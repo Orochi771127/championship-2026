@@ -1,4 +1,5 @@
 import test from 'node:test';
+import cageFieldManifest from '../assets/production/cage/original-opus-v1/manifest.json' with { type: 'json' };
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -47,16 +48,19 @@ test('complete cells draw on loopback and the Owner playtest URL only; invalid r
     const m=structuredClone(manifest);alter(m);assert.throws(()=>validateAssembledUiArt(m,index),/ASSEMBLED_UI/);
   }
 });
-test('dedicated editor thumbnails retain one shared origin across multi-slot cages',()=>{
+test('editor cells show the runtime cage field and retain one shared origin across multi-slot cages',()=>{
   const editor=createCageEditRuntime({initializeOriginal:true});
   const f=editor.getFrame(listCageDefinitions().filter(d=>[0,1,15].includes(d.cageDefinitionIndex)).map(d=>d.shopRecordIndex),0);
   const before=JSON.stringify(f.slots),cells=cageEditorArtCells(f.slots,local);
   for(const d of listCageDefinitions()) {
     const peers=f.slots.filter(s=>s.moduleId===d.moduleId).map(s=>cells[s.slotIndex]);
     if(!peers.length) continue;
-    const image=assembledCageArt(d.cageDefinitionIndex,local);
+    // Owner 2026-10-06: the runtime field picture wins over the assembled thumbnail.
+    const field=cageFieldManifest.fields.find(f=>f.frames[0].src===peers[0].image);
+    assert.ok(field, d.moduleId);
     for(const p of peers) {
-      assert.ok(Math.abs(p.imageWidth/p.imageHeight-image.width/image.height)<1e-9);
+      assert.equal(p.image,field.frames[0].src);
+      assert.ok(Math.abs(p.imageWidth/p.imageHeight-field.worldWidthPx/field.worldHeightPx)<1e-9);
       assert.ok(Math.abs((p.x+p.imageX)-(peers[0].x+peers[0].imageX))<1e-9);
       assert.ok(Math.abs((p.y+p.imageY)-(peers[0].y+peers[0].imageY))<1e-9);
     }

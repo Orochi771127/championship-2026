@@ -1,6 +1,7 @@
 // Presentation of the existing production fields and traced editor coordinates.
 // The editor's slot ownership is authoritative; no geometry here places a cage.
-import manifest from '../../../assets/production/cage/licensed-runtime-v1/manifest.json' with { type: 'json' };
+// The runtime cage fields (Owner 2026-10-06: original opus art replaces the licensed pixels).
+import manifest from '../../../assets/production/cage/original-opus-v1/manifest.json' with { type: 'json' };
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
 import { RANCH_EXPANSION_FIRST_SLOT, isAnnexSlot } from '../cage/ranchExpansion.js';
@@ -30,12 +31,14 @@ export function cageUiSummary(moduleId, fallback = '') {
   if (capacity !== null) parts.push(uiText('建議 {count} 隻', { count: capacity }));
   return parts.join(' · ') || uiText('固定待機區');
 }
-export function cageUiImage(moduleId, baseUrl) {
-  const definition = getCageDefinitionByModuleId(moduleId);
-  const thumbnail = assembledCageArt(definition?.cageDefinitionIndex, baseUrl);
-  if (thumbnail) return thumbnail.src;
+function runtimeFieldFrame(definition) {
   const binding = getOriginalCageVisualBinding(definition?.cageDefinitionIndex);
   return art.fields.find((field) => field.fieldId === binding?.fieldId)?.frames[0]?.src ?? null;
+}
+export function cageUiImage(moduleId, baseUrl) {
+  // The runtime field picture comes first, so the editor shows the same cage art as the ranch.
+  const definition = getCageDefinitionByModuleId(moduleId);
+  return runtimeFieldFrame(definition) ?? assembledCageArt(definition?.cageDefinitionIndex, baseUrl)?.src ?? null;
 }
 export function shopCageUiImage(shopRecordIndex, baseUrl) {
   const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
@@ -56,7 +59,7 @@ export function cageEditorArtCells(slots, baseUrl) {
     const width = (Math.max(...peers.map((entry) => entry.x)) - left + 24) * 2;
     const height = (Math.max(...peers.map((entry) => entry.y)) - top + 28) * 2;
     const definition = getCageDefinitionByModuleId(cell.moduleId);
-    const thumbnail = assembledCageArt(definition?.cageDefinitionIndex, baseUrl);
+    const thumbnail = runtimeFieldFrame(definition) ? null : assembledCageArt(definition?.cageDefinitionIndex, baseUrl);
     const image = cageUiImage(cell.moduleId, baseUrl);
     const field = art.fields.find(field=>field.frames[0]?.src === image);
     const sourceWidth = thumbnail?.width ?? field?.worldWidthPx ?? width;
