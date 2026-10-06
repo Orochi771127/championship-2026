@@ -33,7 +33,7 @@
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import { negativeStatusActionGate, BATTLE_STATUS_GATE_NORMAL } from "./battleStatus.js";
-import { selectBattleAiAction } from "./battleActionSelection.js";
+import { selectBattleAiAction, BATTLE_AI_TABLES_BASELINE, BATTLE_AI_TABLES_ROM } from "./battleActionSelection.js";
 import { buildCandidateBuckets } from "./battleCandidateBuckets.js";
 import { buildMoveBucketsForCombatant } from "./battleMoveBuckets.js";
 import { applyBattleHp, rebuildDecisionCooldown } from "./battleDamageResolver.js";
@@ -199,6 +199,18 @@ export function createBattleSession(input) {
   if (resolveContact !== null && typeof resolveContact !== "function") {
     throw sessionError("RESOLVE_CONTACT_MUST_BE_A_FUNCTION");
   }
+  // BASELINE keeps every battle exactly as it ran before 2026-10-05. ORIGINAL
+  // is the traced personality wiring: a combatant's personality (+0x18) and
+  // battle policy (profile) are set by its roster entry, the target selector
+  // is read by personality and the AI reads the ROM's table bytes.
+  const aiPolicy = input.personalityPolicy ?? "BASELINE";
+  if (aiPolicy !== "BASELINE" && aiPolicy !== "ORIGINAL") throw sessionError("PERSONALITY_POLICY_UNKNOWN");
+  // Slots the roster could not wire (an untraced personality such as 8) stay
+  // on the baseline reading inside an ORIGINAL battle.
+  const baselineSlots = input.baselineSlots ?? [];
+  if (!Array.isArray(baselineSlots) || !baselineSlots.every((slot) => Number.isInteger(slot) && slot >= 0 && slot < BATTLE_SESSION_SLOT_COUNT)) {
+    throw sessionError("BASELINE_SLOTS_MUST_BE_SLOT_INDICES");
+  }
   const downed = input.downed ?? [0, 0];
   if (!Array.isArray(downed) || downed.length !== 2 || !downed.every((value) => Number.isSafeInteger(value))) {
     throw sessionError("DOWNED_MUST_BE_TWO_INTEGERS");
@@ -213,6 +225,17 @@ export function createBattleSession(input) {
     onFrameEvents: input.onFrameEvents ?? null,
     notify: input.notify ?? null,
     normalFlow: null,
+    aiPolicy,
+    aiPolicyBySlot: Array.from({ length: BATTLE_SESSION_SLOT_COUNT },
+      (_, slot) => (aiPolicy === "ORIGINAL" && !baselineSlots.includes(slot) ? "ORIGINAL" : "BASELINE")),
+    // Diagnostic only: never read by the battle. The traces are bounded so a
+    // long match cannot grow them; the tallies count the whole match.
+    decisionTrace: [],
+    decisionCount: 0,
+    temperTrace: [],
+    decisionTally: Array.from({ length: BATTLE_SESSION_SLOT_COUNT }, () => ({
+      decisions: 0, action: 0, targeted: 0, move: 0, byState: {}, gateTargets: {}, actionTargets: {}, temper: 0
+    })),
     // +0x5E98 and +0x5E9C. The frame counter is not the loop index: the ROM
     // advances it inside the frame function, and the end check reads it there.
     clock: 0,
@@ -289,8 +312,32 @@ function runActionGate(combatant, slot, events, rng, allocateAction, session) {
         }
         : null))
     },
-    rng
+    rng,
+    tables: session.aiPolicyBySlot[slot] === "ORIGINAL" ? BATTLE_AI_TABLES_ROM : BATTLE_AI_TABLES_BASELINE
   });
+  // One id per decision, carried to the normal flow's SELECTED / LAUNCHED /
+  // LAUNCH_REFUSED records so a decision can be followed to what happened.
+  const decisionId = ++session.decisionCount;
+  combatant.pendingDecisionId = decisionId;
+  const actionTarget = decision.target?.kind === "SELF" ? slot
+    : Number.isInteger(decision.target?.index) ? (targeting?.allySlots?.[decision.target.index] ?? null) : null;
+  session.decisionTrace.push({
+    decisionId, frame: session.frame, slot, policy: session.aiPolicyBySlot[slot], personality: combatant.field18 ?? 0,
+    profile: combatant.profileIndex, tier: session.tier, statusCode: combatant.statusCode,
+    hp: combatant.currentHp, maxHp: combatant.maxHp, resource: combatant.metricLimit, resourceMax: combatant.metricBase,
+    reserve: decision.reserve ?? null, selector: targeting?.selector ?? null, targetSlot: targeting?.targetSlot ?? null,
+    decision: decision.decision, state: decision.state ?? null, roll: decision.roll ?? null,
+    group: decision.group ?? null, actionTarget, actionId: decision.action?.actionId ?? decision.actionId ?? null
+  });
+  if (session.decisionTrace.length > 600) session.decisionTrace.shift();
+  const tally = session.decisionTally[slot];
+  tally.decisions += 1;
+  if (decision.decision === "ACTION") tally.action += 1;
+  else if (decision.decision === "TARGETED_ACTION") tally.targeted += 1;
+  else tally.move += 1;
+  tally.byState[decision.state] = (tally.byState[decision.state] ?? 0) + 1;
+  if (Number.isInteger(targeting?.targetSlot)) tally.gateTargets[targeting.targetSlot] = (tally.gateTargets[targeting.targetSlot] ?? 0) + 1;
+  if (actionTarget !== null) tally.actionTargets[actionTarget] = (tally.actionTargets[actionTarget] ?? 0) + 1;
   events.push({
     type: BATTLE_SESSION_EVENT_ACTION_CHOSEN,
     slot,
@@ -539,6 +586,13 @@ export function stepBattleSession(session) {
     const ticked = stepFrameSlot(frameFields, slot);
     for (const [key, value] of Object.entries(ticked.combatant)) {
       combatant[key] = value;
+    }
+    for (const event of ticked.events) {
+      if (event.type !== "THRESHOLD_CROSSED") continue;
+      // Diagnostic only: the personality's temper threshold was crossed.
+      session.decisionTally[slot].temper += 1;
+      session.temperTrace.push({ frame: session.frame, slot, personality: combatant.field18, counter: frameFields.field22 });
+      if (session.temperTrace.length > 200) session.temperTrace.shift();
     }
     session.onFrameEvents?.(slot,ticked.events,frameFields);
     events.push(...ticked.events);

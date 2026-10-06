@@ -196,6 +196,12 @@ const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
 const VFX_ART_PREVIEW_SYSTEM = new URLSearchParams(globalThis.location?.search ?? "").get("vfxArt");
+// Free and Practice battles run the original personality wiring (2026-10-05):
+// personality picks the target selector and temper threshold, the team policy
+// picks the AI profile. Every other mode keeps the baseline. ?battlePolicy=baseline
+// returns these two modes to the baseline so the two can be compared.
+const FREE_PRACTICE_PERSONALITY_POLICY =
+  new URLSearchParams(globalThis.location?.search ?? "").get("battlePolicy") === "baseline" ? "BASELINE" : "ORIGINAL";
 
 const titleScreen = document.getElementById("cm-title");
 const titleNote = document.getElementById("cm-title-note");
@@ -759,7 +765,8 @@ async function mountBattleSelect() {
       }
       if(mode==='FREE_BATTLE'){
         const party=await app.prepareFreeBattle(recordIndex,playerInstanceIds,selectedArena);if(!party.ok)return party;
-        const prepared=(await loadBattleRuntime())({mode:2,battleType:0,playerIndividuals:party.individuals,rng:party.rngPreparation.rng});
+        const prepared=(await loadBattleRuntime())({mode:2,battleType:0,playerIndividuals:party.individuals,rng:party.rngPreparation.rng,
+          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY});
         try{
           prepared.chooseFreeBattle({presetIndices:party.match.presetIndices,arenaIndex:party.arenaIndex});prepared.startMatch();
           const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
@@ -768,7 +775,8 @@ async function mountBattleSelect() {
       }
       if(mode==='PRACTICE_BATTLE'){
         const party=await app.preparePracticeBattle(playerInstanceIds,selectedArena);if(!party.ok)return party;
-        const prepared=(await loadBattleRuntime())({mode:5,battleType:0,playerIndividuals:party.parties[0],opponentIndividuals:party.parties[1],rng:party.rngPreparation.rng});
+        const prepared=(await loadBattleRuntime())({mode:5,battleType:0,playerIndividuals:party.parties[0],opponentIndividuals:party.parties[1],rng:party.rngPreparation.rng,
+          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY});
         try{
           prepared.choosePracticeBattle({arenaIndex:party.arenaIndex});prepared.startMatch();
           const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
@@ -907,11 +915,14 @@ async function mountBattleField() {
       battleAttemptId = null;
     }
   });
+  // QA reads each slot's personality wiring and what it decided here.
+  const showPersonality = new URLSearchParams(location.search).get('presentation') === 'developer';
   // The session advances itself; this repaints the DOM beside the scene and
   // moves on to the result once the battle has judged itself.
   activeRuntime.observe((observed) => {
     if (battleRuntime !== activeRuntime || battleAttemptId !== activeAttemptId) return;
     view.render(observed);
+    if (showPersonality) root.dataset.battlePersonality = battlePersonalityReadout(activeRuntime);
     if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
       app.finishMatch({ ...activeRuntime.getSettlementResult(), attemptId: activeAttemptId });
       // The settlement (prize, rank, titles) is committed in the session; the
@@ -920,6 +931,15 @@ async function mountBattleField() {
     }
   });
   return view;
+}
+
+/** Developer readout: per slot, the wiring a battle received and its tallies. */
+function battlePersonalityReadout(runtime) {
+  const d = runtime.getPersonalityDiagnostics();
+  return JSON.stringify({ policy: d.policy, frame: d.frame, ended: d.ended, slots: d.slots.map((s) => s && {
+    slot: s.slot, team: s.team, personality: s.personality, tactic: s.tactic, profile: s.profile, policy: s.policy, fallback: s.fallback,
+    selector: d.decisions.findLast((x) => x.slot === s.slot)?.selector ?? null, decisions: s.decisions, action: s.action,
+    targeted: s.targeted, move: s.move, temper: s.temper, launched: s.launched, refused: s.refused, gateTargets: s.gateTargets }) });
 }
 
 async function mountHuntResult() {

@@ -127,13 +127,45 @@ export function buildBattleRoster({ residentIds = [], presetIndices = [], player
 }
 
 /**
+ * OVL19 0x0212FF0C, u32 x 8: the profile a member whose battle policy is 3
+ * takes from its personality (read by 0x021143D8 at battle start).
+ */
+export const BATTLE_PERSONALITY_POLICY_PROFILE = deepFreeze([1, 0, 0, 2, 1, 2, 0, 1]);
+
+/**
+ * The original personality wiring for one combatant (2026-10-05), or the
+ * reason it stays on the baseline reading.
+ *
+ * 0x0210CBB8..0x0210CBD8 stores the team member's policy as the combatant's
+ * profile (+0x18), then 0x021143D8 resolves it once at battle start: policy 3
+ * becomes the personality's profile and clears +0x9A bit 0; any other policy
+ * is kept and sets bit 0. The personality itself (stats +0x18) is what the
+ * frame loop's temper threshold and the target selector read.
+ */
+export function originalPersonalityFields(creature) {
+  const personality = creature?.personality, tactic = creature?.tactic;
+  if (!Number.isInteger(personality) || personality < 0 || personality > 7) {
+    return { fields: null, reason: "PERSONALITY_NOT_0_TO_7" };
+  }
+  if (!Number.isInteger(tactic) || tactic < 0 || tactic > 4) return { fields: null, reason: "POLICY_NOT_0_TO_4" };
+  if (tactic === 3) {
+    return { fields: { field18: personality, profileIndex: BATTLE_PERSONALITY_POLICY_PROFILE[personality], flags9A: 0 }, reason: null };
+  }
+  return { fields: { field18: personality, profileIndex: tactic, flags9A: 1 }, reason: null };
+}
+
+/**
  * The combatant fields battleSession's factory takes, for one built creature.
  * Kept here rather than in the battle lane so the battle modules never learn
- * about residents or contracts.
+ * about residents or contracts. A baseline battle receives exactly the fields
+ * it always did; the original personality wiring adds personality, profile and
+ * the policy flag.
  */
-export function combatantFieldsFor(creature, slot) {
+export function combatantFieldsFor(creature, slot, personalityPolicy = "BASELINE") {
   if (!creature) return null;
+  const original = personalityPolicy === "ORIGINAL" ? originalPersonalityFields(creature).fields : null;
   return deepFreeze({
+    ...(original ?? {}),
     currentHp: creature.currentHp,
     maxHp: creature.maxHp,
     metricBase: creature.metricBase,

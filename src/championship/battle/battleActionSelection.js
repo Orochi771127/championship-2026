@@ -177,6 +177,55 @@ export const BATTLE_AI_MOVE_THRESHOLDS = deepFreeze([
 /** OVL19 0x0212FE38, used whole when +0x158 == 2. */
 export const BATTLE_AI_MOVE_THRESHOLDS_OVERRIDE = deepFreeze([0, 20]);
 
+/**
+ * The four tables above, as the rows a battle runs without the original
+ * personality wiring. They are kept exactly so such a battle does not change.
+ */
+export const BATTLE_AI_TABLES_BASELINE = deepFreeze({
+  evidence: "PRODUCT_BASELINE_BEFORE_2026_10_05",
+  action: BATTLE_AI_ACTION_THRESHOLDS,
+  actionOverride: BATTLE_AI_ACTION_THRESHOLDS_OVERRIDE,
+  reserve: BATTLE_AI_RESERVE_PERCENT,
+  move: BATTLE_AI_MOVE_THRESHOLDS,
+  moveOverride: BATTLE_AI_MOVE_THRESHOLDS_OVERRIDE
+});
+
+/**
+ * The same tables as the original reads them (ROM bytes re-read 2026-10-05).
+ *
+ * Two differences from the baseline rows:
+ *  - The ladder's fourth threshold is the halfword at +0x08 (0x02115B64
+ *    `ldrh r0,[r4,#8]`): 103, 96 and 93, and 30 in the override row. The
+ *    baseline rows carry the +0x06 halfword (99, 92, 60; 20), which narrowed
+ *    the targeted (support) window, most for profile 2.
+ *  - A profile is the team member's battle policy, and the routine indexes
+ *    each table with it unchecked (base + profile*stride). Policy 4, which
+ *    every free-battle preset carries (+0x42), therefore reads the bytes after
+ *    profile 2: row 3 is all zero and row 4 is listed as stored.
+ */
+export const BATTLE_AI_TABLES_ROM = deepFreeze({
+  evidence: "VERIFIED_BINARY_ROM_BYTES_2026_10_05",
+  action: [[32, 58, 95, 103], [17, 31, 88, 96], [7, 14, 41, 93], [0, 0, 0, 0], [0, 65292, 65293, 65281]],
+  actionOverride: [0, 10, 10, 30],
+  reserve: [
+    [0, 40, 50, 60, 70, 80, 90, 100],
+    [0, 15, 20, 25, 30, 35, 40, 50],
+    [10, 30, 35, 40, 50, 60, 70, 80],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 5, 0]
+  ],
+  move: [[68, 89], [48, 96], [7, 48], [0, 0], [0, 0]],
+  moveOverride: [0, 20]
+});
+
+function tablesFor(input) {
+  const tables = input.tables ?? BATTLE_AI_TABLES_BASELINE;
+  if (!Array.isArray(tables.action) || !Array.isArray(tables.reserve) || !Array.isArray(tables.move)) {
+    throw aiError("tables must carry action, reserve and move rows");
+  }
+  return tables;
+}
+
 /** Q12 immediates written to +0x184 by the three move tiers. */
 export const BATTLE_AI_MOVE_PRIMARY_Q12 = deepFreeze([0x32000, 0x50000, 0x6e000]);
 
@@ -236,10 +285,12 @@ function requireSafeInteger(value, label) {
   return value;
 }
 
-function requireProfileIndex(value) {
+function requireProfileIndex(value, tables = BATTLE_AI_TABLES_BASELINE) {
   requireSafeInteger(value, "profileIndex");
-  if (value < 0 || value >= BATTLE_AI_PROFILE_COUNT) {
-    throw aiError(`profileIndex must be 0..${BATTLE_AI_PROFILE_COUNT - 1}`);
+  // The baseline rows hold the three named policies; the ROM rows also hold
+  // the stored bytes a policy-3/4 member reads.
+  if (value < 0 || value >= tables.action.length) {
+    throw aiError(`profileIndex must be 0..${tables.action.length - 1}`);
   }
   return value;
 }
@@ -264,7 +315,8 @@ export function resolveAiReserve(input) {
   if (!input || typeof input !== "object") {
     throw aiError("resolveAiReserve requires a plain object");
   }
-  const profileIndex = requireProfileIndex(input.profileIndex);
+  const tables = tablesFor(input);
+  const profileIndex = requireProfileIndex(input.profileIndex, tables);
   const scalarIndex = requireSafeInteger(input.sessionScalarIndex, "sessionScalarIndex");
   if (scalarIndex < 0 || scalarIndex >= BATTLE_AI_RESERVE_SCALAR_COUNT) {
     throw aiError(`sessionScalarIndex must be 0..${BATTLE_AI_RESERVE_SCALAR_COUNT - 1}`);
@@ -272,22 +324,22 @@ export function resolveAiReserve(input) {
   const metricBase = requireSafeInteger(input.metricBase, "metricBase");
   const metricLimit = requireSafeInteger(input.metricLimit, "metricLimit");
 
-  const percent = BATTLE_AI_RESERVE_PERCENT[profileIndex][scalarIndex];
+  const percent = tables.reserve[profileIndex][scalarIndex];
   const scaled = Math.trunc((metricBase * percent) / 100);
   // cmp r0, r6 ; movle r6, r0 -- the limit wins on a tie.
   return scaled >= metricLimit ? metricLimit : scaled;
 }
 
-function actionRow(profileIndex, negativeStatusCode) {
+function actionRow(profileIndex, negativeStatusCode, tables = BATTLE_AI_TABLES_BASELINE) {
   return negativeStatusCode === BATTLE_AI_OVERRIDE_STATUS_CODE
-    ? BATTLE_AI_ACTION_THRESHOLDS_OVERRIDE
-    : BATTLE_AI_ACTION_THRESHOLDS[profileIndex];
+    ? tables.actionOverride
+    : tables.action[profileIndex];
 }
 
-function moveRow(profileIndex, negativeStatusCode) {
+function moveRow(profileIndex, negativeStatusCode, tables = BATTLE_AI_TABLES_BASELINE) {
   return negativeStatusCode === BATTLE_AI_OVERRIDE_STATUS_CODE
-    ? BATTLE_AI_MOVE_THRESHOLDS_OVERRIDE
-    : BATTLE_AI_MOVE_THRESHOLDS[profileIndex];
+    ? tables.moveOverride
+    : tables.move[profileIndex];
 }
 
 function readBucket(buckets, state) {
@@ -567,7 +619,8 @@ function resolveTargetedCascade(input, reserve, roll) {
     ...resolveAiMove({
       profileIndex: input.profileIndex,
       negativeStatusCode: input.negativeStatusCode,
-      rng: input.rng
+      rng: input.rng,
+      tables: input.tables
     }),
     targetedAttempts: attemptedGroups
   });
@@ -577,9 +630,10 @@ function resolveTargetedCascade(input, reserve, roll) {
  * The movement ladder at 0x02115E8C. Rolls its own channel-216 value.
  */
 export function resolveAiMove(input) {
-  const profileIndex = requireProfileIndex(input.profileIndex);
+  const tables = tablesFor(input);
+  const profileIndex = requireProfileIndex(input.profileIndex, tables);
   const negativeStatusCode = requireSafeInteger(input.negativeStatusCode, "negativeStatusCode");
-  const row = moveRow(profileIndex, negativeStatusCode);
+  const row = moveRow(profileIndex, negativeStatusCode, tables);
   const roll = requireRoll(input.rng, "move roll");
 
   let tier = 2;
@@ -617,7 +671,8 @@ export function selectBattleAiAction(input) {
   if (!input || typeof input !== "object") {
     throw aiError("selectBattleAiAction requires a plain object");
   }
-  const profileIndex = requireProfileIndex(input.profileIndex);
+  const tables = tablesFor(input);
+  const profileIndex = requireProfileIndex(input.profileIndex, tables);
   const negativeStatusCode = requireSafeInteger(input.negativeStatusCode, "negativeStatusCode");
   const pendingField24 = requireSafeInteger(input.pendingField24, "pendingField24");
   const buckets = input.candidateBuckets;
@@ -627,11 +682,11 @@ export function selectBattleAiAction(input) {
 
   // ldr r0,[r7,#36] ; cmp r0,#0 ; bgt 0x02115E8C -- straight to the move ladder.
   if (pendingField24 > 0) {
-    return resolveAiMove({ profileIndex, negativeStatusCode, rng: input.rng });
+    return resolveAiMove({ profileIndex, negativeStatusCode, rng: input.rng, tables });
   }
 
   const reserve = resolveAiReserve(input);
-  const row = actionRow(profileIndex, negativeStatusCode);
+  const row = actionRow(profileIndex, negativeStatusCode, tables);
   const roll = requireRoll(input.rng, "action roll");
 
   const attempted = [];
@@ -671,7 +726,7 @@ export function selectBattleAiAction(input) {
   if (roll >= row[2]) {
     // 0x02115B64: the targeted path, and only inside [T2, T3).
     if (roll >= row[3]) {
-      return resolveAiMove({ profileIndex, negativeStatusCode, rng: input.rng });
+      return resolveAiMove({ profileIndex, negativeStatusCode, rng: input.rng, tables });
     }
     return resolveTargetedCascade(input, reserve, roll);
   }
@@ -692,5 +747,5 @@ export function selectBattleAiAction(input) {
     if (picked) return commit(BATTLE_AI_STATE_BUCKET_4, picked);
   }
 
-  return resolveAiMove({ profileIndex, negativeStatusCode, rng: input.rng });
+  return resolveAiMove({ profileIndex, negativeStatusCode, rng: input.rng, tables });
 }

@@ -102,6 +102,23 @@ export function normalBattleTargetSelector(profile){
   return value;
 }
 
+/**
+ * The selector the original hands 02111F20 is looked up by PERSONALITY
+ * (2026-10-05): 0x021158E4..0x021158F8 loads the creature (+0x10), reads its
+ * personality (stats +0x18) and indexes the u32 table at 0x0212FEEC. The
+ * baseline `targetProfiles` above is that table's first three words read as a
+ * profile table. Eight entries, one per personality; like the frame loop's
+ * threshold table, an unknown personality (8) is refused here rather than read
+ * from the neighbouring table, and the roster keeps such a combatant on the
+ * baseline reading.
+ */
+export const NORMAL_BATTLE_TARGET_SELECTOR_BY_PERSONALITY=Object.freeze([0,12,8,12,1,5,2,8]);
+export function normalBattlePersonalityTargetSelector(personality){
+  const value=NORMAL_BATTLE_TARGET_SELECTOR_BY_PERSONALITY[personality];
+  if(value===undefined)throw new Error('BATTLE_TARGET_PERSONALITY_UNTRACED');
+  return value;
+}
+
 /** 0210FD40..FDA0 table; ready positions after the intro removes +800 Y. */
 export function normalBattleStands(slots){
   const next=[0,0],counts=[0,1].map(t=>slots.filter((c,i)=>c&&Math.floor(i/3)===t).length);

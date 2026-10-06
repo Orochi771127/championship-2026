@@ -72,6 +72,7 @@ import {
   BATTLE_ROSTER_PROFILES,
   buildBattleRoster,
   combatantFieldsFor,
+  originalPersonalityFields,
   rosterEvidence
 } from "./battleRosterSource.js";
 
@@ -109,6 +110,11 @@ export function createBattleRuntime(options = {}) {
   const mode = options.mode ?? 0;
   const battleType = options.battleType ?? 0;
   const localTeamIndex=options.localTeamIndex??0;
+  // BASELINE runs every battle as it ran before 2026-10-05. ORIGINAL wires each
+  // combatant's personality and battle policy the way the original does; the
+  // application chooses which modes use it.
+  const personalityPolicy=options.personalityPolicy??'BASELINE';
+  if(!['BASELINE','ORIGINAL'].includes(personalityPolicy))throw runtimeError('PERSONALITY_POLICY_UNKNOWN');
   if(![0,1].includes(localTeamIndex)||localTeamIndex!==0&&mode!==3)throw runtimeError('LOCAL_TEAM_CONTEXT_REQUIRED');
   if(opponentIndividuals!==null&&(![3,4,5].includes(mode)||!playerIndividuals||!Array.isArray(opponentIndividuals)
     ||opponentIndividuals.length<1||opponentIndividuals.length>3
@@ -371,6 +377,10 @@ export function createBattleRuntime(options = {}) {
   let session = null;
   let hitRuntime = null;
   let completedRound = null;
+  // Per slot: the original wiring the roster received or why it stayed on the
+  // baseline reading, and how many launches the normal flow accepted.
+  let personalityWiring = null;
+  let launchTally = null;
 
   function stepMatch(liveSession) {
     if(liveSession.ended)return deepFreeze({frame:liveSession.frame,events:[],ended:true});
@@ -571,13 +581,18 @@ export function createBattleRuntime(options = {}) {
       // that has exhausted the pool simply cannot launch, which is the ROM's
       // behaviour and not an error.
       const pool = new Array(BATTLE_LAUNCH_POOL_SIZE).fill(0);
+      personalityWiring = roster.map((creature) => !creature ? null
+        : personalityPolicy === 'ORIGINAL' ? originalPersonalityFields(creature) : { fields: null, reason: 'BASELINE_POLICY' });
+      launchTally = roster.map((creature) => creature ? { launched: 0, refused: 0, refusedBy: {} } : null);
       session = createBattleSession({
+        personalityPolicy,
+        baselineSlots: personalityWiring.flatMap((wiring, slot) => wiring && !wiring.fields ? [slot] : []),
         waitForNativeAction:true,
         stepNotification:slot=>hitRuntime.step(slot),
         onFrameEvents:(slot,events,before)=>hitRuntime.frameEvents(slot,events,before),
         notify:(slot,code)=>hitRuntime.notify(slot,code),
         roster: roster.map((creature, slot) => {
-          const fields = combatantFieldsFor(creature, slot);
+          const fields = combatantFieldsFor(creature, slot, personalityPolicy);
           // State 3 is the cooldown gate, which is where a combatant waits
           // between actions. Starting them in state 1 let every one of them
           // commit on every frame and a match was over in three.
@@ -645,7 +660,11 @@ export function createBattleRuntime(options = {}) {
           // FC68 -> 02043B9C(1,1); 02043A6C displays one white frame, then restores.
           if(!blocked&&(move.field46||critical))impactFlashFrame=session.frame;
         }});
-      session.normalFlow=createBattleNormalRuntime({session,actors:nativeActors,creatures:roster,initialize:prepareActionLaunch,applyStatus:hitRuntime.status});
+      session.normalFlow=createBattleNormalRuntime({session,actors:nativeActors,creatures:roster,applyStatus:hitRuntime.status,
+        initialize:(slot,action)=>{const ok=prepareActionLaunch(slot,action),tally=launchTally[slot];
+          if(tally&&ok)tally.launched+=1;
+          else if(tally){const reason=scriptStateFor(action).guard?.reason??'NO_ACTOR';tally.refused+=1;tally.refusedBy[reason]=(tally.refusedBy[reason]??0)+1;}
+          return ok;}});
       source = createBattlePresentationSource({ session, step: stepMatch, arenaIndex:chosen.championship?10:chosen.arenaIndex, getSpecialPrelude,
         getNativeActor:slot=>nativeActors.project(slot),getImpactEffects:()=>impactEffects.snapshot({
           exclusiveOwner:session.slots.find(c=>c?.field94)?.field94??0}),getNativeLifecycle:()=>({
@@ -674,6 +693,24 @@ export function createBattleRuntime(options = {}) {
       return roster ? playerIndividuals?'ROM_VERIFIED_INDIVIDUAL_FIELDS':rosterEvidence(roster) : null;
     },
 
+    personalityPolicy(){return personalityPolicy;},
+
+    /**
+     * Diagnostic read of the personality wiring: what each slot received, what
+     * it decided and how often its temper threshold was crossed. Copies only;
+     * nothing here is read back by the battle.
+     */
+    getPersonalityDiagnostics(){
+      if(!session)throw runtimeError('NO_MATCH_STARTED');
+      return deepFreeze(structuredClone({policy:personalityPolicy,frame:session.frame,ended:session.ended,
+        slots:roster.map((creature,slot)=>creature?{slot,team:battleTeamOfSlot(slot),instanceId:creature.instanceId??null,speciesId:creature.speciesId,
+          personality:creature.personality??null,tactic:creature.tactic??null,policy:session.aiPolicyBySlot[slot],
+          fallback:personalityWiring[slot]?.reason??null,field18:session.slots[slot].field18,profile:session.slots[slot].profileIndex,
+          flags9A:session.slots[slot].flags9A,hp:session.slots[slot].currentHp,maxHp:session.slots[slot].maxHp,temperCounter:session.slots[slot].field22,
+          ...session.decisionTally[slot],...launchTally[slot]}:null),
+        decisions:session.decisionTrace,temper:session.temperTrace}));
+    },
+
     outcome() {
       if (!source) throw runtimeError("NO_MATCH_STARTED");
       return localPresentationOutcome(source.getView().outcome);
@@ -694,6 +731,8 @@ export function createBattleRuntime(options = {}) {
       builtRoster = null;
       chosen = null;
       session = null;
+      personalityWiring = null;
+      launchTally = null;
       hitRuntime = null;
       for(const launch of nativeLaunches)launch.dispose();nativeLaunches.clear();nativeHistory.length=0;nativeActors=null;
       impactEffects.clear();

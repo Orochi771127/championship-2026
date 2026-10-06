@@ -75,7 +75,8 @@
     "R9 planning-only status for the bounded normal-flow implementation",
     "R9 state16 action1 follow-up and world abort binding open statements for this bounded slice",
     "R9 normal recovery seed9 replaced by19; seed9 now verifies natural status1 pursuit; seed25 retained",
-    "Earlier normal revival/pursuit RNG witnesses are historical; final R13 seeds20/30 and1 retain the same assertions"
+    "Earlier normal revival/pursuit RNG witnesses are historical; final R13 seeds20/30 and1 retain the same assertions",
+    "2026-10-05: 'Normal preset fixtures retain default profile0' no longer holds for Free Battle and Practice under the ORIGINAL personality policy; every other mode is unchanged"
   ],
   "updated": "2026-09-08",
   "verifiedClosureCpuCases": {
@@ -95,6 +96,41 @@
       "Original complete ending-camera, hardware pixel/audio parity and original pre-constructor RNG/profile history are not accepted",
       "Home-owned party, additional moves, untraced status bodies and non-battle triggers remain separate open gameplay work",
       "Physical-device, human visual, public rights and shipping acceptance remain false"
+    ]
+  },
+  "personalityWiring": {
+    "date": "2026-10-05",
+    "evidence": "VERIFIED_BINARY_ROM_TRACE_2026_10_05",
+    "policies": {
+      "BASELINE": "Default for every mode. Every combatant keeps personality 0 / profile 0 / +0x9A bit0 clear, the profile-indexed selector 0/12/8 and the AI rows with the +0x06 fourth threshold, exactly as before (12-battle digest match against main 75a4bdc9).",
+      "ORIGINAL": "Free Battle (mode 2) and Practice (mode 5) in the application; ?battlePolicy=baseline returns them to BASELINE."
+    },
+    "traced": {
+      "personality": "stats +0x18. Owned individuals: native field 018. Free Battle presets: +0x3C passed by OVL10 0x02110618 to 0x02062900 (r3) inside builder 0x02110550, which 0x02111070 calls for mode 2.",
+      "policy": "Team block +0x24 + member*4 (getter 0x020925DC, setter 0x02092568). Team init 0x020924A0 writes 1; the team-setup menu (0x020525A0 / 0x020525CC) changes it. Free Battle presets: +0x42 (4 for all 120) via 0x02110A1C. 0x0210CBB8..0x0210CBD8 copies it to combatant +0x18 (profile).",
+      "policyResolution": "OVL19 0x021143D8 at battle start: policy 3 -> profile = u32 table 0x0212FF0C [1,0,0,2,1,2,0,1] by personality, +0x9A bit0 cleared; any other policy is kept and sets +0x9A bit0.",
+      "targetSelector": "0x021158E4..0x021158F8: u32 table 0x0212FEEC [0,12,8,12,1,5,2,8] indexed by PERSONALITY, handed to 02111F20. The baseline targetProfiles 0/12/8 are this table's first three words read by profile.",
+      "temper": "0x0210D880 threshold [100,100,100,9999,50,9999,50,9999] by personality (already in battleFrameLoop); counter +0x22 rises +1 per normal hit taken, +10 per special hit taken, +20 to living allies when a teammate is downed.",
+      "aiTables": "0x02115B64 reads the ladder's fourth threshold from the +0x08 halfword (103/96/93, override 30); the routine indexes rows by profile unchecked, so profile 4 reads row 4 [0,65292,65293,65281] / reserve [0,0,0,0,0,0,5,0] / move [0,0] as stored."
+    },
+    "observableDifferences": [
+      "Target selector per personality: 0 坦率 composite-max, 1 任性 random, 2 急躁 lowest current HP, 3 悠閒 random, 4 熱血 highest +0x84 rung, 5 冷靜 composite-min, 6 大膽 highest +0x88 rung, 7 膽小 lowest current HP",
+      "Temper (status 1 pursuit) at counter > 50 for 熱血/大膽, never for 悠閒/冷靜/膽小, > 100 for the rest",
+      "Owned members run policy 1 (team-init default); Free Battle preset opponents run policy 4 and decide from bucket 4 (no cost gate) except a cheap bucket-6 pick at clock tier 6",
+      "Targeted window widened by the +0x08 threshold under ORIGINAL only"
+    ],
+    "fallback": "A personality outside 0..7 (the ROM's own 8 included) or a policy outside 0..4 keeps that slot on BASELINE inside an ORIGINAL battle; the reason is reported per slot.",
+    "diagnostics": "battleRuntime.getPersonalityDiagnostics(): per-slot wiring and tallies, the last 600 decisions with decisionId, and temper crossings; SELECTED / LAUNCHED / LAUNCH_REFUSED carry the same decisionId. Developer presentation writes a summary to #cm-root[data-battle-personality]. Diagnostic data is never read by the battle.",
+    "tests": "tests/championship-battle-personality-cases.mjs",
+    "notChanged": [
+      "Damage formula, legal action sets, launch guards, move records, save data",
+      "Title, championship, password and link battles (BASELINE)",
+      "The +0x08 threshold correction outside ORIGINAL battles: a global fix would change every title match and is left for an explicit decision"
+    ],
+    "open": [
+      "The original team-setup policy menu (作戰方針) is not built; owned members always run policy 1, so policy 3's personality profile is reachable only by data",
+      "Profile labels (必殺技優先 / 支援優先 / 普通攻擊) are not bound to profile numbers by a traced read",
+      "ROM personality 8 with policy 3 would index past table 0x0212FF0C; it stays BASELINE"
     ]
   }
 }

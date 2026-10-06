@@ -215,6 +215,12 @@ export function buildCreatureFromProfile(profile) {
     }
   }
 
+  // Personality (stats +0x18) and the team member's battle policy. Only the
+  // original personality wiring reads them; a profile without them builds the
+  // same creature as before.
+  if (profile.personality !== undefined) creature.personality = requireInteger(profile.personality, "PERSONALITY");
+  if (profile.tactic !== undefined) creature.tactic = requireInteger(profile.tactic, "TACTIC");
+
   return deepFreeze(creature);
 }
 
@@ -239,7 +245,12 @@ export function buildCreatureFromPreset(preset) {
     statCurveIndex: speciesStatCurveIndex(speciesId),
     levels,
     source12C: requireInteger(preset[BATTLE_CREATURE_SOURCE_12C_FIELD], "SOURCE_12C"),
-    source130: requireInteger(preset[BATTLE_CREATURE_SOURCE_130_FIELD], "SOURCE_130")
+    source130: requireInteger(preset[BATTLE_CREATURE_SOURCE_130_FIELD], "SOURCE_130"),
+    // OVL10 0x02110618: the team builder passes preset +0x3C to 0x02062900 as
+    // the personality it stores at +0x18; 0x02110A1C / 0x02110F6C pass preset
+    // +0x42 to the team's policy setter 0x02092568.
+    ...(Number.isInteger(preset.field3C) ? { personality: preset.field3C } : {}),
+    ...(Number.isInteger(preset.field42) ? { tactic: preset.field42 } : {})
   });
 }
 

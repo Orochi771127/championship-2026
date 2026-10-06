@@ -1,6 +1,6 @@
 // Bind verified normal state bodies to the existing battle session and actors.
 // This adapter has no clock, renderer, persistent state or independent actors.
-import {normalBattleSpeedScalar,normalBattleTargetSelector,selectNormalBattleTarget,
+import {normalBattleSpeedScalar,normalBattleTargetSelector,normalBattlePersonalityTargetSelector,selectNormalBattleTarget,
   updateNormalBattleGeometry,stepNormalBattlePosition,stepNormalBattleApproach,
   stepNormalBattleWait,stepNormalBattleLaunch,updateNormalBattleTeam,selectBattlePursuitTarget,
   stepBattlePursuit,finishBattleTargetedAction} from './battleNormalFlow.js';
@@ -62,13 +62,16 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
     },
     prepareGate(slot){
       const c=session.slots[slot],team=teams[Math.floor(slot/3)],opponents=teams[1-Math.floor(slot/3)].slots,opposing=entries(opponents);
-      let selected=selectNormalBattleTarget(opposing,normalBattleTargetSelector(c.profileIndex),session.rng);
+      // The original wiring reads the selector by personality (0x021158E4);
+      // a baseline battle keeps the profile-indexed reading it always had.
+      const selector=session.aiPolicyBySlot?.[slot]==='ORIGINAL'?normalBattlePersonalityTargetSelector(c.field18):normalBattleTargetSelector(c.profileIndex);
+      let selected=selectNormalBattleTarget(opposing,selector,session.rng);
       if(selected===null)selected=selectNormalBattleTarget(opposing,0,session.rng);
       if(selected===null){
         if(selectNormalBattleTarget(opposing,12,session.rng)===null)setState(c,13);
         return null;
       }
-      return {targetSlot:opponents[selected],allySlots:team.slots,targeted:{group2Guard:team.guard40,group4Guard:team.guard50,
+      return {targetSlot:opponents[selected],selector,allySlots:team.slots,targeted:{group2Guard:team.guard40,group4Guard:team.guard50,
         positiveEffectCode:c.field160,roster:team.slots.map((i,j)=>({currentHp:session.slots[i].currentHp,positiveEffectCode:session.slots[i].field160,
           metric44:team.metric44[j],metric54:team.metric54[j]}))}};
     },
@@ -81,7 +84,7 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
       if(decision.primaryQ12!==undefined){c.field184=decision.primaryQ12;c.field188=decision.secondaryQ12;}
       c.pendingTargetSlot=decision.target?.kind==='SELF'?slot:Number.isInteger(decision.target?.index)?selection.allySlots[decision.target.index]:next;
       setState(c,decision.state);
-      emit(slot,'SELECTED',{state:c.state,targetSlot:next,actionTarget:c.pendingTargetSlot,moveId:decision.action?.actionId??decision.actionId??null});
+      emit(slot,'SELECTED',{state:c.state,targetSlot:next,actionTarget:c.pendingTargetSlot,moveId:decision.action?.actionId??decision.actionId??null,decisionId:c.pendingDecisionId??null});
     },
     stepState(slot,gate){
       const c=session.slots[slot];if(![3,4,5,6,7,8,14,15,16].includes(c.state))return false;
@@ -108,7 +111,7 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
         },
         initialize(action){const resourceBefore=c.metricLimit,ok=initialize(slot,action);
           emit(slot,ok?'LAUNCHED':'LAUNCH_REFUSED',{moveId:moveId??null,targetSlot:action.targetSlot,state:c.state,actionIndex:action.index,
-            resourceBefore,resourceAfter:c.metricLimit});return ok;},
+            resourceBefore,resourceAfter:c.metricLimit,decisionId:c.pendingDecisionId??null});return ok;},
         release(launchIndex,action){action.release();releaseSlot(slot,launchIndex,action);},
         afterTargeted(){
           const opponents=teams[1-Math.floor(slot/3)].slots;

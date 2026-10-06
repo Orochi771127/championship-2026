@@ -48,13 +48,19 @@ export function battlePartyAdmission(profile,recordIndex=null) {
   return {ok:true};
 }
 
-export function buildOwnedBattleCreature({instanceId,nativeProfile}) {
+// ARM9 0x020924A0..0x020924B4 starts every team member's battle policy at 1;
+// the team-setup menu (0x020525A0 / 0x020525CC) is what changes it.
+export const BATTLE_PARTY_DEFAULT_TACTIC=1;
+export function buildOwnedBattleCreature({instanceId,nativeProfile,tactic=BATTLE_PARTY_DEFAULT_TACTIC}) {
   const f=nativeProfile?.fields;
   if(typeof instanceId!=='string'||!f)throw new Error('BATTLE_PARTY_INDIVIDUAL_REQUIRED');
+  if(!Number.isInteger(tactic)||tactic<0||tactic>3)throw new Error('BATTLE_PARTY_TACTIC_INVALID');
   const read=k=>{if(!Number.isInteger(f[k]))throw new Error(`BATTLE_PARTY_MISSING_FIELD_${k}`);return f[k];};
   const creature={instanceId,nativeProfile:structuredClone(nativeProfile),evidence:'ROM_VERIFIED_INDIVIDUAL_FIELDS',
     speciesId:read('000'),currentHp:read('050'),maxHp:read('058'),metricBase:read('05c'),metricLimit:read('054'),
-    source12C:read('12c'),source130:read('130'),stats:{},levels:{}};
+    // Personality is read only by the ORIGINAL wiring; a baseline battle never
+    // depends on it, so a missing value leaves that slot on the baseline.
+    source12C:read('12c'),source130:read('130'),...(Number.isInteger(f['018'])?{personality:f['018']}:{}),tactic,stats:{},levels:{}};
   for(const entry of BATTLE_CREATURE_STAT_MAP){
     creature.stats[`field${entry.value.toString(16).toUpperCase().padStart(2,'0')}`]=read(entry.value.toString(16).padStart(3,'0'));
     if(entry.level!==null)creature.levels[entry.preset]=read(entry.level.toString(16).padStart(3,'0'));
