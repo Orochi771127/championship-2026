@@ -129,6 +129,24 @@ export function raisingFoldBand(field,worldX){
   return x>=fold.splitPx?{band:1,x:x-fold.splitPx,yOffset:fold.bandOffsetPx}:{band:0,x,yOffset:0};
 }
 
+/**
+ * Which band a point belongs to where a folded ring's bands meet (native px,
+ * band 0's frame). The annex band is drawn as the honeycomb's next two rows,
+ * so its first row meets band 0's lower row tooth for tooth; the nearer cell
+ * centre decides. Single-cell fields are 112 native px tall and 96 wide; field
+ * tops sit 88 apart (band 0's lower row at 64), columns 96 apart, and the lower
+ * row is offset by half a column. Columns past the annex have nothing below.
+ */
+export function raisingFoldPointBand(nx,ny,fold,unit,bandHeightPx){
+  const offset=fold.bandOffsetPx/unit,cap=fold.capPx/unit,annexWidth=fold.annexWidthPx/unit;
+  if(nx<0||nx>=annexWidth||ny<offset-cap)return 0;
+  if(ny>=bandHeightPx/unit)return 1;
+  const lower={x:Math.round((nx-96)/96)*96+96,y:64+56};
+  const column=Math.min(Math.max(Math.round((nx-48)/96),0),Math.floor(annexWidth/96)-1);
+  const annex={x:column*96+48,y:offset-cap+56};
+  return (nx-lower.x)**2+(ny-lower.y)**2<=(nx-annex.x)**2+(ny-annex.y)**2?0:1;
+}
+
 export function raisingNativeToScreen(positionQ12,field,viewport,cameraX=0) {
   const fit=raisingFieldViewport(field,viewport,12,cameraX),unit=field?.nativePixelWorldScale;
   if(!(unit>0)||!positionQ12)return null;
@@ -144,11 +162,9 @@ export function raisingScreenToNative(point,field,viewport,cameraX=0) {
   const fit=raisingFieldViewport(field,viewport,12,cameraX),unit=field?.nativePixelWorldScale;
   if(!(unit>0))return null;
   if(field.fold){
-    // The gap between the bands is split at its middle: above it reads band 0
-    // (y past its foot), below it band 1 (y above its top edge).
-    const fold=field.fold,worldX=(point.x-fit.x)/fit.scale,worldY=(point.y-fit.y)/fit.scale;
-    const second=worldY>=field.worldHeightPx+fold.bandGapPx/2;
-    return {x:(second?fold.splitPx+worldX:worldX)/unit,y:(second?worldY-fold.bandOffsetPx:worldY)/unit,band:second?1:0};
+    const fold=field.fold,nx=(point.x-fit.x)/(unit*fit.scale),ny=(point.y-fit.y)/(unit*fit.scale);
+    const second=raisingFoldPointBand(nx,ny,fold,unit,field.worldHeightPx)===1;
+    return {x:second?fold.splitPx/unit+nx:nx,y:second?ny-fold.bandOffsetPx/unit:ny,band:second?1:0};
   }
   const x=(point.x-fit.x)/(unit*fit.scale);
   return {x:field.wrapWidthPx?wrapRaisingCamera(x,field.wrapWidthPx/unit):x,y:(point.y-fit.y)/(unit*fit.scale)};

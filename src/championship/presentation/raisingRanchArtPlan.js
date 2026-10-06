@@ -15,11 +15,21 @@ import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from "../c
 import { RANCH_DECKS_LAYOUT, annexSlotCount, ranchRing, ringFieldTileOrigin, validateRanchLayout } from "../cage/ranchExpansion.js";
 import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from "./originalCageVisualBindings.js";
 import { createRaisingCageArtPlan } from "./raisingCageArtPlan.js";
-import { RAISING_TOP_HEADROOM_NATIVE } from "./intRh2/raisingFieldViewport.js";
 
 function fail(reason) { throw new Error(`RAISING_CAGE_ART_PLAN_INVALID:${reason}`); }
 
 const SINGLE_CELL_SHAPE_INDEX = ORIGINAL_CAGE_SHAPE_MASKS.indexOf(1);
+
+/**
+ * The annex is drawn as the honeycomb's next two rows, under the main board.
+ * Field tops sit 11 tiles apart (row 0's at -3 under its 3-row crop, row 1's
+ * at 8), so a third row's field top is 19 tiles down and its cropped upper
+ * edge 22 tiles: 176 native pixels below the board's top edge. The 24-pixel
+ * band an upper-row cell drops is the pointed top of its hexes, so the annex
+ * draws it back as a cap that meets the pointed bottoms of the main lower row.
+ */
+export const RANCH_ANNEX_BAND_OFFSET_NATIVE = 176;
+export const RANCH_UPPER_ROW_CAP_NATIVE = 24;
 const LID_FIELD_ID = ORIGINAL_CAGE_STRUCTURAL_VISUALS.find((entry) => entry.role === "LID")?.fieldId ?? null;
 
 function ringCellGeometry({ field, slotIndex, shapeIndex, unit, ringCount }) {
@@ -94,12 +104,17 @@ export function composeRanchArtPlan({ manifest, placements, layoutVersion, unloc
     }
   }
   const worldUnit = tiles[0].worldWidthPx / fields.get(tiles[0].fieldId).nativeWidthPx;
+  // Caps: the cropped tops of the annex's upper-row cells, drawn only in the
+  // annex band, above its first row.
+  const caps = ring.annexStart === null ? [] : result.filter((tile) => tile.fragmentOfSlot === undefined
+    && tile.slotIndex >= ring.annexStart && tile.slotIndex % 2 === 0 && tile.sourceRect?.y > 0).map((tile) => ({
+    fieldId: tile.fieldId, moduleId: tile.moduleId, cageDefinitionIndex: tile.cageDefinitionIndex,
+    ...(tile.structuralRole ? { structuralRole: tile.structuralRole } : {}), x: tile.x, y: -tile.sourceRect.y,
+    foldCap: true, capOfSlot: tile.slotIndex, sourceRect: { x: tile.sourceRect.x, y: 0, width: tile.sourceRect.width, height: tile.sourceRect.y } }));
   return deepFreeze({ mode: 'NATIVE_RANCH', placementEvidence: 'NATIVE_ORIGINS_AND_CROP_WITH_FLATTENED_ART',
-    residentViewport, wrapWidthPx: ring.ringCount * 48 * worldUnit, placements: result,
-    // The second band starts one body's headroom below the first band's foot,
-    // the same room the viewport holds above the board, so no body overlaps it.
+    residentViewport, wrapWidthPx: ring.ringCount * 48 * worldUnit, placements: [...result, ...caps],
     ...(ring.annexStart !== null ? { fold: { splitPx: ring.annexStart * 48 * worldUnit, ringPx: ring.ringCount * 48 * worldUnit,
-      bandGapPx: RAISING_TOP_HEADROOM_NATIVE * worldUnit } } : {}) });
+      bandOffsetPx: RANCH_ANNEX_BAND_OFFSET_NATIVE * worldUnit, capPx: RANCH_UPPER_ROW_CAP_NATIVE * worldUnit } } : {}) });
 }
 
 /** The art plan for whichever layout the ranch carries. */

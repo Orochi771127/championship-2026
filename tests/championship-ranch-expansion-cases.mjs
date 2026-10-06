@@ -32,6 +32,7 @@ import { createRaisingCageArtPlan as createOriginalArtPlan } from "../src/champi
 import { composeRanchArtPlan, createRanchCageArtPlan as createRaisingCageArtPlan } from "../src/championship/presentation/raisingRanchArtPlan.js";
 import { validateNativeRanch } from "../src/championship/cage/nativeRanchLayout.js";
 import { RAISING_TOP_HEADROOM_NATIVE, raisingFieldViewport, raisingNativeToScreen, raisingScreenToNative } from "../src/championship/presentation/intRh2/raisingFieldViewport.js";
+import { RANCH_ANNEX_BAND_OFFSET_NATIVE, RANCH_UPPER_ROW_CAP_NATIVE } from "../src/championship/presentation/raisingRanchArtPlan.js";
 import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
 import { CHAMPIONSHIP_MODERN_SAVE_KEY } from "../src/championship/app/championshipStandaloneSave.js";
 
@@ -166,32 +167,52 @@ test("the field ring continues into the annex: cages, origins and spawns land th
   assert.deepEqual(plain.placements, originalStartingRanch().placements);
 });
 
-test("the art plan folds the same ring, and the folded view maps every point both ways", () => {
+test("the annex is drawn as the honeycomb's next two rows, and the folded view maps every point both ways", () => {
   const runtime = expandedRuntime([[2, 20]]);
   const frame = runtime.getFrame(owned, 0);
   const plan = createRaisingCageArtPlan({ manifest: cageManifest, placements: frame.placements, layoutVersion: frame.layoutVersion,
     unlockedCount: frame.unlockedCount, expansion: frame.expansion });
   const unit = plan.wrapWidthPx / (24 * 48);
-  assert.deepEqual(plan.fold, { splitPx: 14 * 48 * unit, ringPx: 24 * 48 * unit, bandGapPx: RAISING_TOP_HEADROOM_NATIVE * unit });
-  const annexTile = plan.placements.find((tile) => tile.cageDefinitionIndex === 2);
+  // Field tops sit 88 native px apart and the upper row drops a 24 px top band,
+  // so a third row's visible edge is 64 + 88 + 24 = 176 px down.
+  assert.equal(RANCH_ANNEX_BAND_OFFSET_NATIVE, 64 + 88 + 24);
+  assert.deepEqual(plan.fold, { splitPx: 14 * 48 * unit, ringPx: 24 * 48 * unit,
+    bandOffsetPx: RANCH_ANNEX_BAND_OFFSET_NATIVE * unit, capPx: RANCH_UPPER_ROW_CAP_NATIVE * unit });
+  const annexTile = plan.placements.find((tile) => tile.cageDefinitionIndex === 2 && !tile.foldCap);
   assert.equal(annexTile.x, 14 * 96 * unit / 2);
+  // Every annex upper-row cell gets its dropped top band back as a cap, and
+  // nothing else does: the cage at ring 14 and the Lids at 20 and 22.
+  const caps = plan.placements.filter((tile) => tile.foldCap);
+  assert.deepEqual(caps.map((tile) => tile.capOfSlot).sort((a, b) => a - b), [14, 20, 22]);
+  for (const cap of caps) {
+    const cell = plan.placements.find((tile) => tile.slotIndex === cap.capOfSlot);
+    assert.deepEqual([cap.x, cap.y, cap.sourceRect.y, cap.sourceRect.height, cap.sourceRect.width],
+      [cell.x, -RANCH_UPPER_ROW_CAP_NATIVE * unit, 0, RANCH_UPPER_ROW_CAP_NATIVE * unit, cell.sourceRect.width]);
+  }
   // The original layout has no fold.
   const plain = createRaisingCageArtPlan({ manifest: cageManifest, placements: originalStartingRanch().placements,
     layoutVersion: NATIVE_RANCH_LAYOUT, unlockedCount: 14 });
   assert.equal("fold" in plain, false);
 
   const field = { presentationMode: "NATIVE_RANCH", nativePixelWorldScale: unit, worldWidthPx: plan.fold.splitPx, wrapWidthPx: null,
-    worldHeightPx: 192 * unit, fold: { ...plan.fold, annexWidthPx: plan.fold.ringPx - plan.fold.splitPx, bandOffsetPx: 192 * unit + plan.fold.bandGapPx } };
+    worldHeightPx: 192 * unit, fold: { ...plan.fold, annexWidthPx: plan.fold.ringPx - plan.fold.splitPx } };
   const view = { width: 390, height: 723, scrollY: 0 };
   const fit = raisingFieldViewport(field, view);
   assert.equal(fit.scale * unit, 2, "two whole screen pixels per native pixel");
-  assert.equal(fit.scrollMaxY, (RAISING_TOP_HEADROOM_NATIVE * 2 + 192 * 2) * 2 - (723 - 12));
-  for (const [x, y] of [[40, 30], [600, 150], [14 * 48 + 20, 60], [24 * 48 - 5, 170]]) {
+  // Headroom, the board and the annex rows below it: no gap between them.
+  assert.equal(fit.scrollMaxY, (RAISING_TOP_HEADROOM_NATIVE + RANCH_ANNEX_BAND_OFFSET_NATIVE + 192) * 2 - (723 - 12));
+  // Well inside each band, and where the two rows meet: a point near a main
+  // lower-row centre (96, 120) stays on the main board, one near an annex
+  // first-row centre (48, 208 in the main band's frame) goes to the annex.
+  for (const [x, y, band] of [[40, 30, 0], [600, 150, 0], [14 * 48 + 20, 60, 1], [24 * 48 - 5, 170, 1], [96, 165, 0], [14 * 48 + 48, -11, 1]]) {
     const point = raisingNativeToScreen([x * 4096, y * 4096, 0], field, view, 0);
-    assert.equal(point.band, x >= 14 * 48 ? 1 : 0);
+    assert.equal(point.band, band, `${x},${y}`);
     const back = raisingScreenToNative(point, field, view, 0);
-    assert.ok(Math.abs(back.x - x) < 1e-6 && Math.abs(back.y - y) < 1e-6, `${x},${y}`);
+    assert.ok(back.band === band && Math.abs(back.x - x) < 1e-6 && Math.abs(back.y - y) < 1e-6, `${x},${y} -> ${JSON.stringify(back)}`);
   }
+  // Past the annex's five columns nothing lies below the main board.
+  const below = raisingScreenToNative({ x: fit.x + 600 * unit * fit.scale, y: fit.y + 300 * unit * fit.scale }, field, view, 0);
+  assert.equal(below.band, 0);
 });
 
 test("the app grants, saves, reloads and revokes without touching anything else in the save", async () => {

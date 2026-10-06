@@ -580,7 +580,9 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   annexBoard.setAttribute('role', 'grid');
   annexBoard.setAttribute('aria-label', uiText('擴充區格位'));
   annexLabel.hidden = true; annexBoard.hidden = true;
-  boardScroll.append(board, annexLabel, annexBoard);
+  // The annex's two rows continue the main board's honeycomb directly below
+  // it; the label sits under them.
+  boardScroll.append(board, annexBoard, annexLabel);
   const expansionControls = element('div', 'cm-cage-expansion');
   const facilities = element('div', 'cm-cage-facilities');
   facilities.setAttribute('aria-label', uiText('已放置設施'));

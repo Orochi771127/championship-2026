@@ -296,10 +296,11 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   nonEmptyString(placementEvidence, "TILE_SET_PLACEMENT_EVIDENCE_REQUIRED");
   nonEmptyString(presentationMode, "TILE_SET_PRESENTATION_MODE_REQUIRED");
   if(wrapWidthPx!==null&&(!(wrapWidthPx>0)||!Number.isFinite(wrapWidthPx)||presentationMode!=='NATIVE_RANCH'))fail('TILE_SET_WRAP_INVALID');
-  // A folded ring (ranch expansion prototype): band 0 shows ring [0, splitPx),
-  // band 1 shows [splitPx, ringPx) below it, bandGapPx lower than band 0's foot.
-  if(fold!==null&&(presentationMode!=='NATIVE_RANCH'||!['splitPx','ringPx','bandGapPx'].every(k=>Number.isFinite(fold[k]))
-    ||!(fold.splitPx>0)||!(fold.ringPx>fold.splitPx)||fold.bandGapPx<0))fail('TILE_SET_FOLD_INVALID');
+  // A folded ring (ranch expansion prototype): band 0 shows ring [0, splitPx);
+  // band 1 shows [splitPx, ringPx) bandOffsetPx lower, as the honeycomb's next
+  // rows, with capPx of cropped hex tops (foldCap tiles) drawn above it.
+  if(fold!==null&&(presentationMode!=='NATIVE_RANCH'||!['splitPx','ringPx','bandOffsetPx','capPx'].every(k=>Number.isFinite(fold[k]))
+    ||!(fold.splitPx>0)||!(fold.ringPx>fold.splitPx)||!(fold.bandOffsetPx>0)||fold.capPx<0))fail('TILE_SET_FOLD_INVALID');
   const residentBounds = residentViewport ? freezeRecord({...residentViewport}) : null;
   if (residentBounds && (!['x','y','width','height'].every(key=>Number.isFinite(residentBounds[key]))
     || residentBounds.x<0 || residentBounds.y<0 || residentBounds.width<=0 || residentBounds.height<=0)) fail('RESIDENT_VIEWPORT_INVALID');
@@ -308,8 +309,10 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // not change which tiles load, where they render or the composite bounds.
   const seenSlots = new Set();
   const snapshot = freezeRecord(placements.map((placement) => {
+    // Only a fold cap sits above the composite's top edge, by at most capPx.
+    const cap = fold !== null && placement?.foldCap === true;
     if (!placement || !Number.isSafeInteger(placement.x) || !Number.isSafeInteger(placement.y)
-      || placement.x < 0 || placement.y < 0) fail("TILE_SET_INTEGER_POSITION_REQUIRED");
+      || placement.x < 0 || placement.y < (cap ? -fold.capPx : 0)) fail("TILE_SET_INTEGER_POSITION_REQUIRED");
     if (placement.slotIndex !== undefined) {
       if (!Number.isSafeInteger(placement.slotIndex) || placement.slotIndex < 0) fail("TILE_SET_SLOT_INVALID");
       if (seenSlots.has(placement.slotIndex)) fail("TILE_SET_DUPLICATE_SLOT");
@@ -319,6 +322,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
       slotIndex: placement.slotIndex ?? null, moduleId: placement.moduleId ?? null,
       ...(placement.sourceRect ? {sourceRect:{...placement.sourceRect}} : {}),
       ...(placement.fragmentOfSlot !== undefined ? {fragmentOfSlot:placement.fragmentOfSlot} : {}),
+      ...(cap ? {foldCap:true} : {}),
       cageDefinitionIndex: placement.cageDefinitionIndex ?? null };
   }));
 
@@ -362,7 +366,8 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
       // Hard-edged art: a fractional position resamples the silhouette and the
       // seam between two cages becomes visible.
       tile.displayObject.position.set(placement.x, placement.y);
-      ringBand.addChild(tile.displayObject);
+      // A fold cap belongs to the annex band only; it is added there below.
+      if (!placement.foldCap) ringBand.addChild(tile.displayObject);
     }
   } catch (error) {
     await Promise.allSettled(loaded.map((tile) => tile.dispose()));
@@ -388,16 +393,20 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // its own clip; the bands are clamped, not wrapped, so no repeats are made.
   let folded=null;
   if(fold){
-    const second=new PIXI.Container({label:'ranch ring band 1'}),bandOffsetPx=worldHeightPx+fold.bandGapPx;
-    for(const tile of loaded){const original=tile.displayObject,copy=new PIXI.Sprite(original.texture);
+    const second=new PIXI.Container({label:'ranch ring band 1'}),bandOffsetPx=fold.bandOffsetPx;
+    for(const [index,tile] of loaded.entries()){const original=tile.displayObject;
+      if(snapshot[index].foldCap)continue;
+      const copy=new PIXI.Sprite(original.texture);
       copy.position.set(original.x,original.y);copy.width=original.width;copy.height=original.height;copy.eventMode='none';
       second.addChild(copy);repeats.push({original,copy});}
+    // Caps go last, so a hex top meets the main lower row over its tray.
+    for(const [index,tile] of loaded.entries())if(snapshot[index].foldCap)second.addChild(tile.displayObject);
     second.position.set(-fold.splitPx,bandOffsetPx);
     const clipA=new PIXI.Graphics().rect(0,0,fold.splitPx,worldHeightPx).fill(0xffffff);
-    const clipB=new PIXI.Graphics().rect(0,bandOffsetPx,fold.ringPx-fold.splitPx,worldHeightPx).fill(0xffffff);
+    const clipB=new PIXI.Graphics().rect(0,bandOffsetPx-fold.capPx,fold.ringPx-fold.splitPx,worldHeightPx+fold.capPx).fill(0xffffff);
     ringBand.mask=clipA;second.mask=clipB;
     container.addChild(ringBand,second,clipA,clipB);
-    folded=Object.freeze({splitPx:fold.splitPx,ringPx:fold.ringPx,annexWidthPx:fold.ringPx-fold.splitPx,bandGapPx:fold.bandGapPx,
+    folded=Object.freeze({splitPx:fold.splitPx,ringPx:fold.ringPx,annexWidthPx:fold.ringPx-fold.splitPx,capPx:fold.capPx,
       bandOffsetPx,parts:[ringBand,second,clipA,clipB]});
   }
   if(wrapWidthPx&&!fold)for(const tile of loaded)for(const offset of [-wrapWidthPx,wrapWidthPx]){
@@ -416,7 +425,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
       worldWidthPx: folded ? folded.splitPx : wrapWidthPx ?? worldWidthPx,
       wrapWidthPx: folded ? null : wrapWidthPx,
       ...(folded ? { fold: Object.freeze({ splitPx: folded.splitPx, ringPx: folded.ringPx, annexWidthPx: folded.annexWidthPx,
-        bandGapPx: folded.bandGapPx, bandOffsetPx: folded.bandOffsetPx }) } : {}),
+        bandOffsetPx: folded.bandOffsetPx, capPx: folded.capPx }) } : {}),
       worldHeightPx,
       nativePixelWorldScale,
       placements: snapshot,
@@ -451,9 +460,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
       if (disposed) return;
       disposed = true;
       for(const {copy} of repeats){copy.parent?.removeChild(copy);copy.destroy();}
-      for (const tile of loaded) {
-        if (tile.displayObject.parent === ringBand) ringBand.removeChild(tile.displayObject);
-      }
+      for (const tile of loaded) tile.displayObject.parent?.removeChild(tile.displayObject);
       if(folded)for(const part of folded.parts){part.parent?.removeChild(part);part.mask=null;part.destroy({children:false});}
       await Promise.allSettled(loaded.map((tile) => tile.dispose()));
       container.destroy({ children: false });
