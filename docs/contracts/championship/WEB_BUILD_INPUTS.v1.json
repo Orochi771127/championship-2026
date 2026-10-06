@@ -180,6 +180,7 @@
     "src/championship/presentation/characterHudArt.js",
     "src/championship/presentation/characterOriginGeometry.js",
     "src/championship/presentation/events/championshipPresentationEvents.js",
+    "src/championship/presentation/highlight/createHighlightBurstThree.js",
     "src/championship/presentation/huntFeedbackArt.js",
     "src/championship/presentation/huntMobileReadouts.js",
     "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
@@ -4228,6 +4229,7 @@
     "src/championship/presentation/highlight/highlightTimeline.js",
     "src/championship/presentation/highlight/createHighlightSequence.js",
     "src/championship/presentation/highlight/highlightAudio.js",
+    "src/championship/presentation/highlight/createHighlightBurstThree.js",
     "src/championship/app/autosaveScheduler.js",
     "src/championship/app/settings/preferenceStore.js",
     "src/championship/app/settings/preferenceEnvironment.js",
@@ -20166,6 +20168,10 @@
       {
         "path": "src/championship/presentation/highlight/highlightAudio.js",
         "sha256": "3e8b01aa8b56cf3b02073b3c66bd2ca2bbf716ba7f9a00efa73b2514fc75d183"
+      },
+      {
+        "path": "src/championship/presentation/highlight/createHighlightBurstThree.js",
+        "sha256": "a5afc33a52fc28c2376d85c5e1b45f291af00ae289cf55a2d795ccab7816efee"
       },
       {
         "path": "src/championship/app/autosaveScheduler.js",

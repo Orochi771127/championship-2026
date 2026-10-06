@@ -2,6 +2,10 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-10-06 — Publish the highlight burst module the settings publication missed
+
+The 2026-09-29 redesign approved the bounded Three.js highlight prop, and the 2026-10-04 publication was to register the batch's new first-party modules, but `src/championship/presentation/highlight/createHighlightBurstThree.js` was left out of `WEB_BUILD_INPUTS.v1.json`: `main.js` imports it dynamically, and the Pages closure check follows only static imports and the listed `moduleEntries`. The public playtest answered 404 for it, so a won battle landed the result plate without the shards. The Owner chose 「Commit and publish」: add the module to `files`, `moduleEntries` and the public-playtest approval list at its current hash, and publish `main` to the existing public-playtest destination once `build:playtest`, `validate:playtest` and a won battle on the built artifact pass. No other file changes; this adds no asset, destination or rights claim. No force push, rebase, reset or cleanup is authorized.
+
 ## 2026-10-06 — The new original cage maps replace the old ones in the game
 
 After the opus cage-art rounds r1–r17 were reported (35 of the 36 in-use cages redrawn as original Blender 2.5D fields; the Waiting Room kept by its spec; final layout review PASS 11 / REVIEW 26 / FAIL 0), the Owner asks: 「能用新的籠子地圖版本替換掉舊的原作版本並確認地圖的功能都有接入遊戲,也有實質作用或累積數值 然後COMMIT跟PUSH並整合發布至正式版嗎」.
