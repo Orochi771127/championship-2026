@@ -385,6 +385,17 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
       committed("cage-layout");
       return commit();
     },
+    // Ranch expansion prototype (non-paid): optional on the application.
+    grantRanchExpansion() {
+      app.grantRanchExpansionPrototype?.();
+      committed("cage-layout");
+      return commit();
+    },
+    revokeRanchExpansion() {
+      app.revokeRanchExpansionPrototype?.();
+      committed("cage-layout");
+      return commit();
+    },
     setTamerRank(nextRank) {
       app.setTamerRank(nextRank);
       return commit();

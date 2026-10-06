@@ -285,7 +285,7 @@ export function createRuntimeMapArtFieldLoader({ PIXI }) {
  * @param {Array<{fieldId:string, x:number, y:number}>} options.placements
  */
 export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
-  placementEvidence = "UNKNOWN_REQUIRES_TRACE", presentationMode = "EXPLICIT_TILE_SET", residentViewport = null, wrapWidthPx = null }) {
+  placementEvidence = "UNKNOWN_REQUIRES_TRACE", presentationMode = "EXPLICIT_TILE_SET", residentViewport = null, wrapWidthPx = null, fold = null }) {
   assertPixi(PIXI);
   if (typeof PIXI.Container !== "function") throw new TypeError("Runtime map art tile sets require PIXI.Container");
   const checked = validateRuntimeMapArtBundle(manifest);
@@ -296,6 +296,10 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   nonEmptyString(placementEvidence, "TILE_SET_PLACEMENT_EVIDENCE_REQUIRED");
   nonEmptyString(presentationMode, "TILE_SET_PRESENTATION_MODE_REQUIRED");
   if(wrapWidthPx!==null&&(!(wrapWidthPx>0)||!Number.isFinite(wrapWidthPx)||presentationMode!=='NATIVE_RANCH'))fail('TILE_SET_WRAP_INVALID');
+  // A folded ring (ranch expansion prototype): band 0 shows ring [0, splitPx),
+  // band 1 shows [splitPx, ringPx) below it, bandGapPx lower than band 0's foot.
+  if(fold!==null&&(presentationMode!=='NATIVE_RANCH'||!['splitPx','ringPx','bandGapPx'].every(k=>Number.isFinite(fold[k]))
+    ||!(fold.splitPx>0)||!(fold.ringPx>fold.splitPx)||fold.bandGapPx<0))fail('TILE_SET_FOLD_INVALID');
   const residentBounds = residentViewport ? freezeRecord({...residentViewport}) : null;
   if (residentBounds && (!['x','y','width','height'].every(key=>Number.isFinite(residentBounds[key]))
     || residentBounds.x<0 || residentBounds.y<0 || residentBounds.width<=0 || residentBounds.height<=0)) fail('RESIDENT_VIEWPORT_INVALID');
@@ -333,6 +337,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   const loaded = [];
   const container = new PIXI.Container();
   container.label = `runtime map art tile set ${checked.assetId}`;
+  const ringBand = fold ? new PIXI.Container({ label: 'ranch ring band 0' }) : container;
 
   // Assets remains the sole texture authority. Within this composite, shared
   // frame URLs acquire and release once even when several tiles reference them.
@@ -357,7 +362,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
       // Hard-edged art: a fractional position resamples the silhouette and the
       // seam between two cages becomes visible.
       tile.displayObject.position.set(placement.x, placement.y);
-      container.addChild(tile.displayObject);
+      ringBand.addChild(tile.displayObject);
     }
   } catch (error) {
     await Promise.allSettled(loaded.map((tile) => tile.dispose()));
@@ -379,7 +384,23 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // The ground already wraps at the native board width. These neighboring
   // views share the loaded textures; they add no second asset ownership.
   const repeats=[];
-  if(wrapWidthPx)for(const tile of loaded)for(const offset of [-wrapWidthPx,wrapWidthPx]){
+  // Folded, the second band reuses every tile's texture through a copy under
+  // its own clip; the bands are clamped, not wrapped, so no repeats are made.
+  let folded=null;
+  if(fold){
+    const second=new PIXI.Container({label:'ranch ring band 1'}),bandOffsetPx=worldHeightPx+fold.bandGapPx;
+    for(const tile of loaded){const original=tile.displayObject,copy=new PIXI.Sprite(original.texture);
+      copy.position.set(original.x,original.y);copy.width=original.width;copy.height=original.height;copy.eventMode='none';
+      second.addChild(copy);repeats.push({original,copy});}
+    second.position.set(-fold.splitPx,bandOffsetPx);
+    const clipA=new PIXI.Graphics().rect(0,0,fold.splitPx,worldHeightPx).fill(0xffffff);
+    const clipB=new PIXI.Graphics().rect(0,bandOffsetPx,fold.ringPx-fold.splitPx,worldHeightPx).fill(0xffffff);
+    ringBand.mask=clipA;second.mask=clipB;
+    container.addChild(ringBand,second,clipA,clipB);
+    folded=Object.freeze({splitPx:fold.splitPx,ringPx:fold.ringPx,annexWidthPx:fold.ringPx-fold.splitPx,bandGapPx:fold.bandGapPx,
+      bandOffsetPx,parts:[ringBand,second,clipA,clipB]});
+  }
+  if(wrapWidthPx&&!fold)for(const tile of loaded)for(const offset of [-wrapWidthPx,wrapWidthPx]){
     const original=tile.displayObject,copy=new PIXI.Sprite(original.texture);
     copy.position.set(original.x+offset,original.y);copy.width=original.width;copy.height=original.height;
     copy.eventMode='none';container.addChild(copy);repeats.push({original,copy});
@@ -392,8 +413,10 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     tileCount: loaded.length,
     field: Object.freeze({
       fieldId: `${checked.assetId}:composite`,
-      worldWidthPx: wrapWidthPx ?? worldWidthPx,
-      wrapWidthPx,
+      worldWidthPx: folded ? folded.splitPx : wrapWidthPx ?? worldWidthPx,
+      wrapWidthPx: folded ? null : wrapWidthPx,
+      ...(folded ? { fold: Object.freeze({ splitPx: folded.splitPx, ringPx: folded.ringPx, annexWidthPx: folded.annexWidthPx,
+        bandGapPx: folded.bandGapPx, bandOffsetPx: folded.bandOffsetPx }) } : {}),
       worldHeightPx,
       nativePixelWorldScale,
       placements: snapshot,
@@ -427,10 +450,11 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     async dispose() {
       if (disposed) return;
       disposed = true;
-      for(const {copy} of repeats){container.removeChild(copy);copy.destroy();}
+      for(const {copy} of repeats){copy.parent?.removeChild(copy);copy.destroy();}
       for (const tile of loaded) {
-        if (tile.displayObject.parent === container) container.removeChild(tile.displayObject);
+        if (tile.displayObject.parent === ringBand) ringBand.removeChild(tile.displayObject);
       }
+      if(folded)for(const part of folded.parts){part.parent?.removeChild(part);part.mask=null;part.destroy({children:false});}
       await Promise.allSettled(loaded.map((tile) => tile.dispose()));
       container.destroy({ children: false });
       await releaseTextures();

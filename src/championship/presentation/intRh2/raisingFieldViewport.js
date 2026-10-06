@@ -62,7 +62,9 @@ export function raisingNativeScreenPixels(field, viewport, padding = 12) {
  * placement, so nothing is moved on its own.
  */
 function nativeBoardPlacement(field, viewport, padding, scale) {
-  const height = field.worldHeightPx * scale;
+  // A folded ring (ranch expansion prototype) stacks its second band below the
+  // first; the scale stays the first band's, and the frame scrolls over both.
+  const height = (field.fold ? field.fold.bandOffsetPx + field.worldHeightPx : field.worldHeightPx) * scale;
   const headroom = RAISING_TOP_HEADROOM_NATIVE * field.nativePixelWorldScale * scale;
   const available = viewport.height - padding;
   if (headroom + height <= available) {
@@ -116,9 +118,22 @@ export function raisingRegionBounds(region, viewport) {
     width: region.w * viewport.width, height: region.h * viewport.height };
 }
 
+/**
+ * Which band of a folded ring a ring x (world px) shows in, and where.
+ * Band 0 is ring [0, splitPx) and band 1 is [splitPx, ringPx), drawn
+ * bandOffsetPx lower and shifted left by splitPx. Both share the camera.
+ */
+export function raisingFoldBand(field,worldX){
+  const fold=field?.fold;if(!fold)return {band:0,x:worldX,yOffset:0};
+  const x=wrapRaisingCamera(worldX,fold.ringPx);
+  return x>=fold.splitPx?{band:1,x:x-fold.splitPx,yOffset:fold.bandOffsetPx}:{band:0,x,yOffset:0};
+}
+
 export function raisingNativeToScreen(positionQ12,field,viewport,cameraX=0) {
   const fit=raisingFieldViewport(field,viewport,12,cameraX),unit=field?.nativePixelWorldScale;
   if(!(unit>0)||!positionQ12)return null;
+  if(field.fold){const band=raisingFoldBand(field,positionQ12[0]/4096*unit);
+    return {x:fit.x+band.x*fit.scale,y:fit.y+(positionQ12[1]/4096*unit+band.yOffset)*fit.scale,band:band.band};}
   let x=positionQ12[0]/4096*unit;
   if(field.wrapWidthPx){const camera=wrapRaisingCamera(cameraX,field.wrapWidthPx);
     const centre=camera+(viewport.width-24)/(2*fit.scale);
@@ -128,6 +143,13 @@ export function raisingNativeToScreen(positionQ12,field,viewport,cameraX=0) {
 export function raisingScreenToNative(point,field,viewport,cameraX=0) {
   const fit=raisingFieldViewport(field,viewport,12,cameraX),unit=field?.nativePixelWorldScale;
   if(!(unit>0))return null;
+  if(field.fold){
+    // The gap between the bands is split at its middle: above it reads band 0
+    // (y past its foot), below it band 1 (y above its top edge).
+    const fold=field.fold,worldX=(point.x-fit.x)/fit.scale,worldY=(point.y-fit.y)/fit.scale;
+    const second=worldY>=field.worldHeightPx+fold.bandGapPx/2;
+    return {x:(second?fold.splitPx+worldX:worldX)/unit,y:(second?worldY-fold.bandOffsetPx:worldY)/unit,band:second?1:0};
+  }
   const x=(point.x-fit.x)/(unit*fit.scale);
   return {x:field.wrapWidthPx?wrapRaisingCamera(x,field.wrapWidthPx/unit):x,y:(point.y-fit.y)/(unit*fit.scale)};
 }

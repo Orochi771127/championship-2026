@@ -3,6 +3,7 @@
 import manifest from '../../../assets/production/cage/licensed-runtime-v1/manifest.json' with { type: 'json' };
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
+import { RANCH_EXPANSION_FIRST_SLOT, isAnnexSlot } from '../cage/ranchExpansion.js';
 import { getOriginalCageVisualBinding } from './originalCageVisualBindings.js';
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import { cageName } from '../text/zhHant.js';
@@ -41,9 +42,15 @@ export function shopCageUiImage(shopRecordIndex, baseUrl) {
   return definition ? assembledShopArt(shopRecordIndex, baseUrl)?.src ?? cageUiImage(definition.moduleId, baseUrl) : null;
 }
 export function cageEditorArtCells(slots, baseUrl) {
-  const cells = slots.map((slot) => ({ ...slot, ...ranchBoardCell(slot.slotIndex) }));
+  // An expansion annex slot (20..29) is drawn on its own board with the same
+  // traced cell arithmetic as the main board, from its deck-local index.
+  const cells = slots.map((slot) => {
+    const annex = isAnnexSlot(slot.slotIndex);
+    const cell = ranchBoardCell(annex ? slot.slotIndex - RANCH_EXPANSION_FIRST_SLOT : slot.slotIndex);
+    return { ...slot, ...cell, slotIndex: slot.slotIndex, deck: annex ? 1 : 0 };
+  });
   return cells.map((cell) => {
-    const peers = cell.moduleId ? cells.filter((other) => other.moduleId === cell.moduleId) : [cell];
+    const peers = cell.moduleId ? cells.filter((other) => other.moduleId === cell.moduleId && other.deck === cell.deck) : [cell];
     const left = Math.min(...peers.map((entry) => entry.x));
     const top = Math.min(...peers.map((entry) => entry.y));
     const width = (Math.max(...peers.map((entry) => entry.x)) - left + 24) * 2;
@@ -57,7 +64,7 @@ export function cageEditorArtCells(slots, baseUrl) {
     const scale = Math.min(width / sourceWidth, height / sourceHeight);
     const imageWidth = sourceWidth * scale;
     const imageHeight = sourceHeight * scale;
-    return { slotIndex: cell.slotIndex, x: cell.x * 2, y: (cell.y - 8) * 2,
+    return { slotIndex: cell.slotIndex, deck: cell.deck, x: cell.x * 2, y: (cell.y - 8) * 2,
       image, imageWidth, imageHeight,
       imageX: (left - cell.x) * 2 + (width-imageWidth)/2,
       imageY: (top - cell.y) * 2 + (height-imageHeight)/2 };

@@ -21,6 +21,7 @@ import { normalizeNativeChampionshipRun } from "../battle/nativeChampionshipRoun
 import { normalizeFreeBattleMenu } from "../battle/nativeFreeBattle.js";
 import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages.js";
 import { normalizeNativeOpening } from './nativeOpeningState.js';
+import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
 export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
 export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 5;
@@ -49,7 +50,10 @@ const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "hun
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
 const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu"]);
 const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned"]);
-const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion"]);
+// `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
+// the ranch expansion prototype versions its own slice, so a save that never
+// takes the grant keeps exactly its old shape and schemaVersion stays 5.
+const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion", "expansion"]);
 const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex"]);
 
 // Every one of these names identifies forensic/evidence data, catalog structure,
@@ -170,10 +174,17 @@ function normalizeCageEditSlice(cageEdit) {
     }
     placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex });
   }
-  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1') {
+  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1' && cageEdit.layoutVersion !== RANCH_DECKS_LAYOUT) {
     throw saveError('INVALID_RANCH_LAYOUT_VERSION');
   }
-  return { ...(cageEdit.layoutVersion ? { layoutVersion: cageEdit.layoutVersion } : {}), placements };
+  let expansion = null;
+  if (cageEdit.layoutVersion === RANCH_DECKS_LAYOUT) {
+    try { expansion = normalizeRanchExpansion(cageEdit.expansion); } catch { throw saveError('INVALID_RANCH_EXPANSION'); }
+    if (!expansion) throw saveError('INVALID_RANCH_EXPANSION');
+  } else if (cageEdit.expansion !== undefined) {
+    throw saveError('INVALID_RANCH_EXPANSION');
+  }
+  return { ...(cageEdit.layoutVersion ? { layoutVersion: cageEdit.layoutVersion } : {}), ...(expansion ? { expansion } : {}), placements };
 }
 
 function normalizeBattleEconomySlice(battleEconomy) {

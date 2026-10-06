@@ -48,7 +48,10 @@ import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
 import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage} from "../raising/nativeRaisingActor.js";
-import {createNativeRaisingGround,nativeRaisingSpawnPosition,nativeRaisingEntryPosition} from "../raising/nativeRaisingGround.js";
+// The ranch ground for either layout: the original board, or (expansion
+// prototype) the same ring continued into its annex.
+import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnPosition as nativeRaisingSpawnPosition,
+  ranchRaisingEntryPosition as nativeRaisingEntryPosition} from "../raising/nativeRaisingRanchRing.js";
 import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast} from "../raising/nativeRaisingFood.js";
 import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raising/nativeRaisingHomeState.js";
 import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
@@ -69,7 +72,7 @@ import { getDatabaseSlot } from "../database/databaseCatalog.js";
 import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
 import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
-import { validateNativeRanch } from '../cage/nativeRanchLayout.js';
+import { validateRanchLayout } from '../cage/ranchExpansion.js';
 import { getMatchRecord, matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
 import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
 import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX, createNativeChampionshipRun,
@@ -297,6 +300,21 @@ export function createChampionshipStandaloneApp({
 
   function cageEditArgs() {
     return [shopCageOwned(), tamerRank()];
+  }
+
+  // The grant changes the saved layout version, so the ground is rebuilt from
+  // the committed layout exactly as a confirmed edit rebuilds it.
+  function changeRanchExpansion(change) {
+    if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+    const editor = requireCageEdit();
+    const before = JSON.stringify(editor.toSave());
+    storeNativeRaisingPositions(); storeNativeRaisingHome();
+    const frame = change(editor);
+    if (JSON.stringify(editor.toSave()) !== before) {
+      raisingActors.clear(); initializeNativeRaisingHome(); savePort.markDirty();
+    }
+    publishScreens();
+    return frame;
   }
 
   function requireCageEdit() {
@@ -1521,8 +1539,10 @@ export function createChampionshipStandaloneApp({
       }
       const previousRank = tamerRankValue;
       const ranch = this.getCageEditFrame();
-      if (ranch?.layoutVersion && (!validateNativeRanch(ranch.placements, slotCountForTamerRank(nextRank))
-        || !validateNativeRanch(cageEdit.toSave().placements, slotCountForTamerRank(nextRank)))) return previousRank;
+      // Rank opens the main board's slots only; an expansion annex is not rank-gated.
+      const layout = { layoutVersion: ranch?.layoutVersion, mainUnlocked: slotCountForTamerRank(nextRank), expansion: ranch?.expansion ?? null };
+      if (ranch?.layoutVersion && (!validateRanchLayout(ranch.placements, layout)
+        || !validateRanchLayout(cageEdit.toSave().placements, layout))) return previousRank;
       tamerRankValue = normalizeTamerRank(nextRank);
       applyProgression();
       if (tamerRankValue !== previousRank) savePort.markDirty();
@@ -1733,6 +1753,19 @@ export function createChampionshipStandaloneApp({
       requireCageEdit().removePlacement(moduleId, ...cageEditArgs());
       publishScreens();
       return this.getCageEditFrame();
+    },
+
+    /**
+     * Ranch expansion PROTOTYPE (2026-10-05): grant or revoke one annex deck
+     * without any payment. Price, free unlock path, cap and competitive rules
+     * are undecided; nothing here charges, sells or records a purchase.
+     */
+    grantRanchExpansionPrototype() {
+      return changeRanchExpansion((editor) => editor.grantExpansion(...cageEditArgs()));
+    },
+
+    revokeRanchExpansionPrototype() {
+      return changeRanchExpansion((editor) => editor.revokeExpansion(...cageEditArgs()));
     },
 
     confirmCageEdit() {

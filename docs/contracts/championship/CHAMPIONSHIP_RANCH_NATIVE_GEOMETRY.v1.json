@@ -72,5 +72,40 @@
     "normalBrowserVisualChange": false,
     "physicalDeviceQa": false,
     "shippingReady": false
+  },
+  "expansionPrototype": {
+    "date": "2026-10-05",
+    "evidence": "OWNER_APPROVAL_PENDING_ADAPTATION",
+    "status": "NON_PAID_PROTOTYPE_NOT_SHIPPED",
+    "rule": "One annex deck of ten slots (five columns by two rows) beside the original rank-gated board. Inside the annex every original placement rule holds: the sixteen shape masks, the upper-row rule for two-row shapes (0xaa), one occupancy word per deck, unique module ownership. The annex is not rank-gated and holds no Waiting Room.",
+    "save": "Saved slots 20..29 are annex-local 0..9. cageEdit.layoutVersion NATIVE_DECKS_V1 with cageEdit.expansion {version:1, decks:1, grant:PROTOTYPE_NON_PAID}; a ranch without the grant keeps NATIVE_ANCHORS_V1 byte-for-byte and schemaVersion stays 5. Grant migrates V1 -> DECKS_V1 without touching placements; revoking an empty annex migrates back to the exact V1 record. Mixed or unknown versions are refused, never repaired or reset.",
+    "field": "The annex columns follow the board's unlocked columns on the same field ring (ring slot = unlocked + local), so walking, carrying, spawning, feeding and training run unchanged over a longer ring. Each cage is still its own walkable component, as on the original board; residents reach the annex by being carried, as between any two cages.",
+    "presentation": "The ring is shown folded at the annex seam: band 0 is ring [0, unlocked*48), band 1 the annex, drawn RAISING_TOP_HEADROOM_NATIVE (84) native pixels below band 0's foot at the same whole-pixel scale; the frame scrolls vertically over both. Cage Edit shows the annex as a second board of the same cells.",
+    "implementation": [
+      "src/championship/cage/ranchExpansion.js",
+      "src/championship/cage/cageEditRuntime.js",
+      "src/championship/app/championshipStandaloneSave.js",
+      "src/championship/raising/nativeRaisingRanchRing.js",
+      "src/championship/presentation/raisingRanchArtPlan.js",
+      "src/championship/presentation/runtimeMapArtBundle.js",
+      "src/championship/presentation/intRh2/raisingFieldViewport.js",
+      "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "src/championship/app/vs4Screens.js"
+    ],
+    "lockedSourcesUnchanged": "nativeRaisingGround.js, raisingCageArtPlan.js and ranchSlotGeometry.js are hash-locked by docs/art/contracts/cage/field_cm01_01.v1.json and are not edited; the ring repeats their composition and tests require identical output on every original layout.",
+    "tests": "tests/championship-ranch-expansion-cases.mjs",
+    "undecided": [
+      "price",
+      "free unlock path",
+      "expansion cap",
+      "competitive fairness rules",
+      "real payment and entitlement authority",
+      "whether the 16-resident Home cap changes"
+    ],
+    "knownLimits": [
+      "A save holding the annex cannot be opened by a build older than NATIVE_DECKS_V1; revoke (empty annex) first to roll back",
+      "Carrying a resident across the fold adds the jump to the carry velocity; holding still before release settles it",
+      "The camera does not scroll vertically by itself while a resident is carried"
+    ]
   }
 }

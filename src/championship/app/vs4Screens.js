@@ -515,8 +515,25 @@ const CAGE_VERDICT_COPY = Object.freeze({
   ALREADY_PLACED: "That cage is already on the ranch.",
   UNOWNED: "You do not own that cage.",
   NOTHING_SELECTED: "Select a cage first.",
-  OUT_OF_BOUNDS: "That hex is outside the ranch."
+  OUT_OF_BOUNDS: "That hex is outside the ranch.",
+  // Ranch expansion prototype (2026-10-05): no price, no purchase.
+  EXPANSION_GRANTED: "已加入擴充區（原型，不收費）。",
+  EXPANSION_ALREADY_GRANTED: "擴充區已經開放。",
+  EXPANSION_REVOKED: "已移除擴充區，牧場回到原本的格數。",
+  EXPANSION_NOT_EMPTY: "請先把擴充區的設施取回，再移除擴充區。",
+  EXPANSION_REQUIRES_NATIVE_RANCH: "這個存檔的牧場仍是舊版配置，暫時不能加入擴充區。",
+  EXPANSION_NOT_GRANTED: "擴充區尚未開放。"
 });
+
+// Shown only on the QA/developer presentation or with ?ranchExpansion=prototype.
+function ranchExpansionPrototypeVisible(mode) {
+  try {
+    return mode === VS2_PRESENTATION_MODES.DEVELOPER
+      || new URLSearchParams(globalThis.location?.search ?? "").get("ranchExpansion") === "prototype";
+  } catch {
+    return false;
+  }
+}
 
 export function createCageEditView({ root, source, askToLeave = showChoiceDialog }) {
   const frame = source.getFrame();
@@ -555,10 +572,19 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   const status = element("p", "cm-vs2-shop__status");
   status.setAttribute("aria-live", "polite");
   const boardScroll = element('div', 'cm-cage-board-scroll');
-  boardScroll.append(board);
+  // The expansion prototype's annex: its own five-column board under the main
+  // one, with the same cells and rules (ranchExpansion.js).
+  const annexLabel = element('p', 'cm-cage-annex-label', '擴充區 · 原型（未定價、不收費）');
+  const annexBoard = element('div', 'cm-vs2-cage-board cm-vs2-cage-board--annex');
+  annexBoard.setAttribute('role', 'grid');
+  annexBoard.setAttribute('aria-label', uiText('擴充區格位'));
+  annexLabel.hidden = true; annexBoard.hidden = true;
+  boardScroll.append(board, annexLabel, annexBoard);
+  const expansionControls = element('div', 'cm-cage-expansion');
   const facilities = element('div', 'cm-cage-facilities');
   facilities.setAttribute('aria-label', uiText('已放置設施'));
-  body.append(element('p', 'cm-cage-board-hint', '牧場平面配置 · 左右滑動查看所有格位'), boardScroll, facilities, tray, status);
+  const boardHint = element('p', 'cm-cage-board-hint', '牧場平面配置 · 左右滑動查看所有格位');
+  body.append(boardHint, boardScroll, expansionControls, facilities, tray, status);
 
   // Footer rule shared by every screen: leave on the left, the one primary
   // action on the right.
@@ -610,7 +636,8 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     const rankLabel = element(
       "span",
       "cm-vs2-cage-rank__label",
-      uiText("階級 {rank} · {used} / {total} 格", { rank: cage.tamerRank, used: cage.occupiedCount ?? cage.placements.length, total: cage.unlockedCount })
+      uiText("階級 {rank} · {used} / {total} 格", { rank: cage.tamerRank, used: cage.occupiedCount ?? cage.placements.length,
+        total: cage.unlockedCount + (cage.expansion?.annexSlotCount ?? 0) })
     );
     const up = element("button", "cm-vs2-cage-rank__step", "+");
     up.type = "button";
@@ -624,6 +651,25 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     confirm.disabled = !cage.dirty;
 
     board.replaceChildren();
+    annexBoard.replaceChildren();
+    const annex = Boolean(cage.expansion);
+    annexLabel.hidden = !annex; annexBoard.hidden = !annex;
+    boardScroll.dataset.annex = annex ? 'true' : 'false';
+    boardHint.textContent = uiText(annex ? '牧場平面配置 · 左右滑動查看格位，往下是擴充區' : '牧場平面配置 · 左右滑動查看所有格位');
+    expansionControls.replaceChildren();
+    if (ranchExpansionPrototypeVisible(mode) && cage.layoutVersion) {
+      const annexUsed = cage.slots.some((slot) => slot.deck === 1 && slot.moduleId);
+      const toggle = element('button', 'cm-vs2-action', annex ? '移除擴充區（原型）' : '加入擴充區（原型，不收費）');
+      toggle.type = 'button';
+      toggle.dataset.expansionAction = annex ? 'revoke' : 'grant';
+      toggle.disabled = (annex && annexUsed) || (!annex && cage.dirty);
+      toggle.title = uiText(annex && annexUsed ? '先取回擴充區的設施' : !annex && cage.dirty ? '先套用或放棄目前的配置' : '');
+      toggle.addEventListener('click', () => {
+        if (annex) source.intents.revokeRanchExpansion?.();
+        else source.intents.grantRanchExpansion?.();
+      });
+      expansionControls.append(toggle);
+    }
     const cellArt = new Map(cageEditorArtCells(cage.slots).map((cell) => [cell.slotIndex, cell]));
     for (const slot of cage.slots) {
       const cell = element("button", "cm-vs2-cage-slot");
@@ -655,7 +701,8 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         if (slot.moduleId) source.intents.removeCagePlacement(slot.moduleId);
         else source.intents.placeCageAt(slot.slotIndex);
       });
-      board.append(cell);
+      cell.dataset.deck = String(slot.deck ?? 0);
+      (slot.deck === 1 ? annexBoard : board).append(cell);
     }
 
     facilities.replaceChildren();

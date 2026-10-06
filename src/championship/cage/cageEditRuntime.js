@@ -26,6 +26,8 @@ import {
 } from "./cageCatalog.js";
 import { trainingViewFromDefinition } from "./cageEffects.js";
 import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, originalStartingRanch, nativePlacementMask, validateNativeRanch } from './nativeRanchLayout.js';
+import { RANCH_DECKS_LAYOUT, RANCH_EXPANSION_DECK_SLOTS, RANCH_EXPANSION_EVIDENCE, RANCH_EXPANSION_FIRST_SLOT, annexPlacementCells,
+  annexSlotCount, isAnnexSlot, normalizeRanchExpansion, prototypeRanchExpansion, validateRanchLayout } from './ranchExpansion.js';
 
 export const CAGE_EDIT_AUTHORITY = "CHAMPIONSHIP_2026_PRODUCT";
 
@@ -52,7 +54,7 @@ function placementView(entry) {
   };
 }
 
-function normalizePlacements(raw) {
+function normalizePlacements(raw, slotLimit = MAX_SLOT_COUNT) {
   if (raw == null) return [];
   if (!Array.isArray(raw)) throw cageError("INVALID_CAGE_EDIT_PLACEMENTS");
   const placements = [];
@@ -63,7 +65,7 @@ function normalizePlacements(raw) {
     const slotIndex = entry.slotIndex ?? entry.anchorCell;
     const definition = getCageDefinitionByModuleId(entry.moduleId);
     if (!definition) continue;
-    if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= MAX_SLOT_COUNT) continue;
+    if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= slotLimit) continue;
     if (seenModules.has(definition.moduleId) || seenSlots.has(slotIndex)) {
       throw cageError("DUPLICATE_CAGE_PLACEMENT");
     }
@@ -76,10 +78,15 @@ function normalizePlacements(raw) {
 
 export function createCageEditRuntime({ snapshot = null, initializeOriginal = false } = {}) {
   if (initializeOriginal) snapshot = originalStartingRanch();
-  const layoutVersion = snapshot?.layoutVersion ?? null;
-  if (layoutVersion !== null && layoutVersion !== NATIVE_RANCH_LAYOUT) throw cageError('UNKNOWN_RANCH_LAYOUT');
-  let committed = normalizePlacements(snapshot?.placements);
-  if (layoutVersion && !validateNativeRanch(committed)) throw cageError('INVALID_NATIVE_RANCH');
+  // NATIVE_DECKS_V1 is the original layout plus the expansion prototype's
+  // annex (ranchExpansion.js). Only the prototype grant writes it.
+  let layoutVersion = snapshot?.layoutVersion ?? null;
+  if (layoutVersion !== null && layoutVersion !== NATIVE_RANCH_LAYOUT && layoutVersion !== RANCH_DECKS_LAYOUT) throw cageError('UNKNOWN_RANCH_LAYOUT');
+  let expansion = layoutVersion === RANCH_DECKS_LAYOUT ? normalizeRanchExpansion(snapshot?.expansion) : null;
+  if (layoutVersion === RANCH_DECKS_LAYOUT && !expansion) throw cageError('RANCH_EXPANSION_REQUIRED');
+  if (layoutVersion !== RANCH_DECKS_LAYOUT && snapshot?.expansion != null) throw cageError('RANCH_EXPANSION_WITHOUT_DECKS_LAYOUT');
+  let committed = normalizePlacements(snapshot?.placements, MAX_SLOT_COUNT + annexSlotCount(expansion));
+  if (layoutVersion && !validateRanchLayout(committed, { layoutVersion, mainUnlocked: MAX_SLOT_COUNT, expansion })) throw cageError('INVALID_NATIVE_RANCH');
   let draft = clonePlacements(committed);
   let selectedModuleId = null;
   let lastVerdict = null;
@@ -87,7 +94,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
   function dropInvalid(placements, owned, unlockedCount) {
     // A rank change must not silently discard a native multi-cell placement.
     if (layoutVersion) {
-      if (!validateNativeRanch(placements,unlockedCount) || placements.some(entry=>!owned.has(entry.moduleId))) {
+      if (!validateRanchLayout(placements, { layoutVersion, mainUnlocked: unlockedCount, expansion }) || placements.some(entry=>!owned.has(entry.moduleId))) {
         throw cageError('NATIVE_RANCH_OWNERSHIP_OR_RANK_MISMATCH');
       }
       return placements;
@@ -107,6 +114,10 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
     // adding the anchor first would paint a phantom extra hex in Cage Edit.
     const occupied = new Map(layoutVersion ? [] : draft.map((entry) => [entry.slotIndex, entry.moduleId]));
     if (layoutVersion) for (const entry of draft) {
+      if (isAnnexSlot(entry.slotIndex)) {
+        for (const slot of annexPlacementCells(entry, expansion)) occupied.set(slot, entry.moduleId);
+        continue;
+      }
       const mask = nativePlacementMask(entry);
       for (let slot = 0; slot < MAX_SLOT_COUNT; slot++) if (mask & (1 << slot)) occupied.set(slot, entry.moduleId);
     }
@@ -126,6 +137,15 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
         displayName: unlocked ? (definition?.displayName ?? null) : null,
         trainingSummary: unlocked ? (moduleId ? training.summary : null) : null
       });
+    }
+    // The annex deck: always open once granted, never rank-gated.
+    for (let local = 0; local < annexSlotCount(expansion); local += 1) {
+      const slotIndex = RANCH_EXPANSION_FIRST_SLOT + local;
+      const moduleId = occupied.get(slotIndex) ?? null;
+      const definition = moduleId ? getCageDefinitionByModuleId(moduleId) : null;
+      const training = trainingViewFromDefinition(definition);
+      slots.push({ slotIndex, deck: 1, column: Math.floor(local / 2), row: local % 2, unlocked: true, fixed: false,
+        moduleId, displayName: definition?.displayName ?? null, trainingSummary: moduleId ? training.summary : null });
     }
     const placed = new Set(draft.map((entry) => entry.moduleId));
     const tray = listCageDefinitions()
@@ -162,6 +182,8 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       capacityRuleEvidence: CAPACITY_RULE_EVIDENCE,
       capacityOverfillConsequence: CAPACITY_OVERFILL_CONSEQUENCE,
       rotationEnabled: false,
+      ...(expansion ? { expansion: { ...expansion, annexSlotCount: annexSlotCount(expansion), firstSlot: RANCH_EXPANSION_FIRST_SLOT,
+        deckSlots: RANCH_EXPANSION_DECK_SLOTS, evidence: RANCH_EXPANSION_EVIDENCE } } : {}),
       dirty,
       selectedModuleId,
       lastVerdict,
@@ -205,17 +227,18 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
         lastVerdict = { ok: false, reason: "ALREADY_PLACED" };
         return getFrame(shopCageOwned, tamerRank);
       }
-      if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= MAX_SLOT_COUNT) {
+      const annex = isAnnexSlot(slotIndex) && slotIndex < RANCH_EXPANSION_FIRST_SLOT + annexSlotCount(expansion);
+      if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || (slotIndex >= MAX_SLOT_COUNT && !annex)) {
         lastVerdict = { ok: false, reason: "OUT_OF_BOUNDS" };
         return getFrame(shopCageOwned, tamerRank);
       }
-      if (slotIndex >= unlockedCount) {
+      if (!annex && slotIndex >= unlockedCount) {
         lastVerdict = { ok: false, reason: "SLOT_LOCKED" };
         return getFrame(shopCageOwned, tamerRank);
       }
       if (layoutVersion) {
         const candidate = { moduleId: selectedModuleId, slotIndex };
-        if (!validateNativeRanch([...draft, candidate], unlockedCount)) {
+        if (!validateRanchLayout([...draft, candidate], { layoutVersion, mainUnlocked: unlockedCount, expansion })) {
           lastVerdict = { ok: false, reason: 'FOOTPRINT_BLOCKED' };
           return getFrame(shopCageOwned, tamerRank);
         }
@@ -261,9 +284,46 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       return getFrame(shopCageOwned, tamerRank);
     },
 
+    /**
+     * Prototype grant (non-paid): adds one annex deck. It changes the saved
+     * layout version, so it commits at once instead of riding the draft; the
+     * placements themselves are untouched.
+     */
+    grantExpansion(shopCageOwned = [], tamerRank = 0) {
+      if (layoutVersion === RANCH_DECKS_LAYOUT) {
+        lastVerdict = { ok: true, reason: "EXPANSION_ALREADY_GRANTED" };
+        return getFrame(shopCageOwned, tamerRank);
+      }
+      if (layoutVersion !== NATIVE_RANCH_LAYOUT) {
+        lastVerdict = { ok: false, reason: "EXPANSION_REQUIRES_NATIVE_RANCH" };
+        return getFrame(shopCageOwned, tamerRank);
+      }
+      layoutVersion = RANCH_DECKS_LAYOUT;
+      expansion = prototypeRanchExpansion();
+      lastVerdict = { ok: true, reason: "EXPANSION_GRANTED" };
+      return getFrame(shopCageOwned, tamerRank);
+    },
+
+    /** Undo the grant while the annex is empty, back to the original version. */
+    revokeExpansion(shopCageOwned = [], tamerRank = 0) {
+      if (layoutVersion !== RANCH_DECKS_LAYOUT) {
+        lastVerdict = { ok: false, reason: "EXPANSION_NOT_GRANTED" };
+        return getFrame(shopCageOwned, tamerRank);
+      }
+      if ([...committed, ...draft].some((entry) => isAnnexSlot(entry.slotIndex))) {
+        lastVerdict = { ok: false, reason: "EXPANSION_NOT_EMPTY" };
+        return getFrame(shopCageOwned, tamerRank);
+      }
+      layoutVersion = NATIVE_RANCH_LAYOUT;
+      expansion = null;
+      lastVerdict = { ok: true, reason: "EXPANSION_REVOKED" };
+      return getFrame(shopCageOwned, tamerRank);
+    },
+
     toSave() {
       return deepFreeze({
         ...(layoutVersion ? { layoutVersion } : {}),
+        ...(expansion ? { expansion: { ...expansion } } : {}),
         placements: clonePlacements(committed)
       });
     }

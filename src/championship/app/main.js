@@ -70,7 +70,7 @@ import {
   createRuntimeMapArtTileSetLoader,
   validateRuntimeMapArtBundle
 } from "../presentation/runtimeMapArtBundle.js";
-import { createRaisingCageArtPlan } from "../presentation/raisingCageArtPlan.js";
+import { createRanchCageArtPlan as createRaisingCageArtPlan } from "../presentation/raisingRanchArtPlan.js";
 import { mountPortraitFrame } from './portraitFrame.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
@@ -451,12 +451,14 @@ async function loadOptionalCageFieldArt(stage) {
       placements: cageFrame?.placements ?? [],
       layoutVersion: cageFrame?.layoutVersion,
       unlockedCount: cageFrame?.unlockedCount,
+      expansion: cageFrame?.expansion ?? null,
       previewFieldId: CAGE_ART_PREVIEW_FIELD || null });
     return await createRuntimeMapArtTileSetLoader({ PIXI: stage.PIXI }).load({
       manifest,
       placements: plan.placements,
       residentViewport: plan.residentViewport,
       wrapWidthPx: plan.wrapWidthPx,
+      ...(plan.fold ? { fold: plan.fold } : {}),
       placementEvidence: plan.placementEvidence,
       presentationMode: plan.mode
     });

@@ -8,12 +8,13 @@
 // The scene may hold transient pointer and animation state, but never cage
 // assignment, save data, gameplay values, routing, or another runtime store.
 
+import { isNativeRanchLayout } from "../../cage/ranchExpansion.js";
 import { getRaisingNativePixelScale, getRaisingNativeActorGeometry } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
-import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll } from "./raisingFieldViewport.js";
+import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
 
 const DRAG_THRESHOLD_PX = 6;
 
@@ -181,7 +182,8 @@ export async function mountRaisingFieldPixiPresentation({
   let drag = null;
   let cameraX = 0;
   // Screen pixels the board is lowered to show the headroom above it. Only a
-  // frame too short for the board and its headroom ever lets this leave 0.
+  // frame too short for the board and its headroom ever lets this leave 0; a
+  // folded ring (expansion annex below the board) scrolls over both bands.
   let cameraY = 0;
   // Every placement on this scene reads the frame through this one view, so
   // the vertical scroll moves art, residents, shadows and input together.
@@ -191,6 +193,10 @@ export async function mountRaisingFieldPixiPresentation({
     get scrollY() { return cameraY; }
   });
   const scrollMaxY = () => (fieldArt?.field ? raisingFieldViewport(fieldArt.field, view).scrollMaxY ?? 0 : 0);
+  // World x of a native x within its band: a folded ring (expansion prototype)
+  // shows its annex as a second band, and the shared camera is band-local.
+  const bandWorldX = (field, nativeX) => field?.fold ? raisingFoldBand(field, nativeX * field.nativePixelWorldScale).x
+    : nativeX * field.nativePixelWorldScale;
   let cameraDrag = null;
   if (fieldArt?.field?.presentationMode === 'NATIVE_RANCH') {
     // Ranch art is layered above the backdrop. Ground input belongs to the
@@ -297,7 +303,9 @@ export async function mountRaisingFieldPixiPresentation({
       .find((value) => Number.isFinite(value));
     if (!Number.isFinite(nativeX)) return;
     cameraStarted = true;
-    const target = nativeX / 4096 * unit - (app.screen.width - 24) / fit.scale / 2;
+    // A folded ring opens on its first band, headroom included.
+    if (fieldArt.field.fold) cameraY = scrollMaxY();
+    const target = bandWorldX(fieldArt.field, nativeX / 4096) - (app.screen.width - 24) / fit.scale / 2;
     cameraX = fieldArt.field.wrapWidthPx
       ? wrapRaisingCamera(target, fieldArt.field.wrapWidthPx)
       : Math.max(0, target);
@@ -305,7 +313,7 @@ export async function mountRaisingFieldPixiPresentation({
 
   function actorPoint(resident) {
     const native=source.getActorFrame?.(resident.creatureId);
-    if(native?.positionQ12&&latestFrame?.ranch?.layoutVersion==='NATIVE_ANCHORS_V1') {
+    if(native?.positionQ12&&isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)) {
       const point=raisingNativeToScreen(native.positionQ12,fieldArt?.field,view,cameraX);if(point)return point;
     }
     const cage = latestFrame?.cages.find((entry) => entry.cageId === resident.cageId);
@@ -355,7 +363,7 @@ export async function mountRaisingFieldPixiPresentation({
         && Number.isInteger(nativeFrame) && nativeFrame-completed.nativeFrame < 10)
       source.intents.touchEgg?.(completed.creatureId);
     if (completed.moved && point && event.type!=="pointercancel" && event.type!=="pointerupoutside") {
-      if(latestFrame?.ranch?.layoutVersion==='NATIVE_ANCHORS_V1') {
+      if(isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)) {
         const nativePoint=raisingScreenToNative(point,fieldArt?.field,view,cameraX);
         // Native short touches do not teleport a resident. Adult relocation
         // completes through the held/flight owner after the ten-frame gate.
@@ -401,7 +409,7 @@ export async function mountRaisingFieldPixiPresentation({
         lastPoint: { x: event.global.x, y: event.global.y },
         moved: false
       };
-      if(drag.tool==='hand'&&latestFrame?.ranch?.layoutVersion==='NATIVE_ANCHORS_V1'){
+      if(drag.tool==='hand'&&isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)){
         const point=raisingScreenToNative(event.global,fieldArt?.field,view,cameraX);
         if(point)drag.nativeHand=source.intents.beginHand?.(creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale})??false;
       }
@@ -615,7 +623,7 @@ export async function mountRaisingFieldPixiPresentation({
     }
     if(drag.carried){const point=raisingScreenToNative(event.global,fieldArt?.field,view,cameraX);
       if(point)source.intents.updateCarry?.(drag.creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale});}
-    else if(drag.moved&&latestFrame?.ranch?.layoutVersion!=='NATIVE_ANCHORS_V1')drag.entry.root.position.set(event.global.x,event.global.y);
+    else if(drag.moved&&!isNativeRanchLayout(latestFrame?.ranch?.layoutVersion))drag.entry.root.position.set(event.global.x,event.global.y);
   }
 
   // The stage already resized the renderer and refreshed the hit area; the scene
@@ -727,7 +735,8 @@ export async function mountRaisingFieldPixiPresentation({
       }
       if(native?.positionQ12&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'&&(drag?.creatureId!==creatureId||drag?.carried||drag?.nativeHand)) {
         const point=raisingNativeToScreen(native.positionQ12,fieldArt.field,view,cameraX);
-        entry.root.position.set(point.x,point.y);entry.root.zIndex=native.state===6?100000:Math.round(native.positionQ12[1]/4096);
+        // A folded ring orders by screen row, so the second band draws in front.
+        entry.root.position.set(point.x,point.y);entry.root.zIndex=native.state===6?100000:fieldArt?.field?.fold?Math.round(point.y):Math.round(native.positionQ12[1]/4096);
         entry.shadow?.scale.set(native.state===6?3277/4096:1);
       }
       if (entry.nativeFramePresenter) {
@@ -796,7 +805,7 @@ export async function mountRaisingFieldPixiPresentation({
         actorLayer.addChild(g);wasteGraphics.set(item.slot,g);}
       placeCare(g,art);g.width=art.width*scale;g.height=art.height*scale;
       const point=raisingNativeToScreen(item.positionQ12,fieldArt?.field,view,cameraX);
-      if(point){g.position.set(point.x,point.y);g.zIndex=Math.round(item.positionQ12[1]/4096);}}
+      if(point){g.position.set(point.x,point.y);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(item.positionQ12[1]/4096);}}
   }
 
   function drawEvolution(entry,native){
@@ -808,7 +817,7 @@ export async function mountRaisingFieldPixiPresentation({
     if(!evolutionCamera||evolutionCamera.id!==source.getLifecycleFrame?.()?.evolution?.instanceId){
       const fit=raisingFieldViewport(fieldArt.field,view);const max=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
       evolutionCamera={id:source.getLifecycleFrame?.()?.evolution?.instanceId,start:cameraX,
-        target:clamp(native.positionQ12[0]/4096*fieldArt.field.nativePixelWorldScale-(app.screen.width-24)/fit.scale/2,0,max)};}
+        target:clamp(bandWorldX(fieldArt.field,native.positionQ12[0]/4096)-(app.screen.width-24)/fit.scale/2,0,max)};}
     if(e.phase===0){cameraX=evolutionCamera.start+(evolutionCamera.target-evolutionCamera.start)*e.elapsed/15;layoutFieldArt();}
     if(e.target>=0&&entry.evolutionTarget!==e.target){entry.evolutionTarget=e.target;
       void characterBundle?.ensureSpecies?.(`championship:creature:species-${String(e.target).padStart(3,'0')}`).then(ready=>{
@@ -891,7 +900,7 @@ export async function mountRaisingFieldPixiPresentation({
       sprite.width=art.width;sprite.height=art.height;sprite.y=-food.heightQ12/4096;
       sprite.tint=spoiled&&!original?0x8ca273:0xffffff;
       const point=raisingNativeToScreen(food.positionQ12,fieldArt?.field,view,cameraX);
-      if(point){g.position.set(point.x,point.y);g.scale.set(scale);g.zIndex=Math.round(food.positionQ12[1]/4096);}
+      if(point){g.position.set(point.x,point.y);g.scale.set(scale);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(food.positionQ12[1]/4096);}
     }
   }
 
@@ -959,7 +968,7 @@ export async function mountRaisingFieldPixiPresentation({
       const native = source.getActorFrame?.(creatureId);
       if (!field || field.presentationMode !== 'NATIVE_RANCH' || !native?.positionQ12 || drag || cameraDrag) return false;
       const fit = raisingFieldViewport(field, view, 12, cameraX);
-      let target = native.positionQ12[0] / 4096 * field.nativePixelWorldScale - (app.screen.width - 24) / fit.scale / 2;
+      let target = bandWorldX(field, native.positionQ12[0] / 4096) - (app.screen.width - 24) / fit.scale / 2;
       let distance;
       if (field.wrapWidthPx) {
         target = wrapRaisingCamera(target, field.wrapWidthPx);

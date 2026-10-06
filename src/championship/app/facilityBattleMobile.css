@@ -48,6 +48,14 @@
 .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot { position: absolute; width: 48px; height: 56px; min-width: 0; min-height: 0; margin: 0; padding: 0; transform: none; border: 0; border-radius: 0; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);  background-repeat: no-repeat;  opacity: 1; font-size: 18px; }
 
 .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot[data-fixed="true"] { opacity: 1; filter: none; }
+/* Ranch expansion prototype (2026-10-05): the annex is a five-column board of
+   the same cells under the main board; with it, the board area also passes
+   vertical pans through so the screen can scroll down to it. */
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-board--annex { width: 270px; margin-top: 4px; }
+.cm-cage-annex-label { margin: 10px 0 6px; color: #3c735d; font-size: 12px; font-weight: 700; }
+.cm-cage-board-scroll[data-annex="true"] { touch-action: pan-x pan-y; }
+.cm-cage-expansion:empty { display: none; }
+.cm-cage-expansion { display: flex; justify-content: flex-end; }
 .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot:focus-visible { filter: brightness(1.2); outline: 3px solid #956614; outline-offset: -4px; }
 .cm-cage-facilities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .cm-cage-facility { display: grid; grid-template-columns: 56px 1fr; gap: 3px 7px; align-items: center; padding: 8px; border: 1px solid #9ec2af; border-radius: 3px 12px 3px 12px; background: #f5fff1e6; color: #265a53; text-align: left; cursor: pointer; }

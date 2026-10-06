@@ -1,3 +1,4 @@
+import { isNativeRanchLayout } from "../cage/ranchExpansion.js";
 import { retranslate, setLabel, setText, uiText } from "../text/uiText.js";
 import {raisingMessageText,raisingMessageSender} from '../text/raisingMessages.zhHant.js';
 import { speciesName } from "../text/zhHant.js";
@@ -407,7 +408,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     lastRevision = frame.revision;
 
     fieldFrame.dataset.residentCount = String(frame.residents?.length ?? 0);
-    const nativeRanch = frame.ranch?.layoutVersion === 'NATIVE_ANCHORS_V1';
+    const nativeRanch = isNativeRanchLayout(frame.ranch?.layoutVersion);
     const resident = selectedResident(frame);
     root.dataset.selection = resident ? "selected" : "none";
     if (resident && !hint.hidden) hint.hidden = true;
