@@ -10,24 +10,68 @@ export const RAISING_MAX_NATIVE_SCREEN_PIXELS = 6;
 export const RAISING_MIN_VISIBLE_NATIVE_WIDTH = 112;
 
 /**
- * Screen pixels per native pixel for the native ranch window (2026-09-29).
+ * Room held above the native board for residents' bodies (2026-10-05).
  *
- * The board is a wide, short strip (two cage rows) panned sideways. The old
- * rule kept two screen pixels on every screen and laid the strip on the floor
- * under a fixed readout band, so a phone showed half its height as empty
- * ground and a tablet two-thirds. This takes the largest whole scale that
- * fits the frame's height and still leaves enough of the board in view.
+ * Residents are drawn from their feet. The tallest main-side body in the
+ * shipped character geometry rises 77 native pixels above its origin
+ * (m503 and m518; tests recompute this from the geometry table). Feet may also
+ * stand up to 7 native pixels above the board's top edge: the original tests
+ * terrain with a signed divide that truncates toward zero (OVL18
+ * 0x0211208C..0x021120B4, the same idiom at 0x02111AB4), so -7..-1 reads as
+ * row 0. That walk rule is kept; the frame makes room for it instead. Before
+ * this, only the centring margin sat above the board and the frame edge cut
+ * tall bodies off under the status bar.
+ */
+export const RAISING_TALLEST_BODY_NATIVE = 77;
+export const RAISING_TOP_EDGE_FOOT_OVERHANG_NATIVE = 7;
+export const RAISING_TOP_HEADROOM_NATIVE = RAISING_TALLEST_BODY_NATIVE + RAISING_TOP_EDGE_FOOT_OVERHANG_NATIVE;
+
+/**
+ * Screen pixels per native pixel for the native ranch window.
+ *
+ * The board is a wide, short strip (two cage rows) panned sideways. This takes
+ * the largest whole scale at which the board and the headroom above it both
+ * fit the frame's height, and still leaves enough of the board in view
+ * (2026-10-05; until then only the board was fitted, which on a phone left
+ * no room for tall bodies). A frame that cannot hold both at two whole pixels
+ * keeps the board at two and scrolls vertically over the difference rather
+ * than blurring the art with a fractional scale.
  */
 export function raisingNativeScreenPixels(field, viewport, padding = 12) {
   const unit = field.nativePixelWorldScale;
   const nativeHeight = field.worldHeightPx / unit;
-  const byHeight = Math.floor((viewport.height - padding * 2) / nativeHeight);
   const byWidth = Math.floor((viewport.width - padding * 2) / RAISING_MIN_VISIBLE_NATIVE_WIDTH);
+  // The headroom stands in for the top padding: bodies rise into it.
+  const byHeight = Math.floor((viewport.height - padding) / (nativeHeight + RAISING_TOP_HEADROOM_NATIVE));
   const whole = Math.min(RAISING_MAX_NATIVE_SCREEN_PIXELS, byHeight, byWidth);
   if (whole >= RAISING_MIN_NATIVE_SCREEN_PIXELS) return whole;
+  const boardOnly = Math.min(byWidth, Math.floor((viewport.height - padding * 2) / nativeHeight));
+  if (boardOnly >= RAISING_MIN_NATIVE_SCREEN_PIXELS) return RAISING_MIN_NATIVE_SCREEN_PIXELS;
   // A frame too short for two whole pixels fits the height instead, as the
   // ranch always did, rather than hiding part of the board.
   return Math.min(RAISING_MIN_NATIVE_SCREEN_PIXELS, Math.max(1e-3, (viewport.height - padding * 2) / nativeHeight));
+}
+
+/**
+ * Where the native board's top edge sits, and how far the frame may scroll.
+ *
+ * When the headroom and the board fit, the pair is centred together. When
+ * they do not, the whole board is shown resting on the bottom padding and
+ * `viewport.scrollY` (screen pixels, clamped to `scrollMaxY`) lowers it to
+ * reveal the headroom. Art, residents, shadows and input all read this one
+ * placement, so nothing is moved on its own.
+ */
+function nativeBoardPlacement(field, viewport, padding, scale) {
+  const height = field.worldHeightPx * scale;
+  const headroom = RAISING_TOP_HEADROOM_NATIVE * field.nativePixelWorldScale * scale;
+  const available = viewport.height - padding;
+  if (headroom + height <= available) {
+    return { y: Math.round((available - headroom - height) / 2 + headroom), scrollMaxY: 0, scrollY: 0 };
+  }
+  const scrollMaxY = headroom + height - available;
+  const requested = Number(viewport.scrollY);
+  const scrollY = Math.min(scrollMaxY, Math.max(0, Number.isFinite(requested) ? requested : 0));
+  return { y: Math.round(available - height + scrollY), scrollMaxY, scrollY };
 }
 
 /** Presentation transform only. Legacy habitat regions retain their identity
@@ -39,8 +83,8 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
     return { x: 0, y: 0, width: viewport.width, height: viewport.height, scale: 1 };
   }
   // The native ranch remains a sideways window over one continuous board,
-  // centred in the frame's height. Nothing is reserved for a readout: cards
-  // float over the margin and never move the board.
+  // centred with its headroom in the frame's height. Nothing is reserved for a
+  // readout: cards float over the margin and never move the board.
   const nativeWindow = field.presentationMode === 'NATIVE_RANCH' && field.nativePixelWorldScale > 0;
   const heightScale = Math.max(1, viewport.height - padding * 2) / field.worldHeightPx;
   const scale = nativeWindow
@@ -51,9 +95,10 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   const maxCameraX = Math.max(0,field.worldWidthPx - (viewport.width-padding*2)/scale);
   const scroll=field.wrapWidthPx ? wrapRaisingCamera(cameraX,field.wrapWidthPx) : Math.min(maxCameraX,Math.max(0,cameraX));
   const x = nativeWindow ? padding - scroll*scale : (viewport.width-width)/2;
+  if (!nativeWindow) return { x, y: (viewport.height - height) / 2, width, height, scale };
   // Whole screen pixels for the board's top edge, so rows do not shimmer.
-  const y = nativeWindow ? Math.round((viewport.height - height) / 2) : (viewport.height - height) / 2;
-  return { x, y, width, height, scale };
+  const { y, scrollMaxY, scrollY } = nativeBoardPlacement(field, viewport, padding, scale);
+  return { x, y, width, height, scale, scrollY, scrollMaxY };
 }
 
 export function wrapRaisingCamera(value,width){return ((value%width)+width)%width;}

@@ -43,7 +43,17 @@
     "horizontalWrapObservation": "ARM9 0x020828F0..0x0208291C wraps a destination index back by one row stride when crossing the right edge",
     "spriteOrigin": "UNKNOWN_REQUIRES_COMPLETE_COMPOSITOR_TRACE",
     "actorTransform": "UNKNOWN_REQUIRES_TRACE",
-    "specialFieldHandling": "Waiting Room and empty-space filler are not ordinary independent shelf tiles"
+    "specialFieldHandling": "Waiting Room and empty-space filler are not ordinary independent shelf tiles",
+    "topEdgeFootTruncation": "VERIFIED_BINARY: OVL18 0x0211208C..0x021120B4 (terrain test after a move) and 0x02111AB4..0x02111AD4 (clearance read) form the tile row with asr #2 / add lsr #29 / asr #3, a signed divide by 8 that truncates toward zero, so a resident's feet may stand at y=-7..-1 and still read row 0. src/championship/raising/nativeRaisingMovement.js tile() matches; the walk rule is unchanged."
+  },
+  "presentationHeadroom": {
+    "date": "2026-10-05",
+    "evidence": "PRODUCT_AUTHORED_PRESENTATION",
+    "reason": "Residents are drawn from their feet and the walkable floor reaches the board's top edge, so with only the centring margin above the board the frame edge cut tall bodies off under the status bar.",
+    "rule": "The native ranch reserves RAISING_TOP_HEADROOM_NATIVE (tallest main-side body 77, m503/m518, plus the 7-pixel top-edge foot overhang = 84) above the board and takes the largest whole screen-pixel scale at which board and headroom fit; a frame that cannot hold both at two whole pixels keeps two and scrolls vertically. Art, residents, shadows, food, feedback and input share the one placement.",
+    "implementation": "src/championship/presentation/intRh2/raisingFieldViewport.js; src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+    "tests": "tests/championship-raising-field-viewport-cases.mjs",
+    "doesNotChange": "Movement, terrain, positions, RNG, save data or any gameplay value."
   },
   "implementation": {
     "coordinateAuthority": "src/championship/cage/ranchSlotGeometry.js",
