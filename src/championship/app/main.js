@@ -128,7 +128,7 @@ const loadBattleRuntime = async () => (await import("./battleRuntime.js")).creat
 // knows where a family lives. An id the index no longer carries simply warms
 // nothing, which costs a cold fetch later and never a wrong one.
 const HOME_ART_ASSET_IDS = Object.freeze([
-  "art:cage:licensed-runtime:v1",
+  "art:cage:original-opus:v1",
   "art:raising-care:licensed-runtime:v1",
   "art:raising:care:r1",
   "art:toolbar:licensed-runtime:v1",
@@ -190,7 +190,9 @@ const CHARACTER_REVIEW_RUNTIME_URL = new URLSearchParams(globalThis.location?.se
   ? "assets/production/internal-character-review/m201-remix-v1/runtime.review.json"
   : null;
 const LICENSED_HUNT_ART_MANIFEST_URL = "assets/production/hunt/licensed-runtime-v1/manifest.json";
-const LICENSED_CAGE_ART_MANIFEST_URL = "assets/production/cage/licensed-runtime-v1/manifest.json";
+// Owner 2026-10-06: the original Blender cage fields (opus rounds r1-r17) replace the
+// licensed pixel fields at runtime; licensed-runtime-v1 stays stored for comparison.
+const CAGE_ART_MANIFEST_URL = "assets/production/cage/original-opus-v1/manifest.json";
 const LICENSED_BATTLE_ART_MANIFEST_URL = "assets/production/battle/licensed-runtime-v1/manifest.json";
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
@@ -437,7 +439,7 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
  */
 async function loadOptionalCageFieldArt(stage) {
   try {
-    const response = await fetch(new URL(LICENSED_CAGE_ART_MANIFEST_URL, globalThis.location.href));
+    const response = await fetch(new URL(CAGE_ART_MANIFEST_URL, globalThis.location.href));
     if (!response.ok) throw new Error(`CAGE_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
     const cageFrame = app.getCageEditFrame();

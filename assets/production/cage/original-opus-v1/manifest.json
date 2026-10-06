@@ -1,0 +1,756 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:cage:original-opus:v1",
+  "family": "CAGE",
+  "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+  "artifactMaturity": "ORIGINAL_BLENDER_2_5D_CAGE_FIELDS",
+  "productionStatus": "OWNER_DIRECTED_RUNTIME_REPLACEMENT_2026_10_06",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": true,
+  "runtimeEligible": true,
+  "shippingReady": false,
+  "rightsStatus": "PROJECT_ORIGINAL",
+  "rights": {
+    "status": "PROJECT_ORIGINAL",
+    "authority": "docs/handoff/cage-art-opus-20261005/PROGRESS_OPUS.md",
+    "ownerDirective": "Owner 2026-10-06: replace the old original cage maps with the new versions and publish",
+    "sourceRastersLoaded": false,
+    "review": "docs/art/production/original-character-cage-r1/cage-base3d-v1/review/refinement-opus-r17",
+    "romDerivedPixels": false
+  },
+  "fieldCount": 37,
+  "defaultPreviewFieldId": "field_cm01_01",
+  "memoryPolicy": "N_ACTIVE_TILES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+  "filter": "nearest",
+  "fields": [
+    {
+      "fieldId": "field_cm01_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r5/seam-v3/fields/field_cm01_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm01_01/frame-00.webp",
+          "sha256": "267E886D3238670BD0FE7CA3F9265281CC7EB65D6021F08D055F30E1A0AA580C",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm02_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r8/seam-v3/fields/field_cm02_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm02_01/frame-00.webp",
+          "sha256": "5894AF3E6AEB8BC72A0AE1D11EF9B2F3EAFAF321E1029E460F328490B79357F4",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm03_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r15/seam-v3/fields/field_cm03_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm03_01/frame-00.webp",
+          "sha256": "0C4FD9DE89D649AF0681EB1198D9F23076D33A76B1FDA8C8E8DABBBA7EA9594E",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm04_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r8/seam-v3/fields/field_cm04_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm04_01/frame-00.webp",
+          "sha256": "C440238EBE9963D3B71E7ADF6615E4DBD826540C9E1A318C013F76F00D413B57",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm05_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r13/seam-v3/fields/field_cm05_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm05_01/frame-00.webp",
+          "sha256": "D668EA0B9A1B6E8E8910468FA8985711A1D55D18F44F1CF09AF1D87CED554281",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm06_01",
+      "worldWidthPx": 1344,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 336,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r1/seam-v3/fields/field_cm06_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm06_01/frame-00.webp",
+          "sha256": "6A5835C8770F2B66269005F419710E0159B7B7CE62C828000B488C62033B1E94",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm07_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r11/seam-v3/fields/field_cm07_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm07_01/frame-00.webp",
+          "sha256": "56E4B4E102DFB97A676C794337CD7046A6BC6506380944C735C747538D0C38A0",
+          "durationMs": 835.7556556544072
+        },
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm07_01/frame-01.webp",
+          "sha256": "938451F3736C933D20141577BB15EC263F911E335F487772CD3A55445E938BD2",
+          "durationMs": 835.7556556544072
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm08_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r17/seam-v3/fields/field_cm08_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm08_01/frame-00.webp",
+          "sha256": "EF4B39477CD8C9F0263AD21124E03460C5E08EEA4C6429307ADAF82861F4524E",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r10/seam-v3/fields/field_cm09_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm09_01/frame-00.webp",
+          "sha256": "BB7E6F43D2990456F090FFFDBED9BA5AAAA994C7B6C971A4C06B18473A9D8A24",
+          "durationMs": 334.30226226176285
+        },
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm09_01/frame-01.webp",
+          "sha256": "494C4105163C1CD793D0FF7FC8EC1C56D64A05CDCF5B265A70304CE9DFB71B88",
+          "durationMs": 334.30226226176285
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm10_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r7/seam-v3/fields/field_cm10_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm10_01/frame-00.webp",
+          "sha256": "DD6ACFD0DC3BCB23B7557E74230E72B5AAA84A0D9B05F82E7FDB10A2521781F0",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm11_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r12/seam-v3/fields/field_cm11_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm11_01/frame-00.webp",
+          "sha256": "A8CDF2DCCCB3CD8E197A252A4DBE5B43A0D627B27B514332401AC6B3654ADECF",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm12_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r5/seam-v3/fields/field_cm12_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm12_01/frame-00.webp",
+          "sha256": "95D928BCB620C52EC44640DD50FC0624472D4E34C3ABDE56EB08DF7DC71AD810",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm13_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r14/seam-v3/fields/field_cm13_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm13_01/frame-00.webp",
+          "sha256": "3A396536C45176F024B31BB2B60AB453FD7A09DE1BC5A7AB634C7D633720F9D3",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm14_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r3/seam-v3/fields/field_cm14_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm14_01/frame-00.webp",
+          "sha256": "E0B5A239D8F7751BFF318A646268B2BFD4F0092024986ED0DC4B7371248FC7CB",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm15_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r1/seam-v3/fields/field_cm15_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm15_01/frame-00.webp",
+          "sha256": "A430DF34C71E2867BC59CF39865990FCB9A7BA115E756AE36C14F9E7CDFD4875",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm16_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r2/seam-v3/fields/field_cm16_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm16_01/frame-00.webp",
+          "sha256": "2D41DFF3CA96732AC712561AD03C86A89255F4EB56A0F0889AA7D671795EB661",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm17_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r1/seam-v3/fields/field_cm17_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm17_01/frame-00.webp",
+          "sha256": "7850B1745BE1A217205F939B2457EA3CAD743FFF6AAC868C5F7B36D39FC8C79A",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm18_01",
+      "worldWidthPx": 576,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 144,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r9/seam-v3/fields/field_cm18_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm18_01/frame-00.webp",
+          "sha256": "943FCF1771EF1E445205A238E53666D19D9B4506A00C38D0B28B6D8EEE7F8DE6",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm19_01",
+      "worldWidthPx": 1536,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 384,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r4/seam-v3/fields/field_cm19_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm19_01/frame-00.webp",
+          "sha256": "7F3DF1B0BD66314B4B39ED8487B85780824B39F49B12DBC0CD1F9904B60018B6",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm20_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r13/seam-v3/fields/field_cm20_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm20_01/frame-00.webp",
+          "sha256": "1B82334DDEC9BD3B6A538D922A994F41014AE43C876A3C06D582BB986977BA80",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm21_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r11/seam-v3/fields/field_cm21_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm21_01/frame-00.webp",
+          "sha256": "3986FBEED1FD0DFDED4909BBA78CDDB996E1D08A6CC20F9805281C033B16534E",
+          "durationMs": 334.30226226176285
+        },
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm21_01/frame-01.webp",
+          "sha256": "5D775DA06A6639440471C7957DD41C5CF09365F9C86E9657414C9F6B08C12622",
+          "durationMs": 334.30226226176285
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm22_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r4/seam-v3/fields/field_cm22_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm22_01/frame-00.webp",
+          "sha256": "0B96E3A1DACD85350A607CB363AEB6C516A8FA4A47D4D91CFC58864BB3AF134E",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm23_01",
+      "worldWidthPx": 576,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 144,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r16/seam-v3/fields/field_cm23_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm23_01/frame-00.webp",
+          "sha256": "D4D6CC12D0F2E282AF843404631589173853C2F3EE9BC547ACC782D1FC32D809",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm24_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r3/seam-v3/fields/field_cm24_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm24_01/frame-00.webp",
+          "sha256": "2ED03164A60BAA95E682DBDF6A8CC781E6899EBABA8F4C171AE91A147D8243BE",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm25_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r12/seam-v3/fields/field_cm25_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm25_01/frame-00.webp",
+          "sha256": "ABC4304513585540315666AB1EE47BC76E905F40572D6F98E27069BD6D366CB4",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm26_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r12/seam-v3/fields/field_cm26_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm26_01/frame-00.webp",
+          "sha256": "632E2ECC7211F386657DE2AF9DCE986F767CC2AB04B933A6A53F03656727BBB9",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm27_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r5/seam-v3/fields/field_cm27_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm27_01/frame-00.webp",
+          "sha256": "5BD988FE4374BB4D864A397BA19A80A85C52B44DB3D0EDD513CE7307D7F852B2",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm28_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "WAITING_ROOM",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/seam-v3/fields/field_cm28_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm28_01/frame-00.webp",
+          "sha256": "DCEC7D19AC6F95FBEDF84BEF659E435A04382525BDE1ED45A41F552AC1446A96",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm29_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "LID",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/seam-v3/fields/field_cm29_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm29_01/frame-00.webp",
+          "sha256": "BC51E2306358CD50A7809691208BE9CB1FC68BC610F3850A3BF471A0214A895B",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm30_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r15/seam-v3/fields/field_cm30_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm30_01/frame-00.webp",
+          "sha256": "F40BC90EEE938AD582AEE341BA0649D728404A95E3F2F4A09BF705D21DE5ED99",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm31_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r2/seam-v3/fields/field_cm31_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm31_01/frame-00.webp",
+          "sha256": "F0913AB6D1705EB91CA1DB9F4224AFFCAFC7374D2D943AB778C6ECF3A9FB24DF",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm32_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r9/seam-v3/fields/field_cm32_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm32_01/frame-00.webp",
+          "sha256": "654738506FD0BCC458AF76ACEC601D260FB9F3DF34216FFDE9D4E38EAFF8F7F0",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm34_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r13/seam-v3/fields/field_cm34_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm34_01/frame-00.webp",
+          "sha256": "87D01FA2F9B3E39B38D170C95DFD02D40BE637A2EC4D6D2FDA6989FC14C754CD",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm35_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r11/seam-v3/fields/field_cm35_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm35_01/frame-00.webp",
+          "sha256": "8C229E2041C735F0485019EBC947D3C81869C2C8BFAD7860ADFDE76DC91F6818",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm37_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r6/seam-v3/fields/field_cm37_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm37_01/frame-00.webp",
+          "sha256": "6FE17B694DAB46F7CF462ABADFDCB0C503310FEBCC7E1B483958F945DA18F619",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm39_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r10/seam-v3/fields/field_cm39_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm39_01/frame-00.webp",
+          "sha256": "B5E98BB93D36E20B0CA7E16997BC98E36BFE31F94F504336F4BE63A0A40C9474",
+          "durationMs": 334.30226226176285
+        },
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm39_01/frame-01.webp",
+          "sha256": "95DEA030D6B2049B53774C3645A2B11856B148CA7123F96B3833EA44D22FE587",
+          "durationMs": 334.30226226176285
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm40_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r6/seam-v3/fields/field_cm40_01/frame-00.png",
+      "frames": [
+        {
+          "src": "assets/production/cage/original-opus-v1/fields/field_cm40_01/frame-00.webp",
+          "sha256": "CB0953765013C0CE69423DED9282F4FD795EDB159F285FD491EBC19A120158AB",
+          "durationMs": null
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Procedural original Blender renders (opus rounds r1-r17); no ROM pixels.",
+    "Collision, walkability, ranch placement and training effects stay in the Cage runtime.",
+    "cm07/cm09/cm21/cm39 keep two ground frames with the original verified durations.",
+    "cm28 is the Waiting Room, cm29 the LID. cm33/cm36/cm38 (unreferenced) are not carried over."
+  ]
+}

@@ -2,6 +2,13 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-10-06 — The new original cage maps replace the old ones in the game
+
+After the opus cage-art rounds r1–r17 were reported (35 of the 36 in-use cages redrawn as original Blender 2.5D fields; the Waiting Room kept by its spec; final layout review PASS 11 / REVIEW 26 / FAIL 0), the Owner asks: 「能用新的籠子地圖版本替換掉舊的原作版本並確認地圖的功能都有接入遊戲,也有實質作用或累積數值 然後COMMIT跟PUSH並整合發布至正式版嗎」.
+- The ranch and the cage editor now read `assets/production/cage/original-opus-v1` (registered in `ART_PRODUCTION_INDEX.json` as `art:cage:original-opus:v1`, rights `PROJECT_ORIGINAL`, no ROM pixels). `licensed-runtime-v1` stays stored and indexed but is no longer loaded. Shop goods icons are unchanged.
+- Art only: collision, walkability, ranch placement, capacity and cage training stay in the Cage runtime, keyed by cage definition. Their existing parity cases (all 28 training writers, capacity and waste allocation, overnight Cage effects against 168 original CPU calls, live growth) pass unchanged.
+- Commit to `main` and publish to the existing public-playtest destination once the gates pass on the built artifact. The new bundle's 42 files are added to the publication list; this adds no new destination and no shipping or commercial-release claim (`shippingReady` stays false).
+
 ## 2026-10-05 — Battle facing, naming every catch, and the state of game values
 
 After 「繼續發佈」 (the Retro Blue & Gold theme was published as `bb6c7ef8`), the Owner reports: 「戰鬥時腳色的面朝方向不對,還有捕捉狩獵有複數時,沒辦法改抓到的其他隻的名稱只能改第一隻的,然後很多遊戲數值都沒接上,說是因為原作DOM的反向解讀還沒做完還是甚麼的,像個性跟進化條件之類的」.

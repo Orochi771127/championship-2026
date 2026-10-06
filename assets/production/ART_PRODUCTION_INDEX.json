@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 31,
+    "registeredRuntimeBundles": 32,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -359,6 +359,17 @@
       "humanApproved": false,
       "productionStatus": "OWNER_AUTHORIZED_LOCAL_REFERENCE",
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "assetId": "art:cage:original-opus:v1",
+      "manifestPath": "assets/production/cage/original-opus-v1/manifest.json",
+      "rightsStatus": "PROJECT_ORIGINAL",
+      "productionStatus": "OWNER_DIRECTED_RUNTIME_REPLACEMENT_2026_10_06",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "ORIGINAL_BLENDER_2_5D_CAGE_FIELDS"
     }
   ]
 }

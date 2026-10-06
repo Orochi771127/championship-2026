@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import {cageUiImage, shopCageUiImage, cageUiName, cageUiSummary, cageEditorArtCells} from '../src/championship/presentation/cageUiArt.js';
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 import {createCageEditRuntime} from '../src/championship/cage/cageEditRuntime.js';
-import manifest from '../assets/production/cage/licensed-runtime-v1/manifest.json' with {type:'json'};
+// Owner 2026-10-06: the runtime cage fields are the original opus renders.
+import manifest from '../assets/production/cage/original-opus-v1/manifest.json' with {type:'json'};
 
 test('all 36 editor facilities resolve to existing production art; shop joins by record identity',()=>{
   for(const d of listCageDefinitions()) {
