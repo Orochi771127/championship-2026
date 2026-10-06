@@ -292,7 +292,9 @@ async function footerReachable(page, selector, label) {
       }
       await page.getByRole('button', { name: '開始練習', exact: true }).click();
       await onScreen(page, 'BATTLE_FIELD');
-      await onScreen(page, 'BATTLE_RESULT');
+      // Practice runs the original AI policy (2026-10-05): this 1v1 between the
+      // QA save's adults lasts about 50 s, past the 45 s screen wait.
+      await page.waitForFunction(() => document.getElementById('cm-root')?.dataset.activeScreen === 'BATTLE_RESULT', null, { timeout: 120000 });
       await page.getByRole('button', { name: '下一頁', exact: true }).click();
       const prize = await page.locator('.cm-vs5-result__body').textContent();
       assert.match(prize, /獎金/);
