@@ -575,7 +575,8 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   // The expansion prototype's annex: its own five-column board under the main
   // one, with the same cells and rules (ranchExpansion.js).
   const annexLabel = element('p', 'cm-cage-annex-label', '擴充區 · 原型（未定價、不收費）');
-  const annexBoard = element('div', 'cm-vs2-cage-board cm-vs2-cage-board--annex');
+  // Its own class: the main board stays the one .cm-vs2-cage-board on screen.
+  const annexBoard = element('div', 'cm-cage-annex-board');
   annexBoard.setAttribute('role', 'grid');
   annexBoard.setAttribute('aria-label', uiText('擴充區格位'));
   annexLabel.hidden = true; annexBoard.hidden = true;
