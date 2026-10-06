@@ -810,6 +810,14 @@
   touch-action: pan-x;
 }
 .cm-vs2-cage-board { position: relative; display: block; width: 508px; height: 102px; padding: 0; margin: 0; }
+/* Ranch expansion prototype (2026-10-05): the annex is its own five-column
+   board of the same cells under the main one. With it, the board area lets
+   vertical pans through so the screen can scroll down to it. */
+.cm-cage-annex-label { margin: var(--sp-3) 0 var(--sp-2); color: var(--c-text-2); font-size: var(--fs-body-sm); font-weight: var(--fw-heavy); }
+.cm-cage-annex-board { position: relative; display: block; width: 270px; height: 102px; padding: 0; margin: 0; }
+.cm-cage-board-scroll[data-annex="true"] { touch-action: pan-x pan-y; }
+.cm-cage-expansion { display: flex; justify-content: flex-end; }
+.cm-cage-expansion:empty { display: none; }
 .cm-vs2-cage-slot {
   position: absolute;
   width: 48px;
@@ -921,6 +929,9 @@
   body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] :is(.cm-cage-board-hint, .cm-cage-board-scroll, .cm-vs2-shop__status) { grid-column: 1 / -1; }
   body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-cage-board-scroll { margin-inline: calc(-1 * var(--sp-8)); padding-inline: var(--sp-8); }
   body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-board { margin-inline: auto; }
+  /* The annex and its label sit under the centred main board's left edge. */
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] :is(.cm-cage-annex-board, .cm-cage-annex-label) { margin-left: max(0px, calc((100% - 508px) / 2)); }
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-cage-expansion { grid-column: 1 / -1; }
   body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-cage-facilities { grid-column: 1; align-content: start; }
   body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-tray { grid-column: 2; }
   /* The Hunt field stays a full-screen world; its HUD islands keep their size. */
