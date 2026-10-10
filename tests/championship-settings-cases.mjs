@@ -26,7 +26,7 @@ import { createAudioBus, effectiveGain } from "../src/championship/presentation/
 import { createHighlightAudio } from "../src/championship/presentation/highlight/highlightAudio.js";
 import { HIGHLIGHT_COMPACT, highlightOverrides, resolveHighlightTiming } from "../src/championship/presentation/highlight/highlightTimeline.js";
 import { createHighlightSequence } from "../src/championship/presentation/highlight/createHighlightSequence.js";
-import { resultHeroAnchor, resultFrameLayout, RESULT_FRAME_DROP } from "../src/championship/presentation/battleResultCharacters.js";
+import { resultHeroAnchor, resultFrameLayout, RESULT_FRAME_DROP, mountBattleResultCharacters } from "../src/championship/presentation/battleResultCharacters.js";
 
 // ---- Fixtures -----------------------------------------------------------------
 function memoryStorage({ failWrites = false } = {}) {
@@ -652,4 +652,30 @@ test("the earlier interface skin returns only as the retro blue & gold theme", (
   }
   // Its fixed type follows the text-size setting like every other sheet.
   assert.equal(/font-size:\s*[0-9.]+(px|rem)\s*;/.test(css), false, "no fixed font size is left");
+});
+
+
+test('result group fitting retains common scale and keeps large alpha cell unions inside padding',()=>{
+ const bounds={left:-120,top:-70,right:350,bottom:260};
+ for(const [width,height] of [[390,700],[320,500],[720,280]]){
+  const p=resultFrameLayout(width,height,bounds);
+  assert.ok(p.left+bounds.left*p.scale>=8-1e-8);
+  assert.ok(p.left+bounds.right*p.scale<=width-8+1e-8);
+  assert.ok(p.top+bounds.top*p.scale>=8-1e-8);
+  assert.ok(p.top+bounds.bottom*p.scale<=height-8+1e-8);
+ }
+});
+test('mounted result actors normalize 4x HUD cells, retain legacy size and normalize each new pose',async()=>{
+ const vector=()=>({x:0,y:0,set(x,y=x){this.x=x;this.y=y;}}),sprites=[];
+ class Sprite{constructor(){this.anchor=vector();this.position=vector();this.scale=vector();sprites.push(this);}}
+ const cells=[{src:'hd-a',width:26.75,height:11.5,origin:[14.5,8.75]},{src:'hd-b',width:28,height:12,origin:[16,9]}],legacy={src:'legacy',width:32,height:16,origin:[16,11]};
+ const textures=new Map([...cells.map(c=>[c.src,{orig:{width:c.width*4,height:c.height*4},source:{}}]),['legacy',{orig:{width:32,height:16},source:{}}]]);
+ let tick,pose=0;const stage={PIXI:{Sprite,Assets:{load:async s=>textures.get(s),unload:async()=>{}}},app:{screen:{width:390,height:700},ticker:{add:f=>{tick=f;},remove(){}}},createSceneRoot:()=>({addChild(){},destroy(){}}),onResize:()=>()=>{}};
+ const hudArt={getBattleCells:id=>id==='hd'?cells:[legacy],getBattleFrame:id=>id==='hd'?cells[pose]:legacy};
+ const mounted=await mountBattleResultCharacters({stage,hudArt,participants:[{speciesId:'hd'},{speciesId:'legacy'}],won:false});
+ const expected=390/256;assert.equal(sprites[0].scale.x,expected/4);assert.equal(sprites[1].scale.x,expected);
+ assert.equal(sprites[0].texture.orig.width*sprites[0].scale.x,cells[0].width*expected);
+ pose=1;tick({deltaMS:17});assert.equal(sprites[0].texture,textures.get('hd-b'));assert.equal(sprites[0].scale.x,expected/4);
+ assert.ok(sprites[0].position.x-sprites[0].anchor.x*sprites[0].texture.orig.width*sprites[0].scale.x>=8);
+ mounted.dispose();
 });

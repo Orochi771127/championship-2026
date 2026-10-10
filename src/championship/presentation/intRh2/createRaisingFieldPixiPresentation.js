@@ -837,7 +837,8 @@ export async function mountRaisingFieldPixiPresentation({
     for(const item of waste){let g=wasteGraphics.get(item.slot);
       if(!g){g=new PIXI.Sprite();g.eventMode='none';g.label='Waste';
         actorLayer.addChild(g);wasteGraphics.set(item.slot,g);}
-      placeCare(g,art);g.width=art.width*scale;g.height=art.height*scale;
+      placeCare(g,art);// Owner 2026-10-10: 60% visual candidate; native cleanup hit area stays unchanged.
+      g.width=art.width*scale*0.6;g.height=art.height*scale*0.6;
       const point=raisingNativeToScreen(item.positionQ12,fieldArt?.field,view,cameraX);
       if(point){g.position.set(point.x,point.y);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(item.positionQ12[1]/4096);}}
   }

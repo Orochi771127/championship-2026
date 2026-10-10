@@ -7,9 +7,16 @@ export const RESULT_ANCHORS=Object.freeze([[46,151],[127,172],[210,154]]); // re
 // the lower part of the stage and the result plate has the space just above
 // them. vs5Styles.css places the stage light and the plate with the same number.
 export const RESULT_FRAME_DROP=0.7;
-export function resultFrameLayout(width,height){
-  const scale=Math.min(width/RESULT_FRAME.width,height/RESULT_FRAME.height);
-  return {scale,left:(width-RESULT_FRAME.width*scale)/2,top:Math.max(0,height-RESULT_FRAME.height*scale)*RESULT_FRAME_DROP};
+export function resultFrameLayout(width,height,bounds=null){
+  let scale=Math.min(width/RESULT_FRAME.width,height/RESULT_FRAME.height);
+  const padding=Math.min(8,width/4,height/4);
+  if(bounds)scale=Math.min(scale,(width-2*padding)/(bounds.right-bounds.left),(height-2*padding)/(bounds.bottom-bounds.top));
+  let left=(width-RESULT_FRAME.width*scale)/2,top=Math.max(0,height-RESULT_FRAME.height*scale)*RESULT_FRAME_DROP;
+  if(bounds){
+    left=Math.max(padding-bounds.left*scale,Math.min(width-padding-bounds.right*scale,left));
+    top=Math.max(padding-bounds.top*scale,Math.min(height-padding-bounds.bottom*scale,top));
+  }
+  return {scale,left,top};
 }
 // The point the important highlight lights: the middle of the characters that
 // are present, at chest height (36 frame pixels above their feet), as
@@ -36,6 +43,7 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
   const scene=stage.createSceneRoot('native result characters');
   const anchors=RESULT_ANCHORS;
   const sequence=won?9:5,actors=[],loaded=new Map();
+  let bounds=null,frameScale=1;
   // The three bodies share most of their cells and none of them waits on
   // another, so awaiting one cell at a time made the result screen pay a round
   // trip per frame. Gather the distinct sources, load them together, then build
@@ -48,14 +56,25 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
     for(const r of results)if(r.status==='fulfilled'){r.value.texture.source.scaleMode='nearest';loaded.set(r.value.src,r.value.texture);}
     const failed=results.find(r=>r.status==='rejected');
     if(failed)throw failed.reason;
-    for(const {p,i} of chosen){
+    for(const {p,i,cells} of chosen){
+      // HUD cells are alpha-cropped. Union every animation cell in logical
+      // pixels so a later pose cannot jump outside the result container.
+      for(const cell of cells){
+        const left=anchors[i][0]-cell.origin[0],top=anchors[i][1]-cell.origin[1];
+        const box={left,top,right:left+cell.width,bottom:top+cell.height};
+        bounds=bounds?{left:Math.min(bounds.left,box.left),top:Math.min(bounds.top,box.top),right:Math.max(bounds.right,box.right),bottom:Math.max(bounds.bottom,box.bottom)}:box;
+      }
       const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,speciesId:p.speciesId,anchor:anchors[i]});}
   }catch(error){scene.destroy({children:true});await Promise.allSettled([...loaded.keys()].map(src=>stage.PIXI.Assets.unload(src)));throw error;}
   let accumulator=0,disposed=false,elapsed=0;
   function apply(){for(const actor of actors){const cell=hudArt.getBattleFrame(actor.speciesId,sequence,elapsed);if(!cell)continue;
-    actor.sprite.texture=loaded.get(cell.src);actor.sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);}}
-  function layout(){const {scale,left,top}=resultFrameLayout(stage.app.screen.width,stage.app.screen.height);
-    for(const actor of actors){actor.sprite.scale.set(scale);actor.sprite.position.set(left+actor.anchor[0]*scale,top+actor.anchor[1]*scale);}}
+    const texture=loaded.get(cell.src);actor.sprite.texture=texture;
+    actor.sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);
+    // Use logical cell size for both HD and legacy 1x textures.
+    actor.sprite.scale.set(frameScale*cell.width/texture.orig.width,frameScale*cell.height/texture.orig.height);}}
+  function layout(){const {scale,left,top}=resultFrameLayout(stage.app.screen.width,stage.app.screen.height,bounds);frameScale=scale;
+    for(const actor of actors)actor.sprite.position.set(left+actor.anchor[0]*scale,top+actor.anchor[1]*scale);
+    apply();}
   function update(ticker){if(disposed)return;
     if(globalThis.document?.hidden){accumulator=0;return;}
     accumulator+=Math.min(250,Math.max(0,ticker.deltaMS));
