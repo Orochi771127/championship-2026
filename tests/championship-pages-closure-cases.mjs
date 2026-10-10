@@ -20,3 +20,12 @@ test("Pages detects removed transitive modules with import attributes and re-exp
   for(const file of [...files,"src/private.js"])fs.unlinkSync(path.join(root,file));
   fs.rmdirSync(path.join(root,"src"));fs.rmdirSync(root);
 });
+
+test("Pages parses large UTF-8 modules without corrupting identifiers across stdin chunks", t => {
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),"championship-pages-utf8-"));
+  const file=path.join(root,"large.js");
+  t.after(()=>{fs.unlinkSync(file);fs.rmdirSync(root);});
+  const source=Array.from({length:16000},(_,i)=>`const 雪${i}=${i};`).join('\n')+'\nexport {雪0};\n';
+  fs.writeFileSync(file,source,'utf8');
+  assert.deepEqual(auditPagesModuleClosure({root,files:['large.js'],entries:['large.js']}).issues,[]);
+});

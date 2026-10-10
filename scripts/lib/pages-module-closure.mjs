@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 // Parse without linking or executing product modules. Node's ESM parser handles
 // comments, re-exports and JSON import attributes; a regex is not a JS parser.
 const parser = `import vm from 'node:vm';
+process.stdin.setEncoding('utf8');
 let input='';for await(const chunk of process.stdin)input+=chunk;
 const results=JSON.parse(input).map(({file,source})=>{
   try{return {file,imports:new vm.SourceTextModule(source).dependencySpecifiers};}
