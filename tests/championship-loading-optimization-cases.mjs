@@ -37,6 +37,8 @@ test('public entry uses only its static bundle preloads and a content-addressed 
   const metadata={entry:'src/championship/app/_bundled/main-ABC.js',startupModules:['src/championship/app/_bundled/main-ABC.js','src/championship/app/_bundled/chunk-DEF.js']};
   const html=bundledBrowserHtml(source,metadata);
   assert.ok(html.includes('href="./src/championship/app/_bundled/chunk-DEF.js"'));
+  assert.ok(html.includes('href="./src/championship/app/_bundled/main-ABC.js" fetchpriority="high"'));
+  assert.ok(html.indexOf('main-ABC.js')<html.indexOf('chunk-DEF.js'));
   assert.ok(html.includes("src='./src/championship/app/_bundled/main-ABC.js'"));
   assert.ok(!html.includes('old'));assert.throws(()=>bundledBrowserHtml('<html/>',metadata),/HTML_ENTRY_MISMATCH/);
 });

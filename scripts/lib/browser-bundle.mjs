@@ -13,7 +13,9 @@ export function bundledBrowserHtml(source,metadata){
   const block=/    <!-- modulepreload:[\s\S]*?    <!-- \/modulepreload -->/;
   const script='./src/championship/app/main.js?v=settings-2';
   if(!block.test(source)||!source.includes(script))throw Error('BROWSER_BUNDLE_HTML_ENTRY_MISMATCH');
-  const links=metadata.startupModules.filter(file=>file!==metadata.entry)
-    .map(file=>`    <link rel="modulepreload" href="./${file}">`).join('\n');
+  // The HTML inserts its module script dynamically. Preload that entry first so
+  // it does not start behind decorative title images on a cold connection.
+  const links=[metadata.entry,...metadata.startupModules.filter(file=>file!==metadata.entry)]
+    .map(file=>`    <link rel="modulepreload" href="./${file}"${file===metadata.entry?' fetchpriority="high"':''}>`).join('\n');
   return source.replace(block,links).replace(script,'./'+metadata.entry);
 }

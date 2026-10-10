@@ -27,3 +27,9 @@
 - 23/23 聚焦單元與 build-boundary 測試通過；包含 164 張既有 UI PNG 完整 SHA／密度、61 canonical flags、HUD species／別名、快取與未核准 bundle 依賴拒絕。
 - 正式打包產物於核准公開 origin 的隔離瀏覽器：gesture 音樂時間0.154→1.171秒、新遊戲正常开場／命名／選蛋→牧場、61枚徽章全圖載入、既有 species217 fixture 正常頭銜戰自然勝利、取得第1枚徽章、reload仍為1枚，全部通過。無 runtime RNG／傷害／outcome／時鐘注入；無 console pageerror 或404。測試準備的 controlled save 不等於玩家養成成就。
 - 原協作工作區67個 tracked修改的SHA全部與保全記錄相符。
+
+## 公開第一輪量測與入口修正
+
+`f06c5053` 已公開，CI1590/1590、61個公開產物檔案SHA均通過。相同profile第一輪 title 103,713ms，較基準慢；Continue完整resident ready 46,686ms，暖title131ms／Continue333ms。登入後5秒原生媒體currentTime為3.887秒，無播放拒絕。不能將這一輪描述成「首頁載入改善」。
+
+Network記錄顯示 static chunks 最慢約5.7秒完成，但主入口未預載、由HTML動態插入，到103.7秒才完整下載（444,157傳輸bytes）；同時大型首頁圖持續下載。據此補上主入口的第一個 modulepreload 與 high fetchpriority，維持完全相同JS和图片bytes，只改請求排程。發布後再次使用原profile量測；CDN變化與實際結果由最終交接包記錄，不預設此修正一定消除所有延遲。
