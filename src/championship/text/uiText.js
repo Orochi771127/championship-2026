@@ -6,6 +6,9 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "MUSIC_VOLUME": "背景音樂",
+  "MUSIC_VOLUME_HINT": "首頁、育成、探索與對戰音樂。",
+  "MUSIC_GESTURE_NOTE": "點擊或按鍵後播放音樂；切到背景時暫停。",
   "RESIDENT_ART_LOADING": "正在載入夥伴外觀…",
   "RESIDENT_ART_ERROR": "夥伴外觀載入失敗，遊戲資料仍保留。",
   "RESIDENT_ART_RETRY": "重試外觀",

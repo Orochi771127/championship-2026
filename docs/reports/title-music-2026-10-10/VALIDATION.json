@@ -1,0 +1,138 @@
+{
+  "scope": "Owner-approved presentation and original music only",
+  "focused": {
+    "passed": 49,
+    "failed": 0
+  },
+  "mandatoryCI": {
+    "passed": 1585,
+    "failed": 0
+  },
+  "titleCases": [
+    {
+      "label": "zh-Hant-390-844-default",
+      "status": "PASS"
+    },
+    {
+      "label": "en-390-844-default",
+      "status": "PASS"
+    },
+    {
+      "label": "ja-390-844-default",
+      "status": "PASS"
+    },
+    {
+      "label": "th-390-844-default",
+      "status": "PASS"
+    },
+    {
+      "label": "vi-390-844-default",
+      "status": "PASS"
+    },
+    {
+      "label": "vi-320-568-default",
+      "status": "PASS"
+    },
+    {
+      "label": "zh-Hant-844-390-default",
+      "status": "PASS"
+    },
+    {
+      "label": "zh-Hant-390-844-reduced",
+      "status": "PASS"
+    }
+  ],
+  "music": {
+    "technicalStages": 18,
+    "status": "PASS",
+    "errors": [],
+    "missing": [],
+    "maximumVoices": 1
+  },
+  "aac": {
+    "status": "PASS",
+    "cueCount": 5,
+    "scope": "Forced unsupported Vorbis capability; actual AAC decoding in Chrome; not physical iOS evidence"
+  },
+  "battle": {
+    "status": "PASS",
+    "fixture": "Existing owned-party fixture only; normal UI and real ticker; no battle state, damage, RNG or clock patch",
+    "outcome": {
+      "ended": true,
+      "reason": "TEAM_DOWN",
+      "verdict": "TEAM_ONE_AHEAD",
+      "winningTeam": 1
+    },
+    "attemptId": "battle:1",
+    "errors": []
+  },
+  "physicalIOS": "NOT_VERIFIED",
+  "humanListening": "PENDING",
+  "originalWorkspace": "Never modified in this batch",
+  "publicArtifact": {
+    "fileCount": 9231,
+    "buildId": "830b0e3f61082047d645af9c23b4527f9fe27c8f1d8a9ee6539c767480297034",
+    "build": "PASS",
+    "validation": "PASS",
+    "changedApprovedGitBlobHashes": 39
+  },
+  "approvedShortTitle": {
+    "date": "2026-10-10",
+    "focusedPassed": 42,
+    "browserCases": [
+      {
+        "label": "zh-Hant-390-100",
+        "status": "PASS"
+      },
+      {
+        "label": "live-setting-language-switch",
+        "status": "PASS"
+      },
+      {
+        "label": "zh-Hant-320-100",
+        "status": "PASS"
+      },
+      {
+        "label": "en-390-100",
+        "status": "PASS"
+      },
+      {
+        "label": "en-320-100",
+        "status": "PASS"
+      },
+      {
+        "label": "ja-390-100",
+        "status": "PASS"
+      },
+      {
+        "label": "ja-320-100",
+        "status": "PASS"
+      },
+      {
+        "label": "th-390-100",
+        "status": "PASS"
+      },
+      {
+        "label": "th-320-100",
+        "status": "PASS"
+      },
+      {
+        "label": "vi-390-100",
+        "status": "PASS"
+      },
+      {
+        "label": "vi-320-100",
+        "status": "PASS"
+      },
+      {
+        "label": "ja-320-130",
+        "status": "PASS"
+      },
+      {
+        "label": "th-320-130",
+        "status": "PASS"
+      }
+    ],
+    "fullCIPolicy": "Reuse prior 1585/1585; final change reruns affected naming/layout only"
+  }
+}

@@ -1,7 +1,10 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: TITLE_ORIGINAL_MUSIC_20261010 -->
+**2026-10-10 全幅晨光首頁與14段原創音樂已完成技術驗證。** Owner核定五語短標已集中管理並同步首頁／網頁標題／aria-label；五語與八組首頁版面、14段解碼、正常參賽結算、音量保存、背景續播與AAC備援通過，沿同一audioBus，CI 1,585／1,585。實體iOS／聽感待驗；發布以實際Pages回條為準。見 [本批報告](reports/title-music-2026-10-10/REPORT_ZH_TW.md)。
+
 <!-- record-id: NEW_GAME_DISPLAY_20261010 -->
-**2026-10-10 新遊戲顯示修复已完成本機驗證。** 八蛋正式名、漫畫完整比例、逐格蛋影、素材錯誤提示／重試及三角色固定牧場比例；八蛋正常自然孵化、五語手機、重載與三角色拖曳通過。實體iOS當次錯誤原因未取得。見 [修復報告](reports/new-game-display-2026-10-10/REPORT_ZH_TW.md)。
+**2026-10-10 新遊戲顯示修復已於 `f8836b6f` 公開，CI／Pages與線上檔案SHA均核對通過。** 八蛋正式名、漫畫完整比例、逐格蛋影、素材錯誤提示／重試及三角色固定牧場比例；八蛋正常自然孵化、五語手機、重載與三角色拖曳通過。實體iOS當次錯誤原因未取得。見 [修復報告](reports/new-game-display-2026-10-10/REPORT_ZH_TW.md)。
 
 
 <!-- record-id: RANCH_PERSONALITY_ANNEX_20261006 -->

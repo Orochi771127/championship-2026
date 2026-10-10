@@ -261,7 +261,7 @@ export function createSettingsPanel({
   // place while a slider moves (see refresh): rebuilding the page would
   // replace the slider under the player's finger and end the drag.
   const VOLUME_NOTE = "實際音量 = 總音量 × 遊戲音效（目前 {level}%）；靜音時為 0。";
-  const SELF_PAINTING = new Set(["masterVolume", "sfxVolume"]);
+  const SELF_PAINTING = new Set(["masterVolume", "sfxVolume", "musicVolume"]);
   const sliderPainters = new Map();
   let volumeNote = null;
   function volumeLevel() {
@@ -328,6 +328,7 @@ export function createSettingsPanel({
       section.append(toggle("muted", "全部靜音"));
       section.append(slider("masterVolume", "總音量"));
       section.append(slider("sfxVolume", "遊戲音效", "對戰音效與高光演出音效。"));
+      section.append(slider("musicVolume", "MUSIC_VOLUME", "MUSIC_VOLUME_HINT"));
       volumeNote = note(VOLUME_NOTE, volumeLevel());
       section.append(volumeNote);
       const test = node("button", "cm-settings__action", "試聽");
@@ -337,7 +338,7 @@ export function createSettingsPanel({
         announce(uiText(played ? "正在播放試聽音效。" : store.get().muted ? "目前為靜音。" : "瀏覽器尚未允許播放聲音，請再點一次。"));
       });
       section.append(test);
-      section.append(note("本版本沒有背景音樂、介面音效與角色語音，所以不提供這些音量。"));
+      section.append(note("MUSIC_GESTURE_NOTE"));
     },
     language(section) {
       section.append(radioGroup("locale", "顯示語言", LOCALE_CHOICES, { hint: "切換後立即生效，不會重新開始或改變目前進度。" }));

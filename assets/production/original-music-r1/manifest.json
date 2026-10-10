@@ -1,0 +1,273 @@
+{
+  "id": "CHAMPIONSHIP_ORIGINAL_MUSIC_R1_20261010",
+  "scope": "Nine explicitly approved existing original tracks plus five Owner-delivered original combat/result cues; no Nexus code or save integration",
+  "loudness": "Provisional cue gain targets around -24 LUFS, positive gain capped at 6 dB; Web Audio GainNodes preserve headroom. No encoded source changes.",
+  "acceptance": "Technical playback/transport testing; human listening acceptance pending",
+  "loopNotes": "MP3 measured edge trim and 0.8s crossfade are a technical treatment, not seamless-listening acceptance. Combat OGG native duration 32 seconds, 0..1536000 samples at 48 kHz; results do not loop.",
+  "files": [
+    {
+      "path": "bgm_central_radiant_core.mp3",
+      "sha256": "3bfb5e29a82df7ff33c69e4219953bac206d2a02a11a9f420d9dea31e64835d2",
+      "bytes": 1484502,
+      "seconds": 75.697052,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "bgm_eastern_mystic_mountains.mp3",
+      "sha256": "1d25c7ff6efee6cb6362166357cbdadfc233e3280f7143c8ff1d44974507ea62",
+      "bytes": 5558737,
+      "seconds": 208.767551,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "bgm_ethereal_moon_lakefront.mp3",
+      "sha256": "7edfd59db3d42ccdba1a0ab26b9be29a2025c708256a2b78a8ca803bc2b40669",
+      "bytes": 4070794,
+      "seconds": 153.58288,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "bgm_linkara_lofi.mp3",
+      "sha256": "4493295603342d74447c2ceb751aa0d486adfef88c9638aa42043d400bab8243",
+      "bytes": 2330696,
+      "seconds": 107.575578,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "bgm_login_page.mp3",
+      "sha256": "fa2164a73a4164bf347509f75753791bd1ea53503ab8f1bbde94af53bc491d16",
+      "bytes": 3959486,
+      "seconds": 164.865624,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "bgm_northern_verdant_plains.mp3",
+      "sha256": "87b231f5f3ef1068bfdc540f1148d2d7373c190fcda220af62e81a641c280cd6",
+      "bytes": 4819141,
+      "seconds": 181.428526,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "bgm_southeast_forge_hills.mp3",
+      "sha256": "09cf38d41e4c247777581be12e17ebc298012ab2287d543ed27e791910346498",
+      "bytes": 4460406,
+      "seconds": 164.813787,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "bgm_southern_harbor_nexus.mp3",
+      "sha256": "5b25c90162cabd990e21ae3f2f0597b01508d4e2fefdd94d89a4a6cb698ac250",
+      "bytes": 6583124,
+      "seconds": 234.334331,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "bgm_southwest_tidal_frontier.mp3",
+      "sha256": "c5f46b343c78a695949dc27b216f2a2e598b6ffd09366f93799d54ad2c0b3406",
+      "bytes": 6510296,
+      "seconds": 229.249161,
+      "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
+    },
+    {
+      "path": "championship_battle_normal_r1.ogg",
+      "sha256": "67cb80063acf1cbb50b3ff8834348674c1fb00909b879ae30e5a27fad898d907",
+      "bytes": 459255,
+      "seconds": 32.0,
+      "sourcePackageSha256": "505f985a39fe55403adec64611ab3b29523188db945ba0f74a554b35e4292648"
+    },
+    {
+      "path": "championship_battle_final_r1.ogg",
+      "sha256": "d8d22a02aca6740d55cd80f0f8fd2f3c82692f5c5d77b79bee68da908c697805",
+      "bytes": 463758,
+      "seconds": 32.0,
+      "sourcePackageSha256": "505f985a39fe55403adec64611ab3b29523188db945ba0f74a554b35e4292648"
+    },
+    {
+      "path": "championship_victory_r1.ogg",
+      "sha256": "5b603af190664196ff2ba8dd2102663ff4980fbaba25013ab17f7ec3b89cb690",
+      "bytes": 30333,
+      "seconds": 4.4,
+      "sourcePackageSha256": "505f985a39fe55403adec64611ab3b29523188db945ba0f74a554b35e4292648"
+    },
+    {
+      "path": "championship_defeat_r1.ogg",
+      "sha256": "cc31141eb0ebd1ab1c6152a028a34cba8803cd8cdf64410be298a8039751fcf0",
+      "bytes": 23989,
+      "seconds": 4.3,
+      "sourcePackageSha256": "505f985a39fe55403adec64611ab3b29523188db945ba0f74a554b35e4292648"
+    },
+    {
+      "path": "championship_draw_r1.ogg",
+      "sha256": "c5be5250b8f29e020eaff06345e50cbe83b4f8a1d96e90bfa3b3d5bb4490d121",
+      "bytes": 24944,
+      "seconds": 3.8,
+      "sourcePackageSha256": "505f985a39fe55403adec64611ab3b29523188db945ba0f74a554b35e4292648"
+    }
+  ],
+  "cues": {
+    "core": {
+      "path": "./assets/production/original-music-r1/bgm_central_radiant_core.mp3",
+      "loop": true,
+      "gainDb": -5.1,
+      "trimStart": 0,
+      "trimEnd": 1.728,
+      "crossfade": 0.8
+    },
+    "mystic": {
+      "path": "./assets/production/original-music-r1/bgm_eastern_mystic_mountains.mp3",
+      "loop": true,
+      "gainDb": 6,
+      "trimStart": 1.9463,
+      "trimEnd": 0.6961,
+      "crossfade": 0.8
+    },
+    "moon": {
+      "path": "./assets/production/original-music-r1/bgm_ethereal_moon_lakefront.mp3",
+      "loop": true,
+      "gainDb": 3.7,
+      "trimStart": 0,
+      "trimEnd": 1.2319,
+      "crossfade": 0.8
+    },
+    "lofi": {
+      "path": "./assets/production/original-music-r1/bgm_linkara_lofi.mp3",
+      "loop": true,
+      "gainDb": 6,
+      "trimStart": 0.5888,
+      "trimEnd": 2.0086,
+      "crossfade": 0.8
+    },
+    "login": {
+      "path": "./assets/production/original-music-r1/bgm_login_page.mp3",
+      "loop": true,
+      "gainDb": 1.1,
+      "trimStart": 0,
+      "trimEnd": 1.4464,
+      "crossfade": 0.8
+    },
+    "plains": {
+      "path": "./assets/production/original-music-r1/bgm_northern_verdant_plains.mp3",
+      "loop": true,
+      "gainDb": -5.4,
+      "trimStart": 1.7717,
+      "trimEnd": 1.0123,
+      "crossfade": 0.8
+    },
+    "forge": {
+      "path": "./assets/production/original-music-r1/bgm_southeast_forge_hills.mp3",
+      "loop": true,
+      "gainDb": 6,
+      "trimStart": 0,
+      "trimEnd": 0.6285,
+      "crossfade": 0.8
+    },
+    "harbor": {
+      "path": "./assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
+      "loop": true,
+      "gainDb": 1.7,
+      "trimStart": 0,
+      "trimEnd": 0.4872,
+      "crossfade": 0.8
+    },
+    "tidal": {
+      "path": "./assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
+      "loop": true,
+      "gainDb": 6,
+      "trimStart": 0,
+      "trimEnd": 1.9305,
+      "crossfade": 0.8
+    },
+    "battle_normal": {
+      "path": "./assets/production/original-music-r1/championship_battle_normal_r1.ogg",
+      "loop": true,
+      "gainDb": -8.5,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0,
+      "fallbackPath": "./assets/production/original-music-r1/championship_battle_normal_r1.m4a"
+    },
+    "battle_final": {
+      "path": "./assets/production/original-music-r1/championship_battle_final_r1.ogg",
+      "loop": true,
+      "gainDb": -8.6,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0,
+      "fallbackPath": "./assets/production/original-music-r1/championship_battle_final_r1.m4a"
+    },
+    "victory": {
+      "path": "./assets/production/original-music-r1/championship_victory_r1.ogg",
+      "loop": false,
+      "gainDb": -9.6,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0,
+      "fallbackPath": "./assets/production/original-music-r1/championship_victory_r1.m4a"
+    },
+    "defeat": {
+      "path": "./assets/production/original-music-r1/championship_defeat_r1.ogg",
+      "loop": false,
+      "gainDb": -8.4,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0,
+      "fallbackPath": "./assets/production/original-music-r1/championship_defeat_r1.m4a"
+    },
+    "draw": {
+      "path": "./assets/production/original-music-r1/championship_draw_r1.ogg",
+      "loop": false,
+      "gainDb": -9.1,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0,
+      "fallbackPath": "./assets/production/original-music-r1/championship_draw_r1.m4a"
+    }
+  },
+  "compatibleEncodings": [
+    {
+      "file": "championship_battle_final_r1.m4a",
+      "sourceFile": "championship_battle_final_r1.ogg",
+      "sourceSha256": "d8d22a02aca6740d55cd80f0f8fd2f3c82692f5c5d77b79bee68da908c697805",
+      "sha256": "4315a43e277d8732b923752c5bab9cbf5f4cbeb1e1ccf3b8de4219c552bb2e34",
+      "bytes": 654463,
+      "seconds": 32.0,
+      "derivation": "AAC LC 160k, 48kHz, same cue, selected only when browser cannot play OGG; technical format validation, human listening pending"
+    },
+    {
+      "file": "championship_battle_normal_r1.m4a",
+      "sourceFile": "championship_battle_normal_r1.ogg",
+      "sourceSha256": "67cb80063acf1cbb50b3ff8834348674c1fb00909b879ae30e5a27fad898d907",
+      "sha256": "156f1168a491ec321fec3750ce9cde295e8ac58f7f0d42f11e2785d917b04cf9",
+      "bytes": 654166,
+      "seconds": 32.0,
+      "derivation": "AAC LC 160k, 48kHz, same cue, selected only when browser cannot play OGG; technical format validation, human listening pending"
+    },
+    {
+      "file": "championship_defeat_r1.m4a",
+      "sourceFile": "championship_defeat_r1.ogg",
+      "sourceSha256": "cc31141eb0ebd1ab1c6152a028a34cba8803cd8cdf64410be298a8039751fcf0",
+      "sha256": "8ce39e6e4f183d18f62da5daaf7fa074f5b5dcc8d5460c39e9a0d3fd66c20b9a",
+      "bytes": 57679,
+      "seconds": 4.3,
+      "derivation": "AAC LC 160k, 48kHz, same cue, selected only when browser cannot play OGG; technical format validation, human listening pending"
+    },
+    {
+      "file": "championship_draw_r1.m4a",
+      "sourceFile": "championship_draw_r1.ogg",
+      "sourceSha256": "c5be5250b8f29e020eaff06345e50cbe83b4f8a1d96e90bfa3b3d5bb4490d121",
+      "sha256": "acb13aa78881127bf99a0275472e234ee23c556fbfc34d5922c54dd3fb4c75c1",
+      "bytes": 58646,
+      "seconds": 3.8,
+      "derivation": "AAC LC 160k, 48kHz, same cue, selected only when browser cannot play OGG; technical format validation, human listening pending"
+    },
+    {
+      "file": "championship_victory_r1.m4a",
+      "sourceFile": "championship_victory_r1.ogg",
+      "sourceSha256": "5b603af190664196ff2ba8dd2102663ff4980fbaba25013ab17f7ec3b89cb690",
+      "sha256": "7590fef94a4eb9e6bb1d7910798d04b815ed248eae8bdd2bed3f30f9bb143dce",
+      "bytes": 62728,
+      "seconds": 4.4,
+      "derivation": "AAC LC 160k, 48kHz, same cue, selected only when browser cannot play OGG; technical format validation, human listening pending"
+    }
+  ]
+}

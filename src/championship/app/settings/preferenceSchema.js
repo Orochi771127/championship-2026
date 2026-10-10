@@ -50,6 +50,7 @@ const DEFINITIONS = {
   muted: { category: "sound", scope: "device", type: "boolean", default: false },
   masterVolume: { category: "sound", scope: "device", type: "integer", min: 0, max: 100, step: 5, default: 100 },
   sfxVolume: { category: "sound", scope: "device", type: "integer", min: 0, max: 100, step: 5, default: 100 },
+  musicVolume: { category: "sound", scope: "device", type: "integer", min: 0, max: 100, step: 5, default: 100 },
   // Language
   locale: { category: "language", scope: "account", type: "enum", values: ["zh-Hant", "en", "ja", "th", "vi"], default: "zh-Hant" },
   // Controls and accessibility

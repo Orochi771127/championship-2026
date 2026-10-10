@@ -1,29 +1,11 @@
-// One Web Audio graph for every sound the product makes.
-//
-//   source nodes -> category gain ("sfx") -> master gain -> destination
-//
-// Sources that exist today (settings round, 2026-09-29 inventory):
-//   * battle sounds: the registered original battle samples, played on frame
-//     events by battleAudioPresentation.js (short one-shot clips, no music);
-//   * the important-highlight cues, synthesized by highlightAudio.js.
-// Both are "sfx". There is no music, no interface sound and no voice, so no
-// such category exists here (and the settings screen offers no slider for
-// one). A new source picks a category when it is added.
-//
-// Levels: effective gain = master% x category% / 10000, and 0 while muted.
-// Changes ramp over ~30 ms (setTargetAtTime), so a slider never clicks. The
-// context is created with the saved levels already applied, so a muted game
-// is silent from its first sound, not after a correction.
-//
-// Browsers start an AudioContext suspended until a user gesture; the bus
-// resumes it on the first pointer or key press and reports the state.
-
-export const AUDIO_CATEGORIES = Object.freeze(["sfx"]);
+// One shared Web Audio graph: sources -> sfx/music category -> master -> destination.
+// Original music uses two streaming media sources, with per-cue headroom before its category.
+export const AUDIO_CATEGORIES = Object.freeze(["sfx", "music"]);
 const RAMP_SECONDS = 0.03;
 
-export function effectiveGain({ muted = false, masterVolume = 100, sfxVolume = 100 } = {}, category = "sfx") {
+export function effectiveGain({ muted = false, masterVolume = 100, sfxVolume = 100, musicVolume = 100 } = {}, category = "sfx") {
   if (muted) return 0;
-  const categoryVolume = category === "sfx" ? sfxVolume : 100;
+  const categoryVolume = category === "sfx" ? sfxVolume : category === "music" ? musicVolume : 100;
   return Math.max(0, Math.min(1, (masterVolume / 100) * (categoryVolume / 100)));
 }
 
@@ -32,7 +14,7 @@ export function createAudioBus({
   eventTarget = globalThis.document,
   levels: initial = {}
 } = {}) {
-  let levels = { muted: false, masterVolume: 100, sfxVolume: 100, ...initial };
+  let levels = { muted: false, masterVolume: 100, sfxVolume: 100, musicVolume: 100, ...initial };
   let context = null;
   let master = null;
   const categories = new Map();
@@ -41,7 +23,7 @@ export function createAudioBus({
   let previews = 0;
 
   const masterLevel = () => (levels.muted ? 0 : Math.max(0, Math.min(1, levels.masterVolume / 100)));
-  const categoryLevel = (name) => (name === "sfx" ? Math.max(0, Math.min(1, levels.sfxVolume / 100)) : 1);
+  const categoryLevel = (name) => Math.max(0, Math.min(1, (name === "sfx" ? levels.sfxVolume : name === "music" ? levels.musicVolume : 100) / 100));
 
   function resume() {
     if (context?.state === "suspended") void context.resume().catch(() => {});
@@ -109,7 +91,9 @@ export function createAudioBus({
       return Object.freeze({
         master: master ? master.gain.value : masterLevel(),
         sfx: categories.get("sfx")?.gain.value ?? categoryLevel("sfx"),
-        effective: effectiveGain(levels, "sfx")
+        effective: effectiveGain(levels, "sfx"),
+        music: categories.get("music")?.gain.value ?? categoryLevel("music"),
+        musicEffective: effectiveGain(levels, "music")
       });
     },
     state: () => context?.state ?? "none",

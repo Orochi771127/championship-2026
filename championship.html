@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#0b181c">
     <link rel="icon" href="data:,">
-    <title>數碼獸冠軍賽 — 2026</title>
+    <title>網線拍檔：錦標賽</title>
     <script>
       // Player preferences before the first paint (settings round, 2026-09-29).
       // Read-only, and a mirror of settings/preferenceEnvironment.js and the
@@ -328,24 +328,30 @@
     <div id="cm-title" class="cm-title" data-palette="night">
       <div class="cm-title__panel" data-opening="login">
         <button id="cm-title-settings" class="cm-title__settings" type="button" aria-label="設定" title="設定" hidden></button>
+        <div class="cm-title__light" aria-hidden="true"></div>
         <div class="cm-title__logo">
-          <span class="cm-title__crown" aria-hidden="true"></span>
-          <p class="cm-title__eyebrow">網線拍檔</p>
-          <h1 class="cm-title__name">網線拍檔<br><span>錦標賽</span></h1>
-          <p class="cm-title__edition">CHAMPIONSHIP <b>2026</b></p>
+          <img class="cm-title__logo-art" src="./assets/production/title-morning-r1/logo-zh-Hant.webp" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="high">
+          <h1 class="cm-title__name" aria-label="網線拍檔：錦標賽">網線拍檔<br><span>錦標賽</span></h1>
         </div>
-        <div class="cm-title__world" aria-hidden="true"></div>
-        <button id="cm-login" class="cm-title__login" type="button" disabled>LOGIN</button>
-        <div class="cm-title__actions" hidden>
-          <button id="cm-new-game" class="cm-button cm-button--primary" type="button">開始新遊戲</button>
-          <button id="cm-continue" class="cm-button" type="button" disabled>繼續遊戲</button>
+        <div class="cm-title__partners" aria-hidden="true">
+          <span class="cm-title__spark cm-title__spark--one"></span>
+          <span class="cm-title__spark cm-title__spark--two"></span>
+          <img class="cm-title__partner cm-title__partner--blaze" src="./assets/production/title-morning-r1/blaze.webp" width="1353" height="1162" alt="">
+          <img class="cm-title__partner cm-title__partner--cloud" src="./assets/production/title-morning-r1/cloud.webp" width="1254" height="1254" alt="">
+        </div>
+        <div class="cm-title__entry">
+          <button id="cm-login" class="cm-title__login" type="button" disabled>LOGIN</button>
+          <div class="cm-title__actions" hidden>
+            <button id="cm-new-game" class="cm-button cm-button--primary" type="button">開始新遊戲</button>
+            <button id="cm-continue" class="cm-button" type="button" disabled>繼續遊戲</button>
+          </div>
         </div>
         <div id="cm-opening" hidden></div>
         <p id="cm-title-note" class="cm-title__note" role="status"></p>
       </div>
     </div>
     <div id="cm-root" hidden></div>
-    <noscript>數碼獸冠軍賽 2026 需要啟用 JavaScript 才能執行。</noscript>
+    <noscript>網線拍檔：錦標賽需要啟用 JavaScript 才能執行。</noscript>
     <script>
       if (window.location.protocol === "file:") {
         document.querySelector("#cm-new-game").disabled = true;

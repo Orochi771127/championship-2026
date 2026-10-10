@@ -94,6 +94,8 @@ import { createPreferenceEnvironment } from './settings/preferenceEnvironment.js
 import { createQualityController } from './settings/qualityController.js';
 import { createSettingsPanel } from './settings/settingsPanel.js';
 import { createAudioBus } from '../presentation/audioBus.js';
+import { createMusicPresentation } from '../presentation/musicPresentation.js';
+import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
 import { cappedPixelRatio, currentQuality, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange } from '../text/locale.js';
@@ -303,10 +305,10 @@ function bootSettings() {
   const store = createPreferenceStore({ port });
   const quality = createQualityController({ preference: store.get().quality });
   const environment = createPreferenceEnvironment({ store, quality });
-  const levels = () => ({ muted: store.get().muted, masterVolume: store.get().masterVolume, sfxVolume: store.get().sfxVolume });
+  const levels = () => ({ muted: store.get().muted, masterVolume: store.get().masterVolume, sfxVolume: store.get().sfxVolume, musicVolume: store.get().musicVolume });
   const audio = createAudioBus({ levels: levels() });
   store.subscribe((values, changed) => {
-    if (changed.some((id) => id === "muted" || id === "masterVolume" || id === "sfxVolume")) audio.setLevels(levels());
+    if (changed.some((id) => id === "muted" || id === "masterVolume" || id === "sfxVolume" || id === "musicVolume")) audio.setLevels(levels());
   });
   quality.subscribe((described) => { pixiStage?.setResolutionCap(described.parameters.pixiResolutionCap); });
   // Another tab changed the settings: follow it, without writing back.
@@ -317,6 +319,23 @@ function bootSettings() {
   return Object.freeze({ store, environment, quality, audio });
 }
 const settings = bootSettings();
+const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CUES,
+  onState(state){document.documentElement.dataset.musicState=JSON.stringify(state);}});
+settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume'].includes(id)))music.preferencesChanged();});
+const tutorialMusicAttempts=new WeakMap();let tutorialMusicSequence=0;
+function syncMusic(){
+  if(!titleScreen.hidden){const cue=selectOriginalMusic({titleVisible:true,openingVisible:!document.getElementById('cm-opening').hidden});music.setScene(cue.id);return;}
+  const screen=app?.getScreen(),tutorialBattle=app?.getInteractiveTutorialBattle?.(),runtime=tutorialBattle?.runtime??battleRuntime;
+  let attemptId=battleAttemptId;
+  if(tutorialBattle?.runtime){if(!tutorialMusicAttempts.has(runtime))tutorialMusicAttempts.set(runtime,`tutorial:${++tutorialMusicSequence}`);attemptId=tutorialMusicAttempts.get(runtime);}
+  const cue=selectOriginalMusic({screen,tutorial:app?.getInteractiveTutorial?.()?.finished===false,
+    biome:app?.getConfirmedGate?.()?.biomeId,chosen:runtime?.getChosenMatch?.(),
+    outcome:screen===CHAMPIONSHIP_SCREENS.BATTLE_RESULT?(tutorialBattle?.outcome??runtime?.outcome?.()):null,attemptId});
+  music.setScene(cue.id,cue.attemptId);
+}
+const musicOverlayObserver=new MutationObserver(syncMusic);
+musicOverlayObserver.observe(titleScreen,{attributes:true,attributeFilter:['hidden']});
+musicOverlayObserver.observe(document.getElementById('cm-opening'),{attributes:true,attributeFilter:['hidden']});
 
 // When a quality sample may count: the screen is mounted and settled, the
 // page is visible, and nothing is loading. A screen change restarts the clock.
@@ -1284,6 +1303,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) view = await mountBattleField();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) view = await mountBattleResult();
     mountedScreen = target;
+    syncMusic();
     screenChangedAt = performance.now();
     // One attribute every screen carries, whichever view family drew it. The
     // views' own data-screen stays theirs (the status bar also carries one).
@@ -1346,7 +1366,7 @@ async function openGameplay() {
     }
   }
   unsubscribeScreen = app.subscribeScreen(() => {
-    refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
+    syncMusic(); refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
   let calendarSession=null,stopCalendarSession=null;
   const bindCalendarSession=()=>{
@@ -1399,7 +1419,7 @@ async function openGameplay() {
     const tutorial=app.getInteractiveTutorial(),active=tutorial&&!tutorial.finished&&app.getScreen()===CHAMPIONSHIP_SCREENS.RAISING_HOME;
     const next=active?tutorial.tool:null,key=active?tutorial.checkpoint.stage+":"+tutorial.checkpoint.message:null;
     if(key===previousTutorialTool)return;
-    previousTutorialTool=key;toolbar.setTutorialTool(next,{select:tutorial?.selectTool??true,key,menuEntry:tutorial?.menuEntry});
+    syncMusic(); previousTutorialTool=key;toolbar.setTutorialTool(next,{select:tutorial?.selectTool??true,key,menuEntry:tutorial?.menuEntry});
   };
   unsubscribeTutorialTools=app.subscribeRaising(refreshTutorialTools);
   refreshTutorialTools();
@@ -1752,7 +1772,7 @@ const titleSettingsButton = document.getElementById("cm-title-settings");
  */
 function relabelChrome() {
   const currentLang = document.documentElement.lang || "zh-Hant";
-  document.title = getActiveGameTitle(currentLang) + " · 2026";
+  document.title = getActiveGameTitle(currentLang);
   const eyebrow = titleScreen?.querySelector(".cm-title__eyebrow");
   const heading = titleScreen?.querySelector(".cm-title__name");
   if (eyebrow) {
@@ -1825,6 +1845,7 @@ function boot() {
   installHomeEntries();
   refreshContinue();
   loginButton.disabled=false;
+  syncMusic();
   // The title is the longest idle moment the player gives us: they are reading
   // it before pressing LOGIN. Warming only from mountCurrentScreen missed it
   // entirely, because the title is not mounted through there, so the first Hunt

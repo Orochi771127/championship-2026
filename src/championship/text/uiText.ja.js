@@ -5,6 +5,9 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "MUSIC_VOLUME": "音楽",
+  "MUSIC_VOLUME_HINT": "タイトル、育成、探索、バトルの音楽。",
+  "MUSIC_GESTURE_NOTE": "タップまたはキー操作後に再生し、バックグラウンドでは一時停止します。",
   "RESIDENT_ART_LOADING": "パートナーの画像を読み込み中…",
   "RESIDENT_ART_ERROR": "パートナーの画像を読み込めませんでした。ゲームデータは保持されています。",
   "RESIDENT_ART_RETRY": "画像を再読み込み",

@@ -232,10 +232,12 @@
     "src/championship/presentation/licensedCharacterRoster.js",
     "src/championship/presentation/m001CharacterArtReview.js",
     "src/championship/presentation/m001CharacterHudReview.js",
+    "src/championship/presentation/musicPresentation.js",
     "src/championship/presentation/nativeHuntCharacterAction.js",
     "src/championship/presentation/originalBattleFieldBindings.js",
     "src/championship/presentation/originalCageVisualBindings.js",
     "src/championship/presentation/originalMapAnimationTiming.js",
+    "src/championship/presentation/originalMusicCatalog.js",
     "src/championship/presentation/originalRuntimeLocation.js",
     "src/championship/presentation/originalSharedVfxReview.js",
     "src/championship/presentation/originalShopCageArt.js",
@@ -8820,6 +8822,26 @@
     "assets/production/opening/original-comic-r2-20261010/04_partnership.webp",
     "assets/production/opening/original-comic-r2-20261010/05_invitation.webp",
     "assets/production/opening/original-comic-r2-20261010/manifest.json",
+    "assets/production/original-music-r1/bgm_central_radiant_core.mp3",
+    "assets/production/original-music-r1/bgm_eastern_mystic_mountains.mp3",
+    "assets/production/original-music-r1/bgm_ethereal_moon_lakefront.mp3",
+    "assets/production/original-music-r1/bgm_linkara_lofi.mp3",
+    "assets/production/original-music-r1/bgm_login_page.mp3",
+    "assets/production/original-music-r1/bgm_northern_verdant_plains.mp3",
+    "assets/production/original-music-r1/bgm_southeast_forge_hills.mp3",
+    "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
+    "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
+    "assets/production/original-music-r1/championship_battle_final_r1.m4a",
+    "assets/production/original-music-r1/championship_battle_final_r1.ogg",
+    "assets/production/original-music-r1/championship_battle_normal_r1.m4a",
+    "assets/production/original-music-r1/championship_battle_normal_r1.ogg",
+    "assets/production/original-music-r1/championship_defeat_r1.m4a",
+    "assets/production/original-music-r1/championship_defeat_r1.ogg",
+    "assets/production/original-music-r1/championship_draw_r1.m4a",
+    "assets/production/original-music-r1/championship_draw_r1.ogg",
+    "assets/production/original-music-r1/championship_victory_r1.m4a",
+    "assets/production/original-music-r1/championship_victory_r1.ogg",
+    "assets/production/original-music-r1/manifest.json",
     "assets/production/original-ui-intake-20261007/care/manifest.json",
     "assets/production/original-ui-intake-20261007/database/cell-000.png",
     "assets/production/original-ui-intake-20261007/database/cell-001.png",
@@ -9039,6 +9061,11 @@
     "assets/production/temporary/int-rh2/environment/raising_home_first_frame.webp",
     "assets/production/temporary/int-rh2/manifest.json",
     "assets/production/temporary/vs2-hunt/manifest.json",
+    "assets/production/title-morning-r1/arena.webp",
+    "assets/production/title-morning-r1/blaze.webp",
+    "assets/production/title-morning-r1/cloud.webp",
+    "assets/production/title-morning-r1/logo-zh-Hant.webp",
+    "assets/production/title-morning-r1/manifest.json",
     "assets/production/toolbar/licensed-runtime-v1/clean-rest.png",
     "assets/production/toolbar/licensed-runtime-v1/clean-selected.png",
     "assets/production/toolbar/licensed-runtime-v1/feed-rest.png",
@@ -9401,10 +9428,12 @@
     "src/championship/presentation/licensedCharacterRoster.js",
     "src/championship/presentation/m001CharacterArtReview.js",
     "src/championship/presentation/m001CharacterHudReview.js",
+    "src/championship/presentation/musicPresentation.js",
     "src/championship/presentation/nativeHuntCharacterAction.js",
     "src/championship/presentation/originalBattleFieldBindings.js",
     "src/championship/presentation/originalCageVisualBindings.js",
     "src/championship/presentation/originalMapAnimationTiming.js",
+    "src/championship/presentation/originalMusicCatalog.js",
     "src/championship/presentation/originalRuntimeLocation.js",
     "src/championship/presentation/originalSharedVfxReview.js",
     "src/championship/presentation/originalShopCageArt.js",
@@ -43461,6 +43490,86 @@
         "sha256": "520dfe41f2fbc03ca7cb9ff1ed0d7183921137a79b7e1dc7d41467b2ccc9390b"
       },
       {
+        "path": "assets/production/original-music-r1/bgm_central_radiant_core.mp3",
+        "sha256": "3bfb5e29a82df7ff33c69e4219953bac206d2a02a11a9f420d9dea31e64835d2"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_eastern_mystic_mountains.mp3",
+        "sha256": "1d25c7ff6efee6cb6362166357cbdadfc233e3280f7143c8ff1d44974507ea62"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_ethereal_moon_lakefront.mp3",
+        "sha256": "7edfd59db3d42ccdba1a0ab26b9be29a2025c708256a2b78a8ca803bc2b40669"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_linkara_lofi.mp3",
+        "sha256": "4493295603342d74447c2ceb751aa0d486adfef88c9638aa42043d400bab8243"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_login_page.mp3",
+        "sha256": "fa2164a73a4164bf347509f75753791bd1ea53503ab8f1bbde94af53bc491d16"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_northern_verdant_plains.mp3",
+        "sha256": "87b231f5f3ef1068bfdc540f1148d2d7373c190fcda220af62e81a641c280cd6"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_southeast_forge_hills.mp3",
+        "sha256": "09cf38d41e4c247777581be12e17ebc298012ab2287d543ed27e791910346498"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
+        "sha256": "5b25c90162cabd990e21ae3f2f0597b01508d4e2fefdd94d89a4a6cb698ac250"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
+        "sha256": "c5f46b343c78a695949dc27b216f2a2e598b6ffd09366f93799d54ad2c0b3406"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_battle_final_r1.m4a",
+        "sha256": "4315a43e277d8732b923752c5bab9cbf5f4cbeb1e1ccf3b8de4219c552bb2e34"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_battle_final_r1.ogg",
+        "sha256": "d8d22a02aca6740d55cd80f0f8fd2f3c82692f5c5d77b79bee68da908c697805"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_battle_normal_r1.m4a",
+        "sha256": "156f1168a491ec321fec3750ce9cde295e8ac58f7f0d42f11e2785d917b04cf9"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_battle_normal_r1.ogg",
+        "sha256": "67cb80063acf1cbb50b3ff8834348674c1fb00909b879ae30e5a27fad898d907"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_defeat_r1.m4a",
+        "sha256": "8ce39e6e4f183d18f62da5daaf7fa074f5b5dcc8d5460c39e9a0d3fd66c20b9a"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_defeat_r1.ogg",
+        "sha256": "cc31141eb0ebd1ab1c6152a028a34cba8803cd8cdf64410be298a8039751fcf0"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_draw_r1.m4a",
+        "sha256": "acb13aa78881127bf99a0275472e234ee23c556fbfc34d5922c54dd3fb4c75c1"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_draw_r1.ogg",
+        "sha256": "c5be5250b8f29e020eaff06345e50cbe83b4f8a1d96e90bfa3b3d5bb4490d121"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_victory_r1.m4a",
+        "sha256": "7590fef94a4eb9e6bb1d7910798d04b815ed248eae8bdd2bed3f30f9bb143dce"
+      },
+      {
+        "path": "assets/production/original-music-r1/championship_victory_r1.ogg",
+        "sha256": "5b603af190664196ff2ba8dd2102663ff4980fbaba25013ab17f7ec3b89cb690"
+      },
+      {
+        "path": "assets/production/original-music-r1/manifest.json",
+        "sha256": "1785d8119fd44dbc63fe2e984c24b78d7489d23f46eb110a722d5da70ecd82a2"
+      },
+      {
         "path": "assets/production/original-ui-intake-20261007/care/manifest.json",
         "sha256": "49c006667b7016f3a748873ca92df893f42c29fb13ed5b4701b6cf5eeb61e8ae"
       },
@@ -44337,6 +44446,26 @@
         "sha256": "34460c18251f1e080a0a70537671ab0f6a1b3ebdf8be92575319b5628d2dded6"
       },
       {
+        "path": "assets/production/title-morning-r1/arena.webp",
+        "sha256": "a7c8f01413abe0b8448bfeb33266753f35f96bbb2e3d106169ec3eba3564eca1"
+      },
+      {
+        "path": "assets/production/title-morning-r1/blaze.webp",
+        "sha256": "12813a7468665413497fbdb851715c0336fd10c2c8d219a5991e30bba7927e57"
+      },
+      {
+        "path": "assets/production/title-morning-r1/cloud.webp",
+        "sha256": "2d218508c3caa0b3ddaae6ccbaee495bfd4f845dc8a4a4e1a7fb0aad6d7ddb67"
+      },
+      {
+        "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+        "sha256": "b9d05cab400546c6b100993e074e5e660d357bc841f709bd561018d4db6a805a"
+      },
+      {
+        "path": "assets/production/title-morning-r1/manifest.json",
+        "sha256": "cd429d84058ff0a0359112909e673ab4f3d08e6f542e28a346a19d764b18340c"
+      },
+      {
         "path": "assets/production/toolbar/licensed-runtime-v1/clean-rest.png",
         "sha256": "b021bf21c4fd4b609ec6e9892fc574dff0d1e9e67b0615865fefc20003ebb2f2"
       },
@@ -44658,7 +44787,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "55ee83fd4c823652e58ac33ec6c9e6480e9e4ecd115502ecb11a1940f6c401aa"
+        "sha256": "2021596224206c76d2b77293cdbb2199cc8f7c459055786d36e9f84a952c2031"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -44986,7 +45115,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "a4fcd842230423bfab12f17de55c313376fb2e28bcad758c63348ad3575cb5cb"
+        "sha256": "5d8446a6f640aca00c0000047b1c25a83e1cdbac41fd28a297bd32203ecc9460"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -45022,7 +45151,7 @@
       },
       {
         "path": "src/championship/app/opening.css",
-        "sha256": "f12f4dac75cc615a7ef47248f066099c66209ecb7bbcaad2824ce0bdbf2d8a13"
+        "sha256": "49da3dddf1f3fa565378dbda0ab42dfe025f247fd16efda2a891578d1818f34a"
       },
       {
         "path": "src/championship/app/openingEggChoices.js",
@@ -45070,7 +45199,7 @@
       },
       {
         "path": "src/championship/app/settings/preferenceSchema.js",
-        "sha256": "21731efd814117e84ae06b5afecfbe6c469dab4ecfdce7042734347192c4ab30"
+        "sha256": "0b22d77f78e06439da76d9ccdfc914c9f228ce7003de83296734ef99e88059a0"
       },
       {
         "path": "src/championship/app/settings/preferenceStore.js",
@@ -45082,7 +45211,7 @@
       },
       {
         "path": "src/championship/app/settings/settingsPanel.js",
-        "sha256": "12d1fcb96ccbb3336a7fcbb48797efc7f0ac4625bd86972beab3e9b449ed6d4a"
+        "sha256": "a7c3442d5d4b64c676dc7918838dcb20d8187f34efe27d858b79a82e14890f61"
       },
       {
         "path": "src/championship/app/shopOriginalVideo.css",
@@ -45634,7 +45763,7 @@
       },
       {
         "path": "src/championship/presentation/audioBus.js",
-        "sha256": "069ec67cc7779c6223d6d54d797066812825d03e0471fd0f315272bb91801c35"
+        "sha256": "cf6f75e5c64e1e63ba41d5a6453194a01d209101bf401e0b04c54dcc145dd3f5"
       },
       {
         "path": "src/championship/presentation/battleAudioPresentation.js",
@@ -45785,6 +45914,10 @@
         "sha256": "031a3f73d8f81387c5bd62e5629a78a753b23967bf218df0b7c327237315a713"
       },
       {
+        "path": "src/championship/presentation/musicPresentation.js",
+        "sha256": "294f701060647a69e150374f123c9f6754d394b78b18bb0d503c2004575e18ce"
+      },
+      {
         "path": "src/championship/presentation/nativeHuntCharacterAction.js",
         "sha256": "8a0025afe0affc0ddf1636986eb633bd7e06febcd56216b1f09ba2e62ecf0f21"
       },
@@ -45799,6 +45932,10 @@
       {
         "path": "src/championship/presentation/originalMapAnimationTiming.js",
         "sha256": "2777338d6c9585e78d85d09e44dfa5e9899ca2bd1335f1f6cbbe90fcbb27fd9e"
+      },
+      {
+        "path": "src/championship/presentation/originalMusicCatalog.js",
+        "sha256": "b7ee6aa36f1c5c7941d0b070c3529d026037fcd7fe950f4df70ec57e80785ce9"
       },
       {
         "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -46054,7 +46191,7 @@
       },
       {
         "path": "src/championship/text/brandTerms.js",
-        "sha256": "9b7fc4ab2ab03562560e46e4f607352b175315815de97c5fc7f4adbfc8727867"
+        "sha256": "1bce67f0bd106678bf5bba882c5f5108e14d298a889c70479c785075e0bb27ed"
       },
       {
         "path": "src/championship/text/catalogs.en.js",
@@ -46154,23 +46291,23 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "08190ab767146cc823d32c929097713995e8895e659540c5ebd72f10257583d3"
+        "sha256": "3fb7872c3dd0a80192212e7770b108d1e6bceefa1e72941e54f4537a4855515f"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "73ce9eda81b71613c968b9d0f2434176b61edd10e473bad3cde05169bca06a8b"
+        "sha256": "ce88a115d93545c03d586debff9809b219ef6f87b9cd8ffce18073c19385f288"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "5c420adc71d1a732246bdc250d3a01c54d18d3669d5cf738a62c733970506016"
+        "sha256": "bd9c7904722995f28e32e97f7ae7120fad5ca55c469ee8ba09d30aa498f39233"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "53a83e55e8b8ca40c87131e2942f73f2b56fa0d2d4427bf9bc62a5ddfb6829a2"
+        "sha256": "47751d52b0489d44da3dceb401fa740d568940fd29cb21c02dbf05ea235bcd93"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "94fb4e5dbc65c8ec87ddda0ade1a1bb5875eca5fb3da35e5d5ba661c16028da6"
+        "sha256": "937de03f908d1de8c0c8770578b4fb7facacea63673574f215d620f09cb888d5"
       },
       {
         "path": "src/championship/text/zhHant.js",

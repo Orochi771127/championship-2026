@@ -118,9 +118,10 @@ test("every preference has a category, a scope and a valid default", () => {
   assert.equal(DEFAULT_PREFERENCES.locale, "zh-Hant");
   assert.equal(DEFAULT_PREFERENCES.masterVolume, 100);
   assert.equal(DEFAULT_PREFERENCES.quality, "auto");
-  // No preference exists without a real effect: there is no music, interface
-  // sound, voice, screen-shake or frame-rate setting.
-  for (const absent of ["musicVolume", "uiVolume", "voiceVolume", "screenShake", "frameRate"]) assert.equal(PREFERENCE_DEFINITIONS[absent], undefined, absent);
+  // Music now has original sources in the same bus; nonexistent categories
+  // still do not get controls.
+  assert.equal(PREFERENCE_DEFINITIONS.musicVolume.scope, "device");
+  for (const absent of ["uiVolume", "voiceVolume", "screenShake", "frameRate"]) assert.equal(PREFERENCE_DEFINITIONS[absent], undefined, absent);
   assert.deepEqual(preferenceIdsIn("data"), [], "data & account holds facts and actions, no preference");
 });
 
@@ -441,7 +442,11 @@ test("a muted game is silent from its first sound, and changes ramp without a cl
   assert.equal(bus.gains().master, 0.8);
   const masterParam = output.destination.connections[0].gain;
   assert.ok(masterParam.calls.some((call) => Array.isArray(call) && call[0] === "target" && call[2] > 0), "changes use a time-constant ramp");
-  assert.throws(() => bus.output("music"), /AUDIO_CATEGORY_music/, "there is no music category to route into");
+  assert.equal(bus.output("music").context, output.context, "music and SFX share one AudioContext");
+  bus.setLevels({ musicVolume: 35 });
+  assert.equal(bus.gains().music, .35);
+  assert.equal(bus.gains().sfx, .6, "music volume does not change the effects category");
+  assert.throws(() => bus.output("voice"), /AUDIO_CATEGORY_voice/, "unknown categories remain rejected");
   bus.dispose();
 });
 

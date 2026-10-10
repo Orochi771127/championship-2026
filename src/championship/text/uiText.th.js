@@ -5,6 +5,9 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "MUSIC_VOLUME": "ดนตรี",
+  "MUSIC_VOLUME_HINT": "ดนตรีหน้าหลัก ฟาร์ม การสำรวจ และการต่อสู้",
+  "MUSIC_GESTURE_NOTE": "เพลงจะเริ่มหลังแตะหน้าจอหรือกดปุ่ม และหยุดชั่วคราวเมื่ออยู่เบื้องหลัง",
   "RESIDENT_ART_LOADING": "กำลังโหลดภาพคู่หู…",
   "RESIDENT_ART_ERROR": "โหลดภาพคู่หูไม่สำเร็จ ข้อมูลเกมยังคงอยู่",
   "RESIDENT_ART_RETRY": "ลองโหลดภาพอีกครั้ง",

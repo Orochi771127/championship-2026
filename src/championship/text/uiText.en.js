@@ -17,6 +17,9 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "MUSIC_VOLUME": "Music",
+  "MUSIC_VOLUME_HINT": "Music for the title, ranch, exploration and battles.",
+  "MUSIC_GESTURE_NOTE": "Music starts after a tap or key press and pauses in the background.",
   "RESIDENT_ART_LOADING": "Loading companion artwork…",
   "RESIDENT_ART_ERROR": "Companion artwork could not load. Your game data is retained.",
   "RESIDENT_ART_RETRY": "Retry artwork",
