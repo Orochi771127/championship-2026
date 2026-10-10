@@ -4,6 +4,13 @@
   "authority": "CHAMPIONSHIP_2026_PRODUCT",
   "note": "The BATTLE screen's layout and the runtime fields it may show. Layout numbers are PRODUCT-AUTHORED for a 9:16 phone frame. Every HUD field below is traced to a ROM read site, so the screen shows what the original tracks and nothing else. This file lives with the contracts rather than in src/ because src/championship carries no binary asset paths at all.",
   "originalParityClaim": false,
+  "originalCharacterDisplay": {
+    "authority": "OWNER_APPROVED_ADAPTATION_2026_10_10",
+    "scale": 1.5,
+    "scope": "Completed original character bodies in Battle only; retain relative scale and native ground anchors",
+    "unchanged": ["native pixel density", "simulation", "collision", "movement", "skill rules", "effect sizing", "Raising", "Hunt", "result"],
+    "originalParityClaim": false
+  },
   "specialPrelude": {
     "status": "BOUNDED_PRELUDE_INTEGRATED_FULL_ATTACK_PARTIAL",
     "script": "OVL19:0x02120900",

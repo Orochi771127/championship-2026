@@ -78,6 +78,9 @@ function bandById(id) {
 
 /** Kept so a caller can ask what aspect this scene's host must be. */
 export const BATTLE_FIELD_BAND = bandById("FIELD");
+// Owner 2026-10-10: readability of the accepted original bodies on the full-field phone view.
+// This presentation factor does not redefine native pixel density or simulation coordinates.
+export const BATTLE_ORIGINAL_CHARACTER_DISPLAY_SCALE = contract.originalCharacterDisplay.scale;
 
 function assertDependencies(stage, source) {
   if (!stage || !stage.PIXI || !stage.app || typeof stage.createSceneRoot !== "function"
@@ -253,7 +256,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const texture = sprite.texture;
       const packedScale = motion?.geometry.scale ?? nativeSizing?.packedPixelsPerNativePixel;
       const resolution = texture?.source?.resolution;
-      const scale = nativeScale * resolution / packedScale;
+      const displayScale = nativeSizing?.evidence === "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+        ? BATTLE_ORIGINAL_CHARACTER_DISPLAY_SCALE : 1;
+      const scale = nativeScale * resolution / packedScale * displayScale;
       sprite.visible = Boolean(scale > 0 && Number.isFinite(scale) && texture?.orig);
       if (!sprite.visible) continue;
       const trim = texture.trim ?? {x:0,y:0,width:texture.orig.width,height:texture.orig.height};

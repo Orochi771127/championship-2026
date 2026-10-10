@@ -12,6 +12,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 import {
+  BATTLE_ORIGINAL_CHARACTER_DISPLAY_SCALE,
   battleBandRect,
   battleFrameRect,
   mountBattleFieldPixiPresentation
@@ -387,4 +388,32 @@ test("the three battle screens follow the original's own screen names", async ()
   const stackSource = fs.readFileSync(path.join(root, "src/championship/app/championshipScreenStack.js"), "utf8");
   assert.match(stackSource, /BATTLE_FIELD: "RAISING_HOME"/);
   assert.match(stackSource, /BATTLE_RESULT: "RAISING_HOME"/);
+});
+
+
+test('accepted original battle bodies use the Owner display scale while native ground points stay fixed',async()=>{
+  assert.equal(BATTLE_ORIGINAL_CHARACTER_DISPLAY_SCALE,1.5);
+  const sprites=[];
+  const characterRoster={createActor(){
+    const sprite={texture:{source:{resolution:1},orig:{width:256,height:256},trim:{x:0,y:0,width:256,height:256}},
+      anchor:{x:0,y:0},scale:{set(x,y){this.x=x;this.y=y;}},position:{set(x,y){this.x=x;this.y=y;}},destroy(){}};
+    sprites.push(sprite);
+    return {sprite,nativeSizing:{packedPixelsPerNativePixel:4,evidence:'COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY'},
+      battleAnimator:{apply(){return {geometry:{scale:4,origin:[112,148],sourceSize:[256,256]},baseBounds:[-9.75,-17.75,12.5,2]};}}};
+  },dispose(){}};
+  const fieldArt={assetId:'test',field:{fieldId:'field_bm06_01',worldWidthPx:1664,worldHeightPx:1088,nativeWidthPx:416},displayObject:{},update(){},dispose(){},getDiagnostics(){return {};}};
+  const {stage,source,scene}=await mount({fieldArt,characterRoster,hps:[100,null,null,100,null,null],autoAdvance:false});
+  const before=JSON.stringify(source.getView().combatants);
+  for(const width of [320,390,844]){
+    stage.app.screen.width=width;stage.app.screen.height=width/1.5;scene.redraw();
+    const p=scene.getFieldPlacement(),stands=source.getView().combatants.filter(c=>c.present).map(c=>c.stand);
+    sprites.forEach((s,i)=>{
+      const k=p.nativeScale*BATTLE_ORIGINAL_CHARACTER_DISPLAY_SCALE;
+      assert.equal(Math.abs(s.scale.x),k/4);assert.equal(s.scale.y,k/4);
+      assert.ok(Math.abs(s.position.x+1.375*4*s.scale.x-(p.artRect.x+stands[i].x*p.artRect.width))<1e-8);
+      assert.ok(Math.abs(s.position.y+2*4*s.scale.y-(p.artRect.y+stands[i].y*p.artRect.height))<1e-8);
+    });
+  }
+  assert.equal(JSON.stringify(source.getView().combatants),before,'presentation must not change native battle state');
+  scene.dispose();
 });
