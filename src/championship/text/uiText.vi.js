@@ -5,6 +5,7 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  "OPENING_COMIC_LOADING": "Đang tải câu chuyện…",
   "輕觸數碼獸查看": "Nhấn vào đối tác để xem",
   "野生數碼獸": "bạn đồng hành hoang dã",
 

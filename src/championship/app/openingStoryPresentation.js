@@ -44,11 +44,25 @@ const COMIC=[
 ];
 const FRAME_MS=1000/60;
 
+// Delay presentation startup until eager image decoding settles. The original
+// card/frame trajectory remains unchanged, including every click/hold interval.
+export async function waitForOpeningComicImages(images,{timeoutMs=60000,signal}={}){
+  if(signal?.aborted)return false;
+  let timer,abort;
+  const ready=Promise.all(images.map(img=>img.complete?Promise.resolve(img.naturalWidth>0)
+    :Promise.resolve().then(()=>img.decode()).then(()=>img.naturalWidth>0,()=>false))).then(states=>states.every(Boolean));
+  const stopped=new Promise(resolve=>{timer=setTimeout(()=>resolve(false),timeoutMs);abort=()=>resolve(false);signal?.addEventListener('abort',abort,{once:true});});
+  try{return await Promise.race([ready,stopped]);}
+  finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
+}
+
 export function createOpeningStoryPresentation({host,onComplete}){
   const el=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=uiText(text);return n;};
   const root=el('section','cm-opening-story');root.tabIndex=0;root.setAttribute('role','button');
   root.setAttribute('aria-label',uiText('開場故事，閱讀後點按繼續'));
   const cards=[],parts=[];
+  const readiness=new AbortController();
+  root.setAttribute("aria-busy","true");root.dataset.comicReady="loading";
   function addComic(picture,index){
     const art=COMIC[index],img=document.createElement('img');
     img.src=art.src;img.width=art.width;img.height=art.height;img.alt='';img.draggable=false;
@@ -65,6 +79,8 @@ export function createOpeningStoryPresentation({host,onComplete}){
     if(i===1||i===2){const picture=el('div',`cm-opening-story__picture cm-opening-story__${i===1?'world':'champion'}`);row.push(addComic(picture,i+2));}
     card.append(...row);root.append(card);cards.push(card);parts.push(row);
   }
+  const loading=el('p','cm-opening-story__loading',uiText('OPENING_COMIC_LOADING'));
+  loading.setAttribute('role','status');root.append(loading);
   host.replaceChildren(root);host.hidden=false;
   let animations=[],clock=null,frames=[],generation=0,disposed=false,finishing=false;
   // Keep both edges of a constant span so a long reading hold cannot interpolate
@@ -116,9 +132,15 @@ export function createOpeningStoryPresentation({host,onComplete}){
     if(!state.cards.some(c=>c.phase===2))return;
     advanceOpeningStory(state,true);play(state);
   }
-  function dispose(){if(disposed)return;disposed=true;generation++;cancel();document.removeEventListener('visibilitychange',visibility);root.remove();}
+  function dispose(){if(disposed)return;disposed=true;readiness.abort();generation++;cancel();document.removeEventListener('visibilitychange',visibility);root.remove();}
   root.addEventListener('click',advance);
   root.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();advance();}});
-  document.addEventListener('visibilitychange',visibility);play(createOpeningStoryState());root.focus({preventScroll:true});
+  document.addEventListener('visibilitychange',visibility);root.focus({preventScroll:true});
+  void waitForOpeningComicImages([...root.querySelectorAll('img')],{signal:readiness.signal}).then(ready=>{
+    if(disposed)return;loading.remove();root.setAttribute('aria-busy','false');root.dataset.comicReady=ready?'ready':'partial';
+    // A failed request must not permanently block New Game; surviving text and
+    // images retain the same story path, while the status is inspectable.
+    play(createOpeningStoryState());
+  });
   return {dispose};
 }

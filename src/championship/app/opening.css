@@ -379,3 +379,6 @@ body[data-portrait-frame] .cm-title__panel { width: 390px; height: var(--cm-view
 .cm-opening__egg-actions .cm-opening__back, .cm-opening__name .cm-opening__back { background:var(--c-surface-2); color:var(--c-text-2); }
 .cm-opening__name .cm-opening__back { margin-top:10px; }
 @media(max-width:359px) { .cm-opening__egg-choice { padding:10px; } .cm-opening__egg-option { grid-template-columns:48px 1fr; gap:3px; padding:5px; } .cm-opening__egg-option img { width:48px; } }
+
+.cm-opening-story[aria-busy="true"] .cm-opening-story__card { visibility: hidden; }
+.cm-opening-story__loading { position: absolute; inset: 45% 16px auto; margin: 0; text-align: center; color: var(--text, #e8f5ef); font-size: 16px; }

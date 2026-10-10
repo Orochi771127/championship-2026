@@ -17,6 +17,7 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "OPENING_COMIC_LOADING": "Loading the story…",
   "輕觸數碼獸查看": "Tap a partner to see it",
   "野生數碼獸": "Wild Creatures",
 

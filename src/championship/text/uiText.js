@@ -6,6 +6,7 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "OPENING_COMIC_LOADING": "正在載入故事…",
   "輕觸數碼獸查看": "輕觸夥伴查看",
   "野生數碼獸": "野生夥伴",
 
