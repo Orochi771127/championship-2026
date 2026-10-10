@@ -12,7 +12,8 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
   const state = () => Object.freeze({ cue: desired?.id ?? null, key: desired?.key ?? null,
     playing: current && !current.media.paused ? current.id : null, pending: pending?.id ?? null,
     voices: slots.filter(s => !s.media.paused).length, slots: slots.length, starts, unlocked, hidden,
-    paused: Boolean(current?.media.paused), position: current?.media.currentTime ?? 0, error });
+    paused: Boolean(current?.media.paused), position: current?.media.currentTime ?? 0,
+    initialBuffering: Boolean(unlocked&&!hidden&&audible()&&(pending??current)&&!(pending??current).startupReady&&!(pending??current).media.paused), error });
   const emit = () => onState(state());
   function gain(slot, value, seconds = 0) {
     const now = slot.context.currentTime, param = slot.gain.gain;
@@ -24,6 +25,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     if (!slot) return;
     slot.generation++; slot.media.pause(); gain(slot, 0);
     slot.media.onloadedmetadata = slot.media.ontimeupdate = slot.media.onended = slot.media.onerror = null;
+    slot.media.oncanplaythrough = slot.media.onprogress = null;
     slot.media.removeAttribute('src'); slot.media.load(); slot.id = slot.key = null;
     if (pending === slot) pending = null;
     if (current === slot) current = null;
@@ -49,7 +51,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     const slot = availableSlot();
     if (!slot) { error = 'MUSIC_OUTPUT_UNAVAILABLE'; emit(); return; }
     const request = serial, token = ++slot.generation, key = desired.key;
-    slot.id = desired.id; slot.key = key; pending = slot; error = null;
+    slot.id = desired.id; slot.key = key; slot.startupReady=false; pending = slot; error = null;
     const valid = () => !disposed && slot.generation === token && !hidden && audible()
       && ((pending === slot && serial === request) || (current === slot && desired?.key === key));
     const fail = reason => {
@@ -59,6 +61,13 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     };
     slot.media.loop = Boolean(cue.loop && !cue.crossfade);
     slot.media.onloadedmetadata = () => { if (valid()) slot.media.currentTime = cue.trimStart ?? 0; };
+    const buffered = () => {
+      if(!valid()||slot.startupReady)return;
+      const ranges=slot.media.buffered;
+      const ahead=ranges?.length?ranges.end(ranges.length-1)-slot.media.currentTime:0;
+      if(slot.media.readyState>=4||ahead>=8){slot.startupReady=true;emit();}
+    };
+    slot.media.oncanplaythrough=slot.media.onprogress=buffered;
     slot.media.onerror = () => fail(`MUSIC_MEDIA_ERROR_${slot.media.error?.code ?? 'UNKNOWN'}`);
     slot.media.onended = () => {
       if (current !== slot || slot.generation !== token) return;
@@ -80,6 +89,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     Promise.resolve(slot.media.play()).then(() => {
       if (!valid()) { if (slot.generation === token) release(slot); return; }
       const old = current; current = slot; pending = null; starts++;
+      buffered();
       if (!cue.loop) playedResults.add(desired.attemptId);
       const seconds = old ? Math.min(cue.crossfade || .35, .8) : .2;
       gain(slot, 10 ** (cue.gainDb / 20), seconds);

@@ -44,6 +44,7 @@ import { mountBattleFieldPixiPresentation } from "../presentation/vs5/createBatt
 import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../presentation/battleEffectArt.js';
 import {loadRegisteredRaisingFeedbackArt} from '../presentation/raisingFeedbackArt.js';
 import {loadRegisteredCharacterHudArt} from '../presentation/characterHudArt.js';
+import {createTitleImageLifecycle} from '../presentation/titleImageLifecycle.js';
 import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js';
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
@@ -166,6 +167,7 @@ const FREE_PRACTICE_PERSONALITY_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battlePolicy") === "baseline" ? "BASELINE" : "ORIGINAL";
 
 const titleScreen = document.getElementById("cm-title");
+const syncTitleImages=createTitleImageLifecycle(titleScreen);
 const titleNote = document.getElementById("cm-title-note");
 const newGameButton = document.getElementById("cm-new-game");
 const continueButton = document.getElementById("cm-continue");
@@ -246,7 +248,10 @@ function bootSettings() {
 }
 const settings = bootSettings();
 const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CUES,
-  onState(state){document.documentElement.dataset.musicState=JSON.stringify(state);}});
+  onState(state){
+    document.documentElement.dataset.musicState=JSON.stringify(state);
+    syncTitleImages(titleScreen.hidden||(state.cue==='login'&&state.initialBuffering));
+  }});
 settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume'].includes(id)))music.preferencesChanged();});
 const tutorialMusicAttempts=new WeakMap();let tutorialMusicSequence=0;
 function syncMusic(){
@@ -259,7 +264,7 @@ function syncMusic(){
     outcome:screen===CHAMPIONSHIP_SCREENS.BATTLE_RESULT?(tutorialBattle?.outcome??runtime?.outcome?.()):null,attemptId});
   music.setScene(cue.id,cue.attemptId);
 }
-const musicOverlayObserver=new MutationObserver(syncMusic);
+const musicOverlayObserver=new MutationObserver(()=>{syncTitleImages();syncMusic();});
 musicOverlayObserver.observe(titleScreen,{attributes:true,attributeFilter:['hidden']});
 musicOverlayObserver.observe(document.getElementById('cm-opening'),{attributes:true,attributeFilter:['hidden']});
 
@@ -300,8 +305,13 @@ function note(message) {
   if (titleNote) setText(titleNote, message);
 }
 
+let pixiModulePromise;
+function loadPixiModule(){
+  return pixiModulePromise??=import("../../../node_modules/pixi.js/dist/pixi.mjs")
+    .catch(error=>{pixiModulePromise=null;throw error;});
+}
 async function ensurePixiStage(canvasHost, signal) {
-  const PIXI = await import("../../../node_modules/pixi.js/dist/pixi.mjs");
+  const PIXI = await loadPixiModule();
   signal?.throwIfAborted();
   if (!pixiStage) {
     // The quality tier chooses the resolution cap (changeable later) and the
@@ -552,6 +562,9 @@ function fieldFallback(host, error) {
 
 async function mountRaisingHome() {
   raisingSource = createRaisingPresentationSource(app);
+  // Current screen intent only. Fetch code alongside HUD metadata; the one
+  // Application is still created below when its real canvas host exists.
+  void loadPixiModule().catch(()=>{});
   let hudArt=null;
   try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href,speciesIds:raisingSource.getFrame().residents.map(r=>r.speciesId)});}
   catch(error){console.warn('Character HUD art unavailable',error);}

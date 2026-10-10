@@ -71,3 +71,16 @@ test('music level is independent of SFX and defaults safely for an older prefere
 test('a browser without OGG support loads the same combat cue through its AAC encoding',async()=>{
   const f=fixture({ogg:false});f.music.setScene('battle_final');f.doc.emit('pointerdown');await settle();assert.ok(f.media[0].src.endsWith('championship_battle_final_r1.m4a'));assert.equal(f.media[0].loop,true);f.music.dispose();
 });
+
+test('initial stream buffering ends at canplaythrough, releases on mute/error, and never prefetches other cues',async()=>{
+  const f=fixture();f.music.setScene('login');assert.equal(f.music.inspect().initialBuffering,false);
+  f.doc.emit('pointerdown');await settle();assert.equal(f.music.inspect().initialBuffering,true);
+  const a=f.media[0];a.readyState=4;a.oncanplaythrough();assert.equal(f.music.inspect().initialBuffering,false);
+  assert.equal(f.media.length,1);
+  f.music.setScene('moon');await settle();assert.equal(f.music.inspect().initialBuffering,true);
+  f.bus.setLevels({muted:true});f.music.preferencesChanged();assert.equal(f.music.inspect().initialBuffering,false);
+  f.bus.setLevels({muted:false});f.music.preferencesChanged();await settle();
+  const active=f.media.find(m=>m.src.includes('moon'));active.error={code:2};active.onerror();
+  assert.equal(f.music.inspect().initialBuffering,false);assert.equal(active.oncanplaythrough,null);
+  f.music.dispose();
+});

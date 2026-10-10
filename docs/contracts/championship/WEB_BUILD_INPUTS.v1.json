@@ -224,6 +224,7 @@
     "src/championship/presentation/highlight/createHighlightSequence.js",
     "src/championship/presentation/highlight/highlightAudio.js",
     "src/championship/presentation/highlight/highlightTimeline.js",
+    "src/championship/presentation/hudManifestCache.js",
     "src/championship/presentation/huntFeedbackArt.js",
     "src/championship/presentation/huntMobileReadouts.js",
     "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
@@ -251,6 +252,7 @@
     "src/championship/presentation/runtimeBattleArenaArtReview.js",
     "src/championship/presentation/runtimeMapArtBundle.js",
     "src/championship/presentation/shopGoodsUiArt.js",
+    "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/battleWeatherVfxPresentation.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
     "src/championship/presentation/vfx/faithfulVfxRuntimeBundle.js",
@@ -338,8 +340,7 @@
     "src/data/championship/battleNativeMathTables.js",
     "src/data/championship/characterNativeSizing.js",
     "src/data/championship/nativeBookSpecies.js",
-    "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/championship/presentation/hudManifestCache.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9421,6 +9422,7 @@
     "src/championship/presentation/highlight/createHighlightSequence.js",
     "src/championship/presentation/highlight/highlightAudio.js",
     "src/championship/presentation/highlight/highlightTimeline.js",
+    "src/championship/presentation/hudManifestCache.js",
     "src/championship/presentation/huntFeedbackArt.js",
     "src/championship/presentation/huntMobileReadouts.js",
     "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
@@ -9448,6 +9450,7 @@
     "src/championship/presentation/runtimeBattleArenaArtReview.js",
     "src/championship/presentation/runtimeMapArtBundle.js",
     "src/championship/presentation/shopGoodsUiArt.js",
+    "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/battleWeatherVfxPresentation.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
     "src/championship/presentation/vfx/faithfulVfxRuntimeBundle.js",
@@ -9572,8 +9575,7 @@
     "src/data/championship/characterNativeSizing.js",
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/public-playtest.r1.json",
-    "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/championship/presentation/hudManifestCache.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -44789,7 +44791,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "033b284362c0b94647423b2eaae488fb734a5d7d6a1dc7e78a174efc4c9c28e1"
+        "sha256": "04e784d8e4ff8fea3ac7672549e668f21daabdba255f4ae29985956dd703c201"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45117,7 +45119,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "3823cef0079b0a563e4245f52c6892f78ab9efdb36d8f850b85f77ad1f06fc54"
+        "sha256": "44bbbed7cfd03d978e3351dfd4911d71bba2db4be94463fab650e8516378f8b3"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -45153,7 +45155,7 @@
       },
       {
         "path": "src/championship/app/opening.css",
-        "sha256": "49da3dddf1f3fa565378dbda0ab42dfe025f247fd16efda2a891578d1818f34a"
+        "sha256": "39845df96ec01411258c6fe2461c5d333813b20c4134cf1142feefdb28fd923d"
       },
       {
         "path": "src/championship/app/openingEggChoices.js",
@@ -45753,7 +45755,7 @@
       },
       {
         "path": "src/championship/modes/championshipModeRegistry.js",
-        "sha256": "c010d5aa3630ac462190710316006882feb207261134eaf1b15e61b30ec7ed86"
+        "sha256": "3a06f6947bcef12bee1b8dcd4d6e02dfa3db3f3da03b7622d0500978fdef88e6"
       },
       {
         "path": "src/championship/modes/createChampionshipModeShell.js",
@@ -45825,7 +45827,7 @@
       },
       {
         "path": "src/championship/presentation/characterHudArt.js",
-        "sha256": "2a6d540b2a34e5454775d6626638a15be7db71d4246ab952c670285c46b40bdc"
+        "sha256": "116fa3220933b3eebb4c1f00bc8c5c9119e66f45bb28c59bb1bace109f5f0c98"
       },
       {
         "path": "src/championship/presentation/characterOriginGeometry.js",
@@ -45884,6 +45886,10 @@
         "sha256": "821c8b87b92c948485ca908be938a234218878a3c5f24a6aede83b30a4835995"
       },
       {
+        "path": "src/championship/presentation/hudManifestCache.js",
+        "sha256": "19e0e5f2f328fd5e54b320a64b6cffcb0c04c99089d05612c84f692cf59050cf"
+      },
+      {
         "path": "src/championship/presentation/huntFeedbackArt.js",
         "sha256": "b89f32d21fc7068a727f16781937e8fbc396fd1f253c13d7333ac609e9453c95"
       },
@@ -45917,7 +45923,7 @@
       },
       {
         "path": "src/championship/presentation/musicPresentation.js",
-        "sha256": "294f701060647a69e150374f123c9f6754d394b78b18bb0d503c2004575e18ce"
+        "sha256": "fbcbfe7403ab2f647ba7e04bb721f2cc0978d68b7ff7033965ff00068ee2d5a5"
       },
       {
         "path": "src/championship/presentation/nativeHuntCharacterAction.js",
@@ -45990,6 +45996,10 @@
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
         "sha256": "60ae6085450a5f306a7aad82bb11fc54c6de3dbd00728f4678e9bf45de47787f"
+      },
+      {
+        "path": "src/championship/presentation/titleImageLifecycle.js",
+        "sha256": "8671183c9500ad45bbbe88f7b06e9471c054c311e1ff7234e6d3ccbe48a9fc0f"
       },
       {
         "path": "src/championship/presentation/vfx/battleWeatherVfxPresentation.js",
@@ -46490,10 +46500,6 @@
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
-      },
-      {
-        "path": "src/championship/presentation/hudManifestCache.js",
-        "sha256": "19e0e5f2f328fd5e54b320a64b6cffcb0c04c99089d05612c84f692cf59050cf"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

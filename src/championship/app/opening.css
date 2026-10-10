@@ -10,6 +10,7 @@
   overflow:hidden; text-align:center; color:#12343e;
   background:#daeee6 url('../../../assets/production/title-morning-r1/arena.webp') center / cover no-repeat;
 }
+#cm-title[hidden] .cm-title__panel { background-image:none; }
 #cm-title .cm-title__panel::before { content:""; position:absolute; z-index:-1; inset:0; pointer-events:none; background:linear-gradient(180deg,rgba(239,252,255,.08),transparent 52%,rgba(243,246,220,.5)); }
 #cm-title .cm-title__light { position:absolute; z-index:-1; inset:0; pointer-events:none; background:radial-gradient(ellipse at 54% 28%,rgba(255,243,182,.38),transparent 60%); animation:cm-title-light 7s ease-in-out infinite; }
 #cm-title .cm-title__settings { top:max(12px,env(safe-area-inset-top)); right:16px; min-width:44px; min-height:44px; width:44px; height:44px; z-index:6; color:#075e65; border:1px solid rgba(255,255,255,.9); background:#fff4d2; box-shadow:0 3px 0 #bbad75,0 5px 12px #12343e25; }

@@ -8,6 +8,8 @@ import {compileBrowserBundle,bundledBrowserHtml} from '../scripts/lib/browser-bu
 import {readHudManifest} from '../src/championship/presentation/hudManifestCache.js';
 import {loadRegisteredCharacterHudArt} from '../src/championship/presentation/characterHudArt.js';
 import {TOOLBAR_PRODUCT_ENTRIES,toolbarProductEntryAvailable} from '../src/championship/app/championshipToolbar.js';
+import {createTitleImageLifecycle} from '../src/championship/presentation/titleImageLifecycle.js';
+import {championshipModeRegistry,CHAMPIONSHIP_MODE_IDS} from '../src/championship/modes/championshipModeRegistry.js';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const publicUrl='https://orochi771127.github.io/championship-2026/championship.html';
@@ -80,4 +82,35 @@ test('only the medals entry gains approved public-origin access; local experimen
     assert.equal(toolbarProductEntryAvailable(medals,url),false,url);
   assert.equal(toolbarProductEntryAvailable({id:'local-experiment',localOnly:true},publicUrl),false);
   assert.equal(toolbarProductEntryAvailable({id:'settings'},publicUrl),true);
+});
+
+test('HUD independent metadata requests start together and still validate the registered source',async()=>{
+  const pending=new Map();const fetchImpl=url=>new Promise(resolve=>pending.set(new URL(url).pathname.replace(/^\/championship-2026\//,''),resolve));
+  const load=loadRegisteredCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:[]});
+  await Promise.resolve();await Promise.resolve();
+  assert.equal(pending.size,2,'baseline metadata starts before the production index resolves');
+  for(const [file,resolve] of pending)resolve({ok:true,json:async()=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'))});
+  assert.ok(await load);
+});
+
+test('unfinished title images pause, restore the same URLs, and retain already decoded images',()=>{
+  const image=(src,complete)=>({src,complete,getAttribute(){return this.src;},removeAttribute(){this.src=null;},setAttribute(_,value){this.src=value;}});
+  const ready=image('ready.webp',true),pending=image('pending.webp',false),title={hidden:false,querySelectorAll:()=>[ready,pending]};
+  const sync=createTitleImageLifecycle(title);sync(true);sync(true);
+  assert.equal(ready.src,'ready.webp');assert.equal(pending.src,null);
+  sync(false);assert.equal(pending.src,'pending.webp');
+  title.hidden=true;sync();assert.equal(pending.src,null);title.hidden=false;sync();assert.equal(pending.src,'pending.webp');
+});
+
+test('missing HUD registration returns without waiting for unrelated in-flight metadata',async()=>{
+  const fetchImpl=url=>String(url).includes('ART_PRODUCTION_INDEX.json')
+    ?Promise.resolve({ok:true,json:async()=>({entries:[]})}):new Promise(()=>{});
+  assert.equal(await loadRegisteredCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:[]}),null);
+});
+
+test('shared shell code remains lazy in instantiation and preserves activation gates',async()=>{
+  const a=await championshipModeRegistry.load(CHAMPIONSHIP_MODE_IDS.RAISING_HOME);
+  const b=await championshipModeRegistry.load(CHAMPIONSHIP_MODE_IDS.RAISING_HOME);
+  assert.notStrictEqual(a,b);assert.equal(a.getSnapshot().lifecycle,'CREATED');
+  await assert.rejects(championshipModeRegistry.load(CHAMPIONSHIP_MODE_IDS.NETWORK_ARENA_SHELL),/not activatable/);
 });

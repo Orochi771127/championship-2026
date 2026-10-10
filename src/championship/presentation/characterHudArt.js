@@ -48,11 +48,17 @@ export function validateCharacterHudArt(manifest,index){
 }
 export async function loadRegisteredCharacterHudArt({baseUrl,fetchImpl=globalThis.fetch,speciesIds=null}){
   if(!isLocalBattleEffectPreview(baseUrl))return null;
+  // Fixed registered inputs can travel together. An absent registration still
+  // returns immediately; consume background rejections without using pixels.
+  const manifestPending=readHudManifest(new URL(CHARACTER_HUD_ART_MANIFEST,baseUrl),fetchImpl);
+  const adapterPending=import('./completedOriginalCharacters.js');
+  void manifestPending.catch(()=>{});void adapterPending.catch(()=>{});
   const index=await readHudManifest(new URL('assets/production/ART_PRODUCTION_INDEX.json',baseUrl),fetchImpl);
   if(!index.entries?.some(e=>e.assetId===CHARACTER_HUD_ART_ID&&e.runtimeEligible))return null;
-  const manifest=validateCharacterHudArt(await readHudManifest(new URL(CHARACTER_HUD_ART_MANIFEST,baseUrl),fetchImpl),index),portraits=new Map(manifest.portraits.map(p=>[p.speciesId,p]));
+  const [rawManifest,adapter]=await Promise.all([manifestPending,adapterPending]);
+  const manifest=validateCharacterHudArt(rawManifest,index),portraits=new Map(manifest.portraits.map(p=>[p.speciesId,p]));
   const battle=new Map((manifest.battle??[]).map(b=>[b.speciesId,{sequences:b.sequences,cells:new Map(b.cells.map(c=>[c.cell,c]))}]));
-  const {applyCompletedOriginalHudArt,completedOriginalHudSpecies,originalHudSourceSpecies}=await import('./completedOriginalCharacters.js');
+  const {applyCompletedOriginalHudArt,completedOriginalHudSpecies,originalHudSourceSpecies}=adapter;
   const canonical=id=>id?.replace(/^championship:creature:/,'');
   const known=new Set(completedOriginalHudSpecies(baseUrl)),settled=new Set(),pending=new Map(),listeners=new Set();
   async function ensureSpecies(ids){

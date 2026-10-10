@@ -1,4 +1,5 @@
 import { deepFreeze } from "../contracts/championshipContracts.js";
+import { createChampionshipModeShell } from "./createChampionshipModeShell.js";
 
 export const CHAMPIONSHIP_MODE_IDS = deepFreeze({
   HUNT_CAPTURE: "championship:mode:hunt-capture",
@@ -50,8 +51,9 @@ const CANONICAL_PARITY_SCOPE = "VERIFIED_FAMILY_PRESENCE_ONLY";
 
 function createLazyShellLoader(modeId) {
   return async function loadProjectNativeModeShell() {
-    const module = await import("./createChampionshipModeShell.js");
-    return module.createChampionshipModeShell({ modeId });
+    // Instantiate only when routed, but do not put a tiny shared shell behind
+    // another cold network round trip after the player presses Continue.
+    return createChampionshipModeShell({ modeId });
   };
 }
 

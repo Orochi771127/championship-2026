@@ -95,6 +95,7 @@
     <link rel="modulepreload" href="./src/championship/presentation/battleEffectArt.js">
     <link rel="modulepreload" href="./src/championship/presentation/raisingFeedbackArt.js">
     <link rel="modulepreload" href="./src/championship/presentation/characterHudArt.js">
+    <link rel="modulepreload" href="./src/championship/presentation/titleImageLifecycle.js">
     <link rel="modulepreload" href="./src/championship/presentation/huntFeedbackArt.js">
     <link rel="modulepreload" href="./src/championship/presentation/battleResultCharacters.js">
     <link rel="modulepreload" href="./src/championship/battle/nativeTitleProgression.js">
@@ -310,6 +311,7 @@
     <link rel="modulepreload" href="./src/championship/text/openingStoryText.js">
     <link rel="modulepreload" href="./src/championship/kernel/ChampionshipSavePort.js">
     <link rel="modulepreload" href="./src/championship/raising/createRaisingHomeRuntime.js">
+    <link rel="modulepreload" href="./src/championship/modes/createChampionshipModeShell.js">
     <link rel="modulepreload" href="./src/championship/field/fieldConstants.js">
     <link rel="modulepreload" href="./src/championship/field/fieldCamera.js">
     <link rel="modulepreload" href="./src/championship/contracts/evidenceIngest.js">
@@ -333,14 +335,14 @@
         <button id="cm-title-settings" class="cm-title__settings" type="button" aria-label="設定" title="設定" hidden></button>
         <div class="cm-title__light" aria-hidden="true"></div>
         <div class="cm-title__logo">
-          <img class="cm-title__logo-art" src="./assets/production/title-morning-r1/logo-zh-Hant.webp" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="high">
+          <img class="cm-title__logo-art" src="./assets/production/title-morning-r1/logo-zh-Hant.webp" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
           <h1 class="cm-title__name" aria-label="網線拍檔：錦標賽">網線拍檔<br><span>錦標賽</span></h1>
         </div>
         <div class="cm-title__partners" aria-hidden="true">
           <span class="cm-title__spark cm-title__spark--one"></span>
           <span class="cm-title__spark cm-title__spark--two"></span>
-          <img class="cm-title__partner cm-title__partner--blaze" src="./assets/production/title-morning-r1/blaze.webp" width="1353" height="1162" alt="">
-          <img class="cm-title__partner cm-title__partner--cloud" src="./assets/production/title-morning-r1/cloud.webp" width="1254" height="1254" alt="">
+          <img class="cm-title__partner cm-title__partner--blaze" src="./assets/production/title-morning-r1/blaze.webp" width="1353" height="1162" alt="" fetchpriority="low">
+          <img class="cm-title__partner cm-title__partner--cloud" src="./assets/production/title-morning-r1/cloud.webp" width="1254" height="1254" alt="" fetchpriority="low">
         </div>
         <div class="cm-title__entry">
           <button id="cm-login" class="cm-title__login" type="button" disabled>LOGIN</button>
