@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "de54307bd7c4133fdb4e42d19448da87891a1aba",
+  "status": "PASS_SCOPED",
+  "buildId": "e477713fadda8ad82c7e071c1af53a62a194bf97b8d9a7837f36370a1a8bf16f",
+  "fileCount": 9290,
+  "focusedTests": {
+    "tests": 33,
+    "pass": 33,
+    "fail": 0
+  },
+  "controlledBrowser": {
+    "status": "PASS",
+    "scope": "Local original bytes routed in an isolated browser; delayed native fetch response canceled before headers. Unit tests cover delayed body/decode ignoring abort. This is not a CDN throughput sample.",
+    "initial": {
+      "paused": false,
+      "disposed": false,
+      "generation": 1,
+      "state": "loading",
+      "hasCachedBlob": false,
+      "background": "none",
+      "size": "cover",
+      "position": "50% 50%",
+      "repeat": "no-repeat",
+      "color": "rgb(218, 238, 230)"
+    },
+    "restored": {
+      "paused": false,
+      "disposed": false,
+      "generation": 3,
+      "state": "ready",
+      "hasCachedBlob": true,
+      "background": "url(\"blob:https://championship-title-background.test/b10f0411-5771-4e05-9716-9c1dc2f963d8\")",
+      "size": "cover",
+      "position": "50% 50%",
+      "repeat": "no-repeat",
+      "color": "rgb(218, 238, 230)",
+      "sha256": "a7c8f01413abe0b8448bfeb33266753f35f96bbb2e3d106169ec3eba3564eca1",
+      "bytes": 2057534,
+      "width": 941,
+      "height": 1672
+    },
+    "requests": [
+      {
+        "id": "9244.13",
+        "at": 495392.48885,
+        "data": [],
+        "failedAt": 495392.556923,
+        "canceled": true,
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "id": "9244.15",
+        "at": 495392.643303,
+        "data": [
+          {
+            "at": 495392.671753,
+            "bytes": 0,
+            "encodedBytes": 2057534
+          }
+        ],
+        "finished": 495392.670185,
+        "encodedBytes": 2057598
+      },
+      {
+        "id": "9244.22",
+        "at": 495393.548663,
+        "data": [],
+        "failedAt": 495393.552451,
+        "canceled": true,
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "id": "9244.23",
+        "at": 495393.739146,
+        "data": [
+          {
+            "at": 495393.765223,
+            "bytes": 1048576,
+            "encodedBytes": 0
+          },
+          {
+            "at": 495393.766312,
+            "bytes": 1008958,
+            "encodedBytes": 2057534
+          }
+        ],
+        "finished": 495393.763781,
+        "encodedBytes": 2057598
+      }
+    ],
+    "events": [
+      {
+        "type": "create",
+        "url": "blob:https://championship-title-background.test/b10f0411-5771-4e05-9716-9c1dc2f963d8",
+        "size": 2057534
+      },
+      {
+        "type": "revoke",
+        "url": "blob:https://championship-title-background.test/b10f0411-5771-4e05-9716-9c1dc2f963d8"
+      },
+      {
+        "type": "create",
+        "url": "blob:https://championship-title-background.test/0d32bc31-e26b-432a-95f6-88ca667a7072",
+        "size": 2057534
+      },
+      {
+        "type": "revoke",
+        "url": "blob:https://championship-title-background.test/0d32bc31-e26b-432a-95f6-88ca667a7072"
+      }
+    ],
+    "pixelComparison": {
+      "candidate": "0e4bb8b498769bfc23928da1ea8a29489d4691617f4cba486a68dfbe42840932",
+      "baseline": "0e4bb8b498769bfc23928da1ea8a29489d4691617f4cba486a68dfbe42840932",
+      "equal": true
+    },
+    "checks": {
+      "abortNativeRequest": true,
+      "staleCompletionIgnored": true,
+      "returnOneRequest": true,
+      "cachedReturnNoRequest": true,
+      "disposeCancels": true,
+      "noCssDuplicate": true
+    },
+    "pageErrors": []
+  },
+  "normalBrowser": {
+    "status": "PASS",
+    "rows": [
+      {
+        "mode": "unfinished",
+        "muted": true,
+        "beforeReturn": 1,
+        "totalRequests": 2,
+        "returnRequests": 1,
+        "requests": [
+          {
+            "url": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "failed": "net::ERR_ABORTED"
+          },
+          {
+            "url": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "failed": null
+          }
+        ],
+        "background": {
+          "bytes": 2057534,
+          "sha256": "a7c8f01413abe0b8448bfeb33266753f35f96bbb2e3d106169ec3eba3564eca1",
+          "size": "cover",
+          "position": "50% 50%"
+        },
+        "pageErrors": [],
+        "canvasCountInRanch": 1
+      },
+      {
+        "mode": "decoded",
+        "muted": false,
+        "beforeReturn": 1,
+        "totalRequests": 1,
+        "returnRequests": 0,
+        "requests": [
+          {
+            "url": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "failed": null
+          }
+        ],
+        "background": {
+          "bytes": 2057534,
+          "sha256": "a7c8f01413abe0b8448bfeb33266753f35f96bbb2e3d106169ec3eba3564eca1",
+          "size": "cover",
+          "position": "50% 50%"
+        },
+        "pageErrors": [],
+        "canvasCountInRanch": 1
+      }
+    ],
+    "scope": "Built artifact, original bytes via local routes, no new server; same isolated native owned-party fixture; normal Login/Continue/Save & Quit, original music and native ticker. No player save or game/RNG override."
+  },
+  "original67FileHashDifferences": [],
+  "coldPerformance": "OPEN",
+  "physicalDeviceAccepted": false,
+  "newServerStarted": false,
+  "gameplayAndSaveChanged": false
+}

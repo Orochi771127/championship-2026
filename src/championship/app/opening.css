@@ -8,7 +8,7 @@
   display:grid; grid-template-rows:56px auto minmax(120px,1fr) 132px auto; gap:10px;
   padding:env(safe-area-inset-top,0px) 22px max(18px,env(safe-area-inset-bottom));
   overflow:hidden; text-align:center; color:#12343e;
-  background:#daeee6 url('../../../assets/production/title-morning-r1/arena.webp') center / cover no-repeat;
+  background:#daeee6 center / cover no-repeat; /* Original image is owned by titleImageLifecycle. */
 }
 #cm-title[hidden] .cm-title__panel { background-image:none; }
 #cm-title .cm-title__panel::before { content:""; position:absolute; z-index:-1; inset:0; pointer-events:none; background:linear-gradient(180deg,rgba(239,252,255,.08),transparent 52%,rgba(243,246,220,.5)); }

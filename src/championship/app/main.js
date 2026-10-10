@@ -169,6 +169,14 @@ const FREE_PRACTICE_PERSONALITY_POLICY =
 
 const titleScreen = document.getElementById("cm-title");
 const syncTitleImages=createTitleImageLifecycle(titleScreen);
+let titleMusicBuffering=false;
+const syncTitleArt=()=>syncTitleImages(titleScreen.hidden||titleMusicBuffering);
+syncTitleArt();
+// A BFCache page resumes the same owner; a discarded page releases its cache.
+globalThis.addEventListener('pagehide',event=>{
+  if(event.persisted)syncTitleImages(true);else syncTitleImages.dispose();
+});
+globalThis.addEventListener('pageshow',syncTitleArt);
 const titleNote = document.getElementById("cm-title-note");
 const newGameButton = document.getElementById("cm-new-game");
 const continueButton = document.getElementById("cm-continue");
@@ -251,7 +259,8 @@ const settings = bootSettings();
 const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CUES,
   onState(state){
     document.documentElement.dataset.musicState=JSON.stringify(state);
-    syncTitleImages(titleScreen.hidden||(state.cue==='login'&&state.initialBuffering));
+    titleMusicBuffering=state.cue==='login'&&state.initialBuffering;
+    syncTitleArt();
   }});
 settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume'].includes(id)))music.preferencesChanged();});
 const tutorialMusicAttempts=new WeakMap();let tutorialMusicSequence=0;
@@ -265,7 +274,7 @@ function syncMusic(){
     outcome:screen===CHAMPIONSHIP_SCREENS.BATTLE_RESULT?(tutorialBattle?.outcome??runtime?.outcome?.()):null,attemptId});
   music.setScene(cue.id,cue.attemptId);
 }
-const musicOverlayObserver=new MutationObserver(()=>{syncTitleImages();syncMusic();});
+const musicOverlayObserver=new MutationObserver(()=>{syncTitleArt();syncMusic();});
 musicOverlayObserver.observe(titleScreen,{attributes:true,attributeFilter:['hidden']});
 musicOverlayObserver.observe(document.getElementById('cm-opening'),{attributes:true,attributeFilter:['hidden']});
 
