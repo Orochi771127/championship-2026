@@ -1098,3 +1098,9 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   :root:not([data-motion]) :is(.cm-button, .cm-screen-back, .cm-screen-primary):active:not(:disabled) { transform: none; }
   :root:not([data-motion]) .cm-toolbar__cell::before { transition: none; }
 }
+
+/* DOM owns transient resident loading/error feedback, never a substitute animal. */
+.int-rh2-resident-assets { position:absolute; inset:12px 12px auto; z-index:12; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; padding:10px 12px; border:1px solid var(--c-line-2); border-radius:var(--r-control); background:var(--c-surface-1); color:var(--c-text-1); pointer-events:none; }
+.int-rh2-resident-assets[hidden] { display:none; }
+.int-rh2-resident-assets p { flex:1 1 180px; margin:0; font-size:13px; line-height:1.4; }
+.int-rh2-resident-assets button { min-height:44px; padding:8px 12px; border:1px solid var(--c-line-2); border-radius:var(--r-control); background:var(--c-accent); color:var(--c-text-on-accent); font:inherit; pointer-events:auto; }

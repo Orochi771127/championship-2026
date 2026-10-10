@@ -17,6 +17,9 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "RESIDENT_ART_LOADING": "Loading companion artwork…",
+  "RESIDENT_ART_ERROR": "Companion artwork could not load. Your game data is retained.",
+  "RESIDENT_ART_RETRY": "Retry artwork",
   "OPENING_COMIC_LOADING": "Loading the story…",
   "輕觸數碼獸查看": "Tap a partner to see it",
   "野生數碼獸": "Wild Creatures",
@@ -874,6 +877,8 @@ export const TEXT_EN = Object.freeze({
 // Proper nouns with no approved English form. English shows their approved
 // zh-Hant form on purpose, so they are not reported as missing translations.
 export const UNTRANSLATED_PROPER_NOUNS = Object.freeze(new Set([
+  // Owner-confirmed original egg names; localized note states they retain zh-Hant.
+  "星絮蛋", "焰脈蛋", "潮環蛋", "森芽蛋", "雷紋蛋", "月霧蛋", "晶棘蛋", "聖耀蛋",
   ...Object.values(SPECIES_NAMES_ZH),
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"

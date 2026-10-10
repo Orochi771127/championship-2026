@@ -90,7 +90,7 @@ export async function loadLicensedCharacterRoster({
         runtimeUrl: new URL(record.runtime, manifestUrl).href,
         sides, cachePrefix: `licensed:${entityId}:` }));
     } catch (error) {
-      failures.push({ entityId, reason: error.message });
+      failures.push({ entityId, runtimeUrl:new URL(record.runtime,manifestUrl).href, reason: error.message });
     }
   }
   for (const entityId of wanted) await loadEntity(entityId);

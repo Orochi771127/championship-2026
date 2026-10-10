@@ -1,0 +1,138 @@
+{
+  "scope": "2026-10-10 new-game display and Raising original body normalization",
+  "baseCommit": "aef0c8997ae5becbc8b3f2dea534fe7cbbfada47",
+  "browser": "Chrome headless, 390x844, DPR3, mobile/touch; isolated storage; public-location gates against local candidate files",
+  "physicalDeviceAccepted": false,
+  "ownerSaveUsed": false,
+  "normalNewGame": [
+    {
+      "egg": 1,
+      "locale": "zh-Hant",
+      "hatchSpecies": "species-018",
+      "entityId": "m011_yuramon",
+      "naturalTicker": true,
+      "reload": true,
+      "errors": []
+    },
+    {
+      "egg": 0,
+      "locale": "en",
+      "hatchSpecies": "species-014",
+      "entityId": "m007_botamon",
+      "naturalTicker": true,
+      "reload": true,
+      "errors": []
+    },
+    {
+      "egg": 2,
+      "locale": "ja",
+      "hatchSpecies": "species-008",
+      "entityId": "m001_zurumon",
+      "naturalTicker": true,
+      "reload": true,
+      "errors": []
+    },
+    {
+      "egg": 3,
+      "locale": "th",
+      "hatchSpecies": "species-023",
+      "entityId": "m104_tunomon",
+      "naturalTicker": true,
+      "reload": true,
+      "errors": []
+    },
+    {
+      "egg": 4,
+      "locale": "vi",
+      "hatchSpecies": "species-020",
+      "entityId": "m101_caprimon",
+      "naturalTicker": true,
+      "reload": true,
+      "errors": []
+    },
+    {
+      "egg": 5,
+      "locale": "zh-Hant",
+      "hatchSpecies": "species-019",
+      "entityId": "m012_petimon",
+      "naturalTicker": true,
+      "reload": true,
+      "errors": []
+    },
+    {
+      "egg": 6,
+      "locale": "zh-Hant",
+      "hatchSpecies": "species-019",
+      "entityId": "m012_petimon",
+      "naturalTicker": true,
+      "reload": true,
+      "errors": []
+    },
+    {
+      "egg": 7,
+      "locale": "zh-Hant",
+      "hatchSpecies": "species-011",
+      "entityId": "m004_bubbmon",
+      "naturalTicker": true,
+      "reload": true,
+      "errors": []
+    }
+  ],
+  "retry": {
+    "httpFailureInjected": true,
+    "sameSceneRecovered": true,
+    "species": "species-020",
+    "entity": "m101_caprimon"
+  },
+  "ranch": [
+    {
+      "species": 204,
+      "factor": 0.6444,
+      "carryAndGround": true,
+      "unchanged": false,
+      "errors": []
+    },
+    {
+      "species": 212,
+      "factor": 0.3648,
+      "carryAndGround": true,
+      "unchanged": false,
+      "errors": []
+    },
+    {
+      "species": 223,
+      "factor": 0.5948,
+      "carryAndGround": true,
+      "unchanged": false,
+      "errors": []
+    },
+    {
+      "species": 189,
+      "factor": 1,
+      "carryAndGround": null,
+      "unchanged": true,
+      "errors": []
+    },
+    {
+      "species": 195,
+      "factor": 1,
+      "carryAndGround": null,
+      "unchanged": true,
+      "errors": []
+    }
+  ],
+  "focusedTests": {
+    "passed": 23,
+    "failed": 0
+  },
+  "mandatoryCI": {
+    "passed": 1578,
+    "failed": 0,
+    "log": "mandatory-ci-final.log"
+  },
+  "iOSSafari": {
+    "physicalDeviceAccepted": false,
+    "localWebKitAvailable": false,
+    "reason": "Playwright WebKit executable absent; no new browser installed"
+  }
+}

@@ -254,7 +254,12 @@ export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href) 
       }
       entry.refs++;
       held.set(key, entry);
-      return entry.promise;
+      return entry.promise.catch(error=>{
+        // A failure before bundle creation has no disposer. Release this
+        // scope's rejected promise as well, so explicit retry can fetch again.
+        if(held.get(key)===entry){held.delete(key);entry.refs--;}
+        throw error;
+      });
     },
     async unload(value) {
       const key = keyOf(value), entry = held.get(key);

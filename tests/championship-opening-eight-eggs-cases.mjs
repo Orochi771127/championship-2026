@@ -15,6 +15,8 @@ const saved=s=>JSON.parse(s.getItem(KEY)),cp=a=>a.getInteractiveTutorial().check
 function progress(s){s=structuredClone(s);delete s.updatedAt;delete s.progression.revision;delete s.progression.nativeOpening;s.raisingHome=JSON.parse(s.raisingHome);delete s.raisingHome.revision;return s;}
 test('eight exact existing original egg identities and portraits, with five complete UI locales',()=>{
  assert.deepEqual(OPENING_EGG_CHOICES.map(e=>e.speciesIndex),[0,1,2,3,4,5,6,7]);
+  assert.deepEqual(OPENING_EGG_CHOICES.map(e=>e.formalName),['星絮蛋','焰脈蛋','潮環蛋','森芽蛋','雷紋蛋','月霧蛋','晶棘蛋','聖耀蛋']);
+  assert.deepEqual(openingEggChoices('https://orochi771127.github.io/championship-2026/').map(e=>e.formalName),OPENING_EGG_CHOICES.map(e=>e.formalName));
  const publicEggs=openingEggChoices('https://orochi771127.github.io/championship-2026/');assert.deepEqual(publicEggs.map(({speciesIndex,entityId,width,height})=>({speciesIndex,entityId,width,height})),OPENING_EGG_CHOICES.map(({speciesIndex,entityId,width,height})=>({speciesIndex,entityId,width,height})));
  for(const e of publicEggs){assert.ok(e.src.startsWith('assets/production/characters/accepted-20261010/'));const c=COMPLETED_ORIGINAL_CHARACTERS.find(c=>c.entityId===e.entityId);assert.equal(c.speciesId,`species-${String(e.speciesIndex).padStart(3,'0')}`);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);}
  try{for(const l of LOCALES){setLocale(l);for(const k of ['title','hint','egg','confirm','back','cancel'])assert.ok(openingEggText()[k]);}}finally{setLocale('zh-Hant');}

@@ -335,14 +335,15 @@ body[data-portrait-frame] .cm-title__panel { width: 390px; height: var(--cm-view
   position: relative;
   flex: 1;
   min-height: 0;
-  width: 65%;
-  overflow: hidden;
-  border: 1px solid var(--c-line-2);
-  border-radius: var(--r-control);
-  box-shadow: 0 0 30px rgba(86, 227, 194, 0.12);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.cm-opening-story__picture { background: #07110f; }
-.cm-opening-story__picture img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; image-rendering: auto; }
+/* Fit the image itself to its card: an oversized painted frame used to leave
+   black bars around contain-fitted artwork. Intrinsic aspect ratios preserve
+   the whole illustration; transparent layout space belongs to the story. */
+.cm-opening-story__picture img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center; image-rendering: auto; border-radius: var(--r-control); box-shadow: 0 0 24px rgba(86,227,194,.1); }
 .cm-opening-story__text { flex-shrink: 0; }
 /* Three separate frames keep every image visible, including feet and ears. */
 .cm-opening-story__card--0 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); grid-template-rows: auto minmax(0,1fr) minmax(0,1fr); gap: 8px; }

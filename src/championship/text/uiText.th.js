@@ -5,6 +5,9 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "RESIDENT_ART_LOADING": "กำลังโหลดภาพคู่หู…",
+  "RESIDENT_ART_ERROR": "โหลดภาพคู่หูไม่สำเร็จ ข้อมูลเกมยังคงอยู่",
+  "RESIDENT_ART_RETRY": "ลองโหลดภาพอีกครั้ง",
   "OPENING_COMIC_LOADING": "กำลังโหลดเรื่องราว…",
   "輕觸數碼獸查看": "แตะพันธมิตรเพื่อดู",
   "野生數碼獸": "สหายป่า",
@@ -1103,6 +1106,8 @@ export const TEXT_TH = Object.freeze({
 });
 
 export const UNTRANSLATED_PROPER_NOUNS_TH = Object.freeze(new Set([
+  // Owner-confirmed original egg names; localized note states they retain zh-Hant.
+  "星絮蛋", "焰脈蛋", "潮環蛋", "森芽蛋", "雷紋蛋", "月霧蛋", "晶棘蛋", "聖耀蛋",
   ...Object.values(SPECIES_NAMES_ZH),
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"

@@ -2,6 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createPixiAssetScope } from '../src/championship/presentation/pixiCharacterRuntimeBundle.js';
 
+test('an initial failed runtime has no bundle disposer but can retry in the same live scope',async()=>{
+  let loads=0,unloads=0;
+  const PIXI={Assets:{async load(){if(++loads===1)throw Error('TEMPORARY_DECODE_FAILURE');return {ok:true};},async unload(){unloads++;}}};
+  const scope=createPixiAssetScope(PIXI,'https://example.test/');
+  await assert.rejects(scope.Assets.load('hatch/runtime.json'),/TEMPORARY_DECODE_FAILURE/);
+  assert.deepEqual(await scope.Assets.load('hatch/runtime.json'),{ok:true});
+  assert.equal(loads,2);await scope.Assets.unload('hatch/runtime.json');assert.equal(unloads,1);
+});
+
 const deferred = () => { let resolve; const promise = new Promise(r => resolve = r); return { promise, resolve }; };
 const base = 'https://game.invalid/championship.html';
 

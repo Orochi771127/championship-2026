@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { CHARACTER_NATIVE_SIZING } from "../src/data/championship/characterNativeSizing.js";
 import { getCharacterStaticNativeSizing } from "../src/championship/presentation/licensedCharacterRoster.js";
-import { getRaisingNativePixelScale, getRaisingNativeActorGeometry } from "../src/championship/presentation/intRh2/raisingNativeSizing.js";
+import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale } from "../src/championship/presentation/intRh2/raisingNativeSizing.js";
 import { mountRaisingFieldPixiPresentation } from "../src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js";
 const read = (name) => JSON.parse(fs.readFileSync(new URL(`../${name}`, import.meta.url), "utf8"));
 const base = "assets/production/internal-faithful-baseline/characters-v1/";
@@ -20,6 +20,41 @@ function fixture(id = "e000_digitama", resolution = 1) {
         width: data.spriteSourceSize.w / resolution, height: data.spriteSourceSize.h / resolution } } } };
 }
 const cm01 = { worldWidthPx: 384, worldHeightPx: 448, nativePixelWorldScale: 4 };
+test('three oversized original ranch bodies use one fixed factor across every pose without moving its ground or center',()=>{
+  const selection=read('src/data/championship/accepted-original-character-selection.r1.json');
+  for(const [id,factor] of [['m518_blackwargreymon',.6444],['m529_metalgarurumon_va',.3648],['m541_dukemon',.5948],['m503_warglaymon',1],['m509_shinegraymon',1]]){
+    const config=selection.characters.find(c=>c.entityId===id),runtime=read(selection.root+config.folder+'/runtime.review.json');
+    const sizing={packedPixelsPerNativePixel:4,evidence:'COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY'};
+    assert.equal(raisingOriginalBodyScale(id,sizing),factor);assert.equal(raisingOriginalBodyScale(id,{...sizing,evidence:'VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME'}),1);
+    for(const frame of Object.values(runtime.reviewGeometry.frames).filter(f=>!f.blank)){
+      const sprite={anchor:{x:frame.origin[0]/frame.sourceSize[0],y:frame.origin[1]/frame.sourceSize[1]},texture:{source:{resolution:1},orig:{width:frame.sourceSize[0],height:frame.sourceSize[1]}}};
+      for(const flipX of [false,true]){
+        const g=getRaisingNativeActorGeometry(sprite,sizing,2,{frameGeometry:frame,displayScale:factor,flipX});
+        const [x0,y0,x1,y1]=frame.nativeBounds;
+        assert.ok(Math.abs(g.visible.width-(x1-x0)*factor)<1e-9);assert.ok(Math.abs(g.visible.height-(y1-y0)*factor)<1e-9);
+        assert.ok(Math.abs(g.visible.y+g.visible.height-y1)<1e-9,'opaque bottom stays on the same ground line');
+        assert.ok(Math.abs(g.visible.x+g.visible.width/2-(flipX?-1:1)*(x0+x1)/2)<1e-9,'horizontal center stays fixed');
+        assert.equal(g.spriteScale,factor/4);assert.ok(g.hitArea.width*2>=44-1e-9);
+      }
+    }
+  }
+});
+test('untrimmed original egg uses verified per-cell alpha bounds for its floor shadow and touch area',()=>{
+  const runtime=read('assets/production/characters/accepted-20261010/e001_digitama-dot-intake-r01/runtime.review.json');
+  for(const frame of Object.values(runtime.reviewGeometry.frames).filter(f=>!f.blank)){
+    const sprite={anchor:{x:frame.origin[0]/frame.sourceSize[0],y:frame.origin[1]/frame.sourceSize[1]},texture:{source:{resolution:1},orig:{width:frame.sourceSize[0],height:frame.sourceSize[1]},trim:null}};
+    const before=structuredClone(sprite);
+    for(const flipX of [false,true]){
+      const actual=getRaisingNativeActorGeometry(sprite,{packedPixelsPerNativePixel:4},2,{frameGeometry:frame,flipX});
+      const [x0,y0,x1,y1]=frame.nativeBounds;
+      assert.equal(actual.visible.width,x1-x0);assert.equal(actual.visible.height,y1-y0);
+      assert.equal(actual.visible.y+actual.visible.height,y1,'floor uses opaque bottom, independent of jump Z');
+      assert.equal(actual.visible.x,flipX?-x1:x0);
+      assert.equal(actual.spriteScale,.25);assert.ok(actual.hitArea.width*2>=44);
+    }
+    assert.deepEqual(sprite,before,'sizing does not mutate the authored origin or texture');
+  }
+});
 test("all 224 current static identities bind verified sizing; stale hashes and other frames/sides refuse", () => {
   assert.equal(Object.keys(CHARACTER_NATIVE_SIZING).length, 224);
   for (const record of manifest.records) assert.ok(fixture(record.entityId).sizing, record.entityId);

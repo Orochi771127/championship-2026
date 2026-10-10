@@ -1,5 +1,9 @@
 // Existing original production portraits. Public selection preserves exact RGBA; no gameplay stats.
 import {isApprovedOriginalPublicLocation} from "../presentation/originalRuntimeLocation.js";
+// Owner-confirmed original design-board names (OC225..232). These are species
+// labels, independent of the name the player gives their own companion.
+const FORMAL_NAMES=Object.freeze(['星絮蛋','焰脈蛋','潮環蛋','森芽蛋','雷紋蛋','月霧蛋','晶棘蛋','聖耀蛋']);
+const namedEgg=egg=>Object.freeze({...egg,formalName:FORMAL_NAMES[egg.speciesIndex]});
 export const OPENING_EGG_CHOICES=Object.freeze([
   {
     "speciesIndex": 0,
@@ -65,7 +69,7 @@ export const OPENING_EGG_CHOICES=Object.freeze([
     "width": 241,
     "height": 273
   }
-].map(Object.freeze));
+].map(namedEgg));
 
 const PUBLIC_OPENING_EGG_CHOICES=Object.freeze([
   {
@@ -132,5 +136,5 @@ const PUBLIC_OPENING_EGG_CHOICES=Object.freeze([
     "width": 241,
     "height": 273
   }
-].map(Object.freeze));
+].map(namedEgg));
 export function openingEggChoices(location=globalThis.location){return isApprovedOriginalPublicLocation(location)?PUBLIC_OPENING_EGG_CHOICES:OPENING_EGG_CHOICES;}

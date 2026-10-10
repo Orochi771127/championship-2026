@@ -19,3 +19,7 @@
 ## 驗證邊界
 
 [本批報告](../../reports/opening-eight-eggs-2026-10-09/REPORT_ZH_TW.md)。8種蛋完整基底比較、拒絕／Continue、接受／checkpoint重載／special hatch、受控完成清理；五語正常 New Game UI；其中一語正常接受、重載、示範孵化、退出。完成段用明示 checkpoint fixture，不宣稱重新走過完整 Hunt／Battle 鏈。實體手機與母語審閱仍未完成。
+
+## 2026-10-10 Owner 正式名稱補充
+
+上述第2項的數字顯示已由確認設定板正式名取代：e000..007依序為星絮蛋、焰脈蛋、潮環蛋、森芽蛋、雷紋蛋、月霧蛋、晶棘蛋、聖耀蛋。其他四語明示保留繁中正式名；不改玩家暱稱、species、history、RNG或教學映射。參閱 [本次驗證](../../reports/new-game-display-2026-10-10/REPORT_ZH_TW.md)。

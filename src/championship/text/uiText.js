@@ -6,6 +6,9 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "RESIDENT_ART_LOADING": "正在載入夥伴外觀…",
+  "RESIDENT_ART_ERROR": "夥伴外觀載入失敗，遊戲資料仍保留。",
+  "RESIDENT_ART_RETRY": "重試外觀",
   "OPENING_COMIC_LOADING": "正在載入故事…",
   "輕觸數碼獸查看": "輕觸夥伴查看",
   "野生數碼獸": "野生夥伴",

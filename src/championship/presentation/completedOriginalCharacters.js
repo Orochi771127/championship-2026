@@ -60,7 +60,7 @@ export async function loadCompletedOriginalCharacters(options,href){
         battleGeometry:actorOptions.battleGeometry?runtime.reviewGeometry:null});}};
     }catch(error){
       await bundle?.dispose();
-      replacementFailures.push({entityId:config.entityId,reason:error.message});
+      replacementFailures.push({entityId:config.entityId,runtimeUrl,reason:error.message});
       return loadPixiCharacterRuntimeBundle(args);
     }
   }});

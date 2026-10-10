@@ -10,7 +10,7 @@ import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
 // assignment, save data, gameplay values, routing, or another runtime store.
 
 import { isNativeRanchLayout } from "../../cage/ranchExpansion.js";
-import { getRaisingNativePixelScale, getRaisingNativeActorGeometry } from "./raisingNativeSizing.js";
+import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
@@ -101,6 +101,7 @@ export async function mountRaisingFieldPixiPresentation({
   getSelectedTool = () => null,
   onTrainingFrame = () => {},
   onActorFrame = null,
+  onResidentAssetState = () => {},
   reducedMotion = prefersReducedMotion()
 }) {
   assertDependencies(stage, source);
@@ -430,13 +431,18 @@ export async function mountRaisingFieldPixiPresentation({
     // The pick is the interface's one living colour (mint, 2026-09-29), drawn as
     // a lit spot on the floor rather than the old gold ring.
     const selection = new PIXI.Graphics().ellipse(0, 0, 54, 17).fill({ color: 0x56e3c2, alpha: 0.12 }).stroke({ color: 0x56e3c2, width: 3, alpha: 0.9 });
-    const fallback = fallbackCreature(PIXI);
+    // A canonical species must never appear to hatch into a fabricated animal
+    // while its atlas loads (or fails). DOM status owns loading/error feedback.
+    const canonicalSpecies=/^(championship:creature:)?species-\d{3}$/.test(resident.speciesId);
+    const fallback = canonicalSpecies ? new PIXI.Container({label:'resident art pending'}) : fallbackCreature(PIXI);
     selection.visible = resident.selected;
     root.addChild(shadow, selection, fallback);
     actorLayer.addChild(root);
     const entry = {
       root,
       speciesId: resident.speciesId,
+      entityId: null,
+      assetState: 'loading',
       shadow,
       selection,
       fallback,
@@ -461,6 +467,8 @@ export async function mountRaisingFieldPixiPresentation({
         fallback.destroy();
         entry.fallback = null;
         entry.sprite = actor.sprite;
+        entry.entityId = actor.entityId;
+        entry.assetState = 'ready';
         entry.nativeSizing = actor.nativeSizing ?? null;
         entry.characterController = actor.controller;
         entry.nativeFramePresenter = actor.nativeFramePresenter;
@@ -468,6 +476,8 @@ export async function mountRaisingFieldPixiPresentation({
       }
     }
     actors.set(resident.creatureId, entry);
+    entry.shadow.visible=Boolean(entry.sprite)||!canonicalSpecies;
+    reportResidentAssets();
     attachActorInput(entry, resident.creatureId);
     if (!entry.sprite) void loadActorTextures(entry, resident);
     return entry;
@@ -476,6 +486,7 @@ export async function mountRaisingFieldPixiPresentation({
   async function loadActorTextures(entry, resident) {
     if (entry.sprite) return;
     const token = ++entry.loadToken;
+    entry.assetState='loading';entry.assetError=null;reportResidentAssets();
     try {
       if (characterBundle?.ensureSpecies) {
         const ready = await characterBundle.ensureSpecies(resident.speciesId);
@@ -484,11 +495,12 @@ export async function mountRaisingFieldPixiPresentation({
         if (actor) {
           entry.root.removeChild(entry.fallback);entry.fallback.destroy();entry.fallback=null;
           entry.sprite=actor.sprite;entry.nativeSizing=actor.nativeSizing;
+          entry.entityId=actor.entityId;entry.assetState='ready';entry.shadow.visible=true;
           entry.nativeFramePresenter=actor.nativeFramePresenter;entry.characterController=actor.controller;
-          entry.root.addChildAt(actor.sprite,2);sync(source.getFrame(),{force:true});return;
+          entry.root.addChildAt(actor.sprite,2);reportResidentAssets();sync(source.getFrame(),{force:true});return;
         }
       }
-      if (!resident.sprite?.idle?.sheet || !resident.sprite?.reaction?.sheet) return;
+      if (!resident.sprite?.idle?.sheet || !resident.sprite?.reaction?.sheet) throw new Error(`RESIDENT_ART_UNAVAILABLE:${resident.speciesId}`);
       const key = resident.speciesId.replace(/^championship:creature:/, "");
       const [idle, reaction] = await Promise.all([
         parseGridSheet(PIXI, resident.sprite.idle, `int-rh2:${key}:idle:`),
@@ -518,11 +530,33 @@ export async function mountRaisingFieldPixiPresentation({
       entry.fallback = null;
       entry.root.addChildAt(sprite, 2);
       entry.sprite = sprite;
+      entry.assetState='ready';entry.shadow.visible=true;reportResidentAssets();
       if (resident.intent === "care-reaction") playReaction(entry, resident, latestRevision);
     } catch (error) {
+      if(disposed||token!==entry.loadToken)return;
       assetFailures += 1;
-      onFallback(`A resident texture could not load; the neutral field fallback remains active. ${error.message}`);
+      entry.assetState='error';entry.assetError=error.message;reportResidentAssets();
+      onFallback(`CHAMPIONSHIP_RESIDENT_ART_FAILED ${resident.speciesId}: ${error.message} ${JSON.stringify(characterBundle?.getDiagnostics?.().failures??[])}`);
     }
+  }
+
+  function reportResidentAssets(){
+    onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.assetState,error:e.assetError??null})));
+  }
+
+  function actorGeometry(entry,frameGeometry=entry.nativeFramePresenter?.getSnapshot()?.geometry,flipX=false){
+    const nativeScale=getRaisingNativePixelScale(fieldArt?.field,view);
+    const sizing=frameGeometry?.scale?{...entry.nativeSizing,packedPixelsPerNativePixel:frameGeometry.scale}:entry.nativeSizing;
+    return getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing)});
+  }
+
+  function decorateActor(entry,geometry){
+    const {visible,hitArea}=geometry,center=visible.x+visible.width/2,bottom=visible.y+visible.height;
+    entry.shadow.clear().ellipse(center,bottom+1,visible.width*.42,Math.max(1,visible.width*.13)).fill({color:0x02070a,alpha:.26});
+    entry.selection.clear().ellipse(center,bottom+1,visible.width/2+2,Math.max(2,visible.width*.16))
+      .fill({color:0x56e3c2,alpha:.12}).stroke({color:0x56e3c2,width:1,alpha:.95});
+    entry.root.hitArea=new PIXI.Rectangle(hitArea.x,hitArea.y,hitArea.width,hitArea.height);
+    entry.visibleGeometry=visible;
   }
 
   function playReaction(entry, resident, revision) {
@@ -564,6 +598,7 @@ export async function mountRaisingFieldPixiPresentation({
       actorLayer.removeChild(entry.root);
       entry.root.destroy({ children: true });
       actors.delete(creatureId);
+      reportResidentAssets();
     }
     for (const resident of frame.residents) {
       const previous = actors.get(resident.creatureId);
@@ -581,24 +616,22 @@ export async function mountRaisingFieldPixiPresentation({
         entry.root.position.set(point.x, point.y);
       }
       const nativeScale = getRaisingNativePixelScale(fieldArt?.field, view);
-      const frameGeometry=entry.nativeFramePresenter?.getSnapshot()?.geometry;
-      const sizing=frameGeometry?.scale ? {...entry.nativeSizing,packedPixelsPerNativePixel:frameGeometry.scale} : entry.nativeSizing;
-      const geometry = getRaisingNativeActorGeometry(entry.sprite, sizing, nativeScale);
+      const actorFrame=source.getActorFrame?.(resident.creatureId);
+      if(entry.nativeFramePresenter&&actorFrame&&entry.speciesId===`championship:creature:species-${String(actorFrame.speciesIndex).padStart(3,'0')}`){
+        applyNativeCharacterCellGeometry(entry.sprite,entry.nativeFramePresenter.apply(actorFrame));
+      }
+      const flipX=Boolean(entry.nativeFramePresenter&&actorFrame?.flipBits&1);
+      const geometry = actorGeometry(entry,undefined,flipX);
       const scale = geometry ? nativeScale : clamp(Math.min(app.screen.width / 390, app.screen.height / 620), 0.78, 1.18);
       const facing = resident.facing === "left" ? -1 : 1;
       if (geometry) {
-        entry.sprite.scale.set(geometry.spriteScale);
-        const { visible, hitArea } = geometry;
-        const center = visible.x + visible.width / 2;
-        const bottom = visible.y + visible.height;
-        entry.shadow.clear().ellipse(center, bottom + 1, visible.width * 0.42, Math.max(1, visible.width * 0.13))
-          .fill({ color: 0x02070a, alpha: 0.26 });
-        entry.selection.clear().ellipse(center, bottom + 1, visible.width / 2 + 2, Math.max(2, visible.width * 0.16))
-          .fill({ color: 0x56e3c2, alpha: 0.12 }).stroke({ color: 0x56e3c2, width: 1, alpha: 0.95 });
-        entry.root.hitArea = new PIXI.Rectangle(hitArea.x, hitArea.y, hitArea.width, hitArea.height);
+        entry.sprite.scale.set(geometry.spriteScale*(flipX?-1:1),geometry.spriteScale);
+        entry.visualLift=entry.nativeFramePresenter?(actorFrame?.positionQ12?.[2]??0)/4096:0;
+        entry.sprite.x=geometry.offset.x;entry.sprite.y=geometry.offset.y-entry.visualLift;
+        decorateActor(entry,geometry);
       }
       entry.nativeScale = geometry ? nativeScale : null;
-      entry.root.scale.set(scale * facing, scale);
+      entry.root.scale.set(scale * (entry.nativeFramePresenter?1:facing), scale);
       entry.restScale=scale;
       if (resident.intent === "care-reaction") playReaction(entry, resident, frame.revision);
     }
@@ -665,11 +698,9 @@ export async function mountRaisingFieldPixiPresentation({
   // hit area are built from, lifted by any hop -- not the padded texture box.
   function drawnBodyTop(entry) {
     if (!entry || entry.root.destroyed) return null;
-    const frameGeometry = entry.nativeFramePresenter?.getSnapshot()?.geometry;
-    const sizing = frameGeometry?.scale ? { ...entry.nativeSizing, packedPixelsPerNativePixel: frameGeometry.scale } : entry.nativeSizing;
-    const geometry = entry.sprite && !entry.sprite.destroyed && entry.nativeScale ? getRaisingNativeActorGeometry(entry.sprite, sizing, entry.nativeScale) : null;
+    const geometry = entry.sprite && !entry.sprite.destroyed && entry.nativeScale ? actorGeometry(entry) : null;
     if (!geometry) return entry.root.getBounds().y;
-    return entry.root.toGlobal(new PIXI.Point(0, geometry.visible.y + (entry.sprite.y ?? 0))).y;
+    return entry.root.toGlobal(new PIXI.Point(0, geometry.visible.y - (entry.visualLift ?? 0))).y;
   }
 
   // On a frame that scrolls vertically, how far to lower (or raise) the board
@@ -778,8 +809,11 @@ export async function mountRaisingFieldPixiPresentation({
         if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId)
           {const visualFrame=entry.nativeFramePresenter.apply(frame);if(entry.sprite){
             if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
+            const geometry=entry.nativeScale!==null?actorGeometry(entry,visualFrame?.geometry,Boolean(frame.flipBits&1)):null;
+            if(geometry){entry.sprite.scale.set(geometry.spriteScale);entry.sprite.x=geometry.offset.x;decorateActor(entry,geometry);}
             if(entry.nativeScale!==null)entry.root.scale.x=Math.abs(entry.root.scale.x);
-            entry.sprite.y=-(frame.positionQ12?.[2]??0)/4096;
+            entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
+            entry.sprite.y=(geometry?.offset.y??0)-entry.visualLift;
             // Main is authored facing left; the original body bit mirrors it.
             entry.sprite.scale.x=Math.abs(entry.sprite.scale.x)*(frame.flipBits&1?-1:1);
           }}
@@ -859,6 +893,7 @@ export async function mountRaisingFieldPixiPresentation({
         if(!ready||disposed||entry.root.destroyed||!entry.evolutionActive||entry.evolutionTarget!==e.target)return;
         const visual=characterBundle.createActor({speciesId:`championship:creature:species-${String(e.target).padStart(3,'0')}`,side:'main',presentation:'raising',reducedMotion:false});
         if(!visual)return;entry.evolutionSprite=visual.sprite;entry.evolutionPresenter=visual.nativeFramePresenter;
+        entry.evolutionSizing=visual.nativeSizing;entry.evolutionEntity=visual.entityId;
         const geometry=getRaisingNativeActorGeometry(visual.sprite,visual.nativeSizing,getRaisingNativePixelScale(fieldArt?.field,view));
         visual.sprite.scale.set(geometry?.spriteScale??120/352);entry.root.addChildAt(visual.sprite,2);
       });}
@@ -870,7 +905,11 @@ export async function mountRaisingFieldPixiPresentation({
     if(entry.evolutionSprite){entry.evolutionSprite.visible=e.reveal;
       entry.evolutionSprite.filters=e.phase<=4?[silhouette]:null;
       if(e.targetFrame){const frame=entry.evolutionPresenter?.apply(e.targetFrame);
-        if(entry.nativeScale!==null&&e.reveal)applyNativeCharacterCellGeometry(entry.evolutionSprite,frame);}}
+        if(entry.nativeScale!==null&&e.reveal){
+          applyNativeCharacterCellGeometry(entry.evolutionSprite,frame);
+          const geometry=getRaisingNativeActorGeometry(entry.evolutionSprite,entry.evolutionSizing,entry.nativeScale,{frameGeometry:frame?.geometry,displayScale:raisingOriginalBodyScale(entry.evolutionEntity,entry.evolutionSizing)});
+          if(geometry){entry.evolutionSprite.scale.set(geometry.spriteScale);entry.evolutionSprite.position.set(geometry.offset.x,geometry.offset.y);}
+        }}}
     const center={x:entry.root.x,y:entry.root.y-24*(entry.restScale??1)};
     const useEvolutionArt=evolutionArt&&e.target>=0;
     if(useEvolutionArt){
@@ -985,6 +1024,15 @@ export async function mountRaisingFieldPixiPresentation({
       sync(frame);
     },
 
+    retryResidentAssets(){
+      if(disposed||!characterBundle?.ensureSpecies)return false;
+      for(const resident of source.getFrame().residents){
+        const entry=actors.get(resident.creatureId);
+        if(entry?.assetState==='error')void loadActorTextures(entry,resident);
+      }
+      return true;
+    },
+
     /** A resident's on-screen box, relative to the field host, so interface
      * cards can keep out of its way. Null while it is not drawn. */
     actorScreenRect(creatureId) {
@@ -1029,6 +1077,7 @@ export async function mountRaisingFieldPixiPresentation({
         threeUsed: false,
         frameRevision: latestRevision,
         residentCount: actors.size,
+        residentAssets:[...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.assetState,error:e.assetError??null,visible:e.visibleGeometry??null})),
         foodCount:foodGraphics.size,
         wasteCount:wasteGraphics.size,
         careArt:'LICENSED_PIXEL_FAITHFUL_WITH_AUTHORED_CELEBRATION',

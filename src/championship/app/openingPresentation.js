@@ -32,7 +32,8 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
     title.id='cm-egg-choice-title';n.setAttribute('aria-labelledby',title.id);
     const grid=el('div','cm-opening__egg-grid');
     for(const egg of openingEggChoices()){
-      const label=el('label','cm-opening__egg-option'),input=el('input',''),image=el('img',''),caption=el('span','',copy.egg.replace('{n}',String(egg.speciesIndex+1)));
+      const label=el('label','cm-opening__egg-option'),input=el('input',''),image=el('img',''),caption=el('span','',egg.formalName);
+      caption.lang='zh-Hant';
       input.type='radio';input.name='starterEgg';input.value=String(egg.speciesIndex);input.checked=egg.speciesIndex===eggSpeciesIndex;
       input.addEventListener('change',()=>{eggSpeciesIndex=egg.speciesIndex;});
       image.src=new URL(egg.src,document.baseURI).href;image.alt='';image.width=egg.width;image.height=egg.height;image.decoding='async';
@@ -41,7 +42,8 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
     const actions=el('div','cm-opening__egg-actions'),confirm=el('button','',copy.confirm),cancel=el('button','cm-opening__back',copy.cancel);
     confirm.type='submit';confirm.dataset.eggConfirm='true';cancel.type='button';cancel.dataset.openingCancel='true';
     cancel.addEventListener('click',()=>{host.replaceChildren();host.hidden=true;onCancel();});actions.append(confirm,cancel);
-    n.append(title,hint,grid,actions);n.addEventListener('submit',e=>{e.preventDefault();name('egg',start);});show(n);grid.querySelector('input:checked').focus({preventScroll:true});
+    n.append(title,hint);if(copy.nameNote)n.append(el('p','cm-opening__egg-name-note',copy.nameNote));
+    n.append(grid,actions);n.addEventListener('submit',e=>{e.preventDefault();name('egg',start);});show(n);grid.querySelector('input:checked').focus({preventScroll:true});
   }
   async function start(){if(busy)return;busy=true;host.inert=true;try{if(await onStart({trainerName,eggName,eggSpeciesIndex})===false){name('egg',start);return;}host.hidden=true;host.replaceChildren();}finally{busy=false;host.inert=false;}}
   return {begin(){trainerName='';eggName='';eggSpeciesIndex=0;story?.dispose();story=createOpeningStoryPresentation({host,onComplete(){story=null;envelope(()=>letter('歡迎來到數位世界。\n首先，請輸入姓名，完成馴獸師登錄。',()=>name('trainer',confirmTrainer)));}});},reset(){story?.dispose();story=null;host.replaceChildren();host.hidden=true;host.inert=false;busy=false;}};

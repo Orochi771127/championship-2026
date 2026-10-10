@@ -1,5 +1,8 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-10 新遊戲與牧場顯示修復](reports/new-game-display-2026-10-10/REPORT_ZH_TW.md)
+
+
 - [2026-10-10 精選原創成品與 CM24 整合](reports/public-original-intake-2026-10-10/REPORT_ZH_TW.md)
 
 Latest Raising lifecycle stage: [進化、排泄、睡眠與換日整合](research/RAISING_LIFECYCLE_STAGE_2026-09-08.md) · [same-stage contract and remaining original branches](contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json). Core flow is integrated; full original stage remains open.

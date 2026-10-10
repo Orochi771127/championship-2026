@@ -626,8 +626,20 @@ async function mountRaisingHome() {
       let characterBundle = null;
       let fieldArt = null;
       let feedbackArt = null;
+      let fieldPresentation=null;
+      const assetStatus=document.createElement('div'),assetMessage=document.createElement('p'),assetRetry=document.createElement('button');
+      assetStatus.className='int-rh2-resident-assets';assetStatus.hidden=true;assetMessage.setAttribute('role','status');
+      assetRetry.type='button';assetRetry.textContent=uiText('RESIDENT_ART_RETRY');assetStatus.append(assetMessage,assetRetry);
+      assetRetry.addEventListener('click',()=>{
+        if(!fieldPresentation?.retryResidentAssets()){
+          // A missing roster retries through the existing serialized mount.
+          // The current gameplay session and save stay in place.
+          mountedScreen=null;void mountCurrentScreen();
+        }
+      });
       try {
         const stage = await ensurePixiStage(host);
+        host.append(assetStatus);
         // The three art loads need the stage and nothing from each other, but
         // they were awaited in a row, so Home waited out three manifest chains
         // end to end. Run them together. Settling rather than racing keeps the
@@ -645,7 +657,7 @@ async function mountRaisingHome() {
         if (review.status === "rejected") throw review.reason;
         if (cage.status === "rejected") throw cage.reason;
         delete root.dataset.fieldFallback;
-        return await mountRaisingFieldPixiPresentation({
+        fieldPresentation=await mountRaisingFieldPixiPresentation({
           stage,
           source: fieldSource,
           fieldArt,
@@ -653,6 +665,12 @@ async function mountRaisingHome() {
           feedbackArt,
           getSelectedTool: () => toolbar?.getSelectedTool() ?? null,
           onTrainingFrame,
+          onResidentAssetState(states){
+            const failed=states.some(s=>s.state==='error'),loading=states.some(s=>s.state==='loading');
+            host.dataset.residentAssets=JSON.stringify(states);
+            assetStatus.hidden=!failed&&!loading;assetRetry.hidden=!failed;
+            assetMessage.textContent=uiText(failed?'RESIDENT_ART_ERROR':'RESIDENT_ART_LOADING');
+          },
           // Read-only tutorial hit positions support input QA without changing the player UI.
           onActorFrame:new URLSearchParams(location.search).get('presentation')==='developer'||app.getInteractiveTutorial()?.finished===false
             ? positions=>{host.dataset.residentScreenPositions=JSON.stringify(positions);}:null,
@@ -661,7 +679,9 @@ async function mountRaisingHome() {
             console.warn(message);
           }
         });
+        return Object.freeze({...fieldPresentation,dispose(){assetStatus.remove();fieldPresentation.dispose();}});
       } catch (error) {
+        assetStatus.remove();
         void fieldArt?.dispose();
         void characterBundle?.dispose();
         void feedbackArt?.dispose();
