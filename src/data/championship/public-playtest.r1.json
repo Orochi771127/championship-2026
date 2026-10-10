@@ -10,5 +10,26 @@
   "rightsDocumentVerified": false,
   "fullOriginalParityAccepted": false,
   "commercialReleaseAccepted": false,
-  "supersedes": "Loopback-only access for the selected game assets on this one Owner-authorized public playtest URL. Legacy asset provenance and pending rights facts remain unchanged."
+  "supersedes": "Loopback-only access for the selected game assets on this one Owner-authorized public playtest URL. Legacy asset provenance and pending rights facts remain unchanged.",
+  "acceptedOriginalRuntime": {
+    "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
+    "status": "OWNER_AUTHORIZED_PUBLIC_PLAYTEST",
+    "authorizationRecordedAt": "2026-10-10T00:28:00Z",
+    "ownerReply": "可以公開",
+    "ownerReplyId": "Sentinel_8d960f4a95048191aaceee1ffa0fa441",
+    "scopeQuestionId": "Sentinel_04c7060bb16c8191a6f7bf0e46d480f0",
+    "commitPushPublishInstructionId": "Sentinel_d01bb93584408191bde36e59ea90a3de",
+    "scope": "222 selected original characters and HUD; original medals, database and item UI; 37 cage fields and 35 thumbnails; 17 hunt terrain families; 11 arenas; opening comic R2; accepted CM03/CM24 foreground. Exact approved existing origin/basePath and hash-selected runtime only.",
+    "excluded": [
+      "ROM/native payloads",
+      "research",
+      "source masters",
+      "private candidate versions"
+    ],
+    "buildAuthority": "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json",
+    "sourceReviewFlagsRemainProvenance": true,
+    "rightsDocumentVerified": false,
+    "fullOriginalParityAccepted": false,
+    "commercialReleaseAccepted": false
+  }
 }

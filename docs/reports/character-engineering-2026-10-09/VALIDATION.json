@@ -1,0 +1,261 @@
+{
+  "date": "2026-10-09",
+  "scope": "Two authorized character engineering fixes plus bounded desktop browser observations",
+  "branch": "handoff/dot-continuation-20261001",
+  "head": "1fb7d5fd21d3da47775d34ab0d3a1a95f6623972",
+  "slice6Checkpoint": {
+    "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\SAFE_CONTINUATION.json",
+    "sha256": "137d0c2ee349f3481421d8d5527adeeb72d92f785335035f4672919ec026ff0c",
+    "head": "1fb7d5fd21d3da47775d34ab0d3a1a95f6623972",
+    "noCopyOfWholeProject": true
+  },
+  "runtimeAuthority": {
+    "schemaVersion": 1,
+    "renderer": "PIXIJS_V8_SPRITESHEET",
+    "density": "runtime.artProfile.scale and each referenced reviewGeometry frame scale equal selected config.density",
+    "selectedCharacters": 222,
+    "growthSidecarsWithoutLegacyDensity": 38,
+    "negativeCases": [
+      "missing schema",
+      "wrong renderer",
+      "missing artProfile",
+      "missing/wrong runtime scale",
+      "missing/wrong frame scale",
+      "missing geometry",
+      "changed origin",
+      "changed ticks"
+    ],
+    "assetsChanged": false
+  },
+  "capacity": {
+    "source": "actual loaded TextureSource.pixelWidth/pixelHeight; selected Main/Sub page list; identity dedup within bundle",
+    "label": "BASE_RGBA8_ESTIMATE_NOT_GPU_USAGE",
+    "unknownDimensions": "null; no baseline fallback",
+    "hunt": {
+      "sameLoadedEntityIds": [
+        "m104_tunomon",
+        "m108_pyokomon",
+        "m205_gaomon",
+        "m003_nyokimon",
+        "m006_punimon",
+        "m106_nyaromon",
+        "m214_kunemon",
+        "m203_elecmon"
+      ],
+      "oldBaselineRecordEstimate": 110920576,
+      "actualLoadedBaseRgbaEstimate": 142606336,
+      "source": "normal UI grass gate; dynamic draw differs from earlier seven-entity audit; compare identical loaded IDs only"
+    }
+  },
+  "unitTests": {
+    "uniqueTests": 465,
+    "passed": 465,
+    "failed": 0,
+    "files": 56,
+    "command": "R:\\Projects\\Championship2026\\character-engineering-20261009\\UNIQUE_TEST_COMMAND.json",
+    "log": "R:\\Projects\\Championship2026\\character-engineering-20261009\\FOCUSED_FINAL.txt",
+    "counting": "One deduplicated final run; excludes repeated targeted tests and prior slices"
+  },
+  "tutorialRegression": {
+    "locale": "zh-Hant",
+    "status": "PASS",
+    "completedReloadNoReplay": true,
+    "baselineUnchanged": true,
+    "oneCanvas": true,
+    "normalEligibility": true,
+    "normalUrl": true,
+    "errors": []
+  },
+  "largeAtlas": {
+    "environment": "desktop Chrome headless, 390x844 CSS px, DPR2, touch emulation",
+    "physicalDevice": false,
+    "maxTextureSize": 16384,
+    "loadedTextureFormat": "bgra8unorm",
+    "fileInventory": [
+      {
+        "entityId": "m535_slayerdramon",
+        "side": "main",
+        "path": "assets/production/internal-character-review/m535_slayerdramon-ultimate-raw-r01/main.png",
+        "width": 6144,
+        "height": 6912,
+        "encodedBytes": 10781797,
+        "pngBitDepth": 8,
+        "pngColorType": 6,
+        "baseRgbaBytes": 169869312,
+        "sha256": "866c6dce32bfebba9707c1ade05f0fd7d3851ee46acbb030252a915e6d8dfebb",
+        "browserLoadedThisBatch": true
+      },
+      {
+        "entityId": "m535_slayerdramon",
+        "side": "sub",
+        "path": "assets/production/internal-character-review/m535_slayerdramon-ultimate-raw-r01/sub.png",
+        "width": 6144,
+        "height": 2304,
+        "encodedBytes": 3130957,
+        "pngBitDepth": 8,
+        "pngColorType": 6,
+        "baseRgbaBytes": 56623104,
+        "sha256": "7ab110063991882ab75a339e7adebbe75c406583ac4d4ad4afa053e106e936be",
+        "browserLoadedThisBatch": false
+      },
+      {
+        "entityId": "m531_metalseadramon",
+        "side": "main",
+        "path": "assets/production/internal-character-review/m531_metalseadramon-ultimate-raw-r01/main.png",
+        "width": 6144,
+        "height": 6144,
+        "encodedBytes": 10703397,
+        "pngBitDepth": 8,
+        "pngColorType": 6,
+        "baseRgbaBytes": 150994944,
+        "sha256": "a1ca6508b300e4842538fd4ef91d027335730740425a607a2152e79f8a658c0e",
+        "browserLoadedThisBatch": true
+      },
+      {
+        "entityId": "m531_metalseadramon",
+        "side": "sub",
+        "path": "assets/production/internal-character-review/m531_metalseadramon-ultimate-raw-r01/sub.png",
+        "width": 6144,
+        "height": 2304,
+        "encodedBytes": 3090420,
+        "pngBitDepth": 8,
+        "pngColorType": 6,
+        "baseRgbaBytes": 56623104,
+        "sha256": "ebf05f9df86ffdca600c907d58116b4659608f854e2aa04721fcf7274bb7bf25",
+        "browserLoadedThisBatch": false
+      }
+    ],
+    "runs": [
+      {
+        "entityId": "m535_slayerdramon",
+        "status": "PASS",
+        "loadReadyMs": [
+          2201,
+          1905
+        ],
+        "cycles": 2,
+        "pageCount": 1,
+        "sourceDestroyed": true,
+        "resourceCleared": true,
+        "imageBitmapClosed": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "entityId": "m531_metalseadramon",
+        "status": "PASS",
+        "loadReadyMs": [
+          1922,
+          1870
+        ],
+        "cycles": 2,
+        "pageCount": 1,
+        "sourceDestroyed": true,
+        "resourceCleared": true,
+        "imageBitmapClosed": true,
+        "errors": [],
+        "warnings": []
+      }
+    ],
+    "gpuAllocationMeasured": false,
+    "packingChanged": false
+  },
+  "sleep": {
+    "entityId": "m454_grondramon",
+    "status": "OBSERVED_SLEEP_FROM_NEAR_THRESHOLD_INITIAL_SAVE",
+    "predicate": "idle state1 && signed fatigue00c >= signed threshold178; owner transitions to state4 and requests13",
+    "fixture": {
+      "species": 181,
+      "initialFatigue": 1210,
+      "initialThreshold": 1211,
+      "forcedLiveState": false,
+      "naturalAdultProgression": false
+    },
+    "physicalDevice": false,
+    "boundSimulationMs": 20000,
+    "sampledSimulationMs": 3750,
+    "errors": [],
+    "warnings": []
+  },
+  "battle": {
+    "boundSimulatedMs": 40000,
+    "traceSamples": 1755,
+    "observedSequenceIds": [
+      0,
+      3,
+      5,
+      6,
+      7,
+      8,
+      15,
+      26,
+      33,
+      37
+    ],
+    "observedLaunchesInRetainedHistory": 14,
+    "outcomeAtEnd": {
+      "ended": true,
+      "reason": "TEAM_DOWN",
+      "verdict": "TEAM_ONE_AHEAD",
+      "winningTeam": 1
+    },
+    "lastScreen": "BATTLE_FIELD",
+    "originalTimingParity": false,
+    "acceptance": "PARTIAL; current owner activity and source animations observed; no native frame-by-frame comparison or complete result transition claim",
+    "errors": [],
+    "warnings": []
+  },
+  "remaining": [
+    "physical phone texture limits/peak memory/frame performance",
+    "large-character viewport cropping observed; preserved existing source scale/origins",
+    "m535/m531 Sub inspected statically only in this batch",
+    "natural long-term m454 progression and complete wake cycle not claimed",
+    "Battle native timing parity and bounded sample result-screen completion remain open",
+    "m528/m540 branch values UNKNOWN_REQUIRES_TRACE; no invented values",
+    "rights/publication acceptance unchanged"
+  ],
+  "harnessCorrections": [
+    "Invalid test trainer name corrected before gameplay",
+    "assetFailures is a numeric count; test expectation corrected from [] to 0; product behavior unchanged"
+  ],
+  "library": {
+    "callsThisBatch": 0,
+    "status": "Parent confirmed official transfer unavailable; no retry or fabricated ID"
+  },
+  "quota": {
+    "codexUsedPercent": 61,
+    "codexRemainingPercent": 39,
+    "resetsOrPurchases": 0
+  },
+  "artSkill": "championship-art-production absent from available executor catalog/local known locations; engineering-only scope proceeded with existing runtime authorities; no art production",
+  "rawEvidenceDirectory": "R:\\Projects\\Championship2026\\character-engineering-20261009",
+  "safety": {
+    "root": "R:/Projects/Championship2026/championship-2026",
+    "branch": "handoff/dot-continuation-20261001",
+    "head": "1fb7d5fd21d3da47775d34ab0d3a1a95f6623972",
+    "initialDirtyEntries": 1111,
+    "finalDirtyEntries": 1118,
+    "allInitialStatusEntriesRetained": true,
+    "newStatusEntries": [
+      " M src/championship/presentation/licensedCharacterRoster.js",
+      " M src/championship/presentation/pixiCharacterRuntimeBundle.js",
+      " M tests/championship-character-animation-timeline-cases.mjs",
+      "?? docs/contracts/championship/COMPLETED_ORIGINAL_CHARACTER_RUNTIME.v1.md",
+      "?? docs/reports/character-engineering-2026-10-09/",
+      "?? tests/championship-character-texture-memory-cases.mjs",
+      "?? tests/championship-completed-character-contract-cases.mjs"
+    ],
+    "ownedFileCount": 11,
+    "scopedGitDiffCheck": "PASS",
+    "newReportLinks": "PASS",
+    "slice6CheckpointHashUnchanged": true,
+    "noAssetsOwned": true,
+    "note": "Status retention is not a whole-project byte comparison; only task-owned before/after copies were made.",
+    "server": {
+      "address": "127.0.0.1",
+      "port": 8766,
+      "pid": 38660,
+      "newServerStarted": false
+    }
+  }
+}

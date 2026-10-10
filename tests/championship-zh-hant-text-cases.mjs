@@ -49,7 +49,7 @@ test("all 118 Shop descriptions are translated from the verified source catalog"
     assert.match(description, /\p{Script=Han}/u, `Shop record ${record.shopRecordIndex}`);
     assert.doesNotMatch(description, /[\p{Script=Katakana}\p{Script=Hiragana}]/u, `Shop record ${record.shopRecordIndex}`);
   }
-  assert.equal(SHOP_NAMES_ZH[4], "數碼繩 α");
+  assert.equal(SHOP_NAMES_ZH[4], "捕捉繩 α");
   assert.equal(SHOP_NAMES_ZH[96], "小高山");
   assert.match(SHOP_DESCRIPTIONS_ZH[32], /長度 24.*威力 10/);
   assert.match(SHOP_DESCRIPTIONS_ZH[61], /世代、種族、屬性、生命值、性格、所需容量/);
@@ -109,7 +109,7 @@ test("every regular species and egg has Chinese identity copy at its original in
     assert.doesNotMatch(speciesName(record.recordIndex), /[\p{Script=Katakana}\p{Script=Hiragana}]/u);
     assert.equal(speciesNameForId(`championship:creature:species-${record.recordIndex}`), speciesName(record.recordIndex));
   }
-  for (let index = 0; index < 8; index++) assert.equal(speciesName(index), "數碼蛋");
+  for (let index = 0; index < 8; index++) assert.equal(speciesName(index), "培育蛋");
   assert.equal(speciesName(999, "future catalog value"), "future catalog value");
 });
 

@@ -1,0 +1,936 @@
+{
+  "contract": "INTERACTIVE_OPENING_TUTORIAL.v1",
+  "date": "2026-10-09",
+  "status": "RUNTIME_FIVE_LANGUAGE_LOCAL_NORMAL_ONBOARDING_ACCEPTED_BOUNDED",
+  "scope": "Original interactive opening within the existing Championship application. No character/art batch or publication.",
+  "authorization": {
+    "source": "Owner direction conveyed by the 2026-10-09 parent delegation",
+    "choices": [
+      "Original accept/decline and interactive teaching",
+      "Continue evidence -> contract -> integration -> bounded normal-browser acceptance",
+      "Web close/reopen resume is OWNER_APPROVED_ADAPTATION"
+    ],
+    "prohibited": [
+      "Second application/store/router/save key/Pixi ticker",
+      "Reordering the legacy 35 cursor indices",
+      "Mutating existing player saves during testing",
+      "Commit/push/merge/checkout/reset/deploy/delete",
+      "Quota reset/purchase/autopay"
+    ]
+  },
+  "authority": {
+    "application": "src/championship/app/championshipStandaloneApp.js",
+    "shell": "src/championship/app/main.js",
+    "legacyCursor": "src/championship/app/nativeTutorialProgression.js",
+    "openingSave": "src/championship/app/nativeOpeningState.js",
+    "save": "Existing ChampionshipPersistentSavePort and championshipModernSave:v1",
+    "raising": "src/championship/raising/nativeRaisingActor.js",
+    "hunt": "src/championship/hunt/huntRuntime.js",
+    "battle": "src/championship/app/battleRuntime.js",
+    "clock": "Existing application-owned Pixi ticker only",
+    "presentation": "DOM application UI, existing Pixi 2D scenes"
+  },
+  "source": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "evidenceMcp": "UNAVAILABLE_USED_EXISTING_LOCAL_EVIDENCE",
+    "method": [
+      "Existing decompile and bounded Capstone ARM disassembly",
+      "Reachable VM control flow, not linear text ordering",
+      "Real stylus actions in isolated DeSmuME; no memory writes",
+      "Read existing private checkpoints; no source payload shipped"
+    ],
+    "rawArtifacts": "RESEARCH_ONLY"
+  },
+  "legacy": {
+    "version": 1,
+    "unchangedCount": 35,
+    "unchangedTextIds": [
+      1515,
+      1549
+    ],
+    "preserveCursorValues": "null, -1, 0..34 and unsupported 35..71",
+    "automaticMigration": false,
+    "normalOnboardingEligible": false
+  },
+  "native": {
+    "phases": {
+      "invitation": 0,
+      "raisingInitial": 1,
+      "gateHunt": 2,
+      "raisingAfterHunt": 3,
+      "battle": 4,
+      "raisingAfterBattle": 5,
+      "finished": 6
+    },
+    "invite": {
+      "controller": "OVL18 0210FC04",
+      "textId": 648,
+      "accept": {
+        "event": 13,
+        "handler": "02110128",
+        "phase": 1
+      },
+      "decline": {
+        "event": 14,
+        "handler": "021100F0",
+        "phase": 6
+      },
+      "commonOpeningFlagWriter": "02110354"
+    },
+    "raisingScript": {
+      "entry": "OVL18 021265B8",
+      "branches": [
+        {
+          "argument": 0,
+          "entry": "021267EF"
+        },
+        {
+          "argument": 4096,
+          "entry": "02127AB6"
+        },
+        {
+          "argument": 8192,
+          "entry": "02127BD1"
+        }
+      ],
+      "messageTable": "ARM9 020CBC64",
+      "emittedTextIds": [
+        1495,
+        1496,
+        1497,
+        1498,
+        1499,
+        1500,
+        1501,
+        1502,
+        1503,
+        1504,
+        1505,
+        1506,
+        1507,
+        1508,
+        1509,
+        1511,
+        1512,
+        1513,
+        1514,
+        1515,
+        1516,
+        1517,
+        1518,
+        1519,
+        1520,
+        1521,
+        1522,
+        1523,
+        1524,
+        1525,
+        1526,
+        1553,
+        1554,
+        1564,
+        1565
+      ]
+    },
+    "specialActor": {
+      "table": "OVL18 021283D0",
+      "tableBytes": 608,
+      "stateCount": 19,
+      "normalTable": "02128630",
+      "selector": "02110C34",
+      "phases": [
+        1,
+        3,
+        5
+      ],
+      "knownStates": {
+        "idle": 1,
+        "sleep": 4,
+        "carryFlightWait": 7,
+        "treatment": 17,
+        "egg": 18
+      },
+      "hatch": {
+        "command": 155,
+        "targetSpeciesIndex": 17,
+        "doNotInterpretSpeciesAsState": true,
+        "initialPosition": [
+          128,
+          96
+        ],
+        "trigger": "After first three messages, egg-target touch OR 180 native update waits; then wait for special state1"
+      },
+      "conditions": {
+        "helper": "02121774",
+        "selectors": {
+          "0": "actor+418=1",
+          "1": "actor+418=0",
+          "2": "profile138=1",
+          "3": "profile138=0",
+          "4": "profile050=1",
+          "5": "profile050=profile058",
+          "6": "profile134=1",
+          "7": "profile134=0"
+        }
+      },
+      "sleep": {
+        "think": "02121C10",
+        "enter": "02121C2C",
+        "exit": "02121C60",
+        "wakeEvent": 156,
+        "normalSleepAuthorityAllowed": false
+      },
+      "remaining": "runtimeSlice3 integrates handlers used by the initial Raising path through special sleep. Full19-state branch/frame differential and unexpected special evolution remain pending; no normal FSM/growth substitution."
+    },
+    "raisingPredicates": [
+      {
+        "id": "FEED_PLACE",
+        "tool": 1,
+        "target": [
+          100,
+          120
+        ],
+        "radiusPerAxis": 12,
+        "units": "native logical pixels",
+        "source": "ARM9 020860B0"
+      },
+      {
+        "id": "CLEAN_ALL_THREE",
+        "tool": 3,
+        "targets": [
+          {
+            "at": [
+              100,
+              120
+            ],
+            "kind": "food",
+            "freshness": 6
+          },
+          {
+            "at": [
+              160,
+              100
+            ],
+            "kind": "waste",
+            "cage": 35
+          },
+          {
+            "at": [
+              80,
+              80
+            ],
+            "kind": "food",
+            "freshness": -1
+          }
+        ],
+        "perTargetCounter": "latched hit then >20",
+        "afterAllWait": 120
+      },
+      {
+        "id": "TREAT_ILLNESS",
+        "tool": 5,
+        "target": "actor hit",
+        "command": 125,
+        "wait": 90
+      },
+      {
+        "id": "TRAINING_DROP",
+        "tool": 0,
+        "precondition": "hand state3",
+        "predicate": "released; special actor state !=7; cageId==1",
+        "wrongDrop": "restore prompt position/cage and retry"
+      },
+      {
+        "id": "RECOVERY_DROP",
+        "tool": 0,
+        "predicate": "released; special actor state !=7; cageId==15",
+        "setup": "profile050=1",
+        "after": "profile050=profile058"
+      },
+      {
+        "id": "TREAT_INJURY",
+        "tool": 4,
+        "target": "actor hit",
+        "command": 124,
+        "wait": 240,
+        "thenCommand": 157
+      },
+      {
+        "id": "OPEN_HUNT",
+        "tool": 7,
+        "submenu": 3,
+        "event": 143
+      },
+      {
+        "id": "OPEN_BATTLE",
+        "tool": 7,
+        "submenu": 4,
+        "event": 142
+      },
+      {
+        "id": "FINISH",
+        "event": 158
+      }
+    ],
+    "gate": {
+      "tutorialGateIndex": 16,
+      "ordinaryGateIndices": [
+        0,
+        15
+      ],
+      "script": "OVL12 02114033",
+      "messageId": 1527,
+      "sourceSetup": "VM02113E26 calls0210C4C4 for0..15 and0210C504 for16",
+      "normalProviderMustNotAliasGate0": true
+    },
+    "hunt": {
+      "scriptEntries": [
+        "OVL0 0212837F",
+        "OVL0 02128472"
+      ],
+      "reachableInstructions": 1337,
+      "unknownOpcodes": 0,
+      "textTable": "0212A090",
+      "emittedTextIds": [
+        1528,
+        1529,
+        1530,
+        1531,
+        1532,
+        1533,
+        1534,
+        1535,
+        1536,
+        1537,
+        1538,
+        1539,
+        1540,
+        1541,
+        1543,
+        1544,
+        1545,
+        1546,
+        1547,
+        1548,
+        1549
+      ],
+      "setup": {
+        "phase": 2,
+        "guard": "0211A550..0211A564",
+        "constructor": "0211AAB0..0211AB64",
+        "speciesIndices": [
+          13,
+          21
+        ],
+        "builder": "ARM9 02062100",
+        "hp": "Native builder, not fixed observed HP210/390"
+      },
+      "predicates": {
+        "tool": "context+F88 via0211F10C",
+        "enclosure": "wild+118 via0211F1F0 ->0211E5E0",
+        "depletedHp": "wild+4E8 <=0 via0211F250 ->0211E5B0",
+        "handCollection": "fieldActor+1E8 !=0 via0211F170",
+        "guidedTouch": "0211E3FC pointer within guide+/-12 including camera",
+        "stun": "wild+11C >0 via0211F344 ->0211E784 ->0210C034"
+      },
+      "sequence": [
+        "scripted rope/pull demonstration",
+        "tool1 then wild0 enclosure then HP<=0 then tool0 and insertion signal",
+        "wild1 movement/escape demonstration",
+        "tool4 guided-target touch then scripted movement/stun demonstration",
+        "tool2 and wild1 stun counter positive",
+        "tool1 then wild1 enclosure then HP<=0 then tool0 and insertion signal"
+      ],
+      "finish": "0211F41C ->0211EA94 clears pending card count, writes phase3 and returns. Ordinary Home capture commit must not run on demo data."
+    },
+    "battle": {
+      "setup": "OVL10 0210BA24..0210BB20 guarded by phase4",
+      "speciesIndices": [
+        189,
+        212,
+        207
+      ],
+      "builder": "ARM9 02062100",
+      "entryMode": 4,
+      "recordIndex": 61,
+      "scriptEntries": [
+        "021142C4",
+        "0211430D",
+        "0211438F"
+      ],
+      "emittedTextIds": [
+        1555,
+        1556,
+        1557,
+        1558,
+        1559,
+        1560,
+        1561,
+        1562,
+        1563
+      ],
+      "predicates": [
+        "menuState2",
+        "menuState6",
+        "menuState11",
+        "partyMenuState14",
+        "nestedState3 AND partyMask7",
+        "return menuState11 then BattleStart"
+      ],
+      "returnHandler": "OVL8 0210D7F8..0210D864 writes phase4->5 with no outcome test in this handler",
+      "outcomeCoverage": {
+        "victory": "OBSERVED_NATIVE_NORMAL_INPUT",
+        "loss": "UNKNOWN_REQUIRES_TRACE",
+        "draw": "UNKNOWN_REQUIRES_TRACE",
+        "allOutcomesReachReturnHandler": "NOT_ESTABLISHED"
+      }
+    },
+    "textCoverage": {
+      "dictionaryEntries": 72,
+      "emittedByLocatedScripts": 66,
+      "notCalledInLocatedReachableBranches": [
+        1510,
+        1542,
+        1550,
+        1551,
+        1552,
+        1566
+      ],
+      "notCalledIsNotGloballyUnreachable": true
+    },
+    "nativePersistence": {
+      "writer": "ARM9 020698C8",
+      "loader": "0206A3C8..0206A3E8",
+      "phaseRestore": "0 or6 only",
+      "midStepResume": "NOT_NATIVE"
+    }
+  },
+  "integration": {
+    "savePolicy": "Same canonical save stores normal baseline plus validated tutorial checkpoint; demo mutations never replace baseline values.",
+    "activeAuthority": "One live app/session and actor set; an immutable serialized baseline is rollback data, not another running simulation.",
+    "schema": "Versioned semantic checkpoint separate from legacy cursor; strict validation before accepting it in continueGame. Do not insert raw addresses/VM/runtime snapshots into save.",
+    "protect": [
+      "names",
+      "creature and collection",
+      "instance ID allocator",
+      "money",
+      "items",
+      "registered species",
+      "titles and win/loss records",
+      "calendar",
+      "cages",
+      "gameplay RNG",
+      "hunt history"
+    ],
+    "guardBeforeWrites": [
+      "profile registration",
+      "capture Home commit",
+      "battle settlement",
+      "autosave",
+      "normal overnight/raising clock"
+    ],
+    "completion": "Restore only this tutorial's baseline; keep initial trainer/egg names. Atomically save completion before publishing normal Home. Retain retry state on failure.",
+    "resume": {
+      "classification": "OWNER_APPROVED_ADAPTATION",
+      "policy": "Persist successful interaction boundaries. Re-enter an interrupted activity from its last saved safe boundary, never claim an incomplete interaction completed.",
+      "inFlight": "Project a valid tutorial checkpoint instead of bypassing current active Hunt/Battle save guards."
+    },
+    "nonVictory": {
+      "sourceStatus": "UNKNOWN_REQUIRES_TRACE",
+      "webPolicy": "Preserve actual result; bounded demo end/retry, no forced win or rewards; mark engineering/web behavior independently."
+    },
+    "activation": "Normal new-game invitation enabled only on loopback after five-language full-preview acceptance; public publication remains unauthorized.",
+    "remaining": "Five-language normal URL full onboarding and branch acceptance passed in slice6. Native loss/draw, physical device, full native frame/RNG parity, final visual/rights/publication acceptance remain unverified. Historical slice results remain bounded to their recorded scope."
+  },
+  "validation": {
+    "sourceInspection": "BOUNDED_COMPLETE_FOR_LISTED_CLAIMS",
+    "controlledObservation": [
+      "wrong feed target does not advance",
+      "two cleanup targets do not advance; third does",
+      "special sleep remains state4 after600 additional native cycles",
+      "decline preserves starter/name",
+      "Hunt checkpoint confirms species13/21"
+    ],
+    "normalWebFullFlow": "PASS_LOOPBACK_ZH_HANT_PREVIEW_ONLY_NORMAL_INVITATION_DISABLED",
+    "physicalDevice": "NOT_RUN",
+    "rights": "NOT_CHANGED",
+    "publication": "NOT_AUTHORIZED",
+    "raisingPreviewBrowser": "PASS_BOUNDED_FIVE_LANGUAGE_INITIAL_RAISING_PLUS_FINAL_EN_WRONG_DROP_AND_CANCELLED_RETRY"
+  },
+  "evidenceReport": "docs/research/INTERACTIVE_TUTORIAL_PREDICATES_2026-10-09.md",
+  "requiredAcceptance": [
+    "Old saves/cursors unchanged and no unsolicited invitation",
+    "Normal new-game accept and decline in five languages",
+    "Negative predicate checks block progress",
+    "Full Raising/Gate/Hunt/Raising/Battle/Raising completion",
+    "Resume from each safe phase and failed save without duplication",
+    "Normal baseline equality for all protected fields",
+    "One canvas/ticker, existing core use",
+    "Real player storage untouched"
+  ],
+  "sourceFiles": [
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\lifecycle-two-stage-2026-09-09\\tutorial-script.asm",
+      "sha256": "bbdc605e18a9642950f3b8a1f1badb1c08ed2fb04a14f748dc2e54884781d29d",
+      "bytes": 38267,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\lifecycle-two-stage-2026-09-09\\tutorial-bytecode.bin",
+      "sha256": "9620123ad2f33bf564bf4d9e7dc563828e8887dbe5da1f16eee655af25eeb909",
+      "bytes": 6861,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\PHASE2_OBSERVATIONS.json",
+      "sha256": "66fbc021a656a02e662be30624f6158e40b69522ca96ff5471ecbc2837edf45c",
+      "bytes": 117733,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\hunt-special-setup-observed.json",
+      "sha256": "ac59ce187d6bd3ea3dd77032478708047b44eeac105ae3a50e27f705e4d3ded6",
+      "bytes": 662,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\hunt-tutorial-script.json",
+      "sha256": "13fc187e605194ba32ad336296fc75a014466f1c1031dae329bea8c058313cdc",
+      "bytes": 106720,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\gate-tutorial-script.json",
+      "sha256": "93751dca204eeeba8d312eec65361a71bd46029e4f49ef290145ec302d26c700",
+      "bytes": 14681,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-audit-20261009\\private-original-replay\\OBSERVATIONS.json",
+      "sha256": "dbe812fcaae83204e2a913690ca94f4821ad45e971f59f7ec58d59c32f3b5c6b",
+      "bytes": 161935,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-audit-20261009\\private-original-replay\\battle-tutorial-script.json",
+      "sha256": "b05e2e0ff6707b5a0076c48f88bb23122acc9f9052a4e4bc4ad6bcb0e3bc0b1d",
+      "bytes": 39744,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\src\\championship\\app\\nativeOpeningState.js",
+      "sha256": "772bea112dd0598a5829e53600c22311e0de2b14f53fe0ef4be6c1c01e438c33",
+      "bytes": 756,
+      "runtimeLoadAllowed": null
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\src\\championship\\app\\nativeTutorialProgression.js",
+      "sha256": "319de66aad80771d44d4e0263f4cb8fced6c36abd2e2988cfa9e5884f48d7b3a",
+      "bytes": 3867,
+      "runtimeLoadAllowed": null
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\src\\championship\\app\\championshipStandaloneApp.js",
+      "sha256": "ee6c7dcb9d34d8c7dcf4fee1aa2eb780d2519995116e4b6d4307f8fbc63fbd71",
+      "bytes": 142956,
+      "runtimeLoadAllowed": null
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\src\\championship\\app\\main.js",
+      "sha256": "edd350bef1f75ad9dd49c7fae7e52f18882969f9a6421e10e1d61056aac3bea9",
+      "bytes": 92362,
+      "runtimeLoadAllowed": null
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\src\\championship\\raising\\nativeRaisingActor.js",
+      "sha256": "03299e23f856a6bf4a643eb59e004f6b6449f4ff2e4097a9bccb898be2f32d02",
+      "bytes": 36351,
+      "runtimeLoadAllowed": null
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\src\\championship\\hunt\\huntRuntime.js",
+      "sha256": "71bb080f818ed08cc7153b5fae4baa11ab52fada53a2a42add84eefd6347407e",
+      "bytes": 20635,
+      "runtimeLoadAllowed": null
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\src\\championship\\app\\battleRuntime.js",
+      "sha256": "c07ad84e6568812a4787c29cb3f6f6c2da0481208aa693696ccf34757134b28c",
+      "bytes": 39002,
+      "runtimeLoadAllowed": null
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\docs\\contracts\\championship\\HUNT_CAPTURE_DATAFLOW.v1.json",
+      "sha256": "7ee232ab3c30d781f1b437681daf7c0e7aabc4b9ae7fbf64f6b6f42c70eea24c",
+      "bytes": 14828,
+      "runtimeLoadAllowed": null
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\0-0210c000-0210c070.asm",
+      "sha256": "25fc23baeb55d5eba0ed9884762f3db390f893feb1d3851c586b261948375c07",
+      "bytes": 759,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\0-0211aa30-0211aca0.asm",
+      "sha256": "62b8e5ce6853ebce44518663acfddb2618ec531ccc22910d643dc78de079201c",
+      "bytes": 4692,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\0-0211b3ec-0211b43c.asm",
+      "sha256": "659d6020bf36a9aff477751e7eb0a8d31a51a6c5be941592ba39f66510b83c39",
+      "bytes": 550,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\0-0211e31c-0211eb80.asm",
+      "sha256": "0935b4d296620010b90ab05a9ba300bac7b72c9e32f596cc2ecccc55615c5a32",
+      "bytes": 15448,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\0-0211eb40-0211eda0.asm",
+      "sha256": "4be585732ad7237974e7cf932eb23ad7c83503cb93df5b1ce003cd8b92cc53e5",
+      "bytes": 4270,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\0-0211ed98-0211f468.asm",
+      "sha256": "4c66f43d09c429609d94cc461e63e529f951a83e67ef6bea276854366f95df9a",
+      "bytes": 10950,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\10-0210b430-0210b620.asm",
+      "sha256": "98cbd7d4efc4aed91b0a0cd26facf4a44cb597c612bc48a657d8652739d95423",
+      "bytes": 4048,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\10-0210b9a0-0210bb54.asm",
+      "sha256": "3a3dccc886ec4acbaa50827232823b161bce831d67073ab3c7b8747f44dfa852",
+      "bytes": 3076,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\10-0210bd10-0210bd60.asm",
+      "sha256": "24040fe9bf4321c7ad0a61e0b674d6c9361a59f3e70f52880b3d329453f5c350",
+      "bytes": 550,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\12-0210c40c-0210c590.asm",
+      "sha256": "267eca5f4c2df4b7a370ce2e32dc06dcc7486f34b35e3e4e0529890dfc2f52e6",
+      "bytes": 2635,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\12-021113e0-02111490.asm",
+      "sha256": "26b44eb44ce4f2b727b843adc667fb9a4bfc1fccb1e090b4405233355ab5afbe",
+      "bytes": 1136,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\12-02114070-02114178.asm",
+      "sha256": "5af73d89b98f44f64a48b4a788fe7f9923728af720b22cb8ba4ae2e9a04309e8",
+      "bytes": 2363,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\18-02110c34-02110c98.asm",
+      "sha256": "d65a4a03e783dd121d32ce2864a0a45f1b052b47505b59a77459e2cae3befceb",
+      "bytes": 699,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\18-02116348-02116400.asm",
+      "sha256": "f618539eb8fb66137296134273e54243158c3855f77fe44aac25120d8d28ab95",
+      "bytes": 1239,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\18-02121754-021218d8.asm",
+      "sha256": "6c82ecdde295c58113ebbff7333a8bf6eac2e59b3c5b39b97b2e6fe2f4b3a3ce",
+      "bytes": 2492,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\18-02121a3c-02121b60.asm",
+      "sha256": "1c73540ede5f25f615a6108cbc73ecdf9e53a611e65de06ef244dfc187301b01",
+      "bytes": 1881,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\18-02121c10-02121d18.asm",
+      "sha256": "5c96a6445650169bd08b030859d0b5da897065b200f40f42b1d19700f776ef7f",
+      "bytes": 1674,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\18-02125128-021252f0.asm",
+      "sha256": "03c5add5e25b71b2127429ea35311de04ed04c6c4d6f30f9be249ea05a8860f1",
+      "bytes": 2842,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\18-021252f0-021254fc.asm",
+      "sha256": "059b15ad9b957248ec7f0e15359b1ec4cdc49e4c6d9c5bd6f9b96cffcbedf1a0",
+      "bytes": 3409,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\18-0212566c-0212588c.asm",
+      "sha256": "51a37f9f86c3ed8852a7dd126c9d6e9ddd9cd6524d6e23eb59b9cc7f98e042c2",
+      "bytes": 3478,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\8-0210d520-0210d7f8.asm",
+      "sha256": "073075e77ecf4a497b14c61b009e721427846029981c282e00381563436e3d36",
+      "bytes": 4821,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\8-0210d7f8-0210d864.asm",
+      "sha256": "fb1d9b49022e9fb70f500e48c0854f28349031936998679cd0ab6574092016cc",
+      "bytes": 710,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\arm9-02044120-02044150.asm",
+      "sha256": "1d0cec0d6b76bdeca06aae4c14a54ec9bad4701ca3e0b7675e249d4cd241a95f",
+      "bytes": 290,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\arm9-0205fde0-0205fee0.asm",
+      "sha256": "ad3eae600c4ba48bd98d1b184324c08eef57625052b630817ad79a0fe6820319",
+      "bytes": 1931,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\arm9-0209295c-02092a48.asm",
+      "sha256": "5b75412f180440325772e95669ad3bd8a79e59eaf8ff814ecacd8d45cc7bc060",
+      "bytes": 1687,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\gate-tutorial-script.asm",
+      "sha256": "89bbad8425aa03863b2ee9766f261cc8826f422f777f5274f6b13b0f15b1a9cc",
+      "bytes": 4585,
+      "runtimeLoadAllowed": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\tutorial-phase2-20261009\\private\\hunt-tutorial-script.asm",
+      "sha256": "a2ea5ab4706aaacaa5289ffcee0c1a8e2d306d995f8febcb65697f35bc570b8c",
+      "bytes": 33353,
+      "runtimeLoadAllowed": false
+    }
+  ],
+  "sourceFilesSnapshot": "The sourceFiles hashes retain the phase-2A source/evidence snapshot before runtime slices1/2. Runtime reports and task-local file receipts record implementation changes; native evidence provenance is not rewritten.",
+  "runtimeSlice1": {
+    "status": "INTEGRATED_BOUNDED",
+    "report": "docs/reports/tutorial-runtime-2026-10-09/REPORT_ZH_TW.md",
+    "validation": "docs/reports/tutorial-runtime-2026-10-09/VALIDATION.json",
+    "module": "src/championship/app/interactiveTutorialCheckpoint.js",
+    "tests": "tests/championship-interactive-tutorial-save-cases.mjs",
+    "normalOnboardingEligible": false,
+    "openingVersion": 2,
+    "checkpointVersion": 1,
+    "implementedStages": [
+      "invitation",
+      "raising-intro",
+      "raising-hatch",
+      "declined"
+    ],
+    "raisingHatch": "Saved boundary only; actor and interaction are not implemented. available=false and finished=false.",
+    "legacyCursorChanged": false,
+    "baselinePolicy": "Frozen serialized normal baseline; canonical saves project baseline plus checkpoint. Reapply baseline on every decline retry before releasing isolation.",
+    "resumeClassification": "OWNER_APPROVED_ADAPTATION",
+    "testsPassed": 61,
+    "newInteractiveSaveTests": 14,
+    "normalEntryBrowser": "PASS at 390x844 and 360x800 in isolated nonpersistent contexts on existing 127.0.0.1:8766",
+    "fullBrowserTutorial": "PENDING"
+  },
+  "runtimeSlice2": {
+    "status": "INTEGRATED_BOUNDED",
+    "report": "docs/reports/tutorial-runtime2-2026-10-09/REPORT_ZH_TW.md",
+    "validation": "docs/reports/tutorial-runtime2-2026-10-09/VALIDATION.json",
+    "normalOnboardingEligible": false,
+    "reviewEntry": "Loopback only: ?tutorialPreview=raising",
+    "module": "src/championship/raising/nativeTutorialRaisingActor.js",
+    "newCheckpoint": {
+      "version": 1,
+      "stage": "raising-hatched",
+      "message": 0
+    },
+    "actorPath": "special state18, command9B target17, animation completion, state1 entry",
+    "full19StateCoverage": false,
+    "previewLocales": [
+      "zh-Hant",
+      "en",
+      "ja",
+      "th",
+      "vi"
+    ],
+    "testsPassed": 113,
+    "prior61Included": true,
+    "fullBrowserTutorial": "PENDING",
+    "normalEntryBrowser": "PASS at390x844 and360x800",
+    "sourceEvidence": [
+      "OVL18 table021283D0, state18 02125788/02125814, state1 entry02121A7C",
+      "OVL18 VM021268D1..0212695C; target17 via021173C0"
+    ],
+    "toolbarConstraint": "The current hatch segment selects/locks hand, disables other slots and restores previous selection on exit. Actor predicates remain app-owned."
+  },
+  "runtimeSlice3": {
+    "status": "INTEGRATED_BOUNDED_INITIAL_RAISING",
+    "report": "docs/reports/tutorial-runtime3-2026-10-09/REPORT_ZH_TW.md",
+    "validation": "docs/reports/tutorial-runtime3-2026-10-09/VALIDATION.json",
+    "normalOnboardingEligible": false,
+    "reviewEntry": "Loopback only: ?tutorialPreview=raising",
+    "steps": "src/championship/app/interactiveTutorialRaisingSteps.js",
+    "actor": "src/championship/raising/nativeTutorialRaisingActor.js",
+    "boundary": {
+      "version": 1,
+      "stage": "raising-gate-ready",
+      "message": 0
+    },
+    "boundaryScreen": "RAISING_HOME",
+    "gate16Opened": false,
+    "implemented": "Initial Raising: special hatch, food bite, three-target cleanup, illness, camera, carry/flight cage1 and15, training/recovery, injury, special sleep, SYSTEM Hunt menu",
+    "singleOwner": true,
+    "resumeClassification": "OWNER_APPROVED_ADAPTATION_SEMANTIC_SAFE_BOUNDARY",
+    "exactTransientReplay": false,
+    "testsPassed": 119,
+    "prior113Included": true,
+    "newRaisingTests": 6,
+    "previewLocales": [
+      "zh-Hant",
+      "en",
+      "ja",
+      "th",
+      "vi"
+    ],
+    "finalWrongDropAndCancelledRetryBrowser": "PASS_EN_360x844_DPR2",
+    "normalEntryBrowser": "PASS390x844_and360x800",
+    "fullBrowserTutorial": "PENDING",
+    "full19StateCoverage": false,
+    "specialEvolution": "UNEXPECTED_CODE1_REQUIRES_TRACE_NOT_FORCED_SUCCESS",
+    "sourceEvidence": [
+      "OVL18 script021267EF..02127AB5",
+      "special handlers02121C8C..02122E90",
+      "training0212355C..02123C40",
+      "weak021252F0 recovery0212553C treatment0212566C",
+      "sleep02121C10/02121C2C"
+    ]
+  },
+  "runtimeSlice4": {
+    "status": "INTEGRATED_BOUNDED_GATE16_HUNT_RETURN",
+    "scope": "Dedicated Gate16 / field32 HM00; fixed species13/21 through current Hunt owner; phase3 Raising return. Normal eligibility remains false.",
+    "evidence": [
+      "OVL0 0211AAB0 fixed native constructors",
+      "OVL0 0210CA24..0210D1AC scripted wild control state5: event23 bound; HP<=0 then15-update down; event16 collection; shot event2E starts180-update shake; no ordinary wandering/status clock",
+      "OVL0 0211E564 restores HP by negative damage through0210C3C8, clears bind and emits3B",
+      "Gate record16 day/night field32, native ATR/ESC functional extraction through existing offline builder"
+    ],
+    "boundaries": [
+      "No demo Home commit, reward, wallet, registry, normal RNG/history change",
+      "Safe checkpoint reconstruction; unfinished input must recur; previous completed predicates may be restored",
+      "DOM Gate16 uses existing accessible list/confirm; ordinary Gate0..15 remain unchanged",
+      "Single existing Hunt runtime, actor collection, controllers and ticker"
+    ],
+    "report": "docs/reports/tutorial-runtime4-2026-10-09/REPORT_ZH_TW.md",
+    "validation": "docs/reports/tutorial-runtime4-2026-10-09/VALIDATION.json",
+    "normalOnboardingEligible": false,
+    "reviewEntry": "Loopback only: ?tutorialPreview=raising",
+    "boundary": {
+      "version": 1,
+      "stage": "raising-battle-ready",
+      "message": 0
+    },
+    "testsPassed": 220,
+    "newHuntTests": 6,
+    "checkpointResumeCount": 39,
+    "fullBrowserSlice": "PASS_ZH_HANT_390x844_DPR2",
+    "fullBrowserTutorial": "PENDING",
+    "normalEntryBrowser": "PASS_390x844_AND_360x800",
+    "exitDuringHuntBrowser": "PASS",
+    "choreography": "Native VM ordering, targets and bounded wait steps; demo rope pointer path is web presentation over existing recognizer, not native Bezier/frame parity.",
+    "remaining": [
+      "Battle record61/mode4 and completion",
+      "special evolution code1",
+      "Battle loss/draw",
+      "full native RNG call-order and frame differential",
+      "physical device and full five-language Hunt acceptance"
+    ],
+    "phase3Limit": "Returning Raising prompts only; do not claim native phase3 full roster/actor parity.",
+    "presentation": "Dedicated Gate list uses existing DOM accessibility path and existing translated labels. Original Gate0..15 behavior retained."
+  },
+  "runtimeSlice5": {
+    "status": "INTEGRATED_BOUNDED_BATTLE_COMPLETED",
+    "normalNewgameEligible": false,
+    "entry": {
+      "entryMode": 4,
+      "coreMode": 1,
+      "battleType": 0,
+      "recordIndex": 61,
+      "speciesIndices": [
+        189,
+        212,
+        207
+      ],
+      "requiredPartyMask": 7,
+      "coreModeEvidence": "Read-only native tutorial-battle-party/live checkpoint root+C98=1; OVL10 menu entry remains phase4"
+    },
+    "integration": "Existing Battle runtime, screen stack, Pixi Application and ticker; isolated profiles/RNG cloned from frozen baseline; no beginBattleAttempt or settleBattleAttempt for demo",
+    "resume": "Semantic menu checkpoints; unfinished battle restarts from same frozen entry seed; persisted real result resumes without rerunning battle",
+    "outcomePolicy": {
+      "evidence": "OWNER_APPROVED_ADAPTATION_WEB_SAFE_END",
+      "winLossDraw": "Display the actual ended core verdict, then explicit end-demo action returns to Raising1564/1565; no favorable-outcome retries; interrupted battle reload repeats the same entry seed",
+      "nativeLossAndDraw": "UNKNOWN_REQUIRES_TRACE"
+    },
+    "completion": "completed is saved atomically with restored baseline in the same canonical save; failed save retains isolation and idempotent retry",
+    "limitations": [
+      "No exact original constructor RNG call-order/frame parity claim",
+      "Native loss/draw reachability unknown; web safe end remains adaptation",
+      "Full five-language Hunt/whole chain and normal invitation acceptance pending; eligibility false",
+      "Final visual/device/rights/publication acceptance not claimed"
+    ],
+    "report": "docs/reports/tutorial-runtime5-2026-10-09/REPORT_ZH_TW.md",
+    "validation": "docs/reports/tutorial-runtime5-2026-10-09/VALIDATION.json",
+    "checkpointStageCount": 17,
+    "checkpointValueCount": 30,
+    "focusedTests": 294,
+    "additionalPresentationTests": 48,
+    "strengthenedBattleTests": 7,
+    "uniqueTestsAcrossRuns": 343,
+    "battleBrowser": "PASS_FIVE_LOCALES_CONTROLLED_START",
+    "fullPreviewBrowser": "PASS_ZH_HANT_REAL_OPENING_UI_ONLY",
+    "normalEntryBrowser": "PASS_EXISTING_NO_INVITATION",
+    "physicalDevice": "NOT_RUN"
+  },
+  "runtimeSlice6": {
+    "status": "PASS_LOCAL_NORMAL_ONBOARDING_BOUNDED",
+    "normalNewgameEligible": true,
+    "locationScope": [
+      "localhost",
+      "127.0.0.1",
+      "[::1]"
+    ],
+    "publicationAuthorized": false,
+    "prerequisite": "Five-language full preview actual-input acceptance passed; zh-Hant reused slice5; en/ja/th/vi slice6",
+    "browserMethod": "Normal URL without query; read-only actor render coordinates also emitted while tutorial is active; no actor/HP/RNG/stage injection in full flows",
+    "remaining": "Physical devices/native unknowns/final visual/rights/publication remain outside this acceptance",
+    "resizeOwnership": "A layout resize may cancel only the UI pointer it owns. Idle UI cancellation must not abort automatic demonstration controls; observed Japanese normal-URL stall reproduced by a real Hunt-script regression.",
+    "normalFullBrowser": "PASS_FIVE_LOCALES_REAL_OPENING_UI",
+    "branchCases": 20,
+    "layoutCases": 5,
+    "uniqueNodeTests": 352,
+    "nodeFiles": 48,
+    "report": "docs/reports/tutorial-runtime6-2026-10-09/REPORT_ZH_TW.md",
+    "validation": "docs/reports/tutorial-runtime6-2026-10-09/VALIDATION.json",
+    "physicalDevice": "NOT_RUN"
+  }
+}

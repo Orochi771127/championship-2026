@@ -165,7 +165,8 @@ test("Pixi runtime bundle loads all review atlases and releases them without own
   };
 
   const bundle = await loadPixiCharacterRuntimeBundle({ PIXI, runtimeUrl });
-  assert.deepEqual(bundle.getDiagnostics(), {
+  const {textureMemory,...diagnostics}=bundle.getDiagnostics();
+  assert.deepEqual(diagnostics, {
     entityId: "m201_agumon",
     textureCount: 83,
     sheetCount: 2,
@@ -173,6 +174,10 @@ test("Pixi runtime bundle loads all review atlases and releases them without own
     runtimeEligible: false,
     ticker: "SCENE_OWNED_APPLICATION_TICKER_REQUIRED"
   });
+  assert.equal(textureMemory.measurement,'BASE_RGBA8_ESTIMATE_NOT_GPU_USAGE');
+  assert.equal(textureMemory.pageCount,2);
+  assert.equal(textureMemory.unknownSourceCount,2,'metadata-only test fixture has no decoded TextureSource dimensions');
+  assert.equal(textureMemory.estimatedBaseRgbaBytes,null);
   const actor = bundle.createActor({ animation: "idle" });
   assert.equal(actor.sprite.texture.key, "m201_agumon/main/cell_000");
   assert.deepEqual(actor.sprite.anchorValue, runtime.artProfile.anchor);

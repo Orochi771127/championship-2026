@@ -51,7 +51,7 @@ const DEFINITIONS = {
   masterVolume: { category: "sound", scope: "device", type: "integer", min: 0, max: 100, step: 5, default: 100 },
   sfxVolume: { category: "sound", scope: "device", type: "integer", min: 0, max: 100, step: 5, default: 100 },
   // Language
-  locale: { category: "language", scope: "account", type: "enum", values: ["zh-Hant", "en"], default: "zh-Hant" },
+  locale: { category: "language", scope: "account", type: "enum", values: ["zh-Hant", "en", "ja", "th", "vi"], default: "zh-Hant" },
   // Controls and accessibility
   reducedMotion: { category: "access", scope: "device", type: "enum", values: ["system", "on", "off"], default: "system" },
   flashIntensity: { category: "access", scope: "account", type: "enum", values: ["standard", "soft"], default: "standard" },

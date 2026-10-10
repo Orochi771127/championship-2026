@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 32,
+    "registeredRuntimeBundles": 36,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -370,6 +370,58 @@
       "runtimeEligible": true,
       "shippingReady": false,
       "maturity": "ORIGINAL_BLENDER_2_5D_CAGE_FIELDS"
+    },
+    {
+      "assetId": "art:cage:shop-final:20261008",
+      "runtimeEligible": true,
+      "localOnly": true,
+      "publicReleasePermitted": false,
+      "humanApproved": false,
+      "runtimeQaPassed": false,
+      "shippingReady": false,
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "manifestPath": "assets/production/cage/shop-final-20261008/manifest.json",
+      "scope": "35 final shop thumbnails; local integration only",
+      "ownerDirection": "Owner 2026-10-09 13:53 UTC authorized local review and integration of the final 21-part intake; art/runtime/publication acceptance remain separate."
+    },
+    {
+      "assetId": "art:cage:final-intake:20261008",
+      "runtimeEligible": true,
+      "localOnly": true,
+      "publicReleasePermitted": false,
+      "humanApproved": false,
+      "runtimeQaPassed": false,
+      "shippingReady": false,
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "manifestPath": "assets/production/cage/final-intake-20261008/manifest.json",
+      "scope": "37 cage fields / 41 frames; local final intake only",
+      "ownerDirection": "Owner 2026-10-09 13:53 UTC authorizes local review and integration only"
+    },
+    {
+      "assetId": "art:hunt:final-intake:20261008",
+      "runtimeEligible": true,
+      "localOnly": true,
+      "publicReleasePermitted": false,
+      "humanApproved": false,
+      "runtimeQaPassed": false,
+      "shippingReady": false,
+      "rightsStatus": "PROJECT_ORIGINAL",
+      "manifestPath": "assets/production/hunt/final-intake-20261008/manifest.json",
+      "scope": "Final hunt art, local integration only",
+      "ownerDirection": "Owner 2026-10-09 13:53 UTC authorized full local review/integration of final 21-part intake; no publication or source-evidence promotion."
+    },
+    {
+      "assetId": "art:hunt:final-intake-night:20261008",
+      "runtimeEligible": true,
+      "localOnly": true,
+      "publicReleasePermitted": false,
+      "humanApproved": false,
+      "runtimeQaPassed": false,
+      "shippingReady": false,
+      "rightsStatus": "PROJECT_ORIGINAL",
+      "manifestPath": "assets/production/hunt/final-intake-20261008/hm10-night.manifest.json",
+      "scope": "Final hunt art, local integration only",
+      "ownerDirection": "Owner 2026-10-09 13:53 UTC authorized full local review/integration of final 21-part intake; no publication or source-evidence promotion."
     }
   ]
 }

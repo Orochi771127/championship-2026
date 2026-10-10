@@ -54,6 +54,7 @@ import contract from "../../../../docs/contracts/championship/battle-field-prese
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import {battleFocusViewport,drawBattleDigitalCurtain} from '../battleFocusViewport.js';
 import {createBattleEffectSprites} from '../battleEffectSprites.js';
+import {createBm03GroundShadows} from '../bm03GroundShadows.js';
 
 const PALETTE = Object.freeze({
   letterbox: 0x072f5e,
@@ -190,11 +191,16 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const curtain = new stage.PIXI.Graphics();
   const clip = new stage.PIXI.Graphics();
   actorLayer.sortableChildren = true;
-  world.addChild(productionArtLayer, graphic, actorLayer);
+  const shadowLayer = new stage.PIXI.Container({label:"bounded BM03 ground shadows"});
+  world.addChild(productionArtLayer, graphic, shadowLayer, actorLayer);
   scene.addChild(letterbox,world,curtain,clip);
   world.mask=clip;
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
   const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
+
+  let groundShadows = null;
+  try { groundShadows = await createBm03GroundShadows({PIXI:stage.PIXI,parent:shadowLayer,fieldArt}); }
+  catch(error) { console.warn("CHAMPIONSHIP_BM03_SHADOW_FALLBACK",error.message); }
 
   let disposed = false;
   let disposal = null;
@@ -210,6 +216,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
 
   function layoutCharacters(rect, view) {
     const rendered = new Set();
+    groundShadows?.begin(rect);
     // Arena source pixels and sprite packed pixels have different enlargements.
     // Never size a creature using its atlas dimensions or a fixed circle radius.
     const nativeWidth = fieldArt?.field.nativeWidthPx;
@@ -284,10 +291,13 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       sprite.tint=nativeTint === undefined ? brightness*0x010101
         : ((Math.round((nativeTint>>16&255)*brightness/255)<<16)
           |(Math.round((nativeTint>>8&255)*brightness/255)<<8)|Math.round((nativeTint&255)*brightness/255));
-      graphic.ellipse(x, y + scale, trim.width * scale * 0.42, Math.max(1, trim.width * scale * 0.13))
+      const grounded=groundShadows?.update({slot:combatant.slot,actor:entry.actor,motion,facing,
+        rotation:sprite.rotation,x,y,nativeScale,heightNativePx:combatant.nativeMotion?.heightNativePx,alpha:sprite.alpha});
+      if(!grounded) graphic.ellipse(x, y + scale, trim.width * scale * 0.42, Math.max(1, trim.width * scale * 0.13))
         .fill({color:0x000000,alpha:0.22});
       rendered.add(combatant.slot);
     }
+    groundShadows?.end();
     return rendered;
   }
 
@@ -391,6 +401,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         outcome: source.getFrame().outcome,
         viewport: Object.freeze({ ...lastViewport }),
         effectSprites:effectSprites?.getDiagnostics() ?? null,
+        groundShadows:groundShadows?.getDiagnostics() ?? null,
         characters: Object.freeze([...actors].map(([slot, entry]) => Object.freeze({
           slot, speciesId: entry.speciesId, entityId: entry.actor.entityId,
           rendered: entry.actor.sprite.visible,
@@ -422,9 +433,10 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       }
       if (scene.parent) scene.parent.removeChild(scene);
       effectSprites?.dispose();
+      const shadowDisposal=groundShadows?.dispose();
       scene.destroy({ children: true });
       actors.clear();
-      disposal=Promise.allSettled([fieldArt?.dispose(),characterRoster?.dispose(),effectArt?.dispose()]);
+      disposal=Promise.allSettled([fieldArt?.dispose(),characterRoster?.dispose(),effectArt?.dispose(),shadowDisposal]);
       // The Application belongs to the stage and outlives this scene.
       return disposal;
     }

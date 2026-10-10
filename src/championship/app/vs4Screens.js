@@ -1,3 +1,4 @@
+import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import { speciesName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
 // VS4 -- Shop presentation.
 //
@@ -363,6 +364,8 @@ export function createDatabaseView({ root, source }) {
   );
   const census = element("div", "cm-vs2-shop__wallet");
   census.setAttribute("aria-live", "polite");
+  const bookArt=originalDatabaseIcon("DATABASE");
+  if(bookArt){const icon=element("img","cm-collection-icon");icon.src=bookArt.src;icon.alt="";copy.prepend(icon);}
   header.append(copy, census);
 
   const body = element("div", "cm-vs2-body cm-vs2-shop__body");

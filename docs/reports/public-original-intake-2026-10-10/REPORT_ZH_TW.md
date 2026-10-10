@@ -1,0 +1,29 @@
+# 2026-10-10 精選原創成品整合
+
+本批沿用既有應用程式、單一 Pixi Application/ticker、路由、模擬與存檔。以 origin/main `7487731ff690506a56027d74ad5e105c632e9d67` 建立隔離整合分支；混合作業目錄中的 67 個已修改追蹤檔均核對原雜湊，未覆寫協作者工作。
+
+## 授權與範圍
+
+Owner 指示「做好請commit 跟push並整合至公開發佈版」，並於 2026-10-10 00:28 UTC 對明列範圍回答「可以公開」（`Sentinel_8d960f4a95048191aaceee1ffa0fa441`）。同一自動審核已接受這份補充授權；原拒絕操作未執行，沒有繞過審核。
+
+公開試玩選擇涵蓋 222 個原創角色與 HUD、工具列／勳章／圖鑑／道具、37 座籠子、35 張商店縮圖、17 種狩獵地形、11 個競技場、漫畫 R2，以及本批驗證的 CM03／CM24 遮擋。以現有 `public-playtest.r1.json` 與 `WEB_BUILD_INPUTS.v1.json` 的目的網址、明確檔案與 SHA-256 為準。來源中的 local/review 標記保留為歷史證據；不宣稱商業權利、完整遊戲或實體裝置驗收。
+
+ROM、原生載荷、研究素材、ZIP、Blender 母檔及私人候選圖不包含在新增公開素材內。原有歷史與來源紀錄未改寫。README 與 GitHub About 按 Owner 最新指示使用暫名 Championship，介紹原創怪獸夥伴育成、狩獵捕獲、籠子管理、自動對戰錦標賽、手機直向 Web 與五語介面；不宣稱即時多人 PvP 已完成。
+
+## CM24
+
+使用 Owner 下載的最終 R1 ART ZIP：SHA-256 `e7aff79f3a2cdacde2bac5ee80bc255c43537a385945ad0aa29650cfad93d5f7`；master `dd731a1d27cec5cc19ecf67682e20a26bc3fd86c873f5e9e3c3b39b87ea28670`；已接入最終合成圖 `601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146`。母檔留在倉庫外。
+
+九組遮擋來自最終 master 的實際可見物件，深度取 Z=0 接觸頂點的地面投影。遮罩保持完整 384×448 畫布，依原生欄位布局裁切；未更動可走網格、雕像位置、香爐位置或來源動畫。與 CM03 共用既有前景 owner、底圖 texture 與 stencil，額外解碼 texture 為零。
+
+上下排共 56 組瀏覽器／像素案例通過：前／後／提起、橫向布局；無角色重繪差異為零、角色之外差異為零。既有 CM03 六項契約回歸與新增 CM24 四項契約均通過。詳見 [限定驗收](CM24_BOUNDED_ACCEPTANCE.json)、[逐像素證據](CM24_PIXEL_PROOF.json)。
+
+## 封裝與驗證
+
+角色與狩獵 PNG 僅在檔案更小時使用 lossless WebP，逐一比較所有 RGBA 值（含透明像素的 RGB），未改尺寸、畫格、原點或取樣。646 份同資料夾的完全相同圖片改用共用引用；原 5,422 檔完整性檢查保留，另外驗證 alias 雜湊。狩獵 geometry JSON 保持位元組一致；原生 timing、field ID、phase/page order 與 solid flags 繼續受必跑測試約束。
+
+195 個既有 CI 模組全部保留，另加 20 個必要模組，共 215。公開成品的 Gate 縮圖已改接相同原創場地，避免遺留舊 URL。Node 24 的全域鎖不再干涉記憶體測試存檔；真實瀏覽器 session lock 與注入鎖衝突測試保持有效。完整 CI、build、validate 與建置成品正常入口檢查為發布前必要條件；部署狀態需再以 GitHub Actions 及線上 pages-build.json 確認。
+
+本機證據目錄：`R:\Projects\Championship2026\publication-prep-20261010`。所有瀏覽器檢查使用隔離 context／測試存檔；未開第二台伺服器，未讀寫玩家存檔。
+
+建置成品的正常入口另驗證繁中／泰文／越文開場、八顆蛋，以及 CM24 上下排 Continue、Gate → 裝備 → Hunt → 返回育成；錯誤與缺檔皆為零。這是限定範圍的瀏覽器驗證，不等同全遊戲或實體手機验收。

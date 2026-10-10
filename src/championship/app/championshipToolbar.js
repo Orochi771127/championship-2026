@@ -1,3 +1,4 @@
+import {isOriginalUiIntakeLocal,originalToolbarArt,originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import { uiText } from "../text/uiText.js";
 // The contextual toolbar -- the original's ui/toolbar.nxr.
 //
@@ -89,6 +90,7 @@ export const TOOLBAR_MENUS = Object.freeze([
  */
 export const TOOLBAR_PRODUCT_ENTRIES = Object.freeze({
   SYSTEM: Object.freeze([
+    Object.freeze({ id:"medals", label:"徽章收藏", screen:"MEDALS", hint:"61 場頭銜賽的勝利紀錄", localOnly:true, evidence:"OWNER_APPROVED_ADAPTATION_20261007" }),
     Object.freeze({ id: "settings", label: "Settings", action: "OPEN_SETTINGS", hint: "主題、畫質、聲音與語言", evidence: "PRODUCT_AUTHORED" })
   ])
 });
@@ -108,7 +110,7 @@ export const TOOLBAR_MENU_GROUPS = Object.freeze({
   ]),
   SYSTEM: Object.freeze([
     Object.freeze({ id: "go", title: "出發", entries: Object.freeze(["hunt", "battle", "shop"]), prominent: true }),
-    Object.freeze({ id: "reference", title: "資料", entries: Object.freeze(["database", "help"]) }),
+    Object.freeze({ id: "reference", title: "資料", entries: Object.freeze(["database", "medals", "help"]) }),
     Object.freeze({ id: "session", title: null, entries: Object.freeze(["settings", "saveQuit"]), separate: true })
   ])
 });
@@ -128,7 +130,7 @@ function element(tag, className, text) {
  * @param {(entry: object) => void} options.onMenuEntry
  * @param {(toolId: string|null) => void} [options.onToolChange]
  */
-export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null } = {}) {
+export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null } = {}) {
   if (!root) throw new TypeError("The toolbar requires a root element");
   if (typeof onMenuEntry !== "function") throw new TypeError("The toolbar requires an onMenuEntry handler");
 
@@ -160,6 +162,9 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
 
   let currentMode = null;
   let selectedTool = null;
+  let tutorialTool = null;
+  let tutorialAutoSelect=true,tutorialKey=null,tutorialMenuEntry="hunt";
+  let toolBeforeTutorial = null;
   let openMenuId = null;
 
   function closeMenu() {
@@ -173,6 +178,8 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     // Two lines: the original entry name, then what it is for, so Hunt,
     // Battle and Shop can be found without knowing the menus by heart.
     const button = element("button", "cm-toolbar__entry");
+    const art=originalDatabaseIcon(entry.screen);
+    if(art){const icon=element("img","cm-toolbar__entry-icon");icon.src=art.src;icon.alt="";button.append(icon);}
     button.append(element("span", "cm-toolbar__entry-label", entry.label));
     if (entry.hint) button.append(element("span", "cm-toolbar__entry-hint", entry.hint));
     button.setAttribute("aria-label", uiText(entry.label));
@@ -180,7 +187,8 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     button.setAttribute("role", "menuitem");
     button.dataset.entryId = entry.id;
     const reachable = Boolean(entry.screen || entry.action);
-    button.disabled = !reachable;
+    button.disabled = !reachable || (tutorialTool!==null&&!(tutorialTool==="SYSTEM"&&entry.id===tutorialMenuEntry));
+    const tutorialCheckpoint=getTutorialCheckpoint();
     if (!reachable) {
       // The original has this destination; this build has not made it yet.
       button.dataset.state = "NOT_IMPLEMENTED";
@@ -188,17 +196,19 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     }
     button.addEventListener("click", () => {
       closeMenu();
-      onMenuEntry(entry);
+      if(button.disabled)return;
+      onMenuEntry(entry,{checkpoint:tutorialCheckpoint});
     });
     return button;
   }
 
   function openMenu(menu) {
+    if(tutorialTool!==null&&!(tutorialTool==="SYSTEM"&&menu.id==="SYSTEM"))return;
     if (openMenuId === menu.id) { closeMenu(); return; }
     openMenuId = menu.id;
     menuPanel.replaceChildren();
     menuPanel.dataset.menuId = menu.id;
-    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? [])].map((entry) => [entry.id, entry]));
+    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? []).filter(entry=>!entry.localOnly || isOriginalUiIntakeLocal())].map((entry) => [entry.id, entry]));
     const placed = new Set();
     for (const group of TOOLBAR_MENU_GROUPS[menu.id] ?? []) {
       const entries = group.entries.map((id) => byId.get(id)).filter(Boolean);
@@ -228,14 +238,15 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     }
   }
 
-  function selectTool(toolId) {
-    selectedTool = selectedTool === toolId ? null : toolId;
+  function selectTool(toolId,context={}) {
+    if(tutorialTool==="SYSTEM")return;
+    selectedTool = tutorialTool ?? (selectedTool === toolId ? null : toolId);
     for (const cell of rail.querySelectorAll("[data-tool-id]")) {
       cell.setAttribute("aria-pressed", String(cell.dataset.toolId === selectedTool));
     }
     bar.dataset.selectedTool = selectedTool ?? "";
     paintToolHint();
-    onToolChange?.(selectedTool);
+    onToolChange?.(selectedTool,context);
   }
 
   // Six care tools then the management and system menus.
@@ -248,18 +259,24 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     button.type = "button";
     button.dataset.cellIndex = String(index);
     button.dataset.slotMapping = TOOLBAR_SLOT_MAPPING_EVIDENCE;
-    // The original's rail is eight icon discs, not eight words. The art is the
-    // approved toolbar cell set; `data-icon` names which one, and the skin
-    // paints it. The label stays in the DOM for assistive technology.
+    // `data-icon` names the slot. Local candidate art uses the same binding
+    // for tools and menus; the label stays in the DOM for assistive technology.
     button.dataset.icon = cell.kind === "tool"
       ? cell.tool.id
       : (cell.menu.id === "MANAGEMENT" ? "manage" : "system");
+    const art=originalToolbarArt(button.dataset.icon);
+    if(art){button.dataset.originalIntake="true";button.style.setProperty("--original-intake-icon",`url("${new URL(art.src,document.baseURI).href}")`);}
     if (cell.kind === "tool") {
       button.dataset.toolId = cell.tool.id;
       button.setAttribute("aria-pressed", "false");
       button.title = uiText(cell.tool.hint);
       button.append(element("span", "cm-toolbar__cell-label", cell.tool.label));
-      button.addEventListener("click", () => { closeMenu(); selectTool(cell.tool.id); });
+      let gestureCheckpoint=null;
+      button.addEventListener("pointerdown",()=>{gestureCheckpoint=getTutorialCheckpoint();});
+      button.addEventListener("click", () => {
+        const checkpoint=gestureCheckpoint??getTutorialCheckpoint();gestureCheckpoint=null;
+        if(button.disabled)return;closeMenu();selectTool(cell.tool.id,{userInitiated:true,checkpoint});
+      });
     } else {
       button.dataset.menuId = cell.menu.id;
       button.setAttribute("aria-haspopup", "true");
@@ -339,10 +356,10 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
       const visible = mode === TOOLBAR_MODES.TRAINING || mode === TOOLBAR_MODES.HUNT;
       if (!visible || currentMode !== mode) closeMenu();
       if (currentMode !== mode) {
-        selectedTool = null;
-        bar.dataset.selectedTool = "";
+        selectedTool = mode===TOOLBAR_MODES.TRAINING&&tutorialAutoSelect&&tutorialTool!=="SYSTEM"?tutorialTool:null;
+        bar.dataset.selectedTool = selectedTool??"";
         paintToolHint();
-        onToolChange?.(null);
+        onToolChange?.(selectedTool);
       }
       currentMode = mode;
       // Hunt command-to-slot dispatch is untraced. Do not carry Raising care
@@ -350,7 +367,7 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
       for (const button of rail.querySelectorAll("[data-cell-index]")) {
         const cell = cells[Number(button.dataset.cellIndex)];
         const hunt = mode === TOOLBAR_MODES.HUNT;
-        button.disabled = hunt;
+        button.disabled = hunt || (tutorialTool!==null && (tutorialTool==="SYSTEM"?cell.menu?.id!=="SYSTEM":cell.tool?.id!==tutorialTool));
         button.querySelector(".cm-toolbar__cell-label").textContent = uiText(hunt ? "—" : (cell.tool?.label ?? cell.menu.label));
         button.title = uiText(hunt ? "In the original, not yet in this build" : (cell.tool?.hint ?? ""));
         if (cell.tool) button.setAttribute("aria-pressed", String(cell.tool.id === selectedTool));
@@ -364,6 +381,28 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
 
     getSelectedTool() {
       return selectedTool;
+    },
+
+    // Display/input constraint for an app-owned tutorial step; no gameplay
+    // predicate or progression lives here. Restore the prior tool on exit.
+    setTutorialTool(toolId,{select=true,key=null,menuEntry="hunt"}={}) {
+      if(disposed||toolId===tutorialTool&&select===tutorialAutoSelect&&key===tutorialKey)return;
+      if(toolId!==null&&toolId!=="SYSTEM"&&!TOOLBAR_TOOLS.some(tool=>tool.id===toolId))
+        throw new TypeError("UNKNOWN_TUTORIAL_TOOL");
+      if(tutorialTool===null)toolBeforeTutorial=selectedTool;
+      tutorialTool=toolId;tutorialAutoSelect=select;tutorialKey=key;tutorialMenuEntry=menuEntry;toolDone.hidden=tutorialTool!==null;
+      if(toolId!==null){closeMenu();if(select&&toolId!=="SYSTEM")selectTool(toolId);else{selectedTool=null;bar.dataset.selectedTool="";paintToolHint();onToolChange?.(null);}}
+      else {
+        const restored=toolBeforeTutorial;toolBeforeTutorial=null;
+        selectedTool=null;
+        if(restored!==null)selectTool(restored);
+        else {bar.dataset.selectedTool="";paintToolHint();onToolChange?.(null);}
+      }
+      for(const button of rail.querySelectorAll("[data-cell-index]")){
+        button.disabled=currentMode===TOOLBAR_MODES.HUNT || (tutorialTool!==null&&(tutorialTool==="SYSTEM"?button.dataset.menuId!=="SYSTEM":button.dataset.toolId!==tutorialTool));
+        if(button.dataset.toolId)button.setAttribute("aria-pressed",String(button.dataset.toolId===selectedTool));
+      }
+      syncHeight();
     },
 
     /** Re-apply every label in the current language (after a language switch). */

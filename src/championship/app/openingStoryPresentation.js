@@ -1,13 +1,46 @@
 import {createOpeningStoryState,advanceOpeningStory,openingStoryTrajectory} from './nativeOpeningStory.js';
 import {uiText} from '../text/uiText.js';
+import {openingStoryText} from '../text/openingStoryText.js';
 
-// Translated from the four observed opening cards. Pictures below are authored
-// CSS illustrations, not decoded original screenshots or licensed battle art.
+// The four observed story cards retain their timing and DOM text.
+// R2 original comic art is narrative illustration, not a player identity or hatch mapping.
 const TEXT=[
   '每四年舉辦一次的\n數碼獸冠軍賽。',
   '取得參賽資格，\n正是身為真正數碼獸馴獸師的證明。',
   '而今天，你也迎來了\n參加數碼獸冠軍賽的機會。\n\n奪下勝利吧！\n數碼獸冠軍賽！',
   '好像已經收到郵件了。'
+];
+const COMIC=[
+  {
+    "slot": "01_arena",
+    "src": "assets/production/opening/original-comic-r2-20261010/01_arena.webp",
+    "width": 640,
+    "height": 640
+  },
+  {
+    "slot": "02_blaze_action",
+    "src": "assets/production/opening/original-comic-r2-20261010/02_blaze_action.webp",
+    "width": 560,
+    "height": 640
+  },
+  {
+    "slot": "03_cloud_action",
+    "src": "assets/production/opening/original-comic-r2-20261010/03_cloud_action.webp",
+    "width": 640,
+    "height": 480
+  },
+  {
+    "slot": "04_partnership",
+    "src": "assets/production/opening/original-comic-r2-20261010/04_partnership.webp",
+    "width": 549,
+    "height": 768
+  },
+  {
+    "slot": "05_invitation",
+    "src": "assets/production/opening/original-comic-r2-20261010/05_invitation.webp",
+    "width": 768,
+    "height": 768
+  }
 ];
 const FRAME_MS=1000/60;
 
@@ -16,13 +49,20 @@ export function createOpeningStoryPresentation({host,onComplete}){
   const root=el('section','cm-opening-story');root.tabIndex=0;root.setAttribute('role','button');
   root.setAttribute('aria-label',uiText('開場故事，閱讀後點按繼續'));
   const cards=[],parts=[];
+  function addComic(picture,index){
+    const art=COMIC[index],img=document.createElement('img');
+    img.src=art.src;img.width=art.width;img.height=art.height;img.alt='';img.draggable=false;
+    img.decoding='async';img.loading='eager';img.dataset.comicSlot=art.slot;
+    picture.setAttribute('aria-hidden','true');picture.append(img);return picture;
+  }
   for(let i=0;i<4;i++){
     const card=el('article',`cm-opening-story__card cm-opening-story__card--${i}`),row=[el('p','cm-opening-story__text',TEXT[i])];
+    row[0].textContent=openingStoryText(TEXT[i]);
     if(i===0)for(let n=0;n<3;n++){
       const picture=el('div',`cm-opening-story__picture cm-opening-story__arena cm-opening-story__arena--${n}`);
-      picture.setAttribute('aria-hidden','true');picture.append(el('i','cm-opening-story__fighter'),el('i','cm-opening-story__fighter cm-opening-story__fighter--r'));row.push(picture);
+      row.push(addComic(picture,n));
     }
-    if(i===1||i===2){const picture=el('div',`cm-opening-story__picture cm-opening-story__${i===1?'world':'champion'}`);picture.setAttribute('aria-hidden','true');row.push(picture);}
+    if(i===1||i===2){const picture=el('div',`cm-opening-story__picture cm-opening-story__${i===1?'world':'champion'}`);row.push(addComic(picture,i+2));}
     card.append(...row);root.append(card);cards.push(card);parts.push(row);
   }
   host.replaceChildren(root);host.hidden=false;

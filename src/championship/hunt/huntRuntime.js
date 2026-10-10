@@ -1,3 +1,4 @@
+import {createNativeTutorialHuntScript} from './capture/nativeTutorialHuntScript.js';
 // VS2 -- Hunt field runtime.
 //
 // EVIDENCE POSITION
@@ -198,6 +199,7 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
   const controls = world.nativeEntry && nativeControls ? createNativeHuntFieldControls({
     ...nativeControls, records:entryState.encounter.actors, wildIds:wilds.map(w=>w.wildId),
     environment:nativeEntry.scene.environment,rng:nativeEntry.rng,maxCardG,night:nativeEntry.scene.variant.night }) : null;
+  const tutorialScript=nativeEntry?.tutorial&&controls?createNativeTutorialHuntScript(controls,entryState.encounter.actors,(x,y)=>{cameraCenter={x:x*2,y:y*2};}):null;
   const cardEntries = () => controls ? controls.getOnCardEntries() : [...captureFlows.values()].map((flow) => flow.snapshot()).filter((entry) => entry.state === "ON_CARD");
   const captureVisible = (wild) => {
     const captured = captureFlows.get(wild.wildId)?.snapshot();
@@ -229,7 +231,8 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
   function advance(deltaMs) {
     const seconds = deltaMs / 1000;
     elapsedMs += deltaMs;
-    controls?.tick(deltaMs,[(cameraCenter.x-256)/2,(cameraCenter.y-192)/2]);
+    if(tutorialScript)tutorialScript.advance(deltaMs,[(cameraCenter.x-256)/2,(cameraCenter.y-192)/2]);
+    else controls?.tick(deltaMs,[(cameraCenter.x-256)/2,(cameraCenter.y-192)/2]);
 
     if (player.targetX !== null) {
       const done = step(player, player.targetX, player.targetY, HUNT_PLAYER_SPEED_PX_PER_SECOND, seconds);
@@ -266,7 +269,7 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
     world,
     movementAuthority: HUNT_MOVEMENT_AUTHORITY,
     getNativeEntryState: () => structuredClone(entryState),
-    getNativeReturnContext: () => nativeEntry && controls ? Object.freeze({biomeIndex:nativeEntry.scene.biomeIndex,
+    getNativeReturnContext: () => nativeEntry && !nativeEntry.tutorial && controls ? Object.freeze({biomeIndex:nativeEntry.scene.biomeIndex,
       releasedSlot:nativeEntry.releasedSlot, carriedAtEntry:!!nativeEntry.encounter.historyWrite}) : null,
     applyReturnedIndividuals(entries) {
       if (!controls) throw Error("HUNT_NATIVE_RETURN_UNAVAILABLE");
@@ -366,6 +369,8 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
     },
 
     getSelectedWildId() { return controls ? controls.getSelectedWildId() : selectedWildId; },
+    configureTutorialHunt:(cp,step)=>tutorialScript?.configure(cp,step),
+    getTutorialHuntProgress:()=>tutorialScript?{ready:tutorialScript.ready(),...tutorialScript.view()}:null,
     getToolState: () => controls?.getState() ?? null,
     selectTool: kind => controls?.selectTool(kind) ?? false,
     toolPointerDown: (x,y) => controls?.pointerDown(x,y) ?? false,

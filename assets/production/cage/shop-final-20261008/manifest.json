@@ -1,0 +1,1960 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:cage:shop-final:20261008",
+  "family": "SHOP_CAGE_THUMBNAILS",
+  "localOnly": true,
+  "runtimeScope": "LOOPBACK_ONLY",
+  "runtimeEligible": true,
+  "publicReleasePermitted": false,
+  "humanApproved": false,
+  "runtimeQaPassed": false,
+  "shippingReady": false,
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+  "ownerDirection": "Owner 2026-10-09 13:53 UTC authorized local review and integration of the final 21-part intake; art/runtime/publication acceptance remain separate.",
+  "sourceIntake": {
+    "indexSha256": "3a75bf65bb3331ce3577af86c5f24ea2349a651af4ee5ad0e9cf48b4c81a6544",
+    "contentsSha256": "21a088855d6a5a3e3477e570c99df5fba685d4d86b399b9648ab0aecb19a9953",
+    "shopArtIndexSha256": "e32ee048655f9c6aa7e82c2734ed3ba752d08961fa910a2fe2b4568695e9284f"
+  },
+  "composition": "Full final frame00 fitted and centered; alpha retained; no crop, no alpha-bound trim, no labels or added art",
+  "logicalCanvas": [
+    64,
+    48
+  ],
+  "logicalOrigin": [
+    32,
+    23
+  ],
+  "density": 4,
+  "rasterOrigin": [
+    128,
+    92
+  ],
+  "records": [
+    {
+      "shopRecordIndex": 83,
+      "itemIndex": 0,
+      "cageDefinitionIndex": 0,
+      "moduleId": "championship:2026:cage:0",
+      "catalogDisplayName": "Cage 0",
+      "fieldId": "field_cm01_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-083_item-00_field_cm01_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm01_01/frame-00.png",
+        "sha256": "e4e175144fd1cb89531c9b5a53f00eb177852db27205bd001d50dd60db8e83ba",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "81074b5f0d1e22cf92bb64adf64a8bd16ff91a8d917ab9403baf89bf430adef6",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 49629
+    },
+    {
+      "shopRecordIndex": 85,
+      "itemIndex": 1,
+      "cageDefinitionIndex": 1,
+      "moduleId": "championship:2026:cage:1",
+      "catalogDisplayName": "Cage 1",
+      "fieldId": "field_cm02_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-085_item-01_field_cm02_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm02_01/frame-00.png",
+        "sha256": "3191bc4922b49a9ae19229655c8f892050f1d666156100b5df79e27f528908b6",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          768,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        184,
+        192
+      ],
+      "pasteXY": [
+        36,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "7d17f3f1ace05ee2af16f4761a4df22a6a163c51c322f075b5eacf0e5185e478",
+      "alphaBounds": [
+        36,
+        0,
+        220,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 44273
+    },
+    {
+      "shopRecordIndex": 86,
+      "itemIndex": 2,
+      "cageDefinitionIndex": 2,
+      "moduleId": "championship:2026:cage:2",
+      "catalogDisplayName": "Cage 2",
+      "fieldId": "field_cm03_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-086_item-02_field_cm03_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm03_01/frame-00.png",
+        "sha256": "6824d4a79723ff32f93694ea8c1a018761c8c17f8515e8bb1bb4c91b54d6837e",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          1152,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        256,
+        178
+      ],
+      "pasteXY": [
+        0,
+        7
+      ],
+      "scale": 0.2222222222222222,
+      "sha256": "7b26c26400adf0826263512df235938eb00574372513094808992ebabdbcdf63",
+      "alphaBounds": [
+        0,
+        7,
+        256,
+        185
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 58285
+    },
+    {
+      "shopRecordIndex": 87,
+      "itemIndex": 3,
+      "cageDefinitionIndex": 3,
+      "moduleId": "championship:2026:cage:3",
+      "catalogDisplayName": "Cage 3",
+      "fieldId": "field_cm04_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-087_item-03_field_cm04_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm04_01/frame-00.png",
+        "sha256": "154ee9eb9a7e77ae293741669f0e7dd59719dd6306562dcb2ea5fedb1bb30c0e",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          1152,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        256,
+        100
+      ],
+      "pasteXY": [
+        0,
+        46
+      ],
+      "scale": 0.2222222222222222,
+      "sha256": "d646a7cb6340e0950faf7bcbda83e1ac6b21d061a54b0dda80d6e5e1c490d5a9",
+      "alphaBounds": [
+        0,
+        46,
+        256,
+        146
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 50560
+    },
+    {
+      "shopRecordIndex": 89,
+      "itemIndex": 4,
+      "cageDefinitionIndex": 4,
+      "moduleId": "championship:2026:cage:4",
+      "catalogDisplayName": "Cage 4",
+      "fieldId": "field_cm05_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-089_item-04_field_cm05_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm05_01/frame-00.png",
+        "sha256": "f1732a70ebda686c7e857ce43fa005861319d27e0c843f4db98b6afa2c211a30",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "6d195c2bd46348d2f9a557a138ca374a1ac4251ccc3b40666831038c81cdbd20",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 61392
+    },
+    {
+      "shopRecordIndex": 109,
+      "itemIndex": 5,
+      "cageDefinitionIndex": 5,
+      "moduleId": "championship:2026:cage:5",
+      "catalogDisplayName": "Cage 5",
+      "fieldId": "field_cm06_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-109_item-05_field_cm06_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm06_01/frame-00.png",
+        "sha256": "4d4098cc73a10831bd4c69e1678087383990666301b20aca1d3d407e52b52cf3",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          1344,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        256,
+        152
+      ],
+      "pasteXY": [
+        0,
+        20
+      ],
+      "scale": 0.19047619047619047,
+      "sha256": "c4454bc76ee0246a08220f4b072364ade7691a3b6fe59697f40041f829f493ed",
+      "alphaBounds": [
+        0,
+        20,
+        256,
+        172
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 41359
+    },
+    {
+      "shopRecordIndex": 93,
+      "itemIndex": 6,
+      "cageDefinitionIndex": 6,
+      "moduleId": "championship:2026:cage:6",
+      "catalogDisplayName": "Cage 6",
+      "fieldId": "field_cm07_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-093_item-06_field_cm07_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm07_01/frame-00.png",
+        "sha256": "87f258d95603b285f38946305af2d18527a70cd3a35dc52b53c97f8052b18f00",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "9e83eb03c89ec10001fc363dab779c155e974dba9825add60c8031d154d8377a",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 78251
+    },
+    {
+      "shopRecordIndex": 91,
+      "itemIndex": 7,
+      "cageDefinitionIndex": 7,
+      "moduleId": "championship:2026:cage:7",
+      "catalogDisplayName": "Cage 7",
+      "fieldId": "field_cm08_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-091_item-07_field_cm08_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm08_01/frame-00.png",
+        "sha256": "5b1fb9d830f17c578501406b4c8fdf2d6d73ccd8fef33bebd8d8651c5bbd9175",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "51ea70dc54df9f32bcf75cb5aa2476abc5d8a24971362b6dd389c7e830903042",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 49603
+    },
+    {
+      "shopRecordIndex": 95,
+      "itemIndex": 8,
+      "cageDefinitionIndex": 8,
+      "moduleId": "championship:2026:cage:8",
+      "catalogDisplayName": "Cage 8",
+      "fieldId": "field_cm09_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-095_item-08_field_cm09_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm09_01/frame-00.png",
+        "sha256": "5509edc8951ad798185c8989a1271b4d0c1eb34ca0a6cfcf048f9c604eee3efa",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          1152,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        256,
+        178
+      ],
+      "pasteXY": [
+        0,
+        7
+      ],
+      "scale": 0.2222222222222222,
+      "sha256": "ebc119160851f6fbf0a05256eed9fef4d9b0a84a78e7cf0799eb7d3a94d2c758",
+      "alphaBounds": [
+        0,
+        7,
+        256,
+        185
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 60767
+    },
+    {
+      "shopRecordIndex": 97,
+      "itemIndex": 9,
+      "cageDefinitionIndex": 9,
+      "moduleId": "championship:2026:cage:9",
+      "catalogDisplayName": "Cage 9",
+      "fieldId": "field_cm10_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-097_item-09_field_cm10_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm10_01/frame-00.png",
+        "sha256": "2d23e700fea7ce5b6a625f7242534766d57b87adbe1513c334df046e1012410f",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          1152,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        256,
+        178
+      ],
+      "pasteXY": [
+        0,
+        7
+      ],
+      "scale": 0.2222222222222222,
+      "sha256": "7b2a16b9e95255ec71468233e4d858b7319265d7c1738c328e7eb329fed3b5fa",
+      "alphaBounds": [
+        0,
+        7,
+        256,
+        185
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 58338
+    },
+    {
+      "shopRecordIndex": 98,
+      "itemIndex": 10,
+      "cageDefinitionIndex": 10,
+      "moduleId": "championship:2026:cage:10",
+      "catalogDisplayName": "Cage 10",
+      "fieldId": "field_cm11_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-098_item-10_field_cm11_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm11_01/frame-00.png",
+        "sha256": "fc656ebb601d627c3bdb66fd245d0f2450a97a7b5a4b7be54ba70b69cc352790",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "fed9e25fe4051853d01c301fa5707b70a56019c49fc962ef31ac8657878c3add",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 56903
+    },
+    {
+      "shopRecordIndex": 99,
+      "itemIndex": 11,
+      "cageDefinitionIndex": 11,
+      "moduleId": "championship:2026:cage:11",
+      "catalogDisplayName": "Cage 11",
+      "fieldId": "field_cm12_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-099_item-11_field_cm12_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm12_01/frame-00.png",
+        "sha256": "922370efb843c01391406c162cb494c81d2301c4042c4522c85fae6933934050",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "0986dbecb7ee80d70dc60a2544bd336390a54267a166cee0869f2d785535b901",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 63275
+    },
+    {
+      "shopRecordIndex": 107,
+      "itemIndex": 12,
+      "cageDefinitionIndex": 12,
+      "moduleId": "championship:2026:cage:12",
+      "catalogDisplayName": "Cage 12",
+      "fieldId": "field_cm13_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-107_item-12_field_cm13_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm13_01/frame-00.png",
+        "sha256": "c5bebfee9637bd7d52954774621cc7dd3cdcfe9c6100909c061e6038f57f8bbd",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          768,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        184,
+        192
+      ],
+      "pasteXY": [
+        36,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "115fddecc995d13a947128f00ec247495ef7375683b2a189b7d799eb77d8c922",
+      "alphaBounds": [
+        36,
+        0,
+        220,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 32334
+    },
+    {
+      "shopRecordIndex": 103,
+      "itemIndex": 13,
+      "cageDefinitionIndex": 13,
+      "moduleId": "championship:2026:cage:13",
+      "catalogDisplayName": "Cage 13",
+      "fieldId": "field_cm14_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-103_item-13_field_cm14_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm14_01/frame-00.png",
+        "sha256": "c0c76a5ce07247e85cf50766763d027a5ba1005a8fd1fd1bc933111f2a5b55f9",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "35616e22cf30f0aa2a82c3aacbf1222315ac61f3c592eb9a4a223be60239b09a",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 38785
+    },
+    {
+      "shopRecordIndex": 100,
+      "itemIndex": 14,
+      "cageDefinitionIndex": 14,
+      "moduleId": "championship:2026:cage:14",
+      "catalogDisplayName": "Cage 14",
+      "fieldId": "field_cm15_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-100_item-14_field_cm15_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm15_01/frame-00.png",
+        "sha256": "08a147028ad02a80b796fd9aa0fe614425a8a0ca14537b7ddcf4d3ddd84dc19a",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "d6e1823d3786d9945515e0ff9f9cbd4c19d3c604579815e4cf07b29b1077b520",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 47019
+    },
+    {
+      "shopRecordIndex": 112,
+      "itemIndex": 15,
+      "cageDefinitionIndex": 15,
+      "moduleId": "championship:2026:cage:15",
+      "catalogDisplayName": "Cage 15",
+      "fieldId": "field_cm16_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-112_item-15_field_cm16_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm16_01/frame-00.png",
+        "sha256": "5b53067f1838f4bbb08cc42fec0ea67f277192d0615d07656a372df19a262483",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "16712055cd933c3b65e479590f382f67e29eabfed923f11de8239832b8553b82",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 39312
+    },
+    {
+      "shopRecordIndex": 110,
+      "itemIndex": 16,
+      "cageDefinitionIndex": 16,
+      "moduleId": "championship:2026:cage:16",
+      "catalogDisplayName": "Cage 16",
+      "fieldId": "field_cm17_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-110_item-16_field_cm17_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm17_01/frame-00.png",
+        "sha256": "f5b5477a7ac049b70f3f2361e1aca4e5af04028db8bd7a89e8d80e471d1930ec",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          768,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        184,
+        192
+      ],
+      "pasteXY": [
+        36,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "e9356e457f8d02e4009ceefc1e154a24c03bcb7df112302e80493b7a4540f13e",
+      "alphaBounds": [
+        36,
+        0,
+        220,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 39551
+    },
+    {
+      "shopRecordIndex": 102,
+      "itemIndex": 17,
+      "cageDefinitionIndex": 17,
+      "moduleId": "championship:2026:cage:17",
+      "catalogDisplayName": "Cage 17",
+      "fieldId": "field_cm18_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-102_item-17_field_cm18_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm18_01/frame-00.png",
+        "sha256": "fb95c85df387565ed06016a996521c243ff33039b356b1ed2db20335f61dbccf",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          576,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        138,
+        192
+      ],
+      "pasteXY": [
+        59,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "3b5c2d85aa959bd3f2e14901d368dc25d01ba3acd7436bcbb97b6b4ba0032be2",
+      "alphaBounds": [
+        59,
+        0,
+        197,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 41233
+    },
+    {
+      "shopRecordIndex": 114,
+      "itemIndex": 18,
+      "cageDefinitionIndex": 18,
+      "moduleId": "championship:2026:cage:18",
+      "catalogDisplayName": "Cage 18",
+      "fieldId": "field_cm19_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-114_item-18_field_cm19_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm19_01/frame-00.png",
+        "sha256": "16e9b1cb5869d5bc4231b0ee9bbff1fa109abc1e99f3b75ee2891e73611f6433",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          1536,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        256,
+        75
+      ],
+      "pasteXY": [
+        0,
+        58
+      ],
+      "scale": 0.16666666666666666,
+      "sha256": "cc0e48209608d52eb02e71707a9c7f9483b0924c2be7220d71d583e7f7f1a540",
+      "alphaBounds": [
+        0,
+        58,
+        256,
+        133
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 41111
+    },
+    {
+      "shopRecordIndex": 104,
+      "itemIndex": 19,
+      "cageDefinitionIndex": 19,
+      "moduleId": "championship:2026:cage:19",
+      "catalogDisplayName": "Cage 19",
+      "fieldId": "field_cm20_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-104_item-19_field_cm20_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm20_01/frame-00.png",
+        "sha256": "297781a4b6867c18ed35e0f9d05471ca214856e3e8f2cb8eb92744a89133db83",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "d866f69a222acb6097ca6dcf8fff68a07c3ae31733a703c9a3bbd15c1a491fdd",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 47215
+    },
+    {
+      "shopRecordIndex": 105,
+      "itemIndex": 20,
+      "cageDefinitionIndex": 20,
+      "moduleId": "championship:2026:cage:20",
+      "catalogDisplayName": "Cage 20",
+      "fieldId": "field_cm21_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-105_item-20_field_cm21_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm21_01/frame-00.png",
+        "sha256": "99620574314a6de9ae58373fa8056282b3f6e29367a42ae9f587629a6d4479d3",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "d56322b4b78742d0e04cc5acf193dcbb369c628b51efc78a786edf787d24631e",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 59516
+    },
+    {
+      "shopRecordIndex": 106,
+      "itemIndex": 21,
+      "cageDefinitionIndex": 21,
+      "moduleId": "championship:2026:cage:21",
+      "catalogDisplayName": "Cage 21",
+      "fieldId": "field_cm22_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-106_item-21_field_cm22_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm22_01/frame-00.png",
+        "sha256": "c2eb8f83a17da8464d8085b3bc9e1942cc4ff9919d09c6f8003b87a23fb7d6b0",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          768,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        184,
+        192
+      ],
+      "pasteXY": [
+        36,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "e9327875fdd4f94cb2c0471d47224dd7c1319f3596e2612b40a155613fe15d14",
+      "alphaBounds": [
+        36,
+        0,
+        220,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 47780
+    },
+    {
+      "shopRecordIndex": 111,
+      "itemIndex": 22,
+      "cageDefinitionIndex": 22,
+      "moduleId": "championship:2026:cage:22",
+      "catalogDisplayName": "Cage 22",
+      "fieldId": "field_cm23_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-111_item-22_field_cm23_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm23_01/frame-00.png",
+        "sha256": "4e8dcb8b0bf3299c9260d8cc6367304890f08dae8cd267d4957d8da7a3d35fbf",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          576,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        138,
+        192
+      ],
+      "pasteXY": [
+        59,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "dbc7ab688fe4abb893d1e860aef1a6d35af1ae732a5a70115dca8017776ec192",
+      "alphaBounds": [
+        59,
+        0,
+        197,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 33452
+    },
+    {
+      "shopRecordIndex": 90,
+      "itemIndex": 23,
+      "cageDefinitionIndex": 23,
+      "moduleId": "championship:2026:cage:23",
+      "catalogDisplayName": "Cage 23",
+      "fieldId": "field_cm24_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-090_item-23_field_cm24_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cm24_shrine_rearrangement_20261008/frame-00.png",
+        "sha256": "2cbde017df3e1f53ac23eeec0630834ef487686f52688ba422addb9c92237c1b",
+        "disposition": "CM24_SHRINE_REARRANGEMENT_R1_20261008",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "434bb61c87353cd5528d017ca28515d3922846afc0ae9b099682c5438d26a113",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 48143
+    },
+    {
+      "shopRecordIndex": 115,
+      "itemIndex": 24,
+      "cageDefinitionIndex": 24,
+      "moduleId": "championship:2026:cage:24",
+      "catalogDisplayName": "Cage 24",
+      "fieldId": "field_cm25_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-115_item-24_field_cm25_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm25_01/frame-00.png",
+        "sha256": "06d31dd97a0075f6ab611932e731cd2df9f67270b15b56c9f474150f2fd33c3e",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          768,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        256,
+        149
+      ],
+      "pasteXY": [
+        0,
+        21
+      ],
+      "scale": 0.3333333333333333,
+      "sha256": "a9b0297f68687cc3f550b981319d485731adbb61c86374e43a7d7e7d0b31b461",
+      "alphaBounds": [
+        0,
+        21,
+        256,
+        170
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 65911
+    },
+    {
+      "shopRecordIndex": 116,
+      "itemIndex": 25,
+      "cageDefinitionIndex": 25,
+      "moduleId": "championship:2026:cage:25",
+      "catalogDisplayName": "Cage 25",
+      "fieldId": "field_cm26_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-116_item-25_field_cm26_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm26_01/frame-00.png",
+        "sha256": "fea91e817ee895ec4f650b9b4ac82667bd473c91b60daa2aac20b4e90f925d40",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          960,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        230,
+        192
+      ],
+      "pasteXY": [
+        13,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "dc3f41397d59daa78dbee7c1cdb58c4b2d46cb7c009900ac62461e7f3f53909e",
+      "alphaBounds": [
+        13,
+        0,
+        243,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 51701
+    },
+    {
+      "shopRecordIndex": 117,
+      "itemIndex": 26,
+      "cageDefinitionIndex": 26,
+      "moduleId": "championship:2026:cage:26",
+      "catalogDisplayName": "Cage 26",
+      "fieldId": "field_cm27_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-117_item-26_field_cm27_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm27_01/frame-00.png",
+        "sha256": "4eb8bd67c500c66191f1f00af00bfb113a7ca473ea03e849f864b2450d063aef",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          768,
+          800
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        184,
+        192
+      ],
+      "pasteXY": [
+        36,
+        0
+      ],
+      "scale": 0.24,
+      "sha256": "f1ec2918de50e9183a838b8608c3530130a538f4b94b98071da972c9566fd485",
+      "alphaBounds": [
+        36,
+        0,
+        220,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 50457
+    },
+    {
+      "shopRecordIndex": 84,
+      "itemIndex": 27,
+      "cageDefinitionIndex": 27,
+      "moduleId": "championship:2026:cage:27",
+      "catalogDisplayName": "Cage 27",
+      "fieldId": "field_cm30_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-084_item-27_field_cm30_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm30_01/frame-00.png",
+        "sha256": "bd3c8aae7cb47e7909465604e1e2ee87e3250e43fa09a7dd9587747fae998a17",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "681cfdd027d2121301d413b5ffaea14e871743a227ff8fd95aaef2f07062d95c",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 41032
+    },
+    {
+      "shopRecordIndex": 113,
+      "itemIndex": 28,
+      "cageDefinitionIndex": 28,
+      "moduleId": "championship:2026:cage:28",
+      "catalogDisplayName": "Cage 28",
+      "fieldId": "field_cm31_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-113_item-28_field_cm31_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm31_01/frame-00.png",
+        "sha256": "22e202655fb76fe4600cb8b8824cb80913ba54da8c942c0eea1171fad7f63d1b",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          768,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        256,
+        149
+      ],
+      "pasteXY": [
+        0,
+        21
+      ],
+      "scale": 0.3333333333333333,
+      "sha256": "20f15937f6309973c13dec1357b885973822fd44c948ab6640377cba1c18946f",
+      "alphaBounds": [
+        0,
+        21,
+        256,
+        170
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 43193
+    },
+    {
+      "shopRecordIndex": 101,
+      "itemIndex": 29,
+      "cageDefinitionIndex": 29,
+      "moduleId": "championship:2026:cage:29",
+      "catalogDisplayName": "Cage 29",
+      "fieldId": "field_cm32_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-101_item-29_field_cm32_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm32_01/frame-00.png",
+        "sha256": "ffdd7ca9e97546a03ecac5edb056d2481946bd4841fa36cbaae88af70ad7e275",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "7b47ed7a29ea742f9050d4178161abf33ecc254c8aa2fc7cc36fb53dbaee7998",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 52856
+    },
+    {
+      "shopRecordIndex": 88,
+      "itemIndex": 30,
+      "cageDefinitionIndex": 30,
+      "moduleId": "championship:2026:cage:30",
+      "catalogDisplayName": "Cage 30",
+      "fieldId": "field_cm34_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-088_item-30_field_cm34_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm34_01/frame-00.png",
+        "sha256": "ba9c1d19646457d46123c28a830b23531350cd8cb8a6bdf1050a805f67dce615",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "33624555e29dba3de7e7465f196af262d7955fe4de4c118439e048f650f71361",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 52937
+    },
+    {
+      "shopRecordIndex": 92,
+      "itemIndex": 31,
+      "cageDefinitionIndex": 31,
+      "moduleId": "championship:2026:cage:31",
+      "catalogDisplayName": "Cage 31",
+      "fieldId": "field_cm35_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-092_item-31_field_cm35_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm35_01/frame-00.png",
+        "sha256": "01455962ec117ff2ce02c6a2970ab68ebb374829878327022a5e8a461c7c5679",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "6b748eb06d4d2f5aff54d1318972c4e395fd668583f17b335091dcc15107b8b5",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 58672
+    },
+    {
+      "shopRecordIndex": 96,
+      "itemIndex": 32,
+      "cageDefinitionIndex": 32,
+      "moduleId": "championship:2026:cage:32",
+      "catalogDisplayName": "Cage 32",
+      "fieldId": "field_cm37_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-096_item-32_field_cm37_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm37_01/frame-00.png",
+        "sha256": "a9eb2707f1763862cf77e4561783c262fece3038d897d90f3eb3d749dba276a7",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "14bfb8f7a145e0d95df412fa71e9d4fcadc89469a28bc2b4bf76fb7f50fa0794",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 50666
+    },
+    {
+      "shopRecordIndex": 94,
+      "itemIndex": 33,
+      "cageDefinitionIndex": 33,
+      "moduleId": "championship:2026:cage:33",
+      "catalogDisplayName": "Cage 33",
+      "fieldId": "field_cm39_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-094_item-33_field_cm39_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm39_01/frame-00.png",
+        "sha256": "a53f6461ea5cffe252e625b287a0a73d2ca66410f0e6ad72fce9e98d0c19e607",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "c45e010b234430aad7053a36f24f35b4e7a6235090b85ab3fc71a12d0e58f670",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 62337
+    },
+    {
+      "shopRecordIndex": 108,
+      "itemIndex": 34,
+      "cageDefinitionIndex": 34,
+      "moduleId": "championship:2026:cage:34",
+      "catalogDisplayName": "Cage 34",
+      "fieldId": "field_cm40_01",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-108_item-34_field_cm40_01.png",
+      "width": 256,
+      "height": 192,
+      "legacyCanvas": [
+        64,
+        48
+      ],
+      "logicalOrigin": [
+        32,
+        23
+      ],
+      "rasterOrigin": [
+        128,
+        92
+      ],
+      "density": 4,
+      "source": {
+        "path": "/workspace/scratch/44db6e123fa7/cage_refinement_20261008/delivery/CAGE36_REVIEWED_COLOR_AND_MASTERS/fields/field_cm40_01/frame-00.png",
+        "sha256": "2fde4224175231bd6c57dc4896c41efec72491ddb50e6f603a2787f0fc512274",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "canvas": [
+          384,
+          448
+        ]
+      },
+      "sourceFrame": 0,
+      "sourceCrop": null,
+      "resizedFullFrame": [
+        165,
+        192
+      ],
+      "pasteXY": [
+        45,
+        0
+      ],
+      "scale": 0.42857142857142855,
+      "sha256": "761abd50299c1ccf4000d912a8afa1b7cfef3dad2e1715c46396073a7fd97143",
+      "alphaBounds": [
+        45,
+        0,
+        210,
+        192
+      ],
+      "alphaPreserved": true,
+      "category": "CAGES",
+      "subcategory": "CAGE",
+      "bytes": 46308
+    }
+  ]
+}

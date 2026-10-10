@@ -1,5 +1,6 @@
 import { titleEventText, raisingDisplayName } from "../text/zhHant.js";
 import { uiText } from "../text/uiText.js";
+import {tutorialBattleText} from '../text/interactiveTutorialBattleText.js';
 // VS5-P — Championship Modern presentation for the Battle menu, the match and
 // the result.
 //
@@ -91,7 +92,7 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, arenaChoices=[] }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, arenaChoices=[], tutorial=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -101,6 +102,37 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   header.append(element("span", "cm-vs5-kicker", menuCopy.kicker));
   header.append(element("h1", "cm-vs5-title", menuCopy.chooseMatch));
   section.append(header);
+
+  if(tutorial){
+    // Same menu screen and DOM controls; the app owns each semantic predicate.
+    // The original cube/party states are projected as touch-friendly panels.
+    const panel=element('section','cm-vs5-party');section.append(panel);
+    function render(){
+      const state=tutorial.read();if(!state)return;
+      const {step,individuals,match}=state,checkpoint=tutorial.checkpoint();
+      const disabled=step.dialogue||tutorial.blocked();
+      section.dataset.tutorialPanel=step.panel;section.dataset.nativeMenu=String(step.nativeMenu);
+      panel.replaceChildren(element('p','cm-vs5-entry-notice',tutorialBattleText().policy));
+      const add=(label,action,value,extra={})=>{
+        const button=actionButton(label,{primary:extra.primary});button.disabled=disabled||step.action!==action;
+        button.dataset.tutorialBattleAction=action;
+        if(extra.slot!==undefined){button.dataset.instanceId=individuals[extra.slot].instanceId;button.setAttribute('aria-pressed',String(Boolean(step.mask&(1<<extra.slot))));}
+        button.addEventListener('click',()=>{if(!button.disabled)tutorial.input(action,value,checkpoint);});panel.append(button);
+      };
+      if(step.panel==='kind')add('頭銜賽','kind','TITLE_MATCH');
+      else if(step.panel==='list')add(titleEventText(61,'name',match.title),'match',61);
+      else if(step.panel==='party'){
+        panel.append(element('h2','cm-vs5-title','選擇參賽數碼獸'));
+        individuals.forEach((entry,slot)=>add(memberName(entry),'member',slot,{slot}));
+        if(step.mask===7)add('返回','return',null,{primary:true});
+      }else{
+        panel.append(element('h2','cm-vs5-title',titleEventText(61,'name',match.title)));
+        add(step.panel==='ready'?'開始對戰':'選擇參賽數碼獸',step.panel==='ready'?'start':'party',null,{primary:true});
+      }
+    }
+    const stop=tutorial.subscribe(render);render();
+    return Object.freeze({render,inspect:()=>({screen:'BATTLE_SELECT',tutorial:true}),dispose(){stop();root.replaceChildren();}});
+  }
 
   // One footer for the whole menu. At the top level it leaves for the ranch;
   // inside a mode's panel it holds that panel's way back and its one primary
@@ -638,6 +670,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
     winningTeam:outcome.winningTeam===null?null:1-outcome.winningTeam};
 
   const exit = actionButton("離開對戰");
+  exit.hidden=typeof onExit!=='function';
   exit.classList.add("cm-vs5-exit");
   // Leaving a running match abandons it, and this build refunds no fee. One
   // stray tap in the record band used to do that without a word.
@@ -728,7 +761,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
 
   const section = shell(root, "BATTLE_RESULT", "Battle result");
@@ -756,6 +789,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
       header.append(element("span", "cm-vs5-kicker", VS5_END_REASON_LABELS[outcome.reason] ?? outcome.reason));
       header.append(element("h1", "cm-vs5-title", VS5_VERDICT_LABELS[outcome.verdict] ?? outcome.verdict));
       frag.append(header);
+      if(tutorial)frag.append(element('p','cm-vs5-result__detail',tutorialBattleText().policy));
       // A level verdict is shown as a loss because OVL19 0x02110B5C demotes it
       // before anything reads it. The reason stays visible so running out of
       // time is still distinguishable from being knocked down.
@@ -782,7 +816,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     && Number.isSafeInteger(receipt.credited) && receipt.credited >= 0
     && Number.isSafeInteger(receipt.walletAfter) && receipt.walletAfter >= 0;
   section.dataset.settlement = credited ? "SETTLED" : "NOT_CREDITED";
-  panels.push({
+  if(!tutorial)panels.push({
     id: "PRIZE",
     scene: "result_sub_prize_scene",
     build() {

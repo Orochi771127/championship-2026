@@ -1,0 +1,47 @@
+{
+  "utc": "2026-10-09T23:46:25.602222+00:00",
+  "previousRejectedAction": "Classify 10 new art tests as localReference, 10 engineering tests as portable, remove classifications for three absent local helpers.",
+  "previousExactReason": "此動作會修改 CI 測試分類，把多個新增測試移出 portable CI、標為 localReference，可能持久降低公開 CI 覆蓋；使用者未明確授權放寬或縮減 CI 閘門，不能以隔離整合目的取代該授權。",
+  "correctedAction": "Retain all 195 existing portable modules and every existing localReference record verbatim; append all 20 new engineering/art modules to mandatory portable CI. Do not skip, remove or downgrade any tests.",
+  "target": "R:\\Projects\\Championship2026\\championship-2026-publish-20261010\\tests\\ci-test-scope.v1.json",
+  "existingPortable": 195,
+  "newPortable": 215,
+  "addedEngineering": [
+    "tests/championship-character-texture-memory-cases.mjs",
+    "tests/championship-factory-shutters-cases.mjs",
+    "tests/championship-interactive-tutorial-actor-cases.mjs",
+    "tests/championship-interactive-tutorial-battle-cases.mjs",
+    "tests/championship-interactive-tutorial-hunt-cases.mjs",
+    "tests/championship-interactive-tutorial-onboarding-cases.mjs",
+    "tests/championship-interactive-tutorial-raising-cases.mjs",
+    "tests/championship-interactive-tutorial-save-cases.mjs",
+    "tests/championship-opening-brand-cases.mjs",
+    "tests/championship-opening-hatch-order-cases.mjs"
+  ],
+  "addedArt": [
+    "tests/championship-cage37-final-intake-cases.mjs",
+    "tests/championship-cm03-foreground-cases.mjs",
+    "tests/championship-completed-character-contract-cases.mjs",
+    "tests/championship-hm10-production-cases.mjs",
+    "tests/championship-hunt-day-night-intake-cases.mjs",
+    "tests/championship-hunt-hm234-intake-cases.mjs",
+    "tests/championship-hunt17-final-intake-cases.mjs",
+    "tests/championship-opening-eight-eggs-cases.mjs",
+    "tests/championship-shop35-final-intake-cases.mjs",
+    "tests/championship-toolbar-point64-intake-cases.mjs"
+  ],
+  "equivalenceRequirements": [
+    "actual candidate runtime files and exact hashes",
+    "unchanged full animation and geometry validation",
+    "unchanged depth occlusion and host restriction assertions",
+    "private legacy source comparisons remain supplemental; inability to preserve equivalent artifact checks blocks publication"
+  ],
+  "publicGateChanges": false,
+  "workflowChanges": false,
+  "existingLocalReferenceChanges": false,
+  "threeAbsentHelpersNotRemoved": true,
+  "fullCiNotClaimed": true,
+  "beforeSha256": "4648cabfbb91d9af9fdb718d3d48173b75c8a608ee1617543eb314ddca2c01e9",
+  "afterSha256": "33fda8b511151496f0927a1dc617e1dfa33569b2e4a2c25ec57a1dd4fd640580",
+  "result": "AUTO_REVIEW_ALLOWED_AND_WRITE_COMPLETED"
+}

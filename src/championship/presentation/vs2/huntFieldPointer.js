@@ -33,7 +33,8 @@ export function createHuntFieldPointer({ getView, intents }) {
       return true;
     },
     cancel(event) {
-      if (event && !matches(event)) return false;
+      // A layout/visibility event owns no automatic tutorial gesture.
+      if (!pointer || event && !matches(event)) return false;
       pointer = null;
       intents.abortEnclosureStroke();
       return true;

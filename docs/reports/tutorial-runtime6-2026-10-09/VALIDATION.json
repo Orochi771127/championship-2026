@@ -1,0 +1,1035 @@
+{
+  "status": "PASS_LOCAL_NORMAL_ONBOARDING_BOUNDED",
+  "date": "2026-10-09",
+  "scope": {
+    "normalNewgameEligible": true,
+    "hosts": [
+      "localhost",
+      "127.0.0.1",
+      "[::1]"
+    ],
+    "publicRelease": false,
+    "url": "http://127.0.0.1:8766/championship.html",
+    "query": ""
+  },
+  "previewPrerequisite": {
+    "newFullFlows": [
+      {
+        "locale": "en",
+        "status": "PASS"
+      },
+      {
+        "locale": "ja",
+        "status": "PASS"
+      },
+      {
+        "locale": "th",
+        "status": "PASS"
+      },
+      {
+        "locale": "vi",
+        "status": "PASS"
+      }
+    ],
+    "reusedZhHant": "docs/reports/tutorial-runtime5-2026-10-09/VALIDATION.json",
+    "beforeActivation": true
+  },
+  "node": {
+    "uniqueTests": 352,
+    "pass": 352,
+    "fail": 0,
+    "files": 48,
+    "counting": "One deduplicated final node --test invocation. Earlier slices, earlier runs and the separate two-test run are not added.",
+    "command": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\UNIQUE_TEST_COMMAND.json",
+    "receipt": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\FOCUSED_FINAL.txt"
+  },
+  "normalFullFlows": [
+    {
+      "locale": "zh-Hant",
+      "completedReloadNoReplay": true,
+      "status": "PASS",
+      "huntResult": {
+        "reloaded": true,
+        "retried": true,
+        "negative": true
+      },
+      "battleResult": {
+        "reloaded": true,
+        "resultReload": true,
+        "startRetry": true,
+        "endRetry": true,
+        "completedRetry": true,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "normalEligibility": true,
+      "normalUrl": true,
+      "invitationReload": true,
+      "invitationSaveRetry": true,
+      "cleanReload": true,
+      "saveRetry": true,
+      "wrongDrop": false,
+      "errors": [],
+      "finalSourceAfterIdlePointerFix": true,
+      "evidenceDirectory": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\final-a",
+      "raisingTraceSteps": 57,
+      "huntTraceSteps": 46,
+      "battleTraceSteps": 23
+    },
+    {
+      "locale": "en",
+      "completedReloadNoReplay": true,
+      "status": "PASS",
+      "huntResult": {
+        "reloaded": true,
+        "retried": true,
+        "negative": true
+      },
+      "battleResult": {
+        "reloaded": true,
+        "resultReload": true,
+        "startRetry": true,
+        "endRetry": true,
+        "completedRetry": true,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "normalEligibility": true,
+      "normalUrl": true,
+      "invitationReload": true,
+      "invitationSaveRetry": true,
+      "cleanReload": true,
+      "saveRetry": false,
+      "wrongDrop": true,
+      "errors": [],
+      "finalSourceAfterIdlePointerFix": true,
+      "evidenceDirectory": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\final-a",
+      "raisingTraceSteps": 57,
+      "huntTraceSteps": 46,
+      "battleTraceSteps": 23
+    },
+    {
+      "locale": "ja",
+      "completedReloadNoReplay": true,
+      "status": "PASS",
+      "huntResult": {
+        "reloaded": true,
+        "retried": true,
+        "negative": true
+      },
+      "battleResult": {
+        "reloaded": true,
+        "resultReload": true,
+        "startRetry": true,
+        "endRetry": true,
+        "completedRetry": true,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "normalEligibility": true,
+      "normalUrl": true,
+      "invitationReload": true,
+      "invitationSaveRetry": true,
+      "cleanReload": true,
+      "saveRetry": false,
+      "wrongDrop": false,
+      "errors": [],
+      "finalSourceAfterIdlePointerFix": true,
+      "evidenceDirectory": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\final-b",
+      "raisingTraceSteps": 57,
+      "huntTraceSteps": 46,
+      "battleTraceSteps": 23
+    },
+    {
+      "locale": "th",
+      "completedReloadNoReplay": true,
+      "status": "PASS",
+      "huntResult": {
+        "reloaded": true,
+        "retried": true,
+        "negative": true
+      },
+      "battleResult": {
+        "reloaded": true,
+        "resultReload": true,
+        "startRetry": true,
+        "endRetry": true,
+        "completedRetry": true,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "normalEligibility": true,
+      "normalUrl": true,
+      "invitationReload": true,
+      "invitationSaveRetry": true,
+      "cleanReload": true,
+      "saveRetry": false,
+      "wrongDrop": false,
+      "errors": [],
+      "finalSourceAfterIdlePointerFix": true,
+      "evidenceDirectory": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\final-b",
+      "raisingTraceSteps": 57,
+      "huntTraceSteps": 46,
+      "battleTraceSteps": 23
+    },
+    {
+      "locale": "vi",
+      "completedReloadNoReplay": true,
+      "status": "PASS",
+      "huntResult": {
+        "reloaded": true,
+        "retried": true,
+        "negative": true
+      },
+      "battleResult": {
+        "reloaded": true,
+        "resultReload": true,
+        "startRetry": true,
+        "endRetry": true,
+        "completedRetry": true,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "normalEligibility": true,
+      "normalUrl": true,
+      "invitationReload": true,
+      "invitationSaveRetry": true,
+      "cleanReload": true,
+      "saveRetry": false,
+      "wrongDrop": false,
+      "errors": [],
+      "finalSourceAfterIdlePointerFix": true,
+      "evidenceDirectory": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\final-b",
+      "raisingTraceSteps": 57,
+      "huntTraceSteps": 46,
+      "battleTraceSteps": 23
+    }
+  ],
+  "normalBranchCases": [
+    {
+      "locale": "zh-Hant",
+      "case": "skip",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "zh-Hant",
+      "case": "exit",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "zh-Hant",
+      "case": "legacy-v1-no-cursor",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "zh-Hant",
+      "case": "legacy-v1-cursor0",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "en",
+      "case": "skip",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "en",
+      "case": "exit",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "en",
+      "case": "legacy-v1-no-cursor",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "en",
+      "case": "legacy-v1-cursor0",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "ja",
+      "case": "skip",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "ja",
+      "case": "exit",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "ja",
+      "case": "legacy-v1-no-cursor",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "ja",
+      "case": "legacy-v1-cursor0",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "th",
+      "case": "skip",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "th",
+      "case": "exit",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "th",
+      "case": "legacy-v1-no-cursor",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "th",
+      "case": "legacy-v1-cursor0",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "vi",
+      "case": "skip",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "vi",
+      "case": "exit",
+      "status": "PASS",
+      "realOpening": true,
+      "saveFailureRetry": true,
+      "baselineUnchanged": true,
+      "reloadNoReplay": true,
+      "errors": []
+    },
+    {
+      "locale": "vi",
+      "case": "legacy-v1-no-cursor",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    },
+    {
+      "locale": "vi",
+      "case": "legacy-v1-cursor0",
+      "status": "PASS",
+      "fixture": true,
+      "openingUnchanged": true,
+      "noInjection": true,
+      "errors": []
+    }
+  ],
+  "layoutCases": [
+    {
+      "locale": "zh-Hant",
+      "status": "PASS",
+      "realOpening": true,
+      "measurements": [
+        {
+          "viewport": {
+            "width": 360,
+            "height": 800
+          },
+          "hud": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 48,
+            "top": 0,
+            "bottom": 48
+          },
+          "guide": {
+            "x": 0,
+            "y": 48,
+            "width": 360,
+            "height": 61,
+            "top": 48,
+            "bottom": 109
+          },
+          "root": {
+            "x": 0,
+            "y": 109,
+            "width": 360,
+            "height": 617,
+            "top": 109,
+            "bottom": 726
+          },
+          "overflow": false,
+          "guideLayoutHeight": 61,
+          "guideCssHeight": "61px",
+          "buttons": [
+            {
+              "text": "繼續",
+              "height": 44
+            },
+            {
+              "text": "結束教學",
+              "height": 44
+            },
+            {
+              "text": "結束教學",
+              "height": 48
+            },
+            {
+              "text": "繼續",
+              "height": 48
+            }
+          ],
+          "copy": "新手教學\n\n在育成畫面裡，可以照顧你的夥伴。\n\n結束教學\n繼續"
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "hud": {
+            "x": 437.5,
+            "y": 0.002685546875,
+            "width": 405,
+            "height": 49.846153259277344,
+            "top": 0.002685546875,
+            "bottom": 49.848838806152344
+          },
+          "guide": {
+            "x": 437.5,
+            "y": 49.848838806152344,
+            "width": 405,
+            "height": 63.346160888671875,
+            "top": 49.848838806152344,
+            "bottom": 113.19499969482422
+          },
+          "root": {
+            "x": 437.5,
+            "y": 113.19499969482422,
+            "width": 405,
+            "height": 529.9561157226562,
+            "top": 113.19499969482422,
+            "bottom": 643.1511154174805
+          },
+          "overflow": false,
+          "guideLayoutHeight": 61,
+          "guideCssHeight": "61px",
+          "buttons": [
+            {
+              "text": "繼續",
+              "height": 44
+            },
+            {
+              "text": "結束教學",
+              "height": 44
+            },
+            {
+              "text": "結束教學",
+              "height": 48
+            },
+            {
+              "text": "繼續",
+              "height": 48
+            }
+          ],
+          "copy": "新手教學\n\n在育成畫面裡，可以照顧你的夥伴。\n\n結束教學\n繼續"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "locale": "en",
+      "status": "PASS",
+      "realOpening": true,
+      "measurements": [
+        {
+          "viewport": {
+            "width": 360,
+            "height": 800
+          },
+          "hud": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 73,
+            "top": 0,
+            "bottom": 73
+          },
+          "guide": {
+            "x": 0,
+            "y": 73,
+            "width": 360,
+            "height": 71.5625,
+            "top": 73,
+            "bottom": 144.5625
+          },
+          "root": {
+            "x": 0,
+            "y": 145,
+            "width": 360,
+            "height": 582,
+            "top": 145,
+            "bottom": 727
+          },
+          "overflow": false,
+          "guideLayoutHeight": 72,
+          "guideCssHeight": "72px",
+          "buttons": [
+            {
+              "text": "Continue",
+              "height": 44
+            },
+            {
+              "text": "End tutorial",
+              "height": 44
+            },
+            {
+              "text": "End tutorial",
+              "height": 48
+            },
+            {
+              "text": "Continue",
+              "height": 48
+            }
+          ],
+          "copy": "Getting started\n\nOn the raising screen, you can look after your partner.\n\nEnd tutorial\nContinue"
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "hud": {
+            "x": 437.5,
+            "y": 0.002685546875,
+            "width": 405,
+            "height": 49.846153259277344,
+            "top": 0.002685546875,
+            "bottom": 49.848838806152344
+          },
+          "guide": {
+            "x": 437.5,
+            "y": 49.848838806152344,
+            "width": 405,
+            "height": 74.31491088867188,
+            "top": 49.848838806152344,
+            "bottom": 124.16374969482422
+          },
+          "root": {
+            "x": 437.5,
+            "y": 124.61807250976562,
+            "width": 405,
+            "height": 519.571533203125,
+            "top": 124.61807250976562,
+            "bottom": 644.1896057128906
+          },
+          "overflow": false,
+          "guideLayoutHeight": 72,
+          "guideCssHeight": "72px",
+          "buttons": [
+            {
+              "text": "Continue",
+              "height": 44
+            },
+            {
+              "text": "End tutorial",
+              "height": 44
+            },
+            {
+              "text": "End tutorial",
+              "height": 48
+            },
+            {
+              "text": "Continue",
+              "height": 48
+            }
+          ],
+          "copy": "Getting started\n\nOn the raising screen, you can look after your partner.\n\nEnd tutorial\nContinue"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "locale": "ja",
+      "status": "PASS",
+      "realOpening": true,
+      "measurements": [
+        {
+          "viewport": {
+            "width": 360,
+            "height": 800
+          },
+          "hud": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 73,
+            "top": 0,
+            "bottom": 73
+          },
+          "guide": {
+            "x": 0,
+            "y": 73,
+            "width": 360,
+            "height": 89.75,
+            "top": 73,
+            "bottom": 162.75
+          },
+          "root": {
+            "x": 0,
+            "y": 163,
+            "width": 360,
+            "height": 549,
+            "top": 163,
+            "bottom": 712
+          },
+          "overflow": false,
+          "guideLayoutHeight": 90,
+          "guideCssHeight": "90px",
+          "buttons": [
+            {
+              "text": "続ける",
+              "height": 44
+            },
+            {
+              "text": "チュートリアルを終了",
+              "height": 54
+            },
+            {
+              "text": "チュートリアルを終了",
+              "height": 48
+            },
+            {
+              "text": "続ける",
+              "height": 48
+            }
+          ],
+          "copy": "はじめての遊び方\n\n育成画面では、パートナーのお世話をすることができます。\n\nチュートリアルを終了\n続ける"
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "hud": {
+            "x": 437.5,
+            "y": 0.002685546875,
+            "width": 405,
+            "height": 75.80769348144531,
+            "top": 0.002685546875,
+            "bottom": 75.81037902832031
+          },
+          "guide": {
+            "x": 437.5,
+            "y": 75.81037902832031,
+            "width": 405,
+            "height": 93.20191955566406,
+            "top": 75.81037902832031,
+            "bottom": 169.01229858398438
+          },
+          "root": {
+            "x": 437.5,
+            "y": 169.2719268798828,
+            "width": 405,
+            "height": 459.34075927734375,
+            "top": 169.2719268798828,
+            "bottom": 628.6126861572266
+          },
+          "overflow": false,
+          "guideLayoutHeight": 90,
+          "guideCssHeight": "90px",
+          "buttons": [
+            {
+              "text": "続ける",
+              "height": 44
+            },
+            {
+              "text": "チュートリアルを終了",
+              "height": 44
+            },
+            {
+              "text": "チュートリアルを終了",
+              "height": 48
+            },
+            {
+              "text": "続ける",
+              "height": 48
+            }
+          ],
+          "copy": "はじめての遊び方\n\n育成画面では、パートナーのお世話をすることができます。\n\nチュートリアルを終了\n続ける"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "locale": "th",
+      "status": "PASS",
+      "realOpening": true,
+      "measurements": [
+        {
+          "viewport": {
+            "width": 360,
+            "height": 800
+          },
+          "hud": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 73,
+            "top": 0,
+            "bottom": 73
+          },
+          "guide": {
+            "x": 0,
+            "y": 73,
+            "width": 360,
+            "height": 61,
+            "top": 73,
+            "bottom": 134
+          },
+          "root": {
+            "x": 0,
+            "y": 134,
+            "width": 360,
+            "height": 593,
+            "top": 134,
+            "bottom": 727
+          },
+          "overflow": false,
+          "guideLayoutHeight": 61,
+          "guideCssHeight": "61px",
+          "buttons": [
+            {
+              "text": "ต่อไป",
+              "height": 44
+            },
+            {
+              "text": "จบบทสอน",
+              "height": 44
+            },
+            {
+              "text": "จบบทสอน",
+              "height": 48
+            },
+            {
+              "text": "ต่อไป",
+              "height": 48
+            }
+          ],
+          "copy": "เริ่มเล่น\n\nในหน้าจอการดูแล คุณสามารถดูแลพาร์ตเนอร์ของคุณได้\n\nจบบทสอน\nต่อไป"
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "hud": {
+            "x": 437.5,
+            "y": 0.002685546875,
+            "width": 405,
+            "height": 75.80769348144531,
+            "top": 0.002685546875,
+            "bottom": 75.81037902832031
+          },
+          "guide": {
+            "x": 437.5,
+            "y": 75.81037902832031,
+            "width": 405,
+            "height": 63.346160888671875,
+            "top": 75.81037902832031,
+            "bottom": 139.1565399169922
+          },
+          "root": {
+            "x": 437.5,
+            "y": 139.1565399169922,
+            "width": 405,
+            "height": 505.03302001953125,
+            "top": 139.1565399169922,
+            "bottom": 644.1895599365234
+          },
+          "overflow": false,
+          "guideLayoutHeight": 61,
+          "guideCssHeight": "61px",
+          "buttons": [
+            {
+              "text": "ต่อไป",
+              "height": 44
+            },
+            {
+              "text": "จบบทสอน",
+              "height": 44
+            },
+            {
+              "text": "จบบทสอน",
+              "height": 48
+            },
+            {
+              "text": "ต่อไป",
+              "height": 48
+            }
+          ],
+          "copy": "เริ่มเล่น\n\nในหน้าจอการดูแล คุณสามารถดูแลพาร์ตเนอร์ของคุณได้\n\nจบบทสอน\nต่อไป"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "locale": "vi",
+      "status": "PASS",
+      "realOpening": true,
+      "measurements": [
+        {
+          "viewport": {
+            "width": 360,
+            "height": 800
+          },
+          "hud": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 73,
+            "top": 0,
+            "bottom": 73
+          },
+          "guide": {
+            "x": 0,
+            "y": 73,
+            "width": 360,
+            "height": 126.125,
+            "top": 73,
+            "bottom": 199.125
+          },
+          "root": {
+            "x": 0,
+            "y": 199,
+            "width": 360,
+            "height": 516,
+            "top": 199,
+            "bottom": 715
+          },
+          "overflow": false,
+          "guideLayoutHeight": 126,
+          "guideCssHeight": "126px",
+          "buttons": [
+            {
+              "text": "Tiếp tục",
+              "height": 44
+            },
+            {
+              "text": "Kết thúc hướng dẫn",
+              "height": 44
+            },
+            {
+              "text": "Kết thúc hướng dẫn",
+              "height": 48
+            },
+            {
+              "text": "Tiếp tục",
+              "height": 48
+            }
+          ],
+          "copy": "Bắt đầu chơi\n\nTrên màn hình nuôi dưỡng, bạn có thể chăm sóc bạn đồng hành của mình.\n\nKết thúc hướng dẫn\nTiếp tục"
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "hud": {
+            "x": 437.5,
+            "y": 0.002685546875,
+            "width": 405,
+            "height": 75.80769348144531,
+            "top": 0.002685546875,
+            "bottom": 75.81037902832031
+          },
+          "guide": {
+            "x": 437.5,
+            "y": 75.81037902832031,
+            "width": 405,
+            "height": 93.20191955566406,
+            "top": 75.81037902832031,
+            "bottom": 169.01229858398438
+          },
+          "root": {
+            "x": 437.5,
+            "y": 169.2719268798828,
+            "width": 405,
+            "height": 462.4561767578125,
+            "top": 169.2719268798828,
+            "bottom": 631.7281036376953
+          },
+          "overflow": false,
+          "guideLayoutHeight": 90,
+          "guideCssHeight": "90px",
+          "buttons": [
+            {
+              "text": "Tiếp tục",
+              "height": 44
+            },
+            {
+              "text": "Kết thúc hướng dẫn",
+              "height": 44
+            },
+            {
+              "text": "Kết thúc hướng dẫn",
+              "height": 48
+            },
+            {
+              "text": "Tiếp tục",
+              "height": 48
+            }
+          ],
+          "copy": "Bắt đầu chơi\n\nTrên màn hình nuôi dưỡng, bạn có thể chăm sóc bạn đồng hành của mình.\n\nKết thúc hướng dẫn\nTiếp tục"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "method": {
+    "profiles": "Fresh isolated Playwright Chrome contexts; no player profile/storage used",
+    "fullChain": "LOGIN/story/trainer and partner naming/invitation/raising/Gate16/two real UI captures/raising/actual Battle/raising/completed",
+    "inputs": "Actual DOM clicks, taps, pointer gestures and read-only rendered actor coordinates; no checkpoint jumping, actor/HP/RNG injection, forced wins or favorable rerolls",
+    "faultInjection": "Storage.setItem failure in isolated contexts; retries and unchanged canonical saved baseline asserted",
+    "reload": "Invitation, partial cleanup, Hunt pull, running Battle, persisted result and completed Continue",
+    "legacy": "Ten controlled v1 fixtures (null/0 cursor across five languages), clearly separate from full UI flows",
+    "baseline": "Semantic gameplay content compared; metadata updatedAt and revision excluded; opening checkpoint inspected separately"
+  },
+  "fixes": [
+    "Normal five-language invitation/action labels replace preview wording; demo baseline policy is explained.",
+    "Tutorial guide reserves screen height below shared HUD. offsetHeight avoids applying portrait-frame scale twice.",
+    "Idle UI pointer cancellation no longer aborts the real automatic Hunt demo; failing-before/passing-after native-script regression and final five-language full reruns recorded.",
+    "Hunt browser harness now samples coordinates after screenshots and holds the target as prompted; previous instantaneous click timed out. Diagnostic fixture and the complete rerun are separate evidence."
+  ],
+  "limitations": [
+    "Native loss/draw reachability UNKNOWN_REQUIRES_TRACE",
+    "No full native RNG call-order/frame parity claim",
+    "Physical devices NOT_RUN",
+    "No final art/rights/commercial/publication acceptance",
+    "Library transfer outcome reported separately; local PNG existence does not mean parent has seen it"
+  ],
+  "evidenceFiles": {
+    "FULL_PREVIEW_BROWSER_RESULT.json": {
+      "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\FULL_PREVIEW_BROWSER_RESULT.json",
+      "sha256": "09db9b1f14c5e78ba9e1768eca8acfe8a98752d3b5e3bb28f0477808bc3a08f1"
+    },
+    "NORMAL_FULL_ONBOARDING_RESULT.json": {
+      "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\NORMAL_FULL_ONBOARDING_RESULT.json",
+      "sha256": "5282b18efa95114ae88642b0335d4bfc96d15b9fbb47120b261af9697f11c924"
+    },
+    "ONBOARDING_EDGE_RESULT.json": {
+      "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\ONBOARDING_EDGE_RESULT.json",
+      "sha256": "0fe7c99c741c1220f4850c980da7c48385fa8a57905c3267cbc9315cf968c9c9"
+    },
+    "ONBOARDING_LAYOUT_RESULT.json": {
+      "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\ONBOARDING_LAYOUT_RESULT.json",
+      "sha256": "b49af273c2df7c4e1478ea38e4f5ca0ead7e704b61a8b21f1e728656d7e255a4"
+    },
+    "SHOT_DIAGNOSTIC.json": {
+      "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\normal\\SHOT_DIAGNOSTIC.json",
+      "sha256": "64a226253c7577cb5b2b6184733f406ecd5194cb94d709dec05436fb752e8fa4"
+    },
+    "FOCUSED_FINAL.txt": {
+      "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\FOCUSED_FINAL.txt",
+      "sha256": "d700b7852f8aab91ba39176e2266550ba831f88434dd42701197989199e20d2a"
+    },
+    "POINTER_REGRESSION_BEFORE.txt": {
+      "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\POINTER_REGRESSION_BEFORE.txt",
+      "sha256": "bf63b70c6859d59e8b8a89dd5a8a7c54a87c8cb15bd0fabd15a6e2fa8b417f55"
+    },
+    "POINTER_REGRESSION_AFTER.txt": {
+      "path": "R:\\Projects\\Championship2026\\tutorial-runtime6-20261009\\POINTER_REGRESSION_AFTER.txt",
+      "sha256": "9d74b43fbb8b316bccc5e83370fa6a02ad712e7a86395a8769e986380dd456bc"
+    }
+  },
+  "delivery": {
+    "status": "BLOCKED_PREPARE_UNAVAILABLE",
+    "error": "Library prepare_uploads is not available",
+    "remoteAttempts": 1,
+    "helperInvocations": 2,
+    "localPreflightFailures": 1,
+    "preflightExplanation": "Unsupported create filename field rejected locally before remote call; removed before the single remote attempt.",
+    "filesOffered": 6,
+    "libraryFileIds": [],
+    "parentHasNotSeenLocalPngs": true,
+    "noFurtherAttempts": true
+  }
+}

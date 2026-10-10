@@ -22,7 +22,7 @@ import {nativeCarryPosition,nativeCarryVelocity,nativeReleaseVelocity,stepNative
 import {findNativeRaisingOpenTile} from './nativeRaisingGround.js';
 import {nativeRaisingHandAdmission,enterNativeRaisingStroke,stepNativeRaisingStroke,nativeRaisingTapWakes,enterNativeRaisingTap,selectNativeRaisingTapReaction} from './nativeRaisingHand.js';
 
-function request(actor, sequenceId, force=false, frame=null) {
+export function requestNativeRaisingSequence(actor, sequenceId, force=false, frame=null) {
   if(actor.sequenceId===sequenceId&&!force)return;
   const entityId=BATTLE_SPECIES_ENTITIES[actor.speciesIndex];
   const sequence=BATTLE_CHARACTER_PROFILES[entityId]?.sequences.find(s=>s.id===sequenceId);
@@ -31,6 +31,8 @@ function request(actor, sequenceId, force=false, frame=null) {
     frame===null?{}:{initialSnapshot:{frameIndex:frame,elapsedQ12:0,active:false}});
   actor.sequenceId=sequenceId;
 }
+
+const request=requestNativeRaisingSequence;
 
 export function createNativeRaisingActor(profile, poolSlot) {
   const p=normalizeNativeIndividualProfile(profile);
@@ -43,6 +45,7 @@ export function projectNativeRaisingActor(actor) {
   return Object.freeze({...actor.animator.getSnapshot(),contract:NATIVE_HUNT_CHARACTER_FRAME_CONTRACT,
     flipBits:actor.flipBits??0,speciesIndex:actor.speciesIndex,nativeFrame:actor.nativeFrame,eggPhase:actor.eggPhase,
     positionQ12:actor.positionQ12?Object.freeze([...actor.positionQ12]):null,cageDefinitionIndex:actor.cageDefinitionIndex??null,
+    actorAuthority:actor.tutorialSpecial?'TUTORIAL_SPECIAL_19_STATE':'NORMAL_RAISING',
     state:actor.state??(actor.speciesIndex<8?26:1),foodSlot:actor.foodSlot??null,
     feedback:projectNativeRaisingFeedback(actor),
     statusFeedback:projectNativeRaisingStatusFeedback(actor),

@@ -166,6 +166,7 @@ export function createRaisingPresentationSource(app) {
   let frameRevision = 0;
   let currentFrame = null;
   let runtimeUnsubscribe = null;
+  let boundSession = null;
   let saveUnsubscribe = null;
   let nativeUnsubscribe = null;
   let reactionCreatureId = null;
@@ -192,6 +193,7 @@ export function createRaisingPresentationSource(app) {
       contractVersion: RAISING_PRESENTATION_CONTRACT_VERSION,
       revision: frameRevision,
       ranch: { layoutVersion: app.getCageEditFrame()?.layoutVersion ?? null },
+      tutorial: app.getInteractiveTutorial?.()??null,
       foods: app.getRaisingFoodFrame?.()??[],
       lifecycle:app.getRaisingLifecycleFrame?.()??null,
       clock: {
@@ -279,9 +281,11 @@ export function createRaisingPresentationSource(app) {
     return currentFrame;
   }
 
-  function wireRuntime() {
-    if (runtimeUnsubscribe || saveUnsubscribe) return;
-    const session = app.getSession();
+  function bindSession() {
+    const session=app.getSession();
+    if(session===boundSession)return;
+    runtimeUnsubscribe?.();runtimeUnsubscribe=null;boundSession=session;
+    if(!session)return;
     let displayedClock = `${app.getSnapshot().year}:${app.getSnapshot().clockMinutes}:${app.getSnapshot().season}:${app.getSnapshot().dayOfSeason}`;
     runtimeUnsubscribe = session.subscribeRaisingHome((publication) => {
       const snapshot = app.getSnapshot();
@@ -290,8 +294,16 @@ export function createRaisingPresentationSource(app) {
       displayedClock = clockKey;
       publish({ clearReaction: publication?.kind !== "clock" });
     });
-    saveUnsubscribe = app.savePort.subscribe(() => publish());
-    nativeUnsubscribe = app.subscribeRaising?.(() => publish({clearReaction:false}));
+  }
+
+  function wireRuntime() {
+    if(saveUnsubscribe)return;
+    bindSession();
+    saveUnsubscribe = app.savePort.subscribe(() => {if(app.getSession())publish();});
+    nativeUnsubscribe = app.subscribeRaising?.(() => {
+      bindSession();
+      if(app.getSession())publish({clearReaction:false});
+    });
     // Asset mounting is asynchronous; the shared clock can reach its stop
     // boundary before the first observer attaches. Catch up once on attach,
     // including when no future minute publication will arrive.
@@ -305,7 +317,7 @@ export function createRaisingPresentationSource(app) {
     runtimeUnsubscribe?.();
     saveUnsubscribe?.();
     nativeUnsubscribe?.();nativeUnsubscribe=null;
-    runtimeUnsubscribe = null;
+    runtimeUnsubscribe = null;boundSession=null;
     saveUnsubscribe = null;
   }
 
@@ -323,10 +335,11 @@ export function createRaisingPresentationSource(app) {
     beginCarry(creatureId,input){return app.beginRaisingCarry?.(creatureId,input)??false;},
     updateCarry(creatureId,input){return app.updateRaisingCarry?.(creatureId,input)??false;},
     releaseCarry(creatureId){return app.releaseRaisingCarry?.(creatureId)??false;},
+    panTutorial(input){return app.panInteractiveTutorial?.(input)??false;},
     cleanFood(input) {const result=app.cleanRaisingFood?.(input)??false;publish();return result;},
     placeFood(input) {const result=app.placeRaisingFood?.(input)??{ok:false,reason:"UNAVAILABLE"};publish();return result;},
-    touchEgg(creatureId) { return app.touchRaisingEgg?.(creatureId) ?? false; },
-    treatResident(creatureId,kind){const result=app.treatRaisingResident?.(creatureId,kind)??{ok:false};publish();return result;},
+    touchEgg(creatureId,checkpoint=null) { return app.touchRaisingEgg?.(creatureId,checkpoint) ?? false; },
+    treatResident(creatureId,kind,checkpoint=null){const result=app.treatRaisingResident?.(creatureId,kind,checkpoint)??{ok:false};publish();return result;},
     selectCreature(creatureId) {
       if (app.getSelectedCreatureId() === creatureId) return currentFrame;
       reactionCreatureId = null;

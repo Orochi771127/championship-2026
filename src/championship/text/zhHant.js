@@ -23,17 +23,32 @@
 // than to a blank or to an invented word.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
-import { SPECIES_NAMES_ZH, HELP_ZH, TITLE_EVENTS_ZH, SHOP_NAMES_ZH, SHOP_DESCRIPTIONS_ZH } from "./catalogs.zhHant.js";
-// English (settings round, 2026-09-29): the accessors below return English
-// when the display language is English and an English entry exists. The
-// tables in this file stay the zh-Hant source; nothing here is replaced.
-import { isEnglish } from "./locale.js";
+import { SPECIES_NAMES_ZH, SPECIAL_SPECIES_NAMES_ZH, HELP_ZH, TITLE_EVENTS_ZH, SHOP_NAMES_ZH, SHOP_DESCRIPTIONS_ZH } from "./catalogs.zhHant.js";
+import { getLocale, isEnglish } from "./locale.js";
 import {
   BATTLE_FACE_LABELS_EN, BATTLE_MENU_LABELS_EN, CAGE_EFFECT_LABELS_EN, CAGE_NAMES_EN, DIGI_EGG_EN,
   FAMILY_LABELS_EN, GATE_NAMES_EN, GENERATIONS_EN, PERSONALITIES_EN, RESIST_LABELS_EN, ROSTER_FAMILIES_EN,
   SPECIAL_SKILLS_EN, TAMER_RANK_NAMES_EN, UNKNOWN_DIGIMON_EN
 } from "./gameText.en.js";
+import {
+  BATTLE_FACE_LABELS_JA, BATTLE_MENU_LABELS_JA, CAGE_EFFECT_LABELS_JA, CAGE_NAMES_JA, DIGI_EGG_JA,
+  FAMILY_LABELS_JA, GATE_NAMES_JA, GENERATIONS_JA, PERSONALITIES_JA, RESIST_LABELS_JA, ROSTER_FAMILIES_JA,
+  SPECIAL_SKILLS_JA, TAMER_RANK_NAMES_JA, UNKNOWN_DIGIMON_JA
+} from "./gameText.ja.js";
+import {
+  BATTLE_FACE_LABELS_TH, BATTLE_MENU_LABELS_TH, CAGE_EFFECT_LABELS_TH, CAGE_NAMES_TH, DIGI_EGG_TH,
+  FAMILY_LABELS_TH, GATE_NAMES_TH, GENERATIONS_TH, PERSONALITIES_TH, RESIST_LABELS_TH, ROSTER_FAMILIES_TH,
+  SPECIAL_SKILLS_TH, TAMER_RANK_NAMES_TH, UNKNOWN_DIGIMON_TH
+} from "./gameText.th.js";
+import {
+  BATTLE_FACE_LABELS_VI, BATTLE_MENU_LABELS_VI, CAGE_EFFECT_LABELS_VI, CAGE_NAMES_VI, DIGI_EGG_VI,
+  FAMILY_LABELS_VI, GATE_NAMES_VI, GENERATIONS_VI, PERSONALITIES_VI, RESIST_LABELS_VI, ROSTER_FAMILIES_VI,
+  SPECIAL_SKILLS_VI, TAMER_RANK_NAMES_VI, UNKNOWN_DIGIMON_VI
+} from "./gameText.vi.js";
 import { HELP_EN, SHOP_DESCRIPTIONS_EN, SHOP_NAMES_EN, TITLE_EVENTS_EN } from "./catalogs.en.js";
+import { HELP_JA, SHOP_DESCRIPTIONS_JA, SHOP_NAMES_JA, TITLE_EVENTS_JA } from "./catalogs.ja.js";
+import { HELP_TH, SHOP_DESCRIPTIONS_TH, SHOP_NAMES_TH, TITLE_EVENTS_TH } from "./catalogs.th.js";
+import { HELP_VI, SHOP_DESCRIPTIONS_VI, SHOP_NAMES_VI, TITLE_EVENTS_VI } from "./catalogs.vi.js";
 
 export const TEXT_LOCALE = "zh-Hant";
 export const TEXT_EVIDENCE = "PRODUCT_AUTHORED";
@@ -41,19 +56,40 @@ export const TEXT_SOURCE_LANGUAGE = "ja";
 
 // Display translations keyed by the original text-bank selectors confirmed at
 // ARM9 02088480 and OVL4 0210BB9C (2026-09-13). Unknown indices stay absent.
-const GENERATIONS = Object.freeze(['數碼蛋','幼年期Ⅰ','幼年期Ⅱ','成長期','成熟期','完全體','究極體']);
+const GENERATIONS = Object.freeze(['培育蛋','幼年期Ⅰ','幼年期Ⅱ','成長期','成熟期','完全體','究極體']);
 const PERSONALITIES = Object.freeze(['坦率','任性','急躁','悠閒','熱血','冷靜','大膽','膽小','？？？']);
 const ROSTER_FAMILIES = Object.freeze(['無','獸','機械','昆蟲植物','鳥','龍','水','聖','暗黑']);
 const TAMER_RANK_NAMES = Object.freeze(['綠階','藍階','紅階','白階','青銅','白銀','黃金','白金','冠軍','大師']);
 const SPECIAL_SKILLS = Object.freeze(['無','挑釁','治癒 α','治癒 β','治癒 γ','全體治癒 α','全體治癒 β','全體治癒 γ',
   '淨化','全體淨化','強化攻擊','全體強化攻擊','防護','全體防護','加速','全體加速','感知','全體感知',
   '耐火','全體耐火','耐水','全體耐水','耐雷','全體耐雷','耐光','全體耐光','耐暗','全體耐暗','復活 α','復活 β','勇氣']);
-const localized = (zh, en, key) => (isEnglish() ? en[key] ?? zh[key] : zh[key]) ?? null;
-export const generationName = index => localized(GENERATIONS, GENERATIONS_EN, index);
-export const personalityName = index => localized(PERSONALITIES, PERSONALITIES_EN, index);
-export const rosterFamilyName = ordinal => localized(ROSTER_FAMILIES, ROSTER_FAMILIES_EN, ordinal);
-export const tamerRankName = index => localized(TAMER_RANK_NAMES, TAMER_RANK_NAMES_EN, index);
-export const specialSkillName = index => localized(SPECIAL_SKILLS, SPECIAL_SKILLS_EN, index);
+
+const GENERATIONS_BY_LOCALE = {
+  "zh-Hant": GENERATIONS, "en": GENERATIONS_EN, "ja": GENERATIONS_JA, "th": GENERATIONS_TH, "vi": GENERATIONS_VI
+};
+const PERSONALITIES_BY_LOCALE = {
+  "zh-Hant": PERSONALITIES, "en": PERSONALITIES_EN, "ja": PERSONALITIES_JA, "th": PERSONALITIES_TH, "vi": PERSONALITIES_VI
+};
+const ROSTER_FAMILIES_BY_LOCALE = {
+  "zh-Hant": ROSTER_FAMILIES, "en": ROSTER_FAMILIES_EN, "ja": ROSTER_FAMILIES_JA, "th": ROSTER_FAMILIES_TH, "vi": ROSTER_FAMILIES_VI
+};
+const TAMER_RANK_NAMES_BY_LOCALE = {
+  "zh-Hant": TAMER_RANK_NAMES, "en": TAMER_RANK_NAMES_EN, "ja": TAMER_RANK_NAMES_JA, "th": TAMER_RANK_NAMES_TH, "vi": TAMER_RANK_NAMES_VI
+};
+const SPECIAL_SKILLS_BY_LOCALE = {
+  "zh-Hant": SPECIAL_SKILLS, "en": SPECIAL_SKILLS_EN, "ja": SPECIAL_SKILLS_JA, "th": SPECIAL_SKILLS_TH, "vi": SPECIAL_SKILLS_VI
+};
+
+const localized = (tables, key) => {
+  const loc = getLocale();
+  const table = tables[loc] ?? tables["zh-Hant"];
+  return (table ? table[key] : null) ?? tables["zh-Hant"]?.[key] ?? null;
+};
+export const generationName = index => localized(GENERATIONS_BY_LOCALE, index);
+export const personalityName = index => localized(PERSONALITIES_BY_LOCALE, index);
+export const rosterFamilyName = ordinal => localized(ROSTER_FAMILIES_BY_LOCALE, ordinal);
+export const tamerRankName = index => localized(TAMER_RANK_NAMES_BY_LOCALE, index);
+export const specialSkillName = index => localized(SPECIAL_SKILLS_BY_LOCALE, index);
 
 /** The status bar's mode field. The cartridge's own words are in the comments. */
 export const MODE_LABELS = deepFreeze({
@@ -155,50 +191,107 @@ function lookup(table, key, fallback) {
   return value === undefined || value === null ? fallback : value;
 }
 
+const BATTLE_MENU_LABELS_BY_LOCALE = {
+  "zh-Hant": BATTLE_MENU_LABELS, "en": BATTLE_MENU_LABELS_EN, "ja": BATTLE_MENU_LABELS_JA, "th": BATTLE_MENU_LABELS_TH, "vi": BATTLE_MENU_LABELS_VI
+};
+const BATTLE_FACE_LABELS_BY_LOCALE = {
+  "zh-Hant": BATTLE_FACE_LABELS, "en": BATTLE_FACE_LABELS_EN, "ja": BATTLE_FACE_LABELS_JA, "th": BATTLE_FACE_LABELS_TH, "vi": BATTLE_FACE_LABELS_VI
+};
+const CAGE_NAMES_BY_LOCALE = {
+  "zh-Hant": CAGE_NAMES, "en": CAGE_NAMES_EN, "ja": CAGE_NAMES_JA, "th": CAGE_NAMES_TH, "vi": CAGE_NAMES_VI
+};
+const GATE_NAMES_BY_LOCALE = {
+  "zh-Hant": GATE_NAMES, "en": GATE_NAMES_EN, "ja": GATE_NAMES_JA, "th": GATE_NAMES_TH, "vi": GATE_NAMES_VI
+};
+const UNKNOWN_BY_LOCALE = {
+  "zh-Hant": "未確認生物", "en": UNKNOWN_DIGIMON_EN, "ja": UNKNOWN_DIGIMON_JA, "th": UNKNOWN_DIGIMON_TH, "vi": UNKNOWN_DIGIMON_VI
+};
+const EGG_BY_LOCALE = {
+  "zh-Hant": "培育蛋", "en": DIGI_EGG_EN, "ja": DIGI_EGG_JA, "th": DIGI_EGG_TH, "vi": DIGI_EGG_VI
+};
+const SHOP_NAMES_BY_LOCALE = {
+  "zh-Hant": SHOP_NAMES_ZH, "en": SHOP_NAMES_EN, "ja": SHOP_NAMES_JA, "th": SHOP_NAMES_TH, "vi": SHOP_NAMES_VI
+};
+const SHOP_DESCRIPTIONS_BY_LOCALE = {
+  "zh-Hant": SHOP_DESCRIPTIONS_ZH, "en": SHOP_DESCRIPTIONS_EN, "ja": SHOP_DESCRIPTIONS_JA, "th": SHOP_DESCRIPTIONS_TH, "vi": SHOP_DESCRIPTIONS_VI
+};
+const HELP_BY_LOCALE = {
+  "zh-Hant": HELP_ZH, "en": HELP_EN, "ja": HELP_JA, "th": HELP_TH, "vi": HELP_VI
+};
+const TITLE_EVENTS_BY_LOCALE = {
+  "zh-Hant": TITLE_EVENTS_ZH, "en": TITLE_EVENTS_EN, "ja": TITLE_EVENTS_JA, "th": TITLE_EVENTS_TH, "vi": TITLE_EVENTS_VI
+};
+const CAGE_EFFECT_LABELS_BY_LOCALE = {
+  "zh-Hant": CAGE_EFFECT_LABELS, "en": CAGE_EFFECT_LABELS_EN, "ja": CAGE_EFFECT_LABELS_JA, "th": CAGE_EFFECT_LABELS_TH, "vi": CAGE_EFFECT_LABELS_VI
+};
+const FAMILY_LABELS_BY_LOCALE = {
+  "zh-Hant": FAMILY_LABELS, "en": FAMILY_LABELS_EN, "ja": FAMILY_LABELS_JA, "th": FAMILY_LABELS_TH, "vi": FAMILY_LABELS_VI
+};
+const RESIST_LABELS_BY_LOCALE = {
+  "zh-Hant": RESIST_LABELS, "en": RESIST_LABELS_EN, "ja": RESIST_LABELS_JA, "th": RESIST_LABELS_TH, "vi": RESIST_LABELS_VI
+};
+
 /** The battle menu's copy in the display language (a fresh object per call). */
 export function battleMenuLabels() {
-  return isEnglish() ? { ...BATTLE_MENU_LABELS, ...BATTLE_MENU_LABELS_EN } : { ...BATTLE_MENU_LABELS };
+  const loc = getLocale();
+  const specific = BATTLE_MENU_LABELS_BY_LOCALE[loc];
+  return specific ? { ...BATTLE_MENU_LABELS, ...specific } : { ...BATTLE_MENU_LABELS };
 }
 
 /** A battle mode's name in the display language. */
 export function battleFaceLabel(id) {
-  return (isEnglish() ? BATTLE_FACE_LABELS_EN[id] : null) ?? BATTLE_FACE_LABELS[id] ?? id;
+  const loc = getLocale();
+  const table = BATTLE_FACE_LABELS_BY_LOCALE[loc] ?? BATTLE_FACE_LABELS;
+  return table[id] ?? BATTLE_FACE_LABELS[id] ?? id;
 }
 
-/** Chinese (or English) for a cage, falling back to the cartridge's Japanese. */
+/** Name for a cage, falling back to the cartridge's Japanese. */
 export function cageName(cageIndex, japanese) {
-  if (isEnglish() && CAGE_NAMES_EN[cageIndex]) return CAGE_NAMES_EN[cageIndex];
+  const loc = getLocale();
+  const table = CAGE_NAMES_BY_LOCALE[loc] ?? CAGE_NAMES;
+  if (table[cageIndex]) return table[cageIndex];
   return lookup(CAGE_NAMES, cageIndex, japanese);
 }
 
-/** Chinese (or English) for a gate, falling back to the cartridge's Japanese. */
+/** Name for a gate, falling back to the cartridge's Japanese. */
 export function gateName(recordIndex, japanese) {
-  if (isEnglish() && GATE_NAMES_EN[recordIndex]) return GATE_NAMES_EN[recordIndex];
+  const loc = getLocale();
+  const table = GATE_NAMES_BY_LOCALE[loc] ?? GATE_NAMES;
+  if (table[recordIndex]) return table[recordIndex];
   return lookup(GATE_NAMES, recordIndex, japanese);
 }
 
 /**
  * Only catalog identity is localized here; never pass a player's nickname.
- * Species names have no approved English form, so English shows the approved
- * zh-Hant name; the eggs and the unknown fallback are ordinary words.
+ * Species names have no approved translation, so they keep approved characters;
+ * eggs and unknown fallback are ordinary localized words.
  */
 export function speciesName(recordIndex, fallback = undefined) {
-  if (Number.isInteger(recordIndex) && recordIndex >= 0 && recordIndex < 8) return isEnglish() ? DIGI_EGG_EN : "數碼蛋";
-  return lookup(SPECIES_NAMES_ZH, recordIndex, fallback === undefined ? (isEnglish() ? UNKNOWN_DIGIMON_EN : "未知數碼獸") : fallback);
+  const loc = getLocale();
+  const egg = EGG_BY_LOCALE[loc] ?? "培育蛋";
+  const unknown = fallback === undefined ? (UNKNOWN_BY_LOCALE[loc] ?? "未確認生物") : fallback;
+  if (Number.isInteger(recordIndex) && recordIndex >= 0 && recordIndex < 8) return egg;
+  if (SPECIAL_SPECIES_NAMES_ZH?.[recordIndex]) return SPECIAL_SPECIES_NAMES_ZH[recordIndex];
+  return lookup(SPECIES_NAMES_ZH, recordIndex, unknown);
 }
 
 export function speciesNameForId(speciesId, fallback = undefined) {
-  const unknown = fallback === undefined ? (isEnglish() ? UNKNOWN_DIGIMON_EN : "未知數碼獸") : fallback;
+  const loc = getLocale();
+  const unknown = fallback === undefined ? (UNKNOWN_BY_LOCALE[loc] ?? "未確認生物") : fallback;
   const match = /^(?:championship:creature:)?species-(\d+)$/.exec(speciesId ?? "");
   return match ? speciesName(Number(match[1]), unknown) : unknown;
 }
 
 /** A Shop item's name and description in the display language. */
 export function shopItemName(recordIndex, fallback = null) {
-  return (isEnglish() ? SHOP_NAMES_EN[recordIndex] : null) ?? SHOP_NAMES_ZH[recordIndex] ?? fallback;
+  const loc = getLocale();
+  const table = SHOP_NAMES_BY_LOCALE[loc] ?? SHOP_NAMES_ZH;
+  return table[recordIndex] ?? SHOP_NAMES_ZH[recordIndex] ?? fallback;
 }
 export function shopItemDescription(recordIndex, fallback = null) {
-  return (isEnglish() ? SHOP_DESCRIPTIONS_EN[recordIndex] : null) ?? SHOP_DESCRIPTIONS_ZH[recordIndex] ?? fallback;
+  const loc = getLocale();
+  const table = SHOP_DESCRIPTIONS_BY_LOCALE[loc] ?? SHOP_DESCRIPTIONS_ZH;
+  return table[recordIndex] ?? SHOP_DESCRIPTIONS_ZH[recordIndex] ?? fallback;
 }
 
 // Original starter constructor's 25 variants (two produce the same name).
@@ -223,27 +316,33 @@ export function raisingDisplayName(instance) {
 }
 
 export function helpText(entryIndex, field, fallback) {
-  return (isEnglish() ? HELP_EN[entryIndex]?.[field] : null) ?? HELP_ZH[entryIndex]?.[field] ?? fallback;
+  const loc = getLocale();
+  const table = HELP_BY_LOCALE[loc] ?? HELP_ZH;
+  return table[entryIndex]?.[field] ?? HELP_ZH[entryIndex]?.[field] ?? fallback;
 }
 
 export function titleEventText(recordIndex, field, fallback) {
-  return (isEnglish() ? TITLE_EVENTS_EN[recordIndex]?.[field] : null) ?? TITLE_EVENTS_ZH[recordIndex]?.[field] ?? fallback;
+  const loc = getLocale();
+  const table = TITLE_EVENTS_BY_LOCALE[loc] ?? TITLE_EVENTS_ZH;
+  return table[recordIndex]?.[field] ?? TITLE_EVENTS_ZH[recordIndex]?.[field] ?? fallback;
 }
 
-/** Chinese (or English) for a cage effect, falling back to the raw kind:target key. */
+/** Localized string for a cage effect. */
 export function cageEffectLabel(kind, target) {
   const key = `${kind}:${target}`;
-  const english = isEnglish();
-  const direct = english ? CAGE_EFFECT_LABELS_EN[key] ?? CAGE_EFFECT_LABELS[key] : CAGE_EFFECT_LABELS[key];
+  const loc = getLocale();
+  const direct = CAGE_EFFECT_LABELS_BY_LOCALE[loc]?.[key] ?? CAGE_EFFECT_LABELS[key];
   if (direct) return direct;
   if (kind === "FAMILY_UP") {
-    if (english && FAMILY_LABELS_EN[target]) return `${FAMILY_LABELS_EN[target]} up`;
-    const family = FAMILY_LABELS[target];
-    return family ? `${family}屬性上升` : null;
+    const fam = FAMILY_LABELS_BY_LOCALE[loc]?.[target] ?? FAMILY_LABELS[target];
+    if (loc === "en") return `${fam} up`;
+    if (loc === "ja") return `${fam}上昇`;
+    if (loc === "th") return `เพิ่มพลังเผ่า${fam}`;
+    if (loc === "vi") return `Tăng tộc ${fam}`;
+    return fam ? `${fam}屬性上升` : null;
   }
   if (kind === "RESIST_UP") {
-    const resist = english ? RESIST_LABELS_EN[target] ?? RESIST_LABELS[target] : RESIST_LABELS[target];
-    return resist ?? null;
+    return RESIST_LABELS_BY_LOCALE[loc]?.[target] ?? RESIST_LABELS[target] ?? null;
   }
   return null;
 }

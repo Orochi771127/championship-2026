@@ -350,13 +350,30 @@ body[data-toolbar="on"] #cm-root { bottom: var(--cm-screen-bottom); }
 .cm-toolbar__cell[data-icon="manage"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/manage-rest.png"); }
 .cm-toolbar__cell[data-icon="system"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/system-rest.png"); }
 
-.cm-toolbar__cell-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cm-toolbar__cell-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  text-align: center;
+  line-height: 1.25;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
 /* Icon captions: the icon carries the meaning and the full name is the
    button's label, so the caption keeps its size at larger reading sizes
    and English letters sit a little tighter. */
 .cm-toolbar__cell-label { font-size: min(var(--fs-caption), 11px); }
 :root:lang(en) .cm-toolbar__cell { padding-inline: 0; }
-:root:lang(en) .cm-toolbar__cell-label { font-size: 10px; letter-spacing: -0.02em; }
+:root:lang(en) .cm-toolbar__cell-label { font-size: 10px; line-height: 1.2; letter-spacing: -0.02em; }
+:root:lang(vi) .cm-toolbar__cell,
+:root:lang(th) .cm-toolbar__cell { padding-inline: 1px; }
+:root:lang(vi) .cm-toolbar__cell-label { font-size: 10px; line-height: 1.25; }
+:root:lang(th) .cm-toolbar__cell-label { font-size: 10.5px; line-height: 1.25; letter-spacing: -0.01em; }
 
 /* The two menus sit apart from the six tools. */
 .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 4px; }

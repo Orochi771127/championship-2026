@@ -1,0 +1,138 @@
+{
+  "date": "2026-10-09",
+  "status": "BOUNDED_GATE16_HUNT_RETURN_PASS_FULL_TUTORIAL_PENDING",
+  "normalOnboardingEligible": false,
+  "focused": {
+    "files": 31,
+    "tests": 220,
+    "passed": 220,
+    "failed": 0,
+    "receipt": "R:\\Projects\\Championship2026\\tutorial-runtime4-20261009\\FOCUSED_FINAL.txt"
+  },
+  "huntCheckpointResume": {
+    "count": 39,
+    "everyDeclaredStageCanFinishToRaisingBoundary": true,
+    "newTests": 6
+  },
+  "browser": {
+    "fullNewGameRaisingGate16TwoCapturesRaisingPrompts": "PASS_ZH_HANT_390x844_DPR2",
+    "source": "R:\\Projects\\Championship2026\\tutorial-runtime4-20261009\\FULL_RAISING_HUNT_BROWSER_RESULT.json",
+    "huntReload": "PASS_FIRST_PULL",
+    "saveFailureRetry": [
+      "Raising illness",
+      "Hunt first collection"
+    ],
+    "negative": [
+      "wrong food target",
+      "empty enclosure tap",
+      "shot miss"
+    ],
+    "exitDuringHunt": "PASS_NORMAL_PRESENTATION",
+    "normalNewGameContinue": "PASS_390x844_AND_360x800",
+    "playerSaveTouched": false,
+    "oneCanvas": true,
+    "pageErrors": []
+  },
+  "controlledSaveFailureRetry": [
+    "Gate candidate",
+    "first capture",
+    "second capture",
+    "return to Raising",
+    "exit during Hunt"
+  ],
+  "screenshots": [
+    {
+      "stage": "gate-select",
+      "path": "R:/Projects/Championship2026/tutorial-runtime4-20261009/CHAMPIONSHIP_TUTORIAL4_gate_select_20261009.png",
+      "normalPresentation": true,
+      "controlledResume": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "errors": [],
+      "body": "春季\n第\n1\n日\n狩獵\n07:00\n狩獵\n選擇狩獵場\n\n選擇目的地\n\n1\n請選擇目的地\n入場費\n—\n持有金額\n0 位元幣\n選擇目的地\n17\n教學關卡\n開始狩獵\n教學預覽 · 連點閘門兩下，選擇要去的地圖。\n結束預覽"
+    },
+    {
+      "stage": "hunt-first-enclose",
+      "path": "R:/Projects/Championship2026/tutorial-runtime4-20261009/CHAMPIONSHIP_TUTORIAL4_hunt_first_enclose_20261009.png",
+      "normalPresentation": true,
+      "controlledResume": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "errors": [],
+      "body": "春季\n第\n1\n日\n狩獵\n07:00\n教學關卡\n返回牧場\n輕觸數碼獸查看\n\n快速畫圈綑綁 · 按住目標拉動繩索 · 放鬆可恢復耐久\n\n手\n繩索\n普通射擊 α\n肉餌\n教學預覽 · 「圈住」用繩索圖示把牠圈起來。\n結束預覽"
+    },
+    {
+      "stage": "hunt-food-place",
+      "path": "R:/Projects/Championship2026/tutorial-runtime4-20261009/CHAMPIONSHIP_TUTORIAL4_hunt_food_place_20261009.png",
+      "normalPresentation": true,
+      "controlledResume": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "errors": [],
+      "body": "春季\n第\n1\n日\n狩獵\n07:00\n教學關卡\n返回牧場\n輕觸數碼獸查看\n\n輕觸地面放置肉餌\n\n手\n繩索\n普通射擊 α\n肉餌\n教學預覽 · 在附近放下食物，把牠引過來。\n結束預覽"
+    },
+    {
+      "stage": "hunt-shot-hit",
+      "path": "R:/Projects/Championship2026/tutorial-runtime4-20261009/CHAMPIONSHIP_TUTORIAL4_hunt_shot_hit_20261009.png",
+      "normalPresentation": true,
+      "controlledResume": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "errors": [],
+      "body": "春季\n第\n1\n日\n狩獵\n07:00\n教學關卡\n返回牧場\n輕觸數碼獸查看\n\n按住目標射擊\n\n手\n繩索\n普通射擊 α\n肉餌\n教學預覽 · 用彈射可以讓夥伴停下動作。\n結束預覽"
+    },
+    {
+      "stage": "raising-after-hunt",
+      "path": "R:/Projects/Championship2026/tutorial-runtime4-20261009/CHAMPIONSHIP_TUTORIAL4_raising_after_hunt_20261009.png",
+      "normalPresentation": true,
+      "controlledResume": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "errors": [],
+      "body": "春季\n第\n1\n日\n育成\n07:00\n0\n\n點選夥伴查看狀態・左右滑動查看牧場\n\n手掌\n餵食\n50\n蛋白質\n10\n清潔\n傷藥\n10\n藥品\n10\n管理\n選單\n教學預覽 · 請從子選單開啟「對戰」。\n繼續\n結束預覽\n教學預覽\n\n請從子選單開啟「對戰」。\n\n結束預覽\n繼續"
+    }
+  ],
+  "notClaimed": [
+    "physical device QA",
+    "five-language full Hunt UI acceptance",
+    "full tutorial completion / Battle",
+    "pixel/frame parity",
+    "full original RNG construction call order",
+    "publication rights"
+  ],
+  "quota": {
+    "codexUsedPercent": 47,
+    "remainingPercent": 53,
+    "resetUsed": false,
+    "purchasedCredits": false
+  },
+  "syntax": "PASS_18_TASK_FILES",
+  "scopedDiffCheck": "PASS",
+  "rawResearchUploaded": false,
+  "libraryDelivery": {
+    "status": "BLOCKED_BEFORE_CONFIRMED_UPLOAD",
+    "route": "Current Library prepared upload helper, one ordered batch of report plus five images",
+    "attempts": 1,
+    "exitCode": 1,
+    "error": "library upload failed: Library prepare_uploads is not available",
+    "libraryIds": [],
+    "noDirectFallbackOrRetry": true,
+    "localDeliverablesReadable": true,
+    "next": "Parent coordinate supported native Library transfer. Do not reupload blindly; no successful Library create was reported."
+  }
+}

@@ -132,8 +132,8 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     frame: initial,
     kicker: "HUNT",
     title: "選擇狩獵場",
-    subtitle: "轉動地球，選擇要前往的場地。",
-    signal: "16"
+    subtitle: initial.gateSelect.tutorial ? "選擇目的地" : "轉動地球，選擇要前往的場地。",
+    signal: String(initial.gateSelect.gates.length)
   });
   body.classList.add("cm-vs2-body--gate");
 
@@ -193,7 +193,8 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   const buttons = new Map();
   let worldPresentation = null;
   let worldFailure = null;
-  let fallbackVisible = mode === VS2_PRESENTATION_MODES.DEVELOPER;
+  let fallbackVisible = initial.gateSelect.tutorial || mode === VS2_PRESENTATION_MODES.DEVELOPER;
+  if(initial.gateSelect.tutorial){worldPanel.hidden=true;back.hidden=true;confirm.textContent=uiText("開始狩獵");}
   try {
     fallbackVisible ||= new URLSearchParams(globalThis.location?.search ?? "").get("gateMode") === "fallback";
   } catch { /* a URL parser failure must not block the default 3D attempt */ }
@@ -585,7 +586,10 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     // the label stays in the DOM for assistive technology.
     button.dataset.tool = tool.id;
     button.setAttribute("aria-pressed",String(block.toolState.activeTool===tool.id));
-    button.addEventListener("click",()=>source.intents.selectHuntTool(tool.id));
+    let checkpoint=null;
+    button.addEventListener("pointerdown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
+    button.addEventListener("keydown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
+    button.addEventListener("click",()=>source.intents.selectHuntTool(tool.id,checkpoint));
     toolButtons.set(tool.id,button);tools.append(button);
   }
   const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸數碼獸選取");
@@ -664,7 +668,8 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   try {
     const pending = Promise.resolve().then(() => mountField({ host: fieldHost, source, signal: load.signal,
     onProgress: showProgress,
-    onActorFrame:mode===VS2_PRESENTATION_MODES.DEVELOPER
+    // Tutorial positions are a read-only render projection, never a progression input.
+    onActorFrame:mode===VS2_PRESENTATION_MODES.DEVELOPER||frame.tutorial
       ? (positions,toolState)=>{fieldHost.dataset.wildScreenPositions=JSON.stringify(positions);
         fieldHost.dataset.huntToolState=JSON.stringify(toolState);} : null }));
     // A late result belongs to the abandoned view even if another Hunt is open.
@@ -698,6 +703,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   function render(nextFrame) {
     const next = nextFrame?.huntField;
     if (!next) return;
+    exit.disabled = !next.hud.exitAvailable;
     gateName.textContent = uiText(next.hud.gateName ?? "");
     const remaining=next.hud.time?.remainingMinutes;
     companion.textContent = uiText(remaining == null ? next.hud.companionName ?? "" :
@@ -731,7 +737,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     // join it, because the native controller moves the wilds every frame and
     // nothing outside the running field can work out where they are -- which is
     // what stopped the VS3 capture gate from being able to aim at one. Player
-    // Mode writes nothing, so no player build carries this readout.
+    // Mode writes no general diagnostics; active tutorials expose only the render projection above.
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) {
       fieldHost.dataset.huntToolState = JSON.stringify(next.toolState);
     }

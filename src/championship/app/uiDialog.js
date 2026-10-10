@@ -23,9 +23,9 @@ let openDialog = null;
  * @param {string} [options.focusId] defaults to cancelId, else the first action
  * @returns {Promise<string|null>}
  */
-export function showChoiceDialog({ title, message = "", actions, cancelId = null, focusId = null, doc = globalThis.document } = {}) {
+export function showChoiceDialog({ title, message = "", actions, cancelId = null, focusId = null, signal = null, doc = globalThis.document } = {}) {
   if (!Array.isArray(actions) || actions.length === 0) throw new TypeError("A dialog needs at least one action");
-  if (openDialog) return Promise.resolve(null);
+  if (openDialog || signal?.aborted) return Promise.resolve(null);
   const dialog = doc.createElement("dialog");
   dialog.className = "cm-dialog";
   dialog.setAttribute("aria-labelledby", "cm-dialog-title");
@@ -65,11 +65,14 @@ export function showChoiceDialog({ title, message = "", actions, cancelId = null
     const finish = (id) => {
       if (settled) return;
       settled = true;
+      signal?.removeEventListener("abort", abort);
       openDialog = null;
       try { if (dialog.open) dialog.close(); } catch { /* already closed */ }
       dialog.remove();
       resolve(id);
     };
+    const abort = () => finish(null);
+    signal?.addEventListener("abort", abort, { once: true });
     for (const [id, button] of buttons) button.addEventListener("click", () => finish(id));
     // Escape arrives as `cancel`; keep the dialog in charge of its own result.
     dialog.addEventListener("cancel", (event) => { event.preventDefault(); finish(cancelId); });

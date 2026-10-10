@@ -1,3 +1,4 @@
+import {originalMedalArt} from './completedOriginalUi20261007.js';
 import {isLocalBattleEffectPreview} from './battleEffectArt.js';
 import {nativeAnimationCellAt} from './characterAnimationTimeline.js';
 export const CHARACTER_HUD_ART_ID='art:characters:hud:local-reference:v1';
@@ -54,6 +55,8 @@ export async function loadRegisteredCharacterHudArt({baseUrl,fetchImpl=globalThi
   if(!response.ok)throw new Error('CHARACTER_HUD_MANIFEST_UNAVAILABLE');
   const manifest=validateCharacterHudArt(await response.json(),index),portraits=new Map(manifest.portraits.map(p=>[p.speciesId,p]));
   const battle=new Map((manifest.battle??[]).map(b=>[b.speciesId,{sequences:b.sequences,cells:new Map(b.cells.map(c=>[c.cell,c]))}]));
+  const {applyCompletedOriginalHudArt}=await import('./completedOriginalCharacters.js');
+  await applyCompletedOriginalHudArt({baseUrl,fetchImpl,portraits,battle});
   if(new URL(baseUrl).searchParams.get('characterArtReview')==='m001'){
     const {applyM001HudReview}=await import('./m001CharacterHudReview.js');
     await applyM001HudReview({baseUrl,fetchImpl,portraits,battle});
@@ -64,7 +67,7 @@ export async function loadRegisteredCharacterHudArt({baseUrl,fetchImpl=globalThi
   }
   const canonical=id=>id?.replace(/^championship:creature:/,'');
   return Object.freeze({getPortrait(speciesId){return portraits.get(canonical(speciesId))??null;},
-    getMedal(titleId){return manifest.medals?.find(m=>m.titleId===titleId)??null;},
+    getMedal(titleId){return originalMedalArt(titleId,baseUrl)??manifest.medals?.find(m=>m.titleId===titleId)??null;},
     getCageThumbnail(definition){return manifest.ranch?.find(c=>c.definition===definition)??null;},
     getBattleCells(speciesId,sequenceId){const bank=battle.get(canonical(speciesId)),sequence=bank?.sequences.find(s=>s.id===sequenceId);
       return sequence?[...new Set(sequence.frames.map(f=>f.cell))].map(id=>bank.cells.get(id)):[];},

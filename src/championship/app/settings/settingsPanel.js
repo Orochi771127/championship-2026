@@ -52,7 +52,10 @@ const QUALITY_CHOICES = Object.freeze([
 ]);
 const LOCALE_CHOICES = Object.freeze([
   { value: "zh-Hant", name: "繁體中文", desc: "", lang: "zh-Hant" },
-  { value: "en", name: "English", desc: "", lang: "en" }
+  { value: "en", name: "English", desc: "", lang: "en" },
+  { value: "ja", name: "日本語", desc: "", lang: "ja" },
+  { value: "th", name: "ไทย", desc: "", lang: "th" },
+  { value: "vi", name: "Tiếng Việt", desc: "", lang: "vi" }
 ]);
 const MOTION_CHOICES = Object.freeze([
   { value: "system", name: "跟隨系統", desc: "依裝置的「減少動態效果」設定。" },

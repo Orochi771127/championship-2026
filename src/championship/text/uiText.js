@@ -1,8 +1,14 @@
 // Display-only PRODUCT_AUTHORED copy. Never translate identifiers or saved input.
 import { formatNumber, getLocale, pluralCategory } from "./locale.js";
 import { PATTERNS_EN, TEXT_EN, UI_COPY_EN, UNTRANSLATED_PROPER_NOUNS } from "./uiText.en.js";
+import { PATTERNS_JA, TEXT_JA, UI_COPY_JA } from "./uiText.ja.js";
+import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
+import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "輕觸數碼獸查看": "輕觸夥伴查看",
+  "野生數碼獸": "野生夥伴",
+
   "SWIPE TO VIEW": "滑動查看場地", "Waiting Room": "待機區",
   "Moonwell Pool": "月井池", "Quiet Hollow": "靜謐谷地",
   "TAMER RANK": "馴獸師階級", "ENTRY FEE": "報名費",
@@ -11,14 +17,14 @@ export const UI_COPY = Object.freeze({
   "ON MEMORY CARD": "已收入記憶卡", "MEMORY CARD": "記憶卡",
   "RELEASE": "放生", "CANCEL": "取消", "CONFIRM RELEASE": "確認放生", "NAME THIS ONE": "命名", "NAMING": "命名中",
   "Memory card and Home roster": "記憶卡與育成夥伴名單", "Confirm release": "確認放生",
-  "Release is not yet available for this resident.": "目前尚無法放生這隻數碼獸。",
-  "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "儲存失敗，數碼獸仍在記憶卡中。請再次返回育成基地以重試。",
-  "Your home roster is full. Your Digimon remains on the memory card.": "育成夥伴名單已滿，數碼獸仍在記憶卡中。",
+  "Release is not yet available for this resident.": "目前尚無法放生這隻夥伴。",
+  "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "儲存失敗，夥伴仍在記憶卡中。請再次返回育成基地以重試。",
+  "Your home roster is full. Your Digimon remains on the memory card.": "育成夥伴名單已滿，夥伴仍在記憶卡中。",
   "The full cage footprint must fit in free, unlocked cells.": "設施占用的所有格位都必須為已開放的空格。",
   "Waiting Room stays at the ranch entrance.": "待機區固定在育成區入口。",
-  "Exploration field. Drag empty ground to look around. Touch a creature to select it.": "狩獵場地。拖曳空地移動視野，點選數碼獸進行選取。",
+  "Exploration field. Drag empty ground to look around. Touch a creature to select it.": "狩獵場地。拖曳空地移動視野，點選夥伴進行選取。",
   "Rotatable world destination view": "可旋轉的世界目的地視圖", "World destination nodes": "世界目的地節點",
-  "DIGIMON CHAMPIONSHIP · 2026": "數碼獸冠軍賽 · 2026",
+  "DIGIMON CHAMPIONSHIP · 2026": "網線拍檔：雜訊彼端的錦標賽 · 2026",
   "RAISING HOME": "育成基地", "Raising Home": "育成基地", "Training": "育成",
   "Spring": "春季", "Summer": "夏季", "Autumn": "秋季", "Winter": "冬季",
   "SPRING": "春季", "SUMMER": "夏季", "AUTUMN": "秋季", "WINTER": "冬季",
@@ -28,12 +34,12 @@ export const UI_COPY = Object.freeze({
   "SHOP": "商店", "Shop": "商店", "HUNT": "狩獵", "Hunt": "狩獵",
   "Battle": "對戰", "Battle result": "對戰結果", "DATABASE": "圖鑑", "Database": "圖鑑",
   "HOME": "育成", "CAGE": "設施配置", "CAGES": "育成設施", "GOODS": "育成用品",
-  "PLUGINS": "外掛程式", "EGG": "數碼蛋", "EGGS": "數碼蛋", "REGULAR": "一般物種",
+  "PLUGINS": "外掛程式", "EGG": "培育蛋", "EGGS": "培育蛋", "REGULAR": "一般物種",
   "SPECIES": "物種", "REGISTERED": "已登錄", "STARTER": "初始夥伴", "NEW": "新品",
   "HELD": "已達上限", "BUY": "購買", "Undiscovered": "尚未發現", "Unknown gate": "未知傳送門",
   "GIVEN NAME": "暱稱", "Given name": "暱稱", "NAME": "名稱", "FAMILY": "種族",
   "GEN.": "世代", "ATTR. INDEX": "屬性編號", "none set": "未設定",
-  "HP": "生命值", "TP": "技力", "DIGIMON": "數碼獸", "Digimon": "數碼獸",
+  "HP": "生命值", "TP": "技力", "DIGIMON": "夥伴", "Digimon": "夥伴",
   "ROSTER": "夥伴名單", "NAME EDIT": "更改名稱", "DELETE": "移除", "ENTRY": "報名",
   "TAMER": "馴獸師", "Tamer": "馴獸師", "TAMER INFO": "馴獸師資料",
   "SCHEDULE": "賽程", "Schedule": "賽程", "TITLE MATCHES": "頭銜賽", "RECORD": "編號",
@@ -41,7 +47,7 @@ export const UI_COPY = Object.freeze({
   "Save & Quit": "儲存並離開", "MANAGE": "管理", "SYSTEM": "選單", "Settings": "設定",
   "Retry": "重試", "Saving...": "保存中…",
   "HAND": "手掌", "FEED": "餵食", "CLEAN": "清潔", "MED": "藥品", "WOUND": "傷藥", "PROTEIN": "蛋白質",
-  "Move a resident, or stroke it": "移動或撫摸數碼獸", "Place food beside a resident": "在數碼獸身旁放置食物",
+  "Move a resident, or stroke it": "移動或撫摸夥伴", "Place food beside a resident": "在夥伴身旁放置食物",
   "Clear droppings and leftovers": "清除排泄物與剩餘食物", "Cure sickness": "治療疾病",
   "Heal injury": "治療傷勢", "Raise attack for a time": "暫時提升攻擊力",
   "Contextual toolbar": "目前場景工具列", "In the original, not yet in this build": "此功能尚未開放",
@@ -50,15 +56,15 @@ export const UI_COPY = Object.freeze({
   "The last safe Raising Home state was recovered.": "已復原最近一次有效的育成狀態。",
   "Save did not complete. You can try again.": "儲存未完成，請再試一次。",
   "Raising Home status updated.": "育成狀態已更新。", "Raising Home is ready.": "育成基地準備完成。",
-  "Saved game restored.": "已讀取存檔。", "Raising Home is ready. Tap a creature to look after them.": "育成基地準備完成，點選數碼獸查看狀態。",
+  "Saved game restored.": "已讀取存檔。", "Raising Home is ready. Tap a creature to look after them.": "育成基地準備完成，點選夥伴查看狀態。",
   "Raising Home time": "育成時間", "Playable Raising field": "育成活動場地",
   "LIVE HABITAT": "育成場地", "FIELD ONLINE": "場地已就緒", "COMPANION LINK": "夥伴狀態",
-  "SELECT A RESIDENT": "選擇數碼獸", "Touch a resident in the habitat.": "點選場地中的數碼獸。",
-  "TAP A RESIDENT": "點數碼獸看狀態",
+  "SELECT A RESIDENT": "選擇夥伴", "Touch a resident in the habitat.": "點選場地中的夥伴。",
+  "TAP A RESIDENT": "點夥伴看狀態",
   "Original toolbar structure, commands unverified": "工具列結構，指令尚待確認",
   "TRAINING TOOLBAR · MODE 1": "育成工具列 · 模式一", "8-SLOT SHELL · ROM VERIFIED": "八格工具列 · 結構已驗證",
   "Commands, icons, submenu membership, enable mask and slot 7 identity remain unverified.": "指令、圖示、子選單歸屬、啟用條件與第八格用途仍待確認。",
-  "No Digimon in the roster.": "目前沒有數碼獸。", "Empty roster.": "夥伴名單是空的。",
+  "No Digimon in the roster.": "目前沒有夥伴。", "Empty roster.": "夥伴名單是空的。",
   "No topic selected.": "尚未選擇說明主題。", "No fixture selected.": "尚未選擇賽事。",
   "The original draws this field; this build has no traced source for it": "此欄位的資料來源尚待確認",
   "Buy goods, hunt gear, plugins and cages.": "購買育成用品、狩獵裝備、外掛程式與設施。",
@@ -69,7 +75,7 @@ export const UI_COPY = Object.freeze({
   "Database families": "圖鑑分類", "Return to Raising Home": "返回牧場", "Return to database list": "返回圖鑑列表",
   "This slot is in the 224-entry book. Unlock/filter logic is untraced.": "此格屬於 224 格圖鑑，解鎖與篩選條件尚待確認。",
   "Registered by the opening partner. No Hunt instance yet.": "由初始夥伴登錄，尚無狩獵帶回的個體。",
-  "Cage editor": "設施配置", "One cage per hex. Rank opens 14–20. Overfill is allowed; extra Digimon stress more easily.": "每個六角格可放一座設施，隨階級開放 14 至 20 格。可以超過建議容納數，但數碼獸較容易累積壓力。",
+  "Cage editor": "設施配置", "One cage per hex. Rank opens 14–20. Overfill is allowed; extra Digimon stress more easily.": "每個六角格可放一座設施，隨階級開放 14 至 20 格。可以超過建議容納數，但夥伴較容易累積壓力。",
   "Ranch hex slots": "育成區六角格", "Owned cages": "持有的設施", "Keep this ranch layout": "保留目前設施配置",
   "Lower stand-in rank until title matches write it": "降低目前測試階級", "Raise stand-in rank until title matches write it": "提高目前測試階級",
   "Placed.": "已放置。", "Removed from the ranch.": "已從育成區移除。",
@@ -79,7 +85,7 @@ export const UI_COPY = Object.freeze({
   "That hex is still locked.": "此格尚未開放。", "You do not own that cage.": "尚未持有此設施。",
   "Every owned cage is on the ranch.": "所有持有的設施都已放入育成區。",
   "GATE SELECT": "選擇傳送門", "Rotate the world and focus a biome node.": "旋轉世界，選擇想前往的地區。",
-  "WORLD DESTINATION NETWORK": "數碼世界傳送網路", "WORLD MODE": "世界視圖", "16 BIOME LINKS": "16 個地區連結",
+  "WORLD DESTINATION NETWORK": "世界傳送網路", "WORLD MODE": "世界視圖", "16 BIOME LINKS": "16 個地區連結",
   "LIST VIEW": "列表視圖", "WORLD VIEW": "世界視圖", "DRAG TO ROTATE · TAP A NODE TO FOCUS": "拖曳旋轉 · 點選地區",
   "SELECT A BIOME": "選擇地區", "DESTINATION NODE --": "目的地 --", "STANDBY": "等待選擇", "READY": "已就緒",
   "DESTINATION INFORMATION": "目的地資訊", "DESTINATION": "目的地", "ACCESSIBLE DESTINATION LIST": "目的地列表",
@@ -88,8 +94,8 @@ export const UI_COPY = Object.freeze({
   "Equipment classes": "裝備種類", "Plugin positions": "外掛程式欄位", "None owned": "尚未持有", "BEGIN HUNT": "開始狩獵",
   "ROPE": "繩索", "SHOT": "射擊器", "WIRE": "攔阻線", "ENTRAP": "誘捕裝置", "DAMAGE TRAP": "傷害陷阱",
   "DURABILITY": "耐久度", "Durability": "耐久度", "Length": "長度", "LENGTH": "長度", "AMMO": "彈藥", "QUANTITY": "數量",
-  "Hunt field": "狩獵場地", "Exploration field. Touch a creature to draw a circle. Empty ground moves you.": "狩獵場地。點選數碼獸後畫圈，點選空地則會移動。",
-  "TOUCH A CREATURE AND DRAW A CIRCLE. EMPTY GROUND MOVES YOU.": "點選數碼獸後畫圈，點選空地則會移動。",
+  "Hunt field": "狩獵場地", "Exploration field. Touch a creature to draw a circle. Empty ground moves you.": "狩獵場地。點選夥伴後畫圈，點選空地則會移動。",
+  "TOUCH A CREATURE AND DRAW A CIRCLE. EMPTY GROUND MOVES YOU.": "點選夥伴後畫圈，點選空地則會移動。",
   "Unavailable contextual controls": "尚未開放的場景控制", "CONTEXT BAR": "場景工具列",
   "HUNT RESULT": "狩獵結果", "BROUGHT HOME": "已帶回育成基地", "EXPEDITION": "狩獵",
   "Name them, then return home. They will be waiting in the habitat.": "取好名字後返回牧場，牠會在牧場等你。",
@@ -118,9 +124,31 @@ export const UI_COPY = Object.freeze({
  */
 export function uiText(value, params) {
   if (typeof value !== "string") return value;
-  if (getLocale() === "en") return englishText(value, params);
+  const loc = getLocale();
+  if (loc === "en") return englishText(value, params);
+  if (loc === "ja") return localizedText(value, params, UI_COPY_JA, TEXT_JA, PATTERNS_JA);
+  if (loc === "th") return localizedText(value, params, UI_COPY_TH, TEXT_TH, PATTERNS_TH);
+  if (loc === "vi") return localizedText(value, params, UI_COPY_VI, TEXT_VI, PATTERNS_VI);
   if (Object.hasOwn(UI_COPY, value)) return fillTemplate(UI_COPY[value], params);
   for (const [pattern, format] of PATTERNS) {
+    const match = value.match(pattern);
+    if (match) return format(...match.slice(1));
+  }
+  return fillTemplate(value, params);
+}
+
+function localizedText(value, params, uiCopyTable, textTable, patternsTable) {
+  if (Object.hasOwn(UI_COPY, value)) {
+    return fillTemplate(select(uiCopyTable?.[value] ?? UI_COPY[value] ?? value, params), params);
+  }
+  const contextual = params?.context ? `${params.context}|${value}` : null;
+  if (contextual && Object.hasOwn(textTable, contextual)) {
+    return fillTemplate(select(textTable[contextual], params), params);
+  }
+  if (Object.hasOwn(textTable, value)) {
+    return fillTemplate(select(textTable[value], params), params);
+  }
+  for (const [pattern, format] of patternsTable) {
     const match = value.match(pattern);
     if (match) return format(...match.slice(1));
   }
@@ -286,7 +314,15 @@ const PATTERNS = [
   [/^x(\d+)$/, n => `數量 ${n}`]
 ];
 
-export const TAMER_FIELD_LABELS = Object.freeze({
+const TAMER_FIELD_LABELS_ZH = Object.freeze({
   title: '頭銜完成度', guid: '圖鑑完成度', map: '地圖完成度', battle: '對戰次數', win: '勝率',
   name: '名稱', rank: '階級', money: '持有金額', time: '遊玩時間', license: '育成執照', have: '收納容量', cage: '設施格數'
+});
+
+export const TAMER_FIELD_LABELS = new Proxy(TAMER_FIELD_LABELS_ZH, {
+  get(target, prop) {
+    if (typeof prop !== "string") return target[prop];
+    const zh = target[prop];
+    return zh ? uiText(zh) : undefined;
+  }
 });

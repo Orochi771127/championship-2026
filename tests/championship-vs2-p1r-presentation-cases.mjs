@@ -55,7 +55,16 @@ test("VS2-P CSS carries the P1R mobile contract", () => {
 
 test("temporary Hunt renderer preserves the shared Pixi/runtime authority boundary", () => {
   assert.doesNotMatch(field, /new\s+PIXI\.Application|new\s+Application/);
-  assert.deepEqual([...field.matchAll(/^import .* from "(.*?)";/gm)].map((match) => match[1]), ["./huntFieldPointer.js"]);
+  // Cover both quote styles. Every helper remains presentation-owned; the
+  // earlier double-quote-only check missed most imports and predated foliage.
+  const imports = [...field.matchAll(/^import\s+.*?from\s+(['"])(.*?)\1;/gm)].map(match => match[2]);
+  assert.deepEqual(imports, [
+    "./huntFactoryShutters.js", "./huntFoliageDither.js", "./huntFieldPointer.js",
+    "../presentationPreferences.js", "../nativeHuntCharacterAction.js",
+    "../huntFeedbackArt.js", "../vfx/captureStorageVfx.js"
+  ]);
+  const shutters = fs.readFileSync("src/championship/presentation/vs2/huntFactoryShutters.js", "utf8");
+  assert.doesNotMatch(shutters, /new\s+(?:PIXI\.)?Application|ticker\.add|localStorage|positionQ12|nextChannel/);
   assert.match(field, /stage\.createSceneRoot/);
   assert.match(field, /app\.ticker\.add\(advance\)/);
   assert.match(field, /app\.ticker\.remove\(advance\)/);

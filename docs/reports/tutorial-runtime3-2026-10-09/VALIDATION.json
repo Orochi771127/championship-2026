@@ -1,0 +1,147 @@
+{
+  "date": "2026-10-09",
+  "status": "PASS_BOUNDED_COMPLETE_INITIAL_RAISING",
+  "normalOnboardingEligible": false,
+  "fullTutorialAcceptance": false,
+  "tests": {
+    "passed": 119,
+    "failed": 0,
+    "prior113Included": true,
+    "newRaisingTests": 6,
+    "command": "R:\\Projects\\Championship2026\\tutorial-runtime3-20261009\\FOCUSED_TEST_COMMAND.json",
+    "output": "R:\\Projects\\Championship2026\\tutorial-runtime3-20261009\\FOCUSED_TEST_OUTPUT.txt"
+  },
+  "previewBrowser": {
+    "existingServer": "127.0.0.1:8766",
+    "newServer": false,
+    "isolatedNonpersistentContexts": true,
+    "playerSaveTouched": false,
+    "runs": [
+      {
+        "locale": "zh-Hant",
+        "status": "PASS",
+        "baselineUnchanged": true,
+        "oneCanvas": true,
+        "normalEligibility": false,
+        "cleanReload": false,
+        "saveRetry": true,
+        "errors": []
+      },
+      {
+        "locale": "en",
+        "status": "PASS",
+        "baselineUnchanged": true,
+        "oneCanvas": true,
+        "normalEligibility": false,
+        "cleanReload": true,
+        "saveRetry": false,
+        "errors": []
+      },
+      {
+        "locale": "ja",
+        "status": "PASS",
+        "baselineUnchanged": true,
+        "oneCanvas": true,
+        "normalEligibility": false,
+        "cleanReload": false,
+        "saveRetry": false,
+        "errors": []
+      },
+      {
+        "locale": "th",
+        "status": "PASS",
+        "baselineUnchanged": true,
+        "oneCanvas": true,
+        "normalEligibility": false,
+        "cleanReload": false,
+        "saveRetry": false,
+        "errors": []
+      },
+      {
+        "locale": "vi",
+        "status": "PASS",
+        "baselineUnchanged": true,
+        "oneCanvas": true,
+        "normalEligibility": false,
+        "cleanReload": false,
+        "saveRetry": false,
+        "errors": []
+      }
+    ],
+    "result": "R:\\Projects\\Championship2026\\tutorial-runtime3-20261009\\RAISING_BROWSER_RESULT.json"
+  },
+  "finalNegativeBrowser": {
+    "runs": [
+      {
+        "locale": "en",
+        "status": "PASS",
+        "baselineUnchanged": true,
+        "oneCanvas": true,
+        "normalEligibility": false,
+        "cleanReload": true,
+        "saveRetry": false,
+        "wrongDrop": true,
+        "errors": []
+      }
+    ],
+    "result": "R:\\Projects\\Championship2026\\tutorial-runtime3-20261009\\FINAL_NEGATIVE_BROWSER_RESULT.json",
+    "cancelledDragRetry": "Observed actor reset at viewport change; test releases cancelled gesture, retries through actual pointer input, then finishes same checkpoint and full Raising."
+  },
+  "normalEntryBrowser": {
+    "status": "PASS_BOUNDED_NORMAL_ENTRY_REGRESSION",
+    "isolatedNonpersistentContext": true,
+    "playerSaveTouched": false,
+    "existingServer": "127.0.0.1:8766",
+    "realOpeningUI": true,
+    "interactiveTutorialEntryBound": false,
+    "fullTutorialAcceptance": false,
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 360,
+        "height": 800
+      }
+    ],
+    "errors": []
+  },
+  "boundary": {
+    "version": 1,
+    "stage": "raising-gate-ready",
+    "message": 0,
+    "screen": "RAISING_HOME",
+    "gate16Opened": false
+  },
+  "resume": "OWNER_APPROVED_ADAPTATION_SEMANTIC_SAFE_BOUNDARY_NOT_FULL_TRANSIENT_REPLAY",
+  "visualInspection": [
+    "sleep-zh-Hant.png",
+    "gate-boundary-th.png",
+    "training-en.png",
+    "failure-en.png"
+  ],
+  "remaining": [
+    "Gate16 adapter",
+    "Hunt teaching and Raising return",
+    "Battle teaching and Raising return",
+    "atomic completed cleanup",
+    "full normal tutorial UI acceptance",
+    "special evolution branch and full19state differential"
+  ],
+  "full19StateDifferential": "NOT_RUN",
+  "physicalDevice": "NOT_RUN",
+  "nativeSpeakerReview": "NOT_RUN",
+  "rights": "UNCHANGED",
+  "publication": "NOT_AUTHORIZED",
+  "closingQuota": {
+    "readAt": "2026-10-09 19:01:01 UTC",
+    "usedPercent": 39,
+    "remainingPercent": 61,
+    "windowDurationMins": 10080,
+    "resetsAt": 1792156125,
+    "resetInvoked": false,
+    "purchaseInvoked": false,
+    "autoTopupEnabled": false
+  }
+}

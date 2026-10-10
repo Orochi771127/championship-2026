@@ -1,0 +1,1028 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:cage:final-intake:20261008",
+  "family": "CAGE",
+  "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+  "artifactMaturity": "ORIGINAL_BLENDER_2_5D_CAGE_FIELDS",
+  "productionStatus": "OWNER_AUTHORIZED_LOCAL_FINAL_INTAKE_20261009",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": false,
+  "runtimeEligible": true,
+  "shippingReady": false,
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+  "rights": {
+    "status": "ORIGINAL_CREATED_AI_ASSISTED",
+    "authority": "assets/production/ART_PRODUCTION_INDEX.json",
+    "ownerDirective": "Owner 2026-10-09 13:53 UTC authorizes local review and integration only",
+    "sourceRastersLoaded": false,
+    "romDerivedPixels": false
+  },
+  "fieldCount": 37,
+  "defaultPreviewFieldId": "field_cm01_01",
+  "memoryPolicy": "N_ACTIVE_TILES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+  "filter": "nearest",
+  "fields": [
+    {
+      "fieldId": "field_cm01_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm01_01/frame-00.webp",
+          "sha256": "d58df0d87a5a47da445ffe7f5dc75a86cf26dba91c266f32717cf9d92a71752f",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r5",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm01_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm02_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm02_01/frame-00.webp",
+          "sha256": "e85e0ad54b8b543225e8a51de763025e401f4f69ad13332b938442300d5864e0",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r8",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm02_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm03_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm03_01/frame-00.webp",
+          "sha256": "b757e18558a44b0f2ebd3052ae9de508258cff9b4670fe3b8215fb55bf6d70df",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r18",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm03_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm04_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm04_01/frame-00.webp",
+          "sha256": "61860fe8881bb13a8ebbcc3318a2f48a01abe973f9eee041ab577f69eee06cc7",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r8",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm04_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm05_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm05_01/frame-00.webp",
+          "sha256": "9209b1a1b6de1678575aa9e24e624d41d47116aec2d073bb3a9e3e4ed5cd6daf",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r13",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm05_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm06_01",
+      "worldWidthPx": 1344,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 336,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm06_01/frame-00.webp",
+          "sha256": "69236570228b748f7b3a96672f1ac52a2321387a419bd9b05ac047adeca5a761",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r1",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm06_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm07_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm07_01/frame-00.webp",
+          "sha256": "8b852f1e1a448d9e4262e881428ad1eb10feaf387689c59454897a09a521d839",
+          "durationMs": 835.7556556544072,
+          "durationRawTicks": 50
+        },
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm07_01/frame-01.webp",
+          "sha256": "43c3c4d03d2a461c5ef42b25cf76c1f41fc1db6a3596fdb7bd99f13bef322b61",
+          "durationMs": 835.7556556544072,
+          "durationRawTicks": 50
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r11",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm07_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm08_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm08_01/frame-00.webp",
+          "sha256": "262bcbafd77b26abc04b7f9eda83207178847e73a72321a83f0f4858a3ccba00",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r17",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm08_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm09_01/frame-00.webp",
+          "sha256": "914abd00861147a3c90bac76a23fa74028c2d38a9410cdde56c29beab58c87dc",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20
+        },
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm09_01/frame-01.webp",
+          "sha256": "0868f0e9dbe4a0adf6d6b06d1af96f30fcd2beed83d2c53f3585a9c67026a3e0",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r10",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm09_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm10_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm10_01/frame-00.webp",
+          "sha256": "ea829d993f39e1fa2cc7c301d396a9dba1a444602389a838aeca2fbe12d8b75e",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r7",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm10_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm11_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm11_01/frame-00.webp",
+          "sha256": "b20ae37023342d6abf63aba4afe825af65da1bc75a0b934c1f978682edb30343",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r12",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm11_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm12_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm12_01/frame-00.webp",
+          "sha256": "34c566b7714e70003a21c9de7488e0978275136f14171f7d59b9ad857f5bf8dc",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r5",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm12_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm13_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm13_01/frame-00.webp",
+          "sha256": "07bb4525268db41509a0aa4afbaaaf11dcbc019c8a885a686dccb8a6d3755881",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r14",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm13_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm14_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm14_01/frame-00.webp",
+          "sha256": "6f97cf360f40d137473f938008e70c837d8c10cc476a759f18c527bc3e54f442",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r3",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm14_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm15_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm15_01/frame-00.webp",
+          "sha256": "7ca03ad74f6be32da16bb78a11064954b86d190061c550abe35efb61348ffa44",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r1",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm15_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm16_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm16_01/frame-00.webp",
+          "sha256": "fde2a4a230a0e99ac9a814f7b9e897f97e1f671e25c4aa1b0e8378b5be2fd099",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r2",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm16_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm17_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm17_01/frame-00.webp",
+          "sha256": "13b16eab8b99175503fdb346da13b3d7352d7aacc9690abe843da28261edd2e5",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r1",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm17_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm18_01",
+      "worldWidthPx": 576,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 144,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm18_01/frame-00.webp",
+          "sha256": "77b15a61928660bc5580e71f05a582be16582e7abf68b47db5a84132181ea0d3",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r9",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm18_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm19_01",
+      "worldWidthPx": 1536,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 384,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm19_01/frame-00.webp",
+          "sha256": "8bfcb86cabd8a8bc7dabb8475e7393541586e90a74255f901c60db3d76cda1b8",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r4",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm19_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm20_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm20_01/frame-00.webp",
+          "sha256": "982d06c7d2fd60230d436fc77d745ec6dad8db78bd19e886a2bf68fcc01223f5",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r13",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm20_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm21_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm21_01/frame-00.webp",
+          "sha256": "d4f6a91a70107fff39057a0b01e0b84a2f1f45f0628eacaaa22c5337183cb4f0",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20
+        },
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm21_01/frame-01.webp",
+          "sha256": "d1b03ebe8103ea5449d2de07f11cbcbb39c39e6765a71037bda51dd19b49e6d9",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r11",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm21_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm22_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm22_01/frame-00.webp",
+          "sha256": "632a0d52553a80be787fcfdd317a62298c15ffdcd4ac80d3f7d8bc25b425a7a7",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r4",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm22_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm23_01",
+      "worldWidthPx": 576,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 144,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm23_01/frame-00.webp",
+          "sha256": "8033c103f23bd720c0282d27c8780bf33ca0016974c81e7e0ddac70cc75c7601",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r16",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm23_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm24_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm24_01/frame-00.webp",
+          "sha256": "601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "CM24_SHRINE_REARRANGEMENT_R1_20261008",
+        "disposition": "OWNER_SUPPLIED_FINAL_LAYOUT_REFINEMENT",
+        "sourceNamespace": "cage/field_cm24_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm25_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm25_01/frame-00.webp",
+          "sha256": "0b2df5476e6fc7e5e2ce0ef86c414734fde4dd32f4d96bafd8c082edcaf13fb4",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r12",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm25_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm26_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm26_01/frame-00.webp",
+          "sha256": "c2b556e66bc1f4d4a0be4b576e362dcfeafa9047e8364635fe3dfc32fe168d19",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r12",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm26_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm27_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm27_01/frame-00.webp",
+          "sha256": "38a756affa4304d3eeb5f3e8b22e82f2e770f0adb0dcbfd824a20e07e393290a",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r5",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm27_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm28_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "WAITING_ROOM",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm28_01/frame-00.webp",
+          "sha256": "8da7ea008641479f1889143b2d14dc0942e4c897f53d28cce05ec906afc4f9e6",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "cage-base3d-v1/seam-v3",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm28_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm29_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "LID",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm29_01/frame-00.webp",
+          "sha256": "44ef978cb914e7249fe308f63e1b4c21135b9eb7594a93352177dde85b20fd56",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "cage-base3d-v1/seam-v3",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm29_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm30_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm30_01/frame-00.webp",
+          "sha256": "24f108db6bb5b9826bfd01eb576479e7fb33b889476b8e1962e42678dbb07913",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r15",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm30_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm31_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm31_01/frame-00.webp",
+          "sha256": "b4805ac5b9bc7030c13e49dddaaf60ffee6512c26d2becfacfc3519571145dd6",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r2",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm31_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm32_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm32_01/frame-00.webp",
+          "sha256": "606fe143d6718d33efc2ac570cd69dd726c996453943b3b363d5d9decd27e73f",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r9",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm32_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm34_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm34_01/frame-00.webp",
+          "sha256": "83e8ca9a18c4e3364ba58cad6bc81440e64f3dbd5452339a52428485e55dd41b",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r13",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm34_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm35_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm35_01/frame-00.webp",
+          "sha256": "feaa658ea72ca88d67c480a2891091cd2edd5658003b94fcd286eaf2beff28e3",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r11",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm35_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm37_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm37_01/frame-00.webp",
+          "sha256": "ce27eae8b2ab9c98a622dc5bbbca6457a028022ab58113a3ac8a77513766e7bb",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r6",
+        "disposition": "REVIEWED_RETAINED_ORIGINAL",
+        "sourceNamespace": "cage/field_cm37_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm39_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm39_01/frame-00.webp",
+          "sha256": "789517dadeebc1a37ccde89c41ec79103cd9784dc6c22a334f6c1983392651dd",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20
+        },
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm39_01/frame-01.webp",
+          "sha256": "be1d7e29d7e9a8eb054134953b455f455e1618869aa44f5f8df003dd2f16e08b",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r10",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm39_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    },
+    {
+      "fieldId": "field_cm40_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/final-intake-20261008/fields/field_cm40_01/frame-00.webp",
+          "sha256": "9368a25066552a72d5469b3b5db7136dd886b181d2ff7d8ae02e166074905c1d",
+          "durationMs": null,
+          "durationRawTicks": null
+        }
+      ],
+      "intake": {
+        "selectedVersion": "opm-opus-r6",
+        "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
+        "sourceNamespace": "cage/field_cm40_01",
+        "runtimeAcceptance": "PENDING_BOUNDED_QA",
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
+      }
+    }
+  ],
+  "notes": [
+    "37 final fields / 41 unchanged delivered WebP frames, including Waiting Room and structural Lid.",
+    "Native dimensions, placement, upper-row crop, wrap, ground durations and gameplay are inherited unchanged.",
+    "CM03 and CM24 use final delivered artwork. No grid adaptation, artwork rescale, pixel edit or independent clock.",
+    "Object cell clock remains unknown; static authored composition is not full dynamic foreground acceptance."
+  ],
+  "localOnly": true,
+  "runtimeScope": "LOOPBACK_ONLY",
+  "publicReleasePermitted": false,
+  "runtimeQaPassed": false,
+  "runtimeAccepted": false,
+  "sourceIntake": {
+    "contentsSha256": "21a088855d6a5a3e3477e570c99df5fba685d4d86b399b9648ab0aecb19a9953",
+    "cage36ArtIndexSha256": "c51f0a4118a5a1fbb7d8de9c82d8ff23d2de8481c4d6f7a3458ac624b72fb43f",
+    "cm24ArtIndexSha256": "9cffda764e926bb5a137fd9d1ab13e27a11cc7cc4a8f1b05635d31c5021da632"
+  }
+}

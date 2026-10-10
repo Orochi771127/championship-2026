@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_EXPECTED_CONTRACT_NOT_PUBLIC_AUTHORIZATION",
+  "sourceManifestSha256": {
+    "day": "d3ed6eeea757e88daab482607fa4e03e971295d81b8c2fa1ed4ab6944b621698",
+    "dayNight": "ebb1f80919c7e142d7279601179233e23540c22bfaef814ed07a06654cc220cb"
+  },
+  "staticPhaseNormalization": "Absent animationFrames and one unchanged atlas phase are equivalent only when the background has one static frame with null duration.",
+  "fields": [
+    {
+      "fieldId": "field_hm01_01",
+      "binding": {
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE"
+      },
+      "frames": [
+        {
+          "sha256": "65c0458cbdb3c4fb5a6b9456c3a7708b9d98d42fce9fb595d45d19c18521349a",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285
+        },
+        {
+          "sha256": "14e185922dc38f00f2115c8235b9125bb5cd434f460a995bbad0c7109c0beefa",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285
+        }
+      ],
+      "sourceFramePaths": [
+        "assets/production/hunt/cave-clearance-natural-r11/frame-00.png",
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/frame-01.png"
+      ],
+      "sourceLabel": "PRIVATE_LOCAL_SHA_VERIFIED_HM01_R11_DAY_ANIMATION_AND_GRASSLAND_NIGHT_TWO_PHASES",
+      "piecesSha256": "2f22cb70a03fbbe31b8eb6acdf61d8c9e411d647287b79d2078df9ab08d27f42",
+      "sourcePiecesPath": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/occluders.json",
+      "atlasHashes": [
+        "511d87bee71fade82a12484f363d8ec183763d67ff6e6a96144d8c6bd82bce4f",
+        "70f9521f3e77f78a2e3eecfd9da33c03b178c20dd22dc1c911c4d3d7d820da1d"
+      ],
+      "animationAtlasHashes": [
+        [
+          "511d87bee71fade82a12484f363d8ec183763d67ff6e6a96144d8c6bd82bce4f",
+          "70f9521f3e77f78a2e3eecfd9da33c03b178c20dd22dc1c911c4d3d7d820da1d"
+        ],
+        [
+          "ac024887228b0a4c71329ec63744ccfaffc939aa9e46360f90e26c675c41d780",
+          "2e6dd7204b1f651d15ab4f345e70e865adc38e482f6eeb764d6d1f5ee6c7ab5f"
+        ]
+      ]
+    },
+    {
+      "fieldId": "field_hm01_02",
+      "binding": {
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE"
+      },
+      "frames": [
+        {
+          "sha256": "3d03d523f9019809ce1e00abd3b3ac7d7d9bf3706be3e248d76bb1c24f0fe64d",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285
+        },
+        {
+          "sha256": "34818e21c9720754e66884cef0f78072828da8d41f2daeed4e733080a678d0a4",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285
+        }
+      ],
+      "sourceFramePaths": [
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/frame-00.png",
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/frame-01.png"
+      ],
+      "sourceLabel": "PRIVATE_LOCAL_SHA_VERIFIED_HM01_R11_DAY_ANIMATION_AND_GRASSLAND_NIGHT_TWO_PHASES",
+      "piecesSha256": "2f22cb70a03fbbe31b8eb6acdf61d8c9e411d647287b79d2078df9ab08d27f42",
+      "sourcePiecesPath": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/occluders.json",
+      "atlasHashes": [
+        "8eedbd98ef275755dad5d9211d8b27c64507f8cf5950b058824304604b7ed140",
+        "12ea93dd98d7e6b9124ce4d7188811686a64fa646852b9bf1526cd564ce30f28"
+      ],
+      "animationAtlasHashes": [
+        [
+          "8eedbd98ef275755dad5d9211d8b27c64507f8cf5950b058824304604b7ed140",
+          "12ea93dd98d7e6b9124ce4d7188811686a64fa646852b9bf1526cd564ce30f28"
+        ],
+        [
+          "c3c1fada2fdaa9f913bf2a222b8b4c5e56843a381188173727903507fe1523c1",
+          "3e23287977b0de7c55c564943de56667248f76fb0f211a0d5a9309cd02cff994"
+        ]
+      ]
+    },
+    {
+      "fieldId": "field_hm02_02",
+      "binding": {
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE"
+      },
+      "frames": [
+        {
+          "sha256": "d52f81eb7f38298637284ae9a815ae7cc37d9d21c2c037e1c17dd17090c78c18",
+          "durationRawTicks": null,
+          "durationMs": null
+        }
+      ],
+      "sourceFramePaths": [
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm02_02/frame-00.png"
+      ],
+      "sourceLabel": "PRIVATE_LOCAL_SHA_VERIFIED_HM02_NIGHT_STATIC",
+      "piecesSha256": "78c74373717d60139009e54d8d1902ad98bf7c9119bb3f1de73b44160afb18d9",
+      "sourcePiecesPath": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm02_02/occluders.json",
+      "atlasHashes": [
+        "fb80d0d82b2f3a7e7e5d5f55b607f18ba49b6500de23b82223eced7d7aa6426b",
+        "2026a3847fd0ec421ed1a68e13a85077e8a8537532d97b44180d45f912a2a438"
+      ],
+      "animationAtlasHashes": [
+        [
+          "fb80d0d82b2f3a7e7e5d5f55b607f18ba49b6500de23b82223eced7d7aa6426b",
+          "2026a3847fd0ec421ed1a68e13a85077e8a8537532d97b44180d45f912a2a438"
+        ]
+      ]
+    },
+    {
+      "fieldId": "field_hm03_02",
+      "binding": {
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE"
+      },
+      "frames": [
+        {
+          "sha256": "a179a3c35488e0fb9ebb8596ab316d5796ed89ea382cdf8a5348fa832a591540",
+          "durationRawTicks": null,
+          "durationMs": null
+        }
+      ],
+      "sourceFramePaths": [
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm03_02/frame-00.png"
+      ],
+      "sourceLabel": "PRIVATE_LOCAL_SHA_VERIFIED_HM03_NIGHT_SAMPLING_R2",
+      "piecesSha256": "fc6037f673a7b327a60c81c49243fe808ff5dced9047c0f12df1c2c45116da91",
+      "sourcePiecesPath": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm03_02/occluders.json",
+      "atlasHashes": [
+        "7c313c23d96849deed8df81fbbb49ebf1a5793724e807ef945d7327a89e5eaa2",
+        "016d72390c54a69985bb8563f7937b2226db7d9ff6f0bc3c1fcdccba6ba66b20"
+      ],
+      "animationAtlasHashes": [
+        [
+          "7c313c23d96849deed8df81fbbb49ebf1a5793724e807ef945d7327a89e5eaa2",
+          "016d72390c54a69985bb8563f7937b2226db7d9ff6f0bc3c1fcdccba6ba66b20"
+        ]
+      ]
+    },
+    {
+      "fieldId": "field_hm04_02",
+      "binding": {
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE"
+      },
+      "frames": [
+        {
+          "sha256": "348558a071b0a0fb5e269ae8507b7e5de6141d14369279ca8fcac15af9687256",
+          "durationRawTicks": null,
+          "durationMs": null
+        }
+      ],
+      "sourceFramePaths": [
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm04_02/frame-00.png"
+      ],
+      "sourceLabel": "PRIVATE_LOCAL_SHA_VERIFIED_HM04_NIGHT_STATIC",
+      "piecesSha256": "c9195b3759569c56a5d2b10bae080e0764ee87b8686596c6b561be2e3aeee965",
+      "sourcePiecesPath": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm04_02/occluders.json",
+      "atlasHashes": [
+        "f8a206f71e72b9131a81e07562f4244876561932825b7fdfdfd28cc7dbfc60ce",
+        "20514e638274be9e27b6aa5ebbf8e5be92dad1d0297bfcd5123cd6043b2c49a0"
+      ],
+      "animationAtlasHashes": [
+        [
+          "f8a206f71e72b9131a81e07562f4244876561932825b7fdfdfd28cc7dbfc60ce",
+          "20514e638274be9e27b6aa5ebbf8e5be92dad1d0297bfcd5123cd6043b2c49a0"
+        ]
+      ]
+    },
+    {
+      "fieldId": "field_hm02_01",
+      "binding": {
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE"
+      },
+      "frames": [
+        {
+          "sha256": "02ae5b83e67a24d017b323c5acd8cab505fb6c8b783eec67e9de948053c58a87",
+          "durationRawTicks": null,
+          "durationMs": null
+        }
+      ],
+      "sourceFramePaths": [
+        "assets/production/hunt/hm234-day-review-20261007/fields/field_hm02_01/frame-00.png"
+      ],
+      "sourceLabel": "private-intake:HM02-SAVANNA-FINAL/docs/art/production/original-maps-r1/hunt/hunt-savanna-hm02-final/fields/field_hm02_01",
+      "piecesSha256": "78c74373717d60139009e54d8d1902ad98bf7c9119bb3f1de73b44160afb18d9",
+      "sourcePiecesPath": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm02_01/occluders.json",
+      "atlasHashes": [
+        "e48e0c27449a787143f74438cf3034105a285d1527f766b384464a7edb42bc0d",
+        "4cedc14ce3c77b1a980a1cf0dce2788d25fa38429dc592356d5c62a3bb7d3121"
+      ],
+      "animationAtlasHashes": [
+        [
+          "e48e0c27449a787143f74438cf3034105a285d1527f766b384464a7edb42bc0d",
+          "4cedc14ce3c77b1a980a1cf0dce2788d25fa38429dc592356d5c62a3bb7d3121"
+        ]
+      ]
+    },
+    {
+      "fieldId": "field_hm03_01",
+      "binding": {
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE"
+      },
+      "frames": [
+        {
+          "sha256": "768f1d6374c7cab90e4355e0d66a752803279f378c47261dc62d1bc595c86fff",
+          "durationRawTicks": null,
+          "durationMs": null
+        }
+      ],
+      "sourceFramePaths": [
+        "assets/production/hunt/hm234-day-review-20261007/fields/field_hm03_01/frame-00.png"
+      ],
+      "sourceLabel": "private-intake:HM03-FOREST-R2/docs/art/production/original-maps-r1/hunt/hunt-forest-r2-root-fixed-final/fields/field_hm03_01",
+      "piecesSha256": "fc6037f673a7b327a60c81c49243fe808ff5dced9047c0f12df1c2c45116da91",
+      "sourcePiecesPath": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm03_01/occluders.json",
+      "atlasHashes": [
+        "e287bcf3b5da7a300ae855d835bb0f1bed8dc8b95a2e8ad6ca19c56e1e90ea46",
+        "4cda609ae9049b9b1d89fdb0f22578abd15c3ef6baeb3db180bb1842d9eaa4d5"
+      ],
+      "animationAtlasHashes": [
+        [
+          "e287bcf3b5da7a300ae855d835bb0f1bed8dc8b95a2e8ad6ca19c56e1e90ea46",
+          "4cda609ae9049b9b1d89fdb0f22578abd15c3ef6baeb3db180bb1842d9eaa4d5"
+        ]
+      ]
+    },
+    {
+      "fieldId": "field_hm04_01",
+      "binding": {
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE"
+      },
+      "frames": [
+        {
+          "sha256": "a0c41ffd545c49f507763a7d8030661204614d27a37e95d5607eb5a8a359808f",
+          "durationRawTicks": null,
+          "durationMs": null
+        }
+      ],
+      "sourceFramePaths": [
+        "assets/production/hunt/hm234-day-review-20261007/fields/field_hm04_01/frame-00.png"
+      ],
+      "sourceLabel": "private-intake:HM04-R12/docs/art/production/original-maps-r1/hunt/hunt-jungle-r12-final/fields/field_hm04_01",
+      "piecesSha256": "c9195b3759569c56a5d2b10bae080e0764ee87b8686596c6b561be2e3aeee965",
+      "sourcePiecesPath": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm04_01/occluders.json",
+      "atlasHashes": [
+        "8ed59e67c6e18989a41bd01dd05b157dc0054cbb94bf0b14b28e83b5020d4efc",
+        "0ffa8e2290b20be0453cce668e8110c232ba617bd6159d80bdbd7812357a5954"
+      ],
+      "animationAtlasHashes": [
+        [
+          "8ed59e67c6e18989a41bd01dd05b157dc0054cbb94bf0b14b28e83b5020d4efc",
+          "0ffa8e2290b20be0453cce668e8110c232ba617bd6159d80bdbd7812357a5954"
+        ]
+      ]
+    }
+  ]
+}

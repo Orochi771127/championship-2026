@@ -7,6 +7,7 @@
 import manifest from '../../../assets/production/toolbar/licensed-runtime-v1/manifest.json' with {type:'json'};
 import productionIndex from '../../../assets/production/ART_PRODUCTION_INDEX.json' with {type:'json'};
 import {getShopRecord} from '../shop/shopCatalog.js';
+import {originalShopItemArt} from './completedOriginalUi20261007.js';
 import {assembledShopArt} from './assembledUiArt.js';
 
 const goods = Object.freeze([
@@ -18,6 +19,12 @@ const goods = Object.freeze([
 
 export function shopGoodsPresentation(shopRecordIndex, baseUrl) {
   if (!Number.isSafeInteger(shopRecordIndex)) return null;
+  const original = originalShopItemArt(shopRecordIndex,baseUrl);
+  if(original){
+    const record=getShopRecord(shopRecordIndex);
+    if(record.itemIndex!==original.itemIndex || record.category!==original.category || (original.productItemId && record.productItemId!==original.productItemId))throw new Error("ORIGINAL_ITEM_BINDING_MISMATCH");
+    return Object.freeze({...original,width:original.nativeSize[0],height:original.nativeSize[1],name:goods[shopRecordIndex]?.name??null,icon:goods[shopRecordIndex]?.icon??original.subcategory.toLowerCase(),backgroundPosition:"center",identityEvidence:"VERIFIED_BINARY",imageEvidence:"OWNER_SUPPLIED_ORIGINAL_LOCAL_REVIEW"});
+  }
   const complete = assembledShopArt(shopRecordIndex, baseUrl);
   if (complete && complete.category !== 'CAGES') return Object.freeze({
     ...complete, name:null, icon:complete.subcategory.toLowerCase(), backgroundPosition:'center',

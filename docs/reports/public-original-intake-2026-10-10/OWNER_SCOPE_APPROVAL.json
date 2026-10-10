@@ -1,0 +1,79 @@
+{
+  "utc": "2026-10-10T00:30:17.529018+00:00",
+  "previousRejection": "General publication instruction judged insufficient for source-marked loopback/private character, HUD, shop and hunt batches.",
+  "ownerScopeQuestion": "Sentinel_04c7060bb16c8191a6f7bf0e46d480f0",
+  "ownerReply": "可以公開",
+  "ownerReplyId": "Sentinel_8d960f4a95048191aaceee1ffa0fa441",
+  "ownerReplyUtc": "2026-10-10T00:28:00Z",
+  "publicationInstruction": "做好請commit 跟push並整合至公開發佈版",
+  "publicationInstructionId": "Sentinel_d01bb93584408191bde36e59ea90a3de",
+  "sameReviewProcessRetryNumber": 1,
+  "result": "AUTO_REVIEW_ALLOWED_AND_BOUNDED_WRITE_COMPLETED",
+  "publicOrigin": "https://orochi771127.github.io",
+  "basePath": "/championship-2026/",
+  "privateQueriesRemainLocal": true,
+  "rightsOrCommercialAcceptancePromoted": false,
+  "committedPushedDeployed": false,
+  "paths": [
+    {
+      "path": "src/data/championship/public-playtest.r1.json",
+      "beforeSha256": "4d6332254ccd8998397eec0935af88121de4e1b8c8b516aa6a1f123081e1b283",
+      "afterSha256": "800516acf8de29ab6b5061e7400988941d290cf71fbf34a9ba6c0bba724e638b"
+    },
+    {
+      "path": "src/championship/presentation/originalRuntimeLocation.js",
+      "beforeSha256": null,
+      "afterSha256": "425cf681c92206f4d5944bc3e57fea00e3f71d40517f32d0f2261955963fbebb"
+    },
+    {
+      "path": "src/data/championship/accepted-original-character-selection.r1.json",
+      "beforeSha256": null,
+      "afterSha256": "7e0bea635f02003f8aa8ad8273420ad360037dd7ce282a9ee34a44452d64bda8"
+    },
+    {
+      "path": "src/championship/presentation/completedOriginalCharacters.js",
+      "beforeSha256": "a0e55b0aaa9bfe3be789cdcd04d48d4e6307b4140f6ad28ce7f1c18a919c6ecf",
+      "afterSha256": "5c8637a14829a54c4698812a80fc5958cb7fa11a928ddee856d5538984acdbbf"
+    },
+    {
+      "path": "src/championship/presentation/completedOriginalUi20261007.js",
+      "beforeSha256": "165160ded1975c54c45a153111d8096824965e5bb4df9625434f5e0daa81b775",
+      "afterSha256": "db9bb36e8971cb8113d4b85b55b3fb9022e0f9f32db00f5e9a69115f577d4e38"
+    },
+    {
+      "path": "src/championship/presentation/originalShopCageArt.js",
+      "beforeSha256": "03e4e2f07df8d501ead93f9e857b170684e999da9d09c3914b06707cdad4a9b7",
+      "afterSha256": "98682127ed3e0a91a4e9f4ea1d76cf8abe05141dfa29fa9324d33863081f7d71"
+    },
+    {
+      "path": "src/championship/presentation/finalHuntArt20261008.js",
+      "beforeSha256": "2600ba5374590e2276344dfc7f19641d8119dfc4506830ee01566ce1508b7e21",
+      "afterSha256": "6deb377c68a581bb69a3c8d45582014b7d5c2f30e3c41ff26df5b3e722ac2dfd"
+    },
+    {
+      "path": "src/championship/presentation/cageForeground.js",
+      "beforeSha256": "fc646ef78771adb7411b10263e11be8ce5e7a290b9b9f84dd9aa24f03b9c96ef",
+      "afterSha256": "4563f5a91d5ac63a84cf8c3a52cf7003e829d256166a72b6bcf757b18e7d7d48"
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntFactoryShutters.js",
+      "beforeSha256": "e2ea35dd36d381a45b156e64ff9faea88850f7266f4bc7063df279fc759c7631",
+      "afterSha256": "2decda4ee33bb441fdc631d8f820b2916d087dc7a85d6315ad70927119265919"
+    },
+    {
+      "path": "src/championship/app/interactiveTutorialPreview.js",
+      "beforeSha256": "02312a664aaa2eda459f2f005e9a777962a32d4cbf424633bb48755b715f908b",
+      "afterSha256": "4f151db4f1cff99102fa9a175fb6b95161183cf6e13a334cf2e0254174227ec1"
+    },
+    {
+      "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "beforeSha256": "d3acac03df781efe34dbef4287d2003a8baceea83f15fb48ce4b90db67941e18",
+      "afterSha256": "6b504b4f44ca44d99d0c0f4bdc60bf822b5c695a1a2440a21720fb312e53bc32"
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "beforeSha256": "00031b4d79e60e513b5663987cbcb7d6656814d8b3dfd81850628f468dd10c01",
+      "afterSha256": "c2043e9fca889935289b978bf77306622e16de40cb9392e7ff9ba135bc2e3cc8"
+    }
+  ]
+}

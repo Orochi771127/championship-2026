@@ -1,4 +1,8 @@
-import { uiText } from "../text/uiText.js";
+import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation} from '../presentation/originalRuntimeLocation.js';
+import { finalHuntArtManifestUrl } from '../presentation/finalHuntArt20261008.js';
+import {factoryShutterSpec} from '../presentation/vs2/huntFactoryShutters.js';
+import {loadHuntDepthOccluders,withHuntDepthOccluders} from '../presentation/vs2/huntDepthOccluders.js';
+import { getActiveGameTitle, getTitleEyebrow, getTitleHeadingHtml } from "../text/brandTerms.js";
 // Championship Modern -- standalone browser entry.
 //
 // This is the production standalone shell: the game boots, saves, and reloads
@@ -58,6 +62,7 @@ import { createChampionshipView } from "./championshipScreen.js";
 import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
 import { BATTLE_MATCH_LIST_CAP } from "../battle/battleMatchSelection.js";
 import { createHelpView } from "./helpScreen.js";
+import { createMedalCollectionView } from "./medalCollectionScreen.js";
 import { createTamerInfoView } from "./tamerInfoScreen.js";
 import { createOpeningPresentation } from './openingPresentation.js';
 import { lookupSpeciesIdentity } from "./phase1ProductCreatures.js";
@@ -71,8 +76,10 @@ import {
   validateRuntimeMapArtBundle
 } from "../presentation/runtimeMapArtBundle.js";
 import { createRanchCageArtPlan as createRaisingCageArtPlan } from "../presentation/raisingRanchArtPlan.js";
+import { withCageForeground } from "../presentation/cageForeground.js";
 import { mountPortraitFrame } from './portraitFrame.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
+import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
@@ -90,7 +97,7 @@ import { createAudioBus } from '../presentation/audioBus.js';
 import { cappedPixelRatio, currentQuality, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange } from '../text/locale.js';
-import { retranslate, setLabel, setText } from '../text/uiText.js';
+import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 
 const PIXI_V8_MODULE_URL = "../../../node_modules/pixi.js/dist/pixi.mjs";
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
@@ -190,10 +197,35 @@ const CHARACTER_REVIEW_RUNTIME_URL = new URLSearchParams(globalThis.location?.se
   ? "assets/production/internal-character-review/m201-remix-v1/runtime.review.json"
   : null;
 const LICENSED_HUNT_ART_MANIFEST_URL = "assets/production/hunt/licensed-runtime-v1/manifest.json";
-// Owner 2026-10-06: the original Blender cage fields (opus rounds r1-r17) replace the
-// licensed pixel fields at runtime; licensed-runtime-v1 stays stored for comparison.
-const CAGE_ART_MANIFEST_URL = "assets/production/cage/original-opus-v1/manifest.json";
-const LICENSED_BATTLE_ART_MANIFEST_URL = "assets/production/battle/licensed-runtime-v1/manifest.json";
+const LOCAL_MAP_REVIEW = ["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname)
+  ? new URLSearchParams(globalThis.location?.search ?? "") : new URLSearchParams();
+const ORIGINAL_HUNT_ART_MANIFEST_URL = LOCAL_MAP_REVIEW.get("industrialReview") === "r1"
+  ? "assets/production/hunt/industrial-review-r1/manifest.json"
+  : LOCAL_MAP_REVIEW.get("caveReview") === "natural-r11"
+    ? "assets/production/hunt/cave-clearance-natural-r11/manifest.json"
+  : LOCAL_MAP_REVIEW.get("caveReview") === "natural-r10"
+    ? "assets/production/hunt/cave-clearance-natural-r10/manifest.json"
+    : "assets/production/hunt/original-opus-v1/manifest.json";
+const HUNT_FACTORY_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("factoryShutters") === "r3"
+  ? "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/manifest.json" : null;
+const HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") === "hm01-hm04-20261008"
+  ? "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/manifest.json" : null;
+const HUNT_DAY_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") === "hm234-20261007"
+  ? "assets/production/hunt/hm234-day-review-20261007/manifest.json" : null;
+// Owner 2026-10-09: final 37 cage fields in normal local play; existing geometry and clocks.
+const CAGE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
+  ? "assets/production/cage/final-intake-20261008/manifest.json"
+  : "assets/production/cage/original-opus-v1/manifest.json";
+// Owner 2026-10-07: completed original arenas in normal local play; publication remains gated.
+const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
+  ? (LOCAL_MAP_REVIEW.get("battleReview") === "stage-20261007"
+     ? "assets/production/battle/stage-review-20261007/manifest.json"
+     : LOCAL_MAP_REVIEW.get("battleReview") === "bm07-quiet-r1"
+    ? "assets/production/battle/bm07-quiet-review-r1/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "bm03-volcano-r2"
+      ? "assets/production/battle/bm03-volcano-review-r2/manifest.json"
+      : "assets/production/battle/original-opus-v1/manifest.json")
+  : "assets/production/battle/licensed-runtime-v1/manifest.json";
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
@@ -213,7 +245,10 @@ const root = document.getElementById("cm-root");
 mountPortraitFrame();
 const loginButton=document.getElementById('cm-login');
 const titleActions=titleScreen.querySelector('.cm-title__actions');
-const openingPresentation=createOpeningPresentation({host:document.getElementById('cm-opening'),onStart:startNewGame});
+const openingPresentation=createOpeningPresentation({host:document.getElementById('cm-opening'),onStart:startNewGame,
+  allowEggChoice:shouldOfferInteractiveTutorial(location),onCancel(){
+    titleActions.hidden=false;if(titleSettingsButton)titleSettingsButton.hidden=false;refreshContinue();newGameButton.focus({preventScroll:true});
+  }});
 
 let app = null;
 let view = null;
@@ -233,6 +268,8 @@ let mounting = null;
 // field mount and re-attached to whichever screen's field host is current.
 let pixiStage = null;
 let clockDriver = null;
+let tutorialPreview = null;
+let unsubscribeTutorialTools = null;
 
 // The one persistent status bar. It lives OUTSIDE #cm-root on purpose: every
 // view calls root.replaceChildren() when it mounts, which would take the bar
@@ -352,6 +389,20 @@ async function ensurePixiStage(canvasHost, signal) {
   return pixiStage;
 }
 
+// Opt-in loopback review (?vfxOriginal=shared-v1): original shared VFX cells
+// drawn over the loaded effect art; pool, timing and collision are unchanged.
+async function loadOptionalOriginalVfxReview(stage, effectArt) {
+  if(!effectArt||new URLSearchParams(location.search).get('vfxOriginal')!=='shared-v1')return effectArt;
+  try {
+    const {loadOriginalSharedVfxReview}=await import('../presentation/originalSharedVfxReview.js');
+    return await loadOriginalSharedVfxReview({PIXI:stage.PIXI,baseArt:effectArt,href:location.href,
+      onFirstUse:(key,seen)=>{document.documentElement.dataset.vfxReviewSeen=seen.join(' ');}});
+  } catch (error) {
+    console.warn('Original VFX review unavailable',error);
+    return effectArt;
+  }
+}
+
 async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main']) {
   if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
   const PIXI = createPixiAssetScope(stage.PIXI);
@@ -380,6 +431,10 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
         const {loadCandidateCharacterArtReview}=await import('../presentation/candidateCharacterArtReview.js');
         return await loadCandidateCharacterArtReview(rosterOptions,location.href);
       }
+      if(isOriginalRuntimeLocation(location)){
+        const {loadCompletedOriginalCharacters}=await import('../presentation/completedOriginalCharacters.js');
+        return await loadCompletedOriginalCharacters(rosterOptions,location.href);
+      }
       return await loadLicensedCharacterRoster(rosterOptions);
     }
     return await loadPixiCharacterRuntimeBundle({
@@ -406,22 +461,40 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
   if (!wanted) return null;
   let frameUrls = [];
   try {
-    const response = await fetch(new URL(LICENSED_HUNT_ART_MANIFEST_URL, globalThis.location.href), { signal });
-    if (!response.ok) throw new Error(`HUNT_ART_MANIFEST_HTTP_${response.status}`);
-    const manifest = validateRuntimeMapArtBundle(await response.json());
-    const field = manifest.fields.find((entry) => entry.fieldId === wanted);
+    let manifest = null;
+    let field = null;
+    for (const url of (["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)]:[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))) {
+      const response = await fetch(new URL(url, globalThis.location.href), { signal });
+      if (!response.ok) {
+        if (url !== LICENSED_HUNT_ART_MANIFEST_URL) continue;
+        throw new Error(`HUNT_ART_MANIFEST_HTTP_${response.status}`);
+      }
+      manifest = validateRuntimeMapArtBundle(await response.json());
+      field = manifest.fields.find((entry) => entry.fieldId === wanted) ?? null;
+      if (field) break;
+    }
     if (!field) return null;
     // The map frames are the heavy part of a Hunt (about a megabyte each).
     // Streaming them first gives the loading screen real progress on a slow
     // link, and the texture loader then reads the same bytes instead of
     // downloading them again.
-    frameUrls = field.frames.map((frame) => new URL(frame.src.replaceAll("\\", "/"), globalThis.location.href).href);
+    const atlasFrames = field.depthOccluders?.animationFrames;
+    const atlasEntries = atlasFrames ? atlasFrames.flatMap(frame => frame.atlases) : (field.depthOccluders?.atlases ?? []);
+    frameUrls = [...new Set([...field.frames.map((frame) => frame.src), ...atlasEntries.map((atlas) => atlas.src)])]
+      .map((src) => new URL(src.replaceAll("\\", "/"), globalThis.location.href).href);
     const report = () => onProgress?.(assetPrefetcher.progress(frameUrls));
     const stopReporting = assetPrefetcher.subscribe(report);
     try { await assetPrefetcher.fetchAll(frameUrls, { signal }); } finally { stopReporting(); }
     if (signal?.aborted) return null;
     const PIXI = withPrefetchedTextures(createPixiAssetScope(stage.PIXI), (url) => assetPrefetcher.blobOf(url));
-    return await createRuntimeMapArtFieldLoader({ PIXI }).load({ manifest, fieldId: wanted });
+    const art = await createRuntimeMapArtFieldLoader({ PIXI }).load({ manifest, fieldId: wanted });
+    // 2.5D: a field rendered from 3D may carry occluder pieces; without them it stays flat.
+    const shutters = factoryShutterSpec(field, manifest.assetId);
+    const occluders = await loadHuntDepthOccluders({ PIXI, field, cutouts: shutters?.cutouts ?? [], solidRegions: shutters?.solidRegions ?? [] }).catch((error) => {
+      console.warn(`CHAMPIONSHIP_HUNT_DEPTH_FALLBACK: ${error.message}`);
+      return null;
+    });
+    return Object.freeze({ ...withHuntDepthOccluders(art, occluders), factoryShutters: occluders ? shutters : null });
   } catch (error) {
     if (!signal?.aborted) console.warn(`CHAMPIONSHIP_HUNT_ART_FALLBACK: ${error.message}`);
     return null;
@@ -455,7 +528,7 @@ async function loadOptionalCageFieldArt(stage) {
       unlockedCount: cageFrame?.unlockedCount,
       expansion: cageFrame?.expansion ?? null,
       previewFieldId: CAGE_ART_PREVIEW_FIELD || null });
-    return await createRuntimeMapArtTileSetLoader({ PIXI: stage.PIXI }).load({
+    const fieldArt=await createRuntimeMapArtTileSetLoader({ PIXI: stage.PIXI }).load({
       manifest,
       placements: plan.placements,
       residentViewport: plan.residentViewport,
@@ -464,6 +537,8 @@ async function loadOptionalCageFieldArt(stage) {
       placementEvidence: plan.placementEvidence,
       presentationMode: plan.mode
     });
+    try{return await withCageForeground({PIXI:stage.PIXI,art:fieldArt,manifest,placements:plan.placements});}
+    catch(error){await fieldArt.dispose();throw error;}
   } catch (error) {
     console.warn(`CHAMPIONSHIP_CAGE_ART_FALLBACK: ${error.message}`);
     return null;
@@ -578,7 +653,8 @@ async function mountRaisingHome() {
           feedbackArt,
           getSelectedTool: () => toolbar?.getSelectedTool() ?? null,
           onTrainingFrame,
-          onActorFrame:new URLSearchParams(location.search).get('presentation')==='developer'
+          // Read-only tutorial hit positions support input QA without changing the player UI.
+          onActorFrame:new URLSearchParams(location.search).get('presentation')==='developer'||app.getInteractiveTutorial()?.finished===false
             ? positions=>{host.dataset.residentScreenPositions=JSON.stringify(positions);}:null,
           onFallback(message) {
             root.dataset.fieldFallback = "true";
@@ -737,6 +813,15 @@ async function enterChampionshipRound(playerInstanceIds) {
 }
 
 async function mountBattleSelect() {
+  const tutorial=app.getInteractiveTutorialBattle();
+  if(tutorial){
+    if(battleRuntime!==tutorial.runtime)battleRuntime?.dispose();
+    battleRuntime=tutorial.runtime;battleAttemptId=null;battleProgressBefore=null;
+    return createBattleSelectView({root,matches:battleRuntime.listMatches(),menuCopy:battleMenuLabels(),onEnter:()=>false,
+      tutorial:{read:()=>app.getInteractiveTutorialBattle(),checkpoint:()=>app.getInteractiveTutorial().checkpoint,
+        blocked:()=>{const t=app.getInteractiveTutorial();return t.pendingSave||t.restoring;},
+        subscribe:listener=>app.subscribeRaising(listener),input:(action,value,cp)=>app.interactiveBattleInput(action,value,cp)}});
+  }
   battleRuntime?.dispose();
   battleRuntime = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
   battleAttemptId = null;
@@ -835,6 +920,8 @@ async function mountBattleSelect() {
 }
 
 async function mountBattleField() {
+  const tutorial=app.getInteractiveTutorialBattle();
+  if(tutorial)battleRuntime=tutorial.runtime;
   const activeRuntime = battleRuntime;
   const activeAttemptId = battleAttemptId;
   const source = activeRuntime.startMatch();
@@ -862,7 +949,7 @@ async function mountBattleField() {
           const loaded=await Promise.allSettled([
             loadOptionalBattleFieldArt(stage,source),
             loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId)),
-            loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href})
+            loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
           for(const result of loaded)if(result.status==='rejected')console.warn('Battle art unavailable',result.reason);
@@ -912,7 +999,7 @@ async function mountBattleField() {
         }
       };
     },
-    onExit() {
+    onExit: tutorial?undefined:()=>{
       app.leaveScreen();
       battleRuntime?.dispose();
       battleRuntime = null;
@@ -928,6 +1015,7 @@ async function mountBattleField() {
     view.render(observed);
     if (showPersonality) root.dataset.battlePersonality = battlePersonalityReadout(activeRuntime);
     if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
+      if(tutorial){app.finishInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       app.finishMatch({ ...activeRuntime.getSettlementResult(), attemptId: activeAttemptId });
       // The settlement (prize, rank, titles) is committed in the session; the
       // result screen is a safe place to write it.
@@ -1003,11 +1091,13 @@ function playResultHighlight(request, getStage, getAnchor = null) {
 }
 
 async function mountBattleResult() {
+  const tutorial=app.getInteractiveTutorialBattle();
+  if(tutorial)battleRuntime=tutorial.runtime;
   // The result consumes the app's actual receipt, including loss and clamping.
   const chosen = battleRuntime.getChosenMatch?.() ?? null;
   const record=app.getTitleProgress().record;
   const hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href}).catch(()=>null);
-  const receipt = app.getBattleReceipt();
+  const receipt = tutorial?null:app.getBattleReceipt();
   const progression = battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),
     earnedTitles:app.getBattleBadges().filter(id=>!battleProgressBefore.badges.includes(id)).map(id=>({id,name:titleEventText(id,'name',uiText('頭銜 {id}',{id}))}))}:null;
   // Only this attempt's own settled receipt can earn the highlight.
@@ -1019,7 +1109,7 @@ async function mountBattleResult() {
   // Which of the three result slots will show a character, so the highlight's
   // light can fall where they stand (resultHeroAnchor, same frame layout).
   const heroSlots = (() => {
-    try { return hudArt ? battleRuntime.getResultParticipants().slice(0, 3).map((entry, index) => (entry ? index : -1)).filter((index) => index >= 0) : []; }
+    try { return hudArt ? (tutorial?.participants??battleRuntime.getResultParticipants()).slice(0, 3).map((entry, index) => (entry ? index : -1)).filter((index) => index >= 0) : []; }
     catch { return []; }
   })();
   let characterHostNode = null;
@@ -1029,7 +1119,8 @@ async function mountBattleResult() {
   };
   const resultView=createBattleResultView({
     root,
-    outcome: battleRuntime.outcome(),
+    outcome: tutorial?.outcome??battleRuntime.outcome(),
+    tutorial:Boolean(tutorial),
     receipt,
     feedback,
     highlight: (request) => playResultHighlight(request, () => stageReady, heroAnchor),
@@ -1039,11 +1130,12 @@ async function mountBattleResult() {
     hudArt,
     // exitBattle returns to the tournament board while the run is still owed
     // a round; the verdict is already recorded when this result mounts.
-    exitLabel:chosen?.championship&&app.getChampionshipRun()?.continues?uiText('返回賽事'):undefined,
-    statistics:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
+    exitLabel:tutorial?(await import('../text/interactiveTutorialBattleText.js')).tutorialBattleText().end:chosen?.championship&&app.getChampionshipRun()?.continues?uiText('返回賽事'):undefined,
+    statistics:tutorial?null:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
     unlocks:battleProgressBefore?app.getShopFrame().listings.filter(item=>!battleProgressBefore.shopIds.includes(item.shopRecordIndex)).map(item=>({name:uiText(item.displayName)})):[],
     progression,
     onExit() {
+      if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       battleRuntime?.dispose();
       battleRuntime = null;
       battleAttemptId = null;
@@ -1064,8 +1156,8 @@ async function mountBattleResult() {
   stageReady = ensurePixiStage(characterHostNode);
   let resultCharacters=null;
   try{
-    const participants=battleRuntime.getResultParticipants(),stage=await stageReady;
-    resultCharacters=await mountBattleResultCharacters({stage,hudArt,participants,won:battleRuntime.outcome().winningTeam===0});
+    const participants=tutorial?.participants??battleRuntime.getResultParticipants(),stage=await stageReady;
+    resultCharacters=await mountBattleResultCharacters({stage,hudArt,participants,won:(tutorial?.outcome??battleRuntime.outcome()).winningTeam===0});
   }catch(error){console.warn('Battle result character reference unavailable',error);}
   return {...resultView,dispose(){resultCharacters?.dispose();resultView.dispose();}};
 }
@@ -1106,6 +1198,7 @@ async function mountCurrentScreen() {
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
     else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = createShopView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = createDatabaseView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, battleBadges:app.getBattleBadges(), onExit(){app.leaveScreen();}});
     else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
@@ -1194,6 +1287,8 @@ function applyQaUnlockIfRequested() {
 }
 
 async function openGameplay() {
+  tutorialPreview?.dispose();tutorialPreview=null;
+  unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
   titleScreen.hidden = true;
   root.hidden = false;
   applyQaUnlockIfRequested();
@@ -1224,7 +1319,7 @@ async function openGameplay() {
     if (mountedScreen !== app.getScreen()) return;
     if (app.getScreen() === CHAMPIONSHIP_SCREENS.SCHEDULE) {
       view?.render?.({ calendar, eligibleRecordIndices: app.getAvailableBattleRecordIndices(),progress:app.getTitleProgress() });
-    } else if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) {
+    } else if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT&&!app.getInteractiveTutorialBattle()) {
       const current = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
       view?.render?.({ matches: current.listMatches() });
       current.dispose();
@@ -1233,7 +1328,17 @@ async function openGameplay() {
   unsubscribeScreen = app.subscribeScreen(() => {
     refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
-  unsubscribeCalendar = app.getSession().subscribeRaisingHome(refreshCalendarViews);
+  let calendarSession=null,stopCalendarSession=null;
+  const bindCalendarSession=()=>{
+    const next=app.getSession();
+    if(next===calendarSession)return;
+    stopCalendarSession?.();calendarSession=next;
+    stopCalendarSession=next?.subscribeRaisingHome(refreshCalendarViews)??null;
+    calendarKey="";
+  };
+  bindCalendarSession();
+  const stopCalendarRebind=app.subscribeRaising(()=>{bindCalendarSession();if(app.getSession())void refreshCalendarViews();});
+  unsubscribeCalendar=()=>{stopCalendarSession?.();stopCalendarRebind();calendarSession=null;};
   unsubscribeHud?.();
   {
     const stopShop = app.subscribeShop(refreshStatusBar);
@@ -1258,6 +1363,8 @@ async function openGameplay() {
     toolbar = createChampionshipToolbar({
       root: document.body,
       onMenuEntry: runToolbarMenuEntry,
+      getTutorialCheckpoint:()=>app.getInteractiveTutorial()?.checkpoint??null,
+      onToolChange:(tool,context)=>{if(context?.userInitiated)app.selectInteractiveTutorialTool(tool,context.checkpoint);},
       getFoodStock:()=>{const rows=app.getShopFrame()?.listings??[];return {
         feed:rows.find(r=>r.shopRecordIndex===0)?.owned,protein:rows.find(r=>r.shopRecordIndex===1)?.owned,
         medicine:rows.find(r=>r.shopRecordIndex===2)?.owned,woundMedicine:rows.find(r=>r.shopRecordIndex===3)?.owned};},
@@ -1267,8 +1374,19 @@ async function openGameplay() {
   refreshStatusBar();
   refreshToolbarMode();
 
+  let previousTutorialTool=null;
+  const refreshTutorialTools=()=>{
+    const tutorial=app.getInteractiveTutorial(),active=tutorial&&!tutorial.finished&&app.getScreen()===CHAMPIONSHIP_SCREENS.RAISING_HOME;
+    const next=active?tutorial.tool:null,key=active?tutorial.checkpoint.stage+":"+tutorial.checkpoint.message:null;
+    if(key===previousTutorialTool)return;
+    previousTutorialTool=key;toolbar.setTutorialTool(next,{select:tutorial?.selectTool??true,key,menuEntry:tutorial?.menuEntry});
+  };
+  unsubscribeTutorialTools=app.subscribeRaising(refreshTutorialTools);
+  refreshTutorialTools();
   mountedScreen = null;
   await mountCurrentScreen();
+  if(app.getInteractiveTutorial()&&!app.getInteractiveTutorial().finished)
+    tutorialPreview=mountInteractiveTutorialPreview({app,preview:isInteractiveTutorialPreviewLocation(location)});
 }
 
 /**
@@ -1289,7 +1407,8 @@ function refreshToolbarMode() {
 }
 
 /** Act on a submenu entry. Entries with no destination yet never reach here. */
-function runToolbarMenuEntry(entry) {
+function runToolbarMenuEntry(entry,context={}) {
+  if(app.getInteractiveTutorial()&&!app.getInteractiveTutorial().finished){app.openInteractiveTutorialMenu(entry.id,context.checkpoint);return;}
   if(app.hasRaisingPresentation())return;
   // Product-authored System entry (2026-09-29): the settings screen. It opens
   // over the current screen and changes nothing in the session.
@@ -1317,6 +1436,7 @@ function runToolbarMenuEntry(entry) {
   else if (entry.screen === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) app.openDigimonList();
   else if (entry.screen === CHAMPIONSHIP_SCREENS.SCHEDULE) app.openSchedule();
   else if (entry.screen === CHAMPIONSHIP_SCREENS.HELP) app.openHelp();
+  else if (entry.screen === CHAMPIONSHIP_SCREENS.MEDALS) app.openMedals();
   else if (entry.screen === CHAMPIONSHIP_SCREENS.TAMER_INFO) app.openTamerInfo();
 }
 
@@ -1345,7 +1465,7 @@ function runToolbarMenuEntry(entry) {
 // closed on the result no longer loses the win; app.save() still refuses any
 // battle that is running or unsettled.
 const HIDE_SAVE_SCREENS = new Set([
-  CHAMPIONSHIP_SCREENS.SHOP, CHAMPIONSHIP_SCREENS.DATABASE, CHAMPIONSHIP_SCREENS.CAGE_EDIT,
+  CHAMPIONSHIP_SCREENS.SHOP, CHAMPIONSHIP_SCREENS.DATABASE, CHAMPIONSHIP_SCREENS.MEDALS, CHAMPIONSHIP_SCREENS.CAGE_EDIT,
   CHAMPIONSHIP_SCREENS.DIGIMON_LIST, CHAMPIONSHIP_SCREENS.SCHEDULE, CHAMPIONSHIP_SCREENS.HELP,
   CHAMPIONSHIP_SCREENS.TAMER_INFO, CHAMPIONSHIP_SCREENS.GATE_SELECT, CHAMPIONSHIP_SCREENS.HUNT_LOADOUT,
   CHAMPIONSHIP_SCREENS.BATTLE_SELECT, CHAMPIONSHIP_SCREENS.CHAMPIONSHIP, CHAMPIONSHIP_SCREENS.BATTLE_RESULT
@@ -1419,6 +1539,8 @@ async function openSaveDetails() {
 
 /** Save & Quit returns to the title, which is where the original ends a session. */
 async function returnToTitle() {
+  tutorialPreview?.dispose();tutorialPreview=null;
+  unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
   clockDriver?.setActive(false);
   autosave?.dispose();autosave=null;
   statusBar?.dispose();statusBar=null;
@@ -1543,6 +1665,7 @@ async function startNewGame(names={}) {
     // page is next hidden there would be no save at all. Write the new game
     // once now, through the same port, so Continue always has something.
     try { app.save(); } catch (error) { console.warn(`CHAMPIONSHIP_NEW_GAME_SAVE: ${error.message}`); }
+    if(shouldOfferInteractiveTutorial(location))app.offerInteractiveTutorial();
     await openGameplay();
     return true;
   } catch (error) {
@@ -1608,14 +1731,17 @@ const titleSettingsButton = document.getElementById("cm-title-settings");
  * place. Nothing is remounted, so the page, its selection and its scroll stay.
  */
 function relabelChrome() {
-  document.title = uiText("數碼獸冠軍賽 — 2026");
-  const heading = titleScreen.querySelector(".cm-title__name");
-  // The logo is drawn brand art and keeps its Chinese; English readers get
-  // the name through the heading's label.
+  const currentLang = document.documentElement.lang || "zh-Hant";
+  document.title = getActiveGameTitle(currentLang) + " · 2026";
+  const eyebrow = titleScreen?.querySelector(".cm-title__eyebrow");
+  const heading = titleScreen?.querySelector(".cm-title__name");
+  if (eyebrow) {
+    eyebrow.textContent = getTitleEyebrow(currentLang);
+  }
   if (heading) {
-    heading.lang = "zh-Hant";
-    if (document.documentElement.lang === "en") heading.setAttribute("aria-label", "Digimon Championship");
-    else heading.removeAttribute("aria-label");
+    heading.lang = currentLang;
+    heading.innerHTML = getTitleHeadingHtml(currentLang);
+    heading.setAttribute("aria-label", getActiveGameTitle(currentLang));
   }
   retranslate(titleScreen);
   statusBar?.relabel?.();

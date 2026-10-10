@@ -137,10 +137,13 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
     };
   }
 
+  const tutorial=()=>{const t=app.getInteractiveTutorial?.();return t&&!t.finished?t:null;};
+  let tutorialGesture=null;
   function gateSelectBlock() {
     const selectedGateId = app.getSelectedGateId();
     const admission = app.getGateAdmission(selectedGateId);
     return {
+      tutorial:Boolean(tutorial()),
       gates: app.getGates().map((gate) => ({
         gateId: gate.gateId,
         ordinal: gate.ordinal,
@@ -149,7 +152,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
         // presentation default a localization layer may replace.
         biomeId: gate.biomeId,
         identityEvidence: gate.identityEvidence,
-        displayName: gate.displayName,
+        displayName: gate.tutorial ? "教學關卡" : gate.displayName,
         displayNameEvidence: gate.displayNameEvidence,
         codeString: gate.codeString,
         entranceFeeBits: gate.entranceFeeBits,
@@ -159,7 +162,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
         unlockKind: gate.unlockKind,
         unlockParameter: gate.unlockParameter,
         selected: gate.gateId === selectedGateId,
-        art: { thumbnail: huntGateThumbnail(gate) }
+        art: { thumbnail: gate.tutorial?null:huntGateThumbnail(gate) }
       })),
       gateCount: { value: app.getGates().length, evidence: "ROM_VERIFIED" },
       selection: { gateId: selectedGateId },
@@ -232,12 +235,12 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
         target: huntTargetReadout(runtime, app.getHuntLoadout()?.getHudCapabilities()),
         plugins:huntPluginReadout(runtime,app.getHuntLoadout()?.getHudCapabilities()),
         time:app.getHuntTimeState?.() ?? null,
-        gateName: gate?.displayName ?? null,
+        gateName: gate?.tutorial ? "教學關卡" : gate?.displayName ?? null,
         actorName: runtime.getPlayer().displayName,
         // What the HUD may display is decided at loadout by the fitted plugins.
         // A readout with no plugin behind it stays dark - the recovered rule.
         capabilities: app.getHuntLoadout()?.getHudCapabilities() ?? null,
-        exitAvailable: true,
+        exitAvailable: !tutorial(),
         note: "Deliberately minimal. hunt_sub_scene carries map_marker0..23 and remain_icon0..3 as structural evidence only; their semantics are unknown, so none are rendered."
       },
       affordances: {
@@ -253,7 +256,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
         note: "Native tool/actor ports share the normal encounter RNG. Full AI and every-tool live ROM parity remain separate acceptance requirements."
       },
       toolbar: HUNT_TOOLBAR_FRAME,
-      toolState:runtime.getToolState?.() ?? null
+      toolState:(()=>{const state=runtime.getToolState?.()??null,t=tutorial();return state&&t?{...state,tools:state.tools.map(tool=>({...tool,enabled:tool.enabled&&!t.pendingSave&&!t.dialogue&&t.action==='select'&&tool.id===t.tool}))}:state;})()
     };
   }
 
@@ -292,6 +295,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
       contractVersion: GATE_HUNT_PRESENTATION_CONTRACT_VERSION,
       revision: frameRevision,
       screen,
+      tutorial:tutorial(),
       gateSelect: screen === CHAMPIONSHIP_SCREENS.GATE_SELECT ? gateSelectBlock() : null,
       huntLoadout: screen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT ? huntLoadoutBlock() : null,
       huntField: screen === CHAMPIONSHIP_SCREENS.HUNT_FIELD ? huntFieldBlock() : null,
@@ -416,12 +420,12 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
     },
     selectGate(gateId) {
       if (app.getSelectedGateId() === gateId) return currentFrame;
-      app.selectGate(gateId);
+      app.selectGate(gateId,tutorial()?.checkpoint);
       return commit();
     },
     confirmGate() {
-      app.confirmGate();
-      return commit();
+      const result=app.confirmGate(tutorial()?.checkpoint);
+      return result?.then ? result.then(()=>commit()) : commit();
     },
     selectEquipment(equipmentClass, itemId) {
       app.selectHuntEquipment(equipmentClass, itemId);
@@ -441,6 +445,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
     },
     /** Continuous input goes to the existing field runtime only. */
     panCamera(deltaX, deltaY, viewportWidth, viewportHeight) {
+      if(tutorial())return app.interactiveHuntInput('camera',[deltaX,deltaY,viewportWidth,viewportHeight],tutorialGesture??tutorial().checkpoint);
       return app.getHuntRuntime()?.panCamera(deltaX, deltaY, viewportWidth, viewportHeight) ?? false;
     },
     selectWildAt(worldX, worldY) {
@@ -453,10 +458,10 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
       return selected;
     },
     abortEnclosureStroke() { return app.abortEnclosureStroke(); },
-    selectHuntTool(kind) { const accepted=app.getHuntRuntime()?.selectTool(kind)??false; publish(); return accepted; },
-    toolPointerDown(x,y) { const accepted=app.getHuntRuntime()?.toolPointerDown(x,y)??false; publish(); return accepted; },
-    toolPointerMove(x,y) { return app.getHuntRuntime()?.toolPointerMove(x,y)??false; },
-    toolPointerUp(x,y) { return app.getHuntRuntime()?.toolPointerUp(x,y)??false; },
+    selectHuntTool(kind,checkpoint=tutorial()?.checkpoint) { const accepted=tutorial()?app.interactiveHuntInput('select',[kind],checkpoint):app.getHuntRuntime()?.selectTool(kind)??false; publish(); return accepted; },
+    toolPointerDown(x,y) { tutorialGesture=tutorial()?.checkpoint??null;const accepted=tutorial()?app.interactiveHuntInput('down',[x,y],tutorialGesture):app.getHuntRuntime()?.toolPointerDown(x,y)??false; publish(); return accepted; },
+    toolPointerMove(x,y) { return tutorial()?app.interactiveHuntInput('move',[x,y],tutorialGesture):app.getHuntRuntime()?.toolPointerMove(x,y)??false; },
+    toolPointerUp(x,y) { return tutorial()?app.interactiveHuntInput('up',[x,y],tutorialGesture):app.getHuntRuntime()?.toolPointerUp(x,y)??false; },
     beginEnclosureStroke(worldX, worldY) {
       return app.beginEnclosureStroke(worldX, worldY);
     },
@@ -500,7 +505,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
     /** Relay from the one Application-owned ticker. Not a gameplay intent. */
     tick(deltaMs) {
       const runtime=app.getHuntRuntime();
-      runtime?.tick(deltaMs);
+      if(app.advanceHunt)app.advanceHunt(deltaMs);else runtime?.tick(deltaMs);
       app.checkHuntDeadline?.();
       if (app.getScreen() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return;
       if(!runtime?.getToolState?.())return;
@@ -521,6 +526,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
       const camera = runtime.getCamera(viewportWidth, viewportHeight);
       const transform = huntViewportTransform(viewportWidth, viewportHeight);
       return {
+        tutorial:runtime.getTutorialHuntProgress?.()??null,
         gateId: world.gateId,
         tileSizePx: world.tileSizePx,
         worldWidthPx: world.worldWidthPx,

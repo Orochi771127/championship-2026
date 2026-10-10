@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:toolbar:original-point64:r1:20261009",
+  "runtimeScope": "LOOPBACK_ONLY",
+  "runtimeEligible": true,
+  "publicReleasePermitted": false,
+  "shippingReady": false,
+  "humanApproved": true,
+  "runtimeAccepted": false,
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED_NOT_COMMERCIAL_CLEARANCE",
+  "ownerDirection": "2026-10-09 local integration of hand/manage/system only; Owner approved the integrated visual preview at 13:47 UTC. Runtime validation remains scoped; no publication authorization.",
+  "sourceDelivery": {
+    "fileName": "TOOLBAR_THREE_POINT64_INTAKE_R1_20261009.zip",
+    "libraryFileId": "libfile_d41f3dd3583c81919486ad3626d71b4d",
+    "sha256": "2fe5e8f71071495c9ca2680b5ae3208aa4caf7781eda875c471334b02c623836",
+    "sourceManifestSha256": "760bb508456c555cdb8f50d48dad4aae0c2d5733ebfb375b0b579104104015d5",
+    "receivedVia": "OWNER_DOWNLOADED_LOCAL_FILE"
+  },
+  "normalization": "Full square canvas1254x1254 directly sampled to64x64 with ImageMagick point filter. No16px intermediate, crop, recolor, reposition, background removal or distortion. Original masters retained outside intake ZIP.",
+  "parentVisualCandidateReviewed": true,
+  "assets": [
+    {
+      "role": "hand",
+      "assetId": "toolbar-point64-r1/hand-rest",
+      "src": "assets/production/original-ui-intake-20261007/toolbar-point64-r1-20261009/hand-rest.png",
+      "sha256": "1adcd5b6d3acfe9599ad702bd1a2959c772ce5d8a271baacbdc7f5175fc6717a",
+      "bytes": 3826,
+      "rasterSize": [
+        64,
+        64
+      ],
+      "nativeSize": [
+        16,
+        16
+      ],
+      "origin": [
+        8,
+        8
+      ],
+      "density": 4,
+      "rasterAnchor": [
+        32,
+        32
+      ],
+      "alphaBBox": [
+        15,
+        13,
+        52,
+        54
+      ],
+      "frameCount": 1
+    },
+    {
+      "role": "manage",
+      "assetId": "toolbar-point64-r1/manage-rest",
+      "src": "assets/production/original-ui-intake-20261007/toolbar-point64-r1-20261009/manage-rest.png",
+      "sha256": "5d58bcbe356bba4cdeddd663deb3e97b861273d105c4fa0a010397567855d686",
+      "bytes": 3314,
+      "rasterSize": [
+        64,
+        64
+      ],
+      "nativeSize": [
+        16,
+        16
+      ],
+      "origin": [
+        8,
+        8
+      ],
+      "density": 4,
+      "rasterAnchor": [
+        32,
+        32
+      ],
+      "alphaBBox": [
+        9,
+        19,
+        56,
+        48
+      ],
+      "frameCount": 1
+    },
+    {
+      "role": "system",
+      "assetId": "toolbar-point64-r1/system-rest",
+      "src": "assets/production/original-ui-intake-20261007/toolbar-point64-r1-20261009/system-rest.png",
+      "sha256": "a11dd5c9b8b5ddee9c81e4c7f1ecbcc83d6dd9a3b74f14957cf9e74d1b0a6030",
+      "bytes": 3150,
+      "rasterSize": [
+        64,
+        64
+      ],
+      "nativeSize": [
+        16,
+        16
+      ],
+      "origin": [
+        8,
+        8
+      ],
+      "density": 4,
+      "rasterAnchor": [
+        32,
+        32
+      ],
+      "alphaBBox": [
+        17,
+        11,
+        58,
+        57
+      ],
+      "frameCount": 1
+    }
+  ],
+  "humanApprovalScope": "HAND_MANAGE_SYSTEM_VISUAL_ONLY",
+  "ownerVisualApproval": {
+    "approved": true,
+    "scope": "HAND_MANAGE_SYSTEM_VISUAL_ONLY",
+    "approvedAt": "2026-10-09T13:47:00Z",
+    "ownerMessageId": "Sentinel_751ba88b201c8191ab2994fbbbb84eed",
+    "ownerQuote": "嗯嗯 可以",
+    "evidenceSource": "PARENT_RELAY_OF_OWNER_MESSAGE",
+    "previewLibraryId": "libfile_73041eca66b081919f5ec831b0dc1e49",
+    "assetSha256": {
+      "hand": "1adcd5b6d3acfe9599ad702bd1a2959c772ce5d8a271baacbdc7f5175fc6717a",
+      "manage": "5d58bcbe356bba4cdeddd663deb3e97b861273d105c4fa0a010397567855d686",
+      "system": "a11dd5c9b8b5ddee9c81e4c7f1ecbcc83d6dd9a3b74f14957cf9e74d1b0a6030"
+    },
+    "doesNotAuthorize": [
+      "FULL_GAME_RUNTIME_ACCEPTANCE",
+      "PUBLIC_RELEASE",
+      "COMMERCIAL_RIGHTS_CLEARANCE",
+      "COMMIT_PUSH_DEPLOY"
+    ]
+  }
+}

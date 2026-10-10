@@ -1,3 +1,4 @@
+import { originalShopCageThumbnail } from './originalShopCageArt.js';
 // Presentation of the existing production fields and traced editor coordinates.
 // The editor's slot ownership is authoritative; no geometry here places a cage.
 // The runtime cage fields (Owner 2026-10-06: original opus art replaces the licensed pixels).
@@ -41,6 +42,8 @@ export function cageUiImage(moduleId, baseUrl) {
   return runtimeFieldFrame(definition) ?? assembledCageArt(definition?.cageDefinitionIndex, baseUrl)?.src ?? null;
 }
 export function shopCageUiImage(shopRecordIndex, baseUrl) {
+  const original = originalShopCageThumbnail(shopRecordIndex, baseUrl);
+  if (original) return original.src;
   const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
   return definition ? assembledShopArt(shopRecordIndex, baseUrl)?.src ?? cageUiImage(definition.moduleId, baseUrl) : null;
 }

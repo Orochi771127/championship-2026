@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:opening:original-comic:r2:20261010",
+  "sourceLibraryId": "libfile_2eff4aeb18c081919a4f4a84fe1f4102",
+  "sourceArchive": "OPENING_ORIGINAL_COMIC_R2_20261010.zip",
+  "sourceArchiveBytes": 11891842,
+  "sourceArchiveSha256": "da5f15fe529d98f88b307d70b8215b8275ee91f0a65109184f71a84cf78f17f6",
+  "masterPngDirectory": "R:\\Projects\\Championship2026\\opening-comic-r2-20261010\\source",
+  "supersededR1Permitted": false,
+  "referenceCharacters": [
+    "OC035",
+    "OC049"
+  ],
+  "charactersAreNarrativeOnly": true,
+  "playerAvatarOrHatchMapping": false,
+  "conversion": {
+    "resampling": "Lanczos full image fit within max edge",
+    "webpQuality": 86,
+    "webpMethod": 6,
+    "cropped": false,
+    "stretched": false
+  },
+  "shippingReady": false,
+  "publicReleasePermitted": false,
+  "files": [
+    {
+      "slot": "01_arena",
+      "storyCard": 1,
+      "src": "assets/production/opening/original-comic-r2-20261010/01_arena.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 133966,
+      "sha256": "73635ac2a8d1d32601979f44fcb065a20c4235e562b8438f6a495d806dc6b44b",
+      "sourcePNG": {
+        "file": "01_arena.png",
+        "sha256": "06f7915a029f750ebcb9c0a2c9d7ef46676048a6d1b46e5117b26c7969b4fe6f",
+        "bytes": 2547621,
+        "size": [
+          1254,
+          1254
+        ],
+        "storyCard": 1
+      }
+    },
+    {
+      "slot": "02_blaze_action",
+      "storyCard": 1,
+      "src": "assets/production/opening/original-comic-r2-20261010/02_blaze_action.webp",
+      "width": 560,
+      "height": 640,
+      "bytes": 106768,
+      "sha256": "58a6f23515f2d0f1262f0b968f3c231f89710a931233d4aa80da23b46498f771",
+      "sourcePNG": {
+        "file": "02_blaze_action.png",
+        "sha256": "8aa15dcbd29da69981ce8d2f44607816d0e62f5697c44fbc73a290682b319f13",
+        "bytes": 2512623,
+        "size": [
+          1173,
+          1341
+        ],
+        "storyCard": 1
+      }
+    },
+    {
+      "slot": "03_cloud_action",
+      "storyCard": 1,
+      "src": "assets/production/opening/original-comic-r2-20261010/03_cloud_action.webp",
+      "width": 640,
+      "height": 480,
+      "bytes": 75224,
+      "sha256": "1679facd279f8fe88989831b810aaa444500e446d626e761239db5123f614ff6",
+      "sourcePNG": {
+        "file": "03_cloud_action.png",
+        "sha256": "4383f7000eb557ad4f891088d260cae24a73a003a6e46a6cb8d60bedb4cdb3b0",
+        "bytes": 2211033,
+        "size": [
+          1448,
+          1086
+        ],
+        "storyCard": 1
+      }
+    },
+    {
+      "slot": "04_partnership",
+      "storyCard": 2,
+      "src": "assets/production/opening/original-comic-r2-20261010/04_partnership.webp",
+      "width": 549,
+      "height": 768,
+      "bytes": 142718,
+      "sha256": "f2194007a25c0a2daedaa992eac7c101e9ce9a7103ddf81be9f6c198249f9381",
+      "sourcePNG": {
+        "file": "04_partnership.png",
+        "sha256": "c97bdcd36f37beca869207bbc6df62de75872e10944a864ee2dfd6b4c5d521f7",
+        "bytes": 2703610,
+        "size": [
+          1060,
+          1484
+        ],
+        "storyCard": 2
+      }
+    },
+    {
+      "slot": "05_invitation",
+      "storyCard": 3,
+      "src": "assets/production/opening/original-comic-r2-20261010/05_invitation.webp",
+      "width": 768,
+      "height": 768,
+      "bytes": 97420,
+      "sha256": "1d9789304d282eab9f11173237e6efffb85c9684ff005ae01391d93e40c05a5a",
+      "sourcePNG": {
+        "file": "05_invitation.png",
+        "sha256": "2db6f7af30af3aa9dfbc0429d3dcf81a3efdca308c17333a026e2268c720f017",
+        "bytes": 2145417,
+        "size": [
+          1254,
+          1254
+        ],
+        "storyCard": 3
+      }
+    }
+  ]
+}

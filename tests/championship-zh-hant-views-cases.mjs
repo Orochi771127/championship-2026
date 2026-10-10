@@ -184,7 +184,7 @@ test("Hunt Result translates failure/release UI without committing a displayed d
   const root = useDocument(t);
   const block = {
     title: "HUNT RESULT", outcomeLabel: "ON MEMORY CARD", speciesId: "species-034",
-    speciesLabel: "SPECIES 034", displayName: "亞古獸", commitError: "SAVE_FAILED",
+    speciesLabel: "SPECIES 034", displayName: "鎧焰蜥", commitError: "SAVE_FAILED",
     rows: [{ kind: "CARD", key: "card:wild-3", displayName: "HUNT", canRelease: true }]
   };
   const names = [], releases = []; let home = 0;
@@ -192,7 +192,7 @@ test("Hunt Result translates failure/release UI without committing a displayed d
     setHuntResultName: name => names.push(name), confirmHuntResult: () => home++, requestHuntResultRelease: key => releases.push(key)
   } };
   const view = createHuntResultView({ root, source });
-  assert.equal(root.querySelector(".cm-vs2-result__species").textContent, "亞古獸");
+  assert.equal(root.querySelector(".cm-vs2-result__species").textContent, "鎧焰蜥");
   assert.match(visibleCopy(root), /儲存失敗/);
   buttonWithText(root, "返回牧場").click();
   assert.equal(home, 1); assert.deepEqual(names, []);
@@ -241,7 +241,7 @@ test("Hunt result projection distinguishes an unnamed card entry from a user nam
     getHuntResult: () => raw, getHuntRuntime: () => ({ getOnCardEntries: () => cards }), getRaisingInstances: () => []
   });
   const frame = source.getFrame().huntResult;
-  assert.equal(frame.displayName, "亞古獸");
-  assert.deepEqual(frame.rows.map(row => row.displayName), ["亞古獸", "HUNT"]);
+  assert.equal(frame.displayName, "鎧焰蜥");
+  assert.deepEqual(frame.rows.map(row => row.displayName), ["鎧焰蜥", "HUNT"]);
   assert.equal(JSON.stringify({ raw, cards }), before);
 });

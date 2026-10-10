@@ -49,6 +49,7 @@ export async function loadPixiCharacterRuntimeBundle({
   const loadedUrls = new Set([runtimeUrl]);
   const textures = new Map();
   const decodedSources = new Set();
+  const atlasPages = [];
   async function releaseResources() {
     // Pixi's ImageSource.destroy releases GPU storage and drops .resource,
     // but does not close its decoded ImageBitmap. Explicitly close only after
@@ -58,7 +59,7 @@ export async function loadPixiCharacterRuntimeBundle({
     textures.clear();
     await Promise.allSettled([...loadedUrls].map(url=>PIXI.Assets.unload?.(url)));
     for(const [bitmap,source] of decoded)if(source.destroyed)bitmap.close();
-    decodedSources.clear();sheets.length=0;loadedUrls.clear();
+    decodedSources.clear();sheets.length=0;loadedUrls.clear();atlasPages.length=0;
   }
 
   try {
@@ -93,13 +94,16 @@ export async function loadPixiCharacterRuntimeBundle({
         const atlasAsset = replacementGuard ? guardedAtlases.get(dataUrl) : await PIXI.Assets.load(dataUrl);
         loadedUrls.add(dataUrl);
         let sheet;
+        let pageSource;
         let owned = false;
         if (atlasAsset?.textures && atlasAsset?.data?.frames) {
           // Pixi's spritesheet loader recognizes TexturePacker JSON and returns
           // an already parsed Spritesheet, including its image dependency.
           sheet = atlasAsset;
+          pageSource = sheet.textureSource ?? Object.values(sheet.textures)[0]?.source;
         } else {
           const texture = await PIXI.Assets.load(imageUrl);
+          pageSource = texture.source;
           if(texture.source)decodedSources.add(texture.source);
           loadedUrls.add(imageUrl);
           sheet = new PIXI.Spritesheet({
@@ -111,6 +115,7 @@ export async function loadPixiCharacterRuntimeBundle({
           owned = true;
         }
         sheets.push({ sheet, owned });
+        atlasPages.push({side:sideName,page,dataUrl,imageUrl,source:pageSource});
         if(sheet.textureSource)decodedSources.add(sheet.textureSource);
         for (const [key, value] of Object.entries(sheet.textures)) {
           if (textures.has(key)) throw new Error(`Duplicate character texture key: ${key}`);
@@ -183,6 +188,7 @@ export async function loadPixiCharacterRuntimeBundle({
         entityId: runtime.entityId,
         textureCount: textures.size,
         sheetCount: sheets.length,
+        textureMemory: characterTextureMemory(atlasPages),
         reviewOnly: runtime.artProfile?.reviewOnly === true,
         runtimeEligible: runtime.artProfile?.runtimeEligible === true,
         ticker: "SCENE_OWNED_APPLICATION_TICKER_REQUIRED"
@@ -196,6 +202,25 @@ export async function loadPixiCharacterRuntimeBundle({
       return disposal;
     }
   });
+}
+
+function characterTextureMemory(pages){
+  const sources=new Map();let bytes=0,unknownSourceCount=0;
+  const atlasPages=pages.map(({source,...page})=>{
+    const key=source??page,first=!sources.has(key);
+    if(first)sources.set(key,sources.size);
+    // TextureSource.width is logical; physical pixel dimensions include resolution.
+    const width=source?.pixelWidth,height=source?.pixelHeight;
+    const known=Number.isSafeInteger(width)&&width>0&&Number.isSafeInteger(height)&&height>0;
+    const baseRgbaBytes=known?width*height*4:null;
+    if(first){if(known)bytes+=baseRgbaBytes;else unknownSourceCount++;}
+    return Object.freeze({...page,sourceIndex:sources.get(key),width:known?width:null,height:known?height:null,
+      textureFormat:source?.format??null,baseRgbaBytes,countedInEstimate:first});
+  });
+  return Object.freeze({measurement:'BASE_RGBA8_ESTIMATE_NOT_GPU_USAGE',
+    basis:'Loaded TextureSource physical pixels × 4; excludes mipmaps, decode copies and driver/cache overhead',
+    pageCount:pages.length,sourceCount:sources.size,unknownSourceCount,
+    estimatedBaseRgbaBytes:unknownSourceCount?null:bytes,atlasPages:Object.freeze(atlasPages)});
 }
 // A cancelled scene and its replacement may briefly share cached downloads.
 // Keep URL ownership around the existing Assets singleton: releasing the old

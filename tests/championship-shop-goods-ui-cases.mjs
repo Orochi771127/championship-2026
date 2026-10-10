@@ -26,7 +26,7 @@ test('battle identity projects the existing session species; unknown species doe
   const session={slots:[{speciesId:10},null,null,{speciesId:999},null,null]};
   const source=createBattlePresentationSource({session,step:()=>{}});
   assert.equal(source.getFrame().combatants[0].speciesId,'species-010');
-  assert.equal(source.getFrame().combatants[0].displayName,'種子獸');
+  assert.equal(source.getFrame().combatants[0].displayName,'星芽獸');
   assert.equal(source.getFrame().combatants[3].speciesId,null);
   assert.equal(source.getFrame().combatants[3].displayName,null);
   assert.equal(session.slots[0].speciesId,10);

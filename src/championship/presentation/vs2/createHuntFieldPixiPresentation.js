@@ -1,3 +1,4 @@
+import { createHuntFactoryShutters } from './huntFactoryShutters.js';
 // VS2 -- Hunt field scene on the single Championship Pixi stage.
 //
 // The world is 2048x2048 px and the viewport is roughly 390x780. This module
@@ -13,6 +14,7 @@
 // Every visual here is product-authored neutral technical art. No ROM pixel is
 // loaded, and none of it is a claim about original terrain, props or creatures.
 
+import { describeHuntActorSilhouette } from "./huntFoliageDither.js";
 import { createHuntFieldPointer } from "./huntFieldPointer.js";
 import { flashScale } from '../presentationPreferences.js';
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
@@ -142,6 +144,7 @@ export async function mountHuntFieldPixiPresentation({
   actorLayer.sortableChildren = true;
   const strokeGraphic = new PIXI.Graphics();
   const toolGraphic = new PIXI.Graphics();
+  const tutorialGuide=new PIXI.Graphics();
   const nativeTools = new PIXI.Container({label:'native tool feedback'});
   const toolSprites=[];
   const flashGraphic = new PIXI.Graphics();
@@ -173,7 +176,11 @@ export async function mountHuntFieldPixiPresentation({
   strokeLayer.addChild(toolGraphic);
   strokeLayer.addChild(nativeTools);
   strokeLayer.addChild(strokeGraphic);
+  strokeLayer.addChild(tutorialGuide);
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
+  fieldArt?.occluders?.configureFoliageDither?.(app.renderer);
+  fieldArt?.occluders?.attach(actorLayer);
+  const factoryShutters = createHuntFactoryShutters({ PIXI, layer: actorLayer, spec: fieldArt?.factoryShutters, mapSprite: fieldArt?.displayObject });
   world.addChild(productionArtLayer, terrainLayer, objectLayer, actorLayer, strokeLayer);
   scene.addChild(backdrop, world, captureLayer, flashGraphic);
 
@@ -343,6 +350,23 @@ export async function mountHuntFieldPixiPresentation({
     node.body = body;
     node.ring = ring;
     return node;
+  }
+
+  /** 2.5D fields: foliage in front of a visible creature fades so the hunt target stays readable. */
+  function revealActorsBehindFoliage(view) {
+    const occluders = fieldArt?.occluders;
+    if (!occluders) return;
+    const boxes = [];
+    for (const wild of view.wildCreatures) {
+      const node = wildNodes.get(wild.wildId);
+      if (!node?.visible) continue;
+      const sprite = node.characterSprite;
+      boxes.push({ x: wild.worldX, y: wild.worldY, halfWidth: Math.max(18, (sprite?.width ?? 36) / 2),
+        height: Math.max(40, (sprite?.height ?? 48) + (wild.worldZ ?? 0)),
+        silhouette: occluders.usesActorAlpha ? describeHuntActorSilhouette(sprite, node) : null });
+    }
+    if (playerNode?.visible) boxes.push({ x: view.player.worldX, y: view.player.worldY, halfWidth: 24, height: 56 });
+    occluders.revealActors(boxes);
   }
 
   function syncStamina(node, wild, tethered) {
@@ -554,7 +578,7 @@ export async function mountHuntFieldPixiPresentation({
     });
   }
 
-  function render() {
+  function render(deltaMs = 0) {
     if (disposed) return;
     const view = source.field.getView({
       viewportWidth: app.screen.width,
@@ -591,14 +615,20 @@ export async function mountHuntFieldPixiPresentation({
       syncTerrain(view);
     }
     syncActors(view);
+    factoryShutters?.sync(view, deltaMs);
+    revealActorsBehindFoliage(view);
     syncEnclosure(view);
     syncCaptureStorageVfx(view);
+    tutorialGuide.clear();
+    const guide=view.tutorial?.guide??view.tutorial?.pointer;
+    if(guide)tutorialGuide.circle(guide.x,guide.y,24).stroke({color:0x65dbc4,width:3}).circle(guide.x,guide.y,5).fill({color:0xf4ffe5});
     // The camera window is the only thing that moves the world.
     world.scale.set(view.transform.scale);
     world.position.set(-view.camera.left * view.transform.scale, -view.camera.top * view.transform.scale);
-    if(onActorFrame)onActorFrame(view.wildCreatures.map(wild=>({wildId:wild.wildId,
+    fieldArt?.occluders?.syncView({left:view.camera.left,top:view.camera.top,right:view.camera.left+app.screen.width/view.transform.scale,bottom:view.camera.top+app.screen.height/view.transform.scale});
+    if(onActorFrame)onActorFrame(view.wildCreatures.map(wild=>({wildId:wild.wildId,speciesId:wild.speciesId,
       x:(wild.worldX-view.camera.left)*view.transform.scale,y:(wild.worldY-view.camera.top)*view.transform.scale,
-      state:wild.state??null,moving:wild.moving===true,currentHp:wild.currentHp??null,maxHp:wild.maxHp??null})),view.tools);
+      state:wild.state??null,bound:wild.bound??false,stunTicks:wild.stunTicks??0,worldX:wild.worldX,worldY:wild.worldY,moving:wild.moving===true,currentHp:wild.currentHp??null,maxHp:wild.maxHp??null})),view.tools);
   }
 
   const pointer = createHuntFieldPointer({
@@ -609,7 +639,7 @@ export async function mountHuntFieldPixiPresentation({
   const onPointerMove = (event) => pointer.move(event);
   const onPointerUp = (event) => pointer.up(event);
   const onPointerCancel = (event) => pointer.cancel(event);
-  const cancelPointer = () => pointer.cancel();
+  const cancelPointer = () => { pointer.cancel(); factoryShutters?.reset(); };
   const cancelHiddenPointer = () => { if (globalThis.document?.hidden) cancelPointer(); };
   globalThis.addEventListener?.("blur", cancelPointer);
   globalThis.document?.addEventListener("visibilitychange", cancelHiddenPointer);
@@ -619,7 +649,7 @@ export async function mountHuntFieldPixiPresentation({
     source.field.tick(ticker.deltaMS);
     if (disposed) return;
     fieldArt?.update(ticker.deltaMS);
-    render();
+    render(ticker.deltaMS);
     playerNode?.characterController?.update(ticker);
     for (const node of wildNodes.values()) node.characterController?.update(ticker);
   }
@@ -678,6 +708,7 @@ export async function mountHuntFieldPixiPresentation({
         selectedWildId: view?.selectedWildId ?? null,
         captureAvailability: view?.captureAvailability ?? null,
         captureVfx: captureVfxDiagnostics,
+        factoryShutters: factoryShutters?.getDiagnostics() ?? null,
         activePointerId: pointer.getOwner(),
         objectCount: objectNodes.size,
         characterAssetFailures,
@@ -718,6 +749,8 @@ export async function mountHuntFieldPixiPresentation({
       if (fieldArt?.displayObject.parent === productionArtLayer) {
         productionArtLayer.removeChild(fieldArt.displayObject);
       }
+      factoryShutters?.dispose();
+      fieldArt?.occluders?.detach();
       if (scene.parent) scene.parent.removeChild(scene);
       scene.destroy({ children: true });
       void fieldArt?.dispose();

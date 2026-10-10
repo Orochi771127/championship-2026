@@ -1,0 +1,201 @@
+{
+  "status": "PASS_BOUNDED_BATTLE_COMPLETED_AND_ZH_HANT_FULL_PREVIEW",
+  "head": "1fb7d5fd21d3da47775d34ab0d3a1a95f6623972",
+  "branch": "handoff/dot-continuation-20261001",
+  "normalOnboardingEligible": false,
+  "tests": {
+    "focused": {
+      "passed": 294,
+      "failed": 0,
+      "commandReceipt": "tutorial-runtime5-20261009/FOCUSED_TEST_COMMAND.json"
+    },
+    "presentation": {
+      "passed": 48,
+      "failed": 0,
+      "commandReceipt": "tutorial-runtime5-20261009/PRESENTATION_TEST_COMMAND.json"
+    },
+    "strengthenedBattle": {
+      "passed": 7,
+      "failed": 0,
+      "overlapsFocused": 6,
+      "additionalUniqueCase": 1,
+      "receipt": "tutorial-runtime5-20261009/BATTLE_TESTS_FINAL.txt"
+    },
+    "uniquePassedAcrossRuns": 343
+  },
+  "battleCheckpointCoverage": {
+    "stages": 17,
+    "checkpointValues": 30,
+    "menuValues": 21,
+    "running": 1,
+    "resultValues": 6,
+    "raisingAfterBattleValues": 2,
+    "failedNextSaveReloadMenuAndRaisingValues": 23
+  },
+  "actualControlledBattle": {
+    "nativeUpdates": 2830,
+    "reason": "TEAM_DOWN",
+    "verdict": "TEAM_ZERO_AHEAD",
+    "forcedResult": false
+  },
+  "battleBrowser": [
+    {
+      "locale": "zh-Hant",
+      "status": "PASS",
+      "result": {
+        "reloaded": true,
+        "resultReload": true,
+        "startRetry": true,
+        "endRetry": true,
+        "completedRetry": true,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "errors": [],
+      "controlledStart": true
+    },
+    {
+      "locale": "en",
+      "status": "PASS",
+      "result": {
+        "reloaded": false,
+        "resultReload": false,
+        "startRetry": false,
+        "endRetry": false,
+        "completedRetry": false,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "errors": [],
+      "controlledStart": true
+    },
+    {
+      "locale": "ja",
+      "status": "PASS",
+      "result": {
+        "reloaded": false,
+        "resultReload": false,
+        "startRetry": false,
+        "endRetry": false,
+        "completedRetry": false,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "errors": [],
+      "controlledStart": true
+    },
+    {
+      "locale": "th",
+      "status": "PASS",
+      "result": {
+        "reloaded": false,
+        "resultReload": false,
+        "startRetry": false,
+        "endRetry": false,
+        "completedRetry": false,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "errors": [],
+      "controlledStart": true
+    },
+    {
+      "locale": "vi",
+      "status": "PASS",
+      "result": {
+        "reloaded": false,
+        "resultReload": false,
+        "startRetry": false,
+        "endRetry": false,
+        "completedRetry": false,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "errors": [],
+      "controlledStart": true
+    }
+  ],
+  "fullPreviewBrowser": [
+    {
+      "locale": "zh-Hant",
+      "status": "PASS",
+      "huntResult": {
+        "reloaded": true,
+        "retried": true,
+        "negative": true
+      },
+      "battleResult": {
+        "reloaded": true,
+        "resultReload": true,
+        "startRetry": true,
+        "endRetry": true,
+        "completedRetry": true,
+        "actual": "TEAM_ZERO_AHEAD"
+      },
+      "baselineUnchanged": true,
+      "oneCanvas": true,
+      "normalEligibility": false,
+      "cleanReload": false,
+      "saveRetry": true,
+      "wrongDrop": false,
+      "errors": []
+    }
+  ],
+  "fullPreviewMethod": "Real opening and UI input on existing localhost server, isolated browser storage; presentation=developer exposes read-only actor coordinates, no actor/HP/RNG injection. Save failures are explicit isolated Storage.setItem faults. Captures use actual circle/pull/collect. Battle uses existing live ticker/core.",
+  "battleBrowserMethod": "Five locales from controlled raising-battle-ready save, normal presentation, actual DOM menu and existing Battle canvas/ticker; not five full opening/Hunt runs.",
+  "battleExitBrowser": {
+    "status": "PASS",
+    "baselineUnchanged": true,
+    "oneCanvas": true,
+    "saveFailureRetry": true,
+    "errors": []
+  },
+  "normalEntryBrowser": {
+    "status": "PASS_BOUNDED_NORMAL_ENTRY_REGRESSION",
+    "isolatedNonpersistentContext": true,
+    "playerSaveTouched": false,
+    "existingServer": "127.0.0.1:8766",
+    "realOpeningUI": true,
+    "interactiveTutorialEntryBound": false,
+    "fullTutorialAcceptance": false,
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 360,
+        "height": 800
+      }
+    ],
+    "errors": []
+  },
+  "unverified": [
+    "Full five-locale opening/Raising/Hunt/Battle sequence",
+    "Normal URL invitation accept/skip/exit-resume/completed no-retrigger in five locales; eligibility remains false",
+    "Physical touch devices",
+    "Native loss/draw reachability and source outcome parity",
+    "Full original constructor RNG call order/frame differential and native phase3/5 roster parity",
+    "Final visual/layout acceptance; preview banner still overlays top HUD",
+    "Public build/deployment/rights acceptance"
+  ],
+  "delivery": {
+    "Library": "prepare_uploads unavailable in slice4; no retry in slice5",
+    "newLibraryIds": [],
+    "parentSawScreenshots": false
+  },
+  "safety": {
+    "playerStorageTouched": false,
+    "newServer": false,
+    "existingServer": "127.0.0.1:8766",
+    "serverPid": 38660,
+    "gitMutation": false,
+    "artCssAndBrandDictionariesTouched": false,
+    "quotaResetOrPurchase": false
+  }
+}

@@ -1,0 +1,2880 @@
+{
+  "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
+  "sourceFiles": 127,
+  "publicFiles": 126,
+  "sourceBytes": 310249056,
+  "runtimeBytes": 240551122,
+  "files": [
+    {
+      "source": "assets/production/hunt/cave-clearance-natural-r11/frame-00.png",
+      "sourceSha256": "65c0458cbdb3c4fb5a6b9456c3a7708b9d98d42fce9fb595d45d19c18521349a",
+      "sourceBytes": 7915697,
+      "target": "assets/production/hunt/accepted-20261010/images/6f543a8e6cbc97bccee5863e6f862c15705eb925f84e8eb82757e4e4193029fc.webp",
+      "sha256": "6f543a8e6cbc97bccee5863e6f862c15705eb925f84e8eb82757e4e4193029fc",
+      "bytes": 4687076,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm00_01/frame-00.png",
+      "sourceSha256": "85e72bcd4eb8eb62feaa0810095c7a6d373737449a3b7bbfa20188c381ac2024",
+      "sourceBytes": 7229382,
+      "target": "assets/production/hunt/accepted-20261010/images/d266c7c42d56092d1515d37ef8d0ce532025b2193ece94398ecb4aeb6c88ed0c.webp",
+      "sha256": "d266c7c42d56092d1515d37ef8d0ce532025b2193ece94398ecb4aeb6c88ed0c",
+      "bytes": 4094638,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm00_01/frame-01.png",
+      "sourceSha256": "e2613283006caa4d999bfe9fd0ec8b4608cc1a5c9c345795c99803361422453e",
+      "sourceBytes": 7229182,
+      "target": "assets/production/hunt/accepted-20261010/images/65826785834c9aedf81ff9bcf053e79e7c6ca4f495ad0ebb98e247b029e70827.webp",
+      "sha256": "65826785834c9aedf81ff9bcf053e79e7c6ca4f495ad0ebb98e247b029e70827",
+      "bytes": 4095656,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm00_01/occluders-phase00-page0.png",
+      "sourceSha256": "29ffd1f71c216c3ec707348daad6387acde18593027fdd2c6794b0cab9dc057c",
+      "sourceBytes": 2916423,
+      "target": "assets/production/hunt/accepted-20261010/images/b1753ee1db999c33e2482a9654770075baefbfc4383bfbbf359cfafcc2632399.webp",
+      "sha256": "b1753ee1db999c33e2482a9654770075baefbfc4383bfbbf359cfafcc2632399",
+      "bytes": 2255504,
+      "size": [
+        2048,
+        739
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm00_01/occluders-phase01-page0.png",
+      "sourceSha256": "36d135d700c659146ceef5d73d87e870e3ac4519306a66f872519056fcef4406",
+      "sourceBytes": 2916449,
+      "target": "assets/production/hunt/accepted-20261010/images/e8a5ec0f9dbab05c05513eb95dd37e24bd90dc796343943e41094cbb0f897bf9.webp",
+      "sha256": "e8a5ec0f9dbab05c05513eb95dd37e24bd90dc796343943e41094cbb0f897bf9",
+      "bytes": 2256094,
+      "size": [
+        2048,
+        739
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_01/frame-00.webp",
+      "sourceSha256": "18ed11e7cdf09ad15dd7e62206bb8eac42c875a5980410d28cacef3edeb6bd1a",
+      "sourceBytes": 3881302,
+      "target": "assets/production/hunt/accepted-20261010/images/18ed11e7cdf09ad15dd7e62206bb8eac42c875a5980410d28cacef3edeb6bd1a.webp",
+      "sha256": "18ed11e7cdf09ad15dd7e62206bb8eac42c875a5980410d28cacef3edeb6bd1a",
+      "bytes": 3881302,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_01/frame-01.webp",
+      "sourceSha256": "3659e8f4961d9f7a14e398c2f5abdb7293bd52cd651810d88133c4f10b6969e6",
+      "sourceBytes": 3949144,
+      "target": "assets/production/hunt/accepted-20261010/images/3659e8f4961d9f7a14e398c2f5abdb7293bd52cd651810d88133c4f10b6969e6.webp",
+      "sha256": "3659e8f4961d9f7a14e398c2f5abdb7293bd52cd651810d88133c4f10b6969e6",
+      "bytes": 3949144,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_01/occluders-phase00-page0.png",
+      "sourceSha256": "5fa54598cab59e25974877de839b669c3b39ea394f53687a6b16a813ed5c1c86",
+      "sourceBytes": 1055016,
+      "target": "assets/production/hunt/accepted-20261010/images/bbc442152e0ae052c3fad204d4042c950aec58c892ea4f1ac359359bc753392a.webp",
+      "sha256": "bbc442152e0ae052c3fad204d4042c950aec58c892ea4f1ac359359bc753392a",
+      "bytes": 823956,
+      "size": [
+        2048,
+        289
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_01/occluders-phase01-page0.png",
+      "sourceSha256": "6619e114b1a7c8a6f0a70961edef5a43c324725a4611026868218547e9a377a1",
+      "sourceBytes": 1054845,
+      "target": "assets/production/hunt/accepted-20261010/images/ff67f8822972b585f3bee77d56b31c1d188f97b6e23fb69c24653e4f64aa6c95.webp",
+      "sha256": "ff67f8822972b585f3bee77d56b31c1d188f97b6e23fb69c24653e4f64aa6c95",
+      "bytes": 824606,
+      "size": [
+        2048,
+        289
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_02/frame-00.webp",
+      "sourceSha256": "347d11467f2be954fe4b6949e28f69a43901b7230d11c2fc79d5f3bdc87100b3",
+      "sourceBytes": 3755296,
+      "target": "assets/production/hunt/accepted-20261010/images/347d11467f2be954fe4b6949e28f69a43901b7230d11c2fc79d5f3bdc87100b3.webp",
+      "sha256": "347d11467f2be954fe4b6949e28f69a43901b7230d11c2fc79d5f3bdc87100b3",
+      "bytes": 3755296,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_02/frame-01.webp",
+      "sourceSha256": "110e052c482b5488c332ab676f7fd2513b2f21452c2ecb87823dfc83b0f2d27c",
+      "sourceBytes": 3775882,
+      "target": "assets/production/hunt/accepted-20261010/images/110e052c482b5488c332ab676f7fd2513b2f21452c2ecb87823dfc83b0f2d27c.webp",
+      "sha256": "110e052c482b5488c332ab676f7fd2513b2f21452c2ecb87823dfc83b0f2d27c",
+      "bytes": 3775882,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_02/occluders-phase00-page0.png",
+      "sourceSha256": "ed18add6c4b1f1fee6b4105280cc69713553dbdc7d6c657e92f0f7aba6754359",
+      "sourceBytes": 969508,
+      "target": "assets/production/hunt/accepted-20261010/images/24efca4dfe32dee9f4dd08d5e8b8dbb8593eb7a56a8e49a01dcc22505a583ec5.webp",
+      "sha256": "24efca4dfe32dee9f4dd08d5e8b8dbb8593eb7a56a8e49a01dcc22505a583ec5",
+      "bytes": 778000,
+      "size": [
+        2048,
+        289
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_02/occluders-phase01-page0.png",
+      "sourceSha256": "45ad742e0a2e88d19791334a02bdb9a5e54c28091f4130162a7538395585f6b9",
+      "sourceBytes": 969614,
+      "target": "assets/production/hunt/accepted-20261010/images/19767cac7dd8f6d4e920315fcef47ea8144b69f8e5ee5f172f0996490bc35064.webp",
+      "sha256": "19767cac7dd8f6d4e920315fcef47ea8144b69f8e5ee5f172f0996490bc35064",
+      "bytes": 778054,
+      "size": [
+        2048,
+        289
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm06_01/frame-00.webp",
+      "sourceSha256": "0fbd38dbf56d7a905d6afec9a3c50e2007e30b30cc627345007984c58770aa26",
+      "sourceBytes": 2874714,
+      "target": "assets/production/hunt/accepted-20261010/images/0fbd38dbf56d7a905d6afec9a3c50e2007e30b30cc627345007984c58770aa26.webp",
+      "sha256": "0fbd38dbf56d7a905d6afec9a3c50e2007e30b30cc627345007984c58770aa26",
+      "bytes": 2874714,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm06_01/frame-01.webp",
+      "sourceSha256": "19e0b2eadfb60d606954834bec79df46893f32d1ef376aba96b1ac834f4b150a",
+      "sourceBytes": 2874106,
+      "target": "assets/production/hunt/accepted-20261010/images/19e0b2eadfb60d606954834bec79df46893f32d1ef376aba96b1ac834f4b150a.webp",
+      "sha256": "19e0b2eadfb60d606954834bec79df46893f32d1ef376aba96b1ac834f4b150a",
+      "bytes": 2874106,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm06_01/occluders-phase00-page0.webp",
+      "sourceSha256": "b32c70aac78eb73ea5699e5d2f8a71ec1c98bcc3cbb257512fc00fde3bc2ae99",
+      "sourceBytes": 635956,
+      "target": "assets/production/hunt/accepted-20261010/images/b32c70aac78eb73ea5699e5d2f8a71ec1c98bcc3cbb257512fc00fde3bc2ae99.webp",
+      "sha256": "b32c70aac78eb73ea5699e5d2f8a71ec1c98bcc3cbb257512fc00fde3bc2ae99",
+      "bytes": 635956,
+      "size": [
+        2048,
+        483
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm06_02/frame-00.webp",
+      "sourceSha256": "513f8f8a25b8cb0278483487d239f67336487e8a7eec7e9c432a06d5d00314a4",
+      "sourceBytes": 2718694,
+      "target": "assets/production/hunt/accepted-20261010/images/513f8f8a25b8cb0278483487d239f67336487e8a7eec7e9c432a06d5d00314a4.webp",
+      "sha256": "513f8f8a25b8cb0278483487d239f67336487e8a7eec7e9c432a06d5d00314a4",
+      "bytes": 2718694,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm06_02/frame-01.webp",
+      "sourceSha256": "e00c7dd73fbb2292c010101ae379b54ec54515c94257654c12b1bf618ce39fea",
+      "sourceBytes": 2716314,
+      "target": "assets/production/hunt/accepted-20261010/images/e00c7dd73fbb2292c010101ae379b54ec54515c94257654c12b1bf618ce39fea.webp",
+      "sha256": "e00c7dd73fbb2292c010101ae379b54ec54515c94257654c12b1bf618ce39fea",
+      "bytes": 2716314,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm06_02/occluders-phase00-page0.webp",
+      "sourceSha256": "543856b4323ffb7c802a17415a819e8fa9cf17b45c17d07d810c4520ea876db0",
+      "sourceBytes": 615996,
+      "target": "assets/production/hunt/accepted-20261010/images/543856b4323ffb7c802a17415a819e8fa9cf17b45c17d07d810c4520ea876db0.webp",
+      "sha256": "543856b4323ffb7c802a17415a819e8fa9cf17b45c17d07d810c4520ea876db0",
+      "bytes": 615996,
+      "size": [
+        2048,
+        483
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm08_01/frame-00.webp",
+      "sourceSha256": "dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd",
+      "sourceBytes": 2989394,
+      "target": "assets/production/hunt/accepted-20261010/images/dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd.webp",
+      "sha256": "dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd",
+      "bytes": 2989394,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm08_01/occluders-phase00-page0.webp",
+      "sourceSha256": "182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093",
+      "sourceBytes": 1288316,
+      "target": "assets/production/hunt/accepted-20261010/images/182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093.webp",
+      "sha256": "182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093",
+      "bytes": 1288316,
+      "size": [
+        2048,
+        624
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm08_02/frame-00.webp",
+      "sourceSha256": "f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc",
+      "sourceBytes": 2617456,
+      "target": "assets/production/hunt/accepted-20261010/images/f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc.webp",
+      "sha256": "f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc",
+      "bytes": 2617456,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm08_02/occluders-phase00-page0.webp",
+      "sourceSha256": "818232e99c196b4626bb9b8e02c17201cc55f38c1c979cfad0c2788f900429d5",
+      "sourceBytes": 1090702,
+      "target": "assets/production/hunt/accepted-20261010/images/818232e99c196b4626bb9b8e02c17201cc55f38c1c979cfad0c2788f900429d5.webp",
+      "sha256": "818232e99c196b4626bb9b8e02c17201cc55f38c1c979cfad0c2788f900429d5",
+      "bytes": 1090702,
+      "size": [
+        2048,
+        624
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm09_01/frame-00.webp",
+      "sourceSha256": "caa02e908463fb40014c2e74811e6d656fbda2b9e37c27ccbe7e36c1dda602b6",
+      "sourceBytes": 3152152,
+      "target": "assets/production/hunt/accepted-20261010/images/caa02e908463fb40014c2e74811e6d656fbda2b9e37c27ccbe7e36c1dda602b6.webp",
+      "sha256": "caa02e908463fb40014c2e74811e6d656fbda2b9e37c27ccbe7e36c1dda602b6",
+      "bytes": 3152152,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm09_01/occluders-phase00-page0.png",
+      "sourceSha256": "d03c7df36596351109e4b155acbc0dc9a58f056cb1d076f1e225db373c5f4af5",
+      "sourceBytes": 1731131,
+      "target": "assets/production/hunt/accepted-20261010/images/f5758d56212824f676b22e975d762fa59e550a7eee2f562987d771f35deb39d4.webp",
+      "sha256": "f5758d56212824f676b22e975d762fa59e550a7eee2f562987d771f35deb39d4",
+      "bytes": 1217382,
+      "size": [
+        2048,
+        702
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm10_01-night/frame-00.png",
+      "sourceSha256": "359bdce5378280fcf279278f313922ad2841cfbb8b5fcda1c37f56c3f030425c",
+      "sourceBytes": 5022002,
+      "target": "assets/production/hunt/accepted-20261010/images/1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf.webp",
+      "sha256": "1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf",
+      "bytes": 2497850,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm10_01-night/frame-01.png",
+      "sourceSha256": "ee9b985b5dc399e6230536b3a32ea328f5056947b50b4f7ff00ac4c9db64ccff",
+      "sourceBytes": 5042230,
+      "target": "assets/production/hunt/accepted-20261010/images/77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253.webp",
+      "sha256": "77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253",
+      "bytes": 2518206,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm10_01-night/frame-02.png",
+      "sourceSha256": "64cedb9c57b58a1b0fef479f4561a80f344c3e73a29837487bce9a344290a5bc",
+      "sourceBytes": 5022002,
+      "target": "assets/production/hunt/accepted-20261010/images/1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf.webp",
+      "sha256": "1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf",
+      "bytes": 2497850,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm10_01-night/occluders-phase00-page0.png",
+      "sourceSha256": "d8273c3b71d6fe92379fa7fb1f0aa673cedb9fb31b77c7b2589778e2969614e9",
+      "sourceBytes": 2550910,
+      "target": "assets/production/hunt/accepted-20261010/images/aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818.webp",
+      "sha256": "aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818",
+      "bytes": 1721622,
+      "size": [
+        2048,
+        1209
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm10_01-night/occluders-phase01-page0.png",
+      "sourceSha256": "76555b7469ff5601a3860bc1acdd3b6714c13926d0bd563b1a3f947d6ab0dc7c",
+      "sourceBytes": 2559224,
+      "target": "assets/production/hunt/accepted-20261010/images/d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6.webp",
+      "sha256": "d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6",
+      "bytes": 1718400,
+      "size": [
+        2048,
+        1209
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm11_01/frame-00.webp",
+      "sourceSha256": "294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7",
+      "sourceBytes": 2717164,
+      "target": "assets/production/hunt/accepted-20261010/images/294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7.webp",
+      "sha256": "294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7",
+      "bytes": 2717164,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm11_01/frame-01.webp",
+      "sourceSha256": "a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc",
+      "sourceBytes": 2719370,
+      "target": "assets/production/hunt/accepted-20261010/images/a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc.webp",
+      "sha256": "a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc",
+      "bytes": 2719370,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm11_01/frame-02.webp",
+      "sourceSha256": "8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d",
+      "sourceBytes": 2716562,
+      "target": "assets/production/hunt/accepted-20261010/images/8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d.webp",
+      "sha256": "8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d",
+      "bytes": 2716562,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm11_01/occluders-phase00-page0.png",
+      "sourceSha256": "70e7357a058735bd8bda6f8c9fa4a05cf19214b79d7f5c66da42257bb9dbfe6f",
+      "sourceBytes": 1312671,
+      "target": "assets/production/hunt/accepted-20261010/images/e9948bd0dab2b69d2a2f406bfc9248f5ac2b977e1611aa0219e2fba2168ddd39.webp",
+      "sha256": "e9948bd0dab2b69d2a2f406bfc9248f5ac2b977e1611aa0219e2fba2168ddd39",
+      "bytes": 739632,
+      "size": [
+        2048,
+        428
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm11_01/occluders-phase01-page0.png",
+      "sourceSha256": "cebe97dac1ea27f3592d8ca73c8581134de22266287ee3b12b606957b52697ce",
+      "sourceBytes": 1312464,
+      "target": "assets/production/hunt/accepted-20261010/images/965154abada1869a418deef9830d32699dd4ff351bb3f012c5906b133cebcc8d.webp",
+      "sha256": "965154abada1869a418deef9830d32699dd4ff351bb3f012c5906b133cebcc8d",
+      "bytes": 738308,
+      "size": [
+        2048,
+        428
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm11_01/occluders-phase02-page0.png",
+      "sourceSha256": "0167449a74f1f691438313e43cfd1f6d83fad8813e398a765926d05dd2898779",
+      "sourceBytes": 1312560,
+      "target": "assets/production/hunt/accepted-20261010/images/bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d.webp",
+      "sha256": "bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d",
+      "bytes": 739412,
+      "size": [
+        2048,
+        428
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm13_01/frame-00.webp",
+      "sourceSha256": "513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f",
+      "sourceBytes": 3134448,
+      "target": "assets/production/hunt/accepted-20261010/images/513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f.webp",
+      "sha256": "513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f",
+      "bytes": 3134448,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm13_01/occluders-phase00-page0.webp",
+      "sourceSha256": "fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087",
+      "sourceBytes": 770124,
+      "target": "assets/production/hunt/accepted-20261010/images/fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087.webp",
+      "sha256": "fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087",
+      "bytes": 770124,
+      "size": [
+        2048,
+        497
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm13_02/frame-00.webp",
+      "sourceSha256": "f615a1d2f2ad3c098d5e2d1769db7e3ad44df3809e9e64b4486c28a646f6c5d1",
+      "sourceBytes": 3427862,
+      "target": "assets/production/hunt/accepted-20261010/images/f615a1d2f2ad3c098d5e2d1769db7e3ad44df3809e9e64b4486c28a646f6c5d1.webp",
+      "sha256": "f615a1d2f2ad3c098d5e2d1769db7e3ad44df3809e9e64b4486c28a646f6c5d1",
+      "bytes": 3427862,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm13_02/occluders-phase00-page0.webp",
+      "sourceSha256": "000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c",
+      "sourceBytes": 765092,
+      "target": "assets/production/hunt/accepted-20261010/images/000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c.webp",
+      "sha256": "000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c",
+      "bytes": 765092,
+      "size": [
+        2048,
+        497
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm14_01/frame-00.webp",
+      "sourceSha256": "63212fbf55baeb3be4f94d103a20da279ca7b19eb8423e4a748609fdb3f726e3",
+      "sourceBytes": 3515370,
+      "target": "assets/production/hunt/accepted-20261010/images/63212fbf55baeb3be4f94d103a20da279ca7b19eb8423e4a748609fdb3f726e3.webp",
+      "sha256": "63212fbf55baeb3be4f94d103a20da279ca7b19eb8423e4a748609fdb3f726e3",
+      "bytes": 3515370,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm14_01/occluders-phase00-page0.png",
+      "sourceSha256": "6a75b986b9b8e8ff157c1856bd258f0cf284bd93f1e5d996d4befddc7d248bb8",
+      "sourceBytes": 1561706,
+      "target": "assets/production/hunt/accepted-20261010/images/79e65d73137fe9cf6a265b3203cfe4e708d9066618fc273b43f65a5616d02fcb.webp",
+      "sha256": "79e65d73137fe9cf6a265b3203cfe4e708d9066618fc273b43f65a5616d02fcb",
+      "bytes": 952926,
+      "size": [
+        2048,
+        606
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm14_02/frame-00.webp",
+      "sourceSha256": "a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031",
+      "sourceBytes": 3315950,
+      "target": "assets/production/hunt/accepted-20261010/images/a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031.webp",
+      "sha256": "a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031",
+      "bytes": 3315950,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm14_02/occluders-phase00-page0.png",
+      "sourceSha256": "76f6821b3a71ce9916f3bc91115b582246a8508aa3981124c0e4236b178f3423",
+      "sourceBytes": 1309666,
+      "target": "assets/production/hunt/accepted-20261010/images/ad7422054c46843e2a43d048496c9253398bcf7c6dfd3e71b73ad2d03b4698d1.webp",
+      "sha256": "ad7422054c46843e2a43d048496c9253398bcf7c6dfd3e71b73ad2d03b4698d1",
+      "bytes": 744802,
+      "size": [
+        2048,
+        606
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_01/frame-00.webp",
+      "sourceSha256": "e3b4fc7faae9a83a72a668a0707490ceb8f0301ef5cc53c0878a9934ce1da8a9",
+      "sourceBytes": 3708940,
+      "target": "assets/production/hunt/accepted-20261010/images/e3b4fc7faae9a83a72a668a0707490ceb8f0301ef5cc53c0878a9934ce1da8a9.webp",
+      "sha256": "e3b4fc7faae9a83a72a668a0707490ceb8f0301ef5cc53c0878a9934ce1da8a9",
+      "bytes": 3708940,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_01/frame-01.webp",
+      "sourceSha256": "3aa60f86c9b04af7995eceabd310d6ecf722a8a531da5b13f24108d27b9ed56e",
+      "sourceBytes": 3708300,
+      "target": "assets/production/hunt/accepted-20261010/images/3aa60f86c9b04af7995eceabd310d6ecf722a8a531da5b13f24108d27b9ed56e.webp",
+      "sha256": "3aa60f86c9b04af7995eceabd310d6ecf722a8a531da5b13f24108d27b9ed56e",
+      "bytes": 3708300,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_01/occluders-phase00-page0.webp",
+      "sourceSha256": "701bdced29a1c30bd41d1494a1e03c3929532f08f3028b731b033abc72f815ce",
+      "sourceBytes": 736576,
+      "target": "assets/production/hunt/accepted-20261010/images/701bdced29a1c30bd41d1494a1e03c3929532f08f3028b731b033abc72f815ce.webp",
+      "sha256": "701bdced29a1c30bd41d1494a1e03c3929532f08f3028b731b033abc72f815ce",
+      "bytes": 736576,
+      "size": [
+        2048,
+        529
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_01/occluders-phase01-page0.webp",
+      "sourceSha256": "ea329cc5877734e995d9dc7b0ce10b263aaea272d96a56b7f2ef7eb20612e59d",
+      "sourceBytes": 734260,
+      "target": "assets/production/hunt/accepted-20261010/images/ea329cc5877734e995d9dc7b0ce10b263aaea272d96a56b7f2ef7eb20612e59d.webp",
+      "sha256": "ea329cc5877734e995d9dc7b0ce10b263aaea272d96a56b7f2ef7eb20612e59d",
+      "bytes": 734260,
+      "size": [
+        2048,
+        529
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_02/frame-00.webp",
+      "sourceSha256": "d86443e0ab2b220b26a218b6e16a2c3da813fa42282e32c08f86bcdc626fcf46",
+      "sourceBytes": 3503330,
+      "target": "assets/production/hunt/accepted-20261010/images/d86443e0ab2b220b26a218b6e16a2c3da813fa42282e32c08f86bcdc626fcf46.webp",
+      "sha256": "d86443e0ab2b220b26a218b6e16a2c3da813fa42282e32c08f86bcdc626fcf46",
+      "bytes": 3503330,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_02/frame-01.webp",
+      "sourceSha256": "5d2adf1d767d91ad608e1c01424a587ecfa0da9f05c8e7ea936a105c95d5d35b",
+      "sourceBytes": 3498756,
+      "target": "assets/production/hunt/accepted-20261010/images/5d2adf1d767d91ad608e1c01424a587ecfa0da9f05c8e7ea936a105c95d5d35b.webp",
+      "sha256": "5d2adf1d767d91ad608e1c01424a587ecfa0da9f05c8e7ea936a105c95d5d35b",
+      "bytes": 3498756,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_02/occluders-phase00-page0.webp",
+      "sourceSha256": "a4439317de55ac8b7794c77d3a4f13fb4b19659925e98d08db74966141312a17",
+      "sourceBytes": 720914,
+      "target": "assets/production/hunt/accepted-20261010/images/a4439317de55ac8b7794c77d3a4f13fb4b19659925e98d08db74966141312a17.webp",
+      "sha256": "a4439317de55ac8b7794c77d3a4f13fb4b19659925e98d08db74966141312a17",
+      "bytes": 720914,
+      "size": [
+        2048,
+        529
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_02/occluders-phase01-page0.webp",
+      "sourceSha256": "1f667c58cd859daa60400f6c54c84a20793ee8b56ba71bbf57b2633ff9f2165c",
+      "sourceBytes": 718296,
+      "target": "assets/production/hunt/accepted-20261010/images/1f667c58cd859daa60400f6c54c84a20793ee8b56ba71bbf57b2633ff9f2165c.webp",
+      "sha256": "1f667c58cd859daa60400f6c54c84a20793ee8b56ba71bbf57b2633ff9f2165c",
+      "bytes": 718296,
+      "size": [
+        2048,
+        529
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm16_01/frame-00.webp",
+      "sourceSha256": "0c11f1e05326d1e31d24f0dea684b892f174af539aba08858d092beabfa77a53",
+      "sourceBytes": 2102790,
+      "target": "assets/production/hunt/accepted-20261010/images/0c11f1e05326d1e31d24f0dea684b892f174af539aba08858d092beabfa77a53.webp",
+      "sha256": "0c11f1e05326d1e31d24f0dea684b892f174af539aba08858d092beabfa77a53",
+      "bytes": 2102790,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm16_01/occluders-phase00-page0.webp",
+      "sourceSha256": "53c770a6c42bc9dab45c1225cb54d396b240a18272a7f63c36a6dc7b016896a6",
+      "sourceBytes": 356576,
+      "target": "assets/production/hunt/accepted-20261010/images/53c770a6c42bc9dab45c1225cb54d396b240a18272a7f63c36a6dc7b016896a6.webp",
+      "sha256": "53c770a6c42bc9dab45c1225cb54d396b240a18272a7f63c36a6dc7b016896a6",
+      "bytes": 356576,
+      "size": [
+        2048,
+        199
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm16_02/frame-00.webp",
+      "sourceSha256": "36c910a8d17222d9df4f3faff9a2806fe4c97cf44ad9769075e7f777b4b38995",
+      "sourceBytes": 2100568,
+      "target": "assets/production/hunt/accepted-20261010/images/36c910a8d17222d9df4f3faff9a2806fe4c97cf44ad9769075e7f777b4b38995.webp",
+      "sha256": "36c910a8d17222d9df4f3faff9a2806fe4c97cf44ad9769075e7f777b4b38995",
+      "bytes": 2100568,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm16_02/occluders-phase00-page0.webp",
+      "sourceSha256": "755ab37ebcd78c9d445522b882adddce7aeb82b5b29b6b4fd6f7506d20b491cf",
+      "sourceBytes": 325536,
+      "target": "assets/production/hunt/accepted-20261010/images/755ab37ebcd78c9d445522b882adddce7aeb82b5b29b6b4fd6f7506d20b491cf.webp",
+      "sha256": "755ab37ebcd78c9d445522b882adddce7aeb82b5b29b6b4fd6f7506d20b491cf",
+      "bytes": 325536,
+      "size": [
+        2048,
+        199
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm17_01/frame-00.webp",
+      "sourceSha256": "b311ccbef3d249da78d6f615b132632448f2b91165fd880483462ad890b2720e",
+      "sourceBytes": 2774584,
+      "target": "assets/production/hunt/accepted-20261010/images/b311ccbef3d249da78d6f615b132632448f2b91165fd880483462ad890b2720e.webp",
+      "sha256": "b311ccbef3d249da78d6f615b132632448f2b91165fd880483462ad890b2720e",
+      "bytes": 2774584,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm17_01/frame-01.webp",
+      "sourceSha256": "f208313ef68aacbbe7fb7884ee477f3bcae51d6e7ff4d6b23b065656f79c5925",
+      "sourceBytes": 2773034,
+      "target": "assets/production/hunt/accepted-20261010/images/f208313ef68aacbbe7fb7884ee477f3bcae51d6e7ff4d6b23b065656f79c5925.webp",
+      "sha256": "f208313ef68aacbbe7fb7884ee477f3bcae51d6e7ff4d6b23b065656f79c5925",
+      "bytes": 2773034,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm17_01/occluders-phase00-page0.webp",
+      "sourceSha256": "9dc99fee686f1bbd72297cffa5d40e0199baed787ed85ea81789eaf155885103",
+      "sourceBytes": 716708,
+      "target": "assets/production/hunt/accepted-20261010/images/9dc99fee686f1bbd72297cffa5d40e0199baed787ed85ea81789eaf155885103.webp",
+      "sha256": "9dc99fee686f1bbd72297cffa5d40e0199baed787ed85ea81789eaf155885103",
+      "bytes": 716708,
+      "size": [
+        2048,
+        580
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm17_02/frame-00.webp",
+      "sourceSha256": "d32a045c04fc05bc66abd6466b9d963b7998b72cf7d9a7cda9d2d634e3cc03a9",
+      "sourceBytes": 2810536,
+      "target": "assets/production/hunt/accepted-20261010/images/d32a045c04fc05bc66abd6466b9d963b7998b72cf7d9a7cda9d2d634e3cc03a9.webp",
+      "sha256": "d32a045c04fc05bc66abd6466b9d963b7998b72cf7d9a7cda9d2d634e3cc03a9",
+      "bytes": 2810536,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm17_02/frame-01.webp",
+      "sourceSha256": "05ec83343388ae48934531610be8109da609fdf237aa5f6820ac8582a33fc94f",
+      "sourceBytes": 2811262,
+      "target": "assets/production/hunt/accepted-20261010/images/05ec83343388ae48934531610be8109da609fdf237aa5f6820ac8582a33fc94f.webp",
+      "sha256": "05ec83343388ae48934531610be8109da609fdf237aa5f6820ac8582a33fc94f",
+      "bytes": 2811262,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm17_02/occluders-phase00-page0.webp",
+      "sourceSha256": "b2b9af4cd075c43ae8aba1a2be9a8ce16723fdcd1231549c1a6d1488fc72b30a",
+      "sourceBytes": 689766,
+      "target": "assets/production/hunt/accepted-20261010/images/b2b9af4cd075c43ae8aba1a2be9a8ce16723fdcd1231549c1a6d1488fc72b30a.webp",
+      "sha256": "b2b9af4cd075c43ae8aba1a2be9a8ce16723fdcd1231549c1a6d1488fc72b30a",
+      "bytes": 689766,
+      "size": [
+        2048,
+        580
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm18_01/frame-00.png",
+      "sourceSha256": "bff58f384e6c362016a2bbc2e2d9982dbc5cc34b2b89773d29f834229b1a44fd",
+      "sourceBytes": 6784429,
+      "target": "assets/production/hunt/accepted-20261010/images/8c8306f52bd570296e0ab8ef2bef9a2c503d321b39ecb973f60723383f78734c.webp",
+      "sha256": "8c8306f52bd570296e0ab8ef2bef9a2c503d321b39ecb973f60723383f78734c",
+      "bytes": 3882486,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm18_01/occluders-phase00-page0.png",
+      "sourceSha256": "0911f10452e00ee3df4b903f4c3e07a9631d17ac331a8481ce636aff1e659d19",
+      "sourceBytes": 2993460,
+      "target": "assets/production/hunt/accepted-20261010/images/cf907aa8434e3c59aa8b8fc98ee9a9bc34e446687345f93c1603e781dd6a966a.webp",
+      "sha256": "cf907aa8434e3c59aa8b8fc98ee9a9bc34e446687345f93c1603e781dd6a966a",
+      "bytes": 2134842,
+      "size": [
+        2048,
+        884
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm18_02/frame-00.png",
+      "sourceSha256": "24986530727f45d440b4e06e3380bf70cd910ecab4b6622cb4a6a92518c67e10",
+      "sourceBytes": 6656163,
+      "target": "assets/production/hunt/accepted-20261010/images/617556ccf0bedf68e0a9bb2c4e3ac571f1404c82ea2c60f3fc84af08b2266df6.webp",
+      "sha256": "617556ccf0bedf68e0a9bb2c4e3ac571f1404c82ea2c60f3fc84af08b2266df6",
+      "bytes": 3808624,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm18_02/occluders-phase00-page0.png",
+      "sourceSha256": "2b2093cdc64714844ddf32a91b935194e3e2b3862dba7dbfe2ecc46b45b6c6e5",
+      "sourceBytes": 2765955,
+      "target": "assets/production/hunt/accepted-20261010/images/200cd88ffbd2f55630fe574c74f1e9bea216722fdb0b0bdef461ce78ba496fba.webp",
+      "sha256": "200cd88ffbd2f55630fe574c74f1e9bea216722fdb0b0bdef461ce78ba496fba",
+      "bytes": 1994372,
+      "size": [
+        2048,
+        884
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/frame-01.png",
+      "sourceSha256": "14e185922dc38f00f2115c8235b9125bb5cd434f460a995bbad0c7109c0beefa",
+      "sourceBytes": 7914315,
+      "target": "assets/production/hunt/accepted-20261010/images/32f64bc246c20b12ad1724c1a4fdf96ceed6c973f2b3e04f163c2897ee03ee40.webp",
+      "sha256": "32f64bc246c20b12ad1724c1a4fdf96ceed6c973f2b3e04f163c2897ee03ee40",
+      "bytes": 4685542,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-00/occluders-backcap.png",
+      "sourceSha256": "70f9521f3e77f78a2e3eecfd9da33c03b178c20dd22dc1c911c4d3d7d820da1d",
+      "sourceBytes": 139289,
+      "target": "assets/production/hunt/accepted-20261010/images/f5549db0a4fcabc4e2f17e9f103913237f84d7fba8d9b1fd03995fa0c3c4a64f.webp",
+      "sha256": "f5549db0a4fcabc4e2f17e9f103913237f84d7fba8d9b1fd03995fa0c3c4a64f",
+      "bytes": 98056,
+      "size": [
+        512,
+        360
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-00/occluders.png",
+      "sourceSha256": "511d87bee71fade82a12484f363d8ec183763d67ff6e6a96144d8c6bd82bce4f",
+      "sourceBytes": 4741578,
+      "target": "assets/production/hunt/accepted-20261010/images/c66ccd29b2a8786edbcaa99d1564a875dec9e9b3e3e947ec5860d5f113920e69.webp",
+      "sha256": "c66ccd29b2a8786edbcaa99d1564a875dec9e9b3e3e947ec5860d5f113920e69",
+      "bytes": 3744744,
+      "size": [
+        2048,
+        1094
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-01/occluders-backcap.png",
+      "sourceSha256": "2e6dd7204b1f651d15ab4f345e70e865adc38e482f6eeb764d6d1f5ee6c7ab5f",
+      "sourceBytes": 139256,
+      "target": "assets/production/hunt/accepted-20261010/images/0df07476010b63e65dbc4406e334bbcaa93002365de452ff9a82d6d68529a202.webp",
+      "sha256": "0df07476010b63e65dbc4406e334bbcaa93002365de452ff9a82d6d68529a202",
+      "bytes": 98086,
+      "size": [
+        512,
+        360
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-01/occluders.png",
+      "sourceSha256": "ac024887228b0a4c71329ec63744ccfaffc939aa9e46360f90e26c675c41d780",
+      "sourceBytes": 4745667,
+      "target": "assets/production/hunt/accepted-20261010/images/33e63cd40b610771eee6480f457ebd634067740912f815b7f63de0f16df002d8.webp",
+      "sha256": "33e63cd40b610771eee6480f457ebd634067740912f815b7f63de0f16df002d8",
+      "bytes": 3746068,
+      "size": [
+        2048,
+        1094
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/frame-00.png",
+      "sourceSha256": "3d03d523f9019809ce1e00abd3b3ac7d7d9bf3706be3e248d76bb1c24f0fe64d",
+      "sourceBytes": 6204672,
+      "target": "assets/production/hunt/accepted-20261010/images/b73357ac76a1161e9145b1801c65abcefa78d413fb07df701374dcdf10ff7075.webp",
+      "sha256": "b73357ac76a1161e9145b1801c65abcefa78d413fb07df701374dcdf10ff7075",
+      "bytes": 4217084,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/frame-01.png",
+      "sourceSha256": "34818e21c9720754e66884cef0f78072828da8d41f2daeed4e733080a678d0a4",
+      "sourceBytes": 6202890,
+      "target": "assets/production/hunt/accepted-20261010/images/a4f4da756ed3d03742230f29ada3f14866c85ca3493d02642a1e520568c62497.webp",
+      "sha256": "a4f4da756ed3d03742230f29ada3f14866c85ca3493d02642a1e520568c62497",
+      "bytes": 4214180,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/phase-00/occluders-backcap.png",
+      "sourceSha256": "12ea93dd98d7e6b9124ce4d7188811686a64fa646852b9bf1526cd564ce30f28",
+      "sourceBytes": 119627,
+      "target": "assets/production/hunt/accepted-20261010/images/391d91cc20d39a78b821f651912ae38f8b26a96caf8eb990e6b2a542f5904e2b.webp",
+      "sha256": "391d91cc20d39a78b821f651912ae38f8b26a96caf8eb990e6b2a542f5904e2b",
+      "bytes": 82306,
+      "size": [
+        512,
+        360
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/phase-00/occluders.png",
+      "sourceSha256": "8eedbd98ef275755dad5d9211d8b27c64507f8cf5950b058824304604b7ed140",
+      "sourceBytes": 4185204,
+      "target": "assets/production/hunt/accepted-20261010/images/00069061462d8b7c0a8c41acbc194a137fa54d5159871b9b15ef896523e2ebce.webp",
+      "sha256": "00069061462d8b7c0a8c41acbc194a137fa54d5159871b9b15ef896523e2ebce",
+      "bytes": 3429426,
+      "size": [
+        2048,
+        1094
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/phase-01/occluders-backcap.png",
+      "sourceSha256": "3e23287977b0de7c55c564943de56667248f76fb0f211a0d5a9309cd02cff994",
+      "sourceBytes": 119649,
+      "target": "assets/production/hunt/accepted-20261010/images/a17cc986a57df68b7a73eaf66b01c225322b5f67536da0519ee9f580c3bdbcf7.webp",
+      "sha256": "a17cc986a57df68b7a73eaf66b01c225322b5f67536da0519ee9f580c3bdbcf7",
+      "bytes": 82208,
+      "size": [
+        512,
+        360
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_02/phase-01/occluders.png",
+      "sourceSha256": "c3c1fada2fdaa9f913bf2a222b8b4c5e56843a381188173727903507fe1523c1",
+      "sourceBytes": 4185192,
+      "target": "assets/production/hunt/accepted-20261010/images/da7c5a2d62673ae1fa56b716c5ebdc82e1f318665fb2e2e25fd0b99769bb4bf6.webp",
+      "sha256": "da7c5a2d62673ae1fa56b716c5ebdc82e1f318665fb2e2e25fd0b99769bb4bf6",
+      "bytes": 3430414,
+      "size": [
+        2048,
+        1094
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm02_02/frame-00.png",
+      "sourceSha256": "d52f81eb7f38298637284ae9a815ae7cc37d9d21c2c037e1c17dd17090c78c18",
+      "sourceBytes": 6272216,
+      "target": "assets/production/hunt/accepted-20261010/images/59ee4ed53d469ec138056dc38c17987a86e5dcff384efd90f083979efb87307f.webp",
+      "sha256": "59ee4ed53d469ec138056dc38c17987a86e5dcff384efd90f083979efb87307f",
+      "bytes": 3457666,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm02_02/occluders-backcap.png",
+      "sourceSha256": "2026a3847fd0ec421ed1a68e13a85077e8a8537532d97b44180d45f912a2a438",
+      "sourceBytes": 167451,
+      "target": "assets/production/hunt/accepted-20261010/images/f3261db3f829abb01cc848c03ecb038eee4977066768843acd7cbff2d143f7aa.webp",
+      "sha256": "f3261db3f829abb01cc848c03ecb038eee4977066768843acd7cbff2d143f7aa",
+      "bytes": 112784,
+      "size": [
+        640,
+        256
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm02_02/occluders.png",
+      "sourceSha256": "fb80d0d82b2f3a7e7e5d5f55b607f18ba49b6500de23b82223eced7d7aa6426b",
+      "sourceBytes": 1109039,
+      "target": "assets/production/hunt/accepted-20261010/images/d9899893de9b8c13ab26564137bc0a1c399981af73c07a697b7898e512c8276e.webp",
+      "sha256": "d9899893de9b8c13ab26564137bc0a1c399981af73c07a697b7898e512c8276e",
+      "bytes": 645442,
+      "size": [
+        2048,
+        400
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm03_02/frame-00.png",
+      "sourceSha256": "a179a3c35488e0fb9ebb8596ab316d5796ed89ea382cdf8a5348fa832a591540",
+      "sourceBytes": 7385076,
+      "target": "assets/production/hunt/accepted-20261010/images/d3a73592a8db5a803fa67c28547b1b5be7126e33dcd4f584333a4da241cd95e9.webp",
+      "sha256": "d3a73592a8db5a803fa67c28547b1b5be7126e33dcd4f584333a4da241cd95e9",
+      "bytes": 5358946,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm03_02/occluders-backcap.png",
+      "sourceSha256": "016d72390c54a69985bb8563f7937b2226db7d9ff6f0bc3c1fcdccba6ba66b20",
+      "sourceBytes": 127918,
+      "target": "assets/production/hunt/accepted-20261010/images/a96efdd9953a00da9b7916061ce32355e9a839775d2f4f5a6dd3a0cfac9c7997.webp",
+      "sha256": "a96efdd9953a00da9b7916061ce32355e9a839775d2f4f5a6dd3a0cfac9c7997",
+      "bytes": 89918,
+      "size": [
+        512,
+        360
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm03_02/occluders.png",
+      "sourceSha256": "7c313c23d96849deed8df81fbbb49ebf1a5793724e807ef945d7327a89e5eaa2",
+      "sourceBytes": 7718365,
+      "target": "assets/production/hunt/accepted-20261010/images/fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9.webp",
+      "sha256": "fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9",
+      "bytes": 6231294,
+      "size": [
+        2048,
+        1628
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm04_02/frame-00.png",
+      "sourceSha256": "348558a071b0a0fb5e269ae8507b7e5de6141d14369279ca8fcac15af9687256",
+      "sourceBytes": 7304858,
+      "target": "assets/production/hunt/accepted-20261010/images/61ea69a1c5b1823dc54c21cc0e909a8e3f06154285cda185f9dad555977a6a75.webp",
+      "sha256": "61ea69a1c5b1823dc54c21cc0e909a8e3f06154285cda185f9dad555977a6a75",
+      "bytes": 4319356,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm04_02/occluders-backcap.png",
+      "sourceSha256": "20514e638274be9e27b6aa5ebbf8e5be92dad1d0297bfcd5123cd6043b2c49a0",
+      "sourceBytes": 111218,
+      "target": "assets/production/hunt/accepted-20261010/images/c47ff11e6b06fa3798a96aeafaf207c3f753f2e19ac3295586df2993de277fc6.webp",
+      "sha256": "c47ff11e6b06fa3798a96aeafaf207c3f753f2e19ac3295586df2993de277fc6",
+      "bytes": 76136,
+      "size": [
+        512,
+        360
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm04_02/occluders.png",
+      "sourceSha256": "f8a206f71e72b9131a81e07562f4244876561932825b7fdfdfd28cc7dbfc60ce",
+      "sourceBytes": 7885243,
+      "target": "assets/production/hunt/accepted-20261010/images/4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69.webp",
+      "sha256": "4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69",
+      "bytes": 6092288,
+      "size": [
+        2048,
+        1575
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm02_01/frame-00.png",
+      "sourceSha256": "02ae5b83e67a24d017b323c5acd8cab505fb6c8b783eec67e9de948053c58a87",
+      "sourceBytes": 6784041,
+      "target": "assets/production/hunt/accepted-20261010/images/94a65da0ae81a2f3fe58aeff4f5a0e452a4d7c43ac92749de870f1d20f5ea88d.webp",
+      "sha256": "94a65da0ae81a2f3fe58aeff4f5a0e452a4d7c43ac92749de870f1d20f5ea88d",
+      "bytes": 3779056,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm02_01/occluders-backcap.png",
+      "sourceSha256": "4cedc14ce3c77b1a980a1cf0dce2788d25fa38429dc592356d5c62a3bb7d3121",
+      "sourceBytes": 196534,
+      "target": "assets/production/hunt/accepted-20261010/images/49e5ce653a8695102af9cf3900496c26e65cf75e35da2842212f8630ad8446dc.webp",
+      "sha256": "49e5ce653a8695102af9cf3900496c26e65cf75e35da2842212f8630ad8446dc",
+      "bytes": 132152,
+      "size": [
+        640,
+        256
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm02_01/occluders.png",
+      "sourceSha256": "e48e0c27449a787143f74438cf3034105a285d1527f766b384464a7edb42bc0d",
+      "sourceBytes": 1645269,
+      "target": "assets/production/hunt/accepted-20261010/images/c7267ac7cb9142f03031bca0a387e41e975e73f97c2532518f907e9931be6ef0.webp",
+      "sha256": "c7267ac7cb9142f03031bca0a387e41e975e73f97c2532518f907e9931be6ef0",
+      "bytes": 1279324,
+      "size": [
+        2048,
+        400
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm03_01/frame-00.png",
+      "sourceSha256": "768f1d6374c7cab90e4355e0d66a752803279f378c47261dc62d1bc595c86fff",
+      "sourceBytes": 9295406,
+      "target": "assets/production/hunt/accepted-20261010/images/cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2.webp",
+      "sha256": "cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2",
+      "bytes": 6108190,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm03_01/occluders-backcap.png",
+      "sourceSha256": "4cda609ae9049b9b1d89fdb0f22578abd15c3ef6baeb3db180bb1842d9eaa4d5",
+      "sourceBytes": 150279,
+      "target": "assets/production/hunt/accepted-20261010/images/89a0d4f88d8386b638ac737c08500451167852c82cacb4bae6f76f99666ed66f.webp",
+      "sha256": "89a0d4f88d8386b638ac737c08500451167852c82cacb4bae6f76f99666ed66f",
+      "bytes": 109452,
+      "size": [
+        512,
+        360
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm03_01/occluders.png",
+      "sourceSha256": "e287bcf3b5da7a300ae855d835bb0f1bed8dc8b95a2e8ad6ca19c56e1e90ea46",
+      "sourceBytes": 7102459,
+      "target": "assets/production/hunt/accepted-20261010/images/32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4.webp",
+      "sha256": "32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4",
+      "bytes": 5765622,
+      "size": [
+        2048,
+        1628
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm04_01/frame-00.png",
+      "sourceSha256": "a0c41ffd545c49f507763a7d8030661204614d27a37e95d5607eb5a8a359808f",
+      "sourceBytes": 8008299,
+      "target": "assets/production/hunt/accepted-20261010/images/a92bd40a0e3e94ce9c20e958974e4a90983b6aabb8c17c159c256237e4b17230.webp",
+      "sha256": "a92bd40a0e3e94ce9c20e958974e4a90983b6aabb8c17c159c256237e4b17230",
+      "bytes": 4684318,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm04_01/occluders-backcap.png",
+      "sourceSha256": "0ffa8e2290b20be0453cce668e8110c232ba617bd6159d80bdbd7812357a5954",
+      "sourceBytes": 133399,
+      "target": "assets/production/hunt/accepted-20261010/images/e846d6716917ef354ab91e48183a575d5339f6cdff9bd09f994fcecf72060c4a.webp",
+      "sha256": "e846d6716917ef354ab91e48183a575d5339f6cdff9bd09f994fcecf72060c4a",
+      "bytes": 93416,
+      "size": [
+        512,
+        360
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm04_01/occluders.png",
+      "sourceSha256": "8ed59e67c6e18989a41bd01dd05b157dc0054cbb94bf0b14b28e83b5020d4efc",
+      "sourceBytes": 7113243,
+      "target": "assets/production/hunt/accepted-20261010/images/6ae77617274797bcb7569bdf5b647dd167fdfc72e6f9e2563e295263061d3ee8.webp",
+      "sha256": "6ae77617274797bcb7569bdf5b647dd167fdfc72e6f9e2563e295263061d3ee8",
+      "bytes": 5553358,
+      "size": [
+        2048,
+        1575
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/frame-00.webp",
+      "sourceSha256": "9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654",
+      "sourceBytes": 2683862,
+      "target": "assets/production/hunt/accepted-20261010/images/9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654.webp",
+      "sha256": "9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654",
+      "bytes": 2683862,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/frame-01.webp",
+      "sourceSha256": "1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263",
+      "sourceBytes": 2691422,
+      "target": "assets/production/hunt/accepted-20261010/images/1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263.webp",
+      "sha256": "1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263",
+      "bytes": 2691422,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/frame-02.webp",
+      "sourceSha256": "e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710",
+      "sourceBytes": 2682390,
+      "target": "assets/production/hunt/accepted-20261010/images/e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710.webp",
+      "sha256": "e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710",
+      "bytes": 2682390,
+      "size": [
+        2048,
+        2048
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders-phase00-page0.webp",
+      "sourceSha256": "a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee",
+      "sourceBytes": 1955412,
+      "target": "assets/production/hunt/accepted-20261010/images/a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee.webp",
+      "sha256": "a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee",
+      "bytes": 1955412,
+      "size": [
+        2048,
+        1208
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders-phase01-page0.webp",
+      "sourceSha256": "a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5",
+      "sourceBytes": 1959444,
+      "target": "assets/production/hunt/accepted-20261010/images/a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5.webp",
+      "sha256": "a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5",
+      "bytes": 1959444,
+      "size": [
+        2048,
+        1208
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders-phase02-page0.webp",
+      "sourceSha256": "3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef",
+      "sourceBytes": 1955314,
+      "target": "assets/production/hunt/accepted-20261010/images/3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef.webp",
+      "sha256": "3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef",
+      "bytes": 1955314,
+      "size": [
+        2048,
+        1208
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/thumb-256.webp",
+      "sourceSha256": "bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9",
+      "sourceBytes": 65026,
+      "target": "assets/production/hunt/accepted-20261010/images/bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9.webp",
+      "sha256": "bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9",
+      "bytes": 65026,
+      "size": [
+        256,
+        256
+      ],
+      "allRgbaExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm00_01/occluders.json",
+      "sourceSha256": "8f40180df1053d356d65ce1ef2d77aba8cf1447450578165dc2afeb91602d869",
+      "sourceBytes": 75778,
+      "target": "assets/production/hunt/accepted-20261010/geometry/8f40180df1053d356d65ce1ef2d77aba8cf1447450578165dc2afeb91602d869.json",
+      "sha256": "8f40180df1053d356d65ce1ef2d77aba8cf1447450578165dc2afeb91602d869",
+      "bytes": 75778,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm05_01/occluders.json",
+      "sourceSha256": "c1c66fca38b3da70974027d186db99dd86ad7d676db970e08770e4d25fe92954",
+      "sourceBytes": 41503,
+      "target": "assets/production/hunt/accepted-20261010/geometry/c1c66fca38b3da70974027d186db99dd86ad7d676db970e08770e4d25fe92954.json",
+      "sha256": "c1c66fca38b3da70974027d186db99dd86ad7d676db970e08770e4d25fe92954",
+      "bytes": 41503,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm06_01/occluders.json",
+      "sourceSha256": "b9f654a8f3bab9838049a3a9917051299724c662b9f81760900ea2e41657136e",
+      "sourceBytes": 63818,
+      "target": "assets/production/hunt/accepted-20261010/geometry/b9f654a8f3bab9838049a3a9917051299724c662b9f81760900ea2e41657136e.json",
+      "sha256": "b9f654a8f3bab9838049a3a9917051299724c662b9f81760900ea2e41657136e",
+      "bytes": 63818,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm06_02/occluders.json",
+      "sourceSha256": "73bf9954a5a9a88c0db7c08189d83343f0a92f928e41ae9411f15cc118a9df12",
+      "sourceBytes": 63818,
+      "target": "assets/production/hunt/accepted-20261010/geometry/73bf9954a5a9a88c0db7c08189d83343f0a92f928e41ae9411f15cc118a9df12.json",
+      "sha256": "73bf9954a5a9a88c0db7c08189d83343f0a92f928e41ae9411f15cc118a9df12",
+      "bytes": 63818,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm08_01/occluders.json",
+      "sourceSha256": "e9c1f41b8af50c56a051f1b2f417fcd51f7bd3285c2764d5a849e86bc503dfa6",
+      "sourceBytes": 101146,
+      "target": "assets/production/hunt/accepted-20261010/geometry/e9c1f41b8af50c56a051f1b2f417fcd51f7bd3285c2764d5a849e86bc503dfa6.json",
+      "sha256": "e9c1f41b8af50c56a051f1b2f417fcd51f7bd3285c2764d5a849e86bc503dfa6",
+      "bytes": 101146,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm08_02/occluders.json",
+      "sourceSha256": "2fa4c9e40e1609952f180739eab9dc38ba66bdbec888fd64e7fa3a86b7c2fa30",
+      "sourceBytes": 101146,
+      "target": "assets/production/hunt/accepted-20261010/geometry/2fa4c9e40e1609952f180739eab9dc38ba66bdbec888fd64e7fa3a86b7c2fa30.json",
+      "sha256": "2fa4c9e40e1609952f180739eab9dc38ba66bdbec888fd64e7fa3a86b7c2fa30",
+      "bytes": 101146,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm09_01/occluders.json",
+      "sourceSha256": "241530dcb2297dd40ab245468bb3dee01214b9d314c3384edcf8c5e91344f791",
+      "sourceBytes": 121396,
+      "target": "assets/production/hunt/accepted-20261010/geometry/241530dcb2297dd40ab245468bb3dee01214b9d314c3384edcf8c5e91344f791.json",
+      "sha256": "241530dcb2297dd40ab245468bb3dee01214b9d314c3384edcf8c5e91344f791",
+      "bytes": 121396,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm10_01-night/occluders.json",
+      "sourceSha256": "c108e2efd05f1f25de080b0dc5de044e55fae61865d0cc771ef0128bbccbb536",
+      "sourceBytes": 130374,
+      "target": "assets/production/hunt/accepted-20261010/geometry/c108e2efd05f1f25de080b0dc5de044e55fae61865d0cc771ef0128bbccbb536.json",
+      "sha256": "c108e2efd05f1f25de080b0dc5de044e55fae61865d0cc771ef0128bbccbb536",
+      "bytes": 130374,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm11_01/occluders.json",
+      "sourceSha256": "1026f2478622db838a11694d0d0c8f0d858e489e9604c747d3244938d3661073",
+      "sourceBytes": 189062,
+      "target": "assets/production/hunt/accepted-20261010/geometry/1026f2478622db838a11694d0d0c8f0d858e489e9604c747d3244938d3661073.json",
+      "sha256": "1026f2478622db838a11694d0d0c8f0d858e489e9604c747d3244938d3661073",
+      "bytes": 189062,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm13_01/occluders.json",
+      "sourceSha256": "55ec9b8e24bda09641a21f7dc3580d3fc6b123a76b63d2b738896706a749d378",
+      "sourceBytes": 76614,
+      "target": "assets/production/hunt/accepted-20261010/geometry/55ec9b8e24bda09641a21f7dc3580d3fc6b123a76b63d2b738896706a749d378.json",
+      "sha256": "55ec9b8e24bda09641a21f7dc3580d3fc6b123a76b63d2b738896706a749d378",
+      "bytes": 76614,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm14_01/occluders.json",
+      "sourceSha256": "d78fc01d9c429a87a810e6e3f984c8ffb4360570adf7bd8745364cb03a9b4c37",
+      "sourceBytes": 75870,
+      "target": "assets/production/hunt/accepted-20261010/geometry/d78fc01d9c429a87a810e6e3f984c8ffb4360570adf7bd8745364cb03a9b4c37.json",
+      "sha256": "d78fc01d9c429a87a810e6e3f984c8ffb4360570adf7bd8745364cb03a9b4c37",
+      "bytes": 75870,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm15_01/occluders.json",
+      "sourceSha256": "df7808e9fb563a289bd5cc552e1f9feaf63cd50e6fe9bbf396afba781d1e1da0",
+      "sourceBytes": 76854,
+      "target": "assets/production/hunt/accepted-20261010/geometry/df7808e9fb563a289bd5cc552e1f9feaf63cd50e6fe9bbf396afba781d1e1da0.json",
+      "sha256": "df7808e9fb563a289bd5cc552e1f9feaf63cd50e6fe9bbf396afba781d1e1da0",
+      "bytes": 76854,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm16_01/occluders.json",
+      "sourceSha256": "cd6fb1df144a700398a2933db65102a935c4740ae12d85d0f3bc3c527fc8c150",
+      "sourceBytes": 28436,
+      "target": "assets/production/hunt/accepted-20261010/geometry/cd6fb1df144a700398a2933db65102a935c4740ae12d85d0f3bc3c527fc8c150.json",
+      "sha256": "cd6fb1df144a700398a2933db65102a935c4740ae12d85d0f3bc3c527fc8c150",
+      "bytes": 28436,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm16_02/occluders.json",
+      "sourceSha256": "ba7a1ed0a6502364e35d75964301e99e25f141a389cec5047bb9e746088d1412",
+      "sourceBytes": 28436,
+      "target": "assets/production/hunt/accepted-20261010/geometry/ba7a1ed0a6502364e35d75964301e99e25f141a389cec5047bb9e746088d1412.json",
+      "sha256": "ba7a1ed0a6502364e35d75964301e99e25f141a389cec5047bb9e746088d1412",
+      "bytes": 28436,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm17_01/occluders.json",
+      "sourceSha256": "eb50c8a4daea72b6efe7b7955a4d1bf1afe7546184a659455153190129f41fe1",
+      "sourceBytes": 80629,
+      "target": "assets/production/hunt/accepted-20261010/geometry/eb50c8a4daea72b6efe7b7955a4d1bf1afe7546184a659455153190129f41fe1.json",
+      "sha256": "eb50c8a4daea72b6efe7b7955a4d1bf1afe7546184a659455153190129f41fe1",
+      "bytes": 80629,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm17_02/occluders.json",
+      "sourceSha256": "b360f5a346a99a9925385151b09500e11acaf6e67eb531a57984cfb989c3b96e",
+      "sourceBytes": 80629,
+      "target": "assets/production/hunt/accepted-20261010/geometry/b360f5a346a99a9925385151b09500e11acaf6e67eb531a57984cfb989c3b96e.json",
+      "sha256": "b360f5a346a99a9925385151b09500e11acaf6e67eb531a57984cfb989c3b96e",
+      "bytes": 80629,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm18_01/occluders.json",
+      "sourceSha256": "99d912765fc8ebd9632fd09906730dd032455e63ad7950e4a357ef58db405ee2",
+      "sourceBytes": 95445,
+      "target": "assets/production/hunt/accepted-20261010/geometry/99d912765fc8ebd9632fd09906730dd032455e63ad7950e4a357ef58db405ee2.json",
+      "sha256": "99d912765fc8ebd9632fd09906730dd032455e63ad7950e4a357ef58db405ee2",
+      "bytes": 95445,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/fields/field_hm18_02/occluders.json",
+      "sourceSha256": "2c91b6f103681d1bec6b91fa8ddbc234fc08864b24b4659581f0985f08a4f752",
+      "sourceBytes": 95445,
+      "target": "assets/production/hunt/accepted-20261010/geometry/2c91b6f103681d1bec6b91fa8ddbc234fc08864b24b4659581f0985f08a4f752.json",
+      "sha256": "2c91b6f103681d1bec6b91fa8ddbc234fc08864b24b4659581f0985f08a4f752",
+      "bytes": 95445,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/occluders.json",
+      "sourceSha256": "2f22cb70a03fbbe31b8eb6acdf61d8c9e411d647287b79d2078df9ab08d27f42",
+      "sourceBytes": 85179,
+      "target": "assets/production/hunt/accepted-20261010/geometry/2f22cb70a03fbbe31b8eb6acdf61d8c9e411d647287b79d2078df9ab08d27f42.json",
+      "sha256": "2f22cb70a03fbbe31b8eb6acdf61d8c9e411d647287b79d2078df9ab08d27f42",
+      "bytes": 85179,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm02_01/occluders.json",
+      "sourceSha256": "78c74373717d60139009e54d8d1902ad98bf7c9119bb3f1de73b44160afb18d9",
+      "sourceBytes": 32578,
+      "target": "assets/production/hunt/accepted-20261010/geometry/78c74373717d60139009e54d8d1902ad98bf7c9119bb3f1de73b44160afb18d9.json",
+      "sha256": "78c74373717d60139009e54d8d1902ad98bf7c9119bb3f1de73b44160afb18d9",
+      "bytes": 32578,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm03_01/occluders.json",
+      "sourceSha256": "fc6037f673a7b327a60c81c49243fe808ff5dced9047c0f12df1c2c45116da91",
+      "sourceBytes": 95232,
+      "target": "assets/production/hunt/accepted-20261010/geometry/fc6037f673a7b327a60c81c49243fe808ff5dced9047c0f12df1c2c45116da91.json",
+      "sha256": "fc6037f673a7b327a60c81c49243fe808ff5dced9047c0f12df1c2c45116da91",
+      "bytes": 95232,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/hm234-day-review-20261007/fields/field_hm04_01/occluders.json",
+      "sourceSha256": "c9195b3759569c56a5d2b10bae080e0764ee87b8686596c6b561be2e3aeee965",
+      "sourceBytes": 121887,
+      "target": "assets/production/hunt/accepted-20261010/geometry/c9195b3759569c56a5d2b10bae080e0764ee87b8686596c6b561be2e3aeee965.json",
+      "sha256": "c9195b3759569c56a5d2b10bae080e0764ee87b8686596c6b561be2e3aeee965",
+      "bytes": 121887,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders.json",
+      "sourceSha256": "53f22da4aead53a00d6f3f8bdd8d78c0686ed2c74232c9488d37d4952f06835e",
+      "sourceBytes": 102711,
+      "target": "assets/production/hunt/accepted-20261010/geometry/53f22da4aead53a00d6f3f8bdd8d78c0686ed2c74232c9488d37d4952f06835e.json",
+      "sha256": "53f22da4aead53a00d6f3f8bdd8d78c0686ed2c74232c9488d37d4952f06835e",
+      "bytes": 102711,
+      "geometryByteExact": true
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/manifest.json",
+      "sourceSha256": "5c67084e72fd270337298d31131773e3e10e3700cab5371ec621c5117963011e",
+      "sourceBytes": 78119,
+      "target": "assets/production/hunt/accepted-20261010/manifest.json",
+      "sha256": "55014c5bb9a633b5ad6566cafb33b52526b1590afd2cf46abed97aa7a0b75b83",
+      "bytes": 61923
+    },
+    {
+      "source": "assets/production/hunt/final-intake-20261008/hm10-night.manifest.json",
+      "sourceSha256": "557a250d0a9fd8b1cbf2e0edb2d657a1069aa810723dc0c1966c988f243b93f7",
+      "sourceBytes": 5642,
+      "target": "assets/production/hunt/accepted-20261010/hm10-night.manifest.json",
+      "sha256": "452b108fba5d77f1bb7da57863bb041382e029bbea358698b32d5c7ba1bfbf6e",
+      "bytes": 4965
+    }
+  ],
+  "factoryR3SourceField": {
+    "fieldId": "field_hm10_01",
+    "worldWidthPx": 2048,
+    "worldHeightPx": 2048,
+    "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+    "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+    "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+    "frames": [
+      {
+        "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/frame-00.webp",
+        "sha256": "9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654",
+        "durationRawTicks": 13,
+        "durationMs": 217.29647047014586,
+        "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+      },
+      {
+        "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/frame-01.webp",
+        "sha256": "1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263",
+        "durationRawTicks": 12,
+        "durationMs": 200.58135735705773,
+        "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+      },
+      {
+        "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/frame-02.webp",
+        "sha256": "e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710",
+        "durationRawTicks": 12,
+        "durationMs": 200.58135735705773,
+        "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+      }
+    ],
+    "source": "ISOLATED_HM10_R3_ACCEPTED_SCENE_PRODUCTION_20261008",
+    "thumbnail": {
+      "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/thumb-256.webp",
+      "sha256": "bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9",
+      "widthPx": 256
+    },
+    "depthOccluders": {
+      "atlases": [
+        {
+          "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders-phase00-page0.webp",
+          "sha256": "a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee"
+        }
+      ],
+      "animationFrames": [
+        {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders-phase00-page0.webp",
+              "sha256": "a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee"
+            }
+          ]
+        },
+        {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders-phase01-page0.webp",
+              "sha256": "a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5"
+            }
+          ]
+        },
+        {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders-phase02-page0.webp",
+              "sha256": "3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef"
+            }
+          ]
+        }
+      ],
+      "pieces": {
+        "src": "assets/production/hunt/industrial-review-r1/hm10/warehouse-r3-20261008/occluders.json",
+        "sha256": "53f22da4aead53a00d6f3f8bdd8d78c0686ed2c74232c9488d37d4952f06835e"
+      },
+      "pieceCount": 3034,
+      "bandNativePx": 8,
+      "geometrySha256": "6db280e774fda6d1fd4897cfc570bad6686e4be55fe47c8988cd7a922fe0a958",
+      "sourceDepthSha256": "3733aa513bf2d997bddb18c551b20808d06bcaa65d953490071deee925107f3e",
+      "zIndex": "world y of ground row; explicit local portal cuts/backcaps preserve entrance presentation"
+    }
+  },
+  "nativeBaselineManifestSha256": "ddbfab1bd7be3f187d530101578ead6e3663245d3e5103363a295be43c57dcd8",
+  "nativeBaselineManifest": {
+    "schemaVersion": 1,
+    "assetId": "art:hunt:original-opus:v1",
+    "family": "HUNT",
+    "product": "DIGIMON CHAMPIONSHIP \u2014 2026 MODERN REBUILD",
+    "artifactMaturity": "ORIGINAL_BLENDER_2_5D_HUNT_FIELDS_FIRST_VERSION",
+    "productionStatus": "LOCAL_INTEGRATION_CANDIDATE_NOT_PUBLISHED",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "runtimeEligible": true,
+    "shippingReady": false,
+    "rightsStatus": "PROJECT_ORIGINAL",
+    "fieldCount": 30,
+    "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+    "filter": "nearest",
+    "rights": {
+      "status": "PROJECT_ORIGINAL",
+      "romDerivedPixels": false,
+      "sourceRastersLoaded": false,
+      "authority": "docs/art/production/original-maps-r1 (local first version)"
+    },
+    "fields": [
+      {
+        "fieldId": "field_hm00_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm00_01/frame-00.webp",
+            "sha256": "26DED1F05C5DAD6B59999EBA6B48E14C5458C1F33AE4FCC990D1F73453351153",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm00_01/frame-01.webp",
+            "sha256": "0895CE65B2B59E1B4EC807B4C42DEB24C27566EBB581F46C2AE7514E50413004",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm00_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm00_01/thumb-256.webp",
+          "sha256": "D5DB8AEFCD7A14A4EFC1B88C8DBE0F896F9A5D520B39E1788C82D93D6D34B8B3",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm00_01/occluders.webp",
+              "sha256": "A1D7063E76C3FB002E0A463EF52E08B8A9479D6241C60BE0703998B8479DA2AE"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm00_01/occluders.json",
+            "sha256": "28B8DB788D5677172AC26D50EDE97FDF5B9CFE9AF8DE2DB98415FE2A28F8794D"
+          },
+          "pieceCount": 2445,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm01_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_01/frame-00.webp",
+            "sha256": "73F491EFE597B11EA9D727671D7AFAF0CE41F522AB715D6A6CAAE2FDA9EE5F09",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_01/frame-01.webp",
+            "sha256": "362D9C0B2F2B97483D874AF46FCBE0659EBDFBC6D38DC216C0B10D2775455BAC",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm01_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_01/thumb-256.webp",
+          "sha256": "7F7E0E38E43C88C1D0B235D4A637D16CECD085396944E3C5027A117AD8B125F3",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_01/occluders.webp",
+              "sha256": "76A3604B6D644764341ADCE89B02E09E5E997835668A29761571D2AA826BA8A7"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_01/occluders.json",
+            "sha256": "03145868AF12578DF35AA85A6DEC324F6BD2FEB1DD2D835A109B7933ADDBE9DE"
+          },
+          "pieceCount": 2646,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm01_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_02/frame-00.webp",
+            "sha256": "395F2D8D696AED96F05BF79441D9F1CEA2EC78B19F585B9DA90C332666D49246",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_02/frame-01.webp",
+            "sha256": "C916EFABDED72768F25D6B6F9E7115007395C6968D90141805CA9ACAA4B27DF6",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm01_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_02/thumb-256.webp",
+          "sha256": "B7C7E20626239570FB388774A519092B09051B8A4F936CE7E5E2C79F6598534C",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_02/occluders.webp",
+              "sha256": "F94691D6134403B58D640078F07122269CAEA2A62299E0424EECE263BF78A9CF"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm01_02/occluders.json",
+            "sha256": "0F373715347E9B7456687C5E7C26FD900507242DA9D07EAC34F1EA69B07E6B55"
+          },
+          "pieceCount": 2646,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm02_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm02_01/frame-00.webp",
+            "sha256": "F91AF19FE6EB425622B29C3ED446B9A6F749C972CBA2C49841CD0EC85B141166",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm02_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm02_01/thumb-256.webp",
+          "sha256": "FBD2560B8541B2A0C5D4765590A27EA53DB10F29DFC3522C26CFFAC83B081FC2",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm02_01/occluders.webp",
+              "sha256": "EEF8D3647816BF716F9615BC26844DA4A09E142E32D418FBF7472CAEBF9EFAB8"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm02_01/occluders.json",
+            "sha256": "91445C5CC496542729B17E70B51A983DE8086A9FA96887679DA1119A6339D11D"
+          },
+          "pieceCount": 1120,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm02_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm02_02/frame-00.webp",
+            "sha256": "D5D489CBA3545453A8CC1BA6EDB342F5BF9BACEB8A937196B8C7C9D50E040AAA",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm02_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm02_02/thumb-256.webp",
+          "sha256": "00D9C0A66DC53926E8CE7B2B3A777C6E71655E0B8181907622C4A5B499C0980D",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm02_02/occluders.webp",
+              "sha256": "749EA8F5FE96E6F693AFC9D2449E5237EED2920D4E6A54A2742F2760EFF1B4E8"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm02_02/occluders.json",
+            "sha256": "4B5BD9C67558D55038AC511C0E7468E21C0C9C9852F7989CA28E1CCAB7683070"
+          },
+          "pieceCount": 1120,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm03_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm03_01/frame-00.webp",
+            "sha256": "FD5FA9934331FC2EBBEF086CEBD047784D0FD9FA2ECC835D07FB4D4397465E03",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm03_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm03_01/thumb-256.webp",
+          "sha256": "E5A5DAC56019C23AD122B3900B857A91E6BA040F930B695FF3377D6BE78085EB",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm03_01/occluders.webp",
+              "sha256": "CEEC20E447F27AF3B4D714531145E28CA226BDE6F547412D6FAD0B7C2A68D24E"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm03_01/occluders.json",
+            "sha256": "07969F03A708581F59F8D230BE8F44E950FEB6B0BA2651E8AE2833AB5B234F70"
+          },
+          "pieceCount": 2869,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm03_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm03_02/frame-00.webp",
+            "sha256": "988D634386DF90FA782395CF96ED1E5058EA98867902327B691544DAD5E7986A",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm03_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm03_02/thumb-256.webp",
+          "sha256": "1AF15BC596490419C4746FEACA5CE3842DF5656417835F002C73523C2829F894",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm03_02/occluders.webp",
+              "sha256": "717006CE1EDC20433E28BE409AF3CA39965F6FD2183DF2B72A758F5839F051D1"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm03_02/occluders.json",
+            "sha256": "1EC6A4F50FF7ECEF140F93A7AFB5A78920FF30E2AC2E71403CD9B28208AC96AF"
+          },
+          "pieceCount": 2869,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm04_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm04_01/frame-00.webp",
+            "sha256": "509BB6D1C5C524FC8F40652F1751E9F5278FD8F1F239C49E66F152C55A278772",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm04_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm04_01/thumb-256.webp",
+          "sha256": "8B2536485587C55D5CDA8D867887CB955443F36A9D70793E89782B497F614CB9",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm04_01/occluders.webp",
+              "sha256": "A225B3EED960F0B73C14DF003923D3D71A981B9DEBB6B01A5459A793B3923845"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm04_01/occluders.json",
+            "sha256": "795EF7146244D9521C725DF80963FC385D54079EA88863176369B7934D11DCA0"
+          },
+          "pieceCount": 3843,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm04_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm04_02/frame-00.webp",
+            "sha256": "2F9D38FAB8324910F59296A6B23EB823B4A17A190C431D37EA25789FDD96B4CE",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm04_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm04_02/thumb-256.webp",
+          "sha256": "E7C698D55D2D88EE115F7DF3850ADD722C0100213D4A95777CBB38B0682BA859",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm04_02/occluders.webp",
+              "sha256": "E5AB28F6CCEFCFC624A961CF41BE05D024990203C97543611F5BA0B10D78427B"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm04_02/occluders.json",
+            "sha256": "D9CDC0768338559908BEF6F16EBF19DCF91B23C1F042119D353945EB97A1F788"
+          },
+          "pieceCount": 3843,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm05_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_01/frame-00.webp",
+            "sha256": "442303D841C5632D409B4F30ABA7085688D16E86DD5D2241B91C0F9DA7B680B7",
+            "durationRawTicks": 40,
+            "durationMs": 668.6045245235257,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_01/frame-01.webp",
+            "sha256": "08744AB0B1AF98767D1870BA9320818E2340F617193701C246144FDB39C045C2",
+            "durationRawTicks": 40,
+            "durationMs": 668.6045245235257,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm05_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_01/thumb-256.webp",
+          "sha256": "6071E128569F1A84B314DC9E2A417672CB6323B4116FC2A2874ABB7A8A3CF9FA",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_01/occluders.webp",
+              "sha256": "D648181ED09C1A66790B0365BEC05985C6633B313A670FAE87713EA0ED7C51ED"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_01/occluders.json",
+            "sha256": "4DB093C1F4716B34309E595F726F97FD9E26370DAA9EC4B25E49D610786C048B"
+          },
+          "pieceCount": 1926,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm05_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_02/frame-00.webp",
+            "sha256": "76182A5B15CA29AA688DBCA6DDC2AECB28C10D971D8A78D1EB4E7B558606ECF8",
+            "durationRawTicks": 40,
+            "durationMs": 668.6045245235257,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_02/frame-01.webp",
+            "sha256": "B7CCC3407AC478336DE681428C9CAD7EA7548EC0A626085E527EE4DBBD8BA7CD",
+            "durationRawTicks": 40,
+            "durationMs": 668.6045245235257,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm05_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_02/thumb-256.webp",
+          "sha256": "565979C9C5789BAFD0F4C67C879905890DF91B5C1267C1F7F172C7365BD92E04",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_02/occluders.webp",
+              "sha256": "31596F598AB818314B79FD8E8BDB04AFB6F536EE78945009B0B7889C9DE083C3"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm05_02/occluders.json",
+            "sha256": "BC17F44C18EB4D9C7E12FE296C1B4B56AE786FFCD92FB4D28FF98FE6ACF79831"
+          },
+          "pieceCount": 1926,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm06_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_01/frame-00.webp",
+            "sha256": "7AC4AB398E4D8BF8CB067425345F28C95C4954C2CD75E854BC823A90DCE9AE08",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_01/frame-01.webp",
+            "sha256": "C3FE84B04608336E03D146B57256CCE19DF2DE694683938674D56FA8DD693183",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm06_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_01/thumb-256.webp",
+          "sha256": "A7461BABB1570D66CEAD57D826546C2A14173E5255B9EE7597454547E707580F",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_01/occluders.webp",
+              "sha256": "CDF683369216D4A77464401D764AA64D68FC83A4D18A928145EEAEC9EFD0CB5F"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_01/occluders.json",
+            "sha256": "671033148C11E7A4382B785841A1B34353342A5F6B87389FBB3CB4A3F0DF1238"
+          },
+          "pieceCount": 1789,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm06_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_02/frame-00.webp",
+            "sha256": "46866FD0568097F53BDC0B9863729C67ACF4BD252CB2CEAE18464DEAD865C861",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_02/frame-01.webp",
+            "sha256": "68AF632DBA4761C0AF493C08E8279009810836F123E03FAF1725A8E0C3E9984D",
+            "durationRawTicks": 20,
+            "durationMs": 334.30226226176285,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm06_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_02/thumb-256.webp",
+          "sha256": "AB1C3A0FD27A2D4EAF3B39A764C9F20A2D9E0E682BFA9F81EBA91C6DCAC63D68",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_02/occluders.webp",
+              "sha256": "D6A7B19170DC1CEC1549B452F9ED8F575F9FA4B169D42F3C8F65DACC0AE75B26"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm06_02/occluders.json",
+            "sha256": "4374F64BE1E0EEA5A63D5E272AF55EE7EC85AB10266B6587F8046C4EC2E0AB03"
+          },
+          "pieceCount": 1789,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm08_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm08_01/frame-00.webp",
+            "sha256": "CAC97372C7535E57681EACC024558F65C66F84170E932C07BEB8743FEDA49F11",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm08_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm08_01/thumb-256.webp",
+          "sha256": "B4209EDB91268EA3FBE9BA714CA184C15B0CC8788CAB1C03B78DC41D62F0AE20",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm08_01/occluders.webp",
+              "sha256": "B85290934B4226EC92A89A6D9039B84541F19A82EDBBB544A244FCE8069B9D0E"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm08_01/occluders.json",
+            "sha256": "FECBE0DA281C19DD38D9F0C168A441ECAA2E3274F738140BEF092CDD20DC364F"
+          },
+          "pieceCount": 2940,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm08_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm08_02/frame-00.webp",
+            "sha256": "E859D096AC0064D956D9037A31A7172FFB33807CDA7CBD964573E4DD6D15D769",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm08_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm08_02/thumb-256.webp",
+          "sha256": "870FD8C4BEA5D7B61551849AE973EEBB24A19B344F1F8CC3E00118BF75A5C6CB",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm08_02/occluders.webp",
+              "sha256": "9D598A55AC6278F146D472B0EAAB1812311EF5E5702BC9D2C93094E5B528C58E"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm08_02/occluders.json",
+            "sha256": "5ECB0C44B0D1F4A2AC82799686242DA5A47AA39DA2951BE6FF7D61DB7C98682F"
+          },
+          "pieceCount": 2940,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm09_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm09_01/frame-00.webp",
+            "sha256": "28A00CF046B8684AF6573FE006DAFA1AC4D2F49660110ECC892EB39DBB2D8AC0",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm09_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm09_01/thumb-256.webp",
+          "sha256": "A623253C54BB92DA0587C86D44F664A51A74D80E589552701DABFE0271A5B651",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm09_01/occluders.webp",
+              "sha256": "1D7C738661E76A3C6E3203E29A2DD946134D7A86557DA024BCCE7B98AA103FEB"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm09_01/occluders.json",
+            "sha256": "31B37A9A1E2BBB5BB9F34B6D2A3AD64183121CEEE5526561F7F4B6A3E4E804BC"
+          },
+          "pieceCount": 3630,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm10_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm10_01/frame-00.webp",
+            "sha256": "8117359AA364D7A3889810AACF7D24EAB9C8CEB5078511F2696E48F487B5E291",
+            "durationRawTicks": 13,
+            "durationMs": 217.29647047014586,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm10_01/frame-01.webp",
+            "sha256": "87C0FD9FAD52B12D4371582909C744353174BCC016368DB6A4C993CE855BA800",
+            "durationRawTicks": 12,
+            "durationMs": 200.58135735705773,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm10_01/frame-02.webp",
+            "sha256": "4FDAE585D79588F0921B2A20F1B6DB8B242ABF77DDDB799C7C96BC4DD52CD4FF",
+            "durationRawTicks": 12,
+            "durationMs": 200.58135735705773,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm10_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm10_01/thumb-256.webp",
+          "sha256": "AE706DD8A27443D91317049C87FD1C21A9925A6DE011B96D0478E951A3A51F3B",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm10_01/occluders.webp",
+              "sha256": "41CD09DC816CA7810990D105449F0CA895147F59042CC6609F22F3CBCFA8E60D"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm10_01/occluders.json",
+            "sha256": "DBBB27AD398EBB523787DF3A9F77E09F567440423CFAB2ED5608699BF1BFBE7F"
+          },
+          "pieceCount": 3023,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm11_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm11_01/frame-00.webp",
+            "sha256": "2EE32EF5D796A8107C408DBBFD02D828A491B3356201BEF6C1051BF5E486ECD9",
+            "durationRawTicks": 13,
+            "durationMs": 217.29647047014586,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm11_01/frame-01.webp",
+            "sha256": "FFD3535D7477787FECB60285C4567564AA2D397F015CDBE3B72BA76C9B43ADDF",
+            "durationRawTicks": 12,
+            "durationMs": 200.58135735705773,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm11_01/frame-02.webp",
+            "sha256": "0E37CEF0FFC95648D465EBB6ACB69C51B3AE93A61C5C51E7231DBF35C70D6E3B",
+            "durationRawTicks": 12,
+            "durationMs": 200.58135735705773,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm11_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm11_01/thumb-256.webp",
+          "sha256": "FA6A44A07E632AA4AA10BD3D4E17F0846BADE8BAF0BE182F89AEFB7D6B54DF04",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm11_01/occluders.webp",
+              "sha256": "77634200EED3FAB93859A314FD373F3A232D1C1167D9E998631C62A404890B44"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm11_01/occluders.json",
+            "sha256": "AEB4C02B7DD9A58A191E5E24C99551EAA6A7D3D9A265AC536693FA2C2F34658E"
+          },
+          "pieceCount": 2159,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm13_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm13_01/frame-00.webp",
+            "sha256": "D5A4423F123A152B24529A9EE8E938FE826552CABF96E82A82761D76D07BC843",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm13_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm13_01/thumb-256.webp",
+          "sha256": "D96105C9032FAE102D0F6A3D05E7F255FAF936FCDFAD47F27B855F60A1DB2CCE",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm13_01/occluders.webp",
+              "sha256": "E29676EE80ED31BACB75C7DF0892D6B18AFB50E6B0FC451BD0387A2294A8D93A"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm13_01/occluders.json",
+            "sha256": "AACE7F64EEAE84B4B16CA85B014CC758C400127EC167955ACD19443E1F0E84A2"
+          },
+          "pieceCount": 2239,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm13_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm13_02/frame-00.webp",
+            "sha256": "6B3DF935E87D95DB2281F3C9B956E5BA30076CD21860C922F18CC60860F29898",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm13_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm13_02/thumb-256.webp",
+          "sha256": "F5755C3363FAA4C3CC47CEC9A38BCC451D31AAC6CFA061CCEBD824BA921F9BB9",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm13_02/occluders.webp",
+              "sha256": "AB35DEE87B6501373612F41DA2D011A53BD5FD8FEF6E812D41A26D91EDC4E8E2"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm13_02/occluders.json",
+            "sha256": "991FD91C7EAD2DDD89C0E8DB912F4ADC9F6E595C6E4B4D1CAF3DD036B2EF5D8E"
+          },
+          "pieceCount": 2239,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm14_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm14_01/frame-00.webp",
+            "sha256": "1524A97C1FE0177754F9D97838DE37AB53C01B357B83C788B6F5C95055135223",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm14_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm14_01/thumb-256.webp",
+          "sha256": "6CDD948BA5FBAA1CBEA8D4FB219A8B4D4B819EA377E0FCA2FFCEFCC6D8A50EF6",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm14_01/occluders.webp",
+              "sha256": "D705B10FD72B24CBF7C589499AD31D827AA2D3CEFD999E9D63BEBDE95B822C2B"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm14_01/occluders.json",
+            "sha256": "8FCB5760ED71C6DFCEF66D8B8876CA4D33D3859C7056A35CE44F85D306185531"
+          },
+          "pieceCount": 2185,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm14_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm14_02/frame-00.webp",
+            "sha256": "3CFC5C1247D82D0B64A14CCCEA9534549206B9CB053E1861DE9707E4E7DC756F",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm14_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm14_02/thumb-256.webp",
+          "sha256": "B61A6D74D04E28398635540E37154D43530FF9F0E4376C398B45A6E9B721D5A4",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm14_02/occluders.webp",
+              "sha256": "C51D2D07208664EDF85F2961660C93E0F840D8B6FFC86C51145BEF4DB238E180"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm14_02/occluders.json",
+            "sha256": "05F61B8A6E3AF845D55449BEE8C0F20DA877657D44B6700CCDCEF10A772A6705"
+          },
+          "pieceCount": 2185,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm15_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_01/frame-00.webp",
+            "sha256": "F3D286410B0637D0EA391F1AC6889092FF6F641841C2F82F4A9C45122B016687",
+            "durationRawTicks": 50,
+            "durationMs": 835.7556556544072,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_01/frame-01.webp",
+            "sha256": "6198B308DA859B9F9F23160A5C454CA8C4B37853E5D0169C088A9C8FBCF9ECA0",
+            "durationRawTicks": 50,
+            "durationMs": 835.7556556544072,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm15_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_01/thumb-256.webp",
+          "sha256": "F4360463F1EA5021E2574D68AD0DB1FB82B7B6720B3DE4FB0D60A107A27BEB50",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_01/occluders.webp",
+              "sha256": "2914EE1202F39126FBE7226F951E2FB0A747C185E353BC18AD8B5CE8339F4885"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_01/occluders.json",
+            "sha256": "71AA0A1BA5AB11F4E1EE26DFA2EE8E789DBBF2D03BB8418C923D9902FE7D5B4A"
+          },
+          "pieceCount": 2206,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm15_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_02/frame-00.webp",
+            "sha256": "600F0C701C793EBC6F0AE8AE542CD35999BB5A72E45469639E34B5E1A274B565",
+            "durationRawTicks": 50,
+            "durationMs": 835.7556556544072,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_02/frame-01.webp",
+            "sha256": "F918FCAF3887E1BD93247D16534DA21DBCEA007BAC2DC74E12A391B97205DC2C",
+            "durationRawTicks": 50,
+            "durationMs": 835.7556556544072,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm15_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_02/thumb-256.webp",
+          "sha256": "71808F8AF0777AF673C4C37574E850DB52E8405BE900C1614DA727356511FDC6",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_02/occluders.webp",
+              "sha256": "1F69F3049395DE7E537AEABCD489FB38D340B586CE20ED5F06D47D6BD7EED16E"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm15_02/occluders.json",
+            "sha256": "2E9990F05034378F3637A26EC39D42F0FF7837E86A2C5A0AD7CFC1F29CF44AA1"
+          },
+          "pieceCount": 2206,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm16_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm16_01/frame-00.webp",
+            "sha256": "8D43852A9A3881B944BA2D2BAB7F8C6450D9333F9832D2A879C2DC90FC681620",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm16_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm16_01/thumb-256.webp",
+          "sha256": "A413AD10C7210A45872B526A7359FE1E089C20B6F226F8BED88E75064258C562",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm16_01/occluders.webp",
+              "sha256": "A74FD701ED56854A463F04A0ECE0D0BD3857C8518F870BB62C08E07125E68A7B"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm16_01/occluders.json",
+            "sha256": "2FEADD2BEDE07CA86A4C5EBE2674151615D52B7FC383F9802E575BD0D7879B33"
+          },
+          "pieceCount": 971,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm16_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm16_02/frame-00.webp",
+            "sha256": "E5C9CB631C21C8E9FEEB230B32C43AE39C3ABAE4C92597AE4142D6DE0794310A",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm16_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm16_02/thumb-256.webp",
+          "sha256": "496310A9ED4B0CEEA88AF165D922097B8D4D88711867E8062696B689DAF61B7D",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm16_02/occluders.webp",
+              "sha256": "323ED3226DBAB13969E84F3FA8BD8DBED847450DFC9B404EF074CDAF40AECC1E"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm16_02/occluders.json",
+            "sha256": "0980A511E6EE94E53B5391D0182275FD650E199C7504CF2E2E47222053906E3D"
+          },
+          "pieceCount": 971,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm17_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_01/frame-00.webp",
+            "sha256": "DF477F6182006B888AB26A2C188CC7A2E80D435F7145755D1E7042935717C134",
+            "durationRawTicks": 22,
+            "durationMs": 367.7324884879392,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_01/frame-01.webp",
+            "sha256": "6AAA91C2066CD4AB89A3D0E4784BA26951C5D5E77A53F1082480658038DF1E6C",
+            "durationRawTicks": 22,
+            "durationMs": 367.7324884879392,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm17_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_01/thumb-256.webp",
+          "sha256": "5AB9447FD8C529A077C1FB11536EF5E5D809808C89FE4DCFA5EB8F717CD4C894",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_01/occluders.webp",
+              "sha256": "1BE988BEDB919C6757302E5ACB4D438C0297975F390AEF9FE3E6F73DF614570D"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_01/occluders.json",
+            "sha256": "9585770F6218A90F31592FB2BCE7849E56931066F016277B2F8CE85F068D1C45"
+          },
+          "pieceCount": 2355,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm17_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_02/frame-00.webp",
+            "sha256": "DC88EF36935677B63D15F43779AB5AFBBB2C0E6395A122E55F4D15A5E27D2E74",
+            "durationRawTicks": 22,
+            "durationMs": 367.7324884879392,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          },
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_02/frame-01.webp",
+            "sha256": "10BE7127037A392358AD88166176605C0CD185FD08C2A4DECE83FB2774D27881",
+            "durationRawTicks": 22,
+            "durationMs": 367.7324884879392,
+            "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm17_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_02/thumb-256.webp",
+          "sha256": "17D681502288183FD0B221B51A7224B00F2B79B81848794583A9C31803D2F832",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_02/occluders.webp",
+              "sha256": "F70300EF06708B7126EF8F37525D722FBFC9D08AFD0F6A77F5127D0580DC9085"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm17_02/occluders.json",
+            "sha256": "F4CD82EFC259389914847AEF999BE929372287607C748D8B8EE1DA571C293B4D"
+          },
+          "pieceCount": 2355,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm18_01",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm18_01/frame-00.webp",
+            "sha256": "4297511F8F52F17B01575C0A799675A351806AC43B4D7652480B738B0EC4F854",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm18_01",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm18_01/thumb-256.webp",
+          "sha256": "27C094AD9F21A76D0C9918C910144B9B288C112D23A4338035D27A6414849A65",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm18_01/occluders.webp",
+              "sha256": "6FDC91B1FEB039BEA1887FACB037FE1C41DA48F2EA03C033F4E0AB04D8C3B445"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm18_01/occluders.json",
+            "sha256": "E2F5813B9CE68288538BCF6A5BFA1490632A4A4978E4C4A3DF2D596807E4247A"
+          },
+          "pieceCount": 3628,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      },
+      {
+        "fieldId": "field_hm18_02",
+        "worldWidthPx": 2048,
+        "worldHeightPx": 2048,
+        "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+        "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+        "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+        "frames": [
+          {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm18_02/frame-00.webp",
+            "sha256": "2615DD7D9E8C73D91AA693E6291A208A14C1873722BFEAC86AAC1AA34DC68EAA",
+            "durationMs": null
+          }
+        ],
+        "source": "docs/art/production/original-maps-r1/hunt/hunt-h1/fields/field_hm18_02",
+        "thumbnail": {
+          "src": "assets/production/hunt/original-opus-v1/fields/field_hm18_02/thumb-256.webp",
+          "sha256": "D1BEE10ACBCA2C0A27731790EC9B41322A8E6F541B1C16CE8FA4F31C2E703BAA",
+          "widthPx": 256
+        },
+        "depthOccluders": {
+          "atlases": [
+            {
+              "src": "assets/production/hunt/original-opus-v1/fields/field_hm18_02/occluders.webp",
+              "sha256": "0D8D77C3BECFE61A30F9F0DEBA4AC22D94EF7F59CB7F0080253B6DBE64575B9B"
+            }
+          ],
+          "pieces": {
+            "src": "assets/production/hunt/original-opus-v1/fields/field_hm18_02/occluders.json",
+            "sha256": "07735695E71DF6911A46F4B9FA98C7D83FCC1B40FBB766E1D0BA9021E4580E17"
+          },
+          "pieceCount": 3628,
+          "bandNativePx": 8,
+          "zIndex": "world y of the piece ground row; compare with actor worldY"
+        }
+      }
+    ],
+    "notes": [
+      "Procedural original Blender hunt fields: 3D scenes from the hunt terrain grid, cage camera and light.",
+      "Characters stay 2D; depthOccluders pieces sort with actors by world y (2.5D).",
+      "Caves sit at the escape anchors from hunt-scene; collision, encounters and escapes stay in Hunt runtime.",
+      "Fields not listed here still load from licensed-runtime-v1."
+    ]
+  }
+}

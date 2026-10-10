@@ -107,7 +107,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   // Until a player has picked someone once, the habitat says how. It does not
   // take a tap: the residents under it still do.
-  const hint = node("p", "int-rh2-hint", "點選數碼獸查看狀態・左右滑動查看牧場");
+  const hint = node("p", "int-rh2-hint", "點選夥伴查看狀態・左右滑動查看牧場");
   hint.setAttribute("aria-hidden", "true");
   // Shown on the player's first day only (the app decides from its own
   // calendar; this view keeps no storage of its own), until the first touch.
@@ -116,7 +116,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // ---- The resident card (a resident is picked) -------------------------
   const companion = node("section", "int-rh2-companion");
   companion.setAttribute("aria-live", "polite");
-  setLabel(companion, "aria-label", "選取的數碼獸");
+  setLabel(companion, "aria-label", "選取的夥伴");
   companion.dataset.open = "false";
   companion.dataset.placement = "bottom";
   companion.setAttribute("aria-hidden", "true");
@@ -169,9 +169,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // the original has no such control. Care there is "pick a tool, touch the
   // target" over six distinct tools; the intent seam (careForCreature) stays.
   const actions = node("div", "int-rh2-companion__actions");
-  const previous = button("int-rh2-companion__nav", "‹", "上一隻數碼獸");
+  const previous = button("int-rh2-companion__nav", "‹", "上一隻夥伴");
   previous.dataset.direction = "previous";
-  const next = button("int-rh2-companion__nav", "›", "下一隻數碼獸");
+  const next = button("int-rh2-companion__nav", "›", "下一隻夥伴");
   next.dataset.direction = "next";
   const close = button("int-rh2-companion__close", "×", "取消選取");
   actions.append(previous, next, close);
@@ -359,7 +359,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     lastRosterKey = key;
     detailRows.replaceChildren();
     if (entry && typeof renderCreatureDetail === "function") renderCreatureDetail(detailRows, entry);
-    else detailRows.append(node("p", "int-rh2-detail__empty", "這隻數碼獸的詳細資料暫時無法顯示。"));
+    else detailRows.append(node("p", "int-rh2-detail__empty", "這隻夥伴的詳細資料暫時無法顯示。"));
   }
 
   function openDetail() {
@@ -481,9 +481,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if(eventKey!==null&&eventKey!==lastEventKey){
       if(event.kind==='EVOLVED'||event.kind==='REBORN'){
         const member=frame.residents.find(r=>r.creatureId===event.instanceId);
-        if(member)showNotice(event.kind==='EVOLVED'?uiText('{name} 進化成了{species}。',{name:member.displayName,species:speciesName(event.target)}):uiText('{name} 回到了數碼蛋。',{name:member.displayName}));
+        if(member)showNotice(event.kind==='EVOLVED'?uiText('{name} 進化成了{species}。',{name:member.displayName,species:speciesName(event.target)}):uiText('{name} 回到了培育蛋。',{name:member.displayName}));
       }
-      if(event.kind==='DISAPPEARED')showNotice(uiText('數碼獸消失了。'));
+      if(event.kind==='DISAPPEARED')showNotice(uiText('夥伴消失了。'));
     }
     lastEventKey=eventKey;
 

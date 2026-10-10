@@ -9,7 +9,7 @@
 // franchise has more than one English convention, and choosing one is an
 // Owner decision recorded in the glossary.
 
-export const GENERATIONS_EN = Object.freeze(["Digi-Egg", "Baby I", "Baby II", "Child", "Adult", "Perfect", "Ultimate"]);
+export const GENERATIONS_EN = Object.freeze(["Creature Egg", "Baby I", "Baby II", "Child", "Adult", "Perfect", "Ultimate"]);
 export const PERSONALITIES_EN = Object.freeze(["Honest", "Selfish", "Impatient", "Easygoing", "Passionate", "Calm", "Bold", "Timid", "???"]);
 export const ROSTER_FAMILIES_EN = Object.freeze(["None", "Beast", "Machine", "Insect & Plant", "Bird", "Dragon", "Aquatic", "Holy", "Dark"]);
 export const TAMER_RANK_NAMES_EN = Object.freeze(["Green", "Blue", "Red", "White", "Bronze", "Silver", "Gold", "Platinum", "Champion", "Master"]);
@@ -78,4 +78,4 @@ export const BATTLE_MENU_LABELS_EN = Object.freeze({
 });
 
 export const UNKNOWN_DIGIMON_EN = "Unknown Digimon";
-export const DIGI_EGG_EN = "Digi-Egg";
+export const DIGI_EGG_EN = "Creature Egg";

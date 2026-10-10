@@ -1,0 +1,10 @@
+/* Same measured-bar layout as the existing HUD; no toolbar typography changes. */
+.cm-tutorial-guidance {
+ position:fixed;top:var(--cm-status-bar-height,var(--hud-height));left:0;right:0;
+ z-index:150;display:flex;align-items:center;gap:8px;padding:8px 12px;
+ background:#10242a;color:#e9fff8;border-bottom:1px solid #65dbc4;
+ font-size:13px;line-height:1.4;
+}
+body[data-status-bar="on"][data-tutorial-guide] {
+ --cm-screen-top:calc(var(--cm-status-bar-height,var(--hud-height)) + var(--cm-tutorial-guide-height,0px));
+}

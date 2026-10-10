@@ -17,6 +17,7 @@ export const CHAMPIONSHIP_SCREENS = deepFreeze({
   RAISING_HOME: "RAISING_HOME",
   SHOP: "SHOP",
   DATABASE: "DATABASE",
+  MEDALS: "MEDALS",
   CAGE_EDIT: "CAGE_EDIT",
   // The original's Digimon roster, reached from the toolbar's management
   // submenu. Its shape comes from ui/digimon_list_main.nxr (list chrome, a
@@ -59,9 +60,10 @@ export const CHAMPIONSHIP_SCREEN_STACK_MAX_DEPTH = 5;
 // Forward transitions only. Going back is popping, and is legal wherever the
 // stack has something to pop to.
 const FORWARD_TRANSITIONS = deepFreeze({
-  RAISING_HOME: ["GATE_SELECT", "SHOP", "DATABASE", "CAGE_EDIT", "BATTLE_SELECT", "DIGIMON_LIST", "SCHEDULE", "HELP", "TAMER_INFO"],
+  RAISING_HOME: ["GATE_SELECT", "SHOP", "DATABASE", "CAGE_EDIT", "BATTLE_SELECT", "DIGIMON_LIST", "SCHEDULE", "HELP", "TAMER_INFO", "MEDALS"],
   SHOP: [],
   DATABASE: [],
+  MEDALS: [],
   CAGE_EDIT: [],
   DIGIMON_LIST: [],
   SCHEDULE: [],

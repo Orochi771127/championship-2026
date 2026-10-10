@@ -87,7 +87,7 @@ export function createChampionshipPreferencePort({ storage } = {}) {
 
 export function createChampionshipPersistentSavePort({
   storage,
-  locks = globalThis.navigator?.locks,
+  locks = globalThis.window?.navigator?.locks,
   now = () => new Date().toISOString()
 } = {}) {
   if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function"
@@ -226,6 +226,12 @@ export function createChampionshipPersistentSavePort({
       // rebuilds a current snapshot for retry instead of replaying old state.
       if (status.phase === "SAVE_FAILED" || status.phase === "DIRTY") return status;
       return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED" });
+    },
+
+    // Pure candidate construction for app-owned rollback/hydration. No write,
+    // lock adoption, retry change or status publication occurs here.
+    prepare(request) {
+      return encode(request);
     },
 
     save(request) {

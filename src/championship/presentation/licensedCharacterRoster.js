@@ -145,11 +145,20 @@ export async function loadLicensedCharacterRoster({
           : "STATIC_SOURCE_IDENTITY_ACTION_BINDING_REQUIRES_TRACE" });
     },
     getDiagnostics() {
+      const entities=[...bundles].map(([entityId,bundle])=>({entityId,memory:bundle.getDiagnostics?.().textureMemory??null}));
+      const known=entities.every(({memory})=>memory?.estimatedBaseRgbaBytes!==null&&Number.isSafeInteger(memory?.estimatedBaseRgbaBytes));
+      const textureMemory=Object.freeze({measurement:'BASE_RGBA8_ESTIMATE_NOT_GPU_USAGE',
+        basis:'Actual loaded bundle pages; excludes mipmaps, decode copies and driver/cache overhead',
+        estimatedBaseRgbaBytes:known?entities.reduce((n,{memory})=>n+memory.estimatedBaseRgbaBytes,0):null,
+        pageCount:entities.every(({memory})=>memory)?entities.reduce((n,{memory})=>n+memory.pageCount,0):null,
+        sourceCount:entities.every(({memory})=>memory)?entities.reduce((n,{memory})=>n+memory.sourceCount,0):null,
+        unknownEntityIds:entities.filter(({memory})=>!memory||memory.estimatedBaseRgbaBytes===null).map(({entityId})=>entityId),
+        atlasPages:entities.flatMap(({entityId,memory})=>(memory?.atlasPages??[]).map(page=>({entityId,...page}))) });
       return Object.freeze({ assetId: manifest.assetId, entityCount: manifest.records.length,
         loadedEntityIds: [...bundles.keys()], loadedSides: [...sides], failures: [...failures],
         replacementFailures: [...replacementFailures],
         appearances: [...appearances].map(([entityId, pack]) => ({ entityId, assetId: pack.assetId, designVersion: pack.designVersion })),
-        rgbaBytes: [...bundles.keys()].reduce((sum, id) => sum + sides.reduce((n,side)=>n+(appearances.get(id) ?? records.get(id)).sides[side].rgbaBytes,0), 0),
+        rgbaBytes: textureMemory.estimatedBaseRgbaBytes,textureMemory,
         animationBinding: manifest.animationBinding, runtimeEligible: true, shippingReady: false });
     },
     dispose() {

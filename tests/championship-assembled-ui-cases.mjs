@@ -21,7 +21,7 @@ test('all Shop images join native identities; cage order is not Shop order',()=>
     assert.equal(c.category,r.category); assert.equal(c.itemIndex,r.itemIndex);
     assert.equal(c.subcategory,r.subcategory);
     if(r.category==='CAGES') assert.equal(c.sourceCell,r.itemIndex);
-    else assert.equal(shopGoodsPresentation(r.shopRecordIndex,local).src,c.src);
+    else {const publicArt=shopGoodsPresentation(r.shopRecordIndex,'https://orochi771127.github.io/championship-2026/'); assert.equal(publicArt.src,shopGoodsPresentation(r.shopRecordIndex,local).src); assert.equal(assembledShopArt(r.shopRecordIndex,'https://orochi771127.github.io/championship-2026/').src,c.src);}
   }
   assert.equal(assembledShopArt(112,local).sourceCell,15);
   assert.equal(assembledShopArt(16,local).sourceCell,12);

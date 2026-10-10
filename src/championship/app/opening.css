@@ -341,21 +341,17 @@ body[data-portrait-frame] .cm-title__panel { width: 390px; height: var(--cm-view
   border-radius: var(--r-control);
   box-shadow: 0 0 30px rgba(86, 227, 194, 0.12);
 }
-.cm-opening-story__card--0 { display: block; }
-.cm-opening-story__card--0 .cm-opening-story__text { height: 23%; }
+.cm-opening-story__picture { background: #07110f; }
+.cm-opening-story__picture img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; image-rendering: auto; }
+.cm-opening-story__text { flex-shrink: 0; }
+/* Three separate frames keep every image visible, including feet and ears. */
+.cm-opening-story__card--0 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); grid-template-rows: auto minmax(0,1fr) minmax(0,1fr); gap: 8px; }
+.cm-opening-story__card--0 .cm-opening-story__text { grid-column: 1 / -1; }
+.cm-opening-story__arena { width: 100%; height: 100%; }
+.cm-opening-story__arena--0 { grid-column: 1; grid-row: 2; }
+.cm-opening-story__arena--1 { grid-column: 2; grid-row: 2; }
+.cm-opening-story__arena--2 { grid-column: 1 / -1; grid-row: 3; }
 .cm-opening-story__card--3 { justify-content: center; }
-/* The authored pictures keep their drawings. */
-.cm-opening-story__arena { position: absolute; width: 45%; height: 41%; background: repeating-linear-gradient(0deg, transparent 0 11px, #b5b89055 12px), repeating-linear-gradient(90deg, #986b3777 0 17px, #77723a88 18px 19px), linear-gradient(145deg, #dce2aa, #806538); }
-.cm-opening-story__arena--0 { left: 8%; top: 29%; transform: rotate(-2deg); }
-.cm-opening-story__arena--1 { right: 6%; top: 28%; width: 33%; height: 35%; background: repeating-radial-gradient(circle, #191e3a 0 15px, #cabd7066 17px, #151a2d 19px); }
-.cm-opening-story__arena--2 { left: 29%; top: 56%; width: 58%; height: 39%; background: repeating-linear-gradient(110deg, #ffa63377 0 5px, #521c1b44 6px 12px), linear-gradient(25deg, #152854, #c07727); }
-.cm-opening-story__fighter { position: absolute; bottom: 17%; left: 10%; width: 35%; height: 54%; background: linear-gradient(135deg, #f7ffe6, #b3d9ce 50%, #2a5a78); filter: drop-shadow(2px 3px #162b44); clip-path: polygon(8% 42%, 25% 24%, 35% 0, 53% 24%, 81% 17%, 71% 42%, 100% 70%, 70% 61%, 83% 99%, 47% 78%, 19% 100%, 31% 59%, 0 72%); }
-.cm-opening-story__fighter--r { left: auto; right: 6%; transform: scaleX(-1); background: linear-gradient(135deg, #fff4b5, #e99b31 50%, #854035); }
-.cm-opening-story__world { background: radial-gradient(ellipse at 43% 40%, #5cad5d 0 18%, transparent 19%), radial-gradient(ellipse at 66% 58%, #638c4a 0 21%, transparent 22%), radial-gradient(ellipse at 29% 65%, #819b57 0 15%, transparent 16%), repeating-linear-gradient(0deg, #b7e3f72a 0 1px, transparent 2px 12px), linear-gradient(130deg, #a8c4d1, #2d537e); }
-.cm-opening-story__world::after { content: ""; position: absolute; inset: 20% 34%; background: linear-gradient(130deg, #82fcd2, #2bbe96); clip-path: polygon(25% 4%, 59% 0, 80% 19%, 59% 38%, 92% 53%, 64% 59%, 85% 99%, 42% 84%, 9% 100%, 25% 58%, 0 53%, 35% 35%); filter: drop-shadow(3px 4px #06273a); }
-.cm-opening-story__champion { background: repeating-linear-gradient(0deg, #1d548b 0 3px, #122346 4px 7px); }
-.cm-opening-story__champion::before { content: ""; position: absolute; width: 70%; aspect-ratio: 1; left: 15%; top: 5%; border-radius: 50%; background: radial-gradient(ellipse at 35% 12%, #fff, #92edfb 10%, #193f61 20%, #080d27 42%, #a1e8ed 62%, #122c50 70%); box-shadow: 0 0 12px #79bcfc; }
-.cm-opening-story__champion::after { content: ""; position: absolute; inset: 28% 35% 25%; background: linear-gradient(#82f8ff 0 27%, transparent 27% 38%, #18a5fe 38% 66%, transparent 66% 76%, #1371f9 76%); clip-path: polygon(14% 0, 86% 0, 100% 20%, 83% 48%, 100% 78%, 85% 100%, 15% 100%, 0 80%, 19% 51%, 0 22%); }
 
 /* Reduced motion: the player's choice (data-motion on <html>, resolved from
    the setting and, when it is "system", from the OS); the media query only
@@ -366,3 +362,20 @@ body[data-portrait-frame] .cm-title__panel { width: 390px; height: var(--cm-view
   :root:not([data-motion]) .cm-opening__envelope::after { animation: none; opacity: 0.6; }
   :root:not([data-motion]) .cm-opening__letter, :root:not([data-motion]) .cm-opening__name { animation-name: cm-fade; }
 }
+
+/* Local eight-egg opening. Existing art, native radio keyboard behavior. */
+.cm-opening__egg-choice { width:min(100%,380px); max-height:100%; overflow:auto; padding:16px; border:1px solid var(--c-line-2); border-radius:var(--r-sheet); background:var(--c-surface-1); }
+.cm-opening__egg-choice h2 { margin:0 0 6px; font-size:20px; line-height:1.3; }
+.cm-opening__egg-choice > p { margin:0 0 12px; color:var(--c-text-2); font-size:14px; line-height:1.5; }
+.cm-opening__egg-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.cm-opening__egg-option { position:relative; min-height:90px; display:grid; grid-template-columns:60px 1fr; align-items:center; gap:6px; padding:8px; border:2px solid var(--c-line-2); border-radius:var(--r-control); color:var(--c-text-2); cursor:pointer; }
+.cm-opening__egg-option img { width:60px; height:70px; object-fit:contain; image-rendering:auto; }
+.cm-opening__egg-option span { font-size:13px; line-height:1.3; overflow-wrap:anywhere; }
+.cm-opening__egg-option input { position:absolute; width:18px; height:18px; top:4px; right:4px; accent-color:var(--c-accent); }
+.cm-opening__egg-option:has(input:checked) { border-color:var(--c-gold); color:var(--c-text-1); background:var(--c-surface-3); }
+.cm-opening__egg-option:has(input:focus-visible) { outline:3px solid var(--c-accent); outline-offset:2px; }
+.cm-opening__egg-actions { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.cm-opening__egg-actions button { min-height:44px; padding:8px 12px; border:1px solid var(--c-line-2); border-radius:var(--r-control); font:inherit; font-weight:var(--fw-heavy); background:var(--c-accent); color:var(--c-text-on-accent); }
+.cm-opening__egg-actions .cm-opening__back, .cm-opening__name .cm-opening__back { background:var(--c-surface-2); color:var(--c-text-2); }
+.cm-opening__name .cm-opening__back { margin-top:10px; }
+@media(max-width:359px) { .cm-opening__egg-choice { padding:10px; } .cm-opening__egg-option { grid-template-columns:48px 1fr; gap:3px; padding:5px; } .cm-opening__egg-option img { width:48px; } }

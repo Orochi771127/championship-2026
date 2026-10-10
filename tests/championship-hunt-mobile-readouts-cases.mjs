@@ -16,7 +16,7 @@ test('each of the 30 fitted plugins reaches the matching display without changin
     const caps=loadout.getHudCapabilities(),hud=huntPluginReadout(runtime,caps),target=huntTargetReadout(runtime,caps);
     if(plugin.pluginKind==='ANALYZER'){
       for(const key of ['GENERATION','FAMILY','ALIGNMENT','HP','PERSONALITY','CAPACITY'])assert.equal(target[key.toLowerCase()]!=='???',plugin.capability.analyzerFields.includes(key),plugin.itemId+key);
-      assert.equal(target.name,'亞古獸');
+      assert.equal(target.name,'鎧焰蜥');
     }else assert.equal(target.name,'???');
     assert.equal(hud.memory!==null,plugin.pluginKind==='MEMORY_CHECKER');
     assert.equal(hud.radar!==null,plugin.pluginKind==='RADAR_SEARCH');
@@ -87,3 +87,5 @@ test('normal selection publishes target changes once through the existing source
     assert.equal(source.getFrame().huntField.hud.target, null);
   } finally { unsubscribe(); await app.dispose(); }
 });
+
+test("all sixteen public Gate previews use existing accepted original field pixels",()=>{for(const g of listChampionshipGates()){const t=huntGateThumbnail(g,"https://orochi771127.github.io/championship-2026/");assert.equal(t.fieldId,g.originalFields.dayFieldId);assert.ok(t.src.startsWith("assets/production/hunt/accepted-20261010/"));assert.ok(fs.existsSync(t.src));assert.notEqual(t.src,huntGateThumbnail(g,"https://example.com/").src);}});

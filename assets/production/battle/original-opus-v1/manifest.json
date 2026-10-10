@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:battle:original-opus:v1",
+  "family": "BATTLE",
+  "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+  "artifactMaturity": "ORIGINAL_BLENDER_2_5D_BATTLE_ARENAS_FIRST_VERSION",
+  "productionStatus": "LOCAL_INTEGRATION_CANDIDATE_NOT_PUBLISHED",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": false,
+  "runtimeEligible": true,
+  "shippingReady": false,
+  "rightsStatus": "PROJECT_ORIGINAL",
+  "fieldCount": 11,
+  "defaultPreviewFieldId": "field_bm01_01",
+  "defaultPreviewNote": "Default arenaIndex 0 is BATTLE_NORMAL. Match-to-arena mapping is untraced. Native 416x272 is contain-fit into the 3:2 field band; do not stretch.",
+  "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+  "filter": "nearest",
+  "rights": {
+    "status": "PROJECT_ORIGINAL",
+    "romDerivedPixels": false,
+    "sourceRastersLoaded": false,
+    "authority": "docs/art/production/original-maps-r1 (local first version)"
+  },
+  "fields": [
+    {
+      "fieldId": "field_bm01_01",
+      "identifier": "BATTLE_NORMAL",
+      "arenaIndex": 0,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm01_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm01_01/frame-00.webp",
+          "sha256": "C9201ED52C4BDEC86912B05A656C90C6A0FAE709816AA8F7CF0E169C3CD34B96",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm02_01",
+      "identifier": "BATTLE_GRASS",
+      "arenaIndex": 1,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm02_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm02_01/frame-00.webp",
+          "sha256": "F552042965B3256DA3E1E86781AB17CFD899371BB688C26066B61AF5F619FD19",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm03_01",
+      "identifier": "BATTLE_VOLCANO",
+      "arenaIndex": 2,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm03_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm03_01/frame-00.webp",
+          "sha256": "F26DE416EA74900D152B80797343120FA8D40F553CECA2C200409A02DDB99BFE",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm04_01",
+      "identifier": "BATTLE_ISLAND",
+      "arenaIndex": 3,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm04_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm04_01/frame-00.webp",
+          "sha256": "34DAAC1E539DA6544057FEB0D38200F37D51A8AE29B4773FEC62456D7628B320",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm05_01",
+      "identifier": "BATTLE_SOUTHPOLE",
+      "arenaIndex": 4,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm05_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm05_01/frame-00.webp",
+          "sha256": "E15D75B484F0D8B52694A97EFA57E5B64C1D8A9A58FA37CD61EB9BA3C5EAE880",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm06_01",
+      "identifier": "BATTLE_DESERT",
+      "arenaIndex": 5,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm06_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm06_01/frame-00.webp",
+          "sha256": "0B80CF6732B8B081DEFD9CBAE6E607FA86E87E36F5709B329ABDEF46E501465E",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm07_01",
+      "identifier": "BATTLE_CYBERSPACE",
+      "arenaIndex": 6,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": false,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm07_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm07_01/frame-00.webp",
+          "sha256": "BC55D5290ABFA61A463E092DD6B09489DD3BA0450021B76A84EB4DCF9E973A34",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm08_01",
+      "identifier": "BATTLE_HELL",
+      "arenaIndex": 7,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm08_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm08_01/frame-00.webp",
+          "sha256": "415DEB6DE2EB6DE9D39A51654AC1785923DA9BF00D97624BF06799EC1A2A3516",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm09_01",
+      "identifier": "BATTLE_COLOSSEUM",
+      "arenaIndex": 8,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm09_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm09_01/frame-00.webp",
+          "sha256": "643DD330A11DA432030F705AA789F707631891CEF3839275934E17D4B797AC00",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm10_01",
+      "identifier": "BATTLE_STADIUM",
+      "arenaIndex": 9,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm10_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm10_01/frame-00.webp",
+          "sha256": "4DA0D95AA333E38F2902A8C574EDD6CA71256D293FE2CC385808C769900BEE1A",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm11_01",
+      "identifier": "BATTLE_DOMESTADIUM",
+      "arenaIndex": 10,
+      "worldWidthPx": 1664,
+      "worldHeightPx": 1088,
+      "nativeWidthPx": 416,
+      "nativeHeightPx": 272,
+      "visualRole": "BATTLE_ARENA",
+      "hasCommonLayer": true,
+      "animationStatus": "NOT_PRESENT",
+      "objectLayerId": null,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "source": "docs/art/production/original-maps-r1/battle/battle-b2/fields/field_bm11_01",
+      "frames": [
+        {
+          "src": "assets/production/battle/original-opus-v1/fields/field_bm11_01/frame-00.webp",
+          "sha256": "96083D18F000574304012884A9B106040251EF124A4F7FA08BB053977DC574C2",
+          "durationMs": null
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Procedural original Blender arenas, same camera and light as the original cage fields.",
+    "Arena floor covers the whole spec interior and all six standing slots; scenery stays outside it.",
+    "Ten arenas carry the shared ring; BATTLE_CYBERSPACE has none."
+  ]
+}

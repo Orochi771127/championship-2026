@@ -7,6 +7,9 @@ import test from "node:test";
 import { DEFAULT_LOCALE, LOCALES, formatDateTime, formatList, formatNumber, getLocale, onLocaleChange, pluralCategory, setLocale } from "../src/championship/text/locale.js";
 import { UI_COPY, fillTemplate, listMissingTranslations, retranslate, setLabel, setText, templateParts, uiText } from "../src/championship/text/uiText.js";
 import { UI_COPY_EN, TEXT_EN } from "../src/championship/text/uiText.en.js";
+import { UI_COPY_JA, TEXT_JA } from "../src/championship/text/uiText.ja.js";
+import { UI_COPY_TH, TEXT_TH } from "../src/championship/text/uiText.th.js";
+import { UI_COPY_VI, TEXT_VI } from "../src/championship/text/uiText.vi.js";
 import { SPECIES_NAMES_ZH } from "../src/championship/text/catalogs.zhHant.js";
 import { battleMenuLabels, cageName, gateName, generationName, helpText, shopItemName, speciesName, starterName, tamerRankName, titleEventText } from "../src/championship/text/zhHant.js";
 import { raisingMessageSender, raisingMessageText } from "../src/championship/text/raisingMessages.zhHant.js";
@@ -18,9 +21,24 @@ function inEnglish(t) {
   t.after(() => setLocale("zh-Hant"));
 }
 
+function inJapanese(t) {
+  setLocale("ja");
+  t.after(() => setLocale("zh-Hant"));
+}
+
+function inThai(t) {
+  setLocale("th");
+  t.after(() => setLocale("zh-Hant"));
+}
+
+function inVietnamese(t) {
+  setLocale("vi");
+  t.after(() => setLocale("zh-Hant"));
+}
+
 test("zh-Hant is the default and an unknown locale is refused", () => {
   assert.equal(DEFAULT_LOCALE, "zh-Hant");
-  assert.deepEqual(LOCALES, ["zh-Hant", "en"]);
+  assert.deepEqual(LOCALES, ["zh-Hant", "en", "ja", "th", "vi"]);
   assert.equal(getLocale(), "zh-Hant");
   assert.equal(setLocale("fr"), false);
   assert.equal(getLocale(), "zh-Hant");
@@ -57,7 +75,7 @@ test("English keeps player names and approved proper nouns, and never shows a ke
   inEnglish(t);
   assert.equal(uiText("{name}，查看詳細資料", { name: "小蛋" }), "小蛋, see details", "a player's name is inserted as typed");
   assert.equal(speciesName(34), SPECIES_NAMES_ZH[34], "species names keep their approved zh-Hant form");
-  assert.equal(speciesName(3), "Digi-Egg");
+  assert.equal(speciesName(3), "Creature Egg");
   assert.equal(starterName("デジデジ"), "迪吉迪吉");
   const before = listMissingTranslations().length;
   uiText(SPECIES_NAMES_ZH[40]);
@@ -83,6 +101,54 @@ test("English catalogs: names, help, events, shop, mail, tutorial", (t) => {
   assert.equal(raisingMessageSender(5), "浩司", "a personal name without an approved English form");
   assert.equal(tutorialLine(1500), "First, choose the meat icon.");
   assert.equal(tutorialPrompt("ROPE_ENCLOSE"), "Circle it with the rope");
+});
+
+test("Japanese: design keys, catalogs, shop, tutorial, and battle", (t) => {
+  inJapanese(t);
+  assert.equal(uiText("SAVE"), "セーブ");
+  assert.equal(uiText("1,250 Bits"), "1,250 Bits");
+  assert.equal(gateName(0), "ダイナ草原");
+  assert.equal(cageName(18), "温泉");
+  assert.equal(generationName(6), "究極体");
+  assert.equal(tamerRankName(9), "マスター");
+  assert.equal(shopItemName(0), "エサ");
+  assert.equal(battleMenuLabels().chooseMatch, "対戦を選択");
+  assert.equal(raisingMessageSender(4), "ショップ店長");
+  assert.equal(tutorialPrompt("ROPE_ENCLOSE"), "ロープで囲む");
+  assert.equal(speciesName(3), "タマゴ");
+});
+
+test("Thai: design keys, catalogs, shop, tutorial, and Gregorian calendar dates", (t) => {
+  inThai(t);
+  assert.equal(uiText("SAVE"), "บันทึก");
+  assert.equal(uiText("1,250 Bits"), "1,250 Bits");
+  assert.equal(gateName(0), "ทุ่งหญ้าไดนา");
+  assert.equal(cageName(18), "น้ำพุร้อน");
+  assert.equal(generationName(6), "ขั้นสุดยอด");
+  assert.equal(tamerRankName(9), "มาสเตอร์");
+  assert.equal(shopItemName(0), "อาหาร");
+  assert.equal(battleMenuLabels().chooseMatch, "เลือกการแข่งขัน");
+  assert.equal(raisingMessageSender(4), "ผู้จัดการร้านค้า");
+  assert.equal(tutorialPrompt("ROPE_ENCLOSE"), "ใช้เชือกล้อม");
+  assert.equal(speciesName(3), "ไข่");
+  // Explicit Western Gregorian calendar verification: must format with 2026, not Buddhist Era (2569)
+  const dt = formatDateTime("2026-09-29T08:05:00Z");
+  assert.match(dt, /2026/, "Thai date format must remain Gregorian 2026");
+});
+
+test("Vietnamese: design keys, catalogs, shop, tutorial, and battle", (t) => {
+  inVietnamese(t);
+  assert.equal(uiText("SAVE"), "Lưu");
+  assert.equal(uiText("1,250 Bits"), "1,250 Bits");
+  assert.equal(gateName(0), "Đồng cỏ Dyna");
+  assert.equal(cageName(18), "Suối nước nóng");
+  assert.equal(generationName(6), "Tối hậu");
+  assert.equal(tamerRankName(9), "Bậc thầy");
+  assert.equal(shopItemName(0), "Thức ăn");
+  assert.equal(battleMenuLabels().chooseMatch, "Chọn trận đấu");
+  assert.equal(raisingMessageSender(4), "Chủ cửa hàng");
+  assert.equal(tutorialPrompt("ROPE_ENCLOSE"), "Dùng dây thừng khoanh vùng");
+  assert.equal(speciesName(3), "Trứng");
 });
 
 test("numbers, dates, lists and plurals follow the language", (t) => {
@@ -118,31 +184,49 @@ test("long-lived labels relabel in place when the language changes", () => {
   assert.equal(retranslate(root), 2);
   assert.equal(label.textContent, "Back to ranch");
   assert.equal(button.attributes["aria-label"], "Day 2");
+  setLocale("ja");
+  retranslate(root);
+  assert.equal(label.textContent, "牧場に戻る");
   setLocale("zh-Hant");
   retranslate(root);
   assert.equal(label.textContent, "返回牧場");
   stop();
 });
 
-test("every English design key has English, and the tables carry no empty entry", () => {
-  for (const key of Object.keys(UI_COPY)) assert.ok(Object.hasOwn(UI_COPY_EN, key), key);
-  for (const [key, value] of Object.entries(TEXT_EN)) {
-    const values = typeof value === "string" ? [value] : Object.values(value);
-    for (const text of values) assert.ok(typeof text === "string" && text.length > 0, key);
-    // Every placeholder in the source reaches the English.
-    const holes = [...key.matchAll(/\{([A-Za-z0-9_]+)\}/g)].map((m) => m[1]).sort();
-    for (const text of values) assert.deepEqual([...text.matchAll(/\{([A-Za-z0-9_]+)\}/g)].map((m) => m[1]).sort(), holes, `placeholders of ${key}`);
+test("every design key and text table carries no empty entry across all languages", () => {
+  for (const [lang, uiCopy, textTable] of [
+    ["en", UI_COPY_EN, TEXT_EN],
+    ["ja", UI_COPY_JA, TEXT_JA],
+    ["th", UI_COPY_TH, TEXT_TH],
+    ["vi", UI_COPY_VI, TEXT_VI]
+  ]) {
+    for (const key of Object.keys(UI_COPY)) {
+      assert.ok(Object.hasOwn(uiCopy, key), `${lang}: missing UI_COPY[${key}]`);
+    }
+    for (const [key, value] of Object.entries(textTable)) {
+      const values = typeof value === "string" ? [value] : Object.values(value);
+      for (const text of values) assert.ok(typeof text === "string" && text.length > 0, `${lang}: empty TEXT[${key}]`);
+      const holes = [...key.matchAll(/\{([A-Za-z0-9_]+)\}/g)].map((m) => m[1]).sort();
+      for (const text of values) {
+        assert.deepEqual([...text.matchAll(/\{([A-Za-z0-9_]+)\}/g)].map((m) => m[1]).sort(), holes, `${lang}: placeholders of ${key}`);
+      }
+    }
   }
 });
 
-test("coverage: every display string in the source has English and every catalog record is translated", async () => {
+test("coverage: every display string in the source and catalog record is translated across all 5 locales", async () => {
   const report = await buildLocaleCoverage();
   assert.equal(report.counts.missing, 0, JSON.stringify(report.missing.slice(0, 5)));
   assert.equal(report.counts.uiCopyMissing, 0, JSON.stringify(report.uiCopyMissing));
   assert.equal(report.counts.catalogGaps, 0, JSON.stringify(report.catalogGaps));
   assert.ok(report.counts.distinctDisplayStrings > 600);
-  // One template still builds zh-Hant around values: the rope names in the
-  // hunt catalog. Its twelve results are translated one by one.
+  assert.deepEqual(report.locales, ["zh-Hant", "en", "ja", "th", "vi"]);
+  for (const loc of report.locales) {
+    assert.equal(report.byLocale[loc].missing, 0, `${loc} has missing strings`);
+    assert.equal(report.byLocale[loc].uiCopyMissing, 0, `${loc} has missing UI copy`);
+    assert.equal(report.byLocale[loc].catalogGaps, 0, `${loc} has catalog gaps`);
+  }
+  // One template still builds zh-Hant around values: the rope names in the hunt catalog.
   assert.deepEqual(report.interpolatedZh.map((entry) => entry.file), ["src/championship/hunt/loadout/huntEquipmentCatalog.js"]);
   for (const grade of ["基礎", "強化", "高階", "頂級"]) for (const tier of ["α", "β", "γ"]) assert.ok(TEXT_EN[`${grade}捕捉繩 ${tier}`], `${grade}捕捉繩 ${tier}`);
 });

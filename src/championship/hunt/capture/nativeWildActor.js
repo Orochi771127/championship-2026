@@ -191,7 +191,27 @@ function decide(a, events, host) {
 export function stepNativeWildActor(a, host) {
   if (!a.actorActive || a.cardState && a.cardState!=="HAND_ANIMATION") return;
   const previous=[...a.positionQ12], events=a.events.splice(0);
-  if (!a.cardState) {
+  if (a.tutorialScripted && !a.cardState) {
+    // OVL0 outer control state5 (0210CA24), not ordinary AI wandering.
+    // Reuse this actor, tool event queue, animation and hand controller.
+    if (events.some(e=>e.code===0x2e) && !a.tutorialShot) {
+      a.tutorialShot=1;a.shotShakeTicks=180;
+      a.shake={ticks:180,shakeX:1,shakeY:0,toggle:0};nativeWildRequest(a,6);
+    }
+    if (a.tutorialShot && !a.tutorialDown && a.shake?.ticks===0) {
+      a.shake={ticks:180,shakeX:1,shakeY:0,toggle:0};nativeWildRequest(a,6);
+    }
+    if(events.some(e=>e.code===0x23)){a.bound=1;nativeWildRequest(a,16);}
+    if (a.currentHp<=0 && !a.tutorialDown) {
+      a.tutorialDown=1;a.shake={ticks:15,shakeX:0,shakeY:1,toggle:1};nativeWildRequest(a,15);
+    } else if(a.tutorialDown===1 && a.shake?.ticks===0) {
+      a.tutorialDown=2;a.aiState=11;a.handReady=true;
+    } else if(a.tutorialDown===2 && events.some(e=>e.code===0x16)) {
+      if(host.usedG()+nativeHuntToolSpecies(a.speciesIndex).capacityG>host.maxCardG)host.emit('OVER_CAPACITY');
+      else enterNativeWildState(a,12,host);
+    }
+    a.shotShakeTicks=a.tutorialShot?(a.shake?.ticks??0):0;
+  } else if (!a.cardState) {
     const next=decide(a,events,host);
     if (next>=0) enterNativeWildState(a,next,host);
     let mode=({2:0,3:1,7:1})[a.aiState];

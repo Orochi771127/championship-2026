@@ -19,7 +19,10 @@ if (source.schemaVersion !== 1 || source.contract !== "HUNT_SCENE_SOURCES.v1"
 deepFreeze(source);
 
 export function resolveNativeHuntEnvironment(fieldId) {
-  const data = source.environments[fieldId];
+  return createNativeHuntEnvironment(source.environments[fieldId]);
+}
+
+export function createNativeHuntEnvironment(data) {
   if (!data || data.width !== 128 || data.height !== 128 || data.wrap !== false) throw Error("HUNT_SCENE_ENVIRONMENT_REQUIRED");
   const length = data.width * data.height;
   const terrain = expand(data.terrainRuns, length, 4);

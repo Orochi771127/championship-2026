@@ -1,5 +1,7 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-10 精選原創成品與 CM24 整合](reports/public-original-intake-2026-10-10/REPORT_ZH_TW.md)
+
 Latest Raising lifecycle stage: [進化、排泄、睡眠與換日整合](research/RAISING_LIFECYCLE_STAGE_2026-09-08.md) · [same-stage contract and remaining original branches](contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json). Core flow is integrated; full original stage remains open.
 
 Latest Raising correction: [自主活動、肉／維他命與清潔圖像修正](research/RAISING_ACTIVITY_CARE_FIX_2026-09-08.md), with [validation receipt](reports/parity-audit/2026-09-08/activity-care-validation.json).
@@ -14,6 +16,20 @@ Do not infer current implementation state from one historical coordination file.
 | 遊戲數值接線盤點：哪些已讀原作資料、哪些還沒追到、追蹤順序（2026-10-05） | [數值盤點](reports/game-values-audit-2026-10-05/AUDIT_ZH_TW.md) |
 | 正式設定畫面：外觀主題、畫質、聲音、繁中／英文、操作輔助與資料（2026-09-29，合併於 `bfb1f28`） | [設定報告](reports/settings-2026-09-29/REPORT_ZH_TW.md) · [中英術語表](reports/settings-2026-09-29/GLOSSARY_ZH_TW.md) · [各畫質效能](reports/settings-2026-09-29/perf/perf-tiers.json) |
 | 全遊戲 UI／HUD 重設計、重要高光、本機自動保存與帳號方向（2026-09-29，合併於 `bfb1f28`） | [重設計報告](reports/ui-redesign-2026-09-29/REPORT_ZH_TW.md) · [設計規則](reports/ui-redesign-2026-09-29/DESIGN_ZH_TW.md) · [驗證回條](reports/ui-redesign-2026-09-29/validation.json) · [帳號與雲端存檔規劃](planning/ACCOUNT_CLOUD_SAVE_PLAN_2026-09-29_ZH_TW.md) |
+
+| 原作蛋時邀請＋八蛋選擇（2026-10-09，同日較新Owner指示） | [本機驗證](reports/opening-eight-eggs-2026-10-09/REPORT_ZH_TW.md) · [八蛋契約](contracts/championship/OPENING_EIGHT_EGGS_2026-10-09.md) · [dot漫畫規格](art/production/OPENING_COMIC_INTAKE_2026-10-09_ZH_TW.md) |
+| 原創開場漫畫R2（2026-10-10包，本機接入） | [來源／手機驗證／容量](reports/opening-comic-r2-2026-10-10/REPORT_ZH_TW.md) |
+| CM03 r18無損前景／CM24精確缺件／開場待定品牌（2026-10-09，本機有界） | [成果與驗證](reports/cm03-foreground-2026-10-09/REPORT_ZH_TW.md) · [CM24層契約](reports/cm03-foreground-2026-10-09/CM24_LAYER_REQUEST.json) |
+| HM01／HM10有界遮擋與CM24／CM03層資料（2026-10-09） | [檢查與最小修正](reports/scene-occlusion-2026-10-09/REPORT_ZH_TW.md) |
+| 角色 runtime 契約／實載圖集容量修復（2026-10-09，本機有界） | [工程報告](reports/character-engineering-2026-10-09/REPORT_ZH_TW.md) · [465項回歸與容量回條](reports/character-engineering-2026-10-09/VALIDATION.json) · [runtime authority](contracts/championship/COMPLETED_ORIGINAL_CHARACTER_RUNTIME.v1.md) |
+| 五語本機正常新手教學（2026-10-09，正常URL全鏈／略過／結束／舊存檔隔離） | [第6切片報告](reports/tutorial-runtime6-2026-10-09/REPORT_ZH_TW.md) · [352項測試與五語瀏覽器回條](reports/tutorial-runtime6-2026-10-09/VALIDATION.json) |
+| 互動教學 Battle／completed（2026-10-09，繁中全鏈、五語Battle局部；正常入口關閉） | [第5切片報告](reports/tutorial-runtime5-2026-10-09/REPORT_ZH_TW.md) · [保存／瀏覽器回條](reports/tutorial-runtime5-2026-10-09/VALIDATION.json) |
+| 互動教學 Gate16／Hunt／返回育成（2026-10-09，有界驗證） | [第4切片報告](reports/tutorial-runtime4-2026-10-09/REPORT_ZH_TW.md) · [220項測試與繁中操作回條](reports/tutorial-runtime4-2026-10-09/VALIDATION.json) |
+| 首段 Raising 互動教學完成至 Gate16 前（2026-10-09，五語 preview；正常入口關閉） | [第3切片實作報告](reports/tutorial-runtime3-2026-10-09/REPORT_ZH_TW.md) · [119項測試、五語操作與錯籠重試回條](reports/tutorial-runtime3-2026-10-09/VALIDATION.json) |
+| 互動教學特殊孵化與五語 preview（2026-10-09，正常入口仍關閉） | [第2切片實作報告](reports/tutorial-runtime2-2026-10-09/REPORT_ZH_TW.md) · [113項測試及五語UI回條](reports/tutorial-runtime2-2026-10-09/VALIDATION.json) |
+| 互動教學 checkpoint 與基底隔離 runtime（2026-10-09，入口關閉；完整教學待接） | [實作報告](reports/tutorial-runtime-2026-10-09/REPORT_ZH_TW.md) · [61 項測試與瀏覽器回條](reports/tutorial-runtime-2026-10-09/VALIDATION.json) |
+| 互動教學特殊初始化與推進條件（2026-10-09，來源／接線契約；runtime未完成） | [研究結果](research/INTERACTIVE_TUTORIAL_PREDICATES_2026-10-09.md) · [接線契約](contracts/championship/INTERACTIVE_OPENING_TUTORIAL.v1.json) |
+| 全遊戲 UI／HUD 重設計、重要高光、本機自動保存與帳號方向（2026-09-29，本機驗收，未發布） | [重設計報告](reports/ui-redesign-2026-09-29/REPORT_ZH_TW.md) · [設計規則](reports/ui-redesign-2026-09-29/DESIGN_ZH_TW.md) · [驗證回條](reports/ui-redesign-2026-09-29/validation.json) · [帳號與雲端存檔規劃](planning/ACCOUNT_CLOUD_SAVE_PLAN_2026-09-29_ZH_TW.md) |
 | 全遊戲頁面、操作流程與系統整合（2026-09-28，已發布） | [頁面與流程整合報告](reports/ui-integration-2026-09-28/REPORT_ZH_TW.md) · [驗證回條](reports/ui-integration-2026-09-28/validation.json) · [發布回條](reports/ui-integration-2026-09-28/PUBLICATION_ZH_TW.md) |
 | 原地產品化收束與 Cage / Responsive 驗收 | [Convergence index](planning/NEXUS_LINK_PRODUCTIZATION_CONVERGENCE_INDEX_2026-09-16_ZH_TW.md) · [2026-09-17 Cage 技術驗收與 Raising/Cage 排版](reports/cage-layout-2026-09-17/REPORT_ZH_TW.md) · [前輪 Handoff](coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) · [2026-09-16 歷史報告](reports/convergence-2026-09-16/REPORT_ZH_TW.md) |
 | Current original-content priority: characters and existing cages first | [2026-09-15 原創角色與棲地籠子優先](planning/ORIGINAL_CHARACTER_CAGE_FIRST_2026-09-15.md) · [concept and cost work packet](art/production/original-character-cage-r1/README.md) |

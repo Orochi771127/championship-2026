@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "fieldId": "field_cm24_01",
+  "status": "AWAITING_EXACT_FINAL_MASTER_OR_LAYERS",
+  "runtimeIntegration": "NOT_ATTEMPTED",
+  "version": "CM24_SHRINE_REARRANGEMENT_R1_20261008",
+  "canvasRaster": [
+    384,
+    448
+  ],
+  "canvasNative": [
+    96,
+    112
+  ],
+  "pixelScale": 4,
+  "nativeOrigin": [
+    0,
+    0
+  ],
+  "upperRowCropTopRaster": 96,
+  "lowerRowCropTopRaster": 0,
+  "finalComposite": {
+    "local": "assets/production/cage/final-intake-20261008/fields/field_cm24_01/frame-00.webp",
+    "sha256": "601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146",
+    "pngSha256": "2cbde017df3e1f53ac23eeec0630834ef487686f52688ba422addb9c92237c1b",
+    "libraryPart": "CHAMPIONSHIP_ART_INTAKE_20261008_PART21OF21.zip",
+    "libraryId": "libfile_b1910288749c8191a5aac5a073fdc9ef",
+    "bytes": 9824109,
+    "archiveSha256": "de7086a5617bc1b665b099b59eaf9e9c128b4306e3a7fb179ffb926a9e7422ac"
+  },
+  "requiredFinalMaster": {
+    "cloudSourceRecorded": "/workspace/scratch/44db6e123fa7/cm24_shrine_rearrangement_20261008/master.blend",
+    "sha256": "dd731a1d27cec5cc19ecf67682e20a26bc3fd86c873f5e9e3c3b39b87ea28670",
+    "localPath": null,
+    "libraryId": null
+  },
+  "oldSourceForProvenanceOnly": {
+    "local": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r3/seam-v3/fields/field_cm24_01/master.blend",
+    "sha256": "f87c685eecf54215d259371eec47529e9d926bfd5a552c6f32d800a20ceef2c9",
+    "archive": "CAGE_ORIGINAL_SOURCE_20261008_PART15OF19.zip",
+    "libraryId": "libfile_59db9df36a4c81919572cc7bd1879360",
+    "archiveSha256": "4d41680115ee423bd624f5c7495096054d07271da5f201d66ff09b1c72d1bd93",
+    "usableAsFinalMask": false
+  },
+  "recordedRearrangementOnly": {
+    "statueNativeDelta": [
+      0,
+      24
+    ],
+    "incenseNativeDelta": [
+      12,
+      0
+    ],
+    "doesNotProveFinalBoundsOrGroundDepth": true
+  },
+  "minimumDelivery": {
+    "alternativeA": "Exact final master matching requiredFinalMaster.sha256; Codex may mechanically extract without redraw.",
+    "alternativeB": "Final aligned alpha PNGs or lossless masks with manifest; no floor baked into foreground.",
+    "independentGroups": [
+      "statue",
+      "left-pillar",
+      "right-pillar",
+      "altar-offering-incense-front (split where ground depths differ)",
+      "left-candle",
+      "right-candle"
+    ],
+    "perGroupRequired": [
+      "stableId",
+      "sourceFinalMasterSha256",
+      "sourceFinalCompositeSha256",
+      "fullCanvasRasterSize",
+      "fullCanvasOriginRaster",
+      "boundsRasterUncropped",
+      "alphaPNGorMaskSha256",
+      "groundContactNative",
+      "depthNative",
+      "correspondingRasterCoordinates",
+      "sourceObjectSelectors"
+    ],
+    "unknownNow": [
+      "final per-object bounds",
+      "final pivots",
+      "final ground contact / depth"
+    ],
+    "croppingRule": "Deliver full uncropped coordinates. Runtime alone applies 96px upper-row crop; do not pre-crop lower-row material."
+  },
+  "prohibitions": [
+    "No mask inferred by moving old pixels",
+    "No walk-grid/collision/camera change",
+    "No guessed animation clock from raw ticks",
+    "No general publication authorization"
+  ]
+}

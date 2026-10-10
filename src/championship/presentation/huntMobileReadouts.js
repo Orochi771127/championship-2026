@@ -1,3 +1,5 @@
+import acceptedManifest from '../../../assets/production/hunt/accepted-20261010/manifest.json' with {type:'json'};
+import {isApprovedOriginalPublicLocation} from './originalRuntimeLocation.js';
 // Read-only projections for the continuous mobile Hunt screen.
 // Daytime field thumbnails are previews, never the original field_image_icon.
 import manifest from '../../../assets/production/hunt/licensed-runtime-v1/manifest.json' with { type: 'json' };
@@ -6,9 +8,11 @@ import {nativeHuntAnalyzedFields,nativeHuntRadarMask,nativeHuntRadarMatches} fro
 import {SPECIES_NAMES_ZH} from '../text/catalogs.zhHant.js';
 
 const art = validateRuntimeMapArtBundle(manifest);
+const acceptedArt = validateRuntimeMapArtBundle(acceptedManifest);
 
-export function huntGateThumbnail(gate) {
-  const field = art.fields.find((entry) => entry.fieldId === gate?.originalFields?.dayFieldId);
+export function huntGateThumbnail(gate,location=globalThis.location) {
+  const selected=isApprovedOriginalPublicLocation(location)?acceptedArt:art;
+  const field = selected.fields.find((entry) => entry.fieldId === gate?.originalFields?.dayFieldId);
   return field ? { src: field.frames[0].src, fieldId: field.fieldId,
     evidence: 'PRODUCTION_DAY_FIELD_PREVIEW' } : null;
 }

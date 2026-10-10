@@ -1,0 +1,245 @@
+{
+  "date": "2026-10-09",
+  "status": "PASS_BOUNDED_SPECIAL_HATCH_PREVIEW",
+  "normalOnboardingEligible": false,
+  "tests": {
+    "passed": 113,
+    "failed": 0,
+    "prior61Included": true,
+    "newActorTests": 10,
+    "newToolbarTests": 2,
+    "output": "R:/Projects/Championship2026/tutorial-runtime2-20261009/FOCUSED_TEST_OUTPUT.txt"
+  },
+  "previewBrowser": {
+    "status": "PASS_BOUNDED_PREVIEW_HATCH",
+    "existingServer": "127.0.0.1:8766",
+    "newServer": false,
+    "isolatedNonpersistentContexts": true,
+    "playerSaveTouched": false,
+    "normalOnboardingEligible": false,
+    "fullTutorialAcceptance": false,
+    "runs": [
+      {
+        "locale": "zh-Hant",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "intro": "在育成畫面裡，可以照顧你的夥伴。",
+        "input": "real_touch",
+        "touchFrame": 0,
+        "hatchFrame": 95,
+        "metrics": {
+          "width": 358,
+          "scrollWidth": 358,
+          "height": 258,
+          "scrollHeight": 258,
+          "focusInside": true,
+          "buttons": [
+            {
+              "name": "結束預覽",
+              "height": 47.73529052734375
+            },
+            {
+              "name": "保留進度",
+              "height": 47.73529052734375
+            }
+          ],
+          "overflow": false
+        },
+        "errors": [],
+        "baselineUnchanged": true,
+        "exitRestoredStarter": true,
+        "postHatchReload": false,
+        "saveFailureRetry": true,
+        "escapeResume": false
+      },
+      {
+        "locale": "en",
+        "viewport": {
+          "width": 360,
+          "height": 844
+        },
+        "intro": "On the raising screen, you can look after your partner.",
+        "input": "timeout",
+        "touchFrame": null,
+        "hatchFrame": 270,
+        "metrics": {
+          "width": 328,
+          "scrollWidth": 328,
+          "height": 302,
+          "scrollHeight": 302,
+          "focusInside": true,
+          "buttons": [
+            {
+              "name": "Exit preview",
+              "height": 47.443359375
+            },
+            {
+              "name": "Keep progress",
+              "height": 47.443359375
+            }
+          ],
+          "overflow": false
+        },
+        "errors": [],
+        "baselineUnchanged": true,
+        "exitRestoredStarter": true,
+        "postHatchReload": true,
+        "saveFailureRetry": false,
+        "escapeResume": true
+      },
+      {
+        "locale": "ja",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "intro": "育成画面では、パートナーのお世話をすることができます。",
+        "input": "timeout",
+        "touchFrame": null,
+        "hatchFrame": 270,
+        "metrics": {
+          "width": 358,
+          "scrollWidth": 358,
+          "height": 280,
+          "scrollHeight": 280,
+          "focusInside": true,
+          "buttons": [
+            {
+              "name": "プレビューを終了",
+              "height": 47.053924560546875
+            },
+            {
+              "name": "進行状況を残す",
+              "height": 47.053924560546875
+            }
+          ],
+          "overflow": false
+        },
+        "errors": [],
+        "baselineUnchanged": true,
+        "exitRestoredStarter": true,
+        "postHatchReload": false,
+        "saveFailureRetry": false,
+        "escapeResume": false
+      },
+      {
+        "locale": "th",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "intro": "ในหน้าจอการดูแล คุณสามารถดูแลพาร์ตเนอร์ของคุณได้",
+        "input": "timeout",
+        "touchFrame": null,
+        "hatchFrame": 270,
+        "metrics": {
+          "width": 358,
+          "scrollWidth": 358,
+          "height": 268,
+          "scrollHeight": 268,
+          "focusInside": true,
+          "buttons": [
+            {
+              "name": "ออกจากตัวอย่าง",
+              "height": 47.05218505859375
+            },
+            {
+              "name": "เก็บความคืบหน้า",
+              "height": 47.05218505859375
+            }
+          ],
+          "overflow": false
+        },
+        "errors": [],
+        "baselineUnchanged": true,
+        "exitRestoredStarter": true,
+        "postHatchReload": false,
+        "saveFailureRetry": false,
+        "escapeResume": false
+      },
+      {
+        "locale": "vi",
+        "viewport": {
+          "width": 360,
+          "height": 844
+        },
+        "intro": "Trên màn hình nuôi dưỡng, bạn có thể chăm sóc bạn đồng hành của mình.",
+        "input": "timeout",
+        "touchFrame": null,
+        "hatchFrame": 270,
+        "metrics": {
+          "width": 328,
+          "scrollWidth": 328,
+          "height": 302,
+          "scrollHeight": 302,
+          "focusInside": true,
+          "buttons": [
+            {
+              "name": "Thoát xem trước",
+              "height": 47.056732177734375
+            },
+            {
+              "name": "Giữ tiến độ",
+              "height": 47.056732177734375
+            }
+          ],
+          "overflow": false
+        },
+        "errors": [],
+        "baselineUnchanged": true,
+        "exitRestoredStarter": true,
+        "postHatchReload": false,
+        "saveFailureRetry": false,
+        "escapeResume": false
+      }
+    ]
+  },
+  "normalEntryBrowser": {
+    "status": "PASS_BOUNDED_NORMAL_ENTRY_REGRESSION",
+    "isolatedNonpersistentContext": true,
+    "playerSaveTouched": false,
+    "existingServer": "127.0.0.1:8766",
+    "realOpeningUI": true,
+    "interactiveTutorialEntryBound": false,
+    "fullTutorialAcceptance": false,
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 360,
+        "height": 800
+      }
+    ],
+    "errors": []
+  },
+  "dialogLifecycle": {
+    "status": "PASS",
+    "controlledLocaleChange": true,
+    "oldDialogButtonCannotAdvance": true,
+    "oneDialog": true,
+    "exitHidesPreview": true,
+    "errors": [],
+    "playerSaveTouched": false
+  },
+  "visualInspection": [
+    "preview-zh-Hant-hatched.png",
+    "preview-en-hatched-390.png",
+    "preview-th-dialog.png",
+    "preview-vi-dialog.png"
+  ],
+  "regressionCaughtAndFixed": "Initial toolbar selection was null: an apparent touch success was actually timeout. Preview now selects/locks hand, restores tools on exit, and requires touch completion before180 updates; observed95 vs timeout270.",
+  "remaining": [
+    "Raising feeding/cleanup/treatment/training/recovery/sleep handlers",
+    "Gate/Hunt/Battle adapters",
+    "completed cleanup",
+    "full normal UI acceptance"
+  ],
+  "full19StateDifferential": "NOT_RUN",
+  "physicalDevice": "NOT_RUN",
+  "nativeSpeakerReview": "NOT_RUN",
+  "publication": "NOT_AUTHORIZED"
+}

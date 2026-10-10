@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-09",
+  "status": "PASS_BOUNDED_RUNTIME_SAVE_SLICE",
+  "normalOnboardingEligible": false,
+  "head": "1fb7d5fd21d3da47775d34ab0d3a1a95f6623972",
+  "tests": {
+    "passed": 61,
+    "failed": 0,
+    "newInteractiveSaveTests": 14,
+    "legacyCursorValuesCovered": 74,
+    "command": "node --test tests/championship-interactive-tutorial-save-cases.mjs tests/championship-tutorial-cases.mjs tests/championship-save-conflict-cases.mjs tests/championship-save-economy-v2-cases.mjs tests/championship-clock-runtime-save-cases.mjs tests/championship-hunt-normal-capture-save-cases.mjs tests/championship-autosave-cases.mjs tests/championship-battle-economy-transaction-cases.mjs",
+    "recordedFrom": "Completed execution output; final run exit0, 61 passed, 0 failed"
+  },
+  "browser": {
+    "status": "PASS_NORMAL_ENTRY_REGRESSION",
+    "server": "127.0.0.1:8766",
+    "isolatedNonpersistentContext": true,
+    "playerSaveTouched": false,
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 360,
+        "height": 800
+      }
+    ],
+    "pageErrors": [],
+    "raisingCanvasCount": 1,
+    "overflow": false,
+    "newTutorialUiBound": false
+  },
+  "fullTutorialFlow": "PENDING",
+  "specialActor": "PENDING",
+  "gateHuntBattleTutorialAdapters": "PENDING",
+  "completionTransaction": "PENDING",
+  "physicalDevice": "NOT_RUN",
+  "publication": "NOT_AUTHORIZED",
+  "regressionCaughtAndFixed": "Mutations after a failed decline leaked into a later normal save; every exit retry now reapplies the immutable baseline before releasing isolation."
+}

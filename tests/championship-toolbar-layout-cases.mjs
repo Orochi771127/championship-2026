@@ -144,3 +144,28 @@ test("Hunt never displays Raising care tools or menus and returning Home restore
   assert.ok(rail.children.every((button) => !button.disabled));
   toolbar.dispose();
 });
+
+
+test("tutorial tool constraint selects hand, keeps it selected, and restores the prior care tool on exit", t=>{
+ const {toolbar,rail}=fixture(t);toolbar.setMode(TOOLBAR_MODES.TRAINING);
+ const protein=rail.children.find(b=>b.dataset.toolId==="protein"),hand=rail.children.find(b=>b.dataset.toolId==="hand");
+ protein.events.click();assert.equal(toolbar.getSelectedTool(),"protein");
+ toolbar.setTutorialTool("hand");
+ assert.equal(toolbar.getSelectedTool(),"hand");assert.equal(hand.attributes["aria-pressed"],"true");
+ for(const button of rail.children)assert.equal(button.disabled,button!==hand);
+ hand.events.click();assert.equal(toolbar.getSelectedTool(),"hand","locked hand cannot toggle off");
+ toolbar.setMode(TOOLBAR_MODES.TRAINING);
+ for(const button of rail.children)assert.equal(button.disabled,button!==hand);
+ toolbar.setTutorialTool(null);assert.equal(toolbar.getSelectedTool(),"protein");
+ for(const button of rail.children)assert.equal(button.disabled,false);
+ toolbar.dispose();
+});
+
+test("tutorial constraint follows toolbar visibility without leaking tools into Hunt, and rejects unknown tools", t=>{
+ const {toolbar,rail}=fixture(t);toolbar.setMode(TOOLBAR_MODES.TRAINING);toolbar.setTutorialTool("hand");
+ assert.throws(()=>toolbar.setTutorialTool("unknown"),/UNKNOWN_TUTORIAL_TOOL/);
+ toolbar.setMode(TOOLBAR_MODES.HUNT);assert.equal(toolbar.getSelectedTool(),null);
+ assert.ok(rail.children.every(b=>b.disabled));
+ toolbar.setMode(TOOLBAR_MODES.TRAINING);assert.equal(toolbar.getSelectedTool(),"hand");
+ toolbar.setTutorialTool(null);assert.equal(toolbar.getSelectedTool(),null);toolbar.dispose();
+});
