@@ -1,5 +1,7 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-10 R7 / R9 / R10 發布收尾與本機同步範圍](reports/release-r11-2026-10-10/REPORT_ZH_TW.md)
+
 - [2026-10-10 全幅首頁與14段原創音樂](reports/title-music-2026-10-10/REPORT_ZH_TW.md)
 - [2026-10-10 首頁／牧場載入與公開徽章入口](reports/loading-medals-2026-10-10/REPORT_ZH_TW.md)
 - [2026-10-10 冷牧場與首曲載入第二批](reports/cold-loading-r2-2026-10-10/REPORT_ZH_TW.md)
