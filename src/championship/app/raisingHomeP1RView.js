@@ -491,6 +491,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   }
 
   const unsubscribe = presentation.subscribe(render);
+  // Evolution may introduce a portrait after this screen was mounted. Repaint
+  // that same frame when its metadata arrives, without advancing simulation.
+  const unsubscribeHud = hudArt?.subscribe?.(() => { lastRevision = -1; render(presentation.getFrame()); });
   render(presentation.getFrame());
 
   return Object.freeze({
@@ -517,6 +520,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     },
     dispose() {
       unsubscribe?.();
+      unsubscribeHud?.();
       clearTimeout(noticeTimer);
       noticeTimer = null;
       closeDetail();

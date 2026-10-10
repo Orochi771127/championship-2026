@@ -4,6 +4,7 @@ import {loadLicensedCharacterRoster} from './licensedCharacterRoster.js';
 import {loadPixiCharacterRuntimeBundle} from './pixiCharacterRuntimeBundle.js';
 
 import {COMPLETED_ORIGINAL_CHARACTERS} from './completedOriginalCharacterCatalog.js';
+import {readHudManifest} from './hudManifestCache.js';
 const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'
   ?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 
@@ -76,9 +77,20 @@ export async function loadCompletedOriginalCharacters(options,href){
   });
 }
 
-export async function applyCompletedOriginalHudArt({baseUrl,fetchImpl,portraits,battle}){
-  if(!isOriginalRuntimeLocation(baseUrl))return;
-  const configs=isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS;
+export function completedOriginalHudSpecies(baseUrl){
+  if(!isOriginalRuntimeLocation(baseUrl))return [];
+  return (isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS).map(c=>c.speciesId);
+}
+const HUD_ALIAS_SOURCE=Object.freeze({'species-224':'species-034','species-225':'species-195','species-096':'species-226','species-097':'species-227'});
+export function originalHudSourceSpecies(id){
+  const canonical=id?.replace(/^championship:creature:/,'');
+  return HUD_ALIAS_SOURCE[canonical]??canonical;
+}
+export async function applyCompletedOriginalHudArt({baseUrl,fetchImpl,portraits,battle,speciesIds=null}){
+  if(!isOriginalRuntimeLocation(baseUrl))return [];
+  const selected=speciesIds===null?null:new Set(speciesIds.map(originalHudSourceSpecies));
+  const configs=(isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS)
+    .filter(c=>selected===null||selected.has(c.speciesId));
   // Bound network work while retaining catalog order for validation and aliases.
   // Serial 222-manifest round trips delayed the first raising screen on cold CDN loads.
   const loaded=new Array(configs.length);let next=0;
@@ -89,12 +101,15 @@ export async function applyCompletedOriginalHudArt({baseUrl,fetchImpl,portraits,
       catch(error){loaded[i]={error};}
     }
   }));
+  const applied=[];
   for(const [i,config] of configs.entries()){
     try{
       if(loaded[i].error)throw loaded[i].error;
       applyCompletedHudCharacter({baseUrl,portraits,battle},config,loaded[i].manifest);
+      applied.push(config.speciesId);
     }catch(error){console.warn('CHAMPIONSHIP_COMPLETED_ORIGINAL_HUD_FALLBACK',config.entityId,error.message);}
   }
+  return applied;
 }
 function completedHudPrefix(baseUrl,config){
   const assetRoot=isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.root:"assets/production/internal-character-review/";
@@ -102,13 +117,12 @@ function completedHudPrefix(baseUrl,config){
 }
 async function fetchCompletedHudManifest({baseUrl,fetchImpl},config){
   const url=new URL(completedHudPrefix(baseUrl,config)+'manifest.json',baseUrl);
-  let response=await fetchImpl(url);
-  if([429,500,502,503,504].includes(response.status)){
+  try{return await readHudManifest(url,fetchImpl);}
+  catch(error){
+    if(!/HTTP_(429|500|502|503|504)$/.test(error.message))throw error;
     await new Promise(resolve=>setTimeout(resolve,200));
-    response=await fetchImpl(url);
+    return readHudManifest(url,fetchImpl);
   }
-  if(!response.ok)throw Error('CANDIDATE_HUD_REVIEW_UNAVAILABLE');
-  return response.json();
 }
 function applyCompletedHudCharacter({baseUrl,portraits,battle},config,manifest){
   const prefix=completedHudPrefix(baseUrl,config);

@@ -29,8 +29,11 @@ test('83 non-cage goods preserve record/item identity and deferred cage icons',(
  for(let i=83;i<118;i++)assert.equal(originalShopItemArt(i,local),null);
  assert.deepEqual([0,1,2,3].map(i=>shopGoodsPresentation(i,local).itemIndex),[0,1,3,2]);
 });
-test('new art never inherits old public-playtest permission and unknown third icon is not guessed',()=>{
- for(const url of ['https://example.com/game','file:///R:/game','https://orochi771127.github.io/championship-2026/']){assert.equal(isOriginalUiIntakeLocal(url),false);assert.equal(originalMedalArt(0,url),null);}
+test('medals follow the approved original-runtime location while local intake and unknown icons stay bounded',()=>{
+ for(const url of ['https://example.com/game','file:///R:/game','https://orochi771127.github.io/other/']){assert.equal(isOriginalUiIntakeLocal(url),false);assert.equal(originalMedalArt(0,url),null);}
+ const approved='https://orochi771127.github.io/championship-2026/';
+ assert.equal(isOriginalUiIntakeLocal(approved),false);
+ assert.equal(originalMedalArt(0,approved).src,originalMedalArt(0,local).src);
  assert.equal(originalDatabaseIcon('DATABASE',local).cell,0);assert.equal(originalDatabaseIcon('MEDALS',local).cell,1);assert.equal(originalDatabaseIcon('HELP',local),null);
  assert.equal(originalMedalArt(61,local),null);
 });

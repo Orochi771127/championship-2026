@@ -101,7 +101,6 @@ import { resultHeroAnchor, resultStageLight } from '../presentation/battleResult
 import { formatDateTime, formatList, onLocaleChange } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 
-const PIXI_V8_MODULE_URL = "../../../node_modules/pixi.js/dist/pixi.mjs";
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
 // fetched the first time that view asks for one. The wrappers keep the same
 // signature and return the same value the views already await.
@@ -119,81 +118,8 @@ const mountHighlightBurstThree = async (options) =>
 // is already past that menu, so it is fetched then.
 const loadBattleRuntime = async () => (await import("./battleRuntime.js")).createBattleRuntime;
 
-// Deferring those modules buys a faster title at the cost of a slower first
-// Hunt or Battle, which is the wait the player actually notices. So once a
-// screen is up and the player is reading it, fetch them in the background: the
-// module cache means the real entry then costs nothing. Failures are ignored --
-// this is a head start, and every caller still awaits its own import.
-// The Home screen's art arrives as a chain of dependent fetches: the production
-// index, then a manifest for each family it draws from, then the care cells.
-// None of it starts until the player has already asked for the cage, so the
-// chain runs on the critical path -- measured on the deployed site over a 4G
-// profile it was still fetching eight seconds after the cage was asked for, and
-// the last link had not begun. Priming the same URLs while the player reads the
-// title and the opening moves the whole chain off that path. It adds no bytes:
-// the cage fetches exactly these, and warming only decides when.
-//
-// The ids are named rather than the paths so the index stays the one place that
-// knows where a family lives. An id the index no longer carries simply warms
-// nothing, which costs a cold fetch later and never a wrong one.
-const HOME_ART_ASSET_IDS = Object.freeze([
-  "art:cage:original-opus:v1",
-  "art:raising-care:licensed-runtime:v1",
-  "art:raising:care:r1",
-  "art:toolbar:licensed-runtime:v1",
-  "art:raising_home:int-rh2:temporary-presentation-bundle",
-  "art:characters:licensed-internal:v1",
-  "art:characters:hud:local-reference:v1",
-  "art:vfx:raising-feedback:local-reference:v1",
-  "art:ui:raising-header-material:tooling-pilot-r1"
-]);
-const RAISING_CARE_ASSET_ID = "art:raising-care:licensed-runtime:v1";
-
-async function warmHomeArt() {
-  const at = (path, base = location.href) => new URL(path, base).href;
-  // Read each body so the response reaches the HTTP cache, but never parse it:
-  // this is a head start, not a consumer, and parsing would spend the main
-  // thread the warming is meant to protect.
-  const prime = (href) => fetch(href, { priority: "low" }).then((r) => r.arrayBuffer()).catch(() => {});
-  try {
-    const index = await fetch(at("assets/production/ART_PRODUCTION_INDEX.json")).then((r) => r.json());
-    const wanted = new Set(HOME_ART_ASSET_IDS);
-    const entries = (index?.entries ?? []).filter((entry) => wanted.has(entry.assetId));
-    const care = entries.find((entry) => entry.assetId === RAISING_CARE_ASSET_ID);
-    await Promise.all(entries.filter((entry) => entry !== care).map((entry) => prime(at(entry.manifestPath))));
-    if (!care) return;
-    // The care cells are the last link in the chain and total about 10 KB, so
-    // this manifest is the one worth reading rather than only caching.
-    const manifest = at(care.manifestPath);
-    const parsed = await fetch(manifest).then((r) => r.json()).catch(() => null);
-    await Promise.all((parsed?.cells ?? []).map((cell) => prime(at(cell.file, manifest))));
-  } catch {
-    // A head start that fails costs the cold fetch it was avoiding, nothing more.
-  }
-}
-
-let warmed = false;
-function warmDeferredModules() {
-  if (warmed) return;
-  warmed = true;
-  const warm = () => {
-    for (const load of [
-      () => import("./battleRuntime.js"),
-      () => import("../hunt/capture/nativeHuntEntryTransaction.js"),
-      () => import("../hunt/huntRuntime.js"),
-      () => import("../battle/battleParty.js"),
-      () => import("../presentation/licensedCharacterRoster.js"),
-      () => import("../presentation/vs2/createGateSelectThreePresentation.js"),
-      () => import("../presentation/vs5/createBattleSelectThreePresentation.js"),
-      () => import("../presentation/vs5/createBattleVfxThreeOverlay.js"),
-      () => import("../modes/createChampionshipModeShell.js"),
-      () => import(PIXI_V8_MODULE_URL)
-    ]) load().catch(() => {});
-    void warmHomeArt();
-  };
-  if (typeof requestIdleCallback === "function") requestIdleCallback(warm, { timeout: 4000 });
-  else setTimeout(warm, 1200);
-}
+// Screen modules and art load through their existing foreground owners.
+// Avoid speculative Battle/Three/whole-roster traffic competing with title music.
 
 const CHARACTER_REVIEW_RUNTIME_URL = new URLSearchParams(globalThis.location?.search ?? "").get("characterArtReview") === "m201"
   ? "assets/production/internal-character-review/m201-remix-v1/runtime.review.json"
@@ -375,7 +301,7 @@ function note(message) {
 }
 
 async function ensurePixiStage(canvasHost, signal) {
-  const PIXI = await import(PIXI_V8_MODULE_URL);
+  const PIXI = await import("../../../node_modules/pixi.js/dist/pixi.mjs");
   signal?.throwIfAborted();
   if (!pixiStage) {
     // The quality tier chooses the resolution cap (changeable later) and the
@@ -627,7 +553,7 @@ function fieldFallback(host, error) {
 async function mountRaisingHome() {
   raisingSource = createRaisingPresentationSource(app);
   let hudArt=null;
-  try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href});}
+  try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href,speciesIds:raisingSource.getFrame().residents.map(r=>r.speciesId)});}
   catch(error){console.warn('Character HUD art unavailable',error);}
   const p1r = await createRaisingHomeP1RView({
     root,
@@ -965,7 +891,7 @@ async function mountBattleField() {
   const activeAttemptId = battleAttemptId;
   const source = activeRuntime.startMatch();
   let hudArt=null;
-  try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href});}
+  try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href,speciesIds:source.getFrame().combatants.filter(c=>c.present).map(c=>c.speciesId)});}
   catch(error){console.warn('Battle HUD reference unavailable',error);}
   const view = createBattleFieldView({
     root,
@@ -1078,7 +1004,7 @@ async function mountHuntResult() {
   // registered portrait bank the battle result and the Raising home use, on
   // demand and the same way: a bank that fails to load must not take the
   // screen down with it, because this is where the catch is named and saved.
-  const hudArt = await loadRegisteredCharacterHudArt({ baseUrl: location.href }).catch(() => null);
+  const hudArt = await loadRegisteredCharacterHudArt({ baseUrl: location.href,speciesIds:[expeditionSource.getFrame().huntResult?.speciesId] }).catch(() => null);
   return createHuntResultView({ root, source: expeditionSource, hudArt });
 }
 
@@ -1135,7 +1061,7 @@ async function mountBattleResult() {
   // The result consumes the app's actual receipt, including loss and clamping.
   const chosen = battleRuntime.getChosenMatch?.() ?? null;
   const record=app.getTitleProgress().record;
-  const hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href}).catch(()=>null);
+  const hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href,speciesIds:(tutorial?.participants??battleRuntime.getResultParticipants()).filter(Boolean).map(p=>p.speciesId)}).catch(()=>null);
   const receipt = tutorial?null:app.getBattleReceipt();
   const progression = battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),
     earnedTitles:app.getBattleBadges().filter(id=>!battleProgressBefore.badges.includes(id)).map(id=>({id,name:titleEventText(id,'name',uiText('頭銜 {id}',{id}))}))}:null;
@@ -1308,7 +1234,6 @@ async function mountCurrentScreen() {
     // One attribute every screen carries, whichever view family drew it. The
     // views' own data-screen stays theirs (the status bar also carries one).
     root.dataset.activeScreen = target;
-    warmDeferredModules();
   } finally {
     release();
   }
@@ -1846,12 +1771,6 @@ function boot() {
   refreshContinue();
   loginButton.disabled=false;
   syncMusic();
-  // The title is the longest idle moment the player gives us: they are reading
-  // it before pressing LOGIN. Warming only from mountCurrentScreen missed it
-  // entirely, because the title is not mounted through there, so the first Hunt
-  // still paid a cold fetch. Start the head start here.
-  warmDeferredModules();
-
   // Background/unload resets elapsed measurement, and now also writes the
   // session: the Raising Home SAVE button was removed on 2026-09-16, so leaving
   // the page is what commits it. Save & Quit still commits explicitly.

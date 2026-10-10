@@ -4,6 +4,7 @@ import {execFileSync} from 'node:child_process';
 import {auditWebBuild,auditOwnerPlaytest,ART_INDEX_PATH,BUILD_INPUT_PATH,sha256,checkedInput,permittedCopyPath} from './web-build-plan.mjs';
 import {publicArtIndex,isPrivateRepositoryPath} from './public-art-boundary.mjs';
 import {assertPagesModuleClosure} from './pages-module-closure.mjs';
+import {compileBrowserBundle,bundledBrowserHtml} from './browser-bundle.mjs';
 export const INTERNAL_TARGET='LOCAL_INTERNAL_REVIEW';
 export const PUBLIC_TARGET='GITHUB_PAGES_STATIC';
 export const PLAYTEST_TARGET='GITHUB_PAGES_OWNER_PLAYTEST';
@@ -46,6 +47,9 @@ export function buildWebArtifact({root,output,target}){
   const out=checkedOutput(root,output,target);
   // Capture bytes before replacing a previous artifact.
   const sources=audit.input.files.map(file=>({file,bytes:fs.readFileSync(checkedInput(root,file))}));
+  const bundle=compileBrowserBundle(root,audit.input);
+  const entrySource=sources.find(r=>r.file==='championship.html').bytes;
+  const entryBytes=bundle?Buffer.from(bundledBrowserHtml(entrySource.toString('utf8'),bundle.metadata)):entrySource;
   if(fs.existsSync(out))fs.rmSync(out,{recursive:true});
   fs.mkdirSync(out,{recursive:true});
   const rows=[];
@@ -53,8 +57,9 @@ export function buildWebArtifact({root,output,target}){
     const destination=path.join(out,file);fs.mkdirSync(path.dirname(destination),{recursive:true});fs.writeFileSync(destination,bytes);
     rows.push({path:file,sha256:sha256(bytes),bytes:Buffer.byteLength(bytes)});
   };
-  for(const {file,bytes} of sources)write(file,file===ART_INDEX_PATH&&!internal&&!playtest?JSON.stringify(publicArtIndex(audit.index),null,2)+'\n':bytes);
-  write('index.html',sources.find(r=>r.file==='championship.html').bytes);
+  for(const {file,bytes} of sources)write(file,file==='championship.html'?entryBytes:file===ART_INDEX_PATH&&!internal&&!playtest?JSON.stringify(publicArtIndex(audit.index),null,2)+'\n':bytes);
+  for(const file of bundle?.files??[])write(file.path,file.bytes);
+  write('index.html',entryBytes);
   if(!internal)write('.nojekyll','');
   rows.sort((a,b)=>a.path.localeCompare(b.path,'en'));
   const inputSha256=sha256(fs.readFileSync(path.join(root,BUILD_INPUT_PATH)));
@@ -66,7 +71,8 @@ export function buildWebArtifact({root,output,target}){
     romDerivedBattleCatalogsIncluded:rows.some(r=>r.path==='src/championship/battle/battleCatalogs.js'),
     ...(playtest?{ownerSelectedReferenceArtIncluded:rows.some(r=>isPrivateRepositoryPath(r.path))}:{}),
     staticModuleClosure:{checked:true,moduleCount:audit.technical.moduleCount},
-    moduleEntries:audit.input.moduleEntries,importMap:audit.input.importMap,
+    moduleEntries:[...audit.input.moduleEntries,...(bundle?.metadata.generatedFiles??[])],importMap:audit.input.importMap,
+    ...(bundle?{browserBundle:bundle.metadata}:{}),
     release:{approved:!internal&&!playtest,scope:audit.input.release},
     ...(playtest?{publicPlaytest:{ownerApproved:true,policyId:audit.input.publicPlaytest.policyId,
       rightsDocumentVerified:false,commercialReleaseAccepted:false,fullOriginalParityAccepted:false}}:{}),
@@ -96,8 +102,16 @@ export function validateWebArtifact({root,output,target}){
     const audit=auditWebBuild(root);
     if(!audit.technical.ok||(!playtest&&!audit.release.ok)||m.inputSha256!==sha256(fs.readFileSync(path.join(root,BUILD_INPUT_PATH))))throw Error('PUBLIC_RELEASE_NOT_APPROVED');
     if(playtest){const check=auditOwnerPlaytest(root,audit);if(!check.ok||m.publicPlaytest.policyId!==check.policy.id)throw Error('PUBLIC_PLAYTEST_NOT_APPROVED');}
-    if(JSON.stringify([...audit.input.files,'index.html','.nojekyll'].sort())!==JSON.stringify(m.files.map(r=>r.path).sort()))throw Error('PUBLIC_INPUT_LIST_MISMATCH');
-    for(const row of m.files.filter(r=>!['index.html','.nojekyll',ART_INDEX_PATH].includes(r.path))){
+    const bundle=compileBrowserBundle(root,audit.input),generated=bundle?.metadata.generatedFiles??[];
+    if(JSON.stringify(m.browserBundle??null)!==JSON.stringify(bundle?.metadata??null))throw Error('PUBLIC_BUNDLE_RECIPE_MISMATCH');
+    if(JSON.stringify([...audit.input.files,...generated,'index.html','.nojekyll'].sort())!==JSON.stringify(m.files.map(r=>r.path).sort()))throw Error('PUBLIC_INPUT_LIST_MISMATCH');
+    if(bundle){
+      for(const file of bundle.files)if(sha256(fs.readFileSync(checkedInput(out,file.path)))!==sha256(file.bytes))throw Error('PUBLIC_BUNDLE_CHANGED: '+file.path);
+      const expected=bundledBrowserHtml(fs.readFileSync(checkedInput(root,'championship.html'),'utf8'),bundle.metadata);
+      if(sha256(fs.readFileSync(path.join(out,'championship.html')))!==sha256(expected))throw Error('PUBLIC_BUNDLE_HTML_CHANGED');
+      if(JSON.stringify(m.moduleEntries)!==JSON.stringify([...audit.input.moduleEntries,...generated]))throw Error('PUBLIC_BUNDLE_ENTRIES_CHANGED');
+    }
+    for(const row of m.files.filter(r=>!['index.html','.nojekyll',ART_INDEX_PATH,...generated,...(bundle?['championship.html']:[])].includes(r.path))){
       if(row.sha256!==sha256(fs.readFileSync(checkedInput(root,row.path))))throw Error('PUBLIC_SOURCE_CHANGED: '+row.path);
     }
     const index=JSON.parse(fs.readFileSync(path.join(out,ART_INDEX_PATH),'utf8'));

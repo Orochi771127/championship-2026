@@ -1,6 +1,7 @@
 # Championship 2026 Documentation Hub
 
 - [2026-10-10 全幅首頁與14段原創音樂](reports/title-music-2026-10-10/REPORT_ZH_TW.md)
+- [2026-10-10 首頁／牧場載入與公開徽章入口](reports/loading-medals-2026-10-10/REPORT_ZH_TW.md)
 
 - [2026-10-10 新遊戲與牧場顯示修復](reports/new-game-display-2026-10-10/REPORT_ZH_TW.md)
 

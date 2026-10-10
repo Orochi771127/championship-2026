@@ -1,4 +1,5 @@
 import {isOriginalUiIntakeLocal,originalToolbarArt,originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
+import {isOriginalRuntimeLocation} from "../presentation/originalRuntimeLocation.js";
 import { uiText } from "../text/uiText.js";
 // The contextual toolbar -- the original's ui/toolbar.nxr.
 //
@@ -90,10 +91,17 @@ export const TOOLBAR_MENUS = Object.freeze([
  */
 export const TOOLBAR_PRODUCT_ENTRIES = Object.freeze({
   SYSTEM: Object.freeze([
-    Object.freeze({ id:"medals", label:"徽章收藏", screen:"MEDALS", hint:"61 場頭銜賽的勝利紀錄", localOnly:true, evidence:"OWNER_APPROVED_ADAPTATION_20261007" }),
+    Object.freeze({ id:"medals", label:"徽章收藏", screen:"MEDALS", hint:"61 場頭銜賽的勝利紀錄", originalRuntimeOnly:true, evidence:"OWNER_APPROVED_ADAPTATION_20261007" }),
     Object.freeze({ id: "settings", label: "Settings", action: "OPEN_SETTINGS", hint: "主題、畫質、聲音與語言", evidence: "PRODUCT_AUTHORED" })
   ])
 });
+
+// This gate admits only explicitly marked approved-runtime entries. Other
+// local-only experiments retain the original loopback restriction.
+export function toolbarProductEntryAvailable(entry,baseUrl=globalThis.location?.href){
+  if(entry.originalRuntimeOnly)return isOriginalRuntimeLocation(baseUrl);
+  return !entry.localOnly||isOriginalUiIntakeLocal(baseUrl);
+}
 
 /**
  * How the two submenus are laid out (2026-09-29, OWNER_APPROVED_ADAPTATION of
@@ -208,7 +216,7 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     openMenuId = menu.id;
     menuPanel.replaceChildren();
     menuPanel.dataset.menuId = menu.id;
-    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? []).filter(entry=>!entry.localOnly || isOriginalUiIntakeLocal())].map((entry) => [entry.id, entry]));
+    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? []).filter(entry=>toolbarProductEntryAvailable(entry))].map((entry) => [entry.id, entry]));
     const placed = new Set();
     for (const group of TOOLBAR_MENU_GROUPS[menu.id] ?? []) {
       const entries = group.entries.map((id) => byId.get(id)).filter(Boolean);
