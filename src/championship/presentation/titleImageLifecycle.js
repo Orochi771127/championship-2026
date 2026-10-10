@@ -4,7 +4,11 @@
 export function createTitleImageLifecycle(title, {
   fetchImpl = (...args) => globalThis.fetch(...args),
   urls = globalThis.URL,
-  createImage = () => new globalThis.Image()
+  createImage = () => new globalThis.Image(),
+  timeoutMs = 60000,
+  setTimer = globalThis.setTimeout,
+  clearTimer = globalThis.clearTimeout,
+  onStateChange = () => {}
 } = {}) {
   const images = [...title.querySelectorAll('img')].map(image => ({
     image, src: image.getAttribute('src'), released: false
@@ -14,22 +18,36 @@ export function createTitleImageLifecycle(title, {
   const backgroundUrl = source ? new URL(source, title.ownerDocument.baseURI).href : null;
   let paused = null, titleWasHidden = null, disposed = false, generation = 0, active = null, cachedBlob = null;
 
-  function state(value) { if (panel) panel.dataset.titleBackgroundState = value; }
+  function state(value) {
+    if (panel) panel.dataset.titleBackgroundState = value;
+    onStateChange(value);
+  }
+  function clearDeadline(entry) {
+    if (entry?.timer != null) { clearTimer(entry.timer); entry.timer = null; }
+  }
   function release(entry) {
     if (!entry || entry.released) return;
     entry.released = true;
+    clearDeadline(entry);
     entry.controller.abort();
     entry.image?.removeAttribute('src');
     if (entry.url) urls.revokeObjectURL(entry.url);
   }
   function current(entry) {
-    return !disposed && !title.hidden && (!paused || entry.fromCache)
+    return !disposed && !entry.released && !title.hidden && (!paused || entry.fromCache)
       && active === entry && entry.generation === generation;
+  }
+  function fail(entry) {
+    if (!current(entry)) return;
+    release(entry); state('error');
+    // Retain this attempt until a deliberate retry or leaving/returning.
   }
   function startBackground() {
     if (!backgroundUrl || active) return;
     const entry = { generation: ++generation, controller: new AbortController(), released: false, fromCache: cachedBlob !== null };
     active = entry; state('loading');
+    // Bound the entire fetch/body/decode lifetime, including HTTP 200 stalls.
+    entry.timer = setTimer(() => fail(entry), timeoutMs);
     void (async () => {
       try {
         let blob = cachedBlob;
@@ -45,15 +63,12 @@ export function createTitleImageLifecycle(title, {
         entry.image.src = entry.url;
         await entry.image.decode();
         if (!current(entry)) return;
+        clearDeadline(entry);
         cachedBlob = blob; entry.ready = true;
         panel.style.backgroundImage = `url("${entry.url}")`;
         state('ready');
       } catch {
-        if (current(entry)) {
-          release(entry); state('error');
-          // Keep the failed entry until the next pause/return. Music status
-          // notifications must not turn an error into an unbounded retry loop.
-        }
+        fail(entry);
       }
     })();
   }
@@ -72,13 +87,21 @@ export function createTitleImageLifecycle(title, {
     if (paused) {
       // Login music only pauses unfinished downloads. A decoded background
       // must stay visible until the title itself is actually left.
-      if (!hidden && (active?.ready || active?.fromCache)) return;
+      if (!hidden && (active?.ready || active?.fromCache || active?.released)) return;
       if (!hidden && cachedBlob) { startBackground(); return; }
       generation++; release(active); active = null;
       if (panel) panel.style.backgroundImage = 'none';
       state('paused');
     } else startBackground();
   }
+  syncTitleImages.retry = () => {
+    if (disposed || title.hidden || panel?.dataset.titleBackgroundState !== 'error') return false;
+    release(active); active = null;
+    // A first tap may also start music. Queue this one deliberate retry until
+    // its initial buffer is ready, preserving the existing network priority.
+    if (paused) state('loading'); else startBackground();
+    return true;
+  };
   syncTitleImages.dispose = () => {
     if (disposed) return;
     syncTitleImages(true);

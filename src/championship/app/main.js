@@ -168,7 +168,19 @@ const FREE_PRACTICE_PERSONALITY_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battlePolicy") === "baseline" ? "BASELINE" : "ORIGINAL";
 
 const titleScreen = document.getElementById("cm-title");
-const syncTitleImages=createTitleImageLifecycle(titleScreen);
+const titleBackgroundFeedback=document.getElementById('cm-title-background-feedback');
+const titleBackgroundStatus=document.getElementById('cm-title-background-status');
+const titleBackgroundRetry=document.getElementById('cm-title-background-retry');
+const syncTitleImages=createTitleImageLifecycle(titleScreen,{onStateChange(state){
+  // Keep the action rows still across music buffering, completion and retry.
+  const visible=state==='loading'||state==='error'||(state==='paused'&&!titleScreen.hidden);
+  titleBackgroundFeedback.style.visibility=visible?'visible':'hidden';
+  titleBackgroundFeedback.setAttribute('aria-hidden',String(!visible));
+  titleBackgroundRetry.hidden=state!=='error';
+  if(visible)setText(titleBackgroundStatus,state==='error'?'TITLE_BACKGROUND_ERROR':'TITLE_BACKGROUND_LOADING');
+}});
+setText(titleBackgroundRetry,'TITLE_BACKGROUND_RETRY');
+titleBackgroundRetry.addEventListener('click',()=>syncTitleImages.retry());
 let titleMusicBuffering=false;
 const syncTitleArt=()=>syncTitleImages(titleScreen.hidden||titleMusicBuffering);
 syncTitleArt();

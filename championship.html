@@ -353,7 +353,13 @@
           </div>
         </div>
         <div id="cm-opening" hidden></div>
-        <p id="cm-title-note" class="cm-title__note" role="status"></p>
+        <div class="cm-title__feedback">
+          <div id="cm-title-background-feedback" class="cm-title__background-feedback" style="visibility:hidden" aria-hidden="true">
+            <p id="cm-title-background-status" role="status" aria-live="polite"></p>
+            <button id="cm-title-background-retry" type="button" hidden></button>
+          </div>
+          <p id="cm-title-note" class="cm-title__note" role="status"></p>
+        </div>
       </div>
     </div>
     <div id="cm-root" hidden></div>
