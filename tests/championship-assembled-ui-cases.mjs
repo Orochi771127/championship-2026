@@ -100,3 +100,22 @@ test('failed optional evolution image load unloads all settled successes',async(
   assert.equal(unloaded.length,selected.length-1);
   assert.equal(new Set(unloaded).size,unloaded.length);
 });
+
+test('retired code-symbol cell stays archived but is neither requested nor selected for the public artifact',async()=>{
+  const retired='assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--017.png';
+  assert.ok(fs.existsSync(retired),'retain the local source-reference archive');
+  assert.equal(manifest.hud['evolution-code'],undefined);
+  assert.equal(manifest.cells.some(c=>c.src===retired),false);
+  const requested=[],unloaded=[];
+  const PIXI={Assets:{load:async src=>{requested.push(src);const c=manifest.cells.find(c=>c.src===src);
+    assert.ok(c);return {width:c.width,height:c.height,source:{}};},unload:async src=>unloaded.push(src)}};
+  const art=await loadAssembledEvolutionArt(PIXI,local);
+  assert.equal(requested.includes(retired),false);
+  for(const key of ['evolution-word','evolution-word-small','evolution-ring'])assert.ok(art.get(key)?.texture);
+  assert.ok(art.frame('evolution-green',2)?.texture);
+  assert.ok(art.frame('evolution-burst',7)?.texture);
+  await art.dispose();assert.deepEqual(unloaded,requested);
+  const inputs=JSON.parse(fs.readFileSync('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json','utf8'));
+  assert.equal(inputs.files.includes(retired),false);
+  assert.equal(inputs.publicPlaytest.files.some(r=>r.path===retired),false);
+});

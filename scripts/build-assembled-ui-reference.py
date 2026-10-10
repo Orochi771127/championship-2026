@@ -74,7 +74,7 @@ def build():
     for i in range(16): hud[f'gate-{i}'] = select('ui/hunt/world/field_image_icon', 0, i)
     for i, name in enumerate(['tl','top','tr','left','right','bl','bottom','br']):
         hud[f'memory-{name}'] = select('ui/hunt/hunting/memory_card_plate', i, 0)
-    for name, frame in [('evolution-word',0),('evolution-word-small',1),('evolution-code',4),('evolution-ring',5)]:
+    for name, frame in [('evolution-word',0),('evolution-word-small',1),('evolution-ring',5)]:
         hud[name] = select('common/e001_evolution_all', 1, frame)
     animations = {}
     for name, family, sequence in [('evolution-burst','common/e001_evolution_all',0),

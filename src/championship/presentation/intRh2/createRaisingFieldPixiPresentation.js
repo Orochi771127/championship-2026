@@ -13,6 +13,7 @@ import { isNativeRanchLayout } from "../../cage/ranchExpansion.js";
 import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
+import {EVOLUTION_SYMBOL_REPLACEMENT_TEXT} from '../../text/evolutionPresentationText.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
 import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
@@ -137,9 +138,14 @@ export async function mountRaisingFieldPixiPresentation({
   const evolutionWords=Array.from({length:6},(_,i)=>{const word=new PIXI.Text({text:i%2?uiText('進化!!'):'EVOLUTION',style:{fontFamily:'sans-serif',fontSize:16+(i%3)*4,fontWeight:'bold',fill:0x008bff}});evolutionWriting.addChild(word);return word;});
   const evolutionArt=await loadAssembledEvolutionArt(PIXI).catch(error=>{onFallback(error);return null;});
   if(evolutionArt)for(let i=0;i<evolutionWords.length;i+=2){
-    const art=evolutionArt.get(i===4?'evolution-code':i%3?'evolution-word-small':'evolution-word');
-    const old=evolutionWords[i],word=new PIXI.Sprite(art.texture);
-    word.eventMode='none';word.scale.set(1.25);evolutionWriting.addChild(word);old.destroy();evolutionWords[i]=word;
+    // Owner 2026-10-10: replace only the code-symbol row. Existing Chinese,
+    // English, row positions, scroll directions and the phase clock stay intact.
+    const word=i===4?new PIXI.Text({text:EVOLUTION_SYMBOL_REPLACEMENT_TEXT,style:{
+      fontFamily:'Tahoma, "Noto Sans Thai", Thonburi, "Yu Gothic", "Hiragino Sans", "Noto Sans JP", sans-serif',
+      fontSize:16,lineHeight:18,fontWeight:'bold',fill:0x008bff
+    }}):new PIXI.Sprite(evolutionArt.get(i%3?'evolution-word-small':'evolution-word').texture);
+    const old=evolutionWords[i];word.eventMode='none';if(i!==4)word.scale.set(1.25);
+    evolutionWriting.addChild(word);old.destroy();evolutionWords[i]=word;
   }
   const evolutionCells=evolutionArt?Object.fromEntries(['ring','green','burst'].map(name=>{
     const sprite=new PIXI.Sprite();sprite.label=`native evolution ${name}`;sprite.eventMode='none';sprite.visible=false;
@@ -399,7 +405,10 @@ export async function mountRaisingFieldPixiPresentation({
       if (disposed||drag||cameraDrag) return;
       if(source.getLifecycleFrame?.()?.day||source.getLifecycleFrame?.()?.evolution)return;
       event.stopPropagation();
-      if(["feed","protein","clean"].includes(getSelectedTool())&&fieldArt?.field?.presentationMode==='NATIVE_RANCH') {
+      // The camera lesson precedes carry: a swipe beginning on the resident
+      // must still reach the camera owner while native carry is gated off.
+      const cameraLesson=source.getFrame().tutorial?.action==='camera'&&getSelectedTool()==='hand';
+      if((cameraLesson||["feed","protein","clean"].includes(getSelectedTool()))&&fieldArt?.field?.presentationMode==='NATIVE_RANCH') {
         cameraDrag={pointerId:event.pointerId,startX:event.global.x,startY:event.global.y,origin:cameraX,originY:cameraY,tool:getSelectedTool(),moved:false,tutorialCheckpoint:source.getFrame().tutorial?.checkpoint??null};
         pointerPreview={x:event.global.x,y:event.global.y,touch:event.pointerType==='touch',held:true};
         return;
@@ -997,6 +1006,10 @@ export async function mountRaisingFieldPixiPresentation({
   app.stage.on("pointerup", finishDrag);
   app.stage.on("pointerupoutside", finishDrag);
   app.stage.on("pointercancel", finishDrag);
+  // Pixi's boundary does not map native pointercancel. Release this scene's
+  // held gesture when the browser/OS cancels a touch, through the same owner.
+  const cancelNativePointer=event=>finishDrag({type:'pointercancel',pointerId:event.pointerId});
+  app.canvas.addEventListener('pointercancel',cancelNativePointer);
   app.ticker.add(updateAnimations);
 
   const unsubscribe = source.subscribe(sync);
@@ -1119,6 +1132,7 @@ export async function mountRaisingFieldPixiPresentation({
       app.stage.off("pointerup", finishDrag);
       app.stage.off("pointerupoutside", finishDrag);
       app.stage.off("pointercancel", finishDrag);
+      app.canvas.removeEventListener('pointercancel',cancelNativePointer);
       for (const entry of actors.values()) entry.loadToken += 1;
       if (scene.parent) scene.parent.removeChild(scene);
       scene.destroy({ children: true });

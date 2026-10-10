@@ -11,6 +11,8 @@
   background:#daeee6 center / cover no-repeat; /* Original image is owned by titleImageLifecycle. */
 }
 #cm-title[hidden] .cm-title__panel { background-image:none; }
+/* Controls share the portrait bounds, independently of the fixed art canvas. */
+#cm-title .cm-title__controls { position:absolute; top:0; left:50%; width:min(100vw,56.25dvh,520px); height:100%; transform:translateX(-50%); }
 /* Match the 941 × 1672 background cover rectangle. Art anchors are source-image
    coordinates; text, status and safe-area controls cannot move the partners. */
 #cm-title .cm-title__art { position:absolute; top:0; left:50%; width:max(100%,calc(var(--cm-title-height) * 941 / 1672)); height:100%; transform:translateX(-50%); pointer-events:none; }
@@ -55,11 +57,46 @@ body[data-portrait-frame] #cm-title .cm-title__panel { --cm-title-height:var(--c
 :root[data-motion="reduced"] #cm-title *, :root[data-quality="saver"] #cm-title * { animation:none !important; transition:none; }
 @media(prefers-reduced-motion:reduce) { :root:not([data-motion]) #cm-title * { animation:none !important; transition:none; } }
 @media(max-height:650px) and (orientation:portrait) {
-  #cm-title .cm-title__actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
-  #cm-title .cm-title__actions .cm-button { min-width:0; overflow-wrap:anywhere; }
+  #cm-title .cm-title__actions { display:grid; grid-template-columns:minmax(0,1fr); }
+  #cm-title .cm-title__entry { top:auto; bottom:max(12px,env(safe-area-inset-bottom,0px)); }
+  #cm-title .cm-title__note { top:max(31%,calc(env(safe-area-inset-top,0px) + 128px)); bottom:auto; }
+  #cm-title .cm-title__background-feedback { top:max(38%,calc(env(safe-area-inset-top,0px) + 172px)); }
+  #cm-title .cm-title__actions .cm-button { min-width:0; overflow-wrap:normal; word-break:normal; }
   #cm-title .cm-title__name { font-size:29px; }
   :root:lang(ja) #cm-title .cm-title__name, :root:lang(th) #cm-title .cm-title__name { font-size:23px; }
 }
+
+/* Only the visible title escapes the sideways game frame. Game layout and its
+   transform resume unchanged when the title is hidden. The art is scaled back
+   to the exact R8 frame; the same interactive DOM stays at device CSS size. */
+body[data-portrait-frame]:has(#cm-title:not([hidden])) { overflow:visible; }
+body[data-portrait-frame] #cm-title {
+  inset:auto; left:50%; top:50%; width:100vw; height:100dvh;
+  grid-template: minmax(0,1fr) / minmax(0,1fr);
+  transform:translate(-50%,-50%) scale(calc(1 / var(--cm-frame-scale)));
+}
+body[data-portrait-frame] #cm-title .cm-title__panel { transform:scale(var(--cm-frame-scale)); }
+body[data-portrait-frame] #cm-title .cm-title__controls { width:100%; }
+body[data-portrait-frame] #cm-title .cm-title__settings { right:max(16px,env(safe-area-inset-right,0px)); }
+body[data-portrait-frame] #cm-title .cm-title__entry {
+  top:auto; bottom:max(12px,env(safe-area-inset-bottom,0px)); left:50%; right:auto;
+  width:min(560px,calc(100% - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px) - 32px));
+  transform:translateX(-50%);
+}
+body[data-portrait-frame] #cm-title .cm-title__actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); width:100%; }
+body[data-portrait-frame] #cm-title .cm-title__actions .cm-button { min-width:0; overflow-wrap:normal; word-break:normal; }
+body[data-portrait-frame] #cm-title .cm-title__background-feedback,
+body[data-portrait-frame] #cm-title .cm-title__note {
+  top:max(68px,calc(env(safe-area-inset-top,0px) + 56px)); bottom:auto;
+  width:max(120px,calc((100% - 390px * var(--cm-frame-scale)) / 2 - max(16px,env(safe-area-inset-left,0px),env(safe-area-inset-right,0px)) - 16px));
+  max-height:calc(100% - 180px); overflow:auto;
+}
+body[data-portrait-frame] #cm-title .cm-title__background-feedback { left:max(16px,env(safe-area-inset-left,0px)); right:auto; }
+body[data-portrait-frame] #cm-title .cm-title__note {
+  left:auto; right:max(16px,env(safe-area-inset-right,0px)); padding:6px 8px;
+  border-radius:10px; background:#f6fbebed; pointer-events:auto;
+}
+body[data-portrait-frame] #cm-title .cm-title__note:empty { display:none; }
 
 /* ---- Opening: overlay, letters, naming ----------------------------------- */
 #cm-opening {

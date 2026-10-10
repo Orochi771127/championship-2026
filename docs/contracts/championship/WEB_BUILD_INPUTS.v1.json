@@ -21,7 +21,6 @@
     "src/championship/app/ChampionshipPersistentSavePort.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
-    "src/championship/app/downloadSaveBackup.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
@@ -37,6 +36,7 @@
     "src/championship/app/championshipStorageGuard.js",
     "src/championship/app/championshipToolbar.js",
     "src/championship/app/digimonListScreen.js",
+    "src/championship/app/downloadSaveBackup.js",
     "src/championship/app/gateHuntPresentationSource.js",
     "src/championship/app/helpScreen.js",
     "src/championship/app/interactiveTutorialBattleSteps.js",
@@ -310,6 +310,7 @@
     "src/championship/text/catalogs.th.js",
     "src/championship/text/catalogs.vi.js",
     "src/championship/text/catalogs.zhHant.js",
+    "src/championship/text/evolutionPresentationText.js",
     "src/championship/text/gameText.en.js",
     "src/championship/text/gameText.ja.js",
     "src/championship/text/gameText.th.js",
@@ -5492,7 +5493,6 @@
     "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--012.png",
     "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--013.png",
     "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--014.png",
-    "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--017.png",
     "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--018.png",
     "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--115.png",
     "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--116.png",
@@ -9203,7 +9203,6 @@
     "src/championship/app/ChampionshipPersistentSavePort.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
-    "src/championship/app/downloadSaveBackup.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
@@ -9220,6 +9219,7 @@
     "src/championship/app/championshipToolbar.js",
     "src/championship/app/daylightSkin.css",
     "src/championship/app/digimonListScreen.js",
+    "src/championship/app/downloadSaveBackup.js",
     "src/championship/app/facilityBattleMobile.css",
     "src/championship/app/gateHuntPresentationSource.js",
     "src/championship/app/helpScreen.js",
@@ -9509,6 +9509,7 @@
     "src/championship/text/catalogs.th.js",
     "src/championship/text/catalogs.vi.js",
     "src/championship/text/catalogs.zhHant.js",
+    "src/championship/text/evolutionPresentationText.js",
     "src/championship/text/gameText.en.js",
     "src/championship/text/gameText.ja.js",
     "src/championship/text/gameText.th.js",
@@ -30164,10 +30165,6 @@
         "sha256": "d480fc7cc5f5905bb42b69d1eee97f1a5861a0b4535db5a1b396ee8f00143db7"
       },
       {
-        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--017.png",
-        "sha256": "2775f885a2de2616ee487aa2539f116a75b08d8665dc7ee71491b33ed6aba33f"
-      },
-      {
         "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--018.png",
         "sha256": "77b5d266433ce27a2b604d90b34f762e666f123f0f52842e366b6c076f7b140b"
       },
@@ -30213,7 +30210,7 @@
       },
       {
         "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/manifest.json",
-        "sha256": "860219c36c6b6584e7908281bf86977d79f8c919346a00d3ca91a98762ab5ad1"
+        "sha256": "62cae48f6556bf985da35a161994a4de05361725bdd456e42eb8850b99165f9c"
       },
       {
         "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--000.png",
@@ -44793,7 +44790,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "ed971574375afb9f68b21df898329a217095a091f944f9ae65ed19f7e21edf7b"
+        "sha256": "49895cc4e929a60c2dae65968b134bfc2d703eccf557e8f2320bad227a62b435"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45072,6 +45069,10 @@
         "sha256": "d5cc43b35b571ce88d139139210b211464de54b277db5e4957a36f8eee034f55"
       },
       {
+        "path": "src/championship/app/downloadSaveBackup.js",
+        "sha256": "13dd65a772f01b747450482f5f18d2a7a54d508311ec8c79f546223b905095d7"
+      },
+      {
         "path": "src/championship/app/facilityBattleMobile.css",
         "sha256": "5208017a7a19b0b77cd1cbe30ca52678ba3eaeeef9225146451bdeb5b05df67d"
       },
@@ -45157,7 +45158,7 @@
       },
       {
         "path": "src/championship/app/opening.css",
-        "sha256": "55dc72f67a98a0f204478787efd8cf6d92a5282a306903a12a5f4c049e59d907"
+        "sha256": "c251f20414a9717fee0bdd4c4157752af6f19ab84acab4103e842a91d0f5e9d1"
       },
       {
         "path": "src/championship/app/openingEggChoices.js",
@@ -45901,7 +45902,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "ee462657b1adcf8040207927c662d8202f7fec71dea309d0cd861d2fd9896df0"
+        "sha256": "1a14b0452e793bafc8999b3ca5c5931854f312d90b45b7c63747ac8c8efe0dfd"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
@@ -46029,7 +46030,7 @@
       },
       {
         "path": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
-        "sha256": "2e2ff2759011ea8e41fa35bac26585144a5bc6b48f08ccd7585e821126c788e0"
+        "sha256": "dc27ef1636545b69ce8aa845079fa48e41b083f57f753bfe5e7f82a3fe7b1dc1"
       },
       {
         "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
@@ -46226,6 +46227,10 @@
       {
         "path": "src/championship/text/catalogs.zhHant.js",
         "sha256": "7b2910b06a4c21059bf01a71884c32c8b1e23c7af37b638e22f09514aa201474"
+      },
+      {
+        "path": "src/championship/text/evolutionPresentationText.js",
+        "sha256": "bda796dcb9f7edbc9d35fd3ba1e6612e7b5c3e1b631024275ecbbff7459a10f0"
       },
       {
         "path": "src/championship/text/gameText.en.js",
@@ -46502,10 +46507,6 @@
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
-      },
-      {
-        "path": "src/championship/app/downloadSaveBackup.js",
-        "sha256": "13dd65a772f01b747450482f5f18d2a7a54d508311ec8c79f546223b905095d7"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

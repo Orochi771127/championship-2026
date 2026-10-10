@@ -336,6 +336,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
       disposeObject(scene);
       selectedRingMaterial.dispose();
       renderer.dispose();
+      renderer.forceContextLoss();
       renderer.domElement.remove();
       overlay.remove();
     }
