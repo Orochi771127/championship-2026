@@ -177,7 +177,8 @@ test('Password panel makes a copyable code for up to three of the player’s own
   button('產生密碼').click();await Promise.resolve();await Promise.resolve();
   assert.deepEqual(made,[['a','b','c']]);assert.equal(output.value,'四ぬ体石た');assert.equal(output.readOnly,true);
   assert.equal(button('複製密碼').hidden,false);
-  pick('a').click();assert.equal(output.value,'','changing the team clears the old code');assert.equal(button('複製密碼').hidden,true);
+  const own=descendants(root).find(n=>n.attributes['aria-label']==='A 隊密碼');assert.equal(own.value,output.value);
+  pick('a').click();assert.equal(own.value,'');assert.equal(output.value,'','changing the team clears the old code');assert.equal(button('複製密碼').hidden,true);
   view.dispose();
 });
 
@@ -194,8 +195,38 @@ test('Link selection exposes host and guest code exchange before starting',async
   invite.value='CM26-LINK-INVITE';invite.listeners.input();button('乙').click();button('產生回覆碼').click();
   await Promise.resolve();await Promise.resolve();
   const reply=descendants(root).find(node=>node.attributes['aria-label']==='回覆碼');assert.equal(reply.value,'CM26-LINK-REPLY');
-  button('已分享回覆碼，開始對戰').click();await Promise.resolve();
+  button('已交換通訊碼，開始本機重播').click();await Promise.resolve();
   assert.deepEqual(entered,[[-1,prepared,'LINK_BATTLE']]);view.dispose();
+});
+
+const flushView = () => new Promise(resolve => setImmediate(resolve));
+async function linkHarness(t, overrides={}) {
+  const root=useDocument(t),entered=[];let cube;
+  const candidates=['a','b'].map((instanceId,i)=>({instanceId,displayName:i?'乙':'甲',admission:{ok:true}}));
+  const prepared={ok:true,replyCode:'REPLY-A',localTeamIndex:1,parties:[[{instanceId:'remote',displayName:'對手'}],[candidates[0]]]};
+  const view=createBattleSelectView({root,matches:[],menuCopy:{menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'},
+    mountCube:options=>{cube=options;return {dispose(){}};},getModeMatches:()=>[],onEnter:(...args)=>{entered.push(args);return {ok:true};},
+    getLinkSelection:()=>({candidates,createInvite:()=>({ok:true,inviteCode:'INVITE-A',arenaIndex:0}),prepareGuest:()=>prepared,prepareHost:()=>prepared,...overrides})});
+  cube.onSelect('LINK_BATTLE');await flushView();
+  return {root,view,entered,prepared,button:text=>descendants(root).find(n=>n.tagName==='button'&&n.textContent===text),
+    field:label=>descendants(root).find(n=>n.tagName==='textarea'&&n.attributes['aria-label']===label)};
+}
+
+test('P0 host changing its selected team revokes the old invitation, reply and start',async t=>{
+  const h=await linkHarness(t);h.button('甲').click();h.button('產生邀請碼').click();await flushView();
+  assert.equal(h.field('邀請碼').value,'INVITE-A');h.field('對方回覆碼').value='REPLY-A';h.field('對方回覆碼').listeners.input();
+  assert.equal(h.button('讀取回覆並確認隊伍').disabled,false);
+  h.button('讀取回覆並確認隊伍').click();await flushView();assert.equal(h.button('已交換通訊碼，開始本機重播').disabled,false);
+  h.button('乙').click();assert.equal(h.field('邀請碼').value,'');assert.equal(h.field('對方回覆碼').value,'');
+  assert.equal(h.button('讀取回覆並確認隊伍').disabled,true);assert.equal(h.button('已交換通訊碼，開始本機重播').disabled,true);h.button('已交換通訊碼，開始本機重播').click();assert.deepEqual(h.entered,[]);h.view.dispose();
+});
+
+test('P0 guest changing its selected team revokes the prepared snapshot and both codes',async t=>{
+  const h=await linkHarness(t);h.button('加入邀請').click();h.button('甲').click();
+  h.field('對方邀請碼').value='INVITE-A';h.field('對方邀請碼').listeners.input();h.button('產生回覆碼').click();await flushView();
+  assert.equal(h.field('回覆碼').value,'REPLY-A');assert.equal(h.button('已交換通訊碼，開始本機重播').disabled,false);
+  h.button('乙').click();assert.equal(h.field('回覆碼').value,'');assert.equal(h.field('對方邀請碼').value,'');
+  assert.equal(h.button('已交換通訊碼，開始本機重播').disabled,true);h.button('已交換通訊碼，開始本機重播').click();assert.deepEqual(h.entered,[]);h.view.dispose();
 });
 
 test('mode switching keeps free opponents separate from scheduled titles and rejects stale asynchronous menus',async t=>{
@@ -282,4 +313,39 @@ test("the menu distinguishes fee and prize, and explains insufficient funds", as
   assert.equal(notice.attributes.role, "status");
   assert.match(notice.textContent, /150 位元幣.*149 位元幣/);
   assert.deepEqual(cubeAvailable, ['TITLE_MATCH'], "only modes supplied by the application can be entered");
+});
+
+
+test('P0 exchange preview shows decoded locked parties and editing a reply revokes start', async t=>{
+ const host={ok:true,localTeamIndex:0,parties:[[{instanceId:'actual-own',displayName:'碼內我方'}],[{instanceId:'actual-remote',displayName:'碼內對手'}]]};
+ const h=await linkHarness(t,{prepareHost:()=>host});h.button('甲').click();h.button('產生邀請碼').click();await flushView();
+ h.field('對方回覆碼').value='REPLY-A';h.field('對方回覆碼').listeners.input();h.button('讀取回覆並確認隊伍').click();await flushView();
+ assert.equal(h.button('已交換通訊碼，開始本機重播').disabled,false);
+ const own=descendants(h.root).find(n=>n.dataset.teamRole==='local'),opponent=descendants(h.root).find(n=>n.dataset.teamRole==='opponent');
+ assert.match(textOf(own),/碼內我方/);assert.match(textOf(opponent),/碼內對手/);assert.doesNotMatch(textOf(own),/甲/);
+ h.field('對方回覆碼').value='REPLY-B';h.field('對方回覆碼').listeners.input();
+ assert.equal(h.button('已交換通訊碼，開始本機重播').disabled,true);assert.equal(opponent.hidden,true);h.view.dispose();
+});
+
+test('P0 exchange preparation failure releases controls and clipboard denial selects the exact code', async t=>{
+ const descriptor=Object.getOwnPropertyDescriptor(globalThis,'navigator');let copied;
+ Object.defineProperty(globalThis,'navigator',{configurable:true,value:{clipboard:{writeText:async text=>{copied=text;throw Error('denied');}}}});
+ t.after(()=>{if(descriptor)Object.defineProperty(globalThis,'navigator',descriptor);else delete globalThis.navigator;});
+ let fail=true;const h=await linkHarness(t,{createInvite:async()=>{if(fail)throw Error('failed');return {ok:true,inviteCode:'FULL-CODE',arenaIndex:0};}});
+ h.button('甲').click();h.button('產生邀請碼').click();await flushView();assert.equal(h.button('產生邀請碼').disabled,false);
+ assert.equal(h.button('乙').disabled,false);assert.equal(h.button('已交換通訊碼，開始本機重播').disabled,true);
+ fail=false;h.button('產生邀請碼').click();await flushView();let selected=false;
+ h.field('邀請碼').select=()=>selected=true;h.button('複製通訊碼').click();await flushView();
+ assert.equal(copied,'FULL-CODE');assert.equal(selected,true);assert.match(textOf(h.root),/無法自動複製/);h.view.dispose();
+});
+
+
+test('P0 password generation cannot restore a code after its selected team changes', async t=>{
+ const root=useDocument(t);let cube,resolve;
+ const view=createBattleSelectView({root,matches:[],menuCopy:{menu:'對戰',chooseMatch:'選擇',availableMatches:'賽事',faceNotice:'模式'},
+ mountCube:o=>{cube=o;return {dispose(){}};},onEnter:()=>{},getPasswordSelection:()=>({candidates:['a','b'].map(instanceId=>({instanceId,displayName:instanceId,admission:{ok:true}})),createPassword:()=>new Promise(r=>resolve=r)})});
+ cube.onSelect('PASSWORD_BATTLE');await flushView();const button=s=>descendants(root).find(n=>n.tagName==='button'&&n.textContent===s);
+ button('a').click();button('產生密碼').click();button('b').click();resolve({ok:true,password:'STALE'});await flushView();
+ const output=descendants(root).find(n=>n.attributes['aria-label']==='我的隊伍密碼');assert.equal(output.value,'');
+ assert.equal(descendants(root).find(n=>n.attributes['aria-label']==='A 隊密碼').value,'');assert.equal(button('產生密碼').disabled,false);view.dispose();
 });

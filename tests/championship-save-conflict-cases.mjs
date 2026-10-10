@@ -42,3 +42,26 @@ test('failed write keeps serializable current progress exportable even when stor
  assert.equal([...h.data.values()][0],durable);
  }finally{await a.dispose();}
 });
+
+
+test('P0 backup validates the complete saved envelope without changing active progress or storage', async()=>{
+ const h=setup(),a=h.create();try{await a.newGame();a.save();const durable=[...h.data.values()][0];a.creditBits(93);
+ const status=a.savePort.getStatus(),screen=a.getScreen(),before=a.getRaisingInstances();
+ const backup=a.persistenceFacade().exportRecovery();assert.equal(backup.backupSource,'stored');assert.equal(backup.text,durable);
+ assert.equal(a.getShopFrame().bits,93);assert.equal(a.getScreen(),screen);assert.deepEqual(a.getRaisingInstances(),before);
+ assert.deepEqual(a.savePort.getStatus(),status);assert.equal([...h.data.values()][0],durable);
+ const invalid=JSON.parse(durable),nested=JSON.parse(invalid.raisingHome);nested.payload.residents=[];
+ invalid.raisingHome=JSON.stringify(nested);const corrupt=JSON.stringify(invalid);h.data.set(backup.key,corrupt);
+ assert.throws(()=>a.persistenceFacade().exportRecovery(),/digest|integrity|resident|mismatch/i);
+ assert.equal(h.data.get(backup.key),corrupt);assert.equal(a.getShopFrame().bits,93);
+ }finally{await a.dispose();}
+});
+
+test('P0 blocked save retains last successful time and exports validated pending bytes without retrying', async()=>{
+ const h=setup(),a=h.create();try{await a.newGame();a.save();const saved=a.savePort.getStatus(),durable=[...h.data.values()][0];
+ a.creditBits(82);h.block();a.save();const failed=a.savePort.getStatus();assert.equal(failed.savedAt,saved.savedAt);
+ assert.equal(failed.committedWrites,saved.committedWrites);const backup=a.persistenceFacade().exportRecovery();
+ assert.equal(backup.backupSource,'pending');assert.equal(deserializeChampionshipModernSave(backup.text).shop.bits,82);
+ assert.deepEqual(a.savePort.getStatus(),failed);assert.equal([...h.data.values()][0],durable);
+ }finally{await a.dispose();}
+});

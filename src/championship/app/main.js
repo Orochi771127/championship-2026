@@ -86,6 +86,7 @@ import { createLoadWatchdog } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
+import { downloadSaveBackup } from './downloadSaveBackup.js';
 import { createAutosaveScheduler } from './autosaveScheduler.js';
 // Settings round (2026-09-29): player preferences, applied to the page, the
 // one Pixi stage, the audio graph and the highlight template.
@@ -286,6 +287,7 @@ function openSettings(from = null) {
     audio: settings.audio,
     quality: settings.quality,
     getSaveStatus: saveStatusLine,
+    exportBackup: () => downloadSaveBackup(() => app?.persistenceFacade().exportRecovery()),
     confirm: showChoiceDialog
   });
   settingsPanel.open({ from });
@@ -296,9 +298,13 @@ function saveStatusLine() {
   const status = app?.savePort?.getStatus?.();
   if (!status || !app?.getSession?.()) return { key: "目前沒有進行中的遊戲。" };
   const when = status.savedAt ? formatDateTime(status.savedAt) : null;
-  if (status.phase === "SAVE_FAILED") return { key: "上次保存失敗；可在畫面上方的保存狀態重試。" };
+  const lastSaved = when ? { key: 'SAVE_LAST_SUCCESS', params: { time: when } } : { key: 'SAVE_NO_SUCCESS' };
+  if (status.phase === "SAVE_FAILED") return { key: status.lastCode === 'CHAMPIONSHIP_MODERN_SAVE_CONFLICT'
+    ? "另一個分頁已寫入較新的存檔，這個分頁不會覆蓋它。請關閉其他分頁後重新開啟遊戲。"
+    : "上次保存失敗；可在畫面上方的保存狀態重試。", lastSaved };
+  if ((autosave?.inspect().pending.length ?? 0) > 0) return { key: 'SAVE_PENDING', lastSaved };
   if (status.phase === "SAVED" || status.phase === "RESTORED") return when ? { key: "已存到本機（{time}）。", params: { time: when } } : { key: "已存到本機。" };
-  return { key: "上次寫入後遊戲又有進展，重要操作或離開頁面時會保存。" };
+  return { key: "上次寫入後遊戲又有進展，重要操作或離開頁面時會保存。", lastSaved };
 }
 
 function note(message) {
@@ -1496,7 +1502,7 @@ async function openSaveDetails() {
       : "這次沒有寫入本機存檔。可以再試一次；若仍失敗，請確認瀏覽器沒有封鎖網站資料或處於私密瀏覽。");
     const choice = await showChoiceDialog({
       title: uiText("保存失敗"),
-      message: `${reason}\n${where}`,
+      message: `${reason}\n${when ? uiText('SAVE_LAST_SUCCESS', {time: when}) : uiText('SAVE_NO_SUCCESS')}\n${where}`,
       actions: status.canRetry
         ? [{ id: "close", label: uiText("關閉"), tone: "secondary" }, { id: "retry", label: uiText("再試一次"), tone: "primary" }]
         : [{ id: "close", label: uiText("關閉"), tone: "secondary" }],
@@ -1509,7 +1515,7 @@ async function openSaveDetails() {
     return;
   }
   const pending = (autosave?.inspect().pending.length ?? 0) > 0;
-  const state = pending ? uiText("有變更正在等待寫入。")
+  const state = pending ? `${uiText('SAVE_PENDING')}\n${when ? uiText('SAVE_LAST_SUCCESS', {time: when}) : uiText('SAVE_NO_SUCCESS')}`
     : status.phase === "DIRTY" ? (when ? uiText("上次寫入後遊戲又有進展（上次：{time}）。", { time: when }) : uiText("上次寫入後遊戲又有進展。"))
     : (when ? uiText("已存到本機（{time}）。", { time: when }) : uiText("已存到本機。"));
   await showChoiceDialog({ title: uiText("存檔狀態"), message: `${state}\n${how}\n${where}`, actions: [{ id: "close", label: uiText("知道了"), tone: "primary" }], cancelId: "close" });
@@ -1576,6 +1582,7 @@ function projectRoster() {
 
 /** Repaint the four info_bar fields from the R2 snapshot and the current screen. */
 function refreshStatusBar() {
+  settingsPanel?.refreshSaveStatus?.();
   if (!statusBar) return;
   const screen = app.getScreen();
   const snapshot = app.getSession()?.getRaisingHomeSnapshot?.() ?? null;

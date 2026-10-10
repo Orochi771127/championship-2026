@@ -610,3 +610,9 @@
   :root:not([data-motion]) .cm-vs5-shell[data-entrance="CHARGE"] .cm-vs5-result__characters { transform: none; }
 }
 @keyframes cm-vs5-fade { from { opacity: 0; } }
+
+/* Code exchange keeps instructions and the exact locked teams readable on phones. */
+.cm-vs5-exchange-steps { margin: 0; padding-inline-start: 1.4em; line-height: 1.5; }
+.cm-vs5-team-preview { padding: var(--sp-2); border: 1px solid var(--c-border); border-radius: var(--r-control); }
+.cm-vs5-team-preview[hidden] { display: none; }
+.cm-vs5-team-preview__members { margin: var(--sp-1) 0 0; padding-inline-start: 1.4em; overflow-wrap: anywhere; }

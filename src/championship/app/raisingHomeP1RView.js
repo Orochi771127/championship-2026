@@ -1,3 +1,4 @@
+import { downloadSaveBackup } from './downloadSaveBackup.js';
 import { isNativeRanchLayout } from "../cage/ranchExpansion.js";
 import { retranslate, setLabel, setText, uiText } from "../text/uiText.js";
 import {raisingMessageText,raisingMessageSender} from '../text/raisingMessages.zhHant.js';
@@ -186,13 +187,12 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   notice.setAttribute("aria-live", "polite");
   const noticeText = node("p", "int-rh2-notice__text");
   const recovery=button('int-rh2-system-button','匯出未存成功的進度');recovery.hidden=true;
+  const recoveryResult = node('p', 'int-rh2-notice__text'); recoveryResult.hidden = true;
   recovery.addEventListener('click',()=>{
-    const data=presentation.intents.exportRecovery?.();if(!data?.text)return;
-    const url=URL.createObjectURL(new Blob([data.text],{type:'application/json'}));
-    const link=document.createElement('a');link.href=url;link.download='championship-recovery.json';link.click();
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    const outcome = downloadSaveBackup(() => presentation.intents.exportRecovery?.());
+    setText(recoveryResult, outcome.key); recoveryResult.hidden = false;
   });
-  notice.append(noticeText, recovery);
+  notice.append(noticeText, recovery, recoveryResult);
 
   // ---- The full record (a sheet; bottom on phones, side on tablets) ------
   const detail = node("dialog", "int-rh2-detail");
@@ -288,6 +288,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const phase = saveStatus?.phase ?? "CLEAN";
     const failed = phase === "SAVE_FAILED";
     recovery.hidden = !failed || typeof presentation.intents.exportRecovery !== 'function';
+    if (!failed) recoveryResult.hidden = true;
     if (saveStatus?.conflict) showNotice(uiText(SAVE_COPY.CONFLICT), { sticky: true });
     else if (failed) showNotice(uiText(SAVE_COPY.SAVE_FAILED), { sticky: true });
     else clearStickyNotice();

@@ -1,4 +1,4 @@
-import { titleEventText, raisingDisplayName } from "../text/zhHant.js";
+import { titleEventText, raisingDisplayName, speciesName } from "../text/zhHant.js";
 import { uiText } from "../text/uiText.js";
 import {tutorialBattleText} from '../text/interactiveTutorialBattleText.js';
 // VS5-P — Championship Modern presentation for the Battle menu, the match and
@@ -57,6 +57,7 @@ function element(tag, className, text, localize = true) {
 
 /** The roster's name for a member, so every picker agrees with Raising Home. */
 function memberName(entry) {
+  if(entry?.nativeProfile && !entry.displayName && !entry.speciesId) return entry.nativeProfile.name || speciesName(entry.nativeProfile.fields['000']);
   return entry?.speciesId || entry?.source ? raisingDisplayName(entry) : (entry?.displayName ?? entry?.name ?? entry?.instanceId);
 }
 
@@ -64,6 +65,23 @@ function actionButton(label, { primary = false } = {}) {
   const button = element("button", `cm-vs5-action${primary ? " cm-vs5-action--primary" : ""}`, label);
   button.type = "button";
   return button;
+}
+
+async function copyCode(field, status, success='CODE_COPIED', fallback='CODE_COPY_MANUAL') {
+  const code=field.value;if(!code)return;
+  let copied=false;
+  try{if(globalThis.navigator?.clipboard?.writeText){await globalThis.navigator.clipboard.writeText(code);copied=true;}}catch{}
+  if(field.value!==code)return;
+  if(!copied){field.focus?.();field.select?.();}
+  status.hidden=false;status.textContent=uiText(copied?success:fallback);
+}
+
+function teamPreview(node,entries,key) {
+  node.replaceChildren(element('h3','cm-vs5-link__heading',key));
+  const list=element('ul','cm-vs5-team-preview__members');
+  for(const entry of entries){const item=element('li','',memberName(entry),false);item.dataset.instanceId=entry.instanceId;list.append(item);}
+  if(!entries.length)list.append(element('li','','TEAM_PICK_HINT'));
+  node.append(list);
 }
 
 function shell(root, screen, label) {
@@ -315,7 +333,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     if(cubeDisposed||request!==partyRequest)return;
     const maxLength=Number.isInteger(setup?.maxLength)?setup.maxLength:22;
     partyPanel.append(element('h2','cm-vs5-title','密碼對戰'),
-      element('p','cm-vs5-entry-notice','輸入兩組隊伍密碼。每組密碼可還原最多 3 隻數碼獸。'));
+      element('p','cm-vs5-entry-notice','PASSWORD_LOCAL_STEPS'));
     const inputs=[];
     for(const team of ['A','B']){
       const label=element('label','cm-vs5-password-label',uiText('{team} 隊密碼',{team}));
@@ -343,15 +361,18 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       maker=element('section','cm-vs5-password-maker');
       maker.append(element('h3','cm-vs5-link__heading','我的隊伍密碼'),
         element('p','cm-vs5-entry-notice','選擇最多 3 隻自己的數碼獸，產生可以分享給朋友的密碼。密碼保存的是現在的狀態。'));
-      const chosen=[],picks=[];
+      const chosen=[],picks=[],preview=element('section','cm-vs5-team-preview');
+      let generation=0,making=false,locked=[];
       const output=element('input','cm-vs5-password-input');output.value='';output.readOnly=true;
       output.setAttribute('readonly','');output.setAttribute('aria-label',uiText('我的隊伍密碼'));
-      const make=actionButton('產生密碼',{primary:true}),copy=actionButton('複製密碼');copy.hidden=true;
+      const make=actionButton('產生密碼',{primary:true}),copy=actionButton('複製密碼');copy.hidden=true;make.dataset.action='create-password';copy.dataset.action='copy-password';
       const status=element('p','cm-vs5-entry-notice');status.hidden=true;status.setAttribute('role','status');
       const sync=()=>{
         for(const {entry,button} of picks){const picked=chosen.includes(entry.instanceId);button.setAttribute('aria-pressed',String(picked));
           button.disabled=!entry.admission.ok||(!picked&&chosen.length>=3);}
-        make.disabled=chosen.length===0;
+        make.disabled=making||entering||chosen.length===0;
+        teamPreview(preview,locked.length&&inputs[0].value===output.value?locked:chosen.map(id=>setup.candidates.find(e=>e.instanceId===id)),
+          locked.length&&inputs[0].value===output.value?'PASSWORD_TEAM_LOCKED':'TEAM_SELECTED');
       };
       for(const entry of setup.candidates){
         const button=actionButton(memberName(entry));button.dataset.instanceId=entry.instanceId;
@@ -359,28 +380,25 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         button.addEventListener('click',()=>{
           if(button.disabled)return;const at=chosen.indexOf(entry.instanceId);
           if(at<0)chosen.push(entry.instanceId);else chosen.splice(at,1);
-          output.value='';copy.hidden=true;status.hidden=true;sync();
+          generation++;if(inputs[0].value===output.value)inputs[0].value='';locked=[];
+          output.value='';copy.hidden=true;status.hidden=true;sync();refresh();
         });
         picks.push({entry,button});maker.append(button);
       }
       if(!setup.candidates.some(entry=>entry.admission.ok))maker.append(element('p','cm-vs5-entry-notice','目前沒有可以密碼化的數碼獸。'));
       make.addEventListener('click',async()=>{
-        if(make.disabled)return;make.disabled=true;
+        if(make.disabled)return;const token=++generation,ids=[...chosen];making=true;sync();
         let made;
-        try{made=await setup.createPassword([...chosen]);}catch(error){made=null;}
-        if(cubeDisposed)return;
-        if(made?.ok){output.value=made.password;copy.hidden=false;status.hidden=true;}
+        try{made=await setup.createPassword(ids);}catch(error){made=null;}
+        making=false;if(cubeDisposed||request!==partyRequest)return;
+        if(token!==generation){sync();return;}
+        if(made?.ok){output.value=made.password;inputs[0].value=made.password;locked=ids.map(id=>({...setup.candidates.find(e=>e.instanceId===id)}));copy.hidden=false;status.hidden=true;}
         else{output.value='';copy.hidden=true;status.hidden=false;status.textContent=uiText(made?.message??'密碼產生失敗，請再試一次。');}
-        sync();
+        sync();refresh();
       });
-      copy.addEventListener('click',async()=>{
-        if(!output.value)return;
-        let copied=false;
-        try{if(globalThis.navigator?.clipboard){await globalThis.navigator.clipboard.writeText(output.value);copied=true;}}catch(error){copied=false;}
-        if(!copied)output.select?.();
-        status.hidden=false;status.textContent=uiText(copied?'已複製密碼。':'請長按密碼欄位手動複製。');
-      });
-      maker.append(make,output,copy,status);sync();
+      copy.addEventListener('click',()=>{void copyCode(output,status,'已複製密碼。','請長按密碼欄位手動複製。');});
+      inputs[0].addEventListener('input',()=>{refresh();sync();});
+      maker.append(preview,make,output,copy,status);sync();
     }
     refresh();if(maker)partyPanel.append(maker);setPanelFooter(back,confirm);
   }
@@ -396,57 +414,103 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     if(cubeDisposed||request!==partyRequest)return;
     const rolePanel=element('section','cm-vs5-link');
     const title=element('h2','cm-vs5-title','通訊對戰');
-    const note=element('p','cm-vs5-entry-notice','兩台裝置交換邀請碼與回覆碼，完成後雙方會看到同一場對戰。');
+    const note=element('p','cm-vs5-entry-notice','LINK_LOCAL_ONLY');
+    const steps=element('ol','cm-vs5-exchange-steps');
+    for(const key of ['LINK_STEP_1','LINK_STEP_2','LINK_STEP_3'])steps.append(element('li','',key));
     const host=actionButton('建立邀請'),guest=actionButton('加入邀請');
-    partyPanel.append(title,note,host,guest,rolePanel);setPanelFooter(back);
+    partyPanel.append(title,note,steps,host,guest,rolePanel);setPanelFooter(back);
+    let roleRevision=0;
 
     const teamPicker=(container,selected,refresh)=>{
       const controls=[];container.append(element('h3','cm-vs5-link__heading','選擇參賽數碼獸（1 至 3 隻）'));
       for(const entry of setup.candidates){
-        const button=actionButton(memberName(entry));button.setAttribute('aria-pressed','false');
+        const button=actionButton(memberName(entry));button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
         button.disabled=!entry.admission.ok;
         if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
-        button.addEventListener('click',()=>{const at=selected.indexOf(entry.instanceId);if(at<0)selected.push(entry.instanceId);else selected.splice(at,1);refresh();});
+        button.addEventListener('click',()=>{if(button.disabled)return;const at=selected.indexOf(entry.instanceId);if(at<0)selected.push(entry.instanceId);else selected.splice(at,1);refresh();});
         controls.push({entry,button});container.append(button);
       }
       return ()=>{for(const {entry,button} of controls){const picked=selected.includes(entry.instanceId);button.setAttribute('aria-pressed',String(picked));button.disabled=entering||!entry.admission.ok||(!picked&&selected.length>=3);}};
     };
     const codeField=(labelText,readOnly=false)=>{
       const label=element('label','cm-vs5-password-label',labelText),field=element('textarea','cm-vs5-link-code');
-      field.value='';field.setAttribute('aria-label',labelText);field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');
+      field.value='';field.setAttribute('aria-label',uiText(labelText));field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('autocapitalize','none');
       if(readOnly){field.readOnly=true;field.setAttribute('readonly','');}
       label.append(field);return {label,field};
     };
-    const start=async prepared=>{
+    const start=async(prepared,refresh)=>{
+      if(entering||!prepared?.ok)return;
       entering=true;host.disabled=true;guest.disabled=true;back.disabled=true;entryNotice.hidden=true;
+      refresh();
       try{showRefusal(await onEnter(-1,prepared,'LINK_BATTLE'),{});}
       catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'通訊對戰準備失敗，請再交換一次通訊碼。'},{});}
-      finally{entering=false;if(!cubeDisposed){host.disabled=false;guest.disabled=false;back.disabled=false;}}
+      finally{entering=false;if(!cubeDisposed){host.disabled=false;guest.disabled=false;back.disabled=false;refresh();}}
     };
-    const renderHost=()=>{
-      rolePanel.replaceChildren();const selected=[],invite=codeField('邀請碼',true),reply=codeField('對方回覆碼');
-      const create=actionButton('產生邀請碼',{primary:true}),begin=actionButton('讀取回覆並開始',{primary:true});begin.disabled=true;
-      let updateButtons=()=>{};
-      const refresh=()=>{updateButtons();create.disabled=entering||selected.length===0;begin.disabled=entering||!invite.field.value||!reply.field.value;};
-      updateButtons=teamPicker(rolePanel,selected,refresh);reply.field.addEventListener('input',refresh);
-      create.addEventListener('click',async()=>{if(create.disabled)return;entering=true;refresh();
-        const result=await setup.createInvite([...selected]);entering=false;if(result.ok){invite.field.value=result.inviteCode;invite.field.dataset.arena=String(result.arenaIndex);}else showRefusal(result,{});refresh();});
-      begin.addEventListener('click',async()=>{if(begin.disabled)return;entering=true;refresh();const prepared=await setup.prepareHost(invite.field.value,reply.field.value);
-        entering=false;refresh();if(!prepared.ok){showRefusal(prepared,{});return;}await start(prepared);});
-      rolePanel.append(create,invite.label,reply.label,begin);refresh();
+    const renderRole=isHost=>{
+      if(entering)return;
+      const revision=++roleRevision,alive=()=>!cubeDisposed&&request===partyRequest&&revision===roleRevision;
+      rolePanel.replaceChildren();rolePanel.dataset.role=isHost?'host':'guest';
+      const selected=[],invite=codeField(isHost?'邀請碼':'對方邀請碼',isHost),reply=codeField(isHost?'對方回覆碼':'回覆碼',!isHost);
+      const create=actionButton(isHost?'產生邀請碼':'產生回覆碼',{primary:true}),read=actionButton('LINK_READ_REPLY'),begin=actionButton('LINK_START_LOCAL',{primary:true});
+      create.dataset.action='create-code';read.dataset.action='read-reply';begin.dataset.action='start-local';
+      const copy=actionButton('CODE_COPY'),copyStatus=element('p','cm-vs5-entry-notice'),notice=element('p','cm-vs5-entry-notice');
+      copy.dataset.action='copy-code';copyStatus.setAttribute('role','status');copyStatus.hidden=true;notice.setAttribute('role','status');notice.hidden=true;
+      const own=element('section','cm-vs5-team-preview'),opponent=element('section','cm-vs5-team-preview');
+      own.dataset.teamRole='local';opponent.dataset.teamRole='opponent';
+      let prepared=null,locked=[],version=0,updateButtons=()=>{};
+      const refresh=()=>{
+        updateButtons();host.disabled=guest.disabled=back.disabled=entering;
+        invite.field.disabled=reply.field.disabled=entering;
+        create.disabled=entering||selected.length===0||(!isHost&&!invite.field.value.trim());
+        read.disabled=entering||!invite.field.value||!reply.field.value.trim();begin.disabled=entering||!prepared;
+        copy.disabled=entering||!(isHost?invite:reply).field.value;
+        rolePanel.dataset.codeState=prepared?'prepared':locked.length?'locked':'draft';
+        const localIndex=prepared?.localTeamIndex??(isHost?0:1);
+        const ownTeam=prepared?.parties?.[localIndex]?.map((entry,index)=>{
+          const label=isHost?locked[index]:setup.candidates.find(candidate=>candidate.instanceId===entry.instanceId);
+          return label&&entry.nativeProfile?{...entry,displayName:memberName(label)}:entry;
+        })??(locked.length?locked:selected.map(id=>setup.candidates.find(e=>e.instanceId===id)));
+        teamPreview(own,ownTeam,prepared||locked.length?'TEAM_LOCKED':'TEAM_SELECTED');
+        opponent.hidden=!prepared;
+        if(prepared)teamPreview(opponent,prepared.parties[1-localIndex],'TEAM_OPPONENT_LOCKED');
+      };
+      const invalidate=(clearInvite=true)=>{
+        const hadSnapshot=Boolean(prepared||locked.length||reply.field.value);
+        version++;prepared=null;locked=[];reply.field.value='';copyStatus.hidden=true;
+        if(clearInvite){invite.field.value='';delete invite.field.dataset.arena;}
+        notice.hidden=!hadSnapshot;notice.textContent=uiText('TEAM_EXCHANGE_RESET');
+        refresh();
+      };
+      updateButtons=teamPicker(rolePanel,selected,()=>invalidate(isHost||Boolean(prepared||locked.length||reply.field.value)));
+      if(isHost)reply.field.addEventListener('input',()=>{version++;prepared=null;copyStatus.hidden=true;refresh();});
+      else invite.field.addEventListener('input',()=>invalidate(false));
+      const prepare=async operation=>{
+        const token=++version;entering=true;prepared=null;notice.hidden=true;copyStatus.hidden=true;refresh();
+        try{
+          const result=await operation();if(!alive()||token!==version)return;
+          if(!result?.ok){showRefusal(result??{ok:false,message:'通訊對戰準備失敗，請重新交換通訊碼。'},{});return;}
+          if(isHost&&result.inviteCode&&!result.parties){
+            invite.field.value=result.inviteCode;reply.field.value='';invite.field.dataset.arena=String(result.arenaIndex);
+            locked=selected.map(id=>({...setup.candidates.find(e=>e.instanceId===id)}));
+          }else{prepared=result;if(!isHost)reply.field.value=result.replyCode;}
+        }catch{if(alive())showRefusal({ok:false,message:'通訊對戰準備失敗，請重新交換通訊碼。'},{});}
+        finally{entering=false;if(alive())refresh();}
+      };
+      create.addEventListener('click',()=>{
+        if(create.disabled)return;const ids=[...selected],code=invite.field.value;
+        if(isHost){version++;prepared=null;locked=[];invite.field.value='';reply.field.value='';}
+        else reply.field.value='';
+        void prepare(()=>isHost?setup.createInvite(ids):setup.prepareGuest(code,ids));
+      });
+      read.addEventListener('click',()=>{if(!read.disabled){const a=invite.field.value,b=reply.field.value;void prepare(()=>setup.prepareHost(a,b));}});
+      copy.addEventListener('click',()=>{void copyCode((isHost?invite:reply).field,copyStatus);});
+      begin.addEventListener('click',()=>{if(!begin.disabled)void start(prepared,refresh);});
+      rolePanel.append(own);
+      if(isHost)rolePanel.append(create,invite.label,copy,copyStatus,reply.label,read);
+      else rolePanel.append(invite.label,create,reply.label,copy,copyStatus);
+      rolePanel.append(opponent,notice,begin);refresh();
     };
-    const renderGuest=()=>{
-      rolePanel.replaceChildren();const selected=[],invite=codeField('對方邀請碼'),reply=codeField('回覆碼',true);
-      const create=actionButton('產生回覆碼',{primary:true}),begin=actionButton('已分享回覆碼，開始對戰',{primary:true});begin.disabled=true;
-      let prepared=null,updateButtons=()=>{};
-      const refresh=()=>{updateButtons();create.disabled=entering||selected.length===0||!invite.field.value;begin.disabled=entering||!prepared;};
-      updateButtons=teamPicker(rolePanel,selected,refresh);invite.field.addEventListener('input',()=>{prepared=null;reply.field.value='';refresh();});
-      create.addEventListener('click',async()=>{if(create.disabled)return;entering=true;refresh();prepared=await setup.prepareGuest(invite.field.value,[...selected]);entering=false;
-        if(prepared.ok)reply.field.value=prepared.replyCode;else{showRefusal(prepared,{});prepared=null;}refresh();});
-      begin.addEventListener('click',async()=>{if(!begin.disabled)await start(prepared);});
-      rolePanel.append(invite.label,create,reply.label,begin);refresh();
-    };
-    host.addEventListener('click',renderHost);guest.addEventListener('click',renderGuest);renderHost();
+    host.addEventListener('click',()=>renderRole(true));guest.addEventListener('click',()=>renderRole(false));renderRole(true);
   }
   function renderMatches(nextMatches) {
     if (!Array.isArray(nextMatches)) return;

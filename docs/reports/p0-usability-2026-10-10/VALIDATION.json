@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_SCOPED",
+  "baseCommit": "906915b7a9dd560768ab5e98309c51b3b831ddeb",
+  "focusedRegressionDistinctTests": 116,
+  "fiveLocaleMobile": {
+    "status": "PASS",
+    "rows": [
+      {
+        "locale": "zh-Hant",
+        "backupIdentical": true,
+        "hostAndGuestTeamChangesInvalidate": true,
+        "clipboardManualFallback": true,
+        "passwordAutoA": true,
+        "realInstanceIds": [
+          "p0:owned-secondary"
+        ],
+        "minButtonHeight": 48,
+        "pageErrors": []
+      },
+      {
+        "locale": "en",
+        "backupIdentical": true,
+        "hostAndGuestTeamChangesInvalidate": true,
+        "clipboardManualFallback": true,
+        "passwordAutoA": true,
+        "realInstanceIds": [
+          "p0:owned-secondary"
+        ],
+        "minButtonHeight": 48,
+        "pageErrors": []
+      },
+      {
+        "locale": "ja",
+        "backupIdentical": true,
+        "hostAndGuestTeamChangesInvalidate": true,
+        "clipboardManualFallback": true,
+        "passwordAutoA": true,
+        "realInstanceIds": [
+          "p0:owned-secondary"
+        ],
+        "minButtonHeight": 48,
+        "pageErrors": []
+      },
+      {
+        "locale": "th",
+        "backupIdentical": true,
+        "hostAndGuestTeamChangesInvalidate": true,
+        "clipboardManualFallback": true,
+        "passwordAutoA": true,
+        "realInstanceIds": [
+          "p0:owned-secondary"
+        ],
+        "minButtonHeight": 48,
+        "pageErrors": []
+      },
+      {
+        "locale": "vi",
+        "backupIdentical": true,
+        "hostAndGuestTeamChangesInvalidate": true,
+        "clipboardManualFallback": true,
+        "passwordAutoA": true,
+        "realInstanceIds": [
+          "p0:owned-secondary"
+        ],
+        "minButtonHeight": 48,
+        "pageErrors": []
+      }
+    ],
+    "scope": "390x844 DPR2 touch; isolated canonical two-owned fixture; built artifacts via local route at approved origin, no live network performance or physical-device claim."
+  },
+  "normalTwoPartyAndSave": {
+    "status": "PASS",
+    "rows": [
+      {
+        "twoDeviceCodeExchange": true,
+        "hostAndGuestEnteredExistingBattleCore": true
+      },
+      {
+        "saveSuccessPendingFailureVisible": true,
+        "lastSuccessTimeVisibleOnFailure": true,
+        "pendingBackupContainsPurchase": true,
+        "originalSaveUnchanged": true
+      }
+    ],
+    "pageErrors": [],
+    "scope": "Two separate isolated browser contexts, canonical fixtures, normal UI/native battle core. Storage failure injection restricted to isolated test context. No forced battle result, no Owner save."
+  },
+  "coldPerformance": "OPEN",
+  "physicalDeviceAccepted": false,
+  "ownerSaveUsed": false,
+  "newServerStarted": false,
+  "originalCollaboratorFileHashDifferences": []
+}

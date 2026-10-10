@@ -27,6 +27,7 @@ import {
   normalizeProductGivenName,
   renameEnclosedCreature
 } from "./championshipRaisingProduction.js";
+import { deserializeChampionshipModernSave } from "./championshipStandaloneSave.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
 import {normalizeNativeIndividualProfile} from '../raising/nativeIndividualProfile.js';
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
@@ -3223,7 +3224,14 @@ export function createChampionshipStandaloneApp({
           }
           return app.save();
         },
-        exportRecovery: () => savePort.exportRecovery()
+        exportRecovery: () => {
+          const recovery = savePort.exportRecovery();
+          // Use the same complete validation as Continue, without adopting,
+          // writing, migrating stored bytes, or replacing the active session.
+          const save = deserializeChampionshipModernSave(recovery.text);
+          restoreCandidate(save);
+          return Object.freeze({ ...recovery, backupSource: recovery.pendingText ? 'pending' : 'stored' });
+        }
       });
     },
 

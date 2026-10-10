@@ -96,12 +96,14 @@ export function createSettingsPanel({
   audio = null,
   quality = null,
   getSaveStatus = () => null,
+  exportBackup = null,
   confirm,
   history = globalThis.history,
   win = globalThis.window
 } = {}) {
   if (!store) throw new TypeError("The settings panel needs a preference store");
   let dialog = null;
+  let saveStatusNode = null, lastSavedNode = null;
   let category = "appearance";
   let view = "list";
   let opener = null;
@@ -354,7 +356,6 @@ export function createSettingsPanel({
       section.append(note("鍵盤：Tab 移動、方向鍵切換選項、Esc 返回或關閉。"));
     },
     data(section) {
-      const save = getSaveStatus?.() ?? null;
       const block = (titleKey) => {
         const group = node("section", "cm-settings__block");
         group.append(node("h4", "cm-settings__block-title", titleKey));
@@ -363,7 +364,21 @@ export function createSettingsPanel({
       };
       const saveBlock = block("存檔");
       saveBlock.append(node("p", "cm-settings__text", "存檔保存在這台裝置的這個瀏覽器（本機）。重要操作後會自動保存；清除網站資料後無法取回。"));
-      if (save) saveBlock.append(node("p", "cm-settings__text", save.key, save.params));
+      saveStatusNode = node('p', 'cm-settings__text');
+      lastSavedNode = node('p', 'cm-settings__text');
+      saveBlock.append(saveStatusNode, lastSavedNode);
+      refreshSaveStatus();
+      if (typeof exportBackup === 'function') {
+        const backup = node('button', 'cm-settings__action', 'BACKUP_DOWNLOAD');
+        backup.type = 'button'; backup.dataset.action = 'export-backup';
+        const result = node('p', 'cm-settings__text'); result.setAttribute('role', 'status'); result.hidden = true;
+        backup.addEventListener('click', () => {
+          let outcome;
+          try { outcome = exportBackup(); } catch { outcome = null; }
+          setText(result, outcome?.key ?? 'BACKUP_FAILED'); result.hidden = false;
+        });
+        saveBlock.append(note('BACKUP_HINT'), backup, result);
+      }
       const account = block("帳號");
       account.append(node("p", "cm-settings__text", "尚未提供帳號登入與雲端同步，這台裝置的資料不會上傳。"));
       account.append(node("p", "cm-settings__text", "標示為「帳號偏好」的設定將來可隨帳號同步；目前與「此裝置」設定一樣只保存在本機。"));
@@ -396,6 +411,15 @@ export function createSettingsPanel({
       prefs.append(resetAll);
     }
   };
+
+  function refreshSaveStatus() {
+    if (!saveStatusNode) return;
+    const save = getSaveStatus?.();
+    saveStatusNode.hidden = !save;
+    if (save) setText(saveStatusNode, save.key, save.params);
+    lastSavedNode.hidden = !save?.lastSaved;
+    if (save?.lastSaved) setText(lastSavedNode, save.lastSaved.key, save.lastSaved.params);
+  }
 
   function preferenceStatusKey(status) {
     if (status.phase === "SAVE_FAILED") return "設定未能保存到本機（本次遊玩仍然有效）。";
@@ -441,6 +465,7 @@ export function createSettingsPanel({
     const focusedValue = doc.activeElement?.value ?? null;
     const scroll = content.scrollTop;
     content.replaceChildren();
+    saveStatusNode = lastSavedNode = null;
     sliderPainters.clear();
     volumeNote = null;
     const heading = node("h3", "cm-settings__section-title", CATEGORY_TITLES[category]);
@@ -611,6 +636,7 @@ export function createSettingsPanel({
       first?.focus({ preventScroll: true });
     },
     close,
+    refreshSaveStatus,
     /** The current category and view, for QA and tests. */
     inspect: () => Object.freeze({ open: Boolean(dialog), category, view }),
     dispose() { close(); }
@@ -625,6 +651,7 @@ export function createSettingsPanel({
     try { if (dialog.open) dialog.close(); } catch { /* already closed */ }
     dialog.remove();
     dialog = null;
+    saveStatusNode = lastSavedNode = null;
     closing = false;
     if (historyEntry && !fromHistory) {
       historyEntry = false;
