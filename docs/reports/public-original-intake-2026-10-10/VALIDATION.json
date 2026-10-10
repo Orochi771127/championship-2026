@@ -1,7 +1,7 @@
 {
   "mandatoryModules": 215,
   "lastFullProductCi": {
-    "passed": 1572,
+    "passed": 1574,
     "failed": 0,
     "skipped": 0
   },
@@ -28,14 +28,14 @@
   "fullGameAcceptance": false,
   "physicalDeviceAcceptance": false,
   "commercialReleaseAccepted": false,
-  "liveDeployment": "MAIN_BATCH_DEPLOYED_OPENING_READINESS_FOLLOWUP_PENDING",
+  "liveDeployment": "OPENING_FIX_DEPLOYED_HUD_FOLLOWUP_PENDING",
   "stagedOnlyCi": {
     "modules": 215,
-    "passed": 1572,
+    "passed": 1574,
     "failed": 0,
     "skipped": 0,
     "unstagedFileDependencies": 0,
-    "logSha256": "721e5ebeb1c9806956a8c330a70102d9fb4654a840fad5beaa70500bd730b1c0"
+    "logSha256": "a2193e2243df555a1b566d802adb27a6e907f5ff68d705658eaab956e1ffcbd2"
   },
   "openingReadiness": {
     "delayedImageMs": 2500,
@@ -43,5 +43,13 @@
     "addedTests": 2,
     "nativeTimelineChanged": false,
     "realNetworkIssue": "images decoded after timeline had started; startup now awaits readiness"
+  },
+  "hudColdStart": {
+    "maxConcurrentRequests": 6,
+    "transientHttpRetries": 1,
+    "all222BindingsAndAliasesVerified": true,
+    "catalogValidationOrderPreserved": true,
+    "sourceBrowserNormalFlow": "PASS",
+    "realPublicFlow": "RECHECK_AFTER_DEPLOYMENT"
   }
 }

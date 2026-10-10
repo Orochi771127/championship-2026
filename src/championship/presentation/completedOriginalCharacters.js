@@ -79,17 +79,39 @@ export async function loadCompletedOriginalCharacters(options,href){
 export async function applyCompletedOriginalHudArt({baseUrl,fetchImpl,portraits,battle}){
   if(!isOriginalRuntimeLocation(baseUrl))return;
   const configs=isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS;
-  for(const config of configs){
-    try{await applyCompletedHudCharacter({baseUrl,fetchImpl,portraits,battle},config);}
-    catch(error){console.warn('CHAMPIONSHIP_COMPLETED_ORIGINAL_HUD_FALLBACK',config.entityId,error.message);}
+  // Bound network work while retaining catalog order for validation and aliases.
+  // Serial 222-manifest round trips delayed the first raising screen on cold CDN loads.
+  const loaded=new Array(configs.length);let next=0;
+  await Promise.all(Array.from({length:Math.min(6,configs.length)},async()=>{
+    while(next<configs.length){
+      const i=next++,config=configs[i];
+      try{loaded[i]={manifest:await fetchCompletedHudManifest({baseUrl,fetchImpl},config)};}
+      catch(error){loaded[i]={error};}
+    }
+  }));
+  for(const [i,config] of configs.entries()){
+    try{
+      if(loaded[i].error)throw loaded[i].error;
+      applyCompletedHudCharacter({baseUrl,portraits,battle},config,loaded[i].manifest);
+    }catch(error){console.warn('CHAMPIONSHIP_COMPLETED_ORIGINAL_HUD_FALLBACK',config.entityId,error.message);}
   }
 }
-async function applyCompletedHudCharacter({baseUrl,fetchImpl,portraits,battle},config){
+function completedHudPrefix(baseUrl,config){
   const assetRoot=isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.root:"assets/production/internal-character-review/";
-  const prefix=`${assetRoot}${config.folder}/hud-r01/`;
-  const response=await fetchImpl(new URL(prefix+'manifest.json',baseUrl));
+  return `${assetRoot}${config.folder}/hud-r01/`;
+}
+async function fetchCompletedHudManifest({baseUrl,fetchImpl},config){
+  const url=new URL(completedHudPrefix(baseUrl,config)+'manifest.json',baseUrl);
+  let response=await fetchImpl(url);
+  if([429,500,502,503,504].includes(response.status)){
+    await new Promise(resolve=>setTimeout(resolve,200));
+    response=await fetchImpl(url);
+  }
   if(!response.ok)throw Error('CANDIDATE_HUD_REVIEW_UNAVAILABLE');
-  const manifest=await response.json();
+  return response.json();
+}
+function applyCompletedHudCharacter({baseUrl,portraits,battle},config,manifest){
+  const prefix=completedHudPrefix(baseUrl,config);
   if(manifest.sourceBankSha256!==config.sourceBankSha256||manifest.entityId!==config.entityId||manifest.reviewOnly!==true||manifest.runtimeEligible!==false
     ||manifest.publicReleasePermitted!==false||manifest.portrait?.speciesId!==config.speciesId
     ||manifest.battle?.speciesId!==config.speciesId||manifest.portrait.nativeScale!==2
