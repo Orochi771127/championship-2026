@@ -274,7 +274,8 @@ function syncMusic(){
     outcome:screen===CHAMPIONSHIP_SCREENS.BATTLE_RESULT?(tutorialBattle?.outcome??runtime?.outcome?.()):null,attemptId});
   music.setScene(cue.id,cue.attemptId);
 }
-const musicOverlayObserver=new MutationObserver(()=>{syncTitleArt();syncMusic();});
+// Resolve the new cue before art reads its buffering state on title return.
+const musicOverlayObserver=new MutationObserver(()=>{syncMusic();syncTitleArt();});
 musicOverlayObserver.observe(titleScreen,{attributes:true,attributeFilter:['hidden']});
 musicOverlayObserver.observe(document.getElementById('cm-opening'),{attributes:true,attributeFilter:['hidden']});
 
