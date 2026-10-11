@@ -109,7 +109,7 @@ test("the grant is reachable only from the one guarded call site", () => {
 test("full QA grant survives real app settlement, repeated entry and Save/Continue", async () => {
   const data = new Map();
   const storage = { getItem: k => data.get(k) ?? null, setItem: (k, v) => data.set(k, v), removeItem: k => data.delete(k) };
-  const create = () => createChampionshipStandaloneApp({ storage,
+  const create = () => createChampionshipStandaloneApp({ storage, locks: null,
     catalog: JSON.parse(fs.readFileSync('src/data/championship/catalogs/creature-species.r1.json')),
     cages: JSON.parse(fs.readFileSync('docs/contracts/championship/raising-home-presentation.v1.json')).cages });
   const app = create();

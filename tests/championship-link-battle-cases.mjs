@@ -42,7 +42,7 @@ test('Link battle uses the original fixed master seed and seven arenas',()=>{
 const read=path=>JSON.parse(readFileSync(new URL(`../${path}`,import.meta.url),'utf8'));
 async function ownedApp(index){
   const data=new Map(),storage={getItem:key=>data.get(key)??null,setItem:(key,value)=>data.set(key,value),removeItem:key=>data.delete(key)};
-  const app=createChampionshipStandaloneApp({storage,catalog:read('src/data/championship/catalogs/creature-species.r1.json'),
+  const app=createChampionshipStandaloneApp({storage,locks:null,catalog:read('src/data/championship/catalogs/creature-species.r1.json'),
     cages:read('docs/contracts/championship/raising-home-presentation.v1.json').cages,rngClock:()=>({hour:13,minute:20,second:50})});
   await app.newGame();app.save();const key=[...data.keys()][0],save=JSON.parse(data.get(key)),profile=individual(index===0?34:72,index+4).nativeProfile;
   save.creature.nativeProfile=profile;save.creature.speciesId=`species-${String(profile.fields['000']).padStart(3,'0')}`;
