@@ -262,6 +262,7 @@
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+    "src/championship/presentation/vs2/huntContactShadow.js",
     "src/championship/presentation/vs2/huntDepthOccluders.js",
     "src/championship/presentation/vs2/huntFactoryShutters.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
@@ -9461,6 +9462,7 @@
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+    "src/championship/presentation/vs2/huntContactShadow.js",
     "src/championship/presentation/vs2/huntDepthOccluders.js",
     "src/championship/presentation/vs2/huntFactoryShutters.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
@@ -9582,7 +9584,7 @@
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
-    "authorizationRecordedOn": "2026-10-10",
+    "authorizationRecordedOn": "2026-10-11",
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
@@ -46034,7 +46036,11 @@
       },
       {
         "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
-        "sha256": "ee092cbdbfe6aa1a9e1d84eb9daa00be2ba4db35fb33aa3e49266ea3b0de694d"
+        "sha256": "1d93ba0c1e950c9808666d4fbeeaaec4f26b1da12bef47ccc264e27866effeb8"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntContactShadow.js",
+        "sha256": "00f5106303a6e10d428465385449141add61298987f2c2dab84880ea6d70f832"
       },
       {
         "path": "src/championship/presentation/vs2/huntDepthOccluders.js",

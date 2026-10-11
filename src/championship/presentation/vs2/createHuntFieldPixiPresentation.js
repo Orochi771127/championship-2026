@@ -1,3 +1,4 @@
+import { huntContactShadow } from './huntContactShadow.js';
 import { createHuntFactoryShutters } from './huntFactoryShutters.js';
 // VS2 -- Hunt field scene on the single Championship Pixi stage.
 //
@@ -349,6 +350,8 @@ export async function mountHuntFieldPixiPresentation({
     node.stamina = stamina;
     node.body = body;
     node.ring = ring;
+    node.contactShadow = shadow;
+    node.contactShadowKey = null;
     return node;
   }
 
@@ -438,6 +441,25 @@ export async function mountHuntFieldPixiPresentation({
       if (node.characterSprite) applyNativeCharacterCellGeometry(node.characterSprite,nativeFrame,2);
       node.scale.x = nativeFrame ? (nativeFrame.flipX ? -1 : 1) : (wild.facing === "left" ? -1 : 1);
       node.scale.y = nativeFrame?.flipY ? -1 : 1;
+      const contact = huntContactShadow(wild.speciesId, nativeFrame, wild.worldZ ?? 0);
+      if (contact) {
+        const key = JSON.stringify(contact.ellipses);
+        if (node.contactShadowKey !== key) {
+          const shadow = node.contactShadow.clear();
+          for (const ellipse of contact.ellipses) {
+            shadow.ellipse(ellipse.x, ellipse.y, ellipse.radiusX, ellipse.radiusY);
+          }
+          shadow.fill({ color: 0x02070a, alpha: 0.48 });
+          node.contactShadowKey = key;
+        }
+        node.contactShadow.y = contact.localY;
+        node.contactShadow.scale.y = contact.scaleY;
+      } else if (node.contactShadowKey !== null) {
+        node.contactShadow.clear().ellipse(0, 4, 11, 4).fill({ color: 0x02070a, alpha: 0.48 });
+        node.contactShadow.y = 0;
+        node.contactShadow.scale.y = 1;
+        node.contactShadowKey = null;
+      }
       const tethered = view.selectedWildId === wild.wildId;
       node.ring.clear()
         .ellipse(0, 3, 13, 6)

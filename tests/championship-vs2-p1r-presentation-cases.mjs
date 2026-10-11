@@ -59,7 +59,7 @@ test("temporary Hunt renderer preserves the shared Pixi/runtime authority bounda
   // earlier double-quote-only check missed most imports and predated foliage.
   const imports = [...field.matchAll(/^import\s+.*?from\s+(['"])(.*?)\1;/gm)].map(match => match[2]);
   assert.deepEqual(imports, [
-    "./huntFactoryShutters.js", "./huntFoliageDither.js", "./huntFieldPointer.js",
+    "./huntContactShadow.js", "./huntFactoryShutters.js", "./huntFoliageDither.js", "./huntFieldPointer.js",
     "../presentationPreferences.js", "../nativeHuntCharacterAction.js",
     "../huntFeedbackArt.js", "../vfx/captureStorageVfx.js"
   ]);
