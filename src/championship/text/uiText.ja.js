@@ -5,6 +5,21 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "ENTER_GAME": "ゲームに入る",
+  "OPENING_ART_PENDING": "イラストの準備中です。先に物語を読むことができます。",
+  "OPENING_TEXT_FIRST": "先に文章を読む",
+  "OPENING_RETURN": "タイトルに戻る",
+  "FIELD_LOAD_START": "牧場を準備中…",
+  "FIELD_LOAD_ART": "牧場とパートナーを読み込み中…",
+  "FIELD_LOAD_RETRY": "牧場を再読み込み",
+  "FIELD_LOAD_CANCEL": "読み込みを中止",
+  "FIELD_LOAD_RETURN": "保存してタイトルへ",
+  "FIELD_LOAD_RELOAD": "保存してゲームを再読み込み",
+  "FIELD_LOAD_TIMEOUT": "読み込みに時間がかかっています。再試行するか、保存してゲームを再読み込みしてください。",
+  "FIELD_LOAD_CANCELLED": "読み込みを中止しました。進行状況は保持されています。",
+  "FIELD_LOAD_ERROR": "牧場を読み込めませんでした。再試行するか、保存してゲームを再読み込みしてください。",
+  "FIELD_LOAD_SAVE_FAILED": "保存できなかったため、この画面に留まっています。再試行するか、進行状況をエクスポートしてください。",
+
   "CODE_COPY": "交換コードをコピー",
   "CODE_COPIED": "交換コードをコピーしました。",
   "CODE_COPY_MANUAL": "自動コピーできません。選択されたコードを長押しするか、コピー操作を使ってください。",

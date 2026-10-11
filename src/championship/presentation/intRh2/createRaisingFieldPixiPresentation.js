@@ -1,3 +1,4 @@
+import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
 import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
 // INT-RH2 Raising field -- a scene on the single Championship Pixi stage.
 //
@@ -99,6 +100,7 @@ export async function mountRaisingFieldPixiPresentation({
   fieldArt = null,
   characterBundle = null,
   feedbackArt = null,
+  signal = null,
   getSelectedTool = () => null,
   onTrainingFrame = () => {},
   onActorFrame = null,
@@ -106,12 +108,27 @@ export async function mountRaisingFieldPixiPresentation({
   reducedMotion = prefersReducedMotion()
 }) {
   assertDependencies(stage, source);
-  const { PIXI, app } = stage;
+  const { app } = stage;
+  const lifetime = new AbortController();
+  const abort = () => lifetime.abort(signal?.reason);
+  signal?.addEventListener('abort', abort, { once: true });
+  if (signal?.aborted) abort();
+  const PIXI = createPixiAssetScope(stage.PIXI, globalThis.location?.href, { signal: lifetime.signal });
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
     || typeof fieldArt.dispose !== "function" || typeof fieldArt.getDiagnostics !== "function")) {
     throw new TypeError("The Raising field art binding must be a loaded runtime map-art field");
   }
 
+  // Care pixels communicate tool placement. Finish this required load before
+  // attaching a scene; cancellation can never leave a half-mounted scene root.
+  let careArt;
+  try {
+    careArt = fieldArt?.field?.presentationMode === 'NATIVE_RANCH' ? await loadCareArt() : new Map();
+    lifetime.signal.throwIfAborted();
+  } catch (error) {
+    lifetime.abort(error); signal?.removeEventListener('abort', abort); throw error;
+  }
+  let disposed = false;
   const scene = stage.createSceneRoot("INT-RH2 Raising field");
   const unmarkScene = stage.markScene("cm-raising-pixi-canvas");
   const backgroundLayer = new PIXI.Container({ label: "background" });
@@ -136,7 +153,12 @@ export async function mountRaisingFieldPixiPresentation({
   const evolutionBackdrop=new PIXI.Graphics();evolutionBackdrop.eventMode='none';scene.addChildAt(evolutionBackdrop,4);
   const evolutionWriting=new PIXI.Container();evolutionWriting.eventMode='none';scene.addChildAt(evolutionWriting,5);
   const evolutionWords=Array.from({length:6},(_,i)=>{const word=new PIXI.Text({text:i%2?uiText('進化!!'):'EVOLUTION',style:{fontFamily:'sans-serif',fontSize:16+(i%3)*4,fontWeight:'bold',fill:0x008bff}});evolutionWriting.addChild(word);return word;});
-  const evolutionArt=await loadAssembledEvolutionArt(PIXI).catch(error=>{onFallback(error);return null;});
+  let evolutionArt = null, evolutionCells = null;
+  // Decorative evolution cells never block the field. The same lifetime owns
+  // pending assets and ignores a success after this scene has been disposed.
+  void loadAssembledEvolutionArt(PIXI).then(art => {
+    if (disposed || lifetime.signal.aborted) { void art?.dispose(); return; }
+    evolutionArt = art;
   if(evolutionArt)for(let i=0;i<evolutionWords.length;i+=2){
     // Owner 2026-10-10: replace only the code-symbol row. Existing Chinese,
     // English, row positions, scroll directions and the phase clock stay intact.
@@ -147,11 +169,12 @@ export async function mountRaisingFieldPixiPresentation({
     const old=evolutionWords[i];word.eventMode='none';if(i!==4)word.scale.set(1.25);
     evolutionWriting.addChild(word);old.destroy();evolutionWords[i]=word;
   }
-  const evolutionCells=evolutionArt?Object.fromEntries(['ring','green','burst'].map(name=>{
+  evolutionCells=evolutionArt?Object.fromEntries(['ring','green','burst'].map(name=>{
     const sprite=new PIXI.Sprite();sprite.label=`native evolution ${name}`;sprite.eventMode='none';sprite.visible=false;
     // The floor ring belongs behind the body; emitters stay below the white flash.
     if(name==='ring')evolutionWriting.addChild(sprite);else fxLayer.addChildAt(sprite,0);
     return [name,sprite];})):null;
+  }).catch(error => { if (!disposed && !lifetime.signal.aborted) onFallback(error); });
   const silhouette=new PIXI.ColorMatrixFilter();silhouette.matrix=[0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0];
   let evolutionCamera=null;
   // Licensed original cells (common/i000_item) carry their own size and sprite
@@ -163,7 +186,9 @@ export async function mountRaisingFieldPixiPresentation({
     const art=new Map();
     const local=isOriginalRuntimeLocation();
     const licensed=new URL(local?'../../../../assets/production/original-ui-intake-20261007/care/':'../../../../assets/production/raising-care/licensed-runtime-v1/',import.meta.url);
-    const manifest=await (await fetch(new URL('manifest.json',licensed).href)).json();
+    const response=await fetch(new URL('manifest.json',licensed).href,{signal:lifetime.signal});
+    if(!response.ok)throw new Error('RAISING_CARE_HTTP_'+response.status);
+    const manifest=await response.json();
     await Promise.all(manifest.cells.map(async cell=>art.set(`${cell.role}-${cell.pose}`,{
       texture:await PIXI.Assets.load(new URL(cell.file,licensed).href),
       width:cell.nativeWidth,height:cell.nativeHeight,
@@ -174,7 +199,6 @@ export async function mountRaisingFieldPixiPresentation({
       width:32,height:32,anchorX:0.5,anchorY:0.85}))));
     return art;
   }
-  const careArt = fieldArt?.field?.presentationMode==='NATIVE_RANCH' ? await loadCareArt() : new Map();
   const toolPreview = careArt.size?new PIXI.Sprite(careArt.get('broom-0').texture):null;
   if(toolPreview){toolPreview.eventMode='none';toolPreview.visible=false;
     toolPreview.label='Clean broom and dustpan';fxLayer.addChild(toolPreview);}
@@ -186,7 +210,6 @@ export async function mountRaisingFieldPixiPresentation({
   let pointerPreview=null,cleanFeedback=null,careElapsed=0;
   const carePose=()=>reducedMotion?0:Math.floor(careElapsed/NATIVE_POSE_MS)%2;
   const sheets = new Set();
-  let disposed = false;
   let latestFrame = null;
   let latestRevision = -1;
   let drag = null;
@@ -1037,6 +1060,11 @@ export async function mountRaisingFieldPixiPresentation({
       sync(frame);
     },
 
+    setFeedbackArt(art) {
+      if (disposed) { void art?.dispose(); return; }
+      void feedbackArt?.dispose(); feedbackArt = art;
+    },
+
     retryResidentAssets(){
       if(disposed||!characterBundle?.ensureSpecies)return false;
       for(const resident of source.getFrame().residents){
@@ -1119,6 +1147,7 @@ export async function mountRaisingFieldPixiPresentation({
     dispose() {
       if (disposed) return;
       disposed = true;
+      lifetime.abort(); signal?.removeEventListener('abort', abort);
       cancelInput();
       globalThis.removeEventListener?.('blur',cancelInput);
       globalThis.document?.removeEventListener('visibilitychange',cancelHiddenInput);

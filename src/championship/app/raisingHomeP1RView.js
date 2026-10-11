@@ -494,11 +494,19 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const unsubscribe = presentation.subscribe(render);
   // Evolution may introduce a portrait after this screen was mounted. Repaint
   // that same frame when its metadata arrives, without advancing simulation.
-  const unsubscribeHud = hudArt?.subscribe?.(() => { lastRevision = -1; render(presentation.getFrame()); });
+  let disposed = false;
+  let unsubscribeHud = hudArt?.subscribe?.(() => { lastRevision = -1; render(presentation.getFrame()); });
   render(presentation.getFrame());
 
   return Object.freeze({
     render,
+    get isPlayable() { return field.isPlayable !== false; },
+    setHudArt(next) {
+      if (disposed) return;
+      unsubscribeHud?.(); hudArt = next;
+      unsubscribeHud = hudArt?.subscribe?.(() => { lastRevision = -1; render(presentation.getFrame()); });
+      lastRevision = -1; render(presentation.getFrame());
+    },
     /** Repaint every label in the current language; the habitat stays mounted. */
     relabel() {
       retranslate(root);
@@ -520,6 +528,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       });
     },
     dispose() {
+      disposed = true;
       unsubscribe?.();
       unsubscribeHud?.();
       clearTimeout(noticeTimer);

@@ -227,7 +227,7 @@ function characterTextureMemory(pages){
 // scene must not destroy a texture that the new scene is using. This scope is
 // for our explicit single-URL loaders (not aliases or arbitrary Pixi bundles).
 const assetOwners = new WeakMap();
-export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href) {
+export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, { signal } = {}) {
   const assets = PIXI.Assets;
   let shared = assetOwners.get(assets);
   if (!shared) assetOwners.set(assets, shared = new Map());
@@ -238,6 +238,7 @@ export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href) 
   };
   const scoped = {
     load(value) {
+      if (signal?.aborted) return Promise.reject(signal.reason);
       const key = keyOf(value);
       if (held.has(key)) return held.get(key).promise;
       let entry = shared.get(key);
@@ -276,5 +277,11 @@ export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href) 
       await entry.releasing;
     }
   };
+  // Assets does not offer per-request cancellation. Release this scope's
+  // references now; each underlying late success is unloaded when it settles.
+  // Other live scopes keep their own reference to the same texture.
+  signal?.addEventListener('abort', () => {
+    for (const key of [...held.keys()]) void scoped.unload(key).catch(() => {});
+  }, { once: true });
   return { ...PIXI, Assets: scoped };
 }

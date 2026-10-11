@@ -8,6 +8,47 @@
 export const LOAD_STALL_MS = 30000;
 export const LOAD_MAX_MS = 240000;
 
+// One screen-load attempt. Racing bounds the UI even for a loader that does
+// not support AbortSignal; owned late successes are disposed, never attached.
+export function createLoadAttempt({ timeoutMs = 60000,
+  setTimer = (fn, ms) => globalThis.setTimeout(fn, ms),
+  clearTimer = handle => globalThis.clearTimeout(handle) } = {}) {
+  const controller = new AbortController(), owned = new Set();
+  let timer = setTimer(() => cancel(new Error('LOAD_TIMEOUT')), timeoutMs);
+  const dispose = value => { try { void Promise.resolve(value?.dispose?.()).catch(() => {}); } catch {} };
+  function stopTimer() { if (timer !== null) clearTimer(timer); timer = null; }
+  function cancel(reason = new DOMException('Loading cancelled', 'AbortError')) {
+    stopTimer();
+    if (!controller.signal.aborted) controller.abort(reason);
+    for (const value of owned) dispose(value);
+    owned.clear();
+  }
+  function wait(pending) {
+    // Attach both handlers even when already cancelled: a late rejection must
+    // not become an unhandled rejection after the screen has gone away.
+    return new Promise((resolve, reject) => {
+      const abort = () => reject(controller.signal.reason);
+      controller.signal.addEventListener('abort', abort, { once: true });
+      Promise.resolve(pending).then(value => {
+        controller.signal.removeEventListener('abort', abort);
+        controller.signal.aborted ? reject(controller.signal.reason) : resolve(value);
+      }, error => { controller.signal.removeEventListener('abort', abort); reject(error); });
+      if (controller.signal.aborted) abort();
+    });
+  }
+  return Object.freeze({ signal: controller.signal, wait, cancel, stopTimer,
+    own(pending) {
+      return wait(Promise.resolve(pending).then(value => {
+        if (controller.signal.aborted) dispose(value);
+        else if (value) owned.add(value);
+        return value;
+      }));
+    },
+    transfer(value) { owned.delete(value); },
+    fetch(url, options = {}) { return globalThis.fetch(url, { ...options, signal: controller.signal }); }
+  });
+}
+
 /**
  * @param {object} options
  * @param {(reason: 'STALLED'|'TOO_LONG') => void} options.onExpire

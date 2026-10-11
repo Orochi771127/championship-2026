@@ -5,6 +5,21 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "ENTER_GAME": "เข้าสู่เกม",
+  "OPENING_ART_PENDING": "ภาพประกอบบางภาพยังไม่พร้อม คุณอ่านเรื่องรอก่อนได้",
+  "OPENING_TEXT_FIRST": "อ่านข้อความก่อน",
+  "OPENING_RETURN": "กลับหน้าหลัก",
+  "FIELD_LOAD_START": "กำลังเตรียมพื้นที่เลี้ยง…",
+  "FIELD_LOAD_ART": "กำลังโหลดพื้นที่เลี้ยงและคู่หู…",
+  "FIELD_LOAD_RETRY": "โหลดพื้นที่เลี้ยงใหม่",
+  "FIELD_LOAD_CANCEL": "ยกเลิกการโหลด",
+  "FIELD_LOAD_RETURN": "บันทึกและกลับหน้าหลัก",
+  "FIELD_LOAD_RELOAD": "บันทึกแล้วโหลดเกมใหม่",
+  "FIELD_LOAD_TIMEOUT": "โหลดนานเกินไป โปรดลองอีกครั้ง หรือบันทึกแล้วโหลดเกมใหม่",
+  "FIELD_LOAD_CANCELLED": "ยกเลิกการโหลดแล้ว ความคืบหน้าของคุณยังอยู่",
+  "FIELD_LOAD_ERROR": "ไม่สามารถโหลดพื้นที่เลี้ยงได้ โปรดลองอีกครั้ง หรือบันทึกแล้วโหลดเกมใหม่",
+  "FIELD_LOAD_SAVE_FAILED": "บันทึกไม่สำเร็จ จึงยังอยู่หน้าปัจจุบัน โปรดลองอีกครั้งหรือส่งออกความคืบหน้า",
+
   "CODE_COPY": "คัดลอกรหัสแลกเปลี่ยน",
   "CODE_COPIED": "คัดลอกรหัสแลกเปลี่ยนแล้ว",
   "CODE_COPY_MANUAL": "คัดลอกอัตโนมัติไม่ได้ เลือกรหัสไว้แล้ว โปรดกดค้างหรือใช้คำสั่งคัดลอก",

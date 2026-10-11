@@ -6,6 +6,21 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "ENTER_GAME": "進入遊戲",
+  "OPENING_ART_PENDING": "插圖尚未就緒，可以先閱讀故事。",
+  "OPENING_TEXT_FIRST": "先閱讀文字",
+  "OPENING_RETURN": "返回標題",
+  "FIELD_LOAD_START": "正在準備牧場…",
+  "FIELD_LOAD_ART": "正在載入牧場與夥伴…",
+  "FIELD_LOAD_RETRY": "重新載入牧場",
+  "FIELD_LOAD_CANCEL": "取消載入",
+  "FIELD_LOAD_RETURN": "保存並返回標題",
+  "FIELD_LOAD_RELOAD": "保存並重新載入遊戲",
+  "FIELD_LOAD_TIMEOUT": "載入時間過長。請重試，或保存並重新載入遊戲。",
+  "FIELD_LOAD_CANCELLED": "載入已取消，遊戲進度仍保留。",
+  "FIELD_LOAD_ERROR": "牧場未能載入。請重試，或保存並重新載入遊戲。",
+  "FIELD_LOAD_SAVE_FAILED": "保存未完成，已留在目前畫面。請重試或匯出進度。",
+
   "CODE_COPY": "複製通訊碼",
   "CODE_COPIED": "已複製通訊碼。",
   "CODE_COPY_MANUAL": "無法自動複製，已選取通訊碼；請長按或使用複製指令。",

@@ -1,0 +1,123 @@
+{
+  "baseHead": "91062c053c4dd460393b54fd99c817c49d96a8ff",
+  "reviewedFiles": [
+    {
+      "path": "championship.html",
+      "reviewedSha256": "f08d1006c6d8d0298117a2dfea0646ed5a3060c70a7a0a90b544f7793cf1055a",
+      "releaseSha256": "7f3850b11b8a087b78a7204c794cbdd81e1ce490ac9457e526a141732248bfe3",
+      "kind": "product",
+      "generatedDifference": "modulepreload block only; bundled production HTML identical"
+    },
+    {
+      "path": "src/championship/app/loadWatchdog.js",
+      "reviewedSha256": "10b5a9e38c4c41ad92e859b66204131c90d316855dd8e7b3fb7c9996f226af17",
+      "releaseSha256": "10b5a9e38c4c41ad92e859b66204131c90d316855dd8e7b3fb7c9996f226af17",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "reviewedSha256": "c2eb85016f4a52001edaf99758e92d1d2ce278819ef50f2cd29aae15b1d22c3e",
+      "releaseSha256": "c2eb85016f4a52001edaf99758e92d1d2ce278819ef50f2cd29aae15b1d22c3e",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/app/opening.css",
+      "reviewedSha256": "a7159ca521701bfcd5891e53acb1bcfb7c65835edb8ee4776c202c4feede8df9",
+      "releaseSha256": "a7159ca521701bfcd5891e53acb1bcfb7c65835edb8ee4776c202c4feede8df9",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/app/openingPresentation.js",
+      "reviewedSha256": "2c63c423c7a3bb81a8f5cd4c08f4c8841fcd5b3fa36cb3e18d0bd50bd7441a72",
+      "releaseSha256": "2c63c423c7a3bb81a8f5cd4c08f4c8841fcd5b3fa36cb3e18d0bd50bd7441a72",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/app/openingStoryPresentation.js",
+      "reviewedSha256": "c9f91d1b880c6fe788064ed165ac63f3eea502be83536c4216757a0317a55a40",
+      "releaseSha256": "c9f91d1b880c6fe788064ed165ac63f3eea502be83536c4216757a0317a55a40",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/app/raisingHomeP1RView.js",
+      "reviewedSha256": "9744bad2b0c5bf5999409cb8532276d2e13d34228d340c6472ed2ff7280f90f2",
+      "releaseSha256": "9744bad2b0c5bf5999409cb8532276d2e13d34228d340c6472ed2ff7280f90f2",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "reviewedSha256": "b703dab8a35c772a1982ea2c7bf3a477feb406cf11e20af1592f90bd077950df",
+      "releaseSha256": "b703dab8a35c772a1982ea2c7bf3a477feb406cf11e20af1592f90bd077950df",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/presentation/pixiCharacterRuntimeBundle.js",
+      "reviewedSha256": "a3714cfceb934e50a4fe9d1ef2744d8710c50a6918757866e7d293b4d756c6ad",
+      "releaseSha256": "a3714cfceb934e50a4fe9d1ef2744d8710c50a6918757866e7d293b4d756c6ad",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/text/uiText.en.js",
+      "reviewedSha256": "5019e66129e725b8aeabd304bd5325eacecc92cb9c8977edd313a14f573591da",
+      "releaseSha256": "5019e66129e725b8aeabd304bd5325eacecc92cb9c8977edd313a14f573591da",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/text/uiText.ja.js",
+      "reviewedSha256": "6269badf2f598d73c28dd91e006e07a5e42444f5e57c02d6cbc471216c29c7b4",
+      "releaseSha256": "6269badf2f598d73c28dd91e006e07a5e42444f5e57c02d6cbc471216c29c7b4",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/text/uiText.js",
+      "reviewedSha256": "7b4bbfbd1b87c1a211467bb44f3f299b8098656b9c69c3000dc8e4d597a5e63a",
+      "releaseSha256": "7b4bbfbd1b87c1a211467bb44f3f299b8098656b9c69c3000dc8e4d597a5e63a",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/text/uiText.th.js",
+      "reviewedSha256": "f7b7c16c7b6b83c1d92e3d1343a4295f8a8aa9b43ac25004d26910ca742a98ba",
+      "releaseSha256": "f7b7c16c7b6b83c1d92e3d1343a4295f8a8aa9b43ac25004d26910ca742a98ba",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "src/championship/text/uiText.vi.js",
+      "reviewedSha256": "823fa154766d4223c780be2ce8afc94e0bb4948b2dce0ded867c4dbd969afd97",
+      "releaseSha256": "823fa154766d4223c780be2ce8afc94e0bb4948b2dce0ded867c4dbd969afd97",
+      "kind": "product",
+      "generatedDifference": null
+    },
+    {
+      "path": "tests/championship-asset-loading-cases.mjs",
+      "reviewedSha256": "6d9d1e0b42c78df1654191990a11af27483ba51e161d4431ce2caeabfe51e01f",
+      "releaseSha256": "6d9d1e0b42c78df1654191990a11af27483ba51e161d4431ce2caeabfe51e01f",
+      "kind": "test",
+      "generatedDifference": null
+    },
+    {
+      "path": "tests/championship-asset-ownership-cases.mjs",
+      "reviewedSha256": "681e55e043324e2bfd36e46804ed3f524bf927ce70f1aa91b0edae9a4653cfb7",
+      "releaseSha256": "681e55e043324e2bfd36e46804ed3f524bf927ce70f1aa91b0edae9a4653cfb7",
+      "kind": "test",
+      "generatedDifference": null
+    }
+  ],
+  "approvedHashUpdates": 14,
+  "unrelatedApprovalEntriesChanged": 0,
+  "buildId": "c86f64390b25ae885266ccfe2d58c728cd27798092ddc0fa3f4592c9e4d6c17d",
+  "fileCount": 9291,
+  "rightsDocumentVerified": false,
+  "commercialReleaseAccepted": false
+}

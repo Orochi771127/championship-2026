@@ -14,6 +14,28 @@ test('an initial failed runtime has no bundle disposer but can retry in the same
 const deferred = () => { let resolve; const promise = new Promise(r => resolve = r); return { promise, resolve }; };
 const base = 'https://game.invalid/championship.html';
 
+test('aborting a scope releases its late pixels and blocks subsequent loads', async () => {
+  const download = deferred(), controller = new AbortController(); let unloads = 0;
+  const PIXI = { Assets: { load: () => download.promise, unload: () => unloads++ } };
+  const scope = createPixiAssetScope(PIXI, base, { signal: controller.signal });
+  const pending = scope.Assets.load('late.png'); controller.abort();
+  await assert.rejects(scope.Assets.load('next.png'), { name: 'AbortError' });
+  download.resolve({ alive: true }); await pending; await new Promise(r => setImmediate(r));
+  assert.equal(unloads, 1);
+  await scope.Assets.unload('late.png'); assert.equal(unloads, 1);
+});
+
+test('aborting one scope cannot unload a shared texture still used by another scene', async () => {
+  const download = deferred(), controller = new AbortController(); let unloads = 0;
+  const PIXI = { Assets: { load: () => download.promise, unload: () => unloads++ } };
+  const old = createPixiAssetScope(PIXI, base, { signal: controller.signal });
+  const live = createPixiAssetScope(PIXI, base);
+  const a = old.Assets.load('shared.png'), b = live.Assets.load('shared.png');
+  controller.abort(); download.resolve({ alive: true });
+  assert.equal(await a, await b); assert.equal(unloads, 0);
+  await live.Assets.unload('shared.png'); assert.equal(unloads, 1);
+});
+
 test('an abandoned download cannot unload the replacement scene texture', async () => {
   const download = deferred(), calls = [];
   const PIXI = { Assets: { load: src => { calls.push(['load', src]); return download.promise; },

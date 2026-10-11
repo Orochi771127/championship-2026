@@ -1,5 +1,7 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-11 登入／開場／牧場載入恢復發布集與驗證](reports/loading-recovery-2026-10-11/REPORT_ZH_TW.md)
+
 - [2026-10-10 R7 / R9 / R10 發布收尾與本機同步範圍](reports/release-r11-2026-10-10/REPORT_ZH_TW.md)
 
 - [2026-10-10 全幅首頁與14段原創音樂](reports/title-music-2026-10-10/REPORT_ZH_TW.md)

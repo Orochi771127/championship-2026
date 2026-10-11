@@ -46,5 +46,5 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
     n.append(grid,actions);n.addEventListener('submit',e=>{e.preventDefault();name('egg',start);});show(n);grid.querySelector('input:checked').focus({preventScroll:true});
   }
   async function start(){if(busy)return;busy=true;host.inert=true;try{if(await onStart({trainerName,eggName,eggSpeciesIndex})===false){name('egg',start);return;}host.hidden=true;host.replaceChildren();}finally{busy=false;host.inert=false;}}
-  return {begin(){trainerName='';eggName='';eggSpeciesIndex=0;story?.dispose();story=createOpeningStoryPresentation({host,onComplete(){story=null;envelope(()=>letter('歡迎來到數位世界。\n首先，請輸入姓名，完成馴獸師登錄。',()=>name('trainer',confirmTrainer)));}});},reset(){story?.dispose();story=null;host.replaceChildren();host.hidden=true;host.inert=false;busy=false;}};
+  return {begin(){trainerName='';eggName='';eggSpeciesIndex=0;story?.dispose();story=createOpeningStoryPresentation({host,onCancel(){story=null;host.replaceChildren();host.hidden=true;onCancel();},onComplete(){story=null;envelope(()=>letter('歡迎來到數位世界。\n首先，請輸入姓名，完成馴獸師登錄。',()=>name('trainer',confirmTrainer)));}});},reset(){story?.dispose();story=null;host.replaceChildren();host.hidden=true;host.inert=false;busy=false;}};
 }

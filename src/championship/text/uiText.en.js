@@ -17,6 +17,21 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "ENTER_GAME": "Enter game",
+  "OPENING_ART_PENDING": "Some illustrations are not ready. You can read the story now.",
+  "OPENING_TEXT_FIRST": "Read text first",
+  "OPENING_RETURN": "Back to title",
+  "FIELD_LOAD_START": "Preparing the habitat…",
+  "FIELD_LOAD_ART": "Loading the habitat and companions…",
+  "FIELD_LOAD_RETRY": "Retry habitat",
+  "FIELD_LOAD_CANCEL": "Cancel loading",
+  "FIELD_LOAD_RETURN": "Save and return to title",
+  "FIELD_LOAD_RELOAD": "Save and reload game",
+  "FIELD_LOAD_TIMEOUT": "Loading is taking too long. Retry, or save and reload the game.",
+  "FIELD_LOAD_CANCELLED": "Loading cancelled. Your progress is still here.",
+  "FIELD_LOAD_ERROR": "The habitat could not load. Retry, or save and reload the game.",
+  "FIELD_LOAD_SAVE_FAILED": "Saving did not complete. You are still on this screen. Retry or export your progress.",
+
   "CODE_COPY": "Copy exchange code",
   "CODE_COPIED": "Exchange code copied.",
   "CODE_COPY_MANUAL": "Automatic copying is unavailable. The code is selected; long-press or use Copy.",

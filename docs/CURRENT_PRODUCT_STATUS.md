@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: LOADING_RECOVERY_R1_R2_20261011 -->
+**2026-10-11 登入、故事與牧場載入恢復完成，已納入Owner核准的本批公開試玩發布集。** 牧場UI先顯示，支援期限／取消／重試／保存返回；永不完成的Pixi請求可保存成功後完整重新載入遊戲。完整CI 1,628／1,628、production build與正常New Game／Continue／完整reload驗證通過。遠端發布以同SHA的實際回條為準；後半自然教學與實機等仍待驗。見[發布範圍與驗證](reports/loading-recovery-2026-10-11/REPORT_ZH_TW.md)。
+
 <!-- record-id: TITLE_ORIGINAL_MUSIC_20261010 -->
 **2026-10-10 全幅晨光首頁與14段原創音樂已完成技術驗證。** Owner核定五語短標已集中管理並同步首頁／網頁標題／aria-label；五語與八組首頁版面、14段解碼、正常參賽結算、音量保存、背景續播與AAC備援通過，沿同一audioBus，CI 1,585／1,585。實體iOS／聽感待驗；發布以實際Pages回條為準。見 [本批報告](reports/title-music-2026-10-10/REPORT_ZH_TW.md)。
 

@@ -2,6 +2,10 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-10-11 — Publish the independently reviewed loading recovery R1 + R2
+
+Owner authorizes the exact reviewed R1 16-file set with the six R2 replacements for the existing public playtest. Parent independently verified file hashes, the permanent Pixi-request document recovery, failed-save no-reload behavior, and retained gameplay/tutorial data, then directed: 「先完整必要release gates／CI與production build，再commit/push/Pages」. Update only the 14 selected product-file approval hashes; necessary generated preload output and publication records are listed separately. Preserve room, values and all unrelated untracked work; no force/reset/clean. Confirm remote main, CI/Pages and live build/assets at the same SHA, then continue the original organic tutorial save. Gate double-tap wording and the second-target legacy species name remain separate follow-up defects. See [the release scope and pre-publication validation](../reports/loading-recovery-2026-10-11/REPORT_ZH_TW.md).
+
 ## 2026-10-11 — Reviewed handoff reconciliation, two-species contact shadows and reversible local migration
 
 Owner requests direct file/result coordination, says 「做好後請你自我審查沒問題就發佈」 and 「本機端檔案也要記得更新喔」, and delegates the local branch integration with 「這些交給你去處理，好嗎？」 / 「我只負責看成果」 / 「嗯嗯」. Parent independently reviewed the bounded candidate and R2 preservation ledgers, then authorized exact allowlist commits, required CI/build/normal-flow gates, main/Pages publication and reversible original-checkout migration after those gates pass.

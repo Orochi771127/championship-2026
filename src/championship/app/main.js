@@ -82,7 +82,7 @@ import { mountPortraitFrame } from './portraitFrame.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
-import { createLoadWatchdog } from './loadWatchdog.js';
+import { createLoadWatchdog, createLoadAttempt } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
@@ -334,6 +334,7 @@ function note(message) {
 }
 
 let pixiModulePromise;
+let pixiStagePromise;
 function loadPixiModule(){
   return pixiModulePromise??=import("../../../node_modules/pixi.js/dist/pixi.mjs")
     .catch(error=>{pixiModulePromise=null;throw error;});
@@ -345,11 +346,16 @@ async function ensurePixiStage(canvasHost, signal) {
     // The quality tier chooses the resolution cap (changeable later) and the
     // antialiasing (fixed for the Application's life: next launch).
     const tier = currentQuality();
-    pixiStage = await createChampionshipPixiStage({ PIXI, canvasHost, resolutionCap: tier.pixiResolutionCap, antialias: tier.pixiAntialias });
+    pixiStagePromise ??= createChampionshipPixiStage({ PIXI, canvasHost, resolutionCap: tier.pixiResolutionCap, antialias: tier.pixiAntialias })
+      .catch(error => { pixiStagePromise = null; throw error; });
+    pixiStage = await pixiStagePromise;
     // "Auto" may step down once if frames stay long on a settled scene.
     settings.quality.attachTicker(pixiStage.app.ticker, { isStable: sceneIsSettled });
   }
-  else pixiStage.attach(canvasHost);
+  // An abandoned load may finish creating the shared Application, but it must
+  // never reattach its canvas over a newer screen. All callers share one init.
+  signal?.throwIfAborted();
+  pixiStage.attach(canvasHost);
   if (!clockDriver) {
     clockDriver = createChampionshipClockDriver({
       app, ticker: pixiStage.app.ticker,
@@ -386,9 +392,9 @@ async function loadOptionalOriginalVfxReview(stage, effectArt) {
   }
 }
 
-async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main']) {
+async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal } = {}) {
   if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
-  const PIXI = createPixiAssetScope(stage.PIXI);
+  const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
   try {
     if (!CHARACTER_REVIEW_RUNTIME_URL) {
       // The roster module carries the battle character geometry and sizing --
@@ -396,12 +402,12 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
       // fetched when a character bundle is actually wanted.
       const { LICENSED_CHARACTER_ASSET_ID, LICENSED_CHARACTER_MANIFEST, loadLicensedCharacterRoster } =
         await import("../presentation/licensedCharacterRoster.js");
-      const indexResponse = await fetch(new URL("assets/production/ART_PRODUCTION_INDEX.json", location.href));
+      const indexResponse = await fetch(new URL("assets/production/ART_PRODUCTION_INDEX.json", location.href), { signal });
       if (!indexResponse.ok) return null;
       const productionIndex = await indexResponse.json();
       if (!productionIndex.entries.some((entry) => entry.assetId === LICENSED_CHARACTER_ASSET_ID && entry.runtimeEligible === true)) return null;
       const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
-      const response = await fetch(manifestUrl);
+      const response = await fetch(manifestUrl, { signal });
       if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
       const rosterOptions={PIXI,speciesIds,sides,productionIndex,manifestUrl,manifest:await response.json()};
       if(new URLSearchParams(location.search).get('characterArtReview')==='m001'
@@ -499,9 +505,10 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
  * Placement is PRODUCT_AUTHORED; see ranchSlotGeometry.js. `?cageArt=field_cm09_01`
  * still overlays one named field on its own for visual QA.
  */
-async function loadOptionalCageFieldArt(stage) {
+async function loadOptionalCageFieldArt(stage, { signal } = {}) {
+  const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
   try {
-    const response = await fetch(new URL(CAGE_ART_MANIFEST_URL, globalThis.location.href));
+    const response = await fetch(new URL(CAGE_ART_MANIFEST_URL, globalThis.location.href), { signal });
     if (!response.ok) throw new Error(`CAGE_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
     const cageFrame = app.getCageEditFrame();
@@ -511,7 +518,7 @@ async function loadOptionalCageFieldArt(stage) {
       unlockedCount: cageFrame?.unlockedCount,
       expansion: cageFrame?.expansion ?? null,
       previewFieldId: CAGE_ART_PREVIEW_FIELD || null });
-    const fieldArt=await createRuntimeMapArtTileSetLoader({ PIXI: stage.PIXI }).load({
+    const fieldArt=await createRuntimeMapArtTileSetLoader({ PIXI }).load({
       manifest,
       placements: plan.placements,
       residentViewport: plan.residentViewport,
@@ -520,7 +527,7 @@ async function loadOptionalCageFieldArt(stage) {
       placementEvidence: plan.placementEvidence,
       presentationMode: plan.mode
     });
-    try{return await withCageForeground({PIXI:stage.PIXI,art:fieldArt,manifest,placements:plan.placements});}
+    try{return await withCageForeground({PIXI,art:fieldArt,manifest,placements:plan.placements,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
     catch(error){await fieldArt.dispose();throw error;}
   } catch (error) {
     console.warn(`CHAMPIONSHIP_CAGE_ART_FALLBACK: ${error.message}`);
@@ -590,102 +597,139 @@ function fieldFallback(host, error) {
 
 async function mountRaisingHome() {
   raisingSource = createRaisingPresentationSource(app);
-  // Current screen intent only. Fetch code alongside HUD metadata; the one
-  // Application is still created below when its real canvas host exists.
-  void loadPixiModule().catch(()=>{});
-  let hudArt=null;
-  try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href,speciesIds:raisingSource.getFrame().residents.map(r=>r.speciesId)});}
-  catch(error){console.warn('Character HUD art unavailable',error);}
+  const source = raisingSource;
+  let disposed = false, hudLoad = null;
+  void loadPixiModule().catch(() => {});
   const p1r = await createRaisingHomeP1RView({
-    root,
-    hudArt,
-    source: raisingSource,
-    // The full record in the detail sheet is the roster's own projection and
-    // row renderer, so Home and the roster can never disagree.
-    getRosterEntry: (creatureId) => projectRoster().find((entry) => entry.instanceId === creatureId) ?? null,
+    root, hudArt: null, source,
+    getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
     renderCreatureDetail: appendCreatureDetail,
     openRoster: () => runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }),
-    // The select hint is for the first day of a new game, read from the game's
-    // own calendar rather than a private storage flag (one save, one writer).
     firstRunHint: (() => { const c = app.getCalendar(); return (c.year ?? 0) === 0 && c.season === 0 && c.dayOfSeason === 0; })(),
-    async mountField({ host, source: fieldSource,onTrainingFrame }) {
-      let characterBundle = null;
-      let fieldArt = null;
-      let feedbackArt = null;
-      let fieldPresentation=null;
-      const assetStatus=document.createElement('div'),assetMessage=document.createElement('p'),assetRetry=document.createElement('button');
-      assetStatus.className='int-rh2-resident-assets';assetStatus.hidden=true;assetMessage.setAttribute('role','status');
-      assetRetry.type='button';assetRetry.textContent=uiText('RESIDENT_ART_RETRY');assetStatus.append(assetMessage,assetRetry);
-      assetRetry.addEventListener('click',()=>{
-        if(!fieldPresentation?.retryResidentAssets()){
-          // A missing roster retries through the existing serialized mount.
-          // The current gameplay session and save stay in place.
-          mountedScreen=null;void mountCurrentScreen();
+    mountField({ host, source: fieldSource, onTrainingFrame }) {
+      let closed = false, attempt = null, effects = null, scene = null, phase = 'loading';
+      let residentStates = [], lastFrame = fieldSource.getFrame();
+      const status = document.createElement('div'), message = document.createElement('p');
+      const retry = document.createElement('button'), cancel = document.createElement('button'), leave = document.createElement('button'), reloadGame = document.createElement('button');
+      status.className = 'int-rh2-resident-assets'; status.dataset.loadOwner = 'raising';
+      message.setAttribute('role', 'status'); message.setAttribute('aria-live', 'polite');
+      for (const button of [retry, cancel, leave, reloadGame]) button.type = 'button';
+      setText(retry, 'FIELD_LOAD_RETRY'); setText(cancel, 'FIELD_LOAD_CANCEL'); setText(leave, 'FIELD_LOAD_RETURN');
+      setText(reloadGame, 'FIELD_LOAD_RELOAD');
+      retry.dataset.loadAction = 'retry'; cancel.dataset.loadAction = 'cancel'; leave.dataset.loadAction = 'return';
+      reloadGame.dataset.loadAction = 'reload';
+      status.append(message, retry, cancel, leave, reloadGame); host.append(status);
+      function show(next, key) {
+        if (closed) return;
+        phase = next; host.dataset.loadState = next; host.setAttribute('aria-busy', String(next === 'loading'));
+        const failed = residentStates.some(s => s.state === 'error'), loading = residentStates.some(s => s.state === 'loading');
+        status.hidden = next === 'ready' && !failed && !loading;
+        retry.hidden = next === 'loading' || (next === 'ready' && !failed); retry.disabled = next === 'loading';
+        cancel.hidden = next !== 'loading'; leave.hidden = next === 'ready';
+        reloadGame.hidden = retry.hidden;
+        setText(message, key ?? (failed ? 'RESIDENT_ART_ERROR' : 'RESIDENT_ART_LOADING'));
+      }
+      const active = owner => !closed && attempt === owner && !owner.signal.aborted;
+      function start() {
+        if (closed) return;
+        attempt?.cancel(); effects?.cancel(); scene?.dispose(); scene = null; residentStates = [];
+        const owner = attempt = createLoadAttempt();
+        tutorialPreview?.dispose(); tutorialPreview = null;
+        show('loading', 'FIELD_LOAD_START');
+        void (async () => {
+          try {
+            const stage = await owner.wait(ensurePixiStage(host, owner.signal));
+            show('loading', 'FIELD_LOAD_ART');
+            const [characterBundle, fieldArt] = await Promise.all([
+              owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], { signal: owner.signal })),
+              owner.own(loadOptionalCageFieldArt(stage, { signal: owner.signal }))
+            ]);
+            owner.signal.throwIfAborted();
+            if (!characterBundle || !fieldArt) throw new Error('RAISING_CORE_ART_UNAVAILABLE');
+            const pending = mountRaisingFieldPixiPresentation({
+              stage, source: fieldSource, fieldArt, characterBundle, signal: owner.signal,
+              getSelectedTool: () => toolbar?.getSelectedTool() ?? null, onTrainingFrame,
+              onResidentAssetState(states) {
+                if (!active(owner)) return;
+                residentStates = states; host.dataset.residentAssets = JSON.stringify(states);
+                if (phase === 'ready') show('ready');
+              },
+              onActorFrame: new URLSearchParams(location.search).get('presentation') === 'developer' || app.getInteractiveTutorial()?.finished === false
+                ? positions => { if (active(owner)) host.dataset.residentScreenPositions = JSON.stringify(positions); } : null,
+              onFallback(text) { if (active(owner)) console.warn(text); }
+            }).then(value => { owner.transfer(fieldArt); owner.transfer(characterBundle); return value; });
+            const next = await owner.own(pending);
+            owner.signal.throwIfAborted(); owner.transfer(next); scene = next; owner.stopTimer();
+            delete root.dataset.fieldFallback; show('ready'); scene.render(lastFrame);
+            resumeTutorialPresentation();
+            // Reaction pixels can arrive after the same scene is playable.
+            // Their independent deadline cannot hold the router or its clock.
+            const extra = effects = createLoadAttempt({ timeoutMs: 30000 });
+            void extra.own(loadRegisteredRaisingFeedbackArt({
+              PIXI: createPixiAssetScope(stage.PIXI, location.href, { signal: extra.signal }),
+              baseUrl: location.href, fetchImpl: extra.fetch
+            })).then(art => {
+              if (!active(owner)) { extra.cancel(); return; }
+              scene.setFeedbackArt(art); extra.transfer(art); extra.stopTimer();
+            }).catch(error => { extra.cancel(error); if (active(owner)) console.warn('Raising reaction art unavailable', error); });
+          } catch (error) {
+            const current = !closed && attempt === owner;
+            owner.cancel(error);
+            if (current) {
+              root.dataset.fieldFallback = 'true';
+              show('error', error?.message === 'LOAD_TIMEOUT' ? 'FIELD_LOAD_TIMEOUT' : owner.signal.reason?.name === 'AbortError' ? 'FIELD_LOAD_CANCELLED' : 'FIELD_LOAD_ERROR');
+              if (error?.name !== 'AbortError') console.warn('CHAMPIONSHIP_RAISING_LOAD', error);
+            }
+          }
+        })();
+      }
+      retry.addEventListener('click', () => {
+        if (closed || phase === 'loading') return;
+        if (phase === 'ready' && scene?.retryResidentAssets?.()) return;
+        start(); startHud();
+      });
+      cancel.addEventListener('click', () => { attempt?.cancel(); });
+      async function saveAndNavigate(navigate) {
+        if (leave.disabled || reloadGame.disabled || closed) return;
+        leave.disabled = reloadGame.disabled = true;
+        try {
+          if (app.save().phase !== 'SAVED') { setText(message, 'FIELD_LOAD_SAVE_FAILED'); return; }
+          await navigate();
+        } catch (error) { setText(message, 'FIELD_LOAD_SAVE_FAILED'); console.warn(error); }
+        finally { leave.disabled = reloadGame.disabled = false; }
+      }
+      leave.addEventListener('click', () => { void saveAndNavigate(returnToTitle); });
+      // A new document can recover even when Pixi's old download never settles.
+      reloadGame.addEventListener('click', () => { void saveAndNavigate(() => location.reload()); });
+      start();
+      return Object.freeze({
+        get isPlayable() { return phase === 'ready' && !!scene && scene.isPlayable !== false; },
+        render(frame) { lastFrame = frame; scene?.render(frame); },
+        actorScreenRect(id) { return scene?.actorScreenRect?.(id) ?? null; },
+        focusResident(id, options) { return scene?.focusResident?.(id, options) ?? false; },
+        getDiagnostics() { return scene?.getDiagnostics?.() ?? { renderer: 'LOADING', state: phase }; },
+        dispose() {
+          if (closed) return; closed = true;
+          attempt?.cancel(); effects?.cancel(); scene?.dispose(); scene = null; status.remove();
         }
       });
-      try {
-        const stage = await ensurePixiStage(host);
-        host.append(assetStatus);
-        // The three art loads need the stage and nothing from each other, but
-        // they were awaited in a row, so Home waited out three manifest chains
-        // end to end. Run them together. Settling rather than racing keeps the
-        // catch below able to dispose whatever did load when one of them fails.
-        const [review, cage, reactions] = await Promise.allSettled([
-          loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map((resident) => resident.speciesId)),
-          loadOptionalCageFieldArt(stage),
-          loadRegisteredRaisingFeedbackArt({ PIXI: stage.PIXI, baseUrl: location.href })
-        ]);
-        characterBundle = review.status === "fulfilled" ? review.value : null;
-        fieldArt = cage.status === "fulfilled" ? cage.value : null;
-        // Reaction art has always been optional: Home draws without it.
-        feedbackArt = reactions.status === "fulfilled" ? reactions.value : null;
-        if (reactions.status === "rejected") console.warn("Raising reaction art unavailable", reactions.reason);
-        if (review.status === "rejected") throw review.reason;
-        if (cage.status === "rejected") throw cage.reason;
-        delete root.dataset.fieldFallback;
-        fieldPresentation=await mountRaisingFieldPixiPresentation({
-          stage,
-          source: fieldSource,
-          fieldArt,
-          characterBundle,
-          feedbackArt,
-          getSelectedTool: () => toolbar?.getSelectedTool() ?? null,
-          onTrainingFrame,
-          onResidentAssetState(states){
-            const failed=states.some(s=>s.state==='error'),loading=states.some(s=>s.state==='loading');
-            host.dataset.residentAssets=JSON.stringify(states);
-            assetStatus.hidden=!failed&&!loading;assetRetry.hidden=!failed;
-            assetMessage.textContent=uiText(failed?'RESIDENT_ART_ERROR':'RESIDENT_ART_LOADING');
-          },
-          // Read-only tutorial hit positions support input QA without changing the player UI.
-          onActorFrame:new URLSearchParams(location.search).get('presentation')==='developer'||app.getInteractiveTutorial()?.finished===false
-            ? positions=>{host.dataset.residentScreenPositions=JSON.stringify(positions);}:null,
-          onFallback(message) {
-            root.dataset.fieldFallback = "true";
-            console.warn(message);
-          }
-        });
-        return Object.freeze({...fieldPresentation,dispose(){assetStatus.remove();fieldPresentation.dispose();}});
-      } catch (error) {
-        assetStatus.remove();
-        void fieldArt?.dispose();
-        void characterBundle?.dispose();
-        void feedbackArt?.dispose();
-        return fieldFallback(host, error);
-      }
     }
   });
-
-  // The invented five-button nav (CAGE / DATA / SHOP / BATTLE / GATES) was
-  // removed on 2026-09-03. The original reaches those destinations through the
-  // toolbar's two submenus, which createChampionshipToolbar now provides.
-
+  function startHud() {
+    if (disposed) return;
+    hudLoad?.cancel();
+    const owner = hudLoad = createLoadAttempt({ timeoutMs: 20000 });
+    void owner.wait(loadRegisteredCharacterHudArt({ baseUrl: location.href,
+      speciesIds: source.getFrame().residents.map(r => r.speciesId), fetchImpl: owner.fetch
+    })).then(art => { if (!disposed && hudLoad === owner) p1r.setHudArt(art); })
+      .catch(error => { if (!disposed && hudLoad === owner) console.warn('Character HUD art unavailable', error); })
+      .finally(() => owner.stopTimer());
+  }
+  startHud();
   return Object.freeze({
-    render: p1r.render,
-    inspect: p1r.inspect,
-    dispose() {
-      p1r.dispose();
-    }
+    render: p1r.render, inspect: p1r.inspect, relabel: p1r.relabel,
+    get isPlayable() { return p1r.isPlayable; },
+    dispose() { disposed = true; hudLoad?.cancel(); p1r.dispose(); }
   });
 }
 
@@ -1292,6 +1336,13 @@ function applyQaUnlockIfRequested() {
   console.info("CHAMPIONSHIP_QA_UNLOCK", granted);
 }
 
+function resumeTutorialPresentation() {
+  if (!tutorialPreview && !root.hidden && mountedScreen === app.getScreen() && view?.isPlayable !== false
+    && app.getInteractiveTutorial()?.finished === false) {
+    tutorialPreview = mountInteractiveTutorialPreview({ app, preview: isInteractiveTutorialPreviewLocation(location) });
+  }
+}
+
 async function openGameplay() {
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
@@ -1391,8 +1442,7 @@ async function openGameplay() {
   refreshTutorialTools();
   mountedScreen = null;
   await mountCurrentScreen();
-  if(app.getInteractiveTutorial()&&!app.getInteractiveTutorial().finished)
-    tutorialPreview=mountInteractiveTutorialPreview({app,preview:isInteractiveTutorialPreviewLocation(location)});
+  resumeTutorialPresentation();
 }
 
 /**
@@ -1760,6 +1810,7 @@ function relabelChrome() {
 
 function boot() {
   // Title labels that the language setting can change.
+  setText(loginButton, "ENTER_GAME");
   setText(newGameButton, "開始新遊戲");
   setText(continueButton, "繼續遊戲");
   if (titleSettingsButton) {
@@ -1781,6 +1832,7 @@ function boot() {
   } catch (error) {
     console.warn(error);
     note(`Championship 2026 could not start: ${error.message}`);
+    window.dispatchEvent(new Event("championship:boot-error"));
     newGameButton.disabled = true;
     continueButton.disabled = true;
     return;
@@ -1812,6 +1864,7 @@ function boot() {
   installHomeEntries();
   refreshContinue();
   loginButton.disabled=false;
+  window.dispatchEvent(new Event("championship:ready"));
   syncMusic();
   // Background/unload resets elapsed measurement, and now also writes the
   // session: the Raising Home SAVE button was removed on 2026-09-16, so leaving

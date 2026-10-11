@@ -37,6 +37,9 @@
 #cm-title .cm-title__entry { position:absolute; top:80%; bottom:max(6%,calc(env(safe-area-inset-bottom,0px) + 28px)); left:6%; right:6%; z-index:3; display:grid; grid-template-rows:minmax(0,1fr); place-items:center; padding:0; }
 #cm-title .cm-title__login, #cm-title .cm-title__actions .cm-button { position:relative; min-height:52px; width:100%; margin:0; border:2px solid #fff2b4; border-radius:14px; background:linear-gradient(#ffe89b,#eec568); color:#183c42; font-size:calc(17px * var(--text-scale,1)); font-weight:900; line-height:1.25; letter-spacing:.03em; padding:8px 12px; box-shadow:0 4px 0 #876b2c,0 8px 20px #12343e30; text-shadow:0 1px #fff9; transition:transform .15s,box-shadow .15s; }
 #cm-title .cm-title__login { width:82%; letter-spacing:.2em; }
+#cm-title .cm-title__boot-status { position:absolute; top:58%; left:6%; right:6%; z-index:5; padding:10px 12px; border-radius:10px; background:#f6fbebf5; color:#183c42; pointer-events:auto; text-align:center; font-size:14px; line-height:1.5; }
+#cm-title .cm-title__boot-status p { margin:0; }
+#cm-title .cm-title__boot-status button { min-height:44px; margin-top:8px; padding:8px 16px; border:1px solid #075e65; border-radius:8px; color:#183c42; background:#fff4d2; font:inherit; }
 #cm-title .cm-title__actions { display:flex; flex-direction:column; align-self:end; gap:8px; width:92%; margin:0; }
 #cm-title .cm-title__actions .cm-button { min-height:44px; padding:6px 12px; }
 #cm-title .cm-title__actions .cm-button:not(.cm-button--primary) { background:#f6fbeb; border-color:#fff; box-shadow:0 4px 0 #6a9890,0 8px 20px #12343e20; }
@@ -315,3 +318,6 @@ body[data-portrait-frame] #cm-title .cm-title__note:empty { display:none; }
 
 .cm-opening-story[aria-busy="true"] .cm-opening-story__card { visibility: hidden; }
 .cm-opening-story__loading { position: absolute; inset: 45% 16px auto; margin: 0; text-align: center; color: var(--text, #e8f5ef); font-size: 16px; }
+.cm-opening-story__loading p { margin:0 0 12px; }
+.cm-opening-story__art-status { position:absolute; top:max(12px,env(safe-area-inset-top,0px)); left:16px; right:16px; z-index:2; margin:0; padding:8px 10px; border-radius:8px; background:#10292be8; color:#e8f5ef; text-align:center; font-size:13px; line-height:1.5; }
+.cm-opening-story__loading button { min-height:44px; max-width:100%; margin:4px; padding:10px 14px; border:1px solid var(--c-line-2); border-radius:var(--r-control); background:var(--c-surface-2); color:var(--c-text-1); font:inherit; line-height:1.4; }

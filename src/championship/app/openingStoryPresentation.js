@@ -56,9 +56,9 @@ export async function waitForOpeningComicImages(images,{timeoutMs=60000,signal}=
   finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
 }
 
-export function createOpeningStoryPresentation({host,onComplete}){
+export function createOpeningStoryPresentation({host,onComplete,onCancel=()=>{}}){
   const el=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=uiText(text);return n;};
-  const root=el('section','cm-opening-story');root.tabIndex=0;root.setAttribute('role','button');
+  const root=el('section','cm-opening-story');root.tabIndex=0;root.setAttribute('role','group');
   root.setAttribute('aria-label',uiText('開場故事，閱讀後點按繼續'));
   const cards=[],parts=[];
   const readiness=new AbortController();
@@ -79,10 +79,23 @@ export function createOpeningStoryPresentation({host,onComplete}){
     if(i===1||i===2){const picture=el('div',`cm-opening-story__picture cm-opening-story__${i===1?'world':'champion'}`);row.push(addComic(picture,i+2));}
     card.append(...row);root.append(card);cards.push(card);parts.push(row);
   }
-  const loading=el('p','cm-opening-story__loading',uiText('OPENING_COMIC_LOADING'));
-  loading.setAttribute('role','status');root.append(loading);
+  const loading=el('div','cm-opening-story__loading');
+  const loadingText=el('p','',uiText('OPENING_COMIC_LOADING'));loadingText.setAttribute('role','status');
+  const readText=el('button','',uiText('OPENING_TEXT_FIRST')),back=el('button','',uiText('OPENING_RETURN'));
+  readText.type=back.type='button';readText.dataset.storyAction='text';back.dataset.storyAction='return';
+  loading.append(loadingText,readText,back);root.append(loading);
+  const images=[...root.querySelectorAll('img')];
+  const artNotice=el('p','cm-opening-story__art-status',uiText('OPENING_ART_PENDING'));
+  artNotice.hidden=true;artNotice.setAttribute('role','status');root.append(artNotice);
   host.replaceChildren(root);host.hidden=false;
-  let animations=[],clock=null,frames=[],generation=0,disposed=false,finishing=false;
+  let animations=[],clock=null,frames=[],generation=0,disposed=false,finishing=false,started=false;
+  function updateArtNotice(){
+    if(disposed)return;
+    const complete=images.every(img=>img.complete&&img.naturalWidth>0);
+    artNotice.hidden=!started||complete;
+    if(started)root.dataset.comicReady=complete?'ready':'partial';
+  }
+  for(const img of images)img.addEventListener('load',updateArtNotice);
   // Keep both edges of a constant span so a long reading hold cannot interpolate
   // toward a later movement. Interior duplicate frames need no animation keys.
   function keys(values){
@@ -132,15 +145,20 @@ export function createOpeningStoryPresentation({host,onComplete}){
     if(!state.cards.some(c=>c.phase===2))return;
     advanceOpeningStory(state,true);play(state);
   }
-  function dispose(){if(disposed)return;disposed=true;readiness.abort();generation++;cancel();document.removeEventListener('visibilitychange',visibility);root.remove();}
-  root.addEventListener('click',advance);
-  root.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();advance();}});
+  function dispose(){if(disposed)return;disposed=true;readiness.abort();for(const img of images){img.removeEventListener('load',updateArtNotice);if(!img.complete)img.removeAttribute('src');}generation++;cancel();document.removeEventListener('visibilitychange',visibility);root.remove();}
+  root.addEventListener('click',event=>{if(!event.target.closest?.('button'))advance();});
+  root.addEventListener('keydown',e=>{if(e.target.closest?.('button'))return;if(e.key==='Enter'||e.key===' '){e.preventDefault();advance();}});
   document.addEventListener('visibilitychange',visibility);root.focus({preventScroll:true});
-  void waitForOpeningComicImages([...root.querySelectorAll('img')],{signal:readiness.signal}).then(ready=>{
-    if(disposed)return;loading.remove();root.setAttribute('aria-busy','false');root.dataset.comicReady=ready?'ready':'partial';
-    // A failed request must not permanently block New Game; surviving text and
-    // images retain the same story path, while the status is inspectable.
+  function beginPlayback(ready){
+    if(disposed||started)return;started=true;readiness.abort();loading.remove();
+    root.setAttribute('aria-busy','false');updateArtNotice();
+    // Original card timing/text and advance rules are unchanged. Later panels
+    // download in parallel instead of holding the first player interaction.
     play(createOpeningStoryState());
-  });
+  }
+  readText.addEventListener('click',()=>beginPlayback(false));
+  back.addEventListener('click',()=>{if(disposed)return;dispose();onCancel();});
+  void waitForOpeningComicImages([...cards[0].querySelectorAll('img')],{timeoutMs:8000,signal:readiness.signal})
+    .then(ready=>beginPlayback(ready));
   return {dispose};
 }

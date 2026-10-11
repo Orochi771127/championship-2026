@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createLoadWatchdog } from "../src/championship/app/loadWatchdog.js";
+import { createLoadAttempt, createLoadWatchdog } from "../src/championship/app/loadWatchdog.js";
 import { createAssetPrefetcher, withPrefetchedTextures } from "../src/championship/app/assetPrefetch.js";
 
 function fakeClock() {
@@ -23,6 +23,40 @@ function fakeClock() {
     }
   };
 }
+
+test('screen load timeout bounds a loader that ignores abort and disposes its late success', async () => {
+  const clock = fakeClock(), attempt = createLoadAttempt({ ...clock, timeoutMs: 20 });
+  let resolve, disposed = 0;
+  const pending = attempt.own(new Promise(r => resolve = r));
+  const rejected = assert.rejects(pending, /LOAD_TIMEOUT/);
+  clock.advance(20); await rejected;
+  assert.equal(attempt.signal.aborted, true);
+  resolve({ dispose() { disposed++; } });
+  await new Promise(r => setImmediate(r));
+  attempt.cancel(); assert.equal(disposed, 1);
+});
+
+test('cancelling releases owned results but preserves the resource transferred to the live scene', async () => {
+  const clock = fakeClock(), attempt = createLoadAttempt(clock);
+  let ownedDisposals = 0, liveDisposals = 0;
+  await attempt.own({ dispose() { ownedDisposals++; } });
+  const live = await attempt.own({ dispose() { liveDisposals++; } });
+  attempt.transfer(live); attempt.stopTimer(); clock.advance(100000);
+  assert.equal(attempt.signal.aborted, false);
+  attempt.cancel(); attempt.cancel();
+  assert.equal(ownedDisposals, 1); assert.equal(liveDisposals, 0);
+});
+
+test('a cancelled attempt consumes late rejection and a separate retry can succeed', async () => {
+  const clock = fakeClock(), old = createLoadAttempt(clock);
+  let reject;
+  const result = old.wait(new Promise((_, r) => reject = r));
+  const rejected = assert.rejects(result, { name: 'AbortError' });
+  old.cancel(); await rejected;
+  reject(Error('late network failure')); await new Promise(r => setImmediate(r));
+  const retry = createLoadAttempt(clock);
+  assert.equal(await retry.wait(Promise.resolve('ready')), 'ready'); retry.cancel();
+});
 
 test("a load with no progress for the stall window is given up as stalled", () => {
   const clock = fakeClock();

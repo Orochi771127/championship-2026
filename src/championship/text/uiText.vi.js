@@ -5,6 +5,21 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  "ENTER_GAME": "Vào trò chơi",
+  "OPENING_ART_PENDING": "Một số hình minh họa chưa sẵn sàng. Bạn có thể đọc truyện trước.",
+  "OPENING_TEXT_FIRST": "Đọc lời dẫn trước",
+  "OPENING_RETURN": "Về màn hình chính",
+  "FIELD_LOAD_START": "Đang chuẩn bị khu nuôi…",
+  "FIELD_LOAD_ART": "Đang tải khu nuôi và bạn đồng hành…",
+  "FIELD_LOAD_RETRY": "Tải lại khu nuôi",
+  "FIELD_LOAD_CANCEL": "Hủy tải",
+  "FIELD_LOAD_RETURN": "Lưu và về màn hình chính",
+  "FIELD_LOAD_RELOAD": "Lưu và tải lại trò chơi",
+  "FIELD_LOAD_TIMEOUT": "Tải quá lâu. Hãy thử lại hoặc lưu và tải lại trò chơi.",
+  "FIELD_LOAD_CANCELLED": "Đã hủy tải. Tiến trình của bạn vẫn được giữ.",
+  "FIELD_LOAD_ERROR": "Không thể tải khu nuôi. Hãy thử lại hoặc lưu và tải lại trò chơi.",
+  "FIELD_LOAD_SAVE_FAILED": "Chưa lưu được nên bạn vẫn ở màn hình này. Hãy thử lại hoặc xuất tiến trình.",
+
   "CODE_COPY": "Sao chép mã trao đổi",
   "CODE_COPIED": "Đã sao chép mã trao đổi.",
   "CODE_COPY_MANUAL": "Không thể sao chép tự động. Mã đã được chọn; hãy nhấn giữ hoặc dùng lệnh Sao chép.",
