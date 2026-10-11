@@ -1148,3 +1148,124 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__extras { flex-basis: 100%; margin-inline-start: 0; }
   .cm-status-bar__currencies { flex: 0 1 auto; gap: 4px; padding-inline: 4px; }
 }
+
+/* ---- 2026-10-12 UI polish: honest loading, the ranch expansion preview ---- */
+
+/* A dialog action that is not available yet reads as unavailable, not broken. */
+.cm-dialog__action:disabled { opacity: 0.5; cursor: not-allowed; filter: saturate(0.4); }
+.cm-dialog__action:not(:disabled):active { transform: translateY(1px); }
+
+/* Loading progress: steps finish with their loads, bytes are network bytes,
+   and the sheen only says a step is still running. Nothing moves on a timer. */
+.cm-load-progress { display: grid; gap: var(--sp-2); width: 100%; }
+.cm-load-progress[hidden] { display: none; }
+.cm-load-progress__bar { position: relative; height: 6px; overflow: hidden; border-radius: 999px; background: var(--c-surface-3); }
+.cm-load-progress__fill { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: inherit;
+  background: linear-gradient(90deg, var(--c-accent-deep), var(--c-accent)); transition: width var(--dur-slow) var(--ease-out); }
+.cm-load-progress__bar[data-running="true"]::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 38%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent); animation: cm-load-sheen 1.5s var(--ease-in-out) infinite; }
+.cm-load-progress__bar[data-failed="true"] .cm-load-progress__fill { background: var(--c-danger); }
+@keyframes cm-load-sheen { from { transform: translateX(-110%); } to { transform: translateX(280%); } }
+.cm-load-progress__steps { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-1) var(--sp-3); margin: 0; padding: 0; list-style: none;
+  color: var(--c-text-3); font-size: var(--fs-label); line-height: var(--lh-label); }
+.cm-load-progress__step { display: inline-flex; align-items: center; gap: 6px; }
+.cm-load-progress__step::before { content: ""; flex: none; box-sizing: border-box; width: 9px; height: 9px; border: 1.5px solid currentColor; border-radius: 50%; }
+.cm-load-progress__step[data-state="active"] { color: var(--c-text-1); font-weight: var(--fw-strong); }
+.cm-load-progress__step[data-state="active"]::before { border-color: var(--c-accent); border-right-color: transparent; animation: cm-save-spin 0.9s linear infinite; }
+.cm-load-progress__step[data-state="done"] { color: var(--c-text-2); }
+.cm-load-progress__step[data-state="done"]::before { border-color: var(--c-success); background: var(--c-success); box-shadow: inset 0 0 0 1.5px var(--c-surface-1); }
+.cm-load-progress__step[data-state="error"] { color: var(--c-danger-text); }
+.cm-load-progress__step[data-state="error"]::before { border-color: var(--c-danger); background: var(--c-danger-soft); }
+.cm-load-progress .cm-load-progress__meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-1) var(--sp-3); flex: none; margin: 0;
+  color: var(--c-text-3); font-size: var(--fs-caption); line-height: var(--lh-caption); font-variant-numeric: tabular-nums; }
+.cm-load-progress .cm-load-progress__slow { flex: none; margin: 0; color: var(--c-warning); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+.cm-load-progress [hidden] { display: none; }
+:root[data-motion="reduced"] .cm-load-progress__bar::after,
+:root[data-motion="reduced"] .cm-load-progress__step::before { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion]) .cm-load-progress__bar::after,
+  :root:not([data-motion]) .cm-load-progress__step::before { animation: none; }
+}
+
+/* The ranch's loading card: centred over the field while it loads or fails,
+   faded in after a beat so a quick load never flashes it. Once the scene is
+   up, a resident-art notice keeps the old strip along the top. */
+.int-rh2-resident-assets:is([data-phase="loading"], [data-phase="error"]) {
+  inset: 50% 16px auto; max-width: 420px; margin: 0 auto; transform: translateY(-50%);
+  padding: var(--sp-4); gap: var(--sp-3); border-radius: var(--r-card); box-shadow: var(--shadow-float);
+}
+.int-rh2-resident-assets[data-phase="loading"] { animation: cm-fade var(--dur-base) var(--ease-out) 240ms both; }
+/* A short frame or long words never push the card off the field: it scrolls
+   inside it, and the first-day hint steps aside while the card is up. */
+.int-rh2-resident-assets:is([data-phase="loading"], [data-phase="error"]) { max-height: calc(100% - 24px); overflow-y: auto; overscroll-behavior: contain; pointer-events: auto; }
+.int-rh2-root:has(.int-rh2-resident-assets:is([data-phase="loading"], [data-phase="error"]):not([hidden])) .int-rh2-hint { display: none; }
+.int-rh2-resident-assets:is([data-phase="loading"], [data-phase="error"]) > p { flex-basis: 100%; text-align: center; font-weight: var(--fw-strong); }
+
+/* One clear next step on the loading card: retry is the primary action;
+   cancel, return and reload are quieter, with the same pressed and focus
+   feedback as every other button. */
+.int-rh2-resident-assets button { border-color: var(--c-line-2); background: var(--c-surface-2); color: var(--c-text-1); font-weight: var(--fw-strong); }
+.int-rh2-resident-assets button[data-load-action="retry"] { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+.int-rh2-resident-assets button:not(:disabled):active { transform: translateY(1px); }
+.int-rh2-resident-assets button:disabled { opacity: 0.55; cursor: default; }
+.int-rh2-resident-assets button:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 2px; }
+@media (hover: hover) {
+  .int-rh2-resident-assets button:not(:disabled):hover { background: var(--c-surface-3); }
+  .int-rh2-resident-assets button[data-load-action="retry"]:not(:disabled):hover { background: var(--c-accent-strong); }
+}
+
+/* The locked expansion rows' call to action, floated over the rows. Blue to
+   match the original Lid art it sits on, in every theme. */
+.int-rh2-expansion-cta {
+  position: absolute; left: var(--cta-x, 50%); top: var(--cta-y, 50%); z-index: 6;
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: 0; padding: 6px 12px 6px 6px;
+  border: 1px solid rgba(134, 230, 255, 0.6); border-radius: 999px;
+  background: linear-gradient(180deg, rgba(14, 44, 66, 0.92), rgba(6, 22, 34, 0.92)); color: #eaf7ff;
+  font: inherit; font-size: var(--fs-body-sm); font-weight: var(--fw-heavy); line-height: 1.2; white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.42), 0 0 0 3px rgba(134, 230, 255, 0.14);
+  transform: translate(-50%, -50%); cursor: pointer; touch-action: manipulation;
+  animation: cm-fade var(--dur-base) var(--ease-out) both;
+}
+.int-rh2-expansion-cta[hidden] { display: none; }
+/* Out of the way while the player is doing something: a partner's card is
+   open or a care tool is in hand (the hint steps aside the same way). */
+.int-rh2-root[data-selection="selected"] .int-rh2-expansion-cta, body[data-tool] .int-rh2-expansion-cta { display: none; }
+.int-rh2-expansion-cta__lock { position: relative; flex: none; width: 30px; height: 30px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #2f6c95, #123a56); box-shadow: inset 0 0 0 1px rgba(134, 230, 255, 0.55); }
+.int-rh2-expansion-cta__lock::after { content: ""; position: absolute; inset: 7px; background: #eaf7ff;
+  -webkit-mask: var(--cm-padlock) center / contain no-repeat; mask: var(--cm-padlock) center / contain no-repeat; }
+.int-rh2-expansion-cta__badge { padding: 2px 8px; border-radius: 999px; background: rgba(134, 230, 255, 0.16); color: #9eeaff;
+  font-size: var(--fs-caption); font-weight: var(--fw-strong); }
+.int-rh2-expansion-cta:active { transform: translate(-50%, -50%) scale(0.97); }
+.int-rh2-expansion-cta:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 3px; }
+@media (hover: hover) { .int-rh2-expansion-cta:hover { border-color: #9eeaff; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.42), 0 0 0 4px rgba(134, 230, 255, 0.22); } }
+:root { --cm-padlock: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 7V5a3.5 3.5 0 0 1 7 0v2h.5A1.5 1.5 0 0 1 13.5 8.5v5A1.5 1.5 0 0 1 12 15H4a1.5 1.5 0 0 1-1.5-1.5v-5A1.5 1.5 0 0 1 4 7h.5Zm2 0h3V5a1.5 1.5 0 0 0-3 0v2Zm1.5 2.5a1 1 0 0 0-.6 1.8V12.5h1.2v-1.2A1 1 0 0 0 8 9.5Z'/%3E%3C/svg%3E"); }
+
+/* The ranch expansion sheet: a map of the honeycomb, three points, status. */
+dialog.cm-dialog[data-variant="expansion"] { width: min(420px, calc(100vw - 32px)); }
+dialog.cm-dialog[data-variant="expansion"] .cm-dialog__panel { max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; }
+.cm-expansion-sheet { display: grid; gap: var(--sp-3); }
+.cm-expansion-sheet__map { display: grid; justify-items: center; gap: var(--sp-2); margin: 0; padding: var(--sp-3);
+  border: 1px solid var(--c-line-1); border-radius: var(--r-card); background: var(--c-ground-raised); }
+.cm-expansion-sheet__svg { display: block; width: min(100%, 240px); height: auto; }
+.cm-expansion-sheet__hex { fill: color-mix(in srgb, var(--c-accent) 30%, var(--c-surface-2)); stroke: var(--c-accent-line); stroke-width: 0.8; }
+.cm-expansion-sheet__hex--locked { fill: #4b7ea3; stroke: #a9d6f0; }
+.cm-expansion-sheet__lock-shackle { fill: none; stroke: #eaf7ff; stroke-width: 1.4; }
+.cm-expansion-sheet__lock-body { fill: #eaf7ff; }
+.cm-expansion-sheet__key { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-1) var(--sp-4); color: var(--c-text-2);
+  font-size: var(--fs-label); line-height: var(--lh-label); }
+.cm-expansion-sheet__key-item { display: inline-flex; align-items: center; gap: 6px; }
+.cm-expansion-sheet__key-item::before { content: ""; width: 12px; height: 14px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.cm-expansion-sheet__key-item--current::before { background: color-mix(in srgb, var(--c-accent) 55%, var(--c-surface-2)); }
+.cm-expansion-sheet__key-item--locked::before { background: #4b7ea3; }
+.cm-expansion-sheet__points { display: grid; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.cm-expansion-sheet__points li { position: relative; padding-left: 20px; color: var(--c-text-1); font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+.cm-expansion-sheet__points li::before { content: ""; position: absolute; left: 3px; top: calc(var(--lh-body-sm) / 2 - 4px); width: 8px; height: 8px;
+  border-radius: 2px; background: var(--c-accent); transform: rotate(45deg); }
+.cm-expansion-sheet__status { padding: var(--sp-3); border: 1px solid color-mix(in srgb, var(--c-warning) 40%, transparent); border-radius: var(--r-control); background: var(--c-warning-soft); }
+.cm-expansion-sheet__status strong { display: block; color: var(--c-warning); font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+.cm-expansion-sheet__status p { margin: var(--sp-1) 0 0; color: var(--c-text-2); font-size: var(--fs-label); line-height: var(--lh-label); }
+
+/* The title-match chip is small to look at; its hit area is not (44 px tall). */
+.cm-status-bar__matches { position: relative; }
+.cm-status-bar__matches::after { content: ""; position: absolute; inset: -8px -4px; }

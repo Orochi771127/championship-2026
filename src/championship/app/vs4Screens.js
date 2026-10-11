@@ -8,8 +8,11 @@ import { speciesName, shopItemDescription as shopDescriptionText, shopItemName }
 
 import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.js";
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2Screens.js";
-import { cageUiImage, shopCageUiImage, cageEditorArtCells, cageUiName, shopCageUiName, cageUiSummary } from '../presentation/cageUiArt.js';
-import { setLabel, uiText } from '../text/uiText.js';
+import { cageUiImage, cageUiLidImage, shopCageUiImage, cageEditorArtCells, cageUiName, shopCageUiName, cageUiSummary } from '../presentation/cageUiArt.js';
+import { setLabel, setText, uiText } from '../text/uiText.js';
+import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
+import { NATIVE_RANCH_LAYOUT, RANCH_EXPANSION_DECK_SLOTS } from '../cage/ranchExpansion.js';
+import { openRanchExpansionPreview } from './ranchExpansionPreview.js';
 import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
 import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
 import { showChoiceDialog } from './uiDialog.js';
@@ -538,7 +541,26 @@ function ranchExpansionPrototypeVisible(mode) {
   }
 }
 
-export function createCageEditView({ root, source, askToLeave = showChoiceDialog }) {
+// The expansion's rows as a ranch without it sees them (2026-10-12): ten bays
+// under the original blue Lid, placed exactly where the annex cells would be,
+// with the same few padlocks the ranch shows. Not cells: nothing to select.
+const EXPANSION_PREVIEW_LOCKED_BAYS = Object.freeze([2, 6, 5]);
+function expansionPreviewBays(doc = globalThis.document) {
+  const lid = cageUiLidImage();
+  return Array.from({ length: RANCH_EXPANSION_DECK_SLOTS }, (_, slot) => {
+    const cell = ranchBoardCell(slot);
+    const bay = doc.createElement('span');
+    bay.className = 'cm-cage-annex-bay';
+    bay.setAttribute('aria-hidden', 'true');
+    bay.dataset.slotIndex = String(slot);
+    bay.style.left = `${cell.x * 2}px`; bay.style.top = `${(cell.y - 8) * 2}px`;
+    if (lid) bay.style.backgroundImage = `url('${lid}')`;
+    if (EXPANSION_PREVIEW_LOCKED_BAYS.includes(slot)) bay.dataset.lock = 'true';
+    return bay;
+  });
+}
+
+export function createCageEditView({ root, source, askToLeave = showChoiceDialog, openExpansionPreview = openRanchExpansionPreview }) {
   const frame = source.getFrame();
   const block = frame.cageEdit;
   if (!block) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
@@ -659,10 +681,32 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     board.replaceChildren();
     annexBoard.replaceChildren();
     const annex = Boolean(cage.expansion);
-    annexLabel.hidden = !annex; annexBoard.hidden = !annex;
-    boardScroll.dataset.annex = annex ? 'true' : 'false';
+    // A native ranch without the expansion shows its rows locked, with a way
+    // to see what the expansion is; a granted one shows the real cells.
+    const preview = !annex && cage.layoutVersion === NATIVE_RANCH_LAYOUT;
+    annexLabel.hidden = !annex && !preview; annexBoard.hidden = !annex && !preview;
+    annexBoard.dataset.preview = preview ? 'true' : 'false';
+    if (preview) {
+      annexBoard.setAttribute('role', 'img');
+      setLabel(annexBoard, 'aria-label', 'EXPANSION_EDIT_LOCKED_GRID');
+      setText(annexLabel, 'EXPANSION_EDIT_LOCKED_LABEL');
+      annexBoard.append(...expansionPreviewBays());
+    } else {
+      annexBoard.setAttribute('role', 'grid');
+      setLabel(annexBoard, 'aria-label', '擴充區格位');
+      setText(annexLabel, '擴充區 · 原型（未定價、不收費）');
+    }
+    boardScroll.dataset.annex = annex || preview ? 'true' : 'false';
     boardHint.textContent = uiText(annex ? '牧場平面配置 · 左右滑動查看格位，往下是擴充區' : '牧場平面配置 · 左右滑動查看所有格位');
     expansionControls.replaceChildren();
+    if (preview) {
+      const view = element('button', 'cm-vs2-action cm-cage-expansion__view');
+      view.type = 'button';
+      view.dataset.expansionAction = 'preview';
+      setText(view, 'EXPANSION_VIEW');
+      view.addEventListener('click', () => { void openExpansionPreview(); });
+      expansionControls.append(view);
+    }
     if (ranchExpansionPrototypeVisible(mode) && cage.layoutVersion) {
       const annexUsed = cage.slots.some((slot) => slot.deck === 1 && slot.moduleId);
       const toggle = element('button', 'cm-vs2-action', annex ? '移除擴充區（原型）' : '加入擴充區（原型，不收費）');

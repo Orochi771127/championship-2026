@@ -6,7 +6,7 @@ import manifest from '../../../assets/production/cage/original-opus-v1/manifest.
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
 import { RANCH_EXPANSION_FIRST_SLOT, isAnnexSlot } from '../cage/ranchExpansion.js';
-import { getOriginalCageVisualBinding } from './originalCageVisualBindings.js';
+import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from './originalCageVisualBindings.js';
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import { cageName } from '../text/zhHant.js';
 import { uiText } from '../text/uiText.js';
@@ -35,6 +35,11 @@ export function cageUiSummary(moduleId, fallback = '') {
 function runtimeFieldFrame(definition) {
   const binding = getOriginalCageVisualBinding(definition?.cageDefinitionIndex);
   return art.fields.find((field) => field.fieldId === binding?.fieldId)?.frames[0]?.src ?? null;
+}
+/** The blue Lid that covers a bay nothing is built on (the ranch draws the same art). */
+export function cageUiLidImage() {
+  const lid = ORIGINAL_CAGE_STRUCTURAL_VISUALS.find((entry) => entry.role === 'LID')?.fieldId;
+  return art.fields.find((field) => field.fieldId === lid)?.frames[0]?.src ?? null;
 }
 export function cageUiImage(moduleId, baseUrl) {
   // The runtime field picture comes first, so the editor shows the same cage art as the ranch.

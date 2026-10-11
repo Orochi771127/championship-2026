@@ -76,13 +76,16 @@ import {
   createRuntimeMapArtTileSetLoader,
   validateRuntimeMapArtBundle
 } from "../presentation/runtimeMapArtBundle.js";
-import { createRanchCageArtPlan as createRaisingCageArtPlan } from "../presentation/raisingRanchArtPlan.js";
+import { createRanchCageArtPlan as createRaisingCageArtPlan, ranchExpansionPreviewPlan } from "../presentation/raisingRanchArtPlan.js";
 import { withCageForeground } from "../presentation/cageForeground.js";
+import { withRanchExpansionPreview } from "../presentation/raisingExpansionPreview.js";
+import { openRanchExpansionPreview } from './ranchExpansionPreview.js';
+import { createLoadProgressView, observeDownloadedBytes } from './loadProgress.js';
 import { mountPortraitFrame } from './portraitFrame.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
-import { createLoadWatchdog, createLoadAttempt } from './loadWatchdog.js';
+import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
@@ -527,8 +530,16 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       placementEvidence: plan.placementEvidence,
       presentationMode: plan.mode
     });
-    try{return await withCageForeground({PIXI,art:fieldArt,manifest,placements:plan.placements,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
+    let art;
+    try{art=await withCageForeground({PIXI,art:fieldArt,manifest,placements:plan.placements,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
     catch(error){await fieldArt.dispose();throw error;}
+    // A ranch without the expansion shows its locked rows below the board
+    // (2026-10-12). Decoration only, so a failure keeps the ranch as it was.
+    const preview = app.getInteractiveTutorial()?.finished === false ? null
+      : ranchExpansionPreviewPlan({ manifest, layoutVersion: cageFrame?.layoutVersion, previewFieldId: CAGE_ART_PREVIEW_FIELD || null });
+    if (!preview || signal?.aborted) return art;
+    try { return await withRanchExpansionPreview({ PIXI, art, manifest, preview }); }
+    catch (error) { console.warn(`CHAMPIONSHIP_EXPANSION_PREVIEW_FALLBACK: ${error.message}`); return art; }
   } catch (error) {
     console.warn(`CHAMPIONSHIP_CAGE_ART_FALLBACK: ${error.message}`);
     return null;
@@ -618,12 +629,51 @@ async function mountRaisingHome() {
       setText(reloadGame, 'FIELD_LOAD_RELOAD');
       retry.dataset.loadAction = 'retry'; cancel.dataset.loadAction = 'cancel'; leave.dataset.loadAction = 'return';
       reloadGame.dataset.loadAction = 'reload';
-      status.append(message, retry, cancel, leave, reloadGame); host.append(status);
+      // Real progress (2026-10-12): steps finish when their loads do, bytes are
+      // what the network delivered, and a load that stops moving is given up
+      // on instead of one that is merely slow.
+      const progress = createLoadProgressView({ steps: [
+        { id: 'engine', key: 'LOAD_STEP_ENGINE' }, { id: 'facilities', key: 'LOAD_STEP_FACILITIES' },
+        { id: 'partners', key: 'LOAD_STEP_PARTNERS' }, { id: 'scene', key: 'LOAD_STEP_SCENE' }] });
+      let tracking = null;
+      const stopTracking = () => { tracking?.stop(); tracking = null; };
+      status.append(message, progress.element, retry, cancel, leave, reloadGame); host.append(status);
+      // The locked expansion rows' call to action: placed over the visible part
+      // of the rows by the scene, hidden whenever they are off screen.
+      const expansionCta = document.createElement('button');
+      expansionCta.type = 'button'; expansionCta.className = 'int-rh2-expansion-cta'; expansionCta.hidden = true;
+      const ctaLock = document.createElement('span'), ctaLabel = document.createElement('span'), ctaBadge = document.createElement('small');
+      ctaLock.className = 'int-rh2-expansion-cta__lock'; ctaLock.setAttribute('aria-hidden', 'true');
+      ctaLabel.className = 'int-rh2-expansion-cta__label'; ctaBadge.className = 'int-rh2-expansion-cta__badge';
+      setText(ctaLabel, 'EXPANSION_VIEW'); setText(ctaBadge, 'EXPANSION_VIEW_BADGE'); setLabel(expansionCta, 'aria-label', 'EXPANSION_VIEW_LABEL');
+      expansionCta.append(ctaLock, ctaLabel, ctaBadge);
+      let expansionSheetOpen = false;
+      const openExpansionSheet = () => {
+        if (closed || expansionSheetOpen) return;
+        expansionSheetOpen = true;
+        void openRanchExpansionPreview().finally(() => { expansionSheetOpen = false; });
+      };
+      expansionCta.addEventListener('click', openExpansionSheet);
+      host.append(expansionCta);
+      function placeExpansionCta(rect) {
+        const frame = rect?.visible;
+        // Too little of the rows on screen to point at: hide rather than float.
+        if (closed || !frame || frame.right - frame.left < 150 || frame.bottom - frame.top < 64) { expansionCta.hidden = true; return; }
+        expansionCta.hidden = false;
+        // Centred on what shows of the rows, clear of their top edge and of
+        // the hint strip along the frame's bottom, and always wholly on screen.
+        const half = (expansionCta.offsetWidth || 168) / 2, margin = 8;
+        const x = Math.min(Math.max((frame.left + frame.right) / 2, half + margin), Math.max(half + margin, host.clientWidth - half - margin));
+        const y = Math.min(Math.max(frame.top + 40, (frame.top + frame.bottom) / 2), Math.max(frame.top + 40, host.clientHeight - 88));
+        expansionCta.style.setProperty('--cta-x', `${Math.round(x)}px`);
+        expansionCta.style.setProperty('--cta-y', `${Math.round(y)}px`);
+      }
       function show(next, key) {
         if (closed) return;
         phase = next; host.dataset.loadState = next;
         const failed = residentStates.some(s => s.state === 'error'), loading = residentStates.some(s => s.state === 'loading');
         host.setAttribute('aria-busy', String(next === 'loading' || loading));
+        status.dataset.phase = next; progress.element.hidden = next === 'ready';
         const residentPending = next === 'ready' && (failed || loading);
         status.hidden = next === 'ready' && !failed && !loading;
         retry.hidden = next === 'loading' || (next === 'ready' && !failed); retry.disabled = next === 'loading';
@@ -635,19 +685,34 @@ async function mountRaisingHome() {
       function start() {
         if (closed) return;
         attempt?.cancel(); effects?.cancel(); scene?.dispose(); scene = null; residentStates = [];
-        const owner = attempt = createLoadAttempt();
+        expansionCta.hidden = true;
+        // The hard cap is the watchdog's longest load; stalling ends it sooner.
+        const owner = attempt = createLoadAttempt({ timeoutMs: LOAD_MAX_MS });
+        stopTracking(); progress.reset();
+        const watchdog = createLoadWatchdog({ stallMs: 45000, onExpire(reason) {
+          if (attempt === owner) owner.cancel(new Error(reason === 'STALLED' ? 'LOAD_STALLED' : 'LOAD_TIMEOUT'));
+        } });
+        const bytes = observeDownloadedBytes(total => { watchdog.activity(); progress.setBytes(total); });
+        const slowNotice = setTimeout(() => { if (attempt === owner && phase === 'loading') progress.showSlow(); }, 8000);
+        tracking = { stop() { watchdog.stop(); bytes.stop(); clearTimeout(slowNotice); } };
         tutorialPreview?.dispose(); tutorialPreview = null;
         show('loading', 'FIELD_LOAD_START');
+        progress.start('engine');
         void (async () => {
           try {
             const stage = await owner.wait(ensurePixiStage(host, owner.signal));
+            progress.done('engine');
             show('loading', 'FIELD_LOAD_ART');
+            progress.start('facilities'); progress.start('partners');
             const [characterBundle, fieldArt] = await Promise.all([
-              owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], { signal: owner.signal })),
+              owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], { signal: owner.signal }))
+                .then(value => { if (value) progress.done('partners'); return value; }),
               owner.own(loadOptionalCageFieldArt(stage, { signal: owner.signal }))
+                .then(value => { if (value) progress.done('facilities'); return value; })
             ]);
             owner.signal.throwIfAborted();
             if (!characterBundle || !fieldArt) throw new Error('RAISING_CORE_ART_UNAVAILABLE');
+            progress.start('scene');
             const pending = mountRaisingFieldPixiPresentation({
               stage, source: fieldSource, fieldArt, characterBundle, signal: owner.signal,
               getSelectedTool: () => toolbar?.getSelectedTool() ?? null, onTrainingFrame,
@@ -658,10 +723,15 @@ async function mountRaisingHome() {
               },
               onActorFrame: new URLSearchParams(location.search).get('presentation') === 'developer' || app.getInteractiveTutorial()?.finished === false
                 ? positions => { if (active(owner)) host.dataset.residentScreenPositions = JSON.stringify(positions); } : null,
-              onFallback(text) { if (active(owner)) console.warn(text); }
+              onFallback(text) { if (active(owner)) console.warn(text); },
+              ...(app.getInteractiveTutorial()?.finished === false ? {} : {
+                onExpansionPreview(rect) { if (active(owner)) placeExpansionCta(rect); },
+                onExpansionPreviewOpen() { if (active(owner)) openExpansionSheet(); }
+              })
             }).then(value => { owner.transfer(fieldArt); owner.transfer(characterBundle); return value; });
             const next = await owner.own(pending);
             owner.signal.throwIfAborted(); owner.transfer(next); scene = next; owner.stopTimer();
+            progress.done('scene'); stopTracking();
             delete root.dataset.fieldFallback; show('ready'); scene.render(lastFrame);
             resumeTutorialPresentation();
             // Reaction pixels can arrive after the same scene is playable.
@@ -678,8 +748,10 @@ async function mountRaisingHome() {
             const current = !closed && attempt === owner;
             owner.cancel(error);
             if (current) {
+              stopTracking(); progress.fail();
               root.dataset.fieldFallback = 'true';
-              show('error', error?.message === 'LOAD_TIMEOUT' ? 'FIELD_LOAD_TIMEOUT' : owner.signal.reason?.name === 'AbortError' ? 'FIELD_LOAD_CANCELLED' : 'FIELD_LOAD_ERROR');
+              show('error', error?.message === 'LOAD_TIMEOUT' ? 'FIELD_LOAD_TIMEOUT' : error?.message === 'LOAD_STALLED' ? 'FIELD_LOAD_STALLED'
+                : owner.signal.reason?.name === 'AbortError' ? 'FIELD_LOAD_CANCELLED' : 'FIELD_LOAD_ERROR');
               if (error?.name !== 'AbortError') console.warn('CHAMPIONSHIP_RAISING_LOAD', error);
             }
           }
@@ -712,7 +784,7 @@ async function mountRaisingHome() {
         getDiagnostics() { return scene?.getDiagnostics?.() ?? { renderer: 'LOADING', state: phase }; },
         dispose() {
           if (closed) return; closed = true;
-          attempt?.cancel(); effects?.cancel(); scene?.dispose(); scene = null; status.remove();
+          attempt?.cancel(); effects?.cancel(); stopTracking(); scene?.dispose(); scene = null; status.remove(); expansionCta.remove();
         }
       });
     }
@@ -986,7 +1058,8 @@ async function mountBattleField() {
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt,
     askToLeave: showChoiceDialog,
-    mountField({ host,onReady,onError }) {
+    loadingProgress: { createView: createLoadProgressView, observeBytes: observeDownloadedBytes },
+    mountField({ host,onReady,onError,progress=null }) {
       let disposed = false;
       const characters = new AbortController();
       let scene = null;
@@ -1005,12 +1078,17 @@ async function mountBattleField() {
         let characterRoster = null;
         let effectArt = null;
         try {
+          progress?.start('engine');
           const stage = await ensurePixiStage(host,characters.signal);
           if (disposed) return;
+          progress?.done('engine');
+          // Each step finishes when its own load resolves with art.
+          const step=(id,pending)=>Promise.resolve(pending).then(value=>{if(value&&!disposed)progress?.done(id);return value;});
+          for(const id of ['arena','fighters','effects'])progress?.start(id);
           const loaded=await Promise.allSettled([
-            loadOptionalBattleFieldArt(stage,source),
-            loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal}),
-            loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))
+            step('arena',loadOptionalBattleFieldArt(stage,source)),
+            step('fighters',loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal})),
+            step('effects',loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art)))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
           for(const result of loaded)if(result.status==='rejected')console.warn('Battle art unavailable',result.reason);
@@ -1019,6 +1097,7 @@ async function mountBattleField() {
           }
           if(!fieldArt||!characterRoster||!effectArt||characterRoster.getDiagnostics?.().failures?.length)
             throw new Error('BATTLE_CORE_ART_UNAVAILABLE');
+          progress?.start('scene');
           delete root.dataset.fieldFallback;
           // The existing overlay owns Hyper, five impact families and hit flash.
           // Keep its readiness gate: no safe replacement for these cues is proven.
@@ -1032,6 +1111,7 @@ async function mountBattleField() {
             await Promise.all([release(vfxOverlay),release(scene)]);
             return;
           }
+          progress?.done('scene');
           onReady?.();
           // Start bounded, optional audio only after core visual readiness. The
           // adapter discards old sound events and owns cancellation of its work.

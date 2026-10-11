@@ -17,17 +17,22 @@ let openDialog = null;
  * @param {object} options
  * @param {string} options.title
  * @param {string} [options.message]
- * @param {Array<{id:string,label:string,tone?:'primary'|'danger'|'secondary'}>} options.actions
- *   Displayed in order; the primary one should come last.
+ * @param {Array<{id:string,label:string,tone?:'primary'|'danger'|'secondary',disabled?:boolean}>} options.actions
+ *   Displayed in order; the primary one should come last. A disabled action
+ *   shows what is not available yet and never resolves.
+ * @param {Node|null} [options.content] richer body placed after the message
+ * @param {string} [options.variant] a styling hook (data-variant)
  * @param {string|null} [options.cancelId] resolved on Escape or a backdrop tap
  * @param {string} [options.focusId] defaults to cancelId, else the first action
  * @returns {Promise<string|null>}
  */
-export function showChoiceDialog({ title, message = "", actions, cancelId = null, focusId = null, signal = null, doc = globalThis.document } = {}) {
+export function showChoiceDialog({ title, message = "", actions, cancelId = null, focusId = null, signal = null, content = null, variant = null,
+  doc = globalThis.document } = {}) {
   if (!Array.isArray(actions) || actions.length === 0) throw new TypeError("A dialog needs at least one action");
   if (openDialog || signal?.aborted) return Promise.resolve(null);
   const dialog = doc.createElement("dialog");
   dialog.className = "cm-dialog";
+  if (variant) dialog.dataset.variant = variant;
   dialog.setAttribute("aria-labelledby", "cm-dialog-title");
   const panel = doc.createElement("div");
   panel.className = "cm-dialog__panel";
@@ -44,6 +49,7 @@ export function showChoiceDialog({ title, message = "", actions, cancelId = null
     body.id = "cm-dialog-message";
     panel.append(body);
   }
+  if (content) panel.append(content);
   const row = doc.createElement("div");
   row.className = "cm-dialog__actions";
   row.dataset.count = String(actions.length);
@@ -54,12 +60,15 @@ export function showChoiceDialog({ title, message = "", actions, cancelId = null
     button.className = `cm-dialog__action cm-dialog__action--${action.tone ?? "secondary"}`;
     button.dataset.action = action.id;
     button.textContent = action.label;
+    if (action.disabled) { button.disabled = true; button.setAttribute("aria-disabled", "true"); }
     buttons.set(action.id, button);
     row.append(button);
   }
   panel.append(row);
   dialog.append(panel);
 
+  // Focus goes back where it came from, even if the browser does not do it.
+  const opener = doc.activeElement && doc.activeElement !== doc.body ? doc.activeElement : null;
   return new Promise((resolve) => {
     let settled = false;
     const finish = (id) => {
@@ -69,6 +78,8 @@ export function showChoiceDialog({ title, message = "", actions, cancelId = null
       openDialog = null;
       try { if (dialog.open) dialog.close(); } catch { /* already closed */ }
       dialog.remove();
+      const lost = !doc.activeElement || doc.activeElement === doc.body || !doc.activeElement.isConnected;
+      if (lost && opener?.isConnected && typeof opener.focus === "function") opener.focus({ preventScroll: true });
       resolve(id);
     };
     const abort = () => finish(null);
@@ -82,7 +93,7 @@ export function showChoiceDialog({ title, message = "", actions, cancelId = null
     doc.body.append(dialog);
     if (typeof dialog.showModal === "function") dialog.showModal();
     else dialog.setAttribute("open", "");
-    const initial = buttons.get(focusId ?? cancelId) ?? buttons.values().next().value;
+    const initial = buttons.get(focusId ?? cancelId) ?? [...buttons.values()].find((button) => !button.disabled);
     initial?.focus({ preventScroll: true });
   });
 }

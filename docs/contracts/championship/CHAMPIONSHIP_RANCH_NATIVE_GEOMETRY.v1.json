@@ -94,13 +94,29 @@
     ],
     "lockedSourcesUnchanged": "nativeRaisingGround.js, raisingCageArtPlan.js and ranchSlotGeometry.js are hash-locked by docs/art/contracts/cage/field_cm01_01.v1.json and are not edited; the ring repeats their composition and tests require identical output on every original layout.",
     "tests": "tests/championship-ranch-expansion-cases.mjs",
+    "ordinaryPlayerPreview": {
+      "date": "2026-10-12",
+      "rule": "A native ranch without the expansion (NATIVE_ANCHORS_V1) shows the annex's rows 3-4 locked: the ten bays at the granted annex's exact origins, band offset and capped back row, each under the original Lid (field_cm29_01), dimmed, three with padlocks (bays 2, 5, 6). The bays form a ring of their own ten so the front row's last half-bay wraps into the band, never into the player's board. They are presentation only: the walk grid, ring, placements, input mapping and save are unchanged, and nothing can be walked into or placed there.",
+      "entry": "A 查看擴充 call to action floats over the visible part of the rows on the ranch (and a tap on the rows opens the same sheet); Cage Edit shows the same locked rows under the board with a 查看擴充 button. Both open one sheet (the native modal dialog) stating what the expansion adds, the rules it keeps, the unchanged 16-resident limit, and that obtaining it is not available yet; its purchase action is disabled.",
+      "capacityDecision": "The 16-resident Home limit stays. It is the original's 16-slot resident pool (save poolSlots 0..15); the expansion adds facility space, so residents spread out and crowd less, without raising the raising-throughput ceiling for competition.",
+      "notShown": "Legacy layouts, a granted annex (its real cells show instead), the interactive tutorial, and the ?cageArt= single-field preview.",
+      "implementation": [
+        "src/championship/presentation/raisingRanchArtPlan.js",
+        "src/championship/presentation/raisingExpansionPreview.js",
+        "src/championship/presentation/intRh2/raisingFieldViewport.js",
+        "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+        "src/championship/app/ranchExpansionPreview.js",
+        "src/championship/app/vs4Screens.js",
+        "src/championship/app/main.js"
+      ],
+      "tests": "tests/championship-ui-expansion-loading-cases.mjs"
+    },
     "undecided": [
       "price",
       "free unlock path",
       "expansion cap",
       "competitive fairness rules",
-      "real payment and entitlement authority",
-      "whether the 16-resident Home cap changes"
+      "real payment and entitlement authority"
     ],
     "knownLimits": [
       "A save holding the annex cannot be opened by a build older than NATIVE_DECKS_V1; revoke (empty annex) first to roll back",

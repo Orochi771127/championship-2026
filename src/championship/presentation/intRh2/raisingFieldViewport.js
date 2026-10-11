@@ -64,7 +64,10 @@ export function raisingNativeScreenPixels(field, viewport, padding = 12) {
 function nativeBoardPlacement(field, viewport, padding, scale) {
   // A folded ring (ranch expansion prototype) stacks its second band below the
   // first; the scale stays the first band's, and the frame scrolls over both.
-  const height = (field.fold ? field.fold.bandOffsetPx + field.worldHeightPx : field.worldHeightPx) * scale;
+  // A ranch without the expansion shows the same rows locked (2026-10-12), so
+  // both lay out the same height and the board sits in the same place.
+  const band = field.fold?.bandOffsetPx ?? field.expansionPreview?.bandOffsetPx ?? 0;
+  const height = (band > 0 ? band + field.worldHeightPx : field.worldHeightPx) * scale;
   const headroom = RAISING_TOP_HEADROOM_NATIVE * field.nativePixelWorldScale * scale;
   const available = viewport.height - padding;
   if (headroom + height <= available) {

@@ -1,5 +1,28 @@
 # Championship Owner Direction
 
+## 2026-10-12 — Ranch expansion for every player (locked preview), real loading progress, UI polish
+
+The Owner attached dot's UI handoff (`CLAUDE_UI_HANDOFF_20261011.md`, base `6d712b90`) and directed: 「請依附件接續 UI／HUD、使用者體驗與轉場打磨。沿用現有藍色蓋板完成後排擴充預覽，加入真實載入進度；先核對已發布版本，不要重做已完成的方塊旋轉、觸控／貼上與貨幣图示。片頭影片另案繼續，兩邊避免同時修改相同檔案。把籠子擴充系統也上線,全頁面或分頁跟功能頁面設計或籠子能容納的寵物數量都交由你評估跟決定,你只要跟我說為什麼你會這樣決定,請把這些UI /HUD介面再一次打磨優化…完成後請自審」.
+
+「上線」 together with 「完成後請自審」 authorizes committing this batch to `main` and publishing it to the existing public-playtest Pages destination after the self-review and gates. Scope:
+- **Ranch:** a native ranch without the expansion shows the annex's rows 3–4 locked under the original blue Lid, with a few padlocks.
+- **Entry points:** a 查看擴充 entry on the ranch and in Cage Edit opens one sheet. The sheet says what the expansion adds, the rules it keeps, that the 16-resident limit stays, and that obtaining it is 尚未開放, with its purchase action disabled.
+- **Loading:** ranch and battle loads show real step and byte progress. A ranch load is given up on when it stalls, no longer at a fixed 60 s.
+- **Dialogs:** dialogs return focus to their opener.
+
+The Owner delegated the page design and the resident capacity. The decisions are:
+- no separate page or tab: Cage Edit plus one sheet, because the annex is the same honeycomb;
+- the 16-resident limit stays, because it is the original's 16-slot resident pool, and keeping it also serves fairness and phone performance.
+
+Not authorized and not included:
+- price, a free unlock path, an expansion cap, fairness rules, payment, entitlement or a diamond ledger;
+- any ordinary-player grant (the prototype grant stays QA/developer-only);
+- walkability, save-format or gameplay changes;
+- cube, touch/paste, currency icons or HUD logic;
+- intro-video or TITLE files.
+
+Existing granted annexes, layouts and saves are kept as they are. See [scope and evidence](../reports/ui-expansion-loading-2026-10-12/REPORT_ZH_TW.md).
+
 ## 2026-10-11 — Publish reviewed Touch R3 / Currency HUD R1 separately
 
 The Owner directly authorized this receiving release chat: 「我授權發布已審查的 Touch R3／Currency HUD 這批 32 檔變更，包含手機防誤觸、明確複製貼上及貨幣列。請核對差異與測試後 commit、push 至 main、部署既有 Pages，並同步本機。保留其他協作者改動，不包含儲值、支付或付費開通。」 Publish its exact32 reviewed files plus necessary records with normal main push and existing Pages, then verify same-commit CI/Pages, local main and public hashes. Runtime25 paths match reviewed sequential candidate overlay; CI1679/1679, focused77, mobile16, four browser gates and formal build/validate9308 files pass. Diamond remains preview only; existing Bits balance and save authority unchanged. Physical iOS/OS clipboard remain UNVERIFIED; prior12 missing internal reference paths and public C long-flow limitations remain open. No recharge, payment, paid unlock, diamond ledger, new online LINK backend or other collaborator changes. See [scope and evidence](../reports/touch-hud-r3-2026-10-11/REPORT_ZH_TW.md).

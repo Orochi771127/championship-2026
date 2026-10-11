@@ -12,7 +12,8 @@
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import { getCageDefinitionByModuleId, MAX_SLOT_COUNT } from "../cage/cageCatalog.js";
 import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from "../cage/ranchSlotGeometry.js";
-import { RANCH_DECKS_LAYOUT, annexSlotCount, ranchRing, ringFieldTileOrigin, validateRanchLayout } from "../cage/ranchExpansion.js";
+import { NATIVE_RANCH_LAYOUT, RANCH_DECKS_LAYOUT, RANCH_EXPANSION_DECK_SLOTS, annexSlotCount, ranchRing, ringFieldTileOrigin,
+  validateRanchLayout } from "../cage/ranchExpansion.js";
 import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from "./originalCageVisualBindings.js";
 import { createRaisingCageArtPlan } from "./raisingCageArtPlan.js";
 
@@ -115,6 +116,43 @@ export function composeRanchArtPlan({ manifest, placements, layoutVersion, unloc
     residentViewport, wrapWidthPx: ring.ringCount * 48 * worldUnit, placements: [...result, ...caps],
     ...(ring.annexStart !== null ? { fold: { splitPx: ring.annexStart * 48 * worldUnit, ringPx: ring.ringCount * 48 * worldUnit,
       bandOffsetPx: RANCH_ANNEX_BAND_OFFSET_NATIVE * worldUnit, capPx: RANCH_UPPER_ROW_CAP_NATIVE * worldUnit } } : {}) });
+}
+
+/**
+ * The expansion as a ranch without it sees it (2026-10-12): the annex's ten
+ * bays under the board, each under the original Lid, so the room an
+ * expansion would open reads as more of the same honeycomb instead of empty
+ * screen. Presentation only -- the player's ring, walk grid and placements
+ * are untouched, and nothing here can be walked into or built on.
+ *
+ * The bays sit exactly where a granted annex draws its rows 3-4: the same
+ * band offset, the same capped upper row, the same cell origins. They form a
+ * ring of their own ten bays, so the lower row's last half-cell wraps into the
+ * band's own first column instead of showing a piece of the player's board.
+ * Back row first, caps last, as the annex band draws them.
+ */
+export function ranchExpansionPreviewPlan({ manifest, layoutVersion, previewFieldId = null }) {
+  if (layoutVersion !== NATIVE_RANCH_LAYOUT || previewFieldId !== null || !Array.isArray(manifest?.fields)) return null;
+  const lid = LID_FIELD_ID ? manifest.fields.find((field) => field.fieldId === LID_FIELD_ID) : null;
+  if (!lid || !(lid.nativeWidthPx > 0)) return null;
+  const unit = lid.worldWidthPx / lid.nativeWidthPx;
+  const ringCount = RANCH_EXPANSION_DECK_SLOTS;
+  const bays = [], caps = [];
+  const slots = Array.from({ length: ringCount }, (_, slot) => slot).sort((a, b) => (a % 2) - (b % 2) || a - b);
+  for (const slotIndex of slots) {
+    const geometry = ringCellGeometry({ field: lid, slotIndex, shapeIndex: SINGLE_CELL_SHAPE_INDEX, unit, ringCount });
+    const identity = { fieldId: lid.fieldId, moduleId: null, cageDefinitionIndex: null, structuralRole: 'LID' };
+    bays.push({ slotIndex, ...identity, x: geometry.x, y: geometry.y, sourceRect: geometry.sourceRect });
+    if (geometry.width < lid.worldWidthPx) bays.push({ ...identity, x: 0, y: geometry.y, fragmentOfSlot: slotIndex,
+      sourceRect: { ...geometry.sourceRect, x: geometry.width, width: lid.worldWidthPx - geometry.width } });
+    if (geometry.sourceRect.y > 0) caps.push({ ...identity, x: geometry.x, y: -geometry.sourceRect.y, capOfSlot: slotIndex,
+      sourceRect: { x: geometry.sourceRect.x, y: 0, width: geometry.sourceRect.width, height: geometry.sourceRect.y } });
+  }
+  return deepFreeze({ mode: 'NATIVE_RANCH_EXPANSION_PREVIEW', placements: [...bays, ...caps],
+    bandOffsetPx: RANCH_ANNEX_BAND_OFFSET_NATIVE * unit, capPx: RANCH_UPPER_ROW_CAP_NATIVE * unit,
+    widthPx: ringCount * 48 * unit, bayHeightPx: lid.worldHeightPx, nativePixelWorldScale: unit,
+    // A few bays carry a lock: enough to read as locked, not a wall of icons.
+    lockedBays: Object.freeze([2, 6, 5]) });
 }
 
 /** The art plan for whichever layout the ranch carries. */

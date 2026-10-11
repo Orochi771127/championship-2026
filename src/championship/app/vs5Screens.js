@@ -708,7 +708,7 @@ function combatantCard(combatant, compact,hudArt=null) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -730,8 +730,18 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const host = element("div", "cm-vs5-field");
   host.setAttribute("aria-label", uiText("Battle field. The match runs on its own."));
   host.setAttribute('aria-busy','true');
-  const loading=element('p','cm-vs5-field__loading','正在準備對戰場地…');
-  loading.setAttribute('role','status');host.append(loading);
+  // 2026-10-12: real progress while the arena loads -- steps finish with their
+  // loads, bytes are what the network delivered, nothing moves on a timer.
+  // The app hands the progress helpers in; this screen imports display copy only.
+  const loading=element('div','cm-vs5-field__loading');
+  const loadingText=element('p','cm-vs5-field__loading-text','正在準備對戰場地…');
+  loadingText.setAttribute('role','status');
+  const progress=loadingProgress?.createView?.({steps:[{id:'engine',key:'LOAD_STEP_ENGINE'},{id:'arena',key:'LOAD_STEP_ARENA'},
+    {id:'fighters',key:'LOAD_STEP_FIGHTERS'},{id:'effects',key:'LOAD_STEP_EFFECTS'},{id:'scene',key:'LOAD_STEP_SCENE'}]})??null;
+  loading.append(loadingText);if(progress)loading.append(progress.element);host.append(loading);
+  const downloaded=progress?loadingProgress.observeBytes?.(total=>progress.setBytes(total))??null:null;
+  const slowNotice=progress?setTimeout(()=>{if(host.getAttribute('aria-busy')==='true')progress.showSlow();},8000):null;
+  const stopLoadingTrack=()=>{downloaded?.stop();clearTimeout(slowNotice);};
 
   // The arena name and the evidence label live INSIDE the clock band: the shell
   // holds the contract's five bands and nothing else, so a sixth child cannot
@@ -779,9 +789,10 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   // three, the field, the player's three, the record.
   section.append(clock.band, opponents, host, players, log.band);
 
-  const field = mountField({ host,
-    onReady(){host.setAttribute('aria-busy','false');loading.remove();},
-    onError(){host.setAttribute('aria-busy','false');loading.textContent='對戰場地載入失敗，請返回牧場後再試。';}
+  const field = mountField({ host, progress,
+    onReady(){stopLoadingTrack();host.setAttribute('aria-busy','false');loading.remove();},
+    onError(){stopLoadingTrack();progress?.fail();host.setAttribute('aria-busy','false');loading.dataset.state='error';
+      loadingText.textContent=uiText('對戰場地載入失敗，請返回牧場後再試。');}
   });
 
   return Object.freeze({
@@ -809,6 +820,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
     },
     dispose() {
       viewDisposed = true;
+      stopLoadingTrack();
       field?.dispose?.();
       root.replaceChildren();
     }

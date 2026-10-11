@@ -100,7 +100,7 @@ test('already aborted load makes no requests; completion after verdict never pla
 // Exercise the real main.js mount owner with controlled presentation resources.
 // Browser coverage separately runs the same owner with the formal artifact.
 const main=readFileSync(new URL('../src/championship/app/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
-const binding=main.slice(main.indexOf('    mountField({ host,onReady,onError }) {'),main.indexOf('    onExit: tutorial?undefined:'));
+const binding=main.slice(main.indexOf('    mountField({ host,onReady,onError,progress=null }) {'),main.indexOf('    onExit: tutorial?undefined:'));
 function mountFixture({audioLoad,fieldLoad,vfxLoad,sceneLoad}={}){
   const order=[],warnings=[],resources={};
   for(const name of ['field','roster','effects','vfx','scene','audio'])resources[name]={released:0,dispose(){this.released++;},getDiagnostics:()=>({failures:[]})};

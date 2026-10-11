@@ -105,6 +105,10 @@ export async function mountRaisingFieldPixiPresentation({
   onTrainingFrame = () => {},
   onActorFrame = null,
   onResidentAssetState = () => {},
+  // Locked expansion bays (2026-10-12): where they show on screen, and a tap
+  // on them. Both are presentation hooks; the caller owns the DOM and dialog.
+  onExpansionPreview = null,
+  onExpansionPreviewOpen = null,
   reducedMotion = prefersReducedMotion()
 }) {
   assertDependencies(stage, source);
@@ -275,6 +279,33 @@ export async function mountRaisingFieldPixiPresentation({
     productionArtLayer.scale.set(bounds.scale);
     productionArtLayer.position.set(bounds.x, bounds.y);
     fieldArt.foreground?.syncViewport(bounds);
+    syncExpansionPreview(bounds);
+  }
+
+  // The on-screen part of the locked expansion bays, for the caller's call to
+  // action. The band repeats with the ring, so the copy nearest the middle of
+  // the frame is the one reported. Reported only when it changes.
+  let expansionPreviewKey = null;
+  function expansionPreviewRect(bounds) {
+    const preview = fieldArt?.field?.expansionPreview;
+    if (!preview || !(bounds?.scale > 0)) return null;
+    const scale = bounds.scale, wrap = fieldArt.field.wrapWidthPx;
+    let left = bounds.x;
+    if (wrap > 0) left += Math.round((app.screen.width / 2 - (left + preview.widthPx * scale / 2)) / (wrap * scale)) * wrap * scale;
+    const rect = { left, right: left + preview.widthPx * scale,
+      top: bounds.y + (preview.bandOffsetPx - preview.capPx) * scale,
+      bottom: bounds.y + (preview.bandOffsetPx + preview.contentHeightPx) * scale };
+    const visible = { left: Math.max(0, rect.left), right: Math.min(app.screen.width, rect.right),
+      top: Math.max(0, rect.top), bottom: Math.min(app.screen.height, rect.bottom) };
+    return visible.right - visible.left > 0 && visible.bottom - visible.top > 0 ? { band: rect, visible } : null;
+  }
+  function syncExpansionPreview(bounds) {
+    if (typeof onExpansionPreview !== 'function') return;
+    const rect = expansionPreviewRect(bounds);
+    const key = rect ? [rect.visible.left, rect.visible.top, rect.visible.right, rect.visible.bottom, rect.band.top].map(Math.round).join(',') : '';
+    if (key === expansionPreviewKey) return;
+    expansionPreviewKey = key;
+    onExpansionPreview(rect);
   }
 
   function drawField(frame) {
@@ -339,8 +370,9 @@ export async function mountRaisingFieldPixiPresentation({
       .find((value) => Number.isFinite(value));
     if (!Number.isFinite(nativeX)) return;
     cameraStarted = true;
-    // A folded ring opens on its first band, headroom included.
-    if (fieldArt.field.fold) cameraY = scrollMaxY();
+    // A folded ring opens on its first band, headroom included; so does a
+    // ranch showing the expansion's locked rows below its board.
+    if (fieldArt.field.fold || fieldArt.field.expansionPreview) cameraY = scrollMaxY();
     const target = bandWorldX(fieldArt.field, nativeX / 4096) - (app.screen.width - 24) / fit.scale / 2;
     cameraX = fieldArt.field.wrapWidthPx
       ? wrapRaisingCamera(target, fieldArt.field.wrapWidthPx)
@@ -378,6 +410,12 @@ export async function mountRaisingFieldPixiPresentation({
       // bare ground with a tool that places nothing puts it away again.
       else if(!completed.moved&&event.type!=="pointercancel"&&event.type!=="pointerupoutside"
         &&source.getFrame().selection?.creatureId!=null) source.intents.selectCreature(null);
+      // A plain tap on the locked expansion bays opens what they are for.
+      else if(!completed.moved&&event.type!=="pointercancel"&&event.type!=="pointerupoutside"&&!completed.tool
+        &&completed.tutorialCheckpoint===null&&typeof onExpansionPreviewOpen==='function') {
+        const rect=expansionPreviewRect(raisingFieldViewport(fieldArt?.field,view,12,cameraX)),at=event.global??{x:completed.startX,y:completed.startY};
+        if(rect&&at.x>=rect.visible.left&&at.x<=rect.visible.right&&at.y>=rect.visible.top&&at.y<=rect.visible.bottom)onExpansionPreviewOpen();
+      }
       if(pointerPreview)pointerPreview.held=false;
       if(event.type==='pointercancel'||event.type==='pointerupoutside'){pointerPreview=null;cleanFeedback=null;}
     }

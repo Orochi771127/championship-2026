@@ -616,3 +616,9 @@
 .cm-vs5-team-preview { padding: var(--sp-2); border: 1px solid var(--c-border); border-radius: var(--r-control); }
 .cm-vs5-team-preview[hidden] { display: none; }
 .cm-vs5-team-preview__members { margin: var(--sp-1) 0 0; padding-inline-start: 1.4em; overflow-wrap: anywhere; }
+
+/* 2026-10-12: the arena's loading card carries real progress under its line. */
+.cm-vs5-field__loading { display: grid; gap: var(--sp-2); box-shadow: var(--shadow-float); animation: cm-fade var(--dur-base) var(--ease-out) 200ms both; }
+.cm-vs5-field__loading-text { margin: 0; font-weight: var(--fw-strong); }
+.cm-vs5-field__loading[data-state="error"] { border-color: var(--c-danger-line); }
+.cm-vs5-field__loading[data-state="error"] .cm-vs5-field__loading-text { color: var(--c-danger-text); }
