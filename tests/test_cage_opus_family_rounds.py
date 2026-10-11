@@ -1,4 +1,4 @@
-"""Batch tests for the opus family rounds r2-r17 (Blender -> layered 2.5D -> hex layout).
+"""Batch tests for the opus family rounds r2-r18 (Blender -> layered 2.5D -> hex layout).
 
 They read the exported cell banks, fit tables, check reports and review
 reports; they do not render.  Round r1 has its own test module.
@@ -34,6 +34,7 @@ ROUNDS = {
     'opm-opus-r15': ('cage_opus_athletics_authoring', FAMILY, ('field_cm03_01', 'field_cm30_01')),
     'opm-opus-r16': ('cage_opus_toxic_authoring', FAMILY, ('field_cm23_01',)),
     'opm-opus-r17': ('cage_opus_meadow_authoring', FAMILY, ('field_cm08_01',)),
+    'opm-opus-r18': ('cage_opus_athletics_v2_authoring', FAMILY, ('field_cm03_01',)),
 }
 # The newest round that holds each field (earlier rounds stay on disk for comparison).
 LATEST = {}
@@ -41,7 +42,7 @@ for _round, (_module, _producer, _fields) in ROUNDS.items():
     for _field in _fields:
         LATEST[_field] = _round
 LATEST.update({'field_cm06_01': 'opm-opus-r1', 'field_cm15_01': 'opm-opus-r1', 'field_cm17_01': 'opm-opus-r1'})
-FINAL_REVIEW = WORK / 'review/refinement-opus-r17'
+FINAL_REVIEW = WORK / 'review/refinement-opus-r18'
 
 
 def read(path):

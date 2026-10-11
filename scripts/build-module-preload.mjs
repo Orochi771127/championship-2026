@@ -51,7 +51,9 @@ function startupGraph() {
 
 function block(modules) {
   const links = modules.map((href) => {
-    const as = href.endsWith(".json") ? ' as="fetch" crossorigin' : "";
+    // JSON modules must be preloaded as="json". Any other value (including
+    // "fetch") makes the browser discard the hint and log a warning.
+    const as = href.endsWith(".json") ? ' as="json"' : "";
     return `    <link rel="modulepreload" href="./${href}"${as}>`;
   });
   return [BEGIN, ...links, END].join("\n");

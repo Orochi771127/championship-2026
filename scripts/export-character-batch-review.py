@@ -36,33 +36,70 @@ SPECIES={'m002_choromon':'species-009','m003_nyokimon':'species-010','m004_bubbm
          'm103_tanemon':'species-022','m104_tunomon':'species-023','m105_tokomon':'species-024'}
 
 
-def build(entity):
+def validated_cell_origin(source, bank, inventory, key, record, image, density):
+    """Allow storage repacking only with byte-exact world-coordinate evidence."""
+    expected=[v*density for v in inventory['slots'][key].get('canvasOrigin',inventory['sourceOrigin'])]
+    actual=record.get('canvasOrigin',[v*density for v in inventory['sourceOrigin']])
+    if actual==expected:return actual
+    P.require(bank.get('packingPolicy')=='OWN_RGBA_TRANSLATION_WITH_MATCHING_ORIGIN','CELL_ORIGIN_DRIFT '+key)
+    proof=record.get('packingProof',{})
+    P.require(record.get('sourceCanvasOrigin')==expected,'PACKING_SOURCE_ORIGIN_DRIFT '+key)
+    P.require(len(actual)==2 and all(type(v) is int for v in actual),'PACKING_ORIGIN_INVALID '+key)
+    delta=[actual[i]-expected[i] for i in (0,1)]
+    P.require(proof.get('rasterOffset')==delta,'PACKING_OFFSET_DRIFT '+key)
+    path=(source/proof.get('image','')).resolve()
+    P.require(path.is_relative_to(source.resolve()) and path.is_file(),'PACKING_PROOF_PATH '+key)
+    P.require(P.sha(path.read_bytes())==proof.get('sha256'),'PACKING_PROOF_DRIFT '+key)
+    before=Image.open(path).convert('RGBA');size=bank.get('logicalCanvas',[64,64])[0]*density
+    P.require(before.size==(size*2,size*2),'PACKING_PROOF_SIZE '+key)
+    origin=proof.get('canvasOffset')
+    P.require(origin==[size//2,size//2],'PACKING_PROOF_OFFSET '+key)
+    restored=Image.new('RGBA',before.size)
+    restored.alpha_composite(image,tuple(origin[i]-delta[i] for i in (0,1)))
+    P.require(restored.tobytes()==before.tobytes(),'PACKING_WORLD_PIXELS_DRIFT '+key)
+    return actual
+
+
+def build(entity, allow_pending_local_qa=False):
     config=CONFIG[entity];source=J.JOBS/entity/config['candidate']
     bank=P.read(source/'bank.json')
     contract=P.read(P.PACK/'generated/entities'/entity/'motion-contract.json')
     inventory=P.read(J.D.BASE/entity/'inventory.json')
     visual=P.read(J.JOBS/entity/config['review']/'visual-validation.json')
-    P.require(visual['status'].startswith('PASS_CANDIDATE_VISUAL'),'VISUAL_GATE_NOT_PASSED')
+    visual_passed=visual['status'].startswith('PASS_CANDIDATE_VISUAL')
+    P.require(visual_passed or (allow_pending_local_qa
+              and visual['status']=='PENDING_LOCAL_ART_QA'
+              and visual.get('sourceBankSha256')==P.sha((source/'bank.json').read_bytes())
+              and visual.get('structuralStatus')=='PASS_STRUCTURAL_ONLY'), 'VISUAL_GATE_NOT_PASSED')
     normal_game_qa=visual.get('limits',{}).get('normalGameQa','PENDING')
     runtime=P.read(ROOT/'assets/production/internal-faithful-baseline/characters-v1'/entity/'runtime.json')
     origin=inventory['sourceOrigin']
     P.require(bank['entityId']==entity and bank['sourceOrigin']==origin,'ENTITY_ORIGIN_DRIFT')
+    density=bank.get('rasterScale',1)
+    P.require(type(density) is int and density in (1,2,4),'INVALID_RASTER_SCALE')
+    logical=bank.get('logicalCanvas',[64,64]);P.require(len(logical)==2 and logical[0]==logical[1] and type(logical[0]) is int and 64<=logical[0]<=256 and logical[0]%32==0,'INVALID_LOGICAL_STORAGE_CANVAS')
+    size=logical[0]*density
     files={};geometry={'frames':{}}
     for side in ('main','sub'):
         atlas=Image.open(source/f'{side}-atlas.png').convert('RGBA');frames={}
         for key,record in bank['cells'].items():
             if not key.startswith(side+'/'):continue
             image=Image.open(source/record['image']).convert('RGBA')
-            P.require(image.size==(64,64) and set(image.getchannel('A').get_flattened_data())<={0,255},'INVALID_CELL '+key)
+            P.require(image.size==(size,size) and set(image.getchannel('A').get_flattened_data())<={0,255},'INVALID_CELL '+key)
             P.require(P.sha((source/record['image']).read_bytes())==record['sha256'],'CELL_DRIFT '+key)
-            bounds=image.getchannel('A').getbbox();P.require(bounds is not None,'EMPTY_CELL '+key)
+            bounds=image.getchannel('A').getbbox();blank=bounds is None
+            P.require(not blank or (record.get('blank') is True and inventory['slots'][key]['blank'] is True),'UNEXPECTED_EMPTY_CELL '+key)
+            # Keep source-authorized blank frames in their sequence. A one-pixel
+            # transparent texture is valid atlas storage; blank geometry hides it.
+            if blank:bounds=(0,0,1,1)
             index=int(key[-3:]);bx,by,ex,ey=bounds;texture=entity+'/'+key
-            frames[texture]={'frame':{'x':index%8*64+bx,'y':index//8*64+by,'w':ex-bx,'h':ey-by},
+            frames[texture]={'frame':{'x':index%8*size+bx,'y':index//8*size+by,'w':ex-bx,'h':ey-by},
                              'rotated':False,'trimmed':True,
                              'spriteSourceSize':{'x':bx,'y':by,'w':ex-bx,'h':ey-by},
-                             'sourceSize':{'w':64,'h':64}}
-            geometry['frames'][texture]={'blank':False,'scale':1,'origin':origin,'sourceSize':[64,64],
-                                         'nativeBounds':[bx-origin[0],by-origin[1],ex-origin[0],ey-origin[1]]}
+                             'sourceSize':{'w':size,'h':size}}
+            cell_origin=validated_cell_origin(source,bank,inventory,key,record,image,density)
+            geometry['frames'][texture]={'blank':blank,'scale':density,'origin':cell_origin,'sourceSize':[size,size],
+                                         'nativeBounds':[(bx-cell_origin[0])/density,(by-cell_origin[1])/density,(ex-cell_origin[0])/density,(ey-cell_origin[1])/density]}
         source_sequences=contract['sides'][side]['sequences']
         P.require(len(runtime['sides'][side]['animations'])==len(source_sequences),'SEQUENCE_COUNT_DRIFT')
         for animation in runtime['sides'][side]['animations']:
@@ -75,11 +112,11 @@ def build(entity):
         files[f'{side}.png']=(source/f'{side}-atlas.png').read_bytes()
         files[f'{side}.json']=P.encoded({'frames':frames,'meta':{'image':f'{side}.png','format':'RGBA8888',
                                                                  'size':{'w':atlas.width,'h':atlas.height},'scale':'1'}})
-    runtime['artProfile']={'style':'ORIGINAL_HIGGSFIELD_CANDIDATE','scale':1,'filter':'nearest',
-                           'logicalCanvas':[64,64],'anchor':{'x':origin[0]/64,'y':origin[1]/64},
+    runtime['artProfile']={'style':'ORIGINAL_HIGGSFIELD_CANDIDATE','scale':density,'filter':'nearest',
+                           'logicalCanvas':logical,'anchor':{'x':origin[0]/logical[0],'y':origin[1]/logical[1]},
                            'alphaBoundary':'TRANSPARENT','reviewOnly':True,'runtimeEligible':False,
                            'shippingReady':False,'publicReleasePermitted':False,
-                           'designVersion':bank['designVersion']}
+                           'designVersion':bank['designVersion'],'visualAccepted':visual_passed}
     runtime['reviewGeometry']=geometry
     runtime['sourceBankSha256']=P.sha((source/'bank.json').read_bytes())
     runtime['motionContractSha256']=P.sha((P.PACK/'generated/entities'/entity/'motion-contract.json').read_bytes())
@@ -87,7 +124,7 @@ def build(entity):
     files['manifest.json']=P.encoded({'entityId':entity,'reviewOnly':True,'humanApproved':False,
         'runtimeEligible':False,'shippingReady':False,'publicReleasePermitted':False,
         'sourceBankSha256':runtime['sourceBankSha256'],'files':{key:P.sha(value) for key,value in files.items()},
-        'nativeOrigin':origin,'nativeCanvas':[64,64],'packedPixelsPerNativePixel':1,
+        'nativeOrigin':origin,'nativeCanvas':logical,'packedPixelsPerNativePixel':density,'visualAccepted':visual_passed,
         'normalGameQa':normal_game_qa,'usage':'Loopback candidate review only. No default production replacement.'})
     destination=ROOT/'assets/production/internal-character-review'/config['folder']
     P.SOURCE.publish(files,destination,False)
@@ -101,9 +138,11 @@ def build(entity):
         bounds=image.getchannel('A').getbbox();P.require(bounds is not None,'EMPTY_HUD_CELL '+key)
         crop=image.crop(bounds);name=key.replace('/','-')+'.png';data=P.PIXEL.png_bytes(crop)
         hud_files[name]=data
-        row={'src':hud_path+name,'width':crop.width,'height':crop.height,
-             'origin':[origin[0]-bounds[0],origin[1]-bounds[1]],'sha256':P.sha(data),
+        cell_origin=bank['cells'][key].get('canvasOrigin',[v*density for v in origin])
+        row={'src':hud_path+name,'width':crop.width/density if density!=1 else crop.width,'height':crop.height/density if density!=1 else crop.height,
+             'origin':[(cell_origin[0]-bounds[0])/density,(cell_origin[1]-bounds[1])/density],'sha256':P.sha(data),
              'cell':int(key[-3:])}
+        if density!=1:row.update({'rasterScale':density,'rasterWidth':crop.width,'rasterHeight':crop.height})
         if key.startswith('main'):
             portrait={**row,'speciesId':SPECIES[entity],'entityId':entity,'nativeScale':2,
                       'sourceBank':entity+'_main','sequenceId':0,
