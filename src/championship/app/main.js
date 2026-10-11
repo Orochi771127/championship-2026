@@ -992,12 +992,20 @@ async function mountBattleField() {
       let scene = null;
       let vfxOverlay = null;
       let battleAudio = null;
+      const audioLoading = new AbortController();
+      const released = new Map();
+      const release = resource => {
+        if(!resource)return Promise.resolve();
+        if(!released.has(resource))released.set(resource,Promise.resolve().then(()=>resource.dispose())
+          .catch(error=>console.warn('Battle presentation cleanup unavailable',error)));
+        return released.get(resource);
+      };
       void (async () => {
         let fieldArt = null;
         let characterRoster = null;
         let effectArt = null;
         try {
-          const stage = await ensurePixiStage(host);
+          const stage = await ensurePixiStage(host,characters.signal);
           if (disposed) return;
           const loaded=await Promise.allSettled([
             loadOptionalBattleFieldArt(stage,source),
@@ -1007,34 +1015,35 @@ async function mountBattleField() {
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
           for(const result of loaded)if(result.status==='rejected')console.warn('Battle art unavailable',result.reason);
           if (disposed) {
-            await effectArt?.dispose();await fieldArt?.dispose();await characterRoster?.dispose();return;
+            await Promise.all([release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }
+          if(!fieldArt||!characterRoster||!effectArt||characterRoster.getDiagnostics?.().failures?.length)
+            throw new Error('BATTLE_CORE_ART_UNAVAILABLE');
           delete root.dataset.fieldFallback;
+          // The existing overlay owns Hyper, five impact families and hit flash.
+          // Keep its readiness gate: no safe replacement for these cues is proven.
           vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement());
           if (disposed) {
-            await vfxOverlay?.dispose();await effectArt?.dispose();await fieldArt?.dispose();await characterRoster?.dispose();return;
+            await Promise.all([release(vfxOverlay),release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }
-          // Audio is optional presentation; an unavailable decoder/sample must
-          // never prevent the existing battle scene from starting.
-          // Through the product audio bus: master volume, sound effects
-          // volume and mute apply to the battle's own samples too.
-          battleAudio = await mountBattleAudioPresentation({source,output:settings.audio.output('sfx')}).catch(error=>{
-            console.warn('Battle audio unavailable',error);return null;
-          });
+          if(!vfxOverlay)throw new Error('BATTLE_CORE_VFX_UNAVAILABLE');
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame) });
           if (disposed) {
-            await battleAudio?.dispose();
-            await vfxOverlay?.dispose();
-            scene?.dispose();
+            await Promise.all([release(vfxOverlay),release(scene)]);
             return;
           }
           onReady?.();
+          // Start bounded, optional audio only after core visual readiness. The
+          // adapter discards old sound events and owns cancellation of its work.
+          void mountBattleAudioPresentation({source,output:settings.audio.output('sfx'),signal:audioLoading.signal})
+            .then(async audio=>{if(disposed)await release(audio);else battleAudio=audio;})
+            .catch(error=>{if(!disposed)console.warn('Battle audio unavailable',error);});
         } catch (error) {
-          void fieldArt?.dispose();
-          void characterRoster?.dispose();
-          void effectArt?.dispose();
-          void vfxOverlay?.dispose();
-          void battleAudio?.dispose();
+          audioLoading.abort();
+          if(scene)void release(scene);
+          else {void release(fieldArt);void release(characterRoster);void release(effectArt);}
+          void release(vfxOverlay);
+          void release(battleAudio);
           if (disposed) return;
           // This scene owns the callback on the shared ticker. A failed mount
           // cannot claim a running or naturally resolving battle.
@@ -1045,11 +1054,13 @@ async function mountBattleField() {
       })();
       return {
         dispose() {
+          if(disposed)return;
           disposed = true;
           characters.abort();
-          void vfxOverlay?.dispose();
-          void battleAudio?.dispose();
-          scene?.dispose();
+          audioLoading.abort();
+          void release(vfxOverlay);
+          void release(battleAudio);
+          void release(scene);
         }
       };
     },

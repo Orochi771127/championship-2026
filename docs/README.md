@@ -1,5 +1,7 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-11 Battle 音效可選載入 Performance C 發布集](reports/performance-c-2026-10-11/REPORT_ZH_TW.md)
+
 - [2026-10-11 角色載入 Performance A 發布集](reports/performance-a-2026-10-11/REPORT_ZH_TW.md)
 
 - [2026-10-11 自有夥伴就緒與時鐘 P1 發布集](reports/clock-ready-2026-10-11/REPORT_ZH_TW.md)
