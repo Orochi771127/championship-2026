@@ -12,7 +12,7 @@
 
 ## 嚴格 FAIL 與有限視覺接受分開
 
-[STRICT_PIXEL_PROOF.json](STRICT_PIXEL_PROOF.json) 原 bytes 保留，`allPass:false`，沒有改寫 PASS。dot 獨立檢查原尺寸畫面、幾何與 GPU 對照後採用 [VISUAL_ACCEPTANCE.json](VISUAL_ACCEPTANCE.json) 的有限例外，只限精確候選 hash、圖片 hash、viewport／DPR／pose與指定座標。桌面actor-free三點各channel差≤1、alpha不變；front另(196,296) blue202→203獨立記錄，非預期遮擋；outside-actor(190,290)為既有點。其餘座標／更大差／素材／形狀／位移仍block。mobile維持原零差異門檻，held current/raw零差。未建立全局近似比較或放寬既有測試。
+[STRICT_PIXEL_PROOF.json](STRICT_PIXEL_PROOF.json) 原始 CRLF 證據另保留，倉庫副本依 `eol=lf` 正規化，兩者 JSON 內容完全相同。`VISUAL_ACCEPTANCE.json.strictEvidenceSha256` 指原始 CRLF 證據，`repositoryStrictEvidenceSha256` 指倉庫 LF 副本；`allPass:false` 保留，沒有改寫 PASS。dot 獨立檢查原尺寸畫面、幾何與 GPU 對照後採用 [VISUAL_ACCEPTANCE.json](VISUAL_ACCEPTANCE.json) 的有限例外，只限精確候選 hash、圖片 hash、viewport／DPR／pose與指定座標。桌面actor-free三點各channel差≤1、alpha不變；front另(196,296) blue202→203獨立記錄，非預期遮擋；outside-actor(190,290)為既有點。其餘座標／更大差／素材／形狀／位移仍block。mobile維持原零差異門檻，held current/raw零差。未建立全局近似比較或放寬既有測試。
 
 dot判斷強證據支持共用三角對角上的4xMSAA合成量化；這是其分析／品質決策，不冒充新增GPU因果測試。mask ABC三座標A1=A2=C、B不同；break-only三點無差；mesh造成141底圖像素差而被拒絕，未採用mesh、關AA或renderer monkey patch。dispose後四張original控制圖hash還原。
 
