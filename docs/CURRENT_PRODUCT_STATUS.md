@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: CUBE_FREE_ROTATION_R2_20261011 -->
+**2026-10-11 六面方塊自由旋轉R2已按精確hash整合並完成本機驗收，沿直接人類授權獨立發布。** quaternion trackball、六實際面點選與既有模式路由；聚焦25、LINK/PASSWORD16、正式CI1663／1663及三組browser通過，build/validate9292檔。真機iOS仍UNVERIFIED，R3、貼上與貨幣HUD不在本批；最新遠端與公開結果以同SHA發布回條為準。見[範圍與驗收](reports/cube-r2-2026-10-11/REPORT_ZH_TW.md)。
+
 <!-- record-id: ANNEX_FOREGROUND_FOLD_20261011 -->
 **2026-10-11 CM03／CM24 折疊擴充前景兩檔候選已按精確 hash 整合工作區，發布以接收任務回條為準。** 修復巢狀底圖查找、fold stencil 裁切／座標與前景深度，保留素材、角色比例、碰撞、存檔與原型授予界線。既有49項聚焦與1646項CI、手機／桌面搬運存讀撤銷證據沿用相同 bytes。原嚴格像素比較仍 FAIL；dot 只對精確條件／指定座標核准有限視覺例外，未放寬其他差異或採用mesh。見[本批範圍與正式建置證據](reports/annex-foreground-2026-10-11/REPORT_ZH_TW.md)。
 

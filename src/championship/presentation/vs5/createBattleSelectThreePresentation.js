@@ -32,6 +32,7 @@ import { BATTLE_FACE_LABELS, battleFaceLabel } from "../../text/zhHant.js";
 import { uiText } from "../../text/uiText.js";
 import { cappedPixelRatio, currentQuality } from "../presentationPreferences.js";
 import { BATTLE_CUBE_ART_ID, resolveBattleCubeArt } from "./battleCubeArt.js";
+import { bindBattleCubeTrackball } from "./battleCubeTrackball.js";
 
 /** Mode identities confirmed against OVL10's original help-bank dispatch. */
 export const BATTLE_CUBE_FACES = Object.freeze([
@@ -76,6 +77,31 @@ function faceMaterials() {
     metalness: 0.18,
     emissive: 0x000000
   }));
+}
+
+// Product UI labels for the two modes without authored panel art. These are
+// ordinary localized text, not new production artwork or ROM-derived textures.
+function makeModeLabelTexture(faceId, fontFamily) {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 512;
+  const context = canvas.getContext("2d");
+  if (!context) return null; // HTML shortcuts remain usable if 2D is unavailable.
+  context.fillStyle = `#${FACE_COLOUR[faceId].toString(16).padStart(6, "0")}`;
+  context.fillRect(0, 0, 512, 512);
+  context.strokeStyle = "#e2edf0";
+  context.lineWidth = 4;
+  context.strokeRect(24, 24, 464, 464);
+  context.fillStyle = "#ffffff";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  const label = battleFaceLabel(faceId);
+  let size = 64;
+  do { context.font = `600 ${size}px ${fontFamily}`; size -= 2; }
+  while (context.measureText(label).width > 440 && size >= 16);
+  context.fillText(label, 256, 256, 440);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
 }
 
 /**
@@ -156,13 +182,18 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
     }
     button.addEventListener("click", () => {
       if (button.disabled) return;
-      selected = face.id;
-      paint();
-      draw();
-      onSelect(face.id);
+      selectFace(face.id);
     });
     overlay.append(button);
     buttons.set(face.id, button);
+  }
+
+  function selectFace(faceId) {
+    if (disposed || !buttons.has(faceId) || buttons.get(faceId).disabled) return;
+    selected = faceId;
+    paint();
+    draw();
+    onSelect(faceId);
   }
 
   function paint() {
@@ -176,11 +207,21 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
   }
 
   let disposed = false;
-  let spin = 0.6;
-  let dragging = false;
-  let lastX = 0;
+  cube.rotation.set(Math.sin(0.3) * 0.12, 0.6, 0);
   const textures = new Set();
   const textureStates = Object.fromEntries(BATTLE_CUBE_FACES.map(face => [face.id, "UNAVAILABLE"]));
+  const labelTextures = new Set();
+  const fontFamily = globalThis.getComputedStyle?.(host).fontFamily || "system-ui, sans-serif";
+  for (const faceId of ["PASSWORD_BATTLE", "PRACTICE_BATTLE"]) {
+    const texture = makeModeLabelTexture(faceId, fontFamily);
+    if (!texture) continue;
+    labelTextures.add(texture);
+    const material = materials[SIDE_ORDER.indexOf(faceId)];
+    material.map = texture;
+    material.color.setHex(0xffffff);
+    material.needsUpdate = true;
+    textureStates[faceId] = "UI_LABEL";
+  }
 
   function resize() {
     const width = Math.max(1, host.clientWidth);
@@ -193,39 +234,33 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
   // Drawn ON DEMAND, never on a loop. This product runs exactly one ticker and
   // it belongs to the Pixi stage; a second animation loop here would be a second
   // ticker, which the architecture forbids. The Gate world sphere is drawn the
-  // same way -- the box turns when the player turns it.
+  // same way -- the box turns when the player turns it. No automatic motion,
+  // inertia or easing in either full or reduced-motion mode.
   function draw() {
     if (disposed) return;
-    cube.rotation.y = spin;
-    cube.rotation.x = Math.sin(spin * 0.5) * 0.12;
     renderer.render(scene, camera);
   }
 
-  const startDrag = (event) => {
-    if (!event.isPrimary || event.button !== 0) return;
-    dragging = true;
-    lastX = event.clientX;
-    renderer.domElement.setPointerCapture(event.pointerId);
-  };
-  const moveDrag = (event) => {
-    if (!dragging) return;
-    spin += (event.clientX - lastX) * 0.01;
-    lastX = event.clientX;
-    draw();
-  };
-  const endDrag = () => { dragging = false; };
-  const rotateKey = (event) => {
-    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-    event.preventDefault();
-    spin += event.key === "ArrowLeft" ? -Math.PI / 2 : Math.PI / 2;
-    draw();
-  };
-  renderer.domElement.addEventListener("pointerdown", startDrag);
-  renderer.domElement.addEventListener("pointermove", moveDrag);
-  renderer.domElement.addEventListener("pointerup", endDrag);
-  renderer.domElement.addEventListener("pointercancel", endDrag);
-  renderer.domElement.addEventListener("lostpointercapture", endDrag);
-  renderer.domElement.addEventListener("keydown", rotateKey);
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  const controls = bindBattleCubeTrackball({
+    canvas: renderer.domElement,
+    orientation: cube.quaternion,
+    cameraOrientation: camera.quaternion,
+    onChange: draw,
+    onTap(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      if (!rect.width || !rect.height || event.clientX < rect.left || event.clientX > rect.right ||
+          event.clientY < rect.top || event.clientY > rect.bottom) return;
+      pointer.set((event.clientX - rect.left) / rect.width * 2 - 1,
+        1 - (event.clientY - rect.top) / rect.height * 2);
+      camera.updateMatrixWorld();
+      cube.updateMatrixWorld(true);
+      raycaster.setFromCamera(pointer, camera);
+      const hit = raycaster.intersectObject(cube, false)[0];
+      if (hit?.face) selectFace(SIDE_ORDER[hit.face.materialIndex]);
+    }
+  });
   const restored = () => { if (!disposed) draw(); };
   renderer.domElement.addEventListener("webglcontextrestored", restored);
   const observer = new ResizeObserver(() => { if (!disposed) { resize(); draw(); } });
@@ -278,8 +313,12 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
         selectionAuthority: "INJECTED_ON_SELECT_INTENT",
         artAssetId: BATTLE_CUBE_ART_ID,
         textureCount: textures.size,
+        uiLabelTextureCount: labelTextures.size,
         textureStates: Object.freeze({ ...textureStates }),
-        rotation: spin,
+        rotation: cube.rotation.y,
+        rotationQuaternion: Object.freeze(cube.quaternion.toArray()),
+        rotationMode: "FREE_TRACKBALL",
+        dragging: controls.isDragging(),
         disposed
       });
     },
@@ -288,9 +327,12 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
       if (disposed) return;
       disposed = true;
       observer.disconnect();
-      for (const [type, handler] of [["pointerdown", startDrag], ["pointermove", moveDrag], ["pointerup", endDrag], ["pointercancel", endDrag], ["lostpointercapture", endDrag], ["keydown", rotateKey], ["webglcontextrestored", restored]]) renderer.domElement.removeEventListener(type, handler);
+      controls.dispose();
+      renderer.domElement.removeEventListener("webglcontextrestored", restored);
       for (const texture of textures) texture.dispose();
       textures.clear();
+      for (const texture of labelTextures) texture.dispose();
+      labelTextures.clear();
       cube.geometry.dispose();
       edges.geometry.dispose();
       edges.material.dispose();

@@ -39,17 +39,50 @@ async function fixture(page) {
       report.viewports.push({ ...viewport, ...info });
     }
     const canvas=page.locator('canvas');
-    await canvas.focus(); const before=await page.evaluate(()=>window.cube.getDiagnostics().rotation);
+    await canvas.focus(); const before=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
     await page.keyboard.press('ArrowRight');
-    assert.ok(Math.abs(await page.evaluate(()=>window.cube.getDiagnostics().rotation)-before-Math.PI/2)<1e-6);
+    const after=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
+    const angle=2*Math.acos(Math.min(1,Math.abs(before.reduce((dot,value,i)=>dot+value*after[i],0))));
+    assert.ok(Math.abs(angle-Math.PI/12)<1e-6);
+    assert.equal(await page.evaluate(()=>window.cube.getDiagnostics().uiLabelTextureCount),2);
     const rect=await canvas.boundingBox();
     await page.mouse.move(rect.x+rect.width*.4,rect.y+rect.height*.4);await page.mouse.down();await page.mouse.move(rect.x+rect.width*.7,rect.y+rect.height*.4,{steps:8});await page.mouse.up();
     assert.equal(await page.evaluate(()=>window.selectionCalls.length),0);
     await page.screenshot({path:path.join(OUTPUT,'cube-rotated.png')});
-    // Check every face-on direction so reversed/back-side UV text cannot hide.
-    for (let i=0;i<4;i++) {
-      await page.keyboard.press('ArrowRight');
-      await page.screenshot({path:path.join(OUTPUT,`cube-side-${i}.png`)});
+    // Vertical and diagonal motion retain an arbitrary orientation after release.
+    for (const [dx,dy] of [[0,70],[65,-55]]) {
+      const old=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
+      const x=rect.x+rect.width*.5,y=rect.y+rect.height*.5;
+      await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+dx,y+dy,{steps:8});await page.mouse.up();
+      const changed=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
+      assert.notDeepEqual(changed,old);
+      await page.waitForTimeout(100);
+      assert.deepEqual(await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion),changed);
+    }
+    assert.equal(await page.evaluate(()=>window.selectionCalls.length),0);
+    // 15-degree arrow steps, including top/bottom faces; no fixed 90-degree snap.
+    for (const key of ['ArrowRight','ArrowRight','ArrowUp','ArrowDown']) {
+      for(let step=0;step<6;step++)await page.keyboard.press(key);
+      await page.screenshot({path:path.join(OUTPUT,`cube-orientation-${key}-${Date.now()}.png`)});
+    }
+    // Both cancellation paths release their pointer and never become a tap.
+    for (const cancel of ['pointercancel','touchcancel']) {
+      const result=await page.evaluate(cancel=>{
+        const canvas=document.querySelector('canvas'),rect=canvas.getBoundingClientRect();
+        const event={pointerId:77,pointerType:'touch',isPrimary:true,button:0,buttons:1,clientX:rect.x+rect.width/2,clientY:rect.y+rect.height/2};
+        // Synthetic pointers cannot own browser capture. Replace only in this
+        // targeted cancellation check; real pointer drag coverage is above.
+        const set=canvas.setPointerCapture,release=canvas.releasePointerCapture;
+        canvas.setPointerCapture=()=>{};canvas.releasePointerCapture=()=>{};
+        try {
+          canvas.dispatchEvent(new PointerEvent('pointerdown',event));
+          const started=window.cube.getDiagnostics().dragging;
+          canvas.dispatchEvent(cancel==='touchcancel'?new Event(cancel):new PointerEvent(cancel,event));
+          canvas.dispatchEvent(new PointerEvent('pointerup',event));
+          return {started,dragging:window.cube.getDiagnostics().dragging,calls:window.selectionCalls.length};
+        } finally {canvas.setPointerCapture=set;canvas.releasePointerCapture=release;}
+      },cancel);
+      assert.deepEqual(result,{started:true,dragging:false,calls:0});
     }
     await page.evaluate(()=>{
       window.cube.dispose();window.cube.dispose();
@@ -58,6 +91,21 @@ async function fixture(page) {
     await page.evaluate(()=>window.cube.ready);
     await page.click('[data-face-id="FREE_BATTLE"]');
     assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['FREE_BATTLE']);
+    // Canvas tap selects a mode once; dragging it never dispatches a mode.
+    await page.evaluate(()=>{window.cube.dispose();window.selectionCalls=[];window.mountCube({available:null});});
+    await page.evaluate(()=>window.cube.ready);
+    const activeRect=await page.locator('canvas').boundingBox();
+    const cx=activeRect.x+activeRect.width/2,cy=activeRect.y+activeRect.height/2;
+    await page.mouse.click(cx,cy);
+    assert.equal(await page.evaluate(()=>window.selectionCalls.length),1);
+    assert.ok(['CHAMPIONSHIP','TITLE_MATCH','FREE_BATTLE','LINK_BATTLE','PASSWORD_BATTLE','PRACTICE_BATTLE'].includes(await page.evaluate(()=>window.cube.getSelected())));
+    await page.mouse.move(cx,cy);await page.mouse.down();await page.mouse.move(cx+50,cy+40,{steps:10});await page.mouse.up();
+    assert.equal(await page.evaluate(()=>window.selectionCalls.length),1);
+    // Reduced motion has no inertia or deferred rotation either.
+    await page.emulateMedia({reducedMotion:'reduce'});
+    const stable=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
+    await page.waitForTimeout(150);
+    assert.deepEqual(await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion),stable);
     // Late successful and rejected loads must not resurrect a disposed presenter.
     await page.evaluate(()=>{
       window.cube.dispose();window.pending=[];window.disposals=0;
@@ -86,7 +134,11 @@ async function fixture(page) {
     // Real application entry, return and repeated mount at the mobile contracts.
     const appContext=await browser.newContext({viewport:VIEWPORTS[1],deviceScaleFactor:2});
     const app=await appContext.newPage();const appErrors=[];app.on('pageerror',e=>appErrors.push(e.message));
-    await app.goto(`${ORIGIN}/championship.html`,{waitUntil:'networkidle'});await startGame(app);
+    // Use the repository's isolated QA save: new games now intentionally lock
+    // SYSTEM during the onboarding tutorial, which is outside this cube gate.
+    await app.goto(`${ORIGIN}/full-qa-save.html`,{waitUntil:'networkidle'});
+    await app.click('#install');await app.waitForURL(`${ORIGIN}/championship.html`);
+    await startGame(app,{continueGame:true});
     await app.waitForSelector('[data-screen="RAISING_HOME"]');
     report.homeMenus=await app.locator('[data-menu-id]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuId));
     await app.locator('button[data-menu-id="SYSTEM"]').click();

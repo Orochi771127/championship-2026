@@ -1,5 +1,9 @@
 # Championship Owner Direction
 
+## 2026-10-11 — Publish reviewed and accepted six-face Cube R2 separately
+
+The Owner directly authorized this receiving release chat: 「我授權發布已審查的 CM03／CM24 蜂巢前景修復，以及接下來完成並通過驗收的六面方塊自由旋轉。請各自核對差異、測試及 build／validate 後，分批 commit、push 至 main、部署既有 Pages 並同步本機。保留其他協作者改動，不混入金流、付費開通或其他未驗收功能。」 Cube R2 is now locally accepted with the reviewed product bytes unchanged: focused25, full LINK/PASSWORD16, CI1663/1663 and three browser gates, formal build/validate9292 files. Publish only its six-file allowlist plus necessary records using normal main push and existing Pages, then verify same-commit CI/Pages, local main and public hashes. Physical iOS remains UNVERIFIED. Mobile R3, paste UI, currency HUD, payment/unlock and other unaccepted work are excluded; no new online LINK backend or player-save migration. See [scope and evidence](../reports/cube-r2-2026-10-11/REPORT_ZH_TW.md).
+
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
 ## 2026-10-11 — Reviewed CM03/CM24 fold foreground integration and bounded visual acceptance

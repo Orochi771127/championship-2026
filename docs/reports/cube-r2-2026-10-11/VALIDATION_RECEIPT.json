@@ -1,0 +1,144 @@
+{
+  "at": "2026-10-11T13:34:15.021819+00:00",
+  "status": "LOCAL_ACCEPTANCE_FOR_AUTHORIZED_CUBE_R2_RELEASE",
+  "base": "043a150289f9cef6cbd74ce02fa045d78e4fa92b",
+  "scope": [
+    {
+      "path": "src/championship/presentation/vs5/battleCubeTrackball.js",
+      "sha256": "48f713b01f1e34563a0c7bc652dfc0ccd7aca3165cef46d3ec2a4bf060274b8c",
+      "bytes": 4796
+    },
+    {
+      "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
+      "sha256": "ecaf713641d3103683a1c1a452d5487b31a62a1c91b49c03d04743198aa7b63f",
+      "bytes": 15425
+    },
+    {
+      "path": "tests/championship-battle-cube-trackball-cases.mjs",
+      "sha256": "19d79fa6edc1d5636f64c45fe63a48d525049f8487aa890a7bcbe17191c54453",
+      "bytes": 10475
+    },
+    {
+      "path": "tests/championship-battle-cube-browser.cjs",
+      "sha256": "f61972fc286eb12f91381b69c82d570c2cfb9fe12e1778712122e830c381aed2",
+      "bytes": 11926
+    },
+    {
+      "path": "tests/ci-test-scope.v1.json",
+      "sha256": "fc499d80d12d5504d552f652ec2fba91ea128b0275a4634ec815b3f5a347050d",
+      "bytes": 20284
+    },
+    {
+      "path": "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json",
+      "sha256": "04debfc9088a14f370505ecfbda56986e7e4dad140354c0de1255bdd5ffb2ead",
+      "bytes": 2949335
+    }
+  ],
+  "candidate": "libfile_aefaa47fdd648191817b64086e2f02b1",
+  "candidateSha256": "08e94747525a26a5dc88de55c430c18c2250ca42128e930250025c8f957b56d6",
+  "productionBytesMatchReviewedR2": true,
+  "focusedTests": 25,
+  "linkPasswordTests": 16,
+  "fullCI": {
+    "passed": 1663,
+    "failed": 0,
+    "skipped": 0,
+    "logSha256": "517ec6d60b04a9615506bed9010a4d9a94a7e5fbefdcc0d503cae608e9fd5a2b"
+  },
+  "browser": {
+    "fixtureActualSixFaceTaps": {
+      "desktop": 6,
+      "touchEmulated390": 6
+    },
+    "disabledFaceTaps": 12,
+    "normalAppActualSixFaceTaps": 6,
+    "correctModePanels": 6,
+    "unintendedBattles": 0,
+    "storedBitsUnchanged": 6,
+    "localeMounts": 10,
+    "texturesDisposed": 96,
+    "contextsReleased": 16,
+    "existingFiveViewportFallbackAndReentry": "PASS",
+    "errors": []
+  },
+  "formalBuild": {
+    "path": "R:\\Projects\\Championship2026\\championship-2026\\dist\\cube-r2-20261011",
+    "fileCount": 9292,
+    "buildId": "1fac5008e3656f825b67af6131f06acaa5d616b612241b8ae992ec6e389dc138",
+    "validated": true
+  },
+  "protectedWorktrees": [
+    {
+      "root": "R:\\Projects\\Championship2026\\championship-2026-room-p1-20261010",
+      "files": 9,
+      "unchanged": true
+    },
+    {
+      "root": "R:\\Projects\\Championship2026\\championship-2026\\.claude\\worktrees\\values-trace",
+      "files": 5,
+      "unchanged": true
+    }
+  ],
+  "physicalIOS": "UNVERIFIED",
+  "productLimitations": [
+    "No physical touch/pen/OS interruption claim",
+    "No new online LINK room backend",
+    "Prior C public cold Raising and organic Battle acceptance remains open"
+  ],
+  "initialFailures": [
+    "Original browser gate used new-game SYSTEM while onboarding intentionally locked it; updated only that test entry to isolated full QA save + Continue",
+    "Initial custom lost-capture check released pending capture before gotpointercapture; corrected test event order, production untouched",
+    "Initial CI had missing local esbuild resolution and sandbox loopback EACCES; exact existing esbuild resolution and allowed environment yielded full 1663/1663"
+  ],
+  "noCommitAttemptHere": true,
+  "noPlayerSaveChanges": true,
+  "nextBatches": "Mobile R3 and currency HUD R1 downloaded/hash-verified only; not applied to root and excluded from cube release",
+  "rawEvidenceLogs": {
+    "FOCUSED": {
+      "path": "R:\\Projects\\Championship2026\\cube-free-rotation-candidate-r2-20261011\\FOCUSED_TESTS.log",
+      "sha256": "cb53964d5496cce1d19a3fa502c427968723d27987b50fafb1b8ab91d18bc4ed",
+      "bytes": 2235
+    },
+    "LINK_PASSWORD": {
+      "path": "R:\\Projects\\Championship2026\\cube-free-rotation-candidate-r2-20261011\\LINK_PASSWORD_TESTS.log",
+      "sha256": "63bdb7d35ea58e08eb6c3dbe51f7ad2791ea2079a38ec1f3d5e890794596179d",
+      "bytes": 1475
+    },
+    "CI": {
+      "path": "R:\\Projects\\Championship2026\\cube-free-rotation-candidate-r2-20261011\\FULL_CI_VERIFIED.log",
+      "sha256": "517ec6d60b04a9615506bed9010a4d9a94a7e5fbefdcc0d503cae608e9fd5a2b",
+      "bytes": 161855
+    },
+    "BUILD": {
+      "path": "R:\\Projects\\Championship2026\\cube-free-rotation-candidate-r2-20261011\\BUILD_VERIFIED.log",
+      "sha256": "8452836485aa0044e800de62c570f96a83953639dfb5c4dbcb09890cc16d5218",
+      "bytes": 218
+    },
+    "VALIDATE": {
+      "path": "R:\\Projects\\Championship2026\\cube-free-rotation-candidate-r2-20261011\\VALIDATE_VERIFIED.log",
+      "sha256": "137a209149c601d7487174c225a39c5d290ebdc0fb59e6f71e1e64ef3262ff54",
+      "bytes": 135
+    }
+  },
+  "browserEvidenceFiles": [
+    {
+      "path": "R:\\Projects\\Championship2026\\cube-free-rotation-candidate-r2-20261011\\browser-six-faces\\RESULT.json",
+      "sha256": "44da6ef0e57443ba909d0c818b04253c2bc640e6e93d3b2e4a468b259742aade",
+      "bytes": 21934
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\cube-free-rotation-candidate-r2-20261011\\browser-normal-six-faces\\RESULT.json",
+      "sha256": "8d568cffaa1bf9d180e81e2475d7a57d19736ac7152532d9791dc9c861406b5a",
+      "bytes": 2464
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\cube-free-rotation-candidate-r2-20261011\\browser\\battle-cube-v1\\browser-qa.json",
+      "sha256": "b1225f5f20ba4e9972c9905c06ec419d5a7274e7dbbbfa7627235cb30c13ce05",
+      "bytes": 9656
+    }
+  ],
+  "receiverVerifiedCandidateZipSHA256": "08e94747525a26a5dc88de55c430c18c2250ca42128e930250025c8f957b56d6",
+  "receiverVerifiedProductBytesExact": true,
+  "authorizationSource": "Direct human message in receiving release chat",
+  "publicationStatus": "Use final same-commit release receipt; this precommit record does not claim deployment"
+}
