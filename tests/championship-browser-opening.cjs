@@ -17,6 +17,12 @@
 // Public builds keep their existing single-egg opening.
 // None of it is skippable, so the gates perform it rather than reaching past
 // it: that sequence IS the accepted boot path.
+//
+// Since the interactive tutorial (2026-10-09), a New Game on loopback or the
+// approved public host then lands on Raising Home with the tutorial's
+// invitation open, and until it is answered the toolbar is held to the hand
+// tool. The gates written for the ordinary ranch answer it the way a player
+// who skips the tutorial does, with its own 略過教學 action; see declineTutorial.
 
 /** Reveal New Game / Continue. Every entry to the game goes through it. */
 async function login(page) {
@@ -24,12 +30,37 @@ async function login(page) {
 }
 
 /**
+ * Decline the onboarding tutorial a New Game offers, through the invitation's
+ * own 略過教學 action. Declining restores the starting ranch the same way
+ * Continue does and finishes the tutorial, so the toolbar is released.
+ *
+ * The app decides whether to show the invitation in the same task that mounts
+ * Raising Home and in the one that settles its field (ready, or the load-error
+ * panel), so once both are observed the dialog is either open or not coming.
+ * Returns false, changing nothing, when no invitation was shown: a host that
+ * does not offer the tutorial, or a field that failed to load.
+ */
+async function declineTutorial(page, { timeout = 60000 } = {}) {
+  await page.waitForFunction(() => document.getElementById("cm-root")?.dataset.activeScreen === "RAISING_HOME"
+    && ["ready", "error"].includes(document.querySelector(".int-rh2-field-host")?.dataset.loadState), null, { timeout });
+  const decline = page.locator('dialog.cm-dialog [data-action="decline"]');
+  if (!(await decline.count())) return false;
+  await decline.click();
+  // The guidance strip hides once the declined tutorial has been saved.
+  await page.locator(".cm-tutorial-guidance").waitFor({ state: "hidden", timeout });
+  return true;
+}
+
+/**
  * Play the New Game opening through to the egg's name.
  *
  * Assumes LOGIN has already been clicked. Returns the names it entered so a
- * caller can assert on the identity the opening created.
+ * caller can assert on the identity the opening created. The tutorial
+ * invitation that follows is declined unless `tutorial: "keep"` leaves it open
+ * for a gate that tests the tutorial itself.
  */
-async function playOpening(page, { trainerName = "測試", eggName = "小蛋", eggSpeciesIndex = 0, onEggChoice = null } = {}) {
+async function playOpening(page, { trainerName = "測試", eggName = "小蛋", eggSpeciesIndex = 0, onEggChoice = null, tutorial = "decline" } = {}) {
+  if (!["decline", "keep"].includes(tutorial)) throw new TypeError(`unknown tutorial option: ${tutorial}`);
   await page.click("#cm-new-game");
   // With a save already stored, New Game first asks before the opening can
   // replace it (2026-09-28). A gate that means to start over says so here.
@@ -58,7 +89,8 @@ async function playOpening(page, { trainerName = "測試", eggName = "小蛋", e
   }
   await page.fill("#cm-opening-name", eggName);
   await page.click(".cm-opening__name button[type=submit]");
-  return { trainerName, eggName };
+  const tutorialDeclined = tutorial === "decline" ? await declineTutorial(page) : false;
+  return { trainerName, eggName, tutorialDeclined };
 }
 
 /**
@@ -339,7 +371,7 @@ async function leaveHuntField(page, { attempts = 30 } = {}) {
 }
 
 module.exports = {
-  login, playOpening, startGame, openFreshGame, openHunt, selectEnterableGate,
+  login, playOpening, declineTutorial, startGame, openFreshGame, openHunt, selectEnterableGate,
   liveWilds, selectHuntTool, captureOneWild, leaveHuntField,
   RAISING_HOME, GATE_CONFIRM, WILD_POSITIONS
 };
