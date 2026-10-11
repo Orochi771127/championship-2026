@@ -1,0 +1,162 @@
+{
+  "purpose": "Controlled visual pose only; separate from normal browser carry/save evidence",
+  "cases": [
+    {
+      "viewport": "visual-mobile",
+      "case": "field_cm03_01-behind",
+      "size": [
+        780,
+        1444
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 336,
+      "changesOutsideActor": 0,
+      "actorPixels": 26082,
+      "pass": true
+    },
+    {
+      "viewport": "visual-mobile",
+      "case": "field_cm03_01-front",
+      "size": [
+        780,
+        1444
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 0,
+      "changesOutsideActor": 0,
+      "actorPixels": 26052,
+      "pass": true
+    },
+    {
+      "viewport": "visual-mobile",
+      "case": "field_cm03_01-held",
+      "size": [
+        780,
+        1444
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 0,
+      "changesOutsideActor": 0,
+      "actorPixels": 24132,
+      "pass": true
+    },
+    {
+      "viewport": "visual-mobile",
+      "case": "field_cm24_01-behind",
+      "size": [
+        780,
+        1444
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 672,
+      "changesOutsideActor": 0,
+      "actorPixels": 25861,
+      "pass": true
+    },
+    {
+      "viewport": "visual-mobile",
+      "case": "field_cm24_01-front",
+      "size": [
+        780,
+        1444
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 0,
+      "changesOutsideActor": 0,
+      "actorPixels": 25857,
+      "pass": true
+    },
+    {
+      "viewport": "visual-mobile",
+      "case": "field_cm24_01-held",
+      "size": [
+        780,
+        1444
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 0,
+      "changesOutsideActor": 0,
+      "actorPixels": 23921,
+      "pass": true
+    },
+    {
+      "viewport": "visual-desktop",
+      "case": "field_cm03_01-behind",
+      "size": [
+        390,
+        571
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 98,
+      "changesOutsideActor": 0,
+      "actorPixels": 6783,
+      "pass": true
+    },
+    {
+      "viewport": "visual-desktop",
+      "case": "field_cm03_01-front",
+      "size": [
+        390,
+        571
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 0,
+      "changesOutsideActor": 0,
+      "actorPixels": 6768,
+      "pass": true
+    },
+    {
+      "viewport": "visual-desktop",
+      "case": "field_cm03_01-held",
+      "size": [
+        390,
+        571
+      ],
+      "basePixelsChanged": 0,
+      "occludedPixels": 0,
+      "changesOutsideActor": 0,
+      "actorPixels": 6277,
+      "pass": true
+    },
+    {
+      "viewport": "visual-desktop",
+      "case": "field_cm24_01-behind",
+      "size": [
+        390,
+        571
+      ],
+      "basePixelsChanged": 3,
+      "occludedPixels": 178,
+      "changesOutsideActor": 0,
+      "actorPixels": 6686,
+      "pass": false
+    },
+    {
+      "viewport": "visual-desktop",
+      "case": "field_cm24_01-front",
+      "size": [
+        390,
+        571
+      ],
+      "basePixelsChanged": 3,
+      "occludedPixels": 2,
+      "changesOutsideActor": 1,
+      "actorPixels": 6682,
+      "pass": false
+    },
+    {
+      "viewport": "visual-desktop",
+      "case": "field_cm24_01-held",
+      "size": [
+        390,
+        571
+      ],
+      "basePixelsChanged": 3,
+      "occludedPixels": 0,
+      "changesOutsideActor": 0,
+      "actorPixels": 6172,
+      "pass": false
+    }
+  ],
+  "allPass": false
+}

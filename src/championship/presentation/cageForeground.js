@@ -24,7 +24,7 @@ export function cm03ForegroundEligible(manifest,placements,location=globalThis.l
 export function cm24ForegroundEligible(manifest,placements,location=globalThis.location){
  return eligible(FIELDS[1],manifest,placements,location);
 }
-export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null}={}) {
+export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null,fold=null,worldHeightPx=null}={}) {
   const config=FIELDS.find(f=>f.fieldId===data?.fieldId);
   if(!config||data.sourceComposite?.sha256!==config.sourceHash||data.masterSha256!==config.masterHash||data.pixelScale!==unit
     ||data.width!==config.width||data.height!==config.height||!Array.isArray(data.objects))throw Error('CAGE_FOREGROUND_SOURCE_MISMATCH');
@@ -40,14 +40,34 @@ export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null}={})
       if(!Array.isArray(o.maskRects)||o.maskRects.some(r=>!Array.isArray(r)||r.length!==4||!r.every(Number.isInteger)||r[0]<0||r[1]<0||r[2]<=0||r[3]<=0||r[0]+r[2]>o.width||r[1]+r[3]>o.height))throw Error('CAGE_FOREGROUND_MASK_INVALID');
       const maskRects=o.maskRects.flatMap(([rx,ry,rw,rh])=>{const left=Math.max(o.x+rx,x),top=Math.max(o.y+ry,y),endX=Math.min(o.x+rx+rw,right),endY=Math.min(o.y+ry+rh,bottom);
         return endX>left&&endY>top?[[left-rect.x,top-rect.y,endX-left,endY-top]]:[];});
-      for(const repeat of wrapWidthPx?[-wrapWidthPx,0,wrapWidthPx]:[0])result.push({id:o.id,src:o.src,fieldId:data.fieldId,
+      for(const repeat of !fold&&wrapWidthPx?[-wrapWidthPx,0,wrapWidthPx]:[0])result.push({id:o.id,src:o.src,fieldId:data.fieldId,
         tileX:p.x+repeat,tileY:p.y,sourceTileX:p.x,sourceTileY:p.y,maskRects,
         x:p.x+x-rect.x+repeat,y:p.y+y-rect.y,width:right-x,height:bottom-y,
         crop:{x:x-o.x,y:y-o.y,width:right-x,height:bottom-y},depth:(p.y-rect.y)/unit+o.depthNative,
-        slotIndex:p.slotIndex??p.fragmentOfSlot??null,repeat});
+        slotIndex:p.slotIndex??p.fragmentOfSlot??p.capOfSlot??null,repeat,
+        ...(fold?{foldCap:p.foldCap===true}:{})});
     }
   }
-  return result;
+  if(!fold)return result;
+  if(!['splitPx','ringPx','bandOffsetPx','capPx'].every(k=>Number.isFinite(fold[k]))
+    ||fold.splitPx<=0||fold.ringPx<=fold.splitPx||fold.bandOffsetPx<=0||fold.capPx<0
+    ||!Number.isFinite(worldHeightPx)||worldHeightPx<=0)throw Error('CAGE_FOREGROUND_FOLD_INVALID');
+  // Match the tile-set owner's two band clips in the original ring space.
+  // Keep the exact base quad; only its stencil and placement are projected.
+  const bands=[{id:0,left:0,right:fold.splitPx,top:0,dx:0,dy:0},
+    {id:1,left:fold.splitPx,right:fold.ringPx,top:-fold.capPx,dx:-fold.splitPx,dy:fold.bandOffsetPx}];
+  return result.flatMap(piece=>bands.flatMap(band=>{
+    if(piece.foldCap&&band.id!==1)return [];
+    const maskRects=piece.maskRects.flatMap(([x,y,w,h])=>{
+      const left=Math.max(x,band.left-piece.sourceTileX),top=Math.max(y,band.top-piece.sourceTileY);
+      const right=Math.min(x+w,band.right-piece.sourceTileX),bottom=Math.min(y+h,worldHeightPx-piece.sourceTileY);
+      return right>left&&bottom>top?[[left,top,right-left,bottom-top]]:[];
+    });
+    if(!maskRects.length)return [];
+    return [{...piece,maskRects,foldBand:band.id,
+      tileX:piece.tileX+band.dx,tileY:piece.tileY+band.dy,x:piece.x+band.dx,y:piece.y+band.dy,
+      depthWorldPx:piece.depth*unit+band.dy}];
+  }));
 }
 export async function withCageForeground({PIXI,art,manifest,placements,location=globalThis.location,fetchImpl=globalThis.fetch,baseHref=globalThis.location?.href}) {
   const selected=FIELDS.filter(config=>eligible(config,manifest,placements,location));
@@ -55,7 +75,8 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   const bundles=[];
   for(const config of selected){
    const response=await fetchImpl(new URL(config.manifest,baseHref));if(!response.ok)throw Error('CAGE_FOREGROUND_MANIFEST_HTTP_'+response.status);
-   const data=await response.json(),plan=cageForegroundPlan(data,placements,{unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx});
+   const data=await response.json(),plan=cageForegroundPlan(data,placements,{unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
+     fold:art.field.fold??null,worldHeightPx:art.field.worldHeightPx});
    if(data.fieldId!==config.fieldId)throw Error('CAGE_FOREGROUND_SOURCE_MISMATCH');
    bundles.push({config,data,plan});
   }
@@ -64,10 +85,20 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   // pixel scale can pick the neighbouring texel at nearest-sampling ties.
   // Stencil geometry reveals the same shared texture without a colour filter,
   // extra decoded image, offscreen surface, or a second asset owner.
+  // Index only quads owned by this art tree. Folded tiles live inside band
+  // containers; caps live in the second band. No texture is loaded or owned here.
+  const bases=new Map();
+  const key=(fieldId,x,y)=>`${fieldId}:${x}:${y}`;
+  const collect=object=>{
+    if(object.texture&&object.label?.startsWith('runtime map art '))
+      bases.set(key(object.label.slice('runtime map art '.length),object.x,object.y),object);
+    for(const child of object.children??[])collect(child);
+  };
+  collect(art.displayObject);
   const groups=[];let disposed=false,parent=null;
   try {
     for(const piece of plan){
-      const base=art.displayObject.children.find(s=>s.label===`runtime map art ${piece.fieldId}`&&s.x===piece.sourceTileX&&s.y===piece.sourceTileY);
+      const base=bases.get(key(piece.fieldId,piece.sourceTileX,piece.sourceTileY));
       if(!base?.texture)throw Error('CAGE_FOREGROUND_BASE_TILE_MISSING');
       const root=new PIXI.Container({label:'cage foreground '+piece.id});root.zIndex=piece.depth;root.eventMode='none';
       const sprite=new PIXI.Sprite(base.texture);sprite.width=base.width;sprite.height=base.height;
@@ -77,7 +108,12 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   } catch(error){for(const {root}of groups)root.destroy({children:true});throw error;}
   const foreground={
     attach(layer){parent=layer;for(const {root}of groups)layer.addChild(root);},
-    syncViewport(fit){if(disposed)return;for(const {root,piece:p}of groups){root.position.set(fit.x+p.tileX*fit.scale,fit.y+p.tileY*fit.scale);root.scale.set(fit.scale);}},
+    syncViewport(fit){if(disposed)return;for(const {root,piece:p}of groups){
+      root.position.set(fit.x+p.tileX*fit.scale,fit.y+p.tileY*fit.scale);root.scale.set(fit.scale);
+      // Folded actors, food and waste sort by projected screen Y in the shared
+      // actor layer. Unfolded ranches retain their original native-depth order.
+      if(p.foldBand!==undefined)root.zIndex=Math.round(fit.y+p.depthWorldPx*fit.scale);
+    }},
     getDiagnostics(){return {fieldId:bundles.length===1?bundles[0].data.fieldId:null,fieldIds:bundles.map(b=>b.data.fieldId),
       objectCount:bundles.reduce((n,b)=>n+b.data.objects.length,0),spriteCount:groups.length,
       deliveredPackedRgbaBytes:bundles.reduce((n,b)=>n+b.data.objects.reduce((n,o)=>n+o.width*o.height*4,0),0),additionalDecodedTextureBytes:0,

@@ -1,0 +1,403 @@
+{
+  "status": "BOUNDED_VISUAL_ACCEPTANCE_BY_PARENT_DOT",
+  "strictResult": "FAIL_RETAINED",
+  "strictEvidenceSha256": "61c285817dbce276bfd79b9c8257a5d5f0a174ad8e1ede75a905d57301dc534f",
+  "decisionSourceThread": "01a11cbe-9813-75f7-9ddd-29102a8d2003",
+  "scope": "Exact original stencil candidate only; not a generic tolerance, renderer rewrite, rights or ordinary-player unlock approval",
+  "candidateHashes": [
+    {
+      "path": "src/championship/presentation/cageForeground.js",
+      "beforeSha256": "b0ead340c2f341d14c281b403a89393bdf7c69cca087ecc7f8315f7dd060a022",
+      "afterSha256": "9610acd3aa90802443baaf8662db57c1b7a720dff859a2389aa8aeb5d5680650",
+      "afterBytes": 9307,
+      "new": false
+    },
+    {
+      "path": "tests/championship-cm03-foreground-cases.mjs",
+      "beforeSha256": "84f7b198b5ef142ba5552d8fa6186e8885168d0a52bc1c6d5ccb33248af032a7",
+      "afterSha256": "2ee3a1f78097e7456abd427fe07f4ce9dbe1d7cbe1adf569719390e2ecb6fc8b",
+      "afterBytes": 19208,
+      "new": false
+    }
+  ],
+  "parentIndependentReviewReported": {
+    "geometryAssertions": 75,
+    "maskPixelsWithoutLossOrOverlap": 117882,
+    "originalSizeVisualReview": "No visible regression reported",
+    "causeAssessment": "Strong evidence of 4xMSAA compositing/quantization at base-quad shared triangle diagonal; a parent analysis, not a new runtime test or proof of all GPU steps"
+  },
+  "desktop": {
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "DPR": 1,
+    "canvas": {
+      "width": 390,
+      "height": 571
+    },
+    "fit": {
+      "x": -477,
+      "y": -145,
+      "scale": 0.5
+    },
+    "cameraX": 978,
+    "cameraY": 0,
+    "poses": {
+      "behind": {
+        "object": "cm24-cushion",
+        "offset": -8,
+        "state": 9
+      },
+      "front": {
+        "object": "cm24-cushion",
+        "offset": 20,
+        "state": 9
+      },
+      "held": {
+        "object": "cm24-cushion",
+        "offset": -8,
+        "state": 6
+      }
+    },
+    "exceptions": [
+      {
+        "pose": "behind",
+        "comparison": "base-to-overdraw",
+        "x": 190,
+        "y": 290,
+        "before": [
+          147,
+          116,
+          91,
+          255
+        ],
+        "after": [
+          146,
+          115,
+          91,
+          255
+        ]
+      },
+      {
+        "pose": "behind",
+        "comparison": "base-to-overdraw",
+        "x": 199,
+        "y": 299,
+        "before": [
+          178,
+          149,
+          123,
+          255
+        ],
+        "after": [
+          177,
+          149,
+          122,
+          255
+        ]
+      },
+      {
+        "pose": "behind",
+        "comparison": "base-to-overdraw",
+        "x": 202,
+        "y": 301,
+        "before": [
+          89,
+          60,
+          34,
+          255
+        ],
+        "after": [
+          89,
+          59,
+          34,
+          255
+        ]
+      },
+      {
+        "pose": "front",
+        "comparison": "base-to-overdraw",
+        "x": 190,
+        "y": 290,
+        "before": [
+          147,
+          116,
+          91,
+          255
+        ],
+        "after": [
+          146,
+          115,
+          91,
+          255
+        ]
+      },
+      {
+        "pose": "front",
+        "comparison": "base-to-overdraw",
+        "x": 199,
+        "y": 299,
+        "before": [
+          178,
+          149,
+          123,
+          255
+        ],
+        "after": [
+          177,
+          149,
+          122,
+          255
+        ]
+      },
+      {
+        "pose": "front",
+        "comparison": "base-to-overdraw",
+        "x": 202,
+        "y": 301,
+        "before": [
+          89,
+          60,
+          34,
+          255
+        ],
+        "after": [
+          89,
+          59,
+          34,
+          255
+        ]
+      },
+      {
+        "pose": "held",
+        "comparison": "base-to-overdraw",
+        "x": 190,
+        "y": 290,
+        "before": [
+          147,
+          116,
+          91,
+          255
+        ],
+        "after": [
+          146,
+          115,
+          91,
+          255
+        ]
+      },
+      {
+        "pose": "held",
+        "comparison": "base-to-overdraw",
+        "x": 199,
+        "y": 299,
+        "before": [
+          178,
+          149,
+          123,
+          255
+        ],
+        "after": [
+          177,
+          149,
+          122,
+          255
+        ]
+      },
+      {
+        "pose": "held",
+        "comparison": "base-to-overdraw",
+        "x": 202,
+        "y": 301,
+        "before": [
+          89,
+          60,
+          34,
+          255
+        ],
+        "after": [
+          89,
+          59,
+          34,
+          255
+        ]
+      },
+      {
+        "pose": "front",
+        "comparison": "raw-to-current",
+        "x": 190,
+        "y": 290,
+        "before": [
+          147,
+          116,
+          91,
+          255
+        ],
+        "after": [
+          146,
+          115,
+          91,
+          255
+        ],
+        "classification": "known actor-free coordinate"
+      },
+      {
+        "pose": "front",
+        "comparison": "raw-to-current",
+        "x": 196,
+        "y": 296,
+        "before": [
+          231,
+          213,
+          202,
+          255
+        ],
+        "after": [
+          231,
+          213,
+          203,
+          255
+        ],
+        "classification": "separate numeric difference; not expected occlusion"
+      }
+    ],
+    "maxPerChannelDifference": 1,
+    "alphaUnchanged": true,
+    "frontAdditionalPoint": "(196,296) blue 202 -> 203; separately recorded, not intended occlusion",
+    "outsideActorPoint": "(190,290), already one of the actor-free points",
+    "behindActorChanges": "Expected foreground occlusion; original counts retained",
+    "heldRawCurrentDifferences": 0
+  },
+  "mobile": "Original strict threshold retained; prior six mobile cases pass unchanged",
+  "stillBlocked": "Any additional coordinate, larger channel difference, alpha change, asset/shape/displacement change, or unrecorded viewport/pose exception",
+  "exactImageGuards": [
+    {
+      "path": "browser/visual-mobile/field_cm24_01-behind-base.png",
+      "bytes": 1670887,
+      "sha256": "c4a8b4d5ac320b9c4f82837279a41ff646b70db98b25eafe0ac6945ee4040cec"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-behind-current.png",
+      "bytes": 1695925,
+      "sha256": "da43f21152b64b0a6c4a387c279b3bb85408a48c49760821394f68d4cd6f2125"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-behind-overdraw.png",
+      "bytes": 1670887,
+      "sha256": "c4a8b4d5ac320b9c4f82837279a41ff646b70db98b25eafe0ac6945ee4040cec"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-behind-raw.png",
+      "bytes": 1696796,
+      "sha256": "4f05040234159a03987d4cebfea9c9d7805197d3879f7450a0069b9c6213f472"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-front-base.png",
+      "bytes": 1670887,
+      "sha256": "c4a8b4d5ac320b9c4f82837279a41ff646b70db98b25eafe0ac6945ee4040cec"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-front-current.png",
+      "bytes": 1703044,
+      "sha256": "20f47b4459d577540760233e597a6110c894c4a56b8c169d86450fe09f0079d8"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-front-overdraw.png",
+      "bytes": 1670887,
+      "sha256": "c4a8b4d5ac320b9c4f82837279a41ff646b70db98b25eafe0ac6945ee4040cec"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-front-raw.png",
+      "bytes": 1703044,
+      "sha256": "20f47b4459d577540760233e597a6110c894c4a56b8c169d86450fe09f0079d8"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-held-base.png",
+      "bytes": 1670887,
+      "sha256": "c4a8b4d5ac320b9c4f82837279a41ff646b70db98b25eafe0ac6945ee4040cec"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-held-current.png",
+      "bytes": 1696458,
+      "sha256": "0ffbd869f753b65f6cf178b7433939add2d0944363e287bfbc34c1f2a0b59751"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-held-overdraw.png",
+      "bytes": 1670887,
+      "sha256": "c4a8b4d5ac320b9c4f82837279a41ff646b70db98b25eafe0ac6945ee4040cec"
+    },
+    {
+      "path": "browser/visual-mobile/field_cm24_01-held-raw.png",
+      "bytes": 1696458,
+      "sha256": "0ffbd869f753b65f6cf178b7433939add2d0944363e287bfbc34c1f2a0b59751"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-behind-base.png",
+      "bytes": 361347,
+      "sha256": "00560ca50950892269d92fd88fc9e7a101f20c62608e89e73c35c7c016b31093"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-behind-current.png",
+      "bytes": 367303,
+      "sha256": "2c58547e9a3a970eb2603197ededecb25a91e762f1d270390e549ac2d1c27a91"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-behind-overdraw.png",
+      "bytes": 361346,
+      "sha256": "e7b9f10dc5f574adc1a43eda475894f327acf68cdd20f7770c59505ad091ddc6"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-behind-raw.png",
+      "bytes": 367267,
+      "sha256": "5e1483441e80e866c8584ba84d3c78aedc98ba0f3ef159ec00e6c8b9793cc8f1"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-front-base.png",
+      "bytes": 361347,
+      "sha256": "00560ca50950892269d92fd88fc9e7a101f20c62608e89e73c35c7c016b31093"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-front-current.png",
+      "bytes": 369129,
+      "sha256": "1e05b2dfe814c1345a627454300faf7c3e88170db0400874f3bfe0ff52216531"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-front-overdraw.png",
+      "bytes": 361346,
+      "sha256": "e7b9f10dc5f574adc1a43eda475894f327acf68cdd20f7770c59505ad091ddc6"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-front-raw.png",
+      "bytes": 369129,
+      "sha256": "9d1d1dc3089c5865edaaa4f3dfa6361e59fb08b123d70b8acbf10d3405e5b7a9"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-held-base.png",
+      "bytes": 361347,
+      "sha256": "00560ca50950892269d92fd88fc9e7a101f20c62608e89e73c35c7c016b31093"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-held-current.png",
+      "bytes": 367138,
+      "sha256": "cb1287da3c3f3743429c44aac08d40669308130faec932abbcb3d9939f54b7e7"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-held-overdraw.png",
+      "bytes": 361346,
+      "sha256": "e7b9f10dc5f574adc1a43eda475894f327acf68cdd20f7770c59505ad091ddc6"
+    },
+    {
+      "path": "browser/visual-desktop/field_cm24_01-held-raw.png",
+      "bytes": 367138,
+      "sha256": "cb1287da3c3f3743429c44aac08d40669308130faec932abbcb3d9939f54b7e7"
+    }
+  ],
+  "meshExperiment": "REJECTED; 141 changed base pixels, no implementation retained",
+  "evidenceLibrary": {
+    "candidate": "libfile_32325cd6e83c8191b26eb9d9f741ece9",
+    "maskABC": "libfile_d49e9d608f108191a42b3c94966f0483",
+    "pixiSource": "libfile_3ec1e28af4b88191a3280cdb124970cb",
+    "rejectedMesh": "libfile_c8a84bcc70288191b4520091e7de9558"
+  }
+}

@@ -3,6 +3,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import {cageForegroundPlan,cm03ForegroundEligible,cm24ForegroundEligible,withCageForeground} from '../src/championship/presentation/cageForeground.js';
+import {loadRuntimeMapArtTileSet} from '../src/championship/presentation/runtimeMapArtBundle.js';
+import {composeRanchArtPlan} from '../src/championship/presentation/raisingRanchArtPlan.js';
+import {originalStartingRanch} from '../src/championship/cage/nativeRanchLayout.js';
+import {prototypeRanchExpansion,RANCH_DECKS_LAYOUT} from '../src/championship/cage/ranchExpansion.js';
+import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url),'utf8'));
 const data=read('assets/production/cage/cm03-r18-foreground-20261009/manifest.json');
 const manifest=read('assets/production/cage/final-intake-20261008/manifest.json');
@@ -110,4 +115,118 @@ test('CM03 and CM24 share one foreground owner, base textures and disposal witho
  const d=result.getDiagnostics().foreground;assert.deepEqual(d.fieldIds,['field_cm03_01','field_cm24_01']);assert.equal(d.objectCount,23);assert.equal(d.spriteCount,69);assert.equal(d.additionalDecodedTextureBytes,0);
  assert.equal(h.sprites.filter(s=>s.texture===texture24).length,27);assert.equal(h.sprites.filter(s=>s.texture===h.texture).length,42);
  await result.dispose();await result.dispose();assert.equal(h.baseDisposed(),1);assert.ok(h.groups.every(g=>g.destroyed));
+});
+
+// Use the production compositor and loader together: the earlier foreground
+// doubles had only flat children and could not reveal folded band failures.
+function foldedPixi(){
+ const loaded=[],unloaded=[],textures=[],objects=[];
+ class Container{
+  constructor(options={}){Object.assign(this,options);this.children=[];this.x=0;this.y=0;
+   this.position={set:(x,y)=>{this.x=x;this.y=y;}};this.scale={set:v=>{this.scaleValue=v;}};objects.push(this);}
+  addChild(...children){for(const c of children){c.parent?.removeChild(c);this.children.push(c);c.parent=this;}}
+  removeChild(c){this.children=this.children.filter(x=>x!==c);c.parent=null;}
+  destroy(options={}){assert.ok(!this.destroyed,'display object disposed twice');this.destroyed=true;this.destroyOptions=options;
+   if(options.children)for(const c of [...this.children])if(!c.destroyed)c.destroy(options);}
+ }
+ class Sprite extends Container{constructor(texture){super();this.texture=texture;}}
+ class AnimatedSprite extends Sprite{constructor({textures}){super(textures[0]);}gotoAndStop(){}}
+ class Graphics extends Container{constructor(){super();this.rects=[];}rect(...r){this.rects.push(r);return this;}fill(){return this;}}
+ class Rectangle{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}}
+ class Texture{constructor(args){Object.assign(this,args);textures.push(this);}destroy(source){assert.equal(source,false);assert.ok(!this.destroyed);this.destroyed=true;}}
+ const fields=new Map(manifest.fields.flatMap(f=>f.frames.map(frame=>[frame.src,f])));
+ const PIXI={Container,Sprite,AnimatedSprite,Graphics,Rectangle,Texture,Assets:{
+  async load(src){loaded.push(src);const f=fields.get(src);assert.ok(f);return {source:{},frame:{x:0,y:0,width:f.worldWidthPx,height:f.worldHeightPx}};},
+  async unload(src){unloaded.push(src);}
+ }};
+ return {PIXI,loaded,unloaded,textures,objects};
+}
+function annexArtPlan(entries){
+ const definitions=listCageDefinitions();
+ return composeRanchArtPlan({manifest,layoutVersion:RANCH_DECKS_LAYOUT,expansion:prototypeRanchExpansion(),unlockedCount:20,
+  placements:[originalStartingRanch().placements.find(p=>p.moduleId.includes('waiting-room')),
+   ...entries.map(([index,slotIndex])=>({moduleId:definitions[index].moduleId,slotIndex}))]});
+}
+async function foldedResult(entries){
+ const h=foldedPixi(),plan=annexArtPlan(entries);
+ const art=await loadRuntimeMapArtTileSet({PIXI:h.PIXI,manifest,placements:plan.placements,residentViewport:plan.residentViewport,
+  wrapWidthPx:plan.wrapWidthPx,fold:plan.fold,presentationMode:plan.mode});
+ const count=h.loaded.length;
+ const result=await withCageForeground({PIXI:h.PIXI,art,manifest,placements:plan.placements,location:{hostname:'localhost'},baseHref:'http://localhost/',
+  fetchImpl:async url=>({ok:true,json:async()=>String(url).includes('cm24-final')?cm24:data})});
+ assert.equal(h.loaded.length,count,'foreground borrows loaded base textures');
+ const layer=new h.PIXI.Container();result.foreground.attach(layer);
+ return {...h,art,plan,result,layer};
+}
+
+test('real folded tile sets retain CM03 and CM24 foreground in both bands, caps and lower rows',async()=>{
+ for(const entries of [[[2,4],[23,10]],[[2,20],[23,26]],[[2,4],[23,27]],[[2,20],[23,11]]]){
+  const h=await foldedResult(entries),fields=h.result.getDiagnostics().foreground.fieldIds;
+  assert.deepEqual(fields,['field_cm03_01','field_cm24_01']);
+  assert.ok(h.layer.children.length>0);
+  const descendants=o=>[o,...(o.children??[]).flatMap(descendants)];
+  const baseTextures=new Set(descendants(h.art.displayObject).filter(o=>o.label?.startsWith('runtime map art field_')).map(o=>o.texture));
+  for(const root of h.layer.children)assert.ok(baseTextures.has(root.children[0].texture),'exact base quad/UV source');
+  assert.equal(h.result.getDiagnostics().foreground.additionalDecodedTextureBytes,0);
+  await h.result.dispose();await h.result.dispose();
+  assert.equal(new Set(h.loaded).size,h.loaded.length,'caps share loads');
+  assert.deepEqual([...h.unloaded].sort(),[...h.loaded].sort());assert.ok(h.textures.every(t=>t.destroyed));
+  assert.equal(h.layer.children.length,0);
+ }
+});
+
+test('fold stencils match both owner clips, cap pixels stay in band one, and depth follows actor screen Y',async()=>{
+ const h=await foldedResult([[2,20],[23,26]]),unit=4,fold=h.art.field.fold;
+ const parts=[...cageForegroundPlan(data,h.plan.placements,{unit,fold,worldHeightPx:h.art.field.worldHeightPx}),
+  ...cageForegroundPlan(cm24,h.plan.placements,{unit,fold,worldHeightPx:h.art.field.worldHeightPx})];
+ assert.equal(h.layer.children.length,parts.length);
+ assert.ok(h.plan.placements.some(p=>p.foldCap),'the real compositor supplies upper caps');
+ // Both accepted foreground masks are transparent in the top 96px. Keep the
+ // base cap artwork, but do not manufacture opaque foreground there.
+ assert.equal(parts.filter(p=>p.foldCap).length,0);
+ for(const fit of [{x:12,y:168,scale:.5},{x:-113,y:-71,scale:.75}]){
+  h.result.foreground.syncViewport(fit);
+  for(const[p,root]of parts.map((p,i)=>[p,h.layer.children[i]])){
+   if(p.foldCap)assert.equal(p.foldBand,1);
+   assert.equal(root.x,fit.x+p.tileX*fit.scale);assert.equal(root.y,fit.y+p.tileY*fit.scale);
+   assert.equal(root.zIndex,Math.round(fit.y+p.depthWorldPx*fit.scale));
+   // A foot at the object's original ground depth ties its projected depth;
+   // behind/in-front feet remain ordered under scrolling and fractional scale.
+   assert.ok(Math.round(fit.y+(p.depthWorldPx-4)*fit.scale)<root.zIndex);
+   assert.ok(Math.round(fit.y+(p.depthWorldPx+4)*fit.scale)>root.zIndex);
+   for(const[x,y,w,hgt]of p.maskRects){
+    const wx=p.sourceTileX+x,wy=p.sourceTileY+y;
+    assert.ok(wx>=(p.foldBand?fold.splitPx:0)&&wx+w<=(p.foldBand?fold.ringPx:fold.splitPx));
+    assert.ok(wy>=(p.foldBand?-fold.capPx:0)&&wy+hgt<=h.art.field.worldHeightPx);
+   }
+  }
+ }
+ await h.result.dispose();
+});
+
+test('a foreground spanning a fold seam is partitioned without missing or duplicate mask pixels',()=>{
+ // Choose a seam through the real CM03 stencil so clipping is independently
+ // exercised even when valid facility footprints stay within one deck.
+ const placement={...placements[0],x:0},plain=cageForegroundPlan(data,[placement]);
+ const fold={splitPx:512,ringPx:1536,bandOffsetPx:704,capPx:96};
+ const parts=cageForegroundPlan(data,[placement],{fold,worldHeightPx:800});
+ const pixels=list=>{const set=new Set();for(const p of list)for(const[x,y,w,h]of p.maskRects)
+  for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++){
+   const k=p.id+':'+(p.sourceTileX+xx)+':'+(p.sourceTileY+yy);assert.ok(!set.has(k),'duplicate mask pixel');set.add(k);
+  }return set;};
+ assert.ok(parts.some(p=>p.foldBand===0)&&parts.some(p=>p.foldBand===1));
+ assert.deepEqual(pixels(parts),pixels(plain));
+ assert.throws(()=>cageForegroundPlan(data,[placement],{fold:{...fold,splitPx:-1},worldHeightPx:800}),/FOLD_INVALID/);
+});
+
+test('partial folded allocation failure releases overlays without destroying owner textures',async()=>{
+ const h=foldedPixi(),plan=annexArtPlan([[2,20],[23,26]]);
+ const art=await loadRuntimeMapArtTileSet({PIXI:h.PIXI,manifest,placements:plan.placements,residentViewport:plan.residentViewport,
+  wrapWidthPx:plan.wrapWidthPx,fold:plan.fold,presentationMode:plan.mode});
+ const hide=o=>{if(o.label==='runtime map art field_cm24_01')o.label='missing';for(const c of o.children??[])hide(c);};hide(art.displayObject);
+ await assert.rejects(withCageForeground({PIXI:h.PIXI,art,manifest,placements:plan.placements,location:{hostname:'localhost'},baseHref:'http://localhost/',
+  fetchImpl:async url=>({ok:true,json:async()=>String(url).includes('cm24-final')?cm24:data})}),/BASE_TILE_MISSING/);
+ assert.ok(h.objects.filter(o=>o.label?.startsWith('cage foreground ')).every(o=>o.destroyed));
+ assert.equal(h.unloaded.length,0);assert.ok(h.textures.every(t=>!t.destroyed),'only the art owner can release textures');
+ await art.dispose();assert.deepEqual([...h.unloaded].sort(),[...h.loaded].sort());
 });

@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: ANNEX_FOREGROUND_FOLD_20261011 -->
+**2026-10-11 CM03／CM24 折疊擴充前景兩檔候選已按精確 hash 整合工作區，發布以接收任務回條為準。** 修復巢狀底圖查找、fold stencil 裁切／座標與前景深度，保留素材、角色比例、碰撞、存檔與原型授予界線。既有49項聚焦與1646項CI、手機／桌面搬運存讀撤銷證據沿用相同 bytes。原嚴格像素比較仍 FAIL；dot 只對精確條件／指定座標核准有限視覺例外，未放寬其他差異或採用mesh。見[本批範圍與正式建置證據](reports/annex-foreground-2026-10-11/REPORT_ZH_TW.md)。
+
 <!-- record-id: PERFORMANCE_C_OPTIONAL_AUDIO_20261011 -->
 **2026-10-11 Battle 音效可選載入 C 四檔已獨立審查並獲直接發布授權。** 核心場景與必要 Three VFX 就緒後先啟動戰鬥，再以最多四個完整工作準備音效；取消、晚到資源、共享 audio bus ownership 與過期音效事件均保留清理界線。交接完整 CI 1,642／1,642、loopback 1／1及五種受控瀏覽器情境通過。正式 build／validate、遠端 CI／Pages、公開 hash 與公網流程以本批最終回條為準；沒有宣稱核心永久 pending、公網速度、實機或 fold 前景問題已修復。見[範圍與限制](reports/performance-c-2026-10-11/REPORT_ZH_TW.md)。
 
