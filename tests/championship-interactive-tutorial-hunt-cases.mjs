@@ -129,3 +129,18 @@ test('idle UI cancellation leaves the real tutorial rope, pull and hand demonstr
   assert.deepEqual(normal(storage.getItem(KEY)),baseline);
  }
 });
+
+// Public normal UI: a broken rope must release its input ownership on pointer-up.
+test('rope break and release allow capture retry without reloading or changing tools',async t=>{
+ const {app:a,storage,baseline}=await fixture(t,'hunt-final-capture');
+ circle(a);assert.equal(target(a).bound,true);
+ let p=target(a);input(a,'down',[p.worldX,p.worldY-10]);
+ input(a,'move',[p.worldX+400,p.worldY]);tick(a,2);
+ assert.equal(a.getHuntRuntime().getToolState().notice,'ROPE_BROKEN');
+ input(a,'up',[p.worldX+400,p.worldY]);tick(a,2);
+ p=target(a);input(a,'down',[p.worldX,p.worldY-10]);tick(a);
+ assert.ok(a.getHuntRuntime().getToolState().rope,'released broken gesture must allow a fresh pull');
+ input(a,'up',[p.worldX,p.worldY-10]);tick(a);
+ pull(a);assert.equal(cp(a).stage,'hunt-final-hand');
+ assert.deepEqual(normal(storage.getItem(KEY)),baseline);
+});

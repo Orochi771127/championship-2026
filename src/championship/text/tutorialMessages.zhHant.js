@@ -5,6 +5,8 @@
 // a demonstration. See TUTORIAL_MESSAGE_COVERAGE_2026-09-13.json.
 // English (2026-09-29) lives beside it, keyed identically; the display
 import { getLocale } from './locale.js';
+import { speciesName } from './zhHant.js';
+import { uiText } from './uiText.js';
 import { TUTORIAL_LINES_EN, TUTORIAL_PROMPTS_EN } from './tutorialMessages.en.js';
 import { TUTORIAL_LINES_JA, TUTORIAL_PROMPTS_JA } from './tutorialMessages.ja.js';
 import { TUTORIAL_LINES_TH, TUTORIAL_PROMPTS_TH } from './tutorialMessages.th.js';
@@ -57,7 +59,7 @@ const lines = {
   1524: '夥伴睡著了。',
   1525: '趁牠睡著的時候，去捕獲另一隻夥伴吧。',
   1526: '從子選單選擇「狩獵」，出發去抓吧。',
-  1527: '連點閘門兩下，選擇要去的地圖。',
+  1527: "選擇目的地後，按「{startHunt}」。",
   1528: '選擇手掌圖示的時候，',
   1529: '就可以拖曳捲動地圖。',
   1530: '方向鍵也可以捲動畫面。',
@@ -73,10 +75,10 @@ const lines = {
   1540: '「拉扯」減少牠的 HP。',
   1541: '「觸碰」用手掌圖示抓住牠。',
   1542: '那麼，繼續往下走吧。',
-  1543: '那裡有一隻滾球獸，試著抓抓看。',
+  1543: "那裡有一隻{species}，試著抓抓看。",
   1544: '牠逃進洞裡了。',
   1545: '就算逃走了，過一陣子牠還是會回來。',
-  1546: '滾球獸好像回來了。',
+  1546: "{species}好像回來了。",
   1547: '在附近放下食物，把牠引過來。',
   1548: '用彈射可以讓夥伴停下動作。',
   1549: '趁牠麻痺的時候，用繩索把牠抓住。',
@@ -105,7 +107,7 @@ const prompts = {
   SELECT_MEDICINE_TOOL: '選擇傷藥',
   APPLY_TOOL_TO_CREATURE: '點一下夥伴',
   OPEN_HUNT: '開啟狩獵',
-  SELECT_GATE_TWICE: '連點閘門兩下',
+  SELECT_GATE_TWICE: "選擇目的地，再按「{startHunt}」",
   SCROLL_HUNT_FIELD: '拖曳畫面',
   FIND_WILD: '找到野生夥伴',
   ROPE_ENCLOSE: '用繩索圈住',
@@ -116,18 +118,24 @@ const prompts = {
   ACKNOWLEDGE: '繼續',
 };
 
+// Presentation only: nativeTutorialHuntEntry fixes the second target at species 21.
+// Resolve its existing product name; never pass a player nickname or change its ID.
+function formatTutorialCopy(copy) {
+  return copy.replaceAll('{species}', speciesName(21)).replaceAll('{startHunt}', uiText('開始狩獵'));
+}
+
 export function tutorialLine(textId) {
   const line = lines[textId];
   if (line === undefined) throw new Error(`TUTORIAL_TEXT_MISSING: ${textId}`);
   const loc = getLocale();
-  return (TUTORIAL_LINES_MAP[loc]?.[textId]) ?? line;
+  return formatTutorialCopy((TUTORIAL_LINES_MAP[loc]?.[textId]) ?? line);
 }
 
 export function tutorialPrompt(advance) {
   const prompt = prompts[advance];
   if (prompt === undefined) throw new Error(`TUTORIAL_PROMPT_MISSING: ${advance}`);
   const loc = getLocale();
-  return (TUTORIAL_PROMPTS_MAP[loc]?.[advance]) ?? prompt;
+  return formatTutorialCopy((TUTORIAL_PROMPTS_MAP[loc]?.[advance]) ?? prompt);
 }
 
 export const TUTORIAL_TEXT_IDS = Object.freeze(Object.keys(lines).map(Number));

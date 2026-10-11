@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: TUTORIAL_ROPE_HOTFIX_20261011 -->
+**2026-10-11 教材／斷繩重試 7 檔已獨立審查並核准公開試玩 hotfix。** Gate 五語提示對齊「選目的地→開始狩獵」、第二目標沿既有種名映射，斷繩放開可同頁重試。完整 CI 1,629／1,629，production 教材 smoke 通過；遠端發布以最終同 SHA 回條為準。基準公開版一條自然教學已完成，但外觀尚未就緒時育成時間前進的 clock P1、Battle 冷載入与實體觸控仍開放，未混入本批。見[範圍／證據／限制](reports/tutorial-rope-hotfix-2026-10-11/REPORT_ZH_TW.md)。
+
 <!-- record-id: LOADING_RECOVERY_R1_R2_20261011 -->
 **2026-10-11 登入、故事與牧場載入恢復完成，已納入Owner核准的本批公開試玩發布集。** 牧場UI先顯示，支援期限／取消／重試／保存返回；永不完成的Pixi請求可保存成功後完整重新載入遊戲。完整CI 1,628／1,628、production build與正常New Game／Continue／完整reload驗證通過。遠端發布以同SHA的實際回條為準；後半自然教學與實機等仍待驗。見[發布範圍與驗證](reports/loading-recovery-2026-10-11/REPORT_ZH_TW.md)。
 

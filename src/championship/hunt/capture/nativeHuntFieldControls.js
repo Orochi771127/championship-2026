@@ -63,7 +63,9 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     // Actor requests from the previous tool update precede the next tool tick.
     for(const a of actors)stepNativeWildActor(a,host);
     consumables.tick(pointer,activeTool);
-    if(pointer?.released && !['ROPE_PULL','ROPE_STROKE'].includes(pointer.kind))pointer=null;
+    // A break can remove the rope before pointer-up; release still ends the gesture.
+    if(pointer?.released && (!['ROPE_PULL','ROPE_STROKE'].includes(pointer.kind)
+      || pointer.kind==='ROPE_PULL' && !rope))pointer=null;
     if(closure) {
       if(closure.ticks===0) {
         for(const a of queryNativeHuntActors(actors,closure.centerQ12,[-48,-48,48,48]))a.events.push({code:0x23});

@@ -1,8 +1,8 @@
 // English guided-tutorial copy, keyed exactly like tutorialMessages.zhHant.js
 // (the original's text-bank record ids). PRODUCT_AUTHORED, 2026-09-29,
 // translated from the approved zh-Hant copy; not yet reviewed by a native
-// English editor. The species name in 1543/1546 keeps its approved zh-Hant
-// form (no approved English name; see the glossary).
+// English editor. Species placeholders use the existing product-name mapping.
+// No new translated species name is introduced here.
 
 export const TUTORIAL_LINES_EN = Object.freeze({
   1495: "On the raising screen, you can look after your partner.",
@@ -37,7 +37,7 @@ export const TUTORIAL_LINES_EN = Object.freeze({
   1524: "Your partner has fallen asleep.",
   1525: "While it sleeps, let's go and catch another partner.",
   1526: "Choose Hunt from the submenu and set out to catch one.",
-  1527: "Tap a gate twice to choose the map to visit.",
+  1527: "Select a destination, then choose “{startHunt}”.",
   1528: "While the hand icon is chosen,",
   1529: "you can drag to scroll the map.",
   1530: "The arrow keys scroll the screen too.",
@@ -53,10 +53,10 @@ export const TUTORIAL_LINES_EN = Object.freeze({
   1540: "\"Pull\": lower its HP.",
   1541: "\"Touch\": grab it with the hand icon.",
   1542: "Now, let's keep going.",
-  1543: "There's a 滾球獸 over there. Try catching it.",
+  1543: "There's a {species} over there. Try catching it.",
   1544: "It ran off into a hole.",
   1545: "Even when one runs away, it comes back after a while.",
-  1546: "Looks like the 滾球獸 is back.",
+  1546: "Looks like the {species} is back.",
   1547: "Put some food down nearby to lure it over.",
   1548: "A shot can stop a creature in its tracks.",
   1549: "While it's paralyzed, catch it with the rope.",
@@ -84,7 +84,7 @@ export const TUTORIAL_PROMPTS_EN = Object.freeze({
   SELECT_MEDICINE_TOOL: "Choose the salve",
   APPLY_TOOL_TO_CREATURE: "Tap the creature",
   OPEN_HUNT: "Open Hunt",
-  SELECT_GATE_TWICE: "Tap the gate twice",
+  SELECT_GATE_TWICE: "Select a destination, then choose “{startHunt}”",
   SCROLL_HUNT_FIELD: "Drag the screen",
   FIND_WILD: "Find a creature",
   ROPE_ENCLOSE: "Circle it with the rope",
