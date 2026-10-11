@@ -17,6 +17,12 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "HUD_CURRENCIES": "Currencies",
+  "HUD_PREVIEW": "Preview",
+  "HUD_DIAMOND_TITLE": "Diamond preview",
+  "HUD_DIAMOND_OPEN": "Open diamond preview; top-ups are not available",
+  "HUD_DIAMOND_UNAVAILABLE": "Diamond top-ups are not available yet. This is an interface preview only. It will not make a purchase, charge you, or change your Bits.",
+
   "ENTER_GAME": "Enter game",
   "OPENING_ART_PENDING": "Some illustrations are not ready. You can read the story now.",
   "OPENING_TEXT_FIRST": "Read text first",
@@ -32,6 +38,10 @@ export const UI_COPY_EN = Object.freeze({
   "FIELD_LOAD_ERROR": "The habitat could not load. Retry, or save and reload the game.",
   "FIELD_LOAD_SAVE_FAILED": "Saving did not complete. You are still on this screen. Retry or export your progress.",
 
+  "CODE_PASTE": "Paste code",
+  "CODE_PASTED": "Code pasted.",
+  "CODE_PASTE_MANUAL": "Long-press the code field and choose Paste.",
+  "CODE_PASTE_EMPTY": "The clipboard has no text. You can paste manually into the code field.",
   "CODE_COPY": "Copy exchange code",
   "CODE_COPIED": "Exchange code copied.",
   "CODE_COPY_MANUAL": "Automatic copying is unavailable. The code is selected; long-press or use Copy.",

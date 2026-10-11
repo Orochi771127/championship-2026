@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: TOUCH_R3_CURRENCY_HUD_R1_20261011 -->
+**2026-10-11 Touch R3／Currency HUD R1已按32檔精確hash核對並沿直接人類授權獨立發布。** 手機防誤觸、明確貼上與既有Bits貨幣列；鑽石僅預覽。本機CI1679／1679、聚焦77、mobile16、四組browser及正式build/validate9308檔通過。真機iOS／系統剪貼簿與既有12參考404路徑仍保留限制；最新遠端與公開結果以同SHA發布回條為準。見[範圍與驗收](reports/touch-hud-r3-2026-10-11/REPORT_ZH_TW.md)。
+
 <!-- record-id: CUBE_FREE_ROTATION_R2_20261011 -->
 **2026-10-11 六面方塊自由旋轉R2已按精確hash整合並完成本機驗收，沿直接人類授權獨立發布。** quaternion trackball、六實際面點選與既有模式路由；聚焦25、LINK/PASSWORD16、正式CI1663／1663及三組browser通過，build/validate9292檔。真機iOS仍UNVERIFIED，R3、貼上與貨幣HUD不在本批；最新遠端與公開結果以同SHA發布回條為準。見[範圍與驗收](reports/cube-r2-2026-10-11/REPORT_ZH_TW.md)。
 

@@ -5,6 +5,12 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  "HUD_CURRENCIES": "Tiền tệ",
+  "HUD_PREVIEW": "Xem trước",
+  "HUD_DIAMOND_TITLE": "Xem trước kim cương",
+  "HUD_DIAMOND_OPEN": "Mở bản xem trước kim cương; chưa hỗ trợ nạp",
+  "HUD_DIAMOND_UNAVAILABLE": "Hiện chưa hỗ trợ nạp kim cương. Đây chỉ là bản xem trước giao diện. Không có giao dịch mua, khoản phí hay thay đổi nào đối với số Bit của bạn.",
+
   "ENTER_GAME": "Vào trò chơi",
   "OPENING_ART_PENDING": "Một số hình minh họa chưa sẵn sàng. Bạn có thể đọc truyện trước.",
   "OPENING_TEXT_FIRST": "Đọc lời dẫn trước",
@@ -20,6 +26,10 @@ export const UI_COPY_VI = Object.freeze({
   "FIELD_LOAD_ERROR": "Không thể tải khu nuôi. Hãy thử lại hoặc lưu và tải lại trò chơi.",
   "FIELD_LOAD_SAVE_FAILED": "Chưa lưu được nên bạn vẫn ở màn hình này. Hãy thử lại hoặc xuất tiến trình.",
 
+  "CODE_PASTE": "Dán mã",
+  "CODE_PASTED": "Đã dán mã.",
+  "CODE_PASTE_MANUAL": "Nhấn giữ ô mã rồi chọn Dán.",
+  "CODE_PASTE_EMPTY": "Bảng nhớ tạm không có văn bản. Bạn có thể dán thủ công vào ô mã.",
   "CODE_COPY": "Sao chép mã trao đổi",
   "CODE_COPIED": "Đã sao chép mã trao đổi.",
   "CODE_COPY_MANUAL": "Không thể sao chép tự động. Mã đã được chọn; hãy nhấn giữ hoặc dùng lệnh Sao chép.",

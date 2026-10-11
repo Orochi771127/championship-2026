@@ -1,0 +1,129 @@
+{
+  "status": "LOCAL_ACCEPTANCE_FOR_AUTHORIZED_TOUCH_HUD_RELEASE",
+  "base": "5d1ce6dabffea8076c311a8857cdfd55648be0f7",
+  "reviewedFiles": 32,
+  "runtimeOverlayFiles": 25,
+  "runtimeBytesExactReviewedOverlay": true,
+  "packages": [
+    {
+      "path": "R:\\Projects\\Championship2026\\mobile-touch-r3-20261011\\MOBILE_TOUCH_R3.zip",
+      "sha256": "3051292a0bfad8a6addaa2d45805ad197eded1db366b8b5e827f8951485013a0",
+      "bytes": 165792,
+      "crcPass": true
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\currency-hud-r1-20261011\\CURRENCY_HUD_R1.zip",
+      "sha256": "2d206e011c1d0f500d01d2a7360962909e1da9dd7137eb7b62851a6d1e4ef157",
+      "bytes": 1033657,
+      "crcPass": true
+    }
+  ],
+  "rawEvidenceLogs": {
+    "FULL_CI": {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\FULL_CI_VERIFIED.log",
+      "sha256": "675bdeebd470cc39c1346c7d863bc7a5137e45981764f5b20bb7a081405d702a",
+      "bytes": 163407
+    },
+    "FOCUSED": {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\FOCUSED_REGRESSION.log",
+      "sha256": "2aff34f2c184229479074367a0eb1b20933838c72100639db3195e1bf8144560",
+      "bytes": 6920
+    },
+    "MOBILE": {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\MOBILE_CONTRACT.log",
+      "sha256": "3fa7f542fc9590f6c308eaface02e2bfb5950f2593c74ec103c4bbae83df0dbd",
+      "bytes": 1616
+    },
+    "CURRENCY": {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\CURRENCY_CONTRACT.log",
+      "sha256": "b662f53f3d98b0246cb785fafea688a586e40e1dd49d27de5d872cf4165ca40b",
+      "bytes": 322
+    },
+    "BUILD": {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\BUILD_VERIFIED.log",
+      "sha256": "f56b98105caafc262777a751e6ed4e44ff26e9aa43ec88deaf06010f190458a7",
+      "bytes": 224
+    },
+    "VALIDATE": {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\VALIDATE_VERIFIED.log",
+      "sha256": "a103e33eb9865c9ea7cc6c8355caaf51ee3011dd0b7203802e12b0c3762e1491",
+      "bytes": 135
+    }
+  },
+  "browserEvidenceFiles": [
+    {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\browser-hud\\RESULT.json",
+      "sha256": "ec07c4014f123054fa57eaf803d3b69945a55a72edd8adf744df16e18a3aacae",
+      "bytes": 21469
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\browser-paste\\RESULT.json",
+      "sha256": "3bbd7cf516e43378d18be2fb7becfdaccca4c938ee0e80e4142f91d79d40fbec",
+      "bytes": 1391
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\browser-built-paste\\RESULT.json",
+      "sha256": "3bbd7cf516e43378d18be2fb7becfdaccca4c938ee0e80e4142f91d79d40fbec",
+      "bytes": 1391
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\ui-r3-integration-20261011\\browser-built-ui\\RESULT.json",
+      "sha256": "2d4c6e3e4a125fe9cc8546932b0e4b3caffe1ea5a69b37ad1bd32a518bf42a87",
+      "bytes": 35148
+    }
+  ],
+  "localAcceptance": {
+    "ci": 1679,
+    "focused": 77,
+    "mobileContract": 16,
+    "currencyContract": "PASS",
+    "browserGates": 4,
+    "hudMatrix": 120,
+    "hudMatrixSameSourceReused": "Previous same-source run: all 120 layout assertions passed before unrelated dialog assertion",
+    "nativeDialogs": 5,
+    "controlledPasteChecksEach": 12,
+    "builtHomeViews": 15,
+    "builtPasswordViews": 10
+  },
+  "build": {
+    "fileCount": 9308,
+    "buildId": "203d9a3241ab6de779798086040b83dd3d96e8b3c13aa274b38455b5abf5ce0d",
+    "inputSha256": "2c05a23fe01c22550212d578f0fcf5d2864e5938f6817db79b6e36643141467f",
+    "candidatePath": "R:\\Projects\\Championship2026\\championship-2026\\dist\\mobile-hud-r3-20261011",
+    "formalBuildValidatePass": true
+  },
+  "physicalIOS": "UNVERIFIED",
+  "clipboard": "Controlled API only; no actual system clipboard acceptance",
+  "inheritedReferenceRequests": {
+    "occurrences": 156,
+    "uniquePaths": 12,
+    "paths": [
+      "assets/production/internal-character-review/e000_digitama-dot-intake-r01/hud-r01/manifest.json",
+      "assets/production/internal-character-review/e000_digitama-dot-intake-r01/runtime.review.json",
+      "assets/production/internal-character-review/m503_warglaymon-ultimate-raw-r01/hud-r01/manifest.json",
+      "assets/production/internal-character-review/m503_warglaymon-ultimate-raw-r01/runtime.review.json",
+      "assets/production/internal-character-review/m509_shinegraymon-ultimate-raw-r01/hud-r01/manifest.json",
+      "assets/production/internal-character-review/m509_shinegraymon-ultimate-raw-r01/runtime.review.json",
+      "assets/production/internal-character-review/m518_blackwargreymon-ultimate-raw-r01/hud-r01/manifest.json",
+      "assets/production/internal-character-review/m518_blackwargreymon-ultimate-raw-r01/runtime.review.json",
+      "assets/production/internal-character-review/m529_metalgarurumon_va-ultimate-raw-r01/hud-r01/manifest.json",
+      "assets/production/internal-character-review/m529_metalgarurumon_va-ultimate-raw-r01/runtime.review.json",
+      "assets/production/internal-character-review/m541_dukemon-ultimate-raw-r01/hud-r01/manifest.json",
+      "assets/production/internal-character-review/m541_dukemon-ultimate-raw-r01/runtime.review.json"
+    ],
+    "notCurrencyAssetFailures": true
+  },
+  "publicationStatus": "Use same-commit final release receipt; this precommit record does not claim deployment",
+  "authorization": "Direct human message in receiving release chat",
+  "limitations": [
+    "Physical iOS Safari long press, OS clipboard and interruption remain unverified",
+    "Earlier C public cold Raising timeout and organic Battle acceptance remain open",
+    "Existing internal-character-review 12 missing paths remain; no character fallback changes",
+    "No recharge, payment, paid unlock, diamond ledger or online LINK backend"
+  ],
+  "historicalFailuresPreserved": [
+    "Initial CI six failures from two compatibility tests; final same-source CI passes",
+    "Browser selectors, orientation measurements, native modal focus and pinch baseline retries retained in original evidence"
+  ],
+  "receiverReranLocalSuites": false
+}

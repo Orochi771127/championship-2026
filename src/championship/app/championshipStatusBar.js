@@ -1,5 +1,6 @@
 import { setLabel, setText, templateParts, uiText } from "../text/uiText.js";
 import { formatNumber } from "../text/locale.js";
+import { showChoiceDialog, isChoiceDialogOpen } from "./uiDialog.js";
 // The persistent status bar -- the original's ui/info_bar.nxr.
 //
 // WHY IT LIVES AT THE ROOT AND NOT INSIDE A SCREEN
@@ -132,8 +133,46 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
   matches.type = "button";
   matches.hidden = true;
   matches.addEventListener("click", () => onOpenMatches?.());
+  const currencies = element("span", "cm-status-bar__currencies");
+  currencies.setAttribute("role", "group");
+  setLabel(currencies, "aria-label", "HUD_CURRENCIES");
+  function currencyIcon(kind) {
+    const icon = element("img", "cm-status-bar__currency-icon");
+    icon.src = new URL(`../../../assets/production/currency-hud-r1/${kind}-24.png`, import.meta.url).href;
+    icon.srcset = `${new URL(`../../../assets/production/currency-hud-r1/${kind}-48.png`, import.meta.url).href} 2x`;
+    icon.width = 24;
+    icon.height = 24;
+    icon.alt = "";
+    icon.setAttribute("aria-hidden", "true");
+    return icon;
+  }
   const bits = element("span", "cm-status-bar__bits");
   bits.hidden = true;
+  const bitsValue = element("span", "cm-status-bar__bits-value");
+  bits.append(currencyIcon("bits"), bitsValue);
+  // No wallet exists in this build. A preview is not a fabricated balance.
+  const diamond = element("button", "cm-status-bar__diamond");
+  diamond.type = "button";
+  diamond.setAttribute("aria-haspopup", "dialog");
+  const diamondText = element("span", "cm-status-bar__diamond-text");
+  diamond.append(currencyIcon("diamond"), diamondText);
+  function paintCurrencyLabels() {
+    setLabel(currencies, "aria-label", "HUD_CURRENCIES");
+    setLabel(diamond, "aria-label", "HUD_DIAMOND_OPEN");
+    setLabel(diamond, "title", "HUD_DIAMOND_OPEN");
+    setText(diamondText, "HUD_PREVIEW");
+  }
+  paintCurrencyLabels();
+  diamond.addEventListener("click", () => {
+    if (isChoiceDialogOpen()) return;
+    void showChoiceDialog({
+      title: uiText("HUD_DIAMOND_TITLE"),
+      message: uiText("HUD_DIAMOND_UNAVAILABLE"),
+      actions: [{ id: "close", label: uiText("關閉"), tone: "primary" }],
+      cancelId: "close"
+    });
+  });
+  currencies.append(bits, diamond);
   // The save state is a button: it opens what "saved" means here (this
   // device only) and, after a failure, the way to try again.
   const save = element("button", "cm-status-bar__save");
@@ -145,7 +184,7 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
   const announcer = element("span", "cm-status-bar__announce");
   announcer.setAttribute("role", "status");
   announcer.setAttribute("aria-live", "polite");
-  extras.append(matches, bits, save, announcer);
+  extras.append(currencies, matches, save, announcer);
   let lastWrites = null, flashDue = false, flashTimer = null, lastAnnounced = null;
 
   bar.append(season, day, mode, time, extras);
@@ -191,6 +230,7 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
     relabel() {
       setLabel(bar, "aria-label", "遊戲狀態");
       paintDayWords();
+      paintCurrencyLabels();
       if (endDayButton) { setText(endDayButton, "END DAY"); setLabel(endDayButton, "aria-label", "End the day"); }
       lastAnnounced = null;
       this.render({ ...lastReading });
@@ -219,7 +259,7 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
       if (Object.hasOwn(reading, "bits")) {
         const known = Number.isSafeInteger(reading.bits);
         bits.hidden = !known;
-        bits.textContent = known ? String(formatNumber(reading.bits)) : "";
+        bitsValue.textContent = known ? String(formatNumber(reading.bits)) : "";
         bits.setAttribute("aria-label", known ? uiText("持有 {bits} 位元幣", { bits: reading.bits }) : "");
       }
       if (Object.hasOwn(reading, "todayMatches")) {

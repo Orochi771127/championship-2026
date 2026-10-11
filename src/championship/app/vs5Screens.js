@@ -1,3 +1,4 @@
+import { bindCodePaste } from "./codeClipboard.js";
 import { titleEventText, raisingDisplayName, speciesName } from "../text/zhHant.js";
 import { uiText } from "../text/uiText.js";
 import {tutorialBattleText} from '../text/interactiveTutorialBattleText.js';
@@ -334,7 +335,8 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const maxLength=Number.isInteger(setup?.maxLength)?setup.maxLength:22;
     partyPanel.append(element('h2','cm-vs5-title','密碼對戰'),
       element('p','cm-vs5-entry-notice','PASSWORD_LOCAL_STEPS'));
-    const inputs=[];
+    const inputs=[],pasteButtons=[];
+    let passwordRevision=0;
     for(const team of ['A','B']){
       const label=element('label','cm-vs5-password-label',uiText('{team} 隊密碼',{team}));
       // Spaces in a copied code do not count and the decoder checks the real
@@ -343,13 +345,19 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       const input=element('input','cm-vs5-password-input');input.value='';input.maxLength=inputCap;
       input.setAttribute('maxlength',String(inputCap));input.setAttribute('autocomplete','off');input.setAttribute('autocapitalize','none');
       input.setAttribute('spellcheck','false');input.setAttribute('aria-label',uiText('{team} 隊密碼',{team}));
-      label.append(input);inputs.push(input);partyPanel.append(label);
+      label.append(input);inputs.push(input);
+      const paste=actionButton('CODE_PASTE'),pasteStatus=element('p','cm-vs5-entry-notice');
+      paste.dataset.action='paste-password';paste.setAttribute('aria-label',`${uiText('CODE_PASTE')}: ${uiText('{team} 隊密碼',{team})}`);
+      pasteStatus.hidden=true;pasteStatus.setAttribute('role','status');
+      bindCodePaste({button:paste,field:input,status:pasteStatus,text:uiText,
+        isCurrent:()=>!cubeDisposed&&request===partyRequest&&!entering,getRevision:()=>passwordRevision});
+      pasteButtons.push(paste);partyPanel.append(label,paste,pasteStatus);
     }
     const confirm=actionButton('開始密碼對戰',{primary:true});confirm.disabled=true;
-    const refresh=()=>{confirm.disabled=entering||inputs.some(input=>![...input.value].length);back.disabled=entering;};
-    for(const input of inputs)input.addEventListener('input',refresh);
+    const refresh=()=>{confirm.disabled=entering||inputs.some(input=>![...input.value].length);back.disabled=entering;for(const paste of pasteButtons)paste.disabled=entering;};
+    for(const input of inputs)input.addEventListener('input',()=>{passwordRevision++;refresh();});
     confirm.addEventListener('click',async()=>{
-      if(confirm.disabled)return;entering=true;refresh();entryNotice.hidden=true;
+      if(confirm.disabled)return;passwordRevision++;entering=true;refresh();entryNotice.hidden=true;
       try{showRefusal(await onEnter(-1,inputs.map(input=>input.value),'PASSWORD_BATTLE'),{});}
       catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'密碼對戰準備失敗，請再試一次。'},{});}
       finally{entering=false;if(!cubeDisposed)refresh();}
@@ -380,24 +388,25 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         button.addEventListener('click',()=>{
           if(button.disabled)return;const at=chosen.indexOf(entry.instanceId);
           if(at<0)chosen.push(entry.instanceId);else chosen.splice(at,1);
-          generation++;if(inputs[0].value===output.value)inputs[0].value='';locked=[];
+          passwordRevision++;generation++;if(inputs[0].value===output.value)inputs[0].value='';locked=[];
           output.value='';copy.hidden=true;status.hidden=true;sync();refresh();
         });
         picks.push({entry,button});maker.append(button);
       }
       if(!setup.candidates.some(entry=>entry.admission.ok))maker.append(element('p','cm-vs5-entry-notice','目前沒有可以密碼化的數碼獸。'));
       make.addEventListener('click',async()=>{
-        if(make.disabled)return;const token=++generation,ids=[...chosen];making=true;sync();
+        if(make.disabled)return;passwordRevision++;const token=++generation,ids=[...chosen];making=true;sync();
         let made;
         try{made=await setup.createPassword(ids);}catch(error){made=null;}
         making=false;if(cubeDisposed||request!==partyRequest)return;
+        passwordRevision++;
         if(token!==generation){sync();return;}
         if(made?.ok){output.value=made.password;inputs[0].value=made.password;locked=ids.map(id=>({...setup.candidates.find(e=>e.instanceId===id)}));copy.hidden=false;status.hidden=true;}
         else{output.value='';copy.hidden=true;status.hidden=false;status.textContent=uiText(made?.message??'密碼產生失敗，請再試一次。');}
         sync();refresh();
       });
       copy.addEventListener('click',()=>{void copyCode(output,status,'已複製密碼。','請長按密碼欄位手動複製。');});
-      inputs[0].addEventListener('input',()=>{refresh();sync();});
+      inputs[0].addEventListener('input',()=>{generation++;refresh();sync();});
       maker.append(preview,make,output,copy,status);sync();
     }
     refresh();if(maker)partyPanel.append(maker);setPanelFooter(back,confirm);
@@ -458,9 +467,14 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       const own=element('section','cm-vs5-team-preview'),opponent=element('section','cm-vs5-team-preview');
       own.dataset.teamRole='local';opponent.dataset.teamRole='opponent';
       let prepared=null,locked=[],version=0,updateButtons=()=>{};
+      const incoming=(isHost?reply:invite).field,paste=actionButton('CODE_PASTE'),pasteStatus=element('p','cm-vs5-entry-notice');
+      paste.dataset.action='paste-code';paste.setAttribute('aria-label',`${uiText('CODE_PASTE')}: ${incoming.getAttribute('aria-label')}`);
+      pasteStatus.hidden=true;pasteStatus.setAttribute('role','status');
+      bindCodePaste({button:paste,field:incoming,status:pasteStatus,text:uiText,
+        isCurrent:()=>alive()&&!entering,getRevision:()=>version});
       const refresh=()=>{
         updateButtons();host.disabled=guest.disabled=back.disabled=entering;
-        invite.field.disabled=reply.field.disabled=entering;
+        invite.field.disabled=reply.field.disabled=paste.disabled=entering;
         create.disabled=entering||selected.length===0||(!isHost&&!invite.field.value.trim());
         read.disabled=entering||!invite.field.value||!reply.field.value.trim();begin.disabled=entering||!prepared;
         copy.disabled=entering||!(isHost?invite:reply).field.value;
@@ -506,8 +520,8 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       copy.addEventListener('click',()=>{void copyCode((isHost?invite:reply).field,copyStatus);});
       begin.addEventListener('click',()=>{if(!begin.disabled)void start(prepared,refresh);});
       rolePanel.append(own);
-      if(isHost)rolePanel.append(create,invite.label,copy,copyStatus,reply.label,read);
-      else rolePanel.append(invite.label,create,reply.label,copy,copyStatus);
+      if(isHost)rolePanel.append(create,invite.label,copy,copyStatus,reply.label,paste,pasteStatus,read);
+      else rolePanel.append(invite.label,paste,pasteStatus,create,reply.label,copy,copyStatus);
       rolePanel.append(opponent,notice,begin);refresh();
     };
     host.addEventListener('click',()=>renderRole(true));guest.addEventListener('click',()=>renderRole(false));renderRole(true);

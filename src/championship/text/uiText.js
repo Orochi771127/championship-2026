@@ -6,6 +6,12 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "HUD_CURRENCIES": "貨幣",
+  "HUD_PREVIEW": "預覽",
+  "HUD_DIAMOND_TITLE": "鑽石預覽",
+  "HUD_DIAMOND_OPEN": "查看鑽石預覽；目前尚未開放儲值",
+  "HUD_DIAMOND_UNAVAILABLE": "目前尚未開放鑽石儲值。此處僅為介面預覽，不會購買、扣款或變更位元幣。",
+
   "ENTER_GAME": "進入遊戲",
   "OPENING_ART_PENDING": "插圖尚未就緒，可以先閱讀故事。",
   "OPENING_TEXT_FIRST": "先閱讀文字",
@@ -21,6 +27,10 @@ export const UI_COPY = Object.freeze({
   "FIELD_LOAD_ERROR": "牧場未能載入。請重試，或保存並重新載入遊戲。",
   "FIELD_LOAD_SAVE_FAILED": "保存未完成，已留在目前畫面。請重試或匯出進度。",
 
+  "CODE_PASTE": "貼上代碼",
+  "CODE_PASTED": "已貼上代碼。",
+  "CODE_PASTE_MANUAL": "請長按代碼欄位，使用貼上指令。",
+  "CODE_PASTE_EMPTY": "剪貼簿沒有文字；可以在代碼欄位手動貼上。",
   "CODE_COPY": "複製通訊碼",
   "CODE_COPIED": "已複製通訊碼。",
   "CODE_COPY_MANUAL": "無法自動複製，已選取通訊碼；請長按或使用複製指令。",

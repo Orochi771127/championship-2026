@@ -1,5 +1,7 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-11 Touch R3／Currency HUD R1發布集](reports/touch-hud-r3-2026-10-11/REPORT_ZH_TW.md)
+
 - [2026-10-11 六面方塊自由旋轉R2發布集](reports/cube-r2-2026-10-11/REPORT_ZH_TW.md)
 
 - [2026-10-11 CM03／CM24 折疊擴充前景修復](reports/annex-foreground-2026-10-11/REPORT_ZH_TW.md)

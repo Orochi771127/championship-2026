@@ -5,6 +5,12 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "HUD_CURRENCIES": "通貨",
+  "HUD_PREVIEW": "プレビュー",
+  "HUD_DIAMOND_TITLE": "ダイヤのプレビュー",
+  "HUD_DIAMOND_OPEN": "ダイヤのプレビューを開く。チャージはまだ利用できません",
+  "HUD_DIAMOND_UNAVAILABLE": "ダイヤのチャージはまだ利用できません。これは画面のプレビューです。購入や請求は発生せず、ビットも変わりません。",
+
   "ENTER_GAME": "ゲームに入る",
   "OPENING_ART_PENDING": "イラストの準備中です。先に物語を読むことができます。",
   "OPENING_TEXT_FIRST": "先に文章を読む",
@@ -20,6 +26,10 @@ export const UI_COPY_JA = Object.freeze({
   "FIELD_LOAD_ERROR": "牧場を読み込めませんでした。再試行するか、保存してゲームを再読み込みしてください。",
   "FIELD_LOAD_SAVE_FAILED": "保存できなかったため、この画面に留まっています。再試行するか、進行状況をエクスポートしてください。",
 
+  "CODE_PASTE": "コードを貼り付け",
+  "CODE_PASTED": "コードを貼り付けました。",
+  "CODE_PASTE_MANUAL": "コード欄を長押しして「ペースト」を選んでください。",
+  "CODE_PASTE_EMPTY": "クリップボードにテキストがありません。コード欄に手動で貼り付けられます。",
   "CODE_COPY": "交換コードをコピー",
   "CODE_COPIED": "交換コードをコピーしました。",
   "CODE_COPY_MANUAL": "自動コピーできません。選択されたコードを長押しするか、コピー操作を使ってください。",

@@ -18,6 +18,7 @@ class Node {
   append(...nodes) { this.children.push(...nodes); }
   replaceChildren(...nodes) { this.children = [...nodes]; }
   setAttribute(name, value) { this.attributes[name] = value; }
+  getAttribute(name) { return this.attributes[name] ?? null; }
   addEventListener(name, listener) { this.listeners[name] = listener; }
   click() { if (!this.disabled) this.listeners.click?.(); }
 }

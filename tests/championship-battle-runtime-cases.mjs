@@ -129,9 +129,11 @@ test("observers are given the current view and stop on dispose", () => {
   assert.throws(() => runtime.outcome(), /NO_MATCH_STARTED/);
 });
 
-test("the screens import display copy only and cannot reach into the runtime", () => {
-  const imports = [...screens.matchAll(/^import .* from "([^"]+)";/gm)].map(match => match[1]);
-  assert.deepEqual(imports.sort(), ["../text/uiText.js", "../text/zhHant.js"]);
+test("the screens import display copy and the clipboard UI helper without reaching into the runtime", () => {
+  const imports = [...screens.matchAll(/^import .*from\s*["']([^"']+)["'];/gm)].map(match => match[1]);
+  assert.deepEqual(imports.sort(), ["../text/interactiveTutorialBattleText.js", "../text/uiText.js", "../text/zhHant.js", "./codeClipboard.js"]);
+  const clipboard = fs.readFileSync(path.join(root, "src/championship/app/codeClipboard.js"), "utf8");
+  assert.doesNotMatch(clipboard, /\bimport\s*(?:[({*]|["'])/);
   assert.doesNotMatch(screens, /import\s*\(/);
   assert.match(screens, /export function createBattleSelectView/);
   assert.match(screens, /export function createBattleFieldView/);

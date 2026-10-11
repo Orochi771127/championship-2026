@@ -5,6 +5,12 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "HUD_CURRENCIES": "สกุลเงิน",
+  "HUD_PREVIEW": "ตัวอย่าง",
+  "HUD_DIAMOND_TITLE": "ตัวอย่างเพชร",
+  "HUD_DIAMOND_OPEN": "เปิดตัวอย่างเพชร ยังไม่เปิดให้เติมเงิน",
+  "HUD_DIAMOND_UNAVAILABLE": "ยังไม่เปิดให้เติมเพชร นี่เป็นเพียงตัวอย่างหน้าจอ จะไม่มีการซื้อ การเรียกเก็บเงิน หรือการเปลี่ยนแปลงจำนวนบิตของคุณ",
+
   "ENTER_GAME": "เข้าสู่เกม",
   "OPENING_ART_PENDING": "ภาพประกอบบางภาพยังไม่พร้อม คุณอ่านเรื่องรอก่อนได้",
   "OPENING_TEXT_FIRST": "อ่านข้อความก่อน",
@@ -20,6 +26,10 @@ export const UI_COPY_TH = Object.freeze({
   "FIELD_LOAD_ERROR": "ไม่สามารถโหลดพื้นที่เลี้ยงได้ โปรดลองอีกครั้ง หรือบันทึกแล้วโหลดเกมใหม่",
   "FIELD_LOAD_SAVE_FAILED": "บันทึกไม่สำเร็จ จึงยังอยู่หน้าปัจจุบัน โปรดลองอีกครั้งหรือส่งออกความคืบหน้า",
 
+  "CODE_PASTE": "วางรหัส",
+  "CODE_PASTED": "วางรหัสแล้ว",
+  "CODE_PASTE_MANUAL": "กดช่องรหัสค้างไว้ แล้วเลือกวาง",
+  "CODE_PASTE_EMPTY": "ไม่มีข้อความในคลิปบอร์ด คุณสามารถวางรหัสในช่องได้ด้วยตนเอง",
   "CODE_COPY": "คัดลอกรหัสแลกเปลี่ยน",
   "CODE_COPIED": "คัดลอกรหัสแลกเปลี่ยนแล้ว",
   "CODE_COPY_MANUAL": "คัดลอกอัตโนมัติไม่ได้ เลือกรหัสไว้แล้ว โปรดกดค้างหรือใช้คำสั่งคัดลอก",

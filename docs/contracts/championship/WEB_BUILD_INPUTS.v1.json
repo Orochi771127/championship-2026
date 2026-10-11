@@ -5345,6 +5345,20 @@
     "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/runtime.review.json",
     "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/sub.json",
     "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/sub.webp",
+    "assets/production/currency-hud-r1/bits-128.png",
+    "assets/production/currency-hud-r1/bits-24.png",
+    "assets/production/currency-hud-r1/bits-256.png",
+    "assets/production/currency-hud-r1/bits-32.png",
+    "assets/production/currency-hud-r1/bits-48.png",
+    "assets/production/currency-hud-r1/bits-512.png",
+    "assets/production/currency-hud-r1/bits-64.png",
+    "assets/production/currency-hud-r1/diamond-128.png",
+    "assets/production/currency-hud-r1/diamond-24.png",
+    "assets/production/currency-hud-r1/diamond-256.png",
+    "assets/production/currency-hud-r1/diamond-32.png",
+    "assets/production/currency-hud-r1/diamond-48.png",
+    "assets/production/currency-hud-r1/diamond-512.png",
+    "assets/production/currency-hud-r1/diamond-64.png",
     "assets/production/gate/vs2-r1/manifest.json",
     "assets/production/hunt/accepted-20261010/geometry/1026f2478622db838a11694d0d0c8f0d858e489e9604c747d3244938d3661073.json",
     "assets/production/hunt/accepted-20261010/geometry/241530dcb2297dd40ab245468bb3dee01214b9d314c3384edcf8c5e91344f791.json",
@@ -9218,6 +9232,7 @@
     "src/championship/app/championshipStatusBar.js",
     "src/championship/app/championshipStorageGuard.js",
     "src/championship/app/championshipToolbar.js",
+    "src/championship/app/codeClipboard.js",
     "src/championship/app/daylightSkin.css",
     "src/championship/app/digimonListScreen.js",
     "src/championship/app/downloadSaveBackup.js",
@@ -9237,6 +9252,7 @@
     "src/championship/app/medalCollection.css",
     "src/championship/app/medalCollection.js",
     "src/championship/app/medalCollectionScreen.js",
+    "src/championship/app/mobileTouch.css",
     "src/championship/app/nativeOpeningState.js",
     "src/championship/app/nativeOpeningStory.js",
     "src/championship/app/nativeTutorialBattleEntry.js",
@@ -29572,6 +29588,62 @@
         "sha256": "3e47af7f3b7a22fed44664f0c08c7bdf5845e866efaf3ce185e74e4246a704d1"
       },
       {
+        "path": "assets/production/currency-hud-r1/bits-128.png",
+        "sha256": "b695cb9fb09f4c22945307d3395ee46631e4f00202be328de132c01981dddc3d"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/bits-24.png",
+        "sha256": "0b829dd713358f014e223b16ba5502e8c9555e2378a79497b4de9ff831d2e682"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/bits-256.png",
+        "sha256": "895744f8581db1eccb7a8689e0ad6a36e52612820d46bfad7c8c2e42de117182"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/bits-32.png",
+        "sha256": "d1ead0f3edc27e822dead91e886395cc0eba82eda30c7e272e8971305e5ea68b"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/bits-48.png",
+        "sha256": "b3d84f9866cf436ad0166f711c0f9cbd175460be337cb12cfe574a6ae8203139"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/bits-512.png",
+        "sha256": "8e338462b3feb1ffb9502a8f313b1ca0193227b65ac21cdce658e7fef60e3c1c"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/bits-64.png",
+        "sha256": "16525fc9e41c30c8ac56e493fc277640656422440dc49ed0e8bfcc6f426f59b9"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/diamond-128.png",
+        "sha256": "38b214c9ab618ec400ce29c2ca9311ffb40b5a45ce484b798988826030e731ac"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/diamond-24.png",
+        "sha256": "72960900167edf8088cce921dbced79ced3902131dbb9bba13058a248223a83a"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/diamond-256.png",
+        "sha256": "0d5e90dea8697b95cf0e2fc40442f58941ecbccb89169b94708c3d913e67e139"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/diamond-32.png",
+        "sha256": "31b43b2d5034ba0193810b353ba714273018ae26c3a772e2b8d46e66eaa118cb"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/diamond-48.png",
+        "sha256": "c44e2bba71cefab7cf7360a3127e0b8713b4f48e32055364b02dfbd52d43171a"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/diamond-512.png",
+        "sha256": "16f9204a14a87bba3d36667fe37fc6a729a9d9918d069db9e69532437c06ad10"
+      },
+      {
+        "path": "assets/production/currency-hud-r1/diamond-64.png",
+        "sha256": "ffbb22c200ee905c892510db4bba958ebe0a97014043be24a6b93383c44e2f36"
+      },
+      {
         "path": "assets/production/gate/vs2-r1/manifest.json",
         "sha256": "76434749bb6ea6baa4050ce3cd5eabb52afd5caab397b7b652026204c9b04686"
       },
@@ -44793,7 +44865,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "7f3850b11b8a087b78a7204c794cbdd81e1ce490ac9457e526a141732248bfe3"
+        "sha256": "1af120cffd5e6da530c75c7b8d857d039b8e8b7c58503d9b442a2cf1ecc1f9ef"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45053,7 +45125,7 @@
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
-        "sha256": "befad872f7b6bcc8cdab4521989d157d83e09d2f337640acb94b86f312dc68d1"
+        "sha256": "204fc3191752040bffe62b27421b5fd91f5fc3784677336eef610816bf9da3cb"
       },
       {
         "path": "src/championship/app/championshipStorageGuard.js",
@@ -45062,6 +45134,10 @@
       {
         "path": "src/championship/app/championshipToolbar.js",
         "sha256": "cfb01770a386fbf352798c4179aee88cf6116d60d26e9ae4ff6f515d434729db"
+      },
+      {
+        "path": "src/championship/app/codeClipboard.js",
+        "sha256": "f318836f6d8f9babbf88be083c9818b112c41c621f9afb107851264dfe877609"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -45138,6 +45214,10 @@
       {
         "path": "src/championship/app/medalCollectionScreen.js",
         "sha256": "86a155136f137b80d98e0dbc673f7730827341d5003e46d5887a3e3fbec0cc33"
+      },
+      {
+        "path": "src/championship/app/mobileTouch.css",
+        "sha256": "19a5aa745944517f89e9920f1ab17912b21501bf05a88fa5c62781aead02bff2"
       },
       {
         "path": "src/championship/app/nativeOpeningState.js",
@@ -45229,7 +45309,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "d1abebb701fb395b1ed26959a2579bafa993bcf3b1b0eb2ec4fd112456fab77a"
+        "sha256": "b9d2578bdf8007e18a0a2d540eea65b674d17af1f799d682446af3758506dbb2"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -45273,7 +45353,7 @@
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "c1abaf6499c9b59c893c94014836f12c86ede294b05513e5399d0368577b7abe"
+        "sha256": "4c4f5b551d2e8913ff251dfccc95b853fd9ff5dc6eacdbd4736f4dd08834a626"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
@@ -46321,23 +46401,23 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "5019e66129e725b8aeabd304bd5325eacecc92cb9c8977edd313a14f573591da"
+        "sha256": "49145a17e705ec99612563f210ec09c1ece5d82a353db90eeef3a2c59b8d42e4"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "6269badf2f598d73c28dd91e006e07a5e42444f5e57c02d6cbc471216c29c7b4"
+        "sha256": "060b06e1b2d47cf89a91210291e0acfc165a7f1563a6c576c6f1f7fda85dc1f5"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "7b4bbfbd1b87c1a211467bb44f3f299b8098656b9c69c3000dc8e4d597a5e63a"
+        "sha256": "6e8f3e380885a0e0e9c123b8568105137861ef2298054a3a25051edc0ed69293"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "f7b7c16c7b6b83c1d92e3d1343a4295f8a8aa9b43ac25004d26910ca742a98ba"
+        "sha256": "3a6ce4c638703ff94ee8f732700fd9f384a099f6c23e292161927ac40cb0c046"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "823fa154766d4223c780be2ce8afc94e0bb4948b2dce0ded867c4dbd969afd97"
+        "sha256": "e0516376c3db4caa618621c80e73c4aa36a8c195376991cad6c91c6272e5d660"
       },
       {
         "path": "src/championship/text/zhHant.js",
