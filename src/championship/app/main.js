@@ -621,12 +621,14 @@ async function mountRaisingHome() {
       status.append(message, retry, cancel, leave, reloadGame); host.append(status);
       function show(next, key) {
         if (closed) return;
-        phase = next; host.dataset.loadState = next; host.setAttribute('aria-busy', String(next === 'loading'));
+        phase = next; host.dataset.loadState = next;
         const failed = residentStates.some(s => s.state === 'error'), loading = residentStates.some(s => s.state === 'loading');
+        host.setAttribute('aria-busy', String(next === 'loading' || loading));
+        const residentPending = next === 'ready' && (failed || loading);
         status.hidden = next === 'ready' && !failed && !loading;
         retry.hidden = next === 'loading' || (next === 'ready' && !failed); retry.disabled = next === 'loading';
-        cancel.hidden = next !== 'loading'; leave.hidden = next === 'ready';
-        reloadGame.hidden = retry.hidden;
+        cancel.hidden = next !== 'loading'; leave.hidden = next === 'ready' && !residentPending;
+        reloadGame.hidden = retry.hidden && !residentPending;
         setText(message, key ?? (failed ? 'RESIDENT_ART_ERROR' : 'RESIDENT_ART_LOADING'));
       }
       const active = owner => !closed && attempt === owner && !owner.signal.aborted;

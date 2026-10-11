@@ -619,6 +619,12 @@ export async function mountRaisingFieldPixiPresentation({
 
   function sync(frame, { force = false } = {}) {
     if (disposed || !frame || (!force && frame.revision === latestRevision)) return;
+    // Completing the tutorial restores the owned resident on this same scene.
+    // Reuse the normal entry camera instead of leaving the egg off-screen at
+    // the demonstration's last training cage.
+    if (latestFrame?.tutorial && !latestFrame.tutorial.finished && frame.tutorial?.finished) {
+      cameraStarted = false; cameraFocus = null;
+    }
     latestFrame = frame;
     latestRevision = frame.revision;
     startCameraOnResident(frame);
@@ -1053,6 +1059,15 @@ export async function mountRaisingFieldPixiPresentation({
   resize();
 
   return Object.freeze({
+    // Core actors can change after mount (Continue, tutorial completion, hatch).
+    // Feed their readiness into the existing clock guard; that driver discards
+    // loading time and starts a fresh elapsed baseline when the pixels arrive.
+    get isPlayable() {
+      return !disposed && !lifetime.signal.aborted && source.getFrame().residents.every(resident => {
+        const entry = actors.get(resident.creatureId);
+        return entry?.speciesId === resident.speciesId && entry.assetState === 'ready';
+      });
+    },
     // The P1R DOM shell calls render(frame) after its own DOM repaint. The
     // source subscription remains authoritative; this method is an idempotent
     // presentation sync only and skips an already-consumed revision.

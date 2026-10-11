@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: RESIDENT_READINESS_CLOCK_P1_20261011 -->
+**2026-10-11 自有夥伴就緒前停鐘與教學結束鏡頭定位，3 檔已獨立審查並核准本批發布。** 接回既有時鐘就緒守門，避免自己的蛋仍在載入時已孵化；載入中保留取消／重試／保存返回。完整 CI 1,630／1,630、production build／validate、隔離存檔的素材延遲與正常點選、拖曳手勢、自然孵化、名冊及保存退出通過。遠端與公開操作以同 SHA 最終回條為準；沒有改倍率或孵化規則。見[證據與限制](reports/clock-ready-2026-10-11/REPORT_ZH_TW.md)。
+
 <!-- record-id: TUTORIAL_ROPE_HOTFIX_20261011 -->
 **2026-10-11 教材／斷繩重試 7 檔已獨立審查並核准公開試玩 hotfix。** Gate 五語提示對齊「選目的地→開始狩獵」、第二目標沿既有種名映射，斷繩放開可同頁重試。完整 CI 1,629／1,629，production 教材 smoke 通過；遠端發布以最終同 SHA 回條為準。基準公開版一條自然教學已完成，但外觀尚未就緒時育成時間前進的 clock P1、Battle 冷載入与實體觸控仍開放，未混入本批。見[範圍／證據／限制](reports/tutorial-rope-hotfix-2026-10-11/REPORT_ZH_TW.md)。
 

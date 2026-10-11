@@ -86,3 +86,55 @@ test('one bundle owns a repeated URL once and preserves an explicit parser', asy
   await scope.Assets.unload('atlas.json');
   assert.deepEqual(calls, [{ src: 'https://game.invalid/atlas.json', parser: 'json' }, 'https://game.invalid/atlas.json']);
 });
+
+
+// Exercise actual scene readiness through the existing elapsed driver. The
+// lightweight Pixi nodes replace drawing only, never the scene or clock logic.
+class ReadinessNode {
+  constructor(options={}) { Object.assign(this,options); this.children=[]; this.events={};
+    this.position={set:(x,y)=>{this.x=x;this.y=y;}};
+    this.scale={x:1,y:1,set:(x,y=x)=>{this.scale.x=x;this.scale.y=y;}}; }
+  addChild(...children){for(const child of children){child.parent=this;this.children.push(child);}return children[0];}
+  addChildAt(child,index){child.parent=this;this.children.splice(index,0,child);}
+  removeChild(child){this.children=this.children.filter(item=>item!==child);child.parent=null;}
+  on(name,fn){this.events[name]=fn;} off(name){delete this.events[name];}
+  destroy(){this.destroyed=true;}
+  clear(){return this;} ellipse(){return this;} fill(){return this;} stroke(){return this;}
+  circle(){return this;} poly(){return this;} rect(){return this;} roundRect(){return this;}
+  moveTo(){return this;} lineTo(){return this;} star(){return this;}
+}
+
+test('resident replacement, failed art and retry suspend the existing clock without catch-up or another ticker',async()=>{
+  const {mountRaisingFieldPixiPresentation}=await import('../src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js');
+  const {createChampionshipClockDriver}=await import('../src/championship/app/championshipClockDriver.js');
+  const listeners=new Set(),ticker={add:fn=>listeners.add(fn),remove:fn=>listeners.delete(fn)};
+  const stage={PIXI:{Assets:{async load(){throw Error('OPTIONAL_ART_UNAVAILABLE');},async unload(){}},Container:ReadinessNode,Graphics:ReadinessNode,Text:ReadinessNode,ColorMatrixFilter:ReadinessNode,
+    Rectangle:class{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}}},
+    app:{screen:{width:390,height:620},stage:new ReadinessNode(),canvas:new EventTarget(),ticker},
+    createSceneRoot:()=>new ReadinessNode(),markScene:()=>()=>{},attach(){},onContextLost:()=>()=>{},onResize:()=>()=>{}};
+  let frame={revision:1,cages:[{cageId:'a',name:'A',region:{x:0,y:0,w:1,h:1}}],
+    residents:[{creatureId:'owned',speciesId:'species-017',displayName:'Owned',cageId:'a',lane:{x:.5,y:.5},facing:'left'}]};
+  let publish;const source={getFrame:()=>frame,subscribe:fn=>{publish=fn;return()=>{};},intents:{selectCreature(){},relocateCreature(){}}};
+  const available=new Set(['species-017']);let pending=deferred();
+  const bundle={createActor:({speciesId})=>available.has(speciesId)?{sprite:new ReadinessNode()}:null,
+    ensureSpecies:()=>pending.promise,dispose(){},getDiagnostics(){return{};}};
+  const port=await mountRaisingFieldPixiPresentation({stage,source,characterBundle:bundle,reducedMotion:true});
+  assert.equal(port.isPlayable,true);assert.equal(listeners.size,1,'one scene animation callback');
+  const session={};let now=0,advanced=0;
+  const app={getSession:()=>session,getClockRunState:()=>({running:true}),subscribeScreen:()=>()=>{},advanceNaturalClock:({frames})=>advanced+=frames};
+  const clock=createChampionshipClockDriver({app,ticker,now:()=>now,isSceneReady:()=>port.isPlayable});clock.setActive(true);
+  const clockTick=[...listeners].at(-1),tick=t=>{now=t;clockTick();};tick(0);tick(20);assert.equal(advanced,1);
+  frame={...frame,revision:2,residents:[{...frame.residents[0],speciesId:'species-001'}]};publish(frame);
+  assert.equal(port.isPlayable,false,'same resident ID now needs its owned egg pixels');
+  for(let t=40;t<=4000;t+=20)tick(t);assert.equal(advanced,1);
+  pending.resolve(false);await new Promise(r=>setImmediate(r));assert.equal(port.getDiagnostics().residentAssets[0].state,'error');
+  assert.equal(port.isPlayable,false);tick(4020);assert.equal(advanced,1);
+  pending=deferred();assert.equal(port.retryResidentAssets(),true);assert.equal(port.isPlayable,false);
+  available.add('species-001');pending.resolve(true);await new Promise(r=>setImmediate(r));assert.equal(port.isPlayable,true);
+  tick(9000);assert.equal(advanced,1,'ready starts a fresh elapsed baseline');tick(9020);assert.equal(advanced,2);
+  assert.equal(listeners.size,2,'same one scene callback and one clock callback after retry');
+  frame={...frame,revision:3,residents:[{...frame.residents[0],speciesId:'species-022'}]};pending=deferred();publish(frame);assert.equal(port.isPlayable,false);
+  port.dispose();assert.equal(port.isPlayable,false);available.add('species-022');pending.resolve(true);await new Promise(r=>setImmediate(r));
+  assert.equal(port.isPlayable,false,'late completion cannot revive a disposed scene');assert.equal(listeners.size,1);
+  clock.dispose();assert.equal(listeners.size,0);
+});
