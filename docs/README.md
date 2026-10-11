@@ -1,5 +1,7 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-11 角色載入 Performance A 發布集](reports/performance-a-2026-10-11/REPORT_ZH_TW.md)
+
 - [2026-10-11 自有夥伴就緒與時鐘 P1 發布集](reports/clock-ready-2026-10-11/REPORT_ZH_TW.md)
 
 - [2026-10-11 五語教材與斷繩重試 hotfix 發布集](reports/tutorial-rope-hotfix-2026-10-11/REPORT_ZH_TW.md)

@@ -24,7 +24,7 @@ export function getCharacterStaticNativeSizing(record, runtime, side = "main", a
 /** One scene's texture resources, indexed by existing species identities. No gameplay state. */
 export async function loadLicensedCharacterRoster({
   PIXI, speciesIds, manifest, productionIndex, manifestUrl,
-  sides = ['main'],
+  sides = ['main'], signal = null,
   loadBundle = loadPixiCharacterRuntimeBundle,
   appearanceReplacements = manifest?.appearanceReplacements ?? [],
   baselineMotionContracts = manifest?.motionContractHashes ?? {},
@@ -52,9 +52,58 @@ export async function loadLicensedCharacterRoster({
   const replacementFailures = [];
   let disposed = false;
   let disposal = null;
-  let loadQueue = Promise.resolve();
-  const pending = new Map();
-  // Bound peak decode allocations. Duplicate species reuse one loaded Main atlas set.
+  const pending = new Map(), queue = [], active = new Set();
+  const maxConcurrent = 2;
+  // Initial and later residents share the same bounded queue and entity dedupe.
+  // The limit covers whole bundles, including their metadata and atlas decoding.
+  async function retainBundle(entityId, bundle) {
+    if (disposed) { await bundle.dispose(); return false; }
+    bundles.set(entityId, bundle);
+    return true;
+  }
+  function pump() {
+    while (!disposed && active.size < maxConcurrent && queue.length) {
+      const job = queue.shift();
+      const running = Promise.resolve().then(async () => {
+        if (disposed) return false;
+        await loadEntity(job.entityId);
+        return !disposed && bundles.has(job.entityId);
+      });
+      active.add(running);
+      const finish = () => {
+        active.delete(running);
+        if (pending.get(job.entityId) === job.promise) pending.delete(job.entityId);
+        pump();
+      };
+      void running.then(value => { finish(); job.resolve(value); }, error => { finish(); job.reject(error); });
+    }
+  }
+  function enqueue(entityId) {
+    if (disposed) return Promise.resolve(false);
+    if (bundles.has(entityId)) return Promise.resolve(true);
+    if (pending.has(entityId)) return pending.get(entityId);
+    const job = { entityId };
+    job.promise = new Promise((resolve, reject) => Object.assign(job, { resolve, reject }));
+    pending.set(entityId, job.promise);
+    queue.push(job);
+    pump();
+    return job.promise;
+  }
+  function dispose() {
+    if (disposal) return disposal;
+    disposed = true;
+    signal?.removeEventListener('abort', onAbort);
+    for (const job of queue.splice(0)) { pending.delete(job.entityId); job.resolve(false); }
+    disposal = (async () => {
+      // Every active decode may settle after cancellation. retainBundle destroys
+      // those late bundles without exposing them to the abandoned scene.
+      await Promise.allSettled([...active]);
+      await Promise.allSettled([...bundles.values()].map(bundle => bundle.dispose()));
+      bundles.clear();
+    })();
+    return disposal;
+  }
+  const onAbort = () => { void dispose(); };
   async function loadEntity(entityId) {
     const record = records.get(entityId);
     if (record?.runtime !== `${entityId}/runtime.json` || !/^[em]\d{3}_[a-z0-9_]+$/.test(entityId)) {
@@ -69,46 +118,44 @@ export async function loadLicensedCharacterRoster({
         try {
           const baselineRuntime = await PIXI.Assets.load({ src: baselineRuntimeUrl, parser: "json" });
           baselineLoaded = true;
+          if (disposed) return;
           const bundle = await loadBundle({ PIXI, runtimeUrl: appearance.runtimeUrl, sides: ["main"],
-            cachePrefix: appearance.cachePrefix,
+            cachePrefix: appearance.cachePrefix, signal,
             replacementGuard: await createCharacterAppearanceGuard({ entityId, record, baselineRuntime,
               originGeometry: appearance.originGeometry, geometryContractSha256: appearance.geometryContractSha256,
               expectedGeometryContractSha256: appearance.expectedGeometryContractSha256,
               motionContractSha256: appearance.manifest.motionContractSha256 }) });
-          bundles.set(entityId, bundle);
-          appearances.set(entityId, appearance.manifest);
+          if (await retainBundle(entityId, bundle)) appearances.set(entityId, appearance.manifest);
           return;
         } finally {
           if (baselineLoaded) await Promise.allSettled([PIXI.Assets.unload?.(baselineRuntimeUrl)]);
         }
       }
     } catch (error) {
+      if (disposed) return;
       replacementFailures.push({ entityId, reason: error.message });
     }
     try {
-      bundles.set(entityId, await loadBundle({ PIXI,
+      if (disposed) return;
+      await retainBundle(entityId, await loadBundle({ PIXI,
         runtimeUrl: new URL(record.runtime, manifestUrl).href,
-        sides, cachePrefix: `licensed:${entityId}:` }));
+        sides, signal, cachePrefix: `licensed:${entityId}:` }));
     } catch (error) {
-      failures.push({ entityId, runtimeUrl:new URL(record.runtime,manifestUrl).href, reason: error.message });
+      if (!disposed) failures.push({ entityId, runtimeUrl:new URL(record.runtime,manifestUrl).href, reason: error.message });
     }
   }
-  for (const entityId of wanted) await loadEntity(entityId);
+  signal?.addEventListener('abort', onAbort, { once: true });
+  try {
+    if (signal?.aborted) { await dispose(); signal.throwIfAborted(); }
+    await Promise.all([...wanted].map(enqueue));
+    signal?.throwIfAborted();
+  } catch (error) { await dispose(); throw error; }
   return Object.freeze({
     ensureSpecies(speciesId) {
       if (disposed) return Promise.reject(new Error("CHARACTER_ROSTER_DISPOSED"));
       const entityId = identities.get(canonicalSpeciesId(speciesId));
       if (!entityId) return Promise.resolve(false);
-      if (bundles.has(entityId)) return Promise.resolve(true);
-      if (pending.has(entityId)) return pending.get(entityId);
-      const task = loadQueue.then(async () => {
-        if (disposed) return false;
-        await loadEntity(entityId);
-        return bundles.has(entityId);
-      });
-      pending.set(entityId, task);
-      loadQueue = task.catch(() => {}).finally(() => pending.delete(entityId));
-      return task;
+      return enqueue(entityId);
     },
     createActor({ speciesId, side = "main", reducedMotion = false, presentation = null } = {}) {
       if (disposed) throw new Error("CHARACTER_ROSTER_DISPOSED");
@@ -161,15 +208,6 @@ export async function loadLicensedCharacterRoster({
         rgbaBytes: textureMemory.estimatedBaseRgbaBytes,textureMemory,
         animationBinding: manifest.animationBinding, runtimeEligible: true, shippingReady: false });
     },
-    dispose() {
-      if (disposal) return disposal;
-      disposed = true;
-      disposal = (async () => {
-        await loadQueue;
-        await Promise.allSettled([...bundles.values()].map((bundle) => bundle.dispose()));
-        bundles.clear();
-      })();
-      return disposal;
-    }
+    dispose
   });
 }

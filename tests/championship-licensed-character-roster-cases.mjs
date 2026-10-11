@@ -124,30 +124,114 @@ test('decoded bitmaps close after asset-source destruction and repeated dispose 
   await bundle.dispose();assert.equal(closed,1);
 });
 
-test('hatching loads one shared atlas per entity and disposal waits for a pending decode', async()=>{
-  const loads=[],releases=[];
-  let completeDecode,notifyStarted;
-  const decoding=new Promise(resolve=>{completeDecode=resolve;});
-  const started=new Promise(resolve=>{notifyStarted=resolve;});
-  const roster=await loadLicensedCharacterRoster({...args,async loadBundle({runtimeUrl}){
-    loads.push(runtimeUrl);
-    if(loads.length===2){notifyStarted();await decoding;}
-    return {createActor(){return {sprite:{}};},async dispose(){releases.push(runtimeUrl);}};
+const defer = () => { let resolve; const promise = new Promise(r => { resolve = r; }); return { promise, resolve }; };
+const settledTurn = () => new Promise(r => setImmediate(r));
+const entityOf = url => new URL(url).pathname.split('/').at(-2);
+const stubBundle = (id, releases) => ({ createActor: () => ({ sprite: { id } }), dispose: async () => { releases.push(id); } });
+
+test('initial roster starts at most two distinct entities and fills a freed slot without waiting for the other', async () => {
+  const started = [], gates = new Map(), releases = [];
+  const ids = ['species-000', 'species-001', 'species-002', 'species-003'];
+  const loading = loadLicensedCharacterRoster({ ...args, speciesIds: [...ids, 'championship:creature:species-000'],
+    async loadBundle({ runtimeUrl }) {
+      const id = entityOf(runtimeUrl); started.push(id); const gate = defer(); gates.set(id, gate);
+      await gate.promise; return stubBundle(id, releases);
+    }
+  });
+  await settledTurn(); assert.equal(started.length, 2);
+  gates.get(started[1]).resolve(); await settledTurn(); assert.equal(started.length, 3);
+  gates.get(started[2]).resolve(); await settledTurn(); assert.equal(started.length, 4);
+  gates.get(started[0]).resolve(); gates.get(started[3]).resolve();
+  const roster = await loading; assert.equal(new Set(started).size, 4);
+  for (const id of ids) assert.ok(roster.createActor({ speciesId: id }));
+  await roster.dispose(); assert.equal(new Set(releases).size, 4);
+});
+
+test('dynamic queue deduplicates aliases, cancels queued work and waits for both active late decodes', async () => {
+  const started = [], gates = new Map(), releases = [];
+  const roster = await loadLicensedCharacterRoster({ ...args, speciesIds: [], async loadBundle({ runtimeUrl }) {
+    const id = entityOf(runtimeUrl); started.push(id); const gate = defer(); gates.set(id, gate);
+    await gate.promise; return stubBundle(id, releases);
   }});
-  const first=roster.ensureSpecies('species-014');
-  assert.equal(first,roster.ensureSpecies('championship:creature:species-014'));
-  await started;
-  const queued=roster.ensureSpecies('species-021');
-  const closing=roster.dispose();
-  assert.equal(closing,roster.dispose());
-  assert.equal(releases.length,0);
-  await assert.rejects(roster.ensureSpecies('species-015'),/DISPOSED/);
-  completeDecode();await closing;
-  assert.equal(await first,true);
-  assert.equal(await queued,false,'queued species is never decoded after disposal');
-  assert.equal(loads.length,2);
-  assert.equal(new Set(releases).size,2);
-  assert.deepEqual(roster.getDiagnostics().loadedEntityIds,[]);
+  const first = roster.ensureSpecies('species-014'), second = roster.ensureSpecies('species-021');
+  assert.equal(first, roster.ensureSpecies('championship:creature:species-014'));
+  const queued = roster.ensureSpecies('species-015');
+  assert.equal(queued, roster.ensureSpecies('championship:creature:species-015'));
+  await settledTurn(); assert.equal(started.length, 2);
+  const closing = roster.dispose(); assert.equal(closing, roster.dispose());
+  assert.equal(await queued, false);
+  let closed = false; void closing.then(() => { closed = true; });
+  gates.get(started[1]).resolve(); await settledTurn();
+  assert.equal(closed, false, 'dispose waits for the earlier active decode too');
+  assert.equal(await second, false, 'late completion never reports playable');
+  gates.get(started[0]).resolve(); await closing;
+  assert.equal(await first, false); assert.equal(started.length, 2);
+  assert.deepEqual(new Set(releases), new Set(started)); assert.equal(releases.length, 2);
+  await assert.rejects(roster.ensureSpecies('species-015'), /DISPOSED/);
+  assert.throws(() => roster.createActor({ speciesId: 'species-014' }), /DISPOSED/);
+  assert.deepEqual(roster.getDiagnostics().loadedEntityIds, []);
+});
+
+test('initial signal abort drops unstarted entries and releases every active bundle once', async () => {
+  const controller = new AbortController(), gates = [], releases = [], started = [];
+  const loading = loadLicensedCharacterRoster({ ...args, signal: controller.signal,
+    speciesIds: ['species-000', 'species-001', 'species-002', 'species-003'],
+    async loadBundle({ runtimeUrl, signal }) {
+      assert.equal(signal, controller.signal); const id = entityOf(runtimeUrl); started.push(id);
+      const gate = defer(); gates.push(gate); await gate.promise; return stubBundle(id, releases);
+    }
+  });
+  const rejected = assert.rejects(loading, { name: 'AbortError' });
+  await settledTurn(); assert.equal(started.length, 2); controller.abort();
+  gates[1].resolve(); await settledTurn(); assert.equal(started.length, 2);
+  gates[0].resolve(); await rejected;
+  assert.deepEqual(new Set(releases), new Set(started)); assert.equal(releases.length, 2);
+  let called = false;
+  await assert.rejects(loadLicensedCharacterRoster({ ...args, signal: controller.signal,
+    loadBundle: async () => { called = true; } }), { name: 'AbortError' });
+  assert.equal(called, false, 'already-aborted initial requests do not start');
+});
+
+test('a failed queue job does not poison explicit retry or block other species', async () => {
+  const attempts = new Map(), releases = [];
+  const roster = await loadLicensedCharacterRoster({ ...args, speciesIds: [], async loadBundle({ runtimeUrl }) {
+    const id = entityOf(runtimeUrl), count = (attempts.get(id) ?? 0) + 1; attempts.set(id, count);
+    if (id === 'e000_digitama' && count === 1) throw Error('TEMPORARY_IMAGE_FAILURE');
+    return stubBundle(id, releases);
+  }});
+  const failed = roster.ensureSpecies('species-000'), other = roster.ensureSpecies('species-001');
+  assert.equal(failed, roster.ensureSpecies('championship:creature:species-000'));
+  assert.deepEqual(await Promise.all([failed, other]), [false, true]);
+  assert.equal(await roster.ensureSpecies('species-000'), true);
+  assert.equal(attempts.get('e000_digitama'), 2); assert.equal(attempts.get('e001_digitama'), 1);
+  await roster.dispose(); assert.equal(releases.length, 2);
+});
+
+test('completed-original cancellation reaches baseline validation and never falls back to another atlas', async () => {
+  const { loadCompletedOriginalCharacters } = await import('../src/championship/presentation/completedOriginalCharacters.js');
+  const controller = new AbortController(), validating = defer(), loaded = [], released = [];
+  const href = 'https://orochi771127.github.io/championship-2026/championship.html';
+  const originalFetch = globalThis.fetch;
+  class Spritesheet { constructor({ data }) { this.textures = Object.fromEntries(Object.keys(data.frames).map(k => [k, { source: {} }])); } async parse() {} destroy() {} }
+  const PIXI = { Sprite: class {}, Spritesheet, Assets: {
+    async load(value) { const url = typeof value === 'string' ? value : value.src; loaded.push(url);
+      const local = new URL(url).pathname.slice('/championship-2026/'.length);
+      return url.endsWith('.json') ? JSON.parse(fs.readFileSync(local, 'utf8')) : { source: {} };
+    }, async unload(url) { released.push(url); }
+  }};
+  globalThis.fetch = async (url, options) => {
+    assert.match(url, /characters-v1\/e000_digitama\/runtime.json$/);
+    assert.equal(options.signal, controller.signal); validating.resolve();
+    return new Promise((resolve, reject) => options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true }));
+  };
+  try {
+    const loading = loadCompletedOriginalCharacters({ ...args, PIXI, signal: controller.signal,
+      manifestUrl: new URL(LICENSED_CHARACTER_MANIFEST, href).href }, href);
+    const rejected = assert.rejects(loading, { name: 'AbortError' });
+    await validating.promise; controller.abort(); await rejected;
+    assert.equal(loaded.length, 3); assert.ok(loaded.every(url => url.includes('/accepted-20261010/')));
+    assert.equal(new Set(released).size, 3);
+  } finally { globalThis.fetch = originalFetch; }
 });
 
 test('all registered Main frames reach the Hunt, Raising and Battle presenters through the real roster', async()=>{

@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: PERFORMANCE_A_TWO_WORKERS_20261011 -->
+**2026-10-11 角色載入 A 四檔已獨立審查並核准公開試玩發布。** 初始與動態角色共用最多2工作排程，保留去重、取消與晚到資源清理；完整CI 1,630／1,630與聚焦108項、production戰鬥自然動畫／結算／保存重開通過。固定延遲的控制比較約49–50%，不是公網速度宣稱，峰值decode配置可能高於串行。遠端CI／Pages／live hash以同SHA最終回條為準；Hunt B、cube及近戰右側重疊／裁切另列。見[範圍與限制](reports/performance-a-2026-10-11/REPORT_ZH_TW.md)。
+
 <!-- record-id: RESIDENT_READINESS_CLOCK_P1_20261011 -->
 **2026-10-11 自有夥伴就緒前停鐘與教學結束鏡頭定位，3 檔已獨立審查並核准本批發布。** 接回既有時鐘就緒守門，避免自己的蛋仍在載入時已孵化；載入中保留取消／重試／保存返回。完整 CI 1,630／1,630、production build／validate、隔離存檔的素材延遲與正常點選、拖曳手勢、自然孵化、名冊及保存退出通過。遠端與公開操作以同 SHA 最終回條為準；沒有改倍率或孵化規則。見[證據與限制](reports/clock-ready-2026-10-11/REPORT_ZH_TW.md)。
 

@@ -51,7 +51,7 @@ export async function loadCompletedOriginalCharacters(options,href){
     bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,
       cachePrefix:`${config.entityId}-completed-original-local:`});
       const runtime=bundle.runtime;
-      const response=await fetch(args.runtimeUrl);
+      const response=await fetch(args.runtimeUrl,{signal:args.signal});
       if(!response.ok)throw Error('CANDIDATE_BASELINE_MOTION_UNAVAILABLE');
       const baseline=await response.json();
       validateCompletedOriginalRuntime(runtime,config,baseline);
@@ -61,6 +61,7 @@ export async function loadCompletedOriginalCharacters(options,href){
         battleGeometry:actorOptions.battleGeometry?runtime.reviewGeometry:null});}};
     }catch(error){
       await bundle?.dispose();
+      args.signal?.throwIfAborted();
       replacementFailures.push({entityId:config.entityId,runtimeUrl,reason:error.message});
       return loadPixiCharacterRuntimeBundle(args);
     }

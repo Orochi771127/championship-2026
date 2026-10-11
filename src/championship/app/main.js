@@ -409,7 +409,7 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
       const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
       const response = await fetch(manifestUrl, { signal });
       if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
-      const rosterOptions={PIXI,speciesIds,sides,productionIndex,manifestUrl,manifest:await response.json()};
+      const rosterOptions={PIXI,speciesIds,sides,signal,productionIndex,manifestUrl,manifest:await response.json()};
       if(new URLSearchParams(location.search).get('characterArtReview')==='m001'
         && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
         const {loadM001CharacterArtReview}=await import('../presentation/m001CharacterArtReview.js');
@@ -762,7 +762,7 @@ async function mountHuntField() {
           viewportWidth: stage.app.screen.width, viewportHeight: stage.app.screen.height
         }).wildCreatures.map((wild) => wild.speciesId);
         const loaded = await Promise.allSettled([
-          own(loadOptionalCharacterReview(stage, speciesIds)),
+          own(loadOptionalCharacterReview(stage, speciesIds, ['main'], { signal })),
           own(loadOptionalHuntFieldArt(stage, { signal, onProgress })),
           own(loadRegisteredHuntFeedbackArt({PIXI:createPixiAssetScope(stage.PIXI),baseUrl:location.href,
             kinds:fieldSource.getFrame().huntField.toolState?.tools.map(tool=>tool.subtype??tool.id)??null}))
@@ -988,6 +988,7 @@ async function mountBattleField() {
     askToLeave: showChoiceDialog,
     mountField({ host,onReady,onError }) {
       let disposed = false;
+      const characters = new AbortController();
       let scene = null;
       let vfxOverlay = null;
       let battleAudio = null;
@@ -1000,7 +1001,7 @@ async function mountBattleField() {
           if (disposed) return;
           const loaded=await Promise.allSettled([
             loadOptionalBattleFieldArt(stage,source),
-            loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId)),
+            loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal}),
             loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
@@ -1045,6 +1046,7 @@ async function mountBattleField() {
       return {
         dispose() {
           disposed = true;
+          characters.abort();
           void vfxOverlay?.dispose();
           void battleAudio?.dispose();
           scene?.dispose();
