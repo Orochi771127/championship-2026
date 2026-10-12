@@ -269,6 +269,11 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
     world,
     movementAuthority: HUNT_MOVEMENT_AUTHORITY,
     getNativeEntryState: () => structuredClone(entryState),
+    // Tutorial choreography reveals actors later; preload their art without
+    // changing visibility. Ordinary encounters retain visible-only loading.
+    getTutorialCharacterSpeciesIds: () => nativeEntry?.tutorial
+      ? [...new Set(entryState.encounter.actors.map(actor => `species-${String(actor.speciesIndex).padStart(3, '0')}`))]
+      : null,
     getNativeReturnContext: () => nativeEntry && !nativeEntry.tutorial && controls ? Object.freeze({biomeIndex:nativeEntry.scene.biomeIndex,
       releasedSlot:nativeEntry.releasedSlot, carriedAtEntry:!!nativeEntry.encounter.historyWrite}) : null,
     applyReturnedIndividuals(entries) {

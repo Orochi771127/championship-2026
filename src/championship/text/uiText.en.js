@@ -38,6 +38,7 @@ export const UI_COPY_EN = Object.freeze({
   "FIELD_LOAD_ERROR": "The habitat could not load. Retry, or save and reload the game.",
   "FIELD_LOAD_SAVE_FAILED": "Saving did not complete. You are still on this screen. Retry or export your progress.",
   "FIELD_LOAD_STALLED": "The download stopped responding. Retry, or save and reload the game.",
+  "HUNT_FEEDBACK_FALLBACK_NOTICE": "Item graphics failed to load and switched to basic shapes; you can click \"Back to Ranch\" anytime to retry.",
   "LOAD_PROGRESS_LABEL": "Loading progress",
   "LOAD_STEP_ENGINE": "Graphics",
   "LOAD_STEP_FACILITIES": "Facilities",

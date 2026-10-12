@@ -26,6 +26,7 @@ export const UI_COPY_VI = Object.freeze({
   "FIELD_LOAD_ERROR": "Không thể tải khu nuôi. Hãy thử lại hoặc lưu và tải lại trò chơi.",
   "FIELD_LOAD_SAVE_FAILED": "Chưa lưu được nên bạn vẫn ở màn hình này. Hãy thử lại hoặc xuất tiến trình.",
   "FIELD_LOAD_STALLED": "Quá trình tải đã ngừng phản hồi. Hãy thử lại, hoặc lưu rồi tải lại trò chơi.",
+  "HUNT_FEEDBACK_FALLBACK_NOTICE": "Tải hình ảnh vật phẩm thất bại, đã chuyển sang hình cơ bản; có thể bấm「Về trang trại」để thử lại bất cứ lúc nào.",
   "LOAD_PROGRESS_LABEL": "Tiến trình tải",
   "LOAD_STEP_ENGINE": "Đồ họa",
   "LOAD_STEP_FACILITIES": "Cơ sở",

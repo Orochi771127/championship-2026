@@ -27,6 +27,7 @@ export const UI_COPY = Object.freeze({
   "FIELD_LOAD_ERROR": "牧場未能載入。請重試，或保存並重新載入遊戲。",
   "FIELD_LOAD_SAVE_FAILED": "保存未完成，已留在目前畫面。請重試或匯出進度。",
   "FIELD_LOAD_STALLED": "下載已停止回應。請重試，或保存並重新載入遊戲。",
+  "HUNT_FEEDBACK_FALLBACK_NOTICE": "道具外觀素材載入失敗，已切換為簡易圖形；可隨時點擊「返回牧場」重試。",
   "LOAD_PROGRESS_LABEL": "載入進度",
   "LOAD_STEP_ENGINE": "畫面引擎",
   "LOAD_STEP_FACILITIES": "牧場設施",

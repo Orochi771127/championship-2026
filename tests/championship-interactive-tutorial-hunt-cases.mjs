@@ -7,6 +7,8 @@ import {TUTORIAL_HUNT_STEPS,TUTORIAL_GATE} from '../src/championship/app/interac
 import {listChampionshipGates} from '../src/championship/gate/gateCatalog.js';
 const KEY='championshipModernSave:v1',FRAME=1000*560190/33513982;
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+import {createHuntRuntime} from '../src/championship/hunt/huntRuntime.js';
+import {createHuntWorld} from '../src/championship/hunt/huntWorld.js';
 const cp=a=>a.getInteractiveTutorial().checkpoint;
 const normal=bytes=>{const s=JSON.parse(bytes);delete s.updatedAt;delete s.progression.revision;delete s.progression.nativeOpening;s.raisingHome=JSON.parse(s.raisingHome);delete s.raisingHome.revision;return s;};
 async function fixture(t,stage='gate-intro'){
@@ -19,6 +21,18 @@ async function fixture(t,stage='gate-intro'){
 }
 function input(a,kind,args,expected=cp(a)){return a.interactiveHuntInput(kind,args,expected);}
 function tick(a,n=1){for(let i=0;i<n;i++)a.advanceHunt(FRAME);}
+test('tutorial preload includes both encounter species without revealing its hidden target; ordinary loading stays lazy',async t=>{
+ const {app:a,storage}=await fixture(t,'hunt-intro'),runtime=a.getHuntRuntime(),before=storage.getItem(KEY);
+ assert.deepEqual(runtime.getWildCreatures().map(a=>a.speciesId),['species-013']);
+ const preload=runtime.getTutorialCharacterSpeciesIds();assert.deepEqual(preload,['species-013','species-021']);
+ preload.pop();assert.deepEqual(runtime.getTutorialCharacterSpeciesIds(),['species-013','species-021']);
+ assert.deepEqual(runtime.getWildCreatures().map(a=>a.speciesId),['species-013']);assert.equal(storage.getItem(KEY),before);
+ runtime.configureTutorialHunt({stage:'hunt-second-intro',message:0},TUTORIAL_HUNT_STEPS['hunt-second-intro']);
+ assert.deepEqual(runtime.getWildCreatures().map(a=>a.speciesId),['species-021']);
+ assert.deepEqual(runtime.getTutorialCharacterSpeciesIds(),['species-013','species-021']);
+ const ordinary=createHuntRuntime({world:createHuntWorld(listChampionshipGates()[0]),fieldActor:{actorId:'qa',displayName:'QA'}});
+ assert.equal(ordinary.getTutorialCharacterSpeciesIds(),null);
+});
 function target(a){return a.getHuntRuntime()?.getWildCreatures().find(x=>x.speciesIndex===(TUTORIAL_HUNT_STEPS[cp(a).stage]?.target===1?21:13));}
 function circle(a){const c=cp(a),p=target(a),x=p.worldX,y=p.worldY-10;
  for(let i=0;i<16;i++){const angle=i/16*Math.PI*2,pos=[x+70*Math.cos(angle),y+70*Math.sin(angle)];input(a,i?'move':'down',pos,c);tick(a);}

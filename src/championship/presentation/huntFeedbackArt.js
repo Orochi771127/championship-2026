@@ -54,6 +54,32 @@ export function validateHuntFeedbackArt(manifest,index){
   return structuredClone(manifest);
 }
 
+// Ordinary meat (MEAT item 0) shows the original care meat instead of the old
+// reference cells. Hunt sequence 3-tier equals the care pose (tier 3 -> meat-0
+// ... tier 0 -> meat-3), so only cells 0..3 change; timelines, consumption and
+// every other meat kind keep their existing bank. The original raster has
+// density 4, so its logical size/anchor must equal the native cell and the
+// sprite is drawn at HUNT_NATIVE_SCALE/density: the same 64x48 world size.
+export const ORIGINAL_HUNT_MEAT_ART_ID='art:original-ui:dot-intake:20261007:care';
+export const ORIGINAL_HUNT_MEAT_MANIFEST='assets/production/original-ui-intake-20261007/care/manifest.json';
+const HUNT_NATIVE_SCALE=2;
+export function originalHuntMeatCells(manifest,nativeBank){
+  const density=manifest?.scale;
+  if(manifest?.schemaVersion!==1||manifest.assetId!==ORIGINAL_HUNT_MEAT_ART_ID||density!==4
+    ||manifest.publicReleasePermitted!==false||manifest.shippingReady!==false||!Array.isArray(manifest.cells))throw new Error('HUNT_ORIGINAL_MEAT_MANIFEST_INVALID');
+  return [0,1,2,3].map(pose=>{
+    const matches=manifest.cells.filter(c=>c.role==='meat'&&c.pose===pose),c=matches[0];
+    const native=nativeBank?.cells?.find(n=>n.cell===pose);
+    if(matches.length!==1||!native||c.sequenceId!==pose
+      ||c.src!==`assets/production/original-ui-intake-20261007/items/care19/meat-${pose}.png`
+      ||c.nativeWidth!==native.width||c.nativeHeight!==native.height
+      ||c.nativeAnchorX!==native.origin[0]||c.nativeAnchorY!==native.origin[1]
+      ||!/^[a-f0-9]{64}$/.test(c.sha256))throw new Error('HUNT_ORIGINAL_MEAT_CELL_INVALID');
+    return {cell:pose,src:c.src,width:c.nativeWidth,height:c.nativeHeight,origin:[c.nativeAnchorX,c.nativeAnchorY],sha256:c.sha256,
+      rasterWidth:c.nativeWidth*density,rasterHeight:c.nativeHeight*density,displayScale:HUNT_NATIVE_SCALE/density,art:'ORIGINAL_CARE_MEAT'};
+  });
+}
+
 export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=globalThis.fetch,kinds=null}){
   if(!isLocalBattleEffectPreview(baseUrl))return null;
   const indexResponse=await fetchImpl(new URL('assets/production/ART_PRODUCTION_INDEX.json',baseUrl));
@@ -69,6 +95,15 @@ export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=glob
   // emit mines, bombs or food; downloading all their animation cells delayed
   // the first visible map. Keep every item/sequence of each carried kind.
   const selectedBanks=kinds===null?manifest.banks:manifest.banks.filter(bank=>kinds.includes(bank.kind));
+  const meatIndex=selectedBanks.findIndex(bank=>bank.kind==='MEAT'&&bank.itemIndex===0);
+  if(meatIndex>=0){
+    // No fallback to the old reference cells: a failed original meat rejects
+    // this load exactly like any other missing cell.
+    const meatResponse=await fetchImpl(new URL(ORIGINAL_HUNT_MEAT_MANIFEST,baseUrl));
+    if(!meatResponse.ok)throw new Error('HUNT_ORIGINAL_MEAT_MANIFEST_UNAVAILABLE');
+    const bank=selectedBanks[meatIndex],original=originalHuntMeatCells(await meatResponse.json(),bank);
+    selectedBanks[meatIndex]={...bank,cells:[...original,...bank.cells.filter(c=>c.cell>3)]};
+  }
   const pending=selectedBanks.flatMap(bank=>bank.cells.map(c=>({bank,c})));
   const results=await Promise.allSettled(pending.map(async e=>({...e,texture:await PIXI.Assets.load(e.c.src)})));
   for(const r of results)if(r.status==='fulfilled')loaded.push(r.value.c.src);
@@ -77,7 +112,7 @@ export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=glob
     if(failed)throw failed.reason;
     for(const bank of selectedBanks)banks.set(`${bank.kind}:${bank.itemIndex}`,{...bank,cells:new Map()});
     for(const {bank,c,texture} of results.map(r=>r.value)){
-      if(texture.width!==c.width||texture.height!==c.height)throw new Error('HUNT_FEEDBACK_DIMENSIONS');
+      if(texture.width!==(c.rasterWidth??c.width)||texture.height!==(c.rasterHeight??c.height))throw new Error('HUNT_FEEDBACK_DIMENSIONS');
       texture.source.scaleMode='nearest';
       banks.get(`${bank.kind}:${bank.itemIndex}`).cells.set(c.cell,{...c,texture});}
   }catch(error){await Promise.allSettled(loaded.map(src=>PIXI.Assets.unload(src)));throw error;}

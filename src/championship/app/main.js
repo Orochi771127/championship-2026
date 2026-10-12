@@ -849,7 +849,7 @@ async function mountHuntField() {
       try {
         const stage = await ensurePixiStage(host, signal);
         signal.throwIfAborted();
-        const speciesIds = fieldSource.field.getView({
+        const speciesIds = app.getHuntRuntime()?.getTutorialCharacterSpeciesIds?.() ?? fieldSource.field.getView({
           viewportWidth: stage.app.screen.width, viewportHeight: stage.app.screen.height
         }).wildCreatures.map((wild) => wild.speciesId);
         const loaded = await Promise.allSettled([
@@ -860,16 +860,28 @@ async function mountHuntField() {
         ]);
         [characterBundle, fieldArt, feedbackArt] = loaded.map((result) =>
           result.status === 'fulfilled' ? result.value : null);
-        for (const result of loaded) if (result.status === 'rejected') {
+        let feedbackFallbackNotice = null;
+        if (loaded[2]?.status === 'rejected') {
+          root.dataset.fieldFallback = "true";
+          console.warn('Hunt feedback art unavailable, using fallback shapes:', loaded[2].reason);
+          feedbackFallbackNotice = document.createElement('p');
+          feedbackFallbackNotice.className = 'cm-hunt-feedback-fallback-notice';
+          feedbackFallbackNotice.setAttribute('role', 'status');
+          feedbackFallbackNotice.textContent = uiText('HUNT_FEEDBACK_FALLBACK_NOTICE');
+          host.append(feedbackFallbackNotice);
+        } else {
+          delete root.dataset.fieldFallback;
+        }
+        for (const result of loaded) if (result.status === 'rejected' && result !== loaded[2]) {
           console.warn('Hunt art unavailable', result.reason);
         }
         // An exit received during loading must not attach the abandoned field
         // or start its native actor ticker. The serial mount then returns Home.
         if (signal.aborted || app.getScreen() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) {
+          feedbackFallbackNotice?.remove();
           releaseArt();
           return { isPlayable: false, render() {}, dispose() {} };
         }
-        delete root.dataset.fieldFallback;
         const scene = await mountHuntFieldPixiPresentation({
           onActorFrame,
           stage,
@@ -884,7 +896,13 @@ async function mountHuntField() {
         });
         // The mounted scene now owns these bundles and releases them on exit.
         owned.clear();
-        return scene;
+        return {
+          ...scene,
+          dispose() {
+            feedbackFallbackNotice?.remove();
+            scene.dispose();
+          }
+        };
       } catch (error) {
         releaseArt();
         if (signal.aborted) return { isPlayable: false, render() {}, dispose() {} };

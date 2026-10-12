@@ -26,6 +26,7 @@ export const UI_COPY_JA = Object.freeze({
   "FIELD_LOAD_ERROR": "牧場を読み込めませんでした。再試行するか、保存してゲームを再読み込みしてください。",
   "FIELD_LOAD_SAVE_FAILED": "保存できなかったため、この画面に留まっています。再試行するか、進行状況をエクスポートしてください。",
   "FIELD_LOAD_STALLED": "ダウンロードが応答しなくなりました。再試行するか、保存してゲームを再読み込みしてください。",
+  "HUNT_FEEDBACK_FALLBACK_NOTICE": "アイテム外観素材の読み込みに失敗したため簡易表示に切り替えました。「牧場へ戻る」でいつでも再試行できます。",
   "LOAD_PROGRESS_LABEL": "読み込みの進行状況",
   "LOAD_STEP_ENGINE": "描画エンジン",
   "LOAD_STEP_FACILITIES": "牧場の施設",

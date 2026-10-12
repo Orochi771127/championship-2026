@@ -481,7 +481,7 @@ export async function mountHuntFieldPixiPresentation({
           const sprite=toolSprites[nativeCount]??new PIXI.Sprite(frame.texture);
           if(!toolSprites[nativeCount]){toolSprites.push(sprite);nativeTools.addChild(sprite);}
           nativeCount++;sprite.texture=frame.texture;sprite.anchor.set(frame.origin[0]/frame.width,frame.origin[1]/frame.height);
-          sprite.scale.set(2);sprite.position.set(o.x,o.y);sprite.visible=true;continue;
+          sprite.scale.set(frame.displayScale??2);sprite.position.set(o.x,o.y);sprite.visible=true;continue;
         }
         const g=toolGraphic,x=o.x,y=o.y;
         if(o.kind==='WIRE'){
