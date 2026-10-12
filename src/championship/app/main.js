@@ -691,9 +691,11 @@ async function mountRaisingHome() {
         attempt?.cancel(); effects?.cancel(); scene?.dispose(); scene = null; residentStates = [];
         expansionCta.hidden = true;
         // The hard cap is the watchdog's longest load; stalling ends it sooner.
+        // Only finished requests count as progress (bytes in flight are not
+        // visible), so a slow link sharing big files gets a long window.
         const owner = attempt = createLoadAttempt({ timeoutMs: LOAD_MAX_MS });
         stopTracking(); progress.reset();
-        const watchdog = createLoadWatchdog({ stallMs: 45000, onExpire(reason) {
+        const watchdog = createLoadWatchdog({ stallMs: 90000, onExpire(reason) {
           if (attempt === owner) owner.cancel(new Error(reason === 'STALLED' ? 'LOAD_STALLED' : 'LOAD_TIMEOUT'));
         } });
         const bytes = observeDownloadedBytes(total => { watchdog.activity(); progress.setBytes(total); });

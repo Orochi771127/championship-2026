@@ -116,7 +116,7 @@ export function createLoadProgressView({ steps, doc = globalThis.document }) {
     start(id) { set(id, 'active'); },
     done(id) { set(id, 'done'); },
     /** Mark every unfinished step failed (the load as a whole stopped). */
-    fail() { for (const [id, item] of items) if (item.dataset.state !== 'done') set(id, item.dataset.state === 'active' ? 'error' : 'pending'); },
+    fail() { slow.hidden = true; for (const [id, item] of items) if (item.dataset.state !== 'done') set(id, item.dataset.state === 'active' ? 'error' : 'pending'); },
     reset() { byteTotal = 0; slow.hidden = true; for (const item of items.values()) { item.dataset.state = 'pending'; item.removeAttribute('aria-current'); } paint(); },
     setBytes(total) { const next = Math.max(0, Number(total) || 0); if (next !== byteTotal) { byteTotal = next; paint(); } },
     showSlow(show = true) { slow.hidden = !show; },

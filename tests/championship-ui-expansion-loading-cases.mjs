@@ -164,7 +164,9 @@ test("progress counts finished steps only, and reaches 100 % only when all are d
   assert.equal(progress.state(), "loading");
   progress.setBytes(2 * 1048576);
   assert.match(progress.element.children[2].textContent, /2\.0 MB/);
+  progress.showSlow();
   progress.fail();
+  assert.equal(progress.element.children[3].hidden, true, "a failed load no longer says it is still downloading");
   assert.equal(states(), "done done error");
   assert.equal(progress.state(), "error");
   assert.equal(bar.dataset.failed, "true");
