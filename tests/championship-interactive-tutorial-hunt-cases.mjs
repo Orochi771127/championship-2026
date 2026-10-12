@@ -9,6 +9,7 @@ const KEY='championshipModernSave:v1',FRAME=1000*560190/33513982;
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 import {createHuntRuntime} from '../src/championship/hunt/huntRuntime.js';
 import {createHuntWorld} from '../src/championship/hunt/huntWorld.js';
+import {createGateHuntPresentationSource} from '../src/championship/app/gateHuntPresentationSource.js';
 const cp=a=>a.getInteractiveTutorial().checkpoint;
 const normal=bytes=>{const s=JSON.parse(bytes);delete s.updatedAt;delete s.progression.revision;delete s.progression.nativeOpening;s.raisingHome=JSON.parse(s.raisingHome);delete s.raisingHome.revision;return s;};
 async function fixture(t,stage='gate-intro'){
@@ -156,5 +157,16 @@ test('rope break and release allow capture retry without reloading or changing t
  assert.ok(a.getHuntRuntime().getToolState().rope,'released broken gesture must allow a fresh pull');
  input(a,'up',[p.worldX,p.worldY-10]);tick(a);
  pull(a);assert.equal(cp(a).stage,'hunt-final-hand');
+ assert.deepEqual(normal(storage.getItem(KEY)),baseline);
+});
+
+test('tutorial hunt keeps exit disabled to guard sequence, and retains progress and save across recovery',async t=>{
+ const {app:a,storage,baseline}=await fixture(t,'hunt-practice-intro');
+ const source=createGateHuntPresentationSource(a);
+ const frame=source.getFrame();
+ assert.equal(frame.huntField.hud.exitAvailable,false,'exit button is disabled in tutorial to protect sequence');
+ const stepBefore=cp(a),saveBefore=storage.getItem(KEY);
+ assert.deepEqual(cp(a),stepBefore,'tutorial checkpoint remains exact');
+ assert.equal(storage.getItem(KEY),saveBefore,'storage remains unmodified');
  assert.deepEqual(normal(storage.getItem(KEY)),baseline);
 });

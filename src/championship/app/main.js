@@ -861,13 +861,55 @@ async function mountHuntField() {
         [characterBundle, fieldArt, feedbackArt] = loaded.map((result) =>
           result.status === 'fulfilled' ? result.value : null);
         let feedbackFallbackNotice = null;
+        let activeScene = null;
+
+        const retryFeedbackArt = async (button) => {
+          if (button) {
+            button.disabled = true;
+            button.textContent = uiText('HUNT_FEEDBACK_RETRYING');
+          }
+          try {
+            const scope = createPixiAssetScope(stage.PIXI);
+            const kinds = fieldSource.getFrame().huntField.toolState?.tools.map(tool => tool.subtype ?? tool.id) ?? null;
+            const reloadedArt = await loadRegisteredHuntFeedbackArt({
+              PIXI: scope,
+              baseUrl: location.href,
+              kinds
+            });
+            if (signal.aborted || app.getScreen() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) {
+              void reloadedArt?.dispose();
+              return;
+            }
+            if (activeScene?.setFeedbackArt) {
+              activeScene.setFeedbackArt(reloadedArt);
+            }
+            delete root.dataset.fieldFallback;
+            feedbackFallbackNotice?.remove();
+            feedbackFallbackNotice = null;
+          } catch (error) {
+            console.warn('Hunt feedback art retry failed:', error);
+            if (button) {
+              button.disabled = false;
+              button.textContent = uiText('HUNT_FEEDBACK_RETRY_BUTTON');
+            }
+          }
+        };
+
         if (loaded[2]?.status === 'rejected') {
           root.dataset.fieldFallback = "true";
           console.warn('Hunt feedback art unavailable, using fallback shapes:', loaded[2].reason);
-          feedbackFallbackNotice = document.createElement('p');
+          feedbackFallbackNotice = document.createElement('div');
           feedbackFallbackNotice.className = 'cm-hunt-feedback-fallback-notice';
           feedbackFallbackNotice.setAttribute('role', 'status');
-          feedbackFallbackNotice.textContent = uiText('HUNT_FEEDBACK_FALLBACK_NOTICE');
+          const noticeText = document.createElement('span');
+          noticeText.className = 'cm-hunt-feedback-fallback-text';
+          noticeText.textContent = uiText('HUNT_FEEDBACK_FALLBACK_NOTICE');
+          const retryBtn = document.createElement('button');
+          retryBtn.type = 'button';
+          retryBtn.className = 'cm-hunt-feedback-retry-button';
+          retryBtn.textContent = uiText('HUNT_FEEDBACK_RETRY_BUTTON');
+          retryBtn.addEventListener('click', () => { void retryFeedbackArt(retryBtn); });
+          feedbackFallbackNotice.append(noticeText, retryBtn);
           host.append(feedbackFallbackNotice);
         } else {
           delete root.dataset.fieldFallback;
@@ -894,12 +936,16 @@ async function mountHuntField() {
             console.warn(message);
           }
         });
+        activeScene = scene;
         // The mounted scene now owns these bundles and releases them on exit.
         owned.clear();
         return {
           ...scene,
+          retryFeedbackArt,
           dispose() {
             feedbackFallbackNotice?.remove();
+            feedbackFallbackNotice = null;
+            activeScene = null;
             scene.dispose();
           }
         };

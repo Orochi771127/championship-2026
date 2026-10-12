@@ -141,3 +141,114 @@ test('shared care19 texture lifecycle across Raising -> Hunt -> Raising -> Hunt 
   await huntScope2.Assets.unload(meatSrc);
   assert.equal(unloaded.filter(s => s.endsWith('meat-0.png')).length, 2);
 });
+
+test('mountHuntFieldPixiPresentation supports dynamic setFeedbackArt recovery, swaps art seamlessly, and disposes active art', async () => {
+  const { mountHuntFieldPixiPresentation } = await import('../src/championship/presentation/vs2/createHuntFieldPixiPresentation.js');
+  let disposed1 = false, disposed2 = false;
+  const mockArt1 = {
+    getFrame: () => ({ texture: { id: 'tex1' }, origin: [15, 19], width: 32, height: 24, displayScale: 2 }),
+    dispose: () => { disposed1 = true; }
+  };
+  const mockArt2 = {
+    getFrame: () => ({ texture: { id: 'tex2' }, origin: [15, 19], width: 32, height: 24, displayScale: 2 }),
+    dispose: () => { disposed2 = true; }
+  };
+
+  class MockContainer {
+    constructor() { this.children = []; this.position = { set() {} }; this.scale = { set() {} }; }
+    addChild(...c) { this.children.push(...c); }
+    removeChild() {}
+    removeChildren() { this.children.length = 0; }
+    destroy() {}
+  }
+  class MockGraphics extends MockContainer {
+    constructor() {
+      super();
+      const proxy = new Proxy(this, {
+        get(target, prop) {
+          if (prop in target) return typeof target[prop] === 'function' ? target[prop].bind(target) : target[prop];
+          return () => proxy;
+        }
+      });
+      return proxy;
+    }
+  }
+  class MockSprite extends MockContainer {
+    constructor(texture) {
+      super();
+      this.texture = texture;
+      this.anchor = { set() {} };
+      this.scale = { set() {} };
+      this.position = { set() {} };
+      this.visible = false;
+    }
+  }
+
+  const stage = {
+    PIXI: { Container: MockContainer, Graphics: MockGraphics, Sprite: MockSprite },
+    app: {
+      screen: { width: 390, height: 844 },
+      ticker: { add() {}, remove() {} },
+      stage: { on() {}, off() {} },
+      renderer: {}
+    },
+    createSceneRoot: () => new MockContainer(),
+    markScene: () => () => {},
+    onContextLost: () => () => {},
+    onResize: () => () => {}
+  };
+
+  const source = {
+    getFrame: () => ({
+      huntField: {
+        camera: { x: 0, y: 0, zoom: 1 },
+        actor: { worldX: 0, worldY: 0 },
+        wilds: [],
+        toolState: { tools: [] }
+      }
+    }),
+    getTerrainTheme: () => 'grass',
+    intents: {
+      panCamera: () => {},
+      selectWildAt: () => {},
+      abortEnclosureStroke: () => {}
+    },
+    field: {
+      tick: () => {},
+      getView: () => ({
+        transform: { scale: 1 },
+        camera: { left: 0, top: 0 },
+        visibleChunks: [],
+        player: { worldX: 0, worldY: 0, facing: 'right' },
+        actor: { worldX: 0, worldY: 0, isMoving: false },
+        wildCreatures: [],
+        objects: [],
+        tools: { objects: [{ kind: 'MEAT', itemIndex: 0, tier: 2, x: 10, y: 10 }], points: [] }
+      }),
+      world: {
+        getBounds: () => ({ minX: -100, minY: -100, maxX: 100, maxY: 100 })
+      }
+    }
+  };
+
+  const scene = await mountHuntFieldPixiPresentation({ stage, source });
+  assert.equal(scene.getFeedbackArt(), null, 'initial feedbackArt is null on fallback');
+  scene.render(); // Renders with fallback geometry without throwing
+
+  // Dynamically attach reloaded art
+  scene.setFeedbackArt(mockArt1);
+  assert.equal(scene.getFeedbackArt(), mockArt1, 'setFeedbackArt updates active art');
+  assert.equal(disposed1, false);
+  scene.render(); // Renders with reloaded mockArt1 sprite
+
+  // Subsequent swap disposes previous art
+  scene.setFeedbackArt(mockArt2);
+  assert.equal(disposed1, true, 'previous art disposed on swap');
+  assert.equal(scene.getFeedbackArt(), mockArt2, 'active art updated to new instance');
+  assert.equal(disposed2, false);
+  scene.render(); // Renders with mockArt2
+
+  // Scene disposal disposes currently active art
+  scene.dispose();
+  assert.equal(disposed2, true, 'active art disposed on scene teardown');
+});

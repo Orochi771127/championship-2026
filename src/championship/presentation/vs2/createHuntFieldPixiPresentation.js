@@ -747,6 +747,17 @@ export async function mountHuntFieldPixiPresentation({
       });
     },
 
+    setFeedbackArt(art) {
+      if (feedbackArt && feedbackArt !== art) {
+        void feedbackArt.dispose();
+      }
+      feedbackArt = art;
+    },
+
+    getFeedbackArt() {
+      return feedbackArt;
+    },
+
     dispose() {
       if (disposed) return;
       disposed = true;

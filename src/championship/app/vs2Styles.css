@@ -390,9 +390,32 @@
   font-size: var(--fs-label);
   line-height: var(--lh-label);
   text-align: center;
-  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
   max-width: 90%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.cm-hunt-feedback-retry-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  min-height: 28px;
+  border-radius: var(--r-control);
+  background: var(--c-accent);
+  color: #fff;
+  border: 1px solid transparent;
+  font-size: var(--fs-label);
+  font-weight: bold;
+  cursor: pointer;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+.cm-hunt-feedback-retry-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .cm-vs2-hud {
