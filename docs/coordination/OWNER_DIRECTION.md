@@ -1,5 +1,11 @@
 # Championship Owner Direction
 
+## 2026-10-12 — Publish the reviewed NS33 opening film in the existing TITLE flow
+
+Owner message `Sentinel_3dfc9984246c81918d9ca360d66ce7f3` at 2026-10-11 23:20 UTC: 「用好了就接入然後發佈啊。之後如果有有問題，我們再修就好。」 The Owner selected their original `ns33.mp3` music and authorized integration, isolated-worktree commit, normal main push and the existing Pages publication after the necessary checks. Only the reviewed 48.5-second textless 720×1280 H.264/AAC final file (SHA-256 `74e171baa7a3893a7e5e1274dab699339e9753733c1681ee18aff4f5dbaaf184`, 14,563,538 bytes) is selected. No production sources or music stems are published.
+
+The film is a DOM presentation inside existing TITLE: immediate skip, muted inline startup, explicit sound consent respecting preferences, uninterrupted 15-second TITLE idle replay, graceful media failure, reduced-motion manual playback and existing five-language brand copy. Keep the same router, save, Pixi application/ticker and gameplay. Preserve collaborator work and the player's 8732 origin. Physical-device acceptance and complete subjective listening remain unverified; publication permission does not change those labels or commercial rights. See the [implementation contract](../contracts/championship/NS33_OPENING_FILM_2026-10-12.md) and [validation report](../reports/ns33-opening-2026-10-12/REPORT_ZH_TW.md).
+
 ## 2026-10-12 — Ranch expansion for every player (locked preview), real loading progress, UI polish
 
 The Owner attached dot's UI handoff (`CLAUDE_UI_HANDOFF_20261011.md`, base `6d712b90`) and directed: 「請依附件接續 UI／HUD、使用者體驗與轉場打磨。沿用現有藍色蓋板完成後排擴充預覽，加入真實載入進度；先核對已發布版本，不要重做已完成的方塊旋轉、觸控／貼上與貨幣图示。片頭影片另案繼續，兩邊避免同時修改相同檔案。把籠子擴充系統也上線,全頁面或分頁跟功能頁面設計或籠子能容納的寵物數量都交由你評估跟決定,你只要跟我說為什麼你會這樣決定,請把這些UI /HUD介面再一次打磨優化…完成後請自審」.

@@ -1,0 +1,72 @@
+{
+  "generatedAt": "2026-10-11T23:43:29.276Z",
+  "checks": [
+    {
+      "name": "real playback, audio consent, native finish and unchanged save",
+      "passed": true
+    },
+    {
+      "name": "skip gesture guard, repeated manual watch, idle 14.9s input, menu block",
+      "passed": true
+    },
+    {
+      "name": "dialog idle block and controlled background/foreground reset",
+      "passed": true
+    },
+    {
+      "name": "reject returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "404 returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "network returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "slow returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "reduced motion system loads no video until manual watch",
+      "passed": true
+    },
+    {
+      "name": "reduced motion on loads no video until manual watch",
+      "passed": true
+    },
+    {
+      "name": "locale zh-Hant portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "locale en portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "locale ja portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "locale th portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "locale vi portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "QA save bytes unchanged on TITLE, Continue keeps film off in Raising",
+      "passed": true
+    }
+  ],
+  "physicalDeviceAccepted": false,
+  "fullSubjectiveListeningAccepted": false,
+  "origin": "http://127.0.0.1:61620",
+  "partial": false,
+  "passed": true,
+  "artifactBuildId": "3b68b52bf22c2c32671f18fea61c63d89269d06b6b76197bd9fb9049a9e2031d",
+  "scope": "15 focused scenarios; legacy gates reported separately"
+}

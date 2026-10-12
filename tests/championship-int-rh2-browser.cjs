@@ -91,7 +91,7 @@ async function openRaising(context, { continueGame = false, developer = false } 
   const failedRequests = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => failedRequests.push(`${request.url()} :: ${request.failure()?.errorText}`));
-  await page.goto(developer ? BASE_URL + (BASE_URL.includes("?") ? "&" : "?") + "presentation=developer" : BASE_URL, { waitUntil: "networkidle" });
+  await page.goto(developer ? BASE_URL + (BASE_URL.includes("?") ? "&" : "?") + "presentation=developer" : BASE_URL, { waitUntil: "domcontentloaded" });
   await startGame(page, { continueGame });
   try {
     await page.waitForSelector(".cm-raising-pixi-canvas", { timeout: 30000 });
@@ -243,7 +243,7 @@ async function runPixiFallback(browser) {
   const page = await context.newPage();
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto(BASE_URL, { waitUntil: "networkidle" });
+  await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
   await login(page);
   // The opening is DOM-only, so it still runs when the field cannot.
   await playOpening(page);

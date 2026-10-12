@@ -321,3 +321,14 @@ body[data-portrait-frame] #cm-title .cm-title__note:empty { display:none; }
 .cm-opening-story__loading p { margin:0 0 12px; }
 .cm-opening-story__art-status { position:absolute; top:max(12px,env(safe-area-inset-top,0px)); left:16px; right:16px; z-index:2; margin:0; padding:8px 10px; border-radius:8px; background:#10292be8; color:#e8f5ef; text-align:center; font-size:13px; line-height:1.5; }
 .cm-opening-story__loading button { min-height:44px; max-width:100%; margin:4px; padding:10px 14px; border:1px solid var(--c-line-2); border-radius:var(--r-control); background:var(--c-surface-2); color:var(--c-text-1); font:inherit; line-height:1.4; }
+
+/* NS33 film shares the TITLE portrait frame and approved DOM brand. */
+#cm-title .cm-title__film-watch { position:absolute; top:max(12px,env(safe-area-inset-top)); left:12px; z-index:6; min-height:44px; max-width:65%; padding:8px 12px; border:1px solid #fff4d2; border-radius:10px; background:#12343edb; color:#fff4d2; font-size:13px; }
+#cm-title .cm-title__film { position:absolute; inset:0; margin:auto; width:min(100vw,56.25dvh,520px); height:100%; overflow:hidden; background:#12343e; z-index:20; --cm-title-height:100dvh; }
+#cm-title .cm-title__film-video { display:block; width:100%; height:100%; object-fit:cover; }
+#cm-title .cm-title__film .cm-title__art { width:100%; text-align:center; }
+#cm-title .cm-title__film-controls { position:absolute; inset:max(12px,env(safe-area-inset-top)) 12px auto; z-index:4; display:flex; justify-content:space-between; gap:12px; }
+#cm-title .cm-title__film-controls button { min-width:44px; min-height:44px; max-width:60%; padding:8px 12px; border:1px solid #fff4d2b3; border-radius:10px; background:#12343edb; color:#fff4d2; font-size:14px; line-height:1.4; }
+#cm-title .cm-title__film-status { position:absolute; left:12px; right:12px; bottom:10%; padding:10px; text-align:center; background:#12343edb; color:#fff4d2; }
+#cm-title .cm-title__film button:focus-visible { outline:3px solid #ffe895; outline-offset:3px; }
+body[data-portrait-frame] #cm-title .cm-title__film { width:390px; --cm-title-height:var(--cm-viewport-height); }

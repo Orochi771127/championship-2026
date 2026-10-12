@@ -1,0 +1,17 @@
+AssertionError [ERR_ASSERTION]: 360x800 failed requests
++ actual - expected
+
++ [
++   'http://isolated-loopback/assets/production/original-music-r1/bgm_login_page.mp3 :: net::ERR_ABORTED'
++ ]
+- []
+
+    at runViewport (R:\Projects\Championship2026\ns33-opening-20261012\.tmp\ns33-baseline-tests\championship-int-rh2-browser.cjs:149:10)
+    at async R:\Projects\Championship2026\ns33-opening-20261012\.tmp\ns33-baseline-tests\championship-int-rh2-browser.cjs:269:54 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [Array],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}

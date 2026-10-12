@@ -56,7 +56,7 @@ fs.mkdirSync(output, { recursive: true });
     // A real document departure exercises pagehide, unlike a synthetic
     // visibility event. The fresh document must open the same roster again.
     await page.goto('about:blank');
-    await page.goto(`${origin}/championship.html`, { waitUntil: 'networkidle' });
+    await page.goto(`${origin}/championship.html`, { waitUntil: 'domcontentloaded' });
     const persisted = await saved();
     assert.notEqual(persisted.updatedAt, installed.updatedAt);
     assert.equal(persisted.schemaVersion, installed.schemaVersion);

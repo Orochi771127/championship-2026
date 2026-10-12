@@ -59,7 +59,7 @@ async function footerReachable(page, selector, label) {
       const page = await context.newPage();
       page.setDefaultTimeout(30000);
       const problems = await watch(page);
-      await page.goto(`${origin}/championship.html`, { waitUntil: 'networkidle' });
+      await page.goto(`${origin}/championship.html`, { waitUntil: 'domcontentloaded' });
       await login(page);
       assert.equal(await page.locator('#cm-continue').isHidden(), true, 'no Continue without a save');
       await playOpening(page, { trainerName: '驗收員', eggName: '小蛋' });
@@ -128,7 +128,7 @@ async function footerReachable(page, selector, label) {
       await menu(page, 'SYSTEM', 'saveQuit');
       await page.locator('#cm-login').waitFor();
       await page.goto('about:blank');
-      await page.goto(`${origin}/championship.html`, { waitUntil: 'networkidle' });
+      await page.goto(`${origin}/championship.html`, { waitUntil: 'domcontentloaded' });
       await login(page);
       const titleOrder = await page.locator('.cm-title__actions button:visible').allTextContents();
       assert.deepEqual(titleOrder.map((t) => t.trim()), ['繼續遊戲', '開始新遊戲']);
@@ -175,7 +175,7 @@ async function footerReachable(page, selector, label) {
       assert.equal(bits1 - bits2, 5, 'a separate tap buys again');
       // Leave the page while still in the Shop; the purchases must survive.
       await page.goto('about:blank');
-      await page.goto(`${origin}/championship.html`, { waitUntil: 'networkidle' });
+      await page.goto(`${origin}/championship.html`, { waitUntil: 'domcontentloaded' });
       const after = await saved(page);
       assert.notEqual(after.updatedAt, before.updatedAt, 'leaving from the Shop writes the save');
       await login(page); await page.click('#cm-continue'); await home(page);

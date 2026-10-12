@@ -66,6 +66,7 @@ import { createHelpView } from "./helpScreen.js";
 import { createMedalCollectionView } from "./medalCollectionScreen.js";
 import { createTamerInfoView } from "./tamerInfoScreen.js";
 import { createOpeningPresentation } from './openingPresentation.js';
+import { createOpeningFilm } from './openingFilm.js';
 import { lookupSpeciesIdentity } from "./phase1ProductCreatures.js";
 // The cartridge's own Japanese species names, recovered from txt_list_txt.dat
 // at species index + 33. See scripts/build-species-names.py.
@@ -171,6 +172,7 @@ const FREE_PRACTICE_PERSONALITY_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battlePolicy") === "baseline" ? "BASELINE" : "ORIGINAL";
 
 const titleScreen = document.getElementById("cm-title");
+let openingFilm = null;
 const titleBackgroundFeedback=document.getElementById('cm-title-background-feedback');
 const titleBackgroundStatus=document.getElementById('cm-title-background-status');
 const titleBackgroundRetry=document.getElementById('cm-title-background-retry');
@@ -280,6 +282,7 @@ const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CU
 settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume'].includes(id)))music.preferencesChanged();});
 const tutorialMusicAttempts=new WeakMap();let tutorialMusicSequence=0;
 function syncMusic(){
+  if(openingFilm?.isPlaying()){music.setScene(null);return;}
   if(!titleScreen.hidden){const cue=selectOriginalMusic({titleVisible:true,openingVisible:!document.getElementById('cm-opening').hidden});music.setScene(cue.id);return;}
   const screen=app?.getScreen(),tutorialBattle=app?.getInteractiveTutorialBattle?.(),runtime=tutorialBattle?.runtime??battleRuntime;
   let attemptId=battleAttemptId;
@@ -290,7 +293,7 @@ function syncMusic(){
   music.setScene(cue.id,cue.attemptId);
 }
 // Resolve the new cue before art reads its buffering state on title return.
-const musicOverlayObserver=new MutationObserver(()=>{syncMusic();syncTitleArt();});
+const musicOverlayObserver=new MutationObserver(()=>{syncMusic();syncTitleArt();openingFilm?.sync();});
 musicOverlayObserver.observe(titleScreen,{attributes:true,attributeFilter:['hidden']});
 musicOverlayObserver.observe(document.getElementById('cm-opening'),{attributes:true,attributeFilter:['hidden']});
 
@@ -1959,6 +1962,11 @@ function boot() {
   installHomeEntries();
   refreshContinue();
   loginButton.disabled=false;
+  openingFilm=createOpeningFilm({title:titleScreen,controls:titleScreen.querySelector('.cm-title__controls'),
+    login:loginButton,menu:titleActions,opening:document.getElementById('cm-opening'),
+    getPreferences:()=>settings.store.get(),onActiveChange:()=>syncMusic()});
+  settings.store.subscribe(()=>openingFilm.sync());
+  openingFilm.start();
   window.dispatchEvent(new Event("championship:ready"));
   syncMusic();
   // Background/unload resets elapsed measurement, and now also writes the

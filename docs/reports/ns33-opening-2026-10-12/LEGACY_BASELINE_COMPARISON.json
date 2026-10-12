@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "ebcb41c6a17f718bdb2fa7065721f5696efc37f7",
+  "baselineBundleSourceHashesMatched": true,
+  "baselineVerifiedInputCount": 375,
+  "sameReferenceRoot": true,
+  "sameServerAndBrowserRunner": true,
+  "originalBaselineTestsAndHelper": true,
+  "gameplayAssertionsRelaxed": false,
+  "checks": [
+    {
+      "gate": "int-rh2",
+      "candidate": "FAIL",
+      "baseline": "FAIL",
+      "sameFailurePaths": true,
+      "paths": [
+        "assets/production/original-music-r1/bgm_login_page.mp3"
+      ],
+      "reason": "Existing title music request cancellation"
+    },
+    {
+      "gate": "ui",
+      "candidate": "FAIL",
+      "baseline": "FAIL",
+      "sameFailurePaths": true,
+      "paths": [
+        "assets/production/hunt/cave-clearance-natural-r11/frame-00.png",
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/frame-01.png",
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-00/occluders-backcap.png",
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-00/occluders.png",
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-01/occluders-backcap.png",
+        "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-01/occluders.png"
+      ],
+      "reason": "Existing local-only hunt references absent from the fixed fallback set"
+    }
+  ],
+  "recentIntegrationCandidate": "PASS",
+  "publicFullGameplayAccepted": false
+}

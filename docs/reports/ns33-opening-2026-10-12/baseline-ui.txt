@@ -1,0 +1,29 @@
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   '404 http://isolated-loopback/assets/production/hunt/cave-clearance-natural-r11/frame-00.png',
++   'console: Failed to load resource: the server responded with a status of 404 (Not Found)',
++   '404 http://isolated-loopback/assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/frame-01.png',
++   'console: Failed to load resource: the server responded with a status of 404 (Not Found)',
++   '404 http://isolated-loopback/assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-00/occluders.png',
++   'console: Failed to load resource: the server responded with a status of 404 (Not Found)',
++   '404 http://isolated-loopback/assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-00/occluders-backcap.png',
++   'console: Failed to load resource: the server responded with a status of 404 (Not Found)',
++   '404 http://isolated-loopback/assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-01/occluders.png',
++   'console: Failed to load resource: the server responded with a status of 404 (Not Found)',
++   '404 http://isolated-loopback/assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/phase-01/occluders-backcap.png',
++   'console: Failed to load resource: the server responded with a status of 404 (Not Found)',
++   '404 http://isolated-loopback/assets/production/hunt/cave-clearance-natural-r11/frame-00.png',
++   '404 http://isolated-loopback/assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/field_hm01_01/frame-01.png'
++ ]
+- []
+
+    at R:\Projects\Championship2026\ns33-opening-20261012\.tmp\ns33-baseline-tests\championship-ui-integration-browser.cjs:146:14 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [Array],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}

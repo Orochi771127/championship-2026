@@ -53,6 +53,7 @@
     "src/championship/app/nativeTutorialBattleEntry.js",
     "src/championship/app/nativeTutorialProgression.js",
     "src/championship/app/openingEggChoices.js",
+    "src/championship/app/openingFilm.js",
     "src/championship/app/openingPresentation.js",
     "src/championship/app/openingStoryPresentation.js",
     "src/championship/app/phase1ProductCreatures.js",
@@ -320,6 +321,7 @@
     "src/championship/text/interactiveTutorialPreviewText.js",
     "src/championship/text/locale.js",
     "src/championship/text/openingEggText.js",
+    "src/championship/text/openingFilmText.js",
     "src/championship/text/openingStoryText.js",
     "src/championship/text/raisingMessages.en.js",
     "src/championship/text/raisingMessages.ja.js",
@@ -8834,6 +8836,8 @@
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-180.png",
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-181.png",
     "assets/production/internal-faithful-baseline/raising-feedback-v1/manifest.json",
+    "assets/production/opening-film-ns33-r1/manifest.json",
+    "assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4",
     "assets/production/opening/original-comic-r2-20261010/01_arena.webp",
     "assets/production/opening/original-comic-r2-20261010/02_blaze_action.webp",
     "assets/production/opening/original-comic-r2-20261010/03_cloud_action.webp",
@@ -9261,6 +9265,7 @@
     "src/championship/app/nativeUiSkin.css",
     "src/championship/app/opening.css",
     "src/championship/app/openingEggChoices.js",
+    "src/championship/app/openingFilm.js",
     "src/championship/app/openingPresentation.js",
     "src/championship/app/openingStoryPresentation.js",
     "src/championship/app/phase1ProductCreatures.js",
@@ -9540,6 +9545,7 @@
     "src/championship/text/interactiveTutorialPreviewText.js",
     "src/championship/text/locale.js",
     "src/championship/text/openingEggText.js",
+    "src/championship/text/openingFilmText.js",
     "src/championship/text/openingStoryText.js",
     "src/championship/text/raisingMessages.en.js",
     "src/championship/text/raisingMessages.ja.js",
@@ -43547,6 +43553,14 @@
         "sha256": "3ea8a8c1596b0165b767b86e503a1c79c2815b7ec066b6bc265d0aadf5a5944e"
       },
       {
+        "path": "assets/production/opening-film-ns33-r1/manifest.json",
+        "sha256": "649fae2c566c4b90615f23aaa1b97a3240ba1487ade86eff8f348229d5776d66"
+      },
+      {
+        "path": "assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4",
+        "sha256": "74e171baa7a3893a7e5e1274dab699339e9753733c1681ee18aff4f5dbaaf184"
+      },
+      {
         "path": "assets/production/opening/original-comic-r2-20261010/01_arena.webp",
         "sha256": "73635ac2a8d1d32601979f44fcb065a20c4235e562b8438f6a495d806dc6b44b"
       },
@@ -44868,7 +44882,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "8fcaed943cdd8e042106f7c853b4f0887bbea11e52c9a8701d9343ce40955261"
+        "sha256": "d1feeef287d06a6e4d75dc6a95c777a0061b0f1420797058603252c4e773cd78"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45208,7 +45222,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "afb38f6ce53961fe0fa3624f6f71c60e03deecfaf2f42711fabc7dc1aed419ec"
+        "sha256": "6280c86d30ac788cdb028653657e450e3957ab0cd106b68d3a014624dcea61f1"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -45248,11 +45262,15 @@
       },
       {
         "path": "src/championship/app/opening.css",
-        "sha256": "a7159ca521701bfcd5891e53acb1bcfb7c65835edb8ee4776c202c4feede8df9"
+        "sha256": "511fa8fc63ad80921b313a7e110e34088d3a21303750c1963106971a26429006"
       },
       {
         "path": "src/championship/app/openingEggChoices.js",
         "sha256": "575681b5a7d4ab7e71cae60dcbc0bcb8c49aa7a680981b88c79eba8fdccbbc78"
+      },
+      {
+        "path": "src/championship/app/openingFilm.js",
+        "sha256": "c412d289a3e30219c6bfc5e876197f367cfab1320e8fce06898f13413b181400"
       },
       {
         "path": "src/championship/app/openingPresentation.js",
@@ -46369,6 +46387,10 @@
       {
         "path": "src/championship/text/openingEggText.js",
         "sha256": "96dc1c7a04341e71f6f106613d8c48193bfed7bd0c09f84fe3f4c60b7f334bfc"
+      },
+      {
+        "path": "src/championship/text/openingFilmText.js",
+        "sha256": "dcc22f9a5862d5887fed966eb7313b16cb613af559f79bdbc1df44affaba40fa"
       },
       {
         "path": "src/championship/text/openingStoryText.js",

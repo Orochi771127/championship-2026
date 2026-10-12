@@ -11,6 +11,8 @@
 //
 // WHAT THE OPENING IS
 // -------------------
+// The optional NS33 TITLE film precedes LOGIN and has its own Skip intro
+// action. The story described below is the separate New Game onboarding.
 // LOGIN reveals New Game / Continue. New Game then plays the scrolling story,
 // the envelope, the welcome letter, the tamer name and its confirmation, the
 // two gift letters, the local eight-egg chooser, and finally the egg's name.
@@ -26,7 +28,23 @@
 
 /** Reveal New Game / Continue. Every entry to the game goes through it. */
 async function login(page) {
+  await page.waitForFunction(() => document.querySelector('#cm-login')?.disabled === false);
+  // These gates cover gameplay after TITLE. The dedicated film gate plays
+  // all 48.5 seconds in real time and tests immediate skip. Here only the
+  // presentation video runs faster; its native ended event restores TITLE.
+  // No application clock, game state, story or tutorial is advanced.
+  await page.locator('#cm-opening-film video').evaluateAll(videos => {
+    for (const video of videos) video.playbackRate = 8;
+  });
+  await page.waitForFunction(() => {
+    const film = document.querySelector('#cm-opening-film');
+    return !film || film.hidden;
+  }, null, { timeout: 55000 });
   await page.click("#cm-login");
+  // LOGIN opens the menu (which suppresses attract-mode replay) and unlocks
+  // title music. Settle those real loads before a gate immediately starts a
+  // different scene and asserts that no resource request was cancelled.
+  await page.waitForLoadState('networkidle');
 }
 
 /**
