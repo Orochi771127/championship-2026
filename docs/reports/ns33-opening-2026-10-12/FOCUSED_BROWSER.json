@@ -1,5 +1,7 @@
 {
-  "generatedAt": "2026-10-11T23:43:29.276Z",
+  "generatedAt": "2026-10-12T00:25:23.996772+00:00",
+  "artifactBuildId": "be38d9eee72bc39b5f232e48c801c44892f89863ce3ddb240a11e00915117adb",
+  "passed": true,
   "checks": [
     {
       "name": "real playback, audio consent, native finish and unchanged save",
@@ -27,6 +29,10 @@
     },
     {
       "name": "slow returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "cold startup allows 4.2s delivery; playback stalls still return within 3s",
       "passed": true
     },
     {
@@ -62,11 +68,17 @@
       "passed": true
     }
   ],
+  "runGroups": [
+    {
+      "origin": "http://127.0.0.1:54164",
+      "passedCases": 7
+    },
+    {
+      "origin": "http://127.0.0.1:50705",
+      "passedCases": 9
+    }
+  ],
+  "method": "Same artifact. After the first seven checks, freeze the controlled clock before exact 2999/3001ms stall assertions, then run the remaining nine cases. No product change between these two runs.",
   "physicalDeviceAccepted": false,
-  "fullSubjectiveListeningAccepted": false,
-  "origin": "http://127.0.0.1:61620",
-  "partial": false,
-  "passed": true,
-  "artifactBuildId": "3b68b52bf22c2c32671f18fea61c63d89269d06b6b76197bd9fb9049a9e2031d",
-  "scope": "15 focused scenarios; legacy gates reported separately"
+  "fullSubjectiveListeningAccepted": false
 }

@@ -5,7 +5,7 @@ import {getActiveGameTitle, getTitleHeadingHtml} from '../text/brandTerms.js';
 export const OPENING_FILM = Object.freeze({
   src:'assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4',
   sha256:'74e171baa7a3893a7e5e1274dab699339e9753733c1681ee18aff4f5dbaaf184',
-  bytes:14563538, duration:48.5, logoTime:46.2, idleMs:15000, waitMs:3000
+  bytes:14563538, duration:48.5, logoTime:46.2, idleMs:15000, startupWaitMs:8000, waitMs:3000
 });
 export function canAutoPlayOpening({titleVisible,titleReady,menuOpen,dialogOpen,hidden,reducedMotion,failed}){
   return Boolean(titleVisible&&titleReady&&!menuOpen&&!dialogOpen&&!hidden&&!reducedMotion&&!failed);
@@ -73,7 +73,13 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
     }
     resetIdle();
   }
-  function armWait(){if(!active||wait!==null)return;wait=win.setTimeout(()=>finish('timeout'),OPENING_FILM.waitMs);}
+  function armWait(){
+    if(!active||wait!==null)return;
+    // Cold Pages requests compete with TITLE art. Once playback starts,
+    // retain the shorter stall bound; Skip is available throughout.
+    const delay=host.dataset.state==='playing'?OPENING_FILM.waitMs:OPENING_FILM.startupWaitMs;
+    wait=win.setTimeout(()=>finish('timeout'),delay);
+  }
   function playing(){if(!active)return;clearWait();status.hidden=true;host.dataset.state='playing';}
   function time(){if(active){const show=video.currentTime>=OPENING_FILM.logoTime;if(brand.hidden===show)brand.hidden=!show;}}
   function ended(){finish('ended');}
@@ -89,7 +95,7 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
     if(!video.getAttribute('src'))video.src=new URL(OPENING_FILM.src,doc.baseURI).href;
     else video.currentTime=0;
     video.preload='auto';armWait();
-    deadline=win.setTimeout(()=>finish('timeout'),(OPENING_FILM.duration+6)*1000);
+    deadline=win.setTimeout(()=>finish('timeout'),OPENING_FILM.duration*1000+OPENING_FILM.startupWaitMs+OPENING_FILM.waitMs);
     try{Promise.resolve(video.play()).then(()=>{
       if(request!==token){if(!active)video.pause();return;}
       if(video.readyState>=2)playing();

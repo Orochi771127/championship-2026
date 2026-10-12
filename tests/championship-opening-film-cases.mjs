@@ -8,7 +8,7 @@ const eligible={titleVisible:true,titleReady:true,menuOpen:false,dialogOpen:fals
 test('automatic film is confined to interactive, uninterrupted TITLE',()=>{
   assert.equal(canAutoPlayOpening(eligible),true);
   for(const key of Object.keys(eligible))assert.equal(canAutoPlayOpening({...eligible,[key]:!eligible[key]}),false,key);
-  assert.equal(OPENING_FILM.idleMs,15000);assert.equal(OPENING_FILM.waitMs,3000);
+  assert.equal(OPENING_FILM.idleMs,15000);assert.equal(OPENING_FILM.startupWaitMs,8000);assert.equal(OPENING_FILM.waitMs,3000);
 });
 test('all five locales expose film controls alongside the approved brand registry',()=>{
   for(const locale of Object.keys(APPROVED_GAME_TITLES)){

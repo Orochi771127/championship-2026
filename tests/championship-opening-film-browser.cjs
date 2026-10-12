@@ -88,10 +88,19 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
   });
   for(const failure of ['reject','404','network','slow'])await scenario(failure+' returns TITLE without retry loop or save write',async(page,context)=>{
     if(failure==='reject')await context.addInitScript(()=>{const original=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){return this.tagName==='VIDEO'?Promise.reject(new DOMException('blocked','NotAllowedError')):original.call(this);};});
-    else await page.route('**/opening-720p-74e171ba.mp4',async route=>{if(failure==='404')await route.fulfill({status:404,body:''});else if(failure==='network')await route.abort();else await new Promise(resolve=>setTimeout(resolve,4200)).then(()=>route.abort()).catch(()=>{});});
+    else await page.route('**/opening-720p-74e171ba.mp4',async route=>{if(failure==='404')await route.fulfill({status:404,body:''});else if(failure==='network')await route.abort();else await new Promise(resolve=>setTimeout(resolve,9000)).then(()=>route.abort()).catch(()=>{});});
     await boot(page);await page.waitForFunction(()=>['rejected','error','timeout'].includes(document.querySelector('#cm-opening-film')?.dataset.result));
     assert.equal(await page.locator('#cm-login').isVisible(),true);
+    if(failure==='slow')assert.equal((await state(page)).result,'timeout');
     await page.clock.install();await page.clock.runFor(20000);assert.equal((await state(page)).hidden,true);assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
+  });
+  await scenario('cold startup allows 4.2s delivery; playback stalls still return within 3s',async(page)=>{
+    await page.route('**/opening-720p-74e171ba.mp4',async route=>{await new Promise(resolve=>setTimeout(resolve,4200));await route.continue();});
+    await boot(page);assert.equal(await page.locator('#cm-film-skip').isVisible(),true);await playing(page);
+    await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+1000));
+    await page.locator('video').evaluate(v=>{v.pause();v.dispatchEvent(new Event('waiting'));});
+    await page.clock.runFor(2999);assert.equal((await state(page)).hidden,false);
+    await page.clock.runFor(2);assert.equal((await state(page)).result,'timeout');assert.equal(await page.locator('#cm-login').isVisible(),true);
   });
   for(const reduced of ['system','on'])await scenario('reduced motion '+reduced+' loads no video until manual watch',async(page,context)=>{
     await prefs(context,{reducedMotion:reduced});let requests=0;page.on('request',r=>{if(r.url().includes('opening-720p'))requests++;});
