@@ -417,3 +417,67 @@ test('accepted original battle bodies use the Owner display scale while native g
   assert.equal(JSON.stringify(source.getView().combatants),before,'presentation must not change native battle state');
   scene.dispose();
 });
+
+// Local review stages (loopback + stage-review/BM03 R2 art) mount the real baked
+// ground-shadow path. Its stamps are keyed by the drawn horizontal scale sign
+// (+1 = authored pixels), so every redraw must look up the sprite's mirror.
+test('review-stage ground shadows mount and look up the stamp for the drawn mirror',async()=>{
+  const texture='stub/main/cell_000',geometry={blank:false,scale:4,origin:[112,148],sourceSize:[256,256]};
+  const stamps={[texture+'|1']:[{offset:[-10,-2],rect:[0,0,8,8]},{offset:[-5,-1],rect:[8,0,4,4]}],
+    [texture+'|-1']:[{offset:[3,-2],rect:[16,0,8,8]},{offset:[1,-1],rect:[24,0,4,4]}]};
+  const shadowData={fullDelta:[26,76],groundDelta:[26,37],verticalScale:40,
+    entities:{'stub-identity':{folder:'stub-folder'}},frames:{[texture]:{geometry}},stamps};
+  const casts=[],stage=stubStage(),node=()=>({position:{set(x,y){this.x=x;this.y=y;}},scale:{set(x,y){this.x=x;this.y=y;}},
+    addChild(){},destroy(){}});
+  stage.PIXI={...stage.PIXI,
+    Container:function Container(){return {...node(),visible:true,removeChild(){},parent:null};},
+    Rectangle:function Rectangle(...rect){return {rect};},
+    Texture:function Texture({frame}){return {frame:frame.rect,destroy(){}};},
+    Sprite:function Sprite(t){const s={...node(),texture:t};if(t.frame)casts.push(s);return s;},
+    Assets:{load:async()=>({source:{}}),unload:async()=>{}}};
+  const sprites=[];
+  const characterRoster={createActor(){
+    const sprite={texture:{source:{resolution:1,resource:{src:'http://localhost/stub-folder/main.png'}},
+      orig:{width:256,height:256},trim:{x:0,y:0,width:256,height:256}},
+      anchor:{x:0,y:0},scale:{set(x,y){this.x=x;this.y=y;}},position:{set(x,y){this.x=x;this.y=y;}},destroy(){}};
+    sprites.push(sprite);
+    return {sprite,entityId:'stub-identity',nativeSizing:{packedPixelsPerNativePixel:4},
+      battleAnimator:{apply(){return {texture,geometry:{...geometry},baseBounds:[-8,-17,9,1]};},getSnapshot(){return null;}}};
+  },dispose(){}};
+  const fieldArt={assetId:'art:battle:original-opus:v1:stage-review-20261007',
+    field:{fieldId:'field_bm01_01',worldWidthPx:1664,worldHeightPx:1088,nativeWidthPx:416},
+    displayObject:{},update(){},dispose(){},getDiagnostics(){return {};}};
+  const hadLocation=Object.hasOwn(globalThis,'location'),{location,fetch}=globalThis;
+  globalThis.location={hostname:'localhost',href:'http://localhost/championship.html'};
+  globalThis.fetch=async url=>{
+    assert.equal(String(url),'http://localhost/assets/production/battle/stage-review-20261007/fields/field_bm01_01/shadows.json');
+    return {ok:true,json:async()=>shadowData};
+  };
+  let scene;
+  try{
+    const {source}=sourceOf([100,null,null,100,null,null]);
+    scene=await mountBattleFieldPixiPresentation({stage,source,fieldArt,characterRoster,autoAdvance:false});
+    for(const width of [360,390]){
+      stage.app.screen.width=width;scene.redraw();
+      const shadows=scene.getDiagnostics().groundShadows;
+      assert.equal(shadows.assetRoot,'assets/production/battle/stage-review-20261007/fields/field_bm01_01/');
+      const stands=source.getView().combatants.filter(c=>c.present).map(c=>c.stand);
+      assert.deepEqual(new Set(stands.map(s=>s.facing)),new Set([1,-1]),'both stamp keys are exercised');
+      assert.equal(shadows.actors.length,2);
+      sprites.forEach((sprite,i)=>{
+        const mirror=Math.sign(sprite.scale.x),sample=shadows.actors[i];
+        assert.equal(mirror,-stands[i].facing);
+        assert.equal(sample.facing,mirror,'the cast is the drawn silhouette, not stand.facing');
+        assert.equal(sample.texture,texture);
+        // Shadow sprites are created per slot in draw order: [cast, contact].
+        assert.deepEqual(casts.slice(i*2,i*2+2).map(s=>s.texture.frame),stamps[texture+'|'+mirror].map(c=>c.rect));
+      });
+      // Every actor received its baked cast, so no fallback blob is drawn.
+      assert.equal(stage.calls.filter(call=>call.op==='ellipse').length,0);
+    }
+  }finally{
+    if(hadLocation)globalThis.location=location;else delete globalThis.location;
+    globalThis.fetch=fetch;
+  }
+  await scene?.dispose();
+});
