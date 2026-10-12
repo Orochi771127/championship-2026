@@ -296,7 +296,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       sprite.tint=nativeTint === undefined ? brightness*0x010101
         : ((Math.round((nativeTint>>16&255)*brightness/255)<<16)
           |(Math.round((nativeTint>>8&255)*brightness/255)<<8)|Math.round((nativeTint&255)*brightness/255));
-      const grounded=groundShadows?.update({slot:combatant.slot,actor:entry.actor,motion,facing,
+      // Baked casts are keyed by the drawn horizontal scale sign (+1 = authored
+      // pixels, unmirrored), so the shadow takes the sprite's mirror, not stand.facing.
+      const grounded=groundShadows?.update({slot:combatant.slot,actor:entry.actor,motion,facing:mirror,
         rotation:sprite.rotation,x,y,nativeScale,heightNativePx:combatant.nativeMotion?.heightNativePx,alpha:sprite.alpha});
       if(!grounded) graphic.ellipse(x, y + scale, trim.width * scale * 0.42, Math.max(1, trim.width * scale * 0.13))
         .fill({color:0x000000,alpha:0.22});
