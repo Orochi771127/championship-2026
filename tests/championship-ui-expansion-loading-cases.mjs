@@ -9,7 +9,7 @@ import { composeRanchArtPlan, ranchExpansionPreviewPlan, RANCH_ANNEX_BAND_OFFSET
 import { expansionBayCentre } from "../src/championship/presentation/raisingExpansionPreview.js";
 import { prototypeRanchExpansion } from "../src/championship/cage/ranchExpansion.js";
 import { raisingFieldViewport, raisingScreenToNative, raisingNativeToScreen } from "../src/championship/presentation/intRh2/raisingFieldViewport.js";
-import { createLoadProgressView, formatLoadBytes, observeDownloadedBytes } from "../src/championship/app/loadProgress.js";
+import { createLoadProgressView, observeLoadActivity } from "../src/championship/app/loadProgress.js";
 import { showChoiceDialog } from "../src/championship/app/uiDialog.js";
 import { openRanchExpansionPreview, ranchExpansionMapMarkup, ranchExpansionPreviewContent } from "../src/championship/app/ranchExpansionPreview.js";
 import { UI_COPY } from "../src/championship/text/uiText.js";
@@ -138,13 +138,6 @@ test("the locked rows lay the frame out as the granted annex does, without touch
   assert.equal(back.band, undefined);
 });
 
-test("bytes read as people read them, never as zero once something arrived", () => {
-  assert.equal(formatLoadBytes(0), "0 KB");
-  assert.equal(formatLoadBytes(100), "1 KB");
-  assert.equal(formatLoadBytes(640 * 1024), "640 KB");
-  assert.equal(formatLoadBytes(3.25 * 1048576), "3.3 MB");
-});
-
 test("progress counts finished steps only, and reaches 100 % only when all are done", () => {
   const doc = fakeDocument();
   const progress = createLoadProgressView({ doc, steps: [{ id: "a", key: "LOAD_STEP_ENGINE" }, { id: "b", key: "LOAD_STEP_FACILITIES" },
@@ -162,8 +155,8 @@ test("progress counts finished steps only, and reaches 100 % only when all are d
   progress.done("b");
   assert.equal(bar.getAttribute("aria-valuenow"), "67");
   assert.equal(progress.state(), "loading");
-  progress.setBytes(2 * 1048576);
-  assert.match(progress.element.children[2].textContent, /2\.0 MB/);
+  progress.setFiles(37);
+  assert.match(progress.element.children[2].textContent, /37/);
   progress.showSlow();
   progress.fail();
   assert.equal(progress.element.children[3].hidden, true, "a failed load no longer says it is still downloading");
@@ -179,23 +172,29 @@ test("progress counts finished steps only, and reaches 100 % only when all are d
   assert.throws(() => createLoadProgressView({ doc, steps: [] }));
 });
 
-test("downloaded bytes are network bytes: a cached file adds nothing but still counts as activity", () => {
-  let callback = null, observed = null, disconnected = false;
+test("finished files count from the page's requests and the worker's textures, each URL once", () => {
+  let callback = null, observed = null, disconnected = false, settled = null, unsubscribed = false;
   class FakeObserver {
     constructor(fn) { callback = fn; }
     observe(options) { observed = options; }
     disconnect() { disconnected = true; }
   }
   const seen = [];
-  const watch = observeDownloadedBytes((total) => seen.push(total), { PerformanceObserverImpl: FakeObserver });
+  const watch = observeLoadActivity((files) => seen.push(files), { PerformanceObserverImpl: FakeObserver,
+    subscribeSettled: (listener) => { settled = listener; return () => { unsubscribed = true; }; } });
   assert.equal(watch.supported, true);
   assert.deepEqual(observed, { type: "resource", buffered: false });
-  callback({ getEntries: () => [{ transferSize: 5300, encodedBodySize: 5000 }, { transferSize: 0, encodedBodySize: 90000 }, { transferSize: 700, encodedBodySize: 0 }] });
-  assert.deepEqual(seen, [5000, 5000, 5700]);
-  assert.equal(watch.total, 5700);
+  callback({ getEntries: () => [{ name: "https://x/a.json" }, { name: "https://x/b.js" }] });
+  // A texture the worker fetched is invisible to resource timing; the asset
+  // scope reports it. One the page also saw is not counted twice.
+  settled({ url: "https://x/sheet.webp", ok: true });
+  settled({ url: "https://x/a.json", ok: true });
+  assert.deepEqual(seen, [1, 2, 3], "the duplicate is neither counted nor reported again");
+  assert.equal(watch.files, 3);
   watch.stop();
   assert.equal(disconnected, true);
-  const unsupported = observeDownloadedBytes(() => {}, { PerformanceObserverImpl: function Broken() { throw new Error("no"); } });
+  assert.equal(unsubscribed, true);
+  const unsupported = observeLoadActivity(() => {}, { PerformanceObserverImpl: function Broken() { throw new Error("no"); } });
   assert.equal(unsupported.supported, false);
 });
 

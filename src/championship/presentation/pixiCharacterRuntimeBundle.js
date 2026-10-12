@@ -227,6 +227,20 @@ function characterTextureMemory(pages){
 // scene must not destroy a texture that the new scene is using. This scope is
 // for our explicit single-URL loaders (not aliases or arbitrary Pixi bundles).
 const assetOwners = new WeakMap();
+
+// Every scoped asset load that settles, for a loading screen that needs to
+// know the load is alive. Pixi decodes textures in a worker, where the page's
+// own resource timing cannot see the download (2026-10-12).
+const assetSettledListeners = new Set();
+export function onPixiAssetSettled(listener) {
+  assetSettledListeners.add(listener);
+  return () => assetSettledListeners.delete(listener);
+}
+function announceAssetSettled(url, ok) {
+  for (const listener of [...assetSettledListeners]) {
+    try { listener({ url, ok }); } catch { /* a loading screen never breaks a load */ }
+  }
+}
 export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, { signal } = {}) {
   const assets = PIXI.Assets;
   let shared = assetOwners.get(assets);
@@ -245,7 +259,11 @@ export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, 
       if (entry?.releasing) return entry.releasing.then(() => scoped.load(value));
       if (!entry) {
         entry = { refs: 0, source: typeof value === 'string' ? key : { ...value, src: key } };
-        entry.promise = Promise.resolve().then(() => assets.load(entry.source)).catch(error => {
+        entry.promise = Promise.resolve().then(() => assets.load(entry.source)).then(value => {
+          announceAssetSettled(key, true);
+          return value;
+        }, error => {
+          announceAssetSettled(key, false);
           // Some callers fail before they can construct a disposable bundle.
           // A failed cache entry must never poison a later scene's retry.
           if (shared.get(key) === entry) shared.delete(key);

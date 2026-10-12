@@ -35,7 +35,7 @@ export const UI_COPY_JA = Object.freeze({
   "LOAD_STEP_FIGHTERS": "出場パートナー",
   "LOAD_STEP_EFFECTS": "技エフェクト",
   "LOAD_PROGRESS_STEPS": "{total}項目中{done}項目完了",
-  "LOAD_BYTES": "{size}をダウンロード済み",
+  "LOAD_FILES": "{count}個のファイルを読み込み済み",
   "LOAD_SLOW": "通信が遅いため、ダウンロードを続けています。",
   "EXPANSION_TITLE": "牧場の拡張",
   "EXPANSION_LEAD": "牧場の下にもう2列、施設10マス分が広がります。",

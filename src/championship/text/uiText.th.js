@@ -35,7 +35,7 @@ export const UI_COPY_TH = Object.freeze({
   "LOAD_STEP_FIGHTERS": "คู่หูที่ลงแข่ง",
   "LOAD_STEP_EFFECTS": "เอฟเฟกต์ท่า",
   "LOAD_PROGRESS_STEPS": "เสร็จแล้ว {done}/{total}",
-  "LOAD_BYTES": "ดาวน์โหลดแล้ว {size}",
+  "LOAD_FILES": "โหลดแล้ว {count} ไฟล์",
   "LOAD_SLOW": "การเชื่อมต่อช้า ยังดาวน์โหลดอยู่",
   "EXPANSION_TITLE": "ขยายฟาร์ม",
   "EXPANSION_LEAD": "เปิดเพิ่มอีก 2 แถวใต้ฟาร์ม รวมพื้นที่สิ่งอำนวยความสะดวก 10 ช่อง",

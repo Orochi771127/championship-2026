@@ -35,7 +35,7 @@ export const UI_COPY_VI = Object.freeze({
   "LOAD_STEP_FIGHTERS": "Đấu thủ",
   "LOAD_STEP_EFFECTS": "Hiệu ứng chiêu",
   "LOAD_PROGRESS_STEPS": "Xong {done}/{total}",
-  "LOAD_BYTES": "Đã tải {size}",
+  "LOAD_FILES": "Đã tải {count} tệp",
   "LOAD_SLOW": "Kết nối chậm, vẫn đang tải.",
   "EXPANSION_TITLE": "Mở rộng trang trại",
   "EXPANSION_LEAD": "Mở thêm hai hàng bên dưới trang trại: thêm 10 ô cơ sở.",

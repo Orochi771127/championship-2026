@@ -47,7 +47,7 @@ export const UI_COPY_EN = Object.freeze({
   "LOAD_STEP_FIGHTERS": "Fighters",
   "LOAD_STEP_EFFECTS": "Move effects",
   "LOAD_PROGRESS_STEPS": "{done} of {total} done",
-  "LOAD_BYTES": "{size} downloaded",
+  "LOAD_FILES": {"one": "{count} file loaded", "other": "{count} files loaded"},
   "LOAD_SLOW": "The connection is slow; still downloading.",
   "EXPANSION_TITLE": "Ranch expansion",
   "EXPANSION_LEAD": "Opens two more rows below your ranch: 10 more facility hexes.",

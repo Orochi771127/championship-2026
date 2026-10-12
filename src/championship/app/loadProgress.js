@@ -6,43 +6,40 @@
 //   - steps complete only when their load resolves (no timers, no easing),
 //     so the bar can sit still on a big step, and 100 % appears only when
 //     every step is done;
-//   - downloaded bytes are the network bytes the browser reports for each
-//     finished request (Resource Timing); a cached file adds nothing;
-//   - there is no total byte figure, because the loaders discover their files
-//     as they go, so the bar measures steps and carries a moving sheen while
-//     a step is running.
+//   - finished files are counted from two sources: the page's own requests
+//     (Resource Timing) and every texture the shared Pixi asset scope loads,
+//     because Pixi decodes images in a worker the page's timing cannot see.
+//     Bytes are not shown: the worker's are invisible, so a byte figure would
+//     undercount (2026-10-12, found on the live site);
+//   - there is no total, because the loaders discover their files as they
+//     go, so the bar measures steps and carries a moving sheen while a step
+//     is running.
 // It reuses the screen's own loads; it starts and owns no loading itself.
 
 import { setLabel, setText } from '../text/uiText.js';
 
-/** "1.2 MB" / "640 KB"; kilobytes never show as zero once something arrived. */
-export function formatLoadBytes(bytes) {
-  const value = Math.max(0, Number(bytes) || 0);
-  if (value >= 1048576) return `${(value / 1048576).toFixed(1)} MB`;
-  return `${value > 0 ? Math.max(1, Math.round(value / 1024)) : 0} KB`;
-}
-
 /**
- * Network bytes of requests that finish while this runs. Every finished
- * request (cached or not) also counts as activity for a stall watchdog.
- * @returns {{ stop(): void, readonly total: number, readonly supported: boolean }}
+ * Files that finish loading while this runs: the page's own requests and,
+ * through `subscribeSettled`, the textures a worker fetched. A URL counts
+ * once. Every finished file is also activity for a stall watchdog.
+ * @returns {{ stop(): void, readonly files: number, readonly supported: boolean }}
  */
-export function observeDownloadedBytes(onChange, { PerformanceObserverImpl = globalThis.PerformanceObserver } = {}) {
-  let total = 0, observer = null;
+export function observeLoadActivity(onChange, { PerformanceObserverImpl = globalThis.PerformanceObserver, subscribeSettled = null } = {}) {
+  const seen = new Set();
+  let observer = null, unsubscribe = null;
+  const finished = (url) => {
+    if (url) { if (seen.has(url)) return; seen.add(url); }
+    onChange?.(seen.size);
+  };
   try {
-    observer = new PerformanceObserverImpl((list) => {
-      for (const entry of list.getEntries()) {
-        // transferSize 0 is a cache hit (or no timing access): nothing crossed the network.
-        if (entry.transferSize > 0) total += entry.encodedBodySize > 0 ? entry.encodedBodySize : entry.transferSize;
-        onChange?.(total, entry);
-      }
-    });
+    observer = new PerformanceObserverImpl((list) => { for (const entry of list.getEntries()) finished(entry.name); });
     observer.observe({ type: 'resource', buffered: false });
   } catch { observer = null; }
+  try { unsubscribe = subscribeSettled?.(({ url }) => finished(url)) ?? null; } catch { unsubscribe = null; }
   return Object.freeze({
-    stop() { observer?.disconnect(); observer = null; },
-    get total() { return total; },
-    get supported() { return observer !== null; }
+    stop() { observer?.disconnect(); observer = null; unsubscribe?.(); unsubscribe = null; },
+    get files() { return seen.size; },
+    get supported() { return observer !== null || unsubscribe !== null; }
   });
 }
 
@@ -79,17 +76,17 @@ export function createLoadProgressView({ steps, doc = globalThis.document }) {
   const meta = doc.createElement('p');
   meta.className = 'cm-load-progress__meta';
   const count = doc.createElement('span');
-  const bytes = doc.createElement('span');
-  bytes.className = 'cm-load-progress__bytes';
-  bytes.hidden = true;
-  meta.append(count, bytes);
+  const files = doc.createElement('span');
+  files.className = 'cm-load-progress__files';
+  files.hidden = true;
+  meta.append(count, files);
   const slow = doc.createElement('p');
   slow.className = 'cm-load-progress__slow';
   slow.hidden = true;
   setText(slow, 'LOAD_SLOW');
   root.append(bar, list, meta, slow);
 
-  let byteTotal = 0;
+  let fileCount = 0;
   function paint() {
     const states = [...items.values()].map((item) => item.dataset.state);
     const done = states.filter((state) => state === 'done').length;
@@ -100,8 +97,8 @@ export function createLoadProgressView({ steps, doc = globalThis.document }) {
     bar.dataset.failed = String(states.includes('error'));
     root.dataset.state = states.includes('error') ? 'error' : done === items.size ? 'done' : 'loading';
     setText(count, 'LOAD_PROGRESS_STEPS', { done, total: items.size });
-    bytes.hidden = !(byteTotal > 0);
-    if (byteTotal > 0) setText(bytes, 'LOAD_BYTES', { size: formatLoadBytes(byteTotal) });
+    files.hidden = !(fileCount > 0);
+    if (fileCount > 0) setText(files, 'LOAD_FILES', { count: fileCount });
   }
   function set(id, state) {
     const item = items.get(id);
@@ -117,8 +114,8 @@ export function createLoadProgressView({ steps, doc = globalThis.document }) {
     done(id) { set(id, 'done'); },
     /** Mark every unfinished step failed (the load as a whole stopped). */
     fail() { slow.hidden = true; for (const [id, item] of items) if (item.dataset.state !== 'done') set(id, item.dataset.state === 'active' ? 'error' : 'pending'); },
-    reset() { byteTotal = 0; slow.hidden = true; for (const item of items.values()) { item.dataset.state = 'pending'; item.removeAttribute('aria-current'); } paint(); },
-    setBytes(total) { const next = Math.max(0, Number(total) || 0); if (next !== byteTotal) { byteTotal = next; paint(); } },
+    reset() { fileCount = 0; slow.hidden = true; for (const item of items.values()) { item.dataset.state = 'pending'; item.removeAttribute('aria-current'); } paint(); },
+    setFiles(total) { const next = Math.max(0, Math.floor(Number(total) || 0)); if (next !== fileCount) { fileCount = next; paint(); } },
     showSlow(show = true) { slow.hidden = !show; },
     state() { return root.dataset.state; }
   });

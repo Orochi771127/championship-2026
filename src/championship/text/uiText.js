@@ -36,7 +36,7 @@ export const UI_COPY = Object.freeze({
   "LOAD_STEP_FIGHTERS": "參賽夥伴",
   "LOAD_STEP_EFFECTS": "招式特效",
   "LOAD_PROGRESS_STEPS": "{done}／{total} 項完成",
-  "LOAD_BYTES": "已下載 {size}",
+  "LOAD_FILES": "已載入 {count} 個檔案",
   "LOAD_SLOW": "網路較慢，仍在下載中。",
   "EXPANSION_TITLE": "牧場擴充",
   "EXPANSION_LEAD": "在牧場下方再開兩排，共 10 格設施空間。",

@@ -53,7 +53,7 @@ import { mountBattleAudioPresentation } from '../presentation/battleAudioPresent
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText } from "../text/zhHant.js";
 import { createBattleSelectView, createBattleFieldView, createBattleResultView } from "./vs5Screens.js";
-import { loadPixiCharacterRuntimeBundle, createPixiAssetScope } from "../presentation/pixiCharacterRuntimeBundle.js";
+import { loadPixiCharacterRuntimeBundle, createPixiAssetScope, onPixiAssetSettled } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
 import { listChampionshipGates } from "../gate/gateCatalog.js";
 import { createChampionshipStatusBar } from "./championshipStatusBar.js";
@@ -81,7 +81,7 @@ import { createRanchCageArtPlan as createRaisingCageArtPlan, ranchExpansionPrevi
 import { withCageForeground } from "../presentation/cageForeground.js";
 import { withRanchExpansionPreview } from "../presentation/raisingExpansionPreview.js";
 import { openRanchExpansionPreview } from './ranchExpansionPreview.js';
-import { createLoadProgressView, observeDownloadedBytes } from './loadProgress.js';
+import { createLoadProgressView, observeLoadActivity } from './loadProgress.js';
 import { mountPortraitFrame } from './portraitFrame.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
@@ -699,7 +699,7 @@ async function mountRaisingHome() {
         const watchdog = createLoadWatchdog({ stallMs: 150000, onExpire(reason) {
           if (attempt === owner) owner.cancel(new Error(reason === 'STALLED' ? 'LOAD_STALLED' : 'LOAD_TIMEOUT'));
         } });
-        const bytes = observeDownloadedBytes(total => { watchdog.activity(); progress.setBytes(total); });
+        const bytes = observeLoadActivity(files => { watchdog.activity(); progress.setFiles(files); }, { subscribeSettled: onPixiAssetSettled });
         const slowNotice = setTimeout(() => { if (attempt === owner && phase === 'loading') progress.showSlow(); }, 8000);
         tracking = { stop() { watchdog.stop(); bytes.stop(); clearTimeout(slowNotice); } };
         tutorialPreview?.dispose(); tutorialPreview = null;
@@ -1065,7 +1065,8 @@ async function mountBattleField() {
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt,
     askToLeave: showChoiceDialog,
-    loadingProgress: { createView: createLoadProgressView, observeBytes: observeDownloadedBytes },
+    loadingProgress: { createView: createLoadProgressView,
+      observeActivity: onChange => observeLoadActivity(onChange, { subscribeSettled: onPixiAssetSettled }) },
     mountField({ host,onReady,onError,progress=null }) {
       let disposed = false;
       const characters = new AbortController();

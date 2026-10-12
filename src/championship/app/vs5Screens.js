@@ -739,7 +739,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const progress=loadingProgress?.createView?.({steps:[{id:'engine',key:'LOAD_STEP_ENGINE'},{id:'arena',key:'LOAD_STEP_ARENA'},
     {id:'fighters',key:'LOAD_STEP_FIGHTERS'},{id:'effects',key:'LOAD_STEP_EFFECTS'},{id:'scene',key:'LOAD_STEP_SCENE'}]})??null;
   loading.append(loadingText);if(progress)loading.append(progress.element);host.append(loading);
-  const downloaded=progress?loadingProgress.observeBytes?.(total=>progress.setBytes(total))??null:null;
+  const downloaded=progress?loadingProgress.observeActivity?.(files=>progress.setFiles(files))??null:null;
   const slowNotice=progress?setTimeout(()=>{if(host.getAttribute('aria-busy')==='true')progress.showSlow();},8000):null;
   const stopLoadingTrack=()=>{downloaded?.stop();clearTimeout(slowNotice);};
 
