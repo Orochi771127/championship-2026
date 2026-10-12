@@ -2,8 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { CHARACTER_NATIVE_SIZING } from "../src/data/championship/characterNativeSizing.js";
+import { BATTLE_CHARACTER_GEOMETRY } from "../src/data/championship/battleCharacterGeometry.js";
 import { getCharacterStaticNativeSizing } from "../src/championship/presentation/licensedCharacterRoster.js";
-import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale } from "../src/championship/presentation/intRh2/raisingNativeSizing.js";
+import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset } from "../src/championship/presentation/intRh2/raisingNativeSizing.js";
 import { mountRaisingFieldPixiPresentation } from "../src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js";
 const read = (name) => JSON.parse(fs.readFileSync(new URL(`../${name}`, import.meta.url), "utf8"));
 const base = "assets/production/internal-faithful-baseline/characters-v1/";
@@ -20,6 +21,56 @@ function fixture(id = "e000_digitama", resolution = 1) {
         width: data.spriteSourceSize.w / resolution, height: data.spriteSourceSize.h / resolution } } } };
 }
 const cm01 = { worldWidthPx: 384, worldHeightPx: 448, nativePixelWorldScale: 4 };
+
+test('all eight original eggs fit native idle bounds with one transform for idle/hatch, resolution and flip',()=>{
+  const selection=read('src/data/championship/accepted-original-character-selection.r1.json');
+  const sizing={packedPixelsPerNativePixel:4,evidence:'COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY'};
+  for(let index=0;index<8;index++){
+    const id=`e00${index}_digitama`,config=selection.characters.find(c=>c.entityId===id);
+    const runtime=read(selection.root+config.folder+'/runtime.review.json');
+    const idle=runtime.reviewGeometry.frames[`${id}/main/cell_000`];
+    const target=BATTLE_CHARACTER_GEOMETRY[id].frames[`${id}/main/cell_000`].nativeBounds;
+    assert.deepEqual(target,[-7,-17,7,1]);
+    const [x0,y0,x1,y1]=idle.nativeBounds;
+    const factor=Math.min((target[2]-target[0])/(x1-x0),(target[3]-target[1])/(y1-y0));
+    assert.equal(raisingOriginalBodyScale(id,sizing),factor);
+    const offset=raisingOriginalBodyOffset(id,sizing),savedOffset=structuredClone(offset);
+    const originalRuntime=JSON.stringify(runtime);
+    for(const frame of Object.values(runtime.reviewGeometry.frames).filter(f=>!f.blank)){
+      for(const resolution of [1,2])for(const nativeScale of [.5,2,4])for(const flipX of [false,true]){
+        const sprite={anchor:{x:frame.origin[0]/frame.sourceSize[0],y:frame.origin[1]/frame.sourceSize[1]},
+          texture:{source:{resolution},orig:{width:frame.sourceSize[0]/resolution,height:frame.sourceSize[1]/resolution}}};
+        const actual=getRaisingNativeActorGeometry(sprite,sizing,nativeScale,{frameGeometry:frame,displayScale:factor,displayOffset:offset,flipX});
+        const [a,b,c,d]=frame.nativeBounds,sign=flipX?-1:1;
+        assert.ok(Math.abs(actual.visible.width-(c-a)*factor)<1e-9);
+        assert.ok(Math.abs(actual.visible.height-(d-b)*factor)<1e-9);
+        assert.ok(Math.abs(actual.visible.x+actual.visible.width/2-sign*((a+c)/2*factor+offset.x))<1e-9);
+        assert.ok(Math.abs(actual.visible.y+actual.visible.height-(d*factor+offset.y))<1e-9,'fixed anchor retains hatch motion');
+        assert.equal(actual.spriteScale,resolution/4*factor);
+        assert.ok(actual.hitArea.width*nativeScale>=44-1e-9);
+        assert.ok(actual.hitArea.height*nativeScale>=44-1e-9);
+        if(frame===idle){
+          assert.ok(actual.visible.width<=14+1e-9&&actual.visible.height<=18+1e-9);
+          assert.ok(Math.abs(actual.visible.x+actual.visible.width/2)<1e-9);
+          assert.ok(Math.abs(actual.visible.y+actual.visible.height-1)<1e-9);
+          for(const css of [{x:1,y:1},{x:.5625,y:.5625},{x:.5,y:.75}]){
+            const fitted=getRaisingNativeActorGeometry(sprite,sizing,nativeScale,{frameGeometry:frame,displayScale:factor,displayOffset:offset,flipX,hitAreaCssScale:css});
+            assert.deepEqual(fitted.visible,actual.visible,'CSS hit padding never changes the drawn body/shadow bounds');
+            assert.deepEqual(fitted.offset,actual.offset);
+            assert.equal(fitted.spriteScale,actual.spriteScale);
+            assert.ok(fitted.hitArea.width*nativeScale*css.x>=44-1e-9,'44 real CSS px after horizontal canvas transform');
+            assert.ok(fitted.hitArea.height*nativeScale*css.y>=44-1e-9,'44 real CSS px after vertical canvas transform');
+          }
+        }
+      }
+    }
+    assert.deepEqual(offset,savedOffset,'flipping never mutates the reusable offset');
+    assert.equal(JSON.stringify(runtime),originalRuntime,'source pixels, anchors and animation metadata remain untouched');
+    const nativeSizing={...sizing,evidence:'VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME'};
+    assert.equal(raisingOriginalBodyScale(id,nativeSizing),1);
+    assert.equal(raisingOriginalBodyOffset(id,nativeSizing),null);
+  }
+});
 test('three oversized original ranch bodies use one fixed factor across every pose without moving its ground or center',()=>{
   const selection=read('src/data/championship/accepted-original-character-selection.r1.json');
   for(const [id,factor] of [['m518_blackwargreymon',.6444],['m529_metalgarurumon_va',.3648],['m541_dukemon',.5948],['m503_warglaymon',1],['m509_shinegraymon',1]]){
@@ -120,8 +171,8 @@ test("real Raising scene shares native scale on resize/flip and keeps padded tap
   const frame={revision:1,cages:[{cageId:"a",name:"A",region:{x:0,y:0,w:1,h:.5}},
     {cageId:"b",name:"B",region:{x:0,y:.5,w:1,h:.5}}],
     residents:[{creatureId:"egg",speciesId:"species-000",displayName:"Egg",cageId:"a",lane:{x:.5,y:.5},facing:"left"}]};
-  const stage={PIXI:{Container:Node,Graphics:Node,Text:Node,ColorMatrixFilter:Node,Rectangle:class{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}}},
-    app:{screen:{width:390,height:620},stage:new Node(),ticker:{add(){},remove(){}}},
+  const stage={PIXI:{Assets:{},Container:Node,Graphics:Node,Text:Node,ColorMatrixFilter:Node,Rectangle:class{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}}},
+    app:{screen:{width:390,height:620},stage:new Node(),canvas:{addEventListener(){},removeEventListener(){}},ticker:{add(){},remove(){}}},
     createSceneRoot:()=>scene, markScene:()=>()=>{},attach(){},onContextLost:()=>()=>{},
     onResize(fn){onResize=fn;return()=>{};}};
   const fieldArt={field:cm01,displayObject:new Node(),update(){},dispose(){},getDiagnostics(){return{};}};

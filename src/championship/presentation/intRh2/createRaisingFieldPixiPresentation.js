@@ -11,7 +11,7 @@ import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
 // assignment, save data, gameplay values, routing, or another runtime store.
 
 import { isNativeRanchLayout } from "../../cage/ranchExpansion.js";
-import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale } from "./raisingNativeSizing.js";
+import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
 import {EVOLUTION_SYMBOL_REPLACEMENT_TEXT} from '../../text/evolutionPresentationText.js';
@@ -628,7 +628,12 @@ export async function mountRaisingFieldPixiPresentation({
   function actorGeometry(entry,frameGeometry=entry.nativeFramePresenter?.getSnapshot()?.geometry,flipX=false){
     const nativeScale=getRaisingNativePixelScale(fieldArt?.field,view);
     const sizing=frameGeometry?.scale?{...entry.nativeSizing,packedPixelsPerNativePixel:frameGeometry.scale}:entry.nativeSizing;
-    return getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing)});
+    const displayOffset=raisingOriginalBodyOffset(entry.entityId,entry.nativeSizing);
+    // A fixed offset identifies only the eight normalized original eggs.
+    // Read the rendered canvas rect so orientation-only CSS scaling is covered.
+    const rect=displayOffset?app.canvas.getBoundingClientRect?.():null;
+    const hitAreaCssScale=rect?{x:rect.width/app.screen.width,y:rect.height/app.screen.height}:null;
+    return getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing),displayOffset,hitAreaCssScale});
   }
 
   function decorateActor(entry,geometry){
@@ -994,7 +999,7 @@ export async function mountRaisingFieldPixiPresentation({
       if(e.targetFrame){const frame=entry.evolutionPresenter?.apply(e.targetFrame);
         if(entry.nativeScale!==null&&e.reveal){
           applyNativeCharacterCellGeometry(entry.evolutionSprite,frame);
-          const geometry=getRaisingNativeActorGeometry(entry.evolutionSprite,entry.evolutionSizing,entry.nativeScale,{frameGeometry:frame?.geometry,displayScale:raisingOriginalBodyScale(entry.evolutionEntity,entry.evolutionSizing)});
+          const geometry=getRaisingNativeActorGeometry(entry.evolutionSprite,entry.evolutionSizing,entry.nativeScale,{frameGeometry:frame?.geometry,displayScale:raisingOriginalBodyScale(entry.evolutionEntity,entry.evolutionSizing),displayOffset:raisingOriginalBodyOffset(entry.evolutionEntity,entry.evolutionSizing)});
           if(geometry){entry.evolutionSprite.scale.set(geometry.spriteScale);entry.evolutionSprite.position.set(geometry.offset.x,geometry.offset.y);}
         }}}
     const center={x:entry.root.x,y:entry.root.y-24*(entry.restScale??1)};

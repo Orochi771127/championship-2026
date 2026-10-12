@@ -1,5 +1,7 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-12 八蛋原作尺寸與 44 CSS px 觸控校準](reports/egg-native-sizing-2026-10-12/REPORT_ZH_TW.md)
+
 - [2026-10-12 NS33 片頭整合與發布驗證](reports/ns33-opening-2026-10-12/REPORT_ZH_TW.md)
 
 - [2026-10-12 牧場擴充一般玩家預覽、真實載入進度與介面打磨](reports/ui-expansion-loading-2026-10-12/REPORT_ZH_TW.md)

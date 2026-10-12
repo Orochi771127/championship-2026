@@ -1,5 +1,11 @@
 # Championship Owner Direction
 
+## 2026-10-12 — Publish the independently reviewed eight-egg size and CSS touch correction
+
+Owner requests native-sized eggs (Sentinel_ec2469868d0c8191b5fc1f129a04b880) and explicitly includes every egg (Sentinel_0ad6158a0628819197b140ea7ae3f3c4). After independent R1/R2 hash, geometry and landscape edge-tap review, Parent authorizes this bounded release under the Owner's self-review then publish instruction (Sentinel_cac9fa4b6e18819182496a5bde0bea78), local synchronization instruction (Sentinel_bc03219eebf48191bc531dfda959e940), and commit/push/publication instruction (Sentinel_7bfe8e2ba1848191a3eb73643142988c).
+
+Only e000–e007 Raising visual normalization and their 44 CSS-pixel minimum touch area are approved, with the focused test and necessary release records. Preserve original art, cage/layout, other actors, Battle, evolution and save authority. Update exactly the two existing product approval hashes. Run the repository CI and formal build/validate, commit, integrate latest main without force, push and verify exact-SHA CI/Pages plus public artifacts. Preserve all Claude work and its unmerged VS5 conflict. This supersedes the pre-review no-push pause solely for this reviewed egg batch. Physical-device acceptance and commercial rights remain unverified. See [evidence and R2 correction](../reports/egg-native-sizing-2026-10-12/REPORT_ZH_TW.md).
+
 ## 2026-10-12 — Publish the reviewed NS33 opening film in the existing TITLE flow
 
 Owner message `Sentinel_3dfc9984246c81918d9ca360d66ce7f3` at 2026-10-11 23:20 UTC: 「用好了就接入然後發佈啊。之後如果有有問題，我們再修就好。」 The Owner selected their original `ns33.mp3` music and authorized integration, isolated-worktree commit, normal main push and the existing Pages publication after the necessary checks. Only the reviewed 48.5-second textless 720×1280 H.264/AAC final file (SHA-256 `74e171baa7a3893a7e5e1274dab699339e9753733c1681ee18aff4f5dbaaf184`, 14,563,538 bytes) is selected. No production sources or music stems are published.
