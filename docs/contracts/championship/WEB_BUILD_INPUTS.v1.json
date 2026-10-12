@@ -21,6 +21,7 @@
     "src/championship/app/ChampionshipPersistentSavePort.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
+    "src/championship/app/battleFxLookups.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
@@ -202,6 +203,10 @@
     "src/championship/presentation/battleEffectArt.js",
     "src/championship/presentation/battleEffectSprites.js",
     "src/championship/presentation/battleFocusViewport.js",
+    "src/championship/presentation/battleFx/battleFxCamera.js",
+    "src/championship/presentation/battleFx/battleFxEvents.js",
+    "src/championship/presentation/battleFx/battleFxLayer.js",
+    "src/championship/presentation/battleFx/battleFxRecipes.js",
     "src/championship/presentation/battleResultCharacters.js",
     "src/championship/presentation/bm03GroundShadows.js",
     "src/championship/presentation/cageForeground.js",
@@ -9222,6 +9227,7 @@
     "src/championship/app/ChampionshipPersistentSavePort.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
+    "src/championship/app/battleFxLookups.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
@@ -9424,6 +9430,10 @@
     "src/championship/presentation/battleEffectArt.js",
     "src/championship/presentation/battleEffectSprites.js",
     "src/championship/presentation/battleFocusViewport.js",
+    "src/championship/presentation/battleFx/battleFxCamera.js",
+    "src/championship/presentation/battleFx/battleFxEvents.js",
+    "src/championship/presentation/battleFx/battleFxLayer.js",
+    "src/championship/presentation/battleFx/battleFxRecipes.js",
     "src/championship/presentation/battleResultCharacters.js",
     "src/championship/presentation/bm03GroundShadows.js",
     "src/championship/presentation/cageForeground.js",
@@ -9614,7 +9624,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "e6f3c0e5632c562f31d87d0a40a8cf4c3cc90c883245d584579161d3d7589194"
+        "sha256": "2e4a0caa4a123f147d0f066e3301a482f426d93e9c5d83dee119aca5b6ba50d0"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -45097,6 +45107,10 @@
         "sha256": "02dc4889e0609e9e89d48051617525842925ee0bf5081b057686f4fe065ccc76"
       },
       {
+        "path": "src/championship/app/battleFxLookups.js",
+        "sha256": "e420c4b1274e59a7e8e81782a70d6fcc85ce8af3ff5bbf06dcd7735a73709147"
+      },
+      {
         "path": "src/championship/app/battlePresentationSource.js",
         "sha256": "47f627731d1571e8615218baac838de7de2622a1b5e9ced899ace503641044c6"
       },
@@ -45106,7 +45120,7 @@
       },
       {
         "path": "src/championship/app/battleRuntime.js",
-        "sha256": "213942dc6a33e5ebf4958e8ad0287ebf06809300aa671f9a2e50f3907746dee9"
+        "sha256": "4fc0848172859e3f2553c6353c975a1d53c8fae5d66586c6106611f548689f48"
       },
       {
         "path": "src/championship/app/cageRoster.js",
@@ -45222,7 +45236,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "f6b31126cbd8f8ed11954a74df95a04c7379b8c7c1851bc1df3967bccb7c4886"
+        "sha256": "2d34c761347eaf2c3baf276f01fc1876021c9181019398fdf545bb1e93a89e41"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -45382,11 +45396,11 @@
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "19c51dfeb7e5d1abeec9d868a8ff668d8c5e40641d5dcc87d9335f8e95fb23d4"
+        "sha256": "305280e9e02424e0ee6ca5dc05a9a307e97f28bc05767f530d7a4986e44c2500"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
-        "sha256": "3e02d6d64ec1026884063bd82bc662fd48c5a398046d8657193c134db04d2ded"
+        "sha256": "3ae2264659fb6fe8a6c82f73d3933b470da89f0b32a30a4b9dac69a97cde230b"
       },
       {
         "path": "src/championship/battle/battleActionApplication.js",
@@ -45905,6 +45919,22 @@
         "sha256": "f19fbf5b546ee347a6af24b7f6b4ea9352609d507e9695f713a53f73a72b0f24"
       },
       {
+        "path": "src/championship/presentation/battleFx/battleFxCamera.js",
+        "sha256": "487124cbcac80265a3448483dedfc8cf115a714667cbdaade72f9342fd6d7336"
+      },
+      {
+        "path": "src/championship/presentation/battleFx/battleFxEvents.js",
+        "sha256": "348a29a0687510b59cd01744bd11b44bab87078425e156dcf3f3e2392e6e4041"
+      },
+      {
+        "path": "src/championship/presentation/battleFx/battleFxLayer.js",
+        "sha256": "7cab18c1ca870510ccec67f4b2f300fc483116ff3ff60d884308e80ccf050da6"
+      },
+      {
+        "path": "src/championship/presentation/battleFx/battleFxRecipes.js",
+        "sha256": "429d195e5294ae3fc4b552ab5fae901a044de654d10dc8986a6de19574ad0957"
+      },
+      {
         "path": "src/championship/presentation/battleResultCharacters.js",
         "sha256": "b64b744fed87e6a30fd2cf304d82766f65fbc3f80b02c9dfcce76e388a32044d"
       },
@@ -46182,7 +46212,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "ded53fdb60ca61601b505e0083500e9ed064da33755a8a0a94b27cef1f5b9b59"
+        "sha256": "3bd923c8a73a63c0df8f26dc5a62ee65fec92482f4ce660f379ef257d34620b5"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -46438,11 +46468,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "c521817889b4a4bb03a080870da41ead595732a28559e958d71854028bdc0af0"
+        "sha256": "60540f88db8ddb9db359d41853e8dad307b478d30b0314088324f7fe5eadb46b"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "39a022b8ab4a268844e5901412be1eaa10153effd7df440d6ee635165a1b92fd"
+        "sha256": "74776731f7d86f720de37e2d92e5397d1426427dbcf71238348e64c6d9abff9f"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -46450,11 +46480,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "a472795a976f58de69948559657121ee19b0709c1f93a128e4e5ec60a03273af"
+        "sha256": "bda4bbfddd6d217865afd1b48432ad2884b36fcd8fc95b16b128f9497918ca47"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "095dce18ddc1833f7cae5c080b4dcb2a93dc7df22e0500c8d2c09624958a85cb"
+        "sha256": "6eeecb2b96636338379cb2061f44e055d78e169636fff0e8fc22c48dc4ec08eb"
       },
       {
         "path": "src/championship/text/zhHant.js",
