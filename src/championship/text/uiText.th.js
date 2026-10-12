@@ -44,6 +44,7 @@ export const UI_COPY_TH = Object.freeze({
   "EXPANSION_POINT_RULES": "สิ่งอำนวยความสะดวกทุกแบบใช้รูปทรงและกฎการวางเดิม แม้แต่ขนาดใหญ่อย่างสนามแข่งขันก็วางได้",
   "EXPANSION_POINT_TRAINING": "อุ้มคู่หูเข้าออกได้ และเมื่อเข้าสิ่งอำนวยความสะดวกจะฝึกตามปกติ",
   "EXPANSION_POINT_CAPACITY": "ฟาร์มยังรับคู่หูได้สูงสุด 16 ตัว สิ่งที่เพิ่มคือพื้นที่สิ่งอำนวยความสะดวก คู่หูจึงกระจายตัวและแออัดน้อยลง",
+  "EXPANSION_POINT_MORE": "ช่องที่ล็อกที่เหลือสงวนไว้สำหรับการขยายครั้งต่อไป จำนวนและวิธีเปิดยังไม่ได้กำหนด",
   "EXPANSION_STATUS_TITLE": "วิธีรับ: ยังไม่เปิดให้ใช้",
   "EXPANSION_STATUS_NOTE": "จะเปิดเมื่อกำหนดราคาและวิธีรับแล้ว การจัดวางและเซฟปัจจุบันของคุณจะไม่เปลี่ยนแปลง",
   "EXPANSION_UNAVAILABLE": "ยังไม่เปิด",
@@ -51,7 +52,7 @@ export const UI_COPY_TH = Object.freeze({
   "EXPANSION_VIEW": "ดูส่วนขยาย",
   "EXPANSION_VIEW_BADGE": "+10 ช่อง",
   "EXPANSION_VIEW_LABEL": "ดูการขยายฟาร์ม: 10 ช่องด้านล่างยังล็อกอยู่",
-  "EXPANSION_EDIT_LOCKED_LABEL": "ส่วนขยาย · +10 ช่อง · ยังไม่เปิด",
+  "EXPANSION_EDIT_LOCKED_LABEL": "ส่วนขยาย · ยังไม่เปิด",
   "EXPANSION_EDIT_LOCKED_GRID": "ช่องส่วนขยาย (ล็อก)",
 
   "CODE_PASTE": "วางรหัส",

@@ -44,6 +44,7 @@ export const UI_COPY_VI = Object.freeze({
   "EXPANSION_POINT_RULES": "Mọi cơ sở giữ nguyên hình dạng và quy tắc đặt, kể cả cơ sở lớn như Đấu trường.",
   "EXPANSION_POINT_TRAINING": "Có thể bế bạn đồng hành ra vào, và vào cơ sở sẽ huấn luyện như thường.",
   "EXPANSION_POINT_CAPACITY": "Trang trại vẫn chứa tối đa 16 bạn đồng hành. Phần tăng thêm là không gian cơ sở, nên chúng tản ra và đỡ chật hơn.",
+  "EXPANSION_POINT_MORE": "Các ô khóa còn lại dành cho những lần mở rộng sau; số lượng và cách mở chưa được quyết định.",
   "EXPANSION_STATUS_TITLE": "Cách nhận: chưa mở",
   "EXPANSION_STATUS_NOTE": "Sẽ mở khi giá và cách nhận được quyết định. Bố cục và bản lưu hiện tại của bạn giữ nguyên.",
   "EXPANSION_UNAVAILABLE": "Chưa mở",
@@ -51,7 +52,7 @@ export const UI_COPY_VI = Object.freeze({
   "EXPANSION_VIEW": "Xem mở rộng",
   "EXPANSION_VIEW_BADGE": "+10 ô",
   "EXPANSION_VIEW_LABEL": "Xem mở rộng trang trại: 10 ô bên dưới đang khóa",
-  "EXPANSION_EDIT_LOCKED_LABEL": "Khu mở rộng · +10 ô · chưa mở",
+  "EXPANSION_EDIT_LOCKED_LABEL": "Khu mở rộng · chưa mở",
   "EXPANSION_EDIT_LOCKED_GRID": "Ô khu mở rộng (đang khóa)",
 
   "CODE_PASTE": "Dán mã",

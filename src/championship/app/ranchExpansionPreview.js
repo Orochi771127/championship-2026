@@ -64,7 +64,7 @@ export function ranchExpansionPreviewContent(doc = globalThis.document) {
   figure.append(ranchExpansionMap(doc), key);
   const points = doc.createElement('ul');
   points.className = 'cm-expansion-sheet__points';
-  for (const label of ['EXPANSION_POINT_RULES', 'EXPANSION_POINT_TRAINING', 'EXPANSION_POINT_CAPACITY']) {
+  for (const label of ['EXPANSION_POINT_RULES', 'EXPANSION_POINT_TRAINING', 'EXPANSION_POINT_CAPACITY', 'EXPANSION_POINT_MORE']) {
     const item = doc.createElement('li');
     setText(item, label);
     points.append(item);

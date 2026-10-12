@@ -56,6 +56,7 @@ export const UI_COPY_EN = Object.freeze({
   "EXPANSION_POINT_RULES": "Every facility keeps its shape and placement rules, so even large ones like the Arena fit.",
   "EXPANSION_POINT_TRAINING": "Partners can be carried in and out, and entering a facility trains them as usual.",
   "EXPANSION_POINT_CAPACITY": "The ranch still holds up to 16 partners. You gain facility space, so they spread out and crowd less.",
+  "EXPANSION_POINT_MORE": "The other locked hexes are kept for later expansions; how many and how they open is not decided yet.",
   "EXPANSION_STATUS_TITLE": "How to get it: not available yet",
   "EXPANSION_STATUS_NOTE": "It opens once its price and how to get it are decided. Your current layout and save stay as they are.",
   "EXPANSION_UNAVAILABLE": "Not available yet",
@@ -63,7 +64,7 @@ export const UI_COPY_EN = Object.freeze({
   "EXPANSION_VIEW": "View expansion",
   "EXPANSION_VIEW_BADGE": "+10 hexes",
   "EXPANSION_VIEW_LABEL": "View the ranch expansion: the 10 hexes below are locked",
-  "EXPANSION_EDIT_LOCKED_LABEL": "Expansion · +10 hexes · not available yet",
+  "EXPANSION_EDIT_LOCKED_LABEL": "Expansion · not available yet",
   "EXPANSION_EDIT_LOCKED_GRID": "Expansion hexes (locked)",
 
   "CODE_PASTE": "Paste code",

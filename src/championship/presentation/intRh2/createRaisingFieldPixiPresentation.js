@@ -297,6 +297,12 @@ export async function mountRaisingFieldPixiPresentation({
       bottom: bounds.y + (preview.bandOffsetPx + preview.contentHeightPx) * scale };
     const visible = { left: Math.max(0, rect.left), right: Math.min(app.screen.width, rect.right),
       top: Math.max(0, rect.top), bottom: Math.min(app.screen.height, rect.bottom) };
+    // A band as long as the ring tiles seamlessly with its repeats: what shows
+    // is all of them together, not the one copy nearest the middle.
+    if (wrap > 0 && preview.widthPx >= wrap) for (const shift of [-wrap * scale, wrap * scale]) {
+      const from = Math.max(0, rect.left + shift), to = Math.min(app.screen.width, rect.right + shift);
+      if (to > from) { visible.left = Math.min(visible.left, from); visible.right = Math.max(visible.right, to); }
+    }
     return visible.right - visible.left > 0 && visible.bottom - visible.top > 0 ? { band: rect, visible } : null;
   }
   function syncExpansionPreview(bounds) {
@@ -370,9 +376,14 @@ export async function mountRaisingFieldPixiPresentation({
       .find((value) => Number.isFinite(value));
     if (!Number.isFinite(nativeX)) return;
     cameraStarted = true;
-    // A folded ring opens on its first band, headroom included; so does a
-    // ranch showing the expansion's locked rows below its board.
-    if (fieldArt.field.fold || fieldArt.field.expansionPreview) cameraY = scrollMaxY();
+    // Owner 2026-10-12: a ranch with rows below its board (the annex, or the
+    // expansion's locked rows) opens with the board right under the HUD, not
+    // below an empty band. The headroom is still there: a drag down shows it,
+    // and a tap on a resident brings its whole body into view.
+    if (fieldArt.field.fold || fieldArt.field.expansionPreview) {
+      cameraY = 0;
+      cameraY = clamp(-raisingFieldViewport(fieldArt.field, view, 12, cameraX).y, 0, scrollMaxY());
+    }
     const target = bandWorldX(fieldArt.field, nativeX / 4096) - (app.screen.width - 24) / fit.scale / 2;
     cameraX = fieldArt.field.wrapWidthPx
       ? wrapRaisingCamera(target, fieldArt.field.wrapWidthPx)

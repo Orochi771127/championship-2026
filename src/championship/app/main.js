@@ -539,7 +539,8 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
     // A ranch without the expansion shows its locked rows below the board
     // (2026-10-12). Decoration only, so a failure keeps the ranch as it was.
     const preview = app.getInteractiveTutorial()?.finished === false ? null
-      : ranchExpansionPreviewPlan({ manifest, layoutVersion: cageFrame?.layoutVersion, previewFieldId: CAGE_ART_PREVIEW_FIELD || null });
+      : ranchExpansionPreviewPlan({ manifest, layoutVersion: cageFrame?.layoutVersion, unlockedCount: cageFrame?.unlockedCount,
+        previewFieldId: CAGE_ART_PREVIEW_FIELD || null });
     if (!preview || signal?.aborted) return art;
     try { return await withRanchExpansionPreview({ PIXI, art, manifest, preview }); }
     catch (error) { console.warn(`CHAMPIONSHIP_EXPANSION_PREVIEW_FALLBACK: ${error.message}`); return art; }

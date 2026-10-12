@@ -80,6 +80,27 @@ test("the locked rows are a granted, empty annex's rows 3-4, bay for bay", () =>
   assert.deepEqual([...preview.lockedBays].sort(), [2, 5, 6]);
 });
 
+test("the locked covers run under every column of the board, so panning never opens a hole", () => {
+  for (const unlockedCount of [14, 16, 18, 20]) {
+    const wide = ranchExpansionPreviewPlan({ manifest, layoutVersion: "NATIVE_ANCHORS_V1", unlockedCount });
+    const ten = ranchExpansionPreviewPlan({ manifest, layoutVersion: "NATIVE_ANCHORS_V1" });
+    assert.equal(wide.widthPx, unlockedCount * 48 * 4, "as long as the board's own ring, which it repeats with");
+    assert.equal(wide.placements.filter((tile) => tile.slotIndex !== undefined).length, unlockedCount);
+    assert.equal(wide.placements.filter((tile) => tile.capOfSlot !== undefined).length, unlockedCount / 2);
+    assert.deepEqual(wide.placements.filter((tile) => tile.fragmentOfSlot !== undefined).map((tile) => [tile.fragmentOfSlot, tile.x]), [[unlockedCount - 1, 0]]);
+    assert.equal(wide.expansionBays, 10);
+    assert.ok(wide.lockedBays.every((bay) => bay < wide.expansionBays), "padlocks only on the expansion's own bays");
+    // The expansion's bays keep the granted annex's origins; only bay 9 is no
+    // longer the ring's last, so it is drawn whole instead of cut at the seam.
+    const origin = (plan, slot) => plan.placements.find((tile) => tile.slotIndex === slot);
+    for (let slot = 0; slot < 10; slot += 1) {
+      assert.deepEqual([origin(wide, slot).x, origin(wide, slot).y, origin(wide, slot).sourceRect.y], [origin(ten, slot).x, origin(ten, slot).y, origin(ten, slot).sourceRect.y]);
+    }
+    assert.equal(origin(wide, 9).sourceRect.width, 96 * 4);
+  }
+  assert.equal(ranchExpansionPreviewPlan({ manifest, layoutVersion: "NATIVE_ANCHORS_V1", unlockedCount: 13 }).widthPx, 10 * 48 * 4, "an unknown board falls back to the expansion's ten");
+});
+
 test("only a native ranch without the expansion gets the locked rows", () => {
   assert.equal(ranchExpansionPreviewPlan({ manifest, layoutVersion: "NATIVE_DECKS_V1" }), null, "the granted annex draws its own cells");
   assert.equal(ranchExpansionPreviewPlan({ manifest, layoutVersion: undefined }), null, "a legacy layout has no annex to show");
@@ -214,7 +235,7 @@ test("the expansion sheet says what it adds, keeps 16, and cannot be bought", as
   assert.doesNotMatch(markup, /https?:/, "no namespace URL: the HTML parser places it");
   const body = ranchExpansionPreviewContent(doc);
   assert.equal(body.querySelectorAll("SVG").length, 1);
-  assert.equal(body.querySelectorAll("LI").length, 3);
+  assert.equal(body.querySelectorAll("LI").length, 4, "what it adds, the rules, the limit, and that the other locked hexes are for later");
   assert.match(UI_COPY.EXPANSION_POINT_CAPACITY, /16/);
   assert.match(UI_COPY_EN.EXPANSION_POINT_CAPACITY, /16/);
   assert.match(UI_COPY.EXPANSION_STATUS_TITLE, /尚未開放/);

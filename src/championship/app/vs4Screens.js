@@ -541,13 +541,16 @@ function ranchExpansionPrototypeVisible(mode) {
   }
 }
 
-// The expansion's rows as a ranch without it sees them (2026-10-12): ten bays
+// The expansion's rows as a ranch without it sees them (2026-10-12): bays
 // under the original blue Lid, placed exactly where the annex cells would be,
 // with the same few padlocks the ranch shows. Not cells: nothing to select.
+// Owner 2026-10-12: they run under all ten board columns, as on the ranch; the
+// first ten (five columns) are the expansion and carry the padlocks.
 const EXPANSION_PREVIEW_LOCKED_BAYS = Object.freeze([2, 6, 5]);
+const EXPANSION_PREVIEW_BAYS = RANCH_EXPANSION_DECK_SLOTS * 2;
 function expansionPreviewBays(doc = globalThis.document) {
   const lid = cageUiLidImage();
-  return Array.from({ length: RANCH_EXPANSION_DECK_SLOTS }, (_, slot) => {
+  return Array.from({ length: EXPANSION_PREVIEW_BAYS }, (_, slot) => {
     const cell = ranchBoardCell(slot);
     const bay = doc.createElement('span');
     bay.className = 'cm-cage-annex-bay';

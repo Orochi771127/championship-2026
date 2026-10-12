@@ -957,7 +957,7 @@
 /* 2026-10-12: a ranch without the expansion sees its rows locked under the
    board -- the original blue Lid on every bay, a few padlocks -- in the same
    place the annex cells would be. They are decoration, not cells. */
-.cm-cage-annex-board[data-preview="true"] { pointer-events: none; }
+.cm-cage-annex-board[data-preview="true"] { width: 508px; pointer-events: none; }
 .cm-cage-annex-bay { position: absolute; width: 48px; height: 56px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   background-color: #4b7ea3; background-size: 100% 100%; background-repeat: no-repeat; image-rendering: pixelated; }
 .cm-cage-annex-bay[data-lock="true"]::before { content: ""; position: absolute; left: 50%; top: 50%; width: 24px; height: 24px; border-radius: 50%;
@@ -965,4 +965,6 @@
 .cm-cage-annex-bay[data-lock="true"]::after { content: ""; position: absolute; left: 50%; top: 50%; width: 13px; height: 13px; background: #eaf7ff;
   transform: translate(-50%, -50%); -webkit-mask: var(--cm-padlock) center / contain no-repeat; mask: var(--cm-padlock) center / contain no-repeat; }
 .cm-cage-annex-board[data-preview="true"] + .cm-cage-annex-label { color: var(--c-text-3); }
+/* The label stays readable however far the board is scrolled sideways. */
+.cm-cage-annex-label { position: sticky; left: 0; width: max-content; max-width: 100%; }
 .cm-cage-expansion { gap: var(--sp-2); }

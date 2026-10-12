@@ -45,6 +45,7 @@ export const UI_COPY = Object.freeze({
   "EXPANSION_POINT_RULES": "沿用所有設施的形狀與放置規則，競技場等大型設施也放得下。",
   "EXPANSION_POINT_TRAINING": "夥伴可以搬運進出，進入設施時照常觸發訓練。",
   "EXPANSION_POINT_CAPACITY": "收容上限維持 16 隻；多出的是設施空間，夥伴分散後比較不擁擠。",
+  "EXPANSION_POINT_MORE": "其餘的鎖定格保留給之後的擴充；開放的數量與方式尚未決定。",
   "EXPANSION_STATUS_TITLE": "取得方式：尚未開放",
   "EXPANSION_STATUS_NOTE": "價格與取得方式確定後才會開放。你現在的牧場配置與存檔都不會改變。",
   "EXPANSION_UNAVAILABLE": "尚未開放",
@@ -52,7 +53,7 @@ export const UI_COPY = Object.freeze({
   "EXPANSION_VIEW": "查看擴充",
   "EXPANSION_VIEW_BADGE": "+10 格",
   "EXPANSION_VIEW_LABEL": "查看牧場擴充：下方 10 格尚未開放",
-  "EXPANSION_EDIT_LOCKED_LABEL": "擴充區 · +10 格 · 尚未開放",
+  "EXPANSION_EDIT_LOCKED_LABEL": "擴充區 · 尚未開放",
   "EXPANSION_EDIT_LOCKED_GRID": "擴充區格位（尚未開放）",
 
   "CODE_PASTE": "貼上代碼",

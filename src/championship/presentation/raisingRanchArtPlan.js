@@ -126,17 +126,20 @@ export function composeRanchArtPlan({ manifest, placements, layoutVersion, unloc
  * are untouched, and nothing here can be walked into or built on.
  *
  * The bays sit exactly where a granted annex draws its rows 3-4: the same
- * band offset, the same capped upper row, the same cell origins. They form a
- * ring of their own ten bays, so the lower row's last half-cell wraps into the
- * band's own first column instead of showing a piece of the player's board.
- * Back row first, caps last, as the annex band draws them.
+ * band offset, the same capped upper row, the same cell origins. Owner
+ * 2026-10-12: the covers run under every column of the board, not only the
+ * expansion's five, so panning never opens a hole below the ranch. The band
+ * is a ring as long as the board's (it repeats with the ranch's own wrap),
+ * and its front row's last half-bay wraps into the band's first column.
+ * Bays 0-9 are the expansion's ten; padlocks sit only on those. Back row
+ * first, caps last, as the annex band draws them.
  */
-export function ranchExpansionPreviewPlan({ manifest, layoutVersion, previewFieldId = null }) {
+export function ranchExpansionPreviewPlan({ manifest, layoutVersion, unlockedCount = null, previewFieldId = null }) {
   if (layoutVersion !== NATIVE_RANCH_LAYOUT || previewFieldId !== null || !Array.isArray(manifest?.fields)) return null;
   const lid = LID_FIELD_ID ? manifest.fields.find((field) => field.fieldId === LID_FIELD_ID) : null;
   if (!lid || !(lid.nativeWidthPx > 0)) return null;
   const unit = lid.worldWidthPx / lid.nativeWidthPx;
-  const ringCount = RANCH_EXPANSION_DECK_SLOTS;
+  const ringCount = [14, 16, 18, 20].includes(unlockedCount) ? unlockedCount : RANCH_EXPANSION_DECK_SLOTS;
   const bays = [], caps = [];
   const slots = Array.from({ length: ringCount }, (_, slot) => slot).sort((a, b) => (a % 2) - (b % 2) || a - b);
   for (const slotIndex of slots) {
@@ -150,7 +153,7 @@ export function ranchExpansionPreviewPlan({ manifest, layoutVersion, previewFiel
   }
   return deepFreeze({ mode: 'NATIVE_RANCH_EXPANSION_PREVIEW', placements: [...bays, ...caps],
     bandOffsetPx: RANCH_ANNEX_BAND_OFFSET_NATIVE * unit, capPx: RANCH_UPPER_ROW_CAP_NATIVE * unit,
-    widthPx: ringCount * 48 * unit, bayHeightPx: lid.worldHeightPx, nativePixelWorldScale: unit,
+    widthPx: ringCount * 48 * unit, expansionBays: RANCH_EXPANSION_DECK_SLOTS, bayHeightPx: lid.worldHeightPx, nativePixelWorldScale: unit,
     // A few bays carry a lock: enough to read as locked, not a wall of icons.
     lockedBays: Object.freeze([2, 6, 5]) });
 }

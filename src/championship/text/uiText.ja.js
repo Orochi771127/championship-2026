@@ -44,6 +44,7 @@ export const UI_COPY_JA = Object.freeze({
   "EXPANSION_POINT_RULES": "すべての施設の形と配置ルールがそのまま使え、競技場のような大型施設も置けます。",
   "EXPANSION_POINT_TRAINING": "パートナーは運んで出入りでき、施設に入ると通常どおりトレーニングが発生します。",
   "EXPANSION_POINT_CAPACITY": "収容上限は16体のままです。増えるのは施設スペースなので、パートナーが分散して混雑しにくくなります。",
+  "EXPANSION_POINT_MORE": "残りのロックされたマスは今後の拡張用です。開放する数と方法はまだ決まっていません。",
   "EXPANSION_STATUS_TITLE": "入手方法：未公開",
   "EXPANSION_STATUS_NOTE": "価格と入手方法が決まり次第公開します。現在の配置とセーブデータは変わりません。",
   "EXPANSION_UNAVAILABLE": "未公開",
@@ -51,7 +52,7 @@ export const UI_COPY_JA = Object.freeze({
   "EXPANSION_VIEW": "拡張を見る",
   "EXPANSION_VIEW_BADGE": "+10マス",
   "EXPANSION_VIEW_LABEL": "牧場の拡張を見る：下の10マスは未公開です",
-  "EXPANSION_EDIT_LOCKED_LABEL": "拡張エリア · +10マス · 未公開",
+  "EXPANSION_EDIT_LOCKED_LABEL": "拡張エリア · 未公開",
   "EXPANSION_EDIT_LOCKED_GRID": "拡張エリアのマス（未公開）",
 
   "CODE_PASTE": "コードを貼り付け",
