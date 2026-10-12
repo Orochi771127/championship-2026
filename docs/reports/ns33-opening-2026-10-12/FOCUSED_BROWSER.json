@@ -1,7 +1,5 @@
 {
-  "generatedAt": "2026-10-12T00:25:23.996772+00:00",
-  "artifactBuildId": "be38d9eee72bc39b5f232e48c801c44892f89863ce3ddb240a11e00915117adb",
-  "passed": true,
+  "generatedAt": "2026-10-12T00:44:25.367Z",
   "checks": [
     {
       "name": "real playback, audio consent, native finish and unchanged save",
@@ -29,6 +27,10 @@
     },
     {
       "name": "slow returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "film pauses unfinished TITLE art and resumes it on return",
       "passed": true
     },
     {
@@ -68,17 +70,17 @@
       "passed": true
     }
   ],
-  "runGroups": [
-    {
-      "origin": "http://127.0.0.1:54164",
-      "passedCases": 7
-    },
-    {
-      "origin": "http://127.0.0.1:50705",
-      "passedCases": 9
-    }
-  ],
-  "method": "Same artifact. After the first seven checks, freeze the controlled clock before exact 2999/3001ms stall assertions, then run the remaining nine cases. No product change between these two runs.",
   "physicalDeviceAccepted": false,
-  "fullSubjectiveListeningAccepted": false
+  "fullSubjectiveListeningAccepted": false,
+  "origin": "http://127.0.0.1:49690",
+  "partial": false,
+  "localReferences": {
+    "root": null,
+    "files": [],
+    "published": false
+  },
+  "passed": true,
+  "buildId": "8b2fbe2a3341b3f2dc658296559083cd09647361ea3d4482bfbd1a211142bfbf",
+  "sourceParentCommit": "30e72f373005a8753ca6a57975dc5632d65715ce",
+  "execution": "All 17 scenarios in one run against the same final artifact; no public network interception."
 }

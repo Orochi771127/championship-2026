@@ -187,7 +187,7 @@ const syncTitleImages=createTitleImageLifecycle(titleScreen,{onStateChange(state
 setText(titleBackgroundRetry,'TITLE_BACKGROUND_RETRY');
 titleBackgroundRetry.addEventListener('click',()=>syncTitleImages.retry());
 let titleMusicBuffering=false;
-const syncTitleArt=()=>syncTitleImages(titleScreen.hidden||titleMusicBuffering);
+const syncTitleArt=()=>syncTitleImages(titleScreen.hidden||titleMusicBuffering||openingFilm?.isPlaying());
 syncTitleArt();
 // A BFCache page resumes the same owner; a discarded page releases its cache.
 globalThis.addEventListener('pagehide',event=>{
@@ -1964,7 +1964,7 @@ function boot() {
   loginButton.disabled=false;
   openingFilm=createOpeningFilm({title:titleScreen,controls:titleScreen.querySelector('.cm-title__controls'),
     login:loginButton,menu:titleActions,opening:document.getElementById('cm-opening'),
-    getPreferences:()=>settings.store.get(),onActiveChange:()=>syncMusic()});
+    getPreferences:()=>settings.store.get(),onActiveChange:()=>{syncMusic();syncTitleArt();}});
   settings.store.subscribe(()=>openingFilm.sync());
   openingFilm.start();
   window.dispatchEvent(new Event("championship:ready"));

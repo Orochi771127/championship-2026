@@ -94,6 +94,23 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
     if(failure==='slow')assert.equal((await state(page)).result,'timeout');
     await page.clock.install();await page.clock.runFor(20000);assert.equal((await state(page)).hidden,true);assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
   });
+  await scenario('film pauses unfinished TITLE art and resumes it on return',async(page)=>{
+    const attempts=[];
+    await page.route('**/title-morning-r1/*.webp',async route=>{
+      attempts.push(route.request().url());
+      await new Promise(resolve=>setTimeout(resolve,1500));
+      await route.continue().catch(()=>{});
+    });
+    await boot(page);await playing(page);
+    assert.equal(await page.locator('.cm-title__panel').getAttribute('data-title-background-state'),'paused');
+    const titleImages=page.locator('#cm-title > .cm-title__panel img');
+    assert.ok(await titleImages.count()>0);
+    assert.equal(await titleImages.evaluateAll(images=>images.every(image=>!image.hasAttribute('src'))),true);
+    await skip(page);
+    assert.equal(await titleImages.evaluateAll(images=>images.every(image=>!!image.getAttribute('src'))),true);
+    await page.waitForFunction(()=>document.querySelector('.cm-title__panel')?.dataset.titleBackgroundState==='ready');
+    assert.ok(attempts.some(url=>url.endsWith('/arena.webp')));
+  });
   await scenario('cold startup allows 4.2s delivery; playback stalls still return within 3s',async(page)=>{
     await page.route('**/opening-720p-74e171ba.mp4',async route=>{await new Promise(resolve=>setTimeout(resolve,4200));await route.continue();});
     await boot(page);assert.equal(await page.locator('#cm-film-skip').isVisible(),true);await playing(page);
