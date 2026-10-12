@@ -8844,6 +8844,9 @@
     "assets/production/internal-faithful-baseline/raising-feedback-v1/manifest.json",
     "assets/production/opening-film-ns33-r1/manifest.json",
     "assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4",
+    "assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+    "assets/production/opening-film-ns33-r1/opening-540p-6869b2cb.mp4",
+    "assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
     "assets/production/opening/original-comic-r2-20261010/01_arena.webp",
     "assets/production/opening/original-comic-r2-20261010/02_blaze_action.webp",
     "assets/production/opening/original-comic-r2-20261010/03_cloud_action.webp",
@@ -43571,11 +43574,23 @@
       },
       {
         "path": "assets/production/opening-film-ns33-r1/manifest.json",
-        "sha256": "649fae2c566c4b90615f23aaa1b97a3240ba1487ade86eff8f348229d5776d66"
+        "sha256": "b6673e989c825c19d88d692b7bd5a75b3041af50d087c0d9031907980013643c"
       },
       {
         "path": "assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4",
         "sha256": "74e171baa7a3893a7e5e1274dab699339e9753733c1681ee18aff4f5dbaaf184"
+      },
+      {
+        "path": "assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "sha256": "ef50993b1856da8f7fb4ec62ca6d6ab50489f5e81e4b7b799469a4b154b8831d"
+      },
+      {
+        "path": "assets/production/opening-film-ns33-r1/opening-540p-6869b2cb.mp4",
+        "sha256": "6869b2cb08b3e225b634525d350a4529ea707640a157d355abc85e283670cc46"
+      },
+      {
+        "path": "assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+        "sha256": "048c2ee9cd049398421631536e99e3b72aaa8f79c53068ecf3617371ef183b38"
       },
       {
         "path": "assets/production/opening/original-comic-r2-20261010/01_arena.webp",
@@ -45291,7 +45306,7 @@
       },
       {
         "path": "src/championship/app/openingFilm.js",
-        "sha256": "04e4474409f031159b60a8d7767ab1730992599a4b675bb0af06961275d4ab4f"
+        "sha256": "a631c2c83a1ff5fdd14728e9a7dc46918c3ea48fb04859c843e0fa7deaecf5d8"
       },
       {
         "path": "src/championship/app/openingPresentation.js",

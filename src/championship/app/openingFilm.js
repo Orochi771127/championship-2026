@@ -3,10 +3,23 @@ export {openingFilmCopy} from '../text/openingFilmText.js';
 // Owner-approved NS33 film; DOM-only TITLE presentation, no save/router/ticker.
 import {getActiveGameTitle, getTitleHeadingHtml} from '../text/brandTerms.js';
 export const OPENING_FILM = Object.freeze({
-  src:'assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4',
-  sha256:'74e171baa7a3893a7e5e1274dab699339e9753733c1681ee18aff4f5dbaaf184',
-  bytes:14563538, duration:48.5, logoTime:46.2, idleMs:15000, startupWaitMs:8000, waitMs:3000
+  src:'assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4',
+  sha256:'ef50993b1856da8f7fb4ec62ca6d6ab50489f5e81e4b7b799469a4b154b8831d',
+  bytes:19412041,
+  liteSrc:'assets/production/opening-film-ns33-r1/opening-540p-6869b2cb.mp4',
+  liteSha256:'6869b2cb08b3e225b634525d350a4529ea707640a157d355abc85e283670cc46',
+  liteBytes:8782520,
+  poster:'assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg',
+  posterSha256:'048c2ee9cd049398421631536e99e3b72aaa8f79c53068ecf3617371ef183b38',
+  duration:58.0, logoTime:55.71, idleMs:15000, startupWaitMs:8000, waitMs:3000
 });
+export function selectOpeningFilmSource(nav = globalThis.navigator) {
+  const conn = nav?.connection;
+  if (conn?.saveData || conn?.effectiveType === '2g' || conn?.effectiveType === 'slow-2g') {
+    return OPENING_FILM.liteSrc;
+  }
+  return OPENING_FILM.src;
+}
 export function canAutoPlayOpening({titleVisible,titleReady,menuOpen,dialogOpen,hidden,reducedMotion,failed}){
   return Boolean(titleVisible&&titleReady&&!menuOpen&&!dialogOpen&&!hidden&&!reducedMotion&&!failed);
 }
@@ -17,6 +30,7 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
   const host=node('section','cm-title__film');host.id='cm-opening-film';host.hidden=true;
   host.setAttribute('role','dialog');host.setAttribute('aria-modal','true');
   const video=node('video','cm-title__film-video');video.preload='none';video.muted=true;video.defaultMuted=true;
+  video.poster=new URL(OPENING_FILM.poster,doc.baseURI).href;
   video.playsInline=true;video.setAttribute('playsinline','');video.setAttribute('disablepictureinpicture','');
   video.setAttribute('aria-hidden','true');video.tabIndex=-1;
   const art=node('div','cm-title__art'),brand=title.querySelector('.cm-title__logo').cloneNode(true);
@@ -65,7 +79,8 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
     for(const [n,inert] of restoreInert)n.inert=inert;restoreInert=[];
     if(['error','timeout','rejected'].includes(reason))failed=true;
     // Cancel an unfinished request; finished media can reuse the browser cache.
-    if(video.readyState<2||failed||reason==='leave'){video.removeAttribute('src');video.load();}
+    // Skip immediately aborts in-flight downloads so user entering game never waits on video.
+    if(video.readyState<2||failed||reason==='skip'||reason==='leave'){video.removeAttribute('src');video.load();}
     onActiveChange(false);
     if(reason==='skip')guardUntil=win.performance.now()+350;
     if(visible()&&doc.visibilityState!=='hidden'&&reason!=='leave'){
@@ -92,7 +107,8 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
     for(const [n] of restoreInert)n.inert=true;
     host.hidden=false;host.dataset.state='loading';status.hidden=false;brand.hidden=true;
     onActiveChange(true);skip.focus({preventScroll:true});
-    if(!video.getAttribute('src'))video.src=new URL(OPENING_FILM.src,doc.baseURI).href;
+    const filmSrc=selectOpeningFilmSource(win?.navigator);
+    if(!video.getAttribute('src'))video.src=new URL(filmSrc,doc.baseURI).href;
     else video.currentTime=0;
     video.preload='auto';armWait();
     deadline=win.setTimeout(()=>finish('timeout'),OPENING_FILM.duration*1000+OPENING_FILM.startupWaitMs+OPENING_FILM.waitMs);

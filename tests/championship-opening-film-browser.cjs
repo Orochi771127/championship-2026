@@ -53,19 +53,21 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
   await scenario('real playback, audio consent, native finish and unchanged save',async(page)=>{
     await boot(page);await playing(page);
     assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
-    const media=await page.locator('#cm-opening-film video').evaluate(v=>({muted:v.muted,inline:v.playsInline,w:v.videoWidth,h:v.videoHeight,d:v.duration,src:v.currentSrc}));
-    assert.equal(media.muted,true);assert.equal(media.inline,true);assert.equal(media.w,720);assert.equal(media.h,1280);assert.ok(Math.abs(media.d-48.5)<.1);assert.ok(media.src.includes('/championship-2026/assets/production/'));
+    const media=await page.locator('#cm-opening-film video').evaluate(v=>({muted:v.muted,inline:v.playsInline,w:v.videoWidth,h:v.videoHeight,d:v.duration,src:v.currentSrc,poster:v.poster}));
+    assert.equal(media.muted,true);assert.equal(media.inline,true);assert.equal(media.w,720);assert.equal(media.h,1280);assert.ok(Math.abs(media.d-58.0)<.1);assert.ok(media.src.includes('/championship-2026/assets/production/'));
+    assert.ok(media.poster.includes('poster-048c2ee9.jpg'));
     await page.click('#cm-film-sound');assert.equal(await page.locator('video').evaluate(v=>v.muted),false);
     await page.click('#cm-film-sound');assert.equal(await page.locator('video').evaluate(v=>v.muted),true);
     await page.screenshot({path:path.join(output,'playing-zh.png')});
-    await page.waitForFunction(()=>document.querySelector('#cm-opening-film .cm-title__logo')?.hidden===false,null,{timeout:52000});
+    await page.waitForFunction(()=>document.querySelector('#cm-opening-film .cm-title__logo')?.hidden===false,null,{timeout:65000});
     await page.screenshot({path:path.join(output,'closing-brand-zh.png')});
-    await page.waitForFunction(()=>document.querySelector('#cm-opening-film')?.dataset.result==='ended');
+    await page.waitForFunction(()=>document.querySelector('#cm-opening-film')?.dataset.result==='ended',null,{timeout:65000});
     assert.equal(await page.locator('#cm-login').isVisible(),true);assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
   });
   await scenario('skip gesture guard, repeated manual watch, idle 14.9s input, menu block',async(page)=>{
     await boot(page);await playing(page);
     await page.click('#cm-film-skip');
+    assert.equal(await page.locator('#cm-opening-film video').evaluate(v=>v.getAttribute('src')),null,'skip aborts video download');
     await page.locator('#cm-login').evaluate(n=>n.click());
     assert.equal(await page.locator('.cm-title__actions').isHidden(),true);
     await page.waitForTimeout(400);await page.click('#cm-watch-film');await playing(page);await skip(page);
@@ -88,7 +90,7 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
   });
   for(const failure of ['reject','404','network','slow'])await scenario(failure+' returns TITLE without retry loop or save write',async(page,context)=>{
     if(failure==='reject')await context.addInitScript(()=>{const original=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){return this.tagName==='VIDEO'?Promise.reject(new DOMException('blocked','NotAllowedError')):original.call(this);};});
-    else await page.route('**/opening-720p-74e171ba.mp4',async route=>{if(failure==='404')await route.fulfill({status:404,body:''});else if(failure==='network')await route.abort();else await new Promise(resolve=>setTimeout(resolve,9000)).then(()=>route.abort()).catch(()=>{});});
+    else await page.route('**/opening-720p-ef50993b.mp4',async route=>{if(failure==='404')await route.fulfill({status:404,body:''});else if(failure==='network')await route.abort();else await new Promise(resolve=>setTimeout(resolve,9000)).then(()=>route.abort()).catch(()=>{});});
     await boot(page);await page.waitForFunction(()=>['rejected','error','timeout'].includes(document.querySelector('#cm-opening-film')?.dataset.result));
     assert.equal(await page.locator('#cm-login').isVisible(),true);
     if(failure==='slow')assert.equal((await state(page)).result,'timeout');
@@ -112,7 +114,7 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
     assert.ok(attempts.some(url=>url.endsWith('/arena.webp')));
   });
   await scenario('cold startup allows 4.2s delivery; playback stalls still return within 3s',async(page)=>{
-    await page.route('**/opening-720p-74e171ba.mp4',async route=>{await new Promise(resolve=>setTimeout(resolve,4200));await route.continue();});
+    await page.route('**/opening-720p-ef50993b.mp4',async route=>{await new Promise(resolve=>setTimeout(resolve,4200));await route.continue();});
     await boot(page);assert.equal(await page.locator('#cm-film-skip').isVisible(),true);await playing(page);
     await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+1000));
     await page.locator('video').evaluate(v=>{v.pause();v.dispatchEvent(new Event('waiting'));});
@@ -133,7 +135,7 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
       const b=await page.locator(id).boundingBox();assert.ok(b.height>=44&&b.x>=0&&b.x+b.width<=391);
       assert.equal(await page.locator(id).evaluate(n=>n.scrollWidth>n.clientWidth),false);
     }
-    await page.locator('video').evaluate(v=>{v.currentTime=46.3;});
+    await page.locator('video').evaluate(v=>{v.currentTime=55.8;});
     await page.waitForFunction(()=>!document.querySelector('#cm-opening-film .cm-title__logo').hidden);
     const label=await page.locator('#cm-opening-film .cm-title__name').getAttribute('aria-label');assert.ok(label&&!label.includes('CHAMPIONSHIP2026'));
     await page.waitForTimeout(900);
