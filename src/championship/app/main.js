@@ -170,6 +170,10 @@ const VFX_ART_PREVIEW_SYSTEM = new URLSearchParams(globalThis.location?.search ?
 // returns these two modes to the baseline so the two can be compared.
 const FREE_PRACTICE_PERSONALITY_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battlePolicy") === "baseline" ? "BASELINE" : "ORIGINAL";
+// Owner 2026-10-12: battles use the dynamic presentation (original proportions,
+// following camera, skill-field interaction, callouts) over the unchanged
+// simulation. ?battleFx=classic returns to the earlier fixed full-field view.
+const BATTLE_DYNAMIC_FX = new URLSearchParams(globalThis.location?.search ?? "").get("battleFx") !== "classic";
 
 const titleScreen = document.getElementById("cm-title");
 let openingFilm = null;
@@ -386,11 +390,16 @@ async function ensurePixiStage(canvasHost, signal) {
 
 // Opt-in loopback review (?vfxOriginal=shared-v1): original shared VFX cells
 // drawn over the loaded effect art; pool, timing and collision are unchanged.
+// Owner 2026-10-12: the dynamic battle uses the Owner's own effects, so on a
+// loopback host it loads them by default; ?vfxOriginal=off keeps the base art.
 async function loadOptionalOriginalVfxReview(stage, effectArt) {
-  if(!effectArt||new URLSearchParams(location.search).get('vfxOriginal')!=='shared-v1')return effectArt;
+  const requested=new URLSearchParams(location.search).get('vfxOriginal');
+  const byDefault=requested===null&&BATTLE_DYNAMIC_FX&&['localhost','127.0.0.1','[::1]'].includes(location.hostname);
+  if(!effectArt||(requested!=='shared-v1'&&!byDefault))return effectArt;
+  const href=new URL(location.href);href.searchParams.set('vfxOriginal','shared-v1');
   try {
     const {loadOriginalSharedVfxReview}=await import('../presentation/originalSharedVfxReview.js');
-    return await loadOriginalSharedVfxReview({PIXI:stage.PIXI,baseArt:effectArt,href:location.href,
+    return await loadOriginalSharedVfxReview({PIXI:stage.PIXI,baseArt:effectArt,href:href.href,
       onFirstUse:(key,seen)=>{document.documentElement.dataset.vfxReviewSeen=seen.join(' ');}});
   } catch (error) {
     console.warn('Original VFX review unavailable',error);
@@ -1064,6 +1073,7 @@ async function mountBattleField() {
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt,
+    dynamicFx: BATTLE_DYNAMIC_FX,
     askToLeave: showChoiceDialog,
     loadingProgress: { createView: createLoadProgressView,
       observeActivity: onChange => observeLoadActivity(onChange, { subscribeSettled: onPixiAssetSettled }) },
@@ -1093,18 +1103,27 @@ async function mountBattleField() {
           // Each step finishes when its own load resolves with art.
           const step=(id,pending)=>Promise.resolve(pending).then(value=>{if(value&&!disposed)progress?.done(id);return value;});
           for(const id of ['arena','fighters','effects'])progress?.start(id);
+          // The dynamic presentation's catalog look-ups load beside the art.
+          const fxLookupsLoading=BATTLE_DYNAMIC_FX?import('./battleFxLookups.js'):null;
           const loaded=await Promise.allSettled([
             step('arena',loadOptionalBattleFieldArt(stage,source)),
             step('fighters',loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal})),
             step('effects',loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art)))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
+          const fxLookupsModule=fxLookupsLoading?await fxLookupsLoading.catch(error=>{console.warn('Battle dynamic presentation unavailable',error);return null;}):null;
           for(const result of loaded)if(result.status==='rejected')console.warn('Battle art unavailable',result.reason);
           if (disposed) {
             await Promise.all([release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }
           if(!fieldArt||!characterRoster||!effectArt||characterRoster.getDiagnostics?.().failures?.length)
             throw new Error('BATTLE_CORE_ART_UNAVAILABLE');
+          // Resolved with the art, so the scene still mounts in the same task as
+          // the overlay: no frame may render between the two.
+          const fxLookups = fxLookupsModule
+            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:line=>view.feed?.(line),
+              // Local acceptance shows stable skill IDs; players see approved names only.
+              showIds:String(location.search??'').includes('battleFxDebug')&&['localhost','127.0.0.1','[::1]'].includes(location.hostname)}) : null;
           progress?.start('scene');
           delete root.dataset.fieldFallback;
           // The existing overlay owns Hyper, five impact families and hit flash.
@@ -1114,7 +1133,8 @@ async function mountBattleField() {
             await Promise.all([release(vfxOverlay),release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }
           if(!vfxOverlay)throw new Error('BATTLE_CORE_VFX_UNAVAILABLE');
-          scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame) });
+          scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame),
+            dynamicFx:BATTLE_DYNAMIC_FX, fx:fxLookups, localTeam:activeRuntime.localTeamIndex() });
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);
             return;

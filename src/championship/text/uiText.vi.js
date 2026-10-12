@@ -1187,7 +1187,21 @@ export const TEXT_VI = Object.freeze({
   "裝置記憶體較少，自動使用省電。": "Thiết bị có ít bộ nhớ hơn và tự động sử dụng nó để tiết kiệm điện.",
   "裝置處理器核心較少，自動使用省電。": "Thiết bị có ít lõi xử lý hơn và tự động sử dụng chúng để tiết kiệm điện năng.",
   "自動使用平衡。": "Tự động sử dụng số dư.",
-  "畫面持續低於約 35 FPS，已自動改用省電（本次遊玩不會再改回）。": "Màn hình luôn ở mức dưới khoảng 35 FPS và đã được tự động chuyển sang chế độ tiết kiệm năng lượng (nó sẽ không được thay đổi trở lại đối với trò chơi này)."
+  "畫面持續低於約 35 FPS，已自動改用省電（本次遊玩不會再改回）。": "Màn hình luôn ở mức dưới khoảng 35 FPS và đã được tự động chuyển sang chế độ tiết kiệm năng lượng (nó sẽ không được thay đổi trở lại đối với trò chơi này).",
+  // Dynamic battle presentation (Owner 2026-10-12)
+  "絕招！": "TUYỆT CHIÊU!",
+  "對戰開始！": "BẮT ĐẦU!",
+  "會心一擊！": "CHÍ MẠNG!",
+  "重擊！": "ĐÒN MẠNH!",
+  "命中！": "TRÚNG!",
+  "回復": "HỒI",
+  "倒下！": "GỤC NGÃ!",
+  "{name}發動絕招「{move}」！": "{name} tung tuyệt chiêu \"{move}\"!",
+  "{name}使出「{move}」！": "{name} dùng \"{move}\"!",
+  "{name}倒下了！": "{name} đã gục ngã!",
+  "技能": "KỸ NĂNG",
+  "{name}發動絕招！": "{name} tung tuyệt chiêu!",
+  "{name}使出技能！": "{name} dùng kỹ năng!"
 });
 
 export const UNTRANSLATED_PROPER_NOUNS_VI = Object.freeze(new Set([

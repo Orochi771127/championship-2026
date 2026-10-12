@@ -48,13 +48,20 @@
 // that layer.
 //
 // Words are not drawn here at all: the stage's declared API is Container and
-// Graphics, and every label on this screen belongs to the DOM view.
+// Graphics, and every label on this screen belongs to the DOM view. The one
+// exception is the dynamic presentation (OWNER_APPROVED_ADAPTATION 2026-10-12,
+// presentation/battleFx/): its impact words, move callout and overhead bars
+// are part of the played picture, follow the camera, and are localized through
+// uiText by the caller.
 
 import contract from "../../../../docs/contracts/championship/battle-field-presentation.v1.json" with { type: "json" };
-import { prefersReducedMotion } from '../presentationPreferences.js';
+import { prefersReducedMotion, currentQualityTier, flashScale as currentFlashScale } from '../presentationPreferences.js';
 import {battleFocusViewport,drawBattleDigitalCurtain} from '../battleFocusViewport.js';
 import {createBattleEffectSprites} from '../battleEffectSprites.js';
 import {createBm03GroundShadows} from '../bm03GroundShadows.js';
+import {createBattleFxCamera} from '../battleFx/battleFxCamera.js';
+import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
+import {createBattleFxLayer} from '../battleFx/battleFxLayer.js';
 
 const PALETTE = Object.freeze({
   letterbox: 0x072f5e,
@@ -174,8 +181,17 @@ function drawField(graphic, rect, frame, view, renderedSlots) {
  * host. This module owns its own scene and its own ticker callback, and removes
  * both on dispose.
  */
+/**
+ * `dynamicFx` (OWNER_APPROVED_ADAPTATION 2026-10-12) adds the following camera,
+ * skill and field interaction, words, callouts and overhead bars over the same
+ * battle at original proportions; false keeps the earlier fixed full-field
+ * view (with its 1.5x bodies) exactly. `fx` carries the look-ups the layer
+ * needs from outside this scene: describeMove(slot, moveId), nameOfSlot(slot),
+ * moveNameOf(moveId, look), text(zhHant), and onEvent(event) for the DOM
+ * record band.
+ */
 export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt = null, characterRoster = null, effectArt = null, autoAdvance = true,
-  onView = null,
+  onView = null, dynamicFx = false, fx = null, localTeam = 0,
   reducedMotion = prefersReducedMotion() }) {
   assertDependencies(stage, source);
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
@@ -195,11 +211,66 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const clip = new stage.PIXI.Graphics();
   actorLayer.sortableChildren = true;
   const shadowLayer = new stage.PIXI.Container({label:"bounded BM03 ground shadows"});
-  world.addChild(productionArtLayer, graphic, shadowLayer, actorLayer);
-  scene.addChild(letterbox,world,curtain,clip);
+  // Dynamic presentation layers: ground dressing under the actors, glows and
+  // particles over them (both in the camera's world), words and bars on screen.
+  const fxBack = new stage.PIXI.Container({label:'battle fx ground'});
+  const fxFront = new stage.PIXI.Container({label:'battle fx front'});
+  const fxScreen = new stage.PIXI.Container({label:'battle fx screen'});
+  world.addChild(productionArtLayer, graphic, fxBack, shadowLayer, actorLayer, fxFront);
+  scene.addChild(letterbox,world,fxScreen,curtain,clip);
   world.mask=clip;
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
   const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
+  const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen,
+    quality:currentQualityTier(), reducedMotion, flashScale:currentFlashScale(),
+    describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text}) : null;
+  const director = fxLayer ? createBattleFxCamera({reducedMotion}) : null;
+  const tracker = fxLayer ? createBattleFxEventTracker() : null;
+  // The dynamic camera follows fighters wherever the original's movement takes
+  // them, sometimes past the arena picture. Continue the floor with eight
+  // mirrored, darkened copies of the arena (rendered once, no per-frame cost);
+  // a mirror keeps every seam continuous. Presentation only.
+  let continuation = null, continuationTexture = null;
+  if (fxLayer && fieldArt) {
+    try {
+      const {worldWidthPx:W, worldHeightPx:H} = fieldArt.field;
+      continuationTexture = app.renderer.generateTexture({target:fieldArt.displayObject, frame:new stage.PIXI.Rectangle(0, 0, W, H), resolution:0.5});
+      continuation = new stage.PIXI.Container({label:'battle fx arena continuation'});
+      for (const [dx, dy] of [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]) {
+        const tile = new stage.PIXI.Sprite(continuationTexture);
+        tile.anchor.set(0.5); tile.tint = 0xb8b8b8;
+        tile.width = W; tile.height = H;
+        tile.scale.set((dx ? -1 : 1) * Math.abs(tile.scale.x), (dy ? -1 : 1) * Math.abs(tile.scale.y));
+        tile.position.set(W / 2 + dx * W, H / 2 + dy * H);
+        continuation.addChild(tile);
+      }
+      // A stepped fade outward from every arena edge: no hard seam at the edge,
+      // darker the further the floor is from the real arena.
+      const fade = new stage.PIXI.Graphics();
+      const steps = 10;
+      for (let i = 0; i < steps; i++) {
+        const near = i / steps * 0.6, alpha = 0.05 + 0.055 * i, bandW = W * 0.6 / steps, bandH = H * 0.6 / steps;
+        fade.rect(-W * near - bandW, -H, bandW, H * 3).fill({color:0x000000, alpha});
+        fade.rect(W + W * near, -H, bandW, H * 3).fill({color:0x000000, alpha});
+        fade.rect(0, -H * near - bandH, W, bandH).fill({color:0x000000, alpha});
+        fade.rect(0, H + H * near, W, bandH).fill({color:0x000000, alpha});
+      }
+      fade.rect(-W, -H, W * 0.4, H * 3).fill({color:0x000000, alpha:0.6});
+      fade.rect(W + W * 0.6, -H, W * 0.4, H * 3).fill({color:0x000000, alpha:0.6});
+      fade.rect(0, -H, W, H * 0.4).fill({color:0x000000, alpha:0.6});
+      fade.rect(0, H + H * 0.6, W, H * 0.4).fill({color:0x000000, alpha:0.6});
+      continuation.addChild(fade);
+      productionArtLayer.addChildAt(continuation, 0);
+    } catch (error) {
+      console.warn('CHAMPIONSHIP_BATTLE_FX_CONTINUATION_UNAVAILABLE', error?.message);
+      continuation?.destroy({children:true}); continuationTexture?.destroy(true); continuation = continuationTexture = null;
+    }
+  }
+  const slotInfos = new Map();
+  let pendingDtMs = 0;
+  let layoutDtMs = 0;
+  const motionEvents = [];
+  let lastCamera = null;
 
   let groundShadows = null;
   try { groundShadows = await createBm03GroundShadows({PIXI:stage.PIXI,parent:shadowLayer,fieldArt}); }
@@ -219,6 +290,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
 
   function layoutCharacters(rect, view) {
     const rendered = new Set();
+    slotInfos.clear();
+    motionEvents.length = 0;
     groundShadows?.begin(rect);
     // Arena source pixels and sprite packed pixels have different enlargements.
     // Never size a creature using its atlas dimensions or a fixed circle radius.
@@ -229,6 +302,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if (entry && (!combatant.present || entry.speciesId !== combatant.speciesId)) {
         actorLayer.removeChild(entry.actor.sprite);
         entry.actor.sprite.destroy();
+        entry.flashSprite?.destroy();
         actors.delete(combatant.slot);
         entry = null;
       }
@@ -251,12 +325,15 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         nativeRequest:combatant.animationRequest?.nativeRequest===true,
         specialPrelude:Boolean(focus)});
       if (motion?.geometry.blank) {
-        sprite.visible=false;rendered.add(combatant.slot);continue;
+        sprite.visible=false;if(entry.flashSprite)entry.flashSprite.visible=false;rendered.add(combatant.slot);continue;
       }
       const texture = sprite.texture;
       const packedScale = motion?.geometry.scale ?? nativeSizing?.packedPixelsPerNativePixel;
       const resolution = texture?.source?.resolution;
-      const displayScale = nativeSizing?.evidence === "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+      // Owner 2026-10-12: the dynamic presentation keeps the original relative
+      // size (no 1.5x); the camera brings fighters closer. Density-4 art keeps
+      // its full resolution either way. The 1.5x remains in ?battleFx=classic.
+      const displayScale = !fxLayer && nativeSizing?.evidence === "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
         ? BATTLE_ORIGINAL_CHARACTER_DISPLAY_SCALE : 1;
       const scale = nativeScale * resolution / packedScale * displayScale;
       sprite.visible = Boolean(scale > 0 && Number.isFinite(scale) && texture?.orig);
@@ -281,21 +358,83 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       }
       const x = rect.x + combatant.stand.x * rect.width;
       const y = rect.y + combatant.stand.y * rect.height;
-      sprite.scale.set(scale * mirror, scale);
+      // Dynamic presentation only: a hit squash and knock about the ground
+      // anchor. The stand position the simulation owns is unchanged.
+      const dress = fxLayer?.actorFx(combatant.slot) ?? null;
+      sprite.scale.set(scale * mirror * (dress?.squashX ?? 1), scale * (dress?.squashY ?? 1));
       // Numeric rotation is written by the original reaction handler. This
       // projection changes no timing or physics and resets after its exit.
       sprite.rotation=Math.atan2(combatant.nativeMotion?.rotationSinQ12??0,
         combatant.nativeMotion?.rotationCosQ12??4096);
       const lift=(combatant.nativeMotion?.heightNativePx ?? 0)*nativeScale;
-      sprite.position.set(x - center * scale * mirror, y - bottom * scale - lift);
+      sprite.position.set(x - center * scale * mirror * (dress?.squashX ?? 1) + (dress?.offsetX ?? 0),
+        y - bottom * scale * (dress?.squashY ?? 1) - lift);
       sprite.zIndex = y;
       // Down remains a session fact; original effect/return-to-idle timing is separate.
       sprite.alpha = combatant.nativeMotion?.alpha ?? (combatant.down ? 0.35 : 1);
-      const brightness=focus ? 255 : Math.round(255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096);
+      const fxBrightness = fxLayer?.brightnessFor(combatant.slot) ?? 1;
+      const brightness=Math.round((focus ? 255 : 255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096)*fxBrightness);
       const nativeTint=combatant.nativeMotion?.tintRgb;
       sprite.tint=nativeTint === undefined ? brightness*0x010101
         : ((Math.round((nativeTint>>16&255)*brightness/255)<<16)
           |(Math.round((nativeTint>>8&255)*brightness/255)<<8)|Math.round((nativeTint&255)*brightness/255));
+      if (fxLayer) {
+        // The brief hit flash: an additive white copy of the same frame.
+        const glow = dress?.flash ?? 0;
+        if (!entry.flashSprite && glow > 0) {
+          entry.flashSprite = new stage.PIXI.Sprite(sprite.texture);
+          entry.flashSprite.blendMode = 'add';
+          actorLayer.addChild(entry.flashSprite);
+        }
+        if (entry.flashSprite) {
+          const overlay = entry.flashSprite;
+          overlay.visible = glow > 0.01 && sprite.visible;
+          if (overlay.visible) {
+            overlay.texture = sprite.texture;
+            overlay.anchor.copyFrom(sprite.anchor);
+            overlay.scale.copyFrom(sprite.scale);
+            overlay.position.copyFrom(sprite.position);
+            overlay.rotation = sprite.rotation;
+            overlay.zIndex = sprite.zIndex + 0.01;
+            overlay.tint = 0xffffff;
+            overlay.alpha = Math.min(1, glow) * sprite.alpha;
+          }
+        }
+        // Local-space box the camera frames and the layer dresses.
+        const top = motion ? motion.baseBounds[1] * packedScale / resolution : trim.y - texture.orig.height * sprite.anchor.y;
+        const bodyHeight = Math.max(8, (bottom - top) * scale);
+        const bodyWidth = Math.max(8, (motion ? (motion.baseBounds[2] - motion.baseBounds[0]) * packedScale / resolution : trim.width) * scale);
+        slotInfos.set(combatant.slot, {slot:combatant.slot, x, y:y-lift, groundY:y, liftNative:(combatant.nativeMotion?.heightNativePx ?? 0),
+          top:y-lift-bodyHeight, height:bodyHeight, width:bodyWidth,
+          facing:combatant.stand.facing, team:combatant.team, down:combatant.down,
+          left:x-bodyWidth/2, right:x+bodyWidth/2, bottom:y});
+      }
+      if (fxLayer) {
+        // Field interaction from the fighter's own native motion (never the
+        // hit jitter): a landing when its height returns to the ground, run
+        // dust while it moves fast on the ground, and an afterimage on a dash.
+        const liftNative = combatant.nativeMotion?.heightNativePx ?? 0;
+        const stand = {x, y}, previous = entry.lastStand, previousSprite = entry.lastSprite;
+        entry.ghostMs = (entry.ghostMs ?? 0) + layoutDtMs;
+        entry.stepMs = (entry.stepMs ?? 0) + layoutDtMs;
+        if (previous && layoutDtMs > 0 && !combatant.down) {
+          const dx = stand.x - previous.x;
+          const speed = Math.hypot(dx, stand.y - previous.y) / layoutDtMs * 16.7 / Math.max(0.01, nativeScale);
+          if ((entry.lastLift ?? 0) > 1.5 && liftNative <= 0.25) motionEvents.push({type:'LANDED', slot:combatant.slot});
+          if (liftNative <= 0.25 && speed > 1.6 && entry.stepMs > 110) {
+            entry.stepMs = 0;
+            motionEvents.push({type:'STEP', slot:combatant.slot, direction:Math.sign(dx)});
+          }
+          if (previousSprite && speed > 3 && entry.ghostMs > 45) {
+            entry.ghostMs = 0;
+            fxLayer.ghost({...previousSprite, tint:combatant.team === localTeam ? 0x7cc8ff : 0xffa070});
+          }
+        }
+        entry.lastStand = stand;
+        entry.lastLift = liftNative;
+        entry.lastSprite = {texture:sprite.texture, anchorX:sprite.anchor.x, anchorY:sprite.anchor.y,
+          scaleX:sprite.scale.x, scaleY:sprite.scale.y, x:sprite.x, y:sprite.y, rotation:sprite.rotation};
+      }
       // Baked casts are keyed by the drawn horizontal scale sign (+1 = authored
       // pixels, unmirrored), so the shadow takes the sprite's mirror, not stand.facing.
       const grounded=groundShadows?.update({slot:combatant.slot,actor:entry.actor,motion,facing:mirror,
@@ -332,38 +471,65 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     const frame = source.getFrame();
     lastViewport = { width: app.screen.width, height: app.screen.height };
     const rect = { x: 0, y: 0, width: app.screen.width, height: app.screen.height };
+    const dtMs = pendingDtMs;
+    pendingDtMs = 0;
+    layoutDtMs = dtMs;
 
     letterbox.clear();
     graphic.clear();
     clip.clear().rect(0,0,rect.width,rect.height).fill(0xffffff);
     let artRect=rect;
     if (fieldArt) {
-      letterbox.rect(rect.x, rect.y, rect.width, rect.height).fill(PALETTE.letterbox);
+      // Under the dynamic camera the mirrored arena continues the floor; the
+      // letterbox only shows beyond it, painted as a dark stage edge.
+      letterbox.rect(rect.x, rect.y, rect.width, rect.height).fill(fxLayer ? 0x0a1419 : PALETTE.letterbox);
       artRect = layoutFieldArt();
       drawStandMarkers(graphic, artRect, view, layoutCharacters(artRect, view));
     } else {
       productionArtLayer.visible = false;
       drawField(graphic, rect, frame, view);
     }
+    const nativeScale = artRect.width / (fieldArt?.field.nativeWidthPx ?? 416);
+    // Dynamic presentation: events from this view, then the camera for it.
+    let camera = {zoom:1, x:0, y:0};
+    let fxContext = null;
+    if (fxLayer && fieldArt) {
+      const events = [...tracker.consume(view), ...motionEvents];
+      camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
+        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints()});
+      fxContext = {artRect, nativeScale, localTeam, viewport:{width:rect.width, height:rect.height},
+        slotInfo:slot => slotInfos.get(slot) ?? null,
+        opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),
+        camera:{...camera, director}};
+      fxLayer.update(view, fxContext, dtMs, events);
+      for (const event of events) fx?.onEvent?.(event);
+    }
     effectSprites?.update(view.nativeLifecycle?.effectActors ?? [], artRect,
-      artRect.width / (fieldArt?.field.nativeWidthPx ?? 416), view.specialPrelude?.brightnessQ12 ?? 4096);
+      nativeScale, view.specialPrelude?.brightnessQ12 ?? 4096);
     const focus=view.specialPrelude;
     const actor=focus ? view.combatants[focus.slot] : null;
-    const transform=battleFocusViewport({width:rect.width,height:rect.height,
-      anchorX:artRect.x+(actor?.stand.x??.5)*artRect.width,
-      anchorY:artRect.y+(actor?.stand.y??.5)*artRect.height,
+    // The original prelude zoom composes over the camera in screen space.
+    const anchorLocalX=artRect.x+(actor?.stand.x??.5)*artRect.width, anchorLocalY=artRect.y+(actor?.stand.y??.5)*artRect.height;
+    const prelude=battleFocusViewport({width:rect.width,height:rect.height,
+      anchorX:camera.zoom*anchorLocalX+camera.x, anchorY:camera.zoom*anchorLocalY+camera.y,
       zoomQ12:focus?.zoomQ12,reducedMotion});
+    const transform=Object.freeze({zoom:prelude.zoom*camera.zoom, x:prelude.zoom*camera.x+prelude.x, y:prelude.zoom*camera.y+prelude.y,
+      anchorX:prelude.anchorX, anchorY:prelude.anchorY});
     world.scale.set(transform.zoom);
     world.position.set(transform.x,transform.y);
-    const brightness=Math.round(255*(focus?.brightnessQ12??4096)/4096);
+    lastCamera = fxLayer ? {...camera, total:transform.zoom} : null;
+    const backdrop=fxLayer?.brightnessFor(null) ?? 1;
+    const brightness=Math.round(255*(focus?.brightnessQ12??4096)/4096*backdrop);
     letterbox.tint=brightness*0x010101;
     productionArtLayer.tint=brightness*0x010101;
     graphic.tint=brightness*0x010101;
+    if (fxLayer && fxContext) fxLayer.updateScreen({viewport:{width:rect.width, height:rect.height}, view,
+      ctx:{...fxContext, camera:{zoom:transform.zoom, x:transform.x, y:transform.y, director}}, dtMs});
     drawBattleDigitalCurtain(curtain,rect.width,rect.height,focus,reducedMotion);
-    focusPlacement=focus ? {...transform,nativeScale:artRect.width/(fieldArt?.field.nativeWidthPx??416),
+    focusPlacement=focus ? {...transform,nativeScale,
       width:rect.width,height:rect.height,reducedMotion}:null;
     fieldPlacement={...transform,artRect:{...artRect},width:rect.width,height:rect.height,
-      nativeScale:artRect.width/(fieldArt?.field.nativeWidthPx??416),reducedMotion};
+      nativeScale,reducedMotion};
   }
 
   function advance(ticker) {
@@ -382,14 +548,23 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     }
     if(disposed)return;
     fieldArt?.update(ticker?.deltaMS ?? 0);
+    // Presentation time for the dynamic layer; it keeps animating through the
+    // original hit pause, when the battle frame itself holds still.
+    pendingDtMs += Math.min(100, Math.max(0, ticker?.deltaMS ?? nativeFrameMs));
     redraw();
   }
 
   const unobserveResize = stage.onResize(redraw);
   app.ticker.add(advance);
   redraw();
+  // Local verification only: ?battleFxDebug on a loopback host exposes this
+  // scene's diagnostics to automated review captures.
+  const debugHook = fxLayer && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
+    && String(globalThis.location?.search ?? '').includes('battleFxDebug');
+  let presentation = null;
+  if (debugHook) globalThis.__championshipBattleDiagnostics = () => presentation?.getDiagnostics();
 
-  return Object.freeze({
+  presentation = Object.freeze({
     /** Exposed so a test can drive the scene without a ticker. */
     redraw,
     advance,
@@ -408,6 +583,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         outcome: source.getFrame().outcome,
         viewport: Object.freeze({ ...lastViewport }),
         effectSprites:effectSprites?.getDiagnostics() ?? null,
+        dynamicFx:fxLayer ? Object.freeze({...fxLayer.getDiagnostics(), camera:lastCamera,
+          bodies:[...slotInfos.values()].map(b=>Object.freeze({slot:b.slot,x:Math.round(b.x),groundY:Math.round(b.groundY),top:Math.round(b.top),width:Math.round(b.width)})),
+          director:director.getState()}) : null,
         groundShadows:groundShadows?.getDiagnostics() ?? null,
         characters: Object.freeze([...actors].map(([slot, entry]) => Object.freeze({
           slot, speciesId: entry.speciesId, entityId: entry.actor.entityId,
@@ -440,6 +618,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       }
       if (scene.parent) scene.parent.removeChild(scene);
       effectSprites?.dispose();
+      continuation?.destroy({children:true}); continuationTexture?.destroy(true);
+      fxLayer?.dispose();
+      if (debugHook && globalThis.__championshipBattleDiagnostics) delete globalThis.__championshipBattleDiagnostics;
       const shadowDisposal=groundShadows?.dispose();
       scene.destroy({ children: true });
       actors.clear();
@@ -448,4 +629,5 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       return disposal;
     }
   });
+  return presentation;
 }

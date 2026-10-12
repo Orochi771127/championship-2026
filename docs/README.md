@@ -1,5 +1,7 @@
 # Championship 2026 Documentation Hub
 
+- [2026-10-12 對戰動態演出：原作比例＋動態鏡頭＋技能與場地互動](reports/battle-dynamic-2026-10-12/REPORT_ZH_TW.md) · [招式名稱盤點與待審候選](reports/battle-move-names-2026-10-12/REVIEW_ZH_TW.md)
+
 - [2026-10-12 新遊戲贈禮信件五語品牌用詞修正](reports/opening-letter-brand-2026-10-12/REPORT_ZH_TW.md)
 
 - [2026-10-12 八蛋原作尺寸與 44 CSS px 觸控校準](reports/egg-native-sizing-2026-10-12/REPORT_ZH_TW.md)

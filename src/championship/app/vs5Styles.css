@@ -622,3 +622,33 @@
 .cm-vs5-field__loading-text { margin: 0; font-weight: var(--fw-strong); }
 .cm-vs5-field__loading[data-state="error"] { border-color: var(--c-danger-line); }
 .cm-vs5-field__loading[data-state="error"] .cm-vs5-field__loading-text { color: var(--c-danger-text); }
+
+/* ---------------- Dynamic arena presentation (Owner 2026-10-12) ----------------
+ * OWNER_APPROVED_ADAPTATION: the arena takes most of the screen and the camera
+ * frames the action, so the bands keep their order and content but not the
+ * 37.5% field height above. Overhead bars in the arena carry health at a glance,
+ * so both team rows become one compact line; empty slots are not drawn. The
+ * field stops growing near 1.2x its width (the camera's arena cover limit) and
+ * any spare height goes to the record band. ?battleFx=classic restores the bands.
+ */
+.cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-clock { flex: 0 0 auto; min-height: 32px; padding-block: 4px; }
+.cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-roster--opponent,
+.cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-roster--player { flex: 0 0 auto; flex-direction: row; min-height: 0; padding: 5px var(--sp-3); }
+.cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-field { flex: 1 1 0; min-height: 42%; max-height: min(122vw, 560px); aspect-ratio: auto; }
+.cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-log { flex: 0.001 0 auto; min-height: 58px; align-content: start; padding-top: var(--sp-3); }
+.cm-vs5-shell[data-fx="dynamic"] .cm-vs5-fighter[data-present="false"] { display: none; }
+.cm-vs5-shell[data-fx="dynamic"] .cm-vs5-roster .cm-vs5-fighter { flex: 1 1 0; min-width: 0; padding: 4px 6px; }
+.cm-vs5-shell[data-fx="dynamic"] .cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) {
+  grid-template-columns: 28px minmax(0, 1fr);
+  grid-template-areas: "portrait name" "portrait hpbar" "portrait tp";
+  row-gap: 2px;
+}
+.cm-vs5-shell[data-fx="dynamic"] .cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-fighter__portrait { width: 28px; height: 28px; }
+.cm-vs5-shell[data-fx="dynamic"] .cm-vs5-roster--player .cm-vs5-fighter__name { font-size: var(--fs-label); }
+.cm-vs5-shell[data-fx="dynamic"] .cm-vs5-roster--player .cm-vs5-fighter__hp { display: none; }
+.cm-vs5-shell[data-fx="dynamic"] .cm-vs5-field { border-block-width: 2px; }
+.cm-vs5-shell[data-fx="dynamic"] .cm-vs5-log__detail { color: var(--c-text-1); font-size: var(--fs-body-sm); font-weight: var(--fw-strong); }
+.cm-vs5-log__detail--fresh { animation: cm-vs5-feed-in var(--dur-base) var(--ease-out) both; }
+@keyframes cm-vs5-feed-in { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { :root:not([data-motion]) .cm-vs5-log__detail--fresh { animation: none; } }
+:root[data-motion="reduced"] .cm-vs5-log__detail--fresh { animation: none; }

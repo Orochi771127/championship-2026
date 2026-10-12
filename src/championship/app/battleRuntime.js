@@ -670,7 +670,8 @@ export function createBattleRuntime(options = {}) {
           exclusiveOwner:session.slots.find(c=>c?.field94)?.field94??0}),getNativeLifecycle:()=>({
           active:[...nativeLaunches].map(v=>v.snapshot()),recent:[...nativeHistory],impacts:impactEffects.diagnostics(),sound:soundEvents.snapshot(),
           timing:{pause:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f134),slowdown:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f138),issues:[...timingIssues]},
-          flash:{active:!session.ended&&impactFlashFrame===session.frame-1,frame:impactFlashFrame,source:'0210FC68'},
+          // No impact has flashed before the first frame (-1 === 0-1 is not a flash).
+          flash:{active:!session.ended&&impactFlashFrame>=0&&impactFlashFrame===session.frame-1,frame:impactFlashFrame,source:'0210FC68'},
           effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history]},reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
       unsubscribe = source.subscribe(() => {
         const view = source.getView();

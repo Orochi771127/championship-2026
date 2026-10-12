@@ -1,5 +1,26 @@
 # Championship Owner Direction
 
+## 2026-10-12 — Dynamic battle presentation: original proportions, moving camera, skill–field interaction
+
+The Owner shared two screen recordings of an arena fan game and asked for battles with that feel, built with the project's own original characters, moves and effects: 「我想讓我的戰鬥系統我的自創腳色們，也能擁由如同影片中的對戰動態效果感」, then 「就是全權交給你去設計跟處理…是我們自己的角色跟我們自己的招式絕招」. They then fixed the direction:
+
+> 「角色維持原作的相對大小，取消額外放大 1.5 倍；原創圖片的清晰度照樣保留。我剛才建議保留 1.5 倍當基準，就不採用了。動感靠鏡頭拉近、拉遠與跟拍，加上既有技能特效和場地的互動，例如落地揚塵、命中衝擊波、爆炸碎屑、短暫焦痕。這些要對準真正的出招位置、命中點與地面，不能只是浮在角色身上的光效。這就是給 Claude 的最新方向：原作角色比例＋動態鏡頭＋技能與場地互動；先做視覺演出，保持傷害、碰撞與勝負規則不變。」
+
+`OWNER_APPROVED_ADAPTATION` for the battle field presentation only:
+- **Proportions:** under the dynamic presentation, completed original bodies are drawn at the original relative size (no 1.5× display factor) at their full density-4 resolution. The 2026-10-10 1.5× factor remains only in the `?battleFx=classic` comparison view.
+- **Camera:** the camera follows the fight on the existing Pixi world container. It pushes in on a launch, follows live projectiles, pulls out to the whole group, punches and shakes on heavy hits, and holds on a knockout. Reduced motion keeps a steady shot.
+- **Skill–field interaction:** take-off and landing dust, run dust, hit shockwaves, explosion debris and short-lived scorch are placed at the real launch point (the effect actor's first position), the real contact point (the native impact or the projectile's last position) and the ground beneath it (native ground y, height removed). These are not glows floating on a body.
+- **Existing effects:** the Owner's own shared VFX pack and the existing native effect pool keep their timing and positions.
+- **Unchanged:** simulation, damage, collision, timing, RNG, verdicts and save; classic view via `?battleFx=classic`.
+
+Then the Owner authorized delivery: 「都做好後自審沒問題就commit 並push整合至main」, 「要發佈」 and 「都做好後就一樣commit並push然後發佈整合至main」 — self-review, commit, push, integration into `main` and publication through the existing Pages playtest.
+
+On move names the Owner directed: 「我沒有另外的招式表，請你從現有技能資料、角色對應和已完成的原創特效清單整理。保留穩定的技能 ID、角色關聯及傷害、屬性、射程等既有規則，區分『技能本身』與『共用特效配方』…先查找專案裡已有的核准名稱與五語翻譯，有就沿用；缺少名稱的…擬定原創名稱，標記為待審候選，不要把通用組字當成已核准的正式招名。先交一小批代表角色的對照表供審查…演出驗收可以先用技能 ID 對照。」
+- Display: only approved names are shown. The 30 special skills keep their approved five-language names. A species move without an approved name shows the character's name with 技能／絕招, and local acceptance (`?battleFxDebug`) shows the stable skill ID. The generic composed wording is withdrawn.
+- Candidates: the review batch of 24 moves across 9 characters, plus rule candidates for the remaining 541 moves, are in [the review document](../reports/battle-move-names-2026-10-12/REVIEW_ZH_TW.md). All are pending review and unused at runtime. No skill ID, owner link or value changes.
+
+Still not authorized: gameplay changes such as a beam clash; showing candidate names before approval.
+
 ## 2026-10-12 — Correct and publish the new-game gift-letter brand wording
 
 Owner reports the two TITLE opening gift letters still show 「數碼獸／數碼蛋」 (Sentinel_cfc02d51dad48191b422823d4462a773), then explicitly directs 「改完自己審查沒有問題就送上去commit跟push並發佈」 (Sentinel_34621683f3508191bb44e93ffef6ca07). Dot relays this bounded implementation and release: use the existing centralized 拍檔／培育蛋 terms across five locales, check the actual envelope/letter flow, preserve player names and old saves, run focused/CI/build/validate checks, then normal main push and existing Pages exact-SHA verification. Three existing product hashes may be updated for these three changed modules. Do not change registry-wide term approval, research, IDs, gameplay, player storage or unrelated assets. Keep Owner main and Claude's battle conflict untouched. The newly reported full-tutorial actor/texture and return-to-TITLE issues are a separate diagnostic task. See [scope and checks](../reports/opening-letter-brand-2026-10-12/REPORT_ZH_TW.md).

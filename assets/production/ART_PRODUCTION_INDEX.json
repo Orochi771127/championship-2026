@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 36,
+    "registeredRuntimeBundles": 37,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -267,6 +267,21 @@
       "shippingReady": false,
       "maturity": "HISTORICAL_R11_RETAINED_NOT_SELECTED",
       "publicReleasePermitted": false
+    },
+    {
+      "assetId": "art:vfx:original-shared:review:v1",
+      "manifestPath": "assets/production/vfx/original-shared-review-v1/manifest.json",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "ORIGINAL_REVIEW_CANDIDATE",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": false,
+      "reviewOnly": true,
+      "localOnly": true,
+      "runtimeScope": "LOOPBACK_REVIEW_ONLY",
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "maturity": "ORIGINAL_SHARED_BATTLE_VFX_OPT_IN_LOOPBACK_REVIEW"
     },
     {
       "assetId": "art:vfx:battle-effects:local-reference:v1",

@@ -956,7 +956,21 @@ export const TEXT_EN = Object.freeze({
   "裝置記憶體較少，自動使用省電。": "Your device has little memory, so Auto uses Power saving.",
   "裝置處理器核心較少，自動使用省電。": "Your device has few processor cores, so Auto uses Power saving.",
   "自動使用平衡。": "Auto uses Balanced.",
-  "畫面持續低於約 35 FPS，已自動改用省電（本次遊玩不會再改回）。": "Frames stayed below about 35 FPS, so Auto switched to Power saving (it won't switch back this session)."
+  "畫面持續低於約 35 FPS，已自動改用省電（本次遊玩不會再改回）。": "Frames stayed below about 35 FPS, so Auto switched to Power saving (it won't switch back this session).",
+  // Dynamic battle presentation (Owner 2026-10-12)
+  "絕招！": "SPECIAL!",
+  "對戰開始！": "FIGHT!",
+  "會心一擊！": "CRITICAL!",
+  "重擊！": "SMASH!",
+  "命中！": "HIT!",
+  "回復": "HEAL",
+  "倒下！": "DOWN!",
+  "{name}發動絕招「{move}」！": "{name} unleashes {move}!",
+  "{name}使出「{move}」！": "{name} uses {move}!",
+  "{name}倒下了！": "{name} is down!",
+  "技能": "SKILL",
+  "{name}發動絕招！": "{name} unleashes a special!",
+  "{name}使出技能！": "{name} uses a skill!"
 });
 
 // Proper nouns with no approved English form. English shows their approved

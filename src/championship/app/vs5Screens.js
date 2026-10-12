@@ -640,13 +640,24 @@ function eventLogBand(labels) {
   const line = element("p", "cm-vs5-log__line", "");
   const detail = element("p", "cm-vs5-log__detail", "");
   band.append(line, detail);
+  // The dynamic presentation's running record: the latest move or knockout.
+  let feed = "";
   return {
     band,
+    feed(text) {
+      feed = String(text ?? "");
+      if (band.dataset.ended !== "true") {
+        detail.textContent = feed;
+        detail.classList.remove("cm-vs5-log__detail--fresh");
+        void detail.offsetWidth;
+        detail.classList.add("cm-vs5-log__detail--fresh");
+      }
+    },
     update(outcome) {
       band.dataset.ended = String(outcome.ended);
       if (!outcome.ended) {
         line.textContent = uiText(labels.running);
-        detail.textContent = uiText("");
+        if (detail.textContent !== feed) detail.textContent = feed;
         return;
       }
       band.dataset.verdict = outcome.verdict;
@@ -708,13 +719,16 @@ function combatantCard(combatant, compact,hudArt=null) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
 
   const section = shell(root, "BATTLE_FIELD", "Battle");
   section.dataset.arena = frame.arena.identifier;
+  // Owner 2026-10-12: the dynamic presentation gives the arena most of the
+  // screen; the bands keep their order and content (styles in vs5Styles.css).
+  if (dynamicFx) section.dataset.fx = "dynamic";
   section.dataset.rosterEvidence = frame.rosterEvidence ?? "PRODUCT_AUTHORED";
 
   const opponents = element("ul", "cm-vs5-roster cm-vs5-roster--opponent");
@@ -796,6 +810,8 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   });
 
   return Object.freeze({
+    /** A line for the record band from the dynamic presentation. */
+    feed(text) { if (!viewDisposed) log.feed(text); },
     /** Called with each view the presentation source publishes. */
     render(view) {
       for (const combatant of view.combatants) {

@@ -1,0 +1,597 @@
+﻿moveId,status,owner,characterNameZh,entityId,tier,candidateZh,candidateEn,approvedZh,approvedEn,power,actionCost,elementSelect,targetMode,statusCode,recipeForm,recipeColour,recipeBank,recipeSharedBySpecies,ownerVfxTitles,basis
+0,RESERVED,RESERVED,,,basic,,,,,0,0,0,1,0,,,,,,
+1,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,挑釁,Taunt,0,5,0,0,0,,,,,,
+2,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,治癒 α,Heal α,0,5,0,1,14,projectile,neutral,1:battle#10,0,,
+3,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,治癒 β,Heal β,0,15,0,1,15,projectile,neutral,1:battle#10,0,,
+4,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,治癒 γ,Heal γ,0,35,0,1,16,projectile,neutral,1:battle#10,0,,
+5,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體治癒 α,Heal All α,0,10,0,2,17,projectile,neutral,1:battle#10,0,,
+6,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體治癒 β,Heal All β,0,25,0,2,18,projectile,neutral,1:battle#10,0,,
+7,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體治癒 γ,Heal All γ,0,50,0,2,19,projectile,neutral,1:battle#10,0,,
+8,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,淨化,Cleanse,0,5,0,1,20,projectile,neutral,1:battle#12,0,,
+9,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體淨化,Cleanse All,0,15,0,2,20,projectile,neutral,1:battle#12,0,,
+10,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,強化攻擊,Power Up,15,10,0,1,21,projectile,neutral,1:battle#17,0,,
+11,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體強化攻擊,Power Up All,15,30,0,2,21,projectile,neutral,1:battle#17,0,,
+12,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,防護,Guard,15,10,0,1,22,projectile,neutral,1:battle#18,0,,
+13,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體防護,Guard All,15,30,0,2,22,projectile,neutral,1:battle#18,0,,
+14,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,加速,Speed Up,15,10,0,1,23,projectile,neutral,1:battle#19,0,,
+15,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體加速,Speed Up All,15,30,0,2,23,projectile,neutral,1:battle#19,0,,
+16,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,感知,Sense,15,10,0,1,24,projectile,neutral,1:battle#46,0,,
+17,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體感知,Sense All,15,30,0,2,24,projectile,neutral,1:battle#46,0,,
+18,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,耐火,Fireproof,15,10,0,1,25,projectile,neutral,1:battle#12,0,,
+19,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體耐火,Fireproof All,15,30,0,2,25,projectile,neutral,1:battle#12,0,,
+20,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,耐水,Waterproof,15,10,0,1,26,projectile,neutral,1:battle#13,0,,
+21,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體耐水,Waterproof All,15,30,0,2,26,projectile,neutral,1:battle#13,0,,
+22,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,耐雷,Thunderproof,15,10,0,1,27,projectile,neutral,1:battle#14,0,,
+23,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體耐雷,Thunderproof All,15,30,0,2,27,projectile,neutral,1:battle#14,0,,
+24,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,耐光,Lightproof,15,10,0,1,28,projectile,neutral,1:battle#16,0,,
+25,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體耐光,Lightproof All,15,30,0,2,28,projectile,neutral,1:battle#16,0,,
+26,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,耐暗,Darkproof,15,10,0,1,29,projectile,neutral,1:battle#15,0,,
+27,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,全體耐暗,Darkproof All,15,30,0,2,29,projectile,neutral,1:battle#15,0,,
+28,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,復活 α,Revive α,0,5,0,0,0,,,,,,
+29,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,復活 β,Revive β,0,10,0,0,0,,,,,,
+30,APPROVED_EXISTING,SPECIAL_SKILL,,,support,,,勇氣,Courage,0,0,0,0,0,,,,,,
+31,CANDIDATE_RULE,SPECIES,鐵鈴芽,m101_caprimon,basic,鐵鈴撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+32,CANDIDATE_RULE,SPECIES,鐵鈴芽,m101_caprimon,ultimate,鐵鈴怒濤砲,,,,400,4,0,1,4,beam,water,32:walaser00#1,4,弧電迸裂（電擊）,絕招；beam／water；威力 400、消耗 4、狀態碼 4
+33,CANDIDATE_RULE,SPECIES,焰角丸,m102_koromon,basic,焰角撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+34,CANDIDATE_RULE,SPECIES,焰角丸,m102_koromon,ultimate,焰角怒濤彈,,,,400,4,0,1,0,projectile,water,6:bubble00#1,4,,絕招；projectile／water；威力 400、消耗 4
+35,CANDIDATE_RULE,SPECIES,芽螺寶,m103_tanemon,basic,芽螺撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+36,CANDIDATE_RULE,SPECIES,芽螺寶,m103_tanemon,ultimate,芽螺極拳,,,,400,4,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 400、消耗 4
+37,CANDIDATE_RULE,SPECIES,角絨仔,m104_tunomon,basic,角絨撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+38,CANDIDATE_RULE,SPECIES,角絨仔,m104_tunomon,ultimate,角絨極拳,,,,400,4,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 400、消耗 4
+39,CANDIDATE_RULE,SPECIES,聖暉絨,m105_tokomon,basic,聖暉撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+40,CANDIDATE_RULE,SPECIES,聖暉絨,m105_tokomon,ultimate,聖暉極彈,,,,400,4,0,1,0,projectile,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,絕招；projectile／neutral；威力 400、消耗 4
+41,CANDIDATE_RULE,SPECIES,霧鬃貓,m106_nyaromon,basic,霧鬃撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+42,CANDIDATE_RULE,SPECIES,霧鬃貓,m106_nyaromon,ultimate,霧鬃極拳,,,,400,4,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 400、消耗 4
+43,CANDIDATE_RULE,SPECIES,幽咬豆,m107_pagumon,basic,幽咬撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+44,CANDIDATE_RULE,SPECIES,幽咬豆,m107_pagumon,ultimate,幽咬極拳,,,,400,4,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 400、消耗 4
+45,CANDIDATE_RULE,SPECIES,花喙芽,m108_pyokomon,basic,花喙撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+46,CANDIDATE_RULE,SPECIES,花喙芽,m108_pyokomon,ultimate,花喙怒濤彈,,,,400,4,0,1,0,projectile,water,6:bubble00#1,4,,絕招；projectile／water；威力 400、消耗 4
+47,CANDIDATE_RULE,SPECIES,潮泡仔,m109_pukamon,basic,潮泡撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+48,CANDIDATE_RULE,SPECIES,潮泡仔,m109_pukamon,ultimate,潮泡怒濤彈,,,,400,4,2,1,0,projectile,water,6:bubble00#1,4,,絕招；projectile／water；威力 400、消耗 4
+49,CANDIDATE_RULE,SPECIES,熾芯仔,m110_petimemramon,basic,熾芯撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+50,CANDIDATE_RULE,SPECIES,熾芯仔,m110_petimemramon,ultimate,熾芯煉獄彈,,,,400,4,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 400、消耗 4
+51,CANDIDATE_REVIEW_BATCH,SPECIES,星糯核,m111_mochimon,basic,糯糯撞,MOCHI BUMP,,,100,0,0,1,0,,,,,,基本攻擊
+52,CANDIDATE_REVIEW_BATCH,SPECIES,星糯核,m111_mochimon,ultimate,星糯泡泡,STAR BUBBLE,,,300,4,0,1,7,projectile,water,6:bubble00#1,4,踏塵（落地沙塵命中）,絕招：泡泡投射（威力 300、消耗 4），附帶狀態碼 7
+53,CANDIDATE_REVIEW_BATCH,SPECIES,焰角幼龍,m112_bebydomon,basic,幼角頂,HORN BUMP,,,100,0,0,1,0,,,,,,基本攻擊
+54,CANDIDATE_REVIEW_BATCH,SPECIES,焰角幼龍,m112_bebydomon,ultimate,焰角火球,CINDER BALL,,,500,5,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,絕招：火球（威力 500、消耗 5）
+55,CANDIDATE_RULE,SPECIES,曉暉靈,m113_sunmon,basic,曉暉撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+56,CANDIDATE_RULE,SPECIES,曉暉靈,m113_sunmon,ultimate,曉暉聖曜彈,,,,500,5,3,1,0,projectile,light,9:lightball00#0,3,以太光球（能量投射物）,絕招；projectile／light；威力 500、消耗 5
+57,CANDIDATE_RULE,SPECIES,月紗靈,m114_moonmon,basic,月紗撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+58,CANDIDATE_RULE,SPECIES,月紗靈,m114_moonmon,ultimate,月紗冥暗爆,,,,500,5,4,1,0,area,dark,100:dark01#1,3,,絕招；area／dark；威力 500、消耗 5
+59,CANDIDATE_REVIEW_BATCH,SPECIES,鎧焰蜥,m201_agumon,basic,鎧焰爪,BLAZE CLAW,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；命中序列為燃燒爪擊類（共用：焰爪掠擊）
+60,CANDIDATE_REVIEW_BATCH,SPECIES,鎧焰蜥,m201_agumon,skill,焰鱗彈,EMBER SCALE,,,300,6,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,火屬投射（威力 300、消耗 6）；鱗片狀火彈呼應鎧甲蜥
+61,CANDIDATE_REVIEW_BATCH,SPECIES,鎧焰蜥,m201_agumon,ultimate,烈鎧焰砲,REX FLARE,,,400,10,1,1,0,beam,fire,13:beam01#0,2,翻騰爆炎（爆炸）,絕招：火屬光束（威力 400、消耗 10）收尾大爆炸
+62,CANDIDATE_RULE,SPECIES,岩甲穿獸,m202_armadimon,basic,岩甲掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+63,CANDIDATE_RULE,SPECIES,岩甲穿獸,m202_armadimon,skill,岩甲爪,,,,400,6,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／neutral；威力 400、消耗 6
+64,CANDIDATE_RULE,SPECIES,岩甲穿獸,m202_armadimon,ultimate,岩甲極拳,,,,500,10,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 500、消耗 10
+65,CANDIDATE_RULE,SPECIES,雷鬃獾,m203_elecmon,basic,雷鬃撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+66,CANDIDATE_RULE,SPECIES,雷鬃獾,m203_elecmon,ultimate,雷鬃天雷彈,,,,400,6,5,1,0,projectile,thunder,28:thunderball00#1,5,雷暴球（雷電投射物）,絕招；projectile／thunder；威力 400、消耗 6
+67,CANDIDATE_RULE,SPECIES,泡歌蝌,m204_otamamon,basic,泡歌掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+68,CANDIDATE_RULE,SPECIES,泡歌蝌,m204_otamamon,ultimate,泡歌怒濤彈,,,,300,6,2,1,4,projectile,water,35:bubble01#1,2,踏塵（落地沙塵命中）,絕招；projectile／water；威力 300、消耗 6、狀態碼 4
+69,CANDIDATE_RULE,SPECIES,蒼拳狼,m205_gaomon,basic,蒼拳撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+70,CANDIDATE_RULE,SPECIES,蒼拳狼,m205_gaomon,ultimate,蒼拳極拳,,,,500,8,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 500、消耗 8
+71,CANDIDATE_RULE,SPECIES,蒼拳狼,m205_gaomon,skill,蒼拳,,,,400,6,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 400、消耗 6
+72,CANDIDATE_RULE,SPECIES,蒼拳狼,m205_gaomon,skill,蒼拳狼拳,,,,100,12,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 100、消耗 12
+73,CANDIDATE_RULE,SPECIES,棘牙蜥,m206_gazimon,basic,棘牙掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+74,CANDIDATE_RULE,SPECIES,棘牙蜥,m206_gazimon,ultimate,棘牙冥暗霧,,,,300,6,4,1,2,smoke,dark,111:blacksmoke03#1,2,踏塵（落地沙塵命中）,絕招；smoke／dark；威力 300、消耗 6、狀態碼 2
+75,CANDIDATE_RULE,SPECIES,霜裘幼龍,m208_gabumon,basic,霜裘掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+76,CANDIDATE_RULE,SPECIES,霜裘幼龍,m208_gabumon,skill,霜裘火球,,,,300,6,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 300、消耗 6
+77,CANDIDATE_RULE,SPECIES,霜裘幼龍,m208_gabumon,ultimate,霜裘煉獄爪,,,,400,10,1,1,0,melee,fire,79:H_claw#0,19,三痕裂爪（爪擊命中） | 燼花燃燒（燃燒附加）,絕招；melee／fire；威力 400、消耗 10
+78,CANDIDATE_RULE,SPECIES,潮甲龜,m209_kamemon,basic,潮甲撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+79,CANDIDATE_RULE,SPECIES,潮甲龜,m209_kamemon,skill,潮甲指標彈,,,,300,6,0,1,0,projectile,metal,22:pointer00#1,1,,技能；projectile／metal；威力 300、消耗 6
+80,CANDIDATE_RULE,SPECIES,潮甲龜,m209_kamemon,ultimate,潮甲極拳,,,,400,10,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 400、消耗 10
+81,CANDIDATE_RULE,SPECIES,沼牙蜥,m210_gizamon,basic,沼牙撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+82,CANDIDATE_RULE,SPECIES,沼牙蜥,m210_gizamon,ultimate,沼牙極斬,,,,400,6,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 400、消耗 6
+83,CANDIDATE_RULE,SPECIES,燭芯靈,m211_candmon,basic,燭芯撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+84,CANDIDATE_RULE,SPECIES,燭芯靈,m211_candmon,ultimate,燭芯煉獄彈,,,,300,6,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 300、消耗 6
+85,CANDIDATE_RULE,SPECIES,葉角幼蟲,m214_kunemon,basic,葉角撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+86,CANDIDATE_RULE,SPECIES,葉角幼蟲,m214_kunemon,ultimate,葉角天雷彈,,,,300,6,5,1,3,projectile,thunder,28:thunderball00#1,5,雷暴球（雷電投射物） | 弧電迸裂（電擊）,絕招；projectile／thunder；威力 300、消耗 6、狀態碼 3
+87,CANDIDATE_RULE,SPECIES,晶礫兵,m217_gottumon,basic,晶礫撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+88,CANDIDATE_RULE,SPECIES,晶礫兵,m217_gottumon,ultimate,晶礫崩岩彈,,,,300,6,0,1,0,projectile,earth,24:rock00#1,1,,絕招；projectile／earth；威力 300、消耗 6
+89,CANDIDATE_RULE,SPECIES,夜牙小鬼,m218_goburimon,basic,夜牙撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+90,CANDIDATE_RULE,SPECIES,夜牙小鬼,m218_goburimon,ultimate,夜牙煉獄彈,,,,300,6,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 300、消耗 6
+91,CANDIDATE_RULE,SPECIES,潮鬃海豹,m219_gomamon,basic,潮鬃掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+92,CANDIDATE_RULE,SPECIES,潮鬃海豹,m219_gomamon,ultimate,潮鬃怒濤彈,,,,400,6,2,1,0,projectile,water,14:fish00#1,1,,絕招；projectile／water；威力 400、消耗 6
+93,CANDIDATE_RULE,SPECIES,雲耳獸,m221_terriermon,basic,雲耳撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+94,CANDIDATE_RULE,SPECIES,雲耳獸,m221_terriermon,ultimate,雲耳狂嵐息,,,,400,10,0,1,0,stream,wind,33:tatumaki00#1,2,,絕招；stream／wind；威力 400、消耗 10
+95,CANDIDATE_RULE,SPECIES,雲耳獸,m221_terriermon,skill,雲耳火球,,,,300,6,0,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 300、消耗 6
+96,CANDIDATE_RULE,SPECIES,雷角甲,m222_tentomon,basic,雷角射擊,,,,100,0,0,1,0,melee,neutral,1:battle#41,5,曳光彈（一般投射物）,基本攻擊；melee／neutral；威力 100、消耗 0
+97,CANDIDATE_RULE,SPECIES,雷角甲,m222_tentomon,ultimate,雷角天雷彈,,,,400,6,5,1,0,projectile,thunder,28:thunderball00#1,5,雷暴球（雷電投射物） | 弧電迸裂（電擊）,絕招；projectile／thunder；威力 400、消耗 6
+98,CANDIDATE_RULE,SPECIES,鐵玩暴龍,m223_toyagumon,basic,鐵玩掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+99,CANDIDATE_RULE,SPECIES,鐵玩暴龍,m223_toyagumon,ultimate,鐵玩煉獄彈,,,,300,6,1,1,0,projectile,fire,34:toyfire00#1,1,翻騰爆炎（爆炸）,絕招；projectile／fire；威力 300、消耗 6
+100,CANDIDATE_RULE,SPECIES,蒼冠幼龍,m224_dracomon,basic,蒼冠掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+101,CANDIDATE_RULE,SPECIES,蒼冠幼龍,m224_dracomon,skill,蒼冠火球,,,,300,5,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物）,技能；projectile／fire；威力 300、消耗 5
+102,CANDIDATE_RULE,SPECIES,蒼冠幼龍,m224_dracomon,skill,蒼冠刺,,,,500,10,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,技能；melee／neutral；威力 500、消耗 10
+103,CANDIDATE_RULE,SPECIES,蒼冠幼龍,m224_dracomon,ultimate,蒼冠煉獄砲,,,,600,12,1,1,0,beam,fire,13:beam01#0,2,翻騰爆炎（爆炸）,絕招；beam／fire；威力 600、消耗 12
+104,CANDIDATE_RULE,SPECIES,眠雲貘,m225_bakumon,basic,眠雲撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+105,CANDIDATE_RULE,SPECIES,眠雲貘,m225_bakumon,ultimate,眠雲冥暗霧,,,,400,6,4,1,0,smoke,dark,16:blacksmoke00#1,1,煤煙綻（黑煙）,絕招；smoke／dark；威力 400、消耗 6
+106,CANDIDATE_RULE,SPECIES,星環齒靈,m226_hagurumon,basic,星環撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+107,CANDIDATE_RULE,SPECIES,星環齒靈,m226_hagurumon,ultimate,星環冥暗彈,,,,400,6,4,1,1,projectile,dark,15:cogwheel00#1,1,緋紅瘴爆（瘴氣命中）,絕招；projectile／dark；威力 400、消耗 6、狀態碼 1
+108,CANDIDATE_RULE,SPECIES,曜翼團子,m227_patamon,basic,曜翼撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+109,CANDIDATE_RULE,SPECIES,曜翼團子,m227_patamon,skill,曜翼拳,,,,300,5,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 300、消耗 5
+110,CANDIDATE_RULE,SPECIES,曜翼團子,m227_patamon,ultimate,曜翼怒濤彈,,,,400,6,0,1,0,projectile,water,35:bubble01#1,2,,絕招；projectile／water；威力 400、消耗 6
+111,CANDIDATE_RULE,SPECIES,花藤幼姬,m228_palmon,basic,花藤撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+112,CANDIDATE_RULE,SPECIES,花藤幼姬,m228_palmon,ultimate,花藤極彈,,,,400,6,0,1,3,projectile,neutral,1:battle#44,8,棘藤鞭（藤蔓命中） | 弧電迸裂（電擊）,絕招；projectile／neutral；威力 400、消耗 6、狀態碼 3
+113,CANDIDATE_RULE,SPECIES,影牙小魔,m229_picodevimon,basic,影牙撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+114,CANDIDATE_RULE,SPECIES,影牙小魔,m229_picodevimon,ultimate,影牙冥暗彈,,,,300,6,4,1,0,projectile,dark,30:tyusyaki00#1,1,,絕招；projectile／dark；威力 300、消耗 6
+115,CANDIDATE_RULE,SPECIES,曉歌雛羽,m230_piyomon,basic,曉歌掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+116,CANDIDATE_RULE,SPECIES,曉歌雛羽,m230_piyomon,ultimate,曉歌煉獄彈,,,,400,6,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 400、消耗 6
+117,CANDIDATE_RULE,SPECIES,蒼風獵隼,m231_falcomon,basic,蒼風掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+118,CANDIDATE_RULE,SPECIES,蒼風獵隼,m231_falcomon,skill,蒼風爪,,,,400,6,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／neutral；威力 400、消耗 6
+119,CANDIDATE_RULE,SPECIES,蒼風獵隼,m231_falcomon,ultimate,蒼風極爪,,,,500,10,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,絕招；melee／neutral；威力 500、消耗 10
+120,CANDIDATE_RULE,SPECIES,蒼風獵隼,m231_falcomon,skill,蒼風飛鏢,,,,300,5,0,1,0,projectile,metal,27:syuriken00#1,1,,技能；projectile／metal；威力 300、消耗 5
+121,CANDIDATE_RULE,SPECIES,聖鈴幼犬,m232_plotmon,basic,聖鈴撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+122,CANDIDATE_RULE,SPECIES,聖鈴幼犬,m232_plotmon,ultimate,聖鈴怒濤砲,,,,400,6,0,1,3,beam,water,32:walaser00#1,4,弧電迸裂（電擊）,絕招；beam／water；威力 400、消耗 6、狀態碼 3
+123,CANDIDATE_RULE,SPECIES,花纓芽姬,m233_floramon,basic,花纓撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+124,CANDIDATE_RULE,SPECIES,花纓芽姬,m233_floramon,ultimate,花纓冥暗霧,,,,400,6,4,1,10,smoke,dark,65:blacksmoke01#1,1,緋紅瘴爆（瘴氣命中）,絕招；smoke／dark；威力 400、消耗 6、狀態碼 10
+125,CANDIDATE_RULE,SPECIES,菌冠菇獸,m235_mushmon,basic,菌冠撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+126,CANDIDATE_RULE,SPECIES,菌冠菇獸,m235_mushmon,ultimate,菌冠森羅彈,,,,150,10,0,1,2,projectile,nature,20:kinoko00#1,1,踏塵（落地沙塵命中）,絕招；projectile／nature；威力 150、消耗 10、狀態碼 2
+127,CANDIDATE_RULE,SPECIES,雪晶幼龍,m236_yukiagumon,basic,雪晶掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+128,CANDIDATE_RULE,SPECIES,雪晶幼龍,m236_yukiagumon,ultimate,雪晶怒濤息,,,,400,6,2,1,0,stream,water,36:fireball_w00#1,1,霜晶碎（冰晶）,絕招；stream／water；威力 400、消耗 6
+129,CANDIDATE_RULE,SPECIES,光綾狐,m237_renamon,basic,光綾掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+130,CANDIDATE_RULE,SPECIES,光綾狐,m237_renamon,ultimate,光綾鋼魂彈,,,,400,6,0,1,0,projectile,metal,18:hasyuriken00#1,1,,絕招；projectile／metal；威力 400、消耗 6
+131,CANDIDATE_RULE,SPECIES,曦冕幼獅,m238_coronamon,basic,曦冕撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+132,CANDIDATE_RULE,SPECIES,曦冕幼獅,m238_coronamon,skill,曦冕焰拳,,,,400,6,1,1,0,melee,fire,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中） | 燼花燃燒（燃燒附加）,技能；melee／fire；威力 400、消耗 6
+133,CANDIDATE_RULE,SPECIES,曦冕幼獅,m238_coronamon,skill,曦冕火球,,,,300,5,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 300、消耗 5
+134,CANDIDATE_RULE,SPECIES,曦冕幼獅,m238_coronamon,ultimate,曦冕煉獄拳,,,,450,10,1,1,0,melee,fire,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中） | 翻騰爆炎（爆炸）,絕招；melee／fire；威力 450、消耗 10
+135,CANDIDATE_RULE,SPECIES,月紗兔,m239_lunamon,basic,月紗掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+136,CANDIDATE_RULE,SPECIES,月紗兔,m239_lunamon,skill,月紗暗爪,,,,400,6,4,1,0,melee,dark,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／dark；威力 400、消耗 6
+137,CANDIDATE_RULE,SPECIES,月紗兔,m239_lunamon,skill,月紗水彈,,,,300,5,2,1,0,projectile,water,31:waterball00#1,1,,技能；projectile／water；威力 300、消耗 5
+138,CANDIDATE_RULE,SPECIES,月紗兔,m239_lunamon,ultimate,月紗怒濤彈,,,,450,10,2,1,0,projectile,water,117:ropear01#1,1,,絕招；projectile／water；威力 450、消耗 10
+139,CANDIDATE_RULE,SPECIES,灰燼幼龍,m240_kuroagumon,basic,灰燼掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+140,CANDIDATE_RULE,SPECIES,灰燼幼龍,m240_kuroagumon,ultimate,灰燼煉獄霧,,,,450,10,1,1,0,smoke,fire,66:blacksmoke02#1,1,燼花燃燒（燃燒附加）,絕招；smoke／fire；威力 450、消耗 10
+141,CANDIDATE_RULE,SPECIES,灰燼幼龍,m240_kuroagumon,skill,灰燼火球,,,,400,6,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 400、消耗 6
+142,CANDIDATE_RULE,SPECIES,幻紋幼獸,m241_psychemon,basic,幻紋射擊,,,,100,0,0,1,0,melee,neutral,1:battle#41,5,曳光彈（一般投射物）,基本攻擊；melee／neutral；威力 100、消耗 0
+143,CANDIDATE_RULE,SPECIES,幻紋幼獸,m241_psychemon,skill,幻紋落雷,,,,300,5,5,1,0,area,thunder,68:colorfulspark00#1,1,弧電迸裂（電擊）,技能；area／thunder；威力 300、消耗 5
+144,CANDIDATE_RULE,SPECIES,幻紋幼獸,m241_psychemon,ultimate,幻紋煉獄砲,,,,400,6,1,1,0,beam,fire,32:walaser00#1,4,燼花燃燒（燃燒附加）,絕招；beam／fire；威力 400、消耗 6
+145,CANDIDATE_RULE,SPECIES,蕾蕾花姬,m242_alraumon,basic,蕾蕾撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+146,CANDIDATE_RULE,SPECIES,蕾蕾花姬,m242_alraumon,ultimate,蕾蕾極彈,,,,400,6,0,1,1,projectile,neutral,1:battle#44,8,棘藤鞭（藤蔓命中） | 弧電迸裂（電擊）,絕招；projectile／neutral；威力 400、消耗 6、狀態碼 1
+147,CANDIDATE_RULE,SPECIES,闇羽使魔,m243_tsukaimon,basic,闇羽撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+148,CANDIDATE_RULE,SPECIES,闇羽使魔,m243_tsukaimon,skill,闇羽水雷射,,,,300,6,4,1,10,beam,dark,32:walaser00#1,4,緋紅瘴爆（瘴氣命中）,技能；beam／dark；威力 300、消耗 6、狀態碼 10
+149,CANDIDATE_RULE,SPECIES,闇羽使魔,m243_tsukaimon,ultimate,闇羽極拳,,,,400,10,0,1,2,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中） | 踏塵（落地沙塵命中）,絕招；melee／neutral；威力 400、消耗 10、狀態碼 2
+150,CANDIDATE_RULE,SPECIES,星角幼龍,m244_vmon,basic,星角撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+151,CANDIDATE_RULE,SPECIES,星角幼龍,m244_vmon,ultimate,星角極拳,,,,450,10,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 450、消耗 10
+152,CANDIDATE_RULE,SPECIES,星角幼龍,m244_vmon,skill,星角拳,,,,300,5,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 300、消耗 5
+153,CANDIDATE_RULE,SPECIES,裂焰幼龍,m255_guilmon,basic,裂焰掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+154,CANDIDATE_RULE,SPECIES,裂焰幼龍,m255_guilmon,skill,裂焰火球,,,,250,4,1,1,0,projectile,fire,7:fireball00#1,12,彗燼火球（投射物）,技能；projectile／fire；威力 250、消耗 4
+155,CANDIDATE_RULE,SPECIES,裂焰幼龍,m255_guilmon,skill,裂焰爪,,,,350,6,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／neutral；威力 350、消耗 6
+156,CANDIDATE_RULE,SPECIES,裂焰幼龍,m255_guilmon,ultimate,裂焰煉獄拳,,,,450,10,1,1,0,melee,fire,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／fire；威力 450、消耗 10
+157,CANDIDATE_RULE,SPECIES,晶鏈甲龍,m301_ankylomon,basic,晶鏈撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+158,CANDIDATE_RULE,SPECIES,晶鏈甲龍,m301_ankylomon,skill,晶鏈突進,,,,400,12,0,1,0,,,,,,技能；projectile／neutral；威力 400、消耗 12
+159,CANDIDATE_RULE,SPECIES,晶鏈甲龍,m301_ankylomon,ultimate,晶鏈極拳,,,,500,18,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 500、消耗 18
+160,CANDIDATE_RULE,SPECIES,極潮角獸,m303_ikkakumon,basic,極潮撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+161,CANDIDATE_RULE,SPECIES,極潮角獸,m303_ikkakumon,ultimate,極潮崩岩彈,,,,400,12,0,1,0,projectile,earth,29:tuno00#1,1,,絕招；projectile／earth；威力 400、消耗 12
+162,CANDIDATE_RULE,SPECIES,影紋術士,m304_wizarmon,basic,影紋撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+163,CANDIDATE_RULE,SPECIES,影紋術士,m304_wizarmon,ultimate,影紋天雷爆,,,,400,12,5,1,0,area,thunder,23:raiun00#1,1,弧電迸裂（電擊）,絕招；area／thunder；威力 400、消耗 12
+164,CANDIDATE_RULE,SPECIES,森核樹靈,m305_woodmon,basic,森核撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+165,CANDIDATE_RULE,SPECIES,森核樹靈,m305_woodmon,ultimate,森核極彈,,,,400,12,0,1,0,projectile,neutral,1:battle#44,8,棘藤鞭（藤蔓命中）,絕招；projectile／neutral；威力 400、消耗 12
+166,CANDIDATE_RULE,SPECIES,蒼穹飛龍,m306_airdramon,basic,蒼穹咬擊,,,,100,0,0,1,0,melee,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+167,CANDIDATE_RULE,SPECIES,蒼穹飛龍,m306_airdramon,ultimate,蒼穹狂嵐息,,,,500,18,0,1,0,stream,wind,33:tatumaki00#1,2,,絕招；stream／wind；威力 500、消耗 18
+168,CANDIDATE_RULE,SPECIES,蒼穹飛龍,m306_airdramon,skill,蒼穹風針,,,,400,12,0,1,0,projectile,wind,17:airneedle00#1,1,,技能；projectile／wind；威力 400、消耗 12
+169,CANDIDATE_RULE,SPECIES,曦羽聖使,m308_angemon,basic,曦羽撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+170,CANDIDATE_RULE,SPECIES,曦羽聖使,m308_angemon,ultimate,曦羽聖曜砲,,,,400,12,3,1,0,beam,light,12:beam00#0,19,稜光射線（能量光束）,絕招；beam／light；威力 400、消耗 12
+171,CANDIDATE_RULE,SPECIES,岩牙戰鬼,m310_orgemon,basic,岩牙撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+172,CANDIDATE_RULE,SPECIES,岩牙戰鬼,m310_orgemon,ultimate,岩牙煉獄彈,,,,400,12,0,1,0,projectile,fire,93:flamefist00#0,1,,絕招；projectile／fire；威力 400、消耗 12
+173,CANDIDATE_RULE,SPECIES,迅風獵狼,m311_gaogamon,basic,迅風咬擊,,,,100,0,0,1,0,melee,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+174,CANDIDATE_RULE,SPECIES,迅風獵狼,m311_gaogamon,skill,迅風拳,,,,150,22,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 150、消耗 22
+175,CANDIDATE_RULE,SPECIES,迅風獵狼,m311_gaogamon,skill,迅風彈,,,,300,10,0,1,0,projectile,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,技能；projectile／neutral；威力 300、消耗 10
+176,CANDIDATE_RULE,SPECIES,迅風獵狼,m311_gaogamon,ultimate,迅風煉獄砲,,,,450,12,0,1,0,beam,fire,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,絕招；beam／fire；威力 450、消耗 12
+177,CANDIDATE_RULE,SPECIES,星雷鍬,m312_kabuterimon,basic,星雷撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+178,CANDIDATE_RULE,SPECIES,星雷鍬,m312_kabuterimon,ultimate,星雷天雷彈,,,,450,12,5,1,0,projectile,thunder,9:lightball00#0,3,以太光球（能量投射物）,絕招；projectile／thunder；威力 450、消耗 12
+179,CANDIDATE_REVIEW_BATCH,SPECIES,爆風槍兔,m313_gargomon,basic,疾耳衝,HARE DASH,,,100,0,0,1,0,,,,,,基本攻擊；無特效欄位，以身體衝撞
+180,CANDIDATE_REVIEW_BATCH,SPECIES,爆風槍兔,m313_gargomon,ultimate,爆風連射,GALE BARRAGE,,,60,22,0,1,0,projectile,metal,19:kikanzyu00#1,1,連射彈幕（槍口焰／彈幕／命中）,絕招：連射型投射（威力 60、消耗 22），呼應槍兔
+181,CANDIDATE_REVIEW_BATCH,SPECIES,爆風槍兔,m313_gargomon,skill,槍兔突進,HARE LUNGE,,,60,12,0,1,0,,,,,,技能（威力 60、消耗 12）；無特效欄位的突進動作
+182,CANDIDATE_RULE,SPECIES,霜紋狼,m314_garurumon_va,basic,霜紋掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+183,CANDIDATE_RULE,SPECIES,霜紋狼,m314_garurumon_va,ultimate,霜紋煉獄彈,,,,400,12,1,1,0,projectile,fire,109:foxfire00#1,3,燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 400、消耗 12
+184,CANDIDATE_RULE,SPECIES,烈月狼,m315_garurumon_vi,basic,烈月掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+185,CANDIDATE_RULE,SPECIES,烈月狼,m315_garurumon_vi,ultimate,烈月煉獄彈,,,,400,12,1,1,0,projectile,fire,109:foxfire00#1,3,燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 400、消耗 12
+186,CANDIDATE_RULE,SPECIES,鋼城守衛,m316_guardromon,basic,鋼城撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+187,CANDIDATE_RULE,SPECIES,鋼城守衛,m316_guardromon,ultimate,鋼城鋼魂彈,,,,400,12,0,1,0,projectile,metal,21:missile00#1,3,,絕招；projectile／metal；威力 400、消耗 12
+188,CANDIDATE_RULE,SPECIES,蒼喙奇羽,m317_kiwimon,basic,蒼喙射擊,,,,100,0,0,1,0,melee,neutral,1:battle#41,5,曳光彈（一般投射物）,基本攻擊；melee／neutral；威力 100、消耗 0
+189,CANDIDATE_RULE,SPECIES,蒼喙奇羽,m317_kiwimon,ultimate,蒼喙煉獄襲,,,,80,22,0,1,0,character,fire,110:kiwimonsmall00#1,1,翻騰爆炎（爆炸）,絕招；character／fire；威力 80、消耗 22
+190,CANDIDATE_RULE,SPECIES,神焰九尾,m318_kyubimon,basic,神焰撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+191,CANDIDATE_RULE,SPECIES,神焰九尾,m318_kyubimon,ultimate,神焰煉獄彈,,,,400,12,1,1,0,projectile,fire,122:kyubimonfire#1,2,燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 400、消耗 12
+192,CANDIDATE_RULE,SPECIES,神焰九尾,m318_kyubimon,skill,神焰吐焰,,,,170,22,1,1,0,stream,fire,41:koenryu00#1,1,燼花燃燒（燃燒附加）,技能；stream／fire；威力 170、消耗 22
+193,CANDIDATE_RULE,SPECIES,裂顎暴龍,m320_graymon,basic,裂顎撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+194,CANDIDATE_RULE,SPECIES,裂顎暴龍,m320_graymon,skill,裂顎熔岩彈,,,,300,12,1,1,0,projectile,fire,51:magmaball01#1,5,熔岩彗核（熔岩投射物） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 300、消耗 12
+195,CANDIDATE_RULE,SPECIES,裂顎暴龍,m320_graymon,ultimate,裂顎極刺,,,,400,18,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,絕招；melee／neutral；威力 400、消耗 18
+196,CANDIDATE_RULE,SPECIES,星盤鐘靈,m321_clockmon,basic,星盤撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+197,CANDIDATE_RULE,SPECIES,星盤鐘靈,m321_clockmon,ultimate,星盤鋼魂拳,,,,500,18,0,1,3,melee,metal,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中） | 緋紅瘴爆（瘴氣命中）,絕招；melee／metal；威力 500、消耗 18、狀態碼 3
+198,CANDIDATE_RULE,SPECIES,斷空鋏皇,m322_kuwagamon,basic,斷空咬擊,,,,100,0,0,1,0,melee,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+199,CANDIDATE_RULE,SPECIES,斷空鋏皇,m322_kuwagamon,ultimate,斷空極斬,,,,400,12,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 400、消耗 12
+200,CANDIDATE_RULE,SPECIES,潮鳴蛙,m323_gekomon,basic,潮鳴撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+201,CANDIDATE_RULE,SPECIES,潮鳴蛙,m323_gekomon,ultimate,潮鳴心靈彈,,,,350,12,0,1,0,projectile,psychic,10:onpu00#0,4,,絕招；projectile／psychic；威力 350、消耗 12
+202,CANDIDATE_RULE,SPECIES,深潮烏賊,m324_gesomon,basic,深潮撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+203,CANDIDATE_RULE,SPECIES,深潮烏賊,m324_gesomon,ultimate,深潮冥暗息,,,,300,10,4,1,3,stream,dark,42:sumiburesu00#1,1,踏塵（落地沙塵命中）,絕招；stream／dark；威力 300、消耗 10、狀態碼 3
+204,CANDIDATE_RULE,SPECIES,深潮烏賊,m324_gesomon,skill,深潮拳,,,,100,22,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 100、消耗 22
+205,CANDIDATE_RULE,SPECIES,曠原角騎,m325_centalmon,basic,曠原撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+206,CANDIDATE_RULE,SPECIES,曠原角騎,m325_centalmon,ultimate,曠原聖曜砲,,,,400,12,3,1,0,beam,light,126:beam02#0,1,,絕招；beam／light；威力 400、消耗 12
+207,CANDIDATE_RULE,SPECIES,烈冠巨雞,m326_cockatrimon,basic,烈冠撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+208,CANDIDATE_RULE,SPECIES,烈冠巨雞,m326_cockatrimon,ultimate,烈冠冥暗砲,,,,300,12,4,1,8,beam,dark,127:beam03#0,3,緋紅瘴爆（瘴氣命中）,絕招；beam／dark；威力 300、消耗 12、狀態碼 8
+209,CANDIDATE_RULE,SPECIES,轟雷球核,m328_thanderballmon,basic,轟雷撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+210,CANDIDATE_RULE,SPECIES,轟雷球核,m328_thanderballmon,ultimate,轟雷天雷彈,,,,400,12,5,1,0,projectile,thunder,28:thunderball00#1,5,雷暴球（雷電投射物） | 弧電迸裂（電擊）,絕招；projectile／thunder；威力 400、消耗 12
+211,CANDIDATE_RULE,SPECIES,珊鎧殼獸,m329_shellmon,basic,珊鎧咬擊,,,,100,0,0,1,0,melee,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+212,CANDIDATE_RULE,SPECIES,珊鎧殼獸,m329_shellmon,ultimate,珊鎧怒濤彈,,,,400,12,2,1,0,projectile,water,112:waterball01#1,2,,絕招；projectile／water；威力 400、消耗 12
+213,CANDIDATE_RULE,SPECIES,地炎暴牙,m330_geograymon,basic,地炎撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+214,CANDIDATE_RULE,SPECIES,地炎暴牙,m330_geograymon,skill,地炎熔岩彈,,,,350,12,1,1,0,projectile,fire,51:magmaball01#1,5,熔岩彗核（熔岩投射物） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 350、消耗 12
+215,CANDIDATE_RULE,SPECIES,地炎暴牙,m330_geograymon,ultimate,地炎煉獄砲,,,,500,20,1,1,0,beam,fire,150:beam07#0,5,翻騰爆炎（爆炸）,絕招；beam／fire；威力 500、消耗 20
+216,CANDIDATE_RULE,SPECIES,地炎暴牙,m330_geograymon,skill,地炎刺,,,,400,16,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,技能；melee／neutral；威力 400、消耗 16
+217,CANDIDATE_RULE,SPECIES,蒼潮海龍,m331_seadramon,basic,蒼潮撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+218,CANDIDATE_RULE,SPECIES,蒼潮海龍,m331_seadramon,skill,蒼潮拳,,,,60,16,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 60、消耗 16
+219,CANDIDATE_RULE,SPECIES,蒼潮海龍,m331_seadramon,ultimate,蒼潮冰獄彈,,,,350,12,2,1,0,projectile,ice,48:icearrow00#1,1,霜晶碎（冰晶）,絕招；projectile／ice；威力 350、消耗 12
+220,CANDIDATE_RULE,SPECIES,沼核怪,m333_scumon,basic,沼核撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+221,CANDIDATE_RULE,SPECIES,沼核怪,m333_scumon,ultimate,沼核腐毒彈,,,,350,12,0,1,0,projectile,toxic,8:unchi00#0,6,,絕招；projectile／toxic；威力 350、消耗 12
+222,CANDIDATE_RULE,SPECIES,星彩武星,m334_starmon,basic,星彩撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+223,CANDIDATE_RULE,SPECIES,星彩武星,m334_starmon,ultimate,星彩聖曜彈,,,,50,22,0,1,0,projectile,light,52:star00#1,1,,絕招；projectile／light；威力 50、消耗 22
+224,CANDIDATE_RULE,SPECIES,聖刃女武,m337_darcmon,basic,聖刃斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+225,CANDIDATE_RULE,SPECIES,聖刃女武,m337_darcmon,ultimate,聖刃極斬,,,,400,12,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 400、消耗 12
+226,CANDIDATE_RULE,SPECIES,夜獄暴龍,m338_darktyranomon,basic,夜獄掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+227,CANDIDATE_RULE,SPECIES,夜獄暴龍,m338_darktyranomon,ultimate,夜獄煉獄砲,,,,400,16,1,1,0,beam,fire,150:beam07#0,5,翻騰爆炎（爆炸）,絕招；beam／fire；威力 400、消耗 16
+228,CANDIDATE_RULE,SPECIES,赤棘暴龍,m339_tyranomon,basic,赤棘掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+229,CANDIDATE_RULE,SPECIES,赤棘暴龍,m339_tyranomon,ultimate,赤棘煉獄砲,,,,300,12,1,1,0,beam,fire,138:beam04#0,1,熾焰射線（火焰光束） | 翻騰爆炎（爆炸）,絕招；beam／fire；威力 300、消耗 12
+230,CANDIDATE_RULE,SPECIES,聖鈴靈貓,m340_tailmon,basic,聖鈴掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+231,CANDIDATE_RULE,SPECIES,聖鈴靈貓,m340_tailmon,ultimate,聖鈴極爪,,,,500,16,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,絕招；melee／neutral；威力 500、消耗 16
+232,CANDIDATE_RULE,SPECIES,聖鈴靈貓,m340_tailmon,skill,聖鈴瞳光,,,,300,12,3,1,1,projectile,light,40:catseye00#1,1,稜星閃（星芒閃光）,技能；projectile／light；威力 300、消耗 12、狀態碼 1
+233,CANDIDATE_RULE,SPECIES,淵棘邪龍,m341_devidramon,basic,淵棘掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+234,CANDIDATE_RULE,SPECIES,淵棘邪龍,m341_devidramon,ultimate,淵棘極爪,,,,500,16,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,絕招；melee／neutral；威力 500、消耗 16
+235,CANDIDATE_RULE,SPECIES,闇翼魔使,m342_devimon,basic,闇翼掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+236,CANDIDATE_RULE,SPECIES,闇翼魔使,m342_devimon,ultimate,闇翼極刺,,,,400,12,0,1,13,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中） | 微光閃爍（光點）,絕招；melee／neutral；威力 400、消耗 12、狀態碼 13
+237,CANDIDATE_RULE,SPECIES,花刺皇后,m343_togemon,basic,花刺撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+238,CANDIDATE_RULE,SPECIES,花刺皇后,m343_togemon,ultimate,花刺崩岩彈,,,,150,18,0,1,0,projectile,earth,53:toge00#1,3,,絕招；projectile／earth；威力 150、消耗 18
+239,CANDIDATE_RULE,SPECIES,巖盾陸龜,m345_tortamon,basic,巖盾撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+240,CANDIDATE_RULE,SPECIES,巖盾陸龜,m345_tortamon,ultimate,巖盾崩岩彈,,,,60,12,0,1,0,projectile,earth,53:toge00#1,3,,絕招；projectile／earth；威力 60、消耗 12
+241,CANDIDATE_RULE,SPECIES,鏽泥躍獸,m346_numemon,basic,鏽泥撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+242,CANDIDATE_RULE,SPECIES,鏽泥躍獸,m346_numemon,ultimate,鏽泥腐毒彈,,,,300,12,0,1,0,projectile,toxic,8:unchi00#0,6,,絕招；projectile／toxic；威力 300、消耗 12
+243,CANDIDATE_RULE,SPECIES,蝕影幽靈,m347_bakemon,basic,蝕影撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+244,CANDIDATE_RULE,SPECIES,蝕影幽靈,m347_bakemon,skill,蝕影詛咒,,,,300,12,0,1,0,area,dark,120:bakemoncurse00#1,2,,技能；area／dark；威力 300、消耗 12
+245,CANDIDATE_RULE,SPECIES,蝕影幽靈,m347_bakemon,ultimate,蝕影冥暗彈,,,,400,18,4,1,9,projectile,dark,45:deathcharm00#1,1,緋紅瘴爆（瘴氣命中）,絕招；projectile／dark；威力 400、消耗 18、狀態碼 9
+246,CANDIDATE_RULE,SPECIES,曦炎巨鳥,m349_bardramon,basic,曦炎掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+247,CANDIDATE_RULE,SPECIES,曦炎巨鳥,m349_bardramon,ultimate,曦炎煉獄彈,,,,150,18,1,1,0,projectile,fire,46:firewing00#1,1,燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 150、消耗 18
+248,CANDIDATE_RULE,SPECIES,苔核花衛,m351_vagimon,basic,苔核鞭擊,,,,100,0,0,1,0,melee,neutral,1:battle#44,8,棘藤鞭（藤蔓命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+249,CANDIDATE_RULE,SPECIES,苔核花衛,m351_vagimon,ultimate,苔核腐毒彈,,,,300,12,0,1,0,projectile,toxic,8:unchi00#0,6,,絕招；projectile／toxic；威力 300、消耗 12
+250,CANDIDATE_RULE,SPECIES,銳啄晨隼,m352_peckmon,basic,銳啄射擊,,,,100,0,0,1,0,melee,neutral,1:battle#41,5,曳光彈（一般投射物）,基本攻擊；melee／neutral；威力 100、消耗 0
+251,CANDIDATE_RULE,SPECIES,銳啄晨隼,m352_peckmon,ultimate,銳啄極衝,,,,400,18,0,1,0,,,,,,絕招；projectile／neutral；威力 400、消耗 18
+252,CANDIDATE_RULE,SPECIES,銳啄晨隼,m352_peckmon,skill,銳啄火翼,,,,100,12,0,1,0,projectile,fire,114:firewing02#1,1,,技能；projectile／fire；威力 100、消耗 12
+253,CANDIDATE_RULE,SPECIES,銳啄晨隼,m352_peckmon,skill,銳啄刺,,,,50,22,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,技能；melee／neutral；威力 50、消耗 22
+254,CANDIDATE_REVIEW_BATCH,SPECIES,焰核炎靈,m353_meramon,basic,焰核掌,PYRE PALM,,,100,0,0,1,0,,,,,,基本攻擊
+255,CANDIDATE_REVIEW_BATCH,SPECIES,焰核炎靈,m353_meramon,ultimate,炎靈核爆拳,CORE BURST FIST,,,400,12,1,1,0,melee,fire,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中） | 燼花燃燒（燃燒附加）,絕招：火屬拳擊（威力 400）＋燃燒；原作特寫鏡頭招式
+256,CANDIDATE_RULE,SPECIES,霜鬃雪猿,m354_mojyamon,basic,霜鬃撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+257,CANDIDATE_RULE,SPECIES,霜鬃雪猿,m354_mojyamon,skill,霜鬃冰角,,,,300,12,2,1,0,projectile,ice,49:koorituno00#1,1,霜晶碎（冰晶）,技能；projectile／ice；威力 300、消耗 12
+258,CANDIDATE_RULE,SPECIES,霜鬃雪猿,m354_mojyamon,ultimate,霜鬃崩岩彈,,,,400,18,0,1,0,projectile,earth,43:bone00#1,1,,絕招；projectile／earth；威力 400、消耗 18
+259,CANDIDATE_RULE,SPECIES,曜角鎧龍,m355_monochromon,basic,曜角撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+260,CANDIDATE_RULE,SPECIES,曜角鎧龍,m355_monochromon,ultimate,曜角極斬,,,,400,18,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 400、消耗 18
+261,CANDIDATE_RULE,SPECIES,曜角鎧龍,m355_monochromon,skill,曜角熔岩彈,,,,300,12,1,1,0,projectile,fire,50:magmaball00#1,1,燼花燃燒（燃燒附加）,技能；projectile／fire；威力 300、消耗 12
+262,CANDIDATE_RULE,SPECIES,雪燈靈偶,m356_yukidarumon,basic,雪燈撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+263,CANDIDATE_RULE,SPECIES,雪燈靈偶,m356_yukidarumon,ultimate,雪燈怒濤拳,,,,300,12,2,1,0,melee,water,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／water；威力 300、消耗 12
+264,CANDIDATE_RULE,SPECIES,曙刃天駒,m357_unimon,basic,曙刃射擊,,,,100,0,0,1,0,melee,neutral,1:battle#41,5,曳光彈（一般投射物）,基本攻擊；melee／neutral；威力 100、消耗 0
+265,CANDIDATE_RULE,SPECIES,曙刃天駒,m357_unimon,ultimate,曙刃聖曜彈,,,,400,12,3,1,0,projectile,light,9:lightball00#0,3,以太光球（能量投射物）,絕招；projectile／light；威力 400、消耗 12
+266,CANDIDATE_RULE,SPECIES,緋尾妖狐,m358_youkomon,basic,緋尾撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+267,CANDIDATE_RULE,SPECIES,緋尾妖狐,m358_youkomon,ultimate,緋尾煉獄彈,,,,300,12,1,1,0,projectile,fire,122:kyubimonfire#1,2,燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 300、消耗 12
+268,CANDIDATE_RULE,SPECIES,緋尾妖狐,m358_youkomon,skill,緋尾吐焰,,,,150,18,1,1,0,stream,fire,145:koenryu01#1,1,燼花燃燒（燃燒附加）,技能；stream／fire；威力 150、消耗 18
+269,CANDIDATE_RULE,SPECIES,迅影猞王,m359_rynxmon,basic,迅影撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+270,CANDIDATE_RULE,SPECIES,迅影猞王,m359_rynxmon,ultimate,迅影煉獄彈,,,,350,12,1,1,0,projectile,fire,132:leomonhed00#0,4,炎獅頭彈（共用投射＋命中） | 燼花燃燒（燃燒附加）,絕招；projectile／fire；威力 350、消耗 12
+271,CANDIDATE_RULE,SPECIES,腐沼核獸,m362_raremon,basic,腐沼撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+272,CANDIDATE_RULE,SPECIES,腐沼核獸,m362_raremon,ultimate,腐沼腐毒彈,,,,350,12,0,1,0,projectile,toxic,8:unchi00#0,6,,絕招；projectile／toxic；威力 350、消耗 12
+273,CANDIDATE_RULE,SPECIES,日曜獅,m363_leomon,basic,日曜撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+274,CANDIDATE_RULE,SPECIES,日曜獅,m363_leomon,ultimate,日曜煉獄彈,,,,420,12,0,1,0,projectile,fire,132:leomonhed00#0,4,炎獅頭彈（共用投射＋命中）,絕招；projectile／fire；威力 420、消耗 12
+275,CANDIDATE_RULE,SPECIES,血棘花衛,m364_redvagimon,basic,血棘鞭擊,,,,100,0,0,1,0,melee,neutral,1:battle#44,8,棘藤鞭（藤蔓命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+276,CANDIDATE_RULE,SPECIES,血棘花衛,m364_redvagimon,ultimate,血棘冥暗霧,,,,350,12,4,1,0,smoke,dark,111:blacksmoke03#1,2,,絕招；smoke／dark；威力 350、消耗 12
+277,CANDIDATE_RULE,SPECIES,天鋒核龍,m366_coredramon_ten,basic,天鋒撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+278,CANDIDATE_RULE,SPECIES,天鋒核龍,m366_coredramon_ten,skill,天鋒熔岩彈,,,,300,12,1,1,0,projectile,fire,107:magmaball03#1,3,,技能；projectile／fire；威力 300、消耗 12
+279,CANDIDATE_RULE,SPECIES,天鋒核龍,m366_coredramon_ten,skill,天鋒拳,,,,450,18,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 450、消耗 18
+280,CANDIDATE_RULE,SPECIES,天鋒核龍,m366_coredramon_ten,ultimate,天鋒煉獄砲,,,,550,22,0,1,0,beam,fire,150:beam07#0,5,翻騰爆炎（爆炸）,絕招；beam／fire；威力 550、消耗 22
+281,CANDIDATE_RULE,SPECIES,深淵核龍,m367_coredramon_ti,basic,深淵撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+282,CANDIDATE_RULE,SPECIES,深淵核龍,m367_coredramon_ti,skill,深淵熔岩彈,,,,300,12,1,1,0,projectile,fire,108:magmaball04#1,1,,技能；projectile／fire；威力 300、消耗 12
+283,CANDIDATE_RULE,SPECIES,深淵核龍,m367_coredramon_ti,skill,深淵拳,,,,450,18,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 450、消耗 18
+284,CANDIDATE_RULE,SPECIES,深淵核龍,m367_coredramon_ti,ultimate,深淵煉獄砲,,,,550,22,0,1,0,beam,fire,150:beam07#0,5,翻騰爆炎（爆炸）,絕招；beam／fire；威力 550、消耗 22
+285,CANDIDATE_RULE,SPECIES,聖焰獅皇,m368_firamon,basic,聖焰撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+286,CANDIDATE_RULE,SPECIES,聖焰獅皇,m368_firamon,ultimate,聖焰煉獄拳,,,,500,18,1,1,0,melee,fire,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中） | 燼花燃燒（燃燒附加）,絕招；melee／fire；威力 500、消耗 18
+287,CANDIDATE_RULE,SPECIES,聖焰獅皇,m368_firamon,skill,聖焰爪,,,,400,12,1,1,0,melee,fire,79:H_claw#0,19,三痕裂爪（爪擊命中） | 燼花燃燒（燃燒附加）,技能；melee／fire；威力 400、消耗 12
+288,CANDIDATE_RULE,SPECIES,聖焰獅皇,m368_firamon,skill,聖焰熔岩彈,,,,300,12,1,1,0,projectile,fire,51:magmaball01#1,5,熔岩彗核（熔岩投射物） | 翻騰爆炎（爆炸）,技能；projectile／fire；威力 300、消耗 12
+289,CANDIDATE_RULE,SPECIES,月影羽兔,m369_lekismon,basic,月影撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+290,CANDIDATE_RULE,SPECIES,月影羽兔,m369_lekismon,skill,月影水彈,,,,300,12,2,1,4,projectile,water,112:waterball01#1,2,踏塵（落地沙塵命中）,技能；projectile／water；威力 300、消耗 12、狀態碼 4
+291,CANDIDATE_RULE,SPECIES,月影羽兔,m369_lekismon,skill,月影箭,,,,400,12,2,1,0,projectile,water,89:lekismonarrow00#1,2,,技能；projectile／water；威力 400、消耗 12
+292,CANDIDATE_RULE,SPECIES,月影羽兔,m369_lekismon,ultimate,月影極拳,,,,500,18,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 500、消耗 18
+293,CANDIDATE_RULE,SPECIES,霜獄魔翼,m370_icedevimon,basic,霜獄掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+294,CANDIDATE_RULE,SPECIES,霜獄魔翼,m370_icedevimon,ultimate,霜獄怒濤刺,,,,500,18,2,1,0,melee,water,82:H_piercing#0,14,貫槍突刺（穿刺命中） | 霜晶碎（冰晶）,絕招；melee／water；威力 500、消耗 18
+295,CANDIDATE_RULE,SPECIES,霜獄魔翼,m370_icedevimon,skill,霜獄激流砲,,,,300,12,2,1,0,beam,water,12:beam00#0,19,稜光射線（能量光束） | 霜晶碎（冰晶）,技能；beam／water；威力 300、消耗 12
+296,CANDIDATE_RULE,SPECIES,荒牙狼王,m371_grurumon,basic,荒牙掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+297,CANDIDATE_RULE,SPECIES,荒牙狼王,m371_grurumon,skill,荒牙熔岩彈,,,,350,12,1,1,0,projectile,fire,51:magmaball01#1,5,熔岩彗核（熔岩投射物） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 350、消耗 12
+298,CANDIDATE_RULE,SPECIES,荒牙狼王,m371_grurumon,ultimate,荒牙極彈,,,,450,18,0,1,0,projectile,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,絕招；projectile／neutral；威力 450、消耗 18
+299,CANDIDATE_REVIEW_BATCH,SPECIES,腐泥滑怪,m372_geremon,basic,泥沼拍,MUCK SLAP,,,100,0,0,1,0,,,,,,基本攻擊
+300,CANDIDATE_REVIEW_BATCH,SPECIES,腐泥滑怪,m372_geremon,ultimate,腐泥團,MIRE GLOB,,,400,12,0,1,0,projectile,toxic,8:unchi00#0,6,,絕招：泥團投射（威力 400、消耗 12）
+301,CANDIDATE_RULE,SPECIES,霜祈巫靈,m374_sorcerimon,basic,霜祈撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+302,CANDIDATE_RULE,SPECIES,霜祈巫靈,m374_sorcerimon,ultimate,霜祈冰獄爆,,,,500,18,2,1,0,area,ice,136:yukigumo00#1,1,霜晶碎（冰晶）,絕招；area／ice；威力 500、消耗 18
+303,CANDIDATE_RULE,SPECIES,霜祈巫靈,m374_sorcerimon,skill,霜祈暴風雪,,,,400,12,2,1,0,stream,ice,137:snowstorm#1,1,,技能；stream／ice；威力 400、消耗 12
+304,CANDIDATE_RULE,SPECIES,赤冠風禽,m375_akatorimon,basic,赤冠撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+305,CANDIDATE_RULE,SPECIES,赤冠風禽,m375_akatorimon,ultimate,赤冠冥暗砲,,,,400,12,4,1,8,beam,dark,127:beam03#0,3,緋紅瘴爆（瘴氣命中）,絕招；beam／dark；威力 400、消耗 12、狀態碼 8
+306,CANDIDATE_RULE,SPECIES,闇羽曦龍,m376_saverdramon,basic,闇羽掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+307,CANDIDATE_RULE,SPECIES,闇羽曦龍,m376_saverdramon,ultimate,闇羽極爪,,,,500,22,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,絕招；melee／neutral；威力 500、消耗 22
+308,CANDIDATE_RULE,SPECIES,闇羽曦龍,m376_saverdramon,skill,闇羽火翼,,,,150,18,1,1,0,projectile,fire,113:firewing01#1,1,燼花燃燒（燃燒附加）,技能；projectile／fire；威力 150、消耗 18
+309,CANDIDATE_RULE,SPECIES,冰核石靈,m377_icemon,basic,冰核撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+310,CANDIDATE_RULE,SPECIES,冰核石靈,m377_icemon,ultimate,冰核冰獄彈,,,,400,12,2,1,0,projectile,ice,88:icerock00#1,1,霜晶碎（冰晶）,絕招；projectile／ice；威力 400、消耗 12
+311,CANDIDATE_RULE,SPECIES,蒼電迅龍,m378_vdramon,basic,蒼電撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+312,CANDIDATE_RULE,SPECIES,蒼電迅龍,m378_vdramon,basic,蒼電迅撞擊,,,,300,12,0,1,0,beam,neutral,147:beam06#0,1,,基本攻擊；beam／neutral；威力 300、消耗 12
+313,CANDIDATE_RULE,SPECIES,蒼電迅龍,m378_vdramon,ultimate,蒼電極拳,,,,90,22,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 90、消耗 22
+314,CANDIDATE_RULE,SPECIES,曜脈戰龍,m379_growmon,basic,曜脈掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+315,CANDIDATE_RULE,SPECIES,曜脈戰龍,m379_growmon,basic,曜脈斬擊,,,,300,12,5,1,3,melee,thunder,80:H_Slashtop#0,22,鋼月斬（斬擊命中） | 弧電迸裂（電擊）,基本攻擊；melee／thunder；威力 300、消耗 12、狀態碼 3
+316,CANDIDATE_RULE,SPECIES,曜脈戰龍,m379_growmon,skill,曜脈熔岩彈,,,,400,18,1,1,0,projectile,fire,51:magmaball01#1,5,熔岩彗核（熔岩投射物） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 400、消耗 18
+317,CANDIDATE_RULE,SPECIES,曜脈戰龍,m379_growmon,ultimate,曜脈天雷爪,,,,500,22,5,1,3,melee,thunder,79:H_claw#0,19,熔岩彗核（熔岩投射物） | 三痕裂爪（爪擊命中） | 弧電迸裂（電擊）,絕招；melee／thunder；威力 500、消耗 22、狀態碼 3
+318,CANDIDATE_RULE,SPECIES,煌角皇甲,m401_atlurkabuterimon,basic,煌角撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+319,CANDIDATE_RULE,SPECIES,煌角皇甲,m401_atlurkabuterimon,ultimate,煌角極刺,,,,400,35,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,絕招；melee／neutral；威力 400、消耗 35
+320,CANDIDATE_RULE,SPECIES,煌角皇甲,m401_atlurkabuterimon,skill,煌角光球,,,,300,25,5,1,0,projectile,thunder,74:lightball01#1,2,,技能；projectile／thunder；威力 300、消耗 25
+321,CANDIDATE_RULE,SPECIES,裂潮異蝦,m402_anomalocarimon,basic,裂潮掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+322,CANDIDATE_RULE,SPECIES,裂潮異蝦,m402_anomalocarimon,skill,裂潮月華,,,,300,25,0,1,0,area,light,44:crescentmoon00#1,3,金月雙刃（發射／飛行／命中）,技能；area／light；威力 300、消耗 25
+323,CANDIDATE_RULE,SPECIES,裂潮異蝦,m402_anomalocarimon,ultimate,裂潮極斬,,,,400,35,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 400、消耗 35
+324,CANDIDATE_RULE,SPECIES,星衛機神,m403_andromon,basic,星衛撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+325,CANDIDATE_RULE,SPECIES,星衛機神,m403_andromon,skill,星衛飛彈,,,,300,25,0,1,0,projectile,metal,39:missile01#1,4,雙發飛彈（發射→飛行→爆炸）,技能；projectile／metal；威力 300、消耗 25
+326,CANDIDATE_RULE,SPECIES,星衛機神,m403_andromon,ultimate,星衛聖曜斬,,,,420,35,3,1,0,melee,light,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／light；威力 420、消耗 35
+327,CANDIDATE_RULE,SPECIES,狂奏猿王,m404_etemon,basic,狂奏撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+328,CANDIDATE_RULE,SPECIES,狂奏猿王,m404_etemon,skill,狂奏音波,,,,300,25,4,1,10,projectile,dark,10:onpu00#0,4,緋紅瘴爆（瘴氣命中）,技能；projectile／dark；威力 300、消耗 25、狀態碼 10
+329,CANDIDATE_RULE,SPECIES,狂奏猿王,m404_etemon,ultimate,狂奏冥暗爆,,,,420,35,4,1,0,area,dark,100:dark01#1,3,,絕招；area／dark；威力 420、消耗 35
+330,CANDIDATE_RULE,SPECIES,曦紗天姬,m405_angewomon,basic,曦紗撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+331,CANDIDATE_RULE,SPECIES,曦紗天姬,m405_angewomon,skill,曦紗聖箭,,,,300,25,3,1,0,projectile,light,47:holyarrow#1,1,弧電迸裂（電擊）,技能；projectile／light；威力 300、消耗 25
+332,CANDIDATE_RULE,SPECIES,曦紗天姬,m405_angewomon,ultimate,曦紗聖曜爆,,,,420,35,3,1,0,area,light,102:heaven00#0,2,,絕招；area／light；威力 420、消耗 35
+333,CANDIDATE_RULE,SPECIES,闇鋏皇甲,m406_oukuwamon,basic,闇鋏撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+334,CANDIDATE_RULE,SPECIES,闇鋏皇甲,m406_oukuwamon,ultimate,闇鋏極斬,,,,300,25,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 300、消耗 25
+335,CANDIDATE_RULE,SPECIES,闇鋏皇甲,m406_oukuwamon,skill,闇鋏鉗擊,,,,90,42,0,1,0,character,metal,92:oukuwamon#0,1,巨鍬形蟲獸形象特效（重用原創 Main 圖格）,技能；character／metal；威力 90、消耗 42
+336,CANDIDATE_RULE,SPECIES,曜羽烈鳳,m407_gurudamon,basic,曜羽撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+337,CANDIDATE_RULE,SPECIES,曜羽烈鳳,m407_gurudamon,ultimate,曜羽極拳,,,,420,35,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 420、消耗 35
+338,CANDIDATE_RULE,SPECIES,曜羽烈鳳,m407_gurudamon,skill,曜羽吐焰,,,,300,25,1,1,0,stream,fire,54:firehurricane00#1,1,燼花燃燒（燃燒附加）,技能；stream／fire；威力 300、消耗 25
+339,CANDIDATE_RULE,SPECIES,廢都王桶,m408_gerbemon,basic,廢都撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+340,CANDIDATE_RULE,SPECIES,廢都王桶,m408_gerbemon,skill,廢都泥團,,,,300,25,0,1,0,projectile,toxic,8:unchi00#0,6,,技能；projectile／toxic；威力 300、消耗 25
+341,CANDIDATE_RULE,SPECIES,廢都王桶,m408_gerbemon,ultimate,廢都腐毒彈,,,,420,35,0,1,0,projectile,toxic,55:dirtysaucer00#1,1,,絕招；projectile／toxic；威力 420、消耗 35
+342,CANDIDATE_RULE,SPECIES,電脈裂龍,m410_cyberdramon,basic,電脈掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+343,CANDIDATE_RULE,SPECIES,電脈裂龍,m410_cyberdramon,ultimate,電脈聖曜彈,,,,420,35,0,1,0,projectile,light,56:crescent00#1,1,,絕招；projectile／light；威力 420、消耗 35
+344,CANDIDATE_RULE,SPECIES,電脈裂龍,m410_cyberdramon,skill,電脈爪,,,,300,25,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／neutral；威力 300、消耗 25
+345,CANDIDATE_RULE,SPECIES,界根樹王,m412_jyureimon,basic,界根撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+346,CANDIDATE_RULE,SPECIES,界根樹王,m412_jyureimon,ultimate,界根煉獄彈,,,,420,35,0,1,13,projectile,fire,57:cherrybomb00#1,1,微光閃爍（光點）,絕招；projectile／fire；威力 420、消耗 35、狀態碼 13
+347,CANDIDATE_RULE,SPECIES,界根樹王,m412_jyureimon,skill,界根彈,,,,300,25,0,1,0,projectile,neutral,1:battle#44,8,棘藤鞭（藤蔓命中）,技能；projectile／neutral；威力 300、消耗 25
+348,CANDIDATE_RULE,SPECIES,墓焰暴君,m413_skullgreymon,basic,墓焰撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+349,CANDIDATE_RULE,SPECIES,墓焰暴君,m413_skullgreymon,ultimate,墓焰崩岩爆,,,,420,35,0,1,0,area,earth,58:groundzero00#1,1,翻騰爆炎（爆炸）,絕招；area／earth；威力 420、消耗 35
+350,CANDIDATE_RULE,SPECIES,墓焰暴君,m413_skullgreymon,skill,墓焰黑霧,,,,300,25,4,1,3,stream,dark,98:casuburesu00#1,1,踏塵（落地沙塵命中）,技能；stream／dark；威力 300、消耗 25、狀態碼 3
+351,CANDIDATE_RULE,SPECIES,潮鑄海將,m414_zudomon,basic,潮鑄撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+352,CANDIDATE_RULE,SPECIES,潮鑄海將,m414_zudomon,skill,潮鑄落雷,,,,300,25,5,1,0,area,thunder,128:hammerspark#0,1,弧電迸裂（電擊）,技能；area／thunder；威力 300、消耗 25
+353,CANDIDATE_RULE,SPECIES,潮鑄海將,m414_zudomon,ultimate,潮鑄極刺,,,,420,35,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,絕招；melee／neutral；威力 420、消耗 35
+354,CANDIDATE_RULE,SPECIES,淵祈邪神,m415_dagomon,basic,淵祈撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+355,CANDIDATE_RULE,SPECIES,淵祈邪神,m415_dagomon,ultimate,淵祈鋼魂彈,,,,300,25,0,1,0,projectile,metal,59:trident00#1,1,,絕招；projectile／metal；威力 300、消耗 25
+356,CANDIDATE_RULE,SPECIES,淵祈邪神,m415_dagomon,skill,淵祈拳,,,,50,40,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 50、消耗 40
+357,CANDIDATE_RULE,SPECIES,煉獄殘焰,m416_deathmeramon,basic,煉獄斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+358,CANDIDATE_RULE,SPECIES,煉獄殘焰,m416_deathmeramon,skill,煉獄熔岩彈,,,,300,25,1,1,0,projectile,fire,94:magmaball02#1,1,燼花燃燒（燃燒附加）,技能；projectile／fire；威力 300、消耗 25
+359,CANDIDATE_RULE,SPECIES,煉獄殘焰,m416_deathmeramon,ultimate,煉獄煉獄斬,,,,420,35,1,1,0,melee,fire,80:H_Slashtop#0,22,鋼月斬（斬擊命中） | 燼花燃燒（燃燒附加）,絕招；melee／fire；威力 420、消耗 35
+360,CANDIDATE_RULE,SPECIES,華冠羽皇,m417_delumon,basic,華冠撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+361,CANDIDATE_RULE,SPECIES,華冠羽皇,m417_delumon,skill,華冠蛋彈,,,,140,25,0,1,0,projectile,neutral,86:delumonegg00#1,1,,技能；projectile／neutral；威力 140、消耗 25
+362,CANDIDATE_RULE,SPECIES,華冠羽皇,m417_delumon,ultimate,華冠極刺,,,,420,35,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,絕招；melee／neutral；威力 420、消耗 35
+363,CANDIDATE_RULE,SPECIES,爵潮蛙皇,m418_tonosamagekomon,basic,爵潮撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+364,CANDIDATE_RULE,SPECIES,爵潮蛙皇,m418_tonosamagekomon,skill,爵潮音波,,,,300,25,5,1,0,projectile,thunder,10:onpu00#0,4,弧電迸裂（電擊）,技能；projectile／thunder；威力 300、消耗 25
+365,CANDIDATE_RULE,SPECIES,爵潮蛙皇,m418_tonosamagekomon,ultimate,爵潮心靈爆,,,,420,35,0,1,0,area,psychic,99:crashsymphony00#1,1,,絕招；area／psychic；威力 420、消耗 35
+366,CANDIDATE_RULE,SPECIES,熔角重獸,m419_toriceramon,basic,熔角撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+367,CANDIDATE_RULE,SPECIES,熔角重獸,m419_toriceramon,skill,熔角刺,,,,300,25,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,技能；melee／neutral；威力 300、消耗 25
+368,CANDIDATE_RULE,SPECIES,熔角重獸,m419_toriceramon,ultimate,熔角天雷刺,,,,420,35,5,1,3,melee,thunder,82:H_piercing#0,14,貫槍突刺（穿刺命中） | 弧電迸裂（電擊）,絕招；melee／thunder；威力 420、消耗 35、狀態碼 3
+369,CANDIDATE_RULE,SPECIES,曙光騎聖,m420_knightmon,basic,曙光斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+370,CANDIDATE_RULE,SPECIES,曙光騎聖,m420_knightmon,ultimate,曙光極斬,,,,420,35,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 420、消耗 35
+371,CANDIDATE_RULE,SPECIES,曙光騎聖,m420_knightmon,skill,曙光拳,,,,350,25,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 350、消耗 25
+372,CANDIDATE_RULE,SPECIES,虹嵐鸚皇,m422_parrotmon,basic,虹嵐撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+373,CANDIDATE_RULE,SPECIES,虹嵐鸚皇,m422_parrotmon,skill,虹嵐月華,,,,300,25,0,1,0,area,light,44:crescentmoon00#1,3,金月雙刃（發射／飛行／命中）,技能；area／light；威力 300、消耗 25
+374,CANDIDATE_RULE,SPECIES,虹嵐鸚皇,m422_parrotmon,ultimate,虹嵐天雷爆,,,,420,35,5,1,0,area,thunder,103:myorunirusanda00#1,1,弧電迸裂（電擊）,絕招；area／thunder；威力 420、消耗 35
+375,CANDIDATE_RULE,SPECIES,潮鰭海臣,m423_hangyomon,basic,潮鰭撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+376,CANDIDATE_RULE,SPECIES,潮鰭海臣,m423_hangyomon,skill,潮鰭長槍,,,,300,25,0,1,0,projectile,metal,60:spear00#1,1,,技能；projectile／metal；威力 300、消耗 25
+377,CANDIDATE_RULE,SPECIES,潮鰭海臣,m423_hangyomon,ultimate,潮鰭極衝,,,,420,35,0,1,0,,,,,,絕招；projectile／neutral；威力 420、消耗 35
+378,CANDIDATE_RULE,SPECIES,玄竹戰熊,m424_pandamon,basic,玄竹撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+379,CANDIDATE_RULE,SPECIES,玄竹戰熊,m424_pandamon,skill,玄竹爪,,,,300,25,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／neutral；威力 300、消耗 25
+380,CANDIDATE_RULE,SPECIES,玄竹戰熊,m424_pandamon,ultimate,玄竹極彈,,,,420,35,0,1,0,projectile,neutral,1:battle#44,8,棘藤鞭（藤蔓命中）,絕招；projectile／neutral；威力 420、消耗 35
+381,CANDIDATE_RULE,SPECIES,巨核裝豆,m426_bigmamemon,basic,巨核撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+382,CANDIDATE_RULE,SPECIES,巨核裝豆,m426_bigmamemon,skill,巨核巨彈,,,,100,25,0,1,0,projectile,psychic,61:bigsmileybomber00#1,1,翻騰爆炎（爆炸）,技能；projectile／psychic；威力 100、消耗 25
+383,CANDIDATE_RULE,SPECIES,巨核裝豆,m426_bigmamemon,ultimate,巨核極衝,,,,420,35,0,1,0,,,,,,絕招；projectile／neutral；威力 420、消耗 35
+384,CANDIDATE_RULE,SPECIES,靈環仙靈,m427_picklemon,basic,靈環斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+385,CANDIDATE_RULE,SPECIES,靈環仙靈,m427_picklemon,ultimate,靈環鋼魂彈,,,,420,35,0,1,1,projectile,metal,62:bitbomb00#1,1,翻騰爆炎（爆炸）,絕招；projectile／metal；威力 420、消耗 35、狀態碼 1
+386,CANDIDATE_RULE,SPECIES,靈環仙靈,m427_picklemon,skill,靈環斬,,,,300,25,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,技能；melee／neutral；威力 300、消耗 25
+387,CANDIDATE_RULE,SPECIES,幽幕死神,m428_fantomon,basic,幽幕斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+388,CANDIDATE_RULE,SPECIES,幽幕死神,m428_fantomon,skill,幽幕暗斬,,,,70,35,4,1,13,melee,dark,80:H_Slashtop#0,22,鋼月斬（斬擊命中） | 微光閃爍（光點）,技能；melee／dark；威力 70、消耗 35、狀態碼 13
+389,CANDIDATE_RULE,SPECIES,幽幕死神,m428_fantomon,ultimate,幽幕冥暗砲,,,,200,25,4,1,13,beam,dark,106:walaser01#1,1,微光閃爍（光點）,絕招；beam／dark；威力 200、消耗 25、狀態碼 13
+390,CANDIDATE_RULE,SPECIES,星界入侵體,m430_vademon,basic,星界撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+391,CANDIDATE_RULE,SPECIES,星界入侵體,m430_vademon,skill,星界心彈,,,,300,25,4,1,10,projectile,dark,37:hart00#1,2,緋紅瘴爆（瘴氣命中）,技能；projectile／dark；威力 300、消耗 25、狀態碼 10
+392,CANDIDATE_RULE,SPECIES,星界入侵體,m430_vademon,ultimate,星界冥暗爆,,,,420,35,0,1,0,area,dark,125:abduction00#1,1,,絕招；area／dark；威力 420、消耗 35
+393,CANDIDATE_RULE,SPECIES,潮冠巨鯨,m431_whamon,basic,潮冠撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+394,CANDIDATE_RULE,SPECIES,潮冠巨鯨,m431_whamon,ultimate,潮冠怒濤爆,,,,300,25,2,1,0,area,water,91:tsunami#0,3,怒濤巨浪（水波）,絕招；area／water；威力 300、消耗 25
+395,CANDIDATE_RULE,SPECIES,潮冠巨鯨,m431_whamon,skill,潮冠噴射箭,,,,70,35,2,1,0,projectile,water,63:jetarrow00#1,1,,技能；projectile／water；威力 70、消耗 35
+396,CANDIDATE_RULE,SPECIES,耀裁天使,m432_holyangemon,basic,耀裁斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+397,CANDIDATE_RULE,SPECIES,耀裁天使,m432_holyangemon,skill,耀裁斬,,,,300,25,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,技能；melee／neutral；威力 300、消耗 25
+398,CANDIDATE_RULE,SPECIES,耀裁天使,m432_holyangemon,ultimate,耀裁聖曜爆,,,,420,35,3,1,13,area,light,70:heavensgate00#1,1,微光閃爍（光點）,絕招；area／light；威力 420、消耗 35、狀態碼 13
+399,CANDIDATE_RULE,SPECIES,音刃疾狼,m433_machgaogamon,basic,音刃撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+400,CANDIDATE_RULE,SPECIES,音刃疾狼,m433_machgaogamon,skill,音刃拳,,,,40,42,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 40、消耗 42
+401,CANDIDATE_RULE,SPECIES,音刃疾狼,m433_machgaogamon,skill,音刃疾拳,,,,200,20,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 200、消耗 20
+402,CANDIDATE_RULE,SPECIES,音刃疾狼,m433_machgaogamon,ultimate,音刃極砲,,,,400,35,0,1,0,beam,neutral,12:beam00#0,19,稜光射線（能量光束）,絕招；beam／neutral；威力 400、消耗 35
+403,CANDIDATE_RULE,SPECIES,鋼豆核,m435_mamemon,basic,鋼豆撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+404,CANDIDATE_RULE,SPECIES,鋼豆核,m435_mamemon,skill,鋼豆炸彈,,,,300,25,0,1,0,projectile,psychic,72:smileybomb00#1,1,翻騰爆炎（爆炸）,技能；projectile／psychic；威力 300、消耗 25
+405,CANDIDATE_RULE,SPECIES,鋼豆核,m435_mamemon,ultimate,鋼豆極衝,,,,400,35,0,1,0,,,,,,絕招；projectile／neutral；威力 400、消耗 35
+406,CANDIDATE_RULE,SPECIES,霜牙長象,m437_mammon,basic,霜牙撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+407,CANDIDATE_RULE,SPECIES,霜牙長象,m437_mammon,ultimate,霜牙極刺,,,,400,35,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,絕招；melee／neutral；威力 400、消耗 35
+408,CANDIDATE_RULE,SPECIES,霜牙長象,m437_mammon,skill,霜牙黑煙,,,,50,25,2,1,0,smoke,water,129:blacksmoke05#1,1,霜晶碎（冰晶）,技能；smoke／water；威力 50、消耗 25
+409,CANDIDATE_RULE,SPECIES,蒼雷海棘龍,m438_megaseadramon,basic,蒼雷撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+410,CANDIDATE_RULE,SPECIES,蒼雷海棘龍,m438_megaseadramon,ultimate,蒼雷天雷爆,,,,420,35,5,1,0,area,thunder,73:thunderjavelin00#1,1,弧電迸裂（電擊）,絕招；area／thunder；威力 420、消耗 35
+411,CANDIDATE_RULE,SPECIES,蒼雷海棘龍,m438_megaseadramon,skill,蒼雷海嘯,,,,300,25,2,1,0,area,water,91:tsunami#0,3,怒濤巨浪（水波） | 霜晶碎（冰晶）,技能；area／water；威力 300、消耗 25
+412,CANDIDATE_RULE,SPECIES,裂空機龍,m439_megadramon,basic,裂空撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+413,CANDIDATE_RULE,SPECIES,裂空機龍,m439_megadramon,ultimate,裂空冥暗爆,,,,420,35,0,1,0,area,dark,71:genocideattack00#1,1,,絕招；area／dark；威力 420、消耗 35
+414,CANDIDATE_RULE,SPECIES,裂空機龍,m439_megadramon,skill,裂空斬,,,,300,25,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,技能；melee／neutral；威力 300、消耗 25
+415,CANDIDATE_RULE,SPECIES,赤鋼暴君,m440_metalgreymon_vi,basic,赤鋼撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+416,CANDIDATE_RULE,SPECIES,赤鋼暴君,m440_metalgreymon_vi,ultimate,赤鋼魂爆,,,,420,35,0,1,0,area,metal,75:gigadestroyer00#1,2,翻騰爆炎（爆炸）,絕招；area／metal；威力 420、消耗 35
+417,CANDIDATE_RULE,SPECIES,赤鋼暴君,m440_metalgreymon_vi,skill,赤鋼岩彈,,,,300,25,0,1,0,projectile,metal,38:rocketpunch00#1,2,,技能；projectile／metal；威力 300、消耗 25
+418,CANDIDATE_RULE,SPECIES,蒼鋒機暴龍,m441_metalgreymon_va,basic,蒼鋒撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+419,CANDIDATE_RULE,SPECIES,蒼鋒機暴龍,m441_metalgreymon_va,ultimate,蒼鋒鋼魂爆,,,,420,35,0,1,0,area,metal,75:gigadestroyer00#1,2,翻騰爆炎（爆炸）,絕招；area／metal；威力 420、消耗 35
+420,CANDIDATE_RULE,SPECIES,蒼鋒機暴龍,m441_metalgreymon_va,skill,蒼鋒岩彈,,,,300,25,0,1,0,projectile,metal,38:rocketpunch00#1,2,,技能；projectile／metal；威力 300、消耗 25
+421,CANDIDATE_RULE,SPECIES,機冕龍,m442_metaltyranomon,basic,機冕撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+422,CANDIDATE_RULE,SPECIES,機冕龍,m442_metaltyranomon,ultimate,機冕鋼魂彈,,,,420,35,0,1,0,projectile,metal,39:missile01#1,4,雙發飛彈（發射→飛行→爆炸） | 翻騰爆炎（爆炸）,絕招；projectile／metal；威力 420、消耗 35
+423,CANDIDATE_RULE,SPECIES,機冕龍,m442_metaltyranomon,skill,機冕熾焰砲,,,,300,25,0,1,0,beam,fire,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,技能；beam／fire；威力 300、消耗 25
+424,CANDIDATE_RULE,SPECIES,星抱天熊,m444_monzaemon,basic,星抱撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+425,CANDIDATE_RULE,SPECIES,星抱天熊,m444_monzaemon,skill,星抱心彈,,,,300,25,4,1,10,projectile,dark,37:hart00#1,2,緋紅瘴爆（瘴氣命中）,技能；projectile／dark；威力 300、消耗 25、狀態碼 10
+426,CANDIDATE_RULE,SPECIES,星抱天熊,m444_monzaemon,ultimate,星抱極拳,,,,420,35,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 420、消耗 35
+427,CANDIDATE_RULE,SPECIES,日影鴉,m445_yatagaramon,basic,日影撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+428,CANDIDATE_RULE,SPECIES,日影鴉,m445_yatagaramon,ultimate,日影極刺,,,,420,35,0,1,13,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中） | 微光閃爍（光點）,絕招；melee／neutral；威力 420、消耗 35、狀態碼 13
+429,CANDIDATE_RULE,SPECIES,日影鴉,m445_yatagaramon,skill,日影冥爆,,,,100,25,4,1,0,area,dark,76:haguro00#1,1,緋紅瘴爆（瘴氣命中）,技能；area／dark；威力 100、消耗 25
+430,CANDIDATE_RULE,SPECIES,旭煌彈龍,m446_rizegreymon,basic,旭煌撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+431,CANDIDATE_RULE,SPECIES,旭煌彈龍,m446_rizegreymon,skill,旭煌雷球,,,,100,25,0,1,0,projectile,thunder,28:thunderball00#1,5,雷暴球（雷電投射物） | 翻騰爆炎（爆炸）,技能；projectile／thunder；威力 100、消耗 25
+432,CANDIDATE_RULE,SPECIES,旭煌彈龍,m446_rizegreymon,ultimate,旭煌鋼魂爆,,,,420,42,0,1,0,area,metal,104:risingdestroyer00#0,1,電漿射束（光束本體／前端／槍口焰／命中）,絕招；area／metal；威力 420、消耗 42
+433,CANDIDATE_RULE,SPECIES,旭煌彈龍,m446_rizegreymon,skill,旭煌拳,,,,400,35,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 400、消耗 35
+434,CANDIDATE_RULE,SPECIES,閃躍野兔獸,m447_rapidmon,basic,閃躍撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+435,CANDIDATE_RULE,SPECIES,閃躍野兔獸,m447_rapidmon,skill,閃躍飛彈,,,,60,25,0,1,0,projectile,metal,21:missile00#1,3,翻騰爆炎（爆炸）,技能；projectile／metal；威力 60、消耗 25
+436,CANDIDATE_RULE,SPECIES,閃躍野兔獸,m447_rapidmon,ultimate,閃躍聖曜砲,,,,420,42,3,1,13,beam,light,12:beam00#0,19,稜光射線（能量光束） | 微光閃爍（光點）,絕招；beam／light；威力 420、消耗 42、狀態碼 13
+437,CANDIDATE_RULE,SPECIES,綻光花風妖精,m448_lilimon,basic,綻光撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+438,CANDIDATE_RULE,SPECIES,綻光花風妖精,m448_lilimon,skill,綻光能量砲,,,,300,25,0,1,0,beam,neutral,69:fraucanon00#1,1,,技能；beam／neutral；威力 300、消耗 25
+439,CANDIDATE_RULE,SPECIES,綻光花風妖精,m448_lilimon,ultimate,綻光煉獄砲,,,,420,35,0,1,0,beam,fire,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,絕招；beam／fire；威力 420、消耗 35
+440,CANDIDATE_RULE,SPECIES,夜詠魔女,m449_ladydevimon,basic,夜詠撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+441,CANDIDATE_RULE,SPECIES,夜詠魔女,m449_ladydevimon,skill,夜詠黑霧,,,,150,35,4,1,0,stream,dark,67:darknesswave00#1,1,燼花燃燒（燃燒附加）,技能；stream／dark；威力 150、消耗 35
+442,CANDIDATE_RULE,SPECIES,夜詠魔女,m449_ladydevimon,ultimate,夜詠冥暗爆,,,,300,25,4,1,10,area,dark,120:bakemoncurse00#1,2,,絕招；area／dark；威力 300、消耗 25、狀態碼 10
+443,CANDIDATE_RULE,SPECIES,拼魔熊,m450_warumonzaemon,basic,拼魔掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+444,CANDIDATE_RULE,SPECIES,拼魔熊,m450_warumonzaemon,skill,拼魔冥爆,,,,300,25,4,1,10,area,dark,101:hartbreak00#1,1,緋紅瘴爆（瘴氣命中）,技能；area／dark；威力 300、消耗 25、狀態碼 10
+445,CANDIDATE_RULE,SPECIES,拼魔熊,m450_warumonzaemon,ultimate,拼魔極爪,,,,420,35,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,絕招；melee／neutral；威力 420、消耗 35
+446,CANDIDATE_RULE,SPECIES,聖銘之狼,m451_weregarurumon_va,basic,聖銘撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+447,CANDIDATE_RULE,SPECIES,聖銘之狼,m451_weregarurumon_va,ultimate,聖銘極爪,,,,300,25,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,絕招；melee／neutral；威力 300、消耗 25
+448,CANDIDATE_RULE,SPECIES,聖銘之狼,m451_weregarurumon_va,skill,聖銘熔岩彈,,,,300,25,1,1,0,projectile,fire,107:magmaball03#1,3,燼花燃燒（燃燒附加）,技能；projectile／fire；威力 300、消耗 25
+449,CANDIDATE_RULE,SPECIES,狂紅嚎狼,m452_weregarurumon_vi,basic,狂紅撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+450,CANDIDATE_RULE,SPECIES,狂紅嚎狼,m452_weregarurumon_vi,skill,狂紅爪,,,,300,25,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／neutral；威力 300、消耗 25
+451,CANDIDATE_RULE,SPECIES,狂紅嚎狼,m452_weregarurumon_vi,ultimate,狂紅極拳,,,,420,35,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 420、消耗 35
+452,CANDIDATE_RULE,SPECIES,天槍飛龍,m453_wingdramon,basic,天槍撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+453,CANDIDATE_RULE,SPECIES,天槍飛龍,m453_wingdramon,skill,天槍狐火,,,,300,25,1,1,0,projectile,fire,109:foxfire00#1,3,,技能；projectile／fire；威力 300、消耗 25
+454,CANDIDATE_RULE,SPECIES,天槍飛龍,m453_wingdramon,skill,天槍刺,,,,400,35,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,技能；melee／neutral；威力 400、消耗 35
+455,CANDIDATE_RULE,SPECIES,天槍飛龍,m453_wingdramon,ultimate,天槍極拳,,,,450,42,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 450、消耗 42
+456,CANDIDATE_RULE,SPECIES,地龍獸,m454_grondramon,basic,地龍撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+457,CANDIDATE_RULE,SPECIES,地龍獸,m454_grondramon,skill,地龍拳,,,,300,25,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 300、消耗 25
+458,CANDIDATE_RULE,SPECIES,地龍獸,m454_grondramon,skill,地龍獸拳,,,,400,35,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 400、消耗 35
+459,CANDIDATE_RULE,SPECIES,地龍獸,m454_grondramon,ultimate,地龍崩岩爆,,,,450,42,0,1,0,area,earth,143:jiware#0,1,,絕招；area／earth；威力 450、消耗 42
+460,CANDIDATE_RULE,SPECIES,耀冠獅王,m455_flaremon,basic,耀冠撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+461,CANDIDATE_RULE,SPECIES,耀冠獅王,m455_flaremon,skill,耀冠獅頭彈,,,,300,25,1,1,0,projectile,fire,132:leomonhed00#0,4,炎獅頭彈（共用投射＋命中） | 燼花燃燒（燃燒附加）,技能；projectile／fire；威力 300、消耗 25
+462,CANDIDATE_RULE,SPECIES,耀冠獅王,m455_flaremon,skill,耀冠焰拳,,,,30,42,1,1,0,melee,fire,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中） | 燼花燃燒（燃燒附加）,技能；melee／fire；威力 30、消耗 42
+463,CANDIDATE_RULE,SPECIES,耀冠獅王,m455_flaremon,ultimate,耀冠極砲,,,,400,35,0,1,13,beam,neutral,150:beam07#0,5,微光閃爍（光點）,絕招；beam／neutral；威力 400、消耗 35、狀態碼 13
+464,CANDIDATE_RULE,SPECIES,月鎌幻鐮,m456_crescemon,basic,月鎌斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+465,CANDIDATE_RULE,SPECIES,月鎌幻鐮,m456_crescemon,skill,月鎌月鎌,,,,80,42,3,1,0,character,light,139:crescemon#0,1,月鎌獸形象特效（重用原創 Main 圖格） | 稜星閃（星芒閃光）,技能；character／light；威力 80、消耗 42
+466,CANDIDATE_RULE,SPECIES,月鎌幻鐮,m456_crescemon,skill,月鎌箭,,,,300,25,2,1,0,projectile,water,85:crescemonarrow00#1,1,霜晶碎（冰晶）,技能；projectile／water；威力 300、消耗 25
+467,CANDIDATE_RULE,SPECIES,月鎌幻鐮,m456_crescemon,ultimate,月鎌冥暗彈,,,,400,35,4,1,0,projectile,dark,119:crescemonarrow01#1,1,,絕招；projectile／dark；威力 400、消耗 35
+468,CANDIDATE_RULE,SPECIES,銀河星警,m457_superstarmon,basic,銀河撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+469,CANDIDATE_RULE,SPECIES,銀河星警,m457_superstarmon,skill,銀河星彈,,,,40,45,0,1,0,projectile,light,144:star01#1,1,,技能；projectile／light；威力 40、消耗 45
+470,CANDIDATE_RULE,SPECIES,銀河星警,m457_superstarmon,ultimate,銀河極拳,,,,300,25,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 300、消耗 25
+471,CANDIDATE_RULE,SPECIES,影脈槍兔,m458_blackrapidmon,basic,影脈撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+472,CANDIDATE_RULE,SPECIES,影脈槍兔,m458_blackrapidmon,skill,影脈飛彈,,,,60,25,0,1,0,projectile,metal,21:missile00#1,3,翻騰爆炎（爆炸）,技能；projectile／metal；威力 60、消耗 25
+473,CANDIDATE_RULE,SPECIES,影脈槍兔,m458_blackrapidmon,ultimate,影脈聖曜砲,,,,420,42,3,1,13,beam,light,12:beam00#0,19,稜光射線（能量光束） | 微光閃爍（光點）,絕招；beam／light；威力 420、消耗 42、狀態碼 13
+474,CANDIDATE_RULE,SPECIES,蒼焰騎靈,m373_bluemeramon,basic,蒼焰撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+475,CANDIDATE_RULE,SPECIES,蒼焰騎靈,m373_bluemeramon,ultimate,蒼焰冥暗爆,,,,420,35,4,1,10,area,dark,100:dark01#1,3,緋紅瘴爆（瘴氣命中）,絕招；area／dark；威力 420、消耗 35、狀態碼 10
+476,CANDIDATE_RULE,SPECIES,蒼焰騎靈,m373_bluemeramon,skill,蒼焰熔岩彈,,,,330,25,2,1,0,projectile,water,107:magmaball03#1,3,緋紅瘴爆（瘴氣命中）,技能；projectile／water；威力 330、消耗 25
+477,CANDIDATE_RULE,SPECIES,霜灣戰牙,m501_vikemon,basic,霜灣撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+478,CANDIDATE_RULE,SPECIES,霜灣戰牙,m501_vikemon,skill,霜灣龍捲,,,,280,35,2,1,0,stream,water,97:tatumaki01#1,1,霜晶碎（冰晶）,技能；stream／water；威力 280、消耗 35
+479,CANDIDATE_RULE,SPECIES,霜灣戰牙,m501_vikemon,ultimate,霜灣極拳,,,,380,45,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 380、消耗 45
+480,CANDIDATE_RULE,SPECIES,曜羽武姬,m502_valkyrimon,basic,曜羽斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+481,CANDIDATE_RULE,SPECIES,曜羽武姬,m502_valkyrimon,ultimate,曜羽怒濤斬,,,,380,45,2,1,0,melee,water,80:H_Slashtop#0,22,鋼月斬（斬擊命中） | 霜晶碎（冰晶）,絕招；melee／water；威力 380、消耗 45
+482,CANDIDATE_RULE,SPECIES,曜羽武姬,m502_valkyrimon,skill,曜羽箭,,,,280,35,3,1,0,projectile,light,89:lekismonarrow00#1,2,,技能；projectile／light；威力 280、消耗 35
+483,CANDIDATE_RULE,SPECIES,日冕戰暴龍,m503_warglaymon,basic,日冕掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+484,CANDIDATE_RULE,SPECIES,日冕戰暴龍,m503_warglaymon,ultimate,日冕聖曜彈,,,,400,60,3,1,0,projectile,light,78:lightball02#1,4,,絕招；projectile／light；威力 400、消耗 60
+485,CANDIDATE_RULE,SPECIES,日冕戰暴龍,m503_warglaymon,skill,日冕水爪,,,,280,35,2,1,0,melee,water,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／water；威力 280、消耗 35
+486,CANDIDATE_RULE,SPECIES,深潮軌龍,m504_gigaseadramon,basic,深潮軌撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+487,CANDIDATE_RULE,SPECIES,深潮軌龍,m504_gigaseadramon,ultimate,深潮鋼魂彈,,,,280,35,0,1,0,projectile,metal,134:missile03#1,1,黃銅砲彈（發射／飛行／爆炸） | 翻騰爆炎（爆炸）,絕招；projectile／metal；威力 280、消耗 35
+488,CANDIDATE_RULE,SPECIES,深潮軌龍,m504_gigaseadramon,skill,深潮光球,,,,70,60,0,1,0,projectile,light,74:lightball01#1,2,,技能；projectile／light；威力 70、消耗 60
+489,CANDIDATE_RULE,SPECIES,帝剪煌甲,m505_grankuwagamon,basic,帝剪斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+490,CANDIDATE_RULE,SPECIES,帝剪煌甲,m505_grankuwagamon,ultimate,帝剪極斬,,,,280,35,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 280、消耗 35
+491,CANDIDATE_RULE,SPECIES,帝剪煌甲,m505_grankuwagamon,skill,帝剪突進,,,,80,60,0,1,0,,,,,,技能；projectile／neutral；威力 80、消耗 60
+492,CANDIDATE_RULE,SPECIES,曦冠獅鷲,m506_griffomon,basic,曦冠咬擊,,,,100,0,0,1,0,melee,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+493,CANDIDATE_RULE,SPECIES,曦冠獅鷲,m506_griffomon,ultimate,曦冠煉獄砲,,,,280,35,0,1,0,beam,fire,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,絕招；beam／fire；威力 280、消耗 35
+494,CANDIDATE_RULE,SPECIES,曦冠獅鷲,m506_griffomon,skill,曦冠彈,,,,70,50,0,1,0,projectile,neutral,1:battle#42,7,碎牙咬合（咬擊命中）,技能；projectile／neutral；威力 70、消耗 50
+495,CANDIDATE_RULE,SPECIES,審判十字鷹,m507_crossmon,basic,審判撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+496,CANDIDATE_RULE,SPECIES,審判十字鷹,m507_crossmon,ultimate,審判極拳,,,,380,50,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 380、消耗 50
+497,CANDIDATE_RULE,SPECIES,審判十字鷹,m507_crossmon,skill,審判聖光砲,,,,280,35,3,1,0,beam,light,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,技能；beam／light；威力 280、消耗 35
+498,CANDIDATE_RULE,SPECIES,棘林劍獅,m508_saberleomon,basic,棘林掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+499,CANDIDATE_RULE,SPECIES,棘林劍獅,m508_saberleomon,ultimate,棘林極爪,,,,400,50,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,絕招；melee／neutral；威力 400、消耗 50
+500,CANDIDATE_RULE,SPECIES,棘林劍獅,m508_saberleomon,skill,棘林聖爆,,,,280,35,0,1,2,area,light,77:infinitiarrow00#1,1,弧電迸裂（電擊）,技能；area／light；威力 280、消耗 35、狀態碼 2
+501,CANDIDATE_REVIEW_BATCH,SPECIES,曜極星龍,m509_shinegraymon,basic,曜龍爪,LUMINARC CLAW,,,100,0,0,1,0,,,,,,基本攻擊
+502,CANDIDATE_REVIEW_BATCH,SPECIES,曜極星龍,m509_shinegraymon,skill,極光星彈,AURORA ORB,,,350,40,3,1,0,projectile,light,78:lightball02#1,4,翻騰爆炎（爆炸）,光屬光球（威力 350、消耗 40）收尾爆炸
+503,CANDIDATE_REVIEW_BATCH,SPECIES,曜極星龍,m509_shinegraymon,ultimate,曜極天爆,ZENITH NOVA,,,400,60,3,1,0,area,light,149:explo#0,1,翻騰爆炎（爆炸）,絕招：光屬範圍（威力 400、消耗 60）
+504,CANDIDATE_REVIEW_BATCH,SPECIES,曜極星龍,m509_shinegraymon,skill,星曜貫刃,STARPIERCE,,,380,45,0,1,0,melee,neutral,82:H_piercing#0,14,貫槍突刺（穿刺命中）,穿刺（威力 380、消耗 45）；共用貫槍突刺
+505,CANDIDATE_RULE,SPECIES,冥骨長牙,m510_skullmammon,basic,冥骨撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+506,CANDIDATE_RULE,SPECIES,冥骨長牙,m510_skullmammon,skill,冥骨旋骨,,,,280,35,0,1,0,projectile,earth,140:spiralbone00#0,1,,技能；projectile／earth；威力 280、消耗 35
+507,CANDIDATE_RULE,SPECIES,冥骨長牙,m510_skullmammon,ultimate,冥骨極拳,,,,380,45,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 380、消耗 45
+508,CANDIDATE_RULE,SPECIES,聖砲天兔,m511_saintgargomon,basic,聖砲撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+509,CANDIDATE_RULE,SPECIES,聖砲天兔,m511_saintgargomon,skill,聖砲飛彈,,,,70,60,0,1,0,projectile,metal,39:missile01#1,4,雙發飛彈（發射→飛行→爆炸）,技能；projectile／metal；威力 70、消耗 60
+510,CANDIDATE_RULE,SPECIES,聖砲天兔,m511_saintgargomon,ultimate,聖砲鋼魂彈,,,,280,35,0,1,0,projectile,metal,135:giantmissile00#0,1,翻騰爆炎（爆炸）,絕招；projectile／metal；威力 280、消耗 35
+511,CANDIDATE_RULE,SPECIES,時鋼執行者,m512_hiandromon,basic,時鋼斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+512,CANDIDATE_RULE,SPECIES,時鋼執行者,m512_hiandromon,ultimate,時鋼聖曜砲,,,,400,45,3,1,0,beam,light,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,絕招；beam／light；威力 400、消耗 45
+513,CANDIDATE_RULE,SPECIES,時鋼執行者,m512_hiandromon,skill,時鋼聖斬,,,,320,35,3,1,0,melee,light,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,技能；melee／light；威力 320、消耗 35
+514,CANDIDATE_RULE,SPECIES,焰番迅獅,m513_bantyoliomon,basic,焰番撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+515,CANDIDATE_RULE,SPECIES,焰番迅獅,m513_bantyoliomon,ultimate,焰番極斬,,,,400,50,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 400、消耗 50
+516,CANDIDATE_RULE,SPECIES,焰番迅獅,m513_bantyoliomon,skill,焰番獅頭彈,,,,280,40,0,1,0,projectile,fire,132:leomonhed00#0,4,炎獅頭彈（共用投射＋命中） | 翻騰爆炎（爆炸）,技能；projectile／fire；威力 280、消耗 40
+517,CANDIDATE_RULE,SPECIES,蝕夜丑皇,m514_piemon,basic,蝕夜撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+518,CANDIDATE_RULE,SPECIES,蝕夜丑皇,m514_piemon,ultimate,蝕夜鋼魂彈,,,,350,45,0,1,0,projectile,metal,96:sword00#1,1,,絕招；projectile／metal；威力 350、消耗 45
+519,CANDIDATE_RULE,SPECIES,蝕夜丑皇,m514_piemon,skill,蝕夜雷霆砲,,,,300,35,5,1,3,beam,thunder,12:beam00#0,19,稜光射線（能量光束） | 弧電迸裂（電擊）,技能；beam／thunder；威力 300、消耗 35、狀態碼 3
+520,CANDIDATE_RULE,SPECIES,齒木塞皇,m515_pinochimon,basic,齒木撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+521,CANDIDATE_RULE,SPECIES,齒木塞皇,m515_pinochimon,skill,齒木拳,,,,50,50,0,1,13,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 50、消耗 50、狀態碼 13
+522,CANDIDATE_RULE,SPECIES,齒木塞皇,m515_pinochimon,ultimate,齒木極彈,,,,280,45,0,1,0,projectile,neutral,90:pinochimonarrow00#1,1,,絕招；projectile／neutral；威力 280、消耗 45
+523,CANDIDATE_RULE,SPECIES,冥砂法皇,m516_pharaohmon,basic,冥砂撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+524,CANDIDATE_RULE,SPECIES,冥砂法皇,m516_pharaohmon,ultimate,冥砂冥暗爆,,,,130,60,4,1,13,area,dark,130:kumo00#0,1,,絕招；area／dark；威力 130、消耗 60、狀態碼 13
+525,CANDIDATE_RULE,SPECIES,冥砂法皇,m516_pharaohmon,skill,冥砂雲爆,,,,100,35,4,1,2,area,dark,131:kumo01#0,1,踏塵（落地沙塵命中）,技能；area／dark；威力 100、消耗 35、狀態碼 2
+526,CANDIDATE_RULE,SPECIES,潮墨河鯆,m517_pukumon,basic,潮墨撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+527,CANDIDATE_RULE,SPECIES,潮墨河鯆,m517_pukumon,skill,潮墨尖刺,,,,50,35,0,1,0,projectile,earth,53:toge00#1,3,,技能；projectile／earth；威力 50、消耗 35
+528,CANDIDATE_RULE,SPECIES,潮墨河鯆,m517_pukumon,ultimate,潮墨極拳,,,,380,60,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 380、消耗 60
+529,CANDIDATE_RULE,SPECIES,闇鎧墨皇,m518_blackwargreymon,basic,闇鎧掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+530,CANDIDATE_RULE,SPECIES,闇鎧墨皇,m518_blackwargreymon,ultimate,闇鎧冥暗彈,,,,380,60,4,1,0,projectile,dark,78:lightball02#1,4,,絕招；projectile／dark；威力 380、消耗 60
+531,CANDIDATE_RULE,SPECIES,闇鎧墨皇,m518_blackwargreymon,skill,闇鎧水爪,,,,350,35,2,1,0,melee,water,79:H_claw#0,19,三痕裂爪（爪擊命中）,技能；melee／water；威力 350、消耗 35
+532,CANDIDATE_RULE,SPECIES,星冠豆爵,m519_princemamemon,basic,星冠撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+533,CANDIDATE_RULE,SPECIES,星冠豆爵,m519_princemamemon,ultimate,星冠極拳,,,,280,45,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 280、消耗 45
+534,CANDIDATE_RULE,SPECIES,星冠豆爵,m519_princemamemon,skill,星冠紫焰,,,,40,60,0,1,0,projectile,dark,95:purple00#0,1,,技能；projectile／dark；威力 40、消耗 60
+535,CANDIDATE_RULE,SPECIES,霜洋蛇龍,m520_pilesiomon,basic,霜洋撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+536,CANDIDATE_RULE,SPECIES,霜洋蛇龍,m520_pilesiomon,skill,霜洋暗影砲,,,,280,35,4,1,10,beam,dark,105:soloblue00#1,1,稜星閃（星芒閃光）,技能；beam／dark；威力 280、消耗 35、狀態碼 10
+537,CANDIDATE_RULE,SPECIES,霜洋蛇龍,m520_pilesiomon,ultimate,霜洋煉獄砲,,,,400,45,0,1,0,beam,fire,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,絕招；beam／fire；威力 400、消耗 45
+538,CANDIDATE_RULE,SPECIES,神角力王,m521_heraklekabuterimon,basic,神角撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+539,CANDIDATE_RULE,SPECIES,神角力王,m521_heraklekabuterimon,ultimate,神角天雷砲,,,,420,60,5,1,13,beam,thunder,115:gigaburasuta#0,1,微光閃爍（光點）,絕招；beam／thunder；威力 420、消耗 60、狀態碼 13
+540,CANDIDATE_RULE,SPECIES,神角力王,m521_heraklekabuterimon,skill,神角光球,,,,280,45,5,1,0,projectile,thunder,78:lightball02#1,4,,技能；projectile／thunder；威力 280、消耗 45
+541,CANDIDATE_RULE,SPECIES,煌羽鳳凰,m522_hououmon,basic,煌羽撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+542,CANDIDATE_RULE,SPECIES,煌羽鳳凰,m522_hououmon,skill,煌羽聖爆,,,,60,60,3,1,13,area,light,142:starlight00#0,1,翻騰爆炎（爆炸）,技能；area／light；威力 60、消耗 60、狀態碼 13
+543,CANDIDATE_RULE,SPECIES,煌羽鳳凰,m522_hououmon,ultimate,煌羽煉獄彈,,,,250,35,1,1,0,projectile,fire,116:magmaball06#1,2,,絕招；projectile／fire；威力 250、消耗 35
+544,CANDIDATE_RULE,SPECIES,幻紋狼爵,m526_miragegaogamon,basic,幻紋撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+545,CANDIDATE_RULE,SPECIES,幻紋狼爵,m526_miragegaogamon,skill,幻紋月華,,,,280,35,0,1,0,area,light,44:crescentmoon00#1,3,金月雙刃（發射／飛行／命中）,技能；area／light；威力 280、消耗 35
+546,CANDIDATE_RULE,SPECIES,幻紋狼爵,m526_miragegaogamon,skill,幻紋熾焰砲,,,,350,45,0,1,0,beam,fire,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,技能；beam／fire；威力 350、消耗 45
+547,CANDIDATE_RULE,SPECIES,幻紋狼爵,m526_miragegaogamon,ultimate,幻紋極爪,,,,420,65,0,1,0,melee,neutral,79:H_claw#0,19,三痕裂爪（爪擊命中）,絕招；melee／neutral；威力 420、消耗 65
+548,CANDIDATE_RULE,SPECIES,滅界機龍,m527_mugendramon,basic,滅界撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+549,CANDIDATE_RULE,SPECIES,滅界機龍,m527_mugendramon,ultimate,滅界煉獄砲,,,,420,65,0,1,0,beam,fire,151:beam08#0,2,翻騰爆炎（爆炸）,絕招；beam／fire；威力 420、消耗 65
+550,CANDIDATE_RULE,SPECIES,滅界機龍,m527_mugendramon,skill,滅界拳,,,,80,45,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 80、消耗 45
+551,CANDIDATE_RULE,SPECIES,鋼鐵猿猴獸,m528_metaletemon,basic,鋼鐵撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+552,CANDIDATE_RULE,SPECIES,鋼鐵猿猴獸,m528_metaletemon,skill,鋼鐵蕉彈,,,,250,25,0,1,0,projectile,nature,11:banana00#0,1,,技能；projectile／nature；威力 250、消耗 25
+553,CANDIDATE_RULE,SPECIES,鋼鐵猿猴獸,m528_metaletemon,ultimate,鋼鐵冥暗彈,,,,400,45,4,1,10,projectile,dark,10:onpu00#0,4,踏塵（落地沙塵命中）,絕招；projectile／dark；威力 400、消耗 45、狀態碼 10
+554,CANDIDATE_REVIEW_BATCH,SPECIES,霜砲機狼,m529_metalgarurumon_va,basic,機狼爪,WOLFRAM CLAW,,,100,0,0,1,0,,,,,,基本攻擊
+555,CANDIDATE_REVIEW_BATCH,SPECIES,霜砲機狼,m529_metalgarurumon_va,ultimate,冰河霜砲,GLACIER CANNON,,,350,45,2,1,0,beam,water,12:beam00#0,19,稜光射線（能量光束） | 霜晶碎（冰晶）,絕招：水／冰屬光束（威力 350、消耗 45）＋冰晶；與赤曜槍皇 595 共用光束配方，但為不同技能
+556,CANDIDATE_REVIEW_BATCH,SPECIES,霜砲機狼,m529_metalgarurumon_va,skill,寒鋼飛彈群,FROST MISSILES,,,70,50,0,1,0,projectile,metal,133:missile02#1,2,翻騰爆炎（爆炸）,飛彈群（威力 70、消耗 50）收尾爆炸
+557,CANDIDATE_RULE,SPECIES,闇巡零狼,m530_metalgarurumon_vi,basic,闇巡撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+558,CANDIDATE_RULE,SPECIES,闇巡零狼,m530_metalgarurumon_vi,ultimate,闇巡怒濤砲,,,,280,35,2,1,0,beam,water,12:beam00#0,19,稜光射線（能量光束） | 霜晶碎（冰晶）,絕招；beam／water；威力 280、消耗 35
+559,CANDIDATE_RULE,SPECIES,闇巡零狼,m530_metalgarurumon_vi,skill,闇巡飛彈,,,,70,50,0,1,0,projectile,metal,133:missile02#1,2,翻騰爆炎（爆炸）,技能；projectile／metal；威力 70、消耗 50
+560,CANDIDATE_RULE,SPECIES,深鎧海皇龍,m531_metalseadramon,basic,深鎧撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+561,CANDIDATE_RULE,SPECIES,深鎧海皇龍,m531_metalseadramon,ultimate,深鎧煉獄砲,,,,400,65,0,1,0,beam,fire,151:beam08#0,2,翻騰爆炎（爆炸）,絕招；beam／fire；威力 400、消耗 65
+562,CANDIDATE_RULE,SPECIES,深鎧海皇龍,m531_metalseadramon,skill,深鎧海嘯,,,,300,35,2,1,0,area,water,91:tsunami#0,3,怒濤巨浪（水波）,技能；area／water；威力 300、消耗 35
+563,CANDIDATE_RULE,SPECIES,棘月花后,m532_rosemon,basic,棘月斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+564,CANDIDATE_RULE,SPECIES,棘月花后,m532_rosemon,skill,棘月雷彈,,,,60,35,5,1,0,projectile,thunder,1:battle#44,8,棘藤鞭（藤蔓命中）,技能；projectile／thunder；威力 60、消耗 35
+565,CANDIDATE_RULE,SPECIES,棘月花后,m532_rosemon,ultimate,棘月聖曜彈,,,,160,60,3,1,13,projectile,light,83:rose00#0,1,微光閃爍（光點）,絕招；projectile／light；威力 160、消耗 60、狀態碼 13
+566,CANDIDATE_RULE,SPECIES,雷獵王狼,m533_zeedgarurumon,basic,雷獵掠爪,,,,100,0,0,1,0,melee,neutral,1:battle#36,34,焰爪掠擊（火焰命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+567,CANDIDATE_RULE,SPECIES,雷獵王狼,m533_zeedgarurumon,ultimate,雷獵鋼魂彈,,,,450,65,0,1,0,projectile,metal,141:missile04#1,1,,絕招；projectile／metal；威力 450、消耗 65
+568,CANDIDATE_RULE,SPECIES,雷獵王狼,m533_zeedgarurumon,skill,雷獵飛彈,,,,60,45,0,1,0,projectile,metal,39:missile01#1,4,雙發飛彈（發射→飛行→爆炸）,技能；projectile／metal；威力 60、消耗 45
+569,CANDIDATE_RULE,SPECIES,雷獵王狼,m533_zeedgarurumon,skill,雷獵熾焰砲,,,,250,35,0,1,0,beam,fire,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,技能；beam／fire；威力 250、消耗 35
+570,CANDIDATE_RULE,SPECIES,焰耀戰刃龍,m534_victorygreymon,basic,焰耀斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+571,CANDIDATE_RULE,SPECIES,焰耀戰刃龍,m534_victorygreymon,skill,焰耀斬,,,,380,50,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,技能；melee／neutral；威力 380、消耗 50
+572,CANDIDATE_RULE,SPECIES,焰耀戰刃龍,m534_victorygreymon,ultimate,焰耀煉獄砲,,,,400,65,1,1,0,beam,fire,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,絕招；beam／fire；威力 400、消耗 65
+573,CANDIDATE_RULE,SPECIES,焰耀戰刃龍,m534_victorygreymon,skill,焰耀拳,,,,250,35,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,技能；melee／neutral；威力 250、消耗 35
+574,CANDIDATE_RULE,SPECIES,天斬蒼龍,m535_slayerdramon,basic,天斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+575,CANDIDATE_RULE,SPECIES,天斬蒼龍,m535_slayerdramon,ultimate,天斬極斬,,,,420,65,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／neutral；威力 420、消耗 65
+576,CANDIDATE_RULE,SPECIES,天斬蒼龍,m535_slayerdramon,skill,天斬,,,,320,35,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,技能；melee／neutral；威力 320、消耗 35
+577,CANDIDATE_RULE,SPECIES,天斬蒼龍,m535_slayerdramon,skill,天斬蒼斬,,,,70,35,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,技能；melee／neutral；威力 70、消耗 35
+578,CANDIDATE_RULE,SPECIES,裂地裝甲龍,m536_brakedramon,basic,裂地撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+579,CANDIDATE_RULE,SPECIES,裂地裝甲龍,m536_brakedramon,skill,裂地剎擊,,,,80,65,0,1,0,character,metal,148:brakedramon#0,1,剎車龍獸形象特效（重用原創候選 Main 圖格＋原創揮擊弧）,技能；character／metal；威力 80、消耗 65
+580,CANDIDATE_RULE,SPECIES,裂地裝甲龍,m536_brakedramon,ultimate,裂地極拳,,,,400,45,0,1,0,melee,neutral,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中）,絕招；melee／neutral；威力 400、消耗 45
+581,CANDIDATE_RULE,SPECIES,裂地裝甲龍,m536_brakedramon,skill,裂地突進,,,,280,35,0,1,0,,,,,,技能；projectile／neutral；威力 280、消耗 35
+582,CANDIDATE_RULE,SPECIES,日輪獅神,m538_apollomon,basic,日輪撞擊,,,,100,0,0,1,0,,,,,,基本攻擊；melee／neutral；威力 100、消耗 0
+583,CANDIDATE_RULE,SPECIES,日輪獅神,m538_apollomon,skill,日輪熔岩彈,,,,280,35,1,1,0,projectile,fire,116:magmaball06#1,2,翻騰爆炎（爆炸）,技能；projectile／fire；威力 280、消耗 35
+584,CANDIDATE_RULE,SPECIES,日輪獅神,m538_apollomon,ultimate,日輪煉獄拳,,,,380,45,1,1,0,melee,fire,81:H_Knuckle#0,45,稜光衝擊（一般打擊命中） | 翻騰爆炎（爆炸）,絕招；melee／fire；威力 380、消耗 45
+585,CANDIDATE_RULE,SPECIES,日輪獅神,m538_apollomon,skill,日輪箭,,,,150,65,1,1,0,projectile,fire,84:apollomonarrow00#1,1,翻騰爆炎（爆炸）,技能；projectile／fire；威力 150、消耗 65
+586,CANDIDATE_RULE,SPECIES,夜月獵姬,m539_dianamon,basic,夜月斬擊,,,,100,0,0,1,0,melee,neutral,1:battle#37,15,霜裂斬（冰屬命中）,基本攻擊；melee／neutral；威力 100、消耗 0
+587,CANDIDATE_RULE,SPECIES,夜月獵姬,m539_dianamon,ultimate,夜月聖曜斬,,,,450,65,0,1,1,melee,light,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,絕招；melee／light；威力 450、消耗 65、狀態碼 1
+588,CANDIDATE_RULE,SPECIES,夜月獵姬,m539_dianamon,skill,夜月箭,,,,250,25,2,1,0,projectile,water,87:dianamonarrow00#1,1,,技能；projectile／water；威力 250、消耗 25
+589,CANDIDATE_RULE,SPECIES,夜月獵姬,m539_dianamon,skill,夜月冥爆,,,,380,45,4,1,4,area,dark,102:heaven00#0,2,踏塵（落地沙塵命中）,技能；area／dark；威力 380、消耗 45、狀態碼 4
+590,CANDIDATE_RULE,SPECIES,帝皇龍甲獸,m540_imperialdramon_fm,skill,帝皇突進,,,,100,0,0,1,0,,,,,,技能；projectile／neutral；威力 100、消耗 0
+591,CANDIDATE_RULE,SPECIES,帝皇龍甲獸,m540_imperialdramon_fm,skill,帝皇熾焰砲,,,,300,35,0,1,0,beam,fire,127:beam03#0,3,翻騰爆炎（爆炸）,技能；beam／fire；威力 300、消耗 35
+592,CANDIDATE_RULE,SPECIES,帝皇龍甲獸,m540_imperialdramon_fm,ultimate,帝皇煉獄砲,,,,380,65,0,1,0,beam,fire,146:beam05#0,1,翻騰爆炎（爆炸）,絕招；beam／fire；威力 380、消耗 65
+593,CANDIDATE_REVIEW_BATCH,SPECIES,赤曜槍皇,m541_dukemon,skill,曜槍突,SOL THRUST,,,100,0,0,1,0,projectile,neutral,1:battle#37,15,霜裂斬（冰屬命中）,技能但不耗資源（威力 100）；命中序列共用霜裂斬
+594,CANDIDATE_REVIEW_BATCH,SPECIES,赤曜槍皇,m541_dukemon,skill,赤曜盾斬,AEGIS SLASH,,,280,35,0,1,0,melee,neutral,80:H_Slashtop#0,22,鋼月斬（斬擊命中）,斬擊（威力 280、消耗 35）；共用鋼月斬
+595,CANDIDATE_REVIEW_BATCH,SPECIES,赤曜槍皇,m541_dukemon,ultimate,皇曜聖槍砲,SOLGUARD LANCE,,,380,65,3,1,0,beam,light,12:beam00#0,19,稜光射線（能量光束） | 翻騰爆炎（爆炸）,絕招：光屬光束（威力 380、消耗 65）；光束配方與霜砲機狼 555 共用，但屬性與數值不同，是不同技能
