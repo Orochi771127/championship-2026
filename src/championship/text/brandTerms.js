@@ -74,5 +74,7 @@ export function getOpeningBrandTerms(locale = 'zh-Hant') {
     ?? PENDING_TERMS_REGISTRY.CREATURE_SPECIES_TERM.candidates['zh-Hant'][0];
   const tournament = ({'zh-Hant':`${creature}錦標賽`,en:`${creature} Tournament`,ja:`${creature}トーナメント`,
     th:`ทัวร์นาเมนต์${creature}`,vi:`Giải đấu ${creature}`})[locale] ?? `${creature}錦標賽`;
-  return {creature,tournament};
+  const egg = PENDING_TERMS_REGISTRY.EGG_TERM.candidates[locale]?.[0]
+    ?? PENDING_TERMS_REGISTRY.EGG_TERM.candidates['zh-Hant'][0];
+  return {creature,tournament,egg};
 }

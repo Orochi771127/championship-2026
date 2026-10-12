@@ -19,6 +19,20 @@ for(const [locale,four,eligibility,invitation]of [
 });
 
 import {waitForOpeningComicImages} from '../src/championship/app/openingStoryPresentation.js';
+test('five-language opening gift letters and egg naming use central terms without rewriting player input',()=>{
+ const tamer='從現在起，你也是數碼獸馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。',egg='這顆數碼蛋送給你。\n請替牠取個名字。';
+ try{for(const locale of ['zh-Hant','en','ja','th','vi']){
+  setLocale(locale);const terms=getOpeningBrandTerms(locale),letters=[openingStoryText(tamer),openingStoryText(egg),openingStoryText('請替數碼蛋取名字')];
+  assert.ok(letters[0].includes(terms.creature));assert.ok(letters.slice(1).every(t=>t.includes(terms.egg)));
+  assert.ok(letters.every(t=>! /數碼獸|數碼蛋|Digimon|Digi[- ]?Egg|デジモン|デジタマ|ดิจิมอน/i.test(t)));
+  assert.equal(openingStoryText('數碼獸小蛋'),'數碼獸小蛋');
+ }
+ setLocale('zh-Hant');assert.equal(setLocale('unsupported'),false);
+ assert.equal(openingStoryText(egg),'這顆培育蛋送給你。\n請替牠取個名字。');
+ assert.equal(openingStoryText(tamer).split('\n')[0],'從現在起，你也是拍檔馴獸師了。');
+ assert.equal(getOpeningBrandTerms('unsupported').egg,'培育蛋');
+ }finally{setLocale('zh-Hant');}
+});
 test('cold comic startup waits for every successful decode without advancing native time',async()=>{
  let first,second,settled=false;const a={complete:false,naturalWidth:0,decode:()=>new Promise(r=>{first=()=>{a.naturalWidth=640;r();};})},b={complete:false,naturalWidth:0,decode:()=>new Promise(r=>{second=()=>{b.naturalWidth=560;r();};})};
  const ready=waitForOpeningComicImages([a,b]).then(v=>{settled=true;return v;});await Promise.resolve();first();await Promise.resolve();assert.equal(settled,false);second();assert.equal(await ready,true);

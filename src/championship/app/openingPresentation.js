@@ -4,6 +4,7 @@ import {createOpeningStoryPresentation} from './openingStoryPresentation.js';
 import {uiText} from '../text/uiText.js';
 import {openingEggChoices} from './openingEggChoices.js';
 import {openingEggText} from '../text/openingEggText.js';
+import {openingStoryText} from '../text/openingStoryText.js';
 export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEggChoice=false}){
   let trainerName='',eggName='',eggSpeciesIndex=0,busy=false,story=null;
   // Copy is resolved when each card is built, so the language the player
@@ -13,11 +14,11 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
   function envelope(next){const b=el('button','cm-opening__envelope');b.type='button';b.setAttribute('aria-label',uiText('開啟信件'));b.addEventListener('click',next,{once:true});show(b);b.focus({preventScroll:true});}
   function letter(text,next,{egg=false}={}){
     const n=el('section','cm-opening__letter');n.setAttribute('aria-label',uiText('信件'));n.setAttribute('role','dialog');
-    if(egg)n.append(el('div','cm-opening__egg'));n.append(el('p','',text),el('small','','數位競技場'));
+    if(egg)n.append(el('div','cm-opening__egg'));n.append(el('p','',openingStoryText(text)),el('small','','數位競技場'));
     const b=el('button','','確認');b.type='button';b.addEventListener('click',next,{once:true});n.append(b);show(n);b.focus({preventScroll:true});
   }
   function name(kind,next){
-    const n=el('form','cm-opening__name'),label=el('label','',kind==='trainer'?'請輸入馴獸師姓名':'請替數碼蛋取名字');
+    const n=el('form','cm-opening__name'),label=el('label','',kind==='trainer'?'請輸入馴獸師姓名':openingStoryText('請替數碼蛋取名字'));
     const input=el('input','');input.id='cm-opening-name';input.name=kind;input.maxLength=5;input.required=true;input.autocomplete='off';input.value=kind==='trainer'?trainerName:eggName;label.htmlFor=input.id;
     const b=el('button','','決定');b.type='submit';n.append(label,input,b);
     if(kind==='egg'&&allowEggChoice){const back=el('button','cm-opening__back',openingEggText().back);back.type='button';back.dataset.eggBack='true';back.addEventListener('click',()=>{eggName=input.value.trim();chooseEgg();});n.append(back);}

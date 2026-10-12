@@ -1,5 +1,9 @@
 # Championship Owner Direction
 
+## 2026-10-12 — Correct and publish the new-game gift-letter brand wording
+
+Owner reports the two TITLE opening gift letters still show 「數碼獸／數碼蛋」 (Sentinel_cfc02d51dad48191b422823d4462a773), then explicitly directs 「改完自己審查沒有問題就送上去commit跟push並發佈」 (Sentinel_34621683f3508191bb44e93ffef6ca07). Dot relays this bounded implementation and release: use the existing centralized 拍檔／培育蛋 terms across five locales, check the actual envelope/letter flow, preserve player names and old saves, run focused/CI/build/validate checks, then normal main push and existing Pages exact-SHA verification. Three existing product hashes may be updated for these three changed modules. Do not change registry-wide term approval, research, IDs, gameplay, player storage or unrelated assets. Keep Owner main and Claude's battle conflict untouched. The newly reported full-tutorial actor/texture and return-to-TITLE issues are a separate diagnostic task. See [scope and checks](../reports/opening-letter-brand-2026-10-12/REPORT_ZH_TW.md).
+
 ## 2026-10-12 — Publish the independently reviewed eight-egg size and CSS touch correction
 
 Owner requests native-sized eggs (Sentinel_ec2469868d0c8191b5fc1f129a04b880) and explicitly includes every egg (Sentinel_0ad6158a0628819197b140ea7ae3f3c4). After independent R1/R2 hash, geometry and landscape edge-tap review, Parent authorizes this bounded release under the Owner's self-review then publish instruction (Sentinel_cac9fa4b6e18819182496a5bde0bea78), local synchronization instruction (Sentinel_bc03219eebf48191bc531dfda959e940), and commit/push/publication instruction (Sentinel_7bfe8e2ba1848191a3eb73643142988c).
