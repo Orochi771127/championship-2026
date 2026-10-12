@@ -1,5 +1,25 @@
 # Championship Owner Direction
 
+## 2026-10-13 — Corner stall: restore the original first, then a bounded improved AI
+
+The Owner reports 「對戰角色被連續打到角落後，長時間停住、不移動也不出招」. They direct:
+
+- Reproduce the stall first.
+- Separate normal-game evidence from fixed-seed diagnostics.
+- Trace the original ROM before changing anything.
+- If it is a port error, apply a minimal fix with a regression test, and do not mask it.
+- Then build a bounded improved AI prototype:
+  - it may use only known positions, visible state and legal actions, with no future RNG and no unrevealed opponent decisions;
+  - it must not add invincibility or endless kiting;
+  - it must not disturb the existing simulation RNG sequence;
+  - it must stay on the existing clock.
+- Commit and record the original restoration and the improved AI separately, and label the improvement an Owner-authorized adaptation.
+- After self-review and tests, handle it under the current publication authorization.
+
+- **Original restoration:** a launch whose target was cleared on the same frame is refused by the initialiser, as in ROM 0211C0A0, instead of being refused at allocation. Before this fix the combatant held state 14 behind a looping walk and stood in a corner. See [the root-cause report](../reports/battle-corner-stall-2026-10-13/ROOT_CAUSE_ZH_TW.md).
+- **Original behaviour kept:** the approach dead band in states 4 and 5 (021161F0 / 02116314) is CPU-verified against the ROM and stays unchanged in the original mode.
+- **Not fixed in this batch:** the special-prelude timeline throw, whose root cause is still open.
+
 ## 2026-10-12 — Approve move names, rename three characters, publish the remade shared VFX
 
 The Owner delegated the move-name review: 「那些名稱你幫我審核啊，然後角色名稱也幫我更改。……你幫我核准以後就可以寫入遊戲並補齊翻譯。完成以後就commit 並push整合發佈至main」. On the private VFX pack: 「那包當然可以發佈啊，都已經重做了。你幫我審查一下吧若沒問題就是接入遊戲使用然後發佈啊」.

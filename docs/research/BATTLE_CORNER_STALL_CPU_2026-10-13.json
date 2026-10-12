@@ -1,0 +1,387 @@
+{
+ "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+ "overlaySha256": "d660e3e0bf243541c356c54dcbd1aec58e8df6c2dfaf4a5854d375a5f2d13715",
+ "scope": "Corner-stall ARM oracle (2026-10-13). Controlled inputs, never a full-match ROM claim.\n\nOriginal target, positioning and C144 guard instructions execute unchanged.\nScene animation, allocator, state/notification services and RNG are explicit\nseams. Numeric tables only; no ROM graphics are emitted into the product.\n",
+ "cases": [
+  {
+   "label": "slot1_band_32_48",
+   "input": {
+    "label": "slot1_band_32_48",
+    "c": {
+     "168": 4,
+     "16c": 8,
+     "17c": 1,
+     "180": 100,
+     "28": 40,
+     "40": 0,
+     "3c": 3100,
+     "78": 0,
+     "7c": 0,
+     "80": 0
+    },
+    "distance": 159744,
+    "angle": 29535,
+    "point": [
+     1572864,
+     811008,
+     0
+    ],
+    "targetPoint": [
+     1421312,
+     860160,
+     0
+    ]
+   },
+   "stateHandler": {
+    "c": {
+     "28": 40,
+     "3c": 3100,
+     "40": 0,
+     "44": 27362,
+     "48": 0,
+     "4c": 0,
+     "50": 0,
+     "168": 4,
+     "16c": 8,
+     "170": 4,
+     "17c": 1,
+     "180": 100
+    },
+    "calls": [],
+    "rolls": []
+   },
+   "movementDelta": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "label": "slot0_vertical_near",
+   "input": {
+    "label": "slot0_vertical_near",
+    "c": {
+     "168": 4,
+     "16c": 8,
+     "17c": 1,
+     "180": 100,
+     "28": 40,
+     "40": 0,
+     "3c": 3100,
+     "78": 0,
+     "7c": 0,
+     "80": 0
+    },
+    "distance": 114688,
+    "angle": 46984,
+    "point": [
+     1445888,
+     974848,
+     0
+    ],
+    "targetPoint": [
+     1421312,
+     860160,
+     0
+    ]
+   },
+   "stateHandler": {
+    "c": {
+     "28": 40,
+     "3c": 3100,
+     "40": 0,
+     "44": 52678,
+     "48": 0,
+     "4c": 0,
+     "50": 0,
+     "168": 4,
+     "16c": 8,
+     "170": 4,
+     "17c": 1,
+     "180": 100
+    },
+    "calls": [],
+    "rolls": []
+   },
+   "movementDelta": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "label": "slot3_vertical_after_attack",
+   "input": {
+    "label": "slot3_vertical_after_attack",
+    "c": {
+     "168": 4,
+     "16c": 8,
+     "17c": 9,
+     "180": 100,
+     "28": 40,
+     "40": 0,
+     "3c": 3100,
+     "78": 0,
+     "7c": 0,
+     "80": 0
+    },
+    "distance": 114688,
+    "angle": 14216,
+    "point": [
+     1421312,
+     860160,
+     0
+    ],
+    "targetPoint": [
+     1445888,
+     974848,
+     0
+    ]
+   },
+   "stateHandler": {
+    "c": {
+     "28": 40,
+     "3c": 3100,
+     "40": 0,
+     "44": 19910,
+     "48": 0,
+     "4c": 0,
+     "50": 0,
+     "168": 4,
+     "16c": 8,
+     "170": 4,
+     "17c": 9,
+     "180": 100
+    },
+    "calls": [],
+    "rolls": []
+   },
+   "movementDelta": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "label": "slot4_band_after_attack",
+   "input": {
+    "label": "slot4_band_after_attack",
+    "c": {
+     "168": 4,
+     "16c": 8,
+     "17c": 8,
+     "180": 100,
+     "28": 40,
+     "40": 0,
+     "3c": 3100,
+     "78": 0,
+     "7c": 0,
+     "80": 0
+    },
+    "distance": 184320,
+    "angle": 7679,
+    "point": [
+     1310720,
+     847872,
+     0
+    ],
+    "targetPoint": [
+     1421312,
+     860160,
+     0
+    ]
+   },
+   "stateHandler": {
+    "c": {
+     "28": 40,
+     "3c": 3100,
+     "40": 0,
+     "44": 2708,
+     "48": 0,
+     "4c": 0,
+     "50": 0,
+     "168": 4,
+     "16c": 8,
+     "170": 4,
+     "17c": 8,
+     "180": 100
+    },
+    "calls": [],
+    "rolls": []
+   },
+   "movementDelta": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "label": "control_far_walks",
+   "input": {
+    "label": "control_far_walks",
+    "c": {
+     "168": 4,
+     "16c": 8,
+     "17c": 1,
+     "180": 100,
+     "28": 40,
+     "40": 0,
+     "3c": 3100,
+     "78": 0,
+     "7c": 0,
+     "80": 0
+    },
+    "distance": 196608,
+    "angle": 29535,
+    "point": [
+     1572864,
+     811008,
+     0
+    ],
+    "targetPoint": [
+     1372160,
+     860160,
+     0
+    ]
+   },
+   "stateHandler": {
+    "c": {
+     "28": 40,
+     "3c": 3100,
+     "40": 0,
+     "44": 29169,
+     "48": 0,
+     "4c": 0,
+     "50": 0,
+     "168": 4,
+     "16c": 8,
+     "170": 4,
+     "17c": 7,
+     "180": -255
+    },
+    "calls": [
+     [
+      "notify",
+      7
+     ]
+    ],
+    "rolls": []
+   },
+   "movementDelta": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "label": "control_near_launches",
+   "input": {
+    "label": "control_near_launches",
+    "c": {
+     "168": 4,
+     "16c": 8,
+     "17c": 1,
+     "180": 100,
+     "28": 40,
+     "40": 0,
+     "3c": 3100,
+     "78": 0,
+     "7c": 0,
+     "80": 0
+    },
+    "distance": 126976,
+    "angle": 29535,
+    "point": [
+     1572864,
+     811008,
+     0
+    ],
+    "targetPoint": [
+     1445888,
+     860160,
+     0
+    ]
+   },
+   "stateHandler": {
+    "c": {
+     "28": 40,
+     "3c": 3100,
+     "40": 0,
+     "44": 25750,
+     "48": 0,
+     "4c": 0,
+     "50": 0,
+     "168": 14,
+     "16c": -255,
+     "170": 1,
+     "17c": 1,
+     "180": 100
+    },
+    "calls": [],
+    "rolls": []
+   },
+   "movementDelta": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "label": "slot1_band_cooldown_spent",
+   "input": {
+    "label": "slot1_band_cooldown_spent",
+    "c": {
+     "168": 4,
+     "16c": 8,
+     "17c": 1,
+     "180": 100,
+     "28": 0,
+     "40": 0,
+     "3c": 3100,
+     "78": 0,
+     "7c": 0,
+     "80": 0
+    },
+    "distance": 159744,
+    "angle": 29535,
+    "point": [
+     1572864,
+     811008,
+     0
+    ],
+    "targetPoint": [
+     1421312,
+     860160,
+     0
+    ]
+   },
+   "stateHandler": {
+    "c": {
+     "28": 0,
+     "3c": 3100,
+     "40": 0,
+     "44": 27362,
+     "48": 0,
+     "4c": 0,
+     "50": 0,
+     "168": 4,
+     "16c": 8,
+     "170": 4,
+     "17c": 1,
+     "180": 100
+    },
+    "calls": [
+     [
+      "gate"
+     ]
+    ],
+    "rolls": []
+   },
+   "movementDelta": [
+    0,
+    0,
+    0
+   ]
+  }
+ ]
+}

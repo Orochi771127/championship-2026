@@ -109,7 +109,13 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
           if(action){c.launchSlots[launchIndex]=action;c.committedAction=action;m.writeU32(actors.address(slot),0x78+launchIndex*4,0x11000000+action.index*0x2000);}
           return action;
         },
-        initialize(action){const resourceBefore=c.metricLimit,ok=initialize(slot,action);
+        initialize(action){
+          // 0211C098: `movs r4,r3; moveq r0,#0` -- a null target object (+0x5C
+          // for 14/15 at 02116B68/02116D68, +0x64 for 16 at 02116F34) returns 0
+          // before the C144 guard, so nothing is charged and the caller releases.
+          if(!(action.targetSlot>=0)){emit(slot,'LAUNCH_REFUSED',{moveId:moveId??null,targetSlot:null,state:c.state,actionIndex:action.index,
+            reason:'NULL_TARGET_0211C0A0',resourceBefore:c.metricLimit,resourceAfter:c.metricLimit,decisionId:c.pendingDecisionId??null});return false;}
+          const resourceBefore=c.metricLimit,ok=initialize(slot,action);
           emit(slot,ok?'LAUNCHED':'LAUNCH_REFUSED',{moveId:moveId??null,targetSlot:action.targetSlot,state:c.state,actionIndex:action.index,
             resourceBefore,resourceAfter:c.metricLimit,decisionId:c.pendingDecisionId??null});return ok;},
         release(launchIndex,action){action.release();releaseSlot(slot,launchIndex,action);},

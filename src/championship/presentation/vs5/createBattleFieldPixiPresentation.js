@@ -563,6 +563,19 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     && String(globalThis.location?.search ?? '').includes('battleFxDebug');
   let presentation = null;
   if (debugHook) globalThis.__championshipBattleDiagnostics = () => presentation?.getDiagnostics();
+  // Same loopback-only switch: a read-only per-slot record of the published
+  // battle view (state, notification, world point, target, timers), used to
+  // measure stalls in normal play. It reads; it never steps or writes.
+  if (debugHook) globalThis.__championshipBattleState = () => {
+    const view = source.getView(), flow = view.nativeLifecycle?.normalFlow?.slots ?? [];
+    const reactions = view.nativeLifecycle?.reactions?.combatants ?? [];
+    return {clock: view.clock?.frames ?? null, animationFrame: view.animationFrame ?? null, ended: !!view.outcome?.ended,
+      slots: view.combatants.map((c, i) => c?.present ? {slot: i, team: c.team, speciesId: c.speciesId, name: c.displayName,
+        hp: c.hp.current, sp: c.resource.current, cooldown: c.cooldown, status: c.status.code, down: c.down, engaged: c.engaged,
+        state: flow[i]?.state ?? null, target: flow[i]?.targetSlot ?? null, point: flow[i]?.point ?? null,
+        launches: flow[i]?.launches ?? null, notification: reactions[i]?.notification ?? null, counter: reactions[i]?.counter ?? null,
+        suspended: reactions[i]?.suspended ?? null} : null)};
+  };
 
   presentation = Object.freeze({
     /** Exposed so a test can drive the scene without a ticker. */
@@ -621,6 +634,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       continuation?.destroy({children:true}); continuationTexture?.destroy(true);
       fxLayer?.dispose();
       if (debugHook && globalThis.__championshipBattleDiagnostics) delete globalThis.__championshipBattleDiagnostics;
+      if (debugHook && globalThis.__championshipBattleState) delete globalThis.__championshipBattleState;
       const shadowDisposal=groundShadows?.dispose();
       scene.destroy({ children: true });
       actors.clear();

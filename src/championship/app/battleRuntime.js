@@ -608,7 +608,11 @@ export function createBattleRuntime(options = {}) {
           const targetSlot=launchContext?.targetSlot??(decision.target?.kind==='SELF'?slot
             : Number.isInteger(decision.target?.index)?decision.target.index
             : session.slots.findIndex((c,i)=>c&&c.currentHp>0&&battleTeamOfSlot(i)!==battleTeamOfSlot(slot)));
-          if(targetSlot<0)return null;
+          // Normal launches allocate from the object pool alone (0x0210F8C4
+          // never reads the target). A cleared +0x5C reaches the initialiser,
+          // which refuses it (0x0211C0A0) so state 14/15 releases and re-gates.
+          // Only the scalar fixture adapter still needs a target to allocate.
+          if(targetSlot<0&&!launchContext)return null;
           const index = allocateLaunchObject(pool);
           if (index < 0) return null;
           pool[index] = 1;
