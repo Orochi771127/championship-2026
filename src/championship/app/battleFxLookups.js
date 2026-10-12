@@ -5,21 +5,20 @@
 // these functions. Everything returned is display data.
 //
 // MOVE NAMES (Owner 2026-10-12): only an approved name is ever shown. The 30
-// learnable special skills (records 1..30) have approved five-language names
-// in zhHant.js; a species move shows a name only once the Owner approves one
-// in BATTLE_FX_MOVE_NAMES. Until then the callout says 技能／絕招 with the
-// character's name. Candidate names live in the review document, never here.
-// Local acceptance (?battleFxDebug on loopback) shows the stable skill ID.
+// learnable special skills (records 1..30) keep their names in zhHant.js; the
+// 565 species moves use the approved five-language table in battleMoveNames.js.
+// A record with no approved name falls back to 技能／絕招 with the character's
+// name. Local acceptance (?battleFxDebug on loopback) appends the stable ID.
 import {getBattleCatalogRecord, listMoveRecordsForSpecies} from '../battle/battleCatalogs.js';
-import {BATTLE_FX_MOVE_NAMES, describeBattleFxMove} from '../presentation/battleFx/battleFxRecipes.js';
+import {describeBattleFxMove} from '../presentation/battleFx/battleFxRecipes.js';
+import {battleMoveName} from '../text/battleMoveNames.js';
 import {specialSkillName} from '../text/zhHant.js';
 import {uiText} from '../text/uiText.js';
 
 /** The approved display name of a move record, or null when none is approved. */
 export function battleFxApprovedMoveName(moveId) {
   if (Number.isSafeInteger(moveId) && moveId >= 1 && moveId <= 30) return specialSkillName(moveId) ?? null;
-  const owned = BATTLE_FX_MOVE_NAMES[moveId];
-  return owned ? uiText(owned) : null;
+  return battleMoveName(moveId);
 }
 
 export function createBattleFxLookups({getView, onFeed = null, showIds = false}) {

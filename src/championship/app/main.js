@@ -391,10 +391,13 @@ async function ensurePixiStage(canvasHost, signal) {
 // Opt-in loopback review (?vfxOriginal=shared-v1): original shared VFX cells
 // drawn over the loaded effect art; pool, timing and collision are unchanged.
 // Owner 2026-10-12: the dynamic battle uses the Owner's own effects, so on a
-// loopback host it loads them by default; ?vfxOriginal=off keeps the base art.
+// loopback host and on the approved public playtest URL (the loader checks the
+// playtest policy selection) they load by default; ?vfxOriginal=off keeps the
+// base art.
 async function loadOptionalOriginalVfxReview(stage, effectArt) {
   const requested=new URLSearchParams(location.search).get('vfxOriginal');
-  const byDefault=requested===null&&BATTLE_DYNAMIC_FX&&['localhost','127.0.0.1','[::1]'].includes(location.hostname);
+  const byDefault=requested===null&&BATTLE_DYNAMIC_FX&&(['localhost','127.0.0.1','[::1]'].includes(location.hostname)
+    ||isApprovedOriginalPublicLocation(location.href));
   if(!effectArt||(requested!=='shared-v1'&&!byDefault))return effectArt;
   const href=new URL(location.href);href.searchParams.set('vfxOriginal','shared-v1');
   try {

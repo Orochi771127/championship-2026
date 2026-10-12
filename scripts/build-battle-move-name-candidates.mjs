@@ -226,7 +226,7 @@ for (const row of rows) {
 // listed for the Owner; the game names are used here.
 const counts = rows.reduce((a, r) => (a[r.status] = (a[r.status] ?? 0) + 1, a), {});
 const document = {schemaVersion: 1, generatedBy: 'scripts/build-battle-move-name-candidates.mjs', ownerDirection: '2026-10-12',
-  status: 'CANDIDATES_PENDING_OWNER_REVIEW', runtimeUse: 'NONE_UNTIL_APPROVED_INTO_BATTLE_FX_MOVE_NAMES', counts, rows};
+  status: 'CANDIDATES_SUPERSEDED_BY_APPROVED_NAMES_2026_10_12', runtimeUse: 'NONE (approved names live in src/championship/text/battleMoveNames.js)', counts, rows};
 fs.mkdirSync(OUT, {recursive: true});
 fs.writeFileSync(path.join(OUT, 'MOVE_NAME_CANDIDATES.v1.json'), JSON.stringify(document, null, 1) + '\n');
 const csvCell = v => { const s = v === null || v === undefined ? '' : Array.isArray(v) ? v.join(' | ') : String(v); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };

@@ -350,7 +350,8 @@
     "src/data/championship/battleNativeMathTables.js",
     "src/data/championship/characterNativeSizing.js",
     "src/data/championship/nativeBookSpecies.js",
-    "src/data/championship/r2/fields/fieldInventoryR2.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js",
+    "src/championship/text/battleMoveNames.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9616,7 +9617,13 @@
     "src/data/championship/characterNativeSizing.js",
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/public-playtest.r1.json",
-    "src/data/championship/r2/fields/fieldInventoryR2.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js",
+    "assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json",
+    "assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png",
+    "assets/production/vfx/original-shared-review-v1/text-zh-Hant.png",
+    "assets/production/vfx/original-shared-review-v1/text-ja.png",
+    "assets/production/vfx/original-shared-review-v1/text-en.png",
+    "src/championship/text/battleMoveNames.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -45108,7 +45115,7 @@
       },
       {
         "path": "src/championship/app/battleFxLookups.js",
-        "sha256": "e420c4b1274e59a7e8e81782a70d6fcc85ce8af3ff5bbf06dcd7735a73709147"
+        "sha256": "db37f28b6f6619c4f41786fd696307ab22ddd9fdc7e6a846f418cc0a14e68f45"
       },
       {
         "path": "src/championship/app/battlePresentationSource.js",
@@ -45236,7 +45243,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "2d34c761347eaf2c3baf276f01fc1876021c9181019398fdf545bb1e93a89e41"
+        "sha256": "93ed24a4ee089aaac3e67139376760832884383a6abebb7da5812da55105afb8"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -45932,7 +45939,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxRecipes.js",
-        "sha256": "429d195e5294ae3fc4b552ab5fae901a044de654d10dc8986a6de19574ad0957"
+        "sha256": "e018379c4ad2504ae693329f2d7fc4eb682ea223bcc9d3d8f2b1d2795e10fed1"
       },
       {
         "path": "src/championship/presentation/battleResultCharacters.js",
@@ -46096,7 +46103,7 @@
       },
       {
         "path": "src/championship/presentation/originalSharedVfxReview.js",
-        "sha256": "894fffabb7730045b52e16830d14c9c7362e6c1dd3342f3e01e6b7f7125d8eab"
+        "sha256": "ee69ac3aadb912978f730e36016d321094dfb658d8d746b38e827d9bd4263508"
       },
       {
         "path": "src/championship/presentation/originalShopCageArt.js",
@@ -46380,7 +46387,7 @@
       },
       {
         "path": "src/championship/text/catalogs.zhHant.js",
-        "sha256": "7b2910b06a4c21059bf01a71884c32c8b1e23c7af37b638e22f09514aa201474"
+        "sha256": "6bce5d12eba1c34ad97583ab1296e82d90a8ea59a96d13c5ff3329b2d26c2349"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
@@ -46660,11 +46667,35 @@
       },
       {
         "path": "src/data/championship/public-playtest.r1.json",
-        "sha256": "800516acf8de29ab6b5061e7400988941d290cf71fbf34a9ba6c0bba724e638b"
+        "sha256": "f3846f35a6c6a5baaf89886cfa866ccf4b74abe0819f66b01c066df04c28f3c3"
       },
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
+      },
+      {
+        "path": "assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json",
+        "sha256": "eb64b9790addceffd87638cd024bbe338953547f80ef84b0f01973dfcefe46ea"
+      },
+      {
+        "path": "assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png",
+        "sha256": "992850bf24b0594b727ba2a45e2d484d8277e3c31e8bf48ae6af67b7f5f985a0"
+      },
+      {
+        "path": "assets/production/vfx/original-shared-review-v1/text-zh-Hant.png",
+        "sha256": "6ef0d9aaf695ef300ae2f11e2b984aa91866aad35e07303b518737259da9f884"
+      },
+      {
+        "path": "assets/production/vfx/original-shared-review-v1/text-ja.png",
+        "sha256": "b507a807759c972c8164d6c2c05836e09d7bb58142f56b46461f2347dcd09c8f"
+      },
+      {
+        "path": "assets/production/vfx/original-shared-review-v1/text-en.png",
+        "sha256": "c73848c392baa1d61a920fb7b2db4ce01056550c8829416e6c01e7280a3da436"
+      },
+      {
+        "path": "src/championship/text/battleMoveNames.js",
+        "sha256": "664fc8decba6913951dd37fa89f0d7a82a2ec23bc2e6f916eda56599f76255bf"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

@@ -142,8 +142,5 @@ export function describeBattleFxMove(move, speciesMoves = null) {
   });
 }
 
-// Approved species-move names (stable record index -> zh-Hant source text,
-// translated through uiText). Owner 2026-10-12: only approved names are shown;
-// candidates stay in docs/reports/battle-move-names-2026-10-12/ until approved.
-// The 30 learnable special skills keep their existing approved names (zhHant.js).
-export const BATTLE_FX_MOVE_NAMES = Object.freeze({});
+// Move names are display text owned by the text layer
+// (src/championship/text/battleMoveNames.js); recipes only describe the look.

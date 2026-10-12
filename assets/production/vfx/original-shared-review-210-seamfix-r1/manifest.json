@@ -1,0 +1,7656 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:vfx:original-shared:review:v1",
+  "reviewOnly": true,
+  "runtimeEligible": false,
+  "localOnly": true,
+  "runtimeScope": "LOOPBACK_REVIEW_ONLY",
+  "publicReleasePermitted": false,
+  "shippingReady": false,
+  "humanApproved": false,
+  "rightsStatus": "ORIGINAL_CREATED",
+  "productionStatus": "ORIGINAL_REVIEW_CANDIDATE",
+  "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+  "timing": "NATIVE_SEQUENCES_UNCHANGED",
+  "finishProfile": "banded",
+  "blend": "NORMAL_ALPHA",
+  "pixelsPerNativePixel": 4,
+  "image": {
+    "src": "assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png",
+    "width": 1024,
+    "height": 2048,
+    "sha256": "992850bf24b0594b727ba2a45e2d484d8277e3c31e8bf48ae6af67b7f5f985a0",
+    "scaleMode": "nearest"
+  },
+  "nativeTimingSource": {
+    "file": "src/data/championship/battleEffectProfiles.json",
+    "sha256": "10f48b6981a89d675a5c92c2f605f9c958c432e1ca3a7155127fc37f32488ba7",
+    "policy": "Sequences, ticks, play modes, loop starts and boxes are read from this file at runtime; the bundle carries none."
+  },
+  "banks": [
+    {
+      "bankId": 81,
+      "family": "e003_H_Knuckle",
+      "effectId": "hit_knuckle_prism",
+      "category": "hit",
+      "title": "稜光衝擊（一般打擊命中）",
+      "sequences": [
+        0
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "1695b08ec47a0b5e2b4946085bf4382391fd275851cb654746d94e45a15bc919",
+      "designSha256": "5597c8b845a52404792b93118905eabe659f5ccaa0783f9d8a5dff1780f98334"
+    },
+    {
+      "bankId": 79,
+      "family": "e003_H_claw",
+      "effectId": "hit_claw_rend",
+      "category": "hit",
+      "title": "三痕裂爪（爪擊命中）",
+      "sequences": [
+        0
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "962741889e5cca58ac064428101e9dd841afec01bd4d3c18959812616d636905",
+      "designSha256": "35ce74167f361067835188f0a22935e807e5321f356ecd9c3c209e8650023a68"
+    },
+    {
+      "bankId": 80,
+      "family": "e003_H_Slashtop",
+      "effectId": "hit_slash_steel",
+      "category": "hit",
+      "title": "鋼月斬（斬擊命中）",
+      "sequences": [
+        0
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "4e77b4517e774a092a6134513c6c3af7e60b8aabc27c23b68cb6ba3c79f7efad",
+      "designSha256": "cd9047f3e49b4f8c1ba3257b91265b51d5abd38d517d51dee15b7ceea246b79b"
+    },
+    {
+      "bankId": 82,
+      "family": "e003_H_piercing",
+      "effectId": "hit_pierce_lance",
+      "category": "hit",
+      "title": "貫槍突刺（穿刺命中）",
+      "sequences": [
+        0
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "0301616f60c042b02d210d343b69ba3df6393b8b977f8b525a162b8a40832601",
+      "designSha256": "fdd80afbd64957a6e6a868c1f5f710277603e0111c30f3ad426f6b01e30ac5d5"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "fire_ember_bloom",
+      "category": "fire",
+      "title": "燼花燃燒（燃燒附加）",
+      "sequences": [
+        30
+      ],
+      "cells": [
+        86,
+        87,
+        88,
+        89,
+        90,
+        91
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "8127ca9b1a4545a49d8f3ba2f4460eb94cd6a3cb9d8bd7999014bded3209e953"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "fire_flame_swipe",
+      "category": "fire",
+      "title": "焰爪掠擊（火焰命中）",
+      "sequences": [
+        36
+      ],
+      "cells": [
+        118
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "b57c936b832a7c2a3bc6e95f7b29358ffdfd2e0aaceb8bbd4066a7258d049ab3"
+    },
+    {
+      "bankId": 149,
+      "family": "e003_explo",
+      "effectId": "fire_billow_blast",
+      "category": "fire",
+      "title": "翻騰爆炎（爆炸）",
+      "sequences": [
+        0,
+        1
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "nativeBindingSha256": "25df18577f7b74bd6a8247866489192bc7458bdcda44cbae87b0581c1562838b",
+      "designSha256": "f3a09d288bf4ef999f2b411fff7aab965b72710183286d6e3a3ebd6f9a3b290e"
+    },
+    {
+      "bankId": 7,
+      "family": "e003_fireball00",
+      "effectId": "proj_fire_comet",
+      "category": "projectile",
+      "title": "彗燼火球（投射物）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "nativeBindingSha256": "f8d29d0aa1bb86f7a0170629518ffe4a08651f94831fdc20a38fd4d2b507be61",
+      "designSha256": "784ac4b178d1c4e85cf0b6c059401b0570e9bdc18de545477e03e7c6b7e52968"
+    },
+    {
+      "bankId": 16,
+      "family": "e003_blacksmoke00",
+      "effectId": "smoke_soot_bloom",
+      "category": "smoke",
+      "title": "煤煙綻（黑煙）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "nativeBindingSha256": "0bc9eb6265e6d928898f14f9c7fbfc6d76ae45752dff00ae44cde3cc1fb2b8ea",
+      "designSha256": "a9967945366709dd588036030e6d4d48b27b8d9a8ac282876315fa597694fee1"
+    },
+    {
+      "bankId": 64,
+      "family": "e003_etc_hiteffect",
+      "effectId": "smoke_dust_kick",
+      "category": "smoke",
+      "title": "踏塵（落地沙塵命中）",
+      "sequences": [
+        0
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "nativeBindingSha256": "c6e9ba82dbf454b32c17c80a26b64a6838ad4fef9625340835c117c5c937d87e",
+      "designSha256": "37332f104c3683b5378c33cfa697f77e6a3b71c83055d6639752854ca07a5f31"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "flash_prism_twinkle",
+      "category": "flash",
+      "title": "稜星閃（星芒閃光）",
+      "sequences": [
+        33
+      ],
+      "cells": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "c4f56622daaa8b11f6bd93b4048b2ad2c48c98bfc69ffbbc3e5d989e72afe5f1"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "flash_wisp_glimmer",
+      "category": "flash",
+      "title": "微光閃爍（光點）",
+      "sequences": [
+        40
+      ],
+      "cells": [
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "74cb61b984004c39761b9d81a83104d31f1bb07d22daa9d38b17c99f0b97c023"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "energy_arc_spark",
+      "category": "energy",
+      "title": "弧電迸裂（電擊）",
+      "sequences": [
+        32
+      ],
+      "cells": [
+        97,
+        98,
+        99,
+        100
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "4cdc2f04ca072c6e363816c43a02e01d785fbdbec348395dc992b1fd91530315"
+    },
+    {
+      "bankId": 9,
+      "family": "e003_lightball00",
+      "effectId": "proj_aether_orb",
+      "category": "projectile",
+      "title": "以太光球（能量投射物）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "nativeBindingSha256": "4a97008b84d975ad9e78c07f815ad1466b644a8c6bb9c5a2cb06febbe7d96ba4",
+      "designSha256": "287dbf95b95406789d3a77a7b15681634a9757c88e3cb9133537a3e77b6eb58d"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "energy_frost_rend",
+      "category": "energy",
+      "title": "霜裂斬（冰屬命中）",
+      "sequences": [
+        37
+      ],
+      "cells": [
+        119
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "41c565355957f20867e961984c8cd944c6cdb662e6c6cd802870771b96f6a779"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "proj_tracer_streak",
+      "category": "projectile",
+      "title": "曳光彈（一般投射物）",
+      "sequences": [
+        41
+      ],
+      "cells": [
+        133
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "8eb4e8baa55137d86c64e45378da3fbf4b7e396976438e4f775295f6daf3c99a"
+    },
+    {
+      "bankId": 12,
+      "family": "e003_beam00",
+      "effectId": "beam_prism_lance",
+      "category": "energy",
+      "title": "稜光射線（能量光束）",
+      "sequences": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "102b6f65df71b27b176d3ca7168afcb7eb89882362a726c6d0bfd720ba971c48",
+      "designSha256": "1b37864807f4e2799ba6dc9171bda097d0de304120915fc30a3e2421efe7b354"
+    },
+    {
+      "bankId": 138,
+      "family": "e003_beam04",
+      "effectId": "beam_flare_lance",
+      "category": "fire",
+      "title": "熾焰射線（火焰光束）",
+      "sequences": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "1ff0040253d838e0072a24543dbe4897d91de7ffa7d20f66c037eb0b6e2c6249",
+      "designSha256": "8e7e1a00b577b1d5625457547880369c074e7cb9933e9dbc5f409a383c8fb9e1"
+    },
+    {
+      "bankId": 51,
+      "family": "e003_magmaball01",
+      "effectId": "proj_molten_comet",
+      "category": "projectile",
+      "title": "熔岩彗核（熔岩投射物）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nativeBindingSha256": "9bcfa461bf0a60b9893a10ddba44217b0851e3ebd50fa784e7a406c17dd466fe",
+      "designSha256": "5e2880190ad02c1ea1f6c0038a16e1a415ece5af84a887ff06be24cec02a99e0"
+    },
+    {
+      "bankId": 28,
+      "family": "e003_thunderball00",
+      "effectId": "proj_storm_orb",
+      "category": "projectile",
+      "title": "雷暴球（雷電投射物）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "nativeBindingSha256": "d217ba8138c08123738e4f1dbec479f95a94a9f7b7479dd2464ee3cd2bbd7f4f",
+      "designSha256": "a23368070aff60e2756a0d6d0b754945a0277a5da0853b326ddec2529e2fd7f0"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "ice_rime_shard",
+      "category": "energy",
+      "title": "霜晶碎（冰晶）",
+      "sequences": [
+        31
+      ],
+      "cells": [
+        92,
+        93,
+        94,
+        95,
+        96
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "929ebebf6da0773f020e075e3af65e8241e4d5c3751a30595f721f528ccdef7c"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "hit_fang_crush",
+      "category": "hit",
+      "title": "碎牙咬合（咬擊命中）",
+      "sequences": [
+        42
+      ],
+      "cells": [
+        134
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "8323fa8c0227a0a70dc729c688a2ff4aed821e24d6641f9e9cfbc7af9a89b264"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "hit_thorn_lash",
+      "category": "hit",
+      "title": "棘藤鞭（藤蔓命中）",
+      "sequences": [
+        44
+      ],
+      "cells": [
+        136
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "7fd3fda1b6f2550d2691a32bc3d1503d248b07629fb0f91081f6ec2aff24040d"
+    },
+    {
+      "bankId": 139,
+      "family": "e003_crescemon",
+      "effectId": "char_crescemon_moonblade",
+      "category": "character",
+      "title": "月鎌獸形象特效（重用原創 Main 圖格）",
+      "sequences": [
+        0,
+        1
+      ],
+      "cells": [
+        0,
+        1,
+        2
+      ],
+      "nativeBindingSha256": "86676a6a27531dfeb597aede09eac4cf70cab365f0c637039af67250b9977af4",
+      "designSha256": "038851b7f6d01dbca50b7c5394848c53dc4d3ff8df3b139f7fc3313fe1ce3644"
+    },
+    {
+      "bankId": 92,
+      "family": "e003_oukuwamon",
+      "effectId": "char_oukuwamon_scissor",
+      "category": "character",
+      "title": "巨鍬形蟲獸形象特效（重用原創 Main 圖格）",
+      "sequences": [
+        0,
+        1
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "0da4e54e3f1fc26e5fa64a4bb89b9435b9cf31026a21101d12ade867c856bd65",
+      "designSha256": "e145a735e8a19f4194cf891f0ab1f6262c7eba6d9f811ba98a3e06334d4f4330"
+    },
+    {
+      "bankId": 148,
+      "family": "e003_brakedramon",
+      "effectId": "char_brakedramon_body",
+      "category": "character",
+      "title": "剎車龍獸形象特效（重用原創候選 Main 圖格＋原創揮擊弧）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "nativeBindingSha256": "f0e4c6cf87e3ab20650b34a4cf668b58a1bb9721e1317a0511f61e699a6f41e5",
+      "designSha256": "8109f15834d768e10d18624d15b6ba80a828f1ca9db46579670f94826a1640ba"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "impact_gold_large_r1",
+      "category": "hit",
+      "title": "金稜命中閃（大型角色追加衝擊）",
+      "sequences": [
+        35
+      ],
+      "cells": [
+        117
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "9ad797a6fb2721dd6bd4c63ebfbe06d344af86f0eea96885d285ea8d73142707"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "impact_gold_small_r1",
+      "category": "hit",
+      "title": "金芒命中閃（一般角色追加衝擊）",
+      "sequences": [
+        43
+      ],
+      "cells": [
+        135
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "f60e1675eba4530d3831615776545c6a11e24f2abc05188ec9fca5e748a61f16"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "impact_gold_result_r1",
+      "category": "hit",
+      "title": "散環命中餘光（結果附加）",
+      "sequences": [
+        45
+      ],
+      "cells": [
+        137,
+        138,
+        139,
+        140,
+        141
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "11fbb70c69e44e1fa178276222b86fb0aa238913d15f9dbc0299d294bb7f4061"
+    },
+    {
+      "bankId": 4,
+      "family": "e003_suport_eff",
+      "effectId": "support_aura_ring",
+      "category": "support",
+      "title": "援護光環（支援技能前導）",
+      "sequences": [
+        0
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "nativeBindingSha256": "8238c0c8137affbceb6a073e2db01d6798ecf2c78a1d72e4f9ce0645c228d0b1",
+      "designSha256": "d7e25189f6a5838cce39c2edd65c68961696a4396810fafff5c91a0e45445844"
+    },
+    {
+      "bankId": 132,
+      "family": "e003_leomonhed00",
+      "effectId": "lion_head_fireball",
+      "category": "projectile",
+      "title": "炎獅頭彈（共用投射＋命中）",
+      "sequences": [
+        0,
+        1
+      ],
+      "cells": [
+        0,
+        1,
+        2
+      ],
+      "nativeBindingSha256": "9caa80935c56868823550b252c500d30dde3d0cd372d68f4ad6a83a705992792",
+      "designSha256": "785fb04e864102fb669463b813c5d63810a0fdf02272df78dee784ad606750e0"
+    },
+    {
+      "bankId": 39,
+      "family": "e003_missile01",
+      "effectId": "missile_twin_volley",
+      "category": "projectile",
+      "title": "雙發飛彈（發射→飛行→爆炸）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "nativeBindingSha256": "bccdbe1f617a73ef7b6d062b043151753bfaff447a96382b7bc9897789a2da72",
+      "designSha256": "55b33ea8035e49b5f5a746abf382e3e19cf6ce63b6ac935a795966dd81e9a198"
+    },
+    {
+      "bankId": 1,
+      "family": "e003_battle",
+      "effectId": "miasma_burst",
+      "category": "hit",
+      "title": "緋紅瘴爆（瘴氣命中）",
+      "sequences": [
+        34
+      ],
+      "cells": [
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116
+      ],
+      "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+      "designSha256": "db6127e66837c4529ab1feba0978ed24da9eed4cc75f2f18f632a7b6b4fd0416"
+    },
+    {
+      "bankId": 3,
+      "family": "e003_mind_eff",
+      "effectId": "mind_mist_prelude",
+      "category": "support",
+      "title": "心念霧光（支援技能前導・無文字）",
+      "sequences": [
+        0
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "nativeBindingSha256": "4adf8e793219eb8dcf5403dda88b14825813e5e8bdc7a118b1afcd3b6e5da537",
+      "designSha256": "ad18aea84cd1161bb7b7e1e63b3146de52a4cca5635cba41e72860eb6fb2b0b3"
+    },
+    {
+      "bankId": 91,
+      "family": "e003_tsunami",
+      "effectId": "tidal_wave",
+      "category": "water",
+      "title": "怒濤巨浪（水波）",
+      "sequences": [
+        0
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "nativeBindingSha256": "06b7473221df271f208cf291a83d75c95d6fc2284287f6f021265b1f2192ef8d",
+      "designSha256": "673de8175c90751e477ccc8bc70640d29fb78d41377056a820615b34cb9b6da3"
+    },
+    {
+      "bankId": 104,
+      "family": "e003_risingdestroyer00",
+      "effectId": "plasma_beam_pieces",
+      "category": "energy",
+      "title": "電漿射束（光束本體／前端／槍口焰／命中）",
+      "sequences": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "0a56405881266d270b5b60ff3173b034cf103735a8ce504c986dd1df9953137f",
+      "designSha256": "3bd12e2eb2e728c612d01556a5572aa356ac29741cece6a098f58442f7aa8d25"
+    },
+    {
+      "bankId": 44,
+      "family": "e003_crescentmoon00",
+      "effectId": "golden_twin_crescents",
+      "category": "projectile",
+      "title": "金月雙刃（發射／飛行／命中）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "nativeBindingSha256": "d69cafac50f08c00a8a192a3441279d2e8a15575eb94a04b2966ad53e7ee9c05",
+      "designSha256": "4d72e8e54b816f75f58b83754a107924845aa498dd35b5648c2c92b2ba000869"
+    },
+    {
+      "bankId": 134,
+      "family": "e003_missile03",
+      "effectId": "brass_cannon_shell",
+      "category": "projectile",
+      "title": "黃銅砲彈（發射／飛行／爆炸）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "nativeBindingSha256": "b350354fef697acffa79d48e3c9527b4aead6826ba44f76af8c9d113bb0557f6",
+      "designSha256": "f8e9e55f1281d2e19617cf01831303ed2673fc8bb23046087896e7b081729e80"
+    },
+    {
+      "bankId": 19,
+      "family": "e003_kikanzyu00",
+      "effectId": "rapid_fire_volley",
+      "category": "projectile",
+      "title": "連射彈幕（槍口焰／彈幕／命中）",
+      "sequences": [
+        0,
+        1,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nativeBindingSha256": "63717785a8b6168363f7c59bdd5c9de375f406967b9627b4edf4bbc7ac3118df",
+      "designSha256": "77aee088fecc0ad2e21586c05aa656bc56a28cab8c0313417a37c18efc45fab8"
+    }
+  ],
+  "cells": [
+    {
+      "bankId": 1,
+      "cell": 86,
+      "effectId": "fire_ember_bloom",
+      "frame": [
+        650,
+        1417,
+        29,
+        30
+      ],
+      "origin": [
+        15,
+        16
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ed0ed4598dba35eb3d12cb18119130d4a2ea45f7b1559dc71813d9bf4b3e3708",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        11,
+        9
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 87,
+      "effectId": "fire_ember_bloom",
+      "frame": [
+        446,
+        1417,
+        45,
+        34
+      ],
+      "origin": [
+        18,
+        19
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f43396c27b3a9a8de9603a91972c8be2b7edbd4f703e778e71aa5c5fc27c379a",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        11,
+        9
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 88,
+      "effectId": "fire_ember_bloom",
+      "frame": [
+        655,
+        1236,
+        48,
+        62
+      ],
+      "origin": [
+        20,
+        46
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9cc1d296ed5e9f8bd21f091563e1f00f672d6ff3321a4073ece271b96dd135f2",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        11,
+        9
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 89,
+      "effectId": "fire_ember_bloom",
+      "frame": [
+        785,
+        1153,
+        47,
+        70
+      ],
+      "origin": [
+        20,
+        53
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "714017c86e1e5a50808bd21ac59260b2b61bea38b786200c86d5a26f7974e1ad",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        11,
+        17
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 90,
+      "effectId": "fire_ember_bloom",
+      "frame": [
+        477,
+        1304,
+        39,
+        56
+      ],
+      "origin": [
+        16,
+        42
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0e59aa507cbc1b244199b1cea4d95502a28ad949e0b33dee3af08544efb8fa59",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        11,
+        9
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 91,
+      "effectId": "fire_ember_bloom",
+      "frame": [
+        129,
+        1417,
+        15,
+        37
+      ],
+      "origin": [
+        1,
+        30
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "032a1957a6dbcd4a349985c7630afc9e4ab4d1050d7a8022c513fb275529eb0d",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        3,
+        9
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 92,
+      "effectId": "ice_rime_shard",
+      "frame": [
+        875,
+        1366,
+        65,
+        43
+      ],
+      "origin": [
+        31,
+        19
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "2d80b19ff4f571763dd1a9bfd205d8f76cc62b5eacb37a92fbdd113d3cab8667",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        11,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 93,
+      "effectId": "ice_rime_shard",
+      "frame": [
+        64,
+        1304,
+        67,
+        59
+      ],
+      "origin": [
+        32,
+        35
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "6a80d0b9fe6d8c2809ba2663f42a0440b82eb389fbcb678db78a02313f39db19",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        11,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 94,
+      "effectId": "ice_rime_shard",
+      "frame": [
+        332,
+        1304,
+        67,
+        58
+      ],
+      "origin": [
+        32,
+        34
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "280b7e7ac1bb0b293ee503f2ec490f4aef7d2edd797197b74c23cfd8be172bc5",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        11,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 95,
+      "effectId": "ice_rime_shard",
+      "frame": [
+        83,
+        1153,
+        84,
+        78
+      ],
+      "origin": [
+        41,
+        38
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "656003010f5f62711abf10887a572095eae6023669f90aebbcc64d5193bb5528",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        11,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 96,
+      "effectId": "ice_rime_shard",
+      "frame": [
+        512,
+        1366,
+        65,
+        45
+      ],
+      "origin": [
+        34,
+        29
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8cf6265e24f515e4770b2b75092d2c71e40b716c20955dc84c24e17a06550bfc",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        11,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 97,
+      "effectId": "energy_arc_spark",
+      "frame": [
+        698,
+        1304,
+        55,
+        54
+      ],
+      "origin": [
+        25,
+        26
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "c343879a06db8fb0a63d647f71d49295940718704d5424bdbbda89da06585980",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 98,
+      "effectId": "energy_arc_spark",
+      "frame": [
+        2,
+        1153,
+        79,
+        81
+      ],
+      "origin": [
+        37,
+        41
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "46934326953879e4c402fc43b6bee587e0802bd4344fddc2d2722e2846892b88",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 99,
+      "effectId": "energy_arc_spark",
+      "frame": [
+        477,
+        1059,
+        80,
+        85
+      ],
+      "origin": [
+        37,
+        42
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "65965003d8f955f9c7fd71d23e8de30ab6f3d781bfb511ef8b1d9f9a4e4f2e28",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 100,
+      "effectId": "energy_arc_spark",
+      "frame": [
+        641,
+        1153,
+        71,
+        71
+      ],
+      "origin": [
+        33,
+        32
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9db67e716a28873a929f315dca085f9ddcb96f469a1ff430ceb2b335699f9ce3",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        12
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 101,
+      "effectId": "flash_prism_twinkle",
+      "frame": [
+        834,
+        1153,
+        72,
+        70
+      ],
+      "origin": [
+        31,
+        35
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8b7b3a08d57097324eb2481f38a227ff0e6513a75a5499808143687371dc9214",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 102,
+      "effectId": "flash_prism_twinkle",
+      "frame": [
+        345,
+        1153,
+        76,
+        74
+      ],
+      "origin": [
+        33,
+        37
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e72d36bf789f0515dacce5fbc70ca5fde7644b4b18def5990a34549c50f88f3f",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 103,
+      "effectId": "flash_prism_twinkle",
+      "frame": [
+        433,
+        946,
+        96,
+        96
+      ],
+      "origin": [
+        45,
+        48
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "dc85ec8f49c81dbf8776533b1df4fa16de00050c093091d696f5fff66e1e9dd4",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 104,
+      "effectId": "flash_prism_twinkle",
+      "frame": [
+        217,
+        946,
+        106,
+        105
+      ],
+      "origin": [
+        49,
+        53
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a6dc938102e7058b3dcbf7e5052c4e3ba2df66a2f45a17d1916c023403f555b9",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 105,
+      "effectId": "flash_prism_twinkle",
+      "frame": [
+        2,
+        946,
+        104,
+        111
+      ],
+      "origin": [
+        48,
+        56
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "476d3812af6d430c8170f45186863cbd4b90e797d8f78286b269682bc1027847",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 106,
+      "effectId": "flash_prism_twinkle",
+      "frame": [
+        954,
+        1417,
+        24,
+        24
+      ],
+      "origin": [
+        8,
+        12
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "52b99c8e4dd482d7e11925fdf862e07ebb9d476ec951bb03fa0f2ee431d3294a",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        8
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 107,
+      "effectId": "miasma_burst",
+      "frame": [
+        930,
+        572,
+        30,
+        30
+      ],
+      "origin": [
+        16,
+        14
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8e981aa4fbe3850ff56119260972ed946dc3d2f50323e1c87fda5b3c647a7b23",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        4,
+        9
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 108,
+      "effectId": "miasma_burst",
+      "frame": [
+        964,
+        852,
+        37,
+        35
+      ],
+      "origin": [
+        22,
+        18
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e32db23ec9f675d1a67da6663178532f8d1dd62492f7fcaea30d8cf6963428be",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        12,
+        9
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 109,
+      "effectId": "miasma_burst",
+      "frame": [
+        964,
+        698,
+        36,
+        49
+      ],
+      "origin": [
+        20,
+        29
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "7a1259aa8e527d463127228953292af86963d3c853c9026d3a16861358287270",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        12,
+        9
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 110,
+      "effectId": "miasma_burst",
+      "frame": [
+        964,
+        572,
+        35,
+        60
+      ],
+      "origin": [
+        20,
+        40
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "1bde06f122ce2a669ee3d711710d620afd22db229ed97a30f0469806e6a54027",
+      "nativeSize": [
+        16,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        17
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 111,
+      "effectId": "miasma_burst",
+      "frame": [
+        988,
+        490,
+        34,
+        68
+      ],
+      "origin": [
+        19,
+        48
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9a41916285b044df8fbff2b3807a7c7c51c2eb286b790d6eb1896ec19c0e80dd",
+      "nativeSize": [
+        16,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        17
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 112,
+      "effectId": "miasma_burst",
+      "frame": [
+        954,
+        490,
+        29,
+        78
+      ],
+      "origin": [
+        15,
+        60
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0ca3b7672d24da2f63f1bfadf428e5736f6103a74c7fcf0cc942648f6034c042",
+      "nativeSize": [
+        8,
+        24
+      ],
+      "nativeOrigin": [
+        4,
+        17
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 113,
+      "effectId": "miasma_burst",
+      "frame": [
+        964,
+        636,
+        32,
+        57
+      ],
+      "origin": [
+        14,
+        51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a7e8172afff07fd1f6537971783c4ddeb96126c53008d782ee8a369d3f962b88",
+      "nativeSize": [
+        16,
+        24
+      ],
+      "nativeOrigin": [
+        4,
+        17
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 114,
+      "effectId": "miasma_burst",
+      "frame": [
+        964,
+        752,
+        46,
+        48
+      ],
+      "origin": [
+        23,
+        44
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ddb4d6c684a494ed1218da469cdc4ee7510939e87aeae8f4c4543869952081ac",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        17
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 115,
+      "effectId": "miasma_burst",
+      "frame": [
+        964,
+        804,
+        44,
+        43
+      ],
+      "origin": [
+        22,
+        49
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "58b0eaa210612805c0cf5a3c27be5aa9c7e00b6a40c2e14b63c5cbfef21df8ea",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        12,
+        17
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 116,
+      "effectId": "miasma_burst",
+      "frame": [
+        964,
+        892,
+        32,
+        23
+      ],
+      "origin": [
+        16,
+        56
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "23321f18815b2095aed9ef0b6c1161301ee53b2dbf5594f0c5959abfcb1aa882",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        4,
+        17
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 117,
+      "effectId": "impact_gold_large_r1",
+      "frame": [
+        968,
+        1304,
+        54,
+        50
+      ],
+      "origin": [
+        22,
+        23
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a24d75e94bd617236f2d3ae4467c4d071b1550be05804a61a3a97a97405ba972",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 118,
+      "effectId": "fire_flame_swipe",
+      "frame": [
+        714,
+        1153,
+        69,
+        71
+      ],
+      "origin": [
+        33,
+        32
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f702ba101cbcc37d094b371a0ba81804f59a9cf858820f5addaa021c55994fbb",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 119,
+      "effectId": "energy_frost_rend",
+      "frame": [
+        705,
+        1236,
+        69,
+        62
+      ],
+      "origin": [
+        52,
+        36
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f886655a91f5c8489bb3373e4b40fc43ea940490c32b2cdf0daa1ca39fb42b90",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        12,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 125,
+      "effectId": "flash_wisp_glimmer",
+      "frame": [
+        768,
+        1417,
+        28,
+        28
+      ],
+      "origin": [
+        12,
+        12
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d86509fe3c47bcebc9a69473d3a8a6ebe1c3a9dace8d6775cffadfa1c3f428eb",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 126,
+      "effectId": "flash_wisp_glimmer",
+      "frame": [
+        980,
+        1417,
+        26,
+        24
+      ],
+      "origin": [
+        11,
+        10
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "eabcbe1a0185f713305866524e1dbf7f49236f1b538da502e4d8d320e67ffb4e",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 127,
+      "effectId": "flash_wisp_glimmer",
+      "frame": [
+        798,
+        1417,
+        28,
+        28
+      ],
+      "origin": [
+        12,
+        12
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "caf14d4689ca71b489a3d0a461bca776c50d26ddb0e229b43175c7a8214a21f7",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 128,
+      "effectId": "flash_wisp_glimmer",
+      "frame": [
+        2,
+        1459,
+        24,
+        24
+      ],
+      "origin": [
+        10,
+        10
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "78df33b272e6af591b09b03a9787ba00e148fcd17471f729a0d163de063efdd2",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 129,
+      "effectId": "flash_wisp_glimmer",
+      "frame": [
+        526,
+        1417,
+        32,
+        32
+      ],
+      "origin": [
+        14,
+        14
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f9bb57ef5d200286e678dd92cdc47ae494544fcd0d51a6b8cd9514a92146a812",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 130,
+      "effectId": "flash_wisp_glimmer",
+      "frame": [
+        829,
+        1366,
+        44,
+        44
+      ],
+      "origin": [
+        20,
+        20
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "dfecb3092803241ca54dcac7afd5f1edc96e640389248529eedcff855d7a2f3a",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 131,
+      "effectId": "flash_wisp_glimmer",
+      "frame": [
+        518,
+        1304,
+        56,
+        56
+      ],
+      "origin": [
+        26,
+        26
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "bfe1ba34642a7e0c8b41aec0ef57d64311ed6b8a9f29f0d2d86160646e9f1d44",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 132,
+      "effectId": "flash_wisp_glimmer",
+      "frame": [
+        2,
+        1236,
+        60,
+        66
+      ],
+      "origin": [
+        27,
+        29
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "cd81b9f846f48498c61c82c501d181c21b7f305278130b8b63824ee2603f297f",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 133,
+      "effectId": "proj_tracer_streak",
+      "frame": [
+        828,
+        1417,
+        96,
+        26
+      ],
+      "origin": [
+        30,
+        11
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "c005b80dbbb37784361a179025523db75ba2eaedf7f38313349baf71b6e2d84d",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 134,
+      "effectId": "hit_fang_crush",
+      "frame": [
+        401,
+        1304,
+        74,
+        57
+      ],
+      "origin": [
+        34,
+        26
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "980e1773ca342d2cbf0efe8bc5598c685d39bc12e969aedad06c583dca6e2b1d",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 135,
+      "effectId": "impact_gold_small_r1",
+      "frame": [
+        82,
+        1459,
+        28,
+        24
+      ],
+      "origin": [
+        10,
+        12
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "af00a18e2eb4110190a6cf0415f81f08a676acb71254c1a458d28288ee721b6c",
+      "nativeSize": [
+        8,
+        8
+      ],
+      "nativeOrigin": [
+        3,
+        4
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 136,
+      "effectId": "hit_thorn_lash",
+      "frame": [
+        845,
+        1236,
+        96,
+        61
+      ],
+      "origin": [
+        56,
+        25
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "726973070315526ad6eb0bb035f16dd09a720de8a012b682e781ae2b1a1f5e5e",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        12,
+        8
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 137,
+      "effectId": "impact_gold_result_r1",
+      "frame": [
+        386,
+        1459,
+        10,
+        10
+      ],
+      "origin": [
+        3,
+        3
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ac6ebc6b3897e6b9f89cad39037999db5bbf96f5f35d5b514ad0bbee281df007",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 138,
+      "effectId": "impact_gold_result_r1",
+      "frame": [
+        352,
+        1459,
+        16,
+        16
+      ],
+      "origin": [
+        6,
+        6
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "c928d8afc500a9b09d927f727a2ab297606e621bb1196916a55794b0d9b3d8eb",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 139,
+      "effectId": "impact_gold_result_r1",
+      "frame": [
+        926,
+        1417,
+        26,
+        26
+      ],
+      "origin": [
+        11,
+        11
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "7466e8e800301e7c6069de96079641f06888a2f9e087dcfe582738979e8d943b",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 140,
+      "effectId": "impact_gold_result_r1",
+      "frame": [
+        681,
+        1417,
+        30,
+        30
+      ],
+      "origin": [
+        13,
+        13
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "035fc00e11b9967843cad436ac5832948f7095a8c7ce7ff3db6bb2b4ed5c5e88",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 1,
+      "cell": 141,
+      "effectId": "impact_gold_result_r1",
+      "frame": [
+        560,
+        1417,
+        32,
+        32
+      ],
+      "origin": [
+        14,
+        14
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "1281d34ab88aae799588866ef13bff1d991669b0f156da59cd9b7201c1552d02",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 3,
+      "cell": 0,
+      "effectId": "mind_mist_prelude",
+      "frame": [
+        976,
+        984,
+        40,
+        35
+      ],
+      "origin": [
+        25,
+        19
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "97527063b16614eb7248ca32cada5f46572060defb3066673ae8f3811d6dc272",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        8
+      ]
+    },
+    {
+      "bankId": 3,
+      "cell": 1,
+      "effectId": "mind_mist_prelude",
+      "frame": [
+        954,
+        1510,
+        65,
+        47
+      ],
+      "origin": [
+        34,
+        28
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "50c31e2e17b094da784f7b0347c666ad9b480c2473adf6eed4e2ac354af6f27e",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        16,
+        8
+      ]
+    },
+    {
+      "bankId": 3,
+      "cell": 2,
+      "effectId": "mind_mist_prelude",
+      "frame": [
+        960,
+        1044,
+        62,
+        79
+      ],
+      "origin": [
+        31,
+        57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "af2c8879700cfdc9e3325a1306bd5a608396aaf0d041d7770f19a4e3947d17e8",
+      "nativeSize": [
+        32,
+        24
+      ],
+      "nativeOrigin": [
+        16,
+        16
+      ]
+    },
+    {
+      "bankId": 3,
+      "cell": 3,
+      "effectId": "mind_mist_prelude",
+      "frame": [
+        956,
+        1446,
+        66,
+        60
+      ],
+      "origin": [
+        35,
+        50
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a1b1c4f326b2a329450eee7d80228dc957bb4bacc39c4a02af6400cad537b388",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        16,
+        16
+      ]
+    },
+    {
+      "bankId": 3,
+      "cell": 4,
+      "effectId": "mind_mist_prelude",
+      "frame": [
+        976,
+        920,
+        45,
+        60
+      ],
+      "origin": [
+        9,
+        65
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "7ff635f512f1af6100afa7d144ee79e9bb2003a3fa276efb06e92aaa5c1c3c2d",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        8,
+        24
+      ]
+    },
+    {
+      "bankId": 3,
+      "cell": 5,
+      "effectId": "mind_mist_prelude",
+      "frame": [
+        670,
+        420,
+        20,
+        18
+      ],
+      "origin": [
+        -11,
+        48
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "cb153d0499a1dea636c69c70fd4848661e1f92adb48922b2fbf99aa13acc5711",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        0,
+        16
+      ]
+    },
+    {
+      "bankId": 4,
+      "cell": 0,
+      "effectId": "support_aura_ring",
+      "frame": [
+        930,
+        420,
+        73,
+        66
+      ],
+      "origin": [
+        32,
+        33
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "149b4f20e3a427bb4ec6308e951e799daa3a917e858dbaab3db36a4d2f30de23",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 4,
+      "cell": 1,
+      "effectId": "support_aura_ring",
+      "frame": [
+        716,
+        1450,
+        102,
+        102
+      ],
+      "origin": [
+        47,
+        51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a6f9c5fce8db82cbb437df4594a1cc4a4b94e25cdb3a9029f345cd9e94181cce",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 4,
+      "cell": 2,
+      "effectId": "support_aura_ring",
+      "frame": [
+        448,
+        1456,
+        111,
+        110
+      ],
+      "origin": [
+        51,
+        55
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "39bb947b0893376d627c2542de77d8c5d38080766d66750d11d16d6d1ce17a3a",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 4,
+      "cell": 3,
+      "effectId": "support_aura_ring",
+      "frame": [
+        596,
+        1452,
+        115,
+        116
+      ],
+      "origin": [
+        54,
+        58
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a2d23c1c984ec78655b1d8d51b96d3de20ef21e9f46d7633fdba4121ded419d6",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 4,
+      "cell": 4,
+      "effectId": "support_aura_ring",
+      "frame": [
+        830,
+        1448,
+        120,
+        118
+      ],
+      "origin": [
+        54,
+        58
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b9a5fc35f5ea90a0d31e720a8ab80feb98b1d195fc880042a9d88896d83e570f",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 7,
+      "cell": 0,
+      "effectId": "proj_fire_comet",
+      "frame": [
+        288,
+        1459,
+        23,
+        20
+      ],
+      "origin": [
+        7,
+        8
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "484f3c752a271e719f97bc595f71e8fd8813b21c4c4bc955b5124d215baae213",
+      "nativeSize": [
+        8,
+        8
+      ],
+      "nativeOrigin": [
+        5,
+        4
+      ]
+    },
+    {
+      "bankId": 7,
+      "cell": 1,
+      "effectId": "proj_fire_comet",
+      "frame": [
+        263,
+        1459,
+        23,
+        21
+      ],
+      "origin": [
+        9,
+        10
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8bd83f5d50efdab6632dd5bcdd44053db58e4eacaa488f968ee7b2217dcdefda",
+      "nativeSize": [
+        8,
+        8
+      ],
+      "nativeOrigin": [
+        5,
+        4
+      ]
+    },
+    {
+      "bankId": 7,
+      "cell": 2,
+      "effectId": "proj_fire_comet",
+      "frame": [
+        594,
+        1417,
+        54,
+        31
+      ],
+      "origin": [
+        7,
+        13
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ac66dd2310db63bb87f51e6b9207d647cacf4faa423da127a64eb0eada269357",
+      "nativeSize": [
+        16,
+        8
+      ],
+      "nativeOrigin": [
+        4,
+        4
+      ]
+    },
+    {
+      "bankId": 7,
+      "cell": 3,
+      "effectId": "proj_fire_comet",
+      "frame": [
+        713,
+        1417,
+        53,
+        29
+      ],
+      "origin": [
+        7,
+        13
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "2378014d0fc904b0225b4ad29323102a160e4c4a3fbb09eb139950b0d948faf1",
+      "nativeSize": [
+        16,
+        8
+      ],
+      "nativeOrigin": [
+        4,
+        4
+      ]
+    },
+    {
+      "bankId": 7,
+      "cell": 4,
+      "effectId": "proj_fire_comet",
+      "frame": [
+        460,
+        1236,
+        56,
+        63
+      ],
+      "origin": [
+        28,
+        29
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "c6cb3f6337d76bb27cc624a8246f549e15f540548e3ba1916be07eebcdc63fdc",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 7,
+      "cell": 5,
+      "effectId": "proj_fire_comet",
+      "frame": [
+        64,
+        1236,
+        66,
+        65
+      ],
+      "origin": [
+        32,
+        29
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f929cab372ebe523f30352d09d0a92f2e9535b11c4bafe49f397a3a630424c2e",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 7,
+      "cell": 6,
+      "effectId": "proj_fire_comet",
+      "frame": [
+        908,
+        1153,
+        74,
+        68
+      ],
+      "origin": [
+        36,
+        30
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "bba7815c801ad3067436da0c43e79856e76500e30633fbacb4f284287867c9f6",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 9,
+      "cell": 0,
+      "effectId": "proj_aether_orb",
+      "frame": [
+        755,
+        1304,
+        64,
+        54
+      ],
+      "origin": [
+        32,
+        23
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f3de261fdd0ea88a940bb573ad4e1a9aaa6c53ed1724197514277522b8111c0b",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 9,
+      "cell": 1,
+      "effectId": "proj_aether_orb",
+      "frame": [
+        199,
+        1236,
+        54,
+        64
+      ],
+      "origin": [
+        27,
+        28
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "545fe23ff3f68d9698ee9464debe51e1f90806125b7bfceb5e478c8fc6069318",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 9,
+      "cell": 2,
+      "effectId": "proj_aether_orb",
+      "frame": [
+        493,
+        1417,
+        31,
+        33
+      ],
+      "origin": [
+        13,
+        14
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "724f2c6ae1bce937c0e81d85774b3b176f02cd83264371450a82a63be77b7d70",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 9,
+      "cell": 3,
+      "effectId": "proj_aether_orb",
+      "frame": [
+        2,
+        1059,
+        80,
+        92
+      ],
+      "origin": [
+        40,
+        46
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "4477eb66778be49847cea83db949e512a8206a946bc68a48a7fbc640a7a28691",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        12
+      ]
+    },
+    {
+      "bankId": 9,
+      "cell": 4,
+      "effectId": "proj_aether_orb",
+      "frame": [
+        916,
+        1304,
+        50,
+        50
+      ],
+      "origin": [
+        25,
+        25
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "2b79041e6842bc956555ca6428e0155b597d54ec6ef9fef1129647a3c9b08fd4",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        9,
+        9
+      ]
+    },
+    {
+      "bankId": 9,
+      "cell": 5,
+      "effectId": "proj_aether_orb",
+      "frame": [
+        370,
+        1459,
+        14,
+        14
+      ],
+      "origin": [
+        5,
+        5
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "2af5454ef3aa4024bbd5bed9cc3fe4bbd9cb7c34e70c8877cdf80e7f8917076e",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 9,
+      "cell": 6,
+      "effectId": "proj_aether_orb",
+      "frame": [
+        332,
+        1459,
+        18,
+        18
+      ],
+      "origin": [
+        7,
+        7
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "74a715bfcaef15550ed8b996ae0705bac850a77e07f8a8d7c6716b527f45a1c1",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 12,
+      "cell": 0,
+      "effectId": "beam_prism_lance",
+      "frame": [
+        255,
+        1236,
+        32,
+        64
+      ],
+      "origin": [
+        0,
+        32
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "cf363cea08c32d06e8fb85b11c8a6a6437f58b6305a4bb7541420ef74b796440",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        0,
+        8
+      ],
+      "candidateSource": "beam_prism_lance_seamfix_r1"
+    },
+    {
+      "bankId": 12,
+      "cell": 1,
+      "effectId": "beam_prism_lance",
+      "frame": [
+        289,
+        1236,
+        32,
+        64
+      ],
+      "origin": [
+        0,
+        32
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "5add2dadf1c8f7cbb40bc4360db0076fdcf5e8a25de2dfc2cc4f42a8d1ceb36c",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        0,
+        8
+      ]
+    },
+    {
+      "bankId": 12,
+      "cell": 2,
+      "effectId": "beam_prism_lance",
+      "frame": [
+        252,
+        1059,
+        40,
+        86
+      ],
+      "origin": [
+        14,
+        43
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "bf51c073d5c310898fb9718b3f602ea1dcc38a32236d1af2a3056a51f32013ef",
+      "nativeSize": [
+        8,
+        32
+      ],
+      "nativeOrigin": [
+        0,
+        16
+      ]
+    },
+    {
+      "bankId": 12,
+      "cell": 3,
+      "effectId": "beam_prism_lance",
+      "frame": [
+        499,
+        1153,
+        69,
+        73
+      ],
+      "origin": [
+        34,
+        35
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "7d6c881cd42985251c25571dc8e6264f216959298bbe389453dd9881d4f9f49e",
+      "nativeSize": [
+        16,
+        32
+      ],
+      "nativeOrigin": [
+        8,
+        16
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 0,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        28,
+        1459,
+        26,
+        24
+      ],
+      "origin": [
+        10,
+        10
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d24e73714bc9ce5ae00ba32330d17a7958b5ab8db38cbc6b5d49e1ea8ddf2c7d",
+      "nativeSize": [
+        8,
+        8
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 1,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        2,
+        1417,
+        44,
+        40
+      ],
+      "origin": [
+        20,
+        18
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f66589e7d9aa1039294e95f34463d14d420dce9493bee1d95ded68258a33f44e",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 2,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        576,
+        1304,
+        60,
+        56
+      ],
+      "origin": [
+        27,
+        25
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "6314dd9e5b9e99b380dee3a8d9d3d6f08dc9630d17ebde8093df21ca9d39a363",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 3,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        323,
+        1236,
+        67,
+        64
+      ],
+      "origin": [
+        29,
+        29
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9ea52f4d9b6251144ca5c296de0e3d7dc531a73185c45034cb74ed74ecfd1682",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 4,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        776,
+        1236,
+        67,
+        62
+      ],
+      "origin": [
+        31,
+        26
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "50cdacd7ab06229055694ceb1892b3f28584ec8e5aa4a7274a10d5c28533bc9b",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 5,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        518,
+        1236,
+        67,
+        63
+      ],
+      "origin": [
+        32,
+        28
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "7065bca028f2e769582d8eacb4446b6dbb66cfc778d6b4b1aafde9bd969fc393",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 6,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        587,
+        1236,
+        66,
+        63
+      ],
+      "origin": [
+        31,
+        29
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "40d1b2fa402813fb8c182a0789638026f7c8a068ea54202fa14315a630cf792c",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 7,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        943,
+        1236,
+        64,
+        61
+      ],
+      "origin": [
+        30,
+        30
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0a9081491a8c8313f6464b9fb044ea76dca61a05b2a3c38dd9ee343ccbc44e40",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 8,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        133,
+        1304,
+        61,
+        59
+      ],
+      "origin": [
+        28,
+        31
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a713a9cd0ede757f42e8db0e6f272be60b450dc6d891f78898a8f3c93c421c49",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 16,
+      "cell": 9,
+      "effectId": "smoke_soot_bloom",
+      "frame": [
+        196,
+        1304,
+        61,
+        59
+      ],
+      "origin": [
+        29,
+        33
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "49ff8d5691b1118aaa58ea3351c7254428d687be01a6a9e6f8ca23e98d3dbe92",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 19,
+      "cell": 0,
+      "effectId": "rapid_fire_volley",
+      "frame": [
+        862,
+        916,
+        30,
+        22
+      ],
+      "origin": [
+        12,
+        7
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "7f3b42cce63c211bc47487104faed82be176aeedec57db1cee244d3377baecd0",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 19,
+      "cell": 1,
+      "effectId": "rapid_fire_volley",
+      "frame": [
+        816,
+        1820,
+        50,
+        47
+      ],
+      "origin": [
+        26,
+        24
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "66001e0d918a511cc5736871a6492ee46e349355bd2d3ffe1982c9bf33027d16",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 19,
+      "cell": 2,
+      "effectId": "rapid_fire_volley",
+      "frame": [
+        870,
+        1820,
+        46,
+        46
+      ],
+      "origin": [
+        19,
+        19
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e1053291626a197f6b4ee838d5bbb3cd7ed55f47dc0e1df8d51d3b4f2424bdf8",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 19,
+      "cell": 3,
+      "effectId": "rapid_fire_volley",
+      "frame": [
+        752,
+        1820,
+        60,
+        55
+      ],
+      "origin": [
+        28,
+        23
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "00dc92a8fe2745bf5224b3f214daa9842b9e439ac52910dfbcae21e38bf0609b",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 0,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        194,
+        1153,
+        76,
+        76
+      ],
+      "origin": [
+        36,
+        36
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "6c31b73be6f6838ebc774ca8c17aecc6bc731f24f1ad25f686c1508906987d0f",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 1,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        2,
+        1304,
+        60,
+        60
+      ],
+      "origin": [
+        28,
+        28
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "feb69306dc072ca41c77251159bd21ceccd037dfe9dfdc6d2503603d9872b726",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 2,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        343,
+        1366,
+        46,
+        46
+      ],
+      "origin": [
+        21,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "750c9f9607fbc4f8f79f87bfb7c7fc3624fb2619c78cee7b568612382b0cb60a",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 3,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        56,
+        1459,
+        24,
+        24
+      ],
+      "origin": [
+        10,
+        10
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "1445b1348cb925b63a7afd0e49bfd1d6f2cbf357f9b366314c790b3a0b83f30a",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 4,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        579,
+        1366,
+        50,
+        45
+      ],
+      "origin": [
+        24,
+        27
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "fcf467d0fa0f827e931ebf619e8db1509045c007de9cf670589347a6214d34e3",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 5,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        2,
+        1366,
+        46,
+        49
+      ],
+      "origin": [
+        15,
+        24
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "724bbee8170f28b72e3099614adcefa47ce239dc148d0e422b6ad40e955a30f8",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 6,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        631,
+        1366,
+        50,
+        45
+      ],
+      "origin": [
+        22,
+        15
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d0ff289df80ccbe9b298ca8e54725a7062ea1c584b3341b816d04cde0e563695",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 7,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        50,
+        1366,
+        45,
+        49
+      ],
+      "origin": [
+        26,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "29c68eeda805e843b1f30b3096168908e62e2d888c6b1f1c5120629bac4b7f79",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 8,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        391,
+        1366,
+        46,
+        46
+      ],
+      "origin": [
+        18,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "526b91594759e047b9d1b6a97199a4b1d5b0878b1cd9b34edcfd5d473a150c45",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 9,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        132,
+        1236,
+        65,
+        65
+      ],
+      "origin": [
+        29,
+        31
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "cd66e45e51ae5744f038ecafb48bc1db325f14bad67bab6289648d81e9deeabf",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 28,
+      "cell": 10,
+      "effectId": "proj_storm_orb",
+      "frame": [
+        781,
+        1059,
+        79,
+        84
+      ],
+      "origin": [
+        37,
+        40
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "04f05209b6f0f028a3b1d3b33e26c02729272e8d712118dc255f5b9d8c384f90",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 39,
+      "cell": 0,
+      "effectId": "missile_twin_volley",
+      "frame": [
+        992,
+        390,
+        10,
+        12
+      ],
+      "origin": [
+        -1,
+        4
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b8678ccdef9f9680ea988d6f9c0c85a48f90ed9500b468c2d25e5fd7bae45844",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        0,
+        7
+      ]
+    },
+    {
+      "bankId": 39,
+      "cell": 1,
+      "effectId": "missile_twin_volley",
+      "frame": [
+        956,
+        390,
+        31,
+        23
+      ],
+      "origin": [
+        3,
+        9
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b0b7f63a5bd3d799767ae3d55c408e5d134164eeaf3a8a7484a6d8ec5d5b315b",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 39,
+      "cell": 2,
+      "effectId": "missile_twin_volley",
+      "frame": [
+        930,
+        490,
+        20,
+        40
+      ],
+      "origin": [
+        -8,
+        16
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a33897508fc98dbd5a9f37e2f3414cf41f75e92f47680c7bb66f3718480f76a2",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        0,
+        7
+      ]
+    },
+    {
+      "bankId": 39,
+      "cell": 3,
+      "effectId": "missile_twin_volley",
+      "frame": [
+        156,
+        1486,
+        106,
+        63
+      ],
+      "origin": [
+        17,
+        31
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9a5cdbc6541fe5c4e85d3ae7bdcff3b2d6b8e82818e6abbfe40673785acfacb7",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        8
+      ]
+    },
+    {
+      "bankId": 39,
+      "cell": 4,
+      "effectId": "missile_twin_volley",
+      "frame": [
+        156,
+        1554,
+        100,
+        57
+      ],
+      "origin": [
+        17,
+        28
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "1c28f52f3c687e6127c8c4fe1786703f87858a317674c9dc797c05c433bf2958",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        8
+      ]
+    },
+    {
+      "bankId": 39,
+      "cell": 5,
+      "effectId": "missile_twin_volley",
+      "frame": [
+        956,
+        344,
+        54,
+        42
+      ],
+      "origin": [
+        24,
+        14
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "c3fd2ede827cf4cd3afad19b98914b461c918389462485acfa2a06266f75ede7",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        8
+      ]
+    },
+    {
+      "bankId": 39,
+      "cell": 6,
+      "effectId": "missile_twin_volley",
+      "frame": [
+        956,
+        282,
+        55,
+        57
+      ],
+      "origin": [
+        28,
+        31
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "cbf074a61ebf9178ee0a7c52e6a99d1c6e31d522def40953d33c6d16f7693ad8",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        8
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 0,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        1006,
+        390,
+        14,
+        12
+      ],
+      "origin": [
+        5,
+        4
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f15368fdbaa987fcefda519221dde1478c10d1a021a74457bca23b8a071525be",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 1,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        986,
+        1358,
+        34,
+        46
+      ],
+      "origin": [
+        13,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9d059ed9d72764077da0563ea50802b479acb1de6f12347e685cb3377137ad9e",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 2,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        556,
+        1602,
+        54,
+        54
+      ],
+      "origin": [
+        25,
+        25
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "eeeef258825b7d70d6f03e90f39d55dd6fb18fdf12dfb054900b4d9df6d758b2",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 3,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        1018,
+        2,
+        1,
+        1
+      ],
+      "origin": [
+        0,
+        0
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": true,
+      "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "nativeSize": [
+        8,
+        8
+      ],
+      "nativeOrigin": [
+        -1,
+        -1
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 4,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        340,
+        1720,
+        121,
+        94
+      ],
+      "origin": [
+        58,
+        40
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0d62d7e728756e147167431808f6e451458929f7061bdbfbb2dd9083cb9e0a30",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        15
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 5,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        210,
+        1720,
+        126,
+        95
+      ],
+      "origin": [
+        58,
+        41
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "50afca25df00dce5279aa9d661c8fa84e73a729b1a0e933ce25e3a0e49da3da1",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        15
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 6,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        864,
+        1718,
+        120,
+        97
+      ],
+      "origin": [
+        57,
+        43
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d2a8bc7d5f488d3ebb8bd349bceb3cceb99a215cb5a1ed14dfeaebe9c51c78ce",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        15
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 7,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        736,
+        1718,
+        124,
+        98
+      ],
+      "origin": [
+        56,
+        44
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "5bbeb60208428f6e4a1a6ea1129f732caf15fc2ac13dbf141b22394b33777f6e",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        15
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 8,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        110,
+        1710,
+        96,
+        96
+      ],
+      "origin": [
+        44,
+        44
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e501cb68ac86aa2f087e4c6369cf9c67b23d0436a9d2fb3183cb538abf87e278",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        15
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 9,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        2,
+        1710,
+        103,
+        106
+      ],
+      "origin": [
+        45,
+        46
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "28f2b234a4f1abaff76273b61aafc7a64889f72bfc3b5ec98e1d79534f76caaa",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        15
+      ]
+    },
+    {
+      "bankId": 44,
+      "cell": 10,
+      "effectId": "golden_twin_crescents",
+      "frame": [
+        1018,
+        8,
+        1,
+        1
+      ],
+      "origin": [
+        0,
+        0
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": true,
+      "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "nativeSize": [
+        8,
+        8
+      ],
+      "nativeOrigin": [
+        -1,
+        -1
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 0,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        313,
+        1459,
+        17,
+        19
+      ],
+      "origin": [
+        7,
+        8
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b57888a37d2c2f3a7be7d285b0a4747086916680d34fa7ddea4f54a741acf8cd",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 1,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        112,
+        1459,
+        24,
+        23
+      ],
+      "origin": [
+        9,
+        10
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0b6f73077d22d14f2e52c55e6b42dce2a1ba85d627096576cb4f146efa3ac001",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 2,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        146,
+        1417,
+        79,
+        36
+      ],
+      "origin": [
+        11,
+        15
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f6ee7b745c2012cd191f0c1a8da488d446a365a60ae71b85118e543fc43f9dce",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        10,
+        7
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 3,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        227,
+        1417,
+        78,
+        36
+      ],
+      "origin": [
+        11,
+        15
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b40e0b7d3517aae8bfda4a0973b13b45db1b07bd254520fa2e007849a4644009",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        10,
+        7
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 4,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        307,
+        1417,
+        79,
+        36
+      ],
+      "origin": [
+        11,
+        15
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e6bb9bbd603964e70e06d43693ae17608e4d906c0a3777148b98c93a236e77fa",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        10,
+        7
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 5,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        48,
+        1417,
+        79,
+        39
+      ],
+      "origin": [
+        11,
+        18
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e14067f9e8fae3b02b02b3e42cc6e4bd93ff9c33afff302d42f9a795e2f9852d",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        10,
+        7
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 6,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        683,
+        1366,
+        46,
+        45
+      ],
+      "origin": [
+        20,
+        19
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "91e88d5fe994a160766246a2a395f7ad2d2c443a8a7ded4d27845cd2fa28b5b3",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 7,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        272,
+        1153,
+        71,
+        76
+      ],
+      "origin": [
+        32,
+        35
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9a0160c8406bb71819acaa9a95783b8f2fb374a6f444e4809496110fbb24b9a8",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 51,
+      "cell": 8,
+      "effectId": "proj_molten_comet",
+      "frame": [
+        259,
+        1304,
+        71,
+        59
+      ],
+      "origin": [
+        31,
+        28
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "c326d7be70823e344c43667c68ca1e9c2e007626f4a5521cfd47ee1e9bc702ee",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 64,
+      "cell": 0,
+      "effectId": "smoke_dust_kick",
+      "frame": [
+        638,
+        1304,
+        58,
+        55
+      ],
+      "origin": [
+        25,
+        16
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "a869cabd237cbf738bec03047a28f99b7b4dbc950dbb7f685e5a151611ee4506",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        6
+      ]
+    },
+    {
+      "bankId": 64,
+      "cell": 1,
+      "effectId": "smoke_dust_kick",
+      "frame": [
+        423,
+        1153,
+        74,
+        74
+      ],
+      "origin": [
+        31,
+        29
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "46709cec50292e1055bdda750cdb7df0c85f4b7288433b9143b4c6fd729ad9b5",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        13,
+        6
+      ]
+    },
+    {
+      "bankId": 64,
+      "cell": 2,
+      "effectId": "smoke_dust_kick",
+      "frame": [
+        734,
+        946,
+        90,
+        93
+      ],
+      "origin": [
+        41,
+        45
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0d015f80e3af2e394826e64b6ac2e41bc8f80f4ab7b62ebdd3746fe67b58ec6a",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        13
+      ]
+    },
+    {
+      "bankId": 64,
+      "cell": 3,
+      "effectId": "smoke_dust_kick",
+      "frame": [
+        84,
+        1059,
+        78,
+        92
+      ],
+      "origin": [
+        36,
+        47
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d3182b01c0db41da8d12292bafdc14582894449a6f12dd742715e36ed6987798",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        14
+      ]
+    },
+    {
+      "bankId": 64,
+      "cell": 4,
+      "effectId": "smoke_dust_kick",
+      "frame": [
+        559,
+        1059,
+        75,
+        85
+      ],
+      "origin": [
+        35,
+        40
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "c41f5546cedae4a132f41327f7f01babe497cc91335ea7de96ee2511bcd1a749",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        12,
+        6
+      ]
+    },
+    {
+      "bankId": 64,
+      "cell": 5,
+      "effectId": "smoke_dust_kick",
+      "frame": [
+        388,
+        1417,
+        56,
+        36
+      ],
+      "origin": [
+        23,
+        -9
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "7f000a9959f967570103cda47586fc69bd6ab521fd71fcc02c2a6c5bee85611e",
+      "nativeSize": [
+        24,
+        8
+      ],
+      "nativeOrigin": [
+        12,
+        -2
+      ]
+    },
+    {
+      "bankId": 79,
+      "cell": 0,
+      "effectId": "hit_claw_rend",
+      "frame": [
+        97,
+        1366,
+        60,
+        48
+      ],
+      "origin": [
+        3,
+        62
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "fd25ca654d800601737cee129704c88932fd7b200c5edbe57566d0aa669f225a",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        16
+      ]
+    },
+    {
+      "bankId": 79,
+      "cell": 1,
+      "effectId": "hit_claw_rend",
+      "frame": [
+        325,
+        946,
+        106,
+        103
+      ],
+      "origin": [
+        59,
+        62
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d044d6b98b666331689d8b6e8d92bd4f9314133e63615c0fa592d9d9bc722c66",
+      "nativeSize": [
+        24,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        16
+      ]
+    },
+    {
+      "bankId": 79,
+      "cell": 2,
+      "effectId": "hit_claw_rend",
+      "frame": [
+        108,
+        946,
+        107,
+        110
+      ],
+      "origin": [
+        59,
+        41
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "305789d7d413334346c26105cfbcd815ca23fdddda94cf08e2b5ddf33b88a701",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        15,
+        8
+      ]
+    },
+    {
+      "bankId": 79,
+      "cell": 3,
+      "effectId": "hit_claw_rend",
+      "frame": [
+        731,
+        1366,
+        96,
+        45
+      ],
+      "origin": [
+        28,
+        -24
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9ebb6512a09662422c10a1bc29bec899af826d856ee5f737af1e850ebe314fc7",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        15,
+        0
+      ]
+    },
+    {
+      "bankId": 80,
+      "cell": 0,
+      "effectId": "hit_slash_steel",
+      "frame": [
+        169,
+        1153,
+        23,
+        77
+      ],
+      "origin": [
+        21,
+        54
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "114b4fc84147a7e24779d4416e46ffad34eb549af4e9f8d7d1fbc5fde784fe33",
+      "nativeSize": [
+        16,
+        24
+      ],
+      "nativeOrigin": [
+        16,
+        16
+      ]
+    },
+    {
+      "bankId": 80,
+      "cell": 1,
+      "effectId": "hit_slash_steel",
+      "frame": [
+        148,
+        625,
+        73,
+        166
+      ],
+      "origin": [
+        25,
+        98
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e44a22848f6e543cf35f725121fdffada29503b0150da6cab46cd3d2ba0eeb2e",
+      "nativeSize": [
+        32,
+        48
+      ],
+      "nativeOrigin": [
+        16,
+        24
+      ]
+    },
+    {
+      "bankId": 80,
+      "cell": 2,
+      "effectId": "hit_slash_steel",
+      "frame": [
+        223,
+        625,
+        90,
+        161
+      ],
+      "origin": [
+        22,
+        92
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "3675de42f2a518bf86df83dce273b6312c1bd2931d4bb6ccaa9ae70423799eb4",
+      "nativeSize": [
+        32,
+        48
+      ],
+      "nativeOrigin": [
+        16,
+        24
+      ]
+    },
+    {
+      "bankId": 80,
+      "cell": 3,
+      "effectId": "hit_slash_steel",
+      "frame": [
+        942,
+        1366,
+        40,
+        42
+      ],
+      "origin": [
+        12,
+        -34
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "2f9490d090c9ecea0647c9729e70cc96fa52bdb464b648a735259fbe51f58478",
+      "nativeSize": [
+        8,
+        24
+      ],
+      "nativeOrigin": [
+        8,
+        0
+      ]
+    },
+    {
+      "bankId": 81,
+      "cell": 0,
+      "effectId": "hit_knuckle_prism",
+      "frame": [
+        439,
+        1366,
+        71,
+        46
+      ],
+      "origin": [
+        20,
+        23
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "48d0e4454a6f67d1159bf3cd8c8be04fc439b5124f5d3e32e0479ca0bccb1381",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        4,
+        7
+      ]
+    },
+    {
+      "bankId": 81,
+      "cell": 1,
+      "effectId": "hit_knuckle_prism",
+      "frame": [
+        862,
+        1059,
+        94,
+        84
+      ],
+      "origin": [
+        21,
+        42
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "44fd4ea9bcc61859bce4b42a08e5e54f292b99ea02bdb5ddbf88e9b223b47e6a",
+      "nativeSize": [
+        24,
+        32
+      ],
+      "nativeOrigin": [
+        4,
+        15
+      ]
+    },
+    {
+      "bankId": 81,
+      "cell": 2,
+      "effectId": "hit_knuckle_prism",
+      "frame": [
+        315,
+        625,
+        109,
+        161
+      ],
+      "origin": [
+        1,
+        80
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "95696d2f78f56ef8e7343c6075bdc3471f3867dc3ec621692d37d9fc4c5cedaf",
+      "nativeSize": [
+        32,
+        48
+      ],
+      "nativeOrigin": [
+        4,
+        23
+      ]
+    },
+    {
+      "bankId": 81,
+      "cell": 3,
+      "effectId": "hit_knuckle_prism",
+      "frame": [
+        2,
+        234,
+        96,
+        207
+      ],
+      "origin": [
+        -29,
+        105
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d03d5d2709eb410ae45ab157a43b57c9e27a2859954a55fac1243ebb1ecd4123",
+      "nativeSize": [
+        32,
+        48
+      ],
+      "nativeOrigin": [
+        4,
+        23
+      ]
+    },
+    {
+      "bankId": 82,
+      "cell": 0,
+      "effectId": "hit_pierce_lance",
+      "frame": [
+        138,
+        1459,
+        77,
+        23
+      ],
+      "origin": [
+        -79,
+        10
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d976b229abb09e0137cad3fd26ca33c7eae7c24ab0626498c438f4d0635ecd5d",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        -16,
+        7
+      ]
+    },
+    {
+      "bankId": 82,
+      "cell": 1,
+      "effectId": "hit_pierce_lance",
+      "frame": [
+        159,
+        1366,
+        182,
+        47
+      ],
+      "origin": [
+        28,
+        22
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "91f6870e687bdf2a82ad001e595fc0f8df876ce583e32974b394f113fd8e4730",
+      "nativeSize": [
+        48,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        7
+      ]
+    },
+    {
+      "bankId": 82,
+      "cell": 2,
+      "effectId": "hit_pierce_lance",
+      "frame": [
+        859,
+        797,
+        101,
+        114
+      ],
+      "origin": [
+        11,
+        54
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0d266c6e3b208e0484c9f0bc8d49eddb2c5e751640d90ef94df0c6e6087c9f1a",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        8,
+        15
+      ]
+    },
+    {
+      "bankId": 82,
+      "cell": 3,
+      "effectId": "hit_pierce_lance",
+      "frame": [
+        676,
+        797,
+        53,
+        120
+      ],
+      "origin": [
+        26,
+        56
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8b7b70ca9a2442820162dde8a516baecbfdfb2a5e5b0370221f6b952925fc973",
+      "nativeSize": [
+        16,
+        32
+      ],
+      "nativeOrigin": [
+        8,
+        15
+      ]
+    },
+    {
+      "bankId": 91,
+      "cell": 0,
+      "effectId": "tidal_wave",
+      "frame": [
+        500,
+        1572,
+        199,
+        25
+      ],
+      "origin": [
+        76,
+        22
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "dedb7f13e0fd6e4a55352992766fe01f2c1c85e88d37eaf5273d8ead1a254b45",
+      "nativeSize": [
+        56,
+        8
+      ],
+      "nativeOrigin": [
+        24,
+        6
+      ]
+    },
+    {
+      "bankId": 91,
+      "cell": 1,
+      "effectId": "tidal_wave",
+      "frame": [
+        222,
+        1690,
+        239,
+        26
+      ],
+      "origin": [
+        120,
+        23
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f46c693ae7502d1598e18964f0e5d807feaf55c7f16296639f9e3be9506b29dd",
+      "nativeSize": [
+        64,
+        8
+      ],
+      "nativeOrigin": [
+        32,
+        6
+      ]
+    },
+    {
+      "bankId": 91,
+      "cell": 2,
+      "effectId": "tidal_wave",
+      "frame": [
+        736,
+        1670,
+        216,
+        43
+      ],
+      "origin": [
+        96,
+        40
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b21e80432d1dbb256ea6f0c0ba730638019c5cf6f43ed81d43745aa6e9896ebf",
+      "nativeSize": [
+        56,
+        16
+      ],
+      "nativeOrigin": [
+        24,
+        14
+      ]
+    },
+    {
+      "bankId": 91,
+      "cell": 3,
+      "effectId": "tidal_wave",
+      "frame": [
+        500,
+        1670,
+        232,
+        71
+      ],
+      "origin": [
+        108,
+        68
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "3866723400bb6bc24c7054a390505dc6006f9ee66cccb8b4bcf041bc8646e0fe",
+      "nativeSize": [
+        64,
+        24
+      ],
+      "nativeOrigin": [
+        32,
+        22
+      ]
+    },
+    {
+      "bankId": 91,
+      "cell": 4,
+      "effectId": "tidal_wave",
+      "frame": [
+        260,
+        1570,
+        236,
+        115
+      ],
+      "origin": [
+        116,
+        112
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8e9c2c83cf9a9491ea6ef9c55f005afb4fa62ac327b885564b0ee9beaa542bd2",
+      "nativeSize": [
+        64,
+        32
+      ],
+      "nativeOrigin": [
+        32,
+        30
+      ]
+    },
+    {
+      "bankId": 91,
+      "cell": 5,
+      "effectId": "tidal_wave",
+      "frame": [
+        716,
+        1570,
+        224,
+        95
+      ],
+      "origin": [
+        112,
+        92
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d87dbfc6a9ee30b13ce6eabcf1b4e3dd49e627d17074511bb693514ab34823bd",
+      "nativeSize": [
+        64,
+        32
+      ],
+      "nativeOrigin": [
+        32,
+        30
+      ]
+    },
+    {
+      "bankId": 91,
+      "cell": 6,
+      "effectId": "tidal_wave",
+      "frame": [
+        2,
+        1616,
+        216,
+        89
+      ],
+      "origin": [
+        120,
+        86
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b3ebe1cf4cff20a74591ec10a95dd388b2e29aac878fe3743979ae300e44a7ed",
+      "nativeSize": [
+        56,
+        32
+      ],
+      "nativeOrigin": [
+        32,
+        30
+      ]
+    },
+    {
+      "bankId": 91,
+      "cell": 7,
+      "effectId": "tidal_wave",
+      "frame": [
+        2,
+        1570,
+        139,
+        38
+      ],
+      "origin": [
+        116,
+        35
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f9edeb4fa89f8e22a21502e1a3b14dc92ae629cfbc5b76d16c63e0cb2a49cd41",
+      "nativeSize": [
+        40,
+        16
+      ],
+      "nativeOrigin": [
+        32,
+        14
+      ]
+    },
+    {
+      "bankId": 92,
+      "cell": 0,
+      "effectId": "char_oukuwamon_scissor",
+      "frame": [
+        294,
+        1059,
+        139,
+        86
+      ],
+      "origin": [
+        76,
+        50
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "50ab9367af9fc804c9dd9eb61647aa1cec81ffc0254fb91766fb41e32e6f75d2",
+      "nativeSize": [
+        40,
+        32
+      ],
+      "nativeOrigin": [
+        20,
+        27
+      ]
+    },
+    {
+      "bankId": 92,
+      "cell": 1,
+      "effectId": "char_oukuwamon_scissor",
+      "frame": [
+        636,
+        1059,
+        143,
+        85
+      ],
+      "origin": [
+        199,
+        72
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e4f4d1a2a7401750923c34fb7d5878405a66297bcbda0d7b21f81066f98bca1f",
+      "nativeSize": [
+        48,
+        32
+      ],
+      "nativeOrigin": [
+        36,
+        27
+      ]
+    },
+    {
+      "bankId": 92,
+      "cell": 2,
+      "effectId": "char_oukuwamon_scissor",
+      "frame": [
+        731,
+        797,
+        126,
+        120
+      ],
+      "origin": [
+        35,
+        83
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "4bc5b5177587839c85dab16592694fc9622325dfd53a19d76cef5a1e2c0552fa",
+      "nativeSize": [
+        40,
+        40
+      ],
+      "nativeOrigin": [
+        20,
+        35
+      ]
+    },
+    {
+      "bankId": 92,
+      "cell": 3,
+      "effectId": "char_oukuwamon_scissor",
+      "frame": [
+        531,
+        946,
+        201,
+        94
+      ],
+      "origin": [
+        210,
+        58
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "34b080ae8aa2d7cac5da3f50f385d1ee237d0b2772cd4082ac3faee465d57155",
+      "nativeSize": [
+        64,
+        40
+      ],
+      "nativeOrigin": [
+        44,
+        35
+      ]
+    },
+    {
+      "bankId": 104,
+      "cell": 0,
+      "effectId": "plasma_beam_pieces",
+      "frame": [
+        990,
+        1562,
+        32,
+        64
+      ],
+      "origin": [
+        0,
+        32
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f144d045baff19cbf36d9485a906a5f2bf366de8d33a6c29a569f152d02331f8",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        0,
+        8
+      ]
+    },
+    {
+      "bankId": 104,
+      "cell": 1,
+      "effectId": "plasma_beam_pieces",
+      "frame": [
+        986,
+        1128,
+        25,
+        74
+      ],
+      "origin": [
+        -1,
+        35
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b194b94a230f5f5e23d84d8c8d8dcf1f279977d79b3269cd07b2f6c6ab63d2cd",
+      "nativeSize": [
+        8,
+        32
+      ],
+      "nativeOrigin": [
+        0,
+        16
+      ]
+    },
+    {
+      "bankId": 104,
+      "cell": 2,
+      "effectId": "plasma_beam_pieces",
+      "frame": [
+        956,
+        1562,
+        30,
+        126
+      ],
+      "origin": [
+        -1,
+        63
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "5cfa3d9913fa07615e45316ad311b1b75fc7fba90f027799e7a956a70fbe7bfe",
+      "nativeSize": [
+        8,
+        32
+      ],
+      "nativeOrigin": [
+        0,
+        16
+      ]
+    },
+    {
+      "bankId": 104,
+      "cell": 3,
+      "effectId": "plasma_beam_pieces",
+      "frame": [
+        500,
+        1602,
+        52,
+        52
+      ],
+      "origin": [
+        24,
+        24
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0a846d76a422a9e0a1fed21a202cc89544d06bc734b5284b35b8080763e760e7",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        8
+      ]
+    },
+    {
+      "bankId": 132,
+      "cell": 0,
+      "effectId": "lion_head_fireball",
+      "frame": [
+        2,
+        1488,
+        149,
+        78
+      ],
+      "origin": [
+        27,
+        30
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "64bef9a7e45d29139be141cb41cbef6131bf56b6e3d613dd422876dd01ab0f2a",
+      "nativeSize": [
+        40,
+        24
+      ],
+      "nativeOrigin": [
+        7,
+        8
+      ]
+    },
+    {
+      "bankId": 132,
+      "cell": 1,
+      "effectId": "lion_head_fireball",
+      "frame": [
+        266,
+        1484,
+        156,
+        80
+      ],
+      "origin": [
+        27,
+        32
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "794dbd5e8a00ee74e38374b90a48e7d89fa042dfb86af9cc453128b74446adfd",
+      "nativeSize": [
+        40,
+        24
+      ],
+      "nativeOrigin": [
+        7,
+        8
+      ]
+    },
+    {
+      "bankId": 132,
+      "cell": 2,
+      "effectId": "lion_head_fireball",
+      "frame": [
+        956,
+        222,
+        56,
+        56
+      ],
+      "origin": [
+        28,
+        28
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "889a82f09ade6cfcdd12f14c7fe695f94dd10df1ddf8c4868645e52c5cf2b0af",
+      "nativeSize": [
+        16,
+        16
+      ],
+      "nativeOrigin": [
+        8,
+        8
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 0,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        644,
+        1746,
+        85,
+        47
+      ],
+      "origin": [
+        25,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "42c40654edef8ca4823238ef2615c4bb153836e2a39d59679adc2589154483bc",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 1,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        110,
+        1810,
+        93,
+        47
+      ],
+      "origin": [
+        25,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "af19e1431072b1fc0eb0e707049bc714229745fbbbba3e02f455552a173003c0",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 2,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        340,
+        1818,
+        102,
+        47
+      ],
+      "origin": [
+        25,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "76b99821b8620a5c873a6a3a4af264e3032f24b8bf0c42046f1066c1b55d96ce",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 3,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        2,
+        1820,
+        93,
+        47
+      ],
+      "origin": [
+        25,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "62b0a8eb86e722fd6d397ffa7026dcac6ff8ab65b7daa3449d02c5696e685a8b",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 4,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        208,
+        1820,
+        119,
+        47
+      ],
+      "origin": [
+        25,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "3dd7779c8f8dc4c002a3709ff342d2b539608437ba64c566d7c2b86e5c45ae89",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 5,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        644,
+        1820,
+        104,
+        47
+      ],
+      "origin": [
+        25,
+        21
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "32803cd1ddfcb7b846866b81993bcccacfa166259329614b6b5be611bbaec872",
+      "nativeSize": [
+        32,
+        16
+      ],
+      "nativeOrigin": [
+        7,
+        7
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 6,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        614,
+        1602,
+        61,
+        55
+      ],
+      "origin": [
+        27,
+        23
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b75d1c1ab460c38ed0e9b71cf53272512c9db14f837631f9f555ee68c661dd46",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        11,
+        11
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 7,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        466,
+        1746,
+        91,
+        93
+      ],
+      "origin": [
+        39,
+        44
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "525cd085df381d560f9232263ef0183cf58951f75e9bbf9ebb35bb566154ec8f",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        11,
+        11
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 8,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        562,
+        1746,
+        78,
+        79
+      ],
+      "origin": [
+        32,
+        38
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "fba28c30b88b622bf9f0da2d0596c0b99d46970e7dc06458b1ac14d5dff15988",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        11,
+        11
+      ]
+    },
+    {
+      "bankId": 134,
+      "cell": 9,
+      "effectId": "brass_cannon_shell",
+      "frame": [
+        1018,
+        14,
+        1,
+        1
+      ],
+      "origin": [
+        0,
+        0
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": true,
+      "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "nativeSize": [
+        8,
+        8
+      ],
+      "nativeOrigin": [
+        0,
+        0
+      ]
+    },
+    {
+      "bankId": 138,
+      "cell": 0,
+      "effectId": "beam_flare_lance",
+      "frame": [
+        392,
+        1236,
+        32,
+        64
+      ],
+      "origin": [
+        0,
+        32
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0703ad178f628d66c1c0aea91375677e73ed65e6a9ed409965a155bcb4811ea4",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        0,
+        8
+      ],
+      "candidateSource": "beam_flare_lance_seamfix_r1"
+    },
+    {
+      "bankId": 138,
+      "cell": 1,
+      "effectId": "beam_flare_lance",
+      "frame": [
+        426,
+        1236,
+        32,
+        64
+      ],
+      "origin": [
+        0,
+        32
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "bac6a54d68dc31576e6949cf809708b1fdacd9cb57f3b2a3753f7ea70571697c",
+      "nativeSize": [
+        8,
+        16
+      ],
+      "nativeOrigin": [
+        0,
+        8
+      ]
+    },
+    {
+      "bankId": 138,
+      "cell": 2,
+      "effectId": "beam_flare_lance",
+      "frame": [
+        435,
+        1059,
+        40,
+        86
+      ],
+      "origin": [
+        14,
+        43
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "3768c1a4ad7cfb3ee288c723465ed611a683072b557a43f1ae5ef0266d1bec98",
+      "nativeSize": [
+        8,
+        32
+      ],
+      "nativeOrigin": [
+        0,
+        16
+      ]
+    },
+    {
+      "bankId": 138,
+      "cell": 3,
+      "effectId": "beam_flare_lance",
+      "frame": [
+        570,
+        1153,
+        69,
+        73
+      ],
+      "origin": [
+        34,
+        35
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "99601aaffc7dcc8794ec617de434487b5b448df27393d7b91ef358a0ab75078d",
+      "nativeSize": [
+        16,
+        32
+      ],
+      "nativeOrigin": [
+        8,
+        16
+      ]
+    },
+    {
+      "bankId": 139,
+      "cell": 0,
+      "effectId": "char_crescemon_moonblade",
+      "frame": [
+        820,
+        443,
+        105,
+        170
+      ],
+      "origin": [
+        3,
+        157
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "da4e2590e6f79c630bcf06838d4901776f7c249a093393865a36aa25828c63c0",
+      "nativeSize": [
+        32,
+        48
+      ],
+      "nativeOrigin": [
+        7,
+        46
+      ]
+    },
+    {
+      "bankId": 139,
+      "cell": 1,
+      "effectId": "char_crescemon_moonblade",
+      "frame": [
+        199,
+        797,
+        174,
+        139
+      ],
+      "origin": [
+        127,
+        126
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "158cee987d4a3ec94ce98e37c63dd8226a22b862238626faf69397451d9f12d7",
+      "nativeSize": [
+        48,
+        48
+      ],
+      "nativeOrigin": [
+        31,
+        46
+      ]
+    },
+    {
+      "bankId": 139,
+      "cell": 2,
+      "effectId": "char_crescemon_moonblade",
+      "frame": [
+        676,
+        443,
+        142,
+        172
+      ],
+      "origin": [
+        44,
+        159
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "40a670ee3423bc4cd1cdbf04f1fe7cec445fae5a0cd2fc1e1383009ffdaa0d70",
+      "nativeSize": [
+        32,
+        40
+      ],
+      "nativeOrigin": [
+        15,
+        38
+      ]
+    },
+    {
+      "bankId": 148,
+      "cell": 0,
+      "effectId": "char_brakedramon_body",
+      "frame": [
+        295,
+        2,
+        215,
+        215
+      ],
+      "origin": [
+        93,
+        173
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "31c3c14c8dd2a5fe154c0b9bb137959f1c38ff057077474904364728a42dc87d",
+      "nativeSize": [
+        64,
+        56
+      ],
+      "nativeOrigin": [
+        38,
+        54
+      ]
+    },
+    {
+      "bankId": 148,
+      "cell": 1,
+      "effectId": "char_brakedramon_body",
+      "frame": [
+        2,
+        2,
+        291,
+        230
+      ],
+      "origin": [
+        179,
+        195
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "aafc61cd2dc4ebbdcbdb41b9709fb80ac333e5b2c4727383fb7b5e8236fb0efe",
+      "nativeSize": [
+        64,
+        48
+      ],
+      "nativeOrigin": [
+        38,
+        46
+      ]
+    },
+    {
+      "bankId": 148,
+      "cell": 2,
+      "effectId": "char_brakedramon_body",
+      "frame": [
+        512,
+        2,
+        215,
+        215
+      ],
+      "origin": [
+        93,
+        173
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "31c3c14c8dd2a5fe154c0b9bb137959f1c38ff057077474904364728a42dc87d",
+      "nativeSize": [
+        64,
+        56
+      ],
+      "nativeOrigin": [
+        38,
+        54
+      ]
+    },
+    {
+      "bankId": 148,
+      "cell": 3,
+      "effectId": "char_brakedramon_body",
+      "frame": [
+        729,
+        2,
+        285,
+        215
+      ],
+      "origin": [
+        163,
+        173
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "fbab7455e176fff9dcb8bf2a39bd63d341b140438c8a62d67d6edcc0e1dafe72",
+      "nativeSize": [
+        64,
+        56
+      ],
+      "nativeOrigin": [
+        38,
+        54
+      ]
+    },
+    {
+      "bankId": 148,
+      "cell": 4,
+      "effectId": "char_brakedramon_body",
+      "frame": [
+        426,
+        625,
+        249,
+        160
+      ],
+      "origin": [
+        158,
+        133
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "7c3a0df3cb65601f1c8845de175b137171e459b877992d2cbbff5785b5183a2e",
+      "nativeSize": [
+        64,
+        56
+      ],
+      "nativeOrigin": [
+        38,
+        54
+      ]
+    },
+    {
+      "bankId": 148,
+      "cell": 5,
+      "effectId": "char_brakedramon_body",
+      "frame": [
+        371,
+        234,
+        294,
+        189
+      ],
+      "origin": [
+        163,
+        141
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "30b62a6aefa8eb68d94ec9e55f2e03462939b3eda9fde0c87db689ed89dbffbe",
+      "nativeSize": [
+        64,
+        56
+      ],
+      "nativeOrigin": [
+        38,
+        54
+      ]
+    },
+    {
+      "bankId": 148,
+      "cell": 6,
+      "effectId": "char_brakedramon_body",
+      "frame": [
+        391,
+        443,
+        283,
+        174
+      ],
+      "origin": [
+        181,
+        148
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8594c7e64a34f3b528f47a9da7bb324716a112791e6304d1e34355a70af1cc90",
+      "nativeSize": [
+        64,
+        48
+      ],
+      "nativeOrigin": [
+        38,
+        46
+      ]
+    },
+    {
+      "bankId": 148,
+      "cell": 7,
+      "effectId": "char_brakedramon_body",
+      "frame": [
+        677,
+        625,
+        283,
+        160
+      ],
+      "origin": [
+        251,
+        134
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ad1a303537af14918ddcb71a5d9d632e4225c7832a7eb41549eccdd78dd6867d",
+      "nativeSize": [
+        64,
+        56
+      ],
+      "nativeOrigin": [
+        54,
+        54
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 0,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        826,
+        946,
+        146,
+        93
+      ],
+      "origin": [
+        81,
+        40
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "20ee5a24ce5227fbf2c43b99e68f59e6477decc04ddf8ca624fb1bec07af78a9",
+      "nativeSize": [
+        48,
+        48
+      ],
+      "nativeOrigin": [
+        31,
+        24
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 1,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        2,
+        797,
+        195,
+        147
+      ],
+      "origin": [
+        104,
+        79
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "287ed56eb62945e61603ab3c7871eef9878cdcb9a576a96bd890374601a85b96",
+      "nativeSize": [
+        56,
+        56
+      ],
+      "nativeOrigin": [
+        33,
+        24
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 2,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        153,
+        443,
+        236,
+        178
+      ],
+      "origin": [
+        124,
+        97
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d5e758fdf1ac0848892b6e7c03c40fae34aa6e458fbe7d656f2193561fb2062e",
+      "nativeSize": [
+        64,
+        64
+      ],
+      "nativeOrigin": [
+        31,
+        32
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 3,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        100,
+        234,
+        269,
+        202
+      ],
+      "origin": [
+        139,
+        111
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "02f5d4f83abf691ee30bfb8755d3307db1f93ef21b9449d2f4edd8b7fce06b82",
+      "nativeSize": [
+        72,
+        64
+      ],
+      "nativeOrigin": [
+        39,
+        32
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 4,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        667,
+        234,
+        285,
+        181
+      ],
+      "origin": [
+        146,
+        84
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "1f94a3e32687ae5dae18735aa7f83c349aa1a87baf933a30486afaa6e7b8e6ef",
+      "nativeSize": [
+        72,
+        56
+      ],
+      "nativeOrigin": [
+        39,
+        24
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 5,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        496,
+        797,
+        178,
+        121
+      ],
+      "origin": [
+        43,
+        80
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "940080433b0c3bc97e6855f55710c3cc1cc61cf6b78b8dc41ec750f91f1adb76",
+      "nativeSize": [
+        56,
+        48
+      ],
+      "nativeOrigin": [
+        29,
+        25
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 6,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        164,
+        1059,
+        86,
+        91
+      ],
+      "origin": [
+        30,
+        34
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ab650fb5f6572103ba46fea3e667a908accdd81fa40847f662faadb855ccec2b",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        15,
+        14
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 7,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        375,
+        797,
+        119,
+        130
+      ],
+      "origin": [
+        44,
+        54
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "1edf0d956facb72a388b4ee63940dfc1ec84591a86c5d9ea540ca23de2306e56",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        13,
+        14
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 8,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        2,
+        625,
+        144,
+        170
+      ],
+      "origin": [
+        52,
+        75
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b134479915dfa40ee4e13f1ad79bb92d999636de3907b3954fb7eee9619fc8bc",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        12,
+        13
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 9,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        2,
+        443,
+        149,
+        180
+      ],
+      "origin": [
+        50,
+        78
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8bcbc6e9c1f24e3f72425fba0a9ebb8dfb6096958986f9104651d365a92cf350",
+      "nativeSize": [
+        32,
+        32
+      ],
+      "nativeOrigin": [
+        12,
+        14
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 10,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        821,
+        1304,
+        93,
+        51
+      ],
+      "origin": [
+        34,
+        14
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "2eaab5a281803278e0a0b5b8cd960e6f1bb714a226ba1160d561aaee478ebd7d",
+      "nativeSize": [
+        24,
+        24
+      ],
+      "nativeOrigin": [
+        12,
+        14
+      ]
+    },
+    {
+      "bankId": 149,
+      "cell": 11,
+      "effectId": "fire_billow_blast",
+      "frame": [
+        217,
+        1459,
+        44,
+        23
+      ],
+      "origin": [
+        1,
+        -9
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "1ab5bb495599ac586f000881fb597bd3a2a74d84ea6bf1de5431fdcd319647d2",
+      "nativeSize": [
+        24,
+        16
+      ],
+      "nativeOrigin": [
+        12,
+        6
+      ]
+    }
+  ],
+  "provenance": {
+    "localRevision": "original-shared-review-210-seamfix-r1",
+    "imageGeneration": "NONE (reuse authored210 atlas and accepted157 beam pixels)",
+    "originalPixelsUsed": false,
+    "sourceSnapshotProvenance": {
+      "pipeline": "Blender 5.2.0 LTS EEVEE heat/coverage pass + Python palette/pixel finish",
+      "deliveryRoot": "R:\\Projects\\Championship2026\\VFX_共用特效_原創交付_20261006",
+      "imageGeneration": "NONE (procedural geometry, no AI image model)",
+      "originalPixelsUsed": false,
+      "revision": "20261007-210-text-r1",
+      "previous135PixelsPreserved": true,
+      "previousAtlasSha256": "65b9aa4f720cd266db6c276b8cb5523a52b03e77858aa7997798d82750eddf60",
+      "previousManifestSha256": "482f47785e467922b45cfc5ecd6cca435d294e7cc4594b6f97e061273fe84c99",
+      "previousRevision": "20261007-142-r1",
+      "mainAtlasUnchanged": true,
+      "textFont": "Noto Sans TC (SIL Open Font License 1.1 (embedded name table ID 13/14))",
+      "appendOnly": true,
+      "previousCellsUnchanged": 206,
+      "appended": [
+        "rapid_fire_volley"
+      ]
+    },
+    "codex210Intake": {
+      "sourceManifestSha256": "dff7cabc87a002068145be64a544d450eb3ffe51ea28d8b07a4cf95f21f07da8",
+      "sourceAtlasSha256": "d3ce57f6f20f7c7879cb59a2bf5acd916d3ca4d5f90d8b36a1478537519355c2",
+      "acceptedBeamDonorManifestSha256": "26fdc5726df3679df385c600e1638e80d7dc84c840b7eb378bd574ea72238eac",
+      "scope": "LOCAL_REVIEW_ONLY_210_PLUS_ACCEPTED_TWO_CELL_SEAMFIX",
+      "unchanged": "All remaining 208 cells, geometry, native ticks and three text sets",
+      "date": "2026-10-07"
+    },
+    "retained210Cells": 208,
+    "acceptedChangedCells": [
+      "12:0",
+      "138:0"
+    ]
+  },
+  "localizedText": {
+    "schema": "LOCALIZED_TEXT_CELLS_V1",
+    "bankId": 1,
+    "sequences": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      46
+    ],
+    "cells": [
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      142
+    ],
+    "selection": {
+      "source": "GAME_SETTING_LOCALE",
+      "rules": [
+        {
+          "prefix": "zh",
+          "set": "zh-Hant"
+        },
+        {
+          "prefix": "ja",
+          "set": "ja"
+        }
+      ],
+      "fallback": "en"
+    },
+    "timing": "NATIVE_SEQUENCES_UNCHANGED",
+    "font": {
+      "family": "Noto Sans TC",
+      "file": "NotoSansTC-VF.ttf (Windows Fonts)",
+      "sha256": "c6481c5d93420aeac11087367dae56ae7492eb1989ce42f4ca5d5aa5e2db3116",
+      "version": "Version 2.04;241114210131;non-release",
+      "license": "SIL Open Font License 1.1 (embedded name table ID 13/14)",
+      "weight": 900
+    },
+    "render": {
+      "rasterPxPerNativePx": 4,
+      "supersample": 4,
+      "outlineNative": 1.0,
+      "shadowNative": [
+        0.0,
+        1.0
+      ],
+      "maxInkHeightNative": 12.0
+    },
+    "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+    "sets": {
+      "zh-Hant": {
+        "image": {
+          "src": "assets/production/vfx/original-shared-review-v1/text-zh-Hant.png",
+          "width": 256,
+          "height": 1024,
+          "sha256": "6ef0d9aaf695ef300ae2f11e2b984aa91866aad35e07303b518737259da9f884",
+          "scaleMode": "nearest"
+        },
+        "fontSizeNative": {
+          "all": 12.4
+        },
+        "cells": [
+          {
+            "bankId": 1,
+            "cell": 44,
+            "sequence": 10,
+            "text": "HP回復",
+            "frame": [
+              2,
+              128,
+              174,
+              60
+            ],
+            "origin": [
+              81,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "8b6c08c7a06fd1a092bcf992d304d9d0af1b868adbcfc7f0735d99b75af8eb88",
+            "nativeSize": [
+              56,
+              16
+            ],
+            "nativeOrigin": [
+              27,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -20.25,
+              -14.25,
+              23.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 45,
+            "sequence": 11,
+            "text": "狀態回復",
+            "frame": [
+              2,
+              190,
+              206,
+              60
+            ],
+            "origin": [
+              105,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "bb99757d048f2bf9a63b9f89d4b09d1067ec0ce1986ccaa019f95bd0c0321d1b",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -26.25,
+              -14.25,
+              25.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 46,
+            "sequence": 12,
+            "text": "熱耐性UP",
+            "frame": [
+              2,
+              252,
+              226,
+              60
+            ],
+            "origin": [
+              113,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "34b0ab4c1ef4e04dbb975b3c7858902f589fd2a3bd18e795c885dbbeb7827856",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -28.25,
+              -14.25,
+              28.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 47,
+            "sequence": 13,
+            "text": "冷耐性UP",
+            "frame": [
+              2,
+              2,
+              225,
+              61
+            ],
+            "origin": [
+              108,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "95ce7eea5a7b7c81bf51e75c9b4d152e1d0bb1411498d0eb1b9ba29e222f00a3",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              43,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -27.0,
+              -14.25,
+              29.25,
+              1.0
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 48,
+            "sequence": 14,
+            "text": "雷耐性UP",
+            "frame": [
+              2,
+              314,
+              224,
+              60
+            ],
+            "origin": [
+              94,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "979019afbfb6db0282b4e8e6d49adcafd0faf97501498ff0f1f0bf230afdd180",
+            "nativeSize": [
+              104,
+              16
+            ],
+            "nativeOrigin": [
+              48,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -23.5,
+              -14.25,
+              32.5,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 49,
+            "sequence": 15,
+            "text": "暗耐性UP",
+            "frame": [
+              2,
+              376,
+              224,
+              60
+            ],
+            "origin": [
+              112,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "135ce73bdf6bbbdd6952afb8b5ce467cad97d25b7218f9dd72c895da19317f06",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -28.0,
+              -14.25,
+              28.0,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 50,
+            "sequence": 16,
+            "text": "光耐性UP",
+            "frame": [
+              2,
+              438,
+              226,
+              60
+            ],
+            "origin": [
+              113,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "aa0912a10ad3651323de11d1883a174d20608dd5530877f505a3d51374d54d72",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -28.25,
+              -14.25,
+              28.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 51,
+            "sequence": 17,
+            "text": "攻擊UP",
+            "frame": [
+              2,
+              500,
+              176,
+              60
+            ],
+            "origin": [
+              86,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "d91b9b1e19f25d5959377b81a715803886adaf945083c239aedc19dbd2fd833e",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -21.5,
+              -14.25,
+              22.5,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 52,
+            "sequence": 18,
+            "text": "防禦UP",
+            "frame": [
+              2,
+              562,
+              174,
+              60
+            ],
+            "origin": [
+              83,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "5394ec5cd7a7a905136479e1e5b985447d0336e8fb8fa5b8ebf7a793e64daaf0",
+            "nativeSize": [
+              72,
+              16
+            ],
+            "nativeOrigin": [
+              35,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -20.75,
+              -14.25,
+              22.75,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 53,
+            "sequence": 19,
+            "text": "速度UP",
+            "frame": [
+              2,
+              624,
+              176,
+              60
+            ],
+            "origin": [
+              86,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "826d768846678e16803cbdabbd31350a83b73ed1e2ac88fe0a9bd936e7de6cde",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -21.5,
+              -14.25,
+              22.5,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 54,
+            "sequence": 20,
+            "text": "命中UP",
+            "frame": [
+              2,
+              65,
+              177,
+              61
+            ],
+            "origin": [
+              88,
+              58
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "50ade5411d98e553b2fec2a69195dd0178a128d808973216fcd7f3739d00ec06",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -22.0,
+              -14.5,
+              22.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 142,
+            "sequence": 46,
+            "text": "暴擊UP",
+            "frame": [
+              2,
+              686,
+              176,
+              60
+            ],
+            "origin": [
+              86,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "8055d9239dc6a227bae328b17e5b224d527a93b25cf4adacadd73703e0b911ab",
+            "nativeSize": [
+              96,
+              16
+            ],
+            "nativeOrigin": [
+              48,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -21.5,
+              -14.25,
+              22.5,
+              0.75
+            ],
+            "sizeGroup": "all"
+          }
+        ]
+      },
+      "ja": {
+        "image": {
+          "src": "assets/production/vfx/original-shared-review-v1/text-ja.png",
+          "width": 1024,
+          "height": 256,
+          "sha256": "b507a807759c972c8164d6c2c05836e09d7bb58142f56b46461f2347dcd09c8f",
+          "scaleMode": "nearest"
+        },
+        "fontSizeNative": {
+          "all": 12.4
+        },
+        "cells": [
+          {
+            "bankId": 1,
+            "cell": 44,
+            "sequence": 10,
+            "text": "HP回復",
+            "frame": [
+              490,
+              2,
+              174,
+              60
+            ],
+            "origin": [
+              81,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "8ded286ee1c7c56597f508cfeeccbd13cf34666749cc41707376e47692f684ea",
+            "nativeSize": [
+              56,
+              16
+            ],
+            "nativeOrigin": [
+              27,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -20.25,
+              -14.25,
+              23.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 45,
+            "sequence": 11,
+            "text": "じょうたい回復",
+            "frame": [
+              666,
+              2,
+              307,
+              60
+            ],
+            "origin": [
+              156,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "47259c7ae25be88e58405d63716c498895b5b07378f246a03670fcb347bac97c",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -39.0,
+              -14.25,
+              37.75,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 46,
+            "sequence": 12,
+            "text": "ねつ耐性UP",
+            "frame": [
+              2,
+              65,
+              274,
+              60
+            ],
+            "origin": [
+              137,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "0d515707c1b09e6adccdc1574f508aabac62f718e27fe76fb63c85ad022cd44a",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -34.25,
+              -14.25,
+              34.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 47,
+            "sequence": 13,
+            "text": "さむさ耐性UP",
+            "frame": [
+              278,
+              65,
+              302,
+              60
+            ],
+            "origin": [
+              147,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "3e36e366b3f36159c311ba7b808062b71d744963cf0e835f75f3a107fae1c1b2",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              43,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -36.75,
+              -14.25,
+              38.75,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 48,
+            "sequence": 14,
+            "text": "かみなり耐性UP",
+            "frame": [
+              582,
+              65,
+              358,
+              60
+            ],
+            "origin": [
+              161,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "e09cb7b1de6dd5d87e7cfe871efc6a45ca62db8d56a21d8ab7f70068355b5ed5",
+            "nativeSize": [
+              104,
+              16
+            ],
+            "nativeOrigin": [
+              48,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -40.25,
+              -14.25,
+              49.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 49,
+            "sequence": 15,
+            "text": "やみ耐性UP",
+            "frame": [
+              2,
+              127,
+              272,
+              60
+            ],
+            "origin": [
+              136,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "f7efd0964e5d50c797c1befb736a9fc4966cd0ae12c878b5094dec61853fdf62",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -34.0,
+              -14.25,
+              34.0,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 50,
+            "sequence": 16,
+            "text": "ひかり耐性UP",
+            "frame": [
+              276,
+              127,
+              308,
+              60
+            ],
+            "origin": [
+              154,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "640f866bcde8d950b68dadb66c996532a6f6fa83cd71b829c57c8cc781b284e7",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -38.5,
+              -14.25,
+              38.5,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 51,
+            "sequence": 17,
+            "text": "こうげきUP",
+            "frame": [
+              2,
+              2,
+              240,
+              61
+            ],
+            "origin": [
+              118,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "5977e36374d66c5d166539830e6f06db1477b1a94feec1d99105919ea3794398",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -29.5,
+              -14.25,
+              30.5,
+              1.0
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 52,
+            "sequence": 18,
+            "text": "ぼうぎょUP",
+            "frame": [
+              244,
+              2,
+              244,
+              61
+            ],
+            "origin": [
+              118,
+              58
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "ac4569795ca33d833083e940bf80441bc8a2604ec90cd76ff4953572239b0847",
+            "nativeSize": [
+              72,
+              16
+            ],
+            "nativeOrigin": [
+              35,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -29.5,
+              -14.5,
+              31.5,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 53,
+            "sequence": 19,
+            "text": "すばやさUP",
+            "frame": [
+              586,
+              127,
+              258,
+              60
+            ],
+            "origin": [
+              127,
+              57
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "ff309c939d9e03d11219a41cbcd8f0852f223f47f1d2e8520f9cc1a1b2a3149d",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -31.75,
+              -14.25,
+              32.75,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 54,
+            "sequence": 20,
+            "text": "めいちゅうUP",
+            "frame": [
+              338,
+              189,
+              286,
+              58
+            ],
+            "origin": [
+              143,
+              55
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "ab4e02910f15cb1024f8406fb04afd77708b6cf8e5a8eba3febf0d9682446f3c",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -35.75,
+              -13.75,
+              35.75,
+              0.75
+            ],
+            "sizeGroup": "all"
+          },
+          {
+            "bankId": 1,
+            "cell": 142,
+            "sequence": 46,
+            "text": "クリティカルUP",
+            "frame": [
+              2,
+              189,
+              334,
+              59
+            ],
+            "origin": [
+              165,
+              56
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "b52049749019ea164a64cba76705a926b55d67aa393512606c46a324890f7a3c",
+            "nativeSize": [
+              96,
+              16
+            ],
+            "nativeOrigin": [
+              48,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -41.25,
+              -14.0,
+              42.25,
+              0.75
+            ],
+            "sizeGroup": "all"
+          }
+        ]
+      },
+      "en": {
+        "image": {
+          "src": "assets/production/vfx/original-shared-review-v1/text-en.png",
+          "width": 512,
+          "height": 512,
+          "sha256": "c73848c392baa1d61a920fb7b2db4ce01056550c8829416e6c01e7280a3da436",
+          "scaleMode": "nearest"
+        },
+        "fontSizeNative": {
+          "resist": 11.4,
+          "short": 12.4
+        },
+        "cells": [
+          {
+            "bankId": 1,
+            "cell": 44,
+            "sequence": 10,
+            "text": "HEAL",
+            "frame": [
+              2,
+              161,
+              134,
+              50
+            ],
+            "origin": [
+              61,
+              51
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "88f9d5d0caba07a00b5f3b8bfa05563c494e7c05c72518d0b68f921785324c4f",
+            "nativeSize": [
+              56,
+              16
+            ],
+            "nativeOrigin": [
+              27,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -15.25,
+              -12.75,
+              18.25,
+              -0.25
+            ],
+            "sizeGroup": "short"
+          },
+          {
+            "bankId": 1,
+            "cell": 45,
+            "sequence": 11,
+            "text": "CURE",
+            "frame": [
+              2,
+              2,
+              140,
+              51
+            ],
+            "origin": [
+              72,
+              51
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "714bae85e1acbbe95098906af3495dc697ed712074d0472652adc2d62a11c8cf",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -18.0,
+              -12.75,
+              17.0,
+              0.0
+            ],
+            "sizeGroup": "short"
+          },
+          {
+            "bankId": 1,
+            "cell": 46,
+            "sequence": 12,
+            "text": "HEAT RES UP",
+            "frame": [
+              138,
+              161,
+              304,
+              48
+            ],
+            "origin": [
+              152,
+              50
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "4c21e0530a480ed024a2aef91d141c6c8d72e516808dfd63b2e1b856085e24cb",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -38.0,
+              -12.5,
+              38.0,
+              -0.5
+            ],
+            "sizeGroup": "resist"
+          },
+          {
+            "bankId": 1,
+            "cell": 47,
+            "sequence": 13,
+            "text": "COLD RES UP",
+            "frame": [
+              2,
+              213,
+              308,
+              48
+            ],
+            "origin": [
+              150,
+              50
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "69e58f6e4791ff1c3a6488b490162c24ff6ed2a21af0ca1bcf817ded18629f1a",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              43,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -37.5,
+              -12.5,
+              39.5,
+              -0.5
+            ],
+            "sizeGroup": "resist"
+          },
+          {
+            "bankId": 1,
+            "cell": 48,
+            "sequence": 14,
+            "text": "THUNDER RES UP",
+            "frame": [
+              2,
+              263,
+              412,
+              48
+            ],
+            "origin": [
+              188,
+              50
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "bdcc1d403f6da09d3df50f4946b02a9c57a6dfad56ae800b8810fb35939735e6",
+            "nativeSize": [
+              104,
+              16
+            ],
+            "nativeOrigin": [
+              48,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -47.0,
+              -12.5,
+              56.0,
+              -0.5
+            ],
+            "sizeGroup": "resist"
+          },
+          {
+            "bankId": 1,
+            "cell": 49,
+            "sequence": 15,
+            "text": "DARK RES UP",
+            "frame": [
+              2,
+              313,
+              308,
+              48
+            ],
+            "origin": [
+              154,
+              50
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "cc2c1e0b6c2db84230a124cb09614c48a375a5c5c4b04f192f7fb407a8916723",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -38.5,
+              -12.5,
+              38.5,
+              -0.5
+            ],
+            "sizeGroup": "resist"
+          },
+          {
+            "bankId": 1,
+            "cell": 50,
+            "sequence": 16,
+            "text": "LIGHT RES UP",
+            "frame": [
+              2,
+              363,
+              322,
+              48
+            ],
+            "origin": [
+              161,
+              50
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "2614f09f4aafda58c6aa0ec2b6e75047e4de2f289b3279976d7323a1803da6ec",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -40.25,
+              -12.5,
+              40.25,
+              -0.5
+            ],
+            "sizeGroup": "resist"
+          },
+          {
+            "bankId": 1,
+            "cell": 51,
+            "sequence": 17,
+            "text": "ATK UP",
+            "frame": [
+              144,
+              2,
+              190,
+              51
+            ],
+            "origin": [
+              93,
+              51
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "e480a527a73cdef79d538eb5ac98d90beccd6d79c4228af03d9f326656f0efea",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -23.25,
+              -12.75,
+              24.25,
+              0.0
+            ],
+            "sizeGroup": "short"
+          },
+          {
+            "bankId": 1,
+            "cell": 52,
+            "sequence": 18,
+            "text": "DEF UP",
+            "frame": [
+              2,
+              55,
+              182,
+              51
+            ],
+            "origin": [
+              87,
+              51
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "2d9b80affef3059b0d3650ce019788655b1fd26eedf652fb3d3e25677fe58a20",
+            "nativeSize": [
+              72,
+              16
+            ],
+            "nativeOrigin": [
+              35,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -21.75,
+              -12.75,
+              23.75,
+              0.0
+            ],
+            "sizeGroup": "short"
+          },
+          {
+            "bankId": 1,
+            "cell": 53,
+            "sequence": 19,
+            "text": "SPD UP",
+            "frame": [
+              186,
+              55,
+              190,
+              51
+            ],
+            "origin": [
+              93,
+              51
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "9a7d2a35732df44abf433371148957114b2a931056365a0aef4a83ed53470bfe",
+            "nativeSize": [
+              80,
+              16
+            ],
+            "nativeOrigin": [
+              40,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -23.25,
+              -12.75,
+              24.25,
+              0.0
+            ],
+            "sizeGroup": "short"
+          },
+          {
+            "bankId": 1,
+            "cell": 54,
+            "sequence": 20,
+            "text": "ACC UP",
+            "frame": [
+              2,
+              108,
+              189,
+              51
+            ],
+            "origin": [
+              94,
+              51
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "adba8d0c8484c338d290b1b8a613019ea1134719a4803ae1a986ed1153c1854c",
+            "nativeSize": [
+              88,
+              16
+            ],
+            "nativeOrigin": [
+              44,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -23.5,
+              -12.75,
+              23.75,
+              0.0
+            ],
+            "sizeGroup": "short"
+          },
+          {
+            "bankId": 1,
+            "cell": 142,
+            "sequence": 46,
+            "text": "CRIT UP",
+            "frame": [
+              193,
+              108,
+              204,
+              51
+            ],
+            "origin": [
+              100,
+              51
+            ],
+            "pixelsPerNativePixel": 4,
+            "blank": false,
+            "rgbaSha256": "fe00394a52ba744fd4af50c5176cfbd5f5e289966368855fa14ea51322cb2db7",
+            "nativeSize": [
+              96,
+              16
+            ],
+            "nativeOrigin": [
+              48,
+              15
+            ],
+            "extentNativeRelAnchor": [
+              -25.0,
+              -12.75,
+              26.0,
+              0.0
+            ],
+            "sizeGroup": "short"
+          }
+        ]
+      }
+    }
+  }
+}

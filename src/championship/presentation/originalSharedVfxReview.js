@@ -8,6 +8,8 @@
 // every other language -> en. Only the active set's atlas is loaded; a settings change
 // swaps the set in place and the previous atlas is released after the scene has drawn.
 import profiles from '../../data/championship/battleEffectProfiles.json' with {type:'json'};
+import playtestPolicy from '../../data/championship/public-playtest.r1.json' with {type:'json'};
+import {isApprovedOriginalPublicLocation} from './originalRuntimeLocation.js';
 import {getLocale as settingLocale, onLocaleChange as onSettingLocaleChange} from '../text/locale.js';
 export const ORIGINAL_SHARED_VFX_ID = 'art:vfx:original-shared:review:v1';
 export const ORIGINAL_SHARED_VFX_MANIFEST = 'assets/production/vfx/original-shared-review-v1/manifest.json';
@@ -15,8 +17,22 @@ export const ORIGINAL_SHARED_VFX_QUERY = ['vfxOriginal', 'shared-v1'];
 export const ORIGINAL_SHARED_BEAM_MANIFEST = 'assets/production/vfx/original-shared-beam-seamfix-r1/manifest.json';
 export const ORIGINAL_SHARED_157_MANIFEST = 'assets/production/vfx/original-shared-review-157-seamfix-r1/manifest.json';
 export const ORIGINAL_SHARED_LOCAL_MANIFEST = 'assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json';
+// Owner 2026-10-12 ("那包當然可以發佈"): the public playtest URL plays the
+// remade shared effects. Only the selected 210-cell revision is published; the
+// review flags inside its manifest stay as provenance, as for the accepted
+// original characters, and the playtest policy record is the approval.
+export const ORIGINAL_SHARED_PUBLIC_SELECTION_ID = 'ACCEPTED_ORIGINAL_SHARED_VFX_20261012';
+export function originalSharedVfxPublicSelected(href) {
+  const selection = playtestPolicy.acceptedOriginalSharedVfx;
+  return selection?.status === 'OWNER_AUTHORIZED_PUBLIC_PLAYTEST'
+    && selection.selectionId === ORIGINAL_SHARED_PUBLIC_SELECTION_ID
+    && selection.manifestPath === ORIGINAL_SHARED_LOCAL_MANIFEST
+    && isApprovedOriginalPublicLocation(href);
+}
 export function originalSharedVfxManifestFor(href) {
-  const query = new URL(href).searchParams;
+  const url = new URL(href), query = url.searchParams;
+  // Review revisions are loopback choices; the public URL always plays the selection.
+  if (!loopback(url.hostname)) return ORIGINAL_SHARED_LOCAL_MANIFEST;
   if (query.get('vfxCandidate') === 'beam-body-seamfix-r1') return ORIGINAL_SHARED_BEAM_MANIFEST;
   if (query.get('vfxRevision') === '157-seamfix') return ORIGINAL_SHARED_157_MANIFEST;
   return query.get('vfxRevision') === '157-baseline' ? ORIGINAL_SHARED_VFX_MANIFEST : ORIGINAL_SHARED_LOCAL_MANIFEST;
@@ -95,7 +111,8 @@ function validateLocalizedText(text, mainCells) {
 export function originalSharedVfxReviewRequested(href) {
   try {
     const url = new URL(href);
-    return ['http:', 'https:'].includes(url.protocol) && loopback(url.hostname)
+    return ['http:', 'https:'].includes(url.protocol)
+      && (loopback(url.hostname) || originalSharedVfxPublicSelected(url.href))
       && url.searchParams.get(ORIGINAL_SHARED_VFX_QUERY[0]) === ORIGINAL_SHARED_VFX_QUERY[1];
   } catch { return false; }
 }

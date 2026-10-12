@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+## 2026-10-12 — Approve move names, rename three characters, publish the remade shared VFX
+
+The Owner delegated the move-name review: 「那些名稱你幫我審核啊，然後角色名稱也幫我更改。……你幫我核准以後就可以寫入遊戲並補齊翻譯。完成以後就commit 並push整合發佈至main」. On the private VFX pack: 「那包當然可以發佈啊，都已經重做了。你幫我審查一下吧若沒問題就是接入遊戲使用然後發佈啊」.
+
+- **Move names (approved by delegated review):** every one of the 565 species moves has an approved five-language name in `src/championship/text/battleMoveNames.js`, keyed by stable skill ID. 504 generic rule candidates were rewritten. Values, IDs and owner links are unchanged. See [the review document](../reports/battle-move-names-2026-10-12/REVIEW_ZH_TW.md) and [the approved table](../reports/battle-move-names-2026-10-12/MOVE_NAMES_APPROVED.v1.csv).
+- **Character names:** the three in-game names that were still original-work names now use the Owner's own name table:
+  - 181 地嘯暴龍;
+  - 211 黃銅王猿 (OC-220, chosen over OC-211);
+  - 222 天穹帝龍.
+
+  The other five table differences keep the in-game spelling.
+- **Remade shared VFX (published):** revision `original-shared-review-210-seamfix-r1` (210 cells; Blender procedural; no original pixels; bank 110 excluded) and its three battle-text atlases now play on the approved public playtest URL. The approval is recorded as `acceptedOriginalSharedVfx` in `src/data/championship/public-playtest.r1.json` and hash-selected in the build inputs. The manifest's review flags stay as provenance, as for the accepted characters. Unselected revisions and candidates stay local. Pixels, timing, collision and damage are unchanged; `?vfxOriginal=off` shows the base art.
+
+Still not authorized: gameplay changes; redrawing bank 110 (assigned to dot).
+
 ## 2026-10-12 — Dynamic battle presentation: original proportions, moving camera, skill–field interaction
 
 The Owner shared two screen recordings of an arena fan game and asked for battles with that feel, built with the project's own original characters, moves and effects: 「我想讓我的戰鬥系統我的自創腳色們，也能擁由如同影片中的對戰動態效果感」, then 「就是全權交給你去設計跟處理…是我們自己的角色跟我們自己的招式絕招」. They then fixed the direction:

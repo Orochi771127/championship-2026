@@ -10,7 +10,7 @@ import fs from 'node:fs';
 import test from 'node:test';
 
 import {
-  BATTLE_FX_FORMS, BATTLE_FX_MOVE_NAMES, BATTLE_FX_PALETTES, battleFxMoveBanks, battleFxMoveTier, describeBattleFxMove
+  BATTLE_FX_FORMS, BATTLE_FX_PALETTES, battleFxMoveBanks, battleFxMoveTier, describeBattleFxMove
 } from '../src/championship/presentation/battleFx/battleFxRecipes.js';
 import {createBattleFxEventTracker} from '../src/championship/presentation/battleFx/battleFxEvents.js';
 import {battleFxFrameShot, battleFxUnionBox, createBattleFxCamera} from '../src/championship/presentation/battleFx/battleFxCamera.js';
@@ -18,6 +18,8 @@ import {
   battleFxHitPoint, battleFxHitTier, battleFxProject, battleFxRandom, createBattleFxLayer, mixColor
 } from '../src/championship/presentation/battleFx/battleFxLayer.js';
 import {battleFxApprovedMoveName, createBattleFxLookups} from '../src/championship/app/battleFxLookups.js';
+import {BATTLE_MOVE_NAMES, battleMoveName} from '../src/championship/text/battleMoveNames.js';
+import {SPECIES_NAMES_ZH} from '../src/championship/text/catalogs.zhHant.js';
 import {getBattleCatalogRecord, listBattleCatalogRecords, listMoveRecordsForSpecies} from '../src/championship/battle/battleCatalogs.js';
 import {createBattleRuntime} from '../src/championship/app/battleRuntime.js';
 
@@ -61,24 +63,49 @@ test('only approved move names are shown; local acceptance shows stable skill ID
   // The 30 learnable special skills keep their existing approved names.
   assert.equal(battleFxApprovedMoveName(1), '挑釁');
   assert.equal(battleFxApprovedMoveName(5), '全體治癒 α');
-  // No species move has an approved name yet; nothing is composed for it.
-  assert.deepEqual(Object.keys(BATTLE_FX_MOVE_NAMES), []);
-  assert.equal(battleFxApprovedMoveName(61), null);
+  // Species moves use the approved table; records without a name show none.
+  assert.equal(battleFxApprovedMoveName(61), '烈鎧焰砲');
+  assert.equal(battleFxApprovedMoveName(0), null);
+  assert.equal(battleFxApprovedMoveName(9999), null);
   const view = {combatants: [{displayName: '鎧焰蜥'}]};
   const lines = [];
   const player = createBattleFxLookups({getView: () => view, onFeed: line => lines.push(line)});
-  assert.equal(player.moveNameOf(61), '');
+  assert.equal(player.moveNameOf(61), '烈鎧焰砲');
   player.onEvent({type: 'LAUNCH', slot: 0, moveId: 61});
   player.onEvent({type: 'LAUNCH', slot: 0, moveId: 60});
   player.onEvent({type: 'LAUNCH', slot: 0, moveId: 59});
-  assert.deepEqual(lines, ['鎧焰蜥發動絕招！', '鎧焰蜥使出技能！'], 'a basic attack writes no line');
+  assert.deepEqual(lines, ['鎧焰蜥發動絕招「烈鎧焰砲」！', '鎧焰蜥使出「焰鱗彈」！'], 'a basic attack writes no line');
   const review = createBattleFxLookups({getView: () => view, showIds: true});
-  assert.equal(review.moveNameOf(61), '#61');
+  assert.equal(review.moveNameOf(61), '烈鎧焰砲 #61');
   assert.equal(review.moveNameOf(5), '全體治癒 α #5');
   setLocale('en');
   const english = battleFxApprovedMoveName(1);
   assert.ok(typeof english === 'string' && english.length > 0 && english !== '挑釁', 'the approved name follows the game language');
   setLocale('zh-Hant');
+});
+
+test('every species move has one unique approved name in each shipped language (Owner 2026-10-12)', async () => {
+  const {setLocale} = await import('../src/championship/text/locale.js');
+  const speciesMoves = listBattleCatalogRecords('moves').filter(move => move.recordIndex > 30);
+  assert.equal(speciesMoves.length, 565);
+  assert.deepEqual(Object.keys(BATTLE_MOVE_NAMES).map(Number).sort((a, b) => a - b), speciesMoves.map(move => move.recordIndex));
+  for (const [column, locale] of ['zh-Hant', 'en', 'ja', 'th', 'vi'].entries()) {
+    const names = Object.values(BATTLE_MOVE_NAMES).map(entry => entry[column]);
+    assert.ok(names.every(name => typeof name === 'string' && name.trim() === name && name.length > 0), locale);
+    assert.equal(new Set(names.map(name => name.toLowerCase())).size, names.length, `${locale} names are unique`);
+    setLocale(locale);
+    assert.equal(battleMoveName(595), BATTLE_MOVE_NAMES[595][column]);
+  }
+  setLocale('zh-Hant');
+  // A name is display text only; English stays short enough for the callout.
+  assert.ok(Object.values(BATTLE_MOVE_NAMES).every(entry => entry[1].length <= 18));
+});
+
+test('in-game species names are original (Owner 2026-10-12 rename)', () => {
+  assert.equal(SPECIES_NAMES_ZH[181], '地嘯暴龍');
+  assert.equal(SPECIES_NAMES_ZH[211], '黃銅王猿');
+  assert.equal(SPECIES_NAMES_ZH[222], '天穹帝龍');
+  for (const retired of ['地龍獸', '鋼鐵猿猴獸', '帝皇龍甲獸']) assert.ok(!Object.values(SPECIES_NAMES_ZH).includes(retired), retired);
 });
 
 test('every new battle word has a translation in each shipped language', () => {
@@ -235,4 +262,29 @@ test('reading every view for the presentation never changes the battle', () => {
   assert.deepEqual(dressed.hp, plain.hp);
   assert.equal(dressed.outcome, plain.outcome);
   for (const type of ['START', 'LAUNCH', 'HIT', 'KO', 'END']) assert.ok(dressed.events.includes(type), type);
+});
+
+test('the approved public playtest URL plays the selected remade shared effects only (Owner 2026-10-12)', async () => {
+  const {ORIGINAL_SHARED_LOCAL_MANIFEST, originalSharedVfxManifestFor, originalSharedVfxPublicSelected, originalSharedVfxReviewRequested} =
+    await import('../src/championship/presentation/originalSharedVfxReview.js');
+  const policy = JSON.parse(fs.readFileSync('src/data/championship/public-playtest.r1.json', 'utf8'));
+  const selection = policy.acceptedOriginalSharedVfx;
+  assert.equal(selection.manifestPath, ORIGINAL_SHARED_LOCAL_MANIFEST);
+  const inputs = JSON.parse(fs.readFileSync('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json', 'utf8'));
+  for (const file of selection.files) {
+    assert.ok(inputs.files.includes(file), file);
+    assert.ok(fs.existsSync(file), file);
+  }
+  const manifest = JSON.parse(fs.readFileSync(ORIGINAL_SHARED_LOCAL_MANIFEST, 'utf8'));
+  assert.ok(!manifest.banks.some(bank => bank.bankId === 110), 'the withdrawn bank 110 stays out');
+  assert.deepEqual([manifest.image.src, ...Object.values(manifest.localizedText.sets).map(set => set.image.src)].sort(),
+    selection.files.filter(file => file.endsWith('.png')).sort());
+  const publicUrl = 'https://orochi771127.github.io/championship-2026/championship.html';
+  assert.equal(originalSharedVfxPublicSelected(publicUrl), true);
+  assert.equal(originalSharedVfxReviewRequested(publicUrl + '?vfxOriginal=shared-v1'), true);
+  assert.equal(originalSharedVfxReviewRequested(publicUrl), false, 'the app opts in; ?vfxOriginal=off stays off');
+  // Review revisions are loopback choices; the public URL always plays the selection.
+  assert.equal(originalSharedVfxManifestFor(publicUrl + '?vfxOriginal=shared-v1&vfxRevision=157-baseline'), ORIGINAL_SHARED_LOCAL_MANIFEST);
+  for (const url of ['https://orochi771127.github.io/other/?vfxOriginal=shared-v1', 'https://example.org/championship-2026/?vfxOriginal=shared-v1'])
+    assert.equal(originalSharedVfxReviewRequested(url), false, url);
 });

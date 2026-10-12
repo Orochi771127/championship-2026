@@ -422,7 +422,7 @@ export const SPECIES_NAMES_ZH = Object.freeze(Object.fromEntries(`
 178|聖銘之狼
 179|狂紅嚎狼
 180|天槍飛龍
-181|地龍獸
+181|地嘯暴龍
 182|耀冠獅王
 183|月鎌幻鐮
 184|銀河星警
@@ -452,7 +452,7 @@ export const SPECIES_NAMES_ZH = Object.freeze(Object.fromEntries(`
 208|煌羽鳳凰
 209|幻紋狼爵
 210|滅界機龍
-211|鋼鐵猿猴獸
+211|黃銅王猿
 212|霜砲機狼
 213|闇巡零狼
 214|深鎧海皇龍
@@ -463,7 +463,7 @@ export const SPECIES_NAMES_ZH = Object.freeze(Object.fromEntries(`
 219|裂地裝甲龍
 220|日輪獅神
 221|夜月獵姬
-222|帝皇龍甲獸
+222|天穹帝龍
 223|赤曜槍皇
 `.trim().split('\n').map(line => line.split('|'))));
 
