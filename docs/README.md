@@ -1,4 +1,6 @@
-# Championship 2026 Documentation Hub
+# Cyber Partner: Tournament / 網線拍檔：錦標賽 — Documentation Hub
+
+Public product names follow [the approved five-language title registry](../src/championship/text/brandTerms.js). Historical report titles and `championship-2026` paths retain their original identifiers; dated “working title” notes do not supersede the approved current names.
 
 - [2026-10-12 對戰動態演出：原作比例＋動態鏡頭＋技能與場地互動](reports/battle-dynamic-2026-10-12/REPORT_ZH_TW.md) · [招式名稱盤點與待審候選](reports/battle-move-names-2026-10-12/REVIEW_ZH_TW.md)
 

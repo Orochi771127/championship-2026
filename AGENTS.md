@@ -1,6 +1,6 @@
-# Championship 2026 repository rules
+# Cyber Partner: Tournament repository rules
 
-This is the standalone product authority for **DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD**: web-first, mobile-first, portrait 9:16 and touch-first, with desktop-browser compatibility.
+This is the standalone product authority for **Cyber Partner: Tournament / 網線拍檔：錦標賽**: web-first, mobile-first, portrait 9:16 and touch-first, with desktop-browser compatibility. The approved five-language titles are in `src/championship/text/brandTerms.js`. `championship-2026` remains the repository and engineering identifier; historical source names below are provenance, not the public product title.
 
 ## Stable boundaries
 
