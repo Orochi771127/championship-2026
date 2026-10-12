@@ -692,10 +692,11 @@ async function mountRaisingHome() {
         expansionCta.hidden = true;
         // The hard cap is the watchdog's longest load; stalling ends it sooner.
         // Only finished requests count as progress (bytes in flight are not
-        // visible), so a slow link sharing big files gets a long window.
+        // visible), and one resident sheet can be ~10 MB, a minute and more
+        // on a slow phone link, so the stall window is long.
         const owner = attempt = createLoadAttempt({ timeoutMs: LOAD_MAX_MS });
         stopTracking(); progress.reset();
-        const watchdog = createLoadWatchdog({ stallMs: 90000, onExpire(reason) {
+        const watchdog = createLoadWatchdog({ stallMs: 150000, onExpire(reason) {
           if (attempt === owner) owner.cancel(new Error(reason === 'STALLED' ? 'LOAD_STALLED' : 'LOAD_TIMEOUT'));
         } });
         const bytes = observeDownloadedBytes(total => { watchdog.activity(); progress.setBytes(total); });
