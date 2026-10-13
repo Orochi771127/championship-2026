@@ -20,3 +20,18 @@ export function downloadSaveBackup(exportValidated, { doc = globalThis.document,
     if (url) defer(() => urls.revokeObjectURL(url), 1000);
   }
 }
+
+/** Explicit local download; no upload or access to the game save. */
+export function downloadRuntimeDiagnostics(exportText, {doc=globalThis.document,urls=globalThis.URL,
+  BlobClass=globalThis.Blob,defer=globalThis.setTimeout}={}) {
+  let url;
+  try {
+    const text=exportText();
+    if(typeof text!=='string')throw new Error('NO_DIAGNOSTIC_TEXT');
+    url=urls.createObjectURL(new BlobClass([text],{type:'application/json'}));
+    const link=doc.createElement('a');link.href=url;link.download='championship-runtime-diagnostics.json';
+    doc.body.append(link);try{link.click();}finally{link.remove();}
+    return {ok:true,key:'DIAGNOSTIC_READY'};
+  }catch{return {ok:false,key:'DIAGNOSTIC_FAILED'};}
+  finally{if(url)defer(()=>urls.revokeObjectURL(url),1000);}
+}

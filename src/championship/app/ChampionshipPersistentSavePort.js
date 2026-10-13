@@ -58,6 +58,21 @@ export function guardChampionshipStorage(storage) {
 // place that writes durable storage, and the same key policy guards both.
 export const CHAMPIONSHIP_PREFERENCES_KEY = "championshipModernSave:preferences:v1";
 
+// Technical recovery evidence only. Separate from progress and preferences;
+// every writer still passes through this product storage boundary.
+export const CHAMPIONSHIP_DIAGNOSTICS_KEY = 'championshipModernSave:runtimeDiagnostics:v1';
+export function createChampionshipDiagnosticPort(storage) {
+  const guarded = guardChampionshipStorage(storage);
+  return Object.freeze({
+    read() { return guarded.getItem(CHAMPIONSHIP_DIAGNOSTICS_KEY); },
+    write(text) {
+      if (typeof text !== 'string' || new TextEncoder().encode(text).length > 8192)
+        throw new Error('DIAGNOSTIC_BYTE_LIMIT');
+      guarded.setItem(CHAMPIONSHIP_DIAGNOSTICS_KEY, text);
+    }
+  });
+}
+
 /**
  * Raw access to the stored preferences text. Parsing, defaults and migration
  * live in settings/preferenceSchema.js; this only moves text across the

@@ -6,6 +6,11 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "DIAGNOSTIC_TITLE": "重啟診斷",
+  "DIAGNOSTIC_DOWNLOAD": "下載診斷紀錄",
+  "DIAGNOSTIC_HINT": "只保留本機最近 32 筆／8 KiB 技術事件，不含玩家或存檔資料，也不會自動上傳。重啟後可在標題設定下載；若瀏覽器封鎖儲存，僅能匯出本次開啟的紀錄。",
+  "DIAGNOSTIC_READY": "診斷檔已準備，請在瀏覽器的下載項目查看。",
+  "DIAGNOSTIC_FAILED": "無法下載診斷紀錄，請再試一次。",
   "HUD_CURRENCIES": "貨幣",
   "HUD_PREVIEW": "預覽",
   "HUD_DIAMOND_TITLE": "鑽石預覽",

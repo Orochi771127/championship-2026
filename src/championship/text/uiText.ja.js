@@ -5,6 +5,11 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "DIAGNOSTIC_TITLE": "再起動の診断",
+  "DIAGNOSTIC_DOWNLOAD": "診断記録をダウンロード",
+  "DIAGNOSTIC_HINT": "直近32件・8 KiBまでの技術記録を端末内に保存します。プレイヤー情報やセーブ内容は含まず、自動送信しません。再起動後はタイトルの設定から取得できます。保存が拒否された場合は今回の記録のみ取得できます。",
+  "DIAGNOSTIC_READY": "診断ファイルを準備しました。ブラウザーのダウンロードをご確認ください。",
+  "DIAGNOSTIC_FAILED": "診断記録を取得できませんでした。もう一度お試しください。",
   "HUD_CURRENCIES": "通貨",
   "HUD_PREVIEW": "プレビュー",
   "HUD_DIAMOND_TITLE": "ダイヤのプレビュー",

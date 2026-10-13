@@ -22,8 +22,8 @@ export function createNativeTutorialHuntScript(controls,records,setCamera){
   if(rebuilding&&['hunt-demo-pull-intro','hunt-demo-pull','hunt-first-pull-intro','hunt-first-pull','hunt-escape-demo'].includes(stage))bound(second?1:0);
   if(rebuilding&&['hunt-demo-hand-intro','hunt-demo-hand','hunt-first-hand','hunt-first-collect','hunt-final-hand','hunt-final-collect'].includes(stage))down(second?1:0);
   if(rebuilding&&second&&!['hunt-second-intro','hunt-second-rope','hunt-second-enclose','hunt-escape-demo'].includes(stage)){position(1,640,530);setCamera(624,560);}
-  if(stage==='hunt-escape-explain'){reset(1);position(1,640,420);setCamera(624,560);}
-  if(rebuilding&&stage==='hunt-return-demo')position(1,640,420);
+  if(stage==='hunt-escape-explain'){reset(1);actors[1].hidden=true;position(1,640,420);setCamera(624,560);}
+  if(stage==='hunt-return-demo'){actors[1].hidden=true;position(1,640,420);}
   if(rebuilding&&['hunt-final-intro','hunt-final-rope','hunt-final-capture'].includes(stage)){actors[1].tutorialShot=1;actors[1].shotShakeTicks=180;actors[1].shake={ticks:180,shakeX:1,shakeY:0,toggle:0};}
   if(rebuilding&&stage==='hunt-return-wait'){for(const a of actors){a.cardState='ON_CARD';a.hidden=true;}}
   if(rebuilding&&stage==='hunt-food-demo'){controls.selectTool('ENTRAP');point(640,584,true);controls.tick(FRAME);up();}
@@ -45,8 +45,8 @@ export function createNativeTutorialHuntScript(controls,records,setCamera){
     if(elapsed<=16){const angle=elapsed/16*Math.PI*2;point(400+35*Math.cos(angle),395+35*Math.sin(angle));}
     if(elapsed===17)up();
    }else if(step.demo==='pull'&&a.currentHp>0){point(400+Math.min(80,elapsed*2),395+Math.min(40,elapsed));}
-   else if(step.demo==='escape'&&elapsed<=90){position(1,640,600-2*elapsed);nativeWildRequest(a,19);}
-   else if(step.demo==='return'&&elapsed>180&&elapsed<=235){position(1,640,420+2*(elapsed-180));nativeWildRequest(a,2);}
+   else if(step.demo==='escape'&&elapsed<=90){position(1,640,600-2*elapsed);nativeWildRequest(a,19);if(elapsed===90)a.hidden=true;}
+   else if(step.demo==='return'&&elapsed>180&&elapsed<=235){a.hidden=false;position(1,640,420+2*(elapsed-180));nativeWildRequest(a,2);}
    else if(step.demo==='food'&&elapsed>70&&elapsed<=100){position(1,640,530+2*(elapsed-70));nativeWildRequest(a,3);}
    controls.tick(FRAME,camera);
    if(step.demo==='pull'&&a.currentHp<=0){up();downAt??=elapsed;ready=elapsed-downAt>=60;}

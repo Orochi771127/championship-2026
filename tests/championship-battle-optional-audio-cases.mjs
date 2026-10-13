@@ -107,7 +107,7 @@ function mountFixture({audioLoad,fieldLoad,vfxLoad,sceneLoad}={}){
   const source={getFrame:()=>({combatants:[{present:true,speciesId:'test'}]})};let audioSignal;
   // BATTLE_DYNAMIC_FX (main.js module switch, Owner 2026-10-12) is off here; activeRuntime supplies the local team.
   const context=vm.createContext({AbortController,BATTLE_DYNAMIC_FX:false,activeRuntime:{localTeamIndex:()=>0},location:{href:'https://orochi771127.github.io/championship-2026/championship.html'},root:{dataset:{}},source,view:{render(){}},console:{warn(...args){warnings.push(args);}},
-    settings:{audio:{output:()=>({})}},ensurePixiStage:async(_host,signal)=>{signal.throwIfAborted();return {};},
+    settings:{audio:{output:()=>({})}},recoveryDiagnostics:{record(){}},ensurePixiStage:async(_host,signal)=>{signal.throwIfAborted();return {};},
     loadOptionalBattleFieldArt:()=>fieldLoad?fieldLoad():resources.field,
     loadOptionalCharacterReview:async()=>resources.roster,loadRegisteredBattleEffectArt:async()=>resources.effects,
     loadOptionalOriginalVfxReview:async(_stage,art)=>art,

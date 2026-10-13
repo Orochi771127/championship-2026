@@ -1,0 +1,36 @@
+{
+  "root": "R:\\Projects\\Championship2026\\capture-raising-recovery-20261013\\dist\\github-playtest",
+  "checks": [
+    {
+      "message": 1544,
+      "positions": []
+    },
+    {
+      "message": 1545,
+      "positions": []
+    },
+    {
+      "stage": "hunt-food-intro",
+      "positions": [
+        {
+          "wildId": "championship:2026:gate:tutorial:native-wild:1",
+          "speciesId": "species-021",
+          "x": 219.375,
+          "y": 321.796875,
+          "state": "WILD",
+          "bound": false,
+          "stunTicks": 0,
+          "worldX": 1280,
+          "worldY": 1060,
+          "moving": false,
+          "currentHp": 360,
+          "maxHp": 360
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "seededCheckpoint": true,
+  "physicalSafari": "UNVERIFIED"
+}

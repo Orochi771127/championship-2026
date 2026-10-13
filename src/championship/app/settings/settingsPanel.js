@@ -97,6 +97,7 @@ export function createSettingsPanel({
   quality = null,
   getSaveStatus = () => null,
   exportBackup = null,
+  exportDiagnostics = null,
   confirm,
   history = globalThis.history,
   win = globalThis.window
@@ -378,6 +379,17 @@ export function createSettingsPanel({
           setText(result, outcome?.key ?? 'BACKUP_FAILED'); result.hidden = false;
         });
         saveBlock.append(note('BACKUP_HINT'), backup, result);
+      }
+      if(typeof exportDiagnostics==='function') {
+        const diagnostics=block('DIAGNOSTIC_TITLE');
+        const download=node('button','cm-settings__action','DIAGNOSTIC_DOWNLOAD');
+        download.type='button';download.dataset.action='export-diagnostics';
+        const result=node('p','cm-settings__text');result.setAttribute('role','status');result.hidden=true;
+        download.addEventListener('click',()=>{
+          let outcome;try{outcome=exportDiagnostics();}catch{}
+          setText(result,outcome?.key??'DIAGNOSTIC_FAILED');result.hidden=false;
+        });
+        diagnostics.append(note('DIAGNOSTIC_HINT'),download,result);
       }
       const account = block("帳號");
       account.append(node("p", "cm-settings__text", "尚未提供帳號登入與雲端同步，這台裝置的資料不會上傳。"));

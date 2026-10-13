@@ -90,7 +90,8 @@ import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchd
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
-import { downloadSaveBackup } from './downloadSaveBackup.js';
+import { downloadSaveBackup, downloadRuntimeDiagnostics } from './downloadSaveBackup.js';
+import { createRuntimeRecoveryDiagnostics } from './runtimeRecoveryDiagnostics.js';
 import { createAutosaveScheduler } from './autosaveScheduler.js';
 // Settings round (2026-09-29): player preferences, applied to the page, the
 // one Pixi stage, the audio graph and the highlight template.
@@ -249,6 +250,16 @@ let statusBar = null;
 // attached by the ARM9 main binary, not by any mode overlay.
 let toolbar = null;
 
+// Bounded local technical evidence survives a new document. It never reads the
+// save, captures player text, uploads data or controls recovery/navigation.
+const recoveryDiagnostics=createRuntimeRecoveryDiagnostics({
+  storage:()=>window.localStorage,
+  getScreen:()=>root.hidden?'TITLE':app?.getScreen()??'TITLE',
+  getRenderer:canvas=>canvas===pixiStage?.app.canvas?'PIXI':'OTHER',
+  build:document.querySelector('script[type="module"][src]')?.getAttribute('src')?.match(/main-[A-Z0-9]+\.js/)?.[0]
+});
+onPixiAssetSettled(({url,ok})=>{if(!ok)recoveryDiagnostics.record('ASSET_FAILED',{url});});
+
 // ---- Settings (2026-09-29) --------------------------------------------------
 // One preference store, written only through the preference port beside the
 // save port (a different key: settings can never overwrite progress). The
@@ -328,6 +339,7 @@ function openSettings(from = null) {
     quality: settings.quality,
     getSaveStatus: saveStatusLine,
     exportBackup: () => downloadSaveBackup(() => app?.persistenceFacade().exportRecovery()),
+    exportDiagnostics: () => downloadRuntimeDiagnostics(() => recoveryDiagnostics.exportText()),
     confirm: showChoiceDialog
   });
   settingsPanel.open({ from });
@@ -385,8 +397,9 @@ async function ensurePixiStage(canvasHost, signal) {
       // can precede its awaited mount; discard that interval without catch-up.
       isSceneReady: () => mountedScreen === app.getScreen() && view?.isPlayable !== false
     });
-    pixiStage.onContextLost(() => clockDriver.reset());
+    pixiStage.onContextLost(() => {recoveryDiagnostics.record('CONTEXT_LOST',{renderer:'PIXI'});clockDriver.reset();});
     pixiStage.onContextRestored(() => {
+      recoveryDiagnostics.record('CONTEXT_RESTORED',{renderer:'PIXI'});
       clockDriver.reset();
       delete root.dataset.fieldFallback;
     });
@@ -694,6 +707,7 @@ async function mountRaisingHome() {
       }
       function show(next, key) {
         if (closed) return;
+        recoveryDiagnostics.record('LOAD',{area:'raising',stage:next});
         phase = next; host.dataset.loadState = next;
         const failed = residentStates.some(s => s.state === 'error'), loading = residentStates.some(s => s.state === 'loading');
         host.setAttribute('aria-busy', String(next === 'loading' || loading));
@@ -724,27 +738,32 @@ async function mountRaisingHome() {
         tracking = { stop() { watchdog.stop(); bytes.stop(); clearTimeout(slowNotice); } };
         tutorialPreview?.dispose(); tutorialPreview = null;
         show('loading', 'FIELD_LOAD_START');
+        recoveryDiagnostics.record('LOAD',{area:'raising',stage:'engine',phase:'start'});
         progress.start('engine');
         void (async () => {
           try {
             const stage = await owner.wait(ensurePixiStage(host, owner.signal));
             progress.done('engine');
+            recoveryDiagnostics.record('LOAD',{area:'raising',stage:'engine',phase:'done'});
             show('loading', 'FIELD_LOAD_ART');
             progress.start('facilities'); progress.start('partners');
             const [characterBundle, fieldArt] = await Promise.all([
               owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], { signal: owner.signal }))
-                .then(value => { if (value) progress.done('partners'); return value; }),
+                .then(value => { if (value) {progress.done('partners');recoveryDiagnostics.record('LOAD',{area:'raising',stage:'partners',phase:'done'});} return value; }),
               owner.own(loadOptionalCageFieldArt(stage, { signal: owner.signal }))
-                .then(value => { if (value) progress.done('facilities'); return value; })
+                .then(value => { if (value) {progress.done('facilities');recoveryDiagnostics.record('LOAD',{area:'raising',stage:'facilities',phase:'done'});} return value; })
             ]);
             owner.signal.throwIfAborted();
             if (!characterBundle || !fieldArt) throw new Error('RAISING_CORE_ART_UNAVAILABLE');
             progress.start('scene');
+            recoveryDiagnostics.record('LOAD',{area:'raising',stage:'scene',phase:'start'});
             const pending = mountRaisingFieldPixiPresentation({
               stage, source: fieldSource, fieldArt, characterBundle, signal: owner.signal,
               getSelectedTool: () => toolbar?.getSelectedTool() ?? null, onTrainingFrame,
               onResidentAssetState(states) {
                 if (!active(owner)) return;
+                const failed=states.find(s=>s.state==='error');
+                if(failed)recoveryDiagnostics.record('LOAD_FAILED',{area:'raising',error:{name:'Error',message:failed.error}});
                 residentStates = states; host.dataset.residentAssets = JSON.stringify(states);
                 if (phase === 'ready') show('ready');
               },
@@ -775,6 +794,7 @@ async function mountRaisingHome() {
             const current = !closed && attempt === owner;
             owner.cancel(error);
             if (current) {
+              recoveryDiagnostics.record('LOAD_FAILED',{area:'raising',error});
               stopTracking(); progress.fail();
               root.dataset.fieldFallback = 'true';
               show('error', error?.message === 'LOAD_TIMEOUT' ? 'FIELD_LOAD_TIMEOUT' : error?.message === 'LOAD_STALLED' ? 'FIELD_LOAD_STALLED'
@@ -802,6 +822,7 @@ async function mountRaisingHome() {
       leave.addEventListener('click', () => { void saveAndNavigate(() => returnToTitle('raising-load-return')); });
       // A new document can recover even when Pixi's old download never settles.
       reloadGame.addEventListener('click', () => { void saveAndNavigate(() => {
+        recoveryDiagnostics.record('DOCUMENT_RELOAD',{source:'raising-load-reload'});
         console.info('CHAMPIONSHIP_DOCUMENT_RELOAD', { source: 'raising-load-reload', screen: app.getScreen() });
         location.reload();
       }); });
@@ -1174,12 +1195,13 @@ async function mountBattleField() {
         let characterRoster = null;
         let effectArt = null;
         try {
+          recoveryDiagnostics.record('LOAD',{area:'battle',stage:'engine',phase:'start'});
           progress?.start('engine');
           const stage = await ensurePixiStage(host,characters.signal);
           if (disposed) return;
           progress?.done('engine');
           // Each step finishes when its own load resolves with art.
-          const step=(id,pending)=>Promise.resolve(pending).then(value=>{if(value&&!disposed)progress?.done(id);return value;});
+          const step=(id,pending)=>Promise.resolve(pending).then(value=>{if(value&&!disposed){progress?.done(id);recoveryDiagnostics.record('LOAD',{area:'battle',stage:id,phase:'done'});}return value;});
           for(const id of ['arena','fighters','effects'])progress?.start(id);
           // The dynamic presentation's catalog look-ups load beside the art.
           const fxLookupsLoading=BATTLE_DYNAMIC_FX?import('./battleFxLookups.js'):null;
@@ -1203,6 +1225,7 @@ async function mountBattleField() {
               // Local acceptance shows stable skill IDs; players see approved names only.
               showIds:String(location.search??'').includes('battleFxDebug')&&['localhost','127.0.0.1','[::1]'].includes(location.hostname)}) : null;
           progress?.start('scene');
+          recoveryDiagnostics.record('LOAD',{area:'battle',stage:'overlay',phase:'start'});
           delete root.dataset.fieldFallback;
           // The existing overlay owns Hyper, five impact families and hit flash.
           // Keep its readiness gate: no safe replacement for these cues is proven.
@@ -1211,6 +1234,7 @@ async function mountBattleField() {
             await Promise.all([release(vfxOverlay),release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }
           if(!vfxOverlay)throw new Error('BATTLE_CORE_VFX_UNAVAILABLE');
+          recoveryDiagnostics.record('LOAD',{area:'battle',stage:'scene',phase:'start'});
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame),
             dynamicFx:BATTLE_DYNAMIC_FX, fx:fxLookups, localTeam:activeRuntime.localTeamIndex() });
           if (disposed) {
@@ -1218,6 +1242,7 @@ async function mountBattleField() {
             return;
           }
           progress?.done('scene');
+          recoveryDiagnostics.record('LOAD',{area:'battle',stage:'ready'});
           onReady?.();
           // Start bounded, optional audio only after core visual readiness. The
           // adapter discards old sound events and owns cancellation of its work.
@@ -1235,6 +1260,7 @@ async function mountBattleField() {
           // cannot claim a running or naturally resolving battle.
           root.dataset.fieldFallback = "true";
           onError?.();
+          recoveryDiagnostics.record('LOAD_FAILED',{area:'battle',error});
           console.warn(error);
         }
       })();
@@ -1520,6 +1546,7 @@ async function mountCurrentScreen() {
     // One attribute every screen carries, whichever view family drew it. The
     // views' own data-screen stays theirs (the status bar also carries one).
     root.dataset.activeScreen = target;
+    recoveryDiagnostics.record('SCREEN');
   } finally {
     release();
   }
@@ -1796,6 +1823,7 @@ async function openSaveDetails() {
 
 /** Save & Quit returns to the title, which is where the original ends a session. */
 async function returnToTitle(source = 'save-and-quit') {
+  recoveryDiagnostics.record('TITLE_RETURN',{source,phase:'start'});
   console.info('CHAMPIONSHIP_TITLE_RETURN', { source, screen: app.getScreen(), stack: new Error().stack });
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
@@ -1820,6 +1848,7 @@ async function returnToTitle(source = 'save-and-quit') {
   if (titleSettingsButton) titleSettingsButton.hidden = false;
   newGameButton.disabled = false;
   refreshContinue();
+  recoveryDiagnostics.record('TITLE_RETURN',{source,phase:'done'});
 }
 
 /**
@@ -1943,6 +1972,7 @@ async function continueGame() {
   try {
     const resumed = await app.continueGame();
     if (!resumed) {
+      recoveryDiagnostics.record('CONTINUE_FAILED');
       note("That saved game could not be opened. Start a new game.");
       newGameButton.disabled = false;
       return;
@@ -1953,6 +1983,7 @@ async function continueGame() {
     newGameButton.disabled = false;
     refreshContinue();
     note(uiText("無法讀取存檔：{reason}", { reason: uiText(error.message) }));
+    recoveryDiagnostics.record('CONTINUE_FAILED',{error});
   }
 }
 

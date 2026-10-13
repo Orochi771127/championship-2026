@@ -5,6 +5,11 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "DIAGNOSTIC_TITLE": "การวินิจฉัยการเริ่มใหม่",
+  "DIAGNOSTIC_DOWNLOAD": "ดาวน์โหลดบันทึกการวินิจฉัย",
+  "DIAGNOSTIC_HINT": "เก็บเหตุการณ์ทางเทคนิคล่าสุดไม่เกิน 32 รายการ / 8 KiB ในเครื่อง ไม่มีข้อมูลผู้เล่นหรือเซฟ และไม่อัปโหลดอัตโนมัติ ดาวน์โหลดจากการตั้งค่าหน้าเริ่มหลังเริ่มใหม่ หากบล็อกพื้นที่เก็บข้อมูล จะดาวน์โหลดได้เฉพาะบันทึกหน้านี้",
+  "DIAGNOSTIC_READY": "เตรียมไฟล์แล้ว ตรวจสอบรายการดาวน์โหลดของเบราว์เซอร์",
+  "DIAGNOSTIC_FAILED": "ดาวน์โหลดบันทึกไม่ได้ โปรดลองอีกครั้ง",
   "HUD_CURRENCIES": "สกุลเงิน",
   "HUD_PREVIEW": "ตัวอย่าง",
   "HUD_DIAMOND_TITLE": "ตัวอย่างเพชร",

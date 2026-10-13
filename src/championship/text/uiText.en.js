@@ -17,6 +17,11 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "DIAGNOSTIC_TITLE": "Restart diagnostics",
+  "DIAGNOSTIC_DOWNLOAD": "Download diagnostic log",
+  "DIAGNOSTIC_HINT": "Keeps up to 32 recent technical events / 8 KiB locally, with no player or save data and no automatic upload. Download from title settings after a restart. If storage is blocked, only this document's log is available.",
+  "DIAGNOSTIC_READY": "Diagnostic file prepared. Check your browser downloads.",
+  "DIAGNOSTIC_FAILED": "Could not download the diagnostic log. Try again.",
   "HUD_CURRENCIES": "Currencies",
   "HUD_PREVIEW": "Preview",
   "HUD_DIAMOND_TITLE": "Diamond preview",

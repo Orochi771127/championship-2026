@@ -22,6 +22,23 @@ async function fixture(t,stage='gate-intro'){
 }
 function input(a,kind,args,expected=cp(a)){return a.interactiveHuntInput(kind,args,expected);}
 function tick(a,n=1){for(let i=0;i<n;i++)a.advanceHunt(FRAME);}
+test('escaped tutorial partner stays hidden through both cave messages and the return wait, including reload',async t=>{
+ const f=await fixture(t,'hunt-escape-demo');let a=f.app;
+ const visible=()=>a.getHuntRuntime().getWildCreatures().map(actor=>actor.speciesId);
+ tick(a,89);assert.deepEqual(visible(),['species-021']);
+ tick(a);assert.equal(cp(a).stage,'hunt-escape-explain');assert.deepEqual(visible(),[]);
+ for(const message of [0,1]){
+  assert.equal(cp(a).message,message);assert.equal(a.getInteractiveTutorial().textId,1544+message);
+  a=await f.reload();assert.deepEqual(visible(),[],'cave dialogue checkpoint must restore hidden');
+  a.acknowledgeInteractiveTutorial(cp(a));
+ }
+ assert.equal(cp(a).stage,'hunt-return-demo');assert.deepEqual(visible(),[]);
+ a=await f.reload();assert.deepEqual(visible(),[],'return checkpoint must restore hidden');
+ tick(a,180);assert.deepEqual(visible(),[]);
+ tick(a);assert.deepEqual(visible(),['species-021'],'actual return starts at frame 181');
+ tick(a,54);assert.equal(cp(a).stage,'hunt-food-intro');assert.deepEqual(visible(),['species-021']);
+ assert.deepEqual(normal(f.storage.getItem(KEY)),f.baseline);
+});
 test('tutorial preload includes both encounter species without revealing its hidden target; ordinary loading stays lazy',async t=>{
  const {app:a,storage}=await fixture(t,'hunt-intro'),runtime=a.getHuntRuntime(),before=storage.getItem(KEY);
  assert.deepEqual(runtime.getWildCreatures().map(a=>a.speciesId),['species-013']);
