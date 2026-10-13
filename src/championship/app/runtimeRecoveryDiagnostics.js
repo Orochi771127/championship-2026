@@ -5,7 +5,8 @@ const TYPES=new Set(['BOOT','PAGE_SHOW','PAGE_HIDE','VISIBILITY','SCREEN','LOAD'
   'TITLE_RETURN','DOCUMENT_RELOAD','CONTEXT_LOST','CONTEXT_RESTORED','ERROR','REJECTION','CONTINUE_FAILED']);
 const SCREENS=new Set(['TITLE','RAISING_HOME','HUNT_FIELD','HUNT_RESULT','HUNT_LOADOUT','GATE_SELECT','BATTLE_SELECT',
   'BATTLE_FIELD','BATTLE_RESULT','CHAMPIONSHIP','SHOP','DATABASE','MEDALS','CAGE_EDIT','DIGIMON_LIST','SCHEDULE','HELP','TAMER_INFO']);
-const STAGES=new Set(['engine','facilities','partners','scene','arena','fighters','effects','overlay','loading','ready','error','cancelled']);
+const STAGES=new Set(['engine','facilities','partners','scene','arena','fighters','effects','overlay','loading','ready','error','cancelled',
+  'loading-card','first-render','audio']);
 const CODES=['NATIVE_CHARACTER_TEXTURE_MISSING','UNVERIFIED_NATIVE_CHARACTER_FRAME','RESIDENT_ART_UNAVAILABLE',
   'RAISING_CORE_ART_UNAVAILABLE','BATTLE_CORE_ART_UNAVAILABLE','BATTLE_CORE_VFX_UNAVAILABLE','LOAD_TIMEOUT','LOAD_STALLED','SAVE_FAILED',
   'CHAMPIONSHIP_MODERN_SAVE_CONFLICT','CHARACTER_RUNTIME_BUNDLE_DISPOSED'];
@@ -42,6 +43,34 @@ function read(text) {
   }catch{return [];}
 }
 
+// Drop routine progress before document/lifecycle/failure and battle-boundary
+// evidence. Keep chronological order and the newest event within the same cap.
+function evict(events) {
+  let index=events.findIndex((e,i)=>i<events.length-1&&e.type==='LOAD'
+    &&!(e.area==='battle'&&['overlay','scene','ready','loading-card','first-render','audio'].includes(e.stage)));
+  if(index<0)index=events.findIndex((e,i)=>i<events.length-1&&e.type==='SCREEN');
+  events.splice(index<0?0:index,1);
+}
+
+// Observe one existing renderer call, without rendering, ticking or waiting.
+// A successful return confirms command submission, not compositor/GPU paint.
+export function observeBattleFirstRender({renderer,record,isActive=()=>true}={}) {
+  const original=renderer?.render;
+  if(typeof original!=='function')return ()=>{};
+  let started=false,stopped=false;
+  const write=phase=>{try{record('LOAD',{area:'battle',stage:'first-render',phase,renderer:'PIXI'});}catch{}};
+  function observed(...args){
+    const target=args[0]?.target??args[1]?.renderTexture;
+    if(stopped||started||!isActive()||(target&&target!==renderer.view?.renderTarget))return original.apply(this,args);
+    started=true;write('start');
+    try{const result=original.apply(this,args);write('done');return result;}
+    finally{stop();}
+  }
+  function stop(){stopped=true;if(renderer.render===observed)renderer.render=original;}
+  try{renderer.render=observed;}catch{return ()=>{};}
+  return stop;
+}
+
 export function createRuntimeRecoveryDiagnostics({storage=()=>globalThis.localStorage,win=globalThis.window,
   doc=globalThis.document,now=()=>globalThis.performance.now(),getScreen=()=> 'TITLE',getRenderer=()=> 'OTHER',build='source',
   documentId=()=>{let n;try{n=globalThis.crypto.getRandomValues(new Uint32Array(1))[0];}catch{n=Math.floor(Math.random()*4294967296);}return n.toString(16).padStart(8,'0');}}={}) {
@@ -64,9 +93,9 @@ export function createRuntimeRecoveryDiagnostics({storage=()=>globalThis.localSt
     // A failed write leaves newer evidence only in memory; rereading the stale
     // stored ring must not discard it on the next event.
     try{if(port&&persistent){const stored=read(port.read());if(stored.length)events=stored;}}catch{persistent=false;}
-    events.push(row);events=events.slice(-DIAGNOSTIC_LIMIT.entries);
+    events.push(row);while(events.length>DIAGNOSTIC_LIMIT.entries)evict(events);
     let text=JSON.stringify({schemaVersion:1,kind,events});
-    while(new TextEncoder().encode(text).length>DIAGNOSTIC_LIMIT.bytes-64&&events.length){events.shift();text=JSON.stringify({schemaVersion:1,kind,events});}
+    while(new TextEncoder().encode(text).length>DIAGNOSTIC_LIMIT.bytes-64&&events.length){evict(events);text=JSON.stringify({schemaVersion:1,kind,events});}
     try{if(port){port.write(text);persistent=true;}}catch{persistent=false;}
   }
   const listen=(target,event,fn,capture=false)=>{target?.addEventListener?.(event,fn,capture);cleanups.push(()=>target?.removeEventListener?.(event,fn,capture));};

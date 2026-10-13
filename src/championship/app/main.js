@@ -91,7 +91,7 @@ import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } 
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
 import { downloadSaveBackup, downloadRuntimeDiagnostics } from './downloadSaveBackup.js';
-import { createRuntimeRecoveryDiagnostics } from './runtimeRecoveryDiagnostics.js';
+import { createRuntimeRecoveryDiagnostics, observeBattleFirstRender } from './runtimeRecoveryDiagnostics.js';
 import { createAutosaveScheduler } from './autosaveScheduler.js';
 // Settings round (2026-09-29): player preferences, applied to the page, the
 // one Pixi stage, the audio graph and the highlight template.
@@ -1182,6 +1182,7 @@ async function mountBattleField() {
       let scene = null;
       let vfxOverlay = null;
       let battleAudio = null;
+      let stopFirstRender=()=>{};
       const audioLoading = new AbortController();
       const released = new Map();
       const release = resource => {
@@ -1241,15 +1242,20 @@ async function mountBattleField() {
             await Promise.all([release(vfxOverlay),release(scene)]);
             return;
           }
+          stopFirstRender=observeBattleFirstRender({renderer:stage.app.renderer,
+            record:recoveryDiagnostics.record,isActive:()=>!disposed});
           progress?.done('scene');
           recoveryDiagnostics.record('LOAD',{area:'battle',stage:'ready'});
           onReady?.();
+          recoveryDiagnostics.record('LOAD',{area:'battle',stage:'loading-card',phase:'done'});
           // Start bounded, optional audio only after core visual readiness. The
           // adapter discards old sound events and owns cancellation of its work.
+          recoveryDiagnostics.record('LOAD',{area:'battle',stage:'audio',phase:'start'});
           void mountBattleAudioPresentation({source,output:settings.audio.output('sfx'),signal:audioLoading.signal})
             .then(async audio=>{if(disposed)await release(audio);else battleAudio=audio;})
             .catch(error=>{if(!disposed)console.warn('Battle audio unavailable',error);});
         } catch (error) {
+          stopFirstRender();
           audioLoading.abort();
           if(scene)void release(scene);
           else {void release(fieldArt);void release(characterRoster);void release(effectArt);}
@@ -1268,6 +1274,7 @@ async function mountBattleField() {
         dispose() {
           if(disposed)return;
           disposed = true;
+          stopFirstRender();
           characters.abort();
           audioLoading.abort();
           void release(vfxOverlay);

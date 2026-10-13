@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {mountBattleAudioPresentation,BATTLE_AUDIO_MANIFEST,BATTLE_AUDIO_LOAD_CONCURRENCY} from '../src/championship/presentation/battleAudioPresentation.js';
+import {observeBattleFirstRender} from '../src/championship/app/runtimeRecoveryDiagnostics.js';
 
 const registration={assetId:'art:audio:battle:local-reference:v1',runtimeEligible:true,localOnly:true,
   publicReleasePermitted:false,shippingReady:false,runtimeScope:'LOOPBACK_RESEARCH_ONLY'};
@@ -102,12 +103,12 @@ test('already aborted load makes no requests; completion after verdict never pla
 const main=readFileSync(new URL('../src/championship/app/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const binding=main.slice(main.indexOf('    mountField({ host,onReady,onError,progress=null }) {'),main.indexOf('    onExit: tutorial?undefined:'));
 function mountFixture({audioLoad,fieldLoad,vfxLoad,sceneLoad}={}){
-  const order=[],warnings=[],resources={};
+  const order=[],warnings=[],resources={},diagnostics=[];
   for(const name of ['field','roster','effects','vfx','scene','audio'])resources[name]={released:0,dispose(){this.released++;},getDiagnostics:()=>({failures:[]})};
   const source={getFrame:()=>({combatants:[{present:true,speciesId:'test'}]})};let audioSignal;
   // BATTLE_DYNAMIC_FX (main.js module switch, Owner 2026-10-12) is off here; activeRuntime supplies the local team.
   const context=vm.createContext({AbortController,BATTLE_DYNAMIC_FX:false,activeRuntime:{localTeamIndex:()=>0},location:{href:'https://orochi771127.github.io/championship-2026/championship.html'},root:{dataset:{}},source,view:{render(){}},console:{warn(...args){warnings.push(args);}},
-    settings:{audio:{output:()=>({})}},recoveryDiagnostics:{record(){}},ensurePixiStage:async(_host,signal)=>{signal.throwIfAborted();return {};},
+    settings:{audio:{output:()=>({})}},observeBattleFirstRender,recoveryDiagnostics:{record:(type,row)=>diagnostics.push({type,...row})},ensurePixiStage:async(_host,signal)=>{signal.throwIfAborted();return {app:{renderer:{}}};},
     loadOptionalBattleFieldArt:()=>fieldLoad?fieldLoad():resources.field,
     loadOptionalCharacterReview:async()=>resources.roster,loadRegisteredBattleEffectArt:async()=>resources.effects,
     loadOptionalOriginalVfxReview:async(_stage,art)=>art,
@@ -116,11 +117,12 @@ function mountFixture({audioLoad,fieldLoad,vfxLoad,sceneLoad}={}){
     mountBattleAudioPresentation:({signal})=>{order.push('audio');audioSignal=signal;return audioLoad?audioLoad(signal):Promise.resolve(resources.audio);}});
   const mount=vm.runInContext('({'+binding+'}).mountField',context);
   const owner=mount({host:{},onReady(){order.push('ready');},onError(){order.push('error');}});
-  return {owner,order,warnings,resources,context,get audioSignal(){return audioSignal;}};
+  return {owner,order,warnings,resources,context,diagnostics,get audioSignal(){return audioSignal;}};
 }
 
 test('core ready precedes optional audio completion; late ownership is released on leaving',async()=>{
   const gate=deferred(),f=mountFixture({audioLoad:()=>gate.promise});await flush();assert.deepEqual(f.order,['scene','ready','audio']);
+  assert.deepEqual(f.diagnostics.filter(e=>['ready','loading-card','audio'].includes(e.stage)).map(e=>[e.stage,e.phase]),[['ready',undefined],['loading-card','done'],['audio','start']]);
   f.owner.dispose();assert.equal(f.audioSignal.aborted,true);gate.resolve(f.resources.audio);await flush();
   assert.equal(f.resources.audio.released,1);assert.equal(f.resources.scene.released,1);assert.equal(f.resources.vfx.released,1);
 });

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createRuntimeRecoveryDiagnostics,DIAGNOSTIC_LIMIT} from '../src/championship/app/runtimeRecoveryDiagnostics.js';
+import {createRuntimeRecoveryDiagnostics,DIAGNOSTIC_LIMIT,observeBattleFirstRender} from '../src/championship/app/runtimeRecoveryDiagnostics.js';
 import {CHAMPIONSHIP_DIAGNOSTICS_KEY,createChampionshipDiagnosticPort} from '../src/championship/app/ChampionshipPersistentSavePort.js';
 import {downloadRuntimeDiagnostics} from '../src/championship/app/downloadSaveBackup.js';
 import {setLocale} from '../src/championship/text/locale.js';
@@ -16,6 +16,31 @@ function fixture(document='00000001',data=new Map()) {
   return {journal,data,keys,win,doc,setScreen:s=>{screen=s;},advance:()=>{ms+=100;},events:()=>JSON.parse(journal.exportText()).events};
 }
 const send=(target,type,fields={})=>{const event=Object.assign(new Event(type,{cancelable:true}),fields);target.dispatchEvent(event);return event;};
+function rendererFixture(){return {view:{renderTarget:{}},calls:[],render(...args){this.calls.push(args);return args[0];}};}
+
+test('first screen render is recorded once and preserves renderer this, arguments, return and later calls',()=>{
+  const renderer=rendererFixture(),records=[],screen={target:renderer.view.renderTarget},offscreen={target:{}};
+  const original=renderer.render;
+  const stop=observeBattleFirstRender({renderer,record:(type,row)=>records.push({type,...row})});
+  assert.equal(renderer.calls.length,0,'installing the observer cannot render');
+  assert.equal(renderer.render(offscreen),offscreen);assert.equal(records.length,0);
+  assert.equal(renderer.render(screen,'unchanged argument'),screen);assert.deepEqual(records.map(e=>e.phase),['start','done']);
+  assert.deepEqual(renderer.calls[1],[screen,'unchanged argument']);assert.equal(renderer.render,original);
+  for(let i=0;i<30;i++)renderer.render(screen);
+  assert.equal(records.length,2);assert.equal(renderer.calls.length,32);assert.ok(records.every(e=>e.area==='battle'&&e.stage==='first-render'&&e.renderer==='PIXI'));
+  stop();stop();
+});
+
+test('leaving before render removes the observer; renderer failures remain failures without fake completion',()=>{
+  const renderer=rendererFixture(),records=[],original=renderer.render;
+  const stop=observeBattleFirstRender({renderer,record:(type,row)=>records.push(row)});stop();renderer.render({});
+  assert.equal(renderer.render,original);assert.equal(records.length,0);
+  const failure=Error('controlled renderer failure'),failed={render(){throw failure;}};
+  const failedOriginal=failed.render;observeBattleFirstRender({renderer:failed,record:(type,row)=>records.push(row)});
+  assert.throws(()=>failed.render({}),e=>e===failure);assert.equal(failed.render,failedOriginal);
+  assert.deepEqual(records.map(e=>e.phase),['start']);
+  assert.doesNotThrow(()=>observeBattleFirstRender({renderer:{}})());
+});
 
 test('technical history survives another document and keeps navigation separate from title return and context loss',()=>{
   const a=fixture();a.setScreen('BATTLE_FIELD');a.journal.record('LOAD',{area:'battle',stage:'overlay',phase:'start'});
@@ -57,6 +82,17 @@ test('entry and UTF-8 byte limits apply to storage and export, with repeated tic
   assert.ok(Buffer.byteLength(h.journal.exportText())<=DIAGNOSTIC_LIMIT.bytes);
   assert.ok(Buffer.byteLength(h.data.get(CHAMPIONSHIP_DIAGNOSTICS_KEY))<=DIAGNOSTIC_LIMIT.bytes);
   assert.throws(()=>createChampionshipDiagnosticPort({setItem(){}}).write('a'.repeat(8193)),/BYTE_LIMIT/);h.journal.dispose();
+});
+
+test('routine loading cannot evict document boundaries or the battle ready-to-render window',()=>{
+  const a=fixture();a.setScreen('BATTLE_FIELD');
+  for(const [stage,phase]of [['ready',undefined],['loading-card','done'],['audio','start'],['first-render','start'],['first-render','done']])a.journal.record('LOAD',{area:'battle',stage,phase});
+  for(let i=0;i<60;i++){a.advance();a.journal.record('LOAD',{area:'raising',stage:i%2?'engine':'partners',phase:'done'});}
+  const b=fixture('00000002',a.data);send(b.win,'pageshow',{persisted:false});
+  const events=b.events();assert.equal(events.filter(e=>e.type==='BOOT').length,2);
+  assert.deepEqual(events.filter(e=>e.type==='LOAD'&&e.area==='battle').map(e=>[e.stage,e.phase]),
+    [['ready',undefined],['loading-card','done'],['audio','start'],['first-render','start'],['first-render','done']]);
+  assert.ok(events.length<=32);assert.ok(Buffer.byteLength(b.journal.exportText())<=8192);a.journal.dispose();b.journal.dispose();
 });
 
 test('blocked or corrupt diagnostic storage never blocks recording or touches game data',()=>{
