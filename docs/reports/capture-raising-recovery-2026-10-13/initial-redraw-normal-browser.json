@@ -1,0 +1,95 @@
+{
+  "root": "R:\\Projects\\Championship2026\\capture-raising-recovery-20261013\\dist\\github-playtest",
+  "buildId": "ebe0014b6367b1e03f826130c467ddd259036c9e409f33acd46ccf93075328fa",
+  "events": [
+    {
+      "type": "LOAD",
+      "document": "43913a79",
+      "build": "main-3DS7GCO3.js",
+      "elapsedMs": 2029,
+      "screen": "BATTLE_FIELD",
+      "stage": "ready",
+      "area": "battle"
+    },
+    {
+      "type": "LOAD",
+      "document": "43913a79",
+      "build": "main-3DS7GCO3.js",
+      "elapsedMs": 2030,
+      "screen": "BATTLE_FIELD",
+      "stage": "loading-card",
+      "phase": "done",
+      "area": "battle"
+    },
+    {
+      "type": "LOAD",
+      "document": "43913a79",
+      "build": "main-3DS7GCO3.js",
+      "elapsedMs": 2030,
+      "screen": "BATTLE_FIELD",
+      "stage": "audio",
+      "phase": "start",
+      "area": "battle"
+    },
+    {
+      "type": "LOAD",
+      "document": "43913a79",
+      "build": "main-3DS7GCO3.js",
+      "elapsedMs": 2124,
+      "screen": "BATTLE_FIELD",
+      "stage": "first-render",
+      "phase": "start",
+      "area": "battle",
+      "renderer": "PIXI"
+    },
+    {
+      "type": "LOAD",
+      "document": "43913a79",
+      "build": "main-3DS7GCO3.js",
+      "elapsedMs": 2632,
+      "screen": "BATTLE_FIELD",
+      "stage": "first-render",
+      "phase": "done",
+      "area": "battle",
+      "renderer": "PIXI"
+    }
+  ],
+  "unchangedSaveBytes": true,
+  "onePixiApplicationCanvas": true,
+  "boundedThreeCanvas": true,
+  "webglContexts": [
+    {
+      "canvas": "",
+      "connected": false,
+      "width": 0,
+      "height": 0,
+      "lost": true
+    },
+    {
+      "canvas": "",
+      "connected": false,
+      "width": 0,
+      "height": 0,
+      "lost": false
+    },
+    {
+      "canvas": "cm-field-canvas",
+      "connected": true,
+      "width": 390,
+      "height": 472,
+      "lost": false
+    },
+    {
+      "canvas": "cm-vs5-vfx-overlay",
+      "connected": true,
+      "width": 390,
+      "height": 476,
+      "lost": false
+    }
+  ],
+  "onceAfterFurtherFrames": true,
+  "missing": [],
+  "errors": [],
+  "seededCheckpoint": true,
+  "physicalSafari": "UNVERIFIED"
+}

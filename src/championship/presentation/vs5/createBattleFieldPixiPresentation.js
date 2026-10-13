@@ -554,9 +554,10 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     redraw();
   }
 
-  const unobserveResize = stage.onResize(redraw);
-  app.ticker.add(advance);
-  redraw();
+  let unobserveResize=()=>{};
+  // Inputs remain caller-owned until the first draw succeeds. The app already
+  // releases them when this mount rejects; the scene only owns its new nodes.
+  let ownsInputs=false;
   // Local verification only: ?battleFxDebug on a loopback host exposes this
   // scene's diagnostics to automated review captures.
   const debugHook = fxLayer && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
@@ -638,10 +639,20 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const shadowDisposal=groundShadows?.dispose();
       scene.destroy({ children: true });
       actors.clear();
-      disposal=Promise.allSettled([fieldArt?.dispose(),characterRoster?.dispose(),effectArt?.dispose(),shadowDisposal]);
+      disposal=Promise.allSettled([...(ownsInputs
+        ?[fieldArt?.dispose(),characterRoster?.dispose(),effectArt?.dispose()]:[]),shadowDisposal]);
       // The Application belongs to the stage and outlives this scene.
       return disposal;
     }
   });
+  try {
+    unobserveResize=stage.onResize(redraw);
+    app.ticker.add(advance);
+    redraw();
+    ownsInputs=true;
+  } catch(error) {
+    try{await presentation.dispose();}catch{/* Preserve the original mount error. */}
+    throw error;
+  }
   return presentation;
 }

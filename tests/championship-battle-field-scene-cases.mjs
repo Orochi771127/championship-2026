@@ -111,6 +111,42 @@ async function mount(options = {}) {
   return { stage, session, source, scene };
 }
 
+test('initial redraw failure destroys its scene and callbacks, preserves the original error and leaves inputs with caller',async()=>{
+  const stage=stubStage(),sharedTick=()=>{},sharedResize=()=>{};
+  stage.tickers.add(sharedTick);stage.resizers.add(sharedResize);
+  let destroyed=0,detached=0;
+  const create=stage.createSceneRoot;
+  stage.createSceneRoot=label=>{const root=create(label);root.parent={removeChild(node){assert.equal(node,root);root.parent=null;detached++;}};root.destroy=()=>{destroyed++;};return root;};
+  const releases={field:0,roster:0,effects:0};
+  const fieldArt={assetId:'test',field:{fieldId:'field_bm06_01',worldWidthPx:1664,worldHeightPx:1088,nativeWidthPx:416},displayObject:{},update(){},getDiagnostics(){return {};},dispose(){releases.field++;}};
+  const characterRoster={dispose(){releases.roster++;}},effectArt={dispose(){releases.effects++;}};
+  const {source}=sourceOf([100,100,100,100,100,100]),failure=Error('QA_INITIAL_REDRAW_FAILURE');
+  await assert.rejects(mountBattleFieldPixiPresentation({stage,source,fieldArt,characterRoster,effectArt,onView(){throw failure;}}),error=>error===failure);
+  assert.deepEqual({destroyed,detached,ownTicks:stage.tickers.size-1,ownResize:stage.resizers.size-1},
+    {destroyed:1,detached:1,ownTicks:0,ownResize:0});
+  assert.ok(stage.tickers.has(sharedTick));assert.ok(stage.resizers.has(sharedResize));
+  assert.deepEqual(releases,{field:0,roster:0,effects:0},'rejected mount must not dispose caller-owned shared inputs');
+  fieldArt.dispose();characterRoster.dispose();effectArt.dispose();
+  assert.deepEqual(releases,{field:1,roster:1,effects:1});
+});
+
+test('successful first draw transfers inputs once and normal disposal leaves shared callbacks alone',async()=>{
+  const stage=stubStage(),sharedTick=()=>{},sharedResize=()=>{};
+  stage.tickers.add(sharedTick);stage.resizers.add(sharedResize);
+  let destroyed=0,draws=0;
+  const create=stage.createSceneRoot;stage.createSceneRoot=label=>{const root=create(label);root.destroy=()=>{destroyed++;};return root;};
+  const releases={field:0,roster:0,effects:0};
+  const fieldArt={assetId:'test',field:{fieldId:'field_bm06_01',worldWidthPx:1664,worldHeightPx:1088,nativeWidthPx:416},displayObject:{},update(){},getDiagnostics(){return {};},dispose(){releases.field++;}};
+  const characterRoster={createActor(){return {sprite:{texture:{},destroy(){}},nativeSizing:null};},dispose(){releases.roster++;}};
+  const effectArt={getCell(){return null;},dispose(){releases.effects++;}}, {source}=sourceOf([100,null,null,100,null,null]);
+  const scene=await mountBattleFieldPixiPresentation({stage,source,fieldArt,characterRoster,effectArt,onView(){draws++;}});
+  assert.equal(draws,1);assert.equal(stage.tickers.size,2);assert.equal(stage.resizers.size,2);
+  assert.deepEqual(releases,{field:0,roster:0,effects:0});
+  const disposal=scene.dispose();assert.equal(scene.dispose(),disposal);await disposal;scene.redraw();
+  assert.deepEqual(releases,{field:1,roster:1,effects:1});assert.equal(destroyed,1);assert.equal(draws,1);
+  assert.deepEqual([...stage.tickers],[sharedTick]);assert.deepEqual([...stage.resizers],[sharedResize]);
+});
+
 test("the 9:16 frame is centred and never stretched", () => {
   // A taller viewport letterboxes nothing: width leads and the frame centres.
   const tall = battleFrameRect(360, 900);
