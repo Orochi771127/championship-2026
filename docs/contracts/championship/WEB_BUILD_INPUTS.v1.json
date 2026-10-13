@@ -351,7 +351,8 @@
     "src/data/championship/characterNativeSizing.js",
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/championship/text/battleMoveNames.js"
+    "src/championship/text/battleMoveNames.js",
+    "src/championship/battle/battleAiAdaptation.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9626,7 +9627,8 @@
     "assets/production/vfx/original-shared-review-v1/text-zh-Hant.png",
     "assets/production/vfx/original-shared-review-v1/text-ja.png",
     "assets/production/vfx/original-shared-review-v1/text-en.png",
-    "src/championship/text/battleMoveNames.js"
+    "src/championship/text/battleMoveNames.js",
+    "src/championship/battle/battleAiAdaptation.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -45142,7 +45144,7 @@
       },
       {
         "path": "src/championship/app/battleRuntime.js",
-        "sha256": "61237fd13806e7b84638ab533935b0dd9a5f42e5daceed6691a3e6316a9600b1"
+        "sha256": "6a12c76adb4bc98a2d6d4da94329193524b516bb2a0dd23ffa323b4ace0f5339"
       },
       {
         "path": "src/championship/app/cageRoster.js",
@@ -45258,7 +45260,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "837b6e77d9d085fd0a281d4f79c3eaa2adbda6ac02978df6e101eaca3c74b4a2"
+        "sha256": "37b84ef503bef29b72762be29197381db63ff809f2d59f515ccf1b3abe89ee80"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -45534,7 +45536,7 @@
       },
       {
         "path": "src/championship/battle/battleNormalRuntime.js",
-        "sha256": "cfd8e72d248c36ad974cd669820adb63ab41866b764cb25bbb9b1b95f7da2307"
+        "sha256": "5063c68d41e420ae33a65bdee30f0196acc7e6573bd318fd41a75a131aa93499"
       },
       {
         "path": "src/championship/battle/battleOutcome.js",
@@ -46711,6 +46713,10 @@
       {
         "path": "src/championship/text/battleMoveNames.js",
         "sha256": "664fc8decba6913951dd37fa89f0d7a82a2ec23bc2e6f916eda56599f76255bf"
+      },
+      {
+        "path": "src/championship/battle/battleAiAdaptation.js",
+        "sha256": "e27816e23a6c7941de22480229c37790a98311bb98a0165c9a78330980a75749"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

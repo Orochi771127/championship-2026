@@ -104,6 +104,9 @@ test("only the authorized source families are present", () => {
       "battleActionApplication.js",
       "battleActionResource.js",
       "battleActionSelection.js",
+      // Owner 2026-10-13: the bounded improved AI (OWNER_APPROVED_ADAPTATION),
+      // opt-in through the existing runtime; the original rule stays the default.
+      "battleAiAdaptation.js",
       "battleCandidateBuckets.js",
       "battleCatalogs.js",
       "battleContactTargeting.js",

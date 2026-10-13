@@ -7,6 +7,9 @@ import {normalBattleSpeedScalar,normalBattleTargetSelector,normalBattlePersonali
 import {getBattleCatalogRecord} from './battleCatalogs.js';
 import {buildMoveBucketsForCombatant} from './battleMoveBuckets.js';
 import {negativeStatusActionGate} from './battleStatus.js';
+import {BATTLE_AI_ADAPTATION_V1,stepBattleAiApproach} from './battleAiAdaptation.js';
+import {battleAngleIndex} from './battleNativeMath.js';
+import {BATTLE_SPECIES_MOVEMENT} from '../../data/championship/battleCharacterProfiles.js';
 
 export function createBattleNormalRuntime({session,actors,creatures,initialize,applyStatus,globalAbort=()=>!!(actors.worldFlags()&2)}){
   const m=actors.memory,history=[];
@@ -18,6 +21,8 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
   const emit=(slot,type,detail={})=>{history.push({frame:session.frame,clock:session.clock,slot,type,...detail});if(history.length>512)history.shift();};
   const setState=(c,s)=>{c.state=s;c.stateCounter=-255;};
   let geometry;
+  // Improved-AI bookkeeping (OWNER_APPROVED_ADAPTATION 2026-10-13); unused in ORIGINAL.
+  const aiMemo=session.slots.map(()=>({idleSince:null,kicks:0}));
   function updateGeometry(){
     const points=session.slots.map((c,i)=>c?point(i):[0,0,0]);
     geometry=updateNormalBattleGeometry(points);
@@ -129,11 +134,20 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
         }};
       const before=c.state;
       if(c.state===3)stepNormalBattlePosition(c,h);
-      else if([4,5].includes(c.state))stepNormalBattleApproach(c,h);
+      else if([4,5].includes(c.state)){
+        stepNormalBattleApproach(c,h);
+        if(session.aiPolicy===BATTLE_AI_ADAPTATION_V1&&[4,5].includes(c.state)){
+          const action=stepBattleAiApproach(c,{...h,frame:session.clock,
+            walkSpeed:()=>BATTLE_SPECIES_MOVEMENT[c.speciesId]?.walkQ12??0,
+            angleTo:(x,y)=>battleAngleIndex(y-h.point[1],x-h.point[0])},aiMemo[slot]);
+          if(action)emit(slot,'AI_ADAPTATION',{action,policy:BATTLE_AI_ADAPTATION_V1,targetSlot:index,distance:h.distance,angle:h.angle,heading:c.field44&65535});
+        }
+      }
       else if([6,7].includes(c.state))stepNormalBattleWait(c,h);
       else if(c.state===8)stepBattlePursuit(c,h);
       else stepNormalBattleLaunch(c,h);
-      if(c.state!==before)emit(slot,'STATE_CHANGED',{from:before,to:c.state});
+      // The approach launch carries the matrix distance/angle it was decided on.
+      if(c.state!==before)emit(slot,'STATE_CHANGED',{from:before,to:c.state,...([4,5].includes(before)?{distance:h.distance,angle:h.angle}:{})});
       return true;
     },
     releaseSlot,

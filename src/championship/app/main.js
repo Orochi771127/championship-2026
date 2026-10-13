@@ -122,7 +122,16 @@ const mountHighlightBurstThree = async (options) =>
 // battleRuntime reaches the character geometry, profiles, moves, presets and
 // scripts -- about 3.7MB no screen before the battle menu reads. Every caller
 // is already past that menu, so it is fetched then.
-const loadBattleRuntime = async () => (await import("./battleRuntime.js")).createBattleRuntime;
+// Owner 2026-10-13: battles opened from the menus use the improved AI
+// (OWNER_APPROVED_ADAPTATION, IMPROVED_V1) that walks out of the original
+// approach dead band; ?battleAi=original keeps the original rule. The guided
+// tutorial battle builds its own runtime and stays on the original rule.
+const BATTLE_AI_POLICY =
+  new URLSearchParams(globalThis.location?.search ?? "").get("battleAi") === "original" ? "ORIGINAL" : "IMPROVED_V1";
+const loadBattleRuntime = async () => {
+  const create = (await import("./battleRuntime.js")).createBattleRuntime;
+  return options => create({ aiPolicy: BATTLE_AI_POLICY, ...options });
+};
 
 // Screen modules and art load through their existing foreground owners.
 // Avoid speculative Battle/Three/whole-roster traffic competing with title music.

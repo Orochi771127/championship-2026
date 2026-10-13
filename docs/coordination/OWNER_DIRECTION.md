@@ -19,6 +19,7 @@ The Owner reports 「對戰角色被連續打到角落後，長時間停住、�
 - **Original restoration:** a launch whose target was cleared on the same frame is refused by the initialiser, as in ROM 0211C0A0, instead of being refused at allocation. Before this fix the combatant held state 14 behind a looping walk and stood in a corner. See [the root-cause report](../reports/battle-corner-stall-2026-10-13/ROOT_CAUSE_ZH_TW.md).
 - **Original behaviour kept:** the approach dead band in states 4 and 5 (021161F0 / 02116314) is CPU-verified against the ROM and stays unchanged in the original mode.
 - **Not fixed in this batch:** the special-prelude timeline throw, whose root cause is still open.
+- **Improved AI v1 (OWNER_APPROVED_ADAPTATION, separate commit):** when the original rule leaves a standing fighter idle inside the approach dead band for 20 battle frames, it issues the original walk notification toward the original aim point, using the reachable side when the target hugs a wall. It does this at most three times per decision and never in hit, down or recovery states. It draws no RNG. The runtime default stays ORIGINAL; menu battles use IMPROVED_V1, and ?battleAi=original restores the original rule. See [the AI report](../reports/battle-corner-stall-2026-10-13/IMPROVED_AI_V1_ZH_TW.md).
 
 ## 2026-10-12 — Approve move names, rename three characters, publish the remade shared VFX
 

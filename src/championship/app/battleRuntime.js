@@ -15,6 +15,7 @@
 // creatures through the ROM's own builder, and the player's three through the
 // same builder over declared levels. Nothing here computes a stat.
 
+import {BATTLE_AI_ORIGINAL,BATTLE_AI_POLICIES} from '../battle/battleAiAdaptation.js';
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import {
   BATTLE_MATCH_LIST_CAP,
@@ -114,6 +115,10 @@ export function createBattleRuntime(options = {}) {
   // combatant's personality and battle policy the way the original does; the
   // application chooses which modes use it.
   const personalityPolicy=options.personalityPolicy??'BASELINE';
+  // Owner-approved improved AI (2026-10-13) is opt-in; the runtime default is
+  // the original rule so parity fixtures and replays keep their behaviour.
+  const aiPolicy=options.aiPolicy??BATTLE_AI_ORIGINAL;
+  if(!BATTLE_AI_POLICIES.includes(aiPolicy))throw runtimeError('AI_POLICY_UNKNOWN');
   if(!['BASELINE','ORIGINAL'].includes(personalityPolicy))throw runtimeError('PERSONALITY_POLICY_UNKNOWN');
   if(![0,1].includes(localTeamIndex)||localTeamIndex!==0&&mode!==3)throw runtimeError('LOCAL_TEAM_CONTEXT_REQUIRED');
   if(opponentIndividuals!==null&&(![3,4,5].includes(mode)||!playerIndividuals||!Array.isArray(opponentIndividuals)
@@ -664,6 +669,7 @@ export function createBattleRuntime(options = {}) {
           // FC68 -> 02043B9C(1,1); 02043A6C displays one white frame, then restores.
           if(!blocked&&(move.field46||critical))impactFlashFrame=session.frame;
         }});
+      session.aiPolicy=aiPolicy;
       session.normalFlow=createBattleNormalRuntime({session,actors:nativeActors,creatures:roster,applyStatus:hitRuntime.status,
         initialize:(slot,action)=>{const ok=prepareActionLaunch(slot,action),tally=launchTally[slot];
           if(tally&&ok)tally.launched+=1;
@@ -699,6 +705,7 @@ export function createBattleRuntime(options = {}) {
     },
 
     personalityPolicy(){return personalityPolicy;},
+    aiPolicy(){return aiPolicy;},
 
     /**
      * Diagnostic read of the personality wiring: what each slot received, what

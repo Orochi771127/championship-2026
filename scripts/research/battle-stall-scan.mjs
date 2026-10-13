@@ -1,6 +1,7 @@
 // Diagnostic (fixed-seed) battle stall scanner (2026-10-13). Not normal-game
 // evidence: practice matches built from hunt individuals with explicit seeds.
 // Usage: node scripts/research/battle-stall-scan.mjs seeds=30 arenas=2 size=3 [min=120] [out=file.json]
+// [policy=ai-v1] runs the Owner-approved improved AI (IMPROVED_V1) on both teams.
 // Runs practice battles headless and reports intervals where a living,
 // non-suspended combatant neither moves nor has an action in flight.
 const ROOT = new URL('../../', import.meta.url).href;
@@ -14,7 +15,9 @@ const args = Object.fromEntries(process.argv.slice(2).map(a => a.split('=')));
 const SEEDS = Number(args.seeds ?? 20), MIN = Number(args.min ?? 120), SIZE = Number(args.size ?? 3);
 const ARENAS = (args.arenas ?? '2,7').split(',').map(Number);
 const OUT = args.out ?? null;
+const AI = args.policy === 'ai-v1' ? 'IMPROVED_V1' : 'ORIGINAL';
 
+const v_end = src => src.getView().combatants.map(c => c?.present ? c.hp.current : null);
 function individual(id, species, personality, rngSeed) {
   const p = structuredClone(nativeIndividualProfile(createNativeHuntIndividual({species: nativeHuntSpeciesByIndex(species), rng: {next: () => rngSeed}})));
   if (personality !== undefined) p.fields['018'] = personality;
@@ -29,7 +32,7 @@ function pick(n, seed, k) { const out = []; let x = (seed * 2654435761 + k * 97)
 const report = [];
 for (let seed = 1; seed <= SEEDS; seed++) for (const arena of ARENAS) {
   const a = pick(SIZE, seed, 1), b = pick(SIZE, seed, 2);
-  const rt = createBattleRuntime({mode: 5, battleType: 0, seed,
+  const rt = createBattleRuntime({mode: 5, battleType: 0, seed, aiPolicy: AI,
     playerIndividuals: a.map((s, i) => individual('A' + i, s, (seed + i) % 8, seed + i)),
     opponentIndividuals: b.map((s, i) => individual('B' + i, s, (seed * 3 + i) % 8, seed * 7 + i))});
   let src;
@@ -37,10 +40,12 @@ for (let seed = 1; seed <= SEEDS; seed++) for (const arena of ARENAS) {
   const last = [], run = [], launchesSeen = [];
   const stalls = [];
   let frame = 0, tickError = null;
+  const adapt = new Map(), seen = new Set(), dealt = [0, 0];
   for (; frame < 9000 && !src.getView().outcome.ended; frame++) {
     try { src.tick(); } catch (e) { tickError = {frame: src.getView().clock.frames, message: e.message}; break; }
     const v = src.getView();
     const nf = v.nativeLifecycle.normalFlow.slots, re = v.nativeLifecycle.reactions.combatants;
+    for (const e of v.nativeLifecycle.normalFlow.history) { const k = e.frame + ":" + e.slot + ":" + e.type + ":" + (e.action ?? ""); if (seen.has(k)) continue; seen.add(k); if (e.type === "AI_ADAPTATION") adapt.set(e.action, (adapt.get(e.action) ?? 0) + 1); }
     const active = new Set((v.nativeLifecycle.active ?? []).map(l => l.ownerSlot));
     v.combatants.forEach((c, i) => {
       if (!c?.present || !nf[i]) return;
@@ -63,7 +68,7 @@ for (let seed = 1; seed <= SEEDS; seed++) for (const arena of ARENAS) {
   }
   for (const r of run) if (r && r.end - r.start >= MIN) stalls.push({...r, frames: r.end - r.start, endedBy: 'BATTLE_END'});
   const o = src.getView().outcome;
-  report.push({seed, arena, a, b, frames: frame, verdict: o.verdict, reason: o.reason, stalls, tickError});
+  report.push({seed, arena, a, b, frames: frame, verdict: o.verdict, reason: o.reason, winningTeam: o.winningTeam ?? null, hp: v_end(src), stalls, tickError, adaptations: Object.fromEntries(adapt)});
   rt.dispose();
 }
 const all = report.flatMap(r => (r.stalls ?? []).map(s => ({seed: r.seed, arena: r.arena, ...s})));
