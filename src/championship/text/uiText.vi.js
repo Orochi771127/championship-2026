@@ -6,6 +6,9 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  "DEX_STAGE": "Giai đoạn phát triển",
+  "DEX_ALL": "Tất cả giai đoạn",
+  "DEX_EGG_INDEX": "Danh mục nội dung trứng. Không lưu lịch sử sở hữu vĩnh viễn; trứng không được tính vào số loài đã đăng ký trong danh mục thông thường.",
   "DIAGNOSTIC_TITLE": "Chẩn đoán khởi động lại",
   "DIAGNOSTIC_DOWNLOAD": "Tải nhật ký chẩn đoán",
   "DIAGNOSTIC_HINT": "Lưu tối đa 32 sự kiện kỹ thuật / 8 KiB trên máy, không chứa dữ liệu người chơi hay bản lưu và không tự tải lên. Tải từ cài đặt màn hình đầu sau khi khởi động lại. Nếu chặn lưu trữ, chỉ có nhật ký trang hiện tại.",

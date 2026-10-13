@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: DATABASE_DISPLAY_20261013 -->
+**2026-10-13 Database display catalog.** Owner-approved seven-stage filters and explicit immutable EG/B1/B2/GR/MA/AW/UL display codes join the original 216-row book. Eight approved eggs are an untracked content index outside regular registration. Same save/registration/evolution authorities, desktop two panes, mobile return flow and five-language shared stage terms. See the [mapping, browser/save checks and publication receipt](reports/database-display-2026-10-13/REPORT_ZH_TW.md).
+
 <!-- record-id: TITLE_ENTRY_20261013 -->
 **2026-10-13 TITLE entry cost.** The separate batch after desktop browse `12c4b61a` defers only the existing Raising/Gate/Hunt/Shop/Database/Cage/Battle presenters through the existing foreground mounts. Same app/router/save/Pixi/ticker and movie/art bytes; Continue validation and media/music lifecycle are unchanged. See the [controlled cold/warm-cache measurements, regression and publication receipt](reports/title-entry-2026-10-13/REPORT_ZH_TW.md). Synthetic network/CPU measurements do not establish the cause or performance of Owner's physical Chrome phone.
 

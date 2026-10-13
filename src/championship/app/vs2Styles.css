@@ -801,6 +801,12 @@
 .cm-shop-goods-icon { display: block; width: 62px; height: 62px; justify-self: center; border-radius: var(--r-control); background-color: var(--c-ground-raised); background-position: center; background-size: 74% 74%; background-repeat: no-repeat; box-shadow: inset 0 0 0 1px var(--c-line-2); image-rendering: pixelated; }
 
 /* ---- Database: a grid of numbered tiles, registered ones named ------------- */
+.cm-vs2-database__catalog { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--sp-2); min-width: 0; min-height: 0; }
+.cm-vs2-database__catalog[hidden] { display: none; }
+.cm-vs2-database__filter { display: flex; align-items: center; gap: var(--sp-2); min-width: 0; color: var(--c-text-2); font-size: var(--fs-label); }
+.cm-vs2-database__stage { flex: 1; min-width: 0; min-height: 44px; padding: 8px; border: 1px solid var(--c-line-2); border-radius: var(--r-control); background: var(--c-surface-1); color: var(--c-text-1); font: inherit; }
+.cm-vs2-database__stage:focus-visible { outline: 3px solid var(--c-accent); outline-offset: -3px; }
+.cm-vs2-database__egg { width: min(100%, 160px); height: 160px; object-fit: contain; justify-self: center; }
 .cm-vs2-database .cm-vs2-shop__body[data-mode="list"] { grid-template-rows: minmax(0, 1fr); }
 .cm-vs2-database .cm-vs2-shop__body[data-mode="detail"] { grid-template-rows: minmax(0, 1fr); }
 .cm-vs2-database .cm-vs2-shop__list {
@@ -851,7 +857,7 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-shop__bod
   grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
   grid-template-areas: "list detail";
 }
-body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-shop__list { grid-area: list; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__catalog { grid-area: list; }
 body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row { min-height: 64px; }
 body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-shop__body[data-mode="list"] { grid-template-areas: "list"; }
 body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail { grid-area: detail; padding: var(--sp-3); overflow-wrap: anywhere; overscroll-behavior: contain; }

@@ -7,6 +7,9 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "DEX_STAGE": "成長階段",
+  "DEX_ALL": "全部階段",
+  "DEX_EGG_INDEX": "蛋內容索引；未記錄永久取得歷史，不計入常規圖鑑登錄。",
   "DIAGNOSTIC_TITLE": "重啟診斷",
   "DIAGNOSTIC_DOWNLOAD": "下載診斷紀錄",
   "DIAGNOSTIC_HINT": "只保留本機最近 32 筆／8 KiB 技術事件，不含玩家或存檔資料，也不會自動上傳。重啟後可在標題設定下載；若瀏覽器封鎖儲存，僅能匯出本次開啟的紀錄。",

@@ -18,6 +18,9 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "DEX_STAGE": "Growth stage",
+  "DEX_ALL": "All stages",
+  "DEX_EGG_INDEX": "Egg content index. Permanent acquisition history is not tracked; eggs do not count toward regular book registration.",
   "DIAGNOSTIC_TITLE": "Restart diagnostics",
   "DIAGNOSTIC_DOWNLOAD": "Download diagnostic log",
   "DIAGNOSTIC_HINT": "Keeps up to 32 recent technical events / 8 KiB locally, with no player or save data and no automatic upload. Download from title settings after a restart. If storage is blocked, only this document's log is available.",

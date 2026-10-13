@@ -1,5 +1,8 @@
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
-import { speciesName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
+import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
+import {databaseDisplayRows, getDatabaseDisplayEntry} from '../database/databaseDisplayCatalog.js';
+import {openingEggChoices} from './openingEggChoices.js';
+import {openingEggText} from '../text/openingEggText.js';
 // VS4 -- Shop presentation.
 //
 // Consumes only the injected Gate/Hunt presentation source. The Shop runtime
@@ -388,11 +391,23 @@ export function createDatabaseView({ root, source }) {
   header.append(copy, census);
 
   const body = element("div", "cm-vs2-body cm-vs2-shop__body");
+  const catalogPane = element('div', 'cm-vs2-database__catalog');
+  const filterLabel = element('label', 'cm-vs2-database__filter');
+  filterLabel.append(element('span', '', 'DEX_STAGE'));
+  const stageFilter = element('select', 'cm-vs2-database__stage');
+  stageFilter.setAttribute('aria-label', uiText('DEX_STAGE'));
+  for (const value of ['', '0', '1', '2', '3', '4', '5', '6']) {
+    const option = element('option', '', value === '' ? uiText('DEX_ALL') : generationName(Number(value)));
+    option.value = value;
+    stageFilter.append(option);
+  }
+  filterLabel.append(stageFilter);
   const list = element("div", "cm-vs2-shop__list");
   list.setAttribute("role", "list");
   const detail = element("div", "cm-vs2-database__detail");
   detail.hidden = true;
-  body.append(list, detail);
+  catalogPane.append(filterLabel, list);
+  body.append(catalogPane, detail);
 
   // Leaving is not this screen's primary action, so it does not wear gold.
   const footer = element("footer", "cm-vs2-footer");
@@ -407,28 +422,46 @@ export function createDatabaseView({ root, source }) {
   let lastOpened = null;
   let paintedRows = null;
   let paintedDetail = null;
+  let activeStage = null;
+  let selectedEgg = null;
+  const eggs = new Map(openingEggChoices().map(egg=>[egg.speciesIndex,egg]));
   back.addEventListener("click", () => {
     const current = source.getFrame().database;
-    if (current?.selected) source.intents.selectDatabaseSpecies(null);
+    if (selectedEgg) { selectedEgg = null; paint(source.getFrame()); }
+    else if (current?.selected) source.intents.selectDatabaseSpecies(null);
     else source.intents.leaveScreen();
+  });
+  stageFilter.addEventListener('change', () => {
+    activeStage = stageFilter.value === '' ? null : Number(stageFilter.value);
+    listScroll = null;
+    lastOpened = null;
+    list.scrollTop = 0;
+    const selected = selectedEgg ?? source.getFrame().database?.selected;
+    if (selected && activeStage !== null && getDatabaseDisplayEntry(selected.speciesIndex)?.numberingStageIndex !== activeStage) {
+      selectedEgg = null;
+      source.intents.selectDatabaseSpecies(null);
+    }
+    paint(source.getFrame());
   });
   const stopBackKeys = bindBrowseBack(root, back);
 
   function paint(nextFrame) {
     const book = nextFrame?.database;
     if (!book) return;
+    const selected = selectedEgg ?? (book.selected ? {...book.selected, ...getDatabaseDisplayEntry(book.selected.speciesIndex)} : null);
     census.textContent = uiText("已登錄 {count} / {total}", { count: book.registeredCount, total: book.slotCount });
-    body.dataset.mode = book.selected ? "detail" : "list";
+    body.dataset.mode = selected ? "detail" : "list";
     const wide = isDesktopBrowseLayout({width:globalThis.innerWidth,height:globalThis.innerHeight,activeScreen:'DATABASE'});
     const focusWasInList = list.contains(document.activeElement);
-    list.hidden = Boolean(book.selected) && !wide;
-    detail.hidden = !book.selected;
-    if (book.selected) {
+    list.hidden = Boolean(selected) && !wide;
+    catalogPane.hidden = list.hidden;
+    detail.hidden = !selected;
+    if (selected) {
       back.textContent = uiText("Return to database list");
       back.setAttribute("aria-label", uiText("Return to database list"));
-      const detailKey = JSON.stringify([document.documentElement.lang, book.selected]);
+      const detailKey = JSON.stringify([document.documentElement.lang, selected]);
       if (detailKey !== paintedDetail) {
-        paintDetail(book.selected, book);
+        paintDetail(selected, book);
         detail.scrollTop = 0;
         paintedDetail = detailKey;
       }
@@ -439,10 +472,10 @@ export function createDatabaseView({ root, source }) {
       back.textContent = uiText("RETURN TO RANCH");
       back.setAttribute("aria-label", uiText("Return to Raising Home"));
     }
-    const rows = book.entries;
+    const rows = databaseDisplayRows(book, activeStage);
     // Keep the live list when selecting/resizing. Keyboard focus and each
     // pane's scroll position must survive while the other pane changes.
-    const rowsKey = JSON.stringify([document.documentElement.lang, rows]);
+    const rowsKey = JSON.stringify([document.documentElement.lang, activeStage, rows]);
     if (rowsKey !== paintedRows) {
       list.replaceChildren();
       paintedRows = rowsKey;
@@ -451,26 +484,28 @@ export function createDatabaseView({ root, source }) {
         item.dataset.speciesIndex = String(row.speciesIndex);
         item.type = "button";
         item.dataset.state = row.state;
-        item.setAttribute("aria-label", row.state === "REGISTERED" ? uiText(speciesName(row.speciesIndex, row.displayName)) : uiText("未登錄 {n}", { n: row.bookOrdinal + 1 }));
+        item.dataset.displayCode = row.displayCode;
+        const visibleName = row.kind === 'EGG' ? eggs.get(row.speciesIndex).formalName : row.state === 'REGISTERED' ? speciesName(row.speciesIndex, row.displayName) : uiText('Undiscovered');
+        item.setAttribute("aria-label", `${row.displayCode} · ${generationName(row.numberingStageIndex)} · ${visibleName}`);
         const name = element("div", "cm-vs2-shop__name");
-        name.append(element("strong", "", row.state === "REGISTERED" ? speciesName(row.speciesIndex, row.displayName) : "-----"));
-        // Registration and book numbering stay in the existing projection.
-        name.append(element("span", "cm-vs2-shop__meta", String(row.bookOrdinal + 1).padStart(3, "0")));
+        name.append(element("strong", "", row.state === 'UNDISCOVERED' ? '????' : visibleName));
+        name.append(element("span", "cm-vs2-shop__meta", row.displayCode));
         item.append(name);
         item.addEventListener("click", () => {
           listScroll = list.scrollTop ?? 0;
           lastOpened = row.speciesIndex;
-          source.intents.selectDatabaseSpecies(row.speciesIndex);
+          selectedEgg = row.kind === 'EGG' ? row : null;
+          source.intents.selectDatabaseSpecies(row.kind === 'EGG' ? null : row.speciesIndex);
         });
         list.append(item);
       }
     }
     for (const item of list.children) {
-      const selected = Number(item.dataset.speciesIndex) === book.selected?.speciesIndex;
-      item.dataset.selected = String(selected);
-      item.setAttribute('aria-pressed', String(selected));
+      const isSelected = Number(item.dataset.speciesIndex) === selected?.speciesIndex;
+      item.dataset.selected = String(isSelected);
+      item.setAttribute('aria-pressed', String(isSelected));
     }
-    if (!book.selected && listScroll !== null) {
+    if (!selected && listScroll !== null) {
       list.scrollTop = listScroll;
       const reopened = list.querySelector(`[data-species-index="${lastOpened}"]`);
       reopened?.scrollIntoView({block:'nearest',inline:'nearest'});
@@ -481,7 +516,8 @@ export function createDatabaseView({ root, source }) {
 
   function paintDetail(selected, book) {
     detail.replaceChildren();
-    const title = element("h2", "cm-vs2-database__detail-title", selected.state === "REGISTERED" ? speciesName(selected.speciesIndex, selected.displayName) : "Undiscovered");
+    const egg = selected.kind === 'EGG' ? eggs.get(selected.speciesIndex) : null;
+    const title = element("h2", "cm-vs2-database__detail-title", egg ? egg.formalName : selected.state === "REGISTERED" ? speciesName(selected.speciesIndex, selected.displayName) : "Undiscovered");
     title.tabIndex = -1;
     const meta = element(
       "p",
@@ -490,7 +526,16 @@ export function createDatabaseView({ root, source }) {
         ? "已登錄"
         : "尚未登錄這隻數碼獸。"
     );
-    detail.append(title, meta);
+    detail.append(title, element('p','cm-vs2-shop__meta', `${selected.displayCode} · ${generationName(selected.numberingStageIndex)}`));
+    if (egg) {
+      const image = element('img','cm-vs2-database__egg');
+      image.src = egg.src;
+      image.alt = '';
+      detail.append(image, element('p','cm-vs2-shop__status','DEX_EGG_INDEX'));
+      if (openingEggText().nameNote) detail.append(element('p','cm-vs2-shop__meta',openingEggText().nameNote));
+      return;
+    }
+    detail.append(meta);
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) {
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
     }

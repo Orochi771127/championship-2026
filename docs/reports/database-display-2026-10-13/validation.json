@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-10-13T22:18:18.885Z",
+  "baselineCommit": "391cbe78227ed60b5d88148188cc5a7a7c12149c",
+  "classification": "OWNER_APPROVED_ADAPTATION",
+  "sourceCrossCheckRows": 228,
+  "displayEntries": 224,
+  "regularRegistrationTotal": 216,
+  "eggHistory": "NOT_TRACKED",
+  "stageCounts": [
+    8,
+    12,
+    14,
+    38,
+    64,
+    51,
+    37
+  ],
+  "focused": {
+    "passed": 23,
+    "failed": 0
+  },
+  "registrationCaptureDesktopRegression": {
+    "passed": 8,
+    "failed": 0
+  },
+  "ci": {
+    "passed": 1766,
+    "failed": 0,
+    "skipped": 0
+  },
+  "sourceBrowser": {
+    "configurations": 100,
+    "operations": 20,
+    "filterGroups": 10,
+    "errors": [],
+    "missing": []
+  },
+  "compiledBrowser": {
+    "configurations": 40,
+    "operations": 8,
+    "filterGroups": 4,
+    "errors": [],
+    "missing": []
+  },
+  "formalBuild": {
+    "fileCount": 9398,
+    "buildId": "8f78abda3f1d571cb2b14ded1654b19a84822bda4119fdc8cc24f70979f444cd",
+    "inputSha256": "04cd098293d5b3d774a9e4cc955d2fe02007ab24d9ea0e73b457090b630b340e",
+    "validated": true
+  },
+  "unchangedAuthorities": [
+    "databaseRuntime",
+    "nativeBookRegistration",
+    "championshipStandaloneApp",
+    "championshipStandaloneSave",
+    "nativeRaisingLifecycle",
+    "nativeBookSpecies"
+  ],
+  "physicalDeviceAccepted": false,
+  "nativeSpeakerReview": {
+    "th": false,
+    "vi": false
+  },
+  "publication": "Exact SHA workflows and live bytes checked after commit, outside this precommit receipt."
+}

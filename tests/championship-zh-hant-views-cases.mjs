@@ -9,6 +9,7 @@ import { createHuntResultView } from "../src/championship/app/vs3Screens.js";
 import { createGateHuntPresentationSource } from "../src/championship/app/gateHuntPresentationSource.js";
 import { listShopRecords } from "../src/championship/shop/shopCatalog.js";
 import { HELP_ZH, TITLE_EVENTS_ZH, SPECIES_NAMES_ZH } from "../src/championship/text/catalogs.zhHant.js";
+import {NATIVE_REGULAR_BOOK_SPECIES} from '../src/data/championship/nativeBookSpecies.js';
 
 // Tests mounted text, attributes, and original intent arguments. Actual layout
 // is checked separately in the browser at the required mobile viewports.
@@ -134,8 +135,8 @@ test("Database translates every registered species without revealing unregistere
   const selected = [];
   const view = createDatabaseView({ root, source: { getFrame: () => frame, intents: { selectDatabaseSpecies: id => selected.push(id) } } });
   for (const row of root.querySelectorAll(".cm-vs2-database__row")) row.click();
-  assert.deepEqual(selected, entries.map(entry => entry.speciesIndex));
-  noForeignCopy(root);
+  assert.deepEqual(selected, [...Array(8).fill(null), ...NATIVE_REGULAR_BOOK_SPECIES]);
+  assert.doesNotMatch(visibleCopy(root).replace(/\b(?:EG|B1|B2|GR|MA|AW|UL)\d{2,}\b/g,''), /[a-zA-Z\p{Script=Katakana}\p{Script=Hiragana}]/u);
   view.render({ ...frame, database: { ...frame.database, entries: [{ ...entries[0], state: "UNDISCOVERED" }] } });
   assert.doesNotMatch(visibleCopy(root), /黏液獸|M_8/);
 });

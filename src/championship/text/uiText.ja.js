@@ -6,6 +6,9 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "DEX_STAGE": "成長段階",
+  "DEX_ALL": "すべての段階",
+  "DEX_EGG_INDEX": "タマゴのコンテンツ一覧です。永続的な入手履歴は記録されず、通常図鑑の登録数には含まれません。",
   "DIAGNOSTIC_TITLE": "再起動の診断",
   "DIAGNOSTIC_DOWNLOAD": "診断記録をダウンロード",
   "DIAGNOSTIC_HINT": "直近32件・8 KiBまでの技術記録を端末内に保存します。プレイヤー情報やセーブ内容は含まず、自動送信しません。再起動後はタイトルの設定から取得できます。保存が拒否された場合は今回の記録のみ取得できます。",
