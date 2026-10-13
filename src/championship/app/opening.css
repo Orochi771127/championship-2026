@@ -22,9 +22,14 @@
 #cm-title .cm-title__logo { z-index:2; position:absolute; top:max(10%,calc(env(safe-area-inset-top,0px) + 52px)); left:8%; width:84%; animation:cm-title-arrive .85s cubic-bezier(.2,.8,.2,1) both; }
 #cm-title .cm-title__logo-art { display:none; width:100%; height:auto; image-rendering:auto; filter:drop-shadow(0 6px 0 #184d5940) drop-shadow(0 9px 14px #184d5930); }
 :root:lang(zh) #cm-title .cm-title__logo-art { display:block; }
+:root:lang(zh) #cm-title > .cm-title__panel .cm-title__logo { aspect-ratio:2; }
+:root:lang(zh) #cm-title > .cm-title__panel .cm-title__logo-art { display:none; }
+:root:lang(zh) #cm-title > .cm-title__panel .cm-title__logo-art[data-title-image-state="ready"] { display:block; }
 #cm-title .cm-title__name { margin:0; color:#ffe895; font-size:clamp(30px,7.5vw,42px); font-weight:900; line-height:1.24; letter-spacing:-.025em; overflow-wrap:anywhere; text-wrap:balance; -webkit-text-stroke:1.5px #154b55; paint-order:stroke fill; text-shadow:0 3px 0 #8f782f,0 5px 0 #154b55,0 8px 12px #12343e44; }
 #cm-title .cm-title__name span { color:#c7fff1; -webkit-text-stroke-color:#075e65; text-shadow:0 3px 0 #26938b,0 5px 0 #075e65,0 8px 12px #12343e44; }
 :root:lang(zh) #cm-title .cm-title__name { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+:root:lang(zh) #cm-title > .cm-title__panel .cm-title__name { top:50%; left:0; width:100%; height:auto; overflow:visible; clip-path:none; white-space:normal; transform:translateY(-50%); }
+:root:lang(zh) #cm-title > .cm-title__panel .cm-title__logo:has(.cm-title__logo-art[data-title-image-state="ready"]) .cm-title__name { top:0; width:1px; height:1px; transform:none; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 :root:lang(ja) #cm-title .cm-title__name, :root:lang(th) #cm-title .cm-title__name { font-size:clamp(23px,6vw,30px); line-height:1.5; }
 #cm-title .cm-title__partners { position:absolute; left:10%; bottom:23%; width:80%; height:25%; pointer-events:none; }
 #cm-title .cm-title__partner { position:absolute; bottom:0; width:52%; height:100%; object-fit:contain; object-position:center bottom; image-rendering:auto; filter:drop-shadow(0 8px 5px #24464238); animation:cm-title-partner .7s .3s ease-out both; }

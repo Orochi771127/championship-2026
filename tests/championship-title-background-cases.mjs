@@ -14,10 +14,10 @@ test('deferred TITLE pixels remain unrequested during the film and restore immed
  image.complete=false;sync(true);assert.equal(attrs.has('src'),false);
  sync(false);assert.equal(attrs.get('src'),src);sync.dispose();
 });
-function harness(images=[]){
+function harness(images=[],locale='zh-Hant'){
  const timers=new Map();let nextTimer=0;
  const calls=[],created=[],revoked=[],decodes=[],panel={style:{backgroundImage:''},dataset:{backgroundSrc:'assets/production/title-morning-r1/arena.webp'}};
- const title={hidden:false,ownerDocument:{baseURI:'https://example.test/game/'},querySelectorAll:()=>images,querySelector:()=>panel};
+ const title={hidden:false,ownerDocument:{baseURI:'https://example.test/game/',documentElement:{lang:locale}},querySelectorAll:()=>images,querySelector:()=>panel};
  const sync=createTitleImageLifecycle(title,{setTimer:fn=>{const id=++nextTimer;timers.set(id,fn);return id;},clearTimer:id=>timers.delete(id),fetchImpl:(url,options)=>{const d=deferred();calls.push({url,options,...d});return d.promise;},
   urls:{createObjectURL:blob=>{const url='blob:qa-'+created.length;created.push({url,blob});return url;},revokeObjectURL:url=>revoked.push(url)},
   createImage:()=>{const d=deferred(),image={src:'',decode:()=>d.promise,removeAttribute(){this.src='';}};decodes.push({image,...d});return image;}});
@@ -160,4 +160,49 @@ test('a retry tap during initial music buffering queues one attempt until resume
  const h=harness();h.sync(false);h.expire();h.sync(true);assert.equal(h.panel.dataset.titleBackgroundState,'error');
  assert.equal(h.sync.retry(),true);assert.equal(h.sync.retry(),false);h.sync(true);assert.equal(h.calls.length,1);assert.equal(h.timers.size,0);
  h.sync(false);h.sync(false);assert.equal(h.calls.length,2);assert.equal(h.timers.size,1);h.sync.dispose();assert.equal(h.timers.size,0);
+});
+
+test('five-language visibility only requests the Chinese logo for Chinese, including film warmup',async()=>{
+ for(const locale of ['zh-Hant','en','ja','th','vi']){
+  const logo=titleImage('logo');logo.dataset.titleLocale='zh-Hant';
+  const h=harness([logo,titleImage('blaze'),titleImage('cloud')],locale);h.sync(true);
+  const count=locale==='zh-Hant'?4:3;
+  for(let i=0;i<count;i++){assert.equal(h.sync.warmNext(),true);await complete(h,i);}
+  assert.equal(h.sync.warmNext(),false);assert.equal(h.calls.some(c=>c.url.endsWith('/logo.webp')),locale==='zh-Hant');
+  h.sync(false);assert.equal(h.panel.dataset.titleBackgroundState,'ready');
+  assert.equal(logo.dataset.titleImageState,locale==='zh-Hant'?'ready':undefined);h.sync.dispose();
+ }
+});
+
+test('en to Chinese to en cancels only a pending logo; stale body cannot attach and completed cache survives switches',async()=>{
+ const logo=titleImage('logo');logo.dataset.titleLocale='zh-Hant';const h=harness([logo],'en');h.sync(false);await complete(h,0);
+ assert.equal(h.calls.length,1);h.title.ownerDocument.documentElement.lang='zh-Hant';h.sync(false);assert.equal(h.calls.length,2);
+ const body=deferred();h.calls[1].resolve({ok:true,blob:()=>body.promise});await flush();
+ h.title.ownerDocument.documentElement.lang='en';h.sync(false);assert.equal(h.calls[1].options.signal.aborted,true);assert.equal(h.panel.dataset.titleBackgroundState,'ready');
+ body.resolve({stale:true});await flush();assert.equal(logo.getAttribute('src'),null);
+ h.title.ownerDocument.documentElement.lang='zh-Hant';h.sync(false);await complete(h,2);assert.equal(logo.dataset.titleImageState,'ready');
+ const url=logo.getAttribute('src');for(let i=0;i<4;i++){h.title.ownerDocument.documentElement.lang='en';h.sync(false);h.title.ownerDocument.documentElement.lang='zh-Hant';h.sync(false);}
+ assert.equal(h.calls.length,3);assert.equal(logo.getAttribute('src'),url);
+ h.title.hidden=true;h.sync(true);h.title.hidden=false;h.sync(false);for(const decode of h.decodes.slice(2))decode.resolve();await flush();
+ assert.equal(h.calls.length,3);assert.equal(logo.dataset.titleImageState,'ready');h.sync.dispose();assert.equal(new Set(h.revoked).size,h.revoked.length);
+});
+
+test('logo errors and deliberate retry track the visible language without hiding a background error',async()=>{
+ const logo=titleImage('logo');logo.dataset.titleLocale='zh-Hant';const h=harness([logo]);h.sync(false);h.calls[0].resolve({ok:false});await flush();await complete(h,1);
+ assert.equal(logo.dataset.titleImageState,'error');assert.equal(h.panel.dataset.titleBackgroundState,'error');
+ h.title.ownerDocument.documentElement.lang='en';h.sync(false);assert.equal(h.panel.dataset.titleBackgroundState,'ready');assert.equal(h.sync.retry(),false);
+ h.title.ownerDocument.documentElement.lang='zh-Hant';h.sync(false);assert.equal(h.panel.dataset.titleBackgroundState,'error');
+ assert.equal(h.sync.retry(),true);assert.equal(h.sync.retry(),false);await complete(h,2);assert.equal(logo.dataset.titleImageState,'ready');h.sync.dispose();
+ const failed=harness([logo],'en');failed.sync(false);failed.calls[0].resolve({ok:false});await flush();
+ failed.title.ownerDocument.documentElement.lang='zh-Hant';failed.sync(false);assert.equal(failed.panel.dataset.titleBackgroundState,'error');failed.sync.dispose();
+});
+
+test('attached logo decode must finish before ready; timeout or language change never reveals a released URL',async()=>{
+ const logo=titleImage('logo');logo.dataset.titleLocale='zh-Hant';const attached=deferred();logo.decode=()=>attached.promise;
+ const h=harness([logo]);h.sync(false);h.calls[0].resolve({ok:true,blob:async()=>({})});await flush();h.decodes[0].resolve();await flush();
+ assert.equal(logo.dataset.titleImageState,'loading');assert.ok(logo.getAttribute('src').startsWith('blob:'));
+ logo.complete=true;logo.naturalWidth=1774;await complete(h,1);
+ assert.equal(h.panel.dataset.titleBackgroundState,'loading','DOM load is not attached decode readiness');
+ h.title.ownerDocument.documentElement.lang='en';h.sync(false);assert.equal(logo.getAttribute('src'),null);attached.resolve();await flush();
+ assert.equal(logo.dataset.titleImageState,'idle');assert.equal(h.revoked.length,1);h.sync.dispose();
 });

@@ -2085,7 +2085,7 @@ function boot() {
     titleSettingsButton.hidden = false;
   }
   relabelChrome();
-  onLocaleChange(() => relabelChrome());
+  onLocaleChange(() => { relabelChrome(); syncTitleArt(); });
   try {
     app = createChampionshipStandaloneApp({
       storage: window.localStorage,

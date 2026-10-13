@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "125ad364d7789ee8247fdbd849fe73f59a81621b",
+  "controlledProfile": "Chromium Pixel7; cold cache; 4Mbps down/1Mbps up/150ms; CPU4; actual video first frame and trusted Skip/LOGIN; random isolated loopback port, not8732",
+  "samplesPerLocale": 2,
+  "orderingCandidate": "NOT_IMPLEMENTED",
+  "locales": {
+    "zh-Hant": {
+      "titleImageBytes": {
+        "before": 5350394,
+        "after": 5350394
+      },
+      "titleImageRequests": {
+        "before": 4,
+        "after": 4
+      },
+      "brandFromSkipMs": {
+        "before": 12703.799999952316,
+        "after": 30.350000023841858
+      },
+      "primaryFromSkipMs": {
+        "before": 15379.649999916553,
+        "after": 15393.150000035763
+      },
+      "compositionFromSkipMs": {
+        "before": 15379.899999976158,
+        "after": 15393.600000083447
+      },
+      "skipToTitleMs": {
+        "before": 473.0499999523163,
+        "after": 479.80000001192093
+      }
+    },
+    "en": {
+      "titleImageBytes": {
+        "before": 5350394,
+        "after": 3957374
+      },
+      "titleImageRequests": {
+        "before": 4,
+        "after": 3
+      },
+      "brandFromSkipMs": {
+        "before": 28.69999998807907,
+        "after": 29.200000047683716
+      },
+      "primaryFromSkipMs": {
+        "before": 15380.249999940395,
+        "after": 12611.25
+      },
+      "compositionFromSkipMs": {
+        "before": 15380.449999988079,
+        "after": 12611.600000023842
+      },
+      "skipToTitleMs": {
+        "before": 434.30000001192093,
+        "after": 434.25000005960464
+      }
+    }
+  },
+  "physicalDeviceAccepted": false,
+  "statisticalSignificanceClaimed": false
+}

@@ -20,13 +20,16 @@ export function createTitleImageLifecycle(title, {
   const source = panel?.dataset.backgroundSrc;
   const backgroundUrl = source ? new URL(source, title.ownerDocument.baseURI).href : null;
   if (backgroundUrl) for (const entry of images) entry.managed = true;
-  let paused = null, titleWasHidden = null, disposed = false, generation = 0, active = null, cachedBlob = null;
+  let paused = null, titleWasHidden = null, visibleKey = null, disposed = false, generation = 0, active = null, cachedBlob = null;
+  const visible = entry => !entry.image.dataset?.titleLocale || entry.image.dataset.titleLocale === (title.ownerDocument?.documentElement?.lang || 'zh-Hant');
+  const imageState = (entry, value) => { if (entry.image.dataset) entry.image.dataset.titleImageState = value; };
 
   function state(value) {
-    const progress = {ready: Number(Boolean(active?.ready)) + images.filter(e => e.blob || (!e.released && e.image.complete && e.image.naturalWidth > 0)).length,
-      total: images.length + Number(Boolean(backgroundUrl))};
+    const shown = images.filter(visible);
+    const progress = {ready: Number(Boolean(active?.ready)) + shown.filter(e => e.managed ? e.request?.ready : (!e.released && e.image.complete && e.image.naturalWidth > 0)).length,
+      total: shown.length + Number(Boolean(backgroundUrl))};
     if (value === 'ready' && progress.ready < progress.total) value = 'loading';
-    if (!['disposed','paused'].includes(value) && images.some(e => e.failed)) value = 'error';
+    if (!['disposed','paused'].includes(value) && (active?.failed || shown.some(e => e.failed))) value = 'error';
     if (panel) panel.dataset.titleBackgroundState = value;
     onStateChange(value,progress);
   }
@@ -47,6 +50,7 @@ export function createTitleImageLifecycle(title, {
   }
   function fail(entry) {
     if (!current(entry)) return;
+    entry.failed = true;
     release(entry); state('error'); onSettled();
     // Retain this attempt until a deliberate retry or leaving/returning.
   }
@@ -81,22 +85,24 @@ export function createTitleImageLifecycle(title, {
     })();
   }
   function releaseImage(entry) {
+    const hadRequest = Boolean(entry.request);
     release(entry.request);
     entry.request = null;
-    if (entry.warmed) { entry.image.removeAttribute('src'); entry.released = true; }
+    if (entry.warmed || hadRequest) { entry.image.removeAttribute('src'); entry.released = true; imageState(entry,'idle'); }
   }
   function startImage(entry, warm = false) {
-    if (entry.request || entry.failed || !entry.src) return;
+    if (entry.request || entry.failed || !entry.src || !visible(entry)) return;
     entry.managed = true;
     const request = {controller:new AbortController(),released:false,warm,fromCache:Boolean(entry.blob)};
     entry.request = request;
-    const currentImage = () => !disposed && !title.hidden && !request.released && entry.request === request
+    const currentImage = () => !disposed && !title.hidden && visible(entry) && !request.released && entry.request === request
       && (!paused || warm || request.fromCache);
     const failImage = () => {
       if (!currentImage()) return;
-      release(request); entry.failed = true; state('error'); onSettled();
+      releaseImage(entry); entry.failed = true; imageState(entry,'error'); state('error'); onSettled();
     };
     state('loading');
+    imageState(entry,'loading');
     request.timer = setTimer(failImage,timeoutMs);
     void (async () => {
       try {
@@ -111,8 +117,14 @@ export function createTitleImageLifecycle(title, {
         request.url = urls.createObjectURL(blob); request.image = createImage(); request.image.src = request.url;
         await request.image.decode();
         if (!currentImage()) return;
-        clearDeadline(request); request.ready = true; entry.blob = blob; entry.warmed = true; entry.released = false;
+        // Decode the attached DOM image too before replacing the readable
+        // heading. Same Blob URL and original pixels; no second download.
+        entry.released = false;
         entry.image.setAttribute('src',request.url);
+        await entry.image.decode?.();
+        if (!currentImage()) return;
+        clearDeadline(request); request.ready = true; entry.blob = blob; entry.warmed = true;
+        imageState(entry,'ready');
         state(active?.ready ? 'ready' : 'loading'); onSettled();
       } catch { failImage(); }
     })();
@@ -120,8 +132,8 @@ export function createTitleImageLifecycle(title, {
   for (const entry of images) {
     entry.loaded = () => { if (!disposed && !title.hidden && active?.ready && !images.some(e => e.failed)) state('ready'); };
     entry.error = () => {
-      if (disposed || title.hidden || entry.released) return;
-      entry.managed = true; entry.failed = true; entry.blob = null; state('error');
+      if (disposed || title.hidden || entry.released || !visible(entry)) return;
+      entry.managed = true; entry.failed = true; entry.blob = null; imageState(entry,'error'); state('error');
     };
     entry.image.addEventListener?.('load',entry.loaded);
     entry.image.addEventListener?.('error',entry.error);
@@ -129,8 +141,16 @@ export function createTitleImageLifecycle(title, {
   function syncTitleImages(nextPaused = title.hidden) {
     if (disposed) return;
     const hidden = Boolean(title.hidden), wantPause = Boolean(nextPaused) || hidden;
+    const nextVisibleKey = images.map(entry=>Number(visible(entry))).join('');
+    const visibilityChanged = visibleKey !== nextVisibleKey;
+    visibleKey = nextVisibleKey;
     for (const entry of images) {
       if (hidden) { releaseImage(entry); entry.failed = false; }
+      else if (!visible(entry)) {
+        // Keep completed pixels cached; only cancel an unfinished hidden logo.
+        if (entry.request && !entry.request.ready) releaseImage(entry);
+        continue;
+      }
       else if (wantPause && entry.request && !entry.request.ready && !entry.request.warm && !entry.request.fromCache) { releaseImage(entry); }
       else if (entry.managed && !entry.request && (entry.blob || !wantPause)) { startImage(entry); }
       // A warm request becomes the normal TITLE request on skip; no duplicate
@@ -142,7 +162,10 @@ export function createTitleImageLifecycle(title, {
         entry.image.setAttribute('src', entry.src); entry.released = false;
       }
     }
-    if (paused === wantPause && titleWasHidden === hidden) return;
+    if (paused === wantPause && titleWasHidden === hidden) {
+      if (visibilityChanged) state(active?.ready ? 'ready' : paused ? 'paused' : 'loading');
+      return;
+    }
     paused = wantPause; titleWasHidden = hidden;
     if (paused) {
       // Login music only pauses unfinished downloads. A decoded background
@@ -157,8 +180,8 @@ export function createTitleImageLifecycle(title, {
   syncTitleImages.warmNext = () => {
     if (disposed || title.hidden || !paused || panel?.dataset.titleBackgroundState === 'error') return false;
     if (!active) { startBackground(true); return Boolean(backgroundUrl); }
-    if (!active.ready || images.some(e => e.request && !e.request.ready)) return false;
-    const entry = images.find(e => !e.blob && !(e.image.complete && !e.released && e.image.naturalWidth > 0));
+    if (!active.ready || images.some(e => visible(e) && e.request && !e.request.ready)) return false;
+    const entry = images.find(e => visible(e) && !e.blob && !(e.image.complete && !e.released && e.image.naturalWidth > 0));
     if (!entry || entry.failed) return false;
     startImage(entry,true); return true;
   };
@@ -170,7 +193,7 @@ export function createTitleImageLifecycle(title, {
   };
   syncTitleImages.retry = () => {
     if (disposed || title.hidden || panel?.dataset.titleBackgroundState !== 'error') return false;
-    const failedImage = images.find(e => e.failed);
+    const failedImage = images.find(e => visible(e) && e.failed);
     if (failedImage) {
       releaseImage(failedImage); failedImage.failed = false; state('loading');
       if (!paused) startImage(failedImage); else onSettled();

@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: TITLE_VISIBLE_BRAND_20261013 -->
+**2026-10-13 TITLE visible-language art.** The existing image owner excludes the hidden Chinese logo from non-Chinese requests/progress/errors and keeps completed cache through language switches. The approved h1 is readable until the attached Chinese logo decodes, with fixed logo bounds and one accessible heading; the film's cloned closing brand retains its previous rules. Original files, source selection, music/video/skip/idle/background lifecycle and save are preserved. See [controlled before/after, normal UI and publication evidence](reports/title-visibility-2026-10-13/REPORT_ZH_TW.md); this does not establish Owner-device speed.
+
 <!-- record-id: DATABASE_DISPLAY_20261013 -->
 **2026-10-13 Database display catalog.** Owner-approved seven-stage filters and explicit immutable EG/B1/B2/GR/MA/AW/UL display codes join the original 216-row book. Eight approved eggs are an untracked content index outside regular registration. Same save/registration/evolution authorities, desktop two panes, mobile return flow and five-language shared stage terms. See the [mapping, browser/save checks and publication receipt](reports/database-display-2026-10-13/REPORT_ZH_TW.md).
 

@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "125ad364d7789ee8247fdbd849fe73f59a81621b",
+  "classification": "OWNER_APPROVED_ADAPTATION",
+  "generatedAt": "2026-10-13T23:01:24.994Z",
+  "improvements": [
+    "visible-language Chinese logo",
+    "readable approved heading until attached logo decode or on error"
+  ],
+  "orderingCandidate": "NOT_IMPLEMENTED",
+  "focused": {
+    "passed": 39,
+    "failed": 0
+  },
+  "aggregate": {
+    "passed": 1770,
+    "failed": 0,
+    "note": "One aggregate before the final CSS scope-only tightening; focused/compiled/media tests rerun after tightening; exact-SHA remote CI verifies final content."
+  },
+  "compiledUi": {
+    "locales": [
+      "zh-Hant",
+      "en",
+      "ja",
+      "th",
+      "vi"
+    ],
+    "passed": 5,
+    "failed": 0
+  },
+  "mediaBuffer": {
+    "passed": 8,
+    "failed": 0,
+    "filmCloneStylePreserved": true
+  },
+  "filmContracts": {
+    "passed": 3,
+    "failed": 0
+  },
+  "performance": {
+    "samplesPerLocale": 2,
+    "locales": [
+      "zh-Hant",
+      "en"
+    ],
+    "cold": true,
+    "physicalDeviceAccepted": false,
+    "statisticalSignificanceClaimed": false,
+    "artifactBuildId": "ce0608e632398f69a080fb393b01ed2202d036c0aa8cdea40e0f35306c3f4d74"
+  },
+  "build": {
+    "fileCount": 9398,
+    "buildId": "ce0608e632398f69a080fb393b01ed2202d036c0aa8cdea40e0f35306c3f4d74",
+    "inputSha256": "133196b9726a4f72f8245523602e91d70a779836a03d3c160d5d8116fb751dc7",
+    "validated": true
+  },
+  "sourcePreloadCount": 232,
+  "originalImagesUnchanged": true,
+  "movieAndMusicModulesUnchanged": true,
+  "ownerMainUnchanged": true,
+  "publication": "After commit: exact-SHA CI/Pages and live artifact hashes in final receipt.",
+  "finalChineseScreenshotBytesEqual": true
+}

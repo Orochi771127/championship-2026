@@ -4,7 +4,8 @@ const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),
 const assert=require('node:assert/strict'),{chromium,devices}=require('playwright');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
 const fallback=path.resolve(process.env.ENTRY_QA_FALLBACK||root);
-const label=process.env.ENTRY_QA_LABEL||'before',out=path.resolve('docs/reports/title-entry-2026-10-13');fs.mkdirSync(out,{recursive:true});
+const visibilityMode=process.env.ENTRY_QA_TITLE_VISIBILITY==='1';
+const label=process.env.ENTRY_QA_LABEL||'before',out=path.resolve(process.env.ENTRY_QA_OUTPUT||'docs/reports/title-entry-2026-10-13');fs.mkdirSync(out,{recursive:true});
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8'));
 const presenterChunks=manifest.browserBundle.generatedFiles.filter(p=>{
  const code=fs.readFileSync(path.join(root,p),'utf8');
@@ -34,13 +35,14 @@ let browser;
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}/championship-2026/`;report.origin=base;
  assert.notEqual(server.address().port,8732);
  browser=await chromium.launch({channel:'chrome',headless:true});
- for(const profile of profiles)for(let sample=0;sample<2;sample++){
+ for(const profile of profiles.filter(p=>!visibilityMode||p.name==='mobile-4g'))for(const locale of (visibilityMode?['zh-Hant','en']:['zh-Hant']))for(let sample=0;sample<2;sample++){
   const ctx=await browser.newContext({...devices['Pixel 7'],reducedMotion:'no-preference'}),page=await ctx.newPage(),cdp=await ctx.newCDPSession(page);
   page.setDefaultTimeout(60000);
   await cdp.send('Network.enable');await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:profile.latency,downloadThroughput:profile.download,uploadThroughput:profile.upload});
   await cdp.send('Emulation.setCPUThrottlingRate',{rate:profile.cpu});
-  await page.addInitScript(()=>{
-   const trace=window.__entryTrace={marks:{},longTasks:[],media:[]},mark=k=>{trace.marks[k]??=performance.now();};
+  await page.addInitScript(({locale})=>{
+   localStorage.setItem('championshipModernSave:preferences:v1',JSON.stringify({locale}));
+   const trace=window.__entryTrace={marks:{},titleImages:{},longTasks:[],media:[]},mark=k=>{trace.marks[k]??=performance.now();};
    new PerformanceObserver(list=>trace.longTasks.push(...list.getEntries().map(e=>({start:e.startTime,duration:e.duration})))).observe({type:'longtask',buffered:true});
    document.addEventListener('DOMContentLoaded',()=>mark('domReady'));
    addEventListener('championship:ready',()=>mark('appReady'));
@@ -52,10 +54,22 @@ let browser;
     if(video&&watched!==video){watched=video;video.requestVideoFrameCallback?.(()=>mark('firstFrame'));for(const event of ['loadedmetadata','loadeddata','playing','waiting','error'])video.addEventListener(event,()=>trace.media.push({event,at:performance.now()}));}
     if(trace.marks.skipClick&&!document.querySelector('.cm-title__actions')?.hidden)mark('titleOperable');
     if(document.querySelector('.cm-title__panel')?.dataset.titleBackgroundState==='ready')mark('titleArtReady');
+    const title=document.querySelector('#cm-title'),panel=title?.querySelector('.cm-title__panel'),heading=title?.querySelector('h1'),logo=title?.querySelector('.cm-title__logo-art');
+    const images=[...title?.querySelectorAll(':scope > .cm-title__panel img')||[]];
+    for(const img of images)if(img.complete&&img.naturalWidth>0)trace.titleImages[img.dataset.titleSrc]??=performance.now();
+    const show=title&&!title.hidden&&film?.hidden;
+    const headingVisible=heading&&getComputedStyle(heading).clipPath==='none'&&heading.getBoundingClientRect().width>1;
+    const logoVisible=logo&&getComputedStyle(logo).display!=='none'&&logo.complete&&logo.naturalWidth>0;
+    if(show&&(headingVisible||logoVisible))mark('brandVisible');
+    const backgroundReady=panel&&getComputedStyle(panel).backgroundImage!=='none';
+    if(backgroundReady)mark('arenaDecoded');
+    if(show&&backgroundReady&&(headingVisible||logoVisible))mark('primaryComposition');
+    if(show&&backgroundReady&&images.filter(img=>!img.classList.contains('cm-title__logo-art')||document.documentElement.lang==='zh-Hant').every(img=>img.complete&&img.naturalWidth>0))mark('visibleComposition');
    };
-   new MutationObserver(inspect).observe(document,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','disabled','inert','data-title-background-state']});
-  });
-  for(const cache of ['cold','warm']){
+   document.addEventListener('load',inspect,true);
+   new MutationObserver(inspect).observe(document,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','disabled','inert','data-title-background-state','data-title-image-state','src','style']});
+  },{locale});
+  for(const cache of (visibilityMode?['cold']:['cold','warm'])){
    const errors=[],requests=[];const onError=e=>errors.push(e.message),onResponse=r=>requests.push({url:r.url(),status:r.status()});page.on('pageerror',onError);page.on('response',onResponse);
    await page.goto(base+'championship.html',{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>window.__entryTrace?.marks.skipAvailable);
@@ -73,7 +87,9 @@ let browser;
    const beforeSkip=new Set(js.filter(r=>r.start<=m.skipAvailable).map(r=>new URL(r.name).pathname.slice('/championship-2026/'.length)));
    const presentersBeforeSkip=presenterChunks.filter(p=>beforeSkip.has(p));
    if(label==='after'){assert.ok(presenterChunks.length>=3,'locate actual field presenter bodies');assert.deepEqual(presentersBeforeSkip,[],'TITLE never fetches deferred field/screen presenters');}
-   const entry={profile:profile.name,sample,cache,presentersBeforeSkip,marks:m,skipToTitleMs:m.titleOperable-m.skipClick,initialJsRequests:js.filter(r=>r.start<=m.skipAvailable).length,initialJsDecoded:js.filter(r=>r.start<=m.skipAvailable).reduce((s,r)=>s+r.decoded,0),initialJsEncoded:js.filter(r=>r.start<=m.skipAvailable).reduce((s,r)=>s+r.encoded,0),initialJsTransfer:js.filter(r=>r.start<=m.skipAvailable).reduce((s,r)=>s+r.transfer,0),scriptResponseEnd:Math.max(...js.filter(r=>r.start<=m.skipAvailable).map(r=>r.end)),film,result,errors};
+   const art=result.resources.filter(r=>r.name.includes('/title-morning-r1/')&&r.name.endsWith('.webp'));
+   if(visibilityMode&&label==='after'&&locale!=='zh-Hant')assert.ok(!art.some(r=>r.name.endsWith('/logo-zh-Hant.webp')));
+   const entry={profile:profile.name,locale,sample,cache,presentersBeforeSkip,marks:m,skipToTitleMs:m.titleOperable-m.skipClick,titleImageBytes:art.reduce((s,r)=>s+r.decoded,0),titleImageRequests:art.length,brandFromSkipMs:m.brandVisible-m.skipClick,primaryFromSkipMs:m.primaryComposition-m.skipClick,compositionFromSkipMs:m.visibleComposition-m.skipClick,initialJsRequests:js.filter(r=>r.start<=m.skipAvailable).length,initialJsDecoded:js.filter(r=>r.start<=m.skipAvailable).reduce((s,r)=>s+r.decoded,0),initialJsEncoded:js.filter(r=>r.start<=m.skipAvailable).reduce((s,r)=>s+r.encoded,0),initialJsTransfer:js.filter(r=>r.start<=m.skipAvailable).reduce((s,r)=>s+r.transfer,0),scriptResponseEnd:Math.max(...js.filter(r=>r.start<=m.skipAvailable).map(r=>r.end)),film,result,errors};
    report.cases.push(entry);fs.writeFileSync(path.join(out,`${label}-performance.json`),JSON.stringify(report,null,2)+'\n');
    console.log(JSON.stringify({profile:profile.name,sample,cache,marks:m,skipToTitleMs:entry.skipToTitleMs,jsRequests:entry.initialJsRequests,jsDecoded:entry.initialJsDecoded,jsTransfer:entry.initialJsTransfer,scriptResponseEnd:entry.scriptResponseEnd,longTasks:result.trace.longTasks}));
    page.off('pageerror',onError);page.off('response',onResponse);await page.goto('about:blank');

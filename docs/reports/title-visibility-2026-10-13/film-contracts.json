@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-10-13T22:50:59.358Z",
+  "checks": [
+    {
+      "name": "skip gesture guard, repeated manual watch, idle 14.9s input, menu block",
+      "passed": true
+    },
+    {
+      "name": "dialog idle block and controlled background/foreground reset",
+      "passed": true
+    },
+    {
+      "name": "cold startup allows 4.2s delivery; playback stalls still return within 3s",
+      "passed": true
+    }
+  ],
+  "physicalDeviceAccepted": false,
+  "fullSubjectiveListeningAccepted": false,
+  "origin": "http://127.0.0.1:49874",
+  "partial": true,
+  "localReferences": {
+    "root": null,
+    "files": [],
+    "published": false
+  },
+  "passed": true
+}

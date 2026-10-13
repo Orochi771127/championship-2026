@@ -87,6 +87,10 @@ async function scenario(name,options,run){
  });
  await scenario('low buffer/stall stops new warm requests; skip joins the pending background',{controlled:true,gateTitle:p=>p.endsWith('/arena.webp')},async({page,titleRequests,media,skip,gates,readyTitle})=>{
   await media({readyState:4,end:5.9},'playing');await delay(100);assert.equal(titleRequests().length,0);
+  await media({currentTime:56,end:56},'timeupdate');
+  const closing=page.locator('#cm-opening-film .cm-title__name');
+  assert.equal(await closing.evaluate(e=>getComputedStyle(e).clipPath),'inset(50%)','TITLE fallback must not alter the film clone');
+  await media({currentTime:0,end:5.9},'playing');
   await media({end:6});await page.waitForFunction(()=>__qaTitle.inspect().state==='loading');await delay(100);assert.equal(titleRequests().length,1);
   await media({end:58},'waiting');gates.at(-1)();await delay(150);assert.equal(titleRequests().length,1,'waiting must not queue partners');
   await skip();await readyTitle();assert.equal(titleRequests().length,4);assert.equal(new Set(titleRequests().map(r=>r.path)).size,4);
