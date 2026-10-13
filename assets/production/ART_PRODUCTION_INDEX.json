@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 37,
+    "registeredRuntimeBundles": 38,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -437,6 +437,17 @@
       "manifestPath": "assets/production/hunt/final-intake-20261008/hm10-night.manifest.json",
       "scope": "Final hunt art, local integration only",
       "ownerDirection": "Owner 2026-10-09 13:53 UTC authorized full local review/integration of final 21-part intake; no publication or source-evidence promotion."
+    },
+    {
+      "assetId": "art:characters:battle-packed:20261013",
+      "runtimeEligible": true,
+      "localOnly": false,
+      "publicReleasePermitted": true,
+      "shippingReady": false,
+      "rightsStatus": "INHERITS_HASH_SELECTED_PUBLIC_PLAYTEST_PIXELS_NO_NEW_RIGHTS",
+      "manifestPath": "assets/production/characters/battle-packed-20261013/manifest.json",
+      "scope": "Six species only; lossless Main atlas repack, unchanged pixels/motion/geometry; explicit Battle context only",
+      "ownerDirection": "Owner authorized six-character lossless Battle atlas integration and publication after exact pixel/frame/runtime validation."
     }
   ]
 }

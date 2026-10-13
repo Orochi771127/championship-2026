@@ -1,4 +1,5 @@
 import acceptedSelection from '../../data/championship/accepted-original-character-selection.r1.json' with {type:'json'};
+import battlePacking from '../../../assets/production/characters/battle-packed-20261013/manifest.json' with {type:'json'};
 import {isApprovedOriginalPublicLocation,isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
 import {loadLicensedCharacterRoster} from './licensedCharacterRoster.js';
 import {loadPixiCharacterRuntimeBundle} from './pixiCharacterRuntimeBundle.js';
@@ -7,6 +8,21 @@ import {COMPLETED_ORIGINAL_CHARACTERS} from './completedOriginalCharacterCatalog
 import {readHudManifest} from './hudManifestCache.js';
 const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'
   ?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
+
+export function completedCharacterBundleLocation(config,options,href){
+  const packed=options.battleAtlas===true&&options.sides?.length===1&&options.sides[0]==='main'
+    &&battlePacking.characters.find(c=>c.entity===config.entityId);
+  if(packed){
+    const entry=options.productionIndex?.entries?.find(e=>e.assetId===battlePacking.assetId);
+    if(entry?.runtimeEligible!==true||entry.manifestPath!==battlePacking.root+'manifest.json'
+      ||isApprovedOriginalPublicLocation(href)&&entry.publicReleasePermitted!==true)throw Error('BATTLE_PACKED_ATLAS_NOT_REGISTERED');
+    return {runtimeUrl:new URL(battlePacking.root+config.entityId+'/runtime.review.json',href).href,
+      cachePrefix:config.entityId+'-battle-packed-20261013:',packed:true};
+  }
+  const root=isApprovedOriginalPublicLocation(href)?acceptedSelection.root:'assets/production/internal-character-review/';
+  return {runtimeUrl:new URL(root+config.folder+'/runtime.review.json',href).href,
+    cachePrefix:config.entityId+'-completed-original-local:',packed:false};
+}
 
 /** Existing runtime schema is the one density/motion authority for loading and QA. */
 export function validateCompletedOriginalRuntime(runtime,config,baseline){
@@ -37,7 +53,6 @@ export async function loadCompletedOriginalCharacters(options,href){
   if(!isOriginalRuntimeLocation(href))return loadLicensedCharacterRoster(options);
   const publicSelection=isApprovedOriginalPublicLocation(href);
   const configs=publicSelection?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS;
-  const assetRoot=publicSelection?acceptedSelection.root:"assets/production/internal-character-review/";
   const byEntity=new Map(configs.map(c=>[c.entityId,c]));
   const reviewed=new Set();
   const replacementFailures=[];
@@ -45,11 +60,10 @@ export async function loadCompletedOriginalCharacters(options,href){
     const config=byEntity.get(new URL(args.runtimeUrl).pathname.split('/').at(-2));
     if(!config)
       return loadPixiCharacterRuntimeBundle(args);
-  const runtimeUrl=new URL(`${assetRoot}${config.folder}/runtime.review.json`,href).href;
+    const selected=completedCharacterBundleLocation(config,options,href),{runtimeUrl}=selected;
     let bundle;
     try {
-    bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,
-      cachePrefix:`${config.entityId}-completed-original-local:`});
+    bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,cachePrefix:selected.cachePrefix});
       const runtime=bundle.runtime;
       const response=await fetch(args.runtimeUrl,{signal:args.signal});
       if(!response.ok)throw Error('CANDIDATE_BASELINE_MOTION_UNAVAILABLE');
@@ -63,6 +77,9 @@ export async function loadCompletedOriginalCharacters(options,href){
       await bundle?.dispose();
       args.signal?.throwIfAborted();
       replacementFailures.push({entityId:config.entityId,runtimeUrl,reason:error.message});
+      // A failed packed load must not decode the original large atlas or hide
+      // the failure behind the historical source-art fallback.
+      if(selected.packed)throw error;
       return loadPixiCharacterRuntimeBundle(args);
     }
   }});

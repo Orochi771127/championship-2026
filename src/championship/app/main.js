@@ -431,7 +431,7 @@ async function loadOptionalOriginalVfxReview(stage, effectArt) {
   }
 }
 
-async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal } = {}) {
+async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal, battleAtlas=false } = {}) {
   if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
   const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
   try {
@@ -448,7 +448,7 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
       const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
       const response = await fetch(manifestUrl, { signal });
       if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
-      const rosterOptions={PIXI,speciesIds,sides,signal,productionIndex,manifestUrl,manifest:await response.json()};
+      const rosterOptions={PIXI,speciesIds,sides,signal,battleAtlas,productionIndex,manifestUrl,manifest:await response.json()};
       if(new URLSearchParams(location.search).get('characterArtReview')==='m001'
         && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
         const {loadM001CharacterArtReview}=await import('../presentation/m001CharacterArtReview.js');
@@ -1208,7 +1208,7 @@ async function mountBattleField() {
           const fxLookupsLoading=BATTLE_DYNAMIC_FX?import('./battleFxLookups.js'):null;
           const loaded=await Promise.allSettled([
             step('arena',loadOptionalBattleFieldArt(stage,source)),
-            step('fighters',loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal})),
+            step('fighters',loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal,battleAtlas:true})),
             step('effects',loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art)))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
