@@ -45,7 +45,7 @@ export function createNativeHuntCharacterFramePresenter({ sprite, animations, te
       }
       const sourceFrame = sequence.frames[reducedMotion ? 0 : frame.frameIndex];
       const texture = textureResolver(sourceFrame.texture);
-      if (!texture) throw new RangeError("NATIVE_CHARACTER_TEXTURE_MISSING");
+      if (!texture) throw new RangeError(`NATIVE_CHARACTER_TEXTURE_MISSING:${entityId}:${frame.sequenceId}:${frame.frameIndex}:${sourceFrame.texture}`);
       const placement = geometry?.frames[sourceFrame.texture];
       if (geometry && !placement) throw new RangeError('NATIVE_CHARACTER_GEOMETRY_MISSING');
       sprite.texture = texture;

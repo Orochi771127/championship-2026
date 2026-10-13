@@ -221,6 +221,9 @@
     <link rel="modulepreload" href="./src/championship/presentation/battleFocusViewport.js">
     <link rel="modulepreload" href="./src/championship/presentation/battleEffectSprites.js">
     <link rel="modulepreload" href="./src/championship/presentation/bm03GroundShadows.js">
+    <link rel="modulepreload" href="./src/championship/presentation/battleFx/battleFxCamera.js">
+    <link rel="modulepreload" href="./src/championship/presentation/battleFx/battleFxEvents.js">
+    <link rel="modulepreload" href="./src/championship/presentation/battleFx/battleFxLayer.js">
     <link rel="modulepreload" href="./src/championship/presentation/characterAnimationTimeline.js">
     <link rel="modulepreload" href="./src/championship/presentation/hudManifestCache.js">
     <link rel="modulepreload" href="./src/championship/battle/titleEventSchedule.js">
@@ -249,6 +252,7 @@
     <link rel="modulepreload" href="./src/championship/app/openingStoryPresentation.js">
     <link rel="modulepreload" href="./src/championship/app/openingEggChoices.js">
     <link rel="modulepreload" href="./src/championship/text/openingEggText.js">
+    <link rel="modulepreload" href="./src/championship/text/openingStoryText.js">
     <link rel="modulepreload" href="./src/championship/text/openingFilmText.js">
     <link rel="modulepreload" href="./src/championship/presentation/originalCageVisualBindings.js">
     <link rel="modulepreload" href="./src/championship/presentation/raisingCageArtPlan.js">
@@ -315,10 +319,10 @@
     <link rel="modulepreload" href="./assets/production/original-ui-intake-20261007/toolbar-point64-r1-20261009/manifest.json" as="json">
     <link rel="modulepreload" href="./src/championship/presentation/originalShopCageArt.js">
     <link rel="modulepreload" href="./assets/production/cage/original-opus-v1/manifest.json" as="json">
+    <link rel="modulepreload" href="./src/championship/presentation/battleFx/battleFxRecipes.js">
     <link rel="modulepreload" href="./src/data/championship/catalogs/battle-title-event-strings.r1.json" as="json">
     <link rel="modulepreload" href="./src/data/championship/catalogs/creature-stat-curve.r1.json" as="json">
     <link rel="modulepreload" href="./src/championship/app/nativeOpeningStory.js">
-    <link rel="modulepreload" href="./src/championship/text/openingStoryText.js">
     <link rel="modulepreload" href="./src/championship/kernel/ChampionshipSavePort.js">
     <link rel="modulepreload" href="./src/championship/raising/createRaisingHomeRuntime.js">
     <link rel="modulepreload" href="./src/championship/modes/createChampionshipModeShell.js">
@@ -331,6 +335,7 @@
     <link rel="modulepreload" href="./src/data/championship/catalogs/raising-activity.r1.json" as="json">
     <link rel="modulepreload" href="./src/data/championship/catalogs/cage-definitions.r1.json" as="json">
     <link rel="modulepreload" href="./assets/production/cage/shop-final-20261008/manifest.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/battleEffectProfiles.json" as="json">
     <link rel="modulepreload" href="./src/championship/contracts/evidenceAdapter.js">
     <link rel="modulepreload" href="./src/data/championship/battleNativeMathTables.js">
     <link rel="modulepreload" href="./src/championship/battle/battleScriptVm.js">
@@ -345,14 +350,14 @@
         <div class="cm-title__art">
         <div class="cm-title__light" aria-hidden="true"></div>
         <div class="cm-title__logo">
-          <img class="cm-title__logo-art" src="./assets/production/title-morning-r1/logo-zh-Hant.webp" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
+          <img class="cm-title__logo-art" data-title-src="./assets/production/title-morning-r1/logo-zh-Hant.webp" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
           <h1 class="cm-title__name" aria-label="網線拍檔：錦標賽">網線拍檔<br><span>錦標賽</span></h1>
         </div>
         <div class="cm-title__partners" aria-hidden="true">
           <span class="cm-title__spark cm-title__spark--one"></span>
           <span class="cm-title__spark cm-title__spark--two"></span>
-          <img class="cm-title__partner cm-title__partner--blaze" src="./assets/production/title-morning-r1/blaze.webp" width="1353" height="1162" alt="" fetchpriority="low">
-          <img class="cm-title__partner cm-title__partner--cloud" src="./assets/production/title-morning-r1/cloud.webp" width="1254" height="1254" alt="" fetchpriority="low">
+          <img class="cm-title__partner cm-title__partner--blaze" data-title-src="./assets/production/title-morning-r1/blaze.webp" width="1353" height="1162" alt="" fetchpriority="low">
+          <img class="cm-title__partner cm-title__partner--cloud" data-title-src="./assets/production/title-morning-r1/cloud.webp" width="1254" height="1254" alt="" fetchpriority="low">
         </div>
         </div>
       </div>

@@ -1,5 +1,11 @@
 # Championship Owner Direction
 
+## 2026-10-13 — Focused capture recovery, startup, classic UI and neutral authored labels
+
+Owner delegated this focused batch after confirming quota reset: 「完成自審後可 commit、push 並發佈」 and 「通過後已授權提交相關檔案、非強制推送main並部署，核對exact SHA的CI/Pages」. Use an isolated worktree and QA context; preserve the user's main, other uncommitted work, AI/special fixes and Antigravity's tutorial asset routing work. Follow-ups include the provided tutorial battle MP4, bounded classic HUD/tool alignment and meat ground-depth corrections, and removal of the confirmed legacy branding from authored UI/error labels while preserving keys, IDs, research and player nicknames.
+
+No new agent, art recreation, species/evolution change or unrelated debt scan is authorized. Unknown original save/TITLE restart and physical Safari causes stay unverified; do not infer OOM or claim an unreproduced issue fixed. Publication uses only the reviewed existing public-playtest selection and normal main push. See [batch evidence](../reports/capture-raising-recovery-2026-10-13/REPORT_ZH_TW.md).
+
 ## 2026-10-13 — Special hit on its launch frame: stop the battle-wide freeze
 
 The Owner delegates the fix choice: 「修復方式交由你自行判斷，不限定一定恢復起手動畫。請根據根因，選擇對玩法影響最小、可驗證且不會再次卡死的方案；必要的演出流程調整，我授權你處理並記錄原因。」 They also direct:

@@ -604,6 +604,10 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   const load = new AbortController();
   let expired = null;
   exit.addEventListener("click", () => {
+    // The native controller can refuse return while card insertion is active.
+    // Keep the live scene's textures until the router actually accepts exit.
+    source.intents.exitHunt();
+    if (source.getFrame().screen === 'HUNT_FIELD') return;
     if (fieldHost.getAttribute('aria-busy') === 'true') {
       loadingText.textContent = uiText('正在返回牧場…');
       loadingBar.hidden = true;
@@ -612,7 +616,6 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       exit.disabled = true;
     }
     load.abort();
-    source.intents.exitHunt();
   });
   // Network time belongs to this view, not to the native Hunt timer. Releasing
   // the mount queue on cancellation also lets Home open if a request hangs.

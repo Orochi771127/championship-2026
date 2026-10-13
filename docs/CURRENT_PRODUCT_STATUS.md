@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: CAPTURE_RAISING_RECOVERY_20261013 -->
+**2026-10-13 — 已重現 Hunt 退出被拒卻先取消貼圖，完成最小生命週期修正。** 兩個失敗／載入取消回歸與最終 CI 1728／1728、正式 build／validate 9335 檔通過；既有 QA 存檔 species-139／165 正常捕捉→返家→保存退出→重新 Continue。首屏延後 TITLE 圖片、復古 UI 與精確 authored 去品牌小修同批驗證。Owner 錄影約 38 秒教學對戰重新啟動／43 秒 Continue 恢復，仍未定因，不能宣稱本批解決所有 TITLE 重啟或未知舊存檔阻斷；實體 Safari 未驗。見[範圍與證據](reports/capture-raising-recovery-2026-10-13/REPORT_ZH_TW.md)。發布以同 SHA 最終回條為準。
+
 <!-- record-id: NS33_OPENING_FILM_20261012 -->
 **2026-10-12 — NS33 片頭已接入既有 TITLE。** 精確 48.5 秒成品，靜音 inline 啟動、明確開聲、略過防穿透、15 秒閒置重播、減少動態與五語品牌；沿用 TITLE 圖片生命週期，在影片期間暫停未完成的裝飾下載並於返回時恢復。啟動等待 8 秒、播放停滯 3 秒回退，影片 bytes 不變。最終本機片頭 browser **17／17**、相關單元 **16／16**、build／validate **9,315 檔**通過；CI 1,690 項首次通過，唯一 loopback 案例因沙箱 EACCES 阻擋，取得連線權限後單獨重跑通過。recent-integration 通過；兩個舊 gate 的原基線 FAIL 保留，未弱化斷言。已授權正常發布；同 SHA CI／Pages 與公開 smoke 以獨立回執為準。先前公開檔案雜湊一致，但本 executor 的公開串流仍逾時，**公開播放驗收尚未通過**；實機與完整主觀試聽仍 UNVERIFIED。詳見[本次報告](reports/ns33-opening-2026-10-12/REPORT_ZH_TW.md)。
 

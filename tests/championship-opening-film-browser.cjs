@@ -104,6 +104,7 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
       await route.continue().catch(()=>{});
     });
     await boot(page);await playing(page);
+    assert.equal(attempts.length,0,'startup film must not compete with eager TITLE art requests');
     assert.equal(await page.locator('.cm-title__panel').getAttribute('data-title-background-state'),'paused');
     const titleImages=page.locator('#cm-title > .cm-title__panel img');
     assert.ok(await titleImages.count()>0);

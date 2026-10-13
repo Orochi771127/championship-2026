@@ -1,0 +1,980 @@
+{
+  "runs": [
+    {
+      "cold": true,
+      "ready": 3804.5,
+      "tasks": [
+        {
+          "at": 3711.6999999284744,
+          "ms": 93
+        }
+      ],
+      "navigation": {
+        "name": "https://orochi771127.github.io/championship-2026/championship.html",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 0,
+        "navigationId": 4152,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "gzip",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.5,
+        "domainLookupStart": 1.100000023841858,
+        "domainLookupEnd": 852.8999999761581,
+        "connectStart": 852.8999999761581,
+        "secureConnectionStart": 917.1000000238419,
+        "connectEnd": 987.3999999761581,
+        "requestStart": 987.5,
+        "responseStart": 1294,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 1294,
+        "responseEnd": 1375.8999999761581,
+        "transferSize": 4780,
+        "encodedBodySize": 4480,
+        "decodedBodySize": 14416,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 2052.2999999523163,
+        "domContentLoadedEventStart": 2052.2999999523163,
+        "domContentLoadedEventEnd": 2052.399999976158,
+        "domComplete": 0,
+        "loadEventStart": 0,
+        "loadEventEnd": 0,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "paint": [
+        {
+          "name": "first-paint",
+          "entryType": "paint",
+          "startTime": 2144,
+          "duration": 0,
+          "navigationId": 4152,
+          "paintTime": 2051.1999999284744,
+          "presentationTime": 2144
+        },
+        {
+          "name": "first-contentful-paint",
+          "entryType": "paint",
+          "startTime": 2144,
+          "duration": 0,
+          "navigationId": 4152,
+          "paintTime": 2051.1999999284744,
+          "presentationTime": 2144
+        }
+      ],
+      "resources": [
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+          "start": 1378.2999999523163,
+          "response": 1745.6000000238419,
+          "end": 1762.6999999284744,
+          "bytes": 7900,
+          "decoded": 24418,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/intRh2Styles.css?v=settings-1",
+          "start": 1378.6000000238419,
+          "response": 1683.6000000238419,
+          "end": 1694.7999999523163,
+          "bytes": 6465,
+          "decoded": 25231,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/vs2Styles.css?v=ui-polish-20261012b",
+          "start": 1378.6000000238419,
+          "response": 1848.7999999523163,
+          "end": 1876.2999999523163,
+          "bytes": 12026,
+          "decoded": 56238,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+          "start": 1378.6000000238419,
+          "response": 1890.2999999523163,
+          "end": 1891.1000000238419,
+          "bytes": 645,
+          "decoded": 522,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+          "start": 1378.6000000238419,
+          "response": 1904,
+          "end": 1944.8999999761581,
+          "bytes": 13447,
+          "decoded": 62769,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+          "start": 1378.6999999284744,
+          "response": 1753.6999999284744,
+          "end": 1848.1999999284744,
+          "bytes": 9303,
+          "decoded": 37619,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+          "start": 1378.6999999284744,
+          "response": 1903.6999999284744,
+          "end": 1945,
+          "bytes": 1184,
+          "decoded": 2655,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+          "start": 1378.7999999523163,
+          "response": 1753.3999999761581,
+          "end": 1848.3999999761581,
+          "bytes": 3011,
+          "decoded": 8603,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+          "start": 1378.7999999523163,
+          "response": 1890.6000000238419,
+          "end": 1903.1000000238419,
+          "bytes": 6280,
+          "decoded": 22756,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+          "start": 1378.8999999761581,
+          "response": 1717.1999999284744,
+          "end": 1745.5,
+          "bytes": 4986,
+          "decoded": 20535,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+          "start": 1378.8999999761581,
+          "response": 1904.1000000238419,
+          "end": 2004.6000000238419,
+          "bytes": 21268,
+          "decoded": 119799,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+          "start": 1378.8999999761581,
+          "response": 1903.6000000238419,
+          "end": 2014.1999999284744,
+          "bytes": 926,
+          "decoded": 1581,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+          "start": 1379.1000000238419,
+          "response": 1755,
+          "end": 1848.5,
+          "bytes": 2186,
+          "decoded": 5835,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/main-IPJKUVRP.js",
+          "start": 1379.1000000238419,
+          "response": 1904.6000000238419,
+          "end": 3114.5,
+          "bytes": 479242,
+          "decoded": 1910898,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+          "start": 1379.2999999523163,
+          "response": 1752.6999999284744,
+          "end": 1848.6000000238419,
+          "bytes": 1260,
+          "decoded": 2833,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+          "start": 1379.3999999761581,
+          "response": 1902.8999999761581,
+          "end": 3170.100000023842,
+          "bytes": 428,
+          "decoded": 128,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+          "start": 1379.3999999761581,
+          "response": 1759.6999999284744,
+          "end": 3210.600000023842,
+          "bytes": 1881,
+          "decoded": 4594,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+          "start": 1379.3999999761581,
+          "response": 1754.5,
+          "end": 3209.7999999523163,
+          "bytes": 83929,
+          "decoded": 952752,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+          "start": 1379.5,
+          "response": 1890.7999999523163,
+          "end": 3239.7999999523163,
+          "bytes": 17513,
+          "decoded": 94276,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-AIIFKSSH.js",
+          "start": 1379.6000000238419,
+          "response": 1772.7999999523163,
+          "end": 3256.399999976158,
+          "bytes": 3842,
+          "decoded": 11742,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-CX4FEDGU.js",
+          "start": 1379.6000000238419,
+          "response": 1755.1000000238419,
+          "end": 3273,
+          "bytes": 13040,
+          "decoded": 52594,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-DE7YMKOV.js",
+          "start": 1379.6000000238419,
+          "response": 1754.6999999284744,
+          "end": 3568.2999999523163,
+          "bytes": 177911,
+          "decoded": 548115,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-HQSKRSRS.js",
+          "start": 1379.6999999284744,
+          "response": 1695,
+          "end": 1699.1999999284744,
+          "bytes": 2657,
+          "decoded": 14844,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+          "start": 1379.6999999284744,
+          "response": 1714.2999999523163,
+          "end": 1714.6999999284744,
+          "bytes": 1607,
+          "decoded": 3136,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+          "start": 1379.6999999284744,
+          "response": 1847.6999999284744,
+          "end": 3442.399999976158,
+          "bytes": 1374,
+          "decoded": 1753,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+          "start": 1379.7999999523163,
+          "response": 1716.8999999761581,
+          "end": 1717.1999999284744,
+          "bytes": 1920,
+          "decoded": 4534,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+          "start": 1379.7999999523163,
+          "response": 1902.6000000238419,
+          "end": 3649,
+          "bytes": 14795,
+          "decoded": 118479,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+          "start": 1379.8999999761581,
+          "response": 1752.8999999761581,
+          "end": 3649.2999999523163,
+          "bytes": 1992,
+          "decoded": 5482,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-LKU6YKSO.js",
+          "start": 1379.8999999761581,
+          "response": 1754.8999999761581,
+          "end": 3649.2999999523163,
+          "bytes": 2457,
+          "decoded": 5090,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-PIRFU24X.js",
+          "start": 1379.8999999761581,
+          "response": 1902.5,
+          "end": 3649.600000023842,
+          "bytes": 12598,
+          "decoded": 30019,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-QHG4GRSM.js",
+          "start": 1380.1000000238419,
+          "response": 1890.6999999284744,
+          "end": 3649.6999999284744,
+          "bytes": 4208,
+          "decoded": 12129,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+          "start": 1380.1000000238419,
+          "response": 1755,
+          "end": 3685,
+          "bytes": 5824,
+          "decoded": 15262,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+          "start": 1380.1000000238419,
+          "response": 1904.3999999761581,
+          "end": 3685.2999999523163,
+          "bytes": 6664,
+          "decoded": 38249,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+          "start": 1380.1999999284744,
+          "response": 1902.1000000238419,
+          "end": 3685.600000023842,
+          "bytes": 3062,
+          "decoded": 6330,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+          "start": 1380.1999999284744,
+          "response": 1753.1000000238419,
+          "end": 3685.6999999284744,
+          "bytes": 664,
+          "decoded": 598,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+          "start": 1380.1999999284744,
+          "response": 1848.6000000238419,
+          "end": 3685.899999976158,
+          "bytes": 17080,
+          "decoded": 127165,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+          "start": 1380.2999999523163,
+          "response": 1760,
+          "end": 3685.7999999523163,
+          "bytes": 1887,
+          "decoded": 3955,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-UHWT46X4.js",
+          "start": 1380.2999999523163,
+          "response": 1755.2999999523163,
+          "end": 3705.1999999284744,
+          "bytes": 10284,
+          "decoded": 84076,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+          "start": 1380.2999999523163,
+          "response": 1902.6999999284744,
+          "end": 3709.2999999523163,
+          "bytes": 2543,
+          "decoded": 5353,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+          "start": 1380.5,
+          "response": 1700,
+          "end": 1711.2999999523163,
+          "bytes": 8205,
+          "decoded": 47117,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+          "start": 1380.5,
+          "response": 1904.2999999523163,
+          "end": 3710.1999999284744,
+          "bytes": 1351,
+          "decoded": 2524,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-YSPHDNKO.js",
+          "start": 1380.5,
+          "response": 1753.5,
+          "end": 3710.5,
+          "bytes": 1476,
+          "decoded": 3093,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/cloud.webp",
+          "start": 1380.7999999523163,
+          "response": 1903.1999999284744,
+          "end": 3807.100000023842,
+          "bytes": 300,
+          "decoded": 0,
+          "type": "img"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/blaze.webp",
+          "start": 1380.7999999523163,
+          "response": 1848.8999999761581,
+          "end": 3807.1999999284744,
+          "bytes": 300,
+          "decoded": 0,
+          "type": "img"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/arena.webp",
+          "start": 3767.600000023842,
+          "response": 0,
+          "end": 3806.899999976158,
+          "bytes": 0,
+          "decoded": 0,
+          "type": "fetch"
+        }
+      ]
+    },
+    {
+      "cold": false,
+      "ready": 114.20000004768372,
+      "tasks": [],
+      "navigation": {
+        "name": "https://orochi771127.github.io/championship-2026/championship.html",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 0,
+        "navigationId": 5131,
+        "initiatorType": "navigation",
+        "deliveryType": "cache",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "gzip",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.3999999761581421,
+        "domainLookupStart": 0.3999999761581421,
+        "domainLookupEnd": 0.3999999761581421,
+        "connectStart": 0.3999999761581421,
+        "secureConnectionStart": 0.3999999761581421,
+        "connectEnd": 0.3999999761581421,
+        "requestStart": 1.2000000476837158,
+        "responseStart": 70.5,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 70.5,
+        "responseEnd": 71,
+        "transferSize": 300,
+        "encodedBodySize": 4480,
+        "decodedBodySize": 14416,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 74.20000004768372,
+        "unloadEventEnd": 74.20000004768372,
+        "domInteractive": 85.20000004768372,
+        "domContentLoadedEventStart": 85.20000004768372,
+        "domContentLoadedEventEnd": 85.20000004768372,
+        "domComplete": 0,
+        "loadEventStart": 0,
+        "loadEventEnd": 0,
+        "type": "reload",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "paint": [
+        {
+          "name": "first-paint",
+          "entryType": "paint",
+          "startTime": 136,
+          "duration": 0,
+          "navigationId": 5131,
+          "paintTime": 115,
+          "presentationTime": 136
+        },
+        {
+          "name": "first-contentful-paint",
+          "entryType": "paint",
+          "startTime": 136,
+          "duration": 0,
+          "navigationId": 5131,
+          "paintTime": 115,
+          "presentationTime": 136
+        }
+      ],
+      "resources": [
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+          "start": 76.80000007152557,
+          "response": 76.80000007152557,
+          "end": 76.80000007152557,
+          "bytes": 0,
+          "decoded": 24418,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+          "start": 76.80000007152557,
+          "response": 76.80000007152557,
+          "end": 76.80000007152557,
+          "bytes": 0,
+          "decoded": 62769,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+          "start": 76.89999997615814,
+          "response": 76.89999997615814,
+          "end": 76.89999997615814,
+          "bytes": 0,
+          "decoded": 522,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/intRh2Styles.css?v=settings-1",
+          "start": 77,
+          "response": 77,
+          "end": 77,
+          "bytes": 0,
+          "decoded": 25231,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/vs2Styles.css?v=ui-polish-20261012b",
+          "start": 77,
+          "response": 77,
+          "end": 77,
+          "bytes": 0,
+          "decoded": 56238,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+          "start": 77.10000002384186,
+          "response": 77.10000002384186,
+          "end": 77.10000002384186,
+          "bytes": 0,
+          "decoded": 2655,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+          "start": 77.10000002384186,
+          "response": 77.10000002384186,
+          "end": 77.10000002384186,
+          "bytes": 0,
+          "decoded": 37619,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+          "start": 77.10000002384186,
+          "response": 77.10000002384186,
+          "end": 77.10000002384186,
+          "bytes": 0,
+          "decoded": 22756,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+          "start": 77.20000004768372,
+          "response": 77.20000004768372,
+          "end": 77.20000004768372,
+          "bytes": 0,
+          "decoded": 8603,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+          "start": 77.30000007152557,
+          "response": 77.30000007152557,
+          "end": 77.30000007152557,
+          "bytes": 0,
+          "decoded": 20535,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+          "start": 77.39999997615814,
+          "response": 77.39999997615814,
+          "end": 77.39999997615814,
+          "bytes": 0,
+          "decoded": 119799,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+          "start": 77.5,
+          "response": 77.5,
+          "end": 77.5,
+          "bytes": 0,
+          "decoded": 1581,
+          "type": "link"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/main-IPJKUVRP.js",
+          "start": 77.5,
+          "response": 77.5,
+          "end": 77.5,
+          "bytes": 0,
+          "decoded": 1910898,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+          "start": 77.60000002384186,
+          "response": 77.60000002384186,
+          "end": 77.60000002384186,
+          "bytes": 0,
+          "decoded": 5835,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+          "start": 77.60000002384186,
+          "response": 77.60000002384186,
+          "end": 77.60000002384186,
+          "bytes": 0,
+          "decoded": 2833,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+          "start": 77.60000002384186,
+          "response": 77.60000002384186,
+          "end": 77.60000002384186,
+          "bytes": 0,
+          "decoded": 952752,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+          "start": 77.80000007152557,
+          "response": 77.80000007152557,
+          "end": 77.80000007152557,
+          "bytes": 0,
+          "decoded": 128,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+          "start": 77.80000007152557,
+          "response": 77.80000007152557,
+          "end": 77.80000007152557,
+          "bytes": 0,
+          "decoded": 4594,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+          "start": 77.80000007152557,
+          "response": 77.80000007152557,
+          "end": 77.80000007152557,
+          "bytes": 0,
+          "decoded": 94276,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-AIIFKSSH.js",
+          "start": 77.89999997615814,
+          "response": 77.89999997615814,
+          "end": 77.89999997615814,
+          "bytes": 0,
+          "decoded": 11742,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-CX4FEDGU.js",
+          "start": 77.89999997615814,
+          "response": 77.89999997615814,
+          "end": 77.89999997615814,
+          "bytes": 0,
+          "decoded": 52594,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-DE7YMKOV.js",
+          "start": 78,
+          "response": 78,
+          "end": 78,
+          "bytes": 0,
+          "decoded": 548115,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+          "start": 78,
+          "response": 78,
+          "end": 78,
+          "bytes": 0,
+          "decoded": 3136,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-HQSKRSRS.js",
+          "start": 78.10000002384186,
+          "response": 78.10000002384186,
+          "end": 78.10000002384186,
+          "bytes": 0,
+          "decoded": 14844,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+          "start": 78.20000004768372,
+          "response": 78.20000004768372,
+          "end": 78.20000004768372,
+          "bytes": 0,
+          "decoded": 1753,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+          "start": 78.20000004768372,
+          "response": 78.20000004768372,
+          "end": 78.20000004768372,
+          "bytes": 0,
+          "decoded": 118479,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+          "start": 78.30000007152557,
+          "response": 78.30000007152557,
+          "end": 78.30000007152557,
+          "bytes": 0,
+          "decoded": 4534,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+          "start": 78.39999997615814,
+          "response": 78.39999997615814,
+          "end": 78.39999997615814,
+          "bytes": 0,
+          "decoded": 5482,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-LKU6YKSO.js",
+          "start": 78.39999997615814,
+          "response": 78.39999997615814,
+          "end": 78.39999997615814,
+          "bytes": 0,
+          "decoded": 5090,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-PIRFU24X.js",
+          "start": 78.39999997615814,
+          "response": 78.39999997615814,
+          "end": 78.39999997615814,
+          "bytes": 0,
+          "decoded": 30019,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-QHG4GRSM.js",
+          "start": 78.5,
+          "response": 78.5,
+          "end": 78.5,
+          "bytes": 0,
+          "decoded": 12129,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+          "start": 78.60000002384186,
+          "response": 78.60000002384186,
+          "end": 78.60000002384186,
+          "bytes": 0,
+          "decoded": 15262,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+          "start": 78.60000002384186,
+          "response": 78.60000002384186,
+          "end": 78.60000002384186,
+          "bytes": 0,
+          "decoded": 38249,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+          "start": 78.60000002384186,
+          "response": 78.60000002384186,
+          "end": 78.60000002384186,
+          "bytes": 0,
+          "decoded": 127165,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+          "start": 78.70000004768372,
+          "response": 78.70000004768372,
+          "end": 78.70000004768372,
+          "bytes": 0,
+          "decoded": 6330,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+          "start": 78.80000007152557,
+          "response": 78.80000007152557,
+          "end": 78.80000007152557,
+          "bytes": 0,
+          "decoded": 598,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+          "start": 78.80000007152557,
+          "response": 78.80000007152557,
+          "end": 78.80000007152557,
+          "bytes": 0,
+          "decoded": 3955,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-UHWT46X4.js",
+          "start": 78.89999997615814,
+          "response": 78.89999997615814,
+          "end": 78.89999997615814,
+          "bytes": 0,
+          "decoded": 84076,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+          "start": 78.89999997615814,
+          "response": 78.89999997615814,
+          "end": 78.89999997615814,
+          "bytes": 0,
+          "decoded": 5353,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+          "start": 79,
+          "response": 79,
+          "end": 79,
+          "bytes": 0,
+          "decoded": 2524,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+          "start": 79,
+          "response": 79,
+          "end": 79,
+          "bytes": 0,
+          "decoded": 47117,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/src/championship/app/_bundled/chunk-YSPHDNKO.js",
+          "start": 79.10000002384186,
+          "response": 79.10000002384186,
+          "end": 79.10000002384186,
+          "bytes": 0,
+          "decoded": 3093,
+          "type": "script"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/cloud.webp",
+          "start": 79.30000007152557,
+          "response": 0,
+          "end": 123.70000004768372,
+          "bytes": 0,
+          "decoded": 0,
+          "type": "img"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/blaze.webp",
+          "start": 79.30000007152557,
+          "response": 0,
+          "end": 123.70000004768372,
+          "bytes": 0,
+          "decoded": 0,
+          "type": "img"
+        },
+        {
+          "name": "https://orochi771127.github.io/championship-2026/assets/production/title-morning-r1/arena.webp",
+          "start": 110.10000002384186,
+          "response": 0,
+          "end": 123.60000002384186,
+          "bytes": 0,
+          "decoded": 0,
+          "type": "fetch"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

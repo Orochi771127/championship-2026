@@ -3,6 +3,17 @@ import assert from 'node:assert/strict';
 import {createTitleImageLifecycle} from '../src/championship/presentation/titleImageLifecycle.js';
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
+test('deferred TITLE pixels remain unrequested during the film and restore immediately on skip',()=>{
+ const src='assets/production/title-morning-r1/cloud.webp',attrs=new Map();
+ const image={dataset:{titleSrc:src},complete:true,getAttribute:k=>attrs.get(k)??null,
+   setAttribute:(k,v)=>attrs.set(k,v),removeAttribute:k=>attrs.delete(k)};
+ const title={hidden:false,querySelectorAll:()=>[image]};
+ const sync=createTitleImageLifecycle(title);
+ sync(true);assert.equal(attrs.has('src'),false);
+ sync(false);assert.equal(attrs.get('src'),src);
+ image.complete=false;sync(true);assert.equal(attrs.has('src'),false);
+ sync(false);assert.equal(attrs.get('src'),src);sync.dispose();
+});
 function harness(){
  const timers=new Map();let nextTimer=0;
  const calls=[],created=[],revoked=[],decodes=[],panel={style:{backgroundImage:''},dataset:{backgroundSrc:'assets/production/title-morning-r1/arena.webp'}};

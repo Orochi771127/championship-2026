@@ -1,0 +1,41 @@
+{
+  "base": "2971a18a24dd4f32958a7a0c1ce1e2e73d8f0cbf",
+  "precommitBuildId": "14ecc85322b79dc344ca596b3b4531d4244129bcf8b11bb15aa998f7197fe913",
+  "files": 9335,
+  "aggregate": {
+    "passed": 1728,
+    "failed": 0
+  },
+  "normalFlow": {
+    "fixture": "qa/championship-full-qa-save.json",
+    "seeded": true,
+    "gestures": true,
+    "virtualInputCadence": true,
+    "species": [
+      139,
+      165
+    ],
+    "capturedIndividualFieldsPreserved": true,
+    "normalizationExceptions": [
+      "1c0",
+      "1c4"
+    ],
+    "physicalDevice": "UNVERIFIED"
+  },
+  "unknownOwnerRestart": "NOT_REPRODUCED_CAUSE_UNVERIFIED",
+  "video": {
+    "sha256": "ba488730c868e013235c8b76fbb8317c0430b5da938256d9b5281bd1521b48e4",
+    "seconds": 64.466667,
+    "restartSecondsApprox": 38,
+    "continueSecondsApprox": 43
+  },
+  "selfReview": {
+    "singleRouterSavePixiTicker": true,
+    "gameplayAndArtBytesUnchanged": true,
+    "reviewedProductHashUpdates": 9,
+    "personalSaveUntouched": true,
+    "legacyCharacterFallbackObserved": false,
+    "gitDiffCheck": true
+  },
+  "publication": "PENDING_EXACT_SHA_CI_PAGES_VERIFICATION"
+}

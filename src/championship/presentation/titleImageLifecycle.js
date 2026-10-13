@@ -11,7 +11,8 @@ export function createTitleImageLifecycle(title, {
   onStateChange = () => {}
 } = {}) {
   const images = [...title.querySelectorAll('img')].map(image => ({
-    image, src: image.getAttribute('src'), released: false
+    image, src: image.getAttribute('src') ?? image.dataset?.titleSrc,
+    released: !image.getAttribute('src')
   }));
   const panel = title.querySelector?.('.cm-title__panel');
   const source = panel?.dataset.backgroundSrc;

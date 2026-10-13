@@ -201,7 +201,6 @@ setText(titleBackgroundRetry,'TITLE_BACKGROUND_RETRY');
 titleBackgroundRetry.addEventListener('click',()=>syncTitleImages.retry());
 let titleMusicBuffering=false;
 const syncTitleArt=()=>syncTitleImages(titleScreen.hidden||titleMusicBuffering||openingFilm?.isPlaying());
-syncTitleArt();
 // A BFCache page resumes the same owner; a discarded page releases its cache.
 globalThis.addEventListener('pagehide',event=>{
   if(event.persisted)syncTitleImages(true);else syncTitleImages.dispose();
@@ -800,9 +799,12 @@ async function mountRaisingHome() {
         } catch (error) { setText(message, 'FIELD_LOAD_SAVE_FAILED'); console.warn(error); }
         finally { leave.disabled = reloadGame.disabled = false; }
       }
-      leave.addEventListener('click', () => { void saveAndNavigate(returnToTitle); });
+      leave.addEventListener('click', () => { void saveAndNavigate(() => returnToTitle('raising-load-return')); });
       // A new document can recover even when Pixi's old download never settles.
-      reloadGame.addEventListener('click', () => { void saveAndNavigate(() => location.reload()); });
+      reloadGame.addEventListener('click', () => { void saveAndNavigate(() => {
+        console.info('CHAMPIONSHIP_DOCUMENT_RELOAD', { source: 'raising-load-reload', screen: app.getScreen() });
+        location.reload();
+      }); });
       start();
       return Object.freeze({
         get isPlayable() { return phase === 'ready' && !!scene && scene.isPlayable !== false; },
@@ -1793,7 +1795,8 @@ async function openSaveDetails() {
 }
 
 /** Save & Quit returns to the title, which is where the original ends a session. */
-async function returnToTitle() {
+async function returnToTitle(source = 'save-and-quit') {
+  console.info('CHAMPIONSHIP_TITLE_RETURN', { source, screen: app.getScreen(), stack: new Error().stack });
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
   clockDriver?.setActive(false);
@@ -2068,6 +2071,7 @@ function boot() {
     getPreferences:()=>settings.store.get(),onActiveChange:()=>{syncMusic();syncTitleArt();}});
   settings.store.subscribe(()=>openingFilm.sync());
   openingFilm.start();
+  syncTitleArt();
   window.dispatchEvent(new Event("championship:ready"));
   syncMusic();
   // Background/unload resets elapsed measurement, and now also writes the

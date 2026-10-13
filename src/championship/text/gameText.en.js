@@ -77,5 +77,5 @@ export const BATTLE_MENU_LABELS_EN = Object.freeze({
   match: "Match", noPayout: "No prize", returnHome: "Back to ranch", conference: "Multi-round events"
 });
 
-export const UNKNOWN_DIGIMON_EN = "Unknown Digimon";
+export const UNKNOWN_DIGIMON_EN = "Unknown partner";
 export const DIGI_EGG_EN = "Creature Egg";

@@ -1,0 +1,90 @@
+{
+  "artifact": "R:\\Projects\\Championship2026\\capture-raising-recovery-20261013\\dist\\github-playtest",
+  "events": [
+    {
+      "kind": "document",
+      "url": "https://orochi771127.github.io/championship-2026/championship.html?gateMode=fallback&presentation=developer"
+    },
+    {
+      "kind": "requestfailed",
+      "url": "https://orochi771127.github.io/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+      "error": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    },
+    {
+      "kind": "requestfailed",
+      "url": "https://orochi771127.github.io/championship-2026/assets/production/original-music-r1/bgm_login_page.mp3",
+      "error": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    },
+    {
+      "kind": "requestfailed",
+      "url": "https://orochi771127.github.io/championship-2026/assets/production/original-music-r1/bgm_ethereal_moon_lakefront.mp3",
+      "error": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    },
+    {
+      "kind": "requestfailed",
+      "url": "https://orochi771127.github.io/championship-2026/assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
+      "error": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    },
+    {
+      "kind": "requestfailed",
+      "url": "https://orochi771127.github.io/championship-2026/assets/production/original-music-r1/bgm_eastern_mystic_mountains.mp3",
+      "error": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    },
+    {
+      "kind": "info",
+      "message": "CHAMPIONSHIP_TITLE_RETURN {source: save-and-quit, screen: RAISING_HOME, stack: Error\n    at returnToTitle (https://orochi771127.g…pionship/app/_bundled/main-3XCZQV6L.js:613:32673)}"
+    },
+    {
+      "kind": "document",
+      "url": "https://orochi771127.github.io/championship-2026/championship.html?gateMode=fallback&presentation=developer"
+    },
+    {
+      "kind": "requestfailed",
+      "url": "https://orochi771127.github.io/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+      "error": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    },
+    {
+      "kind": "requestfailed",
+      "url": "https://orochi771127.github.io/championship-2026/assets/production/original-music-r1/bgm_login_page.mp3",
+      "error": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    }
+  ],
+  "missing": [],
+  "legacyPixels": [],
+  "timings": [
+    {
+      "phase": "continue-ready",
+      "at": 3496.7000000476837,
+      "assets": "[{\"creatureId\":\"resident:species-000\",\"speciesId\":\"championship:creature:species-000\",\"entityId\":\"e000_digitama\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0001\",\"speciesId\":\"championship:creature:species-189\",\"entityId\":\"m503_warglaymon\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0002\",\"speciesId\":\"championship:creature:species-195\",\"entityId\":\"m509_shinegraymon\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0003\",\"speciesId\":\"championship:creature:species-204\",\"entityId\":\"m518_blackwargreymon\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0004\",\"speciesId\":\"championship:creature:species-212\",\"entityId\":\"m529_metalgarurumon_va\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0005\",\"speciesId\":\"championship:creature:species-223\",\"entityId\":\"m541_dukemon\",\"state\":\"ready\",\"error\":null}]"
+    },
+    {
+      "phase": "continue-ready",
+      "at": 14563,
+      "assets": "[{\"creatureId\":\"resident:species-000\",\"speciesId\":\"championship:creature:species-000\",\"entityId\":\"e000_digitama\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0001\",\"speciesId\":\"championship:creature:species-189\",\"entityId\":\"m503_warglaymon\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0002\",\"speciesId\":\"championship:creature:species-195\",\"entityId\":\"m509_shinegraymon\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0003\",\"speciesId\":\"championship:creature:species-204\",\"entityId\":\"m518_blackwargreymon\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0004\",\"speciesId\":\"championship:creature:species-212\",\"entityId\":\"m529_metalgarurumon_va\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0005\",\"speciesId\":\"championship:creature:species-223\",\"entityId\":\"m541_dukemon\",\"state\":\"ready\",\"error\":null},{\"creatureId\":\"championship:2026:instance:0006\",\"speciesId\":\"championship:creature:species-139\",\"entityId\":\"m404_etemon\",\"state\":\"ready\",\"error\":null}]"
+    }
+  ],
+  "browser": {
+    "events": [
+      {
+        "kind": "screen",
+        "screen": "RAISING_HOME",
+        "titleHidden": true
+      }
+    ],
+    "ready": 12038
+  }
+}

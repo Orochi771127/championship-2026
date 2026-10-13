@@ -214,6 +214,30 @@ export const UI_COPY = Object.freeze({
  * no English yet falls back to its zh-Hant source -- never to undefined and
  * never to a key -- and is recorded for the coverage report.
  */
+// Exact authored-label aliases. Resolve before filling parameters so a player's
+// nickname is never rewritten. Other locales retain their existing dictionaries.
+const PARTNER_LABELS_ZH = Object.freeze({
+  "選擇參賽數碼獸": "選擇參賽拍檔",
+  "目前沒有符合這場比賽條件的數碼獸。": "目前沒有符合這場比賽條件的拍檔。",
+  "將自己培育的數碼獸分成兩隊，每隊最多 3 隻。": "將自己培育的拍檔分成兩隊，每隊最多 3 隻。",
+  "練習對戰需要至少兩隻可以參賽的數碼獸。": "練習對戰需要至少兩隻可以參賽的拍檔。",
+  "選擇最多 3 隻自己的數碼獸，產生可以分享給朋友的密碼。密碼保存的是現在的狀態。": "選擇最多 3 隻自己的拍檔，產生可以分享給朋友的密碼。密碼保存的是現在的狀態。",
+  "目前沒有可以密碼化的數碼獸。": "目前沒有可以密碼化的拍檔。",
+  "選擇參賽數碼獸（1 至 3 隻）": "選擇參賽拍檔（1 至 3 隻）",
+  "參賽數碼獸": "參賽拍檔",
+  "選擇本輪參賽數碼獸；確認後抽出對手。": "選擇本輪參賽拍檔；確認後抽出對手。",
+  "目前沒有可以參賽的數碼獸。": "目前沒有可以參賽的拍檔。",
+  "數碼獸圖鑑": "拍檔圖鑑",
+  "尚未登錄這隻數碼獸。": "尚未登錄這隻拍檔。",
+  "這隻數碼獸的名字無法更改。": "這隻拍檔的名字無法更改。",
+  "數碼獸物種名稱與初始夥伴的自動名稱在英文正式名稱核定前，沿用已核定的繁體中文名稱；你取的名字不會被翻譯。": "拍檔物種名稱與初始夥伴的自動名稱在英文正式名稱核定前，沿用已核定的繁體中文名稱；你取的名字不會被翻譯。",
+  "同一隻數碼獸只能加入一隊。": "同一隻拍檔只能加入一隊。",
+  "通訊碼內含不能參戰的數碼獸。": "通訊碼內含不能參戰的拍檔。",
+  "請選擇 1 至 3 隻數碼獸。": "請選擇 1 至 3 隻拍檔。",
+  "請選擇 1 至 {limit} 隻符合條件的數碼獸。": "請選擇 1 至 {limit} 隻符合條件的拍檔。",
+  "選擇的數碼獸已不在目前名冊。": "選擇的拍檔已不在目前名冊。",
+});
+
 export function uiText(value, params) {
   if (typeof value !== "string") return value;
   const loc = getLocale();
@@ -221,6 +245,7 @@ export function uiText(value, params) {
   if (loc === "ja") return localizedText(value, params, UI_COPY_JA, TEXT_JA, PATTERNS_JA);
   if (loc === "th") return localizedText(value, params, UI_COPY_TH, TEXT_TH, PATTERNS_TH);
   if (loc === "vi") return localizedText(value, params, UI_COPY_VI, TEXT_VI, PATTERNS_VI);
+  if (Object.hasOwn(PARTNER_LABELS_ZH, value)) return fillTemplate(PARTNER_LABELS_ZH[value], params);
   if (Object.hasOwn(UI_COPY, value)) return fillTemplate(UI_COPY[value], params);
   for (const [pattern, format] of PATTERNS) {
     const match = value.match(pattern);

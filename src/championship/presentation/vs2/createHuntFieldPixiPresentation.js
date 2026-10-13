@@ -480,6 +480,11 @@ export async function mountHuntFieldPixiPresentation({
         if(frame){
           const sprite=toolSprites[nativeCount]??new PIXI.Sprite(frame.texture);
           if(!toolSprites[nativeCount]){toolSprites.push(sprite);nativeTools.addChild(sprite);}
+          // Meat is a ground object: the same foot-Y sort as the creatures.
+          // Rope, cursor and other feedback retain the overlay layer.
+          const layer=o.kind==='MEAT'?actorLayer:nativeTools;
+          if(sprite.parent!==layer)layer.addChild(sprite);
+          sprite.zIndex=Math.round(o.y);
           nativeCount++;sprite.texture=frame.texture;sprite.anchor.set(frame.origin[0]/frame.width,frame.origin[1]/frame.height);
           sprite.scale.set(frame.displayScale??2);sprite.position.set(o.x,o.y);sprite.visible=true;continue;
         }

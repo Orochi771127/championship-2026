@@ -1,0 +1,18 @@
+{
+  "events": [
+    {
+      "kind": "warning",
+      "message": "QA_BUNDLE_DISPOSE m214_kunemon Error\n    at Object.dispose (https://orochi771127.github.io/championship-2026/src/championship/presentation/pixiCharacterRuntimeBundle.js:199:57)\n    at https://orochi771127.github.io/championship-2026/src/championship/presentation/licensedCharacterRoster.js:101:75\n    at Array.map (<anonymous>)\n    at https://orochi771127.github.io/championship-2026/src/championship/presentation/licensedCharacterRoster.js:101:54"
+    },
+    {
+      "kind": "error",
+      "message": "RangeError: NATIVE_CHARACTER_TEXTURE_MISSING:m214_kunemon:0:1:m214_kunemon/main/cell_001\n    at Object.apply (https://orochi771127.github.io/championship-2026/src/championship/presentation/nativeHuntCharacterAction.js:48:27)\n    at syncActors (https://orochi771127.github.io/championship-2026/src/championship/presentation/vs2/createHuntFieldPixiPresentation.js:440:54)\n    at render (https://orochi771127.github.io/championship-2026/src/championship/presentation/vs2/createHuntFieldPixiPresentation.js:639:5)\n    at TickerListener.advance [as _fn] (https://orochi771127.github.io/championship-2026/src/championship/presentation/vs2/createHuntFieldPixiPresentation.js:674:5)\n    at TickerListener.emit (https://orochi771127.github.io/championship-2026/node_modules/pixi.js/dist/pixi.mjs:8207:14)\n    at _Ticker.update (https://orochi771127.github.io/championship-2026/node_modules/pixi.js/dist/pixi.mjs:8691:29)\n    at _tick (https://orochi771127.github.io/championship-2026/node_modules/pixi.js/dist/pixi.mjs:8376:14)\n    at ClockController._callFirstTimer (eval at evaluate (:311:30), <anonymous>:284:20)\n    at ClockController._runTo (eval at evaluate (:311:30), <anonymous>:119:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:167:38)"
+    },
+    {
+      "kind": "failure",
+      "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'HUNT_FIELD'\n- 'HUNT_RESULT'\n        ^\n",
+      "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'HUNT_FIELD'\n- 'HUNT_RESULT'\n        ^\n\n    at R:\\Projects\\Championship2026\\capture-raising-recovery-20261013\\tests\\championship-capture-raising-recovery-browser.cjs:76:12"
+    }
+  ],
+  "missing": []
+}
