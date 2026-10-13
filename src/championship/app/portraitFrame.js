@@ -1,7 +1,12 @@
 // Owner 2026-09-13: landscape displays the existing portrait UI, without
-// rebuilding scenes or changing world coordinates. This owns layout only.
+// rebuilding scenes or changing world coordinates. Owner 2026-10-13 permits
+// the Raising scene alone to use a desktop viewport. This owns layout only.
+export function isDesktopRaisingLayout({width,height,activeScreen,hidden=false}) {
+  return width>=1024&&height>=600&&activeScreen==='RAISING_HOME'&&!hidden;
+}
 export function mountPortraitFrame({window:win=globalThis.window,document:doc=globalThis.document}={}) {
   const body=doc.body,visual=win.visualViewport;
+  const root=doc.getElementById?.('cm-root');
   const properties=['--cm-frame-scale','--cm-viewport-height','--cm-frame-center-x','--cm-frame-center-y'];
   let sideways=null,inputBaseline=null,disposed=false;
   const editing=()=>{
@@ -23,7 +28,9 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     if(inputBaseline&&Math.abs(width-inputBaseline.width)>1)inputBaseline=null;
     if(hasInput&&!inputBaseline)inputBaseline={width,height,sideways:width>height};
     const keyboard=!!inputBaseline&&height<inputBaseline.height;
-    sideways=keyboard?inputBaseline.sideways:width>height;
+    const desktop=isDesktopRaisingLayout({width,height,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden});
+    body.toggleAttribute('data-desktop-raising',desktop);
+    sideways=!desktop&&(keyboard?inputBaseline.sideways:width>height);
     if(!hasInput&&!keyboard)inputBaseline=null;
     body.toggleAttribute('data-portrait-frame',sideways);
     if(!sideways){for(const name of properties)body.style.removeProperty(name);revealInput();return;}
@@ -45,6 +52,9 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   visual?.addEventListener('scroll',update);
   doc.addEventListener('focusin',update);
   doc.addEventListener('focusout',update);
+  const Observer=win.MutationObserver;
+  const observer=root&&Observer?new Observer(()=>update()):null;
+  observer?.observe(root,{attributes:true,attributeFilter:['data-active-screen','hidden']});
   update();
   return {dispose(){
     if(disposed)return;disposed=true;
@@ -53,6 +63,8 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     visual?.removeEventListener('scroll',update);
     doc.removeEventListener('focusin',update);doc.removeEventListener('focusout',update);
     body.removeAttribute('data-portrait-frame');
+    body.removeAttribute('data-desktop-raising');
+    observer?.disconnect();
     for(const name of properties)body.style.removeProperty(name);
   }};
 }

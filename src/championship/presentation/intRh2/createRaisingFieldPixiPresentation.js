@@ -239,6 +239,7 @@ export async function mountRaisingFieldPixiPresentation({
   const view = Object.freeze({
     get width() { return app.screen.width; },
     get height() { return app.screen.height; },
+    get desktopRaising() { return globalThis.document?.body?.hasAttribute('data-desktop-raising')??false; },
     get scrollY() { return cameraY; }
   });
   const scrollMaxY = () => (fieldArt?.field ? raisingFieldViewport(fieldArt.field, view).scrollMaxY ?? 0 : 0);
@@ -778,6 +779,13 @@ export async function mountRaisingFieldPixiPresentation({
     if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
     // A taller frame may need less scroll, or none.
     cameraY = clamp(cameraY, 0, scrollMaxY());
+    // Desktop starts with the existing main cages in view. Locked lower rows
+    // keep their place and their scroll range; a shorter height must not carry
+    // the phone's numeric offset into a newly clipped main row.
+    if(view.desktopRaising&&fieldArt?.field){
+      const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
+      cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
+    }
     sync(source.getFrame(), { force: true });
   }
 

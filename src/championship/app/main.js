@@ -39,6 +39,7 @@ import { createHuntResultView } from "./vs3Screens.js";
 import { createShopView, createDatabaseView, createCageEditView } from "./vs4Screens.js";
 import { createChampionshipPixiStage } from "../presentation/championshipPixiStage.js";
 import { mountRaisingFieldPixiPresentation } from "../presentation/intRh2/createRaisingFieldPixiPresentation.js";
+import { desktopRaisingViewportWidth } from "../presentation/intRh2/raisingFieldViewport.js";
 import { mountHuntFieldPixiPresentation } from "../presentation/vs2/createHuntFieldPixiPresentation.js";
 import { mountBattleFieldPixiPresentation } from "../presentation/vs5/createBattleFieldPixiPresentation.js";
 import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../presentation/battleEffectArt.js';
@@ -755,6 +756,8 @@ async function mountRaisingHome() {
             ]);
             owner.signal.throwIfAborted();
             if (!characterBundle || !fieldArt) throw new Error('RAISING_CORE_ART_UNAVAILABLE');
+            const uniqueWidth=desktopRaisingViewportWidth(fieldArt.field);
+            host.style.setProperty('--cm-ranch-unique-width',uniqueWidth===null?'100%':`${uniqueWidth}px`);
             progress.start('scene');
             recoveryDiagnostics.record('LOAD',{area:'raising',stage:'scene',phase:'start'});
             const pending = mountRaisingFieldPixiPresentation({

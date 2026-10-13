@@ -9,6 +9,11 @@ export const RAISING_MAX_NATIVE_SCREEN_PIXELS = 6;
  * still seen beside its neighbours however large the screen makes it. */
 export const RAISING_MIN_VISIBLE_NATIVE_WIDTH = 112;
 
+// Owner desktop adaptation: keep the normal 390x844 phone field's zoom.
+// The reference field leaves 95px for HUD and 74px for the eight tools.
+// Actual dimensions still own pan limits, headroom and pointer conversion.
+export const RAISING_DESKTOP_REFERENCE_VIEWPORT = Object.freeze({width:390,height:675});
+
 /**
  * Room held above the native board for residents' bodies (2026-10-05).
  *
@@ -38,6 +43,7 @@ export const RAISING_TOP_HEADROOM_NATIVE = RAISING_TALLEST_BODY_NATIVE + RAISING
  * than blurring the art with a fractional scale.
  */
 export function raisingNativeScreenPixels(field, viewport, padding = 12) {
+  if(viewport.desktopRaising)viewport=RAISING_DESKTOP_REFERENCE_VIEWPORT;
   const unit = field.nativePixelWorldScale;
   const nativeHeight = field.worldHeightPx / unit;
   const byWidth = Math.floor((viewport.width - padding * 2) / RAISING_MIN_VISIBLE_NATIVE_WIDTH);
@@ -104,6 +110,12 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   // Whole screen pixels for the board's top edge, so rows do not shimmer.
   const { y, scrollMaxY, scrollY } = nativeBoardPlacement(field, viewport, padding, scale);
   return { x, y, width, height, scale, scrollY, scrollMaxY };
+}
+
+// Do not show extra complete copies of the same cages on oversized monitors.
+export function desktopRaisingViewportWidth(field,padding=12) {
+  if(field?.presentationMode!=='NATIVE_RANCH'||!(field.nativePixelWorldScale>0))return null;
+  return field.worldWidthPx*raisingNativeScreenPixels(field,RAISING_DESKTOP_REFERENCE_VIEWPORT,padding)/field.nativePixelWorldScale+padding*2;
 }
 
 export function wrapRaisingCamera(value,width){return ((value%width)+width)%width;}

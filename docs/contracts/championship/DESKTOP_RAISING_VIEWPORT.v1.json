@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "classification": "OWNER_APPROVED_ADAPTATION",
+  "ownerAuthorizedOn": "2026-10-13",
+  "scope": "RAISING_HOME only; additional desktop viewport width at the phone reference native scale",
+  "specificationSha256": "04c95a9f4f3e0f0f17b1e868117156e86fc30d2c903a5e1042a22fad5dda0d11",
+  "minimumAvailableViewport": { "width": 1024, "height": 600 },
+  "nativeScaleReference": { "width": 390, "height": 675 },
+  "maximumCanvasWidth": "one existing native ring at reference scale plus the existing 12px edge padding",
+  "dom": "existing HUD, eight-tool dock, collapsible selected-companion card and dialogs; no second control tree",
+  "unchanged": ["world coordinates", "collision", "foreground occlusion", "character/cage ratio", "blue locked covers", "unlocks", "runtime", "save", "Pixi Application and ticker", "phone portrait", "other scenes", "opening film"],
+  "acceptance": ["390/1024/1366/1920 widths", "two HUD themes", "five locales", "resize/navigation", "map drag", "companion carry", "pointer coordinate round trip", "tall companion focus", "tutorial guidance and dialog bounds", "same-save same-zoom visible unique cages at 390 vs 1366"],
+  "physicalDeviceAccepted": false
+}

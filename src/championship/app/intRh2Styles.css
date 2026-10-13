@@ -58,6 +58,21 @@
 }
 .int-rh2-field-host { position: relative; z-index: 1; touch-action: none; }
 
+/* One native ring at the phone zoom, with the existing collapsible card.
+   Additional monitor space never stretches art or invents duplicate cages. */
+body[data-desktop-raising] .int-rh2-field-host {
+  max-width: var(--cm-ranch-unique-width, 100%);
+}
+body[data-desktop-raising] .int-rh2-companion {
+  left: auto;
+  right: 16px;
+  width: min(320px, calc(100% - 32px));
+  transform: none;
+}
+body[data-desktop-raising] .int-rh2-companion[data-open="false"] {
+  transform: translateY(14px);
+}
+
 .int-rh2-field-fallback {
   display: grid;
   place-items: center;
