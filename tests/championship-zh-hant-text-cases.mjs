@@ -100,6 +100,10 @@ test("the ROM catalogs keep their Japanese untouched", () => {
   assert.equal(gates.records[0].displayName, "ダイナそうげん");
   assert.equal(cages.language, "ja");
   assert.equal(gates.language, "ja");
+  assert.equal(help.records[32].title,"完全体");
+  assert.match(help.records[32].body,/完全体/);
+  assert.match(events.records[27].description,/完全体/);
+  assert.match(helpText(32,'body'),/完整夥伴/,'ordinary complete adjective remains');
 });
 
 test("every regular species and egg has Chinese identity copy at its original index", () => {

@@ -1,3 +1,4 @@
+import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
 // English for the tables in zhHant.js, keyed identically (record index or
 // the same key). PRODUCT_AUTHORED, 2026-09-29, translated from the approved
 // zh-Hant copy; not yet reviewed by a native English editor.
@@ -9,7 +10,7 @@
 // franchise has more than one English convention, and choosing one is an
 // Owner decision recorded in the glossary.
 
-export const GENERATIONS_EN = Object.freeze(["Creature Egg", "Baby I", "Baby II", "Child", "Adult", "Perfect", "Ultimate"]);
+export const GENERATIONS_EN = Object.freeze(["Creature Egg", "Baby I", "Baby II", "Child", "Adult", AWAKENED_FORM_NAMES.en, "Ultimate"]);
 export const PERSONALITIES_EN = Object.freeze(["Honest", "Selfish", "Impatient", "Easygoing", "Passionate", "Calm", "Bold", "Timid", "???"]);
 export const ROSTER_FAMILIES_EN = Object.freeze(["None", "Beast", "Machine", "Insect & Plant", "Bird", "Dragon", "Aquatic", "Holy", "Dark"]);
 export const TAMER_RANK_NAMES_EN = Object.freeze(["Green", "Blue", "Red", "White", "Bronze", "Silver", "Gold", "Platinum", "Champion", "Master"]);

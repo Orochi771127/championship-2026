@@ -1,5 +1,6 @@
 // Display-only PRODUCT_AUTHORED copy. Never translate identifiers or saved input.
 import { formatNumber, getLocale, pluralCategory } from "./locale.js";
+import { growthStageUiAlias } from "./growthStageTerms.js";
 import { PATTERNS_EN, TEXT_EN, UI_COPY_EN, UNTRANSLATED_PROPER_NOUNS } from "./uiText.en.js";
 import { PATTERNS_JA, TEXT_JA, UI_COPY_JA } from "./uiText.ja.js";
 import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
@@ -246,6 +247,8 @@ const PARTNER_LABELS_ZH = Object.freeze({
 export function uiText(value, params) {
   if (typeof value !== "string") return value;
   const loc = getLocale();
+  const stageAlias=growthStageUiAlias(value,loc);
+  if(stageAlias!==null)return stageAlias;
   if (loc === "en") return englishText(value, params);
   if (loc === "ja") return localizedText(value, params, UI_COPY_JA, TEXT_JA, PATTERNS_JA);
   if (loc === "th") return localizedText(value, params, UI_COPY_TH, TEXT_TH, PATTERNS_TH);

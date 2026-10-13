@@ -1,3 +1,4 @@
+import { AWAKENED_FORM_NAMES, AWAKENED_RADAR_NAMES } from "./growthStageTerms.js";
 // Thai display copy. PRODUCT_AUTHORED, 2026-10-09.
 
 import { uiText } from "./uiText.js";
@@ -936,7 +937,7 @@ export const TEXT_TH = Object.freeze({
   "幼年期雷達": "เรดาร์ในวัยเด็ก",
   "成長期雷達": "เรดาร์การเติบโต",
   "成熟期雷達": "เรดาร์ครบกำหนด",
-  "完全體雷達": "เรดาร์ทั้งตัว",
+  "完全體雷達": AWAKENED_RADAR_NAMES.th,
   "資料／自由屬性雷達": "ข้อมูล/เรดาร์คุณลักษณะฟรี",
   "疫苗屬性雷達": "เรดาร์คุณสมบัติของวัคซีน",
   "病毒屬性雷達": "เรดาร์คุณสมบัติของไวรัส",
@@ -959,7 +960,7 @@ export const TEXT_TH = Object.freeze({
   "幼年期Ⅱ": "วัยทารกระยะที่ 2",
   "成長期": "ระยะเวลาการเจริญเติบโต",
   "成熟期": "ระยะผู้ใหญ่",
-  "完全體": "ร่างกายที่สมบูรณ์แบบ",
+  "完全體": AWAKENED_FORM_NAMES.th,
   "究極體": "สุดยอดร่างกาย",
   "昆蟲／植物": "แมลง/พืช",
   "暗黑": "มืด",

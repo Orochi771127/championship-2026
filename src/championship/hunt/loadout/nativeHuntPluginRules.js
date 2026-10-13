@@ -1,3 +1,4 @@
+import { AWAKENED_FORM_NAMES } from "../../text/growthStageTerms.js";
 import tools from '../../../data/championship/catalogs/hunt-tools.r1.json' with {type:'json'};
 
 // 02125ED8..02125F78: OR four fitted masks; 02127884: native radar predicate.
@@ -21,7 +22,7 @@ export function nativeHuntRadarMatches(speciesIndex,mask){
 
 // Product localization of text-bank 1BB..1D8. The field identities and selectors
 // are original; words are the presentation layer's Traditional Chinese copy.
-const generations=['數碼蛋','幼年期 I','幼年期 II','成長期','成熟期','完全體','究極體'];
+const generations=['數碼蛋','幼年期 I','幼年期 II','成長期','成熟期',AWAKENED_FORM_NAMES['zh-Hant'],'究極體'];
 const families=['—','獸','機械','昆蟲／植物','鳥','龍','水','聖','暗黑'];
 const alignments=['無','疫苗','病毒','資料','自由'];
 const personalities=['坦率','任性','急躁','悠閒','熱血','冷靜','大膽','膽小','???'];

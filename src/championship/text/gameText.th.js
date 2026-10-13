@@ -1,6 +1,7 @@
+import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
 // Thai for the tables in zhHant.js. PRODUCT_AUTHORED, 2026-10-09.
 
-export const GENERATIONS_TH = Object.freeze(["ไข่", "ทารก I", "ทารก II", "วัยเจริญเติบโต", "วัยเจริญเต็มที่", "สมบูรณ์แบบ", "ขั้นสุดยอด"]);
+export const GENERATIONS_TH = Object.freeze(["ไข่", "ทารก I", "ทารก II", "วัยเจริญเติบโต", "วัยเจริญเต็มที่", AWAKENED_FORM_NAMES.th, "ขั้นสุดยอด"]);
 export const PERSONALITIES_TH = Object.freeze(["ซื่อตรง", "เอาแต่ใจ", "ใจร้อน", "สบายๆ", "กระตือรือร้น", "สุขุม", "กล้าหาญ", "ขี้ขลาด", "???"]);
 export const ROSTER_FAMILIES_TH = Object.freeze(["ไม่มี", "สัตว์ป่า", "เครื่องจักร", "แมลงและพืช", "สัตว์ปีก", "มังกร", "สัตว์น้ำ", "ศักดิ์สิทธิ์", "ความมืด"]);
 export const TAMER_RANK_NAMES_TH = Object.freeze(["เขียว", "น้ำเงิน", "แดง", "ขาว", "บรอนซ์", "ซิลเวอร์", "โกลด์", "แพลตทินัม", "แชมเปียน", "มาสเตอร์"]);

@@ -1,3 +1,4 @@
+import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
 // Vietnamese catalog copy, keyed exactly like catalogs.zhHant.js.
 // PRODUCT_AUTHORED, 2026-10-09.
 
@@ -138,9 +139,9 @@ export const SHOP_DESCRIPTIONS_VI = Object.freeze([
   "Dây thừng dành cho giai đoạn trưởng thành. Độ bền 60.",
   "Dây thừng dành cho giai đoạn trưởng thành. Độ bền 80.",
   "Dây thừng dành cho giai đoạn trưởng thành. Độ bền 100.",
-  "Dây thừng dành cho giai đoạn hoàn thiện/tối hậu. Độ bền 150.",
-  "Dây thừng dành cho giai đoạn hoàn thiện/tối hậu. Độ bền 200.",
-  "Dây thừng dành cho giai đoạn hoàn thiện/tối hậu. Độ bền 250.",
+  `Dây thừng dành cho giai đoạn ${AWAKENED_FORM_NAMES.vi.toLowerCase()}/tối hậu. Độ bền 150.`,
+  `Dây thừng dành cho giai đoạn ${AWAKENED_FORM_NAMES.vi.toLowerCase()}/tối hậu. Độ bền 200.`,
+  `Dây thừng dành cho giai đoạn ${AWAKENED_FORM_NAMES.vi.toLowerCase()}/tối hậu. Độ bền 250.`,
   "Bắn đạn khiến mục tiêu khựng lại. Số đạn 10.",
   "Bắn đạn khiến mục tiêu khựng lại. Số đạn 10.",
   "能連續發射子彈。威力 10。",
@@ -195,7 +196,7 @@ export const SHOP_DESCRIPTIONS_VI = Object.freeze([
   "Hiển thị đối tác thời thơ ấu trên radar.",
   "Hiển thị đối tác thời kỳ tăng trưởng trên radar.",
   "Hiển thị đối tác thời kỳ thành thục trên radar.",
-  "Hiển thị đối tác thể hoàn toàn trên radar.",
+  `Hiển thị đối tác ${AWAKENED_FORM_NAMES.vi.toLowerCase()} trên radar.`,
   "Hiển thị đối tác thuộc tính dữ liệu hoặc tự do trên radar.",
   "Hiển thị đối tác thuộc tính vắc-xin trên radar.",
   "Hiển thị đối tác thuộc tính vi-rút trên radar.",
@@ -342,7 +343,7 @@ const HELP_ROWS = [
     "Trưởng thành"
   ],
   [
-    "Hoàn thiện"
+    `${AWAKENED_FORM_NAMES.vi}`
   ],
   [
     "Tối hậu"
@@ -612,7 +613,7 @@ const EVENT_ROWS = [
   ],
   [
     "Autumn Survivor",
-    "The title holder is one calm Perfect, 祖利獸! Fighting alone, balance attack with recovery!\nTrận đấu 1 chọi 1."
+    `The title holder is one calm ${AWAKENED_FORM_NAMES.vi}, 祖利獸! Fighting alone, balance attack with recovery!\nTrận đấu 1 chọi 1.`
   ],
   [
     "Winter General",
@@ -680,7 +681,7 @@ const EVENT_ROWS = [
   ],
   [
     "Giant Extreme",
-    "A special three-on-one match! Can you withstand 小丑皇's attacks and beat it with teamwork?\nChỉ giới hạn Hoàn thiện, Trận đấu 3 chọi 1."
+    `A special three-on-one match! Can you withstand 小丑皇's attacks and beat it with teamwork?\nChỉ giới hạn ${AWAKENED_FORM_NAMES.vi}, Trận đấu 3 chọi 1.`
   ],
   [
     "Perfect Fighter",

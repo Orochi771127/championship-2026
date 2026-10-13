@@ -1,3 +1,4 @@
+import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
 // Thai catalog copy, keyed exactly like catalogs.zhHant.js.
 // PRODUCT_AUTHORED, 2026-10-09.
 
@@ -138,9 +139,9 @@ export const SHOP_DESCRIPTIONS_TH = Object.freeze([
   "เชือกสำหรับช่วงเจริญเต็มที่ ความทนทาน 60",
   "เชือกสำหรับช่วงเจริญเต็มที่ ความทนทาน 80",
   "เชือกสำหรับช่วงเจริญเต็มที่ ความทนทาน 100",
-  "เชือกสำหรับช่วงสมบูรณ์แบบ/สุดยอด ความทนทาน 150",
-  "เชือกสำหรับช่วงสมบูรณ์แบบ/สุดยอด ความทนทาน 200",
-  "เชือกสำหรับช่วงสมบูรณ์แบบ/สุดยอด ความทนทาน 250",
+  `เชือกสำหรับ${AWAKENED_FORM_NAMES.th}/สุดยอด ความทนทาน 150`,
+  `เชือกสำหรับ${AWAKENED_FORM_NAMES.th}/สุดยอด ความทนทาน 200`,
+  `เชือกสำหรับ${AWAKENED_FORM_NAMES.th}/สุดยอด ความทนทาน 250`,
   "ยิงกระสุนเพื่อให้เป้าหมายชะงัก กระสุน 10 นัด",
   "ยิงกระสุนเพื่อให้เป้าหมายชะงัก กระสุน 10 นัด",
   "能連續發射子彈。威力 10。",
@@ -195,7 +196,7 @@ export const SHOP_DESCRIPTIONS_TH = Object.freeze([
   "แสดงพาร์ตเนอร์วัยทารกบนเรดาร์",
   "แสดงพาร์ตเนอร์วัยเติบโตบนเรดาร์",
   "แสดงพาร์ตเนอร์วัยโตเต็มวัยบนเรดาร์",
-  "แสดงพาร์ตเนอร์ร่างสมบูรณ์บนเรดาร์",
+  `แสดงพาร์ตเนอร์${AWAKENED_FORM_NAMES.th}บนเรดาร์`,
   "แสดงพาร์ตเนอร์ธาตุข้อมูลหรือธาตุอิสระบนเรดาร์",
   "แสดงพาร์ตเนอร์ธาตุวัคซีนบนเรดาร์",
   "แสดงพาร์ตเนอร์ธาตุไวรัสบนเรดาร์",
@@ -342,7 +343,7 @@ const HELP_ROWS = [
     "วัยเจริญเต็มที่"
   ],
   [
-    "สมบูรณ์แบบ"
+    `${AWAKENED_FORM_NAMES.th}`
   ],
   [
     "ขั้นสุดยอด"
@@ -612,7 +613,7 @@ const EVENT_ROWS = [
   ],
   [
     "Autumn Survivor",
-    "The title holder is one calm Perfect, 祖利獸! Fighting alone, balance attack with recovery!\nการต่อสู้แบบ 1 ต่อ 1"
+    `The title holder is one calm ${AWAKENED_FORM_NAMES.th}, 祖利獸! Fighting alone, balance attack with recovery!\nการต่อสู้แบบ 1 ต่อ 1`
   ],
   [
     "Winter General",
@@ -680,7 +681,7 @@ const EVENT_ROWS = [
   ],
   [
     "Giant Extreme",
-    "A special three-on-one match! Can you withstand 小丑皇's attacks and beat it with teamwork?\nจำกัดขั้นสมบูรณ์แบบ, การต่อสู้แบบ 3 ต่อ 1"
+    `A special three-on-one match! Can you withstand 小丑皇's attacks and beat it with teamwork?\nจำกัดขั้น${AWAKENED_FORM_NAMES.th}, การต่อสู้แบบ 3 ต่อ 1`
   ],
   [
     "Perfect Fighter",

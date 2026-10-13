@@ -1,3 +1,4 @@
+import { AWAKENED_FORM_NAMES, AWAKENED_RADAR_NAMES } from "./growthStageTerms.js";
 // Japanese display copy. PRODUCT_AUTHORED, 2026-10-09.
 
 import { uiText } from "./uiText.js";
@@ -936,7 +937,7 @@ export const TEXT_JA = Object.freeze({
   "幼年期雷達": "幼児用レーダー",
   "成長期雷達": "成長レーダー",
   "成熟期雷達": "成熟度レーダー",
-  "完全體雷達": "全身レーダー",
+  "完全體雷達": AWAKENED_RADAR_NAMES.ja,
   "資料／自由屬性雷達": "データ/無料属性レーダー",
   "疫苗屬性雷達": "ワクチン特性レーダー",
   "病毒屬性雷達": "ウイルス特性レーダー",
@@ -959,7 +960,7 @@ export const TEXT_JA = Object.freeze({
   "幼年期Ⅱ": "乳児期 II",
   "成長期": "成長期",
   "成熟期": "成熟期",
-  "完全體": "完璧なボディ",
+  "完全體": AWAKENED_FORM_NAMES.ja,
   "究極體": "究極のボディ",
   "昆蟲／植物": "昆虫・植物",
   "暗黑": "暗い",

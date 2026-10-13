@@ -1,3 +1,4 @@
+import { AWAKENED_FORM_NAMES, AWAKENED_RADAR_NAMES } from "./growthStageTerms.js";
 // Vietnamese display copy. PRODUCT_AUTHORED, 2026-10-09.
 
 import { uiText } from "./uiText.js";
@@ -936,7 +937,7 @@ export const TEXT_VI = Object.freeze({
   "幼年期雷達": "radar sơ sinh",
   "成長期雷達": "radar tăng trưởng",
   "成熟期雷達": "radar trưởng thành",
-  "完全體雷達": "radar cơ thể hoàn chỉnh",
+  "完全體雷達": AWAKENED_RADAR_NAMES.vi,
   "資料／自由屬性雷達": "Radar dữ liệu/thuộc tính tự do",
   "疫苗屬性雷達": "Radar đặc tính vắc xin",
   "病毒屬性雷達": "Radar đặc tính virus",
@@ -959,7 +960,7 @@ export const TEXT_VI = Object.freeze({
   "幼年期Ⅱ": "Giai đoạn sơ sinh II",
   "成長期": "thời kỳ tăng trưởng",
   "成熟期": "giai đoạn trưởng thành",
-  "完全體": "cơ thể hoàn hảo",
+  "完全體": AWAKENED_FORM_NAMES.vi,
   "究極體": "cơ thể cuối cùng",
   "昆蟲／植物": "Côn trùng/Thực vật",
   "暗黑": "tối",

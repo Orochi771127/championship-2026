@@ -1,3 +1,4 @@
+import { AWAKENED_FORM_NAMES, AWAKENED_RADAR_NAMES } from "./growthStageTerms.js";
 // English display copy. PRODUCT_AUTHORED, 2026-09-29 (settings round).
 //
 // Not yet reviewed by a native English editor; the report says so.
@@ -743,7 +744,7 @@ export const TEXT_EN = Object.freeze({
   "HP 分析": "HP analysis", "性格分析": "Personality analysis", "容量分析": "Capacity analysis",
   "世代／種族分析": "Generation/family analysis", "世代／種族／屬性分析": "Generation/family/attribute analysis", "完整分析": "Full analysis",
   "射擊數量": "Shot count", "鋼索數量": "Wire count", "誘引道具數量": "Lure count", "傷害陷阱數量": "Damage trap count", "全部道具數量": "All item counts",
-  "幼年期雷達": "Baby radar", "成長期雷達": "Child radar", "成熟期雷達": "Adult radar", "完全體雷達": "Perfect radar",
+  "幼年期雷達": "Baby radar", "成長期雷達": "Child radar", "成熟期雷達": "Adult radar", "完全體雷達": AWAKENED_RADAR_NAMES.en,
   "資料／自由屬性雷達": "Data/Free attribute radar", "疫苗屬性雷達": "Vaccine attribute radar", "病毒屬性雷達": "Virus attribute radar",
   "龍族雷達": "Dragon radar", "獸族雷達": "Beast radar", "鳥族雷達": "Bird radar", "水族雷達": "Aquatic radar",
   "聖族雷達": "Holy radar", "暗黑族雷達": "Dark radar", "昆蟲植物雷達": "Insect & Plant radar", "機械族雷達": "Machine radar",
@@ -753,7 +754,7 @@ export const TEXT_EN = Object.freeze({
   // Hunt target readouts (analyzer plug-ins).
   "數碼蛋": "Creature Egg",
   "幼年期 I": "Baby I", "幼年期 II": "Baby II", "幼年期Ⅰ": "Baby I", "幼年期Ⅱ": "Baby II",
-  "成長期": "Child", "成熟期": "Adult", "完全體": "Perfect", "究極體": "Ultimate",
+  "成長期": "Child", "成熟期": "Adult", "完全體": AWAKENED_FORM_NAMES.en, "究極體": "Ultimate",
   "昆蟲／植物": "Insect & Plant", "暗黑": "Dark", "自由": "Free",
   "坦率": "Honest", "任性": "Selfish", "急躁": "Impatient", "悠閒": "Easygoing",
   "熱血": "Passionate", "冷靜": "Calm", "大膽": "Bold", "膽小": "Timid",

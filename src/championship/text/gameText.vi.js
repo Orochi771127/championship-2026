@@ -1,6 +1,7 @@
+import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
 // Vietnamese for the tables in zhHant.js. PRODUCT_AUTHORED, 2026-10-09.
 
-export const GENERATIONS_VI = Object.freeze(["Trứng", "Sơ sinh I", "Sơ sinh II", "Trưởng thành non", "Trưởng thành", "Hoàn thiện", "Tối hậu"]);
+export const GENERATIONS_VI = Object.freeze(["Trứng", "Sơ sinh I", "Sơ sinh II", "Trưởng thành non", "Trưởng thành", AWAKENED_FORM_NAMES.vi, "Tối hậu"]);
 export const PERSONALITIES_VI = Object.freeze(["Thẳng thắn", "Ích kỷ", "Nóng vội", "Thảnh thơi", "Nhiệt huyết", "Điềm tĩnh", "Táo bạo", "Nhút nhát", "???"]);
 export const ROSTER_FAMILIES_VI = Object.freeze(["Không", "Dã thú", "Máy móc", "Côn trùng & Thực vật", "Chim chóc", "Rồng", "Thủy sinh", "Thánh thần", "Hắc ám"]);
 export const TAMER_RANK_NAMES_VI = Object.freeze(["Lục", "Lam", "Đỏ", "Trắng", "Đồng", "Bạc", "Vàng", "Bạch kim", "Quán quân", "Bậc thầy"]);

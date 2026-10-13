@@ -355,7 +355,8 @@
     "src/championship/text/battleMoveNames.js",
     "src/championship/battle/battleAiAdaptation.js",
     "assets/production/characters/battle-packed-20261013/manifest.json",
-    "src/championship/presentation/evolutionGlyphArt.js"
+    "src/championship/presentation/evolutionGlyphArt.js",
+    "src/championship/text/growthStageTerms.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9668,7 +9669,8 @@
     "assets/production/evolution-glyphs-v1/CP-G04-evolution-128.png",
     "assets/production/evolution-glyphs-v1/manifest.json",
     "src/championship/presentation/evolutionGlyphArt.js",
-    "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4"
+    "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
+    "src/championship/text/growthStageTerms.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -44956,7 +44958,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "5c2648647383fc108c3aa1a44e7326af8b643a6bb4b66e58292f48ae02e0e721"
+        "sha256": "66c9aa03a194378ed9baf6a01c139664ea4cd5ab1ca4123c767c6873cf3c54c8"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45916,7 +45918,7 @@
       },
       {
         "path": "src/championship/hunt/loadout/huntEquipmentCatalog.js",
-        "sha256": "f98c9a355472c88408706e5cf589d23b8b31fe77b51950a71f4381df146c7870"
+        "sha256": "050381845ddb5b1b16936a539f44612ff76bbd10759b3055a803c0cc84ec3d84"
       },
       {
         "path": "src/championship/hunt/loadout/huntInventory.js",
@@ -45932,7 +45934,7 @@
       },
       {
         "path": "src/championship/hunt/loadout/nativeHuntPluginRules.js",
-        "sha256": "dbd5c2e78cf938c68d56c5448c2ffc630a8a4633fe3aefa629f5c57ff35c8186"
+        "sha256": "20b7e1c6c2b73598bd0b7c552c2640e74914693d41388af92f70c1c06f16bd9d"
       },
       {
         "path": "src/championship/kernel/ChampionshipModeRouter.js",
@@ -46432,23 +46434,23 @@
       },
       {
         "path": "src/championship/text/catalogs.en.js",
-        "sha256": "9dea13fea54a431f32255a22cf5485eee22b76a199f545b3cc8014991f80b09f"
+        "sha256": "305e485ede4c5ae5e3a60bcb7ff9279f26952b411e612f0f0305d2782bda47a7"
       },
       {
         "path": "src/championship/text/catalogs.ja.js",
-        "sha256": "8e382a3efe913b3c80473eb80fd199ffa3e731cc66108bbf4207830ac3772c5a"
+        "sha256": "f507291aea3c0e361e85296f5e569ecb52d7772485c9e2ffccffc1471a2bd62e"
       },
       {
         "path": "src/championship/text/catalogs.th.js",
-        "sha256": "37ee607c6dde9737dc8957d4dfcee8e725418edcacb2a6daefb2c38a95f22bc6"
+        "sha256": "cc154eb75cca08ebb1e6293bd90b04b10c1fc072a7850ff6c3b24049c91b8003"
       },
       {
         "path": "src/championship/text/catalogs.vi.js",
-        "sha256": "3ea0a30e9dd4cd3376cd86839d8c5059dc576d10bf4b876c19906637a8651c47"
+        "sha256": "05e337be09a54608c4365b29888fd5003f439d5a9ca56607f191dc2049574e6d"
       },
       {
         "path": "src/championship/text/catalogs.zhHant.js",
-        "sha256": "6bce5d12eba1c34ad97583ab1296e82d90a8ea59a96d13c5ff3329b2d26c2349"
+        "sha256": "d296908ac4483ceee2f548b4978063d8427b33c5ef5adc158e350c36c5e25af5"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
@@ -46456,19 +46458,19 @@
       },
       {
         "path": "src/championship/text/gameText.en.js",
-        "sha256": "a4ea612e36cf17d1e1e14a48ab697e6a5738a444d7e015151523a6d2e141199f"
+        "sha256": "92d75360661b17404efe78e1ded9eea5dec291f2bde810b0cf79e4c1f4be94f5"
       },
       {
         "path": "src/championship/text/gameText.ja.js",
-        "sha256": "08a60eb963cb7656a4894780e99ad5c0dc32f2ee7b252eab9588d3557a7a18b8"
+        "sha256": "2a339fda766bc54f01ed9601bdbd075c5c9e275291faa3bc0a6c1673fe6936ba"
       },
       {
         "path": "src/championship/text/gameText.th.js",
-        "sha256": "26bc22ed45780f58a5df9e05faf89b6cb04a9f66e1b5b370e316e793bdbddc83"
+        "sha256": "152cfcecd4dab4ae1feed3f3c9114d6a2c3b3a0fea5f9fc4dba3a45c528fd22a"
       },
       {
         "path": "src/championship/text/gameText.vi.js",
-        "sha256": "c45c47a9d19177ee72b4786e2f7a37cccc71f2213738f68d0de0db7d1aadfd17"
+        "sha256": "3eaff823fe8dc07dc61d6f34fdb9128370e67253bf6833bf56119d9f8c112ce6"
       },
       {
         "path": "src/championship/text/interactiveTutorialBattleText.js",
@@ -46536,27 +46538,27 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "6ce76eec26d48e2bdd32d1cdb8907927aef7a9877de9abe9df4a53e642a5ba3c"
+        "sha256": "fb6278ee6ffba17601f1beabb63ad0976060841b02d45f823ea3f3ee78ac736f"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "00f24efd54b997e2cb70340c604d75287cd317dfb9f80b0fb11391ec7f55e4df"
+        "sha256": "28fc194a5ca1918fdaf0f938ce436438f7a68c62614edffcdde81adf1b318f0a"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "7d67e58ea65dbc42dd479a3f612f390e3cf8a23d124110c129c977806b1ee1d6"
+        "sha256": "02997e484f6dee42c0bb9365e982c626ceb89e347872196fa0d02e69d639f1df"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "f8d811b28d211f3fe4cb52a19c6e990b3f324ce41e6fef0996d28a767117d342"
+        "sha256": "dd189eee10cb87153dd59aa3337edd5770ee1536437b6fc8c09ceec56651b54c"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "8359d0496ecc7359776fce026a46a55ff78767eb5593bd97943e98f346193c0e"
+        "sha256": "cfebb6ef68a9c1015f352f7beaa078f420fcfb76b00738a05beb9b0d585cb970"
       },
       {
         "path": "src/championship/text/zhHant.js",
-        "sha256": "67186d26b90fb11b22e097d9e5aac8fa4ed7486b832a65fd70e926c1cc0c7c1d"
+        "sha256": "15cefd629653105e572fd73dfc7457f1c22398978644632b61f167b7c32473a8"
       },
       {
         "path": "src/championship/time/championshipWorldClock.js",
@@ -46905,6 +46907,10 @@
       {
         "path": "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
         "sha256": "30b173920b3ad776aa9fc85949c720715f2d0b6fad6bca2a443ae30686a770ce"
+      },
+      {
+        "path": "src/championship/text/growthStageTerms.js",
+        "sha256": "88176ad7994e0fc7a796605ff7e37b26962755869316839356175ab26aa82ff1"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

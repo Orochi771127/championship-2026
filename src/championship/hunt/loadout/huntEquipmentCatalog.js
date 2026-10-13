@@ -1,3 +1,4 @@
+import { AWAKENED_RADAR_NAMES } from "../../text/growthStageTerms.js";
 // All 79 native Shop identities share the Shop's prices, unlocks and ownership.
 // Functional rules come from ROM readers; display labels are localized prose.
 import shop from "../../../data/championship/catalogs/shop.r1.json" with { type: "json" };
@@ -16,7 +17,7 @@ const LABELS = {
   MINE:["地雷", "大型地雷"], CAPTURE_TRAP:["捕捉陷阱", "強化捕捉陷阱"],
   ANALYZER:["世代分析", "種族分析", "屬性分析", "HP 分析", "性格分析", "容量分析", "世代／種族分析", "世代／種族／屬性分析", "完整分析"],
   CHECKER:["射擊數量", "鋼索數量", "誘引道具數量", "傷害陷阱數量", "全部道具數量"],
-  RADAR_SEARCH:["幼年期雷達", "成長期雷達", "成熟期雷達", "完全體雷達", "資料／自由屬性雷達", "疫苗屬性雷達", "病毒屬性雷達", "龍族雷達", "獸族雷達", "鳥族雷達", "水族雷達", "聖族雷達", "暗黑族雷達", "昆蟲植物雷達", "機械族雷達"],
+  RADAR_SEARCH:["幼年期雷達", "成長期雷達", "成熟期雷達", AWAKENED_RADAR_NAMES['zh-Hant'], "資料／自由屬性雷達", "疫苗屬性雷達", "病毒屬性雷達", "龍族雷達", "獸族雷達", "鳥族雷達", "水族雷達", "聖族雷達", "暗黑族雷達", "昆蟲植物雷達", "機械族雷達"],
   MEMORY_CHECKER:["記憶卡容量顯示"], MEMORY_CARD:["記憶卡 32G", "記憶卡 64G", "記憶卡 96G"]
 };
 

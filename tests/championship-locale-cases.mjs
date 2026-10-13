@@ -11,10 +11,66 @@ import { UI_COPY_JA, TEXT_JA } from "../src/championship/text/uiText.ja.js";
 import { UI_COPY_TH, TEXT_TH } from "../src/championship/text/uiText.th.js";
 import { UI_COPY_VI, TEXT_VI } from "../src/championship/text/uiText.vi.js";
 import { SPECIES_NAMES_ZH } from "../src/championship/text/catalogs.zhHant.js";
-import { battleMenuLabels, cageName, gateName, generationName, helpText, shopItemName, speciesName, starterName, tamerRankName, titleEventText } from "../src/championship/text/zhHant.js";
+import { battleMenuLabels, cageName, gateName, generationName, helpText, shopItemName, shopItemDescription, speciesName, starterName, tamerRankName, titleEventText, raisingDisplayName } from "../src/championship/text/zhHant.js";
+import { AWAKENED_FORM_NAMES, AWAKENED_RADAR_NAMES, GROWTH_STAGE_TERM_REVIEW } from "../src/championship/text/growthStageTerms.js";
+import { nativeHuntAnalyzedFields, nativeHuntRadarMask, nativeHuntRadarMatches } from "../src/championship/hunt/loadout/nativeHuntPluginRules.js";
+import { HUNT_PLUGIN_ITEMS } from "../src/championship/hunt/loadout/huntEquipmentCatalog.js";
 import { raisingMessageSender, raisingMessageText } from "../src/championship/text/raisingMessages.zhHant.js";
 import { tutorialLine, tutorialPrompt } from "../src/championship/text/tutorialMessages.zhHant.js";
 import { buildLocaleCoverage } from "../scripts/check-locale-coverage.mjs";
+
+test('Owner display stage five is Awakened in all five locales; legacy UI keys remain compatible',t=>{
+  t.after(()=>setLocale('zh-Hant'));
+  const names={'zh-Hant':'覺醒體',en:'Awakened',ja:'覚醒体',th:'ร่างตื่นพลัง',vi:'Thức tỉnh'};
+  for(const [locale,name] of Object.entries(names)){
+    setLocale(locale);
+    assert.equal(generationName(5),name);
+    assert.equal(uiText('完全體'),name);
+    assert.equal(uiText('覺醒體'),name);
+    assert.equal(generationName(999),null);
+  }
+});
+
+test('stage copy covers ropes, radar, analyzed fields, help and title restrictions without changing selectors',t=>{
+  t.after(()=>setLocale('zh-Hant'));
+  const radar=HUNT_PLUGIN_ITEMS.find(r=>r.pluginKind==='RADAR_SEARCH'&&r.nativeItemIndex===3);
+  assert.equal(radar.displayName,AWAKENED_RADAR_NAMES['zh-Hant']);
+  assert.equal(radar.capability.nativeRadarIndex,3);
+  assert.equal(nativeHuntRadarMask([3]),8);
+  assert.equal(nativeHuntRadarMatches(137,8),true);
+  const fields=nativeHuntAnalyzedFields({speciesIndex:137,maxHp:345},['GENERATION','HP']);
+  assert.equal(fields.generation,'覺醒體');assert.equal(fields.hp,'345');assert.equal(fields.family,'???');
+  for(const locale of LOCALES){
+    setLocale(locale);const name=AWAKENED_FORM_NAMES[locale];
+    assert.equal(uiText(fields.generation),name);
+    assert.equal(uiText(radar.displayName),AWAKENED_RADAR_NAMES[locale]);
+    assert.equal(uiText('完全體雷達'),AWAKENED_RADAR_NAMES[locale]);
+    for(const record of [13,14,15,70])assert.ok(shopItemDescription(record).toLowerCase().includes(name.toLowerCase()),`${locale} shop ${record}`);
+    const helpStage=['th','vi'].includes(locale)?26:32;
+    assert.equal(helpText(helpStage,'title'),name);
+    for(const record of [10,27])assert.ok(titleEventText(record,'description').toLowerCase().includes(name.toLowerCase()),`${locale} event ${record}`);
+  }
+  assert.equal(GROWTH_STAGE_TERM_REVIEW.nativeSpeakerReview.th,false);
+  assert.equal(GROWTH_STAGE_TERM_REVIEW.nativeSpeakerReview.vi,false);
+});
+
+test('stage aliases never rewrite placeholder names, ordinary perfect adjectives or other stages',t=>{
+  t.after(()=>setLocale('zh-Hant'));
+  const nickname='完全體 PERFECT Perfect Fighter';
+  for(const locale of LOCALES){
+    setLocale(locale);
+    assert.ok(uiText('{name}，查看詳細資料',{name:nickname}).includes(nickname));
+    assert.equal(fillTemplate('{name} / {stage}',{name:nickname,stage:AWAKENED_FORM_NAMES[locale]}),`${nickname} / ${AWAKENED_FORM_NAMES[locale]}`);
+    assert.equal(raisingDisplayName({displayName:nickname,source:{kind:'COLLECTION'}}),nickname);
+    assert.equal(uiText('Perfect Fighter'),'Perfect Fighter');
+    assert.equal(uiText('完全に回復'),'完全に回復');
+    assert.equal(uiText('perfect timing'),'perfect timing');
+  }
+  setLocale('en');assert.equal(generationName(6),'Ultimate');
+  assert.equal(titleEventText(28,'name'),'Perfect Fighter');
+  assert.ok(titleEventText(57,'description').includes('ultimate beauty'));
+  setLocale('ja');assert.equal(generationName(6),'究極体');
+});
 
 function inEnglish(t) {
   setLocale("en");
