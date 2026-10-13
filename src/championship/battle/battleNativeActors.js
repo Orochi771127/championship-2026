@@ -107,6 +107,9 @@ export function createBattleNativeActors({ slots, stands, creatures=[] }) {
         updateCell(actor,entry);
       }
     },
+    // Read-only: which lane made the actor's current sequence selection.
+    animationRequestOf(slot){const r=actors.get(actorOf(slot))?.request;
+      return r?{sequenceRequestId:r.sequenceRequestId,timingEvidence:r.timingEvidence}:null;},
     targetPoint(slot) {const b=box(slot);if(!b)return null;
       const p=memory.readU32(address(slot),0x2c),[x,y,z]=[0,4,8].map(o=>memory.readU32(p,o)|0);
       return launchPosition({x,y,z},cellBoxToLaunchCell(b));},

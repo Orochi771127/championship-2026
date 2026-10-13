@@ -1,5 +1,25 @@
 # Championship Owner Direction
 
+## 2026-10-13 — Special hit on its launch frame: stop the battle-wide freeze
+
+The Owner delegates the fix choice: 「修復方式交由你自行判斷，不限定一定恢復起手動畫。請根據根因，選擇對玩法影響最小、可驗證且不會再次卡死的方案；必要的演出流程調整，我授權你處理並記錄原因。」 They also direct:
+
+- Start from the latest main and keep other people's changes.
+- Do not just swallow the exception or force a result.
+- Avoid double damage, double resource cost, a lingering presentation lock and accidental invincibility.
+- Ask again before any large battle-rule or balance change.
+- Reproduce with a test first, then verify the fix and normal battles.
+- After self-review, commit, push and publish.
+
+- **Root cause:**
+  - An unengaged projectile can hit a special's owner on the launch frame (0210D690 / 0211D7C0).
+  - The owner's hit reaction keeps running in the exclusive branch (0210D534). It replaces the script's pose and ends on a looping idle.
+  - The script waits only on 0211D3A8 → 02047C48. The CPU oracle shows the prelude has no other exit.
+  - The battle then freezes: in the prelude (the timeline throw) or silently in the primary.
+- **Fix (OWNER_APPROVED_ADAPTATION, presentation flow):** while the special holds the owner's +94 lock, a script pose replaced by the owner's own notification lane counts as finished.
+- **Unchanged:** hits, damage, costs, the reaction, the timeline detector and victory rules.
+- **Original behaviour:** the original very likely waits forever too, but this stays PARTIAL until a full-encounter replay confirms it. See [the report](../reports/battle-prelude-hit-softlock-2026-10-13/REPORT_ZH_TW.md).
+
 ## 2026-10-13 — Corner stall: restore the original first, then a bounded improved AI
 
 The Owner reports 「對戰角色被連續打到角落後，長時間停住、不移動也不出招」. They direct:
@@ -18,7 +38,7 @@ The Owner reports 「對戰角色被連續打到角落後，長時間停住、�
 
 - **Original restoration:** a launch whose target was cleared on the same frame is refused by the initialiser, as in ROM 0211C0A0, instead of being refused at allocation. Before this fix the combatant held state 14 behind a looping walk and stood in a corner. See [the root-cause report](../reports/battle-corner-stall-2026-10-13/ROOT_CAUSE_ZH_TW.md).
 - **Original behaviour kept:** the approach dead band in states 4 and 5 (021161F0 / 02116314) is CPU-verified against the ROM and stays unchanged in the original mode.
-- **Not fixed in this batch:** the special-prelude timeline throw, whose root cause is still open.
+- **Not fixed in this batch:** the special-prelude timeline throw, whose root cause was still open (fixed in the later 2026-10-13 entry above).
 - **Improved AI v1 (OWNER_APPROVED_ADAPTATION, separate commit):** when the original rule leaves a standing fighter idle inside the approach dead band for 20 battle frames, it issues the original walk notification toward the original aim point, using the reachable side when the target hugs a wall. It does this at most three times per decision and never in hit, down or recovery states. It draws no RNG. The runtime default stays ORIGINAL; menu battles use IMPROVED_V1, and ?battleAi=original restores the original rule. See [the AI report](../reports/battle-corner-stall-2026-10-13/IMPROVED_AI_V1_ZH_TW.md).
 
 ## 2026-10-12 — Approve move names, rename three characters, publish the remade shared VFX

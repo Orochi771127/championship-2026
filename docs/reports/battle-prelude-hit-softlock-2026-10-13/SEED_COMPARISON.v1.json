@@ -1,0 +1,115 @@
+{
+ "scope": "FIXED_SEED_DIAGNOSTIC_NOT_NORMAL_GAME",
+ "harness": "practice matches from hunt individuals, seeds 1..60, arenas 2 and 7, team picks as in scripts/research/battle-stall-scan.mjs; per-tick hash of clock, HP, SP and engagement",
+ "old": "origin/main b70a7b11",
+ "configs": [
+  {
+   "config": "3v3 ORIGINAL",
+   "battles": 120,
+   "identical": 116,
+   "oldThrows": 2,
+   "newThrows": 0,
+   "oldUnended": 4,
+   "newUnended": 0,
+   "oldLongestHeldClockTicks": 13811,
+   "newLongestHeldClockTicks": 395,
+   "adaptationsFired": 6,
+   "differing": [
+    {
+     "seed": 2,
+     "arena": 2,
+     "old": {
+      "clock": 1228,
+      "verdict": "RUNNING",
+      "err": "BATTLE_RUNTIME_PRELUDE_NATIVE_TIMELINE_MISMATCH",
+      "maxHeld": 391
+     },
+     "new": {
+      "clock": 1630,
+      "verdict": "TEAM_ZERO_AHEAD",
+      "err": null,
+      "maxHeld": 395,
+      "adaptations": 1
+     }
+    },
+    {
+     "seed": 2,
+     "arena": 7,
+     "old": {
+      "clock": 1228,
+      "verdict": "RUNNING",
+      "err": "BATTLE_RUNTIME_PRELUDE_NATIVE_TIMELINE_MISMATCH",
+      "maxHeld": 391
+     },
+     "new": {
+      "clock": 1630,
+      "verdict": "TEAM_ZERO_AHEAD",
+      "err": null,
+      "maxHeld": 395,
+      "adaptations": 1
+     }
+    },
+    {
+     "seed": 5,
+     "arena": 2,
+     "old": {
+      "clock": 1022,
+      "verdict": "RUNNING",
+      "err": null,
+      "maxHeld": 13811
+     },
+     "new": {
+      "clock": 1139,
+      "verdict": "TEAM_ONE_AHEAD",
+      "err": null,
+      "maxHeld": 85,
+      "adaptations": 2
+     }
+    },
+    {
+     "seed": 5,
+     "arena": 7,
+     "old": {
+      "clock": 1022,
+      "verdict": "RUNNING",
+      "err": null,
+      "maxHeld": 13811
+     },
+     "new": {
+      "clock": 1139,
+      "verdict": "TEAM_ONE_AHEAD",
+      "err": null,
+      "maxHeld": 85,
+      "adaptations": 2
+     }
+    }
+   ]
+  },
+  {
+   "config": "3v3 IMPROVED_V1",
+   "battles": 120,
+   "identical": 120,
+   "oldThrows": 0,
+   "newThrows": 0,
+   "oldUnended": 0,
+   "newUnended": 0,
+   "oldLongestHeldClockTicks": 504,
+   "newLongestHeldClockTicks": 504,
+   "adaptationsFired": 0,
+   "differing": []
+  },
+  {
+   "config": "1v1 ORIGINAL",
+   "battles": 120,
+   "identical": 120,
+   "oldThrows": 0,
+   "newThrows": 0,
+   "oldUnended": 0,
+   "newUnended": 0,
+   "oldLongestHeldClockTicks": 308,
+   "newLongestHeldClockTicks": 308,
+   "adaptationsFired": 0,
+   "differing": []
+  }
+ ]
+}

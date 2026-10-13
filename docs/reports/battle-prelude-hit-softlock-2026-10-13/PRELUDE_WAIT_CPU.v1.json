@@ -1,0 +1,110 @@
+{
+  "scope": "ORIGINAL_ARM9_VM_CONTROLLED_ACTOR_ADAPTERS",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "entry": "0x02120900",
+  "boundaries": [
+    "Synthetic geometry and animation completion inputs",
+    "Shows only the script exit condition; not an encounter replay"
+  ],
+  "cases": [
+    {
+      "input": {
+        "zoomInTicks": 15,
+        "poseTicks": 68,
+        "returnTicks": 15,
+        "poseCompletes": true,
+        "frameLimit": 240
+      },
+      "framesExecuted": 85,
+      "activeAfterLastFrame": false,
+      "ownerSequenceRequests": [
+        {
+          "frame": 1,
+          "rawSequence": 33
+        },
+        {
+          "frame": 69,
+          "rawSequence": 8
+        }
+      ],
+      "distinctNativeCallSequencesInLast64Frames": [
+        [
+          "0x0211CE94",
+          "0x0211CE7C",
+          "0x0211D0D4",
+          "0x0211D134"
+        ],
+        [
+          "0x0211CFF4",
+          "0x0211D3A8",
+          "0x0211CFF4",
+          "0x0211CDFC"
+        ],
+        [
+          "0x0211CFF4",
+          "0x0211D3A8",
+          "0x0211CFF4",
+          "0x0211CE5C",
+          "0x0211CFF4",
+          "0x0211D44C",
+          "0x0211E0D4",
+          "0x0211E0D4",
+          "0x0211D54C",
+          "0x0211D2BC",
+          "0x0211D44C",
+          "0x0211CFD8",
+          "0x0211D514",
+          "0x0211CE94",
+          "0x0211CE7C",
+          "0x0211D3C8",
+          "0x0211CFF4",
+          "0x0211D238",
+          "0x0211D298",
+          "0x0211D298",
+          "0x0211D1C4",
+          "0x0211D1A8",
+          "0x0211D3C8",
+          "0x0211D1E0",
+          "0x0211D418",
+          "0x0211CFF4",
+          "0x0211D360",
+          "0x0211CE94",
+          "0x0211CE7C",
+          "0x0211D0D4",
+          "0x0211D134"
+        ],
+        [
+          "0x0211D134",
+          "0x0211D0A4",
+          "0x0211E1F4",
+          "0x0211CEFC"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "zoomInTicks": 15,
+        "poseTicks": 68,
+        "returnTicks": 15,
+        "poseCompletes": false,
+        "frameLimit": 3600
+      },
+      "framesExecuted": 3600,
+      "activeAfterLastFrame": true,
+      "ownerSequenceRequests": [
+        {
+          "frame": 1,
+          "rawSequence": 33
+        }
+      ],
+      "distinctNativeCallSequencesInLast64Frames": [
+        [
+          "0x0211CFF4",
+          "0x0211D3A8",
+          "0x0211CFF4",
+          "0x0211CDFC"
+        ]
+      ]
+    }
+  ]
+}

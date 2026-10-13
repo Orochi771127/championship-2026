@@ -197,6 +197,7 @@ export function createBattleRuntime(options = {}) {
   let impactFlashFrame=-1;
   const timingIssues=new Set();
   const contacts={projectileCalls:0,projectileHits:0,meleeCalls:0,history:[]};
+  const poseWaitAdaptations=[];
   let specialPrelude = null;
 
   function prepareActionLaunch(slot,action){
@@ -267,7 +268,32 @@ export function createBattleRuntime(options = {}) {
         owner:ownerObject,ownerSlot:slot,target:nativeActors.address(targetSlot),point,record:move,
         skipPrelude:state.preludeDone===true,onSupport:()=>applySupportFromLaunch(slot,action,state),
         advanceOwned:object=>effectActors.advanceOwned(object),callNative(routine,args) {
-        const actorResult=nativeActors.call(routine,args);if(actorResult!==undefined)return actorResult;
+        // OWNER_APPROVED_ADAPTATION 2026-10-13. While a special holds the owner's
+        // +94 lock, its scripts wait for the owner's pose through 0211D3A8 ->
+        // 02047C48 (actor+0x7C == 0); 02120900 has no other exit (CPU oracle).
+        // An unengaged projectile may hit the owner on its launch frame
+        // (0210D690 / 0211D7C0), and the owner's hit reaction, which keeps
+        // running in the exclusive branch (0210D534), replaces that pose and
+        // ends on a looping idle that never finishes: the battle waits forever.
+        // A script pose replaced by the owner's own notification lane counts as
+        // finished. Hits, damage, costs and the reaction itself are unchanged.
+        const ownerActor=nativeActors.actorOf(slot);
+        const engaged=args[0]===ownerActor&&slots[slot]?.field94===0x11000000+action.index*0x2000;
+        if(routine===0x02047c48&&engaged&&state.scriptPose!==undefined){
+          const current=nativeActors.animationRequestOf(slot);
+          if(current&&current.sequenceRequestId!==state.scriptPose&&current.timingEvidence==='ROM_NOTIFICATION_UPDATE'){
+            const phase=state.launch?.snapshot().phase??'PRELUDE';
+            if(!state.poseAdapted?.has(phase)){(state.poseAdapted??=new Set()).add(phase);
+              poseWaitAdaptations.push({frame:session.frame,slot,moveId:move.recordIndex,actionIndex:action.index,phase,
+                preludeFrame:specialPrelude?.action===action?specialPrelude.sample.frame:null,
+                reason:'OWNER_POSE_REPLACED_BY_NOTIFICATION',replacedBy:current.timingEvidence,adaptation:'OWNER_APPROVED_ADAPTATION_2026-10-13'});
+              if(poseWaitAdaptations.length>32)poseWaitAdaptations.shift();}
+            return 1;
+          }
+        }
+        const actorResult=nativeActors.call(routine,args);
+        if(engaged&&(routine===0x02047904||routine===0x020479a4))state.scriptPose=nativeActors.animationRequestOf(slot)?.sequenceRequestId;
+        if(actorResult!==undefined)return actorResult;
         const effectResult=effectActors.call(routine,args);if(effectResult!==undefined)return effectResult;
         const soundResult=soundEvents.call(routine,args,session.frame,move.recordIndex);if(soundResult!==undefined)return soundResult;
         const impactResult=impactEffects.call(nativeActors.memory,routine,args);if(impactResult!==undefined)return impactResult;
@@ -682,7 +708,7 @@ export function createBattleRuntime(options = {}) {
           timing:{pause:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f134),slowdown:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f138),issues:[...timingIssues]},
           // No impact has flashed before the first frame (-1 === 0-1 is not a flash).
           flash:{active:!session.ended&&impactFlashFrame>=0&&impactFlashFrame===session.frame-1,frame:impactFlashFrame,source:'0210FC68'},
-          effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history]},reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
+          effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history]},poseWaitAdaptations:poseWaitAdaptations.map(a=>({...a})),reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
       unsubscribe = source.subscribe(() => {
         const view = source.getView();
         for (const observer of [...observers]) {

@@ -2,6 +2,7 @@
 
 Public product names follow [the approved five-language title registry](../src/championship/text/brandTerms.js). Historical report titles and `championship-2026` paths retain their original identifiers; dated “working title” notes do not supersede the approved current names.
 
+- [2026-10-13 特殊招式出手同幀被打中後整場凍結：根因、原作證據與修復](reports/battle-prelude-hit-softlock-2026-10-13/REPORT_ZH_TW.md)
 - [2026-10-13 對戰角落停住：根因、原作證據與最小修復](reports/battle-corner-stall-2026-10-13/ROOT_CAUSE_ZH_TW.md) · [改良 AI v1（Owner 授權改編）](reports/battle-corner-stall-2026-10-13/IMPROVED_AI_V1_ZH_TW.md)
 - [2026-10-12 對戰動態演出：原作比例＋動態鏡頭＋技能與場地互動](reports/battle-dynamic-2026-10-12/REPORT_ZH_TW.md) · [招式名稱盤點與待審候選](reports/battle-move-names-2026-10-12/REVIEW_ZH_TW.md)
 
