@@ -1,5 +1,21 @@
 # Championship 2026 — Technical Debt Register
 
+## Current triage — 2026-10-13
+
+Evidence baseline: `319c90c6ce7cfbdd1543d9544b1537589bf12b54`. This dated triage supersedes the older work queue below, not its historical receipts. This documentation check did not run new gameplay tests.
+
+- **Published; retain regression coverage, do not reimplement:** cleared-target attack recovery (`0dfe96ac`), bounded approach AI (`b70a7b11`), special prelude/primary pose-wait freezes (`2971a18a`), and refused Hunt exit texture disposal, classic HUD alignment, ground-meat sorting and authored-label cleanup (`319c90c6`). See [battle findings](reports/battle-corner-stall-2026-10-13/ROOT_CAUSE_ZH_TW.md), [AI adaptation](reports/battle-corner-stall-2026-10-13/IMPROVED_AI_V1_ZH_TW.md), [special recovery](reports/battle-prelude-hit-softlock-2026-10-13/REPORT_ZH_TW.md), and [capture/UI receipt](reports/capture-raising-recovery-2026-10-13/REPORT_ZH_TW.md).
+- **Open stability blockers:** the Owner's tutorial-battle recording returns to the opening/TITLE around 38 seconds and resumes on Continue around 43 seconds; document/Safari restart cause remains unconfirmed. The original unknown-species capture-to-Home persistent load failure was not fully reproduced. Two large-species capture/save/reload passes do not close all cases. Do not claim OOM or universal recovery.
+- **Open verification debt:** normal New Game through tutorial and ordinary battle, repeated scene changes/load failures, long sessions, broad species coverage, and physical iPhone acceptance. Persistent, bounded local restart diagnostics are in progress; this note does not claim they shipped.
+- **Content/integration gaps, not generic refactoring:** approved-original selection still lacks m528/m540 at this baseline. Both original monkey designs must be retained as separate evolution branches per Owner direction; IDs, conditions and candidate acceptance require reconciliation. Never interpret the earlier OC-220-over-OC-211 name choice as permission to discard either design.
+- **Tamer counters:** the current tamer view documents known original read bindings; durable Web writers/history for remaining map/time values are the gap. Do not invent historical counters.
+- **Superseded blanket obligations:** interactive tutorial now exists; “restore original audio” is not authority to replace Owner-approved original music. Classic is an optional theme, not authority for a wholesale rollback of the current HUD. The toolbar “fixed” row and later “still authored” sentence below describe different historical checks and must not be used as contradictory current instructions.
+- **Needs current reproduction or decision:** remaining palette cleanup, ordinary empty-handed Hunt guidance, cup/round-banner parity and other original-parity observations below. Empty-handed entry was intentional; do not silently auto-equip or block it.
+
+Owner's target is a stable web candidate on **2026-10-27**, not a guaranteed commercial release. Aim to converge major fixes by 2026-10-20 and reserve the final week for regression/device acceptance. Freeze new features; prioritize data safety, blocking flows, loading and tests. Work on valid remaining debt after the current repair batch; no broad architecture/gameplay change merely to empty this register. Rights, full original parity and device acceptance remain separate gates.
+
+## Historical review — 2026-09-11
+
 Reviewed 2026-09-11 against implementation, Claude handoff, original evidence and a real-browser screenshot pass over Raising, Gate, Shop and Database. See [the review](research/CHARACTER_BEHAVIOR_REVIEW_2026-09-11.md). Full character restoration remains open in its stage contract.
 
 Priority = (Impact + Risk) x (6 - Effort), inputs 1–5. Closed items remain recorded to prevent regression.

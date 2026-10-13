@@ -1,5 +1,18 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: STABILITY_TRIAGE_20261013 -->
+## Current acceptance summary — 2026-10-13
+
+The current verified release is `319c90c6ce7cfbdd1543d9544b1537589bf12b54`: [CI](https://github.com/Orochi771127/championship-2026/actions/runs/38361349574) and [Pages](https://github.com/Orochi771127/championship-2026/actions/runs/38361349551) succeeded. The executor verified live build ID `14ecc85322b79dc344ca596b3b4531d4244129bcf8b11bb15aa998f7197fe913` and entry HTML/main-bundle hashes. This does not establish all-device acceptance.
+
+- Corner-stall and special-pose freeze repairs are published; preserve their regression tests rather than redoing them.
+- Capture exit lifecycle, classic HUD, ground-meat sorting, 19 exact authored-label aliases and the English unknown-partner fallback were repaired in this batch. The detailed receipt below preserves test scope.
+- **Still open:** unexplained tutorial-battle return to the opening/TITLE, the Owner's original persistent Home load failure, full normal-flow/long-session and physical Safari acceptance. A diagnostic instrument is not itself a root-cause repair.
+- **Current film is 58 seconds**, integrated in `02cf4fdad343269e7607c48a627f7734ddc6c147`; [runtime manifest](../assets/production/opening-film-ns33-r1/manifest.json) is authoritative. The 48.5-second integration entry below is historical. Its measurements and playback limitations must not be silently transferred to the 58-second file. Full subjective listening and physical-device acceptance of the new film remain unverified here.
+- Stable-web target: **2026-10-27**, with major-fix convergence targeted for 2026-10-20 and final-week regression/device checks. This is conditional on closing blockers, not a guaranteed commercial launch or completion of accounts, payments or live PvP.
+
+Use the [dated technical-debt triage](TECH_DEBT_REGISTER.md#current-triage--2026-10-13) for priorities. The chronological receipts below retain their original dates and evidence boundaries.
+
 <!-- record-id: CAPTURE_RAISING_RECOVERY_20261013 -->
 **2026-10-13 — 已重現 Hunt 退出被拒卻先取消貼圖，完成最小生命週期修正。** 兩個失敗／載入取消回歸與最終 CI 1728／1728、正式 build／validate 9335 檔通過；既有 QA 存檔 species-139／165 正常捕捉→返家→保存退出→重新 Continue。首屏延後 TITLE 圖片、復古 UI 與精確 authored 去品牌小修同批驗證。Owner 錄影約 38 秒教學對戰重新啟動／43 秒 Continue 恢復，仍未定因，不能宣稱本批解決所有 TITLE 重啟或未知舊存檔阻斷；實體 Safari 未驗。見[範圍與證據](reports/capture-raising-recovery-2026-10-13/REPORT_ZH_TW.md)。發布以同 SHA 最終回條為準。
 
