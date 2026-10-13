@@ -191,23 +191,30 @@ let openingFilm = null;
 const titleBackgroundFeedback=document.getElementById('cm-title-background-feedback');
 const titleBackgroundStatus=document.getElementById('cm-title-background-status');
 const titleBackgroundRetry=document.getElementById('cm-title-background-retry');
-const syncTitleImages=createTitleImageLifecycle(titleScreen,{onStateChange(state){
+const syncTitleImages=createTitleImageLifecycle(titleScreen,{onStateChange(state,progress){
   // Keep the action rows still across music buffering, completion and retry.
   const visible=state==='loading'||state==='error'||(state==='paused'&&!titleScreen.hidden);
   titleBackgroundFeedback.style.visibility=visible?'visible':'hidden';
   titleBackgroundFeedback.setAttribute('aria-hidden',String(!visible));
   titleBackgroundRetry.hidden=state!=='error';
   if(visible)setText(titleBackgroundStatus,state==='error'?'TITLE_BACKGROUND_ERROR':'TITLE_BACKGROUND_LOADING');
-}});
+  if(visible&&state==='loading'&&progress?.total)titleBackgroundStatus.textContent+=` (${progress.ready}/${progress.total})`;
+},onSettled:()=>syncTitleArt()});
 setText(titleBackgroundRetry,'TITLE_BACKGROUND_RETRY');
 titleBackgroundRetry.addEventListener('click',()=>syncTitleImages.retry());
 let titleMusicBuffering=false;
-const syncTitleArt=()=>syncTitleImages(titleScreen.hidden||titleMusicBuffering||openingFilm?.isPlaying());
+const syncTitleArt=()=>{
+  syncTitleImages(document.hidden||titleScreen.hidden||titleMusicBuffering||openingFilm?.isPlaying());
+  if(!document.hidden&&!titleScreen.hidden&&openingFilm?.canPreloadTitle())syncTitleImages.warmNext();
+};
 // A BFCache page resumes the same owner; a discarded page releases its cache.
 globalThis.addEventListener('pagehide',event=>{
-  if(event.persisted)syncTitleImages(true);else syncTitleImages.dispose();
+  if(event.persisted)syncTitleImages.suspend();else syncTitleImages.dispose();
 });
 globalThis.addEventListener('pageshow',syncTitleArt);
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden)syncTitleImages.suspend();else syncTitleArt();
+});
 const titleNote = document.getElementById("cm-title-note");
 const newGameButton = document.getElementById("cm-new-game");
 const continueButton = document.getElementById("cm-continue");
@@ -2109,7 +2116,7 @@ function boot() {
   loginButton.disabled=false;
   openingFilm=createOpeningFilm({title:titleScreen,controls:titleScreen.querySelector('.cm-title__controls'),
     login:loginButton,menu:titleActions,opening:document.getElementById('cm-opening'),
-    getPreferences:()=>settings.store.get(),onActiveChange:()=>{syncMusic();syncTitleArt();}});
+    getPreferences:()=>settings.store.get(),onActiveChange:()=>{syncMusic();syncTitleArt();},onBufferChange:syncTitleArt});
   settings.store.subscribe(()=>openingFilm.sync());
   openingFilm.start();
   syncTitleArt();

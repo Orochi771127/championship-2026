@@ -96,7 +96,7 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
     if(failure==='slow')assert.equal((await state(page)).result,'timeout');
     await page.clock.install();await page.clock.runFor(20000);assert.equal((await state(page)).hidden,true);assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
   });
-  await scenario('film pauses unfinished TITLE art and resumes it on return',async(page)=>{
+  await scenario('buffered film warms exactly four TITLE assets and reuses them on return',async(page)=>{
     const attempts=[];
     await page.route('**/title-morning-r1/*.webp',async route=>{
       attempts.push(route.request().url());
@@ -104,15 +104,16 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
       await route.continue().catch(()=>{});
     });
     await boot(page);await playing(page);
-    assert.equal(attempts.length,0,'startup film must not compete with eager TITLE art requests');
-    assert.equal(await page.locator('.cm-title__panel').getAttribute('data-title-background-state'),'paused');
+    await page.waitForFunction(()=>document.querySelector('.cm-title__panel')?.dataset.titleBackgroundState==='ready'&&[...document.querySelectorAll('#cm-title > .cm-title__panel img')].every(i=>i.complete&&i.naturalWidth>0));
+    assert.equal(attempts.length,4);assert.equal(new Set(attempts).size,4);
     const titleImages=page.locator('#cm-title > .cm-title__panel img');
     assert.ok(await titleImages.count()>0);
-    assert.equal(await titleImages.evaluateAll(images=>images.every(image=>!image.hasAttribute('src'))),true);
+    assert.equal(await titleImages.evaluateAll(images=>images.every(image=>image.getAttribute('src').startsWith('blob:'))),true);
     await skip(page);
     assert.equal(await titleImages.evaluateAll(images=>images.every(image=>!!image.getAttribute('src'))),true);
     await page.waitForFunction(()=>document.querySelector('.cm-title__panel')?.dataset.titleBackgroundState==='ready');
     assert.ok(attempts.some(url=>url.endsWith('/arena.webp')));
+    assert.equal(attempts.length,4,'skip must not repeat completed warm requests');
   });
   await scenario('cold startup allows 4.2s delivery; playback stalls still return within 3s',async(page)=>{
     await page.route('**/opening-720p-ef50993b.mp4',async route=>{await new Promise(resolve=>setTimeout(resolve,4200));await route.continue();});

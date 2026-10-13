@@ -14,10 +14,10 @@ test('deferred TITLE pixels remain unrequested during the film and restore immed
  image.complete=false;sync(true);assert.equal(attrs.has('src'),false);
  sync(false);assert.equal(attrs.get('src'),src);sync.dispose();
 });
-function harness(){
+function harness(images=[]){
  const timers=new Map();let nextTimer=0;
  const calls=[],created=[],revoked=[],decodes=[],panel={style:{backgroundImage:''},dataset:{backgroundSrc:'assets/production/title-morning-r1/arena.webp'}};
- const title={hidden:false,ownerDocument:{baseURI:'https://example.test/game/'},querySelectorAll:()=>[],querySelector:()=>panel};
+ const title={hidden:false,ownerDocument:{baseURI:'https://example.test/game/'},querySelectorAll:()=>images,querySelector:()=>panel};
  const sync=createTitleImageLifecycle(title,{setTimer:fn=>{const id=++nextTimer;timers.set(id,fn);return id;},clearTimer:id=>timers.delete(id),fetchImpl:(url,options)=>{const d=deferred();calls.push({url,options,...d});return d.promise;},
   urls:{createObjectURL:blob=>{const url='blob:qa-'+created.length;created.push({url,blob});return url;},revokeObjectURL:url=>revoked.push(url)},
   createImage:()=>{const d=deferred(),image={src:'',decode:()=>d.promise,removeAttribute(){this.src='';}};decodes.push({image,...d});return image;}});
@@ -27,6 +27,58 @@ test('title exclusively owns one background request and aborts it when paused',a
  const h=harness();h.sync(false);h.sync(false);assert.equal(h.calls.length,1);assert.equal(h.calls[0].url,'https://example.test/game/assets/production/title-morning-r1/arena.webp');
  h.sync(true);assert.equal(h.calls[0].options.signal.aborted,true);assert.equal(h.panel.style.backgroundImage,'none');h.sync(true);assert.equal(h.calls.length,1);
  h.sync(false);h.sync(false);assert.equal(h.calls.length,2);h.sync.dispose();assert.equal(h.calls[1].options.signal.aborted,true);
+});
+function titleImage(name){
+ const attrs=new Map();return {dataset:{titleSrc:`assets/production/title-morning-r1/${name}.webp`},complete:false,naturalWidth:0,
+  getAttribute:key=>attrs.get(key)??null,setAttribute:(key,value)=>attrs.set(key,value),removeAttribute:key=>attrs.delete(key)};
+}
+async function complete(h,index){h.calls[index].resolve({ok:true,blob:async()=>({index})});await flush();h.decodes.at(-1).resolve();await flush();}
+test('film warmup owns exactly four TITLE assets with one pending request at a time',async()=>{
+ const images=['logo','blaze','cloud'].map(titleImage),h=harness(images);h.sync(true);
+ for(let i=0;i<4;i++){
+  assert.equal(h.sync.warmNext(),true);
+  for(let j=0;j<10;j++)assert.equal(h.sync.warmNext(),false);
+  assert.equal(h.calls.length,i+1);assert.equal(h.calls[i].options.priority,'low');await complete(h,i);
+ }
+ assert.equal(h.sync.warmNext(),false);assert.equal(h.calls.length,4);h.sync(false);
+ assert.ok(images.every(image=>image.getAttribute('src').startsWith('blob:')));
+ h.sync.dispose();assert.equal(h.revoked.length,4);assert.equal(new Set(h.revoked).size,4);
+});
+test('skip reuses an unfinished warm image; leaving aborts it and ignores late bytes',async()=>{
+ const image=titleImage('logo'),h=harness([image]);h.sync(true);h.sync.warmNext();await complete(h,0);h.sync.warmNext();
+ const body=deferred();h.calls[1].resolve({ok:true,blob:()=>body.promise});await flush();h.sync(false);h.sync(false);
+ assert.equal(h.calls.length,2);assert.equal(image.getAttribute('src'),null);
+ h.title.hidden=true;h.sync(true);assert.equal(h.calls[1].options.signal.aborted,true);
+ body.resolve({late:true});await flush();assert.equal(h.created.length,1);assert.equal(h.revoked.length,1);h.sync.dispose();
+});
+test('warm image timeout can retry once without redownloading the decoded background',async()=>{
+ const image=titleImage('logo'),h=harness([image]);h.sync(true);h.sync.warmNext();await complete(h,0);h.sync.warmNext();h.expire();
+ assert.equal(h.panel.dataset.titleBackgroundState,'error');assert.equal(h.calls[1].options.signal.aborted,true);
+ assert.equal(h.sync.warmNext(),false);assert.equal(h.sync.retry(),true);assert.equal(h.sync.retry(),false);
+ h.sync(false);assert.equal(h.calls.length,3);assert.ok(h.calls[2].url.endsWith('/logo.webp'));await complete(h,2);
+ assert.equal(h.panel.dataset.titleBackgroundState,'ready');h.sync.dispose();assert.equal(h.revoked.length,2);
+});
+test('skip keeps progress visible until normal images load; image errors expose a bounded retry',async()=>{
+ const image=titleImage('logo'),listeners=new Map();image.addEventListener=(key,fn)=>listeners.set(key,fn);image.removeEventListener=key=>listeners.delete(key);
+ const h=harness([image]);h.sync(true);h.sync.warmNext();await complete(h,0);
+ assert.equal(h.panel.dataset.titleBackgroundState,'loading');h.sync(false);await complete(h,1);listeners.get('error')();assert.equal(h.panel.dataset.titleBackgroundState,'error');
+ assert.equal(h.sync.retry(),true);assert.equal(h.calls.length,3);await complete(h,2);assert.equal(h.panel.dataset.titleBackgroundState,'ready');
+ h.sync.dispose();assert.equal(listeners.size,0);
+});
+test('backgrounding cancels warm work and cached TITLE images return without HTTP',async()=>{
+ const image=titleImage('logo'),h=harness([image]);h.sync(true);h.sync.warmNext();h.sync.suspend();
+ assert.equal(h.calls[0].options.signal.aborted,true);h.sync(true);h.sync.warmNext();await complete(h,1);
+ h.sync(true);h.sync.warmNext();await complete(h,2);
+ h.title.hidden=true;h.sync(true);assert.equal(image.getAttribute('src'),null);
+ h.title.hidden=false;h.sync(true);assert.equal(h.calls.length,3);assert.equal(h.created.length,4);
+ for(const decode of h.decodes.slice(2))decode.resolve();await flush();assert.ok(image.getAttribute('src').startsWith('blob:'));
+ h.sync.dispose();assert.equal(h.revoked.length,4);
+});
+test('normal TITLE image failure survives later background completion; paused downloads abort',async()=>{
+ const image=titleImage('logo'),h=harness([image]);h.sync(false);
+ assert.equal(h.calls.length,2);assert.ok(h.calls[0].url.endsWith('/logo.webp'));h.calls[0].resolve({ok:false});await flush();
+ await complete(h,1);assert.equal(h.panel.dataset.titleBackgroundState,'error');assert.equal(h.sync.retry(),true);assert.equal(h.calls.length,3);
+ h.sync(true);assert.equal(h.calls[2].options.signal.aborted,true);h.sync(false);assert.equal(h.calls.length,4);await complete(h,3);assert.equal(h.panel.dataset.titleBackgroundState,'ready');h.sync.dispose();
 });
 
 
