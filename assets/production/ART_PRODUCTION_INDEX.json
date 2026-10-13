@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 38,
+    "registeredRuntimeBundles": 39,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -448,6 +448,19 @@
       "manifestPath": "assets/production/characters/battle-packed-20261013/manifest.json",
       "scope": "Six species only; lossless Main atlas repack, unchanged pixels/motion/geometry; explicit Battle context only",
       "ownerDirection": "Owner authorized six-character lossless Battle atlas integration and publication after exact pixel/frame/runtime validation."
+    },
+    {
+      "assetId": "art:evolution:glyphs:v1",
+      "manifestPath": "assets/production/evolution-glyphs-v1/manifest.json",
+      "runtimeEligible": true,
+      "localOnly": false,
+      "publicReleasePermitted": true,
+      "shippingReady": false,
+      "humanApproved": true,
+      "rightsStatus": "PROJECT_ORIGINAL",
+      "classification": "OWNER_APPROVED_ADAPTATION",
+      "scope": "Four decorative original glyphs; 128px PNG only; existing Raising evolution writing lifetime/frame clock",
+      "ownerDirection": "Owner 2026-10-13 selected dot original glyphs and authorized additive integration/publication; retain all five-language evolution text, rules, actors and existing ticker."
     }
   ]
 }

@@ -354,7 +354,8 @@
     "src/data/championship/r2/fields/fieldInventoryR2.js",
     "src/championship/text/battleMoveNames.js",
     "src/championship/battle/battleAiAdaptation.js",
-    "assets/production/characters/battle-packed-20261013/manifest.json"
+    "assets/production/characters/battle-packed-20261013/manifest.json",
+    "src/championship/presentation/evolutionGlyphArt.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9660,7 +9661,13 @@
     "assets/production/characters/battle-packed-20261013/m529_metalgarurumon_va/main-01.json",
     "assets/production/characters/battle-packed-20261013/m529_metalgarurumon_va/main-01.webp",
     "assets/production/characters/battle-packed-20261013/m529_metalgarurumon_va/runtime.review.json",
-    "assets/production/characters/battle-packed-20261013/manifest.json"
+    "assets/production/characters/battle-packed-20261013/manifest.json",
+    "assets/production/evolution-glyphs-v1/CP-G01-link-128.png",
+    "assets/production/evolution-glyphs-v1/CP-G02-memory-128.png",
+    "assets/production/evolution-glyphs-v1/CP-G03-growth-128.png",
+    "assets/production/evolution-glyphs-v1/CP-G04-evolution-128.png",
+    "assets/production/evolution-glyphs-v1/manifest.json",
+    "src/championship/presentation/evolutionGlyphArt.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -9668,7 +9675,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "b975ed55374ab24db41b1b350446899022a8053510a98eee5542999f800195f5"
+        "sha256": "3dd686fa305b1c5f78907ba05f8bbfd1736d89eafff9f4b26404078d9aca7f8b"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -44948,7 +44955,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "895aaf4a5788e955d71d748335953cb6ad675cb3e053356f1517f8a181dc02d2"
+        "sha256": "1b752087552cf51e5756d7fa9a0662b85d8fecb9cd048a8db204d1afa187ca81"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -46104,7 +46111,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "a1cfb80c2f96ffd54879c915bc4a83075d633801f92297cb2d80ea426829e033"
+        "sha256": "f3c4c8283b6d5ad0957d71b236765e1510f94b59a993f77002ff441340f36935"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
@@ -46720,7 +46727,7 @@
       },
       {
         "path": "src/data/championship/public-playtest.r1.json",
-        "sha256": "23fe350b727f1131552bd73d074e350eed4c2ff5e59818a2f81e89dbb47b6ebb"
+        "sha256": "76d0349b591dd04127123524701ecb791f02ffccd14515f55d95106a23a57d2f"
       },
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
@@ -46869,6 +46876,30 @@
       {
         "path": "assets/production/characters/battle-packed-20261013/manifest.json",
         "sha256": "e8bae357b4c83231982956a6d0d035deb7a7a0883dcee072576aef9aa046fffe"
+      },
+      {
+        "path": "assets/production/evolution-glyphs-v1/CP-G01-link-128.png",
+        "sha256": "7a7120ab07333958371352dc18c45d3949b75a082c39ab28cc88e5eb8a64b574"
+      },
+      {
+        "path": "assets/production/evolution-glyphs-v1/CP-G02-memory-128.png",
+        "sha256": "5399f808e0105066bf56a9a43e4d4317f8eea29b5afc356ffac5b9174e9cf37f"
+      },
+      {
+        "path": "assets/production/evolution-glyphs-v1/CP-G03-growth-128.png",
+        "sha256": "cba3df2594aaa0a11d6e2f1e5cd445092b92b0a50c70e19a7b63d516967e8821"
+      },
+      {
+        "path": "assets/production/evolution-glyphs-v1/CP-G04-evolution-128.png",
+        "sha256": "1ddb2de43e5ef7fbc89c9773debf01d4e6b10f90a81bb23e52ae87ac2aacf106"
+      },
+      {
+        "path": "assets/production/evolution-glyphs-v1/manifest.json",
+        "sha256": "7c43845a410a5bed6eba76fd3fd399bcf508ce1777b514c7e4ccbc0639f476bf"
+      },
+      {
+        "path": "src/championship/presentation/evolutionGlyphArt.js",
+        "sha256": "c39195bac3be5041d6fd0cf640a6fd3938ba020f270a3ef0ea848cb6d7184e41"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

@@ -14,6 +14,7 @@ import { isNativeRanchLayout } from "../../cage/ranchExpansion.js";
 import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
+import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyphArt.js';
 import {EVOLUTION_SYMBOL_REPLACEMENT_TEXT} from '../../text/evolutionPresentationText.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
@@ -158,6 +159,17 @@ export async function mountRaisingFieldPixiPresentation({
   const evolutionWriting=new PIXI.Container();evolutionWriting.eventMode='none';scene.addChildAt(evolutionWriting,5);
   const evolutionWords=Array.from({length:6},(_,i)=>{const word=new PIXI.Text({text:i%2?uiText('進化!!'):'EVOLUTION',style:{fontFamily:'sans-serif',fontSize:16+(i%3)*4,fontWeight:'bold',fill:0x008bff}});evolutionWriting.addChild(word);return word;});
   let evolutionArt = null, evolutionCells = null;
+  let evolutionGlyphArt = null, evolutionGlyphBand = null, evolutionGlyphLoad = null;
+  function ensureEvolutionGlyphs() {
+    if (evolutionGlyphLoad) return;
+    // First evolution only: no glyph pixels are fetched at boot or Home entry.
+    evolutionGlyphLoad = loadEvolutionGlyphArt(PIXI).then(art => {
+      if (disposed || lifetime.signal.aborted) { void art.dispose(); return; }
+      evolutionGlyphArt = art;
+      evolutionGlyphBand = createEvolutionGlyphBand(PIXI, art);
+      evolutionWriting.addChild(evolutionGlyphBand.container);
+    }).catch(error => { if (!disposed && !lifetime.signal.aborted) onFallback(error); });
+  }
   // Decorative evolution cells never block the field. The same lifetime owns
   // pending assets and ignores a success after this scene has been disposed.
   void loadAssembledEvolutionArt(PIXI).then(art => {
@@ -869,6 +881,9 @@ export async function mountRaisingFieldPixiPresentation({
     if(covered){
       evolutionBackdrop.rect(0,0,app.screen.width,app.screen.height).fill(evolutionWriting.visible?0x08163f:0x000000);
       if(evolutionWriting.visible){
+        ensureEvolutionGlyphs();
+        evolutionGlyphBand?.update({width:app.screen.width,height:app.screen.height,
+          totalFrames:activeFrame.totalFrames,reducedMotion:reducedMotion||prefersReducedMotion()});
         for(let i=0;i<5;i++)evolutionBackdrop.rect(0,i*app.screen.height/5,app.screen.width,app.screen.height/15).fill(i%2?0x0c205b:0x102b77);
         evolutionWords.forEach((word,i)=>{word.x=((i*113+activeFrame.totalFrames*(i%2?1:-1))%(app.screen.width+220)+app.screen.width+220)%(app.screen.width+220)-150;word.y=(i+0.5)*app.screen.height/6;});
       }
@@ -1248,6 +1263,7 @@ export async function mountRaisingFieldPixiPresentation({
       void characterBundle?.dispose();
       void feedbackArt?.dispose();
       void evolutionArt?.dispose();
+      void evolutionGlyphArt?.dispose();
       characterBundle = null;
       // The Application belongs to the stage and outlives this scene.
       latestFrame = null;
