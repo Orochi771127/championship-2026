@@ -1485,6 +1485,7 @@ async function mountCurrentScreen() {
     // Multiple publications may queue behind one async mount. Re-check after
     // acquiring it, so a queued HUD update cannot remount the same scene.
     if (target === mountedScreen) return;
+    const returningFromBrowse = [CHAMPIONSHIP_SCREENS.SHOP, CHAMPIONSHIP_SCREENS.DATABASE].includes(mountedScreen);
     view?.dispose?.();
     view = null;
     if (target !== CHAMPIONSHIP_SCREENS.RAISING_HOME) raisingSource = null;
@@ -1563,6 +1564,9 @@ async function mountCurrentScreen() {
     // One attribute every screen carries, whichever view family drew it. The
     // views' own data-screen stays theirs (the status bar also carries one).
     root.dataset.activeScreen = target;
+    if (returningFromBrowse && target === CHAMPIONSHIP_SCREENS.RAISING_HOME && app.getScreen() === target) {
+      document.querySelector('button[data-menu-id="SYSTEM"]')?.focus({preventScroll:true});
+    }
     recoveryDiagnostics.record('SCREEN');
   } finally {
     release();

@@ -1,5 +1,9 @@
 # Championship Owner Direction
 
+## 2026-10-13 — Desktop Shop / Database browse layout
+
+Owner delegates the small desktop layout batch: use horizontal space for the existing Shop list/detail and Database list/detail, retain mobile operation and both modern/classic styles. Scope is layout, readability and navigation/focus only; preserve registration, numbering, story, prices, economy, save and Battle. No new art, runtime, engine or ticker. Use an isolated QA context, check desktop/short desktop/390px phone, resize, five languages, scrolling and return focus. After self-review and tests, commit only this batch, integrate without force or moving Owner's main checkout, push and publish via existing Pages; verify exact-SHA CI/Pages and public bytes. Existing Pages size warnings do not authorize asset deletion or reduced quality. See [batch report](../reports/desktop-browse-2026-10-13/REPORT_ZH_TW.md).
+
 ## 2026-10-13 — Focused capture recovery, startup, classic UI and neutral authored labels
 
 Owner delegated this focused batch after confirming quota reset: 「完成自審後可 commit、push 並發佈」 and 「通過後已授權提交相關檔案、非強制推送main並部署，核對exact SHA的CI/Pages」. Use an isolated worktree and QA context; preserve the user's main, other uncommitted work, AI/special fixes and Antigravity's tutorial asset routing work. Follow-ups include the provided tutorial battle MP4, bounded classic HUD/tool alignment and meat ground-depth corrections, and removal of the confirmed legacy branding from authored UI/error labels while preserving keys, IDs, research and player nicknames.

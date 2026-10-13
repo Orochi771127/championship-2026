@@ -1,5 +1,7 @@
 # Cyber Partner: Tournament / 網線拍檔：錦標賽 — Documentation Hub
 
+- [2026-10-13 桌機商店／圖鑑雙欄、短高配置與焦點驗證](reports/desktop-browse-2026-10-13/REPORT_ZH_TW.md)
+
 - [2026-10-13 捕捉退出資源、首屏與復古 UI 修復；教學對戰重啟仍未定因](reports/capture-raising-recovery-2026-10-13/REPORT_ZH_TW.md)
 
 Public product names follow [the approved five-language title registry](../src/championship/text/brandTerms.js). Historical report titles and `championship-2026` paths retain their original identifiers; dated “working title” notes do not supersede the approved current names.

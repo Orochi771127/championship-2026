@@ -833,6 +833,37 @@
 .cm-vs2-database__detail-title { margin: 0; font-size: var(--fs-title-1); line-height: var(--lh-title-1); font-weight: var(--fw-heavy); }
 .cm-vs2-database__instance { display: grid; gap: 6px; padding: var(--sp-3); border: 1px solid var(--c-line-1); border-radius: var(--r-card); background: var(--c-surface-1); }
 
+/* Owner 2026-10-13: use the existing Shop columns and keep the Database
+   list beside its selected entry. Each pane scrolls beneath fixed chrome. */
+body[data-desktop-browse] .cm-vs2-root[data-screen] .cm-vs2-shell { width: min(100%, 1200px); }
+body[data-desktop-browse] .cm-vs2-root[data-screen] .cm-vs2-shop__body { overflow: hidden; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="SHOP"] .cm-vs2-shop__detail {
+  align-self: stretch;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+body[data-desktop-browse] .cm-vs2-root[data-screen="SHOP"] .cm-vs2-shop__detail-art { min-height: 112px; max-height: 200px; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="SHOP"] .cm-vs2-shop__detail-description { max-height: none; overflow: visible; }
+body[data-desktop-browse] .cm-vs2-root[data-screen] .cm-vs2-shop__list { scrollbar-width: thin; scrollbar-gutter: stable; }
+body[data-desktop-browse] .cm-vs2-root[data-screen] .cm-vs2-shop__list::-webkit-scrollbar { display: block; width: 8px; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="SHOP"] .cm-vs2-shop__name strong { overflow: visible; white-space: normal; overflow-wrap: anywhere; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-shop__body[data-mode="detail"] {
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
+  grid-template-areas: "list detail";
+}
+body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-shop__list { grid-area: list; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row { min-height: 64px; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-shop__body[data-mode="list"] { grid-template-areas: "list"; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail { grid-area: detail; padding: var(--sp-3); overflow-wrap: anywhere; overscroll-behavior: contain; }
+body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-vs2-shop__meta { white-space: normal; }
+body[data-desktop-browse] .cm-vs2-root[data-screen] :is(.cm-vs2-shop__row, .cm-vs2-database__detail-title):focus-visible { outline: 3px solid var(--c-accent); outline-offset: -3px; }
+@media (max-height: 600px) {
+  body[data-desktop-browse] .cm-vs2-root[data-screen] .cm-vs2-header { padding-block: var(--sp-2); }
+  body[data-desktop-browse] .cm-vs2-root[data-screen] .cm-collection-icon { width: 40px; height: 40px; }
+  body[data-desktop-browse] .cm-vs2-root[data-screen] .cm-vs2-footer { padding-top: var(--sp-2); }
+  body[data-desktop-browse] .cm-vs2-root[data-screen="SHOP"] .cm-vs2-shop__detail-art { min-height: 80px; max-height: 112px; }
+}
+
 /* ---- Cage edit: the measured board, then placed facilities and the tray --- */
 .cm-vs2-cage-edit__body { display: grid; grid-auto-rows: max-content; align-content: start; gap: var(--sp-3); min-height: 0; }
 .cm-vs2-cage-rank { gap: 8px; }

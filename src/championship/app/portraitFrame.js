@@ -1,8 +1,11 @@
 // Owner 2026-09-13: landscape displays the existing portrait UI, without
 // rebuilding scenes or changing world coordinates. Owner 2026-10-13 permits
-// the Raising scene alone to use a desktop viewport. This owns layout only.
+// Raising, Shop and Database to use a desktop viewport. This owns layout only.
 export function isDesktopRaisingLayout({width,height,activeScreen,hidden=false}) {
   return width>=1024&&height>=600&&activeScreen==='RAISING_HOME'&&!hidden;
+}
+export function isDesktopBrowseLayout({width,height,activeScreen,hidden=false}) {
+  return width>=1024&&height>=420&&['SHOP','DATABASE'].includes(activeScreen)&&!hidden;
 }
 export function mountPortraitFrame({window:win=globalThis.window,document:doc=globalThis.document}={}) {
   const body=doc.body,visual=win.visualViewport;
@@ -29,8 +32,10 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     if(hasInput&&!inputBaseline)inputBaseline={width,height,sideways:width>height};
     const keyboard=!!inputBaseline&&height<inputBaseline.height;
     const desktop=isDesktopRaisingLayout({width,height,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden});
+    const browse=isDesktopBrowseLayout({width,height,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden});
     body.toggleAttribute('data-desktop-raising',desktop);
-    sideways=!desktop&&(keyboard?inputBaseline.sideways:width>height);
+    body.toggleAttribute('data-desktop-browse',browse);
+    sideways=!desktop&&!browse&&(keyboard?inputBaseline.sideways:width>height);
     if(!hasInput&&!keyboard)inputBaseline=null;
     body.toggleAttribute('data-portrait-frame',sideways);
     if(!sideways){for(const name of properties)body.style.removeProperty(name);revealInput();return;}
@@ -64,6 +69,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     doc.removeEventListener('focusin',update);doc.removeEventListener('focusout',update);
     body.removeAttribute('data-portrait-frame');
     body.removeAttribute('data-desktop-raising');
+    body.removeAttribute('data-desktop-browse');
     observer?.disconnect();
     for(const name of properties)body.style.removeProperty(name);
   }};

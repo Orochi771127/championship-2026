@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isDesktopRaisingLayout, mountPortraitFrame } from '../src/championship/app/portraitFrame.js';
+import { isDesktopRaisingLayout, isDesktopBrowseLayout, mountPortraitFrame } from '../src/championship/app/portraitFrame.js';
 import { raisingFieldViewport, raisingNativeScreenPixels, desktopRaisingViewportWidth, raisingNativeToScreen, raisingScreenToNative } from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
 
 test('desktop Raising alone leaves the portrait frame, based on available dimensions',()=>{
@@ -23,8 +23,20 @@ test('navigation, resize, and disposal release layout attributes and the screen 
  assert.equal(attrs.size,0);
  win.innerWidth=1920;win.innerHeight=1080;win.dispatchEvent(new Event('resize'));
  assert.ok(attrs.has('data-desktop-raising'));
- root.dataset.activeScreen='SHOP';observed();assert.ok(attrs.has('data-portrait-frame'));
+ root.dataset.activeScreen='SHOP';observed();assert.ok(attrs.has('data-desktop-browse'));assert.ok(!attrs.has('data-portrait-frame'));assert.ok(!attrs.has('data-desktop-raising'));
+ root.dataset.activeScreen='DATABASE';observed();assert.ok(attrs.has('data-desktop-browse'));
+ win.innerHeight=480;win.dispatchEvent(new Event('resize'));assert.ok(attrs.has('data-desktop-browse'));
+ root.dataset.activeScreen='BATTLE';observed();assert.ok(attrs.has('data-portrait-frame'));assert.ok(!attrs.has('data-desktop-browse'));
  controller.dispose();controller.dispose();assert.equal(attrs.size,0);assert.equal(styles.size,0);assert.equal(disconnected,true);
+});
+
+test('browse viewport is bounded to visible Shop/Database, including short desktops',()=>{
+ for(const activeScreen of ['SHOP','DATABASE']) {
+  for(const [width,height] of [[1024,420],[1366,480],[1366,768],[1024,1366]])assert.equal(isDesktopBrowseLayout({width,height,activeScreen}),true);
+  for(const [width,height] of [[390,844],[1023,768],[1366,419]])assert.equal(isDesktopBrowseLayout({width,height,activeScreen}),false);
+  assert.equal(isDesktopBrowseLayout({width:1366,height:768,activeScreen,hidden:true}),false);
+ }
+ for(const activeScreen of ['RAISING_HOME','TITLE','BATTLE','HUNT_FIELD','GATE_SELECT'])assert.equal(isDesktopBrowseLayout({width:1366,height:768,activeScreen}),false);
 });
 
 test('desktop widens the same native zoom, caps one ring and round-trips all pointer coordinates',()=>{

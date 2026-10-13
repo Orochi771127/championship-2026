@@ -26,6 +26,8 @@ class Element {
   getAttribute(key) { return this.attributes[key] ?? null; }
   removeAttribute(key) { delete this.attributes[key]; }
   addEventListener(key, listener) { this.listeners[key] = listener; }
+  removeEventListener(key, listener) { if (this.listeners[key] === listener) delete this.listeners[key]; }
+  contains(node) { return node === this || this.children.some(child => child.contains(node)); }
   click() { if (!this.disabled) this.listeners.click?.(); }
   scrollIntoView() {}
   querySelectorAll(selector) {
@@ -42,7 +44,7 @@ class Element {
 
 function useDocument(t) {
   const old = globalThis.document;
-  globalThis.document = { createElement: tag => new Element(tag), activeElement: null };
+  globalThis.document = { createElement: tag => new Element(tag), activeElement: null, documentElement: {lang:'zh-Hant'} };
   t.after(() => { if (old === undefined) delete globalThis.document; else globalThis.document = old; });
   return new Element("main");
 }

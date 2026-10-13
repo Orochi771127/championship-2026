@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: DESKTOP_BROWSE_20261013 -->
+**2026-10-13 desktop Shop / Database browse batch.** The shared portrait controller permits these two existing screens at ≥1024×420; Shop reuses its existing columns and Database keeps the selected entry beside its live list. Mobile keeps the shelf/detail flow; scrolling and keyboard/return focus remain within existing DOM views and router. Local validation and publication are recorded in the [batch report](reports/desktop-browse-2026-10-13/REPORT_ZH_TW.md). This is an Owner-approved presentation adaptation, not new registration/data or physical-device acceptance.
+
 <!-- record-id: STABILITY_TRIAGE_20261013 -->
 ## Current acceptance summary — 2026-10-13
 
