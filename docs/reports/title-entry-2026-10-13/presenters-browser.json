@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "normalUi": true,
+  "physicalDeviceAccepted": false,
+  "checks": [
+    "normal Continue -> deferred Raising, same Pixi canvas",
+    "deferred shop -> Raising",
+    "deferred database -> Raising",
+    "deferred Cage edit -> Raising",
+    "deferred Gate -> Loadout -> Hunt field -> Raising",
+    "deferred Battle select -> actual practice -> Result -> Raising"
+  ],
+  "errors": [],
+  "missing": [],
+  "status": "PASS"
+}

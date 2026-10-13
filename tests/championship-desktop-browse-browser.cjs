@@ -8,7 +8,7 @@ const {login}=require('./championship-browser-opening.cjs');
 const origin='https://orochi771127.github.io',base=origin+'/championship-2026/',key='championshipModernSave:v1';
 const baseline=process.argv.includes('--before');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'.');
-const output=path.resolve('docs/reports/desktop-browse-2026-10-13',baseline?'before':'after');
+const output=path.resolve(process.env.CHAMPIONSHIP_QA_OUTPUT||path.join('docs/reports/desktop-browse-2026-10-13',baseline?'before':'after'));
 const seed=fs.readFileSync('qa/championship-full-qa-save.json','utf8');
 const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.mp4':'video/mp4','.jpg':'image/jpeg','.wav':'audio/wav','.mp3':'audio/mpeg','.woff2':'font/woff2'};
 fs.mkdirSync(output,{recursive:true});

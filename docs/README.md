@@ -1,5 +1,7 @@
 # Cyber Partner: Tournament / 網線拍檔：錦標賽 — Documentation Hub
 
+- [2026-10-13 手機 TITLE 入口冷／熱快取量測與呈現模組延後載入](reports/title-entry-2026-10-13/REPORT_ZH_TW.md)
+
 - [2026-10-13 桌機商店／圖鑑雙欄、短高配置與焦點驗證](reports/desktop-browse-2026-10-13/REPORT_ZH_TW.md)
 
 - [2026-10-13 捕捉退出資源、首屏與復古 UI 修復；教學對戰重啟仍未定因](reports/capture-raising-recovery-2026-10-13/REPORT_ZH_TW.md)

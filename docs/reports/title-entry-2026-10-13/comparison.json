@@ -1,0 +1,48 @@
+{
+  "method": "mean of two paired cold/warm samples per profile; not statistical significance",
+  "beforePublishedCommit": "12c4b61ae3f97d801445de74e373f15704bb039d",
+  "beforeBuildId": "3892e19fae0ebcb3fb7fe0ae1067446fbbb380c7da01097a0f6df6e818227e42",
+  "afterBuildId": "85622a383dcff286c31638bbca4e768f55bd8b09e7f8d6062ce3d13fac10849d",
+  "table": [
+    {
+      "profile": "unthrottled",
+      "cache": "cold",
+      "beforeSkip": 245.60000002384186,
+      "afterSkip": 249.54999995231628,
+      "beforeFrame": 409.80000001192093,
+      "afterFrame": 445.55000001192093,
+      "beforeSkipToTitle": 415.55000001192093,
+      "afterSkipToTitle": 397.44999998807907
+    },
+    {
+      "profile": "unthrottled",
+      "cache": "warm",
+      "beforeSkip": 52.40000003576279,
+      "afterSkip": 53.75,
+      "beforeFrame": 157.25000005960464,
+      "afterFrame": 144.80000001192093,
+      "beforeSkipToTitle": 380.50000005960464,
+      "afterSkipToTitle": 464.64999997615814
+    },
+    {
+      "profile": "mobile-4g",
+      "cache": "cold",
+      "beforeSkip": 2926.350000023842,
+      "afterSkip": 2589.199999988079,
+      "beforeFrame": 3926.649999976158,
+      "afterFrame": 3613.75,
+      "beforeSkipToTitle": 430.30000001192093,
+      "afterSkipToTitle": 462.94999998807907
+    },
+    {
+      "profile": "mobile-4g",
+      "cache": "warm",
+      "beforeSkip": 423.5499999523163,
+      "afterSkip": 428.44999998807907,
+      "beforeFrame": 1040.8499999642372,
+      "afterFrame": 1047.800000011921,
+      "beforeSkipToTitle": 408.1999999284744,
+      "afterSkipToTitle": 411.64999997615814
+    }
+  ]
+}

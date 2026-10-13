@@ -17,14 +17,20 @@ const mime={'.html':'text/html','.js':'text/javascript','.json':'application/jso
    const url=route.request().url();if(!url.startsWith(base)){missing.push('external');await route.abort();return;}
    const relative=decodeURIComponent(new URL(url).pathname.slice(new URL(base).pathname.length)),file=path.resolve(root,relative||'index.html');
    if(!file.startsWith(root+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile()){missing.push(relative);await route.fulfill({status:404,body:'missing QA input'});return;}
-   if(/main-.*\.js$/.test(relative)){
-    let body=fs.readFileSync(file,'utf8');assert.ok(body.includes('app=createChampionshipStandaloneApp('));
-    body=body.replace('app=createChampionshipStandaloneApp(','app=globalThis.__qaApp=createChampionshipStandaloneApp(');
+   if(relative.endsWith('.js')){
+    let body=fs.readFileSync(file,'utf8');
+    if(/main-.*\.js$/.test(relative)){
+     assert.ok(body.includes('app=createChampionshipStandaloneApp('));
+     body=body.replace('app=createChampionshipStandaloneApp(','app=globalThis.__qaApp=createChampionshipStandaloneApp(');
+    }
     const start=body.indexOf('async function mountRaisingFieldPixiPresentation'),end=body.indexOf('function updateAnimations(ticker){',start),prefix=body.slice(start,end);
+    if(start>=0){
+    assert.ok(end>start,'find the presenter in its lazy chunk');
     const view=prefix.match(/(\w+)=Object.freeze\(\{get width\(\)\{return \w+\.screen.width/)[1];
     const cameraX=prefix.match(/\b(cameraX\w*)=0/)[1],cameraY=prefix.match(/\b(cameraY\w*)=0/)[1],actors=prefix.match(/\b(actors\w*)=new Map/)[1];
     const hook=`globalThis.__qaLandscape={stage,source,fieldArt,actors:${actors},getView:()=>${view},getCamera:()=>[${cameraX},${cameraY}],getFit:()=>raisingFieldViewport(fieldArt?.field,${view},12,${cameraX})};`;
     body=body.replace('function updateAnimations(ticker){','function updateAnimations(ticker){'+hook);
+    }
     await route.fulfill({body,contentType:'text/javascript'});return;
    }
    await route.fulfill({path:file,contentType:mime[path.extname(file)]||'application/octet-stream'});

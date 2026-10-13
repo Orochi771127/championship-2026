@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: TITLE_ENTRY_20261013 -->
+**2026-10-13 TITLE entry cost.** The separate batch after desktop browse `12c4b61a` defers only the existing Raising/Gate/Hunt/Shop/Database/Cage/Battle presenters through the existing foreground mounts. Same app/router/save/Pixi/ticker and movie/art bytes; Continue validation and media/music lifecycle are unchanged. See the [controlled cold/warm-cache measurements, regression and publication receipt](reports/title-entry-2026-10-13/REPORT_ZH_TW.md). Synthetic network/CPU measurements do not establish the cause or performance of Owner's physical Chrome phone.
+
 <!-- record-id: DESKTOP_BROWSE_20261013 -->
 **2026-10-13 desktop Shop / Database browse batch.** The shared portrait controller permits these two existing screens at ≥1024×420; Shop reuses its existing columns and Database keeps the selected entry beside its live list. Mobile keeps the shelf/detail flow; scrolling and keyboard/return focus remain within existing DOM views and router. Local validation and publication are recorded in the [batch report](reports/desktop-browse-2026-10-13/REPORT_ZH_TW.md). This is an Owner-approved presentation adaptation, not new registration/data or physical-device acceptance.
 

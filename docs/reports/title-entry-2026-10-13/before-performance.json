@@ -1,0 +1,4474 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-13T21:07:02.627Z",
+  "label": "before",
+  "commit": "892c6d26a63e3c9a94678ad6e8931ad97cd225fc",
+  "buildId": "3892e19fae0ebcb3fb7fe0ae1067446fbbb380c7da01097a0f6df6e818227e42",
+  "physicalDeviceAccepted": false,
+  "compression": "gzip HTTP; synthetic CDP shared throughput and latency",
+  "profiles": [
+    {
+      "name": "unthrottled",
+      "latency": 0,
+      "download": -1,
+      "upload": -1,
+      "cpu": 1
+    },
+    {
+      "name": "mobile-4g",
+      "latency": 150,
+      "download": 500000,
+      "upload": 125000,
+      "cpu": 4
+    }
+  ],
+  "cases": [
+    {
+      "profile": "unthrottled",
+      "sample": 0,
+      "cache": "cold",
+      "marks": {
+        "domReady": 53.10000002384186,
+        "appReady": 301.7000000476837,
+        "skipAvailable": 302.2000000476837,
+        "firstFrame": 571.7000000476837,
+        "skipClick": 651,
+        "titleArtReady": 829.5,
+        "titleOperable": 1114.3000000715256
+      },
+      "skipToTitleMs": 463.3000000715256,
+      "initialJsRequests": 31,
+      "initialJsDecoded": 4148641,
+      "initialJsEncoded": 870331,
+      "initialJsTransfer": 879631,
+      "scriptResponseEnd": 186.60000002384186,
+      "film": {
+        "hidden": false,
+        "state": "playing"
+      },
+      "result": {
+        "trace": {
+          "marks": {
+            "domReady": 53.10000002384186,
+            "appReady": 301.7000000476837,
+            "skipAvailable": 302.2000000476837,
+            "firstFrame": 571.7000000476837,
+            "skipClick": 651,
+            "titleArtReady": 829.5,
+            "titleOperable": 1114.3000000715256
+          },
+          "longTasks": [
+            {
+              "start": 231.60000002384186,
+              "duration": 70
+            }
+          ],
+          "media": [
+            {
+              "event": "waiting",
+              "at": 330.7000000476837
+            },
+            {
+              "event": "loadedmetadata",
+              "at": 368.5
+            },
+            {
+              "event": "loadeddata",
+              "at": 538.1000000238419
+            },
+            {
+              "event": "playing",
+              "at": 540.8000000715256
+            }
+          ]
+        },
+        "resources": [
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+            "start": 15.5,
+            "end": 21.200000047683716,
+            "duration": 5.700000047683716,
+            "encoded": 7492,
+            "decoded": 24418,
+            "transfer": 7792,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+            "start": 15.800000071525574,
+            "end": 28.200000047683716,
+            "duration": 12.399999976158142,
+            "encoded": 12812,
+            "decoded": 62769,
+            "transfer": 13112,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+            "start": 15.899999976158142,
+            "end": 28.5,
+            "duration": 12.600000023841858,
+            "encoded": 345,
+            "decoded": 522,
+            "transfer": 645,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/intRh2Styles.css?v=desktop-raising-20261013",
+            "start": 16,
+            "end": 29,
+            "duration": 13,
+            "encoded": 6193,
+            "decoded": 25723,
+            "transfer": 6493,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs2Styles.css?v=desktop-browse-20261013",
+            "start": 16.100000023841858,
+            "end": 31.600000023841858,
+            "duration": 15.5,
+            "encoded": 11793,
+            "decoded": 58914,
+            "transfer": 12093,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+            "start": 16.200000047683716,
+            "end": 34.10000002384186,
+            "duration": 17.899999976158142,
+            "encoded": 888,
+            "decoded": 2655,
+            "transfer": 1188,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+            "start": 16.300000071525574,
+            "end": 37.10000002384186,
+            "duration": 20.799999952316284,
+            "encoded": 8852,
+            "decoded": 37619,
+            "transfer": 9152,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+            "start": 16.399999976158142,
+            "end": 43.60000002384186,
+            "duration": 27.200000047683716,
+            "encoded": 5941,
+            "decoded": 22756,
+            "transfer": 6241,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+            "start": 16.399999976158142,
+            "end": 45.200000047683716,
+            "duration": 28.800000071525574,
+            "encoded": 2684,
+            "decoded": 8603,
+            "transfer": 2984,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+            "start": 16.5,
+            "end": 47.200000047683716,
+            "duration": 30.700000047683716,
+            "encoded": 4608,
+            "decoded": 20535,
+            "transfer": 4908,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+            "start": 16.5,
+            "end": 50.39999997615814,
+            "duration": 33.89999997615814,
+            "encoded": 20345,
+            "decoded": 119896,
+            "transfer": 20645,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+            "start": 16.600000023841858,
+            "end": 51.89999997615814,
+            "duration": 35.299999952316284,
+            "encoded": 620,
+            "decoded": 1581,
+            "transfer": 920,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/main-5Y3LJEPZ.js",
+            "start": 16.700000047683716,
+            "end": 94.10000002384186,
+            "duration": 77.39999997615814,
+            "encoded": 484112,
+            "decoded": 1936840,
+            "transfer": 484412,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-24MLB3UP.js",
+            "start": 16.899999976158142,
+            "end": 97.60000002384186,
+            "duration": 80.70000004768372,
+            "encoded": 12595,
+            "decoded": 30288,
+            "transfer": 12895,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+            "start": 16.899999976158142,
+            "end": 98.80000007152557,
+            "duration": 81.90000009536743,
+            "encoded": 1890,
+            "decoded": 5835,
+            "transfer": 2190,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+            "start": 16.899999976158142,
+            "end": 100.10000002384186,
+            "duration": 83.20000004768372,
+            "encoded": 966,
+            "decoded": 2833,
+            "transfer": 1266,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+            "start": 17,
+            "end": 117.10000002384186,
+            "duration": 100.10000002384186,
+            "encoded": 76058,
+            "decoded": 952752,
+            "transfer": 76358,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+            "start": 17.100000023841858,
+            "end": 116.80000007152557,
+            "duration": 99.70000004768372,
+            "encoded": 121,
+            "decoded": 128,
+            "transfer": 421,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+            "start": 17.100000023841858,
+            "end": 121.80000007152557,
+            "duration": 104.70000004768372,
+            "encoded": 1587,
+            "decoded": 4594,
+            "transfer": 1887,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7AHIFSAW.js",
+            "start": 17.200000047683716,
+            "end": 126.5,
+            "duration": 109.29999995231628,
+            "encoded": 589,
+            "decoded": 1014,
+            "transfer": 889,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-AMVPJWAU.js",
+            "start": 17.300000071525574,
+            "end": 129,
+            "duration": 111.69999992847443,
+            "encoded": 2711,
+            "decoded": 15955,
+            "transfer": 3011,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+            "start": 17.300000071525574,
+            "end": 128.60000002384186,
+            "duration": 111.29999995231628,
+            "encoded": 15981,
+            "decoded": 94276,
+            "transfer": 16281,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+            "start": 17.399999976158142,
+            "end": 130.20000004768372,
+            "duration": 112.80000007152557,
+            "encoded": 1319,
+            "decoded": 3136,
+            "transfer": 1619,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-EEVOZZRV.js",
+            "start": 17.5,
+            "end": 130.89999997615814,
+            "duration": 113.39999997615814,
+            "encoded": 3895,
+            "decoded": 12129,
+            "transfer": 4195,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-FYGJAFOP.js",
+            "start": 17.600000023841858,
+            "end": 133.30000007152557,
+            "duration": 115.70000004768372,
+            "encoded": 12722,
+            "decoded": 52594,
+            "transfer": 13022,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+            "start": 17.700000047683716,
+            "end": 138.60000002384186,
+            "duration": 120.89999997615814,
+            "encoded": 1098,
+            "decoded": 1753,
+            "transfer": 1398,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-GTZIDLCD.js",
+            "start": 17.700000047683716,
+            "end": 138.5,
+            "duration": 120.79999995231628,
+            "encoded": 9901,
+            "decoded": 84144,
+            "transfer": 10201,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+            "start": 17.800000071525574,
+            "end": 141.10000002384186,
+            "duration": 123.29999995231628,
+            "encoded": 14135,
+            "decoded": 118479,
+            "transfer": 14435,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+            "start": 17.899999976158142,
+            "end": 142.89999997615814,
+            "duration": 125,
+            "encoded": 1630,
+            "decoded": 4534,
+            "transfer": 1930,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+            "start": 18,
+            "end": 143.89999997615814,
+            "duration": 125.89999997615814,
+            "encoded": 1700,
+            "decoded": 5482,
+            "transfer": 2000,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-NUILHAM6.js",
+            "start": 18.100000023841858,
+            "end": 145.20000004768372,
+            "duration": 127.10000002384186,
+            "encoded": 3562,
+            "decoded": 11742,
+            "transfer": 3862,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OUWPREPI.js",
+            "start": 18.200000047683716,
+            "end": 166.20000004768372,
+            "duration": 148,
+            "encoded": 176950,
+            "decoded": 554014,
+            "transfer": 177250,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OVQJWLK4.js",
+            "start": 18.300000071525574,
+            "end": 165,
+            "duration": 146.69999992847443,
+            "encoded": 2626,
+            "decoded": 6398,
+            "transfer": 2926,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+            "start": 18.399999976158142,
+            "end": 166.5,
+            "duration": 148.10000002384186,
+            "encoded": 5561,
+            "decoded": 15262,
+            "transfer": 5861,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+            "start": 18.399999976158142,
+            "end": 167.70000004768372,
+            "duration": 149.30000007152557,
+            "encoded": 6185,
+            "decoded": 38249,
+            "transfer": 6485,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+            "start": 18.600000023841858,
+            "end": 178.10000002384186,
+            "duration": 159.5,
+            "encoded": 2802,
+            "decoded": 6330,
+            "transfer": 3102,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+            "start": 18.600000023841858,
+            "end": 177.20000004768372,
+            "duration": 158.60000002384186,
+            "encoded": 15312,
+            "decoded": 127165,
+            "transfer": 15612,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SG3BYFV6.js",
+            "start": 18.700000047683716,
+            "end": 182.80000007152557,
+            "duration": 164.10000002384186,
+            "encoded": 1206,
+            "decoded": 3168,
+            "transfer": 1506,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+            "start": 18.700000047683716,
+            "end": 183.39999997615814,
+            "duration": 164.69999992847443,
+            "encoded": 365,
+            "decoded": 598,
+            "transfer": 665,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+            "start": 18.800000071525574,
+            "end": 184,
+            "duration": 165.19999992847443,
+            "encoded": 1606,
+            "decoded": 3955,
+            "transfer": 1906,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+            "start": 18.899999976158142,
+            "end": 184.70000004768372,
+            "duration": 165.80000007152557,
+            "encoded": 2259,
+            "decoded": 5353,
+            "transfer": 2559,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+            "start": 19.100000023841858,
+            "end": 185.30000007152557,
+            "duration": 166.20000004768372,
+            "encoded": 1043,
+            "decoded": 2524,
+            "transfer": 1343,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+            "start": 19.200000047683716,
+            "end": 186.60000002384186,
+            "duration": 167.39999997615814,
+            "encoded": 7844,
+            "decoded": 47117,
+            "transfer": 8144,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+            "start": 302.39999997615814,
+            "end": 307.10000002384186,
+            "duration": 4.700000047683716,
+            "encoded": 233617,
+            "decoded": 233617,
+            "transfer": 233917,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+            "start": 329.8000000715256,
+            "end": 734,
+            "duration": 404.1999999284744,
+            "encoded": 0,
+            "decoded": 0,
+            "transfer": 300,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "start": 539.5,
+            "end": 563.7000000476837,
+            "duration": 24.200000047683716,
+            "encoded": 2057534,
+            "decoded": 2057534,
+            "transfer": 2057834,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/logo-zh-Hant.webp",
+            "start": 609.3000000715256,
+            "end": 615.8999999761581,
+            "duration": 6.599999904632568,
+            "encoded": 1393020,
+            "decoded": 1393020,
+            "transfer": 1393320,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/blaze.webp",
+            "start": 746.8999999761581,
+            "end": 756.8999999761581,
+            "duration": 10,
+            "encoded": 1063356,
+            "decoded": 1063356,
+            "transfer": 1063656,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/cloud.webp",
+            "start": 747.1000000238419,
+            "end": 755.2000000476837,
+            "duration": 8.100000023841858,
+            "encoded": 836484,
+            "decoded": 836484,
+            "transfer": 836784,
+            "kind": "fetch"
+          }
+        ],
+        "source": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "music": "{\"cue\":\"login\",\"key\":\"login\",\"playing\":\"login\",\"pending\":null,\"voices\":1,\"slots\":1,\"starts\":1,\"unlocked\":true,\"hidden\":false,\"paused\":false,\"position\":0,\"initialBuffering\":false,\"error\":null}",
+        "save": null
+      },
+      "errors": []
+    },
+    {
+      "profile": "unthrottled",
+      "sample": 0,
+      "cache": "warm",
+      "marks": {
+        "domReady": 21.399999976158142,
+        "appReady": 50.800000071525574,
+        "skipAvailable": 51.39999997615814,
+        "firstFrame": 168.10000002384186,
+        "skipClick": 225.20000004768372,
+        "titleArtReady": 316.2000000476837,
+        "titleOperable": 606.8000000715256
+      },
+      "skipToTitleMs": 381.60000002384186,
+      "initialJsRequests": 31,
+      "initialJsDecoded": 4148641,
+      "initialJsEncoded": 870331,
+      "initialJsTransfer": 0,
+      "scriptResponseEnd": 13.100000023841858,
+      "film": {
+        "hidden": false,
+        "state": "playing"
+      },
+      "result": {
+        "trace": {
+          "marks": {
+            "domReady": 21.399999976158142,
+            "appReady": 50.800000071525574,
+            "skipAvailable": 51.39999997615814,
+            "firstFrame": 168.10000002384186,
+            "skipClick": 225.20000004768372,
+            "titleArtReady": 316.2000000476837,
+            "titleOperable": 606.8000000715256
+          },
+          "longTasks": [],
+          "media": [
+            {
+              "event": "waiting",
+              "at": 62
+            },
+            {
+              "event": "loadedmetadata",
+              "at": 123.5
+            },
+            {
+              "event": "loadeddata",
+              "at": 159.89999997615814
+            },
+            {
+              "event": "playing",
+              "at": 161.30000007152557
+            }
+          ]
+        },
+        "resources": [
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+            "start": 10.100000023841858,
+            "end": 10.100000023841858,
+            "duration": 0,
+            "encoded": 7492,
+            "decoded": 24418,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+            "start": 10.200000047683716,
+            "end": 10.200000047683716,
+            "duration": 0,
+            "encoded": 12812,
+            "decoded": 62769,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+            "start": 10.399999976158142,
+            "end": 10.399999976158142,
+            "duration": 0,
+            "encoded": 345,
+            "decoded": 522,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/intRh2Styles.css?v=desktop-raising-20261013",
+            "start": 10.399999976158142,
+            "end": 10.399999976158142,
+            "duration": 0,
+            "encoded": 6193,
+            "decoded": 25723,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs2Styles.css?v=desktop-browse-20261013",
+            "start": 10.5,
+            "end": 10.5,
+            "duration": 0,
+            "encoded": 11793,
+            "decoded": 58914,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+            "start": 10.600000023841858,
+            "end": 10.600000023841858,
+            "duration": 0,
+            "encoded": 888,
+            "decoded": 2655,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+            "start": 10.700000047683716,
+            "end": 10.700000047683716,
+            "duration": 0,
+            "encoded": 8852,
+            "decoded": 37619,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+            "start": 10.800000071525574,
+            "end": 10.800000071525574,
+            "duration": 0,
+            "encoded": 5941,
+            "decoded": 22756,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+            "start": 10.899999976158142,
+            "end": 10.899999976158142,
+            "duration": 0,
+            "encoded": 2684,
+            "decoded": 8603,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+            "start": 11,
+            "end": 11,
+            "duration": 0,
+            "encoded": 4608,
+            "decoded": 20535,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+            "start": 11,
+            "end": 11,
+            "duration": 0,
+            "encoded": 20345,
+            "decoded": 119896,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+            "start": 11.100000023841858,
+            "end": 11.100000023841858,
+            "duration": 0,
+            "encoded": 620,
+            "decoded": 1581,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/main-5Y3LJEPZ.js",
+            "start": 11.300000071525574,
+            "end": 11.300000071525574,
+            "duration": 0,
+            "encoded": 484112,
+            "decoded": 1936840,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-24MLB3UP.js",
+            "start": 11.399999976158142,
+            "end": 11.399999976158142,
+            "duration": 0,
+            "encoded": 12595,
+            "decoded": 30288,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+            "start": 11.399999976158142,
+            "end": 11.399999976158142,
+            "duration": 0,
+            "encoded": 1890,
+            "decoded": 5835,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+            "start": 11.5,
+            "end": 11.5,
+            "duration": 0,
+            "encoded": 966,
+            "decoded": 2833,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+            "start": 11.600000023841858,
+            "end": 11.600000023841858,
+            "duration": 0,
+            "encoded": 76058,
+            "decoded": 952752,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+            "start": 11.700000047683716,
+            "end": 11.700000047683716,
+            "duration": 0,
+            "encoded": 121,
+            "decoded": 128,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+            "start": 11.700000047683716,
+            "end": 11.700000047683716,
+            "duration": 0,
+            "encoded": 1587,
+            "decoded": 4594,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7AHIFSAW.js",
+            "start": 11.700000047683716,
+            "end": 11.700000047683716,
+            "duration": 0,
+            "encoded": 589,
+            "decoded": 1014,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+            "start": 11.800000071525574,
+            "end": 11.800000071525574,
+            "duration": 0,
+            "encoded": 15981,
+            "decoded": 94276,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-AMVPJWAU.js",
+            "start": 11.899999976158142,
+            "end": 11.899999976158142,
+            "duration": 0,
+            "encoded": 2711,
+            "decoded": 15955,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+            "start": 11.899999976158142,
+            "end": 11.899999976158142,
+            "duration": 0,
+            "encoded": 1319,
+            "decoded": 3136,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-EEVOZZRV.js",
+            "start": 12,
+            "end": 12,
+            "duration": 0,
+            "encoded": 3895,
+            "decoded": 12129,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-FYGJAFOP.js",
+            "start": 12,
+            "end": 12,
+            "duration": 0,
+            "encoded": 12722,
+            "decoded": 52594,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-GTZIDLCD.js",
+            "start": 12.100000023841858,
+            "end": 12.100000023841858,
+            "duration": 0,
+            "encoded": 9901,
+            "decoded": 84144,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+            "start": 12.100000023841858,
+            "end": 12.100000023841858,
+            "duration": 0,
+            "encoded": 1098,
+            "decoded": 1753,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+            "start": 12.200000047683716,
+            "end": 12.200000047683716,
+            "duration": 0,
+            "encoded": 14135,
+            "decoded": 118479,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+            "start": 12.200000047683716,
+            "end": 12.200000047683716,
+            "duration": 0,
+            "encoded": 1630,
+            "decoded": 4534,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+            "start": 12.300000071525574,
+            "end": 12.300000071525574,
+            "duration": 0,
+            "encoded": 1700,
+            "decoded": 5482,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-NUILHAM6.js",
+            "start": 12.399999976158142,
+            "end": 12.399999976158142,
+            "duration": 0,
+            "encoded": 3562,
+            "decoded": 11742,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OUWPREPI.js",
+            "start": 12.5,
+            "end": 12.5,
+            "duration": 0,
+            "encoded": 176950,
+            "decoded": 554014,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OVQJWLK4.js",
+            "start": 12.5,
+            "end": 12.5,
+            "duration": 0,
+            "encoded": 2626,
+            "decoded": 6398,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+            "start": 12.600000023841858,
+            "end": 12.600000023841858,
+            "duration": 0,
+            "encoded": 5561,
+            "decoded": 15262,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+            "start": 12.600000023841858,
+            "end": 12.600000023841858,
+            "duration": 0,
+            "encoded": 6185,
+            "decoded": 38249,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+            "start": 12.700000047683716,
+            "end": 12.700000047683716,
+            "duration": 0,
+            "encoded": 15312,
+            "decoded": 127165,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+            "start": 12.700000047683716,
+            "end": 12.700000047683716,
+            "duration": 0,
+            "encoded": 2802,
+            "decoded": 6330,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SG3BYFV6.js",
+            "start": 12.800000071525574,
+            "end": 12.800000071525574,
+            "duration": 0,
+            "encoded": 1206,
+            "decoded": 3168,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+            "start": 12.800000071525574,
+            "end": 12.800000071525574,
+            "duration": 0,
+            "encoded": 365,
+            "decoded": 598,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+            "start": 12.899999976158142,
+            "end": 12.899999976158142,
+            "duration": 0,
+            "encoded": 1606,
+            "decoded": 3955,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+            "start": 13,
+            "end": 13,
+            "duration": 0,
+            "encoded": 2259,
+            "decoded": 5353,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+            "start": 13,
+            "end": 13,
+            "duration": 0,
+            "encoded": 1043,
+            "decoded": 2524,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+            "start": 13.100000023841858,
+            "end": 13.100000023841858,
+            "duration": 0,
+            "encoded": 7844,
+            "decoded": 47117,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+            "start": 51.700000047683716,
+            "end": 51.700000047683716,
+            "duration": 0,
+            "encoded": 233617,
+            "decoded": 233617,
+            "transfer": 0,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+            "start": 61.5,
+            "end": 245.39999997615814,
+            "duration": 183.89999997615814,
+            "encoded": 0,
+            "decoded": 0,
+            "transfer": 300,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "start": 160.5,
+            "end": 163.10000002384186,
+            "duration": 2.600000023841858,
+            "encoded": 2057534,
+            "decoded": 2057534,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/logo-zh-Hant.webp",
+            "start": 208,
+            "end": 209.20000004768372,
+            "duration": 1.2000000476837158,
+            "encoded": 1393020,
+            "decoded": 1393020,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/blaze.webp",
+            "start": 261.60000002384186,
+            "end": 263.7000000476837,
+            "duration": 2.100000023841858,
+            "encoded": 1063356,
+            "decoded": 1063356,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/cloud.webp",
+            "start": 261.8000000715256,
+            "end": 265,
+            "duration": 3.1999999284744263,
+            "encoded": 836484,
+            "decoded": 836484,
+            "transfer": 0,
+            "kind": "fetch"
+          }
+        ],
+        "source": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "music": "{\"cue\":\"login\",\"key\":\"login\",\"playing\":\"login\",\"pending\":null,\"voices\":1,\"slots\":1,\"starts\":1,\"unlocked\":true,\"hidden\":false,\"paused\":false,\"position\":0,\"initialBuffering\":false,\"error\":null}",
+        "save": null
+      },
+      "errors": []
+    },
+    {
+      "profile": "unthrottled",
+      "sample": 1,
+      "cache": "cold",
+      "marks": {
+        "domReady": 120.69999992847443,
+        "appReady": 188.59999990463257,
+        "skipAvailable": 189,
+        "firstFrame": 247.89999997615814,
+        "skipClick": 334.2999999523163,
+        "titleArtReady": 422,
+        "titleOperable": 702.0999999046326
+      },
+      "skipToTitleMs": 367.7999999523163,
+      "initialJsRequests": 31,
+      "initialJsDecoded": 4148641,
+      "initialJsEncoded": 870331,
+      "initialJsTransfer": 879631,
+      "scriptResponseEnd": 51.299999952316284,
+      "film": {
+        "hidden": false,
+        "state": "playing"
+      },
+      "result": {
+        "trace": {
+          "marks": {
+            "domReady": 120.69999992847443,
+            "appReady": 188.59999990463257,
+            "skipAvailable": 189,
+            "firstFrame": 247.89999997615814,
+            "skipClick": 334.2999999523163,
+            "titleArtReady": 422,
+            "titleOperable": 702.0999999046326
+          },
+          "longTasks": [
+            {
+              "start": 121.29999995231628,
+              "duration": 68
+            }
+          ],
+          "media": [
+            {
+              "event": "waiting",
+              "at": 200.5
+            },
+            {
+              "event": "loadedmetadata",
+              "at": 210.39999997615814
+            },
+            {
+              "event": "loadeddata",
+              "at": 238.69999992847443
+            },
+            {
+              "event": "playing",
+              "at": 241.09999990463257
+            }
+          ]
+        },
+        "resources": [
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+            "start": 12.299999952316284,
+            "end": 15.899999976158142,
+            "duration": 3.600000023841858,
+            "encoded": 7492,
+            "decoded": 24418,
+            "transfer": 7792,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+            "start": 12.699999928474426,
+            "end": 17.59999990463257,
+            "duration": 4.899999976158142,
+            "encoded": 12812,
+            "decoded": 62769,
+            "transfer": 13112,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+            "start": 12.799999952316284,
+            "end": 18,
+            "duration": 5.200000047683716,
+            "encoded": 345,
+            "decoded": 522,
+            "transfer": 645,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/intRh2Styles.css?v=desktop-raising-20261013",
+            "start": 12.799999952316284,
+            "end": 18.299999952316284,
+            "duration": 5.5,
+            "encoded": 6193,
+            "decoded": 25723,
+            "transfer": 6493,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs2Styles.css?v=desktop-browse-20261013",
+            "start": 12.899999976158142,
+            "end": 18.699999928474426,
+            "duration": 5.799999952316284,
+            "encoded": 11793,
+            "decoded": 58914,
+            "transfer": 12093,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+            "start": 12.899999976158142,
+            "end": 21,
+            "duration": 8.100000023841858,
+            "encoded": 888,
+            "decoded": 2655,
+            "transfer": 1188,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+            "start": 12.899999976158142,
+            "end": 21.399999976158142,
+            "duration": 8.5,
+            "encoded": 8852,
+            "decoded": 37619,
+            "transfer": 9152,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+            "start": 13,
+            "end": 21.799999952316284,
+            "duration": 8.799999952316284,
+            "encoded": 5941,
+            "decoded": 22756,
+            "transfer": 6241,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+            "start": 13,
+            "end": 26.399999976158142,
+            "duration": 13.399999976158142,
+            "encoded": 2684,
+            "decoded": 8603,
+            "transfer": 2984,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+            "start": 13.099999904632568,
+            "end": 26.699999928474426,
+            "duration": 13.600000023841858,
+            "encoded": 4608,
+            "decoded": 20535,
+            "transfer": 4908,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+            "start": 13.199999928474426,
+            "end": 27.09999990463257,
+            "duration": 13.899999976158142,
+            "encoded": 20345,
+            "decoded": 119896,
+            "transfer": 20645,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+            "start": 13.199999928474426,
+            "end": 27.5,
+            "duration": 14.300000071525574,
+            "encoded": 620,
+            "decoded": 1581,
+            "transfer": 920,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+            "start": 13.299999952316284,
+            "end": 34.89999997615814,
+            "duration": 21.600000023841858,
+            "encoded": 1890,
+            "decoded": 5835,
+            "transfer": 2190,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-24MLB3UP.js",
+            "start": 13.299999952316284,
+            "end": 28.899999976158142,
+            "duration": 15.600000023841858,
+            "encoded": 12595,
+            "decoded": 30288,
+            "transfer": 12895,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/main-5Y3LJEPZ.js",
+            "start": 13.299999952316284,
+            "end": 32.799999952316284,
+            "duration": 19.5,
+            "encoded": 484112,
+            "decoded": 1936840,
+            "transfer": 484412,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+            "start": 13.5,
+            "end": 35.699999928474426,
+            "duration": 22.199999928474426,
+            "encoded": 121,
+            "decoded": 128,
+            "transfer": 421,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+            "start": 13.5,
+            "end": 34.89999997615814,
+            "duration": 21.399999976158142,
+            "encoded": 966,
+            "decoded": 2833,
+            "transfer": 1266,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+            "start": 13.5,
+            "end": 37.199999928474426,
+            "duration": 23.699999928474426,
+            "encoded": 76058,
+            "decoded": 952752,
+            "transfer": 76358,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+            "start": 13.599999904632568,
+            "end": 36.09999990463257,
+            "duration": 22.5,
+            "encoded": 1587,
+            "decoded": 4594,
+            "transfer": 1887,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7AHIFSAW.js",
+            "start": 13.699999928474426,
+            "end": 36.59999990463257,
+            "duration": 22.899999976158142,
+            "encoded": 589,
+            "decoded": 1014,
+            "transfer": 889,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+            "start": 13.699999928474426,
+            "end": 39.199999928474426,
+            "duration": 25.5,
+            "encoded": 15981,
+            "decoded": 94276,
+            "transfer": 16281,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-AMVPJWAU.js",
+            "start": 13.799999952316284,
+            "end": 39.09999990463257,
+            "duration": 25.299999952316284,
+            "encoded": 2711,
+            "decoded": 15955,
+            "transfer": 3011,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-EEVOZZRV.js",
+            "start": 13.799999952316284,
+            "end": 39.5,
+            "duration": 25.700000047683716,
+            "encoded": 3895,
+            "decoded": 12129,
+            "transfer": 4195,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+            "start": 13.799999952316284,
+            "end": 39.199999928474426,
+            "duration": 25.399999976158142,
+            "encoded": 1319,
+            "decoded": 3136,
+            "transfer": 1619,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-FYGJAFOP.js",
+            "start": 13.899999976158142,
+            "end": 39.799999952316284,
+            "duration": 25.899999976158142,
+            "encoded": 12722,
+            "decoded": 52594,
+            "transfer": 13022,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-GTZIDLCD.js",
+            "start": 14,
+            "end": 41,
+            "duration": 27,
+            "encoded": 9901,
+            "decoded": 84144,
+            "transfer": 10201,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+            "start": 14.199999928474426,
+            "end": 41.5,
+            "duration": 27.300000071525574,
+            "encoded": 1098,
+            "decoded": 1753,
+            "transfer": 1398,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+            "start": 14.299999952316284,
+            "end": 42,
+            "duration": 27.700000047683716,
+            "encoded": 1630,
+            "decoded": 4534,
+            "transfer": 1930,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+            "start": 14.299999952316284,
+            "end": 42,
+            "duration": 27.700000047683716,
+            "encoded": 14135,
+            "decoded": 118479,
+            "transfer": 14435,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+            "start": 14.5,
+            "end": 43.39999997615814,
+            "duration": 28.899999976158142,
+            "encoded": 1700,
+            "decoded": 5482,
+            "transfer": 2000,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-NUILHAM6.js",
+            "start": 14.5,
+            "end": 43.699999928474426,
+            "duration": 29.199999928474426,
+            "encoded": 3562,
+            "decoded": 11742,
+            "transfer": 3862,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OUWPREPI.js",
+            "start": 14.599999904632568,
+            "end": 45.59999990463257,
+            "duration": 31,
+            "encoded": 176950,
+            "decoded": 554014,
+            "transfer": 177250,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OVQJWLK4.js",
+            "start": 14.699999928474426,
+            "end": 44.199999928474426,
+            "duration": 29.5,
+            "encoded": 2626,
+            "decoded": 6398,
+            "transfer": 2926,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+            "start": 14.799999952316284,
+            "end": 44.699999928474426,
+            "duration": 29.899999976158142,
+            "encoded": 5561,
+            "decoded": 15262,
+            "transfer": 5861,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+            "start": 14.899999976158142,
+            "end": 47.199999928474426,
+            "duration": 32.299999952316284,
+            "encoded": 6185,
+            "decoded": 38249,
+            "transfer": 6485,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+            "start": 15,
+            "end": 48.699999928474426,
+            "duration": 33.699999928474426,
+            "encoded": 15312,
+            "decoded": 127165,
+            "transfer": 15612,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+            "start": 15.099999904632568,
+            "end": 48.39999997615814,
+            "duration": 33.300000071525574,
+            "encoded": 2802,
+            "decoded": 6330,
+            "transfer": 3102,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SG3BYFV6.js",
+            "start": 15.199999928474426,
+            "end": 48.799999952316284,
+            "duration": 33.60000002384186,
+            "encoded": 1206,
+            "decoded": 3168,
+            "transfer": 1506,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+            "start": 15.299999952316284,
+            "end": 50.39999997615814,
+            "duration": 35.10000002384186,
+            "encoded": 365,
+            "decoded": 598,
+            "transfer": 665,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+            "start": 15.299999952316284,
+            "end": 50.699999928474426,
+            "duration": 35.39999997615814,
+            "encoded": 2259,
+            "decoded": 5353,
+            "transfer": 2559,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+            "start": 15.299999952316284,
+            "end": 50.699999928474426,
+            "duration": 35.39999997615814,
+            "encoded": 1606,
+            "decoded": 3955,
+            "transfer": 1906,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+            "start": 15.399999976158142,
+            "end": 50.89999997615814,
+            "duration": 35.5,
+            "encoded": 1043,
+            "decoded": 2524,
+            "transfer": 1343,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+            "start": 15.5,
+            "end": 51.299999952316284,
+            "duration": 35.799999952316284,
+            "encoded": 7844,
+            "decoded": 47117,
+            "transfer": 8144,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+            "start": 189.19999992847443,
+            "end": 192.69999992847443,
+            "duration": 3.5,
+            "encoded": 233617,
+            "decoded": 233617,
+            "transfer": 233917,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+            "start": 200.19999992847443,
+            "end": 352.5,
+            "duration": 152.30000007152557,
+            "encoded": 0,
+            "decoded": 0,
+            "transfer": 300,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "start": 240.09999990463257,
+            "end": 253.19999992847443,
+            "duration": 13.100000023841858,
+            "encoded": 2057534,
+            "decoded": 2057534,
+            "transfer": 2057834,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/logo-zh-Hant.webp",
+            "start": 300.39999997615814,
+            "end": 307,
+            "duration": 6.600000023841858,
+            "encoded": 1393020,
+            "decoded": 1393020,
+            "transfer": 1393320,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/blaze.webp",
+            "start": 362.1999999284744,
+            "end": 370.89999997615814,
+            "duration": 8.700000047683716,
+            "encoded": 1063356,
+            "decoded": 1063356,
+            "transfer": 1063656,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/cloud.webp",
+            "start": 362.39999997615814,
+            "end": 370.1999999284744,
+            "duration": 7.799999952316284,
+            "encoded": 836484,
+            "decoded": 836484,
+            "transfer": 836784,
+            "kind": "fetch"
+          }
+        ],
+        "source": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "music": "{\"cue\":\"login\",\"key\":\"login\",\"playing\":\"login\",\"pending\":null,\"voices\":1,\"slots\":1,\"starts\":1,\"unlocked\":true,\"hidden\":false,\"paused\":false,\"position\":0,\"initialBuffering\":false,\"error\":null}",
+        "save": null
+      },
+      "errors": []
+    },
+    {
+      "profile": "unthrottled",
+      "sample": 1,
+      "cache": "warm",
+      "marks": {
+        "domReady": 22.800000071525574,
+        "appReady": 53.10000002384186,
+        "skipAvailable": 53.40000009536743,
+        "firstFrame": 146.40000009536743,
+        "skipClick": 204.5,
+        "titleArtReady": 288.90000009536743,
+        "titleOperable": 583.9000000953674
+      },
+      "skipToTitleMs": 379.40000009536743,
+      "initialJsRequests": 31,
+      "initialJsDecoded": 4148641,
+      "initialJsEncoded": 870331,
+      "initialJsTransfer": 0,
+      "scriptResponseEnd": 14.700000047683716,
+      "film": {
+        "hidden": false,
+        "state": "playing"
+      },
+      "result": {
+        "trace": {
+          "marks": {
+            "domReady": 22.800000071525574,
+            "appReady": 53.10000002384186,
+            "skipAvailable": 53.40000009536743,
+            "firstFrame": 146.40000009536743,
+            "skipClick": 204.5,
+            "titleArtReady": 288.90000009536743,
+            "titleOperable": 583.9000000953674
+          },
+          "longTasks": [],
+          "media": [
+            {
+              "event": "waiting",
+              "at": 64.60000002384186
+            },
+            {
+              "event": "loadedmetadata",
+              "at": 117.5
+            },
+            {
+              "event": "loadeddata",
+              "at": 143.80000007152557
+            },
+            {
+              "event": "playing",
+              "at": 144.90000009536743
+            }
+          ]
+        },
+        "resources": [
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+            "start": 10.300000071525574,
+            "end": 10.300000071525574,
+            "duration": 0,
+            "encoded": 7492,
+            "decoded": 24418,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+            "start": 10.5,
+            "end": 10.5,
+            "duration": 0,
+            "encoded": 12812,
+            "decoded": 62769,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+            "start": 10.600000023841858,
+            "end": 10.600000023841858,
+            "duration": 0,
+            "encoded": 345,
+            "decoded": 522,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/intRh2Styles.css?v=desktop-raising-20261013",
+            "start": 10.700000047683716,
+            "end": 10.700000047683716,
+            "duration": 0,
+            "encoded": 6193,
+            "decoded": 25723,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs2Styles.css?v=desktop-browse-20261013",
+            "start": 10.800000071525574,
+            "end": 10.800000071525574,
+            "duration": 0,
+            "encoded": 11793,
+            "decoded": 58914,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+            "start": 10.800000071525574,
+            "end": 10.800000071525574,
+            "duration": 0,
+            "encoded": 888,
+            "decoded": 2655,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+            "start": 10.900000095367432,
+            "end": 10.900000095367432,
+            "duration": 0,
+            "encoded": 8852,
+            "decoded": 37619,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+            "start": 11.100000023841858,
+            "end": 11.100000023841858,
+            "duration": 0,
+            "encoded": 5941,
+            "decoded": 22756,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+            "start": 11.200000047683716,
+            "end": 11.200000047683716,
+            "duration": 0,
+            "encoded": 2684,
+            "decoded": 8603,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+            "start": 11.200000047683716,
+            "end": 11.200000047683716,
+            "duration": 0,
+            "encoded": 4608,
+            "decoded": 20535,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+            "start": 11.300000071525574,
+            "end": 11.300000071525574,
+            "duration": 0,
+            "encoded": 20345,
+            "decoded": 119896,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+            "start": 11.400000095367432,
+            "end": 11.400000095367432,
+            "duration": 0,
+            "encoded": 620,
+            "decoded": 1581,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/main-5Y3LJEPZ.js",
+            "start": 11.5,
+            "end": 11.5,
+            "duration": 0,
+            "encoded": 484112,
+            "decoded": 1936840,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-24MLB3UP.js",
+            "start": 11.700000047683716,
+            "end": 11.700000047683716,
+            "duration": 0,
+            "encoded": 12595,
+            "decoded": 30288,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+            "start": 11.800000071525574,
+            "end": 11.800000071525574,
+            "duration": 0,
+            "encoded": 1890,
+            "decoded": 5835,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+            "start": 12,
+            "end": 12,
+            "duration": 0,
+            "encoded": 966,
+            "decoded": 2833,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+            "start": 12.100000023841858,
+            "end": 12.100000023841858,
+            "duration": 0,
+            "encoded": 76058,
+            "decoded": 952752,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+            "start": 12.200000047683716,
+            "end": 12.200000047683716,
+            "duration": 0,
+            "encoded": 121,
+            "decoded": 128,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+            "start": 12.300000071525574,
+            "end": 12.300000071525574,
+            "duration": 0,
+            "encoded": 1587,
+            "decoded": 4594,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7AHIFSAW.js",
+            "start": 12.400000095367432,
+            "end": 12.400000095367432,
+            "duration": 0,
+            "encoded": 589,
+            "decoded": 1014,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+            "start": 12.5,
+            "end": 12.5,
+            "duration": 0,
+            "encoded": 15981,
+            "decoded": 94276,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-AMVPJWAU.js",
+            "start": 12.600000023841858,
+            "end": 12.600000023841858,
+            "duration": 0,
+            "encoded": 2711,
+            "decoded": 15955,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+            "start": 12.700000047683716,
+            "end": 12.700000047683716,
+            "duration": 0,
+            "encoded": 1319,
+            "decoded": 3136,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-EEVOZZRV.js",
+            "start": 12.800000071525574,
+            "end": 12.800000071525574,
+            "duration": 0,
+            "encoded": 3895,
+            "decoded": 12129,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-FYGJAFOP.js",
+            "start": 12.900000095367432,
+            "end": 12.900000095367432,
+            "duration": 0,
+            "encoded": 12722,
+            "decoded": 52594,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-GTZIDLCD.js",
+            "start": 13.100000023841858,
+            "end": 13.100000023841858,
+            "duration": 0,
+            "encoded": 9901,
+            "decoded": 84144,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+            "start": 13.200000047683716,
+            "end": 13.200000047683716,
+            "duration": 0,
+            "encoded": 1098,
+            "decoded": 1753,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+            "start": 13.400000095367432,
+            "end": 13.400000095367432,
+            "duration": 0,
+            "encoded": 14135,
+            "decoded": 118479,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+            "start": 13.400000095367432,
+            "end": 13.400000095367432,
+            "duration": 0,
+            "encoded": 1630,
+            "decoded": 4534,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+            "start": 13.600000023841858,
+            "end": 13.600000023841858,
+            "duration": 0,
+            "encoded": 1700,
+            "decoded": 5482,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-NUILHAM6.js",
+            "start": 13.600000023841858,
+            "end": 13.600000023841858,
+            "duration": 0,
+            "encoded": 3562,
+            "decoded": 11742,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OUWPREPI.js",
+            "start": 13.800000071525574,
+            "end": 13.800000071525574,
+            "duration": 0,
+            "encoded": 176950,
+            "decoded": 554014,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OVQJWLK4.js",
+            "start": 13.800000071525574,
+            "end": 13.800000071525574,
+            "duration": 0,
+            "encoded": 2626,
+            "decoded": 6398,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+            "start": 13.900000095367432,
+            "end": 13.900000095367432,
+            "duration": 0,
+            "encoded": 5561,
+            "decoded": 15262,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+            "start": 14.100000023841858,
+            "end": 14.100000023841858,
+            "duration": 0,
+            "encoded": 6185,
+            "decoded": 38249,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+            "start": 14.100000023841858,
+            "end": 14.100000023841858,
+            "duration": 0,
+            "encoded": 15312,
+            "decoded": 127165,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+            "start": 14.200000047683716,
+            "end": 14.200000047683716,
+            "duration": 0,
+            "encoded": 2802,
+            "decoded": 6330,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SG3BYFV6.js",
+            "start": 14.300000071525574,
+            "end": 14.300000071525574,
+            "duration": 0,
+            "encoded": 1206,
+            "decoded": 3168,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+            "start": 14.400000095367432,
+            "end": 14.400000095367432,
+            "duration": 0,
+            "encoded": 365,
+            "decoded": 598,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+            "start": 14.5,
+            "end": 14.5,
+            "duration": 0,
+            "encoded": 1606,
+            "decoded": 3955,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+            "start": 14.600000023841858,
+            "end": 14.600000023841858,
+            "duration": 0,
+            "encoded": 2259,
+            "decoded": 5353,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+            "start": 14.700000047683716,
+            "end": 14.700000047683716,
+            "duration": 0,
+            "encoded": 1043,
+            "decoded": 2524,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+            "start": 14.700000047683716,
+            "end": 14.700000047683716,
+            "duration": 0,
+            "encoded": 7844,
+            "decoded": 47117,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+            "start": 53.700000047683716,
+            "end": 53.700000047683716,
+            "duration": 0,
+            "encoded": 233617,
+            "decoded": 233617,
+            "transfer": 0,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+            "start": 64.30000007152557,
+            "end": 220.5,
+            "duration": 156.19999992847443,
+            "encoded": 0,
+            "decoded": 0,
+            "transfer": 300,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "start": 144.30000007152557,
+            "end": 146,
+            "duration": 1.6999999284744263,
+            "encoded": 2057534,
+            "decoded": 2057534,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/logo-zh-Hant.webp",
+            "start": 194,
+            "end": 195.20000004768372,
+            "duration": 1.2000000476837158,
+            "encoded": 1393020,
+            "decoded": 1393020,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/blaze.webp",
+            "start": 239.20000004768372,
+            "end": 241.20000004768372,
+            "duration": 2,
+            "encoded": 1063356,
+            "decoded": 1063356,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/cloud.webp",
+            "start": 239.5,
+            "end": 242.60000002384186,
+            "duration": 3.100000023841858,
+            "encoded": 836484,
+            "decoded": 836484,
+            "transfer": 0,
+            "kind": "fetch"
+          }
+        ],
+        "source": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "music": "{\"cue\":\"login\",\"key\":\"login\",\"playing\":\"login\",\"pending\":null,\"voices\":1,\"slots\":1,\"starts\":1,\"unlocked\":true,\"hidden\":false,\"paused\":false,\"position\":0,\"initialBuffering\":false,\"error\":null}",
+        "save": null
+      },
+      "errors": []
+    },
+    {
+      "profile": "mobile-4g",
+      "sample": 0,
+      "cache": "cold",
+      "marks": {
+        "domReady": 864.8000000715256,
+        "appReady": 2898.100000023842,
+        "skipAvailable": 2901,
+        "firstFrame": 3899,
+        "skipClick": 3996.4000000953674,
+        "titleOperable": 4449.400000095367,
+        "titleArtReady": 19417.600000023842
+      },
+      "skipToTitleMs": 453,
+      "initialJsRequests": 31,
+      "initialJsDecoded": 4148641,
+      "initialJsEncoded": 870331,
+      "initialJsTransfer": 879631,
+      "scriptResponseEnd": 2572.3000000715256,
+      "film": {
+        "hidden": false,
+        "state": "loading"
+      },
+      "result": {
+        "trace": {
+          "marks": {
+            "domReady": 864.8000000715256,
+            "appReady": 2898.100000023842,
+            "skipAvailable": 2901,
+            "firstFrame": 3899,
+            "skipClick": 3996.4000000953674,
+            "titleOperable": 4449.400000095367,
+            "titleArtReady": 19417.600000023842
+          },
+          "longTasks": [
+            {
+              "start": 2603,
+              "duration": 299
+            }
+          ],
+          "media": [
+            {
+              "event": "waiting",
+              "at": 2919.8000000715256
+            },
+            {
+              "event": "loadedmetadata",
+              "at": 3871.7000000476837
+            }
+          ]
+        },
+        "resources": [
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+            "start": 208.80000007152557,
+            "end": 432.3000000715256,
+            "duration": 223.5,
+            "encoded": 7492,
+            "decoded": 24418,
+            "transfer": 7792,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+            "start": 209.70000004768372,
+            "end": 464.10000002384186,
+            "duration": 254.39999997615814,
+            "encoded": 12812,
+            "decoded": 62769,
+            "transfer": 13112,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+            "start": 210.30000007152557,
+            "end": 385.90000009536743,
+            "duration": 175.60000002384186,
+            "encoded": 345,
+            "decoded": 522,
+            "transfer": 645,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/intRh2Styles.css?v=desktop-raising-20261013",
+            "start": 211,
+            "end": 433.2000000476837,
+            "duration": 222.20000004768372,
+            "encoded": 6193,
+            "decoded": 25723,
+            "transfer": 6493,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs2Styles.css?v=desktop-browse-20261013",
+            "start": 211.40000009536743,
+            "end": 463.90000009536743,
+            "duration": 252.5,
+            "encoded": 11793,
+            "decoded": 58914,
+            "transfer": 12093,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+            "start": 211.80000007152557,
+            "end": 386.2000000476837,
+            "duration": 174.39999997615814,
+            "encoded": 888,
+            "decoded": 2655,
+            "transfer": 1188,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+            "start": 212.20000004768372,
+            "end": 588.3000000715256,
+            "duration": 376.10000002384186,
+            "encoded": 8852,
+            "decoded": 37619,
+            "transfer": 9152,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+            "start": 212.60000002384186,
+            "end": 572.8000000715256,
+            "duration": 360.2000000476837,
+            "encoded": 5941,
+            "decoded": 22756,
+            "transfer": 6241,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+            "start": 213.20000004768372,
+            "end": 604,
+            "duration": 390.7999999523163,
+            "encoded": 2684,
+            "decoded": 8603,
+            "transfer": 2984,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+            "start": 213.60000002384186,
+            "end": 619.8000000715256,
+            "duration": 406.2000000476837,
+            "encoded": 4608,
+            "decoded": 20535,
+            "transfer": 4908,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+            "start": 214.30000007152557,
+            "end": 667.9000000953674,
+            "duration": 453.60000002384186,
+            "encoded": 20345,
+            "decoded": 119896,
+            "transfer": 20645,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+            "start": 214.70000004768372,
+            "end": 636.1000000238419,
+            "duration": 421.39999997615814,
+            "encoded": 620,
+            "decoded": 1581,
+            "transfer": 920,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/main-5Y3LJEPZ.js",
+            "start": 215.30000007152557,
+            "end": 2572.3000000715256,
+            "duration": 2357,
+            "encoded": 484112,
+            "decoded": 1936840,
+            "transfer": 484412,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-24MLB3UP.js",
+            "start": 215.80000007152557,
+            "end": 825.7000000476837,
+            "duration": 609.8999999761581,
+            "encoded": 12595,
+            "decoded": 30288,
+            "transfer": 12895,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+            "start": 216.10000002384186,
+            "end": 778.5,
+            "duration": 562.3999999761581,
+            "encoded": 1890,
+            "decoded": 5835,
+            "transfer": 2190,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+            "start": 216.5,
+            "end": 794.4000000953674,
+            "duration": 577.9000000953674,
+            "encoded": 966,
+            "decoded": 2833,
+            "transfer": 1266,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+            "start": 216.90000009536743,
+            "end": 1187.8000000715256,
+            "duration": 970.8999999761581,
+            "encoded": 76058,
+            "decoded": 952752,
+            "transfer": 76358,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+            "start": 217.10000002384186,
+            "end": 826.3000000715256,
+            "duration": 609.2000000476837,
+            "encoded": 121,
+            "decoded": 128,
+            "transfer": 421,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+            "start": 217.30000007152557,
+            "end": 950.7000000476837,
+            "duration": 733.3999999761581,
+            "encoded": 1587,
+            "decoded": 4594,
+            "transfer": 1887,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7AHIFSAW.js",
+            "start": 217.70000004768372,
+            "end": 966.5,
+            "duration": 748.7999999523163,
+            "encoded": 589,
+            "decoded": 1014,
+            "transfer": 889,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+            "start": 218.40000009536743,
+            "end": 1092.4000000953674,
+            "duration": 874,
+            "encoded": 15981,
+            "decoded": 94276,
+            "transfer": 16281,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-AMVPJWAU.js",
+            "start": 219,
+            "end": 1013.8000000715256,
+            "duration": 794.8000000715256,
+            "encoded": 2711,
+            "decoded": 15955,
+            "transfer": 3011,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+            "start": 219.40000009536743,
+            "end": 1124.7000000476837,
+            "duration": 905.2999999523163,
+            "encoded": 1319,
+            "decoded": 3136,
+            "transfer": 1619,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-EEVOZZRV.js",
+            "start": 220,
+            "end": 1156.5,
+            "duration": 936.5,
+            "encoded": 3895,
+            "decoded": 12129,
+            "transfer": 4195,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-FYGJAFOP.js",
+            "start": 220.80000007152557,
+            "end": 1235.1000000238419,
+            "duration": 1014.2999999523163,
+            "encoded": 12722,
+            "decoded": 52594,
+            "transfer": 13022,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-GTZIDLCD.js",
+            "start": 221.20000004768372,
+            "end": 1297.6000000238419,
+            "duration": 1076.3999999761581,
+            "encoded": 9901,
+            "decoded": 84144,
+            "transfer": 10201,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+            "start": 221.60000002384186,
+            "end": 1282.3000000715256,
+            "duration": 1060.7000000476837,
+            "encoded": 1098,
+            "decoded": 1753,
+            "transfer": 1398,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+            "start": 222,
+            "end": 1376.7000000476837,
+            "duration": 1154.7000000476837,
+            "encoded": 14135,
+            "decoded": 118479,
+            "transfer": 14435,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+            "start": 222.5,
+            "end": 1360.9000000953674,
+            "duration": 1138.4000000953674,
+            "encoded": 1630,
+            "decoded": 4534,
+            "transfer": 1930,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+            "start": 222.80000007152557,
+            "end": 1408,
+            "duration": 1185.1999999284744,
+            "encoded": 1700,
+            "decoded": 5482,
+            "transfer": 2000,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-NUILHAM6.js",
+            "start": 223.30000007152557,
+            "end": 1455.5,
+            "duration": 1232.1999999284744,
+            "encoded": 3562,
+            "decoded": 11742,
+            "transfer": 3862,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OUWPREPI.js",
+            "start": 223.5,
+            "end": 2289.600000023842,
+            "duration": 2066.100000023842,
+            "encoded": 176950,
+            "decoded": 554014,
+            "transfer": 177250,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OVQJWLK4.js",
+            "start": 223.90000009536743,
+            "end": 1534.6000000238419,
+            "duration": 1310.6999999284744,
+            "encoded": 2626,
+            "decoded": 6398,
+            "transfer": 2926,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+            "start": 224.20000004768372,
+            "end": 1565.9000000953674,
+            "duration": 1341.7000000476837,
+            "encoded": 5561,
+            "decoded": 15262,
+            "transfer": 5861,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+            "start": 224.70000004768372,
+            "end": 1612.4000000953674,
+            "duration": 1387.7000000476837,
+            "encoded": 6185,
+            "decoded": 38249,
+            "transfer": 6485,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+            "start": 224.90000009536743,
+            "end": 1722.9000000953674,
+            "duration": 1498,
+            "encoded": 15312,
+            "decoded": 127165,
+            "transfer": 15612,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+            "start": 225.30000007152557,
+            "end": 1723.1000000238419,
+            "duration": 1497.7999999523163,
+            "encoded": 2802,
+            "decoded": 6330,
+            "transfer": 3102,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SG3BYFV6.js",
+            "start": 225.60000002384186,
+            "end": 1723.7000000476837,
+            "duration": 1498.1000000238419,
+            "encoded": 1206,
+            "decoded": 3168,
+            "transfer": 1506,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+            "start": 226.10000002384186,
+            "end": 1786.2000000476837,
+            "duration": 1560.1000000238419,
+            "encoded": 365,
+            "decoded": 598,
+            "transfer": 665,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+            "start": 226.30000007152557,
+            "end": 1911.8000000715256,
+            "duration": 1685.5,
+            "encoded": 1606,
+            "decoded": 3955,
+            "transfer": 1906,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+            "start": 226.70000004768372,
+            "end": 1911.6000000238419,
+            "duration": 1684.8999999761581,
+            "encoded": 2259,
+            "decoded": 5353,
+            "transfer": 2559,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+            "start": 227.10000002384186,
+            "end": 1896,
+            "duration": 1668.8999999761581,
+            "encoded": 1043,
+            "decoded": 2524,
+            "transfer": 1343,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+            "start": 227.30000007152557,
+            "end": 1991.2000000476837,
+            "duration": 1763.8999999761581,
+            "encoded": 7844,
+            "decoded": 47117,
+            "transfer": 8144,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+            "start": 2902.100000023842,
+            "end": 3992.5,
+            "duration": 1090.3999999761581,
+            "encoded": 233617,
+            "decoded": 233617,
+            "transfer": 233917,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+            "start": 2917.3000000715256,
+            "end": 4036.600000023842,
+            "duration": 1119.2999999523163,
+            "encoded": 0,
+            "decoded": 0,
+            "transfer": 300,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/logo-zh-Hant.webp",
+            "start": 4300.300000071526,
+            "end": 16699.100000023842,
+            "duration": 12398.799999952316,
+            "encoded": 1393020,
+            "decoded": 1393020,
+            "transfer": 1393320,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/blaze.webp",
+            "start": 4302.600000023842,
+            "end": 14709.900000095367,
+            "duration": 10407.300000071526,
+            "encoded": 1063356,
+            "decoded": 1063356,
+            "transfer": 1063656,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/cloud.webp",
+            "start": 4304.700000047684,
+            "end": 12862.900000095367,
+            "duration": 8558.200000047684,
+            "encoded": 836484,
+            "decoded": 836484,
+            "transfer": 836784,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "start": 4308.200000047684,
+            "end": 19375.300000071526,
+            "duration": 15067.100000023842,
+            "encoded": 2057534,
+            "decoded": 2057534,
+            "transfer": 2057834,
+            "kind": "fetch"
+          }
+        ],
+        "source": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "music": "{\"cue\":\"login\",\"key\":\"login\",\"playing\":\"login\",\"pending\":null,\"voices\":1,\"slots\":1,\"starts\":1,\"unlocked\":true,\"hidden\":false,\"paused\":false,\"position\":0.01161,\"initialBuffering\":false,\"error\":null}",
+        "save": null
+      },
+      "errors": []
+    },
+    {
+      "profile": "mobile-4g",
+      "sample": 0,
+      "cache": "warm",
+      "marks": {
+        "domReady": 233.10000002384186,
+        "appReady": 403,
+        "skipAvailable": 404.39999997615814,
+        "firstFrame": 1026.5,
+        "skipClick": 1140.6000000238419,
+        "titleOperable": 1541.1999999284744,
+        "titleArtReady": 1561.6999999284744
+      },
+      "skipToTitleMs": 400.59999990463257,
+      "initialJsRequests": 31,
+      "initialJsDecoded": 4148641,
+      "initialJsEncoded": 870331,
+      "initialJsTransfer": 0,
+      "scriptResponseEnd": 202.39999997615814,
+      "film": {
+        "hidden": false,
+        "state": "playing"
+      },
+      "result": {
+        "trace": {
+          "marks": {
+            "domReady": 233.10000002384186,
+            "appReady": 403,
+            "skipAvailable": 404.39999997615814,
+            "firstFrame": 1026.5,
+            "skipClick": 1140.6000000238419,
+            "titleOperable": 1541.1999999284744,
+            "titleArtReady": 1561.6999999284744
+          },
+          "longTasks": [
+            {
+              "start": 282,
+              "duration": 123
+            },
+            {
+              "start": 417.60000002384186,
+              "duration": 144
+            }
+          ],
+          "media": [
+            {
+              "event": "waiting",
+              "at": 417.5
+            },
+            {
+              "event": "loadedmetadata",
+              "at": 991
+            },
+            {
+              "event": "loadeddata",
+              "at": 1081.3999999761581
+            },
+            {
+              "event": "playing",
+              "at": 1084.3999999761581
+            }
+          ]
+        },
+        "resources": [
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+            "start": 188,
+            "end": 188,
+            "duration": 0,
+            "encoded": 7492,
+            "decoded": 24418,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+            "start": 188.29999995231628,
+            "end": 188.29999995231628,
+            "duration": 0,
+            "encoded": 12812,
+            "decoded": 62769,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+            "start": 188.69999992847443,
+            "end": 188.69999992847443,
+            "duration": 0,
+            "encoded": 345,
+            "decoded": 522,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/intRh2Styles.css?v=desktop-raising-20261013",
+            "start": 188.89999997615814,
+            "end": 188.89999997615814,
+            "duration": 0,
+            "encoded": 6193,
+            "decoded": 25723,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs2Styles.css?v=desktop-browse-20261013",
+            "start": 189.29999995231628,
+            "end": 189.29999995231628,
+            "duration": 0,
+            "encoded": 11793,
+            "decoded": 58914,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+            "start": 189.69999992847443,
+            "end": 189.69999992847443,
+            "duration": 0,
+            "encoded": 888,
+            "decoded": 2655,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+            "start": 189.89999997615814,
+            "end": 189.89999997615814,
+            "duration": 0,
+            "encoded": 8852,
+            "decoded": 37619,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+            "start": 190.29999995231628,
+            "end": 190.29999995231628,
+            "duration": 0,
+            "encoded": 5941,
+            "decoded": 22756,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+            "start": 190.5,
+            "end": 190.5,
+            "duration": 0,
+            "encoded": 2684,
+            "decoded": 8603,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+            "start": 190.89999997615814,
+            "end": 190.89999997615814,
+            "duration": 0,
+            "encoded": 4608,
+            "decoded": 20535,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+            "start": 191.29999995231628,
+            "end": 191.29999995231628,
+            "duration": 0,
+            "encoded": 20345,
+            "decoded": 119896,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+            "start": 191.5,
+            "end": 191.5,
+            "duration": 0,
+            "encoded": 620,
+            "decoded": 1581,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/main-5Y3LJEPZ.js",
+            "start": 191.60000002384186,
+            "end": 191.60000002384186,
+            "duration": 0,
+            "encoded": 484112,
+            "decoded": 1936840,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-24MLB3UP.js",
+            "start": 191.79999995231628,
+            "end": 191.79999995231628,
+            "duration": 0,
+            "encoded": 12595,
+            "decoded": 30288,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+            "start": 192.39999997615814,
+            "end": 192.39999997615814,
+            "duration": 0,
+            "encoded": 1890,
+            "decoded": 5835,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+            "start": 192.89999997615814,
+            "end": 192.89999997615814,
+            "duration": 0,
+            "encoded": 966,
+            "decoded": 2833,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+            "start": 193,
+            "end": 193,
+            "duration": 0,
+            "encoded": 76058,
+            "decoded": 952752,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+            "start": 193.5,
+            "end": 193.5,
+            "duration": 0,
+            "encoded": 121,
+            "decoded": 128,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+            "start": 194.29999995231628,
+            "end": 194.29999995231628,
+            "duration": 0,
+            "encoded": 1587,
+            "decoded": 4594,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7AHIFSAW.js",
+            "start": 194.89999997615814,
+            "end": 194.89999997615814,
+            "duration": 0,
+            "encoded": 589,
+            "decoded": 1014,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+            "start": 195.39999997615814,
+            "end": 195.39999997615814,
+            "duration": 0,
+            "encoded": 15981,
+            "decoded": 94276,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-AMVPJWAU.js",
+            "start": 195.60000002384186,
+            "end": 195.60000002384186,
+            "duration": 0,
+            "encoded": 2711,
+            "decoded": 15955,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+            "start": 195.89999997615814,
+            "end": 195.89999997615814,
+            "duration": 0,
+            "encoded": 1319,
+            "decoded": 3136,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-EEVOZZRV.js",
+            "start": 196.19999992847443,
+            "end": 196.19999992847443,
+            "duration": 0,
+            "encoded": 3895,
+            "decoded": 12129,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-FYGJAFOP.js",
+            "start": 196.60000002384186,
+            "end": 196.60000002384186,
+            "duration": 0,
+            "encoded": 12722,
+            "decoded": 52594,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-GTZIDLCD.js",
+            "start": 196.89999997615814,
+            "end": 196.89999997615814,
+            "duration": 0,
+            "encoded": 9901,
+            "decoded": 84144,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+            "start": 197.19999992847443,
+            "end": 197.19999992847443,
+            "duration": 0,
+            "encoded": 1098,
+            "decoded": 1753,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+            "start": 197.60000002384186,
+            "end": 197.60000002384186,
+            "duration": 0,
+            "encoded": 14135,
+            "decoded": 118479,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+            "start": 197.79999995231628,
+            "end": 197.79999995231628,
+            "duration": 0,
+            "encoded": 1630,
+            "decoded": 4534,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+            "start": 198.10000002384186,
+            "end": 198.10000002384186,
+            "duration": 0,
+            "encoded": 1700,
+            "decoded": 5482,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-NUILHAM6.js",
+            "start": 198.5,
+            "end": 198.5,
+            "duration": 0,
+            "encoded": 3562,
+            "decoded": 11742,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OUWPREPI.js",
+            "start": 199,
+            "end": 199,
+            "duration": 0,
+            "encoded": 176950,
+            "decoded": 554014,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OVQJWLK4.js",
+            "start": 199.29999995231628,
+            "end": 199.29999995231628,
+            "duration": 0,
+            "encoded": 2626,
+            "decoded": 6398,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+            "start": 199.60000002384186,
+            "end": 199.60000002384186,
+            "duration": 0,
+            "encoded": 5561,
+            "decoded": 15262,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+            "start": 200,
+            "end": 200,
+            "duration": 0,
+            "encoded": 6185,
+            "decoded": 38249,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+            "start": 200.19999992847443,
+            "end": 200.19999992847443,
+            "duration": 0,
+            "encoded": 15312,
+            "decoded": 127165,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+            "start": 200.60000002384186,
+            "end": 200.60000002384186,
+            "duration": 0,
+            "encoded": 2802,
+            "decoded": 6330,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SG3BYFV6.js",
+            "start": 200.79999995231628,
+            "end": 200.79999995231628,
+            "duration": 0,
+            "encoded": 1206,
+            "decoded": 3168,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+            "start": 201.19999992847443,
+            "end": 201.19999992847443,
+            "duration": 0,
+            "encoded": 365,
+            "decoded": 598,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+            "start": 201.39999997615814,
+            "end": 201.39999997615814,
+            "duration": 0,
+            "encoded": 1606,
+            "decoded": 3955,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+            "start": 201.79999995231628,
+            "end": 201.79999995231628,
+            "duration": 0,
+            "encoded": 2259,
+            "decoded": 5353,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+            "start": 202.19999992847443,
+            "end": 202.19999992847443,
+            "duration": 0,
+            "encoded": 1043,
+            "decoded": 2524,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+            "start": 202.39999997615814,
+            "end": 202.39999997615814,
+            "duration": 0,
+            "encoded": 7844,
+            "decoded": 47117,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+            "start": 405.10000002384186,
+            "end": 405.10000002384186,
+            "duration": 0,
+            "encoded": 233617,
+            "decoded": 233617,
+            "transfer": 0,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+            "start": 416.10000002384186,
+            "end": 1172.8999999761581,
+            "duration": 756.7999999523163,
+            "encoded": 0,
+            "decoded": 0,
+            "transfer": 300,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/logo-zh-Hant.webp",
+            "start": 1427,
+            "end": 1428.3999999761581,
+            "duration": 1.399999976158142,
+            "encoded": 1393020,
+            "decoded": 1393020,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/blaze.webp",
+            "start": 1428.3999999761581,
+            "end": 1429.2999999523163,
+            "duration": 0.8999999761581421,
+            "encoded": 1063356,
+            "decoded": 1063356,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/cloud.webp",
+            "start": 1429.5,
+            "end": 1430.6000000238419,
+            "duration": 1.100000023841858,
+            "encoded": 836484,
+            "decoded": 836484,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "start": 1430.6000000238419,
+            "end": 1432.1000000238419,
+            "duration": 1.5,
+            "encoded": 2057534,
+            "decoded": 2057534,
+            "transfer": 0,
+            "kind": "fetch"
+          }
+        ],
+        "source": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "music": "{\"cue\":\"login\",\"key\":\"login\",\"playing\":\"login\",\"pending\":null,\"voices\":1,\"slots\":1,\"starts\":1,\"unlocked\":true,\"hidden\":false,\"paused\":false,\"position\":0,\"initialBuffering\":false,\"error\":null}",
+        "save": null
+      },
+      "errors": []
+    },
+    {
+      "profile": "mobile-4g",
+      "sample": 1,
+      "cache": "cold",
+      "marks": {
+        "domReady": 894.6000000238419,
+        "appReady": 2949.7000000476837,
+        "skipAvailable": 2951.7000000476837,
+        "firstFrame": 3954.2999999523163,
+        "skipClick": 4061,
+        "titleOperable": 4468.600000023842,
+        "titleArtReady": 19433.100000023842
+      },
+      "skipToTitleMs": 407.60000002384186,
+      "initialJsRequests": 31,
+      "initialJsDecoded": 4148641,
+      "initialJsEncoded": 870331,
+      "initialJsTransfer": 879631,
+      "scriptResponseEnd": 2598.600000023842,
+      "film": {
+        "hidden": false,
+        "state": "loading"
+      },
+      "result": {
+        "trace": {
+          "marks": {
+            "domReady": 894.6000000238419,
+            "appReady": 2949.7000000476837,
+            "skipAvailable": 2951.7000000476837,
+            "firstFrame": 3954.2999999523163,
+            "skipClick": 4061,
+            "titleOperable": 4468.600000023842,
+            "titleArtReady": 19433.100000023842
+          },
+          "longTasks": [
+            {
+              "start": 2640.2000000476837,
+              "duration": 312
+            }
+          ],
+          "media": [
+            {
+              "event": "waiting",
+              "at": 2967.2000000476837
+            },
+            {
+              "event": "loadedmetadata",
+              "at": 3916.899999976158
+            },
+            {
+              "event": "loadeddata",
+              "at": 4046.100000023842
+            },
+            {
+              "event": "playing",
+              "at": 4049.100000023842
+            }
+          ]
+        },
+        "resources": [
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+            "start": 210.70000004768372,
+            "end": 432.60000002384186,
+            "duration": 221.89999997615814,
+            "encoded": 7492,
+            "decoded": 24418,
+            "transfer": 7792,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+            "start": 211.70000004768372,
+            "end": 463.7000000476837,
+            "duration": 252,
+            "encoded": 12812,
+            "decoded": 62769,
+            "transfer": 13112,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+            "start": 212.29999995231628,
+            "end": 387,
+            "duration": 174.70000004768372,
+            "encoded": 345,
+            "decoded": 522,
+            "transfer": 645,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/intRh2Styles.css?v=desktop-raising-20261013",
+            "start": 212.79999995231628,
+            "end": 440.2000000476837,
+            "duration": 227.40000009536743,
+            "encoded": 6193,
+            "decoded": 25723,
+            "transfer": 6493,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs2Styles.css?v=desktop-browse-20261013",
+            "start": 213.10000002384186,
+            "end": 464.2000000476837,
+            "duration": 251.10000002384186,
+            "encoded": 11793,
+            "decoded": 58914,
+            "transfer": 12093,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+            "start": 213.70000004768372,
+            "end": 387.10000002384186,
+            "duration": 173.39999997615814,
+            "encoded": 888,
+            "decoded": 2655,
+            "transfer": 1188,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+            "start": 214.10000002384186,
+            "end": 590.5,
+            "duration": 376.39999997615814,
+            "encoded": 8852,
+            "decoded": 37619,
+            "transfer": 9152,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+            "start": 214.60000002384186,
+            "end": 574.6000000238419,
+            "duration": 360,
+            "encoded": 5941,
+            "decoded": 22756,
+            "transfer": 6241,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+            "start": 215,
+            "end": 606.8999999761581,
+            "duration": 391.89999997615814,
+            "encoded": 2684,
+            "decoded": 8603,
+            "transfer": 2984,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+            "start": 215.20000004768372,
+            "end": 622.5,
+            "duration": 407.2999999523163,
+            "encoded": 4608,
+            "decoded": 20535,
+            "transfer": 4908,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+            "start": 215.60000002384186,
+            "end": 685.6000000238419,
+            "duration": 470,
+            "encoded": 20345,
+            "decoded": 119896,
+            "transfer": 20645,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+            "start": 216,
+            "end": 638.7999999523163,
+            "duration": 422.7999999523163,
+            "encoded": 620,
+            "decoded": 1581,
+            "transfer": 920,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/main-5Y3LJEPZ.js",
+            "start": 216.39999997615814,
+            "end": 2598.600000023842,
+            "duration": 2382.2000000476837,
+            "encoded": 484112,
+            "decoded": 1936840,
+            "transfer": 484412,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-24MLB3UP.js",
+            "start": 216.79999995231628,
+            "end": 825.8999999761581,
+            "duration": 609.1000000238419,
+            "encoded": 12595,
+            "decoded": 30288,
+            "transfer": 12895,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+            "start": 217.20000004768372,
+            "end": 780.1000000238419,
+            "duration": 562.8999999761581,
+            "encoded": 1890,
+            "decoded": 5835,
+            "transfer": 2190,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+            "start": 217.5,
+            "end": 795.5,
+            "duration": 578,
+            "encoded": 966,
+            "decoded": 2833,
+            "transfer": 1266,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+            "start": 217.79999995231628,
+            "end": 1187.1000000238419,
+            "duration": 969.3000000715256,
+            "encoded": 76058,
+            "decoded": 952752,
+            "transfer": 76358,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+            "start": 218,
+            "end": 858.1000000238419,
+            "duration": 640.1000000238419,
+            "encoded": 121,
+            "decoded": 128,
+            "transfer": 421,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+            "start": 218.39999997615814,
+            "end": 954.3999999761581,
+            "duration": 736,
+            "encoded": 1587,
+            "decoded": 4594,
+            "transfer": 1887,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7AHIFSAW.js",
+            "start": 218.79999995231628,
+            "end": 970,
+            "duration": 751.2000000476837,
+            "encoded": 589,
+            "decoded": 1014,
+            "transfer": 889,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+            "start": 219.10000002384186,
+            "end": 1094.5,
+            "duration": 875.3999999761581,
+            "encoded": 15981,
+            "decoded": 94276,
+            "transfer": 16281,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-AMVPJWAU.js",
+            "start": 219.60000002384186,
+            "end": 1031.6000000238419,
+            "duration": 812,
+            "encoded": 2711,
+            "decoded": 15955,
+            "transfer": 3011,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+            "start": 219.79999995231628,
+            "end": 1125.2000000476837,
+            "duration": 905.4000000953674,
+            "encoded": 1319,
+            "decoded": 3136,
+            "transfer": 1619,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-EEVOZZRV.js",
+            "start": 220.20000004768372,
+            "end": 1156,
+            "duration": 935.7999999523163,
+            "encoded": 3895,
+            "decoded": 12129,
+            "transfer": 4195,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-FYGJAFOP.js",
+            "start": 220.60000002384186,
+            "end": 1250.6000000238419,
+            "duration": 1030,
+            "encoded": 12722,
+            "decoded": 52594,
+            "transfer": 13022,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-GTZIDLCD.js",
+            "start": 221.10000002384186,
+            "end": 1298.8999999761581,
+            "duration": 1077.7999999523163,
+            "encoded": 9901,
+            "decoded": 84144,
+            "transfer": 10201,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+            "start": 221.5,
+            "end": 1299,
+            "duration": 1077.5,
+            "encoded": 1098,
+            "decoded": 1753,
+            "transfer": 1398,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+            "start": 221.89999997615814,
+            "end": 1394.2000000476837,
+            "duration": 1172.3000000715256,
+            "encoded": 14135,
+            "decoded": 118479,
+            "transfer": 14435,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+            "start": 222.20000004768372,
+            "end": 1362.5,
+            "duration": 1140.2999999523163,
+            "encoded": 1630,
+            "decoded": 4534,
+            "transfer": 1930,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+            "start": 222.5,
+            "end": 1426.1000000238419,
+            "duration": 1203.6000000238419,
+            "encoded": 1700,
+            "decoded": 5482,
+            "transfer": 2000,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-NUILHAM6.js",
+            "start": 222.89999997615814,
+            "end": 1489.3999999761581,
+            "duration": 1266.5,
+            "encoded": 3562,
+            "decoded": 11742,
+            "transfer": 3862,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OUWPREPI.js",
+            "start": 223.29999995231628,
+            "end": 2314,
+            "duration": 2090.7000000476837,
+            "encoded": 176950,
+            "decoded": 554014,
+            "transfer": 177250,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OVQJWLK4.js",
+            "start": 223.60000002384186,
+            "end": 1537.5,
+            "duration": 1313.8999999761581,
+            "encoded": 2626,
+            "decoded": 6398,
+            "transfer": 2926,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+            "start": 223.89999997615814,
+            "end": 1585.1000000238419,
+            "duration": 1361.2000000476837,
+            "encoded": 5561,
+            "decoded": 15262,
+            "transfer": 5861,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+            "start": 224.10000002384186,
+            "end": 1632.6000000238419,
+            "duration": 1408.5,
+            "encoded": 6185,
+            "decoded": 38249,
+            "transfer": 6485,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+            "start": 224.5,
+            "end": 1759.8999999761581,
+            "duration": 1535.3999999761581,
+            "encoded": 15312,
+            "decoded": 127165,
+            "transfer": 15612,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+            "start": 224.89999997615814,
+            "end": 1727.6000000238419,
+            "duration": 1502.7000000476837,
+            "encoded": 2802,
+            "decoded": 6330,
+            "transfer": 3102,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SG3BYFV6.js",
+            "start": 225.29999995231628,
+            "end": 1760.1000000238419,
+            "duration": 1534.8000000715256,
+            "encoded": 1206,
+            "decoded": 3168,
+            "transfer": 1506,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+            "start": 225.5,
+            "end": 1807.2000000476837,
+            "duration": 1581.7000000476837,
+            "encoded": 365,
+            "decoded": 598,
+            "transfer": 665,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+            "start": 225.89999997615814,
+            "end": 1902.2999999523163,
+            "duration": 1676.3999999761581,
+            "encoded": 1606,
+            "decoded": 3955,
+            "transfer": 1906,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+            "start": 226.29999995231628,
+            "end": 1934.5,
+            "duration": 1708.2000000476837,
+            "encoded": 2259,
+            "decoded": 5353,
+            "transfer": 2559,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+            "start": 226.60000002384186,
+            "end": 1934.3999999761581,
+            "duration": 1707.7999999523163,
+            "encoded": 1043,
+            "decoded": 2524,
+            "transfer": 1343,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+            "start": 227,
+            "end": 2028.2999999523163,
+            "duration": 1801.2999999523163,
+            "encoded": 7844,
+            "decoded": 47117,
+            "transfer": 8144,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+            "start": 2952.7999999523163,
+            "end": 4038.100000023842,
+            "duration": 1085.3000000715256,
+            "encoded": 233617,
+            "decoded": 233617,
+            "transfer": 233917,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+            "start": 2965.5,
+            "end": 4096.899999976158,
+            "duration": 1131.3999999761581,
+            "encoded": 0,
+            "decoded": 0,
+            "transfer": 300,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/logo-zh-Hant.webp",
+            "start": 4371,
+            "end": 16693.299999952316,
+            "duration": 12322.299999952316,
+            "encoded": 1393020,
+            "decoded": 1393020,
+            "transfer": 1393320,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/blaze.webp",
+            "start": 4374.299999952316,
+            "end": 14741.100000023842,
+            "duration": 10366.800000071526,
+            "encoded": 1063356,
+            "decoded": 1063356,
+            "transfer": 1063656,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/cloud.webp",
+            "start": 4376.5,
+            "end": 12918.700000047684,
+            "duration": 8542.200000047684,
+            "encoded": 836484,
+            "decoded": 836484,
+            "transfer": 836784,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "start": 4380.799999952316,
+            "end": 19382.399999976158,
+            "duration": 15001.600000023842,
+            "encoded": 2057534,
+            "decoded": 2057534,
+            "transfer": 2057834,
+            "kind": "fetch"
+          }
+        ],
+        "source": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "music": "{\"cue\":\"login\",\"key\":\"login\",\"playing\":\"login\",\"pending\":null,\"voices\":1,\"slots\":1,\"starts\":1,\"unlocked\":true,\"hidden\":false,\"paused\":false,\"position\":0.020317,\"initialBuffering\":false,\"error\":null}",
+        "save": null
+      },
+      "errors": []
+    },
+    {
+      "profile": "mobile-4g",
+      "sample": 1,
+      "cache": "warm",
+      "marks": {
+        "domReady": 260.10000002384186,
+        "appReady": 441.2999999523163,
+        "skipAvailable": 442.6999999284744,
+        "firstFrame": 1055.1999999284744,
+        "skipClick": 1184.3999999761581,
+        "titleOperable": 1600.1999999284744,
+        "titleArtReady": 1621.6999999284744
+      },
+      "skipToTitleMs": 415.7999999523163,
+      "initialJsRequests": 31,
+      "initialJsDecoded": 4148641,
+      "initialJsEncoded": 870331,
+      "initialJsTransfer": 0,
+      "scriptResponseEnd": 218.69999992847443,
+      "film": {
+        "hidden": false,
+        "state": "playing"
+      },
+      "result": {
+        "trace": {
+          "marks": {
+            "domReady": 260.10000002384186,
+            "appReady": 441.2999999523163,
+            "skipAvailable": 442.6999999284744,
+            "firstFrame": 1055.1999999284744,
+            "skipClick": 1184.3999999761581,
+            "titleOperable": 1600.1999999284744,
+            "titleArtReady": 1621.6999999284744
+          },
+          "longTasks": [
+            {
+              "start": 314.89999997615814,
+              "duration": 128
+            },
+            {
+              "start": 457.60000002384186,
+              "duration": 173
+            }
+          ],
+          "media": [
+            {
+              "event": "waiting",
+              "at": 457.60000002384186
+            },
+            {
+              "event": "loadedmetadata",
+              "at": 1027.6000000238419
+            },
+            {
+              "event": "loadeddata",
+              "at": 1115.6000000238419
+            },
+            {
+              "event": "playing",
+              "at": 1118.6000000238419
+            }
+          ]
+        },
+        "resources": [
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/tokens.css?v=settings-1",
+            "start": 201.69999992847443,
+            "end": 201.69999992847443,
+            "duration": 0,
+            "encoded": 7492,
+            "decoded": 24418,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/styles.css?v=ui-polish-20261012",
+            "start": 201.89999997615814,
+            "end": 201.89999997615814,
+            "duration": 0,
+            "encoded": 12812,
+            "decoded": 62769,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+            "start": 202.19999992847443,
+            "end": 202.19999992847443,
+            "duration": 0,
+            "encoded": 345,
+            "decoded": 522,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/intRh2Styles.css?v=desktop-raising-20261013",
+            "start": 202.60000002384186,
+            "end": 202.60000002384186,
+            "duration": 0,
+            "encoded": 6193,
+            "decoded": 25723,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs2Styles.css?v=desktop-browse-20261013",
+            "start": 203.10000002384186,
+            "end": 203.10000002384186,
+            "duration": 0,
+            "encoded": 11793,
+            "decoded": 58914,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/medalCollection.css?v=intake-20261007",
+            "start": 203.29999995231628,
+            "end": 203.29999995231628,
+            "duration": 0,
+            "encoded": 888,
+            "decoded": 2655,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+            "start": 203.89999997615814,
+            "end": 203.89999997615814,
+            "duration": 0,
+            "encoded": 8852,
+            "decoded": 37619,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/opening.css?v=ns33-film-r1",
+            "start": 204.10000002384186,
+            "end": 204.10000002384186,
+            "duration": 0,
+            "encoded": 5941,
+            "decoded": 22756,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/highlight.css?v=settings-1",
+            "start": 204.69999992847443,
+            "end": 204.69999992847443,
+            "duration": 0,
+            "encoded": 2684,
+            "decoded": 8603,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/ui/settings.css?v=settings-2",
+            "start": 205.5,
+            "end": 205.5,
+            "duration": 0,
+            "encoded": 4608,
+            "decoded": 20535,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/nativeUiSkin.css?v=classic-1",
+            "start": 205.89999997615814,
+            "end": 205.89999997615814,
+            "duration": 0,
+            "encoded": 20345,
+            "decoded": 119896,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+            "start": 206.5,
+            "end": 206.5,
+            "duration": 0,
+            "encoded": 620,
+            "decoded": 1581,
+            "transfer": 0,
+            "kind": "link"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/main-5Y3LJEPZ.js",
+            "start": 206.89999997615814,
+            "end": 206.89999997615814,
+            "duration": 0,
+            "encoded": 484112,
+            "decoded": 1936840,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-24MLB3UP.js",
+            "start": 207.29999995231628,
+            "end": 207.29999995231628,
+            "duration": 0,
+            "encoded": 12595,
+            "decoded": 30288,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2I7QH2EI.js",
+            "start": 207.60000002384186,
+            "end": 207.60000002384186,
+            "duration": 0,
+            "encoded": 1890,
+            "decoded": 5835,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-2XTOXRXY.js",
+            "start": 207.89999997615814,
+            "end": 207.89999997615814,
+            "duration": 0,
+            "encoded": 966,
+            "decoded": 2833,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-3JF2PO36.js",
+            "start": 208.19999992847443,
+            "end": 208.19999992847443,
+            "duration": 0,
+            "encoded": 76058,
+            "decoded": 952752,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+            "start": 208.60000002384186,
+            "end": 208.60000002384186,
+            "duration": 0,
+            "encoded": 121,
+            "decoded": 128,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-76ZC3FHS.js",
+            "start": 208.79999995231628,
+            "end": 208.79999995231628,
+            "duration": 0,
+            "encoded": 1587,
+            "decoded": 4594,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7AHIFSAW.js",
+            "start": 209.10000002384186,
+            "end": 209.10000002384186,
+            "duration": 0,
+            "encoded": 589,
+            "decoded": 1014,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-7NJLQW25.js",
+            "start": 209.29999995231628,
+            "end": 209.29999995231628,
+            "duration": 0,
+            "encoded": 15981,
+            "decoded": 94276,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-AMVPJWAU.js",
+            "start": 209.79999995231628,
+            "end": 209.79999995231628,
+            "duration": 0,
+            "encoded": 2711,
+            "decoded": 15955,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-E24MEMQO.js",
+            "start": 210.19999992847443,
+            "end": 210.19999992847443,
+            "duration": 0,
+            "encoded": 1319,
+            "decoded": 3136,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-EEVOZZRV.js",
+            "start": 210.60000002384186,
+            "end": 210.60000002384186,
+            "duration": 0,
+            "encoded": 3895,
+            "decoded": 12129,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-FYGJAFOP.js",
+            "start": 211.19999992847443,
+            "end": 211.19999992847443,
+            "duration": 0,
+            "encoded": 12722,
+            "decoded": 52594,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-GTZIDLCD.js",
+            "start": 211.60000002384186,
+            "end": 211.60000002384186,
+            "duration": 0,
+            "encoded": 9901,
+            "decoded": 84144,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-J2R277PW.js",
+            "start": 212,
+            "end": 212,
+            "duration": 0,
+            "encoded": 1098,
+            "decoded": 1753,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KB2JXB63.js",
+            "start": 212.39999997615814,
+            "end": 212.39999997615814,
+            "duration": 0,
+            "encoded": 14135,
+            "decoded": 118479,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-KU6AII7O.js",
+            "start": 212.79999995231628,
+            "end": 212.79999995231628,
+            "duration": 0,
+            "encoded": 1630,
+            "decoded": 4534,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-LAHT22KL.js",
+            "start": 213.19999992847443,
+            "end": 213.19999992847443,
+            "duration": 0,
+            "encoded": 1700,
+            "decoded": 5482,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-NUILHAM6.js",
+            "start": 213.79999995231628,
+            "end": 213.79999995231628,
+            "duration": 0,
+            "encoded": 3562,
+            "decoded": 11742,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OUWPREPI.js",
+            "start": 214.5,
+            "end": 214.5,
+            "duration": 0,
+            "encoded": 176950,
+            "decoded": 554014,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-OVQJWLK4.js",
+            "start": 215,
+            "end": 215,
+            "duration": 0,
+            "encoded": 2626,
+            "decoded": 6398,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-QKXM4U5T.js",
+            "start": 215.39999997615814,
+            "end": 215.39999997615814,
+            "duration": 0,
+            "encoded": 5561,
+            "decoded": 15262,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RHFFJENV.js",
+            "start": 215.79999995231628,
+            "end": 215.79999995231628,
+            "duration": 0,
+            "encoded": 6185,
+            "decoded": 38249,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-RPEJ26XX.js",
+            "start": 216.19999992847443,
+            "end": 216.19999992847443,
+            "duration": 0,
+            "encoded": 15312,
+            "decoded": 127165,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-S5RPZJVL.js",
+            "start": 216.39999997615814,
+            "end": 216.39999997615814,
+            "duration": 0,
+            "encoded": 2802,
+            "decoded": 6330,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SG3BYFV6.js",
+            "start": 216.89999997615814,
+            "end": 216.89999997615814,
+            "duration": 0,
+            "encoded": 1206,
+            "decoded": 3168,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SHHPIUSK.js",
+            "start": 217.29999995231628,
+            "end": 217.29999995231628,
+            "duration": 0,
+            "encoded": 365,
+            "decoded": 598,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-SOR4H6LU.js",
+            "start": 217.69999992847443,
+            "end": 217.69999992847443,
+            "duration": 0,
+            "encoded": 1606,
+            "decoded": 3955,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-W3TBMQOY.js",
+            "start": 218.10000002384186,
+            "end": 218.10000002384186,
+            "duration": 0,
+            "encoded": 2259,
+            "decoded": 5353,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-XWTFIRDY.js",
+            "start": 218.29999995231628,
+            "end": 218.29999995231628,
+            "duration": 0,
+            "encoded": 1043,
+            "decoded": 2524,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/src/championship/app/_bundled/chunk-YDUMSQUO.js",
+            "start": 218.69999992847443,
+            "end": 218.69999992847443,
+            "duration": 0,
+            "encoded": 7844,
+            "decoded": 47117,
+            "transfer": 0,
+            "kind": "other"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+            "start": 443.60000002384186,
+            "end": 443.60000002384186,
+            "duration": 0,
+            "encoded": 233617,
+            "decoded": 233617,
+            "transfer": 0,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+            "start": 455.60000002384186,
+            "end": 1219.2999999523163,
+            "duration": 763.6999999284744,
+            "encoded": 0,
+            "decoded": 0,
+            "transfer": 300,
+            "kind": "video"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/logo-zh-Hant.webp",
+            "start": 1479.6000000238419,
+            "end": 1480.7999999523163,
+            "duration": 1.1999999284744263,
+            "encoded": 1393020,
+            "decoded": 1393020,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/blaze.webp",
+            "start": 1481,
+            "end": 1481.8999999761581,
+            "duration": 0.8999999761581421,
+            "encoded": 1063356,
+            "decoded": 1063356,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/cloud.webp",
+            "start": 1481.8999999761581,
+            "end": 1482.6999999284744,
+            "duration": 0.7999999523162842,
+            "encoded": 836484,
+            "decoded": 836484,
+            "transfer": 0,
+            "kind": "fetch"
+          },
+          {
+            "name": "http://127.0.0.1:60732/championship-2026/assets/production/title-morning-r1/arena.webp",
+            "start": 1483.1000000238419,
+            "end": 1484.5,
+            "duration": 1.399999976158142,
+            "encoded": 2057534,
+            "decoded": 2057534,
+            "transfer": 0,
+            "kind": "fetch"
+          }
+        ],
+        "source": "http://127.0.0.1:60732/championship-2026/assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+        "music": "{\"cue\":\"login\",\"key\":\"login\",\"playing\":\"login\",\"pending\":null,\"voices\":1,\"slots\":1,\"starts\":1,\"unlocked\":true,\"hidden\":false,\"paused\":false,\"position\":0.008719,\"initialBuffering\":false,\"error\":null}",
+        "save": null
+      },
+      "errors": []
+    }
+  ],
+  "origin": "http://127.0.0.1:60732/championship-2026/"
+}

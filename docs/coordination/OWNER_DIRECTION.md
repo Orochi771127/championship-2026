@@ -1,5 +1,9 @@
 # Championship Owner Direction
 
+## 2026-10-13 — Measure and reduce mobile Chrome TITLE entry cost
+
+After publishing desktop browse `12c4b61a`, Owner delegates an independent small entry-performance batch. Measure URL→usable Skip, actual video first frame, and Skip→operable TITLE on the current formal artifact with isolated cold/warm cache and representative throttling; controlled Chromium is not Owner-device evidence. Modify measured costs only, starting with non-TITLE screen presenters. Keep the same app/router/save, already-lazy Pixi/Three/battleRuntime, approved 720p/1080p/540p media, image quality, skip/failure/reduced-motion/background/idle/music contracts and save validation. No deployment migration, ROM work or large rewrite. After focused/regression/CI/build checks, commit only this batch, normally push and publish, and verify exact-SHA CI/Pages/live bytes. See [measurement and bounded result](../reports/title-entry-2026-10-13/REPORT_ZH_TW.md).
+
 ## 2026-10-13 — Desktop Shop / Database browse layout
 
 Owner delegates the small desktop layout batch: use horizontal space for the existing Shop list/detail and Database list/detail, retain mobile operation and both modern/classic styles. Scope is layout, readability and navigation/focus only; preserve registration, numbering, story, prices, economy, save and Battle. No new art, runtime, engine or ticker. Use an isolated QA context, check desktop/short desktop/390px phone, resize, five languages, scrolling and return focus. After self-review and tests, commit only this batch, integrate without force or moving Owner's main checkout, push and publish via existing Pages; verify exact-SHA CI/Pages and public bytes. Existing Pages size warnings do not authorize asset deletion or reduced quality. See [batch report](../reports/desktop-browse-2026-10-13/REPORT_ZH_TW.md).

@@ -30,18 +30,11 @@ import { adaptFeedback } from "./championshipStandaloneMessages.js";
 import { createChampionshipStandaloneApp } from "./championshipStandaloneApp.js";
 import { createChampionshipClockDriver } from "./championshipClockDriver.js";
 import { RAISING_CAGES } from "./cageRoster.js";
-import { createRaisingHomeP1RView } from "./raisingHomeP1RView.js";
 import { createRaisingPresentationSource } from "./raisingPresentationSource.js";
 import { createGateHuntPresentationSource } from "./gateHuntPresentationSource.js";
 import { CHAMPIONSHIP_SCREENS } from "./championshipScreenStack.js";
-import { createGateSelectView, createHuntLoadoutView, createHuntFieldView } from "./vs2Screens.js";
-import { createHuntResultView } from "./vs3Screens.js";
-import { createShopView, createDatabaseView, createCageEditView } from "./vs4Screens.js";
 import { createChampionshipPixiStage } from "../presentation/championshipPixiStage.js";
-import { mountRaisingFieldPixiPresentation } from "../presentation/intRh2/createRaisingFieldPixiPresentation.js";
 import { desktopRaisingViewportWidth } from "../presentation/intRh2/raisingFieldViewport.js";
-import { mountHuntFieldPixiPresentation } from "../presentation/vs2/createHuntFieldPixiPresentation.js";
-import { mountBattleFieldPixiPresentation } from "../presentation/vs5/createBattleFieldPixiPresentation.js";
 import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../presentation/battleEffectArt.js';
 import {loadRegisteredRaisingFeedbackArt} from '../presentation/raisingFeedbackArt.js';
 import {loadRegisteredCharacterHudArt} from '../presentation/characterHudArt.js';
@@ -53,7 +46,6 @@ import { mountBattleAudioPresentation } from '../presentation/battleAudioPresent
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText } from "../text/zhHant.js";
-import { createBattleSelectView, createBattleFieldView, createBattleResultView } from "./vs5Screens.js";
 import { loadPixiCharacterRuntimeBundle, createPixiAssetScope, onPixiAssetSettled } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
 import { listChampionshipGates } from "../gate/gateCatalog.js";
@@ -120,6 +112,21 @@ const mountGateSelectThreePresentation = async (options) =>
   (await import("../presentation/vs2/createGateSelectThreePresentation.js")).mountGateSelectThreePresentation(options);
 const mountHighlightBurstThree = async (options) =>
   (await import("../presentation/highlight/createHighlightBurstThree.js")).mountHighlightBurstThree(options);
+
+// TITLE does not mount field/screen presenters. Fetch them through the same
+// serialized foreground mounts; native module caching retains their owners.
+const createRaisingHomeP1RView = async options => (await import('./raisingHomeP1RView.js')).createRaisingHomeP1RView(options);
+const createGateSelectView = async options => (await import('./vs2Screens.js')).createGateSelectView(options);
+const createHuntLoadoutView = async options => (await import('./vs2Screens.js')).createHuntLoadoutView(options);
+const createHuntFieldView = async options => (await import('./vs2Screens.js')).createHuntFieldView(options);
+const createHuntResultView = async options => (await import('./vs3Screens.js')).createHuntResultView(options);
+const createShopView = async options => (await import('./vs4Screens.js')).createShopView(options);
+const createDatabaseView = async options => (await import('./vs4Screens.js')).createDatabaseView(options);
+const createCageEditView = async options => (await import('./vs4Screens.js')).createCageEditView(options);
+const createBattleSelectView = async options => (await import('./vs5Screens.js')).createBattleSelectView(options);
+const mountRaisingFieldPixiPresentation = async options => (await import('../presentation/intRh2/createRaisingFieldPixiPresentation.js')).mountRaisingFieldPixiPresentation(options);
+const mountHuntFieldPixiPresentation = async options => (await import('../presentation/vs2/createHuntFieldPixiPresentation.js')).mountHuntFieldPixiPresentation(options);
+const mountBattleFieldPixiPresentation = async options => (await import('../presentation/vs5/createBattleFieldPixiPresentation.js')).mountBattleFieldPixiPresentation(options);
 
 // battleRuntime reaches the character geometry, profiles, moves, presets and
 // scripts -- about 3.7MB no screen before the battle menu reads. Every caller
@@ -1177,6 +1184,7 @@ async function mountBattleField() {
   let hudArt=null;
   try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href,speciesIds:source.getFrame().combatants.filter(c=>c.present).map(c=>c.speciesId)});}
   catch(error){console.warn('Battle HUD reference unavailable',error);}
+  const {createBattleFieldView} = await import('./vs5Screens.js');
   const view = createBattleFieldView({
     root,
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
@@ -1411,6 +1419,7 @@ async function mountBattleResult() {
     const box = characterHostNode?.getBoundingClientRect?.();
     return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots }) : null;
   };
+  const {createBattleResultView} = await import('./vs5Screens.js');
   const resultView=createBattleResultView({
     root,
     outcome: tutorial?.outcome??battleRuntime.outcome(),
@@ -1491,10 +1500,10 @@ async function mountCurrentScreen() {
     if (target !== CHAMPIONSHIP_SCREENS.RAISING_HOME) raisingSource = null;
 
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
-    else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = createShopView({ root, source: expeditionSource });
-    else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = createDatabaseView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = await createShopView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = await createDatabaseView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, battleBadges:app.getBattleBadges(), onExit(){app.leaveScreen();}});
-    else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = createCageEditView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = await createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
       entries: projectRoster(),
@@ -1552,7 +1561,7 @@ async function mountCurrentScreen() {
       });
     }
     else if (target === CHAMPIONSHIP_SCREENS.GATE_SELECT) view = await mountGateSelect();
-    else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = createHuntLoadoutView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = await createHuntLoadoutView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_FIELD) view = await mountHuntField();
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_RESULT) view = await mountHuntResult();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) view = await mountBattleSelect();

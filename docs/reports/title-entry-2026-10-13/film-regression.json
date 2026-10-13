@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-10-13T21:26:09.713Z",
+  "checks": [
+    {
+      "name": "skip gesture guard, repeated manual watch, idle 14.9s input, menu block",
+      "passed": true
+    },
+    {
+      "name": "dialog idle block and controlled background/foreground reset",
+      "passed": true
+    },
+    {
+      "name": "reject returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "404 returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "network returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "slow returns TITLE without retry loop or save write",
+      "passed": true
+    },
+    {
+      "name": "cold startup allows 4.2s delivery; playback stalls still return within 3s",
+      "passed": true
+    },
+    {
+      "name": "reduced motion system loads no video until manual watch",
+      "passed": true
+    },
+    {
+      "name": "reduced motion on loads no video until manual watch",
+      "passed": true
+    },
+    {
+      "name": "QA save bytes unchanged on TITLE, Continue keeps film off in Raising",
+      "passed": true
+    }
+  ],
+  "physicalDeviceAccepted": false,
+  "fullSubjectiveListeningAccepted": false,
+  "origin": "http://127.0.0.1:51521",
+  "partial": true,
+  "localReferences": {
+    "root": null,
+    "files": [],
+    "published": false
+  },
+  "passed": true
+}
