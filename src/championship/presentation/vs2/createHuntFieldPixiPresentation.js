@@ -137,6 +137,7 @@ export async function mountHuntFieldPixiPresentation({
   const unmarkScene = stage.markScene("cm-hunt-pixi-canvas");
   const backdrop = new PIXI.Graphics();
   const world = new PIXI.Container({ label: "hunt world" });
+  const mapClip = new PIXI.Graphics();
   const productionArtLayer = new PIXI.Container({ label: "bounded production map art" });
   const terrainLayer = new PIXI.Container({ label: "modular terrain" });
   const objectLayer = new PIXI.Container({ label: "field objects", sortableChildren: true });
@@ -183,7 +184,7 @@ export async function mountHuntFieldPixiPresentation({
   fieldArt?.occluders?.attach(actorLayer);
   const factoryShutters = createHuntFactoryShutters({ PIXI, layer: actorLayer, spec: fieldArt?.factoryShutters, mapSprite: fieldArt?.displayObject });
   world.addChild(productionArtLayer, terrainLayer, objectLayer, actorLayer, strokeLayer);
-  scene.addChild(backdrop, world, captureLayer, flashGraphic);
+  scene.addChild(backdrop, world, mapClip, captureLayer, flashGraphic);
 
   const chunkCache = new Map();
   const liveChunks = new Set();
@@ -561,8 +562,8 @@ export async function mountHuntFieldPixiPresentation({
 
     const scale = view.transform.scale;
     const start = {
-      x: (effect.worldX - view.camera.left) * scale,
-      y: (effect.worldY - (effect.worldZ ?? 0) - view.camera.top) * scale
+      x: (view.viewportOffset?.x ?? 0) + (effect.worldX - (view.viewRect ?? view.camera).left) * scale,
+      y: (view.viewportOffset?.y ?? 0) + (effect.worldY - (effect.worldZ ?? 0) - (view.viewRect ?? view.camera).top) * scale
     };
     const target = captureStorageTarget(app.screen.width, app.screen.height);
     const frame = captureStorageVfxFrame(effect, start, target);
@@ -649,12 +650,25 @@ export async function mountHuntFieldPixiPresentation({
     tutorialGuide.clear();
     const guide=view.tutorial?.guide??view.tutorial?.pointer;
     if(guide)tutorialGuide.circle(guide.x,guide.y,24).stroke({color:0x65dbc4,width:3}).circle(guide.x,guide.y,5).fill({color:0xf4ffe5});
-    // The camera window is the only thing that moves the world.
+    // Crop the map intersection only; margins remain the existing neutral
+    // backdrop and cannot expose out-of-map terrain, tools or actor pixels.
+    mapClip.clear();
+    if (view.viewRect) {
+      const rect = view.visibleMapRect;
+      if (rect) {
+        const origin = view.toViewportPoint({ x: rect.left, y: rect.top });
+        mapClip.rect(origin.x, origin.y, (rect.right - rect.left) * view.transform.scale,
+          (rect.bottom - rect.top) * view.transform.scale).fill(0xffffff);
+      }
+      world.mask = mapClip;
+    } else world.mask = null;
+    mapClip.visible = !!view.viewRect;
+    // The presentation window moves only the world container, never native focus.
     world.scale.set(view.transform.scale);
-    world.position.set(-view.camera.left * view.transform.scale, -view.camera.top * view.transform.scale);
-    fieldArt?.occluders?.syncView({left:view.camera.left,top:view.camera.top,right:view.camera.left+app.screen.width/view.transform.scale,bottom:view.camera.top+app.screen.height/view.transform.scale});
+    world.position.set((view.viewportOffset?.x ?? 0) - (view.viewRect ?? view.camera).left * view.transform.scale, (view.viewportOffset?.y ?? 0) - (view.viewRect ?? view.camera).top * view.transform.scale);
+    fieldArt?.occluders?.syncView(view.visibleMapRect ?? view.viewRect ?? {left:(view.viewRect ?? view.camera).left,top:(view.viewRect ?? view.camera).top,right:(view.viewRect ?? view.camera).left+app.screen.width/view.transform.scale,bottom:(view.viewRect ?? view.camera).top+app.screen.height/view.transform.scale});
     if(onActorFrame)onActorFrame(view.wildCreatures.map(wild=>({wildId:wild.wildId,speciesId:wild.speciesId,
-      x:(wild.worldX-view.camera.left)*view.transform.scale,y:(wild.worldY-view.camera.top)*view.transform.scale,
+      x:(view.viewportOffset?.x ?? 0)+(wild.worldX-(view.viewRect ?? view.camera).left)*view.transform.scale,y:(view.viewportOffset?.y ?? 0)+(wild.worldY-(view.viewRect ?? view.camera).top)*view.transform.scale,
       state:wild.state??null,bound:wild.bound??false,stunTicks:wild.stunTicks??0,worldX:wild.worldX,worldY:wild.worldY,moving:wild.moving===true,currentHp:wild.currentHp??null,maxHp:wild.maxHp??null})),view.tools);
   }
 
@@ -716,6 +730,9 @@ export async function mountHuntFieldPixiPresentation({
         visibleChunks: liveChunks.size,
         wildCount: wildNodes.size,
         camera: view?.camera ?? null,
+        viewRect: view?.viewRect ?? view?.camera ?? null,
+        visibleMapRect: view?.visibleMapRect ?? null,
+        viewportOffset: view?.viewportOffset ?? { x: 0, y: 0 },
         transform: view?.transform ?? null,
         // Where the live actors are on this canvas, in its own pixels. The
         // native controller owns their positions and moves them every frame, so
@@ -727,8 +744,8 @@ export async function mountHuntFieldPixiPresentation({
         // view and its one pointer adapter, never the Hunt domain.
         wildScreenPositions: Object.freeze((view?.wildCreatures ?? []).map((wild) => Object.freeze({
           wildId: wild.wildId,
-          x: (wild.worldX - view.camera.left) * view.transform.scale,
-          y: (wild.worldY - view.camera.top) * view.transform.scale,
+          x: (view.viewportOffset?.x ?? 0) + (wild.worldX - (view.viewRect ?? view.camera).left) * view.transform.scale,
+          y: (view.viewportOffset?.y ?? 0) + (wild.worldY - (view.viewRect ?? view.camera).top) * view.transform.scale,
           state: wild.state ?? null, moving: wild.moving === true,
           currentHp: wild.currentHp ?? null, maxHp: wild.maxHp ?? null
         }))),

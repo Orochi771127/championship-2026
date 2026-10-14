@@ -5,6 +5,7 @@
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import {projectDatabaseEvolutionRoutes} from './databaseEvolutionRoutes.js';
+import {projectDatabaseEvolutionConditions} from './databaseEvolutionConditions.js';
 import {
   DATABASE_EGG_COUNT,
   DATABASE_REGULAR_COUNT,
@@ -83,14 +84,18 @@ export function projectDatabase({
   if (selectedSpeciesIndex !== null) {
     const slot = getDatabaseSlot(selectedSpeciesIndex);
     const row = entries[slot.bookOrdinal];
+    const routeContext = {
+      sourceRegistered:row.state === DATABASE_ENTRY_STATES.REGISTERED,
+      registeredSpecies:entries.filter(entry=>entry.state === DATABASE_ENTRY_STATES.REGISTERED).map(entry=>entry.speciesIndex),
+      evolutionBranches
+    };
     selected = {
       ...row,
       instances: instancesBySpecies.get(slot.speciesId) ?? [],
-      evolutionRoutes:projectDatabaseEvolutionRoutes(slot.speciesIndex, {
-        sourceRegistered:row.state === DATABASE_ENTRY_STATES.REGISTERED,
-        registeredSpecies:entries.filter(entry=>entry.state === DATABASE_ENTRY_STATES.REGISTERED).map(entry=>entry.speciesIndex),
-        evolutionBranches
-      })
+      evolutionRoutes:projectDatabaseEvolutionRoutes(slot.speciesIndex, routeContext).map(route=>({
+        ...route,
+        conditions:projectDatabaseEvolutionConditions(slot.speciesIndex, route.branchIndex, routeContext)
+      }))
     };
   }
 

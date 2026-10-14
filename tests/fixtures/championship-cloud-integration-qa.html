@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Isolated combined candidate QA</title>
+<style>body{font:18px system-ui;max-width:760px;margin:36px auto;padding:20px;background:#13232f;color:#fff}button,select,a{font:inherit;padding:12px;margin:8px;display:inline-block}a{color:#aee4ff}label{display:block;margin:12px}#status{white-space:pre-wrap}</style>
+<h1>Isolated combined candidate QA</h1><p>This loopback-only fixture installs the repository's synthetic QA save with branch 5 recorded and species 10 unregistered. It is not natural progression, a user save, or release content. Continue into the real app, then use ordinary controls.</p>
+<label>Language <select id="locale"><option>zh-Hant</option><option>en</option><option>ja</option><option>th</option><option>vi</option></select></label>
+<label>Theme <select id="theme"><option>warm</option><option>classic</option></select></label>
+<label><input id="responsive" type="checkbox"> Opt in to responsive candidate (default OFF)</label>
+<button id="prepare">Prepare isolated QA save</button><a id="game" href="../../championship.html">Open real game</a><p id="status" role="status">Not prepared</p>
+<script type="module">
+const key='championshipModernSave:v1';
+if(!['127.0.0.1','localhost','[::1]'].includes(location.hostname))throw Error('LOOPBACK_QA_ONLY');
+const query=()=>document.querySelector('#responsive').checked?'?responsiveLayout=candidate':'';
+document.querySelector('#responsive').addEventListener('change',()=>document.querySelector('#game').href='../../championship.html'+query());
+document.querySelector('#prepare').addEventListener('click',async()=>{
+ const seed=await fetch('../../qa/championship-full-qa-save.json').then(r=>{if(!r.ok)throw Error('QA fixture unavailable');return r.json()});
+ seed.progression.registeredSpecies=seed.progression.registeredSpecies.filter(id=>id!==10);
+ seed.raising.nativeHome.evolutionBranches=[5];
+ localStorage.setItem(key,JSON.stringify(seed));
+ localStorage.setItem('championshipModernSave:preferences:v1',JSON.stringify({locale:document.querySelector('#locale').value,theme:document.querySelector('#theme').value,reducedMotion:'on',muted:true}));
+ document.querySelector('#status').textContent='Prepared. Open real game → LOGIN → Continue → SYSTEM → Database. Select species 9 (fixed code in the first non-egg stage), then its Conditions button. For Battle choose practice, two existing participants, then Confirm.';
+});
+</script></html>

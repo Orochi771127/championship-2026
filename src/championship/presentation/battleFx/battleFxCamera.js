@@ -36,16 +36,20 @@ export function battleFxUnionBox(boxes) {
  * The shot for one framing box: zoom and centre, clamped so the visible region
  * never leaves the arena. `art` is the arena rectangle in local coordinates.
  */
-export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boost = 0}) {
+export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boost = 0, responsiveLayout = false}) {
   const cover = Math.max(viewport.width / art.width, viewport.height / art.height);
   const maxZoom = cover * maxZoomFactor;
+  let minimumZoom = cover;
   let zoom = cover, cx = art.x + art.width / 2, cy = art.y + art.height / 2, want = null;
   if (box) {
     const width = Math.max(1, box.right - box.left), height = Math.max(1, box.bottom - box.top);
     // Room for the overhead bars and words above, and the shadow below.
     const padX = width * 0.12 + 16, padTop = height * 0.12 + 28, padBottom = height * 0.08 + 12;
     const fit = Math.min(viewport.width / (width + padX * 2), viewport.height / (height + padTop + padBottom));
-    zoom = clamp(fit * (1 + boost), cover, maxZoom);
+    // The wide host must fit the selected action, even when arena cover would
+    // cut off a tall group. Mirrored floor continuation remains presentation.
+    if (responsiveLayout) minimumZoom = Math.min(cover, fit);
+    zoom = clamp(fit * (1 + boost), minimumZoom, maxZoom);
     want = {left: box.left - padX, right: box.right + padX, top: box.top - padTop, bottom: box.bottom + padBottom};
     cx = (want.left + want.right) / 2;
     cy = (want.top + want.bottom) / 2;
@@ -66,11 +70,11 @@ export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boo
   let placed = place(zoom);
   // Near an edge the clamp moves the centre off the fighters; back the zoom
   // off (never below cover) until the framed group is inside the shot again.
-  for (let i = 0; box && i < 12 && zoom > cover; i++) {
+  for (let i = 0; box && i < 12 && zoom > minimumZoom; i++) {
     const inside = box.left >= placed.x - placed.halfW && box.right <= placed.x + placed.halfW
       && box.top - 18 >= placed.y - placed.halfH && box.bottom <= placed.y + placed.halfH;
     if (inside) break;
-    zoom = Math.max(cover, zoom * 0.92);
+    zoom = Math.max(minimumZoom, zoom * 0.92);
     placed = place(zoom);
   }
   return {zoom, cx: placed.x, cy: placed.y, cover, maxZoom, over: placed.over};
@@ -88,9 +92,10 @@ function shakeNoise(t, seed) {
   return Math.sin(t * 0.037 + seed) * 0.55 + Math.sin(t * 0.061 + seed * 2.3) * 0.3 + Math.sin(t * 0.113 + seed * 4.1) * 0.15;
 }
 
-export function createBattleFxCamera({reducedMotion = false} = {}) {
+export function createBattleFxCamera({reducedMotion = false, responsiveLayout = false} = {}) {
   let zoom = null, cx = 0, cy = 0, over = {left: 0, right: 0, top: 0, bottom: 0};
   let punch = 0, trauma = 0, time = 0;
+  let previousViewport = null;
   let stages = []; // [{slots:Set|null, boost, includeDown, endMs, priority}]
   const current = () => { while (stages.length && time >= stages[0].endMs) stages.shift(); return stages[0] ?? null; };
   /**
@@ -130,8 +135,13 @@ export function createBattleFxCamera({reducedMotion = false} = {}) {
       const follow = stage && stage.boost >= 0.3 ? [] : points.map(p => ({left: p.x - 12, right: p.x + 12, top: p.y - 12, bottom: p.y + 12}));
       const shot = battleFxFrameShot({viewport, art, box: battleFxUnionBox([...framing, ...follow]),
         // An ordinary shot stays within 1.7x cover; a staged push-in may reach 2.3x.
-        boost: focused.length ? stage.boost : 0, maxZoomFactor: reducedMotion ? 1.3 : focused.length ? 2.3 : 1.7});
-      if (zoom === null && reducedMotion) {
+        boost: focused.length ? stage.boost : 0, responsiveLayout, maxZoomFactor: reducedMotion ? 1.3 : focused.length ? 2.3 : 1.7});
+      const resized = responsiveLayout && previousViewport !== null
+        && (previousViewport.width !== viewport.width || previousViewport.height !== viewport.height);
+      previousViewport = {width:viewport.width, height:viewport.height};
+      // Reframe on the existing resize draw, without advancing shot time or
+      // replacing the director. No tween from stale screen geometry.
+      if (resized || (zoom === null && responsiveLayout) || (zoom === null && reducedMotion)) {
         zoom = shot.zoom; cx = shot.cx; cy = shot.cy; over = {...shot.over};
       } else if (zoom === null) {
         // Open on the whole arena, then push in: the first frames are the wide shot.

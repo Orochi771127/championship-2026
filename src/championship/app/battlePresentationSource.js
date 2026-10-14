@@ -172,7 +172,7 @@ function requireSession(session) {
  * and so this module never becomes a second clock.
  */
 export function createBattlePresentationSource({ session, step, arenaIndex = 0, getSpecialPrelude = () => null,
-  getNativeActor = () => null, getNativeLifecycle = () => null, getImpactEffects = () => [] } = {}) {
+  getOpening = () => null, getNativeActor = () => null, getNativeLifecycle = () => null, getImpactEffects = () => [] } = {}) {
   requireSession(session);
   if (typeof step !== "function") {
     throw sourceError("REQUIRES_A_STEP_FUNCTION");
@@ -184,6 +184,7 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
 
   const listeners = new Set();
   let frame = null;
+  let disposed = false;
   // Presentation history sampled at each EXISTING simulation step, including
   // steps between GPU redraws. It neither selects actions nor advances a clock.
   const animationStarts=new Map();
@@ -217,6 +218,7 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
   function buildFrame() {
     return deepFreeze({
       contractVersion: BATTLE_PRESENTATION_CONTRACT_VERSION,
+      opening: getOpening(),
       arena: deepFreeze({
         index: arena.index,
         identifier: arena.identifier,
@@ -255,6 +257,7 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
     /** Read every tick by the scene. Continuous, and never published to observers. */
     getView() {
       return deepFreeze({
+        opening: getOpening(),
         clock: projectClock(session),
         animationFrame: session.frame ?? session.clock ?? 0,
         specialPrelude: getSpecialPrelude(),
@@ -269,11 +272,13 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
      * down, someone's engagement changed, or the battle ended.
      */
     tick() {
+      if(disposed)return deepFreeze({frame:session.frame,events:[],ended:session.ended});
       const before = frame;
       const stepped = step(session);
       sampleAnimationStarts();
       const after = buildFrame();
-      const changed = after.outcome.ended !== before.outcome.ended
+      const changed = after.opening?.phase !== before.opening?.phase
+        || after.outcome.ended !== before.outcome.ended
         || after.combatants.some((entry, index) => {
           const was = before.combatants[index];
           return entry.present !== was.present
@@ -285,6 +290,7 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
       return stepped;
     },
     dispose() {
+      disposed = true;
       listeners.clear();
       animationStarts.clear();
     }

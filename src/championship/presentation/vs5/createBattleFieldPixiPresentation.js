@@ -191,9 +191,10 @@ function drawField(graphic, rect, frame, view, renderedSlots) {
  * record band.
  */
 export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt = null, characterRoster = null, effectArt = null, autoAdvance = true,
-  onView = null, dynamicFx = false, fx = null, localTeam = 0,
+  onView = null, dynamicFx = false, fx = null, localTeam = 0, responsiveLayout = false,
   reducedMotion = prefersReducedMotion() }) {
   assertDependencies(stage, source);
+  responsiveLayout = responsiveLayout && dynamicFx;
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
     || typeof fieldArt.dispose !== "function" || typeof fieldArt.getDiagnostics !== "function"
     || !fieldArt.field)) {
@@ -222,9 +223,11 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
   const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
   const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen,
-    quality:currentQualityTier(), reducedMotion, flashScale:currentFlashScale(),
+    quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
     describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text}) : null;
-  const director = fxLayer ? createBattleFxCamera({reducedMotion}) : null;
+  // A failed FX capability probe has no camera: retain contain-fit fallback.
+  responsiveLayout = responsiveLayout && Boolean(fxLayer);
+  const director = fxLayer ? createBattleFxCamera({reducedMotion, responsiveLayout}) : null;
   const tracker = fxLayer ? createBattleFxEventTracker() : null;
   // The dynamic camera follows fighters wherever the original's movement takes
   // them, sometimes past the arena picture. Continue the floor with eight
@@ -280,6 +283,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   let disposal = null;
   let frames = 0;
   let pendingFrames = 0;
+  let resumeWithoutDelta = false;
+  let lastTickerOpeningCue = null;
+  const visibilityChanged=()=>{pendingFrames=0;resumeWithoutDelta=true;};
   // Nominal NDS VBlank cadence from the existing platform-clock receipt.
   // Consume the owning Pixi ticker; never create another scheduler.
   const nativeFrameMs = 1000 * 560190 / 33513982;
@@ -453,6 +459,14 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       return null;
     }
     const { worldWidthPx, worldHeightPx } = fieldArt.field;
+    // Keep particles, shadow anchors, native bodies and projectiles in one
+    // stable presentation world while the existing camera handles rotation.
+    if (responsiveLayout) {
+      productionArtLayer.visible = true;
+      productionArtLayer.scale.set(1);
+      productionArtLayer.position.set(0, 0);
+      return {x:0, y:0, width:worldWidthPx, height:worldHeightPx};
+    }
     const fit = Math.min(app.screen.width / worldWidthPx, app.screen.height / worldHeightPx);
     productionArtLayer.visible = true;
     productionArtLayer.scale.set(fit);
@@ -467,7 +481,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   function redraw() {
     if (disposed) return;
     const view = source.getView();
-    onView?.(view);
+    onView?.({...view,openingFxVisible:Boolean(fxLayer && fieldArt && view.opening?.cue)});
     const frame = source.getFrame();
     lastViewport = { width: app.screen.width, height: app.screen.height };
     const rect = { x: 0, y: 0, width: app.screen.width, height: app.screen.height };
@@ -497,7 +511,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const events = [...tracker.consume(view), ...motionEvents];
       camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
         subjects:[...slotInfos.values()], points:fxLayer.projectilePoints()});
-      fxContext = {artRect, nativeScale, localTeam, viewport:{width:rect.width, height:rect.height},
+      fxContext = {artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height},
         slotInfo:slot => slotInfos.get(slot) ?? null,
         opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),
         camera:{...camera, director}};
@@ -534,6 +548,14 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
 
   function advance(ticker) {
     if (disposed) return;
+    if(globalThis.document?.hidden){pendingFrames=0;resumeWithoutDelta=true;return;}
+    if(resumeWithoutDelta){resumeWithoutDelta=false;pendingFrames=0;redraw();return;}
+    const openingCue=source.getView().opening?.cue ?? null;
+    if(openingCue && openingCue!==lastTickerOpeningCue){
+      // Assets may become ready between callbacks. Present the first cue before
+      // consuming any elapsed time from the task that loaded those assets.
+      lastTickerOpeningCue=openingCue;pendingFrames=0;redraw();return;
+    }
     // The battle stops itself: the source's session ends on a wipe or on the
     // clock passing 7200, and a stopped battle is still drawn.
     if (autoAdvance && !source.getFrame().outcome.ended) {
@@ -542,8 +564,14 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       pendingFrames += elapsed/nativeFrameMs;
       while(pendingFrames+1e-9>=1 && !disposed && !source.getFrame().outcome.ended){
         pendingFrames=Math.max(0,pendingFrames-1);
+        const beforeOpening=source.getView().opening;
         source.tick();
         frames += 1;
+        if(beforeOpening?.armed && beforeOpening.phase!=='ACTIVE'){
+          const afterOpening=source.getView().opening;
+          // Never accumulate asset waits or skip a cue on a long foreground frame.
+          if(beforeOpening.phase==='WAITING_ASSETS' || beforeOpening.phase!==afterOpening?.phase){pendingFrames=0;break;}
+        }
       }
     }
     if(disposed)return;
@@ -551,6 +579,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     // Presentation time for the dynamic layer; it keeps animating through the
     // original hit pause, when the battle frame itself holds still.
     pendingDtMs += Math.min(100, Math.max(0, ticker?.deltaMS ?? nativeFrameMs));
+    lastTickerOpeningCue=source.getView().opening?.cue ?? null;
     redraw();
   }
 
@@ -626,6 +655,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if (disposed) return disposal;
       disposed = true;
       unobserveResize();
+      globalThis.document?.removeEventListener?.('visibilitychange',visibilityChanged);
       app.ticker.remove(advance);
       if (fieldArt?.displayObject.parent === productionArtLayer) {
         productionArtLayer.removeChild(fieldArt.displayObject);
@@ -647,6 +677,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   });
   try {
     unobserveResize=stage.onResize(redraw);
+    globalThis.document?.addEventListener?.('visibilitychange',visibilityChanged);
     app.ticker.add(advance);
     redraw();
     ownsInputs=true;

@@ -345,6 +345,9 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
       }));
     },
 
+    // Read-only raw focus; presentation clamps never write this authority.
+    getCameraFocus() { return Object.freeze({ ...cameraCenter }); },
+
     /** A persistent camera independent of the retained developer actor fixture. */
     getCamera(viewportWidth, viewportHeight) {
       return computeFieldCameraWindow(world.definition, cameraRequest(viewportWidth, viewportHeight));

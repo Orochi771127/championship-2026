@@ -851,6 +851,19 @@
 .cm-dex-routes__copy { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
 .cm-dex-routes__name { font-size: var(--fs-label); }
 .cm-dex-routes__status { color: var(--c-text-2); font-size: var(--fs-caption); line-height: 1.5; }
+/* Read-only evolution conditions. The existing detail pane owns scrolling. */
+.cm-dex-conditions__toggle { box-sizing: border-box; display: block; width: auto; max-width: 100%; min-width: 44px; min-height: 44px; margin-top: 6px; padding: 8px 12px; border: 1px solid var(--c-line-2); border-radius: var(--r-control); background: var(--c-surface-1); color: var(--c-text-1); font: inherit; line-height: 1.4; text-align: left; white-space: normal; overflow-wrap: anywhere; cursor: pointer; }
+.cm-dex-conditions__toggle:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 2px; }
+.cm-dex-conditions__toggle[aria-expanded="true"] { border-color: var(--c-accent); background: var(--c-accent-soft); }
+.cm-dex-conditions__panel { box-sizing: border-box; min-width: 0; max-width: 100%; margin-top: 6px; padding: 10px; border: 1px solid var(--c-line-2); border-radius: var(--r-control); background: var(--c-surface-1); color: var(--c-text-1); font-size: var(--fs-label); line-height: 1.5; overflow-wrap: anywhere; }
+.cm-dex-conditions__panel[hidden] { display: none; }
+.cm-dex-conditions__notice { margin: 0 0 8px; color: var(--c-text-2); }
+.cm-dex-conditions__notice:last-child { margin-bottom: 0; }
+.cm-dex-conditions__list { display: grid; gap: 6px; min-width: 0; margin: 0 0 10px; }
+.cm-dex-conditions__row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; min-width: 0; padding-bottom: 6px; border-bottom: 1px solid var(--c-line-1); }
+.cm-dex-conditions__row dt { min-width: 0; font-weight: var(--fw-strong); }
+.cm-dex-conditions__row dd { min-width: 0; margin: 0; font-variant-numeric: tabular-nums; }
+
 .cm-dex-portrait { display: grid; place-items: center; min-width: 0; width: 100%; height: 72px; background: var(--c-ground-raised); border-radius: var(--r-control); }
 .cm-dex-portrait__image { max-width: 100%; width: auto; max-height: 72px; object-fit: contain; }
 .cm-dex-portrait__image[hidden], .cm-dex-portrait__placeholder[hidden] { display: none; }
@@ -1065,3 +1078,45 @@ body[data-desktop-browse] .cm-vs2-root[data-screen] :is(.cm-vs2-shop__row, .cm-v
 /* The label stays readable however far the board is scrolled sideways. */
 .cm-cage-annex-label { position: sticky; left: 0; width: max-content; max-width: 100%; }
 .cm-cage-expansion { gap: var(--sp-2); }
+
+/* Hunt R3: enabled only after the same legacy DOM/stage viewport is measured.
+   The canonical gameplay window remains the session's captured portrait field. */
+.cm-hunt-controls-panel { display: contents; }
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field {
+  --hunt-controls-width: clamp(240px, 25vw, 300px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--hunt-controls-width);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 10px;
+  padding-right: max(8px, env(safe-area-inset-right));
+  padding-left: max(0px, env(safe-area-inset-left));
+}
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__viewport {
+  position: relative; inset: auto; grid-column: 1; grid-row: 1; min-width: 0; min-height: 0;
+}
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud {
+  right: calc(var(--hunt-controls-width) + 20px + env(safe-area-inset-right));
+}
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel {
+  display: flex; flex-direction: column; gap: 10px; grid-column: 2; grid-row: 1;
+  position: relative; min-width: 0; min-height: 0;
+  padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+  overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+}
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-hunt-info {
+  position: static; inset: auto; display: grid; gap: 8px; flex: 0 0 auto;
+}
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-vs2-target {
+  width: 100%; min-width: 0;
+}
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-hunt-tools {
+  position: static; inset: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px; padding: 4px; flex: 0 0 auto; order: 2;
+}
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-hunt-tools .cm-vs2-action {
+  width: 100%; min-width: 44px; max-width: none; min-height: 48px; flex: none;
+}
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-vs2-field__hint {
+  position: static; inset: auto; transform: none; width: 100%; max-width: none;
+  margin: 0; flex: 0 0 auto; order: 3; text-align: start;
+}

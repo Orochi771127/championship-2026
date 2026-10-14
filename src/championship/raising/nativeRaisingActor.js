@@ -165,6 +165,15 @@ function currentHeight(actor){const box=BATTLE_CHARACTER_PROFILES[BATTLE_SPECIES
 export function beginNativeRaisingCarry(actor,profile,pointer,{foods,rng}){
   // Original command 80 handlers for the currently implemented adult states.
   if(!nativeRaisingHandAdmission(actor,0x80))return null;
+  // Transient input rollback, never serialized. Record actor ground position,
+  // not the pointer (which may start on the head or cross a periodic seam).
+  actor.carryOrigin={speciesIndex:actor.speciesIndex,positionQ12:[...actor.positionQ12],cageDefinitionIndex:actor.cageDefinitionIndex,
+    idleCounter:actor.idleCounter??0,occupancy:actor.growthFields['40c'],
+    // Re-catching an airborne resident is admitted by the original hand table.
+    // Cancellation resumes that pre-gesture trajectory, never a floating idle.
+    flight:actor.state===7?{destinationQ12:[...actor.destinationQ12],velocityQ12:[...actor.velocityQ12],
+      phase:actor.flightPhase,badThrow:actor.badThrow,flipBits:actor.flipBits,sequenceId:actor.sequenceId,
+      previousCageDefinition:actor.previousCageDefinition,carryCameraX:actor.carryCameraX}:null};
   let p=profile;
   if(actor.state===4)p=exitNativeRaisingSleep(p,actor.poolSlot,rng);
   if(actor.state===5&&(p.fields['008']|0)>=nativeHuntSpeciesByIndex(actor.speciesIndex).field1c){
@@ -205,8 +214,40 @@ export function touchNativeRaisingActor(actor,profile,{foods,rng}){
   actor.state=10;actor.activity=null;actor.feedback=null;
   return normalizeNativeIndividualProfile(p);
 }
+// Owner 2026-10-14: interrupted viewport gestures must not become throws.
+// Only the explicit resize cancellation calls this adaptation. Time, profile,
+// RNG and ordinary release/landing rules stay owned by their existing paths.
+export function cancelNativeRaisingCarry(actor) {
+  const origin=actor.carryOrigin;
+  if(actor.state!==6||!origin||origin.speciesIndex!==actor.speciesIndex)return false;
+  actor.positionQ12=[...origin.positionQ12];
+  actor.destinationQ12=[...origin.positionQ12];
+  actor.cageDefinitionIndex=origin.cageDefinitionIndex;
+  actor.carryPointer=null;actor.carryOrigin=null;
+  if(origin.flight){
+    const f=origin.flight;actor.state=7;actor.detached=true;
+    actor.destinationQ12=[...f.destinationQ12];actor.velocityQ12=[...f.velocityQ12];
+    actor.flightPhase=f.phase;actor.badThrow=f.badThrow;actor.flipBits=f.flipBits;
+    actor.previousCageDefinition=f.previousCageDefinition;actor.carryCameraX=f.carryCameraX;request(actor,f.sequenceId);
+    return true;
+  }
+  // State13 hop is hand-admissible. Its z is transient body elevation,
+  // not ground geometry; idle must settle onto the same valid ground XY.
+  actor.positionQ12[2]=0;actor.destinationQ12[2]=0;
+  actor.detached=false;
+  actor.velocityQ12=[0,0,0];actor.flightPhase=0;actor.badThrow=false;
+  actor.state=1;actor.foodSlot=null;actor.station=-1;actor.biteLatched=false;
+  actor.idleElapsed=0;actor.idleCounter=origin.idleCounter;
+  actor.activity=null;actor.feedback=null;actor.activityReaction=-1;actor.peer=null;
+  actor.stroke=null;actor.statusMusic=0;actor.destinationState=1;actor.canDefecate=true;
+  actor.growthFields['40c']=origin.occupancy;
+  request(actor,actor.slow?1:0);
+  return true;
+}
+
 export function releaseNativeRaisingCarry(actor,profile){
   if(actor.state!==6)return null;
+  actor.carryOrigin=null;
   actor.velocityQ12=nativeReleaseVelocity(actor.velocityQ12);actor.carryPointer=null;actor.flightPhase=0;actor.state=7;
   actor.badThrow=actor.velocityQ12[1]>=0;actor.flipBits=actor.velocityQ12[0]>=0?1:0;
   request(actor,actor.badThrow?15:5);
@@ -444,7 +485,7 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
       else{
         update()['020']=Math.min(100,next.fields['020']+1);
         const selection=evaluateNativeEvolution(next,{rank:context.rank,roster:context.roster,lifetime:false,lifeThreshold:a['428']},rng);
-        next=selection.profile;actor.training=null;
+        next=selection.profile;a['428']=selection.actor['428'];actor.training=null;
         if(selection.code===1&&context.minute<1290){beginNativeRaisingEvolution(actor,selection,rng);return {profile:next,changed:true,evolutionStarted:true};}
         if((next.fields['040']|0)>30&&rng.next(0x86+actor.poolSlot)%100<Math.min(100,next.fields['040'])){
           const f=update();f['134']=1;f['020']=Math.max(0,f['020']-5);next.narrowFields['03d']=Math.min(7,next.narrowFields['03d']+1);

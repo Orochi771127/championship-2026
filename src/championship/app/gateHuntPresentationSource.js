@@ -1,3 +1,4 @@
+import { createHuntViewportBinding, getHuntPresentationRequest, panHuntPresentationCamera } from "../hunt/huntPresentationBinding.js";
 // VS2 Gate/Hunt presentation boundary.
 //
 // The only runtime seam VS2 presentation consumes, published ahead of the
@@ -118,8 +119,9 @@ function assertApplication(app) {
  *   cage layout, a Database rename -- so the app can autosave. Presentation
  *   wiring only: the source still writes nothing itself.
  */
-export function createGateHuntPresentationSource(app, { onCommitted = null } = {}) {
+export function createGateHuntPresentationSource(app, { onCommitted = null, getHuntViewportLayout = null } = {}) {
   assertApplication(app);
+  const huntViewportBinding = createHuntViewportBinding(getHuntViewportLayout);
   const committed = (reason) => { try { onCommitted?.(reason); } catch { /* an observer must not break the intent */ } };
   const listeners = new Set();
   let frameRevision = 0;
@@ -444,7 +446,13 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
       return commit();
     },
     /** Continuous input goes to the existing field runtime only. */
-    panCamera(deltaX, deltaY, viewportWidth, viewportHeight) {
+    panCamera(deltaX, deltaY, viewportWidth, viewportHeight, panRequest = null) {
+      const runtime = app.getHuntRuntime();
+      if (getHuntPresentationRequest(panRequest, runtime)) {
+        if (tutorial()) return app.interactiveHuntInput('camera',
+          [deltaX, deltaY, viewportWidth, viewportHeight, panRequest], tutorialGesture ?? tutorial().checkpoint);
+        return panHuntPresentationCamera(runtime, deltaX, deltaY, panRequest)?.accepted ?? false;
+      }
       if(tutorial())return app.interactiveHuntInput('camera',[deltaX,deltaY,viewportWidth,viewportHeight],tutorialGesture??tutorial().checkpoint);
       return app.getHuntRuntime()?.panCamera(deltaX, deltaY, viewportWidth, viewportHeight) ?? false;
     },
@@ -523,8 +531,9 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
       const runtime = app.getHuntRuntime();
       if (!runtime) return null;
       const world = runtime.world;
-      const camera = runtime.getCamera(viewportWidth, viewportHeight);
-      const transform = huntViewportTransform(viewportWidth, viewportHeight);
+      const projected = huntViewportBinding.read(runtime, viewportWidth, viewportHeight);
+      const camera = projected?.camera ?? runtime.getCamera(viewportWidth, viewportHeight);
+      const transform = projected?.transform ?? huntViewportTransform(viewportWidth, viewportHeight);
       return {
         tutorial:runtime.getTutorialHuntProgress?.()??null,
         gateId: world.gateId,
@@ -532,10 +541,13 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
         worldWidthPx: world.worldWidthPx,
         worldHeightPx: world.worldHeightPx,
         camera, transform,
-        toWorldPoint: (point) => huntViewportToWorld(point, camera, transform),
+        ...(projected ? { viewRect: projected.viewRect, visibleMapRect: projected.visibleMapRect, viewportOffset: projected.offset,
+          toViewportPoint: projected.toViewportPoint, containsViewportPoint: projected.containsViewportPoint,
+          panRequest: projected.panRequest } : {}),
+        toWorldPoint: projected?.toWorldPoint ?? ((point) => huntViewportToWorld(point, camera, transform)),
         selectedWildId: runtime.getSelectedWildId(),
         captureAvailability: runtime.getCaptureAvailability(),
-        visibleChunks: runtime.getVisibleChunks(viewportWidth, viewportHeight),
+        visibleChunks: projected?.visibleChunks ?? runtime.getVisibleChunks(viewportWidth, viewportHeight),
         player: runtime.getPlayer(),
         wildCreatures: runtime.getWildCreatures(),
         enclosure: runtime.getEnclosureStroke(),

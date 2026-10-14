@@ -138,7 +138,7 @@ function element(tag, className, text) {
  * @param {(entry: object) => void} options.onMenuEntry
  * @param {(toolId: string|null) => void} [options.onToolChange]
  */
-export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null } = {}) {
+export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null } = {}) {
   if (!root) throw new TypeError("The toolbar requires a root element");
   if (typeof onMenuEntry !== "function") throw new TypeError("The toolbar requires an onMenuEntry handler");
 
@@ -338,20 +338,22 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
 
   const host = root.ownerDocument?.body ?? document.body;
   let disposed = false;
+  const measureTarget = responsiveLayout ? bar : rail;
   let measuredHeight = null;
   function syncHeight() {
     if (disposed) return;
-    // Only the rail occupies layout space. The submenu overlays the field.
+    // The wide Raising hint joins the rail in normal flow. Menus remain
+    // absolute overlays. Measure this same bar in both orientations.
     // The border box includes the rail's safe-area padding exactly once.
     // Reserve layout pixels; the portrait frame scales the whole UI afterwards.
-    const height = bar.hidden ? 0 : Math.ceil(rail.offsetHeight ?? rail.getBoundingClientRect().height);
+    const height = bar.hidden ? 0 : Math.ceil(measureTarget.offsetHeight ?? measureTarget.getBoundingClientRect().height);
     if (height === measuredHeight) return;
     measuredHeight = height;
     host.style.setProperty("--cm-toolbar-height", `${height}px`);
   }
   syncHeight();
   const resizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(syncHeight) : null;
-  resizeObserver?.observe(rail, { box: "border-box" });
+  resizeObserver?.observe(measureTarget, { box: "border-box" });
   const windowHost = root.ownerDocument?.defaultView;
   if (!resizeObserver) windowHost?.addEventListener("resize", syncHeight);
 

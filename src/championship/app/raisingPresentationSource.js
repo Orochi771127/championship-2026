@@ -334,7 +334,7 @@ export function createRaisingPresentationSource(app) {
     endHand(creatureId,input){return app.endRaisingHand?.(creatureId,input)??false;},
     beginCarry(creatureId,input){return app.beginRaisingCarry?.(creatureId,input)??false;},
     updateCarry(creatureId,input){return app.updateRaisingCarry?.(creatureId,input)??false;},
-    releaseCarry(creatureId){return app.releaseRaisingCarry?.(creatureId)??false;},
+    releaseCarry(creatureId,input){return app.releaseRaisingCarry?.(creatureId,input)??false;},
     panTutorial(input){return app.panInteractiveTutorial?.(input)??false;},
     cleanFood(input) {const result=app.cleanRaisingFood?.(input)??false;publish();return result;},
     placeFood(input) {const result=app.placeRaisingFood?.(input)??{ok:false,reason:"UNAVAILABLE"};publish();return result;},

@@ -138,6 +138,7 @@ test("only the authorized source families are present", () => {
       // Owner R9: normal target/approach/launch bodies on the existing session.
       "battleNormalFlow.js",
       "battleNormalRuntime.js",
+      "battleOpeningPhase.js", // 2026-10-14: bounded existing-runtime READY/FIGHT presentation gate.
       "battleOutcome.js",
       "battleParty.js",
       "battlePresentationHost.js",
@@ -234,8 +235,18 @@ test("one save key, one persistent writer, one Pixi bootstrap and no second tick
   assert.deepEqual(writers, ["src/championship/app/ChampionshipPersistentSavePort.js"]);
   const pixiBootstraps = sources.reduce((count, { text }) => count + (text.match(/new\s+PIXI\.Application\s*\(/g) ?? []).length, 0);
   assert.equal(pixiBootstraps, 1);
-  const tickers = sources.filter(({ text }) => /new\s+PIXI\.Ticker|Ticker\.shared|requestAnimationFrame\s*\(/.test(text)).map(({ file }) => relative(file));
+  const tickers = sources.filter(({ text }) => /new\s+PIXI\.Ticker|Ticker\.shared/.test(text)).map(({ file }) => relative(file));
   assert.deepEqual(tickers, []);
+  // Owner responsive contract requires two stable DOM/font layout samples.
+  // This bounded, cancelable measurement is not a game animation clock.
+  const layoutFrames=sources.filter(({text})=>/requestAnimationFrame\s*\(/.test(text));
+  assert.deepEqual(layoutFrames.map(({file})=>relative(file)),['src/championship/app/huntLayoutResolver.js']);
+  const layout=layoutFrames[0].text;
+  assert.equal((layout.match(/requestAnimationFrame\s*\(/g)??[]).length,1);
+  assert.match(layout,/win\.cancelAnimationFrame\(scheduled\)/);
+  assert.match(layout,/if \(entry\.sample !== sample\) \{ entry\.sample = sample; schedule\(\); return; \}/);
+  assert.match(layout,/disposed = true/);
+  assert.equal(/PIXI|Ticker|\.advance\(|\.step\(|localStorage|Math\.random/.test(layout),false);
 });
 
 test("coordination paths are repository-relative and manifests expose all required categories", () => {

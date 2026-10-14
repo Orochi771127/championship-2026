@@ -1,3 +1,4 @@
+import {battleOpeningText} from '../text/battleOpeningText.js';
 import { bindCodePaste } from "./codeClipboard.js";
 import { titleEventText, raisingDisplayName, speciesName } from "../text/zhHant.js";
 import { uiText } from "../text/uiText.js";
@@ -719,7 +720,7 @@ function combatantCard(combatant, compact,hudArt=null) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -729,6 +730,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   // Owner 2026-10-12: the dynamic presentation gives the arena most of the
   // screen; the bands keep their order and content (styles in vs5Styles.css).
   if (dynamicFx) section.dataset.fx = "dynamic";
+  if (responsiveLayout && dynamicFx) section.dataset.responsiveBattle = "candidate";
   section.dataset.rosterEvidence = frame.rosterEvidence ?? "PRODUCT_AUTHORED";
 
   const opponents = element("ul", "cm-vs5-roster cm-vs5-roster--opponent");
@@ -753,6 +755,18 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const progress=loadingProgress?.createView?.({steps:[{id:'engine',key:'LOAD_STEP_ENGINE'},{id:'arena',key:'LOAD_STEP_ARENA'},
     {id:'fighters',key:'LOAD_STEP_FIGHTERS'},{id:'effects',key:'LOAD_STEP_EFFECTS'},{id:'scene',key:'LOAD_STEP_SCENE'}]})??null;
   loading.append(loadingText);if(progress)loading.append(progress.element);host.append(loading);
+  // Existing loading-overlay styling is a visible, classic/FX-failure fallback.
+  const openingOverlay=element('div','cm-vs5-field__loading');
+  const openingText=element('p','cm-vs5-field__loading-text');
+  openingText.setAttribute('aria-hidden','true');
+  openingOverlay.append(openingText);openingOverlay.hidden=true;
+  Object.assign(openingOverlay.style,{display:'none',pointerEvents:'none',animation:'none'});
+  host.append(openingOverlay);
+  const openingStatus=element('span','');
+  openingStatus.setAttribute('role','status');openingStatus.setAttribute('aria-live','polite');
+  openingStatus.setAttribute('aria-atomic','true');
+  Object.assign(openingStatus.style,{position:'absolute',width:'1px',height:'1px',overflow:'hidden',clipPath:'inset(50%)',whiteSpace:'nowrap'});
+  host.append(openingStatus);
   const downloaded=progress?loadingProgress.observeActivity?.(files=>progress.setFiles(files))??null:null;
   const slowNotice=progress?setTimeout(()=>{if(host.getAttribute('aria-busy')==='true')progress.showSlow();},8000):null;
   const stopLoadingTrack=()=>{downloaded?.stop();clearTimeout(slowNotice);};
@@ -814,6 +828,14 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
     feed(text) { if (!viewDisposed) log.feed(text); },
     /** Called with each view the presentation source publishes. */
     render(view) {
+      if(viewDisposed)return;
+      const cue=view.opening?.cue;
+      const copy=battleOpeningText(cue);
+      if(openingText.textContent!==copy)openingText.textContent=copy;
+      if(openingStatus.textContent!==copy)openingStatus.textContent=copy;
+      // Keep accessible DOM copy even when Pixi owns the visible banner.
+      openingOverlay.hidden=!cue || view.openingFxVisible===true;
+      openingOverlay.style.display=openingOverlay.hidden?'none':'grid';
       for (const combatant of view.combatants) {
         if (!combatant.present) continue;
         cards.get(combatant.slot)?.update(combatant,view.animationFrame??0,view.outcome);
@@ -867,10 +889,12 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
+  let disposed=false;
 
   const section = shell(root, "BATTLE_RESULT", "Battle result");
+  if (responsiveLayout) section.dataset.responsiveBattle = "candidate";
   section.dataset.verdict = outcome.verdict;
   section.dataset.endReason = outcome.reason;
 
@@ -1027,6 +1051,13 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
 
   return Object.freeze({
     getCharacterHost:()=>characterHost,
+    setHudArt(art) {
+      if(disposed)return;
+      hudArt=art;
+      // Refresh only the currently visible medal panel. Keep its page index,
+      // navigation buttons/focus, settled numbers and highlight lifecycle.
+      if(panels[index].id==='TITLE')paint();
+    },
     render() {},
     inspect() {
       return Object.freeze({
@@ -1043,6 +1074,6 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         outOfScope: Object.freeze(["result_sub_net_scene"])
       });
     },
-    dispose() { entrance?.dispose?.(); entrance = null; }
+    dispose() { if(disposed)return;disposed=true;entrance?.dispose?.(); entrance = null;hudArt=null; }
   });
 }

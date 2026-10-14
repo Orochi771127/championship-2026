@@ -107,7 +107,7 @@ function mountFixture({audioLoad,fieldLoad,vfxLoad,sceneLoad}={}){
   for(const name of ['field','roster','effects','vfx','scene','audio'])resources[name]={released:0,dispose(){this.released++;},getDiagnostics:()=>({failures:[]})};
   const source={getFrame:()=>({combatants:[{present:true,speciesId:'test'}]})};let audioSignal;
   // BATTLE_DYNAMIC_FX (main.js module switch, Owner 2026-10-12) is off here; activeRuntime supplies the local team.
-  const context=vm.createContext({AbortController,BATTLE_DYNAMIC_FX:false,activeRuntime:{localTeamIndex:()=>0},location:{href:'https://orochi771127.github.io/championship-2026/championship.html'},root:{dataset:{}},source,view:{render(){}},console:{warn(...args){warnings.push(args);}},
+  const context=vm.createContext({AbortController,BATTLE_DYNAMIC_FX:false,RESPONSIVE_BATTLE_CANDIDATE:false,activeRuntime:{localTeamIndex:()=>0,markOpeningReady(){order.push('opening-ready');}},location:{href:'https://orochi771127.github.io/championship-2026/championship.html'},root:{dataset:{}},source,view:{render(){}},console:{warn(...args){warnings.push(args);}},
     settings:{audio:{output:()=>({})}},observeBattleFirstRender,recoveryDiagnostics:{record:(type,row)=>diagnostics.push({type,...row})},ensurePixiStage:async(_host,signal)=>{signal.throwIfAborted();return {app:{renderer:{}}};},
     loadOptionalBattleFieldArt:()=>fieldLoad?fieldLoad():resources.field,
     loadOptionalCharacterReview:async()=>resources.roster,loadRegisteredBattleEffectArt:async()=>resources.effects,
@@ -121,7 +121,7 @@ function mountFixture({audioLoad,fieldLoad,vfxLoad,sceneLoad}={}){
 }
 
 test('core ready precedes optional audio completion; late ownership is released on leaving',async()=>{
-  const gate=deferred(),f=mountFixture({audioLoad:()=>gate.promise});await flush();assert.deepEqual(f.order,['scene','ready','audio']);
+  const gate=deferred(),f=mountFixture({audioLoad:()=>gate.promise});await flush();assert.deepEqual(f.order,['scene','ready','opening-ready','audio']);
   assert.deepEqual(f.diagnostics.filter(e=>['ready','loading-card','audio'].includes(e.stage)).map(e=>[e.stage,e.phase]),[['ready',undefined],['loading-card','done'],['audio','start']]);
   f.owner.dispose();assert.equal(f.audioSignal.aborted,true);gate.resolve(f.resources.audio);await flush();
   assert.equal(f.resources.audio.released,1);assert.equal(f.resources.scene.released,1);assert.equal(f.resources.vfx.released,1);
@@ -129,7 +129,7 @@ test('core ready precedes optional audio completion; late ownership is released 
 
 test('optional audio rejection never reverses core ready and leaves no unhandled rejection',async()=>{
   const f=mountFixture({audioLoad:()=>Promise.reject(Error('AUDIO_UNAVAILABLE'))});await flush();
-  assert.deepEqual(f.order,['scene','ready','audio']);assert.equal(f.warnings.length,1);f.owner.dispose();await flush();
+  assert.deepEqual(f.order,['scene','ready','opening-ready','audio']);assert.equal(f.warnings.length,1);f.owner.dispose();await flush();
 });
 
 test('normal optional audio releases with its owner; scene failure never starts it',async()=>{
@@ -142,7 +142,7 @@ test('normal optional audio releases with its owner; scene failure never starts 
 test('required VFX stays gated while pending and late completion after cancellation cannot mount a scene',async()=>{
   const gate=deferred(),f=mountFixture({vfxLoad:()=>gate.promise});await flush();assert.deepEqual(f.order,[]);
   f.owner.dispose();gate.resolve(f.resources.vfx);await flush();assert.deepEqual(f.order,[]);assert.equal(f.resources.vfx.released,1);
-  const next=mountFixture();await flush();assert.deepEqual(next.order,['scene','ready','audio']);next.owner.dispose();await flush();
+  const next=mountFixture();await flush();assert.deepEqual(next.order,['scene','ready','opening-ready','audio']);next.owner.dispose();await flush();
 });
 
 test('missing/rejected core art and missing/rejected required VFX show errors, never fake ready',async()=>{

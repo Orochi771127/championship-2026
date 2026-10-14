@@ -429,6 +429,18 @@ export function createDatabaseView({ root, source }) {
   let detailGeneration = 0;
   let portraitAbort = null;
   let portraitImages = [];
+  // View-local only: never added to the Database frame or save.
+  let conditionSource = null;
+  let expandedConditionBranch = null;
+  const conditionControls = new Map();
+  function clearConditionState() {
+    conditionSource = null;
+    expandedConditionBranch = null;
+    for (const {toggle, panel} of conditionControls.values()) {
+      toggle.setAttribute('aria-expanded', 'false'); panel.hidden = true; panel.replaceChildren();
+    }
+    conditionControls.clear();
+  }
   function releasePortraits() {
     detailGeneration++;
     portraitAbort?.abort();
@@ -460,8 +472,9 @@ export function createDatabaseView({ root, source }) {
   const stopBackKeys = bindBrowseBack(root, back);
 
   function paint(nextFrame) {
+    if (!alive) return;
     const book = nextFrame?.database;
-    if (!book) return;
+    if (!book) { clearConditionState(); paintedDetail = null; return; }
     const selected = selectedEgg ?? (book.selected ? {...book.selected, ...getDatabaseDisplayEntry(book.selected.speciesIndex)} : null);
     census.textContent = uiText("已登錄 {count} / {total}", { count: book.registeredCount, total: book.slotCount });
     body.dataset.mode = selected ? "detail" : "list";
@@ -482,6 +495,7 @@ export function createDatabaseView({ root, source }) {
       if (list.hidden && focusWasInList) detail.querySelector('h2')?.focus({preventScroll:true});
     } else {
       if (paintedDetail !== null) releasePortraits();
+      clearConditionState();
       detail.replaceChildren();
       paintedDetail = null;
       back.textContent = uiText("RETURN TO RANCH");
@@ -530,6 +544,16 @@ export function createDatabaseView({ root, source }) {
   }
 
   function paintDetail(selected, book) {
+    const sameSource = conditionSource === selected.speciesIndex;
+    const focusedBranch = sameSource && detail.contains(document.activeElement)
+      && document.activeElement?.classList.contains('cm-dex-conditions__toggle')
+      ? Number(document.activeElement.dataset.conditionBranch) : null;
+    if (!sameSource) expandedConditionBranch = null;
+    conditionSource = selected.speciesIndex;
+    for (const {toggle, panel} of conditionControls.values()) {
+      toggle.setAttribute('aria-expanded', 'false'); panel.hidden = true; panel.replaceChildren();
+    }
+    conditionControls.clear();
     releasePortraits();
     portraitAbort = new AbortController();
     detail.replaceChildren();
@@ -558,6 +582,8 @@ export function createDatabaseView({ root, source }) {
     }
     if (selected.state !== "REGISTERED") return;
     paintEvolutionRoutes(selected);
+    if (!conditionControls.has(expandedConditionBranch)) expandedConditionBranch = null;
+    if (focusedBranch !== null) conditionControls.get(focusedBranch)?.toggle.focus({preventScroll:true});
     if (selected.source === "STARTER" && selected.instances.length === 0) {
       detail.append(element("p", "cm-vs2-shop__status", "Registered by the opening partner. No Hunt instance yet."));
     }
@@ -643,11 +669,62 @@ export function createDatabaseView({ root, source }) {
           paint(source.getFrame());
           detail.querySelector('h2')?.focus({preventScroll:true});
         });
-        row.append(button); targets.append(row);
+        row.append(button);
+        appendEvolutionConditions(row, route);
+        targets.append(row);
       }
       graph.append(targets);
     }
     section.append(graph); detail.append(section);
+  }
+
+  function paintConditionPanel(control, expanded) {
+    const {toggle, panel, model} = control;
+    toggle.setAttribute('aria-expanded', String(expanded));
+    panel.hidden = !expanded;
+    panel.replaceChildren();
+    if (!expanded) return;
+    panel.append(element('p', 'cm-dex-conditions__notice', 'DEX_CONDITIONS_RULES_ONLY'));
+    if (model.lifetimeOnly) panel.append(element('p', 'cm-dex-conditions__notice', 'DEX_CONDITIONS_LIFETIME'));
+    if (model.conditions.length) {
+      const values = element('dl', 'cm-dex-conditions__list');
+      for (const condition of model.conditions) {
+        const line = element('div', 'cm-dex-conditions__row');
+        const unitKey = {PERCENT:'DEX_CONDITIONS_PERCENT', BATTLES:'DEX_CONDITIONS_BATTLES', TIMES:'DEX_CONDITIONS_TIMES'}[condition.unit];
+        const value = unitKey ? uiText(unitKey, {value:condition.value, count:condition.value})
+          : uiText('{value}', {value:condition.value});
+        line.append(element('dt', '', `DEX_CONDITION_${condition.id}`),
+          element('dd', '', uiText(condition.operator === 'LTE' ? 'DEX_CONDITIONS_LTE' : 'DEX_CONDITIONS_GTE', {value})));
+        values.append(line);
+      }
+      panel.append(values);
+    } else panel.append(element('p', 'cm-dex-conditions__notice', 'DEX_CONDITIONS_NO_NUMERIC'));
+    panel.append(element('p', 'cm-dex-conditions__notice', 'DEX_CONDITIONS_LIMITS'));
+  }
+
+  function appendEvolutionConditions(row, route) {
+    // Unknown routes have no button, panel, hidden thresholds or ARIA payload.
+    if (!route.revealed || route.historyState !== 'RECORDED' || !route.targetRegistered || !route.conditions) return;
+    const toggle = element('button', 'cm-dex-conditions__toggle', 'DEX_CONDITIONS');
+    toggle.type = 'button';
+    toggle.dataset.conditionBranch = String(route.branchIndex);
+    const id = `cm-dex-conditions-${detailGeneration}-${route.branchIndex}`;
+    toggle.id = `${id}-toggle`;
+    toggle.setAttribute('aria-label', uiText('DEX_CONDITIONS_TOGGLE', {branch:route.branchIndex + 1}));
+    toggle.setAttribute('aria-controls', id);
+    const panel = element('section', 'cm-dex-conditions__panel');
+    panel.id = id;
+    panel.setAttribute('aria-labelledby', toggle.id);
+    const control = {toggle, panel, model:route.conditions};
+    conditionControls.set(route.branchIndex, control);
+    paintConditionPanel(control, expandedConditionBranch === route.branchIndex);
+    const generation = detailGeneration;
+    toggle.addEventListener('click', () => {
+      if (!alive || generation !== detailGeneration) return;
+      expandedConditionBranch = expandedConditionBranch === route.branchIndex ? null : route.branchIndex;
+      for (const [branch, entry] of conditionControls) paintConditionPanel(entry, branch === expandedConditionBranch);
+    });
+    row.append(toggle, panel);
   }
 
   paint(frame);
@@ -659,6 +736,7 @@ export function createDatabaseView({ root, source }) {
     relabel() { paint(source.getFrame()); },
     dispose() {
       alive = false;
+      clearConditionState();
       releasePortraits();
       stopBackKeys();
       globalThis.removeEventListener?.('resize', resize);

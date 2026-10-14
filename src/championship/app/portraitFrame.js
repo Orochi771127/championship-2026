@@ -1,13 +1,15 @@
-// Owner 2026-09-13: landscape displays the existing portrait UI, without
-// rebuilding scenes or changing world coordinates. Owner 2026-10-13 permits
-// Raising, Shop and Database to use a desktop viewport. This owns layout only.
+// Owner 2026-10-14 batch A: layout only, with the existing Raising scene.
+// The historical desktop flag now means a wide Raising working area. Two
+// usable columns need 720 CSS pixels; short landscapes scroll the native world.
+// Battle and Hunt leave the frame only through their integrated opt-in readiness gates.
 export function isDesktopRaisingLayout({width,height,activeScreen,hidden=false}) {
-  return width>=1024&&height>=600&&activeScreen==='RAISING_HOME'&&!hidden;
+  return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
+    &&(width>=1024||width>=height+160)&&activeScreen==='RAISING_HOME'&&!hidden;
 }
 export function isDesktopBrowseLayout({width,height,activeScreen,hidden=false}) {
   return width>=1024&&height>=420&&['SHOP','DATABASE'].includes(activeScreen)&&!hidden;
 }
-export function mountPortraitFrame({window:win=globalThis.window,document:doc=globalThis.document}={}) {
+export function mountPortraitFrame({window:win=globalThis.window,document:doc=globalThis.document,responsiveRaising=false,responsiveBattle=false,isHuntWide=()=>false}={}) {
   const body=doc.body,visual=win.visualViewport;
   const root=doc.getElementById?.('cm-root');
   const properties=['--cm-frame-scale','--cm-viewport-height','--cm-frame-center-x','--cm-frame-center-y'];
@@ -31,11 +33,18 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     if(inputBaseline&&Math.abs(width-inputBaseline.width)>1)inputBaseline=null;
     if(hasInput&&!inputBaseline)inputBaseline={width,height,sideways:width>height};
     const keyboard=!!inputBaseline&&height<inputBaseline.height;
-    const desktop=isDesktopRaisingLayout({width,height,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden});
+    const effectiveHeight=keyboard?inputBaseline.height:height;
+    const desktop=responsiveRaising
+      ? isDesktopRaisingLayout({width,height:effectiveHeight,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden})
+      : width>=1024&&height>=600&&root?.dataset.activeScreen==='RAISING_HOME'&&!root?.hidden;
+    const battle=responsiveBattle&&!root?.hidden&&['BATTLE_FIELD','BATTLE_RESULT'].includes(root?.dataset.activeScreen);
     const browse=isDesktopBrowseLayout({width,height,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden});
+    const hunt=root?.dataset.activeScreen==='HUNT_FIELD'&&!root?.hidden&&isHuntWide()===true;
+    body.toggleAttribute('data-hunt-wide',hunt);
     body.toggleAttribute('data-desktop-raising',desktop);
+    body.toggleAttribute('data-responsive-raising',responsiveRaising&&desktop);
     body.toggleAttribute('data-desktop-browse',browse);
-    sideways=!desktop&&!browse&&(keyboard?inputBaseline.sideways:width>height);
+    sideways=!battle&&!desktop&&!browse&&!hunt&&(keyboard?inputBaseline.sideways:width>height);
     if(!hasInput&&!keyboard)inputBaseline=null;
     body.toggleAttribute('data-portrait-frame',sideways);
     if(!sideways){for(const name of properties)body.style.removeProperty(name);revealInput();return;}
@@ -61,7 +70,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   const observer=root&&Observer?new Observer(()=>update()):null;
   observer?.observe(root,{attributes:true,attributeFilter:['data-active-screen','hidden']});
   update();
-  return {dispose(){
+  return {refresh(){update();},dispose(){
     if(disposed)return;disposed=true;
     win.removeEventListener('resize',update);
     visual?.removeEventListener('resize',update);
@@ -69,7 +78,9 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     doc.removeEventListener('focusin',update);doc.removeEventListener('focusout',update);
     body.removeAttribute('data-portrait-frame');
     body.removeAttribute('data-desktop-raising');
+    body.removeAttribute('data-responsive-raising');
     body.removeAttribute('data-desktop-browse');
+    body.removeAttribute('data-hunt-wide');
     observer?.disconnect();
     for(const name of properties)body.style.removeProperty(name);
   }};

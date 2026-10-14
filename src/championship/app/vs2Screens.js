@@ -595,10 +595,12 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸數碼獸選取");
   const info = element('div', 'cm-hunt-info');
   info.append(target, pluginHud);
-  shell.append(viewport, hud, info);
+  // display:contents in legacy; one scrollable controls column when wide.
+  const controlsPanel = element('aside', 'cm-hunt-controls-panel');
+  controlsPanel.append(info, movementHint);
+  if(block.toolState) controlsPanel.append(tools);
+  shell.append(viewport, hud, controlsPanel);
   if (mode === VS2_PRESENTATION_MODES.DEVELOPER) shell.append(toolbar);
-  shell.append(movementHint);
-  if(block.toolState) shell.append(tools);
   root.append(shell);
 
   const load = new AbortController();

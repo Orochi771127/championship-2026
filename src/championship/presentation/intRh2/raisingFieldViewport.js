@@ -14,6 +14,29 @@ export const RAISING_MIN_VISIBLE_NATIVE_WIDTH = 112;
 // Actual dimensions still own pan limits, headroom and pointer conversion.
 export const RAISING_DESKTOP_REFERENCE_VIEWPORT = Object.freeze({width:390,height:675});
 
+// Canonical first-entry fallback, not a measurement of translated/large HUD.
+// A real stable portrait host replaces it once within this scene. Never infer
+// portrait width from a landscape FIELD box after sidebar/HUD subtraction.
+export function initialRaisingReferenceViewport(layout = {}) {
+  const width = Number(layout.width), height = Number(layout.height);
+  if (!Number.isFinite(width)||!Number.isFinite(height)||!(width > 24 && height > 24) || width >= 1024)
+    return { ...RAISING_DESKTOP_REFERENCE_VIEWPORT };
+  return { width: Math.min(width, height), height: Math.max(25, Math.max(width, height) - 169) };
+}
+
+// Sample on the existing scene ticker, not a new timer. Two equal useful
+// samples with ready HUD/visible host reject collapsed and settling layouts.
+export function sampleRaisingReferenceViewport(state, viewport, { portrait = false, ready = false } = {}) {
+  if (!portrait || !ready || !(viewport.width > 24 && viewport.height > 24))
+    return state.pending ? { ...state, pending: null } : state;
+  const sample = { width: viewport.width, height: viewport.height };
+  if(state.measured&&state.reference.width===sample.width&&state.reference.height===sample.height)
+    return state.pending?{...state,pending:null}:state;
+  if (state.pending?.width === sample.width && state.pending?.height === sample.height)
+    return { reference: sample, measured: true, pending: null };
+  return { ...state, pending: sample };
+}
+
 /**
  * Room held above the native board for residents' bodies (2026-10-05).
  *
@@ -43,7 +66,8 @@ export const RAISING_TOP_HEADROOM_NATIVE = RAISING_TALLEST_BODY_NATIVE + RAISING
  * than blurring the art with a fractional scale.
  */
 export function raisingNativeScreenPixels(field, viewport, padding = 12) {
-  if(viewport.desktopRaising)viewport=RAISING_DESKTOP_REFERENCE_VIEWPORT;
+  if(viewport.referenceViewport?.width>24&&viewport.referenceViewport?.height>24)viewport=viewport.referenceViewport;
+  else if(viewport.desktopRaising)viewport=RAISING_DESKTOP_REFERENCE_VIEWPORT;
   const unit = field.nativePixelWorldScale;
   const nativeHeight = field.worldHeightPx / unit;
   const byWidth = Math.floor((viewport.width - padding * 2) / RAISING_MIN_VISIBLE_NATIVE_WIDTH);
@@ -112,10 +136,53 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   return { x, y, width, height, scale, scrollY, scrollMaxY };
 }
 
+/**
+ * Reframe the same native world point when the field host changes size.
+ *
+ * cameraX is a world offset; cameraY is screen-pixel headroom scroll. Keeping
+ * either number unchanged across orientation changes moves the point that was
+ * in the middle of the view. Read that point through the OLD fitted rectangle
+ * (including its clamping), then place it at the NEW view's centre. A folded
+ * ranch uses band-local x and the complete stacked y, without changing bands
+ * or native actor coordinates. The existing wrap, board bounds and headroom
+ * remain authoritative when that centre cannot be reached exactly.
+ *
+ * A temporarily collapsed host during screen attachment has no useful focal
+ * point. Its caller keeps the last non-collapsed viewport for the next resize.
+ */
+export function resizeRaisingCamera(field, previousViewport, nextViewport,
+  { cameraX = 0, cameraY = 0 } = {}, padding = 12) {
+  const current = {
+    cameraX: Number.isFinite(cameraX) ? cameraX : 0,
+    cameraY: Number.isFinite(cameraY) ? cameraY : 0
+  };
+  const usable = viewport => Number.isFinite(viewport?.width) && viewport.width > padding * 2
+    && Number.isFinite(viewport?.height) && viewport.height > padding * 2;
+  if (field?.presentationMode !== 'NATIVE_RANCH' || !(field.nativePixelWorldScale > 0)
+    || !(field.worldWidthPx > 0 && field.worldHeightPx > 0)
+    || !usable(previousViewport) || !usable(nextViewport)) return current;
+
+  const previous = raisingFieldViewport(field, { ...previousViewport, scrollY: current.cameraY }, padding, current.cameraX);
+  const next = raisingFieldViewport(field, { ...nextViewport, scrollY: 0 }, padding, 0);
+  const focalX = (previousViewport.width / 2 - previous.x) / previous.scale;
+  // The board's y is pixel-snapped. Use the centre pixel, too: alternating
+  // odd/even host heights must not round a half pixel in the same direction
+  // on every rotation and slowly drift the world camera.
+  const focalY = (Math.floor(previousViewport.height / 2) - previous.y) / previous.scale;
+  const requestedX = focalX - (nextViewport.width / 2 - padding) / next.scale;
+  const maxX = Math.max(0, field.worldWidthPx - (nextViewport.width - padding * 2) / next.scale);
+  const requestedY = Math.floor(nextViewport.height / 2) - focalY * next.scale - next.y;
+  return {
+    cameraX: field.wrapWidthPx > 0 ? wrapRaisingCamera(requestedX, field.wrapWidthPx)
+      : Math.min(maxX, Math.max(0, requestedX)),
+    cameraY: Math.min(next.scrollMaxY ?? 0, Math.max(0, requestedY))
+  };
+}
+
 // Do not show extra complete copies of the same cages on oversized monitors.
-export function desktopRaisingViewportWidth(field,padding=12) {
+export function desktopRaisingViewportWidth(field,padding=12,referenceViewport=RAISING_DESKTOP_REFERENCE_VIEWPORT) {
   if(field?.presentationMode!=='NATIVE_RANCH'||!(field.nativePixelWorldScale>0))return null;
-  return field.worldWidthPx*raisingNativeScreenPixels(field,RAISING_DESKTOP_REFERENCE_VIEWPORT,padding)/field.nativePixelWorldScale+padding*2;
+  return field.worldWidthPx*raisingNativeScreenPixels(field,referenceViewport,padding)/field.nativePixelWorldScale+padding*2;
 }
 
 export function wrapRaisingCamera(value,width){return ((value%width)+width)%width;}

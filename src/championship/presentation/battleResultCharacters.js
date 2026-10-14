@@ -1,5 +1,6 @@
 // OVL8 0210C438/444 selects Sub 9 for all-wins, otherwise Sub 5.
 // 0210CCB0 advances those three bodies once per native result update.
+import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
 export const RESULT_FRAME=Object.freeze({width:256,height:192});
 export const RESULT_ANCHORS=Object.freeze([[46,151],[127,172],[210,154]]); // result_sub_scene.nxr digimon1..3
 // Where the 256x192 frame sits on a taller portrait stage is PRODUCT_AUTHORED
@@ -39,11 +40,34 @@ export function resultHeroAnchor({width,height,slots=[0]}){
   const x=present.reduce((sum,[ax])=>sum+ax,0)/present.length,y=present.reduce((sum,[,ay])=>sum+ay,0)/present.length-36;
   return {x:(left+x*scale)/width,y:(top+y*scale)/height};
 }
-export async function mountBattleResultCharacters({stage,hudArt,participants,won}){
-  const scene=stage.createSceneRoot('native result characters');
+export async function mountBattleResultCharacters({stage,hudArt,participants,won,signal=null}){
+  signal?.throwIfAborted();
+  const controller=new AbortController(),loadSignal=controller.signal;
+  const PIXI=createPixiAssetScope(stage.PIXI,globalThis.location?.href,{signal:loadSignal});
   const anchors=RESULT_ANCHORS;
-  const sequence=won?9:5,actors=[],loaded=new Map();
-  let bounds=null,frameScale=1;
+  const sequence=won?9:5,actors=[],loaded=new Map(),sources=new Set();
+  let bounds=null,frameScale=1,scene=null,resize=null,ticking=false,disposed=false;
+  let accumulator=0,elapsed=0;
+  function dispose(){
+    if(disposed)return;disposed=true;
+    controller.abort();signal?.removeEventListener('abort',abort);
+    resize?.();if(ticking)stage.app.ticker.remove(update);ticking=false;
+    scene?.destroy({children:true});scene=null;actors.length=0;loaded.clear();
+    // Scoped ownership releases settled pixels now and late pixels when their
+    // uncancellable load finishes, without invalidating a newer result scene.
+    for(const src of sources)void PIXI.Assets.unload(src).catch(()=>{});
+  }
+  const abort=()=>dispose();
+  signal?.addEventListener('abort',abort,{once:true});
+  const wait=pending=>new Promise((resolve,reject)=>{
+    const cancelled=()=>reject(loadSignal.reason);
+    loadSignal.addEventListener('abort',cancelled,{once:true});
+    Promise.resolve(pending).then(value=>{
+      loadSignal.removeEventListener('abort',cancelled);
+      loadSignal.aborted?reject(loadSignal.reason):resolve(value);
+    },error=>{loadSignal.removeEventListener('abort',cancelled);reject(error);});
+    if(loadSignal.aborted)cancelled();
+  });
   // The three bodies share most of their cells and none of them waits on
   // another, so awaiting one cell at a time made the result screen pay a round
   // trip per frame. Gather the distinct sources, load them together, then build
@@ -51,11 +75,14 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
   try{
     const chosen=participants.slice(0,3).map((p,i)=>({p,i,cells:p&&hudArt?hudArt.getBattleCells(p.speciesId,sequence):[]}))
       .filter(e=>e.cells.length);
-    const sources=[...new Set(chosen.flatMap(e=>e.cells.map(c=>c.src)))];
-    const results=await Promise.allSettled(sources.map(async src=>({src,texture:await stage.PIXI.Assets.load(src)})));
-    for(const r of results)if(r.status==='fulfilled'){r.value.texture.source.scaleMode='nearest';loaded.set(r.value.src,r.value.texture);}
-    const failed=results.find(r=>r.status==='rejected');
-    if(failed)throw failed.reason;
+    for(const src of chosen.flatMap(e=>e.cells.map(c=>c.src)))sources.add(src);
+    await wait(Promise.all([...sources].map(async src=>{
+      const texture=await PIXI.Assets.load(src);loadSignal.throwIfAborted();
+      texture.source.scaleMode='nearest';loaded.set(src,texture);
+    })));
+    loadSignal.throwIfAborted();
+    // No scene, callback or canvas content exists while a texture is pending.
+    scene=stage.createSceneRoot('native result characters');
     for(const {p,i,cells} of chosen){
       // HUD cells are alpha-cropped. Union every animation cell in logical
       // pixels so a later pose cannot jump outside the result container.
@@ -65,8 +92,7 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
         bounds=bounds?{left:Math.min(bounds.left,box.left),top:Math.min(bounds.top,box.top),right:Math.max(bounds.right,box.right),bottom:Math.max(bounds.bottom,box.bottom)}:box;
       }
       const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,speciesId:p.speciesId,anchor:anchors[i]});}
-  }catch(error){scene.destroy({children:true});await Promise.allSettled([...loaded.keys()].map(src=>stage.PIXI.Assets.unload(src)));throw error;}
-  let accumulator=0,disposed=false,elapsed=0;
+  }catch(error){dispose();throw error;}
   function apply(){for(const actor of actors){const cell=hudArt.getBattleFrame(actor.speciesId,sequence,elapsed);if(!cell)continue;
     const texture=loaded.get(cell.src);actor.sprite.texture=texture;
     actor.sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);
@@ -79,6 +105,7 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
     if(globalThis.document?.hidden){accumulator=0;return;}
     accumulator+=Math.min(250,Math.max(0,ticker.deltaMS));
     while(accumulator+1e-9>=1000/60){accumulator-=1000/60;elapsed++;}apply();}
-  stage.app.ticker.add(update);const resize=stage.onResize(layout);apply();layout();
-  return {dispose(){if(disposed)return;disposed=true;resize();stage.app.ticker.remove(update);scene.destroy({children:true});void Promise.allSettled([...loaded.keys()].map(src=>stage.PIXI.Assets.unload(src)));}};
+  try{stage.app.ticker.add(update);ticking=true;resize=stage.onResize(layout);apply();layout();}
+  catch(error){dispose();throw error;}
+  return {dispose};
 }

@@ -16,6 +16,7 @@
 // The layer reads the published battle view and the tracker's events only. It
 // owns no clock (the scene hands it the one Pixi ticker's elapsed time) and
 // writes nothing the simulation reads. Textures are generated at mount.
+import {battleOpeningText} from '../../text/battleOpeningText.js';
 import {BATTLE_FX_PALETTES, battleFxFamilyForm, battleFxFamilyPalette} from './battleFxRecipes.js';
 
 const TAU = Math.PI * 2;
@@ -127,7 +128,7 @@ const DEBRIS = [0x8f8070, 0x6f6152, 0xb0a08c];
 const MOVING_FORMS = new Set(['projectile', 'stream', 'beam', 'area']);
 const FOLLOW_FORMS = new Set(['projectile', 'stream', 'beam']);
 
-export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, quality = 'balanced', reducedMotion = false,
+export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, quality = 'balanced', reducedMotion = false, responsiveLayout = false,
   flashScale = 1, describeMove = () => null, nameOfSlot = () => '', moveNameOf = () => '', text = value => value, seed = 0x51ed}) {
   const textures = createTextures(PIXI);
   if (!textures) return null;
@@ -350,7 +351,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     const slot = s => ctx.slotInfo?.(s) ?? null;
     for (const event of events) {
       eventsHandled++;
-      if (event.type === 'START') { showBanner(text('對戰開始！'), {size: 34, fill: 0xffffff, life: 1000}); continue; }
+      if (event.type === 'START') { if(!ctx.opening?.armed)showBanner(text('對戰開始！'), {size: 34, fill: 0xffffff, life: 1000}); continue; }
       if (event.type === 'LAUNCH') {
         const info = slot(event.slot), look = describeMove(event.slot, event.moveId);
         if (!info || !look || look.tier === 'basic' || look.tier === 'support') continue;
@@ -565,7 +566,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (!info || combatant.down) continue;
       const p = toScreen(ctx, info.x, info.top);
       const width = clamp(info.width * (ctx.camera?.zoom ?? 1) * 0.8, 28, 54), height = 4;
-      const x = clamp(p.x - width / 2, 4, viewport.width - width - 4), y = Math.max(4, p.y - 10);
+      const x = clamp(p.x - width / 2, 4, viewport.width - width - 4), y = responsiveLayout ? clamp(p.y - 10, 4, Math.max(4, viewport.height - height - 4)) : Math.max(4, p.y - 10);
       const color = combatant.team === ctx.localTeam ? 0x45e0a8 : 0xff8a5c;
       barGfx.rect(x - 1, y - 1, width + 2, height + 2).fill({color: 0x0a0e12, alpha: 0.75});
       barGfx.rect(x, y, width * bar.ghost, height).fill({color: 0xfff4d6, alpha: 0.9});
@@ -577,14 +578,33 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (w.age >= w.life) { w.node.destroy(); words.splice(i, 1); continue; }
       const k = w.age / w.life, pop = w.age < 110 ? lerp(1.6, 1, w.age / 110) : 1;
       w.node.scale.set(reducedMotion ? 1 : pop);
-      w.node.position.set(w.x, w.y - (reducedMotion ? 0 : w.rise * easeOut(k)));
+      if (responsiveLayout) {
+        w.node.style.wordWrap = true;
+        w.node.style.breakWords = true;
+        w.node.style.wordWrapWidth = Math.max(24, (viewport.width - 16) / pop);
+      }
+      const halfW = w.node.width / 2 + 4, halfH = w.node.height / 2 + 4;
+      w.node.position.set(responsiveLayout ? clamp(w.x, halfW, Math.max(halfW, viewport.width - halfW)) : w.x,
+        responsiveLayout ? clamp(w.y - (reducedMotion ? 0 : w.rise * easeOut(k)), halfH, Math.max(halfH, viewport.height - halfH))
+          : w.y - (reducedMotion ? 0 : w.rise * easeOut(k)));
       w.node.alpha = k > 0.7 ? (1 - k) / 0.3 : 1;
     }
+    const cue=view.opening?.cue;
+    if(cue){
+      const copy=battleOpeningText(cue);
+      if(!banner?.opening || banner.node.text!==copy){
+        showBanner(copy,{size:34,fill:0xffffff,life:Infinity});banner.opening=true;
+      }
+    }else if(banner?.opening){banner.node.destroy();banner=null;}
     if (banner) {
       banner.age += dtMs;
       if (banner.age >= banner.life) { banner.node.destroy(); banner = null; }
       else {
         const k = banner.age / banner.life, pop = banner.age < 140 ? lerp(2.1, 1, easeOut(banner.age / 140)) : 1;
+        if (responsiveLayout) {
+          banner.node.style.wordWrap = true; banner.node.style.breakWords = true;
+          banner.node.style.wordWrapWidth = Math.max(24, (viewport.width - 16) / (reducedMotion ? 1 : pop));
+        }
         banner.node.position.set(viewport.width / 2, viewport.height * 0.42);
         banner.node.scale.set(reducedMotion ? 1 : pop);
         banner.node.alpha = k > 0.8 ? (1 - k) / 0.2 : 1;
@@ -595,13 +615,21 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (callout.age >= callout.life) { callout.node.destroy({children: true}); callout = null; }
       else {
         const {node, bg, title, owner, tag, palette} = callout;
-        const pad = 8, width = Math.max(title.width, owner.width + (tag?.width ?? 0) + 8) + pad * 2 + 6, height = title.height + owner.height + pad;
+        if (responsiveLayout) {
+          for (const label of [title, owner, tag].filter(Boolean)) {
+            label.style.wordWrap = true; label.style.breakWords = true;
+            label.style.wordWrapWidth = Math.max(24, viewport.width - 40);
+          }
+        }
+        const pad = 8, width = (responsiveLayout ? Math.max(title.width, owner.width, tag?.width ?? 0)
+          : Math.max(title.width, owner.width + (tag?.width ?? 0) + 8)) + pad * 2 + 6,
+          height = title.height + owner.height + pad + (responsiveLayout && tag ? tag.height + 2 : 0);
         bg.clear();
         bg.roundRect(0, 0, width, height, 6).fill({color: 0x0b1118, alpha: 0.82});
         bg.rect(0, 0, 4, height).fill({color: palette.main, alpha: 1});
         bg.roundRect(0, 0, width, height, 6).stroke({width: 1, color: palette.edge, alpha: 0.9});
         owner.position.set(pad + 4, pad * 0.5); title.position.set(pad + 4, pad * 0.5 + owner.height - 2);
-        tag?.position.set(pad + 8 + owner.width, pad * 0.5 - 1);
+        tag?.position.set(responsiveLayout ? pad + 4 : pad + 8 + owner.width, responsiveLayout ? pad * 0.5 + owner.height + title.height : pad * 0.5 - 1);
         const fromLeft = callout.team === ctx.localTeam;
         const slide = reducedMotion ? 1 : easeOut(clamp(callout.age / 160, 0, 1));
         const out = callout.age > callout.life - 200 ? (callout.age - (callout.life - 200)) / 200 : 0;

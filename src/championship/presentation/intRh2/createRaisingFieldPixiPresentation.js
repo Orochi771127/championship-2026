@@ -18,7 +18,7 @@ import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyph
 import {EVOLUTION_SYMBOL_REPLACEMENT_TEXT} from '../../text/evolutionPresentationText.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
-import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
+import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
 
 const DRAG_THRESHOLD_PX = 6;
 
@@ -97,6 +97,8 @@ function clamp(value, minimum, maximum) {
 export async function mountRaisingFieldPixiPresentation({
   stage,
   source,
+  responsiveLayout = false,
+  getLayoutSample = () => null,
   onFallback = () => {},
   fieldArt = null,
   characterBundle = null,
@@ -236,12 +238,18 @@ export async function mountRaisingFieldPixiPresentation({
   let cameraY = 0;
   // Every placement on this scene reads the frame through this one view, so
   // the vertical scroll moves art, residents, shadows and input together.
+  let raisingReference = null;
   const view = Object.freeze({
     get width() { return app.screen.width; },
     get height() { return app.screen.height; },
     get desktopRaising() { return globalThis.document?.body?.hasAttribute('data-desktop-raising')??false; },
-    get scrollY() { return cameraY; }
+    get scrollY() { return cameraY; },
+    get referenceViewport() { return raisingReference?.reference; }
   });
+  // The shared stage updates app.screen BEFORE notifying scenes. Keep plain
+  // dimensions from the previous useful layout; retaining `view` itself would
+  // retain its live getters and lose the pre-rotation world focal point.
+  let cameraViewport = null;
   const scrollMaxY = () => (fieldArt?.field ? raisingFieldViewport(fieldArt.field, view).scrollMaxY ?? 0 : 0);
   // World x of a native x within its band: a folded ring (expansion prototype)
   // shows its annex as a second band, and the shared camera is band-local.
@@ -381,6 +389,7 @@ export async function mountRaisingFieldPixiPresentation({
   let cameraStarted = false;
   function startCameraOnResident(frame) {
     if (cameraStarted || fieldArt?.field?.presentationMode !== 'NATIVE_RANCH') return;
+    if (responsiveLayout && (view.width <= 24 || view.height <= 24)) return;
     const unit = fieldArt.field.nativePixelWorldScale;
     const fit = raisingFieldViewport(fieldArt.field, view, 12, cameraX);
     if (!(unit > 0) || !(fit.scale > 0)) return;
@@ -772,10 +781,23 @@ export async function mountRaisingFieldPixiPresentation({
     else if(drag.moved&&!isNativeRanchLayout(latestFrame?.ranch?.layoutVersion))drag.entry.root.position.set(event.global.x,event.global.y);
   }
 
-  // The stage already resized the renderer and refreshed the hit area; the scene
-  // only has to relay out against the new screen size.
+  function samplePortraitReference() {
+    if (!responsiveLayout || disposed || !raisingReference) return;
+    const layout=getLayoutSample();
+    const next=sampleRaisingReferenceViewport(raisingReference,view,{
+      portrait:layout?.portrait===true,ready:layout?.ready===true
+    });
+    if(next===raisingReference)return;
+    const changed=next.reference!==raisingReference.reference;
+    raisingReference=next;
+    if(changed){cancelInput('viewport-resize');resize();}
+  }
+
+  // Reframe the existing scene after the shared stage resized its renderer.
+  // No actor reload, selection intent, scene, application or clock is created.
   function resize() {
     if (disposed) return;
+    if (!responsiveLayout) {
     if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
     // A taller frame may need less scroll, or none.
     cameraY = clamp(cameraY, 0, scrollMaxY());
@@ -786,6 +808,70 @@ export async function mountRaisingFieldPixiPresentation({
       const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
       cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
     }
+    sync(source.getFrame(), { force: true });
+      return;
+    }
+    // A resize can happen while the ticker is suspended. Do not combine a
+    // pre-rotation portrait sample with the first post-rotation frame.
+    if(raisingReference?.pending)raisingReference={...raisingReference,pending:null};
+    if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
+    if(!raisingReference)raisingReference={reference:initialRaisingReferenceViewport({
+      width:globalThis.window?.innerWidth??view.width,height:globalThis.window?.innerHeight??view.height
+    }),measured:false,pending:null};
+    const nextViewport = { width: view.width, height: view.height, desktopRaising: view.desktopRaising,
+      referenceViewport:raisingReference.reference };
+    // An attaching/hidden host can briefly collapse to the renderer's 1px
+    // minimum. Do not turn that intermediate size into a camera movement.
+    if (nextViewport.width <= 24 || nextViewport.height <= 24) return;
+    const changed = cameraViewport && (cameraViewport.width !== nextViewport.width
+      || cameraViewport.height !== nextViewport.height || cameraViewport.desktopRaising !== nextViewport.desktopRaising
+      || cameraViewport.referenceViewport?.width !== nextViewport.referenceViewport.width
+      || cameraViewport.referenceViewport?.height !== nextViewport.referenceViewport.height);
+    if (changed && fieldArt?.field) {
+      const before = { cameraX, cameraY };
+      const next = resizeRaisingCamera(fieldArt.field, cameraViewport, nextViewport, before);
+      // A card-requested camera pan keeps its destination in the new frame.
+      // Restart only its remaining presentation easing, not a gameplay timer.
+      if (cameraFocus) {
+        const target = resizeRaisingCamera(fieldArt.field, cameraViewport, nextViewport, {
+          cameraX: cameraFocus.from + cameraFocus.distance,
+          cameraY: (cameraFocus.fromY ?? cameraY) + (cameraFocus.distanceY ?? 0)
+        });
+        let distance = target.cameraX - next.cameraX;
+        const wrap = fieldArt.field.wrapWidthPx;
+        if (wrap > 0) distance = wrapRaisingCamera(distance + wrap / 2, wrap) - wrap / 2;
+        cameraFocus = { from: next.cameraX, distance, fromY: next.cameraY,
+          distanceY: target.cameraY - next.cameraY, elapsed: 0,
+          duration: Math.max(1, cameraFocus.duration - cameraFocus.elapsed) };
+      }
+      // Evolution's native phase clock still owns its pan. Rebase its end
+      // point and recover a start that meets the already-rendered progress.
+      if (evolutionCamera) {
+        const target = resizeRaisingCamera(fieldArt.field, cameraViewport, nextViewport,
+          { cameraX: evolutionCamera.target, cameraY }).cameraX;
+        const travel = evolutionCamera.target - evolutionCamera.start;
+        const progress = travel ? clamp((cameraX - evolutionCamera.start) / travel, 0, 1) : 1;
+        evolutionCamera = { ...evolutionCamera, target,
+          start: progress < 1 ? (next.cameraX - target * progress) / (1 - progress) : next.cameraX };
+      }
+      cameraX = next.cameraX;
+      cameraY = next.cameraY;
+      // Camera teaching compares movement against this presentation offset.
+      // Reframing must not count the width change as a player camera gesture.
+      if (source.getFrame().tutorial && !source.getFrame().tutorial.finished && fieldArt.field.nativePixelWorldScale > 0) {
+        tutorialCameraOffset += (cameraX - before.cameraX) / fieldArt.field.nativePixelWorldScale;
+      }
+    }
+    // Only initial entry aligns the main cages under the HUD. Later rotations
+    // retain the player's current world focus, including the lower annex.
+    if (!cameraViewport && view.desktopRaising && fieldArt?.field) {
+      const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
+      cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
+    }
+    cameraY = clamp(cameraY, 0, scrollMaxY());
+    cameraViewport = nextViewport;
+    const cap=desktopRaisingViewportWidth(fieldArt?.field,12,raisingReference.reference);
+    if(cap!==null)app.canvas?.parentElement?.style?.setProperty('--cm-ranch-unique-width',`${cap}px`);
     sync(source.getFrame(), { force: true });
   }
 
@@ -836,6 +922,7 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function updateAnimations(ticker) {
+    samplePortraitReference();
     const tutorial=source.getFrame().tutorial;
     const viewKey=tutorial&&!tutorial.finished?tutorial.checkpoint.stage+":"+tutorial.checkpoint.message+":"+tutorial.viewRevision:null;
     if(viewKey!==tutorialViewKey){
@@ -1119,16 +1206,35 @@ export async function mountRaisingFieldPixiPresentation({
   app.ticker.add(updateAnimations);
 
   const unsubscribe = source.subscribe(sync);
-  function cancelInput(){
+  function cancelInput(reason = null){
+    if (!responsiveLayout) {
     if(drag?.nativeHand)source.intents.endHand?.(drag.creatureId,{cancelled:true,checkpoint:drag.tutorialCheckpoint});
     else if(drag?.carried)source.intents.releaseCarry?.(drag.creatureId);
     if(drag)drag.entry.root.cursor='grab';
     drag=null;cameraDrag=null;
+      return;
+    }
+    // Blur/hidden/context loss may suspend the existing ticker between samples.
+    if(raisingReference?.pending)raisingReference={...raisingReference,pending:null};
+    const cancelled = drag;
+    drag=null;cameraDrag=null;
+    pointerPreview=null;cleanFeedback=null;
+    backdrop.cursor='grab';
+    if(toolPreview)toolPreview.visible=false;
+    if(cancelled&&!cancelled.entry.root.destroyed)cancelled.entry.root.cursor='grab';
+    // Clear transient owners before an intent publishes synchronously. This
+    // cannot interpret an old pointer-up as a drop/tool action in the newly
+    // laid-out field. Only stage resize requests the domain's origin rollback;
+    // blur, visibility, context loss and teardown retain their prior semantics.
+    const options = { cancelled:true, checkpoint:cancelled?.tutorialCheckpoint };
+    if(reason==='viewport-resize')options.reason=reason;
+    if(cancelled?.nativeHand)source.intents.endHand?.(cancelled.creatureId,options);
+    else if(cancelled?.carried)source.intents.releaseCarry?.(cancelled.creatureId,options);
   }
   const cancelHiddenInput=()=>{if(globalThis.document?.hidden)cancelInput();};
   globalThis.addEventListener?.('blur',cancelInput);
   globalThis.document?.addEventListener('visibilitychange',cancelHiddenInput);
-  const unobserveResize = stage.onResize(()=>{cancelInput();resize();});
+  const unobserveResize = stage.onResize(()=>{cancelInput('viewport-resize');resize();});
   const unobserveContextLost = stage.onContextLost(() => {
     cancelInput();
     onFallback("The 2D field context was lost. DOM screen controls remain available; reload to restore the field.");
@@ -1230,6 +1336,8 @@ export async function mountRaisingFieldPixiPresentation({
           packedPixelsPerNativePixel: entry.nativeSizing?.packedPixelsPerNativePixel ?? null })),
         assetFailures,
         cameraX,
+        cameraY,
+        cameraViewport: cameraViewport ? Object.freeze({ ...cameraViewport }) : null,
         characterArt: characterBundle?.getDiagnostics() ?? null,
         art: fieldArt?.getDiagnostics() ?? null,
         viewport: Object.freeze({ width: app.screen.width, height: app.screen.height })

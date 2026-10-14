@@ -15,6 +15,7 @@
 // creatures through the ROM's own builder, and the player's three through the
 // same builder over declared levels. Nothing here computes a stat.
 
+import {createBattleOpeningPhase} from '../battle/battleOpeningPhase.js';
 import {BATTLE_AI_ORIGINAL,BATTLE_AI_POLICIES} from '../battle/battleAiAdaptation.js';
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import {
@@ -199,6 +200,7 @@ export function createBattleRuntime(options = {}) {
   const contacts={projectileCalls:0,projectileHits:0,meleeCalls:0,history:[]};
   const poseWaitAdaptations=[];
   let specialPrelude = null;
+  const opening = createBattleOpeningPhase(options.openingTiming);
 
   function prepareActionLaunch(slot,action){
     const state=scriptStateFor(action);if(state.prepared)return !state.refused;
@@ -415,6 +417,9 @@ export function createBattleRuntime(options = {}) {
 
   function stepMatch(liveSession) {
     if(liveSession.ended)return deepFreeze({frame:liveSession.frame,events:[],ended:true});
+    // The opening never touches native flags, animation, AI, cooldown, clock or RNG.
+    // Once released, the established timing/exclusive/session order is unchanged.
+    if(!opening.advance())return deepFreeze({frame:liveSession.frame,events:[],ended:false});
     nativeActors?.setFrame(liveSession.frame);
     nativeActors.updateWorldFlags();
     if(!advanceBattlePresentationTiming(nativeActors.memory,nativeActors.worldAddress)){
@@ -489,6 +494,14 @@ export function createBattleRuntime(options = {}) {
 
   return Object.freeze({
     listMatches,
+
+    prepareOpening() {
+      if(!session)throw runtimeError('NO_MATCH_STARTED');
+      if(session.frame > 0 && !opening.snapshot().armed)throw runtimeError('OPENING_ALREADY_ACTIVE');
+      return opening.prepare();
+    },
+    markOpeningReady() { return opening.ready(); },
+    getOpening() { return opening.snapshot(); },
 
     /** Whether the schedule that produced this list was given or defaulted. */
     scheduleEvidence() {
@@ -701,7 +714,7 @@ export function createBattleRuntime(options = {}) {
           if(tally&&ok)tally.launched+=1;
           else if(tally){const reason=scriptStateFor(action).guard?.reason??'NO_ACTOR';tally.refused+=1;tally.refusedBy[reason]=(tally.refusedBy[reason]??0)+1;}
           return ok;}});
-      source = createBattlePresentationSource({ session, step: stepMatch, arenaIndex:chosen.championship?10:chosen.arenaIndex, getSpecialPrelude,
+      source = createBattlePresentationSource({ session, step: stepMatch, getOpening:opening.snapshot, arenaIndex:chosen.championship?10:chosen.arenaIndex, getSpecialPrelude,
         getNativeActor:slot=>nativeActors.project(slot),getImpactEffects:()=>impactEffects.snapshot({
           exclusiveOwner:session.slots.find(c=>c?.field94)?.field94??0}),getNativeLifecycle:()=>({
           active:[...nativeLaunches].map(v=>v.snapshot()),recent:[...nativeHistory],impacts:impactEffects.diagnostics(),sound:soundEvents.snapshot(),
@@ -760,6 +773,7 @@ export function createBattleRuntime(options = {}) {
     },
 
     dispose() {
+      opening.dispose();
       unsubscribe?.();
       unsubscribe = null;
       observers.clear();

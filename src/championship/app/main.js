@@ -76,6 +76,7 @@ import { withRanchExpansionPreview } from "../presentation/raisingExpansionPrevi
 import { openRanchExpansionPreview } from './ranchExpansionPreview.js';
 import { createLoadProgressView, observeLoadActivity } from './loadProgress.js';
 import { mountPortraitFrame } from './portraitFrame.js';
+import { createHuntLayoutResolver } from './huntLayoutResolver.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
@@ -192,6 +193,21 @@ const FREE_PRACTICE_PERSONALITY_POLICY =
 // following camera, skill-field interaction, callouts) over the unchanged
 // simulation. ?battleFx=classic returns to the earlier fixed full-field view.
 const BATTLE_DYNAMIC_FX = new URLSearchParams(globalThis.location?.search ?? "").get("battleFx") !== "classic";
+// Review-only opt-in. No public default or persisted preference.
+const RESPONSIVE_LAYOUT_CANDIDATE = new URLSearchParams(globalThis.location?.search ?? '').get('responsiveLayout') === 'candidate';
+const RESPONSIVE_BATTLE_CANDIDATE = RESPONSIVE_LAYOUT_CANDIDATE && BATTLE_DYNAMIC_FX;
+// DOM owns the readiness of its chrome. The scene receives only this layout
+// sample and never looks up UI controls or their CSS measurement properties.
+function readRaisingLayoutSample() {
+  const doc=globalThis.document,body=doc?.body,input=doc?.activeElement;
+  const editing=input&&(input.isContentEditable||['INPUT','TEXTAREA'].includes(input.tagName));
+  const measured=(flag,property)=>body?.dataset?.[flag]!=='on'
+    || parseFloat(body.style?.getPropertyValue?.(property))>0;
+  return {ready:!doc?.hidden&&!doc?.getElementById?.('cm-root')?.hidden&&!editing
+      &&measured('statusBar','--cm-status-bar-height')&&measured('toolbar','--cm-toolbar-height'),
+    portrait:!body?.hasAttribute('data-desktop-raising')
+      &&globalThis.window?.innerWidth<=globalThis.window?.innerHeight};
+}
 
 const titleScreen = document.getElementById("cm-title");
 let openingFilm = null;
@@ -226,7 +242,16 @@ const titleNote = document.getElementById("cm-title-note");
 const newGameButton = document.getElementById("cm-new-game");
 const continueButton = document.getElementById("cm-continue");
 const root = document.getElementById("cm-root");
-mountPortraitFrame();
+let huntLayout = null;
+const portraitFrame = mountPortraitFrame({
+  responsiveRaising:RESPONSIVE_LAYOUT_CANDIDATE, responsiveBattle:RESPONSIVE_BATTLE_CANDIDATE,
+  isHuntWide: () => huntLayout?.isWide() ?? false
+});
+huntLayout = createHuntLayoutResolver({
+  enabled: RESPONSIVE_LAYOUT_CANDIDATE,
+  getRuntime: () => app?.getHuntRuntime?.() ?? null,
+  onLayoutChange: () => portraitFrame.refresh()
+});
 const loginButton=document.getElementById('cm-login');
 const titleActions=titleScreen.querySelector('.cm-title__actions');
 const openingPresentation=createOpeningPresentation({host:document.getElementById('cm-opening'),onStart:startNewGame,
@@ -776,6 +801,8 @@ async function mountRaisingHome() {
             recoveryDiagnostics.record('LOAD',{area:'raising',stage:'scene',phase:'start'});
             const pending = mountRaisingFieldPixiPresentation({
               stage, source: fieldSource, fieldArt, characterBundle, signal: owner.signal,
+              responsiveLayout: RESPONSIVE_LAYOUT_CANDIDATE,
+              getLayoutSample: readRaisingLayoutSample,
               getSelectedTool: () => toolbar?.getSelectedTool() ?? null, onTrainingFrame,
               onResidentAssetState(states) {
                 if (!active(owner)) return;
@@ -881,6 +908,8 @@ async function mountHuntField() {
     source: expeditionSource,
     watchLoad: createLoadWatchdog,
     async mountField({ host, source: fieldSource, onActorFrame, onProgress, signal }) {
+      // Measure this same field under its legacy portrait gate before widening.
+      const huntLayoutLease = huntLayout.attach({ host, runtime: app.getHuntRuntime(), signal });
       let characterBundle = null;
       let fieldArt = null;
       let feedbackArt = null;
@@ -897,6 +926,7 @@ async function mountHuntField() {
       signal.addEventListener('abort', releaseArt, { once: true });
       try {
         const stage = await ensurePixiStage(host, signal);
+        huntLayoutLease.setStage(() => ({ width: stage.app.screen.width, height: stage.app.screen.height }));
         signal.throwIfAborted();
         const speciesIds = app.getHuntRuntime()?.getTutorialCharacterSpeciesIds?.() ?? fieldSource.field.getView({
           viewportWidth: stage.app.screen.width, viewportHeight: stage.app.screen.height
@@ -969,6 +999,7 @@ async function mountHuntField() {
         // An exit received during loading must not attach the abandoned field
         // or start its native actor ticker. The serial mount then returns Home.
         if (signal.aborted || app.getScreen() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) {
+          huntLayoutLease.dispose();
           feedbackFallbackNotice?.remove();
           releaseArt();
           return { isPlayable: false, render() {}, dispose() {} };
@@ -992,6 +1023,7 @@ async function mountHuntField() {
           ...scene,
           retryFeedbackArt,
           dispose() {
+            huntLayoutLease.dispose();
             feedbackFallbackNotice?.remove();
             feedbackFallbackNotice = null;
             activeScene = null;
@@ -999,6 +1031,7 @@ async function mountHuntField() {
           }
         };
       } catch (error) {
+        huntLayoutLease.dispose();
         releaseArt();
         if (signal.aborted) return { isPlayable: false, render() {}, dispose() {} };
         return fieldFallback(host, error);
@@ -1181,16 +1214,19 @@ async function mountBattleField() {
   const activeRuntime = battleRuntime;
   const activeAttemptId = battleAttemptId;
   const source = activeRuntime.startMatch();
-  let hudArt=null;
-  try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href,speciesIds:source.getFrame().combatants.filter(c=>c.present).map(c=>c.speciesId)});}
-  catch(error){console.warn('Battle HUD reference unavailable',error);}
+  activeRuntime.prepareOpening();
+  let hudArt=null,viewDisposed=false;
+  // Optional portraits must not hold the screen/navigation owner hostage.
+  // Cards already read their art on render, so this proxy can fill in later.
+  const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null};
   const {createBattleFieldView} = await import('./vs5Screens.js');
   const view = createBattleFieldView({
     root,
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
-    hudArt,
+    hudArt:hudProxy,
     dynamicFx: BATTLE_DYNAMIC_FX,
+    responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
     askToLeave: showChoiceDialog,
     loadingProgress: { createView: createLoadProgressView,
       observeActivity: onChange => observeLoadActivity(onChange, { subscribeSettled: onPixiAssetSettled }) },
@@ -1209,6 +1245,20 @@ async function mountBattleField() {
           .catch(error=>console.warn('Battle presentation cleanup unavailable',error)));
         return released.get(resource);
       };
+      // Own each settled input immediately. A pending peer (or required VFX)
+      // must not retain completed art after this screen has been abandoned.
+      const loadingArt = new Set();
+      let artFailed = false;
+      const releaseLoadingArt = () => {
+        for(const resource of loadingArt)void release(resource);
+        loadingArt.clear();
+      };
+      const ownArt = pending => Promise.resolve(pending).then(resource => {
+        if(!resource){artFailed=true;releaseLoadingArt();}
+        else if(disposed||artFailed)void release(resource);
+        else loadingArt.add(resource);
+        return resource;
+      },error=>{artFailed=true;releaseLoadingArt();throw error;});
       void (async () => {
         let fieldArt = null;
         let characterRoster = null;
@@ -1225,9 +1275,9 @@ async function mountBattleField() {
           // The dynamic presentation's catalog look-ups load beside the art.
           const fxLookupsLoading=BATTLE_DYNAMIC_FX?import('./battleFxLookups.js'):null;
           const loaded=await Promise.allSettled([
-            step('arena',loadOptionalBattleFieldArt(stage,source)),
-            step('fighters',loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal,battleAtlas:true})),
-            step('effects',loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art)))
+            step('arena',ownArt(loadOptionalBattleFieldArt(stage,source))),
+            step('fighters',ownArt(loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal,battleAtlas:true}))),
+            step('effects',ownArt(loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
           const fxLookupsModule=fxLookupsLoading?await fxLookupsLoading.catch(error=>{console.warn('Battle dynamic presentation unavailable',error);return null;}):null;
@@ -1254,8 +1304,12 @@ async function mountBattleField() {
           }
           if(!vfxOverlay)throw new Error('BATTLE_CORE_VFX_UNAVAILABLE');
           recoveryDiagnostics.record('LOAD',{area:'battle',stage:'scene',phase:'start'});
+          // The constructor borrows these inputs until it returns a scene
+          // that owns them. Do not destroy them under an in-flight mount;
+          // rejection returns cleanup to the catch below, late success to scene.
+          for(const resource of [fieldArt,characterRoster,effectArt])loadingArt.delete(resource);
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame),
-            dynamicFx:BATTLE_DYNAMIC_FX, fx:fxLookups, localTeam:activeRuntime.localTeamIndex() });
+            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex() });
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);
             return;
@@ -1265,6 +1319,7 @@ async function mountBattleField() {
           progress?.done('scene');
           recoveryDiagnostics.record('LOAD',{area:'battle',stage:'ready'});
           onReady?.();
+          activeRuntime.markOpeningReady();
           recoveryDiagnostics.record('LOAD',{area:'battle',stage:'loading-card',phase:'done'});
           // Start bounded, optional audio only after core visual readiness. The
           // adapter discards old sound events and owns cancellation of its work.
@@ -1275,6 +1330,7 @@ async function mountBattleField() {
         } catch (error) {
           stopFirstRender();
           audioLoading.abort();
+          releaseLoadingArt();
           if(scene)void release(scene);
           else {void release(fieldArt);void release(characterRoster);void release(effectArt);}
           void release(vfxOverlay);
@@ -1295,6 +1351,7 @@ async function mountBattleField() {
           stopFirstRender();
           characters.abort();
           audioLoading.abort();
+          releaseLoadingArt();
           void release(vfxOverlay);
           void release(battleAudio);
           void release(scene);
@@ -1308,12 +1365,19 @@ async function mountBattleField() {
       battleAttemptId = null;
     }
   });
+  // Same optional-HUD deadline and cancellation owner as Raising.
+  const hudLoad=createLoadAttempt({timeoutMs:20000});
+  void hudLoad.wait(loadRegisteredCharacterHudArt({baseUrl:location.href,
+    speciesIds:source.getFrame().combatants.filter(c=>c.present).map(c=>c.speciesId),fetchImpl:hudLoad.fetch}))
+    .then(art=>{if(!viewDisposed){hudArt=art;view.render(source.getView());}})
+    .catch(error=>{if(!viewDisposed)console.warn('Battle HUD reference unavailable',error);})
+    .finally(()=>hudLoad.stopTimer());
   // QA reads each slot's personality wiring and what it decided here.
   const showPersonality = new URLSearchParams(location.search).get('presentation') === 'developer';
   // The session advances itself; this repaints the DOM beside the scene and
   // moves on to the result once the battle has judged itself.
   activeRuntime.observe((observed) => {
-    if (battleRuntime !== activeRuntime || battleAttemptId !== activeAttemptId) return;
+    if (viewDisposed || battleRuntime !== activeRuntime || battleAttemptId !== activeAttemptId) return;
     view.render(observed);
     if (showPersonality) root.dataset.battlePersonality = battlePersonalityReadout(activeRuntime);
     if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
@@ -1324,7 +1388,7 @@ async function mountBattleField() {
       autosave?.request('settlement');
     }
   });
-  return view;
+  return {...view,dispose(){if(viewDisposed)return;viewDisposed=true;hudLoad.cancel();hudArt=null;view.dispose();}};
 }
 
 /** Developer readout: per slot, the wiring a battle received and its tallies. */
@@ -1398,7 +1462,11 @@ async function mountBattleResult() {
   // The result consumes the app's actual receipt, including loss and clamping.
   const chosen = battleRuntime.getChosenMatch?.() ?? null;
   const record=app.getTitleProgress().record;
-  const hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href,speciesIds:(tutorial?.participants??battleRuntime.getResultParticipants()).filter(Boolean).map(p=>p.speciesId)}).catch(()=>null);
+  // Snapshot the settled data before any asynchronous decoration: onExit may
+  // clear battleRuntime while those requests are still pending.
+  const participants=tutorial?.participants??battleRuntime.getResultParticipants();
+  const outcome=tutorial?.outcome??battleRuntime.outcome();
+  let hudArt=null,disposed=false,resultCharacters=null;
   const receipt = tutorial?null:app.getBattleReceipt();
   const progression = battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),
     earnedTitles:app.getBattleBadges().filter(id=>!battleProgressBefore.badges.includes(id)).map(id=>({id,name:titleEventText(id,'name',uiText('頭銜 {id}',{id}))}))}:null;
@@ -1407,13 +1475,10 @@ async function mountBattleResult() {
   const feedback = tier === 'highlight'
     ? { tier, settlement: receipt.rewardBits > 0 ? { credited: receipt.credited, rewardBits: receipt.rewardBits, clamped: receipt.clamped === true } : null }
     : { tier };
-  let stageReady = null;
+  let stageReady = null,hudReady = null;
   // Which of the three result slots will show a character, so the highlight's
   // light can fall where they stand (resultHeroAnchor, same frame layout).
-  const heroSlots = (() => {
-    try { return hudArt ? (tutorial?.participants??battleRuntime.getResultParticipants()).slice(0, 3).map((entry, index) => (entry ? index : -1)).filter((index) => index >= 0) : []; }
-    catch { return []; }
-  })();
+  let heroSlots=[];
   let characterHostNode = null;
   const heroAnchor = () => {
     const box = characterHostNode?.getBoundingClientRect?.();
@@ -1421,12 +1486,16 @@ async function mountBattleResult() {
   };
   const {createBattleResultView} = await import('./vs5Screens.js');
   const resultView=createBattleResultView({
+    responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
     root,
-    outcome: tutorial?.outcome??battleRuntime.outcome(),
+    outcome,
     tutorial:Boolean(tutorial),
     receipt,
     feedback,
-    highlight: (request) => playResultHighlight(request, () => stageReady, heroAnchor),
+    // Preserve the original hero-anchor timing, but only the optional highlight
+    // waits for portraits. The DOM result and its skip/exit controls do not.
+    highlight: (request) => playResultHighlight(request,
+      () => Promise.all([stageReady,hudReady]).then(([stage])=>stage), heroAnchor),
     matchTitle: chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
       :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
       :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null,
@@ -1446,8 +1515,8 @@ async function mountBattleResult() {
     }
   });
   characterHostNode = resultView.getCharacterHost();
-  // The stage light pools under the characters that are present.
-  {
+  // The stage light fills in with optional art without rebuilding result panels.
+  const updateStageLight=()=>{
     const box = characterHostNode.getBoundingClientRect?.();
     const light = box && heroSlots.length ? resultStageLight({ width: box.width, height: box.height, slots: heroSlots }) : null;
     const stageNode = characterHostNode.parentElement;
@@ -1455,14 +1524,27 @@ async function mountBattleResult() {
       stageNode.style.setProperty("--result-light-x", `${(light.x * 100).toFixed(2)}%`);
       stageNode.style.setProperty("--result-light-w", `${(light.width * 100).toFixed(2)}%`);
     }
-  }
-  stageReady = ensurePixiStage(characterHostNode);
-  let resultCharacters=null;
-  try{
-    const participants=tutorial?.participants??battleRuntime.getResultParticipants(),stage=await stageReady;
-    resultCharacters=await mountBattleResultCharacters({stage,hudArt,participants,won:(tutorial?.outcome??battleRuntime.outcome()).winningTeam===0});
-  }catch(error){console.warn('Battle result character reference unavailable',error);}
-  return {...resultView,dispose(){resultCharacters?.dispose();resultView.dispose();}};
+  };
+  const artLoading=new AbortController(),hudLoad=createLoadAttempt({timeoutMs:20000});
+  stageReady=ensurePixiStage(characterHostNode,artLoading.signal);
+  hudReady=hudLoad.wait(loadRegisteredCharacterHudArt({baseUrl:location.href,
+    speciesIds:participants.filter(Boolean).map(p=>p.speciesId),fetchImpl:hudLoad.fetch}))
+    .then(art=>{
+      if(disposed)return null;
+      hudArt=art;resultView.setHudArt(art);
+      heroSlots=art?participants.slice(0,3).map((entry,index)=>entry?index:-1).filter(index=>index>=0):[];
+      updateStageLight();return art;
+    }).catch(error=>{if(!disposed)console.warn('Battle result HUD reference unavailable',error);return null;})
+    .finally(()=>hudLoad.stopTimer());
+  void Promise.all([stageReady,hudReady]).then(async([stage,art])=>{
+    if(disposed)return;
+    const characters=await mountBattleResultCharacters({stage,hudArt:art,participants,won:outcome.winningTeam===0,signal:artLoading.signal});
+    if(disposed)void characters.dispose();else resultCharacters=characters;
+  }).catch(error=>{if(!disposed)console.warn('Battle result character reference unavailable',error);});
+  return {...resultView,dispose(){
+    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();
+    resultCharacters?.dispose();resultCharacters=null;hudArt=null;resultView.dispose();
+  }};
 }
 
 async function mountGateSelect() {
@@ -1615,7 +1697,8 @@ async function openGameplay() {
   // While a confirmation is open the player is still deciding: wait for it.
   autosave = createAutosaveScheduler({ route: () => (isChoiceDialogOpen() ? null : safeSaveRoute()), onChange: () => refreshStatusBar() });
   // A purchase, a confirmed cage layout or a Database rename asks for a save.
-  expeditionSource = createGateHuntPresentationSource(app, { onCommitted: (reason) => autosave?.request(reason) });
+  expeditionSource = createGateHuntPresentationSource(app, { onCommitted: (reason) => autosave?.request(reason),
+    getHuntViewportLayout: () => huntLayout.getLayout(app.getHuntRuntime()) });
 
   // One subscription repaints the mounted view; a screen change swaps it.
   unsubscribeExpedition = expeditionSource.subscribe((frame) => {
@@ -1676,6 +1759,7 @@ async function openGameplay() {
   }
   if (!toolbar) {
     toolbar = createChampionshipToolbar({
+      responsiveLayout: RESPONSIVE_LAYOUT_CANDIDATE,
       root: document.body,
       onMenuEntry: runToolbarMenuEntry,
       getTutorialCheckpoint:()=>app.getInteractiveTutorial()?.checkpoint??null,

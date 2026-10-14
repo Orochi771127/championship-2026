@@ -698,3 +698,113 @@ body[data-tool] .int-rh2-hint { display: none; }
   :root:not([data-motion]) .int-rh2-detail[open], :root:not([data-motion]) .int-rh2-notice { animation-name: cm-fade; }
   :root:not([data-motion]) .int-rh2-vitals__bar::before { transition: none; }
 }
+
+/* Owner 2026-10-14, responsive batch A. Keep the existing DOM owners and
+   event targets. The field, tutorial and selected-resident card get distinct
+   regions; all dimensions are CSS pixels, never device pixels or UA names.
+   The desktop-named attribute is retained for the existing Pixi zoom adapter. */
+body[data-responsive-raising][data-desktop-raising] {
+  --cm-raising-aside: clamp(256px, 25vw, 320px);
+}
+body[data-responsive-raising][data-desktop-raising][data-status-bar="on"][data-tutorial-guide] {
+  --cm-screen-top: var(--cm-status-bar-height, var(--hud-height));
+}
+body[data-responsive-raising][data-desktop-raising] .cm-status-bar[data-screen="RAISING_HOME"] {
+  padding-top: max(6px, var(--safe-top));
+  padding-left: max(12px, var(--safe-left));
+  padding-right: max(12px, var(--safe-right));
+}
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] {
+  left: 0; right: 0; width: auto; transform: none;
+  display: flex; flex-direction: column;
+}
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"][hidden] { display: none; }
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__rail {
+  width: 100%; max-width: none; margin: 0; flex: 0 0 auto;
+}
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__cell {
+  min-height: 44px;
+}
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__cell-label {
+  font-size: var(--fs-caption); white-space: normal;
+}
+/* This stays in flow and is included in the toolbar owner's ResizeObserver.
+   No hint overlays a drop target, including during the hand tutorial. */
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__tool-hint {
+  position: static; order: -1; transform: none; animation: none;
+  width: 100%; max-width: none; margin: 0;
+  max-height: 22dvh; overflow-y: auto; flex: 0 0 auto;
+}
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__tool-text {
+  white-space: normal; overflow: visible; overflow-wrap: anywhere;
+}
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__menu {
+  max-height: max(88px, var(--cm-screen-height)); overflow-y: auto;
+  overscroll-behavior: contain;
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-field-frame {
+  right: calc(var(--cm-raising-aside) + var(--safe-right));
+  left: var(--safe-left); min-height: 0;
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion,
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion[data-placement="top"],
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion[data-open="false"] {
+  left: auto; right: calc(8px + var(--safe-right)); top: auto; bottom: 8px;
+  width: calc(var(--cm-raising-aside) - 16px); max-height: calc(100% - 16px);
+  transform: none; overflow-y: auto; overscroll-behavior: contain;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "portrait copy" "actions actions" "vitals vitals";
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__actions { justify-content: flex-end; }
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__name,
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__location {
+  white-space: normal; overflow: visible; overflow-wrap: anywhere;
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion > .int-rh2-vitals {
+  grid-template-columns: auto minmax(0, 1fr); row-gap: 4px;
+}
+body[data-responsive-raising][data-desktop-raising][data-tutorial-guide] .int-rh2-root .int-rh2-companion {
+  max-height: calc(50% - 12px);
+}
+body[data-responsive-raising][data-desktop-raising] .cm-tutorial-guidance {
+  left: auto; right: var(--safe-right); top: var(--cm-screen-top);
+  width: var(--cm-raising-aside); max-height: calc(var(--cm-screen-height) / 2 - 8px);
+  overflow-y: auto; overscroll-behavior: contain; flex-wrap: wrap;
+  box-sizing: border-box;
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-hint {
+  left: auto; right: calc(8px + var(--safe-right)); top: 8px; bottom: auto;
+  transform: none; width: calc(var(--cm-raising-aside) - 16px);
+  max-height: calc(100% - 16px); overflow-y: auto; pointer-events: auto;
+}
+body[data-responsive-raising][data-desktop-raising][data-tutorial-guide] .int-rh2-hint { display: none; }
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-notice {
+  left: 12px; right: calc(var(--cm-raising-aside) + 12px + var(--safe-right));
+  width: auto; max-height: calc(100% - 24px); overflow-y: auto; transform: none;
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-detail {
+  inset: var(--safe-top) var(--safe-right) var(--safe-bottom) auto;
+  width: min(420px, 50vw); height: auto; max-height: none;
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-letter {
+  max-height: calc(var(--cm-screen-height) - 16px); overflow-y: auto;
+}
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__tool-hint[hidden],
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__menu[hidden] { display: none; }
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__rail,
+body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__tool-hint {
+  padding-left: max(8px, var(--safe-left)); padding-right: max(8px, var(--safe-right));
+}
+/* Mail remains reachable outside the card's scrollport. Normal onboarding
+   rarely has mail, but that combination still reserves its own button row. */
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-companion {
+  max-height: calc(100% - 72px);
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-hint { top: 72px; }
+body[data-responsive-raising][data-desktop-raising][data-tutorial-guide]:has(.int-rh2-mail-icon:not([hidden])) .cm-tutorial-guidance {
+  max-height: calc(var(--cm-screen-height) / 2 - 36px);
+}
+body[data-responsive-raising][data-desktop-raising][data-tutorial-guide] .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-companion {
+  max-height: calc(50% - 36px);
+}
+body[data-responsive-raising][data-desktop-raising][data-tutorial-guide] .int-rh2-mail-icon { top: calc(50% - 24px); }

@@ -1,3 +1,4 @@
+import { panHuntPresentationCamera } from "../hunt/huntPresentationBinding.js";
 import {tutorialHuntStep,TUTORIAL_GATE} from './interactiveTutorialHuntSteps.js';
 import {tutorialBattleStep} from './interactiveTutorialBattleSteps.js';
 // Championship Modern -- standalone application core.
@@ -52,7 +53,7 @@ import {TUTORIAL_STEP_COUNT,createTutorialCursor, tutorialFinished, tutorialStep
 import {tutorialLine, tutorialPrompt} from '../text/tutorialMessages.zhHant.js';
 import { uiText } from '../text/uiText.js';
 import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
-import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
+import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,cancelNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage} from "../raising/nativeRaisingActor.js";
 // The ranch ground for either layout: the original board, or (expansion
@@ -1308,7 +1309,7 @@ export function createChampionshipStandaloneApp({
       if(raisingHand?.id!==instanceId||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
       raisingHand.pointer={...pointer,x:Math.floor(pointer.x),y:Math.floor(pointer.y)};raisingHand.inside=pointer.inside!==false;return true;
     },
-    endRaisingHand(instanceId,{cancelled=false,checkpoint=null}={}){
+    endRaisingHand(instanceId,{cancelled=false,checkpoint=null,reason=null}={}){
       if(tutorialBaseline){
         if(raisingHand?.id!==instanceId||!tutorialInput(checkpoint,"carry","hand"))return false;
         const actor=raisingActors.get(instanceId),hand=raisingHand;raisingHand=null;
@@ -1319,6 +1320,14 @@ export function createChampionshipStandaloneApp({
       }
       if(raisingHand?.id!==instanceId)return false;
       if(cancelled&&raisingHand.mode===1){raisingHand=null;return true;}
+      if(cancelled&&reason==='viewport-resize'&&raisingHand.mode===3){
+        const actor=raisingActors.get(instanceId);
+        if(actor&&cancelNativeRaisingCarry(actor)){
+          raisingHand=null;publishRaising();return true;
+        }
+        // Missing rollback data must never route a resize into normal drop.
+        return false;
+      }
       raisingHand.held=false;advanceRaisingHand();publishRaising();return true;
     },
     beginRaisingCarry(instanceId,pointer){
@@ -1334,9 +1343,13 @@ export function createChampionshipStandaloneApp({
       const actor=raisingActors.get(instanceId);if(actor?.state!==6||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
       actor.carryPointer={x:pointer.x,y:pointer.y};actor.carryCameraX=pointer.cameraX??actor.carryCameraX;return true;
     },
-    releaseRaisingCarry(instanceId){
+    releaseRaisingCarry(instanceId,{cancelled=false,reason=null}={}){
       if(tutorialBaseline)return false;
       const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);if(!actor||!profile)return false;
+      if(cancelled&&reason==='viewport-resize'){
+        if(!cancelNativeRaisingCarry(actor))return false;
+        publishRaising();return true;
+      }
       const p=releaseNativeRaisingCarry(actor,profile);if(!p)return false;
       writeRaisingNativeProfile(instanceId,p);interactionCount++;savePort.markDirty();publishRaising();return true;
     },
@@ -1982,9 +1995,12 @@ export function createChampionshipStandaloneApp({
       }
       if(kind==='camera'){
         if(step.action!=='camera')return false;
-        const ok=huntRuntime.panCamera(...args);
-        const camera=huntRuntime.getCamera(args[2],args[3]),target=huntRuntime.getWildCreatures()[0];
-        if(ok&&args.some((v,i)=>i<2&&Math.abs(v)>0)&&target&&target.worldX>=camera.left&&target.worldX<=camera.right&&target.worldY>=camera.top&&target.worldY<=camera.bottom) tutorialNext(step.next);
+        const target=huntRuntime.getWildCreatures()[0];
+        const projected=panHuntPresentationCamera(huntRuntime,args[0],args[1],args[4],target);
+        const ok=projected?projected.accepted:huntRuntime.panCamera(...args);
+        const camera=projected?null:huntRuntime.getCamera(args[2],args[3]);
+        const visible=projected?projected.targetVisible:target&&target.worldX>=camera.left&&target.worldX<=camera.right&&target.worldY>=camera.top&&target.worldY<=camera.bottom;
+        if(ok&&args.some((v,i)=>i<2&&Math.abs(v)>0)&&visible) tutorialNext(step.next);
         return ok;
       }
       if(step.action==='select'||step.demo||step.wait||step.action==='camera')return false;

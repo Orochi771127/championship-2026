@@ -652,3 +652,76 @@
 @keyframes cm-vs5-feed-in { from { opacity: 0; transform: translateY(4px); } }
 @media (prefers-reduced-motion: reduce) { :root:not([data-motion]) .cm-vs5-log__detail--fresh { animation: none; } }
 :root[data-motion="reduced"] .cm-vs5-log__detail--fresh { animation: none; }
+
+/* B candidate: explicit view gate only; main/portraitFrame are NOT enabled here.
+ * Existing DOM order, battle source, Pixi stage and ticker are unchanged. */
+.cm-vs5-root .cm-vs5-shell[data-responsive-battle="candidate"] {
+  width: 100%; max-width: none; height: 100%; max-height: none;
+  aspect-ratio: auto; margin: 0;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+.cm-vs5-shell[data-responsive-battle="candidate"][data-fx="dynamic"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(120px, 1fr) auto minmax(64px, auto);
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.cm-vs5-shell[data-responsive-battle="candidate"][data-fx="dynamic"] > .cm-vs5-field {
+  min-height: 120px; max-height: none; aspect-ratio: auto;
+}
+.cm-vs5-shell[data-responsive-battle="candidate"] > .cm-vs5-log {
+  overflow: auto; min-width: 0; min-height: 64px; align-content: start;
+}
+.cm-vs5-shell[data-responsive-battle="candidate"] :is(.cm-vs5-log__line,.cm-vs5-log__detail,.cm-vs5-clock__caption) {
+  min-width: 0; overflow-wrap: anywhere;
+}
+.cm-vs5-shell[data-responsive-battle="candidate"] .cm-vs5-field__loading {
+  max-height: calc(100% - 16px); overflow-y: auto; overflow-wrap: anywhere;
+}
+@media (min-width: 640px) and (orientation: landscape) {
+  .cm-vs5-shell[data-responsive-battle="candidate"][data-fx="dynamic"] {
+    grid-template-columns: minmax(0, 1fr) clamp(210px, 27vw, 330px);
+    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr) minmax(70px, .8fr);
+    grid-template-areas: "clock clock" "field opponents" "field players" "field log";
+    overflow: hidden;
+  }
+  .cm-vs5-shell[data-responsive-battle="candidate"] > .cm-vs5-clock { grid-area: clock; }
+  .cm-vs5-shell[data-responsive-battle="candidate"][data-fx="dynamic"] > .cm-vs5-field { grid-area: field; min-height: 0; }
+  .cm-vs5-shell[data-responsive-battle="candidate"][data-fx="dynamic"] > .cm-vs5-roster {
+    display: flex; flex-direction: column; overflow-y: auto; min-height: 0;
+    padding: 4px 6px; gap: 4px; overscroll-behavior: contain;
+  }
+  .cm-vs5-shell[data-responsive-battle="candidate"] > .cm-vs5-roster--opponent { grid-area: opponents; }
+  .cm-vs5-shell[data-responsive-battle="candidate"] > .cm-vs5-roster--player { grid-area: players; }
+  .cm-vs5-shell[data-responsive-battle="candidate"] > .cm-vs5-log {
+    grid-area: log; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto;
+    padding: 6px; gap: 4px;
+  }
+  .cm-vs5-shell[data-responsive-battle="candidate"] .cm-vs5-log .cm-vs5-exit {
+    grid-column: 1; grid-row: auto; min-height: 44px; width: 100%;
+  }
+  .cm-vs5-shell[data-responsive-battle="candidate"][data-fx="dynamic"] .cm-vs5-roster .cm-vs5-fighter {
+    flex: 0 0 auto; min-height: 44px;
+  }
+}
+/* Short result: normal-flow text remains reachable; do not overlay a zero-height
+ * verdict plate on the character stage or let a long translation trap controls. */
+@media (orientation: landscape) {
+  .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell[data-responsive-battle="candidate"] {
+    grid-template-rows: minmax(0, 1fr) auto auto;
+  }
+  .cm-vs5-shell[data-responsive-battle="candidate"] .cm-vs5-result__stage {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .8fr);
+  }
+  .cm-vs5-shell[data-responsive-battle="candidate"] .cm-vs5-result__characters {
+    position: relative; min-height: 0;
+  }
+  .cm-vs5-shell[data-responsive-battle="candidate"] .cm-vs5-result__body {
+    position: relative; inset: auto; margin: 8px; max-height: calc(100% - 16px);
+    height: auto; min-height: 0; padding: 12px; align-self: stretch;
+    overflow-y: auto; overflow-wrap: anywhere;
+  }
+}
+/* Beat the existing desktop result 720px selector as well as its phone cap. */
+body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell[data-responsive-battle="candidate"] { width: 100%; max-width: none; }

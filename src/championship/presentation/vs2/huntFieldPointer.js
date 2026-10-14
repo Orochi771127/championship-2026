@@ -8,7 +8,7 @@ export function createHuntFieldPointer({ getView, intents }) {
     down(event) {
       if (pointer || !valid(event) || event.button > 0) return false;
       const view = getView();
-      if (!view) return false;
+      if (!view || view.containsViewportPoint && !view.containsViewportPoint(event.global)) return false;
       const point = view.toWorldPoint(event.global);
       const tool = intents.toolPointerDown?.(point.x,point.y) ?? false;
       const selected = tool ? true : intents.selectWildAt(point.x, point.y);
@@ -20,12 +20,13 @@ export function createHuntFieldPointer({ getView, intents }) {
       const dx = (pointer.previous.x - event.global.x) / pointer.scale;
       const dy = (pointer.previous.y - event.global.y) / pointer.scale;
       pointer.previous = { x: event.global.x, y: event.global.y };
-      if(pointer.tool){const p=pointer.view.toWorldPoint(event.global);intents.toolPointerMove?.(p.x,p.y);return true;}
-      if (!pointer.target) intents.panCamera(dx, dy, pointer.width, pointer.height);
+      if(pointer.tool){if(pointer.view.containsViewportPoint && !pointer.view.containsViewportPoint(event.global))return true;const p=pointer.view.toWorldPoint(event.global);intents.toolPointerMove?.(p.x,p.y);return true;}
+      if (!pointer.target) intents.panCamera(dx, dy, pointer.width, pointer.height, pointer.view.panRequest);
       return true;
     },
     up(event) {
       if (!matches(event)) return false;
+      if (pointer.tool && pointer.view.containsViewportPoint && (!valid(event) || !pointer.view.containsViewportPoint(event.global))) { this.cancel(event); return true; }
       // Touch-up has no tool submission authority. A target remains selected.
       this.move(event);
       if(pointer.tool && valid(event)){const p=pointer.view.toWorldPoint(event.global);intents.toolPointerUp?.(p.x,p.y);}
