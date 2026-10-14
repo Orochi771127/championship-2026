@@ -245,6 +245,7 @@ const root = document.getElementById("cm-root");
 let huntLayout = null;
 const portraitFrame = mountPortraitFrame({
   responsiveRaising:RESPONSIVE_LAYOUT_CANDIDATE, responsiveBattle:RESPONSIVE_BATTLE_CANDIDATE,
+  responsiveMenus:RESPONSIVE_LAYOUT_CANDIDATE,
   isHuntWide: () => huntLayout?.isWide() ?? false
 });
 huntLayout = createHuntLayoutResolver({
@@ -1583,7 +1584,7 @@ async function mountCurrentScreen() {
 
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
     else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = await createShopView({ root, source: expeditionSource });
-    else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = await createDatabaseView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = await createDatabaseView({ root, source: expeditionSource, isWideLayout: () => portraitFrame.isBrowseWide('DATABASE') });
     else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, battleBadges:app.getBattleBadges(), onExit(){app.leaveScreen();}});
     else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = await createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({

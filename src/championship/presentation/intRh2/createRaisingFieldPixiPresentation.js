@@ -11,7 +11,7 @@ import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
 // assignment, save data, gameplay values, routing, or another runtime store.
 
 import { isNativeRanchLayout } from "../../cage/ranchExpansion.js";
-import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset } from "./raisingNativeSizing.js";
+import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset, getRaisingEggContactShadow } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
 import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyphArt.js';
@@ -655,12 +655,15 @@ export async function mountRaisingFieldPixiPresentation({
     // Read the rendered canvas rect so orientation-only CSS scaling is covered.
     const rect=displayOffset?app.canvas.getBoundingClientRect?.():null;
     const hitAreaCssScale=rect?{x:rect.width/app.screen.width,y:rect.height/app.screen.height}:null;
-    return getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing),displayOffset,hitAreaCssScale});
+    const geometry=getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing),displayOffset,hitAreaCssScale});
+    if(geometry)geometry.contactShadow=getRaisingEggContactShadow(entry.entityId,entry.nativeSizing,flipX);
+    return geometry;
   }
 
   function decorateActor(entry,geometry){
     const {visible,hitArea}=geometry,center=visible.x+visible.width/2,bottom=visible.y+visible.height;
-    entry.shadow.clear().ellipse(center,bottom+1,visible.width*.42,Math.max(1,visible.width*.13)).fill({color:0x02070a,alpha:.26});
+    const contact=geometry.contactShadow??{x:center,y:bottom+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
+    entry.shadow.clear().ellipse(contact.x,contact.y,contact.radiusX,contact.radiusY).fill({color:0x02070a,alpha:.26});
     entry.selection.clear().ellipse(center,bottom+1,visible.width/2+2,Math.max(2,visible.width*.16))
       .fill({color:0x56e3c2,alpha:.12}).stroke({color:0x56e3c2,width:1,alpha:.95});
     entry.root.hitArea=new PIXI.Rectangle(hitArea.x,hitArea.y,hitArea.width,hitArea.height);

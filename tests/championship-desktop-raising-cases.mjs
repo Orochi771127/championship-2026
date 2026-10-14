@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isDesktopRaisingLayout, isDesktopBrowseLayout, mountPortraitFrame } from '../src/championship/app/portraitFrame.js';
+import { isDesktopRaisingLayout, isDesktopBrowseLayout, isDesktopMenuLayout, isCompactLandscapeMenuLayout, mountPortraitFrame } from '../src/championship/app/portraitFrame.js';
 import { raisingFieldViewport, raisingNativeScreenPixels, desktopRaisingViewportWidth, raisingNativeToScreen, raisingScreenToNative } from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
 
 test('desktop Raising alone leaves the portrait frame, based on available dimensions',()=>{
@@ -55,4 +55,113 @@ test('desktop widens the same native zoom, caps one ring and round-trips all poi
   }
  }
  assert.equal(desktopRaisingViewportWidth({worldWidthPx:400}),null,'legacy geometry keeps its existing fit');
+});
+
+function battleMenuFixture(options={}) {
+ const attrs=new Set(),styles=new Map(),root={dataset:{activeScreen:'BATTLE_SELECT'},hidden:false};let notify,disconnected=false;
+ const body={toggleAttribute(k,v){v?attrs.add(k):attrs.delete(k)},removeAttribute:k=>attrs.delete(k),style:{setProperty:(k,v)=>styles.set(k,v),removeProperty:k=>styles.delete(k)}};
+ const win=Object.assign(new EventTarget(),{innerWidth:1366,innerHeight:768,MutationObserver:class{constructor(fn){notify=fn}observe(){}disconnect(){disconnected=true}}});
+ const doc=Object.assign(new EventTarget(),{body,activeElement:null,getElementById:()=>root});
+ const controller=mountPortraitFrame({window:win,document:doc,...options});
+ return {attrs,styles,root,win,controller,notify:()=>notify(),disconnected:()=>disconnected,
+  resize(width,height){win.innerWidth=width;win.innerHeight=height;win.dispatchEvent(new Event('resize'));}};
+}
+test('candidate DOM battle menu reaches existing desktop grid independently of classic battle FX',()=>{
+ for(const responsiveBattle of [false,true]){
+  const f=battleMenuFixture({responsiveMenus:true,responsiveBattle});
+  for(const [width,height] of [[1366,768],[1920,1080],[1366,480],[1024,420]]){
+   f.resize(width,height);assert.equal(f.attrs.has('data-portrait-frame'),false,`${width}x${height}`);assert.equal(f.styles.size,0);
+  }
+  for(const [width,height,framed] of [[390,844,false],[844,390,false],[1023,420,false],[1024,419,false],[719,320,true],[844,319,true]]){
+   f.resize(width,height);assert.equal(f.attrs.has('data-portrait-frame'),framed,`${width}x${height}`);
+   assert.equal(f.styles.size,framed?4:isCompactLandscapeMenuLayout({width,height,activeScreen:'BATTLE_SELECT'})?2:0);
+  }
+  f.controller.dispose();
+ }
+});
+test('default-off battle selection preserves frame across desktop and mobile sizes',()=>{
+ for(const responsiveBattle of [false,true]){
+  const f=battleMenuFixture({responsiveBattle});
+  for(const [width,height] of [[1366,768],[1920,1080],[1366,480],[1024,420],[390,844],[844,390]]){
+   f.resize(width,height);assert.equal(f.attrs.has('data-portrait-frame'),width>height);assert.equal(f.styles.size,width>height?4:0);
+  }
+  f.controller.dispose();
+ }
+});
+test('candidate battle menu is visible-route bounded and clears frame styles on entry and disposal',()=>{
+ const f=battleMenuFixture({responsiveMenus:true});
+ f.root.hidden=true;f.notify();assert.ok(f.attrs.has('data-portrait-frame'));assert.equal(f.styles.size,4);
+ f.root.hidden=false;f.notify();assert.equal(f.attrs.has('data-portrait-frame'),false);assert.equal(f.styles.size,0);
+ for(const screen of ['TITLE','BATTLE_FIELD','BATTLE_RESULT','UNKNOWN','SETTINGS']){
+  f.root.dataset.activeScreen=screen;f.notify();assert.ok(f.attrs.has('data-portrait-frame'),screen);assert.equal(f.styles.size,4);
+  f.root.dataset.activeScreen='BATTLE_SELECT';f.notify();assert.equal(f.attrs.has('data-portrait-frame'),false);assert.equal(f.styles.size,0);
+ }
+ f.controller.dispose();f.controller.dispose();assert.equal(f.attrs.size,0);assert.equal(f.styles.size,0);assert.ok(f.disconnected());
+ f.resize(844,390);f.notify();f.controller.refresh();assert.equal(f.attrs.size,0);assert.equal(f.styles.size,0);
+});
+test('app wires DOM menus directly to the layout opt-in, not the battle FX gate',async()=>{
+ const {readFile}=await import('node:fs/promises');
+ const source=await readFile(new URL('../src/championship/app/main.js',import.meta.url),'utf8');
+ assert.match(source,/const RESPONSIVE_LAYOUT_CANDIDATE = [^\n]*get\('responsiveLayout'\) === 'candidate'/);
+ assert.match(source,/mountPortraitFrame\(\{[^}]*responsiveMenus:RESPONSIVE_LAYOUT_CANDIDATE/);
+});
+
+const desktopMenus=['BATTLE_SELECT','CHAMPIONSHIP','DIGIMON_LIST','SCHEDULE','TAMER_INFO','HELP','GATE_SELECT','HUNT_LOADOUT','HUNT_RESULT','MEDALS'];
+test('desktop DOM menu allowlist is explicit, finite, visible, and desktop-bounded',()=>{
+ for(const activeScreen of desktopMenus){
+  for(const [width,height] of [[1024,420],[1366,480],[1366,768],[1920,1080],[1024,1366]]){
+   assert.equal(isDesktopMenuLayout({width,height,activeScreen}),true,activeScreen);
+   assert.equal(isDesktopMenuLayout({width,height,activeScreen,hidden:true}),false,activeScreen);
+  }
+  for(const [width,height] of [[390,844],[844,390],[932,430],[1023,768],[1024,419],[NaN,768],[1366,Infinity]])
+   assert.equal(isDesktopMenuLayout({width,height,activeScreen}),false,`${activeScreen} ${width}x${height}`);
+ }
+ for(const activeScreen of ['RAISING_HOME','SHOP','DATABASE','TITLE','BATTLE_FIELD','BATTLE_RESULT','HUNT_FIELD','CAGE_EDIT','SETTINGS','UNKNOWN',undefined])
+  assert.equal(isDesktopMenuLayout({width:1366,height:768,activeScreen}),false,String(activeScreen));
+});
+test('all candidate desktop DOM menus enter and leave cleanly; classic FX is independent',()=>{
+ for(const responsiveBattle of [false,true]){
+  const f=battleMenuFixture({responsiveMenus:true,responsiveBattle});
+  for(const screen of desktopMenus){
+   f.root.dataset.activeScreen=screen;f.root.hidden=false;f.notify();
+   for(const [width,height] of [[1024,420],[1366,480],[1366,768],[1920,1080]]){
+    f.resize(width,height);assert.ok(f.attrs.has('data-desktop-menu'),screen);
+    assert.equal(f.attrs.has('data-portrait-frame'),false,screen);assert.equal(f.styles.size,0);
+   }
+   f.root.hidden=true;f.notify();assert.equal(f.attrs.has('data-desktop-menu'),false);assert.ok(f.attrs.has('data-portrait-frame'));
+   f.root.hidden=false;f.notify();assert.ok(f.attrs.has('data-desktop-menu'));assert.equal(f.styles.size,0);
+   for(const [width,height] of [[390,844],[844,390],[932,430],[1023,420],[1024,419]]){
+    f.resize(width,height);assert.equal(f.attrs.has('data-desktop-menu'),false,screen);
+    const compact=isCompactLandscapeMenuLayout({width,height,activeScreen:screen});
+    assert.equal(f.attrs.has('data-landscape-menu'),compact,screen);
+    assert.equal(f.attrs.has('data-portrait-frame'),width>height&&!compact,screen);assert.equal(f.styles.size,compact?2:width>height?4:0);
+   }
+   f.resize(1366,768);f.root.dataset.activeScreen='UNKNOWN';f.notify();
+   assert.equal(f.attrs.has('data-desktop-menu'),false);assert.ok(f.attrs.has('data-portrait-frame'));
+  }
+  f.controller.dispose();assert.equal(f.attrs.size,0);assert.equal(f.styles.size,0);
+ }
+});
+test('all added desktop menus remain unchanged with the candidate disabled',()=>{
+ const f=battleMenuFixture();
+ for(const screen of desktopMenus){
+  f.root.dataset.activeScreen=screen;f.notify();
+  for(const [width,height] of [[1366,768],[1024,420],[390,844],[844,390]]){
+   f.resize(width,height);assert.equal(f.attrs.has('data-desktop-menu'),false);
+   assert.equal(f.attrs.has('data-portrait-frame'),width>height,screen);
+  }
+ }
+ f.controller.dispose();
+});
+test('short desktop Gate scrolling is candidate-only and uses an actually loaded stylesheet',async()=>{
+ const {readFile}=await import('node:fs/promises');
+ const css=await readFile(new URL('../src/championship/app/vs2Styles.css',import.meta.url),'utf8');
+ const html=await readFile(new URL('../championship.html',import.meta.url),'utf8');
+ const candidate=css.slice(css.indexOf('/* Candidate desktop DOM menus:'));
+ assert.match(html,/<link rel="stylesheet" href="\.\/src\/championship\/app\/vs2Styles\.css/);
+ assert.match(candidate,/@media \(min-width: 1024px\) and \(min-height: 420px\)/);
+ assert.match(candidate,/body\[data-desktop-menu\].*\[data-screen="GATE_SELECT"\].*\.cm-vs2-body--gate \{ overflow-y: auto; overflow-x: hidden; \}/);
+ assert.match(candidate,/\.cm-vs2-gate3d:not\(\[data-view="fallback"\]\) \{ flex: 1 0 336px; min-height: 336px; \}/);
+ assert.match(candidate,/\.cm-vs2-gate-fallback \{ flex: 0 0 auto; overflow: visible; \}/);
+ assert.doesNotMatch(candidate,/HUNT_FIELD|CAGE_EDIT|BATTLE_FIELD/);
 });

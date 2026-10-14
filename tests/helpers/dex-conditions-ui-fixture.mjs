@@ -12,7 +12,7 @@ import {ControlledEvent,createControlledDocument} from './controlled-database-do
 const candidateScreen=new URL('../../src/championship/app/vs4Screens.js',import.meta.url);
 const fixtureCollection=()=>[{speciesId:'species-008',instanceId:'fixture-individual-8',displayName:'Unsubmitted name',originGateId:'fixture-gate'}];
 
-export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpecies=[8,20],evolutionBranches=[0],collection=fixtureCollection(),screenUrl=candidateScreen,projection=projectDatabase,width=390,height=844}={}) {
+export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpecies=[8,20],evolutionBranches=[0],collection=fixtureCollection(),screenUrl=candidateScreen,projection=projectDatabase,width=390,height=844,wideLayout=null}={}) {
   setLocale(locale);
   const input=deepFreeze({registeredSpecies:[...registeredSpecies],evolutionBranches:[...evolutionBranches],collection});
   const inputSnapshot=JSON.stringify(input);
@@ -52,7 +52,7 @@ export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpec
   // Strip ESM declarations, never extract/rewrite the createDatabaseView body.
   const executable=fullModule.replace(/^import\s[\s\S]*?;\s*/gm,'').replace(/\bexport\s+(?=(?:async\s+)?function\b|const\b|let\b|class\b)/g,'');
   new vm.Script(`${executable}\nglobalThis.fixtureCreateDatabaseView=createDatabaseView;`,{filename:screenUrl.pathname}).runInContext(context);
-  view=context.fixtureCreateDatabaseView({root,source});
+  view=context.fixtureCreateDatabaseView({root,source,...(wideLayout?{isWideLayout:()=>wideLayout({width:context.innerWidth,height:context.innerHeight})}:{})});
   return {root,document,view,source,calls,input,inputSnapshot,context,
     frame:()=>frame,
     resize(w,h){context.innerWidth=w;context.innerHeight=h;for(const fn of listeners.get('resize')??[])fn(new ControlledEvent('resize'));},

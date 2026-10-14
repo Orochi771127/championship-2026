@@ -37,6 +37,31 @@ export function raisingOriginalBodyOffset(entityId,sizing){
   return {x:-(bounds[0]+bounds[2])/2*scale,y:1-bounds[3]*scale};
 }
 
+// Accepted original egg idle contact bounds, measured from cell_000 pixels
+// with alpha >= 128 (half opacity), in native units. Near-transparent glow is
+// still drawn, but must not push the floor shadow away from the solid shell.
+// This fixed rest footprint deliberately does not chase animated alpha bounds:
+// hatch poses and native Z lift move the body, not its point on the ground.
+const ORIGINAL_EGG_CONTACT_BOUNDS=Object.freeze({
+  e000_digitama:[-23,-44.5,23.25,0],
+  e001_digitama:[-22.75,-46,22.5,1],
+  e002_digitama:[-22.75,-46,22.25,0],
+  e003_digitama:[-19.75,-51.75,20,.25],
+  e004_digitama:[-23.5,-53.5,23.25,-.5],
+  e005_digitama:[-27,-53.75,30.25,0],
+  e006_digitama:[-18.75,-54.75,27,.5],
+  e007_digitama:[-23.75,-62.5,30.75,.75]
+});
+export function getRaisingEggContactShadow(entityId,sizing,flipX=false){
+  const offset=raisingOriginalBodyOffset(entityId,sizing);
+  const bounds=ORIGINAL_EGG_CONTACT_BOUNDS[entityId];
+  if(!offset||!bounds)return null;
+  const scale=raisingOriginalBodyScale(entityId,sizing);
+  const width=(bounds[2]-bounds[0])*scale;
+  return {x:((bounds[0]+bounds[2])/2*scale+offset.x)*(flipX?-1:1),
+    y:bounds[3]*scale+offset.y,radiusX:width*.42,radiusY:Math.max(1,width*.13)};
+}
+
 /** Screen pixels per native pixel, shared by cage art and residents. */
 export function getRaisingNativePixelScale(field, viewport, padding = 12) {
   const unit = field?.nativePixelWorldScale;

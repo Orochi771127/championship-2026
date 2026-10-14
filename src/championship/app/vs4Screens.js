@@ -364,7 +364,7 @@ export function createShopView({ root, source }) {
   });
 }
 
-export function createDatabaseView({ root, source }) {
+export function createDatabaseView({ root, source, isWideLayout = () => isDesktopBrowseLayout({width:globalThis.innerWidth,height:globalThis.innerHeight,activeScreen:'DATABASE'}) }) {
   const frame = source.getFrame();
   const block = frame.database;
   if (!block) throw new Error("CHAMPIONSHIP_DATABASE_NOT_ACTIVE");
@@ -478,7 +478,7 @@ export function createDatabaseView({ root, source }) {
     const selected = selectedEgg ?? (book.selected ? {...book.selected, ...getDatabaseDisplayEntry(book.selected.speciesIndex)} : null);
     census.textContent = uiText("已登錄 {count} / {total}", { count: book.registeredCount, total: book.slotCount });
     body.dataset.mode = selected ? "detail" : "list";
-    const wide = isDesktopBrowseLayout({width:globalThis.innerWidth,height:globalThis.innerHeight,activeScreen:'DATABASE'});
+    const wide = isWideLayout();
     const focusWasInList = list.contains(document.activeElement);
     list.hidden = Boolean(selected) && !wide;
     catalogPane.hidden = list.hidden;
@@ -856,7 +856,14 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   const facilities = element('div', 'cm-cage-facilities');
   facilities.setAttribute('aria-label', uiText('已放置設施'));
   const boardHint = element('p', 'cm-cage-board-hint', '牧場平面配置 · 左右滑動查看所有格位');
-  body.append(boardHint, boardScroll, expansionControls, facilities, tray, status);
+  // These wrappers are display:contents in the existing portrait layout.
+  // Landscape gives each group its own scroll area without remounting cells,
+  // changing native coordinates, or touching the editor's draft transaction.
+  const boardPanel = element('div', 'cm-cage-board-panel');
+  const inventoryPanel = element('div', 'cm-cage-inventory-panel');
+  boardPanel.append(boardHint, boardScroll, expansionControls);
+  inventoryPanel.append(facilities, tray);
+  body.append(boardPanel, inventoryPanel, status);
 
   // Footer rule shared by every screen: leave on the left, the one primary
   // action on the right.

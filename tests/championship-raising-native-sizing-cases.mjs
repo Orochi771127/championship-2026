@@ -4,7 +4,7 @@ import fs from "node:fs";
 import { CHARACTER_NATIVE_SIZING } from "../src/data/championship/characterNativeSizing.js";
 import { BATTLE_CHARACTER_GEOMETRY } from "../src/data/championship/battleCharacterGeometry.js";
 import { getCharacterStaticNativeSizing } from "../src/championship/presentation/licensedCharacterRoster.js";
-import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset } from "../src/championship/presentation/intRh2/raisingNativeSizing.js";
+import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset, getRaisingEggContactShadow } from "../src/championship/presentation/intRh2/raisingNativeSizing.js";
 import { mountRaisingFieldPixiPresentation } from "../src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js";
 const read = (name) => JSON.parse(fs.readFileSync(new URL(`../${name}`, import.meta.url), "utf8"));
 const base = "assets/production/internal-faithful-baseline/characters-v1/";
@@ -161,7 +161,7 @@ class Node {
   removeChild(child){this.children=this.children.filter(item=>item!==child);child.parent=null;}
   on(name,fn){this.events[name]=fn;} off(name){delete this.events[name];}
   destroy(){this.destroyed=true;}
-  clear(){return this;} ellipse(){return this;} fill(){return this;} stroke(){return this;}
+  clear(){return this;} ellipse(...args){this.lastEllipse=args;return this;} fill(){return this;} stroke(){return this;}
   circle(){return this;} poly(){return this;} rect(){return this;} roundRect(){return this;}
   moveTo(){return this;} lineTo(){return this;} star(){return this;}
 }
@@ -182,6 +182,8 @@ test("real Raising scene shares native scale on resize/flip and keeps padded tap
   const root=scene.children.find(item=>item.label==="actors").children[0];
   assert.ok(scene.children.find(item=>item.label==="terrain").children.every(item=>item.visible===false),
     "legacy region outlines are hidden when real cage artwork is loaded");
+  assert.deepEqual(root.children[0].lastEllipse,[0,1,14*.42,14*.13],
+    'native baseline egg retains its pre-existing shadow; only accepted original eggs opt in');
   assert.equal(sprite.scale.x,1/12);
   assert.equal(root.scale.x,-getRaisingNativePixelScale(cm01,stage.app.screen));
   assert.equal(root.x,195,"lane projection is preserved");
@@ -203,4 +205,68 @@ test("real Raising scene shares native scale on resize/flip and keeps padded tap
   assert.deepEqual(relocated,{id:"egg",cage:"b"},"hiding artwork guides does not alter the existing relocation intent");
   assert.equal(port.getDiagnostics().nativeSizing[0].status,"SHARED_NATIVE_PIXEL_SCALE");
   port.dispose(); assert.equal(disposed,true);
+});
+
+test('accepted egg contact rests on solid shell, not glow; floor footprint stays fixed across hatch/lift',()=>{
+  const sizing={packedPixelsPerNativePixel:4,evidence:'COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY'};
+  // Half-opacity cell_000 pixel bounds: independently checked against unchanged WebP bytes.
+  const opaque=[[-23,-44.5,23.25,0],[-22.75,-46,22.5,1],[-22.75,-46,22.25,0],[-19.75,-51.75,20,.25],
+    [-23.5,-53.5,23.25,-.5],[-27,-53.75,30.25,0],[-18.75,-54.75,27,.5],[-23.75,-62.5,30.75,.75]];
+  for(let i=0;i<8;i++){
+    const id=`e00${i}_digitama`,scale=raisingOriginalBodyScale(id,sizing),offset=raisingOriginalBodyOffset(id,sizing);
+    const runtime=read(`assets/production/characters/accepted-20261010/${id}-dot-intake-r01/runtime.review.json`);
+    const [x0,,x1,y1]=opaque[i],rest=getRaisingEggContactShadow(id,sizing);
+    assert.equal(rest.y,y1*scale+offset.y,'shadow center meets the opaque rest bottom');
+    assert.ok(rest.y<1,'glow tail never determines contact');
+    assert.equal(rest.x,(x0+x1)/2*scale+offset.x);
+    assert.equal(rest.radiusX,(x1-x0)*scale*.42);
+    for(const flipX of [false,true]){
+      const contact=getRaisingEggContactShadow(id,sizing,flipX);
+      assert.equal(contact.x,rest.x*(flipX?-1:1));assert.equal(contact.y,rest.y);
+      for(const frame of Object.values(runtime.reviewGeometry.frames).filter(f=>!f.blank)){
+        const sprite={anchor:{x:frame.origin[0]/frame.sourceSize[0],y:frame.origin[1]/frame.sourceSize[1]},
+          texture:{source:{resolution:1},orig:{width:frame.sourceSize[0],height:frame.sourceSize[1]}}};
+        const geometry=getRaisingNativeActorGeometry(sprite,sizing,2,{frameGeometry:frame,displayScale:scale,displayOffset:offset,flipX});
+        for(const lift of [0,4,16]){
+          assert.equal(geometry.offset.y-lift,offset.y-lift,'native lift is not normalized away');
+          assert.deepEqual(getRaisingEggContactShadow(id,sizing,flipX),contact,'hatch frame never drags the floor shadow');
+        }
+      }
+    }
+    assert.equal(getRaisingEggContactShadow(id,{...sizing,evidence:'VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME'}),null);
+  }
+  assert.equal(getRaisingEggContactShadow('m201_agumon',sizing),null);
+  assert.equal(getRaisingEggContactShadow('e008_digitama',sizing),null);
+  assert.equal(getRaisingEggContactShadow('e007_digitama',null),null);
+});
+
+test('real Raising scene binds egg contact only to shadow and preserves lift, flip and resize',async()=>{
+  const entityId='e007_digitama',runtime=read(`assets/production/characters/accepted-20261010/${entityId}-dot-intake-r01/runtime.review.json`);
+  const sizing={packedPixelsPerNativePixel:4,evidence:'COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY'};
+  const sprite=new Node();sprite.anchor={x:0.5,y:320/352,set(x,y){this.x=x;this.y=y;}};
+  sprite.texture={source:{resolution:1},orig:{width:384,height:352}};
+  let cell=0,onResize,tick;
+  const presenter={apply(){return this.getSnapshot();},getSnapshot:()=>({geometry:runtime.reviewGeometry.frames[`${entityId}/main/cell_${String(cell).padStart(3,'0')}`]})};
+  const native={speciesIndex:7,flipBits:0,positionQ12:[0,0,0],state:0};
+  const frame={revision:1,cages:[],residents:[{creatureId:'egg',speciesId:'championship:creature:species-007',displayName:'Egg',lane:{x:.5,y:.5},facing:'left'}]};
+  const scene=new Node(),stage={PIXI:{Assets:{},Container:Node,Graphics:Node,Text:Node,ColorMatrixFilter:Node,Rectangle:class{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}}},
+    app:{screen:{width:390,height:620},stage:new Node(),canvas:{addEventListener(){},removeEventListener(){},getBoundingClientRect:()=>({width:390,height:620})},ticker:{add(fn){tick=fn;},remove(){}}},
+    createSceneRoot:()=>scene,markScene:()=>()=>{},attach(){},onContextLost:()=>()=>{},onResize(fn){onResize=fn;return()=>{};}};
+  const fieldArt={field:cm01,displayObject:new Node(),update(){},dispose(){},getDiagnostics(){return{};}};
+  const port=await mountRaisingFieldPixiPresentation({stage,fieldArt,reducedMotion:true,
+    source:{getFrame:()=>frame,getActorFrame:()=>native,subscribe:()=>()=>{},intents:{selectCreature(){},relocateCreature(){}}},
+    characterBundle:{createActor:()=>({sprite,entityId,nativeSizing:sizing,nativeFramePresenter:presenter}),dispose(){},getDiagnostics(){return{};}}});
+  const root=scene.children.find(n=>n.label==='actors').children[0],shadow=root.children[0],selection=root.children[1];
+  for(const flip of [0,1])for(const pose of [0,1,4,7,10,12])for(const lift of [0,4,16]){
+    cell=pose;native.flipBits=flip;native.positionQ12[2]=lift*4096;tick({deltaMS:0});
+    const contact=getRaisingEggContactShadow(entityId,sizing,Boolean(flip));
+    assert.deepEqual(shadow.lastEllipse,[contact.x,contact.y,contact.radiusX,contact.radiusY]);
+    assert.equal(sprite.y,raisingOriginalBodyOffset(entityId,sizing).y-lift);
+    assert.equal(Math.sign(sprite.scale.x),flip?-1:1);
+    assert.notDeepEqual(selection.lastEllipse,shadow.lastEllipse,'selection geometry remains independent');
+  }
+  stage.app.screen.width=320;onResize();
+  assert.equal(root.scale.y,getRaisingNativePixelScale(cm01,stage.app.screen));
+  assert.ok(root.hitArea.width*root.scale.y>=44);
+  port.dispose();
 });
