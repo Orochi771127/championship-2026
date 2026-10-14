@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {shopGoodsPresentation} from '../src/championship/presentation/shopGoodsUiArt.js';
+import {shopGoodsPresentation,huntToolIconPresentation} from '../src/championship/presentation/shopGoodsUiArt.js';
+import {HUNT_EQUIPMENT_ITEMS} from '../src/championship/hunt/loadout/huntEquipmentCatalog.js';
 import {createBattlePresentationSource} from '../src/championship/app/battlePresentationSource.js';
 
 test('shop display follows original record/item permutation, including wound versus illness medicine',()=>{
@@ -31,4 +32,21 @@ test('battle identity projects the existing session species; unknown species doe
   assert.equal(source.getFrame().combatants[3].displayName,null);
   assert.equal(session.slots[0].speciesId,10);
   source.dispose();
+});
+
+test('all 46 Hunt equipment variants use the same exact art as their Shop and Loadout identity',()=>{
+ const local='http://127.0.0.1:18743/championship.html';
+ const approved='https://orochi771127.github.io/championship-2026/';
+ assert.equal(HUNT_EQUIPMENT_ITEMS.length,46);
+ for(const item of HUNT_EQUIPMENT_ITEMS){
+  const tool={id:item.equipmentClass,itemId:item.itemId,shopRecordIndex:item.shopRecordIndex};
+  const expected=shopGoodsPresentation(item.shopRecordIndex,local);
+  assert.equal(huntToolIconPresentation(tool,local)?.src,expected.src,item.itemId);
+  assert.equal(huntToolIconPresentation(tool,approved)?.src,expected.src,item.itemId);
+  assert.equal(huntToolIconPresentation({...tool,shopRecordIndex:item.shopRecordIndex+1},local),null);
+ }
+ assert.match(huntToolIconPresentation({id:'HAND'},local).src,/toolbar-point64-r1-20261009\/hand-rest\.png$/);
+ assert.equal(huntToolIconPresentation({id:'ENTRAP',itemId:'unknown'},local),null);
+ assert.equal(huntToolIconPresentation({id:'ROPE'},local),null);
+ assert.equal(huntToolIconPresentation({id:'HAND'},'https://example.com/'),null);
 });

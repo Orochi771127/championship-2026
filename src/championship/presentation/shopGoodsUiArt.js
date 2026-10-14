@@ -7,7 +7,8 @@
 import manifest from '../../../assets/production/toolbar/licensed-runtime-v1/manifest.json' with {type:'json'};
 import productionIndex from '../../../assets/production/ART_PRODUCTION_INDEX.json' with {type:'json'};
 import {getShopRecord} from '../shop/shopCatalog.js';
-import {originalShopItemArt} from './completedOriginalUi20261007.js';
+import {originalShopItemArt, originalToolbarArt} from './completedOriginalUi20261007.js';
+import {getHuntCatalogItem} from '../hunt/loadout/huntEquipmentCatalog.js';
 import {assembledShopArt} from './assembledUiArt.js';
 
 const goods = Object.freeze([
@@ -43,4 +44,14 @@ export function shopGoodsPresentation(shopRecordIndex, baseUrl) {
     src:enabled && cell ? cell.src : null,
     backgroundPosition:'center',
     identityEvidence:'VERIFIED_BINARY', imageEvidence:manifest.productionStatus});
+}
+
+// Hunt, loadout and Shop share an equipped item's canonical identity. A class
+// such as ENTRAP is not an icon identity: it may hold meat, a toy or a light.
+export function huntToolIconPresentation(tool, baseUrl) {
+  if (tool?.id === 'HAND') return originalToolbarArt('hand', baseUrl);
+  const item = getHuntCatalogItem(tool?.itemId);
+  if (!item || item.kind !== 'EQUIPMENT' || item.equipmentClass !== tool.id
+    || (Number.isSafeInteger(tool.shopRecordIndex) && tool.shopRecordIndex !== item.shopRecordIndex)) return null;
+  return shopGoodsPresentation(item.shopRecordIndex, baseUrl);
 }

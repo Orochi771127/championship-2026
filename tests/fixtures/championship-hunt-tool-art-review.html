@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<base href="../../"><title>Hunt tool art review</title>
+<link rel="stylesheet" href="src/championship/app/ui/tokens.css">
+<link rel="stylesheet" href="src/championship/app/styles.css">
+<link rel="stylesheet" href="src/championship/app/vs2Styles.css">
+<link rel="stylesheet" href="src/championship/app/nativeUiSkin.css">
+</head><body><div id="cm-root"></div><script type="module">
+// Controlled loadout and actor-free tool coordinator, rendered by the existing
+// Hunt view. No app/save/ticker or gameplay outcome is created by this fixture.
+import {createHuntFieldView} from './src/championship/app/vs2Screens.js';
+import {HUNT_EQUIPMENT_ITEMS} from './src/championship/hunt/loadout/huntEquipmentCatalog.js';
+import {createNativeHuntFieldControls} from './src/championship/hunt/capture/nativeHuntFieldControls.js';
+import manifest from './assets/production/hunt/accepted-20261010/manifest.json' with {type:'json'};
+const params=new URLSearchParams(location.search);
+document.documentElement.dataset.theme=params.get('theme')??'modern';
+const classes=params.has('normal')?['ROPE','SHOT','ENTRAP']:['ROPE','SHOT','WIRE','ENTRAP','DAMAGE_TRAP'];
+const equipment=classes.map(equipmentClass=>({equipmentClass,itemId:HUNT_EQUIPMENT_ITEMS.find(i=>i.equipmentClass===equipmentClass).itemId,quantity:2}));
+let view,commands=[];
+const controls=createNativeHuntFieldControls({records:[],wildIds:[],environment:{},rng:{next:()=>0},
+ loadout:{getSelectedEquipment:()=>equipment},consumeItem:()=>false,maxCardG:32});
+const frame={screen:'HUNT_FIELD',huntField:{hud:{gateName:'戴納草原',companionName:'',exitAvailable:true,target:null,
+ plugins:{counters:[]}},toolbar:{mode:{value:2},assetFamily:{value:'ui/hunt_set'},slots:[]},toolState:null}};
+function refresh(){
+ frame.huntField.toolState=controls.getState();
+ frame.huntField.hud.plugins.counters=frame.huntField.toolState.tools.filter(t=>t.quantity!==undefined).map(t=>({id:t.id,quantity:t.quantity}));
+ view?.render(frame);
+}
+const source={getFrame:()=>frame,intents:{selectHuntTool:id=>{commands.push(id);controls.selectTool(id);refresh();},exitHunt:()=>{}}};
+refresh();
+view=await createHuntFieldView({root:document.querySelector('#cm-root'),source,mountField:async({host})=>{
+ const field=manifest.fields.find(f=>f.fieldId==='field_hm01_01');
+ host.style.background=`url('${field.frames[0].src}') center / cover`;
+ return {isPlayable:true,render(){},dispose(){}};
+}});
+window.huntReview={items:HUNT_EQUIPMENT_ITEMS,commands,
+ setItem(itemId){const item=HUNT_EQUIPMENT_ITEMS.find(i=>i.itemId===itemId);const slot=equipment.find(e=>e.equipmentClass===item.equipmentClass);slot.itemId=item.itemId;slot.quantity=2;refresh();},
+ setQuantity(kind,quantity){equipment.find(e=>e.equipmentClass===kind).quantity=quantity;refresh();},
+ refresh,dispose:()=>view.dispose()};
+</script></body></html>
