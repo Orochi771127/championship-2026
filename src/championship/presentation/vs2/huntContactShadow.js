@@ -25,6 +25,16 @@ const profiles = {
   }
 };
 
+/** Cancel only the actor container's lift and vertical mirror. Keep authored
+ * body origins/pose displacement intact, including naturally airborne poses.
+ * The fallback footprint needs the same ground plane as measured footprints.
+ */
+export function huntShadowGroundTransform(frame, worldZ = 0) {
+  const height = Number.isFinite(worldZ) ? worldZ : 0;
+  const sign = frame?.flipY ? -1 : 1;
+  return { localY: height * sign, scaleY: sign };
+}
+
 export function huntContactShadow(speciesId, frame, worldZ = 0) {
   const profile = profiles[speciesId], geometry = frame?.geometry;
   if (!profile || !geometry || geometry.blank || geometry.scale !== profile.scale
@@ -37,8 +47,7 @@ export function huntContactShadow(speciesId, frame, worldZ = 0) {
   const soles = height === 0 && [0, 2].includes(frame.sequenceId)
     ? profile.soles[frame.cell] ?? profile.soles[0] : profile.soles[0];
   return {
-    localY: height * (frame.flipY ? -1 : 1),
-    scaleY: frame.flipY ? -1 : 1,
+    ...huntShadowGroundTransform(frame, height),
     ellipses: soles.map(([left, top, right, bottom], i) => ({
       x: ((left + right) / 2 - geometry.origin[0]) * factor,
       y: (profile.groundBottom[i] - 1 - geometry.origin[1]) * factor,

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {huntContactShadow} from '../src/championship/presentation/vs2/huntContactShadow.js';
+import {huntContactShadow,huntShadowGroundTransform} from '../src/championship/presentation/vs2/huntContactShadow.js';
 import {stepNativeBindingBounce} from '../src/championship/hunt/capture/nativeWildStatus.js';
 const frame=(species,cell=0,sequenceId=0,flipY=false)=>({cell,sequenceId,flipY,geometry:{blank:false,scale:4,origin:species===218?[384,512]:[112,164],sourceSize:species===218?[768,768]:[256,256]}});
 test('large footprints land below both inspected soles instead of the empty midpoint',()=>{
@@ -26,4 +26,18 @@ test('lifted poses reuse landing footprint and never use air-pose alpha bottom a
 test('unknown species, missing native art, blank cells and changed geometry keep legacy fallback',()=>{
  assert.equal(huntContactShadow('species-099',frame(218)),null);assert.equal(huntContactShadow('species-218',null),null);
  for(const patch of [{blank:true},{scale:1},{sourceSize:[1024,1024]},{origin:[400,512]}])assert.equal(huntContactShadow('species-218',{...frame(218),geometry:{...frame(218).geometry,...patch}}),null);
+});
+
+test('generic fallback stays on the ground through both facings, lift, flip and landing',()=>{
+ for(const flipX of [false,true])for(const flipY of [false,true])for(const height of [0,3,20,7,0]){
+  const f={flipX,flipY},s=huntShadowGroundTransform(f,height),sign=flipY?-1:1;
+  assert.equal(1234-height+sign*(s.localY+s.scaleY*4),1238);
+  assert.equal(sign*s.scaleY,1);
+  assert.deepEqual(f,{flipX,flipY},'shadow projection must not modify body pose');
+ }
+});
+
+test('fallback without native frames uses the owner height; invalid height remains neutral',()=>{
+ assert.deepEqual(huntShadowGroundTransform(null,12),{localY:12,scaleY:1});
+ assert.deepEqual(huntShadowGroundTransform({flipY:true},NaN),{localY:-0,scaleY:-1});
 });

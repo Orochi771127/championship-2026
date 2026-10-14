@@ -1,4 +1,4 @@
-import { huntContactShadow } from './huntContactShadow.js';
+import { huntContactShadow, huntShadowGroundTransform } from './huntContactShadow.js';
 import { createHuntFactoryShutters } from './huntFactoryShutters.js';
 // VS2 -- Hunt field scene on the single Championship Pixi stage.
 //
@@ -453,14 +453,13 @@ export async function mountHuntFieldPixiPresentation({
           shadow.fill({ color: 0x02070a, alpha: 0.48 });
           node.contactShadowKey = key;
         }
-        node.contactShadow.y = contact.localY;
-        node.contactShadow.scale.y = contact.scaleY;
       } else if (node.contactShadowKey !== null) {
         node.contactShadow.clear().ellipse(0, 4, 11, 4).fill({ color: 0x02070a, alpha: 0.48 });
-        node.contactShadow.y = 0;
-        node.contactShadow.scale.y = 1;
         node.contactShadowKey = null;
       }
+      const ground = contact ?? huntShadowGroundTransform(nativeFrame, wild.worldZ ?? 0);
+      node.contactShadow.y = ground.localY;
+      node.contactShadow.scale.y = ground.scaleY;
       const tethered = view.selectedWildId === wild.wildId;
       node.ring.clear()
         .ellipse(0, 3, 13, 6)
