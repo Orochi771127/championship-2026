@@ -357,7 +357,9 @@
     "assets/production/characters/battle-packed-20261013/manifest.json",
     "src/championship/presentation/evolutionGlyphArt.js",
     "src/championship/text/growthStageTerms.js",
-    "src/championship/database/databaseDisplayCatalog.js"
+    "src/championship/database/databaseDisplayCatalog.js",
+    "src/championship/database/databaseEvolutionRoutes.js",
+    "src/championship/presentation/acceptedDatabasePortraits.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9673,7 +9675,9 @@
     "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
     "src/championship/text/growthStageTerms.js",
     "src/championship/database/databaseDisplayCatalog.js",
-    "src/data/championship/database-display.r1.json"
+    "src/data/championship/database-display.r1.json",
+    "src/championship/database/databaseEvolutionRoutes.js",
+    "src/championship/presentation/acceptedDatabasePortraits.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -44961,7 +44965,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "b99a091045288e0041c71dd35af51d9a076793dc9d8bc5e340bbcf6eec61326a"
+        "sha256": "c04931710abda73bbc456662e8ca669b3a149585ce34fa469780e48e83743527"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45213,7 +45217,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "f722b9d67e9c9fbce73fa1446c173c07bb79d0fc9d72c84cb8098b2da86463cf"
+        "sha256": "1758383ba586ec45c7675218177b17ddd254516511cd18d98fc207a7bdf65785"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -45457,7 +45461,7 @@
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "c143aceac2180d02681a18d3781dccbf4f16b0609921f995d44ec6ad21dc6420"
+        "sha256": "d450ca2bf593533832b6ee692440491c0531d49177d83c3c1086dfaa52366764"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
@@ -45465,7 +45469,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "7d5e162795de18db70d686ba61f4d4810bbc47c3fb96118830c2553e9d51b958"
+        "sha256": "a742ba9ac435adabca9d7abad1d49ba35de02fd928cb5de98ee77acef1fdb44b"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -45737,7 +45741,7 @@
       },
       {
         "path": "src/championship/database/databaseRuntime.js",
-        "sha256": "eacf0ad21d321e09990ea7022bed43d9e7d25bbbe47cbdd2361e27c5863dafaa"
+        "sha256": "839ba9e3fe72653f0aca60051f9824a3d33c2df194a5562655688c9c71f7e834"
       },
       {
         "path": "src/championship/database/nativeBookRegistration.js",
@@ -46541,23 +46545,23 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "b3a4efb3837f703226442b72fbbdf585a699dc760a87fb0ab561ab129f09e469"
+        "sha256": "84017a7cd92f4ce906919c785d4479f6722ed7ddfbace97befbd55daf3a348c3"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "f9f8395bb6c24b84d3f789a5caa0e85f0a470c98c7eee10cad0b21abb2732a75"
+        "sha256": "6a1322313faa226f317c7f592308b5fb1eb0c17bf5ca5c54cd1db2101531af51"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "e66be43236b36e0179f4a87d72e00c67dab28c38f8dbf030ee902792dab496b1"
+        "sha256": "6b7e075ab57ebfd437ec626c3430353297e199a28ada9eb2ac03c21288005684"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "4f7f1b068bb408e9576155e07f8902ce8e1fa549c1ab031f6425857c28065a9f"
+        "sha256": "b0df8d0e083dc13e98950743416056e47dab21dc4c22d6c54a931747b0b03c30"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "034ba60f2349744e2ff5cd71f6bce73567e31b1d8d263701f625b5b129c67856"
+        "sha256": "13c5d5fa27d1bd987b96ffe3065eb73e73070cd3e17fa51f29bd52c3eec25f04"
       },
       {
         "path": "src/championship/text/zhHant.js",
@@ -46922,6 +46926,14 @@
       {
         "path": "src/data/championship/database-display.r1.json",
         "sha256": "a0b5b54308962928e1cebf6a488765a594bd644c35b8bab15baf0199bf8975c6"
+      },
+      {
+        "path": "src/championship/database/databaseEvolutionRoutes.js",
+        "sha256": "1444213c9a330061f816a1a8d917ca2d9893addb6ec8b8fd93ebe8ec54e2942a"
+      },
+      {
+        "path": "src/championship/presentation/acceptedDatabasePortraits.js",
+        "sha256": "5bbc3332c8076816ba31ed2f4c8acb468b0aa0fdda4db3b80025659eedb2c2a7"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

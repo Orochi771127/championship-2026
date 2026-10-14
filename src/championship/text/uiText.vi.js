@@ -6,6 +6,12 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  "DEX_EVOLUTION": "Các hướng tiến hóa",
+  "DEX_ROUTE_RECORDED": "Đã có ghi nhận hoàn thành",
+  "DEX_ROUTE_UNRECORDED": "Chưa có ghi nhận hoàn thành",
+  "DEX_ROUTE_UNKNOWN": "Chưa xác nhận được ghi nhận",
+  "DEX_NO_ROUTES": "Loài này không có hướng tiến hóa khả dụng.",
+  "DEX_IMAGE_MISSING": "Chưa có hình ảnh",
   "DEX_STAGE": "Giai đoạn phát triển",
   "DEX_ALL": "Tất cả giai đoạn",
   "DEX_EGG_INDEX": "Danh mục nội dung trứng. Không lưu lịch sử sở hữu vĩnh viễn; trứng không được tính vào số loài đã đăng ký trong danh mục thông thường.",

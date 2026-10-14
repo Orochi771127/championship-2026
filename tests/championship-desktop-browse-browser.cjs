@@ -8,11 +8,14 @@ const {login}=require('./championship-browser-opening.cjs');
 const origin='https://orochi771127.github.io',base=origin+'/championship-2026/',key='championshipModernSave:v1';
 const baseline=process.argv.includes('--before');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'.');
+const beforeRef=process.env.CHAMPIONSHIP_QA_BEFORE_REF;
+const beforeSources=new Set(['src/championship/app/championshipStandaloneApp.js','src/championship/app/vs4Screens.js','src/championship/app/vs2Styles.css','src/championship/database/databaseRuntime.js',...['','en.','ja.','th.','vi.'].map(s=>`src/championship/text/uiText.${s}js`)]);
 const output=path.resolve(process.env.CHAMPIONSHIP_QA_OUTPUT||path.join('docs/reports/desktop-browse-2026-10-13',baseline?'before':'after'));
 const seedObject=JSON.parse(fs.readFileSync('qa/championship-full-qa-save.json','utf8'));
 // Controlled UI masking case: species10 is not owned by this fixture. Do not
 // alter the canonical QA save or infer a capture/evolution event.
 seedObject.progression.registeredSpecies=seedObject.progression.registeredSpecies.filter(i=>i!==10);
+if(process.env.CHAMPIONSHIP_QA_ROUTES==='1')seedObject.raising.nativeHome.evolutionBranches=[5];
 const seed=JSON.stringify(seedObject);
 const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.mp4':'video/mp4','.jpg':'image/jpeg','.wav':'audio/wav','.mp3':'audio/mpeg','.woff2':'font/woff2'};
 fs.mkdirSync(output,{recursive:true});
@@ -25,7 +28,7 @@ async function sample(page){return page.evaluate(()=>{
  return {screen,viewport:[innerWidth,innerHeight],portrait:document.body.hasAttribute('data-portrait-frame'),shell:box('.cm-vs2-shell'),list:box('.cm-vs2-shop__list'),detail:box(screen==='SHOP'?'.cm-vs2-shop__detail':'.cm-vs2-database__detail'),footer:box('.cm-vs2-footer'),rows:list.children.length,scrollHeight:list.scrollHeight,clientHeight:list.clientHeight,scrollTop:list.scrollTop,selected:document.querySelector('.cm-vs2-database__row[aria-pressed="true"]')?.dataset.speciesIndex,overflow:document.documentElement.scrollWidth>innerWidth,focus:document.activeElement?.className};
 });}
 (async()=>{
- const browser=await chromium.launch({channel:'chrome',headless:true}),report={schemaVersion:1,generatedAt:new Date().toISOString(),origin,allRequestsIntercepted:true,freshStorage:true,root,baseline,physicalDeviceAccepted:false,cases:[],operations:[],filters:[],errors:[],missing:[]};
+ const browser=await chromium.launch({channel:'chrome',headless:true}),report={schemaVersion:1,generatedAt:new Date().toISOString(),origin,allRequestsIntercepted:true,freshStorage:true,root,baseline,physicalDeviceAccepted:false,cases:[],operations:[],filters:[],routes:[],routeOperations:[],errors:[],missing:[]};
  try{
   for(const theme of ['warm','classic']){
    const ctx=await browser.newContext({viewport:{width:1366,height:768},hasTouch:true,reducedMotion:'reduce'}),page=await ctx.newPage();
@@ -35,6 +38,7 @@ async function sample(page){return page.evaluate(()=>{
     const u=new URL(route.request().url());assert.equal(u.origin,origin,'no external or Owner origin');
     assert.ok(u.pathname.startsWith('/championship-2026/'));
     const rel=decodeURIComponent(u.pathname).slice('/championship-2026/'.length)||'championship.html',file=path.resolve(root,rel);
+    if(beforeRef&&beforeSources.has(rel)){await route.fulfill({body:require('node:child_process').execFileSync('git',['show',`${beforeRef}:${rel}`]),contentType:mime[path.extname(file)]});return;}
     if(!file.startsWith(root+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile()){report.missing.push(rel);await route.fulfill({status:404,body:'Missing isolated QA input'});return;}
     await route.fulfill({path:file,contentType:mime[path.extname(file)]||'application/octet-stream'});
    });
@@ -108,6 +112,7 @@ async function sample(page){return page.evaluate(()=>{
        const b=await input.boundingBox();assert.ok(b.x>=0&&b.x+b.width<=w+1&&b.y+b.height<=h+1,'focused input stays readable');
       }
       const savedBefore=await page.evaluate(key=>localStorage.getItem(key),key);
+      if(process.env.CHAMPIONSHIP_QA_ROUTES==='1')await require('./championship-database-routes-browser.cjs')(page,{theme,locale,report,output,size});
       const filter=page.locator('.cm-vs2-database__stage'),counts=[8,12,14,38,64,51,37];
       const codes=await list.locator('button').evaluateAll(rows=>Object.fromEntries(rows.map(e=>[e.dataset.speciesIndex,e.dataset.displayCode])));
       for(let stage=0;stage<7;stage++){

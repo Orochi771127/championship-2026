@@ -66,9 +66,9 @@ test('seven filters and five-language labels retain the same codes and shared Aw
 });
 
 test('browsing with target registered preserves independent branch history, RNG, IDs and canonical save',async()=>{
-  for(const branchHistory of [[],[5]]){
+  for(const branchHistory of [[],[5],[0]]){
     const save=JSON.parse(fs.readFileSync('qa/championship-full-qa-save.json','utf8'));
-    save.progression.registeredSpecies=[20];save.raising.nativeHome.evolutionBranches=branchHistory;
+    save.progression.registeredSpecies=[8,20];save.raising.nativeHome.evolutionBranches=branchHistory;
     const key='championshipModernSave:v1',map=new Map([[key,JSON.stringify(save)]]);
     const storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k)};
     const cages=JSON.parse(fs.readFileSync('docs/contracts/championship/raising-home-presentation.v1.json','utf8')).cages;
@@ -78,9 +78,14 @@ test('browsing with target registered preserves independent branch history, RNG,
     app.openDatabase();
     for(let stage=0;stage<7;stage++)databaseDisplayRows(app.getDatabaseFrame(),stage);
     app.selectDatabaseSpecies(20);assert.equal(app.getDatabaseFrame().selected.state,'REGISTERED');
-    app.selectDatabaseSpecies(8);assert.equal(app.getDatabaseFrame().selected.state,'UNDISCOVERED');
+    app.selectDatabaseSpecies(8);assert.equal(app.getDatabaseFrame().selected.state,'REGISTERED');
+    const route=app.getDatabaseFrame().selected.evolutionRoutes[0];
+    assert.equal(route.targetSpeciesIndex,20);assert.equal(route.legacyBranchOffset,0);
+    assert.equal(route.targetRegistered,true);
+    assert.equal(route.historyState,branchHistory.includes(0)?'RECORDED':'NOT_RECORDED');
+    assert.equal(route.revealed,branchHistory.includes(0));
     assert.deepEqual(app.getRaisingState().nativeHome.evolutionBranches,branchHistory);
-    assert.ok(!app.getRaisingState().nativeHome.evolutionBranches.includes(0),'registered target20 does not record source8 branch0');
+    assert.equal(app.getRaisingState().nativeHome.evolutionBranches.includes(0),branchHistory.includes(0),'registration never invents source8 branch0');
     app.selectDatabaseSpecies(null);app.leaveScreen();
     assert.equal(JSON.stringify(app.getRaisingState()),raising);assert.equal(JSON.stringify(app.savePort.getStatus()),status);
     assert.equal(storage.getItem(key),before);assert.deepEqual([...map.keys()],[key]);

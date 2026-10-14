@@ -4,6 +4,7 @@
 // form or leaves Home. Held instances remain a separate projection.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
+import {projectDatabaseEvolutionRoutes} from './databaseEvolutionRoutes.js';
 import {
   DATABASE_EGG_COUNT,
   DATABASE_REGULAR_COUNT,
@@ -41,6 +42,7 @@ export function projectDatabase({
   starterSpeciesId = null,
   collection = [],
   registeredSpecies = [],
+  evolutionBranches = [],
   selectedSpeciesIndex = null
 } = {}) {
   const instancesBySpecies = new Map();
@@ -83,7 +85,12 @@ export function projectDatabase({
     const row = entries[slot.bookOrdinal];
     selected = {
       ...row,
-      instances: instancesBySpecies.get(slot.speciesId) ?? []
+      instances: instancesBySpecies.get(slot.speciesId) ?? [],
+      evolutionRoutes:projectDatabaseEvolutionRoutes(slot.speciesIndex, {
+        sourceRegistered:row.state === DATABASE_ENTRY_STATES.REGISTERED,
+        registeredSpecies:entries.filter(entry=>entry.state === DATABASE_ENTRY_STATES.REGISTERED).map(entry=>entry.speciesIndex),
+        evolutionBranches
+      })
     };
   }
 

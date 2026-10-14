@@ -18,6 +18,12 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "DEX_EVOLUTION": "Evolution candidates",
+  "DEX_ROUTE_RECORDED": "Completion recorded",
+  "DEX_ROUTE_UNRECORDED": "No completion record",
+  "DEX_ROUTE_UNKNOWN": "Record unconfirmed",
+  "DEX_NO_ROUTES": "This species has no candidate routes.",
+  "DEX_IMAGE_MISSING": "Image unavailable",
   "DEX_STAGE": "Growth stage",
   "DEX_ALL": "All stages",
   "DEX_EGG_INDEX": "Egg content index. Permanent acquisition history is not tracked; eggs do not count toward regular book registration.",

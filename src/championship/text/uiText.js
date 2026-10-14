@@ -7,6 +7,12 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "DEX_EVOLUTION": "進化候選",
+  "DEX_ROUTE_RECORDED": "已有完成紀錄",
+  "DEX_ROUTE_UNRECORDED": "尚無完成紀錄",
+  "DEX_ROUTE_UNKNOWN": "紀錄未能確認",
+  "DEX_NO_ROUTES": "此物種沒有候選路線。",
+  "DEX_IMAGE_MISSING": "圖像暫缺",
   "DEX_STAGE": "成長階段",
   "DEX_ALL": "全部階段",
   "DEX_EGG_INDEX": "蛋內容索引；未記錄永久取得歷史，不計入常規圖鑑登錄。",

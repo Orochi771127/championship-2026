@@ -3,6 +3,7 @@ import { speciesName, generationName, shopItemDescription as shopDescriptionText
 import {databaseDisplayRows, getDatabaseDisplayEntry} from '../database/databaseDisplayCatalog.js';
 import {openingEggChoices} from './openingEggChoices.js';
 import {openingEggText} from '../text/openingEggText.js';
+import {loadAcceptedDatabasePortrait} from '../presentation/acceptedDatabasePortraits.js';
 // VS4 -- Shop presentation.
 //
 // Consumes only the injected Gate/Hunt presentation source. The Shop runtime
@@ -424,6 +425,19 @@ export function createDatabaseView({ root, source }) {
   let paintedDetail = null;
   let activeStage = null;
   let selectedEgg = null;
+  let alive = true;
+  let detailGeneration = 0;
+  let portraitAbort = null;
+  let portraitImages = [];
+  function releasePortraits() {
+    detailGeneration++;
+    portraitAbort?.abort();
+    portraitAbort = null;
+    for (const image of portraitImages) {
+      image.onload = null; image.onerror = null; image.removeAttribute('src');
+    }
+    portraitImages = [];
+  }
   const eggs = new Map(openingEggChoices().map(egg=>[egg.speciesIndex,egg]));
   back.addEventListener("click", () => {
     const current = source.getFrame().database;
@@ -467,6 +481,7 @@ export function createDatabaseView({ root, source }) {
       }
       if (list.hidden && focusWasInList) detail.querySelector('h2')?.focus({preventScroll:true});
     } else {
+      if (paintedDetail !== null) releasePortraits();
       detail.replaceChildren();
       paintedDetail = null;
       back.textContent = uiText("RETURN TO RANCH");
@@ -515,6 +530,8 @@ export function createDatabaseView({ root, source }) {
   }
 
   function paintDetail(selected, book) {
+    releasePortraits();
+    portraitAbort = new AbortController();
     detail.replaceChildren();
     const egg = selected.kind === 'EGG' ? eggs.get(selected.speciesIndex) : null;
     const title = element("h2", "cm-vs2-database__detail-title", egg ? egg.formalName : selected.state === "REGISTERED" ? speciesName(selected.speciesIndex, selected.displayName) : "Undiscovered");
@@ -540,6 +557,7 @@ export function createDatabaseView({ root, source }) {
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
     }
     if (selected.state !== "REGISTERED") return;
+    paintEvolutionRoutes(selected);
     if (selected.source === "STARTER" && selected.instances.length === 0) {
       detail.append(element("p", "cm-vs2-shop__status", "Registered by the opening partner. No Hunt instance yet."));
     }
@@ -569,13 +587,79 @@ export function createDatabaseView({ root, source }) {
     }
   }
 
+  function portrait(speciesIndex, revealed) {
+    const holder = element('div','cm-dex-portrait');
+    holder.dataset.revealed = String(revealed);
+    holder.dataset.art = 'loading';
+    const placeholder = element('span','cm-dex-portrait__placeholder',revealed ? 'DEX_IMAGE_MISSING' : '????');
+    const image = element('img','cm-dex-portrait__image');
+    image.alt = ''; image.hidden = true;
+    holder.append(placeholder,image);
+    portraitImages.push(image);
+    const generation = detailGeneration, signal = portraitAbort.signal;
+    const current = () => alive && generation === detailGeneration && !signal.aborted;
+    const missing = () => { if (!current()) return; holder.dataset.art = 'missing'; image.hidden = true; placeholder.hidden = false; };
+    void loadAcceptedDatabasePortrait(speciesIndex,{signal}).then(art=>{
+      if (!current()) return;
+      if (!art) { missing(); return; }
+      image.onload = () => { if (!current()) return; holder.dataset.art = 'ready'; image.hidden = false; placeholder.hidden = true; };
+      image.onerror = missing;
+      image.src = art.src;
+    }).catch(missing);
+    return holder;
+  }
+
+  function paintEvolutionRoutes(selected) {
+    const section = element('section','cm-dex-routes');
+    section.setAttribute('aria-label',uiText('DEX_EVOLUTION'));
+    section.append(element('h3','cm-dex-routes__heading','DEX_EVOLUTION'));
+    const graph = element('div','cm-dex-routes__graph');
+    const origin = element('div','cm-dex-routes__source');
+    origin.append(portrait(selected.speciesIndex,true),element('strong','',selected.displayCode));
+    graph.append(origin);
+    const routes = selected.evolutionRoutes ?? [];
+    if (!routes.length) graph.append(element('p','cm-vs2-shop__meta','DEX_NO_ROUTES'));
+    else {
+      const targets = element('ul','cm-dex-routes__targets');
+      for (const route of routes) {
+        const mapping = getDatabaseDisplayEntry(route.targetSpeciesIndex);
+        const name = route.revealed ? speciesName(route.targetSpeciesIndex) : '????';
+        const status = route.historyState === 'RECORDED' ? 'DEX_ROUTE_RECORDED' : route.historyState === 'UNKNOWN' ? 'DEX_ROUTE_UNKNOWN' : 'DEX_ROUTE_UNRECORDED';
+        const row = element('li','cm-dex-routes__branch');
+        const button = element('button','cm-dex-routes__target');
+        button.type = 'button'; button.disabled = !route.revealed;
+        button.dataset.branchOffset = String(route.legacyBranchOffset);
+        button.dataset.history = route.historyState;
+        button.dataset.revealed = String(route.revealed);
+        button.setAttribute('aria-label',`${mapping.displayCode} · ${name} · ${uiText(status)}`);
+        const copy = element('span','cm-dex-routes__copy');
+        copy.append(element('span','cm-vs2-shop__meta',mapping.displayCode),element('strong','cm-dex-routes__name',name),element('span','cm-dex-routes__status',status));
+        button.append(portrait(route.targetSpeciesIndex,route.revealed),copy);
+        button.addEventListener('click',()=>{
+          listScroll = list.scrollTop;
+          lastOpened = route.targetSpeciesIndex;
+          if (activeStage !== null && activeStage !== mapping.numberingStageIndex) { activeStage = mapping.numberingStageIndex; stageFilter.value = String(activeStage); }
+          source.intents.selectDatabaseSpecies(route.targetSpeciesIndex);
+          paint(source.getFrame());
+          detail.querySelector('h2')?.focus({preventScroll:true});
+        });
+        row.append(button); targets.append(row);
+      }
+      graph.append(targets);
+    }
+    section.append(graph); detail.append(section);
+  }
+
   paint(frame);
   const resize = () => paint(source.getFrame());
   globalThis.addEventListener?.('resize', resize);
 
   return Object.freeze({
     render: paint,
+    relabel() { paint(source.getFrame()); },
     dispose() {
+      alive = false;
+      releasePortraits();
       stopBackKeys();
       globalThis.removeEventListener?.('resize', resize);
       root.replaceChildren();

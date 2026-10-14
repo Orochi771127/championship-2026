@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: DATABASE_ROUTES_20261014 -->
+**2026-10-14 Database one-level candidate routes.** Registered ordinary details join existing ordered candidates with exact source/branch completion history; target registration alone never reveals a route. Existing selected original HUD portraits and black silhouettes use a bounded six-image loader with cancellation;96/97 aliases remain. Eggs and unknown sources expose no routes;211/222 retain neutral missing-art placeholders while Owner reviews the new style. Writers, fixed codes, rules/order, RNG and save remain unchanged. See [contract](contracts/championship/DATABASE_EVOLUTION_ROUTES_2026-10-14.md) and [validation/publication report](reports/database-routes-2026-10-14/REPORT_ZH_TW.md). This closes the bounded route function only; it does not establish complete Database art, original full UI or physical-device acceptance.
+
 <!-- record-id: TITLE_VISIBLE_BRAND_20261013 -->
 **2026-10-13 TITLE visible-language art.** The existing image owner excludes the hidden Chinese logo from non-Chinese requests/progress/errors and keeps completed cache through language switches. The approved h1 is readable until the attached Chinese logo decodes, with fixed logo bounds and one accessible heading; the film's cloned closing brand retains its previous rules. Original files, source selection, music/video/skip/idle/background lifecycle and save are preserved. See [controlled before/after, normal UI and publication evidence](reports/title-visibility-2026-10-13/REPORT_ZH_TW.md); this does not establish Owner-device speed.
 

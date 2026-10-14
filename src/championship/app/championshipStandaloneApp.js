@@ -2110,6 +2110,7 @@ export function createChampionshipStandaloneApp({
         starterSpeciesId: creature?.speciesId ?? null,
         collection: raising?.collection ?? [],
         registeredSpecies: registeredSpeciesValue,
+        evolutionBranches: raising?.nativeHome?.evolutionBranches ?? [],
         selectedSpeciesIndex: selectedDatabaseSpeciesIndex
       });
       if (!frame.selected) return frame;

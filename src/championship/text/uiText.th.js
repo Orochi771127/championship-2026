@@ -6,6 +6,12 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "DEX_EVOLUTION": "ตัวเลือกวิวัฒนาการ",
+  "DEX_ROUTE_RECORDED": "มีบันทึกการสำเร็จ",
+  "DEX_ROUTE_UNRECORDED": "ยังไม่มีบันทึกการสำเร็จ",
+  "DEX_ROUTE_UNKNOWN": "ยังยืนยันบันทึกไม่ได้",
+  "DEX_NO_ROUTES": "สายพันธุ์นี้ไม่มีเส้นทางที่เป็นตัวเลือก",
+  "DEX_IMAGE_MISSING": "ยังไม่มีภาพ",
   "DEX_STAGE": "ขั้นการเติบโต",
   "DEX_ALL": "ทุกขั้น",
   "DEX_EGG_INDEX": "ดัชนีเนื้อหาไข่ ไม่มีการบันทึกประวัติการได้รับอย่างถาวร และไม่นับรวมในการลงทะเบียนสารานุกรมปกติ",

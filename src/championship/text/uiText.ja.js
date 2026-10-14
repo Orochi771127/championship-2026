@@ -6,6 +6,12 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "DEX_EVOLUTION": "進化候補",
+  "DEX_ROUTE_RECORDED": "完了記録あり",
+  "DEX_ROUTE_UNRECORDED": "完了記録なし",
+  "DEX_ROUTE_UNKNOWN": "記録を確認できません",
+  "DEX_NO_ROUTES": "この種には候補ルートがありません。",
+  "DEX_IMAGE_MISSING": "画像未提供",
   "DEX_STAGE": "成長段階",
   "DEX_ALL": "すべての段階",
   "DEX_EGG_INDEX": "タマゴのコンテンツ一覧です。永続的な入手履歴は記録されず、通常図鑑の登録数には含まれません。",
