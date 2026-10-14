@@ -1,0 +1,258 @@
+{
+  "formalArtifact": true,
+  "mockedApprovedOrigin": "https://orochi771127.github.io/championship-2026/",
+  "physicalDeviceAccepted": false,
+  "normalNativePlayback": 3,
+  "reports": [
+    {
+      "name": "native desktop 1080p, serial warmup, resize and replay retain source/cache",
+      "passed": true,
+      "controlledMedia": false,
+      "device": "desktop",
+      "titleRequests": [
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813545.337602
+        },
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813545.426991
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813545.482484
+        },
+        {
+          "path": "assets/production/title-morning-r1/cloud.webp",
+          "at": 813545.535723
+        }
+      ],
+      "mediaPaths": [
+        "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4"
+      ],
+      "created": 4,
+      "revoked": 0
+    },
+    {
+      "name": "iPhone browser emulation picks 720p; native playback ends with ready TITLE",
+      "passed": true,
+      "controlledMedia": false,
+      "device": "iphone",
+      "titleRequests": [
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813548.376816
+        },
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813548.448799
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813548.500539
+        },
+        {
+          "path": "assets/production/title-morning-r1/cloud.webp",
+          "at": 813548.543802
+        }
+      ],
+      "mediaPaths": [
+        "assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4"
+      ],
+      "created": 4,
+      "revoked": 0
+    },
+    {
+      "name": "immediate skip requests no TITLE pixels before buffer; LOGIN remains usable",
+      "passed": true,
+      "controlledMedia": true,
+      "device": "desktop",
+      "titleRequests": [
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813563.711603
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813563.711869
+        },
+        {
+          "path": "assets/production/title-morning-r1/cloud.webp",
+          "at": 813563.712046
+        },
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813563.712414
+        }
+      ],
+      "mediaPaths": [
+        "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4"
+      ],
+      "created": 4,
+      "revoked": 0
+    },
+    {
+      "name": "low buffer/stall stops new warm requests; skip joins the pending background",
+      "passed": true,
+      "controlledMedia": true,
+      "device": "desktop",
+      "titleRequests": [
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813564.739147
+        },
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813565.133685
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813565.13394
+        },
+        {
+          "path": "assets/production/title-morning-r1/cloud.webp",
+          "at": 813565.134117
+        }
+      ],
+      "mediaPaths": [
+        "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4"
+      ],
+      "created": 4,
+      "revoked": 0
+    },
+    {
+      "name": "warm image error retains background/progress and retries only failed image",
+      "passed": true,
+      "controlledMedia": true,
+      "device": "desktop",
+      "titleRequests": [
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813565.937244
+        },
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813566.016134
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813566.069914,
+          "canceled": true
+        },
+        {
+          "path": "assets/production/title-morning-r1/cloud.webp",
+          "at": 813566.212291
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813566.600851
+        }
+      ],
+      "mediaPaths": [
+        "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4"
+      ],
+      "created": 4,
+      "revoked": 0
+    },
+    {
+      "name": "background and leaving TITLE abort pending warm work and release owned URLs",
+      "passed": true,
+      "controlledMedia": true,
+      "device": "desktop",
+      "titleRequests": [
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813567.073051
+        },
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813567.147
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813567.200455,
+          "canceled": true
+        }
+      ],
+      "mediaPaths": [
+        "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4"
+      ],
+      "created": 2,
+      "revoked": 2
+    },
+    {
+      "name": "reduced motion loads no video until manual watch",
+      "passed": true,
+      "controlledMedia": false,
+      "device": "iphone",
+      "titleRequests": [
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813567.882465
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813567.883153
+        },
+        {
+          "path": "assets/production/title-morning-r1/cloud.webp",
+          "at": 813567.88342
+        },
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813567.883938
+        },
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813568.546887
+        },
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813568.669315
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813568.66959
+        },
+        {
+          "path": "assets/production/title-morning-r1/cloud.webp",
+          "at": 813568.669832
+        }
+      ],
+      "mediaPaths": [
+        "assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4"
+      ],
+      "created": 8,
+      "revoked": 4
+    },
+    {
+      "name": "seeded QA Continue enters existing Raising after immediate skip",
+      "passed": true,
+      "controlledMedia": true,
+      "device": "desktop",
+      "titleRequests": [
+        {
+          "path": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "at": 813569.579737
+        },
+        {
+          "path": "assets/production/title-morning-r1/blaze.webp",
+          "at": 813569.580159
+        },
+        {
+          "path": "assets/production/title-morning-r1/cloud.webp",
+          "at": 813569.580374
+        },
+        {
+          "path": "assets/production/title-morning-r1/arena.webp",
+          "at": 813569.580924
+        }
+      ],
+      "mediaPaths": [
+        "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4"
+      ],
+      "created": 6,
+      "revoked": 5
+    }
+  ]
+}

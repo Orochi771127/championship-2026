@@ -1,5 +1,7 @@
 # Cyber Partner: Tournament / 網線拍檔：錦標賽 — Documentation Hub
 
+- [2026-10-14 四語 TITLE Logo、本機整包交付與最終驗收](reports/title-multilingual-2026-10-14/REPORT_ZH_TW.md)
+
 - [2026-10-14 圖鑑一階候選路線、獨立完成紀錄與缺圖盤點](reports/database-routes-2026-10-14/REPORT_ZH_TW.md)／[顯示契約](contracts/championship/DATABASE_EVOLUTION_ROUTES_2026-10-14.md)
 
 - [2026-10-13 TITLE 依語言載 logo、等待／失敗保留文字品牌](reports/title-visibility-2026-10-13/REPORT_ZH_TW.md)

@@ -206,3 +206,42 @@ test('attached logo decode must finish before ready; timeout or language change 
  h.title.ownerDocument.documentElement.lang='en';h.sync(false);assert.equal(logo.getAttribute('src'),null);attached.resolve();await flush();
  assert.equal(logo.dataset.titleImageState,'idle');assert.equal(h.revoked.length,1);h.sync.dispose();
 });
+
+function localizedLogos(){return ['zh-Hant','en','ja','th','vi'].map(locale=>{const image=titleImage(`logo-${locale}`);image.dataset.titleLocale=locale;const listeners=new Map();image.listeners=listeners;image.addEventListener=(key,fn)=>listeners.set(key,fn);image.removeEventListener=(key,fn)=>{if(listeners.get(key)===fn)listeners.delete(key);};return image;});}
+for(const locale of ['zh-Hant','en','ja','th','vi'])test(`multilingual ${locale} warmup fetches only active logo and skip reuses it`,async()=>{
+ const logos=localizedLogos(),h=harness([...logos,titleImage('blaze'),titleImage('cloud')],locale);h.sync(true);
+ for(let i=0;i<4;i++){assert.equal(h.sync.warmNext(),true);await complete(h,i);}
+ assert.equal(h.sync.warmNext(),false);h.sync(false);
+ assert.equal(h.calls.filter(c=>c.url.includes('/logo-')).length,1);
+ assert.ok(h.calls.some(c=>c.url.endsWith(`/logo-${locale}.webp`)));
+ assert.equal(h.panel.dataset.titleBackgroundState,'ready');
+ for(const logo of logos){assert.equal(logo.dataset.titleImageVisible,String(logo.dataset.titleLocale===locale));if(logo.dataset.titleLocale!==locale)assert.equal(logo.getAttribute('src'),null);}
+ h.sync.dispose();assert.ok(logos.every(x=>x.listeners.size===0));
+});
+test('rapid locale toggles cancel requests and invalidate captured late load/error listeners',async()=>{
+ const logos=localizedLogos(),h=harness(logos,'en'),en=logos[1];h.sync(false);
+ const oldLoad=en.listeners.get('load'),oldError=en.listeners.get('error');
+ h.calls[0].resolve({ok:true,blob:async()=>({old:true})});await flush();const oldDecode=h.decodes.at(-1);
+ for(const locale of ['ja','th','vi','en']){h.title.ownerDocument.documentElement.lang=locale;h.sync(false);}
+ assert.ok(h.calls[0].options.signal.aborted);assert.ok(h.calls.slice(2,-1).every(c=>c.options.signal.aborted));
+ oldLoad();oldError();oldDecode.resolve();await flush();assert.equal(en.dataset.titleImageState,'loading');assert.equal(en.getAttribute('src'),null);
+ await complete(h,h.calls.length-1);await complete(h,1);assert.equal(h.panel.dataset.titleBackgroundState,'ready');
+ oldError();oldLoad();assert.equal(en.dataset.titleImageState,'ready');assert.equal(h.panel.dataset.titleBackgroundState,'ready');h.sync.dispose();
+});
+test('completed locale cache detaches old listeners and reuses bytes with fresh callbacks',async()=>{
+ const logos=localizedLogos(),en=logos[1],h=harness(logos,'en');h.sync(false);await complete(h,0);await complete(h,1);
+ const oldError=en.listeners.get('error'),oldLoad=en.listeners.get('load');
+ h.title.ownerDocument.documentElement.lang='ja';h.sync(false);assert.equal(en.listeners.size,0);
+ h.title.ownerDocument.documentElement.lang='en';h.sync(false);const count=h.calls.length;
+ assert.notEqual(en.listeners.get('error'),oldError);oldError();oldLoad();assert.equal(en.dataset.titleImageState,'ready');assert.equal(h.panel.dataset.titleBackgroundState,'ready');assert.equal(h.calls.length,count);h.sync.dispose();
+});
+test('active foreign missing image has a bounded retry and does not fetch Chinese as a substitute',async()=>{
+ const logos=localizedLogos(),h=harness(logos,'th');h.sync(false);h.calls[0].resolve({ok:false});await flush();await complete(h,1);
+ assert.equal(logos[3].dataset.titleImageState,'error');assert.equal(h.sync.retry(),true);assert.equal(h.sync.retry(),false);await complete(h,2);
+ assert.equal(logos[3].dataset.titleImageState,'ready');assert.equal(h.panel.dataset.titleBackgroundState,'ready');assert.ok(!h.calls.some(c=>c.url.includes('zh-Hant')));h.sync.dispose();
+});
+test('attract replay pauses only unfinished assets; hidden TITLE aborts and stale events cannot revive it',async()=>{
+ const logos=localizedLogos(),h=harness(logos,'vi');h.sync(false);const late=logos[4].listeners.get('error');
+ h.sync(true);assert.ok(h.calls[0].options.signal.aborted);assert.ok(h.calls[1].options.signal.aborted);late();assert.equal(logos[4].dataset.titleImageState,'idle');
+ h.sync(false);h.title.hidden=true;h.sync(true);assert.ok(h.calls.slice(2).every(c=>c.options.signal.aborted));late();assert.equal(logos[4].dataset.titleImageVisible,'false');h.sync.dispose();
+});

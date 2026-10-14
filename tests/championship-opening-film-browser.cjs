@@ -104,9 +104,10 @@ async function prefs(context,value){await context.addInitScript(({key,value})=>l
       await route.continue().catch(()=>{});
     });
     await boot(page);await playing(page);
-    await page.waitForFunction(()=>document.querySelector('.cm-title__panel')?.dataset.titleBackgroundState==='ready'&&[...document.querySelectorAll('#cm-title > .cm-title__panel img')].every(i=>i.complete&&i.naturalWidth>0));
+    await page.waitForFunction(()=>document.querySelector('.cm-title__panel')?.dataset.titleBackgroundState==='ready'&&[...document.querySelectorAll('#cm-title > .cm-title__panel img')].filter(i=>!i.dataset.titleLocale||i.dataset.titleImageVisible==='true').every(i=>i.complete&&i.naturalWidth>0));
     assert.equal(attempts.length,4);assert.equal(new Set(attempts).size,4);
-    const titleImages=page.locator('#cm-title > .cm-title__panel img');
+    const titleImages=page.locator('#cm-title > .cm-title__panel img:not([data-title-locale]), #cm-title > .cm-title__panel img[data-title-image-visible="true"]');
+    assert.equal(await page.locator('#cm-title > .cm-title__panel img[data-title-locale][data-title-image-visible="false"]').evaluateAll(images=>images.length===4&&images.every(i=>!i.getAttribute('src'))),true,'four inactive logos remain unfetched');
     assert.ok(await titleImages.count()>0);
     assert.equal(await titleImages.evaluateAll(images=>images.every(image=>image.getAttribute('src').startsWith('blob:'))),true);
     await skip(page);

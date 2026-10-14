@@ -86,6 +86,7 @@ export function createTitleImageLifecycle(title, {
   }
   function releaseImage(entry) {
     const hadRequest = Boolean(entry.request);
+    unbindImage(entry);
     release(entry.request);
     entry.request = null;
     if (entry.warmed || hadRequest) { entry.image.removeAttribute('src'); entry.released = true; imageState(entry,'idle'); }
@@ -95,6 +96,7 @@ export function createTitleImageLifecycle(title, {
     entry.managed = true;
     const request = {controller:new AbortController(),released:false,warm,fromCache:Boolean(entry.blob)};
     entry.request = request;
+    bindImage(entry);
     const currentImage = () => !disposed && !title.hidden && visible(entry) && !request.released && entry.request === request
       && (!paused || warm || request.fromCache);
     const failImage = () => {
@@ -129,11 +131,22 @@ export function createTitleImageLifecycle(title, {
       } catch { failImage(); }
     })();
   }
-  for (const entry of images) {
-    entry.loaded = () => { if (!disposed && !title.hidden && active?.ready && !images.some(e => e.failed)) state('ready'); };
+  function unbindImage(entry) {
+    entry.listenerEpoch = (entry.listenerEpoch || 0) + 1;
+    entry.image.removeEventListener?.('load',entry.loaded);
+    entry.image.removeEventListener?.('error',entry.error);
+    entry.loaded = entry.error = null;
+  }
+  function bindImage(entry) {
+    if (entry.loaded || !visible(entry)) return;
+    const request = entry.request, epoch = entry.listenerEpoch || 0;
+    const currentEvent = () => !disposed && !title.hidden && !entry.released && visible(entry)
+      && (entry.listenerEpoch || 0) === epoch && entry.request === request && !request?.released;
+    entry.loaded = () => { if (currentEvent() && active?.ready && !images.some(e => visible(e) && e.failed)) state('ready'); };
     entry.error = () => {
-      if (disposed || title.hidden || entry.released || !visible(entry)) return;
-      entry.managed = true; entry.failed = true; entry.blob = null; imageState(entry,'error'); state('error');
+      if (!currentEvent()) return;
+      releaseImage(entry);
+      entry.managed = true; entry.failed = true; entry.blob = null; imageState(entry,'error'); state('error'); onSettled();
     };
     entry.image.addEventListener?.('load',entry.loaded);
     entry.image.addEventListener?.('error',entry.error);
@@ -145,8 +158,10 @@ export function createTitleImageLifecycle(title, {
     const visibilityChanged = visibleKey !== nextVisibleKey;
     visibleKey = nextVisibleKey;
     for (const entry of images) {
+      if (entry.image.dataset) entry.image.dataset.titleImageVisible = String(!hidden && visible(entry));
       if (hidden) { releaseImage(entry); entry.failed = false; }
       else if (!visible(entry)) {
+        unbindImage(entry);
         // Keep completed pixels cached; only cancel an unfinished hidden logo.
         if (entry.request && !entry.request.ready) releaseImage(entry);
         continue;
@@ -155,7 +170,7 @@ export function createTitleImageLifecycle(title, {
       else if (entry.managed && !entry.request && (entry.blob || !wantPause)) { startImage(entry); }
       // A warm request becomes the normal TITLE request on skip; no duplicate
       // image.src download is issued while its body/decode is still pending.
-      if (entry.request) continue;
+      if (entry.request) { bindImage(entry); continue; }
       if (wantPause && !entry.image.complete && entry.src && !entry.released) {
         entry.image.removeAttribute('src'); entry.released = true;
       } else if (!wantPause && entry.released && !entry.failed) {
@@ -211,8 +226,7 @@ export function createTitleImageLifecycle(title, {
     disposed = true; generation++; release(active); active = null; cachedBlob = null;
     for (const entry of images) {
       releaseImage(entry); entry.blob = null;
-      entry.image.removeEventListener?.('load',entry.loaded);
-      entry.image.removeEventListener?.('error',entry.error);
+      unbindImage(entry);
     }
     if (panel) panel.style.backgroundImage = 'none';
     state('disposed');

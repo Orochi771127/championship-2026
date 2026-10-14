@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: TITLE_MULTILINGUAL_20261014 -->
+**2026-10-14 four-language TITLE logos.** The existing locale-aware image owner selects exactly the active logo;en/ja/vi r1 and Thai r2 use their unchanged approved PNG bytes, with the existing Chinese logo preserved. Shared2:1 contain/fallback and request+listener epoch cancellation cover switching/error/retry/cache; foreign art and fallback fonts fit the portrait panel on short desktops. Existing h1 names, film/audio/app/save authority remain. See [Owner-local handoff, normal browser/film validation and publication receipt](reports/title-multilingual-2026-10-14/REPORT_ZH_TW.md). Physical devices, native-speaker Thai review and commercial rights are not accepted by this engineering check.
+
 <!-- record-id: DATABASE_ROUTES_20261014 -->
 **2026-10-14 Database one-level candidate routes.** Registered ordinary details join existing ordered candidates with exact source/branch completion history; target registration alone never reveals a route. Existing selected original HUD portraits and black silhouettes use a bounded six-image loader with cancellation;96/97 aliases remain. Eggs and unknown sources expose no routes;211/222 retain neutral missing-art placeholders while Owner reviews the new style. Writers, fixed codes, rules/order, RNG and save remain unchanged. See [contract](contracts/championship/DATABASE_EVOLUTION_ROUTES_2026-10-14.md) and [validation/publication report](reports/database-routes-2026-10-14/REPORT_ZH_TW.md). This closes the bounded route function only; it does not establish complete Database art, original full UI or physical-device acceptance.
 

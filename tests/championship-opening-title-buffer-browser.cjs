@@ -54,7 +54,7 @@ async function scenario(name,options,run){
   return route.fulfill({path:file,contentType:mime[path.extname(file)]||'application/octet-stream'}).catch(()=>{});
  });
  const media=async(change,event='progress')=>page.evaluate(({change,event})=>{Object.assign(__media,change);document.querySelector('#cm-opening-film video').dispatchEvent(new Event(event));},{change,event});
- const readyTitle=()=>page.waitForFunction(()=>__qaTitle.inspect().state==='ready'&&[...document.querySelectorAll('#cm-title > .cm-title__panel img')].every(i=>i.complete&&i.naturalWidth>0));
+ const readyTitle=()=>page.waitForFunction(()=>__qaTitle.inspect().state==='ready'&&[...document.querySelectorAll('#cm-title > .cm-title__panel img')].filter(i=>!i.dataset.titleLocale||i.dataset.titleImageVisible==='true').every(i=>i.complete&&i.naturalWidth>0)&&[...document.querySelectorAll('#cm-title > .cm-title__panel img[data-title-locale][data-title-image-visible="false"]')].every(i=>!i.getAttribute('src')));
  const skip=async()=>{await page.click('#cm-film-skip');await page.waitForTimeout(400);};
  try{
   await page.goto(base+'championship.html',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>__qaReady);

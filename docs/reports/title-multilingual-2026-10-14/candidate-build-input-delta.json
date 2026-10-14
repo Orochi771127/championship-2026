@@ -1,0 +1,48 @@
+{
+  "baseline": "50c03fedaf12c2a40df46eed5129b5b589c77747",
+  "rows": [
+    {
+      "path": "championship.html",
+      "action": "update",
+      "sha256": "1a5efa8bee6c3de881ba88e3c095f1fa551d1aed43bc9d6a1eb55fd162b2a97f",
+      "baselineSha256": "c04931710abda73bbc456662e8ca669b3a149585ce34fa469780e48e83743527"
+    },
+    {
+      "path": "src/championship/app/opening.css",
+      "action": "update",
+      "sha256": "f27c4d139bbcf64a576d55388c99a8de8e5c0725bfd03db8f9c4d4e85b5db21a",
+      "baselineSha256": "8cb30545daa23ed8dfc84447943516929c1cd650aa9c1a5db25bcff10d7a4b53"
+    },
+    {
+      "path": "src/championship/presentation/titleImageLifecycle.js",
+      "action": "update",
+      "sha256": "dd05d57ad57c681a145a7ee9c35455bf2ce35766fc074ad696c8566dbb00867a",
+      "baselineSha256": "90cb8305223713a934f38a81413cd1b143e8467aabb19f3e0745f5c374950bd7"
+    },
+    {
+      "path": "assets/production/title-multilingual-r1/manifest.json",
+      "action": "add",
+      "sha256": "d698b24452e7975e3c999721bf40272729f0261e7756fdb3e5307a73cadf8663"
+    },
+    {
+      "path": "assets/production/title-multilingual-r1/logo-en.png",
+      "action": "add",
+      "sha256": "7ffd03040b45f8693ebde36e7d77d036574e12c21ce777463828aa4bebbf51e3"
+    },
+    {
+      "path": "assets/production/title-multilingual-r1/logo-ja.png",
+      "action": "add",
+      "sha256": "1c7c970743d0e35b0e78c99d35cb96a1bb17681567af2873bea309f817200764"
+    },
+    {
+      "path": "assets/production/title-multilingual-r1/logo-th.png",
+      "action": "add",
+      "sha256": "2ff08f8927df9c0f4f9d22e3a939b5c44b5aa0bcb916058c313ac47e530793e4"
+    },
+    {
+      "path": "assets/production/title-multilingual-r1/logo-vi.png",
+      "action": "add",
+      "sha256": "5688a98ccd9a21256d309f98ee3ba4658eaa7e0c633dfaed16311145659a30dd"
+    }
+  ]
+}

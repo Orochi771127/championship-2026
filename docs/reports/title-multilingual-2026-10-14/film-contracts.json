@@ -1,0 +1,59 @@
+{
+  "generatedAt": "2026-10-14T04:04:24.289Z",
+  "checks": [
+    {
+      "name": "skip gesture guard, repeated manual watch, idle 14.9s input, menu block",
+      "passed": true
+    },
+    {
+      "name": "dialog idle block and controlled background/foreground reset",
+      "passed": true
+    },
+    {
+      "name": "buffered film warms exactly four TITLE assets and reuses them on return",
+      "passed": true
+    },
+    {
+      "name": "cold startup allows 4.2s delivery; playback stalls still return within 3s",
+      "passed": true
+    },
+    {
+      "name": "reduced motion system loads no video until manual watch",
+      "passed": true
+    },
+    {
+      "name": "reduced motion on loads no video until manual watch",
+      "passed": true
+    },
+    {
+      "name": "locale zh-Hant portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "locale en portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "locale ja portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "locale th portrait layout, brand and global volume",
+      "passed": true
+    },
+    {
+      "name": "locale vi portrait layout, brand and global volume",
+      "passed": true
+    }
+  ],
+  "physicalDeviceAccepted": false,
+  "fullSubjectiveListeningAccepted": false,
+  "origin": "http://127.0.0.1:57977",
+  "partial": true,
+  "localReferences": {
+    "root": null,
+    "files": [],
+    "published": false
+  },
+  "passed": true
+}

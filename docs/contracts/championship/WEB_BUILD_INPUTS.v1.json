@@ -9677,7 +9677,12 @@
     "src/championship/database/databaseDisplayCatalog.js",
     "src/data/championship/database-display.r1.json",
     "src/championship/database/databaseEvolutionRoutes.js",
-    "src/championship/presentation/acceptedDatabasePortraits.js"
+    "src/championship/presentation/acceptedDatabasePortraits.js",
+    "assets/production/title-multilingual-r1/manifest.json",
+    "assets/production/title-multilingual-r1/logo-en.png",
+    "assets/production/title-multilingual-r1/logo-ja.png",
+    "assets/production/title-multilingual-r1/logo-th.png",
+    "assets/production/title-multilingual-r1/logo-vi.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -44965,7 +44970,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "c04931710abda73bbc456662e8ca669b3a149585ce34fa469780e48e83743527"
+        "sha256": "1a5efa8bee6c3de881ba88e3c095f1fa551d1aed43bc9d6a1eb55fd162b2a97f"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45353,7 +45358,7 @@
       },
       {
         "path": "src/championship/app/opening.css",
-        "sha256": "8cb30545daa23ed8dfc84447943516929c1cd650aa9c1a5db25bcff10d7a4b53"
+        "sha256": "b78e60f0349642a19f713cde3ab5bbd8f48f405acbf5fb6319d02555133d61ce"
       },
       {
         "path": "src/championship/app/openingEggChoices.js",
@@ -46225,7 +46230,7 @@
       },
       {
         "path": "src/championship/presentation/titleImageLifecycle.js",
-        "sha256": "90cb8305223713a934f38a81413cd1b143e8467aabb19f3e0745f5c374950bd7"
+        "sha256": "dd05d57ad57c681a145a7ee9c35455bf2ce35766fc074ad696c8566dbb00867a"
       },
       {
         "path": "src/championship/presentation/vfx/battleWeatherVfxPresentation.js",
@@ -46934,6 +46939,26 @@
       {
         "path": "src/championship/presentation/acceptedDatabasePortraits.js",
         "sha256": "5bbc3332c8076816ba31ed2f4c8acb468b0aa0fdda4db3b80025659eedb2c2a7"
+      },
+      {
+        "path": "assets/production/title-multilingual-r1/manifest.json",
+        "sha256": "d698b24452e7975e3c999721bf40272729f0261e7756fdb3e5307a73cadf8663"
+      },
+      {
+        "path": "assets/production/title-multilingual-r1/logo-en.png",
+        "sha256": "7ffd03040b45f8693ebde36e7d77d036574e12c21ce777463828aa4bebbf51e3"
+      },
+      {
+        "path": "assets/production/title-multilingual-r1/logo-ja.png",
+        "sha256": "1c7c970743d0e35b0e78c99d35cb96a1bb17681567af2873bea309f817200764"
+      },
+      {
+        "path": "assets/production/title-multilingual-r1/logo-th.png",
+        "sha256": "2ff08f8927df9c0f4f9d22e3a939b5c44b5aa0bcb916058c313ac47e530793e4"
+      },
+      {
+        "path": "assets/production/title-multilingual-r1/logo-vi.png",
+        "sha256": "5688a98ccd9a21256d309f98ee3ba4658eaa7e0c633dfaed16311145659a30dd"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
