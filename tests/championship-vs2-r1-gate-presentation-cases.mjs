@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
+import { listChampionshipGates } from '../src/championship/gate/gateCatalog.js';
+import { GATE_WORLD_REGIONS, gateWorldPoint, gateWorldRegion, sampleGateWorld } from '../src/championship/presentation/vs2/gateWorldLayout.js';
+import { createGateWorldGeometry, createGateLandmarkGeometry } from '../src/championship/presentation/vs2/createGateSelectThreePresentation.js';
 
 const scene = fs.readFileSync("src/championship/presentation/vs2/createGateSelectThreePresentation.js", "utf8");
 const screens = fs.readFileSync("src/championship/app/vs2Screens.js", "utf8");
@@ -47,4 +50,34 @@ test("the original-created production manifest refuses promotion and ROM payload
   assert.equal(manifest.evidenceBoundary.decodedTextureReuse, false);
   assert.equal(manifest.evidenceBoundary.earthModelUsed, false);
   assert.equal(manifest.promotionGate, "FUTURE_PRODUCTION_PASS_AND_OWNER_GO_REQUIRED");
+});
+
+test('every canonical biome has an inland anchor and a matching neighbourhood independent of list order', () => {
+  assert.equal(GATE_WORLD_REGIONS.length, 16);
+  const gates = [...listChampionshipGates()].reverse();
+  assert.deepEqual(gates.map(g => g.biomeId).sort(), GATE_WORLD_REGIONS.map(r => r.biomeId).sort());
+  for (const gate of gates) {
+    const region = gateWorldRegion(gate.biomeId);
+    for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 8) {
+      const surface = sampleGateWorld(gateWorldPoint(region, Math.cos(angle) * 0.10, Math.sin(angle) * 0.10));
+      assert.equal(surface.biomeId, gate.biomeId, `${gate.biomeId} marker margin escaped its terrain`);
+      assert.ok(surface.coastDistance > 0.65);
+      assert.ok(surface.radius > 2.10);
+    }
+  }
+  assert.equal(sampleGateWorld(gateWorldRegion('Savanna').direction).biomeId, 'Savanna');
+  assert.equal(gateWorldRegion('unknown'), null);
+  assert.match(scene, /gateWorldRegion\(gate\.biomeId\)/);
+  assert.doesNotMatch(scene, /fibonacciDirection|NODE_PALETTE|terrainValue/);
+});
+
+test('paired day/night geography and the bounded static landmarks share positions', () => {
+  const day = createGateWorldGeometry(), night = createGateWorldGeometry({ night: true });
+  const landmarks = createGateLandmarkGeometry();
+  assert.deepEqual(day.getAttribute('position').array, night.getAttribute('position').array);
+  assert.notDeepEqual(day.getAttribute('color').array, night.getAttribute('color').array);
+  assert.ok(landmarks.getAttribute('position').count > 1000);
+  assert.ok(landmarks.getAttribute('position').count < 12000);
+  for (const n of landmarks.getAttribute('position').array) assert.ok(Number.isFinite(n));
+  day.dispose(); night.dispose(); landmarks.dispose();
 });

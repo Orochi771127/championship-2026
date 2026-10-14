@@ -145,14 +145,15 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     element("span", "cm-vs2-kicker", "WORLD MODE"),
     element("strong", "cm-vs2-gate3d__bar-title", "16 BIOME LINKS")
   );
+  const dragHint = element("p", "cm-vs2-gate3d__hint", "拖曳轉動 · 輕觸地點選擇");
+  worldCopy.append(dragHint);
   const viewToggle = actionButton("場地列表");
   viewToggle.classList.add("cm-vs2-gate3d__toggle");
   viewToggle.setAttribute("aria-pressed", "false");
   worldBar.append(worldCopy, viewToggle);
   const worldHost = element("div", "cm-vs2-gate3d__host");
   worldHost.dataset.cameraAuthority = "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER";
-  const dragHint = element("p", "cm-vs2-gate3d__hint", "拖曳轉動 · 輕觸地點選擇");
-  worldPanel.append(worldBar, worldHost, dragHint);
+  worldPanel.append(worldBar, worldHost);
 
   const preview = element("section", "cm-vs2-preview");
   preview.setAttribute("aria-label", uiText("狩獵場資訊"));

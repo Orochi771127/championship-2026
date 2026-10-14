@@ -166,7 +166,8 @@
 }
 
 /* ---- Gate Select ---------------------------------------------------------- */
-.cm-vs2-body--gate { gap: var(--sp-3); overflow: hidden; }
+.cm-vs2-body--gate { gap: var(--sp-3); overflow-y: auto; overflow-x: hidden; }
+.cm-vs2-body--gate > .cm-vs2-status { flex-shrink: 0; }
 .cm-vs2-preview,
 .cm-vs2-destination {
   position: relative;
@@ -203,7 +204,7 @@
 .cm-vs2-gate3d {
   position: relative;
   display: flex;
-  flex: 1 1 0;
+  flex: 1 0 auto;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
@@ -225,8 +226,9 @@
   border-bottom: 1px solid var(--c-line-1);
 }
 .cm-vs2-gate3d__bar-title { display: block; margin-top: 2px; font-size: var(--fs-body-sm); }
+.cm-vs2-gate3d__bar-copy { min-width: 0; overflow-wrap: anywhere; }
 .cm-vs2-gate3d__toggle { min-width: 104px; min-height: var(--target); padding: 0 var(--sp-3); font-size: var(--fs-body-sm); }
-.cm-vs2-gate3d__host { position: relative; flex: 1 1 0; min-height: 280px; overflow: hidden; isolation: isolate; }
+.cm-vs2-gate3d__host { position: relative; flex: 1 0 280px; min-height: 280px; overflow: hidden; isolation: isolate; }
 .cm-vs2-gate3d__host[hidden] { display: none; }
 .cm-vs2-gate3d__canvas { position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .cm-vs2-gate3d__canvas:active { cursor: grabbing; }
@@ -266,7 +268,7 @@
 .cm-vs2-gate3d__node-name {
   position: absolute;
   top: 38px;
-  left: 50%;
+  left: calc(50% + var(--gate-label-offset, 0px));
   max-width: 120px;
   padding: 3px 8px;
   transform: translateX(-50%);
@@ -288,20 +290,14 @@
 }
 .cm-vs2-gate3d__node-hit[data-selected="true"] .cm-vs2-gate3d__node-name,
 .cm-vs2-gate3d__node-hit:focus-visible .cm-vs2-gate3d__node-name { opacity: 1; }
+.cm-vs2-gate3d__node-hit[data-label-above="true"] .cm-vs2-gate3d__node-name { top: auto; bottom: 38px; }
 .cm-vs2-gate3d__hint {
-  position: absolute;
-  left: 50%;
-  bottom: 10px;
-  z-index: 4;
-  margin: 0;
-  padding: 6px 12px;
-  transform: translateX(-50%);
-  border-radius: var(--r-control);
-  background: var(--c-surface-glass);
+  margin: 4px 0 0;
   color: var(--c-text-2);
   font-size: var(--fs-label);
-  white-space: nowrap;
-  pointer-events: none;
+  line-height: var(--lh-body-sm);
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .cm-vs2-gate3d__hint[hidden] { display: none; }
 
@@ -990,7 +986,7 @@ body[data-desktop-browse] .cm-vs2-root[data-screen] :is(.cm-vs2-shop__row, .cm-v
   .cm-vs2-body { padding-inline: var(--sp-3); }
   .cm-vs2-footer { padding-inline: var(--sp-3); }
   .cm-vs2-gates { gap: 5px; }
-  .cm-vs2-gate3d__host { min-height: 250px; }
+  .cm-vs2-gate3d__host { flex-basis: 250px; min-height: 250px; }
   .cm-cage-board-scroll { margin-inline: calc(-1 * var(--sp-3)); padding-inline: var(--sp-3); }
 }
 @media (max-height: 700px) and (orientation: portrait) {
@@ -1174,7 +1170,7 @@ body[data-cage-landscape] .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-footer .
 @media (min-width: 1024px) and (min-height: 420px) {
   body[data-desktop-menu] .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-body--gate { overflow-y: auto; overflow-x: hidden; }
   body[data-desktop-menu] .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-body--gate > * { flex-shrink: 0; }
-  body[data-desktop-menu] .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d:not([data-view="fallback"]) { flex: 1 0 336px; min-height: 336px; }
+  body[data-desktop-menu] .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d:not([data-view="fallback"]) { flex: 1 0 auto; min-height: 336px; }
   body[data-desktop-menu] .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate-fallback { flex: 0 0 auto; overflow: visible; }
 }
 
@@ -1248,7 +1244,7 @@ body[data-landscape-menu]:not([data-portrait-frame]) .cm-dex-routes__target { gr
    medal tiles likewise must not flex-shrink inside a short scrollport. */
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-body--gate { overflow-y: auto; overflow-x: hidden; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root:is([data-screen="GATE_SELECT"], [data-screen="HUNT_LOADOUT"], [data-screen="MEDALS"]) .cm-vs2-body > * { flex-shrink: 0; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d:not([data-view="fallback"]) { flex: 1 0 360px; min-height: 360px; }
+body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d:not([data-view="fallback"]) { flex: 1 0 auto; min-height: 360px; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate-fallback { flex: 0 0 auto; overflow: visible; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="HUNT_RESULT"] .cm-vs2-result__body { grid-template-columns: minmax(160px, 0.8fr) minmax(0, 1.2fr); grid-template-areas: "portrait species" "portrait name" "portrait note" "roster roster" "release release"; gap: 12px; padding: 12px; align-items: start; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__portrait-card { grid-area: portrait; }

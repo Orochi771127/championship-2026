@@ -1,0 +1,156 @@
+{
+  "base": "b01ed619375641f5578b2bc65883ebfa32ad8914",
+  "authority": "OWNER_APPROVED_ADAPTATION_PRESENTATION_GEOGRAPHY",
+  "focused": {
+    "gate": 47,
+    "desktop": 12,
+    "pass": 59
+  },
+  "rendered": {
+    "regions": [
+      {
+        "biomeId": "Canyon",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm08_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Crag",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm14_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Damp",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm05_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Desert",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm16_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Factory",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm10_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Forest",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm03_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Grass",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm01_01/frame-00.png",
+        "disabled": false
+      },
+      {
+        "biomeId": "Ice",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm13_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Jungle",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm04_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Mine",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm09_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Oasis",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm17_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Ruins",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm18_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Savanna",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm02_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Seaside",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm06_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Sewer",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm11_01/frame-00.png",
+        "disabled": true
+      },
+      {
+        "biomeId": "Volcano",
+        "inside": true,
+        "preview": "assets/production/hunt/licensed-runtime-v1/fields/field_hm15_01/frame-00.png",
+        "disabled": true
+      }
+    ],
+    "languageViewportCases": 30,
+    "fallbacks": [
+      {
+        "variant": "?gateMode=fallback",
+        "cards": 16,
+        "renderers": 0
+      },
+      {
+        "variant": "?webglFail=1",
+        "cards": 16,
+        "renderers": 0
+      },
+      {
+        "variant": "?tutorial=1",
+        "cards": 16,
+        "renderers": 0
+      }
+    ],
+    "mounts": 6,
+    "afterDispose": 0,
+    "verdict": "PASS"
+  },
+  "normal": {
+    "url": "COMPILED_LOCAL_PLAYTEST_ARTIFACT",
+    "normalOpening": true,
+    "lockedSavannaPreview": true,
+    "grassAdmission": true,
+    "loadout": true,
+    "gateRemount": true,
+    "rendererAfterHome": 0,
+    "errors": [],
+    "verdict": "PASS"
+  },
+  "build": {
+    "files": 9414,
+    "verdict": "PASS",
+    "buildId": "d64181ffc730c25bf38cbf151c994a37c442afe94fe6b2ddecb9a54d3acce052"
+  },
+  "aggregate": {
+    "executed": 1908,
+    "pass": 1886,
+    "fail": 22,
+    "desktopAssertionFixedAndRerun": true,
+    "remainingMissingPrerequisiteCases": 21,
+    "status": "BLOCKED_IN_SPARSE_CHECKOUT"
+  },
+  "publication": "NOT_PUSHED_NOT_DEPLOYED_PARENT_SERIAL_INTEGRATION",
+  "physicalDevice": "NOT_VERIFIED"
+}

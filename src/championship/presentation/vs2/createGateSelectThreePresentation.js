@@ -8,51 +8,126 @@ import { cappedPixelRatio, currentQuality } from "../presentationPreferences.js"
 // every selected visual is repainted from the published source frame.
 
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
+import { GATE_WORLD_REGIONS, gateWorldPoint, gateWorldRegion, sampleGateWorld } from './gateWorldLayout.js';
 
-const NODE_PALETTE = Object.freeze([
-  0xd08a58, 0x9ca5aa, 0x659f9a, 0xe0b75e,
-  0x78aeb8, 0x6eaa78, 0x89b765, 0xb5d8df,
-  0x68a568, 0xb78b5d, 0xd5bd69, 0xb28f72,
-  0xc6a363, 0x62a9bb, 0x79919a, 0xd46e4f
-]);
-
-function terrainValue(position) {
-  const { x, y, z } = position;
-  return (
-    Math.sin((x * 2.7) + (z * 1.3)) +
-    Math.cos((y * 4.1) - (x * 1.9)) +
-    Math.sin((z * 5.3) + (y * 2.2))
-  ) / 3;
-}
-
-function createWorldGeometry({ night = false } = {}) {
-  const geometry = new THREE.SphereGeometry(2.08, 72, 48);
-  const position = geometry.getAttribute("position");
+export function createGateWorldGeometry({ night = false } = {}) {
+  const geometry = new THREE.SphereGeometry(2.08, 96, 64);
+  const position = geometry.getAttribute('position');
   const colors = new Float32Array(position.count * 3);
-  const point = new THREE.Vector3();
-  const ocean = new THREE.Color(night ? 0x05111d : 0x126bd4);
-  const land = new THREE.Color(night ? 0x123338 : 0x559650);
-  const ridge = new THREE.Color(night ? 0x32493f : 0xbaa270);
-
+  const point = new THREE.Vector3(), color = new THREE.Color();
   for (let index = 0; index < position.count; index += 1) {
     point.fromBufferAttribute(position, index).normalize();
-    const value = terrainValue(point);
-    const color = value > 0.24 ? ridge : value > -0.08 ? land : ocean;
-    const latitudeLight = 0.82 + (Math.abs(point.y) * 0.16);
-    colors[index * 3] = color.r * latitudeLight;
-    colors[(index * 3) + 1] = color.g * latitudeLight;
-    colors[(index * 3) + 2] = color.b * latitudeLight;
+    const surface = sampleGateWorld(point.toArray());
+    position.setXYZ(index, point.x * surface.radius, point.y * surface.radius, point.z * surface.radius);
+    color.setHex(surface.color);
+    if (night) color.multiplyScalar(0.34);
+    color.toArray(colors, index * 3);
   }
-  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  geometry.computeVertexNormals();
   return geometry;
 }
 
-function fibonacciDirection(index, count) {
-  const offset = 2 / count;
-  const y = ((index * offset) - 1) + (offset / 2);
-  const radius = Math.sqrt(1 - (y * y));
-  const phi = index * Math.PI * (3 - Math.sqrt(5));
-  return new THREE.Vector3(Math.cos(phi) * radius, y, Math.sin(phi) * radius).normalize();
+// All static landmarks share one geometry/material per paired state. Their
+// coordinates use the same authored region frame as the terrain and marker.
+export function createGateLandmarkGeometry() {
+  const positions = [], normals = [], colors = [];
+  const up = new THREE.Vector3(0, 1, 0);
+  for (const region of GATE_WORLD_REGIONS) {
+    function add(source, tint, east, north, height = 0, yaw = 0) {
+      const direction = new THREE.Vector3(...gateWorldPoint(region, east, north));
+      const surface = sampleGateWorld(direction.toArray());
+      const orientation = new THREE.Quaternion().setFromUnitVectors(up, direction);
+      orientation.multiply(new THREE.Quaternion().setFromAxisAngle(up, yaw));
+      const transform = new THREE.Matrix4().compose(direction.clone().multiplyScalar(surface.radius + height), orientation, new THREE.Vector3(1, 1, 1));
+      const geometry = source.index ? source.toNonIndexed() : source.clone();
+      geometry.applyMatrix4(transform);
+      const p = geometry.getAttribute('position'), n = geometry.getAttribute('normal');
+      const color = new THREE.Color(tint);
+      for (let i = 0; i < p.count; i += 1) {
+        positions.push(p.getX(i), p.getY(i), p.getZ(i));
+        normals.push(n.getX(i), n.getY(i), n.getZ(i));
+        colors.push(color.r, color.g, color.b);
+      }
+      source.dispose(); geometry.dispose();
+    }
+    const box = (x, y, z) => new THREE.BoxGeometry(x, y, z);
+    const cone = (radius, height, top = 0) => new THREE.CylinderGeometry(top, radius, height, 6);
+    function tree(x, y, kind = 'round') {
+      add(cone(0.024, 0.14, 0.018), 0x6c6041, x, y, 0.065);
+      if (kind === 'flat') {
+        const crown = new THREE.IcosahedronGeometry(0.12, 0); crown.scale(1.45, 0.32, 1);
+        add(crown, 0x6e7b3d, x, y, 0.17);
+      } else add(new THREE.IcosahedronGeometry(kind === 'jungle' ? 0.15 : 0.12, 0), kind === 'jungle' ? 0x2d573b : 0x416b3b, x, y, 0.18);
+    }
+    switch (region.landmark) {
+      case 'terraces':
+        for (const [x, y] of [[-0.14, 0.10], [0.15, -0.12]]) {
+          add(cone(0.24, 0.12, 0.20), 0x8c5239, x, y, 0.05);
+          add(cone(0.20, 0.09, 0.16), 0xc28758, x, y, 0.14);
+          add(cone(0.16, 0.05, 0.15), 0xdda974, x, y, 0.21);
+        } break;
+      case 'crags': case 'icebergs': case 'quarry':
+        for (const [x, y, h] of [[-0.14, 0.12, 0.36], [0.14, 0.13, 0.24], [0.13, -0.14, 0.18]]) {
+          add(cone(0.15, h, 0.015), region.landmark === 'icebergs' ? 0xd5e9e6 : 0x72716a, x, y, h * 0.4);
+          if (region.landmark === 'icebergs') add(cone(0.07, h * 0.4), 0xf0f7ee, x, y, h * 0.8);
+        }
+        if (region.landmark === 'quarry') {
+          add(box(0.23, 0.13, 0.12), 0x574a3d, -0.13, -0.12, 0.06);
+          add(box(0.11, 0.09, 0.025), 0x231f1d, -0.13, -0.15, 0.045);
+          add(box(0.20, 0.025, 0.25), 0xb2a17b, -0.13, -0.20, 0.015);
+        } break;
+      case 'woodland': case 'canopy': case 'wetland': case 'meadow': case 'acacias':
+        for (const [x, y] of (region.landmark === 'meadow' ? [[-0.16, 0.12], [0.19, -0.10]]
+          : [...[[-0.16, 0.12], [0.16, 0.14], [-0.12, -0.16], [0.19, -0.10]],
+            ...(['woodland', 'canopy'].includes(region.landmark) ? [[-0.25, -0.02], [0.25, 0.02], [0.02, 0.24], [-0.02, -0.25]] : [])])) {
+          tree(x, y, region.landmark === 'acacias' ? 'flat' : region.landmark === 'canopy' ? 'jungle' : 'round');
+        }
+        if (region.landmark === 'wetland') add(new THREE.CylinderGeometry(0.17, 0.17, 0.012, 10), 0x4b7770, 0.16, -0.12, 0.005);
+        break;
+      case 'dunes':
+        for (const [x, y] of [[-0.16, 0.13], [0.16, 0.13], [0.10, -0.16]]) {
+          const dune = new THREE.SphereGeometry(0.20, 8, 5); dune.scale(1.5, 0.35, 0.8);
+          add(dune, 0xdbb678, x, y, 0.015, 0.4);
+        } break;
+      case 'spring': case 'shore':
+        tree(-0.16, 0.11, 'flat'); tree(region.landmark === 'shore' ? -0.14 : 0.14, -0.15, 'flat');
+        if (region.landmark === 'spring') add(new THREE.CylinderGeometry(0.17, 0.19, 0.016, 12), 0x52a4b1, 0.17, 0.12, 0.01);
+        else {
+          add(box(0.27, 0.025, 0.07), 0xc9c09a, 0.16, 0.02, 0.03, 0.4);
+        } break;
+      case 'works':
+        for (const [x, y] of [[-0.15, 0.12], [0.15, -0.15]]) {
+          add(box(0.30, 0.12, 0.20), 0x7f8986, x, y, 0.055);
+          add(box(0.32, 0.025, 0.22), 0xb3ab83, x, y, 0.13);
+          add(cone(0.035, 0.26, 0.03), 0x5e6866, x + 0.04, y, 0.23);
+        } break;
+      case 'columns':
+        for (const [x, y] of [[-0.14, 0.12], [0.15, -0.14]]) {
+          add(box(0.32, 0.035, 0.19), 0xaca783, x, y, 0.02);
+          add(box(0.055, 0.23, 0.07), 0xc6c2a0, x - 0.05, y, 0.15);
+          add(box(0.055, 0.18, 0.07), 0xb6b08b, x + 0.05, y, 0.12);
+          add(box(0.28, 0.04, 0.09), 0xc4be9a, x, y, 0.28);
+        } break;
+      case 'channels':
+        for (const x of [-0.16, 0.16]) {
+          add(box(0.17, 0.025, 0.58), 0x4c8c7f, x, 0.02, 0.012);
+          for (const side of [-1, 1]) add(box(0.035, 0.07, 0.61), 0xa4a698, x + side * 0.045, 0.02, 0.04);
+          add(box(0.27, 0.07, 0.10), 0x989c8f, x, -0.12, 0.09);
+        } break;
+      case 'caldera': {
+        add(cone(0.34, 0.33, 0.13), 0x5a4941, -0.12, 0.12, 0.12);
+        add(new THREE.CylinderGeometry(0.12, 0.12, 0.015, 10), 0xe4793d, -0.12, 0.12, 0.29);
+        add(cone(0.17, 0.20, 0.02), 0x735441, 0.15, -0.13, 0.075);
+        break;
+      }
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  return geometry;
 }
 
 function disposeObject(root) {
@@ -70,6 +145,9 @@ function disposeObject(root) {
 export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   if (!host || !Array.isArray(gates) || gates.length !== 16 || typeof onSelect !== "function") {
     throw new Error("CHAMPIONSHIP_GATE_3D_INVALID_BINDING");
+  }
+  if (new Set(gates.map(gate => gate.biomeId)).size !== 16 || gates.some(gate => !gateWorldRegion(gate.biomeId))) {
+    throw new Error('CHAMPIONSHIP_GATE_3D_UNKNOWN_BIOME');
   }
 
   // The quality tier, read when the globe mounts: next Gate visit for a change.
@@ -114,16 +192,19 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   world.name = "world";
   worldRoot.add(world);
 
-  const worldDay = new THREE.Mesh(createWorldGeometry(), new THREE.MeshStandardMaterial({
+  const worldDay = new THREE.Mesh(createGateWorldGeometry(), new THREE.MeshStandardMaterial({
     name: "ORIGINAL_CREATED_WORLD_DAY", vertexColors: true, roughness: 0.82, metalness: 0.12
   }));
   worldDay.name = "world_day";
-  const worldNight = new THREE.Mesh(createWorldGeometry({ night: true }), new THREE.MeshStandardMaterial({
+  const worldNight = new THREE.Mesh(createGateWorldGeometry({ night: true }), new THREE.MeshStandardMaterial({
     name: "ORIGINAL_CREATED_WORLD_NIGHT", vertexColors: true, roughness: 0.74, metalness: 0.22,
     emissive: 0x07121a, emissiveIntensity: 0.62
   }));
   worldNight.name = "world_night";
   worldNight.visible = false;
+  const landmarks = createGateLandmarkGeometry();
+  worldDay.add(new THREE.Mesh(landmarks, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.94 })));
+  worldNight.add(new THREE.Mesh(landmarks, new THREE.MeshStandardMaterial({ vertexColors: true, color: 0x667c86, roughness: 0.94 })));
   world.add(worldDay, worldNight);
 
   const grid = new THREE.Mesh(
@@ -157,11 +238,12 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   const nodeRecords = [];
   const pickTargets = [];
 
-  gates.forEach((gate, index) => {
-    const direction = fibonacciDirection(index, gates.length);
+  gates.forEach((gate) => {
+    const region = gateWorldRegion(gate.biomeId);
+    const direction = new THREE.Vector3(...region.direction);
     const parent = new THREE.Group();
     parent.name = `${gate.displayName}parent`;
-    parent.position.copy(direction).multiplyScalar(2.16);
+    parent.position.copy(direction).multiplyScalar(sampleGateWorld(region.direction).radius + 0.08);
     parent.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), direction);
 
     const node = new THREE.Group();
@@ -170,7 +252,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     const ring = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.024, 12, 28), neutralRingMaterial);
     const core = new THREE.Mesh(
       new THREE.OctahedronGeometry(0.075, 1),
-      new THREE.MeshStandardMaterial({ color: NODE_PALETTE[index], emissive: NODE_PALETTE[index], emissiveIntensity: 0.28, roughness: 0.42, metalness: 0.35 })
+      new THREE.MeshStandardMaterial({ color: region.accent, emissive: region.accent, emissiveIntensity: 0.28, roughness: 0.42, metalness: 0.35 })
     );
     ring.userData.gateId = gate.gateId;
     core.userData.gateId = gate.gateId;
@@ -183,17 +265,18 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     button.type = "button";
     button.className = "cm-vs2-gate3d__node-hit";
     button.dataset.gateId = gate.gateId;
+    button.dataset.biomeId = gate.biomeId;
     button.setAttribute("aria-label", uiText(`Select ${gate.displayName} biome destination`));
     const indexLabel = document.createElement("span");
     indexLabel.className = "cm-vs2-gate3d__node-index";
     indexLabel.textContent = String(gate.ordinal).padStart(2, "0");
     const nameLabel = document.createElement("span");
     nameLabel.className = "cm-vs2-gate3d__node-name";
-    nameLabel.textContent = gate.displayName;
+    nameLabel.textContent = uiText(gate.displayName);
     button.append(indexLabel, nameLabel);
     button.addEventListener("click", () => onSelect(gate.gateId));
     overlay.append(button);
-    nodeRecords.push({ gateId: gate.gateId, parent, node, ring, button });
+    nodeRecords.push({ gateId: gate.gateId, parent, node, ring, button, nameLabel });
   });
 
   const raycaster = new THREE.Raycaster();
@@ -211,6 +294,8 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     renderer.setPixelRatio(cappedPixelRatio(quality.threePixelRatioCap));
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
+    // Fit the complete globe, including raised landmarks, on tall viewports.
+    camera.position.z = Math.max(10.2, 2.65 / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.min(1, camera.aspect)));
     camera.updateProjectionMatrix();
     draw();
   }
@@ -223,13 +308,17 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
       record.parent.getWorldPosition(worldPosition);
       const facing = worldPosition.clone().normalize().dot(cameraDirection);
       projected.copy(worldPosition).project(camera);
-      const visible = facing > 0.12 && projected.z > -1 && projected.z < 1;
+      const visible = facing > 0.24 && projected.z > -1 && projected.z < 1;
       record.button.hidden = !visible;
       if (!visible) continue;
       const x = THREE.MathUtils.clamp(((projected.x * 0.5) + 0.5) * width, 22, width - 22);
       const y = THREE.MathUtils.clamp(((-projected.y * 0.5) + 0.5) * height, 22, height - 22);
       record.button.style.left = `${x}px`;
       record.button.style.top = `${y}px`;
+      const halfLabel = Math.min(width - 8, record.nameLabel.offsetWidth) / 2;
+      const labelX = THREE.MathUtils.clamp(x, halfLabel + 4, width - halfLabel - 4);
+      record.button.style.setProperty('--gate-label-offset', `${labelX - x}px`);
+      record.button.dataset.labelAbove = String(y > height - 64);
     }
   }
 
@@ -246,7 +335,8 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     pointer.x = (((event.clientX - rect.left) / rect.width) * 2) - 1;
     pointer.y = -((((event.clientY - rect.top) / rect.height) * 2) - 1);
     raycaster.setFromCamera(pointer, camera);
-    const gateId = raycaster.intersectObjects(pickTargets, false)[0]?.object?.userData?.gateId;
+    const visible = new Set(nodeRecords.filter(record => !record.button.hidden).map(record => record.gateId));
+    const gateId = raycaster.intersectObjects(pickTargets, false).find(hit => visible.has(hit.object.userData.gateId))?.object?.userData?.gateId;
     if (gateId) onSelect(gateId);
   }
 
@@ -277,11 +367,16 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     pointerState.active = false;
     renderer.domElement.releasePointerCapture?.(event.pointerId);
   }
+  function onPointerCancel(event) {
+    if (event.pointerId !== pointerState.id) return;
+    pointerState.active = false;
+    renderer.domElement.releasePointerCapture?.(event.pointerId);
+  }
 
   renderer.domElement.addEventListener("pointerdown", onPointerDown);
   renderer.domElement.addEventListener("pointermove", onPointerMove);
   renderer.domElement.addEventListener("pointerup", onPointerUp);
-  renderer.domElement.addEventListener("pointercancel", onPointerUp);
+  renderer.domElement.addEventListener("pointercancel", onPointerCancel);
   const observer = new ResizeObserver(resize);
   observer.observe(host);
   resize();
@@ -311,6 +406,8 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
         sceneScope: "GATE_SELECT_ONLY",
         selectionAuthority: "PUBLISHED_SOURCE_FRAME_AND_SELECT_GATE_INTENT",
         modelRights: "ORIGINAL_CREATED",
+        geographyAuthority: "OWNER_APPROVED_AUTHORED_BIOME_LAYOUT",
+        biomeRegions: GATE_WORLD_REGIONS.map(region => region.biomeId),
         sourceAssetCount: 0,
         romModelLoaded: false,
         decodedTextureLoaded: false,
@@ -332,7 +429,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
       renderer.domElement.removeEventListener("pointerdown", onPointerDown);
       renderer.domElement.removeEventListener("pointermove", onPointerMove);
       renderer.domElement.removeEventListener("pointerup", onPointerUp);
-      renderer.domElement.removeEventListener("pointercancel", onPointerUp);
+      renderer.domElement.removeEventListener("pointercancel", onPointerCancel);
       disposeObject(scene);
       selectedRingMaterial.dispose();
       renderer.dispose();
