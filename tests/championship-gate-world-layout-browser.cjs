@@ -75,10 +75,13 @@ async function open(browser, viewport, query='') {
         const node=document.querySelector(`[data-biome-id='${biome}']`),label=node.querySelector('.cm-vs2-gate3d__node-name');
         const h=node.parentElement.getBoundingClientRect(),l=label.getBoundingClientRect();
         return {inside:l.left>=h.left-1&&l.right<=h.right+1&&l.top>=h.top-1&&l.bottom<=h.bottom+1,
+          labelAbove:node.dataset.labelAbove,hitWidth:node.getBoundingClientRect().width,hitHeight:node.getBoundingClientRect().height,
           preview:document.querySelector('.cm-vs2-preview__image').getAttribute('src'),
           disabled:document.querySelector('.cm-vs2-action--primary').disabled};
       },region.biomeId);
       assert.equal(bounds.inside,true,`${region.biomeId} selected label clipped`);
+      assert.equal(bounds.hitWidth,44);assert.equal(bounds.hitHeight,44);
+      if(['Damp','Mine'].includes(region.biomeId))assert.equal(bounds.labelAbove,'true',`${region.biomeId} defining landmark covered below marker`);
       assert.ok(bounds.preview);
       await page.locator('.cm-vs2-gate3d__host').screenshot({path:path.join(OUTPUT,`${region.biomeId}.png`)});
       report.regions.push({biomeId:region.biomeId,...bounds});
@@ -121,7 +124,22 @@ async function open(browser, viewport, query='') {
           assert.equal(visibility,true,'short screen cannot scroll the full globe above the footer');
           await page.screenshot({path:path.join(OUTPUT,`${viewport.width}x${viewport.height}-${lang}-scrolled.png`)});
         }
-        report.viewports.push({viewport,lang,...state});assert.deepEqual(errors,[]);await context.close();
+        const landmarkLabels=[];const rotation={x:-0.16,y:0.42};
+        for(const biomeId of ['Damp','Mine']){
+          await page.locator(toggle).click();
+          await page.locator(`.cm-vs2-gate[data-gate-id='championship:2026:gate:${biomeId.toLowerCase()}']`).click();
+          await page.locator(toggle).click();await page.locator(world).scrollIntoViewIfNeeded();
+          await face(page,GATE_WORLD_REGIONS.find(region=>region.biomeId===biomeId),rotation);
+          const label=await page.locator(`.cm-vs2-gate3d__node-hit[data-biome-id='${biomeId}']`).evaluate(node=>{
+            const h=node.parentElement.getBoundingClientRect(),l=node.querySelector('.cm-vs2-gate3d__node-name').getBoundingClientRect();
+            return {biomeId:node.dataset.biomeId,labelAbove:node.dataset.labelAbove,
+              inside:l.left>=h.left-1&&l.right<=h.right+1&&l.top>=h.top-1&&l.bottom<=h.bottom+1};
+          });
+          assert.equal(label.labelAbove,'true');assert.equal(label.inside,true);
+          await page.screenshot({path:path.join(OUTPUT,`${viewport.width}x${viewport.height}-${lang}-${biomeId}.png`)});
+          landmarkLabels.push(label);
+        }
+        report.viewports.push({viewport,lang,...state,landmarkLabels});assert.deepEqual(errors,[]);await context.close();
       }
     }
     const highContext=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:3,reducedMotion:'reduce'});

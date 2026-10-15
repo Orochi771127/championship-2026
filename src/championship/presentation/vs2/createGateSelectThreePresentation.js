@@ -276,7 +276,9 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     button.append(indexLabel, nameLabel);
     button.addEventListener("click", () => onSelect(gate.gateId));
     overlay.append(button);
-    nodeRecords.push({ gateId: gate.gateId, parent, node, ring, button, nameLabel });
+    // Wetland pools and the quarry entrance sit below their inland markers.
+    const preferLabelAbove = ['wetland', 'quarry'].includes(region.landmark);
+    nodeRecords.push({ gateId: gate.gateId, parent, node, ring, button, nameLabel, preferLabelAbove });
   });
 
   const raycaster = new THREE.Raycaster();
@@ -318,7 +320,8 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
       const halfLabel = Math.min(width - 8, record.nameLabel.offsetWidth) / 2;
       const labelX = THREE.MathUtils.clamp(x, halfLabel + 4, width - halfLabel - 4);
       record.button.style.setProperty('--gate-label-offset', `${labelX - x}px`);
-      record.button.dataset.labelAbove = String(y > height - 64);
+      const labelClearance = record.nameLabel.offsetHeight + 20;
+      record.button.dataset.labelAbove = String(y > height - labelClearance || (record.preferLabelAbove && y >= labelClearance));
     }
   }
 

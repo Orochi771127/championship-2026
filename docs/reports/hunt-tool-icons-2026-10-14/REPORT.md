@@ -29,6 +29,6 @@ All referenced originals already belong to `ACCEPTED_ORIGINAL_RUNTIME_20261010` 
 - Final compiled normal UI: **PASS**, New Game/opening → Ranch → Grass Gate → Loadout → real Hunt field → HAND → Ranch, zero page errors and Hunt controls removed on exit.
 - Final public-playtest build/validator: **PASS**, 9,414 files, build ID `c29fb5887496e78f454d06acc663513f68a893b79356eca691441ea4a5ec00a0`.
 - Preload and scoped whitespace checks: PASS.
-- Aggregate `test:ci`: **1,889 pass / 21 fail out of 1,910**. These are exactly the prior missing-prerequisite cases after the desktop assertion correction, with no new failure. Existing research/contact-sheet images, CPU receipts/CSVs and non-build HUD images are absent from this sparse checkout. The complete integration workspace must rerun full CI before publication; no tests were disabled or reclassified.
+- Aggregate `test:ci`: **1,889 pass / 21 fail out of 1,910**. These match the missing-prerequisite cases observed in the earlier modified sparse checkout after the desktop assertion correction. Research/contact-sheet images, CPU receipts/CSVs and non-build HUD images are absent here. There was no exact `b01ed619` baseline CI run, so this comparison does not prove that the failures existed on baseline. Full CI remains open; the complete integration workspace must rerun it before publication. No tests were disabled or reclassified.
 
 Physical-device Safari acceptance remains unverified. Parent coordinates serial integration with the independent medal and Dex work, followed by the existing publication checks.
