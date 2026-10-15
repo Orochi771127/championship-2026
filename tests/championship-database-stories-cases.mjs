@@ -105,7 +105,7 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
 test('30 hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,30);
- for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|035|037|038|039|040|041|042|043|044|045|046|047|048|049|211|215|222)\.png|database-handpainted-r1-20261015\/species-046\.ed04f491cd22524e\.png|database-handpainted-r1-20261015\/species-042\.d5dcc1491759eea7\.png|database-handpainted-r1-20261015\/species-041\.679bfc5abc699a5e\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|035|037|038|039|040|041|042|043|044|045|046|047|048|049|211|215|222)\.png|database-handpainted-r1-20261015\/species-046\.ed04f491cd22524e\.png|database-handpainted-r1-20261015\/species-042\.d5dcc1491759eea7\.png|database-handpainted-r1-20261015\/species-041\.679bfc5abc699a5e\.png|database-handpainted-r1-20261015\/species-049\.376bd37739caf2ad\.png|database-handpainted-r1-20261015\/species-035\.be1631a7ffea0de4\.png|database-handpainted-r1-20261015\/species-039\.a22eae194967e17d\.png|database-handpainted-r1-20261015\/species-045\.5252dd103f05bc11\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,20,195,'8',NaN])assert.equal(get(id),null);
 });
 
@@ -215,7 +215,7 @@ test('batch seven existing rookie heroes preserve exact identity and discovery p
 test('batch seven PNG hashes and accepted versions join existing stable identities',async()=>{
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- for(const [sp,version] of [[45,'v1'],[46,'refined-handpainted-v2'],[47,'v1'],[49,'v1']]){
+ for(const [sp,version] of [[45,'refined-handpainted-v2'],[46,'refined-handpainted-v2'],[47,'v1'],[49,'refined-handpainted-v2']]){
   const entry=databaseHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
  assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);
@@ -240,4 +240,20 @@ test('041 refined hero preserves042/046 cache keys and stable identity',()=>{
  const a=databaseHeroPortrait(41);assert.equal(a.src,'assets/production/database-handpainted-r1-20261015/species-041.679bfc5abc699a5e.png');assert.equal(a.sha256,'679bfc5abc699a5e8795443ed2cf1117087fdf8138fbcbbe5d651731b09e4a29');assert.equal(a.speciesId,'species-041');assert.equal(a.displayCode,'GR09');
  assert.equal(databaseHeroPortrait(42).src,'assets/production/database-handpainted-r1-20261015/species-042.d5dcc1491759eea7.png');
  assert.equal(databaseHeroPortrait(46).src,'assets/production/database-handpainted-r1-20261015/species-046.ed04f491cd22524e.png');
+});
+
+test('049 refined hero has immutable cache key without replacing other identities',async()=>{
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');const a=databaseHeroPortrait(49);
+ assert.equal(a.speciesId,'species-049');assert.equal(a.displayCode,'GR22');assert.equal(a.src,'assets/production/database-handpainted-r1-20261015/species-049.376bd37739caf2ad.png');assert.equal(a.sha256,'376bd37739caf2ad58093c5701e313efc6ebac1f3a7ae1de363a97ee89907b55');
+ assert.equal(createHash('sha256').update(fs.readFileSync(a.src)).digest('hex'),a.sha256);
+ const qa=JSON.parse(fs.readFileSync('src/data/championship/qa-database-hero-portraits.r1.json','utf8'));assert.deepEqual(qa.entries.find(e=>e.speciesIndex===49),a);
+ assert.equal(databaseHeroPortrait(47).src,'assets/production/database-handpainted-r1-20261015/species-047.png');assert.equal(databaseHeroPortrait(67),null);
+});
+
+test('refined035039045 preserve exact versioned PNG identity and QA registry agreement',async()=>{
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');const expected={"35": {"src": "assets/production/database-handpainted-r1-20261015/species-035.be1631a7ffea0de4.png", "sha256": "be1631a7ffea0de43921ed7eb3e1196be6705fe026439abe9b90e14b564965c7"}, "39": {"src": "assets/production/database-handpainted-r1-20261015/species-039.a22eae194967e17d.png", "sha256": "a22eae194967e17d6aca6cac06ca249ef0fd223a0687c10923e33d78e3d710ec"}, "45": {"src": "assets/production/database-handpainted-r1-20261015/species-045.5252dd103f05bc11.png", "sha256": "5252dd103f05bc111158a75d193c3dc0793051614190f42645b99bb4f00f2453"}};
+ const qa=JSON.parse(fs.readFileSync('src/data/championship/qa-database-hero-portraits.r1.json','utf8'));
+ const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
+ for(const [sp,want] of Object.entries(expected)){const e=databaseHeroPortrait(Number(sp));assert.equal(e.src,want.src);assert.equal(e.sha256,want.sha256);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.deepEqual(qa.entries.find(q=>q.speciesIndex===Number(sp)),e);assert.equal(manifest.entries.find(q=>q.speciesIndex===Number(sp)).selectedGenerationVersion,'refined-handpainted-v2');}
+ assert.equal(qa.entries.length,32);assert.equal(manifest.count,18);assert.equal(databaseHeroPortrait(67),null);
 });
