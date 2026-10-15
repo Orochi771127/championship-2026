@@ -2,6 +2,8 @@
 
 - [2026-10-15 晴空競技 UI／HUD 與演出層：規範、改前／改後與驗收](reports/ui-ceremony-2026-10-15/REPORT_ZH_TW.md)／[視覺與動效規範](reports/ui-ceremony-2026-10-15/SPEC_ZH_TW.md)
 
+- [2026-10-15 Data Arena：潮汐資料港挑戰賽（原創即時 1vE 可玩切片）](reports/data-arena-2026-10-15/REPORT_ZH_TW.md)／[切片契約](contracts/championship/DATA_ARENA_SLICE_2026-10-15.md)／[遊玩測試報告](reports/data-arena-2026-10-15/PLAYTEST_REPORT_ZH_TW.md)（含第二輪：數據錦標賽與四招套組）
+
 - [2026-10-14 四語 TITLE Logo、本機整包交付與最終驗收](reports/title-multilingual-2026-10-14/REPORT_ZH_TW.md)
 
 - [2026-10-14 圖鑑一階候選路線、獨立完成紀錄與缺圖盤點](reports/database-routes-2026-10-14/REPORT_ZH_TW.md)／[顯示契約](contracts/championship/DATABASE_EVOLUTION_ROUTES_2026-10-14.md)

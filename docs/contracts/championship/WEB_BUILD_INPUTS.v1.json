@@ -9981,7 +9981,25 @@
     "assets/production/database-handpainted-r1-20261015/species-049.376bd37739caf2ad.png",
     "assets/production/database-handpainted-r1-20261015/species-035.be1631a7ffea0de4.png",
     "assets/production/database-handpainted-r1-20261015/species-039.a22eae194967e17d.png",
-    "assets/production/database-handpainted-r1-20261015/species-045.5252dd103f05bc11.png"
+    "assets/production/database-handpainted-r1-20261015/species-045.5252dd103f05bc11.png",
+    "src/championship/app/dataArenaScreen.js",
+    "src/championship/app/dataArena.css",
+    "src/championship/modes/dataArena/dataArenaConfig.js",
+    "src/championship/modes/dataArena/dataArenaGrid.js",
+    "src/championship/modes/dataArena/dataArenaNav.js",
+    "src/championship/modes/dataArena/dataArenaSave.js",
+    "src/championship/modes/dataArena/dataArenaSimulation.js",
+    "src/championship/modes/dataArena/dataArenaUpgrades.js",
+    "src/championship/presentation/dataArena/dataArenaAudio.js",
+    "src/championship/presentation/dataArena/dataArenaCamera.js",
+    "src/championship/presentation/dataArena/dataArenaPixiScene.js",
+    "src/championship/presentation/dataArena/dataArenaRoster.js",
+    "src/championship/presentation/dataArena/dataArenaTextures.js",
+    "src/championship/text/dataArenaText.js",
+    "assets/production/database-handpainted-r1-20261015/species-053.a07a52ab7f1501c4.png",
+    "assets/production/database-handpainted-r1-20261015/species-054.653364ea2b2dbdd5.png",
+    "assets/production/database-handpainted-r1-20261015/species-055.32e6689b5e9669c2.png",
+    "assets/production/database-handpainted-r1-20261015/species-057.001820f22618bab0.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -9989,7 +10007,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "dc3f9cf4583e7baab30362374123fad824518d61b3f9561b74b21505a3ab57bb"
+        "sha256": "8f5c0d7d42914d6148b90957ec92be12da95b05eb4d606d11cb9ccd4822c0465"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -30145,7 +30163,7 @@
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
-        "sha256": "f17ca74e8e079968195ce41869e30bb862183d5f7bcf125af88dc49b46dea7d8"
+        "sha256": "88878399128ebf54377f7c44f22786a4096489c7e31760c2aa18e4e8bd07e52b"
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-034.png",
@@ -45741,7 +45759,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "e27952e99b8175a791e5e311f37c7506e4071f2e3a83bd71c4cd59e6cca3a15b"
+        "sha256": "345c6623ae4ac33d865065cb34bfa8e1060c276bb95e3aa24cf52ffe4acbe04d"
       },
       {
         "path": "docs/contracts/championship/battle-economy-runtime.v1.json",
@@ -45977,7 +45995,7 @@
       },
       {
         "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "d7a550f5ee177bec4492b1fb5ab4f3e282e3049ecddb214c353fbc733c8e7da9"
+        "sha256": "cb332a68ec74ea8302e872818ed72f7f7298eb6420916f587e3c447b3244eb86"
       },
       {
         "path": "src/championship/app/championshipRaisingProduction.js",
@@ -46089,7 +46107,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "836633be6c2dbc949e518e2802b89112fd4f828823bc78fb407b6d5abc5fc070"
+        "sha256": "04adb9da0689390e05ae654a5c4ca7fcf7fd2b4ec1e02b2e6b8f49287b00eeb3"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -47649,7 +47667,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.r1.json",
-        "sha256": "d64470b6d8e3b95cf9d3d989f10e2313e0193ade56b2dd9a9ec77be4eb5700a0"
+        "sha256": "9cddf17126b913d13e493284ebea163f9a83ee656abaad1cba026efcefae9ed5"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
@@ -47761,7 +47779,7 @@
       },
       {
         "path": "src/data/championship/qa-database-hero-portraits.r1.json",
-        "sha256": "0f712f80f3b0845f8de1784ca4fde1a22f7efd7e1d363d80e3c1afe646130d03"
+        "sha256": "24c8a588f66b1511f4281b7f97c25ea0e6d87fec8e45691dba175455aed6b81f"
       },
       {
         "path": "src/championship/contracts/productBattleTransport.js",
@@ -48298,6 +48316,78 @@
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-045.5252dd103f05bc11.png",
         "sha256": "5252dd103f05bc111158a75d193c3dc0793051614190f42645b99bb4f00f2453"
+      },
+      {
+        "path": "src/championship/app/dataArenaScreen.js",
+        "sha256": "ba0a14ed19dd1b1a277b6c44abbb5f2298b3b085a9791fdecc53f5a84d5fd52c"
+      },
+      {
+        "path": "src/championship/app/dataArena.css",
+        "sha256": "2176f283fc8753829aac799159bc443d3f37c2d07158958296c0d877686b78a5"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaConfig.js",
+        "sha256": "779049940a3ac5151193681a812cfda1bf76a160967d4be50466bb4bf6448ae4"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaGrid.js",
+        "sha256": "7b155b91a9a846e85a78f87b417774f1cdd18e98490addd3bb268ff5568f8a74"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaNav.js",
+        "sha256": "6b82a61ba55961261d690321218f8a280acc43b7b205e505a46394db4dd61c48"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaSave.js",
+        "sha256": "0df6f684959f8d4ff23651b16f9f05273abde33fafcd4760d9f170a06dcf73b9"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
+        "sha256": "6aa08222ab02ca485031bb9e8f5f410e178b3bbefef79eabb0fbab28a1e844b5"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
+        "sha256": "44f454c553d0a1ac82063b2a1adf36d76df79e2238b385d2d9cc6b7bb4453e71"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaAudio.js",
+        "sha256": "39c8e798490f9cb9cf197aafd4dc61e8139d9a0814acdce247f2cbba63913068"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaCamera.js",
+        "sha256": "a2d45f11ec825700700de5731edacc4213f3785b52ddf3fddbb8bda1d221bc76"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
+        "sha256": "08e52ddecb990a8dbf2810954e546228f98cdf7d2230e750dae906c310588955"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaRoster.js",
+        "sha256": "bc1eb3596376bc8d81e88ff0c601147a30af7a923d50b6a23f006c4f5ad250d1"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaTextures.js",
+        "sha256": "46da1227937b0ce144c91f89f3f1cfadde3023f4e123dda69e6a5e6651360f1c"
+      },
+      {
+        "path": "src/championship/text/dataArenaText.js",
+        "sha256": "1bae72aa9e644be5b84d7ee3e267742890d03546eb9bc19370e12b42ceb0854b"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-053.a07a52ab7f1501c4.png",
+        "sha256": "a07a52ab7f1501c40b283d43af35a2f0b07294c42541dd89c72e8dbbca366716"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-054.653364ea2b2dbdd5.png",
+        "sha256": "653364ea2b2dbdd50e3edd100da021ab1cafe2208fe1d61103bca445177fda41"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-055.32e6689b5e9669c2.png",
+        "sha256": "32e6689b5e9669c26fb0d29f3201ace2d5d619309381ab628d57f5eabc5d693e"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-057.001820f22618bab0.png",
+        "sha256": "001820f22618bab0360081efbc760ef15bc99969c39c5bb4c67a47c86b234295"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

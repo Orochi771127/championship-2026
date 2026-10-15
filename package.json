@@ -85,6 +85,7 @@
     "test:browser:file-launch": "node tests/championship-file-launch-guard-browser.cjs",
     "test:browser:vfx": "node tests/championship-faithful-vfx-browser.cjs",
     "test:browser:full-qa-save": "node tests/championship-full-qa-save-browser.cjs",
+    "test:browser:data-arena": "node tests/championship-data-arena-browser.cjs",
     "qa:full-save:build": "node scripts/create-full-qa-save.mjs",
     "qa:full-save:validate": "node scripts/create-full-qa-save.mjs --check",
     "test:ci": "node scripts/test-ci.mjs",

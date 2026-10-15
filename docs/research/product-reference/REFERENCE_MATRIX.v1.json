@@ -154,6 +154,13 @@
       "strengths": ["mobile_short_loop", "feed", "train", "digivolve", "battle"],
       "patterns": ["MOBILE_RAISE_GROW_BATTLE_LOOP"],
       "source": "https://dgup.bn-ent.net/en/"
+    },
+    {
+      "title": "Pokémon Zarza Arena (fan web game; RESEARCH_ONLY, read 2026-10-15)",
+      "strengths": ["realtime_1v1_footwork", "four_move_energy_cooldown_kit", "committed_dodge_cooldown", "compact_arena_always_in_range", "pillar_cover_blocks_shots", "knockback_wall_slam", "tournament_separate_from_wave_survival"],
+      "patterns": ["REALTIME_DUEL_KIT_WITH_TELEGRAPHED_HEAVIES", "COVER_AND_KNOCKBACK_MAKE_POSITION_MATTER", "SHORT_CUP_SEPARATE_FROM_ENDLESS_SURVIVAL"],
+      "source": "https://pokemonzarza.com/play-guide.html?lang=en",
+      "appliedIn": "docs/contracts/championship/DATA_ARENA_SLICE_2026-10-15.md (Data Arena rounds 2-3; mechanics by type only, no names, numbers or assets copied)"
     }
   ],
   "productPatterns": [
@@ -183,6 +190,9 @@
     "WORLD_ACTIVITIES_FEED_HOME_PROGRESSION",
     "REAL_TIME_FLAVOR_NEEDS_PLAYER_ESCAPE_HATCH",
     "NEW_MODES_SHOULD_RECOMBINE_EXISTING_SYSTEMS",
-    "CONTENT_SCALE_COMES_FROM_SYSTEM_REUSE"
+    "CONTENT_SCALE_COMES_FROM_SYSTEM_REUSE",
+    "REALTIME_DUEL_KIT_WITH_TELEGRAPHED_HEAVIES",
+    "COVER_AND_KNOCKBACK_MAKE_POSITION_MATTER",
+    "SHORT_CUP_SEPARATE_FROM_ENDLESS_SURVIVAL"
   ]
 }
