@@ -1,0 +1,905 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "b01ed619375641f5578b2bc65883ebfa32ad8914",
+  "method": "Human-selected anatomical bands, exclusive right/bottom pixel coordinates; threshold128 offline only. No runtime alpha readback or automatic segmentation.",
+  "rows": [
+    {
+      "entityId": "m104_tunomon",
+      "speciesId": "species-023",
+      "atlasPath": "assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/main.webp",
+      "atlasSha256": "32b9dbbf2141a8e3fc50ced49cef1f5550ad6c11beb0059ebee67ac15545f4c0",
+      "sourceBankSha256": "665c888f35c0520c976180087991c5713e46b4f7eef4a231992bd86a395557c2",
+      "cell": 0,
+      "sequenceFrames": [
+        {
+          "sequenceId": 0,
+          "frameIndex": 0,
+          "ticks": 31
+        }
+      ],
+      "atlasRect": {
+        "h": 60,
+        "w": 63,
+        "x": 65,
+        "y": 76
+      },
+      "geometry": {
+        "blank": false,
+        "nativeBounds": [
+          -5.75,
+          -15.0,
+          10.0,
+          0.0
+        ],
+        "origin": [
+          88,
+          136
+        ],
+        "scale": 4,
+        "sourceSize": [
+          256,
+          256
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          69,
+          132,
+          82,
+          137
+        ],
+        [
+          82,
+          132,
+          98,
+          137
+        ],
+        [
+          98,
+          132,
+          113,
+          137
+        ]
+      ],
+      "soleBands": [
+        [
+          71,
+          132,
+          82,
+          136
+        ],
+        [
+          82,
+          132,
+          98,
+          136
+        ],
+        [
+          98,
+          132,
+          113,
+          135
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m104_tunomon",
+      "speciesId": "species-023",
+      "atlasPath": "assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/main.webp",
+      "atlasSha256": "32b9dbbf2141a8e3fc50ced49cef1f5550ad6c11beb0059ebee67ac15545f4c0",
+      "sourceBankSha256": "665c888f35c0520c976180087991c5713e46b4f7eef4a231992bd86a395557c2",
+      "cell": 1,
+      "sequenceFrames": [
+        {
+          "sequenceId": 0,
+          "frameIndex": 1,
+          "ticks": 22
+        }
+      ],
+      "atlasRect": {
+        "h": 52,
+        "w": 62,
+        "x": 319,
+        "y": 85
+      },
+      "geometry": {
+        "blank": false,
+        "nativeBounds": [
+          -6.25,
+          -12.75,
+          9.25,
+          0.25
+        ],
+        "origin": [
+          88,
+          136
+        ],
+        "scale": 4,
+        "sourceSize": [
+          256,
+          256
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          67,
+          132,
+          80,
+          138
+        ],
+        [
+          79,
+          132,
+          94,
+          138
+        ],
+        [
+          95,
+          132,
+          111,
+          138
+        ]
+      ],
+      "soleBands": [
+        [
+          69,
+          132,
+          80,
+          136
+        ],
+        [
+          79,
+          132,
+          94,
+          137
+        ],
+        [
+          95,
+          132,
+          111,
+          136
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m104_tunomon",
+      "speciesId": "species-023",
+      "atlasPath": "assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/main.webp",
+      "atlasSha256": "32b9dbbf2141a8e3fc50ced49cef1f5550ad6c11beb0059ebee67ac15545f4c0",
+      "sourceBankSha256": "665c888f35c0520c976180087991c5713e46b4f7eef4a231992bd86a395557c2",
+      "cell": 4,
+      "sequenceFrames": [
+        {
+          "sequenceId": 2,
+          "frameIndex": 0,
+          "ticks": 15
+        }
+      ],
+      "atlasRect": {
+        "h": 60,
+        "w": 71,
+        "x": 1082,
+        "y": 76
+      },
+      "geometry": {
+        "blank": false,
+        "nativeBounds": [
+          -7.5,
+          -15.0,
+          10.25,
+          0.0
+        ],
+        "origin": [
+          88,
+          136
+        ],
+        "scale": 4,
+        "sourceSize": [
+          256,
+          256
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          74,
+          133,
+          96,
+          138
+        ],
+        [
+          101,
+          131,
+          120,
+          137
+        ]
+      ],
+      "soleBands": [
+        [
+          75,
+          133,
+          91,
+          136
+        ],
+        [
+          103,
+          131,
+          115,
+          134
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m006_punimon",
+      "speciesId": "species-013",
+      "atlasPath": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/main.webp",
+      "atlasSha256": "25eccc707afdcc757837b0fb8aa178b2e37bc0eba16c6c3741e1e4e68af8f480",
+      "sourceBankSha256": "b4a30d79d84bb3b1a9a3d7a0cfd1cb7ea23227722d32c56bbf93b873a7983787",
+      "cell": 0,
+      "sequenceFrames": [
+        {
+          "sequenceId": 0,
+          "frameIndex": 0,
+          "ticks": 31
+        }
+      ],
+      "atlasRect": {
+        "h": 40,
+        "w": 33,
+        "x": 80,
+        "y": 112
+      },
+      "geometry": {
+        "blank": false,
+        "nativeBounds": [
+          -4.0,
+          -10.0,
+          4.25,
+          0.0
+        ],
+        "origin": [
+          96,
+          152
+        ],
+        "scale": 4,
+        "sourceSize": [
+          256,
+          256
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          80,
+          148,
+          106,
+          154
+        ]
+      ],
+      "soleBands": [
+        [
+          85,
+          148,
+          106,
+          152
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m006_punimon",
+      "speciesId": "species-013",
+      "atlasPath": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/main.webp",
+      "atlasSha256": "25eccc707afdcc757837b0fb8aa178b2e37bc0eba16c6c3741e1e4e68af8f480",
+      "sourceBankSha256": "b4a30d79d84bb3b1a9a3d7a0cfd1cb7ea23227722d32c56bbf93b873a7983787",
+      "cell": 1,
+      "sequenceFrames": [
+        {
+          "sequenceId": 0,
+          "frameIndex": 1,
+          "ticks": 22
+        }
+      ],
+      "atlasRect": {
+        "h": 34,
+        "w": 35,
+        "x": 334,
+        "y": 118
+      },
+      "geometry": {
+        "blank": false,
+        "nativeBounds": [
+          -4.5,
+          -8.5,
+          4.25,
+          0.0
+        ],
+        "origin": [
+          96,
+          152
+        ],
+        "scale": 4,
+        "sourceSize": [
+          256,
+          256
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          79,
+          148,
+          108,
+          154
+        ]
+      ],
+      "soleBands": [
+        [
+          83,
+          148,
+          108,
+          152
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m006_punimon",
+      "speciesId": "species-013",
+      "atlasPath": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/main.webp",
+      "atlasSha256": "25eccc707afdcc757837b0fb8aa178b2e37bc0eba16c6c3741e1e4e68af8f480",
+      "sourceBankSha256": "b4a30d79d84bb3b1a9a3d7a0cfd1cb7ea23227722d32c56bbf93b873a7983787",
+      "cell": 4,
+      "sequenceFrames": [
+        {
+          "sequenceId": 2,
+          "frameIndex": 0,
+          "ticks": 15
+        }
+      ],
+      "atlasRect": {
+        "h": 40,
+        "w": 33,
+        "x": 1104,
+        "y": 112
+      },
+      "geometry": {
+        "blank": false,
+        "nativeBounds": [
+          -4.0,
+          -10.0,
+          4.25,
+          0.0
+        ],
+        "origin": [
+          96,
+          152
+        ],
+        "scale": 4,
+        "sourceSize": [
+          256,
+          256
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          80,
+          148,
+          106,
+          154
+        ]
+      ],
+      "soleBands": [
+        [
+          85,
+          148,
+          106,
+          152
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m006_punimon",
+      "speciesId": "species-013",
+      "atlasPath": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/main.webp",
+      "atlasSha256": "25eccc707afdcc757837b0fb8aa178b2e37bc0eba16c6c3741e1e4e68af8f480",
+      "sourceBankSha256": "b4a30d79d84bb3b1a9a3d7a0cfd1cb7ea23227722d32c56bbf93b873a7983787",
+      "cell": 5,
+      "sequenceFrames": [
+        {
+          "sequenceId": 2,
+          "frameIndex": 1,
+          "ticks": 12
+        }
+      ],
+      "atlasRect": {
+        "h": 38,
+        "w": 34,
+        "x": 1347,
+        "y": 114
+      },
+      "geometry": {
+        "blank": false,
+        "nativeBounds": [
+          -7.25,
+          -9.5,
+          1.25,
+          0.0
+        ],
+        "origin": [
+          96,
+          152
+        ],
+        "scale": 4,
+        "sourceSize": [
+          256,
+          256
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          66,
+          148,
+          96,
+          154
+        ]
+      ],
+      "soleBands": [
+        [
+          81,
+          148,
+          95,
+          152
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m006_punimon",
+      "speciesId": "species-013",
+      "atlasPath": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/main.webp",
+      "atlasSha256": "25eccc707afdcc757837b0fb8aa178b2e37bc0eba16c6c3741e1e4e68af8f480",
+      "sourceBankSha256": "b4a30d79d84bb3b1a9a3d7a0cfd1cb7ea23227722d32c56bbf93b873a7983787",
+      "cell": 23,
+      "sequenceFrames": [
+        {
+          "sequenceId": 13,
+          "frameIndex": 0,
+          "ticks": 37
+        }
+      ],
+      "atlasRect": {
+        "h": 19,
+        "w": 36,
+        "x": 1866,
+        "y": 646
+      },
+      "geometry": {
+        "blank": false,
+        "nativeBounds": [
+          -5.5,
+          -4.5,
+          3.5,
+          0.25
+        ],
+        "origin": [
+          96,
+          152
+        ],
+        "scale": 4,
+        "sourceSize": [
+          256,
+          256
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          72,
+          150,
+          113,
+          155
+        ]
+      ],
+      "soleBands": [
+        [
+          75,
+          150,
+          109,
+          153
+        ]
+      ],
+      "pose": "BODY_SUPPORT"
+    },
+    {
+      "entityId": "m203_elecmon",
+      "speciesId": "species-036",
+      "atlasPath": "assets/production/characters/accepted-20261010/m203_elecmon-final-growth38-20261007/main.webp",
+      "atlasSha256": "d125d563dc1199d1dbd93224a8c2b59c43322ccbbcb8ba6788b8fdc95b81b5ed",
+      "sourceBankSha256": "ea39060f0570245b72161ec7a5d4ec3745043125cdbb5f2262f02908910f1b8c",
+      "cell": 0,
+      "sequenceFrames": [
+        {
+          "sequenceId": 0,
+          "frameIndex": 0,
+          "ticks": 31
+        }
+      ],
+      "atlasRect": {
+        "x": 63,
+        "y": 77,
+        "w": 96,
+        "h": 76
+      },
+      "geometry": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          108,
+          152
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.25,
+          -18.75,
+          12.75,
+          0.25
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          66,
+          147,
+          80,
+          154
+        ],
+        [
+          91,
+          149,
+          109,
+          155
+        ],
+        [
+          112,
+          145,
+          129,
+          153
+        ],
+        [
+          140,
+          147,
+          156,
+          154
+        ]
+      ],
+      "soleBands": [
+        [
+          68,
+          147,
+          80,
+          151
+        ],
+        [
+          92,
+          149,
+          108,
+          153
+        ],
+        [
+          112,
+          145,
+          125,
+          149
+        ],
+        [
+          141,
+          147,
+          154,
+          151
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m203_elecmon",
+      "speciesId": "species-036",
+      "atlasPath": "assets/production/characters/accepted-20261010/m203_elecmon-final-growth38-20261007/main.webp",
+      "atlasSha256": "d125d563dc1199d1dbd93224a8c2b59c43322ccbbcb8ba6788b8fdc95b81b5ed",
+      "sourceBankSha256": "ea39060f0570245b72161ec7a5d4ec3745043125cdbb5f2262f02908910f1b8c",
+      "cell": 1,
+      "sequenceFrames": [
+        {
+          "sequenceId": 0,
+          "frameIndex": 1,
+          "ticks": 22
+        }
+      ],
+      "atlasRect": {
+        "x": 319,
+        "y": 76,
+        "w": 95,
+        "h": 76
+      },
+      "geometry": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          108,
+          152
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.25,
+          -19.0,
+          12.5,
+          0.0
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          65,
+          147,
+          82,
+          154
+        ],
+        [
+          92,
+          149,
+          110,
+          155
+        ],
+        [
+          115,
+          145,
+          133,
+          153
+        ],
+        [
+          140,
+          147,
+          157,
+          154
+        ]
+      ],
+      "soleBands": [
+        [
+          67,
+          147,
+          82,
+          151
+        ],
+        [
+          94,
+          149,
+          110,
+          152
+        ],
+        [
+          116,
+          145,
+          129,
+          149
+        ],
+        [
+          141,
+          147,
+          155,
+          151
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m203_elecmon",
+      "speciesId": "species-036",
+      "atlasPath": "assets/production/characters/accepted-20261010/m203_elecmon-final-growth38-20261007/main.webp",
+      "atlasSha256": "d125d563dc1199d1dbd93224a8c2b59c43322ccbbcb8ba6788b8fdc95b81b5ed",
+      "sourceBankSha256": "ea39060f0570245b72161ec7a5d4ec3745043125cdbb5f2262f02908910f1b8c",
+      "cell": 4,
+      "sequenceFrames": [
+        {
+          "sequenceId": 2,
+          "frameIndex": 0,
+          "ticks": 15
+        }
+      ],
+      "atlasRect": {
+        "x": 1083,
+        "y": 83,
+        "w": 99,
+        "h": 73
+      },
+      "geometry": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          108,
+          152
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.25,
+          -17.25,
+          12.5,
+          1.0
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          49,
+          151,
+          68,
+          158
+        ],
+        [
+          84,
+          151,
+          105,
+          158
+        ],
+        [
+          103,
+          148,
+          121,
+          156
+        ],
+        [
+          129,
+          150,
+          148,
+          158
+        ]
+      ],
+      "soleBands": [
+        [
+          59,
+          151,
+          68,
+          156
+        ],
+        [
+          94,
+          151,
+          105,
+          155
+        ],
+        [
+          103,
+          148,
+          121,
+          155
+        ],
+        [
+          139,
+          150,
+          148,
+          155
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    },
+    {
+      "entityId": "m203_elecmon",
+      "speciesId": "species-036",
+      "atlasPath": "assets/production/characters/accepted-20261010/m203_elecmon-final-growth38-20261007/main.webp",
+      "atlasSha256": "d125d563dc1199d1dbd93224a8c2b59c43322ccbbcb8ba6788b8fdc95b81b5ed",
+      "sourceBankSha256": "ea39060f0570245b72161ec7a5d4ec3745043125cdbb5f2262f02908910f1b8c",
+      "cell": 5,
+      "sequenceFrames": [
+        {
+          "sequenceId": 2,
+          "frameIndex": 1,
+          "ticks": 12
+        }
+      ],
+      "atlasRect": {
+        "x": 1354,
+        "y": 83,
+        "w": 98,
+        "h": 72
+      },
+      "geometry": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          108,
+          152
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.5,
+          -17.25,
+          16.0,
+          0.75
+        ]
+      },
+      "alphaThreshold": 128,
+      "manualRegions": [
+        [
+          74,
+          150,
+          94,
+          157
+        ],
+        [
+          102,
+          152,
+          121,
+          158
+        ],
+        [
+          124,
+          148,
+          142,
+          156
+        ],
+        [
+          153,
+          146,
+          170,
+          155
+        ]
+      ],
+      "soleBands": [
+        [
+          77,
+          150,
+          92,
+          153
+        ],
+        [
+          102,
+          152,
+          118,
+          155
+        ],
+        [
+          124,
+          148,
+          137,
+          152
+        ],
+        [
+          153,
+          146,
+          166,
+          151
+        ]
+      ],
+      "pose": "GROUND_SUPPORT"
+    }
+  ],
+  "knownAirPose": {
+    "entityId": "m104_tunomon",
+    "sequenceId": 2,
+    "frameIndex": 1,
+    "cell": 5,
+    "nativeBoundsBottom": -2,
+    "classification": "AIR_POSE_AT_ZERO_WORLD_Z",
+    "behavior": "Idle landing footprint retained; body not regrounded."
+  },
+  "otherPoses": "UNKNOWN; reuse the measured idle landing footprint, no full-body or species-flight acceptance."
+}

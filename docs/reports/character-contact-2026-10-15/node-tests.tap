@@ -1,0 +1,310 @@
+TAP version 13
+# Subtest: Hunt feedback clock matches the verified native timeline for every catalog tool duration
+ok 1 - Hunt feedback clock matches the verified native timeline for every catalog tool duration
+  ---
+  duration_ms: 13.2437
+  type: 'test'
+  ...
+# Subtest: Hunt feedback selects the existing shot selector and original burst sequence without inventing a trap binding
+ok 2 - Hunt feedback selects the existing shot selector and original burst sequence without inventing a trap binding
+  ---
+  duration_ms: 0.7921
+  type: 'test'
+  ...
+# Subtest: New reference art loaders refuse all public hosts before reading a manifest
+ok 3 - New reference art loaders refuse all public hosts before reading a manifest
+  ---
+  duration_ms: 0.6317
+  type: 'test'
+  ...
+# Subtest: carried kinds load only their own banks, retain burst frames, and release the same textures
+ok 4 - carried kinds load only their own banks, retain burst frames, and release the same textures
+  ---
+  duration_ms: 2.7611
+  type: 'test'
+  ...
+# Subtest: Trap secondary animation switches at the original 31-update boundary and prison retains four parts
+ok 5 - Trap secondary animation switches at the original 31-update boundary and prison retains four parts
+  ---
+  duration_ms: 0.3209
+  type: 'test'
+  ...
+# Subtest: Raising HUD rejects Main art, changed native scale and shipping promotion
+ok 6 - Raising HUD rejects Main art, changed native scale and shipping promotion
+  ---
+  duration_ms: 0.8803
+  type: 'test'
+  ...
+# Subtest: ordinary Hunt meat uses the four original care tiers at native world size; big, poison and stun meat keep their banks
+ok 7 - ordinary Hunt meat uses the four original care tiers at native world size; big, poison and stun meat keep their banks
+  ---
+  duration_ms: 20.4807
+  type: 'test'
+  ...
+# Subtest: shared care19 texture lifecycle across Raising -> Hunt -> Raising -> Hunt preserves textures without cross-scene corruption
+ok 8 - shared care19 texture lifecycle across Raising -> Hunt -> Raising -> Hunt preserves textures without cross-scene corruption
+  ---
+  duration_ms: 1.1395
+  type: 'test'
+  ...
+# Subtest: mountHuntFieldPixiPresentation supports dynamic setFeedbackArt recovery, swaps art seamlessly, and disposes active art
+ok 9 - mountHuntFieldPixiPresentation supports dynamic setFeedbackArt recovery, swaps art seamlessly, and disposes active art
+  ---
+  duration_ms: 15.2166
+  type: 'test'
+  ...
+# Subtest: large footprints land below both inspected soles instead of the empty midpoint
+ok 10 - large footprints land below both inspected soles instead of the empty midpoint
+  ---
+  duration_ms: 2.4756
+  type: 'test'
+  ...
+# Subtest: ordinary representative derives its small footprint from its own measured soles
+ok 11 - ordinary representative derives its small footprint from its own measured soles
+  ---
+  duration_ms: 0.3063
+  type: 'test'
+  ...
+# Subtest: walk changes horizontal contact with the measured sole while retaining ground height
+ok 12 - walk changes horizontal contact with the measured sole while retaining ground height
+  ---
+  duration_ms: 0.2853
+  type: 'test'
+  ...
+# Subtest: native binding bounce and vertical flips leave shadow on the same world plane
+ok 13 - native binding bounce and vertical flips leave shadow on the same world plane
+  ---
+  duration_ms: 0.6685
+  type: 'test'
+  ...
+# Subtest: lifted poses reuse landing footprint and never use air-pose alpha bottom as ground
+ok 14 - lifted poses reuse landing footprint and never use air-pose alpha bottom as ground
+  ---
+  duration_ms: 0.2693
+  type: 'test'
+  ...
+# Subtest: unknown species, missing native art, blank cells and changed geometry keep legacy fallback
+ok 15 - unknown species, missing native art, blank cells and changed geometry keep legacy fallback
+  ---
+  duration_ms: 0.2147
+  type: 'test'
+  ...
+# Subtest: generic fallback stays on the ground through both facings, lift, flip and landing
+ok 16 - generic fallback stays on the ground through both facings, lift, flip and landing
+  ---
+  duration_ms: 0.347
+  type: 'test'
+  ...
+# Subtest: fallback without native frames uses the owner height; invalid height remains neutral
+ok 17 - fallback without native frames uses the owner height; invalid height remains neutral
+  ---
+  duration_ms: 0.2084
+  type: 'test'
+  ...
+# Subtest: the three newly identified bodies remain pinned to the inspected approved atlas bytes
+ok 18 - the three newly identified bodies remain pinned to the inspected approved atlas bytes
+  ---
+  duration_ms: 4.4097
+  type: 'test'
+  ...
+# Subtest: Tunomon and Elecmon contact centers follow inspected paws instead of the midpoint or tail
+ok 19 - Tunomon and Elecmon contact centers follow inspected paws instead of the midpoint or tail
+  ---
+  duration_ms: 2.0334
+  type: 'test'
+  ...
+# Subtest: the exact raw 13/cell23 Punimon pose uses its belly support without naming its action
+ok 20 - the exact raw 13/cell23 Punimon pose uses its belly support without naming its action
+  ---
+  duration_ms: 1.2291
+  type: 'test'
+  ...
+# Subtest: new contacts reject absent/wrong art identity and geometry, including baseline fallback
+ok 21 - new contacts reject absent/wrong art identity and geometry, including baseline fallback
+  ---
+  duration_ms: 2.0001
+  type: 'test'
+  ...
+# Subtest: new contacts preserve both facings and vertical flips through lift/landing and authored air poses
+ok 22 - new contacts preserve both facings and vertical flips through lift/landing and authored air poses
+  ---
+  duration_ms: 24.7989
+  type: 'test'
+  ...
+# Subtest: real Hunt renderer compensates every fallback frame without moving the native body
+ok 23 - real Hunt renderer compensates every fallback frame without moving the native body
+  ---
+  duration_ms: 7.3701
+  type: 'test'
+  ...
+# Subtest: measured-to-fallback transition resets only footprint and keeps ground compensation
+ok 24 - measured-to-fallback transition resets only footprint and keeps ground compensation
+  ---
+  duration_ms: 1.1052
+  type: 'test'
+  ...
+# Subtest: actual Hunt scene binds the approved source-bank metadata and leaves body origins unchanged
+ok 25 - actual Hunt scene binds the approved source-bank metadata and leaves body origins unchanged
+  ---
+  duration_ms: 1.5497
+  type: 'test'
+  ...
+# Subtest: scene loading uses the species lookup crosswalk, deduplicates shared art and never assigns M201 to unknown species
+ok 26 - scene loading uses the species lookup crosswalk, deduplicates shared art and never assigns M201 to unknown species
+  ---
+  duration_ms: 2.8214
+  type: 'test'
+  ...
+# Subtest: missing art is isolated, unregistered/private-release-invalid entries are refused, and malformed paths cannot escape
+ok 27 - missing art is isolated, unregistered/private-release-invalid entries are refused, and malformed paths cannot escape
+  ---
+  duration_ms: 4.0666
+  type: 'test'
+  ...
+# Subtest: the real Pixi bundle loader loads Main only and releases resources when a cell reference is broken
+ok 28 - the real Pixi bundle loader loads Main only and releases resources when a cell reference is broken
+  ---
+  duration_ms: 4.3359
+  type: 'test'
+  ...
+# Subtest: decoded bitmaps close after asset-source destruction and repeated dispose awaits the same unload
+ok 29 - decoded bitmaps close after asset-source destruction and repeated dispose awaits the same unload
+  ---
+  duration_ms: 0.6274
+  type: 'test'
+  ...
+# Subtest: initial roster starts at most two distinct entities and fills a freed slot without waiting for the other
+ok 30 - initial roster starts at most two distinct entities and fills a freed slot without waiting for the other
+  ---
+  duration_ms: 4.0071
+  type: 'test'
+  ...
+# Subtest: dynamic queue deduplicates aliases, cancels queued work and waits for both active late decodes
+ok 31 - dynamic queue deduplicates aliases, cancels queued work and waits for both active late decodes
+  ---
+  duration_ms: 1.7665
+  type: 'test'
+  ...
+# Subtest: initial signal abort drops unstarted entries and releases every active bundle once
+ok 32 - initial signal abort drops unstarted entries and releases every active bundle once
+  ---
+  duration_ms: 2.6866
+  type: 'test'
+  ...
+# Subtest: a failed queue job does not poison explicit retry or block other species
+ok 33 - a failed queue job does not poison explicit retry or block other species
+  ---
+  duration_ms: 0.5571
+  type: 'test'
+  ...
+# Subtest: completed-original cancellation reaches baseline validation and never falls back to another atlas
+ok 34 - completed-original cancellation reaches baseline validation and never falls back to another atlas
+  ---
+  duration_ms: 52.1082
+  type: 'test'
+  ...
+# Subtest: all registered Main frames reach the Hunt, Raising and Battle presenters through the real roster
+ok 35 - all registered Main frames reach the Hunt, Raising and Battle presenters through the real roster
+  ---
+  duration_ms: 664.2859
+  type: 'test'
+  ...
+# Subtest: all 640 OVL0 request/binding/status selectors match original CPU results
+ok 36 - all 640 OVL0 request/binding/status selectors match original CPU results
+  ---
+  duration_ms: 2.3566
+  type: 'test'
+  ...
+# Subtest: native raw modes match 9288 CPU updates, including stop, loop start and discarded overshoot
+ok 37 - native raw modes match 9288 CPU updates, including stop, loop start and discarded overshoot
+  ---
+  duration_ms: 16.5465
+  type: 'test'
+  ...
+# Subtest: same-species original stylus capture matches every animator call and all 476 rendered frames
+ok 38 - same-species original stylus capture matches every animator call and all 476 rendered frames
+  ---
+  duration_ms: 5.6613
+  type: 'test'
+  ...
+# Subtest: frame projection uses raw source textures and native flips, never archive aliases or GPU time
+ok 39 - frame projection uses raw source textures and native flips, never archive aliases or GPU time
+  ---
+  duration_ms: 2.6183
+  type: 'test'
+  ...
+# Subtest: every integrated character retains native frame identity and reduced-motion action transitions
+ok 40 - every integrated character retains native frame identity and reduced-motion action transitions
+  ---
+  duration_ms: 249.9343
+  type: 'test'
+  ...
+# Subtest: all eight original eggs fit native idle bounds with one transform for idle/hatch, resolution and flip
+ok 41 - all eight original eggs fit native idle bounds with one transform for idle/hatch, resolution and flip
+  ---
+  duration_ms: 33.2733
+  type: 'test'
+  ...
+# Subtest: three oversized original ranch bodies use one fixed factor across every pose without moving its ground or center
+ok 42 - three oversized original ranch bodies use one fixed factor across every pose without moving its ground or center
+  ---
+  duration_ms: 14.3573
+  type: 'test'
+  ...
+# Subtest: untrimmed original egg uses verified per-cell alpha bounds for its floor shadow and touch area
+ok 43 - untrimmed original egg uses verified per-cell alpha bounds for its floor shadow and touch area
+  ---
+  duration_ms: 2.8059
+  type: 'test'
+  ...
+# Subtest: all 224 current static identities bind verified sizing; stale hashes and other frames/sides refuse
+ok 44 - all 224 current static identities bind verified sizing; stale hashes and other frames/sides refuse
+  ---
+  duration_ms: 332.7007
+  type: 'test'
+  ...
+# Subtest: native visible geometry reverses actual 12x/8x/4x packaging, not canvas padding
+ok 45 - native visible geometry reverses actual 12x/8x/4x packaging, not canvas padding
+  ---
+  duration_ms: 7.2063
+  type: 'test'
+  ...
+# Subtest: egg/cage ratio survives viewport and composite size; hit area stays at least 44 CSS pixels
+ok 46 - egg/cage ratio survives viewport and composite size; hit area stays at least 44 CSS pixels
+  ---
+  duration_ms: 1.5579
+  type: 'test'
+  ...
+# Subtest: atlas resolution changes do not change native size; unsupported metadata remains unknown
+ok 47 - atlas resolution changes do not change native size; unsupported metadata remains unknown
+  ---
+  duration_ms: 7.2993
+  type: 'test'
+  ...
+# Subtest: real Raising scene shares native scale on resize/flip and keeps padded taps functional
+ok 48 - real Raising scene shares native scale on resize/flip and keeps padded taps functional
+  ---
+  duration_ms: 6.4322
+  type: 'test'
+  ...
+# Subtest: accepted egg contact rests on solid shell, not glow; floor footprint stays fixed across hatch/lift
+ok 49 - accepted egg contact rests on solid shell, not glow; floor footprint stays fixed across hatch/lift
+  ---
+  duration_ms: 8.3983
+  type: 'test'
+  ...
+# Subtest: real Raising scene binds egg contact only to shadow and preserves lift, flip and resize
+ok 50 - real Raising scene binds egg contact only to shadow and preserves lift, flip and resize
+  ---
+  duration_ms: 4.1035
+  type: 'test'
+  ...
+1..50
+# tests 50
+# suites 0
+# pass 50
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 997.3211

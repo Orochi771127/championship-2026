@@ -1,0 +1,21 @@
+{
+  "node": "v24.18.0",
+  "args": [
+    "--test",
+    "--test-reporter=tap",
+    "--test-skip-pattern=the complete 224-art",
+    "tests/championship-hunt-contact-shadow-cases.mjs",
+    "tests/championship-hunt-shadow-render-cases.mjs",
+    "tests/championship-native-character-animation-cases.mjs",
+    "tests/championship-raising-native-sizing-cases.mjs",
+    "tests/championship-licensed-character-roster-cases.mjs",
+    "tests/championship-feedback-art-cases.mjs"
+  ],
+  "exitCode": 0,
+  "tests": 50,
+  "pass": 50,
+  "excludedExistingPixelTest": {
+    "name": "the complete 224-art/228-species material set has intact cells, source ticks and independent Main/Sub atlases",
+    "reason": "Full baseline pixel inputs were not fetched into this sparse checkout; this test was not claimed passing."
+  }
+}
