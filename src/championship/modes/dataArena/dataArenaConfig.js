@@ -95,7 +95,7 @@ export const DATA_ARENA_PLAYER = deepFreeze({
 export const DATA_ARENA_PARTNERS = deepFreeze([
   { id: "ember-lizard", speciesId: "species-034", hp: 130, speed: 250, laserDps: 44, heatPerSecond: 34, coolPerSecond: 46,
     heatCapacity: 100, laserWidth: 10, perk: "BALANCED", startingUpgrades: {} },
-  { id: "corona-cub", speciesId: "species-064", hp: 112, speed: 236, laserDps: 56, heatPerSecond: 38, coolPerSecond: 44,
+  { id: "corona-cub", speciesId: "species-064", hp: 120, speed: 236, laserDps: 56, heatPerSecond: 38, coolPerSecond: 44,
     heatCapacity: 100, laserWidth: 14, perk: "WIDE_BEAM", startingUpgrades: {} },
   { id: "frost-drake", speciesId: "species-061", hp: 120, speed: 262, laserDps: 42, heatPerSecond: 32, coolPerSecond: 48,
     heatCapacity: 100, laserWidth: 10, perk: "FROST_BREATH", startingUpgrades: { frostLens: 1 } }
@@ -154,7 +154,7 @@ export const DATA_ARENA_PROJECTILES = deepFreeze({
 
 export const DATA_ARENA_BOSS = deepFreeze({
   speciesId: "species-146",
-  hp: 1400,
+  hp: 1250,
   radius: 58,
   speed: 72,
   entrance: 3.2,
@@ -165,8 +165,8 @@ export const DATA_ARENA_BOSS = deepFreeze({
   enrageSpeed: 1.3,
   fan: { telegraph: 0.75, count: 7, spread: 1.05, speed: 310, radius: 10, damage: 11 },
   ring: { telegraph: 0.85, count: 22, gaps: 3, speed: 160, damage: 9 },
-  volley: { telegraph: 0.55, count: 3, interval: 0.32, speed: 260, radius: 14, damage: 15, shardHp: 30 },
-  slam: { telegraph: 1.05, radius: 150, damage: 24 },
+  volley: { telegraph: 0.55, count: 3, interval: 0.32, speed: 260, radius: 14, damage: 13, shardHp: 30 },
+  slam: { telegraph: 1.05, radius: 150, damage: 20 },
   summon: { count: 4 },
   xp: 0,
   score: 3000
@@ -178,7 +178,7 @@ export const DATA_ARENA_SCAN = deepFreeze({
   ringInterval: 5.5, ringCount: 18, ringGaps: 3, ringSpeed: 150
 });
 
-export const DATA_ARENA_BEACON = deepFreeze({ radius: 96, seconds: 3, decayPerSecond: 0.35, score: 400 });
+export const DATA_ARENA_BEACON = deepFreeze({ radius: 96, seconds: 3, decayPerSecond: 0.35, score: 400, heal: 20 });
 
 export const DATA_ARENA_SPAWN = deepFreeze({
   maxAlive: { high: 38, low: 30 },
@@ -219,5 +219,7 @@ export const DATA_ARENA_SCORE = deepFreeze({
   victory: 3000,
   perSecondLeft: 8,
   perHp: 6,
-  coreOut: 300
+  coreOut: 300,
+  // Objectives restore a little HP: playing the field beats only surviving it.
+  coreHeal: 12
 });

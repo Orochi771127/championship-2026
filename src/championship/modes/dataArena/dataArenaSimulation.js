@@ -199,6 +199,12 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     }
     return true;
   }
+  function healPlayer(amount) {
+    if (player.state === "DOWNED" || player.state === "DEFEATED") return;
+    const before = player.hp;
+    player.hp = Math.min(player.maxHp, player.hp + amount);
+    if (player.hp > before) emit({ type: "PLAYER_HEAL", amount: Math.round(player.hp - before), x: player.x, y: player.y });
+  }
   function hurtMate(amount, source, x, y) {
     if (mate.state === "DOWNED") return false;
     mate.hp -= amount;
@@ -736,6 +742,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     core.out = true;
     state.stats.coresOut++;
     state.score += DATA_ARENA_SCORE.coreOut;
+    healPlayer(DATA_ARENA_SCORE.coreHeal);
     emit({ type: "CORE_OUT", x: core.x, y: core.y, remaining: state.cores.filter((c) => !c.out).length });
     addHype("CORE_OUT", core.x, core.y);
     douse(core.x, core.y, 2.4);
@@ -1052,6 +1059,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         beacon.progress = 1; beacon.captured = true;
         state.stats.beaconsCaptured++;
         state.score += DATA_ARENA_BEACON.score;
+        healPlayer(DATA_ARENA_BEACON.heal);
         const remaining = state.beacons.filter((b) => !b.captured).length;
         emit({ type: "BEACON_CAPTURED", id: beacon.id, x: beacon.x, y: beacon.y, remaining });
         addHype("BEACON", beacon.x, beacon.y);

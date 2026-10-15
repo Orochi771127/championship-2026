@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: DATA_ARENA_20261015 -->
+**2026-10-15 — Data Arena: Tidal Data Harbor Challenge (original 1vE slice, OWNER_APPROVED_ADAPTATION).** A title-menu entry opens a separate real-time mode: partner select, ten-second briefing, a 4–5 minute timeline (warm-up, spreading embers, tide gates, scan storm, guardian), sustained heat-limited laser, dash, mate Tide Surge, riding the mate across water, fire/water/ice rules, ≥3 three-choice upgrades, results/retry. Same single Pixi Application/ticker, music presentation, audio bus and build flow; records only under `championshipModernSave:dataArena:v1`; no new asset files. Deterministic rule tests and a real-browser gate pass in headless Chromium with software WebGL; physical-device performance is not verified. See [contract](contracts/championship/DATA_ARENA_SLICE_2026-10-15.md) and [report](reports/data-arena-2026-10-15/REPORT_ZH_TW.md).
+
 <!-- record-id: DATABASE_STORIES_20261015 -->
 **2026-10-15 — Reviewed Database story integration candidate.** 216 ordinary species have five-language authored prose, native attribute/family tags and mapped move power/action costs. Only twelve approved B101–B112 portraits are added; unknown detail sections stay masked. Earlier isolated checks pass (108 targeted tests; five locales, ten close/reopen cycles and forty navigation states). Final hosted CI/build status is tied to this PR head, not inferred from those earlier checks. [Scope and evidence](reports/database-stories-2026-10-15/REPORT.md).
 
