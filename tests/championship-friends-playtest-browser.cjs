@@ -203,11 +203,23 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#cm-new-game').click();
   // Advance the normal comic using its real click affordance, without touching time/state.
   const story=page.locator('.cm-opening-story');
+  // The final comic frame can complete between visibility and a real click.
+  // Continue only to another visible normal story surface or the first envelope.
+  async function clickStoryAffordance(target,options={}){
+   try{await target.click({...options,timeout:3000});}
+   catch(error){
+    if(error.name!=='TimeoutError'||await target.isVisible())throw error;
+    const storyVisible=await story.isVisible();
+    const firstEnvelopeVisible=await story.count()===0&&await page.locator('.cm-opening__envelope').isVisible();
+    if(!storyVisible&&!firstEnvelopeVisible)throw error;
+    evidence.assertions.push({openingComicTransitionObserved:true,normalUi:true,storyVisible,firstEnvelopeVisible});write();
+   }
+  }
   const until=Date.now()+120000;
   while(await story.count()){
    if(Date.now()>until)throw Error('Normal opening comic did not finish');
-   const text=page.locator('[data-story-action="text"]');if(await text.isVisible())await text.click();
-   if(await story.isVisible())await story.click({position:{x:10,y:10}});
+   const text=page.locator('[data-story-action="text"]');if(await text.isVisible())await clickStoryAffordance(text);
+   if(await story.isVisible())await clickStoryAffordance(story,{position:{x:10,y:10}});
    await page.waitForTimeout(1200);
   }
   await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();
