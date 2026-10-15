@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mountHuntFieldPixiPresentation} from '../src/championship/presentation/vs2/createHuntFieldPixiPresentation.js';
 
-function fixture(speciesId) {
+function fixture(speciesId,contactShadowArt=null) {
   const nodes=[];
   class Container {
     constructor(options={}) {
@@ -34,7 +34,7 @@ function fixture(speciesId) {
   const view={gateId:'isolated',transform:{scale:1},camera:{left:0,top:0},visibleChunks:[],
     player:{worldX:0,worldY:0,facing:'right'},wildCreatures:[wild],objects:[]};
   const source={field:{tick(){},getView:()=>view},intents:{panCamera(){},selectWildAt(){},abortEnclosureStroke(){}}};
-  const bundle={createActor:({speciesId:id})=>id?{sprite:new Sprite(),nativeFramePresenter:{apply:()=>frame,getSnapshot:()=>frame}}:null,
+  const bundle={createActor:({speciesId:id})=>id?{sprite:new Sprite(),contactShadowArt,nativeFramePresenter:{apply:()=>frame,getSnapshot:()=>frame}}:null,
     dispose(){},getDiagnostics:()=>({})};
   return {nodes,stage,source,bundle,wild,view,ticker,setFrame:value=>{frame=value;}};
 }
@@ -67,4 +67,19 @@ test('measured-to-fallback transition resets only footprint and keeps ground com
   assert.equal(actor.y+actor.scale.y*(actor.contactShadow.y+actor.contactShadow.scale.y*4),204);
   f.wild.worldZ=0;f.setFrame(null);scene.render();assert.equal(actor.contactShadow.y,0);assert.equal(actor.contactShadow.scale.y,1);
   f.view.wildCreatures=[];scene.render();assert.equal(actor.destroyed,true);scene.dispose();assert.equal(f.ticker.size,0);
+});
+
+test('actual Hunt scene binds the approved source-bank metadata and leaves body origins unchanged',async()=>{
+ const art={entityId:'m203_elecmon',folder:'m203_elecmon-final-growth38-20261007',side:'main',sourceBankSha256:'ea39060f0570245b72161ec7a5d4ec3745043125cdbb5f2262f02908910f1b8c'};
+ const f=fixture('species-036',art),geometry={blank:false,scale:4,sourceSize:[256,256],origin:[108,152]};
+ const scene=await mountHuntFieldPixiPresentation({stage:f.stage,source:f.source,characterBundle:f.bundle});
+ const actor=f.nodes.find(n=>n.label==='wild creature');
+ for(const flipX of [false,true])for(const flipY of [false,true])for(const height of [0,18,6,0]){
+  f.wild.worldZ=height;f.setFrame({sequenceId:0,cell:1,flipX,flipY,geometry});scene.render();
+  assert.equal(actor.contactShadow.ellipses.length,4);assert.equal(actor.y,200-height);
+  for(const e of actor.contactShadow.ellipses)assert.equal(actor.y+actor.scale.y*(actor.contactShadow.y+actor.contactShadow.scale.y*e.y),200+e.y);
+  assert.equal(actor.characterSprite.anchor.x,108/256);assert.equal(actor.characterSprite.anchor.y,152/256);
+  assert.equal(actor.characterSprite.scale.y,.5);
+ }
+ scene.dispose();assert.equal(f.ticker.size,0);
 });

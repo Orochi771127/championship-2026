@@ -338,6 +338,7 @@ export async function mountHuntFieldPixiPresentation({
         node.characterController = actor.controller;
         node.nativeFramePresenter = actor.nativeFramePresenter ?? null;
         node.characterSprite = actor.sprite;
+        node.contactShadowArt = actor.contactShadowArt ?? null;
         node.lastCharacterX = null;
         node.lastCharacterY = null;
       }
@@ -442,7 +443,7 @@ export async function mountHuntFieldPixiPresentation({
       if (node.characterSprite) applyNativeCharacterCellGeometry(node.characterSprite,nativeFrame,2);
       node.scale.x = nativeFrame ? (nativeFrame.flipX ? -1 : 1) : (wild.facing === "left" ? -1 : 1);
       node.scale.y = nativeFrame?.flipY ? -1 : 1;
-      const contact = huntContactShadow(wild.speciesId, nativeFrame, wild.worldZ ?? 0);
+      const contact = huntContactShadow(wild.speciesId, nativeFrame, wild.worldZ ?? 0, node.contactShadowArt);
       if (contact) {
         const key = JSON.stringify(contact.ellipses);
         if (node.contactShadowKey !== key) {

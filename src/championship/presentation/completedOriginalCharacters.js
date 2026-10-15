@@ -88,7 +88,8 @@ export async function loadCompletedOriginalCharacters(options,href){
       const actor=roster.createActor(options);
       const config=byEntity.get(actor?.entityId);
       if(!config||!reviewed.has(actor.entityId))return actor;
-      return Object.freeze({...actor,nativeSizing:actor.nativeSizing?Object.freeze({...actor.nativeSizing,
+      return Object.freeze({...actor,contactShadowArt:Object.freeze({entityId:config.entityId,folder:config.folder,side:options?.side??'main',sourceBankSha256:config.sourceBankSha256}),
+        nativeSizing:actor.nativeSizing?Object.freeze({...actor.nativeSizing,
         packedPixelsPerNativePixel:config.density,evidence:'COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY'}):null});
     },
     getDiagnostics(){return {...roster.getDiagnostics(),completedOriginalArt:{scope:publicSelection?"OWNER_HASH_SELECTED_PLAYTEST":"NORMAL_LOOPBACK_PLAY",configured:configs.length,loaded:[...reviewed],failures:replacementFailures,publicReleasePermitted:publicSelection,shippingReady:false}};}
