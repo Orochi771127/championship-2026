@@ -102,3 +102,95 @@ test('top contour survives runtime loading and wrap copies without moving ground
   await assert.rejects(loadRuntimeMapArtTileSet({PIXI,manifest,...invalid}),/TILE_SET_INTEGER_POSITION_REQUIRED/);
   await assert.rejects(loadRuntimeMapArtTileSet({PIXI,manifest,...plan,productGrid:null,presentationMode:plan.mode}),/TILE_SET_INTEGER_POSITION_REQUIRED/);
 });
+
+// Source-canvas padding never changes logical geometry or legacy sourceRect.
+import {loadRuntimeMapArtField,validateRuntimeMapArtBundle} from '../src/championship/presentation/runtimeMapArtBundle.js';
+const paddedManifest=JSON.parse(fs.readFileSync('assets/production/cage/final-intake-20261008/manifest.json','utf8'));
+const water=paddedManifest.fields.find(f=>f.fieldId==='field_cm39_01');
+function paddingPixi({badSize=false}={}) {
+  class Animation extends Sprite {constructor({textures}){super(textures[0]);this.textures=textures;}gotoAndStop(i){this.texture=this.textures[i];this.frameIndex=i;}}
+  const frames=new Map(paddedManifest.fields.flatMap(f=>f.frames.map(frame=>[frame.src,{width:frame.rasterWidthPx??f.worldWidthPx,height:frame.rasterHeightPx??f.worldHeightPx}])));
+  return {...PIXI,AnimatedSprite:Animation,Assets:{load:async src=>({source:{},frame:{x:0,y:0,...frames.get(src),...(badSize?{width:1}:{})}}),unload:async()=>{}}};
+}
+test('padded field keeps nominal footprint and original anchors at fixed density',async()=>{
+  for(const f of paddedManifest.fields.filter(f=>f.visualPaddingNative)){
+    const art=await loadRuntimeMapArtField({PIXI:paddingPixi(),manifest:paddedManifest,fieldId:f.fieldId});
+    assert.equal(art.field.worldWidthPx,f.worldWidthPx);assert.equal(art.field.worldHeightPx,f.worldHeightPx);
+    assert.equal(art.field.nativeWidthPx,f.nativeWidthPx);assert.equal(art.field.nativeHeightPx,f.nativeHeightPx);
+    assert.equal(art.displayObject.width,f.worldWidthPx+64);assert.equal(art.displayObject.height,f.worldHeightPx+64);
+    for(const [x,y] of [[0,0],[f.worldWidthPx,0],[0,f.worldHeightPx],[f.worldWidthPx,f.worldHeightPx],[123,87]]){
+      assert.equal(art.displayObject.x+x+32,x);assert.equal(art.displayObject.y+y+32,y);
+    }
+    assert.deepEqual(art.visualOffset,{x:-32,y:-32});await art.dispose();
+  }
+});
+test('every sourceRect split partitions padded raster once with no gap or duplicate pixels',async()=>{
+  for(const axis of ['x','y'])for(const split of [1,48,192,383]){
+    const width=water.worldWidthPx,height=water.worldHeightPx;
+    const rects=axis==='x'?[{x:0,y:0,width:split,height},{x:split,y:0,width:width-split,height}]:[{x:0,y:0,width,height:split},{x:0,y:split,width,height:height-split}];
+    const arts=await Promise.all(rects.map(sourceRect=>loadRuntimeMapArtField({PIXI:paddingPixi(),manifest:paddedManifest,fieldId:water.fieldId,sourceRect})));
+    const a=arts[0].displayObject.texture.frame,b=arts[1].displayObject.texture.frame;
+    if(axis==='x'){assert.equal(a.x,0);assert.equal(a.x+a.width,b.x);assert.equal(b.x+b.width,width+64);assert.equal(a.height,height+64);}
+    else {assert.equal(a.y,0);assert.equal(a.y+a.height,b.y);assert.equal(b.y+b.height,height+64);assert.equal(a.width,width+64);}
+    await Promise.all(arts.map(a=>a.dispose()));
+  }
+});
+test('interior crops exclude outer padding and preserve existing source-to-world mapping',async()=>{
+  const sourceRect={x:44,y:60,width:100,height:200};
+  const art=await loadRuntimeMapArtField({PIXI:paddingPixi(),manifest:paddedManifest,fieldId:water.fieldId,sourceRect});
+  assert.deepEqual({...art.displayObject.texture.frame},{x:76,y:92,width:100,height:200});
+  assert.equal(art.displayObject.width,100);assert.equal(art.displayObject.height,200);
+  assert.equal(art.displayObject.x,0);assert.equal(art.displayObject.y,0);await art.dispose();
+});
+test('padded wrap split uses unchanged ground placements and synchronized phase copies',async()=>{
+  const w=3840,split=192,y=-96;
+  const placements=[{fieldId:water.fieldId,x:w-split,y,sourceRect:{x:0,y:0,width:split,height:448}},
+    {fieldId:water.fieldId,x:0,y,sourceRect:{x:split,y:0,width:192,height:448}}];
+  const productGrid={columns:10,rows:5,worldWidthNative:960,worldHeightNative:440,sizingHeightNative:192,lockedSlots:[]};
+  const art=await loadRuntimeMapArtTileSet({PIXI:paddingPixi(),manifest:paddedManifest,placements,wrapWidthPx:w,presentationMode:'NATIVE_RANCH',productGrid,placementEvidence:'PADDING_TEST'});
+  assert.equal(art.field.worldWidthPx,w);assert.equal(art.field.worldHeightPx,1760);
+  const [a,b]=art.displayObject.children;assert.equal(a.x,w-split-32);assert.equal(a.x+a.width,w);assert.equal(b.x,0);assert.equal(b.width,224);
+  assert.equal(a.y,-128);assert.equal(b.y,-128);
+  const before=art.displayObject.children.map(c=>c.texture);
+  art.update(water.frames[0].durationMs+1);
+  assert.ok(art.displayObject.children.every((c,i)=>c.texture!==before[i]));
+  for(const c of art.displayObject.children){assert.equal(c.y,-128);assert.ok(c.width===224);}
+  assert.equal(art.field.placements[0].y,-96);await art.dispose();
+});
+test('optional padding rejects unbounded values, wrong families, phase dimensions and decoded sizes',async()=>{
+  for(const patch of [{left:-1},{left:9},{top:NaN},{right:.5},{extra:1}]){
+    const m=structuredClone(paddedManifest);Object.assign(m.fields.find(f=>f.fieldId===water.fieldId).visualPaddingNative,patch);
+    assert.throws(()=>validateRuntimeMapArtBundle(m),/VISUAL_PADDING_INVALID/);
+  }
+  const family=structuredClone(paddedManifest);family.family='HUNT';assert.throws(()=>validateRuntimeMapArtBundle(family),/VISUAL_PADDING_INVALID/);
+  const size=structuredClone(paddedManifest);size.fields.find(f=>f.fieldId===water.fieldId).frames[1].rasterHeightPx++;
+  assert.throws(()=>validateRuntimeMapArtBundle(size),/PADDED_FRAME_SIZE_INVALID/);
+  await assert.rejects(loadRuntimeMapArtField({PIXI:paddingPixi({badSize:true}),manifest:paddedManifest,fieldId:water.fieldId}),/PADDED_TEXTURE_SIZE_INVALID/);
+});
+test('padded art leaves all legal Grid50 plans and resident bounds identical to nominal plans',()=>{
+  const nominal=structuredClone(paddedManifest);for(const f of nominal.fields){delete f.visualPaddingNative;delete f.rasterPixelsPerNative;}
+  let count=0;
+  for(const definition of listCageDefinitions())if(definition.moduleId!==WAITING_ROOM_MODULE)for(let slotIndex=0;slotIndex<50;slotIndex++){
+    const p={moduleId:definition.moduleId,slotIndex};if(!validateProductRanch([waiting,p]))continue;
+    const args={layoutVersion:PRODUCT_RANCH_GRID,placements:[waiting,p]};
+    assert.deepEqual(createRanchCageArtPlan({manifest:paddedManifest,...args}),createRanchCageArtPlan({manifest:nominal,...args}));count++;
+  }
+  assert.equal(count,1241);
+});
+test('new files preserve phase timings and have provenance-linked verified hashes',()=>{
+  const evidence=JSON.parse(fs.readFileSync('assets/production/cage/source-bounds-r1-20261015/provenance.json','utf8'));
+  assert.equal(evidence.frames.length,4);
+  for(const e of evidence.frames){assert.equal(e.previousFrame.durationMs,e.candidateFrame.durationMs);assert.equal(e.previousFrame.durationRawTicks,e.candidateFrame.durationRawTicks);assert.notEqual(e.previousFrame.src,e.candidateFrame.src);}
+});
+
+test('unpadded fields retain legacy crop dimensions and zero origin exactly',async()=>{
+  for(const f of paddedManifest.fields.filter(f=>!f.visualPaddingNative)){
+    const sourceRect={x:1,y:2,width:f.worldWidthPx-2,height:f.worldHeightPx-4};
+    const art=await loadRuntimeMapArtField({PIXI:paddingPixi(),manifest:paddedManifest,fieldId:f.fieldId,sourceRect});
+    assert.equal(art.displayObject.x,0);assert.equal(art.displayObject.y,0);assert.equal(art.visualOffset,undefined);
+    assert.deepEqual({...art.displayObject.texture.frame},sourceRect);
+    assert.equal(art.field.worldWidthPx,sourceRect.width);assert.equal(art.displayObject.width,sourceRect.width);
+    assert.equal(art.field.worldHeightPx,sourceRect.height);assert.equal(art.displayObject.height,sourceRect.height);
+    await art.dispose();
+  }
+});
