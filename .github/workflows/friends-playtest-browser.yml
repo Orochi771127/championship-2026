@@ -46,11 +46,21 @@ jobs:
           CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
           CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
         run: node tests/championship-friends-playtest-browser.cjs
-      - name: Preserve screenshots, exact-build diagnostics and Playwright traces
+      - name: Preserve lightweight screenshots and exact-build diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: friends-playtest-chromium-${{ github.run_id }}
-          path: .tmp/browser-qa/friends-playtest/
+          name: friends-playtest-diagnostics-${{ github.run_id }}
+          path: |
+            .tmp/browser-qa/friends-playtest/*.png
+            .tmp/browser-qa/friends-playtest/*.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve full Playwright traces separately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: friends-playtest-traces-${{ github.run_id }}
+          path: .tmp/browser-qa/friends-playtest/*-trace.zip
           if-no-files-found: warn
           retention-days: 14

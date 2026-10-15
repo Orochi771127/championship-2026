@@ -81,7 +81,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),20);
   for(const [row,balance,total]of [[2,9000,30],[3,8000,40],[4,7000,50]]){
    const button=page.locator(`.cm-cage-expansion [data-buy-test-row="${row}"],button.cm-vs2-action[data-buy-test-row="${row}"]`).first();
-   const label=await button.innerText();assert.match(label,/1000/);assert.match(label,/測試鑽/);assert.match(label,/10/);
+   const label=await button.innerText();assert.match(label.replaceAll(',',''),/1000/);assert.match(label,/測試鑽/);assert.match(label,/10/);
    await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();assert.ok(box&&box.height>=44,'Row purchase touch target');assert.ok(box.x>=0&&box.x+box.width<=390,'Purchase label/control stays inside mobile viewport');await noOverflow();
    await button.click();await page.waitForFunction(({key,balance})=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===balance,{key:saveKey,balance});
    assert.equal(digits(await page.locator('[data-test-diamond-balance]').innerText()),balance);
