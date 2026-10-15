@@ -182,6 +182,8 @@ export const UI_COPY = Object.freeze({
   "Release is not yet available for this resident.": "目前尚無法放生這隻夥伴。",
   "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "儲存失敗，夥伴仍在記憶卡中。請再次返回育成基地以重試。",
   "Your home roster is full. Your Digimon remains on the memory card.": "育成夥伴名單已滿，夥伴仍在記憶卡中。",
+  "FRIENDS_MEDAL_PREVIEW_NOTICE": "測試期間：後期徽章為外觀預覽，不計入實際勝利；前期徽章請透過遊戲取得。",
+  "FRIENDS_MEDAL_PREVIEW_BADGE": "測試預覽",
   "CAGE_PUBLIC_TEST_GRID_HINT": "連續牧場 · 起始 20 格，最多 50 格 · 每排 10 格，測試價 1000 鑽；不涉及真實付款。",
   "CAGE_TEST_BUY_ROW": "購買第 {row} 排（{count} 格 · {price} 測試鑽）",
   "CAGE_TEST_ROW_PURCHASED": "已扣除 1000 測試鑽，本排已開放。",

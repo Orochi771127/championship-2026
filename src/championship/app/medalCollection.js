@@ -1,4 +1,4 @@
-import { FRIENDS_PLAYTEST_POLICY, isLateMedalPreview } from '../testing/friendsPlaytestPolicy.js';
+import { FRIENDS_PLAYTEST_POLICY, isLateMedalPreview } from './friendsPlaytestPolicy.js';
 import { battlePartyCondition } from '../battle/battleParty.js';
 import {TITLE_EVENT_SCAN_LIMIT,titleEventAt,tamerRankRequiredFor} from '../battle/titleEventSchedule.js';
 export function medalCollection(battleBadges = [], policy = null) {

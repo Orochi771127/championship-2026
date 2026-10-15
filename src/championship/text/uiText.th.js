@@ -191,6 +191,8 @@ export const UI_COPY_TH = Object.freeze({
   "Release is not yet available for this resident.": "ยังไม่สามารถปล่อยตัวพาร์ตเนอร์นี้ได้ในขณะนี้",
   "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "บันทึกข้อมูลไม่สำเร็จ พาร์ตเนอร์ยังคงอยู่ในการ์ดความจำ โปรดกลับสู่ฟาร์มเพื่อลองใหม่อีกครั้ง",
   "Your home roster is full. Your Digimon remains on the memory card.": "รายชื่อในฟาร์มเต็มแล้ว พาร์ตเนอร์จะยังคงอยู่ในการ์ดความจำ",
+  "FRIENDS_MEDAL_PREVIEW_NOTICE": "ระหว่างการทดสอบ เหรียญช่วงท้ายเป็นเพียงภาพตัวอย่าง ไม่นับเป็นชัยชนะจริง ส่วนเหรียญช่วงต้นต้องเล่นเพื่อรับเอง",
+  "FRIENDS_MEDAL_PREVIEW_BADGE": "ตัวอย่างทดสอบ",
   "CAGE_PUBLIC_TEST_GRID_HINT": "ฟาร์มต่อเนื่อง เริ่ม 20 ช่อง สูงสุด 50 ช่อง แต่ละแถว 10 ช่อง ราคา 1000 เพชรทดสอบ ไม่มีการชำระเงินจริง",
   "CAGE_TEST_BUY_ROW": "ซื้อแถว {row} ({count} ช่อง · {price} เพชรทดสอบ)",
   "CAGE_TEST_ROW_PURCHASED": "ใช้ 1000 เพชรทดสอบและเปิดแถวแล้ว",

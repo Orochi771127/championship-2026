@@ -1,4 +1,4 @@
-import { normalizeFriendsPlaytestState } from '../testing/friendsPlaytestPolicy.js';
+import { normalizeFriendsPlaytestState } from './friendsPlaytestPolicy.js';
 import {requiresProductSaveVersion} from '../contracts/productSpeciesData.js';
 // Championship Modern -- standalone player save envelope.
 //

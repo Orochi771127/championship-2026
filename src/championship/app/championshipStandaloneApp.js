@@ -1,4 +1,4 @@
-import { grantFriendsPlaytestCoins, purchaseTestRanchRow } from '../testing/friendsPlaytestPolicy.js';
+import { grantFriendsPlaytestCoins, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';

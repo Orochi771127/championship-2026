@@ -191,6 +191,8 @@ export const UI_COPY_JA = Object.freeze({
   "Release is not yet available for this resident.": "このパートナーはまだ放生できません。",
   "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "セーブに失敗しました。パートナーはメモリーカードに残っています。牧場に戻ってやり直してください。",
   "Your home roster is full. Your Digimon remains on the memory card.": "牧場リストがいっぱいです。パートナーはメモリーカードに残っています。",
+  "FRIENDS_MEDAL_PREVIEW_NOTICE": "テスト期間中、後半のメダルは外観プレビューであり、実際の勝利には数えません。序盤のメダルはプレイして獲得してください。",
+  "FRIENDS_MEDAL_PREVIEW_BADGE": "テストプレビュー",
   "CAGE_PUBLIC_TEST_GRID_HINT": "一続きの牧場・初期20マス、最大50マス。1段10マスにつきテスト用ダイヤ1000個。実際の支払いはありません。",
   "CAGE_TEST_BUY_ROW": "第{row}段を購入（{count}マス・テスト用ダイヤ{price}個）",
   "CAGE_TEST_ROW_PURCHASED": "テスト用ダイヤ1000個を消費して、この段を開放しました。",

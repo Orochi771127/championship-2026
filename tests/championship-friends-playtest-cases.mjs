@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createChampionshipStandaloneApp} from '../src/championship/app/championshipStandaloneApp.js';
-import {FRIENDS_PLAYTEST_POLICY as policy,purchaseTestRanchRow,grantFriendsPlaytestCoins} from '../src/championship/testing/friendsPlaytestPolicy.js';
+import {FRIENDS_PLAYTEST_POLICY as policy,purchaseTestRanchRow,grantFriendsPlaytestCoins} from '../src/championship/app/friendsPlaytestPolicy.js';
 import {medalCollection} from '../src/championship/app/medalCollection.js';
 import {createShopRuntime} from '../src/championship/shop/shopRuntime.js';
 import {listShopRecords} from '../src/championship/shop/shopCatalog.js';
@@ -49,4 +49,18 @@ test('normal presentation intent purchases one row through the app and republish
  const h=setup(),a=h.create();let unsubscribe;
  try {await a.newGame();const source=createGateHuntPresentationSource(a);let frame;unsubscribe=source.subscribe(f=>frame=f);source.intents.openCageEdit();const result=source.intents.buyRanchTestRow(2);assert.equal(result.ok,true);assert.equal(a.getCageEditFrame().testDiamonds,9000);assert.equal(a.getCageEditFrame().unlockedCount,30);assert.equal(source.intents.buyRanchTestRow(2).ok,false);assert.equal(a.getCageEditFrame().testDiamonds,9000);assert.ok(frame);}
  finally {unsubscribe?.();await a.dispose();}
+});
+
+test('header projects only test balance, supports all locales, and preserves no-wallet preview',async()=>{
+ const {createControlledDocument}=await import('./helpers/controlled-database-dom.mjs');
+ const {createChampionshipStatusBar}=await import('../src/championship/app/championshipStatusBar.js');
+ const {LOCALES,setLocale}=await import('../src/championship/text/locale.js');
+ const {uiText}=await import('../src/championship/text/uiText.js');
+ const previous=globalThis.document,doc=createControlledDocument();const create=doc.createElement.bind(doc);doc.createElement=tag=>{const n=create(tag);n.offsetHeight=44;return n;};globalThis.document=doc;
+ const host=doc.createElement('main');doc.body.append(host);let bar;
+ try {bar=createChampionshipStatusBar({root:host});const diamond=host.querySelector('.cm-status-bar__diamond');
+  bar.render({testDiamonds:null});assert.equal(diamond.dataset.testWallet,'false');assert.equal(diamond.textContent,uiText('HUD_PREVIEW'));
+  for(const locale of LOCALES){setLocale(locale);for(const amount of [10000,9000,8000,7000,0]){bar.render({testDiamonds:amount});bar.relabel();assert.equal(diamond.dataset.testWallet,'true');assert.equal(Number(diamond.getAttribute('aria-label').replace(/[^0-9]/g,'')),amount);assert.notEqual(diamond.textContent,uiText('HUD_PREVIEW'));}}
+  bar.render({testDiamonds:null});assert.equal(diamond.dataset.testWallet,'false');assert.equal(diamond.textContent,uiText('HUD_PREVIEW'));
+ }finally{bar?.dispose();setLocale('zh-Hant');globalThis.document=previous;}
 });

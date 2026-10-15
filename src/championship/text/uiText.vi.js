@@ -191,6 +191,8 @@ export const UI_COPY_VI = Object.freeze({
   "Release is not yet available for this resident.": "Hiện chưa thể thả tự do cho bạn đồng hành này.",
   "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "Lưu thất bại. Bạn đồng hành vẫn còn trong thẻ nhớ. Vui lòng quay về trang trại để thử lại.",
   "Your home roster is full. Your Digimon remains on the memory card.": "Danh sách trang trại đã đầy. Bạn đồng hành vẫn ở lại trong thẻ nhớ.",
+  "FRIENDS_MEDAL_PREVIEW_NOTICE": "Trong đợt chơi thử, huy chương cuối game chỉ là bản xem trước hình ảnh, không tính là chiến thắng thật. Hãy chơi để giành huy chương đầu game.",
+  "FRIENDS_MEDAL_PREVIEW_BADGE": "Xem trước thử nghiệm",
   "CAGE_PUBLIC_TEST_GRID_HINT": "Trang trại liền mạch · Ban đầu 20 ô, tối đa 50 · Mỗi hàng 10 ô giá 1000 kim cương thử nghiệm. Không thanh toán tiền thật.",
   "CAGE_TEST_BUY_ROW": "Mua hàng {row} ({count} ô · {price} kim cương thử nghiệm)",
   "CAGE_TEST_ROW_PURCHASED": "Đã trừ 1000 kim cương thử nghiệm và mở hàng.",

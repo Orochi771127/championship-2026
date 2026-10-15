@@ -76,7 +76,7 @@ export function projectDatabase({
       displayName: slot.displayName,
       kind: slot.kind,
       state: registered ? DATABASE_ENTRY_STATES.REGISTERED : DATABASE_ENTRY_STATES.UNDISCOVERED,
-      viewable: fullView || registered,
+      ...(fullView ? { viewable: true } : {}),
       source: registered ? registerSource({ isStarter, instanceCount: instances.length }) : null,
       instanceCount: instances.length,
       identityEvidence: slot.identityEvidence
@@ -108,7 +108,7 @@ export function projectDatabase({
     eggCount: DATABASE_EGG_COUNT,
     regularCount: DATABASE_REGULAR_COUNT,
     registeredCount,
-    fullView,
+    ...(fullView ? { fullView: true } : {}),
     unlockEvidence: DATABASE_UNLOCK_EVIDENCE,
     entries,
     selected

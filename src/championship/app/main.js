@@ -1,4 +1,4 @@
-import { FRIENDS_PLAYTEST_POLICY } from '../testing/friendsPlaytestPolicy.js';
+import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation} from '../presentation/originalRuntimeLocation.js';
 import { finalHuntArtManifestUrl } from '../presentation/finalHuntArt20261008.js';
@@ -2126,6 +2126,7 @@ function refreshStatusBar() {
     // Product readouts on the same bar (2026-09-29): bits held, today's title
     // matches (the same capped list the Battle menu shows), the save state.
     reading.bits = app.getShopFrame()?.bits ?? null;
+    reading.testDiamonds = FRIENDS_PLAYTEST_POLICY.enabled ? app.getCageEditFrame()?.testDiamonds ?? null : null;
     reading.todayMatches = Math.min(app.getAvailableBattleRecordIndices().length, BATTLE_MATCH_LIST_CAP);
     const status = app.savePort?.getStatus?.() ?? null;
     reading.save = status ? { ...status, autosavePending: (autosave?.inspect().pending.length ?? 0) > 0 } : null;

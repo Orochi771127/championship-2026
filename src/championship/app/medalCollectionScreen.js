@@ -35,7 +35,7 @@ export function createMedalCollectionView({root,battleBadges=[],onExit,playtestP
   const board=artImage(originalDatabaseIcon('MEDALS'),'cm-collection-icon');
   header.append(copy);if(board)header.append(board);
   const body=element('div','cm-vs2-body cm-medals__body');
-  body.append(element('p','cm-medals__summary',entries.some(m=>m.testPreview)?'測試期間：後期徽章為外觀預覽，不計入實際勝利；前期徽章請透過遊戲取得。':count===0?'尚未取得徽章。贏得頭銜賽後，徽章會記錄在這裡。':'每一枚徽章，都是一場頭銜賽的勝利紀錄。'));
+  body.append(element('p','cm-medals__summary',entries.some(m=>m.testPreview)?'FRIENDS_MEDAL_PREVIEW_NOTICE':count===0?'尚未取得徽章。贏得頭銜賽後，徽章會記錄在這裡。':'每一枚徽章，都是一場頭銜賽的勝利紀錄。'));
   const grid=element('div','cm-medals__grid');grid.setAttribute('aria-label',uiText('61 枚頭銜賽徽章'));
   body.append(grid);
   const dialog=element('dialog','cm-medal-dialog');dialog.setAttribute('aria-label',uiText('徽章詳情'));
@@ -62,7 +62,7 @@ export function createMedalCollectionView({root,battleBadges=[],onExit,playtestP
     const controls=element('p','cm-medal-display__controls',medalPresentationText('controls'));controls.hidden=true;
     const reset=element('button','cm-medal-display__reset',medalPresentationText('reset'));reset.type='button';reset.hidden=true;reset.addEventListener('click',()=>activePresentation?.reset());
     display.append(stage,presentationStatus,controls,reset);
-    const status=element('span','cm-medals__status',entry.testPreview?'測試預覽':entry.acquired?'已取得':'未取得');status.prepend(statusIcon(entry.acquired));
+    const status=element('span','cm-medals__status',entry.testPreview?'FRIENDS_MEDAL_PREVIEW_BADGE':entry.acquired?'已取得':'未取得');status.prepend(statusIcon(entry.acquired));
     dialog.append(display,status,element('h2','cm-vs2-title',name));
     const description=titleEventText(entry.titleId,'description',event?.description??'');
     if(description)dialog.append(element('p','cm-medal-dialog__description',description));
@@ -93,12 +93,12 @@ export function createMedalCollectionView({root,battleBadges=[],onExit,playtestP
   for(const entry of entries) {
     const name=titleEventText(entry.titleId,'name',entry.event?.name??uiText('徽章 {number}',{number:entry.titleId+1}));
     const button=element('button','cm-medals__tile');button.type='button';button.dataset.titleId=String(entry.titleId);applyPresentationProfile(button,getMedalPresentationProfile(entry.titleId));
-    button.dataset.acquired=String(entry.acquired);button.setAttribute('aria-label',uiText('{number}. {name}，{status}',{number:entry.titleId+1,name,status:uiText(entry.testPreview?'測試預覽':entry.acquired?'已取得':'未取得')}));
+    button.dataset.acquired=String(entry.acquired);button.setAttribute('aria-label',uiText('{number}. {name}，{status}',{number:entry.titleId+1,name,status:uiText(entry.testPreview?'FRIENDS_MEDAL_PREVIEW_BADGE':entry.acquired?'已取得':'未取得')}));
     const artwork=element('span','cm-medals__artwork');
     const art=artImage(originalMedalArt(entry.titleId),'cm-medals__art');if(art)artwork.append(art);
     artwork.append(statusIcon(entry.acquired));button.append(artwork);
     button.append(element('span','cm-medals__number',String(entry.titleId+1).padStart(2,'0')),
-      element('span','cm-medals__name',name),element('span','cm-medals__status',entry.testPreview?'測試預覽':entry.acquired?'已取得':'未取得'));
+      element('span','cm-medals__name',name),element('span','cm-medals__status',entry.testPreview?'FRIENDS_MEDAL_PREVIEW_BADGE':entry.acquired?'已取得':'未取得'));
     button.addEventListener('click',()=>select(entry));grid.append(button);
   }
   const footer=element('footer','cm-vs2-footer');const back=element('button','cm-vs2-action','返回牧場');back.type='button';back.addEventListener('click',()=>onExit?.());footer.append(back);

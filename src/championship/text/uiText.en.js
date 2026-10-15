@@ -193,6 +193,8 @@ export const UI_COPY_EN = Object.freeze({
   "Release is not yet available for this resident.": "This partner cannot be released yet.",
   "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "Save failed. Your partner is still on the memory card. Head back to the ranch again to retry.",
   "Your home roster is full. Your Digimon remains on the memory card.": "Your ranch is full. The partner stays on the memory card.",
+  "FRIENDS_MEDAL_PREVIEW_NOTICE": "Playtest: late-game medals are visual previews, not actual victories. Earn early-game medals through play.",
+  "FRIENDS_MEDAL_PREVIEW_BADGE": "Test preview",
   "CAGE_PUBLIC_TEST_GRID_HINT": "Continuous ranch · Starts with 20 cells, up to 50 · Each 10-cell row costs 1000 test diamonds. No real payment.",
   "CAGE_TEST_BUY_ROW": "Buy row {row} ({count} cells · {price} test diamonds)",
   "CAGE_TEST_ROW_PURCHASED": "1000 test diamonds spent. Row opened.",
