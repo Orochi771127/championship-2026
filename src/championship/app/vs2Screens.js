@@ -788,7 +788,8 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     for (const caught of onCard) {
       if (seenCaptures.has(caught.wildId)) continue;
       seenCaptures.add(caught.wildId);
-      announceCapture(caught, onCard.length);
+      // The scripted tutorial speaks for itself at this moment.
+      if (!nextFrame.tutorial) announceCapture(caught, onCard.length);
     }
     const selected = next.hud.target;
     targetName.textContent = uiText(selected ? selected.name??'野生數碼獸' : '輕觸數碼獸查看');

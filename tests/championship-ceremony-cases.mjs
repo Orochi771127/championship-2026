@@ -218,3 +218,59 @@ test("integrations decorate settled state and clean up with their screens", () =
     assert.doesNotMatch(code, /requestAnimationFrame|Ticker|localStorage|\.save\(/, `${file}: no loop, no state`);
   }
 });
+
+// ---- The evolution reveal waits for the native sequence -------------------
+// Same isolated harness shape as championship-raising-floating-card-cases:
+// the real Raising Home view with its imports supplied, a fake source, and the
+// ceremony entry points recorded instead of drawn.
+import vm from "node:vm";
+import { getLocale } from "../src/championship/text/locale.js";
+import { getProductExtension } from "../src/championship/contracts/productSpeciesExtensions.js";
+import { speciesName } from "../src/championship/text/zhHant.js";
+import { productFormText } from "../src/championship/text/productFormText.js";
+
+class Element extends EventTarget {
+  constructor(tag, doc) { super(); this.tagName = tag; this.ownerDocument = doc; this.children = []; this.dataset = {}; this.attributes = {}; this.hidden = false; this.className = ""; this.style = { setProperty() {}, removeProperty() {} }; this.clientWidth = 390; this.clientHeight = 700; this.offsetHeight = 112; this.classList = { toggle() {}, add() {}, remove() {} }; }
+  append(...nodes) { for (const n of nodes) { n.parentNode = this; this.children.push(n); } }
+  appendChild(n) { this.append(n); }
+  replaceChildren(...nodes) { this.children = []; this.append(...nodes); }
+  setAttribute(k, v) { this.attributes[k] = String(v); }
+  getAttribute(k) { return this.attributes[k] ?? null; }
+  removeAttribute(k) { delete this.attributes[k]; }
+  focus() { this.ownerDocument.activeElement = this; }
+  remove() { if (this.parentNode) this.parentNode.children = this.parentNode.children.filter((n) => n !== this); }
+  getBoundingClientRect() { return { width: this.clientWidth, height: this.clientHeight }; }
+}
+
+test("the evolution reveal plays once, after the native sequence ends and nothing else owns the screen", async () => {
+  const document = { createElement: (tag) => new Element(tag, document) };
+  const ceremonies = [];
+  const context = vm.createContext({ document, Date, console, setTimeout, clearTimeout, productFormText, getLocale, getProductExtension,
+    setText: (node, text) => { node.textContent = text; }, setLabel: (node, key, text) => node.setAttribute(key, text), uiText: (s, p = {}) => Object.entries(p).reduce((t, [k, v]) => t.replace(`{${k}}`, v), String(s)), retranslate: () => {},
+    isNativeRanchLayout: () => true, assembledHudArt: () => null, prefersReducedMotion: () => false, speciesName, raisingMessageText: () => "", raisingMessageSender: () => "", downloadSaveBackup: () => ({ key: "ok" }),
+    playCeremony: (options) => { const run = { options, disposed: false, dispose() { this.disposed = true; } }; ceremonies.push(run); return run; },
+    buildEvolve: () => {} });
+  vm.runInContext(fs.readFileSync("src/championship/app/raisingHomeP1RView.js", "utf8").replace(/^import .*;$/gm, "").replace(/export async function /, "async function ") + "\nthis.mount=createRaisingHomeP1RView;", context);
+  const root = new Element("div", document);
+  let frame = { revision: 1, residents: [{ creatureId: "a", displayName: "Partner A", speciesId: "species-020", stats: { currentHp: 8, maxHp: 10, maxTp: 4 }, displayCapacityG: 3 }], selection: { creatureId: null }, ranch: { layoutVersion: 1 }, save: { phase: "CLEAN" } };
+  let listener;
+  const source = { getFrame: () => frame, subscribe: (fn) => { listener = fn; return () => { listener = null; }; }, intents: { selectCreature() {}, relocateCreature() {}, careForCreature() {}, requestSave() {} } };
+  const view = await context.mount({ root, source, hudArt: { getPortrait: (id) => ({ src: `assets/production/${id}.png`, width: 32, height: 32, nativeScale: 1 }) },
+    mountField: async () => ({ render() {}, dispose() {}, focusResident() {} }) });
+  const render = (changes) => { frame = { ...frame, ...changes, revision: frame.revision + 1 }; listener(frame); };
+  const message = { kind: "EVOLVED", instanceId: "a", target: 20 };
+  render({ lifecycle: { evolution: { instanceId: "a", phase: "flash" }, message } });
+  assert.equal(ceremonies.length, 0, "never over the native evolution sequence");
+  render({ lifecycle: { evolution: { instanceId: "a", phase: "writing" }, message } });
+  assert.equal(ceremonies.length, 0);
+  render({ lifecycle: { evolution: null, message, day: { phase: "fade-out", frames: 1 } } });
+  assert.equal(ceremonies.length, 0, "a day change keeps the screen first");
+  render({ lifecycle: { evolution: null, message } });
+  assert.equal(ceremonies.length, 1, "revealed once the screen is free");
+  assert.equal(ceremonies[0].options.kind, "evolve");
+  assert.match(ceremonies[0].options.label, /Partner A/);
+  render({ lifecycle: { evolution: null, message } });
+  assert.equal(ceremonies.length, 1, "the same message never replays");
+  view.dispose();
+  assert.equal(ceremonies[0].disposed, true, "leaving Home releases the reveal");
+});
