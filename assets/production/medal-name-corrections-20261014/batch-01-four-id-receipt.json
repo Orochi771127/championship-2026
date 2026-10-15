@@ -1,0 +1,270 @@
+{
+  "batch": "20261014-first-four-title-IDs",
+  "titleIds": [
+    29,
+    52,
+    56,
+    57
+  ],
+  "status": "SEALED_CANDIDATE_NOT_PUBLISHED",
+  "focusedTests": {
+    "passed": 11,
+    "failed": 0
+  },
+  "files": [
+    {
+      "path": "src/championship/presentation/completedOriginalUi20261007.js",
+      "sha256": "350f315bf9596e2019ab52b14c3a4a0797d16621c2a2f78aceca29dd0dac497f",
+      "bytes": 1838
+    },
+    {
+      "path": "tests/championship-medal-art-corrections-cases.mjs",
+      "sha256": "31def0d644bccf30601774ed4cd430500adf07099e277f4703731fe052e369ca",
+      "bytes": 6907
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/README.md",
+      "sha256": "90df43f802918876e0b80e75d8562cd290835a5e957378137d51e475e6cd7e01",
+      "bytes": 3820
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/generation-prompts.json",
+      "sha256": "5198b1b646474e15bf77846180ac550f381bb2966d43fafc080084c59a36ccff",
+      "bytes": 4488
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/manifest.json",
+      "sha256": "0c7eb40686a832f2ef661a87f516a09c43318c59a0538e1b383ad1118c3dc0c1",
+      "bytes": 6504
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/masters/title-52-infinite-soul-master.png",
+      "sha256": "22f8f6df4b9a71be84dd0395a7d5f9465bbe2cf117d16c104e80535098ec4b87",
+      "bytes": 1512865
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/masters/title-56-rainbow-flyer-master.png",
+      "sha256": "529a42b22499f51367691ca461e1a3eaffe0d14a37cd1804194d55723b6cf911",
+      "bytes": 1501529
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/medals/title-52-infinite-soul.png",
+      "sha256": "92b39a20403e1b02e1829f0d344aee48c0ff8d824c0ef11021ea96101a7adeb4",
+      "bytes": 334290
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/medals/title-56-rainbow-flyer.png",
+      "sha256": "2a57b1b6eaf361ab4379b9c501f73e1f2a7b390b573cd6b25079686981ce65a7",
+      "bytes": 316482
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/validation.json",
+      "sha256": "28ad78b6a59b219a4fbdccca9b0fba20b5aa4cb3a27d0878b42399eff2fa8cfc",
+      "bytes": 2626
+    }
+  ],
+  "manifestSnapshot": {
+    "schemaVersion": 1,
+    "assetId": "art:original-medal-name-corrections:20261014",
+    "status": "CANDIDATE_ONLY_NOT_PUBLISHED",
+    "runtimeScope": "EXISTING_ORIGINAL_RUNTIME_LOCATION_GATE",
+    "runtimeEligible": true,
+    "publicReleasePermitted": false,
+    "shippingReady": false,
+    "rightsStatus": "EXISTING_OWNER_ORIGINAL_REUSE_AND_NEW_GENERATED_ART_NOT_COMMERCIAL_CLEARANCE",
+    "scope": "Four titleId presentation corrections only; no title/name/save/acquisition/gameplay change; not a ROM-art restoration.",
+    "sourceManifest": {
+      "src": "assets/production/original-ui-intake-20261007/manifest.json",
+      "sha256": "7cf3e186ee0207584103cefb51715a2ccaf71ae7ab3b27497edfd2e9d47bfa65"
+    },
+    "audit": {
+      "reviewedCount": 61,
+      "initialCounts": {
+        "ambiguous": 29,
+        "confident": 2,
+        "mismatch": 30
+      },
+      "correctedTitleIds": [
+        29,
+        52,
+        56,
+        57
+      ],
+      "remainingMismatchTitleIds": [
+        3,
+        7,
+        8,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        22,
+        25,
+        31,
+        32,
+        35,
+        36,
+        37,
+        38,
+        42,
+        43,
+        44,
+        45,
+        49,
+        54,
+        55,
+        58,
+        59
+      ],
+      "remainingMismatchCount": 26,
+      "ambiguousCountUnchanged": 29,
+      "all61Corrected": false,
+      "limitation": "Virus biohazard improves virus identity but does not independently depict hunting or change the virus-attribute match condition."
+    },
+    "invariants": [
+      "titleId and recordIndex unchanged",
+      "battleBadges, save keys and win acquisition unchanged",
+      "event names, schedule, ranks, rewards and entry conditions unchanged",
+      "original delivered PNGs and manifest unchanged",
+      "unselected 57 art mappings unchanged",
+      "no ROM/native assets added",
+      "no publication or commercial-rights approval"
+    ],
+    "medals": [
+      {
+        "src": "assets/production/original-ui-intake-20261007/medals/title-52.png",
+        "sha256": "e1a2e553cb07ca5e4c005049b4667613e251fd976780753eef9291100fb6f2a6",
+        "bytes": 17906,
+        "rasterSize": [
+          128,
+          128
+        ],
+        "titleId": 29,
+        "artIdentity": "OC-120",
+        "artName": "腐沼核獸",
+        "width": 32,
+        "height": 32,
+        "density": 4,
+        "origin": [
+          16,
+          16
+        ],
+        "sourceTitleId": 52,
+        "mappingEvidence": "OWNER_REQUESTED_PRODUCT_DISPLAY_CORRECTION_NOT_ROM_ART_MAPPING",
+        "correctionKind": "EXISTING_ORIGINAL_ART_REASSIGNMENT",
+        "previousArt": {
+          "src": "assets/production/original-ui-intake-20261007/medals/title-29.png",
+          "sha256": "8206d172de7b490cc7593c536961f9c1eafe2f87792ca748d6d88cbd09c5849a",
+          "artIdentity": "OC-060"
+        }
+      },
+      {
+        "titleId": 52,
+        "src": "assets/production/medal-name-corrections-20261014/medals/title-52-infinite-soul.png",
+        "sha256": "92b39a20403e1b02e1829f0d344aee48c0ff8d824c0ef11021ea96101a7adeb4",
+        "bytes": 334290,
+        "rasterSize": [
+          512,
+          512
+        ],
+        "width": 32,
+        "height": 32,
+        "density": 16,
+        "origin": [
+          16,
+          16
+        ],
+        "artIdentity": "ORIGINAL-MEDAL-52-20261014",
+        "artName": "無限之魂：無限環與魂火",
+        "correctionKind": "GENERATED_ORIGINAL_DONOR_REPLACEMENT",
+        "mappingEvidence": "OWNER_REQUESTED_PRODUCT_DISPLAY_CORRECTION_NOT_ROM_ART_MAPPING",
+        "generation": {
+          "tool": "host-native image_gen.imagegen",
+          "promptRecord": "generation-prompts.json",
+          "promptTitleId": 52,
+          "master": "assets/production/medal-name-corrections-20261014/masters/title-52-infinite-soul-master.png",
+          "masterSha256": "22f8f6df4b9a71be84dd0395a7d5f9465bbe2cf117d16c104e80535098ec4b87",
+          "masterRasterSize": [
+            1254,
+            1254
+          ],
+          "normalization": "ImageMagick Lanczos resize to 512x512; RGBA preserved; metadata stripped; no compositing or redraw"
+        },
+        "previousArt": {
+          "src": "assets/production/original-ui-intake-20261007/medals/title-52.png",
+          "sha256": "e1a2e553cb07ca5e4c005049b4667613e251fd976780753eef9291100fb6f2a6",
+          "artIdentity": "OC-120"
+        }
+      },
+      {
+        "titleId": 56,
+        "src": "assets/production/medal-name-corrections-20261014/medals/title-56-rainbow-flyer.png",
+        "sha256": "2a57b1b6eaf361ab4379b9c501f73e1f2a7b390b573cd6b25079686981ce65a7",
+        "bytes": 316482,
+        "rasterSize": [
+          512,
+          512
+        ],
+        "width": 32,
+        "height": 32,
+        "density": 16,
+        "origin": [
+          16,
+          16
+        ],
+        "artIdentity": "ORIGINAL-MEDAL-56-20261014",
+        "artName": "彩虹飛翔者：彩虹羽翼",
+        "correctionKind": "GENERATED_ORIGINAL_DONOR_REPLACEMENT",
+        "mappingEvidence": "OWNER_REQUESTED_PRODUCT_DISPLAY_CORRECTION_NOT_ROM_ART_MAPPING",
+        "generation": {
+          "tool": "host-native image_gen.imagegen",
+          "promptRecord": "generation-prompts.json",
+          "promptTitleId": 56,
+          "master": "assets/production/medal-name-corrections-20261014/masters/title-56-rainbow-flyer-master.png",
+          "masterSha256": "529a42b22499f51367691ca461e1a3eaffe0d14a37cd1804194d55723b6cf911",
+          "masterRasterSize": [
+            1254,
+            1254
+          ],
+          "normalization": "ImageMagick Lanczos resize to 512x512; RGBA preserved; metadata stripped; no compositing or redraw"
+        },
+        "previousArt": {
+          "src": "assets/production/original-ui-intake-20261007/medals/title-56.png",
+          "sha256": "f58e0e5b6daf79c5852651e84d11498b2b2846415ea77d1286632b9a794b1aa1",
+          "artIdentity": "OC-183"
+        }
+      },
+      {
+        "src": "assets/production/original-ui-intake-20261007/medals/title-56.png",
+        "sha256": "f58e0e5b6daf79c5852651e84d11498b2b2846415ea77d1286632b9a794b1aa1",
+        "bytes": 28417,
+        "rasterSize": [
+          128,
+          128
+        ],
+        "titleId": 57,
+        "artIdentity": "OC-183",
+        "artName": "月鎌幻鐮",
+        "width": 32,
+        "height": 32,
+        "density": 4,
+        "origin": [
+          16,
+          16
+        ],
+        "sourceTitleId": 56,
+        "mappingEvidence": "OWNER_REQUESTED_PRODUCT_DISPLAY_CORRECTION_NOT_ROM_ART_MAPPING",
+        "correctionKind": "EXISTING_ORIGINAL_ART_REASSIGNMENT",
+        "previousArt": {
+          "src": "assets/production/original-ui-intake-20261007/medals/title-57.png",
+          "sha256": "d090c554b70fd9646fe2408511339d88b899cc54c4745d339a2cc5335d11e455",
+          "artIdentity": "OC-190"
+        }
+      }
+    ]
+  },
+  "runtimeMappingSourceSnapshot": "import {isOriginalRuntimeLocation} from './originalRuntimeLocation.js';\n// Owner 2026-10-07 local art intake. Display only; no gameplay or save writers.\nimport manifest from '../../../assets/production/original-ui-intake-20261007/manifest.json' with {type:'json'};\nimport medalCorrections from '../../../assets/production/medal-name-corrections-20261014/manifest.json' with {type:'json'};\nimport toolbarCandidate from '../../../assets/production/original-ui-intake-20261007/toolbar-point64-r1-20261009/manifest.json' with {type:'json'};\nexport function isOriginalUiIntakeLocal(baseUrl = globalThis.location?.href) {\n  try { const url = new URL(baseUrl); return ['http:','https:'].includes(url.protocol)\n    && ['localhost','127.0.0.1','[::1]'].includes(url.hostname); } catch { return false; }\n}\nexport function originalMedalArt(titleId, baseUrl) {\n  if (!isOriginalRuntimeLocation(baseUrl)) return null;\n  // Display-only correction: donated motifs have new art at their former IDs.\n  // Keep canonical title identity, acquisition and the original delivery intact.\n  return medalCorrections.medals.find(m=>m.titleId===titleId)\n    ?? manifest.medals.find(m=>m.titleId===titleId) ?? null;\n}\nexport function originalDatabaseIcon(screen, baseUrl) {\n  return isOriginalRuntimeLocation(baseUrl) ? manifest.database.find(c=>c.destination===screen && c.bindingEvidence!=='UNKNOWN_REQUIRES_TRACE') ?? null : null;\n}\nexport function originalShopItemArt(recordIndex, baseUrl) {\n  return isOriginalRuntimeLocation(baseUrl) ? manifest.items.find(a=>a.shopRecordIndex===recordIndex) ?? null : null;\n}\nexport function originalToolbarArt(toolId, baseUrl) {\n  if (!isOriginalRuntimeLocation(baseUrl)) return null;\n  return toolbarCandidate.assets.find(a=>a.role===toolId)\n    ?? manifest.items.find(a=>a.assetId.endsWith('/'+toolId+'-rest')) ?? null;\n}\n",
+  "testSourceSnapshot": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport {readFileSync, lstatSync} from 'node:fs';\nimport {createHash} from 'node:crypto';\nimport {inflateSync} from 'node:zlib';\nimport {originalMedalArt} from '../src/championship/presentation/completedOriginalUi20261007.js';\nimport {medalCollection} from '../src/championship/app/medalCollection.js';\n\nconst root=new URL('../',import.meta.url);\nconst read=path=>readFileSync(new URL(path,root));\nconst hash=bytes=>createHash('sha256').update(bytes).digest('hex');\nconst source=JSON.parse(read('assets/production/original-ui-intake-20261007/manifest.json'));\nconst corrections=JSON.parse(read('assets/production/medal-name-corrections-20261014/manifest.json'));\nconst local='http://127.0.0.1:8766/championship.html';\nconst approved='https://orochi771127.github.io/championship-2026/';\nconst changed=[29,52,56,57];\nconst original=id=>source.medals.find(m=>m.titleId===id);\n\nfunction rgbaPng(bytes){\n assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a');\n const width=bytes.readUInt32BE(16),height=bytes.readUInt32BE(20);\n assert.equal(bytes[24],8,'8-bit channel depth');assert.equal(bytes[25],6,'true RGBA');\n assert.equal(bytes[28],0,'non-interlaced');\n const chunks=[];\n for(let p=8;p<bytes.length;){const n=bytes.readUInt32BE(p);if(bytes.toString('ascii',p+4,p+8)==='IDAT')chunks.push(bytes.subarray(p+8,p+8+n));p+=n+12;}\n const packed=inflateSync(Buffer.concat(chunks)),stride=width*4,pixels=Buffer.alloc(stride*height);\n assert.equal(packed.length,(stride+1)*height);\n const paeth=(a,b,c)=>{const p=a+b-c,pa=Math.abs(p-a),pb=Math.abs(p-b),pc=Math.abs(p-c);return pa<=pb&&pa<=pc?a:pb<=pc?b:c;};\n for(let y=0;y<height;y++){\n  const type=packed[y*(stride+1)];assert.ok(type<=4);\n  for(let x=0;x<stride;x++){\n   const i=y*stride+x,a=x>=4?pixels[i-4]:0,b=y?pixels[i-stride]:0,c=y&&x>=4?pixels[i-stride-4]:0;\n   const prediction=type===0?0:type===1?a:type===2?b:type===3?Math.floor((a+b)/2):paeth(a,b,c);\n   pixels[i]=(packed[y*(stride+1)+1+x]+prediction)&255;\n  }\n }\n return {width,height,pixels};\n}\n\ntest('exactly four presentation IDs change, all 61 canonical IDs remain stable',()=>{\n assert.deepEqual(corrections.medals.map(m=>m.titleId),changed);\n for(let id=0;id<61;id++){\n  const art=originalMedalArt(id,local);assert.equal(art.titleId,id);\n  if(changed.includes(id))assert.notEqual(art.src,original(id).src);\n  else assert.deepEqual(art,original(id));\n }\n for(const id of [-1,61,62,null,undefined,'29',NaN])assert.equal(originalMedalArt(id,local),null);\n});\n\ntest('moon and virus use inspected original motifs and their donors receive distinct new art',()=>{\n for(const [target,donor] of [[29,52],[57,56]]){\n  const art=originalMedalArt(target,local);\n  assert.equal(art.src,original(donor).src);assert.equal(art.sha256,original(donor).sha256);\n  assert.equal(art.sourceTitleId,donor);assert.equal(art.artIdentity,original(donor).artIdentity);\n  assert.equal(art.previousArt.src,original(target).src);\n  assert.notEqual(originalMedalArt(donor,local).src,original(target).src,'no wrong-art backfill');\n }\n assert.match(originalMedalArt(56,local).src,/rainbow-flyer\\.png$/);\n assert.match(originalMedalArt(52,local).src,/infinite-soul\\.png$/);\n assert.equal(new Set(changed.map(id=>originalMedalArt(id,local).src)).size,4);\n});\n\ntest('original-runtime location gate remains unchanged, not a publication authorization',()=>{\n for(const id of changed){\n  assert.deepEqual(originalMedalArt(id,approved),originalMedalArt(id,local));\n  for(const url of ['https://example.com/game','file:///game','https://orochi771127.github.io/other/'])assert.equal(originalMedalArt(id,url),null);\n }\n assert.equal(corrections.publicReleasePermitted,false);assert.equal(corrections.shippingReady,false);\n assert.equal(corrections.status,'CANDIDATE_ONLY_NOT_PUBLISHED');\n});\n\ntest('all original delivered medal bytes and source manifest retain exact provenance',()=>{\n assert.equal(hash(read(corrections.sourceManifest.src)),corrections.sourceManifest.sha256);\n assert.equal(source.medals.length,61);\n for(const art of source.medals)assert.equal(hash(read(art.src)),art.sha256,art.src);\n for(const art of corrections.medals){\n  assert.equal(hash(read(art.src)),art.sha256);assert.equal(read(art.src).length,art.bytes);\n  assert.match(art.mappingEvidence,/NOT_ROM_ART_MAPPING/);\n  assert.doesNotMatch(art.src,/internal-faithful|research\\//);\n }\n});\n\ntest('new generated 512px detail textures have genuine alpha and preserved masters',()=>{\n for(const id of [52,56]){\n  const art=originalMedalArt(id,local),bytes=read(art.src),image=rgbaPng(bytes);\n  assert.deepEqual([image.width,image.height],[512,512]);assert.deepEqual(art.rasterSize,[512,512]);\n  assert.equal(art.width*art.density,512);assert.equal(art.height*art.density,512);\n  assert.equal(lstatSync(new URL(art.src,root)).isSymbolicLink(),false);\n  let transparent=0,nearlyOpaque=0,partial=0;\n  // Native generation has alpha 252–253 throughout much of the motif. Preserve\n  // that supplied alpha rather than forcing opacity merely to pass a test.\n  for(let i=3;i<image.pixels.length;i+=4){const a=image.pixels[i];if(a===0)transparent++;if(a>=250)nearlyOpaque++;if(a>0&&a<250)partial++;}\n  assert.ok(transparent>512*512*0.1,'transparent surround');assert.ok(nearlyOpaque>512*512*0.1,'substantial nearly opaque motif');assert.ok(partial>0,'antialiased alpha edges');\n  for(const [x,y] of [[0,0],[511,0],[0,511],[511,511]])assert.equal(image.pixels[(y*512+x)*4+3],0);\n  assert.equal(hash(read(art.generation.master)),art.generation.masterSha256);\n  assert.notEqual(art.src,art.generation.master,'master is not runtime texture');\n  assert.equal(art.generation.tool,'host-native image_gen.imagegen');\n }\n});\n\ntest('award flags and event records are unaffected by image remapping',()=>{\n const saved=Object.freeze([29,52,56,57]),before=JSON.stringify(saved);\n const entries=medalCollection(saved);\n for(const entry of entries){\n  originalMedalArt(entry.titleId,local);\n  assert.equal(entry.acquired,saved.includes(entry.titleId));\n  assert.equal(entry.conditionEvidence,'ROM_VERIFIED_TITLE_WIN');\n }\n assert.equal(entries.length,61);assert.equal(JSON.stringify(saved),before);\n assert.deepEqual(entries.filter(e=>e.acquired).map(e=>e.titleId),changed);\n});\n\ntest('bounded correction records remaining semantic work without claiming all 61 complete',()=>{\n assert.equal(corrections.audit.reviewedCount,61);assert.equal(corrections.audit.initialCounts.mismatch,30);\n assert.deepEqual(corrections.audit.correctedTitleIds,changed);\n assert.equal(corrections.audit.remainingMismatchCount,26);\n assert.equal(corrections.audit.remainingMismatchTitleIds.length,26);\n assert.equal(corrections.audit.ambiguousCountUnchanged,29);\n assert.equal(corrections.audit.all61Corrected,false);\n for(const id of changed)assert.equal(corrections.audit.remainingMismatchTitleIds.includes(id),false);\n});\n"
+}
