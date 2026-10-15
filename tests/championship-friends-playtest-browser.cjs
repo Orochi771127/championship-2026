@@ -106,10 +106,19 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  async function sourceCornerReview(){
   // Long visual sweeps can cross midnight. Acknowledge only the ordinary new-date UI.
   async function clearCalendar(){
-   await page.waitForFunction(()=>{const layer=document.querySelector('.int-rh2-lifecycle');const calendar=document.querySelector('.int-rh2-calendar');return !layer||layer.hidden||calendar&&!calendar.hidden&&!calendar.disabled;});
-   const calendar=page.locator('.int-rh2-calendar');
-   if(await calendar.isVisible()){
-    await calendar.click();await page.locator('.int-rh2-lifecycle').waitFor({state:'hidden'});
+   // Native lifecycle completion can launch a separate evolution ceremony.
+   // Wait for the real hit-test target, not just the native lifecycle flag.
+   for(;;){
+    await page.waitForFunction(()=>{
+     const layer=document.querySelector('.int-rh2-lifecycle'),calendar=document.querySelector('.int-rh2-calendar');
+     if(calendar&&!calendar.hidden&&!calendar.disabled)return true;
+     if(layer&&!layer.hidden||document.querySelector('.cm-ceremony'))return false;
+     const canvas=document.querySelector('#cm-root[data-active-screen="RAISING_HOME"] canvas');if(!canvas)return false;
+     const box=canvas.getBoundingClientRect();return [180,260,Math.min(360,box.height-150)].some(y=>document.elementFromPoint(box.right-35,box.top+y)===canvas);
+    });
+    const calendar=page.locator('.int-rh2-calendar');
+    if(!await calendar.isVisible())return;
+    await calendar.click();await page.waitForTimeout(250);
     evidence.assertions.push({sourceCornerCalendarAcknowledged:true,normalUi:true});write();
    }
   }
