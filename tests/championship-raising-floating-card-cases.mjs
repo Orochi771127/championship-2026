@@ -86,9 +86,17 @@ test('collapse/expand preserves selection, dimensions and one field; details/nav
 
 test('calendar/mail interruption still closes details and suspends field, then resumes the same host', async () => {
   const f=await fixture(),copy=find(f.root,'int-rh2-companion__copy')[0];
-  copy.dispatchEvent(new Event('click'));
-  f.render({lifecycle:{confirmation:true}}); assert.equal(f.host.inert,true); assert.equal(f.root.dataset.detail,undefined); assert.equal(f.root.dataset.lifecycle,'active');
-  f.render({lifecycle:null}); assert.equal(f.host.inert,false); assert.equal(f.root.dataset.lifecycle,'idle'); assert.equal(f.mounts,1);
+  for(const lifecycle of [
+    {confirmation:true},
+    {day:{phase:'calendar',frames:0,calendar:{season:0,dayOfSeason:1,days:[]}}},
+    {mailbox:{queue:[{id:'mail',system:true,sender:0,textId:0}],activeId:'mail',activeFrames:61}}
+  ]) {
+    copy.dispatchEvent(new Event('click'));
+    f.render({lifecycle}); assert.equal(f.host.inert,true); assert.equal(f.root.dataset.detail,undefined); assert.equal(f.root.dataset.lifecycle,'active');
+    if(lifecycle.day) assert.equal(find(f.root,'int-rh2-calendar')[0].hidden,false);
+    if(lifecycle.mailbox) assert.equal(find(f.root,'int-rh2-letter')[0].hidden,false);
+    f.render({lifecycle:null}); assert.equal(f.host.inert,false); assert.equal(f.root.dataset.lifecycle,'idle'); assert.equal(f.mounts,1);
+  }
   f.view.dispose();
 });
 
