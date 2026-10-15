@@ -1,3 +1,4 @@
+import {battleTransportText} from '../text/battleTransportText.js';
 // Original Password Battle team codec.
 // ARM9 02094DB8..02095988; CPU receipt: PASSWORD_BATTLE_CODEC_CPU_2026-09-14.
 // The characters are functional input symbols from the verified codec, not a
@@ -10,6 +11,9 @@ import {creatureStatValue} from './battleCreatureBuild.js';
 import {buildOwnedBattleCreature} from './battleParty.js';
 import {createNativeHuntIndividual} from '../hunt/capture/nativeHuntIndividual.js';
 import {nativeHuntSpeciesByIndex} from '../hunt/capture/nativeHuntSources.js';
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {PRODUCT_PASSWORD_PREFIX,PRODUCT_BATTLE_CATALOG_REVISION,PRODUCT_BATTLE_TRANSPORT_EVIDENCE,requireReadyTransportSpecies} from '../contracts/productBattleTransport.js';
+import {encodeProductPasswordData,decodeProductPasswordData} from '../contracts/productPasswordTransport.js';
 
 const SOURCE_ALPHABET=
   '！＃＄％＆）＊＋－．／０１２３４５６７８９：＞？＠ＡＢＣＤＥＦＧＨＪＫＬＭＮＰＱＲＳＴＵＶＷＸＹＺ＿ａｂｄｅｆｈｉｊｍｎｒｔｙ'+
@@ -61,8 +65,8 @@ function pop(state,base){
   const radix=BigInt(base),value=Number(state.value%radix);state.value/=radix;return value;
 }
 
-function nativeProfileFromCompact(compact,placeholder=null){
-  const species=passwordSpecies.records[compact.speciesIndex];
+function nativeProfileFromCompact(compact,placeholder=null,baseSpeciesIndex=compact.speciesIndex){
+  const species=passwordSpecies.records[baseSpeciesIndex];
   if(!species)throw new Error('PASSWORD_BATTLE_UNKNOWN_SPECIES');
   const base=species.fields;
   const seed=placeholder?structuredClone(placeholder):{
@@ -180,8 +184,14 @@ export const NATIVE_PASSWORD_TEAM_DEFAULTS=Object.freeze({extra:1,teamField:1});
 export function nativePasswordCompactFromProfile(profile){
   const f=profile?.fields,levelByte=profile?.narrowFields?.['044'];
   if(!f||!Number.isInteger(levelByte))throw new Error('PASSWORD_BATTLE_PROFILE_REQUIRED');
+  if(getProductExtension(f['000']))throw new Error('PASSWORD_BATTLE_V2_REQUIRED');
   const species=passwordSpecies.records[f['000']];
   if(!species)throw new Error('PASSWORD_BATTLE_UNKNOWN_SPECIES');
+  return compactFromProfileAndBase(profile,species);
+}
+
+function compactFromProfileAndBase(profile,species){
+  const f=profile.fields,levelByte=profile.narrowFields['044'];
   // <=0 also turns Math.trunc's -0 into a plain 0.
   const b=species.fields,floor0=value=>value<=0?0:value;
   return deepFreeze({
@@ -242,3 +252,78 @@ export function encodeNativePasswordTeamFromProfiles(profiles,{extras=[],teamFie
 
 if(NATIVE_PASSWORD_ALPHABET.length!==257||new Set(NATIVE_PASSWORD_ALPHABET).size!==257
   ||passwordSpecies.recordCount!==228||CANONICAL.length!==ALTERNATES.length)throw new Error('PASSWORD_BATTLE_CATALOG_INVALID');
+
+
+// Championship APIs preserve all old native calls and output. V2 is a distinct,
+// longer web sharing code, never another radix or a base-species substitution.
+export function championshipPasswordProfileAdmission(profile){
+  const extension=getProductExtension(profile?.fields?.['000']);
+  if(!extension)return nativePasswordProfileAdmission(profile);
+  if(!extension.runtimeReady||!extension.networkReady)return deepFreeze({ok:false,reason:'PRODUCT_SPECIES_NOT_READY',
+    message:battleTransportText('PASSWORD_SPECIES_NOT_READY')});
+  try{nativeIndividualProfile(profile);}catch{return deepFreeze({ok:false,reason:'PROFILE_UNAVAILABLE',message:battleTransportText('PROFILE_UNAVAILABLE')});}
+  return deepFreeze({ok:true,transportVersion:2,catalogRevision:PRODUCT_BATTLE_CATALOG_REVISION});
+}
+
+export function championshipPasswordTeamAdmission(team){
+  if(!team||!Array.isArray(team.members)||team.members.length!==3)throw new Error('PASSWORD_BATTLE_TEAM_REQUIRED');
+  const members=team.members.filter(Boolean);
+  if(!members.length)return deepFreeze({ok:false,reason:'EMPTY_TEAM',message:battleTransportText('EMPTY_TEAM')});
+  for(const member of members){const admission=championshipPasswordProfileAdmission(member.nativeProfile);if(!admission.ok)return admission;}
+  return deepFreeze({ok:true,members:members.length});
+}
+
+export function encodeChampionshipPasswordTeam(team){
+  if(!team||!Array.isArray(team.members)||team.members.length!==3)throw new Error('PASSWORD_BATTLE_TEAM_REQUIRED');
+  if(!team.members.some(member=>getProductExtension(member?.compact?.speciesIndex)))return encodeNativePasswordTeam(team);
+  for(const member of team.members)if(member)requireReadyTransportSpecies(member.compact?.speciesIndex);
+  return encodeProductPasswordData({teamField:team.teamField,members:Array.from(team.members,member=>member?{extra:member.extra,compact:member.compact}:null)});
+}
+
+export function encodeChampionshipPasswordTeamFromProfiles(profiles,options={}){
+  if(!Array.isArray(profiles)||profiles.length<1||profiles.length>3||!profiles.some(Boolean))throw new Error('PASSWORD_BATTLE_TEAM_SIZE');
+  if(!profiles.some(profile=>getProductExtension(profile?.fields?.['000'])))return encodeNativePasswordTeamFromProfiles(profiles,options);
+  const {extras=[],teamField=NATIVE_PASSWORD_TEAM_DEFAULTS.teamField}=options;
+  const members=[0,1,2].map(slot=>{
+    if(!profiles[slot])return null;
+    const index=profiles[slot]?.fields?.['000'];requireReadyTransportSpecies(index);
+    const profile=nativeIndividualProfile(profiles[slot]),extension=getProductExtension(index);
+    // Only the numeric definition is inherited. compact.speciesIndex and every
+    // reconstructed profile retain the original product identity.
+    const base=passwordSpecies.records[extension?.baseSpeciesIndex??index];
+    if(!base)throw new Error('PASSWORD_BATTLE_UNKNOWN_SPECIES');
+    return {extra:extras[slot]??NATIVE_PASSWORD_TEAM_DEFAULTS.extra,compact:compactFromProfileAndBase(profile,base)};
+  });
+  return encodeProductPasswordData({teamField,members});
+}
+
+const isProductPasswordEnvelope=password=>typeof password==='string'&&password.trim().startsWith('CM26-PASSWORD-')
+  &&[...password.replace(/\s+/gu,'')].length>NATIVE_PASSWORD_MAX_LENGTH;
+
+export function decodeChampionshipPasswordTeam(password,{placeholders=null,instancePrefix='password'}={}){
+  if(!isProductPasswordEnvelope(password))return decodeNativePasswordTeam(password,{placeholders,instancePrefix});
+  // The v2 decoder rejects unknown prefix, version, catalog, shape and checksum
+  // before creating a profile, battle creature, or consuming any RNG.
+  const decoded=decodeProductPasswordData(password);
+  if(placeholders!==null&&(!Array.isArray(placeholders)||placeholders.length!==3))throw new Error('PASSWORD_BATTLE_PLACEHOLDERS_REQUIRED');
+  if(typeof instancePrefix!=='string'||!instancePrefix)throw new Error('PASSWORD_BATTLE_INSTANCE_PREFIX_REQUIRED');
+  for(const member of decoded.members)if(member)requireReadyTransportSpecies(member.compact.speciesIndex);
+  let presenceMask=0;
+  const members=decoded.members.map((member,slot)=>{
+    if(!member)return null;presenceMask|=1<<slot;
+    const {compact,extra}=member,extension=getProductExtension(compact.speciesIndex);
+    const nativeProfile=nativeProfileFromCompact(compact,placeholders?.[slot]??null,extension?.baseSpeciesIndex??compact.speciesIndex);
+    const instanceId=`${instancePrefix}:${slot}`;
+    return deepFreeze({slot,extra,compact,instanceId,nativeProfile,battleCreature:buildOwnedBattleCreature({instanceId,nativeProfile})});
+  });
+  return deepFreeze({evidence:PRODUCT_BATTLE_TRANSPORT_EVIDENCE,password:decoded.password,version:2,catalogRevision:decoded.catalogRevision,
+    presenceMask,teamField:decoded.teamField,members,ignoredHighPayload:'0'});
+}
+
+export function normalizeChampionshipPassword(password){
+  if(isProductPasswordEnvelope(password))return decodeProductPasswordData(password).password;
+  return normalizeNativePassword(password);
+}
+
+export const CHAMPIONSHIP_PASSWORD_V2_NOTICE=Object.freeze({prefix:PRODUCT_PASSWORD_PREFIX,version:2,catalogRevision:PRODUCT_BATTLE_CATALOG_REVISION,
+  get message(){return battleTransportText('PASSWORD_V2_NOTICE');}});

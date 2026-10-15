@@ -1,3 +1,6 @@
+import {productFormText} from '../text/productFormText.js';
+import {productBaseSpeciesIndex,isKnownSpeciesIndex} from '../contracts/productSpeciesData.js';
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 // Original individual qualification and the ordinary title-match party seam.
 // Source: ARM9 02092204/02092380/02092244; OVL10 0210FF08, 02112D40;
 // OVL19 0210E598..0210E798. Research CPU receipts live outside runtime.
@@ -26,7 +29,7 @@ export function battlePartyCondition(index) {
 
 export function nativeBattleQualification(profile, condition) {
   const f=profile?.fields, n=profile?.narrowFields;
-  const s=conditions.species[f?.['000']];
+  const s=conditions.species[isKnownSpeciesIndex(f?.['000'])?productBaseSpeciesIndex(f['000']):-1];
   if(!s||!n)return false;
   if(condition.family!==0 && (condition.family&s.fields['18'])===0)return false;
   if(condition.generation!==7 && condition.generation!==s.fields['0c'])return false;
@@ -40,7 +43,9 @@ export function nativeBattleQualification(profile, condition) {
 
 export function battlePartyAdmission(profile,recordIndex=null) {
   if(!profile)return {ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻數碼獸的個體資料尚未完整。'};
-  const f=profile.fields,s=conditions.species[f['000']];
+  const extension=getProductExtension(profile.fields?.['000']);
+  if(extension&&!extension.runtimeReady)return {ok:false,reason:'PRODUCT_SPECIES_NOT_READY',message:productFormText('notReady')};
+  const f=profile.fields,s=conditions.species[isKnownSpeciesIndex(f['000'])?productBaseSpeciesIndex(f['000']):-1];
   if(!s||s.fields['0c']<=1)return {ok:false,reason:'TOO_YOUNG',message:'這隻數碼獸還太幼小，暫時無法參賽。'};
   if(['134','138','13c'].some(k=>f[k]!==0))return {ok:false,reason:'CONDITION_UNFIT',message:'這隻數碼獸目前的身體狀況無法參賽。'};
   if(!nativeBattleQualification(profile,battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C)))

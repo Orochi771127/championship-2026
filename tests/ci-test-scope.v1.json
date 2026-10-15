@@ -2,6 +2,9 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
+    "tests/alternate-form-build-boundary-cases.mjs",
+    "tests/alternate-form-portraits-cases.mjs",
+    "tests/championship-alternate-form-assets-cases.mjs",
     "tests/championship-art-a1-map-tech-cases.mjs",
     "tests/championship-art-production-a0-cases.mjs",
     "tests/championship-assembled-ui-cases.mjs",
@@ -94,6 +97,7 @@
     "tests/championship-database-routes-cases.mjs",
     "tests/championship-database-stories-cases.mjs",
     "tests/championship-desktop-raising-cases.mjs",
+    "tests/championship-donor-response-compatibility-cases.mjs",
     "tests/championship-entry-landscape-css-cases.mjs",
     "tests/championship-evolution-glyph-cases.mjs",
     "tests/championship-evolution-text-lanes-cases.mjs",
@@ -189,6 +193,11 @@
     "tests/championship-pixi-context-recovery-cases.mjs",
     "tests/championship-portrait-frame-cases.mjs",
     "tests/championship-presentation-pack-cases.mjs",
+    "tests/championship-product-transport-accepted-fixture-cases.mjs",
+    "tests/championship-product-transport-app-accepted-fixture-cases.mjs",
+    "tests/championship-product-transport-cases.mjs",
+    "tests/championship-product-transport-locale-cases.mjs",
+    "tests/championship-product-transport-ui-cases.mjs",
     "tests/championship-public-responsive-layout-cases.mjs",
     "tests/championship-qa-ranch-expansion-cases.mjs",
     "tests/championship-qa-ranch-expansion-page-cases.mjs",
@@ -272,7 +281,11 @@
     "tests/championship-world-clock-cases.mjs",
     "tests/championship-zh-hant-text-cases.mjs",
     "tests/championship-zh-hant-views-cases.mjs",
-    "tests/championshipNativeRaisingFeeding.test.mjs"
+    "tests/championshipNativeRaisingFeeding.test.mjs",
+    "tests/product-app-accepted-fixture-cases.mjs",
+    "tests/product-evolution-accepted-fixture-cases.mjs",
+    "tests/product-gameplay-compat-cases.mjs",
+    "tests/product-species-extensions-cases.mjs"
   ],
   "localReference": {
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",

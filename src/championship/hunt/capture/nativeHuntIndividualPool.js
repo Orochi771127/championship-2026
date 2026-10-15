@@ -1,3 +1,4 @@
+import {isKnownSpeciesIndex} from '../../contracts/productSpeciesData.js';
 // OVL0 0211A568..0211AA44, ending BEFORE actor registration. The caller must
 // resolve actual Gate/season inputs; this module never selects a fallback Gate,
 // seed, species set, recorded creature, or terrain. Normal binding remains A.
@@ -39,14 +40,14 @@ export function generateNativeHuntIndividualPool({ baseCount, candidates, specie
     const r = carried.individual;
     if (!Number.isInteger(carried.biomeIndex) || carried.biomeIndex < 0 || carried.biomeIndex > 15
       || !r?.fields || !r.narrowFields || typeof r.name !== "string" || r.name.length > 5
-      || !Number.isInteger(r.fields["000"]) || r.fields["000"] < 0 || r.fields["000"] > 227
+      || !isKnownSpeciesIndex(r.fields["000"])
       || !Number.isInteger(r.fields["018"]) || r.fields["018"] < 0 || r.fields["018"] > 8
       || [r.fields,r.narrowFields].some(fields => Object.entries(fields).some(([k,v]) =>
         !/^[0-9a-f]{3}$/.test(k) || !Number.isInteger(v) || v < 0 || v > 0xffffffff))) {
       throw new Error("HUNT_POOL_CARRIED_RECORD_INPUT_REQUIRED");
     }
   }
-  if (released !== null && (!Number.isInteger(released.speciesIndex) || released.speciesIndex < 0 || released.speciesIndex > 227
+  if (released !== null && (!isKnownSpeciesIndex(released.speciesIndex)
       || !Number.isInteger(released.trait) || released.trait < 0 || released.trait > 8 || typeof released.name !== "string")) {
     throw new Error("HUNT_POOL_RELEASED_RECORD_INPUT_REQUIRED");
   }
@@ -108,3 +109,4 @@ export function generateNativeHuntIndividualPool({ baseCount, candidates, specie
   }
   return { records, attempts, targetCount, releasedCandidateConsumed, historyWrite };
 }
+

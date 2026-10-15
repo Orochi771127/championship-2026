@@ -1,5 +1,5 @@
 // OVL18 02118240 / 021182B4. Numeric Main sequence 13 belongs to the actor.
-import rules from '../../data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+import {PRODUCT_RAISING_LIFECYCLE_RULES as rules} from '../contracts/productSpeciesData.js';
 import {nativeHuntSpeciesByIndex} from '../hunt/capture/nativeHuntSources.js';
 import {normalizeNativeIndividualProfile} from './nativeIndividualProfile.js';
 const draw=(rng,poolSlot,max)=>Math.trunc((max-1)*rng.next(0x26+poolSlot)/102);
@@ -24,3 +24,4 @@ export function enterNativeRaisingMorning(profile,poolSlot,rng) {
   f['178']=s.field20+draw(rng,poolSlot,s.field22-s.field20);
   return {profile:normalizeNativeIndividualProfile(p),waitFrames};
 }
+

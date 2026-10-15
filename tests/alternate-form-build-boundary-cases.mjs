@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {permittedCopyPath} from '../scripts/lib/web-build-plan.mjs';
+test('only the explicit alternate form QA entry and three data files are publishable',()=>{for(const file of ['alternate-form-qa.html','qa/alternate-form-save.json','qa/alternate-form-product-catalog.json','qa/alternate-form-asset-catalog.json'])assert.equal(permittedCopyPath(file),true,file);for(const file of ['unreviewed.html','qa/unreviewed.json','qa/alternate-form-app.js','alternate-form-qa.html?enabled=1','../alternate-form-qa.html','qa/../alternate-form-save.json'])assert.equal(permittedCopyPath(file),false,file);});

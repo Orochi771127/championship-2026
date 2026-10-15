@@ -1,3 +1,4 @@
+import {productHuntSpecies} from '../../contracts/productSpeciesData.js';
 // Functional source columns, independent of art and research receipts.
 import source from "../../../data/championship/catalogs/hunt-entry.r1.json" with { type: "json" };
 import { deepFreeze } from "../../contracts/championshipContracts.js";
@@ -33,8 +34,7 @@ export const NATIVE_HUNT_HISTORY_DEFAULT_NAME = source.defaultHistoryName;
 export const NATIVE_HUNT_MODIFIER_COUNTS = Object.freeze(source.catalogs.map(c => c.length));
 
 export function nativeHuntSpeciesByIndex(speciesIndex) {
-  if (!index(speciesIndex, 227)) throw new Error("HUNT_SOURCE_SPECIES_REQUIRED");
-  return source.species[speciesIndex];
+  return productHuntSpecies(speciesIndex);
 }
 
 export function nativeHuntCatalogForBiome(biomeIndex) {
@@ -67,3 +67,4 @@ export function resolveNativeHuntPoolSources({ nativeHuntIndex, season, modifier
     speciesByIndex: nativeHuntSpeciesByIndex
   };
 }
+

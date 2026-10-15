@@ -1,3 +1,4 @@
+import {isKnownSpeciesIndex} from '../../contracts/productSpeciesData.js';
 // OVL0 0210D240 / 0210D5DC and 0211B13C..0211B2F0.
 // Functional inputs only; no renderer, private file, clock or RNG authority.
 
@@ -24,7 +25,7 @@ export function nativeHuntInitialSpeed({ movementBase, aiSelectors }, trait) {
 export function groupNativeHuntActors(actors, { rng, readTerrain, firstIndex = 0 }) {
   if (!Array.isArray(actors) || typeof readTerrain !== "function"
       || !Number.isInteger(firstIndex) || firstIndex < 0 || firstIndex > actors.length
-      || typeof rng?.next !== "function" || actors.some(a => !Number.isInteger(a?.speciesIndex) || a.speciesIndex < 0 || a.speciesIndex > 227
+      || typeof rng?.next !== "function" || actors.some(a => !isKnownSpeciesIndex(a?.speciesIndex)
         || !Array.isArray(a.positionQ12) || a.positionQ12.length !== 3
         || a.positionQ12.some(n => !Number.isInteger(n) || n < -0x80000000 || n > 0x7fffffff))) throw new Error("NATIVE_HUNT_GROUP_INPUT_REQUIRED");
   // Work on owned copies. Later pairs use positions already changed by earlier
@@ -46,3 +47,4 @@ export function groupNativeHuntActors(actors, { rng, readTerrain, firstIndex = 0
   }
   return next;
 }
+

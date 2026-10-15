@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import {productFormText} from '../src/championship/text/productFormText.js';
 import {createChampionshipPixiStage} from '../src/championship/presentation/championshipPixiStage.js';
 import {raisingNativeScreenPixels, raisingNativeToScreen, raisingScreenToNative} from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
 const read = path => fs.readFileSync(new URL(`../src/championship/${path}`, import.meta.url), 'utf8');
@@ -52,7 +53,7 @@ class Element extends EventTarget {
 const find=(root,cls)=>root.children.flatMap(n=>[...(n.className?.split(' ').includes(cls)?[n]:[]),...find(n,cls)]);
 async function fixture() {
   const document={createElement:tag=>new Element(tag,document)};
-  const context=vm.createContext({document,Date,console,setTimeout,clearTimeout,
+  const context=vm.createContext({document,Date,console,setTimeout,clearTimeout,productFormText,
     setText:(node,text)=>node.textContent=text,setLabel:(node,key,text)=>node.setAttribute(key,text),uiText:s=>String(s),retranslate:()=>{},
     isNativeRanchLayout:()=>true,assembledHudArt:()=>null,prefersReducedMotion:()=>false,speciesName:s=>s,raisingMessageText:()=>'',raisingMessageSender:()=>'',downloadSaveBackup:()=>({key:'ok'})});
   vm.runInContext(read('app/raisingHomeP1RView.js').replace(/^import .*;$/gm,'').replace(/export async function /,'async function ')+'\nthis.mount=createRaisingHomeP1RView;',context);
@@ -126,3 +127,4 @@ test('single-stage synthetic host accepts full viewport bounds without bar deduc
   }
   assert.equal(seen.length,4);stage.destroy();
 });
+

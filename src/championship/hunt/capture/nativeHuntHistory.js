@@ -1,9 +1,10 @@
+import {isKnownSpeciesIndex} from '../../contracts/productSpeciesData.js';
 // Functional translation of original history writers and persistence fields.
 // The application owns this state. These pure functions create candidates;
 // they never write storage, seed RNG, load research data or select a Gate.
 const integer = (v, max) => Number.isInteger(v) && v >= 0 && v <= max;
 const validName = (v) => typeof v === "string" && v.length <= 5 && !v.includes("\0");
-const validEntry = (e) => e && integer(e.speciesIndex, 228) && integer(e.biomeIndex, 33)
+const validEntry = (e) => e && (e.speciesIndex===228||isKnownSpeciesIndex(e.speciesIndex)) && integer(e.biomeIndex, 33)
   && integer(e.trait, 8) && validName(e.name);
 
 export function validateNativeHuntHistory(history) {
@@ -46,7 +47,7 @@ export function restoreNativeHuntHistorySave(saved, baseline) {
   if (!saved || !integer(saved.cursor, 2) || !Array.isArray(saved.entries) || saved.entries.length !== 3
     || Object.keys(saved).some(k => !["cursor", "entries"].includes(k))
     || !saved.entries.every(e => e && Object.keys(e).every(k => ["speciesIndex", "biomeIndex", "name"].includes(k))
-      && integer(e.speciesIndex, 228) && integer(e.biomeIndex, 33) && validName(e.name))) throw new Error("HUNT_HISTORY_SAVE_INVALID");
+      && (e.speciesIndex===228||isKnownSpeciesIndex(e.speciesIndex)) && integer(e.biomeIndex, 33) && validName(e.name))) throw new Error("HUNT_HISTORY_SAVE_INVALID");
   // ARM9 0206AF34: restores trait8 explicitly. Slot3 is left as initialized by
   // the application boot, not serialized or inferred from an old expedition.
   const candidate = structuredClone(baseline);
@@ -117,3 +118,4 @@ export function applyNativeHuntReturn({ history, modifiers, biomeIndex, catalog,
   });
   return { history: nextHistory, modifiers: nextModifiers, records: nextRecords };
 }
+

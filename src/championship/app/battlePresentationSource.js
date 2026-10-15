@@ -1,3 +1,5 @@
+import {productSpeciesRecord,isKnownSpeciesIndex} from '../contracts/productSpeciesData.js';
+import {speciesName} from '../text/zhHant.js';
 // BATTLE presentation boundary.
 //
 // The only runtime seam the battle screen consumes, published as
@@ -99,14 +101,14 @@ function projectCombatant(combatant, slot) {
   }
   const currentHp = combatant.currentHp ?? 0;
   const maxHp = combatant.maxHp ?? 0;
-  const species = Number.isSafeInteger(combatant.speciesId)
-    ? speciesCatalog.records.find(record => record.recordIndex === combatant.speciesId) : null;
+  const species = isKnownSpeciesIndex(combatant.speciesId)
+    ? productSpeciesRecord(combatant.speciesId) : null;
   return deepFreeze({
     slot,
     team: battleTeamOfSlot(slot),
     present: true,
     speciesId: species ? `species-${String(species.recordIndex).padStart(3, "0")}` : null,
-    displayName: species ? (SPECIES_NAMES_ZH[species.recordIndex] ?? species.identifier) : null,
+    displayName: species ? speciesName(species.recordIndex,species.identifier) : null,
     animationRequest: projectBattleCharacterRequest(combatant),
     hp: deepFreeze({ current: currentHp, maximum: maxHp, ratio: ratio(currentHp, maxHp) }),
     resource: deepFreeze({
@@ -296,3 +298,4 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
     }
   };
 }
+
