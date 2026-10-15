@@ -1,0 +1,56 @@
+name: Friends playtest real browser acceptance
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/friends-playtest-browser.yml'
+      - 'tests/championship-friends-playtest-browser.cjs'
+      - 'tests/alternate-form-browser-support.cjs'
+      - 'src/championship/app/**'
+      - 'src/championship/cage/**'
+      - 'src/championship/raising/**'
+      - 'src/championship/presentation/**'
+      - 'src/championship/shop/**'
+      - 'src/championship/gate/**'
+      - 'src/championship/hunt/**'
+      - 'src/championship/database/**'
+      - 'src/championship/text/**'
+      - 'src/data/championship/**'
+      - 'qa/championship-full-qa-save.json'
+      - 'full-qa-save.html'
+      - 'championship.html'
+      - 'scripts/build-github-pages.mjs'
+      - 'scripts/validate-github-pages.mjs'
+      - 'scripts/lib/**'
+      - 'docs/contracts/championship/WEB_BUILD_INPUTS.v1.json'
+      - 'package.json'
+      - 'package-lock.json'
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Build and validate the approved public artifact
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Exercise fresh UI purchases, hunt fees, reload and isolated legacy save
+        env:
+          CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
+          CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
+        run: node tests/championship-friends-playtest-browser.cjs
+      - name: Preserve screenshots, exact-build diagnostics and Playwright traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: friends-playtest-chromium-${{ github.run_id }}
+          path: .tmp/browser-qa/friends-playtest/
+          if-no-files-found: warn
+          retention-days: 14
