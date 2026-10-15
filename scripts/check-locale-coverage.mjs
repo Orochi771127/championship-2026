@@ -127,7 +127,9 @@ export async function buildLocaleCoverage() {
   const profileCopy = Object.fromEntries(["zh-Hant", "en", "ja", "th", "vi"].map(locale=>[
     locale,Object.fromEntries(DATABASE_ORIGINAL_PROFILES.entries.map(entry=>[entry.speciesId,entry.textByLocale[locale]]))
   ]));
+  const { MEDAL_PRESENTATION_COPY } = await import("../src/championship/presentation/medals/medalPresentationText.js");
   const scopedCopy = [
+    inspectScopedLocaleCopy("src/championship/presentation/medals/medalPresentationText.js", MEDAL_PRESENTATION_COPY),
     inspectScopedLocaleCopy("src/championship/database/databaseStories.js", DATABASE_STORY_COPY),
     inspectScopedLocaleCopy("src/data/championship/database-original-profiles.r1.json", profileCopy)
   ];

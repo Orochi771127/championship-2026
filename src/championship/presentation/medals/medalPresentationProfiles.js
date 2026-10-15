@@ -1,0 +1,75 @@
+// OWNER_APPROVED_ADAPTATION: fixed-ID display finishes and backing shapes.
+// Shapes/color families are RETAINED_REFERENCE_IMAGE_OBSERVATION, not a traced
+// original material enum, a complete difficulty scale, or reward/save rules.
+// Keep the explicit per-ID ledger: eleven free silhouettes cross rank families.
+// In particular, paleBlueSilver does not assert an original "diamond" tier.
+export const MEDAL_PRESENTATION_PROFILES=Object.freeze([
+  Object.freeze({titleId:0,shape:'round',material:'copper'}),
+  Object.freeze({titleId:1,shape:'round',material:'silver'}),
+  Object.freeze({titleId:2,shape:'hex',material:'gold'}),
+  Object.freeze({titleId:3,shape:'round',material:'copper'}),
+  Object.freeze({titleId:4,shape:'round',material:'copper'}),
+  Object.freeze({titleId:5,shape:'round',material:'copper'}),
+  Object.freeze({titleId:6,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:7,shape:'round',material:'gold'}),
+  Object.freeze({titleId:8,shape:'round',material:'copper'}),
+  Object.freeze({titleId:9,shape:'round',material:'silver'}),
+  Object.freeze({titleId:10,shape:'round',material:'gold'}),
+  Object.freeze({titleId:11,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:12,shape:'hex',material:'gold'}),
+  Object.freeze({titleId:13,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:14,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:15,shape:'round',material:'copper'}),
+  Object.freeze({titleId:16,shape:'round',material:'gold'}),
+  Object.freeze({titleId:17,shape:'round',material:'silver'}),
+  Object.freeze({titleId:18,shape:'round',material:'gold'}),
+  Object.freeze({titleId:19,shape:'round',material:'silver'}),
+  Object.freeze({titleId:20,shape:'round',material:'gold'}),
+  Object.freeze({titleId:21,shape:'round',material:'gold'}),
+  Object.freeze({titleId:22,shape:'round',material:'silver'}),
+  Object.freeze({titleId:23,shape:'round',material:'copper'}),
+  Object.freeze({titleId:24,shape:'round',material:'silver'}),
+  Object.freeze({titleId:25,shape:'round',material:'copper'}),
+  Object.freeze({titleId:26,shape:'round',material:'silver'}),
+  Object.freeze({titleId:27,shape:'round',material:'gold'}),
+  Object.freeze({titleId:28,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:29,shape:'round',material:'gold'}),
+  Object.freeze({titleId:30,shape:'round',material:'copper'}),
+  Object.freeze({titleId:31,shape:'round',material:'silver'}),
+  Object.freeze({titleId:32,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:33,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:34,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:35,shape:'round',material:'gold'}),
+  Object.freeze({titleId:36,shape:'round',material:'silver'}),
+  Object.freeze({titleId:37,shape:'round',material:'gold'}),
+  Object.freeze({titleId:38,shape:'round',material:'copper'}),
+  Object.freeze({titleId:39,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:40,shape:'free',material:'gold'}),
+  Object.freeze({titleId:41,shape:'free',material:'gold'}),
+  Object.freeze({titleId:42,shape:'free',material:'gold'}),
+  Object.freeze({titleId:43,shape:'free',material:'gold'}),
+  Object.freeze({titleId:44,shape:'free',material:'gold'}),
+  Object.freeze({titleId:45,shape:'free',material:'gold'}),
+  Object.freeze({titleId:46,shape:'free',material:'gold'}),
+  Object.freeze({titleId:47,shape:'free',material:'gold'}),
+  Object.freeze({titleId:48,shape:'round',material:'silver'}),
+  Object.freeze({titleId:49,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:50,shape:'hex',material:'paleBlueSilver'}),
+  Object.freeze({titleId:51,shape:'hex',material:'gold'}),
+  Object.freeze({titleId:52,shape:'hex',material:'gold'}),
+  Object.freeze({titleId:53,shape:'hex',material:'gold'}),
+  Object.freeze({titleId:54,shape:'round',material:'gold'}),
+  Object.freeze({titleId:55,shape:'round',material:'copper'}),
+  Object.freeze({titleId:56,shape:'round',material:'silver'}),
+  Object.freeze({titleId:57,shape:'hex',material:'gold'}),
+  Object.freeze({titleId:58,shape:'free',material:'gold'}),
+  Object.freeze({titleId:59,shape:'free',material:'gold'}),
+  Object.freeze({titleId:60,shape:'free',material:'gold'}),
+
+]);
+
+// Unknown IDs remain unclassified; never invent a default gold/round medal.
+export function getMedalPresentationProfile(titleId) {
+  return Number.isInteger(titleId)&&titleId>=0&&titleId<MEDAL_PRESENTATION_PROFILES.length
+    ?MEDAL_PRESENTATION_PROFILES[titleId]:null;
+}

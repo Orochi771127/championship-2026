@@ -240,7 +240,20 @@ test("one save key, one persistent writer, one Pixi bootstrap and no second tick
   // Owner responsive contract requires two stable DOM/font layout samples.
   // This bounded, cancelable measurement is not a game animation clock.
   const layoutFrames=sources.filter(({text})=>/requestAnimationFrame\s*\(/.test(text));
-  assert.deepEqual(layoutFrames.map(({file})=>relative(file)),['src/championship/app/huntLayoutResolver.js']);
+  assert.deepEqual(layoutFrames.map(({file})=>relative(file)),[
+    'src/championship/app/huntLayoutResolver.js',
+    'src/championship/presentation/medals/medalThreePresentation.js'
+  ]);
+  // Owner-approved selected medal detail uses one cancelable invalidation
+  // queue, never an additional simulation or continuous animation ticker.
+  const medal=layoutFrames.find(({file})=>relative(file).endsWith('/medalThreePresentation.js')).text;
+  assert.equal((medal.match(/requestAnimationFrame\s*\(/g)??[]).length,1);
+  assert.match(medal,/cancelFrame:id=>win\.cancelAnimationFrame\(id\)/);
+  assert.match(medal,/runtime\.dispose\(\)/);
+  assert.doesNotMatch(medal,/setAnimationLoop|setInterval|setTimeout|Ticker|localStorage|Math\.random/);
+  const medalFrames=fs.readFileSync(path.join(root,'src/championship/presentation/medals/medalFrameRuntime.js'),'utf8');
+  assert.match(medalFrames,/renderLoop:'ON_DEMAND_ONLY',automaticMotion:false/);
+  assert.match(medalFrames,/function tick\(\)\{frame=null;if\(disposed\|\|!visible\|\|!enabled\)return;draw\(\{\.\.\.pose\}\);drawCount\+\+;\}/);
   const layout=layoutFrames[0].text;
   assert.equal((layout.match(/requestAnimationFrame\s*\(/g)??[]).length,1);
   assert.match(layout,/win\.cancelAnimationFrame\(scheduled\)/);
