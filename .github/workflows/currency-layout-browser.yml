@@ -26,7 +26,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Build approved public artifact for separate normal-onboarding check
-        run: npm run build:pages && npm run validate:pages
+        run: npm run build:playtest && npm run validate:playtest
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.base.sha || '5bd7057b2e7ed6496db42f5b66d8026d9e7857a1' }}
@@ -43,7 +43,7 @@ jobs:
       - name: Controlled geometry and normal tutorial enter/exit
         env:
           HUD_BROWSER: ${{ matrix.browser }}
-          CHAMPIONSHIP_QA_ARTIFACT: dist/github-pages
+          CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
           CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
         run: node tests/championship-currency-layout-browser.cjs
       - uses: actions/upload-artifact@v4
