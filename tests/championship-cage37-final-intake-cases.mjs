@@ -21,7 +21,17 @@ test('37 final cage fields and 41 delivered frames keep verified geometry, roles
    assert.equal(fr.durationMs,old.frames[i].durationMs);
   }
  }
- assert.equal(manifest.fields.find(f=>f.fieldId==='field_cm03_01').frames[0].sha256,'b757e18558a44b0f2ebd3052ae9de508258cff9b4670fe3b8215fb55bf6d70df');
+ const cm03=manifest.fields.find(f=>f.fieldId==='field_cm03_01');
+ assert.equal(cm03.frames[0].sha256,'eb80baa5994fc2b9ff55c525a428cb5fbc979e4d447aa1d911e6d8fa3e8f7c45');
+ assert.equal(cm03.frames[0].src,'assets/production/cage/navy-base-r1-20261015/fields/field_cm03_01/frame-00.webp');
+ assert.deepEqual(cm03.intake.baseEdgeRefinement.foregroundReuse,{
+  sourceMasterSha256:'9b5d847bc91c587413be5baf600501ab60820517a05742a4a53af13a8cf297f0',
+  maskManifest:'assets/production/cage/cm03-r18-foreground-20261009/manifest.json',
+  originalRasterOriginInPadded:[32,32],originalObjectGeometryUnchanged:true
+ });
+ const mask=JSON.parse(readFileSync(cm03.intake.baseEdgeRefinement.foregroundReuse.maskManifest,'utf8'));
+ assert.equal(mask.sourceComposite.sha256,'b757e18558a44b0f2ebd3052ae9de508258cff9b4670fe3b8215fb55bf6d70df');
+ assert.equal(mask.masterSha256,cm03.intake.baseEdgeRefinement.foregroundReuse.sourceMasterSha256);
  assert.equal(manifest.fields.find(f=>f.fieldId==='field_cm24_01').frames[0].sha256,'601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146');
 });
 test('every valid cage anchor preserves upper-row crop, world origin, wrap, lids and resident viewport',()=>{

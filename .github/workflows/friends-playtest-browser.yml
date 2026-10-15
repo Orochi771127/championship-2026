@@ -10,6 +10,7 @@ on:
       - 'src/championship/cage/**'
       - 'src/championship/raising/**'
       - 'src/championship/presentation/**'
+      - 'assets/production/cage/**'
       - 'src/championship/shop/**'
       - 'src/championship/gate/**'
       - 'src/championship/hunt/**'
@@ -28,9 +29,43 @@ on:
 permissions:
   contents: read
 jobs:
-  chromium:
+  scope:
     runs-on: ubuntu-22.04
-    timeout-minutes: 25
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.scope.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - id: scope
+        name: Select required browser suites
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          node - <<'JS'
+          const fs=require('node:fs'),{execFileSync}=require('node:child_process');
+          const event=process.env.EVENT_NAME;
+          const files=event==='pull_request'?execFileSync('git',['diff','--name-only',process.env.BASE_SHA,process.env.HEAD_SHA],{encoding:'utf8'}).trim().split('\n'):[];
+          const relevant=/^(assets\/production\/cage\/|src\/championship\/(cage|raising)\/|src\/championship\/app\/|src\/data\/championship\/catalogs\/cage-|src\/championship\/presentation\/(cage|raising|runtimeMap|originalCage|nativeRanch|championshipPixiStage|pixiCharacter|originalRuntimeLocation)|tests\/(championship-friends-playtest-browser\.cjs|alternate-form-browser-support\.cjs|browser-qa-output\.cjs)|scripts\/(build-github-pages\.mjs|validate-github-pages\.mjs|lib\/)|qa\/championship-full-qa-save\.json$|full-qa-save\.html$|championship\.html$|package(-lock)?\.json$|\.github\/workflows\/friends-playtest-browser\.yml$)/;
+          const ledger='docs/contracts/championship/WEB_BUILD_INPUTS.v1.json';
+          const cageLedger=files.includes(ledger)&&/assets\/production\/cage\/|src\/championship\/presentation\/(cage|raising|runtimeMap)/.test(execFileSync('git',['diff','--unified=1',process.env.BASE_SHA,process.env.HEAD_SHA,'--',ledger],{encoding:'utf8'}));
+          const navy=event==='workflow_dispatch'||files.some(p=>relevant.test(p))||cageLedger;
+          const include=[{suite:'core',budget:25},...(navy?[{suite:'navy',budget:40}]:[])];
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,'matrix='+JSON.stringify({include})+'\n');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,navy?'Core and navy are both REQUIRED; each must execute and pass.\n':'Navy: NOT REQUIRED for these unrelated paths; not an executed PASS. Core remains required.\n');
+          JS
+  chromium:
+    needs: scope
+    runs-on: ubuntu-22.04
+    name: chromium-${{ matrix.suite }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.scope.outputs.matrix) }}
+    timeout-minutes: ${{ matrix.budget }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -45,12 +80,13 @@ jobs:
         env:
           CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
           CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
+          CHAMPIONSHIP_QA_SUITE: ${{ matrix.suite }}
         run: node tests/championship-friends-playtest-browser.cjs
       - name: Preserve lightweight screenshots and exact-build diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: friends-playtest-diagnostics-${{ github.run_id }}
+          name: friends-playtest-${{ matrix.suite }}-diagnostics-${{ github.run_id }}
           path: |
             .tmp/browser-qa/friends-playtest/*.png
             .tmp/browser-qa/friends-playtest/*.json
@@ -60,7 +96,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: friends-playtest-traces-${{ github.run_id }}
+          name: friends-playtest-${{ matrix.suite }}-traces-${{ github.run_id }}
           path: .tmp/browser-qa/friends-playtest/*-trace.zip
           if-no-files-found: warn
           retention-days: 14

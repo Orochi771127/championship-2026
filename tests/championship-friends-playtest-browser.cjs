@@ -4,9 +4,10 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {chromium}=require('playwright');
 const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
+const suite=process.env.CHAMPIONSHIP_QA_SUITE||'core';assert.ok(['core','navy'].includes(suite),'Explicit bounded browser suite required');
 const output=require('./browser-qa-output.cjs')('friends-playtest');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/',saveKey='championshipModernSave:v1';
-const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[]};
+const evidence={suite,status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[]};
 const digits=s=>Number(String(s).replace(/[^0-9]/g,''));
 const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(evidence,null,2)+'\n');
 (async()=>{
@@ -144,14 +145,14 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  }
  // Separate installed QA profile: normal editor clicks only, never real player data.
  async function sourceCornerReview(){
-  await fresh('source-corners');const loadedPaddedUrls=new Set();page.on('response',r=>{if(r.ok()&&r.url().includes('source-bounds-r1-20261015/'))loadedPaddedUrls.add(r.url());});await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
+  await fresh('source-corners');const loadedPaddedUrls=new Set();page.on('response',r=>{if(r.ok()&&['source-bounds-r1-20261015/','navy-base-r1-20261015/'].some(base=>r.url().includes(base)))loadedPaddedUrls.add(r.url());});await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
   const installed=await saved();
-  for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]}]){
+  for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]},{name:'owner-adjacent',slots:[4,20,26],navy:true,verticalLift:280},{name:'owner-wrap',slots:[4,15,7],navy:true}].filter(s=>Boolean(s.navy)===(suite==='navy'))){
    await page.setViewportSize({width:1280,height:800});await clearCalendar();await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
    while(await page.locator('.cm-cage-facility:not([disabled])').count())await page.locator('.cm-cage-facility:not([disabled])').first().click();
-   const specs=[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
+   const specs=scenario.navy?[{id:'02',definition:1},{id:'03',definition:2},{id:'39',definition:33}]:[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
    for(const [i,spec] of specs.entries()){
     const row=page.locator('.cm-vs2-cage-tray__item').filter({has:page.locator(`img[src*="field_cm${spec.id}_01"]`)});
     assert.equal(await row.count(),1,'Exact field image identifies one owned facility');await row.click();
@@ -159,7 +160,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
     assert.equal(await slot.getAttribute('data-unlocked'),'true');assert.equal(await slot.getAttribute('data-filled'),'false');await slot.click();
    }
    await page.locator('#cm-root[data-active-screen="CAGE_EDIT"] .cm-vs2-footer button.cm-vs2-action--primary').click();
-   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
+   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await clearCalendar();await saveQuit();
    const placed=await saved();
    assert.deepEqual(placed.cageEdit.placements.map(p=>({moduleId:p.moduleId,slotIndex:p.slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),[
     {moduleId:'championship:2026:cage:waiting-room',slotIndex:0},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
@@ -171,10 +172,10 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
     await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);await clearCalendar();
     await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();await page.waitForFunction(()=>document.body.dataset.tool==='clean');
     const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
-    // Top-headroom proof was captured above; lift the field 100px so lower tips clear the toolbar.
+    // Top-headroom proof was captured above. The owner layout adds row-2 fields; lift them farther so their lower tips clear the toolbar.
     if(viewport.width===1280){
-     const {box,start}=await beginCanvasDrag(canvas,box=>[260,320,380].map(y=>({x:box.width-35,y})),'Lower-tip framing must begin on unobstructed canvas');
-     await page.mouse.move(box.x+start.x,box.y+start.y-100,{steps:20});await page.mouse.up();await page.waitForTimeout(250);
+     const {box,start}=await beginCanvasDrag(canvas,box=>(scenario.verticalLift?[380,420,460]:[260,320,380]).map(y=>({x:box.width-35,y})),'Lower-tip framing must begin on unobstructed canvas');
+     await page.mouse.move(box.x+start.x,box.y+start.y-(scenario.verticalLift??100),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
     }
     const count=viewport.width<500?9:6;
     for(let pan=0;pan<count;pan++){
@@ -186,18 +187,81 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
     await clearCalendar();await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();
    }
    const resourceUrls=[...loadedPaddedUrls];
-   for(const asset of ['field_cm02_01/frame-00.webp','field_cm18_01/frame-00.webp','field_cm39_01/frame-00.webp','field_cm39_01/frame-01.webp']){
-    assert.ok(resourceUrls.some(url=>url.includes('source-bounds-r1-20261015/fields/'+asset)),'Exact padded phase must load: '+asset);
+   for(const spec of specs)for(const phase of spec.id==='39'?['00','01']:['00']){
+    const base=spec.id==='18'?'source-bounds-r1-20261015':'navy-base-r1-20261015';
+    const asset=`${base}/fields/field_cm${spec.id}_01/frame-${phase}.webp`;
+    assert.ok(resourceUrls.some(url=>url.includes(asset)),'Exact padded phase must load: '+asset);
    }
    await clearCalendar();await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,installed.shop);await continueSaved();
-   evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom','three unchanged source-art styles']});write();
+   if(scenario.navy)await foregroundPlacementReview(scenario);
+   evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,navyBaseCandidate:Boolean(scenario.navy),groundElevationChanged:false,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom',scenario.navy?'owner arrangement navy base-edge refinement':'retained source-corner cases']});write();
   }
+ }
+
+ // Dedicated isolated QA view: existing developer query enables read-only actor
+ // coordinates. Every placement still uses the ordinary hand tool and pointer.
+ async function foregroundPlacementReview(scenario){
+  await clearCalendar();await saveQuit();
+  const foregroundUrls=new Set(),onResponse=r=>{if(r.ok()&&r.url().includes('cm03-r18-foreground-20261009/manifest.json'))foregroundUrls.add(r.url());};
+  page.on('response',onResponse);
+  await page.goto(publicBase+'championship.html?presentation=developer',{waitUntil:'domcontentloaded'});await continueSaved();
+  const read=()=>page.locator('.int-rh2-field-host').evaluate(h=>JSON.parse(h.dataset.residentScreenPositions||'[]'));
+  await page.waitForFunction(()=>JSON.parse(document.querySelector('.int-rh2-field-host')?.dataset.residentScreenPositions||'[]').some(p=>p.speciesIndex>=8));
+  const actorId=(await read()).filter(p=>p.speciesIndex>=8).sort((a,b)=>(b.nativeY??0)-(a.nativeY??0))[0].creatureId;
+  const actor=async()=>{const p=(await read()).find(p=>p.creatureId===actorId);assert.ok(p?.groundScreen&&p.nativePositionQ12);return p;};
+  const targets=scenario.name==='owner-adjacent'?[{id:'stand-0',x:52,depth:198.000135},{id:'cone',x:71,depth:229.984023}]:[{id:'stand-2-wrap',x:956,depth:110.000135}];
+  for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
+   await page.setViewportSize(viewport);await home();await clearCalendar();
+   const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+   for(const target of targets)for(const side of ['behind','front']){
+    await clearCalendar();const cardClose=page.locator('.int-rh2-companion__close');if(await cardClose.isVisible())await cardClose.click();await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
+    // Recenter the real actor via ordinary clean-mode camera swipes. This does
+    // not set camera state, and supports the first carry from the waiting room.
+    for(let pan=0;pan<12;pan++){
+     const p=await actor(),box=await canvas.boundingBox();
+     const dx=Math.max(-240,Math.min(240,box.width*.72-p.x));
+     const dy=Math.max(-180,Math.min(180,300-p.footY));
+     if(Math.abs(dx)<18&&Math.abs(dy)<25)break;
+     const {box:dragBox,start}=await beginCanvasDrag(canvas,box=>[180,300,440].flatMap(y=>[35,box.width/2,box.width-35].map(x=>({x,y}))).filter(q=>q.x+dx>15&&q.x+dx<box.width-15&&q.y+dy>100&&q.y+dy<box.height-130),'Foreground camera swipe needs a real canvas hit');
+     await page.mouse.move(dragBox.x+start.x+dx,dragBox.y+start.y+dy,{steps:16});await page.mouse.up();await page.waitForTimeout(200);
+    }
+    await clearCalendar();await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();
+    await page.waitForFunction(id=>{const p=JSON.parse(document.querySelector('.int-rh2-field-host')?.dataset.residentScreenPositions||'[]').find(p=>p.creatureId===id);return p&&[1,2,3,4,5,17].includes(p.state);},actorId,{timeout:30000});
+    let p=await actor();const box=await canvas.boundingBox();assert.ok(p.x>10&&p.x<box.width-10&&p.y>80&&p.y<box.height-130,'Actor must be visibly pickable');
+    assert.equal(await canvas.evaluate((canvas,{box,p})=>document.elementFromPoint(box.x+p.x,box.y+p.y)===canvas,{box,p}),true,'Actor hit cannot be obscured by a DOM panel');
+    let pointer={x:p.x,y:p.y};await page.mouse.move(box.x+pointer.x,box.y+pointer.y);await page.mouse.down();
+    try{
+     pointer.x+=16;await page.mouse.move(box.x+pointer.x,box.y+pointer.y,{steps:2});
+     await page.waitForFunction(id=>JSON.parse(document.querySelector('.int-rh2-field-host')?.dataset.residentScreenPositions||'[]').find(p=>p.creatureId===id)?.state===6,actorId,{timeout:10000});
+     const targetY=target.depth+(side==='behind'?-8:8);
+     for(let step=0;step<30;step++){
+      p=await actor();const scale=p.nativeScreenPixels,nx=p.nativePositionQ12[0]/4096,ny=p.nativePositionQ12[1]/4096;
+      let deltaX=target.x-nx;deltaX-=Math.round(deltaX/960)*960;
+      const deltaY=targetY-ny;
+      if(Math.abs(deltaX)<1.1&&Math.abs(deltaY)<1.1)break;
+      pointer={x:Math.max(24,Math.min(box.width-24,pointer.x+deltaX*scale)),y:Math.max(110,Math.min(box.height-150,pointer.y+deltaY*scale))};
+      await page.mouse.move(box.x+pointer.x,box.y+pointer.y,{steps:12});await page.waitForTimeout(150);
+     }
+     await page.waitForTimeout(600); // stationary hand sheds throw velocity naturally
+    }finally{await page.mouse.up();}
+    await page.waitForFunction(id=>{const p=JSON.parse(document.querySelector('.int-rh2-field-host')?.dataset.residentScreenPositions||'[]').find(p=>p.creatureId===id);return p&&p.state!==6&&p.nativePositionQ12?.[2]===0;},actorId,{timeout:15000});
+    if(await cardClose.isVisible())await cardClose.click();
+    p=await actor();const actualY=p.nativePositionQ12[1]/4096;
+    assert.ok(side==='behind'?actualY<target.depth-1:actualY>target.depth+1,'Released actor must be on the requested side of the original object depth');
+    let errorX=p.nativePositionQ12[0]/4096-target.x;errorX-=Math.round(errorX/960)*960;assert.ok(Math.abs(errorX)<14,'Actor must overlap the actual stand/prop horizontally');
+    await clearCalendar();await shot(`09-foreground-${scenario.name}-${viewport.width}-${target.id}-${side}`);
+    evidence.assertions.push({foregroundNormalHand:true,scenario:scenario.name,viewport,target,side,actor:p,readOnlyDeveloperCoordinates:true,visualOcclusionReviewRequired:true});write();
+   }
+  }
+  assert.ok(foregroundUrls.size,'Exact CM03 foreground manifest must remain active for the new padded base');page.off('response',onResponse);
+  await clearCalendar();await saveQuit();await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});await continueSaved();
  }
 
  async function wallet(amount){const button=page.locator('.cm-status-bar__diamond');await button.waitFor({state:'visible'});assert.equal(digits(await button.innerText()),amount);assert.match(await button.getAttribute('aria-label'),/測試/);}
  try{
   browser=await chromium.launch({channel:'chromium',headless:true,chromiumSandbox:true});evidence.browserVersion=browser.version();
   evidence.launch={channel:'chromium',headless:true,chromiumSandbox:true,customArgs:[]};
+  if(suite==='core'){
   await fresh('new-save');await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});await login();
   assert.equal(await page.locator('#cm-continue').isEnabled(),false,'Fresh profile must have no save');
   await page.locator('#cm-new-game').click();
@@ -312,7 +376,14 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,old.shop);assert.deepEqual(legacyAfterPurchase.cageEdit.placements,old.cageEdit.placements);
   evidence.assertions.push({oldQaOneTimeDiamonds:10000,afterPurchaseAndReload:9000});
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
+  }
   await sourceCornerReview();
+  const completed=evidence.assertions.filter(x=>x.sourceCorners).map(x=>x.sourceCorners);
+  assert.deepEqual(completed,suite==='navy'?['owner-adjacent','owner-wrap']:['adjacent','wrap'],'Every mandatory source scenario must finish');
+  if(suite==='navy'){
+   const foreground=evidence.assertions.filter(x=>x.foregroundNormalHand);assert.equal(foreground.length,12,'All desktop/mobile stand/prop front/behind checks must finish');
+   for(const scenario of ['owner-adjacent','owner-wrap'])for(const width of [1280,390])for(const side of ['behind','front'])assert.ok(foreground.some(x=>x.scenario===scenario&&x.viewport.width===width&&x.side===side),'Required foreground side/viewport/scenario');
+  }
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
   evidence.status='PASS';write();console.log('CHAMPIONSHIP_FRIENDS_PLAYTEST_BROWSER_PASS');
