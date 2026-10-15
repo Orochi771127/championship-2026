@@ -44,7 +44,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    if(await panel.getAttribute('open')===null)await panel.locator('summary').click();
    await page.getByRole('button',{name:'Refresh read-only diagnostics',exact:true}).click();
    const report=JSON.parse(await page.locator('#alternate-form-qa-report').innerText());
-   evidence.diagnostics.push({label,report});await shot(label);await panel.locator('summary').click();write();return report;
+   evidence.diagnostics.push({label,report});await shot(label);await panel.locator('summary').click();await shot(label+'-scene');write();return report;
   }
   async function boot(){
    await page.locator('#form-qa-start').click();
@@ -115,11 +115,11 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   assert.deepEqual(evidence.hudTeams.filter(n=>n.team===0).map(n=>n.name).sort(),['黃銅王猿',extensionName(229)].sort());
   assert.deepEqual(evidence.hudTeams.filter(n=>n.team===1).map(n=>n.name).sort(),['天穹帝龍',extensionName(230)].sort());await diagnostics('four-actors-battle-running');
   // Natural game clock only. Timeout is failure, never a synthetic victory.
-  await page.locator('#cm-root[data-screen="BATTLE_RESULT"]').waitFor({state:'visible',timeout:600000});await shot('battle-result');
-  evidence.result=await page.locator('#cm-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell').evaluate(n=>({verdict:n.dataset.verdict,reason:n.dataset.endReason,text:n.innerText}));
+  await page.locator('#cm-root[data-active-screen="BATTLE_RESULT"]').waitFor({state:'visible',timeout:600000});await shot('battle-result');
+  evidence.result=await page.locator('#cm-root[data-active-screen="BATTLE_RESULT"] .cm-vs5-shell').evaluate(n=>({verdict:n.dataset.verdict,reason:n.dataset.endReason,text:n.innerText}));
   assert.ok(['TEAM_ZERO_AHEAD','TEAM_ONE_AHEAD','LEVEL'].includes(evidence.result.verdict));assert.ok(['TIME_UP','TEAM_DOWN'].includes(evidence.result.reason));evidence.assertions.push('NATURAL_FOUR_ACTOR_BATTLE_RESULT_PASS');
   for(let n=0;n<12&&!(await page.locator('.cm-vs5-exit').isVisible());n++)await page.getByRole('button',{name:'下一頁',exact:true}).click();
-  await page.locator('.cm-vs5-exit').click();await page.locator('#cm-root[data-screen="BATTLE_RESULT"]').waitFor({state:'hidden'});
+  await page.locator('.cm-vs5-exit').click();await page.locator('#cm-root.int-rh2-root[data-active-screen="RAISING_HOME"]').waitFor({state:'visible'});assert.equal(await page.locator('#cm-root .cm-vs5-result__body').count(),0);
   const last=await diagnostics('battle-complete');
   assert.deepEqual(last.errors,[]);assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_VFX_ART_FALLBACK|BATTLE_CORE_VFX_UNAVAILABLE/.test(m.text)),[],'No product error or VFX fallback is accepted');
   evidence.battleLoaderReport=assertBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount);

@@ -31,7 +31,7 @@ function assertBattleLoaders(assert,reports,beforeCount){
  assert.ok(reports.length>beforeCount);
  for(const report of reports){assert.ok(!report.error);assert.deepEqual(report.failures||[],[]);assert.deepEqual(report.replacementFailures||[],[]);assert.deepEqual(report.completedOriginalArt?.failures||[],[]);}
  const entities=['m528_metaletemon','m540_imperialdramon_fm','oc_crownbrass_mandrill','oc_celestyrant_battle_r10'];
- const battleReport=reports.slice(beforeCount).find(r=>JSON.stringify(r.loadedSides)==='["main"]'&&entities.every(id=>r.loadedEntityIds?.includes(id)&&r.completedOriginalArt?.loaded.includes(id)));
+ const battleReport=reports.slice(beforeCount).find(r=>JSON.stringify(r.loadedSides)==='["main"]'&&r.loadedEntityIds?.length===entities.length&&r.completedOriginalArt?.loaded.length===entities.length&&entities.every(id=>r.loadedEntityIds?.includes(id)&&r.completedOriginalArt?.loaded.includes(id)));
  assert.ok(battleReport,'New battle-specific main-side loader report must prove all four actual entities');
  assert.equal(battleReport.completedOriginalArt.scope,'OWNER_HASH_SELECTED_PLAYTEST');assert.equal(battleReport.completedOriginalArt.publicReleasePermitted,true);return battleReport;
 }

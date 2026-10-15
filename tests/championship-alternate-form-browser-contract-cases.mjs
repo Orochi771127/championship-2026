@@ -25,7 +25,7 @@ test('save acceptance checks evolved instances 0005 and 0006, not only seeded ne
 test('browser harness has no private setters, accelerated clock, synthetic battle result or security flags',()=>{
  const source=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
  assert.doesNotMatch(source,/addInitScript|storage\.setItem|localStorage\.setItem|sessionStorage\.setItem|__alternateFormQaApp|advanceFrames|page\.clock|--no-sandbox|--disable-web-security|--enable-unsafe|--use-gl|--use-angle/);
- assert.match(source,/chromiumSandbox:true/);assert.match(source,/timeout:600000/);assert.match(source,/BLOCKED_GPU/);assert.match(source,/#cm-root\[data-screen="BATTLE_RESULT"\]/);assert.doesNotMatch(source,/locator\('\[data-screen="BATTLE_RESULT"\]/);
+ assert.match(source,/chromiumSandbox:true/);assert.match(source,/timeout:600000/);assert.match(source,/BLOCKED_GPU/);assert.match(source,/#cm-root\[data-active-screen="BATTLE_RESULT"\]/);assert.doesNotMatch(source,/locator\('[^']*\[data-screen="BATTLE_RESULT"\]/);assert.match(source,/#cm-root\.int-rh2-root\[data-active-screen="RAISING_HOME"\]/);
  const workflow=fs.readFileSync(new URL('../.github/workflows/alternate-form-browser.yml',import.meta.url),'utf8');assert.match(workflow,/contents: read/);assert.match(workflow,/npm run build:playtest && npm run validate:playtest/);assert.doesNotMatch(workflow,/continue-on-error|secrets\.|pages: write|pull_request_target/);
 });
 
@@ -35,6 +35,7 @@ test('battle proof cannot reuse raising reports or accept replacements',()=>{
  assert.doesNotThrow(()=>assertBattleLoaders(assert,[report],0));
  assert.throws(()=>assertBattleLoaders(assert,[report],1));
  const raising=structuredClone(report);raising.loadedSides=['main','sub'];assert.throws(()=>assertBattleLoaders(assert,[raising],0));
+ const lateRaising=structuredClone(report);lateRaising.loadedEntityIds.push('e000_digitama');lateRaising.completedOriginalArt.loaded.push('e000_digitama');assert.throws(()=>assertBattleLoaders(assert,[lateRaising],0));
  const missing=structuredClone(report);missing.loadedEntityIds.pop();assert.throws(()=>assertBattleLoaders(assert,[missing],0));
  const replaced=structuredClone(report);replaced.replacementFailures.push({reason:'failed art'});assert.throws(()=>assertBattleLoaders(assert,[replaced],0));
 });
