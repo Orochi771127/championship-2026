@@ -77,6 +77,31 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   }
   const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements,'Camera gestures cannot move slot anchors');assert.deepEqual(after.shop,before.shop,'Camera gestures cannot alter economy or inventory');
  }
+ // Legacy saves do not enable developer actor telemetry. Capture them via
+ // public camera gestures; inspect these screenshots alongside fresh-save
+ // numeric cap/ground assertions rather than inventing legacy diagnostics.
+ async function legacyTopContour(label){
+  const before=await saved();
+  for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
+   await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
+   // Clean-mode swipes pan even when begun on an actor; only a tap cleans.
+   // Every gesture below exceeds the drag threshold and stays on the canvas.
+   await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
+   await page.waitForFunction(()=>document.body.dataset.tool==='clean');
+   const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first(),box=await canvas.boundingBox();
+   assert.ok(box&&box.height>500);
+   for(let gesture=0;gesture<4;gesture++){
+    const candidates=[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y})));
+    const start=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
+    assert.ok(start,'Legacy camera swipe must start on unobstructed canvas');
+    await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
+    await page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
+   }
+   await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();await page.mouse.move(1,1);await page.waitForTimeout(300);
+   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await shot(label+'-top-contour-'+viewport.width);
+  }
+  const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
+ }
  async function wallet(amount){const button=page.locator('.cm-status-bar__diamond');await button.waitFor({state:'visible'});assert.equal(digits(await button.innerText()),amount);assert.match(await button.getAttribute('aria-label'),/測試/);}
  try{
   browser=await chromium.launch({channel:'chromium',headless:true,chromiumSandbox:true});evidence.browserVersion=browser.version();
@@ -182,7 +207,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9000);
   const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,old.shop);assert.deepEqual(legacyAfterPurchase.cageEdit.placements,old.cageEdit.placements);
   evidence.assertions.push({oldQaOneTimeDiamonds:10000,afterPurchaseAndReload:9000});
-  evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await topContour('07-old-save');
+  evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
   evidence.status='PASS';write();console.log('CHAMPIONSHIP_FRIENDS_PLAYTEST_BROWSER_PASS');
