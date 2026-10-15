@@ -108,7 +108,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
   const installed=await saved();
-  for(const scenario of [{name:'adjacent',slots:[4,6,9]},{name:'wrap',slots:[4,6,19]}]){
+  for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]}]){
    await page.setViewportSize({width:1280,height:800});await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
    while(await page.locator('.cm-cage-facility:not([disabled])').count())await page.locator('.cm-cage-facility:not([disabled])').first().click();
    const specs=[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
