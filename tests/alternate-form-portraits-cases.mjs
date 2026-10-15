@@ -1,8 +1,8 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import crypto from 'node:crypto';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url)));
-test('QA hero registry preserves original24 order and includes all51 production portraits plus two QA-only originals',()=>{
+test('QA hero registry preserves original24 order and includes all54 production portraits plus two QA-only originals',()=>{
  const native=read('src/data/championship/database-hero-portraits.r1.json'),qa=read('src/data/championship/qa-database-hero-portraits.r1.json');
- assert.equal(native.entries.length,51);assert.equal(qa.entries.length,53);assert.equal(new Set(qa.entries.map(e=>e.speciesIndex)).size,53);
+ assert.equal(native.entries.length,54);assert.equal(qa.entries.length,56);assert.equal(new Set(qa.entries.map(e=>e.speciesIndex)).size,56);
  assert.deepEqual(qa.entries.slice(0,22),native.entries.slice(0,22));assert.deepEqual(qa.entries.slice(22,24).map(e=>e.speciesIndex),[229,230]);assert.deepEqual(qa.entries.slice(24),native.entries.slice(22));
  for(const entry of native.entries)assert.deepEqual(qa.entries.find(e=>e.speciesIndex===entry.speciesIndex),entry);
  const extra=qa.entries.filter(e=>e.qaOnly);assert.deepEqual(extra.map(e=>e.speciesIndex),[229,230]);
