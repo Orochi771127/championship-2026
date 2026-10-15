@@ -10,8 +10,8 @@ import { cappedPixelRatio, currentQuality } from "../presentationPreferences.js"
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
 import { GATE_WORLD_REGIONS, gateWorldPoint, gateWorldRegion, sampleGateWorld } from './gateWorldLayout.js';
 
-export function createGateWorldGeometry({ night = false } = {}) {
-  const geometry = new THREE.SphereGeometry(2.08, 96, 64);
+export function createGateWorldGeometry({ night = false, detail = true } = {}) {
+  const geometry = new THREE.SphereGeometry(2.08, detail ? 160 : 96, detail ? 96 : 64);
   const position = geometry.getAttribute('position');
   const colors = new Float32Array(position.count * 3);
   const point = new THREE.Vector3(), color = new THREE.Color();
@@ -39,7 +39,7 @@ export function createGateLandmarkGeometry() {
       const surface = sampleGateWorld(direction.toArray());
       const orientation = new THREE.Quaternion().setFromUnitVectors(up, direction);
       orientation.multiply(new THREE.Quaternion().setFromAxisAngle(up, yaw));
-      const transform = new THREE.Matrix4().compose(direction.clone().multiplyScalar(surface.radius + height), orientation, new THREE.Vector3(1, 1, 1));
+      const transform = new THREE.Matrix4().compose(direction.clone().multiplyScalar(surface.radius + height * 0.72), orientation, new THREE.Vector3(0.72, 0.72, 0.72));
       const geometry = source.index ? source.toNonIndexed() : source.clone();
       geometry.applyMatrix4(transform);
       const p = geometry.getAttribute('position'), n = geometry.getAttribute('normal');
@@ -52,13 +52,13 @@ export function createGateLandmarkGeometry() {
       source.dispose(); geometry.dispose();
     }
     const box = (x, y, z) => new THREE.BoxGeometry(x, y, z);
-    const cone = (radius, height, top = 0) => new THREE.CylinderGeometry(top, radius, height, 6);
+    const cone = (radius, height, top = 0) => new THREE.CylinderGeometry(top, radius, height, 9);
     function tree(x, y, kind = 'round') {
       add(cone(0.024, 0.14, 0.018), 0x6c6041, x, y, 0.065);
       if (kind === 'flat') {
-        const crown = new THREE.IcosahedronGeometry(0.12, 0); crown.scale(1.45, 0.32, 1);
+        const crown = new THREE.IcosahedronGeometry(0.12, 1); crown.scale(1.45, 0.32, 1);
         add(crown, 0x6e7b3d, x, y, 0.17);
-      } else add(new THREE.IcosahedronGeometry(kind === 'jungle' ? 0.15 : 0.12, 0), kind === 'jungle' ? 0x2d573b : 0x416b3b, x, y, 0.18);
+      } else add(new THREE.IcosahedronGeometry(kind === 'jungle' ? 0.15 : 0.12, 1), kind === 'jungle' ? 0x2d573b : 0x416b3b, x, y, 0.18);
     }
     switch (region.landmark) {
       case 'terraces':
@@ -83,16 +83,22 @@ export function createGateLandmarkGeometry() {
             ...(['woodland', 'canopy'].includes(region.landmark) ? [[-0.25, -0.02], [0.25, 0.02], [0.02, 0.24], [-0.02, -0.25]] : [])])) {
           tree(x, y, region.landmark === 'acacias' ? 'flat' : region.landmark === 'canopy' ? 'jungle' : 'round');
         }
-        if (region.landmark === 'wetland') add(new THREE.CylinderGeometry(0.17, 0.17, 0.012, 10), 0x4b7770, 0.16, -0.12, 0.005);
+        if (region.landmark === 'wetland') {
+          const pool = new THREE.SphereGeometry(0.17, 16, 8); pool.scale(1.15, 0.035, 0.72);
+          add(pool, 0x4b7770, 0.16, -0.12, 0.006, 0.35);
+        }
         break;
       case 'dunes':
         for (const [x, y] of [[-0.16, 0.13], [0.16, 0.13], [0.10, -0.16]]) {
-          const dune = new THREE.SphereGeometry(0.20, 8, 5); dune.scale(1.5, 0.35, 0.8);
+          const dune = new THREE.SphereGeometry(0.20, 16, 10); dune.scale(1.5, 0.35, 0.8);
           add(dune, 0xdbb678, x, y, 0.015, 0.4);
         } break;
       case 'spring': case 'shore':
         tree(-0.16, 0.11, 'flat'); tree(region.landmark === 'shore' ? -0.14 : 0.14, -0.15, 'flat');
-        if (region.landmark === 'spring') add(new THREE.CylinderGeometry(0.17, 0.19, 0.016, 12), 0x52a4b1, 0.17, 0.12, 0.01);
+        if (region.landmark === 'spring') {
+          const pool = new THREE.SphereGeometry(0.18, 16, 8); pool.scale(1.2, 0.045, 0.72);
+          add(pool, 0x5297a1, 0.17, 0.12, 0.01, -0.25);
+        }
         else {
           add(box(0.27, 0.025, 0.07), 0xc9c09a, 0.16, 0.02, 0.03, 0.4);
         } break;
@@ -155,7 +161,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   const renderer = new THREE.WebGLRenderer({ antialias: quality.threeAntialias, alpha: true, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.08;
+  renderer.toneMappingExposure = 0.98;
   renderer.setClearColor(0x000000, 0);
   renderer.domElement.className = "cm-vs2-gate3d__canvas";
   renderer.domElement.dataset.renderer = "THREE_BOUNDED_GATE_SELECT";
@@ -175,11 +181,11 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   camera.name = "PRODUCT_AUTHORED_GATE_CAMERA";
   camera.position.set(0, 0.05, 10.2);
 
-  scene.add(new THREE.HemisphereLight(0x91c7d1, 0x071018, 2.15));
-  const keyLight = new THREE.DirectionalLight(0xffdf9a, 3.3);
+  scene.add(new THREE.HemisphereLight(0xc0d7dc, 0x132531, 1.7));
+  const keyLight = new THREE.DirectionalLight(0xffeed2, 2.35);
   keyLight.position.set(4.2, 3.5, 5.5);
   scene.add(keyLight);
-  const rimLight = new THREE.PointLight(0x55c8dc, 9, 14, 2);
+  const rimLight = new THREE.PointLight(0x78bac8, 5, 14, 2);
   rimLight.position.set(-4.2, -1.4, 3.8);
   scene.add(rimLight);
 
@@ -192,12 +198,12 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   world.name = "world";
   worldRoot.add(world);
 
-  const worldDay = new THREE.Mesh(createGateWorldGeometry(), new THREE.MeshStandardMaterial({
-    name: "ORIGINAL_CREATED_WORLD_DAY", vertexColors: true, roughness: 0.82, metalness: 0.12
+  const worldDay = new THREE.Mesh(createGateWorldGeometry({ detail: quality.threeAntialias }), new THREE.MeshStandardMaterial({
+    name: "ORIGINAL_CREATED_WORLD_DAY", vertexColors: true, roughness: 0.91, metalness: 0.02
   }));
   worldDay.name = "world_day";
-  const worldNight = new THREE.Mesh(createGateWorldGeometry({ night: true }), new THREE.MeshStandardMaterial({
-    name: "ORIGINAL_CREATED_WORLD_NIGHT", vertexColors: true, roughness: 0.74, metalness: 0.22,
+  const worldNight = new THREE.Mesh(createGateWorldGeometry({ night: true, detail: quality.threeAntialias }), new THREE.MeshStandardMaterial({
+    name: "ORIGINAL_CREATED_WORLD_NIGHT", vertexColors: true, roughness: 0.88, metalness: 0.04,
     emissive: 0x07121a, emissiveIntensity: 0.62
   }));
   worldNight.name = "world_night";
@@ -442,3 +448,4 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     }
   });
 }
+

@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 40,
+    "registeredRuntimeBundles": 41,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -474,6 +474,19 @@
       "shippingReady": false,
       "maturity": "STATIC_SYSTEM_PAGE_BACKGROUNDS_ORIGINAL_LOSSLESS_WEBP",
       "scope": "Optional system-page decoration only; no title, WorldCanvas, gameplay or commercial-rights change"
+    },
+    {
+      "assetId": "art:database:handpainted:r1",
+      "manifestPath": "assets/production/database-handpainted-r1-20261015/manifest.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "FOUR_SOURCE_GUIDED_HANDPAINTED_TRANSPARENT_HEROES",
+      "scope": "Owner-authorized original character redraws for existing encyclopedia; body/identity checked, no gameplay or commercial-rights claim"
     }
   ]
 }

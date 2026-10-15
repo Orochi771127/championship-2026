@@ -89,8 +89,8 @@ fs.mkdirSync(output,{recursive:true});
    const first=await sample();await advance(20);const second=await sample();
    assert.deepEqual(first.glyphs.map(g=>g.id),['CP-G01','CP-G02','CP-G03','CP-G04']);
    assert.equal(first.writingVisible,true);assert.equal(first.canvasCount,1);
-   assert.equal(first.words.length,6);assert.ok(first.words.some(w=>w.includes('進化（しんか）')&&w.includes('TIẾN HÓA')&&w.includes('วิวัฒนาการ')));
-   assert.deepEqual(second.words,first.words,'new band preserves every existing word row');
+   assert.deepEqual(first.words,['EVOLUTION','進化','進化（しんか）','TIẾN HÓA','วิวัฒนาการ']);
+   assert.deepEqual(second.words,first.words,'each language retains its own row');
    if(reduced)assert.equal(second.x,first.x);else assert.ok(second.x<first.x,'right-to-left native-frame travel');
    const glyphRequests=requests.filter(r=>r.includes('evolution-glyphs-v1/')&&r.endsWith('.png'));
    assert.equal(glyphRequests.length,4);assert.ok(glyphRequests.every(r=>r.endsWith('-128.png')));
@@ -114,3 +114,4 @@ fs.mkdirSync(output,{recursive:true});
   await browser.close();
  }
 })().catch(error=>{console.error(error);process.exitCode=1});
+

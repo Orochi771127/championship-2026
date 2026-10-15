@@ -53,11 +53,23 @@ test('verified rotation after keyboard resize/blur never reframes the shortened 
  f.resize(932,210);f.resize(430,210);f.blur();Object.assign(f.window.screen,{width:430,height:932});f.window.screen.orientation.type='portrait-primary';f.window.screen.orientation.dispatchEvent(new Event('change'));
  assert.ok(!f.attrs.has('data-landscape-entry'));assert.ok(!f.attrs.has('data-portrait-frame'));f.resize(430,932);assert.equal(f.attrs.size,0);f.controller.dispose();
 });
-test('all nine Hunt result composition rules reach desktop without applying compact viewport policy',()=>{
- const rules=source('vs2Styles.css').match(/body:is\(\[data-landscape-menu\], \[data-desktop-menu\]\)[^{]*\{[^}]*\}/g)??[];
- assert.equal(rules.length,9);assert.ok(rules.every(s=>s.includes('.cm-vs2-result__')&&!s.includes('--cm-menu-viewport')));
- assert.match(rules[0],/grid-template-areas: "portrait species" "portrait name" "portrait note" "roster roster" "release release"/);
- assert.ok(rules.some(s=>s.includes('grid-area: release')));
+test('Hunt result composition reaches desktop without inheriting compact viewport policy',()=>{
+ // Gate/Hunt can add their own shared responsive rules. Test the result page's
+ // required layout semantics, not a global count of all body:is selectors.
+ const shared=source('vs2Styles.css').match(/body:is\(\[data-landscape-menu\], \[data-desktop-menu\]\)[^{]*\{[^}]*\}/g)??[];
+ const rules=shared.filter(rule=>rule.includes('.cm-vs2-result__'));
+ const ruleFor=selector=>{
+  const rule=rules.findLast(rule=>rule.slice(0,rule.indexOf('{')).trim().endsWith(selector));
+  assert.ok(rule,`Missing shared Hunt result rule: ${selector}`);
+  assert.ok(rule.includes(':not([data-portrait-frame])'));
+  assert.ok(!rule.includes('--cm-menu-viewport'));
+  return rule;
+ };
+ assert.match(ruleFor('.cm-vs2-root[data-screen="HUNT_RESULT"] .cm-vs2-result__body'),/grid-template-areas: "portrait species" "portrait name" "portrait note" "roster roster" "release release"/);
+ for(const [selector,area] of [['.cm-vs2-result__portrait-card','portrait'],['.cm-vs2-result__species','species'],['.cm-vs2-result__name','name'],['.cm-vs2-result__body > .cm-vs2-result__note','note'],['.cm-vs2-result__roster','roster'],['.cm-vs2-result__release','release']])
+  assert.ok(ruleFor(selector).includes(`grid-area: ${area}`),selector);
+ assert.match(ruleFor('.cm-vs2-result__body > .cm-vs2-evidence'),/grid-column: 1 \/ -1/);
+ assert.match(ruleFor('.cm-vs2-result__body > *'),/min-width: 0; max-width: 100%; overflow-wrap: anywhere/);
 });
 test('entry is one full-bleed city scene with bounded controls, contain film, and unchanged story trajectory',()=>{
  const css=source('opening.css'),wide=css.slice(css.indexOf('/* Public landscape entry:'));
@@ -70,4 +82,34 @@ test('entry is one full-bleed city scene with bounded controls, contain film, an
  assert.match(wide,/\.cm-opening-story__text \{[^}]*overflow-y: auto;[^}]*pointer-events: auto;/);
  assert.doesNotMatch(wide,/\.cm-opening-story__card\s*\{[^}]*(?:top:|height:|transform:)/);
  assert.match(css,/\.cm-opening-story__card \{[^}]*top: 50%;[^}]*height: 50%;/);
+});
+
+test('landscape partners are smaller, separated and staggered on the city ground without touching controls',()=>{
+ const css=source('opening.css');
+ const rule=name=>{
+  const selector=`body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--${name}`;
+  const start=css.indexOf(selector);assert.ok(start>=0);
+  const block=css.slice(start,css.indexOf('}',start));
+  return Object.fromEntries([...block.matchAll(/(width|height|left|right|bottom):\s*(-?[\d.]+)%/g)].map(m=>[m[1],Number(m[2])/100]));
+ };
+ const blaze=rule('blaze'),cloud=rule('cloud');
+ assert.deepEqual(blaze,{width:.44,height:.65,left:.03,bottom:.28});
+ assert.deepEqual(cloud,{width:.46,height:.70,right:.01,bottom:-.01});
+ assert.ok(blaze.width<.64*.75);assert.ok(cloud.width<.60*.8);
+ // Numeric box/contain-fit contract only, not screenshot or ground-contact QA.
+ for(const [width,height] of [[720,320],[844,390],[1180,757],[1366,768]]){
+  const compact=height<=480,left=compact?.44:.42,right=.02,bottom=compact?.05:.06,groupHeight=height*(compact?.78:.76),groupWidth=width*(1-left-right);
+  const box=(p,aspect)=>{
+   const w=groupWidth*p.width,h=groupHeight*p.height;
+   const imageHeight=Math.min(h,w/aspect),imageWidth=imageHeight*aspect;
+   const x=width*left+(p.left!==undefined?groupWidth*p.left:groupWidth*(1-p.right-p.width));
+   const foot=height*(1-bottom)-groupHeight*p.bottom;
+   return {left:x,right:x+w,top:foot-imageHeight,bottom:foot,imageWidth,imageHeight};
+  };
+  const b=box(blaze,1353/1162),c=box(cloud,1);
+  assert.ok(b.right<c.left,`${width}x${height}: distinct silhouettes`);
+  assert.ok(b.bottom<c.bottom,`${width}x${height}: blaze farther back`);
+  assert.ok(b.top>=0&&c.top>=0&&b.bottom<=height&&c.bottom<=height,'complete contained art fits viewport');
+  assert.ok(b.left>=width*.43&&c.left>=width*.70,'neither partner enters the left operation region');
+ }
 });

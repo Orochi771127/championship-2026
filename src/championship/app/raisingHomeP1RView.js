@@ -119,6 +119,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   companion.setAttribute("aria-live", "polite");
   setLabel(companion, "aria-label", "選取的夥伴");
   companion.dataset.open = "false";
+  companion.dataset.expanded = "false";
   companion.dataset.placement = "bottom";
   companion.setAttribute("aria-hidden", "true");
   const portraitSlot=node('div','int-rh2-companion__portrait');
@@ -144,6 +145,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // readout is a constant full bar, not a fabricated combat AP value; the
   // card leaves it to the detail sheet, where it sits with the full record.
   const vitals = node("dl", "int-rh2-vitals");
+  vitals.id = "int-rh2-companion-vitals";
   function meter(stat, label, parent = vitals) {
     const term = node("dt", "int-rh2-vitals__label", label);
     term.dataset.stat = stat;
@@ -175,7 +177,17 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const next = button("int-rh2-companion__nav", "›", "下一隻夥伴");
   next.dataset.direction = "next";
   const close = button("int-rh2-companion__close", "×", "取消選取");
-  actions.append(previous, next, close);
+  // Landscape-only disclosure: presentation state, never a selection/camera
+  // intent. Portrait keeps its existing always-visible meters and controls.
+  const cardToggle = button("int-rh2-companion__nav int-rh2-companion__toggle", "", "選取的夥伴");
+  cardToggle.setAttribute("aria-controls", vitals.id);
+  cardToggle.setAttribute("aria-expanded", "false");
+  cardToggle.addEventListener("click", () => {
+    const expanded = companion.dataset.expanded !== "true";
+    companion.dataset.expanded = String(expanded);
+    cardToggle.setAttribute("aria-expanded", String(expanded));
+  });
+  actions.append(previous, next, cardToggle, close);
   companion.append(portraitSlot, companionCopy, actions, vitals);
 
   // What the removed status line alone used to carry: a save that failed or

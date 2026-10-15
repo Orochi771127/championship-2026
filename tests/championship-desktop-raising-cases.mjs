@@ -153,15 +153,21 @@ test('all added desktop menus remain unchanged with the candidate disabled',()=>
  }
  f.controller.dispose();
 });
-test('short desktop Gate scrolling is candidate-only and uses an actually loaded stylesheet',async()=>{
+test('short desktop Gate keeps a scrolling body and a flexible world in the loaded stylesheet',async()=>{
  const {readFile}=await import('node:fs/promises');
  const css=await readFile(new URL('../src/championship/app/vs2Styles.css',import.meta.url),'utf8');
  const html=await readFile(new URL('../championship.html',import.meta.url),'utf8');
- const candidate=css.slice(css.indexOf('/* Candidate desktop DOM menus:'));
+ // Scope to the desktop Gate block, not a dated prose comment or the rest of
+ // the stylesheet, which legitimately contains other responsive screens.
+ const desktop=css.match(/@media \(min-width: 1024px\) and \(min-height: 420px\) \{([\s\S]*?)\n\}/)?.[1];
+ assert.ok(desktop,'desktop Gate media block exists');
  assert.match(html,/<link rel="stylesheet" href="\.\/src\/championship\/app\/vs2Styles\.css/);
- assert.match(candidate,/@media \(min-width: 1024px\) and \(min-height: 420px\)/);
- assert.match(candidate,/body\[data-desktop-menu\].*\[data-screen="GATE_SELECT"\].*\.cm-vs2-body--gate \{ overflow-y: auto; overflow-x: hidden; \}/);
- assert.match(candidate,/\.cm-vs2-gate3d:not\(\[data-view="fallback"\]\) \{ flex: 1 0 auto; min-height: 336px; \}/);
- assert.match(candidate,/\.cm-vs2-gate-fallback \{ flex: 0 0 auto; overflow: visible; \}/);
- assert.doesNotMatch(candidate,/HUNT_FIELD|CAGE_EDIT|BATTLE_FIELD/);
+ assert.match(desktop,/body\[data-desktop-menu\].*\[data-screen="GATE_SELECT"\].*\.cm-vs2-body--gate \{ overflow-y: auto; overflow-x: hidden; \}/);
+ const world=desktop.match(/\.cm-vs2-gate3d:not\(\[data-view="fallback"\]\) \{([^}]*)\}/)?.[1];
+ assert.ok(world,'desktop world remains present');
+ assert.match(world,/flex: 1 1 0(?:px)?;/,'world grows and yields to the existing body scroll owner');
+ const minHeight=Number(world.match(/min-height:\s*([\d.]+)px/)?.[1]);
+ assert.ok(Number.isFinite(minHeight)&&minHeight>0,'world retains a usable nonzero minimum');
+ assert.match(desktop,/\.cm-vs2-gate-fallback \{ flex: 0 0 auto; overflow: visible; \}/);
+ assert.doesNotMatch(desktop,/HUNT_FIELD|CAGE_EDIT|BATTLE_FIELD/);
 });
