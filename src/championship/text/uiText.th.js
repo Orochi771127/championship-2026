@@ -6,6 +6,20 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  // Static system backgrounds; display copy only.
+  "SYSTEM_BACKGROUND_LABEL": "พื้นหลังหน้าระบบ",
+  "SYSTEM_BACKGROUND_HINT": "ใช้เฉพาะหน้าระบบ เช่น สารานุกรม ร้านค้า วิธีเล่น และบันทึก หน้าชื่อเกมรูปนครและฉากเล่นยังเหมือนเดิม",
+  "SYSTEM_BACKGROUND_DEFAULT": "ค่าเริ่มต้น",
+  "SYSTEM_BACKGROUND_DEFAULT_HINT": "ใช้พื้นหลังเดิมของหน้าจอ",
+  "SYSTEM_BACKGROUND_CUSTOM": "เลือกรูปภาพ",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "แตะภาพตัวอย่างด้านล่างเพื่อใช้และบันทึกตัวเลือกทันที",
+  "SYSTEM_BACKGROUND_RANDOM": "สุ่ม",
+  "SYSTEM_BACKGROUND_RANDOM_HINT": "สุ่มหนึ่งภาพเมื่อเข้าสู่หน้าระบบครั้งถัดไป และไม่เปลี่ยนระหว่างอยู่ในหน้านั้น",
+  "SYSTEM_BACKGROUND_PICK": "เลือกรูปภาพ (ใช้ทันที)",
+  "SYSTEM_BACKGROUND_RESONANCE": "เครือข่ายเสียงประสาน",
+  "SYSTEM_BACKGROUND_GROWTH": "บันทึกการเติบโต",
+  "SYSTEM_BACKGROUND_GLORY": "ผลแห่งเกียรติยศ",
+
   // Display-only evolution thresholds. PRODUCT_AUTHORED, 2026-10-14.
   "DEX_CONDITIONS": "เงื่อนไข",
   "DEX_CONDITIONS_TOGGLE": "เงื่อนไขของสาขา {branch}",
@@ -1267,3 +1281,4 @@ export const UNTRANSLATED_PROPER_NOUNS_TH = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+

@@ -21,6 +21,7 @@ import {
   PREFERENCE_DEFINITIONS,
   preferenceIdsIn
 } from "./preferenceSchema.js";
+import { SYSTEM_BACKGROUNDS } from "../../presentation/systemBackgrounds.js";
 import { QUALITY_TIERS } from "../../presentation/presentationPreferences.js";
 
 const CATEGORY_TITLES = Object.freeze({
@@ -34,6 +35,11 @@ const THEME_CHOICES = Object.freeze([
   { value: "warm", name: "經典暖黃", desc: "米黃紙色與琥珀色，柔和的暖色調。" },
   { value: "classic", name: "復古藍金", desc: "深藍底、金色緞帶與框線，搭配六角網格的復古風格。" },
   { value: "system", name: "跟隨系統", desc: "系統深色時用深色夜景，淺色時用藍白清爽。" }
+]);
+const SYSTEM_BACKGROUND_CHOICES = Object.freeze([
+  { value: "default", name: "SYSTEM_BACKGROUND_DEFAULT", desc: "SYSTEM_BACKGROUND_DEFAULT_HINT" },
+  { value: "custom", name: "SYSTEM_BACKGROUND_CUSTOM", desc: "SYSTEM_BACKGROUND_CUSTOM_HINT" },
+  { value: "random", name: "SYSTEM_BACKGROUND_RANDOM", desc: "SYSTEM_BACKGROUND_RANDOM_HINT" }
 ]);
 const TEXT_SCALE_CHOICES = Object.freeze([
   { value: 100, name: "標準", desc: "100%" },
@@ -156,7 +162,7 @@ export function createSettingsPanel({
     return set;
   }
 
-  function radioGroup(id, labelKey, choices, { hint = null, render = null } = {}) {
+  function radioGroup(id, labelKey, choices, { hint = null, render = null, onChoose = null } = {}) {
     const set = fieldset(id, labelKey, hint);
     const options = node("div", "cm-setting__options");
     options.dataset.count = String(choices.length);
@@ -171,7 +177,8 @@ export function createSettingsPanel({
       input.className = "cm-choice__input";
       input.addEventListener("change", () => {
         if (!input.checked) return;
-        store.set(id, choice.value);
+        if (onChoose) onChoose(choice.value);
+        else store.set(id, choice.value);
       });
       const body = node("span", "cm-choice__body");
       if (render) body.append(render(choice));
@@ -184,6 +191,20 @@ export function createSettingsPanel({
     }
     set.append(options);
     return set;
+  }
+
+  function systemBackgroundPreview(choice) {
+    const image = doc.createElement("img");
+    image.className = "cm-system-background-preview";
+    image.alt = "";
+    image.setAttribute("aria-hidden", "true");
+    image.width = image.height = 192;
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.draggable = false;
+    image.addEventListener("error", () => { image.hidden = true; }, { once: true });
+    image.src = choice.thumbnail;
+    return image;
   }
 
   function themePreview(choice) {
@@ -298,6 +319,15 @@ export function createSettingsPanel({
           mode: uiText(resolved.prefersDark ? "深色" : "淺色"), theme: uiText(choiceName(THEME_CHOICES, resolved.theme))
         }));
       }
+      section.append(radioGroup("systemBackgroundMode", "SYSTEM_BACKGROUND_LABEL", SYSTEM_BACKGROUND_CHOICES, {
+        hint: "SYSTEM_BACKGROUND_HINT"
+      }));
+      section.append(radioGroup("systemBackgroundId", "SYSTEM_BACKGROUND_PICK", SYSTEM_BACKGROUNDS.map(asset => ({
+        value: asset.id, name: asset.name, thumbnail: asset.thumbnail
+      })), {
+        render: systemBackgroundPreview,
+        onChoose(id) { store.set("systemBackgroundId", id); store.set("systemBackgroundMode", "custom"); }
+      }));
       const text = radioGroup("textScale", "文字大小", TEXT_SCALE_CHOICES);
       text.append(note("這是文字大小的預覽：生命值 128／技力 64。"));
       section.append(text);
@@ -677,3 +707,4 @@ export function createSettingsPanel({
     if (target?.isConnected) target.focus?.({ preventScroll: true });
   }
 }
+

@@ -6,6 +6,20 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  // Static system backgrounds; display copy only.
+  "SYSTEM_BACKGROUND_LABEL": "システム背景",
+  "SYSTEM_BACKGROUND_HINT": "図鑑、ショップ、ヘルプ、記録などのシステム画面のみ。城邦のタイトル画面とプレイ中の背景は変わりません。",
+  "SYSTEM_BACKGROUND_DEFAULT": "標準",
+  "SYSTEM_BACKGROUND_DEFAULT_HINT": "元の画面背景を使います。",
+  "SYSTEM_BACKGROUND_CUSTOM": "画像を選択",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "下のサムネイルを選ぶと、すぐに適用して記憶します。",
+  "SYSTEM_BACKGROUND_RANDOM": "ランダム",
+  "SYSTEM_BACKGROUND_RANDOM_HINT": "次にシステム画面へ入るときに1枚選び、その画面では変更しません。",
+  "SYSTEM_BACKGROUND_PICK": "画像を選択（すぐに適用）",
+  "SYSTEM_BACKGROUND_RESONANCE": "共鳴ネットワーク",
+  "SYSTEM_BACKGROUND_GROWTH": "成長の記録",
+  "SYSTEM_BACKGROUND_GLORY": "栄光の成果",
+
   // Display-only evolution thresholds. PRODUCT_AUTHORED, 2026-10-14.
   "DEX_CONDITIONS": "条件",
   "DEX_CONDITIONS_TOGGLE": "分岐 {branch} の条件",
@@ -1267,3 +1281,4 @@ export const UNTRANSLATED_PROPER_NOUNS_JA = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+

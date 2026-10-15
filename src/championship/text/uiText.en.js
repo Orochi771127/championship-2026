@@ -18,6 +18,20 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  // Static system backgrounds; display copy only.
+  "SYSTEM_BACKGROUND_LABEL": "System background",
+  "SYSTEM_BACKGROUND_HINT": "Only for system pages such as the encyclopedia, shop, help and records. The city title and playable scenes stay unchanged.",
+  "SYSTEM_BACKGROUND_DEFAULT": "Default",
+  "SYSTEM_BACKGROUND_DEFAULT_HINT": "Keep the original interface background.",
+  "SYSTEM_BACKGROUND_CUSTOM": "Choose an image",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "Select a thumbnail below to apply and remember it.",
+  "SYSTEM_BACKGROUND_RANDOM": "Random",
+  "SYSTEM_BACKGROUND_RANDOM_HINT": "Choose once on your next system-page entry; keep it while you stay.",
+  "SYSTEM_BACKGROUND_PICK": "Choose an image (applies immediately)",
+  "SYSTEM_BACKGROUND_RESONANCE": "Resonance Network",
+  "SYSTEM_BACKGROUND_GROWTH": "Growth Record",
+  "SYSTEM_BACKGROUND_GLORY": "Glory Result",
+
   // Display-only evolution thresholds. PRODUCT_AUTHORED, 2026-10-14.
   "DEX_CONDITIONS": "Conditions",
   "DEX_CONDITIONS_TOGGLE": "Conditions for branch {branch}",
@@ -1038,3 +1052,4 @@ export const UNTRANSLATED_PROPER_NOUNS = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+

@@ -24,6 +24,8 @@
 // test document could have). A document from a NEWER version is not
 // understood, so it is left untouched and the session runs on defaults.
 
+import { SYSTEM_BACKGROUND_IDS } from "../../presentation/systemBackgrounds.js";
+
 export const PREFERENCES_VERSION = 1;
 export const PREFERENCES_KIND = "CHAMPIONSHIP_PREFERENCES";
 
@@ -42,6 +44,9 @@ export const PREFERENCE_TIMING = Object.freeze({ IMMEDIATE: "IMMEDIATE", NEXT_SC
 const DEFINITIONS = {
   // Appearance and display
   theme: { category: "appearance", scope: "account", type: "enum", values: ["night", "clear", "warm", "classic", "system"], default: "night" },
+  systemBackgroundMode: { category: "appearance", scope: "account", type: "enum", values: ["default", "custom", "random"], default: "default" },
+  // Empty / unrecognized stored IDs show the original theme, never an arbitrary image.
+  systemBackgroundId: { category: "appearance", scope: "account", type: "enum", values: ["", ...SYSTEM_BACKGROUND_IDS], default: "" },
   textScale: { category: "appearance", scope: "device", type: "enum", values: [100, 115, 130], default: 100 },
   hudDensity: { category: "appearance", scope: "device", type: "enum", values: ["standard", "compact"], default: "standard" },
   // Quality
@@ -175,3 +180,4 @@ export function resolveReducedMotion(choice, { systemReduced = false } = {}) {
   if (choice === "off") return false;
   return systemReduced === true;
 }
+

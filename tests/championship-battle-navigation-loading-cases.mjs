@@ -62,6 +62,7 @@ function ownerFixture(target,{hudLoad=async()=>hud([cell('result')]),stageLoad=n
     playResultHighlight(_request,getStage){highlightStages.push(getStage);},
     resultHeroAnchor(){},resultStageLight(){},uiText:text=>text,showChoiceDialog(){},createLoadProgressView(){},
     observeLoadActivity(){},onPixiAssetSettled(){},mountRaisingHome:async()=>{raisingMounts++;return newView();},
+    systemBackgrounds:{leave(){events.push('background-leave');},enter(target){events.push('background-enter:'+target);}},
     syncMusic(){},screenChangedAt:0,recoveryDiagnostics:{record(){}},document:{querySelector:()=>null}});
   vm.runInContext(owners,context);
   return {context,events,warnings,attempts,renders,hudUpdates,highlightStages,timers,stageData,
@@ -76,7 +77,8 @@ for(const target of ['BATTLE_FIELD','BATTLE_RESULT']){
     const gate=deferred(),f=ownerFixture(target,{hudLoad:()=>gate.promise});let mounted=false;
     const first=f.run().then(()=>mounted=true);await flush();assert.equal(mounted,true);
     assert.ok(f.events.includes(target==='BATTLE_FIELD'?'field-view':'result-view'));
-    await first;await f.exit();assert.equal(f.raisingMounts,1);assert.equal(f.attempts[0].signal.aborted,true);
+    await first;assert.ok(f.events.includes('background-enter:'+target));
+    await f.exit();assert.ok(f.events.includes('background-leave'));assert.equal(f.raisingMounts,1);assert.equal(f.attempts[0].signal.aborted,true);
     assert.equal(f.timers.size,0);const renders=f.renders.length;
     gate.resolve(hud([cell('late')]));await flush();f.observe();
     assert.equal(f.hudUpdates.length,0);assert.equal(f.renders.length,renders);
