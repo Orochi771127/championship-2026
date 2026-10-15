@@ -105,7 +105,7 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
 test('30 hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,30);
- for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|035|037|038|039|040|041|042|043|044|045|046|047|048|049|211|215|222)\.png|database-handpainted-r1-20261015\/species-046\.ed04f491cd22524e\.png|database-handpainted-r1-20261015\/species-042\.d5dcc1491759eea7\.png|database-handpainted-r1-20261015\/species-041\.679bfc5abc699a5e\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|035|037|038|039|040|041|042|043|044|045|046|047|048|049|211|215|222)\.png|database-handpainted-r1-20261015\/species-046\.ed04f491cd22524e\.png|database-handpainted-r1-20261015\/species-042\.d5dcc1491759eea7\.png|database-handpainted-r1-20261015\/species-041\.679bfc5abc699a5e\.png|database-handpainted-r1-20261015\/species-049\.376bd37739caf2ad\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,20,195,'8',NaN])assert.equal(get(id),null);
 });
 
@@ -215,7 +215,7 @@ test('batch seven existing rookie heroes preserve exact identity and discovery p
 test('batch seven PNG hashes and accepted versions join existing stable identities',async()=>{
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- for(const [sp,version] of [[45,'v1'],[46,'refined-handpainted-v2'],[47,'v1'],[49,'v1']]){
+ for(const [sp,version] of [[45,'v1'],[46,'refined-handpainted-v2'],[47,'v1'],[49,'refined-handpainted-v2']]){
   const entry=databaseHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
  assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);
@@ -240,4 +240,12 @@ test('041 refined hero preserves042/046 cache keys and stable identity',()=>{
  const a=databaseHeroPortrait(41);assert.equal(a.src,'assets/production/database-handpainted-r1-20261015/species-041.679bfc5abc699a5e.png');assert.equal(a.sha256,'679bfc5abc699a5e8795443ed2cf1117087fdf8138fbcbbe5d651731b09e4a29');assert.equal(a.speciesId,'species-041');assert.equal(a.displayCode,'GR09');
  assert.equal(databaseHeroPortrait(42).src,'assets/production/database-handpainted-r1-20261015/species-042.d5dcc1491759eea7.png');
  assert.equal(databaseHeroPortrait(46).src,'assets/production/database-handpainted-r1-20261015/species-046.ed04f491cd22524e.png');
+});
+
+test('049 refined hero has immutable cache key without replacing other identities',async()=>{
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');const a=databaseHeroPortrait(49);
+ assert.equal(a.speciesId,'species-049');assert.equal(a.displayCode,'GR22');assert.equal(a.src,'assets/production/database-handpainted-r1-20261015/species-049.376bd37739caf2ad.png');assert.equal(a.sha256,'376bd37739caf2ad58093c5701e313efc6ebac1f3a7ae1de363a97ee89907b55');
+ assert.equal(createHash('sha256').update(fs.readFileSync(a.src)).digest('hex'),a.sha256);
+ const qa=JSON.parse(fs.readFileSync('src/data/championship/qa-database-hero-portraits.r1.json','utf8'));assert.deepEqual(qa.entries.find(e=>e.speciesIndex===49),a);
+ assert.equal(databaseHeroPortrait(47).src,'assets/production/database-handpainted-r1-20261015/species-047.png');assert.equal(databaseHeroPortrait(67),null);
 });
