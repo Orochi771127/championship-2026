@@ -199,8 +199,10 @@ export function createProductGridArtPlan({manifest,placements,unlockedSlots=null
     if(!field)fail("PRODUCT_GRID_FIELD_REQUIRED");
     const shapeIndex=definitionIndex===null?SINGLE_CELL_SHAPE_INDEX:ORIGINAL_CAGE_DEFINITION_SHAPES[definitionIndex];
     const origin=productFieldTileOrigin(p.slotIndex,shapeIndex);
-    const x=origin.tileX*8*unit,cropTop=origin.cropTopTiles*8*unit;
-    const y=origin.tileY*8*unit+cropTop;
+    // Keep the original top contour above native y=0. This is art overhang,
+    // not extra walkable cells or a displacement of the existing ground.
+    const x=origin.tileX*8*unit,cropTop=0;
+    const y=origin.tileY*8*unit;
     const width=Math.min(field.worldWidthPx,wrapWidthPx-x),height=field.worldHeightPx-cropTop;
     if(width<=0||height<=0)fail("PRODUCT_GRID_SOURCE_BOUNDS");
     const identity={moduleId:p.moduleId,cageDefinitionIndex:definitionIndex,
@@ -209,8 +211,11 @@ export function createProductGridArtPlan({manifest,placements,unlockedSlots=null
       ...identity,x,y,sourceRect:{x:0,y:cropTop,width,height}});
     if(width<field.worldWidthPx)result.push({fieldId:field.fieldId,...identity,x:0,y,fragmentOfSlot:p.slotIndex,
       sourceRect:{x:width,y:cropTop,width:field.worldWidthPx-width,height}});
-    if(definitionIndex===35)residentViewport={x,y,width,height};
+    // Preserve the established resident/drop bounds independently of the art.
+    if(definitionIndex===35){const inset=origin.cropTopTiles*8*unit;
+      residentViewport={x,y:y+inset,width,height:height-inset};}
   }
   return deepFreeze({mode:'NATIVE_RANCH',placementEvidence:'PRODUCT_AUTHORED_CONTINUOUS_GRID50',wrapWidthPx,residentViewport,
     placements:result,productGrid:{columns:10,rows:5,worldWidthNative:PRODUCT_RANCH_WORLD_WIDTH,worldHeightNative:PRODUCT_RANCH_WORLD_HEIGHT,sizingHeightNative:192,lockedSlots}});
 }
+

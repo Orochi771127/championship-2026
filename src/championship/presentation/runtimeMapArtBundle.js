@@ -303,7 +303,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // rows, with capPx of cropped hex tops (foldCap tiles) drawn above it.
   if(fold!==null&&(presentationMode!=='NATIVE_RANCH'||!['splitPx','ringPx','bandOffsetPx','capPx'].every(k=>Number.isFinite(fold[k]))
     ||!(fold.splitPx>0)||!(fold.ringPx>fold.splitPx)||!(fold.bandOffsetPx>0)||fold.capPx<0))fail('TILE_SET_FOLD_INVALID');
-  if(productGrid!==null&&(presentationMode!=='NATIVE_RANCH'||fold!==null||productGrid.columns!==10||productGrid.rows!==5
+  if(productGrid!==null&&(presentationMode!=='NATIVE_RANCH'||checked.family!=='CAGE'||fold!==null||productGrid.columns!==10||productGrid.rows!==5
     ||productGrid.worldWidthNative!==960||productGrid.worldHeightNative!==440||productGrid.sizingHeightNative!==192
     ||!Array.isArray(productGrid.lockedSlots)||productGrid.lockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=50)))fail('PRODUCT_GRID_GEOMETRY_INVALID');
   const residentBounds = residentViewport ? freezeRecord({...residentViewport}) : null;
@@ -314,10 +314,12 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // not change which tiles load, where they render or the composite bounds.
   const seenSlots = new Set();
   const snapshot = freezeRecord(placements.map((placement) => {
-    // Only a fold cap sits above the composite's top edge, by at most capPx.
+    // Grid50 keeps the original 24-native-pixel hex tops above y=0.
+    // Bound that art-only overhang; other tile sets still reject negative y.
     const cap = fold !== null && placement?.foldCap === true;
+    const gridTop = productGrid ? -24 * (checked.fields.find(field => field.fieldId === placement?.fieldId)?.nativePixelWorldScale ?? 0) : 0;
     if (!placement || !Number.isSafeInteger(placement.x) || !Number.isSafeInteger(placement.y)
-      || placement.x < 0 || placement.y < (cap ? -fold.capPx : 0)) fail("TILE_SET_INTEGER_POSITION_REQUIRED");
+      || placement.x < 0 || placement.y < (cap ? -fold.capPx : gridTop)) fail("TILE_SET_INTEGER_POSITION_REQUIRED");
     const structuralLid = placement.structuralRole === 'LID';
     if (placement.structuralRole !== undefined && (!structuralLid || presentationMode !== 'NATIVE_RANCH'
       || checked.family !== 'CAGE' || placement.moduleId !== null || placement.cageDefinitionIndex !== null
@@ -515,3 +517,4 @@ export function createRuntimeMapArtTileSetLoader({ PIXI }) {
     }
   });
 }
+
