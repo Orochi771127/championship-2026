@@ -1,7 +1,7 @@
 // Owner 2026-10-14 batch A: layout only, with the existing Raising scene.
 // The historical desktop flag now means a wide Raising working area. Two
 // usable columns need 720 CSS pixels; short landscapes scroll the native world.
-// Battle and Hunt leave the frame only through their integrated opt-in readiness gates.
+// Battle and Hunt leave the frame only through their integrated readiness gates.
 export function isDesktopRaisingLayout({width,height,activeScreen,hidden=false}) {
   return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
     &&(width>=1024||width>=height+160)&&activeScreen==='RAISING_HOME'&&!hidden;
@@ -32,10 +32,22 @@ export function isCageLandscapeLayout({width,height,activeScreen,hidden=false}) 
   return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
     &&width>=height+160&&activeScreen==='CAGE_EDIT'&&!hidden;
 }
-export function mountPortraitFrame({window:win=globalThis.window,document:doc=globalThis.document,responsiveRaising=false,responsiveBattle=false,responsiveMenus=false,isHuntWide=()=>false}={}) {
+// Entry owns a dedicated art-and-controls composition, not a stretched scene.
+export function isLandscapeEntryLayout({width,height,hidden=false}) {
+  return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
+    &&width>=height+160&&!hidden;
+}
+export function mountPortraitFrame({window:win=globalThis.window,document:doc=globalThis.document,responsiveRaising=false,responsiveBattle=false,responsiveMenus=false,responsiveEntry=false,isHuntWide=()=>false}={}) {
   const body=doc.body,visual=win.visualViewport;
+  const screenOrientation=win.screen?.orientation;
+  const orientationAxis=()=>/^(portrait|landscape)-(primary|secondary)$/.exec(screenOrientation?.type??'')?.[1]??null;
+  const portraitScreen=()=>Number.isFinite(win.screen?.width)&&Number.isFinite(win.screen?.height)
+    &&win.screen.width>0&&win.screen.width<win.screen.height;
+  let knownOrientation=orientationAxis(),portraitRotation=null,unverifiedEditingAxis=null,pendingKeyboardWidth=null;
   const root=doc.getElementById?.('cm-root');
+  const title=responsiveEntry?doc.getElementById?.('cm-title'):null;
   const menuProperties=['--cm-menu-viewport-height','--cm-menu-viewport-top'];
+  const visibleProperties=['--cm-visible-viewport-height','--cm-visible-viewport-top'];
   const properties=['--cm-frame-scale','--cm-viewport-height','--cm-frame-center-x','--cm-frame-center-y'];
   let sideways=null,inputBaseline=null,disposed=false;
   const layoutHeight=()=>inputBaseline&&Math.abs(win.innerWidth-inputBaseline.width)<=1&&win.innerHeight<inputBaseline.height
@@ -47,21 +59,67 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     return !!e&&(e.isContentEditable||e.tagName==='TEXTAREA'||(e.tagName==='INPUT'&&
       !['button','checkbox','radio','range','submit','reset','file','color','hidden'].includes(e.type)));
   };
+  function orientationChanged(event){
+    const next=orientationAxis(),previous=knownOrientation;
+    if(disposed||next===previous)return;
+    knownOrientation=next;
+    const wasEditing=editing()||!!inputBaseline||unverifiedEditingAxis===next
+      ||(pendingKeyboardWidth!==null&&Math.abs(win.innerWidth-pendingKeyboardWidth)<=1);
+    unverifiedEditingAxis=null;pendingKeyboardWidth=null;
+    // Use an actual rotation event, never screen orientation as a global
+    // window-layout policy. Screen/viewport width agreement keeps this bounded
+    // to the rotated viewport; no unoccluded keyboard height is invented.
+    portraitRotation=wasEditing&&previous==='landscape'&&next==='portrait'&&portraitScreen()
+      ? {width:win.screen.width,fromWidth:win.innerWidth,waiting:true} : null;
+    update(event);
+  }
   function update(event){
     if(disposed)return;
     const width=win.innerWidth,height=win.innerHeight;
     if(!(width>0&&height>0))return;
+    // Opening cards are device-size DOM even inside the scaled title frame.
+    // A software keyboard can shrink only the visual viewport; expose that
+    // budget independently of frame orientation, without counteracting zoom.
+    const cardViewport=visual&&Math.abs((visual.scale??1)-1)<0.01&&visual.width>0&&visual.height>0 ? visual : null;
+    if(cardViewport&&(cardViewport.height!==height||(cardViewport.offsetTop??0)!==0)){
+      body.style.setProperty('--cm-visible-viewport-height',`${cardViewport.height}px`);
+      body.style.setProperty('--cm-visible-viewport-top',`${cardViewport.offsetTop??0}px`);
+    }else for(const name of visibleProperties)body.style.removeProperty(name);
     const hasInput=editing();
+    const axis=orientationAxis();
+    // A resize may expose the new type before its change event. Remember only
+    // editing context, including a following blur, until that event verifies it.
+    if(hasInput&&axis&&axis!==knownOrientation)unverifiedEditingAxis=axis;
+    else if(axis===knownOrientation)unverifiedEditingAxis=null;
+    if(portraitRotation){
+      if(!portraitScreen()||Math.abs(win.screen.width-portraitRotation.width)>1)portraitRotation=null;
+      else if(Math.abs(width-portraitRotation.width)<=1)portraitRotation.waiting=false;
+      else if(!portraitRotation.waiting||Math.abs(width-portraitRotation.fromWidth)>1)portraitRotation=null;
+      if(portraitRotation&&!portraitRotation.waiting&&width<=height){
+        portraitRotation=null;
+        if(hasInput)inputBaseline={width,height,sideways:false};
+      }
+    }
     const revealInput=()=>{
       // Scrolling the visual viewport must not fight an intentional pan.
       if(hasInput&&event?.type!=='scroll')doc.activeElement.scrollIntoView?.({block:'nearest',inline:'nearest'});
     };
     // A keyboard can make a portrait layout viewport wider than it is tall.
     // A genuine device rotation changes width, so it releases this guard.
-    if(inputBaseline&&Math.abs(width-inputBaseline.width)>1)inputBaseline=null;
+    if(pendingKeyboardWidth!==null&&(Math.abs(width-pendingKeyboardWidth)>1||width<=height))pendingKeyboardWidth=null;
+    if(inputBaseline&&Math.abs(width-inputBaseline.width)>1){
+      // The layout resize and blur can both precede the orientation property
+      // and event. Retain only an already-shortened keyboard transition at
+      // this exact width; it cannot change layout without the verified event.
+      if(inputBaseline.keyboard&&width>height)pendingKeyboardWidth=width;
+      inputBaseline=null;
+    }
     if(hasInput&&!inputBaseline)inputBaseline={width,height,sideways:width>height};
     const keyboard=!!inputBaseline&&height<inputBaseline.height;
+    if(inputBaseline)inputBaseline.keyboard=keyboard;
     const effectiveHeight=keyboard?inputBaseline.height:height;
+    const entry=responsiveEntry&&!!title&&isLandscapeEntryLayout({width,height:effectiveHeight,hidden:title.hidden});
+    body.toggleAttribute('data-landscape-entry',entry);
     const desktop=responsiveRaising
       ? isDesktopRaisingLayout({width,height:effectiveHeight,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden})
       : width>=1024&&height>=600&&root?.dataset.activeScreen==='RAISING_HOME'&&!root?.hidden;
@@ -86,7 +144,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
       body.style.setProperty('--cm-menu-viewport-height',`${visible?.height??height}px`);
       body.style.setProperty('--cm-menu-viewport-top',`${visible?.offsetTop??0}px`);
     }else for(const name of menuProperties)body.style.removeProperty(name);
-    sideways=!battle&&!menu&&!compactMenu&&!cage&&!desktop&&!browse&&!hunt&&(keyboard?inputBaseline.sideways:width>height);
+    sideways=!(portraitRotation&&!portraitRotation.waiting)&&!entry&&!battle&&!menu&&!compactMenu&&!cage&&!desktop&&!browse&&!hunt&&(keyboard?inputBaseline.sideways:width>height);
     if(!hasInput&&!keyboard)inputBaseline=null;
     body.toggleAttribute('data-portrait-frame',sideways);
     if(!sideways){for(const name of properties)body.style.removeProperty(name);revealInput();return;}
@@ -106,19 +164,23 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   win.addEventListener('resize',update);
   visual?.addEventListener('resize',update);
   visual?.addEventListener('scroll',update);
+  screenOrientation?.addEventListener?.('change',orientationChanged);
   doc.addEventListener('focusin',update);
   doc.addEventListener('focusout',update);
   const Observer=win.MutationObserver;
   const observer=root&&Observer?new Observer(()=>update()):null;
   observer?.observe(root,{attributes:true,attributeFilter:['data-active-screen','hidden']});
+  if(title)observer?.observe(title,{attributes:true,attributeFilter:['hidden']});
   update();
   return {refresh(){update();},isBrowseWide(activeScreen){return !disposed&&browseWide(activeScreen);},dispose(){
     if(disposed)return;disposed=true;
     win.removeEventListener('resize',update);
     visual?.removeEventListener('resize',update);
     visual?.removeEventListener('scroll',update);
+    screenOrientation?.removeEventListener?.('change',orientationChanged);
     doc.removeEventListener('focusin',update);doc.removeEventListener('focusout',update);
     body.removeAttribute('data-portrait-frame');
+    body.removeAttribute('data-landscape-entry');
     body.removeAttribute('data-desktop-raising');
     body.removeAttribute('data-responsive-raising');
     body.removeAttribute('data-desktop-browse');
@@ -127,6 +189,6 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     body.removeAttribute('data-cage-landscape');
     body.removeAttribute('data-hunt-wide');
     observer?.disconnect();
-    for(const name of [...properties,...menuProperties])body.style.removeProperty(name);
+    for(const name of [...properties,...menuProperties,...visibleProperties])body.style.removeProperty(name);
   }};
 }

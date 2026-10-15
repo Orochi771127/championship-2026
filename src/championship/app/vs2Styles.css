@@ -1241,15 +1241,15 @@ body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="G
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root:is([data-screen="GATE_SELECT"], [data-screen="HUNT_LOADOUT"], [data-screen="MEDALS"]) .cm-vs2-body > * { flex-shrink: 0; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d:not([data-view="fallback"]) { flex: 1 0 auto; min-height: 360px; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate-fallback { flex: 0 0 auto; overflow: visible; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="HUNT_RESULT"] .cm-vs2-result__body { grid-template-columns: minmax(160px, 0.8fr) minmax(0, 1.2fr); grid-template-areas: "portrait species" "portrait name" "portrait note" "roster roster" "release release"; gap: 12px; padding: 12px; align-items: start; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__portrait-card { grid-area: portrait; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__species { grid-area: species; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__name { grid-area: name; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__body > .cm-vs2-result__note { grid-area: note; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__roster { grid-area: roster; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__release { grid-area: release; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__body > .cm-vs2-evidence { grid-column: 1 / -1; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-result__body > * { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-root[data-screen="HUNT_RESULT"] .cm-vs2-result__body { grid-template-columns: minmax(160px, 0.8fr) minmax(0, 1.2fr); grid-template-areas: "portrait species" "portrait name" "portrait note" "roster roster" "release release"; gap: 12px; padding: 12px; align-items: start; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-result__portrait-card { grid-area: portrait; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-result__species { grid-area: species; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-result__name { grid-area: name; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-result__body > .cm-vs2-result__note { grid-area: note; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-result__roster { grid-area: roster; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-result__release { grid-area: release; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-result__body > .cm-vs2-evidence { grid-column: 1 / -1; }
+body:is([data-landscape-menu], [data-desktop-menu]):not([data-portrait-frame]) .cm-vs2-result__body > * { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-medals__grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-medal-dialog { max-height: calc(var(--cm-menu-viewport-height, 100dvh) - 24px); overflow-wrap: anywhere; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-medal-dialog > .cm-vs2-action { position: sticky; bottom: 0; }

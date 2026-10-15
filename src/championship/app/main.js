@@ -193,8 +193,9 @@ const FREE_PRACTICE_PERSONALITY_POLICY =
 // following camera, skill-field interaction, callouts) over the unchanged
 // simulation. ?battleFx=classic returns to the earlier fixed full-field view.
 const BATTLE_DYNAMIC_FX = new URLSearchParams(globalThis.location?.search ?? "").get("battleFx") !== "classic";
-// Review-only opt-in. No public default or persisted preference.
-const RESPONSIVE_LAYOUT_CANDIDATE = new URLSearchParams(globalThis.location?.search ?? '').get('responsiveLayout') === 'candidate';
+// Public responsive layouts; the explicit legacy URL remains a rollback.
+// Keep the existing internal name so every reviewed scene shares one decision.
+const RESPONSIVE_LAYOUT_CANDIDATE = new URLSearchParams(globalThis.location?.search ?? '').get('responsiveLayout') !== 'legacy';
 const RESPONSIVE_BATTLE_CANDIDATE = RESPONSIVE_LAYOUT_CANDIDATE && BATTLE_DYNAMIC_FX;
 // DOM owns the readiness of its chrome. The scene receives only this layout
 // sample and never looks up UI controls or their CSS measurement properties.
@@ -245,7 +246,7 @@ const root = document.getElementById("cm-root");
 let huntLayout = null;
 const portraitFrame = mountPortraitFrame({
   responsiveRaising:RESPONSIVE_LAYOUT_CANDIDATE, responsiveBattle:RESPONSIVE_BATTLE_CANDIDATE,
-  responsiveMenus:RESPONSIVE_LAYOUT_CANDIDATE,
+  responsiveMenus:RESPONSIVE_LAYOUT_CANDIDATE, responsiveEntry:RESPONSIVE_LAYOUT_CANDIDATE,
   isHuntWide: () => huntLayout?.isWide() ?? false
 });
 huntLayout = createHuntLayoutResolver({
