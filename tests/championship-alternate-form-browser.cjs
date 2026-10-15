@@ -3,13 +3,13 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const {resolveAsset,serveBuild,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
-const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-pages');
+const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
 const output=require('./browser-qa-output.cjs')('alternate-forms');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/';
 const saveKey='championshipModernSave:v1',qaKey='championshipAlternateFormsQA:r1:'+saveKey;
 const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[],diagnostics:[],gpu:null};
 (async()=>{
- const manifest=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=manifest.buildId;
+ const manifest=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=manifest.buildId;assert.equal(manifest.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(manifest.publicPlaytest?.ownerApproved,true);
  assert.ok(resolveAsset(root,'/alternate-form-qa.html'),'Approved public build must contain isolated QA entry');
  for(const entry of JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/product-species-extensions.r1.json'))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],false,'Production gate remains disabled');
  const fixture=JSON.parse(fs.readFileSync(path.join(root,'qa/alternate-form-save.json')));

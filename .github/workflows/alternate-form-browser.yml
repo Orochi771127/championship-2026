@@ -25,11 +25,11 @@ jobs:
       - run: npm ci
       - name: Install official Chromium and operating system dependencies
         run: npx playwright install --with-deps chromium
-      - name: Build approved public artifact, not an internal playtest
-        run: npm run build:pages && npm run validate:pages
+      - name: Build exact owner-approved public Pages artifact
+        run: npm run build:playtest && npm run validate:playtest
       - name: Run real UI, isolated save, evolution and natural battle
         env:
-          CHAMPIONSHIP_QA_ARTIFACT: dist/github-pages
+          CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
           CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
         run: node tests/championship-alternate-form-browser.cjs
       - name: Preserve diagnostics, screenshots and Playwright trace even on GPU failure
