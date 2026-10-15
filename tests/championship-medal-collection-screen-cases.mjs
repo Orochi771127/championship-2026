@@ -45,8 +45,8 @@ test('earned detail owns exactly one display and ready/fallback preserve truthfu
   const f=fixture({badges:[0,4]});f.tile(0).click();assert.equal(f.mounts.length,1);assert.equal(f.doc.activeElement,f.root.querySelector('.cm-medal-display__stage'));assert.equal(f.dialog().scrollTop,0);
   const first=f.mounts[0],art=f.root.querySelector('.cm-medal-dialog__art'),reset=f.root.querySelector('.cm-medal-display__reset');assert.equal(art.hidden,false);assert.equal(reset.hidden,true);
   const firstArt=originalMedalArt(0,'http://127.0.0.1:8766/championship.html');assert.equal(first.src,firstArt.detailSrc??firstArt.src);first.onState('ready');assert.equal(art.hidden,true);assert.equal(reset.hidden,false);reset.click();assert.equal(first.resets,1);
-  assert.equal(f.root.querySelector('.cm-medal-display__stage').tabIndex,0);assert.equal(f.root.querySelector('.cm-medal-display__technique').textContent,medalPresentationText('technique'));
-  first.onState('fallback');assert.equal(art.hidden,false);assert.equal(reset.hidden,true);assert.equal(f.root.querySelector('.cm-medal-display__stage').tabIndex,-1);assert.equal(f.root.querySelector('.cm-medal-display__technique').textContent,medalPresentationText('fallback'));
+  assert.equal(f.root.querySelector('.cm-medal-display__stage').tabIndex,0);assert.equal(f.root.querySelector('.cm-medal-display__status').hidden,true);
+  first.onState('fallback');assert.equal(art.hidden,false);assert.equal(reset.hidden,true);assert.equal(f.root.querySelector('.cm-medal-display__stage').tabIndex,-1);assert.equal(f.root.querySelector('.cm-medal-display__status').textContent,medalPresentationText('fallback'));
   f.close();assert.equal(first.disposed,true);assert.equal(f.view.getDiagnostics().activePresentation,null);f.tile(4).click();assert.equal(f.mounts.length,2);assert.equal(f.mounts.filter(m=>!m.disposed).length,1);f.view.dispose();assert.ok(f.mounts.every(m=>m.disposed));f.assertUnchanged();
 });
 test('switch, Escape/cancel, close and screen dispose each release active ownership',()=>{
@@ -75,7 +75,7 @@ test('failed flat artwork keeps an earned/locked emblem without exposing a broke
 });
 test('all five locales preserve localized status, detail facts/notes and interaction guidance',()=>{
   for(const locale of LOCALES){const f=fixture({badges:[29],locale});f.tile(29).click();const text=f.dialog().textContent;for(const row of describeMedalDetails(29).facts){assert.ok(text.includes(row.label),`${locale} ${row.key}`);assert.ok(text.includes(row.value));}
-    for(const note of describeMedalDetails(29).notes)assert.ok(text.includes(note));f.mounts[0].onState('ready');assert.equal(f.root.querySelector('.cm-medal-display__technique').textContent,medalPresentationText('technique',locale));assert.equal(f.root.querySelector('.cm-medal-display__controls').textContent,medalPresentationText('controls',locale));f.assertUnchanged();f.view.dispose();}
+    for(const note of describeMedalDetails(29).notes)assert.ok(text.includes(note));f.mounts[0].onState('ready');assert.equal(f.root.querySelector('.cm-medal-display__status').hidden,true);assert.equal(f.root.querySelector('.cm-medal-display__controls').textContent,medalPresentationText('controls',locale));f.assertUnchanged();f.view.dispose();}
   setLocale('zh-Hant');
 });
 test('existing exit intent is retained without save writes or art mapping changes',()=>{

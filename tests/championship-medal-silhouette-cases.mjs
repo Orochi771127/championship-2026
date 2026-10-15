@@ -53,11 +53,14 @@ test('all24 actual512px generated PNG silhouettes stay bounded, preserve key opa
 });
 
 
-test('all11 observed free medals preserve actual128/512px contours and triangulate holes without losing cap area',()=>{
- const free=MEDAL_PRESENTATION_PROFILES.filter(p=>p.shape==='free');assert.equal(free.length,11);
+test('all61 source-alpha medals preserve actual128/512px contours and triangulate holes without losing cap area',()=>{
+ const free=MEDAL_PRESENTATION_PROFILES.filter(p=>p.shape==='free');assert.equal(free.length,61);
  const polygonArea=points=>Math.abs(points.reduce((sum,a,i)=>{const b=points[(i+1)%points.length];return sum+a[0]*b[1]-b[0]*a[1];},0)/2);
  for(const profile of free){const art=originalMedalArt(profile.titleId,'http://127.0.0.1:8766/championship.html'),input=png(art.detailSrc??art.src),s=traceMedalSilhouette(input);assert.equal(s.ok,true,`${profile.titleId}: ${s.reason}`);
    const m=createMedalGeometry({silhouette:s,presentationProfile:profile}),g=m.group.getObjectByName('metal_base').geometry,p=g.getAttribute('position'),n=g.getAttribute('normal');let capArea=0;
+   for(const attribute of Object.values(g.attributes))assert.ok(attribute.array.every(Number.isFinite));
+   let opaque=0,matched=0;for(let y=1;y<input.height-1;y+=2)for(let x=1;x<input.width-1;x+=2){if(input.data[(y*input.width+x)*4+3]<245)continue;opaque++;if(covered(s,x+.5,y+.5))matched++;}
+   assert.ok(matched/opaque>.99,`${profile.titleId} opaque coverage ${matched}/${opaque}`);
    for(let i=0;i<p.count;i+=3)if(n.getZ(i)>.99&&n.getZ(i+1)>.99&&n.getZ(i+2)>.99)capArea+=Math.abs((p.getX(i+1)-p.getX(i))*(p.getY(i+2)-p.getY(i))-(p.getX(i+2)-p.getX(i))*(p.getY(i+1)-p.getY(i)))/2;
    const silhouetteArea=s.shapes.reduce((sum,shape)=>sum+polygonArea(shape.outer)-shape.holes.reduce((area,hole)=>area+polygonArea(hole),0),0);
    assert.ok(Math.abs(capArea-silhouetteArea)/silhouetteArea<.01,`${profile.titleId} cap area ${capArea} versus silhouette ${silhouetteArea}`);assert.ok(p.count<100000);m.dispose();

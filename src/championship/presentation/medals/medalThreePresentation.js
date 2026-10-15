@@ -96,7 +96,7 @@ export function mountMedalThreePresentation({host,src,presentationProfile,onStat
           if(disposed||failed||ready)return;
           try{
             let silhouette;
-            if(presentationProfile.shape==='free'){silhouetteReads++;silhouette=readSilhouette(texture.image,doc);if(!silhouette.ok){fallback(silhouette.reason);return;}}
+            silhouetteReads++;silhouette=readSilhouette(texture.image,doc);if(!silhouette.ok){fallback(silhouette.reason);return;}
             medal=createMedalGeometry({silhouette,presentationProfile});shapeDiagnostics=medal.getDiagnostics();scene.add(medal.group);
             texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(currentQualityTier(doc)==='saver'?1:4,renderer.capabilities.getMaxAnisotropy());
             medal.fitFaceAspect(texture.image?.naturalWidth??texture.image?.width,texture.image?.naturalHeight??texture.image?.height);
@@ -112,6 +112,6 @@ export function mountMedalThreePresentation({host,src,presentationProfile,onStat
   return Object.freeze({
     reset(){releasePointer();runtime.reset();},dispose,
     getDiagnostics(){return {renderer:renderer?'THREE_BOUNDED_MEDAL_DETAIL':'STATIC_FALLBACK',rendererCount:renderer?1:0,textureCount:face?1:0,renderCount,failed,disposed,ready,
-      quality:currentQualityTier(doc),reducedMotion:prefersReducedMotion(doc),pixelRatio:renderer?.getPixelRatio()??null,silhouetteReads,fallbackReason,shape:shapeDiagnostics,base:'AUTHORED_3D',face:'EXISTING_2D_BADGE',originalLayoutClaimed:false,...runtime.snapshot()};}
+      quality:currentQualityTier(doc),reducedMotion:prefersReducedMotion(doc),pixelRatio:renderer?.getPixelRatio()??null,silhouetteReads,fallbackReason,shape:shapeDiagnostics,base:'SOURCE_ALPHA_EXTRUSION',face:'EXISTING_2D_BADGE',originalLayoutClaimed:false,...runtime.snapshot()};}
   });
 }

@@ -58,10 +58,10 @@ export function createMedalCollectionView({root,battleBadges=[],onExit}={}) {
     const placeholder=element('span','cm-medal-display__placeholder');placeholder.setAttribute('aria-hidden','true');placeholder.append(statusIcon(entry.acquired));placeholder.hidden=!!art;flat.append(placeholder);
     art?.addEventListener('error',()=>{flatArtFailed=true;art.hidden=true;placeholder.hidden=display.dataset.state==='ready';});
     if(!entry.acquired){const seal=element('span','cm-medal-display__lock');seal.append(statusIcon(false));seal.setAttribute('aria-hidden','true');stage.append(seal);}
-    const technique=element('p','cm-medal-display__technique',medalPresentationText(entry.acquired?'loading':'locked'));
+    const presentationStatus=element('p','cm-medal-display__status',medalPresentationText(entry.acquired?'loading':'locked'));
     const controls=element('p','cm-medal-display__controls',medalPresentationText('controls'));controls.hidden=true;
     const reset=element('button','cm-medal-display__reset',medalPresentationText('reset'));reset.type='button';reset.hidden=true;reset.addEventListener('click',()=>activePresentation?.reset());
-    display.append(stage,technique,controls,reset);
+    display.append(stage,presentationStatus,controls,reset);
     const status=element('span','cm-medals__status',entry.acquired?'已取得':'未取得');status.prepend(statusIcon(entry.acquired));
     dialog.append(display,status,element('h2','cm-vs2-title',name));
     const description=titleEventText(entry.titleId,'description',event?.description??'');
@@ -84,11 +84,11 @@ export function createMedalCollectionView({root,battleBadges=[],onExit}={}) {
     if(entry.acquired&&detailSrc){
       activePresentation=mountSelectedMedalPresentation({host:stage,src:detailSrc,presentationProfile,onState(state){
         display.dataset.state=state;const ready=state==='ready';flat.hidden=ready;if(art)art.hidden=ready||flatArtFailed;placeholder.hidden=ready||!flatArtFailed;
-        technique.textContent=medalPresentationText(ready?'technique':state==='loading'?'loading':'fallback');
+        presentationStatus.hidden=ready;presentationStatus.textContent=ready?'':medalPresentationText(state==='loading'?'loading':'fallback');
         controls.hidden=!ready;reset.hidden=!ready;stage.tabIndex=ready?0:-1;
         stage.setAttribute('role',ready?'group':'img');stage.setAttribute('aria-label',ready?`${name}. ${medalPresentationText('controls')}`:name);
       }});
-    }else if(entry.acquired){display.dataset.state='fallback';technique.textContent=medalPresentationText('fallback');}
+    }else if(entry.acquired){display.dataset.state='fallback';presentationStatus.textContent=medalPresentationText('fallback');}
   }
   for(const entry of entries) {
     const name=titleEventText(entry.titleId,'name',entry.event?.name??uiText('徽章 {number}',{number:entry.titleId+1}));

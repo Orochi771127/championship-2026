@@ -17,7 +17,7 @@ import {ControlledEvent,createControlledDocument} from './helpers/controlled-dat
 // touch hardware, accessibility, physical-device or normal-flow acceptance.
 function frames(){let id=0;const pending=new Map();return {pending,requestFrame:fn=>{pending.set(++id,fn);return id;},cancelFrame:id=>pending.delete(id),flush(){const batch=[...pending.values()];pending.clear();for(const fn of batch)fn();}};}
 function events(target={}){const listeners=new Map();Object.assign(target,{listeners,addEventListener(type,fn){if(!listeners.has(type))listeners.set(type,new Set());listeners.get(type).add(fn);},removeEventListener(type,fn){listeners.get(type)?.delete(fn);},dispatchEvent(event){for(const fn of [...(listeners.get(event.type)??[])])fn(event);}});return target;}
-function fixture({quality='balanced',motion='full',constructorFails=false,textureFailsSync=false,presentationProfile={shape:'round',material:'gold'},silhouetteResult}={}){
+function fixture({quality='balanced',motion='full',constructorFails=false,textureFailsSync=false,presentationProfile={shape:'free',material:'gold'},silhouetteResult}={}){
   const scheduler=frames(),doc=events(createControlledDocument()),observers=[];
   doc.documentElement.dataset.quality=quality;doc.documentElement.dataset.motion=motion;doc.hidden=false;
   class Observer {constructor(fn){this.fn=fn;this.disconnected=false;observers.push(this);}observe(){}disconnect(){this.disconnected=true;}}
@@ -56,7 +56,7 @@ test('manual rotation is clamped, wraps, rejects invalid inputs, and resets on d
   const before=r.snapshot().pose;r.rotate(NaN,1);assert.deepEqual(r.snapshot().pose,before);r.reset();assert.deepEqual(r.snapshot().pose,MEDAL_HOME_POSE);f.flush();assert.equal(f.pending.size,0);
 });
 test('base is real extruded geometry, frame/back have depth and face remains a flat image plane',()=>{
-  const m=createMedalGeometry({presentationProfile:{shape:'round',material:'gold'}}),base=m.group.getObjectByName('metal_base'),face=m.group.getObjectByName('flat_badge_face');
+  const m=createMedalGeometry({silhouette:traceMedalSilhouette({width:8,height:8,data:new Uint8Array(256).fill(255)}),presentationProfile:{shape:'free',material:'gold'}}),base=m.group.getObjectByName('metal_base'),face=m.group.getObjectByName('flat_badge_face');
   assert.equal(base.geometry.type,'ExtrudeGeometry');base.geometry.computeBoundingBox();assert.ok(base.geometry.boundingBox.max.z-base.geometry.boundingBox.min.z>=.13);
   assert.equal(face.geometry.type,'PlaneGeometry');assert.equal(face.material,m.faceMaterial);assert.ok(face.position.z>base.position.z);
   const geometries=new Set(),materials=new Set();m.group.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const material of Array.isArray(o.material)?o.material:[o.material])if(material)materials.add(material);});
@@ -130,19 +130,19 @@ test('static cards have visible lock/check distinction; the detail has no automa
 test('canonical locale scanner validates every scoped dictionary key and does not ignore stray literals',async()=>{
   const file='src/championship/presentation/medals/medalPresentationText.js';
   const checked=inspectScopedLocaleCopy(file,MEDAL_PRESENTATION_COPY);
-  assert.equal(checked.keys.length,6);assert.deepEqual(checked.gaps,[]);
+  assert.equal(checked.keys.length,5);assert.deepEqual(checked.gaps,[]);
   for(const locale of LOCALES)for(const key of MEDAL_PRESENTATION_COPY_KEYS)assert.equal(checked.covers({file,text:MEDAL_PRESENTATION_COPY[locale][key]}),true);
   assert.equal(checked.covers({file,text:'未翻譯的新文字'}),false);
-  assert.equal(checked.covers({file:'src/championship/app/not-a-dictionary.js',text:MEDAL_PRESENTATION_COPY['zh-Hant'].technique}),false);
+  assert.equal(checked.covers({file:'src/championship/app/not-a-dictionary.js',text:MEDAL_PRESENTATION_COPY['zh-Hant'].controls}),false);
   const missing=JSON.parse(JSON.stringify(MEDAL_PRESENTATION_COPY));delete missing.vi.reset;
   assert.deepEqual(inspectScopedLocaleCopy(file,missing).gaps,[`vi:SCOPED_COPY[${file}:reset]`]);
-  delete missing.th;assert.equal(inspectScopedLocaleCopy(file,missing).gaps.filter(gap=>gap.startsWith('th:')).length,6);
+  delete missing.th;assert.equal(inspectScopedLocaleCopy(file,missing).gaps.filter(gap=>gap.startsWith('th:')).length,5);
   const report=await buildLocaleCoverage();assert.equal(report.counts.missing,0);assert.equal(report.counts.catalogGaps,0);
-  assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:6,gaps:[]});
+  assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:5,gaps:[]});
 });
 
 test('face aspect fits landscape,portrait,square and invalid sizes without replacing geometry',()=>{
-  const m=createMedalGeometry({presentationProfile:{shape:'round',material:'gold'}}),face=m.group.getObjectByName('flat_badge_face'),geometry=face.geometry;
+  const m=createMedalGeometry({silhouette:traceMedalSilhouette({width:8,height:8,data:new Uint8Array(256).fill(255)}),presentationProfile:{shape:'free',material:'gold'}}),face=m.group.getObjectByName('flat_badge_face'),geometry=face.geometry;
   for(const [width,height,x,y] of [[512,473,1,473/512],[473,512,473/512,1],[128,128,1,1],[512,256,1,.5],[256,512,.5,1],[0,512,1,1],[512,0,1,1],[-1,512,1,1],[Infinity,512,1,1],[512,NaN,1,1],[undefined,512,1,1],['512',473,1,1]]){
     m.fitFaceAspect(width,height);assert.deepEqual(face.scale.toArray(),[x,y,1]);assert.equal(face.geometry,geometry);
     assert.equal(Math.max(geometry.parameters.width*face.scale.x,geometry.parameters.height*face.scale.y),2.28);
@@ -167,10 +167,10 @@ test('late texture completion cannot resize a disposed face or resume rendering'
 });
 
 
-test('explicit round/hex/free profiles and distinct observed finishes reach real geometry without altering face',()=>{
- const colors=new Set();for(const material of ['copper','silver','gold','paleBlueSilver']){
-  const m=createMedalGeometry({presentationProfile:{shape:'hex',material}}),base=m.group.getObjectByName('metal_base');colors.add(base.material[1].color.getHex());assert.equal(base.geometry.parameters.shapes[0].getPoints().length,7);assert.equal(m.getDiagnostics().baseShape,'OBSERVED_HEX_BACKING');m.dispose();
- }assert.equal(colors.size,4);assert.throws(()=>createMedalGeometry());assert.throws(()=>createMedalGeometry({presentationProfile:{shape:'free',material:'gold'}}));
+test('source-alpha profiles and distinct finishes reach real geometry without altering face',()=>{
+ const colors=new Set();for(const material of ['copper','silver','gold','paleBlueSilver','crystal']){
+  const m=createMedalGeometry({silhouette:traceMedalSilhouette({width:8,height:8,data:new Uint8Array(256).fill(255)}),presentationProfile:{shape:'free',material}}),base=m.group.getObjectByName('metal_base');colors.add(base.material[1].color.getHex());assert.equal(base.geometry.parameters.shapes[0].getPoints().length,4);assert.equal(m.getDiagnostics().baseShape,'SOURCE_ALPHA_SILHOUETTE');m.dispose();
+ }assert.equal(colors.size,5);assert.throws(()=>createMedalGeometry());assert.throws(()=>createMedalGeometry({presentationProfile:{shape:'free',material:'gold'}}));
  const f=fixture({presentationProfile:{shape:'free',material:'gold'}});f.ready({width:8,height:8});f.scheduler.flush();assert.equal(f.controller.getDiagnostics().silhouetteReads,1);assert.equal(f.controller.getDiagnostics().shape.baseShape,'SOURCE_ALPHA_SILHOUETTE');
  f.ready({width:8,height:8});f.emit('keydown',{key:'ArrowLeft'});f.scheduler.flush();assert.equal(f.controller.getDiagnostics().silhouetteReads,1);f.controller.dispose();assertReleased(f);
 });
@@ -178,9 +178,9 @@ test('unreadable or overcomplex free contours and unknown profiles fail closed w
  for(const reason of ['alpha_read_failed','component_limit','vertex_limit']){const f=fixture({presentationProfile:{shape:'free',material:'gold'},silhouetteResult:{ok:false,reason}});f.ready();assert.deepEqual(f.states,['fallback']);assert.equal(f.controller.getDiagnostics().fallbackReason,reason);assert.equal(f.controller.getDiagnostics().ready,false);assertReleased(f);assert.equal(f.disposedTextures(),1);f.controller.dispose();assertReleased(f);}
  const f=fixture({presentationProfile:{shape:'unknown',material:'gold'}});assert.deepEqual(f.states,['fallback']);assert.equal(f.controller.getDiagnostics().fallbackReason,'unknown_presentation_profile');assert.equal(f.textures.length,0);assertReleased(f);
 });
-test('backed profiles need no alpha read and lazy mount forwards immutable presentation descriptor',async()=>{
- const f=fixture();f.ready();f.scheduler.flush();assert.equal(f.controller.getDiagnostics().silhouetteReads,0);f.controller.dispose();
- const profile=Object.freeze({shape:'hex',material:'paleBlueSilver'});let actual;const p=mountSelectedMedalPresentation({presentationProfile:profile,load:()=>({mountMedalThreePresentation(options){actual=options.presentationProfile;return {dispose(){}};}})});await flushMicrotasks();assert.equal(actual,profile);p.dispose();
+test('all profiles read source alpha once and lazy mount forwards immutable presentation descriptor',async()=>{
+ const f=fixture();f.ready();f.scheduler.flush();assert.equal(f.controller.getDiagnostics().silhouetteReads,1);f.controller.dispose();
+ const profile=Object.freeze({shape:'free',material:'paleBlueSilver'});let actual;const p=mountSelectedMedalPresentation({presentationProfile:profile,load:()=>({mountMedalThreePresentation(options){actual=options.presentationProfile;return {dispose(){}};}})});await flushMicrotasks();assert.equal(actual,profile);p.dispose();
 });
 
 
@@ -190,4 +190,16 @@ test('free mesh geometry and materials release exactly once on context loss and 
  assert.equal(resources.size,5);let releases=0;for(const resource of resources)resource.addEventListener('dispose',()=>releases++);
  f.emit('keydown',{key:'ArrowLeft'});assert.equal(f.scheduler.pending.size,1);f.renderer.domElement.dispatchEvent(new ControlledEvent('webglcontextlost',{bubbles:false}));assert.equal(releases,5);assertReleased(f);
  f.ready();f.controller.reset();f.controller.dispose();f.scheduler.flush();assert.equal(releases,5);assert.equal(f.renders.length,1);assert.equal(f.disposedTextures(),1);assert.equal(f.controller.getDiagnostics().silhouetteReads,1);
+});
+
+
+test('crystal thickness is dielectric and faceted without costly transmission passes',()=>{
+ const m=createMedalGeometry({silhouette:traceMedalSilhouette({width:8,height:8,data:new Uint8Array(256).fill(255)}),presentationProfile:{shape:'free',material:'crystal'}});
+ for(const material of m.group.getObjectByName('metal_base').material){assert.equal(material.transmission,0);assert.equal(material.flatShading,true);assert.ok(material.metalness<.1);assert.equal(material.ior,2.4);assert.equal(material.clearcoat,1);}
+ assert.equal(m.group.children.length,2);m.dispose();
+});
+
+test('legacy round and hex descriptors cannot invent backing geometry',()=>{
+ for(const shape of ['round','hex'])assert.throws(()=>createMedalGeometry({silhouette:traceMedalSilhouette({width:8,height:8,data:new Uint8Array(256).fill(255)}),presentationProfile:{shape,material:'gold'}}));
+ for(const locale of LOCALES){assert.equal(Object.hasOwn(MEDAL_PRESENTATION_COPY[locale],'technique'),false);assert.equal(medalPresentationText('technique',locale),'');}
 });
