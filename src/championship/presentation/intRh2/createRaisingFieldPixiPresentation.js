@@ -1,3 +1,4 @@
+import { getReviewedRaisingContactShadow } from './raisingContactShadow.js';
 import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
 import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
 // INT-RH2 Raising field -- a scene on the single Championship Pixi stage.
@@ -571,6 +572,7 @@ export async function mountRaisingFieldPixiPresentation({
         entry.nativeSizing = actor.nativeSizing ?? null;
         entry.characterController = actor.controller;
         entry.nativeFramePresenter = actor.nativeFramePresenter;
+        entry.contactShadowArt = actor.contactShadowArt ?? null;
         root.addChildAt(actor.sprite, 2);
       }
     }
@@ -596,6 +598,7 @@ export async function mountRaisingFieldPixiPresentation({
           entry.sprite=actor.sprite;entry.nativeSizing=actor.nativeSizing;
           entry.entityId=actor.entityId;entry.assetState='ready';entry.shadow.visible=true;
           entry.nativeFramePresenter=actor.nativeFramePresenter;entry.characterController=actor.controller;
+          entry.contactShadowArt=actor.contactShadowArt??null;
           entry.root.addChildAt(actor.sprite,2);reportResidentAssets();sync(source.getFrame(),{force:true});return;
         }
       }
@@ -652,14 +655,22 @@ export async function mountRaisingFieldPixiPresentation({
     const rect=displayOffset?app.canvas.getBoundingClientRect?.():null;
     const hitAreaCssScale=rect?{x:rect.width/app.screen.width,y:rect.height/app.screen.height}:null;
     const geometry=getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing),displayOffset,hitAreaCssScale});
-    if(geometry)geometry.contactShadow=getRaisingEggContactShadow(entry.entityId,entry.nativeSizing,flipX);
+    if(geometry){
+      geometry.contactShadow=getRaisingEggContactShadow(entry.entityId,entry.nativeSizing,flipX);
+      geometry.reviewedContactShadow=getReviewedRaisingContactShadow(entry.speciesId,
+        entry.nativeFramePresenter?.getSnapshot(),entry.contactShadowArt,entry.visualLift??0,flipX);
+    }
     return geometry;
   }
 
   function decorateActor(entry,geometry){
     const {visible,hitArea}=geometry,center=visible.x+visible.width/2,bottom=visible.y+visible.height;
     const contact=geometry.contactShadow??{x:center,y:bottom+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
-    entry.shadow.clear().ellipse(contact.x,contact.y,contact.radiusX,contact.radiusY).fill({color:0x02070a,alpha:.26});
+    entry.shadow.clear();
+    for(const ellipse of geometry.reviewedContactShadow??[contact]){
+      entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
+    }
+    entry.shadow.fill({color:0x02070a,alpha:.26});
     entry.selection.clear().ellipse(center,bottom+1,visible.width/2+2,Math.max(2,visible.width*.16))
       .fill({color:0x56e3c2,alpha:.12}).stroke({color:0x56e3c2,width:1,alpha:.95});
     entry.root.hitArea=new PIXI.Rectangle(hitArea.x,hitArea.y,hitArea.width,hitArea.height);
@@ -1010,10 +1021,10 @@ export async function mountRaisingFieldPixiPresentation({
         if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId)
           {const visualFrame=entry.nativeFramePresenter.apply(frame);if(entry.sprite){
             if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
+            entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
             const geometry=entry.nativeScale!==null?actorGeometry(entry,visualFrame?.geometry,Boolean(frame.flipBits&1)):null;
             if(geometry){entry.sprite.scale.set(geometry.spriteScale);entry.sprite.x=geometry.offset.x;decorateActor(entry,geometry);}
             if(entry.nativeScale!==null)entry.root.scale.x=Math.abs(entry.root.scale.x);
-            entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
             entry.sprite.y=(geometry?.offset.y??0)-entry.visualLift;
             // Main is authored facing left; the original body bit mirrors it.
             entry.sprite.scale.x=Math.abs(entry.sprite.scale.x)*(frame.flipBits&1?-1:1);

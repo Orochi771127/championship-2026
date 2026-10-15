@@ -53,12 +53,14 @@ export function createGateLandmarkGeometry() {
     }
     const box = (x, y, z) => new THREE.BoxGeometry(x, y, z);
     const cone = (radius, height, top = 0) => new THREE.CylinderGeometry(top, radius, height, 9);
+    // Smooth vertex normals on lean UV crowns retain a soft silhouette while
+    // the complete merged landmark mesh stays under its 12,000-vertex budget.
     function tree(x, y, kind = 'round') {
-      add(cone(0.024, 0.14, 0.018), 0x6c6041, x, y, 0.065);
+      add(new THREE.CylinderGeometry(0.018, 0.024, 0.14, 5), 0x6c6041, x, y, 0.065);
       if (kind === 'flat') {
-        const crown = new THREE.IcosahedronGeometry(0.12, 1); crown.scale(1.45, 0.32, 1);
+        const crown = new THREE.SphereGeometry(0.12, 9, 4); crown.scale(1.45, 0.32, 1);
         add(crown, 0x6e7b3d, x, y, 0.17);
-      } else add(new THREE.IcosahedronGeometry(kind === 'jungle' ? 0.15 : 0.12, 1), kind === 'jungle' ? 0x2d573b : 0x416b3b, x, y, 0.18);
+      } else add(new THREE.SphereGeometry(kind === 'jungle' ? 0.15 : 0.12, 9, 4), kind === 'jungle' ? 0x2d573b : 0x416b3b, x, y, 0.18);
     }
     switch (region.landmark) {
       case 'terraces':
@@ -84,19 +86,19 @@ export function createGateLandmarkGeometry() {
           tree(x, y, region.landmark === 'acacias' ? 'flat' : region.landmark === 'canopy' ? 'jungle' : 'round');
         }
         if (region.landmark === 'wetland') {
-          const pool = new THREE.SphereGeometry(0.17, 16, 8); pool.scale(1.15, 0.035, 0.72);
+          const pool = new THREE.SphereGeometry(0.17, 12, 4); pool.scale(1.15, 0.035, 0.72);
           add(pool, 0x4b7770, 0.16, -0.12, 0.006, 0.35);
         }
         break;
       case 'dunes':
         for (const [x, y] of [[-0.16, 0.13], [0.16, 0.13], [0.10, -0.16]]) {
-          const dune = new THREE.SphereGeometry(0.20, 16, 10); dune.scale(1.5, 0.35, 0.8);
+          const dune = new THREE.SphereGeometry(0.20, 12, 6); dune.scale(1.5, 0.35, 0.8);
           add(dune, 0xdbb678, x, y, 0.015, 0.4);
         } break;
       case 'spring': case 'shore':
         tree(-0.16, 0.11, 'flat'); tree(region.landmark === 'shore' ? -0.14 : 0.14, -0.15, 'flat');
         if (region.landmark === 'spring') {
-          const pool = new THREE.SphereGeometry(0.18, 16, 8); pool.scale(1.2, 0.045, 0.72);
+          const pool = new THREE.SphereGeometry(0.18, 12, 4); pool.scale(1.2, 0.045, 0.72);
           add(pool, 0x5297a1, 0.17, 0.12, 0.01, -0.25);
         }
         else {

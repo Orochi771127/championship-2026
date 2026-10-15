@@ -59,7 +59,8 @@ test('terrain tiers share biome surface and preserve lower saver mesh cost', () 
 
 test('smaller static landmarks are valid merged geometry, without a new render loop', () => {
   const landmarks=geometry.createGateLandmarkGeometry();
-  assert.ok(landmarks.attributes.position.count>0);
+  assert.ok(landmarks.attributes.position.count>1000);
+  assert.ok(landmarks.attributes.position.count<12000, "preserve the existing bounded landmark vertex budget");
   const p=landmarks.attributes.position;
   for(let i=0;i<p.count;i++) {
     const radius=Math.hypot(p.getX(i),p.getY(i),p.getZ(i));

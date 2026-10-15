@@ -381,7 +381,8 @@
     "src/championship/presentation/medals/medalSilhouette.js",
     "src/championship/presentation/medals/medalGeometry.js",
     "src/championship/presentation/medals/medalPresentationText.js",
-    "src/championship/presentation/systemBackgrounds.js"
+    "src/championship/presentation/systemBackgrounds.js",
+    "src/championship/presentation/intRh2/raisingContactShadow.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9802,7 +9803,8 @@
     "src/data/championship/database-original-profiles.r1.json",
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/public-playtest.r1.json",
-    "src/data/championship/r2/fields/fieldInventoryR2.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js",
+    "src/championship/presentation/intRh2/raisingContactShadow.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -46778,7 +46780,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "a461494c300e7f1d96d0bf99a0f586b66397037220bfe6cceb01940ea5054c2e"
+        "sha256": "50acdf52ea4cb0346af6432d8f7292b5b465c74101e769c1edecedd1af861748"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
@@ -46946,7 +46948,7 @@
       },
       {
         "path": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
-        "sha256": "f66f20929edb6ee48a4e26802bd323d46d3b63006b76d27a6af9724214373bc7"
+        "sha256": "4b3170f4189809fdeb596a64c8db42d16f92094a221881b35ac45e897d835e92"
       },
       {
         "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
@@ -47471,6 +47473,10 @@
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
+      },
+      {
+        "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
+        "sha256": "d1ad30f085f8e7e9a3904802fb7a29bea1003155550b4594dc569d04b9db8d54"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
