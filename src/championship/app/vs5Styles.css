@@ -123,13 +123,13 @@
   cursor: pointer;
   transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
-.cm-vs5-action--primary { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+.cm-vs5-action--primary { border-color: transparent; background: var(--btn-primary-bg); box-shadow: var(--btn-primary-edge); color: var(--c-text-on-accent); }
 @media (hover: hover) {
   .cm-vs5-action:hover:not(:disabled) { border-color: var(--c-line-3); background: var(--c-surface-3); }
-  .cm-vs5-action--primary:hover:not(:disabled) { background: var(--c-accent-strong); }
+  .cm-vs5-action--primary:hover:not(:disabled) { background: var(--btn-primary-bg); filter: var(--btn-primary-hover); }
 }
 .cm-vs5-action:not(:disabled):active { transform: translateY(1px); }
-.cm-vs5-action:disabled { border-color: var(--c-line-1); background: var(--c-surface-1); color: var(--c-text-disabled); cursor: default; }
+.cm-vs5-action:disabled { border-color: var(--c-line-1); background: var(--c-surface-1); box-shadow: none; color: var(--c-text-disabled); cursor: default; }
 .cm-vs5-action:focus-visible,
 .cm-vs5-cube__face:focus-visible,
 .cm-vs5-cube__canvas:focus-visible,

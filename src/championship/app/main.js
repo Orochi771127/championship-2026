@@ -84,6 +84,7 @@ import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
+import { configureCeremonyAudio } from '../presentation/ceremony/ceremonyRunner.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
 import { downloadSaveBackup, downloadRuntimeDiagnostics } from './downloadSaveBackup.js';
 import { createRuntimeRecoveryDiagnostics, observeBattleFirstRender } from './runtimeRecoveryDiagnostics.js';
@@ -340,6 +341,8 @@ function bootSettings() {
   return Object.freeze({ store, environment, quality, audio });
 }
 const settings = bootSettings();
+// Ceremonies (2026-10-15) play their synthesized cues through the same sfx bus.
+configureCeremonyAudio(() => settings.audio.output('sfx'));
 const systemBackgrounds = createSystemBackgroundController({ root, store: settings.store });
 const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CUES,
   onState(state){

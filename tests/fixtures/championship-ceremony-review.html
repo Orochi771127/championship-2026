@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="arena"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<base href="../../"><title>演出受控檢查</title>
+<link rel="stylesheet" href="src/championship/app/ui/tokens.css">
+<link rel="stylesheet" href="src/championship/app/styles.css">
+<link rel="stylesheet" href="src/championship/app/intRh2Styles.css">
+<link rel="stylesheet" href="src/championship/app/vs2Styles.css">
+<link rel="stylesheet" href="src/championship/app/vs5Styles.css">
+<link rel="stylesheet" href="src/championship/app/ui/highlight.css">
+<link rel="stylesheet" href="src/championship/app/ui/ceremony.css">
+<style>#cm-stage{position:fixed;inset:0;overflow:hidden;background:var(--bg-pattern),linear-gradient(160deg,#7fc96b,#3f8f4a 60%,#2d6a3a)}</style>
+</head><body><main id="cm-root"></main><div id="cm-stage"></div>
+<script type="module">
+// Explicit presentation fixture (2026-10-15): it runs the production ceremony
+// modules and stylesheets on synthetic, labelled data so each moment can be
+// reviewed and replayed without playing to it. It writes no save or setting.
+//   ?kind=gate|capture|reward|medal|evolve|versus   &theme=arena|night|clear|warm|classic
+//   &motion=reduced   &quality=saver   &title=<titleId>   &species=<speciesId>
+import { playCeremony } from './src/championship/presentation/ceremony/ceremonyRunner.js';
+import { buildGateEntry, buildCapture, buildEvolve, buildVersus } from './src/championship/presentation/ceremony/ceremonyScenes.js';
+import { createBattleResultView } from './src/championship/app/vs5Screens.js';
+import { originalMedalArt } from './src/championship/presentation/completedOriginalUi20261007.js';
+import { loadRegisteredCharacterHudArt } from './src/championship/presentation/characterHudArt.js';
+const query = new URLSearchParams(location.search);
+const kind = query.get('kind') ?? 'medal';
+const html = document.documentElement;
+html.dataset.theme = query.get('theme') ?? 'arena';
+if (query.get('motion') === 'reduced') html.dataset.motion = 'reduced'; else html.dataset.motion = 'full';
+html.dataset.quality = query.get('quality') ?? 'balanced';
+const stage = document.querySelector('#cm-stage');
+const root = document.querySelector('#cm-root');
+window.ceremonyDone = null;
+const run = (options) => { const handle = playCeremony({ autoDismiss: query.get('hold') !== '1', ...options }); window.ceremonyDone = handle.done; return handle; };
+if (kind === 'gate') run({ host: stage, kind: 'gate-entry', cue: 'gate', autoDismiss: false,
+  build: (s, env) => buildGateEntry(s, env, { kicker: '傳送門連線', gateName: '戴納草原', meta: '限時 08:00', hint: '輕觸略過' }) });
+if (kind === 'capture') run({ host: stage, kind: 'capture', cue: 'capture',
+  build: (s, env) => buildCapture(s, env, { kicker: '捕獲成功', name: '星芽獸', chip: '已收入記憶卡 · 1' }) });
+if (kind === 'versus') run({ host: stage, kind: 'versus', cue: 'versus',
+  build: (s, env) => buildVersus(s, env, { playerLabel: '我方', playerNames: ['鎧焰蜥'], opponentLabel: '對手', opponentNames: ['鐵玩暴龍'] }) });
+if (kind === 'evolve') {
+  const species = query.get('species') ?? 'species-189';
+  const art = await loadRegisteredCharacterHudArt({ baseUrl: new URL('../../championship.html', location.href).href, speciesIds: [species] }).catch(() => null);
+  run({ host: stage, kind: 'evolve', cue: 'evolve',
+    build: (s, env) => buildEvolve(s, env, { kicker: '進化', title: '受控進化外觀檢查', meta: '小蛋 進化成了受控進化外觀檢查。',
+      portrait: art?.getPortrait(species) ?? null, hint: '輕觸繼續' }) });
+}
+if (kind === 'medal') {
+  const titleId = Number(query.get('title') ?? 0);
+  stage.remove();
+  const view = createBattleResultView({ root,
+    outcome: { verdict: 'TEAM_ZERO_AHEAD', reason: 'TEAM_DOWN', winningTeam: 0 },
+    receipt: { status: 'SETTLED', won: true, credited: 7000, rewardBits: 7000, walletAfter: 7150, clamped: false },
+    matchTitle: '受控徽章外觀檢查', progression: { rankBefore: 1, rankAfter: 1, earnedTitles: [{ id: titleId, name: '存取突擊兵' }] },
+    hudArt: { getMedal: (id) => originalMedalArt(id, new URL('../../championship.html', location.href).href) },
+    onExit() { root.textContent = '檢查完成'; } });
+  window.resultView = view;
+}
+</script></body></html>

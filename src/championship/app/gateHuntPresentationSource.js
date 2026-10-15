@@ -243,6 +243,12 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         // A readout with no plugin behind it stays dark - the recovered rule.
         capabilities: app.getHuntLoadout()?.getHudCapabilities() ?? null,
         exitAvailable: !tutorial(),
+        // Read-only projection of the memory card, so the field can confirm a
+        // catch the moment it lands there (ceremony layer, 2026-10-15).
+        captures: (runtime.getOnCardEntries?.() ?? []).map((entry) => ({
+          wildId: entry.wildId, speciesId: entry.speciesId,
+          name: entry.displayName ?? speciesNameForId(entry.speciesId)
+        })),
         note: "Deliberately minimal. hunt_sub_scene carries map_marker0..23 and remain_icon0..3 as structural evidence only; their semantics are unknown, so none are rendered."
       },
       affordances: {

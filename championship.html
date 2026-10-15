@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="color-scheme" content="dark">
-    <meta name="theme-color" content="#0b181c">
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#eef5fa">
     <link rel="icon" href="data:,">
     <title>網線拍檔：錦標賽</title>
     <script>
@@ -27,9 +27,9 @@
         } catch (error) { p = {}; }
         function query(text) { try { return window.matchMedia(text).matches === true; } catch (error) { return false; } }
         function pick(value, allowed, fallback) { return allowed.indexOf(value) >= 0 ? value : fallback; }
-        var choice = pick(p.theme, ["night", "clear", "warm", "classic", "system"], "night");
+        var choice = pick(p.theme, ["arena", "night", "clear", "warm", "classic", "system"], "arena");
         var dark = typeof window.matchMedia === "function" ? query("(prefers-color-scheme: dark)") : true;
-        var theme = choice === "system" ? (dark ? "night" : "clear") : choice;
+        var theme = choice === "system" ? (dark ? "night" : "arena") : choice;
         var motion = pick(p.reducedMotion, ["system", "on", "off"], "system");
         var quality = pick(p.quality, ["auto", "saver", "balanced", "high"], "auto");
         var nav = window.navigator || {};
@@ -48,7 +48,7 @@
         root.dataset.quality = quality;
         root.lang = pick(p.locale, ["zh-Hant", "en", "ja", "th", "vi"], "zh-Hant");
         var color = document.querySelector('meta[name="theme-color"]');
-        if (color) color.setAttribute("content", { night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
+        if (color) color.setAttribute("content", { arena: "#eef5fa", night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
         var scheme = document.querySelector('meta[name="color-scheme"]');
         if (scheme) scheme.setAttribute("content", theme === "night" || theme === "classic" ? "dark" : "light");
       })();
@@ -64,6 +64,7 @@
     <link rel="stylesheet" href="./src/championship/app/vs5Styles.css?v=ui-polish-20261012">
     <link rel="stylesheet" href="./src/championship/app/opening.css?v=title-grounded-20261015">
     <link rel="stylesheet" href="./src/championship/app/ui/highlight.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/ui/ceremony.css?v=ceremony-20261015">
     <link rel="stylesheet" href="./src/championship/app/ui/settings.css?v=settings-2">
     <link rel="stylesheet" href="./src/championship/app/ui/systemBackgrounds.css?v=system-backgrounds-r1">
     <!-- Classic theme: the earlier interface skin, active only under data-theme="classic". -->

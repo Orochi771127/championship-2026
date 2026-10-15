@@ -36,6 +36,7 @@ body {
   overflow: hidden;
   /* The night lab: a lamp over the middle of the screen, falling off to ink. */
   background:
+    var(--bg-pattern),
     radial-gradient(90% 60% at 50% 48%, var(--c-stage-glow) 0%, transparent 70%),
     linear-gradient(180deg, var(--c-backdrop-top) 0%, var(--c-ground) 45%, var(--c-backdrop-bottom) 100%);
 }
@@ -577,17 +578,19 @@ body[data-toolbar="on"] #cm-root { bottom: var(--cm-screen-bottom); }
 .cm-button--primary,
 .cm-screen-primary {
   border-color: transparent;
-  background: var(--c-accent);
+  background: var(--btn-primary-bg);
+  box-shadow: var(--btn-primary-edge);
   color: var(--c-text-on-accent);
 }
 @media (hover: hover) {
   .cm-button:hover:not(:disabled), .cm-screen-back:hover:not(:disabled) { border-color: var(--c-line-3); background: var(--c-surface-3); }
-  .cm-button--primary:hover:not(:disabled), .cm-screen-primary:hover:not(:disabled) { background: var(--c-accent-strong); }
+  .cm-button--primary:hover:not(:disabled), .cm-screen-primary:hover:not(:disabled) { filter: var(--btn-primary-hover); }
 }
 :is(.cm-button, .cm-screen-back, .cm-screen-primary):active:not(:disabled) { transform: translateY(1px); }
 :is(.cm-button, .cm-screen-back, .cm-screen-primary):disabled {
   border-color: var(--c-line-1);
   background: var(--c-surface-1);
+  box-shadow: none;
   color: var(--c-text-disabled);
 }
 /* The drawn chevron marks the one way back: the first button of a page footer.
@@ -633,11 +636,11 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   color: var(--c-text-1);
   font-weight: var(--fw-strong);
 }
-.cm-dialog__action--primary { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+.cm-dialog__action--primary { border-color: transparent; background: var(--btn-primary-bg); box-shadow: var(--btn-primary-edge); color: var(--c-text-on-accent); }
 .cm-dialog__action--danger { border-color: var(--c-danger-line); background: var(--c-danger-soft); color: var(--c-danger-text); }
 @media (hover: hover) {
   .cm-dialog__action:hover { background: var(--c-surface-3); }
-  .cm-dialog__action--primary:hover { background: var(--c-accent-strong); }
+  .cm-dialog__action--primary:hover { background: var(--btn-primary-bg); filter: var(--btn-primary-hover); }
   .cm-dialog__action--danger:hover { background: color-mix(in srgb, var(--c-danger) 24%, transparent); }
 }
 
@@ -1045,7 +1048,7 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   color: var(--c-text-1);
   font-weight: var(--fw-strong);
 }
-.cm-championship-action--primary { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+.cm-championship-action--primary { border-color: transparent; background: var(--btn-primary-bg); box-shadow: var(--btn-primary-edge); color: var(--c-text-on-accent); }
 
 /* ---- Wider screens: the extra width becomes columns, not bigger cards ---- */
 @media (min-width: 700px) {
