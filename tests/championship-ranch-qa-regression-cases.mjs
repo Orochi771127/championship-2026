@@ -14,7 +14,7 @@ class AnimatedSprite extends Sprite{constructor({textures}){super(textures[0]);t
 class Graphics extends Container{rect(){return this;}fill(){return this;}}
 class Texture{constructor(o){Object.assign(this,o);}destroy(){}}
 class Rectangle{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}}
-const PIXI={Container,Sprite,AnimatedSprite,Graphics,Texture,Rectangle,Assets:{async load(src){const f=manifest.fields.find(f=>f.frames.some(a=>a.src===src));if(!f)throw Error(src);return{source:{},frame:{x:0,y:0,width:f.worldWidthPx,height:f.worldHeightPx}};},async unload(){}}};
+const PIXI={Container,Sprite,AnimatedSprite,Graphics,Texture,Rectangle,Assets:{async load(src){const f=manifest.fields.find(f=>f.frames.some(a=>a.src===src));if(!f)throw Error(src);return{source:{},frame:{x:0,y:0,width:f.frames.find(a=>a.src===src).rasterWidthPx??f.worldWidthPx,height:f.frames.find(a=>a.src===src).rasterHeightPx??f.worldHeightPx}};},async unload(){}}};
 
 const definitions=listCageDefinitions();const owned=definitions.map(d=>d.shopRecordIndex).filter(Number.isInteger);
 function makeRuntime(decks=0){
