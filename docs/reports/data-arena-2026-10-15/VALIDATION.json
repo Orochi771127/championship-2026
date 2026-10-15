@@ -1,0 +1,1669 @@
+{
+  "schemaVersion": 1,
+  "batch": "DATA_ARENA_20261015",
+  "physicalDeviceAccepted": false,
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "softwareRendering": true,
+  "note": "Headless Chromium 141.0.7390.37 (Playwright 1.62.1) with SwiftShader software WebGL in a cloud container (4 vCPU, no GPU). Frame timings are not GPU or physical-device evidence. Background/foreground is emulated via visibilitychange.",
+  "runs": {
+    "desktopPhoneFull_seed3_final": {
+      "origin": "http://127.0.0.1:8732",
+      "seed": 3,
+      "partnerIndex": 0,
+      "passed": true,
+      "checks": [
+        {
+          "name": "title menu shows the Data Arena entry",
+          "ok": true
+        },
+        {
+          "name": "one shared Pixi Application, one arena ticker callback",
+          "ok": true
+        },
+        {
+          "name": "existing creature art loaded for player, mate and guardian",
+          "ok": true
+        },
+        {
+          "name": "arena fills the desktop viewport",
+          "ok": true
+        },
+        {
+          "name": "holding the mouse fires a sustained, heating beam",
+          "ok": true
+        },
+        {
+          "name": "releasing cools the beam",
+          "ok": true
+        },
+        {
+          "name": "Space dashes (charge spent)",
+          "ok": true
+        },
+        {
+          "name": "backgrounding pauses the match and stops game time",
+          "ok": true
+        },
+        {
+          "name": "low quality applies (scene + pixel ratio cap)",
+          "ok": true
+        },
+        {
+          "name": "resize reaches the shared stage",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "a full match reaches a result",
+          "ok": true
+        },
+        {
+          "name": "at least three level-up choices in a full match",
+          "ok": true
+        },
+        {
+          "name": "restart 1: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 2: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 3: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 4: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 5: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "exit returns to the title and removes the arena",
+          "ok": true
+        },
+        {
+          "name": "exit releases the QA hook and leaves no arena canvas in the page",
+          "ok": true
+        },
+        {
+          "name": "the raising save is byte-identical after arena play",
+          "ok": true
+        },
+        {
+          "name": "arena records live under their own key",
+          "ok": true
+        },
+        {
+          "name": "left touch stick moves the partner",
+          "ok": true
+        },
+        {
+          "name": "right touch stick aims and holds the beam",
+          "ok": true
+        },
+        {
+          "name": "touch dash button dashes",
+          "ok": true
+        },
+        {
+          "name": "touch play never scrolls or zooms the page",
+          "ok": true
+        },
+        {
+          "name": "touch controls are at least 44 CSS px and on screen",
+          "ok": true
+        },
+        {
+          "name": "phone defaults to low quality",
+          "ok": true
+        },
+        {
+          "name": "no page errors, console errors, failed requests or HTTP errors",
+          "ok": true
+        }
+      ],
+      "matches": [
+        {
+          "kind": "full",
+          "outcome": "DEFEAT",
+          "timeSeconds": 195.52,
+          "score": 4590,
+          "level": 5,
+          "levelUps": 4,
+          "decisions": 1838,
+          "wallSeconds": 270.203,
+          "stats": {
+            "perfectDodges": 17,
+            "chains": 1,
+            "rescues": 0,
+            "falls": 2,
+            "coresOut": 2,
+            "beaconsCaptured": 3,
+            "shardsBroken": 0,
+            "orbsErased": 24,
+            "embersQuenched": 4,
+            "bridgesFormed": 0,
+            "rides": 2,
+            "damageTaken": 234.90000000000003,
+            "laserSeconds": 100.79999999999556
+          },
+          "upgrades": {
+            "refractor": 1,
+            "heatSink": 1,
+            "surgePlus": 1,
+            "focusLens": 1
+          }
+        },
+        {
+          "kind": "restarts",
+          "count": 5
+        }
+      ],
+      "performance": {
+        "desktopHigh": {
+          "arenaUpdateMs": {
+            "median": 3.400000000372529,
+            "p95": 7.900000000372529
+          },
+          "frameMsMedian": 100,
+          "frameMsP95": 100,
+          "particlePeak": 180,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "resolution": 1
+        },
+        "phoneEmulated": {
+          "quality": "low",
+          "resolution": 1,
+          "arenaUpdateMs": {
+            "median": 1,
+            "p95": 3.5
+          },
+          "frameMsMedian": 33.399999999999636,
+          "note": "Chromium mobile emulation with software WebGL; not a physical-device measurement."
+        }
+      },
+      "errors": [],
+      "backgroundTest": "EMULATED_VISIBILITYCHANGE_HEADLESS"
+    },
+    "desktopPhoneFull_seed3_preMerge": {
+      "origin": "http://127.0.0.1:8732",
+      "seed": 3,
+      "partnerIndex": 0,
+      "passed": true,
+      "checks": [
+        {
+          "name": "title menu shows the Data Arena entry",
+          "ok": true
+        },
+        {
+          "name": "one shared Pixi Application, one arena ticker callback",
+          "ok": true
+        },
+        {
+          "name": "existing creature art loaded for player, mate and guardian",
+          "ok": true
+        },
+        {
+          "name": "arena fills the desktop viewport",
+          "ok": true
+        },
+        {
+          "name": "holding the mouse fires a sustained, heating beam",
+          "ok": true
+        },
+        {
+          "name": "releasing cools the beam",
+          "ok": true
+        },
+        {
+          "name": "Space dashes (charge spent)",
+          "ok": true
+        },
+        {
+          "name": "backgrounding pauses the match and stops game time",
+          "ok": true
+        },
+        {
+          "name": "low quality applies (scene + pixel ratio cap)",
+          "ok": true
+        },
+        {
+          "name": "resize reaches the shared stage",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "a full match reaches a result",
+          "ok": true
+        },
+        {
+          "name": "at least three level-up choices in a full match",
+          "ok": true
+        },
+        {
+          "name": "restart 1: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 2: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 3: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 4: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 5: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "exit returns to the title and removes the arena",
+          "ok": true
+        },
+        {
+          "name": "exit releases the QA hook and leaves no arena canvas in the page",
+          "ok": true
+        },
+        {
+          "name": "the raising save is byte-identical after arena play",
+          "ok": true
+        },
+        {
+          "name": "arena records live under their own key",
+          "ok": true
+        },
+        {
+          "name": "left touch stick moves the partner",
+          "ok": true
+        },
+        {
+          "name": "right touch stick aims and holds the beam",
+          "ok": true
+        },
+        {
+          "name": "touch dash button dashes",
+          "ok": true
+        },
+        {
+          "name": "touch play never scrolls or zooms the page",
+          "ok": true
+        },
+        {
+          "name": "touch controls are at least 44 CSS px and on screen",
+          "ok": true
+        },
+        {
+          "name": "phone defaults to low quality",
+          "ok": true
+        },
+        {
+          "name": "no page errors, console errors, failed requests or HTTP errors",
+          "ok": true
+        }
+      ],
+      "matches": [
+        {
+          "kind": "full",
+          "outcome": "DEFEAT",
+          "timeSeconds": 245.35,
+          "score": 4740,
+          "level": 5,
+          "levelUps": 4,
+          "decisions": 1532,
+          "wallSeconds": 421.521,
+          "stats": {
+            "perfectDodges": 9,
+            "chains": 6,
+            "rescues": 1,
+            "falls": 5,
+            "coresOut": 3,
+            "beaconsCaptured": 3,
+            "shardsBroken": 0,
+            "orbsErased": 22,
+            "embersQuenched": 2,
+            "bridgesFormed": 2,
+            "rides": 2,
+            "damageTaken": 201.0666666666668,
+            "laserSeconds": 122.06666666666102
+          },
+          "upgrades": {
+            "refractor": 2,
+            "afterimage": 1,
+            "heatSink": 1
+          }
+        },
+        {
+          "kind": "restarts",
+          "count": 5
+        }
+      ],
+      "performance": {
+        "desktopHigh": {
+          "arenaUpdateMs": {
+            "median": 3.2000000001862645,
+            "p95": 8.599999999627471
+          },
+          "frameMsMedian": 100,
+          "frameMsP95": 100,
+          "particlePeak": 176,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "resolution": 1
+        },
+        "phoneEmulated": {
+          "quality": "low",
+          "resolution": 1,
+          "arenaUpdateMs": {
+            "median": 1.2000000001862645,
+            "p95": 5
+          },
+          "frameMsMedian": 50,
+          "note": "Chromium mobile emulation with software WebGL; not a physical-device measurement."
+        }
+      },
+      "errors": [],
+      "backgroundTest": "EMULATED_VISIBILITYCHANGE_HEADLESS"
+    },
+    "desktopPhoneFull_seed7": {
+      "origin": "http://127.0.0.1:8732",
+      "seed": 7,
+      "partnerIndex": 0,
+      "passed": true,
+      "checks": [
+        {
+          "name": "title menu shows the Data Arena entry",
+          "ok": true
+        },
+        {
+          "name": "one shared Pixi Application, one arena ticker callback",
+          "ok": true
+        },
+        {
+          "name": "existing creature art loaded for player, mate and guardian",
+          "ok": true
+        },
+        {
+          "name": "arena fills the desktop viewport",
+          "ok": true
+        },
+        {
+          "name": "holding the mouse fires a sustained, heating beam",
+          "ok": true
+        },
+        {
+          "name": "releasing cools the beam",
+          "ok": true
+        },
+        {
+          "name": "Space dashes (charge spent)",
+          "ok": true
+        },
+        {
+          "name": "backgrounding pauses the match and stops game time",
+          "ok": true
+        },
+        {
+          "name": "low quality applies (scene + pixel ratio cap)",
+          "ok": true
+        },
+        {
+          "name": "resize reaches the shared stage",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "a full match reaches a result",
+          "ok": true
+        },
+        {
+          "name": "at least three level-up choices in a full match",
+          "ok": true
+        },
+        {
+          "name": "restart 1: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 2: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 3: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 4: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 5: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "exit returns to the title and removes the arena",
+          "ok": true
+        },
+        {
+          "name": "exit releases the QA hook and leaves no arena canvas in the page",
+          "ok": true
+        },
+        {
+          "name": "the raising save is byte-identical after arena play",
+          "ok": true
+        },
+        {
+          "name": "arena records live under their own key",
+          "ok": true
+        },
+        {
+          "name": "left touch stick moves the partner",
+          "ok": true
+        },
+        {
+          "name": "right touch stick aims and holds the beam",
+          "ok": true
+        },
+        {
+          "name": "touch dash button dashes",
+          "ok": true
+        },
+        {
+          "name": "touch play never scrolls or zooms the page",
+          "ok": true
+        },
+        {
+          "name": "touch controls are at least 44 CSS px and on screen",
+          "ok": true
+        },
+        {
+          "name": "phone defaults to low quality",
+          "ok": true
+        },
+        {
+          "name": "no page errors, console errors, failed requests or HTTP errors",
+          "ok": true
+        }
+      ],
+      "matches": [
+        {
+          "kind": "full",
+          "outcome": "DEFEAT",
+          "timeSeconds": 180.58,
+          "score": 4690,
+          "level": 6,
+          "levelUps": 5,
+          "decisions": 1137,
+          "wallSeconds": 229.14,
+          "stats": {
+            "perfectDodges": 13,
+            "chains": 2,
+            "rescues": 0,
+            "falls": 0,
+            "coresOut": 3,
+            "beaconsCaptured": 3,
+            "shardsBroken": 1,
+            "orbsErased": 10,
+            "embersQuenched": 4,
+            "bridgesFormed": 0,
+            "rides": 2,
+            "damageTaken": 243.10000000000022,
+            "laserSeconds": 89.56666666666287
+          },
+          "upgrades": {
+            "focusLens": 1,
+            "refractor": 1,
+            "swiftStep": 1,
+            "heatSink": 1,
+            "guardianFin": 1
+          }
+        },
+        {
+          "kind": "restarts",
+          "count": 5
+        }
+      ],
+      "performance": {
+        "desktopHigh": {
+          "arenaUpdateMs": {
+            "median": 3.2999999998137355,
+            "p95": 7.099999999627471
+          },
+          "frameMsMedian": 100,
+          "frameMsP95": 100,
+          "particlePeak": 173,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "resolution": 1
+        },
+        "phoneEmulated": {
+          "quality": "low",
+          "resolution": 1,
+          "arenaUpdateMs": {
+            "median": 1.2000000001862645,
+            "p95": 5.2999999998137355
+          },
+          "frameMsMedian": 50,
+          "note": "Chromium mobile emulation with software WebGL; not a physical-device measurement."
+        }
+      },
+      "errors": [],
+      "backgroundTest": "EMULATED_VISIBILITYCHANGE_HEADLESS"
+    },
+    "desktopPhoneFull_seed19_corona": {
+      "origin": "http://127.0.0.1:8732",
+      "seed": 19,
+      "partnerIndex": 1,
+      "passed": true,
+      "checks": [
+        {
+          "name": "title menu shows the Data Arena entry",
+          "ok": true
+        },
+        {
+          "name": "one shared Pixi Application, one arena ticker callback",
+          "ok": true
+        },
+        {
+          "name": "existing creature art loaded for player, mate and guardian",
+          "ok": true
+        },
+        {
+          "name": "arena fills the desktop viewport",
+          "ok": true
+        },
+        {
+          "name": "holding the mouse fires a sustained, heating beam",
+          "ok": true
+        },
+        {
+          "name": "releasing cools the beam",
+          "ok": true
+        },
+        {
+          "name": "Space dashes (charge spent)",
+          "ok": true
+        },
+        {
+          "name": "backgrounding pauses the match and stops game time",
+          "ok": true
+        },
+        {
+          "name": "low quality applies (scene + pixel ratio cap)",
+          "ok": true
+        },
+        {
+          "name": "resize reaches the shared stage",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-full: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "a full match reaches a result",
+          "ok": true
+        },
+        {
+          "name": "at least three level-up choices in a full match",
+          "ok": true
+        },
+        {
+          "name": "restart 1: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 2: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 3: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 4: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 5: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "exit returns to the title and removes the arena",
+          "ok": true
+        },
+        {
+          "name": "exit releases the QA hook and leaves no arena canvas in the page",
+          "ok": true
+        },
+        {
+          "name": "the raising save is byte-identical after arena play",
+          "ok": true
+        },
+        {
+          "name": "arena records live under their own key",
+          "ok": true
+        },
+        {
+          "name": "left touch stick moves the partner",
+          "ok": true
+        },
+        {
+          "name": "right touch stick aims and holds the beam",
+          "ok": true
+        },
+        {
+          "name": "touch dash button dashes",
+          "ok": true
+        },
+        {
+          "name": "touch play never scrolls or zooms the page",
+          "ok": true
+        },
+        {
+          "name": "touch controls are at least 44 CSS px and on screen",
+          "ok": true
+        },
+        {
+          "name": "phone defaults to low quality",
+          "ok": true
+        },
+        {
+          "name": "no page errors, console errors, failed requests or HTTP errors",
+          "ok": true
+        }
+      ],
+      "matches": [
+        {
+          "kind": "full",
+          "outcome": "DEFEAT",
+          "timeSeconds": 261.17,
+          "score": 3820,
+          "level": 5,
+          "levelUps": 4,
+          "decisions": 2156,
+          "wallSeconds": 343.684,
+          "stats": {
+            "perfectDodges": 9,
+            "chains": 3,
+            "rescues": 1,
+            "falls": 4,
+            "coresOut": 3,
+            "beaconsCaptured": 3,
+            "shardsBroken": 4,
+            "orbsErased": 15,
+            "embersQuenched": 2,
+            "bridgesFormed": 0,
+            "rides": 1,
+            "damageTaken": 169.00000000000034,
+            "laserSeconds": 74.2833333333304
+          },
+          "upgrades": {
+            "heatSink": 2,
+            "refractor": 1,
+            "focusLens": 1
+          }
+        },
+        {
+          "kind": "restarts",
+          "count": 5
+        }
+      ],
+      "performance": {
+        "desktopHigh": {
+          "arenaUpdateMs": {
+            "median": 3.3999999994412065,
+            "p95": 8.5
+          },
+          "frameMsMedian": 100,
+          "frameMsP95": 100,
+          "particlePeak": 164,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "resolution": 1
+        },
+        "phoneEmulated": {
+          "quality": "low",
+          "resolution": 1,
+          "arenaUpdateMs": {
+            "median": 1.099999999627471,
+            "p95": 3.5
+          },
+          "frameMsMedian": 33.399999999999636,
+          "note": "Chromium mobile emulation with software WebGL; not a physical-device measurement."
+        }
+      },
+      "errors": [],
+      "backgroundTest": "EMULATED_VISIBILITYCHANGE_HEADLESS"
+    },
+    "builtArtifactSubpath_quick": {
+      "origin": "http://127.0.0.1:8791/championship-2026",
+      "seed": 7,
+      "partnerIndex": 0,
+      "passed": true,
+      "checks": [
+        {
+          "name": "title menu shows the Data Arena entry",
+          "ok": true
+        },
+        {
+          "name": "one shared Pixi Application, one arena ticker callback",
+          "ok": true
+        },
+        {
+          "name": "existing creature art loaded for player, mate and guardian",
+          "ok": true
+        },
+        {
+          "name": "arena fills the desktop viewport",
+          "ok": true
+        },
+        {
+          "name": "holding the mouse fires a sustained, heating beam",
+          "ok": true
+        },
+        {
+          "name": "releasing cools the beam",
+          "ok": true
+        },
+        {
+          "name": "Space dashes (charge spent)",
+          "ok": true
+        },
+        {
+          "name": "backgrounding pauses the match and stops game time",
+          "ok": true
+        },
+        {
+          "name": "low quality applies (scene + pixel ratio cap)",
+          "ok": true
+        },
+        {
+          "name": "resize reaches the shared stage",
+          "ok": true
+        },
+        {
+          "name": "restart 1: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 2: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 3: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 4: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 5: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "exit returns to the title and removes the arena",
+          "ok": true
+        },
+        {
+          "name": "exit releases the QA hook and leaves no arena canvas in the page",
+          "ok": true
+        },
+        {
+          "name": "the raising save is byte-identical after arena play",
+          "ok": true
+        },
+        {
+          "name": "arena records live under their own key",
+          "ok": true
+        },
+        {
+          "name": "left touch stick moves the partner",
+          "ok": true
+        },
+        {
+          "name": "right touch stick aims and holds the beam",
+          "ok": true
+        },
+        {
+          "name": "touch dash button dashes",
+          "ok": true
+        },
+        {
+          "name": "touch play never scrolls or zooms the page",
+          "ok": true
+        },
+        {
+          "name": "touch controls are at least 44 CSS px and on screen",
+          "ok": true
+        },
+        {
+          "name": "phone defaults to low quality",
+          "ok": true
+        },
+        {
+          "name": "no page errors, console errors, failed requests or HTTP errors",
+          "ok": true
+        }
+      ],
+      "matches": [
+        {
+          "kind": "restarts",
+          "count": 5
+        }
+      ],
+      "performance": {
+        "phoneEmulated": {
+          "quality": "low",
+          "resolution": 1,
+          "arenaUpdateMs": {
+            "median": 1.099999999627471,
+            "p95": 6.2999999998137355
+          },
+          "frameMsMedian": 33.400000000001455,
+          "note": "Chromium mobile emulation with software WebGL; not a physical-device measurement."
+        }
+      },
+      "errors": [],
+      "backgroundTest": "EMULATED_VISIBILITYCHANGE_HEADLESS"
+    },
+    "builtArtifactRoot_quick": {
+      "origin": "http://127.0.0.1:8790",
+      "seed": 7,
+      "partnerIndex": 0,
+      "passed": true,
+      "checks": [
+        {
+          "name": "title menu shows the Data Arena entry",
+          "ok": true
+        },
+        {
+          "name": "one shared Pixi Application, one arena ticker callback",
+          "ok": true
+        },
+        {
+          "name": "existing creature art loaded for player, mate and guardian",
+          "ok": true
+        },
+        {
+          "name": "arena fills the desktop viewport",
+          "ok": true
+        },
+        {
+          "name": "holding the mouse fires a sustained, heating beam",
+          "ok": true
+        },
+        {
+          "name": "releasing cools the beam",
+          "ok": true
+        },
+        {
+          "name": "Space dashes (charge spent)",
+          "ok": true
+        },
+        {
+          "name": "backgrounding pauses the match and stops game time",
+          "ok": true
+        },
+        {
+          "name": "low quality applies (scene + pixel ratio cap)",
+          "ok": true
+        },
+        {
+          "name": "resize reaches the shared stage",
+          "ok": true
+        },
+        {
+          "name": "restart 1: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 2: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 3: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 4: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 5: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "exit returns to the title and removes the arena",
+          "ok": true
+        },
+        {
+          "name": "exit releases the QA hook and leaves no arena canvas in the page",
+          "ok": true
+        },
+        {
+          "name": "the raising save is byte-identical after arena play",
+          "ok": true
+        },
+        {
+          "name": "arena records live under their own key",
+          "ok": true
+        },
+        {
+          "name": "left touch stick moves the partner",
+          "ok": true
+        },
+        {
+          "name": "right touch stick aims and holds the beam",
+          "ok": true
+        },
+        {
+          "name": "touch dash button dashes",
+          "ok": true
+        },
+        {
+          "name": "touch play never scrolls or zooms the page",
+          "ok": true
+        },
+        {
+          "name": "touch controls are at least 44 CSS px and on screen",
+          "ok": true
+        },
+        {
+          "name": "phone defaults to low quality",
+          "ok": true
+        },
+        {
+          "name": "no page errors, console errors, failed requests or HTTP errors",
+          "ok": true
+        }
+      ],
+      "matches": [
+        {
+          "kind": "restarts",
+          "count": 5
+        }
+      ],
+      "performance": {
+        "phoneEmulated": {
+          "quality": "low",
+          "resolution": 1,
+          "arenaUpdateMs": {
+            "median": 1.7000000001862645,
+            "p95": 10.200000000186265
+          },
+          "frameMsMedian": 83.29999999999927,
+          "note": "Chromium mobile emulation with software WebGL; not a physical-device measurement."
+        }
+      },
+      "errors": [],
+      "backgroundTest": "EMULATED_VISIBILITYCHANGE_HEADLESS"
+    },
+    "round2_desktopPhoneFull_seed7_final": {
+      "label": "Round 2-3 final full gate on source after merging main f918bfd6: full tournament + full harbor regression + restarts + exit/re-enter + save isolation + phone touch (tournament and harbor)",
+      "origin": "http://127.0.0.1:8732",
+      "seed": 7,
+      "passed": true,
+      "checkCount": 51,
+      "checks": [
+        {
+          "name": "title menu shows the Data Arena entry",
+          "ok": true
+        },
+        {
+          "name": "a fresh player lands on the tournament mode",
+          "ok": true
+        },
+        {
+          "name": "the select screen previews the four-move kit",
+          "ok": true
+        },
+        {
+          "name": "round 1 opens with a VS intro and frozen input",
+          "ok": true
+        },
+        {
+          "name": "one shared Pixi Application, one arena ticker callback",
+          "ok": true
+        },
+        {
+          "name": "existing creature art loaded for the partner and all three rivals",
+          "ok": true
+        },
+        {
+          "name": "arena fills the desktop viewport",
+          "ok": true
+        },
+        {
+          "name": "kit HUD shows three skills, the ultimate and the energy bar",
+          "ok": true
+        },
+        {
+          "name": "holding the mouse fires a sustained, heating beam",
+          "ok": true
+        },
+        {
+          "name": "releasing cools the beam",
+          "ok": true
+        },
+        {
+          "name": "the 2 key casts skill 1 (energy spent, slot cooling)",
+          "ok": true
+        },
+        {
+          "name": "casting again while cooling is refused with feedback",
+          "ok": true
+        },
+        {
+          "name": "Space dashes (charge spent)",
+          "ok": true
+        },
+        {
+          "name": "backgrounding pauses the match and stops game time",
+          "ok": true
+        },
+        {
+          "name": "low quality applies (scene + pixel ratio cap)",
+          "ok": true
+        },
+        {
+          "name": "resize reaches the shared stage",
+          "ok": true
+        },
+        {
+          "name": "desktop-cup: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-cup: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "a full tournament reaches a champion or knockout result",
+          "ok": true
+        },
+        {
+          "name": "between rounds the bracket and a three-choice upgrade appear",
+          "ok": true
+        },
+        {
+          "name": "the result lists every round played",
+          "ok": true
+        },
+        {
+          "name": "skills were cast through real input during the cup",
+          "ok": true
+        },
+        {
+          "name": "harbor loads partner, mate and guardian art",
+          "ok": true
+        },
+        {
+          "name": "switching mode from the result screen keeps the shared ticker running",
+          "ok": true
+        },
+        {
+          "name": "desktop-harbor: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-harbor: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-harbor: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "desktop-harbor: level-up pauses the match",
+          "ok": true
+        },
+        {
+          "name": "a full harbor match reaches a result",
+          "ok": true
+        },
+        {
+          "name": "at least three level-up choices in a harbor match",
+          "ok": true
+        },
+        {
+          "name": "harbor objectives still run (cores, beacons, rides)",
+          "ok": true
+        },
+        {
+          "name": "restart 1: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 2: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 3: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 4: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 5: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "exit returns to the title and removes the arena",
+          "ok": true
+        },
+        {
+          "name": "exit releases the QA hook and leaves no arena canvas in the page",
+          "ok": true
+        },
+        {
+          "name": "re-entering remembers the last mode played",
+          "ok": true
+        },
+        {
+          "name": "the raising save is byte-identical after arena play",
+          "ok": true
+        },
+        {
+          "name": "arena records live under their own key",
+          "ok": true
+        },
+        {
+          "name": "records keep a separate entry per mode",
+          "ok": true
+        },
+        {
+          "name": "left touch stick moves the partner",
+          "ok": true
+        },
+        {
+          "name": "right touch stick aims and holds the beam",
+          "ok": true
+        },
+        {
+          "name": "tapping a touch skill button casts it (auto-aimed)",
+          "ok": true
+        },
+        {
+          "name": "touch dash button dashes",
+          "ok": true
+        },
+        {
+          "name": "touch play never scrolls or zooms the page",
+          "ok": true
+        },
+        {
+          "name": "touch controls are at least 44 CSS px and on screen",
+          "ok": true
+        },
+        {
+          "name": "phone defaults to low quality",
+          "ok": true
+        },
+        {
+          "name": "harbor on touch adds the mate buttons beside the kit",
+          "ok": true
+        },
+        {
+          "name": "no page errors, console errors, failed requests or HTTP errors",
+          "ok": true
+        }
+      ],
+      "unexpectedErrors": 0,
+      "runs": [
+        {
+          "kind": "tournament",
+          "outcome": "VICTORY",
+          "timeSeconds": 208.1,
+          "score": 8299,
+          "rounds": [
+            {
+              "round": 0,
+              "rivalId": "flame",
+              "won": true,
+              "reason": "KO",
+              "seconds": 72.2,
+              "score": 1350
+            },
+            {
+              "round": 1,
+              "rivalId": "tide",
+              "won": true,
+              "reason": "KO",
+              "seconds": 56.8,
+              "score": 1526
+            },
+            {
+              "round": 2,
+              "rivalId": "storm",
+              "won": true,
+              "reason": "KO",
+              "seconds": 63.4,
+              "score": 1923
+            }
+          ],
+          "levelUps": 2,
+          "casts": 155,
+          "decisions": 2104,
+          "wallSeconds": 348.633,
+          "stats": {
+            "perfectDodges": 7,
+            "chains": 10,
+            "rescues": 0,
+            "falls": 4,
+            "coresOut": 0,
+            "beaconsCaptured": 0,
+            "shardsBroken": 1,
+            "orbsErased": 0,
+            "embersQuenched": 0,
+            "bridgesFormed": 7,
+            "rides": 0,
+            "damageTaken": 336.71666666666994,
+            "laserSeconds": 78.93333333333014,
+            "movesCast": 111,
+            "ultimates": 10,
+            "barrierBlocks": 0,
+            "rivalDodges": 37,
+            "roundsWon": 3
+          },
+          "upgrades": {
+            "focusLens": 1,
+            "perfectTiming": 1
+          }
+        },
+        {
+          "kind": "harbor",
+          "outcome": "DEFEAT",
+          "timeSeconds": 208.07,
+          "score": 4645,
+          "level": 6,
+          "levelUps": 4,
+          "casts": 128,
+          "decisions": 2079,
+          "wallSeconds": 274.305,
+          "stats": {
+            "perfectDodges": 32,
+            "chains": 5,
+            "rescues": 0,
+            "falls": 0,
+            "coresOut": 2,
+            "beaconsCaptured": 3,
+            "shardsBroken": 0,
+            "orbsErased": 16,
+            "embersQuenched": 7,
+            "bridgesFormed": 0,
+            "rides": 2,
+            "damageTaken": 309.46666666666755,
+            "laserSeconds": 101.63333333332885,
+            "movesCast": 82,
+            "ultimates": 4,
+            "barrierBlocks": 0,
+            "rivalDodges": 0,
+            "roundsWon": 0
+          },
+          "upgrades": {
+            "focusLens": 2,
+            "perfectTiming": 1,
+            "swiftStep": 1,
+            "energyLoop": 1
+          }
+        },
+        {
+          "kind": "restarts",
+          "count": 5
+        }
+      ],
+      "performance": {
+        "desktopHighTournament": {
+          "arenaUpdateMs": {
+            "median": 1,
+            "p95": 3.399999998509884
+          },
+          "frameMsMedian": 100,
+          "frameMsP95": 100,
+          "particlePeak": 180,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "resolution": 1
+        },
+        "desktopHighHarbor": {
+          "arenaUpdateMs": {
+            "median": 3.699999999254942,
+            "p95": 9.400000000372529
+          },
+          "frameMsMedian": 100,
+          "frameMsP95": 100,
+          "particlePeak": 175,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "resolution": 1
+        },
+        "phoneEmulated": {
+          "quality": "low",
+          "resolution": 1,
+          "arenaUpdateMs": {
+            "median": 1.1000000014901161,
+            "p95": 3.600000001490116
+          },
+          "frameMsMedian": 66.60000000000036,
+          "note": "Chromium mobile emulation with software WebGL; not a physical-device measurement."
+        }
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "screenshots": [
+        "desktop-00-title-entry.png",
+        "desktop-01-select.png",
+        "desktop-02-briefing.png",
+        "desktop-03-round-intro.png",
+        "desktop-04-skill-cast.png",
+        "desktop-05-paused-after-background.png",
+        "desktop-cup-rival-telegraph.png",
+        "desktop-cup-round1.png",
+        "desktop-cup-ice.png",
+        "desktop-cup-rival-cover.png",
+        "desktop-cup-fire.png",
+        "desktop-cup-ultimate.png",
+        "desktop-cup-levelup.png",
+        "desktop-cup-round2.png",
+        "desktop-cup-round3.png",
+        "desktop-cup-result.png",
+        "desktop-harbor-combat.png",
+        "desktop-harbor-extinguish.png",
+        "desktop-harbor-fire.png",
+        "desktop-harbor-levelup.png",
+        "desktop-harbor-ride.png",
+        "desktop-harbor-scan.png",
+        "desktop-harbor-guardian.png",
+        "desktop-harbor-result.png",
+        "desktop-06-reenter-frost-tournament.png",
+        "phone-01-select.png",
+        "phone-02-briefing.png",
+        "phone-03-twin-stick.png",
+        "phone-04-combat.png",
+        "phone-05-pause.png",
+        "phone-06-select-harbor.png",
+        "phone-07-harbor.png"
+      ]
+    },
+    "round2_builtSubpath_quick": {
+      "label": "Round 2-3 Pages build artifact served under /championship-2026/ (ARENA_SKIP_FULL); includes the last camera top-margin adjustment",
+      "origin": "http://127.0.0.1:8791/championship-2026",
+      "seed": 7,
+      "passed": true,
+      "checkCount": 35,
+      "checks": [
+        {
+          "name": "title menu shows the Data Arena entry",
+          "ok": true
+        },
+        {
+          "name": "a fresh player lands on the tournament mode",
+          "ok": true
+        },
+        {
+          "name": "the select screen previews the four-move kit",
+          "ok": true
+        },
+        {
+          "name": "round 1 opens with a VS intro and frozen input",
+          "ok": true
+        },
+        {
+          "name": "one shared Pixi Application, one arena ticker callback",
+          "ok": true
+        },
+        {
+          "name": "existing creature art loaded for the partner and all three rivals",
+          "ok": true
+        },
+        {
+          "name": "arena fills the desktop viewport",
+          "ok": true
+        },
+        {
+          "name": "kit HUD shows three skills, the ultimate and the energy bar",
+          "ok": true
+        },
+        {
+          "name": "holding the mouse fires a sustained, heating beam",
+          "ok": true
+        },
+        {
+          "name": "releasing cools the beam",
+          "ok": true
+        },
+        {
+          "name": "the 2 key casts skill 1 (energy spent, slot cooling)",
+          "ok": true
+        },
+        {
+          "name": "casting again while cooling is refused with feedback",
+          "ok": true
+        },
+        {
+          "name": "Space dashes (charge spent)",
+          "ok": true
+        },
+        {
+          "name": "backgrounding pauses the match and stops game time",
+          "ok": true
+        },
+        {
+          "name": "low quality applies (scene + pixel ratio cap)",
+          "ok": true
+        },
+        {
+          "name": "resize reaches the shared stage",
+          "ok": true
+        },
+        {
+          "name": "restart 1: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 2: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 3: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 4: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "restart 5: ticker callbacks stay at 3",
+          "ok": true
+        },
+        {
+          "name": "exit returns to the title and removes the arena",
+          "ok": true
+        },
+        {
+          "name": "exit releases the QA hook and leaves no arena canvas in the page",
+          "ok": true
+        },
+        {
+          "name": "re-entering remembers the last mode played",
+          "ok": true
+        },
+        {
+          "name": "the raising save is byte-identical after arena play",
+          "ok": true
+        },
+        {
+          "name": "arena records live under their own key",
+          "ok": true
+        },
+        {
+          "name": "left touch stick moves the partner",
+          "ok": true
+        },
+        {
+          "name": "right touch stick aims and holds the beam",
+          "ok": true
+        },
+        {
+          "name": "tapping a touch skill button casts it (auto-aimed)",
+          "ok": true
+        },
+        {
+          "name": "touch dash button dashes",
+          "ok": true
+        },
+        {
+          "name": "touch play never scrolls or zooms the page",
+          "ok": true
+        },
+        {
+          "name": "touch controls are at least 44 CSS px and on screen",
+          "ok": true
+        },
+        {
+          "name": "phone defaults to low quality",
+          "ok": true
+        },
+        {
+          "name": "harbor on touch adds the mate buttons beside the kit",
+          "ok": true
+        },
+        {
+          "name": "no page errors, console errors, failed requests or HTTP errors",
+          "ok": true
+        }
+      ],
+      "unexpectedErrors": 0,
+      "runs": [
+        {
+          "kind": "restarts",
+          "count": 5
+        }
+      ],
+      "performance": {
+        "phoneEmulated": {
+          "quality": "low",
+          "resolution": 1,
+          "arenaUpdateMs": {
+            "median": 1.099999999627471,
+            "p95": 2.900000000372529
+          },
+          "frameMsMedian": 50,
+          "note": "Chromium mobile emulation with software WebGL; not a physical-device measurement."
+        }
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "screenshots": [
+        "desktop-00-title-entry.png",
+        "desktop-01-select.png",
+        "desktop-02-briefing.png",
+        "desktop-03-round-intro.png",
+        "desktop-04-skill-cast.png",
+        "desktop-05-paused-after-background.png",
+        "desktop-06-reenter-frost-tournament.png",
+        "phone-01-select.png",
+        "phone-02-briefing.png",
+        "phone-03-twin-stick.png",
+        "phone-04-combat.png",
+        "phone-05-pause.png",
+        "phone-06-select-harbor.png",
+        "phone-07-harbor.png"
+      ]
+    }
+  },
+  "round2": {
+    "ruleTests": "tests/championship-data-arena-cases.mjs 42/42",
+    "testCi": "npm run test:ci 2225/2225 (after merging origin/main f918bfd6)",
+    "buildPlaytest": "build:playtest + validate:playtest pass (9691 files)",
+    "headlessBalance": {
+      "tournamentSkill0.6": "6/9 cups, 0 round-1 losses",
+      "tournamentSkill0.35": "6/9 cups",
+      "harbor24": "16/24"
+    },
+    "note": "Autopilot results, not human win rates. Software WebGL only; no physical-device acceptance."
+  }
+}
