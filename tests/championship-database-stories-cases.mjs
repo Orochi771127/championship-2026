@@ -412,7 +412,7 @@ test('070071072 hosted candidates preserve exact identity and discovery privacy 
 
 
 
-test('070071072 scoped candidates preserve all51 baseline entries and require hosted visual review',async()=>{
+test('070071072 scoped heroes preserve all51 baseline entries and exact hosted visual approval',async()=>{
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const hash=b=>createHash('sha256').update(b).digest('hex');
  const registry=JSON.parse(fs.readFileSync('src/data/championship/database-hero-portraits.r1.json','utf8'));
@@ -423,7 +423,7 @@ test('070071072 scoped candidates preserve all51 baseline entries and require ho
  assert.deepEqual(registry.entries.slice(51),expected);
  for(const e of expected){assert.deepEqual(databaseHeroPortrait(e.speciesIndex),e);const raw=fs.readFileSync(e.src);assert.equal(hash(raw),e.sha256);assert.equal(raw.readUInt32BE(16),1254);assert.equal(raw.readUInt32BE(20),1254);assert.equal(raw[25],6);
   const m=manifest.entries.find(x=>x.speciesIndex===e.speciesIndex),s=sources[e.speciesIndex];assert.equal(m.sourceEntityId,s.entity);assert.equal(m.sourceReferenceSha256,s.source);assert.equal(m.promptSha256,s.prompt);assert.equal(m.selectedGenerationVersion,s.version);
-  assert.equal(m.review.rootReview,'HOSTED_COMPARISON_CANDIDATE_NOT_FINAL_VISUAL_PASS');assert.equal(m.review.runtimeBrowser,'PENDING_HOSTED_070_071_072_117_COMPARISON');assert.match(m.review.runtimeContainPadding,/24px/);
+  assert.equal(m.review.rootReview,'SCOPED_HOSTED_VISUAL_PASS');assert.equal(m.review.runtimeBrowser,'PASS_NORMAL_DEX_128_256_LIGHT_DARK_RESPONSIVE');assert.match(m.review.runtimeContainPadding,/24px/);assert.equal(m.review.hostedEvidence.candidateHead,'344010354799c2a6da0c794d7b74de768c6e7cc1');assert.equal(m.review.hostedEvidence.artifactId,11991000289);assert.equal(m.review.hostedEvidence.testedImageSha256,e.sha256);assert.equal(m.review.hostedEvidence.capturePairCount,33);assert.equal(m.review.hostedEvidence.friendsStatus,'PASS');assert.match(m.review.rootReviewScope,/Not an all-roster/);assert.match(m.review.nativeMarginCaveat,/margin/i);
  }
  for(const sp of [73,74,75,76,77,229,230])assert.equal(databaseHeroPortrait(sp),null);
  assert.equal(databaseHeroPortrait(117).sha256,'8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681');
