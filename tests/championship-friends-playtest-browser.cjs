@@ -140,6 +140,14 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
     await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);
     await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();await page.waitForFunction(()=>document.body.dataset.tool==='clean');
     const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+    // Top-headroom proof was captured above; lift the field 100px so lower tips clear the toolbar.
+    if(viewport.width===1280){
+     await clearCalendar();const box=await canvas.boundingBox();assert.ok(box);
+     const start=await canvas.evaluate((canvas,box)=>[260,320,380].map(y=>({x:box.width-35,y})).find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),box);
+     assert.ok(start,'Lower-tip framing must begin on unobstructed canvas');
+     await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
+     await page.mouse.move(box.x+start.x,box.y+start.y-100,{steps:20});await page.mouse.up();await page.waitForTimeout(250);
+    }
     const count=viewport.width<500?9:6;
     for(let pan=0;pan<count;pan++){
      // Real elapsed time: two 170ms samples bracket the 334.302ms sea phases.
