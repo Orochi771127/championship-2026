@@ -126,6 +126,9 @@ const createShopView = async options => (await import('./vs4Screens.js')).create
 const createDatabaseView = async options => (await import('./vs4Screens.js')).createDatabaseView(options);
 const createCageEditView = async options => (await import('./vs4Screens.js')).createCageEditView(options);
 const createBattleSelectView = async options => (await import('./vs5Screens.js')).createBattleSelectView(options);
+// Data Arena (OWNER_APPROVED_ADAPTATION 2026-10-15): an original mode opened
+// from the title menu; fetched only when the player picks it.
+const openDataArena = async options => (await import('./dataArenaScreen.js')).openDataArena(options);
 const mountRaisingFieldPixiPresentation = async options => (await import('../presentation/intRh2/createRaisingFieldPixiPresentation.js')).mountRaisingFieldPixiPresentation(options);
 const mountHuntFieldPixiPresentation = async options => (await import('../presentation/vs2/createHuntFieldPixiPresentation.js')).mountHuntFieldPixiPresentation(options);
 const mountBattleFieldPixiPresentation = async options => (await import('../presentation/vs5/createBattleFieldPixiPresentation.js')).mountBattleFieldPixiPresentation(options);
@@ -280,6 +283,7 @@ let mounting = null;
 // field mount and re-attached to whichever screen's field host is current.
 let pixiStage = null;
 let clockDriver = null;
+let dataArenaSession = null;
 let tutorialPreview = null;
 let unsubscribeTutorialTools = null;
 
@@ -349,6 +353,7 @@ const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CU
 settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume'].includes(id)))music.preferencesChanged();});
 const tutorialMusicAttempts=new WeakMap();let tutorialMusicSequence=0;
 function syncMusic(){
+  if(dataArenaSession)return; // the arena picks its own cues on the shared music presentation
   if(openingFilm?.isPlaying()){music.setScene(null);return;}
   if(!titleScreen.hidden){const cue=selectOriginalMusic({titleVisible:true,openingVisible:!document.getElementById('cm-opening').hidden});music.setScene(cue.id);return;}
   const screen=app?.getScreen(),tutorialBattle=app?.getInteractiveTutorialBattle?.(),runtime=tutorialBattle?.runtime??battleRuntime;
@@ -413,7 +418,9 @@ function loadPixiModule(){
   return pixiModulePromise??=import("../../../node_modules/pixi.js/dist/pixi.mjs")
     .catch(error=>{pixiModulePromise=null;throw error;});
 }
-async function ensurePixiStage(canvasHost, signal) {
+// The one Application, created on first use. The Data Arena attaches to it
+// from the title without a game session, so no clock driver is made here.
+async function ensureSharedPixiStage(canvasHost, signal) {
   const PIXI = await loadPixiModule();
   signal?.throwIfAborted();
   if (!pixiStage) {
@@ -430,6 +437,10 @@ async function ensurePixiStage(canvasHost, signal) {
   // never reattach its canvas over a newer screen. All callers share one init.
   signal?.throwIfAborted();
   pixiStage.attach(canvasHost);
+  return pixiStage;
+}
+async function ensurePixiStage(canvasHost, signal) {
+  await ensureSharedPixiStage(canvasHost, signal);
   if (!clockDriver) {
     clockDriver = createChampionshipClockDriver({
       app, ticker: pixiStage.app.ticker,
@@ -2162,11 +2173,58 @@ function relabelChrome() {
   else retranslate(root);
 }
 
+// ---- Data Arena entry (OWNER_APPROVED_ADAPTATION 2026-10-15) ----------------
+// One title button opens the arena over the title. It needs no game session,
+// writes only its own record key and hands back the title when it closes.
+const dataArenaButton = document.getElementById("cm-data-arena");
+let dataArenaTextModule = null;
+function labelDataArenaEntry() {
+  if (!dataArenaButton) return;
+  dataArenaTextModule ??= import("../text/dataArenaText.js");
+  void dataArenaTextModule.then(({ arenaText }) => { dataArenaButton.textContent = arenaText("entry"); });
+}
+async function enterDataArena() {
+  if (dataArenaSession || !dataArenaButton) return;
+  dataArenaButton.disabled = true;
+  dataArenaSession = "OPENING";
+  let storage = null;
+  try { storage = window.localStorage; } catch { storage = null; }
+  // ?arenaQa=1 exposes read-only observation for browser QA; ?arenaSeed=N replays a match seed.
+  const arenaParams = new URLSearchParams(location.search);
+  const seedParam = arenaParams.get("arenaSeed") ?? "";
+  try {
+    const session = await openDataArena({
+      ensureStage: (host, signal) => ensureSharedPixiStage(host, signal),
+      audioBus: settings.audio, music, storage,
+      reducedMotion: prefersReducedMotion(),
+      resolutionCap: currentQuality().pixiResolutionCap,
+      qa: arenaParams.get("arenaQa") === "1",
+      seed: /^\d{1,10}$/.test(seedParam) ? Number(seedParam) >>> 0 : null,
+      onExit() {
+        dataArenaSession = null;
+        titleScreen.hidden = false;
+        dataArenaButton.disabled = false;
+        syncMusic();
+        dataArenaButton.focus({ preventScroll: true });
+      }
+    });
+    dataArenaSession = session;
+    titleScreen.hidden = true;
+  } catch (error) {
+    console.warn("DATA_ARENA_OPEN_FAILED", error);
+    dataArenaSession = null;
+    titleScreen.hidden = false;
+    dataArenaButton.disabled = false;
+    note(error.message);
+  }
+}
+
 function boot() {
   // Title labels that the language setting can change.
   setText(loginButton, "ENTER_GAME");
   setText(newGameButton, "開始新遊戲");
   setText(continueButton, "繼續遊戲");
+  labelDataArenaEntry();
   if (titleSettingsButton) {
     setLabel(titleSettingsButton, "aria-label", "設定");
     setLabel(titleSettingsButton, "title", "設定");
@@ -2176,7 +2234,7 @@ function boot() {
     titleSettingsButton.hidden = false;
   }
   relabelChrome();
-  onLocaleChange(() => { relabelChrome(); syncTitleArt(); });
+  onLocaleChange(() => { relabelChrome(); syncTitleArt(); labelDataArenaEntry(); });
   try {
     app = createChampionshipStandaloneApp({
       storage: window.localStorage,
@@ -2215,6 +2273,7 @@ function boot() {
     titleActions.hidden=true;note('');if(titleSettingsButton)titleSettingsButton.hidden=true;openingPresentation.begin();
   });
   continueButton.addEventListener("click", () => { void continueGame(); });
+  dataArenaButton?.addEventListener("click", () => { void enterDataArena(); });
   installHomeEntries();
   refreshContinue();
   loginButton.disabled=false;

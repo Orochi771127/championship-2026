@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
+    "tests/championship-data-arena-cases.mjs",
     "tests/championship-hunt-shadow-render-cases.mjs",
     "tests/championship-cage-landscape-cases.mjs",
     "tests/championship-entry-landscape-css-cases.mjs",

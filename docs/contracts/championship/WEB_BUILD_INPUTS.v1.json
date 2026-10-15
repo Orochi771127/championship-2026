@@ -9812,7 +9812,21 @@
     "assets/production/database-handpainted-r1-20261015/species-040.png",
     "assets/production/database-handpainted-r1-20261015/species-211.png",
     "assets/production/database-handpainted-r1-20261015/species-222.png",
-    "src/championship/app/qaRanchExpansion.js"
+    "src/championship/app/qaRanchExpansion.js",
+    "src/championship/app/dataArenaScreen.js",
+    "src/championship/app/dataArena.css",
+    "src/championship/modes/dataArena/dataArenaConfig.js",
+    "src/championship/modes/dataArena/dataArenaGrid.js",
+    "src/championship/modes/dataArena/dataArenaNav.js",
+    "src/championship/modes/dataArena/dataArenaSave.js",
+    "src/championship/modes/dataArena/dataArenaSimulation.js",
+    "src/championship/modes/dataArena/dataArenaUpgrades.js",
+    "src/championship/presentation/dataArena/dataArenaAudio.js",
+    "src/championship/presentation/dataArena/dataArenaCamera.js",
+    "src/championship/presentation/dataArena/dataArenaPixiScene.js",
+    "src/championship/presentation/dataArena/dataArenaRoster.js",
+    "src/championship/presentation/dataArena/dataArenaTextures.js",
+    "src/championship/text/dataArenaText.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -45572,7 +45586,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "b48a8528d3a8168d607b7f61121036d32c3941ff8e836f7f6e9aaedcb366362f"
+        "sha256": "6e0bb6c67a2c0b779716a8d5a033fbee8a23108a90f6636f63e9998ca4594fce"
       },
       {
         "path": "docs/contracts/championship/battle-economy-runtime.v1.json",
@@ -45808,7 +45822,7 @@
       },
       {
         "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "d7a550f5ee177bec4492b1fb5ab4f3e282e3049ecddb214c353fbc733c8e7da9"
+        "sha256": "cb332a68ec74ea8302e872818ed72f7f7298eb6420916f587e3c447b3244eb86"
       },
       {
         "path": "src/championship/app/championshipRaisingProduction.js",
@@ -45920,7 +45934,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "6e856d0c104d5c0c5cc9b06198a013a33de6e63016a3f225d2aea446395145b2"
+        "sha256": "9e61ee83d49086360a3a25539ccf7e1acbd2f78d376889d767abe2c43c86cad7"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -47513,6 +47527,62 @@
       {
         "path": "src/championship/app/qaRanchExpansion.js",
         "sha256": "16ba62f6f757fb049a0371872dbd831cd957e0d04c79dbe3e7b568637bd3ae12"
+      },
+      {
+        "path": "src/championship/app/dataArenaScreen.js",
+        "sha256": "58df2618fbdbeda9a02582b7426aaec76b941324f5808bc3e4a0bb989b538933"
+      },
+      {
+        "path": "src/championship/app/dataArena.css",
+        "sha256": "946557e78baac11fdeda788e084c2bf75356d680861689dd55c3c7d67b733995"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaConfig.js",
+        "sha256": "a06f8c81db9683065383518675f86711f527b65b5841020a575dd52b23cc60dc"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaGrid.js",
+        "sha256": "c42379740f597129ec4c0da920ae962a8ff41ac45b27a08e562206760b52e7c2"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaNav.js",
+        "sha256": "6b82a61ba55961261d690321218f8a280acc43b7b205e505a46394db4dd61c48"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaSave.js",
+        "sha256": "3102bbc5a3e3c29a4f09b8f8a7e60ad2ebba102e5a4c50cb1c3c5a73a6b45c93"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
+        "sha256": "0254c2b81f0795eeb42b856ed771b839283c9999515dfc3eca10c2e762334321"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
+        "sha256": "18b26b8116e868a9f907411f035cb730a5b7ad954108f3728fce486370285b4d"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaAudio.js",
+        "sha256": "39c8e798490f9cb9cf197aafd4dc61e8139d9a0814acdce247f2cbba63913068"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaCamera.js",
+        "sha256": "4c09b7d7d77abb6a00b0ae883403a997e9ff267104d2958f8a22497dbfc9edfc"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
+        "sha256": "f05dc6f17fd3a0ce34c95d64853ec3cad1e897a19a2df8e37450650e71a9a872"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaRoster.js",
+        "sha256": "76ff7fce54b1c89912014b8981f470ce93860c66715e26abb7f18ab2a8254393"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaTextures.js",
+        "sha256": "62d5bf48563f91bdbadfa08c54c00c1255b2c9845e7629243f27ba2c5f2a55b2"
+      },
+      {
+        "path": "src/championship/text/dataArenaText.js",
+        "sha256": "ea47093b170d2c28c09b4c79ff83b0eeff3b77993e2ec28dac78b4b2e8ac7a5c"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
