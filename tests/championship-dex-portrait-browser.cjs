@@ -10,7 +10,15 @@ const { createHash } = require('node:crypto');
 const { pathToFileURL } = require('node:url');
 const PUBLIC_BASE = 'https://orochi771127.github.io/championship-2026/';
 const HERO = '.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero';
+const MATRIX_TARGETS = Object.freeze([117,55,70,71,72]);
 const EXPECTED = Object.freeze({
+  70: Object.freeze({"speciesIndex": 70, "speciesId": "species-070", "displayCode": "GR32", "src": "assets/production/database-handpainted-r1-20261015/species-070.8b5455d530173b0f.png", "sha256": "8b5455d530173b0fe41963b58637e98143f90e68a5961d9997517f2148520eba", "name": "星角幼龍"}),
+  71: Object.freeze({"speciesIndex": 71, "speciesId": "species-071", "displayCode": "GR12", "src": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png", "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913", "name": "裂焰幼龍"}),
+  72: Object.freeze({"speciesIndex": 72, "speciesId": "species-072", "displayCode": "MA04", "src": "assets/production/database-handpainted-r1-20261015/species-072.4ca0e10b98584a76.png", "sha256": "4ca0e10b98584a76aec0c283b6c5628d34122bd7d60aa63411c7cc2156bfca43", "name": "晶鏈甲龍"}),
+  222: Object.freeze({"speciesIndex": 222, "speciesId": "species-222", "displayCode": "UL02", "src": "assets/production/database-handpainted-r1-20261015/species-222.png", "sha256": "4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3"}),
+  230: Object.freeze({"speciesIndex": 230, "speciesId": "species-230", "displayCode": "UL03", "src": "assets/production/database-handpainted-r1-20261015/species-230.png", "sha256": "09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39"}),
+  211: Object.freeze({"speciesIndex": 211, "speciesId": "species-211", "displayCode": "UL33", "src": "assets/production/database-handpainted-r1-20261015/species-211.png", "sha256": "20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634"}),
+  229: Object.freeze({"speciesIndex": 229, "speciesId": "species-229", "displayCode": "UL34", "src": "assets/production/database-handpainted-r1-20261015/species-229.png", "sha256": "f1e1a23e891b9345f4b759e910c5f67efd8a844a2de53e14183a1a2fe3310424"}),
   117: Object.freeze({ speciesIndex: 117, speciesId: 'species-117', displayCode: 'MA58',
     src: 'assets/production/database-handpainted-r1-20261015/species-117.8f7d027cdbf6d3e6.png',
     sha256: '8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681' }),
@@ -48,6 +56,7 @@ function assertMeasured(snapshot, species, size = null) {
   assert.deepEqual(snapshot.natural, [1254, 1254]); assert.equal(snapshot.objectFit, 'contain');
   assert.deepEqual(snapshot.padding, [24, 24, 24, 24]);
   if (species === 117) assert.equal(snapshot.title, '曙刃天駒');
+  if (expected.name) assert.equal(snapshot.title,expected.name,'Exact species name binding');
   assert.equal(snapshot.documentOverflow, false, 'Document-level horizontal overflow');
   assert.ok(snapshot.imageRect.width > 0 && snapshot.imageRect.height > 0);
   if (size !== null) {
@@ -103,7 +112,7 @@ async function main() {
   fs.mkdirSync(output, { recursive: true });
   const evidence = { status: 'RUNNING', visualReview: 'PENDING_ROOT_SCREENSHOT_REVIEW',
     commit: process.env.GITHUB_SHA || null, candidateHeadCommit: process.env.DEX_QA_HEAD_SHA || null, baseCommit: process.env.DEX_QA_BASE_SHA || null,
-    scope: 'Normal fresh public-playtest UI, mounted Dex 117/055, holder-only isolated size/backdrop overrides.',
+    scope: 'Normal fresh public-playtest UI, mounted Dex 117/055 and all four promoted forms; size/backdrop overrides only for117/055.',
     exclusions: ['No visual/anatomy/alpha PASS from automation', 'No runtime-action replacement', 'No physical-device acceptance', 'No public deployment claim'],
     captures: [], assetChecks: [], console: [], pageErrors: [], networkErrors: [], cleanupErrors: [] };
   const write = () => fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify(evidence, null, 2) + '\n');
@@ -116,11 +125,23 @@ async function main() {
     const buildBytes = fs.readFileSync(path.join(root, 'pages-build.json'));
     const build = JSON.parse(buildBytes);
     assert.equal(build.target, 'GITHUB_PAGES_OWNER_PLAYTEST'); assert.equal(build.publicPlaytest?.ownerApproved, true);
-    evidence.build = { buildId: build.buildId, target: build.target, manifestSha256: sha256(buildBytes) };
+    if(process.env.GITHUB_SHA)assert.equal(build.commit,process.env.GITHUB_SHA,'Built checkout must match tested commit');
+    evidence.build = { buildId: build.buildId, commit:build.commit, inputSha256:build.inputSha256, target: build.target, manifestSha256: sha256(buildBytes) };
     assert.ok(resolveAsset(root, '/championship.html'));
     const registryPath = 'src/data/championship/database-hero-portraits.r1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
+    assert.equal(catalog.entries.length,56,'Merged54 accepted heroes plus229/230');
     evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
+    const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json';
+    evidence.productionCatalogs=[];
+    for(const file of [productPath,assetPath]){
+      const sourceBytes=fs.readFileSync(path.join(process.cwd(),file)),builtBytes=fs.readFileSync(path.join(root,file));
+      assert.equal(sha256(sourceBytes),sha256(builtBytes));evidence.productionCatalogs.push({file,sha256:sha256(builtBytes)});
+    }
+    for(const entry of JSON.parse(fs.readFileSync(path.join(root,productPath))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true);
+    const promotedAssets=JSON.parse(fs.readFileSync(path.join(root,assetPath))).characters;
+    assert.deepEqual(promotedAssets.map(e=>e.speciesIndex).sort((a,b)=>a-b),[211,222,229,230]);
+    for(const entry of promotedAssets){assert.equal(entry.runtimeReady,true);assert.equal(entry.qa.normalPath,'PASS');}
     for (const expected of Object.values(EXPECTED)) {
       const entry = catalog.entries.find(e => e.speciesIndex === expected.speciesIndex);
       assert.ok(entry, `Normal production registry missing ${expected.speciesId}`);
@@ -141,6 +162,7 @@ async function main() {
       if (url.startsWith(server.origin + '/')) return route.continue();
       if (url.startsWith(PUBLIC_BASE) && ['GET', 'HEAD'].includes(route.request().method())) {
         const parsed = new URL(url), relative = parsed.pathname.slice(new URL(PUBLIC_BASE).pathname.length);
+        if(relative.startsWith('qa/alternate-form-')||relative==='alternate-form-qa.html'){evidence.networkErrors.push({url,error:'NORMAL_ENTRY_MUST_NOT_LOAD_ALTERNATE_QA'});return route.abort();}
         if (resolveAsset(root, '/' + relative)) {
           const response = await route.fetch({ url: server.origin + '/' + relative + parsed.search, maxRedirects: 0 });
           return route.fulfill({ response });
@@ -195,7 +217,7 @@ async function main() {
       return { registeredSpecies: saved?.progression?.registeredSpecies ?? [], starter: saved?.creature?.speciesId ?? null };
     }); // Read-only observation of this disposable profile, never an imported save.
     evidence.registrationBefore = await registration();
-    assert.ok(!evidence.registrationBefore.registeredSpecies.includes(117) && !evidence.registrationBefore.registeredSpecies.includes(55));
+    assert.deepEqual(evidence.registrationBefore.registeredSpecies,[],'Normal new game must not manufacture any registration');
     await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();
     await page.locator('.cm-toolbar__menu:not([hidden]) button[data-entry-id="database"]').click();
     await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor();
@@ -221,7 +243,7 @@ async function main() {
         screenshot: name + '.png', heroScreenshot: name + '-hero.png' }); write();
       return snapshot;
     }
-    for (const species of [117, 55]) {
+    for (const species of MATRIX_TARGETS) {
       await openSpecies(species);
       const normal = await capture(`${species}-desktop-normal`, species);
       const holder = await page.locator(HERO).elementHandle();
@@ -246,14 +268,40 @@ async function main() {
       assert.deepEqual(restored.cssHolderSize, normal.cssHolderSize);
     }
     // Normal re-entry and responsive rendering, still using the same session/UI.
-    await openSpecies(117); await capture('117-desktop-reentry', 117);
+    for(const species of MATRIX_TARGETS){await openSpecies(species);await capture(`${species}-desktop-reentry`,species);}
     await page.setViewportSize({ width: 390, height: 844 });
-    for (const species of [117, 55, 117]) { await openSpecies(species); await capture(`${species}-mobile-normal-${evidence.captures.length}`, species); }
+    for (const species of [...MATRIX_TARGETS,70]) { await openSpecies(species); await capture(`${species}-mobile-normal-${evidence.captures.length}`, species); }
+    // Production entry only: ordinary rows and route nodes, no fixture/catalog swap.
+    evidence.promotedCaptures=[];
+    async function capturePreview(holder,species,kind,viewport){
+      const img=holder.locator('img');await img.waitFor({state:'visible',timeout:30000});await holder.scrollIntoViewIfNeeded();await img.evaluate(image=>image.decode());
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const actual=await holder.evaluate(n=>{const image=n.querySelector('img'),r=image.getBoundingClientRect();return {art:n.dataset.art,revealed:n.dataset.revealed,src:image.currentSrc||image.src,complete:image.complete,hidden:image.hidden,natural:[image.naturalWidth,image.naturalHeight],objectFit:getComputedStyle(image).objectFit,imageRect:{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};});
+      assert.equal(actual.art,'ready');assert.equal(actual.revealed,'true');assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.objectFit,'contain');assert.deepEqual(actual.natural,[1254,1254]);assert.equal(actual.src,new URL(EXPECTED[species].src,PUBLIC_BASE).href);
+      assert.ok(actual.imageRect.width>0&&actual.imageRect.height>0);assert.ok(actual.imageRect.x>=-1&&actual.imageRect.right<=viewport.width+1&&actual.imageRect.y>=-1&&actual.imageRect.bottom<=viewport.height+1);
+      const name=`production-${species}-${kind}-${viewport.width}`;await shot(name);await holder.screenshot({path:path.join(output,name+'-image.png')});evidence.promotedCaptures.push({speciesIndex:species,displayCode:EXPECTED[species].displayCode,kind,viewport,screenshot:name+'.png',imageScreenshot:name+'-image.png',...actual});write();
+    }
+    for(const viewport of [{width:844,height:390},{width:390,height:844}]){
+      await page.setViewportSize(viewport);
+      for(const species of [222,230,211,229]){
+        await openSpecies(species);await capture(`production-${species}-hero-${viewport.width}`,species);
+        await capturePreview(page.locator('.cm-vs2-database__detail .cm-dex-routes__source .cm-dex-portrait'),species,'source-preview',viewport);
+      }
+      for(const [source,targets] of [[139,[211,229]],[144,[222,230]]]){
+        const detail=page.locator('.cm-vs2-database__detail');if(await detail.isVisible()){await listReturn.click();await detail.waitFor({state:'hidden'});}
+        const row=page.locator(`.cm-vs2-database__row[data-species-index="${source}"]`);await row.scrollIntoViewIfNeeded();await row.click();await detail.waitFor({state:'visible'});
+        for(const species of targets){const target=detail.locator(`.cm-dex-routes__target[aria-label^="${EXPECTED[species].displayCode} · "]`);assert.equal(await target.count(),1);assert.equal(await target.getAttribute('data-revealed'),'true');await capturePreview(target.locator('.cm-dex-portrait'),species,'evolution-choice-preview',viewport);}
+      }
+    }
+    evidence.normalProductionFormCoverage='HERO_SOURCE_TARGET_4_FORMS_2_VIEWPORTS';
     evidence.registrationAfter = await registration();
     assert.deepEqual(evidence.registrationAfter, evidence.registrationBefore, 'Read-only Dex browsing must not register or replace creatures');
     await Promise.all(imageJobs);
-    for (const species of [117, 55]) { assert.ok(imageResponses.has(species), `No actual browser image response captured for ${species}`); evidence.assetChecks.push(imageResponses.get(species)); }
+    for (const species of Object.keys(EXPECTED).map(Number)) { assert.ok(imageResponses.has(species), `No actual browser image response captured for ${species}`); evidence.assetChecks.push(imageResponses.get(species)); }
     assert.deepEqual(evidence.pageErrors, []); assert.deepEqual(evidence.networkErrors, []);
+    evidence.comparisonGroups=['desktop-normal','128-light','128-dark','256-light','256-dark','desktop-restored','desktop-reentry'].map(condition=>({condition,referenceSpecies:117,candidateSpecies:[70,71,72],visualAcceptance:'PENDING_ROOT_ACTUAL_IMAGE_REVIEW',captures:[70,71,72,117].map(species=>{const c=evidence.captures.find(x=>x.name===`${species}-${condition}`);assert.ok(c);return {speciesIndex:species,image:c.heroScreenshot,fullPresentation:c.screenshot};})}));
+    evidence.visualChecklist=['Merged070/071/072 against117 accepted style','Full appendages and normal mobile fit','Cyan edge fringe on light/dark','Exact CSS restoration','Promoted own hero, origin and revealed target identity'];
+    assert.equal(evidence.captures.length,49);assert.equal(evidence.promotedCaptures.length,16);
     evidence.status = 'CAPTURE_PASS_VISUAL_REVIEW_PENDING';
   } catch (error) {
     evidence.status = 'FAIL'; evidence.failure = error.stack || String(error);
@@ -273,6 +321,7 @@ async function main() {
   console.log(JSON.stringify({ status: evidence.status, visualReview: evidence.visualReview, captures: evidence.captures.length, output }));
 }
 function selfTest() {
+  new (require('node:vm').Script)('('+mountedSnapshot.toString()+')');
   assert.deepEqual(sizePlan(128, [24, 24, 24, 24]), { size: 128, width: 176, height: 176 });
   assert.deepEqual(sizePlan(256, [24, 24, 24, 24]), { size: 256, width: 304, height: 304 });
   assert.throws(() => sizePlan(80, [24, 24, 24, 24])); assert.throws(() => sizePlan(128, [0, 0, 0, 0]));
@@ -281,8 +330,8 @@ function selfTest() {
     imageRect: { width: 128, height: 128 }, holderRect: { width: 176, height: 176 } };
   assertMeasured(valid, 117, 128);
   for (const changed of [{ rowState: 'REGISTERED' }, { src: 'wrong.png' }, { objectFit: 'cover' }, { imageRect: { width: 80, height: 80 } }]) assert.throws(() => assertMeasured({ ...valid, ...changed }, 117, 128));
-  const sourceRegistry = Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:229},{speciesIndex:230}]}));
-  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,4);
+  const sourceRegistry = Buffer.from(JSON.stringify({entries:Object.keys(EXPECTED).map(speciesIndex=>({speciesIndex:Number(speciesIndex)}))}));
+  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,9);
   assert.throws(()=>assertRegistry(sourceRegistry,Buffer.from('{}')));
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));
   assert.throws(()=>assertRegistry(duplicated,duplicated));

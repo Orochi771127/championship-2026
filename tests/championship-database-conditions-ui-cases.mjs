@@ -38,11 +38,16 @@ test('real projectDatabase joins all 477 exact branches; original route and book
     const source=i+8;const options=deepFreeze({registeredSpecies:[...allRegistered],evolutionBranches:[...allOffsets],selectedSpeciesIndex:source});
     const result=projectDatabase(options),originalRoutes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies:allRegistered,evolutionBranches:allOffsets});frozen(result);
     assert.deepEqual(Object.keys(result).sort(),['slotCount','eggCount','regularCount','registeredCount','unlockEvidence','entries','selected'].sort());
-    assert.equal(result.slotCount,216);assert.equal(result.eggCount,0);assert.equal(result.regularCount,216);assert.equal(result.registeredCount,216);assert.equal(result.entries.length,216);
+    assert.equal(result.slotCount,218);assert.equal(result.eggCount,0);assert.equal(result.regularCount,218);assert.equal(result.registeredCount,216);assert.equal(result.entries.length,218);
+    assert.ok(result.entries.filter(e=>[229,230].includes(e.speciesIndex)).every(e=>e.state==='UNDISCOVERED'));
     assert.equal(result.selected.speciesIndex,source);assert.equal(result.selected.state,'REGISTERED');assert.deepEqual(plain(result.selected.instances),[]);
     assert.deepEqual(Object.keys(result.selected).sort(),['bookOrdinal','speciesIndex','speciesId','displayName','kind','state','source','instanceCount','identityEvidence','instances','evolutionRoutes'].sort());
-    assert.equal(result.selected.evolutionRoutes.length,lifecycle.rules[i].length);
-    result.selected.evolutionRoutes.forEach((route,branch)=>{
+    const nativeRoutes=result.selected.evolutionRoutes.filter(route=>!route.productRouteId);
+    assert.equal(nativeRoutes.length,lifecycle.rules[i].length);
+    for(const route of result.selected.evolutionRoutes.filter(route=>route.productRouteId)){
+      assert.equal(route.conditions,null);assert.equal(route.legacyBranchOffset,null);assert.equal(route.historyState,'NOT_RECORDED');assert.equal(route.revealed,false);
+    }
+    nativeRoutes.forEach((route,branch)=>{
       const {conditions,...unchanged}=route;assert.deepEqual(plain(unchanged),plain(originalRoutes[branch]));
       const expected=projectDatabaseEvolutionConditions(source,branch,{sourceRegistered:true,registeredSpecies:allRegistered,evolutionBranches:allOffsets});
       assert.deepEqual(plain(conditions),plain(expected));assert.deepEqual(plain(conditions.comparison),{state:'NOT_COMPARED',reason:'NO_INDIVIDUAL_CONTEXT'});
@@ -245,5 +250,19 @@ test('real host-imported runtime/helpers and VM screen execution never touch hos
     assert.equal(attempts,9);
   }finally{
     Math.random=random;for(const [name,descriptor] of prior)if(descriptor)Object.defineProperty(globalThis,name,descriptor);else delete globalThis[name];
+  }
+});
+
+
+test('production product route conditions use their independent history and never fabricate native offsets',()=>{
+  const expected=[[139,229,'139:211:229'],[143,229,'143:211:229'],[144,230,'144:222:230']];
+  for(const [source,target,id] of expected){
+    const input={registeredSpecies:[...allRegistered,229,230],evolutionBranches:[...allOffsets],selectedSpeciesIndex:source};
+    const before=JSON.stringify(input),unrecorded=projectDatabase(input).selected.evolutionRoutes.find(r=>r.productRouteId===id);
+    assert.equal(unrecorded.targetSpeciesIndex,target);assert.equal(unrecorded.conditions,null);assert.equal(unrecorded.legacyBranchOffset,null);
+    const recorded=projectDatabase({...input,productEvolutionBranches:[id]}).selected.evolutionRoutes.find(r=>r.productRouteId===id);
+    assert.equal(recorded.historyState,'RECORDED');assert.equal(recorded.revealed,true);assert.ok(recorded.conditions);
+    assert.equal(recorded.conditions.comparison.state,'NOT_COMPARED');frozen(recorded.conditions);
+    assert.equal(JSON.stringify(input),before);
   }
 });

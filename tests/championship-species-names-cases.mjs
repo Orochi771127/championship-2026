@@ -6,7 +6,8 @@ import species from "../src/data/championship/catalogs/creature-species.r1.json"
 import {
   DATABASE_EGG_COUNT,
   DATABASE_REGULAR_COUNT,
-  DATABASE_SLOT_COUNT
+  DATABASE_SLOT_COUNT,
+  listDatabaseSlots
 } from "../src/championship/database/databaseCatalog.js";
 
 test("the six stat labels are the bank's own, in the game's order", () => {
@@ -43,10 +44,14 @@ test("every name is Japanese text and matches its species record", () => {
   }
 });
 
-test("216 named species agrees with the encyclopedia's own split", () => {
-  // databaseCatalog records 224 slots = 8 eggs + 216 regular, derived separately.
-  // The name run being exactly 216 long is an independent second witness.
-  assert.equal(names.recordCount, DATABASE_REGULAR_COUNT);
-  assert.equal(DATABASE_EGG_COUNT + names.recordCount, DATABASE_SLOT_COUNT);
-  assert.equal(DATABASE_SLOT_COUNT, 216);
+test("the 216 native names remain a separate witness from the 218-row product book", () => {
+  // The raw name bank remains species 8..223. The two product forms have their
+  // own product/localized names; they do not become native Japanese records.
+  const slots=listDatabaseSlots(),nativeSlots=slots.filter(s=>s.identityEvidence==='VERIFIED_BINARY');
+  assert.equal(names.recordCount,216);assert.equal(nativeSlots.length,216);
+  assert.deepEqual(nativeSlots.map(s=>s.speciesIndex).sort((a,b)=>a-b),names.records.map(r=>r.recordIndex));
+  assert.deepEqual(slots.filter(s=>s.identityEvidence==='PRODUCT_EXTENSION_EXPLICIT').map(s=>s.speciesIndex),[229,230]);
+  assert.equal(species.records.length,228);assert.equal(species.records[228],undefined);
+  assert.equal(DATABASE_EGG_COUNT,0);assert.equal(DATABASE_REGULAR_COUNT,218);assert.equal(DATABASE_SLOT_COUNT,218);
+  assert.equal(DATABASE_SLOT_COUNT,names.recordCount+2);
 });

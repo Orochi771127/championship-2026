@@ -10020,7 +10020,10 @@
     "assets/production/cage/source-bounds-r1-20261015/fields/field_cm02_01/frame-00.webp",
     "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-01.webp",
     "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-00.webp",
-    "assets/production/cage/source-bounds-r1-20261015/fields/field_cm18_01/frame-00.webp"
+    "assets/production/cage/source-bounds-r1-20261015/fields/field_cm18_01/frame-00.webp",
+    "assets/production/database-handpainted-r1-20261015/species-070.8b5455d530173b0f.png",
+    "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png",
+    "assets/production/database-handpainted-r1-20261015/species-072.4ca0e10b98584a76.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -10028,7 +10031,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "f1613a4635820bbea236d1211c450f52e52ca32d729f3858d6630fafdcf4e257"
+        "sha256": "f4acdbf0e7a729669790f6caad709b0c3571c398f60ea01da77e0b7b7e2020c2"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -30184,7 +30187,7 @@
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
-        "sha256": "fa98cc119d70eb2148699fc09fd99a8bf8bb8e0d5829af9e4d2de45a49527d1b"
+        "sha256": "8b9b23feb66e878d36383e80e631551743410b9da622711400c45ecde0ea01f3"
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-034.png",
@@ -47384,7 +47387,7 @@
       },
       {
         "path": "src/championship/text/catalogs.zhHant.js",
-        "sha256": "2cab67cca3df5716172e5f3e5378d528ad4a1d287d85336be1d6ae22d19d43cf"
+        "sha256": "ec190a251a49fd1d9e670ed7d64210eb92ea2d25ed1e7526a715e873bc7e379a"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
@@ -47672,7 +47675,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.r1.json",
-        "sha256": "9156bdd113e8048302a1a9f91dc48b1b1e28d5fe809b0eb9665d965508ff78ab"
+        "sha256": "6d121990cee55ba2ba63a9aabaf9cebbb9078c345387a7137aba2b13eb8cd5b9"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
@@ -47736,7 +47739,7 @@
       },
       {
         "path": "src/data/championship/product-species-extensions.r1.json",
-        "sha256": "90c0d3f5df92beb3e40a00b7750ace2e4127d487f1cf9a711bf3245cd1ece44f"
+        "sha256": "ea565e079fafaf72d86008d2df0fb94fe482a57922bb29e4a466b73201851a9e"
       },
       {
         "path": "alternate-form-qa.html",
@@ -47784,7 +47787,7 @@
       },
       {
         "path": "src/data/championship/qa-database-hero-portraits.r1.json",
-        "sha256": "aecaba8841f720f3ff999e672ea911e66a484b9891cadd221573aeb7c0391703"
+        "sha256": "e7c7258069055cdff24ccc39a1650756d854cab3af6460039e3c197e462e565b"
       },
       {
         "path": "src/championship/contracts/productBattleTransport.js",
@@ -47800,7 +47803,7 @@
       },
       {
         "path": "src/data/championship/alternate-form-assets.r1.json",
-        "sha256": "a12aa4c699f3a1f7a07ae38dc86bfa912b8eead7aa77cb579b1a5866b587b436"
+        "sha256": "a92f7099f8d447b083f512c06eef8f1fcccacd40212b3b47bc7c24b17d90709b"
       },
       {
         "path": "src/championship/presentation/alternateFormAssetContracts.js",
@@ -48505,6 +48508,18 @@
       {
         "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm18_01/frame-00.webp",
         "sha256": "9591d0ff3957d6b7860eff5d37363c4ce3cae481abcecf1b8cfb3287a72efed4"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-070.8b5455d530173b0f.png",
+        "sha256": "8b5455d530173b0fe41963b58637e98143f90e68a5961d9997517f2148520eba"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png",
+        "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-072.4ca0e10b98584a76.png",
+        "sha256": "4ca0e10b98584a76aec0c283b6c5628d34122bd7d60aa63411c7cc2156bfca43"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

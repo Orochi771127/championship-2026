@@ -262,7 +262,7 @@ export const SPECIES_NAMES_ZH = Object.freeze(Object.fromEntries(`
 17|霜珠獸
 18|藤糰獸
 19|海芽獸
-20|鐵鈴芽
+20|鋼鈴芽
 21|焰角丸
 22|芽螺寶
 23|角絨仔

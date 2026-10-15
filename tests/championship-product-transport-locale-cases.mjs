@@ -1,17 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {productHuntSpecies} from '../src/championship/contracts/productSpeciesData.js';
+import {nativeIndividualProfile} from '../src/championship/raising/nativeIndividualProfile.js';
+import {createNativeHuntIndividual} from '../src/championship/hunt/capture/nativeHuntIndividual.js';
 import {LOCALES,setLocale,getLocale} from '../src/championship/text/locale.js';
 import {BATTLE_TRANSPORT_COPY,battleTransportText} from '../src/championship/text/battleTransportText.js';
 import {PRODUCT_FORM_TEXT} from '../src/championship/text/productFormText.js';
 import {inspectScopedLocaleCopy,buildLocaleCoverage} from '../scripts/check-locale-coverage.mjs';
-import {CHAMPIONSHIP_PASSWORD_V2_NOTICE,championshipPasswordProfileAdmission,championshipPasswordTeamAdmission}
+import {CHAMPIONSHIP_PASSWORD_V2_NOTICE,championshipPasswordProfileAdmission,championshipPasswordTeamAdmission,
+  encodeChampionshipPasswordTeamFromProfiles,decodeChampionshipPasswordTeam}
   from '../src/championship/battle/nativePasswordBattle.js';
 import {CHAMPIONSHIP_LINK_V2_NOTICE} from '../src/championship/battle/nativeLinkBattle.js';
 const keys=['SPECIES_NOT_READY','CATALOG_MISMATCH','V2_INVITE_REQUIRED','V2_REQUIRED','VERSION_MISMATCH',
   'VALUES_UNSUPPORTED','INVALID_CODE','PASSWORD_V2_NOTICE','LINK_V2_NOTICE','PASSWORD_INPUT_HINT','LINK_VERSION_HINT',
   'CREATE_V2_INVITE','CREATE_V2_INVITE_LABEL','PASSWORD_SPECIES_NOT_READY','PROFILE_UNAVAILABLE','EMPTY_TEAM'];
 const file='src/championship/text/battleTransportText.js';
+const profile=id=>nativeIndividualProfile(createNativeHuntIndividual({species:productHuntSpecies(id),rng:{next:()=>50}}));
 test('all 16 transport display keys have nonempty native-language copy in all five supported locales',()=>{
  assert.deepEqual(Object.keys(BATTLE_TRANSPORT_COPY),LOCALES);
  for(const locale of LOCALES){
@@ -34,15 +41,58 @@ test('codec notices and runtime admission use the current locale after module in
   assert.equal(CHAMPIONSHIP_PASSWORD_V2_NOTICE.message,BATTLE_TRANSPORT_COPY[locale].PASSWORD_V2_NOTICE);
   assert.equal(CHAMPIONSHIP_LINK_V2_NOTICE.message,BATTLE_TRANSPORT_COPY[locale].LINK_V2_NOTICE);
   for(const id of [229,230]){
+   // Production imports are unmodified: accepted forms advance to profile validation.
+   const complete=profile(id),beforeProfile=JSON.stringify(complete);
+   const admitted=championshipPasswordProfileAdmission(complete);
+   assert.equal(admitted.ok,true,`${locale}:${id}`);assert.equal(admitted.transportVersion,2);
+   assert.deepEqual(championshipPasswordTeamAdmission({members:[{nativeProfile:complete},null,null]}),{ok:true,members:1});
+   const password=encodeChampionshipPasswordTeamFromProfiles([complete]);
+   assert.match(password,/^CM26-PASSWORD-2\./);
+   const decoded=decodeChampionshipPasswordTeam(password);
+   assert.equal(decoded.members[0].compact.speciesIndex,id);
+   assert.equal(decoded.members[0].nativeProfile.fields['000'],id);
+   assert.equal(complete.fields['000'],id);assert.equal(JSON.stringify(complete),beforeProfile);
    const result=championshipPasswordProfileAdmission({fields:{'000':id}});
-   assert.equal(result.reason,'PRODUCT_SPECIES_NOT_READY');
-   assert.equal(result.message,BATTLE_TRANSPORT_COPY[locale].PASSWORD_SPECIES_NOT_READY);
+   assert.equal(result.ok,false);assert.equal(result.reason,'PROFILE_UNAVAILABLE');
+   assert.equal(result.message,BATTLE_TRANSPORT_COPY[locale].PROFILE_UNAVAILABLE);
   }
   const empty=championshipPasswordTeamAdmission({members:[null,null,null]});
   assert.equal(empty.reason,'EMPTY_TEAM');assert.equal(empty.message,BATTLE_TRANSPORT_COPY[locale].EMPTY_TEAM);
  }}finally{setLocale(before);}
  assert.equal(CHAMPIONSHIP_PASSWORD_V2_NOTICE.prefix,'CM26-PASSWORD-2.');
  assert.equal(CHAMPIONSHIP_LINK_V2_NOTICE.prefix,'CM26-LINK-2.');
+});
+test('disabled isolated fixture preserves NOT_READY admission copy in all five locales',()=>{
+ // Only this child worker substitutes denied flags in memory. The production
+ // checks above use actual source flags, and no fixture or repository file changes.
+ const child=spawnSync(process.execPath,['--input-type=module','-e',`
+  import assert from 'node:assert/strict';
+  import {registerHooks} from 'node:module';
+  registerHooks({load(url,context,next){
+   const result=next(url,context);
+   if(!url.endsWith('/product-species-extensions.r1.json'))return result;
+   const catalog=JSON.parse(result.source.toString());
+   for(const entry of catalog.entries)for(const key of ['runtimeReady','evolutionReady','networkReady'])entry[key]=false;
+   return {...result,source:JSON.stringify(catalog)};
+  }});
+  const {LOCALES,setLocale}=await import('./src/championship/text/locale.js');
+  const {BATTLE_TRANSPORT_COPY}=await import('./src/championship/text/battleTransportText.js');
+  const {productHuntSpecies}=await import('./src/championship/contracts/productSpeciesData.js');
+  const {nativeIndividualProfile}=await import('./src/championship/raising/nativeIndividualProfile.js');
+  const {createNativeHuntIndividual}=await import('./src/championship/hunt/capture/nativeHuntIndividual.js');
+  const {championshipPasswordProfileAdmission}=await import('./src/championship/battle/nativePasswordBattle.js');
+  for(const locale of LOCALES){
+   setLocale(locale);
+   for(const id of [229,230]){
+    const complete=nativeIndividualProfile(createNativeHuntIndividual({species:productHuntSpecies(id),rng:{next:()=>50}}));
+    const result=championshipPasswordProfileAdmission(complete);
+    assert.equal(complete.fields['000'],id);assert.equal(result.ok,false);
+    assert.equal(result.reason,'PRODUCT_SPECIES_NOT_READY');
+    assert.equal(result.message,BATTLE_TRANSPORT_COPY[locale].PASSWORD_SPECIES_NOT_READY);
+   }
+  }
+ `],{cwd:fileURLToPath(new URL('..',import.meta.url)),encoding:'utf8'});
+ assert.equal(child.status,0,child.stderr||child.stdout||String(child.error));
 });
 test('global locale gate registers both new dictionaries and detects a removed translation',async()=>{
  assert.deepEqual(inspectScopedLocaleCopy(file,BATTLE_TRANSPORT_COPY).gaps,[]);

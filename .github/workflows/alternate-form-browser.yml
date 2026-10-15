@@ -10,6 +10,11 @@ on:
       - 'alternate-form-qa.html'
       - 'qa/alternate-form-*.json'
       - 'src/championship/app/alternateFormQa*.js'
+      - 'src/data/championship/product-species-extensions.r1.json'
+      - 'src/data/championship/alternate-form-assets.r1.json'
+      - 'src/championship/presentation/acceptedDatabasePortraits.js'
+      - 'src/championship/contracts/productSpeciesExtensions.js'
+      - 'src/championship/presentation/**'
 permissions:
   contents: read
 jobs:

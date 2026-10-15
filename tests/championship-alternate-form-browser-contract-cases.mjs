@@ -49,3 +49,18 @@ test('system-menu navigation targets buttons, never the retained hidden menu con
  assert.equal(source.split("locator('button[data-menu-id=\"SYSTEM\"]')").length-1,3);
  assert.equal(source.includes("locator('[data-menu-id=\"SYSTEM\"]')"),false);
 });
+
+test('promotion browser evidence covers real production catalogs and an untouched normal-entry save',()=>{
+ const qa=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
+ assert.match(qa,/assert\.equal\(entry\[gate\],true/);
+ assert.match(qa,/Observed QA gameplay must use the same product identities and readiness/);
+ assert.match(qa,/QA and production must use the same four action\/geometry\/own-art configurations/);
+ const normal=fs.readFileSync(new URL('./championship-dex-portrait-browser.cjs',import.meta.url),'utf8');
+ assert.match(normal,/NORMAL_ENTRY_MUST_NOT_LOAD_ALTERNATE_QA/);
+ assert.match(normal,/HERO_SOURCE_TARGET_4_FORMS_2_VIEWPORTS/);
+ assert.match(normal,/productionCatalogs/);assert.match(normal,/Normal new game must not manufacture any registration/);
+ assert.match(normal,/registrationAfter, evidence\.registrationBefore/);
+ assert.doesNotMatch(normal,/addInitScript|localStorage\.setItem|sessionStorage\.setItem|registerHooks|__alternateFormQaApp|page\.clock/);
+ const production=fs.readFileSync(new URL('./product-form-production-source-cases.mjs',import.meta.url),'utf8');
+ assert.doesNotMatch(production,/registerHooks|alternateFormQaApp/);assert.match(production,/createChampionshipStandaloneApp/);
+});

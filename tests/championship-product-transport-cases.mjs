@@ -70,16 +70,17 @@ test('v1 explicitly refuses extensions even after persistent profile validation 
     assert.throws(()=>link.readNativeLinkInvite(forged),/V2_REQUIRED/);
   }
 });
-test('all production entry points refuse unaccepted new forms without silently casting to211/222',()=>{
+test('production entry points preserve accepted new forms without casting to211/222',()=>{
   for(const id of [229,230]){
-    const e=getProductExtension(id);assert.equal(e.runtimeReady,false);assert.equal(e.networkReady,false);
-    assert.throws(()=>requireReadyTransportSpecies(id),/SPECIES_NOT_READY/);
-    assert.equal(password.championshipPasswordProfileAdmission(profile(id)).reason,'PRODUCT_SPECIES_NOT_READY');
-    assert.throws(()=>password.encodeChampionshipPasswordTeamFromProfiles([profile(id)]),/SPECIES_NOT_READY/);
-    assert.throws(()=>link.createChampionshipLinkInvite({individuals:[individual(id)],arenaIndex:0}),/SPECIES_NOT_READY/);
+    const e=getProductExtension(id);assert.equal(e.runtimeReady,true);assert.equal(e.networkReady,true);
+    assert.doesNotThrow(()=>requireReadyTransportSpecies(id));
+    assert.equal(password.championshipPasswordProfileAdmission(profile(id)).ok,true);
+    const code=password.encodeChampionshipPasswordTeamFromProfiles([profile(id)]);
+    assert.equal(password.decodeChampionshipPasswordTeam(code).members[0].nativeProfile.fields['000'],id);
+    const invite=link.createChampionshipLinkInvite({individuals:[individual(id)],arenaIndex:0});
+    assert.equal(invite.version,2);assert.equal(link.readChampionshipLinkInvite(invite.code).hostIndividuals[0].nativeProfile.fields['000'],id);
   }
-  assert.throws(()=>password.encodeChampionshipPasswordTeam(team),/SPECIES_NOT_READY/);
-  assert.throws(()=>password.decodeChampionshipPasswordTeam(encodeProductPasswordData(team)),/SPECIES_NOT_READY/);
+  assert.deepEqual(password.decodeChampionshipPasswordTeam(password.encodeChampionshipPasswordTeam(team)).members.map(x=>x?.nativeProfile.fields['000']??null),[229,null,230]);
 });
 test('v2 password rejects sentinel, unknown identities, extra fields, nonintegers, overflow and empties',()=>{
   for(const id of [228,231,-1,'229',229.5,NaN]){
@@ -130,15 +131,15 @@ test('v2 host and guest agree on version, identity manifest, arena and exact ful
   assert.notEqual(session.hostIndividuals[0].instanceId,session.guestIndividuals[0].instanceId);
   assert.equal(JSON.stringify([host,guest]),before);assert.equal(Object.isFrozen(session.guestIndividuals[0].nativeProfile.fields),true);
   assert.throws(()=>link.readNativeLinkInvite(invite.code),/CODE_FORMAT/);
-  assert.throws(()=>link.createChampionshipLinkReply({inviteCode:invite.code,individuals:[individual(229)]}),/SPECIES_NOT_READY/);
+  const acceptedReply=link.createChampionshipLinkReply({inviteCode:invite.code,individuals:[individual(229)]});assert.equal(link.readChampionshipLinkReply(invite.code,acceptedReply.code).guestIndividuals[0].nativeProfile.fields['000'],229);
 });
-test('v2 link structural payload preserves229/230 but runtime rejects before using disabled species',()=>{
+test('v2 link structural payload and production runtime preserve229/230',()=>{
   const narrow=['03c','03d','044','046','194'];
   const wire=p=>[NATIVE_INDIVIDUAL_WORDS.map(k=>p.fields[k]),narrow.map(k=>p.narrowFields[k]),p.name];
   const payload={...productTransportHeader('INVITE'),arenaIndex:0,host:[wire(profile(229)),wire(profile(230))]};
   const code=encodeProductBattleEnvelope(PRODUCT_LINK_PREFIX,payload),decoded=decodeProductBattleEnvelope(PRODUCT_LINK_PREFIX,code);
   assert.deepEqual(decoded.payload.host,payload.host);assert.deepEqual(decoded.payload.host.map(p=>p[0][0]),[229,230]);
-  assert.throws(()=>link.readChampionshipLinkInvite(code),/SPECIES_NOT_READY/);
+  assert.deepEqual(link.readChampionshipLinkInvite(code).hostIndividuals.map(e=>e.nativeProfile.fields['000']),[229,230]);
 });
 test('v1/v2 mix, wrong invite, catalog mismatch and malformed link profiles fail closed',()=>{
   const host=[individual(34)],guest=[individual(72)],old=link.createNativeLinkInvite({individuals:host,arenaIndex:0});

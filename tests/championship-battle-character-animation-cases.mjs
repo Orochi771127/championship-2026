@@ -7,6 +7,60 @@ import path from 'node:path';
 import {resolveBattleCharacterRequest,projectBattleCharacterRequest,createBattleCharacterAnimator} from '../src/championship/presentation/battleCharacterAction.js';
 import {BATTLE_CHARACTER_GEOMETRY} from '../src/data/championship/battleCharacterGeometry.js';
 import {loadLicensedCharacterRoster,LICENSED_CHARACTER_MANIFEST} from '../src/championship/presentation/licensedCharacterRoster.js';
+import {spawnSync} from 'node:child_process';
+import {ACTIVE_ALTERNATE_FORM_ASSETS, rekeyAlternateDonorRuntime, bindAlternateFormManifest} from '../src/championship/presentation/alternateFormAssetContracts.js';
+
+// The shipping imports above are intentionally unhooked. Only a separate child
+// process disables the alternate assets to retain the original native oracles.
+const nativeReferenceFlag = '--asset-disabled-native-reference';
+const isNativeReference = process.argv.includes(nativeReferenceFlag);
+const assetDisabledBootstrap = `
+  import {registerHooks} from 'node:module';
+  registerHooks({load(url, context, nextLoad) {
+    const loaded = nextLoad(url, context);
+    if (!url.endsWith('/alternate-form-assets.r1.json')) return loaded;
+    const catalog = JSON.parse(String(loaded.source));
+    for (const config of catalog.characters) {
+      config.runtimeReady = false;
+      config.qa = {...config.qa, normalPath: 'PENDING'};
+    }
+    return {...loaded, source: JSON.stringify(catalog)};
+  }});
+`;
+function runNativeReference(code) {
+  const env = {...process.env};
+  delete env.NODE_TEST_CONTEXT;
+  const result = spawnSync(process.execPath, ['--input-type=module', '--eval', assetDisabledBootstrap + code], {
+    cwd: new URL('..', import.meta.url), env, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024,
+  });
+  assert.ifError(result.error);
+  assert.equal(result.signal, null, 'Native reference child must finish without a signal.');
+  assert.equal(result.status, 0, `Asset-disabled native reference failed:\n${result.stderr}\n${result.stdout}`);
+  return result.stdout;
+}
+function readNativeSnapshot(modulePath, expression) {
+  const moduleUrl = new URL(modulePath, import.meta.url).href;
+  return JSON.parse(runNativeReference(`const native = await import(${JSON.stringify(moduleUrl)}); console.log(JSON.stringify(${expression}));`));
+}
+const expectedAlternateBindings = [
+  [211, 'm528_metaletemon', 'm528_metaletemon'],
+  [222, 'm540_imperialdramon_fm', 'm506_griffomon'],
+  [229, 'oc_crownbrass_mandrill', 'm528_metaletemon'],
+  [230, 'oc_celestyrant_battle_r10', 'm540_imperialdramon_fm'],
+];
+function assertProductionAssets() {
+  assert.deepEqual(ACTIVE_ALTERNATE_FORM_ASSETS.map(c => [c.speciesIndex, c.entityId, c.motionDonorEntityId])
+    .sort((a, b) => a[0] - b[0]), expectedAlternateBindings);
+  for (const config of ACTIVE_ALTERNATE_FORM_ASSETS) {
+    assert.equal(config.runtimeReady, true);
+    assert.equal(config.qa.normalPath, 'PASS');
+  }
+}
+
+if (isNativeReference) {
+  test('native reference explicitly disables alternate assets without changing the original oracle', () => {
+    assert.equal(ACTIVE_ALTERNATE_FORM_ASSETS.length, 0);
+  });
 
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const cpu=read('docs/research/BATTLE_CHARACTER_REQUESTS_CPU_2026-09-07.json');
@@ -152,3 +206,35 @@ test('battle animation is scoped to audited entities and rejects stale geometry 
   assert.equal(captured.at(-1).battleGeometry,null);
   await stale.dispose();
 });
+
+} else {
+  test('asset-disabled child preserves every original local-reference case', () => {
+    runNativeReference(`process.argv.push(${JSON.stringify(nativeReferenceFlag)}); await import(${JSON.stringify(import.meta.url)});`);
+  });
+
+  test('production generated geometry binds 226 identities and preserves immutable donor snapshots', () => {
+    assertProductionAssets();
+    const native = readNativeSnapshot('../src/data/championship/battleCharacterGeometry.js', 'native.BATTLE_CHARACTER_GEOMETRY');
+    assert.equal(Object.keys(native).length, 224);
+    assert.equal(Object.values(native).reduce((n, g) => n + Object.keys(g.frames).length, 0), 13246);
+    assert.equal(Object.keys(BATTLE_CHARACTER_GEOMETRY).length, 226);
+    const replacements = new Set(ACTIVE_ALTERNATE_FORM_ASSETS.map(c => c.entityId));
+    for (const [id, geometry] of Object.entries(native)) {
+      if (!replacements.has(id)) assert.deepEqual(BATTLE_CHARACTER_GEOMETRY[id], geometry, id);
+    }
+    for (const config of ACTIVE_ALTERNATE_FORM_ASSETS) {
+      const source = native[config.motionDonorEntityId];
+      const actual = BATTLE_CHARACTER_GEOMETRY[config.entityId];
+      const expectedFrames = Object.fromEntries(Object.entries(source.frames).map(([key, value]) => {
+        assert.ok(key.startsWith(config.motionDonorEntityId + '/main/'));
+        return [config.entityId + key.slice(config.motionDonorEntityId.length), value];
+      }));
+      assert.deepEqual(actual, {...source, frames: expectedFrames}, config.entityId);
+      assert.deepEqual(actual.files, source.files, 'Native evidence hashes remain donor evidence, not invented OC paths.');
+      assert.deepEqual(Object.keys(actual.frames).sort(), Object.keys(config.frameOrigins).filter(key => key.includes('/main/')).sort());
+    }
+    assert.equal(Object.keys(BATTLE_CHARACTER_GEOMETRY.m540_imperialdramon_fm.frames).length, 61);
+    assert.equal(Object.keys(BATTLE_CHARACTER_GEOMETRY.oc_celestyrant_battle_r10.frames).length, 63);
+    assert.notDeepEqual(BATTLE_CHARACTER_GEOMETRY.m540_imperialdramon_fm.files, BATTLE_CHARACTER_GEOMETRY.oc_celestyrant_battle_r10.files);
+  });
+}

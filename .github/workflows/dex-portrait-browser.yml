@@ -22,6 +22,10 @@ on:
       - 'docs/contracts/championship/WEB_BUILD_INPUTS.v1.json'
       - 'package.json'
       - 'package-lock.json'
+      - 'src/data/championship/product-species-extensions.r1.json'
+      - 'src/data/championship/alternate-form-assets.r1.json'
+      - 'src/championship/presentation/acceptedDatabasePortraits.js'
+      - 'src/championship/contracts/productSpeciesExtensions.js'
 permissions:
   contents: read
 jobs:
@@ -42,7 +46,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Build and validate the owner-approved playtest artifact
         run: npm run build:playtest && npm run validate:playtest
-      - name: Capture normal Dex and same-renderer 128/256 comparisons
+      - name: Capture promoted form normal-entry previews and merged portrait reference matrix
         env:
           CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
           CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa

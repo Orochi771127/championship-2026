@@ -12,7 +12,11 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
 (async()=>{
  const manifest=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=manifest.buildId;assert.equal(manifest.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(manifest.publicPlaytest?.ownerApproved,true);
  assert.ok(resolveAsset(root,'/alternate-form-qa.html'),'Approved public build must contain isolated QA entry');
- for(const entry of JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/product-species-extensions.r1.json'))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],false,'Production gate remains disabled');
+ for(const entry of JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/product-species-extensions.r1.json'))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true,'Promotion requires production readiness, not a forced QA-only gate');
+ const readCatalog=file=>JSON.parse(fs.readFileSync(path.join(root,file)));
+ assert.deepEqual(readCatalog('src/data/championship/product-species-extensions.r1.json').entries,readCatalog('qa/alternate-form-product-catalog.json').entries,'Observed QA gameplay must use the same product identities and readiness');
+ const coreAsset=entry=>{const {blockers,...core}=entry;return core;};
+ assert.deepEqual(readCatalog('src/data/championship/alternate-form-assets.r1.json').characters.map(coreAsset),readCatalog('qa/alternate-form-asset-catalog.json').characters.map(coreAsset),'QA and production must use the same four action/geometry/own-art configurations');
  const fixture=JSON.parse(fs.readFileSync(path.join(root,'qa/alternate-form-save.json')));
  assert.equal(fixture.raising.collection.find(i=>i.instanceId.endsWith(':0005')).speciesId,'species-139');
  assert.equal(fixture.raising.collection.find(i=>i.instanceId.endsWith(':0006')).speciesId,'species-144');
