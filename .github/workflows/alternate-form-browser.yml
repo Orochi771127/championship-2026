@@ -37,6 +37,16 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: alternate-form-chromium-${{ github.run_id }}
-          path: .tmp/browser-qa/alternate-forms/
+          path: |
+            .tmp/browser-qa/alternate-forms/
+            !.tmp/browser-qa/alternate-forms/trace.zip
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve full trace separately from small review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alternate-form-trace-${{ github.run_id }}
+          path: .tmp/browser-qa/alternate-forms/trace.zip
           if-no-files-found: warn
           retention-days: 14
