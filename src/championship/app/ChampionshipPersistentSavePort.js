@@ -100,6 +100,29 @@ export function createChampionshipPreferencePort({ storage } = {}) {
   });
 }
 
+// Data Arena (OWNER_APPROVED_ADAPTATION 2026-10-15): the mode's own records
+// (schema dataArena.v1), beside the save and never inside it. Arena results
+// are records only and feed nothing in the Championship economy.
+export const CHAMPIONSHIP_DATA_ARENA_KEY = "championshipModernSave:dataArena:v1";
+export function createChampionshipDataArenaPort({ storage } = {}) {
+  if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function") {
+    throw new TypeError("Championship Data Arena port requires a Storage-like object");
+  }
+  const key = assertAllowedChampionshipStorageKey(CHAMPIONSHIP_DATA_ARENA_KEY);
+  const guarded = guardChampionshipStorage(storage);
+  return Object.freeze({
+    storageKey: key,
+    read() {
+      try { return Object.freeze({ text: guarded.getItem(key), error: null }); }
+      catch (error) { return Object.freeze({ text: null, error: `STORAGE_UNAVAILABLE: ${error.message}` }); }
+    },
+    write(text) {
+      try { guarded.setItem(key, text); return Object.freeze({ ok: true, error: null }); }
+      catch (error) { return Object.freeze({ ok: false, error: error?.message ?? String(error) }); }
+    }
+  });
+}
+
 export function createChampionshipPersistentSavePort({
   storage,
   locks = globalThis.window?.navigator?.locks,
