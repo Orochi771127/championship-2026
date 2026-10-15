@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: DATABASE_STORIES_20261015 -->
+**2026-10-15 — Reviewed Database story integration candidate.** 216 ordinary species have five-language authored prose, native attribute/family tags and mapped move power/action costs. Only twelve approved B101–B112 portraits are added; unknown detail sections stay masked. Earlier isolated checks pass (108 targeted tests; five locales, ten close/reopen cycles and forty navigation states). Final hosted CI/build status is tied to this PR head, not inferred from those earlier checks. [Scope and evidence](reports/database-stories-2026-10-15/REPORT.md).
+
 <!-- record-id: TITLE_MULTILINGUAL_20261014 -->
 **2026-10-14 four-language TITLE logos.** The existing locale-aware image owner selects exactly the active logo;en/ja/vi r1 and Thai r2 use their unchanged approved PNG bytes, with the existing Chinese logo preserved. Shared2:1 contain/fallback and request+listener epoch cancellation cover switching/error/retry/cache; foreign art and fallback fonts fit the portrait panel on short desktops. Existing h1 names, film/audio/app/save authority remain. See [Owner-local handoff, normal browser/film validation and publication receipt](reports/title-multilingual-2026-10-14/REPORT_ZH_TW.md). Physical devices, native-speaker Thai review and commercial rights are not accepted by this engineering check.
 
