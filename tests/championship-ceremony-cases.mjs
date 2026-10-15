@@ -48,6 +48,79 @@ function fakeTimers() {
 }
 const kinds = Object.keys(CEREMONY_TIMING);
 
+test("already-hidden ceremonies settle silently and finish only once", async () => {
+  let outputs = 0;
+  configureCeremonyAudio(() => { outputs += 1; return null; });
+  try {
+    for (const kind of kinds) {
+      const doc = fakeDocument(), timers = fakeTimers(), host = doc.createElement("div");
+      doc.hidden = true;
+      let completed = 0, resolved = 0;
+      const run = playCeremony({ host, kind, cue: "medal", doc, ...timers, build() {},
+        onDone: () => { completed += 1; } });
+      run.done.then(() => { resolved += 1; });
+      assert.equal(run.element.dataset.state, "leaving", kind);
+      assert.equal(timers.pending, 1, "only the short exit remains");
+      doc.dispatch("visibilitychange");
+      assert.equal(timers.pending, 1, "repeated hidden events do not reschedule");
+      timers.run(260);
+      assert.equal(host.children.length, 0);
+      assert.equal(timers.pending, 0);
+      run.dispose(); run.dismiss(); doc.dispatch("visibilitychange");
+      await run.done;
+      assert.equal(completed, 1);
+      assert.equal(resolved, 1);
+      assert.equal((doc.listeners.visibilitychange ?? []).length, 0);
+      assert.equal((doc.listeners.keydown ?? []).length, 0);
+    }
+    assert.equal(outputs, 0, "no audio bus or cue is requested while hidden");
+  } finally { configureCeremonyAudio(null); }
+});
+
+test("already-hidden held entry and reward reveal settle without a timer or sound", async () => {
+  const doc = fakeDocument(), timers = fakeTimers(), host = doc.createElement("div");
+  doc.hidden = true;
+  let outputs = 0, completed = 0;
+  configureCeremonyAudio(() => { outputs += 1; return null; });
+  try {
+    const run = playCeremony({ host, kind: "gate-entry", cue: "gate", autoDismiss: false,
+      doc, ...timers, build() {}, onDone: () => { completed += 1; } });
+    assert.equal(run.element.dataset.state, "settled");
+    assert.equal(timers.pending, 0);
+    doc.dispatch("visibilitychange");
+    assert.equal(run.settle(), false);
+    assert.equal(completed, 0, "the held entry still belongs to its loading caller");
+    const root = doc.createElement("section");
+    const reveal = playReveal({ root, kind: "hunt-reward", cue: "reward", doc, ...timers });
+    let resolved = 0;
+    reveal.done.then(() => { resolved += 1; });
+    assert.equal(root.dataset.reveal, "settled");
+    assert.equal(reveal.settle(), false);
+    doc.dispatch("visibilitychange");
+    assert.equal(timers.pending, 0);
+    reveal.dispose(); reveal.dispose();
+    assert.equal((await reveal.done).skipped, true);
+    assert.equal(resolved, 1);
+    run.dispose(); run.dispose();
+    await run.done;
+    assert.equal(completed, 1);
+    assert.equal(outputs, 0);
+    assert.equal(timers.pending, 0);
+    assert.equal((doc.listeners.visibilitychange ?? []).length, 0);
+    assert.equal((doc.listeners.keydown ?? []).length, 0);
+    assert.equal((root.listeners.pointerdown ?? []).length, 0);
+    assert.equal((root.listeners.click ?? []).length, 0);
+  } finally { configureCeremonyAudio(null); }
+});
+
+test("the reduced-motion exit wins after the capture-specific exit", () => {
+  const css = fs.readFileSync("src/championship/app/ui/ceremony.css", "utf8");
+  const reduced = '.cm-ceremony[data-motion="reduced"][data-state="leaving"]';
+  const capture = '.cm-ceremony[data-kind="capture"][data-state="leaving"]';
+  assert.ok(css.lastIndexOf(reduced) > css.lastIndexOf(capture));
+  assert.match(css.slice(css.lastIndexOf(reduced)), /animation: cm-cer-fade-out 160ms linear forwards/);
+});
+
 test("every ceremony runs to its end, removes its node and releases its listeners", async () => {
   for (const kind of kinds) {
     const doc = fakeDocument(), timers = fakeTimers(), host = doc.createElement("div");

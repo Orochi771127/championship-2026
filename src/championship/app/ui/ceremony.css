@@ -37,7 +37,6 @@
 .cm-ceremony[data-state="leaving"] { animation: cm-cer-leave 260ms var(--ease-in-out) forwards; pointer-events: none; }
 .cm-ceremony[data-motion="reduced"] { animation: cm-cer-fade 160ms linear backwards; }
 .cm-ceremony[data-motion="reduced"] .cm-ceremony__stage * { animation: none; }
-.cm-ceremony[data-motion="reduced"][data-state="leaving"] { animation: cm-cer-fade-out 160ms linear forwards; }
 /* Saver: the same words without the decoration. */
 .cm-ceremony[data-motion="saver"] :is(.cm-ceremony__spark, .cm-cer-rays, .cm-cer-ring--b, .cm-cer-ring--c) { display: none; }
 .cm-ceremony[data-motion="reduced"] :is(.cm-ceremony__spark, .cm-cer-ring) { display: none; }
@@ -403,3 +402,6 @@
 /* Reduced motion also keeps the two sides of the versus card still on exit
    (that exit rule is more specific than the general stop above). */
 .cm-ceremony[data-motion="reduced"][data-kind="versus"] .cm-cer-versus__side { animation: none; }
+/* Keep the reduced exit last: capture's equally specific exit must not
+   replace the opacity-only fade with a translation. */
+.cm-ceremony[data-motion="reduced"][data-state="leaving"] { animation: cm-cer-fade-out 160ms linear forwards; }

@@ -116,7 +116,7 @@ export function playCeremony({ host, kind, build, cue = null, label = "", autoDi
     return Object.freeze({ settle: () => false, dismiss() {}, dispose() {}, element, done });
   }
   host.append(element);
-  if (cue && !env.reduced) { try { sound = playCeremonyCue(cue, audioOutput()); } catch { sound = null; } }
+  if (cue && !env.reduced && !doc.hidden) { try { sound = playCeremonyCue(cue, audioOutput()); } catch { sound = null; } }
 
   function finish(skipped) {
     if (phase === "gone") return;
@@ -144,7 +144,12 @@ export function playCeremony({ host, kind, build, cue = null, label = "", autoDi
     sound?.stop(); sound = null;
     return true;
   }
-  function onVisibility() { if (doc.hidden) { settle(); if (autoDismiss) dismiss(true); } }
+  function onVisibility() {
+    if (!doc.hidden) return;
+    settle();
+    if (autoDismiss) dismiss(true);
+    else { clearTimer?.(endTimer); endTimer = null; }
+  }
   doc.addEventListener?.("visibilitychange", onVisibility);
 
   function onKey(event) {
@@ -164,6 +169,9 @@ export function playCeremony({ host, kind, build, cue = null, label = "", autoDi
   }
   if (autoDismiss) endTimer = setTimer?.(() => { settle(); dismiss(false); }, lengthMs);
   else endTimer = setTimer?.(() => { if (phase === "playing") { phase = "settled"; element.dataset.state = "settled"; } }, lengthMs);
+  // A field may finish loading while the tab is already hidden. No new
+  // visibility event is guaranteed; apply the same idempotent policy now.
+  if (doc.hidden) onVisibility();
 
   return Object.freeze({
     element, done, settle,
@@ -212,7 +220,7 @@ export function playReveal({ root, kind, cue = null, doc = globalThis.document,
   root.style.setProperty("--cer-length", `${lengthMs}ms`);
   let sound = null, timer = null, settled = false, resolveDone;
   const done = new Promise((resolve) => { resolveDone = resolve; });
-  if (cue && !env.reduced) { try { sound = playCeremonyCue(cue, audioOutput()); } catch { sound = null; } }
+  if (cue && !env.reduced && !doc.hidden) { try { sound = playCeremonyCue(cue, audioOutput()); } catch { sound = null; } }
   function settle(skipped = true) {
     if (settled) return false;
     settled = true;
@@ -243,7 +251,8 @@ export function playReveal({ root, kind, cue = null, doc = globalThis.document,
   root.addEventListener("click", onClick, true);
   doc.addEventListener?.("visibilitychange", onVisibility);
   // Reduced motion: nothing travels, so the screen is simply already there.
-  if (env.reduced) settle(false);
+  if (doc.hidden) settle(true);
+  else if (env.reduced) settle(false);
   else timer = setTimer?.(() => settle(false), lengthMs);
   return Object.freeze({ settle: () => settle(true), done,
     dispose() { sound?.stop(); sound = null; settle(true); root.removeEventListener("click", onClick, true); } });

@@ -1284,3 +1284,8 @@ dialog.cm-dialog[data-variant="expansion"] .cm-dialog__panel { max-height: calc(
 /* The title-match chip is small to look at; its hit area is not (44 px tall). */
 .cm-status-bar__matches { position: relative; }
 .cm-status-bar__matches::after { content: ""; position: absolute; inset: -8px -4px; }
+
+
+/* Module rollover needs a new document, not another request for the old URL. */
+.int-rh2-resident-assets[data-module-load-failed="true"] button[data-load-action="reload"] { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+.int-rh2-resident-assets[data-load-owner="screen"] { position: fixed; }

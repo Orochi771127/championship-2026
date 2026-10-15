@@ -6,6 +6,8 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  "MODULE_LOAD_ERROR": "Không thể tải chương trình màn hình. Trò chơi có thể vừa cập nhật hoặc kết nối bị gián đoạn. Hãy lưu rồi tải lại trò chơi; không cần xóa bản lưu.",
+  "SCREEN_LOAD_ERROR": "Không thể tải màn hình. Hãy lưu rồi tải lại trò chơi, hoặc lưu rồi trở về màn hình tiêu đề.",
   "CAGE_SLOT_RANK_LOCKED": "Ô {n} đang khóa. Mở khóa ở hạng thuần thú sư {rank}.",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "Nền trang hệ thống",
@@ -1301,4 +1303,5 @@ export const UNTRANSLATED_PROPER_NOUNS_VI = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+
 
