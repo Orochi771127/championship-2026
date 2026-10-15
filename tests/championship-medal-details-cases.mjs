@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { describeMedalDetails, medalDetails } from '../src/championship/app/medalDetails.js';
 import { MEDAL_DETAIL_TEXT } from '../src/championship/text/medalDetailText.js';
-import { LOCALES, getLocale, setLocale, onLocaleChange } from '../src/championship/text/locale.js';
+import { LOCALES, getLocale, setLocale, onLocaleChange, formatList } from '../src/championship/text/locale.js';
 import { shopItemName, gateName, generationName, personalityName } from '../src/championship/text/zhHant.js';
 import { listShopRecords } from '../src/championship/shop/shopCatalog.js';
 import { listChampionshipGates } from '../src/championship/gate/gateCatalog.js';
@@ -61,9 +61,9 @@ test('specific restrictions reflect individual qualification, with OR family cho
     assert.ok(fact(describeMedalDetails(id), 'arena'));
   }
   assert.equal(fact(describeMedalDetails(43), 'participation'), '限定植物類型');
-  assert.equal(fact(describeMedalDetails(44), 'participation'), '限定豆豆獸類型');
-  assert.match(fact(describeMedalDetails(48), 'participation'), /《數碼怪獸》/);
-  assert.match(fact(describeMedalDetails(49), 'participation'), /《數碼怪獸擺錘機》/);
+  assert.equal(fact(describeMedalDetails(44), 'participation'), `限定以下種類：${formatList(['巨核裝豆','鋼豆核','星冠豆爵'])}`);
+  assert.match(fact(describeMedalDetails(48), 'participation'), /限定起源組：/);
+  assert.match(fact(describeMedalDetails(49), 'participation'), /限定擺錘組：/);
   for (const [id, count] of [[50, 3], [51, 5], [52, 10]]) assert.match(fact(describeMedalDetails(id), 'participation'), new RegExp(`每隻隊員至少轉生為蛋 ${count} 次`));
   assert.match(fact(describeMedalDetails(53), 'participation'), /每隻隊員容量至少 24/);
   assert.equal(fact(describeMedalDetails(54), 'participation'), `限定${personalityName(7)}個性`);

@@ -6,16 +6,27 @@
 // Audited against original_medals_61_evidence.json and runtime-integration-audit.md,
 // 2026-10-14, source b01ed619375641f5578b2bc65883ebfa32ad8914. Research never imports here.
 // The adapter does not prove original UI pixels, equipped titles, or full rank-branch coverage.
+import qualification from '../../data/championship/battlePartyConditions.json' with {type:'json'};
 import { TITLE_EVENT_SCAN_LIMIT } from '../battle/titleEventSchedule.js';
 import { getMatchRecord, matchEntryFee, matchPayout } from '../battle/battleMatchSelection.js';
 import { battlePartyCondition } from '../battle/battleParty.js';
 import { listShopRecords, SHOP_UNLOCK_KINDS } from '../shop/shopCatalog.js';
 import { listChampionshipGates } from '../gate/gateCatalog.js';
-import { shopItemName, gateName, generationName, personalityName, rosterFamilyName } from '../text/zhHant.js';
+import { shopItemName, gateName, generationName, personalityName, rosterFamilyName, speciesName } from '../text/zhHant.js';
 import { formatList, formatNumber } from '../text/locale.js';
 import { uiText } from '../text/uiText.js';
 import { medalDetailText as text, medalDetailTerm } from '../text/medalDetailText.js';
 import { deepFreeze } from '../contracts/championshipContracts.js';
+
+// Display projection of existing native membership; no eligibility rule is changed.
+// Source flag 3 belongs to both origin groups. Eggs/youngest stage cannot enter.
+export function medalQualificationSpecies({type=null,origin=null}={}) {
+  return Object.freeze(qualification.species.flatMap((record,index)=>
+    index>=8&&index<224&&record.fields['0c']>1
+      &&(type===null||record.fields['14']===type)
+      &&(origin===null||record.field68===origin||record.field68===3) ? [index] : []));
+}
+function qualificationNames(filter){return formatList(medalQualificationSpecies(filter).map(index=>speciesName(index)));}
 
 function conditionText(condition) {
   const parts = [];
@@ -30,8 +41,8 @@ function conditionText(condition) {
   if (condition.minimum03c !== 0) parts.push(text('rebirth', { count: formatNumber(condition.minimum03c) }));
   if (condition.minimum010 !== 0) parts.push(text('capacity', { count: formatNumber(condition.minimum010) }));
   if (condition.individual018 !== -1) parts.push(personalityName(condition.individual018) ? text('personality', { value: personalityName(condition.individual018) }) : text('unknown'));
-  if (condition.species014 !== 0) parts.push(text(({ 5: 'plantType', 6: 'mamemonType' })[condition.species014] ?? 'unknown'));
-  if (condition.field14 !== 0) parts.push(text(({ 1: 'originDigital', 2: 'originPendulum' })[condition.field14] ?? 'unknown'));
+  if (condition.species014 !== 0) parts.push(text(({ 5: 'plantType', 6: 'mamemonType' })[condition.species014] ?? 'unknown', {names:qualificationNames({type:condition.species014})}));
+  if (condition.field14 !== 0) parts.push(text(({ 1: 'originDigital', 2: 'originPendulum' })[condition.field14] ?? 'unknown', {names:qualificationNames({origin:condition.field14})}));
   return parts.length ? parts.join('\n') : text('unrestricted');
 }
 
