@@ -573,7 +573,7 @@ export const HELP_TH = Object.freeze(HELP_ROWS.map(([title, body], entryIndex) =
 const EVENT_ROWS = [
   [
     "Access Striker",
-    "A head-to-head, one-on-one duel with the Child-stage 玩具亞古獸!\nการต่อสู้แบบ 1 ต่อ 1"
+    "A head-to-head, one-on-one duel with the Child-stage 鐵玩暴龍!\nการต่อสู้แบบ 1 ต่อ 1"
   ],
   [
     "Legion Captain",
@@ -585,11 +585,11 @@ const EVENT_ROWS = [
   ],
   [
     "Vector Sector",
-    "Holding back the moves of the team captain, 妖狐獸, is the key to winning!\nการต่อสู้แบบ 3 ต่อ 3"
+    "Holding back the moves of the team captain, 光綾狐, is the key to winning!\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Bit Agent",
-    "Watch out for 獨角獸's power and they're not a hard team to beat!\nการต่อสู้แบบ 3 ต่อ 3"
+    "Watch out for 角絨仔's power and they're not a hard team to beat!\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Tough Digitizer",
@@ -597,7 +597,7 @@ const EVENT_ROWS = [
   ],
   [
     "Core Crusher",
-    "The Ultimate 法老獸 enters the ring! A one-on-one showdown that every tamer is watching!\nการต่อสู้แบบ 1 ต่อ 1"
+    "The Ultimate 冥砂法皇 enters the ring! A one-on-one showdown that every tamer is watching!\nการต่อสู้แบบ 1 ต่อ 1"
   ],
   [
     "Silver Freeze",
@@ -609,11 +609,11 @@ const EVENT_ROWS = [
   ],
   [
     "Summer Phantom",
-    "A special three-on-one match! Can three พาร์ตเนอร์ work together to beat 巨鯨獸 and rule the height of summer?\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 1"
+    "A special three-on-one match! Can three พาร์ตเนอร์ work together to beat 潮冠巨鯨 and rule the height of summer?\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 1"
   ],
   [
     "Autumn Survivor",
-    `The title holder is one calm ${AWAKENED_FORM_NAMES.th}, 祖利獸! Fighting alone, balance attack with recovery!\nการต่อสู้แบบ 1 ต่อ 1`
+    `The title holder is one calm ${AWAKENED_FORM_NAMES.th}, 界根樹王! Fighting alone, balance attack with recovery!\nการต่อสู้แบบ 1 ต่อ 1`
   ],
   [
     "Winter General",
@@ -633,7 +633,7 @@ const EVENT_ROWS = [
   ],
   [
     "Aqua Centurion",
-    "The stage is a water arena! Take on the team built around 雪亞古獸將軍!\nสนามแข่งขันทางน้ำ, การต่อสู้แบบ 3 ต่อ 3"
+    "The stage is a water arena! Take on the team built around 雪晶幼龍將軍!\nสนามแข่งขันทางน้ำ, การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Wing Master",
@@ -641,7 +641,7 @@ const EVENT_ROWS = [
   ],
   [
     "King of Nature",
-    "Many teams have fallen to the attacks of their captain, 「薔薇」!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 3"
+    "หลายทีมพ่ายแพ้ต่อการโจมตีของหัวหน้าทีม 花刺皇后!\nจำกัดวัยเจริญเต็มที่ การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Sanctuary Warrior",
@@ -673,15 +673,15 @@ const EVENT_ROWS = [
   ],
   [
     "Small Challenger",
-    "The title holder 基扎獸 has powerful claws, but find its weak point and you might win easily!\nการต่อสู้แบบ 1 ต่อ 1"
+    "The title holder 沼牙蜥 has powerful claws, but find its weak point and you might win easily!\nการต่อสู้แบบ 1 ต่อ 1"
   ],
   [
     "Big Fighter",
-    "A special three-on-one match! Break the unbelievable power of 祖頓獸 with teamwork!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 1"
+    "A special three-on-one match! Break the unbelievable power of 潮鑄海將 with teamwork!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 1"
   ],
   [
     "Giant Extreme",
-    `A special three-on-one match! Can you withstand 小丑皇's attacks and beat it with teamwork?\nจำกัดขั้น${AWAKENED_FORM_NAMES.th}, การต่อสู้แบบ 3 ต่อ 1`
+    `A special three-on-one match! Can you withstand 蝕夜丑皇's attacks and beat it with teamwork?\nจำกัดขั้น${AWAKENED_FORM_NAMES.th}, การต่อสู้แบบ 3 ต่อ 1`
   ],
   [
     "Perfect Fighter",
@@ -701,7 +701,7 @@ const EVENT_ROWS = [
   ],
   [
     "Noise Divider",
-    "Can you beat the elite squad of 「Ｄ無限」?\nVirus attribute and จำกัดขั้นสุดยอด, การต่อสู้แบบ 3 ต่อ 3"
+    "คุณจะเอาชนะทีมยอดฝีมือของคู่แข่งได้หรือไม่?\nจำกัดคุณสมบัติไวรัสและขั้นสุดยอด การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Security Line Decider",
@@ -717,7 +717,7 @@ const EVENT_ROWS = [
   ],
   [
     "Blizzard Field",
-    "The stage is a snowy mountain! Beware 冰惡魔獸's icy claws and 雪人獸's punches!\nสนามแข่งขันหิมะ, การต่อสู้แบบ 3 ต่อ 3"
+    "The stage is a snowy mountain! Beware 霜獄魔翼's icy claws and 雪燈靈偶's punches!\nสนามแข่งขันหิมะ, การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Volcano Striker",
@@ -741,7 +741,7 @@ const EVENT_ROWS = [
   ],
   [
     "Dancing Puppet",
-    "A special one-on-three match! Deftly beat the three 齒輪獸 that come at you!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 1 ต่อ 3"
+    "A special one-on-three match! Deftly beat the three 星環齒靈 that come at you!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 1 ต่อ 3"
   ],
   [
     "Emerald Seed",
@@ -749,7 +749,7 @@ const EVENT_ROWS = [
   ],
   [
     "Bean World",
-    "A rare battle that only 豆豆獸 can enter. They say whoever masters 豆豆獸 masters every พาร์ตเนอร์.\n豆豆獸 type only, การต่อสู้แบบ 3 ต่อ 3"
+    "การแข่งขันเฉพาะ 巨核裝豆, 鋼豆核 และ 星冠豆爵 ใช้จุดแข็งของแต่ละตัวเพื่อคว้าชัย!\nเฉพาะสามสายพันธุ์นี้ การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Steel Doom",
@@ -765,23 +765,23 @@ const EVENT_ROWS = [
   ],
   [
     "Origin Survivor",
-    "Only the first พาร์ตเนอร์ ever discovered can enter!\nOnly พาร์ตเนอร์ that appeared in 《數碼怪獸》, การต่อสู้แบบ 1 ต่อ 1"
+    "การแข่งขันเฉพาะพาร์ตเนอร์กลุ่มต้นกำเนิด ดูรายชื่อสายพันธุ์ทั้งหมดในเงื่อนไขสมาชิกทีม\nการต่อสู้แบบ 1 ต่อ 1"
   ],
   [
     "Pendulum Twist",
-    "A battle only พาร์ตเนอร์ from the Pendulum era can enter!\nOnly พาร์ตเนอร์ that appeared in 《數碼怪獸擺錘機》, การต่อสู้แบบ 3 ต่อ 3"
+    "การแข่งขันเฉพาะพาร์ตเนอร์กลุ่มลูกตุ้ม ดูรายชื่อสายพันธุ์ทั้งหมดในเงื่อนไขสมาชิกทีม\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Hundred Souls",
-    "Only พาร์ตเนอร์ that have been with you a long time can enter!\nOnly พาร์ตเนอร์ that have returned to a Digi-Egg at least three times, การต่อสู้แบบ 3 ต่อ 3"
+    "Only พาร์ตเนอร์ that have been with you a long time can enter!\nOnly พาร์ตเนอร์ that have returned to a ไข่เพาะเลี้ยง at least three times, การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Thousand Souls",
-    "One of the \"Seven Top Titles\", the highest rank of title there is!\nOnly พาร์ตเนอร์ that have returned to a Digi-Egg at least five times, การต่อสู้แบบ 3 ต่อ 3"
+    "One of the \"Seven Top Titles\", the highest rank of title there is!\nOnly พาร์ตเนอร์ that have returned to a ไข่เพาะเลี้ยง at least five times, การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Infinite Soul",
-    "One of the \"Seven Top Titles\", the highest rank of title there is!\nOnly พาร์ตเนอร์ that have returned to a Digi-Egg at least ten times, การต่อสู้แบบ 3 ต่อ 3"
+    "One of the \"Seven Top Titles\", the highest rank of title there is!\nOnly พาร์ตเนอร์ that have returned to a ไข่เพาะเลี้ยง at least ten times, การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Gravity Knight",
@@ -797,15 +797,15 @@ const EVENT_ROWS = [
   ],
   [
     "Rainbow Flyer",
-    "Colorful พาร์ตเนอร์ such as 妖狐九尾獸 and 迷幻獸 take the stage!\nการต่อสู้แบบ 3 ต่อ 3"
+    "Colorful พาร์ตเนอร์ such as 緋尾妖狐 and 幻紋幼獸 take the stage!\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Lunar Evolution",
-    "One of the \"Seven Top Titles\", the highest rank of title there is! Your opponent is 「黛莉西亞薔薇」, who seeks ultimate beauty!\nการต่อสู้แบบ 3 ต่อ 3"
+    "หนึ่งในเจ็ดตำแหน่งสูงสุด! ท้าทายทีมคู่แข่งอันแข็งแกร่งที่แสวงหาความงามขั้นสูงสุด!\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Blade Guardian",
-    "One of the \"Seven Top Titles\", the highest rank of title there is! Your opponent is 「艾克斯龍騎士」, who knows everything about dragons!\nการต่อสู้แบบ 3 ต่อ 3"
+    "หนึ่งในเจ็ดตำแหน่งสูงสุด! ท้าทายทีมคู่แข่งอันแข็งแกร่งที่เชี่ยวชาญกลยุทธ์เผ่ามังกร!\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Golden Wings",

@@ -59,10 +59,13 @@ test('all nine Hunt result composition rules reach desktop without applying comp
  assert.match(rules[0],/grid-template-areas: "portrait species" "portrait name" "portrait note" "roster roster" "release release"/);
  assert.ok(rules.some(s=>s.includes('grid-area: release')));
 });
-test('entry has real columns, safe overflow, contain film, and story reflow without timeline geometry changes',()=>{
+test('entry is one full-bleed city scene with bounded controls, contain film, and unchanged story trajectory',()=>{
  const css=source('opening.css'),wide=css.slice(css.indexOf('/* Public landscape entry:'));
- assert.match(wide,/grid-template-columns: minmax\(0, 1.1fr\) minmax\(280px, .9fr\)/);
- assert.match(wide,/justify-content: safe center/);assert.match(wide,/\.cm-title__film-video \{ object-fit: contain; \}/);
+ assert.match(wide,/grid-template: none; gap: 0; padding: 0/);
+ assert.match(wide,/width: 100%; height: 100%; max-height: none;[\s\S]*?background-size: cover/);
+ assert.match(wide,/--cm-entry-action-width: min\(32vw, 340px\)/);
+ assert.match(wide,/\.cm-title__partner \{[^}]*object-fit: contain/);
+ assert.match(wide,/justify-content: flex-start/);assert.match(wide,/\.cm-title__film-video \{ object-fit: contain; \}/);
  assert.match(wide,/\.cm-opening-story__arena--2 \{ grid-column: 4; grid-row: 1; \}/);
  assert.match(wide,/\.cm-opening-story__text \{[^}]*overflow-y: auto;[^}]*pointer-events: auto;/);
  assert.doesNotMatch(wide,/\.cm-opening-story__card\s*\{[^}]*(?:top:|height:|transform:)/);

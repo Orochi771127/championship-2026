@@ -355,53 +355,90 @@ body[data-portrait-frame] #cm-title .cm-title__note:empty { display:none; }
 #cm-title .cm-title__film button:focus-visible { outline:3px solid #ffe895; outline-offset:3px; }
 body[data-portrait-frame] #cm-title .cm-title__film { width:390px; --cm-title-height:var(--cm-viewport-height); }
 
-/* Public landscape entry: original portrait artwork in the left column, the
-   existing LOGIN/actions in a device-sized right column. No duplicate view. */
+/* Public landscape entry: one full-bleed city scene. Existing transparent
+   logo/partners and live controls compose over it; no portrait-poster column. */
 body[data-landscape-entry] #cm-title {
+  --cm-entry-left: max(24px, env(safe-area-inset-left), 5vw);
+  --cm-entry-logo-top: max(64px, 10dvh);
+  --cm-entry-logo-width: clamp(260px, 38vw, 480px);
+  --cm-entry-action-width: min(32vw, 340px);
+  --cm-entry-action-top: calc(var(--cm-entry-logo-top) + var(--cm-entry-logo-width) / 2 + 24px);
   top: var(--cm-visible-viewport-top, 0px); bottom: auto;
   height: var(--cm-visible-viewport-height, 100dvh);
-  grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
-  grid-template-rows: minmax(0, 1fr);
-  gap: 16px;
-  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  grid-template: none; gap: 0; padding: 0;
 }
 body[data-landscape-entry] #cm-title > .cm-title__panel {
-  --cm-title-height: calc(var(--cm-visible-viewport-height, 100dvh) - 32px);
-  grid-column: 1; grid-row: 1;
-  width: min(100%, calc(var(--cm-title-height) * 9 / 16));
-  height: 100%; max-height: var(--cm-title-height);
-  transform: none; background-size: contain;
+  --cm-title-height: var(--cm-visible-viewport-height, 100dvh);
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; max-height: none;
+  transform: none; background-size: cover; background-position: center 58%;
 }
-body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__art { width: 100%; }
+body[data-landscape-entry] #cm-title > .cm-title__panel::before {
+  background: linear-gradient(90deg, rgba(244,250,232,.76), rgba(244,250,232,.26) 38%, transparent 64%);
+}
+body[data-landscape-entry] #cm-title > .cm-title__panel > .cm-title__art {
+  inset: 0; width: 100%; height: 100%; transform: none;
+}
+/* Include the art parent to outrank the existing non-Chinese logo positioning
+   without changing image selection, aspect ratio or fallback text. */
+body[data-landscape-entry] #cm-title > .cm-title__panel > .cm-title__art > .cm-title__logo {
+  top: var(--cm-entry-logo-top); left: var(--cm-entry-left);
+  width: var(--cm-entry-logo-width); height: auto; aspect-ratio: 2;
+}
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {
+  left: 42%; right: 2%; bottom: 6%; width: auto; height: 76%;
+}
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner {
+  height: 100%; object-fit: contain; object-position: center bottom;
+}
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--blaze { width: 64%; }
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--cloud { width: 60%; bottom: -2.5%; }
 body[data-landscape-entry] #cm-title > .cm-title__controls {
-  position: relative; inset: auto; transform: none;
-  grid-column: 2; grid-row: 1;
-  display: flex; flex-direction: column; justify-content: safe center; gap: 12px;
-  width: min(100%, 480px); height: 100%; min-height: 0;
-  padding: 64px 12px 12px; box-sizing: border-box;
+  position: absolute; transform: none;
+  top: var(--cm-entry-action-top); bottom: max(16px, env(safe-area-inset-bottom));
+  left: calc(var(--cm-entry-left) + (var(--cm-entry-logo-width) - var(--cm-entry-action-width)) / 2);
+  display: flex; flex-direction: column; justify-content: flex-start; gap: 10px;
+  width: var(--cm-entry-action-width); height: auto; min-height: 0;
+  padding: 4px 6px 12px; box-sizing: border-box;
   overflow-y: auto; overscroll-behavior: contain;
 }
 body[data-landscape-entry] #cm-title .cm-title__entry {
   position: relative; inset: auto; transform: none;
   display: block; width: 100%; min-height: 0;
-  flex: 0 0 auto; padding: 12px;
+  flex: 0 0 auto; padding: 0;
 }
 body[data-landscape-entry] #cm-title .cm-title__actions {
   position: static; display: grid; grid-template-columns: minmax(0, 1fr);
-  width: 100%; gap: 12px; align-self: auto;
+  width: 100%; gap: 10px; align-self: auto;
 }
 body[data-landscape-entry] #cm-title .cm-title__login { width: 100%; }
 body[data-landscape-entry] #cm-title .cm-title__actions .cm-button { white-space: normal; overflow-wrap: anywhere; }
 body[data-landscape-entry] #cm-title .cm-title__feedback { position: static; display: contents; }
 body[data-landscape-entry] #cm-title :is(.cm-title__boot-status, .cm-title__background-feedback, .cm-title__note) {
   position: relative; inset: auto; width: 100%; margin: 0;
-  flex: 0 0 auto; max-height: 35%; overflow-y: auto; overflow-wrap: anywhere;
-  color: #183c42; background: #f6fbebed; border-radius: 10px; padding: 8px 12px;
+  flex: 0 0 auto; max-height: none; overflow-wrap: anywhere;
+  color: #183c42; background: #f6fbebd9; border-radius: 10px; padding: 8px 10px;
   pointer-events: auto;
 }
+body[data-landscape-entry] #cm-title .cm-title__background-feedback[aria-hidden="true"],
 body[data-landscape-entry] #cm-title .cm-title__note:empty { display: none; }
-body[data-landscape-entry] #cm-title :is(.cm-title__settings, .cm-title__film-watch) { top: 8px; }
-body[data-landscape-entry] #cm-title .cm-title__settings { right: 12px; }
+/* These utility buttons stay on the viewport, not inside the narrow action
+   group. The existing hidden state and keyboard targets remain authoritative. */
+body[data-landscape-entry] #cm-title :is(.cm-title__settings, .cm-title__film-watch) {
+  position: fixed; top: max(12px, env(safe-area-inset-top));
+}
+body[data-landscape-entry] #cm-title .cm-title__settings { right: max(16px, env(safe-area-inset-right)); }
+body[data-landscape-entry] #cm-title .cm-title__film-watch { left: max(16px, env(safe-area-inset-left)); }
+@media (max-height: 480px) {
+  body[data-landscape-entry] #cm-title {
+    --cm-entry-logo-top: 56px;
+    --cm-entry-logo-width: clamp(180px, 34vw, 320px);
+    --cm-entry-action-top: calc(var(--cm-entry-logo-top) + var(--cm-entry-logo-width) / 2 + 10px);
+  }
+  body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners { left: 44%; bottom: 5%; height: 78%; }
+  body[data-landscape-entry] #cm-title .cm-title__actions { gap: 8px; }
+  body[data-landscape-entry] #cm-title > .cm-title__controls { gap: 8px; padding-top: 2px; }
+}
 body[data-landscape-entry] #cm-title .cm-title__film {
   width: 100%; height: 100%; --cm-title-height: var(--cm-visible-viewport-height, 100dvh);
 }

@@ -573,7 +573,7 @@ export const HELP_VI = Object.freeze(HELP_ROWS.map(([title, body], entryIndex) =
 const EVENT_ROWS = [
   [
     "Access Striker",
-    "A head-to-head, one-on-one duel with the Child-stage 玩具亞古獸!\nTrận đấu 1 chọi 1."
+    "A head-to-head, one-on-one duel with the Child-stage 鐵玩暴龍!\nTrận đấu 1 chọi 1."
   ],
   [
     "Legion Captain",
@@ -585,11 +585,11 @@ const EVENT_ROWS = [
   ],
   [
     "Vector Sector",
-    "Holding back the moves of the team captain, 妖狐獸, is the key to winning!\nTrận đấu 3 chọi 3."
+    "Holding back the moves of the team captain, 光綾狐, is the key to winning!\nTrận đấu 3 chọi 3."
   ],
   [
     "Bit Agent",
-    "Watch out for 獨角獸's power and they're not a hard team to beat!\nTrận đấu 3 chọi 3."
+    "Watch out for 角絨仔's power and they're not a hard team to beat!\nTrận đấu 3 chọi 3."
   ],
   [
     "Tough Digitizer",
@@ -597,7 +597,7 @@ const EVENT_ROWS = [
   ],
   [
     "Core Crusher",
-    "The Ultimate 法老獸 enters the ring! A one-on-one showdown that every tamer is watching!\nTrận đấu 1 chọi 1."
+    "The Ultimate 冥砂法皇 enters the ring! A one-on-one showdown that every tamer is watching!\nTrận đấu 1 chọi 1."
   ],
   [
     "Silver Freeze",
@@ -609,11 +609,11 @@ const EVENT_ROWS = [
   ],
   [
     "Summer Phantom",
-    "A special three-on-one match! Can three bạn đồng hành work together to beat 巨鯨獸 and rule the height of summer?\nChỉ giới hạn Trưởng thành, Trận đấu 3 chọi 1."
+    "A special three-on-one match! Can three bạn đồng hành work together to beat 潮冠巨鯨 and rule the height of summer?\nChỉ giới hạn Trưởng thành, Trận đấu 3 chọi 1."
   ],
   [
     "Autumn Survivor",
-    `The title holder is one calm ${AWAKENED_FORM_NAMES.vi}, 祖利獸! Fighting alone, balance attack with recovery!\nTrận đấu 1 chọi 1.`
+    `The title holder is one calm ${AWAKENED_FORM_NAMES.vi}, 界根樹王! Fighting alone, balance attack with recovery!\nTrận đấu 1 chọi 1.`
   ],
   [
     "Winter General",
@@ -633,7 +633,7 @@ const EVENT_ROWS = [
   ],
   [
     "Aqua Centurion",
-    "The stage is a water arena! Take on the team built around 雪亞古獸將軍!\nĐấu trường nước, Trận đấu 3 chọi 3."
+    "The stage is a water arena! Take on the team built around 雪晶幼龍將軍!\nĐấu trường nước, Trận đấu 3 chọi 3."
   ],
   [
     "Wing Master",
@@ -641,7 +641,7 @@ const EVENT_ROWS = [
   ],
   [
     "King of Nature",
-    "Many teams have fallen to the attacks of their captain, 「薔薇」!\nChỉ giới hạn Trưởng thành, Trận đấu 3 chọi 3."
+    "Nhiều đội đã thất bại trước những đòn tấn công của đội trưởng 花刺皇后!\nChỉ giới hạn Trưởng thành, trận đấu 3 chọi 3."
   ],
   [
     "Sanctuary Warrior",
@@ -673,15 +673,15 @@ const EVENT_ROWS = [
   ],
   [
     "Small Challenger",
-    "The title holder 基扎獸 has powerful claws, but find its weak point and you might win easily!\nTrận đấu 1 chọi 1."
+    "The title holder 沼牙蜥 has powerful claws, but find its weak point and you might win easily!\nTrận đấu 1 chọi 1."
   ],
   [
     "Big Fighter",
-    "A special three-on-one match! Break the unbelievable power of 祖頓獸 with teamwork!\nChỉ giới hạn Trưởng thành, Trận đấu 3 chọi 1."
+    "A special three-on-one match! Break the unbelievable power of 潮鑄海將 with teamwork!\nChỉ giới hạn Trưởng thành, Trận đấu 3 chọi 1."
   ],
   [
     "Giant Extreme",
-    `A special three-on-one match! Can you withstand 小丑皇's attacks and beat it with teamwork?\nChỉ giới hạn ${AWAKENED_FORM_NAMES.vi}, Trận đấu 3 chọi 1.`
+    `A special three-on-one match! Can you withstand 蝕夜丑皇's attacks and beat it with teamwork?\nChỉ giới hạn ${AWAKENED_FORM_NAMES.vi}, Trận đấu 3 chọi 1.`
   ],
   [
     "Perfect Fighter",
@@ -701,7 +701,7 @@ const EVENT_ROWS = [
   ],
   [
     "Noise Divider",
-    "Can you beat the elite squad of 「Ｄ無限」?\nVirus attribute and Chỉ giới hạn Tối hậu, Trận đấu 3 chọi 3."
+    "Bạn có thể đánh bại đội tinh nhuệ của đối thủ không?\nChỉ thuộc tính Virus và giai đoạn Tối hậu, trận đấu 3 chọi 3."
   ],
   [
     "Security Line Decider",
@@ -717,7 +717,7 @@ const EVENT_ROWS = [
   ],
   [
     "Blizzard Field",
-    "The stage is a snowy mountain! Beware 冰惡魔獸's icy claws and 雪人獸's punches!\nĐấu trường tuyết, Trận đấu 3 chọi 3."
+    "The stage is a snowy mountain! Beware 霜獄魔翼's icy claws and 雪燈靈偶's punches!\nĐấu trường tuyết, Trận đấu 3 chọi 3."
   ],
   [
     "Volcano Striker",
@@ -741,7 +741,7 @@ const EVENT_ROWS = [
   ],
   [
     "Dancing Puppet",
-    "A special one-on-three match! Deftly beat the three 齒輪獸 that come at you!\nChỉ giới hạn Trưởng thành, Trận đấu 1 chọi 3."
+    "A special one-on-three match! Deftly beat the three 星環齒靈 that come at you!\nChỉ giới hạn Trưởng thành, Trận đấu 1 chọi 3."
   ],
   [
     "Emerald Seed",
@@ -749,7 +749,7 @@ const EVENT_ROWS = [
   ],
   [
     "Bean World",
-    "A rare battle that only 豆豆獸 can enter. They say whoever masters 豆豆獸 masters every bạn đồng hành.\n豆豆獸 type only, Trận đấu 3 chọi 3."
+    "Trận đấu riêng dành cho 巨核裝豆, 鋼豆核 và 星冠豆爵. Phát huy thế mạnh của từng loài để giành chiến thắng!\nChỉ ba loài này, trận đấu 3 chọi 3."
   ],
   [
     "Steel Doom",
@@ -765,23 +765,23 @@ const EVENT_ROWS = [
   ],
   [
     "Origin Survivor",
-    "Only the first bạn đồng hành ever discovered can enter!\nOnly bạn đồng hành that appeared in 《數碼怪獸》, Trận đấu 1 chọi 1."
+    "Trận đấu riêng dành cho bạn đồng hành thuộc nhóm Khởi nguyên. Xem danh sách loài đầy đủ trong Điều kiện thành viên.\nTrận đấu 1 chọi 1."
   ],
   [
     "Pendulum Twist",
-    "A battle only bạn đồng hành from the Pendulum era can enter!\nOnly bạn đồng hành that appeared in 《數碼怪獸擺錘機》, Trận đấu 3 chọi 3."
+    "Trận đấu riêng dành cho bạn đồng hành thuộc nhóm Con lắc. Xem danh sách loài đầy đủ trong Điều kiện thành viên.\nTrận đấu 3 chọi 3."
   ],
   [
     "Hundred Souls",
-    "Only bạn đồng hành that have been with you a long time can enter!\nOnly bạn đồng hành that have returned to a Digi-Egg at least three times, Trận đấu 3 chọi 3."
+    "Only bạn đồng hành that have been with you a long time can enter!\nOnly bạn đồng hành that have returned to a trứng nuôi dưỡng at least three times, Trận đấu 3 chọi 3."
   ],
   [
     "Thousand Souls",
-    "One of the \"Seven Top Titles\", the highest rank of title there is!\nOnly bạn đồng hành that have returned to a Digi-Egg at least five times, Trận đấu 3 chọi 3."
+    "One of the \"Seven Top Titles\", the highest rank of title there is!\nOnly bạn đồng hành that have returned to a trứng nuôi dưỡng at least five times, Trận đấu 3 chọi 3."
   ],
   [
     "Infinite Soul",
-    "One of the \"Seven Top Titles\", the highest rank of title there is!\nOnly bạn đồng hành that have returned to a Digi-Egg at least ten times, Trận đấu 3 chọi 3."
+    "One of the \"Seven Top Titles\", the highest rank of title there is!\nOnly bạn đồng hành that have returned to a trứng nuôi dưỡng at least ten times, Trận đấu 3 chọi 3."
   ],
   [
     "Gravity Knight",
@@ -797,15 +797,15 @@ const EVENT_ROWS = [
   ],
   [
     "Rainbow Flyer",
-    "Colorful bạn đồng hành such as 妖狐九尾獸 and 迷幻獸 take the stage!\nTrận đấu 3 chọi 3."
+    "Colorful bạn đồng hành such as 緋尾妖狐 and 幻紋幼獸 take the stage!\nTrận đấu 3 chọi 3."
   ],
   [
     "Lunar Evolution",
-    "One of the \"Seven Top Titles\", the highest rank of title there is! Your opponent is 「黛莉西亞薔薇」, who seeks ultimate beauty!\nTrận đấu 3 chọi 3."
+    "Một trong bảy danh hiệu cao nhất! Thách đấu đội đối thủ hùng mạnh luôn theo đuổi vẻ đẹp tối thượng!\nTrận đấu 3 chọi 3."
   ],
   [
     "Blade Guardian",
-    "One of the \"Seven Top Titles\", the highest rank of title there is! Your opponent is 「艾克斯龍騎士」, who knows everything about dragons!\nTrận đấu 3 chọi 3."
+    "Một trong bảy danh hiệu cao nhất! Thách đấu đội đối thủ hùng mạnh đã làm chủ chiến thuật của tộc Rồng!\nTrận đấu 3 chọi 3."
   ],
   [
     "Golden Wings",
