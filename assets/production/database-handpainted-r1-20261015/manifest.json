@@ -260,25 +260,26 @@
       "speciesIndex": 42,
       "speciesId": "species-042",
       "displayCode": "GR10",
-      "src": "assets/production/database-handpainted-r1-20261015/species-042.png",
+      "src": "assets/production/database-handpainted-r1-20261015/species-042.d5dcc1491759eea7.png",
       "width": 1254,
       "height": 1254,
-      "sha256": "e5e15ba6a055a218a3a03c480f28fabb570441a9f0fd146f0ea48089fdf63922",
+      "sha256": "d5dcc1491759eea7e2f02aeb4ae819997df7a67c9a50c019f3666c6da625feb4",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 1511921,
+      "bytes": 1473682,
       "sourceEntityId": "m210_gizamon",
       "sourceReferenceSha256": "68dec17bcaf023981dea3abc81f9b4915c9bcf012404e3ea69a4e0970ddb9d8a",
       "sourceBindingEvidence": "OWNER_CONFIRMED_EXISTING_SPECIES_ID",
       "selectedSourceForm": "EXACT_SOURCE_INDEX_ENTITY_FILENAME",
-      "selectedGenerationVersion": "v2",
+      "selectedGenerationVersion": "refined-handpainted-v2",
       "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "artDirection": "Root-approved refined hand-painted pilot; preserve source identity and original transparent PNG",
       "review": {
         "artistViewedReferenceAndOutput": true,
         "rootReview": "PASSED",
         "actualAlpha": true,
         "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
-        "runtimeBrowser": "PENDING"
+        "runtimeBrowser": "PENDING",
+        "visualApprovalEvidence": "Root actual-view acceptance reported 2026-10-15; browser fit pending"
       }
     },
     {
@@ -360,25 +361,26 @@
       "speciesIndex": 46,
       "speciesId": "species-046",
       "displayCode": "GR16",
-      "src": "assets/production/database-handpainted-r1-20261015/species-046.png",
+      "src": "assets/production/database-handpainted-r1-20261015/species-046.ed04f491cd22524e.png",
       "width": 1254,
       "height": 1254,
-      "sha256": "1a8d1314517852c89eb156729ba5a0ac347ccb4d0359a556f990c5522ffb700b",
+      "sha256": "ed04f491cd22524e5afd9ed106318c64f3def1f789f9acde7bcf66629b555362",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 1247696,
+      "bytes": 1333068,
       "sourceEntityId": "m218_goburimon",
       "sourceReferenceSha256": "46789e914eadfb51ad7aa10145f2366a30c1ec51beafb93ece93e62f3822f966",
       "sourceBindingEvidence": "OWNER_CONFIRMED_EXISTING_SPECIES_ID",
       "selectedSourceForm": "EXACT_SOURCE_INDEX_ENTITY_FILENAME",
-      "selectedGenerationVersion": "v1",
+      "selectedGenerationVersion": "refined-handpainted-v2",
       "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "artDirection": "Root-approved refined hand-painted pilot; preserve source identity and original transparent PNG",
       "review": {
         "artistViewedReferenceAndOutput": true,
         "rootReview": "PASSED",
         "actualAlpha": true,
-        "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
-        "runtimeBrowser": "PENDING"
+        "runtimeContainPadding": "Existing max-320px border-box container, 24px padding, image object-fit contain; no CSS change",
+        "runtimeBrowser": "PENDING",
+        "visualApprovalEvidence": "Artist and root actual-view acceptance reported 2026-10-15; browser fit pending"
       }
     },
     {
@@ -433,3 +435,4 @@
     }
   ]
 }
+
