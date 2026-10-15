@@ -7,7 +7,7 @@
     "請你中午12點前搞定"
   ],
   "scope": "Ordinary ground footpoint spacing in the existing Raising and Hunt update owners. This adaptation does not claim ROM shared physics.",
-  "limits": {"radiusNativePx": 8, "maximumTotalCorrectionPerActorPerFrameNativePx": 2, "maximumOrderedPairScans": 2, "coordinateUnit": "Q12=4096"},
+  "limits": {"radiusNativePx": 8, "maximumTotalCorrectionPerActorPerFrameNativePx": 2, "maximumOrderedPairScans": 2, "maximumCandidatesPerMove": 3, "coordinateUnit": "Q12=4096"},
   "stableOrder": "Physical actor pool slot; fixed eight-direction slot-derived fallback at coincidence; no RNG or clock reads.",
   "raising": {
     "owner": "championshipStandaloneApp.advanceNativeRaising after the existing ordered actor updates, before home storage and presentation",
@@ -15,13 +15,13 @@
     "exclude": ["carry", "throw/flight", "nonzero Z", "detached", "evolution", "invalid states", "native food approach/eating stations"],
     "follow": "Mode2 uses the existing target Main cell width stop distance continuously and resumes when the peer moves away; existing mode timer and personality selection stay unchanged.",
     "food": "Reserve the existing food.occupants station before approach; release on detach, carry, interruption, invalid target, eaten food, evolution and cage change. No second reservation authority. Legal same-side stations remain eight pixels apart.",
-    "boundary": "Existing X wrap, terrain and cageAt ownership; pure path checks including tile corners; unresolved crowding is permitted where no legal correction fits."
+    "boundary": "Existing X wrap, terrain and cageAt ownership; pure path checks including tile corners. A blocked direct correction tries two deterministic axis/tangent candidates within the same total frame budget; unresolved crowding is permitted when these bounded candidates do not fit."
   },
   "hunt": {
     "owner": "nativeHuntFieldControls.step after stepNativeWildActor loop and before consumables.tick and rope reads",
     "membership": "Visible active ordinary roaming states1/2/3 at exact Z0 with positive HP.",
     "exclude": ["hidden/card/hand animation", "tutorial scripted", "bound/strong pull", "capture trap/down/flight/sleep", "food/decoy/tool restricted states"],
-    "boundary": "Pure native terrain and field bounds only; trial positions never invoke side-effectful tool queryControllers.",
+    "boundary": "Pure native terrain and field bounds only; valid types0/2/3/4 are traversable, type1 and invalid cells are blocked, matching the existing movement terrain rule. Trial positions never invoke side-effectful tool queryControllers; bounded axis/tangent fallback keeps the shared frame budget.",
     "projection": "Write existing actor.positionQ12; display projects /2048, selection and rope read the same point."
   },
   "battle": {

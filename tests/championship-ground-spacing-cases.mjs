@@ -70,6 +70,30 @@ test('trial correction respects walls, crossed corners, wrap seams, narrow space
   assert.equal(separateGroundFootpoints(blocked,{canPlace:()=>false}).unresolved,1,'no room remains unresolved');
 });
 
+test('bounded axis fallback clears walkable narrow corridors and corners without moving through blocked space',()=>{
+  for(const slots of [[0,1],[0,2]]){
+    let entries=slots.map(slot=>entry(slot,100,4)),result;
+    const canStand=p=>p[1]>=0&&p[1]<8*Q;
+    for(let frame=0;frame<120;frame++){
+      result=separateGroundFootpoints(entries,{canPlace:(_entry,to,from)=>canTraverseGroundStep(from,to,{canStand})});
+      result.points.forEach((p,i)=>{assert.ok(canStand(p));assert.ok(result.correctionQ12[i]<=2*Q);assert.ok(distance(p,entries[i].positionQ12)<=2*Q);});
+      entries=entries.map((e,i)=>({...e,positionQ12:result.points[i]}));
+    }
+    assert.equal(result.unresolved,0,`diagonal/cardinal coincidence ${slots} must use the open corridor axis`);
+    assert.equal(result.changed,false,'settled footpoints do not oscillate');
+  }
+  let corner=[entry(0),entry(1)],result;
+  const canStand=p=>p[0]>=100*Q&&p[1]>=100*Q;
+  for(let frame=0;frame<120;frame++){
+    result=separateGroundFootpoints(corner,{canPlace:(_entry,to,from)=>canTraverseGroundStep(from,to,{canStand})});
+    result.points.forEach((p,i)=>{assert.ok(canStand(p));assert.ok(result.correctionQ12[i]<=2*Q);});
+    corner=corner.map((e,i)=>({...e,positionQ12:result.points[i]}));
+  }
+  assert.equal(result.unresolved,0);
+  const blocked=[entry(0),entry(1)],fixed=separateGroundFootpoints(blocked,{canPlace:()=>false});
+  assert.deepEqual(fixed.points,blocked.map(e=>e.positionQ12));assert.equal(fixed.unresolved,1);
+});
+
 test('continuous peer approach stops at the existing target-width distance and resumes without another timer or RNG',()=>{
   const peer={speciesIndex:8,state:1,positionQ12:point(200,100)},radius=nativeRaisingPeerStopDistanceQ12(peer);
   let a={mode:2,ticks:500,threshold:0,angleQ12:0,desiredAngleQ12:0,state:2,slow:0,fast:0,peer,
@@ -124,6 +148,26 @@ test('Hunt only spaces visible ordinary ground roaming and probes pure terrain w
   assert.ok(separateNativeHuntGroundActors(actors,{width:128,height:128,readTerrain:()=>{reads++;return 0;},
     queryControllers:()=>assert.fail('trial position must not trigger mines, wires or traps')}).changed);
   assert.ok(reads>0);
+});
+
+test('Hunt spacing uses the existing terrain 0..4 walkability and rejects terrain1 and invalid cells',()=>{
+  const makeActors=()=>[0,1].map(()=>({actorActive:1,wildActive:1,aiState:1,currentHp:100,positionQ12:point(80,80)}));
+  for(const terrain of [0,2,3,4]){
+    const actors=makeActors(),environment={width:128,height:128,readTerrain:()=>terrain,
+      queryControllers:()=>assert.fail('spacing proposals must remain free of tool side effects')};
+    let result;
+    for(let frame=0;frame<120;frame++){
+      result=separateNativeHuntGroundActors(actors,environment);
+      result.correctionQ12.forEach(cost=>assert.ok(cost<=2*Q));
+    }
+    assert.equal(result.unresolved,0,`traversable terrain ${terrain} must permit separation`);
+    assert.equal(result.changed,false);actors.forEach(a=>{assert.equal(a.currentHp,100);assert.equal(a.aiState,1);});
+  }
+  for(const terrain of [1,-1,5,undefined,null,NaN]){
+    const actors=makeActors(),before=actors.map(a=>[...a.positionQ12]);
+    const result=separateNativeHuntGroundActors(actors,{width:128,height:128,readTerrain:()=>terrain});
+    assert.equal(result.changed,false);assert.deepEqual(actors.map(a=>a.positionQ12),before);
+  }
 });
 
 test('normal Hunt controller tick updates its authoritative Q12 point before selection, display and rope read it',()=>{

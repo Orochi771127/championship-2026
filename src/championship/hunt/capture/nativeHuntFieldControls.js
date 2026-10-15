@@ -18,8 +18,11 @@ export function nativeHuntGroundSpacingEligible(a){
 export function separateNativeHuntGroundActors(actors,environment){
   const entries=actors.flatMap((actor,poolSlot)=>nativeHuntGroundSpacingEligible(actor)?[{actor,poolSlot,group:0,positionQ12:actor.positionQ12}]:[]);
   const result=separateGroundFootpoints(entries,{canPlace:(_entry,to,from)=>canTraverseGroundStep(from,to,{
-    canStand:p=>p[0]>=0&&p[1]>=0&&p[0]<environment.width*32768&&p[1]<environment.height*32768
-      &&environment.readTerrain(Math.floor(p[0]/32768),Math.floor(p[1]/32768))===0})});
+    canStand:p=>{
+      if(p[0]<0||p[1]<0||p[0]>=environment.width*32768||p[1]>=environment.height*32768)return false;
+      const terrain=environment.readTerrain(Math.floor(p[0]/32768),Math.floor(p[1]/32768));
+      return Number.isInteger(terrain)&&terrain>=0&&terrain<=4&&terrain!==1;
+    }})});
   entries.forEach((entry,i)=>{if(result.correctionQ12[i])entry.actor.positionQ12=result.points[i];});
   return result;
 }

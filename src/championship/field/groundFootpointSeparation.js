@@ -27,10 +27,17 @@ export function separateGroundFootpoints(entries,{canPlace,wrapXQ12=0,radiusQ12=
     if(amount<=0||entries[i].movable===false)return;
     const length=Math.sqrt(x*x+y*y);let ox=Math.trunc(x*amount/length),oy=Math.trunc(y*amount/length);
     if(!ox&&!oy){if(Math.abs(x)>=Math.abs(y))ox=Math.sign(x);else oy=Math.sign(y);}
-    const cost=Math.ceil(Math.sqrt(ox*ox+oy*oy));if(!cost||cost>budget)return;
-    const p=[wrap(points[i][0]+ox,wrapXQ12),points[i][1]+oy,points[i][2]];
-    if(canPlace&&!canPlace(entries[i],p,points[i]))return;
-    points[i]=p;spent[i]+=cost;
+    // A rejected diagonal is not proof that this actor has no legal space.
+    // Try at most two ordered axes, including a tangent for cardinal normals.
+    // All accepted candidates debit the same total per-actor frame budget.
+    const step=Math.trunc(amount),sx=Math.sign(x)||Math.sign(y),sy=Math.sign(y)||-Math.sign(x);
+    const axes=Math.abs(x)>=Math.abs(y)?[[sx*step,0],[0,sy*step]]:[[0,sy*step],[sx*step,0]];
+    for(const [cx,cy] of [[ox,oy],...axes]){
+      const cost=Math.ceil(Math.sqrt(cx*cx+cy*cy));if(!cost||cost>budget)continue;
+      const p=[wrap(points[i][0]+cx,wrapXQ12),points[i][1]+cy,points[i][2]];
+      if(canPlace&&!canPlace(entries[i],p,points[i]))continue;
+      points[i]=p;spent[i]+=cost;return;
+    }
   }
   for(let pass=0;pass<Math.min(2,passes);pass++)for(let a=0;a<order.length;a++)for(let b=a+1;b<order.length;b++){
     const i=order[a],j=order[b],left=entries[i],right=entries[j];
