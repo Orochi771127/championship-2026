@@ -57,7 +57,7 @@ class Element extends Target {
  querySelectorAll(s){return this.children.flatMap(c=>[...(c.matches(s)?[c]:[]),...c.querySelectorAll(s)]);}
  querySelector(s){return this.querySelectorAll(s)[0]??null;}
 }
-test('same toolbar owner measures visible hint plus rail and tears down observer/listeners',()=>{
+test('same toolbar owner retains measured rail budget and tears down observer/listeners',()=>{
  const document=new Target();document.createElement=t=>new Element(t,document);document.defaultView=new Target();document.body=new Element('body',document);
  const values=new Map();document.body.style={setProperty:(k,v)=>values.set(k,v),removeProperty:k=>values.delete(k)};
  const observers=[];
@@ -69,18 +69,20 @@ test('same toolbar owner measures visible hint plus rail and tears down observer
  bar.offsetHeight=60;toolbar.setMode(1);assert.equal(values.get('--cm-toolbar-height'),'60px');
  const hand=bar.querySelector('[data-tool-id="hand"]');hand.dispatchEvent(new Event('click'));assert.equal(toolbar.getSelectedTool(),'hand');
  const hint=bar.querySelector('.cm-toolbar__tool-hint');assert.equal(hint.hidden,false);
+ observers[0].fn();assert.equal(values.get('--cm-toolbar-height'),'60px','absolute hint does not change the supplied bar box');
+ // Synthetic owner notification only: enlarged rail (not hint) changes its measured budget.
  bar.offsetHeight=112;observers[0].fn();assert.equal(values.get('--cm-toolbar-height'),'112px');assert.equal(toolbar.getSelectedTool(),'hand');
  toolbar.setTutorialTool('hand',{key:'camera'});bar.offsetHeight=140;observers[0].fn();assert.equal(toolbar.getSelectedTool(),'hand');assert.equal(values.get('--cm-toolbar-height'),'140px');
  toolbar.setMode(null);assert.equal(values.get('--cm-toolbar-height'),'0px');
  toolbar.dispose();toolbar.dispose();assert.ok(observers[0].closed);assert.equal(document.listeners.size,0);assert.equal(values.size,0);assert.equal(document.body.children.length,0);
 });
-test('wide CSS floats card/tutorial over the full field and keeps hints measured; source contract only',()=>{
+test('wide CSS floats card/tutorial and active hint over the full field; source contract only',()=>{
  const css=fs.readFileSync(new URL('../src/championship/app/intRh2Styles.css',import.meta.url),'utf8');
  assert.match(css,/--cm-raising-card: clamp\(256px, 28vw, 340px\)/);
  assert.match(css,/left: var\(--safe-left\); right: var\(--safe-right\); min-height: 0/);
  assert.match(css,/width: 100%; max-width: none/);
  assert.match(css,/max-height: calc\(var\(--cm-screen-height\) - 16px\)/);
- assert.match(css,/position: static; order: -1; transform: none/);
+ assert.match(css.slice(css.indexOf('/* Raising-only overlay composition:')),/position: absolute; left: 50%; right: auto; bottom: calc\(100% \+ 8px\)/);
  assert.match(css,/tool-hint\[hidden\],[\s\S]*menu\[hidden\] \{ display: none; \}/);
  assert.match(css,/\.int-rh2-detail[\s\S]*grid-template-rows: auto minmax\(0, 1fr\) auto/);
 });

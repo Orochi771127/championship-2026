@@ -84,32 +84,50 @@ test('entry is one full-bleed city scene with bounded controls, contain film, an
  assert.match(css,/\.cm-opening-story__card \{[^}]*top: 50%;[^}]*height: 50%;/);
 });
 
-test('landscape partners are smaller, separated and staggered on the city ground without touching controls',()=>{
+test('landscape partners anchor real feet to the unchanged background cover coordinates',()=>{
  const css=source('opening.css');
- const rule=name=>{
-  const selector=`body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--${name}`;
-  const start=css.indexOf(selector);assert.ok(start>=0);
-  const block=css.slice(start,css.indexOf('}',start));
-  return Object.fromEntries([...block.matchAll(/(width|height|left|right|bottom):\s*(-?[\d.]+)%/g)].map(m=>[m[1],Number(m[2])/100]));
- };
- const blaze=rule('blaze'),cloud=rule('cloud');
- assert.deepEqual(blaze,{width:.44,height:.65,left:.03,bottom:.28});
- assert.deepEqual(cloud,{width:.46,height:.70,right:.01,bottom:-.01});
- assert.ok(blaze.width<.64*.75);assert.ok(cloud.width<.60*.8);
- // Numeric box/contain-fit contract only, not screenshot or ground-contact QA.
- for(const [width,height] of [[720,320],[844,390],[1180,757],[1366,768]]){
-  const compact=height<=480,left=compact?.44:.42,right=.02,bottom=compact?.05:.06,groupHeight=height*(compact?.78:.76),groupWidth=width*(1-left-right);
-  const box=(p,aspect)=>{
-   const w=groupWidth*p.width,h=groupHeight*p.height;
-   const imageHeight=Math.min(h,w/aspect),imageWidth=imageHeight*aspect;
-   const x=width*left+(p.left!==undefined?groupWidth*p.left:groupWidth*(1-p.right-p.width));
-   const foot=height*(1-bottom)-groupHeight*p.bottom;
-   return {left:x,right:x+w,top:foot-imageHeight,bottom:foot,imageWidth,imageHeight};
+ const wide=css.slice(css.indexOf('/* Public landscape entry:'));
+ const stageStart=wide.indexOf('body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {');
+ const stage=wide.slice(stageStart,wide.indexOf('}',stageStart));
+ assert.match(wide,/background-size: cover; background-position: center 58%/);
+ assert.match(stage,/--cm-ground-scale: max\(calc\(100cqw \/ 941\), calc\(var\(--cm-title-height\) \/ 1672\)\)/);
+ assert.match(stage,/top: calc\(\(var\(--cm-title-height\) - var\(--cm-ground-scale\) \* 1672\) \* \.58\)/);
+ assert.match(stage,/width: calc\(var\(--cm-ground-scale\) \* 941\)/);
+ assert.match(stage,/height: calc\(var\(--cm-ground-scale\) \* 1672\)/);
+ assert.match(stage,/transform: translateX\(-50%\)/);
+ const readAnchors=block=>Object.fromEntries([...block.matchAll(/--cm-(blaze|cloud)-(x|y|size):\s*(\d+)/g)].map(m=>[`${m[1]}-${m[2]}`,Number(m[3])]));
+ const standard=readAnchors(stage);
+ assert.deepEqual(standard,{'blaze-x':450,'blaze-y':1024,'blaze-size':118,'cloud-x':575,'cloud-y':1117,'cloud-size':220});
+ const compact=readAnchors(wide.slice(wide.indexOf('@media (min-aspect-ratio: 5/2)'),wide.indexOf('@media (min-aspect-ratio: 10/3)')));
+ const shallowStart=wide.indexOf('@media (min-aspect-ratio: 10/3)');
+ const shallow=readAnchors(wide.slice(shallowStart,wide.indexOf('}',shallowStart)));
+ const ultraStart=wide.indexOf('@media (min-aspect-ratio: 9/2)');
+ const ultra=readAnchors(wide.slice(ultraStart,wide.indexOf('}',ultraStart)));
+ assert.match(wide,/cm-title__partner \{[^}]*height: auto; object-fit: contain;[^}]*filter: none;[^}]*animation-name: cm-title-grounded-arrive;/);
+ assert.match(wide,/@keyframes cm-title-grounded-arrive \{ from \{ opacity: 0; \} to \{ opacity: 1; \} \}/);
+ for(const [name,assetWidth,footX,footY] of [['blaze',1353,820,1130],['cloud',1254,515,1093]]){
+  const start=wide.indexOf(`.cm-title__partner--${name} {`),block=wide.slice(start,wide.indexOf('}',start));
+  assert.ok(block.includes(`var(--cm-${name}-x) - ${footX} * var(--cm-${name}-size) / ${assetWidth}`));
+  assert.ok(block.includes(`var(--cm-${name}-y) - ${footY} * var(--cm-${name}-size) / ${assetWidth}`));
+  assert.ok(wide.includes(`.cm-title__partner--${name}[data-title-image-state="ready"][data-title-image-visible="true"]`),'contact shadow follows existing image lifetime');
+ }
+ // Cover projection / transparent-padding contract only. Ground contact still
+ // requires an actual screenshot review against the source bridge pixels.
+ for(const [width,height] of [[720,320],[844,390],[1180,757],[1366,768],[1366,480],[1280,420],[1366,320],[1920,480],[1920,320]]){
+  const anchors=width/height>=9/2?ultra:width/height>=10/3?shallow:width/height>=5/2?compact:standard;
+  const scale=Math.max(width/941,height/1672),ox=(width-941*scale)/2,oy=(height-1672*scale)*.58;
+  const project=(name,assetW,assetH,fx,fy)=>{
+   const size=anchors[`${name}-size`],footX=anchors[`${name}-x`],footY=anchors[`${name}-y`];
+   const x=ox+(footX-fx*size/assetW)*scale,y=oy+(footY-fy*size/assetW)*scale;
+   const w=size*scale,h=w*assetH/assetW;
+   return {x,y,w,h,footX:ox+footX*scale,footY:oy+footY*scale};
   };
-  const b=box(blaze,1353/1162),c=box(cloud,1);
-  assert.ok(b.right<c.left,`${width}x${height}: distinct silhouettes`);
-  assert.ok(b.bottom<c.bottom,`${width}x${height}: blaze farther back`);
-  assert.ok(b.top>=0&&c.top>=0&&b.bottom<=height&&c.bottom<=height,'complete contained art fits viewport');
-  assert.ok(b.left>=width*.43&&c.left>=width*.70,'neither partner enters the left operation region');
+  const b=project('blaze',1353,1162,820,1130),c=project('cloud',1254,1254,515,1093);
+  for(const p of [b,c]){
+   assert.ok(p.x>=0&&p.y>=0&&p.x+p.w<=width+.1&&p.y+p.h<=height+.1,`${width}x${height}: complete image box remains on screen`);
+   assert.ok(p.footY<=height-12,`${width}x${height}: feet clear the viewport bottom`);
+  }
+  assert.ok(b.w<c.w*.65,'far companion has smaller perspective scale');
+  assert.ok(b.footX<c.footX&&b.footY<c.footY,'far entry companion precedes foreground bridge companion');
  }
 });
