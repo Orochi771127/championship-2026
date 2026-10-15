@@ -3,7 +3,7 @@
   "id": "database-handpainted-r1-20261015",
   "classification": "ORIGINAL_REFERENCE_HANDPAINTED_REDRAWS",
   "scope": "Encyclopedia hero illustrations only; never battle/raising sprite or animation replacements",
-  "count": 8,
+  "count": 10,
   "entries": [
     {
       "speciesIndex": 34,
@@ -176,6 +176,56 @@
       "review": {
         "artistViewedReferenceAndOutput": true,
         "rootReview": "PENDING",
+        "actualAlpha": true,
+        "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
+        "runtimeBrowser": "PENDING"
+      }
+    },
+    {
+      "speciesIndex": 211,
+      "speciesId": "species-211",
+      "displayCode": "UL33",
+      "src": "assets/production/database-handpainted-r1-20261015/species-211.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634",
+      "styleBatch": "HANDPAINTED_R1_20261015",
+      "bytes": 2187998,
+      "sourceEntityId": "m528_metaletemon",
+      "sourceReferenceSha256": "a47bac2971eb3eca857177eb287c46c862b2b4bff6216169c82534a68d8daf11",
+      "sourceBindingEvidence": "Owner explicitly confirmed current UL33 retains Yellow Brass Mandrill and alternate monkey gets separate ID. Latest numbering instruction fixes UL33 Yellow Brass Mandrill and UL34 other monkey. Source selection is OC220 gold/purple/black speaker-shoulder and orb-staff form, not the blue/white heavy armor branch.",
+      "selectedSourceForm": "OWNER_CONFIRMED_BRASS_CROWN_MANDRILL",
+      "selectedGenerationVersion": "v1",
+      "generation": "Built-in image generation using owner original character reference",
+      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "review": {
+        "artistViewedReferenceAndOutput": true,
+        "rootReview": "PASSED",
+        "actualAlpha": true,
+        "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
+        "runtimeBrowser": "PENDING"
+      }
+    },
+    {
+      "speciesIndex": 222,
+      "speciesId": "species-222",
+      "displayCode": "UL02",
+      "src": "assets/production/database-handpainted-r1-20261015/species-222.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3",
+      "styleBatch": "HANDPAINTED_R1_20261015",
+      "bytes": 1532783,
+      "sourceEntityId": "m540_imperialdramon_fm",
+      "sourceReferenceSha256": "23a2657481751b4e30446c41b8155770f72c2a85a17cb498d88b0538a7023b68",
+      "sourceBindingEvidence": "Owner confirmed existing UL02 uses the quadruped; separate humanoid battle form gets a new identity/display UL03. Newest R10 paired source, only LEFT quadruped. Obsolete white/gold OC223 excluded.",
+      "selectedSourceForm": "R10_QUADRUPED_LEFT_PANEL",
+      "selectedGenerationVersion": "v2",
+      "generation": "Built-in image generation using owner original character reference",
+      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "review": {
+        "artistViewedReferenceAndOutput": true,
+        "rootReview": "PASSED",
         "actualAlpha": true,
         "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
         "runtimeBrowser": "PENDING"
