@@ -1,9 +1,9 @@
 // Owner 2026-10-14 batch A: layout only, with the existing Raising scene.
-// The historical desktop flag now means a wide Raising working area. Two
-// usable columns need 720 CSS pixels; short landscapes scroll the native world.
+// The historical desktop flag now means the floating Raising working area.
+// Compact landscapes keep native-size HUD controls instead of shrinking the body.
 // Battle and Hunt leave the frame only through their integrated readiness gates.
 export function isDesktopRaisingLayout({width,height,activeScreen,hidden=false}) {
-  return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
+  return Number.isFinite(width)&&Number.isFinite(height)&&width>=568&&height>=320
     &&(width>=1024||width>=height+160)&&activeScreen==='RAISING_HOME'&&!hidden;
 }
 export function isDesktopBrowseLayout({width,height,activeScreen,hidden=false}) {
@@ -20,7 +20,7 @@ export function isDesktopMenuLayout({width,height,activeScreen,hidden=false}) {
     &&DESKTOP_MENU_SCREENS.includes(activeScreen)&&!hidden;
 }
 // Fill only the short-landscape gap. Existing desktop and portrait layouts
-// keep their own contracts. The 568px legacy frame remains intentional.
+// keep their own contracts. Other scenes retain their existing 720px landscape threshold.
 export function isCompactLandscapeMenuLayout({width,height,activeScreen,hidden=false}) {
   return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
     &&width>=height+160&&(width<1024||height<420)&&!hidden

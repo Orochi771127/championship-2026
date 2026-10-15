@@ -41,3 +41,11 @@ test('battle proof cannot reuse raising reports or accept replacements',()=>{
  const missing=structuredClone(report);missing.loadedEntityIds.pop();assert.throws(()=>assertBattleLoaders(assert,[missing],0,{exactCount:true}));
  const replaced=structuredClone(report);replaced.replacementFailures.push({reason:'failed art'});assert.throws(()=>assertBattleLoaders(assert,[replaced],0,{exactCount:true}));
 });
+
+// A hidden menu container persists after returning from battle. Its data-menu-id
+// matches the toolbar button, so bare attribute selectors are ambiguous.
+test('system-menu navigation targets buttons, never the retained hidden menu container',()=>{
+ const source=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
+ assert.equal(source.split("locator('button[data-menu-id=\"SYSTEM\"]')").length-1,3);
+ assert.equal(source.includes("locator('[data-menu-id=\"SYSTEM\"]')"),false);
+});

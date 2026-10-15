@@ -72,7 +72,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    page.on('response',observe);
    const identitySnapshot=()=>page.evaluate(key=>{const save=JSON.parse(sessionStorage.getItem(key));return {schemaVersion:save?.schemaVersion,registeredSpecies:save?.progression?.registeredSpecies,collection:save?.raising?.collection?.map(i=>({instanceId:i.instanceId,speciesId:i.speciesId}))};},qaKey);
    evidence.dexIdentityBefore=await identitySnapshot();evidence.dexCaptures=[];
-   await page.locator('[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="database"]').click();
+   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="database"]').click();
    await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor({state:'visible'});
    await page.locator('.cm-vs2-database__stage').selectOption('');
    const detail=page.locator('.cm-vs2-database__detail'),back=page.locator('.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-footer button');
@@ -140,13 +140,13 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    await ceremony.waitFor({state:'visible',timeout:120000});await ceremony.waitFor({state:'hidden',timeout:10000});
   }
   await page.setViewportSize({width:844,height:390});
-  await page.locator('[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="saveQuit"]').click();await page.locator('#cm-login').waitFor({state:'visible'});
+  await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="saveQuit"]').click();await page.locator('#cm-login').waitFor({state:'visible'});
   const saved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
   assert.equal(saved.schemaVersion,6);
   for(const [suffix,species]of [['0005','species-229'],['0006','species-230']])assert.equal(saved.raising.collection.find(i=>i.instanceId.endsWith(':'+suffix)).speciesId,species);
   await page.reload({waitUntil:'domcontentloaded'});await boot();
   const reloaded=await diagnostics('save-reload-evolved');assertEvolved(assert,reloaded);const beforeBattleReportCount=reloaded.actualLoaderReports.length;evidence.assertions.push('NORMAL_SAVE_EXIT_RELOAD_EVOLVED_0005_0006_PASS');
-  await page.locator('[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();
+  await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();
   await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();
   for(const [id,team]of [[211,'A'],[229,'A'],[222,'B'],[230,'B']]){
    const name=fixture.raising.collection.find(i=>i.speciesId===`species-${id}`).displayName;
