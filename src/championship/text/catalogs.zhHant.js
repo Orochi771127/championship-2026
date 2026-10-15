@@ -305,7 +305,7 @@ export const SPECIES_NAMES_ZH = Object.freeze(Object.fromEntries(`
 60|菌冠菇獸
 61|雪晶幼龍
 62|光綾狐
-63|蒼冠幼龍
+63|翠冠幼龍
 64|曦冕幼獅
 65|月紗兔
 66|灰燼幼龍

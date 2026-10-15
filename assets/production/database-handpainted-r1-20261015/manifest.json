@@ -168,23 +168,26 @@
       "speciesIndex": 40,
       "speciesId": "species-040",
       "displayCode": "GR08",
-      "src": "assets/production/database-handpainted-r1-20261015/species-040.png",
-      "width": 1254,
-      "height": 1254,
-      "sha256": "f412c7dd2fc5346ba0952707e9a4a49e7d4379c56c069eda7cacc9c776add2a0",
+      "src": "assets/production/database-handpainted-r1-20261015/species-040.4c11ede7a2b50add.png",
+      "width": 1402,
+      "height": 1122,
+      "sha256": "4c11ede7a2b50add96b482a63e77b50c65b8b9bdd09175874e2017f0c708b09d",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 1827614,
+      "bytes": 987384,
       "sourceEntityId": "m208_gabumon",
       "sourceReferenceSha256": "a2aae57a7c5baba2ef95311cfbdeb91cf96fce86d69f4893c2f959cff68f9a48",
       "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "artDirection": "Unified cartoon hand-painted finish, readable silhouette, approved identity changes, transparent background.",
       "review": {
-        "artistViewedReferenceAndOutput": true,
-        "rootReview": "PENDING",
+        "rootReview": "STATIC_FULL_AND_128_256_REVIEW_PASS",
         "actualAlpha": true,
-        "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
-        "runtimeBrowser": "PENDING"
-      }
+        "runtimeBrowser": "PENDING",
+        "scope": "Portrait only. Gameplay action sprites and model sheets are not updated by this change.",
+        "runtimeContainPadding": "Preserve original PNG dimensions; use existing padded contain. No crop or cover.",
+        "ownerChange": "Fur-covered biped raptor; warm brown palette and retained motif."
+      },
+      "designRevision": "OWNER_APPROVED_IDENTITY_REVISION_20261016",
+      "selectedGenerationVersion": "owner-redesign-v1"
     },
     {
       "speciesIndex": 211,
@@ -785,36 +788,28 @@
       "speciesIndex": 63,
       "speciesId": "species-063",
       "displayCode": "GR24",
-      "src": "assets/production/database-handpainted-r1-20261015/species-063.a2403ae4b27f60e1.png",
+      "src": "assets/production/database-handpainted-r1-20261015/species-063.e403a93ec4f2d7ec.png",
       "width": 1254,
       "height": 1254,
-      "sha256": "a2403ae4b27f60e19dab4e955f4f1dc43a85b7bce7583d0760f0759fada6f8a0",
+      "sha256": "e403a93ec4f2d7ec24273c2f2f3d861feeec11848d55450989230b2c93283f8a",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 1656109,
+      "bytes": 1741266,
       "sourceEntityId": "m224_dracomon",
       "sourceReferenceSha256": "8597bfb7d91b9654356a06971b7ac33fe84cb7e34cbbd6ac794800f7ddb256b6",
       "sourceBindingEvidence": "OWNER_CONFIRMED_EXISTING_SPECIES_ID",
       "selectedSourceForm": "EXACT_SOURCE_INDEX_ENTITY_FILENAME",
-      "selectedGenerationVersion": "v1",
+      "selectedGenerationVersion": "owner-recolor-v2",
       "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Source-guided hand-painted linework, layered color, transparent background",
+      "artDirection": "Unified cartoon hand-painted finish, readable silhouette, approved identity changes, transparent background.",
       "review": {
-        "artistViewedReferenceAndOutput": true,
-        "rootReview": "PASSED",
+        "rootReview": "STATIC_FULL_AND_128_256_REVIEW_PASS",
         "actualAlpha": true,
-        "runtimeContainPadding": "Existing24px padding and object-fit contain; original PNG canvas unchanged",
         "runtimeBrowser": "PENDING",
-        "compositingCaveat": "Far wing-fin is partly behind head/crown; do not claim both complete wings are fully displayed. Pale-cyan fringe remains, actual all-background compositing not verified.",
-        "presentationRequirement": {
-          "objectFit": "contain",
-          "cropAllowed": false,
-          "coverAllowed": false,
-          "containerPaddingRequired": true,
-          "existingContainerPaddingPx": 24,
-          "nativePadding6PercentAchieved": false,
-          "note": "Protect ears, veils, wings, crowns, solar arc, paws, tails and ribbons with padded contain. No PNG crop."
-        }
-      }
+        "scope": "Portrait only. Gameplay action sprites and model sheets are not updated by this change.",
+        "runtimeContainPadding": "Preserve original PNG dimensions; use existing padded contain. No crop or cover.",
+        "ownerChange": "Green/ivory/gold recolor only; existing quadruped form retained."
+      },
+      "designRevision": "OWNER_APPROVED_IDENTITY_REVISION_20261016"
     },
     {
       "speciesIndex": 64,
@@ -1087,63 +1082,28 @@
       "speciesIndex": 70,
       "speciesId": "species-070",
       "displayCode": "GR32",
-      "src": "assets/production/database-handpainted-r1-20261015/species-070.8b5455d530173b0f.png",
+      "src": "assets/production/database-handpainted-r1-20261015/species-070.2dc33277d80cdfb4.png",
       "width": 1254,
       "height": 1254,
-      "sha256": "8b5455d530173b0fe41963b58637e98143f90e68a5961d9997517f2148520eba",
+      "sha256": "2dc33277d80cdfb4577bee1d369adb59545b4ccc735a4f90fff342087a1ba738",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 1466415,
+      "bytes": 1490819,
       "sourceEntityId": "m244_vmon",
       "sourceReferenceSha256": "312cedec215aac952303f51805380bc2daf6641d56fa26f6918f2cac1b8f6494",
       "sourceBindingEvidence": "EXACT_ORIGINAL_SOURCE_INDEX_ENTITY_FILENAME_AND_PUBLIC_SPECIES_ID",
       "selectedSourceForm": "ORIGINAL_SPECIES_IDENTITY_REUSED_EXISTING_HANDPAINTED_VERSION",
-      "selectedGenerationVersion": "refined-v1",
+      "selectedGenerationVersion": "owner-articulated-arms-v3",
       "generation": "Built-in image generation using owner original reference; untouched original generated PNG",
-      "artDirection": "Cartoon-leaning hand-painted readable body groups and material-specific detail, accepted through actual mounted comparison with117. No surrounding decorative halo or ring.",
+      "artDirection": "Unified cartoon hand-painted finish, readable silhouette, approved identity changes, transparent background.",
       "review": {
-        "artistViewedReferenceAndOutput": true,
-        "sourceIdentityReview": "ARTIST_ACTUALLY_VIEWED_SOURCE_AND_OUTPUT",
-        "rootReview": "SCOPED_HOSTED_VISUAL_PASS",
-        "rootReviewScope": "Root actually reviewed selected hosted070/071/072 captures against117 and accepted this displayed portrait batch; artist reviewed all33 capture pairs. Not an all-roster, action-art, model-sheet or all-background acceptance.",
-        "runtimeBrowser": "PASS_NORMAL_DEX_128_256_LIGHT_DARK_RESPONSIVE",
+        "rootReview": "STATIC_FULL_REVIEW_PASS",
         "actualAlpha": true,
-        "runtimeContainPadding": "Existing24px stage padding and object-fit contain; do not crop or cover; original PNG unchanged.",
-        "smallReviewScope": "Actual mounted normal desktop/mobile,128/256 light/dark, exact CSS restoration and re-entry reviewed. Earlier private PDF is supplementary, not the browser proof.",
-        "anatomy": "Four limbs, one forehead horn, one star-ended tail; no wings.",
-        "nativeMarginCaveat": "Alpha>=8 margins left97/top66/right63/bottom137px; low-alpha edge maximum1. No uniform percentage padding claim.",
-        "compositingCaveat": "Faint colored alpha edges remain. No visible white box, detached ornament or clipping in tested light/dark and normal presentations; not all-background acceptance.",
-        "rootHostedReviewAt": "2026-10-15T16:29:05Z",
-        "artistReviewedAllCapturePairs": true,
-        "hostedEvidence": {
-          "candidateHead": "344010354799c2a6da0c794d7b74de768c6e7cc1",
-          "testedMergeCommit": "e5aaed55411a117c73f7e0fc33f7bbdbf72af426",
-          "baseCommit": "8cea304f1296d1a578dbb842cb6bfdbfdb0b19f2",
-          "runId": 38768286477,
-          "artifactId": 11991000289,
-          "artifactSha256": "4e3e7c6cd294004c6a2b5ad672147b28b6e3979b7dbfc78c74c60acaf28f20fc",
-          "buildId": "cc6460831b1d9089748054ab5a8ea86b7a9565712a0747c6f71684ab8fd56898",
-          "inputSha256": "6efe734b8ded9c239e1076ec5ee94404c17221c1901df68e2a217b7d0e91adea",
-          "buildManifestSha256": "0ee38c8b3e3daaf12ba2d9843a1bb13d39d02032f4f472b8b2baa62e849f52c2",
-          "testedImageSha256": "8b5455d530173b0fe41963b58637e98143f90e68a5961d9997517f2148520eba",
-          "capturePairCount": 33,
-          "contentSizesPx": [
-            128,
-            256
-          ],
-          "paddedHolderSizesPx": [
-            176,
-            304
-          ],
-          "friendsRunId": 38768286218,
-          "friendsArtifactId": 11992045554,
-          "friendsStatus": "PASS",
-          "genericCiRunId": 38768286216,
-          "genericCiTests": 2339
-        },
-        "comparisonCaveat": "Accepted against the unchanged117 reference only for this bounded displayed-portrait release. Current055 is not claimed identical to the owner GR29 runtime reference; no whole-roster validation."
+        "runtimeBrowser": "PENDING",
+        "scope": "Portrait only. Gameplay action sprites and model sheets are not updated by this change.",
+        "runtimeContainPadding": "Preserve original PNG dimensions; use existing padded contain. No crop or cover.",
+        "ownerChange": "Biped juvenile dragon with articulated shoulders, elbows, wrists and grasping dragon-claw hands; one arm naturally lowered. Other identity motifs retained."
       },
-      "designRevision": "SCOPED_THREE_HERO_HOSTED_COMPARISON_20261015",
-      "promptSha256": "1c26155ffaf10dbadda78dc380ea6053d5e654de53ef4603d61f4da025ce9ff7"
+      "designRevision": "OWNER_APPROVED_IDENTITY_REVISION_20261016"
     },
     {
       "speciesIndex": 71,
@@ -1271,4 +1231,3 @@
     }
   ]
 }
-
