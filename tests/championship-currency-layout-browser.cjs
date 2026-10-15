@@ -70,7 +70,7 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
       assert.equal(g.parts.bits.label,labels.bitsLabel);assert.equal(g.parts.diamond.label,labels.diamondLabel);
       if(width<=600){assert.ok(g.font>=14);assert.ok(g.parts.diamond.h>=44);if(g.parts.save)assert.ok(g.parts.save.w>=44&&g.parts.save.h>=44);if(phase==='SAVE_FAILED'){assert.ok(g.parts.save?.label,'Save failure remains visible with an accessible explanation');assert.equal(await page.locator('.cm-status-bar__save').getAttribute('data-state'),'SAVE_FAILED');}assert.ok(g.parts.bits.scroll<=g.parts.bits.client+1);assert.ok(g.parts.diamond.scroll<=g.parts.diamond.client+1);
        const matchKey=JSON.stringify({locale,bits,diamonds,tutorialOn,phase}),wallet=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(matches)assert.deepEqual(wallet,matchAnchors.get(matchKey),'Match badge must never move the wallet');else matchAnchors.set(matchKey,wallet);
-       if(g.parts.matches)assert.ok(g.parts.matches.h>=44&&g.parts.matches.w>=44);
+       if(g.parts.matches){assert.ok(g.parts.matches.h>=44&&g.parts.matches.w>=44);assert.equal(await page.locator('.cm-status-bar__matches-word').evaluate(e=>getComputedStyle(e).clipPath),'none','Match title stays visibly named on small phones');}
        const key=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(baseline)assert.deepEqual(key,baseline,'Wallet/save/tutorial must not change mobile row geometry');else baseline=key;
       }
      }catch(error){evidence.violations.push({width,height,params,message:error.message});}}
@@ -136,11 +136,20 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    if(!diagnostic){assert.equal(evidence.normal[0].geometry.bar.h,evidence.normal[1].geometry.bar.h);assert.equal(evidence.normal[0].geometry.parts.currencies.y,evidence.normal[1].geometry.parts.currencies.y);}
    // Explicit controlled HUD projection over the fully loaded real scene.
    // This is not a real save or match schedule; the actual wallet is never edited.
+   const realWallet=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('championshipModernSave:v1'));return {bits:s.shop.bits,diamonds:s.flags.friendsPlaytest.diamonds};});
+   await page.evaluate(async()=>{const {createChampionshipStatusBar}=await import('./src/championship/app/championshipStatusBar.js');document.querySelector('.cm-status-bar').remove();window.mountedMatchesOpened=0;window.mountedHudProjection=createChampionshipStatusBar({root:document.body,onOpenMatches:()=>window.mountedMatchesOpened++});});
+   let hintAnchor;
+   for(const matches of [0,1,0]){
+    await page.evaluate(matches=>window.mountedHudProjection.render({screen:'RAISING_HOME',seasonName:'Spring',dayNumber:3,time:'20:14',bits:15900,testDiamonds:7000,todayMatches:matches,save:{phase:'DIRTY'}}),matches);
+    await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));const g=await page.evaluate(geometry);
+    evidence.mountedProjection.push({scope:'controlled HUD over actual settled scene, unselected hint',matches,...g});
+    const key=[g.bar.h,g.parts.currencies.y,g.field?.h];if(hintAnchor)assert.deepEqual(key,hintAnchor);else hintAnchor=key;
+    if(g.hint)assert.ok(!intersects(g.hint,g.parts.matches),'Hint clears floating title notice');
+    await page.screenshot({path:path.join(out,`mounted-hint-430-matches-${matches}.png`)});
+   }
    const actor=await page.locator('.int-rh2-field-host').evaluate(h=>{const p=JSON.parse(h.dataset.residentScreenPositions||'[]').find(p=>p.x>0&&p.x<h.clientWidth&&p.bodyTop>60&&p.footY<h.clientHeight-90);return p?{x:p.x,y:(p.bodyTop+p.footY)/2}:null;});
    assert.ok(actor,'Mounted overlap evidence requires a visible resident');await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().click({position:actor});
    await page.locator('.int-rh2-companion[data-open="true"]').waitFor({state:'visible'});
-   const realWallet=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('championshipModernSave:v1'));return {bits:s.shop.bits,diamonds:s.flags.friendsPlaytest.diamonds};});
-   await page.evaluate(async()=>{const {createChampionshipStatusBar}=await import('./src/championship/app/championshipStatusBar.js');document.querySelector('.cm-status-bar').remove();window.mountedMatchesOpened=0;window.mountedHudProjection=createChampionshipStatusBar({root:document.body,onOpenMatches:()=>window.mountedMatchesOpened++});});
    for(const width of [320,390,430,568,844]){
     await page.setViewportSize({width,height:width>=568?320:932});await page.waitForTimeout(500);let walletAnchor;
     for(const matches of [0,1,0]){
