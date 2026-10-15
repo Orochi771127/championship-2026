@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-10-15",
+  "authority": "OWNER_APPROVED_ADAPTATION",
+  "ownerDirection": [
+    "把整套做好嗎？包括角色會擠在一起這件事情。",
+    "請你中午12點前搞定"
+  ],
+  "scope": "Ordinary ground footpoint spacing in the existing Raising and Hunt update owners. This adaptation does not claim ROM shared physics.",
+  "limits": {"radiusNativePx": 8, "maximumTotalCorrectionPerActorPerFrameNativePx": 2, "maximumOrderedPairScans": 2, "maximumCandidatesPerMove": 3, "coordinateUnit": "Q12=4096"},
+  "stableOrder": "Physical actor pool slot; fixed eight-direction slot-derived fallback at coincidence; no RNG or clock reads.",
+  "raising": {
+    "owner": "championshipStandaloneApp.advanceNativeRaising after the existing ordered actor updates, before home storage and presentation",
+    "membership": "Same native cage only; sleeping and other fixed ground actors remain obstacles without translation.",
+    "exclude": ["carry", "throw/flight", "nonzero Z", "detached", "evolution", "invalid states", "native food approach/eating stations"],
+    "follow": "Mode2 uses the existing target Main cell width stop distance continuously and resumes when the peer moves away; existing mode timer and personality selection stay unchanged.",
+    "food": "Reserve the existing food.occupants station before approach; release on detach, carry, interruption, invalid target, eaten food, evolution and cage change. No second reservation authority. Legal same-side stations remain eight pixels apart.",
+    "boundary": "Existing X wrap, terrain and cageAt ownership; pure path checks including tile corners. A blocked direct correction tries two deterministic axis/tangent candidates within the same total frame budget; unresolved crowding is permitted when these bounded candidates do not fit."
+  },
+  "hunt": {
+    "owner": "nativeHuntFieldControls.step after stepNativeWildActor loop and before consumables.tick and rope reads",
+    "membership": "Visible active ordinary roaming states1/2/3 at exact Z0 with positive HP.",
+    "exclude": ["hidden/card/hand animation", "tutorial scripted", "bound/strong pull", "capture trap/down/flight/sleep", "food/decoy/tool restricted states"],
+    "boundary": "Pure native terrain and field bounds only; valid types0/2/3/4 are traversable, type1 and invalid cells are blocked, matching the existing movement terrain rule. Trial positions never invoke side-effectful tool queryControllers; bounded axis/tangent fallback keeps the shared frame budget.",
+    "projection": "Write existing actor.positionQ12; display projects /2048, selection and rope read the same point."
+  },
+  "battle": {
+    "authority": "ROM_VERIFIED_PRESERVE",
+    "source": "OVL19 0x0210F5D8 and existing battleNormalFlow/battleNormalRuntime/battleSession wiring",
+    "behavior": "Existing XYZ distance <16 native pixels retreats each actor by half the deficit in XY. No new battle resolver or attack AABB changes.",
+    "verification": "Controlled 8-to16, exact16, skip, XYZ and coincident cases; one actual session tick invokes normal runtime once and memory footpoints match presentation."
+  },
+  "unchangedAuthorities": ["save schema/key", "individual identity", "actor state owners", "gameplay RNG", "ticker", "renderer", "UI", "art", "Dex"],
+  "acceptanceLimits": "After collision correction, whole-AI trace identity is not claimed. Controlled tests and compiled normal browser entry evidence are separate from physical device acceptance."
+}

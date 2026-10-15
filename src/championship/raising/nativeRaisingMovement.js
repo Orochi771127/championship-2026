@@ -3,8 +3,13 @@
 import {nativeNormalizeQ12,nativeVectorLengthQ12} from "../hunt/capture/nativeCapturePhases.js";
 import {battleAngleIndex} from "../battle/battleNativeMath.js";
 import {nativeRaisingHeadings} from "./nativeRaisingGround.js";
+import {BATTLE_CHARACTER_PROFILES,BATTLE_SPECIES_ENTITIES} from '../../data/championship/battleCharacterProfiles.js';
 const mul=(a,b)=>Number(BigInt.asIntN(32,(BigInt(a)*BigInt(b)+2048n)>>12n));
 const tile=p=>p.slice(0,2).map(n=>Math.trunc((n>>12)/8)||0);
+export function nativeRaisingPeerStopDistanceQ12(peer){
+  const cell=BATTLE_CHARACTER_PROFILES[BATTLE_SPECIES_ENTITIES[peer.speciesIndex]]?.cells[0];
+  return cell?Math.trunc((cell[2]-cell[0])/2)*3*4096:null;
+}
 export function stepNativeRaisingMovement(input,environment) {
   if(![0,1,2].includes(input.mode))throw new Error("RAISING_MOVEMENT_MODE_REQUIRES_TRACE");
   let {mode,ticks,threshold,angleQ12,desiredAngleQ12}=input;
@@ -41,6 +46,14 @@ export function stepNativeRaisingMovement(input,environment) {
   if(input.state===3||input.state===16)delta=delta.map((n,i)=>i<2?n*2:n);
   if(input.slow===1)delta=delta.map((n,i)=>i<2?Math.trunc(n/3)||0:n);
   else if(input.fast===1)delta=delta.map((n,i)=>i<2?mul(n,input.hasFood===false?0x4cd:0x1800):n);
+  // Keep mode2's existing timer/turning. Stop continuously at the same peer
+  // width used by idle selection; a peer moving away permits movement again.
+  if(mode===2&&input.peer?.positionQ12&&nativeRaisingPeerStopDistanceQ12(input.peer)!==null&&![4,5,18,21,22].includes(input.peer.state)){
+    const remaining=nativeVectorLengthQ12(input.peer.positionQ12.slice(0,2).map((n,i)=>n-position[i]).concat(0))-nativeRaisingPeerStopDistanceQ12(input.peer);
+    const length=nativeVectorLengthQ12(delta);
+    if(remaining<=0)delta=[0,0,0];
+    else if(length>remaining)delta=delta.map(n=>Math.trunc(n*remaining/length));
+  }
   const flipBits=delta[0]<0?0:1,candidate=position.map((n,i)=>(n+delta[i])|0);
   if(environment.readTerrain(...tile(candidate))===1) {
     if(mode===0){destination=candidate;mode=1;ticks=60;threshold=environment.readClearance(...tile(position));}
