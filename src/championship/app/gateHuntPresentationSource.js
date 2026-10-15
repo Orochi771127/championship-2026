@@ -245,7 +245,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         exitAvailable: !tutorial(),
         // Read-only projection of the memory card, so the field can confirm a
         // catch the moment it lands there (ceremony layer, 2026-10-15).
-        captures: (runtime.getOnCardEntries?.() ?? []).map((entry) => ({
+        onCard: (runtime.getOnCardEntries?.() ?? []).map((entry) => ({
           wildId: entry.wildId, speciesId: entry.speciesId,
           name: entry.displayName ?? speciesNameForId(entry.speciesId)
         })),

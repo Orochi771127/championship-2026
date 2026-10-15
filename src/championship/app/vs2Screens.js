@@ -612,7 +612,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       meta: remainingText(block.hud.time?.remainingMinutes), hint: uiText('輕觸略過') }) });
   const closeEntry = () => { clearTimeout(entryTimer); entryTimer = null; entry?.dispose(); entry = null; };
   // 捕獲成功: a toast over the live field when a catch lands on the card.
-  const seenCaptures = new Set((block.hud.captures ?? []).map((entry) => entry.wildId));
+  const seenCaptures = new Set((block.hud.onCard ?? []).map((entry) => entry.wildId));
   let captureToast = null;
   function announceCapture(caught, total) {
     captureToast?.dispose();
@@ -784,7 +784,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     const remaining=next.hud.time?.remainingMinutes;
     companion.textContent = uiText(remaining == null ? next.hud.companionName ?? "" :
       uiText('剩餘 {time}', { time: `${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}` }));
-    const onCard = next.hud.captures ?? [];
+    const onCard = next.hud.onCard ?? [];
     for (const caught of onCard) {
       if (seenCaptures.has(caught.wildId)) continue;
       seenCaptures.add(caught.wildId);

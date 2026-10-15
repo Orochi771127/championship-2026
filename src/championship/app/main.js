@@ -84,7 +84,8 @@ import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
-import { configureCeremonyAudio } from '../presentation/ceremony/ceremonyRunner.js';
+import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
+import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
 import { downloadSaveBackup, downloadRuntimeDiagnostics } from './downloadSaveBackup.js';
 import { createRuntimeRecoveryDiagnostics, observeBattleFirstRender } from './runtimeRecoveryDiagnostics.js';
@@ -343,6 +344,23 @@ function bootSettings() {
 const settings = bootSettings();
 // Ceremonies (2026-10-15) play their synthesized cues through the same sfx bus.
 configureCeremonyAudio(() => settings.audio.output('sfx'));
+// The Battle screens import display copy only; their two ceremonies are
+// handed in here, as the result highlight is.
+const battleCeremonies = Object.freeze({
+  medal({ host, label, kicker, title, meta, medal, hint, onDone }) {
+    const run = playCeremony({ host, kind: 'medal', cue: 'medal', label, onDone,
+      build: (stage, env) => buildMedal(stage, env, { kicker, title, meta, medal, hint }) });
+    return Object.freeze({ ...run, setMedal(art) {
+      const fallback = art?.src ? run.element.querySelector('.cm-cer-medal__fallback') : null;
+      if (!fallback) return;
+      const image = document.createElement('img');
+      image.className = 'cm-cer-medal__art'; image.src = art.src; image.alt = ''; image.decoding = 'async';
+      fallback.replaceWith(image);
+    } });
+  },
+  versus: ({ host, playerLabel, playerNames, opponentLabel, opponentNames, onDone }) => playCeremony({ host, kind: 'versus', cue: 'versus', onDone,
+    build: (stage, env) => buildVersus(stage, env, { playerLabel, playerNames, opponentLabel, opponentNames }) })
+});
 const systemBackgrounds = createSystemBackgroundController({ root, store: settings.store });
 const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CUES,
   onState(state){
@@ -1230,6 +1248,7 @@ async function mountBattleField() {
   const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null};
   const {createBattleFieldView} = await import('./vs5Screens.js');
   const view = createBattleFieldView({
+    ceremonies: tutorial ? null : battleCeremonies,
     root,
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
@@ -1495,6 +1514,7 @@ async function mountBattleResult() {
   };
   const {createBattleResultView} = await import('./vs5Screens.js');
   const resultView=createBattleResultView({
+    ceremonies: battleCeremonies,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
     root,
     outcome,

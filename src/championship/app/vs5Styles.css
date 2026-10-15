@@ -445,7 +445,14 @@
 
 /* ---------------- Result ---------------- */
 .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; overflow: hidden; }
-.cm-vs5-result__stage { position: relative; min-height: 0; overflow: hidden; container-type: size; }
+.cm-vs5-result__stage {
+  position: relative; min-height: 0; overflow: hidden; container-type: size;
+  /* 2026-10-15: an arena behind the result -- a soft sky light over the
+     plate and a floor band under the fighters' feet line, in theme colours. */
+  background:
+    radial-gradient(70% 38% at 50% 26%, color-mix(in srgb, var(--c-accent-hi) 16%, transparent), transparent 72%),
+    linear-gradient(180deg, transparent 0 calc(70cqh + 4cqw), color-mix(in srgb, var(--c-accent) 9%, transparent) calc(70cqh + 4cqw), transparent 100%);
+}
 .cm-vs5-result__characters { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
 .cm-vs5-result__characters canvas { display: block; }
 .cm-vs5-result__stage::before {

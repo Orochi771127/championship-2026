@@ -725,6 +725,16 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   line-height: var(--lh-title-1);
   font-weight: var(--fw-heavy);
 }
+/* The signature link line (2026-10-15): a short teal cable under each page
+   title that ends in a lit node -- the 「網線」 of the product's name. Only
+   page titles carry it, so it stays recognisable. The retro theme keeps its
+   own skin untouched. */
+:root:not([data-theme="classic"]) :is(.cm-vs2-title, .cm-digimon-title, .cm-schedule-title, .cm-help-title, .cm-tamer-title, .cm-championship-title) {
+  padding-bottom: 9px;
+  background:
+    radial-gradient(circle, var(--c-accent-hi) 0 2.5px, color-mix(in srgb, var(--c-accent-hi) 35%, transparent) 3px, transparent 5px) 50px 100% / 12px 12px no-repeat,
+    linear-gradient(90deg, var(--c-accent) 0%, var(--c-accent-hi) 100%) 0 calc(100% - 5px) / 54px 2px no-repeat;
+}
 .cm-screen-lede { margin: -6px 0 0; color: var(--c-text-2); font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
 
 /* The footer stays reachable at the bottom of the page. */

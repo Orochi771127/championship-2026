@@ -411,7 +411,9 @@ test("Hunt exposes only the authorized native controls/readouts and no invented 
 
   assert.deepEqual(
     Object.keys(frame.huntField.hud).sort(),
-    ["actorName", "capabilities", "exitAvailable", "gateName", "note", "plugins", "target", "time"],
+    // onCard (2026-10-15) is the memory card's own contents -- the entries the
+    // Hunt result already lists -- projected read-only for the catch toast.
+    ["actorName", "capabilities", "exitAvailable", "gateName", "note", "onCard", "plugins", "target", "time"],
     "the Hunt HUD grew a field whose original semantics are unknown"
   );
 

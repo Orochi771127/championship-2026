@@ -114,7 +114,7 @@
   gap: 2px;
   min-width: min(280px, calc(100% - 48px));
   max-width: calc(100% - 32px);
-  padding: 12px 22px 14px;
+  padding: 12px 26px 14px;
   border: 1px solid var(--c-line-2);
   border-radius: var(--r-card);
   background: var(--c-surface-hud);
@@ -386,7 +386,8 @@
 }
 /* Short landscape phones: everything moves up and shrinks to fit 390px. */
 @media (max-height: 460px) {
-  .cm-cer-gate { gap: 6px; margin-top: 0; }
+  .cm-cer-gate { grid-auto-flow: column; align-items: center; justify-content: center; gap: 20px; margin-top: -12%; }
+  .cm-cer-gate .cm-cer-plate { min-width: 220px; }
   .cm-cer-gate__portal { width: 112px; height: 112px; }
   .cm-cer-gate__portal .cm-cer-ring { --ring-size: 112px; }
   .cm-cer-gate__core { inset: 22px; }

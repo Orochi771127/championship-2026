@@ -672,6 +672,18 @@ body[data-tool] .int-rh2-hint { display: none; }
 .int-rh2-letter[data-system="true"] .int-rh2-letter__text { min-height: 0; padding-top: var(--sp-5); background: none; }
 .int-rh2-letter[data-system="true"] .int-rh2-letter__ack { background: var(--c-accent); color: var(--c-text-on-accent); }
 
+/* ---- Phones and short landscape cards (2026-10-15) ------------------------
+ * The name is the card's headline: it gets the whole copy column. The species
+ * moves under it beside the place, and 詳細 keeps only its chevron (the whole
+ * copy block is the 44px button), so a seven-character name is never cut. */
+@media (max-width: 520px), (max-height: 460px) {
+  .int-rh2-companion__head { display: grid; gap: 0; }
+  .int-rh2-companion__name { font-size: var(--fs-body); line-height: 1.3; }
+  .int-rh2-companion__species { font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .int-rh2-companion__more { font-size: 0; gap: 0; min-width: 16px; justify-content: center; }
+}
+body[data-desktop-raising] .int-rh2-companion__name { white-space: normal; overflow-wrap: anywhere; }
+
 /* ---- Narrow phones -------------------------------------------------------- */
 @media (max-width: 379px) {
   /* Every control stays 44px; the species line (it is in the record) and the
