@@ -382,7 +382,8 @@
     "src/championship/presentation/medals/medalGeometry.js",
     "src/championship/presentation/medals/medalPresentationText.js",
     "src/championship/presentation/systemBackgrounds.js",
-    "src/championship/presentation/intRh2/raisingContactShadow.js"
+    "src/championship/presentation/intRh2/raisingContactShadow.js",
+    "src/championship/app/qaRanchExpansion.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9810,7 +9811,8 @@
     "assets/production/database-handpainted-r1-20261015/species-039.png",
     "assets/production/database-handpainted-r1-20261015/species-040.png",
     "assets/production/database-handpainted-r1-20261015/species-211.png",
-    "assets/production/database-handpainted-r1-20261015/species-222.png"
+    "assets/production/database-handpainted-r1-20261015/species-222.png",
+    "src/championship/app/qaRanchExpansion.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -45742,7 +45744,7 @@
       },
       {
         "path": "full-qa-save.html",
-        "sha256": "a2fcc535b2933c238654485a10e3f63c0375e597a2df1f891b14b43016f5c658"
+        "sha256": "5bcdf551f72a64335e29e95fcea8da4af0833a4baaaeaac135766511ae8fd0f0"
       },
       {
         "path": "node_modules/pixi.js/dist/pixi.mjs",
@@ -45770,7 +45772,7 @@
       },
       {
         "path": "qa/championship-full-qa-save.json",
-        "sha256": "629bb6a79b2f469d0c9eedecef68cdcd215090ea8cea98cecdf54cf17098d926"
+        "sha256": "518e767bfda07c2a6712f9ae5fff3b881ef8cb8525399910d9a3931572432053"
       },
       {
         "path": "src/championship/app/assetPrefetch.js",
@@ -47507,6 +47509,10 @@
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-222.png",
         "sha256": "4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3"
+      },
+      {
+        "path": "src/championship/app/qaRanchExpansion.js",
+        "sha256": "16ba62f6f757fb049a0371872dbd831cd957e0d04c79dbe3e7b568637bd3ae12"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
