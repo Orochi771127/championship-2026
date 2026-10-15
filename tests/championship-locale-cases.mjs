@@ -17,7 +17,8 @@ import { nativeHuntAnalyzedFields, nativeHuntRadarMask, nativeHuntRadarMatches }
 import { HUNT_PLUGIN_ITEMS } from "../src/championship/hunt/loadout/huntEquipmentCatalog.js";
 import { raisingMessageSender, raisingMessageText } from "../src/championship/text/raisingMessages.zhHant.js";
 import { tutorialLine, tutorialPrompt } from "../src/championship/text/tutorialMessages.zhHant.js";
-import { buildLocaleCoverage } from "../scripts/check-locale-coverage.mjs";
+import { buildLocaleCoverage, inspectScopedLocaleCopy } from "../scripts/check-locale-coverage.mjs";
+import { DATABASE_STORY_COPY, DATABASE_ORIGINAL_PROFILES } from "../src/championship/database/databaseStories.js";
 
 test('Owner display stage five is Awakened in all five locales; legacy UI keys remain compatible',t=>{
   t.after(()=>setLocale('zh-Hant'));
@@ -285,4 +286,31 @@ test("coverage: every display string in the source and catalog record is transla
   // One template still builds zh-Hant around values: the rope names in the hunt catalog.
   assert.deepEqual(report.interpolatedZh.map((entry) => entry.file), ["src/championship/hunt/loadout/huntEquipmentCatalog.js"]);
   for (const grade of ["基礎", "強化", "高階", "頂級"]) for (const tier of ["α", "β", "γ"]) assert.ok(TEXT_EN[`${grade}捕捉繩 ${tier}`], `${grade}捕捉繩 ${tier}`);
+});
+
+test('Dex named dictionaries validate every locale and keep stray literals outside the coverage exemption',async()=>{
+  const file='src/championship/database/databaseStories.js';
+  const checked=inspectScopedLocaleCopy(file,DATABASE_STORY_COPY);
+  assert.equal(checked.keys.length,26);assert.deepEqual(checked.gaps,[]);
+  for(const locale of LOCALES){
+    assert.ok(Object.isFrozen(DATABASE_STORY_COPY[locale]));
+    for(const text of Object.values(DATABASE_STORY_COPY[locale]))assert.equal(checked.covers({file,text}),true);
+    const missing=JSON.parse(JSON.stringify(DATABASE_STORY_COPY));delete missing[locale].storyHeading;
+    assert.deepEqual(inspectScopedLocaleCopy(file,missing).gaps,[`${locale}:SCOPED_COPY[${file}:storyHeading]`]);
+    missing[locale].storyHeading=DATABASE_STORY_COPY[locale].storyHeading;missing[locale]['field.cost']=' ';
+    assert.deepEqual(inspectScopedLocaleCopy(file,missing).gaps,[`${locale}:SCOPED_COPY[${file}:field.cost]`]);
+  }
+  assert.equal(checked.covers({file,text:'這是尚未翻譯的新顯示文字'}),false);
+  assert.equal(checked.covers({file:'src/championship/app/not-a-dictionary.js',text:DATABASE_STORY_COPY['zh-Hant'].storyHeading}),false);
+  const profileFile='src/data/championship/database-original-profiles.r1.json';
+  const profileCopy=Object.fromEntries(LOCALES.map(locale=>[locale,Object.fromEntries(DATABASE_ORIGINAL_PROFILES.entries.map(entry=>[entry.speciesId,entry.textByLocale[locale]]))]));
+  assert.equal(inspectScopedLocaleCopy(profileFile,profileCopy).keys.length,216);
+  for(const locale of LOCALES){
+    const missing=JSON.parse(JSON.stringify(profileCopy));delete missing[locale]['species-008'];
+    assert.deepEqual(inspectScopedLocaleCopy(profileFile,missing).gaps,[`${locale}:SCOPED_COPY[${profileFile}:species-008]`]);
+  }
+  const report=await buildLocaleCoverage();
+  assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:26,gaps:[]});
+  assert.deepEqual(report.scopedCopy.find(row=>row.file===profileFile),{file:profileFile,keyCount:216,gaps:[]});
+  assert.equal(report.counts.missing,0);assert.equal(report.counts.catalogGaps,0);
 });

@@ -5,6 +5,9 @@ import {isCompactLandscapeMenuLayout,mountPortraitFrame} from '../src/championsh
 import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
 const screens=['SHOP','DATABASE','BATTLE_SELECT','CHAMPIONSHIP','DIGIMON_LIST','SCHEDULE','TAMER_INFO','HELP','GATE_SELECT','HUNT_LOADOUT','HUNT_RESULT','MEDALS'];
 const sizes=[[720,320],[844,390],[932,430],[1023,420],[1024,419],[1366,320]];
+function compactLandscapeRules(css) {
+ return (css.replace(/\/\*[\s\S]*?\*\//g,'').match(/body\[data-landscape-menu\][^{]*\{[^}]*\}/g)??[]).join('\n');
+}
 function fixture({width=844,height=390,screen='DATABASE',enabled=true,visual=true}={}) {
  const attrs=new Set(),styles=new Map(),root={dataset:{activeScreen:screen},hidden:false};let notify=()=>{};
  const body={style:{setProperty:(k,v)=>styles.set(k,v),removeProperty:k=>styles.delete(k)},toggleAttribute(k,v){v?attrs.add(k):attrs.delete(k);},removeAttribute:k=>attrs.delete(k)};
@@ -79,7 +82,7 @@ test('database default resolver remains portrait and main injects the frame-owne
 });
 test('loaded candidate stylesheet gives bounded scrolling and reachable controls, without overriding hidden state or playable scenes',()=>{
  const css=readFileSync(new URL('../src/championship/app/vs2Styles.css',import.meta.url),'utf8');
- const candidate=css.slice(css.indexOf('/* Candidate compact landscape DOM menus'));
+  const candidate=compactLandscapeRules(css);
  const html=readFileSync(new URL('../championship.html',import.meta.url),'utf8');
  assert.match(html,/<link rel="stylesheet" href="\.\/src\/championship\/app\/vs2Styles\.css/);
  assert.match(candidate,/#cm-root \{\s*top: calc\(var\(--cm-menu-viewport-top, 0px\) \+ var\(--cm-screen-top\)\)/);
@@ -94,6 +97,16 @@ test('loaded candidate stylesheet gives bounded scrolling and reachable controls
  assert.equal([...candidate.matchAll(/display:/g)].length,1,'only the always-present header copy changes display');
  assert.match(candidate,/\.cm-vs2-header__copy \{ display: grid/);
  assert.doesNotMatch(candidate,/HUNT_FIELD|BATTLE_FIELD|BATTLE_RESULT|CAGE_EDIT/,'no playable geometry overrides');
+});
+
+test('compact CSS checks ignore unrelated appended rules but still include new gated display overrides',()=>{
+ const header='body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-header__copy { display: grid; }';
+ const unrelated='\n.cm-dex-traits-grid { display: flex; }\n.cm-dex-hero[hidden] { display: none; }';
+ assert.equal(compactLandscapeRules(header+unrelated),header);
+ const extra='\nbody[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-body[hidden] { display: block; }';
+ assert.equal([...compactLandscapeRules(header+unrelated+extra).matchAll(/display:/g)].length,2);
+ assert.match(compactLandscapeRules(header+extra),/\.cm-vs2-body\[hidden\] \{ display: block/);
+ assert.equal(compactLandscapeRules('/* '+extra+' */\n'+header),header);
 });
 
 test('desktop menu keyboard keeps its original wide layout instead of switching to a portrait frame',()=>{

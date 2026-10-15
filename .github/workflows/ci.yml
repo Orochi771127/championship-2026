@@ -28,3 +28,9 @@ jobs:
 
       - name: Run repository-contained deterministic tests
         run: npm run test:ci
+
+      - name: Build approved public playtest
+        run: npm run build:playtest
+
+      - name: Validate approved public playtest
+        run: npm run validate:playtest

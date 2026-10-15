@@ -1,3 +1,5 @@
+import {databaseHeroPortrait} from '../../src/championship/presentation/databaseHeroPortraits.js';
+import {databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading} from '../../src/championship/database/databaseStories.js';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
@@ -38,7 +40,7 @@ export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpec
     setTimeout:forbidden('TIMER'),setInterval:forbidden('TIMER'),requestAnimationFrame:forbidden('RAF'),
     addEventListener(type,fn){if(!listeners.has(type))listeners.set(type,new Set());listeners.get(type).add(fn);},
     removeEventListener(type,fn){listeners.get(type)?.delete(fn);},
-    databaseDisplayRows,getDatabaseDisplayEntry,speciesName,generationName,setLabel,setText,uiText,isDesktopBrowseLayout,
+    databaseHeroPortrait,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading,databaseDisplayRows,getDatabaseDisplayEntry,speciesName,generationName,setLabel,setText,uiText,isDesktopBrowseLayout,
     originalDatabaseIcon:()=>null,
     openingEggChoices:()=>Array.from({length:8},(_,speciesIndex)=>({speciesIndex,formalName:`Fixture egg ${speciesIndex}`,src:''})),
     openingEggText:()=>({nameNote:''}),

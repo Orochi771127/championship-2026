@@ -1,3 +1,5 @@
+import {databaseHeroPortrait} from '../presentation/databaseHeroPortraits.js';
+import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
 import {databaseDisplayRows, getDatabaseDisplayEntry} from '../database/databaseDisplayCatalog.js';
@@ -581,6 +583,74 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
     }
     if (selected.state !== "REGISTERED") return;
+    const hero = databaseHeroPortrait(selected.speciesIndex);
+    if (hero) {
+      const holder = element('div','cm-dex-hero');
+      holder.dataset.art = 'loading';
+      const placeholder = element('span','cm-dex-hero__placeholder','DEX_IMAGE_MISSING');
+      placeholder.hidden = true;
+      const image = element('img','cm-dex-hero__image');
+      image.hidden = true;
+      image.alt = ''; image.decoding = 'async';
+      image.width = hero.width; image.height = hero.height;
+      const generation = detailGeneration;
+      const current = () => alive && generation === detailGeneration;
+      image.onload = () => {
+        if (!current()) return;
+        const ready = image.naturalWidth === hero.width && image.naturalHeight === hero.height;
+        holder.dataset.art = ready ? 'ready' : 'missing';
+        image.hidden = !ready; placeholder.hidden = ready;
+      };
+      image.onerror = () => { if (current()) {holder.dataset.art = 'missing'; image.hidden = true; placeholder.hidden = false;} };
+      portraitImages.push(image);
+      holder.append(image,placeholder); detail.append(holder);
+      image.src = hero.src;
+    }
+    const story = databaseStory(selected.speciesIndex);
+    if (story) {
+      const profile = element('section','cm-dex-profile');
+      const heading = databaseStoryHeading();
+      profile.setAttribute('aria-label',heading);
+      const title = element('h3','cm-dex-profile__heading');
+      title.textContent = heading;
+      const prose = element('p','cm-dex-profile__text');
+      // Authored locale prose, not a UI translation key or HTML.
+      prose.textContent = story;
+      profile.append(title,prose);
+      detail.append(profile);
+    }
+    const verifiedData = databaseVerifiedData(selected.speciesIndex);
+    if (verifiedData) {
+      const dataSection = element('section', 'cm-dex-data');
+      const dataHeading = databaseVerifiedHeading();
+      dataSection.setAttribute('aria-label', dataHeading);
+      const dataTitle = element('h3', 'cm-dex-profile__heading');
+      dataTitle.textContent = dataHeading;
+      dataSection.append(dataTitle);
+
+      const traitsGrid = element('div', 'cm-dex-traits-grid');
+      traitsGrid.append(
+        element('span', 'cm-dex-trait-tag', `${verifiedData.labels.attribute}: ${verifiedData.attributeName}`),
+        element('span', 'cm-dex-trait-tag', `${verifiedData.labels.family}: ${verifiedData.familyName}`)
+      );
+      dataSection.append(traitsGrid);
+
+      if (verifiedData.moves && verifiedData.moves.length > 0) {
+        const movesList = element('div', 'cm-dex-moves-list');
+        for (const m of verifiedData.moves) {
+          const moveCard = element('div', 'cm-dex-move-card');
+          const header = element('div', 'cm-dex-move-card__header');
+          const nameSpan = element('span', 'cm-dex-move-card__name', m.name);
+          const typeSpan = element('span', 'cm-dex-move-card__type', m.kindName);
+          header.append(nameSpan, typeSpan);
+          const metaSpan = element('span', 'cm-dex-move-card__meta', `${verifiedData.labels.power} ${m.power} · ${verifiedData.labels.cost} ${m.actionCost} TP`);
+          moveCard.append(header, metaSpan);
+          movesList.append(moveCard);
+        }
+        dataSection.append(movesList);
+      }
+      detail.append(dataSection);
+    }
     paintEvolutionRoutes(selected);
     if (!conditionControls.has(expandedConditionBranch)) expandedConditionBranch = null;
     if (focusedBranch !== null) conditionControls.get(focusedBranch)?.toggle.focus({preventScroll:true});

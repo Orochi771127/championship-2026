@@ -366,7 +366,9 @@
     "src/championship/hunt/huntPresentationViewport.js",
     "src/championship/battle/battleOpeningPhase.js",
     "src/championship/text/battleOpeningText.js",
-    "src/championship/database/databaseEvolutionConditions.js"
+    "src/championship/database/databaseEvolutionConditions.js",
+    "src/championship/database/databaseStories.js",
+    "src/championship/presentation/databaseHeroPortraits.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9696,7 +9698,23 @@
     "src/championship/hunt/huntPresentationViewport.js",
     "src/championship/battle/battleOpeningPhase.js",
     "src/championship/text/battleOpeningText.js",
-    "src/championship/database/databaseEvolutionConditions.js"
+    "src/championship/database/databaseEvolutionConditions.js",
+    "src/championship/database/databaseStories.js",
+    "src/championship/presentation/databaseHeroPortraits.js",
+    "src/data/championship/database-hero-portraits.r1.json",
+    "src/data/championship/database-original-profiles.r1.json",
+    "assets/production/database-portraits-b1-20261014/B101.webp",
+    "assets/production/database-portraits-b1-20261014/B102.webp",
+    "assets/production/database-portraits-b1-20261014/B103.webp",
+    "assets/production/database-portraits-b1-20261014/B104.webp",
+    "assets/production/database-portraits-b1-20261014/B105.webp",
+    "assets/production/database-portraits-b1-20261014/B106.webp",
+    "assets/production/database-portraits-b1-20261014/B107.webp",
+    "assets/production/database-portraits-b1-20261014/B108.webp",
+    "assets/production/database-portraits-b1-20261014/B109.webp",
+    "assets/production/database-portraits-b1-20261014/B110.webp",
+    "assets/production/database-portraits-b1-20261014/B111.webp",
+    "assets/production/database-portraits-b1-20261014/B112.webp"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -45480,7 +45498,7 @@
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "8dee5cc78835c1e7dbcadba81c85b5ba154f8ec94417723a4153e60de78e0eff"
+        "sha256": "80ff49709f89aee764f1cde3abb3bf07b65b36215fcf9d55c87fb46dd790a680"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
@@ -45488,7 +45506,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "20c679e0a41847ffcb852fc6c3cbe05dca1a6976039f3a0bae89e8a5a1ff85c7"
+        "sha256": "2eaf8fe6ffb7ab2f3fc442d2e21836d5f1ea02d1917ea55a4c2896cf7078c772"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -46995,12 +47013,76 @@
         "sha256": "2e2993bf597bc55d19609ae5ebaa151f9f9121bce107a64684d669cf75f76032"
       },
       {
+        "path": "src/championship/text/battleOpeningText.js",
+        "sha256": "df10049fbab8e587dbf39531a0122336673824b0de6eec2bbab515b3ecd2bd4a"
+      },
+      {
         "path": "src/championship/database/databaseEvolutionConditions.js",
         "sha256": "1d7ad3636ff0e247a4b99d7a4900ff22896c494dda8e248e639a4629da21b8a4"
       },
       {
-        "path": "src/championship/text/battleOpeningText.js",
-        "sha256": "df10049fbab8e587dbf39531a0122336673824b0de6eec2bbab515b3ecd2bd4a"
+        "path": "src/championship/database/databaseStories.js",
+        "sha256": "ae90b40cb2aefc3f9dd7ced6968b370a065d921f1aa2f2504fef9193055734d4"
+      },
+      {
+        "path": "src/championship/presentation/databaseHeroPortraits.js",
+        "sha256": "70c023baf2aa6ed518d3bbbc56d0e16188592367d0b8fb6d0719176e66e3a442"
+      },
+      {
+        "path": "src/data/championship/database-hero-portraits.r1.json",
+        "sha256": "97e8194a232b67e4ade0679e563bae4974370adef65c32fb0c20598351c21bbb"
+      },
+      {
+        "path": "src/data/championship/database-original-profiles.r1.json",
+        "sha256": "032d67ada58ba3ee5e05fca4c99a2c896f7e24a6d56a2c6c9936f8adcbc6b6cd"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B101.webp",
+        "sha256": "8789a2abc42af316fd005e55a1b81be2e821db5e6a53f8432c238e5ad2fed782"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B102.webp",
+        "sha256": "03d2bb77ae83d1da119b7d0d4af040851bcb9f887ef939e1ac0fd3426d4252e7"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B103.webp",
+        "sha256": "2f1d8ae53c8e32ab2052cd528294949f6c36d905ec54f17914f824a0645a7059"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B104.webp",
+        "sha256": "e2bd9568408ef0fc8bf77a17d49a1b2834f289166325e62b076a792f47c91a90"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B105.webp",
+        "sha256": "ed499503f3c89c6d0475152dcf89666cc8700b793462557e669c3b0c0141f8bb"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B106.webp",
+        "sha256": "53b9e96e74b3077ebf2fedc2ab426e077851d2f2e6b0549f9f80d853f8bb1e65"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B107.webp",
+        "sha256": "11071954c096ee1e181f8b096ad7a191967621deff3b2b897915e0fa900dcf02"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B108.webp",
+        "sha256": "46dde528d8da946a954f1a81e5d8f0a35fae665b6dd2921e40a705f3bbc854a2"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B109.webp",
+        "sha256": "3f887bd16a8e4d7773ded040b9a5ab9d893398789999a0c1a77635a795661655"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B110.webp",
+        "sha256": "3664c85128f4b05addbd33a4b42d917b441fb0c7648f4ad0a1f22e90c7874172"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B111.webp",
+        "sha256": "65506c2a0bccd3c0c50787f7709947e96ec79d8d4a5529eddfecbb566ed05ed2"
+      },
+      {
+        "path": "assets/production/database-portraits-b1-20261014/B112.webp",
+        "sha256": "5ba32d312e07e8b8c8ca0095c2d05fc099f48940defaa451f47e1ff4e29922e0"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
