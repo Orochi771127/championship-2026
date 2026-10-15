@@ -27,8 +27,12 @@ window.fixtureRender=({locale='zh-Hant',bits=100000,diamonds=10000,phase='RESTOR
  tutorial={...tutorial,finished:!tutorialOn};listeners.forEach(f=>f());
  bar.render({screen:'RAISING_HOME',seasonName:'Spring',dayNumber:1,time:'07:00',bits,testDiamonds:diamonds,todayMatches:matches,save:{phase}});bar.relabel();
  return {bitsLabel:uiText('持有 {bits} 位元幣',{bits}),diamondLabel:uiText('CAGE_TEST_DIAMOND_BALANCE',{amount:formatNumber(diamonds)})};
+};
 window.fixtureRender({});window.fixtureReady=true;
 </script>`;
+// Parse the embedded module too: checking this .cjs alone treats it as inert text.
+const fixtureSyntax=require('node:child_process').spawnSync(process.execPath,['--input-type=module','--check'],{input:fixture.match(/<script type="module">([\s\S]*?)<\/script>/)[1],encoding:'utf8'});
+assert.equal(fixtureSyntax.status,0,fixtureSyntax.stderr);
 const geometry=()=>{
  const names=['season','day','time','currencies','bits','diamond','matches','save'];
  const rect=e=>{if(!e||e.hidden||getComputedStyle(e).display==='none')return null;const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom,scroll:e.scrollWidth,client:e.clientWidth,text:e.innerText,label:e.getAttribute('aria-label')}};
