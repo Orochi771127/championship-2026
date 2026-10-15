@@ -547,7 +547,16 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   // ------------------------------------------------------------------ loop
   const frameCost = [];
+  let frameFault = null;
+  // The ticker is the product's shared one: an exception thrown from a listener
+  // would stop its loop for everything. Contain it, report it once, keep going.
   function frame(ticker) {
+    try { frameBody(ticker); }
+    catch (error) {
+      if (!frameFault) { frameFault = error; console.error("DATA_ARENA_FRAME_FAULT", error); }
+    }
+  }
+  function frameBody(ticker) {
     if (!sim || !scene) return;
     const started = performance.now();
     const dtMs = Math.min(ticker.deltaMS, 250);
@@ -612,6 +621,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     showOverlay(el("div", "da-panel da-panel--loading", t("loading")));
     stage ??= await ensureStage(field, signal);
     if (signal.aborted) return;
+    // Drop the previous match's scene BEFORE loadCast releases bundles it may
+    // still draw from (mode or partner change from the result screen).
+    scene?.dispose(); scene = null;
     const ok = await loadCast(partnerId);
     if (signal.aborted) return;
     matchId++;
@@ -861,7 +873,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       state: () => root.dataset.state,
       diagnostics: () => {
         const sorted = [...frameCost].sort((a, b) => a - b);
-        return { tickerListeners: stage?.app.ticker.count ?? null, scene: scene?.getDiagnostics() ?? null, stage: stage?.getDiagnostics() ?? null, bundles: [...bundles.keys()],
+        return { frameFault: frameFault ? String(frameFault.message ?? frameFault) : null, tickerListeners: stage?.app.ticker.count ?? null, scene: scene?.getDiagnostics() ?? null, stage: stage?.getDiagnostics() ?? null, bundles: [...bundles.keys()],
           arenaUpdateMs: sorted.length ? { median: sorted[Math.floor(sorted.length / 2)], p95: sorted[Math.floor(sorted.length * 0.95)] } : null };
       },
       worldToScreen: (x, y) => (scene ? scene.worldToScreen(x, y) : null),

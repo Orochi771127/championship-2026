@@ -494,15 +494,15 @@ test("skills spend energy and start a cooldown; empty energy or a cooling move r
 
 test("auto-aim locks the nearest rival only with a clear line; pillars break the lock", () => {
   const { sim, s, rival } = liveDuel();
-  place(s.player, 13, 8);
-  place(rival, 13, 4); // straight through the pillar at row 6
+  place(s.player, 10, 7);
+  place(rival, 10, 3); // straight through the pillar at (9-10, 5)
   assert.equal(sim.getSnapshot().rivals[0].sight, false);
   assert.equal(sim.internals.autoAim(s.player, 900).target, null);
-  place(rival, 8, 4);
+  place(rival, 5, 4);
   assert.equal(sim.getSnapshot().rivals[0].sight, true);
   assert.equal(sim.internals.autoAim(s.player, 900).target, rival);
   // A bolt fired into the pillar stops there.
-  place(rival, 13, 4);
+  place(rival, 10, 3);
   sim.internals.beginCast(s.player, "emberBolt", rival.x, rival.y);
   const hp = rival.hp;
   run(sim, 1.2);
@@ -517,7 +517,7 @@ test("every rival attack is telegraphed: windups and delayed zones give time to 
   }
   for (const stepOut of [false, true]) {
     const { sim, s, rival } = liveDuel();
-    place(s.player, 15, 15); place(rival, 15, 12);
+    place(s.player, 12, 13); place(rival, 12, 11);
     s.player.invulnerable = 0;
     const hp = s.player.hp;
     assert.ok(sim.internals.beginCast(rival, "quakeSlam", s.player.x, s.player.y));
@@ -534,7 +534,7 @@ test("every rival attack is telegraphed: windups and delayed zones give time to 
 test("the light shield blocks hostile shots from the front only", () => {
   for (const front of [true, false]) {
     const { sim, s, rival } = liveDuel({ partnerId: "corona-cub" });
-    place(s.player, 15, 15); place(rival, 15, 4);
+    place(s.player, 12, 13); place(rival, 12, 3);
     s.player.invulnerable = 0;
     assert.ok(sim.internals.beginCast(s.player, "sunShield", s.player.x, s.player.y - 100)); // facing north
     run(sim, DT * 2);
@@ -553,7 +553,7 @@ test("the light shield blocks hostile shots from the front only", () => {
 
 test("a spent rival breaks line of sight behind cover instead of trading hits", () => {
   const { sim, s, rival } = liveDuel();
-  place(s.player, 15, 15); place(rival, 15, 5);
+  place(s.player, 12, 13); place(rival, 12, 4);
   rival.energy = 0;
   sim.internals.chooseRivalGoal(rival);
   assert.equal(rival.wantsCover, true);
@@ -681,4 +681,34 @@ test("a skill tapped mid-dash or mid-windup is buffered and cast when free, not 
   const again = run(sim, DT, { cast: 0, autoAim: true });
   const later = run(sim, 0.4);
   assert.ok([...again, ...later].some((e) => e.type === "CAST_REFUSED" && e.reason === "COOLDOWN"));
+});
+
+test("knockback into a pillar is a wall slam; into the channel is a splash", () => {
+  const { sim, s, rival } = liveDuel();
+  // Rival just south of the pillar at (9-10, 5), launched north into it.
+  place(s.player, 14, 13); place(rival, 10, 6);
+  rival.kbx = 0; rival.kby = -600;
+  const hp = rival.hp;
+  const events = run(sim, 0.2);
+  const slam = events.find((e) => e.type === "WALL_SLAM" && e.target === "rival");
+  assert.ok(slam, "a fast push into cover hurts");
+  assert.ok(hp - rival.hp >= Math.max(DATA_ARENA_ENERGY.slamMin, rival.maxHp * DATA_ARENA_ENERGY.slamShare) - 1);
+  // Pushed into open water: splashed back to a bank with damage.
+  const duel = liveDuel();
+  place(duel.rival, 8, 7); duel.rival.kbx = 0; duel.rival.kby = 500;
+  const splash = run(duel.sim, 0.4);
+  assert.ok(splash.some((e) => e.type === "RIVAL_SPLASH"));
+  // A slow nudge against a wall is not a slam.
+  const soft = liveDuel();
+  place(soft.rival, 10, 6); soft.rival.kby = -120;
+  assert.ok(!run(soft.sim, 0.3).some((e) => e.type === "WALL_SLAM"));
+});
+
+test("in the cup the dodge is a resource: a longer recharge than the harbor", () => {
+  const { sim, s } = liveDuel();
+  run(sim, DT, { dash: true, moveX: 1 });
+  run(sim, DATA_ARENA_PLAYER.dash.cooldown + 0.2);
+  assert.equal(s.player.dashCharges, 0, "still recharging after the harbor cooldown");
+  run(sim, DATA_ARENA_TOURNAMENT.dashCooldown - DATA_ARENA_PLAYER.dash.cooldown);
+  assert.equal(s.player.dashCharges, 1);
 });

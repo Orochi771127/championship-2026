@@ -22,14 +22,20 @@
 | 錦標賽對手：潮鬃海豹 species-047、焰核炎靈 species-113、赤棘暴龍 species-102 | 同一 `accepted-20261010` 選集，經 `dataArenaArtRecord` 唯讀選取並核對 `entityId`／`sourceBankSha256`；名稱來自 `speciesNameForId` | 同上（公開試玩雜湊選定；`rightsDocumentVerified=false`、`commercialReleaseAccepted=false` 不變） |
 | 招式名稱、說明、數值、預告、彈體材質（`bolt`）、對戰表、HUD | 本專案原創（`dataArenaConfig.js`、`dataArenaText.js`、`dataArenaTextures.js`、CSS） | 原創 |
 
-**參考與機制邊界**：Pokémon Zarza Arena（https://pokemonzarza.com/poke-arena.html?lang=en、play-guide）在本環境被代理拒絕（403），未取得任何頁面、程式、圖或音。操作／節奏只來自二手報導（例：https://retrododo.com/pokemon-zarza-brings-a-battle-arena-15-minigames-to-your-browser/）：
+**參考與機制邊界**：Pokémon Zarza Arena（https://pokemonzarza.com/poke-arena.html?lang=en&avatar=red、https://pokemonzarza.com/play-guide.html?lang=en）。
+
+- 第一次嘗試被代理拒絕（403）。
+- Owner 調整網路後，以 HTTP 讀取公開頁面與前端規則檔（`play-guide-copy.js`、`poke-arena-rules.js` 等）做純文字研究：未執行其程式，未下載或使用任何圖、音、字型，檔案只留在本機暫存區，不進 repo。
+
+取得的是**節奏原則**：
 
 - 四招＋終極；
-- 冷卻與能量；
-- 點按自動瞄準最近且路徑無阻的對手，拖曳手動瞄準；
-- 柱子作掩體；
-- 紅色預告區；
-- 6 輪錦標賽與波次模式分開；
-- 私人房對戰。
+- 能量回復與輕重招分工（便宜快招 vs 長前搖大招）；
+- 閃避有明顯冷卻；
+- 小場地讓雙方隨時在射程內；
+- 柱子阻擋直線攻擊；
+- 重擊會把對手打飛、撞牆受傷；
+- 錦標賽每輪有時限；
+- 波次生存為獨立模式。
 
-本批只採用「機制類型」（如「延遲爆炸區」「正面擋射盾」「無敵突進」），每招在 `DATA_ARENA_MOVES[].mechanic` 留紀錄；任何招式名稱、招式組合、數值、角色、美術、音效或 UI 都未複製。Pokémon 相關名稱與角色不在本產品中出現。
+本產品的數值、場地、招式、名稱、角色、美術、音效與 UI 全為原創，每招機制類型記錄在 `DATA_ARENA_MOVES[].mechanic`。Pokémon 相關名稱與角色不在本產品中出現。

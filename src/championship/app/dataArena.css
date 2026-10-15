@@ -227,7 +227,8 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-card__effect { font-size: 14px; line-height: 1.45; }
 .da-card__rank { font-size: 12px; color: var(--da-gold); }
 .da-result__score { display: flex; gap: 12px; align-items: baseline; justify-content: center; margin: 8px 0; }
-.da-result__score strong { font-size: 40px; font-variant-numeric: tabular-nums; }
+.da-result__score strong { font-size: 40px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.da-panel--result .da-title { line-height: 1.25; margin-bottom: 12px; }
 .da-result__label { color: var(--da-dim); }
 .da-result__line { margin: 4px 0; text-align: center; font-size: 14px; }
 .da-badge { padding: 2px 10px; border-radius: 999px; background: var(--da-gold); color: #241800; font-weight: 900; font-size: 13px; }

@@ -203,7 +203,7 @@ export const DATA_ARENA_LEVELS = deepFreeze({
 export const DATA_ARENA_CROWD = deepFreeze({
   // Hype is a bounded meter; each source has its own cooldown and the meter
   // ignores input during the post-cheer cooldown, so it cannot be farmed.
-  gains: { PERFECT_DODGE: 12, ELEMENT_CHAIN: 10, RESCUE: 16, BEACON: 8, CORE_OUT: 10, MULTI_KILL: 6, BOSS_DOWN: 30, ROUND_WIN: 20 },
+  gains: { PERFECT_DODGE: 12, ELEMENT_CHAIN: 10, RESCUE: 16, BEACON: 8, CORE_OUT: 10, MULTI_KILL: 6, BOSS_DOWN: 30, ROUND_WIN: 20, WALL_SLAM: 10 },
   sourceCooldown: 1.2,
   windowSeconds: 10,
   windowCap: 40,
@@ -248,6 +248,12 @@ export const DATA_ARENA_ENERGY = deepFreeze({ max: 100, regen: 16, regenDelay: 0
   playerCastMove: 0.7,
   // A skill tapped while dashing or winding up is kept this long (seconds) and then cast.
   inputBuffer: 0.25,
+  // Launches: lunges, bursts and waves push bodies; a fast push into a pillar or
+  // wall hurts (a share of max HP) and a push into open water is a splash.
+  launch: { LUNGE: 340, NOVA: 300, WAVE: 420 },
+  slamSpeed: 250,
+  slamShare: 0.05,
+  slamMin: 10,
   rivalCastMove: 0.35
 });
 
@@ -305,39 +311,43 @@ export const DATA_ARENA_TOURNAMENT = deepFreeze({
   koSeconds: 2.2,
   playerHpScale: 1.8,
   // The beam melts swarms; against one armoured rival it is a tool, not the whole kit.
-  rivalBeamScale: 0.55,
+  rivalBeamScale: 0.42,
   roundWinScore: 1000,
   perHpLeft: 4,
   perSecondLeft: 6,
   championScore: 2500,
+  // The dodge is a resource in a duel: long enough that spending it is a decision.
+  dashCooldown: 1.8,
   // AI tiers by round: reaction delay, dodge chance, aim lead accuracy, damage scale.
   tiers: [
-    { reaction: 0.34, dodge: 0.45, lead: 0.5, damage: 1.1, energyRegen: 1.0 },
-    { reaction: 0.26, dodge: 0.58, lead: 0.7, damage: 1.3, energyRegen: 1.15 },
-    { reaction: 0.2, dodge: 0.7, lead: 0.85, damage: 1.5, energyRegen: 1.3 }
+    { reaction: 0.34, dodge: 0.45, lead: 0.5, damage: 1.25, energyRegen: 1.0 },
+    { reaction: 0.26, dodge: 0.58, lead: 0.7, damage: 1.5, energyRegen: 1.15 },
+    { reaction: 0.2, dodge: 0.7, lead: 0.85, damage: 1.75, energyRegen: 1.3 }
   ]
 });
 
 const DT_ = DATA_ARENA_TERRAIN;
 /** The compact tournament arena: 30 x 20 cells, pillars for cover, a narrow channel with two crossings. */
 export const DATA_ARENA_DUEL_MAP = deepFreeze({
-  cell: 64, cols: 30, rows: 20,
+  // Compact on purpose: with 520-760 px move ranges almost every spot is in reach,
+  // so rounds are about footwork and cover rather than walking to the fight.
+  cell: 64, cols: 24, rows: 16,
   rects: [
-    [0, 0, 30, 2, DT_.STANDS],
-    [0, 9, 7, 2, DT_.WATER], [9, 9, 12, 2, DT_.WATER], [23, 9, 7, 2, DT_.WATER],
-    [5, 4, 2, 2, DT_.SOLID], [23, 4, 2, 2, DT_.SOLID], [12, 6, 2, 1, DT_.SOLID], [16, 6, 2, 1, DT_.SOLID],
-    [5, 14, 2, 2, DT_.SOLID], [23, 14, 2, 2, DT_.SOLID], [12, 13, 2, 1, DT_.SOLID], [16, 13, 2, 1, DT_.SOLID],
-    [9, 16, 1, 2, DT_.SOLID], [20, 16, 1, 2, DT_.SOLID], [9, 2, 1, 2, DT_.SOLID], [20, 2, 1, 2, DT_.SOLID]
+    [0, 0, 24, 2, DT_.STANDS],
+    [0, 8, 5, 2, DT_.WATER], [7, 8, 10, 2, DT_.WATER], [19, 8, 5, 2, DT_.WATER],
+    [3, 4, 2, 2, DT_.SOLID], [19, 4, 2, 2, DT_.SOLID], [9, 5, 2, 1, DT_.SOLID], [13, 5, 2, 1, DT_.SOLID],
+    [3, 11, 2, 2, DT_.SOLID], [19, 11, 2, 2, DT_.SOLID], [9, 11, 2, 1, DT_.SOLID], [13, 11, 2, 1, DT_.SOLID],
+    [7, 2, 1, 2, DT_.SOLID], [16, 2, 1, 2, DT_.SOLID], [7, 13, 1, 2, DT_.SOLID], [16, 13, 1, 2, DT_.SOLID]
   ],
   stage: null,
   pylons: [],
-  flammable: [[1, 14, 4, 5], [25, 2, 4, 5], [11, 11, 8, 2]],
-  pods: [[14, 8], [15, 11]],
+  flammable: [[1, 12, 2, 3], [21, 2, 2, 3], [10, 13, 4, 2], [10, 2, 4, 2]],
+  pods: [[11, 7], [12, 10]],
   beacons: [],
   fireCores: [],
-  playerSpawn: [15, 17],
-  mateSpawn: [17, 17],
-  rivalSpawn: [14, 3],
-  bossSpawn: [14, 3],
+  playerSpawn: [12, 14],
+  mateSpawn: [13, 14],
+  rivalSpawn: [11, 3],
+  bossSpawn: [11, 3],
   gates: []
 });

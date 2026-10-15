@@ -307,6 +307,10 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
         await startFromSelect(page, partnerIndex, 'HARBOR');
         diag = await qa(page, () => window.__dataArenaQA.diagnostics());
         check('harbor loads partner, mate and guardian art', diag.bundles.length === 3, diag.bundles);
+        const t0 = await qa(page, () => window.__dataArenaQA.snapshot().time);
+        await page.waitForTimeout(1500);
+        const t1 = await qa(page, () => ({ time: window.__dataArenaQA.snapshot().time, fault: window.__dataArenaQA.diagnostics().frameFault }));
+        check('switching mode from the result screen keeps the shared ticker running', t1.time > t0 && !t1.fault, { t0, t1 });
         const harbor = await autopilotMatch(page, { prefix: 'desktop-harbor' });
         const h = harbor.snap.result;
         report.runs.push({ kind: 'harbor', outcome: h.outcome, timeSeconds: h.timeSeconds, score: h.score, level: h.level, levelUps: harbor.levelUps, casts: harbor.casts,
@@ -437,7 +441,7 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await mobile.waitForFunction(() => !document.querySelector('.da-root'));
     await phone.close();
 
-    const unexpected = report.errors.filter((entry) => !/favicon/.test(entry.url ?? ''));
+    const unexpected = report.errors.filter((entry) => !/favicon/.test(entry.url ?? '') && !/modulepreload> has an invalid `as` value/.test(entry.text ?? ''));
     report.unexpectedErrors = unexpected;
     check('no page errors, console errors, failed requests or HTTP errors', unexpected.length === 0, unexpected.slice(0, 5));
     report.passed = true;

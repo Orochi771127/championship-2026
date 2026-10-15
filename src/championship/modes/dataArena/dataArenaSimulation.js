@@ -59,6 +59,7 @@ export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR"]);
 export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR" } = {}) {
   if (!DATA_ARENA_MODES.includes(mode)) throw new RangeError(`DATA_ARENA_UNKNOWN_MODE:${mode}`);
   const tournamentMode = mode === "TOURNAMENT";
+  const dashCooldown = tournamentMode ? DATA_ARENA_TOURNAMENT.dashCooldown : DATA_ARENA_PLAYER.dash.cooldown;
   const hasMate = !tournamentMode;
   const map = tournamentMode ? DATA_ARENA_DUEL_MAP : DATA_ARENA_MAP;
   const partner = DATA_ARENA_PARTNERS.find((entry) => entry.id === partnerId);
@@ -156,6 +157,29 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if ((nx - x) ** 2 + (ny - y) ** 2 < radius * radius) return true;
     }
     return false;
+  }
+  /** Push a body (knockback velocity, decays); see stepKnock for walls and water. */
+  function launch(body, dirX, dirY, speed) {
+    if (!speed || (body === player && player.state !== "NORMAL")) return;
+    body.kbx = (body.kbx ?? 0) + dirX * speed; body.kby = (body.kby ?? 0) + dirY * speed;
+  }
+  /** Advance a push. Solids stop it; a fast stop is a wall slam. Water does not stop it. */
+  function stepKnock(body) {
+    const speed = Math.hypot(body.kbx ?? 0, body.kby ?? 0);
+    if (speed < 1) { body.kbx = body.kby = 0; return; }
+    const x0 = body.x, y0 = body.y;
+    moveBody(body, body.kbx * DT, body.kby * DT, "swimmer");
+    const moved = Math.hypot(body.x - x0, body.y - y0);
+    if (speed >= DATA_ARENA_ENERGY.slamSpeed && moved < speed * DT * 0.5) {
+      const amount = Math.max(DATA_ARENA_ENERGY.slamMin, body.maxHp * DATA_ARENA_ENERGY.slamShare);
+      body.kbx = body.kby = 0;
+      if (body === player) hurtPlayer(amount, "SLAM", player.x, player.y);
+      else if (body.rival) { damageRival(body, amount, "SLAM"); addHype("WALL_SLAM", body.x, body.y); }
+      emit({ type: "WALL_SLAM", target: body === player ? "player" : "rival", x: body.x, y: body.y, amount: Math.round(amount) });
+      return;
+    }
+    const decay = 1 - Math.min(1, DT * 6);
+    body.kbx *= decay; body.kby *= decay;
   }
   function moveBody(body, dx, dy, kind) {
     const radius = body.radius * 0.8;
@@ -297,7 +321,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     player.dashGrace = DATA_ARENA_PLAYER.dash.invulnerable;
     player.invulnerable = Math.max(player.invulnerable, DATA_ARENA_PLAYER.dash.invulnerable);
     player.dashCharges--;
-    if (player.dashRecharge <= 0) player.dashRecharge = DATA_ARENA_PLAYER.dash.cooldown;
+    if (player.dashRecharge <= 0) player.dashRecharge = dashCooldown;
     player.perfectThisDash = false;
     player.dashHits.clear();
     laser.firing = false;
@@ -385,7 +409,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       player.dashRecharge -= DT;
       if (player.dashRecharge <= 0) {
         player.dashCharges++;
-        player.dashRecharge = player.dashCharges < stat.dashCharges ? DATA_ARENA_PLAYER.dash.cooldown : 0;
+        player.dashRecharge = player.dashCharges < stat.dashCharges ? dashCooldown : 0;
         emit({ type: "DASH_READY", charges: player.dashCharges });
       }
     }
@@ -665,6 +689,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (distance(target.x, target.y, caster.x, caster.y) > move.radius + (target.radius ?? 20)) continue;
       if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
       strike(target, move.damage * damageScale, move.type, zoneStatus(move));
+      if (move.effect !== "ROOT") {
+        const d = distance(target.x, target.y, caster.x, caster.y) || 1;
+        launch(target, (target.x - caster.x) / d, (target.y - caster.y) / d, DATA_ARENA_ENERGY.launch.NOVA);
+      }
     }
     areaElement(caster.x, caster.y, move.radius, move);
     emit({ type: "NOVA", team, x: caster.x, y: caster.y, radius: move.radius, effect: move.effect });
@@ -706,7 +734,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         lunge.hits.add(target.id);
         if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
         strike(target, lunge.damage, "LUNGE", { slow: 0.3, slowSeconds: 0.6 });
-        if (target !== player) { target.kbx = (target.kbx ?? 0) + lunge.dirX * 180; target.kby = (target.kby ?? 0) + lunge.dirY * 180; }
+        launch(target, lunge.dirX, lunge.dirY, DATA_ARENA_ENERGY.launch.LUNGE);
       }
     }
     if (lunge.left <= 0) {
@@ -1201,7 +1229,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (player.dashGrace > 0 && player.state !== "RIDING") continue; // passes through the dash
         if (hurtPlayer(projectile.damage, projectile.kind, projectile.x, projectile.y)) {
           if (projectile.onHit) applyStatus(player, projectile.onHit);
-          if (projectile.knockback && player.state === "NORMAL") { const v = Math.hypot(projectile.vx, projectile.vy) || 1; moveBody(player, projectile.vx / v * 60, projectile.vy / v * 60, "walker"); }
+          if (projectile.knockback) { const v = Math.hypot(projectile.vx, projectile.vy) || 1; launch(player, projectile.vx / v, projectile.vy / v, DATA_ARENA_ENERGY.launch.WAVE); }
           if (projectile.kind !== "WAVE") projectile.dead = true;
         } else if (player.invulnerable > 0 && projectile.kind !== "WAVE") projectile.dead = true;
         continue;
@@ -1791,8 +1819,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const speed = rival.speed * moveScale(rival);
     const k = Math.min(1, DT * 7);
     rival.vx += (ax * speed - rival.vx) * k; rival.vy += (ay * speed - rival.vy) * k;
-    moveBody(rival, (rival.vx + rival.kbx) * DT, (rival.vy + rival.kby) * DT, "walker");
-    rival.kbx *= 1 - Math.min(1, DT * 6); rival.kby *= 1 - Math.min(1, DT * 6);
+    moveBody(rival, rival.vx * DT, rival.vy * DT, "walker");
+    stepKnock(rival);
     if (grid.surfaceAt(rival.x, rival.y) === "WATER") {
       const bank = grid.nearestSafeCell(rival.x, rival.y);
       if (bank) { rival.x = bank.x; rival.y = bank.y; damageRival(rival, 12, "WATER"); emit({ type: "RIVAL_SPLASH", x: rival.x, y: rival.y }); chain("DROWN", rival.x, rival.y); }
@@ -1821,7 +1849,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     Object.assign(player, { x: spawn.x, y: spawn.y, vx: 0, vy: 0, hp: player.maxHp, state: "NORMAL", stateTime: 0, invulnerable: 0, dashGrace: 0,
       energy: DATA_ARENA_ENERGY.max, cast: null, lunge: null, barrier: 0, slow: 0, slowTimer: 0, root: 0, burn: 0, facing: 1 });
     player.cooldowns = Object.create(null);
-    player.dashCharges = stat.dashCharges;
+    player.dashCharges = stat.dashCharges; player.dashRecharge = 0; player.kbx = player.kby = 0;
     kitBuffer = null;
     laser.heat = 0; laser.overheated = false; laser.firing = false; laser.angle = -Math.PI / 2;
   }
@@ -1960,6 +1988,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     } else state.cheerCooldown = Math.max(0, state.cheerCooldown - DT);
     if (!tournamentMode) updatePhases();
     updatePlayer(input);
+    if (player.state === "NORMAL") stepKnock(player); else player.kbx = player.kby = 0;
     playerKitInput(input);
     tickKit(player);
     updateLaser(input);

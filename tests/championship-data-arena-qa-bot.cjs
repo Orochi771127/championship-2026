@@ -49,7 +49,7 @@ function decideDuel(obs, mem) {
     if (mem.seen[key] === undefined) mem.seen[key] = ((Math.abs(Math.round(s.x * 7 + s.y * 13)) % 100) / 100) < skill;
     if (mem.seen[key]) { out.dash = true; out.moveX = -s.vy / speed; out.moveY = s.vx / speed; }
   }
-  if (p.y > 9 * CELL - 30 && p.y < 11 * CELL + 30 && !out.dash) my += p.y < 10 * CELL ? -1 : 1; // keep off the channel edge
+  if (p.y > 8 * CELL - 30 && p.y < 10 * CELL + 30 && !out.dash) my += p.y < 9 * CELL ? -1 : 1; // keep off the channel edge (rows 8-9)
   out.moveX = mx; out.moveY = my;
   out.aimX = rival.x; out.aimY = rival.y;
   out.fire = rival.sight && !snap.laser.overheated;
