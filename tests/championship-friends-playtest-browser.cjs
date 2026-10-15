@@ -59,14 +59,10 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
    let state=await read();assert.ok(state.positions.length,'Top-edge evidence needs renderer diagnostics');
    for(let gesture=0;gesture<8&&state.positions[0].scrollY<state.positions[0].scrollMaxY-1;gesture++){
-    const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first(),box=await canvas.boundingBox();
-    assert.ok(box&&box.height>160);
+    const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
     // Start in empty upper sky, excluding generous bounds around every actor.
-    const candidates=[80,180,Math.min(320,box.height/2)].flatMap(y=>[20,box.width/4,box.width/2,box.width*3/4,box.width-20].map(x=>({x,y}))).filter(({x,y})=>state.positions.every(p=>Math.abs(p.x-x)>110||y<p.bodyTop-35||y>p.footY+35));
-    const clear=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
-    assert.ok(clear,'A safe empty canvas drag origin must exist');const {x,y}=clear;
     const previous=state.positions[0].scrollY;
-    await page.mouse.move(box.x+x,box.y+y);await page.mouse.down();
+    const {box,start:{x,y}}=await beginCanvasDrag(canvas,box=>[80,180,Math.min(320,box.height/2)].flatMap(y=>[20,box.width/4,box.width/2,box.width*3/4,box.width-20].map(x=>({x,y}))).filter(({x,y})=>state.positions.every(p=>Math.abs(p.x-x)>110||y<p.bodyTop-35||y>p.footY+35)),'A safe empty canvas drag origin must exist',{width:0,height:160});
     await page.mouse.move(box.x+x,box.y+Math.min(box.height-90,y+360),{steps:18});await page.mouse.up();await page.waitForTimeout(250);
     state=await read();assert.ok(state.positions[0].scrollY>previous,'Normal blank-field drag must reveal upper headroom');
    }
@@ -80,32 +76,8 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  // Legacy saves do not enable developer actor telemetry. Capture them via
  // public camera gestures; inspect these screenshots alongside fresh-save
  // numeric cap/ground assertions rather than inventing legacy diagnostics.
- async function legacyTopContour(label){
-  const before=await saved();
-  for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
-   await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
-   // Clean-mode swipes pan even when begun on an actor; only a tap cleans.
-   // Every gesture below exceeds the drag threshold and stays on the canvas.
-   await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
-   await page.waitForFunction(()=>document.body.dataset.tool==='clean');
-   const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first(),box=await canvas.boundingBox();
-   assert.ok(box&&box.height>500);
-   for(let gesture=0;gesture<4;gesture++){
-    const candidates=[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y})));
-    const start=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
-    assert.ok(start,'Legacy camera swipe must start on unobstructed canvas');
-    await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
-    await page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
-   }
-   await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();await page.mouse.move(1,1);await page.waitForTimeout(300);
-   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await shot(label+'-top-contour-'+viewport.width);
-  }
-  const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
- }
- // Separate installed QA profile: normal editor clicks only, never real player data.
- async function sourceCornerReview(){
   // Long visual sweeps can cross midnight. Acknowledge only the ordinary new-date UI.
-  async function clearCalendar(){
+ async function clearCalendar(){
    // Native lifecycle completion can launch a separate evolution ceremony.
    // Wait for the real hit-test target, not just the native lifecycle flag.
    for(;;){
@@ -119,15 +91,65 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
     const calendar=page.locator('.int-rh2-calendar');
     if(!await calendar.isVisible())return;
     await calendar.click();await page.waitForTimeout(250);
-    evidence.assertions.push({sourceCornerCalendarAcknowledged:true,normalUi:true});write();
+    evidence.assertions.push({ordinaryCalendarAcknowledged:true,normalUi:true});write();
    }
   }
+
+ // A date/lifecycle overlay can appear after a prior clearCalendar await.
+ // Re-hit-test this gesture's exact candidates immediately before real input.
+ // Only ordinary known UI is acknowledged; unknown obstruction still fails.
+ async function beginCanvasDrag(canvas,makeCandidates,message,minimum={width:0,height:0}){
+  const deadline=Date.now()+90000;
+  const knownOverlay=()=>page.evaluate(()=>{
+   const calendar=document.querySelector('.int-rh2-calendar'),layer=document.querySelector('.int-rh2-lifecycle');
+   return Boolean(calendar&&!calendar.hidden||layer&&!layer.hidden||document.querySelector('.cm-ceremony'));
+  });
+  while(Date.now()<deadline){
+   await clearCalendar();
+   const box=await canvas.boundingBox();
+   assert.ok(box&&box.width>minimum.width&&box.height>minimum.height,'Canvas bounds must support ordinary drag');
+   const candidates=makeCandidates(box);
+   const start=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
+   if(!start&&await knownOverlay())continue;
+   assert.ok(start,message);
+   await page.mouse.move(box.x+start.x,box.y+start.y);
+   const stillClear=await canvas.evaluate((canvas,{x,y})=>document.elementFromPoint(x,y)===canvas,{x:box.x+start.x,y:box.y+start.y});
+   if(!stillClear&&await knownOverlay())continue;
+   assert.ok(stillClear,message+' after pointer positioning');
+   await page.mouse.down();
+   return {box,start};
+  }
+  assert.fail(message+' timed out waiting for ordinary date/lifecycle UI');
+ }
+
+ async function legacyTopContour(label){
+  const before=await saved();
+  for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
+   await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
+   // Clean-mode swipes pan even when begun on an actor; only a tap cleans.
+   // Every gesture below exceeds the drag threshold and stays on the canvas.
+   await clearCalendar();
+   await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
+   await page.waitForFunction(()=>document.body.dataset.tool==='clean');
+   const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+   for(let gesture=0;gesture<4;gesture++){
+    const {box,start}=await beginCanvasDrag(canvas,box=>[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y}))),'Legacy camera swipe must start on unobstructed canvas',{width:0,height:500});
+    await page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
+   }
+   await clearCalendar();
+   await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();await page.mouse.move(1,1);await page.waitForTimeout(300);
+   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await clearCalendar();await shot(label+'-top-contour-'+viewport.width);
+  }
+  const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
+ }
+ // Separate installed QA profile: normal editor clicks only, never real player data.
+ async function sourceCornerReview(){
   await fresh('source-corners');const loadedPaddedUrls=new Set();page.on('response',r=>{if(r.ok()&&r.url().includes('source-bounds-r1-20261015/'))loadedPaddedUrls.add(r.url());});await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
   const installed=await saved();
   for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]}]){
-   await page.setViewportSize({width:1280,height:800});await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
+   await page.setViewportSize({width:1280,height:800});await clearCalendar();await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
    while(await page.locator('.cm-cage-facility:not([disabled])').count())await page.locator('.cm-cage-facility:not([disabled])').first().click();
    const specs=[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
    for(const [i,spec] of specs.entries()){
@@ -146,36 +168,28 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    // The existing legacy helper reaches upper headroom through real tool swipes.
    await legacyTopContour('08-source-'+scenario.name);
    for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
-    await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);
+    await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);await clearCalendar();
     await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();await page.waitForFunction(()=>document.body.dataset.tool==='clean');
     const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
     // Top-headroom proof was captured above; lift the field 100px so lower tips clear the toolbar.
     if(viewport.width===1280){
-     await clearCalendar();const box=await canvas.boundingBox();assert.ok(box);
-     const start=await canvas.evaluate((canvas,box)=>[260,320,380].map(y=>({x:box.width-35,y})).find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),box);
-     assert.ok(start,'Lower-tip framing must begin on unobstructed canvas');
-     await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
+     const {box,start}=await beginCanvasDrag(canvas,box=>[260,320,380].map(y=>({x:box.width-35,y})),'Lower-tip framing must begin on unobstructed canvas');
      await page.mouse.move(box.x+start.x,box.y+start.y-100,{steps:20});await page.mouse.up();await page.waitForTimeout(250);
     }
     const count=viewport.width<500?9:6;
     for(let pan=0;pan<count;pan++){
      // Real elapsed time: two 170ms samples bracket the 334.302ms sea phases.
      for(let frame=0;frame<3;frame++){await page.waitForTimeout(170);await clearCalendar();await shot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);}
-     await clearCalendar();
-     const box=await canvas.boundingBox();assert.ok(box&&box.width>250&&box.height>200);
-     const candidates=[180,260,Math.min(360,box.height-150)].map(y=>({x:box.width-35,y}));
-     const start=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
-     assert.ok(start,'Pan origin must be ordinary unobstructed canvas');
-     await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
+     const {box,start}=await beginCanvasDrag(canvas,box=>[180,260,Math.min(360,box.height-150)].map(y=>({x:box.width-35,y})),'Pan origin must be ordinary unobstructed canvas',{width:250,height:200});
      await page.mouse.move(box.x+Math.max(25,start.x-Math.min(420,box.width-70)),box.y+start.y,{steps:20});await page.mouse.up();await page.waitForTimeout(200);
     }
-    await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();
+    await clearCalendar();await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();
    }
    const resourceUrls=[...loadedPaddedUrls];
    for(const asset of ['field_cm02_01/frame-00.webp','field_cm18_01/frame-00.webp','field_cm39_01/frame-00.webp','field_cm39_01/frame-01.webp']){
     assert.ok(resourceUrls.some(url=>url.includes('source-bounds-r1-20261015/fields/'+asset)),'Exact padded phase must load: '+asset);
    }
-   await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,installed.shop);await continueSaved();
+   await clearCalendar();await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,installed.shop);await continueSaved();
    evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom','three unchanged source-art styles']});write();
   }
  }

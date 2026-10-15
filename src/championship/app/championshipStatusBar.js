@@ -93,6 +93,19 @@ export function statusBarSaveKey(save) {
 // A fresh write is announced in words for this long, then settles to its mark.
 const SAVED_FLASH_MS = 2400;
 
+// Mobile-only display projection. Never writes or rounds the actual wallet.
+// A trailing + means there is an undisplayed remainder; full balances remain
+// in accessible names and in the tap-to-read dialog.
+export function compactHudCurrency(value) {
+  if (!Number.isSafeInteger(value) || value < 0) return "—";
+  if (value < 1000000) return String(formatNumber(value));
+  const [scale, suffix] = value >= 1e15 ? [1e15, "Q"] : value >= 1e12 ? [1e12, "T"] : value >= 1e9 ? [1e9, "B"] : [1e6, "M"];
+  const tenth = scale / 10;
+  const whole = Math.floor(value / scale), decimal = Math.floor((value % scale) / tenth);
+  const display = formatNumber(whole + decimal / 10, { useGrouping: false, maximumFractionDigits: 1 });
+  return `${display}${suffix}${value % tenth ? "+" : ""}`;
+}
+
 export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = null, onOpenSave = null } = {}) {
   if (!root) throw new TypeError("The status bar requires a root element");
 
@@ -146,17 +159,34 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
     icon.setAttribute("aria-hidden", "true");
     return icon;
   }
-  const bits = element("span", "cm-status-bar__bits");
+  let currentBits = null;
+  const bits = element("button", "cm-status-bar__bits");
+  bits.type = "button";
+  bits.setAttribute("aria-haspopup", "dialog");
   bits.hidden = true;
   const bitsValue = element("span", "cm-status-bar__bits-value");
-  bits.append(currencyIcon("bits"), bitsValue);
+  const bitsCompact = element("span", "cm-status-bar__compact-value");
+  bitsValue.setAttribute("aria-hidden", "true");
+  bitsCompact.setAttribute("aria-hidden", "true");
+  bits.append(currencyIcon("bits"), bitsValue, bitsCompact);
+  bits.addEventListener("click", () => {
+    if (isChoiceDialogOpen() || currentBits === null) return;
+    void showChoiceDialog({
+      title: uiText("持有 {bits} 位元幣", { bits: currentBits }),
+      actions: [{ id: "close", label: uiText("關閉"), tone: "primary" }],
+      cancelId: "close"
+    });
+  });
   // Read-only projection of the app-owned simulated wallet; never a payment entry.
   let testDiamonds = null;
   const diamond = element("button", "cm-status-bar__diamond");
   diamond.type = "button";
   diamond.setAttribute("aria-haspopup", "dialog");
   const diamondText = element("span", "cm-status-bar__diamond-text");
-  diamond.append(currencyIcon("diamond"), diamondText);
+  const diamondCompact = element("span", "cm-status-bar__compact-value");
+  diamondText.setAttribute("aria-hidden", "true");
+  diamondCompact.setAttribute("aria-hidden", "true");
+  diamond.append(currencyIcon("diamond"), diamondText, diamondCompact);
   function paintCurrencyLabels() {
     setLabel(currencies, "aria-label", "HUD_CURRENCIES");
     const known = Number.isSafeInteger(testDiamonds) && testDiamonds >= 0;
@@ -164,6 +194,7 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
     setLabel(diamond, "aria-label", known ? "CAGE_TEST_DIAMOND_BALANCE" : "HUD_DIAMOND_OPEN", params);
     setLabel(diamond, "title", known ? "CAGE_TEST_DIAMOND_BALANCE" : "HUD_DIAMOND_OPEN", params);
     setText(diamondText, known ? "CAGE_TEST_DIAMOND_BALANCE" : "HUD_PREVIEW", params);
+    diamondCompact.textContent = known ? compactHudCurrency(testDiamonds) : "";
     diamond.dataset.testWallet = String(known);
   }
   paintCurrencyLabels();
@@ -188,7 +219,11 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
   const announcer = element("span", "cm-status-bar__announce");
   announcer.setAttribute("role", "status");
   announcer.setAttribute("aria-live", "polite");
-  extras.append(currencies, matches, save, announcer);
+  // Reserve a mobile save-control slot even between announcements. A hidden
+  // indicator must not push the whole wallet between flex rows when it returns.
+  const saveSlot = element("span", "cm-status-bar__save-slot");
+  saveSlot.append(save);
+  extras.append(currencies, matches, saveSlot, announcer);
   let lastWrites = null, flashDue = false, flashTimer = null, lastAnnounced = null;
 
   bar.append(season, day, mode, time, extras);
@@ -262,7 +297,9 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
       }
       if (Object.hasOwn(reading, "bits")) {
         const known = Number.isSafeInteger(reading.bits);
+        currentBits = known ? reading.bits : null;
         bits.hidden = !known;
+        bitsCompact.textContent = compactHudCurrency(currentBits);
         bitsValue.textContent = known ? String(formatNumber(reading.bits)) : "";
         bits.setAttribute("aria-label", known ? uiText("持有 {bits} 位元幣", { bits: reading.bits }) : "");
       }

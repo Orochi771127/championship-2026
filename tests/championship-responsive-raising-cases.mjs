@@ -24,7 +24,7 @@ test('idle/loading/selected/tutorial share the same eligibility, and only batch 
  const f=layoutFixture();
  for(const phase of ['idle','loading','selected','tutorial']) {
   f.root.dataset.phase=phase;
-  for(const [w,h,wide] of [[390,844,false],[844,390,true],[390,844,false],[932,430,true],[1366,480,true],[1366,768,true],[320,568,false]]) {
+  for(const [w,h,wide] of [[390,844,false],[568,320,true],[667,375,true],[844,390,true],[390,844,false],[932,430,true],[1366,480,true],[1366,768,true],[320,568,false]]) {
    f.resize(w,h); assert.equal(f.attrs.has('data-desktop-raising'),wide,`${phase} ${w}x${h}`);
   }
  }

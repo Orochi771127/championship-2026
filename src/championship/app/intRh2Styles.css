@@ -886,19 +886,19 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar_
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-companion,
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-companion[data-placement="top"],
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-companion[data-open="false"] {
-  top: calc(var(--cm-status-bar-height, var(--hud-height)) + 8px); bottom: auto;
-  max-height: calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 32px);
+  top: calc(var(--cm-status-bar-height, var(--hud-height)) + var(--cm-match-notice-offset, 0px) + 8px); bottom: auto;
+  max-height: calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 32px);
   overflow-y: auto;
 }
 body[data-tool]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-companion {
-  max-height: calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 104px);
+  max-height: calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 104px);
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-tutorial-guidance,
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hint {
-  top: calc(var(--cm-status-bar-height, var(--hud-height)) + 8px); bottom: auto;
+  top: calc(var(--cm-status-bar-height, var(--hud-height)) + var(--cm-match-notice-offset, 0px) + 8px); bottom: auto;
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-tutorial-guidance {
-  max-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 32px);
+  max-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 32px);
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-mail-icon {
   top: auto; bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 12px);
@@ -916,12 +916,12 @@ body[data-desktop-raising]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([
   max-width: min(560px, calc(100% - var(--cm-raising-card, 320px) - 24px));
 }
 body[data-desktop-raising][data-tool]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-companion {
-  max-height: max(130px, calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 104px));
+  max-height: max(130px, calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 104px));
 }
 
 /* Menus must remain reachable on short phones and at enlarged text sizes. */
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__menu {
-  max-height: max(44px, calc(var(--cm-viewport-height, 100dvh) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 24px));
+  max-height: max(44px, calc(var(--cm-viewport-height, 100dvh) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 24px));
   overflow-y: auto; overscroll-behavior: contain;
 }
 /* The tutorial already carries the first-run instruction. Avoid two bubbles
@@ -1002,4 +1002,10 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-status-b
 }
 @media (max-width: 480px) {
   .int-rh2-evolution-choice { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Match notices float over the field, not in a new full-width HUD row.
+   Move only readout overlays clear of the 44px chip; canvas bounds stay intact. */
+@media (max-width: 600px) {
+  body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):has(.cm-status-bar__matches:not([hidden])) { --cm-match-notice-offset: 50px; }
 }
