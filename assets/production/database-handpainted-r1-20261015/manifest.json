@@ -97,23 +97,25 @@
       "speciesIndex": 35,
       "speciesId": "species-035",
       "displayCode": "GR02",
-      "src": "assets/production/database-handpainted-r1-20261015/species-035.png",
+      "src": "assets/production/database-handpainted-r1-20261015/species-035.be1631a7ffea0de4.png",
       "width": 1254,
       "height": 1254,
-      "sha256": "f2c4940a90fba6634621a5a20d545d292ab3eae4509ec13b9c357336295fa9dd",
+      "sha256": "be1631a7ffea0de43921ed7eb3e1196be6705fe026439abe9b90e14b564965c7",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 2135523,
+      "bytes": 1967753,
       "sourceEntityId": "m202_armadimon",
       "sourceReferenceSha256": "70aacd1ebea365c4a7fdcc0627e85eaeb4dcaaa5d8f71e7456b9cd58f0fef8f9",
       "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "artDirection": "Refined hand-painted rendering preserving source identity and unmodified transparent PNG",
       "review": {
         "artistViewedReferenceAndOutput": true,
-        "rootReview": "PENDING",
+        "rootReview": "PASSED",
         "actualAlpha": true,
         "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
-        "runtimeBrowser": "PENDING"
-      }
+        "runtimeBrowser": "PENDING",
+        "visualApprovalEvidence": "Actual source/output visual review passed 2026-10-15; new live image fit pending"
+      },
+      "selectedGenerationVersion": "refined-handpainted-v2"
     },
     {
       "speciesIndex": 38,
@@ -141,23 +143,26 @@
       "speciesIndex": 39,
       "speciesId": "species-039",
       "displayCode": "GR07",
-      "src": "assets/production/database-handpainted-r1-20261015/species-039.png",
+      "src": "assets/production/database-handpainted-r1-20261015/species-039.a22eae194967e17d.png",
       "width": 1254,
       "height": 1254,
-      "sha256": "b190d04962a7e499b6b8cde5c0e830c41d7dc359f7647f97b6a12e29e2e74cbb",
+      "sha256": "a22eae194967e17d6aca6cac06ca249ef0fd223a0687c10923e33d78e3d710ec",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 2131569,
+      "bytes": 2016621,
       "sourceEntityId": "m206_gazimon",
       "sourceReferenceSha256": "69c75b7bc90f8a41eb24cb366cc4a3cc48a51392bd73e7a7489b66d9e7349307",
       "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "artDirection": "Refined hand-painted rendering preserving source identity and unmodified transparent PNG",
       "review": {
         "artistViewedReferenceAndOutput": true,
-        "rootReview": "PENDING",
+        "rootReview": "PASSED",
         "actualAlpha": true,
         "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
-        "runtimeBrowser": "PENDING"
-      }
+        "runtimeBrowser": "PENDING",
+        "visualApprovalEvidence": "Actual source/output visual review passed 2026-10-15; new live image fit pending",
+        "nativeMarginCaveat": "Right solid-alpha margin 2px; preserve original canvas and existing contain plus24px padding; no crop or UI modification"
+      },
+      "selectedGenerationVersion": "refined-handpainted-v2"
     },
     {
       "speciesIndex": 40,
@@ -337,25 +342,26 @@
       "speciesIndex": 45,
       "speciesId": "species-045",
       "displayCode": "GR15",
-      "src": "assets/production/database-handpainted-r1-20261015/species-045.png",
+      "src": "assets/production/database-handpainted-r1-20261015/species-045.5252dd103f05bc11.png",
       "width": 1254,
       "height": 1254,
-      "sha256": "9170c136c9cdb785d31bfe74c7b4ed400e787916718d90efa5e541b379d8be28",
+      "sha256": "5252dd103f05bc111158a75d193c3dc0793051614190f42645b99bb4f00f2453",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 1919214,
+      "bytes": 1855095,
       "sourceEntityId": "m217_gottumon",
       "sourceReferenceSha256": "34c38e64b4f18bdd233b3a5c91b22177c5e935953e6569613fb97a061220a56c",
       "sourceBindingEvidence": "OWNER_CONFIRMED_EXISTING_SPECIES_ID",
       "selectedSourceForm": "EXACT_SOURCE_INDEX_ENTITY_FILENAME",
-      "selectedGenerationVersion": "v1",
+      "selectedGenerationVersion": "refined-handpainted-v2",
       "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "artDirection": "Refined hand-painted rendering preserving source identity and unmodified transparent PNG",
       "review": {
         "artistViewedReferenceAndOutput": true,
         "rootReview": "PASSED",
         "actualAlpha": true,
         "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
-        "runtimeBrowser": "PENDING"
+        "runtimeBrowser": "PENDING",
+        "visualApprovalEvidence": "Actual source/output visual review passed 2026-10-15; new live image fit pending"
       }
     },
     {
