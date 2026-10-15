@@ -30,3 +30,10 @@ test('all locales preserve exact wallet names and save-slot identity across tuto
   save.click();assert.equal(opens,1);
  }finally{bar.dispose();globalThis.document=previous;setLocale('zh-Hant');}
 });
+test('match notice retains count, accessible meaning and original action across zero/one transitions',()=>{
+ const previous=globalThis.document,doc=createControlledDocument();globalThis.document=doc;
+ const create=doc.createElement.bind(doc);doc.createElement=tag=>{const n=create(tag);n.offsetHeight=44;return n;};
+ let opens=0;const bar=createChampionshipStatusBar({root:doc.body,onOpenMatches:()=>opens++});
+ try{for(const locale of LOCALES){setLocale(locale);bar.relabel();for(const todayMatches of [0,1,0,1]){bar.render({screen:'RAISING_HOME',bits:15900,testDiamonds:7000,todayMatches});const button=doc.querySelector('.cm-status-bar__matches');assert.equal(button.hidden,todayMatches===0);if(todayMatches){assert.ok(button.getAttribute('aria-label'));button.click();}}}assert.equal(opens,LOCALES.length*2);}
+ finally{bar.dispose();globalThis.document=previous;setLocale('zh-Hant');}
+});

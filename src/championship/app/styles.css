@@ -1188,6 +1188,9 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save-slot { display: inline-flex; flex: 0 0 44px; width: 44px; min-height: 44px; align-items: center; justify-content: center; }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save { min-width: 44px; height: 44px; justify-content: center; padding: 0; }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save::after { inset: 0; }
+  /* A small floating notice never participates in wallet flex sizing. */
+  .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__matches { position: absolute; left: max(10px, var(--safe-left)); right: auto; top: calc(100% + 6px); bottom: auto; max-width: calc(100% - 20px - var(--safe-left) - var(--safe-right)); min-height: 44px; height: 44px; font-size: calc(14px * var(--text-scale)); white-space: normal; }
+  .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__matches::after { inset: 0; }
 }
 
 /* ---- 2026-10-12 UI polish: honest loading, the ranch expansion preview ---- */

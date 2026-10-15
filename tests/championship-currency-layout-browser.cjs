@@ -6,7 +6,7 @@ const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const repo=path.resolve(process.env.HUD_SOURCE_ROOT||process.cwd()),out=path.resolve(process.env.CHAMPIONSHIP_QA_OUTPUT_ROOT||'.tmp/browser-qa','currency-layout');
 fs.mkdirSync(out,{recursive:true});
 const diagnostic=process.env.HUD_DIAGNOSTIC_ONLY==='1',engine=process.env.HUD_BROWSER||'chromium';
-const evidence={status:'RUNNING',engine,diagnostic,scope:'Component fixture is geometry only; normal onboarding is separately recorded.',cases:[],normal:[],normalLandscape:[],console:[],errors:[],violations:[]};
+const evidence={status:'RUNNING',engine,diagnostic,scope:'Component fixture is geometry only; normal onboarding is separately recorded.',cases:[],normal:[],normalLandscape:[],mountedProjection:[],console:[],errors:[],violations:[]};
 const write=()=>fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(evidence,null,2)+'\n');
 const styles=[...fs.readFileSync(path.join(repo,'championship.html'),'utf8').matchAll(/<link rel="stylesheet" href="([^\"]+)"/g)].map(m=>`<link rel="stylesheet" href="${m[1]}">`).join('');
 const fixture=`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">${styles}<body><main id="cm-root" data-active-screen="RAISING_HOME"></main><script type="module">
@@ -25,7 +25,7 @@ mountInteractiveTutorialPreview({app:fixtureApp,preview:false});
 window.fixtureRender=({locale='zh-Hant',bits=100000,diamonds=10000,phase='RESTORED',tutorialOn=false,matches=0})=>{
  setLocale(locale);document.documentElement.lang=locale;
  tutorial={...tutorial,finished:!tutorialOn};listeners.forEach(f=>f());
- bar.render({screen:'RAISING_HOME',seasonName:'Spring',dayNumber:1,time:'07:00',bits,testDiamonds:diamonds,todayMatches:matches,save:{phase}});bar.relabel();
+ bar.render({screen:'RAISING_HOME',seasonName:'Spring',dayNumber:28,time:'23:59',bits,testDiamonds:diamonds,todayMatches:matches,save:{phase}});bar.relabel();
  return {bitsLabel:uiText('持有 {bits} 位元幣',{bits}),diamondLabel:uiText('CAGE_TEST_DIAMOND_BALANCE',{amount:formatNumber(diamonds)})};
 };
 window.fixtureRender({});window.fixtureReady=true;
@@ -37,8 +37,8 @@ const geometry=()=>{
  const names=['season','day','time','currencies','bits','diamond','matches','save'];
  const rect=e=>{if(!e||e.hidden||getComputedStyle(e).display==='none')return null;const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom,scroll:e.scrollWidth,client:e.clientWidth,text:e.innerText,label:e.getAttribute('aria-label')}};
  const parts=Object.fromEntries(names.map(n=>[n,rect(document.querySelector('.cm-status-bar__'+n))]));
- const bar=rect(document.querySelector('.cm-status-bar')),guide=rect(document.querySelector('.cm-tutorial-guidance'));
- return {width:innerWidth,height:innerHeight,layout:{bodyAttributes:Object.fromEntries([...document.body.attributes].map(a=>[a.name,a.value])),bodyTransform:getComputedStyle(document.body).transform,rootScreen:document.querySelector('#cm-root')?.dataset.activeScreen},bar,guide,parts,overflow:document.documentElement.scrollWidth>innerWidth,font:parseFloat(getComputedStyle(document.querySelector('.cm-status-bar__compact-value')||document.querySelector('.cm-status-bar__bits-value')).fontSize)};
+ const bar=rect(document.querySelector('.cm-status-bar')),guide=rect(document.querySelector('.cm-tutorial-guidance')),companion=rect(document.querySelector('.int-rh2-companion[data-open="true"]')),hint=rect(document.querySelector('.int-rh2-hint')),field=rect(document.querySelector('.int-rh2-field-host'));
+ return {width:innerWidth,height:innerHeight,layout:{bodyAttributes:Object.fromEntries([...document.body.attributes].map(a=>[a.name,a.value])),bodyTransform:getComputedStyle(document.body).transform,rootScreen:document.querySelector('#cm-root')?.dataset.activeScreen},bar,guide,companion,hint,field,parts,overflow:document.documentElement.scrollWidth>innerWidth,font:parseFloat(getComputedStyle(document.querySelector('.cm-status-bar__compact-value')||document.querySelector('.cm-status-bar__bits-value')).fontSize)};
 };
 const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.y,b.y)>1;
 (async()=>{
@@ -54,9 +54,10 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
   for(const [width,height] of [[320,740],[390,844],[430,932],[568,320],[844,390],[1280,900]]){
    context=await browser.newContext({viewport:{width,height},hasTouch:width<1000,locale:'zh-TW'});const page=await context.newPage();
    page.on('pageerror',e=>evidence.errors.push(e.message));await page.goto(`http://127.0.0.1:${server.address().port}/hud-fixture.html`);await page.waitForFunction(()=>window.fixtureReady);
+   const matchAnchors=new Map();
    for(const locale of ['zh-Hant','en','ja','th','vi'])for(const matches of [0,1]){
     let baseline=null;
-    for(const [bits,diamonds] of [[0,0],[100000,10000],[999999,999999],[1000001,1000001],[9999999,9999999],[Number.MAX_SAFE_INTEGER,Number.MAX_SAFE_INTEGER]])for(const tutorialOn of [true,false])for(const phase of ['RESTORED','SAVED','DIRTY','SAVING','SAVE_FAILED']){
+    for(const [bits,diamonds] of [[0,0],[15900,7000],[100000,10000],[999999,999999],[1000001,1000001],[9999999,9999999],[Number.MAX_SAFE_INTEGER,Number.MAX_SAFE_INTEGER]])for(const tutorialOn of [true,false])for(const phase of ['RESTORED','SAVED','DIRTY','SAVING','SAVE_FAILED']){
      const params={locale,bits,diamonds,tutorialOn,phase,matches};const labels=await page.evaluate(p=>window.fixtureRender(p),params);
      await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
      const g=await page.evaluate(geometry);evidence.cases.push({params,...g});
@@ -64,13 +65,16 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
       assert.equal(g.overflow,false,JSON.stringify(params));
       for(const n of ['season','day','time','currencies','bits','diamond','matches','save']){const q=g.parts[n];if(q)assert.ok(q.x>=-1&&q.right<=width+1,`${n} outside viewport ${JSON.stringify(params)}`);}
       for(const [a,b] of [['currencies','time'],['currencies','day'],['currencies','season'],['currencies','save'],['currencies','matches'],['save','matches']])assert.ok(!intersects(g.parts[a],g.parts[b]),`${a}/${b} overlap`);
-      if(g.guide)assert.ok(g.guide.y>=g.bar.bottom-1,'Tutorial must clear measured HUD');
+      if(g.guide){assert.ok(g.guide.y>=g.bar.bottom-1,'Tutorial must clear measured HUD');assert.ok(!intersects(g.guide,g.parts.matches),'Tutorial must clear floating match notice');}
       if(width===430&&locale==='zh-Hant'&&!matches)assert.ok(Math.abs((g.parts.currencies.y+g.parts.currencies.h/2)-(g.parts.season.y+g.parts.season.h/2))<2,'Working 430px normal one-row HUD must stay one row');
       assert.equal(g.parts.bits.label,labels.bitsLabel);assert.equal(g.parts.diamond.label,labels.diamondLabel);
       if(width<=600){assert.ok(g.font>=14);assert.ok(g.parts.diamond.h>=44);if(g.parts.save)assert.ok(g.parts.save.w>=44&&g.parts.save.h>=44);if(phase==='SAVE_FAILED'){assert.ok(g.parts.save?.label,'Save failure remains visible with an accessible explanation');assert.equal(await page.locator('.cm-status-bar__save').getAttribute('data-state'),'SAVE_FAILED');}assert.ok(g.parts.bits.scroll<=g.parts.bits.client+1);assert.ok(g.parts.diamond.scroll<=g.parts.diamond.client+1);
+       const matchKey=JSON.stringify({locale,bits,diamonds,tutorialOn,phase}),wallet=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(matches)assert.deepEqual(wallet,matchAnchors.get(matchKey),'Match badge must never move the wallet');else matchAnchors.set(matchKey,wallet);
+       if(g.parts.matches)assert.ok(g.parts.matches.h>=44&&g.parts.matches.w>=44);
        const key=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(baseline)assert.deepEqual(key,baseline,'Wallet/save/tutorial must not change mobile row geometry');else baseline=key;
       }
      }catch(error){evidence.violations.push({width,height,params,message:error.message});}}
+     if(locale==='zh-Hant'&&bits===15900&&!tutorialOn&&phase==='DIRTY')await page.screenshot({path:path.join(out,`${width}-owner-balance-matches-${matches}.png`)});
      if(locale==='zh-Hant'&&!matches&&bits===100000&&(phase==='RESTORED'||phase==='DIRTY'))await page.screenshot({path:path.join(out,`${width}-${tutorialOn?'tutorial':'normal'}-${phase}.png`)});
     }
    }
@@ -130,6 +134,28 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    }await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
    const after=await save();assert.equal(after.shop.bits,100000);assert.equal(after.flags.friendsPlaytest.diamonds,10000);await captureNormal('tutorial-off');
    if(!diagnostic){assert.equal(evidence.normal[0].geometry.bar.h,evidence.normal[1].geometry.bar.h);assert.equal(evidence.normal[0].geometry.parts.currencies.y,evidence.normal[1].geometry.parts.currencies.y);}
+   // Explicit controlled HUD projection over the fully loaded real scene.
+   // This is not a real save or match schedule; the actual wallet is never edited.
+   const actor=await page.locator('.int-rh2-field-host').evaluate(h=>{const p=JSON.parse(h.dataset.residentScreenPositions||'[]').find(p=>p.x>0&&p.x<h.clientWidth&&p.bodyTop>60&&p.footY<h.clientHeight-90);return p?{x:p.x,y:(p.bodyTop+p.footY)/2}:null;});
+   assert.ok(actor,'Mounted overlap evidence requires a visible resident');await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().click({position:actor});
+   await page.locator('.int-rh2-companion[data-open="true"]').waitFor({state:'visible'});
+   const realWallet=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('championshipModernSave:v1'));return {bits:s.shop.bits,diamonds:s.flags.friendsPlaytest.diamonds};});
+   await page.evaluate(async()=>{const {createChampionshipStatusBar}=await import('./src/championship/app/championshipStatusBar.js');document.querySelector('.cm-status-bar').remove();window.mountedMatchesOpened=0;window.mountedHudProjection=createChampionshipStatusBar({root:document.body,onOpenMatches:()=>window.mountedMatchesOpened++});});
+   for(const width of [320,390,430,568,844]){
+    await page.setViewportSize({width,height:width>=568?320:932});await page.waitForTimeout(500);let walletAnchor;
+    for(const matches of [0,1,0]){
+     await page.evaluate(matches=>window.mountedHudProjection.render({screen:'RAISING_HOME',seasonName:'Spring',dayNumber:3,time:'20:14',bits:15900,testDiamonds:7000,todayMatches:matches,save:{phase:'DIRTY'}}),matches);
+     await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));const g=await page.evaluate(geometry);
+     evidence.mountedProjection.push({scope:'controlled HUD over actual settled scene, not save injection',matches,...g});
+     const wallet=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w,g.field?.x,g.field?.y,g.field?.w,g.field?.h];if(walletAnchor)assert.deepEqual(wallet,walletAnchor,'Mounted match notice must not move the currency group');else walletAnchor=wallet;
+     assert.equal(g.overflow,false);for(const other of [g.parts.currencies,g.guide,g.companion,g.hint])assert.ok(!intersects(other,g.parts.matches),'Floating match notice must clear wallet and overlays');
+     await page.screenshot({path:path.join(out,`mounted-owner-balance-${width}-matches-${matches}.png`)});
+     if(matches){await page.locator('.cm-status-bar__matches').click();}
+    }
+   }
+   assert.equal(await page.evaluate(()=>window.mountedMatchesOpened),5);
+   assert.deepEqual(await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('championshipModernSave:v1'));return {bits:s.shop.bits,diamonds:s.flags.friendsPlaytest.diamonds};}),realWallet);
+
   }
   assert.deepEqual(evidence.errors,[]);assert.equal(evidence.violations.length,0,JSON.stringify(evidence.violations.slice(0,3)));evidence.status='PASS';write();
  }catch(error){evidence.status='FAIL';evidence.failure=error.stack;if(normalPage){try{evidence.normalFailure=await normalPage.evaluate(()=>({url:location.href,bodyText:document.body.innerText,layout:Object.fromEntries([...document.body.attributes].map(a=>[a.name,a.value])),screen:document.querySelector('#cm-root')?.dataset.activeScreen,field:document.querySelector('.int-rh2-field-host')?.dataset.loadState,save:JSON.parse(localStorage.getItem('championshipModernSave:v1'))}));await normalPage.screenshot({path:path.join(out,'normal-flow-failure.png'),fullPage:true});}catch(captureError){evidence.captureError=captureError.message;}}write();throw error;}
