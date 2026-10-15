@@ -1,0 +1,53 @@
+name: Currency HUD isolated browser acceptance
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/currency-layout-browser.yml'
+      - 'tests/championship-currency-layout-browser.cjs'
+      - 'src/championship/app/championshipStatusBar.js'
+      - 'src/championship/app/styles.css'
+permissions:
+  contents: read
+jobs:
+  hud:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha || '5bd7057b2e7ed6496db42f5b66d8026d9e7857a1' }}
+          path: .tmp/currency-baseline
+      - name: Record unmodified baseline save/tutorial geometry
+        env:
+          HUD_BROWSER: ${{ matrix.browser }}
+          HUD_SOURCE_ROOT: .tmp/currency-baseline
+          HUD_DIAGNOSTIC_ONLY: '1'
+          CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa/baseline
+        run: node tests/championship-currency-layout-browser.cjs
+      - name: Build approved public artifact for separate normal-onboarding check
+        run: npm run build:pages && npm run validate:pages
+      - name: Controlled geometry and normal tutorial enter/exit
+        env:
+          HUD_BROWSER: ${{ matrix.browser }}
+          CHAMPIONSHIP_QA_ARTIFACT: dist/github-pages
+          CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
+        run: node tests/championship-currency-layout-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: currency-layout-${{ matrix.browser }}-${{ github.run_id }}
+          path: .tmp/browser-qa/
+          if-no-files-found: warn
+          retention-days: 14
