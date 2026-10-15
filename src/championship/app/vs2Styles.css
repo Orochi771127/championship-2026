@@ -1401,3 +1401,44 @@ body[data-desktop-menu] .cm-vs2-root[data-screen="MEDALS"] .cm-medals__grid { gr
 /* One continuous five-row grid; the old annex container is not used. */
 .cm-vs2-cage-board[data-product-grid="true"] { height: 232px; }
 .cm-cage-expansion { flex-wrap: wrap; }
+
+/* Product rows share one lock line; cell positions and native rank locks stay unchanged. */
+.cm-vs2-cage-board[data-product-grid="true"] .cm-cage-row-lock {
+  position: absolute;
+  z-index: 1;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.cm-vs2-cage-board[data-product-grid="true"] .cm-cage-row-lock::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  background: var(--c-accent-strong);
+  border-radius: 2px;
+  opacity: 0.55;
+}
+.cm-vs2-cage-board[data-product-grid="true"] .cm-cage-row-lock__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--c-line-2);
+  border-radius: 50%;
+  background: var(--c-surface-1);
+  font-size: 18px;
+}
+.cm-cage-expansion[data-product-grid="true"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-2);
+}
+.cm-cage-expansion[data-product-grid="true"] .cm-cage-row-purchase {
+  min-height: 44px;
+  width: 100%;
+  white-space: normal;
+}

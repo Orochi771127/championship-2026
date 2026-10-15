@@ -89,14 +89,14 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   const initial=await saved();assert.equal(initial.shop.bits,100000);assert.equal(initial.flags.friendsPlaytest.diamonds,10000);
   assert.equal(digits(await page.locator('.cm-status-bar__bits-value').innerText()),100000);await wallet(10000);await noOverflow();await shot('01-new-wallet');
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
-  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),20);
+  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),20);assert.equal(await page.locator('[data-locked-test-row]').count(),3);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),3);assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="false"]').allTextContents().then(xs=>xs.join('')), '');await shot('02-three-row-locks');
   for(const [row,balance,total]of [[2,9000,30],[3,8000,40],[4,7000,50]]){
    const button=page.locator(`.cm-cage-expansion [data-buy-test-row="${row}"],button.cm-vs2-action[data-buy-test-row="${row}"]`).first();
    const label=await button.innerText();assert.match(label.replaceAll(',',''),/1000/);assert.match(label,/測試鑽/);assert.match(label,/10/);
    await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();assert.ok(box&&box.height>=44,'Row purchase touch target');assert.ok(box.x>=0&&box.x+box.width<=390,'Purchase label/control stays inside mobile viewport');await noOverflow();
    await button.click();await page.waitForFunction(({key,balance})=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===balance,{key:saveKey,balance});
    assert.equal(digits(await page.locator('[data-test-diamond-balance]').innerText()),balance);
-   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),total);await shot('row-'+row);
+   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),total);assert.equal(await page.locator('[data-locked-test-row]').count(),4-row);await shot('row-'+row);
   }
   assert.equal(await page.locator('button.cm-vs2-action[data-buy-test-row]').count(),0);
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await wallet(7000);await saveQuit();
@@ -143,10 +143,18 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   // A separate empty browser profile uses the existing QA installer UI, not an edited save.
   await fresh('old-qa');await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);await page.locator('#install').click();await page.waitForURL(/championship\.html$/);
-  const old=await saved();const oldFixture=JSON.parse(fs.readFileSync(path.join(root,'qa/championship-full-qa-save.json')));assert.deepEqual(old.shop,oldFixture.shop,'Installer must preserve fixture economy/inventory');assert.deepEqual(old.cageEdit.placements,oldFixture.cageEdit.placements,'Installer must preserve fixture anchors');await continueSaved();await wallet(0);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
-  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);
+  const old=await saved();const oldFixture=JSON.parse(fs.readFileSync(path.join(root,'qa/championship-full-qa-save.json')));assert.deepEqual(old.shop,oldFixture.shop,'Installer must preserve fixture economy/inventory');assert.deepEqual(old.cageEdit.placements,oldFixture.cageEdit.placements,'Installer must preserve fixture anchors');await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
+  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);assert.equal(await page.locator('[data-locked-test-row]').count(),1);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),1);await shot('07-legacy-one-row-lock');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
-  const migrated=await saved();assert.deepEqual(migrated.shop,old.shop,'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,old.cageEdit.placements);assert.equal(migrated.flags.friendsPlaytest?.diamonds??0,0);
+  const migrated=await saved();assert.deepEqual(migrated.shop,old.shop,'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,old.cageEdit.placements);assert.equal(migrated.flags.friendsPlaytest?.diamonds,10000);assert.equal(migrated.flags.friendsPlaytest.version,2);
+  await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
+  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);
+  await page.locator('button[data-buy-test-row="4"]').click();
+  await page.waitForFunction(key=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===9000,saveKey);
+  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),50);
+  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9000);
+  const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,old.shop);assert.deepEqual(legacyAfterPurchase.cageEdit.placements,old.cageEdit.placements);
+  evidence.assertions.push({oldQaOneTimeDiamonds:10000,afterPurchaseAndReload:9000});
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
