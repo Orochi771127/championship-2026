@@ -80,6 +80,20 @@ function literalsOf(file) {
   return out;
 }
 
+// A narrowly registered component dictionary is checked as a table, not as
+// Chinese/Japanese source text to feed into uiText. Only its exact exported
+// values are recognized; a new stray display literal in that file still fails.
+export function inspectScopedLocaleCopy(file, tables, locales = ["zh-Hant", "en", "ja", "th", "vi"]) {
+  const keys = [...new Set(Object.values(tables).flatMap(table => Object.keys(table ?? {})))];
+  const values = new Set(Object.values(tables).flatMap(table => Object.values(table ?? {})).filter(value => typeof value === "string"));
+  const gaps = [];
+  for (const locale of locales) for (const key of keys) {
+    const value = tables[locale]?.[key];
+    if (typeof value !== "string" || !value.trim()) gaps.push(`${locale}:SCOPED_COPY[${file}:${key}]`);
+  }
+  return { file, keys, gaps, covers: entry => entry.file === file && values.has(entry.text) };
+}
+
 export async function buildLocaleCoverage() {
   const { UI_COPY } = await import("../src/championship/text/uiText.js");
   const uiEn = await import("../src/championship/text/uiText.en.js");
@@ -109,7 +123,15 @@ export async function buildLocaleCoverage() {
   const gameTh = await import("../src/championship/text/gameText.th.js");
   const gameVi = await import("../src/championship/text/gameText.vi.js");
 
-  const literals = scanLiterals().filter((entry) => !NOT_DISPLAY.some((rule) => rule(entry.text, entry.file)));
+  const { DATABASE_STORY_COPY, DATABASE_ORIGINAL_PROFILES } = await import("../src/championship/database/databaseStories.js");
+  const profileCopy = Object.fromEntries(["zh-Hant", "en", "ja", "th", "vi"].map(locale=>[
+    locale,Object.fromEntries(DATABASE_ORIGINAL_PROFILES.entries.map(entry=>[entry.speciesId,entry.textByLocale[locale]]))
+  ]));
+  const scopedCopy = [
+    inspectScopedLocaleCopy("src/championship/database/databaseStories.js", DATABASE_STORY_COPY),
+    inspectScopedLocaleCopy("src/data/championship/database-original-profiles.r1.json", profileCopy)
+  ];
+  const literals = scanLiterals().filter((entry) => !NOT_DISPLAY.some((rule) => rule(entry.text, entry.file)) && !scopedCopy.some(table => table.covers(entry)));
   const interpolatedZh = literals.filter((entry) => entry.interpolated);
   const plain = literals.filter((entry) => !entry.interpolated);
   const distinct = new Set(plain.map((entry) => entry.text));
@@ -257,7 +279,7 @@ export async function buildLocaleCoverage() {
     const missing = plain.filter((entry) => !covered(entry.text));
     const uiCopyGaps = Object.keys(UI_COPY).filter((key) => !Object.hasOwn(cfg.uiCopy, key));
 
-    const gaps = [];
+    const gaps = scopedCopy.flatMap(table => table.gaps.filter(gap => gap.startsWith(`${locale}:`)));
     const compare = (name, zh, target, key = (row, index) => index) => {
       zh.forEach((row, index) => {
         const k = key(row, index);
@@ -337,6 +359,7 @@ export async function buildLocaleCoverage() {
     locales: ["zh-Hant", "en", "ja", "th", "vi"],
     counts,
     byLocale,
+    scopedCopy: scopedCopy.map(({file,keys,gaps}) => ({file,keyCount:keys.length,gaps})),
     missing: [...new Map(totalMissing.map((entry) => [entry.text, entry])).values()],
     interpolatedZh: interpolatedZh.map(({ file, line, text }) => ({ file, line, text })),
     uiCopyMissing: totalUiCopyMissing,
