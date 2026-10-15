@@ -10014,7 +10014,12 @@
     "assets/production/database-handpainted-r1-20261015/species-066.18cfe71dbf919d32.png",
     "assets/production/database-handpainted-r1-20261015/species-067.d3b4711e2fef8428.png",
     "assets/production/database-handpainted-r1-20261015/species-068.fd96778e08b01ee7.png",
-    "assets/production/database-handpainted-r1-20261015/species-069.cf92eaf941781156.png"
+    "assets/production/database-handpainted-r1-20261015/species-069.cf92eaf941781156.png",
+    "assets/production/cage/source-bounds-r1-20261015/provenance.json",
+    "assets/production/cage/source-bounds-r1-20261015/fields/field_cm02_01/frame-00.webp",
+    "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-01.webp",
+    "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-00.webp",
+    "assets/production/cage/source-bounds-r1-20261015/fields/field_cm18_01/frame-00.webp"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -10406,7 +10411,7 @@
       },
       {
         "path": "assets/production/cage/final-intake-20261008/manifest.json",
-        "sha256": "20e51de39abb01d4a2ad8706c307e9cccc9405bd58d9d07af4deb93587b49e83"
+        "sha256": "de21e82aa575f3339ca1e575afd2b88881108ac463ea790997936e343a5b54f8"
       },
       {
         "path": "assets/production/cage/licensed-runtime-v1/fields/field_cm01_01/frame-00.png",
@@ -47118,7 +47123,7 @@
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
-        "sha256": "93b6f8ea207f18b1ef32fcaea31db043550fda80f29ff8fd483b922be91c2eb8"
+        "sha256": "51c505a4680de0b8060c6dfcaed75abaae55cb1071d15002f51f7b88f2c5daab"
       },
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
@@ -48475,6 +48480,26 @@
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-069.cf92eaf941781156.png",
         "sha256": "cf92eaf9417811567ba46df948bd14fa7ee0f297d3a4662508771ec23a114e5a"
+      },
+      {
+        "path": "assets/production/cage/source-bounds-r1-20261015/provenance.json",
+        "sha256": "5718b8f88347b41fa87a0aa841f8f16e2e97cbfa2e7d974870aca1fea01a5f91"
+      },
+      {
+        "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm02_01/frame-00.webp",
+        "sha256": "930dcd6253af5a9d26c71546ccdf0b420d7fd75c0ff5e66df0ed4218655ae6b0"
+      },
+      {
+        "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-01.webp",
+        "sha256": "b7fb200850748fbbb4a795f92433de30a71bb5ed622d8e1787ace49951cdf883"
+      },
+      {
+        "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-00.webp",
+        "sha256": "0917d613efdccd5f3177a11844d331a26589e72ed4a34e08c39053190782cbf6"
+      },
+      {
+        "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm18_01/frame-00.webp",
+        "sha256": "9591d0ff3957d6b7860eff5d37363c4ce3cae481abcecf1b8cfb3287a72efed4"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
