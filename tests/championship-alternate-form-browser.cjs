@@ -46,6 +46,17 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    const report=JSON.parse(await page.locator('#alternate-form-qa-report').innerText());
    evidence.diagnostics.push({label,report});await shot(label);await panel.locator('summary').click();await shot(label+'-scene');write();return report;
   }
+  async function raisingReady(label){
+   const field=page.locator('#cm-root .int-rh2-field-host[data-load-state="ready"][aria-busy="false"]');
+   await field.waitFor({state:'visible',timeout:180000});
+   await page.locator('#cm-root .int-rh2-resident-assets[data-load-owner="raising"]:visible').waitFor({state:'hidden'});
+   assert.equal(await page.locator('#cm-root[data-field-fallback="true"]').count(),0);
+   const state=await field.evaluate(n=>({loadState:n.dataset.loadState,busy:n.getAttribute('aria-busy'),residents:JSON.parse(n.dataset.residentAssets||'[]')}));
+   assert.equal(state.loadState,'ready');assert.equal(state.busy,'false');assert.ok(state.residents.length>0);assert.ok(state.residents.every(r=>!['error','loading'].includes(r.state)));
+   const canvas=field.locator('canvas.cm-field-canvas');assert.equal(await canvas.count(),1);assert.equal(await canvas.isVisible(),true);
+   const size=await canvas.evaluate(n=>({width:n.width,height:n.height}));assert.ok(size.width>0&&size.height>0);
+   (evidence.raisingReady??=[]).push({label,...state,canvas:size});
+  }
   async function boot(){
    await page.locator('#form-qa-start').click();
    const skip=page.locator('#cm-film-skip');
@@ -54,7 +65,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    if(await skip.isVisible()){await skip.click();await page.locator('#cm-opening-film').waitFor({state:'hidden'});await page.waitForTimeout(400);}
    // Respect the film's real 350ms input guard; never alter browser/game clocks.
    await page.locator('#cm-login').click();await page.locator('#cm-continue').waitFor({state:'visible'});await page.locator('#cm-continue').click();
-   await page.locator('[data-active-screen="RAISING_HOME"]').waitFor();
+   await page.locator('[data-active-screen="RAISING_HOME"]').waitFor();await raisingReady('continue');
   }
   await page.goto(publicBase+'alternate-form-qa.html',{waitUntil:'domcontentloaded'});
   // A separate unattached canvas probes capability, without changing app getContext.
@@ -120,7 +131,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   assert.ok(['TEAM_ZERO_AHEAD','TEAM_ONE_AHEAD','LEVEL'].includes(evidence.result.verdict));assert.ok(['TIME_UP','TEAM_DOWN'].includes(evidence.result.reason));evidence.assertions.push('NATURAL_FOUR_ACTOR_BATTLE_RESULT_PASS');
   for(let n=0;n<12&&!(await page.locator('.cm-vs5-exit').isVisible());n++)await page.getByRole('button',{name:'下一頁',exact:true}).click();
   await page.locator('.cm-vs5-exit').click();await page.locator('#cm-root.int-rh2-root[data-active-screen="RAISING_HOME"]').waitFor({state:'visible'});assert.equal(await page.locator('#cm-root .cm-vs5-result__body').count(),0);
-  const last=await diagnostics('battle-complete');
+  await raisingReady('battle-return');const last=await diagnostics('battle-complete');
   assert.deepEqual(last.errors,[]);assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_VFX_ART_FALLBACK|BATTLE_CORE_VFX_UNAVAILABLE/.test(m.text)),[],'No product error or VFX fallback is accepted');
   evidence.battleLoaderReport=assertBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount);
   assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
