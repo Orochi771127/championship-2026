@@ -50,6 +50,33 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
  async function noOverflow(){assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Mobile document must not overflow');}
+ // Read-only renderer diagnostics plus ordinary camera gestures, never private state.
+ async function topContour(label){
+  const host=page.locator('.int-rh2-field-host');
+  const read=()=>host.evaluate(h=>({width:h.clientWidth,height:h.clientHeight,positions:JSON.parse(h.dataset.residentScreenPositions||'[]')}));
+  const before=await saved();
+  for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
+   await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
+   let state=await read();assert.ok(state.positions.length,'Top-edge evidence needs renderer diagnostics');
+   for(let gesture=0;gesture<8&&state.positions[0].scrollY<state.positions[0].scrollMaxY-1;gesture++){
+    const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first(),box=await canvas.boundingBox();
+    assert.ok(box&&box.height>160);
+    // Start in empty upper sky, excluding generous bounds around every actor.
+    const candidates=[80,180,Math.min(320,box.height/2)].flatMap(y=>[20,box.width/4,box.width/2,box.width*3/4,box.width-20].map(x=>({x,y}))).filter(({x,y})=>state.positions.every(p=>Math.abs(p.x-x)>110||y<p.bodyTop-35||y>p.footY+35));
+    const clear=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
+    assert.ok(clear,'A safe empty canvas drag origin must exist');const {x,y}=clear;
+    const previous=state.positions[0].scrollY;
+    await page.mouse.move(box.x+x,box.y+y);await page.mouse.down();
+    await page.mouse.move(box.x+x,box.y+Math.min(box.height-90,y+360),{steps:18});await page.mouse.up();await page.waitForTimeout(250);
+    state=await read();assert.ok(state.positions[0].scrollY>previous,'Normal blank-field drag must reveal upper headroom');
+   }
+   const first=state.positions[0];assert.ok(first.scrollMaxY-first.scrollY<=1,'Camera reached upper presentation bound');
+   assert.ok(first.boardTop-24*first.nativeScreenPixels>=0,'Entire restored hex cap is inside viewport');
+   for(const p of state.positions){if(p.groundScreen&&Number.isFinite(p.nativeY))assert.ok(Math.abs(p.groundScreen.y-(p.boardTop+p.nativeY*p.nativeScreenPixels))<1,'Actor ground and native grid retain the same transform');}
+   evidence.assertions.push({topContour:label,viewport,state});write();await shot(label+'-top-contour-'+viewport.width);
+  }
+  const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements,'Camera gestures cannot move slot anchors');assert.deepEqual(after.shop,before.shop,'Camera gestures cannot alter economy or inventory');
+ }
  async function wallet(amount){const button=page.locator('.cm-status-bar__diamond');await button.waitFor({state:'visible'});assert.equal(digits(await button.innerText()),amount);assert.match(await button.getAttribute('aria-label'),/測試/);}
  try{
   browser=await chromium.launch({channel:'chromium',headless:true,chromiumSandbox:true});evidence.browserVersion=browser.version();
@@ -87,7 +114,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   }
   evidence.assertions.push({settledNewSaveActors:settledActors});write();
   const initial=await saved();assert.equal(initial.shop.bits,100000);assert.equal(initial.flags.friendsPlaytest.diamonds,10000);
-  assert.equal(digits(await page.locator('.cm-status-bar__bits-value').innerText()),100000);await wallet(10000);await noOverflow();await shot('01-new-wallet');
+  assert.equal(digits(await page.locator('.cm-status-bar__bits-value').innerText()),100000);await wallet(10000);await noOverflow();await shot('01-new-wallet');await topContour('01-new-save');
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),20);assert.equal(await page.locator('[data-locked-test-row]').count(),3);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),3);assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="false"]').allTextContents().then(xs=>xs.join('')), '');await shot('02-three-row-locks');
   for(const [row,balance,total]of [[2,9000,30],[3,8000,40],[4,7000,50]]){
@@ -155,7 +182,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9000);
   const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,old.shop);assert.deepEqual(legacyAfterPurchase.cageEdit.placements,old.cageEdit.placements);
   evidence.assertions.push({oldQaOneTimeDiamonds:10000,afterPurchaseAndReload:9000});
-  evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');
+  evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await topContour('07-old-save');
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
   evidence.status='PASS';write();console.log('CHAMPIONSHIP_FRIENDS_PLAYTEST_BROWSER_PASS');
