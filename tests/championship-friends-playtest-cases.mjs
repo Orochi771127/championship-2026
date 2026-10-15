@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createChampionshipStandaloneApp} from '../src/championship/app/championshipStandaloneApp.js';
-import {FRIENDS_PLAYTEST_POLICY as policy,purchaseTestRanchRow,grantFriendsPlaytestCoins} from '../src/championship/app/friendsPlaytestPolicy.js';
+import {FRIENDS_PLAYTEST_POLICY as policy,purchaseTestRanchRow,grantFriendsPlaytestCoins,migrateFriendsPlaytestDiamonds} from '../src/championship/app/friendsPlaytestPolicy.js';
 import {medalCollection} from '../src/championship/app/medalCollection.js';
 import {createShopRuntime} from '../src/championship/shop/shopRuntime.js';
 import {listShopRecords} from '../src/championship/shop/shopCatalog.js';
@@ -15,7 +15,7 @@ test('new local save exact100000 coins/10000 test diamonds; spend/save/reload ne
  const h=setup();let a=h.create();try{await a.newGame();assert.equal(a.getShopFrame().bits,100000);assert.equal(a.getCageEditFrame().testDiamonds,10000);assert.deepEqual(a.getBattleBadges(),[]);assert.equal(a.getTamerRank(),0);
  const row=a.getShopFrame().listings.find(x=>x.owned<x.maxOwned&&x.unitPriceBits>0);a.openShop();const r=a.buyShopItem(row.shopRecordIndex);assert.equal(r.ok,true);const bits=a.getShopFrame().bits;assert.equal(bits,100000-row.unitPriceBits);assert.equal(a.save().phase,'SAVED');await a.dispose();a=h.create();await a.continueGame();assert.equal(a.getShopFrame().bits,bits);assert.equal(a.getCageEditFrame().testDiamonds,10000);assert.equal(a.save().phase,'SAVED');}finally{await a.dispose();}
 });
-test('existing save gets no automatic money or diamonds; true badges and rank persist',async()=>{const h=setup();let a=h.create({playtestPolicy:null});try{await a.newGame();a.creditBits(1234);a.setBattleBadges([0,2]);a.save();await a.dispose();a=h.create();await a.continueGame();assert.equal(a.getShopFrame().bits,1234);assert.equal(a.getCageEditFrame().testDiamonds,0);assert.deepEqual(a.getBattleBadges(),[0,2]);}finally{await a.dispose();}});
+test('existing save gets one test diamond grant without changing coins, badges or rank',async()=>{const h=setup();let a=h.create({playtestPolicy:null});try{await a.newGame();a.creditBits(1234);a.setBattleBadges([0,2]);a.save();await a.dispose();a=h.create();await a.continueGame();assert.equal(a.getShopFrame().bits,1234);assert.equal(a.getCageEditFrame().testDiamonds,10000);assert.deepEqual(a.getBattleBadges(),[0,2]);}finally{await a.dispose();}});
 test('all shop records visible with real prices, stock, insufficiency and no free ownership',()=>{
  const shop=createShopRuntime({bits:100000,allItemsVisible:true});assert.equal(shop.getFrame().listings.length,listShopRecords().length);const before=shop.toSave();const row=listShopRecords().find(r=>before.visibility[r.shopRecordIndex]===0&&r.unitPriceBits>0&&r.maxOwned>0);assert.ok(row);const r=shop.buy(row.shopRecordIndex);assert.equal(r.ok,true);assert.equal(shop.getBits(),100000-row.unitPriceBits);assert.equal(shop.buy(row.shopRecordIndex,0).ok,false);const poor=createShopRuntime({allItemsVisible:true,bits:0});assert.equal(poor.buy(row.shopRecordIndex).reason,'INSUFFICIENT_FUNDS');assert.deepEqual(poor.toSave().quantities,createShopRuntime().toSave().quantities);assert.deepEqual(poor.toSave().cageOwned,createShopRuntime().toSave().cageOwned);
 });
@@ -63,4 +63,42 @@ test('header projects only test balance, supports all locales, and preserves no-
   for(const locale of LOCALES){setLocale(locale);for(const amount of [10000,9000,8000,7000,0]){bar.render({testDiamonds:amount});bar.relabel();assert.equal(diamond.dataset.testWallet,'true');assert.equal(Number(diamond.getAttribute('aria-label').replace(/[^0-9]/g,'')),amount);assert.notEqual(diamond.textContent,uiText('HUD_PREVIEW'));}}
   bar.render({testDiamonds:null});assert.equal(diamond.dataset.testWallet,'false');assert.equal(diamond.textContent,uiText('HUD_PREVIEW'));
  }finally{bar?.dispose();setLocale('zh-Hant');globalThis.document=previous;}
+});
+
+test('version2 legacy diamond allocation is idempotent and never replenishes initialized wallets',()=>{
+ const old=migrateFriendsPlaytestDiamonds(null);assert.equal(old.granted,10000);assert.equal(old.state.version,2);
+ assert.deepEqual(migrateFriendsPlaytestDiamonds(old.state),{state:old.state,changed:false,granted:0});
+ for(const prior of [
+  {version:1,grants:[policy.grantId],diamonds:0,purchases:[2,3,4]},
+  {version:1,grants:[policy.grantId],diamonds:7000,purchases:[2,3,4]},
+  {version:1,grants:[],diamonds:4567,purchases:[2]},
+  {version:1,grants:[],diamonds:0,purchases:[2,3,4]}
+ ]){const m=migrateFriendsPlaytestDiamonds(prior);assert.equal(m.granted,0);assert.equal(m.state.diamonds,prior.diamonds);assert.deepEqual(m.state.purchases,prior.purchases);assert.equal(migrateFriendsPlaytestDiamonds(m.state).changed,false);}
+ assert.equal(migrateFriendsPlaytestDiamonds(null,null).changed,false);
+});
+test('legacy QA migration preserves shop and40cells then row buy/reload never regrants',async()=>{
+ const h=setup(),key='championshipModernSave:v1',fixture=read('qa/championship-full-qa-save.json');fixture.cageEdit.placements.push({moduleId:'championship:2026:cage:23',slotIndex:32});h.data.set(key,JSON.stringify(fixture));let a=h.create();
+ try {await a.continueGame();assert.equal(a.getCageEditFrame().testDiamonds,10000);assert.equal(a.getCageEditFrame().unlockedCount,40);
+  const migrated=JSON.parse(h.data.get(key));assert.deepEqual(migrated.shop,fixture.shop);assert.deepEqual(migrated.cageEdit.placements,fixture.cageEdit.placements);assert.deepEqual(migrated.progression.battleBadges,fixture.progression.battleBadges);
+  a.openCageEdit();assert.equal(a.buyRanchTestRow(4).ok,true);assert.equal(a.getCageEditFrame().testDiamonds,9000);await a.dispose();a=h.create();await a.continueGame();assert.equal(a.getCageEditFrame().testDiamonds,9000);assert.equal(a.getCageEditFrame().unlockedCount,50);assert.deepEqual(JSON.parse(h.data.get(key)).shop,fixture.shop);
+ }finally{await a.dispose();}
+});
+test('failed legacy migration leaves bytes intact, grants nothing and can safely retry',async()=>{
+ const h=setup(),key='championshipModernSave:v1',fixture=JSON.stringify(read('qa/championship-full-qa-save.json'));h.data.set(key,fixture);const a=h.create();
+ try{h.block(true);await assert.rejects(a.continueGame(),/TEST_DIAMOND_MIGRATION_SAVE_FAILED/);assert.equal(h.data.get(key),fixture);h.block(false);await a.continueGame();assert.equal(a.getCageEditFrame().testDiamonds,10000);assert.equal(JSON.parse(h.data.get(key)).flags.friendsPlaytest.version,2);}finally{await a.dispose();}
+});
+
+test('previous version1 new-save spend survives migration/reload without another grant',async()=>{
+ const h=setup(),key='championshipModernSave:v1';let a=h.create();
+ try {await a.newGame();a.openCageEdit();assert.equal(a.buyRanchTestRow(2).ok,true);await a.dispose();const prior=JSON.parse(h.data.get(key));prior.flags.friendsPlaytest.version=1;h.data.set(key,JSON.stringify(prior));a=h.create();await a.continueGame();assert.equal(a.getCageEditFrame().testDiamonds,9000);assert.deepEqual(a.getCageEditFrame().gridAccess.testUnlockedRows,[2]);const after=JSON.parse(h.data.get(key));assert.deepEqual(after.shop,prior.shop);assert.deepEqual(after.flags.friendsPlaytest.purchases,[2]);assert.equal(after.flags.friendsPlaytest.version,2);await a.dispose();a=h.create();await a.continueGame();assert.equal(a.getCageEditFrame().testDiamonds,9000);}finally{await a.dispose();}
+});
+test('disabled public policy never migrates a legacy save on Continue',async()=>{
+ const h=setup(),key='championshipModernSave:v1',original=JSON.stringify(read('qa/championship-full-qa-save.json'));h.data.set(key,original);const a=h.create({playtestPolicy:null});try{await a.continueGame();assert.equal(h.data.get(key),original);assert.equal(a.getCageEditFrame().testDiamonds,0);}finally{await a.dispose();}
+});
+
+test('post-commit storage read exception preserves durable marker and retry never doubles grant',async()=>{
+ const key='championshipModernSave:v1',data=new Map([[key,JSON.stringify(read('qa/championship-full-qa-save.json'))]]);let failRead=false;
+ const storage={getItem:k=>{if(failRead&&k===key)throw Error('READ_BLOCKED');return data.get(k)??null;},setItem(k,v){data.set(k,v);if(k===key)failRead=true;},removeItem:k=>data.delete(k)};
+ const a=createChampionshipStandaloneApp({playtestPolicy:policy,storage,locks:null,catalog:read('src/data/championship/catalogs/creature-species.r1.json'),cages:read('docs/contracts/championship/raising-home-presentation.v1.json').cages});
+ try{await assert.rejects(a.continueGame(),/TEST_DIAMOND_MIGRATION_READ_FAILED/);const durable=JSON.parse(data.get(key));assert.equal(durable.flags.friendsPlaytest.version,2);assert.equal(durable.flags.friendsPlaytest.diamonds,10000);failRead=false;await a.continueGame();assert.equal(a.getCageEditFrame().testDiamonds,10000);assert.equal(data.get(key),JSON.stringify(durable));}finally{await a.dispose();}
 });

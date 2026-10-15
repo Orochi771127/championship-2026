@@ -1033,6 +1033,8 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     }
     boardScroll.dataset.annex = annex || preview ? 'true' : 'false';
     boardHint.textContent = uiText(productGrid ? 'CAGE_PUBLIC_TEST_GRID_HINT' : annex ? '牧場平面配置 · 左右滑動查看格位，往下是擴充區' : '牧場平面配置 · 左右滑動查看所有格位');
+    const cellArt = new Map(cageEditorArtCells(cage.slots, undefined, { productGrid }).map((cell) => [cell.slotIndex, cell]));
+    expansionControls.dataset.productGrid = productGrid ? 'true' : 'false';
     expansionControls.replaceChildren();
     if (productGrid) {
       const walletLabel = element('p', 'cm-cage-board-hint');
@@ -1040,9 +1042,22 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       walletLabel.textContent=uiText('CAGE_TEST_DIAMOND_BALANCE',{amount:cage.testDiamonds??0});
       expansionControls.append(walletLabel);
       for (let row = 2; row < 5; row++) {
-        const remaining = cage.slots.filter(slot=>slot.row === row && !slot.unlocked).length;
+        const lockedSlots = cage.slots.filter(slot=>slot.row === row && !slot.unlocked);
+        const remaining = lockedSlots.length;
         if (!remaining) continue;
-        const unlock = element('button', 'cm-vs2-action');
+        // One row indicator, not ten purchase targets. Use the existing art
+        // coordinates so stable slot anchors and partial legacy access stay put.
+        const lockedArt = lockedSlots.map(slot=>cellArt.get(slot.slotIndex));
+        const left = Math.min(...lockedArt.map(cell=>cell.x));
+        const rowLock = element('div', 'cm-cage-row-lock');
+        rowLock.dataset.lockedTestRow = String(row);
+        rowLock.setAttribute('aria-hidden', 'true');
+        rowLock.style.left = `${left}px`;
+        rowLock.style.top = `${Math.min(...lockedArt.map(cell=>cell.y)) + 6}px`;
+        rowLock.style.width = `${Math.max(...lockedArt.map(cell=>cell.x)) - left + 48}px`;
+        rowLock.append(element('span', 'cm-cage-row-lock__icon', '🔒'));
+        board.append(rowLock);
+        const unlock = element('button', 'cm-vs2-action cm-cage-row-purchase');
         unlock.type = 'button'; unlock.dataset.buyTestRow = String(row);
         unlock.textContent = uiText('CAGE_TEST_BUY_ROW', { row:row+1, count:remaining, price:1000 });
         unlock.addEventListener('click', ()=>source.intents.buyRanchTestRow?.(row));
@@ -1070,7 +1085,6 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       });
       expansionControls.append(toggle);
     }
-    const cellArt = new Map(cageEditorArtCells(cage.slots, undefined, { productGrid }).map((cell) => [cell.slotIndex, cell]));
     for (const slot of cage.slots) {
       const productGrid = cage.layoutVersion === PRODUCT_RANCH_GRID;
       const cell = element("button", "cm-vs2-cage-slot");
@@ -1079,7 +1093,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       cell.dataset.row = String(slot.row);
       cell.dataset.unlocked = slot.unlocked ? "true" : "false";
       cell.dataset.filled = slot.moduleId ? "true" : "false";
-      cell.disabled = (!productGrid && !slot.unlocked) || slot.fixed;
+      cell.disabled = !slot.unlocked || slot.fixed;
       cell.dataset.fixed = slot.fixed ? 'true' : 'false';
       cell.setAttribute("role", "gridcell");
       cell.setAttribute(
@@ -1107,14 +1121,10 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         setLabel(cell, 'aria-label', 'CAGE_SLOT_RANK_LOCKED', lockedParams);
         setLabel(cell, 'title', 'CAGE_SLOT_RANK_LOCKED', lockedParams);
       }
-      cell.textContent = uiText(slot.moduleId ? '' : slot.unlocked ? '+' : '🔒');
-      if (productGrid && !slot.unlocked) {
-        const label = uiText('CAGE_TEST_BUY_ROW', { row:slot.row+1, count:cage.slots.filter(s=>s.row===slot.row&&!s.unlocked).length, price:1000 });
-        cell.title = label; cell.setAttribute('aria-label',label);
-      }
+      cell.textContent = uiText(slot.moduleId ? '' : slot.unlocked ? '+' : productGrid ? '' : '🔒');
       cell.addEventListener("click", () => {
-        if (productGrid && !slot.unlocked) source.intents.buyRanchTestRow?.(slot.row);
-        else if (slot.moduleId) source.intents.removeCagePlacement(slot.moduleId);
+        if (!slot.unlocked || slot.fixed) return;
+        if (slot.moduleId) source.intents.removeCagePlacement(slot.moduleId);
         else source.intents.placeCageAt(slot.slotIndex);
       });
       cell.dataset.deck = String(slot.deck ?? 0);

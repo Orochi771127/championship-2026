@@ -1,4 +1,4 @@
-import { grantFriendsPlaytestCoins, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
+import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
@@ -1208,10 +1208,23 @@ export function createChampionshipStandaloneApp({
       if(tutorialTransitionActive||tutorialCommitActive)return null;
       if (huntCommitActive) return null;
       if(!await savePort.acquireSession())throw new Error('另一個分頁正在遊玩。請先關閉該分頁，再繼續遊戲。');
-      const read = savePort.read({adopt:true});
+      let read = savePort.read({adopt:true});
       if (!read.present) {if(!session)await savePort.releaseSession();return null;}
       let candidate;
       try {candidate=restoreCandidate(read.save);}catch(error){if(!session)await savePort.releaseSession();throw error;}
+      const migration=migrateFriendsPlaytestDiamonds(read.save.flags.friendsPlaytest,playtestPolicy);
+      if(migration.changed){
+        // Grant+marker are one durable transaction before hydration. Failure
+        // leaves the original save intact and never exposes spendable credit.
+        const status=savePort.save({...requestFromSavedGame(read.save,candidate),
+          revision:(read.save.progression.revision??0)+1,friendsPlaytest:migration.state});
+        if(status.phase!=='SAVED'){
+          savePort.discardPendingWrite();if(!session)await savePort.releaseSession();
+          throw new Error('TEST_DIAMOND_MIGRATION_SAVE_FAILED');
+        }
+        read=savePort.read({adopt:true});
+        if(!read.present){if(!session)await savePort.releaseSession();throw new Error('TEST_DIAMOND_MIGRATION_READ_FAILED');}
+      }
       tutorialOfferEligible=false;tutorialPendingOpening=null;
       tutorialBaseline=interactiveTutorialInProgress(read.save.progression.nativeOpening)
         ?retainTutorialBaseline(requestFromSavedGame(read.save,candidate)):null;
