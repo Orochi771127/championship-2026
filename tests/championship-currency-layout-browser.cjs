@@ -6,7 +6,7 @@ const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const repo=path.resolve(process.env.HUD_SOURCE_ROOT||process.cwd()),out=path.resolve(process.env.CHAMPIONSHIP_QA_OUTPUT_ROOT||'.tmp/browser-qa','currency-layout');
 fs.mkdirSync(out,{recursive:true});
 const diagnostic=process.env.HUD_DIAGNOSTIC_ONLY==='1',engine=process.env.HUD_BROWSER||'chromium';
-const evidence={status:'RUNNING',engine,diagnostic,scope:'Component fixture is geometry only; normal onboarding is separately recorded.',cases:[],normal:[],normalLandscape:[],errors:[],violations:[]};
+const evidence={status:'RUNNING',engine,diagnostic,scope:'Component fixture is geometry only; normal onboarding is separately recorded.',cases:[],normal:[],normalLandscape:[],console:[],errors:[],violations:[]};
 const write=()=>fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(evidence,null,2)+'\n');
 const styles=[...fs.readFileSync(path.join(repo,'championship.html'),'utf8').matchAll(/<link rel="stylesheet" href="([^\"]+)"/g)].map(m=>`<link rel="stylesheet" href="${m[1]}">`).join('');
 const fixture=`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">${styles}<body><main id="cm-root" data-active-screen="RAISING_HOME"></main><script type="module">
@@ -42,7 +42,7 @@ const geometry=()=>{
 };
 const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.y,b.y)>1;
 (async()=>{
- let browser,server,publicServer,context;
+ let browser,server,publicServer,context,normalPage;
  try{
   server=http.createServer((req,res)=>{
    const url=new URL(req.url,'http://local');if(url.pathname==='/hud-fixture.html'){res.setHeader('Content-Type','text/html');return res.end(fixture);}
@@ -86,17 +86,22 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
   // Existing friends-playtest harness is deliberately untouched (PR34 ownership).
   if(process.env.CHAMPIONSHIP_QA_ARTIFACT){
    const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT),publicBase='https://orochi771127.github.io/championship-2026/';
+   evidence.commit=process.env.GITHUB_SHA||null;evidence.build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8'));
    publicServer=await serveBuild(root);context=await browser.newContext({viewport:{width:430,height:932},hasTouch:true,locale:'zh-TW',serviceWorkers:'block'});
    await context.route('**/*',async route=>{const u=route.request().url();if(u.startsWith(publicServer.origin+'/'))return route.continue();if(u.startsWith(publicBase)){const relative=new URL(u).pathname.slice(new URL(publicBase).pathname.length);if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:publicServer.origin+'/'+relative,maxRedirects:0});return route.fulfill({response});}}return route.abort();});
-   const page=await context.newPage();page.setDefaultTimeout(90000);page.on('pageerror',e=>evidence.errors.push('normal: '+e.message));
+   const page=normalPage=await context.newPage();page.setDefaultTimeout(90000);page.on('console',m=>evidence.console.push({type:m.type(),text:m.text()}));page.on('pageerror',e=>evidence.errors.push('normal: '+e.message));
    await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});
-   await Promise.race([page.locator('#cm-film-skip').waitFor({state:'visible'}),page.locator('#cm-login').waitFor({state:'visible'})]);
-   if(await page.locator('#cm-film-skip').isVisible())await page.locator('#cm-film-skip').click();
+   await page.locator('#cm-login').waitFor({state:'visible'});await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
+   if(await page.locator('#cm-film-skip').isVisible()){await page.locator('#cm-film-skip').click();await page.locator('#cm-opening-film').waitFor({state:'hidden'});await page.waitForTimeout(400);}
    await page.locator('#cm-login').click();await page.locator('#cm-new-game').click();
    const story=page.locator('.cm-opening-story'),deadline=Date.now()+120000;
-   while(await story.count()){if(Date.now()>deadline)throw Error('Opening comic timeout');const text=page.locator('[data-story-action="text"]');if(await text.isVisible())await text.click();if(await story.isVisible())await story.click({position:{x:10,y:10}});await page.waitForTimeout(1200);}
+   while(await story.count()){if(Date.now()>deadline)throw Error('Opening comic timeout');const text=page.locator('[data-story-action="text"]');if(await text.isVisible()){try{await text.click({timeout:2000});}catch(error){if(await text.isVisible())throw error;}}if(await story.isVisible())await story.click({position:{x:10,y:10}});await page.waitForTimeout(1200);}
    await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();await page.locator('#cm-opening-name').fill('介面測試');await page.locator('.cm-opening__name button[type="submit"]').click();await page.locator('.cm-opening__choices button').first().click();
    await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();await page.locator('.cm-opening__letter button').click();if(await page.locator('[data-egg-confirm]').isVisible())await page.locator('[data-egg-confirm]').click();await page.locator('#cm-opening-name').fill('小夥伴');await page.locator('.cm-opening__name button[type="submit"]').click();
+   await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();
+   await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().waitFor({state:'visible',timeout:180000});
+   await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});
+   await page.screenshot({path:path.join(out,'normal-flow-before-tutorial.png'),fullPage:true});
    await page.locator('dialog[open] [data-action="accept"]').click();
    for(let step=0;step<20&&!(await page.locator('.cm-tutorial-guidance').isVisible()&&await page.locator('dialog[open]').count()===0);step++){const next=page.locator('dialog[open] [data-action="next"]');if(await next.isVisible())await next.click();else await page.waitForTimeout(100);}
    await page.locator('.cm-tutorial-guidance').waitFor({state:'visible'});await page.locator('dialog[open]').waitFor({state:'detached'});
@@ -120,6 +125,6 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    if(!diagnostic){assert.equal(evidence.normal[0].geometry.bar.h,evidence.normal[1].geometry.bar.h);assert.equal(evidence.normal[0].geometry.parts.currencies.y,evidence.normal[1].geometry.parts.currencies.y);}
   }
   assert.deepEqual(evidence.errors,[]);assert.equal(evidence.violations.length,0,JSON.stringify(evidence.violations.slice(0,3)));evidence.status='PASS';write();
- }catch(error){evidence.status='FAIL';evidence.failure=error.stack;write();throw error;}
+ }catch(error){evidence.status='FAIL';evidence.failure=error.stack;if(normalPage){try{evidence.normalFailure=await normalPage.evaluate(()=>({url:location.href,bodyText:document.body.innerText,layout:Object.fromEntries([...document.body.attributes].map(a=>[a.name,a.value])),screen:document.querySelector('#cm-root')?.dataset.activeScreen,field:document.querySelector('.int-rh2-field-host')?.dataset.loadState,save:JSON.parse(localStorage.getItem('championshipModernSave:v1'))}));await normalPage.screenshot({path:path.join(out,'normal-flow-failure.png'),fullPage:true});}catch(captureError){evidence.captureError=captureError.message;}}write();throw error;}
  finally{await context?.close();await browser?.close();await publicServer?.close();if(server)await new Promise(r=>server.close(r));}
 })();
