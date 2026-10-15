@@ -1,4 +1,4 @@
-import * as PIXI from 'https://cdn.jsdelivr.net/npm/pixi.js@8.19.0/dist/pixi.mjs';
+import * as PIXI from '../../node_modules/pixi.js/dist/pixi.mjs';
 import {createChampionshipPixiStage} from '../../src/championship/presentation/championshipPixiStage.js';
 import {mountHuntFieldPixiPresentation} from '../../src/championship/presentation/vs2/createHuntFieldPixiPresentation.js';
 import {loadCompletedOriginalCharacters} from '../../src/championship/presentation/completedOriginalCharacters.js';
