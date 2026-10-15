@@ -39,11 +39,11 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       if (opponent) {
         // HUD chrome takes ~150 px at the top and ~90 px at the bottom; leave room for both bodies.
         const dx = Math.abs(opponent.x - target.x), dy = Math.abs(opponent.y - target.y);
-        const fit = Math.min(viewport.width / (dx + 320), (viewport.height - 230) / (dy + 200));
+        const fit = Math.min(viewport.width / (dx + 320), (viewport.height - 250) / (dy + 240));
         wanted = clamp(Math.min(wanted, fit), Math.max(0.42, base * 0.42), wanted);
         // Centre the pair in the band between the top HUD (rival bar) and the bottom kit bar.
         const z = zoom ?? wanted;
-        focusX = target.x + (opponent.x - target.x) * 0.42; focusY = target.y + (opponent.y - target.y) * 0.42 - 40 / z;
+        focusX = target.x + (opponent.x - target.x) * 0.42; focusY = target.y + (opponent.y - target.y) * 0.42 - 55 / z; // tall sprites (the champion) clear the rival bar
       }
       if (zoom === null) zoom = wanted;
       else zoom += (wanted - zoom) * battleFxApproach(dtMs, reducedMotion ? 1400 : 650);
@@ -58,6 +58,9 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       x = clamp(x, target.x - boxW, target.x + boxW); y = clamp(y, target.y - boxH, target.y + boxH);
       const placed = battleFxClampCentre({ cx: x, cy: y, halfW, halfH, art: { x: 0, y: 0, width: worldWidth, height: worldHeight } });
       x = placed.x; y = placed.y;
+      // In a duel the bottom kit bar must never cover the player at the arena's south
+      // edge: past the floor clamp, nudge the view down just enough (at most the bar).
+      if (opponent) y = Math.min(placed.y + 110 / zoom, Math.max(y, target.y - (halfH - 110 / zoom)));
       trauma = Math.max(0, trauma - (dtMs / 1000) * 1.6);
       const amplitude = shakeEnabled ? Math.min(viewport.width, viewport.height) * 0.018 * trauma * trauma : 0;
       const sx = amplitude * Math.sin(time * 0.047 + 1.3), sy = amplitude * Math.sin(time * 0.071 + 4.1);

@@ -545,6 +545,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         }
         case "SHARD_BLOCK": burst(event.x, event.y - 12, { count: 3, speed: 240, tint: 0xd9c4ff, life: 0.18 }); break;
         case "SHOT_BLOCKED": burst(event.x, event.y, { count: 3, speed: 120, tint: 0xffe2b0, life: 0.2 }); break;
+        case "WALL_SLAM":
+          ring(event.x, event.y, 70, event.target === "player" ? 0xff4a4a : 0xffd34d, 0.4);
+          burst(event.x, event.y - 20, { count: 14, speed: 300, tint: 0xd8d0c0, texture: textures.shard, scale: 1.4, gravity: 420, life: 0.5 });
+          camera.addTrauma(event.target === "player" ? 0.5 : 0.35);
+          if (event.target === "rival") crowdReact("CHEER", event.x, 1);
+          break;
         case "SLAM": ring(event.x, event.y, event.radius, 0xff5a3c, 0.45); puff(event.x, event.y, 0xa89580, 6, 2); camera.addTrauma(0.55); break;
         case "BOSS_SPAWN": ring(event.x, event.y, 220, 0xa58bff, 0.9); camera.addTrauma(0.3); break;
         case "BOSS_READY": ring(event.x, event.y, 260, 0xff5c8a, 0.6); camera.addTrauma(0.45); break;

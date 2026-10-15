@@ -265,12 +265,12 @@ export const DATA_ARENA_MOVES = deepFreeze({
   sunSpear: { type: "BOLT", mechanic: "fast piercing projectile", energy: 22, cooldown: 1.6, windup: 0.28, range: 760, speed: 1100, radius: 12, damage: 30, pierce: 2 },
   sunShield: { type: "BARRIER", mechanic: "frontal projectile shield", energy: 20, cooldown: 7, windup: 0, duration: 1.4, radius: 64, arc: 2.2 },
   scatterLight: { type: "SPREAD", mechanic: "fan of projectiles", energy: 26, cooldown: 3.2, windup: 0.16, range: 520, speed: 700, radius: 9, damage: 12, count: 5, spread: 0.9 },
-  iceShard: { type: "BOLT", mechanic: "slowing projectile", energy: 16, cooldown: 0.8, windup: 0.1, range: 600, speed: 760, radius: 10, damage: 15, onHit: { slow: 0.45, slowSeconds: 1.6 }, onTerrain: "FREEZE" },
+  iceShard: { type: "BOLT", mechanic: "slowing projectile", energy: 16, cooldown: 0.8, windup: 0.1, range: 600, speed: 760, radius: 10, damage: 18, onHit: { slow: 0.45, slowSeconds: 1.6 }, onTerrain: "FREEZE" },
   frostStep: { type: "BLINK", mechanic: "short teleport leaving an ice trail", energy: 20, cooldown: 4, windup: 0, distance: 250, freezeTrail: true },
-  iceCage: { type: "ZONE", mechanic: "delayed root area", energy: 30, cooldown: 7, windup: 0.18, range: 520, radius: 100, delay: 0.9, damage: 18, effect: "ROOT", rootSeconds: 1.1 },
+  iceCage: { type: "ZONE", mechanic: "delayed root area", energy: 30, cooldown: 7, windup: 0.18, range: 520, radius: 100, delay: 0.9, damage: 24, effect: "ROOT", rootSeconds: 1.1 },
   coreNova: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 0.65, radius: 240, damage: 70, effect: "IGNITE" },
   dawnLance: { type: "LANCE", mechanic: "ultimate: fan of heavy piercing shots", windup: 0.55, range: 900, speed: 900, radius: 22, damage: 42, count: 5, spread: 0.7, pierce: 4 },
-  whiteout: { type: "NOVA", mechanic: "ultimate: wide freezing burst", windup: 0.6, radius: 260, damage: 44, effect: "ROOT", rootSeconds: 1.6, freezeWater: true },
+  whiteout: { type: "NOVA", mechanic: "ultimate: wide freezing burst", windup: 0.6, radius: 260, damage: 54, effect: "ROOT", rootSeconds: 1.6, freezeWater: true },
   // Rivals -------------------------------------------------------------------
   tideBolt: { type: "BOLT", mechanic: "projectile", energy: 14, cooldown: 1.1, windup: 0.32, range: 600, speed: 640, radius: 11, damage: 16 },
   tideWave: { type: "WAVE", mechanic: "wide knockback wave", energy: 26, cooldown: 5, windup: 0.6, range: 560, speed: 420, radius: 34, damage: 20, knockback: 320 },
@@ -319,10 +319,11 @@ export const DATA_ARENA_TOURNAMENT = deepFreeze({
   // The dodge is a resource in a duel: long enough that spending it is a decision.
   dashCooldown: 1.8,
   // AI tiers by round: reaction delay, dodge chance, aim lead accuracy, damage scale.
+  // Round 1 teaches the dodge window; later rounds hit harder.
   tiers: [
-    { reaction: 0.34, dodge: 0.45, lead: 0.5, damage: 1.25, energyRegen: 1.0 },
-    { reaction: 0.26, dodge: 0.58, lead: 0.7, damage: 1.5, energyRegen: 1.15 },
-    { reaction: 0.2, dodge: 0.7, lead: 0.85, damage: 1.75, energyRegen: 1.3 }
+    { reaction: 0.4, dodge: 0.35, lead: 0.4, damage: 1.0, energyRegen: 0.9 },
+    { reaction: 0.26, dodge: 0.58, lead: 0.7, damage: 1.45, energyRegen: 1.15 },
+    { reaction: 0.2, dodge: 0.7, lead: 0.85, damage: 1.85, energyRegen: 1.3 }
   ]
 });
 

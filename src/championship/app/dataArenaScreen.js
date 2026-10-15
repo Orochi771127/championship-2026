@@ -509,6 +509,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case "BOSS_SPAWN": audio?.play("roar"); break;
         case "BOSS_ENRAGE": audio?.play("roar"); toast(t("toast.bossEnrage"), { tone: "warn" }); break;
         case "SLAM": audio?.play("slam"); break;
+        case "WALL_SLAM": audio?.play("slam"); toast(t(event.target === "rival" ? "toast.wallSlamRival" : "toast.wallSlam"), { x: event.x, y: event.y, tone: event.target === "rival" ? "good" : "warn", key: `slam-${event.target}`, gap: 800 }); break;
         case "BOSS_DOWN": audio?.play("burst"); break;
         case "PLAYER_RESPAWN": toast(t("toast.respawn"), { tone: "good" }); break;
         case "ROUND_INTRO": {

@@ -712,3 +712,27 @@ test("in the cup the dodge is a resource: a longer recharge than the harbor", ()
   run(sim, DATA_ARENA_TOURNAMENT.dashCooldown - DATA_ARENA_PLAYER.dash.cooldown);
   assert.equal(s.player.dashCharges, 1);
 });
+
+test("ice puts fire out: a frost shard landing on burning ground douses it", () => {
+  const { sim, s } = liveDuel({ partnerId: "frost-drake" });
+  const target = center(11, 13); // flammable strip south of the channel
+  const i = sim.grid.index(11, 13);
+  sim.grid.ignite(i, null, "TEST");
+  assert.ok(sim.grid.burningAt(target.x, target.y));
+  place(s.player, 11, 11.0);
+  sim.internals.spawnProjectile({ kind: "PBOLT", owner: "player", team: "player", moveId: "iceShard", x: target.x, y: target.y - 40, vx: 0, vy: 760,
+    radius: 10, damage: 18, range: 30, travelled: 0, hits: new Set(), onTerrain: "FREEZE", pierce: 0 });
+  const events = run(sim, 0.2);
+  assert.ok(events.some((e) => e.type === "FIRE_OUT"), "the burning cell is put out");
+  assert.equal(sim.grid.burningAt(target.x, target.y), false);
+});
+
+test("duel camera keeps a fighter at the south edge clear of the bottom kit bar", () => {
+  const camera = createDataArenaCamera({ worldWidth: 1536, worldHeight: 1024 });
+  const viewport = { width: 1280, height: 720 };
+  const player = { x: 700, y: 950 }, rival = { x: 500, y: 690 };
+  let view;
+  for (let i = 0; i < 300; i++) view = camera.update({ dtMs: 16.7, viewport, target: player, opponent: rival });
+  const sy = view.y + player.y * view.zoom;
+  assert.ok(sy < viewport.height - 90, `player screen y ${sy}`);
+});

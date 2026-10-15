@@ -244,7 +244,7 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     // Dash on Space.
     const beforeDash = await qa(page, () => window.__dataArenaQA.snapshot().player.dashCharges);
     await page.keyboard.press('Space');
-    await page.waitForTimeout(120);
+    await page.waitForFunction((before) => { const p = window.__dataArenaQA.snapshot().player; return p.dashCharges < before || p.state === 'DASH'; }, beforeDash, { timeout: 3000 }).catch(() => {});
     const afterDash = await qa(page, () => window.__dataArenaQA.snapshot().player);
     check('Space dashes (charge spent)', afterDash.dashCharges < beforeDash || afterDash.state === 'DASH', { beforeDash, afterDash });
 
@@ -404,7 +404,7 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     check('tapping a touch skill button casts it (auto-aimed)', touchCast.energy < touchEnergy && touchCast.moves[0].cooldown > 0, { touchEnergy, energy: touchCast.energy });
     const charges = (await qa(mobile, () => window.__dataArenaQA.snapshot().player)).dashCharges;
     await mobile.tap('.da-tbtn--dash');
-    await mobile.waitForTimeout(100);
+    await mobile.waitForFunction((before) => { const p = window.__dataArenaQA.snapshot().player; return p.dashCharges < before || p.state === 'DASH'; }, charges, { timeout: 3000 }).catch(() => {});
     const dashed = await qa(mobile, () => window.__dataArenaQA.snapshot().player);
     check('touch dash button dashes', dashed.dashCharges < charges || dashed.state === 'DASH', { charges, dashed: dashed.dashCharges });
     const layout = await mobile.evaluate(() => ({ scrollX, scrollY, scale: visualViewport?.scale ?? 1, width: innerWidth, height: innerHeight,

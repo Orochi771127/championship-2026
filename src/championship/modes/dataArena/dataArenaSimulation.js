@@ -715,8 +715,11 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (move.effect === "IGNITE") grid.ignite(i, events, "SKILL");
       if (move.freezeWater || move.effect === "ROOT") grid.freezeCell(i, 7 * stat.iceScale, events, "SKILL");
     }
+    // Ice puts fire out: a freezing burst douses burning ground in its radius.
+    if (move.freezeWater || move.effect === "ROOT") grid.applyWater(x, y, span, events);
     for (let k = before; k < events.length; k++) events[k].t = state.time;
     if (move.effect === "IGNITE" && events.length > before) chain("BURN", x, y);
+    if ((move.freezeWater || move.effect === "ROOT") && events.slice(before).some((e) => e.type === "FIRE_OUT")) chain("STEAM", x, y);
     if ((move.freezeWater || move.effect === "ROOT") && events.slice(before).some((e) => e.type === "ICE_FORM")) chain("FROST", x, y);
   }
 
@@ -1126,7 +1129,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (!grid.inBounds(c, r)) return;
     const before = events.length;
     if (projectile.onTerrain === "IGNITE") grid.ignite(grid.index(c, r), events, "SKILL");
-    if (projectile.onTerrain === "FREEZE") grid.freezeCell(grid.index(c, r), 5 * stat.iceScale, events, "SKILL");
+    if (projectile.onTerrain === "FREEZE") {
+      // Ice freezes open water and puts out a burning cell where it lands.
+      if (!grid.freezeCell(grid.index(c, r), 5 * stat.iceScale, events, "SKILL")) grid.applyWater(x, y, 0.75, events);
+    }
     for (let k = before; k < events.length; k++) events[k].t = state.time;
   }
 
