@@ -617,7 +617,47 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     stage.setResolutionCap(quality === "low" ? 1 : Math.min(2, resolutionCap));
   }
 
+  let startingMatch = false;
   async function startMatch() {
+    if (startingMatch || signal.aborted) return;
+    startingMatch = true;
+    try {
+      await startMatchBody();
+    } catch (error) {
+      // A failed asynchronous start must not strand the player in LOADING.
+      // Report the original failure, but keep cleanup failures from hiding it.
+      console.error("DATA_ARENA_START_FAILED", error);
+      const clean = (action) => {
+        try { action(); } catch (cleanupError) { console.error("DATA_ARENA_CLEANUP_FAILED", cleanupError); }
+      };
+      clean(() => { if (tickerCallback && stage) stage.app.ticker.remove(tickerCallback); });
+      tickerCallback = null;
+      clean(() => scene?.dispose()); scene = null;
+      clean(() => audio?.dispose()); audio = null;
+      sim = null; result = null; paused = false; accumulator = 0;
+      clearTimeout(bannerTimer); clearTimeout(vignetteTimer);
+      releaseInputs();
+      const releases = await Promise.allSettled([...bundles.values()].map((bundle) => Promise.resolve().then(() => bundle.dispose())));
+      bundles.clear(); bundleScope = null;
+      for (const release of releases) if (release.status === "rejected") console.error("DATA_ARENA_CLEANUP_FAILED", release.reason);
+      clean(() => stage?.setResolutionCap(resolutionCap));
+      if (signal.aborted) return;
+      root.dataset.state = "ERROR";
+      const panel = el("div", "da-panel");
+      // Existing translated navigation labels; technical error uses textContent.
+      panel.append(el("h2", "da-title", t("mode.title")), el("p", "da-note", String(error?.message ?? error)));
+      const retry = button("da-btn da-btn--primary", t("result.retry"), () => void startMatch(), signal);
+      retry.dataset.autofocus = "1";
+      const actions = el("div", "da-actions");
+      actions.append(retry, button("da-btn", t("select.back"), () => close(), signal));
+      panel.appendChild(actions);
+      showOverlay(panel);
+    } finally {
+      startingMatch = false;
+    }
+  }
+
+  async function startMatchBody() {
     root.dataset.state = "LOADING";
     showOverlay(el("div", "da-panel da-panel--loading", t("loading")));
     stage ??= await ensureStage(field, signal);

@@ -6,6 +6,8 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "MODULE_LOAD_ERROR": "โหลดโปรแกรมของหน้าจอไม่สำเร็จ เกมอาจเพิ่งอัปเดตหรือการเชื่อมต่อขัดข้อง โปรดบันทึกแล้วโหลดเกมใหม่ ไม่จำเป็นต้องลบข้อมูลบันทึก",
+  "SCREEN_LOAD_ERROR": "โหลดหน้าจอไม่สำเร็จ โปรดบันทึกแล้วโหลดเกมใหม่ หรือบันทึกแล้วกลับหน้าชื่อเกม",
   "CAGE_SLOT_RANK_LOCKED": "ช่องที่ {n} ยังล็อกอยู่ ปลดล็อกเมื่อถึงแรงก์เทมเมอร์ {rank}",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "พื้นหลังหน้าระบบ",
@@ -1282,4 +1284,5 @@ export const UNTRANSLATED_PROPER_NOUNS_TH = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+
 

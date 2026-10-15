@@ -736,3 +736,117 @@ test("duel camera keeps a fighter at the south edge clear of the bottom kit bar"
   const sy = view.y + player.y * view.zoom;
   assert.ok(sy < viewport.height - 90, `player screen y ${sy}`);
 });
+
+
+// Fault-injection tests execute the actual startup functions with owned-resource
+// doubles. They do not claim browser/GPU acceptance.
+const { readFileSync: arenaReadSource } = await import('node:fs');
+const { runInNewContext: arenaRunSource } = await import('node:vm');
+const arenaScreenSource = arenaReadSource(new URL('../src/championship/app/dataArenaScreen.js', import.meta.url), 'utf8');
+const arenaStartupSource = arenaScreenSource.slice(arenaScreenSource.indexOf('  let startingMatch = false;'), arenaScreenSource.indexOf('  // ------------------------------------------------------------------ overlays'));
+function arenaStartupHarness(failure) {
+  const calls = { logs: [], disposed: 0, removed: 0, added: 0, panels: [] };
+  let failing = true;
+  const fail = (where) => { if (failing && where === failure) throw new Error(`injected ${where}`); };
+  const makeNode = () => ({ dataset: {}, children: [], append(...nodes) { this.children.push(...nodes); }, appendChild(node) { this.children.push(node); } });
+  const ticker = { remove() { calls.removed++; }, add() { calls.added++; } };
+  const shared = { app: { ticker }, setResolutionCap() {} };
+  const env = {
+    signal: { aborted: false }, stage: null, scene: null, audio: null, sim: null, result: null, paused: false, accumulator: 1,
+    tickerCallback: null, bundles: new Map(), bundleScope: null, root: makeNode(), field: {}, bannerTimer: null, vignetteTimer: null,
+    matchId: 0, seed: 1, partnerId: 'ember-lizard', quality: 'low', gameMode: 'TOURNAMENT', audioBus: null, resolutionCap: 2,
+    console: { error(...args) { calls.logs.push(args); } }, clearTimeout,
+    el: makeNode, t: (key) => key, button: (_class, label, onClick) => ({ label, onClick, dataset: {} }),
+    showOverlay: (panel) => calls.panels.push(panel), releaseInputs() {}, close() { calls.closed = true; },
+    ensureStage: async () => { fail('stage'); return shared; },
+    loadCast: async () => { env.bundles.set('loaded', { dispose() { calls.disposed++; fail('cleanup'); } }); fail('cast'); return true; },
+    createDataArenaSimulation: () => ({ drainEvents: () => [] }),
+    createDataArenaAudio: () => ({ dispose() { calls.disposed++; } }),
+    mountScene() { fail('mount'); env.scene = { dispose() { calls.disposed++; } }; },
+    buildHud() { fail('hud'); }, hideOverlay() {}, frame() {}, music: { setScene() {} }, toast() {}, banner() {}, handleEvents() {}
+  };
+  arenaRunSource(arenaStartupSource, env);
+  return { env, calls, recover() { failing = false; } };
+}
+for (const point of ['stage', 'cast', 'mount', 'hud']) test(`arena startup ${point} failure exposes retry and back; retry has one listener`, async () => {
+  const h = arenaStartupHarness(point);
+  await h.env.startMatch();
+  assert.equal(h.env.root.dataset.state, 'ERROR');
+  assert.equal(h.env.sim, null);
+  assert.equal(h.env.scene, null);
+  assert.equal(h.env.audio, null);
+  assert.equal(h.env.tickerCallback, null);
+  assert.equal(h.env.bundles.size, 0);
+  assert.equal(h.calls.logs[0][0], 'DATA_ARENA_START_FAILED');
+  assert.equal(h.calls.logs[0][1].message, `injected ${point}`);
+  const panel = h.calls.panels.at(-1);
+  const actions = panel.children.at(-1).children;
+  assert.deepEqual(actions.map((action) => action.label), ['result.retry', 'select.back']);
+  actions[1].onClick(); assert.equal(h.calls.closed, true);
+  h.recover();
+  await h.env.startMatch();
+  assert.equal(h.env.root.dataset.state, 'PLAY');
+  assert.equal(h.calls.added, 1);
+});
+test('arena startup removes an old arena listener without stopping the shared ticker', async () => {
+  const h = arenaStartupHarness('cast');
+  h.env.stage = await h.env.ensureStage();
+  h.env.tickerCallback = h.env.frame;
+  await h.env.startMatch();
+  assert.equal(h.calls.removed, 1);
+  assert.equal(h.env.root.dataset.state, 'ERROR');
+});
+test('arena startup cleanup rejection is reported and still leaves recovery controls', async () => {
+  const h = arenaStartupHarness('mount');
+  h.env.loadCast = async () => { h.env.bundles.set('bad', { dispose() { throw new Error('dispose failed'); } }); return true; };
+  await h.env.startMatch();
+  assert.equal(h.env.root.dataset.state, 'ERROR');
+  assert.ok(h.calls.logs.some(([code]) => code === 'DATA_ARENA_CLEANUP_FAILED'));
+});
+test('arena startup is single-flight and an aborted failure never remounts an overlay', async () => {
+  const h = arenaStartupHarness('none');
+  let rejectStage;
+  h.env.ensureStage = () => new Promise((_resolve, reject) => { rejectStage = reject; });
+  const first = h.env.startMatch();
+  await h.env.startMatch();
+  assert.equal(h.calls.panels.length, 1);
+  h.env.signal.aborted = true;
+  rejectStage(new Error('aborted during startup'));
+  await first;
+  assert.equal(h.calls.panels.length, 1);
+  assert.equal(h.calls.added, 0);
+});
+test('arena scene construction rolls back owned resources and preserves the original error', () => {
+  const source = arenaReadSource(new URL('../src/championship/presentation/dataArena/dataArenaPixiScene.js', import.meta.url), 'utf8');
+  const functionSource = source.slice(source.indexOf('export function mountDataArenaScene')).replace('export function', 'function');
+  const calls = [];
+  const root = { parent: { removeChild() { calls.push('remove'); } }, destroy(options) { assert.equal(options.texture, false); calls.push('root'); } };
+  const error = new Error('mount marker failed');
+  const env = { T: { STANDS: 1 }, createDataArenaTextures: () => ({ destroy() { calls.push('textures'); } }), console };
+  arenaRunSource(functionSource, env);
+  assert.throws(() => env.mountDataArenaScene({ stage: { PIXI: {}, createSceneRoot: () => root, markScene() { throw error; } },
+    sim: { grid: { map: { rects: [] }, cols: 2, rows: 2, cell: 64 } }, cast: {} }), (actual) => actual === error);
+  assert.deepEqual(calls, ['remove', 'root', 'textures']);
+});
+test('arena scene failed ground bake releases render textures, root and canvas mark', () => {
+  const source = arenaReadSource(new URL('../src/championship/presentation/dataArena/dataArenaPixiScene.js', import.meta.url), 'utf8');
+  const functionSource = source.slice(source.indexOf('export function mountDataArenaScene')).replace('export function', 'function');
+  const calls = [];
+  class Display {
+    constructor() { this.position = { set() {} }; this.children = []; }
+    addChild(...children) { this.children.push(...children); }
+    destroy(options) { if (options?.children) for (const child of this.children) child.destroy(options); }
+  }
+  class Graphics extends Display {
+    rect() { return this; } fill() { return this; } moveTo() { return this; } lineTo() { return this; } stroke() { return this; } circle() { return this; }
+  }
+  const root = new Display();
+  root.parent = { removeChild() { calls.push('remove'); } };
+  const error = new Error('GPU bake failed');
+  const PIXI = { Container: Display, Graphics, Sprite: Display, RenderTexture: { create: () => ({ destroy() { calls.push('renderTexture'); } }) }, Matrix: class { translate() { return this; } } };
+  const env = { T: { STANDS: 1 }, createDataArenaTextures: () => ({ destroy() { calls.push('textures'); } }), createDataArenaCamera: () => ({}), console };
+  arenaRunSource(functionSource, env);
+  assert.throws(() => env.mountDataArenaScene({ stage: { PIXI, createSceneRoot: () => root, markScene: () => () => calls.push('unmark'), app: { renderer: { render() { throw error; } } } },
+    sim: { getState: () => ({}), grid: { map: { rects: [], flammable: [], pylons: [], gates: [], beacons: [], playerSpawn: [0, 0], rivalSpawn: [1, 1] }, cols: 2, rows: 2, cell: 64 } }, cast: {} }), (actual) => actual === error);
+  assert.deepEqual(calls, ['renderTexture', 'unmark', 'remove', 'textures']);
+});

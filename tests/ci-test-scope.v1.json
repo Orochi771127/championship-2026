@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
+    "tests/championship-screen-load-recovery-cases.mjs",
     "tests/championship-data-arena-cases.mjs",
     "tests/alternate-form-build-boundary-cases.mjs",
     "tests/alternate-form-portraits-cases.mjs",
@@ -290,7 +291,8 @@
     "tests/product-app-accepted-fixture-cases.mjs",
     "tests/product-evolution-accepted-fixture-cases.mjs",
     "tests/product-gameplay-compat-cases.mjs",
-    "tests/product-species-extensions-cases.mjs"
+    "tests/product-species-extensions-cases.mjs",
+    "tests/championship-companion-visible-copy-cases.mjs"
   ],
   "localReference": {
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",
