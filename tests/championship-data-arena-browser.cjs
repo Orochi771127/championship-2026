@@ -10,7 +10,12 @@
 //
 //   npm run serve   (another terminal)
 //   npm run test:browser:data-arena
-//   CHROME=/path/to/chrome  ARENA_SEED=7  ARENA_SKIP_FULL=1  (optional)
+//   CHROME=/path/to/chrome  ARENA_SEED=7  ARENA_SKIP_FULL=1  ARENA_SKIP_HARBOR=1  (optional)
+//
+// Order: title entry -> select (tournament default) -> briefing -> controls
+// (beam, skills, dash) -> pause/background/quality/resize -> a full 3-round
+// tournament -> mode switch -> a full harbor match (regression) -> restarts ->
+// exit/re-enter -> raising-save isolation -> phone touch (tournament + harbor).
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -64,7 +69,8 @@ async function openArena(page) {
   await page.waitForSelector('.da-panel--select');
   await waitState(page, 'SELECT');
 }
-async function startFromSelect(page, partnerIndex = 0) {
+async function startFromSelect(page, partnerIndex = 0, mode = null) {
+  if (mode) await page.click(`.da-mode[data-mode="${mode}"]`);
   await page.locator('.da-partner').nth(partnerIndex).click();
   await page.click('.da-panel--select .da-btn--primary');
   await page.waitForSelector('.da-panel--brief');
@@ -84,8 +90,8 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
   let firing = false;
   const seen = {};
   const started = Date.now();
-  const pref = ['focusLens', 'refractor', 'heatSink', 'guardianFin', 'swiftStep', 'phaseDash', 'surgePlus', 'perfectTiming', 'patch'];
-  let decisions = 0, levelUps = 0;
+  const pref = ['skillAmp', 'focusLens', 'coolingChip', 'refractor', 'heatSink', 'energyLoop', 'guardianFin', 'swiftStep', 'phaseDash', 'surgePlus', 'perfectTiming', 'ultCore', 'patch'];
+  let decisions = 0, levelUps = 0, casts = 0, bracketShown = 0;
   for (;;) {
     if ((Date.now() - started) / 1000 > maxSeconds) throw new Error(`${prefix}: match exceeded ${maxSeconds}s`);
     const view = await page.evaluate(() => {
@@ -103,13 +109,15 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
       if (firing) await page.mouse.up();
       await page.waitForSelector('.da-panel--result', { timeout: 10000 });
       if (shotsOn) await shot(page, `${prefix}-result`);
-      return { snap, decisions, levelUps, seconds: (Date.now() - started) / 1000 };
+      const panel = await page.$eval('.da-panel--result', (node) => ({ title: node.querySelector('.da-title')?.textContent, rounds: node.querySelectorAll('.da-bracket__step').length }));
+      return { snap, decisions, levelUps, casts, bracketShown, panel, seconds: (Date.now() - started) / 1000 };
     }
     if (state === 'LEVEL') {
       for (const code of held) await page.keyboard.up(code);
       held.clear();
       if (firing) { await page.mouse.up(); firing = false; }
       const ids = await page.$$eval('.da-card', (cards) => cards.map((card) => card.dataset.upgrade));
+      if (await page.locator('.da-bracket').count()) bracketShown++;
       if (shotsOn && !seen.level) { seen.level = true; await shot(page, `${prefix}-levelup`); }
       const pick = pref.find((id) => ids.includes(id)) ?? ids[0];
       const timeBefore = snap.time;
@@ -134,8 +142,15 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     if (d.fire && !firing) { await page.mouse.down(); firing = true; }
     if (!d.fire && firing) { await page.mouse.up(); firing = false; }
     if (d.dash) await page.keyboard.press('Space');
-    if (d.surge) await page.keyboard.press('KeyQ');
-    if (d.ride) await page.keyboard.press('KeyE');
+    if (d.surge) await page.keyboard.press('KeyF');
+    if (d.ride) await page.keyboard.press('KeyC');
+    // Skills: slot 1 alternates right mouse and the 2 key; slots 2-3 on Q/E (3/4 also bound).
+    if (Number.isInteger(d.cast)) {
+      casts++;
+      if (d.cast === 0 && casts % 2 === 0 && view.aim) await page.mouse.click(Math.min(viewport.width - 4, Math.max(4, view.aim.x)), Math.min(viewport.height - 4, Math.max(4, view.aim.y)), { button: 'right' });
+      else await page.keyboard.press(['Digit2', 'KeyQ', 'KeyE'][d.cast]);
+    }
+    if (d.ult) await page.keyboard.press('KeyR');
     if (shotsOn) {
       const p = snap.player;
       const moment = (key, condition) => { if (condition && !seen[key]) { seen[key] = true; return true; } return false; };
@@ -146,6 +161,13 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
       if (moment('ice', snap.ice >= 3)) await shot(page, `${prefix}-ice`);
       if (moment('scan', snap.phase === 'SCAN' && snap.time > 152)) await shot(page, `${prefix}-scan`);
       if (moment('boss', snap.boss && snap.boss.state === 'FIGHT')) await shot(page, `${prefix}-guardian`);
+      const t = snap.tournament, rival = snap.rivals?.[0];
+      if (t && rival) {
+        if (moment('duel-telegraph', t.status === 'FIGHT' && (snap.zones.some((z) => z.team === 'rival') || rival.casting))) await shot(page, `${prefix}-rival-telegraph`);
+        if (moment('duel-cover', t.status === 'FIGHT' && rival.wantsCover && !rival.sight)) await shot(page, `${prefix}-rival-cover`);
+        if (moment('duel-ult', snap.kit.casting && snap.kit.casting === snap.kit.ultimate)) await shot(page, `${prefix}-ultimate`);
+        if (moment(`duel-round-${t.round}`, t.status === 'FIGHT' && t.roundTime > 6)) await shot(page, `${prefix}-round${t.round + 1}`);
+      }
     }
   }
 }
@@ -167,6 +189,8 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     check('title menu shows the Data Arena entry', await page.locator('#cm-data-arena').isVisible());
     await shot(page, 'desktop-00-title-entry');
     await openArena(page);
+    check('a fresh player lands on the tournament mode', await page.locator('.da-mode[data-mode="TOURNAMENT"][aria-checked="true"]').count() === 1);
+    check('the select screen previews the four-move kit', await page.locator('.da-kitview__row').count() === 5);
     await shot(page, 'desktop-01-select');
     report.renderer = await page.evaluate(() => {
       const gl = document.createElement('canvas').getContext('webgl');
@@ -180,16 +204,20 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await shot(page, 'desktop-02-briefing');
     await page.click('.da-panel--brief .da-btn--primary');
     await waitState(page, 'PLAY', 45000);
-    await page.waitForTimeout(1200);
-    await shot(page, 'desktop-03-start');
+    await page.waitForTimeout(600);
+    const intro = await qa(page, () => ({ t: window.__dataArenaQA.snapshot().tournament, banner: document.querySelector('.da-banner:not([hidden])')?.textContent ?? null }));
+    check('round 1 opens with a VS intro and frozen input', intro.t?.status === 'INTRO' && intro.t.round === 0 && Boolean(intro.banner), intro);
+    await shot(page, 'desktop-03-round-intro');
+    await page.waitForFunction(() => window.__dataArenaQA.snapshot().tournament.status === 'FIGHT', null, { timeout: 20000 });
     let diag = await qa(page, () => window.__dataArenaQA.diagnostics());
     check('one shared Pixi Application, one arena ticker callback', diag.stage.applicationCount === 1 && diag.tickerListeners >= 1, diag);
-    check('existing creature art loaded for player, mate and guardian', diag.bundles.length === 3 && diag.scene.hasCreatureArt, diag.bundles);
+    check('existing creature art loaded for the partner and all three rivals', diag.bundles.length === 4 && diag.scene.hasCreatureArt, diag.bundles);
     check('arena fills the desktop viewport', diag.stage.viewport.width === 1280 && diag.stage.viewport.height === 720, diag.stage.viewport);
+    check('kit HUD shows three skills, the ultimate and the energy bar', await page.locator('.da-kit .da-slot').count() === 4 && await page.locator('.da-bar--energy').isVisible());
     const baseTicker = diag.tickerListeners;
 
-    // Mouse aim + sustained laser: heat rises while held, falls after release.
-    await page.mouse.move(980, 360);
+    // Mouse aim + sustained beam: heat rises while held, falls after release.
+    await page.mouse.move(640, 200);
     const fireStart = await qa(page, () => window.__dataArenaQA.snapshot().time);
     await page.mouse.down();
     await page.waitForTimeout(900);
@@ -201,6 +229,18 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     // Judged against game time: a starved software-rendered frame rate slows the game, not the rule.
     check('holding the mouse fires a sustained, heating beam', heating.firing && heating.heat >= heating.gameSeconds * 25, heating);
     check('releasing cools the beam', !cooled.firing && cooled.heat < heating.heat, cooled);
+    // Skill on the 2 key: energy spent, cooldown shown on the slot.
+    const energyBefore = await qa(page, () => window.__dataArenaQA.snapshot().kit.energy);
+    await page.keyboard.press('Digit2');
+    // Game time, not wall time: a starved software frame may not step within a fixed sleep.
+    await page.waitForFunction((before) => window.__dataArenaQA.snapshot().kit.energy < before, energyBefore, { timeout: 3000 }).catch(() => {});
+    const afterCast = await qa(page, () => ({ kit: window.__dataArenaQA.snapshot().kit, cooling: document.querySelector('.da-kit .da-slot')?.classList.contains('is-cooling') }));
+    check('the 2 key casts skill 1 (energy spent, slot cooling)', afterCast.kit.energy < energyBefore && afterCast.kit.moves[0].cooldown > 0 && afterCast.cooling, { energyBefore, afterCast });
+    await page.keyboard.press('Digit2');
+    const refusal = page.locator('.da-toast.is-showing', { hasText: /冷卻中|cooling/i });
+    await refusal.first().waitFor({ timeout: 3000 }).catch(() => {});
+    check('casting again while cooling is refused with feedback', await refusal.count() >= 1);
+    await shot(page, 'desktop-04-skill-cast');
     // Dash on Space.
     const beforeDash = await qa(page, () => window.__dataArenaQA.snapshot().player.dashCharges);
     await page.keyboard.press('Space');
@@ -225,7 +265,7 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await page.evaluate(() => { delete document.hidden; delete document.visibilityState; });
     report.backgroundTest = 'EMULATED_VISIBILITYCHANGE_HEADLESS';
     check('backgrounding pauses the match and stops game time', hidden.state === 'PAUSE' && hiddenLater === hidden.time, { hidden, hiddenLater });
-    await shot(page, 'desktop-04-paused-after-background');
+    await shot(page, 'desktop-05-paused-after-background');
     // Low quality from the pause menu remounts the scene at resolution 1.
     await page.locator('.da-panel--pause .da-toggle').nth(1).click();
     diag = await qa(page, () => window.__dataArenaQA.diagnostics());
@@ -241,21 +281,43 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await page.setViewportSize({ width: 1280, height: 720 });
     await page.waitForFunction(() => window.__dataArenaQA.diagnostics().stage.viewport.width === 1280, null, { timeout: 5000 }).catch(() => {});
 
-    // Full match with the autopilot (restart from the pause menu so it starts at 0:00).
+    // Full tournament with the autopilot (restart from the pause menu so round 1 starts fresh).
     if (!process.env.ARENA_SKIP_FULL) {
       await page.keyboard.press('Escape');
       await waitState(page, 'PAUSE');
       await page.locator('.da-panel--pause .da-btn', { hasText: /重新開始|Restart/ }).click();
       await waitState(page, 'PLAY', 45000);
-      const full = await autopilotMatch(page, { prefix: 'desktop-full' });
-      report.runs.push({ kind: 'full', outcome: full.snap.result.outcome, timeSeconds: full.snap.result.timeSeconds, score: full.snap.result.score,
-        level: full.snap.result.level, levelUps: full.levelUps, decisions: full.decisions, wallSeconds: full.seconds, stats: full.snap.result.stats,
-        upgrades: full.snap.result.upgrades });
-      check('a full match reaches a result', ['VICTORY', 'DEFEAT', 'TIMEOUT'].includes(full.snap.result.outcome), full.snap.result.outcome);
-      check('at least three level-up choices in a full match', full.levelUps >= 3, full.levelUps);
+      const cup = await autopilotMatch(page, { prefix: 'desktop-cup' });
+      const cupResult = cup.snap.result;
+      report.runs.push({ kind: 'tournament', outcome: cupResult.outcome, timeSeconds: cupResult.timeSeconds, score: cupResult.score, rounds: cupResult.tournament.results,
+        levelUps: cup.levelUps, casts: cup.casts, decisions: cup.decisions, wallSeconds: cup.seconds, stats: cupResult.stats, upgrades: cupResult.upgrades });
+      check('a full tournament reaches a champion or knockout result', ['VICTORY', 'DEFEAT'].includes(cupResult.outcome) && cupResult.mode === 'TOURNAMENT', cupResult.outcome);
+      check('between rounds the bracket and a three-choice upgrade appear', cup.levelUps === cupResult.tournament.results.filter((r) => r.won).length - (cupResult.outcome === 'VICTORY' ? 1 : 0) && cup.bracketShown === cup.levelUps,
+        { levelUps: cup.levelUps, bracket: cup.bracketShown, rounds: cupResult.tournament.results.length });
+      check('the result lists every round played', cup.panel.rounds === cupResult.tournament.results.length && Boolean(cup.panel.title), cup.panel);
+      check('skills were cast through real input during the cup', cupResult.stats.movesCast >= 10, cupResult.stats.movesCast);
       diag = await qa(page, () => window.__dataArenaQA.diagnostics());
-      report.performance = { desktopHigh: { arenaUpdateMs: diag.arenaUpdateMs, frameMsMedian: diag.scene.frameMsMedian, frameMsP95: diag.scene.frameMsP95,
+      report.performance = { desktopHighTournament: { arenaUpdateMs: diag.arenaUpdateMs, frameMsMedian: diag.scene.frameMsMedian, frameMsP95: diag.scene.frameMsP95,
         particlePeak: diag.scene.particlePeak, viewport: diag.stage.viewport, resolution: diag.stage.resolution } };
+
+      // Mode switch from the result screen, then a full harbor match (regression of the round-1 slice).
+      if (!process.env.ARENA_SKIP_HARBOR) {
+        await page.click('.da-panel--result .da-btn:nth-child(2)');
+        await page.waitForSelector('.da-panel--select');
+        await startFromSelect(page, partnerIndex, 'HARBOR');
+        diag = await qa(page, () => window.__dataArenaQA.diagnostics());
+        check('harbor loads partner, mate and guardian art', diag.bundles.length === 3, diag.bundles);
+        const harbor = await autopilotMatch(page, { prefix: 'desktop-harbor' });
+        const h = harbor.snap.result;
+        report.runs.push({ kind: 'harbor', outcome: h.outcome, timeSeconds: h.timeSeconds, score: h.score, level: h.level, levelUps: harbor.levelUps, casts: harbor.casts,
+          decisions: harbor.decisions, wallSeconds: harbor.seconds, stats: h.stats, upgrades: h.upgrades });
+        check('a full harbor match reaches a result', ['VICTORY', 'DEFEAT', 'TIMEOUT'].includes(h.outcome) && h.mode === 'HARBOR', h.outcome);
+        check('at least three level-up choices in a harbor match', harbor.levelUps >= 3, harbor.levelUps);
+        check('harbor objectives still run (cores, beacons, rides)', h.stats.coresOut >= 1 && h.stats.beaconsCaptured >= 1 && h.stats.rides >= 1, { cores: h.stats.coresOut, beacons: h.stats.beaconsCaptured, rides: h.stats.rides });
+        diag = await qa(page, () => window.__dataArenaQA.diagnostics());
+        report.performance.desktopHighHarbor = { arenaUpdateMs: diag.arenaUpdateMs, frameMsMedian: diag.scene.frameMsMedian, frameMsP95: diag.scene.frameMsP95,
+          particlePeak: diag.scene.particlePeak, viewport: diag.stage.viewport, resolution: diag.stage.resolution };
+      }
     }
 
     // Five consecutive restarts: no extra ticker callbacks, bundles reused.
@@ -284,9 +346,11 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     diag = await page.evaluate(() => ({ qa: typeof window.__dataArenaQA, canvases: document.querySelectorAll('canvas').length }));
     check('exit releases the QA hook and leaves no arena canvas in the page', diag.qa === 'undefined' && diag.canvases === 0, diag);
     await openArena(page);
-    await startFromSelect(page, 2);
-    await page.waitForTimeout(1500);
-    await shot(page, 'desktop-05-reenter-frost');
+    const remembered = await page.$eval('.da-mode[aria-checked="true"]', (node) => node.dataset.mode);
+    check('re-entering remembers the last mode played', remembered === (process.env.ARENA_SKIP_FULL ? 'TOURNAMENT' : process.env.ARENA_SKIP_HARBOR ? 'TOURNAMENT' : 'HARBOR'), remembered);
+    await startFromSelect(page, 2, 'TOURNAMENT');
+    await page.waitForTimeout(3500);
+    await shot(page, 'desktop-06-reenter-frost-tournament');
     await page.keyboard.press('Escape');
     await waitState(page, 'PAUSE');
     await page.locator('.da-panel--pause .da-btn', { hasText: /離開競技場|Leave the arena/ }).click();
@@ -295,6 +359,8 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     const arenaRecord = await page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? 'null'), ARENA_KEY);
     check('the raising save is byte-identical after arena play', saveAfter === saveBefore);
     check('arena records live under their own key', arenaRecord?.schema === 'dataArena.v1', arenaRecord && { runs: arenaRecord.runs, wins: arenaRecord.wins, best: arenaRecord.bestScore });
+    if (!process.env.ARENA_SKIP_FULL) check('records keep a separate entry per mode', arenaRecord.modes?.TOURNAMENT?.runs >= 1 && (process.env.ARENA_SKIP_HARBOR || arenaRecord.modes?.HARBOR?.runs >= 1),
+      arenaRecord.modes);
     await context.close();
 
     // ------------------------------------------------------------ phone 390x844 touch
@@ -312,6 +378,7 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await mobile.tap('.da-panel--brief .da-btn--primary');
     await waitState(mobile, 'PLAY', 45000);
     await mobile.waitForTimeout(1000);
+    await mobile.waitForFunction(() => window.__dataArenaQA.snapshot().tournament.status === 'FIGHT', null, { timeout: 20000 });
     const cdp = await phone.newCDPSession(mobile);
     const touchPoint = (id, x, y) => ({ x, y, id, radiusX: 4, radiusY: 4, force: 1 });
     const start = await qa(mobile, () => window.__dataArenaQA.snapshot().player);
@@ -326,13 +393,18 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     check('left touch stick moves the partner', moving.player.y < start.y - 20, { from: start.y, to: moving.player.y });
     check('right touch stick aims and holds the beam', moving.laser.firing || moving.laser.heat > 5, moving.laser);
+    const touchEnergy = await qa(mobile, () => window.__dataArenaQA.snapshot().kit.energy);
+    await mobile.tap('.da-tbtn--s1');
+    await mobile.waitForFunction((before) => window.__dataArenaQA.snapshot().kit.energy < before, touchEnergy, { timeout: 3000 }).catch(() => {});
+    const touchCast = await qa(mobile, () => window.__dataArenaQA.snapshot().kit);
+    check('tapping a touch skill button casts it (auto-aimed)', touchCast.energy < touchEnergy && touchCast.moves[0].cooldown > 0, { touchEnergy, energy: touchCast.energy });
     const charges = (await qa(mobile, () => window.__dataArenaQA.snapshot().player)).dashCharges;
     await mobile.tap('.da-tbtn--dash');
     await mobile.waitForTimeout(100);
     const dashed = await qa(mobile, () => window.__dataArenaQA.snapshot().player);
     check('touch dash button dashes', dashed.dashCharges < charges || dashed.state === 'DASH', { charges, dashed: dashed.dashCharges });
     const layout = await mobile.evaluate(() => ({ scrollX, scrollY, scale: visualViewport?.scale ?? 1, width: innerWidth, height: innerHeight,
-      docWidth: document.documentElement.scrollWidth, buttons: [...document.querySelectorAll('.da-tbtn, .da-hud__pause')].map((b) => { const r = b.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height), Math.round(r.right), Math.round(r.bottom)]; }) }));
+      docWidth: document.documentElement.scrollWidth, buttons: [...document.querySelectorAll('.da-tbtn, .da-hud__pause')].filter((b) => getComputedStyle(b).display !== 'none').map((b) => { const r = b.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height), Math.round(r.right), Math.round(r.bottom)]; }) }));
     check('touch play never scrolls or zooms the page', layout.scrollX === 0 && layout.scrollY === 0 && layout.scale === 1 && layout.docWidth <= layout.width, layout);
     check('touch controls are at least 44 CSS px and on screen', layout.buttons.every(([w, h, r, b]) => w >= 44 && h >= 44 && r <= layout.width && b <= layout.height), layout.buttons);
     await mobile.waitForTimeout(3000);
@@ -344,6 +416,23 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await mobile.tap('.da-hud__pause');
     await waitState(mobile, 'PAUSE');
     await shot(mobile, 'phone-05-pause');
+    await mobile.tap('.da-panel--pause .da-btn--quiet');
+    await mobile.waitForFunction(() => !document.querySelector('.da-root'));
+    // Harbor on the phone: mate buttons appear only in that mode.
+    await mobile.tap('#cm-data-arena');
+    await mobile.waitForSelector('.da-panel--select');
+    await mobile.tap('.da-mode[data-mode="HARBOR"]');
+    await shot(mobile, 'phone-06-select-harbor');
+    await mobile.tap('.da-panel--select .da-btn--primary');
+    await mobile.waitForSelector('.da-panel--brief');
+    await mobile.tap('.da-panel--brief .da-btn--primary');
+    await waitState(mobile, 'PLAY', 45000);
+    await mobile.waitForTimeout(1500);
+    const harborButtons = await mobile.evaluate(() => ['surge', 'ride', 's1', 'ult', 'dash'].map((k) => { const r = document.querySelector(`.da-tbtn--${k}`).getBoundingClientRect(); return [k, Math.round(r.width), Math.round(r.height)]; }));
+    check('harbor on touch adds the mate buttons beside the kit', harborButtons.every(([, w, h]) => w >= 44 && h >= 44), harborButtons);
+    await shot(mobile, 'phone-07-harbor');
+    await mobile.tap('.da-hud__pause');
+    await waitState(mobile, 'PAUSE');
     await mobile.tap('.da-panel--pause .da-btn--quiet');
     await mobile.waitForFunction(() => !document.querySelector('.da-root'));
     await phone.close();

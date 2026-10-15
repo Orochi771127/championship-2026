@@ -13,7 +13,7 @@
 // 0 stand, 2 walk, 7 attack, 6 hit, 15 down, 33 win.
 
 import acceptedSelection from "../../../data/championship/accepted-original-character-selection.r1.json" with { type: "json" };
-import { DATA_ARENA_BOSS, DATA_ARENA_MATE, DATA_ARENA_PARTNERS } from "../../modes/dataArena/dataArenaConfig.js";
+import { DATA_ARENA_BOSS, DATA_ARENA_MATE, DATA_ARENA_PARTNERS, DATA_ARENA_RIVALS } from "../../modes/dataArena/dataArenaConfig.js";
 import { speciesNameForId } from "../../text/zhHant.js";
 import { isOriginalRuntimeLocation } from "../originalRuntimeLocation.js";
 
@@ -37,6 +37,7 @@ export function dataArenaCast(href = globalThis.location?.href) {
   return Object.freeze({
     partners: Object.freeze(DATA_ARENA_PARTNERS.map((partner) => member("PLAYER", partner.speciesId, { partnerId: partner.id }))),
     mate: member("MATE", DATA_ARENA_MATE.speciesId),
+    rivals: Object.freeze(DATA_ARENA_RIVALS.map((rival) => member(rival.champion ? "CHAMPION" : "RIVAL", rival.speciesId, { rivalId: rival.id, kit: rival.kit }))),
     boss: member("BOSS", DATA_ARENA_BOSS.speciesId)
   });
 }

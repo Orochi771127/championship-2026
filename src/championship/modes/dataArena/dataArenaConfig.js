@@ -203,7 +203,7 @@ export const DATA_ARENA_LEVELS = deepFreeze({
 export const DATA_ARENA_CROWD = deepFreeze({
   // Hype is a bounded meter; each source has its own cooldown and the meter
   // ignores input during the post-cheer cooldown, so it cannot be farmed.
-  gains: { PERFECT_DODGE: 12, ELEMENT_CHAIN: 10, RESCUE: 16, BEACON: 8, CORE_OUT: 10, MULTI_KILL: 6, BOSS_DOWN: 30 },
+  gains: { PERFECT_DODGE: 12, ELEMENT_CHAIN: 10, RESCUE: 16, BEACON: 8, CORE_OUT: 10, MULTI_KILL: 6, BOSS_DOWN: 30, ROUND_WIN: 20 },
   sourceCooldown: 1.2,
   windowSeconds: 10,
   windowCap: 40,
@@ -222,4 +222,122 @@ export const DATA_ARENA_SCORE = deepFreeze({
   coreOut: 300,
   // Objectives restore a little HP: playing the field beats only surviving it.
   coreHeal: 12
+});
+
+// ---------------------------------------------------------------------------
+// Four-move kits (2026-10-15 round 2). Slot 1 is each partner's sustained beam
+// (heat, above). Slots 2-4 spend ENERGY and have their own cooldown; the
+// ultimate charges from damage dealt/taken and crowd moments.
+//
+// `mechanic` records the genre mechanic a move implements. Names, numbers,
+// visuals and sounds are this project's own; no reference game's move names,
+// art, sounds or signature kit is reproduced (see the batch report's rights
+// note). Types the simulation executes:
+//   BOLT    aimed projectile; optional pierce, onHit status, terrain effect
+//   SPREAD  fan of BOLTs with gaps between them
+//   LUNGE   telegraphed dash that damages along its path
+//   ZONE    ground circle that detonates after a visible delay
+//   BARRIER frontal shield that blocks hostile shots for a short time
+//   BLINK   short teleport; frost variant freezes water along the path
+//   WAVE    wide, slow projectile that knocks back, douses fire, quenches embers
+//   NOVA    (ultimate) circle around the caster after a long windup
+//   LANCE   (ultimate) wide fan of heavy piercing shots
+export const DATA_ARENA_ENERGY = deepFreeze({ max: 100, regen: 16, regenDelay: 0.6, ultMax: 100, ultPerDamageDealt: 0.22, ultPerDamageTaken: 0.45, ultPerCrowd: 6,
+  // Movement while winding up a cast. The player keeps footwork (a heavier slow made the
+  // kit a net loss in harbor runs: 8/24 vs 11/24 wins without it); rivals commit harder.
+  playerCastMove: 0.7,
+  // A skill tapped while dashing or winding up is kept this long (seconds) and then cast.
+  inputBuffer: 0.25,
+  rivalCastMove: 0.35
+});
+
+export const DATA_ARENA_MOVES = deepFreeze({
+  // Partners -----------------------------------------------------------------
+  emberBolt: { type: "BOLT", mechanic: "projectile that ignites terrain", energy: 18, cooldown: 0.9, windup: 0.12, range: 620, speed: 620, radius: 11, damage: 20, onTerrain: "IGNITE", onHit: { burn: 2.5 } },
+  fangRush: { type: "LUNGE", mechanic: "dash attack along a line", energy: 22, cooldown: 4.5, windup: 0.22, distance: 280, speed: 1100, width: 54, damage: 30, invulnerable: true },
+  flameRing: { type: "ZONE", mechanic: "delayed ground detonation", energy: 30, cooldown: 6, windup: 0.18, range: 520, radius: 110, delay: 0.85, damage: 34, effect: "IGNITE" },
+  sunSpear: { type: "BOLT", mechanic: "fast piercing projectile", energy: 22, cooldown: 1.6, windup: 0.28, range: 760, speed: 1100, radius: 12, damage: 30, pierce: 2 },
+  sunShield: { type: "BARRIER", mechanic: "frontal projectile shield", energy: 20, cooldown: 7, windup: 0, duration: 1.4, radius: 64, arc: 2.2 },
+  scatterLight: { type: "SPREAD", mechanic: "fan of projectiles", energy: 26, cooldown: 3.2, windup: 0.16, range: 520, speed: 700, radius: 9, damage: 12, count: 5, spread: 0.9 },
+  iceShard: { type: "BOLT", mechanic: "slowing projectile", energy: 16, cooldown: 0.8, windup: 0.1, range: 600, speed: 760, radius: 10, damage: 15, onHit: { slow: 0.45, slowSeconds: 1.6 }, onTerrain: "FREEZE" },
+  frostStep: { type: "BLINK", mechanic: "short teleport leaving an ice trail", energy: 20, cooldown: 4, windup: 0, distance: 250, freezeTrail: true },
+  iceCage: { type: "ZONE", mechanic: "delayed root area", energy: 30, cooldown: 7, windup: 0.18, range: 520, radius: 100, delay: 0.9, damage: 18, effect: "ROOT", rootSeconds: 1.1 },
+  coreNova: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 0.65, radius: 240, damage: 70, effect: "IGNITE" },
+  dawnLance: { type: "LANCE", mechanic: "ultimate: fan of heavy piercing shots", windup: 0.55, range: 900, speed: 900, radius: 22, damage: 42, count: 5, spread: 0.7, pierce: 4 },
+  whiteout: { type: "NOVA", mechanic: "ultimate: wide freezing burst", windup: 0.6, radius: 260, damage: 44, effect: "ROOT", rootSeconds: 1.6, freezeWater: true },
+  // Rivals -------------------------------------------------------------------
+  tideBolt: { type: "BOLT", mechanic: "projectile", energy: 14, cooldown: 1.1, windup: 0.32, range: 600, speed: 640, radius: 11, damage: 16 },
+  tideWave: { type: "WAVE", mechanic: "wide knockback wave", energy: 26, cooldown: 5, windup: 0.6, range: 560, speed: 420, radius: 34, damage: 20, knockback: 320 },
+  foamZone: { type: "ZONE", mechanic: "delayed slowing area", energy: 24, cooldown: 6, windup: 0.3, range: 520, radius: 120, delay: 1.0, damage: 14, effect: "SLOW", slow: 0.5, slowSeconds: 2 },
+  surfRush: { type: "LUNGE", mechanic: "dash attack", energy: 22, cooldown: 6, windup: 0.55, distance: 300, speed: 950, width: 56, damage: 24 },
+  flameBall: { type: "BOLT", mechanic: "projectile that ignites terrain", energy: 16, cooldown: 1.2, windup: 0.32, range: 600, speed: 600, radius: 12, damage: 18, onTerrain: "IGNITE" },
+  emberFan: { type: "SPREAD", mechanic: "fan of projectiles", energy: 24, cooldown: 3.6, windup: 0.45, range: 520, speed: 480, radius: 9, damage: 12, count: 5, spread: 1.0 },
+  flamePillar: { type: "ZONE", mechanic: "delayed ground detonation", energy: 26, cooldown: 5.5, windup: 0.3, range: 560, radius: 110, delay: 1.0, damage: 28, effect: "IGNITE" },
+  shardVolley: { type: "BOLT", mechanic: "heavy beam-blocking projectile", energy: 18, cooldown: 1.4, windup: 0.36, range: 620, speed: 460, radius: 14, damage: 19, shard: 30 },
+  quakeSlam: { type: "ZONE", mechanic: "delayed ground detonation", energy: 26, cooldown: 4.8, windup: 0.3, range: 540, radius: 130, delay: 0.95, damage: 30, effect: "NONE" },
+  brutalCharge: { type: "LUNGE", mechanic: "dash attack", energy: 24, cooldown: 5.5, windup: 0.6, distance: 340, speed: 1000, width: 64, damage: 28 },
+  vortex: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 1.1, radius: 230, damage: 32, effect: "SLOW", slow: 0.5, slowSeconds: 2 },
+  inferno: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 1.1, radius: 240, damage: 34, effect: "IGNITE" },
+  shardStorm: { type: "LANCE", mechanic: "ultimate: wide fan of heavy shots", windup: 1.0, range: 760, speed: 420, radius: 16, damage: 18, count: 9, spread: 1.6, shard: 30 }
+});
+
+export const DATA_ARENA_KITS = deepFreeze({
+  "ember-lizard": { moves: ["emberBolt", "fangRush", "flameRing"], ultimate: "coreNova" },
+  "corona-cub": { moves: ["sunSpear", "sunShield", "scatterLight"], ultimate: "dawnLance" },
+  "frost-drake": { moves: ["iceShard", "frostStep", "iceCage"], ultimate: "whiteout" },
+  tide: { moves: ["tideBolt", "tideWave", "foamZone", "surfRush"], ultimate: "vortex" },
+  flame: { moves: ["flameBall", "emberFan", "flamePillar"], ultimate: "inferno" },
+  storm: { moves: ["shardVolley", "quakeSlam", "brutalCharge"], ultimate: "shardStorm" }
+});
+
+// ---------------------------------------------------------------------------
+// Short tournament: three 1v1 rounds against AI rivals (not survival waves).
+export const DATA_ARENA_RIVALS = deepFreeze([
+  { id: "tide", speciesId: "species-047", kit: "tide", hp: 720, speed: 225, radius: 24, preferredRange: 380 },
+  { id: "flame", speciesId: "species-113", kit: "flame", hp: 780, speed: 205, radius: 26, preferredRange: 420 },
+  { id: "storm", speciesId: "species-102", kit: "storm", hp: 960, speed: 195, radius: 30, preferredRange: 330, champion: true }
+]);
+
+export const DATA_ARENA_TOURNAMENT = deepFreeze({
+  rounds: 3,
+  roundSeconds: 90,
+  introSeconds: 3,
+  koSeconds: 2.2,
+  playerHpScale: 1.8,
+  // The beam melts swarms; against one armoured rival it is a tool, not the whole kit.
+  rivalBeamScale: 0.55,
+  roundWinScore: 1000,
+  perHpLeft: 4,
+  perSecondLeft: 6,
+  championScore: 2500,
+  // AI tiers by round: reaction delay, dodge chance, aim lead accuracy, damage scale.
+  tiers: [
+    { reaction: 0.34, dodge: 0.45, lead: 0.5, damage: 1.1, energyRegen: 1.0 },
+    { reaction: 0.26, dodge: 0.58, lead: 0.7, damage: 1.3, energyRegen: 1.15 },
+    { reaction: 0.2, dodge: 0.7, lead: 0.85, damage: 1.5, energyRegen: 1.3 }
+  ]
+});
+
+const DT_ = DATA_ARENA_TERRAIN;
+/** The compact tournament arena: 30 x 20 cells, pillars for cover, a narrow channel with two crossings. */
+export const DATA_ARENA_DUEL_MAP = deepFreeze({
+  cell: 64, cols: 30, rows: 20,
+  rects: [
+    [0, 0, 30, 2, DT_.STANDS],
+    [0, 9, 7, 2, DT_.WATER], [9, 9, 12, 2, DT_.WATER], [23, 9, 7, 2, DT_.WATER],
+    [5, 4, 2, 2, DT_.SOLID], [23, 4, 2, 2, DT_.SOLID], [12, 6, 2, 1, DT_.SOLID], [16, 6, 2, 1, DT_.SOLID],
+    [5, 14, 2, 2, DT_.SOLID], [23, 14, 2, 2, DT_.SOLID], [12, 13, 2, 1, DT_.SOLID], [16, 13, 2, 1, DT_.SOLID],
+    [9, 16, 1, 2, DT_.SOLID], [20, 16, 1, 2, DT_.SOLID], [9, 2, 1, 2, DT_.SOLID], [20, 2, 1, 2, DT_.SOLID]
+  ],
+  stage: null,
+  pylons: [],
+  flammable: [[1, 14, 4, 5], [25, 2, 4, 5], [11, 11, 8, 2]],
+  pods: [[14, 8], [15, 11]],
+  beacons: [],
+  fireCores: [],
+  playerSpawn: [15, 17],
+  mateSpawn: [17, 17],
+  rivalSpawn: [14, 3],
+  bossSpawn: [14, 3],
+  gates: []
 });

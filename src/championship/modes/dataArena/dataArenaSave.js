@@ -11,13 +11,14 @@ import { DATA_ARENA_PARTNERS, DATA_ARENA_VERSION } from "./dataArenaConfig.js";
 
 export const DATA_ARENA_RECORD_SCHEMA = DATA_ARENA_VERSION;
 const QUALITY = new Set(["auto", "high", "low"]);
+const MODES = ["TOURNAMENT", "HARBOR"];
 const PARTNER_IDS = new Set(DATA_ARENA_PARTNERS.map((partner) => partner.id));
 const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(value, 1e9) : 0);
 
 export function defaultDataArenaRecords() {
   return {
     schemaVersion: 1, kind: "DATA_ARENA_RECORDS", runs: 0, wins: 0, bestScore: 0, bestVictorySeconds: null,
-    lastPartnerId: DATA_ARENA_PARTNERS[0].id, partners: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
+    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "TOURNAMENT", partners: {}, modes: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
   };
 }
 
@@ -30,13 +31,18 @@ export function sanitizeDataArenaRecords(raw) {
     const entry = raw.partners?.[id];
     if (entry && typeof entry === "object") partners[id] = { runs: count(entry.runs), wins: count(entry.wins), bestScore: count(entry.bestScore) };
   }
+  const modes = {};
+  for (const id of MODES) {
+    const entry = raw.modes?.[id];
+    if (entry && typeof entry === "object") modes[id] = { runs: count(entry.runs), wins: Math.min(count(entry.wins), count(entry.runs)), bestScore: count(entry.bestScore), bestRound: Math.min(count(entry.bestRound), 9) };
+  }
   const best = raw.bestVictorySeconds;
   return {
     ...base,
     runs: count(raw.runs), wins: Math.min(count(raw.wins), count(raw.runs)), bestScore: count(raw.bestScore),
     bestVictorySeconds: Number.isFinite(best) && best > 0 && best < 3600 ? best : null,
     lastPartnerId: PARTNER_IDS.has(raw.lastPartnerId) ? raw.lastPartnerId : base.lastPartnerId,
-    partners,
+    partners, modes, lastMode: MODES.includes(raw.lastMode) ? raw.lastMode : base.lastMode,
     settings: { shake: raw.settings?.shake !== false, quality: QUALITY.has(raw.settings?.quality) ? raw.settings.quality : "auto" },
     briefingSeen: raw.briefingSeen === true
   };
@@ -74,6 +80,7 @@ export function createDataArenaRecordStore({ port = null } = {}) {
     },
     markBriefingSeen() { if (!records.briefingSeen) { records.briefingSeen = true; return write(); } return true; },
     setLastPartner(id) { if (PARTNER_IDS.has(id)) { records.lastPartnerId = id; return write(); } return false; },
+    setLastMode(mode) { if (MODES.includes(mode)) { records.lastMode = mode; return write(); } return false; },
     /** Record one finished match. Returns whether it set a new best score. */
     recordResult(result) {
       if (!result || !PARTNER_IDS.has(result.partnerId)) return { saved: false, newBest: false };
@@ -89,7 +96,13 @@ export function createDataArenaRecordStore({ port = null } = {}) {
       const partner = records.partners[result.partnerId] ?? { runs: 0, wins: 0, bestScore: 0 };
       records.partners[result.partnerId] = { runs: partner.runs + 1, wins: partner.wins + (victory ? 1 : 0), bestScore: Math.max(partner.bestScore, score) };
       records.lastPartnerId = result.partnerId;
-      return { saved: write(), newBest };
+      const mode = MODES.includes(result.mode) ? result.mode : "HARBOR";
+      const entry = records.modes[mode] ?? { runs: 0, wins: 0, bestScore: 0, bestRound: 0 };
+      const reached = result.tournament ? (victory ? result.tournament.rounds : result.tournament.reachedRound) : 0;
+      const newModeBest = score > entry.bestScore;
+      records.modes[mode] = { runs: entry.runs + 1, wins: entry.wins + (victory ? 1 : 0), bestScore: Math.max(entry.bestScore, score), bestRound: Math.max(entry.bestRound, reached) };
+      records.lastMode = mode;
+      return { saved: write(), newBest: newModeBest, overallBest: newBest };
     }
   });
 }

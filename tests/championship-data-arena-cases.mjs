@@ -455,3 +455,230 @@ test("camera keeps the player in frame, stays inside the harbor, and honours red
   assert.equal(calm.update({ dtMs: 16, viewport, target: { x: 1900, y: 1300 } }).trauma, 0, "no shake with reduced motion");
   assert.deepEqual(DATA_ARENA_SEQUENCES, { STAND: 0, WALK: 2, ATTACK: 7, HIT: 6, DOWN: 15, WIN: 33 });
 });
+
+// ---------------------------------------------------------------------------
+// Round 2: four-move kits, rivals and the short tournament.
+import { DATA_ARENA_ENERGY, DATA_ARENA_KITS, DATA_ARENA_MOVES, DATA_ARENA_RIVALS, DATA_ARENA_TOURNAMENT } from "../src/championship/modes/dataArena/dataArenaConfig.js";
+
+/** A tournament with the intro skipped: round 1 is live, the rival waits idle unless a test wakes it. */
+function liveDuel(options = {}) {
+  const sim = createDataArenaSimulation({ seed: 5, mode: "TOURNAMENT", ...options });
+  run(sim, DATA_ARENA_TOURNAMENT.introSeconds + DT * 2);
+  const s = sim.getState();
+  assert.equal(s.tournament.status, "FIGHT");
+  const rival = s.rivals[0];
+  rival.attackDelay = Infinity; rival.dashCooldown = Infinity; rival.speed = 0; rival.ult = 0;
+  return { sim, s, rival };
+}
+function place(body, c, r) { const p = center(c, r); body.x = p.x; body.y = p.y; body.vx = 0; body.vy = 0; }
+
+test("skills spend energy and start a cooldown; empty energy or a cooling move refuses the cast", () => {
+  const { sim, s } = liveDuel();
+  const first = DATA_ARENA_KITS["ember-lizard"].moves[0];
+  const before = s.player.energy;
+  let events = run(sim, DT, { cast: 0, autoAim: true });
+  assert.ok(events.some((e) => e.type === "CAST" && e.moveId === first && e.team === "player"));
+  assert.ok(Math.abs(s.player.energy - (before - DATA_ARENA_MOVES[first].energy)) < 1);
+  assert.ok(s.player.cooldowns[first] > 0);
+  run(sim, DATA_ARENA_MOVES[first].windup + DT * 2);
+  events = run(sim, DT, { cast: 0, autoAim: true });
+  assert.ok(events.some((e) => e.type === "CAST_REFUSED" && e.reason === "COOLDOWN"));
+  run(sim, DATA_ARENA_MOVES[first].cooldown + 0.1);
+  s.player.energy = 0; s.player.energySpentAt = s.time;
+  events = run(sim, DT, { cast: 0, autoAim: true });
+  assert.ok(events.some((e) => e.type === "CAST_REFUSED" && e.reason === "ENERGY"));
+  // Energy refills after a short delay.
+  run(sim, DATA_ARENA_ENERGY.regenDelay + 1);
+  assert.ok(s.player.energy > 10);
+});
+
+test("auto-aim locks the nearest rival only with a clear line; pillars break the lock", () => {
+  const { sim, s, rival } = liveDuel();
+  place(s.player, 13, 8);
+  place(rival, 13, 4); // straight through the pillar at row 6
+  assert.equal(sim.getSnapshot().rivals[0].sight, false);
+  assert.equal(sim.internals.autoAim(s.player, 900).target, null);
+  place(rival, 8, 4);
+  assert.equal(sim.getSnapshot().rivals[0].sight, true);
+  assert.equal(sim.internals.autoAim(s.player, 900).target, rival);
+  // A bolt fired into the pillar stops there.
+  place(rival, 13, 4);
+  sim.internals.beginCast(s.player, "emberBolt", rival.x, rival.y);
+  const hp = rival.hp;
+  run(sim, 1.2);
+  assert.equal(rival.hp, hp, "cover absorbs the shot");
+});
+
+test("every rival attack is telegraphed: windups and delayed zones give time to step out", () => {
+  for (const definition of DATA_ARENA_RIVALS) {
+    const kit = DATA_ARENA_KITS[definition.kit];
+    for (const id of kit.moves) assert.ok(DATA_ARENA_MOVES[id].windup >= 0.3, `${id} windup`);
+    assert.ok(DATA_ARENA_MOVES[kit.ultimate].windup >= 1, `${kit.ultimate} ultimate windup`);
+  }
+  for (const stepOut of [false, true]) {
+    const { sim, s, rival } = liveDuel();
+    place(s.player, 15, 15); place(rival, 15, 12);
+    s.player.invulnerable = 0;
+    const hp = s.player.hp;
+    assert.ok(sim.internals.beginCast(rival, "quakeSlam", s.player.x, s.player.y));
+    assert.ok(s.telegraphs.some((g) => g.owner === `cast:${rival.id}`), "windup telegraph is shown");
+    run(sim, DATA_ARENA_MOVES.quakeSlam.windup + DT * 2);
+    assert.equal(s.zones.length, 1, "the zone is placed before it detonates");
+    assert.equal(s.player.hp, hp, "nothing lands during the warning");
+    run(sim, DATA_ARENA_MOVES.quakeSlam.delay + 0.2, stepOut ? { moveX: 1 } : {});
+    if (stepOut) assert.equal(s.player.hp, hp, "stepping out of the circle avoids it");
+    else assert.ok(s.player.hp < hp, "standing in it is punished");
+  }
+});
+
+test("the light shield blocks hostile shots from the front only", () => {
+  for (const front of [true, false]) {
+    const { sim, s, rival } = liveDuel({ partnerId: "corona-cub" });
+    place(s.player, 15, 15); place(rival, 15, 4);
+    s.player.invulnerable = 0;
+    assert.ok(sim.internals.beginCast(s.player, "sunShield", s.player.x, s.player.y - 100)); // facing north
+    run(sim, DT * 2);
+    const fromY = front ? s.player.y - 200 : s.player.y + 200;
+    sim.internals.spawnProjectile({ kind: "RBOLT", owner: "rival", team: "rival", moveId: "tideBolt", x: s.player.x, y: fromY, vx: 0, vy: front ? 600 : -600,
+      radius: 11, damage: 16, range: 600, travelled: 0, hits: new Set() });
+    const hp = s.player.hp;
+    const events = run(sim, 0.5);
+    if (front) {
+      assert.equal(s.player.hp, hp);
+      assert.ok(events.some((e) => e.type === "CANCEL" && e.rule === "BARRIER_BLOCKS_SHOT"));
+      assert.equal(s.stats.barrierBlocks, 1);
+    } else assert.ok(s.player.hp < hp, "a shot from behind gets through");
+  }
+});
+
+test("a spent rival breaks line of sight behind cover instead of trading hits", () => {
+  const { sim, s, rival } = liveDuel();
+  place(s.player, 15, 15); place(rival, 15, 5);
+  rival.energy = 0;
+  sim.internals.chooseRivalGoal(rival);
+  assert.equal(rival.wantsCover, true);
+  assert.equal(sim.grid.raycast(rival.goal.x, rival.goal.y, (s.player.x - rival.goal.x) / Math.hypot(s.player.x - rival.goal.x, s.player.y - rival.goal.y),
+    (s.player.y - rival.goal.y) / Math.hypot(s.player.x - rival.goal.x, s.player.y - rival.goal.y), Math.hypot(s.player.x - rival.goal.x, s.player.y - rival.goal.y))
+    < Math.hypot(s.player.x - rival.goal.x, s.player.y - rival.goal.y) - 1, true, "the chosen spot is hidden from the player");
+  rival.energy = DATA_ARENA_ENERGY.max;
+  sim.internals.chooseRivalGoal(rival);
+  assert.equal(rival.wantsCover, false, "with energy back it re-engages");
+});
+
+test("tournament: KO -> between-round upgrade -> next rival; three wins crown the champion", () => {
+  const { sim, s } = liveDuel();
+  for (let round = 0; round < DATA_ARENA_TOURNAMENT.rounds; round++) {
+    if (round > 0) {
+      run(sim, DATA_ARENA_TOURNAMENT.introSeconds + DT * 2);
+      assert.equal(s.tournament.status, "FIGHT");
+    }
+    assert.equal(s.rivals[0].definitionId, s.tournament.order[round]);
+    s.rivals[0].attackDelay = Infinity;
+    sim.internals.damageRival(s.rivals[0], 1e6, "TEST");
+    let events = run(sim, DT * 2);
+    assert.ok(events.some((e) => e.type === "ROUND_WON" && e.round === round));
+    events = run(sim, DATA_ARENA_TOURNAMENT.koSeconds + DT * 2);
+    if (round < DATA_ARENA_TOURNAMENT.rounds - 1) {
+      assert.equal(s.mode, "LEVEL_UP");
+      assert.equal(s.offer.length, 3);
+      assert.equal(s.player.hp, s.player.maxHp, "each round starts at full HP");
+      assert.ok(sim.choose(s.offer[0]));
+      assert.equal(s.mode, "PLAY");
+      assert.equal(s.tournament.round, round + 1);
+    } else {
+      const result = events.find((e) => e.type === "RESULT");
+      assert.equal(result?.outcome, "VICTORY");
+    }
+  }
+  assert.equal(s.tournament.order.at(-1), "storm", "the champion is always the final");
+  assert.equal(s.result.tournament.roundsWon, 3);
+  assert.equal(s.result.mode, "TOURNAMENT");
+  assert.ok(s.result.breakdown.victory > 0 && s.result.breakdown.time === 0, "no harbor time-limit bonus in the cup");
+});
+
+test("tournament: a lost round ends the cup; time-out goes to the higher HP share", () => {
+  const lost = liveDuel();
+  lost.s.player.invulnerable = 0;
+  lost.sim.internals.hurtPlayer(1e6, "TEST", lost.s.player.x, lost.s.player.y);
+  let events = run(lost.sim, DATA_ARENA_TOURNAMENT.koSeconds + 0.5);
+  assert.ok(events.some((e) => e.type === "ROUND_LOST"));
+  assert.equal(events.find((e) => e.type === "RESULT")?.outcome, "DEFEAT");
+  assert.equal(lost.s.result.tournament.reachedRound, 1);
+
+  const timed = liveDuel();
+  timed.rival.hp = timed.rival.maxHp * 0.5;
+  timed.s.player.hp = timed.s.player.maxHp * 0.6;
+  timed.s.tournament.roundTime = DATA_ARENA_TOURNAMENT.roundSeconds - DT;
+  events = run(timed.sim, DT * 3);
+  assert.ok(events.some((e) => e.type === "ROUND_WON" && e.reason === "TIME"));
+});
+
+test("modes stay separate: the cup has no swarm, mate or harbor upgrades; the harbor keeps its phases and gains the kit", () => {
+  const duel = createDataArenaSimulation({ seed: 1, mode: "TOURNAMENT" });
+  run(duel, 20, { moveX: 0.3 });
+  const d = duel.getState();
+  assert.equal(d.enemies.length, 0);
+  assert.equal(d.mate.state, "ABSENT");
+  assert.equal(d.boss, null);
+  assert.equal(duel.getSnapshot().phase, "DUEL", "harbor phases never run in the cup");
+  for (let seed = 0; seed < 200; seed++) {
+    const offer = drawUpgradeOffer({}, createArenaRandom(seed), 3, "TOURNAMENT");
+    assert.ok(!offer.includes("surgePlus") && !offer.includes("guardianFin"), `seed ${seed}: ${offer}`);
+  }
+  const harbor = createDataArenaSimulation({ seed: 1, mode: "HARBOR" });
+  const events = run(harbor, 0.2, { cast: 0, autoAim: true });
+  assert.ok(events.some((e) => e.type === "CAST" && e.team === "player"), "the harbor partner casts skills too");
+  assert.equal(harbor.getState().rivals.length, 0);
+  harbor.getState().spawnTimer = Infinity;
+  run(harbor, 50);
+  assert.equal(harbor.getState().mode, "PLAY");
+  assert.notEqual(harbor.getSnapshot().phase, "WARMUP");
+});
+
+test("records keep one entry per mode and remember the last mode", () => {
+  const storage = new Map();
+  const port = createChampionshipDataArenaPort({ storage: { getItem: (k) => storage.get(k) ?? null, setItem: (k, v) => storage.set(k, String(v)), removeItem: (k) => storage.delete(k) } });
+  const store = createDataArenaRecordStore({ port });
+  store.recordResult({ outcome: "DEFEAT", score: 1800, partnerId: "ember-lizard", mode: "TOURNAMENT", timeSeconds: 70,
+    tournament: { roundsWon: 1, rounds: 3, reachedRound: 2, results: [] } });
+  store.recordResult({ outcome: "VICTORY", score: 9000, partnerId: "ember-lizard", mode: "HARBOR", timeSeconds: 260, tournament: null });
+  const saved = store.get();
+  assert.equal(saved.modes.TOURNAMENT.bestScore, 1800);
+  assert.equal(saved.modes.TOURNAMENT.bestRound, 2);
+  assert.equal(saved.modes.TOURNAMENT.wins, 0);
+  assert.equal(saved.modes.HARBOR.wins, 1);
+  assert.equal(saved.lastMode, "HARBOR");
+  assert.deepEqual([...storage.keys()], [CHAMPIONSHIP_DATA_ARENA_KEY]);
+});
+
+test("duel camera keeps both the player and the rival on screen", () => {
+  const camera = createDataArenaCamera({ worldWidth: 1920, worldHeight: 1280 });
+  const viewport = { width: 1280, height: 720 };
+  const player = { x: 960, y: 1120 }, rival = { x: 900, y: 220 };
+  let view;
+  for (let i = 0; i < 240; i++) view = camera.update({ dtMs: 16.7, viewport, target: player, opponent: rival });
+  const onScreen = (body) => { const sx = view.x + body.x * view.zoom, sy = view.y + body.y * view.zoom; return sx > 40 && sx < viewport.width - 40 && sy > 150 && sy < viewport.height - 90; }; // clear of the HUD bands
+  assert.ok(onScreen(player) && onScreen(rival), JSON.stringify({ zoom: view.zoom, x: view.x, y: view.y }));
+  assert.ok(view.zoom >= 0.42);
+  // Close together, the camera does not zoom out needlessly.
+  const near = createDataArenaCamera({ worldWidth: 1920, worldHeight: 1280 });
+  for (let i = 0; i < 240; i++) view = near.update({ dtMs: 16.7, viewport, target: player, opponent: { x: 1000, y: 1000 } });
+  assert.ok(Math.abs(view.zoom - dataArenaBaseZoom(1280, 720)) < 0.01);
+});
+
+test("a skill tapped mid-dash or mid-windup is buffered and cast when free, not dropped", () => {
+  const { sim, s } = liveDuel();
+  run(sim, DT, { dash: true, moveX: 1 });
+  assert.equal(s.player.state, "DASH");
+  run(sim, DT, { cast: 0, autoAim: true });
+  assert.equal(s.player.cast, null);
+  const events = run(sim, 0.3);
+  assert.ok(events.some((e) => e.type === "CAST" && e.team === "player"), "the buffered cast fires after the dash");
+  // A second tap during the windup resolves after it: a cooldown refusal the HUD can show.
+  run(sim, 1.2);
+  run(sim, DT, { cast: 0, autoAim: true });
+  assert.ok(s.player.cast, "winding up");
+  const again = run(sim, DT, { cast: 0, autoAim: true });
+  const later = run(sim, 0.4);
+  assert.ok([...again, ...later].some((e) => e.type === "CAST_REFUSED" && e.reason === "COOLDOWN"));
+});

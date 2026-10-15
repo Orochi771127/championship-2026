@@ -44,7 +44,7 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     for (let r = r0; r < r0 + h; r++) for (let c = c0; c < c0 + w; c++) if (inBounds(c, r)) terrain[index(c, r)] = kind;
   }
   const stage = map.stage;
-  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+  if (stage) for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
     if (Math.hypot(c + 0.5 - (stage.col + 0.5), r + 0.5 - (stage.row + 0.5)) <= stage.radius && terrain[index(c, r)] === T.GROUND) {
       terrain[index(c, r)] = T.STAGE;
     }
@@ -246,7 +246,14 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     for (const n of toIgnite) ignite(n, events, "SPREAD");
   }
 
+  /** Clear fire, heat, wet, ash and ice (a fresh tournament round). Terrain is untouched. */
+  function resetDynamic() {
+    fire.fill(0); heat.fill(0); wet.fill(0); ash.fill(0); ice.fill(0); iceWarned.fill(0);
+    burningCount = 0; iceCount = 0; fireTimer = 0; navRevision++;
+  }
+
   return Object.freeze({
+    resetDynamic, map,
     cols, rows, cell, count, terrain, flammable, fire, wet, ash, ice,
     index, inBounds, cellOf,
     get navRevision() { return navRevision; },

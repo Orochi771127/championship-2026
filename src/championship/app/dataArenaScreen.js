@@ -11,7 +11,8 @@
 //    AbortController), the scene, sounds and the character bundles.
 
 import { createDataArenaSimulation } from "../modes/dataArena/dataArenaSimulation.js";
-import { DATA_ARENA_MATE, DATA_ARENA_MAX_STEPS_PER_FRAME, DATA_ARENA_PARTNERS, DATA_ARENA_STEP_SECONDS, DATA_ARENA_TIMELINE } from "../modes/dataArena/dataArenaConfig.js";
+import { DATA_ARENA_KITS, DATA_ARENA_MATE, DATA_ARENA_MAX_STEPS_PER_FRAME, DATA_ARENA_PARTNERS, DATA_ARENA_STEP_SECONDS, DATA_ARENA_TIMELINE,
+  DATA_ARENA_TOURNAMENT } from "../modes/dataArena/dataArenaConfig.js";
 import { dataArenaUpgrade } from "../modes/dataArena/dataArenaUpgrades.js";
 import { createDataArenaRecordStore } from "../modes/dataArena/dataArenaSave.js";
 import { createChampionshipDataArenaPort } from "./ChampionshipPersistentSavePort.js";
@@ -23,7 +24,15 @@ import { arenaText as t } from "../text/dataArenaText.js";
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
-const GAME_KEYS = new Set([...Object.keys(MOVE_KEYS), "Space", "ShiftLeft", "ShiftRight", "KeyQ", "KeyE", "Escape", "KeyP", "Digit1", "Digit2", "Digit3"]);
+const GAME_KEYS = new Set([...Object.keys(MOVE_KEYS), "Space", "ShiftLeft", "ShiftRight", "Tab", "KeyQ", "KeyE", "KeyR", "KeyF", "KeyC",
+  "KeyJ", "KeyK", "KeyL", "Escape", "KeyP", "Digit1", "Digit2", "Digit3", "Digit4"]);
+// Skill keys -> kit slot (moves 2-4). Slot 1 (the beam) is held: left mouse, 1 or J.
+const SKILL_KEYS = Object.freeze({ Digit2: 0, KeyK: 0, Digit3: 1, KeyL: 1, KeyQ: 1, Digit4: 2, KeyE: 2 });
+const BEAM_KEYS = new Set(["Digit1", "KeyJ"]);
+const SLOT_KEYS = Object.freeze(["RMB·2", "Q·3", "E·4"]);
+const MODES = Object.freeze(["TOURNAMENT", "HARBOR"]);
+const moveName = (id) => t(`move.${id}`).split(/\s*[｜|]\s*/)[0];
+const moveEffect = (id) => t(`move.${id}`).split(/\s*[｜|]\s*/)[1] ?? "";
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -75,10 +84,13 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   let shake = settings.shake && !reducedMotion;
   let quality = settings.quality === "auto" ? (coarse || Math.min(innerWidth, innerHeight) < 500 ? "low" : "high") : settings.quality;
   let partnerId = records.get().lastPartnerId;
+  let gameMode = MODES.includes(records.get().lastMode) ? records.get().lastMode : "TOURNAMENT";
+  const rivalName = (rivalId) => cast.rivals.find((rival) => rival.rivalId === rivalId)?.name ?? "";
 
   // ------------------------------------------------------------------ DOM skeleton
   const root = el("div", "da-root");
   root.dataset.state = "SELECT";
+  root.dataset.mode = gameMode;
   root.dataset.quality = quality;
   if (reducedMotion) root.dataset.motion = "reduced";
   root.setAttribute("role", "application");
@@ -110,7 +122,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   // ------------------------------------------------------------------ input
   const keys = new Set();
-  const latch = { dash: false, surge: false, ride: false };
+  const latch = { dash: false, surge: false, ride: false, cast: null, ult: false, castAuto: false };
   const pointer = { x: null, y: null, fire: false };
   const sticks = { move: null, aim: null };
   let aimVector = { x: 1, y: 0 };
@@ -123,17 +135,21 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (sticks.move?.vector) { mx += sticks.move.vector.x; my += sticks.move.vector.y; }
     const state = sim.getState();
     const body = state.player.state === "RIDING" ? state.mate : state.player;
-    let aimX = null, aimY = null, fire = pointer.fire;
+    let aimX = null, aimY = null, fire = pointer.fire || [...BEAM_KEYS].some((code) => keys.has(code));
     if (sticks.aim?.vector && Math.hypot(sticks.aim.vector.x, sticks.aim.vector.y) > 0.28) {
       const v = sticks.aim.vector, length = Math.hypot(v.x, v.y);
       aimVector = { x: v.x / length, y: v.y / length };
       fire = true;
     }
     if (touchActive && !pointer.mouse) { aimX = body.x + aimVector.x * 320; aimY = body.y + aimVector.y * 320; }
-    else if (pointer.x !== null && scene) { const w = scene.screenToWorld(pointer.x, pointer.y); aimX = w.x; aimY = w.y; }
-    else { aimX = body.x + aimVector.x * 300; aimY = body.y + aimVector.y * 300; }
-    const input = { moveX: mx, moveY: my, aimX, aimY, fire, dash: latch.dash, surge: latch.surge, ride: latch.ride };
-    latch.dash = latch.surge = latch.ride = false;
+    else if (pointer.x !== null && pointer.mouse && scene) { const w = scene.screenToWorld(pointer.x, pointer.y); aimX = w.x; aimY = w.y; }
+    else { const auto = sim.autoAimPoint(); aimX = auto.x; aimY = auto.y; } // keyboard only: lock onto the nearest visible target
+    // Without a mouse (keyboard, or a tapped touch button) skills auto-aim; the aim stick or mouse aims by hand.
+    const manualTouch = touchActive && sticks.aim?.vector && Math.hypot(sticks.aim.vector.x, sticks.aim.vector.y) > 0.28;
+    const autoAim = latch.castAuto || (!pointer.mouse && !manualTouch);
+    const input = { moveX: mx, moveY: my, aimX, aimY, fire, dash: latch.dash, surge: latch.surge, ride: latch.ride, cast: latch.cast, ult: latch.ult, autoAim };
+    latch.dash = latch.surge = latch.ride = latch.ult = latch.castAuto = false;
+    latch.cast = null;
     return input;
   }
 
@@ -153,9 +169,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     event.preventDefault();
     if (event.repeat) return;
     keys.add(event.code);
-    if (event.code === "Space" || event.code.startsWith("Shift")) latch.dash = true;
-    if (event.code === "KeyQ") latch.surge = true;
-    if (event.code === "KeyE") latch.ride = true;
+    if (event.code === "Space" || event.code.startsWith("Shift") || event.code === "Tab") latch.dash = true;
+    if (event.code in SKILL_KEYS) latch.cast = SKILL_KEYS[event.code];
+    if (event.code === "KeyR") latch.ult = true;
+    if (event.code === "KeyF") latch.surge = true;
+    if (event.code === "KeyC") latch.ride = true;
   }, { signal, capture: true });
   window.addEventListener("keyup", (event) => keys.delete(event.code), { signal, capture: true });
   window.addEventListener("blur", releaseInputs, { signal });
@@ -179,7 +197,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     pointer.x = event.clientX - rect.left; pointer.y = event.clientY - rect.top; pointer.mouse = true;
     if (touchActive) { touchActive = false; touch.hidden = true; }
     if (event.button === 0) pointer.fire = true;
-    if (event.button === 2) latch.surge = true;
+    if (event.button === 2) latch.cast = 0;
     field.setPointerCapture?.(event.pointerId);
   }, { signal });
   field.addEventListener("pointerup", (event) => { if (event.button === 0) pointer.fire = false; }, { signal });
@@ -191,8 +209,13 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const dashButton = button("da-tbtn da-tbtn--dash", t("touch.dash"), () => {}, signal);
   const surgeButton = button("da-tbtn da-tbtn--surge", t("touch.surge"), () => {}, signal);
   const rideButton = button("da-tbtn da-tbtn--ride", t("touch.ride"), () => {}, signal);
-  for (const [node, key] of [[dashButton, "dash"], [surgeButton, "surge"], [rideButton, "ride"]]) {
-    node.addEventListener("pointerdown", (event) => { event.preventDefault(); event.stopPropagation(); if (root.dataset.state === "PLAY") latch[key] = true; node.classList.add("is-pressed"); }, { signal });
+  const ultButton = button("da-tbtn da-tbtn--ult", t("touch.ult"), () => {}, signal);
+  const skillButtons = [0, 1, 2].map((slot) => button(`da-tbtn da-tbtn--skill da-tbtn--s${slot + 1}`, String(slot + 2), () => {}, signal));
+  // A tapped skill auto-aims at the nearest visible rival (the aim stick still steers the beam).
+  const press = (key) => () => { if (key === "ult") latch.ult = true; else if (typeof key === "number") latch.cast = key; else latch[key] = true; if (key === "ult" || typeof key === "number") latch.castAuto = true; };
+  for (const [node, key] of [[dashButton, "dash"], [surgeButton, "surge"], [rideButton, "ride"], [ultButton, "ult"], ...skillButtons.map((node, slot) => [node, slot])]) {
+    const fire = press(key);
+    node.addEventListener("pointerdown", (event) => { event.preventDefault(); event.stopPropagation(); if (root.dataset.state === "PLAY") fire(); node.classList.add("is-pressed"); }, { signal });
     for (const end of ["pointerup", "pointercancel", "pointerleave"]) node.addEventListener(end, () => node.classList.remove("is-pressed"), { signal });
     const ring = el("span", "da-tbtn__cooldown");
     node.appendChild(ring);
@@ -280,7 +303,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     right.append(hudRefs.score, hudRefs.level, xp, hype);
     top.append(left, center, right, pause);
     hudRefs.boss = el("div", "da-boss");
-    hudRefs.bossName = el("span", "da-boss__name", cast.boss.name);
+    hudRefs.bossName = el("span", "da-boss__name", gameMode === "TOURNAMENT" ? "" : cast.boss.name);
     hudRefs.bossFill = el("span", "da-bar__fill");
     const bossBar = el("div", "da-bar da-bar--boss"); bossBar.appendChild(hudRefs.bossFill);
     hudRefs.bossShield = el("span", "da-boss__shield");
@@ -289,10 +312,29 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const bottom = el("div", "da-hud__bottom");
     hudRefs.heatFill = el("span", "da-bar__fill");
     hudRefs.heat = el("div", "da-bar da-bar--heat"); hudRefs.heat.append(el("span", "da-bar__label", t("hud.heat")), hudRefs.heatFill);
+    hudRefs.energyFill = el("span", "da-bar__fill");
+    hudRefs.energy = el("div", "da-bar da-bar--energy"); hudRefs.energy.append(el("span", "da-bar__label", t("hud.energy")), hudRefs.energyFill);
+    const gauges = el("div", "da-gauges"); gauges.append(hudRefs.heat, hudRefs.energy);
+    // Kit: three skills (energy + cooldown) and the ultimate (charge). The beam is the heat gauge.
+    hudRefs.slots = [];
+    const kit = el("div", "da-kit");
+    const kitMoves = DATA_ARENA_KITS[partnerId]?.moves ?? [];
+    kitMoves.forEach((id, slot) => {
+      const node = el("div", "da-slot");
+      const cool = el("span", "da-slot__cool");
+      node.append(el("span", "da-slot__key", SLOT_KEYS[slot]), el("span", "da-slot__name", moveName(id)), cool);
+      node.title = `${moveName(id)} — ${moveEffect(id)}`;
+      hudRefs.slots.push(node);
+      kit.appendChild(node);
+    });
+    hudRefs.ult = el("div", "da-slot da-slot--ult");
+    hudRefs.ult.append(el("span", "da-slot__key", "R"), el("span", "da-slot__name", moveName(DATA_ARENA_KITS[partnerId]?.ultimate ?? "")), el("span", "da-slot__charge"));
+    kit.appendChild(hudRefs.ult);
+    for (const [slot, node] of skillButtons.entries()) node.firstChild.textContent = kitMoves[slot] ? moveName(kitMoves[slot]) : "";
     hudRefs.dash = el("div", "da-chip", t("hud.dash"));
-    hudRefs.surge = el("div", "da-chip", t("hud.surge"));
-    hudRefs.ride = el("div", "da-chip", t("hud.ride"));
-    bottom.append(hudRefs.heat, hudRefs.dash, hudRefs.surge, hudRefs.ride);
+    hudRefs.surge = el("div", "da-chip da-chip--harbor", t("hud.surge"));
+    hudRefs.ride = el("div", "da-chip da-chip--harbor", t("hud.ride"));
+    bottom.append(gauges, kit, hudRefs.dash, hudRefs.surge, hudRefs.ride);
     hudRefs.banner = el("div", "da-banner");
     hudRefs.banner.hidden = true;
     hudRefs.vignette = el("div", "da-vignette");
@@ -315,12 +357,20 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     put("mate", hudRefs.mateFill, width, Math.round((m.hp / m.maxHp) * 100) / 100);
     put("mateDown", hudRefs.mateFill.parentElement, (node, v) => node.classList.toggle("is-down", v), m.state === "DOWNED");
     put("revives", hudRefs.revives, text, t("hud.revives", { count: p.revives }));
-    put("timer", hudRefs.timer, text, formatTime(DATA_ARENA_TIMELINE.limit - snap.time));
-    put("phase", hudRefs.phase, text, t(`phase.${snap.phase}`));
     const objective = snap.objective;
-    const objectiveText = objective.done ? `${t(`objective.${objective.id}`, objective)} ✓`
-      : objective.id === "GUARDIAN" && objective.shielded ? t("objective.GUARDIAN.shield") : t(`objective.${objective.id}`, objective);
-    put("objective", hudRefs.objective, text, objectiveText);
+    if (objective.id === "DUEL") {
+      const final = objective.round === objective.rounds;
+      put("timer", hudRefs.timer, text, formatTime(objective.timeLeft));
+      put("timerLow", hudRefs.timer, (node, v) => node.classList.toggle("is-low", v), objective.status === "FIGHT" && objective.timeLeft <= 10);
+      put("phase", hudRefs.phase, text, final ? t("bracket.final") : t("hud.round", objective));
+      put("objective", hudRefs.objective, text, objective.rivalId ? `VS ${rivalName(objective.rivalId)}` : "");
+    } else {
+      put("timer", hudRefs.timer, text, formatTime(DATA_ARENA_TIMELINE.limit - snap.time));
+      put("phase", hudRefs.phase, text, t(`phase.${snap.phase}`));
+      const objectiveText = objective.done ? `${t(`objective.${objective.id}`, objective)} ✓`
+        : objective.id === "GUARDIAN" && objective.shielded ? t("objective.GUARDIAN.shield") : t(`objective.${objective.id}`, objective);
+      put("objective", hudRefs.objective, text, objectiveText);
+    }
     put("score", hudRefs.score, text, snap.score.toLocaleString());
     put("level", hudRefs.level, text, t("hud.level", { level: snap.level }));
     put("xp", hudRefs.xpFill, width, Math.round((snap.xp / snap.xpToNext) * 100) / 100);
@@ -342,11 +392,33 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       put("tsurge", surgeButton, (node, v) => { node.classList.toggle("is-cooling", v > 0); node.style.setProperty("--cool", v.toFixed(2)); }, Math.round(surgeShare * 50) / 50);
       put("tride", rideButton, (node, v) => { node.firstChild.textContent = t(v[0] === "1" ? "hud.dismount" : "touch.ride"); node.classList.toggle("is-cooling", v[2] === "0"); }, riding ? "1|1" : `0|${rideReady ? 1 : 0}`);
     }
+    const kit = snap.kit;
+    put("energy", hudRefs.energyFill, width, Math.round((kit.energy / kit.energyMax) * 100) / 100);
+    kit.moves.forEach((move, slot) => {
+      const cool = move.cooldownMax > 0 ? Math.round((move.cooldown / move.cooldownMax) * 40) / 40 : 0;
+      const value = `${cool}|${move.ready ? 1 : 0}|${kit.energy >= move.energy ? 1 : 0}|${kit.casting === move.id ? 1 : 0}`;
+      const apply = (node, v) => { const [c, ready, energy, casting] = v.split("|"); node.style.setProperty("--cool", c); node.classList.toggle("is-cooling", Number(c) > 0);
+        node.classList.toggle("is-noenergy", energy === "0"); node.classList.toggle("is-ready", ready === "1"); node.classList.toggle("is-casting", casting === "1"); };
+      if (hudRefs.slots[slot]) put(`slot${slot}`, hudRefs.slots[slot], apply, value);
+      if (touchActive && skillButtons[slot]) put(`tslot${slot}`, skillButtons[slot], apply, value);
+    });
+    const ultValue = `${Math.round((kit.ult / kit.ultMax) * 40) / 40}|${kit.ult >= kit.ultMax ? 1 : 0}`;
+    const applyUlt = (node, v) => { const [charge, ready] = v.split("|"); node.style.setProperty("--charge", charge); node.classList.toggle("is-ready", ready === "1"); };
+    put("ult", hudRefs.ult, applyUlt, ultValue);
+    if (touchActive) put("tult", ultButton, applyUlt, ultValue);
     const boss = snap.boss;
-    put("bossShown", hudRefs.boss, (node, v) => { node.hidden = !v; }, Boolean(boss && boss.state !== "DOWN"));
-    if (boss) {
-      put("bossHp", hudRefs.bossFill, width, Math.round((boss.hp / boss.maxHp) * 200) / 200);
-      put("bossShield", hudRefs.bossShield, text, boss.shielded ? "🛡" : boss.enraged ? "!!" : "");
+    const rival = snap.rivals[0];
+    if (rival) {
+      put("bossShown", hudRefs.boss, (node, v) => { node.hidden = !v; }, true);
+      put("bossName", hudRefs.bossName, text, rivalName(rival.id));
+      put("bossHp", hudRefs.bossFill, width, Math.round((rival.hp / rival.maxHp) * 200) / 200);
+      put("bossShield", hudRefs.bossShield, text, rival.rooted ? "❄" : rival.slowed ? "≋" : rival.casting ? "!" : "");
+    } else {
+      put("bossShown", hudRefs.boss, (node, v) => { node.hidden = !v; }, Boolean(boss && boss.state !== "DOWN"));
+      if (boss) {
+        put("bossHp", hudRefs.bossFill, width, Math.round((boss.hp / boss.maxHp) * 200) / 200);
+        put("bossShield", hudRefs.bossShield, text, boss.shielded ? "🛡" : boss.enraged ? "!!" : "");
+      }
     }
     put("lowHp", hudRefs.vignette, (node, v) => node.classList.toggle("is-low", v), p.hp / p.maxHp < 0.3 && p.state !== "DOWNED");
     root.dataset.playerState = p.state;
@@ -425,6 +497,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case "CHEER": audio?.play("cheer"); banner(t("hud.cheer"), "cheer", 2000); break;
         case "CROWD": if (event.source !== "BOSS_DOWN") audio?.play("cheer"); break;
         case "PHASE_WARNING":
+          if (gameMode === "TOURNAMENT") break;
           audio?.play("warn");
           banner(t(`warn.${event.id}`, { name: cast.boss.name }), "warn", Math.max(2000, event.inSeconds * 1000));
           break;
@@ -438,6 +511,27 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case "SLAM": audio?.play("slam"); break;
         case "BOSS_DOWN": audio?.play("burst"); break;
         case "PLAYER_RESPAWN": toast(t("toast.respawn"), { tone: "good" }); break;
+        case "ROUND_INTRO": {
+          const final = event.round === event.rounds - 1;
+          audio?.play("warn");
+          banner(t(final ? "round.final" : "round.intro", { round: event.round + 1, name: rivalName(event.rivalId) }), final ? "boss" : "phase", DATA_ARENA_TOURNAMENT.introSeconds * 1000 - 300);
+          music?.setScene(final ? "battle_final" : "battle_normal", `arena:${matchId}`);
+          break;
+        }
+        case "ROUND_START": audio?.play("roar"); banner(t("round.fight"), "good", 900); break;
+        case "ROUND_WON": audio?.play("capture"); banner(t(event.reason === "TIME" ? "round.wonTime" : "round.won"), "good", 2000); break;
+        case "ROUND_LOST": audio?.play("slam"); banner(t(event.reason === "TIME" ? "round.lostTime" : "round.lost"), "boss", 2000); break;
+        case "CAST_REFUSED":
+          if (event.reason === "ENERGY") toast(t("toast.noEnergy"), { tone: "info", key: "no-energy", gap: 900 });
+          else if (event.reason === "COOLDOWN") toast(t("toast.cooldown"), { tone: "info", key: "cooldown", gap: 900 });
+          break;
+        case "ULT_READY": audio?.play("level"); toast(t("hud.ultReady"), { tone: "good", key: "ult-ready", gap: 3000 }); break;
+        case "CAST": if (event.team === "player") audio?.play("dash"); break;
+        case "ULT_CAST": audio?.play("roar"); break;
+        case "NOVA": case "ZONE_BURST": audio?.play("burst"); break;
+        case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.play("block"); toast(t("toast.blocked"), { x: event.x, y: event.y, tone: "good", key: "blocked", gap: 1200 }); } break;
+        case "RIVAL_HIT": case "SKILL_HIT": audio?.play("hit"); break;
+        case "RIVAL_DODGE": toast(t("toast.rivalDodge"), { x: event.x, y: event.y, tone: "warn", key: "rival-dodge", gap: 2500 }); break;
         case "OFFER": showLevelUp(event.options); break;
         case "RESULT": showResult(); break;
         default: break;
@@ -480,7 +574,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   // ------------------------------------------------------------------ assets
   async function loadCast(selectedPartnerId) {
-    const wanted = [cast.partners.find((p) => p.partnerId === selectedPartnerId), cast.mate, cast.boss].filter((member) => member?.art);
+    const partner = cast.partners.find((p) => p.partnerId === selectedPartnerId);
+    const wanted = (gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
     bundleScope ??= createPixiAssetScope(stage.PIXI, href, { signal });
     let failed = false;
     // Release a partner no longer on the field.
@@ -521,8 +616,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (signal.aborted) return;
     matchId++;
     const matchSeed = seed ?? ((Date.now() ^ (matchId * 2654435761)) >>> 0);
-    sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality });
+    sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode });
     root.dataset.seed = String(matchSeed);
+    root.dataset.mode = gameMode;
     audio ??= createDataArenaAudio({ bus: audioBus });
     mountScene();
     result = null;
@@ -535,7 +631,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (!tickerCallback) { tickerCallback = frame; stage.app.ticker.add(tickerCallback); }
     music?.setScene("battle_normal", `arena:${matchId}`);
     if (!ok) toast(t("loading.failed"), { tone: "warn", key: "art" });
-    banner(t("phase.WARMUP"), "phase", 2200);
+    if (gameMode === "HARBOR") banner(t("phase.WARMUP"), "phase", 2200);
+    else handleEvents(sim.drainEvents()); // the first ROUND_INTRO was queued at construction
     field.focus?.({ preventScroll: true });
   }
 
@@ -550,18 +647,30 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   function showSelect() {
     root.dataset.state = "SELECT";
-    const saved = records.get();
     const panel = el("div", "da-panel da-panel--select");
     const head = el("header", "da-panel__head");
-    head.append(el("p", "da-eyebrow", t("mode.subtitle")), el("h2", "da-title", t("mode.title")), el("p", "da-tagline", t("mode.tagline")));
+    const eyebrow = el("p", "da-eyebrow");
+    head.append(eyebrow, el("h2", "da-title", t("mode.title")));
+    // Mode: the short tournament and the harbor field challenge are separate modes, separate records.
+    const modes = el("div", "da-modes");
+    modes.setAttribute("role", "radiogroup");
+    modes.setAttribute("aria-label", t("mode.heading"));
+    for (const id of MODES) {
+      const card = button("da-mode", "", () => { gameMode = id; refresh(); }, signal);
+      card.setAttribute("role", "radio");
+      card.dataset.mode = id;
+      card.append(el("strong", "da-mode__name", t(`mode.${id}`)), el("span", "da-mode__desc", t(`mode.${id}.desc`)));
+      modes.appendChild(card);
+    }
     const list = el("div", "da-partners");
     list.setAttribute("role", "radiogroup");
     list.setAttribute("aria-label", t("select.heading"));
+    const kitPreview = el("div", "da-kitview");
     for (const partner of DATA_ARENA_PARTNERS) {
       const member = cast.partners.find((p) => p.partnerId === partner.id);
-      const card = button("da-partner", "", () => { partnerId = partner.id; for (const node of list.children) node.setAttribute("aria-checked", String(node === card)); }, signal);
+      const card = button("da-partner", "", () => { partnerId = partner.id; refresh(); }, signal);
       card.setAttribute("role", "radio");
-      card.setAttribute("aria-checked", String(partner.id === partnerId));
+      card.dataset.partner = partner.id;
       if (member.art) { const img = el("img", "da-partner__art"); img.src = member.art.portraitUrl; img.alt = ""; img.decoding = "async"; card.appendChild(img); }
       else card.appendChild(el("span", "da-partner__art da-partner__art--fallback"));
       const stats = el("span", "da-partner__stats");
@@ -570,27 +679,47 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       card.append(el("strong", "da-partner__name", member.name), el("span", "da-partner__perk", t(`perk.${partner.perk}`)), stats);
       list.appendChild(card);
     }
-    const mate = el("p", "da-note", t("select.mate", { name: cast.mate.name }));
-    const best = el("p", "da-note", t("select.best", { score: saved.bestScore.toLocaleString(), wins: saved.wins, runs: saved.runs }));
+    const note = el("p", "da-note"), best = el("p", "da-note");
+    function refresh() {
+      root.dataset.mode = gameMode;
+      eyebrow.textContent = t(`mode.${gameMode}`);
+      for (const node of modes.children) node.setAttribute("aria-checked", String(node.dataset.mode === gameMode));
+      for (const node of list.children) node.setAttribute("aria-checked", String(node.dataset.partner === partnerId));
+      const kit = DATA_ARENA_KITS[partnerId];
+      const rows = [["LMB·1", t(`move.beam.${partnerId}`), t("kit.beam")],
+        ...kit.moves.map((id, slot) => [SLOT_KEYS[slot], moveName(id), moveEffect(id)]), ["R", moveName(kit.ultimate), moveEffect(kit.ultimate)]];
+      kitPreview.replaceChildren(el("h3", "da-subtitle", t("kit.heading")));
+      for (const [key, name, effect] of rows) {
+        const row = el("div", "da-kitview__row");
+        row.append(el("span", "da-kitview__key", key), el("strong", "", name), el("span", "da-kitview__effect", effect));
+        kitPreview.appendChild(row);
+      }
+      note.textContent = gameMode === "TOURNAMENT" ? t("select.rivals", { names: cast.rivals.map((r) => r.name).join("、") }) : t("select.mate", { name: cast.mate.name });
+      const entry = records.get().modes[gameMode] ?? { bestScore: 0, wins: 0, runs: 0 };
+      best.textContent = t(gameMode === "TOURNAMENT" ? "select.best.T" : "select.best", { score: entry.bestScore.toLocaleString(), wins: entry.wins, runs: entry.runs });
+    }
+    refresh();
     const actions = el("div", "da-actions");
-    const start = button("da-btn da-btn--primary", t("select.start"), () => { records.setLastPartner(partnerId); audio?.play?.("ui"); showBriefing(); }, signal);
+    const start = button("da-btn da-btn--primary", t("select.start"), () => { records.setLastPartner(partnerId); records.setLastMode(gameMode); audio?.play?.("ui"); showBriefing(); }, signal);
     start.dataset.autofocus = "1";
     actions.append(start, button("da-btn", t("select.back"), () => close(), signal));
-    panel.append(head, el("h3", "da-subtitle", t("select.heading")), list, mate, best, actions);
+    panel.append(head, el("h3", "da-subtitle", t("mode.heading")), modes, el("h3", "da-subtitle", t("select.heading")), list, kitPreview, note, best, actions);
     showOverlay(panel);
   }
 
   function showBriefing() {
     root.dataset.state = "BRIEF";
     const panel = el("div", "da-panel da-panel--brief");
-    panel.append(el("h2", "da-title", t("brief.heading")), el("p", "da-goal", t("brief.goal")));
+    const duel = gameMode === "TOURNAMENT";
+    panel.append(el("h2", "da-title", t("brief.heading")), el("p", "da-goal", t(duel ? "brief.T.goal" : "brief.goal")));
     const listing = el("ul", "da-controls");
-    const lines = touchActive ? ["brief.touch.move", "brief.touch.aim", "brief.touch.buttons"]
-      : ["brief.kb.move", "brief.kb.aim", "brief.kb.dash", "brief.kb.surge", "brief.kb.ride", "brief.kb.pause"];
+    const lines = duel
+      ? (touchActive ? ["brief.T.touch.move", "brief.T.touch.buttons"] : ["brief.T.kb.move", "brief.T.kb.beam", "brief.T.kb.skills", "brief.T.kb.ult", "brief.T.kb.dash", "brief.T.kb.aim", "brief.kb.pause"])
+      : (touchActive ? ["brief.touch.move", "brief.touch.aim", "brief.touch.buttons"] : ["brief.kb.move", "brief.kb.aim", "brief.kb.dash", "brief.kb.surge", "brief.kb.ride", "brief.kb.pause"]);
     for (const key of lines) listing.appendChild(el("li", "", t(key)));
     const go = button("da-btn da-btn--primary", t("brief.go"), () => { records.markBriefingSeen(); void startMatch(); }, signal);
     go.dataset.autofocus = "1";
-    panel.append(listing, el("p", "da-tips", t("brief.tips")), go);
+    panel.append(listing, el("p", "da-tips", t(duel ? "brief.T.tips" : "brief.tips")), go);
     showOverlay(panel);
   }
 
@@ -598,7 +727,20 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     root.dataset.state = "LEVEL";
     releaseInputs();
     const panel = el("div", "da-panel da-panel--level");
-    panel.append(el("h2", "da-title", t("level.heading")), el("p", "da-note", t("level.hint")));
+    const tournament = sim.getSnapshot().tournament;
+    if (tournament) {
+      panel.append(el("h2", "da-title", t("bracket.heading")));
+      const bracket = el("ol", "da-bracket");
+      tournament.order.forEach((rivalId, index) => {
+        const done = tournament.results.some((entry) => entry.round === index && entry.won);
+        const next = index === tournament.round + 1;
+        const item = el("li", `da-bracket__step${done ? " is-done" : ""}${next ? " is-next" : ""}`,
+          done ? t("bracket.done", { name: rivalName(rivalId) }) : next ? t("bracket.next", { name: rivalName(rivalId) }) : rivalName(rivalId));
+        if (index === tournament.order.length - 1) item.appendChild(el("span", "da-bracket__tag", t("bracket.final")));
+        bracket.appendChild(item);
+      });
+      panel.appendChild(bracket);
+    } else panel.append(el("h2", "da-title", t("level.heading")), el("p", "da-note", t("level.hint")));
     const cards = el("div", "da-cards");
     options.forEach((id, index) => {
       const upgrade = dataArenaUpgrade(id);
@@ -660,18 +802,28 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     releaseInputs();
     audio?.suspend();
     const { newBest, saved } = records.recordResult(result);
-    const best = records.get().bestScore;
+    const best = records.get().modes[result.mode]?.bestScore ?? records.get().bestScore;
     music?.setScene(result.outcome === "VICTORY" ? "victory" : "defeat", `arena-result:${matchId}`);
     const panel = el("div", `da-panel da-panel--result da-result--${result.outcome.toLowerCase()}`);
-    panel.append(el("h2", "da-title", t(`result.${result.outcome}`)));
+    const cup = result.tournament;
+    panel.append(el("h2", "da-title", cup ? (result.outcome === "VICTORY" ? t("result.champion") : t("result.out", { round: cup.reachedRound })) : t(`result.${result.outcome}`)));
     const score = el("div", "da-result__score");
     score.append(el("span", "da-result__label", t("result.score")), el("strong", "", result.score.toLocaleString()));
     if (newBest) score.appendChild(el("span", "da-badge", t("result.newBest")));
-    panel.append(score,
-      el("p", "da-note", t("result.best", { score: best.toLocaleString() })),
-      el("p", "da-result__line", [t("result.time", { time: formatTime(result.timeSeconds) }), t("result.kills", { count: result.kills }), t("result.level", { level: result.level })].join("　")),
-      el("p", "da-result__line", t("result.breakdown", result.breakdown)),
-      el("p", "da-result__line", t("result.stats", { perfect: result.stats.perfectDodges, chains: result.stats.chains, rescues: result.stats.rescues, cheers: result.cheers })));
+    panel.append(score, el("p", "da-note", t("result.best", { score: best.toLocaleString() })));
+    if (cup) {
+      const rounds = el("ol", "da-bracket da-bracket--result");
+      for (const entry of cup.results) {
+        rounds.appendChild(el("li", `da-bracket__step${entry.won ? " is-done" : " is-lost"}`,
+          t("result.rounds", { name: rivalName(entry.rivalId), state: t(entry.won ? "result.roundWon" : "result.roundLost"), time: formatTime(entry.seconds) })));
+      }
+      panel.append(rounds, el("p", "da-result__line", t("result.tStats", { moves: result.stats.movesCast, ults: result.stats.ultimates, blocks: result.stats.barrierBlocks, perfect: result.stats.perfectDodges, dodges: result.stats.rivalDodges })));
+    } else {
+      panel.append(
+        el("p", "da-result__line", [t("result.time", { time: formatTime(result.timeSeconds) }), t("result.kills", { count: result.kills }), t("result.level", { level: result.level })].join("　")),
+        el("p", "da-result__line", t("result.breakdown", result.breakdown)),
+        el("p", "da-result__line", t("result.stats", { perfect: result.stats.perfectDodges, chains: result.stats.chains, rescues: result.stats.rescues, cheers: result.cheers })));
+    }
     const actions = el("div", "da-actions");
     const retry = button("da-btn da-btn--primary", t("result.retry"), () => void startMatch(), signal);
     retry.dataset.autofocus = "1";

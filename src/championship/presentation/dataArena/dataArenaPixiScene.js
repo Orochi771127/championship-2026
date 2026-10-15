@@ -12,7 +12,7 @@
 //  * Budgets: particles 380 high / 120 low, shots capped by the rules (320),
 //    per-cell fire/ice sprites pooled, everything outside the view culled.
 
-import { DATA_ARENA_MAP, DATA_ARENA_TERRAIN, DATA_ARENA_SCAN, DATA_ARENA_BEACON, DATA_ARENA_GRID_RULES } from "../../modes/dataArena/dataArenaConfig.js";
+import { DATA_ARENA_TERRAIN, DATA_ARENA_SCAN, DATA_ARENA_BEACON, DATA_ARENA_GRID_RULES } from "../../modes/dataArena/dataArenaConfig.js";
 import { mixColor } from "../battleFx/battleFxLayer.js";
 import { createDataArenaCamera } from "./dataArenaCamera.js";
 import { createDataArenaTextures } from "./dataArenaTextures.js";
@@ -22,7 +22,7 @@ const T = DATA_ARENA_TERRAIN;
 const TAU = Math.PI * 2;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 const PARTICLE_CAP = Object.freeze({ high: 380, low: 120 });
-const ROLE_HEIGHT = Object.freeze({ PLAYER: 78, MATE: 112, BOSS: 196 });
+const ROLE_HEIGHT = Object.freeze({ PLAYER: 78, MATE: 112, BOSS: 196, RIVAL: 96, CHAMPION: 132 });
 const BEAM_ELEVATION = 22;
 
 const PARTNER_BEAM = Object.freeze({ "ember-lizard": 0x6ff7ff, "corona-cub": 0xffe066, "frost-drake": 0xa8f0ff });
@@ -34,7 +34,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const textures = createDataArenaTextures(PIXI);
   if (!textures) throw new Error("DATA_ARENA_CANVAS_UNAVAILABLE");
   const grid = sim.grid;
+  const MAP = grid.map;
   const cell = grid.cell, worldWidth = grid.cols * cell, worldHeight = grid.rows * cell;
+  const rectsOf = (kind) => MAP.rects.filter((rect) => rect[4] === kind);
+  const standRows = Math.max(0, ...rectsOf(T.STANDS).map(([, r0, , h]) => r0 + h));
+  const harborLayout = Boolean(MAP.stage);
   const rich = quality !== "low";
   const root = stage.createSceneRoot("data arena");
   const unmark = stage.markScene("cm-data-arena-canvas");
@@ -47,8 +51,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // resolution. Chunks are re-baked after a WebGL context restore.
   const ground = new PIXI.Graphics(); ground.label = "arena ground source";
   const groundChunks = new PIXI.Container({ label: "arena ground" });
-  const water = new PIXI.TilingSprite({ texture: textures.water, width: worldWidth, height: 4 * cell });
-  water.position.set(0, 28 * cell);
+  const water = new PIXI.Container({ label: "arena water" });
+  const waterStrips = rectsOf(T.WATER).map(([c0, r0, w, h]) => {
+    const strip = new PIXI.TilingSprite({ texture: textures.water, width: w * cell, height: h * cell });
+    strip.position.set(c0 * cell, r0 * cell);
+    water.addChild(strip);
+    return strip;
+  });
   const cellFx = new PIXI.Container({ label: "arena cell fx" });
   const bridge = new PIXI.Graphics(); bridge.label = "arena bridge";
   const marks = new PIXI.Graphics(); marks.label = "arena telegraphs";
@@ -90,17 +99,24 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const g = ground;
     g.rect(0, 0, worldWidth, worldHeight).fill({ color: 0x141c2b });
     // North yard and south pier plating, with panel seams.
-    g.rect(0, 3 * cell, worldWidth, 25 * cell).fill({ color: 0x1a2436 });
-    g.rect(0, 32 * cell, worldWidth, 8 * cell).fill({ color: 0x1b2a33 });
-    for (let c = 0; c <= grid.cols; c++) g.moveTo(c * cell, 3 * cell).lineTo(c * cell, worldHeight).stroke({ width: c % 4 === 0 ? 2 : 1, color: 0x26334a, alpha: c % 4 === 0 ? 0.9 : 0.45 });
-    for (let r = 3; r <= grid.rows; r++) g.moveTo(0, r * cell).lineTo(worldWidth, r * cell).stroke({ width: r % 4 === 0 ? 2 : 1, color: 0x26334a, alpha: r % 4 === 0 ? 0.9 : 0.45 });
+    g.rect(0, standRows * cell, worldWidth, worldHeight - standRows * cell).fill({ color: 0x1a2436 });
+    if (harborLayout) g.rect(0, 32 * cell, worldWidth, 8 * cell).fill({ color: 0x1b2a33 });
+    else g.rect(0, 11 * cell, worldWidth, worldHeight - 11 * cell).fill({ color: 0x1b2638 });
+    for (let c = 0; c <= grid.cols; c++) g.moveTo(c * cell, standRows * cell).lineTo(c * cell, worldHeight).stroke({ width: c % 4 === 0 ? 2 : 1, color: 0x26334a, alpha: c % 4 === 0 ? 0.9 : 0.45 });
+    for (let r = standRows; r <= grid.rows; r++) g.moveTo(0, r * cell).lineTo(worldWidth, r * cell).stroke({ width: r % 4 === 0 ? 2 : 1, color: 0x26334a, alpha: r % 4 === 0 ? 0.9 : 0.45 });
     // Neon guide lanes: stage to the docks and to each beacon.
     const lane = (x0, y0, x1, y1) => g.moveTo(x0, y0).lineTo(x1, y1).stroke({ width: 6, color: 0x2ad8ff, alpha: 0.16 });
-    lane(30.5 * cell, 21 * cell, 30.5 * cell, 27.6 * cell);
-    lane(4 * cell, 12 * cell, 56 * cell, 12 * cell);
-    for (const [c, r] of DATA_ARENA_MAP.beacons) lane((c + 0.5) * cell, 32.4 * cell, (c + 0.5) * cell, (r + 0.5) * cell);
+    if (harborLayout) {
+      lane(30.5 * cell, 21 * cell, 30.5 * cell, 27.6 * cell);
+      lane(4 * cell, 12 * cell, 56 * cell, 12 * cell);
+      for (const [c, r] of MAP.beacons) lane((c + 0.5) * cell, 32.4 * cell, (c + 0.5) * cell, (r + 0.5) * cell);
+    } else {
+      // Duel arena: a centre ring and the two start marks.
+      g.circle(worldWidth / 2, worldHeight / 2, 5 * cell).stroke({ width: 4, color: 0x63e3ff, alpha: 0.18 });
+      for (const [c, r] of [MAP.playerSpawn, MAP.rivalSpawn]) g.circle((c + 0.5) * cell, (r + 0.5) * cell, 46).stroke({ width: 4, color: 0xffd34d, alpha: 0.35 });
+    }
     // Flammable yards: oil-slick data spills with hazard edging.
-    for (const [c0, r0, w, h] of DATA_ARENA_MAP.flammable) {
+    for (const [c0, r0, w, h] of MAP.flammable) {
       g.rect(c0 * cell, r0 * cell, w * cell, h * cell).fill({ color: 0x2a1d22, alpha: 0.9 });
       for (let i = 0; i < w * h; i += 3) {
         const c = c0 + (i % w), r = r0 + Math.floor(i / w);
@@ -113,11 +129,50 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }
     }
     // Banks along the tide channel.
-    g.rect(0, 28 * cell - 10, worldWidth, 10).fill({ color: 0x8aa3b8 });
-    g.rect(0, 32 * cell, worldWidth, 10).fill({ color: 0x6f8799 });
-    for (let x = 0; x < worldWidth; x += 48) g.rect(x, 28 * cell - 10, 24, 4).fill({ color: 0xffd23f, alpha: 0.85 });
+    for (const [c0, r0, w, h] of [...rectsOf(T.WATER), ...rectsOf(T.BRIDGE)]) {
+      const x0 = c0 * cell, width = w * cell;
+      g.rect(x0, r0 * cell - 10, width, 10).fill({ color: 0x8aa3b8 });
+      g.rect(x0, (r0 + h) * cell, width, 10).fill({ color: 0x6f8799 });
+      for (let x = x0; x < x0 + width; x += 48) g.rect(x, r0 * cell - 10, 24, 4).fill({ color: 0xffd23f, alpha: 0.85 });
+    }
+    if (harborLayout) drawStage(g);
+    // Containers and pylons: solid cells drawn with a lit top and a dark front.
+    const palette = [0x2f8f9d, 0xd2673a, 0x5b6b86, 0x8e5bd6];
+    let k = 0;
+    for (const [c0, r0, w, h, kind] of MAP.rects) {
+      if (kind !== T.SOLID) continue;
+      const color = palette[k++ % palette.length];
+      const x = c0 * cell, y = r0 * cell, width = w * cell, height = h * cell;
+      g.rect(x + 6, y + height, width - 6, 14).fill({ color: 0x000000, alpha: 0.35 });
+      g.rect(x, y, width, height).fill({ color: mixColor(color, 0x000000, 0.45) });
+      g.rect(x + 3, y + 3, width - 6, height - 22).fill({ color });
+      for (let sxp = x + 10; sxp < x + width - 6; sxp += 14) g.rect(sxp, y + 6, 4, height - 30).fill({ color: mixColor(color, 0xffffff, 0.25), alpha: 0.6 });
+      g.rect(x, y, width, height).stroke({ width: 2, color: 0x0a0f18, alpha: 0.9 });
+    }
+    for (const [c, r] of MAP.pylons) {
+      const x = c * cell, y = r * cell;
+      g.rect(x + 8, y + 8, cell - 16, cell - 8).fill({ color: 0x2b3550 }).stroke({ width: 2, color: 0x0a0f18 });
+      g.circle(x + cell / 2, y + 16, 10).fill({ color: 0xff3f6c, alpha: 0.9 });
+    }
+    // Stands: three tiers along the north edge, VIP boxes every 12 cells.
+    for (let tier = 0; tier < standRows; tier++) {
+      g.rect(0, tier * cell, worldWidth, cell).fill({ color: mixColor(0x1d2236, 0x3a4466, tier / standRows) });
+      g.rect(0, tier * cell + cell - 6, worldWidth, 6).fill({ color: 0x0c1020 });
+    }
+    for (let c = 6; c < grid.cols; c += 12) g.rect(c * cell, cell * 0.2, 3 * cell, cell * (standRows - 1.4)).fill({ color: 0x2b1f44 }).stroke({ width: 3, color: 0xffd34d, alpha: 0.6 });
+    g.rect(0, standRows * cell - 8, worldWidth, 8).fill({ color: 0x63e3ff, alpha: 0.55 });
+    // Entry gates: arches at the yard edges.
+    for (const [c, r] of MAP.gates) {
+      g.circle((c + 0.5) * cell, (r + 0.5) * cell, 34).stroke({ width: 5, color: 0xff4fb1, alpha: 0.35 });
+    }
+    // Beacon pads.
+    for (const [c, r] of MAP.beacons) {
+      g.circle((c + 0.5) * cell, (r + 0.5) * cell, DATA_ARENA_BEACON.radius).fill({ color: 0x223a3a }).stroke({ width: 3, color: 0x5affc8, alpha: 0.4 });
+    }
+  }
+  function drawStage(g) {
     // Central stage: raised disc with an original concentric data emblem.
-    const s = DATA_ARENA_MAP.stage, sx = (s.col + 0.5) * cell, sy = (s.row + 0.5) * cell, sr = s.radius * cell;
+    const s = MAP.stage, sx = (s.col + 0.5) * cell, sy = (s.row + 0.5) * cell, sr = s.radius * cell;
     g.ellipse(sx, sy + 18, sr + 6, sr + 2).fill({ color: 0x0b111c });
     g.circle(sx, sy, sr).fill({ color: 0x24324d });
     g.circle(sx, sy, sr).stroke({ width: 6, color: 0x63e3ff, alpha: 0.75 });
@@ -128,54 +183,23 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       g.moveTo(sx + Math.cos(a) * sr * 0.42, sy + Math.sin(a) * sr * 0.42).lineTo(sx + Math.cos(a) * sr * 0.7, sy + Math.sin(a) * sr * 0.7)
         .stroke({ width: 2, color: 0x63e3ff, alpha: 0.4 });
     }
-    // Containers and pylons: solid cells drawn with a lit top and a dark front.
-    const palette = [0x2f8f9d, 0xd2673a, 0x5b6b86, 0x8e5bd6];
-    let k = 0;
-    for (const [c0, r0, w, h, kind] of DATA_ARENA_MAP.rects) {
-      if (kind !== T.SOLID) continue;
-      const color = palette[k++ % palette.length];
-      const x = c0 * cell, y = r0 * cell, width = w * cell, height = h * cell;
-      g.rect(x + 6, y + height, width - 6, 14).fill({ color: 0x000000, alpha: 0.35 });
-      g.rect(x, y, width, height).fill({ color: mixColor(color, 0x000000, 0.45) });
-      g.rect(x + 3, y + 3, width - 6, height - 22).fill({ color });
-      for (let sxp = x + 10; sxp < x + width - 6; sxp += 14) g.rect(sxp, y + 6, 4, height - 30).fill({ color: mixColor(color, 0xffffff, 0.25), alpha: 0.6 });
-      g.rect(x, y, width, height).stroke({ width: 2, color: 0x0a0f18, alpha: 0.9 });
-    }
-    for (const [c, r] of DATA_ARENA_MAP.pylons) {
-      const x = c * cell, y = r * cell;
-      g.rect(x + 8, y + 8, cell - 16, cell - 8).fill({ color: 0x2b3550 }).stroke({ width: 2, color: 0x0a0f18 });
-      g.circle(x + cell / 2, y + 16, 10).fill({ color: 0xff3f6c, alpha: 0.9 });
-    }
-    // Stands: three tiers along the north edge, VIP boxes every 12 cells.
-    for (let tier = 0; tier < 3; tier++) {
-      g.rect(0, tier * cell, worldWidth, cell).fill({ color: mixColor(0x1d2236, 0x3a4466, tier / 3) });
-      g.rect(0, tier * cell + cell - 6, worldWidth, 6).fill({ color: 0x0c1020 });
-    }
-    for (let c = 6; c < grid.cols; c += 12) g.rect(c * cell, cell * 0.2, 3 * cell, cell * 1.6).fill({ color: 0x2b1f44 }).stroke({ width: 3, color: 0xffd34d, alpha: 0.6 });
-    g.rect(0, 3 * cell - 8, worldWidth, 8).fill({ color: 0x63e3ff, alpha: 0.55 });
-    // Entry gates: arches at the yard edges.
-    for (const [c, r] of DATA_ARENA_MAP.gates) {
-      g.circle((c + 0.5) * cell, (r + 0.5) * cell, 34).stroke({ width: 5, color: 0xff4fb1, alpha: 0.35 });
-    }
-    // Beacon pads.
-    for (const [c, r] of DATA_ARENA_MAP.beacons) {
-      g.circle((c + 0.5) * cell, (r + 0.5) * cell, DATA_ARENA_BEACON.radius).fill({ color: 0x223a3a }).stroke({ width: 3, color: 0x5affc8, alpha: 0.4 });
-    }
   }
   function drawBridge() {
-    const x = 28 * cell, y = 28 * cell - 6;
-    bridge.rect(x - 6, y, 4 * cell + 12, 4 * cell + 12).fill({ color: 0x3a4a60 });
-    for (let i = 0; i < 9; i++) bridge.rect(x - 6, y + i * 30, 4 * cell + 12, 4).fill({ color: 0x5c7290 });
-    bridge.rect(x - 8, y, 6, 4 * cell + 12).fill({ color: 0xffd23f });
-    bridge.rect(x + 4 * cell + 2, y, 6, 4 * cell + 12).fill({ color: 0xffd23f });
+    for (const [c0, r0, w, h] of rectsOf(T.BRIDGE)) {
+      const x = c0 * cell, y = r0 * cell - 6, width = w * cell, height = h * cell + 12;
+      bridge.rect(x - 6, y, width + 12, height).fill({ color: 0x3a4a60 });
+      for (let i = 0; i * 30 < height; i++) bridge.rect(x - 6, y + i * 30, width + 12, 4).fill({ color: 0x5c7290 });
+      bridge.rect(x - 8, y, 6, height).fill({ color: 0xffd23f });
+      bridge.rect(x + width + 2, y, 6, height).fill({ color: 0xffd23f });
+    }
   }
   let bridgeLift = -1;
 
   // ------------------------------------------------------------------ crowd
   const fans = [];
-  const fanCount = rich ? 260 : 120;
+  const fanCount = Math.round((rich ? 260 : 120) * Math.min(1, worldWidth / 3840 + 0.25) * (standRows / 3));
   for (let i = 0; i < fanCount; i++) {
-    const tier = i % 3, x = ((i * 7919) % 1000) / 1000 * (worldWidth - 40) + 20;
+    const tier = i % Math.max(1, standRows), x = ((i * 7919) % 1000) / 1000 * (worldWidth - 40) + 20;
     const sprite = new PIXI.Sprite(textures.fans[i % 4]);
     sprite.anchor.set(0.5, 1);
     sprite.scale.set(1.6 + tier * 0.15);
@@ -192,7 +216,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     cone.anchor.set(0.5, 0);
     cone.blendMode = "add";
     cone.alpha = 0.12;
-    cone.position.set((i + 0.5) * worldWidth / 10, 2 * cell);
+    cone.position.set((i + 0.5) * worldWidth / 10, Math.max(1, standRows - 1) * cell);
     cone.scale.set(2.4, 2.2);
     cone.rotation = (i % 2 ? 1 : -1) * 0.12;
     lights.addChild(cone);
@@ -207,7 +231,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const active = crowd.kind && crowd.t < (crowd.kind === "VICTORY" ? 9 : 2.4);
     const envelope = active ? Math.max(0, 1 - crowd.t / (crowd.kind === "VICTORY" ? 9 : 2.4)) : 0;
     const visibleTop = view ? view.centerY - view.halfH - 40 : 0;
-    const standsVisible = visibleTop < 3 * cell;
+    const standsVisible = visibleTop < standRows * cell;
     for (const fan of fans) {
       const sprite = fan.sprite;
       if (!standsVisible) { sprite.visible = false; continue; }
@@ -282,6 +306,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const playerView = createActorView("PLAYER", playerMember, state.player);
   const mateView = createActorView("MATE", cast.mate, state.mate);
   let bossView = null;
+  const rivalViews = new Map();
+  function statusTint(body, base) {
+    if (body.root > 0) return 0xc8f4ff;
+    if (body.slow > 0) return mixColor(base, 0x7fc8ff, 0.45);
+    if (body.burn > 0 && Math.floor(elapsed * 12) % 2 === 0) return mixColor(base, 0xff8a3c, 0.5);
+    return base;
+  }
 
   // Enemy and object pools.
   const enemyViews = new Map(), enemyPool = [];
@@ -327,8 +358,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
   // Shots.
   const shotViews = new Map(), shotPool = [];
-  const SHOT_TEXTURE = { EMBER: "emberShot", ORB: "orb", SHARD: "shardShot", TIDE: "tide" };
-  const SHOT_TINT = { EMBER: 0xff8a2a, ORB: 0xff5cd6, SHARD: 0x9a6bff, TIDE: 0x6fe8ff };
+  const SHOT_TEXTURE = { EMBER: "emberShot", ORB: "orb", SHARD: "shardShot", TIDE: "tide", RBOLT: "tide", WAVE: "wave", PBOLT: "bolt" };
+  const SHOT_TINT = { EMBER: 0xff8a2a, ORB: 0xff5cd6, SHARD: 0x9a6bff, TIDE: 0x6fe8ff, RBOLT: 0x4fb8ff, WAVE: 0x7fe9ff, PBOLT: 0xffffff };
+  const MOVE_TINT = { emberBolt: 0xff9a3c, sunSpear: 0xffe066, scatterLight: 0xfff0a0, iceShard: 0xbff0ff, dawnLance: 0xfff6c8 };
   function shotView(projectile) {
     let entry = shotViews.get(projectile.id);
     if (entry) return entry;
@@ -339,11 +371,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const shadow = new PIXI.Sprite(textures.shadow); shadow.anchor.set(0.5); shadow.scale.set(0.35, 0.3);
       entry = { sprite, glow, shadow };
     }
-    entry.sprite.texture = textures[SHOT_TEXTURE[projectile.kind]];
-    // The texture's core is drawn at the collision radius for a 32 px canvas.
-    const coreRadius = projectile.kind === "SHARD" ? 13 : projectile.kind === "ORB" ? 10 : 9;
+    entry.sprite.texture = textures[SHOT_TEXTURE[projectile.kind] ?? "tide"];
+    // The texture's core is drawn at the collision radius (wave: its half height).
+    const coreRadius = projectile.kind === "SHARD" ? 13 : projectile.kind === "ORB" ? 10 : projectile.kind === "WAVE" ? 22 : 9;
     entry.sprite.scale.set(projectile.radius / coreRadius);
-    entry.glow.tint = SHOT_TINT[projectile.kind];
+    entry.sprite.anchor.set(projectile.kind === "PBOLT" ? 32 / 48 : 0.5, 0.5);
+    entry.sprite.tint = projectile.kind === "PBOLT" ? MOVE_TINT[projectile.moveId] ?? 0xffffff : 0xffffff;
+    entry.glow.tint = projectile.kind === "PBOLT" ? MOVE_TINT[projectile.moveId] ?? 0xffffff : SHOT_TINT[projectile.kind] ?? 0xffffff;
     entry.glow.scale.set((projectile.radius * 4.2) / 64);
     entry.glow.visible = rich;
     entry.sprite.visible = entry.glow.visible = true;
@@ -532,6 +566,21 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "MOUNTED": ring(event.x, event.y, 70, 0x7fe9ff, 0.35); break;
         case "OVERHEAT": puff(state.player.x, state.player.y - 40, 0xdddddd, 6, 1.2); break;
         case "BRIDGE_LIFTED": bridgeLift = 0; camera.addTrauma(0.25); break;
+        case "CAST": if (event.team === "player") spawn({ x: event.x + Math.cos(event.angle) * 26, y: event.y - BEAM_ELEVATION + Math.sin(event.angle) * 26, texture: textures.glow, tint: 0x6ff7ff, scale: 0.45, scaleTo: 0.1, life: 0.14 }); break;
+        case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); crowdReact("CHEER", event.x, 1.2); break;
+        case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
+          burst(event.x, event.y - 20, { count: 24, speed: 380, tint: event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5); break;
+        case "ZONE_BURST": ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
+          burst(event.x, event.y, { count: 12, speed: 260, tint: event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18); break;
+        case "BARRIER_UP": ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
+        case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
+        case "RIVAL_HIT": if (event.cause !== "LASER") burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); break;
+        case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
+        case "RIVAL_SPLASH": ring(event.x, event.y, 50, 0x9fe8ff, 0.4); break;
+        case "SKILL_HIT": spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 }); break;
+        case "STATUS": burst(event.x, event.y - 30, { count: 4, speed: 120, tint: event.status === "ROOT" ? 0xd8f6ff : event.status === "SLOW" ? 0x7fc8ff : 0xff9a3c, life: 0.35 }); break;
+        case "ROUND_WON": crowdReact("VICTORY", event.x ?? worldWidth / 2, 1.4); confetti(); camera.addTrauma(0.3); break;
+        case "ROUND_LOST": crowdReact("DEFEAT", worldWidth / 2, 1); break;
         case "RESULT": crowdReact(event.outcome === "VICTORY" ? "VICTORY" : "DEFEAT", worldWidth / 2, 1.6); if (event.outcome === "VICTORY") confetti(); break;
         default: break;
       }
@@ -569,15 +618,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const threat = Math.min(1, state.enemies.filter((enemy) => Math.hypot(enemy.x - focus.x, enemy.y - focus.y) < 520).length / 14)
       + (boss && boss.state !== "DOWN" ? 0.5 : 0);
     view = camera.update({ dtMs: Math.min(100, dtMs), viewport, target: focus, velocity: { x: focus.vx, y: focus.vy },
-      aim: state.laser.firing ? { x: state.laser.x1, y: state.laser.y1 } : null, threat });
+      aim: state.laser.firing ? { x: state.laser.x1, y: state.laser.y1 } : null, threat,
+      opponent: state.rivals.find((rival) => rival.hp > 0) ?? null });
     world.scale.set(view.zoom); world.position.set(view.x, view.y);
     const left = view.centerX - view.halfW - 80, right = view.centerX + view.halfW + 80;
     const top = view.centerY - view.halfH - 120, bottom = view.centerY + view.halfH + 80;
     const inView = (x, y) => x > left && x < right && y > top && y < bottom;
 
     for (const chunk of chunks) chunk.sprite.visible = chunk.x < right && chunk.x + chunk.width > left && chunk.y < bottom && chunk.y + chunk.height > top;
-    water.tilePosition.x = reducedMotion ? 0 : elapsed * 28;
-    water.tilePosition.y = reducedMotion ? 0 : Math.sin(elapsed * 0.8) * 6;
+    for (const strip of waterStrips) {
+      strip.tilePosition.x = reducedMotion ? 0 : elapsed * 28;
+      strip.tilePosition.y = reducedMotion ? 0 : Math.sin(elapsed * 0.8) * 6;
+    }
     if (bridgeLift >= 0) {
       bridgeLift += dt;
       bridge.alpha = Math.max(0, 1 - bridgeLift / 1.2);
@@ -631,6 +683,23 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         lift: entering ? (1 - clamp(boss.stateTime / 2.6, 0, 1)) * 260 : 0, seq });
       bossView.sprite.tint = boss.hitFlash > 0 ? 0xffb0b0 : boss.enraged ? mixColor(0xffffff, 0xff6060, 0.35 + 0.15 * Math.sin(elapsed * 8)) : 0xffffff;
     }
+
+    // Rivals (tournament).
+    for (const rival of state.rivals) {
+      let actorView = rivalViews.get(rival.id);
+      if (!actorView) {
+        const member = cast.rivals?.find((entry) => entry.rivalId === rival.definitionId);
+        actorView = createActorView(member?.role ?? "RIVAL", member, rival);
+        rivalViews.set(rival.id, actorView);
+      }
+      const seq = rival.hp <= 0 ? DATA_ARENA_SEQUENCES.DOWN : rival.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
+        : rival.cast || rival.lunge ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
+      actorView.update(dtMs, { x: rival.x, y: rival.y, facing: rival.facing, flash: rival.hitFlash, alpha: rival.invulnerable > 0 ? 0.55 : 1, seq });
+      actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
+    }
+    for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => rival.id === id)) { view.container.destroy({ children: true }); rivalViews.delete(id); }
+    if (!(state.mate.state === "ABSENT")) mateView.container.visible = true; else mateView.container.visible = false;
+    playerView.sprite.tint = statusTint(state.player, playerView.sprite.tint);
 
     // Enemies.
     const seen = new Set();
@@ -784,7 +853,19 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     // Telegraphs: fill grows with progress so the timing reads at a glance.
     for (const t of state.telegraphs) {
       const p = clamp(t.t / t.duration, 0, 1);
-      if (t.kind === "LINE") {
+      const mine = t.team === "player";
+      if (t.kind === "LINE" && mine) {
+        const ex = t.x + Math.cos(t.angle) * t.length, ey = t.y + Math.sin(t.angle) * t.length;
+        g.moveTo(t.x, t.y).lineTo(ex, ey).stroke({ width: Math.max(3, t.width), color: 0x6ff7ff, alpha: 0.18 + 0.2 * p });
+      } else if (t.kind === "CONE" && mine) {
+        for (let i = 0; i < t.count; i++) {
+          const a = t.angle - t.spread / 2 + (t.spread * i) / Math.max(1, t.count - 1);
+          g.moveTo(t.x, t.y).lineTo(t.x + Math.cos(a) * t.length * 0.6, t.y + Math.sin(a) * t.length * 0.6).stroke({ width: 3, color: 0x6ff7ff, alpha: 0.35 });
+        }
+      } else if (t.kind === "CIRCLE" && mine) {
+        g.circle(t.x, t.y, t.radius).stroke({ width: 3, color: 0x6ff7ff, alpha: 0.7 });
+        g.circle(t.x, t.y, t.radius * p).fill({ color: 0x6ff7ff, alpha: 0.12 });
+      } else if (t.kind === "LINE") {
         const ex = t.x + Math.cos(t.angle) * t.length, ey = t.y + Math.sin(t.angle) * t.length;
         const nx = -Math.sin(t.angle) * (t.width / 2 + 4), ny = Math.cos(t.angle) * (t.width / 2 + 4);
         g.poly([t.x + nx, t.y + ny, ex + nx, ey + ny, ex - nx, ey - ny, t.x - nx, t.y - ny]).fill({ color: 0xff3b5c, alpha: 0.14 + 0.2 * p });
@@ -809,6 +890,20 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         g.circle(t.x, t.y, t.radius * p).fill({ color, alpha: t.danger ? 0.22 : 0.12 });
       }
     }
+    // Delayed zones: the fill grows until it detonates. Cyan = yours, red/orange = hostile.
+    const ZONE_COLOR = { IGNITE: 0xff7a2a, ROOT: 0x9fe8ff, SLOW: 0x5fd8c8, NONE: 0xff3b5c };
+    for (const zone of state.zones) {
+      const p = clamp(zone.t / zone.delay, 0, 1);
+      const color = zone.team === "player" ? 0x6ff7ff : ZONE_COLOR[zone.move.effect] ?? 0xff3b5c;
+      g.circle(zone.x, zone.y, zone.radius).fill({ color, alpha: 0.08 }).stroke({ width: zone.team === "player" ? 3 : 4, color, alpha: 0.9 });
+      g.circle(zone.x, zone.y, zone.radius * p).fill({ color, alpha: zone.team === "player" ? 0.14 : 0.24 });
+    }
+    const self = state.player;
+    if (self.barrier > 0) {
+      const half = (self.barrierArc ?? 2) / 2;
+      g.arc(self.x, self.y - 16, self.barrierRadius ?? 64, self.barrierAngle - half, self.barrierAngle + half).stroke({ width: 7, color: 0xffe066, alpha: 0.85 });
+    }
+    for (const body of [self, ...state.rivals]) if (body.root > 0) g.ellipse(body.x, body.y, 30, 12).stroke({ width: 4, color: 0xc8f4ff, alpha: 0.9 });
     for (const scan of state.scans) {
       if (scan.telegraph <= 0) continue;
       const p = 1 - scan.telegraph / DATA_ARENA_SCAN.telegraph;
@@ -853,6 +948,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     for (const beacon of state.beacons) if (beacon.active && !beacon.captured) pointTo(beacon.x, beacon.y, 0x5affc8);
     for (const core of state.cores) if (!core.out) pointTo(core.x, core.y, 0xff8a2a);
     if (state.boss && state.boss.state !== "DOWN") pointTo(state.boss.x, state.boss.y, 0xff4a6a, 1.3);
+    for (const rival of state.rivals) if (rival.hp > 0) pointTo(rival.x, rival.y, 0xff6a8a, 1.2);
     if (state.mate.state === "DOWNED") pointTo(state.mate.x, state.mate.y, 0x8dffb0);
     for (; n < arrows.length; n++) arrows[n].visible = false;
   }

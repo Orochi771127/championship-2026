@@ -75,6 +75,12 @@ export function createDataArenaTextures(PIXI) {
       ctx.beginPath(); ctx.moveTo(20, 12); ctx.lineTo(26, 20); ctx.lineTo(20, 28); ctx.lineTo(14, 20); ctx.closePath(); ctx.fillStyle = "#8f5bff"; ctx.fill();
     }),
     tide: shotCore(32, 9, "#7fe9ff", "#0b5c8a", "#ffffff"),
+    // Player skill shot: a bright capsule whose round head is the 9 px hit radius.
+    bolt: make(48, 32, (ctx) => {
+      const g = ctx.createLinearGradient(0, 16, 48, 16); g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(0.55, "rgba(255,255,255,0.75)"); g.addColorStop(1, "#ffffff");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(4, 13); ctx.lineTo(30, 9); ctx.arc(30, 16, 7, -Math.PI / 2, Math.PI / 2); ctx.lineTo(4, 19); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(32, 16, 9, 0, Math.PI * 2); ctx.fillStyle = "#ffffff"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "rgba(0,0,0,0.35)"; ctx.stroke();
+    }),
     pickup: make(20, 20, (ctx) => {
       ctx.beginPath(); ctx.moveTo(10, 1); ctx.lineTo(18, 10); ctx.lineTo(10, 19); ctx.lineTo(2, 10); ctx.closePath();
       ctx.fillStyle = "#5ff3ff"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#e9ffff"; ctx.stroke();

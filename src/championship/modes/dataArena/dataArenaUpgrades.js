@@ -7,7 +7,7 @@
 
 import { deepFreeze } from "../../contracts/championshipContracts.js";
 
-export const DATA_ARENA_TRACKS = deepFreeze(["LASER", "DASH", "TIDE"]);
+export const DATA_ARENA_TRACKS = deepFreeze(["LASER", "SKILL", "DASH", "TIDE"]);
 
 export const DATA_ARENA_UPGRADES = deepFreeze([
   // Laser track
@@ -21,9 +21,15 @@ export const DATA_ARENA_UPGRADES = deepFreeze([
   { id: "perfectTiming", track: "DASH", max: 1, effect: { perfectRefund: 1, nearMiss: 12 } },
   { id: "swiftStep", track: "DASH", max: 2, effect: { speed: 0.1 } },
   // Teammate / environment track
-  { id: "surgePlus", track: "TIDE", max: 2, effect: { surgeRadius: 0.3, surgeCooldown: -0.15 } },
+  // Skill track (four-move kits)
+  { id: "energyLoop", track: "SKILL", max: 2, effect: { energyRegen: 0.25 } },
+  { id: "coolingChip", track: "SKILL", max: 2, effect: { cooldown: -0.12 } },
+  { id: "skillAmp", track: "SKILL", max: 2, effect: { skillDamage: 0.2 } },
+  { id: "ultCore", track: "SKILL", max: 1, effect: { ultGain: 0.35 } },
+  // Teammate / environment track (the mate exists only in the harbor challenge)
+  { id: "surgePlus", track: "TIDE", max: 2, effect: { surgeRadius: 0.3, surgeCooldown: -0.15 }, modes: ["HARBOR"] },
   { id: "cryoStability", track: "TIDE", max: 2, effect: { iceDuration: 0.5 } },
-  { id: "guardianFin", track: "TIDE", max: 2, effect: { mateHp: 0.4, reviveSpeed: 0.35 } },
+  { id: "guardianFin", track: "TIDE", max: 2, effect: { mateHp: 0.4, reviveSpeed: 0.35 }, modes: ["HARBOR"] },
   { id: "showmanship", track: "TIDE", max: 1, effect: { hypeGain: 0.25 } }
 ]);
 
@@ -50,8 +56,8 @@ export function upgradeValue(levels, key) {
  * when possible so each offer presents different builds. `random` is the
  * simulation's seeded stream.
  */
-export function drawUpgradeOffer(levels, random, size = 3) {
-  const available = DATA_ARENA_UPGRADES.filter((upgrade) => (levels[upgrade.id] ?? 0) < upgrade.max);
+export function drawUpgradeOffer(levels, random, size = 3, mode = "HARBOR") {
+  const available = DATA_ARENA_UPGRADES.filter((upgrade) => (levels[upgrade.id] ?? 0) < upgrade.max && (!upgrade.modes || upgrade.modes.includes(mode)));
   const offer = [];
   const tracks = [...DATA_ARENA_TRACKS];
   // Shuffle track order so the first slot is not always LASER.

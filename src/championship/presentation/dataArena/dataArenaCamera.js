@@ -9,6 +9,8 @@
 //  * the player is kept inside a safe inner box whatever the smoothing lag;
 //  * the view is clamped to the harbor, centred when the harbor is smaller;
 //  * gentle dynamic zoom: wider while threats crowd in or the guardian is up;
+//  * duel framing: with an opponent given, centre between the two (biased to the
+//    player) and widen just enough that both stay on screen;
 //  * trauma shake for close impacts, off with reduced motion or "shake off".
 
 import { battleFxApproach, battleFxClampCentre } from "../battleFx/battleFxCamera.js";
@@ -29,17 +31,27 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
     /** Trauma in 0..1; displacement grows with its square. */
     addTrauma(amount) { if (shakeEnabled) trauma = Math.min(1, trauma + amount); },
     snap(targetX, targetY) { x = targetX; y = targetY; },
-    update({ dtMs, viewport, target, velocity = { x: 0, y: 0 }, aim = null, threat = 0 }) {
+    update({ dtMs, viewport, target, velocity = { x: 0, y: 0 }, aim = null, threat = 0, opponent = null }) {
       time += Math.max(0, dtMs);
       const base = dataArenaBaseZoom(viewport.width, viewport.height);
-      const wanted = base * (1 - 0.14 * clamp(threat, 0, 1));
+      let wanted = base * (1 - 0.14 * clamp(threat, 0, 1));
+      let focusX = target.x, focusY = target.y;
+      if (opponent) {
+        // HUD chrome takes ~150 px at the top and ~90 px at the bottom; leave room for both bodies.
+        const dx = Math.abs(opponent.x - target.x), dy = Math.abs(opponent.y - target.y);
+        const fit = Math.min(viewport.width / (dx + 320), (viewport.height - 230) / (dy + 200));
+        wanted = clamp(Math.min(wanted, fit), Math.max(0.42, base * 0.42), wanted);
+        // Centre the pair in the band between the top HUD (rival bar) and the bottom kit bar.
+        const z = zoom ?? wanted;
+        focusX = target.x + (opponent.x - target.x) * 0.42; focusY = target.y + (opponent.y - target.y) * 0.42 - 40 / z;
+      }
       if (zoom === null) zoom = wanted;
       else zoom += (wanted - zoom) * battleFxApproach(dtMs, reducedMotion ? 1400 : 650);
-      const look = reducedMotion ? 0.18 : 0.32;
+      const look = (reducedMotion ? 0.18 : 0.32) * (opponent ? 0.4 : 1);
       let lx = clamp(velocity.x * look, -170, 170), ly = clamp(velocity.y * look, -130, 130);
-      if (aim) { lx += clamp((aim.x - target.x) * 0.16, -110, 110); ly += clamp((aim.y - target.y) * 0.16, -90, 90); }
+      if (aim && !opponent) { lx += clamp((aim.x - target.x) * 0.16, -110, 110); ly += clamp((aim.y - target.y) * 0.16, -90, 90); }
       const k = battleFxApproach(dtMs, reducedMotion ? 260 : 140);
-      x += (target.x + lx - x) * k; y += (target.y + ly - y) * k;
+      x += (focusX + lx - x) * k; y += (focusY + ly - y) * k;
       const halfW = viewport.width / (2 * zoom), halfH = viewport.height / (2 * zoom);
       // Keep the player well inside the frame even when the follow lags a dash.
       const boxW = halfW * 0.62, boxH = halfH * 0.58;

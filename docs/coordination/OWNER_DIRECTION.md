@@ -1,5 +1,25 @@
 # Championship Owner Direction
 
+## 2026-10-15 — Data Arena round 2: four-move kits and a short tournament (supplement, same batch)
+
+Owner supplements the Data Arena task without restarting it. A playable reference, Pokémon Zarza Arena, guides the round:
+
+- Controls and pacing to learn from: footwork, aimed attacks, dodging, four-move cooldown/energy kits and clear attack warnings, instead of standing and trading hits.
+- Cover, obstacles and terrain must really change attack lines and positioning, keeping the fire/water/ice interactions.
+- The short tournament stays separate from endless survival, and six rounds are not six waves. One complete, replayable slice comes first.
+- Big Kid Nation is a reference for crowd and staging only; PokéSurvivor for upgrade and replay rhythm only.
+- Use our own characters, art, skills and engine, with a few distinct characters rather than a large roster.
+- Private-room 2v2 and other multiplayer stay as extension research. Build single-player/AI first; scope must not widen without a multiplayer backend.
+
+Branch and scope rules:
+
+- Continue on the independent mode branch.
+- Protect existing UI, Database, medals, ranch and save work.
+- List the minimal diff before implementing.
+- Acceptance includes real operation and regression of existing features, at commercial-game quality.
+
+Mechanics may be adopted by type only, under our own names, numbers, visuals and audio. See the [round-2 contract section](../contracts/championship/DATA_ARENA_SLICE_2026-10-15.md#第二輪補充2026-10-15同日-owner-補充指示).
+
 ## 2026-10-15 — Data Arena: Tidal Data Harbor Challenge (original real-time 1vE slice)
 
 Owner authorizes a new original mode, 「Data Arena／數據競技場」, built as a complete playable vertical slice rather than a specification: title-menu entry → partner select → ten-second briefing → about four minutes of real-time 1vE (movement, aim, dash, sustained heat-limited laser, cooldown mate command, riding the water mate across a channel, fire/water/ice interactions, telegraphed bullet patterns, at least three three-choice upgrades, a final guardian) → victory/defeat → retry/return. It is an OWNER_APPROVED_ADAPTATION outside ROM parity: reuse existing approved creatures through a read-only adapter, the existing single Pixi Application/ticker, music presentation, audio bus and build/publication flow; keep mode data in its own namespace isolated from the raising save and economy; no Unity/Godot/Unreal engine switch, dependency upgrade or site rewrite; do not overwrite main menu, key art, Database, medals, shadows or character-form work owned by others; original or clearly licensed assets only, with a provenance list; honest physical-device and performance reporting. Commit, push, PR and the existing preview/publication flow are authorized after full checks, a real browser playthrough and a conflict-free comparison with latest main; no force push or rewriting others' commits. Swim relay and obstacle race stay as second-phase planning until this slice is accepted. See [slice contract](../contracts/championship/DATA_ARENA_SLICE_2026-10-15.md) and [batch report](../reports/data-arena-2026-10-15/REPORT_ZH_TW.md).

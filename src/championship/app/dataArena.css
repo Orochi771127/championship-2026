@@ -74,6 +74,32 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-vignette.is-low { box-shadow: inset 0 0 90px rgba(255, 30, 60, 0.45); }
 .da-vignette.is-hit { box-shadow: inset 0 0 120px rgba(255, 30, 60, 0.7); }
 
+/* ---- kit (energy, skills, ultimate) ------------------------------------------ */
+.da-gauges { display: grid; gap: 4px; }
+.da-bar--energy { width: 170px; height: 12px; }
+.da-bar--energy .da-bar__fill { background: linear-gradient(90deg, #ffd34d, #fff1a8); }
+.da-kit { display: flex; gap: 6px; }
+.da-slot {
+  position: relative; width: 66px; height: 46px; border-radius: 10px; border: 1px solid rgba(255, 211, 77, 0.55); background: rgba(14, 26, 44, 0.9);
+  display: grid; align-content: center; justify-items: center; overflow: hidden; padding: 2px 4px;
+}
+.da-slot__key { position: absolute; top: 2px; left: 4px; font-size: 9px; color: var(--da-dim); font-weight: 800; }
+.da-slot__name { font-size: 11px; font-weight: 800; margin-top: 8px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.da-slot__cool { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.6); transform-origin: bottom; transform: scaleY(var(--cool, 0)); pointer-events: none; }
+.da-slot:not(.is-cooling) .da-slot__cool { transform: scaleY(0); }
+.da-slot.is-noenergy { border-color: rgba(120, 140, 170, 0.35); color: var(--da-dim); }
+.da-slot.is-ready { box-shadow: inset 0 0 10px rgba(255, 211, 77, 0.25); }
+.da-slot.is-casting { box-shadow: 0 0 12px rgba(255, 211, 77, 0.9); }
+.da-slot--ult { border-color: rgba(255, 122, 217, 0.55); }
+.da-slot__charge { position: absolute; inset: 0; background: rgba(255, 122, 217, 0.32); transform-origin: bottom; transform: scaleY(var(--charge, 0)); pointer-events: none; }
+.da-slot--ult.is-ready { border-color: var(--da-gold); box-shadow: 0 0 14px rgba(255, 211, 77, 0.8); animation: da-pulse 1s ease-in-out infinite; }
+.da-hud__timer.is-low { color: var(--da-bad); animation: da-blink 0.5s steps(2) infinite; }
+/* Tournament: no mate, no swarm levels; the rival bar replaces the guardian bar. */
+.da-root[data-mode="TOURNAMENT"] .da-bar--mate, .da-root[data-mode="TOURNAMENT"] .da-hud__revives,
+.da-root[data-mode="TOURNAMENT"] .da-hud__level, .da-root[data-mode="TOURNAMENT"] .da-bar--xp,
+.da-root[data-mode="TOURNAMENT"] .da-chip--harbor { display: none; }
+.da-root[data-mode="TOURNAMENT"] .da-boss__name { color: #ffd0a0; }
+
 /* ---- toasts ------------------------------------------------------------- */
 .da-toasts { position: absolute; inset: 0; pointer-events: none; }
 .da-toast {
@@ -94,16 +120,24 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-stick__knob { position: absolute; left: 32px; top: 32px; width: 48px; height: 48px; border-radius: 50%; background: rgba(111, 247, 255, 0.8); box-shadow: 0 0 14px rgba(111, 247, 255, 0.6); }
 .da-stick--aim .da-stick__knob { background: rgba(255, 211, 77, 0.85); }
 .da-touch__buttons {
-  position: absolute; right: max(14px, env(safe-area-inset-right)); bottom: calc(max(14px, env(safe-area-inset-bottom)) + 58px);
-  display: grid; grid-template-columns: 64px 64px; grid-template-rows: 64px 64px; gap: 10px; pointer-events: auto;
+  position: absolute; right: max(12px, env(safe-area-inset-right)); bottom: calc(max(12px, env(safe-area-inset-bottom)) + 52px);
+  display: grid; grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(3, 56px); gap: 8px; pointer-events: auto;
+  grid-template-areas: "ride s3 ult" "surge s2 ." ". s1 dash";
 }
 .da-tbtn {
   position: relative; border-radius: 50%; border: 2px solid var(--da-edge); background: rgba(8, 24, 40, 0.82); color: var(--da-ink);
   font-weight: 900; font-size: 13px; touch-action: none; overflow: hidden;
 }
-.da-tbtn--dash { grid-column: 2; grid-row: 2; border-color: rgba(111, 247, 255, 0.8); }
-.da-tbtn--surge { grid-column: 1; grid-row: 2; border-color: rgba(127, 233, 255, 0.6); }
-.da-tbtn--ride { grid-column: 2; grid-row: 1; }
+.da-tbtn--dash { grid-area: dash; border-color: rgba(111, 247, 255, 0.8); }
+.da-tbtn--surge { grid-area: surge; border-color: rgba(127, 233, 255, 0.6); }
+.da-tbtn--ride { grid-area: ride; }
+.da-tbtn--s1 { grid-area: s1; } .da-tbtn--s2 { grid-area: s2; } .da-tbtn--s3 { grid-area: s3; }
+.da-tbtn--skill { font-size: 11px; line-height: 1.1; padding: 2px; border-color: rgba(255, 211, 77, 0.6); }
+.da-tbtn--skill.is-noenergy { color: var(--da-dim); border-color: rgba(120, 140, 170, 0.4); }
+.da-tbtn--skill.is-casting { box-shadow: 0 0 14px rgba(255, 211, 77, 0.8); }
+.da-tbtn--ult { grid-area: ult; border-color: rgba(255, 122, 217, 0.5); background: linear-gradient(0deg, rgba(255, 122, 217, 0.45) calc(var(--charge, 0) * 100%), rgba(8, 24, 40, 0.82) 0); }
+.da-tbtn--ult.is-ready { border-color: var(--da-gold); box-shadow: 0 0 18px rgba(255, 211, 77, 0.8); animation: da-pulse 1s ease-in-out infinite; }
+.da-root[data-mode="TOURNAMENT"] .da-tbtn--surge, .da-root[data-mode="TOURNAMENT"] .da-tbtn--ride { display: none; }
 .da-tbtn.is-pressed { transform: scale(0.9); background: rgba(40, 90, 120, 0.9); }
 .da-tbtn.is-cooling { color: var(--da-dim); }
 .da-tbtn__cooldown { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5); transform-origin: bottom; transform: scaleY(var(--cool, 0)); pointer-events: none; }
@@ -128,6 +162,26 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-fineprint { font-size: 12px; }
 .da-goal { font-size: 16px; font-weight: 700; color: var(--da-gold); }
 .da-controls { margin: 10px 0; padding-left: 20px; line-height: 1.8; font-size: 15px; }
+.da-modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.da-mode {
+  display: grid; gap: 4px; text-align: left; padding: 12px 14px; border-radius: 16px; color: var(--da-ink); cursor: pointer; min-height: 44px;
+  border: 2px solid rgba(255, 255, 255, 0.12); background: rgba(16, 28, 48, 0.9);
+}
+.da-mode[aria-checked="true"] { border-color: var(--da-gold); box-shadow: 0 0 0 3px rgba(255, 211, 77, 0.18); }
+.da-mode__name { font-size: 17px; }
+.da-mode__desc { font-size: 12px; color: var(--da-dim); line-height: 1.45; }
+.da-kitview { margin-top: 6px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; }
+.da-kitview .da-subtitle { margin: 10px 0 4px; grid-column: 1 / -1; }
+.da-kitview__row { display: grid; grid-template-columns: 3.8em 6.2em 1fr; gap: 6px; align-items: baseline; font-size: 13px; }
+.da-kitview__key { color: var(--da-gold); font-weight: 800; font-size: 11px; }
+.da-kitview__effect { color: var(--da-dim); }
+.da-bracket { list-style: none; display: flex; gap: 8px; padding: 0; margin: 8px 0 4px; justify-content: center; flex-wrap: wrap; }
+.da-bracket__step { padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.16); font-size: 13px; font-weight: 700; background: rgba(16, 28, 48, 0.9); }
+.da-bracket__step.is-done { border-color: rgba(141, 255, 176, 0.6); color: var(--da-good); }
+.da-bracket__step.is-next { border-color: var(--da-gold); color: var(--da-gold); box-shadow: 0 0 12px rgba(255, 211, 77, 0.3); }
+.da-bracket__step.is-lost { border-color: rgba(255, 74, 106, 0.6); color: #ff9aac; }
+.da-bracket__tag { margin-left: 6px; font-size: 11px; padding: 1px 6px; border-radius: 6px; background: rgba(255, 74, 106, 0.25); color: #ffc0cc; }
+.da-bracket--result { flex-direction: column; align-items: center; }
 .da-partners { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .da-partner {
   display: grid; gap: 6px; justify-items: center; text-align: center; padding: 12px 10px; border-radius: 16px; color: var(--da-ink); cursor: pointer;
@@ -144,6 +198,12 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-meter__bar::after { content: ""; position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--v)); background: var(--da-accent); }
 .da-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; justify-content: center; }
 .da-actions--column { flex-direction: column; align-items: stretch; }
+/* The start button never scrolls out of reach on short screens. */
+.da-panel--select .da-actions { position: sticky; bottom: -22px; margin: 10px -22px -22px; padding: 14px 22px 16px;
+  background: linear-gradient(180deg, rgba(9, 16, 30, 0), #0a1120 38%); }
+.da-panel--select .da-subtitle { margin: 12px 0 6px; }
+.da-panel--select .da-title { margin-bottom: 2px; }
+.da-panel--select .da-partner__perk { min-height: 0; }
 .da-btn {
   min-height: 48px; min-width: 120px; padding: 10px 18px; border-radius: 14px; border: 1px solid var(--da-edge); background: rgba(16, 30, 52, 0.95);
   color: var(--da-ink); font-size: 16px; font-weight: 800; cursor: pointer;
@@ -178,6 +238,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 @keyframes da-blink { 50% { opacity: 0.45; } }
 @keyframes da-banner { from { transform: translate(-50%, -50%) scale(1.25); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
 @keyframes da-toast { 0% { opacity: 0; transform: translate(-50%, -30%) scale(0.8); } 15% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); } 100% { opacity: 0; transform: translate(-50%, -120%) scale(1); } }
+@keyframes da-pulse { 50% { filter: brightness(1.35); } }
 @keyframes da-fade { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
 
 @media (max-width: 640px), (max-height: 520px) {
@@ -191,11 +252,16 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   .da-hud__bottom { bottom: calc(max(10px, env(safe-area-inset-bottom)) + 0px); left: max(10px, env(safe-area-inset-left)); transform: none; gap: 5px; padding: 4px 6px; }
   .da-bar--heat { width: 100px; }
   .da-chip { font-size: 11px; padding: 3px 6px; }
-  .da-partners, .da-cards { grid-template-columns: 1fr; }
+  .da-partners, .da-cards, .da-modes { grid-template-columns: 1fr; }
+  .da-kitview { grid-template-columns: 1fr; }
+  .da-kitview__row { grid-template-columns: 3.6em 6.5em 1fr; font-size: 12px; }
+  .da-bar--energy { width: 100px; }
+  .da-slot { width: 52px; height: 40px; }
+  .da-slot__name { font-size: 10px; }
   .da-partner { grid-template-columns: 64px 1fr; justify-items: start; text-align: left; }
   .da-partner__art { width: 60px; height: 60px; grid-row: span 3; }
   .da-card { min-height: 0; }
   .da-boss { top: calc(max(8px, env(safe-area-inset-top)) + 84px); }
 }
-@media (pointer: coarse) { .da-root[data-state="PLAY"] .da-hud__bottom .da-chip { display: none; } }
+@media (pointer: coarse) { .da-root[data-state="PLAY"] .da-hud__bottom .da-chip, .da-root[data-state="PLAY"] .da-hud__bottom .da-kit { display: none; } }
 @media (prefers-reduced-motion: reduce) { .da-banner.is-showing { animation: none; } .da-bar__fill { transition: none; } }

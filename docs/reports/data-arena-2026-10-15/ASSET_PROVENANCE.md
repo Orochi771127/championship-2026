@@ -12,3 +12,24 @@
 | 音樂 | 既有原創音樂目錄的 `battle_normal`／`battle_final`／`victory`／`defeat` cue | 沿用既有已發布音樂 |
 
 參考來源（僅方法／產品原則，未複製角色、名稱、招式、美術、音效、UI 或地圖）：BigKidNation Pokémon Arena（大型場面、觀眾競賽感）、pokesurvivor（走位／成長循環）、Claude-Code-Game-Studios v1.0.0 `984023ddac0d5e27624f2baacde6105e45de375f`（MIT；vertical-slice／playtest-report 方法結構，未複製文字）。
+
+## 第二輪補充（錦標賽、四招套組）
+
+仍**沒有新增任何圖檔、音檔或字型檔**。
+
+| 用途 | 來源 | 權利／核准狀態 |
+|---|---|---|
+| 錦標賽對手：潮鬃海豹 species-047、焰核炎靈 species-113、赤棘暴龍 species-102 | 同一 `accepted-20261010` 選集，經 `dataArenaArtRecord` 唯讀選取並核對 `entityId`／`sourceBankSha256`；名稱來自 `speciesNameForId` | 同上（公開試玩雜湊選定；`rightsDocumentVerified=false`、`commercialReleaseAccepted=false` 不變） |
+| 招式名稱、說明、數值、預告、彈體材質（`bolt`）、對戰表、HUD | 本專案原創（`dataArenaConfig.js`、`dataArenaText.js`、`dataArenaTextures.js`、CSS） | 原創 |
+
+**參考與機制邊界**：Pokémon Zarza Arena（https://pokemonzarza.com/poke-arena.html?lang=en、play-guide）在本環境被代理拒絕（403），未取得任何頁面、程式、圖或音。操作／節奏只來自二手報導（例：https://retrododo.com/pokemon-zarza-brings-a-battle-arena-15-minigames-to-your-browser/）：
+
+- 四招＋終極；
+- 冷卻與能量；
+- 點按自動瞄準最近且路徑無阻的對手，拖曳手動瞄準；
+- 柱子作掩體；
+- 紅色預告區；
+- 6 輪錦標賽與波次模式分開；
+- 私人房對戰。
+
+本批只採用「機制類型」（如「延遲爆炸區」「正面擋射盾」「無敵突進」），每招在 `DATA_ARENA_MOVES[].mechanic` 留紀錄；任何招式名稱、招式組合、數值、角色、美術、音效或 UI 都未複製。Pokémon 相關名稱與角色不在本產品中出現。
