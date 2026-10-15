@@ -9804,7 +9804,11 @@
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/public-playtest.r1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/championship/presentation/intRh2/raisingContactShadow.js"
+    "src/championship/presentation/intRh2/raisingContactShadow.js",
+    "assets/production/database-handpainted-r1-20261015/species-035.png",
+    "assets/production/database-handpainted-r1-20261015/species-038.png",
+    "assets/production/database-handpainted-r1-20261015/species-039.png",
+    "assets/production/database-handpainted-r1-20261015/species-040.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -9812,7 +9816,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "e2e769bc2295a2c1dc95a4a60a747bb44edc2a3ea865ada3138487ef835fecca"
+        "sha256": "d8429105ab78e93d2c1560901ff40093c955b76a9d614883c8ff4d8fb1688ac9"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -29968,7 +29972,7 @@
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
-        "sha256": "2ef308c7b50c9f61b57b14681e7904651dec828a9ae423acebe6d129e8841e0d"
+        "sha256": "82959f23001ec735227bdf02a6ed9591c6d85e076aeaf2edb9e7e3f8a4aff19b"
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-034.png",
@@ -45564,7 +45568,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "514f6d95eb6aab126120073d18466a18e3a507892d31b11e06eb8d75baf4b353"
+        "sha256": "52b1ad80dd69836603769bd54592dab0329a0055eed9d3274a4de3c6b9daf20c"
       },
       {
         "path": "docs/contracts/championship/battle-economy-runtime.v1.json",
@@ -45916,7 +45920,7 @@
       },
       {
         "path": "src/championship/app/medalCollection.css",
-        "sha256": "4d4a0677592417f5fecaee08a7137fedd76d820bddc5c54e555f41444df67bb8"
+        "sha256": "564497c9f160dec7aa7062ccdc225170652b38d639a69889a53188ac48317bab"
       },
       {
         "path": "src/championship/app/medalCollection.js",
@@ -45924,7 +45928,7 @@
       },
       {
         "path": "src/championship/app/medalCollectionScreen.js",
-        "sha256": "63771602187c6659b84f53e3eb8da49052c4637357d33e624aa7aabfaabd573c"
+        "sha256": "20fe69ceefd6515e9c314f3748ceea127b05c7b34ce72f95324d68585d10a956"
       },
       {
         "path": "src/championship/app/medalDetails.js",
@@ -46812,15 +46816,15 @@
       },
       {
         "path": "src/championship/presentation/medals/medalGeometry.js",
-        "sha256": "f636dbf040d01030782e977e493f37bc8bc48f52722944ca99e38b5f6bddc29c"
+        "sha256": "f8b5778a779d740d8c4db1802161dad480096c24ccd8bee85b6c5084ca6587d9"
       },
       {
         "path": "src/championship/presentation/medals/medalPresentationProfiles.js",
-        "sha256": "3c9b9af6fbe813a23ff5c6bac2acfd3d0b3999e74df60f6846bca2916e5a7c70"
+        "sha256": "ae3a467e74e6965ed66583105478887d1f4ec46a39b02e8d7e47f606b098da5f"
       },
       {
         "path": "src/championship/presentation/medals/medalPresentationText.js",
-        "sha256": "8cdc4de8df221c1d2e60549b7b6febe033ac2f3dd27f56bd23c6a3dca2152715"
+        "sha256": "5d3d559bdaa5e038f3b0b2f2183ff9af2d1307357672ca7ae610fa4f253157c9"
       },
       {
         "path": "src/championship/presentation/medals/medalSilhouette.js",
@@ -46828,7 +46832,7 @@
       },
       {
         "path": "src/championship/presentation/medals/medalThreePresentation.js",
-        "sha256": "c237062f288848b26d1c245e20d3b42518a6d2121e9b75564acd489affcf8b68"
+        "sha256": "18f715ed64e483b216eac8eb41d69fe9f85fccf74edbee91151293d607ee4b65"
       },
       {
         "path": "src/championship/presentation/medals/selectedMedalPresentation.js",
@@ -47456,7 +47460,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.r1.json",
-        "sha256": "ead1c572eb8ca654e26e51f14d87463c82d861c463c24831290ce016872505e9"
+        "sha256": "ecbc026b455400cc1c3e1f021ccc0162139be4c5ca94f14e98d53245ea6cd0cd"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
@@ -47477,6 +47481,22 @@
       {
         "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
         "sha256": "d1ad30f085f8e7e9a3904802fb7a29bea1003155550b4594dc569d04b9db8d54"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-035.png",
+        "sha256": "f2c4940a90fba6634621a5a20d545d292ab3eae4509ec13b9c357336295fa9dd"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-038.png",
+        "sha256": "6f2bd7dd3a4770fed9989ab7488e4f7a9f9d6a98f0a0aa7a7cf4a646330cb0d4"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-039.png",
+        "sha256": "b190d04962a7e499b6b8cde5c0e830c41d7dc359f7647f97b6a12e29e2e74cbb"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-040.png",
+        "sha256": "f412c7dd2fc5346ba0952707e9a4a49e7d4379c56c069eda7cacc9c776add2a0"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
