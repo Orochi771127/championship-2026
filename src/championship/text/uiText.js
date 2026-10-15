@@ -7,6 +7,7 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "CAGE_SLOT_RANK_LOCKED": "第 {n} 格尚未開放，馴獸師階級達到 {rank} 後開放。",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "系統背景",
   "SYSTEM_BACKGROUND_HINT": "只用於圖鑑、商店、說明與紀錄等系統頁；城邦標題與遊玩場景不變。",

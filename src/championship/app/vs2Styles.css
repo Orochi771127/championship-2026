@@ -168,7 +168,12 @@
 /* ---- Gate Select ---------------------------------------------------------- */
 .cm-vs2-body--gate { gap: var(--sp-3); overflow-y: auto; overflow-x: hidden; }
 /* The status belongs to the selected destination, not a second banner. */
-.cm-vs2-gate-admission { display: inline-block; max-width: 100%; margin-top: 3px; padding: 2px 5px; border-radius: var(--r-tag); font-size: var(--fs-label); line-height: 1.35; }
+/* Reserve one title line whether admission is open or locked. Both labels
+   may ellipsize visually; their full localized text remains in title/aria. */
+.cm-vs2-preview__heading { display: flex; align-items: center; flex-wrap: nowrap; gap: 6px; min-width: 0; height: 24px; overflow: hidden; }
+.cm-vs2-preview__heading .cm-vs2-preview__name { flex: 1 1 0; min-width: 0; }
+.cm-vs2-preview__heading .cm-vs2-gate-admission { flex: 0 1 auto; min-width: 0; max-width: 58%; margin: 0; padding: 1px 4px; border-radius: var(--r-tag); font-size: var(--fs-label); line-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cm-vs2-preview__heading .cm-vs2-gate-admission[hidden] { display: none; }
 .cm-vs2-body--gate .cm-vs2-preview { padding: 8px 10px; gap: 4px 10px; }
 .cm-vs2-body--gate .cm-vs2-preview__image { width: 56px; height: 56px; }
 .cm-vs2-body--gate .cm-vs2-preview__name { font-size: var(--fs-body); line-height: 1.35; }

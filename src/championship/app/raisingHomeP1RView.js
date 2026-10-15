@@ -265,8 +265,17 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   }
   const transition=node('div','int-rh2-lifecycle');transition.hidden=true;transition.setAttribute('aria-live','polite');
   const transitionText=node('p','int-rh2-lifecycle__text');
-  const evolutionChoice=node('div','int-rh2-day-confirm');evolutionChoice.hidden=true;
-  evolutionChoice.setAttribute('role','dialog');evolutionChoice.setAttribute('aria-label',evolutionChoiceTitle());
+  const evolutionChoice=node('div','int-rh2-evolution-choice');evolutionChoice.hidden=true;
+  evolutionChoice.setAttribute('role','dialog');evolutionChoice.setAttribute('aria-modal','true');evolutionChoice.setAttribute('aria-label',evolutionChoiceTitle());
+  evolutionChoice.addEventListener('keydown',event=>{
+    if(event.key!=='Tab')return;
+    const options=Array.from(evolutionChoice.children).filter(child=>child.dataset?.speciesIndex);
+    if(!options.length)return;
+    const index=options.indexOf(document.activeElement);
+    if(event.shiftKey?(index<=0):(index===options.length-1||index<0)){
+      event.preventDefault();options[event.shiftKey?options.length-1:0].focus();
+    }
+  });
   transition.append(evolutionChoice);
   const retry=button('int-rh2-system-button','Retry');retry.hidden=true;
   retry.addEventListener('click',()=>presentation.intents.requestSave());transition.append(transitionText,retry);root.append(transition);
@@ -481,14 +490,20 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     evolutionChoice.hidden=!choice;
     const choiceKey=choice?`${getLocale()}:${choice.instanceId}:${choice.choices.join(',')}`:'';
     if(evolutionChoice.dataset.choiceKey!==choiceKey){
+      const focusedSpecies=document.activeElement?.dataset?.speciesIndex;
       evolutionChoice.dataset.choiceKey=choiceKey;
-      if(choice)evolutionChoice.replaceChildren(node('p','int-rh2-day-confirm__question',evolutionChoiceTitle()),
+      evolutionChoice.setAttribute('aria-label',evolutionChoiceTitle());
+      if(choice)evolutionChoice.replaceChildren(node('p','int-rh2-evolution-choice__title',evolutionChoiceTitle()),
         ...choice.choices.map(target=>{
           const extension=getProductExtension(target);
           const label=extension?.displayNameZh??speciesName(target);
-          const button=node('button','int-rh2-calendar',uiText(label));button.type='button';
+          const button=node('button','int-rh2-evolution-choice__option',uiText(label));button.type='button';button.dataset.speciesIndex=String(target);
           button.addEventListener('click',()=>presentation.intents.selectEvolutionChoice?.(choice.instanceId,target));return button;
         }));
+      if(choice){
+        const options=Array.from(evolutionChoice.children).filter(child=>child.dataset?.speciesIndex);
+        (options.find(button=>button.dataset.speciesIndex===focusedSpecies)??options[0])?.focus();
+      }
     }
     transition.dataset.phase=day?.phase??(lifecycle?.evolution?'evolution':'idle');
     transition.style.backgroundColor=day?`rgba(0,0,0,${day.phase==='fade-out'?Math.min(1,day.frames/8):day.phase==='fade-in'?Math.max(0,1-day.frames/8):1})`:'transparent';
@@ -575,4 +590,5 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     }
   });
 }
+
 

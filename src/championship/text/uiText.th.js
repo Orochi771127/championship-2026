@@ -6,6 +6,7 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "CAGE_SLOT_RANK_LOCKED": "ช่องที่ {n} ยังล็อกอยู่ ปลดล็อกเมื่อถึงแรงก์เทมเมอร์ {rank}",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "พื้นหลังหน้าระบบ",
   "SYSTEM_BACKGROUND_HINT": "ใช้เฉพาะหน้าระบบ เช่น สารานุกรม ร้านค้า วิธีเล่น และบันทึก หน้าชื่อเกมรูปนครและฉากเล่นยังเหมือนเดิม",

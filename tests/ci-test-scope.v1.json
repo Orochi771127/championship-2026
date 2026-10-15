@@ -4,6 +4,7 @@
   "portable": [
     "tests/alternate-form-build-boundary-cases.mjs",
     "tests/alternate-form-portraits-cases.mjs",
+    "tests/alternate-form-qa-bootstrap-cases.mjs",
     "tests/championship-alternate-form-assets-cases.mjs",
     "tests/championship-art-a1-map-tech-cases.mjs",
     "tests/championship-art-production-a0-cases.mjs",
@@ -81,6 +82,7 @@
     "tests/championship-cage-identity-crosswalk-cases.mjs",
     "tests/championship-cage-landscape-cases.mjs",
     "tests/championship-cage-original-opus-runtime-cases.mjs",
+    "tests/championship-cage-rank-lock-labels-cases.mjs",
     "tests/championship-cage37-final-intake-cases.mjs",
     "tests/championship-character-animation-timeline-cases.mjs",
     "tests/championship-character-faithful-hd-cases.mjs",
@@ -119,6 +121,7 @@
     "tests/championship-highlight-cases.mjs",
     "tests/championship-hm10-production-cases.mjs",
     "tests/championship-home-rebuild-observed-cases.mjs",
+    "tests/championship-hud-gate-stability-cases.mjs",
     "tests/championship-hunt-actor-entry-cases.mjs",
     "tests/championship-hunt-capture-closure-cases.mjs",
     "tests/championship-hunt-clock-cases.mjs",

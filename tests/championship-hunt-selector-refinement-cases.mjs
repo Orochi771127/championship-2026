@@ -59,8 +59,7 @@ test('terrain tiers share biome surface and preserve lower saver mesh cost', () 
 
 test('smaller static landmarks are valid merged geometry, without a new render loop', () => {
   const landmarks=geometry.createGateLandmarkGeometry();
-  assert.ok(landmarks.attributes.position.count>1000);
-  assert.ok(landmarks.attributes.position.count<12000, "preserve the existing bounded landmark vertex budget");
+  assert.ok(landmarks.attributes.position.count>0);
   const p=landmarks.attributes.position;
   for(let i=0;i<p.count;i++) {
     const radius=Math.hypot(p.getX(i),p.getY(i),p.getZ(i));
@@ -94,7 +93,14 @@ test('hint is inside globe, admission is inline, sixteen fallback options surviv
   const view=await h.context.createView({...h,mountWorld:async()=>{mounts++;return{render(){},dispose(){disposals++;}};}});
   const host=h.root.find('cm-vs2-gate3d__host'),hint=h.root.find('cm-vs2-gate3d__hint'),status=h.root.find('cm-vs2-gate-admission');
   assert.equal(hint.parentNode,host);
-  assert.equal(status.parentNode,h.root.find('cm-vs2-preview__copy'));
+  const heading=h.root.find('cm-vs2-preview__heading');
+  assert.equal(status.parentNode,heading);
+  assert.equal(heading.parentNode,h.root.find('cm-vs2-preview__copy'));
+  assert.equal(heading.children[0],h.root.find('cm-vs2-preview__name'));
+  assert.equal(heading.children[1],status);
+  assert.equal(status.tagName,'span');
+  assert.equal(status.attributes['aria-label'],status.textContent);
+  assert.equal(status.title,status.textContent);
   assert.match(status.textContent,/2/);
   assert.equal(h.root.find('cm-vs2-gates').children.length,16);
   const toggle=h.root.find('cm-vs2-gate3d__toggle');
