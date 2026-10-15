@@ -1,3 +1,4 @@
+import {battleTransportText} from '../text/battleTransportText.js';
 import {battleOpeningText} from '../text/battleOpeningText.js';
 import { bindCodePaste } from "./codeClipboard.js";
 import { titleEventText, raisingDisplayName, speciesName } from "../text/zhHant.js";
@@ -26,6 +27,27 @@ import {tutorialBattleText} from '../text/interactiveTutorialBattleText.js';
 // quietly presenting both as if they were the same kind of thing.
 
 export const VS5_UI_AUTHORITY = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
+
+// Presentation-only compatibility hints. The transport decoder remains the
+// authority on version, catalog, checksum and runtime readiness.
+export const VS5_VERSIONED_CODE_MAX_LENGTH=50000;
+export function battleTransportErrorMessage(reason,fallback){
+  if(/SPECIES_NOT_READY$/.test(reason??''))return battleTransportText('SPECIES_NOT_READY');
+  if(/CATALOG_MISMATCH$/.test(reason??''))return battleTransportText('CATALOG_MISMATCH');
+  if(/V2_INVITE_REQUIRED$/.test(reason??''))return battleTransportText('V2_INVITE_REQUIRED');
+  if(/V2_REQUIRED$/.test(reason??''))return battleTransportText('V2_REQUIRED');
+  if(/VERSION_MISMATCH$|UNSUPPORTED_VERSION$/.test(reason??''))return battleTransportText('VERSION_MISMATCH');
+  if(/^PRODUCT_BATTLE_TRANSPORT_INVALID_/.test(reason??''))return battleTransportText('VALUES_UNSUPPORTED');
+  if(/^PRODUCT_BATTLE_TRANSPORT_/.test(reason??''))return battleTransportText('INVALID_CODE');
+  return fallback;
+}
+function showTransportVersion(node,codes,kind){
+  const prefix=kind==='password'?'CM26-PASSWORD-2.':'CM26-LINK-2.';
+  const v2=codes.some(code=>typeof code==='string'&&code.trim().startsWith(prefix)&&code.trim().length>22);
+  node.hidden=!v2;node.dataset.transportVersion=v2?'2':'';
+  node.textContent=v2?battleTransportText(kind==='password'?'PASSWORD_V2_NOTICE':'LINK_V2_NOTICE'):'';
+}
+
 
 export const VS5_EVIDENCE_LABELS = Object.freeze({
   VERIFIED_BINARY: "ROM VERIFIED",
@@ -245,7 +267,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const fee=result.entryFee??match.entryFee,wallet=result.walletBits??result.wallet??result.bits;
     entryNotice.textContent=uiText(['INSUFFICIENT_FUNDS','INSUFFICIENT_BITS'].includes(result.reason)
       ?uiText('持有金額不足。報名費 {fee} 位元幣；持有 {wallet} 位元幣。',{fee,wallet:wallet??'—'})
-      :result.message??menuCopy.entryRefused??'目前無法參加這場對戰。');
+      :battleTransportErrorMessage(result.reason,result.message??menuCopy.entryRefused??'目前無法參加這場對戰。'));
   }
   async function chooseParty(match){
     const request=++partyRequest,mode=selectedMode;
@@ -333,9 +355,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     try{setup=await getPasswordSelection();}
     catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'密碼對戰載入失敗，請再試一次。'},{});setPanelFooter(back);}return;}
     if(cubeDisposed||request!==partyRequest)return;
-    const maxLength=Number.isInteger(setup?.maxLength)?setup.maxLength:22;
+    const maxLength=Number.isInteger(setup?.maxLength)?setup.maxLength:VS5_VERSIONED_CODE_MAX_LENGTH;
     partyPanel.append(element('h2','cm-vs5-title','密碼對戰'),
-      element('p','cm-vs5-entry-notice','PASSWORD_LOCAL_STEPS'));
+      element('p','cm-vs5-entry-notice','PASSWORD_LOCAL_STEPS'),
+      element('p','cm-vs5-entry-notice',battleTransportText('PASSWORD_INPUT_HINT'),false));
+    const versionNotice=element('p','cm-vs5-entry-notice');versionNotice.hidden=true;versionNotice.dataset.codeVersionNotice='password';versionNotice.setAttribute('role','status');partyPanel.append(versionNotice);
     const inputs=[],pasteButtons=[];
     let passwordRevision=0;
     for(const team of ['A','B']){
@@ -355,7 +379,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       pasteButtons.push(paste);partyPanel.append(label,paste,pasteStatus);
     }
     const confirm=actionButton('開始密碼對戰',{primary:true});confirm.disabled=true;
-    const refresh=()=>{confirm.disabled=entering||inputs.some(input=>![...input.value].length);back.disabled=entering;for(const paste of pasteButtons)paste.disabled=entering;};
+    const refresh=()=>{showTransportVersion(versionNotice,inputs.map(input=>input.value),'password');confirm.disabled=entering||inputs.some(input=>!input.value.trim().length);back.disabled=entering;for(const paste of pasteButtons)paste.disabled=entering;};
     for(const input of inputs)input.addEventListener('input',()=>{passwordRevision++;refresh();});
     confirm.addEventListener('click',async()=>{
       if(confirm.disabled)return;passwordRevision++;entering=true;refresh();entryNotice.hidden=true;
@@ -398,12 +422,12 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       make.addEventListener('click',async()=>{
         if(make.disabled)return;passwordRevision++;const token=++generation,ids=[...chosen];making=true;sync();
         let made;
-        try{made=await setup.createPassword(ids);}catch(error){made=null;}
+        try{made=await setup.createPassword(ids);}catch(error){made={ok:false,reason:error?.message};}
         making=false;if(cubeDisposed||request!==partyRequest)return;
         passwordRevision++;
         if(token!==generation){sync();return;}
         if(made?.ok){output.value=made.password;inputs[0].value=made.password;locked=ids.map(id=>({...setup.candidates.find(e=>e.instanceId===id)}));copy.hidden=false;status.hidden=true;}
-        else{output.value='';copy.hidden=true;status.hidden=false;status.textContent=uiText(made?.message??'密碼產生失敗，請再試一次。');}
+        else{output.value='';copy.hidden=true;status.hidden=false;status.textContent=uiText(battleTransportErrorMessage(made?.reason,made?.message??'密碼產生失敗，請再試一次。'));}
         sync();refresh();
       });
       copy.addEventListener('click',()=>{void copyCode(output,status,'已複製密碼。','請長按密碼欄位手動複製。');});
@@ -428,7 +452,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const steps=element('ol','cm-vs5-exchange-steps');
     for(const key of ['LINK_STEP_1','LINK_STEP_2','LINK_STEP_3'])steps.append(element('li','',key));
     const host=actionButton('建立邀請'),guest=actionButton('加入邀請');
-    partyPanel.append(title,note,steps,host,guest,rolePanel);setPanelFooter(back);
+    partyPanel.append(title,note,element('p','cm-vs5-entry-notice',battleTransportText('LINK_VERSION_HINT'),false),steps,host,guest,rolePanel);setPanelFooter(back);
     let roleRevision=0;
 
     const teamPicker=(container,selected,refresh)=>{
@@ -444,7 +468,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     };
     const codeField=(labelText,readOnly=false)=>{
       const label=element('label','cm-vs5-password-label',labelText),field=element('textarea','cm-vs5-link-code');
-      field.value='';field.setAttribute('aria-label',uiText(labelText));field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('autocapitalize','none');
+      field.value='';field.maxLength=(Number.isInteger(setup?.maxLength)?setup.maxLength:VS5_VERSIONED_CODE_MAX_LENGTH)*3;field.setAttribute('maxlength',String(field.maxLength));field.setAttribute('aria-label',uiText(labelText));field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('autocapitalize','none');
       if(readOnly){field.readOnly=true;field.setAttribute('readonly','');}
       label.append(field);return {label,field};
     };
@@ -461,6 +485,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       const revision=++roleRevision,alive=()=>!cubeDisposed&&request===partyRequest&&revision===roleRevision;
       rolePanel.replaceChildren();rolePanel.dataset.role=isHost?'host':'guest';
       const selected=[],invite=codeField(isHost?'邀請碼':'對方邀請碼',isHost),reply=codeField(isHost?'對方回覆碼':'回覆碼',!isHost);
+      const versionChoice=element('input');versionChoice.type='checkbox';versionChoice.checked=false;versionChoice.dataset.action='link-version-2';versionChoice.setAttribute('aria-label',battleTransportText('CREATE_V2_INVITE'));
+      const versionLabel=element('label','cm-vs5-password-label',battleTransportText('CREATE_V2_INVITE_LABEL'),false);versionLabel.append(versionChoice);if(isHost)rolePanel.append(versionLabel);
+      const versionNotice=element('p','cm-vs5-entry-notice');versionNotice.hidden=true;versionNotice.dataset.codeVersionNotice='link';versionNotice.setAttribute('role','status');
       const create=actionButton(isHost?'產生邀請碼':'產生回覆碼',{primary:true}),read=actionButton('LINK_READ_REPLY'),begin=actionButton('LINK_START_LOCAL',{primary:true});
       create.dataset.action='create-code';read.dataset.action='read-reply';begin.dataset.action='start-local';
       const copy=actionButton('CODE_COPY'),copyStatus=element('p','cm-vs5-entry-notice'),notice=element('p','cm-vs5-entry-notice');
@@ -474,7 +501,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       bindCodePaste({button:paste,field:incoming,status:pasteStatus,text:uiText,
         isCurrent:()=>alive()&&!entering,getRevision:()=>version});
       const refresh=()=>{
-        updateButtons();host.disabled=guest.disabled=back.disabled=entering;
+        updateButtons();host.disabled=guest.disabled=back.disabled=entering;versionChoice.disabled=entering;showTransportVersion(versionNotice,[invite.field.value,reply.field.value],'link');
         invite.field.disabled=reply.field.disabled=paste.disabled=entering;
         create.disabled=entering||selected.length===0||(!isHost&&!invite.field.value.trim());
         read.disabled=entering||!invite.field.value||!reply.field.value.trim();begin.disabled=entering||!prepared;
@@ -497,6 +524,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         refresh();
       };
       updateButtons=teamPicker(rolePanel,selected,()=>invalidate(isHost||Boolean(prepared||locked.length||reply.field.value)));
+      versionChoice.addEventListener('change',()=>invalidate(true));
       if(isHost)reply.field.addEventListener('input',()=>{version++;prepared=null;copyStatus.hidden=true;refresh();});
       else invite.field.addEventListener('input',()=>invalidate(false));
       const prepare=async operation=>{
@@ -515,7 +543,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         if(create.disabled)return;const ids=[...selected],code=invite.field.value;
         if(isHost){version++;prepared=null;locked=[];invite.field.value='';reply.field.value='';}
         else reply.field.value='';
-        void prepare(()=>isHost?setup.createInvite(ids):setup.prepareGuest(code,ids));
+        void prepare(()=>isHost?setup.createInvite(ids,versionChoice.checked?{transportVersion:2}:{}):setup.prepareGuest(code,ids));
       });
       read.addEventListener('click',()=>{if(!read.disabled){const a=invite.field.value,b=reply.field.value;void prepare(()=>setup.prepareHost(a,b));}});
       copy.addEventListener('click',()=>{void copyCode((isHost?invite:reply).field,copyStatus);});
@@ -523,7 +551,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       rolePanel.append(own);
       if(isHost)rolePanel.append(create,invite.label,copy,copyStatus,reply.label,paste,pasteStatus,read);
       else rolePanel.append(invite.label,paste,pasteStatus,create,reply.label,copy,copyStatus);
-      rolePanel.append(opponent,notice,begin);refresh();
+      rolePanel.append(versionNotice,opponent,notice,begin);refresh();
     };
     host.addEventListener('click',()=>renderRole(true));guest.addEventListener('click',()=>renderRole(false));renderRole(true);
   }

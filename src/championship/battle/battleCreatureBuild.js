@@ -1,3 +1,4 @@
+import {productSpeciesRecord,isKnownSpeciesIndex} from '../contracts/productSpeciesData.js';
 // Creature build — how an opponent preset becomes something a battle can fight.
 //
 // Independently dumped from YDIJ ROM SHA-256 8ad375ba…c5d1.
@@ -153,7 +154,8 @@ export function creatureStatValue(level, column) {
 /** The HP curve index a species carries at its +0x30. */
 export function speciesStatCurveIndex(speciesId) {
   const id = requireInteger(speciesId, "SPECIES_ID");
-  const record = speciesCatalog.records[id];
+  if(!isKnownSpeciesIndex(id))throw creatureError("UNKNOWN_SPECIES_ID");
+  const record = productSpeciesRecord(id);
   if (!record) {
     throw creatureError("UNKNOWN_SPECIES_ID");
   }
@@ -274,3 +276,4 @@ export function buildOpponentTeam(presetIndices, lookup) {
     return buildCreatureFromPreset(preset);
   }));
 }
+

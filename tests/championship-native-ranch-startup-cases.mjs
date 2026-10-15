@@ -110,7 +110,8 @@ test('existing texture authority shares the lid texture and releases crop views 
 
 test('a later invalid crop rolls back all acquired textures',async()=>{
   const {PIXI,resources}=pixiFixture();const request=structuredClone(plan());request.placements[1].sourceRect.height=99999;
-  await assert.rejects(loadRuntimeMapArtTileSet({PIXI,manifest,placements:request.placements}),/SOURCE_RECT_INVALID/);
+  await assert.rejects(loadRuntimeMapArtTileSet({PIXI,manifest,placements:request.placements,
+    presentationMode:request.mode}),/SOURCE_RECT_INVALID/);
   assert.deepEqual(resources.unloads,resources.loads);
   assert.deepEqual(resources.destroyed,[false]);
 });

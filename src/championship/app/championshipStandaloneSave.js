@@ -1,3 +1,4 @@
+import {requiresProductSaveVersion} from '../contracts/productSpeciesData.js';
 // Championship Modern -- standalone player save envelope.
 //
 // This is the standalone Championship 2026 save envelope. It has one storage
@@ -330,6 +331,7 @@ export function createChampionshipModernSave({
     updatedAt
   };
 
+  if(requiresProductSaveVersion(save))save.schemaVersion=6;
   assertAllowedKeys(save, ALLOWED_TOP_LEVEL_KEYS, "save");
   if (save.battleEconomy.settledThrough > 0 && save.shop === null) throw saveError("MISSING_BATTLE_WALLET_SLICE");
   assertNoForensicPayload(save);
@@ -337,8 +339,9 @@ export function createChampionshipModernSave({
 }
 
 export function serializeChampionshipModernSave(save) {
+  if(save?.schemaVersion===5&&requiresProductSaveVersion(save))throw saveError('PRODUCT_SPECIES_REQUIRES_SAVE_V6');
   assertAllowedKeys(save, ALLOWED_TOP_LEVEL_KEYS, "save");
-  if (save.schemaVersion !== CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
+  if (![CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION,6].includes(save.schemaVersion)) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
   assertNoForensicPayload(save);
   const text = JSON.stringify(save);
   const bytes = byteLength(text);
@@ -372,9 +375,10 @@ export function deserializeChampionshipModernSave(text) {
   const isV4 = parsed.schemaVersion === 4;
   const missingRngHistory = isV1 || isV2 || isV3;
   const legacy = missingRngHistory || isV4;
-  if (!legacy && parsed.schemaVersion !== CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
+  if (!legacy && ![CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION,6].includes(parsed.schemaVersion)) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
   assertAllowedKeys(parsed, isV1 ? ALLOWED_TOP_LEVEL_KEYS_V1 : isV2 ? ALLOWED_TOP_LEVEL_KEYS_V2 : isV3 ? ALLOWED_TOP_LEVEL_KEYS_V3 : isV4 ? ALLOWED_TOP_LEVEL_KEYS_V4 : ALLOWED_TOP_LEVEL_KEYS, "save");
   assertNoForensicPayload(parsed);
+  if(parsed.schemaVersion<6&&requiresProductSaveVersion(parsed))throw saveError('PRODUCT_SPECIES_REQUIRES_SAVE_V6');
   if (!isV1 && !Object.hasOwn(parsed, "battleEconomy")) throw saveError("MISSING_BATTLE_ECONOMY_SLICE");
   if (!isV1 && !isV2 && !Object.hasOwn(parsed, "instanceIdentity")) throw saveError("MISSING_INSTANCE_IDENTITY_SLICE");
   if (!missingRngHistory && !Object.hasOwn(parsed, "gameplayRng")) throw saveError("MISSING_GAMEPLAY_RNG_SLICE");
@@ -401,3 +405,4 @@ export function deserializeChampionshipModernSave(text) {
     updatedAt: typeof parsed.updatedAt === "string" ? parsed.updatedAt : new Date().toISOString()
   });
 }
+

@@ -5,10 +5,28 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const read = name => readFileSync(new URL(`../src/championship/app/${name}`, import.meta.url), 'utf8');
 const css = read('intRh2Styles.css');
-const overlay = css.slice(css.indexOf('/* Raising-only overlay composition:'));
+const start=css.indexOf('/* Raising-only overlay composition:');
+const end=css.indexOf('/* Raising HUD:',start);
+assert.ok(start>=0 && end>start,'explicit fullscreen composition boundaries must exist');
+const overlay=css.slice(start,end);
 const gate = ':has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden]))';
-const rules = [...overlay.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^{}]*)\}/g)]
-  .flatMap(([, selectors, body]) => selectors.trim().split(/,\s*(?=body)/).map(selector => ({selector:selector.trim(), body})));
+function splitSelectors(text) {
+  const result=[];let start=0,depth=0;
+  for(let i=0;i<text.length;i++){
+    if(text[i]==='('||text[i]==='[')depth++;
+    else if(text[i]===')'||text[i]===']')depth--;
+    else if(text[i]===','&&depth===0){result.push(text.slice(start,i));start=i+1;}
+  }
+  result.push(text.slice(start));return result;
+}
+const parseRules = section => [...section.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+  .flatMap(([, selectors, body]) => splitSelectors(selectors.trim()).map(selector => ({selector:selector.trim(), body})));
+const rules=parseRules(overlay);
+const assertVisibleRaising = section => {
+  const parsed=parseRules(section);
+  assert.ok(parsed.length >= 20);
+  assert.ok(parsed.every(r => r.selector.startsWith('body') && r.selector.includes(gate)), 'hidden/title/other scenes cannot inherit overlay rules');
+};
 const block = suffix => {
   const found = rules.filter(r => r.selector === `body${gate} ${suffix}`);
   assert.ok(found.length, `missing gated rule: ${suffix}`);
@@ -16,8 +34,7 @@ const block = suffix => {
 };
 
 test('every overlay override is visible-Raising gated; full canvas beats shared root and safe-area frame reservations', () => {
-  assert.ok(rules.length >= 20);
-  assert.ok(rules.every(r => r.selector.startsWith('body') && r.selector.includes(gate)), 'hidden/title/other scenes cannot inherit overlay rules');
+  assertVisibleRaising(overlay);
   assert.match(block('#cm-root'), /top: 0; bottom: 0;/);
   assert.match(block('.int-rh2-field-frame'), /left: 0; right: 0;/);
   assert.doesNotMatch(overlay, /--cm-screen-(?:height|top|bottom)\s*:|--cm-(?:status-bar|toolbar)-height\s*:/, 'retain measured UI budgets without consuming canvas');
@@ -50,4 +67,11 @@ test('safe-area is for floating controls, not canvas; short-screen menu is scrol
   assert.match(menu,/--cm-status-bar-height/);assert.match(menu,/--cm-toolbar-height/);
   assert.match(menu,/--cm-raising-dock-gap/);assert.match(menu,/overflow-y: auto; overscroll-behavior: contain/);
   for(const selector of ['.int-rh2-mail-icon','.int-rh2-notice','.int-rh2-companion','.cm-tutorial-guidance'])assert.match(block(selector),/--cm-raising-dock-gap/);
+});
+
+test('fullscreen safety contract still rejects ungated and hidden-root selector mutations',()=>{
+  assert.throws(()=>assertVisibleRaising(overlay.replace(gate,'')));
+  assert.throws(()=>assertVisibleRaising(overlay.replace(':not([hidden])','')));
+  assert.throws(()=>assertVisibleRaising(overlay+'\nbody .cm-toolbar { pointer-events: none; }'));
+  assert.throws(()=>assertVisibleRaising(overlay.replace(' #cm-root {',' #cm-root, .cm-toolbar {')));
 });

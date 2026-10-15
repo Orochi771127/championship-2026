@@ -18,6 +18,7 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "CAGE_SLOT_RANK_LOCKED": "Slot {n} is locked. Unlocks at tamer rank {rank}.",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "System background",
   "SYSTEM_BACKGROUND_HINT": "Only for system pages such as the encyclopedia, shop, help and records. The city title and playable scenes stay unchanged.",

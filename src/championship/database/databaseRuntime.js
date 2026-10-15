@@ -44,6 +44,7 @@ export function projectDatabase({
   collection = [],
   registeredSpecies = [],
   evolutionBranches = [],
+  productEvolutionBranches = [],
   selectedSpeciesIndex = null
 } = {}) {
   const instancesBySpecies = new Map();
@@ -87,14 +88,14 @@ export function projectDatabase({
     const routeContext = {
       sourceRegistered:row.state === DATABASE_ENTRY_STATES.REGISTERED,
       registeredSpecies:entries.filter(entry=>entry.state === DATABASE_ENTRY_STATES.REGISTERED).map(entry=>entry.speciesIndex),
-      evolutionBranches
+      evolutionBranches,productEvolutionBranches
     };
     selected = {
       ...row,
       instances: instancesBySpecies.get(slot.speciesId) ?? [],
       evolutionRoutes:projectDatabaseEvolutionRoutes(slot.speciesIndex, routeContext).map(route=>({
         ...route,
-        conditions:projectDatabaseEvolutionConditions(slot.speciesIndex, route.branchIndex, routeContext)
+        conditions:projectDatabaseEvolutionConditions(slot.speciesIndex, route.branchIndex, {...routeContext,productRouteId:route.productRouteId??null})
       }))
     };
   }
@@ -109,3 +110,4 @@ export function projectDatabase({
     selected
   });
 }
+

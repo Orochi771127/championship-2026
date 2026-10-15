@@ -1,3 +1,4 @@
+import {alternateFormAsset,mergeAlternateFormConfigs,bindAlternateFormManifest,rekeyAlternateDonorRuntime} from './alternateFormAssetContracts.js';
 import acceptedSelection from '../../data/championship/accepted-original-character-selection.r1.json' with {type:'json'};
 import battlePacking from '../../../assets/production/characters/battle-packed-20261013/manifest.json' with {type:'json'};
 import {isApprovedOriginalPublicLocation,isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
@@ -10,7 +11,7 @@ const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof v
   ?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 
 export function completedCharacterBundleLocation(config,options,href){
-  const packed=options.battleAtlas===true&&options.sides?.length===1&&options.sides[0]==='main'
+  const packed=!config.assetRoot&&options.battleAtlas===true&&options.sides?.length===1&&options.sides[0]==='main'
     &&battlePacking.characters.find(c=>c.entity===config.entityId);
   if(packed){
     const entry=options.productionIndex?.entries?.find(e=>e.assetId===battlePacking.assetId);
@@ -19,7 +20,7 @@ export function completedCharacterBundleLocation(config,options,href){
     return {runtimeUrl:new URL(battlePacking.root+config.entityId+'/runtime.review.json',href).href,
       cachePrefix:config.entityId+'-battle-packed-20261013:',packed:true};
   }
-  const root=isApprovedOriginalPublicLocation(href)?acceptedSelection.root:'assets/production/internal-character-review/';
+  const root=config.assetRoot??(isApprovedOriginalPublicLocation(href)?acceptedSelection.root:'assets/production/internal-character-review/');
   return {runtimeUrl:new URL(root+config.folder+'/runtime.review.json',href).href,
     cachePrefix:config.entityId+'-completed-original-local:',packed:false};
 }
@@ -52,7 +53,8 @@ export function validateCompletedOriginalRuntime(runtime,config,baseline){
 export async function loadCompletedOriginalCharacters(options,href){
   if(!isOriginalRuntimeLocation(href))return loadLicensedCharacterRoster(options);
   const publicSelection=isApprovedOriginalPublicLocation(href);
-  const configs=publicSelection?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS;
+  const configs=mergeAlternateFormConfigs(publicSelection?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS);
+  options={...options,manifest:bindAlternateFormManifest(options.manifest)};
   const byEntity=new Map(configs.map(c=>[c.entityId,c]));
   const reviewed=new Set();
   const replacementFailures=[];
@@ -65,9 +67,20 @@ export async function loadCompletedOriginalCharacters(options,href){
     try {
     bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,cachePrefix:selected.cachePrefix});
       const runtime=bundle.runtime;
-      const response=await fetch(args.runtimeUrl,{signal:args.signal});
+      const donorUrl=config.motionDonorEntityId?new URL('../'+config.motionDonorEntityId+'/runtime.json',args.runtimeUrl).href:args.runtimeUrl;
+      const response=await fetch(donorUrl,{signal:args.signal});
       if(!response.ok)throw Error('CANDIDATE_BASELINE_MOTION_UNAVAILABLE');
-      const baseline=await response.json();
+      let sourceBaseline;
+      if(config.baselineRuntimeSha256){
+        const baselineText=await response.text();
+        const digest=await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(baselineText));
+        const hash=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+        if(hash!==config.baselineRuntimeSha256)throw Error('ALTERNATE_FORM_DONOR_HASH_MISMATCH');
+        sourceBaseline=JSON.parse(baselineText);
+      }else{
+        sourceBaseline=await response.json();
+      }
+      const baseline=config.motionDonorEntityId?rekeyAlternateDonorRuntime(sourceBaseline,config):sourceBaseline;
       validateCompletedOriginalRuntime(runtime,config,baseline);
       reviewed.add(config.entityId);
       return {...bundle,createActor(actorOptions){return bundle.createActor({...actorOptions,
@@ -79,7 +92,7 @@ export async function loadCompletedOriginalCharacters(options,href){
       replacementFailures.push({entityId:config.entityId,runtimeUrl,reason:error.message});
       // A failed packed load must not decode the original large atlas or hide
       // the failure behind the historical source-art fallback.
-      if(selected.packed)throw error;
+      if(selected.packed||config.assetRoot)throw error;
       return loadPixiCharacterRuntimeBundle(args);
     }
   }});
@@ -98,7 +111,7 @@ export async function loadCompletedOriginalCharacters(options,href){
 
 export function completedOriginalHudSpecies(baseUrl){
   if(!isOriginalRuntimeLocation(baseUrl))return [];
-  return (isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS).map(c=>c.speciesId);
+  return mergeAlternateFormConfigs(isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS).map(c=>c.speciesId);
 }
 const HUD_ALIAS_SOURCE=Object.freeze({'species-224':'species-034','species-225':'species-195','species-096':'species-226','species-097':'species-227'});
 export function originalHudSourceSpecies(id){
@@ -108,7 +121,7 @@ export function originalHudSourceSpecies(id){
 export async function applyCompletedOriginalHudArt({baseUrl,fetchImpl,portraits,battle,speciesIds=null}){
   if(!isOriginalRuntimeLocation(baseUrl))return [];
   const selected=speciesIds===null?null:new Set(speciesIds.map(originalHudSourceSpecies));
-  const configs=(isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS)
+  const configs=mergeAlternateFormConfigs(isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.characters:COMPLETED_ORIGINAL_CHARACTERS)
     .filter(c=>selected===null||selected.has(c.speciesId));
   // Bound network work while retaining catalog order for validation and aliases.
   // Serial 222-manifest round trips delayed the first raising screen on cold CDN loads.
@@ -131,7 +144,7 @@ export async function applyCompletedOriginalHudArt({baseUrl,fetchImpl,portraits,
   return applied;
 }
 function completedHudPrefix(baseUrl,config){
-  const assetRoot=isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.root:"assets/production/internal-character-review/";
+  const assetRoot=config.assetRoot??(isApprovedOriginalPublicLocation(baseUrl)?acceptedSelection.root:"assets/production/internal-character-review/");
   return `${assetRoot}${config.folder}/hud-r01/`;
 }
 async function fetchCompletedHudManifest({baseUrl,fetchImpl},config){
@@ -150,7 +163,7 @@ function applyCompletedHudCharacter({baseUrl,portraits,battle},config,manifest){
     ||manifest.battle?.speciesId!==config.speciesId||manifest.portrait.nativeScale!==2
     ||manifest.portrait.derivation!=='ORIGINAL_CANDIDATE_MAIN_CELL_000_VISIBLE_RGBA')
     throw Error('CANDIDATE_HUD_REVIEW_INVALID');
-  const baseline=battle.get(config.speciesId);
+  const baseline=config.hudSequences?{sequences:config.hudSequences}:battle.get(config.speciesId);
   if(!baseline||JSON.stringify(manifest.battle.sequences.map(sequence=>[sequence.id,sequence.playbackMode,
       sequence.loopStartFrame,sequence.frames.map(frame=>[frame.cell,frame.ticks])]))
     !==JSON.stringify(baseline.sequences.map(sequence=>[sequence.id,sequence.playbackMode,
@@ -182,3 +195,5 @@ function applyCompletedHudCharacter({baseUrl,portraits,battle},config,manifest){
     });
   }
 }
+
+

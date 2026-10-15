@@ -128,7 +128,11 @@ export async function buildLocaleCoverage() {
     locale,Object.fromEntries(DATABASE_ORIGINAL_PROFILES.entries.map(entry=>[entry.speciesId,entry.textByLocale[locale]]))
   ]));
   const { MEDAL_PRESENTATION_COPY } = await import("../src/championship/presentation/medals/medalPresentationText.js");
+  const { BATTLE_TRANSPORT_COPY } = await import("../src/championship/text/battleTransportText.js");
+  const { PRODUCT_FORM_TEXT } = await import("../src/championship/text/productFormText.js");
   const scopedCopy = [
+    inspectScopedLocaleCopy("src/championship/text/battleTransportText.js", BATTLE_TRANSPORT_COPY),
+    inspectScopedLocaleCopy("src/championship/text/productFormText.js", PRODUCT_FORM_TEXT),
     inspectScopedLocaleCopy("src/championship/presentation/medals/medalPresentationText.js", MEDAL_PRESENTATION_COPY),
     inspectScopedLocaleCopy("src/championship/database/databaseStories.js", DATABASE_STORY_COPY),
     inspectScopedLocaleCopy("src/data/championship/database-original-profiles.r1.json", profileCopy)
@@ -385,3 +389,4 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   for (const gap of report.catalogGaps) console.log(`CATALOG_GAP ${gap}`);
   process.exitCode = report.counts.missing || report.counts.uiCopyMissing || report.counts.catalogGaps ? 1 : 0;
 }
+

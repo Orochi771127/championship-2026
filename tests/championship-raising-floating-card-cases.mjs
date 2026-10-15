@@ -2,6 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import {getLocale} from '../src/championship/text/locale.js';
+import {getProductExtension} from '../src/championship/contracts/productSpeciesExtensions.js';
+import {speciesName} from '../src/championship/text/zhHant.js';
+import {productFormText} from '../src/championship/text/productFormText.js';
 import {createChampionshipPixiStage} from '../src/championship/presentation/championshipPixiStage.js';
 import {raisingNativeScreenPixels, raisingNativeToScreen, raisingScreenToNative} from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
 const read = path => fs.readFileSync(new URL(`../src/championship/${path}`, import.meta.url), 'utf8');
@@ -52,14 +56,14 @@ class Element extends EventTarget {
 const find=(root,cls)=>root.children.flatMap(n=>[...(n.className?.split(' ').includes(cls)?[n]:[]),...find(n,cls)]);
 async function fixture() {
   const document={createElement:tag=>new Element(tag,document)};
-  const context=vm.createContext({document,Date,console,setTimeout,clearTimeout,
+  const context=vm.createContext({document,Date,console,setTimeout,clearTimeout,productFormText,getLocale,getProductExtension,
     setText:(node,text)=>node.textContent=text,setLabel:(node,key,text)=>node.setAttribute(key,text),uiText:s=>String(s),retranslate:()=>{},
-    isNativeRanchLayout:()=>true,assembledHudArt:()=>null,prefersReducedMotion:()=>false,speciesName:s=>s,raisingMessageText:()=>'',raisingMessageSender:()=>'',downloadSaveBackup:()=>({key:'ok'})});
+    isNativeRanchLayout:()=>true,assembledHudArt:()=>null,prefersReducedMotion:()=>false,speciesName,raisingMessageText:()=>'',raisingMessageSender:()=>'',downloadSaveBackup:()=>({key:'ok'})});
   vm.runInContext(read('app/raisingHomeP1RView.js').replace(/^import .*;$/gm,'').replace(/export async function /,'async function ')+'\nthis.mount=createRaisingHomeP1RView;',context);
   const root=new Element('div',document),calls=[];
   let frame={revision:1,residents:[{creatureId:'a',displayName:'Partner A',speciesId:'a',stats:{currentHp:8,maxHp:10,maxTp:4},displayCapacityG:3},{creatureId:'b',displayName:'Partner B',speciesId:'b',stats:{currentHp:9,maxHp:10,maxTp:4},displayCapacityG:4}],selection:{creatureId:'a'},ranch:{layoutVersion:1},save:{phase:'CLEAN'}};
   let listener,host,disposed=false,mounts=0;
-  const source={getFrame:()=>frame,subscribe:fn=>{listener=fn;return()=>listener=null;},intents:{selectCreature:id=>calls.push(['select',id]),relocateCreature:()=>{},careForCreature:()=>{},requestSave:()=>{}}};
+  const source={getFrame:()=>frame,subscribe:fn=>{listener=fn;return()=>listener=null;},intents:{selectEvolutionChoice:(id,target)=>calls.push(['evolution',id,target]),selectCreature:id=>calls.push(['select',id]),relocateCreature:()=>{},careForCreature:()=>{},requestSave:()=>{}}};
   const view=await context.mount({root,source,mountField:async({host:fieldHost})=>{host=fieldHost;mounts++;return {render:()=>{},dispose:()=>disposed=true,focusResident:id=>calls.push(['focus',id])};}});
   return {root,document,view,calls,get host(){return host;},get mounts(){return mounts;},get disposed(){return disposed;},get listener(){return listener;},render(changes={}){frame={...frame,...changes,revision:frame.revision+1};listener(frame);}};
 }
@@ -125,4 +129,40 @@ test('single-stage synthetic host accepts full viewport bounds without bar deduc
     }
   }
   assert.equal(seen.length,4);stage.destroy();
+});
+
+
+
+test('evolution choices use distinct flow buttons, preserve focus and dispatch each exact identity',async()=>{
+ const f=await fixture();
+ const lifecycle={evolution:{choicePending:true,instanceId:'a',choices:[211,229]}};
+ f.render({lifecycle});
+ const dialog=find(f.root,'int-rh2-evolution-choice')[0];
+ assert.equal(dialog.getAttribute('role'),'dialog');
+ assert.equal(dialog.getAttribute('aria-modal'),'true');
+ assert.equal(dialog.getAttribute('aria-label'),productFormText('choose'));
+ const buttons=find(dialog,'int-rh2-evolution-choice__option');
+ assert.equal(buttons.length,2);
+ assert.deepEqual(buttons.map(b=>b.dataset.speciesIndex),['211','229']);
+ assert.ok(buttons.every(b=>b.textContent&&b.type==='button'));
+ assert.notEqual(buttons[0].textContent,buttons[1].textContent);
+ assert.equal(find(dialog,'int-rh2-calendar').length,0);
+ assert.equal(f.document.activeElement,buttons[0]);
+ buttons[1].focus();f.render({lifecycle});assert.equal(f.document.activeElement,buttons[1]);
+ const tab=new Event('keydown',{cancelable:true});Object.defineProperty(tab,'key',{value:'Tab'});
+ dialog.dispatchEvent(tab);assert.equal(tab.defaultPrevented,true);assert.equal(f.document.activeElement,buttons[0]);
+ for(const b of buttons)b.dispatchEvent(new Event('click'));
+ assert.deepEqual(f.calls.filter(c=>c[0]==='evolution'),[['evolution','a',211],['evolution','a',229]]);
+ f.view.dispose();
+});
+
+test('evolution choice stylesheet guarantees normal grid flow and narrow-screen stacking without changing calendar',()=>{
+ const css=read('app/intRh2Styles.css');
+ const option=css.match(/\.int-rh2-evolution-choice__option \{([^}]+)\}/)[1];
+ assert.match(option,/position:\s*static/);assert.match(option,/inset:\s*auto/);
+ assert.match(option,/min-width:\s*0/);assert.match(option,/white-space:\s*normal/);
+ assert.match(css,/\.int-rh2-evolution-choice__title \{[^}]*grid-column: 1 \/ -1/s);
+ assert.match(css,/@media \(max-width: 480px\) \{\s*\.int-rh2-evolution-choice \{ grid-template-columns: minmax\(0, 1fr\);/);
+ assert.match(css,/\.int-rh2-evolution-choice__option:focus-visible/);
+ assert.match(css,/\.int-rh2-calendar \{\s*position: absolute;\s*inset: 0;/);
 });

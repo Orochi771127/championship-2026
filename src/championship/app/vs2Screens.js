@@ -191,13 +191,15 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   const previewCopy = element("div", "cm-vs2-preview__copy");
   const previewName = element("strong", "cm-vs2-preview__name", "請選擇目的地");
   const previewId = element("span", "cm-vs2-preview__id", "");
-  previewCopy.append(previewName, previewId);
+  const previewHeading = element("div", "cm-vs2-preview__heading");
+  previewHeading.append(previewName);
+  previewCopy.append(previewHeading, previewId);
   const costs = element("dl", "cm-vs2-preview__costs");
   const fee = element("dd", "", "—");
   const wallet = element("dd", "", "—");
   costs.append(element("dt", "", "入場費"), fee, element("dt", "", "持有金額"), wallet);
   preview.append(previewImage, previewCopy, costs);
-  const admissionStatus = element("p", "cm-vs2-status cm-vs2-gate-admission");
+  const admissionStatus = element("span", "cm-vs2-status cm-vs2-gate-admission");
   admissionStatus.setAttribute("role", "status");
 
   const fallbackPanel = element("section", "cm-vs2-gate-fallback");
@@ -209,7 +211,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   list.setAttribute("role", "listbox");
   list.setAttribute("aria-label", uiText("Biome destinations"));
   fallbackPanel.append(fallbackHeading, list);
-  previewCopy.append(admissionStatus);
+  previewHeading.append(admissionStatus);
   body.append(preview, worldPanel, fallbackPanel);
   const evidence = developerOnly(mode, "16 biome identities and paired world_day/world_night structure are ROM_VERIFIED. Camera, rotation, input, hit-test, node placement and active preview state are PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER. Exact original display copy/order remain unclaimed.");
   if (evidence) body.append(evidence);
@@ -327,6 +329,10 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     confirm.disabled = !block.canConfirm;
     admissionStatus.textContent = uiText(gateAdmissionMessage(block.admission));
     admissionStatus.hidden = !admissionStatus.textContent;
+    admissionStatus.title = admissionStatus.textContent;
+    admissionStatus.setAttribute("aria-label", admissionStatus.textContent);
+    previewName.title = previewName.textContent;
+    previewName.setAttribute("aria-label", previewName.textContent);
     worldPresentation?.render?.(frame);
   }
 

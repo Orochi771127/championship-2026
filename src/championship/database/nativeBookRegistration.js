@@ -1,9 +1,10 @@
+import {listProductExtensions} from '../contracts/productSpeciesExtensions.js';
 import { NATIVE_REGULAR_BOOK_SPECIES } from "../../data/championship/nativeBookSpecies.js";
 
-const regular = new Set(NATIVE_REGULAR_BOOK_SPECIES);
+const regular = new Set([...NATIVE_REGULAR_BOOK_SPECIES,...listProductExtensions().map(e=>e.speciesIndex)]);
 
 export function normalizeRegisteredSpecies(value = []) {
-  if (!Array.isArray(value) || value.length > 216 || new Set(value).size !== value.length
+  if (!Array.isArray(value) || value.length > regular.size || new Set(value).size !== value.length
     || Array.from(value).some(species => !Number.isInteger(species) || !regular.has(species))) {
     throw new Error("INVALID_REGISTERED_SPECIES");
   }
@@ -27,3 +28,4 @@ export function retainOwnedBookSpecies(previous, creature, collection = []) {
   }
   return result;
 }
+

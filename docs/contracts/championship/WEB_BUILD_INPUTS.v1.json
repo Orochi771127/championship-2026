@@ -383,7 +383,19 @@
     "src/championship/presentation/medals/medalPresentationText.js",
     "src/championship/presentation/systemBackgrounds.js",
     "src/championship/presentation/intRh2/raisingContactShadow.js",
-    "src/championship/app/qaRanchExpansion.js"
+    "src/championship/app/qaRanchExpansion.js",
+    "src/championship/contracts/productSpeciesData.js",
+    "src/championship/contracts/productSpeciesExtensions.js",
+    "src/championship/text/productFormText.js",
+    "src/championship/app/alternateFormQaApp.js",
+    "src/championship/app/alternateFormQaCharacters.js",
+    "src/championship/app/alternateFormQaDiagnostics.js",
+    "src/championship/app/alternateFormQaPorts.js",
+    "src/championship/app/alternateFormQaStorage.js",
+    "src/championship/contracts/productBattleTransport.js",
+    "src/championship/contracts/productPasswordTransport.js",
+    "src/championship/text/battleTransportText.js",
+    "src/championship/presentation/alternateFormAssetContracts.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9813,6 +9825,149 @@
     "assets/production/database-handpainted-r1-20261015/species-211.png",
     "assets/production/database-handpainted-r1-20261015/species-222.png",
     "src/championship/app/qaRanchExpansion.js",
+    "src/championship/contracts/productSpeciesData.js",
+    "src/championship/contracts/productSpeciesExtensions.js",
+    "src/championship/text/productFormText.js",
+    "src/data/championship/product-species-extensions.r1.json",
+    "alternate-form-qa.html",
+    "assets/production/database-handpainted-r1-20261015/species-229.png",
+    "assets/production/database-handpainted-r1-20261015/species-230.png",
+    "qa/alternate-form-asset-catalog.json",
+    "qa/alternate-form-product-catalog.json",
+    "qa/alternate-form-save.json",
+    "src/championship/app/alternateFormQaApp.js",
+    "src/championship/app/alternateFormQaCharacters.js",
+    "src/championship/app/alternateFormQaDiagnostics.js",
+    "src/championship/app/alternateFormQaPorts.js",
+    "src/championship/app/alternateFormQaStorage.js",
+    "src/data/championship/qa-database-hero-portraits.r1.json",
+    "src/championship/contracts/productBattleTransport.js",
+    "src/championship/contracts/productPasswordTransport.js",
+    "src/championship/text/battleTransportText.js",
+    "src/data/championship/alternate-form-assets.r1.json",
+    "src/championship/presentation/alternateFormAssetContracts.js",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/manifest.json",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/main-cell_000.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_000.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_002.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_001.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_003.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_008.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_004.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_006.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_007.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_017.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_009.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_005.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_011.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_010.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_012.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_013.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/main-00.json",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_014.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_015.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_016.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/main-01.json",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/motion-contract.json",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/origin-geometry.json",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/runtime.review.json",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/sub-00.json",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/main-cell_000.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_000.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/manifest.json",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_001.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_002.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_003.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_004.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_005.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/main-01.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_006.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_017.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_007.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_008.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_009.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_010.png",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/sub-00.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_011.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_012.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_013.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_015.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_014.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_016.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-00.json",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-01.json",
+    "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/main-00.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/motion-contract.json",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/origin-geometry.json",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/runtime.review.json",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/sub-00.json",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/main-cell_000.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_000.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/manifest.json",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_001.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_002.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_003.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_004.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_005.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_006.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_007.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_017.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_008.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_009.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_010.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_011.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_012.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-01.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_013.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_014.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_016.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_015.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/main-00.json",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/sub-00.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/motion-contract.json",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/origin-geometry.json",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/runtime.review.json",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/sub-00.json",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/main-cell_000.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_000.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/manifest.json",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_001.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_002.png",
+    "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-00.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/sub-00.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_003.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_004.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_006.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_007.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_017.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_005.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_008.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_009.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_011.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_010.png",
+    "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/main-00.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_012.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_013.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_015.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_014.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-00.json",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-01.json",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_016.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/motion-contract.json",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/origin-geometry.json",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/runtime.review.json",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/sub-00.json",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-01.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/sub-00.png",
+    "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-00.png",
+    "assets/production/database-handpainted-r1-20261015/species-041.png",
+    "assets/production/database-handpainted-r1-20261015/species-042.png",
+    "assets/production/database-handpainted-r1-20261015/species-043.png",
+    "assets/production/database-handpainted-r1-20261015/species-044.png",
+    "assets/production/database-handpainted-r1-20261015/species-045.png",
+    "assets/production/database-handpainted-r1-20261015/species-046.png",
+    "assets/production/database-handpainted-r1-20261015/species-047.png",
+    "assets/production/database-handpainted-r1-20261015/species-049.png",
     "src/championship/app/dataArenaScreen.js",
     "src/championship/app/dataArena.css",
     "src/championship/modes/dataArena/dataArenaConfig.js",
@@ -9834,7 +9989,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "ebc7b9d8a0976b6594161615eec834ef86a906bcb40dbc2479bca0cfdb48d4dd"
+        "sha256": "dc3f9cf4583e7baab30362374123fad824518d61b3f9561b74b21505a3ab57bb"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -29990,7 +30145,7 @@
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
-        "sha256": "212099cc91829dc3b20134d288d302cc624ad0c32be3373825ad45706ec3daa2"
+        "sha256": "3b099ae09a3a4b5eabf4a0b689900c8d75d1c20578b92e8d6a7b79ab782f0a89"
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-034.png",
@@ -45586,7 +45741,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "6e0bb6c67a2c0b779716a8d5a033fbee8a23108a90f6636f63e9998ca4594fce"
+        "sha256": "ef1beaf6ac4f44e0bce069b19ca14fa623fa00f269f7a3cd5dffeba367cfc262"
       },
       {
         "path": "docs/contracts/championship/battle-economy-runtime.v1.json",
@@ -45758,7 +45913,7 @@
       },
       {
         "path": "full-qa-save.html",
-        "sha256": "5bcdf551f72a64335e29e95fcea8da4af0833a4baaaeaac135766511ae8fd0f0"
+        "sha256": "83c95226985e6740374aa0775fb7ac78c4e4000f81fb5a962dea4836aa9d3218"
       },
       {
         "path": "node_modules/pixi.js/dist/pixi.mjs",
@@ -45786,7 +45941,7 @@
       },
       {
         "path": "qa/championship-full-qa-save.json",
-        "sha256": "518e767bfda07c2a6712f9ae5fff3b881ef8cb8525399910d9a3931572432053"
+        "sha256": "6ad209dc3b5e4d03dcebc2b20157e84336884f825bf17117a3636be7adc35407"
       },
       {
         "path": "src/championship/app/assetPrefetch.js",
@@ -45802,7 +45957,7 @@
       },
       {
         "path": "src/championship/app/battlePresentationSource.js",
-        "sha256": "54d92ec5cbd1a26ecb21b754b9b23bf131a200d85e46a0c6034c6f9e7b33289e"
+        "sha256": "8dbaa70dbb14ece67ae86a204653f2e3228df37b585a219bc3c4a41945b2ff43"
       },
       {
         "path": "src/championship/app/battleRosterSource.js",
@@ -45838,7 +45993,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "63a76720e7e79c00248bf68d8824765d550b09d43dd227493e6e892ba705306f"
+        "sha256": "7c8885d8c342e358c14cc706f99b15c53218b9371f508fffd3c95e1de0f1634e"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -45846,7 +46001,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "54e58d37a3956e6f992a74ae6f83b4d547e318baeea3ec810e85e00c8dc867b0"
+        "sha256": "9f214f89178477cb54c4e2b6bac9f39d79104433bed5a6712355742bfa3bcd90"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -45922,7 +46077,7 @@
       },
       {
         "path": "src/championship/app/intRh2Styles.css",
-        "sha256": "5f5899b62c3e1d1bdaab374352f5653eff88c2d32c1d000eb3cef1e40be840c5"
+        "sha256": "e372cd83fc238f86325dc5ad290320b6ce9100c7ed7f317efe33fabb2be62214"
       },
       {
         "path": "src/championship/app/loadProgress.js",
@@ -45934,7 +46089,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "9e61ee83d49086360a3a25539ccf7e1acbd2f78d376889d767abe2c43c86cad7"
+        "sha256": "d5f435f27abee5bc7d10cbcbce89287e247033526f321fdac8831e9b50a4b8aa"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -46014,11 +46169,11 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "4153243bd7b98b884afccef89be184835c0e63dac07b183156b4b7a2c592c787"
+        "sha256": "5c39a6567748289aaf529a8253c9a01a7a4fdd4d87fab04c4f5bfaa2cfd5ba75"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
-        "sha256": "8b79072d611481f0785d4d7648f14429ddaacb0579fdb4409d93b283ffed55c7"
+        "sha256": "f3c33507a969419a371b60e4c96d544a0ac3eba3965df8659eca79dbcc6403b6"
       },
       {
         "path": "src/championship/app/ranchExpansionPreview.js",
@@ -46090,11 +46245,11 @@
       },
       {
         "path": "src/championship/app/vs2Screens.js",
-        "sha256": "7580c988493c0795ad6dc62627ba9b1674facb6643edbdacc7f313fb03fb8eff"
+        "sha256": "400850ac8a9658e0aec1aa422c7b0e3a1be17ef535d88e2c6e660a6726f852a4"
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "e394d1897d7045455637ddc8cb96deeb4ae2a4e4dfb122579c7a350970da73b1"
+        "sha256": "2cff00ed1c1545fc60ef62445fecbdce30c8bf3b8ca8f4789bac15b7af4b8bbc"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
@@ -46102,11 +46257,11 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "2eaf8fe6ffb7ab2f3fc442d2e21836d5f1ea02d1917ea55a4c2896cf7078c772"
+        "sha256": "8e3fed476655bc30751f7a31834513275fd00525619e05c598c3aa4d009ca9d2"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "ebf1db6ae00e9bbcbeee71fa7c8d485df10166ded5ef5dc1907c4b21df2d36d0"
+        "sha256": "27e030fb540a20150a08dc58efd54892a251723f2c4ea2f838f58dc1365f83bb"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
@@ -46142,7 +46297,7 @@
       },
       {
         "path": "src/championship/battle/battleCreatureBuild.js",
-        "sha256": "b39f811261d0dffeb0ef9d47275799bb31883c63e3aac05ff005c41f86b8a524"
+        "sha256": "1b01989c2eb55830318fd2a4dd53672398e1c5c9f852df8e7cbe66eb7a676445"
       },
       {
         "path": "src/championship/battle/battleDamageCore.js",
@@ -46238,7 +46393,7 @@
       },
       {
         "path": "src/championship/battle/battleParty.js",
-        "sha256": "4c636bf0c2d9e7c6cd14787b36fa3ca7ac27b7221c9e335e60cc7454a6ad5ad8"
+        "sha256": "d93e2ffca8a4e6c00e73ede446025d715671f5cf3d47bb926023cd15dcd6b644"
       },
       {
         "path": "src/championship/battle/battlePresentationHost.js",
@@ -46314,11 +46469,11 @@
       },
       {
         "path": "src/championship/battle/nativeLinkBattle.js",
-        "sha256": "793c45f9e2024d1b3d7e4fd3fa983fd41af5b8c0e7ca31cbbb8c9051d76a49f9"
+        "sha256": "c3e4a57dd5b373a42be44d407967a2ecff1974a1ecac07ee6b86e8759338b38d"
       },
       {
         "path": "src/championship/battle/nativePasswordBattle.js",
-        "sha256": "74179322b161255ca04106aa91dd192ebe6a679c7429a0734713b43e00d5564c"
+        "sha256": "ef56cdd4725e66d28b404e49a81278be628f45bee0d1b16109a1bdd36c0161ad"
       },
       {
         "path": "src/championship/battle/nativeTitleProgression.js",
@@ -46346,7 +46501,7 @@
       },
       {
         "path": "src/championship/cage/ranchExpansion.js",
-        "sha256": "6528c8aabd5f910029604714d2431c0c689b43f1e16f45e8eedb9548193a726d"
+        "sha256": "2fcba9d7bd0d5c8f67fadd6b66cc9eace829f413901c8c0d4b25be7f02cd681c"
       },
       {
         "path": "src/championship/cage/ranchSlotGeometry.js",
@@ -46378,31 +46533,31 @@
       },
       {
         "path": "src/championship/database/databaseCatalog.js",
-        "sha256": "4d933f929a3338ecef407e5eb04a8b007919daa29f810d46955f42db0628fac3"
+        "sha256": "753432956ada62823310262c9129ae13fa3dcf3c87c5eba56ef676742b57a6f6"
       },
       {
         "path": "src/championship/database/databaseDisplayCatalog.js",
-        "sha256": "264bc37370a50ec0c9a5ab1e8c28aa052bc66f55a008d0a9cae8d78f3fa94732"
+        "sha256": "5af582dbe840db0e8f5746acffa7dce0d3cc3ba3e207a8c8bc89b20791fb8afb"
       },
       {
         "path": "src/championship/database/databaseEvolutionConditions.js",
-        "sha256": "1d7ad3636ff0e247a4b99d7a4900ff22896c494dda8e248e639a4629da21b8a4"
+        "sha256": "17b3cd5c880b0e4d17107629a4217fdaf301a02b1668cfbca09e207e733c2eaa"
       },
       {
         "path": "src/championship/database/databaseEvolutionRoutes.js",
-        "sha256": "1444213c9a330061f816a1a8d917ca2d9893addb6ec8b8fd93ebe8ec54e2942a"
+        "sha256": "52e714573597075be5eebfd48de2eba0bb09c911de4cee5586c2501c4a79ade7"
       },
       {
         "path": "src/championship/database/databaseRuntime.js",
-        "sha256": "5573f59d5430d8bc3e76937eb34ebde8247b85700243647138f3c03f9944936e"
+        "sha256": "6b1f537b95ca9276b87bd81761751c4300b364ba7b3811b1796cc3a5824bb207"
       },
       {
         "path": "src/championship/database/databaseStories.js",
-        "sha256": "ae90b40cb2aefc3f9dd7ced6968b370a065d921f1aa2f2504fef9193055734d4"
+        "sha256": "49dd259ee96cb8569735819f31ba5975bf50da86d32080a8d6c01595bc434e00"
       },
       {
         "path": "src/championship/database/nativeBookRegistration.js",
-        "sha256": "1207b8326acba4ffbf02debc045133e4e6961bd411eb9d2323eff87bfaaacdac"
+        "sha256": "a6254b48a6829b9e2ce84b16eece270787b966eb7052efa4ba2c120d9f8a7f6f"
       },
       {
         "path": "src/championship/field/fieldCamera.js",
@@ -46458,7 +46613,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntActorInitialization.js",
-        "sha256": "d75487c9095a4b562194fd34f75075c1db069d1a1df8194dd4f4773d3c0728e3"
+        "sha256": "8a95970c90bb36da1a02a82868b9b38d7850453201b14d87fe30b17a7f38d761"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntConsumables.js",
@@ -46494,15 +46649,15 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntHistory.js",
-        "sha256": "957b110d1caeac5706a0db8f078f0a8d4d39770dea06434246523f99baeb6738"
+        "sha256": "eb0e2fa2b66fbf6167c6d608ad82614a7a3f759ab6877b138d5aee4853f4bc0d"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntIndividual.js",
-        "sha256": "432c7db9c08f40a2659534e0510051b1438f85ff974f59cac7c01c3b05fa1d4f"
+        "sha256": "881b0589b1b77a8dd9f3e14cd5d29b179cba66a5c38b4d918c5b0347ec8ca749"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntIndividualPool.js",
-        "sha256": "dff301689847e3b3f5c21e8ae8694731ba8302b0a47753d8b71ec9507a0d783b"
+        "sha256": "c088afda0e9741b44846363b21d1072f2e91a732c40f2e9c6cb032dbe78b14bd"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntLures.js",
@@ -46522,7 +46677,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntSources.js",
-        "sha256": "3a5dd36b2c47bad49cc567af05bca7d239f6635c172e4d462493ca10716c4dbb"
+        "sha256": "62d7316fb6e68d582d8ab19d5b6830a8c54c9c7846fcc5e17176c08d530da3b6"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntSpawn.js",
@@ -46530,7 +46685,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntToolRules.js",
-        "sha256": "12935af5f71949a7c0420486418fd12b04acaa2cf96844ec0c5b502af220a771"
+        "sha256": "9e49f9abaaef8ab74537b60caee1c451b3d40c555d022d4ffbde704889240f9c"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntWire.js",
@@ -46734,7 +46889,7 @@
       },
       {
         "path": "src/championship/presentation/completedOriginalCharacters.js",
-        "sha256": "fa5683129daff39f817dcbf6325ff4f63622f146c5baec4f39e01b56669d5f63"
+        "sha256": "d3271622e1cf17983f6f3585d294b7e6cb1354344ea579c3917239820926de03"
       },
       {
         "path": "src/championship/presentation/completedOriginalGrowth38Intake20261007.js",
@@ -46814,7 +46969,7 @@
       },
       {
         "path": "src/championship/presentation/licensedCharacterRoster.js",
-        "sha256": "b4036fa4dde743fbef6211da1a36be516da71b16912e8fdecfbb21d8914faa5f"
+        "sha256": "2aeb7d5eb6d84c2eaf69338ecc755dd1a182ddd219dc4a4c8fd4f597aa1ba98e"
       },
       {
         "path": "src/championship/presentation/m001CharacterArtReview.js",
@@ -46930,7 +47085,7 @@
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
-        "sha256": "2957964ce238165b15d529bcd6c5e1c5ba696869800ec5749bb5d927a676814c"
+        "sha256": "35beab5b5deca0860ca99dbe4a63f944460b897f7388301cc1c547c493ec286f"
       },
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
@@ -47038,15 +47193,15 @@
       },
       {
         "path": "src/championship/raising/nativeIndividualProfile.js",
-        "sha256": "5ee571b4ddf719006b5b5ad5dab4ddbc947900a1254bdcccf09e6f1686a29186"
+        "sha256": "1d425d94cae5c647a2dfef4ffdf03e5f67d1e88806bc6024e55357b11eb6128d"
       },
       {
         "path": "src/championship/raising/nativeRaisingActivity.js",
-        "sha256": "ed675ac33205cd92990d4ef19a87e4cfbea5e85972e4970113b7af875c2cf7cb"
+        "sha256": "ad67af183f27b7a5cd85582f5e59a4ea8801732aa099e5b51dae67fbd76e713b"
       },
       {
         "path": "src/championship/raising/nativeRaisingActor.js",
-        "sha256": "c41234144adea5fe2132625a444f8bfd59f9bfd3ce2e92e5494f41f87ddc8541"
+        "sha256": "4211722e03d4c1fdac447b34f99cb1dc1ed411b3b26f846824079905b15a5ddd"
       },
       {
         "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -47082,11 +47237,11 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingHomeState.js",
-        "sha256": "2e44b30e5d6550d107d6f85b66f5d5233def625d0a64fd5356bcc1b245c9b2ee"
+        "sha256": "0e8782ea2c2673b3b7a34343800953cfa0fce4a29b39f96416ab845771006b88"
       },
       {
         "path": "src/championship/raising/nativeRaisingLifecycle.js",
-        "sha256": "a29e1a6f9ce00b8897d1faeaa21a518b7576347210d3a43eafa004c07c2ccf7f"
+        "sha256": "4531f5545acbb92f325428fab02089a493865e32c20c41efe314e8046722672a"
       },
       {
         "path": "src/championship/raising/nativeRaisingMessages.js",
@@ -47098,7 +47253,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingOvernight.js",
-        "sha256": "3ad3a0f18ee1085208aec83671ce83747d4b13450676e0c2bde623b50738f333"
+        "sha256": "dc51e1f68eb9462138a4b73646624144840a349d47d7e24ae2fb1babd63c9466"
       },
       {
         "path": "src/championship/raising/nativeRaisingRanchRing.js",
@@ -47110,7 +47265,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingSleep.js",
-        "sha256": "662430f4554d9ce9ff02dc371231a478a1bc6838e7367cfbf56d1cdd22dbe9e9"
+        "sha256": "52dc7b5334a5bc14457a37e242dbdeea6d31a85344fda4879b7b10f0c7c3d82c"
       },
       {
         "path": "src/championship/raising/nativeRaisingStarter.js",
@@ -47126,7 +47281,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingWaste.js",
-        "sha256": "fb2dc3157885d82543348ca10736a9afb8ef68e1f41235cb9d5c0d5ff7c50946"
+        "sha256": "822d3aadafdbd7385b1dbd6ee6c7ac50775231eb5b8b3aa67b960ce2505d83b3"
       },
       {
         "path": "src/championship/raising/nativeTutorialRaisingActor.js",
@@ -47146,7 +47301,7 @@
       },
       {
         "path": "src/championship/raising/speciesBaseStats.js",
-        "sha256": "ae2bb0e14346920ade4abbfdc554bfa89fdc0ca12e476240402c607ff73fe9ae"
+        "sha256": "c986ce7881420b19993b784e849253b901a32f27ff40aa858481ec82f253659c"
       },
       {
         "path": "src/championship/raising/statLadder.js",
@@ -47286,27 +47441,27 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "41860e10b79db877f2246bb9349a984f2fc2cb57fe2429781ed14c424e8938ef"
+        "sha256": "63bd1056548727ddc36dcbf9e627c7c294cf1ca248a316ffd8bc12b9a07dd010"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "87fc5ffabac67b6241df2955af562e8ac4d5d0fdc96a46e957c9c797641d08d5"
+        "sha256": "349e06e371a3c20e464958c11d974a75f0497f1da1903b786078940ea70e0f2e"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "3707a3361746e3e9f7a5a261037058e1f41ed16a06054bf16ee6cb3369f9955a"
+        "sha256": "a291dcca777685fa45cdf610e608a3d5d39b1abc1d0bd9b5824bc8493272cb34"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "ccddf8b416b1148580e2bd2cc23a6e2f79b185f14af01725c291f8db20b82061"
+        "sha256": "f4d35dab7f8c55d7f599481817e29c04548716938d659aaba31a85491452600f"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "f74d49436d8798d016975f8632cac7ff2453faa1250bbc258911fed8d89d9c62"
+        "sha256": "90cf4eb097f06b1f3ac36c88444ae63a33c394b55f1ecab6ee372234450d3d02"
       },
       {
         "path": "src/championship/text/zhHant.js",
-        "sha256": "15cefd629653105e572fd73dfc7457f1c22398978644632b61f167b7c32473a8"
+        "sha256": "fb7b35bb543a496720fde9e477db6edf562c9caf3894096846dc5dc3d2efa28b"
       },
       {
         "path": "src/championship/time/championshipWorldClock.js",
@@ -47318,11 +47473,11 @@
       },
       {
         "path": "src/data/championship/battleCharacterGeometry.js",
-        "sha256": "545b570d60144865581e601dcb91e2514ce15370ba120208eee25c2835e3cc13"
+        "sha256": "7139fcc8c051e183dd75be5daf34b26d612afba691658d786446a1d381c215dd"
       },
       {
         "path": "src/data/championship/battleCharacterProfiles.js",
-        "sha256": "7a2f8c1c41fc63e772b8466ed30fa5895516ab2c65bca1d9a1ef9498ffd06340"
+        "sha256": "f735e918bf93197cfe452ab4199c30a4cc6799e0affadad2d3adc7b46de2695f"
       },
       {
         "path": "src/data/championship/battleEffectProfiles.json",
@@ -47470,7 +47625,7 @@
       },
       {
         "path": "src/data/championship/characterNativeSizing.js",
-        "sha256": "3726925646fa51c573810839851570b7250d16bc765d41d63d0e3a16ce5b1e2a"
+        "sha256": "86a9e14ee15d785005ce6efa01e07dbd32d9c8247ff9b0050d9707df01000e50"
       },
       {
         "path": "src/data/championship/database-display.r1.json",
@@ -47478,7 +47633,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.r1.json",
-        "sha256": "bdb66039fd590b2a33a2e40dc4d17acdcd26faa92c3a5fca56578536ec6ab7db"
+        "sha256": "bd3d987e0bec7931c2a4a0babf0ac643e699101443b883b59c851167b20202f7"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
@@ -47526,7 +47681,579 @@
       },
       {
         "path": "src/championship/app/qaRanchExpansion.js",
-        "sha256": "16ba62f6f757fb049a0371872dbd831cd957e0d04c79dbe3e7b568637bd3ae12"
+        "sha256": "1f19ca277a766ca952545bf9462a79f632e0a8a3b9e88e8fd3b7f6d4a56bcdac"
+      },
+      {
+        "path": "src/championship/contracts/productSpeciesData.js",
+        "sha256": "3b7a8140165b3f01a6083d7f3656934f38790431198f7806ba45745d6ebddfaa"
+      },
+      {
+        "path": "src/championship/contracts/productSpeciesExtensions.js",
+        "sha256": "5ab01be7f5da08854eaa2eea683700e02ce419f1f2b5340b06debc627b5e6be7"
+      },
+      {
+        "path": "src/championship/text/productFormText.js",
+        "sha256": "809acbacde53397a2f9f803de7dc5caa284cd8847cb2b439452c3131ab820a28"
+      },
+      {
+        "path": "src/data/championship/product-species-extensions.r1.json",
+        "sha256": "a1aff7b011c843a61c95fcd6e37e2e53958667a8e7bac64953d79a4913a72577"
+      },
+      {
+        "path": "alternate-form-qa.html",
+        "sha256": "e0569b0044e2be36a6ea94c97c15cebe1a27c83bfed10e83b4c49d0ad019b2d4"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-229.png",
+        "sha256": "f1e1a23e891b9345f4b759e910c5f67efd8a844a2de53e14183a1a2fe3310424"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-230.png",
+        "sha256": "09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39"
+      },
+      {
+        "path": "qa/alternate-form-asset-catalog.json",
+        "sha256": "e508d137b9e54f635555814ad0ae2b35291dacf04288cd76e67706162cd4603e"
+      },
+      {
+        "path": "qa/alternate-form-product-catalog.json",
+        "sha256": "c1aa0fdc19157b967bde687b08def35ec56c4ac32f459b7c7f4a591fea319fb8"
+      },
+      {
+        "path": "qa/alternate-form-save.json",
+        "sha256": "d1da76da93a177a27d35d89b245ef59140514a9cdb50b05260a371524bdeaff7"
+      },
+      {
+        "path": "src/championship/app/alternateFormQaApp.js",
+        "sha256": "91d65f6cb42639f009e36967379aa6935ab75d4dc69a9c0efdda0ee1762b1af9"
+      },
+      {
+        "path": "src/championship/app/alternateFormQaCharacters.js",
+        "sha256": "55d144635cc815272d0c914ce78d8f92517cb6626e2627e92132e491a9720e4e"
+      },
+      {
+        "path": "src/championship/app/alternateFormQaDiagnostics.js",
+        "sha256": "3d635a6ed9f5053da9df23e370d1756fab870040e8d8fce07937d57f67b0cc6e"
+      },
+      {
+        "path": "src/championship/app/alternateFormQaPorts.js",
+        "sha256": "0b07a5d690f185639c8b05a6fbda90a533eb456f9ee701f89c4d96babf6576d4"
+      },
+      {
+        "path": "src/championship/app/alternateFormQaStorage.js",
+        "sha256": "08e30075457b5e07ba178bd5ea79ba6f3cc1e2d8afd75c1cc100833ea3dd7573"
+      },
+      {
+        "path": "src/data/championship/qa-database-hero-portraits.r1.json",
+        "sha256": "246c3e6f02e106b609e310a6441df96c348ac38012b79848765a0090d62a316c"
+      },
+      {
+        "path": "src/championship/contracts/productBattleTransport.js",
+        "sha256": "3310edd2e349f98e0b58cbe3fad8b309e00105573639232cc1785b359a4d0d31"
+      },
+      {
+        "path": "src/championship/contracts/productPasswordTransport.js",
+        "sha256": "4e9c5a542f4337b2fbf9c837bb77b93803440dd859316e1e29af27d49bc8fd96"
+      },
+      {
+        "path": "src/championship/text/battleTransportText.js",
+        "sha256": "cc59ad0d077d91a3a87cf75c6554493ad8fcb6e33c3a3ff57bf0f90b7ad49d07"
+      },
+      {
+        "path": "src/data/championship/alternate-form-assets.r1.json",
+        "sha256": "a12aa4c699f3a1f7a07ae38dc86bfa912b8eead7aa77cb579b1a5866b587b436"
+      },
+      {
+        "path": "src/championship/presentation/alternateFormAssetContracts.js",
+        "sha256": "c8562441124bd43e752af8c1e3cb65ebb9dc2001e1e47485248a3383b4af946b"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/manifest.json",
+        "sha256": "cd12ec791eac5c61d07d44706cf728cb3d07a7d2b4d6e52699440fd59eb6f6a7"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/main-cell_000.png",
+        "sha256": "6113ea55a11aff0c7356d2e5f0611d37bf7d7048d9cf4413f471b2461c00bba9"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_000.png",
+        "sha256": "6113ea55a11aff0c7356d2e5f0611d37bf7d7048d9cf4413f471b2461c00bba9"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_002.png",
+        "sha256": "5a1e7785c049c93c9d8e986da352598bce7f8d9f1fb63af0dc6cf659d88a9fd1"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_001.png",
+        "sha256": "ac510b8806057c7062dab1eb75fe3c13f461ffea9438af17d29651e4680661b1"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_003.png",
+        "sha256": "e54ff64271b1686bbc63c7be211091099ff3febca07204ec1d2a6e9b0aa884cf"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_008.png",
+        "sha256": "790f7ad696b33ff72b4688e26cd391d8a5d997a4f5950cff84d2e37e77c01fea"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_004.png",
+        "sha256": "dc5597a74c120c770143afb40fe1be2aa6c0dd37036a96b64936956b73f38074"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_006.png",
+        "sha256": "dc5597a74c120c770143afb40fe1be2aa6c0dd37036a96b64936956b73f38074"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_007.png",
+        "sha256": "dc5597a74c120c770143afb40fe1be2aa6c0dd37036a96b64936956b73f38074"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_017.png",
+        "sha256": "dc5597a74c120c770143afb40fe1be2aa6c0dd37036a96b64936956b73f38074"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_009.png",
+        "sha256": "78c6fecff18befdc1201b362f9f947efab42c58ee6d2e8a803cbb8afba289ed0"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_005.png",
+        "sha256": "9405d1704277019ee17b6ecb515f2143aa77f98159fea44de464b8b8a4a9a226"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_011.png",
+        "sha256": "37293390087b6ab4802df247ee006f6b2692acf50b02b4625e68d91a5623abb8"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_010.png",
+        "sha256": "2f831fe76316b9ebb62efe2e56deb27c0477e8c0e6509b8a8e372c7bb8131fdf"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_012.png",
+        "sha256": "d9b2a54e9b1c4dd874958659b6cd917336f79f29c6292bd3b313bf4d58081771"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_013.png",
+        "sha256": "13aeedf2ba8f59f7e758b5cd6f9cded40d3eb0942afa78e8290d78413ed2e08a"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/main-00.json",
+        "sha256": "49cc91346221967eabead1410cf785e7c4bdcbd915c4ccbd1a4704db1b4ea02c"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_014.png",
+        "sha256": "8bf513a6955e6f7c3e642c3268814babdbe91e645db8781b560ba015da26db35"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_015.png",
+        "sha256": "10fec56a6292e492d015554953afd105ddd02e9fc606b6017898038b6a380d61"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/hud-r01/sub-cell_016.png",
+        "sha256": "66ca4d70ed9d6d924c5be150d6b258e7739c4adda349edf170e89a5a4677eaee"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/main-01.json",
+        "sha256": "628298a23ab503e520deba2b2742a14eef0b4fdd5e9fcd525183fef178dff46d"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/motion-contract.json",
+        "sha256": "8bba694c0c89fa00ed0c00ed7b84367f9d196303e506420980eccde22b421621"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/origin-geometry.json",
+        "sha256": "5f176f7d0f5bdfd51d57fcc6d0685b0645441a642a8dcf8c68fe5749a0e5b090"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/runtime.review.json",
+        "sha256": "beef123d68a6b3439b51c4124113c658a86edacdaf164d4a890bad07885ffae6"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/sub-00.json",
+        "sha256": "99883bbb54286ae529e98bd58f82333c116c174d4f9e557e755d5f736d688cb5"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/main-cell_000.png",
+        "sha256": "95efe15f5ff057965f591bfaf99998cc934fa997b257d4048d9244a7ae0f246f"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_000.png",
+        "sha256": "95efe15f5ff057965f591bfaf99998cc934fa997b257d4048d9244a7ae0f246f"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/manifest.json",
+        "sha256": "e4166487b8a9d63ac775d3065e1cfdbeff7d4ebe75082765d553593d91c48013"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_001.png",
+        "sha256": "a594d37a47e0daafa4b6249160d5220fc89286c8e206a906c613f3bf1251b690"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_002.png",
+        "sha256": "23fc34e65da6e97c964509d2aac40e5316070c49fca059fd48bace7d430d746f"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_003.png",
+        "sha256": "541a60cefcb3809cc7db10909276784521c4232ace6cdcae82c59737602028bb"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_004.png",
+        "sha256": "c53fbe8c6d637efee397ffb2f08977830a2200696ab74fca770cae9c4d61c26f"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_005.png",
+        "sha256": "c53fbe8c6d637efee397ffb2f08977830a2200696ab74fca770cae9c4d61c26f"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/main-01.png",
+        "sha256": "ae688aaa655974e5b3da07863afb8e9167950330c80f1518f9b908de07acc2cb"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_006.png",
+        "sha256": "d65471fb6022239044bb3c23a489b7f9028901275f7407bce9e6211739f2bb28"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_017.png",
+        "sha256": "d65471fb6022239044bb3c23a489b7f9028901275f7407bce9e6211739f2bb28"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_007.png",
+        "sha256": "a9ba58bd7fafe7dc821b7d5f8ff0d571514473e7c7b62a643b2c6bb1c8e0480f"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_008.png",
+        "sha256": "5743c017045bad0f70637bc626f6825311fe6a86e1d759ab92936dc3722ed4a7"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_009.png",
+        "sha256": "18dbe41d0a681015f2ec497a1a72b4414d42930ee8813c06e89c0a7dfabe5ea7"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_010.png",
+        "sha256": "a2f57c862118c301b43ee979547808405bd2b99a728262a0fcf88c821a3fb9ec"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/sub-00.png",
+        "sha256": "255c3212bc26cc8293a0bcb3d78ffe97ea09ff7e0684727f24b3323084aff9af"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_011.png",
+        "sha256": "ffd996182075b6b59dad208106b67bc607962d93dc2bfcc63ee384b99ebec509"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_012.png",
+        "sha256": "d2be8158efe4fbcd4121486fe47c6a3ee7a93afeb8cd5a32dfdee89c8c102e70"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_013.png",
+        "sha256": "9721a33bde0f913333b936ef23bac195143617ad8c4d3aa5cfb88b60e64f19ac"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_015.png",
+        "sha256": "5f48236c56401c77a65430801b27f24b828737182c2ffcb770c1645914372ec7"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_014.png",
+        "sha256": "801350e759d0185334cfe94c25ac320aba2155f762a41197cfd31e0b03a0d902"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/hud-r01/sub-cell_016.png",
+        "sha256": "8b32c2c6dd8591451478b7f6e62585a4a4979ec71d599b4ee5579409fba01fe4"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-00.json",
+        "sha256": "c5648a43be0a4e9e06a1dc9416416b5c0ea890d9e6c35b457124bafc09bab4c1"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-01.json",
+        "sha256": "3955935d99bdacc36a9b20cdbb53c0c9bd766703fff2366bff904e16636f9cf5"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/main-00.png",
+        "sha256": "d5d5b34229fe85b2bbd54c6f5d33f7aacf253f07971d645a4e6af67d8889e490"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/motion-contract.json",
+        "sha256": "0cdeebf6ee3bfdb85c2be5f4c3869698765c0bceff81d730f9e88ceccbc22f6d"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/origin-geometry.json",
+        "sha256": "f33fd42a98d1a85a5d8ad7c4dfd84bdc3ea8d9d19c7e5868ecc38d533ece2a6f"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/runtime.review.json",
+        "sha256": "9374a13e36fc7c5d2bbfca58bb53f688ce7bad6bb849378c0c8e048bd1bee3db"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/sub-00.json",
+        "sha256": "33e0718f96d0cc4c19c21d61928ff728b3a9eb3183fe4336539eb31a593b97bb"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/main-cell_000.png",
+        "sha256": "92ea68b5b3c3f1b624eb6b1db6367ffa210529b7b1199b21eb467b4810a21a33"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_000.png",
+        "sha256": "92ea68b5b3c3f1b624eb6b1db6367ffa210529b7b1199b21eb467b4810a21a33"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/manifest.json",
+        "sha256": "c1ecfdbb234c504c40d397487ee1fd05e02d83e824adeac493a2ea2ef4797f4a"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_001.png",
+        "sha256": "0e2116efd3c6df7c19dff2c853f72a6ff23b1a1eb9cedd5b69a8c6a823ca6135"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_002.png",
+        "sha256": "53c05292bc4ed341e29c686b3a323642544c4fcb8f1b90f4a6a00e17ed1c0897"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_003.png",
+        "sha256": "15697e8712992e49bbe1553354a242ce6460181c435dd987da1ade6929fdc99d"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_004.png",
+        "sha256": "adff937656d3d3dbed399610eb5446de3349181ed9d73008b538d63a29dee5e1"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_005.png",
+        "sha256": "c4d940c97f45118b755f6d7879c405bd2765e6ded7e3f977212181ed51563ce8"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_006.png",
+        "sha256": "a841e480553dd54d81bc40341fb0ae5035d1d4066b767319389d0240404c4169"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_007.png",
+        "sha256": "a841e480553dd54d81bc40341fb0ae5035d1d4066b767319389d0240404c4169"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_017.png",
+        "sha256": "a841e480553dd54d81bc40341fb0ae5035d1d4066b767319389d0240404c4169"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_008.png",
+        "sha256": "4e54039825780a8fdb798b0bf25e3c3459f7c9f606a4b8def2b5bc6e94803239"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_009.png",
+        "sha256": "f568f5ed5ca2263265b3f432af0a7eeb16020d77c08cdeb0037d72e5f22cfeef"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_010.png",
+        "sha256": "7ad68523c2a525d9ae0df62762b662de75572373fdb018c1f23df5f610af55f4"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_011.png",
+        "sha256": "6e96e1f7a53f1067cf502e293ee9b09811ff60b3b80b87c9b1fc82fb027b1b39"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_012.png",
+        "sha256": "7a997387a26bb9ccf7a5dc8f14b7aab1f94c929968be9dccfd1fd5348613cf8e"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-01.png",
+        "sha256": "264b6ce96be10879daf672b9843866654e0526623eece5b7fa40f092ccf72f13"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_013.png",
+        "sha256": "c398988e0d6e546c98fcf6bd5b4e8670664df59cd5311800729a106224b61b6a"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_014.png",
+        "sha256": "6cc4391974d751400fa5fba89ca1ad7350c7ec5e4942331d2e855c3e4ad37604"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_016.png",
+        "sha256": "d4ff031b4e1c8c0b3ea95e56f9772314c794b1aebbdbeb34042bf6e0936ac0b2"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/hud-r01/sub-cell_015.png",
+        "sha256": "9f8d6fd9e25a15261da0c70bb04ea32f09e5c3026d8fdc0c521b1a42857bad07"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/main-00.json",
+        "sha256": "98e2c74eb75531f910cb2d783040bd50f77aefe9b6aa8b424a3a61feb5d8cb30"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/sub-00.png",
+        "sha256": "4e2b486140acb696847fe50e32fbe3b59b1caef1af9dc7710aa0aea7f4ebdd44"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/motion-contract.json",
+        "sha256": "b4600a26623767a52391da1dcfb90e931e78e421311d53f0f321d944120dfa8e"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/origin-geometry.json",
+        "sha256": "d2ee528bb5470bf9d5d7e74d60c683fd77fc1e9484b66c80b1756755984722d7"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/runtime.review.json",
+        "sha256": "8429e2aefaf2d30d360b612e12857d6b53b9ffbd810ecc0f99958906893763a3"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/sub-00.json",
+        "sha256": "773968075330a364701012ef6da3db8e16ed23fa496a18c2b9f02206c1234ded"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/main-cell_000.png",
+        "sha256": "e5353672a8154aeba2d9392e2ea8c937ab1d37880cfa9732d0600afc46125cae"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_000.png",
+        "sha256": "e5353672a8154aeba2d9392e2ea8c937ab1d37880cfa9732d0600afc46125cae"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/manifest.json",
+        "sha256": "6c06fba5531e093f42313586dff379668d5a0a3ab8e64f614162dfae2c5d01c1"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_001.png",
+        "sha256": "312add71247c20606f93ec61fec1536b3528d053b654618baa4aad24db936a8a"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_002.png",
+        "sha256": "36c7ebd1b4ed3482f0a2931267c71ff8a45c6687361b7c232c8abbb87c14eab0"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-00.png",
+        "sha256": "1264bcabfe7ba1224a6c9a14df2ef90ec88c26eedf2de1218bbbd7f8ca8e0a16"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/sub-00.png",
+        "sha256": "a006a6a453e96fb2570a0b3762c0e3bd491b6867dd01a7385f9ce0c93ef1be04"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_003.png",
+        "sha256": "d62ed7cf8cd3caa3d74116791b2ceeb325bb04abd59f1a6beb33c82b71a40498"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_004.png",
+        "sha256": "b954ee74292f849a82add52907a42363a8b9cb1155723f0a6b84fa6e07f34bd8"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_006.png",
+        "sha256": "b954ee74292f849a82add52907a42363a8b9cb1155723f0a6b84fa6e07f34bd8"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_007.png",
+        "sha256": "b954ee74292f849a82add52907a42363a8b9cb1155723f0a6b84fa6e07f34bd8"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_017.png",
+        "sha256": "b954ee74292f849a82add52907a42363a8b9cb1155723f0a6b84fa6e07f34bd8"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_005.png",
+        "sha256": "fd044b575bb90ab141990af255eb31a9a93a3e3db05c684cb98a522633e57e5d"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_008.png",
+        "sha256": "841b5267e762c1060bd9642d8919a2c0aa7034c371e68c1d49adbf9119f14738"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_009.png",
+        "sha256": "2dd6d37b138eb8e19b8656d1c4164080b4b362f894726517b3844cc24fc77ce3"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_011.png",
+        "sha256": "6c5e3dd977d42a58895d7675dd28763210400f9dee5f1c86b2e4b7acfcbe1cdb"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_010.png",
+        "sha256": "29ae5d247e6058d37259c6398918a670779961b155fcf5bf32e724bdf588ca04"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_celestyrant_battle_r10-r10_humanoid-r1/main-00.png",
+        "sha256": "793cf7c07f7f59cf2420c4e4fecac66a05d36fa722d59eb0193d3436e515292f"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_012.png",
+        "sha256": "572fbabc913078f8676a249720eded0fe997f8b3a1550248da723cb55abde87c"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_013.png",
+        "sha256": "754ae7aaa9bf3545401fcb2bed8629b69b65a8e59c1be1ae913d879b5a7ac575"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_015.png",
+        "sha256": "1f6f55162f4a1f6e59a36f3c1c578bfe83b14f32f87f41edb1e7871df2882c6d"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_014.png",
+        "sha256": "5b41c35277c89dc2b3b95273f12864ecc99e1a59a8a85398d1af08d4135e01b7"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-00.json",
+        "sha256": "3e8335cb926c6f1224bd9461ee394543aee6c654fa7f971635686c9338823c57"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-01.json",
+        "sha256": "3ed16aab015af732b37a2ac81e33e510c7fa798d46ef63d1393ddfec08a2bf96"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/hud-r01/sub-cell_016.png",
+        "sha256": "d309e69b6ae63f74668b619010dd5a9ae2d534a66abf24b76da4f7fcfa93f7c0"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/motion-contract.json",
+        "sha256": "5631c8a5ffafc7ea498f9104f1d424f5faa813bcefe88531b23876e2eebf2009"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/origin-geometry.json",
+        "sha256": "ad1ed88a94e0a738e2f894752838165834bb6df46b029c3b055f398a7786426d"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/runtime.review.json",
+        "sha256": "6e19d5b5c9852715f84a8bd11e480a48139d0ee3a1c9494df1c74e09b7d65995"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/sub-00.json",
+        "sha256": "b0baae3794b8161ff1098122089a75c5eb64e5ee81c10fe69f3c2a531801ed68"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-01.png",
+        "sha256": "b411a64e240fe5795792b17766005ab2424f41c68bd600d6591197f03fef8ad2"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/sub-00.png",
+        "sha256": "2525e49efc29267461ab25ff8ff3db01b762dd658c1df1a966a9c203bfa563bb"
+      },
+      {
+        "path": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-00.png",
+        "sha256": "8e37d068239db1611aae5466ca54a69f6f61c6db76a10374479129d83dd1c641"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-041.png",
+        "sha256": "069214988e2e8f59159c3b4b6deda913cc01b3fda974023621ae705d75a7d52b"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-042.png",
+        "sha256": "e5e15ba6a055a218a3a03c480f28fabb570441a9f0fd146f0ea48089fdf63922"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-043.png",
+        "sha256": "4b192def5c28832daa183c42556ad8f616f4d3e7f45a75f100c0df15b3e383ec"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-044.png",
+        "sha256": "6c05160ec1933769c1151a17f7e2006c167d2f7211413fb7149d76d449f16952"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-045.png",
+        "sha256": "9170c136c9cdb785d31bfe74c7b4ed400e787916718d90efa5e541b379d8be28"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-046.png",
+        "sha256": "1a8d1314517852c89eb156729ba5a0ac347ccb4d0359a556f990c5522ffb700b"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-047.png",
+        "sha256": "c91b03594ac7424c879595dfd5eb7918dab740aee88f05ce61e4e437cafa9442"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-049.png",
+        "sha256": "423def7f7de4d82bb51ea9900474a10480518ff2007d7e976835cff0b4db98a7"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",

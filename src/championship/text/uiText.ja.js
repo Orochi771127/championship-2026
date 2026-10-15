@@ -6,6 +6,7 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "CAGE_SLOT_RANK_LOCKED": "{n}番のマスは未開放です。テイマーランク{rank}で開放されます。",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "システム背景",
   "SYSTEM_BACKGROUND_HINT": "図鑑、ショップ、ヘルプ、記録などのシステム画面のみ。城邦のタイトル画面とプレイ中の背景は変わりません。",

@@ -131,7 +131,7 @@ test("observers are given the current view and stop on dispose", () => {
 
 test("the screens import display copy and the clipboard UI helper without reaching into the runtime", () => {
   const imports = [...screens.matchAll(/^import .*from\s*["']([^"']+)["'];/gm)].map(match => match[1]);
-  assert.deepEqual(imports.sort(), ["../text/battleOpeningText.js", "../text/interactiveTutorialBattleText.js", "../text/uiText.js", "../text/zhHant.js", "./codeClipboard.js"]);
+  assert.deepEqual(imports.sort(), ["../text/battleOpeningText.js", "../text/battleTransportText.js", "../text/interactiveTutorialBattleText.js", "../text/uiText.js", "../text/zhHant.js", "./codeClipboard.js"]);
   const clipboard = fs.readFileSync(path.join(root, "src/championship/app/codeClipboard.js"), "utf8");
   assert.doesNotMatch(clipboard, /\bimport\s*(?:[({*]|["'])/);
   assert.doesNotMatch(screens, /import\s*\(/);
@@ -325,3 +325,4 @@ test("the side field is set per team, and without it nobody can be targeted", as
   assert.equal(mine.speciesId, 50);
   assert.match(roster, /the session builds its move buckets for species 0/);
 });
+

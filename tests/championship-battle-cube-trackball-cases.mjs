@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../src/championship/contracts/productBattleTransport.js';
 import { readFileSync } from 'node:fs';
 import { Quaternion, Vector3, PerspectiveCamera, Mesh, BoxGeometry, MeshBasicMaterial, Raycaster, Vector2 } from '../node_modules/three/build/three.module.js';
 import { bindBattleCubeTrackball, projectBattleTrackball, rotateBattleTrackball } from '../src/championship/presentation/vs5/battleCubeTrackball.js';
@@ -162,7 +163,9 @@ test('presenter keeps selection injected, six shortcuts and existing explicit-en
   assert.match(presenter,/buttons.get\(faceId\).disabled/);
   assert.match(presenter,/onSelect\(faceId\)/);
   assert.match(presenter,/for \(const face of BATTLE_CUBE_FACES\)/);
-  assert.match(app,/maxLength:22/);assert.match(app,/createInvite:instanceIds=>app.createLinkBattleInvite/);
+  assert.match(app,/maxLength:PRODUCT_BATTLE_CODE_MAX_LENGTH/);
+  assert.equal(PRODUCT_BATTLE_CODE_MAX_LENGTH,50000, 'versioned code input retains its explicit finite bound');
+  assert.match(app,/createInvite:\(instanceIds,options\)=>app.createLinkBattleInvite\(instanceIds,options\)/);
   assert.match(app,/async onEnter\(/);
   assert.doesNotMatch(presenter,/requestAnimationFrame|setInterval|startMatch|onEnter\(/);
 });
@@ -190,3 +193,4 @@ test('every presenter aria-label resolves through the existing locale dictionari
     }
   } finally { setLocale(previous); }
 });
+

@@ -1,6 +1,6 @@
 // ARM9 02084CA0. Two ordered passes per Cage, then remaining-food aging.
 // This is a child transaction of the existing Raising/save authority.
-import data from '../../data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+import {PRODUCT_RAISING_LIFECYCLE_RULES as data} from '../contracts/productSpeciesData.js';
 import {normalizeNativeIndividualProfile} from './nativeIndividualProfile.js';
 import {nativeHuntSpeciesByIndex} from '../hunt/capture/nativeHuntSources.js';
 import {applyNativeRaisingCondition,NATIVE_FOOD_BITE_BY_GENERATION} from './nativeRaisingCare.js';
@@ -76,3 +76,4 @@ export function settleNativeRaisingCage(profiles,{definition,minutes,night,waste
   if(!night)for(const food of nextFoods)if(food.present&&food.freshness>0)food.freshness=Math.max(0,food.freshness-Math.trunc(minutes/2));
   return {profiles:next.map(p=>normalizeNativeIndividualProfile(p)),foods:nextFoods};
 }
+

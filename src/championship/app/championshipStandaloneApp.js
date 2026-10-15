@@ -1,3 +1,6 @@
+import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
+import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
+import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
 import { panHuntPresentationCamera } from "../hunt/huntPresentationBinding.js";
 import {tutorialHuntStep,TUTORIAL_GATE} from './interactiveTutorialHuntSteps.js';
 import {tutorialBattleStep} from './interactiveTutorialBattleSteps.js';
@@ -499,6 +502,7 @@ export function createChampionshipStandaloneApp({
         localPositionQ12:w.positionQ12.map((n,i)=>n-origin[i]*4096)};});
     raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({version:1,poolSlots:raisingPoolSlots,foods,waste,
       evolutionBranches:raising.nativeHome?.evolutionBranches??[],
+      ...(raising.nativeHome?.productEvolutionBranches?{productEvolutionBranches:raising.nativeHome.productEvolutionBranches}:{}),
       ...(raising.nativeHome?.pendingOvernightMinutes!==undefined?{pendingOvernightMinutes:raising.nativeHome.pendingOvernightMinutes}:{})})});
   }
 
@@ -721,10 +725,16 @@ export function createChampionshipStandaloneApp({
   }
 
   function restoreCandidate(save) {
+    assertPlayableProductSaveData(save);
+    for(const entry of [save.creature,...(save.raising?.collection??[])]){
+      const index=entry?.nativeProfile?.fields?.['000']??Number(entry?.speciesId?.replace(/^championship:creature:/,'').replace(/^species-/,''));
+      if(getProductExtension(index))requirePlayableProductExtension(index);
+    }
     if(interactiveTutorialInProgress(save.progression.nativeOpening)&&save.gameplayRng===null)
       throw new Error("INTERACTIVE_TUTORIAL_RNG_REQUIRED");
     const { document } = deserializeRaisingHomeSaveR2(save.raisingHome);
     const snapshot = restoreRaisingHomeSnapshotR2(document, { sessionId });
+    for(const entry of snapshot.residents){const index=entry?.nativeProfile?.fields?.['000']??Number(entry?.speciesId?.replace(/^championship:creature:/,'').replace(/^species-/,''));if(getProductExtension(index))requirePlayableProductExtension(index);}
     const sources = {
       creature: snapshot.residents.some((entry) => entry.residentId === save.creature.creatureId) ? save.creature : null,
       residents: snapshot.residents,
@@ -1257,6 +1267,11 @@ export function createChampionshipStandaloneApp({
       if(accepted)return this.endDay();
       publishRaising();return true;
     },
+    selectRaisingEvolutionChoice(instanceId,target){
+      const actor=raisingActors.get(instanceId);
+      if(!actor||!selectNativeRaisingEvolutionChoice(actor,target,{next:nextGameplayRandom}))return false;
+      savePort.markDirty();publishRaising();return true;
+    },
     advanceRaisingPresentation({frames}={}) {
       if(!Number.isInteger(frames)||frames<0||frames>120)throw new TypeError('INVALID_RAISING_PRESENTATION_FRAMES');
       if(tutorialBaseline)return advanceInteractiveRaising(frames);
@@ -1285,7 +1300,9 @@ export function createChampionshipStandaloneApp({
           raisingLifecycleMessage={kind:'DISAPPEARED',instanceId:id};storeNativeRaisingHome();savePort.markDirty();break;
         }
         if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target};
-          if(event.target>=8&&!event.inherited){const branches=[...new Set([...(raising.nativeHome?.evolutionBranches??[]),(event.oldSpecies-8)*5+event.index])];
+          if(event.productRouteId){const productEvolutionBranches=[...new Set([...(raising.nativeHome?.productEvolutionBranches??[]),event.productRouteId])];
+            raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,productEvolutionBranches})});}
+          else if(event.target>=8&&!event.inherited){const branches=[...new Set([...(raising.nativeHome?.evolutionBranches??[]),(event.oldSpecies-8)*5+event.index])];
             raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,evolutionBranches:branches})});}
           savePort.markDirty();}
       }
@@ -2131,6 +2148,7 @@ export function createChampionshipStandaloneApp({
         collection: raising?.collection ?? [],
         registeredSpecies: registeredSpeciesValue,
         evolutionBranches: raising?.nativeHome?.evolutionBranches ?? [],
+        productEvolutionBranches: raising?.nativeHome?.productEvolutionBranches ?? [],
         selectedSpeciesIndex: selectedDatabaseSpeciesIndex
       });
       if (!frame.selected) return frame;
@@ -2381,15 +2399,15 @@ export function createChampionshipStandaloneApp({
       return {ok:true,parties,arenaIndex:selectedArena??drawnArena,rngPreparation};
     },
 
-    async createLinkBattleInvite(instanceIds){
+    async createLinkBattleInvite(instanceIds,{transportVersion}={}){
       requireSession();
       if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
       const party=await this.prepareBattleParty(null,instanceIds);if(!party.ok)return party;
       const preview=this.prepareBattleRng(),prepared=battleRngPreparations.get(preview);
       try{
         const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
-        const {createNativeLinkInvite}=await loadLinkBattle();
-        const invite=createNativeLinkInvite({individuals:party.individuals,arenaIndex});
+        const {createChampionshipLinkInvite}=await loadLinkBattle();
+        const invite=createChampionshipLinkInvite({individuals:party.individuals,arenaIndex,transportVersion});
         return {ok:true,inviteCode:invite.code,arenaIndex};
       }catch(error){
         return {ok:false,reason:error?.message??'LINK_BATTLE_INVITE_FAILED',message:'無法建立通訊邀請碼，請重新選擇隊伍。'};
@@ -2404,10 +2422,10 @@ export function createChampionshipStandaloneApp({
         const link=await loadLinkBattle();let packet,responseCode=null,hostIndividuals,guestIndividuals;
         if(role==='GUEST'){
           const party=await this.prepareBattleParty(null,instanceIds);if(!party.ok)return party;
-          const response=link.createNativeLinkReply({inviteCode,individuals:party.individuals});responseCode=response.code;
-          packet=link.readNativeLinkInvite(inviteCode);hostIndividuals=packet.hostIndividuals;guestIndividuals=party.individuals;
+          const response=link.createChampionshipLinkReply({inviteCode,individuals:party.individuals});responseCode=response.code;
+          packet=link.readChampionshipLinkInvite(inviteCode);hostIndividuals=packet.hostIndividuals;guestIndividuals=party.individuals;
         }else{
-          packet=link.readNativeLinkReply(inviteCode,replyCode);hostIndividuals=packet.hostIndividuals;guestIndividuals=packet.guestIndividuals;
+          packet=link.readChampionshipLinkReply(inviteCode,replyCode);hostIndividuals=packet.hostIndividuals;guestIndividuals=packet.guestIndividuals;
         }
         const {battlePartyAdmission,buildOwnedBattleCreature}=await loadBattleParty();
         for(const individual of [...hostIndividuals,...guestIndividuals]){
@@ -2422,7 +2440,7 @@ export function createChampionshipStandaloneApp({
         return {ok:true,role,inviteCode:packet.code??inviteCode,replyCode:responseCode??replyCode,linkKey,
           parties:[hostIndividuals,guestIndividuals],localTeamIndex:role==='HOST'?0:1,arenaIndex:packet.arenaIndex,rngPreparation};
       }catch(error){
-        const known=/^LINK_BATTLE_/.test(error?.message??'');
+        const known=/^(?:LINK_BATTLE_|PRODUCT_BATTLE_TRANSPORT_)/.test(error?.message??'');
         return {ok:false,reason:known?error.message:'LINK_BATTLE_CODE_INVALID',
           message:known?'通訊碼無法辨識、已損壞，或不是同一場邀請。':'通訊對戰準備失敗，請重新交換通訊碼。'};
       }
@@ -2430,10 +2448,10 @@ export function createChampionshipStandaloneApp({
 
     async getPasswordTeamCandidates(){
       requireSession();
-      const {nativePasswordProfileAdmission}=await loadPasswordBattle();
+      const {championshipPasswordProfileAdmission}=await loadPasswordBattle();
       return this.getRaisingInstances().map(entry=>{
         const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
-        return Object.freeze({...entry,admission:nativePasswordProfileAdmission(nativeProfile)});
+        return Object.freeze({...entry,admission:championshipPasswordProfileAdmission(nativeProfile)});
       });
     },
 
@@ -2444,16 +2462,16 @@ export function createChampionshipStandaloneApp({
       requireSession();
       if(!Array.isArray(instanceIds)||instanceIds.length<1||instanceIds.length>3||new Set(instanceIds).size!==instanceIds.length)
         return {ok:false,reason:'PARTY_SIZE',message:'請選擇 1 至 3 隻數碼獸。'};
-      const {encodeNativePasswordTeamFromProfiles,nativePasswordProfileAdmission}=await loadPasswordBattle();
+      const {encodeChampionshipPasswordTeamFromProfiles,championshipPasswordProfileAdmission}=await loadPasswordBattle();
       const owned=new Set(this.getRaisingInstances().map(entry=>entry.instanceId)),profiles=[];
       for(const instanceId of instanceIds){
         const nativeProfile=!owned.has(instanceId)?null
           :instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);
-        const admission=nativePasswordProfileAdmission(nativeProfile);
+        const admission=championshipPasswordProfileAdmission(nativeProfile);
         if(!admission.ok)return admission;
         profiles.push(nativeProfile);
       }
-      return {ok:true,password:encodeNativePasswordTeamFromProfiles(profiles),members:profiles.length};
+      return {ok:true,password:encodeChampionshipPasswordTeamFromProfiles(profiles),members:profiles.length};
     },
 
     async preparePasswordBattle(passwords){
@@ -2461,13 +2479,13 @@ export function createChampionshipStandaloneApp({
       if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
       if(!Array.isArray(passwords)||passwords.length!==2||passwords.some(value=>typeof value!=='string'||value.length<1))
         return {ok:false,reason:'TWO_PASSWORDS_REQUIRED',message:'請輸入 A 隊與 B 隊的密碼。'};
-      const {createNativePasswordPlaceholders,decodeNativePasswordTeam,nativePasswordTeamAdmission}=await loadPasswordBattle();
+      const {createNativePasswordPlaceholders,decodeChampionshipPasswordTeam,championshipPasswordTeamAdmission}=await loadPasswordBattle();
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
       try{
-        const teams=passwords.map((password,index)=>decodeNativePasswordTeam(password,{
+        const teams=passwords.map((password,index)=>decodeChampionshipPasswordTeam(password,{
           placeholders:createNativePasswordPlaceholders(prepared.rng),instancePrefix:`password-${index===0?'a':'b'}`
         }));
-        for(const team of teams){const admission=nativePasswordTeamAdmission(team);if(!admission.ok){
+        for(const team of teams){const admission=championshipPasswordTeamAdmission(team);if(!admission.ok){
           battleRngPreparations.delete(rngPreparation);return admission;
         }}
         const normalized=teams.map(team=>team.password);
@@ -2479,7 +2497,7 @@ export function createChampionshipStandaloneApp({
         return {ok:true,passwords:normalized,teams,parties,arenaIndex,rngPreparation};
       }catch(error){
         battleRngPreparations.delete(rngPreparation);
-        const known=/^PASSWORD_BATTLE_/.test(error?.message??'');
+        const known=/^(?:PASSWORD_BATTLE_|PRODUCT_BATTLE_TRANSPORT_)/.test(error?.message??'');
         return {ok:false,reason:known?error.message:'PASSWORD_BATTLE_INVALID',
           message:known?'密碼無法辨識或校驗不正確，請確認後再輸入。':'密碼隊伍準備失敗，請重新輸入。'};
       }
@@ -3271,3 +3289,4 @@ export function createChampionshipStandaloneApp({
     }
   });
 }
+

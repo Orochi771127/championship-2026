@@ -6,6 +6,7 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  "CAGE_SLOT_RANK_LOCKED": "Ô {n} đang khóa. Mở khóa ở hạng thuần thú sư {rank}.",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "Nền trang hệ thống",
   "SYSTEM_BACKGROUND_HINT": "Chỉ áp dụng cho các trang hệ thống như bách khoa, cửa hàng, hướng dẫn và hồ sơ. Giữ nguyên màn hình tiêu đề thành bang và cảnh chơi.",

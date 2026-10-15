@@ -1,3 +1,4 @@
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
 // Traditional Chinese display copy.
 //
@@ -268,6 +269,7 @@ export function gateName(recordIndex, japanese) {
  * eggs and unknown fallback are ordinary localized words.
  */
 export function speciesName(recordIndex, fallback = undefined) {
+  const extension=getProductExtension(recordIndex);if(extension)return extension.displayNameZh;
   const loc = getLocale();
   const egg = EGG_BY_LOCALE[loc] ?? "培育蛋";
   const unknown = fallback === undefined ? (UNKNOWN_BY_LOCALE[loc] ?? "未確認生物") : fallback;
@@ -347,3 +349,4 @@ export function cageEffectLabel(kind, target) {
   }
   return null;
 }
+

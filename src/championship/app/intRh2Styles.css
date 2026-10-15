@@ -921,3 +921,73 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar_
   max-height: max(32px, calc(22dvh - 16px)); overflow-y: auto;
   pointer-events: auto; overscroll-behavior: contain;
 }
+
+/* Raising HUD: keep currency glyphs opaque and readable over the ranch,
+   without the header rule or currency plate. Hit targets remain unchanged. */
+body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-status-bar[data-screen="RAISING_HOME"] {
+  border-bottom: 0;
+  box-shadow: none;
+}
+body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-status-bar__currencies {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) :is(.cm-status-bar__bits-value, .cm-status-bar__diamond-text) {
+  text-shadow: -1px -1px 0 var(--c-ground), 1px -1px 0 var(--c-ground), -1px 1px 0 var(--c-ground), 1px 1px 0 var(--c-ground), 0 1px 2px rgb(0 0 0 / 40%);
+}
+body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-status-bar__currency-icon {
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 65%)) drop-shadow(0 -1px 1px rgb(255 255 255 / 65%));
+}
+
+/* Alternate-form choice: independent flow layout, never calendar overlay buttons. */
+.int-rh2-evolution-choice {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  width: min(calc(100vw - 32px), 560px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: var(--sp-5);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  color: var(--c-text-1);
+  box-shadow: var(--shadow-lift);
+}
+.int-rh2-evolution-choice__title {
+  grid-column: 1 / -1;
+  margin: 0;
+  text-align: center;
+  font-size: var(--fs-title-2);
+  font-weight: var(--fw-heavy);
+}
+.int-rh2-evolution-choice__option {
+  position: static;
+  inset: auto;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  min-height: var(--control);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  color: var(--c-text-1);
+  font: inherit;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.int-rh2-evolution-choice__option:focus-visible {
+  outline: 3px solid var(--c-accent);
+  outline-offset: 2px;
+}
+@media (max-width: 480px) {
+  .int-rh2-evolution-choice { grid-template-columns: minmax(0, 1fr); }
+}

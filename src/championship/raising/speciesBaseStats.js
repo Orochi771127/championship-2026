@@ -1,3 +1,5 @@
+import {listProductExtensions} from '../contracts/productSpeciesExtensions.js';
+import {productSpeciesRecord} from '../contracts/productSpeciesData.js';
 // Base stats for a species, through the already-traced path.
 //
 // WHY THIS EXISTS
@@ -55,7 +57,7 @@ export const SPECIES_UNDIFFERENTIATED_STATS_EVIDENCE = "UNKNOWN_REQUIRES_TRACE";
 
 const CURVE_ROWS = statCurve.records ?? statCurve.rows;
 const SPECIES_BY_ID = new Map(
-  speciesCatalog.records.map((record) => [
+  [...speciesCatalog.records,...listProductExtensions().map(e=>productSpeciesRecord(e.speciesIndex))].map((record) => [
     `species-${String(record.recordIndex).padStart(3, "0")}`,
     record
   ])
@@ -96,3 +98,4 @@ export function speciesBaseStats(speciesId) {
     undifferentiatedEvidence: SPECIES_UNDIFFERENTIATED_STATS_EVIDENCE
   });
 }
+

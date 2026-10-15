@@ -1,3 +1,4 @@
+import {isKnownSpeciesIndex} from '../../contracts/productSpeciesData.js';
 // ARM9 02062100 -> 02062C28. Executable rules, with explicit caller-supplied
 // functional inputs. No ROM/state/research fixture imports. This constructor is
 // one part of A; it does not prove actor initialization or normal Hunt binding.
@@ -13,7 +14,7 @@ function integer(n, label, min, max) {
 
 export function validateNativeSpeciesInput(s) {
   if (!s || typeof s !== "object") throw new Error("HUNT_INDIVIDUAL_SPECIES_INPUT_REQUIRED");
-  integer(s.speciesIndex, "SPECIES", 0, 227);
+  if(!isKnownSpeciesIndex(s.speciesIndex))throw new TypeError("INVALID_PRODUCT_SPECIES");
   integer(s.generation, "GENERATION", 0, 6);
   integer(s.attribute, "ATTRIBUTE", 0, 4);
   for (const k of ["field1c", "field1e"]) integer(s[k], k, 0, 255);
@@ -30,7 +31,7 @@ export function validateNativeSpeciesInput(s) {
     for (const n of pair) integer(n, "AI_SOURCE", 0, 0xffffffff);
   }
   if (!Array.isArray(s.ancestors)) throw new Error("HUNT_INDIVIDUAL_ANCESTRY_INPUT_REQUIRED");
-  for (const n of s.ancestors) integer(n, "ANCESTOR", 0, 227);
+  for (const n of s.ancestors) if(!isKnownSpeciesIndex(n))throw new TypeError("INVALID_PRODUCT_ANCESTOR");
   if (typeof s.baseName !== "string" || !s.baseName.length) throw new Error("HUNT_INDIVIDUAL_BASE_NAME_REQUIRED");
   return s;
 }
@@ -137,3 +138,4 @@ export function updateNativeHuntIndividual(individual, { speciesByIndex, rng }) 
   }
   return individual;
 }
+
