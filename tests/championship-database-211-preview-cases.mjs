@@ -40,3 +40,11 @@ for(const id of [229,230])test(`${id} illustration preview is gated and preserve
  for(const wrong of [hero211,{...own,speciesIndex:id===229?230:229},{...own,sha256:'0'.repeat(64)}])assert.equal(create(()=>wrong,ready).acceptedDatabaseIllustrationPreview(id),null);
  const controller=new AbortController();controller.abort();await assert.rejects(api.loadAcceptedDatabasePortrait(id,{baseUrl:base,signal:controller.signal}),{name:'AbortError'});
 });
+
+test('222 quadruped uses only its own selected hero without changing animation selection',async()=>{
+ const api=create(),own=heroes.entries.find(e=>e.speciesIndex===222);assert.equal(api.acceptedDatabasePortraitConfig(222),null);let calls=0;
+ const result=await api.loadAcceptedDatabasePortrait(222,{baseUrl:base,fetchImpl:()=>{calls++;throw Error('NO_MANIFEST_FETCH');}});
+ assert.equal(calls,0);assert.equal(result.speciesId,'species-222');assert.equal(result.sha256,'4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3');assert.equal(result.src,base+own.src);
+ const humanoid=heroes.entries.find(e=>e.speciesIndex===230);assert.equal(create(()=>humanoid).acceptedDatabaseIllustrationPreview(222),null);
+ assert.equal(await api.loadAcceptedDatabasePortrait(222,{baseUrl:base,revealed:false}),null);
+});

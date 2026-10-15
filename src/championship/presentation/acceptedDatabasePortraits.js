@@ -33,12 +33,13 @@ export function validateAcceptedDatabasePortrait(manifest, config) {
 // Static encyclopedia previews never promote animation selection or borrow a donor image.
 const ILLUSTRATION_PREVIEW_HASHES = Object.freeze({
   211: '20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634',
+  222: '4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3',
   229: 'f1e1a23e891b9345f4b759e910c5f67efd8a844a2de53e14183a1a2fe3310424',
   230: '09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39'
 });
 export function acceptedDatabaseIllustrationPreview(speciesIndex) {
-  if (![211,229,230].includes(speciesIndex)) return null;
-  if (speciesIndex !== 211) {
+  if (![211,222,229,230].includes(speciesIndex)) return null;
+  if (speciesIndex === 229 || speciesIndex === 230) {
     const extension = getProductExtension(speciesIndex);
     if (!extension?.runtimeReady || !extension.evolutionReady
       || !alternateFormAsset(extension.entityId)) return null;

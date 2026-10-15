@@ -26,6 +26,14 @@ function assertAsset(entry, bytes, expected) {
   assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
   assert.equal(bytes.readUInt32BE(16), 1254); assert.equal(bytes.readUInt32BE(20), 1254);
 }
+function assertRegistry(sourceBytes, builtBytes) {
+  assert.equal(sha256(builtBytes), sha256(sourceBytes), 'Built hero registry must equal this exact candidate source');
+  const catalog = JSON.parse(builtBytes);
+  assert.ok(Array.isArray(catalog.entries));
+  assert.equal(new Set(catalog.entries.map(entry => entry.speciesIndex)).size, catalog.entries.length, 'No duplicate hero identities');
+  for (const id of Object.keys(EXPECTED).map(Number)) assert.ok(catalog.entries.some(entry => entry.speciesIndex === id), `Missing selected hero ${id}`);
+  return catalog;
+}
 function sizePlan(size, padding) {
   assert.ok([128, 256].includes(size));
   assert.deepEqual(padding, [24, 24, 24, 24], 'Existing normal 24px stage padding changed');
@@ -110,9 +118,9 @@ async function main() {
     assert.equal(build.target, 'GITHUB_PAGES_OWNER_PLAYTEST'); assert.equal(build.publicPlaytest?.ownerApproved, true);
     evidence.build = { buildId: build.buildId, target: build.target, manifestSha256: sha256(buildBytes) };
     assert.ok(resolveAsset(root, '/championship.html'));
-    const catalog = JSON.parse(fs.readFileSync(path.join(root, 'src/data/championship/database-hero-portraits.r1.json')));
-    assert.equal(catalog.entries.length, 51, 'This controlled candidate adds exactly one hero to the 50-entry baseline');
-    assert.equal(new Set(catalog.entries.map(entry => entry.speciesIndex)).size, 51, 'No duplicate hero identities');
+    const registryPath = 'src/data/championship/database-hero-portraits.r1.json';
+    const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
+    evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
     for (const expected of Object.values(EXPECTED)) {
       const entry = catalog.entries.find(e => e.speciesIndex === expected.speciesIndex);
       assert.ok(entry, `Normal production registry missing ${expected.speciesId}`);
@@ -273,9 +281,15 @@ function selfTest() {
     imageRect: { width: 128, height: 128 }, holderRect: { width: 176, height: 176 } };
   assertMeasured(valid, 117, 128);
   for (const changed of [{ rowState: 'REGISTERED' }, { src: 'wrong.png' }, { objectFit: 'cover' }, { imageRect: { width: 80, height: 80 } }]) assert.throws(() => assertMeasured({ ...valid, ...changed }, 117, 128));
+  const sourceRegistry = Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:229},{speciesIndex:230}]}));
+  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,4);
+  assert.throws(()=>assertRegistry(sourceRegistry,Buffer.from('{}')));
+  const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));
+  assert.throws(()=>assertRegistry(duplicated,duplicated));
+  const missing=Buffer.from(JSON.stringify({entries:[{speciesIndex:55}]}));assert.throws(()=>assertRegistry(missing,missing));
   console.log('DEX_PORTRAIT_SELF_TEST_PASS: sizing, identity, registration, contain and measured geometry guards; no browser launched.');
 }
-module.exports = { EXPECTED, sizePlan, assertAsset, assertMeasured, mountedSnapshot, checkPolicy };
+module.exports = { EXPECTED, assertRegistry, sizePlan, assertAsset, assertMeasured, mountedSnapshot, checkPolicy };
 if (require.main === module) {
   if (process.argv.includes('--self-test')) selfTest();
   else main().catch(error => { console.error(error); process.exitCode = 1; });

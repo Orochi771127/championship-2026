@@ -2,6 +2,7 @@
 // runtime replacements or changes to production readiness. Requires built public QA.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
+const {createHash}=require('node:crypto');
 const {resolveAsset,serveBuild,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
 const output=require('./browser-qa-output.cjs')('alternate-forms');fs.mkdirSync(output,{recursive:true});
@@ -56,6 +57,51 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    const canvas=field.locator('canvas.cm-field-canvas');assert.equal(await canvas.count(),1);assert.equal(await canvas.isVisible(),true);
    const size=await canvas.evaluate(n=>({width:n.width,height:n.height}));assert.ok(size.width>0&&size.height>0);
    (evidence.raisingReady??=[]).push({label,...state,canvas:size});
+  }
+  async function captureFourFormDatabase(){
+   // Existing isolated QA session, normal menu/list navigation and DOM reads only.
+   const registry=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.r1.json')));
+   const codes=new Map([[222,'UL02'],[230,'UL03'],[211,'UL33'],[229,'UL34']]);
+   const expected=new Map([...codes].map(([id,code])=>{
+    const art=registry.entries.find(e=>e.speciesIndex===id);assert.ok(art);assert.equal(art.src,`assets/production/database-handpainted-r1-20261015/species-${id}.png`);
+    const bytes=fs.readFileSync(path.join(root,art.src));assert.equal(createHash('sha256').update(bytes).digest('hex'),art.sha256);
+    return [id,{...art,code,url:new URL(art.src,publicBase).href}];
+   }));
+   const imageJobs=[],received=new Map();
+   const observe=response=>{const art=[...expected.values()].find(a=>a.url===response.url());if(art)imageJobs.push((async()=>{const bytes=await response.body();assert.equal(response.status(),200);const hash=createHash('sha256').update(bytes).digest('hex');assert.equal(hash,art.sha256);received.set(art.speciesIndex,{speciesIndex:art.speciesIndex,url:response.url(),sha256:hash,bytes:bytes.length});})().catch(error=>evidence.networkErrors.push({url:response.url(),error:String(error)})));};
+   page.on('response',observe);
+   const identitySnapshot=()=>page.evaluate(key=>{const save=JSON.parse(sessionStorage.getItem(key));return {schemaVersion:save?.schemaVersion,registeredSpecies:save?.progression?.registeredSpecies,collection:save?.raising?.collection?.map(i=>({instanceId:i.instanceId,speciesId:i.speciesId}))};},qaKey);
+   evidence.dexIdentityBefore=await identitySnapshot();evidence.dexCaptures=[];
+   await page.locator('[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="database"]').click();
+   await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor({state:'visible'});
+   await page.locator('.cm-vs2-database__stage').selectOption('');
+   const detail=page.locator('.cm-vs2-database__detail'),back=page.locator('.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-footer button');
+   async function select(id){
+    if(await detail.isVisible()){await back.click();await detail.waitFor({state:'hidden'});}
+    const row=page.locator(`.cm-vs2-database__row[data-species-index="${id}"]`);await row.scrollIntoViewIfNeeded();await row.click();await detail.waitFor({state:'visible'});
+    if(codes.has(id))assert.equal(await row.getAttribute('data-display-code'),codes.get(id));
+   }
+   async function capture(holder,id,kind,viewport){
+    const img=holder.locator('img');await img.waitFor({state:'visible',timeout:30000});
+    await holder.scrollIntoViewIfNeeded();await img.evaluate(image=>image.decode());
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    const snapshot=await holder.evaluate(n=>{const image=n.querySelector('img'),rect=el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom};};return {art:n.dataset.art,revealed:n.dataset.revealed??null,src:image.currentSrc||image.src,complete:image.complete,hidden:image.hidden,natural:[image.naturalWidth,image.naturalHeight],imageRect:rect(image),holderRect:rect(n),objectFit:getComputedStyle(image).objectFit};});
+    assert.equal(snapshot.art,'ready');assert.equal(snapshot.hidden,false);assert.equal(snapshot.complete,true);assert.deepEqual(snapshot.natural,[1254,1254]);assert.equal(snapshot.src,expected.get(id).url);assert.ok(snapshot.imageRect.width>0&&snapshot.imageRect.height>0);assert.equal(snapshot.objectFit,'contain');
+    const name=`dex-${id}-${kind}-${viewport.width}`;await shot(name);await holder.screenshot({path:path.join(output,name+'-image.png')});evidence.dexCaptures.push({speciesIndex:id,displayCode:codes.get(id),kind,viewport,screenshot:name+'.png',imageScreenshot:name+'-image.png',...snapshot});write();
+   }
+   for(const viewport of [{width:844,height:390},{width:390,height:844}]){
+    await page.setViewportSize(viewport);
+    for(const id of [222,230,211,229]){await select(id);await capture(detail.locator('.cm-dex-hero'),id,'hero',viewport);await capture(detail.locator('.cm-dex-routes__source .cm-dex-portrait'),id,'source-preview',viewport);}
+    for(const [source,ids] of [[139,[211,229]],[144,[222,230]]]){
+     await select(source);
+     for(const id of ids){const target=detail.locator(`.cm-dex-routes__target[aria-label^="${codes.get(id)} · "]`);assert.equal(await target.count(),1);assert.equal(await target.getAttribute('data-revealed'),'true');await capture(target.locator('.cm-dex-portrait'),id,'evolution-choice-preview',viewport);}
+    }
+   }
+   evidence.dexIdentityAfter=await identitySnapshot();assert.deepEqual(evidence.dexIdentityAfter,evidence.dexIdentityBefore,'Read-only Dex navigation must not change saved identity or registration');
+   await Promise.all(imageJobs);page.off('response',observe);for(const id of codes.keys())assert.ok(received.has(id),`Missing actual hero image response ${id}`);evidence.dexImageResponses=[...received.values()];
+   if(await detail.isVisible()){await back.click();await detail.waitFor({state:'hidden'});}await back.click();
+   await page.locator('#cm-root.int-rh2-root[data-active-screen="RAISING_HOME"]').waitFor({state:'visible'});await raisingReady('dex-return');
+   evidence.assertions.push('FOUR_FORM_DEX_HERO_SOURCE_AND_CHOICE_PREVIEW_CAPTURE_PASS');evidence.dexVisualReview='PENDING_ROOT_SCREENSHOT_REVIEW';
   }
   async function boot(){
    await page.locator('#form-qa-start').click();
@@ -134,6 +180,8 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   await raisingReady('battle-return');const last=await diagnostics('battle-complete');
   assert.deepEqual(last.errors,[]);assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_VFX_ART_FALLBACK|BATTLE_CORE_VFX_UNAVAILABLE/.test(m.text)),[],'No product error or VFX fallback is accepted');
   evidence.battleLoaderReport=assertBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount,{exactCount:true});
+  await captureFourFormDatabase();
+  assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
   evidence.assertions.push('FORMAL_SAVE_UNTOUCHED');evidence.status='PASS';console.log('ALTERNATE_FORM_BROWSER_PASS');
  }catch(error){evidence.status=String(error).includes('BLOCKED_GPU')?'BLOCKED_GPU':'FAIL';evidence.error=String(error.stack||error);if(page){evidence.failureDiagnostics=await page.locator('#alternate-form-qa-report').textContent().catch(()=>null);await page.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});fs.writeFileSync(path.join(output,'failure-dom.html'),await page.content().catch(()=>''));}throw error;
