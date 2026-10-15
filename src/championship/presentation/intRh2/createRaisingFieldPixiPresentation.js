@@ -1,3 +1,4 @@
+import { getReviewedRaisingContactShadow } from './raisingContactShadow.js';
 import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
 import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
 // INT-RH2 Raising field -- a scene on the single Championship Pixi stage.
@@ -15,7 +16,7 @@ import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOrigi
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
 import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyphArt.js';
-import {EVOLUTION_SYMBOL_REPLACEMENT_TEXT} from '../../text/evolutionPresentationText.js';
+import {EVOLUTION_TEXT_ROWS, EVOLUTION_WRITING_COLOR, evolutionWritingY} from '../../text/evolutionPresentationText.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
 import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
@@ -159,7 +160,13 @@ export async function mountRaisingFieldPixiPresentation({
   const evolutionGlow=new PIXI.Graphics();evolutionGlow.eventMode='none';fxLayer.addChild(evolutionGlow);
   const evolutionBackdrop=new PIXI.Graphics();evolutionBackdrop.eventMode='none';scene.addChildAt(evolutionBackdrop,4);
   const evolutionWriting=new PIXI.Container();evolutionWriting.eventMode='none';scene.addChildAt(evolutionWriting,5);
-  const evolutionWords=Array.from({length:6},(_,i)=>{const word=new PIXI.Text({text:i%2?uiText('進化!!'):'EVOLUTION',style:{fontFamily:'sans-serif',fontSize:16+(i%3)*4,fontWeight:'bold',fill:0x008bff}});evolutionWriting.addChild(word);return word;});
+  const evolutionWords=EVOLUTION_TEXT_ROWS.map(({text,row})=>{
+    const word=new PIXI.Text({text,style:{
+      fontFamily:'Tahoma, "Noto Sans Thai", Thonburi, "Yu Gothic", "Hiragino Sans", "Noto Sans JP", sans-serif',
+      fontSize:16+(row%3)*4,fontWeight:'bold',fill:EVOLUTION_WRITING_COLOR
+    }});
+    word.eventMode='none';evolutionWriting.addChild(word);return word;
+  });
   let evolutionArt = null, evolutionCells = null;
   let evolutionGlyphArt = null, evolutionGlyphBand = null, evolutionGlyphLoad = null;
   function ensureEvolutionGlyphs() {
@@ -177,16 +184,6 @@ export async function mountRaisingFieldPixiPresentation({
   void loadAssembledEvolutionArt(PIXI).then(art => {
     if (disposed || lifetime.signal.aborted) { void art?.dispose(); return; }
     evolutionArt = art;
-  if(evolutionArt)for(let i=0;i<evolutionWords.length;i+=2){
-    // Owner 2026-10-10: replace only the code-symbol row. Existing Chinese,
-    // English, row positions, scroll directions and the phase clock stay intact.
-    const word=i===4?new PIXI.Text({text:EVOLUTION_SYMBOL_REPLACEMENT_TEXT,style:{
-      fontFamily:'Tahoma, "Noto Sans Thai", Thonburi, "Yu Gothic", "Hiragino Sans", "Noto Sans JP", sans-serif',
-      fontSize:16,lineHeight:18,fontWeight:'bold',fill:0x008bff
-    }}):new PIXI.Sprite(evolutionArt.get(i%3?'evolution-word-small':'evolution-word').texture);
-    const old=evolutionWords[i];word.eventMode='none';if(i!==4)word.scale.set(1.25);
-    evolutionWriting.addChild(word);old.destroy();evolutionWords[i]=word;
-  }
   evolutionCells=evolutionArt?Object.fromEntries(['ring','green','burst'].map(name=>{
     const sprite=new PIXI.Sprite();sprite.label=`native evolution ${name}`;sprite.eventMode='none';sprite.visible=false;
     // The floor ring belongs behind the body; emitters stay below the white flash.
@@ -575,6 +572,7 @@ export async function mountRaisingFieldPixiPresentation({
         entry.nativeSizing = actor.nativeSizing ?? null;
         entry.characterController = actor.controller;
         entry.nativeFramePresenter = actor.nativeFramePresenter;
+        entry.contactShadowArt = actor.contactShadowArt ?? null;
         root.addChildAt(actor.sprite, 2);
       }
     }
@@ -600,6 +598,7 @@ export async function mountRaisingFieldPixiPresentation({
           entry.sprite=actor.sprite;entry.nativeSizing=actor.nativeSizing;
           entry.entityId=actor.entityId;entry.assetState='ready';entry.shadow.visible=true;
           entry.nativeFramePresenter=actor.nativeFramePresenter;entry.characterController=actor.controller;
+          entry.contactShadowArt=actor.contactShadowArt??null;
           entry.root.addChildAt(actor.sprite,2);reportResidentAssets();sync(source.getFrame(),{force:true});return;
         }
       }
@@ -656,14 +655,22 @@ export async function mountRaisingFieldPixiPresentation({
     const rect=displayOffset?app.canvas.getBoundingClientRect?.():null;
     const hitAreaCssScale=rect?{x:rect.width/app.screen.width,y:rect.height/app.screen.height}:null;
     const geometry=getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing),displayOffset,hitAreaCssScale});
-    if(geometry)geometry.contactShadow=getRaisingEggContactShadow(entry.entityId,entry.nativeSizing,flipX);
+    if(geometry){
+      geometry.contactShadow=getRaisingEggContactShadow(entry.entityId,entry.nativeSizing,flipX);
+      geometry.reviewedContactShadow=getReviewedRaisingContactShadow(entry.speciesId,
+        entry.nativeFramePresenter?.getSnapshot(),entry.contactShadowArt,entry.visualLift??0,flipX);
+    }
     return geometry;
   }
 
   function decorateActor(entry,geometry){
     const {visible,hitArea}=geometry,center=visible.x+visible.width/2,bottom=visible.y+visible.height;
     const contact=geometry.contactShadow??{x:center,y:bottom+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
-    entry.shadow.clear().ellipse(contact.x,contact.y,contact.radiusX,contact.radiusY).fill({color:0x02070a,alpha:.26});
+    entry.shadow.clear();
+    for(const ellipse of geometry.reviewedContactShadow??[contact]){
+      entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
+    }
+    entry.shadow.fill({color:0x02070a,alpha:.26});
     entry.selection.clear().ellipse(center,bottom+1,visible.width/2+2,Math.max(2,visible.width*.16))
       .fill({color:0x56e3c2,alpha:.12}).stroke({color:0x56e3c2,width:1,alpha:.95});
     entry.root.hitArea=new PIXI.Rectangle(hitArea.x,hitArea.y,hitArea.width,hitArea.height);
@@ -983,7 +990,7 @@ export async function mountRaisingFieldPixiPresentation({
         evolutionGlyphBand?.update({width:app.screen.width,height:app.screen.height,
           totalFrames:activeFrame.totalFrames,reducedMotion:reducedMotion||prefersReducedMotion()});
         for(let i=0;i<5;i++)evolutionBackdrop.rect(0,i*app.screen.height/5,app.screen.width,app.screen.height/15).fill(i%2?0x0c205b:0x102b77);
-        evolutionWords.forEach((word,i)=>{word.x=((i*113+activeFrame.totalFrames*(i%2?1:-1))%(app.screen.width+220)+app.screen.width+220)%(app.screen.width+220)-150;word.y=(i+0.5)*app.screen.height/6;});
+        evolutionWords.forEach((word,index)=>{const i=EVOLUTION_TEXT_ROWS[index].row;word.x=((i*113+activeFrame.totalFrames*(i%2?1:-1))%(app.screen.width+220)+app.screen.width+220)%(app.screen.width+220)-150;word.y=evolutionWritingY(i,app.screen.height);});
       }
     }
     for(const g of foodGraphics.values())g.visible=!covered;for(const g of wasteGraphics.values())g.visible=!covered;
@@ -1014,10 +1021,10 @@ export async function mountRaisingFieldPixiPresentation({
         if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId)
           {const visualFrame=entry.nativeFramePresenter.apply(frame);if(entry.sprite){
             if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
+            entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
             const geometry=entry.nativeScale!==null?actorGeometry(entry,visualFrame?.geometry,Boolean(frame.flipBits&1)):null;
             if(geometry){entry.sprite.scale.set(geometry.spriteScale);entry.sprite.x=geometry.offset.x;decorateActor(entry,geometry);}
             if(entry.nativeScale!==null)entry.root.scale.x=Math.abs(entry.root.scale.x);
-            entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
             entry.sprite.y=(geometry?.offset.y??0)-entry.visualLift;
             // Main is authored facing left; the original body bit mirrors it.
             entry.sprite.scale.x=Math.abs(entry.sprite.scale.x)*(frame.flipBits&1?-1:1);
@@ -1389,3 +1396,4 @@ export async function mountRaisingFieldPixiPresentation({
     }
   });
 }
+

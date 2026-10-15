@@ -699,12 +699,14 @@ body[data-tool] .int-rh2-hint { display: none; }
   :root:not([data-motion]) .int-rh2-vitals__bar::before { transition: none; }
 }
 
-/* Owner 2026-10-14, responsive batch A. Keep the existing DOM owners and
-   event targets. The field, tutorial and selected-resident card get distinct
-   regions; all dimensions are CSS pixels, never device pixels or UA names.
-   The desktop-named attribute is retained for the existing Pixi zoom adapter. */
+/* The disclosure is landscape-only; portrait keeps its existing readout. */
+.int-rh2-companion__toggle { display: none; }
+
+/* Owner 2026-10-15: the habitat fills the available screen. Readouts float
+   over it instead of reserving a sidebar. Keep the existing DOM/input owners
+   and native zoom adapter; these are CSS pixels, never device pixels. */
 body[data-responsive-raising][data-desktop-raising] {
-  --cm-raising-aside: clamp(256px, 25vw, 320px);
+  --cm-raising-card: clamp(256px, 28vw, 340px);
 }
 body[data-responsive-raising][data-desktop-raising][data-status-bar="on"][data-tutorial-guide] {
   --cm-screen-top: var(--cm-status-bar-height, var(--hud-height));
@@ -742,20 +744,40 @@ body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .
   max-height: max(88px, var(--cm-screen-height)); overflow-y: auto;
   overscroll-behavior: contain;
 }
+/* Shared status/toolbar owners still bound #cm-root vertically. Removing
+   the column changes only the measured host, never art/native coordinates. */
 body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-field-frame {
-  right: calc(var(--cm-raising-aside) + var(--safe-right));
-  left: var(--safe-left); min-height: 0;
+  left: var(--safe-left); right: var(--safe-right); min-height: 0;
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-field-host {
+  width: 100%; max-width: none;
 }
 body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion,
 body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion[data-placement="top"],
 body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion[data-open="false"] {
-  left: auto; right: calc(8px + var(--safe-right)); top: auto; bottom: 8px;
-  width: calc(var(--cm-raising-aside) - 16px); max-height: calc(100% - 16px);
+  left: auto; right: calc(8px + var(--safe-right)); top: 8px; bottom: auto;
+  width: min(var(--cm-raising-card), calc(100% - 16px - var(--safe-left) - var(--safe-right)));
+  max-height: calc(100% - 16px);
   transform: none; overflow-y: auto; overscroll-behavior: contain;
   grid-template-columns: auto minmax(0, 1fr);
   grid-template-areas: "portrait copy" "actions actions" "vitals vitals";
+  pointer-events: none;
 }
+/* Only actual readout controls/content receive input. The rest of the field,
+   including the empty overlay space and first-run hint, remains playable. */
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion button,
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion > .int-rh2-vitals { pointer-events: auto; }
 body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__actions { justify-content: flex-end; }
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__toggle { display: grid; }
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__toggle::after {
+  content: ""; width: 8px; height: 8px;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__toggle[aria-expanded="true"]::after {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+body[data-responsive-raising][data-desktop-raising] .int-rh2-companion[data-expanded="false"] > .int-rh2-vitals { display: none; }
 body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__name,
 body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__location {
   white-space: normal; overflow: visible; overflow-wrap: anywhere;
@@ -763,24 +785,23 @@ body[data-responsive-raising][data-desktop-raising] .int-rh2-companion__location
 body[data-responsive-raising][data-desktop-raising] .int-rh2-companion > .int-rh2-vitals {
   grid-template-columns: auto minmax(0, 1fr); row-gap: 4px;
 }
-body[data-responsive-raising][data-desktop-raising][data-tutorial-guide] .int-rh2-root .int-rh2-companion {
-  max-height: calc(50% - 12px);
-}
+/* Guidance takes the opposite corner, never a permanent field column. */
 body[data-responsive-raising][data-desktop-raising] .cm-tutorial-guidance {
-  left: auto; right: var(--safe-right); top: var(--cm-screen-top);
-  width: var(--cm-raising-aside); max-height: calc(var(--cm-screen-height) / 2 - 8px);
+  left: calc(8px + var(--safe-left)); right: auto; top: calc(var(--cm-screen-top) + 8px);
+  width: min(360px, 45vw); max-height: calc(var(--cm-screen-height) - 16px);
   overflow-y: auto; overscroll-behavior: contain; flex-wrap: wrap;
   box-sizing: border-box;
 }
 body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-hint {
-  left: auto; right: calc(8px + var(--safe-right)); top: 8px; bottom: auto;
-  transform: none; width: calc(var(--cm-raising-aside) - 16px);
-  max-height: calc(100% - 16px); overflow-y: auto; pointer-events: auto;
+  left: calc(8px + var(--safe-left)); right: auto; top: 8px; bottom: auto;
+  transform: none; width: max-content; max-width: min(440px, calc(100% - 16px));
+  max-height: calc(100% - 16px); overflow-y: auto; pointer-events: none;
 }
 body[data-responsive-raising][data-desktop-raising][data-tutorial-guide] .int-rh2-hint { display: none; }
 body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-notice {
-  left: 12px; right: calc(var(--cm-raising-aside) + 12px + var(--safe-right));
-  width: auto; max-height: calc(100% - 24px); overflow-y: auto; transform: none;
+  left: calc(8px + var(--safe-left)); right: auto; top: auto; bottom: 8px;
+  width: min(440px, calc(100% - var(--cm-raising-card) - 24px - var(--safe-left) - var(--safe-right)));
+  max-height: calc(100% - 24px); overflow-y: auto; transform: none;
 }
 body[data-responsive-raising][data-desktop-raising] .int-rh2-detail {
   inset: var(--safe-top) var(--safe-right) var(--safe-bottom) auto;
@@ -795,16 +816,13 @@ body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .
 body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__tool-hint {
   padding-left: max(8px, var(--safe-left)); padding-right: max(8px, var(--safe-right));
 }
-/* Mail remains reachable outside the card's scrollport. Normal onboarding
-   rarely has mail, but that combination still reserves its own button row. */
-body[data-responsive-raising][data-desktop-raising] .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-companion {
-  max-height: calc(100% - 72px);
+/* Mail stays opposite the top-right card and below onboarding guidance. */
+body[data-responsive-raising][data-desktop-raising] .int-rh2-mail-icon {
+  left: calc(8px + var(--safe-left)); right: auto; top: auto; bottom: 8px;
 }
-body[data-responsive-raising][data-desktop-raising] .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-hint { top: 72px; }
 body[data-responsive-raising][data-desktop-raising][data-tutorial-guide]:has(.int-rh2-mail-icon:not([hidden])) .cm-tutorial-guidance {
-  max-height: calc(var(--cm-screen-height) / 2 - 36px);
+  max-height: calc(var(--cm-screen-height) - 72px);
 }
-body[data-responsive-raising][data-desktop-raising][data-tutorial-guide] .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-companion {
-  max-height: calc(50% - 36px);
+body[data-responsive-raising][data-desktop-raising] .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-notice {
+  bottom: 64px; max-height: calc(100% - 80px);
 }
-body[data-responsive-raising][data-desktop-raising][data-tutorial-guide] .int-rh2-mail-icon { top: calc(50% - 24px); }

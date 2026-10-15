@@ -391,8 +391,8 @@ body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {
 body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner {
   height: 100%; object-fit: contain; object-position: center bottom;
 }
-body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--blaze { width: 64%; }
-body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--cloud { width: 60%; bottom: -2.5%; }
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--blaze { width: 44%; height: 65%; left: 3%; bottom: 28%; }
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--cloud { width: 46%; height: 70%; right: 1%; bottom: -1%; }
 body[data-landscape-entry] #cm-title > .cm-title__controls {
   position: absolute; transform: none;
   top: var(--cm-entry-action-top); bottom: max(16px, env(safe-area-inset-bottom));

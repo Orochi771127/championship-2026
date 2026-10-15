@@ -173,12 +173,13 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     element("strong", "cm-vs2-gate3d__bar-title", "16 BIOME LINKS")
   );
   const dragHint = element("p", "cm-vs2-gate3d__hint", "拖曳轉動 · 輕觸地點選擇");
-  worldCopy.append(dragHint);
+
   const viewToggle = actionButton("場地列表");
   viewToggle.classList.add("cm-vs2-gate3d__toggle");
   viewToggle.setAttribute("aria-pressed", "false");
   worldBar.append(worldCopy, viewToggle);
   const worldHost = element("div", "cm-vs2-gate3d__host");
+  worldHost.append(dragHint);
   worldHost.dataset.cameraAuthority = "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER";
   worldPanel.append(worldBar, worldHost);
 
@@ -196,7 +197,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   const wallet = element("dd", "", "—");
   costs.append(element("dt", "", "入場費"), fee, element("dt", "", "持有金額"), wallet);
   preview.append(previewImage, previewCopy, costs);
-  const admissionStatus = element("p", "cm-vs2-status");
+  const admissionStatus = element("p", "cm-vs2-status cm-vs2-gate-admission");
   admissionStatus.setAttribute("role", "status");
 
   const fallbackPanel = element("section", "cm-vs2-gate-fallback");
@@ -208,7 +209,8 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   list.setAttribute("role", "listbox");
   list.setAttribute("aria-label", uiText("Biome destinations"));
   fallbackPanel.append(fallbackHeading, list);
-  body.append(preview, admissionStatus, worldPanel, fallbackPanel);
+  previewCopy.append(admissionStatus);
+  body.append(preview, worldPanel, fallbackPanel);
   const evidence = developerOnly(mode, "16 biome identities and paired world_day/world_night structure are ROM_VERIFIED. Camera, rotation, input, hit-test, node placement and active preview state are PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER. Exact original display copy/order remain unclaimed.");
   if (evidence) body.append(evidence);
 
@@ -793,3 +795,4 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     }
   });
 }
+

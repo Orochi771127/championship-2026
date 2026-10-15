@@ -74,12 +74,12 @@ test('same toolbar owner measures visible hint plus rail and tears down observer
  toolbar.setMode(null);assert.equal(values.get('--cm-toolbar-height'),'0px');
  toolbar.dispose();toolbar.dispose();assert.ok(observers[0].closed);assert.equal(document.listeners.size,0);assert.equal(values.size,0);assert.equal(document.body.children.length,0);
 });
-test('wide CSS keeps field/card/tutorial disjoint and hints measured; source contract only',()=>{
+test('wide CSS floats card/tutorial over the full field and keeps hints measured; source contract only',()=>{
  const css=fs.readFileSync(new URL('../src/championship/app/intRh2Styles.css',import.meta.url),'utf8');
- assert.match(css,/--cm-raising-aside: clamp\(256px, 25vw, 320px\)/);
- assert.match(css,/right: calc\(var\(--cm-raising-aside\) \+ var\(--safe-right\)\)/);
- assert.match(css,/max-height: calc\(50% - 12px\)/);
- assert.match(css,/max-height: calc\(var\(--cm-screen-height\) \/ 2 - 8px\)/);
+ assert.match(css,/--cm-raising-card: clamp\(256px, 28vw, 340px\)/);
+ assert.match(css,/left: var\(--safe-left\); right: var\(--safe-right\); min-height: 0/);
+ assert.match(css,/width: 100%; max-width: none/);
+ assert.match(css,/max-height: calc\(var\(--cm-screen-height\) - 16px\)/);
  assert.match(css,/position: static; order: -1; transform: none/);
  assert.match(css,/tool-hint\[hidden\],[\s\S]*menu\[hidden\] \{ display: none; \}/);
  assert.match(css,/\.int-rh2-detail[\s\S]*grid-template-rows: auto minmax\(0, 1fr\) auto/);

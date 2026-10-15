@@ -1,3 +1,4 @@
+import {databaseHeroPortrait} from '../src/championship/presentation/databaseHeroPortraits.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DATABASE_ORIGINAL_PROFILES as catalog,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading} from '../src/championship/database/databaseStories.js';
@@ -50,7 +51,7 @@ test('representative roster identities across stages preserve registration priva
   const f=makeView({locale,selectedSpeciesIndex:sp,registeredSpecies:registered?[sp]:[],collection:[]});
   const prose=f.root.querySelector('.cm-dex-profile__text');
   const dataSec=f.root.querySelector('.cm-dex-data');
-  if(registered){assert.equal(prose?.textContent,entry.textByLocale[locale]);assert.equal(f.root.querySelector('.cm-dex-hero'),null);assert.ok(dataSec);}else {assert.equal(prose,null);assert.equal(f.root.querySelector('.cm-dex-hero'),null);assert.equal(dataSec,null);}
+  if(registered){assert.equal(prose?.textContent,entry.textByLocale[locale]);assert.equal(Boolean(f.root.querySelector('.cm-dex-hero')),Boolean(databaseHeroPortrait(sp)));assert.ok(dataSec);}else {assert.equal(prose,null);assert.equal(f.root.querySelector('.cm-dex-hero'),null);assert.equal(dataSec,null);}
   f.assertUnchanged();f.dispose();
  }}}finally{setLocale('zh-Hant');}
 });
@@ -101,10 +102,10 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('twelve hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('sixteen hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,12);
- for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-portraits-b1-20261014\/B1\d{2}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,16);
+ for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|037|048|215)\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,20,195,222,'8',NaN])assert.equal(get(id),null);
 });
 
@@ -129,4 +130,15 @@ test('hero navigation, locale repaint and disposal invalidate earlier decode cal
   const third=f.root.querySelector('.cm-dex-hero__image'),afterDispose=third.onload;
   f.dispose();assert.equal(third.onload,null);assert.equal(third.onerror,null);afterDispose();assert.ok(third.hidden);f.assertUnchanged();
  } finally {setLocale('zh-Hant');}
+});
+
+test('four hand-painted heroes preserve exact identity and discovery privacy across five locales',()=>{
+ try {for(const sp of [34,37,48,215])for(const locale of locales)for(const registered of [true,false]){
+  const f=makeView({locale,selectedSpeciesIndex:sp,registeredSpecies:registered?[sp]:[],collection:[]});
+  try {const holder=f.root.querySelector('.cm-dex-hero'),art=databaseHeroPortrait(sp);
+   if(!registered){assert.equal(holder,null);assert.equal(f.root.querySelector('.cm-dex-profile'),null);}
+   else {assert.ok(holder);const img=holder.querySelector('img');assert.equal(img.src,art.src);assert.equal(art.width,1254);assert.equal(art.height,1254);assert.ok(img.hidden);img.naturalWidth=1254;img.naturalHeight=1254;img.onload();assert.equal(img.hidden,false);assert.equal(holder.dataset.art,'ready');}
+   f.assertUnchanged();
+  }finally{f.dispose();}
+ }}finally{setLocale('zh-Hant');}
 });
