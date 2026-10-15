@@ -1,7 +1,6 @@
 import {getLocale} from '../text/locale.js';
 import {productFormText} from '../text/productFormText.js';
 const evolutionChoiceTitle=()=>productFormText('choose');
-import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 import { downloadSaveBackup } from './downloadSaveBackup.js';
 import { isNativeRanchLayout } from "../cage/ranchExpansion.js";
 import { retranslate, setLabel, setText, uiText } from "../text/uiText.js";
@@ -498,8 +497,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       evolutionChoice.setAttribute('aria-label',evolutionChoiceTitle());
       if(choice)evolutionChoice.replaceChildren(node('p','int-rh2-evolution-choice__title',evolutionChoiceTitle()),
         ...choice.choices.map(target=>{
-          const extension=getProductExtension(target);
-          const label=extension?.displayNameZh??speciesName(target);
+          const label=speciesName(target);
           const button=node('button','int-rh2-evolution-choice__option',uiText(label));button.type='button';button.dataset.speciesIndex=String(target);
           button.addEventListener('click',()=>presentation.intents.selectEvolutionChoice?.(choice.instanceId,target));return button;
         }));

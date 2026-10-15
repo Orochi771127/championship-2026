@@ -133,7 +133,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   await page.locator('.cm-vs5-exit').click();await page.locator('#cm-root.int-rh2-root[data-active-screen="RAISING_HOME"]').waitFor({state:'visible'});assert.equal(await page.locator('#cm-root .cm-vs5-result__body').count(),0);
   await raisingReady('battle-return');const last=await diagnostics('battle-complete');
   assert.deepEqual(last.errors,[]);assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_VFX_ART_FALLBACK|BATTLE_CORE_VFX_UNAVAILABLE/.test(m.text)),[],'No product error or VFX fallback is accepted');
-  evidence.battleLoaderReport=assertBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount);
+  evidence.battleLoaderReport=assertBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount,{exactCount:true});
   assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
   evidence.assertions.push('FORMAL_SAVE_UNTOUCHED');evidence.status='PASS';console.log('ALTERNATE_FORM_BROWSER_PASS');
  }catch(error){evidence.status=String(error).includes('BLOCKED_GPU')?'BLOCKED_GPU':'FAIL';evidence.error=String(error.stack||error);if(page){evidence.failureDiagnostics=await page.locator('#alternate-form-qa-report').textContent().catch(()=>null);await page.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});fs.writeFileSync(path.join(output,'failure-dom.html'),await page.content().catch(()=>''));}throw error;

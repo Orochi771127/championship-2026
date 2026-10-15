@@ -98,12 +98,26 @@ export function validateRuntimeMapArtBundle(manifest) {
         fail(`ANISOTROPIC_NATIVE_PIXEL_SCALE:${field.fieldId}`);
       }
     }
+    if (field.visualPaddingNative !== undefined) {
+      const padding = field.visualPaddingNative;
+      if (manifest.family !== 'CAGE' || !padding || Array.isArray(padding)
+        || Object.keys(padding).sort().join(',') !== 'bottom,left,right,top'
+        || !['left','top','right','bottom'].every(key => Number.isSafeInteger(padding[key]) && padding[key] >= 0 && padding[key] <= 8)
+        || !Number.isSafeInteger(field.rasterPixelsPerNative) || field.rasterPixelsPerNative < 1 || field.rasterPixelsPerNative > 8) {
+        fail(`VISUAL_PADDING_INVALID:${field.fieldId}`);
+      }
+    }
     if (!Array.isArray(field.frames) || field.frames.length === 0) fail(`FRAMES_REQUIRED:${field.fieldId}`);
     if (field.gameplayBinding !== "EXTERNAL_EXISTING_RUNTIME") fail(`GAMEPLAY_BINDING_MUST_STAY_EXTERNAL:${field.fieldId}`);
     if (field.gateMapping !== "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED") fail(`GATE_MAPPING_MUST_NOT_BE_GUESSED:${field.fieldId}`);
     if (field.collisionBinding !== "EXTERNAL_NOT_IN_ART_BUNDLE") fail(`COLLISION_MUST_NOT_BE_EMBEDDED:${field.fieldId}`);
 
     for (const [index, frame] of field.frames.entries()) {
+      if (field.visualPaddingNative) {
+        const p = field.visualPaddingNative, density = field.rasterPixelsPerNative;
+        if (frame.rasterWidthPx !== (field.nativeWidthPx+p.left+p.right)*density
+          || frame.rasterHeightPx !== (field.nativeHeightPx+p.top+p.bottom)*density) fail(`PADDED_FRAME_SIZE_INVALID:${field.fieldId}:${index}`);
+      }
       const src = nonEmptyString(frame.src, `FRAME_SRC_REQUIRED:${field.fieldId}:${index}`);
       if (!src.replaceAll("\\", "/").startsWith("assets/production/")) {
         fail(`FRAME_OUTSIDE_PRODUCTION_ASSETS:${field.fieldId}:${index}`);
@@ -160,6 +174,18 @@ export async function loadRuntimeMapArtField({ PIXI, manifest, fieldId, sourceRe
     field = Object.freeze({...field, worldWidthPx:width, worldHeightPx:height,
       nativeWidthPx:width/field.nativePixelWorldScale, nativeHeightPx:height/field.nativePixelWorldScale});
   }
+  // Padding belongs to the rendered canvas, never the ground footprint. Only
+  // true exterior edges expand; internal sourceRect/wrap cuts remain exact.
+  const padding = field.visualPaddingNative;
+  const rect = sourceRect ?? {x:0,y:0,width:originalWidth,height:originalHeight};
+  const unit = field.nativePixelWorldScale;
+  const visual = padding ? {
+    left:rect.x === 0 ? padding.left*unit : 0,
+    top:rect.y === 0 ? padding.top*unit : 0,
+    right:rect.x+rect.width === originalWidth ? padding.right*unit : 0,
+    bottom:rect.y+rect.height === originalHeight ? padding.bottom*unit : 0
+  } : {left:0,top:0,right:0,bottom:0};
+  if (padding && (typeof PIXI.Texture !== 'function' || typeof PIXI.Rectangle !== 'function')) fail('CROPPED_TEXTURE_API_REQUIRED');
   const sources = field.frames.map((frame) => frame.src.replaceAll("\\", "/"));
   let textures;
   try {
@@ -170,9 +196,21 @@ export async function loadRuntimeMapArtField({ PIXI, manifest, fieldId, sourceRe
   }
   textures.forEach(applyNearestScale);
   const croppedTextures = [];
-  if (sourceRect) {
+  if (sourceRect || padding) {
     try {
-      textures = textures.map(texture => {
+      textures = textures.map((texture,index) => {
+        if (padding) {
+          const frame = field.frames[index];
+          if (texture.frame.width !== frame.rasterWidthPx || texture.frame.height !== frame.rasterHeightPx) fail('PADDED_TEXTURE_SIZE_INVALID');
+          const density = field.rasterPixelsPerNative / unit;
+          const crop = new PIXI.Texture({source:texture.source, frame:new PIXI.Rectangle(
+            texture.frame.x+(rect.x+padding.left*unit-visual.left)*density,
+            texture.frame.y+(rect.y+padding.top*unit-visual.top)*density,
+            (rect.width+visual.left+visual.right)*density,
+            (rect.height+visual.top+visual.bottom)*density)});
+          croppedTextures.push(crop);
+          return crop;
+        }
         const sx = texture.frame.width/originalWidth;
         const sy = texture.frame.height/originalHeight;
         const crop = new PIXI.Texture({source:texture.source, frame:new PIXI.Rectangle(
@@ -198,14 +236,15 @@ export async function loadRuntimeMapArtField({ PIXI, manifest, fieldId, sourceRe
     displayObject.gotoAndStop(0);
   }
   displayObject.label = `runtime map art ${field.fieldId}`;
-  displayObject.position.set(0, 0);
-  displayObject.width = field.worldWidthPx;
-  displayObject.height = field.worldHeightPx;
+  displayObject.position.set(0-visual.left, 0-visual.top);
+  displayObject.width = field.worldWidthPx+visual.left+visual.right;
+  displayObject.height = field.worldHeightPx+visual.top+visual.bottom;
 
   let disposed = false;
   return Object.freeze({
     assetId: manifest.assetId,
     field,
+    ...(padding ? {visualOffset:Object.freeze({x:0-visual.left,y:0-visual.top})} : {}),
     displayObject,
     update(deltaMs) {
       if (disposed || textures.length === 1 || !Number.isFinite(deltaMs) || deltaMs <= 0) return;
@@ -287,7 +326,7 @@ export function createRuntimeMapArtFieldLoader({ PIXI }) {
  * @param {Array<{fieldId:string, x:number, y:number}>} options.placements
  */
 export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
-  placementEvidence = "UNKNOWN_REQUIRES_TRACE", presentationMode = "EXPLICIT_TILE_SET", residentViewport = null, wrapWidthPx = null, fold = null }) {
+  placementEvidence = "UNKNOWN_REQUIRES_TRACE", presentationMode = "EXPLICIT_TILE_SET", residentViewport = null, wrapWidthPx = null, fold = null, productGrid = null }) {
   assertPixi(PIXI);
   if (typeof PIXI.Container !== "function") throw new TypeError("Runtime map art tile sets require PIXI.Container");
   const checked = validateRuntimeMapArtBundle(manifest);
@@ -303,6 +342,9 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // rows, with capPx of cropped hex tops (foldCap tiles) drawn above it.
   if(fold!==null&&(presentationMode!=='NATIVE_RANCH'||!['splitPx','ringPx','bandOffsetPx','capPx'].every(k=>Number.isFinite(fold[k]))
     ||!(fold.splitPx>0)||!(fold.ringPx>fold.splitPx)||!(fold.bandOffsetPx>0)||fold.capPx<0))fail('TILE_SET_FOLD_INVALID');
+  if(productGrid!==null&&(presentationMode!=='NATIVE_RANCH'||checked.family!=='CAGE'||fold!==null||productGrid.columns!==10||productGrid.rows!==5
+    ||productGrid.worldWidthNative!==960||productGrid.worldHeightNative!==440||productGrid.sizingHeightNative!==192
+    ||!Array.isArray(productGrid.lockedSlots)||productGrid.lockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=50)))fail('PRODUCT_GRID_GEOMETRY_INVALID');
   const residentBounds = residentViewport ? freezeRecord({...residentViewport}) : null;
   if (residentBounds && (!['x','y','width','height'].every(key=>Number.isFinite(residentBounds[key]))
     || residentBounds.x<0 || residentBounds.y<0 || residentBounds.width<=0 || residentBounds.height<=0)) fail('RESIDENT_VIEWPORT_INVALID');
@@ -311,10 +353,12 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // not change which tiles load, where they render or the composite bounds.
   const seenSlots = new Set();
   const snapshot = freezeRecord(placements.map((placement) => {
-    // Only a fold cap sits above the composite's top edge, by at most capPx.
+    // Grid50 keeps the original 24-native-pixel hex tops above y=0.
+    // Bound that art-only overhang; other tile sets still reject negative y.
     const cap = fold !== null && placement?.foldCap === true;
+    const gridTop = productGrid ? -24 * (checked.fields.find(field => field.fieldId === placement?.fieldId)?.nativePixelWorldScale ?? 0) : 0;
     if (!placement || !Number.isSafeInteger(placement.x) || !Number.isSafeInteger(placement.y)
-      || placement.x < 0 || placement.y < (cap ? -fold.capPx : 0)) fail("TILE_SET_INTEGER_POSITION_REQUIRED");
+      || placement.x < 0 || placement.y < (cap ? -fold.capPx : gridTop)) fail("TILE_SET_INTEGER_POSITION_REQUIRED");
     const structuralLid = placement.structuralRole === 'LID';
     if (placement.structuralRole !== undefined && (!structuralLid || presentationMode !== 'NATIVE_RANCH'
       || checked.family !== 'CAGE' || placement.moduleId !== null || placement.cageDefinitionIndex !== null
@@ -378,7 +422,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
       loaded.push(tile);
       // Hard-edged art: a fractional position resamples the silhouette and the
       // seam between two cages becomes visible.
-      tile.displayObject.position.set(placement.x, placement.y);
+      tile.displayObject.position.set(placement.x+(tile.visualOffset?.x ?? 0), placement.y+(tile.visualOffset?.y ?? 0));
       // A fold cap belongs to the annex band only; it is added there below.
       if (!placement.foldCap) ringBand.addChild(tile.displayObject);
     }
@@ -439,7 +483,8 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
       wrapWidthPx: folded ? null : wrapWidthPx,
       ...(folded ? { fold: Object.freeze({ splitPx: folded.splitPx, ringPx: folded.ringPx, annexWidthPx: folded.annexWidthPx,
         bandOffsetPx: folded.bandOffsetPx, capPx: folded.capPx }) } : {}),
-      worldHeightPx,
+      worldHeightPx: productGrid ? productGrid.worldHeightNative*nativePixelWorldScale : worldHeightPx,
+      ...(productGrid ? {productGrid:freezeRecord({...productGrid})} : {}),
       nativePixelWorldScale,
       placements: snapshot,
       placementEvidence,
@@ -511,3 +556,4 @@ export function createRuntimeMapArtTileSetLoader({ PIXI }) {
     }
   });
 }
+

@@ -32,10 +32,11 @@ test('browser harness has no private setters, accelerated clock, synthetic battl
 test('battle proof cannot reuse raising reports or accept replacements',()=>{
  const ids=['m528_metaletemon','m540_imperialdramon_fm','oc_crownbrass_mandrill','oc_celestyrant_battle_r10'];
  const report={loadedSides:['main'],loadedEntityIds:ids,failures:[],replacementFailures:[],completedOriginalArt:{loaded:ids,failures:[],scope:'OWNER_HASH_SELECTED_PLAYTEST',publicReleasePermitted:true}};
- assert.doesNotThrow(()=>assertBattleLoaders(assert,[report],0));
- assert.throws(()=>assertBattleLoaders(assert,[report],1));
- const raising=structuredClone(report);raising.loadedSides=['main','sub'];assert.throws(()=>assertBattleLoaders(assert,[raising],0));
- const lateRaising=structuredClone(report);lateRaising.loadedEntityIds.push('e000_digitama');lateRaising.completedOriginalArt.loaded.push('e000_digitama');assert.throws(()=>assertBattleLoaders(assert,[lateRaising],0));
- const missing=structuredClone(report);missing.loadedEntityIds.pop();assert.throws(()=>assertBattleLoaders(assert,[missing],0));
- const replaced=structuredClone(report);replaced.replacementFailures.push({reason:'failed art'});assert.throws(()=>assertBattleLoaders(assert,[replaced],0));
+ assert.doesNotThrow(()=>assertBattleLoaders(assert,[report],0,{exactCount:true}));
+ assert.throws(()=>assertBattleLoaders(assert,[report],1,{exactCount:true}));
+ const raising=structuredClone(report);raising.loadedSides=['main','sub'];assert.throws(()=>assertBattleLoaders(assert,[raising],0,{exactCount:true}));
+ const lateRaising=structuredClone(report);lateRaising.loadedEntityIds.push('e000_digitama');lateRaising.completedOriginalArt.loaded.push('e000_digitama');assert.throws(()=>assertBattleLoaders(assert,[lateRaising],0,{exactCount:true}));
+ assert.doesNotThrow(()=>assertBattleLoaders(assert,[lateRaising],0),'shared helper default retains main superset behavior');
+ const missing=structuredClone(report);missing.loadedEntityIds.pop();assert.throws(()=>assertBattleLoaders(assert,[missing],0,{exactCount:true}));
+ const replaced=structuredClone(report);replaced.replacementFailures.push({reason:'failed art'});assert.throws(()=>assertBattleLoaders(assert,[replaced],0,{exactCount:true}));
 });

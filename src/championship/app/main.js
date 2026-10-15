@@ -1,3 +1,4 @@
+import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation} from '../presentation/originalRuntimeLocation.js';
 import { finalHuntArtManifestUrl } from '../presentation/finalHuntArt20261008.js';
@@ -632,6 +633,7 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       placements: cageFrame?.placements ?? [],
       layoutVersion: cageFrame?.layoutVersion,
       unlockedCount: cageFrame?.unlockedCount,
+      unlockedSlots: cageFrame?.unlockedSlots ?? null,
       expansion: cageFrame?.expansion ?? null,
       previewFieldId: CAGE_ART_PREVIEW_FIELD || null });
     const fieldArt=await createRuntimeMapArtTileSetLoader({ PIXI }).load({
@@ -641,7 +643,8 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       wrapWidthPx: plan.wrapWidthPx,
       ...(plan.fold ? { fold: plan.fold } : {}),
       placementEvidence: plan.placementEvidence,
-      presentationMode: plan.mode
+      presentationMode: plan.mode,
+      productGrid: plan.productGrid ?? null
     });
     let art;
     try{art=await withCageForeground({PIXI,art:fieldArt,manifest,placements:plan.placements,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
@@ -1682,7 +1685,7 @@ async function mountCurrentScreen() {
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
     else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = await createShopView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = await createDatabaseView({ root, source: expeditionSource, isWideLayout: () => portraitFrame.isBrowseWide('DATABASE') });
-    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, battleBadges:app.getBattleBadges(), onExit(){app.leaveScreen();}});
+    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), onExit(){app.leaveScreen();}});
     else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = await createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
@@ -2123,6 +2126,7 @@ function refreshStatusBar() {
     // Product readouts on the same bar (2026-09-29): bits held, today's title
     // matches (the same capped list the Battle menu shows), the save state.
     reading.bits = app.getShopFrame()?.bits ?? null;
+    reading.testDiamonds = FRIENDS_PLAYTEST_POLICY.enabled ? app.getCageEditFrame()?.testDiamonds ?? null : null;
     reading.todayMatches = Math.min(app.getAvailableBattleRecordIndices().length, BATTLE_MATCH_LIST_CAP);
     const status = app.savePort?.getStatus?.() ?? null;
     reading.save = status ? { ...status, autosavePending: (autosave?.inspect().pending.length ?? 0) > 0 } : null;
@@ -2330,6 +2334,7 @@ function boot() {
   onLocaleChange(() => { relabelChrome(); syncTitleArt(); labelDataArenaEntry(); });
   try {
     app = createChampionshipStandaloneApp({
+      playtestPolicy: FRIENDS_PLAYTEST_POLICY,
       storage: window.localStorage,
       catalog: productEntities,
       cages: RAISING_CAGES

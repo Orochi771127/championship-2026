@@ -1,10 +1,10 @@
 // OVL18 02118B04 / 02118AA0 / 02118C34. Q12 operations preserve
 // ARM arithmetic shifts and Nitro normalization. Stepped by the resident owner.
 import {nativeNormalizeQ12 as normalize,nativeVectorLengthQ12 as length} from '../hunt/capture/nativeCapturePhases.js';
-import {findNativeRaisingOpenTile} from './nativeRaisingGround.js';
+import {findRanchRaisingOpenTile as findNativeRaisingOpenTile} from './nativeRaisingRanchRing.js';
 
-export function nativeCarryPosition({x,y},height){
-  return [Math.trunc(x)*4096,(Math.min(Math.trunc(y),150)+2*Math.trunc(height/3))*4096,20*4096];
+export function nativeCarryPosition({x,y},height,ground=null){
+  return [Math.trunc(x)*4096,(Math.min(Math.trunc(y),ground?.pixelHeight ? ground.pixelHeight-1 : 150)+2*Math.trunc(height/3))*4096,20*4096];
 }
 export function nativeCarryVelocity(velocity,previous,position){
   let v=[...velocity];
@@ -23,7 +23,7 @@ export function nativeReleaseVelocity(velocity){
 const tile=v=>Math.trunc((v>>12)/8);
 function ownerAt(ground,x,y){
   if(x>=ground.width)x-=ground.width;else if(x<0)x+=ground.width;
-  return ground.owners[Math.max(0,Math.min(24,y))*ground.width+x]??-1;
+  return ground.owners[Math.max(0,Math.min(ground.pixelHeight ? ground.height-1 : 24,y))*ground.width+x]??-1;
 }
 export function stepNativeRaisingFlight(input,ground,{rng,poolSlot=0,cameraX=0,findOpenTile=findNativeRaisingOpenTile}={}){
   const old=input.positionQ12,p=[...old],v=[...input.velocityQ12];
@@ -49,7 +49,7 @@ export function stepNativeRaisingFlight(input,ground,{rng,poolSlot=0,cameraX=0,f
       }
     }
   }
-  p[1]=Math.max(24*4096,Math.min(160*4096,p[1]));
+  p[1]=Math.max((ground.pixelHeight ? 0 : 24)*4096,Math.min((ground.pixelHeight ? ground.pixelHeight-1 : 160)*4096,p[1]));
   if(p[0]<0)p[0]+=ground.pixelWidth*4096;else if(p[0]>ground.pixelWidth*4096)p[0]-=ground.pixelWidth*4096;
   for(let i=0;i<3;i++){const threshold=i===2?1229:2048;if(v[i]>-threshold&&v[i]<threshold)v[i]=0;}
   return {positionQ12:p,velocityQ12:v,destinationQ12:destination,phase,contact,settled:contact&&!v.some(Boolean)};

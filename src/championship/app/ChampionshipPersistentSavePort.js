@@ -194,7 +194,7 @@ export function createChampionshipPersistentSavePort({
         revision: request.revision,
         tamerRank: request.tamerRank ?? 0
       },
-      flags: { newGameCompleted: true },
+      flags: { newGameCompleted: true, friendsPlaytest: request.friendsPlaytest ?? null },
       updatedAt: now()
     });
     const text = serializeChampionshipModernSave(save);
@@ -294,6 +294,12 @@ export function createChampionshipPersistentSavePort({
           error: error.message
         });
       }
+    },
+
+    // An app-owned atomic transaction rolled back; do not resurrect its candidate.
+    discardPendingWrite() {
+      lastRequest=null;pendingText=null;
+      return publish({...status,canRetry:false});
     },
 
     retry() {

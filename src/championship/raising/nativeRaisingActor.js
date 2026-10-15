@@ -21,7 +21,7 @@ import {NATIVE_RAISING_LIFECYCLE_RULES as lifecycleRules,evaluateNativeEvolution
 import {enterNativeRaisingSleep,exitNativeRaisingSleep,enterNativeRaisingMorning} from './nativeRaisingSleep.js';
 import {enterNativeRaisingTraining,applyNativeCageEntryConditions,createNativeTrainingTimeline,stepNativeTrainingTimeline} from './nativeRaisingTraining.js';
 import {nativeCarryPosition,nativeCarryVelocity,nativeReleaseVelocity,stepNativeRaisingFlight,nativeLandingReaction} from './nativeRaisingCarry.js';
-import {findNativeRaisingOpenTile} from './nativeRaisingGround.js';
+import {findRanchRaisingOpenTile as findNativeRaisingOpenTile} from './nativeRaisingRanchRing.js';
 import {nativeRaisingHandAdmission,enterNativeRaisingStroke,stepNativeRaisingStroke,nativeRaisingTapWakes,enterNativeRaisingTap,selectNativeRaisingTapReaction} from './nativeRaisingHand.js';
 
 export function requestNativeRaisingSequence(actor, sequenceId, force=false, frame=null) {
@@ -163,7 +163,7 @@ export function treatNativeRaisingActor(actor,profile,kind,{foods,ground,rng,mod
 }
 export function interruptNativeRaisingFeeding(actor,foods,rng) {detachFood(actor,foods);enterIdle(actor,rng);}
 function currentHeight(actor){const box=BATTLE_CHARACTER_PROFILES[BATTLE_SPECIES_ENTITIES[actor.speciesIndex]].cells[actor.animator.getSnapshot().cell];return box[3]-box[1];}
-export function beginNativeRaisingCarry(actor,profile,pointer,{foods,rng}){
+export function beginNativeRaisingCarry(actor,profile,pointer,{foods,rng,ground=null}){
   // Original command 80 handlers for the currently implemented adult states.
   if(!nativeRaisingHandAdmission(actor,0x80))return null;
   // Transient input rollback, never serialized. Record actor ground position,
@@ -182,7 +182,7 @@ export function beginNativeRaisingCarry(actor,profile,pointer,{foods,rng}){
   detachFood(actor,foods);actor.previousCageDefinition=actor.cageDefinitionIndex;
   actor.detached=true;actor.state=6;actor.activity=null;actor.feedback=null;actor.training=null;actor.trainingPending=false;
   actor.carryPointer={...pointer};actor.velocityQ12=[0,0,0];request(actor,11);
-  actor.positionQ12=nativeCarryPosition(pointer,currentHeight(actor));actor.growthFields['40c']=0;
+  actor.positionQ12=nativeCarryPosition(pointer,currentHeight(actor),ground);actor.growthFields['40c']=0;
   p=structuredClone(p);p.fields['19c']=0;return normalizeNativeIndividualProfile(p);
 }
 export function beginNativeRaisingStroke(actor,profile,{foods,rng}){
@@ -256,7 +256,7 @@ export function releaseNativeRaisingCarry(actor,profile){
   const p=structuredClone(profile);p.fields['01c']=Math.min(100,(p.fields['01c']|0)+1);return normalizeNativeIndividualProfile(p);
 }
 function stepCarry(actor,profile,ground,rng,season,onJoin){
-  if(actor.state===6){const p=nativeCarryPosition(actor.carryPointer,currentHeight(actor));
+  if(actor.state===6){const p=nativeCarryPosition(actor.carryPointer,currentHeight(actor),ground);
     // The touch camera can cross the existing periodic ground seam. Express
     // the previous sample in the same copy before the native velocity writer.
     const previous=[...actor.positionQ12],period=ground.pixelWidth*4096;

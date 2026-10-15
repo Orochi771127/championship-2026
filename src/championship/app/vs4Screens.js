@@ -1,3 +1,4 @@
+import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
 import {databaseHeroPortrait} from '../presentation/databaseHeroPortraits.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
@@ -517,10 +518,10 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         item.type = "button";
         item.dataset.state = row.state;
         item.dataset.displayCode = row.displayCode;
-        const visibleName = row.kind === 'EGG' ? eggs.get(row.speciesIndex).formalName : row.state === 'REGISTERED' ? speciesName(row.speciesIndex, row.displayName) : uiText('Undiscovered');
+        const visibleName = row.kind === 'EGG' ? eggs.get(row.speciesIndex).formalName : (row.viewable || row.state === 'REGISTERED') ? speciesName(row.speciesIndex, row.displayName) : uiText('Undiscovered');
         item.setAttribute("aria-label", `${row.displayCode} · ${generationName(row.numberingStageIndex)} · ${visibleName}`);
         const name = element("div", "cm-vs2-shop__name");
-        name.append(element("strong", "", row.state === 'UNDISCOVERED' ? '????' : visibleName));
+        name.append(element("strong", "", (!row.viewable && row.state === 'UNDISCOVERED') ? '????' : visibleName));
         name.append(element("span", "cm-vs2-shop__meta", row.displayCode));
         item.append(name);
         item.addEventListener("click", () => {
@@ -561,7 +562,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     portraitAbort = new AbortController();
     detail.replaceChildren();
     const egg = selected.kind === 'EGG' ? eggs.get(selected.speciesIndex) : null;
-    const title = element("h2", "cm-vs2-database__detail-title", egg ? egg.formalName : selected.state === "REGISTERED" ? speciesName(selected.speciesIndex, selected.displayName) : "Undiscovered");
+    const title = element("h2", "cm-vs2-database__detail-title", egg ? egg.formalName : (selected.viewable || selected.state === "REGISTERED") ? speciesName(selected.speciesIndex, selected.displayName) : "Undiscovered");
     title.tabIndex = -1;
     const meta = element(
       "p",
@@ -583,7 +584,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) {
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
     }
-    if (selected.state !== "REGISTERED") return;
+    if (!selected.viewable && selected.state !== "REGISTERED") return;
     const hero = databaseHeroPortrait(selected.speciesIndex);
     if (hero) {
       const holder = element('div','cm-dex-hero');
@@ -692,11 +693,12 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     const image = element('img','cm-dex-portrait__image');
     image.alt = ''; image.hidden = true;
     holder.append(placeholder,image);
+    if (!revealed) { holder.dataset.art = 'hidden'; return holder; }
     portraitImages.push(image);
     const generation = detailGeneration, signal = portraitAbort.signal;
     const current = () => alive && generation === detailGeneration && !signal.aborted;
     const missing = () => { if (!current()) return; holder.dataset.art = 'missing'; image.hidden = true; placeholder.hidden = false; };
-    void loadAcceptedDatabasePortrait(speciesIndex,{signal}).then(art=>{
+    void loadAcceptedDatabasePortrait(speciesIndex,{signal,revealed}).then(art=>{
       if (!current()) return;
       if (!art) { missing(); return; }
       image.onload = () => { if (!current()) return; holder.dataset.art = 'ready'; image.hidden = false; placeholder.hidden = true; };
@@ -775,7 +777,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
 
   function appendEvolutionConditions(row, route) {
     // Unknown routes have no button, panel, hidden thresholds or ARIA payload.
-    if (!route.revealed || route.historyState !== 'RECORDED' || !route.targetRegistered || !route.conditions) return;
+    if (!route.revealed || (!route.displayPreview && (route.historyState !== 'RECORDED' || !route.targetRegistered)) || !route.conditions) return;
     const toggle = element('button', 'cm-dex-conditions__toggle', 'DEX_CONDITIONS');
     toggle.type = 'button';
     toggle.dataset.conditionBranch = String(route.branchIndex);
@@ -822,6 +824,14 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
 
 const CAGE_VERDICT_COPY = Object.freeze({
   PLACED: "Placed.",
+  TEST_ROW_PURCHASED: "CAGE_TEST_ROW_PURCHASED",
+  TEST_ROW_PURCHASE_UNAVAILABLE: "CAGE_TEST_ROW_UNAVAILABLE",
+  TEST_ROW_ALREADY_OPEN: "CAGE_TEST_ROW_ALREADY_OPEN",
+  INSUFFICIENT_TEST_DIAMONDS: "CAGE_TEST_DIAMONDS_INSUFFICIENT",
+  TEST_ROW_PURCHASE_SAVE_FAILED: "CAGE_TEST_ROW_SAVE_FAILED",
+  SAVE_FAILED: "CAGE_TEST_ROW_SAVE_FAILED",
+  ALREADY_OPEN: "CAGE_TEST_ROW_ALREADY_OPEN",
+  INVALID_TEST_ROW: "CAGE_TEST_ROW_UNAVAILABLE",
   REMOVED: "Removed from the ranch.",
   // Home has had no SAVE button since 2026-09-16; the layout is written with
   // the rest of the game when the page is left or on Save & Quit.
@@ -1002,6 +1012,8 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
 
     board.replaceChildren();
     annexBoard.replaceChildren();
+    const productGrid = cage.layoutVersion === PRODUCT_RANCH_GRID;
+    board.dataset.productGrid = productGrid ? 'true' : 'false';
     const annex = Boolean(cage.expansion);
     // A native ranch without the expansion shows its rows locked, with a way
     // to see what the expansion is; a granted one shows the real cells.
@@ -1021,8 +1033,38 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       setText(annexLabel, '擴充區 · 原型（未定價、不收費）');
     }
     boardScroll.dataset.annex = annex || preview ? 'true' : 'false';
-    boardHint.textContent = uiText(annex ? '牧場平面配置 · 左右滑動查看格位，往下是擴充區' : '牧場平面配置 · 左右滑動查看所有格位');
+    boardHint.textContent = uiText(productGrid ? 'CAGE_PUBLIC_TEST_GRID_HINT' : annex ? '牧場平面配置 · 左右滑動查看格位，往下是擴充區' : '牧場平面配置 · 左右滑動查看所有格位');
+    const cellArt = new Map(cageEditorArtCells(cage.slots, undefined, { productGrid }).map((cell) => [cell.slotIndex, cell]));
+    expansionControls.dataset.productGrid = productGrid ? 'true' : 'false';
     expansionControls.replaceChildren();
+    if (productGrid) {
+      const walletLabel = element('p', 'cm-cage-board-hint');
+      walletLabel.dataset.testDiamondBalance='true';
+      walletLabel.textContent=uiText('CAGE_TEST_DIAMOND_BALANCE',{amount:cage.testDiamonds??0});
+      expansionControls.append(walletLabel);
+      for (let row = 2; row < 5; row++) {
+        const lockedSlots = cage.slots.filter(slot=>slot.row === row && !slot.unlocked);
+        const remaining = lockedSlots.length;
+        if (!remaining) continue;
+        // One row indicator, not ten purchase targets. Use the existing art
+        // coordinates so stable slot anchors and partial legacy access stay put.
+        const lockedArt = lockedSlots.map(slot=>cellArt.get(slot.slotIndex));
+        const left = Math.min(...lockedArt.map(cell=>cell.x));
+        const rowLock = element('div', 'cm-cage-row-lock');
+        rowLock.dataset.lockedTestRow = String(row);
+        rowLock.setAttribute('aria-hidden', 'true');
+        rowLock.style.left = `${left}px`;
+        rowLock.style.top = `${Math.min(...lockedArt.map(cell=>cell.y)) + 6}px`;
+        rowLock.style.width = `${Math.max(...lockedArt.map(cell=>cell.x)) - left + 48}px`;
+        rowLock.append(element('span', 'cm-cage-row-lock__icon', '🔒'));
+        board.append(rowLock);
+        const unlock = element('button', 'cm-vs2-action cm-cage-row-purchase');
+        unlock.type = 'button'; unlock.dataset.buyTestRow = String(row);
+        unlock.textContent = uiText('CAGE_TEST_BUY_ROW', { row:row+1, count:remaining, price:1000 });
+        unlock.addEventListener('click', ()=>source.intents.buyRanchTestRow?.(row));
+        expansionControls.append(unlock);
+      }
+    }
     if (preview) {
       const view = element('button', 'cm-vs2-action cm-cage-expansion__view');
       view.type = 'button';
@@ -1031,7 +1073,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       view.addEventListener('click', () => { void openExpansionPreview(); });
       expansionControls.append(view);
     }
-    if (ranchExpansionPrototypeVisible(mode) && cage.layoutVersion) {
+    if (!productGrid && ranchExpansionPrototypeVisible(mode) && cage.layoutVersion) {
       const annexUsed = cage.slots.some((slot) => slot.deck === 1 && slot.moduleId);
       const toggle = element('button', 'cm-vs2-action', annex ? '移除擴充區（原型）' : '加入擴充區（原型，不收費）');
       toggle.type = 'button';
@@ -1044,8 +1086,8 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       });
       expansionControls.append(toggle);
     }
-    const cellArt = new Map(cageEditorArtCells(cage.slots).map((cell) => [cell.slotIndex, cell]));
     for (const slot of cage.slots) {
+      const productGrid = cage.layoutVersion === PRODUCT_RANCH_GRID;
       const cell = element("button", "cm-vs2-cage-slot");
       cell.type = "button";
       cell.dataset.slotIndex = String(slot.slotIndex);
@@ -1072,7 +1114,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       cell.title = uiText(cageUiName(slot.moduleId, slot.displayName) || (slot.unlocked ? '可放置' : '尚未開放'));
       // Derive the first unlocking rank from the authoritative table, never
       // from the QA annex grant or a future paid entitlement.
-      const requiredRank = !slot.unlocked && slot.slotIndex < TAMER_RANK_SLOT_TABLE.at(-1)
+      const requiredRank = !productGrid && !slot.unlocked && slot.slotIndex < TAMER_RANK_SLOT_TABLE.at(-1)
         ? TAMER_RANK_SLOT_TABLE.findIndex(count => slot.slotIndex < count) : null;
       if (requiredRank !== null) {
         cell.dataset.requiredRank = String(requiredRank);
@@ -1080,8 +1122,9 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         setLabel(cell, 'aria-label', 'CAGE_SLOT_RANK_LOCKED', lockedParams);
         setLabel(cell, 'title', 'CAGE_SLOT_RANK_LOCKED', lockedParams);
       }
-      cell.textContent = uiText(slot.moduleId ? '' : slot.unlocked ? '+' : '🔒');
+      cell.textContent = uiText(slot.moduleId ? '' : slot.unlocked ? '+' : productGrid ? '' : '🔒');
       cell.addEventListener("click", () => {
+        if (!slot.unlocked || slot.fixed) return;
         if (slot.moduleId) source.intents.removeCagePlacement(slot.moduleId);
         else source.intents.placeCageAt(slot.slotIndex);
       });

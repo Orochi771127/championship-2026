@@ -40,6 +40,7 @@ function registerSource({ isStarter, instanceCount }) {
  * one). `collection` is Hunt-enclosed instances only.
  */
 export function projectDatabase({
+  fullView = false,
   starterSpeciesId = null,
   collection = [],
   registeredSpecies = [],
@@ -75,6 +76,7 @@ export function projectDatabase({
       displayName: slot.displayName,
       kind: slot.kind,
       state: registered ? DATABASE_ENTRY_STATES.REGISTERED : DATABASE_ENTRY_STATES.UNDISCOVERED,
+      ...(fullView ? { viewable: true } : {}),
       source: registered ? registerSource({ isStarter, instanceCount: instances.length }) : null,
       instanceCount: instances.length,
       identityEvidence: slot.identityEvidence
@@ -86,6 +88,7 @@ export function projectDatabase({
     const slot = getDatabaseSlot(selectedSpeciesIndex);
     const row = entries[slot.bookOrdinal];
     const routeContext = {
+      fullView,
       sourceRegistered:row.state === DATABASE_ENTRY_STATES.REGISTERED,
       registeredSpecies:entries.filter(entry=>entry.state === DATABASE_ENTRY_STATES.REGISTERED).map(entry=>entry.speciesIndex),
       evolutionBranches,productEvolutionBranches
@@ -105,6 +108,7 @@ export function projectDatabase({
     eggCount: DATABASE_EGG_COUNT,
     regularCount: DATABASE_REGULAR_COUNT,
     registeredCount,
+    ...(fullView ? { fullView: true } : {}),
     unlockEvidence: DATABASE_UNLOCK_EVIDENCE,
     entries,
     selected

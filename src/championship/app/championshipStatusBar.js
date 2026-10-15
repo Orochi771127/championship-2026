@@ -150,7 +150,8 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
   bits.hidden = true;
   const bitsValue = element("span", "cm-status-bar__bits-value");
   bits.append(currencyIcon("bits"), bitsValue);
-  // No wallet exists in this build. A preview is not a fabricated balance.
+  // Read-only projection of the app-owned simulated wallet; never a payment entry.
+  let testDiamonds = null;
   const diamond = element("button", "cm-status-bar__diamond");
   diamond.type = "button";
   diamond.setAttribute("aria-haspopup", "dialog");
@@ -158,16 +159,19 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
   diamond.append(currencyIcon("diamond"), diamondText);
   function paintCurrencyLabels() {
     setLabel(currencies, "aria-label", "HUD_CURRENCIES");
-    setLabel(diamond, "aria-label", "HUD_DIAMOND_OPEN");
-    setLabel(diamond, "title", "HUD_DIAMOND_OPEN");
-    setText(diamondText, "HUD_PREVIEW");
+    const known = Number.isSafeInteger(testDiamonds) && testDiamonds >= 0;
+    const params = { amount: known ? formatNumber(testDiamonds) : '' };
+    setLabel(diamond, "aria-label", known ? "CAGE_TEST_DIAMOND_BALANCE" : "HUD_DIAMOND_OPEN", params);
+    setLabel(diamond, "title", known ? "CAGE_TEST_DIAMOND_BALANCE" : "HUD_DIAMOND_OPEN", params);
+    setText(diamondText, known ? "CAGE_TEST_DIAMOND_BALANCE" : "HUD_PREVIEW", params);
+    diamond.dataset.testWallet = String(known);
   }
   paintCurrencyLabels();
   diamond.addEventListener("click", () => {
     if (isChoiceDialogOpen()) return;
     void showChoiceDialog({
-      title: uiText("HUD_DIAMOND_TITLE"),
-      message: uiText("HUD_DIAMOND_UNAVAILABLE"),
+      title: uiText(testDiamonds === null ? "HUD_DIAMOND_TITLE" : "CAGE_TEST_DIAMOND_BALANCE", { amount: formatNumber(testDiamonds ?? 0) }),
+      message: uiText(testDiamonds === null ? "HUD_DIAMOND_UNAVAILABLE" : "CAGE_PUBLIC_TEST_GRID_HINT"),
       actions: [{ id: "close", label: uiText("關閉"), tone: "primary" }],
       cancelId: "close"
     });
@@ -261,6 +265,10 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
         bits.hidden = !known;
         bitsValue.textContent = known ? String(formatNumber(reading.bits)) : "";
         bits.setAttribute("aria-label", known ? uiText("持有 {bits} 位元幣", { bits: reading.bits }) : "");
+      }
+      if (Object.hasOwn(reading, "testDiamonds")) {
+        testDiamonds = Number.isSafeInteger(reading.testDiamonds) && reading.testDiamonds >= 0 ? reading.testDiamonds : null;
+        paintCurrencyLabels();
       }
       if (Object.hasOwn(reading, "todayMatches")) {
         const count = Number.isInteger(reading.todayMatches) ? reading.todayMatches : 0;

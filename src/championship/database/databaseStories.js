@@ -15,7 +15,7 @@ const headings = Object.freeze({'zh-Hant':'角色故事',en:'Profile',ja:'プロ
 // Missing content stays absent. No cross-language or unrelated-species fallback.
 export function databaseStory(speciesIndex, locale = getLocale()) {
   if (!Number.isSafeInteger(speciesIndex) || !Object.hasOwn(headings,locale)) return null;
-  return bySpecies.get(speciesIndex)?.textByLocale[locale] ?? null;
+  return bySpecies.get(speciesIndex)?.textByLocale[locale] ?? getProductExtension(speciesIndex)?.profileByLocale?.[locale] ?? null;
 }
 export function databaseStoryHeading(locale = getLocale()) {
   return Object.hasOwn(headings,locale) ? headings[locale] : null;

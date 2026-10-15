@@ -69,5 +69,5 @@ test('all 214 available ordinary portraits are accepted originals with selected 
 test('research, foreign paths, identities or provenance cannot become a Database portrait',async()=>{
   const config=acceptedDatabasePortraitConfig(8),manifest=read(`assets/production/characters/accepted-20261010/${config.folder}/hud-r01/manifest.json`);
   for(const mutate of [m=>{m.portrait.src='assets/production/internal-faithful-baseline/x.png';},m=>{m.localPackagingProvenance.publicationStatus='RESEARCH_ONLY';},m=>{m.portrait.speciesId='species-211';}]){const m=structuredClone(manifest);mutate(m);assert.throws(()=>validateAcceptedDatabasePortrait(m,config),/DATABASE_ACCEPTED_PORTRAIT_REQUIRED/);}
-  let calls=0;assert.equal(await loadAcceptedDatabasePortrait(211,{fetchImpl:()=>{calls++;},baseUrl:'https://qa.test/'}),null);assert.equal(calls,0);
+  let calls=0;assert.equal((await loadAcceptedDatabasePortrait(211,{fetchImpl:()=>{calls++;},baseUrl:'https://qa.test/'})).speciesId,'species-211');assert.equal(await loadAcceptedDatabasePortrait(229,{baseUrl:'https://qa.test/'}),null);assert.equal(await loadAcceptedDatabasePortrait(230,{baseUrl:'https://qa.test/'}),null);assert.equal(calls,0);
 });
