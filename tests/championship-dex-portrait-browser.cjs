@@ -114,7 +114,7 @@ async function main() {
   fs.mkdirSync(output, { recursive: true });
   const evidence = { status: 'RUNNING', visualReview: 'PENDING_ROOT_SCREENSHOT_REVIEW',
     commit: process.env.GITHUB_SHA || null, candidateHeadCommit: process.env.DEX_QA_HEAD_SHA || null, baseCommit: process.env.DEX_QA_BASE_SHA || null,
-    scope: 'Normal fresh public-playtest UI, mounted Dex 117/055 and all four promoted forms; size/backdrop overrides only for117/055.',
+    scope: 'Normal fresh public-playtest UI: redesigned Dex040/063/070 with unchanged117/055/071/072 comparisons at normal desktop/mobile and128/256 light/dark contain; four existing promoted forms retain normal hero/source/target preview coverage. Only mounted matrix-holder size/backdrop CSS is temporarily overridden.',
     exclusions: ['No visual/anatomy/alpha PASS from automation', 'No runtime-action replacement', 'No physical-device acceptance', 'No public deployment claim'],
     captures: [], assetChecks: [], console: [], pageErrors: [], networkErrors: [], cleanupErrors: [] };
   const write = () => fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify(evidence, null, 2) + '\n');
