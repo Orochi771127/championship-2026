@@ -1,0 +1,57 @@
+name: Alternate forms real browser acceptance
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/alternate-form-browser.yml'
+      - 'tests/championship-alternate-form-browser.cjs'
+      - 'tests/alternate-form-browser-support.cjs'
+      - 'tests/championship-alternate-form-browser-contract-cases.mjs'
+      - 'alternate-form-qa.html'
+      - 'qa/alternate-form-*.json'
+      - 'src/championship/app/alternateFormQa*.js'
+      - 'src/data/championship/product-species-extensions.r1.json'
+      - 'src/data/championship/alternate-form-assets.r1.json'
+      - 'src/championship/presentation/acceptedDatabasePortraits.js'
+      - 'src/championship/contracts/productSpeciesExtensions.js'
+      - 'src/championship/presentation/**'
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Install official Chromium and operating system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Build exact owner-approved public Pages artifact
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Run real UI, isolated save, evolution and natural battle
+        env:
+          CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
+          CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
+        run: node tests/championship-alternate-form-browser.cjs
+      - name: Preserve diagnostics, screenshots and Playwright trace even on GPU failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alternate-form-chromium-${{ github.run_id }}
+          path: |
+            .tmp/browser-qa/alternate-forms/
+            !.tmp/browser-qa/alternate-forms/trace.zip
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve full trace separately from small review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alternate-form-trace-${{ github.run_id }}
+          path: .tmp/browser-qa/alternate-forms/trace.zip
+          if-no-files-found: warn
+          retention-days: 14

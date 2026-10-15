@@ -693,11 +693,12 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     const image = element('img','cm-dex-portrait__image');
     image.alt = ''; image.hidden = true;
     holder.append(placeholder,image);
+    if (!revealed) { holder.dataset.art = 'hidden'; return holder; }
     portraitImages.push(image);
     const generation = detailGeneration, signal = portraitAbort.signal;
     const current = () => alive && generation === detailGeneration && !signal.aborted;
     const missing = () => { if (!current()) return; holder.dataset.art = 'missing'; image.hidden = true; placeholder.hidden = false; };
-    void loadAcceptedDatabasePortrait(speciesIndex,{signal}).then(art=>{
+    void loadAcceptedDatabasePortrait(speciesIndex,{signal,revealed}).then(art=>{
       if (!current()) return;
       if (!art) { missing(); return; }
       image.onload = () => { if (!current()) return; holder.dataset.art = 'ready'; image.hidden = false; placeholder.hidden = true; };

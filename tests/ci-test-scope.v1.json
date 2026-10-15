@@ -300,7 +300,13 @@
     "tests/championship-product-grid50-presentation-cases.mjs",
     "tests/championship-product-row-lock-ui-cases.mjs",
     "tests/championship-product-ranch-grid-cases.mjs",
-    "tests/championship-currency-layout-cases.mjs"
+    "tests/championship-currency-layout-cases.mjs",
+    "tests/product-form-database-accepted-fixture-cases.mjs",
+    "tests/product-form-public-content-cases.mjs",
+    "tests/championship-database-211-preview-cases.mjs",
+    "tests/championship-alternate-form-browser-contract-cases.mjs",
+    "tests/product-form-production-source-cases.mjs",
+    "tests/product-promotion-disabled-fixture-cases.mjs"
   ],
   "localReference": {
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",

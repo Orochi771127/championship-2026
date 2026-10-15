@@ -27,11 +27,11 @@ function assertEvolved(assert,report){
   assert.ok(instance,`Missing actual instance ${suffix}`);assert.equal(instance.speciesIndex,id);assert.equal(instance.actorSpeciesIndex,id);assert.equal(instance.configuredEntity,identity[id][0]);assert.equal(instance.configuredMotionDonor,identity[id][1]);
  }
 }
-function assertBattleLoaders(assert,reports,beforeCount){
+function assertBattleLoaders(assert,reports,beforeCount,{exactCount=false}={}){
  assert.ok(reports.length>beforeCount);
  for(const report of reports){assert.ok(!report.error);assert.deepEqual(report.failures||[],[]);assert.deepEqual(report.replacementFailures||[],[]);assert.deepEqual(report.completedOriginalArt?.failures||[],[]);}
  const entities=['m528_metaletemon','m540_imperialdramon_fm','oc_crownbrass_mandrill','oc_celestyrant_battle_r10'];
- const battleReport=reports.slice(beforeCount).find(r=>JSON.stringify(r.loadedSides)==='["main"]'&&entities.every(id=>r.loadedEntityIds?.includes(id)&&r.completedOriginalArt?.loaded.includes(id)));
+ const battleReport=reports.slice(beforeCount).find(r=>JSON.stringify(r.loadedSides)==='["main"]'&&(!exactCount||(r.loadedEntityIds?.length===entities.length&&r.completedOriginalArt?.loaded.length===entities.length))&&entities.every(id=>r.loadedEntityIds?.includes(id)&&r.completedOriginalArt?.loaded.includes(id)));
  assert.ok(battleReport,'New battle-specific main-side loader report must prove all four actual entities');
  assert.equal(battleReport.completedOriginalArt.scope,'OWNER_HASH_SELECTED_PLAYTEST');assert.equal(battleReport.completedOriginalArt.publicReleasePermitted,true);return battleReport;
 }

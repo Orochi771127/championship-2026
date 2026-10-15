@@ -11,10 +11,10 @@ const source=fs.readFileSync(path.join(root,'src/championship/presentation/compl
 const validator=source.slice(source.indexOf('export function validateCompletedOriginalRuntime'),source.indexOf('/** Reuse the reviewed density-four adapter'));
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
 const check=new Function('canonical',validator.replace('export function','function')+';return validateCompletedOriginalRuntime;')(canonical);
-assert.equal(configs.length,4);assert.equal(ACTIVE_ALTERNATE_FORM_ASSETS.length,0,'Candidates must not activate without normal-path evidence.');
+assert.equal(configs.length,4);assert.equal(ACTIVE_ALTERNATE_FORM_ASSETS.length,4,'Accepted production assets require the recorded normal-path evidence.');
 const identities=new Set();let cells=0;
 for(const c of configs){
- assert(!identities.has(c.entityId));identities.add(c.entityId);assert.equal(c.runtimeReady,false);assert.notEqual(c.speciesIndex,228);
+ assert(!identities.has(c.entityId));identities.add(c.entityId);assert.equal(c.runtimeReady,true);assert.equal(c.qa.normalPath,'PASS');assert.deepEqual(c.blockers,[]);assert.notEqual(c.speciesIndex,228);
  const donorPath=`assets/production/internal-faithful-baseline/characters-v1/${c.motionDonorEntityId}/runtime.json`;
  assert.equal(hash(donorPath),c.baselineRuntimeSha256);
  const original=read(donorPath),before=JSON.stringify(original),baseline=rekeyAlternateDonorRuntime(original,c);
@@ -36,7 +36,7 @@ for(const c of configs){
 assert.equal(cells,306);
 const donorIds=[...new Set(configs.map(c=>c.motionDonorEntityId))];const manifest={records:donorIds.map(entityId=>({entityId,runtime:entityId+'/runtime.json',sides:{main:{cells:entityId==='m540_imperialdramon_fm'?63:entityId==='m506_griffomon'?61:55}}})),speciesBindings:[{speciesId:'species-211',entityId:'m528_metaletemon'},{speciesId:'species-222',entityId:'m540_imperialdramon_fm'}]};
 const before=JSON.stringify(manifest),bound=bindAlternateFormManifest(manifest,configs);assert.equal(JSON.stringify(manifest),before);assert.equal(bound.records.find(r=>r.entityId==='m540_imperialdramon_fm').sides.main.cells,61);assert.equal(bound.records.find(r=>r.entityId==='oc_celestyrant_battle_r10').sides.main.cells,63);assert.equal(bound.speciesBindings.length,4);assert.equal(mergeAlternateFormConfigs([{entityId:'m528_metaletemon',old:true}],configs).length,4);
-console.log('PASS: 4 independent identities; 306 cells; 212 donor sequences; donor hashes; geometry/origin; atlas <=2048; HUD hashes; motion/origin drift rejection; immutable source; disabled pending normal-path QA.');
+console.log('PASS: 4 independent identities; 306 cells; 212 donor sequences; donor hashes; geometry/origin; atlas <=2048; HUD hashes; motion/origin drift rejection; immutable source; production readiness with normal-path QA.');
 // Exercise the real loader adapter with deterministic decoded-bundle/fetch doubles.
 const stripped=source.replace(/^import .*;\n/gm,'').replace(/^export /gm,'');
 const origin='https://example.test/';
@@ -63,5 +63,5 @@ for(const [filename,symbol] of [['battleCharacterProfiles.js','BATTLE_CHARACTER_
   assert.deepEqual(result.BATTLE_SPECIES_MOVEMENT[229],result.BATTLE_SPECIES_MOVEMENT[211]);assert.deepEqual(result.BATTLE_SPECIES_MOVEMENT[230],result.BATTLE_SPECIES_MOVEMENT[222]);
  }
 }
-assert.throws(()=>validateAlternateFormAsset({...configs[0],runtimeReady:true}),/QA_REQUIRED/);
+assert.throws(()=>validateAlternateFormAsset({...configs[0],runtimeReady:true,qa:{...configs[0].qa,normalPath:'PENDING'}}),/QA_REQUIRED/);
 console.log('PASS: explicit entity allowlist; quad m506 61 main cells vs humanoid m540 63; 228 remains null; inherited movement; missing normal-path QA rejects activation.');

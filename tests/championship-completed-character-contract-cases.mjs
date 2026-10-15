@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {COMPLETED_ORIGINAL_CHARACTERS} from '../src/championship/presentation/completedOriginalCharacterCatalog.js';
 import {applyCompletedOriginalHudArt,validateCompletedOriginalRuntime} from '../src/championship/presentation/completedOriginalCharacters.js';
+import {ACTIVE_ALTERNATE_FORM_ASSETS} from '../src/championship/presentation/alternateFormAssetContracts.js';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const packaged=read('tests/fixtures/packaged-character-integrity-20261010.json');
 const root=packaged.root;
@@ -61,7 +62,7 @@ function hudMaps(){
  const hud=read('assets/production/internal-faithful-baseline/character-hud-v1/manifest.json');
  return {portraits:new Map(hud.portraits.map(p=>[p.speciesId,p])),battle:new Map(hud.battle.map(b=>[b.speciesId,{sequences:b.sequences,cells:new Map(b.cells.map(c=>[c.cell,c]))}]))};
 }
-test('cold HUD fetches overlap within six requests, retry one transient failure, and retain all 222 bindings and aliases',async()=>{
+test('cold production HUD fetches overlap within six requests, retry once, and retain 222 originals plus four alternate bindings',async()=>{
  const maps=hudMaps(),counts=new Map(),warnings=[];let active=0,peak=0;
  const first=COMPLETED_ORIGINAL_CHARACTERS[0].folder;
  const warn=console.warn;console.warn=(...a)=>warnings.push(a);
@@ -71,8 +72,21 @@ test('cold HUD fetches overlap within six requests, retry one transient failure,
    if(p.includes('/'+first+'/')&&n===1)return {ok:false,status:503};
    return {ok:true,status:200,json:async()=>read(p)};
  }});}finally{console.warn=warn;}
- assert.equal(peak,6);assert.equal(active,0);assert.equal(counts.size,222);assert.equal([...counts.values()].reduce((a,b)=>a+b,0),223);assert.deepEqual(warnings,[]);
+ assert.equal(peak,6);assert.equal(active,0);assert.equal(counts.size,226);assert.equal([...counts.values()].reduce((a,b)=>a+b,0),227);assert.deepEqual(warnings,[]);
  for(const c of COMPLETED_ORIGINAL_CHARACTERS){assert.equal(maps.portraits.get(c.speciesId).entityId,c.entityId);assert.ok(maps.battle.get(c.speciesId).cells.size>0);}
+ assert.deepEqual(ACTIVE_ALTERNATE_FORM_ASSETS.map(c=>c.speciesIndex).sort((a,b)=>a-b),[211,222,229,230]);
+ assert.ok(ACTIVE_ALTERNATE_FORM_ASSETS.every(c=>!COMPLETED_ORIGINAL_CHARACTERS.some(old=>old.entityId===c.entityId)));
+ for(const c of ACTIVE_ALTERNATE_FORM_ASSETS){
+   const manifest=read(c.assetRoot+c.folder+'/hud-r01/manifest.json'),portrait=maps.portraits.get(c.speciesId),battle=maps.battle.get(c.speciesId);
+   assert.equal(c.runtimeReady,true);assert.equal(c.qa.normalPath,'PASS');
+   assert.equal(counts.get(c.assetRoot+c.folder+'/hud-r01/manifest.json'),1);
+   assert.equal(portrait.entityId,c.entityId);assert.equal(portrait.speciesId,c.speciesId);
+   assert.equal(portrait.src,manifest.portrait.src);assert.equal(portrait.sha256,manifest.portrait.sha256);
+   assert.equal(createHash('sha256').update(fs.readFileSync(portrait.src)).digest('hex'),portrait.sha256);
+   assert.deepEqual(battle.sequences,c.hudSequences);assert.equal(battle.cells.size,manifest.battle.cells.length);
+   assert.ok([...battle.cells.values()].every(cell=>cell.src.startsWith(c.assetRoot+c.folder+'/')));
+ }
+
  for(const [id,entity] of [['species-096','m330_geograymon'],['species-097','m331_seadramon'],['species-224','m201_agumon'],['species-225','m509_shinegraymon']])assert.equal(maps.portraits.get(id).entityId,entity);
 });
 test('HUD retries stay bounded and missing or invalid manifests retain their original fallback',async()=>{

@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import {createHash} from "node:crypto";
 import { createHelpView } from "../src/championship/app/helpScreen.js";
 import { createScheduleView } from "../src/championship/app/scheduleScreen.js";
 import { createDigimonListView } from "../src/championship/app/digimonListScreen.js";
@@ -8,8 +9,9 @@ import { createShopView, createDatabaseView, shopItemDescription } from "../src/
 import { createHuntResultView } from "../src/championship/app/vs3Screens.js";
 import { createGateHuntPresentationSource } from "../src/championship/app/gateHuntPresentationSource.js";
 import { listShopRecords } from "../src/championship/shop/shopCatalog.js";
-import { HELP_ZH, TITLE_EVENTS_ZH, SPECIES_NAMES_ZH } from "../src/championship/text/catalogs.zhHant.js";
+import { HELP_ZH, TITLE_EVENTS_ZH } from "../src/championship/text/catalogs.zhHant.js";
 import {NATIVE_REGULAR_BOOK_SPECIES} from '../src/data/championship/nativeBookSpecies.js';
+import {DATABASE_DISPLAY_CATALOG} from '../src/championship/database/databaseDisplayCatalog.js';
 
 // Tests mounted text, attributes, and original intent arguments. Actual layout
 // is checked separately in the browser at the required mobile viewports.
@@ -128,14 +130,37 @@ test("Shop uses the existing equipment identities for all 118 rows, including lo
 
 test("Database translates every registered species without revealing unregistered entries", t => {
   const root = useDocument(t);
-  const entries = Object.entries(SPECIES_NAMES_ZH).map(([id], index) => ({
-    speciesIndex: Number(id), bookOrdinal: index, state: "REGISTERED", displayName: `M_${id}`
+  // Preserve the original registration oracle independently of the live display.
+  assert.equal(NATIVE_REGULAR_BOOK_SPECIES.length,216);
+  assert.equal(createHash('sha256').update(JSON.stringify(NATIVE_REGULAR_BOOK_SPECIES)).digest('hex'),
+    '577aac3c81ffaa86239e064c39e8c708c659ea90533d693504a6ffe33af23ab8');
+  const registeredSpecies=[...NATIVE_REGULAR_BOOK_SPECIES,229,230];
+  const entries = registeredSpecies.map((id, index) => ({
+    speciesIndex: id, bookOrdinal: index, state: "REGISTERED", displayName: `M_${id}`
   }));
-  const frame = { screen: "DATABASE", database: { entries, selected: null, registeredCount: 216, slotCount: 216 } };
+  const frame = { screen: "DATABASE", database: { entries, selected: null, registeredCount: 218, slotCount: 218 } };
   const selected = [];
   const view = createDatabaseView({ root, source: { getFrame: () => frame, intents: { selectDatabaseSpecies: id => selected.push(id) } } });
-  for (const row of root.querySelectorAll(".cm-vs2-database__row")) row.click();
-  assert.deepEqual(selected, [...Array(8).fill(null), ...NATIVE_REGULAR_BOOK_SPECIES]);
+  const rows=root.querySelectorAll(".cm-vs2-database__row");
+  assert.equal(rows.length,226);assert.equal(DATABASE_DISPLAY_CATALOG.entries.length,226);
+  assert.deepEqual(rows.map(row=>[Number(row.dataset.speciesIndex),row.dataset.displayCode]),
+    DATABASE_DISPLAY_CATALOG.entries.map(row=>[row.speciesIndex,row.displayCode]));
+  // These explicit owner-approved identities and raw-order checks are independent
+  // of the display catalog/renderer, so a shared projection error cannot self-pass.
+  for(const [id,code] of [[222,'UL02'],[230,'UL03'],[211,'UL33'],[229,'UL34']]){
+    const matches=rows.filter(row=>Number(row.dataset.speciesIndex)===id);
+    assert.equal(matches.length,1);assert.equal(matches[0].dataset.displayCode,code);
+    assert.equal(matches[0].dataset.state,'REGISTERED');
+  }
+  const ids=rows.map(row=>Number(row.dataset.speciesIndex));
+  assert.equal(new Set(ids).size,226);assert.ok(!ids.includes(228));
+  assert.deepEqual(ids.filter(id=>id>=8).sort((a,b)=>a-b),[...registeredSpecies].sort((a,b)=>a-b));
+  assert.deepEqual(ids.filter(id=>id>=8&&![211,222,229,230].includes(id)),
+    NATIVE_REGULAR_BOOK_SPECIES.filter(id=>![211,222].includes(id)));
+  assert.deepEqual(['EG','B1','B2','GR','MA','AW','UL'].map(prefix=>rows.filter(row=>row.dataset.displayCode.startsWith(prefix)).length),[8,12,14,38,64,51,39]);
+  assert.equal(rows.at(-1).dataset.displayCode,'UL39');
+  for (const row of rows) row.click();
+  assert.deepEqual(selected,DATABASE_DISPLAY_CATALOG.entries.map(row=>row.numberingStageIndex===0?null:row.speciesIndex));
   assert.doesNotMatch(visibleCopy(root).replace(/\b(?:EG|B1|B2|GR|MA|AW|UL)\d{2,}\b/g,''), /[a-zA-Z\p{Script=Katakana}\p{Script=Hiragana}]/u);
   view.render({ ...frame, database: { ...frame.database, entries: [{ ...entries[0], state: "UNDISCOVERED" }] } });
   assert.doesNotMatch(visibleCopy(root), /黏液獸|M_8/);

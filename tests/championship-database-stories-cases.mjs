@@ -2,6 +2,10 @@ import {databaseHeroPortrait} from '../src/championship/presentation/databaseHer
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DATABASE_ORIGINAL_PROFILES as catalog,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading} from '../src/championship/database/databaseStories.js';
+import nativeDisplay from '../src/data/championship/database-display.r1.json' with {type:'json'};
+import {getProductExtension} from '../src/championship/contracts/productSpeciesExtensions.js';
+// Archived metadata is not persistent identity or the live display sequence.
+const originalOrProductIdentity=index=>nativeDisplay.entries.find(e=>e.speciesIndex===index)??(getProductExtension(index)?{speciesId:getProductExtension(index).speciesId,displayCode:'UL'+String(getProductExtension(index).displaySerial).padStart(2,'0')}:null);
 import {getDatabaseDisplayEntry} from '../src/championship/database/databaseDisplayCatalog.js';
 import {setLocale} from '../src/championship/text/locale.js';
 import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
@@ -10,7 +14,7 @@ test('216 immutable original profiles join exact display identities with five co
  assert.equal(catalog.entries.length,216);assert.ok(Object.isFrozen(catalog));
  assert.equal(new Set(catalog.entries.map(e=>e.speciesIndex)).size,216);
  for(const e of catalog.entries){
-  const id=getDatabaseDisplayEntry(e.speciesIndex);
+  const id=originalOrProductIdentity(e.speciesIndex);
   assert.equal(e.speciesId,id.speciesId);
   assert.equal(e.displayCode,id.displayCode);
   assert.ok(id.numberingStageIndex>=1&&id.numberingStageIndex<=6);
@@ -102,10 +106,10 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('54 hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('56 hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,54);
- for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|035|037|038|039|040|041|042|043|044|045|046|047|048|049|211|215|222)\.png|database-handpainted-r1-20261015\/species-046\.ed04f491cd22524e\.png|database-handpainted-r1-20261015\/species-042\.d5dcc1491759eea7\.png|database-handpainted-r1-20261015\/species-041\.679bfc5abc699a5e\.png|database-handpainted-r1-20261015\/species-049\.376bd37739caf2ad\.png|database-handpainted-r1-20261015\/species-035\.be1631a7ffea0de4\.png|database-handpainted-r1-20261015\/species-039\.a22eae194967e17d\.png|database-handpainted-r1-20261015\/species-045\.5252dd103f05bc11\.png|database-handpainted-r1-20261015\/species-053\.a07a52ab7f1501c4\.png|database-handpainted-r1-20261015\/species-054\.653364ea2b2dbdd5\.png|database-handpainted-r1-20261015\/species-055\.32e6689b5e9669c2\.png|database-handpainted-r1-20261015\/species-057\.001820f22618bab0\.png|database-handpainted-r1-20261015\/species-050\.4da662245939ae14\.png|database-handpainted-r1-20261015\/species-051\.4005fcb499a215ca\.png|database-handpainted-r1-20261015\/species-052\.e2a1ae73e1e1baab\.png|database-handpainted-r1-20261015\/species-056\.f7c3f093351f4965\.png|database-handpainted-r1-20261015\/species-058\.85ac0a27d7121cef\.png|database-handpainted-r1-20261015\/species-059\.d808c556efd2a029\.png|database-handpainted-r1-20261015\/species-060\.7a8efa91b909b615\.png|database-handpainted-r1-20261015\/species-061\.df2dcf13586b2025\.png|database-handpainted-r1-20261015\/species-062\.25391107e04095f4\.png|database-handpainted-r1-20261015\/species-063\.a2403ae4b27f60e1\.png|database-handpainted-r1-20261015\/species-064\.1fd9b11486ee01a1\.png|database-handpainted-r1-20261015\/species-065\.297304ab3fa37f43\.png|database-handpainted-r1-20261015\/species-066\.18cfe71dbf919d32\.png|database-handpainted-r1-20261015\/species-067\.d3b4711e2fef8428\.png|database-handpainted-r1-20261015\/species-068\.fd96778e08b01ee7\.png|database-handpainted-r1-20261015\/species-069\.cf92eaf941781156\.png|database-handpainted-r1-20261015\/species-117\.8f7d027cdbf6d3e6\.png|database-handpainted-r1-20261015\/species-070\.8b5455d530173b0f\.png|database-handpainted-r1-20261015\/species-071\.cd9ee93854a452cc\.png|database-handpainted-r1-20261015\/species-072\.4ca0e10b98584a76\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,56);
+ for(const e of art.entries){const id=originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|035|037|038|039|040|041|042|043|044|045|046|047|048|049|211|215|222|229|230)\.png|database-handpainted-r1-20261015\/species-046\.ed04f491cd22524e\.png|database-handpainted-r1-20261015\/species-042\.d5dcc1491759eea7\.png|database-handpainted-r1-20261015\/species-041\.679bfc5abc699a5e\.png|database-handpainted-r1-20261015\/species-049\.376bd37739caf2ad\.png|database-handpainted-r1-20261015\/species-035\.be1631a7ffea0de4\.png|database-handpainted-r1-20261015\/species-039\.a22eae194967e17d\.png|database-handpainted-r1-20261015\/species-045\.5252dd103f05bc11\.png|database-handpainted-r1-20261015\/species-053\.a07a52ab7f1501c4\.png|database-handpainted-r1-20261015\/species-054\.653364ea2b2dbdd5\.png|database-handpainted-r1-20261015\/species-055\.32e6689b5e9669c2\.png|database-handpainted-r1-20261015\/species-057\.001820f22618bab0\.png|database-handpainted-r1-20261015\/species-050\.4da662245939ae14\.png|database-handpainted-r1-20261015\/species-051\.4005fcb499a215ca\.png|database-handpainted-r1-20261015\/species-052\.e2a1ae73e1e1baab\.png|database-handpainted-r1-20261015\/species-056\.f7c3f093351f4965\.png|database-handpainted-r1-20261015\/species-058\.85ac0a27d7121cef\.png|database-handpainted-r1-20261015\/species-059\.d808c556efd2a029\.png|database-handpainted-r1-20261015\/species-060\.7a8efa91b909b615\.png|database-handpainted-r1-20261015\/species-061\.df2dcf13586b2025\.png|database-handpainted-r1-20261015\/species-062\.25391107e04095f4\.png|database-handpainted-r1-20261015\/species-063\.a2403ae4b27f60e1\.png|database-handpainted-r1-20261015\/species-064\.1fd9b11486ee01a1\.png|database-handpainted-r1-20261015\/species-065\.297304ab3fa37f43\.png|database-handpainted-r1-20261015\/species-066\.18cfe71dbf919d32\.png|database-handpainted-r1-20261015\/species-067\.d3b4711e2fef8428\.png|database-handpainted-r1-20261015\/species-068\.fd96778e08b01ee7\.png|database-handpainted-r1-20261015\/species-069\.cf92eaf941781156\.png|database-handpainted-r1-20261015\/species-117\.8f7d027cdbf6d3e6\.png|database-handpainted-r1-20261015\/species-070\.8b5455d530173b0f\.png|database-handpainted-r1-20261015\/species-071\.cd9ee93854a452cc\.png|database-handpainted-r1-20261015\/species-072\.4ca0e10b98584a76\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,20,195,'8',NaN])assert.equal(get(id),null);
 });
 
@@ -172,7 +176,7 @@ test('confirmed ultimate heroes are present with exact PNG bytes and selected so
  const {DATABASE_HERO_PORTRAITS:art}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- assert.equal(art.entries.length,54);assert.equal(manifest.count,42);
+ assert.equal(art.entries.length,56);assert.equal(manifest.count,42);
  for(const [sp,version,form] of [[211,'v1','OWNER_CONFIRMED_BRASS_CROWN_MANDRILL'],[222,'v2','R10_QUADRUPED_LEFT_PANEL']]){
   const entry=databaseHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(metadata.selectedSourceForm,form);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
@@ -197,7 +201,7 @@ test('batch six PNG hashes and accepted versions join existing stable identities
  for(const [sp,version] of [[41,'refined-handpainted-v2'],[42,'refined-handpainted-v2'],[43,'v1'],[44,'v1']]){
   const entry=databaseHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}
 });
 
 test('batch seven existing rookie heroes preserve exact identity and discovery privacy across five locales',()=>{
@@ -218,7 +222,7 @@ test('batch seven PNG hashes and accepted versions join existing stable identiti
  for(const [sp,version] of [[45,'refined-handpainted-v2'],[46,'refined-handpainted-v2'],[47,'v1'],[49,'refined-handpainted-v2']]){
   const entry=databaseHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}
 });
 
 
@@ -229,7 +233,7 @@ test('046 refined portrait uses immutable content-addressed PNG without widening
  assert.equal(createHash('sha256').update(fs.readFileSync(art.src)).digest('hex'),art.sha256);
  assert.deepEqual(qa.entries.find(e=>e.speciesIndex===46),art);assert.equal(qa.entries.length,56);
  assert.equal(databaseHeroPortrait(42).sha256,'d5dcc1491759eea7e2f02aeb4ae819997df7a67c9a50c019f3666c6da625feb4');
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}
 });
 
 test('042 refined image joins QA and immutable filename with unchanged identity',()=>{
@@ -278,7 +282,7 @@ test('new four portraits preserve exact source identity hashes and aggregate bun
  const bundles=Object.values(index).filter(Array.isArray).flat().filter(e=>e?.assetId==='art:database:handpainted:r1');assert.equal(bundles.length,1);assert.equal(bundles[0].count,42);assert.equal(bundles[0].maturity,'42_SOURCE_GUIDED_HANDPAINTED_TRANSPARENT_HEROES');assert.equal(bundles[0].shippingReady,false);
  assert.equal(manifest.entries.length,42);assert.equal(manifest.count,42);
  for(const [sp,want] of Object.entries(expected)){const e=databaseHeroPortrait(Number(sp));assert.deepEqual(e,want);const b=fs.readFileSync(e.src);assert.equal(createHash('sha256').update(b).digest('hex'),e.sha256);assert.equal(b.readUInt32BE(16),1254);assert.equal(b.readUInt32BE(20),1254);const m=manifest.entries.find(m=>m.speciesIndex===Number(sp));assert.equal(m.sha256,e.sha256);assert.equal(m.sourceEntityId,sourceExpected[sp].entityId);assert.equal(m.sourceReferenceSha256,sourceExpected[sp].sha256);assert.equal(m.selectedGenerationVersion,sourceExpected[sp].version);}
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
 });
 
 test('new050051052056 heroes preserve exact identity and discovery privacy across five locales',()=>{
@@ -301,7 +305,7 @@ test('next four portraits preserve exact source identity hashes and aggregate bu
  const bundles=Object.values(index).filter(Array.isArray).flat().filter(e=>e?.assetId==='art:database:handpainted:r1');assert.equal(bundles.length,1);assert.equal(bundles[0].count,42);assert.equal(bundles[0].maturity,'42_SOURCE_GUIDED_HANDPAINTED_TRANSPARENT_HEROES');assert.equal(bundles[0].shippingReady,false);
  assert.equal(manifest.entries.length,42);assert.equal(manifest.count,42);
  for(const [sp,want] of Object.entries(expected)){const e=databaseHeroPortrait(Number(sp));assert.deepEqual(e,want);const b=fs.readFileSync(e.src);assert.equal(createHash('sha256').update(b).digest('hex'),e.sha256);assert.equal(b.readUInt32BE(16),1254);assert.equal(b.readUInt32BE(20),1254);const m=manifest.entries.find(m=>m.speciesIndex===Number(sp));assert.equal(m.sha256,e.sha256);assert.equal(m.sourceEntityId,sourceExpected[sp].entityId);assert.equal(m.sourceReferenceSha256,sourceExpected[sp].sha256);assert.equal(m.selectedGenerationVersion,sourceExpected[sp].version);}
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
 });
 
 test('new058059060061 heroes preserve exact identity and discovery privacy across five locales',()=>{
@@ -324,7 +328,7 @@ test('058059060061 portraits preserve exact source identity hashes and aggregate
  const bundles=Object.values(index).filter(Array.isArray).flat().filter(e=>e?.assetId==='art:database:handpainted:r1');assert.equal(bundles.length,1);assert.equal(bundles[0].count,42);assert.equal(bundles[0].maturity,'42_SOURCE_GUIDED_HANDPAINTED_TRANSPARENT_HEROES');assert.equal(bundles[0].shippingReady,false);
  assert.equal(manifest.entries.length,42);assert.equal(manifest.count,42);
  for(const [sp,want] of Object.entries(expected)){const e=databaseHeroPortrait(Number(sp));assert.deepEqual(e,want);const b=fs.readFileSync(e.src);assert.equal(createHash('sha256').update(b).digest('hex'),e.sha256);assert.equal(b.readUInt32BE(16),1254);assert.equal(b.readUInt32BE(20),1254);const m=manifest.entries.find(m=>m.speciesIndex===Number(sp));assert.equal(m.sha256,e.sha256);assert.equal(m.sourceEntityId,sourceExpected[sp].entityId);assert.equal(m.sourceReferenceSha256,sourceExpected[sp].sha256);assert.equal(m.selectedGenerationVersion,sourceExpected[sp].version);}
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
 });
 
 test('new062063064065 heroes preserve exact identity and discovery privacy across five locales',()=>{
@@ -347,7 +351,7 @@ test('062063064065 portraits preserve exact source identity hashes and aggregate
  const bundles=Object.values(index).filter(Array.isArray).flat().filter(e=>e?.assetId==='art:database:handpainted:r1');assert.equal(bundles.length,1);assert.equal(bundles[0].count,42);assert.equal(bundles[0].maturity,'42_SOURCE_GUIDED_HANDPAINTED_TRANSPARENT_HEROES');assert.equal(bundles[0].shippingReady,false);
  assert.equal(manifest.entries.length,42);assert.equal(manifest.count,42);
  for(const [sp,want] of Object.entries(expected)){const e=databaseHeroPortrait(Number(sp));assert.deepEqual(e,want);const b=fs.readFileSync(e.src);assert.equal(createHash('sha256').update(b).digest('hex'),e.sha256);assert.equal(b.readUInt32BE(16),1254);assert.equal(b.readUInt32BE(20),1254);const m=manifest.entries.find(m=>m.speciesIndex===Number(sp));assert.equal(m.sha256,e.sha256);assert.equal(m.sourceEntityId,sourceExpected[sp].entityId);assert.equal(m.sourceReferenceSha256,sourceExpected[sp].sha256);assert.equal(m.selectedGenerationVersion,sourceExpected[sp].version);}
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
 });
 
 test('new066067068069 heroes preserve exact identity and discovery privacy across five locales',()=>{
@@ -370,7 +374,7 @@ test('066067068069 portraits preserve exact source identity hashes and aggregate
  const bundles=Object.values(index).filter(Array.isArray).flat().filter(e=>e?.assetId==='art:database:handpainted:r1');assert.equal(bundles.length,1);assert.equal(bundles[0].count,42);assert.equal(bundles[0].maturity,'42_SOURCE_GUIDED_HANDPAINTED_TRANSPARENT_HEROES');assert.equal(bundles[0].shippingReady,false);
  assert.equal(manifest.entries.length,42);assert.equal(manifest.count,42);
  for(const [sp,want] of Object.entries(expected)){const e=databaseHeroPortrait(Number(sp));assert.deepEqual(e,want);const b=fs.readFileSync(e.src);assert.equal(createHash('sha256').update(b).digest('hex'),e.sha256);assert.equal(b.readUInt32BE(16),1254);assert.equal(b.readUInt32BE(20),1254);const m=manifest.entries.find(m=>m.speciesIndex===Number(sp));assert.equal(m.sha256,e.sha256);assert.equal(m.sourceEntityId,sourceExpected[sp].entityId);assert.equal(m.sourceReferenceSha256,sourceExpected[sp].sha256);assert.equal(m.selectedGenerationVersion,sourceExpected[sp].version);}
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}assert.equal(databaseHeroPortrait(67).speciesId,'species-067');
 });
 
 test('117 simplified pilot hero preserve exact identity and discovery privacy across five locales',()=>{
@@ -394,8 +398,22 @@ test('117 simplified pilot is exact source-guided PNG and preserves all existing
  assert.equal(manifest.count,42);assert.equal(manifest.entries.length,42);
  const e=databaseHeroPortrait(117);assert.deepEqual(e,expected);const b=fs.readFileSync(e.src);assert.equal(createHash('sha256').update(b).digest('hex'),e.sha256);assert.equal(b.readUInt32BE(16),1254);assert.equal(b.readUInt32BE(20),1254);assert.equal(b[25],6);
  const m=manifest.entries.find(x=>x.speciesIndex===117);assert.equal(m.sha256,e.sha256);assert.equal(m.sourceEntityId,'m357_unimon');assert.equal(m.sourceReferenceSha256,'8372366d49ae17a40a39326b0e84a1f3a474b5d67c9b639a799e0ebcaaf3ce50');assert.equal(m.selectedGenerationVersion,'simplified-v2');assert.equal(m.review.rootReview,'SCOPED_HOSTED_VISUAL_PASS');assert.equal(m.review.runtimeBrowser,'PASS_NORMAL_DEX_128_256_LIGHT_DARK_RESPONSIVE');assert.equal(m.review.hostedEvidence.candidateHead,'52978fc360df8abb22c0e29dbb7961b27e9cd8f6');assert.equal(m.review.hostedEvidence.artifactId,11983920742);assert.equal(m.review.hostedEvidence.testedImageSha256,e.sha256);assert.match(m.review.comparisonCaveat,/does not validate the whole roster/);assert.match(m.review.rootReviewScope,/not an all-roster, action-art or three-view acceptance/);
- assert.equal(databaseHeroPortrait(229),null);assert.equal(databaseHeroPortrait(230),null);for(const sp of [73,74,75,76,77])assert.equal(databaseHeroPortrait(sp),null);
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}for(const sp of [73,74,75,76,77])assert.equal(databaseHeroPortrait(sp),null);
  assert.equal(getDatabaseDisplayEntry(117).displayCode,'MA58');assert.equal(databaseHeroPortrait(55).speciesId,'species-055');
+});
+
+
+test('promoted forms expose their own five-language stories without extending the raw 216-profile oracle',()=>{
+  assert.equal(catalog.entries.length,216);assert.ok(!catalog.entries.some(e=>e.speciesIndex===229||e.speciesIndex===230));
+  try{for(const id of [229,230])for(const locale of locales)for(const registered of [false,true]){
+    assert.ok(databaseStory(id,locale)?.length>25);
+    const f=makeView({locale,selectedSpeciesIndex:id,registeredSpecies:registered?[id]:[],collection:[]});
+    if(registered){
+      assert.equal(f.root.querySelector('.cm-dex-profile__text')?.textContent,databaseStory(id,locale));
+      assert.ok(f.root.querySelector('.cm-dex-hero'));assert.ok(f.root.querySelector('.cm-dex-data'));
+    }else{assert.equal(f.root.querySelector('.cm-dex-profile'),null);assert.equal(f.root.querySelector('.cm-dex-hero'),null);assert.equal(f.root.querySelector('.cm-dex-data'),null);}
+    f.assertUnchanged();f.dispose();
+  }}finally{setLocale('zh-Hant');}
 });
 
 test('070071072 hosted candidates preserve exact identity and discovery privacy across five locales',()=>{
@@ -418,13 +436,17 @@ test('070071072 scoped heroes preserve all51 baseline entries and exact hosted v
  const registry=JSON.parse(fs.readFileSync('src/data/championship/database-hero-portraits.r1.json','utf8'));
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
  const expected=[{"speciesIndex": 70, "speciesId": "species-070", "displayCode": "GR32", "src": "assets/production/database-handpainted-r1-20261015/species-070.8b5455d530173b0f.png", "width": 1254, "height": 1254, "sha256": "8b5455d530173b0fe41963b58637e98143f90e68a5961d9997517f2148520eba", "styleBatch": "HANDPAINTED_R1_20261015"}, {"speciesIndex": 71, "speciesId": "species-071", "displayCode": "GR12", "src": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png", "width": 1254, "height": 1254, "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913", "styleBatch": "HANDPAINTED_R1_20261015"}, {"speciesIndex": 72, "speciesId": "species-072", "displayCode": "MA04", "src": "assets/production/database-handpainted-r1-20261015/species-072.4ca0e10b98584a76.png", "width": 1254, "height": 1254, "sha256": "4ca0e10b98584a76aec0c283b6c5628d34122bd7d60aa63411c7cc2156bfca43", "styleBatch": "HANDPAINTED_R1_20261015"}], sources={"70": {"entity": "m244_vmon", "source": "312cedec215aac952303f51805380bc2daf6641d56fa26f6918f2cac1b8f6494", "prompt": "1c26155ffaf10dbadda78dc380ea6053d5e654de53ef4603d61f4da025ce9ff7", "version": "refined-v1"}, "71": {"entity": "m255_guilmon", "source": "02749ee1c31367c0344ca76edf72c51e81742a0d3637e7c343b278ec73d50e2f", "prompt": "c523f648187a01bcc616ac0ef71308c2e191aab74aa2d919f2e79fdc149e6504", "version": "refined-v1"}, "72": {"entity": "m301_ankylomon", "source": "cc71a01d0adaf456552b7a04f1371cff442e151375d1aabbeeb2446f27f3d898", "prompt": "ee4cc541afb63792259972a4bb19e28ad65cbfc5d771544c8fd01e28d987e179", "version": "simplified-v3"}};
- assert.equal(registry.entries.length,54);assert.equal(manifest.count,42);assert.equal(manifest.entries.length,42);
- assert.equal(hash(JSON.stringify(registry.entries.slice(0,51))),'cd019b2e72704990f65e5ad20d13cddb81345ec2bada7f98bbce42f7bb4e81af');
- assert.deepEqual(registry.entries.slice(51),expected);
+ assert.equal(registry.entries.length,56);assert.equal(manifest.count,42);assert.equal(manifest.entries.length,42);
+ const mainEntries=registry.entries.filter(e=>![229,230].includes(e.speciesIndex));
+ assert.equal(mainEntries.length,54);
+ assert.deepEqual(registry.entries.filter(e=>[229,230].includes(e.speciesIndex)).map(e=>e.speciesIndex).sort((a,b)=>a-b),[229,230]);
+ assert.equal(hash(JSON.stringify(mainEntries.slice(0,51))),'cd019b2e72704990f65e5ad20d13cddb81345ec2bada7f98bbce42f7bb4e81af');
+ assert.deepEqual(mainEntries.slice(51),expected);
  for(const e of expected){assert.deepEqual(databaseHeroPortrait(e.speciesIndex),e);const raw=fs.readFileSync(e.src);assert.equal(hash(raw),e.sha256);assert.equal(raw.readUInt32BE(16),1254);assert.equal(raw.readUInt32BE(20),1254);assert.equal(raw[25],6);
   const m=manifest.entries.find(x=>x.speciesIndex===e.speciesIndex),s=sources[e.speciesIndex];assert.equal(m.sourceEntityId,s.entity);assert.equal(m.sourceReferenceSha256,s.source);assert.equal(m.promptSha256,s.prompt);assert.equal(m.selectedGenerationVersion,s.version);
   assert.equal(m.review.rootReview,'SCOPED_HOSTED_VISUAL_PASS');assert.equal(m.review.runtimeBrowser,'PASS_NORMAL_DEX_128_256_LIGHT_DARK_RESPONSIVE');assert.match(m.review.runtimeContainPadding,/24px/);assert.equal(m.review.hostedEvidence.candidateHead,'344010354799c2a6da0c794d7b74de768c6e7cc1');assert.equal(m.review.hostedEvidence.artifactId,11991000289);assert.equal(m.review.hostedEvidence.testedImageSha256,e.sha256);assert.equal(m.review.hostedEvidence.capturePairCount,33);assert.equal(m.review.hostedEvidence.friendsStatus,'PASS');assert.match(m.review.rootReviewScope,/Not an all-roster/);assert.match(m.review.nativeMarginCaveat,/margin/i);
  }
- for(const sp of [73,74,75,76,77,229,230])assert.equal(databaseHeroPortrait(sp),null);
+ for(const sp of [73,74,75,76,77])assert.equal(databaseHeroPortrait(sp),null);
+ for(const id of [229,230]){assert.equal(databaseHeroPortrait(id).speciesId,`species-${id}`);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}
  assert.equal(databaseHeroPortrait(117).sha256,'8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681');
 });
