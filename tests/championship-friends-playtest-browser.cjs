@@ -104,6 +104,15 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  }
  // Separate installed QA profile: normal editor clicks only, never real player data.
  async function sourceCornerReview(){
+  // Long visual sweeps can cross midnight. Acknowledge only the ordinary new-date UI.
+  async function clearCalendar(){
+   await page.waitForFunction(()=>{const layer=document.querySelector('.int-rh2-lifecycle');const calendar=document.querySelector('.int-rh2-calendar');return !layer||layer.hidden||calendar&&!calendar.hidden&&!calendar.disabled;});
+   const calendar=page.locator('.int-rh2-calendar');
+   if(await calendar.isVisible()){
+    await calendar.click();await page.locator('.int-rh2-lifecycle').waitFor({state:'hidden'});
+    evidence.assertions.push({sourceCornerCalendarAcknowledged:true,normalUi:true});write();
+   }
+  }
   await fresh('source-corners');const loadedPaddedUrls=new Set();page.on('response',r=>{if(r.ok()&&r.url().includes('source-bounds-r1-20261015/'))loadedPaddedUrls.add(r.url());});await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
@@ -134,7 +143,8 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
     const count=viewport.width<500?9:6;
     for(let pan=0;pan<count;pan++){
      // Real elapsed time: two 170ms samples bracket the 334.302ms sea phases.
-     for(let frame=0;frame<3;frame++){await page.waitForTimeout(170);await shot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);}
+     for(let frame=0;frame<3;frame++){await page.waitForTimeout(170);await clearCalendar();await shot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);}
+     await clearCalendar();
      const box=await canvas.boundingBox();assert.ok(box&&box.width>250&&box.height>200);
      const candidates=[180,260,Math.min(360,box.height-150)].map(y=>({x:box.width-35,y}));
      const start=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
