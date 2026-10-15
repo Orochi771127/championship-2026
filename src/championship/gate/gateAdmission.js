@@ -3,7 +3,8 @@
 // commits through its existing Shop wallet. This module owns no mutable state.
 export const GATE_ADMISSION_EVIDENCE = "ROM_VERIFIED";
 
-export function isGateUnlocked(gate, { tamerRank = 0, battleBadges = [] } = {}) {
+export function isGateUnlocked(gate, { tamerRank = 0, battleBadges = [], playtestUnlocks = false } = {}) {
+  if (playtestUnlocks) return true;
   switch (gate.unlockKind) {
     case 0: return true;
     case 1: return tamerRank >= gate.unlockParameter;

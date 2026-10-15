@@ -9,9 +9,9 @@ function validOffset(value) {
   return Boolean(lifecycle.rules[Math.floor(value / 5)]?.[value % 5]);
 }
 export function projectDatabaseEvolutionRoutes(sourceSpeciesIndex, {
-  sourceRegistered = false, registeredSpecies = [], evolutionBranches = [], productEvolutionBranches = []
+  fullView = false, sourceRegistered = false, registeredSpecies = [], evolutionBranches = [], productEvolutionBranches = []
 } = {}) {
-  if (!sourceRegistered || !Number.isInteger(sourceSpeciesIndex) || sourceSpeciesIndex < 8) return deepFreeze([]);
+  if ((!fullView && !sourceRegistered) || !Number.isInteger(sourceSpeciesIndex) || sourceSpeciesIndex < 8) return deepFreeze([]);
   const candidates = lifecycle.rules[sourceSpeciesIndex - 8] ?? [];
   const valid = Array.isArray(evolutionBranches) ? evolutionBranches.filter(validOffset) : [];
   const uncertain = !Array.isArray(evolutionBranches) || valid.length !== evolutionBranches.length;
@@ -25,12 +25,12 @@ export function projectDatabaseEvolutionRoutes(sourceSpeciesIndex, {
       legacyBranchOffset, historyState, targetRegistered,
       // A contradictory old/invalid registration snapshot stays masked. The
       // completion flag remains its own fact and never registers the target.
-      revealed:historyState === 'RECORDED' && targetRegistered
+      displayPreview:fullView, revealed:fullView || (historyState === 'RECORDED' && targetRegistered)
     };
   });
   const extras=nativeRoutes.flatMap(route=>productEvolutionOptions(route.targetSpeciesIndex).slice(1).map(target=>{
     const productRouteId=`${sourceSpeciesIndex}:${route.targetSpeciesIndex}:${target}`,recorded=productEvolutionBranches.includes(productRouteId),targetRegistered=registeredSpecies.includes(target);
-    return {...route,targetSpeciesIndex:target,targetSpeciesId:`species-${target}`,legacyBranchOffset:null,productRouteId,historyState:recorded?'RECORDED':'NOT_RECORDED',targetRegistered,revealed:recorded&&targetRegistered};
+    return {...route,targetSpeciesIndex:target,targetSpeciesId:`species-${target}`,legacyBranchOffset:null,productRouteId,historyState:recorded?'RECORDED':'NOT_RECORDED',targetRegistered,displayPreview:fullView,revealed:fullView||(recorded&&targetRegistered)};
   }));
   return deepFreeze([...nativeRoutes,...extras]);
 }

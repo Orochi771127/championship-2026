@@ -392,6 +392,11 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       app.removeCagePlacement(moduleId);
       return commit();
     },
+    buyRanchTestRow(row) {
+      const result = app.buyRanchTestRow(row);
+      publish();
+      return result;
+    },
     confirmCageEdit() {
       app.confirmCageEdit();
       committed("cage-layout");

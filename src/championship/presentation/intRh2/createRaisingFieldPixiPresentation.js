@@ -403,6 +403,11 @@ export async function mountRaisingFieldPixiPresentation({
       cameraY = 0;
       cameraY = clamp(-raisingFieldViewport(fieldArt.field, view, 12, cameraX).y, 0, scrollMaxY());
     }
+    if(fieldArt.field.productGrid){
+      const nativeY=frame.residents.map(resident=>source.getActorFrame?.(resident.creatureId)?.positionQ12)
+        .find(position=>Number.isFinite(position?.[0]))?.[1];
+      if(Number.isFinite(nativeY))cameraY=clamp(view.height/2-fit.y-nativeY/4096*unit*fit.scale,0,scrollMaxY());
+    }
     const target = bandWorldX(fieldArt.field, nativeX / 4096) - (app.screen.width - 24) / fit.scale / 2;
     cameraX = fieldArt.field.wrapWidthPx
       ? wrapRaisingCamera(target, fieldArt.field.wrapWidthPx)

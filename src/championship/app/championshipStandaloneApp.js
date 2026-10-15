@@ -1,3 +1,4 @@
+import { grantFriendsPlaytestCoins, purchaseTestRanchRow } from '../testing/friendsPlaytestPolicy.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
@@ -130,6 +131,7 @@ export const STANDALONE_SAVE_UNAVAILABLE_COPY = "Save status is unavailable.";
 
 export function createChampionshipStandaloneApp({
   storage,
+  playtestPolicy = null,
   locks = globalThis.window?.navigator?.locks,
   catalog,
   cages = [],
@@ -231,6 +233,7 @@ export function createChampionshipStandaloneApp({
   let huntInventory = null;
   let huntLoadout = null;
   let shop = null;
+  let friendsPlaytest = null;
   let lastShopReceipt = null;
   let selectedDatabaseSpeciesIndex = null;
   let cageEdit = null;
@@ -311,7 +314,7 @@ export function createChampionshipStandaloneApp({
   }
 
   function progressionContext() {
-    return { tamerRank: tamerRankValue, battleBadges: [...battleBadgesValue],feeWaiver:nativeTitles.feeWaiver };
+    return { tamerRank: tamerRankValue, battleBadges: [...battleBadgesValue],feeWaiver:nativeTitles.feeWaiver, playtestUnlocks: playtestPolicy?.enabled === true && playtestPolicy.huntOpen };
   }
 
   function applyProgression() {
@@ -344,21 +347,25 @@ export function createChampionshipStandaloneApp({
     return cageEdit;
   }
 
-  function openShopAndHunt({ shopSnapshot = null } = {}) {
+  function openShopAndHunt({ shopSnapshot = null, newSave = false } = {}) {
     lastShopReceipt = null;
     const progression = progressionContext();
     if (shopSnapshot) {
       // Continue: Shop snapshot is the inventory authority. Hunt starts empty
       // and receives only the mapped SKUs the Shop currently owns.
       huntInventory = createHuntInventory({ entries: [], ...progression });
-      shop = createShopRuntime({ huntInventory, snapshot: shopSnapshot, progression });
+      shop = createShopRuntime({ allItemsVisible: playtestPolicy?.enabled === true && playtestPolicy.shopOpen, huntInventory, snapshot: shopSnapshot, progression });
       applyMappedHuntInventoryFromShop(shop, huntInventory);
     } else {
       huntInventory = createHuntInventory({ entries: huntStartingInventory, ...progression });
       // Custom starting inventories are a controlled fixture seam. Seed the
       // same Shop authority that purchases, consumption and saves will use.
-      shop = createShopRuntime({ huntInventory, progression, initialHuntInventory:huntInventory });
+      shop = createShopRuntime({ allItemsVisible: playtestPolicy?.enabled === true && playtestPolicy.shopOpen, huntInventory, progression, initialHuntInventory:huntInventory });
     }
+    const grant = newSave ? grantFriendsPlaytestCoins(shop.getBits(), friendsPlaytest, shop.getFrame().bitsCap, playtestPolicy) : {bits:shop.getBits(),state:friendsPlaytest,granted:0};
+    if (grant.granted) shop.applyBitsTransaction({expectedBits:shop.getBits(),bits:grant.bits});
+    friendsPlaytest = grant.state;
+    if (grant.granted) savePort.markDirty();
     bindShopRuntime();
   }
 
@@ -670,7 +677,7 @@ export function createChampionshipStandaloneApp({
       admit:command=>nativeRaisingHandAdmission(actor,command),inside:hand.inside});
     hand.elapsed=(hand.elapsed+1)&65535;
     if(result===-1)return;
-    if(result===3){const p=beginNativeRaisingCarry(actor,profile,hand.pointer,{foods:raisingFoods,rng:{next:nextGameplayRandom}});
+    if(result===3){const p=beginNativeRaisingCarry(actor,profile,hand.pointer,{ground:raisingGround,foods:raisingFoods,rng:{next:nextGameplayRandom}});
       if(p){actor.carryCameraX=hand.pointer.cameraX??0;write(p);hand.mode=3;return;}}
     if(result===4){const p=beginNativeRaisingStroke(actor,profile,{foods:raisingFoods,rng:{next:nextGameplayRandom}});
       if(p){write(p);hand.mode=4;hand.elapsed=0;hand.previous={...hand.pointer};return;}}
@@ -757,7 +764,7 @@ export function createChampionshipStandaloneApp({
   function liveSaveRequest(nextRevision=revision) {
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
-      interactionCount,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
+      interactionCount,friendsPlaytest,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
       championshipRun,freeBattleMenu,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
@@ -766,7 +773,7 @@ export function createChampionshipStandaloneApp({
 
   function requestFromSavedGame(saved,candidate) {
     return {
-      ...saved.progression,snapshot:candidate.snapshot,creature:saved.creature,sessionId,
+      ...saved.progression,friendsPlaytest:saved.flags.friendsPlaytest??null,snapshot:candidate.snapshot,creature:saved.creature,sessionId,
       raising:candidate.production,shop:saved.shop,cageEdit:saved.cageEdit,battleEconomy:saved.battleEconomy,
       instanceIdentity:candidate.identity,gameplayRng:saved.gameplayRng,huntHistory:saved.huntHistory
     };
@@ -1014,8 +1021,9 @@ export function createChampionshipStandaloneApp({
     raisingHand=null;raisingActors.clear();raisingAgeRemainder=0;
     instanceIdentity = candidate.identity;
     selectedCreatureId = null;
+    friendsPlaytest = saved.flags.friendsPlaytest ?? null;
     openShopAndHunt({ shopSnapshot: saved.shop });
-    cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit });
+    cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
     freeBattleMenu=saved.progression.freeBattleMenu??null;
     initializeNativeRaisingHome({tutorialBoundary});
     selectedDatabaseSpeciesIndex = null;
@@ -1161,8 +1169,9 @@ export function createChampionshipStandaloneApp({
       raisingHand=null;raisingActors.clear();raisingAgeRemainder=0;
       instanceIdentity = createRaisingInstanceIdentityState(instanceSources());
       selectedCreatureId = null;
-      openShopAndHunt();
-      cageEdit = createCageEditRuntime({ initializeOriginal: true });
+      friendsPlaytest = null;
+      openShopAndHunt({newSave:true});
+      cageEdit = createCageEditRuntime({ initializeOriginal: true, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
       rebuildFreeBattleMenu();
       initializeNativeRaisingHome();
       selectedDatabaseSpeciesIndex = null;
@@ -1356,7 +1365,7 @@ export function createChampionshipStandaloneApp({
         ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
       const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);
       if(!actor||!profile||[...raisingActors.values()].some(a=>a.state===6))return false;
-      const p=beginNativeRaisingCarry(actor,profile,pointer,{foods:raisingFoods,rng:{next:nextGameplayRandom}});if(!p)return false;
+      const p=beginNativeRaisingCarry(actor,profile,pointer,{ground:raisingGround,foods:raisingFoods,rng:{next:nextGameplayRandom}});if(!p)return false;
       actor.carryCameraX=pointer.cameraX??0;writeRaisingNativeProfile(instanceId,p);savePort.markDirty();publishRaising();return true;
     },
     updateRaisingCarry(instanceId,pointer){
@@ -2144,6 +2153,7 @@ export function createChampionshipStandaloneApp({
 
     getDatabaseFrame() {
       const frame = projectDatabase({
+        fullView: playtestPolicy?.enabled === true && playtestPolicy.fullDexView,
         starterSpeciesId: creature?.speciesId ?? null,
         collection: raising?.collection ?? [],
         registeredSpecies: registeredSpeciesValue,
@@ -2272,7 +2282,7 @@ export function createChampionshipStandaloneApp({
 
     getCageEditFrame() {
       if (!cageEdit) return null;
-      return requireCageEdit().getFrame(...cageEditArgs());
+      return Object.freeze({...requireCageEdit().getFrame(...cageEditArgs()),testDiamonds:friendsPlaytest?.diamonds??0});
     },
 
     openCageEdit() {
@@ -2319,6 +2329,33 @@ export function createChampionshipStandaloneApp({
      */
     grantRanchExpansionPrototype() {
       return changeRanchExpansion((editor) => editor.grantExpansion(...cageEditArgs()));
+    },
+
+    // Stage row entitlement and simulated diamond debit together; publish only
+    // after the same durable save succeeds. A failed write cannot be retried as
+    // a hidden purchase after the UI has reported rollback.
+    buyRanchTestRow(row) {
+      requireSession();
+      if (!playtestPolicy?.enabled || screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT || tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return {ok:false,reason:'TEST_ROW_PURCHASE_UNAVAILABLE'};
+      const editor = requireCageEdit();
+      const quote = editor.quoteTestRow(row, ...cageEditArgs());
+      const purchase = quote.ok ? purchaseTestRanchRow(friendsPlaytest,row) : quote;
+      if (!purchase.ok) {
+        editor.rejectTestRowPurchase(purchase.reason,...cageEditArgs());publishScreens();
+        return Object.freeze({...this.getCageEditFrame(),ok:false,reason:purchase.reason});
+      }
+      const candidateEditor = createCageEditRuntime({snapshot:editor.toSave(),publicTestGrid:true,initialTamerRank:tamerRankValue});
+      candidateEditor.applyTestRowPurchase(row,...cageEditArgs());
+      storeNativeRaisingPositions();storeNativeRaisingHome();
+      const status = savePort.save({...liveSaveRequest(revision+1),friendsPlaytest:purchase.state,cageEdit:candidateEditor.toSave()});
+      if (status.phase !== 'SAVED') {
+        savePort.discardPendingWrite();
+        editor.rejectTestRowPurchase('SAVE_FAILED',...cageEditArgs());publishScreens();
+        return Object.freeze({...this.getCageEditFrame(),ok:false,reason:'SAVE_FAILED'});
+      }
+      friendsPlaytest=purchase.state;editor.applyTestRowPurchase(row,...cageEditArgs());revision+=1;
+      raisingActors.clear();initializeNativeRaisingHome();publishScreens();
+      return Object.freeze({...this.getCageEditFrame(),ok:true,receipt:purchase.receipt});
     },
 
     revokeRanchExpansionPrototype() {
@@ -3113,7 +3150,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: shop ? shop.toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

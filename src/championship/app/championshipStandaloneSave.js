@@ -1,3 +1,4 @@
+import { normalizeFriendsPlaytestState } from '../testing/friendsPlaytestPolicy.js';
 import {requiresProductSaveVersion} from '../contracts/productSpeciesData.js';
 // Championship Modern -- standalone player save envelope.
 //
@@ -23,6 +24,8 @@ import { normalizeFreeBattleMenu } from "../battle/nativeFreeBattle.js";
 import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages.js";
 import { normalizeNativeOpening } from './nativeOpeningState.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
+
+import { PRODUCT_RANCH_GRID, normalizeProductRanchAccess, validateProductRanch } from '../cage/productRanchGrid.js';
 
 export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
 export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 5;
@@ -54,7 +57,7 @@ const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "ca
 // `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
 // the ranch expansion prototype versions its own slice, so a save that never
 // takes the grant keeps exactly its old shape and schemaVersion stays 5.
-const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion", "expansion"]);
+const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion", "expansion", "gridAccess"]);
 const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex"]);
 
 // Every one of these names identifies forensic/evidence data, catalog structure,
@@ -175,9 +178,14 @@ function normalizeCageEditSlice(cageEdit) {
     }
     placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex });
   }
-  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1' && cageEdit.layoutVersion !== RANCH_DECKS_LAYOUT) {
+  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1' && cageEdit.layoutVersion !== RANCH_DECKS_LAYOUT && cageEdit.layoutVersion !== PRODUCT_RANCH_GRID) {
     throw saveError('INVALID_RANCH_LAYOUT_VERSION');
   }
+  if (cageEdit.layoutVersion === PRODUCT_RANCH_GRID) {
+    if (cageEdit.expansion !== undefined || !validateProductRanch(placements)) throw saveError('INVALID_PRODUCT_RANCH');
+    return { layoutVersion:PRODUCT_RANCH_GRID, gridAccess:normalizeProductRanchAccess(cageEdit.gridAccess), placements };
+  }
+  if (cageEdit.gridAccess !== undefined) throw saveError('INVALID_PRODUCT_RANCH_ACCESS');
   let expansion = null;
   if (cageEdit.layoutVersion === RANCH_DECKS_LAYOUT) {
     try { expansion = normalizeRanchExpansion(cageEdit.expansion); } catch { throw saveError('INVALID_RANCH_EXPANSION'); }
@@ -327,7 +335,7 @@ export function createChampionshipModernSave({
         ? Math.min(progression.tamerRank, 65535)
         : 0
     },
-    flags: { newGameCompleted: flags.newGameCompleted === true },
+    flags: { newGameCompleted: flags.newGameCompleted === true, ...(flags.friendsPlaytest != null ? {friendsPlaytest:normalizeFriendsPlaytestState(flags.friendsPlaytest)} : {}) },
     updatedAt
   };
 

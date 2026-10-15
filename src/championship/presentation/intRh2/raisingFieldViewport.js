@@ -69,7 +69,7 @@ export function raisingNativeScreenPixels(field, viewport, padding = 12) {
   if(viewport.referenceViewport?.width>24&&viewport.referenceViewport?.height>24)viewport=viewport.referenceViewport;
   else if(viewport.desktopRaising)viewport=RAISING_DESKTOP_REFERENCE_VIEWPORT;
   const unit = field.nativePixelWorldScale;
-  const nativeHeight = field.worldHeightPx / unit;
+  const nativeHeight = field.productGrid?.sizingHeightNative ?? field.worldHeightPx / unit;
   const byWidth = Math.floor((viewport.width - padding * 2) / RAISING_MIN_VISIBLE_NATIVE_WIDTH);
   // The headroom stands in for the top padding: bodies rise into it.
   const byHeight = Math.floor((viewport.height - padding) / (nativeHeight + RAISING_TOP_HEADROOM_NATIVE));

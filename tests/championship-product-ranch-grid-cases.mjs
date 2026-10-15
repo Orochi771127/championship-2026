@@ -1,0 +1,127 @@
+import fs from 'node:fs';
+import { deserializeChampionshipModernSave, serializeChampionshipModernSave } from '../src/championship/app/championshipStandaloneSave.js';
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { PRODUCT_RANCH_GRID, productGridCell, productGridSlot, productPlacementCells, productFieldTileOrigin,
+  validateProductRanch, normalizeProductRanchAccess, migrateProductRanch } from '../src/championship/cage/productRanchGrid.js';
+import { createCageEditRuntime } from '../src/championship/cage/cageEditRuntime.js';
+import { originalStartingRanch, nativePlacementMask } from '../src/championship/cage/nativeRanchLayout.js';
+import { annexPlacementCells, validateExpandedRanch } from '../src/championship/cage/ranchExpansion.js';
+import { listCageDefinitions } from '../src/championship/cage/cageCatalog.js';
+import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from '../src/championship/cage/ranchSlotGeometry.js';
+const defs=listCageDefinitions(), owned=defs.map(d=>d.shopRecordIndex).filter(Number.isInteger);
+const moduleOf=i=>defs[i].moduleId;
+const expansion={version:1,decks:2,grant:'PROTOTYPE_NON_PAID'};
+const snapshot=()=>({...originalStartingRanch(),layoutVersion:'NATIVE_DECKS_V1',expansion});
+const editor=()=>createCageEditRuntime({snapshot:snapshot(),publicTestGrid:true,initialTamerRank:9});
+
+test('50 unique stable IDs round-trip and exact screenshot cells are adjacent',()=>{
+ const seen=new Set();
+ for(let slot=0;slot<50;slot++){const c=productGridCell(slot);assert.equal(productGridSlot(c.row,c.column),slot);seen.add(`${c.row},${c.column}`);}
+ assert.equal(seen.size,50);assert.equal(productGridSlot(5,0),null);assert.equal(productGridSlot(0,10),null);
+ assert.deepEqual(productPlacementCells({moduleId:moduleOf(22),slotIndex:11}),[11,32]);
+ assert.deepEqual(productGridCell(49),{slotIndex:49,row:4,column:9,x:864,y:352});
+});
+
+test('every old valid native and annex shape retains identical occupied slot IDs',()=>{
+ for(const d of defs) for(let slot=0;slot<20;slot++) {
+  const entry={moduleId:d.moduleId,slotIndex:slot}, mask=nativePlacementMask(entry,20);
+  if(mask!==null) assert.deepEqual(productPlacementCells(entry),Array.from({length:20},(_,i)=>i).filter(i=>mask&(1<<i)));
+  const annex={...entry,slotIndex:20+slot}, cells=annexPlacementCells(annex,expansion);
+  if(cells.length) assert.deepEqual(productPlacementCells(annex),cells);
+ }
+});
+
+test('all36 definitions at all50 anchors follow bounded odd-row geometry, no32bit alias',()=>{
+ for(const d of defs) for(let slot=0;slot<50;slot++) {
+  const a=productGridCell(slot), shape=ORIGINAL_CAGE_SHAPE_MASKS[ORIGINAL_CAGE_DEFINITION_SHAPES[d.cageDefinitionIndex]];
+  const expected=[];let out=false;
+  for(let b=0;b<8;b++)if(shape&(1<<b)){
+   const id=productGridSlot(a.row+b%2,a.column+Math.floor(b/2)+(a.row%2&&b%2?1:0));
+   if(id===null)out=true;else expected.push(id);
+  }
+  assert.deepEqual(productPlacementCells({moduleId:d.moduleId,slotIndex:slot}),out?null:expected);
+ }
+ assert.deepEqual(productPlacementCells({moduleId:moduleOf(15),slotIndex:49}),[49]);
+ assert.equal(productPlacementCells({moduleId:moduleOf(22),slotIndex:49}),null);
+ assert.deepEqual(productFieldTileOrigin(11,2),{tileX:66,tileY:8,cropTopTiles:0});
+ assert.deepEqual(productFieldTileOrigin(0,0),{tileX:0,tileY:-3,cropTopTiles:3});
+});
+
+test('screenshot gas placement succeeds across former boundary, then overlap is rejected',()=>{
+ const e=editor();assert.equal(e.getFrame(owned,9).unlockedCount,40);
+ e.selectModule(moduleOf(22),owned,9);const f=e.placeAt(11,owned,9);assert.equal(f.lastVerdict.reason,'PLACED');
+ assert.deepEqual(f.slots.filter(s=>s.moduleId===moduleOf(22)).map(s=>s.slotIndex),[11,32]);
+ e.selectModule(moduleOf(23),owned,9);assert.equal(e.placeAt(32,owned,9).lastVerdict.reason,'FOOTPRINT_BLOCKED');
+ e.confirm(owned,9);const save=JSON.parse(JSON.stringify(e.toSave()));
+ const reload=createCageEditRuntime({snapshot:save,publicTestGrid:true,initialTamerRank:9});
+ assert.deepEqual(reload.toSave(),save);assert.equal(reload.getFrame(owned,9).slots[32].moduleId,moduleOf(22));
+});
+
+test('row purchase grant is explicit and persistent, never permanent purchase or all50 override',()=>{
+ const e=editor();let f=e.getFrame(owned,9);assert.equal(f.slots.length,50);assert.equal(f.unlockedCount,40);
+ e.selectModule(moduleOf(23),owned,9);assert.equal(e.placeAt(49,owned,9).lastVerdict.reason,'SLOT_LOCKED');
+ f=e.applyTestRowPurchase(4,owned,9);assert.equal(f.unlockedCount,50);assert.deepEqual(e.toSave().gridAccess.purchasedRows,[]);
+ assert.deepEqual(e.toSave().gridAccess.testUnlockedRows,[4]);
+ assert.equal(e.applyTestRowPurchase(5,owned,9).lastVerdict.ok,false);assert.equal(e.getFrame(owned,9).unlockedCount,50);
+ assert.equal(e.placeAt(49,owned,9).lastVerdict.reason,'PLACED');e.confirm(owned,9);
+ const reload=createCageEditRuntime({snapshot:e.toSave(),publicTestGrid:true,initialTamerRank:0});
+ assert.equal(reload.getFrame(owned,0).unlockedCount,50);assert.equal(reload.getFrame(owned,0).slots[49].moduleId,moduleOf(23));
+});
+
+test('new rank0 has20 base cells, base rows cannot be purchased, fixed entrance remains fixed',()=>{
+ const e=createCageEditRuntime({initializeOriginal:true,publicTestGrid:true});
+ assert.equal(e.getFrame(owned,0).unlockedCount,20);
+ assert.equal(e.applyTestRowPurchase(0,owned,0).lastVerdict.reason,'TEST_ROW_PURCHASE_UNAVAILABLE');
+ assert.equal(e.applyTestRowPurchase(1,owned,0).lastVerdict.reason,'TEST_ROW_PURCHASE_UNAVAILABLE');
+ assert.equal(e.removePlacement(moduleOf(35),owned,0).lastVerdict.reason,'FIXED_WAITING_ROOM');
+ assert.deepEqual(e.toSave().gridAccess.purchasedRows,[]);
+});
+
+test('legacy10 annex keeps5x2 anchors and grandfather-opens complete rows without purchase',()=>{
+ const legacy={...snapshot(),expansion:{...expansion,decks:1},placements:[...originalStartingRanch().placements,{moduleId:moduleOf(22),slotIndex:20}]};
+ assert.equal(validateExpandedRanch(legacy.placements,14,legacy.expansion),true);
+ const migrated=migrateProductRanch(legacy,14);
+ assert.deepEqual(migrated.placements,legacy.placements);assert.equal(migrated.gridAccess.legacyUnlockedSlots.length,40);
+ assert.deepEqual(migrated.gridAccess.purchasedRows,[]);assert.deepEqual(migrated.gridAccess.testUnlockedRows,[]);
+ assert.deepEqual(productPlacementCells(legacy.placements.at(-1)),[20,21]);
+ assert.equal(validateProductRanch(migrated.placements),true);
+});
+
+test('malformed entitlement, overlap and out-of-range data rejected; old native mode unchanged',()=>{
+ assert.throws(()=>normalizeProductRanchAccess({version:1,legacyUnlockedSlots:[0],purchasedRows:[],testUnlockedRows:[5]}));
+ const e=editor();assert.equal(validateProductRanch([...e.toSave().placements,{moduleId:moduleOf(22),slotIndex:0}]),false);
+ assert.equal(validateProductRanch([...e.toSave().placements,{moduleId:moduleOf(22),slotIndex:50}]),false);
+ const native=createCageEditRuntime({initializeOriginal:true});assert.equal(native.getFrame(owned,0).slots.length,20);
+ native.selectModule(moduleOf(22),owned,0);assert.equal(native.placeAt(11,owned,0).lastVerdict.reason,'FOOTPRINT_BLOCKED');
+});
+
+test('purchase grant does not confirm or discard an active placement draft',()=>{
+ const e=editor();e.selectModule(moduleOf(22),owned,9);e.placeAt(11,owned,9);
+ const before=e.toSave().placements;assert.equal(e.getFrame(owned,9).dirty,true);
+ e.applyTestRowPurchase(4,owned,9);
+ assert.deepEqual(e.toSave().placements,before);assert.equal(e.getFrame(owned,9).dirty,true);
+ assert.equal(e.getFrame(owned,9).slots[32].moduleId,moduleOf(22));
+});
+
+
+test('full save envelope round-trips test rows without changing wallet or purchased entitlement',()=>{
+ const source=deserializeChampionshipModernSave(fs.readFileSync(new URL('../qa/championship-full-qa-save.json',import.meta.url),'utf8'));
+ const e=createCageEditRuntime({snapshot:source.cageEdit,publicTestGrid:true,initialTamerRank:source.progression.tamerRank});
+ e.applyTestRowPurchase(4,source.shop.cageOwned,source.progression.tamerRank);
+ const updated={...source,cageEdit:e.toSave()};
+ const restored=deserializeChampionshipModernSave(serializeChampionshipModernSave(updated));
+ assert.equal(restored.shop.bits,source.shop.bits);assert.deepEqual(restored.shop.cageOwned,source.shop.cageOwned);
+ assert.deepEqual(restored.cageEdit,updated.cageEdit);assert.deepEqual(restored.cageEdit.gridAccess.purchasedRows,[]);
+ assert.ok(restored.cageEdit.gridAccess.testUnlockedRows.includes(4));
+ assert.equal(Object.hasOwn(restored.cageEdit,'testAccessOverride'),false);
+});
+
+
+test('rank increases grandfather newly open native cells; later rank change does not relock them',()=>{
+ const e=createCageEditRuntime({initializeOriginal:true,publicTestGrid:true});
+ assert.equal(e.getFrame(owned,0).unlockedCount,20);assert.equal(e.getFrame(owned,9).unlockedCount,20);
+ e.selectModule(moduleOf(23),owned,9);assert.equal(e.placeAt(19,owned,9).lastVerdict.reason,'PLACED');e.confirm(owned,9);
+ const reload=createCageEditRuntime({snapshot:e.toSave(),publicTestGrid:true,initialTamerRank:0});
+ assert.equal(reload.getFrame(owned,0).slots[19].unlocked,true);assert.equal(reload.getFrame(owned,0).unlockedCount,20);
+});

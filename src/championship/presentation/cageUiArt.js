@@ -4,6 +4,7 @@ import { originalShopCageThumbnail } from './originalShopCageArt.js';
 // The runtime cage fields (Owner 2026-10-06: original opus art replaces the licensed pixels).
 import manifest from '../../../assets/production/cage/original-opus-v1/manifest.json' with { type: 'json' };
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
+import { productGridCell } from '../cage/productRanchGrid.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
 import { RANCH_EXPANSION_FIRST_SLOT, isAnnexSlot } from '../cage/ranchExpansion.js';
 import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from './originalCageVisualBindings.js';
@@ -52,10 +53,15 @@ export function shopCageUiImage(shopRecordIndex, baseUrl) {
   const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
   return definition ? assembledShopArt(shopRecordIndex, baseUrl)?.src ?? cageUiImage(definition.moduleId, baseUrl) : null;
 }
-export function cageEditorArtCells(slots, baseUrl) {
+export function cageEditorArtCells(slots, baseUrl, { productGrid = false } = {}) {
   // An expansion annex slot (20..29) is drawn on its own board with the same
   // traced cell arithmetic as the main board, from its deck-local index.
   const cells = slots.map((slot) => {
+    if (productGrid) {
+      const cell = productGridCell(slot.slotIndex);
+      // This function uses half-size editor coordinates before its final ×2.
+      return { ...slot, x: 2 + cell.x / 4, y: 8 + cell.y / 4, deck: 0 };
+    }
     const annex = isAnnexSlot(slot.slotIndex);
     const cell = ranchBoardCell(annex ? slot.slotIndex - RANCH_EXPANSION_FIRST_SLOT : slot.slotIndex);
     return { ...slot, ...cell, slotIndex: slot.slotIndex, deck: annex ? 1 : 0 };
