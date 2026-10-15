@@ -88,7 +88,7 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT),publicBase='https://orochi771127.github.io/championship-2026/';
    evidence.commit=process.env.GITHUB_SHA||null;evidence.build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8'));
    publicServer=await serveBuild(root);context=await browser.newContext({viewport:{width:430,height:932},hasTouch:true,locale:'zh-TW',serviceWorkers:'block'});
-   await context.route('**/*',async route=>{const u=route.request().url();if(u.startsWith(publicServer.origin+'/'))return route.continue();if(u.startsWith(publicBase)){const relative=new URL(u).pathname.slice(new URL(publicBase).pathname.length);if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:publicServer.origin+'/'+relative,maxRedirects:0});return route.fulfill({response});}}return route.abort();});
+   await context.route('**/*',async route=>{const u=route.request().url();if(u.startsWith('blob:'+new URL(publicBase).origin+'/'))return route.continue();if(u.startsWith(publicServer.origin+'/'))return route.continue();if(u.startsWith(publicBase)){const relative=new URL(u).pathname.slice(new URL(publicBase).pathname.length);if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:publicServer.origin+'/'+relative,maxRedirects:0});return route.fulfill({response});}}return route.abort();});
    const page=normalPage=await context.newPage();page.setDefaultTimeout(90000);page.on('console',m=>evidence.console.push({type:m.type(),text:m.text()}));page.on('pageerror',e=>evidence.errors.push('normal: '+e.message));
    await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});
    await page.locator('#cm-login').waitFor({state:'visible'});await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
@@ -112,7 +112,7 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
     for(const [width,height] of [[568,320],[844,390]]){
      await page.setViewportSize({width,height});await page.waitForTimeout(1000);
      const g=await page.evaluate(geometry);evidence.normalLandscape.push({stage,...g});
-     await page.screenshot({path:path.join(out,`normal-flow-${stage}-${width}.png`),fullPage:true});
+     await page.screenshot({path:path.join(out,`normal-flow-${stage}-${width}.png`),fullPage:false});
      for(const name of ['bits','diamond','save']){const q=g.parts[name];if(q&&(q.w<44||q.h<44))evidence.violations.push({scope:'actual-normal-landscape',stage,width,height,control:name,bounds:q,message:'Actual control must retain a 44px touch target'});}
      if(g.overflow)evidence.violations.push({scope:'actual-normal-landscape',stage,width,height,message:'Actual document overflow'});
     }
@@ -120,7 +120,7 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    };
    const before=await save();assert.equal(before.shop.bits,100000);assert.equal(before.flags.friendsPlaytest.diamonds,10000);
    await captureNormal('tutorial-on');
-   await page.locator('.cm-tutorial-guidance [data-tutorial-action="exit"]').click();await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
+   await page.locator('dialog[open] [data-action="exit"], .cm-tutorial-guidance [data-tutorial-action="exit"]:not(:disabled)').first().click();await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
    const after=await save();assert.equal(after.shop.bits,100000);assert.equal(after.flags.friendsPlaytest.diamonds,10000);await captureNormal('tutorial-off');
    if(!diagnostic){assert.equal(evidence.normal[0].geometry.bar.h,evidence.normal[1].geometry.bar.h);assert.equal(evidence.normal[0].geometry.parts.currencies.y,evidence.normal[1].geometry.parts.currencies.y);}
   }
