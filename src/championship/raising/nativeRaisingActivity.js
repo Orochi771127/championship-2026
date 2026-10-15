@@ -1,3 +1,4 @@
+import {productBaseSpeciesIndex} from '../contracts/productSpeciesData.js';
 // OVL18 idle tail 02117B90, selectors 02115B8C/02115CD8, target 02113AF4.
 // Numeric source columns and original Main sequences; no presentation RNG.
 import data from '../../data/championship/catalogs/raising-activity.r1.json' with {type:'json'};
@@ -46,7 +47,7 @@ export function selectNativeIdleActivity(actor,profile,{ground,actors,rng,reques
   actor.idleElapsed++;
   if(actor.idleElapsed<actor.idleCounter)return 0;
   const draw=nativeActivityRandom(actor,rng,4),choice=actor.slow?4:draw;
-  if(choice===0)return beginNativeActivityReaction(actor,selectNativeCageReaction(actor.cageDefinitionIndex,data.species[actor.speciesIndex].field18,actor.poolSlot,rng),ground,request);
+  if(choice===0)return beginNativeActivityReaction(actor,selectNativeCageReaction(actor.cageDefinitionIndex,data.species[productBaseSpeciesIndex(actor.speciesIndex)].field18,actor.poolSlot,rng),ground,request);
   if(choice===1)return beginNativeActivityReaction(actor,selectNativePersonalityReaction(profile.fields['018'],actor.poolSlot,rng),ground,request);
   const walk=()=>{actor.state=2;actor.mode=0;actor.destinationState=1;actor.destinationQ12=nativeRaisingWanderTarget(actor,rng);request(actor,nativeSequence(actor,2));return 0;};
   // 02050010 -> Cage resident list, with its original physical slot order.
@@ -57,7 +58,7 @@ export function selectNativeIdleActivity(actor,profile,{ground,actors,rng,reques
     if(distance===-1||d<distance){peer=other;distance=d;}}
   if(!peer)return walk();
   const a=nativeHuntSpeciesByIndex(actor.speciesIndex),b=nativeHuntSpeciesByIndex(peer.speciesIndex);
-  const aExtra=data.species[actor.speciesIndex],bExtra=data.species[peer.speciesIndex];
+  const aExtra=data.species[productBaseSpeciesIndex(actor.speciesIndex)],bExtra=data.species[productBaseSpeciesIndex(peer.speciesIndex)];
   const lower=a.generation<b.generation||(a.generation===b.generation&&aExtra.field3a<bExtra.field3a);
   const friendly=actor.speciesIndex===peer.speciesIndex||((aExtra.field18===bExtra.field18||a.attribute===b.attribute)&&lower);
   const different=aExtra.field18!==bExtra.field18&&a.attribute!==b.attribute;
@@ -117,3 +118,4 @@ export function finishNativeActivityMovement(actor,request) {
   if(actor.destinationState===15){actor.state=15;actor.activity={elapsed:0};actor.directionQ12[2]=0x3000;request(actor,15,true);return false;}
   return true;
 }
+

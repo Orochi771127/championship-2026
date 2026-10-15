@@ -1,3 +1,5 @@
+import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {productEvolutionOptions} from '../contracts/productSpeciesData.js';
 // Child of the application-owned Raising lifecycle. Numeric sequences reuse
 // the existing character metadata and native animator; no renderer or ticker.
 import {BATTLE_CHARACTER_PROFILES,BATTLE_SPECIES_ENTITIES} from "../../data/championship/battleCharacterProfiles.js";
@@ -414,17 +416,28 @@ export function enterNativeRaisingCage(actor,profile,{previousDefinition,ground,
   return normalizeNativeIndividualProfile(p);
 }
 export function beginNativeRaisingEvolution(actor,selection,rng,foods=[]) {
+  if(getProductExtension(selection.target))requirePlayableProductExtension(selection.target);
   detachFood(actor,foods);
+  const choices=selection.productChoiceConfirmed||selection.actor?.['464']?[]:productEvolutionOptions(selection.target);
+  if(choices.length>1){actor.state=12;actor.evolution={oldSpecies:actor.speciesIndex,target:selection.target,
+    choices:[...choices],choicePending:true,pendingSelection:structuredClone(selection),targetActor:null,phase:'choice',elapsed:0,reveal:false};return;}
   actor.state=selection.target<0?21:12;actor.evolution={oldSpecies:actor.speciesIndex,target:selection.target,index:selection.actor?.['1f4']??0,
-    last:selection.actor?.['1f0']??1,inherited:selection.actor?.['464']??0,phase:0,elapsed:0,period:20,reveal:false,totalFrames:0,targetActor:null};
+    productRouteId:selection.productRouteId??null,last:selection.actor?.['1f0']??1,inherited:selection.actor?.['464']??0,phase:0,elapsed:0,period:20,reveal:false,totalFrames:0,targetActor:null};
   if(selection.target>=0){const targetActor={speciesIndex:selection.target,sequenceId:null,animator:null,nativeFrame:0};
     request(targetActor,selection.target<8?0:39,true);actor.evolution.targetActor=targetActor;}
   request(actor,39,true);
 }
+export function selectNativeRaisingEvolutionChoice(actor,target,rng) {
+  const e=actor.evolution;
+  if(!e?.choicePending||!e.choices.includes(target)||!productEvolutionOptions(e.target).includes(target))return false;
+  const selection={...e.pendingSelection,target,productChoiceConfirmed:true,
+    productRouteId:target===e.target?null:`${e.oldSpecies}:${e.target}:${target}`};
+  beginNativeRaisingEvolution(actor,selection,rng);return true;
+}
 // 0211A338 phase counters. Scene transforms remain a projection; this does not
 // create another animation clock or write the form before the original exit.
 export function stepNativeRaisingEvolution(actor,profile,rng) {
-  const e=actor.evolution;if(!e)return {profile,changed:false};
+  const e=actor.evolution;if(!e||e.choicePending)return {profile,changed:false};
   e.elapsed++;e.totalFrames++;actor.animator.advanceNative(4096);
   if(e.targetActor)e.targetActor.animator.advanceNative(4096);
   if(e.target<0){ // 0211C038 / 0211C778: effect sequence 15 advances only in phase 3.
@@ -446,7 +459,7 @@ export function stepNativeRaisingEvolution(actor,profile,rng) {
   else if(e.phase===5&&e.elapsed>7){e.phase=6;e.elapsed=0;}
   else if(e.phase===6&&e.elapsed>=60){e.phase=7;e.elapsed=0;}
   else if(e.phase===7&&e.elapsed>=30){
-    const event={oldSpecies:e.oldSpecies,target:e.target,index:e.index,inherited:e.inherited};
+    const event={oldSpecies:e.oldSpecies,target:e.target,index:e.index,inherited:e.inherited,productRouteId:e.productRouteId??null};
     let next=structuredClone(constructNativeIndividualForm(profile,e.target,rng));
     if(e.target<8){next.fields['024']=0;next.fields['028']=0;next.fields['01c']=0;next.narrowFields['03d']=0;}
     else if(!e.last)next.fields['020']=Math.min(100,(next.fields['020']+10)|0);
@@ -563,3 +576,4 @@ export function stepNativeRaisingAgeClock(remainder,minuteDelta) {
   if(total>4)total=2;
   return total<2 ? {remainder:total,ageDelta:0} : {remainder:total-2,ageDelta:total>>>1};
 }
+

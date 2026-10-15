@@ -6,6 +6,7 @@ import {readFileSync} from 'node:fs';
 // This minimal DOM verifies lifecycle logic, not rendered/native-browser behavior.
 let source=readFileSync(new URL('../src/championship/app/vs5Screens.js',import.meta.url),'utf8');
 source=source.replace('"./codeClipboard.js"',JSON.stringify(new URL('../src/championship/app/codeClipboard.js',import.meta.url).href));
+source=source.replace("'../text/battleTransportText.js'",JSON.stringify(new URL('../src/championship/text/battleTransportText.js',import.meta.url).href));
 source=source.replace(/^import .*from ["']\.\.\/text\/.*;$/gm,'');
 source=`const uiText=(key,params={})=>Object.entries(params).reduce((s,[k,v])=>s.replace('{'+k+'}',v),key);
 const titleEventText=(_a,_b,fallback)=>fallback,raisingDisplayName=e=>e.displayName,speciesName=id=>id,tutorialBattleText=()=>({});\n`+source;

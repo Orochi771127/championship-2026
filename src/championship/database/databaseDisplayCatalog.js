@@ -1,8 +1,13 @@
+import {listProductExtensions,planUltimateDisplayOrder} from '../contracts/productSpeciesExtensions.js';
 // Owner-approved presentation catalog. Codes are stored explicitly, never
 // assigned from array position, species IDs, locale or the active filter.
-import catalog from '../../data/championship/database-display.r1.json' with {type:'json'};
+import nativeCatalog from '../../data/championship/database-display.r1.json' with {type:'json'};
 import {deepFreeze} from '../contracts/championshipContracts.js';
 
+const enabled=listProductExtensions().every(e=>e.runtimeReady&&e.evolutionReady);
+const planned=enabled?planUltimateDisplayOrder(nativeCatalog.entries):[];
+const ultimate=new Map(planned.map(e=>[e.speciesIndex,e]));
+const catalog=enabled?{...nativeCatalog,entries:[...nativeCatalog.entries.map(e=>ultimate.get(e.speciesIndex)??e),...listProductExtensions().map(e=>({...ultimate.get(e.speciesIndex),entryKey:`dex-species-${e.speciesIndex}`,contentStatus:'PUBLISHED',legacyBookOrdinal:null,firstPublishedRevision:2}))].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)}:nativeCatalog;
 export const DATABASE_DISPLAY_CATALOG = deepFreeze(catalog);
 const bySpecies = new Map(catalog.entries.map(entry=>[entry.speciesIndex,entry]));
 export function getDatabaseDisplayEntry(speciesIndex) { return bySpecies.get(speciesIndex) ?? null; }
@@ -17,3 +22,4 @@ export function databaseDisplayRows(book, stageIndex = null) {
       ...entry
     }));
 }
+

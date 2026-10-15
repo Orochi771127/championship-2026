@@ -271,7 +271,19 @@
     "tests/championship-raising-fullscreen-overlay-cases.mjs",
     "tests/championship-database-route-width-cases.mjs",
     "tests/championship-qa-ranch-expansion-cases.mjs",
-    "tests/championship-qa-ranch-expansion-page-cases.mjs"
+    "tests/championship-qa-ranch-expansion-page-cases.mjs",
+    "tests/product-app-accepted-fixture-cases.mjs",
+    "tests/product-evolution-accepted-fixture-cases.mjs",
+    "tests/product-gameplay-compat-cases.mjs",
+    "tests/product-species-extensions-cases.mjs",
+    "tests/alternate-form-build-boundary-cases.mjs",
+    "tests/alternate-form-portraits-cases.mjs",
+    "tests/championship-product-transport-accepted-fixture-cases.mjs",
+    "tests/championship-product-transport-app-accepted-fixture-cases.mjs",
+    "tests/championship-product-transport-cases.mjs",
+    "tests/championship-product-transport-locale-cases.mjs",
+    "tests/championship-product-transport-ui-cases.mjs",
+    "tests/championship-alternate-form-assets-cases.mjs"
   ],
   "localReference": {
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",

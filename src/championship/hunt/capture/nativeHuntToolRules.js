@@ -1,3 +1,4 @@
+import {productBaseSpeciesIndex} from '../../contracts/productSpeciesData.js';
 // Native Hunt tool consumers. Plain functional values, no research bytecode,
 // source art, secondary state owner or clock. Call once per native update.
 import source from "../../../data/championship/catalogs/hunt-tools.r1.json" with { type: "json" };
@@ -12,9 +13,10 @@ function item(rows, index) {
   return rows[index];
 }
 export function nativeHuntToolSpecies(speciesIndex) {
-  const row = source.species[speciesIndex];
-  if (!Number.isInteger(speciesIndex) || row?.speciesIndex !== speciesIndex) throw Error("NATIVE_HUNT_TOOL_SPECIES_REQUIRED");
-  return row;
+  const base=productBaseSpeciesIndex(speciesIndex);
+  const row = source.species[base];
+  if (!Number.isInteger(speciesIndex) || row?.speciesIndex !== base) throw Error("NATIVE_HUNT_TOOL_SPECIES_REQUIRED");
+  return base===speciesIndex?row:Object.freeze({...row,speciesIndex});
 }
 // 0210F0A4: distraction/blindness overrides the species response category.
 export function nativeToolEffectiveness(speciesIndex, selector, { distracted = 0, blinded = 0 } = {}) {
@@ -146,3 +148,4 @@ export function stepNativeFoodBite(state,food,frameIndex,nextChannel,foodThresho
   else {a.satiety+=f.nutrition;f.nutrition=0;f.active=false;return {state:a,food:f,nextAi:1};}
   return {state:a,food:f,nextAi:a.satiety>=foodThreshold?1:-1};
 }
+

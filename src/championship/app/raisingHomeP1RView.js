@@ -1,3 +1,7 @@
+import {getLocale} from '../text/locale.js';
+import {productFormText} from '../text/productFormText.js';
+const evolutionChoiceTitle=()=>productFormText('choose');
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 import { downloadSaveBackup } from './downloadSaveBackup.js';
 import { isNativeRanchLayout } from "../cage/ranchExpansion.js";
 import { retranslate, setLabel, setText, uiText } from "../text/uiText.js";
@@ -261,6 +265,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   }
   const transition=node('div','int-rh2-lifecycle');transition.hidden=true;transition.setAttribute('aria-live','polite');
   const transitionText=node('p','int-rh2-lifecycle__text');
+  const evolutionChoice=node('div','int-rh2-day-confirm');evolutionChoice.hidden=true;
+  evolutionChoice.setAttribute('role','dialog');evolutionChoice.setAttribute('aria-label',evolutionChoiceTitle());
+  transition.append(evolutionChoice);
   const retry=button('int-rh2-system-button','Retry');retry.hidden=true;
   retry.addEventListener('click',()=>presentation.intents.requestSave());transition.append(transitionText,retry);root.append(transition);
   const calendar=node('button','int-rh2-calendar');calendar.type='button';calendar.hidden=true;setLabel(calendar,'aria-label','確認新日期，返回育成');
@@ -470,6 +477,19 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     }
     transition.hidden=!day&&!lifecycle?.evolution&&!lifecycle?.confirmation&&!activeMail;
     dayConfirm.hidden=!lifecycle?.confirmation;
+    const choice=lifecycle?.evolution?.choicePending?lifecycle.evolution:null;
+    evolutionChoice.hidden=!choice;
+    const choiceKey=choice?`${getLocale()}:${choice.instanceId}:${choice.choices.join(',')}`:'';
+    if(evolutionChoice.dataset.choiceKey!==choiceKey){
+      evolutionChoice.dataset.choiceKey=choiceKey;
+      if(choice)evolutionChoice.replaceChildren(node('p','int-rh2-day-confirm__question',evolutionChoiceTitle()),
+        ...choice.choices.map(target=>{
+          const extension=getProductExtension(target);
+          const label=extension?.displayNameZh??speciesName(target);
+          const button=node('button','int-rh2-calendar',uiText(label));button.type='button';
+          button.addEventListener('click',()=>presentation.intents.selectEvolutionChoice?.(choice.instanceId,target));return button;
+        }));
+    }
     transition.dataset.phase=day?.phase??(lifecycle?.evolution?'evolution':'idle');
     transition.style.backgroundColor=day?`rgba(0,0,0,${day.phase==='fade-out'?Math.min(1,day.frames/8):day.phase==='fade-in'?Math.max(0,1-day.frames/8):1})`:'transparent';
     transitionText.textContent=day?.phase==='saving'?(day.savePhase==='SAVE_FAILED'?uiText('Save did not complete. You can try again.'):uiText('Saving...')):'';
@@ -555,3 +575,4 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     }
   });
 }
+

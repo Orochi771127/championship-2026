@@ -1,5 +1,5 @@
 // OVL18 02112734: ordered original evolution predicates and caller results.
-import rules from '../../data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+import {PRODUCT_RAISING_LIFECYCLE_RULES as rules} from '../contracts/productSpeciesData.js';
 import curve from '../../data/championship/catalogs/creature-stat-curve.r1.json' with {type:'json'};
 import {nativeHuntSpeciesByIndex} from '../hunt/capture/nativeHuntSources.js';
 import {normalizeNativeIndividualProfile} from './nativeIndividualProfile.js';
@@ -70,3 +70,4 @@ export function evaluateNativeRebirth(profile,force=false) {
     p.narrowFields['03c']=Math.min(100,cycles+1);return {profile:normalizeNativeIndividualProfile(p),target:Math.min(7,cycles+1)};}
   return {profile:p,target:-1};
 }
+

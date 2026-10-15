@@ -54,7 +54,7 @@ export function projectDatabaseEvolutionConditions(sourceSpeciesIndex, branchInd
     || !Number.isInteger(sourceSpeciesIndex) || sourceSpeciesIndex < 8 || sourceSpeciesIndex > 223
     || !Number.isInteger(branchIndex) || branchIndex < 0 || branchIndex > 4
     || !Array.isArray(options.registeredSpecies) || !Array.isArray(options.evolutionBranches)) return null;
-  const route = projectDatabaseEvolutionRoutes(sourceSpeciesIndex, options)[branchIndex];
+  const route = projectDatabaseEvolutionRoutes(sourceSpeciesIndex, options).find(r=>r.branchIndex===branchIndex&&(r.productRouteId??null)===(options.productRouteId??null));
   if (route?.revealed !== true) return null;
   const rule = lifecycle.rules[sourceSpeciesIndex - 8]?.[branchIndex];
   if (!rule || ![0,1].includes(rule.kind) || !Array.isArray(rule.thresholds)
@@ -81,3 +81,4 @@ export function projectDatabaseEvolutionConditions(sourceSpeciesIndex, branchInd
     caveatIds
   });
 }
+

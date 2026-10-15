@@ -1,3 +1,4 @@
+import {isRegisteredAlternateEntity} from './alternateFormAssetContracts.js';
 import { loadPixiCharacterRuntimeBundle } from "./pixiCharacterRuntimeBundle.js";
 import { CHARACTER_NATIVE_SIZING } from "../../data/championship/characterNativeSizing.js";
 import { BATTLE_CHARACTER_GEOMETRY } from "../../data/championship/battleCharacterGeometry.js";
@@ -42,7 +43,7 @@ export async function loadLicensedCharacterRoster({
   const wanted = new Set(speciesIds.map(canonicalSpeciesId).map((id) => identities.get(id)).filter(Boolean));
   for (const entityId of wanted) {
     if (records.get(entityId)?.runtime !== `${entityId}/runtime.json`
-      || !/^[em]\d{3}_[a-z0-9_]+$/.test(entityId)) {
+      || (!/^[em]\d{3}_[a-z0-9_]+$/.test(entityId)&&!isRegisteredAlternateEntity(entityId))) {
       throw new Error(`INVALID_CHARACTER_RUNTIME_PATH:${entityId}`);
     }
   }
@@ -106,7 +107,7 @@ export async function loadLicensedCharacterRoster({
   const onAbort = () => { void dispose(); };
   async function loadEntity(entityId) {
     const record = records.get(entityId);
-    if (record?.runtime !== `${entityId}/runtime.json` || !/^[em]\d{3}_[a-z0-9_]+$/.test(entityId)) {
+    if (record?.runtime !== `${entityId}/runtime.json` || (!/^[em]\d{3}_[a-z0-9_]+$/.test(entityId)&&!isRegisteredAlternateEntity(entityId))) {
       throw new Error(`INVALID_CHARACTER_RUNTIME_PATH:${entityId}`);
     }
     try {
@@ -211,3 +212,4 @@ export async function loadLicensedCharacterRoster({
     dispose
   });
 }
+

@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0b181c">
+    <link rel="icon" href="data:,">
+    <title>網線拍檔：錦標賽</title>
+    <script>
+      // Player preferences before the first paint (settings round, 2026-09-29).
+      // Read-only, and a mirror of settings/preferenceEnvironment.js and the
+      // "auto" start of settings/qualityController.js, so a saved theme, reading
+      // size or language never flashes the default one first; the modules take
+      // over as soon as they load. tests/championship-settings-cases.mjs runs
+      // this script against the modules' own mapping.
+      (function () {
+        var root = document.documentElement, p = {}, k;
+        try {
+          var d = JSON.parse(window.sessionStorage.getItem("championshipAlternateFormsQA:r1:championshipModernSave:preferences:v1") || "null");
+          if (d && typeof d === "object" && !Array.isArray(d)) {
+            if (d.schemaVersion === 1) {
+              for (k in (d.account || {})) p[k] = d.account[k];
+              for (k in (d.device || {})) p[k] = d.device[k];
+            } else if (d.schemaVersion === undefined) p = d;
+          }
+        } catch (error) { p = {}; }
+        function query(text) { try { return window.matchMedia(text).matches === true; } catch (error) { return false; } }
+        function pick(value, allowed, fallback) { return allowed.indexOf(value) >= 0 ? value : fallback; }
+        var choice = pick(p.theme, ["night", "clear", "warm", "classic", "system"], "night");
+        var dark = typeof window.matchMedia === "function" ? query("(prefers-color-scheme: dark)") : true;
+        var theme = choice === "system" ? (dark ? "night" : "clear") : choice;
+        var motion = pick(p.reducedMotion, ["system", "on", "off"], "system");
+        var quality = pick(p.quality, ["auto", "saver", "balanced", "high"], "auto");
+        var nav = window.navigator || {};
+        if (quality === "auto") {
+          quality = (nav.connection && nav.connection.saveData === true)
+            || (nav.deviceMemory > 0 && nav.deviceMemory <= 2)
+            || (nav.hardwareConcurrency > 0 && nav.hardwareConcurrency <= 2) ? "saver" : "balanced";
+        }
+        root.dataset.theme = theme;
+        root.dataset.themeChoice = choice;
+        root.dataset.textScale = String(pick(p.textScale, [100, 115, 130], 100));
+        root.dataset.hud = pick(p.hudDensity, ["standard", "compact"], "standard");
+        root.dataset.motion = motion === "on" || (motion === "system" && query("(prefers-reduced-motion: reduce)")) ? "reduced" : "full";
+        root.dataset.flash = pick(p.flashIntensity, ["standard", "soft"], "standard");
+        root.dataset.highlight = pick(p.highlightMode, ["full", "compact"], "full");
+        root.dataset.quality = quality;
+        root.lang = pick(p.locale, ["zh-Hant", "en", "ja", "th", "vi"], "zh-Hant");
+        var color = document.querySelector('meta[name="theme-color"]');
+        if (color) color.setAttribute("content", { night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
+        var scheme = document.querySelector('meta[name="color-scheme"]');
+        if (scheme) scheme.setAttribute("content", theme === "night" || theme === "classic" ? "dark" : "light");
+      })();
+    </script>
+    <!-- 2026-09-29 redesign: design tokens first, then one sheet per game area.
+         The earlier reskin layers were folded into these and removed. -->
+    <link rel="stylesheet" href="./src/championship/app/ui/tokens.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/styles.css?v=ui-polish-20261012">
+    <link rel="stylesheet" href="./src/championship/app/interactiveTutorial.css?v=onboarding-20261009">
+    <link rel="stylesheet" href="./src/championship/app/intRh2Styles.css?v=raising-fullscreen-20261015">
+    <link rel="stylesheet" href="./src/championship/app/vs2Styles.css?v=dex-route-height-20261015">
+    <link rel="stylesheet" href="./src/championship/app/medalCollection.css?v=source-outline-20261015">
+    <link rel="stylesheet" href="./src/championship/app/vs5Styles.css?v=ui-polish-20261012">
+    <link rel="stylesheet" href="./src/championship/app/opening.css?v=title-grounded-20261015">
+    <link rel="stylesheet" href="./src/championship/app/ui/highlight.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/ui/settings.css?v=settings-2">
+    <link rel="stylesheet" href="./src/championship/app/ui/systemBackgrounds.css?v=system-backgrounds-r1">
+    <!-- Classic theme: the earlier interface skin, active only under data-theme="classic". -->
+    <link rel="stylesheet" href="./src/championship/app/nativeUiSkin.css?v=classic-1">
+    <link rel="stylesheet" href="./src/championship/app/mobileTouch.css?v=touch-20261011-r2">
+    <script type="importmap">{"imports": {"three": "./node_modules/three/build/three.module.js", "./src/data/championship/product-species-extensions.r1.json": "./qa/alternate-form-product-catalog.json", "./src/data/championship/alternate-form-assets.r1.json": "./qa/alternate-form-asset-catalog.json", "./src/championship/app/championshipStandaloneApp.js": "./src/championship/app/alternateFormQaApp.js", "./src/championship/app/ChampionshipPersistentSavePort.js": "./src/championship/app/alternateFormQaPorts.js", "./src/championship/presentation/completedOriginalCharacters.js": "./src/championship/app/alternateFormQaCharacters.js", "./src/data/championship/database-hero-portraits.r1.json": "./src/data/championship/qa-database-hero-portraits.r1.json"}}</script>
+      <!-- modulepreload: generated by scripts/build-module-preload.mjs -->
+    <link rel="modulepreload" href="./src/championship/presentation/originalRuntimeLocation.js">
+    <link rel="modulepreload" href="./src/championship/presentation/finalHuntArt20261008.js">
+    <link rel="modulepreload" href="./src/championship/presentation/vs2/huntFactoryShutters.js">
+    <link rel="modulepreload" href="./src/championship/presentation/vs2/huntDepthOccluders.js">
+    <link rel="modulepreload" href="./src/championship/text/brandTerms.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/creature-species.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/app/championshipStandaloneMessages.js">
+    <link rel="modulepreload" href="./src/championship/app/championshipStandaloneApp.js">
+    <link rel="modulepreload" href="./src/championship/app/championshipClockDriver.js">
+    <link rel="modulepreload" href="./src/championship/app/cageRoster.js">
+    <link rel="modulepreload" href="./src/championship/app/raisingPresentationSource.js">
+    <link rel="modulepreload" href="./src/championship/app/gateHuntPresentationSource.js">
+    <link rel="modulepreload" href="./src/championship/app/championshipScreenStack.js">
+    <link rel="modulepreload" href="./src/championship/presentation/championshipPixiStage.js">
+    <link rel="modulepreload" href="./src/championship/presentation/intRh2/raisingFieldViewport.js">
+    <link rel="modulepreload" href="./src/championship/presentation/battleEffectArt.js">
+    <link rel="modulepreload" href="./src/championship/presentation/raisingFeedbackArt.js">
+    <link rel="modulepreload" href="./src/championship/presentation/characterHudArt.js">
+    <link rel="modulepreload" href="./src/championship/presentation/titleImageLifecycle.js">
+    <link rel="modulepreload" href="./src/championship/presentation/huntFeedbackArt.js">
+    <link rel="modulepreload" href="./src/championship/presentation/battleResultCharacters.js">
+    <link rel="modulepreload" href="./src/championship/battle/nativeTitleProgression.js">
+    <link rel="modulepreload" href="./src/championship/presentation/battleAudioPresentation.js">
+    <link rel="modulepreload" href="./src/championship/text/zhHant.js">
+    <link rel="modulepreload" href="./src/championship/presentation/pixiCharacterRuntimeBundle.js">
+    <link rel="modulepreload" href="./src/championship/app/qaUnlock.js">
+    <link rel="modulepreload" href="./src/championship/gate/gateCatalog.js">
+    <link rel="modulepreload" href="./src/championship/app/championshipStatusBar.js">
+    <link rel="modulepreload" href="./src/championship/app/digimonListScreen.js">
+    <link rel="modulepreload" href="./src/championship/app/scheduleScreen.js">
+    <link rel="modulepreload" href="./src/championship/app/championshipScreen.js">
+    <link rel="modulepreload" href="./src/championship/battle/battleOutcome.js">
+    <link rel="modulepreload" href="./src/championship/battle/battleMatchSelection.js">
+    <link rel="modulepreload" href="./src/championship/app/helpScreen.js">
+    <link rel="modulepreload" href="./src/championship/app/medalCollectionScreen.js">
+    <link rel="modulepreload" href="./src/championship/app/tamerInfoScreen.js">
+    <link rel="modulepreload" href="./src/championship/app/openingPresentation.js">
+    <link rel="modulepreload" href="./src/championship/app/openingFilm.js">
+    <link rel="modulepreload" href="./src/championship/app/phase1ProductCreatures.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/species-names.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/app/championshipToolbar.js">
+    <link rel="modulepreload" href="./src/championship/presentation/runtimeMapArtBundle.js">
+    <link rel="modulepreload" href="./src/championship/presentation/raisingRanchArtPlan.js">
+    <link rel="modulepreload" href="./src/championship/presentation/cageForeground.js">
+    <link rel="modulepreload" href="./src/championship/presentation/raisingExpansionPreview.js">
+    <link rel="modulepreload" href="./src/championship/app/ranchExpansionPreview.js">
+    <link rel="modulepreload" href="./src/championship/app/loadProgress.js">
+    <link rel="modulepreload" href="./src/championship/app/portraitFrame.js">
+    <link rel="modulepreload" href="./src/championship/app/huntLayoutResolver.js">
+    <link rel="modulepreload" href="./src/championship/app/uiDialog.js">
+    <link rel="modulepreload" href="./src/championship/app/interactiveTutorialPreview.js">
+    <link rel="modulepreload" href="./src/championship/app/assetPrefetch.js">
+    <link rel="modulepreload" href="./src/championship/app/loadWatchdog.js">
+    <link rel="modulepreload" href="./src/championship/presentation/highlight/highlightTimeline.js">
+    <link rel="modulepreload" href="./src/championship/presentation/highlight/createHighlightSequence.js">
+    <link rel="modulepreload" href="./src/championship/presentation/highlight/highlightAudio.js">
+    <link rel="modulepreload" href="./src/championship/app/downloadSaveBackup.js">
+    <link rel="modulepreload" href="./src/championship/app/runtimeRecoveryDiagnostics.js">
+    <link rel="modulepreload" href="./src/championship/app/autosaveScheduler.js">
+    <link rel="modulepreload" href="./src/championship/app/ChampionshipPersistentSavePort.js">
+    <link rel="modulepreload" href="./src/championship/app/settings/preferenceStore.js">
+    <link rel="modulepreload" href="./src/championship/app/settings/preferenceEnvironment.js">
+    <link rel="modulepreload" href="./src/championship/app/settings/qualityController.js">
+    <link rel="modulepreload" href="./src/championship/app/settings/settingsPanel.js">
+    <link rel="modulepreload" href="./src/championship/presentation/systemBackgrounds.js">
+    <link rel="modulepreload" href="./src/championship/presentation/audioBus.js">
+    <link rel="modulepreload" href="./src/championship/presentation/musicPresentation.js">
+    <link rel="modulepreload" href="./src/championship/presentation/originalMusicCatalog.js">
+    <link rel="modulepreload" href="./src/championship/presentation/presentationPreferences.js">
+    <link rel="modulepreload" href="./src/championship/text/locale.js">
+    <link rel="modulepreload" href="./src/championship/text/uiText.js">
+    <link rel="modulepreload" href="./src/data/championship/public-playtest.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/presentation/vs2/huntFoliageDither.js">
+    <link rel="modulepreload" href="./src/championship/hunt/huntPresentationBinding.js">
+    <link rel="modulepreload" href="./src/championship/app/interactiveTutorialHuntSteps.js">
+    <link rel="modulepreload" href="./src/championship/app/interactiveTutorialBattleSteps.js">
+    <link rel="modulepreload" href="./src/championship/r2/createChampionshipR2Session.js">
+    <link rel="modulepreload" href="./src/championship/kernel/ChampionshipSavePortR2.js">
+    <link rel="modulepreload" href="./src/championship/raising/raisingHomePersistenceR2.js">
+    <link rel="modulepreload" href="./src/championship/raising/raisingHomeDefinition.js">
+    <link rel="modulepreload" href="./src/championship/app/championshipRaisingProduction.js">
+    <link rel="modulepreload" href="./src/championship/app/championshipStandaloneSave.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeIndividualProfile.js">
+    <link rel="modulepreload" href="./src/championship/gate/gateAdmission.js">
+    <link rel="modulepreload" href="./src/championship/hunt/huntWorld.js">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/nativeHuntHistory.js">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/nativeHuntSources.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingStarter.js">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/nativeHuntIndividual.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingMessages.js">
+    <link rel="modulepreload" href="./src/championship/app/nativeOpeningState.js">
+    <link rel="modulepreload" href="./src/championship/contracts/championshipContracts.js">
+    <link rel="modulepreload" href="./src/championship/app/interactiveTutorialCheckpoint.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeTutorialRaisingActor.js">
+    <link rel="modulepreload" href="./src/championship/app/interactiveTutorialRaisingSteps.js">
+    <link rel="modulepreload" href="./src/championship/app/nativeTutorialProgression.js">
+    <link rel="modulepreload" href="./src/championship/text/tutorialMessages.zhHant.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingTreatment.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingActor.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingHand.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingRanchRing.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingFood.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeGroundSpacing.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingHomeState.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingWaste.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingCalendar.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingOvernight.js">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/memoryCardCapacity.js">
+    <link rel="modulepreload" href="./src/championship/hunt/loadout/huntInventory.js">
+    <link rel="modulepreload" href="./src/championship/hunt/loadout/huntLoadoutRuntime.js">
+    <link rel="modulepreload" href="./src/championship/hunt/loadout/huntEquipmentCatalog.js">
+    <link rel="modulepreload" href="./src/championship/shop/shopRuntime.js">
+    <link rel="modulepreload" href="./src/championship/database/databaseRuntime.js">
+    <link rel="modulepreload" href="./src/championship/database/databaseCatalog.js">
+    <link rel="modulepreload" href="./src/championship/database/nativeBookRegistration.js">
+    <link rel="modulepreload" href="./src/championship/cage/cageEditRuntime.js">
+    <link rel="modulepreload" href="./src/championship/cage/cageCatalog.js">
+    <link rel="modulepreload" href="./src/championship/cage/ranchExpansion.js">
+    <link rel="modulepreload" href="./src/championship/battle/nativeChampionshipRounds.js">
+    <link rel="modulepreload" href="./src/championship/battle/nativeFreeBattle.js">
+    <link rel="modulepreload" href="./src/championship/time/championshipWorldClock.js">
+    <link rel="modulepreload" href="./src/championship/battle/battleRngChannel.js">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/nativeHuntPersistentState.js">
+    <link rel="modulepreload" href="./src/championship/raising/raisingInstanceIdentity.js">
+    <link rel="modulepreload" href="./src/championship/battle/battleEconomyTransaction.js">
+    <link rel="modulepreload" href="./docs/contracts/championship/raising-home-presentation.v1.json" as="json">
+    <link rel="modulepreload" href="./docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/nativeHuntToolRules.js">
+    <link rel="modulepreload" href="./src/championship/hunt/huntFieldCoordinates.js">
+    <link rel="modulepreload" href="./src/championship/presentation/huntMobileReadouts.js">
+    <link rel="modulepreload" href="./src/championship/presentation/completedOriginalUi20261007.js">
+    <link rel="modulepreload" href="./src/championship/presentation/characterAnimationTimeline.js">
+    <link rel="modulepreload" href="./src/championship/presentation/hudManifestCache.js">
+    <link rel="modulepreload" href="./src/championship/battle/titleEventSchedule.js">
+    <link rel="modulepreload" href="./src/championship/text/growthStageTerms.js">
+    <link rel="modulepreload" href="./src/championship/text/catalogs.zhHant.js">
+    <link rel="modulepreload" href="./src/championship/text/gameText.en.js">
+    <link rel="modulepreload" href="./src/championship/text/gameText.ja.js">
+    <link rel="modulepreload" href="./src/championship/text/gameText.th.js">
+    <link rel="modulepreload" href="./src/championship/text/gameText.vi.js">
+    <link rel="modulepreload" href="./src/championship/text/catalogs.en.js">
+    <link rel="modulepreload" href="./src/championship/text/catalogs.ja.js">
+    <link rel="modulepreload" href="./src/championship/text/catalogs.th.js">
+    <link rel="modulepreload" href="./src/championship/text/catalogs.vi.js">
+    <link rel="modulepreload" href="./src/championship/presentation/pixiCharacterAnimationController.js">
+    <link rel="modulepreload" href="./src/championship/presentation/nativeHuntCharacterAction.js">
+    <link rel="modulepreload" href="./src/championship/presentation/battleCharacterAction.js">
+    <link rel="modulepreload" href="./src/championship/shop/shopCatalog.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/gate-table.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/gate/originalHuntFieldBindings.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/battle-title-events.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/battle-opponent-teams.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/battle-presets.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/help-text.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/app/medalCollection.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingLifecycle.js">
+    <link rel="modulepreload" href="./src/championship/app/openingStoryPresentation.js">
+    <link rel="modulepreload" href="./src/championship/app/openingEggChoices.js">
+    <link rel="modulepreload" href="./src/championship/text/openingEggText.js">
+    <link rel="modulepreload" href="./src/championship/text/openingStoryText.js">
+    <link rel="modulepreload" href="./src/championship/text/openingFilmText.js">
+    <link rel="modulepreload" href="./src/championship/cage/ranchSlotGeometry.js">
+    <link rel="modulepreload" href="./src/championship/presentation/originalCageVisualBindings.js">
+    <link rel="modulepreload" href="./src/championship/presentation/raisingCageArtPlan.js">
+    <link rel="modulepreload" href="./src/championship/text/interactiveTutorialPreviewText.js">
+    <link rel="modulepreload" href="./src/championship/app/championshipStorageGuard.js">
+    <link rel="modulepreload" href="./src/championship/app/settings/preferenceSchema.js">
+    <link rel="modulepreload" href="./src/championship/text/uiText.en.js">
+    <link rel="modulepreload" href="./src/championship/text/uiText.ja.js">
+    <link rel="modulepreload" href="./src/championship/text/uiText.th.js">
+    <link rel="modulepreload" href="./src/championship/text/uiText.vi.js">
+    <link rel="modulepreload" href="./src/championship/hunt/huntPresentationViewport.js">
+    <link rel="modulepreload" href="./src/championship/field/fieldCamera.js">
+    <link rel="modulepreload" href="./src/championship/kernel/ChampionshipModeRouter.js">
+    <link rel="modulepreload" href="./src/championship/kernel/ChampionshipSaveCoordinatorR2.js">
+    <link rel="modulepreload" href="./src/championship/modes/championshipModeRegistry.js">
+    <link rel="modulepreload" href="./src/championship/field/index.js">
+    <link rel="modulepreload" href="./src/data/championship/r2/fields/fieldInventoryR2.js">
+    <link rel="modulepreload" href="./src/championship/field/fieldDefinition.js">
+    <link rel="modulepreload" href="./src/championship/field/fieldCollision.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/hunt-entry.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/nativeHuntActorInitialization.js">
+    <link rel="modulepreload" href="./src/championship/battle/battleCreatureBuild.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/raising-messages.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/raising/nativeIndividualEvolution.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingMovement.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingCare.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingFeedback.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingRecoveryStars.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingCarry.js">
+    <link rel="modulepreload" href="./src/data/championship/battleCharacterProfiles.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingActivity.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingTraining.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/tutorial-steps.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/text/tutorialMessages.en.js">
+    <link rel="modulepreload" href="./src/championship/text/tutorialMessages.ja.js">
+    <link rel="modulepreload" href="./src/championship/text/tutorialMessages.th.js">
+    <link rel="modulepreload" href="./src/championship/text/tutorialMessages.vi.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingGrowth.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingSleep.js">
+    <link rel="modulepreload" href="./src/championship/raising/nativeRaisingGround.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/raising-ground.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/field/groundFootpointSeparation.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/raising-lifecycle.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/hunt/loadout/huntLoadoutContract.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/shop.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/hunt-tools.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/database/databaseEvolutionRoutes.js">
+    <link rel="modulepreload" href="./src/championship/database/databaseEvolutionConditions.js">
+    <link rel="modulepreload" href="./src/data/championship/nativeBookSpecies.js">
+    <link rel="modulepreload" href="./src/championship/cage/cageEffects.js">
+    <link rel="modulepreload" href="./src/championship/cage/nativeRanchLayout.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/championship-pools.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/free-battle.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/rng-channels.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/battle/battleRewardTransaction.js">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/wildCaptureFlow.js">
+    <link rel="modulepreload" href="./src/championship/hunt/capture/nativeCapturePhases.js">
+    <link rel="modulepreload" href="./assets/production/hunt/accepted-20261010/manifest.json" as="json">
+    <link rel="modulepreload" href="./assets/production/hunt/licensed-runtime-v1/manifest.json" as="json">
+    <link rel="modulepreload" href="./src/championship/hunt/loadout/nativeHuntPluginRules.js">
+    <link rel="modulepreload" href="./assets/production/original-ui-intake-20261007/manifest.json" as="json">
+    <link rel="modulepreload" href="./assets/production/medal-name-corrections-20261014/manifest.json" as="json">
+    <link rel="modulepreload" href="./assets/production/original-ui-intake-20261007/toolbar-point64-r1-20261009/manifest.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/battle-title-event-strings.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/creature-stat-curve.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/app/nativeOpeningStory.js">
+    <link rel="modulepreload" href="./src/championship/field/fieldConstants.js">
+    <link rel="modulepreload" href="./src/championship/kernel/ChampionshipSavePort.js">
+    <link rel="modulepreload" href="./src/championship/raising/createRaisingHomeRuntime.js">
+    <link rel="modulepreload" href="./src/championship/modes/createChampionshipModeShell.js">
+    <link rel="modulepreload" href="./src/championship/contracts/evidenceIngest.js">
+    <link rel="modulepreload" href="./src/championship/contracts/evidenceTaxonomy.js">
+    <link rel="modulepreload" href="./src/championship/battle/battleNativeMath.js">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/raising-feedback.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/raising-activity.r1.json" as="json">
+    <link rel="modulepreload" href="./src/data/championship/catalogs/cage-definitions.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/contracts/evidenceAdapter.js">
+    <link rel="modulepreload" href="./src/data/championship/battleNativeMathTables.js">
+    <link rel="modulepreload" href="./src/championship/battle/battleScriptVm.js">
+    <link rel="modulepreload" href="./src/championship/contracts/evidencePolicy.js">
+    <!-- /modulepreload -->
+  </head>
+  <body><script>
+// QA page-owned storage. Production modules retain their single guarded writer.
+(function(){const prefix='championshipAlternateFormsQA:r1:';
+window.__alternateFormQaStorage=Object.freeze({namespace:prefix,
+getItem:key=>window.sessionStorage.getItem(prefix+key),
+setItem:(key,value)=>window.sessionStorage.setItem(prefix+key,value),
+removeItem:key=>window.sessionStorage.removeItem(prefix+key)});})();
+</script><section id="form-qa-gate" style="position:fixed;inset:0;z-index:99999;background:#102230;color:white;padding:32px;font:18px system-ui"><h1>新增型態隔離驗收</h1><p>僅此頁使用測試目錄。正式遊戲未啟用，主存檔不會被讀取或改寫。</p><p>進入後選「繼續遊戲」，測試四套角色、兩組進化選擇、對戰及重新載入。測試進度僅保存在本分頁。</p><button id="form-qa-start" type="button">進入隔離 QA 遊戲</button></section>
+    <!-- The title and the opening are drawn key art: they keep the night
+         palette whichever theme is chosen (data-palette, ui/tokens.css). -->
+    <div id="cm-title" class="cm-title" data-palette="night">
+      <div class="cm-title__panel" data-opening="login" data-background-src="./assets/production/title-morning-r1/arena.webp">
+        <div class="cm-title__art">
+        <div class="cm-title__light" aria-hidden="true"></div>
+        <div class="cm-title__logo">
+          <img class="cm-title__logo-art" data-title-locale="zh-Hant" data-title-src="./assets/production/title-morning-r1/logo-zh-Hant.webp" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
+          <img class="cm-title__logo-art" data-title-locale="en" data-title-src="./assets/production/title-multilingual-r1/logo-en.png" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
+          <img class="cm-title__logo-art" data-title-locale="ja" data-title-src="./assets/production/title-multilingual-r1/logo-ja.png" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
+          <img class="cm-title__logo-art" data-title-locale="th" data-title-src="./assets/production/title-multilingual-r1/logo-th.png" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
+          <img class="cm-title__logo-art" data-title-locale="vi" data-title-src="./assets/production/title-multilingual-r1/logo-vi.png" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
+          <h1 class="cm-title__name" aria-label="網線拍檔：錦標賽">網線拍檔<br><span>錦標賽</span></h1>
+        </div>
+        <div class="cm-title__partners" aria-hidden="true">
+          <span class="cm-title__spark cm-title__spark--one"></span>
+          <span class="cm-title__spark cm-title__spark--two"></span>
+          <img class="cm-title__partner cm-title__partner--blaze" data-title-src="./assets/production/title-morning-r1/blaze.webp" width="1353" height="1162" alt="" fetchpriority="low">
+          <img class="cm-title__partner cm-title__partner--cloud" data-title-src="./assets/production/title-morning-r1/cloud.webp" width="1254" height="1254" alt="" fetchpriority="low">
+        </div>
+        </div>
+      </div>
+      <div class="cm-title__controls">
+        <button id="cm-title-settings" class="cm-title__settings" type="button" aria-label="設定" title="設定" hidden></button>
+        <div class="cm-title__entry">
+          <button id="cm-login" class="cm-title__login" type="button" disabled>進入遊戲</button>
+          <div class="cm-title__actions" hidden>
+            <button id="cm-new-game" class="cm-button cm-button--primary" type="button">開始新遊戲</button>
+            <button id="cm-continue" class="cm-button" type="button" disabled>繼續遊戲</button>
+          </div>
+        </div>
+        <div id="cm-opening" hidden></div>
+        <div class="cm-title__feedback">
+          <div id="cm-boot-status" class="cm-title__boot-status">
+            <p id="cm-boot-message" role="status" aria-live="polite">正在啟動遊戲…</p>
+            <button id="cm-boot-retry" type="button" hidden>重新載入</button>
+          </div>
+          <div id="cm-title-background-feedback" class="cm-title__background-feedback" style="visibility:hidden" aria-hidden="true">
+            <p id="cm-title-background-status" role="status" aria-live="polite"></p>
+            <button id="cm-title-background-retry" type="button" hidden></button>
+          </div>
+          <p id="cm-title-note" class="cm-title__note" role="status"></p>
+        </div>
+      </div>
+    </div>
+    <div id="cm-root" hidden></div>
+    <noscript>網線拍檔：錦標賽需要啟用 JavaScript 才能執行。</noscript>
+    <script>
+      // Runs without the module graph. Reload never clears preferences or save.
+      (function () {
+        const copy = {
+          "zh-Hant": ["進入遊戲", "正在啟動遊戲…", "啟動時間較長。可以繼續等待，或重新載入；存檔不會被清除。", "遊戲未能啟動。請重新載入；存檔不會被清除。", "重新載入"],
+          en: ["Enter game", "Starting the game…", "Starting is taking longer. You can wait or reload; your save will be kept.", "The game could not start. Please reload; your save will be kept.", "Reload"],
+          ja: ["ゲームに入る", "ゲームを起動中…", "起動に時間がかかっています。待つか再読み込みしてください。セーブデータは保持されます。", "起動できませんでした。再読み込みしてください。セーブデータは保持されます。", "再読み込み"],
+          th: ["เข้าสู่เกม", "กำลังเริ่มเกม…", "ใช้เวลาเริ่มเกมนานกว่าปกติ คุณรอหรือโหลดใหม่ได้ ข้อมูลที่บันทึกไว้จะยังอยู่", "เริ่มเกมไม่ได้ โปรดโหลดใหม่ ข้อมูลที่บันทึกไว้จะยังอยู่", "โหลดใหม่"],
+          vi: ["Vào trò chơi", "Đang khởi động trò chơi…", "Khởi động lâu hơn dự kiến. Bạn có thể chờ hoặc tải lại; bản lưu vẫn được giữ.", "Không thể khởi động trò chơi. Hãy tải lại; bản lưu vẫn được giữ.", "Tải lại"]
+        };
+        const words = copy[document.documentElement.lang] || copy["zh-Hant"];
+        const panel = document.getElementById("cm-boot-status"), message = document.getElementById("cm-boot-message"), retry = document.getElementById("cm-boot-retry");
+        document.getElementById("cm-login").textContent = words[0]; message.textContent = words[1]; retry.textContent = words[4];
+        document.documentElement.dataset.bootState = "loading";
+        let ready = false, timer;
+        function failed(slow) {
+          if (ready) return;
+          if (!slow) clearTimeout(timer);
+          document.documentElement.dataset.bootState = slow ? "slow" : "error";
+          message.textContent = words[slow ? 2 : 3]; retry.hidden = false;
+        }
+        function runtimeError() { failed(false); }
+        retry.addEventListener("click", () => { retry.disabled = true; window.location.reload(); });
+        window.addEventListener("championship:ready", () => {
+          ready = true; clearTimeout(timer); panel.hidden = true;
+          document.documentElement.dataset.bootState = "ready";
+          window.removeEventListener("error", runtimeError);
+          window.removeEventListener("championship:boot-error", runtimeError);
+        }, { once: true });
+        if (window.location.protocol === "file:") {
+          document.querySelector("#cm-new-game").disabled = true;
+          document.querySelector("#cm-continue").disabled = true;
+          message.textContent = "請使用 START_CHAMPIONSHIP.cmd 啟動。瀏覽器不能直接執行本機 HTML 的遊戲模組。";
+          document.documentElement.dataset.launchBlocked = "FILE_PROTOCOL";
+          return;
+        }
+        document.getElementById("form-qa-start").addEventListener("click",()=>{
+        document.getElementById("form-qa-gate").remove();
+        timer = setTimeout(() => failed(true), 30000);
+        window.addEventListener("error", runtimeError);
+        window.addEventListener("championship:boot-error", runtimeError);
+        const gameModule = document.createElement("script");
+        gameModule.type = "module";
+        gameModule.src = "./src/championship/app/main.js?v=settings-2";
+        gameModule.addEventListener("error", runtimeError, { once: true });
+        document.body.appendChild(gameModule);
+        },{once:true});
+      })();
+    </script>
+  </body>
+</html>
+
