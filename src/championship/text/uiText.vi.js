@@ -6,6 +6,20 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  // Static system backgrounds; display copy only.
+  "SYSTEM_BACKGROUND_LABEL": "Nền trang hệ thống",
+  "SYSTEM_BACKGROUND_HINT": "Chỉ áp dụng cho các trang hệ thống như bách khoa, cửa hàng, hướng dẫn và hồ sơ. Giữ nguyên màn hình tiêu đề thành bang và cảnh chơi.",
+  "SYSTEM_BACKGROUND_DEFAULT": "Mặc định",
+  "SYSTEM_BACKGROUND_DEFAULT_HINT": "Giữ nền giao diện ban đầu.",
+  "SYSTEM_BACKGROUND_CUSTOM": "Chọn ảnh",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "Chọn ảnh thu nhỏ bên dưới để áp dụng và lưu lựa chọn ngay.",
+  "SYSTEM_BACKGROUND_RANDOM": "Ngẫu nhiên",
+  "SYSTEM_BACKGROUND_RANDOM_HINT": "Chọn một ảnh khi vào trang hệ thống lần tới và giữ nguyên trong trang đó.",
+  "SYSTEM_BACKGROUND_PICK": "Chọn ảnh (áp dụng ngay)",
+  "SYSTEM_BACKGROUND_RESONANCE": "Mạng cộng hưởng",
+  "SYSTEM_BACKGROUND_GROWTH": "Hồ sơ trưởng thành",
+  "SYSTEM_BACKGROUND_GLORY": "Thành quả vinh quang",
+
   // Display-only evolution thresholds. PRODUCT_AUTHORED, 2026-10-14.
   "DEX_CONDITIONS": "Điều kiện",
   "DEX_CONDITIONS_TOGGLE": "Điều kiện của nhánh {branch}",
@@ -1267,3 +1281,4 @@ export const UNTRANSLATED_PROPER_NOUNS_VI = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+

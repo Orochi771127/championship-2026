@@ -94,6 +94,7 @@ import { createPreferenceStore } from './settings/preferenceStore.js';
 import { createPreferenceEnvironment } from './settings/preferenceEnvironment.js';
 import { createQualityController } from './settings/qualityController.js';
 import { createSettingsPanel } from './settings/settingsPanel.js';
+import { createSystemBackgroundController } from '../presentation/systemBackgrounds.js';
 import { createAudioBus } from '../presentation/audioBus.js';
 import { createMusicPresentation } from '../presentation/musicPresentation.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
@@ -338,6 +339,7 @@ function bootSettings() {
   return Object.freeze({ store, environment, quality, audio });
 }
 const settings = bootSettings();
+const systemBackgrounds = createSystemBackgroundController({ root, store: settings.store });
 const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CUES,
   onState(state){
     document.documentElement.dataset.musicState=JSON.stringify(state);
@@ -1579,6 +1581,7 @@ async function mountCurrentScreen() {
     // acquiring it, so a queued HUD update cannot remount the same scene.
     if (target === mountedScreen) return;
     const returningFromBrowse = [CHAMPIONSHIP_SCREENS.SHOP, CHAMPIONSHIP_SCREENS.DATABASE].includes(mountedScreen);
+    systemBackgrounds.leave();
     view?.dispose?.();
     view = null;
     if (target !== CHAMPIONSHIP_SCREENS.RAISING_HOME) raisingSource = null;
@@ -1657,6 +1660,7 @@ async function mountCurrentScreen() {
     // One attribute every screen carries, whichever view family drew it. The
     // views' own data-screen stays theirs (the status bar also carries one).
     root.dataset.activeScreen = target;
+    if (app.getScreen() === target) systemBackgrounds.enter(target);
     if (returningFromBrowse && target === CHAMPIONSHIP_SCREENS.RAISING_HOME && app.getScreen() === target) {
       document.querySelector('button[data-menu-id="SYSTEM"]')?.focus({preventScroll:true});
     }
@@ -1940,6 +1944,7 @@ async function openSaveDetails() {
 /** Save & Quit returns to the title, which is where the original ends a session. */
 async function returnToTitle(source = 'save-and-quit') {
   recoveryDiagnostics.record('TITLE_RETURN',{source,phase:'start'});
+  systemBackgrounds.leave();
   console.info('CHAMPIONSHIP_TITLE_RETURN', { source, screen: app.getScreen(), stack: new Error().stack });
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);

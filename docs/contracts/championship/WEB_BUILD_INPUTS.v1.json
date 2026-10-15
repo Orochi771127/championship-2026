@@ -380,7 +380,8 @@
     "src/championship/presentation/medals/medalFrameRuntime.js",
     "src/championship/presentation/medals/medalSilhouette.js",
     "src/championship/presentation/medals/medalGeometry.js",
-    "src/championship/presentation/medals/medalPresentationText.js"
+    "src/championship/presentation/medals/medalPresentationText.js",
+    "src/championship/presentation/systemBackgrounds.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9787,7 +9788,16 @@
     "src/championship/presentation/medals/medalFrameRuntime.js",
     "src/championship/presentation/medals/medalSilhouette.js",
     "src/championship/presentation/medals/medalGeometry.js",
-    "src/championship/presentation/medals/medalPresentationText.js"
+    "src/championship/presentation/medals/medalPresentationText.js",
+    "assets/production/system-backgrounds-r1/glory-result-v1.thumb.webp",
+    "assets/production/system-backgrounds-r1/glory-result-v1.webp",
+    "assets/production/system-backgrounds-r1/growth-record-v1.thumb.webp",
+    "assets/production/system-backgrounds-r1/growth-record-v1.webp",
+    "assets/production/system-backgrounds-r1/manifest.json",
+    "assets/production/system-backgrounds-r1/resonance-network-v1.thumb.webp",
+    "assets/production/system-backgrounds-r1/resonance-network-v1.webp",
+    "src/championship/app/ui/systemBackgrounds.css",
+    "src/championship/presentation/systemBackgrounds.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -9795,7 +9805,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "3dd686fa305b1c5f78907ba05f8bbfd1736d89eafff9f4b26404078d9aca7f8b"
+        "sha256": "0c178fc821d993a6327f586e106f6aa90d6b6d0a9d5a7596e90f7eda8bb019a7"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -45075,7 +45085,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "54925c344f8e11792ade918dd6e1fdaf93ceaa96808eaac30ee49598fbf36436"
+        "sha256": "5abc6b8acb4fb83110258158df70dba66f7178f04e0db0fa092d08229148d8fc"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45423,7 +45433,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "8c61e3c5b0213e868140b2fe36bcaf60a50b641dacdf79d5e6dbdaba464b4a7f"
+        "sha256": "6e856d0c104d5c0c5cc9b06198a013a33de6e63016a3f225d2aea446395145b2"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -45519,7 +45529,7 @@
       },
       {
         "path": "src/championship/app/settings/preferenceSchema.js",
-        "sha256": "0b22d77f78e06439da76d9ccdfc914c9f228ce7003de83296734ef99e88059a0"
+        "sha256": "ac670274c67c29aa8ff543e64692476ff3458ad66013f28cc25a86f3b7358bdb"
       },
       {
         "path": "src/championship/app/settings/preferenceStore.js",
@@ -45531,7 +45541,7 @@
       },
       {
         "path": "src/championship/app/settings/settingsPanel.js",
-        "sha256": "4203e29fe5713d8efd49ab00173d9f0634369622306c6f595de7eb338b6be765"
+        "sha256": "f14ef042551875c47b8d41abddb7f1fb233dfee7cd6e764d2ff9f35c2ca4a19e"
       },
       {
         "path": "src/championship/app/shopOriginalVideo.css",
@@ -46659,23 +46669,23 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "0b2fb12f4cbb273265eea247212cc680282c6a0e54006be82c157ab7ea77023f"
+        "sha256": "41860e10b79db877f2246bb9349a984f2fc2cb57fe2429781ed14c424e8938ef"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "2040b6fbe2776e858d7644bf6f31466d510f203f8c96f00846de84151e858db4"
+        "sha256": "87fc5ffabac67b6241df2955af562e8ac4d5d0fdc96a46e957c9c797641d08d5"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "558d059614aad607f44cfc76095bdb348d6bf0097409b4d315fff0b94ecd16cc"
+        "sha256": "3707a3361746e3e9f7a5a261037058e1f41ed16a06054bf16ee6cb3369f9955a"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "aac89769921f4afb6b4defe122d2c92830690def2ad01b0b36360bf36015aa87"
+        "sha256": "ccddf8b416b1148580e2bd2cc23a6e2f79b185f14af01725c291f8db20b82061"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "b91daad72c0b3d130100944a084936bdac4bbef596209473b2d37a11534411f4"
+        "sha256": "f74d49436d8798d016975f8632cac7ff2453faa1250bbc258911fed8d89d9c62"
       },
       {
         "path": "src/championship/text/zhHant.js",
@@ -47400,6 +47410,42 @@
       {
         "path": "src/championship/presentation/medals/medalPresentationText.js",
         "sha256": "8cdc4de8df221c1d2e60549b7b6febe033ac2f3dd27f56bd23c6a3dca2152715"
+      },
+      {
+        "path": "assets/production/system-backgrounds-r1/glory-result-v1.thumb.webp",
+        "sha256": "d507f10033e1c27b19226b03aba273349c413de0f07a4bca2c71ac022909f468"
+      },
+      {
+        "path": "assets/production/system-backgrounds-r1/glory-result-v1.webp",
+        "sha256": "3fd6aacb006be42242dbd6850be6a395da7eb01aded12243dce36e0b876deaab"
+      },
+      {
+        "path": "assets/production/system-backgrounds-r1/growth-record-v1.thumb.webp",
+        "sha256": "44b91efa9a80c38a56d74808f3e6f2c1c8573a4c292854f34da086c9f71ab009"
+      },
+      {
+        "path": "assets/production/system-backgrounds-r1/growth-record-v1.webp",
+        "sha256": "3d1784a9fd6d71bda71cf46d56218dcb898beaa46b9c60cda3ce313085c1d1b5"
+      },
+      {
+        "path": "assets/production/system-backgrounds-r1/manifest.json",
+        "sha256": "18dcdae5a93dc3a5a1976676927ce6ed9e91c85737dadbcffdd62802923d824a"
+      },
+      {
+        "path": "assets/production/system-backgrounds-r1/resonance-network-v1.thumb.webp",
+        "sha256": "467ac1deba9ff7621122b12c28dab440c2b6f5387b403bc35249b885826c402e"
+      },
+      {
+        "path": "assets/production/system-backgrounds-r1/resonance-network-v1.webp",
+        "sha256": "23109c5a8af1aeb33ced6aa31c2751e634634f23eb23cdf6e0661a391057ef77"
+      },
+      {
+        "path": "src/championship/app/ui/systemBackgrounds.css",
+        "sha256": "fd976cc3c79ada446aaea7d3f959a583e1526796d407e9d01a19a72ceb2838ff"
+      },
+      {
+        "path": "src/championship/presentation/systemBackgrounds.js",
+        "sha256": "5b34b475298ee2005e7fcc33911bf05701817295bd8e7bcad5be6d6ca6a511dc"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "system-backgrounds-r1",
+  "purpose": "Static optional system-page backgrounds only; title city and playable fields excluded",
+  "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+  "review": {
+    "originalArtwork": "Accepted for low-contrast system backgrounds",
+    "encoding": "Lossless WebP masters decode to exactly the original RGB PNG pixels; thumbnails are 192x192 Lanczos derivatives, losslessly encoded",
+    "actualUiBrowserAcceptance": "PENDING"
+  },
+  "defaults": "Original interface background; no full-size image requested",
+  "assets": [
+    {
+      "id": "resonance-network-v1",
+      "nameZh": "共鳴網路",
+      "original": {
+        "format": "PNG",
+        "width": 1254,
+        "height": 1254,
+        "bytes": 1714717,
+        "sha256": "f2c1e4b4683289522ed682ccca62685e9a8a8dd47cb36946e4c927c9ec18ddc2",
+        "source": "Original text-only image generation requested by owner; no image references or ROM pixels",
+        "generatedOn": "2026-10-15"
+      },
+      "runtime": {
+        "path": "assets/production/system-backgrounds-r1/resonance-network-v1.webp",
+        "bytes": 1220322,
+        "sha256": "23109c5a8af1aeb33ced6aa31c2751e634634f23eb23cdf6e0661a391057ef77",
+        "width": 1254,
+        "height": 1254,
+        "decodedPixelsEqualEncoderInput": true
+      },
+      "thumbnail": {
+        "path": "assets/production/system-backgrounds-r1/resonance-network-v1.thumb.webp",
+        "bytes": 32866,
+        "sha256": "467ac1deba9ff7621122b12c28dab440c2b6f5387b403bc35249b885826c402e",
+        "width": 192,
+        "height": 192,
+        "decodedPixelsEqualEncoderInput": true
+      }
+    },
+    {
+      "id": "growth-record-v1",
+      "nameZh": "成長紀錄",
+      "original": {
+        "format": "PNG",
+        "width": 1254,
+        "height": 1254,
+        "bytes": 1690525,
+        "sha256": "405aea0eb2c8f21eaeda73b059e86e24b1a33750f8c2b1fe15448a080a03b0ef",
+        "source": "Original text-only image generation requested by owner; no image references or ROM pixels",
+        "generatedOn": "2026-10-15"
+      },
+      "runtime": {
+        "path": "assets/production/system-backgrounds-r1/growth-record-v1.webp",
+        "bytes": 1115842,
+        "sha256": "3d1784a9fd6d71bda71cf46d56218dcb898beaa46b9c60cda3ce313085c1d1b5",
+        "width": 1254,
+        "height": 1254,
+        "decodedPixelsEqualEncoderInput": true
+      },
+      "thumbnail": {
+        "path": "assets/production/system-backgrounds-r1/growth-record-v1.thumb.webp",
+        "bytes": 32688,
+        "sha256": "44b91efa9a80c38a56d74808f3e6f2c1c8573a4c292854f34da086c9f71ab009",
+        "width": 192,
+        "height": 192,
+        "decodedPixelsEqualEncoderInput": true
+      }
+    },
+    {
+      "id": "glory-result-v1",
+      "nameZh": "榮耀結果",
+      "original": {
+        "format": "PNG",
+        "width": 1254,
+        "height": 1254,
+        "bytes": 1656974,
+        "sha256": "f9090457d56bb3b4127c76b42db2159511014acd681dc4e80de5edaf7178c035",
+        "source": "Original text-only image generation requested by owner; no image references or ROM pixels",
+        "generatedOn": "2026-10-15"
+      },
+      "runtime": {
+        "path": "assets/production/system-backgrounds-r1/glory-result-v1.webp",
+        "bytes": 1178112,
+        "sha256": "3fd6aacb006be42242dbd6850be6a395da7eb01aded12243dce36e0b876deaab",
+        "width": 1254,
+        "height": 1254,
+        "decodedPixelsEqualEncoderInput": true
+      },
+      "thumbnail": {
+        "path": "assets/production/system-backgrounds-r1/glory-result-v1.thumb.webp",
+        "bytes": 32852,
+        "sha256": "d507f10033e1c27b19226b03aba273349c413de0f07a4bca2c71ac022909f468",
+        "width": 192,
+        "height": 192,
+        "decodedPixelsEqualEncoderInput": true
+      }
+    }
+  ],
+  "shippingReady": false,
+  "rightsDocumentVerified": false,
+  "commercialReleaseAccepted": false
+}

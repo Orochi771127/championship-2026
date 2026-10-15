@@ -7,6 +7,20 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  // Static system backgrounds; display copy only.
+  "SYSTEM_BACKGROUND_LABEL": "系統背景",
+  "SYSTEM_BACKGROUND_HINT": "只用於圖鑑、商店、說明與紀錄等系統頁；城邦標題與遊玩場景不變。",
+  "SYSTEM_BACKGROUND_DEFAULT": "預設",
+  "SYSTEM_BACKGROUND_DEFAULT_HINT": "保留原本的介面背景。",
+  "SYSTEM_BACKGROUND_CUSTOM": "自選",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "點選下方縮圖，立即套用並記住選擇。",
+  "SYSTEM_BACKGROUND_RANDOM": "隨機",
+  "SYSTEM_BACKGROUND_RANDOM_HINT": "下次進入系統頁時選一張，停留期間不更換。",
+  "SYSTEM_BACKGROUND_PICK": "自選圖片（點選即套用）",
+  "SYSTEM_BACKGROUND_RESONANCE": "共鳴網路",
+  "SYSTEM_BACKGROUND_GROWTH": "成長紀錄",
+  "SYSTEM_BACKGROUND_GLORY": "榮耀結果",
+
   // Display-only evolution thresholds. PRODUCT_AUTHORED, 2026-10-14.
   "DEX_CONDITIONS": "條件",
   "DEX_CONDITIONS_TOGGLE": "第 {branch} 分支的條件",
@@ -498,3 +512,4 @@ export const TAMER_FIELD_LABELS = new Proxy(TAMER_FIELD_LABELS_ZH, {
     return zh ? uiText(zh) : undefined;
   }
 });
+
