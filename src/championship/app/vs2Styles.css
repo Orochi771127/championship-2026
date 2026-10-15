@@ -1336,3 +1336,34 @@ body[data-desktop-menu] .cm-vs2-root[data-screen="MEDALS"] .cm-medals__grid { gr
 .cm-dex-hero__image[hidden], .cm-dex-hero__placeholder[hidden] { display: none; }
 .cm-dex-hero__placeholder { display: grid; place-items: center; width: 100%; height: 100%; text-align: center; font-size: var(--fs-label); }
 
+
+/* Database evolution cards: keep portrait and readable copy side by side.
+   Only this section scrolls horizontally when its detail pane is too narrow;
+   never squeeze an unrevealed name/status into a single-character column. */
+.cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes {
+  grid-column: 1 / -1;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__graph {
+  min-width: calc(96px + 20px + 16rem);
+  width: 100%;
+  box-sizing: border-box;
+}
+.cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__targets {
+  min-width: 16rem;
+}
+.cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__target {
+  min-width: 16rem;
+  box-sizing: border-box;
+}
+
+/* A starter without a Hunt instance adds the shared Shop status class.
+   Its tablet grid-area:status must not create implicit Database columns. */
+.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail {
+  grid-template-columns: minmax(0, 1fr);
+}
+.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-vs2-shop__status {
+  grid-area: auto;
+}
