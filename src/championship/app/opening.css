@@ -385,14 +385,74 @@ body[data-landscape-entry] #cm-title > .cm-title__panel > .cm-title__art > .cm-t
   top: var(--cm-entry-logo-top); left: var(--cm-entry-left);
   width: var(--cm-entry-logo-width); height: auto; aspect-ratio: 2;
 }
+/* Match the unchanged 941x1672 arena's cover rectangle and center 58%
+   crop. All footpoints/sizes below are measured in that source image, not
+   viewport percentages. Far bridge: (450,1024); front deck: (575,1117). */
 body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {
-  left: 42%; right: 2%; bottom: 6%; width: auto; height: 76%;
+  --cm-ground-scale: max(calc(100cqw / 941), calc(var(--cm-title-height) / 1672));
+  --cm-blaze-x: 450; --cm-blaze-y: 1024; --cm-blaze-size: 118;
+  --cm-cloud-x: 575; --cm-cloud-y: 1117; --cm-cloud-size: 220;
+  left: 50%; right: auto; bottom: auto;
+  top: calc((var(--cm-title-height) - var(--cm-ground-scale) * 1672) * .58);
+  width: calc(var(--cm-ground-scale) * 941);
+  height: calc(var(--cm-ground-scale) * 1672);
+  transform: translateX(-50%); isolation: isolate;
 }
 body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner {
-  height: 100%; object-fit: contain; object-position: center bottom;
+  height: auto; object-fit: contain; object-position: center bottom;
+  bottom: auto; right: auto; z-index: 1; filter: none;
+  /* Keep the existing arrival timing, but feet must not translate off deck. */
+  animation-name: cm-title-grounded-arrive;
 }
-body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--blaze { width: 44%; height: 65%; left: 3%; bottom: 28%; }
-body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--cloud { width: 46%; height: 70%; right: 1%; bottom: -1%; }
+@keyframes cm-title-grounded-arrive { from { opacity: 0; } to { opacity: 1; } }
+/* Position the actual feet, not the transparent image box's lower edge.
+   Blaze foot midpoint ~820,1130 in 1353x1162; Cloud ~515,1093 in 1254x1254. */
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--blaze {
+  width: calc(var(--cm-ground-scale) * var(--cm-blaze-size));
+  left: calc(var(--cm-ground-scale) * (var(--cm-blaze-x) - 820 * var(--cm-blaze-size) / 1353));
+  top: calc(var(--cm-ground-scale) * (var(--cm-blaze-y) - 1130 * var(--cm-blaze-size) / 1353));
+}
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--cloud {
+  width: calc(var(--cm-ground-scale) * var(--cm-cloud-size));
+  left: calc(var(--cm-ground-scale) * (var(--cm-cloud-x) - 515 * var(--cm-cloud-size) / 1254));
+  top: calc(var(--cm-ground-scale) * (var(--cm-cloud-y) - 1093 * var(--cm-cloud-size) / 1254));
+}
+/* Small contact shadows share the same footpoints; no detached body halo.
+   The image lifecycle still owns readiness and whether any art is visible. */
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners::before,
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners::after {
+  position: absolute; z-index: 0; pointer-events: none;
+  border-radius: 50%; transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, #19332a55 0%, #19332a22 45%, transparent 72%);
+}
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners:has(.cm-title__partner--blaze[data-title-image-state="ready"][data-title-image-visible="true"])::before {
+  content: ""; left: calc(var(--cm-ground-scale) * var(--cm-blaze-x)); top: calc(var(--cm-ground-scale) * var(--cm-blaze-y));
+  width: calc(var(--cm-ground-scale) * var(--cm-blaze-size) * .61); height: calc(var(--cm-ground-scale) * var(--cm-blaze-size) * .075);
+}
+body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners:has(.cm-title__partner--cloud[data-title-image-state="ready"][data-title-image-visible="true"])::after {
+  content: ""; left: calc(var(--cm-ground-scale) * var(--cm-cloud-x)); top: calc(var(--cm-ground-scale) * var(--cm-cloud-y));
+  width: calc(var(--cm-ground-scale) * var(--cm-cloud-size) * .32); height: calc(var(--cm-ground-scale) * var(--cm-cloud-size) * .05);
+}
+/* A shallower cover crop shows less foreground. Move both partners further
+   up the SAME bridge and reduce their perspective size, not the background. */
+@media (min-aspect-ratio: 5/2) {
+  body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {
+    --cm-blaze-x: 450; --cm-blaze-y: 1010; --cm-blaze-size: 95;
+    --cm-cloud-x: 540; --cm-cloud-y: 1074; --cm-cloud-size: 170;
+  }
+}
+@media (min-aspect-ratio: 10/3) {
+  body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {
+    --cm-blaze-x: 440; --cm-blaze-y: 1008; --cm-blaze-size: 72;
+    --cm-cloud-x: 510; --cm-cloud-y: 1045; --cm-cloud-size: 125;
+  }
+}
+@media (min-aspect-ratio: 9/2) {
+  body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {
+    --cm-blaze-x: 450; --cm-blaze-y: 1004; --cm-blaze-size: 50;
+    --cm-cloud-x: 505; --cm-cloud-y: 1018; --cm-cloud-size: 90;
+  }
+}
 body[data-landscape-entry] #cm-title > .cm-title__controls {
   position: absolute; transform: none;
   top: var(--cm-entry-action-top); bottom: max(16px, env(safe-area-inset-bottom));
@@ -435,7 +495,6 @@ body[data-landscape-entry] #cm-title .cm-title__film-watch { left: max(16px, env
     --cm-entry-logo-width: clamp(180px, 34vw, 320px);
     --cm-entry-action-top: calc(var(--cm-entry-logo-top) + var(--cm-entry-logo-width) / 2 + 10px);
   }
-  body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners { left: 44%; bottom: 5%; height: 78%; }
   body[data-landscape-entry] #cm-title .cm-title__actions { gap: 8px; }
   body[data-landscape-entry] #cm-title > .cm-title__controls { gap: 8px; padding-top: 2px; }
 }

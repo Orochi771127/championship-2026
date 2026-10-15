@@ -19,7 +19,7 @@ test('responsive field has no sidebar or host width cap; portrait/native sizes a
   assert.doesNotMatch(responsive, /\.int-rh2-field-host[^}]*transform|\.int-rh2-field-host[^}]*scale\(/);
 });
 
-test('floating controls leave input holes and stay inside the shared bars; guidance/mail use the opposite side', () => {
+test('floating controls retain input holes and legacy shared-bar rules; Raising overlay overrides are tested separately', () => {
   const css = read('app/intRh2Styles.css');
   const responsive = css.slice(css.indexOf('/* Owner 2026-10-15: the habitat'));
   assert.match(responsive, /\.int-rh2-companion\[data-open="false"\] \{[^}]*top: 8px; bottom: auto;[^}]*max-height: calc\(100% - 16px\);[^}]*pointer-events: none;/s);
@@ -100,7 +100,7 @@ test('calendar/mail interruption still closes details and suspends field, then r
   f.view.dispose();
 });
 
-test('single-stage synthetic host follows full available bounds, including short landscape and oversized desktop', async () => {
+test('single-stage synthetic host accepts full viewport bounds without bar deductions (not browser geometry)', async () => {
   const document={},host=new Element('div',document);
   class Container { constructor(){this.children=[];} addChild(n){this.children.push(n);} }
   class Rectangle { constructor(x,y,width,height){Object.assign(this,{x,y,width,height});} }
@@ -115,9 +115,9 @@ test('single-stage synthetic host follows full available bounds, including short
   const field={worldWidthPx:2688,worldHeightPx:768,nativePixelWorldScale:4,presentationMode:'NATIVE_RANCH',wrapWidthPx:2688};
   const phonePixels=raisingNativeScreenPixels(field,{width:390,height:675});
   for(const [width,height,status,toolbar] of [[720,320,48,76],[844,390,60,92],[1180,757,56,76],[1920,1080,56,76]]){
-    host.clientWidth=width;host.clientHeight=height-status-toolbar;stage.attach(host);
-    assert.deepEqual({...stage.screen},{width,height:height-status-toolbar}); assert.equal(stage.app.canvas,canvas);
-    const viewport={width,height:height-status-toolbar,desktopRaising:true};
+    host.clientWidth=width;host.clientHeight=height;stage.attach(host);
+    assert.deepEqual({...stage.screen},{width,height}); assert.equal(stage.app.canvas,canvas);
+    const viewport={width,height,desktopRaising:true};
     assert.equal(raisingNativeScreenPixels(field,viewport),phonePixels,'native art scale does not follow wider CSS host');
     for(const camera of [0,321,2687])for(const [x,y] of [[20,40],[400,96],[660,-7]]){
       const screen=raisingNativeToScreen([x*4096,y*4096],field,viewport,camera),native=raisingScreenToNative(screen,field,viewport,camera);
