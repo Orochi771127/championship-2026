@@ -370,7 +370,17 @@
     "src/championship/database/databaseStories.js",
     "src/championship/presentation/databaseHeroPortraits.js",
     "src/championship/raising/nativeGroundSpacing.js",
-    "src/championship/field/groundFootpointSeparation.js"
+    "src/championship/field/groundFootpointSeparation.js",
+    "src/championship/app/medalDetails.js",
+    "src/championship/text/medalDetailText.js",
+    "src/championship/presentation/medals/medalThreePresentation.js",
+    "src/championship/presentation/medals/selectedMedalPresentation.js",
+    "src/championship/presentation/medals/medalPresentationProfiles.js",
+    "src/championship/presentation/medals/medalFaceTexture.js",
+    "src/championship/presentation/medals/medalFrameRuntime.js",
+    "src/championship/presentation/medals/medalSilhouette.js",
+    "src/championship/presentation/medals/medalGeometry.js",
+    "src/championship/presentation/medals/medalPresentationText.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9767,7 +9777,17 @@
     "assets/production/medal-name-corrections-20261014/medals/title-56-rainbow-flyer-grid.png",
     "assets/production/medal-name-corrections-20261014/medals/title-56-rainbow-flyer.png",
     "assets/production/medal-name-corrections-20261014/medals/title-58-blade-guardian-grid.png",
-    "assets/production/medal-name-corrections-20261014/medals/title-58-blade-guardian.png"
+    "assets/production/medal-name-corrections-20261014/medals/title-58-blade-guardian.png",
+    "src/championship/app/medalDetails.js",
+    "src/championship/text/medalDetailText.js",
+    "src/championship/presentation/medals/medalThreePresentation.js",
+    "src/championship/presentation/medals/selectedMedalPresentation.js",
+    "src/championship/presentation/medals/medalPresentationProfiles.js",
+    "src/championship/presentation/medals/medalFaceTexture.js",
+    "src/championship/presentation/medals/medalFrameRuntime.js",
+    "src/championship/presentation/medals/medalSilhouette.js",
+    "src/championship/presentation/medals/medalGeometry.js",
+    "src/championship/presentation/medals/medalPresentationText.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -45407,7 +45427,7 @@
       },
       {
         "path": "src/championship/app/medalCollection.css",
-        "sha256": "68ee3804cf18afbe265936a60ca1ea467fc6d09b4a44585a0d47d74dea27104b"
+        "sha256": "4d4a0677592417f5fecaee08a7137fedd76d820bddc5c54e555f41444df67bb8"
       },
       {
         "path": "src/championship/app/medalCollection.js",
@@ -45415,7 +45435,7 @@
       },
       {
         "path": "src/championship/app/medalCollectionScreen.js",
-        "sha256": "86a155136f137b80d98e0dbc673f7730827341d5003e46d5887a3e3fbec0cc33"
+        "sha256": "63771602187c6659b84f53e3eb8da49052c4637357d33e624aa7aabfaabd573c"
       },
       {
         "path": "src/championship/app/mobileTouch.css",
@@ -47340,6 +47360,46 @@
       {
         "path": "assets/production/medal-name-corrections-20261014/medals/title-58-blade-guardian.png",
         "sha256": "e706ec2998d05609a1ae2c4d818a74b1ea80718f20cc009ec4e5db83a1d113c4"
+      },
+      {
+        "path": "src/championship/app/medalDetails.js",
+        "sha256": "ae558d56278acb38adf67c9278d2bd4bdd38561a62d9e68181381ce38e1161d1"
+      },
+      {
+        "path": "src/championship/text/medalDetailText.js",
+        "sha256": "f710f395768c4295dc2430b725a4b11f5241361414492e4c37d512d6ffeb811d"
+      },
+      {
+        "path": "src/championship/presentation/medals/medalThreePresentation.js",
+        "sha256": "c237062f288848b26d1c245e20d3b42518a6d2121e9b75564acd489affcf8b68"
+      },
+      {
+        "path": "src/championship/presentation/medals/selectedMedalPresentation.js",
+        "sha256": "f49b5601f525bd21d43663499bbcb6b8576c089cc047ac2d312a994211dfc40c"
+      },
+      {
+        "path": "src/championship/presentation/medals/medalPresentationProfiles.js",
+        "sha256": "3c9b9af6fbe813a23ff5c6bac2acfd3d0b3999e74df60f6846bca2916e5a7c70"
+      },
+      {
+        "path": "src/championship/presentation/medals/medalFaceTexture.js",
+        "sha256": "8af5105c21fae0342adbcd71ddbf863d700668d96a4ad72c5678c466523ca866"
+      },
+      {
+        "path": "src/championship/presentation/medals/medalFrameRuntime.js",
+        "sha256": "1af088992e183ff73e464d25a3959efaef6fe2983c7f261be4f8814422396962"
+      },
+      {
+        "path": "src/championship/presentation/medals/medalSilhouette.js",
+        "sha256": "0ccbf74452813a13db8709a49c679df4438a405eca44652d478ae144d4ade301"
+      },
+      {
+        "path": "src/championship/presentation/medals/medalGeometry.js",
+        "sha256": "f636dbf040d01030782e977e493f37bc8bc48f52722944ca99e38b5f6bddc29c"
+      },
+      {
+        "path": "src/championship/presentation/medals/medalPresentationText.js",
+        "sha256": "8cdc4de8df221c1d2e60549b7b6febe033ac2f3dd27f56bd23c6a3dca2152715"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
