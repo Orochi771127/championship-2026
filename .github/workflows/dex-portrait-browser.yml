@@ -1,0 +1,69 @@
+name: Dex portrait mounted browser evidence
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/dex-portrait-browser.yml'
+      - 'tests/championship-dex-portrait-browser.cjs'
+      - 'tests/alternate-form-browser-support.cjs'
+      - 'tests/browser-qa-output.cjs'
+      - 'src/championship/app/**'
+      - 'src/championship/database/**'
+      - 'src/championship/presentation/databaseHeroPortraits.js'
+      - 'src/data/championship/database-hero-portraits.r1.json'
+      - 'src/data/championship/qa-database-hero-portraits.r1.json'
+      - 'src/data/championship/public-playtest.r1.json'
+      - 'assets/production/database-handpainted-r1-20261015/**'
+      - 'assets/production/ART_PRODUCTION_INDEX.json'
+      - 'championship.html'
+      - 'scripts/build-github-pages.mjs'
+      - 'scripts/validate-github-pages.mjs'
+      - 'scripts/lib/**'
+      - 'docs/contracts/championship/WEB_BUILD_INPUTS.v1.json'
+      - 'package.json'
+      - 'package-lock.json'
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Validate the test contract without launching a browser
+        run: node --check tests/championship-dex-portrait-browser.cjs && node tests/championship-dex-portrait-browser.cjs --self-test
+      - run: npx playwright install --with-deps chromium
+      - name: Build and validate the owner-approved playtest artifact
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Capture normal Dex and same-renderer 128/256 comparisons
+        env:
+          CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
+          CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
+          DEX_QA_BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+          DEX_QA_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node tests/championship-dex-portrait-browser.cjs
+      - name: Preserve portrait screenshots and measured review report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dex-portrait-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .tmp/browser-qa/dex-portrait/*.png
+            .tmp/browser-qa/dex-portrait/*.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve full Playwright trace separately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dex-portrait-trace-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/browser-qa/dex-portrait/*-trace.zip
+          if-no-files-found: warn
+          retention-days: 14
