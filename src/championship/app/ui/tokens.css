@@ -73,6 +73,7 @@
   --c-accent-deep: #1f8f78;
   --c-accent-soft: rgba(86, 227, 194, 0.14);
   --c-accent-line: rgba(86, 227, 194, 0.55);
+  --c-accent-hi: #56e3c2;
 
   /* Bits and rewards */
   --c-gold: #f4b740;
@@ -133,6 +134,106 @@
   --motif-stair-gold: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' viewBox='0 0 9 9'%3E%3Cpath fill='%23f4b740' d='M0 0h3v3H0zM3 3h3v3H3zM6 6h3v3H6z'/%3E%3C/svg%3E");
 }
 
+/* ---- Palette: arena (D) 晴空競技 — default from 2026-10-15 ---------------
+ * The title key art is the brightest thing the player sees first: sky, ivory
+ * stone, a teal network cable and a trophy's gold. This palette carries that
+ * daylight into every screen. The accent is the cable's teal (deep enough for
+ * white words on it); gold stays for bits and rewards; ink is a deep navy, not
+ * black, so pixel art keeps its own darkest values. Light-tech, not neon:
+ * hairline cyan grid on the ground, white HUD islands over the scenes. */
+:root[data-theme="arena"], [data-palette="arena"] {
+  color-scheme: light;
+
+  --c-void: #d4e5f0;
+  --c-ground: #eef5fa;
+  --c-ground-raised: #e3eef6;
+  --c-stage-light: #cfe8f2;
+  --c-stage-glow: rgba(160, 222, 236, 0.55);
+  --c-backdrop-top: #f6fbfe;
+  --c-backdrop-bottom: #e4eff7;
+  --c-scene-backdrop: #dcebf4;
+
+  --c-surface-1: #ffffff;
+  --c-surface-2: #f3f8fb;
+  --c-surface-3: #e2edf4;
+  --c-surface-glass: rgba(255, 255, 255, 0.88);
+  --c-surface-hud: rgba(250, 253, 255, 0.94);
+  --c-surface-bar: rgba(246, 251, 254, 0.95);
+  --c-scrim: rgba(10, 34, 52, 0.42);
+  --c-selection: rgba(8, 122, 140, 0.22);
+
+  --c-line-1: rgba(16, 72, 104, 0.10);
+  --c-line-2: rgba(16, 72, 104, 0.18);
+  --c-line-3: rgba(16, 72, 104, 0.32);
+
+  --c-text-1: #0d2638;
+  --c-text-2: #34536a;
+  --c-text-3: #4b677c;
+  --c-text-disabled: #8a9cab;
+  --c-text-on-accent: #ffffff;
+  --c-text-on-gold: #2a1a00;
+
+  --c-accent: #087a8c;
+  --c-accent-strong: #05687a;
+  --c-accent-deep: #04505c;
+  --c-accent-soft: rgba(8, 122, 140, 0.12);
+  --c-accent-line: rgba(8, 122, 140, 0.5);
+  /* Decoration only (glows, rings, the cable motif): never under words. */
+  --c-accent-hi: #19c3d3;
+
+  --c-gold: #e2a21f;
+  --c-gold-strong: #875600;
+  --c-gold-soft: rgba(226, 162, 31, 0.16);
+  --c-coin-light: #ffe7a8;
+  --c-coin-shade: #a86e12;
+
+  --c-success: #17783f;
+  --c-success-soft: rgba(23, 120, 63, 0.12);
+  --c-warning: #995400;
+  --c-warning-soft: rgba(153, 84, 0, 0.12);
+  --c-danger: #c0322b;
+  --c-danger-soft: rgba(192, 50, 43, 0.10);
+  --c-danger-line: rgba(192, 50, 43, 0.45);
+  --c-danger-text: #a3221e;
+  --c-info: #1d60bf;
+  --c-info-soft: rgba(29, 96, 191, 0.12);
+  --c-rare: #7146cc;
+  --c-rare-soft: rgba(113, 70, 204, 0.12);
+
+  --c-team-player: #087a8c;
+  --c-team-opponent: #b8481a;
+  --c-team-opponent-soft: rgba(184, 72, 26, 0.12);
+
+  --c-season-spring: #2e7d3a;
+  --c-season-summer: #946000;
+  --c-season-autumn: #b3451a;
+  --c-season-winter: #1f62c4;
+
+  --c-element-heat: #e0662f;
+  --c-element-cold: #3b8fd6;
+  --c-element-thunder: #d4a400;
+  --c-element-light: #c9bd6a;
+  --c-element-dark: #7a5ad6;
+
+  --c-stat-hp: #17783f;
+  --c-stat-hp-low: #c0322b;
+  --c-stat-tp: #1d60bf;
+  --c-stat-ap: #875600;
+  --c-stat-capacity: #5b7387;
+
+  --shadow-card: 0 1px 2px rgba(13, 38, 56, 0.08), 0 3px 10px rgba(13, 38, 56, 0.07);
+  --shadow-float: 0 10px 28px rgba(13, 38, 56, 0.16);
+  --shadow-lift: 0 18px 48px rgba(13, 38, 56, 0.22);
+  --shadow-frame: 0 30px 80px rgba(13, 38, 56, 0.2);
+  --glow-accent: 0 0 0 1px var(--c-accent-line), 0 0 16px rgba(25, 195, 211, 0.28);
+
+  /* The ground's light-tech grid: hairlines a few percent strong. */
+  --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M0 .5h48M.5 0v48' stroke='%23087a8c' stroke-opacity='.06'/%3E%3Ccircle cx='.5' cy='.5' r='1.5' fill='%23087a8c' fill-opacity='.10'/%3E%3C/svg%3E");
+
+  --motif-stair: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' viewBox='0 0 9 9'%3E%3Cpath fill='%23087a8c' d='M0 0h3v3H0zM3 3h3v3H3zM6 6h3v3H6z'/%3E%3C/svg%3E");
+  --motif-stair-gold: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' viewBox='0 0 9 9'%3E%3Cpath fill='%23e2a21f' d='M0 0h3v3H0zM3 3h3v3H3zM6 6h3v3H6z'/%3E%3C/svg%3E");
+}
+
 /* ---- Palette: clear (B) 藍白清爽 ------------------------------------------ */
 :root[data-theme="clear"], [data-palette="clear"] {
   color-scheme: light;
@@ -171,6 +272,7 @@
   --c-accent-deep: #0b3f82;
   --c-accent-soft: rgba(26, 104, 198, 0.12);
   --c-accent-line: rgba(26, 104, 198, 0.5);
+  --c-accent-hi: #4aa3ff;
 
   --c-gold: #d99a1e;
   --c-gold-strong: #865600;
@@ -260,6 +362,7 @@
   --c-accent-deep: #6e3200;
   --c-accent-soft: rgba(168, 76, 8, 0.12);
   --c-accent-line: rgba(168, 76, 8, 0.5);
+  --c-accent-hi: #e08a2a;
 
   --c-gold: #c98a12;
   --c-gold-strong: #7a5200;
@@ -355,6 +458,7 @@
   --c-accent-deep: #c46a04;
   --c-accent-soft: rgba(255, 223, 70, 0.16);
   --c-accent-line: rgba(255, 223, 70, 0.55);
+  --c-accent-hi: #fff6a8;
 
   --c-gold: #ffbe28;
   --c-gold-strong: #ffdf46;
@@ -417,6 +521,9 @@
   --c-paper-muted: #6b5d44;
   --c-paper-line: rgba(80, 60, 20, 0.14);
 
+  /* Only the arena palette draws a ground pattern. */
+  --bg-pattern: none;
+
   /* The highlight's own darkness is a stage, not a panel: the same in every
      theme, so the reveal reads the same way. */
   --c-highlight-scrim-core: rgba(3, 9, 11, 0.3);
@@ -458,6 +565,14 @@
   --r-control: 10px;
   --r-card: 14px;
   --r-sheet: 20px;
+
+  /* ---- Game buttons (2026-10-15) --------------------------------------- *
+   * The one primary action reads as a physical key: lit from above, a darker
+   * lip below, and it sinks 1px when pressed. Words sit on the accent band in
+   * the middle, so their contrast is the accent's own. */
+  --btn-primary-bg: linear-gradient(180deg, color-mix(in srgb, var(--c-accent) 84%, #ffffff) 0%, var(--c-accent) 48%, color-mix(in srgb, var(--c-accent) 86%, #000000) 100%);
+  --btn-primary-edge: inset 0 1px 0 rgba(255, 255, 255, 0.32), inset 0 -3px 0 rgba(0, 0, 0, 0.16), 0 3px 10px color-mix(in srgb, var(--c-accent) 32%, transparent);
+  --btn-primary-hover: brightness(1.07);
 
   /* ---- Depth that is not colour --------------------------------------- */
   --focus-ring: 0 0 0 2px var(--c-ground), 0 0 0 4px var(--c-accent);

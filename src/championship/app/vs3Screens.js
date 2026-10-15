@@ -9,6 +9,7 @@ import { appendMemoryCardFrame } from '../presentation/assembledUiArt.js';
 
 import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.js";
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2Screens.js";
+import { playReveal } from "../presentation/ceremony/ceremonyRunner.js";
 
 const RESULT_TITLE = "HUNT RESULT";
 const RESULT_OUTCOME = "BROUGHT HOME";
@@ -103,8 +104,15 @@ export function createHuntResultView({ root, source, hudArt = null }) {
   nameInput.spellcheck = false;
   nameField.append(nameInput);
   const portraitCard = element('div', 'cm-vs2-result__portrait-card');
-  portraitCard.append(portrait);
+  // Ceremony (2026-10-15): rays behind the catch and one light sweep across
+  // the card; decoration only, so both stay out of the accessibility tree.
+  const rays = element('span', 'cm-cer-rays');
+  const sweep = element('span', 'cm-cer-sweep');
+  rays.setAttribute('aria-hidden', 'true');
+  sweep.setAttribute('aria-hidden', 'true');
+  portraitCard.append(rays, portrait);
   appendMemoryCardFrame(portraitCard);
+  portraitCard.append(sweep);
   body.append(
     portraitCard,
     species,
@@ -167,8 +175,9 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     // With more than one catch, each one on the card can take the name plate
     // (Owner report 2026-10-05: only the first catch could be named).
     const catches = (next.rows ?? []).filter((row) => row.kind === "CARD").length;
-    for (const row of next.rows ?? []) {
+    for (const [rowIndex, row] of (next.rows ?? []).entries()) {
       const line = element("div", "cm-vs2-result__row");
+      line.style.setProperty("--row", String(Math.min(rowIndex, 6)));
       if (row.selected) line.dataset.selected = "true";
       const label = `${uiText(row.kind === "CARD" ? "MEMORY CARD" : "HOME")} — ${row.displayName}`;
       const image = hudArt?.getPortrait(row.speciesId);
@@ -219,9 +228,14 @@ export function createHuntResultView({ root, source, hudArt = null }) {
   }
 
   render(frame);
+  // The reward reveal: the card drops in, the name and the roster follow.
+  // The catch is already on the card and the save is untouched; a tap lands
+  // the final layout at once.
+  const reveal = playReveal({ root: shell, kind: "hunt-reward", cue: block.speciesId ? "reward" : null });
   return Object.freeze({
     render,
     dispose() {
+      reveal.dispose();
       root.replaceChildren();
       root.className = "";
       delete root.dataset.uiAuthority;

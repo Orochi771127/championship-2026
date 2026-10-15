@@ -50,7 +50,7 @@ function ownerFixture(target,{hudLoad=async()=>hud([cell('result')]),stageLoad=n
       getBattleReceipt:()=>highlight?{rewardBits:50,credited:50}:null,
       getBattleBadges:()=>[],leaveScreen(){screen='RAISING_HOME';events.push('exit-intent');}},
     battleRuntime:runtime,battleAttemptId:null,battleProgressBefore:null,mountedScreen:'PREVIOUS',mounting:Promise.resolve(),
-    view:newView(),raisingSource:{},root:{dataset:{}},RESPONSIVE_BATTLE_CANDIDATE:false,BATTLE_DYNAMIC_FX:false,
+    view:newView(),raisingSource:{},root:{dataset:{}},RESPONSIVE_BATTLE_CANDIDATE:false,BATTLE_DYNAMIC_FX:false,battleCeremonies:null,
     createLoadAttempt(options){
       const attempt=createLoadAttempt({...options,setTimer(fn,ms){const timer={fn,ms};timers.add(timer);return timer;},clearTimer:timer=>timers.delete(timer)});
       attempts.push(attempt);return attempt;

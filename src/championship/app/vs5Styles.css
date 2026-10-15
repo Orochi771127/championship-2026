@@ -123,13 +123,13 @@
   cursor: pointer;
   transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
-.cm-vs5-action--primary { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+.cm-vs5-action--primary { border-color: transparent; background: var(--btn-primary-bg); box-shadow: var(--btn-primary-edge); color: var(--c-text-on-accent); }
 @media (hover: hover) {
   .cm-vs5-action:hover:not(:disabled) { border-color: var(--c-line-3); background: var(--c-surface-3); }
-  .cm-vs5-action--primary:hover:not(:disabled) { background: var(--c-accent-strong); }
+  .cm-vs5-action--primary:hover:not(:disabled) { background: var(--btn-primary-bg); filter: var(--btn-primary-hover); }
 }
 .cm-vs5-action:not(:disabled):active { transform: translateY(1px); }
-.cm-vs5-action:disabled { border-color: var(--c-line-1); background: var(--c-surface-1); color: var(--c-text-disabled); cursor: default; }
+.cm-vs5-action:disabled { border-color: var(--c-line-1); background: var(--c-surface-1); box-shadow: none; color: var(--c-text-disabled); cursor: default; }
 .cm-vs5-action:focus-visible,
 .cm-vs5-cube__face:focus-visible,
 .cm-vs5-cube__canvas:focus-visible,
@@ -445,7 +445,14 @@
 
 /* ---------------- Result ---------------- */
 .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; overflow: hidden; }
-.cm-vs5-result__stage { position: relative; min-height: 0; overflow: hidden; container-type: size; }
+.cm-vs5-result__stage {
+  position: relative; min-height: 0; overflow: hidden; container-type: size;
+  /* 2026-10-15: an arena behind the result -- a soft sky light over the
+     plate and a floor band under the fighters' feet line, in theme colours. */
+  background:
+    radial-gradient(70% 38% at 50% 26%, color-mix(in srgb, var(--c-accent-hi) 16%, transparent), transparent 72%),
+    linear-gradient(180deg, transparent 0 calc(70cqh + 4cqw), color-mix(in srgb, var(--c-accent) 9%, transparent) calc(70cqh + 4cqw), transparent 100%);
+}
 .cm-vs5-result__characters { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
 .cm-vs5-result__characters canvas { display: block; }
 .cm-vs5-result__stage::before {

@@ -9996,7 +9996,15 @@
     "assets/production/database-handpainted-r1-20261015/species-050.4da662245939ae14.png",
     "assets/production/database-handpainted-r1-20261015/species-051.4005fcb499a215ca.png",
     "assets/production/database-handpainted-r1-20261015/species-052.e2a1ae73e1e1baab.png",
-    "assets/production/database-handpainted-r1-20261015/species-056.f7c3f093351f4965.png"
+    "assets/production/database-handpainted-r1-20261015/species-056.f7c3f093351f4965.png",
+    "src/championship/app/ui/ceremony.css",
+    "src/championship/presentation/ceremony/ceremonyAudio.js",
+    "src/championship/presentation/ceremony/ceremonyRunner.js",
+    "src/championship/presentation/ceremony/ceremonyScenes.js",
+    "assets/production/database-handpainted-r1-20261015/species-058.85ac0a27d7121cef.png",
+    "assets/production/database-handpainted-r1-20261015/species-059.d808c556efd2a029.png",
+    "assets/production/database-handpainted-r1-20261015/species-060.7a8efa91b909b615.png",
+    "assets/production/database-handpainted-r1-20261015/species-061.df2dcf13586b2025.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -10004,7 +10012,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "0d9fa3c78016650429cce7fc9f3b2eab625133698214c475e34ab15225d66e7d"
+        "sha256": "0b607c9d7ed845606ac54f60cf9145d29fc6c5b578b521efda78938335d805c5"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -30160,7 +30168,7 @@
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
-        "sha256": "ac4edda0ca31eb2db935122ad529a91e21c7b644947f204c5e5d85c2fbf524c5"
+        "sha256": "e044b6dc3dc1ea51386b1e3915c19c91a694f3143b99b99ed83cd57001ea5928"
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-034.png",
@@ -45756,7 +45764,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "ef1beaf6ac4f44e0bce069b19ca14fa623fa00f269f7a3cd5dffeba367cfc262"
+        "sha256": "345c6623ae4ac33d865065cb34bfa8e1060c276bb95e3aa24cf52ffe4acbe04d"
       },
       {
         "path": "docs/contracts/championship/battle-economy-runtime.v1.json",
@@ -46052,7 +46060,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "8707e41d010f4783d433aae150fee32514576ab717bf9b178e052536ea03d2c5"
+        "sha256": "738ab1d91d0c534c4b8d01b5b81984f5022e8c06c3adb50be9f1ad879fa85419"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -46092,7 +46100,7 @@
       },
       {
         "path": "src/championship/app/intRh2Styles.css",
-        "sha256": "e372cd83fc238f86325dc5ad290320b6ce9100c7ed7f317efe33fabb2be62214"
+        "sha256": "702e986130073e6f47b114b6722576f37fe385579149f1c1e134c54b016bb9a4"
       },
       {
         "path": "src/championship/app/loadProgress.js",
@@ -46104,7 +46112,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "c7149e31ffe6dd4c638d22d5f549e9ebfef3729a042e519fd6884c4b927eee72"
+        "sha256": "9234f4b52ee2bc5424ed68c4f72b2d619e5d1fd0237a1907fa445665af56e1e0"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -46184,7 +46192,7 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "5c39a6567748289aaf529a8253c9a01a7a4fdd4d87fab04c4f5bfaa2cfd5ba75"
+        "sha256": "f0193d605cc5e75bc43f2f429120ebd1b11ca6aab0ec488760778f2295cb83b5"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
@@ -46204,11 +46212,11 @@
       },
       {
         "path": "src/championship/app/settings/preferenceEnvironment.js",
-        "sha256": "7a5e552991a4ab421c5f27d9582491532693a62b7480c13513b2c20088e7cf0a"
+        "sha256": "7b3badaffcc5b887889988ba0588a6f67787365f9c376f99b83e78ffd29acd3f"
       },
       {
         "path": "src/championship/app/settings/preferenceSchema.js",
-        "sha256": "ac670274c67c29aa8ff543e64692476ff3458ad66013f28cc25a86f3b7358bdb"
+        "sha256": "7d27769ffe258ee6cb3289090be8820322635975adc7f874278a40b58906e4b8"
       },
       {
         "path": "src/championship/app/settings/preferenceStore.js",
@@ -46220,7 +46228,7 @@
       },
       {
         "path": "src/championship/app/settings/settingsPanel.js",
-        "sha256": "f14ef042551875c47b8d41abddb7f1fb233dfee7cd6e764d2ff9f35c2ca4a19e"
+        "sha256": "b6bffa03b4f84ecb9537b78db02013e9c3bfec13576c46fa67a25145e9a44c47"
       },
       {
         "path": "src/championship/app/shopOriginalVideo.css",
@@ -46228,7 +46236,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "83705113770ee6dbc7e9f4265f928745ed3ed82bbe295aecfd84dc8b875983e9"
+        "sha256": "907b90a5a562eef1390f7515d34bed234564c7f1b0fd976c421acb21c9530b22"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -46252,7 +46260,7 @@
       },
       {
         "path": "src/championship/app/ui/tokens.css",
-        "sha256": "8b4cfb481e98e39e5e2348d219f56696d7bedbf2acb712ad67a75970e07df569"
+        "sha256": "b9d21f2b9982bafe4c76ebac24523b609cde9a1b2d5d7331eb60b1aaee83db40"
       },
       {
         "path": "src/championship/app/uiDialog.js",
@@ -46260,15 +46268,15 @@
       },
       {
         "path": "src/championship/app/vs2Screens.js",
-        "sha256": "400850ac8a9658e0aec1aa422c7b0e3a1be17ef535d88e2c6e660a6726f852a4"
+        "sha256": "a93d68c0f544d6511f5cc6912dd2a2f87020e828ae7b33898d009a312d678c3f"
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "2cff00ed1c1545fc60ef62445fecbdce30c8bf3b8ca8f4789bac15b7af4b8bbc"
+        "sha256": "7291871dfaa1324512b9ae1a54dec7ba22059cfa399126ccd1c483873b14f315"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
-        "sha256": "9aa29c0f3163c449ea859816b302f6787df29be09aa79c10316a001da35dd029"
+        "sha256": "b2b4a66fa07a7985ac430fa7794f08875469fc5e7ec895d6732fb524fac6cc0f"
       },
       {
         "path": "src/championship/app/vs4Screens.js",
@@ -46276,11 +46284,11 @@
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "27e030fb540a20150a08dc58efd54892a251723f2c4ea2f838f58dc1365f83bb"
+        "sha256": "c13ab613ccf9fee982044518f6d7058485ca24a513b27fdeaa8471716d87faf5"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
-        "sha256": "b5c98a845938ff69d96bcc8c879b05ecfff29f94677ecd226b42883d5ae2a8ba"
+        "sha256": "e4c00ff3e21ba2399e715c2854b5f03e90e2603862c277df54cacacb6a38835a"
       },
       {
         "path": "src/championship/battle/battleActionApplication.js",
@@ -47456,11 +47464,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "440bac6ed8820e886135ce2a2a762a12abd30b68e3cf472d179cdad03199b16f"
+        "sha256": "c90f3e0866f1248f8cc2c277fe096c97507ba62be2b15b796e81be51df679e3f"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "d2cefed765429b19ed3197ef94ad36d110c0e6d1309e697ddae18ef434306c3d"
+        "sha256": "8ca1a16c43a706c246b2825fdfbd55d6b57e78f3eadcf701b0ca2597dce23ea8"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -47468,11 +47476,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "bc1f1a6037b5bf10397367bdfeb069dd62366c92ae426f127bd3db104c28869b"
+        "sha256": "d0e4db066c826d56535547b86639f1b789aee0670a6385c60afc284befd15c18"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "b7859ca11e42282c5d93734b3f31296ccc6025f7f7de62eacc8315bd4f7f7abc"
+        "sha256": "f1e0f3815c47d20ce0a8f29f1e80d4b4ea1fc103fa94df08015bf9489b28b52a"
       },
       {
         "path": "src/championship/text/zhHant.js",
@@ -47648,7 +47656,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.r1.json",
-        "sha256": "c81e800306e2dff7941014f8e8448e0c71d3587632bd7741f00f867b9e8092cc"
+        "sha256": "c2ac742ce2a36b76425148e114c1f0eac25a1405d18db6074507724f0ce1c830"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
@@ -47716,7 +47724,7 @@
       },
       {
         "path": "alternate-form-qa.html",
-        "sha256": "e0569b0044e2be36a6ea94c97c15cebe1a27c83bfed10e83b4c49d0ad019b2d4"
+        "sha256": "851323c35801341d6d96dea81f4c115464fb90268672cf7ec280b35dcdfc7ede"
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-229.png",
@@ -47760,7 +47768,7 @@
       },
       {
         "path": "src/data/championship/qa-database-hero-portraits.r1.json",
-        "sha256": "626623b119da5b0f6d572da0ec925666a1413097967ea0939c1022c006e588ba"
+        "sha256": "d9976d64ed9c0ac6e58281814e3cfe55aae6db8b1154aa3a231c07e6e70df22a"
       },
       {
         "path": "src/championship/contracts/productBattleTransport.js",
@@ -48385,6 +48393,38 @@
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-056.f7c3f093351f4965.png",
         "sha256": "f7c3f093351f49656d23822132c807f06908aad40bfd8c3e8607429424ca7eb5"
+      },
+      {
+        "path": "src/championship/app/ui/ceremony.css",
+        "sha256": "959d74f7cedcf50f11059d08c39242ba34ab9839a9874492ff86c9ba25e58428"
+      },
+      {
+        "path": "src/championship/presentation/ceremony/ceremonyAudio.js",
+        "sha256": "b119c6929ff4f068fff735df2d96c79da8ee8e2762debe2eeb4e8bfc09a99ce2"
+      },
+      {
+        "path": "src/championship/presentation/ceremony/ceremonyRunner.js",
+        "sha256": "e9067407927fcab3d11d8ada595eca2a984a48c9ac27d5aa43037d3cddccd9b3"
+      },
+      {
+        "path": "src/championship/presentation/ceremony/ceremonyScenes.js",
+        "sha256": "fc73164df93f76c4a6d93c2c1b020d00e6084e5cb234b5f558ba04e39a5e87d1"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-058.85ac0a27d7121cef.png",
+        "sha256": "85ac0a27d7121cef246ba2c911ab452b6bcb97b3284a09edd1ae6cbfcd07d1fc"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-059.d808c556efd2a029.png",
+        "sha256": "d808c556efd2a0291a3d38973783951c41199bdb779bbff913511afbbefff9d6"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-060.7a8efa91b909b615.png",
+        "sha256": "7a8efa91b909b615bab9af95cce073d6184a5df830db6c98932c6827d1a1f523"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-061.df2dcf13586b2025.png",
+        "sha256": "df2dcf13586b20252a75c6b333034bc38f345fdb15fe099f0b826eb60410e112"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",

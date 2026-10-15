@@ -748,7 +748,7 @@ function combatantCard(combatant, compact,hudArt=null) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -845,8 +845,17 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   // three, the field, the player's three, the record.
   section.append(clock.band, opponents, host, players, log.band);
 
+  // Ceremony (2026-10-15): the two sides meet at the top of the arena as it
+  // opens. A toast: it takes no input and leaves the native READY/FIGHT cue,
+  // which owns the centre, untouched.
+  let versus = null;
+  const sideNames = (mine) => frame.combatants.filter((c) => c.present !== false && (c.team === localTeamIndex) === mine)
+    .map((c) => c.displayName ?? uiText(`SLOT ${c.slot + 1}`));
   const field = mountField({ host, progress,
-    onReady(){stopLoadingTrack();host.setAttribute('aria-busy','false');loading.remove();},
+    onReady(){stopLoadingTrack();host.setAttribute('aria-busy','false');loading.remove();
+      if(viewDisposed||versus)return;
+      versus=ceremonies?.versus?.({host,playerLabel:uiText('我方'),playerNames:sideNames(true),
+        opponentLabel:uiText('對手'),opponentNames:sideNames(false),onDone:()=>{versus=null;}})??null;},
     onError(){stopLoadingTrack();progress?.fail();host.setAttribute('aria-busy','false');loading.dataset.state='error';
       loadingText.textContent=uiText('對戰場地載入失敗，請返回牧場後再試。');}
   });
@@ -886,6 +895,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
     },
     dispose() {
       viewDisposed = true;
+      versus?.dispose();
       stopLoadingTrack();
       field?.dispose?.();
       root.replaceChildren();
@@ -917,7 +927,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1039,9 +1049,25 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   characterHost.setAttribute('aria-label',uiText('參賽數碼獸'));
   const resultStage=element('div','cm-vs5-result__stage');resultStage.append(characterHost,body);
   let index = 0;
+  // Ceremony (2026-10-15): the first time the title page (result_sub_titleget)
+  // is reached, the medal is presented before the page settles under it. The
+  // title is already recorded by the app; this only shows it.
+  let medalShown = false, medalCeremony = null;
+  function presentMedal() {
+    const titles = progression?.earnedTitles ?? [];
+    if (medalShown || !titles.length) return;
+    medalShown = true;
+    const names = titles.map((title) => title.name).join(uiText('、'));
+    medalCeremony = ceremonies?.medal?.({ host: root, label: uiText('取得頭銜：{title}', { title: names }),
+      kicker: uiText('徽章獲得'), title: names,
+      meta: titles.length > 1 ? uiText('一次取得 {count} 個頭銜', { count: titles.length }) : uiText('頭銜賽勝利紀錄'),
+      medal: hudArt?.getMedal?.(titles[0].id) ?? null, hint: uiText('輕觸繼續'),
+      onDone: () => { medalCeremony = null; } }) ?? null;
+  }
 
   function paint() {
     body.replaceChildren(panels[index].build());
+    if (panels[index].id === 'TITLE') presentMedal();
     section.dataset.panel = panels[index].id;
     section.dataset.originalScene = panels[index].scene;
     const last = index === panels.length - 1;
@@ -1085,6 +1111,8 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
       // Refresh only the currently visible medal panel. Keep its page index,
       // navigation buttons/focus, settled numbers and highlight lifecycle.
       if(panels[index].id==='TITLE')paint();
+      // A medal ceremony that started before the art arrived gets its medal.
+      if(medalCeremony)medalCeremony.setMedal?.(hudArt?.getMedal?.(progression?.earnedTitles?.[0]?.id)??null);
     },
     render() {},
     inspect() {
@@ -1102,6 +1130,6 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         outOfScope: Object.freeze(["result_sub_net_scene"])
       });
     },
-    dispose() { if(disposed)return;disposed=true;entrance?.dispose?.(); entrance = null;hudArt=null; }
+    dispose() { if(disposed)return;disposed=true;entrance?.dispose?.(); entrance = null;medalCeremony?.dispose();medalCeremony=null;hudArt=null; }
   });
 }

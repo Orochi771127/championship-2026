@@ -2,6 +2,8 @@ import { uiText } from "../text/uiText.js";
 import { shopGoodsPresentation, huntToolIconPresentation } from '../presentation/shopGoodsUiArt.js';
 import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
 import { assembledHudArt } from '../presentation/assembledUiArt.js';
+import { playCeremony, ceremonyEnvironment, CEREMONY_TIMING } from '../presentation/ceremony/ceremonyRunner.js';
+import { buildGateEntry, buildCapture } from '../presentation/ceremony/ceremonyScenes.js';
 // VS2-P -- Championship Modern P1R presentation for Gate Select, Hunt Loadout
 // and the Hunt HUD.
 //
@@ -595,6 +597,30 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   loadingNote.hidden = true;
   loading.append(loadingText, loadingBar, loadingBytes, loadingNote);
   viewport.append(loading);
+  // Ceremony (2026-10-15): 傳送門連線 covers the download and opens onto the
+  // live field. It decorates the entry the app has already made; the field
+  // runs underneath from its first frame, and a tap settles it.
+  const entryEnv = ceremonyEnvironment();
+  const entryStarted = performance.now();
+  let entryTimer = null;
+  const remainingText = (minutes) => minutes == null ? '' : uiText('限時 {time}', {
+    time: `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}` });
+  const entryGate = uiText(block.hud.gateName ?? '');
+  let entry = frame.tutorial ? null : playCeremony({ host: viewport, kind: 'gate-entry', cue: 'gate', autoDismiss: false,
+    label: uiText('傳送門連線：{gate}', { gate: entryGate }),
+    build: (stage, env) => buildGateEntry(stage, env, { kicker: uiText('傳送門連線'), gateName: entryGate,
+      meta: remainingText(block.hud.time?.remainingMinutes), hint: uiText('輕觸略過') }) });
+  const closeEntry = () => { clearTimeout(entryTimer); entryTimer = null; entry?.dispose(); entry = null; };
+  // 捕獲成功: a toast over the live field when a catch lands on the card.
+  const seenCaptures = new Set((block.hud.onCard ?? []).map((entry) => entry.wildId));
+  let captureToast = null;
+  function announceCapture(caught, total) {
+    captureToast?.dispose();
+    captureToast = playCeremony({ host: viewport, kind: 'capture', cue: 'capture',
+      build: (stage, env) => buildCapture(stage, env, { kicker: uiText('捕獲成功'), name: caught.name ?? '',
+        chip: uiText('已收入記憶卡 · {count}', { count: total }) }),
+      onDone: () => { captureToast = null; } });
+  }
   const target = element("section", "cm-vs2-target");
   target.setAttribute('aria-label', uiText('狩獵目標資訊'));
   const targetName = element('strong', 'cm-vs2-target__name', '輕觸數碼獸查看');
@@ -719,12 +745,16 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       if (load.signal.aborted) { result?.dispose?.(); return null; }
       return result;
     }), cancelled]);
+  } catch (error) {
+    closeEntry();
+    throw error;
   } finally {
     watchdog.stop();
     resources?.disconnect();
     clearTimeout(slowNotice);
   }
   if (!field && load.signal.aborted) {
+    closeEntry();
     fieldHost.setAttribute('aria-busy', 'false');
     if (expired) {
       loadingText.textContent = uiText(expired === 'STALLED'
@@ -734,13 +764,17 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       loadingBytes.hidden = true;
       loadingNote.hidden = true;
     }
-    return Object.freeze({ isPlayable: false, render() {}, dispose() { load.abort(); shell.remove(); } });
+    return Object.freeze({ isPlayable: false, render() {}, dispose() { closeEntry(); load.abort(); shell.remove(); } });
   }
   if (!field || typeof field.render !== "function" || typeof field.dispose !== "function") {
     throw new TypeError("Published field presenter must expose render(frame) and dispose()");
   }
   fieldHost.setAttribute('aria-busy', 'false');
   loading.remove();
+  if (entry) {
+    const hold = entryEnv.reduced ? 0 : Math.max(0, CEREMONY_TIMING['gate-entry'].minHold - (performance.now() - entryStarted));
+    entryTimer = setTimeout(() => { entryTimer = null; entry?.dismiss(); }, hold);
+  }
 
   function render(nextFrame) {
     const next = nextFrame?.huntField;
@@ -750,6 +784,13 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     const remaining=next.hud.time?.remainingMinutes;
     companion.textContent = uiText(remaining == null ? next.hud.companionName ?? "" :
       uiText('剩餘 {time}', { time: `${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}` }));
+    const onCard = next.hud.onCard ?? [];
+    for (const caught of onCard) {
+      if (seenCaptures.has(caught.wildId)) continue;
+      seenCaptures.add(caught.wildId);
+      // The scripted tutorial speaks for itself at this moment.
+      if (!nextFrame.tutorial) announceCapture(caught, onCard.length);
+    }
     const selected = next.hud.target;
     targetName.textContent = uiText(selected ? selected.name??'野生數碼獸' : '輕觸數碼獸查看');
     target.dataset.selected = String(Boolean(selected));
@@ -791,6 +832,8 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     render,
     getDiagnostics() { return field.getDiagnostics?.() ?? null; },
     dispose() {
+      closeEntry();
+      captureToast?.dispose();
       load.abort();
       field.dispose();
       root.replaceChildren();

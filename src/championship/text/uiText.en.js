@@ -340,6 +340,25 @@ export const PATTERNS_EN = Object.freeze([
 // zh-Hant source string -> English. Grouped by where the string is shown.
 // "context|source" entries tell apart a word with two meanings.
 export const TEXT_EN = Object.freeze({
+  // 2026-10-15 arena UI / ceremony copy (PRODUCT_AUTHORED).
+  "我方": "YOU",
+  "對手": "RIVAL",
+  "進化": "EVOLUTION",
+  "、": ", ",
+  "取得頭銜：{title}": "Title won: {title}",
+  "徽章獲得": "MEDAL EARNED",
+  "一次取得 {count} 個頭銜": "{count} titles won at once",
+  "頭銜賽勝利紀錄": "A title match victory",
+  "輕觸繼續": "Tap to continue",
+  "限時 {time}": "Time limit {time}",
+  "傳送門連線：{gate}": "Gate link: {gate}",
+  "傳送門連線": "GATE LINK",
+  "輕觸略過": "Tap to skip",
+  "捕獲成功": "CAPTURED",
+  "已收入記憶卡 · {count}": "On the memory card · {count}",
+  "晴空競技": "Arena Daylight",
+  "明亮的天空與競技場配色，青綠連結線與金色獎勵（預設）。": "Bright sky and arena colours, with a teal link line and gold for rewards (default).",
+  "系統深色時用深色夜景，淺色時用晴空競技。": "Night when your system is dark, Arena Daylight when it is light.",
   "返回": "Back", "開始對戰": "Start battle",
   "{name} 回到了培育蛋。": "{name} returned to an egg.",
   "點選夥伴查看狀態・左右滑動查看牧場": "Tap a partner to see its status · Swipe to look around the ranch",

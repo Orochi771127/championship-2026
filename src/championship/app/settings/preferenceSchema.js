@@ -43,7 +43,9 @@ export const PREFERENCE_TIMING = Object.freeze({ IMMEDIATE: "IMMEDIATE", NEXT_SC
 
 const DEFINITIONS = {
   // Appearance and display
-  theme: { category: "appearance", scope: "account", type: "enum", values: ["night", "clear", "warm", "classic", "system"], default: "night" },
+  // "arena" is the default from 2026-10-15 (Owner: bright, light-tech). A saved
+  // explicit choice is kept as it is; only players who never chose see it first.
+  theme: { category: "appearance", scope: "account", type: "enum", values: ["arena", "night", "clear", "warm", "classic", "system"], default: "arena" },
   systemBackgroundMode: { category: "appearance", scope: "account", type: "enum", values: ["default", "custom", "random"], default: "default" },
   // Empty / unrecognized stored IDs show the original theme, never an arbitrary image.
   systemBackgroundId: { category: "appearance", scope: "account", type: "enum", values: ["", ...SYSTEM_BACKGROUND_IDS], default: "" },
@@ -170,8 +172,8 @@ export function parsePreferences(text) {
 
 /** night | clear | warm. "system" follows the OS: dark reads as night, light as clear. */
 export function resolveTheme(theme, { prefersDark = true } = {}) {
-  if (theme === "system") return prefersDark ? "night" : "clear";
-  return ["night", "clear", "warm", "classic"].includes(theme) ? theme : "night";
+  if (theme === "system") return prefersDark ? "night" : "arena";
+  return ["arena", "night", "clear", "warm", "classic"].includes(theme) ? theme : "arena";
 }
 
 /** Whether motion is reduced: the explicit choice wins, else the OS setting. */

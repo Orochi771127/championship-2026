@@ -9,6 +9,8 @@ import {raisingMessageText,raisingMessageSender} from '../text/raisingMessages.z
 import { speciesName } from "../text/zhHant.js";
 import { assembledHudArt } from '../presentation/assembledUiArt.js';
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
+import { playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
+import { buildEvolve } from '../presentation/ceremony/ceremonyScenes.js';
 // INT-RH2 — Codex-owned P1R DOM presentation.
 //
 // This module consumes only the published Raising presentation seam. It never
@@ -432,6 +434,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   let lastRevision = -1;
   let lastEventKey = null;
+  let pendingEvolution = null, evolutionCeremony = null;
   function render(frame) {
     if (!frame || frame.revision === lastRevision) return;
     lastRevision = frame.revision;
@@ -527,13 +530,31 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const event=lifecycle?.message;
     const eventKey=event?`${event.kind}:${event.instanceId??''}:${event.target??''}`:null;
     if(eventKey!==null&&eventKey!==lastEventKey){
-      if(event.kind==='EVOLVED'||event.kind==='REBORN'){
+      if(event.kind==='EVOLVED')pendingEvolution={instanceId:event.instanceId,target:event.target};
+      if(event.kind==='REBORN'){
         const member=frame.residents.find(r=>r.creatureId===event.instanceId);
-        if(member)showNotice(event.kind==='EVOLVED'?uiText('{name} 進化成了{species}。',{name:member.displayName,species:speciesName(event.target)}):uiText('{name} 回到了培育蛋。',{name:member.displayName}));
+        if(member)showNotice(uiText('{name} 回到了培育蛋。',{name:member.displayName}));
       }
       if(event.kind==='DISAPPEARED')showNotice(uiText('夥伴消失了。'));
     }
     lastEventKey=eventKey;
+    // Ceremony (2026-10-15): the new form is revealed once the native
+    // evolution sequence has finished and nothing else owns the screen. The
+    // native sequence itself (ROM timing, ring/burst cells, writing) is untouched.
+    if(pendingEvolution&&!lifecycle?.evolution&&!day&&!lifecycle?.confirmation&&!activeMail){
+      const member=frame.residents.find(r=>r.creatureId===pendingEvolution.instanceId);
+      const species=speciesName(pendingEvolution.target);
+      pendingEvolution=null;
+      if(member){
+        evolutionCeremony?.dispose();
+        evolutionCeremony=playCeremony({host:root,kind:'evolve',cue:'evolve',
+          label:uiText('{name} 進化成了{species}。',{name:member.displayName,species}),
+          build:(stage,env)=>buildEvolve(stage,env,{kicker:uiText('進化'),title:species,
+            meta:uiText('{name} 進化成了{species}。',{name:member.displayName,species}),
+            portrait:hudArt?.getPortrait(member.speciesId)??null,hint:uiText('輕觸繼續')}),
+          onDone:()=>{evolutionCeremony=null;}});
+      }
+    }
 
     field.render(frame);
   }
@@ -576,6 +597,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     },
     dispose() {
       disposed = true;
+      evolutionCeremony?.dispose();
+      evolutionCeremony = null;
       unsubscribe?.();
       unsubscribeHud?.();
       clearTimeout(noticeTimer);

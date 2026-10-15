@@ -502,6 +502,25 @@ export const PATTERNS_VI = Object.freeze([
 ]);
 
 export const TEXT_VI = Object.freeze({
+  // 2026-10-15 arena UI / ceremony copy (PRODUCT_AUTHORED).
+  "我方": "PHE TA",
+  "對手": "ĐỐI THỦ",
+  "進化": "TIẾN HÓA",
+  "、": ", ",
+  "取得頭銜：{title}": "Đạt danh hiệu: {title}",
+  "徽章獲得": "NHẬN HUY HIỆU",
+  "一次取得 {count} 個頭銜": "Đạt {count} danh hiệu cùng lúc",
+  "頭銜賽勝利紀錄": "Chiến thắng trận tranh danh hiệu",
+  "輕觸繼續": "Chạm để tiếp tục",
+  "限時 {time}": "Giới hạn {time}",
+  "傳送門連線：{gate}": "Kết nối cổng: {gate}",
+  "傳送門連線": "KẾT NỐI CỔNG",
+  "輕觸略過": "Chạm để bỏ qua",
+  "捕獲成功": "BẮT THÀNH CÔNG",
+  "已收入記憶卡 · {count}": "Đã vào thẻ nhớ · {count}",
+  "晴空競技": "Đấu trường trời trong",
+  "明亮的天空與競技場配色，青綠連結線與金色獎勵（預設）。": "Màu trời và đấu trường tươi sáng, đường liên kết xanh mòng két và vàng cho phần thưởng (mặc định).",
+  "系統深色時用深色夜景，淺色時用晴空競技。": "Dùng Cảnh đêm khi hệ thống tối, Đấu trường trời trong khi hệ thống sáng.",
   // Upstream naming, Retro theme and ranch expansion integration.
   "返回": "Quay lại",
   "開始對戰": "Bắt đầu trận đấu",

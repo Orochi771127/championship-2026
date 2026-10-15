@@ -1,5 +1,11 @@
 # Championship Owner Direction
 
+## 2026-10-15 — UI/HUD, scene presentation and ceremony upgrade (arena daylight)
+
+The Owner hands over the UI/HUD, scene presentation and animation upgrade for direct integration, with a sellable, polished 2.5D monster game as the quality bar: 「先同步最新 main，理解現有引擎與流程，再訂一套一致的視覺與動效規範。設計要明亮、俐落、有輕科技感與世界觀辨識度；場景滿版、HUD 浮層、資訊清楚」. Scope: desktop, portrait and landscape UI/HUD with stable layouts and 44px targets; complete presentations for medal acquisition, hunt entry, capture success, evolution, battle opening and settlement, with skip, reduced motion and power saving; one art language; reuse approved original art (character art and style calibration stay with dot) and keep source/licence records; load only what a screen needs and release it on exit; keep gameplay, save, reward settlement and evolution/capture timing exactly. Build Raising → Hunt → reward/medal first as the quality template, then extend the rules. Verify at 390×844, 844×390 and 1366×768 with before/after captures, list what tools cannot verify, then 「自行審查修正通過後，依 repo 現有流程提交與發布」.
+
+Decisions recorded under this entry (OWNER_APPROVED_ADAPTATION of presentation): the bright 「晴空競技」 arena palette becomes the default theme (explicit saved themes are kept); a ceremony layer (DOM + CSS timeline, synthesized cues through the existing sfx bus, no extra ticker) decorates only already-settled moments; the native evolution sequence and the native READY/FIGHT cue are untouched and the new reveals play after or beside them; the Hunt field frame gains one read-only `onCard` projection of the memory card. No new raster art, 3D model, font, gameplay value, save field or Battle core. See [spec](../reports/ui-ceremony-2026-10-15/SPEC_ZH_TW.md) and [report](../reports/ui-ceremony-2026-10-15/REPORT_ZH_TW.md).
+
 ## 2026-10-15 — Data Arena round 2: four-move kits and a short tournament (supplement, same batch)
 
 Owner supplements the Data Arena task without restarting it. A playable reference, Pokémon Zarza Arena, guides the round:

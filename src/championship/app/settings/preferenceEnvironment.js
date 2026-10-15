@@ -2,8 +2,8 @@
 //
 // Every visible preference becomes one attribute on <html>, which the
 // stylesheets and presentations read (see presentationPreferences.js):
-//   data-theme        night | clear | warm      (resolved: "system" follows the OS)
-//   data-theme-choice night | clear | warm | system
+//   data-theme        arena | night | clear | warm | classic (resolved: "system" follows the OS)
+//   data-theme-choice arena | night | clear | warm | classic | system
 //   data-text-scale   100 | 115 | 130
 //   data-hud          standard | compact
 //   data-motion       full | reduced            (resolved: "system" follows the OS)
@@ -17,8 +17,8 @@
 import { resolveReducedMotion, resolveTheme } from "./preferenceSchema.js";
 import { setLocale } from "../../text/locale.js";
 
-export const THEME_COLORS = Object.freeze({ night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" });
-export const THEME_SCHEMES = Object.freeze({ night: "dark", clear: "light", warm: "light", classic: "dark" });
+export const THEME_COLORS = Object.freeze({ arena: "#eef5fa", night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" });
+export const THEME_SCHEMES = Object.freeze({ arena: "light", night: "dark", clear: "light", warm: "light", classic: "dark" });
 
 export function createPreferenceEnvironment({
   store,
