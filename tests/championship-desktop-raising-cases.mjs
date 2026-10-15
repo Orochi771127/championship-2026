@@ -5,8 +5,8 @@ import { raisingFieldViewport, raisingNativeScreenPixels, desktopRaisingViewport
 
 test('desktop Raising alone leaves the portrait frame, based on available dimensions',()=>{
  for(const activeScreen of ['TITLE','SHOP','DATABASE','BATTLE','HUNT_FIELD'])assert.equal(isDesktopRaisingLayout({width:1920,height:1080,activeScreen}),false);
- for(const [width,height] of [[720,390],[844,390],[932,430],[1024,600],[1366,480],[1366,768],[1920,1080]])assert.equal(isDesktopRaisingLayout({width,height,activeScreen:'RAISING_HOME'}),true);
- for(const [width,height] of [[390,844],[719,390],[844,319],[800,700]])assert.equal(isDesktopRaisingLayout({width,height,activeScreen:'RAISING_HOME'}),false);
+ for(const [width,height] of [[568,320],[667,375],[719,390],[720,390],[844,390],[932,430],[1024,600],[1366,480],[1366,768],[1920,1080]])assert.equal(isDesktopRaisingLayout({width,height,activeScreen:'RAISING_HOME'}),true);
+ for(const [width,height] of [[390,844],[430,932],[567,320],[568,319],[844,319],[800,700]])assert.equal(isDesktopRaisingLayout({width,height,activeScreen:'RAISING_HOME'}),false);
  assert.equal(isDesktopRaisingLayout({width:1366,height:768,activeScreen:'RAISING_HOME',hidden:true}),false);
 });
 

@@ -80,32 +80,8 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  // Legacy saves do not enable developer actor telemetry. Capture them via
  // public camera gestures; inspect these screenshots alongside fresh-save
  // numeric cap/ground assertions rather than inventing legacy diagnostics.
- async function legacyTopContour(label){
-  const before=await saved();
-  for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
-   await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
-   // Clean-mode swipes pan even when begun on an actor; only a tap cleans.
-   // Every gesture below exceeds the drag threshold and stays on the canvas.
-   await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
-   await page.waitForFunction(()=>document.body.dataset.tool==='clean');
-   const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first(),box=await canvas.boundingBox();
-   assert.ok(box&&box.height>500);
-   for(let gesture=0;gesture<4;gesture++){
-    const candidates=[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y})));
-    const start=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
-    assert.ok(start,'Legacy camera swipe must start on unobstructed canvas');
-    await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
-    await page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
-   }
-   await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();await page.mouse.move(1,1);await page.waitForTimeout(300);
-   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await shot(label+'-top-contour-'+viewport.width);
-  }
-  const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
- }
- // Separate installed QA profile: normal editor clicks only, never real player data.
- async function sourceCornerReview(){
   // Long visual sweeps can cross midnight. Acknowledge only the ordinary new-date UI.
-  async function clearCalendar(){
+ async function clearCalendar(){
    // Native lifecycle completion can launch a separate evolution ceremony.
    // Wait for the real hit-test target, not just the native lifecycle flag.
    for(;;){
@@ -119,9 +95,37 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
     const calendar=page.locator('.int-rh2-calendar');
     if(!await calendar.isVisible())return;
     await calendar.click();await page.waitForTimeout(250);
-    evidence.assertions.push({sourceCornerCalendarAcknowledged:true,normalUi:true});write();
+    evidence.assertions.push({ordinaryCalendarAcknowledged:true,normalUi:true});write();
    }
   }
+
+ async function legacyTopContour(label){
+  const before=await saved();
+  for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
+   await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
+   // Clean-mode swipes pan even when begun on an actor; only a tap cleans.
+   // Every gesture below exceeds the drag threshold and stays on the canvas.
+   await clearCalendar();
+   await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
+   await page.waitForFunction(()=>document.body.dataset.tool==='clean');
+   const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first(),box=await canvas.boundingBox();
+   assert.ok(box&&box.height>500);
+   for(let gesture=0;gesture<4;gesture++){
+    await clearCalendar();
+    const candidates=[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y})));
+    const start=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
+    assert.ok(start,'Legacy camera swipe must start on unobstructed canvas');
+    await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
+    await page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
+   }
+   await clearCalendar();
+   await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();await page.mouse.move(1,1);await page.waitForTimeout(300);
+   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await clearCalendar();await shot(label+'-top-contour-'+viewport.width);
+  }
+  const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
+ }
+ // Separate installed QA profile: normal editor clicks only, never real player data.
+ async function sourceCornerReview(){
   await fresh('source-corners');const loadedPaddedUrls=new Set();page.on('response',r=>{if(r.ok()&&r.url().includes('source-bounds-r1-20261015/'))loadedPaddedUrls.add(r.url());});await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
