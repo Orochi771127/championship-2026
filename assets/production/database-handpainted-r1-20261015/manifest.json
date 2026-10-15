@@ -3,7 +3,7 @@
   "id": "database-handpainted-r1-20261015",
   "classification": "ORIGINAL_REFERENCE_HANDPAINTED_REDRAWS",
   "scope": "Encyclopedia hero illustrations only; never battle/raising sprite or animation replacements",
-  "count": 38,
+  "count": 39,
   "entries": [
     {
       "speciesIndex": 34,
@@ -1033,6 +1033,55 @@
           "note": "Keep crest/flames/claws, horns/scarf/tail, rose/vines/petal hems/feet and batwings/ears/tail inside padded encyclopedia container. Do not crop original PNG."
         }
       }
+    },
+    {
+      "speciesIndex": 117,
+      "speciesId": "species-117",
+      "displayCode": "MA58",
+      "src": "assets/production/database-handpainted-r1-20261015/species-117.8f7d027cdbf6d3e6.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681",
+      "styleBatch": "HANDPAINTED_R1_20261015",
+      "bytes": 1507158,
+      "sourceEntityId": "m357_unimon",
+      "sourceReferenceSha256": "8372366d49ae17a40a39326b0e84a1f3a474b5d67c9b639a799e0ebcaaf3ce50",
+      "sourceBindingEvidence": "EXACT_ORIGINAL_SOURCE_INDEX_ENTITY_FILENAME_AND_PUBLIC_SPECIES_ID",
+      "selectedSourceForm": "ORIGINAL_QUADRUPED_DAWNBLADE_COURSER_HEAVY_LOCAL_SIMPLIFICATION",
+      "selectedGenerationVersion": "simplified-v2",
+      "generation": "Built-in image generation using owner original reference; untouched original generated PNG",
+      "artDirection": "Cartoon-leaning hand-painted large color groups, restrained ornament, dynamic full-body quadruped; same species anatomy",
+      "review": {
+        "artistViewedReferenceAndOutput": true,
+        "rootReview": "SCOPED_HOSTED_VISUAL_PASS",
+        "rootReviewScope": "Species117 displayed-portrait pilot only; not an all-roster, action-art or three-view acceptance.",
+        "sourceIdentityReview": "ARTIST_ACTUALLY_VIEWED_SOURCE_AND_OUTPUT",
+        "actualAlpha": true,
+        "runtimeBrowser": "PASS_NORMAL_DEX_128_256_LIGHT_DARK_RESPONSIVE",
+        "runtimeContainPadding": "Existing 24 px stage padding and object-fit contain; original PNG unchanged.",
+        "nativeMarginCaveat": "Solid alpha>10 margins 54/55/28/43 px. PNG does not meet 8–10 percent padding. Existing runtime inset is retained, not a repaired-source claim.",
+        "remainingDetailCaveat": "Wing-root inner covert clusters remain more than 2–3 broad masses. Readable in the reviewed 128/256 and normal views; not a general simplification template.",
+        "compositingCaveat": "No visible floating alpha pixels, white box or clipped silhouette in the reviewed light/dark and normal captures. Faint source-edge alpha remains; not all-background or physical-device acceptance.",
+        "anatomy": "Four legs/two wings/two ears/one forehead horn/one tail root; adult quadruped, no ribbons or flank banners.",
+        "comparisonCaveat": "The current species055 hero is not identical to the owner positive GR29 runtime example. This pair does not validate the whole roster style.",
+        "rootApprovalReportedAt": "2026-10-15T14:57:27Z",
+        "hostedEvidence": {
+          "candidateHead": "52978fc360df8abb22c0e29dbb7961b27e9cd8f6",
+          "testedMergeCommit": "9e02cd1f884b9453b9bccd6b1f4f758a7e0d55e0",
+          "baseCommit": "9a91ebb415e4bd0e610c83d150bd2fa6ed23132c",
+          "buildId": "6992707eef5ca5fdff3ad0bf0f9254cbc65e53853a83873a2dbf88533987e38c",
+          "buildManifestSha256": "50ee7092aeb471f7a2085802f7b79ea54ac61d06e91171d6110c2a8764f5beb3",
+          "workflowRunId": 38755053081,
+          "artifactId": 11983920742,
+          "artifactSha256": "63c09c0279db9fe8c6d2ca87dffc10cb11cb72759d5af2a2fe06f65a23d3c703",
+          "testedImageSha256": "8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681",
+          "technicalResult": "CAPTURE_PASS; 16 captures; zero page/network/cleanup errors; exact image-response hashes verified.",
+          "rootActuallyViewed": "117 at 128 light/dark, 256 light/dark, normal mobile, restored desktop; 055 at 128 as reference.",
+          "scope": "Exact candidate artifact on hosted Chromium; not public deployment proof or physical-device acceptance."
+        }
+      },
+      "designRevision": "SIMPLIFIED_HANDPAINTED_PILOT_V2_20261015",
+      "promptSha256": "87d7ba21bc426e25cb94611a8305341c2960198021a4dd6e6005ec9d20fe67d2"
     }
   ]
 }
