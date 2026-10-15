@@ -2,6 +2,7 @@
 // persistence authority: the result is a normal schema-v5 player save for the
 // existing championshipModernSave:v1 slot.
 
+import { RANCH_DECKS_LAYOUT, prototypeRanchExpansion } from "../../src/championship/cage/ranchExpansion.js";
 import { NATIVE_REGULAR_BOOK_SPECIES } from "../../src/data/championship/nativeBookSpecies.js";
 import { createChampionshipModernSave, serializeChampionshipModernSave }
   from "../../src/championship/app/championshipStandaloneSave.js";
@@ -127,7 +128,7 @@ export function createFullQaSave(baseSave, { cageIds } = {}) {
     raisingHomeSerialized: baseSave.raisingHome,
     raising,
     shop: fullShopSave(),
-    cageEdit: baseSave.cageEdit,
+    cageEdit: { ...baseSave.cageEdit, layoutVersion: RANCH_DECKS_LAYOUT, expansion: prototypeRanchExpansion() },
     battleEconomy: baseSave.battleEconomy,
     instanceIdentity: identity,
     gameplayRng: baseSave.gameplayRng,

@@ -23,12 +23,14 @@
     <h1>全功能 QA 測試存檔</h1>
     <p>這個頁面會在目前手機建立可自由測試的進階存檔：</p>
     <ul>
-      <li>9,999,999 金錢、全部商店商品與籠子。</li>
+      <li>9,999,999 金錢、全部商店商品與籠子，另開放 10 格牧場擴充區。</li>
       <li>全部 Gate、階級、徽章、冠軍大會與世界大會入口。</li>
       <li>全圖鑑與充足的狩獵／育成道具。</li>
       <li>牧場內有戰鬥暴龍獸、閃光暴龍獸、黑暗戰鬥暴龍獸、鋼鐵加魯魯獸與公爵獸。</li>
     </ul>
     <p class="warning"><strong>安裝會取代這個網址在本手機上的目前進度。</strong>若已有存檔，按鈕會先下載一份備份 JSON。請先關閉其他正在執行遊戲的分頁。</p>
+    <p class="warning"><strong>已有 QA 試玩進度？</strong>請先關閉其他遊戲分頁，再使用下方「只開放」按鈕：先下載備份，只啟用 10 格擴充區，不重置夥伴、配置、金錢或徽章。這是非付費 QA 測試功能，不是正式購買。</p>
+    <button id="expand">QA：保留目前進度，只開放 10 格擴充區</button>
     <button id="install" disabled>正在準備 QA 存檔…</button>
     <button id="download" class="secondary" disabled>只下載 QA 存檔 JSON</button>
     <a href="./championship.html">不安裝，返回遊戲</a>
@@ -43,6 +45,9 @@ import {
   serializeChampionshipModernSave
 } from './src/championship/app/championshipStandaloneSave.js';
 
+import { applyQaRanchExpansion } from './src/championship/app/qaRanchExpansion.js';
+
+const expand = document.querySelector('#expand');
 const install = document.querySelector('#install');
 const download = document.querySelector('#download');
 const status = document.querySelector('#status');
@@ -83,10 +88,43 @@ download.onclick = () => {
   setStatus('QA 存檔已下載，手機上的目前進度沒有變更。', 'ready');
 };
 
+expand.onclick = async () => {
+  expand.disabled = true;
+  install.disabled = true;
+  download.disabled = true;
+  try {
+    let result;
+    const apply = async () => {
+      result = await applyQaRanchExpansion(localStorage, async (previous) => {
+        // Keep a recoverable local backup as well as the requested JSON download.
+        // A blocked/quota-exhausted backup aborts before modifying the active save.
+        const backupKey = `${CHAMPIONSHIP_MODERN_SAVE_KEY}:qa-expansion-backup`;
+        localStorage.setItem(backupKey, previous);
+        if (localStorage.getItem(backupKey) !== previous) throw Error('備份無法保存；未變更目前進度。');
+        downloadText(previous, `championship-before-expansion-${Date.now()}.json`);
+      });
+    };
+    if (navigator.locks) {
+      await navigator.locks.request(CHAMPIONSHIP_MODERN_SAVE_KEY, { mode: 'exclusive', ifAvailable: true }, async (lock) => {
+        if (!lock) throw Error('另一個遊戲分頁正在使用存檔，請先關閉後再按一次。');
+        await apply();
+      });
+    } else await apply();
+    setStatus(result.changed ? '10 格擴充區已開放，原有進度與配置已保留。請按「返回遊戲」。' : '擴充區的 10 格已全部開放，原有進度沒有變更。', 'ready');
+  } catch (error) {
+    setStatus(`未確認套用成功：${error.message}`, 'error');
+  } finally {
+    expand.disabled = false;
+    install.disabled = !qaText;
+    download.disabled = !qaText;
+  }
+};
+
 install.onclick = async () => {
   if (!qaText) return;
   install.disabled = true;
   download.disabled = true;
+  expand.disabled = true;
   try {
     let installed = false;
     const write = async () => {
@@ -107,6 +145,7 @@ install.onclick = async () => {
   } catch (error) {
     install.disabled = false;
     download.disabled = false;
+    expand.disabled = false;
     setStatus(error.message, 'error');
   }
 };
