@@ -1363,6 +1363,7 @@ body[data-desktop-menu] .cm-vs2-root[data-screen="MEDALS"] .cm-medals__grid { gr
    Its tablet grid-area:status must not create implicit Database columns. */
 .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail {
   grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: max-content;
 }
 .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-vs2-shop__status {
   grid-area: auto;

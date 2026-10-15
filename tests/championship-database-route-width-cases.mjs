@@ -55,3 +55,15 @@ test('starter-only status cannot create named implicit columns in the database d
   try{assert.equal(f.frame().database.selected.source,starter?'STARTER':'HISTORY');assert.equal(f.root.querySelectorAll('.cm-vs2-database__detail .cm-vs2-shop__status').length,starter?1:0);assert.ok(f.root.querySelector('.cm-dex-routes'));f.assertUnchanged();}finally{f.dispose();}
  }
 });
+
+test('database detail retains intrinsic content row heights around horizontal route scrolling',()=>{
+ const selector='.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail';
+ const rules=[...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter(([,head])=>head.trim().split(',').some(s=>s.trim()===selector));
+ const declarations=rules.map(([,head,body])=>body).join('\n');
+ const values=[...declarations.matchAll(/grid-auto-rows:\s*([^;]+);/g)].map(m=>m[1].trim());
+ assert.equal(values.at(-1),'max-content');
+ assert.doesNotMatch(declarations,/overflow-y:\s*hidden/);
+ // Overflow-x:auto makes the route's computed overflow-y:auto too, so an
+ // auto track can use a zero automatic minimum. Intrinsic max-content rows
+ // preserve prose, metadata, and every route branch for the detail scroller.
+});

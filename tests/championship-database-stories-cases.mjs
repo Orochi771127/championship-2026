@@ -102,11 +102,11 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('20 hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('22 hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,20);
- for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|035|037|038|039|040|048|215)\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
- for(const id of [0,20,195,222,'8',NaN])assert.equal(get(id),null);
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,22);
+ for(const e of art.entries){const id=getDatabaseDisplayEntry(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/(?:database-portraits-b1-20261014\/B1\d{2}\.webp|database-handpainted-r1-20261015\/species-(?:034|035|037|038|039|040|048|211|215|222)\.png)$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ for(const id of [0,20,195,'8',NaN])assert.equal(get(id),null);
 });
 
 test('hero appears only after matching decoded dimensions and has cancellation-safe handlers',async()=>{
@@ -153,4 +153,27 @@ test('second batch hand-painted heroes preserve exact identity and discovery pri
    f.assertUnchanged();
   }finally{f.dispose();}
  }}finally{setLocale('zh-Hant');}
+});
+
+
+test('owner-confirmed ultimate hand-painted heroes preserve exact identity and discovery privacy across five locales',()=>{
+ try {for(const sp of [211, 222])for(const locale of locales)for(const registered of [true,false]){
+  const f=makeView({locale,selectedSpeciesIndex:sp,registeredSpecies:registered?[sp]:[],collection:[]});
+  try {const holder=f.root.querySelector('.cm-dex-hero'),art=databaseHeroPortrait(sp),identity=getDatabaseDisplayEntry(sp);
+   assert.equal(art.speciesId,identity.speciesId);assert.equal(art.displayCode,identity.displayCode);
+   if(!registered){assert.equal(holder,null);assert.equal(f.root.querySelector('.cm-dex-profile'),null);assert.equal(f.root.querySelector('.cm-dex-data'),null);}
+   else {assert.ok(holder);const img=holder.querySelector('img');assert.equal(img.src,art.src);assert.equal(art.width,1254);assert.equal(art.height,1254);assert.ok(img.hidden);assert.equal(f.root.querySelector('.cm-dex-profile__text').textContent,databaseStory(sp,locale));assert.ok(f.root.querySelector('.cm-dex-data'));img.naturalWidth=1254;img.naturalHeight=1254;img.onload();assert.equal(img.hidden,false);assert.equal(holder.dataset.art,'ready');}
+   f.assertUnchanged();
+  }finally{f.dispose();}
+ }}finally{setLocale('zh-Hant');}
+});
+
+test('confirmed ultimate heroes are present with exact PNG bytes and selected source versions',async()=>{
+ const {DATABASE_HERO_PORTRAITS:art}=await import('../src/championship/presentation/databaseHeroPortraits.js');
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');
+ const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
+ assert.equal(art.entries.length,22);assert.equal(manifest.count,10);
+ for(const [sp,version,form] of [[211,'v1','OWNER_CONFIRMED_BRASS_CROWN_MANDRILL'],[222,'v2','R10_QUADRUPED_LEFT_PANEL']]){
+  const entry=databaseHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(metadata.selectedSourceForm,form);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
+ }
 });
