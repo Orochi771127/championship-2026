@@ -6,7 +6,7 @@ const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const repo=path.resolve(process.env.HUD_SOURCE_ROOT||process.cwd()),out=path.resolve(process.env.CHAMPIONSHIP_QA_OUTPUT_ROOT||'.tmp/browser-qa','currency-layout');
 fs.mkdirSync(out,{recursive:true});
 const diagnostic=process.env.HUD_DIAGNOSTIC_ONLY==='1',engine=process.env.HUD_BROWSER||'chromium';
-const evidence={status:'RUNNING',engine,diagnostic,scope:'Component fixture is geometry only; normal onboarding is separately recorded.',cases:[],normal:[],errors:[]};
+const evidence={status:'RUNNING',engine,diagnostic,scope:'Component fixture is geometry only; normal onboarding is separately recorded.',cases:[],normal:[],normalLandscape:[],errors:[],violations:[]};
 const write=()=>fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(evidence,null,2)+'\n');
 const styles=[...fs.readFileSync(path.join(repo,'championship.html'),'utf8').matchAll(/<link rel="stylesheet" href="([^\"]+)"/g)].map(m=>`<link rel="stylesheet" href="${m[1]}">`).join('');
 const fixture=`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">${styles}<body><main id="cm-root" data-active-screen="RAISING_HOME"></main><script type="module">
@@ -38,7 +38,7 @@ const geometry=()=>{
  const rect=e=>{if(!e||e.hidden||getComputedStyle(e).display==='none')return null;const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom,scroll:e.scrollWidth,client:e.clientWidth,text:e.innerText,label:e.getAttribute('aria-label')}};
  const parts=Object.fromEntries(names.map(n=>[n,rect(document.querySelector('.cm-status-bar__'+n))]));
  const bar=rect(document.querySelector('.cm-status-bar')),guide=rect(document.querySelector('.cm-tutorial-guidance'));
- return {width:innerWidth,height:innerHeight,bar,guide,parts,overflow:document.documentElement.scrollWidth>innerWidth,font:parseFloat(getComputedStyle(document.querySelector('.cm-status-bar__compact-value')||document.querySelector('.cm-status-bar__bits-value')).fontSize)};
+ return {width:innerWidth,height:innerHeight,layout:{bodyAttributes:Object.fromEntries([...document.body.attributes].map(a=>[a.name,a.value])),bodyTransform:getComputedStyle(document.body).transform,rootScreen:document.querySelector('#cm-root')?.dataset.activeScreen},bar,guide,parts,overflow:document.documentElement.scrollWidth>innerWidth,font:parseFloat(getComputedStyle(document.querySelector('.cm-status-bar__compact-value')||document.querySelector('.cm-status-bar__bits-value')).fontSize)};
 };
 const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.y,b.y)>1;
 (async()=>{
@@ -60,7 +60,7 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
      const params={locale,bits,diamonds,tutorialOn,phase,matches};const labels=await page.evaluate(p=>window.fixtureRender(p),params);
      await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
      const g=await page.evaluate(geometry);evidence.cases.push({params,...g});
-     if(!diagnostic){
+     if(!diagnostic){try{
       assert.equal(g.overflow,false,JSON.stringify(params));
       for(const n of ['season','day','time','currencies','bits','diamond','matches','save']){const q=g.parts[n];if(q)assert.ok(q.x>=-1&&q.right<=width+1,`${n} outside viewport ${JSON.stringify(params)}`);}
       for(const [a,b] of [['currencies','time'],['currencies','day'],['currencies','season'],['currencies','save'],['currencies','matches'],['save','matches']])assert.ok(!intersects(g.parts[a],g.parts[b]),`${a}/${b} overlap`);
@@ -70,7 +70,7 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
       if(width<=600){assert.ok(g.font>=14);assert.ok(g.parts.diamond.h>=44);if(g.parts.save)assert.ok(g.parts.save.w>=44&&g.parts.save.h>=44);if(phase==='SAVE_FAILED'){assert.ok(g.parts.save?.label,'Save failure remains visible with an accessible explanation');assert.equal(await page.locator('.cm-status-bar__save').getAttribute('data-state'),'SAVE_FAILED');}assert.ok(g.parts.bits.scroll<=g.parts.bits.client+1);assert.ok(g.parts.diamond.scroll<=g.parts.diamond.client+1);
        const key=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(baseline)assert.deepEqual(key,baseline,'Wallet/save/tutorial must not change mobile row geometry');else baseline=key;
       }
-     }
+     }catch(error){evidence.violations.push({width,height,params,message:error.message});}}
      if(locale==='zh-Hant'&&!matches&&bits===100000&&(phase==='RESTORED'||phase==='DIRTY'))await page.screenshot({path:path.join(out,`${width}-${tutorialOn?'tutorial':'normal'}-${phase}.png`)});
     }
    }
@@ -100,14 +100,26 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    await page.locator('dialog[open] [data-action="accept"]').click();
    for(let step=0;step<20&&!(await page.locator('.cm-tutorial-guidance').isVisible()&&await page.locator('dialog[open]').count()===0);step++){const next=page.locator('dialog[open] [data-action="next"]');if(await next.isVisible())await next.click();else await page.waitForTimeout(100);}
    await page.locator('.cm-tutorial-guidance').waitFor({state:'visible'});await page.locator('dialog[open]').waitFor({state:'detached'});
+   await page.locator('[data-active-screen="RAISING_HOME"]').waitFor();await page.locator('[data-menu-id="MANAGEMENT"]').waitFor();await page.waitForTimeout(1000);
    const save=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('championshipModernSave:v1')));
+   const captureNormal=async stage=>{
+    evidence.normal.push({stage,geometry:await page.evaluate(geometry)});await page.screenshot({path:path.join(out,`normal-flow-${stage}.png`),fullPage:true});
+    for(const [width,height] of [[568,320],[844,390]]){
+     await page.setViewportSize({width,height});await page.waitForTimeout(1000);
+     const g=await page.evaluate(geometry);evidence.normalLandscape.push({stage,...g});
+     await page.screenshot({path:path.join(out,`normal-flow-${stage}-${width}.png`),fullPage:true});
+     for(const name of ['bits','diamond','save']){const q=g.parts[name];if(q&&(q.w<44||q.h<44))evidence.violations.push({scope:'actual-normal-landscape',stage,width,height,control:name,bounds:q,message:'Actual control must retain a 44px touch target'});}
+     if(g.overflow)evidence.violations.push({scope:'actual-normal-landscape',stage,width,height,message:'Actual document overflow'});
+    }
+    await page.setViewportSize({width:430,height:932});await page.waitForTimeout(500);
+   };
    const before=await save();assert.equal(before.shop.bits,100000);assert.equal(before.flags.friendsPlaytest.diamonds,10000);
-   evidence.normal.push({stage:'tutorial-on',geometry:await page.evaluate(geometry)});await page.screenshot({path:path.join(out,'normal-flow-tutorial-on.png'),fullPage:true});
+   await captureNormal('tutorial-on');
    await page.locator('.cm-tutorial-guidance [data-tutorial-action="exit"]').click();await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
-   const after=await save();assert.equal(after.shop.bits,100000);assert.equal(after.flags.friendsPlaytest.diamonds,10000);evidence.normal.push({stage:'tutorial-off',geometry:await page.evaluate(geometry)});await page.screenshot({path:path.join(out,'normal-flow-tutorial-off.png'),fullPage:true});
+   const after=await save();assert.equal(after.shop.bits,100000);assert.equal(after.flags.friendsPlaytest.diamonds,10000);await captureNormal('tutorial-off');
    if(!diagnostic){assert.equal(evidence.normal[0].geometry.bar.h,evidence.normal[1].geometry.bar.h);assert.equal(evidence.normal[0].geometry.parts.currencies.y,evidence.normal[1].geometry.parts.currencies.y);}
   }
-  assert.deepEqual(evidence.errors,[]);evidence.status='PASS';write();
+  assert.deepEqual(evidence.errors,[]);assert.equal(evidence.violations.length,0,JSON.stringify(evidence.violations.slice(0,3)));evidence.status='PASS';write();
  }catch(error){evidence.status='FAIL';evidence.failure=error.stack;write();throw error;}
  finally{await context?.close();await browser?.close();await publicServer?.close();if(server)await new Promise(r=>server.close(r));}
 })();
