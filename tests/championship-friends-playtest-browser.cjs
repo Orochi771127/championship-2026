@@ -4,9 +4,10 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {chromium}=require('playwright');
 const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
+const suite=process.env.CHAMPIONSHIP_QA_SUITE||'core';assert.ok(['core','navy'].includes(suite),'Explicit bounded browser suite required');
 const output=require('./browser-qa-output.cjs')('friends-playtest');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/',saveKey='championshipModernSave:v1';
-const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[]};
+const evidence={suite,status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[]};
 const digits=s=>Number(String(s).replace(/[^0-9]/g,''));
 const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(evidence,null,2)+'\n');
 (async()=>{
@@ -148,7 +149,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
   const installed=await saved();
-  for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]},{name:'owner-adjacent',slots:[4,20,26],navy:true,verticalLift:280},{name:'owner-wrap',slots:[4,15,7],navy:true}]){
+  for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]},{name:'owner-adjacent',slots:[4,20,26],navy:true,verticalLift:280},{name:'owner-wrap',slots:[4,15,7],navy:true}].filter(s=>Boolean(s.navy)===(suite==='navy'))){
    await page.setViewportSize({width:1280,height:800});await clearCalendar();await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
    while(await page.locator('.cm-cage-facility:not([disabled])').count())await page.locator('.cm-cage-facility:not([disabled])').first().click();
    const specs=scenario.navy?[{id:'02',definition:1},{id:'03',definition:2},{id:'39',definition:33}]:[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
@@ -260,16 +261,29 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  try{
   browser=await chromium.launch({channel:'chromium',headless:true,chromiumSandbox:true});evidence.browserVersion=browser.version();
   evidence.launch={channel:'chromium',headless:true,chromiumSandbox:true,customArgs:[]};
+  if(suite==='core'){
   await fresh('new-save');await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});await login();
   assert.equal(await page.locator('#cm-continue').isEnabled(),false,'Fresh profile must have no save');
   await page.locator('#cm-new-game').click();
   // Advance the normal comic using its real click affordance, without touching time/state.
   const story=page.locator('.cm-opening-story');
+  // The final comic frame can complete between visibility and a real click.
+  // Continue only to another visible normal story surface or the first envelope.
+  async function clickStoryAffordance(target,options={}){
+   try{await target.click({...options,timeout:3000});}
+   catch(error){
+    if(error.name!=='TimeoutError'||await target.isVisible())throw error;
+    const storyVisible=await story.isVisible();
+    const firstEnvelopeVisible=await story.count()===0&&await page.locator('.cm-opening__envelope').isVisible();
+    if(!storyVisible&&!firstEnvelopeVisible)throw error;
+    evidence.assertions.push({openingComicTransitionObserved:true,normalUi:true,storyVisible,firstEnvelopeVisible});write();
+   }
+  }
   const until=Date.now()+120000;
   while(await story.count()){
    if(Date.now()>until)throw Error('Normal opening comic did not finish');
-   const text=page.locator('[data-story-action="text"]');if(await text.isVisible())await text.click();
-   if(await story.isVisible())await story.click({position:{x:10,y:10}});
+   const text=page.locator('[data-story-action="text"]');if(await text.isVisible())await clickStoryAffordance(text);
+   if(await story.isVisible())await clickStoryAffordance(story,{position:{x:10,y:10}});
    await page.waitForTimeout(1200);
   }
   await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();
@@ -362,7 +376,14 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,old.shop);assert.deepEqual(legacyAfterPurchase.cageEdit.placements,old.cageEdit.placements);
   evidence.assertions.push({oldQaOneTimeDiamonds:10000,afterPurchaseAndReload:9000});
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
+  }
   await sourceCornerReview();
+  const completed=evidence.assertions.filter(x=>x.sourceCorners).map(x=>x.sourceCorners);
+  assert.deepEqual(completed,suite==='navy'?['owner-adjacent','owner-wrap']:['adjacent','wrap'],'Every mandatory source scenario must finish');
+  if(suite==='navy'){
+   const foreground=evidence.assertions.filter(x=>x.foregroundNormalHand);assert.equal(foreground.length,12,'All desktop/mobile stand/prop front/behind checks must finish');
+   for(const scenario of ['owner-adjacent','owner-wrap'])for(const width of [1280,390])for(const side of ['behind','front'])assert.ok(foreground.some(x=>x.scenario===scenario&&x.viewport.width===width&&x.side===side),'Required foreground side/viewport/scenario');
+  }
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
   evidence.status='PASS';write();console.log('CHAMPIONSHIP_FRIENDS_PLAYTEST_BROWSER_PASS');

@@ -42,7 +42,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Build and validate the owner-approved playtest artifact
         run: npm run build:playtest && npm run validate:playtest
-      - name: Capture normal Dex and same-renderer 128/256 comparisons
+      - name: Capture 070/071/072 and 117 normal Dex and same-renderer 128/256 comparisons
         env:
           CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
           CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
