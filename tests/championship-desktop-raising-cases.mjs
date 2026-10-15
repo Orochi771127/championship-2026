@@ -161,7 +161,7 @@ test('short desktop Gate scrolling is candidate-only and uses an actually loaded
  assert.match(html,/<link rel="stylesheet" href="\.\/src\/championship\/app\/vs2Styles\.css/);
  assert.match(candidate,/@media \(min-width: 1024px\) and \(min-height: 420px\)/);
  assert.match(candidate,/body\[data-desktop-menu\].*\[data-screen="GATE_SELECT"\].*\.cm-vs2-body--gate \{ overflow-y: auto; overflow-x: hidden; \}/);
- assert.match(candidate,/\.cm-vs2-gate3d:not\(\[data-view="fallback"\]\) \{ flex: 1 0 336px; min-height: 336px; \}/);
+ assert.match(candidate,/\.cm-vs2-gate3d:not\(\[data-view="fallback"\]\) \{ flex: 1 0 auto; min-height: 336px; \}/);
  assert.match(candidate,/\.cm-vs2-gate-fallback \{ flex: 0 0 auto; overflow: visible; \}/);
  assert.doesNotMatch(candidate,/HUNT_FIELD|CAGE_EDIT|BATTLE_FIELD/);
 });

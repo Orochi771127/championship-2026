@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createChampionshipStandaloneApp} from '../src/championship/app/championshipStandaloneApp.js';
 import {HUNT_EQUIPMENT_ITEMS,HUNT_MEMORY_CARDS} from '../src/championship/hunt/loadout/huntEquipmentCatalog.js';
+import {createNativeHuntFieldControls} from '../src/championship/hunt/capture/nativeHuntFieldControls.js';
 const catalog=JSON.parse(fs.readFileSync('src/data/championship/catalogs/creature-species.r1.json','utf8'));
 const cages=JSON.parse(fs.readFileSync('docs/contracts/championship/raising-home-presentation.v1.json','utf8')).cages;
 const frame=1000*560190/33513982;
@@ -22,6 +23,7 @@ test('all 34 consumables reach normal generated actors, consume stock and leave 
       const runtime=app.getHuntRuntime();assert.ok(runtime,item.itemId);
       assert.equal(runtime.selectTool(item.equipmentClass),true,item.itemId);runtime.tick(frame);
       const tool=runtime.getToolState().tools.find(t=>t.id===item.equipmentClass);
+      assert.equal(tool.itemId,item.itemId);assert.equal(tool.shopRecordIndex,item.shopRecordIndex);
       assert.equal(tool.enabled,true,item.itemId);assert.equal(tool.unavailableReason,null,item.itemId);
       const target=runtime.getWildCreatures()[0];let x=target.worldX,y=target.worldY;
       if(item.nativeSubcategory==='WIRE'){
@@ -56,4 +58,18 @@ test('all 34 consumables reach normal generated actors, consume stock and leave 
     }finally{await app.dispose();}
   }
   assert.equal(checked,34);
+});
+
+test('the read-only toolbar projection includes the actual identity for all twelve ropes and every consumable',()=>{
+ let draws=0,spent=0;
+ for(const item of HUNT_EQUIPMENT_ITEMS){
+  const equipment=[{equipmentClass:item.equipmentClass,itemId:item.itemId,quantity:2}];
+  const before=JSON.stringify(equipment);
+  const controls=createNativeHuntFieldControls({records:[],wildIds:[],environment:{},rng:{next:()=>{draws++;return 0;}},
+   loadout:{getSelectedEquipment:()=>equipment},consumeItem:()=>{spent++;return false;},maxCardG:32});
+  const tool=controls.getState().tools.find(t=>t.id===item.equipmentClass);
+  assert.equal(tool.itemId,item.itemId);assert.equal(tool.shopRecordIndex,item.shopRecordIndex);
+  assert.equal(JSON.stringify(equipment),before);
+ }
+ assert.equal(draws,0);assert.equal(spent,0);
 });

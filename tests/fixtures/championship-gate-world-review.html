@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<base href="../../"><title>Gate presentation review</title>
+<link rel="stylesheet" href="src/championship/app/ui/tokens.css">
+<link rel="stylesheet" href="src/championship/app/styles.css">
+<link rel="stylesheet" href="src/championship/app/vs2Styles.css">
+<link rel="stylesheet" href="src/championship/app/nativeUiSkin.css">
+</head><body><div id="cm-root"></div><script type="module">
+// Controlled inputs to the existing view and renderer. No app, save or ticker.
+import {createGateSelectView} from './src/championship/app/vs2Screens.js';
+import {mountGateSelectThreePresentation} from './src/championship/presentation/vs2/createGateSelectThreePresentation.js';
+import {CHAMPIONSHIP_GATES} from './src/championship/gate/gateCatalog.js';
+import {huntGateThumbnail} from './src/championship/presentation/huntMobileReadouts.js';
+import {setLocale} from './src/championship/text/locale.js';
+import {mountPortraitFrame} from './src/championship/app/portraitFrame.js';
+const params = new URLSearchParams(location.search);
+setLocale(params.get('lang') ?? 'zh-Hant');
+document.documentElement.dataset.quality = params.get('quality') ?? 'balanced';
+document.documentElement.dataset.motion = params.get('motion') ?? 'full';
+if(params.get('classic'))document.documentElement.dataset.uiStyle='classic';
+const root = document.querySelector('#cm-root');
+root.dataset.activeScreen='GATE_SELECT';
+let view, selected = null, confirmed = 0, exited = 0, scene, selectionEvents = 0;
+const frame = {screen:'GATE_SELECT',gateSelect:{tutorial:params.has('tutorial'),gates:CHAMPIONSHIP_GATES.map(g=>({...g,
+  art:{thumbnail:huntGateThumbnail(g)}, selected:false})),selection:{gateId:null},walletBits:1000,admission:null,canConfirm:false}};
+function selectGate(id) {
+  selectionEvents++;
+  selected = id;
+  for(const gate of frame.gateSelect.gates)gate.selected=gate.gateId===id;
+  frame.gateSelect.selection.gateId=id;
+  const gate=frame.gateSelect.gates.find(g=>g.gateId===id);
+  frame.gateSelect.canConfirm=gate.state!=='LOCKED';
+  frame.gateSelect.admission=gate.state==='LOCKED'?{reason:'GATE_LOCKED',unlockKind:1,unlockParameter:gate.unlockParameter}:null;
+  view.render(frame);
+}
+const source={getFrame:()=>frame,subscribe:()=>()=>{},intents:{selectGate,confirmGate:()=>confirmed++,leaveScreen:()=>exited++}};
+async function mount(){view=await createGateSelectView({root,source,mountWorld:options=>{
+  if(params.has('webglFail'))throw Error('QA_WEBGL_UNAVAILABLE');
+  scene=mountGateSelectThreePresentation(options);return scene;
+}});}
+await mount();
+// Use the product's viewport rules, including its default-off landscape gate.
+const portraitFrame=mountPortraitFrame({responsiveMenus:params.has('responsive')});
+window.gateReview={frame,selectGate,get selected(){return selected;},get selectionEvents(){return selectionEvents;},get confirmed(){return confirmed;},get exited(){return exited;},
+  diagnostics:()=>scene?.getDiagnostics(),remount:async()=>{view.dispose();await mount();},dispose:()=>{portraitFrame.dispose();view.dispose();}};
+</script></body></html>

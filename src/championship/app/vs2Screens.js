@@ -1,5 +1,5 @@
 import { uiText } from "../text/uiText.js";
-import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
+import { shopGoodsPresentation, huntToolIconPresentation } from '../presentation/shopGoodsUiArt.js';
 import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
 import { assembledHudArt } from '../presentation/assembledUiArt.js';
 // VS2-P -- Championship Modern P1R presentation for Gate Select, Hunt Loadout
@@ -30,6 +30,33 @@ function appendEquipmentIcon(button, itemId) {
   image.src = art.src; image.alt = ''; image.loading = 'lazy';
   button.append(image);
   button.dataset.hasArt = 'true';
+}
+
+function renderHuntTool(button, tool, label = uiText(tool.label)) {
+  let copy = button.querySelector('.cm-hunt-tools__label');
+  if (!copy) {
+    copy = element('span', 'cm-hunt-tools__label');
+    button.replaceChildren(copy);
+  }
+  copy.textContent = label;
+  const art = huntToolIconPresentation(tool);
+  let image = button.querySelector('.cm-hunt-tools__icon');
+  if (!art?.src) {
+    image?.remove();
+    button.dataset.hasToolArt = 'false';
+    return;
+  }
+  if (!image) {
+    image = element('img', 'cm-hunt-tools__icon');
+    image.alt = ''; image.draggable = false;
+    image.addEventListener('error', () => { image.hidden = true; button.dataset.hasToolArt = 'false'; });
+    button.prepend(image);
+  }
+  if (image.getAttribute('src') !== art.src) {
+    image.hidden = false;
+    button.dataset.hasToolArt = 'true';
+    image.src = art.src;
+  }
 }
 
 function presentationMode() {
@@ -145,14 +172,15 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     element("span", "cm-vs2-kicker", "WORLD MODE"),
     element("strong", "cm-vs2-gate3d__bar-title", "16 BIOME LINKS")
   );
+  const dragHint = element("p", "cm-vs2-gate3d__hint", "拖曳轉動 · 輕觸地點選擇");
+  worldCopy.append(dragHint);
   const viewToggle = actionButton("場地列表");
   viewToggle.classList.add("cm-vs2-gate3d__toggle");
   viewToggle.setAttribute("aria-pressed", "false");
   worldBar.append(worldCopy, viewToggle);
   const worldHost = element("div", "cm-vs2-gate3d__host");
   worldHost.dataset.cameraAuthority = "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER";
-  const dragHint = element("p", "cm-vs2-gate3d__hint", "拖曳轉動 · 輕觸地點選擇");
-  worldPanel.append(worldBar, worldHost, dragHint);
+  worldPanel.append(worldBar, worldHost);
 
   const preview = element("section", "cm-vs2-preview");
   preview.setAttribute("aria-label", uiText("狩獵場資訊"));
@@ -585,6 +613,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     // uses, not as words. `data-tool` names which glyph; the skin paints it and
     // the label stays in the DOM for assistive technology.
     button.dataset.tool = tool.id;
+    renderHuntTool(button, tool);
     button.setAttribute("aria-pressed",String(block.toolState.activeTool===tool.id));
     let checkpoint=null;
     button.addEventListener("pointerdown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
@@ -723,7 +752,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     for(const marker of plugins?.radar??[]){const dot=element('i');dot.style.left=`${marker.x*100}%`;dot.style.top=`${marker.y*100}%`;radar.append(dot);}
     if(next.toolState){
       for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=field.isPlayable===false||!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
-        const counter=plugins?.counters.find(c=>c.id===tool.id);button.textContent=uiText(tool.label)+(counter?` ×${counter.quantity}`:'');}}
+        const counter=plugins?.counters.find(c=>c.id===tool.id);renderHuntTool(button,tool,uiText(tool.label)+(counter?` ×${counter.quantity}`:''));}}
       const selectedTool=next.toolState.tools.find(t=>t.id===next.toolState.activeTool);
       // A notice (the rope broke, the card is full) is feedback and always
       // shows; an instruction is a hint the compact HUD may leave out.
