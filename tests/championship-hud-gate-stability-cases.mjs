@@ -32,8 +32,29 @@ test('CSS locks title row geometry and constrains both long labels, not their st
  assert.match(block('.cm-vs2-preview__heading .cm-vs2-preview__name'),/min-width: 0/);
  assert.ok(source.includes('worldHost.append(dragHint);'));assert.ok(!source.includes('previewCopy.append(admissionStatus)'));
 });
-test('Raising-only HUD strips plate not glyph opacity or button geometry',()=>{
- const added=hud.slice(hud.indexOf('/* Raising HUD:'));assert.ok(added);assert.match(added,/border-bottom: 0/);assert.match(added,/background: transparent/);assert.match(added,/border-color: transparent/);assert.match(added,/text-shadow:/);assert.match(added,/drop-shadow/);
- assert.doesNotMatch(added,/\bopacity\s*:|pointer-events\s*:|min-height\s*:|min-width\s*:|padding\s*:/);
- for(const rule of added.split('}').filter(s=>s.includes('{')))assert.ok(rule.includes('data-active-screen="RAISING_HOME"'));
+function assertHudContract(sheet) {
+ const start=sheet.indexOf('/* Raising HUD:');
+ const end=sheet.indexOf('/* Alternate-form choice:',start);
+ assert.ok(start>=0 && end>start,'explicit HUD section boundaries must exist');
+ const added=sheet.slice(start,end);
+ const rules=[...added.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}]+)\{([^{}]*)\}/g)];
+ assert.equal(rules.length,4,'all four HUD rules must be inspected');
+ const prefix='body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) ';
+ for(const [,selector,body]of rules){
+   assert.ok(selector.trim().startsWith(prefix),'HUD rules require the visible Raising root');
+   // A comma outside :is() may introduce an unguarded selector branch.
+   let depth=0;for(const c of selector){if(c==='(')depth++;else if(c===')')depth--;else if(c===','&&depth===0)assert.fail('unexpected HUD selector branch');}
+   assert.doesNotMatch(body,/\bopacity\s*:|pointer-events\s*:|min-height\s*:|min-width\s*:|padding\s*:/);
+ }
+ assert.match(added,/border-bottom: 0/);assert.match(added,/background: transparent/);assert.match(added,/border-color: transparent/);assert.match(added,/text-shadow:/);assert.match(added,/drop-shadow/);
+}
+test('Raising-only HUD strips plate not glyph opacity or button geometry',()=>assertHudContract(hud));
+test('HUD safety contract rejects opacity, ungated selector branches and hidden-root leaks',()=>{
+ const start=hud.indexOf('/* Raising HUD:');const before=hud.slice(0,start),section=hud.slice(start);
+ for(const mutated of [
+   section.replace('border-bottom: 0;','border-bottom: 0; opacity: .5;'),
+   section.replace('body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) ', 'body '),
+   section.replace(':not([hidden])',''),
+   section.replace('.cm-status-bar[data-screen="RAISING_HOME"] {','.cm-status-bar[data-screen="RAISING_HOME"], .cm-status-bar {')
+ ])assert.throws(()=>assertHudContract(before+mutated));
 });
