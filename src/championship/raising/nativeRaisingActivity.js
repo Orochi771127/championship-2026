@@ -4,7 +4,7 @@ import data from '../../data/championship/catalogs/raising-activity.r1.json' wit
 import {nativeNormalizeQ12} from '../hunt/capture/nativeCapturePhases.js';
 import {nativeRaisingHeadings} from './nativeRaisingGround.js';
 import {nativeHuntSpeciesByIndex} from '../hunt/capture/nativeHuntSources.js';
-import {BATTLE_CHARACTER_PROFILES,BATTLE_SPECIES_ENTITIES} from '../../data/championship/battleCharacterProfiles.js';
+import {nativeRaisingPeerStopDistanceQ12} from './nativeRaisingMovement.js';
 import {battleAngleIndex} from '../battle/battleNativeMath.js';
 import {requestNativeRaisingFeedback} from './nativeRaisingFeedback.js';
 export const nativeActivityRandom=(actor,rng,max)=>Math.trunc((max-1)*rng.next(0x26+actor.poolSlot)/102);
@@ -62,7 +62,7 @@ export function selectNativeIdleActivity(actor,profile,{ground,actors,rng,reques
   const friendly=actor.speciesIndex===peer.speciesIndex||((aExtra.field18===bExtra.field18||a.attribute===b.attribute)&&lower);
   const different=aExtra.field18!==bExtra.field18&&a.attribute!==b.attribute;
   const rivals=different&&(({1:16,16:1,8:32,32:8,2:4,4:2,128:64,64:128}[aExtra.field18]===bExtra.field18)||([1,2].includes(a.attribute)&&[1,2].includes(b.attribute)));
-  const cell=BATTLE_CHARACTER_PROFILES[BATTLE_SPECIES_ENTITIES[peer.speciesIndex]].cells[0],radius=Math.trunc((cell[2]-cell[0])/2)*3;
+  const radius=nativeRaisingPeerStopDistanceQ12(peer)/4096;
   if(friendly){
     if(distance<=radius*radius)return beginNativeActivityReaction(actor,peer.activityReaction>=0?peer.activityReaction:[4,18].includes(peer.state)?12:-1,ground,request);
     beginNativeActivityReaction(actor,1,ground,request);actor.mode=2;actor.peer=peer;actor.desiredAngleQ12=angleTo(actor.positionQ12,peer.positionQ12);return 0;

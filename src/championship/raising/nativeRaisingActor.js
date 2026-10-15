@@ -132,8 +132,7 @@ export function notifyNativeRaisingResidentAdded(actor,existing,rng){
     member.growthFields['438']=nativeRandom(member,rng,60);}
 }
 function detachFood(actor,foods) {
-  const food=foods.find(f=>f.slot===actor.foodSlot);
-  if(food&&actor.station>=0&&food.occupants[actor.station]===actor.poolSlot)food.occupants[actor.station]=null;
+  for(const food of foods)food.occupants?.forEach((slot,i)=>{if(slot===actor.poolSlot)food.occupants[i]=null;});
   actor.foodSlot=null;actor.station=-1;
 }
 // The original state table at 02128630 handles the medicine commands only
@@ -297,6 +296,10 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
   const modify=()=>{if(next===profile||Object.isFrozen(next.fields))next=structuredClone(next);changed=true;return next.fields;};
   let f=profile.fields;
   const species=nativeHuntSpeciesByIndex(actor.speciesIndex);
+  if(actor.foodSlot!=null){
+    const target=foods.find(food=>food.slot===actor.foodSlot);
+    if(!target?.present||target.cageDefinitionIndex!==actor.cageDefinitionIndex||target.occupants[actor.station]!==actor.poolSlot){detachFood(actor,foods);enterIdle(actor,rng);}
+  }
   actor.slow=f["134"]===1||f["138"]===1||(f["00c"]|0)>=Math.trunc((f["178"]|0)/10)*9
     ||(f["050"]|0)<=Math.trunc((f["058"]|0)/10)*2?1:0;
   // The hunger prefix of 02114A10 is independent of its unbound training,
@@ -330,6 +333,7 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
   if(notice?.search&&(actor.state===1||actor.state===2)&&actor.foodSlot===null) {
     const found=findNativeRaisingFood(next,actor.positionQ12,foods,actor.cageDefinitionIndex,species.field1c);
     if(found&&found.station>=0) {
+      found.food.occupants[found.station]=actor.poolSlot;
       actor.foodSlot=found.food.slot;actor.station=found.station;actor.destinationQ12=found.target;actor.mode=0;
       actor.state=2;request(actor,actor.slow?12:2);
     }
@@ -359,7 +363,7 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
         } else {
           detachFood(actor,foods);
           const found=findNativeRaisingFood(next,actor.positionQ12,foods,actor.cageDefinitionIndex,species.field1c);
-          if(found&&found.station>=0){actor.foodSlot=found.food.slot;actor.station=found.station;actor.destinationQ12=found.target;actor.mode=0;
+          if(found&&found.station>=0){found.food.occupants[found.station]=actor.poolSlot;actor.foodSlot=found.food.slot;actor.station=found.station;actor.destinationQ12=found.target;actor.mode=0;
             actor.state=2;request(actor,actor.slow?12:2);}
           else enterIdle(actor,rng);
         }
@@ -396,7 +400,8 @@ export function startNativeRaisingMorning(actor,profile,rng) {
   actor.state=25;request(actor,13); // 0211C9AC preserves an already playing sleep sequence.
   const morning=enterNativeRaisingMorning(profile,actor.poolSlot,rng);actor.morningWait=morning.waitFrames;actor.morningFrames=0;return morning.profile;
 }
-export function enterNativeRaisingCage(actor,profile,{previousDefinition,ground,season,level=0},rng){
+export function enterNativeRaisingCage(actor,profile,{previousDefinition,ground,season,level=0,foods=[]},rng){
+  detachFood(actor,foods);
   if(actor.speciesIndex<8)return profile;
   let p=profile;const definition=actor.cageDefinitionIndex,reaction=lifecycleRules.cages[definition].entryReaction;
   const delta=beginNativeActivityReaction(actor,reaction,ground,request);
@@ -408,7 +413,8 @@ export function enterNativeRaisingCage(actor,profile,{previousDefinition,ground,
   else if(previousDefinition===definition&&reaction!==-1)enterIdle(actor,rng);
   return normalizeNativeIndividualProfile(p);
 }
-export function beginNativeRaisingEvolution(actor,selection,rng) {
+export function beginNativeRaisingEvolution(actor,selection,rng,foods=[]) {
+  detachFood(actor,foods);
   actor.state=selection.target<0?21:12;actor.evolution={oldSpecies:actor.speciesIndex,target:selection.target,index:selection.actor?.['1f4']??0,
     last:selection.actor?.['1f0']??1,inherited:selection.actor?.['464']??0,phase:0,elapsed:0,period:20,reveal:false,totalFrames:0,targetActor:null};
   if(selection.target>=0){const targetActor={speciesIndex:selection.target,sequenceId:null,animator:null,nativeFrame:0};

@@ -7,8 +7,22 @@ import { createNativeHuntConsumables } from './nativeHuntConsumables.js';
 import { nativeWildRandom } from "./nativeCapturePhases.js";
 import { queryNativeHuntActors } from "./nativeWildSpatial.js";
 import { getHuntCatalogItem } from "../loadout/huntEquipmentCatalog.js";
+import {separateGroundFootpoints,canTraverseGroundStep} from '../../spatial/groundFootpointSeparation.js';
 const Q12=4096;
 const FRAME_MS=1000*560190/33513982;
+export function nativeHuntGroundSpacingEligible(a){
+  return !!(a.actorActive&&a.wildActive&&!a.hidden&&!a.cardState&&!a.tutorialScripted&&[1,2,3].includes(a.aiState)
+    &&a.positionQ12?.[2]===0&&a.currentHp>0&&!a.bound&&!a.pull11&&!a.pull13&&!a.movementRestricted
+    &&!a.shake&&!a.shotShakeTicks&&!a.handReady&&!a.trapReady&&!a.foodTarget&&!a.seekingFood&&!a.decoyCenter);
+}
+export function separateNativeHuntGroundActors(actors,environment){
+  const entries=actors.flatMap((actor,poolSlot)=>nativeHuntGroundSpacingEligible(actor)?[{actor,poolSlot,group:0,positionQ12:actor.positionQ12}]:[]);
+  const result=separateGroundFootpoints(entries,{canPlace:(_entry,to,from)=>canTraverseGroundStep(from,to,{
+    canStand:p=>p[0]>=0&&p[1]>=0&&p[0]<environment.width*32768&&p[1]<environment.height*32768
+      &&environment.readTerrain(Math.floor(p[0]/32768),Math.floor(p[1]/32768))===0})});
+  entries.forEach((entry,i)=>{if(result.correctionQ12[i])entry.actor.positionQ12=result.points[i];});
+  return result;
+}
 
 export function createNativeHuntFieldControls({ records,wildIds,environment,rng,loadout,consumeItem,maxCardG,night=false,onChange=()=>{} }) {
   if (!rng?.next || !loadout?.getSelectedEquipment || typeof consumeItem!=="function") throw Error("NATIVE_HUNT_CONTROL_AUTHORITIES_REQUIRED");
@@ -62,6 +76,9 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     frame++;
     // Actor requests from the previous tool update precede the next tool tick.
     for(const a of actors)stepNativeWildActor(a,host);
+    // One Q12 position owner, before consumable and rope readers. Proposals
+    // read terrain only: queryControllers has damage/capture side effects.
+    separateNativeHuntGroundActors(actors,environment);
     consumables.tick(pointer,activeTool);
     // A break can remove the rope before pointer-up; release still ends the gesture.
     if(pointer?.released && (!['ROPE_PULL','ROPE_STROKE'].includes(pointer.kind)

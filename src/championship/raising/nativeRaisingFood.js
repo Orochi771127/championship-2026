@@ -1,6 +1,15 @@
 // Original food records and OVL18 food station selection. Application-owned;
 // no inventory, renderer, save key or clock is created here.
 const offsets=Object.freeze([[-16,-4],[16,-4],[16,4],[-16,4]].map(Object.freeze));
+export function reconcileNativeFoodReservations(actors,foods){
+  const members=[...actors];
+  for(const food of foods)food.occupants?.forEach((slot,station)=>{
+    if(slot===null)return;
+    const actor=members.find(a=>a.poolSlot===slot);
+    if(!food.present||!actor||actor.detached||![2,5].includes(actor.state)||actor.foodSlot!==food.slot||actor.station!==station||actor.cageDefinitionIndex!==food.cageDefinitionIndex)
+      food.occupants[station]=null;
+  });
+}
 export function nativeFoodStation(food,index) {
   if(!Number.isInteger(index)||index<0||index>3)throw new TypeError("INVALID_NATIVE_FOOD_STATION");
   return [food.positionQ12[0]+offsets[index][0]*4096,food.positionQ12[1]+offsets[index][1]*4096,0];
