@@ -16,6 +16,7 @@ import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.j
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2Screens.js";
 import { cageUiImage, cageUiLidImage, shopCageUiImage, cageEditorArtCells, cageUiName, shopCageUiName, cageUiSummary } from '../presentation/cageUiArt.js';
 import { setLabel, setText, uiText } from '../text/uiText.js';
+import { TAMER_RANK_SLOT_TABLE } from '../cage/cageCatalog.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
 import { NATIVE_RANCH_LAYOUT, RANCH_EXPANSION_DECK_SLOTS } from '../cage/ranchExpansion.js';
 import { openRanchExpansionPreview } from './ranchExpansionPreview.js';
@@ -1069,7 +1070,17 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         cell.style.backgroundPosition = `${visual.imageX}px ${visual.imageY}px`;
       }
       cell.title = uiText(cageUiName(slot.moduleId, slot.displayName) || (slot.unlocked ? '可放置' : '尚未開放'));
-      cell.textContent = uiText(slot.moduleId ? '' : slot.unlocked ? '+' : '×');
+      // Derive the first unlocking rank from the authoritative table, never
+      // from the QA annex grant or a future paid entitlement.
+      const requiredRank = !slot.unlocked && slot.slotIndex < TAMER_RANK_SLOT_TABLE.at(-1)
+        ? TAMER_RANK_SLOT_TABLE.findIndex(count => slot.slotIndex < count) : null;
+      if (requiredRank !== null) {
+        cell.dataset.requiredRank = String(requiredRank);
+        const lockedParams = { n: slot.slotIndex + 1, rank: requiredRank };
+        setLabel(cell, 'aria-label', 'CAGE_SLOT_RANK_LOCKED', lockedParams);
+        setLabel(cell, 'title', 'CAGE_SLOT_RANK_LOCKED', lockedParams);
+      }
+      cell.textContent = uiText(slot.moduleId ? '' : slot.unlocked ? '+' : '🔒');
       cell.addEventListener("click", () => {
         if (slot.moduleId) source.intents.removeCagePlacement(slot.moduleId);
         else source.intents.placeCageAt(slot.slotIndex);

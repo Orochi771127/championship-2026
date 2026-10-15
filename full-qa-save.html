@@ -30,7 +30,7 @@
     </ul>
     <p class="warning"><strong>安裝會取代這個網址在本手機上的目前進度。</strong>若已有存檔，按鈕會先下載一份備份 JSON。請先關閉其他正在執行遊戲的分頁。</p>
     <p class="warning"><strong>已有 QA 試玩進度？</strong>請先關閉其他遊戲分頁，再使用下方「只開放」按鈕：先下載備份，只啟用 20 格擴充區，不重置夥伴、配置、金錢或徽章。這是非付費 QA 測試功能，不是正式購買。</p>
-    <button id="expand">QA：保留目前進度，只開放 20 格擴充區</button>
+    <button id="expand" disabled>QA：保留目前進度，只開放 20 格擴充區</button>
     <button id="install" disabled>正在準備 QA 存檔…</button>
     <button id="download" class="secondary" disabled>只下載 QA 存檔 JSON</button>
     <a href="./championship.html">不安裝，返回遊戲</a>
@@ -58,6 +58,8 @@ const install = document.querySelector('#install');
 const download = document.querySelector('#download');
 const status = document.querySelector('#status');
 let qaText = null;
+let expansionPending = false;
+let expansionAttempted = false;
 
 function downloadText(text, filename) {
   const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
@@ -75,19 +77,6 @@ function setStatus(message, state) {
   status.dataset.state = state;
 }
 
-try {
-  const response = await fetch('./qa/championship-full-qa-save.json', { cache: 'no-store' });
-  if (!response.ok) throw Error(`讀取 QA 存檔失敗：HTTP ${response.status}`);
-  qaText = serializeChampionshipModernSave(deserializeChampionshipModernSave((await response.text()).trim()));
-  install.disabled = false;
-  download.disabled = false;
-  install.textContent = '備份目前進度、安裝 QA 存檔並開啟遊戲';
-  setStatus('QA 存檔已驗證，可以安裝。', 'ready');
-} catch (error) {
-  install.textContent = 'QA 存檔目前無法使用';
-  setStatus(error.message, 'error');
-}
-
 download.onclick = () => {
   if (!qaText) return;
   downloadText(qaText, 'championship-full-qa-save.json');
@@ -95,6 +84,8 @@ download.onclick = () => {
 };
 
 expand.onclick = async () => {
+  expansionPending = true;
+  expansionAttempted = true;
   expand.disabled = true;
   install.disabled = true;
   download.disabled = true;
@@ -128,10 +119,11 @@ expand.onclick = async () => {
         await apply();
       });
     } else await apply();
-    setStatus(result.changed ? '20 格擴充區已開放，原有進度與配置已保留。請按「返回遊戲」。' : '擴充區的 20 格已全部開放，原有進度沒有變更。', 'ready');
+    setStatus(result.changed ? '擴充區 20 格已開放，原有進度與配置已保留。主牧場仍依原階級解鎖，金錢與關卡不變。請按「返回遊戲」。' : '擴充區的 20 格已全部開放，原有進度沒有變更。主牧場仍依原階級解鎖，金錢與關卡不變。請按「返回遊戲」。', 'ready');
   } catch (error) {
     setStatus(`未確認套用成功：${qaExpansionErrors[error.message] ?? error.message}`, 'error');
   } finally {
+    expansionPending = false;
     expand.disabled = false;
     install.disabled = !qaText;
     download.disabled = !qaText;
@@ -167,6 +159,23 @@ install.onclick = async () => {
     setStatus(error.message, 'error');
   }
 };
+// Expansion operates on the existing save and must not wait for the full QA fixture.
+expand.disabled = false;
+setStatus('保留進度擴充已可使用；全功能 QA 存檔仍在準備中。', 'ready');
+
+try {
+  const response = await fetch('./qa/championship-full-qa-save.json', { cache: 'no-store' });
+  if (!response.ok) throw Error(`讀取 QA 存檔失敗：HTTP ${response.status}`);
+  qaText = serializeChampionshipModernSave(deserializeChampionshipModernSave((await response.text()).trim()));
+  install.disabled = expansionPending;
+  download.disabled = expansionPending;
+  install.textContent = '備份目前進度、安裝 QA 存檔並開啟遊戲';
+  if (!expansionAttempted) setStatus('QA 存檔已驗證，可以安裝。', 'ready');
+} catch (error) {
+  install.textContent = 'QA 存檔目前無法使用';
+  if (!expansionAttempted) setStatus(error.message, 'error');
+}
+
 </script>
 </body>
 </html>
