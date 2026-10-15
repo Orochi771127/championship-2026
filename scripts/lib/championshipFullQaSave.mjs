@@ -128,7 +128,7 @@ export function createFullQaSave(baseSave, { cageIds } = {}) {
     raisingHomeSerialized: baseSave.raisingHome,
     raising,
     shop: fullShopSave(),
-    cageEdit: { ...baseSave.cageEdit, layoutVersion: RANCH_DECKS_LAYOUT, expansion: prototypeRanchExpansion() },
+    cageEdit: { ...baseSave.cageEdit, layoutVersion: RANCH_DECKS_LAYOUT, expansion: { ...prototypeRanchExpansion(), decks: 2 } },
     battleEconomy: baseSave.battleEconomy,
     instanceIdentity: identity,
     gameplayRng: baseSave.gameplayRng,

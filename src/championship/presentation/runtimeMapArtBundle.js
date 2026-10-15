@@ -1,3 +1,5 @@
+import { ORIGINAL_CAGE_STRUCTURAL_VISUALS } from "./originalCageVisualBindings.js";
+
 // Championship 2026 -- bounded runtime map-art bundles.
 //
 // A runtime art bundle is presentation-only. It may provide one complete map
@@ -313,10 +315,21 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     const cap = fold !== null && placement?.foldCap === true;
     if (!placement || !Number.isSafeInteger(placement.x) || !Number.isSafeInteger(placement.y)
       || placement.x < 0 || placement.y < (cap ? -fold.capPx : 0)) fail("TILE_SET_INTEGER_POSITION_REQUIRED");
+    const structuralLid = placement.structuralRole === 'LID';
+    if (placement.structuralRole !== undefined && (!structuralLid || presentationMode !== 'NATIVE_RANCH'
+      || checked.family !== 'CAGE' || placement.moduleId !== null || placement.cageDefinitionIndex !== null
+      || !ORIGINAL_CAGE_STRUCTURAL_VISUALS.some(entry => entry.role === 'LID' && entry.fieldId === placement.fieldId))) {
+      fail('TILE_SET_STRUCTURAL_ROLE_INVALID');
+    }
     if (placement.slotIndex !== undefined) {
       if (!Number.isSafeInteger(placement.slotIndex) || placement.slotIndex < 0) fail("TILE_SET_SLOT_INVALID");
-      if (seenSlots.has(placement.slotIndex)) fail("TILE_SET_DUPLICATE_SLOT");
-      seenSlots.add(placement.slotIndex);
+      // Native masks can leave their anchor cell empty. Its structural Lid and
+      // the anchored facility are distinct art tiles, not duplicate facilities.
+      // Keep uniqueness strict within each role; ordinary tile sets retain the
+      // original one-tile-per-slot rule.
+      const slotKey = structuralLid ? `lid:${placement.slotIndex}` : placement.slotIndex;
+      if (seenSlots.has(slotKey)) fail("TILE_SET_DUPLICATE_SLOT");
+      seenSlots.add(slotKey);
     }
     return { fieldId: placement.fieldId, x: placement.x, y: placement.y,
       slotIndex: placement.slotIndex ?? null, moduleId: placement.moduleId ?? null,

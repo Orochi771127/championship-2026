@@ -17,8 +17,8 @@ export function createQaRanchExpansionText(previous) {
   if (!validateRanchLayout(cage.placements, { ...cage, mainUnlocked })) {
     throw Error('QA_RANCH_CURRENT_LAYOUT_INVALID');
   }
-  if (cage.layoutVersion === RANCH_DECKS_LAYOUT) return previous;
-  save.cageEdit = { ...cage, layoutVersion: RANCH_DECKS_LAYOUT, expansion: prototypeRanchExpansion() };
+  if (cage.layoutVersion === RANCH_DECKS_LAYOUT && cage.expansion.decks === 2) return previous;
+  save.cageEdit = { ...cage, layoutVersion: RANCH_DECKS_LAYOUT, expansion: { ...prototypeRanchExpansion(), decks: 2 } };
   if (!validateRanchLayout(save.cageEdit.placements, { ...save.cageEdit, mainUnlocked })) {
     throw Error('QA_RANCH_EXPANDED_LAYOUT_INVALID');
   }

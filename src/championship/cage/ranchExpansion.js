@@ -24,7 +24,8 @@ import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, validateNativeRanch } from ".
 export const RANCH_DECKS_LAYOUT = "NATIVE_DECKS_V1";
 export const RANCH_EXPANSION_VERSION = 1;
 export const RANCH_EXPANSION_DECK_SLOTS = 10;
-export const RANCH_EXPANSION_MAX_DECKS = 1;
+// QA may explicitly grant two ten-cell units; the ordinary prototype still grants one.
+export const RANCH_EXPANSION_MAX_DECKS = 2;
 export const RANCH_EXPANSION_FIRST_SLOT = MAX_SLOT_COUNT;
 export const RANCH_EXPANSION_GRANT_PROTOTYPE = "PROTOTYPE_NON_PAID";
 export const RANCH_EXPANSION_EVIDENCE = "OWNER_APPROVAL_PENDING_ADAPTATION";
@@ -133,7 +134,7 @@ export function annexPlacementCells(entry, expansion) {
   const mask = annexPlacementMask(entry, expansion);
   if (mask === null) return [];
   const cells = [];
-  for (let bit = 0; bit < RANCH_EXPANSION_DECK_SLOTS; bit += 1) if (mask & (1 << bit)) cells.push(RANCH_EXPANSION_FIRST_SLOT + bit);
+  for (let bit = 0; bit < annexSlotCount(expansion); bit += 1) if (mask & (1 << bit)) cells.push(RANCH_EXPANSION_FIRST_SLOT + bit);
   return cells;
 }
 
