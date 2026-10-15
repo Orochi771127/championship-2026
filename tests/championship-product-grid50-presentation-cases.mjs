@@ -21,7 +21,7 @@ test('all50 cells share one960×440 plane and preserve stable anchors',async()=>
   const occupied=new Set(productPlacementCells(waiting));
   const lids=plan.placements.filter(p=>p.structuralRole==='LID'&&p.slotIndex!==undefined);
   assert.equal(lids.length,50-occupied.size);
-  for(const lid of lids){const cell=productGridCell(lid.slotIndex);assert.equal(lid.x,cell.x*4);assert.equal(lid.y,Math.max(0,cell.y-24)*4);}
+  for(const lid of lids){const cell=productGridCell(lid.slotIndex);assert.equal(lid.x,cell.x*4);assert.equal(lid.y,(cell.y-24)*4);}
   const art=await loadRuntimeMapArtTileSet({PIXI,manifest,...plan,presentationMode:plan.mode});
   assert.equal(art.field.worldWidthPx,3840);assert.equal(art.field.worldHeightPx,1760);assert.equal(art.field.wrapWidthPx,3840);
   assert.equal(art.field.fold,undefined);assert.equal(art.tileCount,plan.placements.length);
@@ -34,7 +34,7 @@ test('every legal facility anchor composes with matching shared shape geometry',
     const p={moduleId:definition.moduleId,slotIndex};if(!validateProductRanch([waiting,p]))continue;
     const plan=createRanchCageArtPlan({manifest,layoutVersion:PRODUCT_RANCH_GRID,placements:[waiting,p]});
     const tile=plan.placements.find(t=>t.moduleId===p.moduleId&&t.slotIndex===slotIndex);
-    assert.ok(tile);assert.ok(tile.y>=0);assert.ok(tile.y+tile.sourceRect.height<=1760);
+    assert.ok(tile);assert.ok(tile.y>=-96);assert.equal(tile.sourceRect.y,0);assert.ok(tile.y+tile.sourceRect.height<=1760);
     assert.ok(tile.x+tile.sourceRect.width<=3840);count++;
   }
   assert.ok(count>800);console.log('validated grid50 art anchors',count);
@@ -79,4 +79,26 @@ test('tutorial decline refocus preserves the visible egg and repeated focus is i
       scrollY=next;
     }
   }
+});
+
+
+test('top contour survives runtime loading and wrap copies without moving ground or resident bounds',async()=>{
+  const plan=createRanchCageArtPlan({manifest,layoutVersion:PRODUCT_RANCH_GRID,placements:[waiting]});
+  const tops=plan.placements.filter(p=>p.y<0);
+  assert.ok(tops.length>0);
+  for(const tile of tops){assert.equal(tile.y,-96);assert.equal(tile.sourceRect.y,0);
+    assert.equal(tile.sourceRect.height,manifest.fields.find(f=>f.fieldId===tile.fieldId).worldHeightPx);}
+  const art=await loadRuntimeMapArtTileSet({PIXI,manifest,...plan,presentationMode:plan.mode});
+  assert.equal(art.displayObject.children.filter(c=>c.y===-96).length,tops.length*3);
+  assert.equal(art.field.worldHeightPx,1760);
+  assert.equal(plan.residentViewport.y,0);
+  for(const view of [{width:390,height:675},{width:1280,height:720}]){
+    const fit=raisingFieldViewport(art.field,{...view,scrollY:Infinity});
+    const head=raisingFieldViewport(art.field,{...view,scrollY:fit.scrollMaxY});
+    assert.ok(head.y-24*art.field.nativePixelWorldScale*head.scale>=0,'restored top is reachable inside existing headroom');
+  }
+  await art.dispose();
+  const invalid={...plan,placements:plan.placements.map((p,i)=>i===0?{...p,y:-97}:p),presentationMode:plan.mode};
+  await assert.rejects(loadRuntimeMapArtTileSet({PIXI,manifest,...invalid}),/TILE_SET_INTEGER_POSITION_REQUIRED/);
+  await assert.rejects(loadRuntimeMapArtTileSet({PIXI,manifest,...plan,productGrid:null,presentationMode:plan.mode}),/TILE_SET_INTEGER_POSITION_REQUIRED/);
 });
