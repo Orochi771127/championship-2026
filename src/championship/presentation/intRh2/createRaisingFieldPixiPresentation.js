@@ -19,7 +19,7 @@ import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyph
 import {EVOLUTION_TEXT_ROWS, EVOLUTION_WRITING_COLOR, evolutionWritingY} from '../../text/evolutionPresentationText.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
-import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
+import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
 
 const DRAG_THRESHOLD_PX = 6;
 
@@ -406,7 +406,7 @@ export async function mountRaisingFieldPixiPresentation({
     if(fieldArt.field.productGrid){
       const nativeY=frame.residents.map(resident=>source.getActorFrame?.(resident.creatureId)?.positionQ12)
         .find(position=>Number.isFinite(position?.[0]))?.[1];
-      if(Number.isFinite(nativeY))cameraY=clamp(view.height/2-fit.y-nativeY/4096*unit*fit.scale,0,scrollMaxY());
+      if(Number.isFinite(nativeY))cameraY=centerRaisingNativeY(fieldArt.field,view,nativeY/4096,cameraX);
     }
     const target = bandWorldX(fieldArt.field, nativeX / 4096) - (app.screen.width - 24) / fit.scale / 2;
     cameraX = fieldArt.field.wrapWidthPx

@@ -45,7 +45,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#cm-login').click();await page.locator('#cm-new-game').waitFor({state:'visible'});
  }
  async function screen(name){await page.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();}
- async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().waitFor({state:'visible',timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
+ async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().waitFor({state:'visible',timeout:180000});await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
  async function menu(group,entry){await page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`).click();await page.locator(`.cm-toolbar__menu:not([hidden]) button[data-entry-id="${entry}"]`).click();}
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
@@ -75,6 +75,17 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await home();
   const decline=page.locator('dialog[open] [data-action="decline"]');
   await decline.waitFor({state:'visible',timeout:15000});await decline.click();await decline.waitFor({state:'hidden'});
+  // The existing renderer-owned diagnostics are enabled by normal onboarding.
+  // Decline must keep the already loaded egg on screen, not merely leave a canvas.
+  const settledActors=[];
+  for(let sample=0;sample<3;sample++){
+   await page.waitForTimeout(250);
+   const state=await page.locator('.int-rh2-field-host').evaluate(host=>({height:host.clientHeight,width:host.clientWidth,assets:JSON.parse(host.dataset.residentAssets||'[]'),positions:JSON.parse(host.dataset.residentScreenPositions||'[]')}));
+   assert.ok(state.positions.length>0,'Renderer must report the real resident after tutorial decline');
+   assert.ok(state.positions.some(p=>state.assets.some(a=>a.creatureId===p.creatureId&&a.state==='ready')&&p.x>0&&p.x<state.width&&p.bodyTop>=0&&p.footY>p.bodyTop&&p.footY<state.height),'Loaded partner body and feet must remain inside the settled viewport');
+   settledActors.push(state);
+  }
+  evidence.assertions.push({settledNewSaveActors:settledActors});write();
   const initial=await saved();assert.equal(initial.shop.bits,100000);assert.equal(initial.flags.friendsPlaytest.diamonds,10000);
   assert.equal(digits(await page.locator('.cm-status-bar__bits-value').innerText()),100000);await wallet(10000);await noOverflow();await shot('01-new-wallet');
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');

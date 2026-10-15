@@ -251,3 +251,14 @@ export function raisingScreenToNative(point,field,viewport,cameraX=0) {
   const x=(point.x-fit.x)/(unit*fit.scale);
   return {x:field.wrapWidthPx?wrapRaisingCamera(x,field.wrapWidthPx/unit):x,y:(point.y-fit.y)/(unit*fit.scale)};
 }
+
+/** Recenter an existing native camera without discarding its current scroll.
+ * fit.y already includes scrollY, so the measured screen displacement is a
+ * delta. Repeating focus (including tutorial completion) must be idempotent. */
+export function centerRaisingNativeY(field, viewport, nativeY, cameraX = 0) {
+  const fit = raisingFieldViewport(field, viewport, 12, cameraX);
+  const current = fit.scrollY ?? 0;
+  if (!Number.isFinite(nativeY) || !(field?.nativePixelWorldScale > 0)) return current;
+  const delta = Math.floor(viewport.height / 2) - fit.y - nativeY * field.nativePixelWorldScale * fit.scale;
+  return Math.min(fit.scrollMaxY ?? 0, Math.max(0, Math.round(current + delta)));
+}
