@@ -14,20 +14,20 @@ const memory = (value = text) => { const data = new Map([[KEY,value]]); return {
 test('QA upgrade preserves all unrelated progress and placements; idempotent', () => {
   const result = createQaRanchExpansionText(text);
   const save = JSON.parse(result);
-  assert.deepEqual(save.cageEdit.expansion, {version:1,decks:1,grant:'PROTOTYPE_NON_PAID'});
+  assert.deepEqual(save.cageEdit.expansion, {version:1,decks:2,grant:'PROTOTYPE_NON_PAID'});
   assert.deepEqual(save.cageEdit.placements,original.cageEdit.placements);
   save.cageEdit = original.cageEdit;
   assert.deepEqual(save,original);
   assert.equal(createQaRanchExpansionText(result),result);
 });
 
-test('all ten actual runtime slots accept placement, removal/move and committed save reload', () => {
+test('all twenty actual runtime slots accept placement, removal/move and committed save reload', () => {
   let save = JSON.parse(createQaRanchExpansionText(text));
   let runtime = createCageEditRuntime({snapshot:save.cageEdit});
   const args = [save.shop.cageOwned,save.progression.tamerRank];
   const module = 'championship:2026:cage:15'; // Existing one-cell cage, supports both rows.
-  assert.equal(runtime.getFrame(...args).slots.filter(s=>s.slotIndex>=20&&s.unlocked).length,10);
-  for (let slot = 20; slot <= 29; slot++) {
+  assert.equal(runtime.getFrame(...args).slots.filter(s=>s.slotIndex>=20&&s.unlocked).length,20);
+  for (let slot = 20; slot <= 39; slot++) {
     runtime.removePlacement(module,...args);
     runtime.selectModule(module,...args);
     assert.equal(runtime.placeAt(slot,...args).lastVerdict.reason,'PLACED',`slot ${slot}`);
@@ -37,7 +37,7 @@ test('all ten actual runtime slots accept placement, removal/move and committed 
     assert.equal(runtime.getFrame(...args).slots.find(s=>s.slotIndex===slot).moduleId,module);
   }
   runtime.removePlacement(module,...args);runtime.selectModule(module,...args);
-  assert.equal(runtime.placeAt(30,...args).lastVerdict.reason,'OUT_OF_BOUNDS');
+  assert.equal(runtime.placeAt(40,...args).lastVerdict.reason,'OUT_OF_BOUNDS');
 });
 
 test('normal save stays locked unless explicit QA action is invoked', () => {
@@ -58,4 +58,13 @@ test('pure transformation rejects invalid or unsupported saves with stable error
   invalid.cageEdit.placements[1].slotIndex = 0;
   assert.throws(() => createQaRanchExpansionText(JSON.stringify(invalid)));
   assert.equal(JSON.stringify(original),text,'pure transformation never mutates caller data');
+});
+
+test('existing ten-slot QA saves upgrade in place without changing placements or progress',()=>{
+  const old = structuredClone(fixture);old.cageEdit.expansion.decks=1;
+  old.shop.bits=54321;old.updatedAt='2026-10-15T06:00:00.000Z';
+  old.cageEdit.placements.find(p=>p.moduleId==='championship:2026:cage:15').slotIndex=29;
+  const upgraded=JSON.parse(createQaRanchExpansionText(JSON.stringify(old)));
+  assert.equal(upgraded.cageEdit.expansion.decks,2);
+  upgraded.cageEdit.expansion.decks=1;assert.deepEqual(upgraded,old);
 });

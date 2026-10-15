@@ -21,11 +21,11 @@ await page.evaluate(([key,text])=>localStorage.setItem(key,text),[key,text]);
 assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
 const backupPromise=page.waitForEvent('download');await page.locator('#expand').click();const backup=await backupPromise;
 const backupPath=path.join(output,'before-expansion.json');await backup.saveAs(backupPath);assert.equal(fs.readFileSync(backupPath,'utf8'),text);
-await page.getByText('10 格擴充區已開放，原有進度與配置已保留。請按「返回遊戲」。',{exact:true}).waitFor();
+await page.getByText('20 格擴充區已開放，原有進度與配置已保留。請按「返回遊戲」。',{exact:true}).waitFor();
 const after=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),key);assert.equal(after.cageEdit.layoutVersion,'NATIVE_DECKS_V1');
 assert.deepEqual(after.cageEdit.placements,original.cageEdit.placements);const comparison=structuredClone(after);comparison.cageEdit=original.cageEdit;assert.deepEqual(comparison,original);
 assert.equal(await page.evaluate(key=>localStorage.getItem(`${key}:qa-expansion-backup`),key),text);
-await page.reload();await page.locator('#expand').click();await page.getByText('擴充區的 10 格已全部開放，原有進度沒有變更。',{exact:true}).waitFor();
+await page.reload();await page.locator('#expand').click();await page.getByText('擴充區的 20 格已全部開放，原有進度沒有變更。',{exact:true}).waitFor();
 await page.screenshot({path:path.join(output,'qa-expanded-mobile.png'),fullPage:true});
 // Lock conflict: active game lock must prevent overwrite or download.
 const holder=await context.newPage();await holder.goto(`${origin}/full-qa-save.html`);
