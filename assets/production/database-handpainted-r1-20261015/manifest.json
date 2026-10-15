@@ -413,25 +413,26 @@
       "speciesIndex": 49,
       "speciesId": "species-049",
       "displayCode": "GR22",
-      "src": "assets/production/database-handpainted-r1-20261015/species-049.png",
+      "src": "assets/production/database-handpainted-r1-20261015/species-049.376bd37739caf2ad.png",
       "width": 1254,
       "height": 1254,
-      "sha256": "423def7f7de4d82bb51ea9900474a10480518ff2007d7e976835cff0b4db98a7",
+      "sha256": "376bd37739caf2ad58093c5701e313efc6ebac1f3a7ae1de363a97ee89907b55",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 1376334,
+      "bytes": 1335938,
       "sourceEntityId": "m222_tentomon",
       "sourceReferenceSha256": "71408bc62b98074b846f5e6763da04e16c79625f722c5a578614e3638011c3c8",
       "sourceBindingEvidence": "OWNER_CONFIRMED_EXISTING_SPECIES_ID",
       "selectedSourceForm": "EXACT_SOURCE_INDEX_ENTITY_FILENAME",
-      "selectedGenerationVersion": "v1",
+      "selectedGenerationVersion": "refined-handpainted-v2",
       "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Consistent clean hand-painted linework, layered color, distinct action pose, transparent background",
+      "artDirection": "Refined hand-painted rendering preserving approved armored insect identity and original transparent PNG",
       "review": {
         "artistViewedReferenceAndOutput": true,
         "rootReview": "PASSED",
         "actualAlpha": true,
         "runtimeContainPadding": "Existing 24px padding and object-fit contain; original PNG canvas unchanged",
-        "runtimeBrowser": "PENDING"
+        "runtimeBrowser": "PENDING",
+        "visualApprovalEvidence": "Actual source/output visual review passed 2026-10-15; new live image fit pending"
       }
     }
   ]
