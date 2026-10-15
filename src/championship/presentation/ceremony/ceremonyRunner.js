@@ -242,7 +242,9 @@ export function playReveal({ root, kind, cue = null, doc = globalThis.document,
   root.addEventListener("pointerdown", onTap, true);
   root.addEventListener("click", onClick, true);
   doc.addEventListener?.("visibilitychange", onVisibility);
-  timer = setTimer?.(() => settle(false), lengthMs);
+  // Reduced motion: nothing travels, so the screen is simply already there.
+  if (env.reduced) settle(false);
+  else timer = setTimer?.(() => settle(false), lengthMs);
   return Object.freeze({ settle: () => settle(true), done,
     dispose() { sound?.stop(); sound = null; settle(true); root.removeEventListener("click", onClick, true); } });
 }

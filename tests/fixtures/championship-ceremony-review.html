@@ -17,7 +17,7 @@
 //   ?kind=gate|capture|reward|medal|evolve|versus   &theme=arena|night|clear|warm|classic
 //   &motion=reduced   &quality=saver   &title=<titleId>   &species=<speciesId>
 import { playCeremony } from './src/championship/presentation/ceremony/ceremonyRunner.js';
-import { buildGateEntry, buildCapture, buildEvolve, buildVersus } from './src/championship/presentation/ceremony/ceremonyScenes.js';
+import { buildGateEntry, buildCapture, buildEvolve, buildVersus, buildMedal } from './src/championship/presentation/ceremony/ceremonyScenes.js';
 import { createBattleResultView } from './src/championship/app/vs5Screens.js';
 import { originalMedalArt } from './src/championship/presentation/completedOriginalUi20261007.js';
 import { loadRegisteredCharacterHudArt } from './src/championship/presentation/characterHudArt.js';
@@ -52,6 +52,9 @@ if (kind === 'medal') {
     receipt: { status: 'SETTLED', won: true, credited: 7000, rewardBits: 7000, walletAfter: 7150, clamped: false },
     matchTitle: '受控徽章外觀檢查', progression: { rankBefore: 1, rankAfter: 1, earnedTitles: [{ id: titleId, name: '存取突擊兵' }] },
     hudArt: { getMedal: (id) => originalMedalArt(id, new URL('../../championship.html', location.href).href) },
+    // The same injection main.js makes (the Battle screens import display copy only).
+    ceremonies: { medal: ({ host, label, kicker, title, meta, medal, hint, onDone }) => run({ host, kind: 'medal', cue: 'medal', label, onDone,
+      build: (s, env) => buildMedal(s, env, { kicker, title, meta, medal, hint }) }) },
     onExit() { root.textContent = '檢查完成'; } });
   window.resultView = view;
 }

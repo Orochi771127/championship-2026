@@ -148,6 +148,9 @@ test("a reveal settles on its timer or at the first tap, and swallows that tap's
   playReveal({ root: again, kind: "hunt-reward", doc, ...timers });
   timers.run(5000);
   assert.equal(again.dataset.reveal, "settled");
+  const reducedRoot = doc.createElement("section");
+  playReveal({ root: reducedRoot, kind: "hunt-reward", doc: fakeDocument({ motion: "reduced" }), ...timers });
+  assert.equal(reducedRoot.dataset.reveal, "settled", "reduced motion shows the final screen at once");
   assert.equal(timers.pending, 0);
 });
 
@@ -188,8 +191,18 @@ test("the stylesheet keeps the ceremony rules: final-state statics, compositor-o
     const properties = [...body.matchAll(/([a-z-]+)\s*:/g)].map((m) => m[1]);
     for (const property of properties) assert.ok(["opacity", "transform"].includes(property), `keyframes animate only opacity/transform, found ${property}`);
   }
-  assert.match(css, /\.cm-ceremony\[data-state="settled"\] \*,\s*\n\.cm-ceremony\[data-state="leaving"\] \* \{ animation: none; \}/, "settling lands the final composition");
-  assert.match(css, /\.cm-ceremony\[data-motion="reduced"\] \* \{ animation: none; \}/);
+  assert.match(css, /\.cm-ceremony:is\(\[data-state="settled"\], \[data-state="leaving"\]\) \.cm-ceremony__stage \* \{ animation: none; \}/, "settling lands the final composition");
+  assert.match(css, /\.cm-ceremony\[data-motion="reduced"\] \.cm-ceremony__stage \* \{ animation: none; \}/);
+  // The stop rules are (0,3,0); no per-part animation rule may be as specific
+  // unless it is an intended exit (data-state="leaving").
+  const specificity = (selector) => (selector.match(/\.[\w-]+|\[[^\]]+\]|:(?!is\b|where\b)[\w-]+/g) ?? []).length;
+  for (const [, selectors, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (!/animation:\s*cm-cer-(?!fade|leave)/.test(body)) continue;
+    for (const selector of selectors.split(",")) {
+      if (selector.includes("data-reveal") || selector.includes('data-state="leaving"') || selector.includes("@")) continue;
+      assert.ok(specificity(selector.replace(/\s+/g, " ")) < 3, `a part rule outranks the stop rules: ${selector.trim()}`);
+    }
+  }
   assert.match(css, /\.cm-ceremony\[data-motion="saver"\][^{]*\.cm-ceremony__spark/);
   assert.match(css, /\.cm-ceremony \{\n  position: absolute;[\s\S]*?pointer-events: none;/, "a toast never blocks the scene");
   const html = fs.readFileSync("championship.html", "utf8");

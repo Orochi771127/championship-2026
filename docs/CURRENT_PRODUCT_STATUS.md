@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: UI_CEREMONY_ARENA_20261015 -->
+**2026-10-15 — Arena Daylight UI and ceremony layer.** The bright 「晴空競技」 palette is the default theme (explicit saved themes kept); primary actions read as game keys and page titles carry the link-line mark. A presentation-only ceremony layer adds gate entry, capture confirmation, hunt reward reveal, title medal, post-sequence evolution reveal and battle versus, with skip, reduced motion, saver and hidden-tab handling, synthesized cues and no extra ticker; gameplay, save, settlement and native evolution/READY-FIGHT timing are unchanged. Short landscape Gate Select fits the globe and the companion card keeps full names. See [spec](reports/ui-ceremony-2026-10-15/SPEC_ZH_TW.md) and [before/after and validation](reports/ui-ceremony-2026-10-15/REPORT_ZH_TW.md); physical devices and in-play medal/evolution triggering are not accepted by these checks.
+
 <!-- record-id: DATABASE_STORIES_20261015 -->
 **2026-10-15 — Reviewed Database story integration candidate.** 216 ordinary species have five-language authored prose, native attribute/family tags and mapped move power/action costs. Only twelve approved B101–B112 portraits are added; unknown detail sections stay masked. Earlier isolated checks pass (108 targeted tests; five locales, ten close/reopen cycles and forty navigation states). Final hosted CI/build status is tied to this PR head, not inferred from those earlier checks. [Scope and evidence](reports/database-stories-2026-10-15/REPORT.md).
 

@@ -32,11 +32,11 @@
    theme stays light and a dark one stays dark. */
 .cm-ceremony { --cer-veil: color-mix(in srgb, var(--c-ground) 80%, transparent); }
 .cm-ceremony__stage { position: relative; display: grid; place-items: center; width: 100%; height: 100%; }
-.cm-ceremony[data-state="settled"] *,
-.cm-ceremony[data-state="leaving"] * { animation: none; }
+/* (0,3,0): above every per-ceremony part rule below, so settling always wins. */
+.cm-ceremony:is([data-state="settled"], [data-state="leaving"]) .cm-ceremony__stage * { animation: none; }
 .cm-ceremony[data-state="leaving"] { animation: cm-cer-leave 260ms var(--ease-in-out) forwards; pointer-events: none; }
 .cm-ceremony[data-motion="reduced"] { animation: cm-cer-fade 160ms linear backwards; }
-.cm-ceremony[data-motion="reduced"] * { animation: none; }
+.cm-ceremony[data-motion="reduced"] .cm-ceremony__stage * { animation: none; }
 .cm-ceremony[data-motion="reduced"][data-state="leaving"] { animation: cm-cer-fade-out 160ms linear forwards; }
 /* Saver: the same words without the decoration. */
 .cm-ceremony[data-motion="saver"] :is(.cm-ceremony__spark, .cm-cer-rays, .cm-cer-ring--b, .cm-cer-ring--c) { display: none; }
@@ -399,3 +399,7 @@
   .cm-vs2-field__viewport:has(> .cm-ceremony[data-kind="gate-entry"]) .cm-vs2-field__loading { top: 80%; }
   .cm-cer-hint { display: none; }
 }
+
+/* Reduced motion also keeps the two sides of the versus card still on exit
+   (that exit rule is more specific than the general stop above). */
+.cm-ceremony[data-motion="reduced"][data-kind="versus"] .cm-cer-versus__side { animation: none; }
