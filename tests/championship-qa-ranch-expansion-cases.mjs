@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
-import { createQaRanchExpansionText, applyQaRanchExpansion } from '../src/championship/app/qaRanchExpansion.js';
+import { createQaRanchExpansionText } from '../src/championship/app/qaRanchExpansion.js';
 import { CHAMPIONSHIP_MODERN_SAVE_KEY as KEY, serializeChampionshipModernSave, deserializeChampionshipModernSave } from '../src/championship/app/championshipStandaloneSave.js';
 import { createCageEditRuntime } from '../src/championship/cage/cageEditRuntime.js';
 const fixture = JSON.parse(fs.readFileSync(new URL('../qa/championship-full-qa-save.json', import.meta.url), 'utf8'));
@@ -50,20 +50,12 @@ test('normal save stays locked unless explicit QA action is invoked', () => {
   assert.equal(storage.getItem(KEY),text);
 });
 
-test('validated backup precedes write; repeated action does not back up or write', async () => {
-  const storage=memory();let backups=0;
-  assert.deepEqual(await applyQaRanchExpansion(storage, async before=>{assert.equal(before,text);assert.equal(storage.getItem(KEY),text);backups++;}),{changed:true});
-  assert.deepEqual(await applyQaRanchExpansion(storage,()=>{throw Error('should not back up');}),{changed:false});
-  assert.equal(backups,1);
-});
-
-test('invalid/missing/legacy-layout saves, failed backup, quota error, concurrent change cannot overwrite progress',async()=>{
-  for(const value of [null,'bad json',JSON.stringify({...original,cageEdit:{placements:[]}})]){
-    const s=memory(value);await assert.rejects(applyQaRanchExpansion(s,()=>assert.fail('backup before validation')));assert.equal(s.getItem(KEY),value);
-  }
-  const s=memory();await assert.rejects(applyQaRanchExpansion(s,()=>{throw Error('backup failed');}));assert.equal(s.getItem(KEY),text);
-  const quota={getItem:()=>text,setItem:()=>{throw Error('QuotaExceededError');}};
-  await assert.rejects(applyQaRanchExpansion(quota,()=>{}),/QuotaExceededError/);assert.equal(quota.getItem(KEY),text);
-  const race=memory();await assert.rejects(applyQaRanchExpansion(race,()=>race.setItem(KEY,'newer progress')),/其他分頁/);assert.equal(race.getItem(KEY),'newer progress');
-  const silent={getItem:()=>text,setItem:()=>{}};await assert.rejects(applyQaRanchExpansion(silent,()=>{}),/無法確認/);
+test('pure transformation rejects invalid or unsupported saves with stable error codes', () => {
+  for (const value of [null, 'bad json']) assert.throws(() => createQaRanchExpansionText(value));
+  assert.throws(() => createQaRanchExpansionText(JSON.stringify({...original,cageEdit:{placements:[]}})),
+    {message:'QA_RANCH_NATIVE_LAYOUT_REQUIRED'});
+  const invalid = structuredClone(original);
+  invalid.cageEdit.placements[1].slotIndex = 0;
+  assert.throws(() => createQaRanchExpansionText(JSON.stringify(invalid)));
+  assert.equal(JSON.stringify(original),text,'pure transformation never mutates caller data');
 });

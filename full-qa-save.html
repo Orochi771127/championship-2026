@@ -45,7 +45,13 @@ import {
   serializeChampionshipModernSave
 } from './src/championship/app/championshipStandaloneSave.js';
 
-import { applyQaRanchExpansion } from './src/championship/app/qaRanchExpansion.js';
+import { createQaRanchExpansionText } from './src/championship/app/qaRanchExpansion.js';
+
+const qaExpansionErrors = Object.freeze({
+  QA_RANCH_NATIVE_LAYOUT_REQUIRED: '此存檔不是目前的原生牧場格式；未變更進度。',
+  QA_RANCH_CURRENT_LAYOUT_INVALID: '目前牧場配置無法驗證；未變更進度。',
+  QA_RANCH_EXPANDED_LAYOUT_INVALID: '擴充後配置無法驗證；未變更進度。'
+});
 
 const expand = document.querySelector('#expand');
 const install = document.querySelector('#install');
@@ -95,14 +101,26 @@ expand.onclick = async () => {
   try {
     let result;
     const apply = async () => {
-      result = await applyQaRanchExpansion(localStorage, async (previous) => {
-        // Keep a recoverable local backup as well as the requested JSON download.
-        // A blocked/quota-exhausted backup aborts before modifying the active save.
-        const backupKey = `${CHAMPIONSHIP_MODERN_SAVE_KEY}:qa-expansion-backup`;
-        localStorage.setItem(backupKey, previous);
-        if (localStorage.getItem(backupKey) !== previous) throw Error('備份無法保存；未變更目前進度。');
-        downloadText(previous, `championship-before-expansion-${Date.now()}.json`);
-      });
+      const previous = localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
+      if (!previous) throw Error('目前沒有存檔，請先建立或安裝 QA 存檔。');
+      const next = createQaRanchExpansionText(previous);
+      if (next === previous) { result = { changed: false }; return; }
+      // This explicit QA click is the writer; the src helper is pure.
+      // A blocked/quota-exhausted backup aborts before modifying the active save.
+      const backupKey = `${CHAMPIONSHIP_MODERN_SAVE_KEY}:qa-expansion-backup`;
+      localStorage.setItem(backupKey, previous);
+      if (localStorage.getItem(backupKey) !== previous) throw Error('備份無法保存；未變更目前進度。');
+      downloadText(previous, `championship-before-expansion-${Date.now()}.json`);
+      // Do not overwrite progress changed while preparing the backup.
+      if (localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY) !== previous) {
+        throw Error('存檔已被其他分頁更新，請關閉遊戲分頁後再試；未套用擴充。');
+      }
+      // Web Storage setItem is atomic: quota/security failure keeps the old value.
+      localStorage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY, next);
+      if (localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY) !== next) {
+        throw Error('無法確認瀏覽器已保存擴充，請保留備份；未確認套用成功。');
+      }
+      result = { changed: true };
     };
     if (navigator.locks) {
       await navigator.locks.request(CHAMPIONSHIP_MODERN_SAVE_KEY, { mode: 'exclusive', ifAvailable: true }, async (lock) => {
@@ -112,7 +130,7 @@ expand.onclick = async () => {
     } else await apply();
     setStatus(result.changed ? '10 格擴充區已開放，原有進度與配置已保留。請按「返回遊戲」。' : '擴充區的 10 格已全部開放，原有進度沒有變更。', 'ready');
   } catch (error) {
-    setStatus(`未確認套用成功：${error.message}`, 'error');
+    setStatus(`未確認套用成功：${qaExpansionErrors[error.message] ?? error.message}`, 'error');
   } finally {
     expand.disabled = false;
     install.disabled = !qaText;
