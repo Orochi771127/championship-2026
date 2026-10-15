@@ -45,8 +45,8 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#cm-login').click();await page.locator('#cm-new-game').waitFor({state:'visible'});
  }
  async function screen(name){await page.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();}
- async function home(){await screen('RAISING_HOME');await page.locator('[data-menu-id="MANAGEMENT"]').waitFor();await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().waitFor({state:'visible',timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
- async function menu(group,entry){await page.locator(`[data-menu-id="${group}"]`).click();await page.locator(`[data-entry-id="${entry}"]`).click();}
+ async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().waitFor({state:'visible',timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
+ async function menu(group,entry){await page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`).click();await page.locator(`.cm-toolbar__menu:not([hidden]) button[data-entry-id="${entry}"]`).click();}
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
  async function noOverflow(){assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Mobile document must not overflow');}
@@ -88,9 +88,9 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),total);await shot('row-'+row);
   }
   assert.equal(await page.locator('button.cm-vs2-action[data-buy-test-row]').count(),0);
-  await page.getByRole('button',{name:'返回牧場',exact:true}).click();await home();await wallet(7000);await saveQuit();
+  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await wallet(7000);await saveQuit();
   await page.reload({waitUntil:'domcontentloaded'});await continueSaved();await wallet(7000);
-  await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),50,'Reload must restore all purchased grid rows');await page.getByRole('button',{name:'返回牧場',exact:true}).click();await home();
+  await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),50,'Reload must restore all purchased grid rows');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
   const afterRows=await saved();assert.equal(afterRows.shop.bits,100000);assert.deepEqual(afterRows.flags.friendsPlaytest.purchases,[2,3,4]);assert.equal(afterRows.flags.friendsPlaytest.diamonds,7000);
   await menu('SYSTEM','shop');await screen('SHOP');
   let purchase;
@@ -104,12 +104,12 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   assert.ok(purchase,'A normally paid, not fully owned item must be purchasable');
   const purchasedMeta=(await page.locator('.cm-vs2-shop__detail-meta').innerText()).replaceAll(',','').match(/\d+/g).map(Number);assert.equal(purchasedMeta[1],purchase.owned+1,'Paid purchase must increase actual displayed ownership');
   assert.equal(digits(await page.locator('.cm-vs2-shop__wallet').innerText()),100000-purchase.price);
-  await shot('05-shop-purchased');await page.getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();
+  await shot('05-shop-purchased');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();
   const afterShop=await saved();assert.equal(afterShop.shop.bits,100000-purchase.price);assert.notDeepEqual({quantities:afterShop.shop.quantities,cageOwned:afterShop.shop.cageOwned},{quantities:afterRows.shop.quantities,cageOwned:afterRows.shop.cageOwned},'Persisted inventory, not just wallet, must change');assert.equal(afterShop.flags.friendsPlaytest.diamonds,7000);
   await menu('SYSTEM','shop');await screen('SHOP');await page.locator(`.cm-vs2-shop__tab[data-category="${purchase.category}"]`).click();await page.locator('.cm-vs2-shop__row').nth(purchase.cardIndex).click();
   assert.equal(await page.locator('.cm-vs2-shop__detail-name').innerText(),purchase.itemName);
   const restoredItem=(await page.locator('.cm-vs2-shop__detail-meta').innerText()).replaceAll(',','').match(/\d+/g).map(Number);assert.equal(restoredItem[1],purchase.owned+1,'Purchased item ownership survives reload');
-  await page.getByRole('button',{name:'返回牧場',exact:true}).click();await home();
+  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
   await menu('SYSTEM','hunt');await screen('GATE_SELECT');
   const listToggle=page.locator('.cm-vs2-gate3d__toggle');if((await listToggle.innerText()).includes('場地列表'))await listToggle.click();
   let fee=0;
@@ -117,7 +117,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    if(!await gate.isVisible()||!await gate.isEnabled())continue;await gate.click();
    const confirm=page.getByRole('button',{name:'前往狩獵設定',exact:true});if(!await confirm.isEnabled())continue;await confirm.click();await screen('HUNT_LOADOUT');
    const nums=(await page.locator('.cm-vs2-destination__fee').innerText()).replaceAll(',','').match(/\d+/g)?.map(Number);fee=nums?.[0]||0;
-   if(fee>0)break;await page.getByRole('button',{name:'返回選場',exact:true}).click();if((await listToggle.innerText()).includes('場地列表'))await listToggle.click();
+   if(fee>0)break;await page.locator('#cm-root').getByRole('button',{name:'返回選場',exact:true}).click();if((await listToggle.innerText()).includes('場地列表'))await listToggle.click();
   }
   assert.ok(fee>0,'Use a paid gate, not a fee-waiver/free gate');
   await page.getByRole('button',{name:'開始狩獵',exact:true}).click();await screen('HUNT_FIELD');
@@ -126,7 +126,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   assert.equal(await page.locator('[data-field-fallback="true"],.int-rh2-field-fallback').count(),0,'Hunt must not use an unplayable fallback');
   const huntCanvas=page.locator('.cm-vs2-field__canvas canvas').first();await huntCanvas.waitFor({state:'visible'});
   const huntBox=await huntCanvas.boundingBox();assert.ok(huntBox&&huntBox.width>0&&huntBox.height>0,'Normal Pixi hunt canvas must be visible');await shot('06-paid-hunt');
-  await page.getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
+  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
   const afterHunt=await saved();assert.equal(afterHunt.shop.bits,afterShop.shop.bits-fee);assert.equal(afterHunt.flags.friendsPlaytest.diamonds,7000);
   evidence.assertions.push({freshUi:true,rowBalances:[10000,9000,8000,7000],shopPrice:purchase.price,huntFee:fee,finalBits:afterHunt.shop.bits});write();
   // A separate empty browser profile uses the existing QA installer UI, not an edited save.
@@ -134,7 +134,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);await page.locator('#install').click();await page.waitForURL(/championship\.html$/);
   const old=await saved();const oldFixture=JSON.parse(fs.readFileSync(path.join(root,'qa/championship-full-qa-save.json')));assert.deepEqual(old.shop,oldFixture.shop,'Installer must preserve fixture economy/inventory');assert.deepEqual(old.cageEdit.placements,oldFixture.cageEdit.placements,'Installer must preserve fixture anchors');await continueSaved();await wallet(0);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);
-  await page.getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
+  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
   const migrated=await saved();assert.deepEqual(migrated.shop,old.shop,'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,old.cageEdit.placements);assert.equal(migrated.flags.friendsPlaytest?.diamonds??0,0);
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
