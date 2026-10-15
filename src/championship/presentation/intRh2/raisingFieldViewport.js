@@ -69,7 +69,7 @@ export function raisingNativeScreenPixels(field, viewport, padding = 12) {
   if(viewport.referenceViewport?.width>24&&viewport.referenceViewport?.height>24)viewport=viewport.referenceViewport;
   else if(viewport.desktopRaising)viewport=RAISING_DESKTOP_REFERENCE_VIEWPORT;
   const unit = field.nativePixelWorldScale;
-  const nativeHeight = field.worldHeightPx / unit;
+  const nativeHeight = field.productGrid?.sizingHeightNative ?? field.worldHeightPx / unit;
   const byWidth = Math.floor((viewport.width - padding * 2) / RAISING_MIN_VISIBLE_NATIVE_WIDTH);
   // The headroom stands in for the top padding: bodies rise into it.
   const byHeight = Math.floor((viewport.height - padding) / (nativeHeight + RAISING_TOP_HEADROOM_NATIVE));
@@ -250,4 +250,15 @@ export function raisingScreenToNative(point,field,viewport,cameraX=0) {
   }
   const x=(point.x-fit.x)/(unit*fit.scale);
   return {x:field.wrapWidthPx?wrapRaisingCamera(x,field.wrapWidthPx/unit):x,y:(point.y-fit.y)/(unit*fit.scale)};
+}
+
+/** Recenter an existing native camera without discarding its current scroll.
+ * fit.y already includes scrollY, so the measured screen displacement is a
+ * delta. Repeating focus (including tutorial completion) must be idempotent. */
+export function centerRaisingNativeY(field, viewport, nativeY, cameraX = 0) {
+  const fit = raisingFieldViewport(field, viewport, 12, cameraX);
+  const current = fit.scrollY ?? 0;
+  if (!Number.isFinite(nativeY) || !(field?.nativePixelWorldScale > 0)) return current;
+  const delta = Math.floor(viewport.height / 2) - fit.y - nativeY * field.nativePixelWorldScale * fit.scale;
+  return Math.min(fit.scrollMaxY ?? 0, Math.max(0, Math.round(current + delta)));
 }

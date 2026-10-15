@@ -50,7 +50,7 @@ const caveatIds = deepFreeze([
  * This function never computes current values or says a branch is attainable.
  */
 export function projectDatabaseEvolutionConditions(sourceSpeciesIndex, branchIndex, options = {}) {
-  if (!options || options.sourceRegistered !== true
+  if (!options || (!options.fullView && options.sourceRegistered !== true)
     || !Number.isInteger(sourceSpeciesIndex) || sourceSpeciesIndex < 8 || sourceSpeciesIndex > 223
     || !Number.isInteger(branchIndex) || branchIndex < 0 || branchIndex > 4
     || !Array.isArray(options.registeredSpecies) || !Array.isArray(options.evolutionBranches)) return null;

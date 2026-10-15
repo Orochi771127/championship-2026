@@ -21,6 +21,8 @@ import { MAX_SLOT_COUNT, getCageDefinitionByModuleId } from "./cageCatalog.js";
 import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from "./ranchSlotGeometry.js";
 import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, validateNativeRanch } from "./nativeRanchLayout.js";
 
+import { PRODUCT_RANCH_GRID, validateProductRanch } from './productRanchGrid.js';
+
 export const RANCH_DECKS_LAYOUT = "NATIVE_DECKS_V1";
 export const RANCH_EXPANSION_VERSION = 1;
 export const RANCH_EXPANSION_DECK_SLOTS = 10;
@@ -67,7 +69,7 @@ export function ringFieldTileOrigin(ringSlot, shapeIndex) {
 
 /** Both native layout versions run the native ranch; only DECKS has an annex. */
 export function isNativeRanchLayout(layoutVersion) {
-  return layoutVersion === NATIVE_RANCH_LAYOUT || layoutVersion === RANCH_DECKS_LAYOUT;
+  return layoutVersion === NATIVE_RANCH_LAYOUT || layoutVersion === RANCH_DECKS_LAYOUT || layoutVersion === PRODUCT_RANCH_GRID;
 }
 
 export function prototypeRanchExpansion() {
@@ -125,6 +127,7 @@ export function validateExpandedRanch(placements, mainUnlocked, expansion) {
 
 /** Validate under whichever layout version the ranch carries. */
 export function validateRanchLayout(placements, { layoutVersion, mainUnlocked, expansion = null }) {
+  if (layoutVersion === PRODUCT_RANCH_GRID) return validateProductRanch(placements);
   if (layoutVersion === RANCH_DECKS_LAYOUT) return validateExpandedRanch(placements, mainUnlocked, expansion);
   return validateNativeRanch(placements, mainUnlocked);
 }

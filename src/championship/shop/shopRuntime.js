@@ -50,6 +50,7 @@ export function createShopRuntime({
   initialHuntInventory = null,
   bits = STARTING_BITS,
   progression = { tamerRank: 0, battleBadges: [] },
+  allItemsVisible = false,
   snapshot = null
 } = {}) {
   if (!catalog || catalog.records?.length !== SHOP_RECORD_COUNT) {
@@ -116,7 +117,7 @@ export function createShopRuntime({
     const listings = [];
     for (const record of records) {
       const vis = visibility[record.shopRecordIndex];
-      if (vis === SHOP_VISIBILITY.HIDDEN) continue;
+      if (!allItemsVisible && vis === SHOP_VISIBILITY.HIDDEN) continue;
       const owned = ownedOf(record);
       listings.push({
         shopRecordIndex: record.shopRecordIndex,
@@ -172,7 +173,7 @@ export function createShopRuntime({
       if (!Number.isSafeInteger(quantity) || quantity < 1) {
         return deepFreeze({ ok: false, reason: "INVALID_QUANTITY" });
       }
-      if (visibility[shopRecordIndex] === SHOP_VISIBILITY.HIDDEN) {
+      if (!allItemsVisible && visibility[shopRecordIndex] === SHOP_VISIBILITY.HIDDEN) {
         return deepFreeze({ ok: false, reason: "UNAVAILABLE" });
       }
       const owned = ownedOf(record);

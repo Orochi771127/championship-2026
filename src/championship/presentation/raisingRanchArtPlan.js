@@ -9,6 +9,7 @@
 // slots and adds the fold the presentation shows the annex with. Tests replay
 // the repeat over every original layout and require the original's output.
 
+import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_SLOT_COUNT, productGridCell, productPlacementCells, validateProductRanch, productFieldTileOrigin, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT } from "../cage/productRanchGrid.js";
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import { getCageDefinitionByModuleId, MAX_SLOT_COUNT } from "../cage/cageCatalog.js";
 import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from "../cage/ranchSlotGeometry.js";
@@ -160,6 +161,56 @@ export function ranchExpansionPreviewPlan({ manifest, layoutVersion, unlockedCou
 
 /** The art plan for whichever layout the ranch carries. */
 export function createRanchCageArtPlan(options) {
+  if(options?.layoutVersion===PRODUCT_RANCH_GRID&&(options.previewFieldId??null)===null)return createProductGridArtPlan(options);
   if (options?.layoutVersion !== RANCH_DECKS_LAYOUT || (options.previewFieldId ?? null) !== null) return createRaisingCageArtPlan(options);
   return composeRanchArtPlan(options);
+}
+
+
+
+/** Product-authored continuous five-row area, not a ROM geometry claim.
+ * Uses the authoritative cell adapter; visual copies never add build slots. */
+export function createProductGridArtPlan({manifest,placements,unlockedSlots=null}) {
+  if(manifest?.family!=="CAGE"||!Array.isArray(manifest.fields))fail("CAGE_MANIFEST_REQUIRED");
+  if(!Array.isArray(placements)||!placements.length)fail("PLACEMENTS_REQUIRED");
+  if(!validateProductRanch(placements))fail("PRODUCT_GRID_LAYOUT_INVALID");
+  const fields=new Map(manifest.fields.map(field=>[field.fieldId,field]));
+  const occupied=new Set(),modules=new Set();
+  for(const placement of placements){
+    const cells=productPlacementCells(placement);
+    if(!Array.isArray(cells)||!cells.length||modules.has(placement.moduleId))fail("PRODUCT_GRID_LAYOUT_INVALID");
+    modules.add(placement.moduleId);
+    for(const cell of cells){if(occupied.has(cell))fail("PRODUCT_GRID_OCCUPANCY_OVERLAP");occupied.add(cell);}
+  }
+  if(unlockedSlots!==null&&(!Array.isArray(unlockedSlots)||unlockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=PRODUCT_RANCH_SLOT_COUNT)))fail("PRODUCT_GRID_ACCESS_INVALID");
+  const available=new Set([...(unlockedSlots??[]),...occupied]);
+  const lockedSlots=Array.from({length:PRODUCT_RANCH_SLOT_COUNT},(_,slot)=>slot).filter(slot=>!available.has(slot));
+  const lid=fields.get(LID_FIELD_ID);
+  if(!lid)fail("PRODUCT_GRID_LID_REQUIRED");
+  const unit=lid.worldWidthPx/lid.nativeWidthPx,wrapWidthPx=PRODUCT_RANCH_WORLD_WIDTH*unit;
+  const result=[];let residentViewport=null;
+  const all=[...placements.map(p=>({...p,definition:getCageDefinitionByModuleId(p.moduleId)})),
+    ...Array.from({length:PRODUCT_RANCH_SLOT_COUNT},(_,slotIndex)=>slotIndex).filter(slot=>!occupied.has(slot))
+      .map(slotIndex=>({slotIndex,moduleId:null,definition:null}))];
+  all.sort((a,b)=>productGridCell(a.slotIndex).row-productGridCell(b.slotIndex).row||a.slotIndex-b.slotIndex);
+  for(const p of all){
+    const cell=productGridCell(p.slotIndex),definitionIndex=p.definition?.cageDefinitionIndex??null;
+    const field=definitionIndex===null?lid:fields.get(getOriginalCageVisualBinding(definitionIndex)?.fieldId);
+    if(!field)fail("PRODUCT_GRID_FIELD_REQUIRED");
+    const shapeIndex=definitionIndex===null?SINGLE_CELL_SHAPE_INDEX:ORIGINAL_CAGE_DEFINITION_SHAPES[definitionIndex];
+    const origin=productFieldTileOrigin(p.slotIndex,shapeIndex);
+    const x=origin.tileX*8*unit,cropTop=origin.cropTopTiles*8*unit;
+    const y=origin.tileY*8*unit+cropTop;
+    const width=Math.min(field.worldWidthPx,wrapWidthPx-x),height=field.worldHeightPx-cropTop;
+    if(width<=0||height<=0)fail("PRODUCT_GRID_SOURCE_BOUNDS");
+    const identity={moduleId:p.moduleId,cageDefinitionIndex:definitionIndex,
+      ...(definitionIndex===null?{structuralRole:'LID'}:{})};
+    result.push({slotIndex:p.slotIndex,fieldId:field.fieldId,worldWidthPx:field.worldWidthPx,worldHeightPx:field.worldHeightPx,
+      ...identity,x,y,sourceRect:{x:0,y:cropTop,width,height}});
+    if(width<field.worldWidthPx)result.push({fieldId:field.fieldId,...identity,x:0,y,fragmentOfSlot:p.slotIndex,
+      sourceRect:{x:width,y:cropTop,width:field.worldWidthPx-width,height}});
+    if(definitionIndex===35)residentViewport={x,y,width,height};
+  }
+  return deepFreeze({mode:'NATIVE_RANCH',placementEvidence:'PRODUCT_AUTHORED_CONTINUOUS_GRID50',wrapWidthPx,residentViewport,
+    placements:result,productGrid:{columns:10,rows:5,worldWidthNative:PRODUCT_RANCH_WORLD_WIDTH,worldHeightNative:PRODUCT_RANCH_WORLD_HEIGHT,sizingHeightNative:192,lockedSlots}});
 }

@@ -18,7 +18,7 @@ function render(rank,decks=0){
  const before=runtime.toSave();const cage=runtime.getFrame(owned,rank);const cells=[];const actions=[];
  const element=()=>({dataset:{},style:{},attributes:{},setAttribute(k,v){this.attributes[k]=v;},addEventListener(k,fn){this[k+'Handler']=fn;},click(){if(!this.disabled)this.clickHandler?.();}});
  const append=cell=>cells.push(cell);
- vm.runInNewContext(renderSource,{cage,TAMER_RANK_SLOT_TABLE,element,uiText,setLabel,board:{append},annexBoard:{append},
+ vm.runInNewContext(renderSource,{PRODUCT_RANCH_GRID:"PRODUCT_GRID50_V1",cage,TAMER_RANK_SLOT_TABLE,element,uiText,setLabel,board:{append},annexBoard:{append},
   cellArt:new Map(cage.slots.map(s=>[s.slotIndex,{x:s.column*48,y:s.row*44,image:null}])),
   cageUiName:(id,name)=>name??'',cageUiSummary:()=>'',source:{intents:{removeCagePlacement:id=>actions.push(['remove',id]),placeCageAt:n=>actions.push(['place',n])}}});
  assert.deepEqual(runtime.toSave(),before,'rendering cannot change the save or grant');

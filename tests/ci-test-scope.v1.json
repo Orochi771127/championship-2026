@@ -293,7 +293,11 @@
     "tests/product-evolution-accepted-fixture-cases.mjs",
     "tests/product-gameplay-compat-cases.mjs",
     "tests/product-species-extensions-cases.mjs",
-    "tests/championship-companion-visible-copy-cases.mjs"
+    "tests/championship-companion-visible-copy-cases.mjs",
+    "tests/championship-friends-playtest-cases.mjs",
+    "tests/championship-product-grid-ground-cases.mjs",
+    "tests/championship-product-grid50-presentation-cases.mjs",
+    "tests/championship-product-ranch-grid-cases.mjs"
   ],
   "localReference": {
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",

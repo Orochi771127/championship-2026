@@ -1396,3 +1396,8 @@ body[data-desktop-menu] .cm-vs2-root[data-screen="MEDALS"] .cm-medals__grid { gr
   }
   body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d__host { min-height: 0; }
 }
+
+
+/* One continuous five-row grid; the old annex container is not used. */
+.cm-vs2-cage-board[data-product-grid="true"] { height: 232px; }
+.cm-cage-expansion { flex-wrap: wrap; }

@@ -287,7 +287,7 @@ export function createRuntimeMapArtFieldLoader({ PIXI }) {
  * @param {Array<{fieldId:string, x:number, y:number}>} options.placements
  */
 export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
-  placementEvidence = "UNKNOWN_REQUIRES_TRACE", presentationMode = "EXPLICIT_TILE_SET", residentViewport = null, wrapWidthPx = null, fold = null }) {
+  placementEvidence = "UNKNOWN_REQUIRES_TRACE", presentationMode = "EXPLICIT_TILE_SET", residentViewport = null, wrapWidthPx = null, fold = null, productGrid = null }) {
   assertPixi(PIXI);
   if (typeof PIXI.Container !== "function") throw new TypeError("Runtime map art tile sets require PIXI.Container");
   const checked = validateRuntimeMapArtBundle(manifest);
@@ -303,6 +303,9 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // rows, with capPx of cropped hex tops (foldCap tiles) drawn above it.
   if(fold!==null&&(presentationMode!=='NATIVE_RANCH'||!['splitPx','ringPx','bandOffsetPx','capPx'].every(k=>Number.isFinite(fold[k]))
     ||!(fold.splitPx>0)||!(fold.ringPx>fold.splitPx)||!(fold.bandOffsetPx>0)||fold.capPx<0))fail('TILE_SET_FOLD_INVALID');
+  if(productGrid!==null&&(presentationMode!=='NATIVE_RANCH'||fold!==null||productGrid.columns!==10||productGrid.rows!==5
+    ||productGrid.worldWidthNative!==960||productGrid.worldHeightNative!==440||productGrid.sizingHeightNative!==192
+    ||!Array.isArray(productGrid.lockedSlots)||productGrid.lockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=50)))fail('PRODUCT_GRID_GEOMETRY_INVALID');
   const residentBounds = residentViewport ? freezeRecord({...residentViewport}) : null;
   if (residentBounds && (!['x','y','width','height'].every(key=>Number.isFinite(residentBounds[key]))
     || residentBounds.x<0 || residentBounds.y<0 || residentBounds.width<=0 || residentBounds.height<=0)) fail('RESIDENT_VIEWPORT_INVALID');
@@ -439,7 +442,8 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
       wrapWidthPx: folded ? null : wrapWidthPx,
       ...(folded ? { fold: Object.freeze({ splitPx: folded.splitPx, ringPx: folded.ringPx, annexWidthPx: folded.annexWidthPx,
         bandOffsetPx: folded.bandOffsetPx, capPx: folded.capPx }) } : {}),
-      worldHeightPx,
+      worldHeightPx: productGrid ? productGrid.worldHeightNative*nativePixelWorldScale : worldHeightPx,
+      ...(productGrid ? {productGrid:freezeRecord({...productGrid})} : {}),
       nativePixelWorldScale,
       placements: snapshot,
       placementEvidence,
