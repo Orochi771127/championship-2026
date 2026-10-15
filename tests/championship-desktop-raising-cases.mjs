@@ -99,10 +99,10 @@ test('candidate battle menu is visible-route bounded and clears frame styles on 
  f.controller.dispose();f.controller.dispose();assert.equal(f.attrs.size,0);assert.equal(f.styles.size,0);assert.ok(f.disconnected());
  f.resize(844,390);f.notify();f.controller.refresh();assert.equal(f.attrs.size,0);assert.equal(f.styles.size,0);
 });
-test('app wires DOM menus directly to the layout opt-in, not the battle FX gate',async()=>{
+test('app enables responsive DOM menus by default with an explicit legacy rollback, independent of battle FX',async()=>{
  const {readFile}=await import('node:fs/promises');
  const source=await readFile(new URL('../src/championship/app/main.js',import.meta.url),'utf8');
- assert.match(source,/const RESPONSIVE_LAYOUT_CANDIDATE = [^\n]*get\('responsiveLayout'\) === 'candidate'/);
+ assert.match(source,/const RESPONSIVE_LAYOUT_CANDIDATE = [^\n]*get\('responsiveLayout'\) !== 'legacy'/);
  assert.match(source,/mountPortraitFrame\(\{[^}]*responsiveMenus:RESPONSIVE_LAYOUT_CANDIDATE/);
 });
 
