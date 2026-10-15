@@ -89,8 +89,9 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    publicServer=await serveBuild(root);context=await browser.newContext({viewport:{width:430,height:932},hasTouch:true,locale:'zh-TW',serviceWorkers:'block'});
    await context.route('**/*',async route=>{const u=route.request().url();if(u.startsWith(publicServer.origin+'/'))return route.continue();if(u.startsWith(publicBase)){const relative=new URL(u).pathname.slice(new URL(publicBase).pathname.length);if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:publicServer.origin+'/'+relative,maxRedirects:0});return route.fulfill({response});}}return route.abort();});
    const page=await context.newPage();page.setDefaultTimeout(90000);page.on('pageerror',e=>evidence.errors.push('normal: '+e.message));
-   await page.goto(publicBase+'championship.html');await page.locator('#cm-login').waitFor();await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
-   if(await page.locator('#cm-film-skip').isVisible()){await page.locator('#cm-film-skip').click();await page.locator('#cm-opening-film').waitFor({state:'hidden'});await page.waitForTimeout(400);}
+   await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});
+   await Promise.race([page.locator('#cm-film-skip').waitFor({state:'visible'}),page.locator('#cm-login').waitFor({state:'visible'})]);
+   if(await page.locator('#cm-film-skip').isVisible())await page.locator('#cm-film-skip').click();
    await page.locator('#cm-login').click();await page.locator('#cm-new-game').click();
    const story=page.locator('.cm-opening-story'),deadline=Date.now()+120000;
    while(await story.count()){if(Date.now()>deadline)throw Error('Opening comic timeout');const text=page.locator('[data-story-action="text"]');if(await text.isVisible())await text.click();if(await story.isVisible())await story.click({position:{x:10,y:10}});await page.waitForTimeout(1200);}
