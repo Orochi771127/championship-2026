@@ -1,4 +1,4 @@
-import {separateGroundFootpoints,canTraverseGroundStep} from '../spatial/groundFootpointSeparation.js';
+import {separateGroundFootpoints,canTraverseGroundStep} from '../field/groundFootpointSeparation.js';
 // Ordinary-ground adaptation; native cages, fixed states and food stations
 // retain their existing owners. Eggs and sleeping bodies are never translated.
 export function nativeRaisingSpacingRole(actor){

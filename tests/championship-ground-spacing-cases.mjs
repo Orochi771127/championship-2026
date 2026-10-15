@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {separateGroundFootpoints,canTraverseGroundStep} from '../src/championship/spatial/groundFootpointSeparation.js';
+import {separateGroundFootpoints,canTraverseGroundStep} from '../src/championship/field/groundFootpointSeparation.js';
 import {separateNativeRaisingGroundActors,nativeRaisingSpacingRole} from '../src/championship/raising/nativeGroundSpacing.js';
 import {stepNativeRaisingMovement,nativeRaisingPeerStopDistanceQ12} from '../src/championship/raising/nativeRaisingMovement.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,stepNativeRaisingActor,projectNativeRaisingActor,
@@ -38,7 +38,7 @@ test('ordinary footpoints separate two/six coincident residents deterministicall
   const noOverlap=[entry(0,50,50),entry(1,66,50),entry(2,100,100)];
   assert.deepEqual(separateGroundFootpoints(noOverlap).points,noOverlap.map(e=>e.positionQ12));
   assert.deepEqual(separateGroundFootpoints([entry(0),entry(1),entry(2)],{passes:99}),separateGroundFootpoints([entry(0),entry(1),entry(2)],{passes:2}));
-  const source=fs.readFileSync(new URL('../src/championship/spatial/groundFootpointSeparation.js',import.meta.url),'utf8');
+  const source=fs.readFileSync(new URL('../src/championship/field/groundFootpointSeparation.js',import.meta.url),'utf8');
   assert.doesNotMatch(source,/Math\.random|Date\.|performance\.|\.next\(/,'helper has no RNG/clock authority');
 });
 

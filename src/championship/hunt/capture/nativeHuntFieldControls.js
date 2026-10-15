@@ -7,7 +7,7 @@ import { createNativeHuntConsumables } from './nativeHuntConsumables.js';
 import { nativeWildRandom } from "./nativeCapturePhases.js";
 import { queryNativeHuntActors } from "./nativeWildSpatial.js";
 import { getHuntCatalogItem } from "../loadout/huntEquipmentCatalog.js";
-import {separateGroundFootpoints,canTraverseGroundStep} from '../../spatial/groundFootpointSeparation.js';
+import {separateGroundFootpoints,canTraverseGroundStep} from '../../field/groundFootpointSeparation.js';
 const Q12=4096;
 const FRAME_MS=1000*560190/33513982;
 export function nativeHuntGroundSpacingEligible(a){

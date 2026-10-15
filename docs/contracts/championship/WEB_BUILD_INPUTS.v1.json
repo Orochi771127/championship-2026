@@ -369,8 +369,8 @@
     "src/championship/database/databaseEvolutionConditions.js",
     "src/championship/database/databaseStories.js",
     "src/championship/presentation/databaseHeroPortraits.js",
-    "src/championship/spatial/groundFootpointSeparation.js",
-    "src/championship/raising/nativeGroundSpacing.js"
+    "src/championship/raising/nativeGroundSpacing.js",
+    "src/championship/field/groundFootpointSeparation.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9717,8 +9717,8 @@
     "assets/production/database-portraits-b1-20261014/B110.webp",
     "assets/production/database-portraits-b1-20261014/B111.webp",
     "assets/production/database-portraits-b1-20261014/B112.webp",
-    "src/championship/spatial/groundFootpointSeparation.js",
-    "src/championship/raising/nativeGroundSpacing.js"
+    "src/championship/raising/nativeGroundSpacing.js",
+    "src/championship/field/groundFootpointSeparation.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -45006,7 +45006,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "85b7733153c2ecec8be82a25bb6d5fd0ab3c7a5fcb705b1d47af8abaa92a1391"
+        "sha256": "ffab98be887a1b230d4a6161540f74e0cdef862fdacfd5bb68c20edd31f519e7"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45858,7 +45858,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-        "sha256": "d86f0afd0444458c0c1aa4b24dceb5722ed3844258cab39d4d2dd8b096278ace"
+        "sha256": "329cf7aa269b6c6ea9322ac11ed41c20ff5eea967ccf0e579401575cd457a128"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -47089,12 +47089,12 @@
         "sha256": "5ba32d312e07e8b8c8ca0095c2d05fc099f48940defaa451f47e1ff4e29922e0"
       },
       {
-        "path": "src/championship/spatial/groundFootpointSeparation.js",
-        "sha256": "795908c645bee8f3b8ed26462765f2593d384f984b895c420e7b1346bb1b3a93"
+        "path": "src/championship/raising/nativeGroundSpacing.js",
+        "sha256": "aea48532f007e9c175decadef507ba2eea44ce85b43db4f99c52f1261d23d774"
       },
       {
-        "path": "src/championship/raising/nativeGroundSpacing.js",
-        "sha256": "ede27935fa8df80245003220f36e82f71ef7be06387a40fa0d8b6049561fd5cd"
+        "path": "src/championship/field/groundFootpointSeparation.js",
+        "sha256": "795908c645bee8f3b8ed26462765f2593d384f984b895c420e7b1346bb1b3a93"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
