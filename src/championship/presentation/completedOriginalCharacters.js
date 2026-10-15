@@ -70,13 +70,16 @@ export async function loadCompletedOriginalCharacters(options,href){
       const donorUrl=config.motionDonorEntityId?new URL('../'+config.motionDonorEntityId+'/runtime.json',args.runtimeUrl).href:args.runtimeUrl;
       const response=await fetch(donorUrl,{signal:args.signal});
       if(!response.ok)throw Error('CANDIDATE_BASELINE_MOTION_UNAVAILABLE');
-      const baselineText=await response.text();
+      let sourceBaseline;
       if(config.baselineRuntimeSha256){
+        const baselineText=await response.text();
         const digest=await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(baselineText));
         const hash=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
         if(hash!==config.baselineRuntimeSha256)throw Error('ALTERNATE_FORM_DONOR_HASH_MISMATCH');
+        sourceBaseline=JSON.parse(baselineText);
+      }else{
+        sourceBaseline=await response.json();
       }
-      const sourceBaseline=JSON.parse(baselineText);
       const baseline=config.motionDonorEntityId?rekeyAlternateDonorRuntime(sourceBaseline,config):sourceBaseline;
       validateCompletedOriginalRuntime(runtime,config,baseline);
       reviewed.add(config.entityId);
@@ -192,4 +195,5 @@ function applyCompletedHudCharacter({baseUrl,portraits,battle},config,manifest){
     });
   }
 }
+
 
