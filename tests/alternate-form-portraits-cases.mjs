@@ -1,3 +1,11 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import crypto from 'node:crypto';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url)));
-test('QA hero registry preserves all22 production portraits and binds only two approved new originals',()=>{const native=read('src/data/championship/database-hero-portraits.r1.json'),qa=read('src/data/championship/qa-database-hero-portraits.r1.json');assert.equal(native.entries.length,22);assert.deepEqual(qa.entries.slice(0,22),native.entries);assert.deepEqual(qa.entries.slice(22).map(e=>e.speciesIndex),[229,230]);for(const e of qa.entries.slice(22)){const bytes=fs.readFileSync(new URL('../'+e.src,import.meta.url));assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),e.sha256);assert.equal(bytes.readUInt32BE(16),1254);assert.equal(bytes.readUInt32BE(20),1254);assert.ok(e.qaOnly);}const html=fs.readFileSync(new URL('../alternate-form-qa.html',import.meta.url),'utf8');assert.ok(html.includes('qa-database-hero-portraits.r1.json'));});
+test('QA hero registry preserves original24 order and includes all30 production portraits plus two QA-only originals',()=>{
+ const native=read('src/data/championship/database-hero-portraits.r1.json'),qa=read('src/data/championship/qa-database-hero-portraits.r1.json');
+ assert.equal(native.entries.length,30);assert.equal(qa.entries.length,32);assert.equal(new Set(qa.entries.map(e=>e.speciesIndex)).size,32);
+ assert.deepEqual(qa.entries.slice(0,22),native.entries.slice(0,22));assert.deepEqual(qa.entries.slice(22,24).map(e=>e.speciesIndex),[229,230]);assert.deepEqual(qa.entries.slice(24),native.entries.slice(22));
+ for(const entry of native.entries)assert.deepEqual(qa.entries.find(e=>e.speciesIndex===entry.speciesIndex),entry);
+ const extra=qa.entries.filter(e=>e.qaOnly);assert.deepEqual(extra.map(e=>e.speciesIndex),[229,230]);
+ for(const e of extra){const bytes=fs.readFileSync(new URL('../'+e.src,import.meta.url));assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),e.sha256);assert.equal(bytes.readUInt32BE(16),1254);assert.equal(bytes.readUInt32BE(20),1254);}
+ const html=fs.readFileSync(new URL('../alternate-form-qa.html',import.meta.url),'utf8');assert.ok(html.includes('qa-database-hero-portraits.r1.json'));
+});
