@@ -60,8 +60,8 @@
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
       "frames": [
         {
-          "src": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm02_01/frame-00.webp",
-          "sha256": "930dcd6253af5a9d26c71546ccdf0b420d7fd75c0ff5e66df0ed4218655ae6b0",
+          "src": "assets/production/cage/navy-base-r1-20261015/fields/field_cm02_01/frame-00.webp",
+          "sha256": "892ce4f37d117895bca6f669803ef946c1dc89b6d9d3702b87469d4a96b1d8db",
           "durationMs": null,
           "durationRawTicks": null,
           "rasterWidthPx": 832,
@@ -77,6 +77,12 @@
         "canvasRecovery": {
           "method": "ORIGINAL_REVIEWED_MASTER_RE_RENDER",
           "provenance": "assets/production/cage/source-bounds-r1-20261015/provenance.json",
+          "runtimeAcceptance": "PENDING_BROWSER_GATE"
+        },
+        "baseEdgeRefinement": {
+          "method": "JOINED_INSET_ORIGINAL_NAVY_FOUNDATION_MESH",
+          "provenance": "assets/production/cage/navy-base-r1-20261015/provenance.json",
+          "groundElevationChanged": false,
           "runtimeAcceptance": "PENDING_BROWSER_GATE"
         }
       },
@@ -100,10 +106,12 @@
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
       "frames": [
         {
-          "src": "assets/production/cage/final-intake-20261008/fields/field_cm03_01/frame-00.webp",
-          "sha256": "b757e18558a44b0f2ebd3052ae9de508258cff9b4670fe3b8215fb55bf6d70df",
+          "src": "assets/production/cage/navy-base-r1-20261015/fields/field_cm03_01/frame-00.webp",
+          "sha256": "eb80baa5994fc2b9ff55c525a428cb5fbc979e4d447aa1d911e6d8fa3e8f7c45",
           "durationMs": null,
-          "durationRawTicks": null
+          "durationRawTicks": null,
+          "rasterWidthPx": 1216,
+          "rasterHeightPx": 864
         }
       ],
       "intake": {
@@ -111,8 +119,30 @@
         "disposition": "SOURCE_PRESERVING_MATERIAL_REFINEMENT",
         "sourceNamespace": "cage/field_cm03_01",
         "runtimeAcceptance": "PENDING_BOUNDED_QA",
-        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing"
-      }
+        "objectCellClock": "UNKNOWN_REQUIRES_TRACE; not inferred from ground frame timing",
+        "baseEdgeRefinement": {
+          "method": "JOINED_INSET_ORIGINAL_NAVY_FOUNDATION_MESH",
+          "provenance": "assets/production/cage/navy-base-r1-20261015/provenance.json",
+          "groundElevationChanged": false,
+          "runtimeAcceptance": "PENDING_BROWSER_GATE",
+          "foregroundReuse": {
+            "sourceMasterSha256": "9b5d847bc91c587413be5baf600501ab60820517a05742a4a53af13a8cf297f0",
+            "maskManifest": "assets/production/cage/cm03-r18-foreground-20261009/manifest.json",
+            "originalRasterOriginInPadded": [
+              32,
+              32
+            ],
+            "originalObjectGeometryUnchanged": true
+          }
+        }
+      },
+      "visualPaddingNative": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "rasterPixelsPerNative": 4
     },
     {
       "fieldId": "field_cm04_01",
@@ -990,16 +1020,16 @@
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
       "frames": [
         {
-          "src": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-00.webp",
-          "sha256": "0917d613efdccd5f3177a11844d331a26589e72ed4a34e08c39053190782cbf6",
+          "src": "assets/production/cage/navy-base-r1-20261015/fields/field_cm39_01/frame-00.webp",
+          "sha256": "3ad9da5e81218743cb64d299fb17ae6b51a96212d775208c9d79eb5a37b489fc",
           "durationMs": 334.30226226176285,
           "durationRawTicks": 20,
           "rasterWidthPx": 448,
           "rasterHeightPx": 512
         },
         {
-          "src": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-01.webp",
-          "sha256": "b7fb200850748fbbb4a795f92433de30a71bb5ed622d8e1787ace49951cdf883",
+          "src": "assets/production/cage/navy-base-r1-20261015/fields/field_cm39_01/frame-01.webp",
+          "sha256": "037e1cc5a7c19c3450c24ce0d7fa2689e8d5bee0de0d55b21aa28a07a5f2a730",
           "durationMs": 334.30226226176285,
           "durationRawTicks": 20,
           "rasterWidthPx": 448,
@@ -1015,6 +1045,12 @@
         "canvasRecovery": {
           "method": "ORIGINAL_REVIEWED_MASTER_RE_RENDER",
           "provenance": "assets/production/cage/source-bounds-r1-20261015/provenance.json",
+          "runtimeAcceptance": "PENDING_BROWSER_GATE"
+        },
+        "baseEdgeRefinement": {
+          "method": "JOINED_INSET_ORIGINAL_NAVY_FOUNDATION_MESH",
+          "provenance": "assets/production/cage/navy-base-r1-20261015/provenance.json",
+          "groundElevationChanged": false,
           "runtimeAcceptance": "PENDING_BROWSER_GATE"
         }
       },

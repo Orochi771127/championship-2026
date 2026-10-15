@@ -13,9 +13,23 @@ const FIELDS=Object.freeze([
   masterHash:'dd731a1d27cec5cc19ecf67682e20a26bc3fd86c873f5e9e3c3b39b87ea28670',
   depthAuthority:'EXACT_FINAL_MASTER_Z0_CONTACT_GROUND_PROJECTION'}
 ]);
+// One reviewed derivative only: exact new bytes, original mask/master identity,
+// fixed original dimensions and the PR35 padding contract. Never a generic hash bypass.
+function reviewedNavyBase(config,field){
+ const frame=field?.frames?.[0],reuse=field?.intake?.baseEdgeRefinement?.foregroundReuse;
+ return config.fieldId==='field_cm03_01'
+  &&frame?.sha256==='eb80baa5994fc2b9ff55c525a428cb5fbc979e4d447aa1d911e6d8fa3e8f7c45'
+  &&frame.src==='assets/production/cage/navy-base-r1-20261015/fields/field_cm03_01/frame-00.webp'
+  &&field.frames.length===1&&frame.rasterWidthPx===1216&&frame.rasterHeightPx===864
+  &&field.worldWidthPx===1152&&field.worldHeightPx===800&&field.nativeWidthPx===288&&field.nativeHeightPx===200
+  &&field.rasterPixelsPerNative===4&&['left','top','right','bottom'].every(k=>field.visualPaddingNative?.[k]===8)
+  &&reuse?.sourceMasterSha256===config.masterHash&&reuse.maskManifest===config.manifest
+  &&reuse.originalObjectGeometryUnchanged===true&&JSON.stringify(reuse.originalRasterOriginInPadded)==='[32,32]';
+}
 function eligible(config,manifest,placements,location){
+ const field=manifest?.fields?.find(f=>f.fieldId===config.fieldId);
  return isOriginalRuntimeLocation(location)&&manifest?.assetId==='art:cage:final-intake:20261008'
-  &&manifest.fields?.find(f=>f.fieldId===config.fieldId)?.frames?.[0]?.sha256===config.sourceHash
+  &&(field?.frames?.[0]?.sha256===config.sourceHash||reviewedNavyBase(config,field))
   &&placements.some(p=>p.fieldId===config.fieldId);
 }
 export function cm03ForegroundEligible(manifest,placements,location=globalThis.location){
@@ -90,18 +104,29 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   const bases=new Map();
   const key=(fieldId,x,y)=>`${fieldId}:${x}:${y}`;
   const collect=object=>{
-    if(object.texture&&object.label?.startsWith('runtime map art '))
-      bases.set(key(object.label.slice('runtime map art '.length),object.x,object.y),object);
+    if(object.texture&&object.label?.startsWith('runtime map art ')){
+      const fieldId=object.label.slice('runtime map art '.length),field=manifest.fields.find(f=>f.fieldId===fieldId);
+      for(const p of placements.filter(p=>p.fieldId===fieldId)){
+        const rect=p.sourceRect??{x:0,y:0,width:field.worldWidthPx,height:field.worldHeightPx};
+        const padding=field.visualPaddingNative,unit=art.field.nativePixelWorldScale;
+        const offsetX=padding&&rect.x===0?-padding.left*unit:0;
+        const offsetY=padding&&rect.y===0?-padding.top*unit:0;
+        if(object.x===p.x+offsetX&&object.y===p.y+offsetY)
+          bases.set(key(fieldId,p.x,p.y),{base:object,offsetX,offsetY});
+      }
+    }
     for(const child of object.children??[])collect(child);
   };
   collect(art.displayObject);
   const groups=[];let disposed=false,parent=null;
   try {
     for(const piece of plan){
-      const base=bases.get(key(piece.fieldId,piece.sourceTileX,piece.sourceTileY));
+      const borrowed=bases.get(key(piece.fieldId,piece.sourceTileX,piece.sourceTileY)),base=borrowed?.base;
       if(!base?.texture)throw Error('CAGE_FOREGROUND_BASE_TILE_MISSING');
       const root=new PIXI.Container({label:'cage foreground '+piece.id});root.zIndex=piece.depth;root.eventMode='none';
       const sprite=new PIXI.Sprite(base.texture);sprite.width=base.width;sprite.height=base.height;
+      // Masks/depths stay in nominal coordinates; only the borrowed padded quad moves.
+      sprite.x=borrowed.offsetX;sprite.y=borrowed.offsetY;
       const mask=new PIXI.Graphics();for(const rect of piece.maskRects)mask.rect(...rect);mask.fill(0xffffff);
       root.addChild(sprite,mask);sprite.mask=mask;groups.push({root,piece});
     }
@@ -118,7 +143,9 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
       objectCount:bundles.reduce((n,b)=>n+b.data.objects.length,0),spriteCount:groups.length,
       deliveredPackedRgbaBytes:bundles.reduce((n,b)=>n+b.data.objects.reduce((n,o)=>n+o.width*o.height*4,0),0),additionalDecodedTextureBytes:0,
       maskRectangleCount:plan.reduce((n,p)=>n+p.maskRects.length,0),sourceHash:bundles.length===1?bundles[0].config.sourceHash:null,
-      sourceHashes:Object.fromEntries(bundles.map(b=>[b.data.fieldId,b.config.sourceHash])),disposed,
+      sourceHashes:Object.fromEntries(bundles.map(b=>[b.data.fieldId,b.config.sourceHash])),
+      baseSourceHashes:Object.fromEntries(bundles.map(b=>[b.data.fieldId,manifest.fields.find(f=>f.fieldId===b.data.fieldId).frames[0].sha256])),
+      paddedBaseFieldIds:bundles.filter(b=>manifest.fields.find(f=>f.fieldId===b.data.fieldId).visualPaddingNative).map(b=>b.data.fieldId),disposed,
       depthAuthority:bundles.length===1?bundles[0].config.depthAuthority:'EXACT_MASTER_GROUND_PROJECTION_PER_FIELD',
       timer:'NONE',attached:Boolean(parent),sampling:'SHARED_BASE_QUAD_WITH_STENCIL'};}
 
@@ -127,3 +154,4 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
     async dispose(){if(disposed)return;disposed=true;for(const {root}of groups)if(!root.destroyed){root.parent?.removeChild(root);root.destroy({children:true});}
       parent=null;await art.dispose();}});
 }
+

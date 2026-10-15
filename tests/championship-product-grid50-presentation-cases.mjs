@@ -194,3 +194,37 @@ test('unpadded fields retain legacy crop dimensions and zero origin exactly',asy
     await art.dispose();
   }
 });
+
+import {createHash} from 'node:crypto';
+test('navy base refinement is limited to the three reviewed fields and retains phase clocks',()=>{
+  const provenance=JSON.parse(fs.readFileSync('assets/production/cage/navy-base-r1-20261015/provenance.json','utf8'));
+  assert.equal(provenance.groundElevationChanged,false);assert.equal(provenance.sourceRecoveryBatchExcluded,true);
+  assert.deepEqual([...new Set(provenance.frames.map(x=>x.fieldId))].sort(),['field_cm02_01','field_cm03_01','field_cm39_01']);
+  assert.equal(provenance.frames.length,4);
+  for(const row of provenance.frames){
+    const field=paddedManifest.fields.find(f=>f.fieldId===row.fieldId),frame=field.frames[row.phase];
+    assert.deepEqual(frame,row.candidateFrame);
+    assert.equal(frame.durationMs,row.previousFrame.durationMs);assert.equal(frame.durationRawTicks,row.previousFrame.durationRawTicks);
+    assert.equal(createHash('sha256').update(fs.readFileSync(frame.src)).digest('hex'),frame.sha256);
+    assert.equal(row.proposal.nominalGridAndAnchorsUnchanged,true);assert.equal(row.proposal.allOriginalGeometryTransformsMaterialsUnchanged,true);
+  }
+  const garden=paddedManifest.fields.find(f=>f.fieldId==='field_cm18_01');
+  assert.ok(garden.frames[0].src.startsWith('assets/production/cage/source-bounds-r1-20261015/'));
+  assert.equal(garden.intake.baseEdgeRefinement,undefined);
+});
+test('owner navy arrangement and track wrap preserve the exact logical product-grid anchors',async()=>{
+  for(const slots of [[4,20,26],[4,15,7]]){
+    const placements=[waiting,...[1,2,33].map((d,i)=>({moduleId:`championship:2026:cage:${d}`,slotIndex:slots[i]}))];
+    assert.equal(validateProductRanch(placements),true);
+    const args={layoutVersion:PRODUCT_RANCH_GRID,placements};
+    assert.deepEqual(createRanchCageArtPlan({manifest:paddedManifest,...args}),createRanchCageArtPlan({manifest,...args}));
+    const plan=createRanchCageArtPlan({manifest:paddedManifest,...args});
+    if(slots[1]===15){
+      const fragments=plan.placements.filter(p=>p.fieldId==='field_cm03_01');assert.equal(fragments.length,2);
+      const art=await loadRuntimeMapArtTileSet({PIXI:paddingPixi(),manifest:paddedManifest,placements:fragments,wrapWidthPx:plan.wrapWidthPx,presentationMode:plan.mode,productGrid:plan.productGrid,placementEvidence:'NAVY_WRAP_TEST'});
+      const [a,b]=art.displayObject.children;assert.equal(a.x+a.width,plan.wrapWidthPx);assert.equal(b.x,0);
+      assert.equal(a.texture.frame.x+a.texture.frame.width,b.texture.frame.x);assert.equal(b.texture.frame.x+b.texture.frame.width,1216);
+      await art.dispose();
+    }
+  }
+});

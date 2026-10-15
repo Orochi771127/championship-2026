@@ -10,7 +10,11 @@ import {prototypeRanchExpansion,RANCH_DECKS_LAYOUT} from '../src/championship/ca
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url),'utf8'));
 const data=read('assets/production/cage/cm03-r18-foreground-20261009/manifest.json');
-const manifest=read('assets/production/cage/final-intake-20261008/manifest.json');
+const paddedManifest=read('assets/production/cage/final-intake-20261008/manifest.json');
+// Retain all original compatibility cases using the hash-locked original CM03.
+const manifest=structuredClone(paddedManifest),legacy=manifest.fields.find(f=>f.fieldId==='field_cm03_01');
+legacy.frames=[{src:data.sourceComposite.src,sha256:data.sourceComposite.sha256,durationMs:null,durationRawTicks:null}];
+delete legacy.visualPaddingNative;delete legacy.rasterPixelsPerNative;delete legacy.intake.baseEdgeRefinement;
 const placements=[{fieldId:'field_cm03_01',x:400,y:0,slotIndex:2,sourceRect:{x:0,y:96,width:1152,height:704}}];
 test('foreground admits only authorized locations and the exact accepted final CM03 source',()=>{
  assert.equal(cm03ForegroundEligible(manifest,placements,{hostname:'127.0.0.1'}),true);
@@ -119,7 +123,7 @@ test('CM03 and CM24 share one foreground owner, base textures and disposal witho
 
 // Use the production compositor and loader together: the earlier foreground
 // doubles had only flat children and could not reveal folded band failures.
-function foldedPixi(){
+function foldedPixi(activeManifest=manifest){
  const loaded=[],unloaded=[],textures=[],objects=[];
  class Container{
   constructor(options={}){Object.assign(this,options);this.children=[];this.x=0;this.y=0;
@@ -134,25 +138,25 @@ function foldedPixi(){
  class Graphics extends Container{constructor(){super();this.rects=[];}rect(...r){this.rects.push(r);return this;}fill(){return this;}}
  class Rectangle{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}}
  class Texture{constructor(args){Object.assign(this,args);textures.push(this);}destroy(source){assert.equal(source,false);assert.ok(!this.destroyed);this.destroyed=true;}}
- const fields=new Map(manifest.fields.flatMap(f=>f.frames.map(frame=>[frame.src,f])));
+ const fields=new Map(activeManifest.fields.flatMap(f=>f.frames.map(frame=>[frame.src,{...f,frame}])));
  const PIXI={Container,Sprite,AnimatedSprite,Graphics,Rectangle,Texture,Assets:{
-  async load(src){loaded.push(src);const f=fields.get(src);assert.ok(f);return {source:{},frame:{x:0,y:0,width:f.worldWidthPx,height:f.worldHeightPx}};},
+  async load(src){loaded.push(src);const f=fields.get(src);assert.ok(f);return {source:{},frame:{x:0,y:0,width:f.frame.rasterWidthPx??f.worldWidthPx,height:f.frame.rasterHeightPx??f.worldHeightPx}};},
   async unload(src){unloaded.push(src);}
  }};
  return {PIXI,loaded,unloaded,textures,objects};
 }
-function annexArtPlan(entries){
+function annexArtPlan(entries,activeManifest=manifest){
  const definitions=listCageDefinitions();
- return composeRanchArtPlan({manifest,layoutVersion:RANCH_DECKS_LAYOUT,expansion:prototypeRanchExpansion(),unlockedCount:20,
+ return composeRanchArtPlan({manifest:activeManifest,layoutVersion:RANCH_DECKS_LAYOUT,expansion:prototypeRanchExpansion(),unlockedCount:20,
   placements:[originalStartingRanch().placements.find(p=>p.moduleId.includes('waiting-room')),
    ...entries.map(([index,slotIndex])=>({moduleId:definitions[index].moduleId,slotIndex}))]});
 }
-async function foldedResult(entries){
- const h=foldedPixi(),plan=annexArtPlan(entries);
- const art=await loadRuntimeMapArtTileSet({PIXI:h.PIXI,manifest,placements:plan.placements,residentViewport:plan.residentViewport,
+async function foldedResult(entries,activeManifest=manifest){
+ const h=foldedPixi(activeManifest),plan=annexArtPlan(entries,activeManifest);
+ const art=await loadRuntimeMapArtTileSet({PIXI:h.PIXI,manifest:activeManifest,placements:plan.placements,residentViewport:plan.residentViewport,
   wrapWidthPx:plan.wrapWidthPx,fold:plan.fold,presentationMode:plan.mode});
  const count=h.loaded.length;
- const result=await withCageForeground({PIXI:h.PIXI,art,manifest,placements:plan.placements,location:{hostname:'localhost'},baseHref:'http://localhost/',
+ const result=await withCageForeground({PIXI:h.PIXI,art,manifest:activeManifest,placements:plan.placements,location:{hostname:'localhost'},baseHref:'http://localhost/',
   fetchImpl:async url=>({ok:true,json:async()=>String(url).includes('cm24-final')?cm24:data})});
  assert.equal(h.loaded.length,count,'foreground borrows loaded base textures');
  const layer=new h.PIXI.Container();result.foreground.attach(layer);
@@ -229,4 +233,56 @@ test('partial folded allocation failure releases overlays without destroying own
  assert.ok(h.objects.filter(o=>o.label?.startsWith('cage foreground ')).every(o=>o.destroyed));
  assert.equal(h.unloaded.length,0);assert.ok(h.textures.every(t=>!t.destroyed),'only the art owner can release textures');
  await art.dispose();assert.deepEqual([...h.unloaded].sort(),[...h.loaded].sort());
+});
+
+
+import {createRanchCageArtPlan} from '../src/championship/presentation/raisingRanchArtPlan.js';
+import {PRODUCT_RANCH_GRID} from '../src/championship/cage/productRanchGrid.js';
+import {WAITING_ROOM_MODULE} from '../src/championship/cage/nativeRanchLayout.js';
+test('navy derivative admits only exact reviewed pixels, original geometry identity and padding origin',()=>{
+ assert.equal(cm03ForegroundEligible(paddedManifest,placements,{hostname:'localhost'}),true);
+ for(const mutate of [
+  f=>f.frames[0].sha256='unreviewed',f=>f.frames[0].src='other.webp',f=>f.frames[0].rasterWidthPx++,
+  f=>f.worldWidthPx++,f=>f.nativeHeightPx++,f=>f.rasterPixelsPerNative=2,f=>f.visualPaddingNative.left=7,
+  f=>f.intake.baseEdgeRefinement.foregroundReuse.sourceMasterSha256='other geometry',
+  f=>f.intake.baseEdgeRefinement.foregroundReuse.maskManifest='other masks',
+  f=>f.intake.baseEdgeRefinement.foregroundReuse.originalObjectGeometryUnchanged=false,
+  f=>f.intake.baseEdgeRefinement.foregroundReuse.originalRasterOriginInPadded=[0,0],
+  f=>delete f.intake.baseEdgeRefinement.foregroundReuse
+ ]){const m=structuredClone(paddedManifest);mutate(m.fields.find(f=>f.fieldId===data.fieldId));assert.equal(cm03ForegroundEligible(m,placements,{hostname:'localhost'}),false);}
+ const bad=structuredClone(data);bad.masterSha256='other geometry';assert.throws(()=>cageForegroundPlan(bad,placements),/SOURCE_MISMATCH/);
+});
+function assertNominalMaskAlignment(result,layer,parts,plan){
+ assert.equal(layer.children.length,parts.length);
+ for(let i=0;i<parts.length;i++){
+  const p=parts[i],root=layer.children[i],sprite=root.children[0];
+  const source=plan.placements.find(q=>q.fieldId===p.fieldId&&q.x===p.sourceTileX&&q.y===p.sourceTileY);assert.ok(source);
+  const rect=source.sourceRect??{x:0,y:0};const isPadded=p.fieldId==='field_cm03_01',pad=isPadded?32:0;
+  for(const [x,y]of p.maskRects){
+   assert.equal((sprite.x??0)+(rect.x+x+pad-sprite.texture.frame.x),x,'mask x samples its original nominal pixel');
+   assert.equal((sprite.y??0)+(rect.y+y+pad-sprite.texture.frame.y),y,'mask y samples its original nominal pixel');
+  }
+ }
+ assert.equal(result.getDiagnostics().foreground.additionalDecodedTextureBytes,0);
+}
+test('padded CM03 real Grid50 owner and wrap sprites preserve original masks, depths and UV correspondence',async()=>{
+ for(const slotIndex of [20,15]){
+  const h=foldedPixi(paddedManifest),plan=createRanchCageArtPlan({manifest:paddedManifest,layoutVersion:PRODUCT_RANCH_GRID,placements:[{moduleId:WAITING_ROOM_MODULE,slotIndex:0},{moduleId:'championship:2026:cage:2',slotIndex}]});
+  const art=await loadRuntimeMapArtTileSet({PIXI:h.PIXI,manifest:paddedManifest,...plan,presentationMode:plan.mode});
+  const result=await withCageForeground({PIXI:h.PIXI,art,manifest:paddedManifest,placements:plan.placements,location:{hostname:'localhost'},baseHref:'http://localhost/',fetchImpl:async()=>({ok:true,json:async()=>data})});
+  const layer=new h.PIXI.Container();result.foreground.attach(layer);
+  const parts=cageForegroundPlan(data,plan.placements,{wrapWidthPx:plan.wrapWidthPx});assertNominalMaskAlignment(result,layer,parts,plan);
+  for(const fit of [{x:12,y:168,scale:.5},{x:-113,y:-71,scale:.75}]){
+   result.foreground.syncViewport(fit);
+   parts.forEach((p,i)=>{const r=layer.children[i];assert.equal(r.zIndex,p.depth);assert.equal(r.x,fit.x+p.tileX*fit.scale);assert.equal(r.y,fit.y+p.tileY*fit.scale);assert.ok(p.depth-3<r.zIndex&&p.depth+3>r.zIndex);});
+  }
+  assert.equal(result.getDiagnostics().foreground.objectCount,14);await result.dispose();assert.deepEqual([...h.unloaded].sort(),[...h.loaded].sort());
+ }
+});
+test('padded CM03 upper crops and folded bands retain nominal stencils alongside unchanged CM24',async()=>{
+ for(const entries of [[[2,4],[23,10]],[[2,20],[23,26]]]){
+  const h=await foldedResult(entries,paddedManifest);
+  const parts=[...cageForegroundPlan(data,h.plan.placements,{unit:4,fold:h.art.field.fold,worldHeightPx:h.art.field.worldHeightPx}),...cageForegroundPlan(cm24,h.plan.placements,{unit:4,fold:h.art.field.fold,worldHeightPx:h.art.field.worldHeightPx})];
+  assertNominalMaskAlignment(h.result,h.layer,parts,h.plan);await h.result.dispose();
+ }
 });
