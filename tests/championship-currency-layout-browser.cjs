@@ -120,7 +120,14 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    };
    const before=await save();assert.equal(before.shop.bits,100000);assert.equal(before.flags.friendsPlaytest.diamonds,10000);
    await captureNormal('tutorial-on');
-   await page.locator('dialog[open] [data-action="exit"], .cm-tutorial-guidance [data-tutorial-action="exit"]:not(:disabled)').first().click();await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
+   const exitDeadline=Date.now()+90000;
+   while(await page.locator('.cm-tutorial-guidance').isVisible()){
+    if(Date.now()>exitDeadline)throw Error('Normal tutorial exit did not finish');
+    const dialogExit=page.locator('dialog[open] [data-action="exit"]'),bannerExit=page.locator('.cm-tutorial-guidance [data-tutorial-action="exit"]');
+    const target=await dialogExit.isVisible()?dialogExit:bannerExit;
+    if(await target.isVisible()&&await target.isEnabled()){try{await target.click({timeout:1500});}catch(error){if(!/Timeout|detached/.test(error.message))throw error;}}
+    await page.waitForTimeout(100);
+   }await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
    const after=await save();assert.equal(after.shop.bits,100000);assert.equal(after.flags.friendsPlaytest.diamonds,10000);await captureNormal('tutorial-off');
    if(!diagnostic){assert.equal(evidence.normal[0].geometry.bar.h,evidence.normal[1].geometry.bar.h);assert.equal(evidence.normal[0].geometry.parts.currencies.y,evidence.normal[1].geometry.parts.currencies.y);}
   }

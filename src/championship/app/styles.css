@@ -1167,6 +1167,8 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 /* Wallet width must not depend on balance digits or transient save notices.
    Keep the existing calendar / wallet flex arrangement and <=420px row policy. */
 .cm-status-bar__save-slot { display: contents; }
+/* Raising Save stays a real 44px control in wide phone layouts too. */
+.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save { min-width: 44px; min-height: 44px; }
 .cm-status-bar__compact-value { display: none; }
 .cm-status-bar__currencies .cm-status-bar__bits {
   min-height: 44px; padding: 0; border: 0; border-radius: var(--r-control);

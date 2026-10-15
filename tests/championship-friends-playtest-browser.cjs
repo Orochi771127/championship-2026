@@ -102,6 +102,84 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   }
   const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
  }
+ // Separate installed QA profile: normal editor clicks only, never real player data.
+ async function sourceCornerReview(){
+  // Long visual sweeps can cross midnight. Acknowledge only the ordinary new-date UI.
+  async function clearCalendar(){
+   // Native lifecycle completion can launch a separate evolution ceremony.
+   // Wait for the real hit-test target, not just the native lifecycle flag.
+   for(;;){
+    await page.waitForFunction(()=>{
+     const layer=document.querySelector('.int-rh2-lifecycle'),calendar=document.querySelector('.int-rh2-calendar');
+     if(calendar&&!calendar.hidden&&!calendar.disabled)return true;
+     if(layer&&!layer.hidden||document.querySelector('.cm-ceremony'))return false;
+     const canvas=document.querySelector('#cm-root[data-active-screen="RAISING_HOME"] canvas');if(!canvas)return false;
+     const box=canvas.getBoundingClientRect();return [180,260,Math.min(360,box.height-150)].some(y=>document.elementFromPoint(box.right-35,box.top+y)===canvas);
+    });
+    const calendar=page.locator('.int-rh2-calendar');
+    if(!await calendar.isVisible())return;
+    await calendar.click();await page.waitForTimeout(250);
+    evidence.assertions.push({sourceCornerCalendarAcknowledged:true,normalUi:true});write();
+   }
+  }
+  await fresh('source-corners');const loadedPaddedUrls=new Set();page.on('response',r=>{if(r.ok()&&r.url().includes('source-bounds-r1-20261015/'))loadedPaddedUrls.add(r.url());});await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
+  await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
+  await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
+  const installed=await saved();
+  for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]}]){
+   await page.setViewportSize({width:1280,height:800});await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
+   while(await page.locator('.cm-cage-facility:not([disabled])').count())await page.locator('.cm-cage-facility:not([disabled])').first().click();
+   const specs=[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
+   for(const [i,spec] of specs.entries()){
+    const row=page.locator('.cm-vs2-cage-tray__item').filter({has:page.locator(`img[src*="field_cm${spec.id}_01"]`)});
+    assert.equal(await row.count(),1,'Exact field image identifies one owned facility');await row.click();
+    const slot=page.locator(`.cm-vs2-cage-slot[data-slot-index="${scenario.slots[i]}"]`);
+    assert.equal(await slot.getAttribute('data-unlocked'),'true');assert.equal(await slot.getAttribute('data-filled'),'false');await slot.click();
+   }
+   await page.locator('#cm-root[data-active-screen="CAGE_EDIT"] .cm-vs2-footer button.cm-vs2-action--primary').click();
+   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
+   const placed=await saved();
+   assert.deepEqual(placed.cageEdit.placements.map(p=>({moduleId:p.moduleId,slotIndex:p.slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),[
+    {moduleId:'championship:2026:cage:waiting-room',slotIndex:0},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
+   ].sort((a,b)=>a.moduleId.localeCompare(b.moduleId)));
+   assert.deepEqual(placed.shop,installed.shop,'Editor-only inspection must preserve entire wallet and inventory');await continueSaved();
+   // The existing legacy helper reaches upper headroom through real tool swipes.
+   await legacyTopContour('08-source-'+scenario.name);
+   for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
+    await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);
+    await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();await page.waitForFunction(()=>document.body.dataset.tool==='clean');
+    const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+    // Top-headroom proof was captured above; lift the field 100px so lower tips clear the toolbar.
+    if(viewport.width===1280){
+     await clearCalendar();const box=await canvas.boundingBox();assert.ok(box);
+     const start=await canvas.evaluate((canvas,box)=>[260,320,380].map(y=>({x:box.width-35,y})).find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),box);
+     assert.ok(start,'Lower-tip framing must begin on unobstructed canvas');
+     await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
+     await page.mouse.move(box.x+start.x,box.y+start.y-100,{steps:20});await page.mouse.up();await page.waitForTimeout(250);
+    }
+    const count=viewport.width<500?9:6;
+    for(let pan=0;pan<count;pan++){
+     // Real elapsed time: two 170ms samples bracket the 334.302ms sea phases.
+     for(let frame=0;frame<3;frame++){await page.waitForTimeout(170);await clearCalendar();await shot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);}
+     await clearCalendar();
+     const box=await canvas.boundingBox();assert.ok(box&&box.width>250&&box.height>200);
+     const candidates=[180,260,Math.min(360,box.height-150)].map(y=>({x:box.width-35,y}));
+     const start=await canvas.evaluate((canvas,{box,candidates})=>candidates.find(({x,y})=>document.elementFromPoint(box.x+x,box.y+y)===canvas),{box,candidates});
+     assert.ok(start,'Pan origin must be ordinary unobstructed canvas');
+     await page.mouse.move(box.x+start.x,box.y+start.y);await page.mouse.down();
+     await page.mouse.move(box.x+Math.max(25,start.x-Math.min(420,box.width-70)),box.y+start.y,{steps:20});await page.mouse.up();await page.waitForTimeout(200);
+    }
+    await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();
+   }
+   const resourceUrls=[...loadedPaddedUrls];
+   for(const asset of ['field_cm02_01/frame-00.webp','field_cm18_01/frame-00.webp','field_cm39_01/frame-00.webp','field_cm39_01/frame-01.webp']){
+    assert.ok(resourceUrls.some(url=>url.includes('source-bounds-r1-20261015/fields/'+asset)),'Exact padded phase must load: '+asset);
+   }
+   await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,installed.shop);await continueSaved();
+   evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom','three unchanged source-art styles']});write();
+  }
+ }
+
  async function wallet(amount){const button=page.locator('.cm-status-bar__diamond');await button.waitFor({state:'visible'});assert.equal(digits(await button.innerText()),amount);assert.match(await button.getAttribute('aria-label'),/測試/);}
  try{
   browser=await chromium.launch({channel:'chromium',headless:true,chromiumSandbox:true});evidence.browserVersion=browser.version();
@@ -208,6 +286,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,old.shop);assert.deepEqual(legacyAfterPurchase.cageEdit.placements,old.cageEdit.placements);
   evidence.assertions.push({oldQaOneTimeDiamonds:10000,afterPurchaseAndReload:9000});
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
+  await sourceCornerReview();
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
   evidence.status='PASS';write();console.log('CHAMPIONSHIP_FRIENDS_PLAYTEST_BROWSER_PASS');
