@@ -67,7 +67,7 @@ test("the saved entitlement record is versioned and refuses anything it does not
   assert.deepEqual(prototypeRanchExpansion(), { version: 1, decks: 1, grant: RANCH_EXPANSION_GRANT_PROTOTYPE });
   assert.deepEqual(normalizeRanchExpansion({ version: 1, decks: 1, grant: RANCH_EXPANSION_GRANT_PROTOTYPE }), prototypeRanchExpansion());
   assert.equal(normalizeRanchExpansion(null), null);
-  for (const bad of [{ version: 2, decks: 1, grant: RANCH_EXPANSION_GRANT_PROTOTYPE }, { version: 1, decks: 2, grant: RANCH_EXPANSION_GRANT_PROTOTYPE },
+  for (const bad of [{ version: 2, decks: 1, grant: RANCH_EXPANSION_GRANT_PROTOTYPE }, { version: 1, decks: 3, grant: RANCH_EXPANSION_GRANT_PROTOTYPE },
     { version: 1, decks: 1, grant: "PAID" }, { version: 1, decks: 1, grant: RANCH_EXPANSION_GRANT_PROTOTYPE, price: 100 }, [], "x"]) {
     assert.throws(() => normalizeRanchExpansion(bad), /RANCH_EXPANSION/, JSON.stringify(bad));
   }
@@ -94,7 +94,9 @@ test("the annex keeps every original shape rule inside its own ten slots", () =>
   assert.equal(validateExpandedRanch([...start, { moduleId: moduleOf(2), slotIndex: 20 }], 14, null), false);
   assert.equal(isAnnexSlot(19), false);
   assert.equal(isAnnexSlot(29), true);
-  assert.equal(isAnnexSlot(30), false);
+  assert.equal(isAnnexSlot(30), true);
+  assert.equal(isAnnexSlot(39), true);
+  assert.equal(isAnnexSlot(40), false);
 });
 
 test("a ranch that never takes the grant keeps its frame and save exactly", () => {

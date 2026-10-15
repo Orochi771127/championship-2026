@@ -1006,6 +1006,8 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     // to see what the expansion is; a granted one shows the real cells.
     const preview = !annex && cage.layoutVersion === NATIVE_RANCH_LAYOUT;
     annexLabel.hidden = !annex && !preview; annexBoard.hidden = !annex && !preview;
+    // The QA grant may expose the full ten-column annex; legacy grants keep five.
+    annexBoard.style.width = (preview || (cage.expansion?.annexSlotCount ?? 0) > 10) ? '508px' : '270px';
     annexBoard.dataset.preview = preview ? 'true' : 'false';
     if (preview) {
       annexBoard.setAttribute('role', 'img');
