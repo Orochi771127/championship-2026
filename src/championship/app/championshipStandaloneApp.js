@@ -60,7 +60,8 @@ import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRai
 // prototype) the same ring continued into its annex.
 import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnPosition as nativeRaisingSpawnPosition,
   ranchRaisingEntryPosition as nativeRaisingEntryPosition} from "../raising/nativeRaisingRanchRing.js";
-import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast} from "../raising/nativeRaisingFood.js";
+import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast,reconcileNativeFoodReservations} from "../raising/nativeRaisingFood.js";
+import {separateNativeRaisingGroundActors} from '../raising/nativeGroundSpacing.js';
 import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raising/nativeRaisingHomeState.js";
 import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
 import {projectNativeRaisingCalendar} from '../raising/nativeRaisingCalendar.js';
@@ -617,6 +618,7 @@ export function createChampionshipStandaloneApp({
         if(result.search||result.landed){const previous=signals.get(food.cageDefinitionIndex)??{};
           signals.set(food.cageDefinitionIndex,{search:previous.search||result.search,landed:previous.landed||result.landed});}
       }
+      reconcileNativeFoodReservations(raisingActors.values(),raisingFoods);
       for(const id of ids.sort((a,b)=>raisingPoolSlots[a]-raisingPoolSlots[b])) {
         const actor=nativeRaisingActor(id);
         if(!actor)continue;
@@ -634,6 +636,8 @@ export function createChampionshipStandaloneApp({
         if(result.landed){storeNativeRaisingPositions();savePort.markDirty();}
         if(result.evolutionStarted){publishRaising();return;}
       }
+      reconcileNativeFoodReservations(raisingActors.values(),raisingFoods);
+      if(raisingGround&&separateNativeRaisingGroundActors(raisingActors.values(),raisingGround).changed)changed=true;
       raisingDirtySignals.clear();
     }
     if(raisingGround)storeNativeRaisingHome();
@@ -1368,7 +1372,7 @@ export function createChampionshipStandaloneApp({
       actor.positionQ12=[Math.trunc(x)*4096,Math.trunc(y)*4096,0];actor.destinationQ12=[...actor.positionQ12];
       actor.cageDefinitionIndex=cage.definitionIndex;
       if(actor.speciesIndex>=8)writeRaisingNativeProfile(instanceId,enterNativeRaisingCage(actor,raisingNativeProfile(instanceId),{
-        previousDefinition,ground:raisingGround,season:requireSession().getRaisingHomeSnapshot().season}, {next:nextGameplayRandom}));
+        previousDefinition,ground:raisingGround,foods:raisingFoods,season:requireSession().getRaisingHomeSnapshot().season}, {next:nextGameplayRandom}));
       storeNativeRaisingPositions();storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;
     },
 

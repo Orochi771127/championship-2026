@@ -368,7 +368,9 @@
     "src/championship/text/battleOpeningText.js",
     "src/championship/database/databaseEvolutionConditions.js",
     "src/championship/database/databaseStories.js",
-    "src/championship/presentation/databaseHeroPortraits.js"
+    "src/championship/presentation/databaseHeroPortraits.js",
+    "src/championship/raising/nativeGroundSpacing.js",
+    "src/championship/field/groundFootpointSeparation.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -9715,6 +9717,8 @@
     "assets/production/database-portraits-b1-20261014/B110.webp",
     "assets/production/database-portraits-b1-20261014/B111.webp",
     "assets/production/database-portraits-b1-20261014/B112.webp",
+    "src/championship/raising/nativeGroundSpacing.js",
+    "src/championship/field/groundFootpointSeparation.js",
     "assets/production/medal-name-corrections-20261014/manifest.json",
     "assets/production/medal-name-corrections-20261014/medals/title-03-vector-partition-grid.png",
     "assets/production/medal-name-corrections-20261014/medals/title-03-vector-partition.png",
@@ -45051,7 +45055,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "8bfcd0f2c101ba9b0d39f5cb938a63b8886f9db51c3e28d967426e98031ca5ab"
+        "sha256": "54925c344f8e11792ade918dd6e1fdaf93ceaa96808eaac30ee49598fbf36436"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -45303,7 +45307,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "f433f24ce8dd0d32a3387d439d6be01492486378d537af057a8f60484be573b8"
+        "sha256": "63a76720e7e79c00248bf68d8824765d550b09d43dd227493e6e892ba705306f"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -45903,7 +45907,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-        "sha256": "e45d80a4b5fabafc03d4c9e15a766e9f04a7be743452e2c2e3c1b5d5f57d291d"
+        "sha256": "f3e7725c5c2322a9bf3d46d52a91194aa7b949f200acaadfbd4c6e24fd06b251"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -46407,11 +46411,11 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingActivity.js",
-        "sha256": "21da8951709ffc5c5b152ddfee96d490cc28128404b65e751dd580081061e2c8"
+        "sha256": "ed675ac33205cd92990d4ef19a87e4cfbea5e85972e4970113b7af875c2cf7cb"
       },
       {
         "path": "src/championship/raising/nativeRaisingActor.js",
-        "sha256": "894a38088863110df89b07715f7aa9420eea085ad6ff8d5f828b2927ec38436e"
+        "sha256": "c41234144adea5fe2132625a444f8bfd59f9bfd3ce2e92e5494f41f87ddc8541"
       },
       {
         "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -46431,7 +46435,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingFood.js",
-        "sha256": "aa51ad3547b52f6b6ded6fda320feb0a6b1515e292cf4c9d12bff372c99c4359"
+        "sha256": "daff5f81732f9b1a64394b34d12a29ef221a9fd93c6fcc995969104524536f42"
       },
       {
         "path": "src/championship/raising/nativeRaisingGround.js",
@@ -46459,7 +46463,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingMovement.js",
-        "sha256": "a992e5929124572fbf4fe92629a39c0efca4b6f47b40307c97be36ee179f1225"
+        "sha256": "c98823935ac22f63e6bcd83e8dcff649ee4c6484bf5195752c266ac48b4d6a2d"
       },
       {
         "path": "src/championship/raising/nativeRaisingOvernight.js",
@@ -47132,6 +47136,14 @@
       {
         "path": "assets/production/database-portraits-b1-20261014/B112.webp",
         "sha256": "5ba32d312e07e8b8c8ca0095c2d05fc099f48940defaa451f47e1ff4e29922e0"
+      },
+      {
+        "path": "src/championship/raising/nativeGroundSpacing.js",
+        "sha256": "aea48532f007e9c175decadef507ba2eea44ce85b43db4f99c52f1261d23d774"
+      },
+      {
+        "path": "src/championship/field/groundFootpointSeparation.js",
+        "sha256": "942a1f9139d17deb90b8988bcf1bec2aa2e28feb1773f7e9b8ecfe9d590264e9"
       },
       {
         "path": "assets/production/medal-name-corrections-20261014/manifest.json",
