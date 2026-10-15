@@ -699,6 +699,50 @@ function fieldFallback(host, error) {
   });
 }
 
+// A module fetch is not a save parse failure. Recognize only browser module
+// loader messages, never generic fetch/asset errors or arbitrary TypeErrors.
+function isDynamicModuleLoadError(error) {
+  const message = typeof error?.message === 'string' ? error.message : '';
+  return /^(?:Failed to fetch dynamically imported module(?::|$)|error loading dynamically imported module(?::|$)|Importing a module script failed\.?$)/i.test(message);
+}
+
+function createScreenLoadRecoveryView(error) {
+  const status = document.createElement('section'), message = document.createElement('p');
+  const reload = document.createElement('button'), leave = document.createElement('button');
+  let disposed = false, busy = false;
+  status.className = 'int-rh2-resident-assets'; status.dataset.phase = 'error';
+  status.dataset.loadOwner = 'screen'; status.dataset.moduleLoadFailed = String(isDynamicModuleLoadError(error));
+  message.setAttribute('role', 'alert');
+  setText(message, isDynamicModuleLoadError(error) ? 'MODULE_LOAD_ERROR' : 'SCREEN_LOAD_ERROR');
+  reload.type = leave.type = 'button';
+  reload.dataset.loadAction = 'reload'; leave.dataset.loadAction = 'return';
+  setText(reload, 'FIELD_LOAD_RELOAD'); setText(leave, 'FIELD_LOAD_RETURN');
+  status.append(message, reload, leave); root.replaceChildren(status);
+  async function saveAndNavigate(navigate) {
+    if (disposed || busy) return;
+    busy = true; reload.disabled = leave.disabled = true;
+    try {
+      // Use the same safe-route/lifecycle guard as autosave. In particular,
+      // a failed Hunt view must not persist an entry fee without its hunt.
+      const save = safeSaveRoute();
+      if (!save || save()?.phase !== 'SAVED') { setText(message, 'FIELD_LOAD_SAVE_FAILED'); return; }
+      if (!disposed) await navigate();
+    } catch (failure) {
+      if (!disposed) setText(message, 'FIELD_LOAD_SAVE_FAILED');
+      console.warn('CHAMPIONSHIP_SCREEN_RECOVERY', failure);
+    } finally { busy = false; reload.disabled = leave.disabled = false; }
+  }
+  reload.addEventListener('click', () => { void saveAndNavigate(() => {
+    recoveryDiagnostics.record('DOCUMENT_RELOAD', { source: 'screen-load-reload' });
+    location.reload();
+  }); });
+  leave.addEventListener('click', () => { void saveAndNavigate(() => returnToTitle('screen-load-return')); });
+  return Object.freeze({ isPlayable: false, render() {},
+    relabel() { retranslate(status); },
+    dispose() { disposed = true; status.remove(); }
+  });
+}
+
 async function mountRaisingHome() {
   raisingSource = createRaisingPresentationSource(app);
   const source = raisingSource;
@@ -779,6 +823,8 @@ async function mountRaisingHome() {
       function start() {
         if (closed) return;
         attempt?.cancel(); effects?.cancel(); scene?.dispose(); scene = null; residentStates = [];
+        delete status.dataset.moduleLoadFailed;
+        status.append(retry, cancel, leave, reloadGame);
         expansionCta.hidden = true;
         // The hard cap is the watchdog's longest load; stalling ends it sooner.
         // Only finished requests count as progress (bytes in flight are not
@@ -857,8 +903,16 @@ async function mountRaisingHome() {
               recoveryDiagnostics.record('LOAD_FAILED',{area:'raising',error});
               stopTracking(); progress.fail();
               root.dataset.fieldFallback = 'true';
-              show('error', error?.message === 'LOAD_TIMEOUT' ? 'FIELD_LOAD_TIMEOUT' : error?.message === 'LOAD_STALLED' ? 'FIELD_LOAD_STALLED'
+              const moduleFailed = isDynamicModuleLoadError(error);
+              show('error', moduleFailed ? 'MODULE_LOAD_ERROR' : error?.message === 'LOAD_TIMEOUT' ? 'FIELD_LOAD_TIMEOUT' : error?.message === 'LOAD_STALLED' ? 'FIELD_LOAD_STALLED'
                 : owner.signal.reason?.name === 'AbortError' ? 'FIELD_LOAD_CANCELLED' : 'FIELD_LOAD_ERROR');
+              if (moduleFailed) {
+                // Retrying the same cached module URL cannot recover a release
+                // rollover. Keep the save-safe document reload explicit.
+                status.dataset.moduleLoadFailed = 'true';
+                retry.hidden = true; reloadGame.hidden = false;
+                status.insertBefore(reloadGame, retry);
+              }
               if (error?.name !== 'AbortError') console.warn('CHAMPIONSHIP_RAISING_LOAD', error);
             }
           }
@@ -1588,8 +1642,8 @@ async function mountCurrentScreen() {
   mounting = new Promise((resolve) => { release = resolve; });
   await previous;
 
+  const target = app.getScreen();
   try {
-    const target = app.getScreen();
     // Multiple publications may queue behind one async mount. Re-check after
     // acquiring it, so a queued HUD update cannot remount the same scene.
     if (target === mountedScreen) return;
@@ -1597,6 +1651,9 @@ async function mountCurrentScreen() {
     systemBackgrounds.leave();
     view?.dispose?.();
     view = null;
+    // The disposed route is no longer mounted, even if navigation returns to
+    // it while this load is pending. Keep the clock and queued mounts honest.
+    mountedScreen = null;
     if (target !== CHAMPIONSHIP_SCREENS.RAISING_HOME) raisingSource = null;
 
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
@@ -1678,6 +1735,17 @@ async function mountCurrentScreen() {
       document.querySelector('button[data-menu-id="SYSTEM"]')?.focus({preventScroll:true});
     }
     recoveryDiagnostics.record('SCREEN');
+  } catch (error) {
+    recoveryDiagnostics.record('LOAD_FAILED', { area: 'screen', error });
+    console.warn('CHAMPIONSHIP_SCREEN_LOAD', error);
+    // A queued newer route owns its UI. Otherwise mount a non-playable error
+    // view so neither a blank page nor the clock can treat failure as ready.
+    if (app.getScreen() === target) {
+      view?.dispose?.();
+      view = createScreenLoadRecoveryView(error);
+      mountedScreen = target;
+      root.dataset.activeScreen = target;
+    }
   } finally {
     release();
   }
@@ -2299,3 +2367,4 @@ function boot() {
 boot();
 
 export { adaptFeedback };
+

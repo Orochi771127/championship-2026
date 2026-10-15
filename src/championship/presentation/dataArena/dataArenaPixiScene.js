@@ -30,9 +30,14 @@ const CROWD_TINT = Object.freeze({ PERFECT_DODGE: 0x7fe9ff, ELEMENT_CHAIN: 0xff9
   CORE_OUT: 0x7fd0ff, MULTI_KILL: 0xff6ad5, BOSS_DOWN: 0xffffff, CHEER: 0xffd34d, VICTORY: 0xfff2a8, DEFEAT: 0x4a5a80 });
 
 export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), quality = "high", reducedMotion = false, shake = true, partnerId }) {
+  // Construction is transactional: even a renderer failure before a scene is
+  // returned must release this scene's resources, not the shared Application.
+  const rollback = [];
+  try {
   const PIXI = stage.PIXI;
   const textures = createDataArenaTextures(PIXI);
   if (!textures) throw new Error("DATA_ARENA_CANVAS_UNAVAILABLE");
+  rollback.push(() => textures.destroy());
   const grid = sim.grid;
   const MAP = grid.map;
   const cell = grid.cell, worldWidth = grid.cols * cell, worldHeight = grid.rows * cell;
@@ -41,7 +46,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const harborLayout = Boolean(MAP.stage);
   const rich = quality !== "low";
   const root = stage.createSceneRoot("data arena");
+  rollback.push(() => { root.parent?.removeChild(root); root.destroy({ children: true, texture: false, textureSource: false }); });
   const unmark = stage.markScene("cm-data-arena-canvas");
+  rollback.push(unmark);
   const world = new PIXI.Container({ label: "arena world" });
   const screen = new PIXI.Container({ label: "arena screen overlay" });
   root.addChild(world, screen);
@@ -50,6 +57,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // cost about 70% of a software-rendered frame. Low quality bakes at half
   // resolution. Chunks are re-baked after a WebGL context restore.
   const ground = new PIXI.Graphics(); ground.label = "arena ground source";
+  rollback.push(() => ground.destroy());
   const groundChunks = new PIXI.Container({ label: "arena ground" });
   const water = new PIXI.Container({ label: "arena water" });
   const waterStrips = rectsOf(T.WATER).map(([c0, r0, w, h]) => {
@@ -82,6 +90,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   for (let cy = 0; cy < worldHeight; cy += CHUNK) for (let cx = 0; cx < worldWidth; cx += CHUNK) {
     const width = Math.min(CHUNK, worldWidth - cx), height = Math.min(CHUNK, worldHeight - cy);
     const texture = PIXI.RenderTexture.create({ width, height, resolution: bakeScale });
+    rollback.push(() => texture.destroy(true));
     const sprite = new PIXI.Sprite(texture);
     sprite.position.set(cx, cy);
     groundChunks.addChild(sprite);
@@ -95,6 +104,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   }
   bakeGround();
   const unsubscribeRestore = stage.onContextRestored?.(() => bakeGround()) ?? (() => {});
+  rollback.push(unsubscribeRestore);
   function drawGround() {
     const g = ground;
     g.rect(0, 0, worldWidth, worldHeight).fill({ color: 0x141c2b });
@@ -1003,4 +1013,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       live.length = 0; pool.length = 0; cellPool.length = 0; fans.length = 0;
     }
   });
+  } catch (error) {
+    for (const release of rollback.reverse()) {
+      try { release(); } catch (cleanupError) { console.error("DATA_ARENA_SCENE_CLEANUP_FAILED", cleanupError); }
+    }
+    throw error;
+  }
 }

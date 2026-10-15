@@ -18,6 +18,8 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "MODULE_LOAD_ERROR": "A screen module could not load. The game may have updated, or the connection may have failed. Save and reload the game; do not clear your save.",
+  "SCREEN_LOAD_ERROR": "The screen could not load. Save and reload the game, or save and return to the title.",
   "CAGE_SLOT_RANK_LOCKED": "Slot {n} is locked. Unlocks at tamer rank {rank}.",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "System background",
@@ -1053,4 +1055,5 @@ export const UNTRANSLATED_PROPER_NOUNS = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+
 

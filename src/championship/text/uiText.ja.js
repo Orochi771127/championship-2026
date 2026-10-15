@@ -6,6 +6,8 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "MODULE_LOAD_ERROR": "画面プログラムを読み込めませんでした。ゲームの更新または通信の中断が原因の可能性があります。保存してゲームを再読み込みしてください。セーブデータを消す必要はありません。",
+  "SCREEN_LOAD_ERROR": "画面を読み込めませんでした。保存してゲームを再読み込みするか、保存してタイトルに戻ってください。",
   "CAGE_SLOT_RANK_LOCKED": "{n}番のマスは未開放です。テイマーランク{rank}で開放されます。",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "システム背景",
@@ -1282,4 +1284,5 @@ export const UNTRANSLATED_PROPER_NOUNS_JA = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+
 

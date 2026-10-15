@@ -7,6 +7,8 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "MODULE_LOAD_ERROR": "畫面程式未能載入，可能是遊戲剛更新或連線中斷。請保存並重新載入遊戲；不需要清除存檔。",
+  "SCREEN_LOAD_ERROR": "畫面未能載入。請保存並重新載入遊戲，或保存並返回標題。",
   "CAGE_SLOT_RANK_LOCKED": "第 {n} 格尚未開放，馴獸師階級達到 {rank} 後開放。",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "系統背景",
@@ -285,6 +287,29 @@ export const UI_COPY = Object.freeze({
 // Exact authored-label aliases. Resolve before filling parameters so a player's
 // nickname is never rewritten. Other locales retain their existing dictionaries.
 const PARTNER_LABELS_ZH = Object.freeze({
+  // Exact authored-source aliases for entry eligibility and system fallbacks.
+  "數碼獸冠軍賽 — 2026": "網線拍檔：雜訊彼端的錦標賽 — 2026",
+  "從現在起，你也是數碼獸馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。": "從現在起，你也是馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。",
+  "每四年舉辦一次的\n數碼獸冠軍賽。": "每四年舉辦一次的\n冠軍賽。",
+  "取得參賽資格，\n正是身為真正數碼獸馴獸師的證明。": "取得參賽資格，\n正是身為真正馴獸師的證明。",
+  "而今天，你也迎來了\n參加數碼獸冠軍賽的機會。\n\n奪下勝利吧！\n數碼獸冠軍賽！": "而今天，你也迎來了\n參加冠軍賽的機會。\n\n奪下勝利吧！\n冠軍賽！",
+  "已登錄的數碼獸": "已登錄的夥伴",
+  "前往傳送門捕捉數碼獸": "前往傳送門捕捉夥伴",
+  "點選數碼獸查看狀態・左右滑動查看牧場": "點選夥伴查看狀態・左右滑動查看牧場",
+  "選取的數碼獸": "選取的夥伴",
+  "上一隻數碼獸": "上一隻夥伴",
+  "下一隻數碼獸": "下一隻夥伴",
+  "這隻數碼獸的詳細資料暫時無法顯示。": "這隻夥伴的詳細資料暫時無法顯示。",
+  "數碼獸消失了。": "夥伴消失了。",
+  "這隻數碼獸的個體資料尚未完整。": "這隻夥伴的個體資料尚未完整。",
+  "這隻數碼獸還太幼小，暫時無法參賽。": "這隻夥伴還太幼小，暫時無法參賽。",
+  "這隻數碼獸目前的身體狀況無法參賽。": "這隻夥伴目前的身體狀況無法參賽。",
+  "這隻數碼獸不符合本場比賽的參賽條件。": "這隻夥伴不符合本場比賽的參賽條件。",
+  "密碼中沒有可參戰的數碼獸。": "密碼中沒有可參戰的夥伴。",
+  "密碼中含有目前不能參戰的數碼獸。": "密碼中含有目前不能參戰的夥伴。",
+  "這隻數碼獸還不能密碼化。": "這隻夥伴還不能密碼化。",
+  "輸入兩組隊伍密碼。每組密碼可還原最多 3 隻數碼獸。": "輸入兩組隊伍密碼。每組密碼可還原最多 3 隻夥伴。",
+  "拖曳地面移動視野 · 輕觸數碼獸選取": "拖曳地面移動視野 · 輕觸夥伴選取",
   "選擇參賽數碼獸": "選擇參賽拍檔",
   "目前沒有符合這場比賽條件的數碼獸。": "目前沒有符合這場比賽條件的拍檔。",
   "將自己培育的數碼獸分成兩隊，每隊最多 3 隻。": "將自己培育的拍檔分成兩隊，每隊最多 3 隻。",
@@ -513,4 +538,5 @@ export const TAMER_FIELD_LABELS = new Proxy(TAMER_FIELD_LABELS_ZH, {
     return zh ? uiText(zh) : undefined;
   }
 });
+
 
