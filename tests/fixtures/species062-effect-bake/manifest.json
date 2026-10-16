@@ -1,0 +1,316 @@
+{
+  "scope": "TECHNICAL_BROWSER_CANVAS_EFFECT_BAKE_ONLY",
+  "density": 4,
+  "logicalCanvas": [
+    64,
+    64
+  ],
+  "rasterCanvas": [
+    256,
+    256
+  ],
+  "originRaster": [
+    112,
+    148
+  ],
+  "sources": [
+    {
+      "cell": 0,
+      "file": "base000.png",
+      "sourcePath": "/workspace/scratch/44db6e123fa7/character-animation-refresh-20261016/species-062-action-refresh/grounded-seven-density4-shift8-v1/main-cell_000-grounded-density4.png",
+      "sha256": "7bcf117574ef335caa0ffef76ec2a2ceacd0282de29f60577a87b82166d2a1e2",
+      "alphaSha256": "a74cdc03cc92ec3ce56251a98215539632b98f813e2e478acd2c92081980f66e",
+      "registration": "grounded+8 inherited from accepted idle only"
+    },
+    {
+      "cell": 8,
+      "file": "base008.png",
+      "sourcePath": "/workspace/scratch/44db6e123fa7/character-animation-refresh-20261016/species-062-action-refresh/reaction008-stroke047048-review-export/main-cell_008-candidate-density4.png",
+      "sha256": "9be2e8717d9ab00bec3ec5f0c9a7460c5fe8ea1d8a5f95b39169828847194fed",
+      "alphaSha256": "061a7d6d6e975c7f9c9dc0ed4c103e9802d258bc6a3edcfa328e27d0b99434fb",
+      "registration": "provisional inherited unchanged, no grounded+8"
+    },
+    {
+      "cell": 10,
+      "file": "base010.png",
+      "sourcePath": "/workspace/scratch/44db6e123fa7/character-animation-refresh-20261016/species-062-action-refresh/hit-originalpose-v1-review-export/main-cell_010-technical-256.png",
+      "sha256": "095c32fdc004c61f7dd8ac0bdb15b3e388d4d3a149f37dfadf482614034cefb0",
+      "alphaSha256": "8966969ca6a6f5396959e319702284318b7097fc2ebfab1ec33a508e7fbad82e",
+      "registration": "provisional inherited unchanged, no grounded+8"
+    }
+  ],
+  "recipes": [
+    {
+      "cell": 44,
+      "baseCell": 8,
+      "effect": "palette",
+      "nativeSourcePath": "/workspace/scratch/44db6e123fa7/character-animation-refresh-20261016/species-062-action-refresh/original-renamon-reference/cells/main-cell_044.png",
+      "nativeSourceSha256": "6d044912e34d799def0bee08e38207f3ddfbf38fea586bf8be3557a6d8748852",
+      "palette": [
+        [
+          115,
+          8,
+          24
+        ],
+        [
+          139,
+          41,
+          0
+        ],
+        [
+          156,
+          41,
+          0
+        ],
+        [
+          189,
+          57,
+          0
+        ],
+        [
+          222,
+          106,
+          0
+        ],
+        [
+          222,
+          156,
+          16
+        ],
+        [
+          255,
+          255,
+          106
+        ]
+      ],
+      "status": "CANDIDATE_PENDING_VISUAL_REVIEW"
+    },
+    {
+      "cell": 45,
+      "baseCell": 8,
+      "effect": "dark-eye",
+      "nativeSourcePath": "/workspace/scratch/44db6e123fa7/character-animation-refresh-20261016/species-062-action-refresh/original-renamon-reference/cells/main-cell_045.png",
+      "nativeSourceSha256": "8d060117aaeffb7dfd53c8f397cf6f0cbd7073020e695f25fe21d56db6bb6fb9",
+      "palette": [
+        [
+          32,
+          32,
+          32
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "status": "CANDIDATE_PENDING_VISUAL_REVIEW",
+      "eyeMask": {
+        "shape": "ellipse",
+        "center": [
+          119,
+          67
+        ],
+        "radii": [
+          1.6,
+          1.65
+        ],
+        "rotationRadians": -0.3,
+        "coordinateSource": "Viewed current256 base eye, not native species coordinates",
+        "constraint": "White effect highlight clipped to unchanged base alpha, not new anatomical features"
+      },
+      "alphaDeviation": "Intentionally uses current accepted008 alpha; native045 vs008192pixel difference not carried forward, allowed by root for candidate review."
+    },
+    {
+      "cell": 46,
+      "baseCell": 0,
+      "effect": "dark-eye",
+      "nativeSourcePath": "/workspace/scratch/44db6e123fa7/character-animation-refresh-20261016/species-062-action-refresh/original-renamon-reference/cells/main-cell_046.png",
+      "nativeSourceSha256": "09ecc243621a2857b2f384a8c774c7ffe90daae26cd3dad07ea528fb92d853ba",
+      "palette": [
+        [
+          32,
+          32,
+          32
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "status": "CANDIDATE_PENDING_VISUAL_REVIEW",
+      "eyeMask": {
+        "shape": "ellipse",
+        "center": [
+          104.5,
+          68
+        ],
+        "radii": [
+          1.65,
+          1.2
+        ],
+        "rotationRadians": -0.3,
+        "coordinateSource": "Viewed current256 base eye, not native species coordinates",
+        "constraint": "White effect highlight clipped to unchanged base alpha, not new anatomical features"
+      }
+    },
+    {
+      "cell": 59,
+      "baseCell": 10,
+      "effect": "palette",
+      "nativeSourcePath": "/workspace/scratch/44db6e123fa7/character-animation-refresh-20261016/species-062-action-refresh/original-renamon-reference/cells/main-cell_059.png",
+      "nativeSourceSha256": "49422b773ffacaaeeaa2b7a7bf3666b73b6ec348fa9ef3d937e4d25950927d85",
+      "palette": [
+        [
+          32,
+          32,
+          32
+        ],
+        [
+          57,
+          57,
+          57
+        ],
+        [
+          123,
+          106,
+          82
+        ],
+        [
+          156,
+          139,
+          106
+        ],
+        [
+          189,
+          189,
+          131
+        ],
+        [
+          246,
+          238,
+          189
+        ],
+        [
+          255,
+          255,
+          230
+        ]
+      ],
+      "status": "CANDIDATE_PENDING_VISUAL_REVIEW"
+    },
+    {
+      "cell": 62,
+      "baseCell": 0,
+      "effect": "white",
+      "nativeSourcePath": "/workspace/scratch/44db6e123fa7/character-animation-refresh-20261016/species-062-action-refresh/original-renamon-reference/cells/main-cell_062.png",
+      "nativeSourceSha256": "c61470576977c10e3c287f9c2350d4259f08c75e7c6fed8f8b6b86e27250e0f6",
+      "palette": [
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "status": "CANDIDATE_PENDING_VISUAL_REVIEW"
+    }
+  ],
+  "nativeSequences": {
+    "26": {
+      "id": 26,
+      "name": "action_26",
+      "semanticAlias": null,
+      "semanticConfidence": "VERY_HIGH",
+      "playbackMode": 1,
+      "playback": "forward_loop",
+      "frames": [
+        {
+          "texture": "m237_renamon/main/cell_044",
+          "cell": 44,
+          "ticks": 6,
+          "millisecondsAt60Hz": 100
+        },
+        {
+          "texture": "m237_renamon/main/cell_008",
+          "cell": 8,
+          "ticks": 3,
+          "millisecondsAt60Hz": 50
+        },
+        {
+          "texture": "m237_renamon/main/cell_044",
+          "cell": 44,
+          "ticks": 9,
+          "millisecondsAt60Hz": 150
+        },
+        {
+          "texture": "m237_renamon/main/cell_045",
+          "cell": 45,
+          "ticks": 9,
+          "millisecondsAt60Hz": 150
+        }
+      ],
+      "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+    },
+    "27": {
+      "id": 27,
+      "name": "action_27",
+      "semanticAlias": null,
+      "semanticConfidence": "HIGH_RELATIONSHIP_EXACT_LABEL_UNRESOLVED",
+      "playbackMode": 1,
+      "playback": "forward_loop",
+      "frames": [
+        {
+          "texture": "m237_renamon/main/cell_046",
+          "cell": 46,
+          "ticks": 2,
+          "millisecondsAt60Hz": 33.333
+        }
+      ],
+      "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+    },
+    "36": {
+      "id": 36,
+      "name": "action_36",
+      "semanticAlias": null,
+      "semanticConfidence": "MEDIUM",
+      "playbackMode": 1,
+      "playback": "forward_loop",
+      "frames": [
+        {
+          "texture": "m237_renamon/main/cell_059",
+          "cell": 59,
+          "ticks": 37,
+          "millisecondsAt60Hz": 616.667
+        }
+      ],
+      "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+    },
+    "39": {
+      "id": 39,
+      "name": "action_39",
+      "semanticAlias": null,
+      "semanticConfidence": "HIGH_ROLE_EXACT_LABEL_UNRESOLVED",
+      "playbackMode": 1,
+      "playback": "forward_loop",
+      "frames": [
+        {
+          "texture": "m237_renamon/main/cell_062",
+          "cell": 62,
+          "ticks": 2,
+          "millisecondsAt60Hz": 33.333
+        }
+      ],
+      "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+    }
+  },
+  "subAlias059": {
+    "cell": 16,
+    "sequence": 11,
+    "ticks": 37
+  },
+  "semanticLimits": [
+    "046 native requester not resolved; only exact slot27/2tickhold and silhouettebase relationship verified",
+    "No context-registration acceptance inherited merely from baking",
+    "New accepted whitebluegold base untouched; these are action effects, not costume recoloring"
+  ]
+}

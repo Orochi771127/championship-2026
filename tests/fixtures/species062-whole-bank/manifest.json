@@ -1,0 +1,215 @@
+{
+  "baseline": {
+    "path": "assets/production/characters/accepted-20261010/m237_renamon-final-growth38-20261007/runtime.review.json",
+    "gitBlob": "c33caa682932bc5fcced3b9b162827a6716a82e3",
+    "sourceBankSha256": "10c1b3fd4ce0f815b44f790c854c087d1904f542ef39c2c3cf92622cb78f4981",
+    "artProfile": {
+      "style": "ORIGINAL_MATURE_RAW_CANDIDATE",
+      "scale": 4,
+      "filter": "nearest",
+      "logicalCanvas": [
+        64,
+        64
+      ],
+      "anchor": {
+        "x": 0.4375,
+        "y": 0.578125
+      },
+      "alphaBoundary": "TRANSPARENT",
+      "reviewOnly": true,
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "publicReleasePermitted": false,
+      "designVersion": "codex-down-bob-clean-alpha-r08-20261004",
+      "visualAccepted": false
+    },
+    "frames": {
+      "m237_renamon/main/cell_000": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -17.75,
+          12.5,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_001": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -15.75,
+          12.5,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_004": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -17.75,
+          15,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_005": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -15.25,
+          15.25,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_023": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.5,
+          -7.75,
+          12.5,
+          3
+        ]
+      },
+      "m237_renamon/main/cell_024": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.75,
+          -18.75,
+          12.75,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_025": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.25,
+          -17.75,
+          12.5,
+          2
+        ]
+      }
+    }
+  },
+  "scope": "COMPLETE_BANK_TEST_ONLY_NATIVE_TIMELINES_AND_REAL_SCENES",
+  "contextPairBudget": 16,
+  "contactSheetBudget": 4,
+  "sequenceCount": 53,
+  "slotCount": 81,
+  "density": 4,
+  "origin": [
+    112,
+    148
+  ],
+  "bankFiles": [
+    {
+      "file": "runtime.review.json",
+      "sha256": "05a30aac0e5c3a443c77bff1061cc4bb71a638562ecfcf7c18f74bac9a0e0cce",
+      "bytes": 62575
+    },
+    {
+      "file": "sub-atlas-00.png",
+      "sha256": "22a06dc50fce541ba07110749305ee0134f7d7e911f82219e3d244ade3e4d200",
+      "bytes": 339536
+    },
+    {
+      "file": "main-atlas-00.json",
+      "sha256": "6600caa15c0bc9e162b95d6f1845e5e0775a2e06fd23c81ad1c5d9ebbee23091",
+      "bytes": 27196
+    },
+    {
+      "file": "sub-atlas-00.json",
+      "sha256": "3ed5ca244e749b370060d7678d9a03d8ef7a430e65401cc6068a1d6f4dbbc518",
+      "bytes": 7911
+    },
+    {
+      "file": "main-atlas-00.png",
+      "sha256": "7896a136d84be8034b10b0b0c08474f3361459e3594ccb640262ebfc01b61844",
+      "bytes": 1045908
+    }
+  ],
+  "assemblyReceiptSha256": "dda66e3aafbc83e380dac45d669c965ebce179572aa029f80b2583bdaeacb756",
+  "nativeContractSha256": "88041a7a38265b2dc6ed6f405bc37d103e4c4f481c216c43dded27866b830433",
+  "noAdditionalOffsets": true,
+  "sceneAllocation": {
+    "raising": 2,
+    "hunt": 8,
+    "battle": 6
+  },
+  "limits": [
+    "Exact53numeric sequences and81decodedfullcanvases preserved by trimmed packing",
+    "Eight new gaitgroups/12slots only; contacts calibrated once, no globaloffset",
+    "Raising uses actual native sequence owner with controlled admission; Hunt verified native projection at Z0, not AI admission",
+    "Battle native opening, impact effects, recoil, density unchanged; tightalpha trim fixes actual production ellipse sizing",
+    "No production/main integration; fullpack visualacceptance pending gait and shadow review"
+  ],
+  "revisionScope": "COMBINED_GAIT_AND_ALPHA_TRIM_BATTLE_SHADOW_REVIEW",
+  "retainedPriorEvidence": {
+    "head": "0726ff02d2b90ae3db0a56f60e6ab6af0c1d925e",
+    "rendererRun": 38952323229,
+    "carryCancelRelease": "Passed earlier real actor context run, not duplicated here",
+    "wholePackVisualAcceptance": "HOLD_GAIT_REPLACEMENT_PENDING"
+  },
+  "registrationReview": "Five support corrections accepted f300512. Eight new calibrated gait groups pending native scene/stride review; no additional offsets."
+}

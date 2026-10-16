@@ -1,0 +1,1689 @@
+{
+  "scope": "SIX_FRAME_041_CLARITY_ONLY_NOT_SHIPPING_APPROVAL",
+  "commit": "a88a1123c34fde4a769df23d2903c14d671c9734",
+  "logicalOrigin": [
+    26,
+    41
+  ],
+  "logicalCanvas": [
+    64,
+    64
+  ],
+  "zooms": [
+    1,
+    1.5,
+    2.25
+  ],
+  "assets": [
+    {
+      "group": "current",
+      "cell": 0,
+      "path": "current-000.png",
+      "density": 4,
+      "sha256": "b3f99c2f7ff242bda48984650af4d461d5dd794be464cea8a81d5a81f1fb0b3b"
+    },
+    {
+      "group": "candidate",
+      "cell": 0,
+      "path": "candidate-000.png",
+      "density": 2,
+      "sha256": "2ba8c769fe170bcd39862ab16b010e8cb83b45397966264c0b3cfcaef09ffce4"
+    },
+    {
+      "group": "current",
+      "cell": 1,
+      "path": "current-001.png",
+      "density": 4,
+      "sha256": "208b8f55b855277716aad539a22544327e115f1929817c080178aada02c3ef9b"
+    },
+    {
+      "group": "candidate",
+      "cell": 1,
+      "path": "candidate-001.png",
+      "density": 2,
+      "sha256": "2a02db98d86435c3c4f1c3db2e90b19bf8dd14daad492a27c19ed54be6011128"
+    },
+    {
+      "group": "current",
+      "cell": 4,
+      "path": "current-004.png",
+      "density": 4,
+      "sha256": "c840f5fd7fabb4ab92d5b7c3bf277f627534c5260f9a933a4253ab1a33d9b43d"
+    },
+    {
+      "group": "candidate",
+      "cell": 4,
+      "path": "candidate-004.png",
+      "density": 2,
+      "sha256": "1fa3201979e3cd9452e44201c46bb0e4594abeba109dd110632cbaf87b419916"
+    },
+    {
+      "group": "current",
+      "cell": 5,
+      "path": "current-005.png",
+      "density": 4,
+      "sha256": "db5f830b06677b42f594e272a844781606a09c2bd54405c351b8bef6ca9059e4"
+    },
+    {
+      "group": "candidate",
+      "cell": 5,
+      "path": "candidate-005.png",
+      "density": 2,
+      "sha256": "b726fef29064e5bc490e064e0563c8eaa0ee62815e02f28c7badaa7bd06bc81a"
+    },
+    {
+      "group": "current",
+      "cell": 8,
+      "path": "current-008.png",
+      "density": 4,
+      "sha256": "428a99b89f61017c1ae5e92ee39c192f7f7e39668545c8d2388541e47b33b016"
+    },
+    {
+      "group": "candidate",
+      "cell": 8,
+      "path": "candidate-008.png",
+      "density": 2,
+      "sha256": "1c813fb0b158adc81fde1e2a28e446e9a1905241727d05abde44b713b34a68f4"
+    },
+    {
+      "group": "current",
+      "cell": 10,
+      "path": "current-010.png",
+      "density": 4,
+      "sha256": "63fb34d87e323598d620a029fe386ebb5db68d406c4e9971b8695b5013a67d3f"
+    },
+    {
+      "group": "candidate",
+      "cell": 10,
+      "path": "candidate-010.png",
+      "density": 2,
+      "sha256": "972b5d138bc29a3b3c690ebb77616f0db6eaa0a685428a97fcc8748d749da881"
+    }
+  ],
+  "sequences": [
+    {
+      "frames": [
+        {
+          "cell": 0,
+          "millisecondsAt60Hz": 516.667,
+          "texture": "m209_kamemon/main/cell_000",
+          "ticks": 31
+        },
+        {
+          "cell": 1,
+          "millisecondsAt60Hz": 366.667,
+          "texture": "m209_kamemon/main/cell_001",
+          "ticks": 22
+        }
+      ],
+      "id": 0,
+      "name": "action_00",
+      "playback": "forward_then_backward_once",
+      "playbackMode": 2,
+      "semanticAlias": null,
+      "semanticConfidence": "HIGH",
+      "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "frames": [
+        {
+          "cell": 4,
+          "millisecondsAt60Hz": 250,
+          "texture": "m209_kamemon/main/cell_004",
+          "ticks": 15
+        },
+        {
+          "cell": 5,
+          "millisecondsAt60Hz": 200,
+          "texture": "m209_kamemon/main/cell_005",
+          "ticks": 12
+        }
+      ],
+      "id": 2,
+      "name": "action_02",
+      "playback": "forward_then_backward_once",
+      "playbackMode": 2,
+      "semanticAlias": null,
+      "semanticConfidence": "HIGH",
+      "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "frames": [
+        {
+          "cell": 8,
+          "millisecondsAt60Hz": 616.667,
+          "texture": "m209_kamemon/main/cell_008",
+          "ticks": 37
+        }
+      ],
+      "id": 4,
+      "name": "action_04",
+      "playback": "forward_loop",
+      "playbackMode": 1,
+      "semanticAlias": null,
+      "semanticConfidence": "MEDIUM_HIGH",
+      "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "frames": [
+        {
+          "cell": 10,
+          "millisecondsAt60Hz": 116.667,
+          "texture": "m209_kamemon/main/cell_010",
+          "ticks": 7
+        }
+      ],
+      "id": 6,
+      "name": "action_06",
+      "playback": "forward_loop",
+      "playbackMode": 1,
+      "semanticAlias": null,
+      "semanticConfidence": "HIGH",
+      "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+    }
+  ],
+  "geometry": {
+    "frames": {
+      "m209_kamemon/main/cell_000": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.0,
+          -18.75,
+          15.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_001": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.75,
+          -15.75,
+          12.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_002": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.25,
+          -15.25,
+          13.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_003": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.0,
+          -13.5,
+          12.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_004": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.5,
+          -18.0,
+          12.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_005": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.5,
+          -16.25,
+          14.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_006": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.5,
+          -18.0,
+          12.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_007": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.5,
+          -16.25,
+          14.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_008": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -20.75,
+          13.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_009": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -0.5,
+          -12.0,
+          22.75,
+          0.0
+        ]
+      },
+      "m209_kamemon/main/cell_010": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.0,
+          -21.25,
+          11.5,
+          -1.0
+        ]
+      },
+      "m209_kamemon/main/cell_011": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.25,
+          -20.75,
+          9.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_012": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -18.75,
+          -16.75,
+          6.5,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_013": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -4.25,
+          -20.75,
+          14.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_014": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.5,
+          -16.5,
+          15.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_015": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -4.75,
+          -16.5,
+          22.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_016": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.5,
+          -10.5,
+          12.5,
+          0.75
+        ]
+      },
+      "m209_kamemon/main/cell_017": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -4.25,
+          -20.75,
+          14.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_018": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.5,
+          -16.5,
+          15.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_019": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.0,
+          -18.75,
+          10.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_020": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.5,
+          -20.75,
+          12.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_021": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.5,
+          -16.5,
+          14.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_022": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -14.75,
+          14.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_023": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.5,
+          -13.5,
+          19.75,
+          0.0
+        ]
+      },
+      "m209_kamemon/main/cell_024": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.75,
+          -20.75,
+          12.5,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_025": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.25,
+          -17.25,
+          12.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_026": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.75,
+          -11.25,
+          18.25,
+          0.0
+        ]
+      },
+      "m209_kamemon/main/cell_027": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -14.5,
+          -19.0,
+          12.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_028": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -14.0,
+          -16.25,
+          12.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_029": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.0,
+          -14.75,
+          15.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_030": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.25,
+          -14.75,
+          9.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_031": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.0,
+          -18.5,
+          13.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_032": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -14.75,
+          -16.75,
+          11.25,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_033": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.0,
+          -18.5,
+          13.5,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_034": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -14.75,
+          -16.75,
+          11.25,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_035": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.0,
+          -19.5,
+          15.0,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_036": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.5,
+          -19.0,
+          11.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_037": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.5,
+          -19.25,
+          12.25,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_038": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.5,
+          -16.0,
+          14.25,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_039": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.25,
+          -13.25,
+          13.75,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_040": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.5,
+          -13.5,
+          12.75,
+          0.25
+        ]
+      },
+      "m209_kamemon/main/cell_041": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -14.75,
+          -16.75,
+          10.75,
+          1.25
+        ]
+      },
+      "m209_kamemon/main/cell_042": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.0,
+          -14.75,
+          11.5,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_043": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -12.0,
+          17.75,
+          0.25
+        ]
+      },
+      "m209_kamemon/main/cell_044": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -20.75,
+          13.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_045": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -20.75,
+          13.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_046": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -20.75,
+          13.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_047": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -20.75,
+          13.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_048": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.0,
+          -18.75,
+          15.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_049": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.0,
+          -16.25,
+          14.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_050": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.0,
+          -20.5,
+          12.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_051": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.0,
+          -20.25,
+          13.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_052": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.75,
+          -17.0,
+          12.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_053": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.5,
+          -14.5,
+          11.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_054": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.0,
+          -24.5,
+          13.5,
+          -2.0
+        ]
+      },
+      "m209_kamemon/main/cell_055": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -14.75,
+          13.5,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_056": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.0,
+          -17.0,
+          15.0,
+          -0.75
+        ]
+      },
+      "m209_kamemon/main/cell_057": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.75,
+          -15.25,
+          14.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_058": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.5,
+          -19.5,
+          11.5,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_059": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.25,
+          -15.0,
+          14.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_060": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -18.25,
+          -20.75,
+          8.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/main/cell_061": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -18.25,
+          18.75,
+          -0.75
+        ]
+      },
+      "m209_kamemon/main/cell_062": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -0.5,
+          -12.0,
+          22.75,
+          0.0
+        ]
+      },
+      "m209_kamemon/main/cell_063": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -7.75,
+          -7.75,
+          12.5,
+          7.0
+        ]
+      },
+      "m209_kamemon/main/cell_064": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.0,
+          -18.75,
+          15.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_000": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.0,
+          -18.75,
+          15.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_001": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.75,
+          -15.75,
+          12.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_002": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.25,
+          -15.25,
+          13.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_003": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.0,
+          -13.5,
+          12.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_004": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -0.5,
+          -12.0,
+          22.75,
+          0.0
+        ]
+      },
+      "m209_kamemon/sub/cell_005": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.0,
+          -21.25,
+          11.5,
+          -1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_006": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.5,
+          -13.5,
+          19.75,
+          0.0
+        ]
+      },
+      "m209_kamemon/sub/cell_007": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.75,
+          -11.25,
+          18.25,
+          0.0
+        ]
+      },
+      "m209_kamemon/sub/cell_008": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.0,
+          -18.75,
+          15.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_009": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.0,
+          -16.25,
+          14.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_010": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.0,
+          -20.5,
+          12.0,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_011": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.0,
+          -20.25,
+          13.25,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_012": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -11.75,
+          -17.0,
+          12.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_013": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -12.5,
+          -14.5,
+          11.75,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_014": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.0,
+          -24.5,
+          13.5,
+          -2.0
+        ]
+      },
+      "m209_kamemon/sub/cell_015": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -14.75,
+          13.5,
+          1.0
+        ]
+      },
+      "m209_kamemon/sub/cell_016": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -18.25,
+          18.75,
+          -0.75
+        ]
+      },
+      "m209_kamemon/sub/cell_017": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          104,
+          164
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -0.5,
+          -12.0,
+          22.75,
+          0.0
+        ]
+      }
+    }
+  },
+  "notes": [
+    "Exact current native ticks and playback modes; mode1 single-frame holds, not invented loops.",
+    "Compare equal logical placement per panel; no fit-to-bounds.",
+    "DPR simulations in Chromium are not physical iPhone/WebKit.",
+    "Candidate alpha coverage differs but authored geometry remains locked."
+  ]
+}

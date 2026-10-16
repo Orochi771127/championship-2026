@@ -1,0 +1,413 @@
+{
+  "scope": "CANDIDATE_ONLY_TWO_FRAME_IDLE_NOT_RUNTIME_ACCEPTANCE",
+  "sequence": {
+    "id": 0,
+    "playbackMode": 2,
+    "loopStartFrame": 0,
+    "frames": [
+      {
+        "cell": 0,
+        "ticks": 31,
+        "texture": "0"
+      },
+      {
+        "cell": 1,
+        "ticks": 22,
+        "texture": "1"
+      }
+    ]
+  },
+  "logicalCanvas": [
+    64,
+    64
+  ],
+  "logicalOrigin": [
+    27,
+    38
+  ],
+  "zooms": [
+    2,
+    4,
+    6
+  ],
+  "registration": {
+    "method": "One shared uniform scale and translation, derived from frame000 only; unchanged for frame001. Full native canvas preserved before resampling.",
+    "provisionalDiagnosticOnly": true,
+    "scaleNativeInputToDensity8Raster": 0.1347708894878706,
+    "translationDensity8Raster": [
+      159.98530668595097,
+      167.47708894878707
+    ],
+    "logicalCanvas": [
+      64,
+      64
+    ],
+    "density": 8,
+    "outputCanvas": [
+      512,
+      512
+    ],
+    "runtimeOrigin": [
+      216,
+      304
+    ],
+    "runtimeOriginLogical": [
+      27,
+      38
+    ],
+    "frame000MeasuredContactAnchorNative": [
+      467.75,
+      1013.0
+    ],
+    "contactTargetLogical": [
+      27.878048780487806,
+      38
+    ],
+    "contactAnchorExplanation": "Provisional representative nearest-forepaw ground anchor: midpoint of its two lower claw x positions and lower y. Contact logical x follows old registration; runtime origin remains27,38 and is NOT generic bottom-center. Confirm final anatomy/contact convention before runtime registration.",
+    "scaleExplanation": "Old compiled main000 alpha128 width100 atdensity4 becomes200 atdensity8; frame000 alpha128 width1484 maps to200. This preserves old nominal width without stretching approved art. Height is not forced to old silhouette.",
+    "perFrameAutoFit": false,
+    "perFrameTranslation": false,
+    "anatomicalWarp": false,
+    "candidateMetadataWritten": false
+  },
+  "contactMeasurements": [
+    {
+      "landmark": "far_fore_left_tip",
+      "alphaThreshold": 128,
+      "searchRoi": [
+        70,
+        880,
+        125,
+        1024
+      ],
+      "frame0Native": [
+        92.0,
+        944
+      ],
+      "frame1Native": [
+        92.5,
+        944
+      ],
+      "deltaNative": [
+        0.5,
+        0.0
+      ],
+      "distanceNative": 0.5,
+      "deltaAtDensity8": [
+        0.0673854447439353,
+        0.0
+      ],
+      "deltaLogical": [
+        0.008423180592991913,
+        0.0
+      ]
+    },
+    {
+      "landmark": "far_fore_center_tip",
+      "alphaThreshold": 128,
+      "searchRoi": [
+        125,
+        880,
+        215,
+        1024
+      ],
+      "frame0Native": [
+        163.0,
+        950
+      ],
+      "frame1Native": [
+        163.5,
+        951
+      ],
+      "deltaNative": [
+        0.5,
+        1.0
+      ],
+      "distanceNative": 1.118033988749895,
+      "deltaAtDensity8": [
+        0.0673854447439353,
+        0.1347708894878706
+      ],
+      "deltaLogical": [
+        0.008423180592991913,
+        0.016846361185983826
+      ]
+    },
+    {
+      "landmark": "near_fore_left_tip",
+      "alphaThreshold": 128,
+      "searchRoi": [
+        375,
+        940,
+        465,
+        1024
+      ],
+      "frame0Native": [
+        411.0,
+        1010
+      ],
+      "frame1Native": [
+        413.5,
+        1009
+      ],
+      "deltaNative": [
+        2.5,
+        -1.0
+      ],
+      "distanceNative": 2.692582403567252,
+      "deltaAtDensity8": [
+        0.33692722371967654,
+        -0.1347708894878706
+      ],
+      "deltaLogical": [
+        0.04211590296495957,
+        -0.016846361185983826
+      ]
+    },
+    {
+      "landmark": "near_fore_center_tip",
+      "alphaThreshold": 128,
+      "searchRoi": [
+        490,
+        940,
+        580,
+        1024
+      ],
+      "frame0Native": [
+        524.5,
+        1013
+      ],
+      "frame1Native": [
+        526.0,
+        1013
+      ],
+      "deltaNative": [
+        1.5,
+        0.0
+      ],
+      "distanceNative": 1.5,
+      "deltaAtDensity8": [
+        0.2021563342318059,
+        0.0
+      ],
+      "deltaLogical": [
+        0.025269541778975738,
+        0.0
+      ]
+    },
+    {
+      "landmark": "near_hind_center_tip",
+      "alphaThreshold": 128,
+      "searchRoi": [
+        1160,
+        900,
+        1240,
+        1024
+      ],
+      "frame0Native": [
+        1197.0,
+        964
+      ],
+      "frame1Native": [
+        1198.0,
+        965
+      ],
+      "deltaNative": [
+        1.0,
+        1.0
+      ],
+      "distanceNative": 1.4142135623730951,
+      "deltaAtDensity8": [
+        0.1347708894878706,
+        0.1347708894878706
+      ],
+      "deltaLogical": [
+        0.016846361185983826,
+        0.016846361185983826
+      ]
+    },
+    {
+      "landmark": "far_hind_center_tip",
+      "alphaThreshold": 128,
+      "searchRoi": [
+        765,
+        870,
+        830,
+        1024
+      ],
+      "frame0Native": [
+        782.0,
+        913
+      ],
+      "frame1Native": [
+        783.0,
+        913
+      ],
+      "deltaNative": [
+        1.0,
+        0.0
+      ],
+      "distanceNative": 1.0,
+      "deltaAtDensity8": [
+        0.1347708894878706,
+        0.0
+      ],
+      "deltaLogical": [
+        0.016846361185983826,
+        0.0
+      ]
+    }
+  ],
+  "rawAlphaNotes": [
+    {
+      "path": "character-animation-refresh-20261016/species-035-action-refresh/idle-frame000-v1.png",
+      "alphaMax": 254,
+      "imageBoundaryMaxAlpha": 1
+    },
+    {
+      "path": "character-animation-refresh-20261016/species-035-action-refresh/idle-frame001-v1.png",
+      "alphaMax": 254,
+      "imageBoundaryMaxAlpha": 1
+    }
+  ],
+  "assets": [
+    {
+      "group": "current",
+      "frame": 0,
+      "path": "current-0.png",
+      "source": "character-animation-refresh-20261016/resolution-audit/source-availability/batch01/m202-original/final-r04/cells/main-cell_000.png",
+      "sourceSha256": "19e20e190bbb463cc56f10a9c34f050d6a240791a5c4ae2efe197e34ef39d275",
+      "sha256": "19e20e190bbb463cc56f10a9c34f050d6a240791a5c4ae2efe197e34ef39d275",
+      "bytes": 17908,
+      "density": 4,
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        76,
+        73,
+        176,
+        152
+      ],
+      "nativeBounds": [
+        -8.0,
+        -19.75,
+        17.0,
+        0.0
+      ],
+      "boundaryMaxAlpha": 0
+    },
+    {
+      "group": "current",
+      "frame": 1,
+      "path": "current-1.png",
+      "source": "character-animation-refresh-20261016/resolution-audit/source-availability/batch01/m202-original/final-r04/cells/main-cell_001.png",
+      "sourceSha256": "8f541f7de1e53810fe9efa2fd1a4124d3cea5d53655e8dd7a23a77591cb9c607",
+      "sha256": "8f541f7de1e53810fe9efa2fd1a4124d3cea5d53655e8dd7a23a77591cb9c607",
+      "bytes": 15643,
+      "density": 4,
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        77,
+        83,
+        176,
+        152
+      ],
+      "nativeBounds": [
+        -7.75,
+        -17.25,
+        17.0,
+        0.0
+      ],
+      "boundaryMaxAlpha": 0
+    },
+    {
+      "group": "candidate",
+      "frame": 0,
+      "path": "candidate-0.png",
+      "source": "character-animation-refresh-20261016/species-035-action-refresh/idle-frame000-v1.png",
+      "sourceSha256": "ea04f3c1b969fffa1f3a767ee2fe18fcd37535114c71d31436a1358ee688f3da",
+      "sha256": "4fad3d6e6dabfa8b57602c9dad59748c86a3e08e6823ea2a9d414fdb539271ed",
+      "bytes": 52000,
+      "density": 8,
+      "size": [
+        512,
+        512
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        165,
+        170,
+        365,
+        304
+      ],
+      "nativeBounds": [
+        -6.375,
+        -16.75,
+        18.625,
+        0.0
+      ],
+      "boundaryMaxAlpha": 0
+    },
+    {
+      "group": "candidate",
+      "frame": 1,
+      "path": "candidate-1.png",
+      "source": "character-animation-refresh-20261016/species-035-action-refresh/idle-frame001-v1.png",
+      "sourceSha256": "9566f1002dfb28cb6411ed5008fcb27a69a692af2ff4b59182334ceb0cfd425f",
+      "sha256": "dd13bb96042f37958af6b6649373d30e120068b7da70686d0f68d378af16c7a5",
+      "bytes": 50482,
+      "density": 8,
+      "size": [
+        512,
+        512
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        165,
+        174,
+        364,
+        304
+      ],
+      "nativeBounds": [
+        -6.375,
+        -16.25,
+        18.5,
+        0.0
+      ],
+      "boundaryMaxAlpha": 0
+    }
+  ],
+  "acceptanceNotes": {
+    "registrationStatus": "PROVISIONAL_NOT_SOURCE_EXACT",
+    "frame000SilhouetteOffsetVsCurrentNative": [
+      1.625,
+      3.0
+    ],
+    "topMotionNative": {
+      "current": 2.5,
+      "candidate": 0.5
+    },
+    "noAutomaticCorrection": true,
+    "derivedFilter": "single shared BICUBIC affine; no alpha threshold; interpolation may raise raw alpha254 to255",
+    "runtimeIntegration": "NONE; not80cell/53sequence acceptance"
+  }
+}

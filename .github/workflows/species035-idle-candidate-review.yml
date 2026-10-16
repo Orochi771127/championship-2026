@@ -1,0 +1,128 @@
+name: Species035 and062 idle candidate-only PIXI review
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/species035-idle-candidate-review.yml'
+      - 'tests/championship-species035-idle-candidate-review.mjs'
+      - 'tests/fixtures/species035-idle-candidate/**'
+      - 'tests/fixtures/species062-idle-candidate/**'
+      - 'scripts/review-species041-clarity.mjs'
+      - 'scripts/bake-species062-effects.mjs'
+      - 'scripts/review-species062-whole-*.mjs'
+      - 'scripts/whole-bank-battle-native-helper.mjs'
+      - 'tests/fixtures/species062-whole-bank/**'
+      - 'tests/fixtures/species062-effect-bake/**'
+      - 'scripts/review-species062-carried-context.mjs'
+      - 'tests/fixtures/species062-carried-context/**'
+      - 'scripts/review-species062-grounding-context.mjs'
+      - 'tests/fixtures/species062-grounding-context/**'
+      - 'scripts/review-species062-actions-resolution.mjs'
+      - 'tests/fixtures/species062-actions-resolution/**'
+      - 'tests/fixtures/species041-clarity/**'
+      - 'tests/ci-test-scope.v1.json'
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Check the dedicated actual-renderer runner
+        run: node --check tests/championship-species035-idle-candidate-review.mjs
+      - run: npx playwright install --with-deps chromium
+      - name: Build and validate the existing playtest artifact
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Review only two035 candidate frames against current reference; no runtime replacement
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/browser-qa/species035-idle-candidate
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/browser-qa/species035-idle-candidate/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/species035-idle-candidate/index.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/species035-idle-candidate/index.html > /dev/null
+          node scripts/review-species062-whole-sweep.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank
+          node scripts/review-species062-whole-grounding.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank/grounding
+          node scripts/review-species062-whole-battle.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank/battle
+          node scripts/bake-species062-effects.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-effect-bake
+          node tests/championship-species035-idle-candidate-review.mjs \
+            http://127.0.0.1:8765/ \
+            tests/fixtures/species035-idle-candidate/ \
+            .tmp/browser-qa/species035-idle-candidate
+          node tests/championship-species035-idle-candidate-review.mjs \
+            http://127.0.0.1:8765/ \
+            tests/fixtures/species062-idle-candidate/ \
+            .tmp/browser-qa/species062-idle-candidate
+          node --check scripts/review-species041-clarity.mjs
+          node scripts/review-species041-clarity.mjs \
+            http://127.0.0.1:8765/ \
+            .tmp/browser-qa/species041-clarity
+          node --check scripts/review-species062-actions-resolution.mjs
+          node scripts/review-species062-actions-resolution.mjs \
+            http://127.0.0.1:8765/ \
+            .tmp/browser-qa/species062-actions-resolution
+          node --check scripts/review-species062-grounding-context.mjs
+          node scripts/review-species062-grounding-context.mjs \
+            http://127.0.0.1:8765/ \
+            .tmp/browser-qa/species062-grounding-context
+          node --check scripts/review-species062-carried-context.mjs
+          node scripts/review-species062-carried-context.mjs \
+            http://127.0.0.1:8765/ \
+            .tmp/browser-qa/species062-carried-context
+      - name: Preserve bounded062 complete bank separately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: species062-whole-bank-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/browser-qa/species062-whole-bank/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve bounded062 effect bake separately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: species062-effect-bake-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/browser-qa/species062-effect-bake/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve bounded062 carried review separately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: species062-carried-context-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/browser-qa/species062-carried-context/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve real renderer screenshots and exact result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: species035-idle-candidate-renderer-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .tmp/browser-qa/species035-idle-candidate/*.png
+            .tmp/browser-qa/species035-idle-candidate/*.json
+            .tmp/browser-qa/species035-idle-candidate/server.log
+            .tmp/browser-qa/species062-idle-candidate/*.png
+            .tmp/browser-qa/species062-idle-candidate/*.json
+            .tmp/browser-qa/species041-clarity/*.png
+            .tmp/browser-qa/species041-clarity/*.json
+            .tmp/browser-qa/species062-actions-resolution/*.png
+            .tmp/browser-qa/species062-actions-resolution/*.json
+            .tmp/browser-qa/species062-grounding-context/*.png
+            .tmp/browser-qa/species062-grounding-context/*.json
+          if-no-files-found: warn
+          retention-days: 14

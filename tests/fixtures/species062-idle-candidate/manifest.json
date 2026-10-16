@@ -1,0 +1,349 @@
+{
+  "scope": "CANDIDATE_ONLY_TWO_FRAME_IDLE_NOT_RUNTIME_ACCEPTANCE",
+  "speciesId": "species-062",
+  "sequence": {
+    "id": 0,
+    "playbackMode": 2,
+    "loopStartFrame": 0,
+    "frames": [
+      {
+        "cell": 0,
+        "ticks": 31,
+        "texture": "0"
+      },
+      {
+        "cell": 1,
+        "ticks": 22,
+        "texture": "1"
+      }
+    ]
+  },
+  "logicalCanvas": [
+    64,
+    64
+  ],
+  "logicalOrigin": [
+    28,
+    37
+  ],
+  "zooms": [
+    2,
+    4,
+    6
+  ],
+  "registration": {
+    "coordinateConvention": "Continuous pixel-edge coordinates; each slot starts x0. A pixel occupies [x,x+1)\u00d7[y,y+1).",
+    "sharedSourceGroundAnchor": [
+      510,
+      877
+    ],
+    "sourceAnchorChoice": "Fixed across both frames. x510 is a rounded midpoint between visible near/far planted foot regions, not image bbox center. y877 is the common alpha>127 lower contact edge of the near foot. Far foot lies23px above it in the three-quarter projection; do not force both to a flat row. This is a declared QA registration assumption, not an original native semantic landmark.",
+    "sharedScaleRaster": 1,
+    "sharedScaleLogical": 0.03125,
+    "forwardEdgeMatrix": [
+      [
+        -1,
+        0,
+        1406
+      ],
+      [
+        0,
+        1,
+        307
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "inverseEdgeMatrix": [
+      [
+        -1,
+        0,
+        1406
+      ],
+      [
+        0,
+        1,
+        -307
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "pixelIndexMapping": "output pixel(1405-x,307+y) = source slot pixel(x,y)",
+    "pastedRect": [
+      519,
+      307,
+      1406,
+      1194
+    ],
+    "sourceAnchorMapsTo": [
+      896,
+      1184
+    ],
+    "perFrameTranslationOrFit": false,
+    "resampling": "NONE",
+    "alphaCleanup": "NONE",
+    "originalRGBAndAlpha": "Entire source slot copied byte-exact after horizontal flip, including fully transparent RGB and faint alpha residue. Padding alone is new zero RGBA."
+  },
+  "contactMeasurements": {
+    "sourceNearFootApproxPixels": [
+      1,
+      2
+    ],
+    "sourceFarFootApproxPixels": [
+      -6,
+      -4
+    ],
+    "exportNearFootApproxLogicalX": [
+      -0.0625,
+      -0.03125
+    ],
+    "exportFarFootApproxLogicalX": [
+      0.125,
+      0.1875
+    ],
+    "opaqueContactBottomLogicalY": 0,
+    "hiddenOrCorrected": false
+  },
+  "rawAlphaNotes": {
+    "cleanup": "NONE; faint residue retained",
+    "density8": {
+      "from": [
+        2048,
+        2048
+      ],
+      "to": [
+        512,
+        512
+      ],
+      "factor": 0.25,
+      "algorithm": "Pillow RGBA\u2192RGBa (8-bit premultiplied alpha), LANCZOS resample all premultiplied channels, RGBa\u2192RGBA unpremultiply. Fully transparent RGB may canonicalize; this derivative is not pixel-exact.",
+      "thresholding": false,
+      "backgroundErasure": false,
+      "anatomyEdits": false,
+      "perFrameFitOrContactCorrection": false
+    }
+  },
+  "assets": [
+    {
+      "group": "current",
+      "frame": 0,
+      "path": "current-0.png",
+      "source": "character-animation-refresh-20261016/resolution-audit/source-availability/excluded-bank-diagnosis/species-062/main-cell_000.png",
+      "sha256": "b999b0a104cc2b61c08d687075ba0d576256aca26f94db786cc2b40e0ea0bf53",
+      "bytes": 16386,
+      "density": 4,
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        73,
+        77,
+        162,
+        156
+      ],
+      "nativeBounds": [
+        -9.75,
+        -17.75,
+        12.5,
+        2.0
+      ],
+      "boundaryMaxAlpha": 0,
+      "alphaLow1To15Pixels": 0
+    },
+    {
+      "group": "current",
+      "frame": 1,
+      "path": "current-1.png",
+      "source": "character-animation-refresh-20261016/resolution-audit/source-availability/excluded-bank-diagnosis/species-062/main-cell_001.png",
+      "sha256": "ba1e8f5ce5074197886d466288749812bb8b0c8cd984f84ab5861ced673cb1a8",
+      "bytes": 14965,
+      "density": 4,
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        73,
+        85,
+        162,
+        156
+      ],
+      "nativeBounds": [
+        -9.75,
+        -15.75,
+        12.5,
+        2.0
+      ],
+      "boundaryMaxAlpha": 0,
+      "alphaLow1To15Pixels": 0
+    },
+    {
+      "group": "candidate",
+      "frame": 0,
+      "path": "candidate-0.png",
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/qa-density8/main-cell_000-qa-density8.png",
+      "sha256": "47888bff9eb60ed02431d41699ec617ce4d2a80eddcfc12d3ff8025ae4beb0d8",
+      "bytes": 65828,
+      "density": 8,
+      "size": [
+        512,
+        512
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        166,
+        79,
+        348,
+        296
+      ],
+      "nativeBounds": [
+        -7.25,
+        -27.125,
+        15.5,
+        0.0
+      ],
+      "boundaryMaxAlpha": 0,
+      "alphaLow1To15Pixels": 1462
+    },
+    {
+      "group": "candidate",
+      "frame": 1,
+      "path": "candidate-1.png",
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/qa-density8/main-cell_001-qa-density8.png",
+      "sha256": "9844ce965b7a58dc8d96cf9bec7c6cf475ade645c63149b7c42e508653b884e0",
+      "bytes": 64365,
+      "density": 8,
+      "size": [
+        512,
+        512
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        170,
+        85,
+        350,
+        296
+      ],
+      "nativeBounds": [
+        -6.75,
+        -26.375,
+        15.75,
+        0.0
+      ],
+      "boundaryMaxAlpha": 0,
+      "alphaLow1To15Pixels": 1383
+    },
+    {
+      "group": "diagnostic32",
+      "frame": 0,
+      "path": "diagnostic32-0.png",
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/qa-transparent-export/main-cell_000-qa-density32.png",
+      "sha256": "f3e67e665b79410f73197774f37851c35395dd8888e0ae564143e0903f834976",
+      "bytes": 733270,
+      "density": 32,
+      "size": [
+        2048,
+        2048
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        665,
+        314,
+        1391,
+        1184
+      ],
+      "nativeBounds": [
+        -7.21875,
+        -27.1875,
+        15.46875,
+        0.0
+      ],
+      "boundaryMaxAlpha": 0,
+      "alphaLow1To15Pixels": 25608
+    },
+    {
+      "group": "diagnostic32",
+      "frame": 1,
+      "path": "diagnostic32-1.png",
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/qa-transparent-export/main-cell_001-qa-density32.png",
+      "sha256": "f2ba80562b48e207070125a2caec21df5370ae44a94cc5de4ac0b8a17d47abe5",
+      "bytes": 721880,
+      "density": 32,
+      "size": [
+        2048,
+        2048
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "alpha128Bounds": [
+        681,
+        338,
+        1398,
+        1184
+      ],
+      "nativeBounds": [
+        -6.71875,
+        -26.4375,
+        15.6875,
+        0.0
+      ],
+      "boundaryMaxAlpha": 0,
+      "alphaLow1To15Pixels": 23462
+    }
+  ],
+  "facing": "LEFT",
+  "numberOfSourceReflections": 1,
+  "extraReview": {
+    "nativeMirror": true,
+    "backgrounds": [
+      "light",
+      "saturated"
+    ]
+  },
+  "acceptanceNotes": {
+    "density32": "DIAGNOSTIC_ONLY_NOT_PRODUCTION",
+    "oldQuadrupedNewBiped": true,
+    "sizeComparison": {
+      "oldCurrentQuadrupedDensity": 4,
+      "oldIdle000LogicalBBoxSize": [
+        22.25,
+        19.75
+      ],
+      "oldIdle001LogicalBBoxSize": [
+        22.25,
+        17.75
+      ],
+      "newBipedSizesInFrames": "See alphaOver127LogicalSize. Alpha threshold used only for measurement, never pixel processing.",
+      "interpretation": "Same64\u00d764 logical canvas and legacy anchor; biped is intentionally taller, roughly27.2 logical pixels versus19.75. Density32 is QA transport preserving source bytes, not a production density migration. Native renderer scale must be1/32 and anchor geometry must use this manifest; do not treat2048pixels as density4."
+    },
+    "facing": "Already normalized once; no added reflection at load. Native mirror tested separately.",
+    "memoryRGBA8Bytes": 36175872,
+    "noPerFrameFitOrCorrection": true
+  }
+}
