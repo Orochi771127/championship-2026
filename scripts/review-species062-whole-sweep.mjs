@@ -70,7 +70,17 @@ try{
     // Same native display factor2 observed in actual Raising context. Full cell128 CSS,256 physical atDPR2.
     actor.sprite.position.set(x+56,y+20+74);app.stage.addChild(actor.sprite);
     checked(actor.sprite.texture.source.scaleMode==='nearest','FILTER');const g=f.geometry;checked(JSON.stringify(g.sourceSize)==='[256,256]'&&JSON.stringify(g.origin)==='[112,148]','CELL_GEOMETRY');
-    app.render();const extracted=app.renderer.extract.pixels({target:actor.sprite});const px=extracted.pixels??extracted;checked(px.length>0,'PIXEL_READBACK');let nonblank=0;for(let j=3;j<px.length;j+=4)if(px[j])nonblank++;checked(nonblank>0,'NONBLANK '+key);
+    app.render();
+    // Read the actual stage cell, not generateTexture(target:sprite), whose
+    // local-bounds extraction loses positioned atlas sprites in this Pixi build.
+    const probe=document.createElement('canvas');probe.width=probe.height=256;const pc=probe.getContext('2d',{willReadFrequently:true});
+    pc.drawImage(app.canvas,x*2,(y+20)*2,256,256,0,0,256,256);const px=pc.getImageData(0,0,256,256).data;
+    checked(px.length===256*256*4,'PIXEL_READBACK');
+    for(const j of [0,255,65280,65535]){const bg=j%256<128?[236,233,226]:[35,50,65],o=j*4;checked(px[o]===bg[0]&&px[o+1]===bg[1]&&px[o+2]===bg[2]&&px[o+3]===255,'CELL_BACKGROUND_READBACK');}
+    let nonblank=0;
+    for(let j=0;j<65536;j++){const bg=j%256<128?[236,233,226]:[35,50,65],o=j*4;
+     if(px[o+3]>0&&(px[o]!==bg[0]||px[o+1]!==bg[1]||px[o+2]!==bg[2]))nonblank++;}
+    checked(nonblank>0,'NONBLANK '+key);
     samples.push({side,cell,key,scale:[actor.sprite.scale.x,actor.sprite.scale.y],geometry:g,visiblePixelCount:nonblank,bounds:actor.sprite.getBounds().rectangle??actor.sprite.getBounds()});
    }
    app.render();sheets.push({name:`${side}-${String(start).padStart(3,'0')}-${String(end).padStart(3,'0')}-actualscale.png`,png:app.canvas.toDataURL('image/png').split(',')[1]});
