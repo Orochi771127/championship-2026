@@ -351,6 +351,6 @@ export const COMPLETED_ORIGINAL_M201_REVIEW_20261007=Object.freeze({
     ]
   },
   "sourceBankSha256": "700ad661bad1b125ae4ee1ffcb4ccf3dd745546aa26bf1ce5168cf475c355e74",
-  "assetRoot": "assets/production/characters/density-review-20261016/"
+  "assetRoot": "assets/production/characters/accepted-20261010/"
 });
 export const isM201DeliveredReview=()=>!globalThis.location || (["localhost","127.0.0.1","[::1]","::1"].includes(globalThis.location.hostname)&&new URLSearchParams(globalThis.location.search??"").get("m201Review")!=="legacy-r17");

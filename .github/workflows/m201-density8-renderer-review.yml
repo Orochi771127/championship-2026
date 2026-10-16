@@ -5,7 +5,7 @@ on:
     paths:
       - '.github/workflows/m201-density8-renderer-review.yml'
       - 'tests/championship-m201-density8-renderer-review.mjs'
-      - 'assets/production/characters/density-review-20261016/m201_agumon-r04-density8-07a10bca9765903c/**'
+      - 'assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/**'
       - 'src/data/championship/accepted-original-character-selection.r1.json'
       - 'src/championship/presentation/completedOriginalM201Review20261007.js'
       - 'src/championship/presentation/vs2/huntContactShadow.js'
@@ -45,7 +45,7 @@ jobs:
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/championship-owned-party.html > /dev/null
           node tests/championship-m201-density8-renderer-review.mjs \
             http://127.0.0.1:8765/ \
-            assets/production/characters/density-review-20261016/m201_agumon-r04-density8-07a10bca9765903c/ \
+            assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ \
             .tmp/browser-qa/m201-density8
       - name: Preserve real renderer screenshots and exact result
         if: always()
