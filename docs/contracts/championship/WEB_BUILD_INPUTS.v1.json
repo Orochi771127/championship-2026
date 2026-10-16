@@ -10029,7 +10029,9 @@
     "src/data/championship/product-species-extensions.r1.json",
     "src/data/championship/public-playtest.r1.json",
     "src/data/championship/qa-database-hero-portraits.r1.json",
-    "src/data/championship/r2/fields/fieldInventoryR2.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js",
+    "assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png",
+    "assets/production/database-handpainted-r1-20261015/species-189.8c9cac7746647500.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -10041,7 +10043,7 @@
       },
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "f4acdbf0e7a729669790f6caad709b0c3571c398f60ea01da77e0b7b7e2020c2"
+        "sha256": "8d8a8875cd71416797ba22c67ae33b295776892d9f6f10f9946e3be038294324"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -30673,7 +30675,7 @@
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
-        "sha256": "3d783e056ae6dace8551bf8e7a140fbcf943d5eb80353a85163f3ecdb4fcf930"
+        "sha256": "710d310f1868a42632a21da31ca5493fd352be0f699796db7c8506df791cdf54"
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-034.png",
@@ -48525,11 +48527,11 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.r1.json",
-        "sha256": "56070880371546634923de30277f594cbc625c6f20b2bdef2fb77a10dfdd069f"
+        "sha256": "c1cc8d8196462eefca4c237b887f0b49e0a78b7bd6c5372777a48e2eb9225e02"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
-        "sha256": "20246ddaadabce5c1a7016fb918cfdd1d920004b978e6486dc3c4fb3728fe8c4"
+        "sha256": "1a358d73c68e34895c03df7ba7ec8030594fe3234435fdae4e4569dd8241e3c9"
       },
       {
         "path": "src/data/championship/nativeBookSpecies.js",
@@ -48545,11 +48547,19 @@
       },
       {
         "path": "src/data/championship/qa-database-hero-portraits.r1.json",
-        "sha256": "14844791b6d5d39f6528b8fc5b2866734262f66984563bcc4923fd10eef2db04"
+        "sha256": "52d8e8bd53e170c0d37fa99e16facd1f1b6ddad0917fcb206565a19ae5d17dd8"
       },
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png",
+        "sha256": "a5d0d48e737f81e0c955286a94923fe3b70d6483813ee233aedb80a8d89bc3ae"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-189.8c9cac7746647500.png",
+        "sha256": "8c9cac7746647500066880fbd869e188d1f3c83fb1ea3069c5e1d3ba8798ee64"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
