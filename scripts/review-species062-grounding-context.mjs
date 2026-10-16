@@ -108,12 +108,15 @@ try{
      records.push(record);return record;
     }
     // Validate both complete walk cycles and the mirror seam without additional screenshots.
-    for(let t=0;t<54;t++){const r=sample(2,t);checked(r.cell===(t%27<15?4:5),'WALK_PHASE');timing.push({tick:t,cell:r.cell});}
+    const walk=animations.find(a=>a.id===2),walkTimeline=createNativeCharacterAnimationTimeline(walk);
+    for(let t=0;t<54;t++){const r=walkTimeline.getSnapshot();checked(r.cell===(t%27<15?4:5)&&r.cell===nativeAnimationCellAt(walk,t)&&r.active===1,'WALK_PHASE');timing.push({tick:t,cell:r.cell});walkTimeline.advanceNative(4096);}
+    // Render the actual phase boundaries and cycle seam, not 54 redundant GPU readbacks.
+    for(const t of [0,14,15,26,27,41,42,53])sample(2,t);
     sample(2,27,true);sample(13,37);sample(0,0);
     globalThis.__ground={sample,result:()=>({scene:sceneName,variant,records,timing,alpha,failures,renderer:{resolution:stage.app.renderer.resolution,canvas:[stage.app.canvas.width,stage.app.canvas.height],css:[stage.app.canvas.clientWidth,stage.app.canvas.clientHeight],deviceDpr:devicePixelRatio},baseline:m.baseline,limits:['Fixed native source snapshots, not full gameplay','Sleep baseline bottom differs from upright; uniform shift is not exact sleep proof','No art source changes, runtime registration changes, or release approval']})};
    },{base,sceneName,variant});
    for(const [sequence,tick] of [[0,0],[0,31],[2,0],[2,15],[14,0],[14,25],[13,0]]){
-    const sample=await page.evaluate(([s,t])=>__ground.sample(s,t),[sequence,tick]);await page.screenshot({path:`${out}/${sceneName}-${variant}-cell${String(sample.cell).padStart(3,'0')}.png`});captures++;
+    const sample=await page.evaluate(([s,t])=>__ground.sample(s,t),[sequence,tick]);await page.screenshot({path:`${out}/${sceneName}-${variant}-cell${String(sample.cell).padStart(3,'0')}.png`,timeout:60000});captures++;
    }
    const result=await page.evaluate(()=>__ground.result());assert.deepEqual(errors,[]);assert.deepEqual(result.failures,[]);assert.deepEqual(result.renderer.canvas,[780,1560]);assert.deepEqual(result.renderer.css,[390,780]);assert.equal(result.renderer.resolution,2);
    await fs.writeFile(`${out}/${sceneName}-${variant}.json`,JSON.stringify({status:'PASS_REAL_SCENE_CONTRACTS_VISUAL_REVIEW_PENDING',...result,network,pageErrors:errors},null,2));
