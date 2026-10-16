@@ -19,10 +19,10 @@ const EXPECTED = Object.freeze({
   9: Object.freeze({"speciesIndex":9,"speciesId":"species-009","displayCode":"B102","src":"assets/production/database-portraits-b1-20261014/B102.eb7c0e50feb53dc2.png","width":1323,"height":1189,"sha256":"eb7c0e50feb53dc2eb16a12f0457de8911318011aea08526fea2a184472a7f72","name":"鐵鈴芽"}),
   10: Object.freeze({"speciesIndex":10,"speciesId":"species-010","displayCode":"B103","src":"assets/production/database-portraits-b1-20261014/B103.db66d79eb40c3768.png","width":1312,"height":1199,"sha256":"db66d79eb40c3768b2addfa247c82d7ca2d749f5ba52d9c96778a5787cc53824","name":"星芽獸"}),
 
-  40: Object.freeze({"speciesIndex":40,"speciesId":"species-040","displayCode":"GR08","src":"assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png","sha256":"a5d0d48e737f81e0c955286a94923fe3b70d6483813ee233aedb80a8d89bc3ae","width":1254,"height":1254,"name":"霜裘幼龍"}),
-  63: Object.freeze({"speciesIndex":63,"speciesId":"species-063","displayCode":"GR24","src":"assets/production/database-handpainted-r1-20261015/species-063.e403a93ec4f2d7ec.png","sha256":"e403a93ec4f2d7ec24273c2f2f3d861feeec11848d55450989230b2c93283f8a","width":1254,"height":1254,"name":"翠冠幼龍"}),
-  70: Object.freeze({"speciesIndex": 70, "speciesId": "species-070", "displayCode": "GR32", "src": "assets/production/database-handpainted-r1-20261015/species-070.2dc33277d80cdfb4.png", "sha256": "2dc33277d80cdfb4577bee1d369adb59545b4ccc735a4f90fff342087a1ba738", "name": "星角幼龍"}),
-  71: Object.freeze({"speciesIndex": 71, "speciesId": "species-071", "displayCode": "GR12", "src": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png", "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913", "name": "裂焰幼龍"}),
+  40: Object.freeze({"speciesIndex":40,"speciesId":"species-040","displayCode":"GR08","src":"assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png","sha256":"a5d0d48e737f81e0c955286a94923fe3b70d6483813ee233aedb80a8d89bc3ae","width":1254,"height":1254,"name":"霜裘龍"}),
+  63: Object.freeze({"speciesIndex":63,"speciesId":"species-063","displayCode":"GR24","src":"assets/production/database-handpainted-r1-20261015/species-063.e403a93ec4f2d7ec.png","sha256":"e403a93ec4f2d7ec24273c2f2f3d861feeec11848d55450989230b2c93283f8a","width":1254,"height":1254,"name":"翠冠龍"}),
+  70: Object.freeze({"speciesIndex": 70, "speciesId": "species-070", "displayCode": "GR32", "src": "assets/production/database-handpainted-r1-20261015/species-070.2dc33277d80cdfb4.png", "sha256": "2dc33277d80cdfb4577bee1d369adb59545b4ccc735a4f90fff342087a1ba738", "name": "星角龍"}),
+  71: Object.freeze({"speciesIndex": 71, "speciesId": "species-071", "displayCode": "GR12", "src": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png", "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913", "name": "裂焰龍"}),
   72: Object.freeze({"speciesIndex": 72, "speciesId": "species-072", "displayCode": "MA04", "src": "assets/production/database-handpainted-r1-20261015/species-072.4ca0e10b98584a76.png", "sha256": "4ca0e10b98584a76aec0c283b6c5628d34122bd7d60aa63411c7cc2156bfca43", "name": "晶鏈甲龍"}),
   222: Object.freeze({"speciesIndex": 222, "speciesId": "species-222", "displayCode": "UL02", "src": "assets/production/database-handpainted-r1-20261015/species-222.png", "sha256": "4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3"}),
   230: Object.freeze({"speciesIndex": 230, "speciesId": "species-230", "displayCode": "UL03", "src": "assets/production/database-handpainted-r1-20261015/species-230.png", "sha256": "09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39"}),
@@ -384,6 +384,20 @@ async function selfTest() {
     assertMeasured({...snapshot,imageRect:{width:256,height:256},holderRect:{width:304,height:304}},species,256);
     for(const changed of [{natural:[1,1]},{src:new URL('assets/production/database-handpainted-r1-20261015/species-'+String(species).padStart(3,'0')+'.png',PUBLIC_BASE).href},{objectFit:'cover'},{padding:[0,0,0,0]},{hidden:true},{complete:false},{documentOverflow:true}]) assert.throws(()=>assertMeasured({...snapshot,...changed},species,128));
     if([9,10,189,35].includes(species))assert.throws(()=>assertMeasured({...snapshot,natural:[1254,1254]},species,128));
+  }
+  // Approved canonical name cleanup: bind independently to the requested names.
+  // Keep strict title equality; reject stale names rather than weakening the assertion.
+  for (const [species, name, staleName] of [
+    [40, '霜裘龍', '霜裘幼龍'], [63, '翠冠龍', '翠冠幼龍'],
+    [70, '星角龍', '星角幼龍'], [71, '裂焰龍', '裂焰幼龍']
+  ]) {
+    const expected = EXPECTED[species];
+    assert.equal(expected.name, name);
+    const snapshot = {...valid, speciesIndex:species, displayCode:expected.displayCode,
+      title:name, natural:[expected.width ?? 1254, expected.height ?? 1254],
+      src:new URL(expected.src, PUBLIC_BASE).href};
+    assertMeasured(snapshot, species, 128);
+    assert.throws(() => assertMeasured({...snapshot, title:staleName}, species, 128), /Exact species name binding/);
   }
   for(const species of [9,10]){
     const expected=EXPECTED[species],bytes=fs.readFileSync(expected.src);
