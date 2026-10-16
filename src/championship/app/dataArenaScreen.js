@@ -18,6 +18,8 @@ import { createDataArenaRecordStore } from "../modes/dataArena/dataArenaSave.js"
 import { createChampionshipDataArenaPort } from "./ChampionshipPersistentSavePort.js";
 import { dataArenaCast } from "../presentation/dataArena/dataArenaRoster.js";
 import { mountDataArenaScene } from "../presentation/dataArena/dataArenaPixiScene.js";
+import { loadDataArenaEnvironment } from "../presentation/dataArena/dataArenaEnvironment.js";
+import { loadDataArenaInteractionArt } from "../presentation/dataArena/dataArenaInteractionArt.js";
 import { createDataArenaAudio } from "../presentation/dataArena/dataArenaAudio.js";
 import { createPixiAssetScope, loadPixiCharacterRuntimeBundle } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { arenaText as t } from "../text/dataArenaText.js";
@@ -112,11 +114,15 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   root.addEventListener("contextmenu", (event) => event.preventDefault(), { signal });
 
   let stage = null, scene = null, sim = null, audio = null;
+  let environment = null;
+  let interactionArt = null;
+  const qaRecentEvents=[];
   const bundles = new Map();
   let bundleScope = null;
   let tickerCallback = null;
   let accumulator = 0;
   let paused = false;
+  let qualityReloading = false;
   let matchId = 0;
   let result = null;
 
@@ -573,10 +579,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       if (steps >= DATA_ARENA_MAX_STEPS_PER_FRAME) accumulator = 0; // drop time instead of spiralling
     } else accumulator = 0;
     const events = sim.drainEvents();
+    if(qa&&events.length){qaRecentEvents.push(...events.map(e=>({...e,matchId})));if(qaRecentEvents.length>128)qaRecentEvents.splice(0,qaRecentEvents.length-128);}
     if (events.length) handleEvents(events);
     const state = sim.getState();
     audio?.setLaser(state.laser.firing && root.dataset.state === "PLAY" && !paused, state.laser.heat / sim.stats.heatCapacity);
-    scene.render(dtMs);
+    scene.render(dtMs, paused || document.hidden);
     if (root.dataset.state !== "SELECT") updateHud();
     frameCost.push(performance.now() - started);
     if (frameCost.length > 240) frameCost.shift();
@@ -612,14 +619,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   function mountScene() {
     scene?.dispose();
-    scene = mountDataArenaScene({ stage, sim, cast, bundles, quality, reducedMotion, shake, partnerId });
+    scene = mountDataArenaScene({ stage, sim, cast, bundles, quality, reducedMotion, shake, partnerId, environment, interactionArt });
     root.dataset.quality = quality;
     stage.setResolutionCap(quality === "low" ? 1 : Math.min(2, resolutionCap));
   }
 
   let startingMatch = false;
   async function startMatch() {
-    if (startingMatch || signal.aborted) return;
+    if (startingMatch || qualityReloading || signal.aborted) return;
     startingMatch = true;
     try {
       await startMatchBody();
@@ -633,6 +640,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       clean(() => { if (tickerCallback && stage) stage.app.ticker.remove(tickerCallback); });
       tickerCallback = null;
       clean(() => scene?.dispose()); scene = null;
+      try { await environment?.dispose(); } catch (cleanupError) { console.error("DATA_ARENA_CLEANUP_FAILED", cleanupError); }
+      environment = null;
+      try { await interactionArt?.dispose(); } catch (cleanupError) { console.error("DATA_ARENA_CLEANUP_FAILED", cleanupError); }
+      interactionArt=null;
       clean(() => audio?.dispose()); audio = null;
       sim = null; result = null; paused = false; accumulator = 0;
       clearTimeout(bannerTimer); clearTimeout(vignetteTimer);
@@ -665,11 +676,22 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // Drop the previous match's scene BEFORE loadCast releases bundles it may
     // still draw from (mode or partner change from the result screen).
     scene?.dispose(); scene = null;
+    await environment?.dispose(); environment = null;
+    await interactionArt?.dispose();interactionArt=null;qaRecentEvents.length=0;
     const ok = await loadCast(partnerId);
     if (signal.aborted) return;
     matchId++;
     const matchSeed = seed ?? ((Date.now() ^ (matchId * 2654435761)) >>> 0);
     sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode });
+    // Harbor art is loaded on entry only; a failed pack keeps the playable
+    // geometry and existing presentation available. No character texture changes.
+    if (gameMode === "HARBOR" || gameMode === "TOURNAMENT") {
+      try { environment = await loadDataArenaEnvironment({ PIXI: stage.PIXI, map: sim.grid.map, quality, href, signal }); }
+      catch (error) { if (!signal.aborted) console.warn("DATA_ARENA_ENVIRONMENT_FALLBACK", error?.message); }
+    }
+    try{interactionArt=await loadDataArenaInteractionArt({PIXI:stage.PIXI,map:sim.grid.map,quality,href,signal});}
+    catch(error){if(!signal.aborted)console.warn("DATA_ARENA_INTERACTION_ART_FALLBACK",error?.message);}
+    if (signal.aborted) { await environment?.dispose(); environment = null;await interactionArt?.dispose();interactionArt=null; return; }
     root.dataset.seed = String(matchSeed);
     root.dataset.mode = gameMode;
     audio ??= createDataArenaAudio({ bus: audioBus });
@@ -816,6 +838,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }
 
   function togglePause(force = null) {
+    if (qualityReloading) return;
     const next = force ?? root.dataset.state !== "PAUSE";
     if (next && root.dataset.state === "PLAY") {
       paused = true; root.dataset.state = "PAUSE"; releaseInputs(); audio?.suspend(); showPause();
@@ -835,9 +858,33 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       shakeToggle.textContent = `${t("pause.shake")}：${t(shake ? "pause.on" : "pause.off")}`;
     }, signal);
     shakeToggle.disabled = reducedMotion;
-    const qualityToggle = button("da-btn da-toggle", `${t("pause.quality")}：${t(`pause.quality.${quality}`)}`, () => {
-      quality = quality === "high" ? "low" : "high"; records.setSettings({ quality }); mountScene();
+    const qualityToggle = button("da-btn da-toggle", `${t("pause.quality")}：${t(`pause.quality.${quality}`)}`, async () => {
+      if(qualityReloading||signal.aborted)return;
+      qualityReloading=true;
+      const controls=[...panel.querySelectorAll('button:not(.da-btn--quiet)')].map(control=>[control,control.disabled]);
+      for(const[control]of controls)control.disabled=true;
+      try{
+      quality = quality === "high" ? "low" : "high"; records.setSettings({ quality });
+      scene?.dispose();scene=null;
+      await interactionArt?.dispose();interactionArt=null;
+      if (environment) {
+        // A quality change swaps environment pixels as well as renderer scale.
+        // The paused scene releases its objects before its textures are unloaded.
+        scene?.dispose(); scene = null;
+        await environment.dispose(); environment = null;
+        try { environment = await loadDataArenaEnvironment({ PIXI: stage.PIXI, map: sim.grid.map, quality, href, signal }); }
+        catch (error) { if (!signal.aborted) console.warn("DATA_ARENA_ENVIRONMENT_FALLBACK", error?.message); }
+        if (signal.aborted) { await environment?.dispose(); environment = null; return; }
+      }
+      try{interactionArt=await loadDataArenaInteractionArt({PIXI:stage.PIXI,map:sim.grid.map,quality,href,signal});}
+      catch(error){if(!signal.aborted)console.warn("DATA_ARENA_INTERACTION_ART_FALLBACK",error?.message);}
+      if(signal.aborted){await interactionArt?.dispose();interactionArt=null;return;}
+      mountScene();
       qualityToggle.textContent = `${t("pause.quality")}：${t(`pause.quality.${quality}`)}`;
+      }finally{
+        qualityReloading=false;
+        if(!signal.aborted)for(const[control,disabled]of controls)control.disabled=disabled;
+      }
     }, signal);
     const row = el("div", "da-actions da-actions--column");
     row.append(resume, shakeToggle, qualityToggle,
@@ -898,6 +945,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     audio?.dispose(); audio = null;
     scene?.dispose(); scene = null;
     sim = null;
+    await environment?.dispose(); environment = null;
+    await interactionArt?.dispose();interactionArt=null;qaRecentEvents.length=0;
     stage?.setResolutionCap(resolutionCap);
     await Promise.allSettled([...bundles.values()].map((bundle) => bundle.dispose()));
     bundles.clear();
@@ -911,6 +960,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // Read-only observation for automated browser QA; it cannot drive the match.
     globalThis.__dataArenaQA = Object.freeze({
       snapshot: () => (sim ? sim.getSnapshot() : null),
+      events:()=>JSON.parse(JSON.stringify(qaRecentEvents)),
       state: () => root.dataset.state,
       diagnostics: () => {
         const sorted = [...frameCost].sort((a, b) => a - b);

@@ -17,6 +17,8 @@ import { mixColor } from "../battleFx/battleFxLayer.js";
 import { createDataArenaCamera } from "./dataArenaCamera.js";
 import { createDataArenaTextures } from "./dataArenaTextures.js";
 import { DATA_ARENA_SEQUENCES } from "./dataArenaRoster.js";
+import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./dataArenaEnvironment.js";
+import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 const T = DATA_ARENA_TERRAIN;
 const TAU = Math.PI * 2;
@@ -29,14 +31,16 @@ const PARTNER_BEAM = Object.freeze({ "ember-lizard": 0x6ff7ff, "corona-cub": 0xf
 const CROWD_TINT = Object.freeze({ PERFECT_DODGE: 0x7fe9ff, ELEMENT_CHAIN: 0xff9a3c, RESCUE: 0x8dffb0, BEACON: 0xffe066,
   CORE_OUT: 0x7fd0ff, MULTI_KILL: 0xff6ad5, BOSS_DOWN: 0xffffff, CHEER: 0xffd34d, VICTORY: 0xfff2a8, DEFEAT: 0x4a5a80 });
 
-export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), quality = "high", reducedMotion = false, shake = true, partnerId }) {
+export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), quality = "high", reducedMotion = false, shake = true, partnerId, environment = null, interactionArt = null }) {
   // Construction is transactional: even a renderer failure before a scene is
   // returned must release this scene's resources, not the shared Application.
   const rollback = [];
   try {
   const PIXI = stage.PIXI;
-  const textures = createDataArenaTextures(PIXI);
-  if (!textures) throw new Error("DATA_ARENA_CANVAS_UNAVAILABLE");
+  const generatedTextures = createDataArenaTextures(PIXI);
+  if (!generatedTextures) throw new Error("DATA_ARENA_CANVAS_UNAVAILABLE");
+  const textures = {...generatedTextures};
+  if(interactionArt)for(const[key,id]of[["ice","ICE"],["iceCracked","ICE_CRACKED"],["iceMelt","ICE_MELT"]])textures[key]=interactionArt.textures.get(interactionArt.manifest.ice[id][interactionArt.tier].src);
   rollback.push(() => textures.destroy());
   const grid = sim.grid;
   const MAP = grid.map;
@@ -77,17 +81,20 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const lights = new PIXI.Container({ label: "arena stand lights" });
   world.addChild(groundChunks, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights);
 
-  const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake });
+  const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake, artBounds: environment?.manifest?.cameraArtBounds });
   let elapsed = 0;
+  let ambientElapsed = 0;
   let view = null;
   const state = sim.getState();
+  const floorOffset=(x,y)=>(environment?dataArenaEnvironmentFloorOffset(grid,x,y,environment.manifest):0)
+    +(interactionArt&&grid.surfaceAt(x,y).startsWith("ICE")?(interactionArt.manifest.ice.floorOffsetPx??2.94):0);
 
   // ------------------------------------------------------------------ static harbor
-  drawGround();
-  drawBridge();
+  const legacyGround=!environment||environment.manifest.scope==='REPRESENTATIVE_NORTH_AND_WATER';
+  if (legacyGround) { drawGround(); drawBridge(); }
   const CHUNK = 1024, bakeScale = rich ? 1 : 0.5;
   const chunks = [];
-  for (let cy = 0; cy < worldHeight; cy += CHUNK) for (let cx = 0; cx < worldWidth; cx += CHUNK) {
+  for (let cy = 0; legacyGround && cy < worldHeight; cy += CHUNK) for (let cx = 0; cx < worldWidth; cx += CHUNK) {
     const width = Math.min(CHUNK, worldWidth - cx), height = Math.min(CHUNK, worldHeight - cy);
     const texture = PIXI.RenderTexture.create({ width, height, resolution: bakeScale });
     rollback.push(() => texture.destroy(true));
@@ -105,6 +112,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   bakeGround();
   const unsubscribeRestore = stage.onContextRestored?.(() => bakeGround()) ?? (() => {});
   rollback.push(unsubscribeRestore);
+  const environmentView = environment ? mountDataArenaEnvironment({ PIXI, environment, ground: groundChunks, objects, water, bridge, suppressedPropIds:new Set(grid.props.map(p=>p.id)) }) : null;
+  const interactionView=mountDataArenaInteractionView({PIXI,grid,art:interactionArt,objects,ground:groundChunks,useHarborPatches:Boolean(environment&&MAP.stage&&!environment.manifest.cleanGround),floorOffset,propArt:environment?.propArt});
   function drawGround() {
     const g = ground;
     g.rect(0, 0, worldWidth, worldHeight).fill({ color: 0x141c2b });
@@ -152,6 +161,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     for (const [c0, r0, w, h, kind] of MAP.rects) {
       if (kind !== T.SOLID) continue;
       const color = palette[k++ % palette.length];
+      if(grid.propAtCell(grid.index(c0,r0)))continue;
       const x = c0 * cell, y = r0 * cell, width = w * cell, height = h * cell;
       g.rect(x + 6, y + height, width - 6, 14).fill({ color: 0x000000, alpha: 0.35 });
       g.rect(x, y, width, height).fill({ color: mixColor(color, 0x000000, 0.45) });
@@ -207,8 +217,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
   // ------------------------------------------------------------------ crowd
   const fans = [];
+  const hasModeledCrowd=environment?.manifest.kind==='TOURNAMENT_STONE'||Boolean(environment?.manifest.crowdFrames);
   const fanCount = Math.round((rich ? 260 : 120) * Math.min(1, worldWidth / 3840 + 0.25) * (standRows / 3));
-  for (let i = 0; i < fanCount; i++) {
+  for (let i = 0; !hasModeledCrowd&&i < fanCount; i++) {
     const tier = i % Math.max(1, standRows), x = ((i * 7919) % 1000) / 1000 * (worldWidth - 40) + 20;
     const sprite = new PIXI.Sprite(textures.fans[i % 4]);
     sprite.anchor.set(0.5, 1);
@@ -221,7 +232,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     fans.push({ sprite, x, baseY, phase: (i * 2.399) % TAU });
   }
   const standLights = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; !hasModeledCrowd&&i < 10; i++) {
     const cone = new PIXI.Sprite(textures.lightCone);
     cone.anchor.set(0.5, 0);
     cone.blendMode = "add";
@@ -299,10 +310,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         try { controller.setAnimation(id); sequence = id; } catch { /* a missing raw sequence keeps the current pose */ }
       },
       update(dtMs, { x, y, facing, flash = 0, alpha = 1, lift = 0, seq = DATA_ARENA_SEQUENCES.STAND, sink = 0 }) {
-        container.position.set(x, y);
+        container.position.set(x, y - floorOffset(x,y));
         container.zIndex = y;
         this.setSequence(seq);
-        if (controller) controller.update({ deltaMS: dtMs });
+        if (controller&&dtMs>0) controller.update({ deltaMS: dtMs });
         // Art faces left; mirror for rightward facing.
         sprite.scale.set(scale * (facing > 0 ? -1 : 1), scale * (1 - sink * 0.5));
         sprite.y = -lift + sink * 30;
@@ -412,6 +423,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
   // Cell effects keyed by grid cell.
   const fireSprites = new Map(), iceSprites = new Map(), decalSprites = new Map();
+  const smokeAt=new Float32Array(grid.count);
   const cellPool = [];
   function acquireCellSprite(texture, blend = "normal") {
     const sprite = cellPool.pop() ?? new PIXI.Sprite(texture);
@@ -420,7 +432,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     cellFx.addChild(sprite);
     return sprite;
   }
-  function releaseCellSprite(sprite) { sprite.visible = false; cellFx.removeChild(sprite); cellPool.push(sprite); }
+  function releaseCellSprite(sprite) { sprite.visible = false; sprite.parent?.removeChild(sprite); cellPool.push(sprite); }
   function syncCells() {
     for (let i = 0; i < grid.count; i++) {
       const burning = grid.fire[i] > 0;
@@ -435,17 +447,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       let ice = iceSprites.get(i);
       if (frozen && !ice) {
         ice = acquireCellSprite(textures.ice);
+        if(interactionArt){ice.anchor.set(...interactionArt.manifest.ice.anchor);ice.width=interactionArt.manifest.ice.worldSize[0];ice.height=interactionArt.manifest.ice.worldSize[1];}
         ice.position.set((i % grid.cols + 0.5) * cell, (Math.floor(i / grid.cols) + 0.5) * cell);
+        if(environment?.manifest.projection?.waterSurfaceOffset)ice.y-=environment.manifest.projection.waterSurfaceOffset;
         iceSprites.set(i, ice);
       } else if (!frozen && ice) { releaseCellSprite(ice); iceSprites.delete(i); }
       if (ice) {
         const cracking = grid.ice[i] <= DATA_ARENA_GRID_RULES.iceWarnSeconds;
-        ice.texture = cracking ? textures.crack : textures.ice;
+        ice.texture = cracking ? textures.iceCracked : textures.ice;
         ice.tint = cracking ? 0xbfe8ff : 0xffffff;
-        ice.alpha = cracking ? 0.65 + 0.35 * Math.abs(Math.sin(elapsed * (6 + (DATA_ARENA_GRID_RULES.iceWarnSeconds - grid.ice[i]) * 6))) : 1;
-        if (cracking) ice.texture = Math.sin(elapsed * 10) > 0 ? textures.crack : textures.ice;
+        ice.alpha = 1;
       }
-      const decal = grid.wet[i] > 0 ? "wet" : grid.ash[i] > 0 ? "ash" : null;
+      const decal = grid.scorch[i]>0 ? (grid.wet[i]>0?"scorchWet":"ash") : grid.wet[i] > 0 ? "wet" : null;
       const existing = decalSprites.get(i);
       if (decal && (!existing || existing.kind !== decal)) {
         if (existing) releaseCellSprite(existing.sprite);
@@ -454,6 +467,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         cellFx.setChildIndex(sprite, 0);
         decalSprites.set(i, { kind: decal, sprite });
       } else if (!decal && existing) { releaseCellSprite(existing.sprite); decalSprites.delete(i); }
+      const active=decalSprites.get(i);if(active)active.sprite.alpha=grid.scorch[i]>0 ? .35+grid.scorch[i]/255*.5 : .8;
     }
   }
 
@@ -464,6 +478,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   function spawn({ x, y, vx = 0, vy = 0, life = 0.5, texture = textures.dot, tint = 0xffffff, scale = 1, scaleTo = null, gravity = 0,
     drag = 0, alpha = 1, add = true, rotation = 0, spin = 0, align = false }) {
     if (live.length >= cap) return null;
+    if (reducedMotion) {vx=vy=gravity=spin=0;scale=scaleTo??scale;scaleTo=scale;life=Math.min(life,.35);}
     const sprite = pool.pop() ?? new PIXI.Sprite(texture);
     sprite.texture = texture; sprite.anchor.set(0.5); sprite.tint = tint; sprite.alpha = alpha; sprite.blendMode = add ? "add" : "normal";
     sprite.visible = true; sprite.rotation = rotation; sprite.scale.set(scale); sprite.position.set(x, y);
@@ -512,6 +527,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   }
   const ghosts = [];
   function afterimage(x, y, facing) {
+    if(reducedMotion)return;
     if (!rich || ghosts.length > 8) return;
     const sprite = new PIXI.Sprite(playerView.sprite.texture);
     sprite.anchor.copyFrom(playerView.sprite.anchor);
@@ -539,9 +555,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "DASH": afterimage(event.x, event.y, event.dirX); puff(event.x, event.y, 0xa89580, 3, 0.9); break;
         case "FIRE_IGNITE": if (event.source !== "SPREAD") burst(event.x, event.y, { count: 6, speed: 160, tint: 0xff9a3c, gravity: -120 }); break;
         case "FIRE_OUT": puff(event.x, event.y, 0xe8f4ff, 3, 1.4); break;
-        case "ICE_FORM": if (event.source === "POD") burst(event.x, event.y, { count: 3, speed: 120, tint: 0xd8f6ff, texture: textures.shard }); break;
+        case "ICE_FORM": burst(event.x, event.y, { count: 3, speed: 70, tint: 0xd8f6ff, texture: textures.shard, life:.3 }); break;
         case "ICE_CRACK_WARN": burst(event.x, event.y, { count: 2, speed: 80, tint: 0xffffff, texture: textures.shard, life: 0.3 }); break;
-        case "ICE_MELT": ring(event.x, event.y, 30, 0x7fd8ff, 0.4, 0.6); break;
+        case "ICE_MELT": ring(event.x, event.y, 30, 0x7fd8ff, 0.4, 0.6);spawn({x:event.x,y:event.y,texture:textures.iceMelt,scale:1,scaleTo:.8,life:.35,alpha:.7,add:false});break;
+        case "ICE_MELT_HIT": puff(event.x,event.y,0xc6edf5,2,.6);break;
+        case "PROP_HIT": burst(event.x,event.y-22,{count:3,speed:100,tint:event.cause==="FIRE"?0x8b6948:0xffffff,texture:textures.timberChip,life:.35,gravity:180});break;
+        case "PROP_DESTROYED": burst(event.x,event.y-20,{count:rich?14:7,speed:180,tint:event.charred?0x504033:0xffffff,texture:textures.timberChip,life:.7,gravity:220});puff(event.x,event.y-15,event.charred?0x6a645d:0xa88c64,3,.9);break;
         case "FELL_IN_WATER": ring(event.x, event.y, 60, 0x9fe8ff, 0.5); burst(event.x, event.y, { count: 12, speed: 220, tint: 0xbff4ff, gravity: 500, life: 0.55 }); camera.addTrauma(0.2); break;
         case "RECOVERED": ring(event.x, event.y, 50, 0x7fffd4, 0.4); burst(event.x, event.y - 30, { count: 10, speed: 160, tint: 0x7fffd4, gravity: -100 }); break;
         case "SURGE": waves.push({ age: 0 }); break;
@@ -623,10 +642,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
   // ------------------------------------------------------------------ per frame
   let fpsWindow = [], frameCount = 0;
-  function render(dtMs) {
+  function render(dtMs, ambientPaused = false) {
+    // One paused clock for particles, ice/fire, bridge lift, actors and scenery.
+    // The authoritative simulation is paused by the screen as before.
+    const observedFrameMs=dtMs;
+    if(ambientPaused)dtMs=0;
     const dt = Math.min(0.1, dtMs / 1000);
     elapsed += dt; frameCount++;
-    fpsWindow.push(dtMs); if (fpsWindow.length > 120) fpsWindow.shift();
+    if (!ambientPaused) ambientElapsed += dt;
+    if(!ambientPaused)fpsWindow.push(observedFrameMs); if (fpsWindow.length > 120) fpsWindow.shift();
     const viewport = { width: stage.screen.width, height: stage.screen.height };
     const player = state.player, mate = state.mate, boss = state.boss;
     const riding = player.state === "RIDING" || player.state === "MOUNTING";
@@ -643,9 +667,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
     for (const chunk of chunks) chunk.sprite.visible = chunk.x < right && chunk.x + chunk.width > left && chunk.y < bottom && chunk.y + chunk.height > top;
     for (const strip of waterStrips) {
+      if (environment) break;
       strip.tilePosition.x = reducedMotion ? 0 : elapsed * 28;
       strip.tilePosition.y = reducedMotion ? 0 : Math.sin(elapsed * 0.8) * 6;
     }
+    environmentView?.update({ elapsed: ambientElapsed, reducedMotion, left, right, top, bottom, low: !rich, focus,reaction:crowd });
+    interactionView.update({left,right,top,bottom});
     if (bridgeLift >= 0) {
       bridgeLift += dt;
       bridge.alpha = Math.max(0, 1 - bridgeLift / 1.2);
@@ -656,13 +683,26 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     // Cells: fire flicker and ice states.
     if (frameCount % 2 === 0 || !rich) syncCells();
     for (const [i, flame] of fireSprites) {
+      const prop=grid.propAtCell(i),floorY=(Math.floor(i/grid.cols)+.5)*cell;
+      // Sort burning timber with its actual cover. A floor-only layer hides
+      // every flame behind the crate; foreground actors still draw above it.
+      const raised=prop&&!prop.destroyed;
+      const flameLayer=raised?objects:cellFx;
+      if(flame.parent!==flameLayer)flameLayer.addChild(flame);
+      if(raised)flame.zIndex=(prop.row+prop.height)*cell+.02;
+      flame.y=(Math.floor(i/grid.cols)+.85)*cell-floorOffset(flame.x,floorY)-(prop&&!prop.destroyed?42:0);
       const x = flame.x, y = flame.y;
       flame.visible = inView(x, y);
       if (!flame.visible) continue;
       const left = grid.fire[i];
       const fade = Math.min(1, left / 3);
-      flame.scale.set(0.95 + 0.08 * Math.sin(elapsed * 11 + i), (0.85 + 0.2 * Math.sin(elapsed * 13 + i * 1.7)) * (0.5 + 0.5 * fade));
+      flame.texture=textures.flame[reducedMotion?0:Math.floor(elapsed*(rich?8:4)+i)%textures.flame.length];
+      flame.scale.set(reducedMotion?1:0.95 + 0.08 * Math.sin(elapsed * 11 + i), (reducedMotion?0.95:0.85 + 0.2 * Math.sin(elapsed * 13 + i * 1.7)) * (0.5 + 0.5 * fade));
       flame.alpha = 0.6 + 0.4 * fade;
+      if(dt>0&&!reducedMotion&&elapsed>=smokeAt[i]&&live.length<cap*.7){
+        smokeAt[i]=elapsed+(rich?1.9:3.8)+(i%5)*.12;
+        spawn({x,y:y-26,vx:4,vy:-13,texture:textures.soft,tint:0x77716a,scale:.35,scaleTo:.8,life:1.3,alpha:.18,add:false});
+      }
     }
 
     // Actors.
@@ -671,7 +711,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       : state.mode === "VICTORY_POSE" || state.result?.outcome === "VICTORY" ? DATA_ARENA_SEQUENCES.WIN
       : state.laser.firing ? DATA_ARENA_SEQUENCES.ATTACK
       : Math.hypot(player.vx, player.vy) > 30 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
-    const blink = player.invulnerable > 0 && player.state !== "DASH" && Math.floor(elapsed * 14) % 2 === 0;
+    const blink = !reducedMotion && player.invulnerable > 0 && player.state !== "DASH" && Math.floor(elapsed * 14) % 2 === 0;
     const sink = player.state === "FALLING" ? clamp(player.stateTime / 0.7, 0, 1) : 0;
     playerView.update(dtMs, { x: player.x, y: riding ? mate.y - 2 : player.y, facing: player.facing, flash: player.hitFlash,
       alpha: blink ? 0.35 : 1, lift: riding ? 44 : 0, seq: playerSeq, sink });
@@ -726,7 +766,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       entry.container.visible = visible;
       if (!visible) continue;
       const bob = reducedMotion ? 0 : Math.sin(elapsed * 6 + entry.seed * TAU) * 3;
-      entry.container.position.set(enemy.x, enemy.y);
+      entry.container.position.set(enemy.x, enemy.y - floorOffset(enemy.x,enemy.y));
       entry.container.zIndex = enemy.y;
       const appear = 1 - enemy.spawnFx / 0.4;
       const windup = enemy.windup > 0 ? 1 + 0.15 * Math.sin(elapsed * 30) : 1;
@@ -760,7 +800,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       entry.container.zIndex = core.y;
       entry.container.alpha = core.out ? Math.max(0, entry.container.alpha - dt) : 1;
       entry.glow.scale.set(3 + Math.sin(elapsed * 5) * 0.4);
-      entry.flame.scale.y = 1.6 + Math.sin(elapsed * 9) * 0.25;
+      entry.flame.scale.y = reducedMotion?1.6:1.6 + Math.sin(elapsed * 9) * 0.25;
     }
     state.beacons.forEach((beacon, i) => {
       beaconLights[i].alpha = beacon.captured ? 0.35 + 0.1 * Math.sin(elapsed * 3 + i) : beacon.active ? 0.08 + 0.06 * Math.sin(elapsed * 5) : 0;
@@ -989,6 +1029,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const sorted = [...fpsWindow].sort((a, b) => a - b);
       return {
         renderer: "CHAMPIONSHIP_SINGLE_PIXI_STAGE", scene: "DATA_ARENA", quality, reducedMotion, hasCreatureArt: playerView.hasArt,
+        environment: environmentView?.diagnostics() ?? null,
+        interactions:interactionView.diagnostics(),effectsElapsed:elapsed,
+        particleAgeTotal:live.reduce((n,p)=>n+p.age,0),scorchSprites:[...decalSprites.values()].filter(d=>d.kind!=="wet").length,
+        fireMotion:[...fireSprites].slice(0,8).map(([cell,s])=>({cell,x:s.scale.x,y:s.scale.y,frame:textures.flame.indexOf(s.texture)})),
+        playerDrawIndex: objects.children.indexOf(playerView.container),
         particles: live.length, particlePeak, particleCap: cap, fireSprites: fireSprites.size, iceSprites: iceSprites.size,
         groundChunks: chunks.length, groundBakeScale: bakeScale, enemyViews: enemyViews.size, shotViews: shotViews.size, pooledShots: shotPool.length, fans: fans.length,
         frameMsMedian: sorted.length ? sorted[Math.floor(sorted.length / 2)] : null,

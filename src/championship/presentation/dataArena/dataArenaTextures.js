@@ -38,6 +38,16 @@ export function createDataArenaTextures(PIXI) {
     ctx.lineWidth = Math.max(1.5, core * 0.22); ctx.strokeStyle = rim; ctx.stroke();
     ctx.beginPath(); ctx.arc(c - core * 0.25, c - core * 0.25, core * 0.42, 0, TAU); ctx.fillStyle = highlight; ctx.fill();
   });
+  const drawIce=(ctx,cracked=false)=>{
+    const fill=ctx.createLinearGradient(0,0,64,64);fill.addColorStop(0,'rgba(215,247,255,.96)');fill.addColorStop(.5,'rgba(106,198,230,.92)');fill.addColorStop(1,'rgba(176,228,246,.96)');
+    ctx.fillStyle=fill;ctx.fillRect(0,0,64,64);ctx.strokeStyle='rgba(225,252,255,.95)';ctx.lineWidth=2;ctx.strokeRect(1,1,62,62);
+    ctx.lineWidth=cracked?2.4:1;ctx.strokeStyle=cracked?'rgba(18,69,90,.9)':'rgba(230,252,255,.65)';
+    ctx.beginPath();ctx.moveTo(1,25);ctx.lineTo(21,31);ctx.lineTo(34,19);ctx.lineTo(43,40);ctx.lineTo(63,47);ctx.moveTo(34,19);ctx.lineTo(45,1);ctx.moveTo(43,40);ctx.lineTo(32,63);ctx.stroke();
+  };
+  const drawScorch=ctx=>{
+    const g=ctx.createRadialGradient(32,32,4,32,32,31);g.addColorStop(0,'rgba(24,15,9,.8)');g.addColorStop(.6,'rgba(40,25,14,.50)');g.addColorStop(1,'rgba(36,26,18,0)');ctx.fillStyle=g;ctx.fillRect(0,0,64,64);
+    ctx.strokeStyle='rgba(12,9,6,.55)';ctx.lineWidth=2;for(let i=0;i<6;i++){ctx.beginPath();ctx.moveTo(10+i*8,25+(i%3)*5);ctx.lineTo(13+i*7,42+(i%2)*3);ctx.stroke();}
+  };
 
   const textures = {
     glow: radial(64, [[0, "rgba(255,255,255,0.9)"], [0.35, "rgba(255,255,255,0.35)"], [1, "rgba(255,255,255,0)"]]),
@@ -86,14 +96,25 @@ export function createDataArenaTextures(PIXI) {
       ctx.fillStyle = "#5ff3ff"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#e9ffff"; ctx.stroke();
     }),
     // Cell effects (64 px tiles).
-    flame: [0, 1].map((variant) => make(64, 80, (ctx) => {
+    flame: [0, 1, 2, 3].map((variant) => make(64, 80, (ctx) => {
       const tongue = (x, h, w, color) => {
-        ctx.beginPath(); ctx.moveTo(x - w, 76); ctx.quadraticCurveTo(x - w * 0.6, 76 - h * 0.6, x + (variant ? 3 : -3), 76 - h);
-        ctx.quadraticCurveTo(x + w * 0.6, 76 - h * 0.5, x + w, 76); ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+        const bend=Math.sin(variant*Math.PI/2+x)*w*.34,top=76-h;
+        ctx.beginPath();ctx.moveTo(x-w,72);
+        ctx.bezierCurveTo(x-w*1.15,55,x+w*.2,top+h*.43,x+bend,top);
+        ctx.bezierCurveTo(x+w*.82+bend,top+h*.36,x+w*.2,top+h*.43,x+w*.77,top+h*.62);
+        ctx.bezierCurveTo(x+w*1.5,68,x+w*.55,78,x,78);
+        ctx.bezierCurveTo(x-w*.6,78,x-w*.92,76,x-w,72);
+        ctx.closePath();ctx.fillStyle=color;ctx.fill();
       };
-      tongue(32, 62, 24, "rgba(255,90,20,0.85)"); tongue(22 + variant * 6, 44, 13, "rgba(255,150,40,0.9)");
-      tongue(42 - variant * 6, 50, 12, "rgba(255,140,30,0.9)"); tongue(32, 34, 11, "rgba(255,230,140,0.95)");
+      const glow=ctx.createRadialGradient(32,68,2,32,63,28);
+      glow.addColorStop(0,'rgba(255,143,32,.32)');glow.addColorStop(1,'rgba(255,70,12,0)');ctx.fillStyle=glow;ctx.fillRect(0,36,64,44);
+      tongue(32,48,20,'rgba(235,71,17,.72)');tongue(20+Math.sin(variant)*3,34,11,'rgba(255,127,30,.78)');
+      tongue(43-Math.cos(variant)*3,39,10,'rgba(255,147,42,.82)');tongue(31,27,10,'rgba(255,218,122,.9)');
     })),
+    iceCracked:make(64,64,ctx=>drawIce(ctx,true)),
+    iceMelt:make(64,64,ctx=>{ctx.fillStyle='rgba(150,222,245,.7)';for(let i=0;i<8;i++){ctx.beginPath();ctx.moveTo(8+i*6,14+(i%3)*11);ctx.lineTo(17+i*4,19+(i%3)*11);ctx.lineTo(10+i*6,27+(i%3)*10);ctx.closePath();ctx.fill();}}),
+    scorchWet:make(64,64,ctx=>{drawScorch(ctx);const g=ctx.createRadialGradient(30,34,1,30,34,27);g.addColorStop(0,'rgba(63,146,170,.23)');g.addColorStop(1,'rgba(63,146,170,0)');ctx.fillStyle=g;ctx.fillRect(0,0,64,64);}),
+    timberChip:make(24,8,ctx=>{ctx.fillStyle='#b28850';ctx.beginPath();ctx.moveTo(0,3);ctx.lineTo(21,0);ctx.lineTo(24,5);ctx.lineTo(3,8);ctx.closePath();ctx.fill();ctx.strokeStyle='#4f3821';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(3,4);ctx.lineTo(20,3);ctx.stroke();}),
     ice: make(64, 64, (ctx) => {
       ctx.fillStyle = "rgba(196,240,255,0.88)"; ctx.fillRect(0, 0, 64, 64);
       ctx.strokeStyle = "rgba(255,255,255,0.9)"; ctx.lineWidth = 2; ctx.strokeRect(1, 1, 62, 62);
@@ -113,10 +134,7 @@ export function createDataArenaTextures(PIXI) {
         ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, TAU); ctx.fill();
       }
     }),
-    ash: make(64, 64, (ctx) => {
-      const g = ctx.createRadialGradient(32, 32, 4, 32, 32, 32); g.addColorStop(0, "rgba(20,14,12,0.75)"); g.addColorStop(1, "rgba(20,14,12,0)");
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 64);
-    }),
+    ash: make(64, 64, drawScorch),
     water: make(256, 128, (ctx) => {
       const g = ctx.createLinearGradient(0, 0, 0, 128); g.addColorStop(0, "#0d4f7a"); g.addColorStop(1, "#0a3a60");
       ctx.fillStyle = g; ctx.fillRect(0, 0, 256, 128);

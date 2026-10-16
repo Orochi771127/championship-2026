@@ -80,6 +80,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   const playerSpawn = at(map.playerSpawn), mateSpawn = at(map.mateSpawn);
 
   const player = {
+    canSwim: partner.canSwim === true,
     id: nextId++, x: playerSpawn.x, y: playerSpawn.y, vx: 0, vy: 0, radius: DATA_ARENA_PLAYER.radius,
     hp: partner.hp, maxHp: partner.hp, state: "NORMAL", stateTime: 0, facing: 1,
     invulnerable: 0, dashGrace: 0, dashTimer: 0, dashDirX: 1, dashDirY: 0, dashCharges: 1, dashRecharge: 0,
@@ -96,6 +97,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     x0: 0, y0: 0, x1: 0, y1: 0, endKind: "RANGE", igniteCell: -1, igniteAccum: 0, hitTimer: 0
   };
   const mate = {
+    canSwim: DATA_ARENA_MATE.canSwim === true,
     id: nextId++, x: mateSpawn.x, y: mateSpawn.y, vx: 0, vy: 0, radius: DATA_ARENA_MATE.radius,
     hp: DATA_ARENA_MATE.hp, maxHp: DATA_ARENA_MATE.hp, state: hasMate ? "FOLLOW" : "ABSENT", stateTime: 0, facing: -1,
     jetTimer: 0.6, surgeCooldown: 0, surgeAim: null, reviveProgress: 0, downedTime: 0, hitFlash: 0, swimming: false
@@ -148,6 +150,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   player.dashCharges = stat.dashCharges;
 
   // ------------------------------------------------------------------ movement
+  const movementKind = (body) => body.canSwim === true ? "swimmer" : "walker";
   function blocked(x, y, radius, kind) {
     if (x - radius < 0 || y - radius < 0 || x + radius > worldWidth || y + radius > worldHeight) return true;
     const c0 = grid.cellOf(x - radius), c1 = grid.cellOf(x + radius), r0 = grid.cellOf(y - radius), r1 = grid.cellOf(y + radius);
@@ -168,7 +171,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const speed = Math.hypot(body.kbx ?? 0, body.kby ?? 0);
     if (speed < 1) { body.kbx = body.kby = 0; return; }
     const x0 = body.x, y0 = body.y;
-    moveBody(body, body.kbx * DT, body.kby * DT, "swimmer");
+    moveBody(body, body.kbx * DT, body.kby * DT, "forced");
     const moved = Math.hypot(body.x - x0, body.y - y0);
     if (speed >= DATA_ARENA_ENERGY.slamSpeed && moved < speed * DT * 0.5) {
       const amount = Math.max(DATA_ARENA_ENERGY.slamMin, body.maxHp * DATA_ARENA_ENERGY.slamShare);
@@ -343,6 +346,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   }
 
   function startFall() {
+    if (player.canSwim || ["FALLING","DOWNED","DEFEATED"].includes(player.state)) return;
+    player.lunge=null;player.cast=null;player.kbx=player.kby=player.vx=player.vy=0;player.dashTimer=0;
+    removeTelegraph(`cast:${player.id}`);
     player.fallFromX = player.x; player.fallFromY = player.y;
     laser.firing = false;
     setPlayerState("FALLING");
@@ -377,7 +383,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (player.state !== "RIDING" && player.state !== "MOUNTING") return;
     if (mate.state === "RIDDEN") { mate.state = "FOLLOW"; mate.stateTime = 0; }
     const surface = grid.surfaceAt(player.x, player.y);
-    if (surface === "WATER") {
+    if (surface === "WATER" && !player.canSwim) {
       const safe = grid.nearestSafeCell(player.x, player.y);
       if (!thrown && safe && distance(safe.x, safe.y, player.x, player.y) <= DATA_ARENA_MATE.ride.hopReach) {
         player.x = safe.x; player.y = safe.y;
@@ -393,7 +399,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     // On land: step off beside the mount.
     const side = player.facing >= 0 ? 1 : -1;
     const offX = player.x + side * 34;
-    if (!blocked(offX, player.y + 10, player.radius * 0.8, "walker")) player.x = offX;
+    if (!blocked(offX, player.y + 10, player.radius * 0.8, movementKind(player))) player.x = offX;
     player.y += 10;
     player.invulnerable = Math.max(player.invulnerable, thrown ? 1.0 : 0.2);
     setPlayerState("NORMAL");
@@ -428,8 +434,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         const tx = input.moveX * speed, ty = input.moveY * speed;
         const k = Math.min(1, DT * 14);
         player.vx += (tx - player.vx) * k; player.vy += (ty - player.vy) * k;
-        // Walking stops at the bank; only a dash (or a bridge melting) reaches open water.
-        moveBody(player, player.vx * DT, player.vy * DT, "walker");
+        moveBody(player, player.vx * DT, player.vy * DT, movementKind(player));
         if (input.ride) { if (tryMount()) break; }
         if (input.dash && player.dashCharges > 0 && player.root <= 0) {
           if (player.cast) { removeTelegraph(`cast:${player.id}`); player.cast = null; } // a dash cancels a windup
@@ -440,7 +445,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
       case "DASH": {
         const step = DATA_ARENA_PLAYER.dash.speed * DT;
-        moveBody(player, player.dashDirX * step, player.dashDirY * step, "player");
+        moveBody(player, player.dashDirX * step, player.dashDirY * step, movementKind(player));
         player.vx = player.dashDirX * stat.speed; player.vy = player.dashDirY * stat.speed;
         if (stat.dashDamage > 0) {
           for (const enemy of state.enemies) {
@@ -671,12 +676,17 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     let travelled = 0;
     for (let s = 16; s <= move.distance; s += 16) {
       const x = fromX + dx * s, y = fromY + dy * s;
-      if (blocked(x, y, caster.radius * 0.8, "player")) break;
-      travelled = s;
+      // A frost blink creates actual walkable ice before occupying it. Hard
+      // cover still stops the cast; ordinary movement never gets this bypass.
+      if (blocked(x, y, caster.radius * 0.8, "forced")) break;
       if (move.freezeTrail) {
-        const c = grid.cellOf(x), r = grid.cellOf(y);
-        if (grid.inBounds(c, r)) { const before = events.length; grid.freezeCell(grid.index(c, r), 6 * stat.iceScale, events, "BLINK"); for (let k = before; k < events.length; k++) events[k].t = state.time; }
+        const radius=caster.radius*.8,before=events.length;
+        for(let r=grid.cellOf(y-radius);r<=grid.cellOf(y+radius);r++)for(let c=grid.cellOf(x-radius);c<=grid.cellOf(x+radius);c++)
+          if(grid.inBounds(c,r))grid.freezeCell(grid.index(c,r),6*stat.iceScale,events,"BLINK");
+        for(let k=before;k<events.length;k++)events[k].t=state.time;
       }
+      if(blocked(x,y,caster.radius*.8,movementKind(caster)))break;
+      travelled = s;
     }
     caster.x = fromX + dx * travelled; caster.y = fromY + dy * travelled;
     if (caster === player) { player.invulnerable = Math.max(player.invulnerable, 0.18); player.dashGrace = Math.max(player.dashGrace, 0.18); player.perfectThisDash = false; }
@@ -694,7 +704,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         launch(target, (target.x - caster.x) / d, (target.y - caster.y) / d, DATA_ARENA_ENERGY.launch.NOVA);
       }
     }
-    areaElement(caster.x, caster.y, move.radius, move);
+    areaElement(caster.x, caster.y, move.radius, move,move.damage*damageScale);
     emit({ type: "NOVA", team, x: caster.x, y: caster.y, radius: move.radius, effect: move.effect });
   }
 
@@ -705,20 +715,24 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     return null;
   }
 
-  /** A burst's effect on terrain: fire lights oil, frost freezes open water. */
-  function areaElement(x, y, radius, move) {
+  /** One resolved burst: fire thaws ice or lights fuel; frost freezes water. */
+  function areaElement(x, y, radius, move,damage=move.damage) {
     const before = events.length;
+    if(damage>0)grid.damagePropsInRadius(x,y,radius,damage,events,move.effect==="IGNITE"?"FIRE":"SKILL");
     const span = radius / cell;
     for (let r = grid.cellOf(y - radius); r <= grid.cellOf(y + radius); r++) for (let c = grid.cellOf(x - radius); c <= grid.cellOf(x + radius); c++) {
       if (!grid.inBounds(c, r) || Math.hypot(c + 0.5 - x / cell, r + 0.5 - y / cell) > span) continue;
       const i = grid.index(c, r);
-      if (move.effect === "IGNITE") grid.ignite(i, events, "SKILL");
+      if (move.effect === "IGNITE") {
+        if(grid.ice[i]>0)grid.meltAt((c+.5)*cell,(r+.5)*cell,DATA_ARENA_GRID_RULES.emberIceMelt,events);
+        else grid.ignite(i, events, "SKILL");
+      }
       if (move.freezeWater || move.effect === "ROOT") grid.freezeCell(i, 7 * stat.iceScale, events, "SKILL");
     }
     // Ice puts fire out: a freezing burst douses burning ground in its radius.
     if (move.freezeWater || move.effect === "ROOT") grid.applyWater(x, y, span, events);
     for (let k = before; k < events.length; k++) events[k].t = state.time;
-    if (move.effect === "IGNITE" && events.length > before) chain("BURN", x, y);
+    if (move.effect === "IGNITE" && events.slice(before).some(e=>e.type==='FIRE_IGNITE'||e.type==='PROP_HIT'&&e.cause==='FIRE')) chain("BURN", x, y);
     if ((move.freezeWater || move.effect === "ROOT") && events.slice(before).some((e) => e.type === "FIRE_OUT")) chain("STEAM", x, y);
     if ((move.freezeWater || move.effect === "ROOT") && events.slice(before).some((e) => e.type === "ICE_FORM")) chain("FROST", x, y);
   }
@@ -727,9 +741,18 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const lunge = caster.lunge;
     if (!lunge) return;
     const step = Math.min(lunge.left, lunge.speed * DT);
-    const kind = caster === player ? "player" : "walker";
+    const kind = movementKind(caster);
     const nx = caster.x + lunge.dirX * step, ny = caster.y + lunge.dirY * step;
-    if (blocked(nx, ny, caster.radius * 0.8, kind)) lunge.left = 0;
+    if (blocked(nx, ny, caster.radius * 0.8, kind)) {
+      const before=events.length;
+      for(const prop of grid.props) {
+        if(prop.destroyed||lunge.hits.has(prop.id))continue;
+        const px=clamp(nx,prop.col*cell,(prop.col+prop.width)*cell),py=clamp(ny,prop.row*cell,(prop.row+prop.height)*cell);
+        if(distance(nx,ny,px,py)<=caster.radius*.8+2){grid.damageProp(prop,lunge.damage,events,"LUNGE");lunge.hits.add(prop.id);}
+      }
+      for(let k=before;k<events.length;k++)events[k].t=state.time;
+      lunge.left = 0;
+    }
     else { caster.x = nx; caster.y = ny; lunge.left -= step; }
     for (const target of targetsFor(caster.team)) {
       if (lunge.hits.has(target.id)) continue;
@@ -756,7 +779,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (target === player && player.dashGrace > 0) { perfectDodge(zone.x, zone.y); continue; }
         strike(target, zone.damage, "ZONE", zoneStatus(zone.move), zone.x, zone.y);
       }
-      areaElement(zone.x, zone.y, zone.radius, zone.move);
+      areaElement(zone.x, zone.y, zone.radius, zone.move,zone.damage);
       emit({ type: "ZONE_BURST", team: zone.team, x: zone.x, y: zone.y, radius: zone.radius, effect: zone.move.effect });
     }
     if (state.zones.some((zone) => zone.done)) state.zones = state.zones.filter((zone) => !zone.done);
@@ -905,11 +928,18 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     }
     if (flash) laser.hitTimer = 0.08;
     laser.x0 = ox; laser.y0 = oy; laser.x1 = ox + dx * end; laser.y1 = oy + dy * end; laser.endKind = endKind;
+    if(endKind==="WALL") {
+      const before=events.length;
+      grid.damageProp(grid.propAt(laser.x1+dx*.5,laser.y1+dy*.5),damage,events,"LASER");
+      for(let k=before;k<events.length;k++)events[k].t=state.time;
+    }
     // Where the beam strikes the floor (not a body or shard), it heats an oil
     // spill until it catches: aim at the yard on purpose to set it alight.
     const floorHit = endKind === "WALL" || endKind === "RANGE";
-    const endCell = !floorHit ? -1 : grid.inBounds(grid.cellOf(laser.x1), grid.cellOf(laser.y1)) ? grid.index(grid.cellOf(laser.x1), grid.cellOf(laser.y1)) : -1;
-    if (endCell >= 0 && grid.flammable[endCell] && grid.fire[endCell] <= 0) {
+    const ec=grid.cellOf(laser.x1+dx*.5),er=grid.cellOf(laser.y1+dy*.5);
+    const endCell = !floorHit || !grid.inBounds(ec,er) ? -1 : grid.index(ec,er);
+    if(stat.frostLens&&endCell>=0){const before=events.length;grid.applyWater(laser.x1,laser.y1,.35,events);for(let k=before;k<events.length;k++)events[k].t=state.time;}
+    if (!stat.frostLens && endCell >= 0 && grid.flammable[endCell] && grid.fire[endCell] <= 0) {
       laser.igniteAccum = endCell === laser.igniteCell ? laser.igniteAccum + DT : DT;
       laser.igniteCell = endCell;
       if (laser.igniteAccum >= DATA_ARENA_PLAYER.laser.igniteSeconds && grid.ignite(endCell, events, "LASER")) {
@@ -1047,6 +1077,12 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       const stepLength = Math.min(surge.speed * DT, wave.length - wave.travelled);
       // Cover blocks the wave too.
       const clear = grid.raycast(wave.x, wave.y, wave.dx, wave.dy, stepLength + 1);
+      if(clear<stepLength+1){
+        const before=events.length,prop=grid.propAt(wave.x+wave.dx*(clear+.5),wave.y+wave.dy*(clear+.5));
+        if(prop&&!wave.hit.has(prop.id)){grid.damageProp(prop,surge.damage,events,"SURGE");wave.hit.add(prop.id);}
+        grid.applyWater(wave.x+wave.dx*clear,wave.y+wave.dy*clear,surge.pathRadius,events);
+        for(let k=before;k<events.length;k++)events[k].t=state.time;
+      }
       const advance = Math.min(stepLength, clear);
       wave.x += wave.dx * advance; wave.y += wave.dy * advance; wave.travelled += advance;
       const radius = wave.width / 2;
@@ -1128,7 +1164,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const c = grid.cellOf(x), r = grid.cellOf(y);
     if (!grid.inBounds(c, r)) return;
     const before = events.length;
-    if (projectile.onTerrain === "IGNITE") grid.ignite(grid.index(c, r), events, "SKILL");
+    if (projectile.onTerrain === "IGNITE") {
+      if(grid.ice[grid.index(c,r)]>0)grid.meltAt(x,y,DATA_ARENA_GRID_RULES.emberIceMelt,events);
+      else grid.ignite(grid.index(c, r), events, "SKILL");
+    }
     if (projectile.onTerrain === "FREEZE") {
       // Ice freezes open water and puts out a burning cell where it lands.
       if (!grid.freezeCell(grid.index(c, r), 5 * stat.iceScale, events, "SKILL")) grid.applyWater(x, y, 0.75, events);
@@ -1175,6 +1214,11 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (projectile.travelled >= projectile.range) { projectile.dead = true; terrainEffect(projectile); continue; }
       }
       if (grid.inBounds(c, r) && grid.blocksLaser(grid.index(c, r))) {
+        const before=events.length,prop=grid.propAtCell(grid.index(c,r));
+        grid.damageProp(prop,projectile.damage,events,projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER"?"FIRE":"PROJECTILE");
+        if(projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER")grid.ignite(grid.index(c,r),events,"PROJECTILE");
+        if(projectile.kind==="WAVE"||projectile.kind==="TIDE"||projectile.onTerrain==="FREEZE")grid.applyWater(projectile.x,projectile.y,.8,events);
+        for(let k=before;k<events.length;k++)events[k].t=state.time;
         projectile.dead = true;
         terrainEffect(projectile, -1);
         emit({ type: "SHOT_BLOCKED", kind: projectile.kind, x: projectile.x, y: projectile.y });
@@ -1190,18 +1234,18 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
           }
         }
       }
+      if ((projectile.kind === "EMBER" || projectile.onTerrain === "IGNITE") && grid.inBounds(c, r) && grid.ice[grid.index(c, r)] > 0) {
+        projectile.dead = true;
+        const before = events.length;
+        grid.meltAt(projectile.x, projectile.y, DATA_ARENA_GRID_RULES.emberIceMelt, events);
+        for (let k = before; k < events.length; k++) events[k].t = state.time;
+        continue;
+      }
       if (projectile.owner === "player") { updatePlayerShot(projectile); continue; }
       if (projectile.owner !== "mate" && player.barrier > 0 && barrierBlocks(projectile)) {
         projectile.dead = true;
         state.stats.barrierBlocks++;
         emit({ type: "CANCEL", rule: "BARRIER_BLOCKS_SHOT", x: projectile.x, y: projectile.y });
-        continue;
-      }
-      if (projectile.kind === "EMBER" && grid.inBounds(c, r) && grid.ice[grid.index(c, r)] > 0) {
-        projectile.dead = true;
-        const before = events.length;
-        grid.meltAt(projectile.x, projectile.y, DATA_ARENA_GRID_RULES.emberIceMelt, events);
-        for (let k = before; k < events.length; k++) events[k].t = state.time;
         continue;
       }
       if (projectile.owner === "mate") {
@@ -1680,7 +1724,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   function createRival(definition, tier) {
     const spawn = at(map.rivalSpawn ?? map.bossSpawn);
     const tierRule = DATA_ARENA_TOURNAMENT.tiers[tier] ?? DATA_ARENA_TOURNAMENT.tiers[0];
-    return { id: nextId++, rival: true, definitionId: definition.id, speciesId: definition.speciesId, team: "rival", kit: DATA_ARENA_KITS[definition.kit],
+    return { id: nextId++, rival: true, canSwim:definition.canSwim===true, definitionId: definition.id, speciesId: definition.speciesId, team: "rival", kit: DATA_ARENA_KITS[definition.kit],
       x: spawn.x, y: spawn.y, vx: 0, vy: 0, kbx: 0, kby: 0, radius: definition.radius, hp: definition.hp, maxHp: definition.hp,
       speed: definition.speed, preferredRange: definition.preferredRange, tier: tierRule, damageScale: tierRule.damage,
       energy: DATA_ARENA_ENERGY.max, energySpentAt: -Infinity, cooldowns: Object.create(null), ult: 0, cast: null, lunge: null,
@@ -1722,7 +1766,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       const radius = rival.wantsCover ? range * (0.9 + random() * 0.5) : range * (0.8 + random() * 0.4);
       const x = player.x + Math.cos(angle) * radius, y = player.y + Math.sin(angle) * radius;
       if (x < 40 || y < 40 || x > worldWidth - 40 || y > worldHeight - 40) continue;
-      if (blocked(x, y, rival.radius * 0.8, "walker") || grid.burningAt(x, y)) continue;
+      if (blocked(x, y, rival.radius * 0.8, movementKind(rival)) || grid.burningAt(x, y)) continue;
       const sight = hasSight(x, y, player.x, player.y);
       let score = -distance(x, y, rival.x, rival.y) / 260;
       score += rival.wantsCover ? (sight ? -3 : 3) : (sight ? 2.5 : -2);
@@ -1765,7 +1809,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (rival.dashTimer > 0) {
       rival.dashTimer -= DT;
       const step = 980 * DT;
-      if (!blocked(rival.x + rival.dashX * step, rival.y + rival.dashY * step, rival.radius * 0.8, "walker")) { rival.x += rival.dashX * step; rival.y += rival.dashY * step; }
+      if (!blocked(rival.x + rival.dashX * step, rival.y + rival.dashY * step, rival.radius * 0.8, movementKind(rival))) { rival.x += rival.dashX * step; rival.y += rival.dashY * step; }
       return;
     }
     if (rival.dodge) {
@@ -1774,7 +1818,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         const { dirX, dirY } = rival.dodge;
         const length = Math.hypot(dirX, dirY) || 1;
         let px = -dirY / length, py = dirX / length;
-        if (blocked(rival.x + px * 120, rival.y + py * 120, rival.radius, "walker")) { px = -px; py = -py; }
+        if (blocked(rival.x + px * 120, rival.y + py * 120, rival.radius, movementKind(rival))) { px = -px; py = -py; }
         rival.dashX = px; rival.dashY = py; rival.dashTimer = 0.18; rival.invulnerable = 0.22; rival.dashCooldown = 2.2;
         rival.cast = null; removeTelegraph(`cast:${rival.id}`);
         rival.dodge = null;
@@ -1825,9 +1869,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const speed = rival.speed * moveScale(rival);
     const k = Math.min(1, DT * 7);
     rival.vx += (ax * speed - rival.vx) * k; rival.vy += (ay * speed - rival.vy) * k;
-    moveBody(rival, rival.vx * DT, rival.vy * DT, "walker");
+    moveBody(rival, rival.vx * DT, rival.vy * DT, movementKind(rival));
     stepKnock(rival);
-    if (grid.surfaceAt(rival.x, rival.y) === "WATER") {
+    if (!rival.canSwim && grid.surfaceAt(rival.x, rival.y) === "WATER") {
       const bank = grid.nearestSafeCell(rival.x, rival.y);
       if (bank) { rival.x = bank.x; rival.y = bank.y; damageRival(rival, 12, "WATER"); emit({ type: "RIVAL_SPLASH", x: rival.x, y: rival.y }); chain("DROWN", rival.x, rival.y); }
     }
@@ -2012,7 +2056,12 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     grid.step(DT, gridEvents);
     for (const event of gridEvents) { event.t = state.time; events.push(event); }
     // A body standing on melted ice drops into the water.
-    if ((player.state === "NORMAL") && grid.surfaceAt(player.x, player.y) === "WATER") startFall();
+    if (!["RIDING","MOUNTING","DOWNED","DEFEATED","FALLING"].includes(player.state)
+      && !player.canSwim && grid.surfaceAt(player.x, player.y) === "WATER") startFall();
+    for(const rival of state.rivals)if(rival.active&&rival.hp>0&&!rival.canSwim&&grid.surfaceAt(rival.x,rival.y)==="WATER") {
+      const bank=grid.nearestSafeCell(rival.x,rival.y);
+      if(bank){rival.x=bank.x;rival.y=bank.y;rival.kbx=rival.kby=0;rival.lunge=null;damageRival(rival,12,"WATER");emit({type:"RIVAL_SPLASH",x:rival.x,y:rival.y});}
+    }
     if ((player.state === "NORMAL" || player.state === "DASH") && grid.burningAt(player.x, player.y)) {
       // Fire is a damage-over-time zone, never an instant kill.
       if (player.invulnerable <= 0) {
@@ -2106,7 +2155,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         xpToNext: xpToNext(state.level), score: state.score, kills: state.kills, hype: Math.round(state.hype), cheer: state.cheerTimer > 0,
         player: { x: Math.round(player.x), y: Math.round(player.y), hp: Math.round(player.hp), maxHp: player.maxHp, state: player.state,
           dashCharges: player.dashCharges, dashMax: stat.dashCharges, dashRecharge: player.dashRecharge, revives: player.revives,
-          surface: grid.surfaceAt(player.x, player.y), invulnerable: player.invulnerable > 0 },
+           surface: grid.surfaceAt(player.x, player.y), canSwim:player.canSwim, invulnerable: player.invulnerable > 0 },
         laser: { firing: laser.firing, heat: laser.heat, heatCapacity: stat.heatCapacity, overheated: laser.overheated, endKind: laser.endKind,
           angle: laser.angle, length: Math.round(Math.hypot(laser.x1 - laser.x0, laser.y1 - laser.y0)) },
         mate: { x: Math.round(mate.x), y: Math.round(mate.y), hp: Math.round(mate.hp), maxHp: Math.round(mate.maxHp), state: mate.state,
@@ -2114,6 +2163,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         boss: boss ? { hp: Math.round(boss.hp), maxHp: boss.maxHp, state: boss.state, enraged: boss.enraged, x: Math.round(boss.x), y: Math.round(boss.y),
           shielded: state.beacons.some((b) => !b.captured) } : null,
         enemies: state.enemies.length, projectiles: state.projectiles.length, burning: grid.burningCount, ice: grid.iceCount,
+        terrainRevision:grid.navRevision,scorchedCells:grid.scorch.reduce((n,v)=>n+(v>0),0),
+        props:grid.props.map(p=>({id:p.id,material:p.material,hp:Math.round(p.hp),maxHp:p.maxHp,state:grid.propVisualState(p),destroyed:p.destroyed,rect:[p.col,p.row,p.width,p.height]})),
         objective: objective(), offer: state.offer ? [...state.offer] : null, upgrades: { ...upgrades },
         beacons: state.beacons.map((b) => ({ x: b.x, y: b.y, active: b.active, captured: b.captured, progress: b.progress })),
         cores: state.cores.map((c) => ({ x: c.x, y: c.y, out: c.out })),

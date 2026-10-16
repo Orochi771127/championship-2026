@@ -198,7 +198,7 @@ test("safe fallback: a melting bridge drops the player, who recovers on the near
   assert.ok(s.player.invulnerable > 0);
 });
 
-test("walking stops at the bank; a dash can still reach open water and recovers safely", () => {
+test("walking and a non-swimmer dash both stop at the unfrozen bank", () => {
   const { sim, s } = quietArena();
   sim.internals.enterPhase(2);
   Object.assign(s.player, center(14, 27));
@@ -206,8 +206,8 @@ test("walking stops at the bank; a dash can still reach open water and recovers 
   assert.equal(sim.grid.surfaceAt(s.player.x, s.player.y), "GROUND");
   assert.equal(s.player.state, "NORMAL");
   const events = run(sim, 1.2, (arena) => ({ moveY: 1, dash: arena.getState().time < 1.0 + DT * 2, aimX: 14.5 * C, aimY: 31 * C }));
-  assert.ok(events.some((event) => event.type === "FELL_IN_WATER"), "the dash ends over the channel");
-  assert.ok(events.some((event) => event.type === "RECOVERED"));
+  assert.equal(events.some((event) => event.type === "FELL_IN_WATER"),false);
+  assert.equal(events.some((event) => event.type === "RECOVERED"),false);
   assert.equal(s.player.state, "NORMAL");
   assert.equal(sim.grid.surfaceAt(s.player.x, s.player.y), "GROUND");
 });
@@ -752,15 +752,15 @@ function arenaStartupHarness(failure) {
   const ticker = { remove() { calls.removed++; }, add() { calls.added++; } };
   const shared = { app: { ticker }, setResolutionCap() {} };
   const env = {
-    signal: { aborted: false }, stage: null, scene: null, audio: null, sim: null, result: null, paused: false, accumulator: 1,
+    signal: { aborted: false }, stage: null, scene: null, environment: null, interactionArt:null, qaRecentEvents:[], qa:false, URL, loadDataArenaEnvironment:async()=>null, loadDataArenaInteractionArt:async()=>null, audio: null, sim: null, result: null, paused: false, qualityReloading:false, accumulator: 1,
     tickerCallback: null, bundles: new Map(), bundleScope: null, root: makeNode(), field: {}, bannerTimer: null, vignetteTimer: null,
-    matchId: 0, seed: 1, partnerId: 'ember-lizard', quality: 'low', gameMode: 'TOURNAMENT', audioBus: null, resolutionCap: 2,
-    console: { error(...args) { calls.logs.push(args); } }, clearTimeout,
+    matchId: 0, seed: 1, partnerId: 'ember-lizard', quality: 'low', gameMode: 'TOURNAMENT', audioBus: null, resolutionCap: 2, href:'http://localhost/championship.html',
+    console: { error(...args) { calls.logs.push(args); },warn(...args){calls.logs.push(args);} }, clearTimeout,
     el: makeNode, t: (key) => key, button: (_class, label, onClick) => ({ label, onClick, dataset: {} }),
     showOverlay: (panel) => calls.panels.push(panel), releaseInputs() {}, close() { calls.closed = true; },
     ensureStage: async () => { fail('stage'); return shared; },
     loadCast: async () => { env.bundles.set('loaded', { dispose() { calls.disposed++; fail('cleanup'); } }); fail('cast'); return true; },
-    createDataArenaSimulation: () => ({ drainEvents: () => [] }),
+    createDataArenaSimulation: () => ({ grid:{map:{}},drainEvents: () => [] }),
     createDataArenaAudio: () => ({ dispose() { calls.disposed++; } }),
     mountScene() { fail('mount'); env.scene = { dispose() { calls.disposed++; } }; },
     buildHud() { fail('hud'); }, hideOverlay() {}, frame() {}, music: { setScene() {} }, toast() {}, banner() {}, handleEvents() {}

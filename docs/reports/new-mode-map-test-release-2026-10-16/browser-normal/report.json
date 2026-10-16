@@ -1,0 +1,1078 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-16T23:22:41.975Z",
+  "origin": "http://127.0.0.1:8742",
+  "seed": 7,
+  "partnerIndex": 0,
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "softwareRendering": false,
+  "testReleaseVersions": [
+    "harbor-r6",
+    "tournament-detail-r3"
+  ],
+  "physicalDeviceAccepted": false,
+  "checks": [
+    {
+      "name": "title menu shows the Data Arena entry",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "a fresh player lands on the tournament mode",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "the select screen previews the four-move kit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "round 1 opens with a VS intro and frozen input",
+      "ok": true,
+      "detail": {
+        "t": {
+          "round": 0,
+          "status": "INTRO",
+          "timer": 2.2666666666666693,
+          "roundTime": 0,
+          "order": [
+            "flame",
+            "tide",
+            "storm"
+          ],
+          "results": []
+        },
+        "banner": "第 1 輪　VS　焰核炎靈"
+      }
+    },
+    {
+      "name": "one shared Pixi Application, one arena ticker callback",
+      "ok": true,
+      "detail": {
+        "frameFault": null,
+        "tickerListeners": 3,
+        "scene": {
+          "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+          "scene": "DATA_ARENA",
+          "quality": "high",
+          "reducedMotion": false,
+          "hasCreatureArt": true,
+          "environment": {
+            "id": "data-arena:tournament:detail:r3",
+            "tier": "high",
+            "scope": "FULL_MAP_REVIEW",
+            "groundChunks": 9,
+            "visibleGroundChunks": 9,
+            "props": 8,
+            "crowdCount": 56,
+            "crowdFrame": 2,
+            "pennantFrame": 2,
+            "decodedBytes": 26165248,
+            "waterOffsetX": 15.165999999999993,
+            "occluders": [
+              {
+                "id": "cargo-4",
+                "sortY": 384,
+                "alpha": 1,
+                "drawIndex": 5
+              },
+              {
+                "id": "cargo-5",
+                "sortY": 384,
+                "alpha": 1,
+                "drawIndex": 6
+              },
+              {
+                "id": "cargo-8",
+                "sortY": 832,
+                "alpha": 1,
+                "drawIndex": 14
+              },
+              {
+                "id": "cargo-9",
+                "sortY": 832,
+                "alpha": 1,
+                "drawIndex": 15
+              },
+              {
+                "id": "cargo-12",
+                "sortY": 256,
+                "alpha": 1,
+                "drawIndex": 3
+              },
+              {
+                "id": "cargo-13",
+                "sortY": 256,
+                "alpha": 1,
+                "drawIndex": 4
+              },
+              {
+                "id": "cargo-14",
+                "sortY": 960,
+                "alpha": 1,
+                "drawIndex": 18
+              },
+              {
+                "id": "cargo-15",
+                "sortY": 960,
+                "alpha": 1,
+                "drawIndex": 19
+              }
+            ]
+          },
+          "interactions": {
+            "artLoaded": true,
+            "tier": "high",
+            "decodedBytes": 1108960,
+            "props": [
+              {
+                "id": "cargo-6",
+                "hp": 120,
+                "state": "INTACT",
+                "texture": "INTACT",
+                "drawIndex": 7
+              },
+              {
+                "id": "cargo-7",
+                "hp": 120,
+                "state": "INTACT",
+                "texture": "INTACT",
+                "drawIndex": 8
+              },
+              {
+                "id": "cargo-10",
+                "hp": 120,
+                "state": "INTACT",
+                "texture": "INTACT",
+                "drawIndex": 12
+              },
+              {
+                "id": "cargo-11",
+                "hp": 120,
+                "state": "INTACT",
+                "texture": "INTACT",
+                "drawIndex": 13
+              }
+            ]
+          },
+          "effectsElapsed": 3.0331999999999986,
+          "particleAgeTotal": 0,
+          "scorchSprites": 0,
+          "fireMotion": [],
+          "playerDrawIndex": 16,
+          "particles": 0,
+          "particlePeak": 0,
+          "particleCap": 380,
+          "fireSprites": 0,
+          "iceSprites": 0,
+          "groundChunks": 0,
+          "groundBakeScale": 1,
+          "enemyViews": 0,
+          "shotViews": 0,
+          "pooledShots": 0,
+          "fans": 0,
+          "frameMsMedian": 16.69999999999891,
+          "frameMsP95": 16.799999999999272,
+          "zoom": 0.4978813559322034,
+          "camera": {
+            "x": 768,
+            "y": 512
+          }
+        },
+        "stage": {
+          "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+          "applicationCount": 1,
+          "ticker": "APPLICATION_OWNED",
+          "threeUsed": false,
+          "sceneCount": 1,
+          "contextLost": false,
+          "resolution": 1,
+          "resolutionCap": 2,
+          "antialias": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "bundles": [
+          "species-034",
+          "species-047",
+          "species-102",
+          "species-113"
+        ],
+        "arenaUpdateMs": {
+          "median": 0.4000000059604645,
+          "p95": 0.9000000059604645
+        }
+      }
+    },
+    {
+      "name": "existing creature art loaded for the partner and all three rivals",
+      "ok": true,
+      "detail": [
+        "species-034",
+        "species-047",
+        "species-102",
+        "species-113"
+      ]
+    },
+    {
+      "name": "arena fills the desktop viewport",
+      "ok": true,
+      "detail": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "name": "kit HUD shows three skills, the ultimate and the energy bar",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "holding the mouse fires a sustained, heating beam",
+      "ok": true,
+      "detail": {
+        "firing": true,
+        "heat": 30.59999999999999,
+        "heatCapacity": 100,
+        "overheated": false,
+        "endKind": "RANGE",
+        "angle": -1.614901836253867,
+        "length": 660,
+        "gameSeconds": 0.8999999999999999
+      }
+    },
+    {
+      "name": "releasing cools the beam",
+      "ok": true,
+      "detail": {
+        "firing": false,
+        "heat": 0,
+        "heatCapacity": 100,
+        "overheated": false,
+        "endKind": "RANGE",
+        "angle": -1.6154800190425,
+        "length": 660
+      }
+    },
+    {
+      "name": "the 2 key casts skill 1 (energy spent, slot cooling)",
+      "ok": true,
+      "detail": {
+        "energyBefore": 100,
+        "afterCast": {
+          "kit": {
+            "moves": [
+              {
+                "id": "emberBolt",
+                "cooldown": 0.8833333333333333,
+                "cooldownMax": 0.9,
+                "energy": 18,
+                "type": "BOLT",
+                "ready": false
+              },
+              {
+                "id": "fangRush",
+                "cooldown": 0,
+                "cooldownMax": 4.5,
+                "energy": 22,
+                "type": "LUNGE",
+                "ready": false
+              },
+              {
+                "id": "flameRing",
+                "cooldown": 0,
+                "cooldownMax": 6,
+                "energy": 30,
+                "type": "ZONE",
+                "ready": false
+              }
+            ],
+            "ultimate": "coreNova",
+            "ult": 6,
+            "ultMax": 100,
+            "energy": 82,
+            "energyMax": 100,
+            "casting": "emberBolt",
+            "barrier": false,
+            "slowed": false,
+            "rooted": false
+          },
+          "cooling": true
+        }
+      }
+    },
+    {
+      "name": "casting again while cooling is refused with feedback",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Space dashes (charge spent)",
+      "ok": true,
+      "detail": {
+        "beforeDash": 1,
+        "afterDash": {
+          "x": 800,
+          "y": 928,
+          "hp": 234,
+          "maxHp": 234,
+          "state": "DASH",
+          "dashCharges": 0,
+          "dashMax": 1,
+          "dashRecharge": 1.8,
+          "revives": 0,
+          "surface": "GROUND",
+          "canSwim": false,
+          "invulnerable": true
+        }
+      }
+    },
+    {
+      "name": "backgrounding pauses the match and stops game time",
+      "ok": true,
+      "detail": {
+        "hidden": {
+          "state": "PAUSE",
+          "time": 5.267
+        },
+        "hiddenLater": 5.267
+      }
+    },
+    {
+      "name": "quality reload blocks premature resume while textures are pending",
+      "ok": true,
+      "detail": {
+        "state": "PAUSE",
+        "disabled": true
+      }
+    },
+    {
+      "name": "low quality applies (scene + pixel ratio cap)",
+      "ok": true,
+      "detail": {
+        "quality": "low",
+        "resolution": 1
+      }
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "resize reaches the shared stage",
+      "ok": true,
+      "detail": {
+        "width": 900,
+        "height": 640
+      }
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "restart 1: ticker callbacks stay at 3",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "restart 2: ticker callbacks stay at 3",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "restart 3: ticker callbacks stay at 3",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "restart 4: ticker callbacks stay at 3",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "restart 5: ticker callbacks stay at 3",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "name": "exit returns to the title and removes the arena",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "exit releases the QA hook and leaves no arena canvas in the page",
+      "ok": true,
+      "detail": {
+        "qa": "undefined",
+        "canvases": 0
+      }
+    },
+    {
+      "name": "re-entering remembers the last mode played",
+      "ok": true,
+      "detail": "TOURNAMENT"
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "the raising save is byte-identical after arena play",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "arena records live under their own key",
+      "ok": true,
+      "detail": {
+        "runs": 0,
+        "wins": 0,
+        "best": 0
+      }
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:harbor:blender:r6"
+    },
+    {
+      "name": "harbor high independently animates water and mechanisms",
+      "ok": true,
+      "detail": {
+        "before": {
+          "id": "data-arena:harbor:blender:r6",
+          "tier": "high",
+          "groundChunks": 48,
+          "visibleGroundChunks": 12,
+          "props": 13,
+          "ambientObjects": 9,
+          "decodedBytes": 79844440,
+          "crowdFrame": 0,
+          "crowdCount": 140,
+          "waterOffsetX": 0.2663999999999942,
+          "armAngles": [
+            0,
+            0,
+            0
+          ],
+          "armFrames": [
+            0,
+            4,
+            8
+          ],
+          "visibleMechanisms": [],
+          "occluders": [
+            {
+              "id": "cargo-3",
+              "sortY": 576,
+              "alpha": 1,
+              "drawIndex": 1
+            },
+            {
+              "id": "cargo-4",
+              "sortY": 896,
+              "alpha": 1,
+              "drawIndex": 9
+            },
+            {
+              "id": "cargo-6",
+              "sortY": 1344,
+              "alpha": 1,
+              "drawIndex": 13
+            },
+            {
+              "id": "cargo-8",
+              "sortY": 640,
+              "alpha": 1,
+              "drawIndex": 3
+            },
+            {
+              "id": "cargo-9",
+              "sortY": 576,
+              "alpha": 1,
+              "drawIndex": 2
+            },
+            {
+              "id": "cargo-10",
+              "sortY": 896,
+              "alpha": 1,
+              "drawIndex": 10
+            },
+            {
+              "id": "cargo-12",
+              "sortY": 1344,
+              "alpha": 1,
+              "drawIndex": 14
+            },
+            {
+              "id": "cargo-14",
+              "sortY": 640,
+              "alpha": 1,
+              "drawIndex": 4
+            },
+            {
+              "id": "cargo-16",
+              "sortY": 2304,
+              "alpha": 1,
+              "drawIndex": 30
+            },
+            {
+              "id": "pylon-0",
+              "sortY": 704,
+              "alpha": 1,
+              "drawIndex": 5
+            },
+            {
+              "id": "pylon-1",
+              "sortY": 704,
+              "alpha": 1,
+              "drawIndex": 6
+            },
+            {
+              "id": "pylon-2",
+              "sortY": 1344,
+              "alpha": 1,
+              "drawIndex": 15
+            },
+            {
+              "id": "pylon-3",
+              "sortY": 1344,
+              "alpha": 1,
+              "drawIndex": 16
+            },
+            {
+              "id": "cargo-5",
+              "sortY": 1088.2,
+              "alpha": 1,
+              "drawIndex": 11
+            },
+            {
+              "id": "cargo-11",
+              "sortY": 1088.2,
+              "alpha": 1,
+              "drawIndex": 12
+            },
+            {
+              "id": "cargo-15",
+              "sortY": 2304.2,
+              "alpha": 1,
+              "drawIndex": 31
+            }
+          ]
+        },
+        "after": {
+          "id": "data-arena:harbor:blender:r6",
+          "tier": "high",
+          "groundChunks": 48,
+          "visibleGroundChunks": 8,
+          "props": 13,
+          "ambientObjects": 9,
+          "decodedBytes": 79844440,
+          "crowdFrame": 1,
+          "crowdCount": 140,
+          "waterOffsetX": 6.799999999999996,
+          "armAngles": [
+            0,
+            0,
+            0
+          ],
+          "armFrames": [
+            6,
+            10,
+            14
+          ],
+          "visibleMechanisms": [],
+          "occluders": [
+            {
+              "id": "cargo-3",
+              "sortY": 576,
+              "alpha": 1,
+              "drawIndex": 1
+            },
+            {
+              "id": "cargo-4",
+              "sortY": 896,
+              "alpha": 1,
+              "drawIndex": 9
+            },
+            {
+              "id": "cargo-6",
+              "sortY": 1344,
+              "alpha": 1,
+              "drawIndex": 13
+            },
+            {
+              "id": "cargo-8",
+              "sortY": 640,
+              "alpha": 1,
+              "drawIndex": 3
+            },
+            {
+              "id": "cargo-9",
+              "sortY": 576,
+              "alpha": 1,
+              "drawIndex": 2
+            },
+            {
+              "id": "cargo-10",
+              "sortY": 896,
+              "alpha": 1,
+              "drawIndex": 10
+            },
+            {
+              "id": "cargo-12",
+              "sortY": 1344,
+              "alpha": 1,
+              "drawIndex": 14
+            },
+            {
+              "id": "cargo-14",
+              "sortY": 640,
+              "alpha": 1,
+              "drawIndex": 4
+            },
+            {
+              "id": "cargo-16",
+              "sortY": 2304,
+              "alpha": 1,
+              "drawIndex": 30
+            },
+            {
+              "id": "pylon-0",
+              "sortY": 704,
+              "alpha": 1,
+              "drawIndex": 5
+            },
+            {
+              "id": "pylon-1",
+              "sortY": 704,
+              "alpha": 1,
+              "drawIndex": 6
+            },
+            {
+              "id": "pylon-2",
+              "sortY": 1344,
+              "alpha": 1,
+              "drawIndex": 15
+            },
+            {
+              "id": "pylon-3",
+              "sortY": 1344,
+              "alpha": 1,
+              "drawIndex": 16
+            },
+            {
+              "id": "cargo-5",
+              "sortY": 1088.2,
+              "alpha": 1,
+              "drawIndex": 11
+            },
+            {
+              "id": "cargo-11",
+              "sortY": 1088.2,
+              "alpha": 1,
+              "drawIndex": 12
+            },
+            {
+              "id": "cargo-15",
+              "sortY": 2304.2,
+              "alpha": 1,
+              "drawIndex": 31
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "pausing freezes harbor water and mechanisms",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:harbor:blender:r6"
+    },
+    {
+      "name": "reduced motion holds harbor water and mechanism frames",
+      "ok": true,
+      "detail": {
+        "id": "data-arena:harbor:blender:r6",
+        "tier": "high",
+        "groundChunks": 48,
+        "visibleGroundChunks": 8,
+        "props": 13,
+        "ambientObjects": 9,
+        "decodedBytes": 79844440,
+        "crowdFrame": 0,
+        "crowdCount": 140,
+        "waterOffsetX": 0,
+        "armAngles": [
+          0,
+          0,
+          0
+        ],
+        "armFrames": [
+          0,
+          0,
+          0
+        ],
+        "visibleMechanisms": [],
+        "occluders": [
+          {
+            "id": "cargo-3",
+            "sortY": 576,
+            "alpha": 1,
+            "drawIndex": 1
+          },
+          {
+            "id": "cargo-4",
+            "sortY": 896,
+            "alpha": 1,
+            "drawIndex": 9
+          },
+          {
+            "id": "cargo-6",
+            "sortY": 1344,
+            "alpha": 1,
+            "drawIndex": 13
+          },
+          {
+            "id": "cargo-8",
+            "sortY": 640,
+            "alpha": 1,
+            "drawIndex": 3
+          },
+          {
+            "id": "cargo-9",
+            "sortY": 576,
+            "alpha": 1,
+            "drawIndex": 2
+          },
+          {
+            "id": "cargo-10",
+            "sortY": 896,
+            "alpha": 1,
+            "drawIndex": 10
+          },
+          {
+            "id": "cargo-12",
+            "sortY": 1344,
+            "alpha": 1,
+            "drawIndex": 14
+          },
+          {
+            "id": "cargo-14",
+            "sortY": 640,
+            "alpha": 1,
+            "drawIndex": 4
+          },
+          {
+            "id": "cargo-16",
+            "sortY": 2304,
+            "alpha": 1,
+            "drawIndex": 30
+          },
+          {
+            "id": "pylon-0",
+            "sortY": 704,
+            "alpha": 1,
+            "drawIndex": 5
+          },
+          {
+            "id": "pylon-1",
+            "sortY": 704,
+            "alpha": 1,
+            "drawIndex": 6
+          },
+          {
+            "id": "pylon-2",
+            "sortY": 1344,
+            "alpha": 1,
+            "drawIndex": 15
+          },
+          {
+            "id": "pylon-3",
+            "sortY": 1344,
+            "alpha": 1,
+            "drawIndex": 16
+          },
+          {
+            "id": "cargo-5",
+            "sortY": 1088.2,
+            "alpha": 1,
+            "drawIndex": 11
+          },
+          {
+            "id": "cargo-11",
+            "sortY": 1088.2,
+            "alpha": 1,
+            "drawIndex": 12
+          },
+          {
+            "id": "cargo-15",
+            "sortY": 2304.2,
+            "alpha": 1,
+            "drawIndex": 31
+          }
+        ]
+      }
+    },
+    {
+      "name": "harbor exit keeps raising save byte-identical",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:tournament:detail:r3"
+    },
+    {
+      "name": "left touch stick moves the partner",
+      "ok": true,
+      "detail": {
+        "from": 928,
+        "to": 705
+      }
+    },
+    {
+      "name": "right touch stick aims and holds the beam",
+      "ok": true,
+      "detail": {
+        "firing": true,
+        "heat": 30.59999999999999,
+        "heatCapacity": 100,
+        "overheated": false,
+        "endKind": "TARGET",
+        "angle": -0.7266423406817255,
+        "length": 0
+      }
+    },
+    {
+      "name": "tapping a touch skill button casts it (auto-aimed)",
+      "ok": true,
+      "detail": {
+        "touchEnergy": 100,
+        "energy": 82
+      }
+    },
+    {
+      "name": "touch dash button dashes",
+      "ok": true,
+      "detail": {
+        "charges": 1,
+        "dashed": 0
+      }
+    },
+    {
+      "name": "touch play never scrolls or zooms the page",
+      "ok": true,
+      "detail": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "scale": 1,
+        "width": 390,
+        "height": 844,
+        "docWidth": 390,
+        "buttons": [
+          [
+            44,
+            44,
+            382,
+            52
+          ],
+          [
+            56,
+            56,
+            378,
+            780
+          ],
+          [
+            56,
+            56,
+            378,
+            652
+          ],
+          [
+            56,
+            56,
+            314,
+            780
+          ],
+          [
+            56,
+            56,
+            314,
+            716
+          ],
+          [
+            56,
+            56,
+            314,
+            652
+          ]
+        ]
+      }
+    },
+    {
+      "name": "touch controls are at least 44 CSS px and on screen",
+      "ok": true,
+      "detail": [
+        [
+          44,
+          44,
+          382,
+          52
+        ],
+        [
+          56,
+          56,
+          378,
+          780
+        ],
+        [
+          56,
+          56,
+          378,
+          652
+        ],
+        [
+          56,
+          56,
+          314,
+          780
+        ],
+        [
+          56,
+          56,
+          314,
+          716
+        ],
+        [
+          56,
+          56,
+          314,
+          652
+        ]
+      ]
+    },
+    {
+      "name": "phone defaults to low quality",
+      "ok": true,
+      "detail": "low"
+    },
+    {
+      "name": "normal entry uses selected test-release map",
+      "ok": true,
+      "detail": "data-arena:harbor:blender:r6"
+    },
+    {
+      "name": "harbor on touch adds the mate buttons beside the kit",
+      "ok": true,
+      "detail": [
+        [
+          "surge",
+          56,
+          56
+        ],
+        [
+          "ride",
+          56,
+          56
+        ],
+        [
+          "s1",
+          56,
+          56
+        ],
+        [
+          "ult",
+          56,
+          56
+        ],
+        [
+          "dash",
+          56,
+          56
+        ]
+      ]
+    },
+    {
+      "name": "no page errors, console errors, failed requests or HTTP errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "screenshots": [
+    "desktop-00-title-entry.png",
+    "desktop-01-select.png",
+    "desktop-02-briefing.png",
+    "desktop-03-round-intro.png",
+    "desktop-04-skill-cast.png",
+    "desktop-05-paused-after-background.png",
+    "desktop-06-reenter-frost-tournament.png",
+    "desktop-07-harbor-high.png",
+    "phone-01-select.png",
+    "phone-02-briefing.png",
+    "phone-03-twin-stick.png",
+    "phone-04-combat.png",
+    "phone-05-pause.png",
+    "phone-06-select-harbor.png",
+    "phone-07-harbor.png"
+  ],
+  "errors": [],
+  "runs": [
+    {
+      "kind": "restarts",
+      "count": 5
+    }
+  ],
+  "backgroundTest": "EMULATED_VISIBILITYCHANGE_HEADLESS",
+  "performance": {
+    "phoneEmulated": {
+      "quality": "low",
+      "resolution": 1,
+      "arenaUpdateMs": {
+        "median": 0.4000000059604645,
+        "p95": 0.7999999821186066
+      },
+      "frameMsMedian": 16.69999999999891,
+      "note": "Chromium mobile emulation on the recorded renderer; not a physical-device measurement."
+    }
+  },
+  "unexpectedErrors": [],
+  "passed": true
+}

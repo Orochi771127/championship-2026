@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "id": "data-arena-interactions-v1",
+  "rights": "PROJECT_ORIGINAL",
+  "externalAssets": [],
+  "weights": [],
+  "customNodes": [],
+  "props": {
+    "INTACT": {
+      "high": {
+        "src": "assets/production/data-arena/interactions-v1/timber-intact-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 256
+      },
+      "low": {
+        "src": "assets/production/data-arena/interactions-v1/timber-intact-low.webp",
+        "pixelWidth": 128,
+        "pixelHeight": 128
+      }
+    },
+    "DAMAGED": {
+      "high": {
+        "src": "assets/production/data-arena/interactions-v1/timber-damaged-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 256
+      },
+      "low": {
+        "src": "assets/production/data-arena/interactions-v1/timber-damaged-low.webp",
+        "pixelWidth": 128,
+        "pixelHeight": 128
+      }
+    },
+    "BURNT": {
+      "high": {
+        "src": "assets/production/data-arena/interactions-v1/timber-burnt-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 256
+      },
+      "low": {
+        "src": "assets/production/data-arena/interactions-v1/timber-burnt-low.webp",
+        "pixelWidth": 128,
+        "pixelHeight": 128
+      }
+    },
+    "DESTROYED": {
+      "high": {
+        "src": "assets/production/data-arena/interactions-v1/timber-destroyed-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 256
+      },
+      "low": {
+        "src": "assets/production/data-arena/interactions-v1/timber-destroyed-low.webp",
+        "pixelWidth": 128,
+        "pixelHeight": 128
+      }
+    }
+  },
+  "ice": {
+    "ICE": {
+      "high": {
+        "src": "assets/production/data-arena/interactions-v1/ice-high.webp",
+        "pixelWidth": 68,
+        "pixelHeight": 74
+      },
+      "low": {
+        "src": "assets/production/data-arena/interactions-v1/ice-low.webp",
+        "pixelWidth": 34,
+        "pixelHeight": 37
+      }
+    },
+    "ICE_CRACKED": {
+      "high": {
+        "src": "assets/production/data-arena/interactions-v1/ice_cracked-high.webp",
+        "pixelWidth": 68,
+        "pixelHeight": 74
+      },
+      "low": {
+        "src": "assets/production/data-arena/interactions-v1/ice_cracked-low.webp",
+        "pixelWidth": 34,
+        "pixelHeight": 37
+      }
+    },
+    "ICE_MELT": {
+      "high": {
+        "src": "assets/production/data-arena/interactions-v1/ice_melt-high.webp",
+        "pixelWidth": 68,
+        "pixelHeight": 74
+      },
+      "low": {
+        "src": "assets/production/data-arena/interactions-v1/ice_melt-low.webp",
+        "pixelWidth": 34,
+        "pixelHeight": 37
+      }
+    },
+    "anchor": [
+      0.5,
+      0.5135135135135135
+    ],
+    "worldSize": [
+      68,
+      74
+    ],
+    "floorOffsetPx": 2.941564209736038
+  },
+  "harborPatches": [
+    {
+      "id": "cargo-7",
+      "x": 672,
+      "y": 1424,
+      "width": 272,
+      "height": 288,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-high.webp",
+          "pixelWidth": 272,
+          "pixelHeight": 288
+        },
+        "low": {
+          "src": "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-low.webp",
+          "pixelWidth": 136,
+          "pixelHeight": 144
+        }
+      }
+    },
+    {
+      "id": "cargo-13",
+      "x": 2976,
+      "y": 1424,
+      "width": 272,
+      "height": 288,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/interactions-v1/cargo-13-clean-ground-high.webp",
+          "pixelWidth": 272,
+          "pixelHeight": 288
+        },
+        "low": {
+          "src": "assets/production/data-arena/interactions-v1/cargo-13-clean-ground-low.webp",
+          "pixelWidth": 136,
+          "pixelHeight": 144
+        }
+      }
+    },
+    {
+      "id": "cargo-17",
+      "x": 352,
+      "y": 2256,
+      "width": 272,
+      "height": 288,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/interactions-v1/cargo-17-clean-ground-high.webp",
+          "pixelWidth": 272,
+          "pixelHeight": 288
+        },
+        "low": {
+          "src": "assets/production/data-arena/interactions-v1/cargo-17-clean-ground-low.webp",
+          "pixelWidth": 136,
+          "pixelHeight": 144
+        }
+      }
+    },
+    {
+      "id": "cargo-18",
+      "x": 3296,
+      "y": 2256,
+      "width": 272,
+      "height": 288,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/interactions-v1/cargo-18-clean-ground-high.webp",
+          "pixelWidth": 272,
+          "pixelHeight": 288
+        },
+        "low": {
+          "src": "assets/production/data-arena/interactions-v1/cargo-18-clean-ground-low.webp",
+          "pixelWidth": 136,
+          "pixelHeight": 144
+        }
+      }
+    }
+  ],
+  "files": [
+    {
+      "src": "assets/production/data-arena/interactions-v1/cargo-13-clean-ground-high.webp",
+      "bytes": 41168,
+      "sha256": "2be1d418647257622ec76b9c69de5b233f8326fbb1d3ae32aad273df4a4528ac"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/cargo-13-clean-ground-low.webp",
+      "bytes": 12558,
+      "sha256": "578454014f234d6cc8e654996c880fce732812859a2daadfcc91bb35239f7066"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/cargo-17-clean-ground-high.webp",
+      "bytes": 50762,
+      "sha256": "8d4af69e148573904ca72ae3e81e59d42e36dd5a67c17fad826bdf8624466d03"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/cargo-17-clean-ground-low.webp",
+      "bytes": 13158,
+      "sha256": "1978b549d961f55486fdf122e16489ffd7e5f451b10f8081bb73f735dba14195"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/cargo-18-clean-ground-high.webp",
+      "bytes": 52144,
+      "sha256": "5a0fb269ef16a21b3d46551e87a56131f42370be1057e59e9d2df21af0784555"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/cargo-18-clean-ground-low.webp",
+      "bytes": 14152,
+      "sha256": "0f9c07ca9358038e5d4aab37fd9662ff302bc0676efd113734f31af0299c17a1"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-high.webp",
+      "bytes": 42496,
+      "sha256": "7077308133791885d23d0af515407cdb9722ed3c4348f1094acafc79305dacf3"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-low.webp",
+      "bytes": 12970,
+      "sha256": "3353654b4de6ee19c61d652f4515bdc8a99e7887de613f6370a78b172872792a"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/ice-high.webp",
+      "bytes": 5178,
+      "sha256": "4cddea731f635bf221c7cdb3e207296ea1f2ccdb8a6e867d3c92847e9d45fe33"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/ice-low.webp",
+      "bytes": 1610,
+      "sha256": "48376d6634d26960c5a98156b3d7cfffb841414982c48ab184350f7b24f1e5c5"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/ice_cracked-high.webp",
+      "bytes": 6304,
+      "sha256": "2dc9c3b4ef6631246f25795354c6672ed85487b4f94083c6b283f3da158435b2"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/ice_cracked-low.webp",
+      "bytes": 2040,
+      "sha256": "e0efa0e6b4f369f02656e27b86b59703c81b643f644f93af048f6ca30e1442f9"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/ice_melt-high.webp",
+      "bytes": 4116,
+      "sha256": "fde8f92456872d60b6a1f75745d49d3199b1124f1e4de63b6a38702a56e29e2f"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/ice_melt-low.webp",
+      "bytes": 1426,
+      "sha256": "faadd3c51ea65df723e799fb60a3c9ee7d13c1e1fd28b7e8c22e96f8dadf8936"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/timber-burnt-high.webp",
+      "bytes": 20620,
+      "sha256": "83a947eb12f5aa07e95384d3632ca55d39f69995083d0be9584a55ed706613d1"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/timber-burnt-low.webp",
+      "bytes": 6074,
+      "sha256": "f078611c32e0f9acbe727b3be936556b3c43fbc0d6b492989cd4bf021edafddd"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/timber-damaged-high.webp",
+      "bytes": 25516,
+      "sha256": "0f477ef4bccafd2418611457fa9ddffaf4b4c6b64f71f5a48acb889216aab994"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/timber-damaged-low.webp",
+      "bytes": 7182,
+      "sha256": "62ccc02ed304c29116edb9efbdef9e883da39cbcf5a75d3b949b48ee357794c9"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/timber-destroyed-high.webp",
+      "bytes": 9160,
+      "sha256": "641c8d938a4ba926b34731a1aa4421e63c1e315cc786eb12dd00227d56ea9a17"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/timber-destroyed-low.webp",
+      "bytes": 3070,
+      "sha256": "b5b808be823cb32d51827ff825b5666ce4ea55a5eb9a43d587bcc3a5f9f60d3f"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/timber-intact-high.webp",
+      "bytes": 25836,
+      "sha256": "6b2d82df168cdae7e5b8e0061c421429a68057cd6f65a39db421f46fd46a047a"
+    },
+    {
+      "src": "assets/production/data-arena/interactions-v1/timber-intact-low.webp",
+      "bytes": 7156,
+      "sha256": "ce95e566152c274493e9ba2dc037bbbc52a5d9125c59b1eb3026014e58b05ec2"
+    }
+  ]
+}
