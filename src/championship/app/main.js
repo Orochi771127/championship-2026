@@ -95,6 +95,7 @@ import { createAutosaveScheduler } from './autosaveScheduler.js';
 // one Pixi stage, the audio graph and the highlight template.
 import { CHAMPIONSHIP_PREFERENCES_KEY, createChampionshipPreferencePort } from './ChampionshipPersistentSavePort.js';
 import { createPreferenceStore } from './settings/preferenceStore.js';
+import { consumeRaisingHintDuration } from './transientHint.js';
 import { createPreferenceEnvironment } from './settings/preferenceEnvironment.js';
 import { createQualityController } from './settings/qualityController.js';
 import { createSettingsPanel } from './settings/settingsPanel.js';
@@ -777,7 +778,8 @@ async function mountRaisingHome() {
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
     renderCreatureDetail: appendCreatureDetail,
     openRoster: () => runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }),
-    firstRunHint: (() => { const c = app.getCalendar(); return (c.year ?? 0) === 0 && c.season === 0 && c.dayOfSeason === 0; })(),
+    firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
+    nextHintDuration: () => consumeRaisingHintDuration(settings.store),
     mountField({ host, source: fieldSource, onTrainingFrame }) {
       let closed = false, attempt = null, effects = null, scene = null, phase = 'loading';
       let residentStates = [], lastFrame = fieldSource.getFrame();

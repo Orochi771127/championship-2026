@@ -1,3 +1,4 @@
+import { createTransientHint, TOOL_HINT_MS } from './transientHint.js';
 import {isOriginalUiIntakeLocal,originalToolbarArt,originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import {isOriginalRuntimeLocation} from "../presentation/originalRuntimeLocation.js";
 import { uiText } from "../text/uiText.js";
@@ -153,7 +154,8 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   menuPanel.hidden = true;
   menuPanel.setAttribute("role", "menu");
 
-  // While a care tool is chosen, say what it does and how to put it down.
+  // Briefly explain a newly selected care tool. The selected rail button is
+  // always a toggle/exit, including after this visual instruction fades.
   // It sits above the rail and never changes the rail's measured height.
   const toolHint = element("div", "cm-toolbar__tool-hint");
   toolHint.hidden = true;
@@ -168,6 +170,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   rail.setAttribute("role", "toolbar");
   rail.setAttribute("aria-label", uiText("Contextual toolbar"));
 
+  let disposed = false;
   let currentMode = null;
   let selectedTool = null;
   let tutorialTool = null;
@@ -247,13 +250,13 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   }
 
   function selectTool(toolId,context={}) {
-    if(tutorialTool==="SYSTEM")return;
+    if(disposed||tutorialTool==="SYSTEM")return;
     selectedTool = tutorialTool ?? (selectedTool === toolId ? null : toolId);
     for (const cell of rail.querySelectorAll("[data-tool-id]")) {
       cell.setAttribute("aria-pressed", String(cell.dataset.toolId === selectedTool));
     }
     bar.dataset.selectedTool = selectedTool ?? "";
-    paintToolHint();
+    paintToolHint({ restart: true });
     onToolChange?.(selectedTool,context);
   }
 
@@ -297,11 +300,31 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
 
   bar.append(menuPanel, rail, toolHint);
   root.append(bar);
-  function paintToolHint() {
+  let hintedTool = null;
+  function syncToolHintClearance() {
+    if (disposed) return;
+    const body = root.ownerDocument?.body;
+    const height = bar.hidden || toolHint.hidden ? 0 : Math.ceil(toolHint.offsetHeight ?? 0);
+    body?.style.setProperty('--cm-tool-hint-clearance', `${height > 0 ? height + 8 : 0}px`);
+  }
+  const toolHintTimer = createTransientHint(toolHint, { onPhaseChange: syncToolHintClearance, beforeHide() {
+    // Never leave keyboard focus inside an inert/hidden Done button.
+    if (toolHint.contains?.(root.ownerDocument?.activeElement)) {
+      rail.querySelector(`[data-tool-id="${selectedTool ?? hintedTool}"]`)?.focus?.();
+    }
+  } });
+  function paintToolHint({ restart = false } = {}) {
     const tool = TOOLBAR_TOOLS.find((entry) => entry.id === selectedTool) ?? null;
-    toolHint.hidden = !tool;
+    if (!tool) { toolHintTimer.hide(); hintedTool = null; }
+    else if (restart) { hintedTool = tool.id; toolHintTimer.show(TOOL_HINT_MS); }
+    for (const cell of rail.querySelectorAll("[data-tool-id]")) {
+      const entry = TOOLBAR_TOOLS.find(item => item.id === cell.dataset.toolId);
+      const canPutDown = entry?.id === selectedTool && tutorialTool === null;
+      cell.setAttribute('aria-label', `${uiText(entry.label)}${canPutDown ? ` · ${uiText('完成')}` : ''}`);
+    }
     toolName.textContent = uiText(tool?.label ?? "");
     toolText.textContent = uiText(tool?.hint ?? "");
+    syncToolHintClearance();
     const body = root.ownerDocument?.body ?? null;
     if (body?.dataset) {
       if (tool) body.dataset.tool = tool.id; else delete body.dataset.tool;
@@ -337,13 +360,13 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   const unsubscribeInventory=subscribeInventory?.(refreshFoodStock);
 
   const host = root.ownerDocument?.body ?? document.body;
-  let disposed = false;
   const measureTarget = responsiveLayout ? bar : rail;
   let measuredHeight = null;
   function syncHeight() {
     if (disposed) return;
-    // The wide Raising hint joins the rail in normal flow. Menus remain
-    // absolute overlays. Measure this same bar in both orientations.
+    syncToolHintClearance();
+    // Hint and menus are absolute overlays. Measure only the dock budget
+    // in both orientations; fading never resizes the playable field.
     // The border box includes the rail's safe-area padding exactly once.
     // Reserve layout pixels; the portrait frame scales the whole UI afterwards.
     const height = bar.hidden ? 0 : Math.ceil(measureTarget.offsetHeight ?? measureTarget.getBoundingClientRect().height);
@@ -354,6 +377,10 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   syncHeight();
   const resizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(syncHeight) : null;
   resizeObserver?.observe(measureTarget, { box: "border-box" });
+  // Hint text may wrap after a language, viewport or text-scale change. Its
+  // own box reserves a separate lane, never inflating the dock/field budget.
+  const hintResizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(syncToolHintClearance) : null;
+  hintResizeObserver?.observe(toolHint, { box: 'border-box' });
   const windowHost = root.ownerDocument?.defaultView;
   if (!resizeObserver) windowHost?.addEventListener("resize", syncHeight);
 
@@ -368,7 +395,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       if (currentMode !== mode) {
         selectedTool = mode===TOOLBAR_MODES.TRAINING&&tutorialAutoSelect&&tutorialTool!=="SYSTEM"?tutorialTool:null;
         bar.dataset.selectedTool = selectedTool??"";
-        paintToolHint();
+        paintToolHint({ restart: true });
         onToolChange?.(selectedTool);
       }
       currentMode = mode;
@@ -439,14 +466,18 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     dispose() {
       if (disposed) return;
       disposed = true;
+      toolHintTimer.dispose();
+      delete host.dataset.tool;
       unsubscribeInventory?.();
       resizeObserver?.disconnect();
+      hintResizeObserver?.disconnect();
       if (!resizeObserver) windowHost?.removeEventListener("resize", syncHeight);
       closeMenu();
       ownerDocument?.removeEventListener?.("keydown", onMenuKey);
       ownerDocument?.removeEventListener?.("pointerdown", onOutsidePress, true);
       delete host.dataset.toolbar;
       host.style.removeProperty("--cm-toolbar-height");
+      host.style.removeProperty("--cm-tool-hint-clearance");
       bar.remove();
     }
   });

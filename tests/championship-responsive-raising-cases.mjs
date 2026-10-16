@@ -1,3 +1,4 @@
+import { createTransientHint, consumeRaisingHintDuration, TOOL_HINT_MS } from '../src/championship/app/transientHint.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -63,7 +64,7 @@ test('same toolbar owner retains measured rail budget and tears down observer/li
  const observers=[];
  class RO{constructor(fn){this.fn=fn;observers.push(this)}observe(node){this.node=node}disconnect(){this.closed=true}}
  const source=fs.readFileSync(new URL('../src/championship/app/championshipToolbar.js',import.meta.url),'utf8').replace(/^import .*;$/gm,'').replace(/export /g,'');
- const context=vm.createContext({document,ResizeObserver:RO,globalThis:{},uiText:s=>s,originalToolbarArt:()=>null,originalDatabaseIcon:()=>null,isOriginalRuntimeLocation:()=>false,isOriginalUiIntakeLocal:()=>false});
+ const context=vm.createContext({createTransientHint, consumeRaisingHintDuration, TOOL_HINT_MS,document,ResizeObserver:RO,globalThis:{},uiText:s=>s,originalToolbarArt:()=>null,originalDatabaseIcon:()=>null,isOriginalRuntimeLocation:()=>false,isOriginalUiIntakeLocal:()=>false});
  vm.runInContext(source+'\nthis.createToolbar=createChampionshipToolbar;',context);
  const toolbar=context.createToolbar({responsiveLayout:true,root:document.body,onMenuEntry:()=>{}});const bar=toolbar.element;assert.equal(observers[0].node,bar);
  bar.offsetHeight=60;toolbar.setMode(1);assert.equal(values.get('--cm-toolbar-height'),'60px');
