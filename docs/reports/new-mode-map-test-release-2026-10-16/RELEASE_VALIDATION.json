@@ -1,0 +1,89 @@
+{
+  "baseMain": "e905b893af009e95cf1ba5e087bc302533de3525",
+  "selectedVersions": [
+    "harbor-blender-r6",
+    "tournament-detail-r3",
+    "interactions-v1"
+  ],
+  "localCi": {
+    "passed": 2487,
+    "failed": 0,
+    "skipped": 0,
+    "logSha256": "8e9bd5fa43fc2632822b16fc6fec26320e854e22c443b0085cffc125d84df257"
+  },
+  "focusedNode": {
+    "passed": 89,
+    "logSha256": "36c68e832b8ab66194446c595566ed6ec8aa781bc436ee4fb9c82a7e182d3b0e"
+  },
+  "build": {
+    "fileCount": 10114,
+    "buildId": "54596b3997c5eaee45ecca3cad2764b8ae4227db8297eb94739b5bd62a973d42",
+    "validationPassed": true,
+    "buildLogSha256": "49aa3a9096c22bcbda3f1c5fdd7599cbd633f3dbcd798cd9c4153c684c365bf9",
+    "validateLogSha256": "39ec1713de1fe355330faaf70f6b5cb16084bbe7fc9506fde554e1f2cf440d40"
+  },
+  "compiledArtifactBrowser": {
+    "passed": true,
+    "checks": 52,
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "unexpectedErrors": [],
+    "reportSha256": "5c58828c77eb32186071c20ae2fd7038540a8dcb6c186b0b3f282a6e7056083e",
+    "physicalPhone": false,
+    "fullMatchesRepeatedThisIntegration": false,
+    "note": "Normal browser evidence precedes removal of one empty source EOF line. All content-hashed generated browser paths and other bundle metadata are unchanged; only that source input hash differs."
+  },
+  "priorSameGameplayFullMatchEvidence": {
+    "path": "maps-work/docs/reports/authored-map-full-2026-10-16/browser-full/report.json",
+    "passed": 82,
+    "outcomes": [
+      "TOURNAMENT_3_ROUNDS_VICTORY",
+      "HARBOR_DEFEAT"
+    ]
+  },
+  "commercialArtAccepted": false,
+  "finalArtAccepted": false,
+  "rights": {
+    "maps": "PROJECT_ORIGINAL",
+    "externalAssets": [],
+    "modelWeights": [],
+    "customNodes": [],
+    "blender": "5.2 Python fallback; MCP was not exposed",
+    "comfyUI": "Earlier bounded trial not included in selected assets"
+  },
+  "sourcePackage": {
+    "libraryFileId": "libfile_428514514e4081919011c033a8a0b0cb",
+    "sha256": "ea90f2729ebe63830e86b1e255510727bf86964fc9985bb6758f9ee20c1ad977"
+  },
+  "usageObserved": {
+    "weeklyUsedPercent": 20,
+    "windowMinutes": 10080,
+    "hardTokenLimitKnown": false
+  },
+  "publicationStatus": "PR_PENDING_REQUIRED_CI",
+  "editableSources": [
+    {
+      "version": "harbor-blender-r6",
+      "editableSource": "C:\\Users\\User\\Documents\\Codex\\2026-10-16\\task-2\\maps-work\\docs\\reports\\authored-map-full-2026-10-16\\harbor\\source\\harbor-authored-full.blend",
+      "bytes": 1891219,
+      "sha256": "c30d20b48fb265db98c49474159df6beb1726b6a7abae22ae2583e877d9acec4",
+      "generator": "scripts/render-two-map-authored-detail-crops.py",
+      "animationLayers": [
+        "water",
+        "crowd",
+        "mechanical-arms"
+      ]
+    },
+    {
+      "version": "tournament-detail-r3",
+      "editableSource": "C:\\Users\\User\\Documents\\Codex\\2026-10-16\\task-2\\maps-work\\docs\\reports\\authored-map-full-2026-10-16\\tournament\\source\\tournament-authored-full.blend",
+      "bytes": 1050158,
+      "sha256": "289e9bfde19fbe3d1ff500bc86acac77898097bf74af946a27f8b69ad4f69e41",
+      "generator": "scripts/render-two-map-authored-detail-crops.py",
+      "animationLayers": [
+        "water",
+        "crowd",
+        "pennants"
+      ]
+    }
+  ]
+}

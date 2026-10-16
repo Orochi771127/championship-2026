@@ -23,7 +23,7 @@ export function dataArenaBaseZoom(viewportWidth, viewportHeight) {
   return clamp(Math.min(area, viewportWidth / 560), 0.42, 1.6);
 }
 
-export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion = false, shake = true } = {}) {
+export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion = false, shake = true, artBounds = null } = {}) {
   let x = worldWidth / 2, y = worldHeight / 2, zoom = null, trauma = 0, time = 0;
   let shakeEnabled = Boolean(shake) && !reducedMotion;
   return Object.freeze({
@@ -56,7 +56,7 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       // Keep the player well inside the frame even when the follow lags a dash.
       const boxW = halfW * 0.62, boxH = halfH * 0.58;
       x = clamp(x, target.x - boxW, target.x + boxW); y = clamp(y, target.y - boxH, target.y + boxH);
-      const placed = battleFxClampCentre({ cx: x, cy: y, halfW, halfH, art: { x: 0, y: 0, width: worldWidth, height: worldHeight } });
+      const placed = battleFxClampCentre({ cx: x, cy: y, halfW, halfH, art: artBounds ?? { x: 0, y: 0, width: worldWidth, height: worldHeight } });
       x = placed.x; y = placed.y;
       // In a duel the bottom kit bar must never cover the player at the arena's south
       // edge: past the floor clamp, nudge the view down just enough (at most the bar).

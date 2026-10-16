@@ -42,7 +42,10 @@
     "baseHead": "96885deb42910a0fa63674a31c536768fc60d19c",
     "report": "docs/reports/mobile-photo-repair-2026-09-13/直向優先階段驗收.md",
     "previousPhotoRepair": "docs/reports/mobile-photo-repair-2026-09-13/驗收與交接.md",
-    "outputs": ["src/championship/app/portraitFrame.js", "tests/championship-portrait-frame-cases.mjs"],
+    "outputs": [
+      "src/championship/app/portraitFrame.js",
+      "tests/championship-portrait-frame-cases.mjs"
+    ],
     "completed": "Centered 9:16 landscape frame, keyboard guard and input visibility, unscaled Pixi and bar layout, focused browser rotation flows",
     "current": "Local orientation acceptance complete; no publication",
     "checkpoint": "Local commit containing this entry; baseline recorded above",
@@ -52,7 +55,12 @@
     "playtestBuildId": "0428338cdba276d90f743423a93e96d52f4df32c9adcdf4a8916061da73b1496",
     "dependenciesChanged": "One presentation module added to existing preload and build allowlist; no package dependency changes",
     "gameplayChangedInOrientationStage": false,
-    "blocked": ["Physical iPhone Safari acceptance unverified", "79 shop item icons unmapped", "Four-mode Battle wiring unfinished", "Complete cage-floor and actor art alignment partial"],
+    "blocked": [
+      "Physical iPhone Safari acceptance unverified",
+      "79 shop item icons unmapped",
+      "Four-mode Battle wiring unfinished",
+      "Complete cage-floor and actor art alignment partial"
+    ],
     "nextSafeStep": "Close the separately documented source and visual gaps; discuss full landscape design separately",
     "fullOriginalParity": false,
     "physicalPhoneQA": false,
@@ -93,8 +101,16 @@
     "date": "2026-09-09",
     "status": "CORE_FLOW_INTEGRATED_FULL_ORIGINAL_STAGE_OPEN",
     "completed": "Evolution predicates, lifetime/rebirth/disappearance, Cage training writers, waste and cleanup, sleep/wake, overnight food/growth and normal acknowledged day-change use the existing app actors, RNG, v5 save and Pixi ticker.",
-    "tests": {"focusedPass":30,"regressionPass":1361,"evolutionCpuCalls":2736,"calendarCpuProjections":1024},
-    "evidenceCorrections": ["Calendar +BC means registered, +C0 means won title; attempts are not either field.","Live morning mail 94 says battle entry time has arrived, not increased capacity."],
+    "tests": {
+      "focusedPass": 30,
+      "regressionPass": 1361,
+      "evolutionCpuCalls": 2736,
+      "calendarCpuProjections": 1024
+    },
+    "evidenceCorrections": [
+      "Calendar +BC means registered, +C0 means won title; attempts are not either field.",
+      "Live morning mail 94 says battle entry time has arrived, not increased capacity."
+    ],
     "report": "docs/research/RAISING_LIFECYCLE_STAGE_2026-09-08.md",
     "contract": "docs/contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json",
     "validation": "docs/reports/parity-audit/2026-09-09/raising-lifecycle-validation.json",
@@ -1098,5 +1114,30 @@
     ],
     "originalFullMatchParity": false,
     "shippingReady": false
+  },
+  "dataArenaMapTestRelease20261016": {
+    "id": "DATA_ARENA_MAP_TEST_RELEASE_20261016",
+    "owner": "CODEX_ART",
+    "status": "READY_FOR_PR_REQUIRED_CI",
+    "versions": [
+      "harbor-blender-r6",
+      "tournament-detail-r3",
+      "interactions-v1"
+    ],
+    "baseMain": "e905b893af009e95cf1ba5e087bc302533de3525",
+    "report": "docs/reports/new-mode-map-test-release-2026-10-16/REPORT_ZH_TW.md",
+    "primaryProjectArt": [
+      "libfile_d80c80299678819198f45bfd49ec42f3",
+      "libfile_29b7e456c6fc8191a1a69832f9bdfcf6"
+    ],
+    "externalQualityReferencesAreNotLayoutBlueprints": true,
+    "finalArtAccepted": false,
+    "raisingSaveSchemaChanged": false,
+    "ordinaryBattleModified": false,
+    "oldAlternativesAndEditableSourcesPreserved": true,
+    "publication": "Authorized through existing main GitHub Pages workflow; verify terminal run in delivery receipt",
+    "localCiPassed": 2487,
+    "compiledArtifactBrowserChecks": 52,
+    "validation": "docs/reports/new-mode-map-test-release-2026-10-16/RELEASE_VALIDATION.json"
   }
 }

@@ -91,5 +91,28 @@
     "manifestPath": "assets/production/opening-film-ns33-r1/manifest.json",
     "commercialReleaseAccepted": false,
     "physicalDeviceAccepted": false
+  },
+  "newModeMapTestRelease": {
+    "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",
+    "status": "OWNER_AUTHORIZED_PUBLIC_PLAYTEST",
+    "authorizationRecordedOn": "2026-10-16",
+    "ownerReplyId": "Sentinel_0842e78919c88191a5b2176fb166b67d",
+    "ownerInstruction": "Publish current new-mode map checkpoints first, then refine ordinary battle maps.",
+    "versions": [
+      "data-arena:harbor:blender:r6",
+      "data-arena:tournament:detail:r3",
+      "data-arena-interactions-v1"
+    ],
+    "scope": "Current map art, preserved accepted Data Arena functional fixes and bounded renderer integration only. Raising saves/economy and ordinary Battle are unchanged.",
+    "commercialArtAccepted": false,
+    "finalVisualApproval": false,
+    "excluded": [
+      "PR47 character work",
+      "PR49 cage purchase UI",
+      "BGM or battle-card changes",
+      "source masters",
+      "unselected map alternatives",
+      "ordinary-map production"
+    ]
   }
 }
