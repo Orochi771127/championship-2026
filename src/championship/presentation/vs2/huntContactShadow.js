@@ -66,6 +66,20 @@ const profiles = {
   }
 };
 
+// Derived once: same measured r04 soles in density8 raster coordinates.
+const m201Density8Base = profiles['species-034'];
+const doubledFrozen = values => Object.freeze(values.map(n => n * 2));
+const m201Density8Profile = Object.freeze({
+  ...m201Density8Base, scale: 8,
+  sourceSize: doubledFrozen(m201Density8Base.sourceSize),
+  origin: doubledFrozen(m201Density8Base.origin),
+  groundBottom: doubledFrozen(m201Density8Base.groundBottom),
+  groundInset: (m201Density8Base.groundInset ?? 1) * 2,
+  padding: doubledFrozen(m201Density8Base.padding ?? [4, 4]),
+  soles: Object.freeze(Object.fromEntries(Object.entries(m201Density8Base.soles)
+    .map(([cell, soles]) => [cell, Object.freeze(soles.map(doubledFrozen))])))
+});
+
 /** Cancel only the actor container's lift and vertical mirror. Keep authored
  * body origins/pose displacement intact, including naturally airborne poses.
  * The fallback footprint needs the same ground plane as measured footprints.
@@ -77,7 +91,13 @@ export function huntShadowGroundTransform(frame, worldZ = 0) {
 }
 
 export function huntContactShadow(speciesId, frame, worldZ = 0, art = null) {
-  const profile = profiles[speciesId], geometry = frame?.geometry;
+  const geometry = frame?.geometry;
+  // Old density4 stays unchanged; exact delivery identity gates this one variant.
+  const same034Density8 = speciesId === 'species-034' && geometry?.scale === 8
+    && art?.side === 'main' && art.entityId === 'm201_agumon'
+    && art.folder === 'm201_agumon-r04-density8-07a10bca9765903c'
+    && art.sourceBankSha256 === '700ad661bad1b125ae4ee1ffcb4ccf3dd745546aa26bf1ce5168cf475c355e74';
+  const profile = same034Density8 ? m201Density8Profile : profiles[speciesId];
   if (!profile || !geometry || geometry.blank || geometry.scale !== profile.scale
     || !profile.sourceSize.every((value, i) => geometry.sourceSize?.[i] === value)
     || !profile.origin.every((value, i) => geometry.origin?.[i] === value)) return null;
@@ -96,7 +116,7 @@ export function huntContactShadow(speciesId, frame, worldZ = 0, art = null) {
     ...huntShadowGroundTransform(frame, height),
     ellipses: (pose?.soles ?? soles).map(([left, top, right, bottom], i) => ({
       x: ((left + right) / 2 - geometry.origin[0]) * factor,
-      y: (groundBottom[i] - 1 - geometry.origin[1]) * factor,
+      y: (groundBottom[i] - (profile.groundInset ?? 1) - geometry.origin[1]) * factor,
       radiusX: ((right - left) / 2 + paddingX) * factor,
       radiusY: ((bottom - top) / 2 + paddingY) * factor
     }))
