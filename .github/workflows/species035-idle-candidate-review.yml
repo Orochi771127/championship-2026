@@ -56,7 +56,6 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/species035-idle-candidate/index.html > /dev/null
           node scripts/review-species062-whole-sweep.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank
-          node scripts/review-species062-whole-carried.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank/carried
           node scripts/review-species062-whole-grounding.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank/grounding
           node scripts/review-species062-whole-battle.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank/battle
           node scripts/bake-species062-effects.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-effect-bake

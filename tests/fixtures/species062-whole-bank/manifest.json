@@ -165,13 +165,13 @@
   "bankFiles": [
     {
       "file": "runtime.review.json",
-      "sha256": "d194d5ecb724522c174a5c91dda43fb0c33545323c817a6bc3330a2d218c3779",
-      "bytes": 62186
+      "sha256": "f5128896b6784d19259002e2665ba3565470b55f79155ce93b6d1e4d4d03f63f",
+      "bytes": 62185
     },
     {
       "file": "sub-atlas-00.png",
-      "sha256": "1b901e48216e39cf03259df32e415ad370221eacf1dbb2afca644ae04872fd6e",
-      "bytes": 339591
+      "sha256": "22a06dc50fce541ba07110749305ee0134f7d7e911f82219e3d244ade3e4d200",
+      "bytes": 339536
     },
     {
       "file": "main-atlas-00.json",
@@ -185,21 +185,30 @@
     },
     {
       "file": "main-atlas-00.png",
-      "sha256": "f4cc6c05a1c800b1b563d077b734e528b120a8a1ed59cabd81becab84cc982d2",
-      "bytes": 1015051
+      "sha256": "0a9a5ce1c8bd6e7bb5217d33d4729af44be0d1290f6c5000c71184949a426c17",
+      "bytes": 1015201
     }
   ],
-  "assemblyReceiptSha256": "679ef307bfb656c87d3f5ea3ea43035eac2814d2a6d8be4b29e98dd2034bb6ed",
+  "assemblyReceiptSha256": "7f7d27d5123e6505311a909ec029cedfd729a9496473cb7b243bb08ed79394ce",
   "nativeContractSha256": "88041a7a38265b2dc6ed6f405bc37d103e4c4f481c216c43dded27866b830433",
   "noAdditionalOffsets": true,
   "sceneAllocation": {
-    "raising": 7,
-    "hunt": 3,
+    "raising": 3,
+    "hunt": 7,
     "battle": 6
   },
   "limits": [
-    "Raising eat/sleep and Hunt walk/bound are verified native sample projections into actual scene, not behavior admission",
-    "Carry/cancel/release and Battle controlled inputs use native actor state owners",
-    "No fullgameplay or production acceptance"
-  ]
+    "Raising idle/tired uses actual native sequence owner with controlled admission; Hunt verified native projection at Z0, not AI admission",
+    "Battle real opening/impact presentation and native recoil preserved; controlled input, not full gameplay",
+    "Five per-frame registrations only; exact aliases preserved; no global offset or body rescale",
+    "No runtime/production/main integration or whole-pack acceptance"
+  ],
+  "revisionScope": "TARGETED_SUPPORT_AND_BATTLE_VISIBILITY_REPAIR",
+  "retainedPriorEvidence": {
+    "head": "0726ff02d2b90ae3db0a56f60e6ab6af0c1d925e",
+    "rendererRun": 38952323229,
+    "carryCancelRelease": "Passed earlier real actor context run, not duplicated here",
+    "wholePackVisualAcceptance": "HOLD_GAIT_REPLACEMENT_PENDING"
+  },
+  "registrationReview": "Five selected support offsets baked once; original seven grounded shifts unchanged; context pending"
 }

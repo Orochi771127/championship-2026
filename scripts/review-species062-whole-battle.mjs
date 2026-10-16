@@ -29,7 +29,7 @@ try{for(const scenario of ['attack1','attack2','hit26','recovery54','block57','k
    check(sprite.anchor.x===112/256&&sprite.anchor.y===148/256,'ORIGIN');check(sprite.texture.source.scaleMode==='nearest','FILTER');
    const motion=created[0].battleAnimator.getSnapshot();check(motion.cell===fixture.spec.captureCell,'CAPTURE_CELL');
    const b=sprite.getBounds();check(sprite.visible&&b.width>0&&b.height>0,'VISIBLE_TARGET');
-   const output={scenario,variant,native:result.native,placement:result.placement,diagnostics:diag,geometry:motion.geometry,
+   const output={scenario,variant,native:result.native,placement:result.placement,captureReadiness:result.captureReadiness,diagnostics:diag,geometry:motion.geometry,
     sprite:{position:[sprite.x,sprite.y],scale:[sprite.scale.x,sprite.scale.y],anchor:[sprite.anchor.x,sprite.anchor.y],rotation:sprite.rotation,tint:sprite.tint,alpha:sprite.alpha,bounds:{x:b.x,y:b.y,width:b.width,height:b.height}},
     renderer:{canvas:[stage.app.canvas.width,stage.app.canvas.height],css:[stage.app.canvas.clientWidth,stage.app.canvas.clientHeight],resolution:stage.app.renderer.resolution,dpr:devicePixelRatio},
     limits:['Actual Battle mount and native actors own cell,worldZ,recoil,rotation; controlled notification/hit inputs, not full AI/skill VM or match approval','Baseline and candidate use the same configured native size and original geometry origins; no silhouette auto-fit','Recovery uses actual lethal-hit owner with living ally and seed8']};

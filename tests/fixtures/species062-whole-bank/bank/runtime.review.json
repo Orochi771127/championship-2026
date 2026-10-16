@@ -21,7 +21,7 @@
     "shippingReady": false,
     "publicReleasePermitted": false,
     "visualAccepted": false,
-    "designVersion": "species062-action-refresh-candidate-pack-v1"
+    "designVersion": "species062-action-refresh-support-registration-v2"
   },
   "timing": {
     "source": "ORIGINAL_NANR_DURATION_TICKS",
@@ -1235,9 +1235,9 @@
         ],
         "nativeBounds": [
           -6.25,
-          -26.25,
+          -24.0,
           19.5,
-          -0.25
+          2.0
         ]
       },
       "m237_renamon/main/cell_003": {
@@ -1253,9 +1253,9 @@
         ],
         "nativeBounds": [
           -6.0,
-          -25.25,
+          -23.25,
           19.5,
-          0.0
+          2.0
         ]
       },
       "m237_renamon/main/cell_004": {
@@ -1721,9 +1721,9 @@
         ],
         "nativeBounds": [
           -6.75,
-          -27.25,
+          -25.25,
           15.75,
-          0.0
+          2.0
         ]
       },
       "m237_renamon/main/cell_030": {
@@ -1739,9 +1739,9 @@
         ],
         "nativeBounds": [
           -6.75,
-          -26.5,
+          -24.25,
           15.5,
-          0.0
+          2.25
         ]
       },
       "m237_renamon/main/cell_031": {
@@ -1973,9 +1973,9 @@
         ],
         "nativeBounds": [
           -14.75,
-          -8.25,
+          -5.0,
           13.5,
-          -0.25
+          3.0
         ]
       },
       "m237_renamon/main/cell_044": {
@@ -2369,9 +2369,9 @@
         ],
         "nativeBounds": [
           -6.25,
-          -26.25,
+          -24.0,
           19.5,
-          -0.25
+          2.0
         ]
       },
       "m237_renamon/sub/cell_003": {
@@ -2387,9 +2387,9 @@
         ],
         "nativeBounds": [
           -6.0,
-          -25.25,
+          -23.25,
           19.5,
-          0.0
+          2.0
         ]
       },
       "m237_renamon/sub/cell_004": {
@@ -2647,9 +2647,9 @@
     }
   },
   "motionContractSha256": "8500990153ff65cab51e60baa3313947d6abceff2077db61c974b03d4b34f375",
-  "sourceBankSha256": "26cb008803c1ec20751879028153cab33f56989cace4da19d0f6cedb08ee1cba",
+  "sourceBankSha256": "5fb29756fe49f4c2fd051f63f4da418d3bb93ffb64e1c61d76b79f2caf06e6fb",
   "localPackagingProvenance": {
-    "coverageSha256": "3efb0f03c8c9fcb9b9d315a9b6775bc2782a226ae93cd0048204c97fdecd51f5",
+    "coverageSha256": "9acd1ffe54ecfa9be7c6875ed8287e96c39bf5f3a5f5764bb88603bedaa7f78e",
     "sourceGroupMapSha256": "d631e73ee01a639b78bfb78320713a2f51bb8f592229efc5b03b795305327874",
     "motionHashScope": "Canonical numeric source sequences only; not asserted equal to preexisting renderer-bank hash.",
     "noProductionChanges": true,
