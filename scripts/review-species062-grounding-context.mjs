@@ -70,7 +70,7 @@ try{
      const {mountRaisingFieldPixiPresentation}=await imp('intRh2/createRaisingFieldPixiPresentation.js');
      scene=await mountRaisingFieldPixiPresentation({stage,source,fieldArt,characterBundle:bundle,onActorFrame:x=>actorFrames=x,onFallback:x=>failures.push(String(x)),reducedMotion:false});
     }else{
-     const manifest=validateRuntimeMapArtBundle(await json('assets/production/hunt/final-intake-20261008/manifest.json'));
+     const manifest=validateRuntimeMapArtBundle(await json('assets/production/hunt/accepted-20261010/manifest.json'));
      const field=manifest.fields.find(f=>f.fieldId==='field_hm00_01');checked(field&&field.worldWidthPx>=1024&&field.worldHeightPx>=1024,'REAL_HUNT_FIELD_REQUIRED');
      fieldArt=await createRuntimeMapArtFieldLoader({PIXI}).load({manifest,fieldId:field.fieldId});
      const {loadHuntDepthOccluders,withHuntDepthOccluders}=await imp('vs2/huntDepthOccluders.js');fieldArt=withHuntDepthOccluders(fieldArt,await loadHuntDepthOccluders({PIXI,field}));
@@ -84,12 +84,17 @@ try{
     }
     checked(createdActor,'MISSING_REAL_ACTOR');stage.app.stop();
     function rect(b){return{x:b.x,y:b.y,width:b.width,height:b.height};}
-    const records=[],timing=[];
+    const records=[],timing=[];let presentationTime=performance.now();
     function sample(sequenceId,tick,mirror=false){
      const sequence=animations.find(a=>a.id===sequenceId),timeline=createNativeCharacterAnimationTimeline(sequence);for(let t=0;t<tick;t++)timeline.advanceNative(4096);const snap=timeline.getSnapshot();checked(snap.cell===nativeAnimationCellAt(sequence,tick),'TIMELINE_CELL');
      if(sequenceId===13&&tick>=37)checked(snap.active===0,'SLEEP_HOLD');if([0,2,14].includes(sequenceId))checked(snap.active===1,'LOOP_ACTIVE');
      native={...native,sequenceId,frameIndex:snap.frameIndex,flipBits:mirror?1:0};revision++;if(frame)frame.revision=revision;
-     if(sceneName==='raising')scene.render(frame);else scene.render();stage.app.render();
+     if(sceneName==='raising')scene.render(frame);else scene.render();
+     // Execute the real scene-owned presentation ticker once at each frozen native snapshot.
+     // This initializes lifecycle visibility and actor-frame diagnostics; source clocks stay frozen.
+     stage.app.ticker.update(presentationTime+=1000/60);
+     if(sceneName==='raising')scene.render({...frame,revision:++revision});else scene.render();
+     stage.app.render();
      const sprite=createdActor.sprite,root=sprite.parent,shadow=sceneName==='hunt'?root.contactShadow:root.children[0];
      checked(sprite.anchor.x===28/64&&sprite.anchor.y===37/64,'ORIGIN_DRIFT');checked(sprite.texture.source.scaleMode==='nearest','FILTER_DRIFT');
      const geom=createdActor.nativeFramePresenter.getSnapshot().geometry,b=geom.nativeBounds;
