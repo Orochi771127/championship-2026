@@ -116,6 +116,30 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "trimEnd": 0,
     "crossfade": 0,
     "fallbackPath": "./assets/production/original-music-r1/championship_draw_r1.m4a"
+  },
+  "a_quiet_evening_training": {
+    "path": "./assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
+    "loop": true,
+    "gainDb": -11.7,
+    "trimStart": 0,
+    "trimEnd": 0,
+    "crossfade": 0.8
+  },
+  "unison_under_fire": {
+    "path": "./assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+    "loop": true,
+    "gainDb": -11.7,
+    "trimStart": 0,
+    "trimEnd": 0,
+    "crossfade": 0.8
+  },
+  "federation_siege": {
+    "path": "./assets/production/scene-music-r1/battle/federation_siege.mp3",
+    "loop": true,
+    "gainDb": -11.5,
+    "trimStart": 0,
+    "trimEnd": 0,
+    "crossfade": 0.8
   }
 });
 

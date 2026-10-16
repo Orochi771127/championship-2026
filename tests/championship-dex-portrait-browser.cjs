@@ -110,6 +110,18 @@ async function checkPolicy(repo) {
   return { enabled: policy.enabled, fullDexView: policy.fullDexView,
     sourceHashes: files.map(file => ({ file, sha256: sha256(fs.readFileSync(path.join(repo, file))) })) };
 }
+// The comic can advance itself between visibility inspection and an optional tap.
+// Accept that race only when its removal AND the ordinary next envelope are observed.
+async function clickOptionalComicControl(page, control, options = {}) {
+  if (!await control.isVisible()) return;
+  try {
+    await control.click({ ...options, timeout: 1000 });
+  } catch (error) {
+    if (error.name !== 'TimeoutError'
+      || await page.locator('.cm-opening-story').count() !== 0
+      || !await page.locator('.cm-opening__envelope').isVisible()) throw error;
+  }
+}
 async function main() {
   const { chromium } = require('playwright');
   const { resolveAsset, serveBuild } = require('./alternate-form-browser-support.cjs');
@@ -204,8 +216,8 @@ async function main() {
     const story = page.locator('.cm-opening-story'), deadline = Date.now() + 120000;
     while (await story.count()) {
       if (Date.now() > deadline) throw Error('NORMAL_ONBOARDING_BLOCKED: opening comic timeout');
-      const text = page.locator('[data-story-action="text"]'); if (await text.isVisible()) await text.click();
-      if (await story.isVisible()) await story.click({ position: { x: 10, y: 10 } });
+      await clickOptionalComicControl(page, page.locator('[data-story-action="text"]'));
+      await clickOptionalComicControl(page, story, { position: { x: 10, y: 10 } });
       await page.waitForTimeout(1200);
     }
     await page.locator('.cm-opening__envelope').click(); await page.locator('.cm-opening__letter button').click();
@@ -327,7 +339,32 @@ async function main() {
   }
   console.log(JSON.stringify({ status: evidence.status, visualReview: evidence.visualReview, captures: evidence.captures.length, output }));
 }
-function selfTest() {
+async function selfTestOptionalComicClick() {
+  const timeout = Object.assign(new Error('obsolete comic control'), { name: 'TimeoutError' });
+  const testCase = ({ visible = true, error = null, storyCount = 0, envelopeVisible = true } = {}) => {
+    const calls = [];
+    const control = { isVisible: async () => visible, click: async options => { calls.push(options); if (error) throw error; } };
+    const page = { locator: selector => selector === '.cm-opening-story'
+      ? { count: async () => storyCount } : { isVisible: async () => envelopeVisible } };
+    return { page, control, calls };
+  };
+  const normal = testCase();
+  await clickOptionalComicControl(normal.page, normal.control, { position: { x: 10, y: 10 } });
+  assert.deepEqual(normal.calls, [{ position: { x: 10, y: 10 }, timeout: 1000 }]);
+  const absent = testCase({ visible: false });
+  await clickOptionalComicControl(absent.page, absent.control); assert.equal(absent.calls.length, 0);
+  const advanced = testCase({ error: timeout });
+  await clickOptionalComicControl(advanced.page, advanced.control); assert.equal(advanced.calls.length, 1);
+  for (const options of [{ storyCount: 1 }, { envelopeVisible: false }, { storyCount: 1, envelopeVisible: false }]) {
+    const blocked = testCase({ error: timeout, ...options });
+    await assert.rejects(() => clickOptionalComicControl(blocked.page, blocked.control), error => error === timeout);
+  }
+  const otherError = new Error('browser or selector failed');
+  const broken = testCase({ error: otherError });
+  await assert.rejects(() => clickOptionalComicControl(broken.page, broken.control), error => error === otherError);
+}
+async function selfTest() {
+  await selfTestOptionalComicClick();
   new (require('node:vm').Script)('('+mountedSnapshot.toString()+')');
   assert.deepEqual(sizePlan(128, [24, 24, 24, 24]), { size: 128, width: 176, height: 176 });
   assert.deepEqual(sizePlan(256, [24, 24, 24, 24]), { size: 256, width: 304, height: 304 });
@@ -363,10 +400,10 @@ function selfTest() {
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));
   assert.throws(()=>assertRegistry(duplicated,duplicated));
   const missing=Buffer.from(JSON.stringify({entries:[{speciesIndex:55}]}));assert.throws(()=>assertRegistry(missing,missing));
-  console.log('DEX_PORTRAIT_SELF_TEST_PASS: sizing, identity, registration, contain and measured geometry guards; no browser launched.');
+  console.log('DEX_PORTRAIT_SELF_TEST_PASS: sizing, identity, registration, contain, measured geometry and bounded onboarding-race guards; no browser launched.');
 }
-module.exports = { EXPECTED, assertRegistry, sizePlan, assertAsset, assertMeasured, mountedSnapshot, checkPolicy };
+module.exports = { EXPECTED, assertRegistry, sizePlan, assertAsset, assertMeasured, mountedSnapshot, checkPolicy, clickOptionalComicControl, selfTestOptionalComicClick };
 if (require.main === module) {
-  if (process.argv.includes('--self-test')) selfTest();
+  if (process.argv.includes('--self-test')) selfTest().catch(error => { console.error(error); process.exitCode = 1; });
   else main().catch(error => { console.error(error); process.exitCode = 1; });
 }
