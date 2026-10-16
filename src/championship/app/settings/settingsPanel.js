@@ -21,6 +21,7 @@ import {
   PREFERENCE_DEFINITIONS,
   preferenceIdsIn
 } from "./preferenceSchema.js";
+import { musicChoicesForScene, musicTrackTitle } from "../../presentation/sceneMusicCatalog.js";
 import { SYSTEM_BACKGROUNDS } from "../../presentation/systemBackgrounds.js";
 import { QUALITY_TIERS } from "../../presentation/presentationPreferences.js";
 
@@ -183,7 +184,8 @@ export function createSettingsPanel({
       });
       const body = node("span", "cm-choice__body");
       if (render) body.append(render(choice));
-      const name = node("span", "cm-choice__name", choice.name, choice.context ? { context: choice.context } : undefined);
+      const name = node("span", "cm-choice__name", choice.literal ? undefined : choice.name, choice.context ? { context: choice.context } : undefined);
+      if (choice.literal) name.textContent = choice.name;
       if (choice.lang) name.lang = choice.lang;
       body.append(name);
       if (choice.desc) body.append(node("span", "cm-choice__desc", choice.desc));
@@ -192,6 +194,11 @@ export function createSettingsPanel({
     }
     set.append(options);
     return set;
+  }
+
+  function musicChoices(scene) {
+    return [{ value: "default", name: "MUSIC_SCENE_DEFAULT", desc: "MUSIC_SCENE_DEFAULT_HINT" },
+      ...musicChoicesForScene(scene).map(track => ({ value: track.id, name: musicTrackTitle(track.id, store.get().locale), literal: true, lang: store.get().locale.startsWith("zh") ? "zh-Hant" : "en" }))];
   }
 
   function systemBackgroundPreview(choice) {
@@ -365,7 +372,7 @@ export function createSettingsPanel({
       section.append(slider("musicVolume", "MUSIC_VOLUME", "MUSIC_VOLUME_HINT"));
       volumeNote = note(VOLUME_NOTE, volumeLevel());
       section.append(volumeNote);
-      const test = node("button", "cm-settings__action", "試聽");
+      const test = node("button", "cm-settings__action", "MUSIC_TEST_SFX");
       test.type = "button";
       test.addEventListener("click", () => {
         const played = audio?.preview?.() ?? false;
@@ -373,6 +380,9 @@ export function createSettingsPanel({
       });
       section.append(test);
       section.append(note("MUSIC_GESTURE_NOTE"));
+      section.append(radioGroup("raisingMusic", "MUSIC_RAISING_PICK", musicChoices("raising"), { hint: "MUSIC_RAISING_PICK_HINT" }));
+      section.append(radioGroup("battleMusic", "MUSIC_BATTLE_PICK", musicChoices("battle"), { hint: "MUSIC_BATTLE_PICK_HINT" }));
+      section.append(note("MUSIC_SCENE_PICK_NOTE"));
     },
     language(section) {
       section.append(radioGroup("locale", "顯示語言", LOCALE_CHOICES, { hint: "切換後立即生效，不會重新開始或改變目前進度。" }));

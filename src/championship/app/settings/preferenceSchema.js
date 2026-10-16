@@ -24,6 +24,7 @@
 // test document could have). A document from a NEWER version is not
 // understood, so it is left untouched and the session runs on defaults.
 
+import { musicChoicesForScene } from "../../presentation/sceneMusicCatalog.js";
 import { SYSTEM_BACKGROUND_IDS } from "../../presentation/systemBackgrounds.js";
 
 export const PREFERENCES_VERSION = 1;
@@ -58,6 +59,9 @@ const DEFINITIONS = {
   masterVolume: { category: "sound", scope: "device", type: "integer", min: 0, max: 100, step: 5, default: 100 },
   sfxVolume: { category: "sound", scope: "device", type: "integer", min: 0, max: 100, step: 5, default: 100 },
   musicVolume: { category: "sound", scope: "device", type: "integer", min: 0, max: 100, step: 5, default: 100 },
+  // Track tastes use the preference document, never player progress. Default preserves scene routing.
+  raisingMusic: { category: "sound", scope: "account", type: "enum", values: ["default", ...musicChoicesForScene("raising").map(track => track.id)], default: "default" },
+  battleMusic: { category: "sound", scope: "account", type: "enum", values: ["default", ...musicChoicesForScene("battle").map(track => track.id)], default: "default" },
   // Language
   locale: { category: "language", scope: "account", type: "enum", values: ["zh-Hant", "en", "ja", "th", "vi"], default: "zh-Hant" },
   // Controls and accessibility

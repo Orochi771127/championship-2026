@@ -396,7 +396,8 @@
     "src/championship/contracts/productPasswordTransport.js",
     "src/championship/text/battleTransportText.js",
     "src/championship/presentation/alternateFormAssetContracts.js",
-    "src/championship/app/transientHint.js"
+    "src/championship/app/transientHint.js",
+    "src/championship/presentation/sceneMusicCatalog.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -10057,7 +10058,12 @@
     "src/data/championship/public-playtest.r1.json",
     "src/data/championship/qa-database-hero-portraits.r1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/championship/app/transientHint.js"
+    "src/championship/app/transientHint.js",
+    "src/championship/presentation/sceneMusicCatalog.js",
+    "assets/production/scene-music-r1/manifest.json",
+    "assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
+    "assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+    "assets/production/scene-music-r1/battle/federation_siege.mp3"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -47005,7 +47011,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "b9f4500aafc5d9fc32300d4445a98ede15053be907a02faa40506ca209ebb414"
+        "sha256": "b21062fd58dde7749a898300bf29c5d2f35fc57b86bc3482b13cc013e5df9d0f"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -47113,7 +47119,7 @@
       },
       {
         "path": "src/championship/app/settings/preferenceSchema.js",
-        "sha256": "f3c2ef8f8d2013064b8c7ad1e15446a2a636698c9bb4e1ce598909b0a6bef49c"
+        "sha256": "59c0975ac710a0c00efd3862d3bc028280c3f6e6dbb9d1028f97b4251e5364f5"
       },
       {
         "path": "src/championship/app/settings/preferenceStore.js",
@@ -47125,7 +47131,7 @@
       },
       {
         "path": "src/championship/app/settings/settingsPanel.js",
-        "sha256": "b6bffa03b4f84ecb9537b78db02013e9c3bfec13576c46fa67a25145e9a44c47"
+        "sha256": "20d66dc4521911d97b96b60ae8083efb8e2217bf21b44c9e661f05e4f04e00b3"
       },
       {
         "path": "src/championship/app/shopOriginalVideo.css",
@@ -48021,7 +48027,7 @@
       },
       {
         "path": "src/championship/presentation/musicPresentation.js",
-        "sha256": "fbcbfe7403ab2f647ba7e04bb721f2cc0978d68b7ff7033965ff00068ee2d5a5"
+        "sha256": "a7edc32f773c10db7da874ea960b264a7837f0dd6265af3cbf3c9485d689876f"
       },
       {
         "path": "src/championship/presentation/nativeHuntCharacterAction.js",
@@ -48041,7 +48047,7 @@
       },
       {
         "path": "src/championship/presentation/originalMusicCatalog.js",
-        "sha256": "b7ee6aa36f1c5c7941d0b070c3529d026037fcd7fe950f4df70ec57e80785ce9"
+        "sha256": "4c730d7f5c8490feca19d93b2dca93e4539796cd62f65d345268aa1e3af09674"
       },
       {
         "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -48461,23 +48467,23 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "7ebc8005dd4d02a341d6b6745536177192f512e94f1033c124f30c459d508347"
+        "sha256": "8bbb5dc37fc39d82eccc5e3db889b17d068d2ae0694afc80375efb76b58b1a5e"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "bc1c31f842cb7306d518824a575eef4395a1a28cceba80aad00ebbcc107a5808"
+        "sha256": "a5184c96997d6f0321476ede27b27cdc56623066a2568ac962625e62fffd401c"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "74f2fdea31ea6cec97d7ff95d2f18fd53cbadf8982aa3362948487afc7c8ad06"
+        "sha256": "4cf29450ab9ec879ebe71c1216852811f05b7bd507b00358a657b58f9d1f01e1"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "711380b2564e42b393163fa7876a4dcdab16c989289db9319bf9cec651ef0826"
+        "sha256": "d039e1fda7a55990aee4cc631c3400faac9e8d2a94f57bb2e25f06553cbc38be"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "7d2f1da69fe5793640a995ca98d34fe70b50943a38b034ed753584c370043cad"
+        "sha256": "b47e41cc65d82b55e9cf72a4c6acf8aa5dce298e87d9a533edb4d7d6b20819b8"
       },
       {
         "path": "src/championship/text/zhHant.js",
@@ -48686,6 +48692,26 @@
       {
         "path": "src/championship/app/transientHint.js",
         "sha256": "e2ceecb8454734935cbae2f61327d05e95f9b1c70817714d8ef499514353ae04"
+      },
+      {
+        "path": "src/championship/presentation/sceneMusicCatalog.js",
+        "sha256": "3ec2382f965f475f78d26285dea3e558b96881b40ad1f0b0f6192f646a1581bc"
+      },
+      {
+        "path": "assets/production/scene-music-r1/manifest.json",
+        "sha256": "dd0ebd2e0ab0c1fe5fc2b434ae237859b23c5f0691a73a1bb25b7792bdd6a355"
+      },
+      {
+        "path": "assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
+        "sha256": "269c85f148c2c8f09a7ee0fff2fcf9b7b181adc2a9f8613c67b1993a7b26c568"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+        "sha256": "0e01b0fa1e88831b7f16dc1024133c2d2b390c2700c6585d8c634cda2855f1b6"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/federation_siege.mp3",
+        "sha256": "4d8b4e2782bba9e66a482a1fbf90696d65d023d3b7735884ab60cf378b282b7f"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
