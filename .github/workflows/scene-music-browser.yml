@@ -50,7 +50,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .tmp/browser-qa/scene-music
-          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/browser-qa/scene-music/server.log 2>&1 &
+          node tests/championship-scene-music-browser.mjs --serve 8765 . > .tmp/browser-qa/scene-music/server.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           for attempt in {1..30}; do

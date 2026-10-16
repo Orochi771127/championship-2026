@@ -12,6 +12,7 @@ import {CHAMPIONSHIP_PREFERENCES_KEY,createChampionshipPreferencePort} from '../
 import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../src/championship/app/championshipStandaloneSave.js';
 import {uiText} from '../src/championship/text/uiText.js';
 import {setLocale} from '../src/championship/text/locale.js';
+import {inspectSceneMusicLocaleCopy,buildLocaleCoverage} from '../scripts/check-locale-coverage.mjs';
 
 class Events {
   listeners=new Map();visibilityState='visible';
@@ -45,6 +46,32 @@ test('complete catalog has one categorized Chinese/English record per actual cue
 });
 test('all Chinese locales show Chinese and en/ja/th/vi show only English for every track',()=>{
  for(const t of SCENE_MUSIC_TRACKS){for(const locale of ['zh-Hant','zh-TW','zh-Hans'])assert.equal(musicTrackTitle(t.id,locale),t.titles.zh);for(const locale of ['en','ja','th','vi'])assert.equal(musicTrackTitle(t.id,locale),t.titles.en);}assert.equal(musicTrackTitle('missing','en'),'');
+});
+test('canonical title registration covers all 17 bilingual records, not stray literals or other files',()=>{
+ const file='src/championship/presentation/sceneMusicCatalog.js',checked=inspectSceneMusicLocaleCopy(SCENE_MUSIC_TRACKS);
+ assert.equal(checked.keys.length,17);assert.deepEqual(checked.gaps,[]);
+ for(const track of SCENE_MUSIC_TRACKS)for(const locale of ['zh-Hant','en','ja','th','vi']){
+  const title=musicTrackTitle(track.id,locale);
+  assert.equal(title,track.titles[locale==='zh-Hant'?'zh':'en']);
+  assert.equal(checked.covers({file,text:title}),true);
+  assert.equal(checked.covers({file:'src/championship/app/not-a-dictionary.js',text:title}),false);
+ }
+ assert.equal(checked.covers({file,text:'這是尚未翻譯的新顯示文字'}),false);
+});
+test('every missing or blank Chinese/English music title remains a canonical locale gap',()=>{
+ const file='src/championship/presentation/sceneMusicCatalog.js';
+ for(const track of SCENE_MUSIC_TRACKS)for(const language of ['zh','en'])for(const value of [undefined,' ',42]){
+  const broken=structuredClone(SCENE_MUSIC_TRACKS),titles=broken.find(entry=>entry.id===track.id).titles;
+  if(value===undefined)delete titles[language];else titles[language]=value;
+  const expected=(language==='zh'?['zh-Hant']:['en','ja','th','vi']).map(locale=>`${locale}:SCOPED_COPY[${file}:${track.id}]`);
+  assert.deepEqual(inspectSceneMusicLocaleCopy(broken).gaps,expected);
+ }
+});
+test('global locale gate registers all scene titles with zero missing titles or raw display literals',async()=>{
+ const report=await buildLocaleCoverage(),file='src/championship/presentation/sceneMusicCatalog.js';
+ assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:17,gaps:[]});
+ assert.equal(report.counts.missing,0,JSON.stringify(report.missing));
+ assert.equal(report.counts.uiCopyMissing,0);assert.equal(report.counts.catalogGaps,0);
 });
 test('music control copy exists deliberately in all five UI languages',()=>{
  const keys=['MUSIC_RAISING_PICK','MUSIC_RAISING_PICK_HINT','MUSIC_BATTLE_PICK','MUSIC_BATTLE_PICK_HINT','MUSIC_SCENE_DEFAULT','MUSIC_SCENE_DEFAULT_HINT','MUSIC_SCENE_PICK_NOTE','MUSIC_TEST_SFX'];
