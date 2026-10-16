@@ -633,7 +633,7 @@ const EVENT_ROWS = [
   ],
   [
     "Aqua Centurion",
-    "The stage is a water arena! Take on the team built around 雪晶幼龍將軍!\nĐấu trường nước, Trận đấu 3 chọi 3."
+    "The stage is a water arena! Take on the team built around 雪晶龍將軍!\nĐấu trường nước, Trận đấu 3 chọi 3."
   ],
   [
     "Wing Master",
@@ -797,7 +797,7 @@ const EVENT_ROWS = [
   ],
   [
     "Rainbow Flyer",
-    "Colorful bạn đồng hành such as 緋尾妖狐 and 幻紋幼獸 take the stage!\nTrận đấu 3 chọi 3."
+    "Colorful bạn đồng hành such as 緋尾妖狐 and 幻紋獸 take the stage!\nTrận đấu 3 chọi 3."
   ],
   [
     "Lunar Evolution",

@@ -314,3 +314,48 @@ test('Dex named dictionaries validate every locale and keep stray literals outsi
   assert.deepEqual(report.scopedCopy.find(row=>row.file===profileFile),{file:profileFile,keyCount:216,gaps:[]});
   assert.equal(report.counts.missing,0);assert.equal(report.counts.catalogGaps,0);
 });
+
+// Owner-requested 2026-10-16: remove age-descriptive 幼 only from canonical character names.
+import { speciesNameForId as ageRenameSpeciesNameForId } from '../src/championship/text/zhHant.js';
+import { SPECIAL_SPECIES_NAMES_ZH as ageRenameSpecialNames } from '../src/championship/text/catalogs.zhHant.js';
+import { listProductExtensions as ageRenameExtensions } from '../src/championship/contracts/productSpeciesExtensions.js';
+const AGE_NAME_RENAMES = Object.freeze([{"speciesIndex": 31, "old": "焰角幼龍", "new": "焰角龍"}, {"speciesIndex": 40, "old": "霜裘幼龍", "new": "霜裘龍"}, {"speciesIndex": 44, "old": "葉角幼蟲", "new": "葉角蟲"}, {"speciesIndex": 54, "old": "花藤幼姬", "new": "花藤姬"}, {"speciesIndex": 58, "old": "聖鈴幼犬", "new": "聖鈴犬"}, {"speciesIndex": 61, "old": "雪晶幼龍", "new": "雪晶龍"}, {"speciesIndex": 63, "old": "翠冠幼龍", "new": "翠冠龍"}, {"speciesIndex": 64, "old": "曦冕幼獅", "new": "曦冕獅"}, {"speciesIndex": 66, "old": "灰燼幼龍", "new": "灰燼龍"}, {"speciesIndex": 67, "old": "幻紋幼獸", "new": "幻紋獸"}, {"speciesIndex": 70, "old": "星角幼龍", "new": "星角龍"}, {"speciesIndex": 71, "old": "裂焰幼龍", "new": "裂焰龍"}]);
+
+test('canonical character names omit age descriptor without changing species identity in five locales', t => {
+  t.after(() => setLocale('zh-Hant'));
+  for (const locale of LOCALES) {
+    setLocale(locale);
+    for (const {speciesIndex, old, new: name} of AGE_NAME_RENAMES) {
+      assert.equal(SPECIES_NAMES_ZH[speciesIndex], name);
+      assert.equal(speciesName(speciesIndex), name);
+      assert.equal(ageRenameSpeciesNameForId(`species-${speciesIndex}`), name);
+      assert.equal(ageRenameSpeciesNameForId(`championship:creature:species-${speciesIndex}`), name);
+      assert.equal(raisingDisplayName({speciesId:`species-${speciesIndex}`, displayName:old}), old, 'player nickname is never migrated');
+    }
+  }
+});
+
+test('renamed canonical characters have no name collisions including special forms and extensions', () => {
+  const names = {...SPECIES_NAMES_ZH, ...ageRenameSpecialNames};
+  for (const e of ageRenameExtensions()) names[e.speciesIndex] = e.displayNameZh;
+  for (const {speciesIndex, new:name} of AGE_NAME_RENAMES) {
+    assert.deepEqual(Object.entries(names).filter(([,n]) => n === name).map(([id]) => Number(id)), [speciesIndex]);
+  }
+  assert.equal(Object.values(SPECIES_NAMES_ZH).some(name => name.includes('幼')), false);
+});
+
+test('title-event references use renamed proper names in every locale without replacing growth stages', t => {
+  t.after(() => setLocale('zh-Hant'));
+  for (const locale of LOCALES) {
+    setLocale(locale);
+    const descriptions = Array.from({length:80}, (_,i) => titleEventText(i, 'description')).filter(Boolean).join('\n');
+    assert.ok(descriptions.includes('雪晶龍'));
+    assert.ok(descriptions.includes('幻紋獸'));
+    for (const {old} of AGE_NAME_RENAMES) assert.equal(descriptions.includes(old), false);
+  }
+  setLocale('zh-Hant');
+  assert.equal(generationName(1), '幼年期Ⅰ');
+  assert.equal(generationName(2), '幼年期Ⅱ');
+  assert.equal(uiText('幼年期 I'), '幼年期 I');
+  assert.equal(uiText('幼年期 II'), '幼年期 II');
+});
