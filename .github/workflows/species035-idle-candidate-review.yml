@@ -9,6 +9,9 @@ on:
       - 'tests/fixtures/species062-idle-candidate/**'
       - 'scripts/review-species041-clarity.mjs'
       - 'scripts/bake-species062-effects.mjs'
+      - 'scripts/review-species062-whole-*.mjs'
+      - 'scripts/whole-bank-battle-native-helper.mjs'
+      - 'tests/fixtures/species062-whole-bank/**'
       - 'tests/fixtures/species062-effect-bake/**'
       - 'scripts/review-species062-carried-context.mjs'
       - 'tests/fixtures/species062-carried-context/**'
@@ -52,6 +55,10 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/species035-idle-candidate/index.html > /dev/null
+          node scripts/review-species062-whole-sweep.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank
+          node scripts/review-species062-whole-carried.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank/carried
+          node scripts/review-species062-whole-grounding.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank/grounding
+          node scripts/review-species062-whole-battle.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-whole-bank/battle
           node scripts/bake-species062-effects.mjs http://127.0.0.1:8765/ .tmp/browser-qa/species062-effect-bake
           node tests/championship-species035-idle-candidate-review.mjs \
             http://127.0.0.1:8765/ \
@@ -77,6 +84,14 @@ jobs:
           node scripts/review-species062-carried-context.mjs \
             http://127.0.0.1:8765/ \
             .tmp/browser-qa/species062-carried-context
+      - name: Preserve bounded062 complete bank separately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: species062-whole-bank-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/browser-qa/species062-whole-bank/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Preserve bounded062 effect bake separately
         if: always()
         uses: actions/upload-artifact@v4

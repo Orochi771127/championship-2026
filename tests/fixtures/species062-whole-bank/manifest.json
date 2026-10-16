@@ -1,0 +1,205 @@
+{
+  "baseline": {
+    "path": "assets/production/characters/accepted-20261010/m237_renamon-final-growth38-20261007/runtime.review.json",
+    "gitBlob": "c33caa682932bc5fcced3b9b162827a6716a82e3",
+    "sourceBankSha256": "10c1b3fd4ce0f815b44f790c854c087d1904f542ef39c2c3cf92622cb78f4981",
+    "artProfile": {
+      "style": "ORIGINAL_MATURE_RAW_CANDIDATE",
+      "scale": 4,
+      "filter": "nearest",
+      "logicalCanvas": [
+        64,
+        64
+      ],
+      "anchor": {
+        "x": 0.4375,
+        "y": 0.578125
+      },
+      "alphaBoundary": "TRANSPARENT",
+      "reviewOnly": true,
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "publicReleasePermitted": false,
+      "designVersion": "codex-down-bob-clean-alpha-r08-20261004",
+      "visualAccepted": false
+    },
+    "frames": {
+      "m237_renamon/main/cell_000": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -17.75,
+          12.5,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_001": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -15.75,
+          12.5,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_004": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -17.75,
+          15,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_005": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -15.25,
+          15.25,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_023": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.5,
+          -7.75,
+          12.5,
+          3
+        ]
+      },
+      "m237_renamon/main/cell_024": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.75,
+          -18.75,
+          12.75,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_025": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.25,
+          -17.75,
+          12.5,
+          2
+        ]
+      }
+    }
+  },
+  "scope": "COMPLETE_BANK_TEST_ONLY_NATIVE_TIMELINES_AND_REAL_SCENES",
+  "contextPairBudget": 16,
+  "contactSheetBudget": 4,
+  "sequenceCount": 53,
+  "slotCount": 81,
+  "density": 4,
+  "origin": [
+    112,
+    148
+  ],
+  "bankFiles": [
+    {
+      "file": "runtime.review.json",
+      "sha256": "d194d5ecb724522c174a5c91dda43fb0c33545323c817a6bc3330a2d218c3779",
+      "bytes": 62186
+    },
+    {
+      "file": "sub-atlas-00.png",
+      "sha256": "1b901e48216e39cf03259df32e415ad370221eacf1dbb2afca644ae04872fd6e",
+      "bytes": 339591
+    },
+    {
+      "file": "main-atlas-00.json",
+      "sha256": "9550d3d7ca2f6370ab1046970aa9592a72dd044d51779c67298f72f564bab4c5",
+      "bytes": 27168
+    },
+    {
+      "file": "sub-atlas-00.json",
+      "sha256": "e3d7ae0541ccb2f6d4cf0afa70d95ad6ac9820e5ae7cafa092609b329be5ae3d",
+      "bytes": 7900
+    },
+    {
+      "file": "main-atlas-00.png",
+      "sha256": "f4cc6c05a1c800b1b563d077b734e528b120a8a1ed59cabd81becab84cc982d2",
+      "bytes": 1015051
+    }
+  ],
+  "assemblyReceiptSha256": "679ef307bfb656c87d3f5ea3ea43035eac2814d2a6d8be4b29e98dd2034bb6ed",
+  "nativeContractSha256": "88041a7a38265b2dc6ed6f405bc37d103e4c4f481c216c43dded27866b830433",
+  "noAdditionalOffsets": true,
+  "sceneAllocation": {
+    "raising": 7,
+    "hunt": 3,
+    "battle": 6
+  },
+  "limits": [
+    "Raising eat/sleep and Hunt walk/bound are verified native sample projections into actual scene, not behavior admission",
+    "Carry/cancel/release and Battle controlled inputs use native actor state owners",
+    "No fullgameplay or production acceptance"
+  ]
+}
