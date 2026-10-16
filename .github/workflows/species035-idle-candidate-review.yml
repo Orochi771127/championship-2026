@@ -8,6 +8,8 @@ on:
       - 'tests/fixtures/species035-idle-candidate/**'
       - 'tests/fixtures/species062-idle-candidate/**'
       - 'scripts/review-species041-clarity.mjs'
+      - 'scripts/review-species062-grounding-context.mjs'
+      - 'tests/fixtures/species062-grounding-context/**'
       - 'scripts/review-species062-actions-resolution.mjs'
       - 'tests/fixtures/species062-actions-resolution/**'
       - 'tests/fixtures/species041-clarity/**'
@@ -62,6 +64,10 @@ jobs:
           node scripts/review-species062-actions-resolution.mjs \
             http://127.0.0.1:8765/ \
             .tmp/browser-qa/species062-actions-resolution
+          node --check scripts/review-species062-grounding-context.mjs
+          node scripts/review-species062-grounding-context.mjs \
+            http://127.0.0.1:8765/ \
+            .tmp/browser-qa/species062-grounding-context
       - name: Preserve real renderer screenshots and exact result
         if: always()
         uses: actions/upload-artifact@v4
@@ -77,5 +83,7 @@ jobs:
             .tmp/browser-qa/species041-clarity/*.json
             .tmp/browser-qa/species062-actions-resolution/*.png
             .tmp/browser-qa/species062-actions-resolution/*.json
+            .tmp/browser-qa/species062-grounding-context/*.png
+            .tmp/browser-qa/species062-grounding-context/*.json
           if-no-files-found: warn
           retention-days: 14

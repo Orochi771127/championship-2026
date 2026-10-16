@@ -1,0 +1,250 @@
+{
+  "scope": "ACTUAL_RAISING_HUNT_GROUNDING_NOT_RELEASE",
+  "baseline": {
+    "path": "assets/production/characters/accepted-20261010/m237_renamon-final-growth38-20261007/runtime.review.json",
+    "gitBlob": "c33caa682932bc5fcced3b9b162827a6716a82e3",
+    "sourceBankSha256": "10c1b3fd4ce0f815b44f790c854c087d1904f542ef39c2c3cf92622cb78f4981",
+    "artProfile": {
+      "style": "ORIGINAL_MATURE_RAW_CANDIDATE",
+      "scale": 4,
+      "filter": "nearest",
+      "logicalCanvas": [
+        64,
+        64
+      ],
+      "anchor": {
+        "x": 0.4375,
+        "y": 0.578125
+      },
+      "alphaBoundary": "TRANSPARENT",
+      "reviewOnly": true,
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "publicReleasePermitted": false,
+      "designVersion": "codex-down-bob-clean-alpha-r08-20261004",
+      "visualAccepted": false
+    },
+    "frames": {
+      "m237_renamon/main/cell_000": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -17.75,
+          12.5,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_001": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -15.75,
+          12.5,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_004": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -17.75,
+          15,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_005": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -15.25,
+          15.25,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_023": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.5,
+          -7.75,
+          12.5,
+          3
+        ]
+      },
+      "m237_renamon/main/cell_024": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.75,
+          -18.75,
+          12.75,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_025": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.25,
+          -17.75,
+          12.5,
+          2
+        ]
+      }
+    }
+  },
+  "assets": [
+    {
+      "cell": 0,
+      "staged": "candidate-000.png",
+      "sha256": "2439edad7c980af9183cc4c190bfbc38ba1d9da6afd1d173479f5c86c57e698e",
+      "nativeBoundsDiagnostic": [
+        -7.25,
+        -27.0,
+        15.5,
+        0.0
+      ]
+    },
+    {
+      "cell": 1,
+      "staged": "candidate-001.png",
+      "sha256": "b3f12e349292c8b2ffe926ea891cc254973356f87c37a3c85f90d9b6781c396f",
+      "nativeBoundsDiagnostic": [
+        -6.75,
+        -26.25,
+        15.75,
+        0.0
+      ]
+    },
+    {
+      "cell": 4,
+      "staged": "candidate-004.png",
+      "sha256": "bd7d3a06eaf1065e1187f9f8eb177f99c2dcfda59ad65b3749b281990e8633eb",
+      "nativeBoundsDiagnostic": [
+        -9.25,
+        -26.75,
+        13.5,
+        0.0
+      ]
+    },
+    {
+      "cell": 5,
+      "staged": "candidate-005.png",
+      "sha256": "ddaea53442fef9d077a341e3352c4d8294bb022317ef92e075fc016764b9a980",
+      "nativeBoundsDiagnostic": [
+        -8.75,
+        -26.75,
+        13.25,
+        0.0
+      ]
+    },
+    {
+      "cell": 23,
+      "staged": "candidate-023.png",
+      "sha256": "569de688f225324fbeb8f4818a65b94d8e912229b844eb3c2583a338d7606d0e",
+      "nativeBoundsDiagnostic": [
+        -12.75,
+        -10.5,
+        13.25,
+        0.0
+      ]
+    },
+    {
+      "cell": 24,
+      "staged": "candidate-024.png",
+      "sha256": "61b4c328d1128a7797330f81c8fd1343fb6c01b465db45b11d8c6a55011f4aad",
+      "nativeBoundsDiagnostic": [
+        -7.25,
+        -27.0,
+        17.5,
+        -0.25
+      ]
+    },
+    {
+      "cell": 25,
+      "staged": "candidate-025.png",
+      "sha256": "c5f771a64ffba0e8d7ed1349cf13249900202f59a107202bcdc299dfde2cddc9",
+      "nativeBoundsDiagnostic": [
+        -7.25,
+        -27.0,
+        18.5,
+        0.0
+      ]
+    }
+  ],
+  "origin": [
+    112,
+    148
+  ],
+  "density": 4,
+  "logicalSize": [
+    64,
+    64
+  ],
+  "variants": [
+    "base",
+    "unchanged",
+    "shift8"
+  ],
+  "captureBudget": 42
+}
