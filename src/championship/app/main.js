@@ -102,6 +102,7 @@ import { createSettingsPanel } from './settings/settingsPanel.js';
 import { createSystemBackgroundController } from '../presentation/systemBackgrounds.js';
 import { createAudioBus } from '../presentation/audioBus.js';
 import { createMusicPresentation } from '../presentation/musicPresentation.js';
+import { resolveSceneMusic } from '../presentation/sceneMusicCatalog.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
 import { cappedPixelRatio, currentQuality, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
@@ -369,12 +370,13 @@ const battleCeremonies = Object.freeze({
 });
 const systemBackgrounds = createSystemBackgroundController({ root, store: settings.store });
 const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CUES,
+  resolveCue:(id,scene)=>resolveSceneMusic(id,scene,settings.store.get()),
   onState(state){
     document.documentElement.dataset.musicState=JSON.stringify(state);
     titleMusicBuffering=state.cue==='login'&&state.initialBuffering;
     syncTitleArt();
   }});
-settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume'].includes(id)))music.preferencesChanged();});
+settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume','raisingMusic','battleMusic'].includes(id)))music.preferencesChanged();});
 const tutorialMusicAttempts=new WeakMap();let tutorialMusicSequence=0;
 function syncMusic(){
   if(dataArenaSession)return; // the arena picks its own cues on the shared music presentation
@@ -386,7 +388,7 @@ function syncMusic(){
   const cue=selectOriginalMusic({screen,tutorial:app?.getInteractiveTutorial?.()?.finished===false,
     biome:app?.getConfirmedGate?.()?.biomeId,chosen:runtime?.getChosenMatch?.(),
     outcome:screen===CHAMPIONSHIP_SCREENS.BATTLE_RESULT?(tutorialBattle?.outcome??runtime?.outcome?.()):null,attemptId});
-  music.setScene(cue.id,cue.attemptId);
+  music.setScene(cue.id,cue.attemptId,['RAISING_HOME','CAGE_EDIT'].includes(screen)?'raising':null);
 }
 // Resolve the new cue before art reads its buffering state on title return.
 const musicOverlayObserver=new MutationObserver(()=>{syncMusic();syncTitleArt();openingFilm?.sync();});

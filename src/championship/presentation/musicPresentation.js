@@ -3,13 +3,14 @@
 // decoding the entire original music library into mobile AudioBuffers.
 export function createMusicPresentation({ bus, cues, baseUrl = globalThis.location?.href,
   doc = globalThis.document, win = globalThis.window, AudioClass = globalThis.Audio,
-  timers = globalThis, onState = () => {} } = {}) {
-  let desired = null, current = null, pending = null, serial = 0;
+  timers = globalThis, onState = () => {}, resolveCue = id => id } = {}) {
+  let requested = null, desired = null, current = null, pending = null, serial = 0;
   let unlocked = false, hidden = doc?.visibilityState === 'hidden', disposed = false;
   let fadeTimer = null, error = null, starts = 0;
   const slots = [], playedResults = new Set();
   const audible = () => { const p = bus.levels(); return !p.muted && p.masterVolume > 0 && p.musicVolume > 0; };
   const state = () => Object.freeze({ cue: desired?.id ?? null, key: desired?.key ?? null,
+    requestedCue: requested?.id ?? null, scene: requested?.scene ?? null,
     playing: current && !current.media.paused ? current.id : null, pending: pending?.id ?? null,
     voices: slots.filter(s => !s.media.paused).length, slots: slots.length, starts, unlocked, hidden,
     paused: Boolean(current?.media.paused), position: current?.media.currentTime ?? 0,
@@ -23,7 +24,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
   }
   function release(slot) {
     if (!slot) return;
-    slot.generation++; slot.media.pause(); gain(slot, 0);
+    slot.generation++; slot.resuming = null; slot.media.pause(); gain(slot, 0);
     slot.media.onloadedmetadata = slot.media.ontimeupdate = slot.media.onended = slot.media.onerror = null;
     slot.media.oncanplaythrough = slot.media.onprogress = null;
     slot.media.removeAttribute('src'); slot.media.load(); slot.id = slot.key = null;
@@ -112,9 +113,18 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     if (!desired) { retireOther(); release(current); emit(); return; }
     if (current?.key === desired.key) {
       if (current.media.paused) {
-        const slot = current, token = serial; bus.resume();
-        Promise.resolve(slot.media.play()).then(() => { if (current === slot && serial === token) emit(); })
-          .catch(e => { if (current === slot && serial === token) { error = e.message; emit(); } });
+        const slot = current, token = serial, generation = slot.generation;
+        if (slot.resuming === token) return;
+        slot.resuming = token; bus.resume();
+        Promise.resolve(slot.media.play()).then(() => {
+          if (slot.resuming === token) slot.resuming = null;
+          // A late resume cannot make a hidden/muted or superseded scene audible.
+          if (slot.generation === generation && (disposed || hidden || !audible() || current !== slot || desired?.key !== slot.key)) slot.media.pause();
+          if (current === slot && serial === token) emit();
+        }).catch(e => {
+          if (slot.resuming === token) slot.resuming = null;
+          if (current === slot && serial === token) { error = e.message; emit(); }
+        });
       }
       return;
     }
@@ -133,18 +143,29 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
   doc?.addEventListener('keydown', gesture, { capture: true });
   doc?.addEventListener('visibilitychange', visibility);
   win?.addEventListener('pagehide', pageHide); win?.addEventListener('pageshow', pageShow);
+  function projectRequested() {
+    const sourceId = requested?.id ?? null;
+    const chosen = sourceId == null ? null : resolveCue(sourceId, requested.scene);
+    // A stale preference never invents a URL or replaces intentional silence.
+    const id = chosen != null && cues[chosen] ? chosen : sourceId;
+    const attemptId = requested?.attemptId ?? null;
+    const next = id == null ? null : { id, attemptId, key: cues[id].loop ? id : `${id}:${attemptId}` };
+    if (next && !cues[id].loop && attemptId == null) return false;
+    if (next?.key === desired?.key) return false;
+    serial++; retireOther(); desired = next; error = null;
+    if (next && !cues[id].loop && playedResults.has(attemptId)) { release(current); emit(); return true; }
+    reconcile(); emit(); return true;
+  }
   return Object.freeze({
-    setScene(id, attemptId = null) {
+    setScene(id, attemptId = null, scene = null) {
       if (id != null && !cues[id]) throw new RangeError(`UNKNOWN_MUSIC_CUE_${id}`);
-      const next = id == null ? null : { id, attemptId, key: cues[id].loop ? id : `${id}:${attemptId}` };
-      // A result without this attempt's identity must not replay an old verdict.
-      if (next && !cues[id].loop && attemptId == null) return;
-      if (next?.key === desired?.key) return;
-      serial++; retireOther(); desired = next; error = null;
-      if (next && !cues[id].loop && playedResults.has(attemptId)) { release(current); emit(); return; }
-      reconcile(); emit();
+      // Preserve the source cue even when two screens currently resolve to the same track.
+      if (id != null && !cues[id].loop && attemptId == null) return;
+      const metadataChanged = requested?.id !== id || requested?.attemptId !== attemptId || requested?.scene !== scene;
+      requested = { id, attemptId, scene };
+      if (!projectRequested() && metadataChanged) emit();
     },
-    preferencesChanged: reconcile, inspect: state,
+    preferencesChanged() { if (!projectRequested()) reconcile(); }, inspect: state,
     dispose() {
       disposed = true; serial++; clearFade();
       for (const s of slots) { release(s); s.source.disconnect(); s.gain.disconnect(); }

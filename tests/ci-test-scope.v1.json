@@ -193,6 +193,7 @@
     "tests/championship-opening-story-cases.mjs",
     "tests/championship-original-map-bindings-cases.mjs",
     "tests/championship-original-music-cases.mjs",
+    "tests/championship-scene-music-cases.mjs",
     "tests/championship-pages-closure-cases.mjs",
     "tests/championship-password-battle-app-cases.mjs",
     "tests/championship-password-battle-cases.mjs",
@@ -310,7 +311,7 @@
     "tests/product-promotion-disabled-fixture-cases.mjs"
   ],
   "localReference": {
-    "tests/championship-species035-idle-candidate-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; candidate-only two-frame035 review runs in its dedicated QA workflow, not production acceptance.",
+    "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",
     "tests/championship-raising-hints-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Raising hints browser workflow with real DOM/CSS, wall-clock timing and a controlled normal-game fixture.",
     "tests/championship-m201-density8-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the M201 density8 actual renderer review workflow.",
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",
@@ -356,6 +357,7 @@
     "tests/championship-vfx157-settings-cases.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
     "tests/create-character-save.mjs": "Local fixture-generation CLI, not a portable test; reads the private m301 review save template.",
     "tests/test-all-completed-original-characters.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
-    "tests/test-completed-original-m301.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression."
+    "tests/test-completed-original-m301.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
+    "tests/championship-species035-idle-candidate-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; candidate-only two-frame035 review runs in its dedicated QA workflow, not production acceptance."
   }
 }

@@ -94,6 +94,16 @@ export function inspectScopedLocaleCopy(file, tables, locales = ["zh-Hant", "en"
   return { file, keys, gaps, covers: entry => entry.file === file && values.has(entry.text) };
 }
 
+// Owner-approved music-title policy: Chinese in Chinese UI, English in every
+// other supported UI language. Register only the exact catalog title values,
+// not the whole file; missing titles and unrelated new literals still fail.
+export function inspectSceneMusicLocaleCopy(tracks) {
+  const tables = Object.fromEntries(["zh-Hant", "en", "ja", "th", "vi"].map(locale => [
+    locale, Object.fromEntries(tracks.map(track => [track.id, track.titles?.[locale === "zh-Hant" ? "zh" : "en"]]))
+  ]));
+  return inspectScopedLocaleCopy("src/championship/presentation/sceneMusicCatalog.js", tables);
+}
+
 export async function buildLocaleCoverage() {
   const { UI_COPY } = await import("../src/championship/text/uiText.js");
   const uiEn = await import("../src/championship/text/uiText.en.js");
@@ -130,7 +140,9 @@ export async function buildLocaleCoverage() {
   const { MEDAL_PRESENTATION_COPY } = await import("../src/championship/presentation/medals/medalPresentationText.js");
   const { BATTLE_TRANSPORT_COPY } = await import("../src/championship/text/battleTransportText.js");
   const { PRODUCT_FORM_TEXT } = await import("../src/championship/text/productFormText.js");
+  const { SCENE_MUSIC_TRACKS } = await import("../src/championship/presentation/sceneMusicCatalog.js");
   const scopedCopy = [
+    inspectSceneMusicLocaleCopy(SCENE_MUSIC_TRACKS),
     inspectScopedLocaleCopy("src/championship/text/battleTransportText.js", BATTLE_TRANSPORT_COPY),
     inspectScopedLocaleCopy("src/championship/text/productFormText.js", PRODUCT_FORM_TEXT),
     inspectScopedLocaleCopy("src/championship/presentation/medals/medalPresentationText.js", MEDAL_PRESENTATION_COPY),

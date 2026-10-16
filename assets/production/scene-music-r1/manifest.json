@@ -1,0 +1,94 @@
+{
+  "id": "CHAMPIONSHIP_SCENE_MUSIC_R1_20261016",
+  "scope": "Three Owner-supplied optional Raising/Battle tracks; original MP3 bytes preserved. Existing default routes and existing 19 encoded files unchanged.",
+  "processing": "Read-only loudness analysis. Runtime GainNode targets approximately -24 LUFS, capped to -2 dBTP and maximum +6 dB; no rendered/transcoded audio. No edge trims; 0.8 second loop crossfade.",
+  "acceptance": "Technical local checks only; browser/device decoding, transition/loop listening and final Chinese display-name acceptance pending.",
+  "files": [
+    {
+      "id": "a_quiet_evening_training",
+      "path": "raising/a_quiet_evening_training.mp3",
+      "sha256": "269c85f148c2c8f09a7ee0fff2fcf9b7b181adc2a9f8613c67b1993a7b26c568",
+      "bytes": 3199122,
+      "seconds": 133.041583,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner-provided MP3; verified against the original project music-intake copy",
+      "originalUnchanged": true,
+      "category": "raising",
+      "titles": {
+        "zh": "靜夜修練",
+        "en": "A Quiet Evening Training"
+      },
+      "titleStatus": "Editable display titles; Chinese suggestions pending Owner wording confirmation, not embedded artist metadata",
+      "measuredIntegratedLufs": -12.29,
+      "measuredTruePeakDbtp": 0.53,
+      "playbackGainDb": -11.7
+    },
+    {
+      "id": "unison_under_fire",
+      "path": "battle/unison_under_fire.mp3",
+      "sha256": "0e01b0fa1e88831b7f16dc1024133c2d2b390c2700c6585d8c634cda2855f1b6",
+      "bytes": 4039847,
+      "seconds": 168.071792,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner-provided MP3; verified against the original project music-intake copy",
+      "originalUnchanged": true,
+      "category": "battle",
+      "titles": {
+        "zh": "烽火同心",
+        "en": "Unison Under Fire"
+      },
+      "titleStatus": "Editable display titles; Chinese suggestions pending Owner wording confirmation, not embedded artist metadata",
+      "measuredIntegratedLufs": -12.35,
+      "measuredTruePeakDbtp": 0.94,
+      "playbackGainDb": -11.7
+    },
+    {
+      "id": "federation_siege",
+      "path": "battle/federation_siege.mp3",
+      "sha256": "4d8b4e2782bba9e66a482a1fbf90696d65d023d3b7735884ab60cf378b282b7f",
+      "bytes": 4143919,
+      "seconds": 172.408125,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner-provided MP3; verified against the original project music-intake copy",
+      "originalUnchanged": true,
+      "category": "battle",
+      "titles": {
+        "zh": "聯邦圍城",
+        "en": "Federation Siege"
+      },
+      "titleStatus": "Editable display titles; Chinese suggestions pending Owner wording confirmation, not embedded artist metadata",
+      "measuredIntegratedLufs": -12.54,
+      "measuredTruePeakDbtp": 1.33,
+      "playbackGainDb": -11.5
+    }
+  ],
+  "cues": {
+    "a_quiet_evening_training": {
+      "path": "./assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
+      "loop": true,
+      "gainDb": -11.7,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "unison_under_fire": {
+      "path": "./assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+      "loop": true,
+      "gainDb": -11.7,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "federation_siege": {
+      "path": "./assets/production/scene-music-r1/battle/federation_siege.mp3",
+      "loop": true,
+      "gainDb": -11.5,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    }
+  }
+}
