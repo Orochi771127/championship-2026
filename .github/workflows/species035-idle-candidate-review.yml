@@ -7,6 +7,8 @@ on:
       - 'tests/championship-species035-idle-candidate-review.mjs'
       - 'tests/fixtures/species035-idle-candidate/**'
       - 'tests/fixtures/species062-idle-candidate/**'
+      - 'scripts/review-species041-clarity.mjs'
+      - 'tests/fixtures/species041-clarity/**'
       - 'tests/ci-test-scope.v1.json'
 permissions:
   contents: read
@@ -50,6 +52,10 @@ jobs:
             http://127.0.0.1:8765/ \
             tests/fixtures/species062-idle-candidate/ \
             .tmp/browser-qa/species062-idle-candidate
+          node --check scripts/review-species041-clarity.mjs
+          node scripts/review-species041-clarity.mjs \
+            http://127.0.0.1:8765/ \
+            .tmp/browser-qa/species041-clarity
       - name: Preserve real renderer screenshots and exact result
         if: always()
         uses: actions/upload-artifact@v4
@@ -61,5 +67,7 @@ jobs:
             .tmp/browser-qa/species035-idle-candidate/server.log
             .tmp/browser-qa/species062-idle-candidate/*.png
             .tmp/browser-qa/species062-idle-candidate/*.json
+            .tmp/browser-qa/species041-clarity/*.png
+            .tmp/browser-qa/species041-clarity/*.json
           if-no-files-found: warn
           retention-days: 14
