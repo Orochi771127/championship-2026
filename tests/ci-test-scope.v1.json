@@ -309,6 +309,7 @@
     "tests/product-promotion-disabled-fixture-cases.mjs"
   ],
   "localReference": {
+    "tests/championship-m201-density8-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the M201 density8 actual renderer review workflow.",
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",
     "tests/championship-battle-all-character-actions-cases.mjs": "Requires ignored internal-faithful-baseline character, effect or audio reference material.",
     "tests/championship-battle-art-pilot-cases.mjs": "Requires local art authoring/review manifests, source files or draft models that are deliberately outside this engineering checkpoint.",
