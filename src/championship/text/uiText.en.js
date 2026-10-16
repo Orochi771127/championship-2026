@@ -204,6 +204,10 @@ export const UI_COPY_EN = Object.freeze({
   "FRIENDS_MEDAL_PREVIEW_NOTICE": "Playtest: late-game medals are visual previews, not actual victories. Earn early-game medals through play.",
   "FRIENDS_MEDAL_PREVIEW_BADGE": "Test preview",
   "CAGE_PUBLIC_TEST_GRID_HINT": "Continuous ranch · Starts with 20 cells, up to 50 · Each 10-cell row costs 1000 test diamonds. No real payment.",
+  "CAGE_TEST_ROW_TITLE": "Unlock row {row}",
+  "CAGE_TEST_ROW_DETAILS": "Open {count} cells for {price} test diamonds. No real payment.",
+  "CAGE_TEST_ROW_BUY": "Buy",
+  "CAGE_TEST_ROW_CANCEL": "Cancel",
   "CAGE_TEST_BUY_ROW": "Buy row {row} ({count} cells · {price} test diamonds)",
   "CAGE_TEST_ROW_PURCHASED": "1000 test diamonds spent. Row opened.",
   "CAGE_TEST_ROW_UNAVAILABLE": "This row cannot be purchased right now.",
@@ -1092,5 +1096,6 @@ export const UNTRANSLATED_PROPER_NOUNS = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+
 
 

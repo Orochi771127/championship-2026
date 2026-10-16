@@ -30,38 +30,37 @@ function render(runtime,diamonds=10000){
  const art=cage.slots.map(slot=>{const p=productGridCell(slot.slotIndex);return{slotIndex:slot.slotIndex,x:4+p.x/2,y:p.y/2,image:null};});
  vm.runInNewContext(renderSource,{cage,board,annexBoard,expansionControls,annexLabel:node(),boardScroll:node(),boardHint:node(),
   PRODUCT_RANCH_GRID,NATIVE_RANCH_LAYOUT:'NATIVE_ANCHORS_V1',TAMER_RANK_SLOT_TABLE,element:node,uiText,setLabel,setText,
-  cageEditorArtCells:()=>art,mode:'PLAYER',ranchExpansionPrototypeVisible:()=>false,
+  rowPurchase:{open:row=>actions.push(['open',row])},cageEditorArtCells:()=>art,mode:'PLAYER',ranchExpansionPrototypeVisible:()=>false,
   cageUiName:(id,name)=>name??'',cageUiSummary:()=>'',source:{intents:{buyRanchTestRow:row=>actions.push(['buy',row]),removeCagePlacement:id=>actions.push(['remove',id]),placeCageAt:id=>actions.push(['place',id])}}});
  assert.deepEqual(runtime.toSave(),before,'presentation must not mutate the canonical save');
  return{cage,board,actions,cells:board.children.filter(n=>n.dataset.slotIndex!==undefined),locks:board.children.filter(n=>n.dataset.lockedTestRow!==undefined),ctas:expansionControls.children.filter(n=>n.dataset.buyTestRow!==undefined)};
 }
 function coordinates(view){return view.cells.map(c=>[c.dataset.slotIndex,c.style.left,c.style.top]);}
 
-test('new 20-cell ranch has three row lines and three icons, never 30 per-cell locks',()=>{
+test('new 20-cell ranch has three clickable icons with no lower purchase block, never 30 per-cell locks',()=>{
  const view=render(fresh());
- assert.equal(view.cells.length,50);assert.equal(view.locks.length,3);assert.equal(view.ctas.length,3);
+ assert.equal(view.cells.length,50);assert.equal(view.locks.length,3);assert.equal(view.ctas.length,0);
  assert.deepEqual(view.locks.map(n=>n.dataset.lockedTestRow),['2','3','4']);
- for(const lock of view.locks){assert.equal(lock.children.length,1);assert.equal(lock.children[0].textContent,'🔒');assert.equal(lock.attributes['aria-hidden'],'true');assert.equal(lock.style.width,'480px');}
- assert.deepEqual(view.locks.map(n=>[n.style.left,n.style.top]),[['4px','94px'],['28px','138px'],['4px','182px']]);
+ for(const lock of view.locks){assert.equal(lock.children.length,1);assert.equal(lock.children[0].textContent,'🔒');assert.equal(lock.attributes['aria-haspopup'],'dialog');assert.equal(lock.tag,'button');}
+ assert.deepEqual(view.locks.map(n=>[n.style.left,n.style.top]),[['222px','94px'],['246px','138px'],['222px','182px']]);
  for(const cell of view.cells.filter(n=>n.dataset.unlocked==='false')){assert.equal(cell.disabled,true);assert.equal(cell.textContent,'');}
  assert.equal(view.cells.filter(n=>n.textContent==='🔒').length,0);
 });
 
-test('old 40-cell QA ranch has exactly one last-row icon and one 1000-diamond CTA',()=>{
+test('old 40-cell QA ranch has exactly one last-row icon and one 1000-diamond accessible lock',()=>{
  const view=render(legacy());
  assert.equal(view.cells.filter(c=>c.dataset.unlocked==='true').length,40);
- assert.equal(view.locks.length,1);assert.equal(view.locks[0].dataset.lockedTestRow,'4');assert.equal(view.ctas.length,1);
- assert.equal(view.ctas[0].dataset.buyTestRow,'4');assert.equal(view.ctas[0].textContent,uiText('CAGE_TEST_BUY_ROW',{row:5,count:10,price:1000}));
+ assert.equal(view.locks.length,1);assert.equal(view.locks[0].dataset.lockedTestRow,'4');assert.equal(view.ctas.length,0);
+ assert.equal(view.locks[0].dataset.lockedTestRow,'4');assert.equal(view.locks[0].attributes['aria-label'],uiText('CAGE_TEST_BUY_ROW',{row:5,count:10,price:1000}));
 });
 
-test('only the row CTA can dispatch a purchase; disabled slots and line are not purchase targets',()=>{
+test('only the row lock opens confirmation; no direct purchase intent in render',()=>{
  const view=render(fresh());
  for(const cell of view.cells.filter(n=>n.dataset.unlocked==='false')){cell.click();cell.clickHandler?.();}
- for(const lock of view.locks)lock.click();
  assert.deepEqual(view.actions,[]);
- for(const cta of view.ctas)cta.click();
- assert.deepEqual(view.actions,[['buy',2],['buy',3],['buy',4]]);
- assert.equal((renderSource.match(/buyRanchTestRow/g)??[]).length,1,'one source of row-purchase intent');
+ for(const lock of view.locks)lock.click();
+ assert.deepEqual(view.actions,[['open',2],['open',3],['open',4]]);
+ assert.equal((renderSource.match(/buyRanchTestRow/g)??[]).length,0);
 });
 
 test('purchases remove only their row indicator without moving any slot or placement',()=>{
@@ -70,7 +69,7 @@ test('purchases remove only their row indicator without moving any slot or place
   runtime.applyTestRowPurchase(row,owned,9);
   const after=render(runtime,10000-(row-1)*1000);
   assert.deepEqual(coordinates(after),anchors);assert.deepEqual(runtime.toSave().placements,placements);
-  assert.equal(after.locks.length,4-row);assert.equal(after.ctas.length,4-row);
+  assert.equal(after.locks.length,4-row);assert.equal(after.ctas.length,0);
   assert.equal(after.cells.filter(c=>c.dataset.unlocked==='true').length,10*(row+1));
   assert.equal(after.locks.some(n=>n.dataset.lockedTestRow===String(row)),false);
  }
@@ -79,20 +78,21 @@ test('purchases remove only their row indicator without moving any slot or place
 });
 
 test('a refused purchase leaves its row indicator and CTA available for an authorized retry',()=>{
- const runtime=fresh(),first=render(runtime,0);first.ctas[0].click();
+ const runtime=fresh(),first=render(runtime,0);first.locks[0].click();
  const after=render(runtime,0);assert.deepEqual(coordinates(after),coordinates(first));
- assert.equal(after.locks.length,3);assert.equal(after.ctas.length,3);assert.equal(after.cage.unlockedCount,20);
+ assert.equal(after.locks.length,3);assert.equal(after.ctas.length,0);assert.equal(after.cage.unlockedCount,20);
 });
 
 test('row CTA uses the existing complete price, count and test-currency copy in every locale',()=>{
  try{for(const locale of LOCALES){setLocale(locale);const view=render(fresh());for(let i=0;i<3;i++){
-  assert.equal(view.ctas[i].textContent,uiText('CAGE_TEST_BUY_ROW',{row:i+3,count:10,price:1000}));
-  assert.match(view.ctas[i].textContent.replace(/[^0-9]/g,''),/1000/);assert.doesNotMatch(view.ctas[i].textContent,/CAGE_TEST_BUY_ROW|\{(?:row|count|price)\}/);
+  assert.equal(view.locks[i].attributes['aria-label'],uiText('CAGE_TEST_BUY_ROW',{row:i+3,count:10,price:1000}));
+  assert.match(view.locks[i].attributes['aria-label'].replace(/[^0-9]/g,''),/1000/);assert.doesNotMatch(view.locks[i].attributes['aria-label'],/CAGE_TEST_BUY_ROW|\{(?:row|count|price)\}/);
  }}}finally{setLocale('zh-Hant');}
 });
 
-test('row treatment is product-scoped, pointer-transparent, and retains 44px wrapped CTA targets',()=>{
- assert.match(css,/\.cm-vs2-cage-board\[data-product-grid="true"\] \.cm-cage-row-lock\s*\{[^}]*pointer-events:\s*none/s);
- assert.match(css,/\.cm-vs2-cage-board\[data-product-grid="true"\] \.cm-cage-row-lock::before\s*\{[^}]*inset-inline:\s*0;[^}]*height:\s*2px/s);
- assert.match(css,/\.cm-cage-expansion\[data-product-grid="true"\] \.cm-cage-row-purchase\s*\{[^}]*min-height:\s*44px;[^}]*white-space:\s*normal/s);
+test('row treatment is product-scoped with a 44px target, focus ring and no line',()=>{
+ assert.match(css,/\.cm-vs2-cage-board\[data-product-grid="true"\] \.cm-cage-row-lock\s*\{[^}]*width:\s*44px;[^}]*height:\s*44px/s);
+ assert.match(css,/\.cm-cage-row-lock:focus-visible/);
+ assert.doesNotMatch(css,/\.cm-cage-row-lock::before/);
+ assert.doesNotMatch(css,/\.cm-cage-row-purchase/);
 });

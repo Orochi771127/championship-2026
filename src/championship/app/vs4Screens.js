@@ -1,3 +1,4 @@
+import { createRanchRowPurchasePrompt } from './ranchRowPurchasePrompt.js';
 import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
 import {databaseHeroPortrait} from '../presentation/databaseHeroPortraits.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
@@ -885,7 +886,7 @@ function expansionPreviewBays(doc = globalThis.document) {
   });
 }
 
-export function createCageEditView({ root, source, askToLeave = showChoiceDialog, openExpansionPreview = openRanchExpansionPreview }) {
+export function createCageEditView({ root, source, askToLeave = showChoiceDialog, askToBuy = showChoiceDialog, openExpansionPreview = openRanchExpansionPreview }) {
   const frame = source.getFrame();
   const block = frame.cageEdit;
   if (!block) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
@@ -984,6 +985,16 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   });
   confirm.addEventListener("click", () => source.intents.confirmCageEdit());
 
+  const rowPurchase = createRanchRowPurchasePrompt({ source, ask: askToBuy, restoreFocus(row) {
+    // A purchase or a frame update can replace the opener while the modal is
+    // active. Restore a live target without stealing focus from another control.
+    const doc = root.ownerDocument;
+    if (!root.isConnected || !doc || (doc.activeElement && doc.activeElement !== doc.body && doc.activeElement.isConnected)) return;
+    const target = board.querySelector(`[data-locked-test-row="${row}"]`)
+      ?? board.querySelector('button[data-locked-test-row]') ?? back;
+    target.focus({ preventScroll: true });
+  } });
+
   function paint(nextFrame) {
     const cage = nextFrame?.cageEdit;
     if (!cage) return;
@@ -1038,10 +1049,6 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     expansionControls.dataset.productGrid = productGrid ? 'true' : 'false';
     expansionControls.replaceChildren();
     if (productGrid) {
-      const walletLabel = element('p', 'cm-cage-board-hint');
-      walletLabel.dataset.testDiamondBalance='true';
-      walletLabel.textContent=uiText('CAGE_TEST_DIAMOND_BALANCE',{amount:cage.testDiamonds??0});
-      expansionControls.append(walletLabel);
       for (let row = 2; row < 5; row++) {
         const lockedSlots = cage.slots.filter(slot=>slot.row === row && !slot.unlocked);
         const remaining = lockedSlots.length;
@@ -1050,19 +1057,18 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         // coordinates so stable slot anchors and partial legacy access stay put.
         const lockedArt = lockedSlots.map(slot=>cellArt.get(slot.slotIndex));
         const left = Math.min(...lockedArt.map(cell=>cell.x));
-        const rowLock = element('div', 'cm-cage-row-lock');
+        const rowLock = element('button', 'cm-cage-row-lock');
+        rowLock.type = 'button';
         rowLock.dataset.lockedTestRow = String(row);
-        rowLock.setAttribute('aria-hidden', 'true');
-        rowLock.style.left = `${left}px`;
+        rowLock.setAttribute('aria-haspopup', 'dialog');
+        rowLock.setAttribute('aria-label', uiText('CAGE_TEST_BUY_ROW', { row: row + 1, count: remaining, price: 1000 }));
+        rowLock.style.left = `${(left + Math.max(...lockedArt.map(cell=>cell.x)) + 48) / 2 - 22}px`;
         rowLock.style.top = `${Math.min(...lockedArt.map(cell=>cell.y)) + 6}px`;
-        rowLock.style.width = `${Math.max(...lockedArt.map(cell=>cell.x)) - left + 48}px`;
-        rowLock.append(element('span', 'cm-cage-row-lock__icon', '🔒'));
+        const icon = element('span', 'cm-cage-row-lock__icon', '🔒');
+        icon.setAttribute('aria-hidden', 'true');
+        rowLock.append(icon);
+        rowLock.addEventListener('click', () => { void rowPurchase.open(row); });
         board.append(rowLock);
-        const unlock = element('button', 'cm-vs2-action cm-cage-row-purchase');
-        unlock.type = 'button'; unlock.dataset.buyTestRow = String(row);
-        unlock.textContent = uiText('CAGE_TEST_BUY_ROW', { row:row+1, count:remaining, price:1000 });
-        unlock.addEventListener('click', ()=>source.intents.buyRanchTestRow?.(row));
-        expansionControls.append(unlock);
       }
     }
     if (preview) {
@@ -1176,6 +1182,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   return Object.freeze({
     render: paint,
     dispose() {
+      rowPurchase.dispose();
       root.replaceChildren();
       root.className = "";
       delete root.dataset.uiAuthority;
@@ -1184,3 +1191,4 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     }
   });
 }
+

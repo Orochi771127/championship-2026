@@ -202,6 +202,10 @@ export const UI_COPY_TH = Object.freeze({
   "FRIENDS_MEDAL_PREVIEW_NOTICE": "ระหว่างการทดสอบ เหรียญช่วงท้ายเป็นเพียงภาพตัวอย่าง ไม่นับเป็นชัยชนะจริง ส่วนเหรียญช่วงต้นต้องเล่นเพื่อรับเอง",
   "FRIENDS_MEDAL_PREVIEW_BADGE": "ตัวอย่างทดสอบ",
   "CAGE_PUBLIC_TEST_GRID_HINT": "ฟาร์มต่อเนื่อง เริ่ม 20 ช่อง สูงสุด 50 ช่อง แต่ละแถว 10 ช่อง ราคา 1000 เพชรทดสอบ ไม่มีการชำระเงินจริง",
+  "CAGE_TEST_ROW_TITLE": "ปลดล็อกแถวที่ {row}",
+  "CAGE_TEST_ROW_DETAILS": "เปิด {count} ช่องด้วยเพชรทดสอบ {price} เม็ด ไม่มีการชำระเงินจริง",
+  "CAGE_TEST_ROW_BUY": "ซื้อ",
+  "CAGE_TEST_ROW_CANCEL": "ยกเลิก",
   "CAGE_TEST_BUY_ROW": "ซื้อแถว {row} ({count} ช่อง · {price} เพชรทดสอบ)",
   "CAGE_TEST_ROW_PURCHASED": "ใช้ 1000 เพชรทดสอบและเปิดแถวแล้ว",
   "CAGE_TEST_ROW_UNAVAILABLE": "ขณะนี้ไม่สามารถซื้อแถวนี้ได้",
@@ -1321,5 +1325,6 @@ export const UNTRANSLATED_PROPER_NOUNS_TH = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+
 
 
