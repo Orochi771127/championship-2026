@@ -10,12 +10,13 @@ const { createHash } = require('node:crypto');
 const { pathToFileURL } = require('node:url');
 const PUBLIC_BASE = 'https://orochi771127.github.io/championship-2026/';
 const HERO = '.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero';
-const MATRIX_TARGETS = Object.freeze([117,55,40,63,70,71,72,9,10]);
+const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10]);
 const EXPECTED = Object.freeze({
+  189: Object.freeze({"speciesIndex": 189, "speciesId": "species-189", "displayCode": "UL06", "src": "assets/production/database-handpainted-r1-20261015/species-189.8c9cac7746647500.png", "width": 1324, "height": 1188, "sha256": "8c9cac7746647500066880fbd869e188d1f3c83fb1ea3069c5e1d3ba8798ee64", "styleBatch": "HANDPAINTED_R1_20261015", "name": "日冕戰暴龍"}),
   9: Object.freeze({"speciesIndex":9,"speciesId":"species-009","displayCode":"B102","src":"assets/production/database-portraits-b1-20261014/B102.eb7c0e50feb53dc2.png","width":1323,"height":1189,"sha256":"eb7c0e50feb53dc2eb16a12f0457de8911318011aea08526fea2a184472a7f72","name":"鐵鈴芽"}),
   10: Object.freeze({"speciesIndex":10,"speciesId":"species-010","displayCode":"B103","src":"assets/production/database-portraits-b1-20261014/B103.db66d79eb40c3768.png","width":1312,"height":1199,"sha256":"db66d79eb40c3768b2addfa247c82d7ca2d749f5ba52d9c96778a5787cc53824","name":"星芽獸"}),
 
-  40: Object.freeze({"speciesIndex":40,"speciesId":"species-040","displayCode":"GR08","src":"assets/production/database-handpainted-r1-20261015/species-040.4c11ede7a2b50add.png","sha256":"4c11ede7a2b50add96b482a63e77b50c65b8b9bdd09175874e2017f0c708b09d","width":1402,"height":1122,"name":"霜裘幼龍"}),
+  40: Object.freeze({"speciesIndex":40,"speciesId":"species-040","displayCode":"GR08","src":"assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png","sha256":"a5d0d48e737f81e0c955286a94923fe3b70d6483813ee233aedb80a8d89bc3ae","width":1254,"height":1254,"name":"霜裘幼龍"}),
   63: Object.freeze({"speciesIndex":63,"speciesId":"species-063","displayCode":"GR24","src":"assets/production/database-handpainted-r1-20261015/species-063.e403a93ec4f2d7ec.png","sha256":"e403a93ec4f2d7ec24273c2f2f3d861feeec11848d55450989230b2c93283f8a","width":1254,"height":1254,"name":"翠冠幼龍"}),
   70: Object.freeze({"speciesIndex": 70, "speciesId": "species-070", "displayCode": "GR32", "src": "assets/production/database-handpainted-r1-20261015/species-070.2dc33277d80cdfb4.png", "sha256": "2dc33277d80cdfb4577bee1d369adb59545b4ccc735a4f90fff342087a1ba738", "name": "星角幼龍"}),
   71: Object.freeze({"speciesIndex": 71, "speciesId": "species-071", "displayCode": "GR12", "src": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png", "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913", "name": "裂焰幼龍"}),
@@ -117,7 +118,7 @@ async function main() {
   fs.mkdirSync(output, { recursive: true });
   const evidence = { status: 'RUNNING', visualReview: 'PENDING_ROOT_SCREENSHOT_REVIEW',
     commit: process.env.GITHUB_SHA || null, candidateHeadCommit: process.env.DEX_QA_HEAD_SHA || null, baseCommit: process.env.DEX_QA_BASE_SHA || null,
-    scope: 'Normal fresh public-playtest UI: redesigned Dex040/063/070 with unchanged117/055/071/072 comparisons at normal desktop/mobile and128/256 light/dark contain; four existing promoted forms retain normal hero/source/target preview coverage. Only mounted matrix-holder size/backdrop CSS is temporarily overridden.',
+    scope: 'Normal fresh public-playtest UI: approved Dex040/189 with preserved063/070 with unchanged117/055/071/072 comparisons at normal desktop/mobile and128/256 light/dark contain; four existing promoted forms retain normal hero/source/target preview coverage. Only mounted matrix-holder size/backdrop CSS is temporarily overridden.',
     exclusions: ['No visual/anatomy/alpha PASS from automation', 'No runtime-action replacement', 'No physical-device acceptance', 'No public deployment claim'],
     captures: [], assetChecks: [], console: [], pageErrors: [], networkErrors: [], cleanupErrors: [] };
   const write = () => fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify(evidence, null, 2) + '\n');
@@ -135,7 +136,7 @@ async function main() {
     assert.ok(resolveAsset(root, '/championship.html'));
     const registryPath = 'src/data/championship/database-hero-portraits.r1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
-    assert.equal(catalog.entries.length,56,'Merged54 accepted heroes plus229/230');
+    assert.equal(catalog.entries.length,57,'Merged54 accepted heroes plus189 and229/230');
     evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
     const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json';
     evidence.productionCatalogs=[];
@@ -304,10 +305,10 @@ async function main() {
     await Promise.all(imageJobs);
     for (const species of Object.keys(EXPECTED).map(Number)) { assert.ok(imageResponses.has(species), `No actual browser image response captured for ${species}`); evidence.assetChecks.push(imageResponses.get(species)); }
     assert.deepEqual(evidence.pageErrors, []); assert.deepEqual(evidence.networkErrors, []);
-    evidence.comparisonGroups=['desktop-normal','128-light','128-dark','256-light','256-dark','desktop-restored','desktop-reentry'].map(condition=>({condition,referenceSpecies:117,candidateSpecies:[40,63,70,71,72,9,10],visualAcceptance:'PENDING_ROOT_ACTUAL_IMAGE_REVIEW',captures:[40,63,70,71,72,9,10,117].map(species=>{const c=evidence.captures.find(x=>x.name===`${species}-${condition}`);assert.ok(c);return {speciesIndex:species,image:c.heroScreenshot,fullPresentation:c.screenshot};})}));
-    evidence.visualChecklist=['Redesigned040/063/070, baby009/010 and unchanged071/072 against117 accepted style','Full appendages and normal mobile fit','Cyan edge fringe on light/dark','Exact CSS restoration','Promoted own hero, origin and revealed target identity'];
+    evidence.comparisonGroups=['desktop-normal','128-light','128-dark','256-light','256-dark','desktop-restored','desktop-reentry'].map(condition=>({condition,referenceSpecies:117,candidateSpecies:[40,189,63,70,71,72,9,10],visualAcceptance:'PENDING_ROOT_ACTUAL_IMAGE_REVIEW',captures:[40,189,63,70,71,72,9,10,117].map(species=>{const c=evidence.captures.find(x=>x.name===`${species}-${condition}`);assert.ok(c);return {speciesIndex:species,image:c.heroScreenshot,fullPresentation:c.screenshot};})}));
+    evidence.visualChecklist=['Approved040/189 with preserved063/070, baby009/010 and071/072 against117 accepted style','Full appendages and normal mobile fit','Cyan edge fringe on light/dark','Exact CSS restoration','Promoted own hero, origin and revealed target identity'];
     // Nine matrix heroes × eight conditions, one mobile re-entry, eight production hero captures.
-    assert.equal(evidence.captures.length,81);assert.equal(evidence.promotedCaptures.length,16);
+    assert.equal(evidence.captures.length,89);assert.equal(evidence.promotedCaptures.length,16);
     evidence.status = 'CAPTURE_PASS_VISUAL_REVIEW_PENDING';
   } catch (error) {
     evidence.status = 'FAIL'; evidence.failure = error.stack || String(error);
@@ -336,13 +337,13 @@ function selfTest() {
     imageRect: { width: 128, height: 128 }, holderRect: { width: 176, height: 176 } };
   assertMeasured(valid, 117, 128);
   for (const changed of [{ rowState: 'REGISTERED' }, { src: 'wrong.png' }, { objectFit: 'cover' }, { imageRect: { width: 80, height: 80 } }]) assert.throws(() => assertMeasured({ ...valid, ...changed }, 117, 128));
-  for (const species of [9,10,40,63,70]) {
+  for (const species of [9,10,40,189,63,70]) {
     const expected=EXPECTED[species];
     const snapshot={...valid,speciesIndex:species,displayCode:expected.displayCode,title:expected.name,natural:[expected.width ?? 1254,expected.height ?? 1254],src:new URL(expected.src,PUBLIC_BASE).href};
     assertMeasured(snapshot,species,128);
     assertMeasured({...snapshot,imageRect:{width:256,height:256},holderRect:{width:304,height:304}},species,256);
     for(const changed of [{natural:[1,1]},{src:new URL('assets/production/database-handpainted-r1-20261015/species-'+String(species).padStart(3,'0')+'.png',PUBLIC_BASE).href},{objectFit:'cover'},{padding:[0,0,0,0]},{hidden:true},{complete:false},{documentOverflow:true}]) assert.throws(()=>assertMeasured({...snapshot,...changed},species,128));
-    if([9,10,40].includes(species))assert.throws(()=>assertMeasured({...snapshot,natural:[1254,1254]},species,128));
+    if([9,10,189].includes(species))assert.throws(()=>assertMeasured({...snapshot,natural:[1254,1254]},species,128));
   }
   for(const species of [9,10]){
     const expected=EXPECTED[species],bytes=fs.readFileSync(expected.src);
@@ -354,9 +355,9 @@ function selfTest() {
     const oldSrc=`assets/production/database-portraits-b1-20261014/${expected.displayCode}.webp`;
     assert.throws(()=>assertAsset({...expected,src:oldSrc},bytes,expected));
   }
-  assert.equal(MATRIX_TARGETS.length,9);assert.equal(MATRIX_TARGETS.length*8+1+8,81);
+  assert.equal(MATRIX_TARGETS.length,10);assert.equal(MATRIX_TARGETS.length*8+1+8,89);
   const sourceRegistry = Buffer.from(JSON.stringify({entries:Object.keys(EXPECTED).map(speciesIndex=>({speciesIndex:Number(speciesIndex)}))}));
-  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,13);
+  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,14);
   assert.throws(()=>assertRegistry(sourceRegistry,Buffer.from('{}')));
   for(const species of [9,10]){const missingBaby=Buffer.from(JSON.stringify({entries:JSON.parse(sourceRegistry).entries.filter(e=>e.speciesIndex!==species)}));assert.throws(()=>assertRegistry(missingBaby,missingBaby));}
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));

@@ -3,7 +3,7 @@
   "id": "database-handpainted-r1-20261015",
   "classification": "ORIGINAL_REFERENCE_HANDPAINTED_REDRAWS",
   "scope": "Encyclopedia hero illustrations only; never battle/raising sprite or animation replacements",
-  "count": 42,
+  "count": 43,
   "entries": [
     {
       "speciesIndex": 34,
@@ -168,26 +168,26 @@
       "speciesIndex": 40,
       "speciesId": "species-040",
       "displayCode": "GR08",
-      "src": "assets/production/database-handpainted-r1-20261015/species-040.4c11ede7a2b50add.png",
-      "width": 1402,
-      "height": 1122,
-      "sha256": "4c11ede7a2b50add96b482a63e77b50c65b8b9bdd09175874e2017f0c708b09d",
+      "src": "assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a5d0d48e737f81e0c955286a94923fe3b70d6483813ee233aedb80a8d89bc3ae",
       "styleBatch": "HANDPAINTED_R1_20261015",
-      "bytes": 987384,
-      "sourceEntityId": "m208_gabumon",
-      "sourceReferenceSha256": "a2aae57a7c5baba2ef95311cfbdeb91cf96fce86d69f4893c2f959cff68f9a48",
-      "generation": "Built-in image generation using owner original character reference",
-      "artDirection": "Unified cartoon hand-painted finish, readable silhouette, approved identity changes, transparent background.",
+      "bytes": 1212463,
+      "generation": "Owner-approved original portrait; untouched generated PNG",
+      "artDirection": "Original hand-painted character with readable full-body silhouette and transparent background.",
       "review": {
         "rootReview": "STATIC_FULL_AND_128_256_REVIEW_PASS",
         "actualAlpha": true,
         "runtimeBrowser": "PENDING",
-        "scope": "Portrait only. Gameplay action sprites and model sheets are not updated by this change.",
-        "runtimeContainPadding": "Preserve original PNG dimensions; use existing padded contain. No crop or cover.",
-        "ownerChange": "Fur-covered biped raptor; warm brown palette and retained motif."
+        "scope": "Portrait only visual review. Gameplay action sprites, saves and model sheets are not updated.",
+        "runtimeContainPadding": "Preserve raw PNG; existing padded contain. Native alpha reaches canvas edges; no crop or cover.",
+        "ownerChange": "Original upright furry dragon with bobtail and coat-like collar, superseding rejected raptor."
       },
       "designRevision": "OWNER_APPROVED_IDENTITY_REVISION_20261016",
-      "selectedGenerationVersion": "owner-redesign-v1"
+      "selectedGenerationVersion": "owner-bobtail-v3",
+      "sourceEntityId": "m208_gabumon",
+      "sourceReferenceSha256": "a2aae57a7c5baba2ef95311cfbdeb91cf96fce86d69f4893c2f959cff68f9a48"
     },
     {
       "speciesIndex": 211,
@@ -1228,6 +1228,29 @@
       },
       "designRevision": "SCOPED_THREE_HERO_HOSTED_COMPARISON_20261015",
       "promptSha256": "ee4cc541afb63792259972a4bb19e28ad65cbfc5d771544c8fd01e28d987e179"
+    },
+    {
+      "speciesIndex": 189,
+      "speciesId": "species-189",
+      "displayCode": "UL06",
+      "src": "assets/production/database-handpainted-r1-20261015/species-189.8c9cac7746647500.png",
+      "width": 1324,
+      "height": 1188,
+      "sha256": "8c9cac7746647500066880fbd869e188d1f3c83fb1ea3069c5e1d3ba8798ee64",
+      "styleBatch": "HANDPAINTED_R1_20261015",
+      "bytes": 1610818,
+      "generation": "Owner-approved original portrait; untouched generated PNG",
+      "artDirection": "Original hand-painted character with readable full-body silhouette and transparent background.",
+      "review": {
+        "rootReview": "STATIC_FULL_AND_128_256_REVIEW_PASS",
+        "actualAlpha": true,
+        "runtimeBrowser": "PENDING",
+        "scope": "Portrait only visual review. Gameplay action sprites, saves and model sheets are not updated.",
+        "runtimeContainPadding": "Preserve raw PNG; existing padded contain. Native alpha reaches canvas edges; no crop or cover.",
+        "ownerChange": "Crimson charcoal gold dragon warrior, articulated wings rather than fixed shield, teal pupils."
+      },
+      "designRevision": "OWNER_APPROVED_IDENTITY_REVISION_20261016",
+      "selectedGenerationVersion": "owner-articulated-wings-v3"
     }
   ]
 }
