@@ -55,7 +55,9 @@ test('hint is compact, absolute and pointer-transparent; actual controls and men
   for(const selector of ['.cm-status-bar','.cm-toolbar[data-mode="1"]','.cm-toolbar__rail'])assert.match(block(selector),/pointer-events: none/);
   for(const selector of ['.cm-status-bar button','.cm-toolbar button','.cm-toolbar__menu','.cm-toolbar__tool-done'])assert.match(block(selector),/pointer-events: auto/);
   assert.match(block('.cm-toolbar__tool-text'),/white-space: normal; overflow-wrap: anywhere/);
-  assert.ok(rules.some(r=>r.selector.startsWith('body[data-desktop-raising]')&&r.selector.endsWith('.cm-toolbar__tool-hint')&&r.body.includes('--cm-raising-card')));
+  assert.doesNotMatch(overlay, /\.cm-toolbar__tool-hint \{\s*left: 0/, 'tool instruction stays centered on wide views');
+  assert.match(block('.int-rh2-hint'), /left: calc\(8px \+ var\(--safe-left\)\); right: auto; top: auto/);
+  assert.match(block('.int-rh2-hint'), /bottom: calc\(var\(--cm-toolbar-height/);
 });
 
 test('safe-area is for floating controls, not canvas; short-screen menu is scrollable at every width', () => {

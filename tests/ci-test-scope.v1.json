@@ -221,6 +221,7 @@
     "tests/championship-raising-field-viewport-cases.mjs",
     "tests/championship-raising-floating-card-cases.mjs",
     "tests/championship-raising-fullscreen-overlay-cases.mjs",
+    "tests/championship-raising-hint-cases.mjs",
     "tests/championship-raising-growth-cases.mjs",
     "tests/championship-raising-hand-cases.mjs",
     "tests/championship-raising-hatch-cases.mjs",
@@ -309,6 +310,7 @@
     "tests/product-promotion-disabled-fixture-cases.mjs"
   ],
   "localReference": {
+    "tests/championship-raising-hints-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Raising hints browser workflow with real DOM/CSS, wall-clock timing and a controlled normal-game fixture.",
     "tests/championship-m201-density8-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the M201 density8 actual renderer review workflow.",
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",
     "tests/championship-battle-all-character-actions-cases.mjs": "Requires ignored internal-faithful-baseline character, effect or audio reference material.",

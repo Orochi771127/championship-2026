@@ -107,11 +107,18 @@ body[data-desktop-raising] .int-rh2-companion[data-open="false"] {
   text-align: center;
   text-wrap: balance;
   pointer-events: none;
-  animation: rh2-hint 3.6s var(--ease-in-out) infinite;
+  animation: none;
 }
 .int-rh2-hint::before { content: "☝ "; }
 .int-rh2-root[data-selection="selected"] .int-rh2-hint { display: none; }
-@keyframes rh2-hint { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
+/* One finite visual fade, shared by entry guidance and tool instructions. */
+.int-rh2-hint, .cm-toolbar__tool-hint { transition: opacity .3s ease-out; }
+.int-rh2-hint[data-hint-phase="fading"], .cm-toolbar__tool-hint[data-hint-phase="fading"] { opacity: 0; }
+.int-rh2-hint[hidden], .cm-toolbar__tool-hint[hidden] { display: none; }
+:root[data-motion="reduced"] :is(.int-rh2-hint, .cm-toolbar__tool-hint) { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion]) :is(.int-rh2-hint, .cm-toolbar__tool-hint) { transition: none; }
+}
 
 /* ---- Resident card (someone is picked) ----------------------------------- *
  * Two rows: who (opens the record) with step/close, then the two traced
@@ -157,7 +164,6 @@ body[data-tool]:not([data-tool="hand"]) .int-rh2-companion[data-open="true"] {
   pointer-events: none;
 }
 body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="bottom"]) .cm-toolbar__tool-hint { display: none; }
-body[data-tool] .int-rh2-hint { display: none; }
 .int-rh2-companion[data-open="false"] {
   opacity: 0;
   visibility: hidden;
@@ -893,12 +899,21 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-com
 body[data-tool]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-companion {
   max-height: calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 104px);
 }
-body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-tutorial-guidance,
-body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hint {
+body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-tutorial-guidance {
   top: calc(var(--cm-status-bar-height, var(--hud-height)) + var(--cm-match-notice-offset, 0px) + 8px); bottom: auto;
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-tutorial-guidance {
   max-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 32px);
+}
+/* Entry guidance uses a lower-left lane above the centered tool instruction.
+   Its measured, wrapped height reserves a second lane only while visible;
+   both hints keep their independent reading/fade deadlines. */
+body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hint {
+  left: calc(8px + var(--safe-left)); right: auto; top: auto;
+  bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 8px + var(--cm-tool-hint-clearance, 0px));
+  transform: none; text-align: left;
+  max-width: min(560px, calc(100% - 16px - var(--safe-left) - var(--safe-right)));
+  overflow-wrap: anywhere; pointer-events: none;
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-mail-icon {
   top: auto; bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 12px);
@@ -909,12 +924,7 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-not
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-notice {
   bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 70px);
 }
-/* On a wide view the compact hint sits to the left of the readout, leaving
-   their controls separated even when longer translations wrap. */
-body[data-desktop-raising]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__tool-hint {
-  left: 0; transform: none;
-  max-width: min(560px, calc(100% - var(--cm-raising-card, 320px) - 24px));
-}
+/* Tool instructions retain the centered dock anchor at every width. */
 body[data-desktop-raising][data-tool]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-companion {
   max-height: max(130px, calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 104px));
 }

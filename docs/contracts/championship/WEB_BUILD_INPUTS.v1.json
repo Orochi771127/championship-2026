@@ -395,7 +395,8 @@
     "src/championship/contracts/productBattleTransport.js",
     "src/championship/contracts/productPasswordTransport.js",
     "src/championship/text/battleTransportText.js",
-    "src/championship/presentation/alternateFormAssetContracts.js"
+    "src/championship/presentation/alternateFormAssetContracts.js",
+    "src/championship/app/transientHint.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -10055,7 +10056,8 @@
     "src/data/championship/product-species-extensions.r1.json",
     "src/data/championship/public-playtest.r1.json",
     "src/data/championship/qa-database-hero-portraits.r1.json",
-    "src/data/championship/r2/fields/fieldInventoryR2.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js",
+    "src/championship/app/transientHint.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -46915,7 +46917,7 @@
       },
       {
         "path": "src/championship/app/championshipToolbar.js",
-        "sha256": "b0eb5d38e4558f829675f081ac790f26e83229bf454fcf48c2a501d5790cf8a0"
+        "sha256": "decaf9bdcfa12a071908a14a05336fb61515bbf5d0b474b5f135398a341d4cfa"
       },
       {
         "path": "src/championship/app/codeClipboard.js",
@@ -46967,7 +46969,7 @@
       },
       {
         "path": "src/championship/app/intRh2Styles.css",
-        "sha256": "d9cc767f4e49bc4f1e813281a74805ed14f4f1919cec70904fedb46ecb2f243b"
+        "sha256": "86b99d6b04974084ba73dd3d8a2c67cafb504e5f4af44813a9fe1748560ee537"
       },
       {
         "path": "src/championship/app/interactiveTutorial.css",
@@ -47003,7 +47005,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "f0fe9dc1912f0b35c96511da95e4733bd1f475ebabbe4f6b08ac36377025fe76"
+        "sha256": "5ac701c9842f60028b581339cb35e6bcdf8c63b96127c6ce54860533220dc316"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -47087,7 +47089,7 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "d4074e056bb5e562d8cd6e5d456062c259c34fbef4ca31972ede8e5905c52ba0"
+        "sha256": "049674feacc95b4c69880e2dae01de8312bd34cf1922a5b026ba4cfa46b6dbed"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
@@ -48680,6 +48682,10 @@
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
+      },
+      {
+        "path": "src/championship/app/transientHint.js",
+        "sha256": "413af800d42173c98f7396bb89aff617d7e03db6daeb360ce9e643fef152f665"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
