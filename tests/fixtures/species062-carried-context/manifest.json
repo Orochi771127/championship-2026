@@ -1,0 +1,194 @@
+{
+  "baseline": {
+    "path": "assets/production/characters/accepted-20261010/m237_renamon-final-growth38-20261007/runtime.review.json",
+    "gitBlob": "c33caa682932bc5fcced3b9b162827a6716a82e3",
+    "sourceBankSha256": "10c1b3fd4ce0f815b44f790c854c087d1904f542ef39c2c3cf92622cb78f4981",
+    "artProfile": {
+      "style": "ORIGINAL_MATURE_RAW_CANDIDATE",
+      "scale": 4,
+      "filter": "nearest",
+      "logicalCanvas": [
+        64,
+        64
+      ],
+      "anchor": {
+        "x": 0.4375,
+        "y": 0.578125
+      },
+      "alphaBoundary": "TRANSPARENT",
+      "reviewOnly": true,
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "publicReleasePermitted": false,
+      "designVersion": "codex-down-bob-clean-alpha-r08-20261004",
+      "visualAccepted": false
+    },
+    "frames": {
+      "m237_renamon/main/cell_000": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -17.75,
+          12.5,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_001": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -9.75,
+          -15.75,
+          12.5,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_004": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -17.75,
+          15,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_005": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -8.25,
+          -15.25,
+          15.25,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_023": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -13.5,
+          -7.75,
+          12.5,
+          3
+        ]
+      },
+      "m237_renamon/main/cell_024": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -6.75,
+          -18.75,
+          12.75,
+          2
+        ]
+      },
+      "m237_renamon/main/cell_025": {
+        "blank": false,
+        "scale": 4,
+        "origin": [
+          112,
+          148
+        ],
+        "sourceSize": [
+          256,
+          256
+        ],
+        "nativeBounds": [
+          -10.25,
+          -17.75,
+          12.5,
+          2
+        ]
+      }
+    }
+  },
+  "scope": "REAL_CARRY_ACTOR_AND_RAISING_PRESENTATION_CANDIDATE_ONLY",
+  "captureBudget": 14,
+  "density": 4,
+  "origin": [
+    112,
+    148
+  ],
+  "assets": [
+    {
+      "cell": 0,
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/grounded-seven-density4-shift8-v1/main-cell_000-grounded-density4.png",
+      "staged": "cell000.png",
+      "sha256": "7bcf117574ef335caa0ffef76ec2a2ceacd0282de29f60577a87b82166d2a1e2"
+    },
+    {
+      "cell": 1,
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/grounded-seven-density4-shift8-v1/main-cell_001-grounded-density4.png",
+      "staged": "cell001.png",
+      "sha256": "b56567b0a0cd247b8fb7e24664bd87be99abe6324c38a515d0d5e627c8f98ee1"
+    },
+    {
+      "cell": 19,
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/carried-v2-review-export/main-cell_019-carried-provisional-density4.png",
+      "staged": "cell019.png",
+      "sha256": "57906f8ac334eddd153c4dc3b1c527d2135b267863c1e5cd4b722cf36ab5659d"
+    },
+    {
+      "cell": 20,
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/carried-v2-review-export/main-cell_020-carried-provisional-density4.png",
+      "staged": "cell020.png",
+      "sha256": "723c6b8e496b816129c473818d9e39a59943749d1ca78f4fe142cbc100524a4b"
+    },
+    {
+      "cell": 26,
+      "source": "character-animation-refresh-20261016/species-062-action-refresh/down-originalpose-v1-density4/main-cell_026-candidate-density4.png",
+      "staged": "cell026.png",
+      "sha256": "8812d91ea8e9b7cc7836d2647d8804ef1d5f51afcce9f7546c709fe43447b881"
+    }
+  ]
+}

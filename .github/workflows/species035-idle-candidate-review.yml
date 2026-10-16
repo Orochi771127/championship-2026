@@ -8,6 +8,8 @@ on:
       - 'tests/fixtures/species035-idle-candidate/**'
       - 'tests/fixtures/species062-idle-candidate/**'
       - 'scripts/review-species041-clarity.mjs'
+      - 'scripts/review-species062-carried-context.mjs'
+      - 'tests/fixtures/species062-carried-context/**'
       - 'scripts/review-species062-grounding-context.mjs'
       - 'tests/fixtures/species062-grounding-context/**'
       - 'scripts/review-species062-actions-resolution.mjs'
@@ -68,6 +70,18 @@ jobs:
           node scripts/review-species062-grounding-context.mjs \
             http://127.0.0.1:8765/ \
             .tmp/browser-qa/species062-grounding-context
+          node --check scripts/review-species062-carried-context.mjs
+          node scripts/review-species062-carried-context.mjs \
+            http://127.0.0.1:8765/ \
+            .tmp/browser-qa/species062-carried-context
+      - name: Preserve bounded062 carried review separately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: species062-carried-context-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/browser-qa/species062-carried-context/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Preserve real renderer screenshots and exact result
         if: always()
         uses: actions/upload-artifact@v4
