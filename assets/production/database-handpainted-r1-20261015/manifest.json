@@ -3,7 +3,7 @@
   "id": "database-handpainted-r1-20261015",
   "classification": "ORIGINAL_REFERENCE_HANDPAINTED_REDRAWS",
   "scope": "Encyclopedia hero illustrations only; never battle/raising sprite or animation replacements",
-  "count": 43,
+  "count": 44,
   "entries": [
     {
       "speciesIndex": 34,
@@ -1244,6 +1244,33 @@
       },
       "designRevision": "OWNER_APPROVED_IDENTITY_REVISION_20261016",
       "selectedGenerationVersion": "owner-articulated-wings-v3"
+    },
+    {
+      "speciesIndex": 36,
+      "speciesId": "species-036",
+      "displayCode": "GR04",
+      "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
+      "width": 1415,
+      "height": 1111,
+      "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d",
+      "styleBatch": "HANDPAINTED_R1_20261015",
+      "bytes": 2029665,
+      "generation": "Hand-painted redesign candidate refined to preserve fine thunder-fur spikes; unchanged native PNG bytes",
+      "selectedGenerationVersion": "bold-handpaint-v2",
+      "designRevision": "THUNDER_FUR_MAIN_PORTRAIT_CANDIDATE_20261016",
+      "sourceReferenceSha256": "bdd38a45671fd9b7e467f69996fb83a5feab66a734027784f7a2af4217e769f6",
+      "sourceBindingEvidence": "Existing species-036 / GR04 display identity; v2 refinement of v1 candidate",
+      "promptSha256": "ffe8d493eeeefe3d07659a83ad7c81e5def8bc7041c5ad973f944f919e9a5384",
+      "artDirection": "Gold, aubergine-charcoal, ivory and burnt-orange palette; fine mane, ear and tail tips retained",
+      "review": {
+        "rootReview": "STATIC_CANDIDATE_REVIEWED_RELEASE_PENDING",
+        "actualAlpha": true,
+        "ownerSpecificImageApproval": false,
+        "runtimeBrowser": "PENDING",
+        "actionsUpdated": false,
+        "scope": "MAIN PORTRAIT ONLY. No action atlas, story, stats or other character palette changes.",
+        "runtimeContainPadding": "Preserve native PNG and existing 24px padded contain; no crop, repaint or resampling."
+      }
     }
   ]
 }
