@@ -10063,7 +10063,9 @@
     "assets/production/scene-music-r1/manifest.json",
     "assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
     "assets/production/scene-music-r1/battle/unison_under_fire.mp3",
-    "assets/production/scene-music-r1/battle/federation_siege.mp3"
+    "assets/production/scene-music-r1/battle/federation_siege.mp3",
+    "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png",
+    "assets/production/database-handpainted-r1-20261015/species-062.ad0745c733532dc2.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -30803,7 +30805,7 @@
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
-        "sha256": "710d310f1868a42632a21da31ca5493fd352be0f699796db7c8506df791cdf54"
+        "sha256": "96c062412305cc1b7b1cee9a219eec65786cc09ae4a52d78141acee33cb6ddef"
       },
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-034.png",
@@ -48663,7 +48665,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.r1.json",
-        "sha256": "c1cc8d8196462eefca4c237b887f0b49e0a78b7bd6c5372777a48e2eb9225e02"
+        "sha256": "786c221c792591b7ac6f33c93367bea2243ea1d1a66425be769e2f6a2d64788e"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
@@ -48683,7 +48685,7 @@
       },
       {
         "path": "src/data/championship/qa-database-hero-portraits.r1.json",
-        "sha256": "52d8e8bd53e170c0d37fa99e16facd1f1b6ddad0917fcb206565a19ae5d17dd8"
+        "sha256": "83b7ab46d248bdb76893a3af2f0f469eb53c5d3993202e17709cb658c9146eac"
       },
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
@@ -48712,6 +48714,14 @@
       {
         "path": "assets/production/scene-music-r1/battle/federation_siege.mp3",
         "sha256": "4d8b4e2782bba9e66a482a1fbf90696d65d023d3b7735884ab60cf378b282b7f"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png",
+        "sha256": "291db6a498c8bdbd5e5b2196c8f9a629ec44a1ba55674e103dc596e6827fe6d4"
+      },
+      {
+        "path": "assets/production/database-handpainted-r1-20261015/species-062.ad0745c733532dc2.png",
+        "sha256": "ad0745c733532dc288c5143194e9020e35cd071e74347e7a3851911db136e52d"
       }
     ],
     "selectionId": "ACCEPTED_ORIGINAL_RUNTIME_20261010",
