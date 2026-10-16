@@ -310,6 +310,7 @@
     "tests/product-promotion-disabled-fixture-cases.mjs"
   ],
   "localReference": {
+    "tests/championship-species035-idle-candidate-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; candidate-only two-frame035 review runs in its dedicated QA workflow, not production acceptance.",
     "tests/championship-raising-hints-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Raising hints browser workflow with real DOM/CSS, wall-clock timing and a controlled normal-game fixture.",
     "tests/championship-m201-density8-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the M201 density8 actual renderer review workflow.",
     "tests/championship-art-local-manifests-cases.mjs": "Checks all registered art manifests, including ignored private reference and local art review bundles.",
