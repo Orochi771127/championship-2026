@@ -14,6 +14,9 @@ try{
   try{
    await page.goto(new URL('tests/fixtures/species062-grounding-context/index.html',base).href);
    await page.evaluate(async({base,sceneName,variant})=>{
+    // Runtime scoped asset loaders deliberately resolve against location.href.
+    // Match the real root entry URL without navigating or modifying production code.
+    history.replaceState(null,'',new URL('championship.html?groundingFixture=1',base));
     const imp=p=>import(new URL('src/championship/presentation/'+p,base));
     const PIXI=await import(new URL('node_modules/pixi.js/dist/pixi.mjs',base));
     const {createChampionshipPixiStage}=await imp('championshipPixiStage.js');
