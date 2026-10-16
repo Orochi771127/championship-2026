@@ -1,0 +1,171 @@
+{
+  "scope": "FOUR_FRAME_062_RESOLUTION_COMPARISON_NOT_RUNTIME_ACCEPTANCE",
+  "baseCommit": "5d5ec5ada0c63c1046b8aaafbb30cf4edd303d47",
+  "species": "species-062",
+  "facing": "LEFT",
+  "logicalCanvas": [
+    64,
+    64
+  ],
+  "logicalOrigin": [
+    28,
+    37
+  ],
+  "zooms": [
+    2,
+    4
+  ],
+  "assets": [
+    {
+      "group": "d2",
+      "density": 2,
+      "cell": 11,
+      "path": "d2-011.png",
+      "sha256": "a8b6c70bd0fbc26196df7e40df6654e6387e964636ceafe55438246503fb9be1"
+    },
+    {
+      "group": "d4",
+      "density": 4,
+      "cell": 11,
+      "path": "d4-011.png",
+      "sha256": "2c7ec9f9cde7097af40cbfb229f05fc72465085d1f1d1d364c0770e15f6e4840"
+    },
+    {
+      "group": "d2",
+      "density": 2,
+      "cell": 12,
+      "path": "d2-012.png",
+      "sha256": "8d3a31b567ae371518ad322cef49a12408ac8a25f8fd5cb2aba4c564ce797cc6"
+    },
+    {
+      "group": "d4",
+      "density": 4,
+      "cell": 12,
+      "path": "d4-012.png",
+      "sha256": "126a3842040a2f8972a2d98b2a40320559ab3ed3fc52aef83e680d3f7233a332"
+    },
+    {
+      "group": "d2",
+      "density": 2,
+      "cell": 24,
+      "path": "d2-024.png",
+      "sha256": "b107ef2fae99c5c3c39cb3b70394ffe39926314dcb4b73d73c705d3df527be1a"
+    },
+    {
+      "group": "d4",
+      "density": 4,
+      "cell": 24,
+      "path": "d4-024.png",
+      "sha256": "61b4c328d1128a7797330f81c8fd1343fb6c01b465db45b11d8c6a55011f4aad"
+    },
+    {
+      "group": "d2",
+      "density": 2,
+      "cell": 25,
+      "path": "d2-025.png",
+      "sha256": "5b37d9003b02fa76b1ae75af11e7539617aba79991b61b8064263628e4577708"
+    },
+    {
+      "group": "d4",
+      "density": 4,
+      "cell": 25,
+      "path": "d4-025.png",
+      "sha256": "c5f771a64ffba0e8d7ed1349cf13249900202f59a107202bcdc299dfde2cddc9"
+    }
+  ],
+  "sequences": [
+    {
+      "id": 7,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 11,
+          "ticks": 15,
+          "texture": "main/cell_011"
+        },
+        {
+          "cell": 12,
+          "ticks": 37,
+          "texture": "main/cell_012"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 24,
+          "ticks": 25,
+          "texture": "main/cell_024"
+        },
+        {
+          "cell": 25,
+          "ticks": 31,
+          "texture": "main/cell_025"
+        }
+      ]
+    }
+  ],
+  "geometry": {
+    "frames": {
+      "main/cell_011": {
+        "scale": 2,
+        "origin": [
+          56,
+          74
+        ],
+        "sourceSize": [
+          128,
+          128
+        ],
+        "blank": false
+      },
+      "main/cell_012": {
+        "scale": 2,
+        "origin": [
+          56,
+          74
+        ],
+        "sourceSize": [
+          128,
+          128
+        ],
+        "blank": false
+      },
+      "main/cell_024": {
+        "scale": 2,
+        "origin": [
+          56,
+          74
+        ],
+        "sourceSize": [
+          128,
+          128
+        ],
+        "blank": false
+      },
+      "main/cell_025": {
+        "scale": 2,
+        "origin": [
+          56,
+          74
+        ],
+        "sourceSize": [
+          128,
+          128
+        ],
+        "blank": false
+      }
+    }
+  },
+  "notes": [
+    "128and256 share identical logical geometry; compare no creature enlargement.",
+    "Native nearest is baseline. Linear rows are diagnostic only, not a proposed production change.",
+    "Zoom2 corresponds hunt local units-per-native-pixel; zoom4 is existingfixture-style enlargement, not a verified live game zoom. Outer scene/CSS transforms and ownerdevice remain unverified.",
+    "Balanced renderer cap2 with DPR1,2,3; DPR3case must show backing resolution2 not3.",
+    "No production asset loads, source replacement or fullgameplay."
+  ]
+}
