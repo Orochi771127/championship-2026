@@ -36,6 +36,6 @@ try {for(const dpr of [1,2,3]){
  },{base,dpr});
  for(const [sequence,ticks] of [[0,[0,30,31,52,53,84,106]],[2,[0,14,15,26,27,42,54]],[4,[0,37]],[6,[0,7]]]){await page.evaluate(id=>__qa041.reset(id),sequence);for(const tick of ticks){await page.evaluate(({tick})=>__qa041.sample(tick),{tick});await page.screenshot({path:`${out}/dpr${dpr}-seq${sequence}-tick${tick}.png`});}}
  for(const bg of ['light','dark']){await page.evaluate(bg=>{__qa041.reset(0);__qa041.sample(0,{bg});},bg);await page.screenshot({path:`${out}/dpr${dpr}-${bg}.png`});}
- await page.evaluate(()=>{__qa041.reset(2);for(let tick=0;tick<108;tick++)__qa041.sample(tick,{phase:(tick%8)/8,mirror:true,bg:'light'});});await page.screenshot({path:`${out}/dpr${dpr}-motion-mirror.png`});
+ await page.evaluate(async()=>{__qa041.reset(2);for(let tick=0;tick<108;tick++){__qa041.sample(tick,{phase:(tick%8)/8,mirror:true,bg:'light'});await new Promise(resolve=>requestAnimationFrame(resolve));}});await page.screenshot({path:`${out}/dpr${dpr}-motion-mirror.png`});
  const result=await page.evaluate(()=>__qa041.result());assert.deepEqual(errors,[]);await fs.writeFile(`${out}/dpr${dpr}-renderer-result.json`,JSON.stringify({status:'PASS_ACTUAL_PIXI_GEOMETRY_TIMING_FILTER_CONTRACTS_ONLY',...setup,...result,pageErrors:errors,limits:['Visual acceptance pending','Chromium DPR simulation is not iOS/WebKit or a physical phone','Only six frames; no production loads or replacement','Subpixel motion is a fixture phase sweep, not game AI']},null,2));await page.close();
 }}finally{await browser.close();}
