@@ -76,8 +76,10 @@ try{
      const {loadHuntDepthOccluders,withHuntDepthOccluders}=await imp('vs2/huntDepthOccluders.js');fieldArt=withHuntDepthOccluders(fieldArt,await loadHuntDepthOccluders({PIXI,field}));
      const {huntViewportTransform,huntViewportToWorld,huntWorldToViewport}=await import(new URL('src/championship/hunt/huntFieldCoordinates.js',base));
      source={field:{tick(){},getView({viewportWidth,viewportHeight}){
-      const transform=huntViewportTransform(viewportWidth,viewportHeight),camera={left:(field.worldWidthPx-transform.worldWidth)/2,top:(field.worldHeightPx-transform.worldHeight)/2};
-      return{gateId:'qa062-fixed',worldWidthPx:field.worldWidthPx,worldHeightPx:field.worldHeightPx,transform,camera,objects:[],visibleChunks:[],player:{worldX:0,worldY:0,facing:'left'},wildCreatures:[{wildId:'qa062',speciesId:'championship:creature:species-062',worldX:field.worldWidthPx/2,worldY:field.worldHeightPx/2,worldZ:0,facing:'left',moving:false,currentHp:100,maxHp:100,nativeAnimation:native}],selectedWildId:null,toWorldPoint:p=>huntViewportToWorld(p,camera,transform),toViewportPoint:p=>huntWorldToViewport(p,camera,transform)};
+      // Source-defined tutorial actor 0: native [400,400], world [800,800].
+      // nativeTutorialHuntEntry.js and nativeTutorialHuntScript.js; 3x3 terrain neighborhood is clear.
+      const worldX=800,worldY=800,transform=huntViewportTransform(viewportWidth,viewportHeight),camera={left:worldX-transform.worldWidth/2,top:worldY-transform.worldHeight/2};
+      return{gateId:'qa062-fixed',worldWidthPx:field.worldWidthPx,worldHeightPx:field.worldHeightPx,transform,camera,objects:[],visibleChunks:[],player:{worldX:0,worldY:0,facing:'left'},wildCreatures:[{wildId:'qa062',speciesId:'championship:creature:species-062',worldX,worldY,worldZ:0,facing:'left',moving:false,currentHp:100,maxHp:100,nativeAnimation:native}],selectedWildId:null,toWorldPoint:p=>huntViewportToWorld(p,camera,transform),toViewportPoint:p=>huntWorldToViewport(p,camera,transform)};
      }},intents:{panCamera(){},selectWildAt(){},abortEnclosureStroke(){}}};
      const {mountHuntFieldPixiPresentation}=await imp('vs2/createHuntFieldPixiPresentation.js');
      scene=await mountHuntFieldPixiPresentation({stage,source,fieldArt,characterBundle:bundle,onActorFrame:x=>actorFrames=x,onFallback:x=>failures.push(String(x))});
