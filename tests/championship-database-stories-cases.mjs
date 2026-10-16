@@ -484,7 +484,7 @@ test('redesign leaves every unaffected registry manifest and story entry byte-eq
  const expected={"zh-Hant":"流淌著古老純血血脈的翠綠幼龍，對自身的驕傲與榮耀有著極高要求。牠每天都在林野間刻苦磨礪尖牙與利爪，渴望與心意相通的夥伴並肩踏上登峰之路。","en":"An emerald-green drake bearing ancient draconic blood, holding its sense of honor to the highest standard. It sharpens its claws and fangs with fierce dedication each day, eager to walk the arduous path to the summit beside a trusted partner.","ja":"古の血統を受け継ぐ翠緑の幼竜で、自らの誇りと誇り高さに対して極めてストイック。日々爪と牙を研ぎ澄ませる鍛錬を怠らず、心を通わせた仲間とともに高みを目指す旅路を待ち望んでいる。","th":"มังกรน้อยสีเขียวมรกตผู้สืบสายเลือดโบราณอันบริสุทธิ์ มีความภาคภูมิใจในเกียรติของตนเองเป็นอย่างยิ่ง ฝึกฝนกรงเล็บและเขี้ยวอย่างไม่ย่อท้อในป่าทุกวัน มุ่งหวังที่จะเคียงบ่าเคียงไหล่กับคู่หูที่รู้ใจก้าวสู่จุดสูงสุด","vi":"Chú rồng con màu xanh lục bảo mang huyết mạch cổ xưa thuần khiết, đặt yêu cầu rất cao về lòng kiêu hãnh và danh dự của bản thân. Mỗi ngày nó đều miệt mài mài giũa móng vuốt và răng nanh, khát khao cùng người bạn đồng điệu kề vai chinh phục đỉnh cao."};
  for(const locale of locales)assert.equal(databaseStory(63,locale),expected[locale]);
  const {speciesName}=await import('../src/championship/text/zhHant.js');
- try{setLocale('zh-Hant');assert.equal(speciesName(63),'翠冠幼龍');}finally{setLocale('zh-Hant');}
+ try{setLocale('zh-Hant');assert.equal(speciesName(63),'翠冠龍');}finally{setLocale('zh-Hant');}
 });
 
 // Independent baseline is projected PR41 head 95c392ed74d1c338825931b570fef32e1ae5c690, not a released-main claim.
