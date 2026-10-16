@@ -10,6 +10,7 @@ const { createHash } = require('node:crypto');
 const { pathToFileURL } = require('node:url');
 const PUBLIC_BASE = 'https://orochi771127.github.io/championship-2026/';
 const HERO = '.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero';
+const EXPECTED_REGISTRY_COUNT = 58;
 const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10,35,62,36]);
 const EXPECTED = Object.freeze({
   36: Object.freeze({"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "雷鬃獾"}),
@@ -152,7 +153,7 @@ async function main() {
     assert.ok(resolveAsset(root, '/championship.html'));
     const registryPath = 'src/data/championship/database-hero-portraits.r1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
-    assert.equal(catalog.entries.length,57,'Merged54 accepted heroes plus189 and229/230');
+    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'Existing57 heroes plus reviewed036 portrait');
     evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
     const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json';
     evidence.productionCatalogs=[];
@@ -410,6 +411,7 @@ async function selfTest() {
     const oldSrc=`assets/production/database-portraits-b1-20261014/${expected.displayCode}.webp`;
     assert.throws(()=>assertAsset({...expected,src:oldSrc},bytes,expected));
   }
+  assert.equal(JSON.parse(fs.readFileSync(path.join(__dirname,'../src/data/championship/database-hero-portraits.r1.json'),'utf8')).entries.length,EXPECTED_REGISTRY_COUNT,'Source registry count must match browser preflight');
   assert.equal(MATRIX_TARGETS.length,13);assert.equal(MATRIX_TARGETS.length*8+1+8,113);
   const sourceRegistry = Buffer.from(JSON.stringify({entries:Object.keys(EXPECTED).map(speciesIndex=>({speciesIndex:Number(speciesIndex)}))}));
   assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,17);
