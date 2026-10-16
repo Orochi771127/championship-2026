@@ -24,16 +24,41 @@ try{
   const app=new PIXI.Application();await app.init({width:896,height:444,resolution:2,antialias:false,backgroundAlpha:0,preference:'webgl'});app.stop();
   document.body.replaceChildren(app.canvas);document.body.style.margin='0';
   const geometry=runtime.reviewGeometry,sequenceReports=[],cellBindings=new Map();
-  const alphaMeasurements=[];
-  for(const side of ['main','sub']){
-   const atlas=await json(prefix+'bank/'+side+'-atlas-00.json');const response=await fetch(new URL(prefix+'bank/'+side+'-atlas-00.png',base));
+  const alphaMeasurements=[],atlasFrames=new Map();
+  const rect=r=>r?{x:r.x,y:r.y,width:r.width,height:r.height}:null;
+  function checkTexture(key,texture){
+   const a=atlasFrames.get(key);checked(a&&texture.trim,'PIXI_TRIM_REQUIRED '+key);
+   const r=a.resolution,f=a.frame,s=a.spriteSourceSize;
+   const expected={frame:{x:f.x/r,y:f.y/r,width:f.w/r,height:f.h/r},orig:{x:0,y:0,width:256/r,height:256/r},trim:{x:s.x/r,y:s.y/r,width:s.w/r,height:s.h/r}};
+   const actual={frame:rect(texture.frame),orig:rect(texture.orig),trim:rect(texture.trim)};
+   checked(texture.source.resolution===r&&texture.rotate===0,'PIXI_ATLAS_RESOLUTION_OR_ROTATION '+key);
+   checked(JSON.stringify(actual)===JSON.stringify(expected),'PIXI_ATLAS_RECTANGLES '+key);
+   return{...actual,resolution:r,alphaBounds:a.alphaBounds,halfAlphaBounds:a.halfAlphaBounds};
+  }
+  for(const side of ['main','sub'])for(const page of runtime.sides[side].atlases){
+   const atlas=await json(prefix+'bank/'+page.data);const response=await fetch(new URL(prefix+'bank/'+page.image,base));checked(response.ok,'ATLAS_IMAGE_HTTP');
    const bitmap=await createImageBitmap(await response.blob());const c=document.createElement('canvas');c.width=bitmap.width;c.height=bitmap.height;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(bitmap,0,0);bitmap.close();
+   const resolution=Number(atlas.meta.scale);checked(Number.isFinite(resolution)&&resolution>0,'ATLAS_RESOLUTION');
    for(const [key,meta]of Object.entries(atlas.frames)){
-    const f=meta.frame,d=ctx.getImageData(f.x,f.y,256,256).data;let x0=256,y0=256,x1=0,y1=0;
-    for(let y=0;y<256;y++)for(let x=0;x<256;x++)if(d[(y*256+x)*4+3]>=128){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x+1);y1=Math.max(y1,y+1);}
+    const f=meta.frame,s=meta.spriteSourceSize,o=meta.sourceSize;
+    checked(!atlasFrames.has(key)&&meta.trimmed===true&&meta.rotated===false,'TRIMMED_ATLAS_REQUIRED '+key);
+    checked(o?.w===256&&o.h===256&&f&&s&&[f.x,f.y,f.w,f.h,s.x,s.y,s.w,s.h].every(Number.isInteger),'ATLAS_RECT_INTEGERS '+key);
+    checked(f.x>=0&&f.y>=0&&f.w>0&&f.h>0&&f.x+f.w<=c.width&&f.y+f.h<=c.height&&s.x>=0&&s.y>=0&&s.w===f.w&&s.h===f.h&&s.x+s.w<=256&&s.y+s.h<=256,'ATLAS_RECT_BOUNDS '+key);
+    // Reconstruct the untouched256px source canvas from the packed rectangle.
+    // No rescale, draw-time translation, alpha thresholding or re-grounding.
+    const packed=ctx.getImageData(f.x,f.y,f.w,f.h).data,d=new Uint8ClampedArray(256*256*4);
+    for(let y=0;y<f.h;y++)d.set(packed.subarray(y*f.w*4,(y+1)*f.w*4),((s.y+y)*256+s.x)*4);
+    let x0=256,y0=256,x1=0,y1=0,ax0=256,ay0=256,ax1=0,ay1=0;
+    for(let y=0;y<256;y++)for(let x=0;x<256;x++){
+     const a=d[(y*256+x)*4+3];if(a>0){ax0=Math.min(ax0,x);ay0=Math.min(ay0,y);ax1=Math.max(ax1,x+1);ay1=Math.max(ay1,y+1);}
+     if(a>=128){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x+1);y1=Math.max(y1,y+1);}
+    }
+    const alphaBounds=[ax0,ay0,ax1,ay1];checked(JSON.stringify(alphaBounds)===JSON.stringify([s.x,s.y,s.x+s.w,s.y+s.h]),'TIGHT_NONZERO_ALPHA_TRIM '+key);
     const bounds=[x0,y0,x1,y1],native=bounds.map((v,i)=>(v-(i%2===0?112:148))/4);
     checked(JSON.stringify(native)===JSON.stringify(geometry.frames[key].nativeBounds),'HALF_ALPHA_GEOMETRY '+key);
-    alphaMeasurements.push({key,bounds,nativeBounds:native});
+    checked(JSON.stringify(geometry.frames[key].sourceSize)==='[256,256]'&&JSON.stringify(geometry.frames[key].origin)==='[112,148]','UNTRIMMED_SOURCE_ORIGIN '+key);
+    atlasFrames.set(key,{frame:f,spriteSourceSize:s,resolution,alphaBounds,halfAlphaBounds:bounds});
+    alphaMeasurements.push({key,bounds,nativeBounds:native,alphaBounds,frame:f,spriteSourceSize:s,sourceSize:o,trimmed:true,reconstructedDecodedRgbaSha256:await hash(d.buffer)});
    }
   }
   checked(alphaMeasurements.length===81,'81_GEOMETRY_CHECKS');
@@ -81,12 +106,13 @@ try{
     for(let j=0;j<65536;j++){const bg=j%256<128?[236,233,226]:[35,50,65],o=j*4;
      if(px[o+3]>0&&(px[o]!==bg[0]||px[o+1]!==bg[1]||px[o+2]!==bg[2]))nonblank++;}
     checked(nonblank>0,'NONBLANK '+key);
-    samples.push({side,cell,key,scale:[actor.sprite.scale.x,actor.sprite.scale.y],geometry:g,visiblePixelCount:nonblank,bounds:actor.sprite.getBounds().rectangle??actor.sprite.getBounds()});
+    const texture=checkTexture(key,actor.sprite.texture);
+    samples.push({side,cell,key,scale:[actor.sprite.scale.x,actor.sprite.scale.y],geometry:g,texture,visiblePixelCount:nonblank,bounds:actor.sprite.getBounds().rectangle??actor.sprite.getBounds()});
    }
    app.render();sheets.push({name:`${side}-${String(start).padStart(3,'0')}-${String(end).padStart(3,'0')}-actualscale.png`,png:app.canvas.toDataURL('image/png').split(',')[1]});
   }
   checked(samples.length===81&&sheets.length===4,'SHEET_BUDGET');
-  const report={status:'NUMERIC_AND_RENDER_BINDINGS_PASS_VISUAL_REVIEW_PENDING',sequenceReports,samples,alphaMeasurements,logicalCanvas:[64,64],origin:[112,148],density:4,renderer:{resolution:app.renderer.resolution,css:[896,444],canvas:[app.canvas.width,app.canvas.height],nativeDisplayFactor:2,fullCellCss:[128,128],fullCellPhysical:[256,256]},files:manifest.bankFiles,limits:['Four sheets are actual Pixi samples at native display factor2; not game scene context','No per-frame fit, no shared offset, no atlas mutation','Native numeric playback, not legacy generic English labels, is asserted']};
+  const report={status:'NUMERIC_AND_RENDER_BINDINGS_PASS_VISUAL_REVIEW_PENDING',sequenceReports,samples,alphaMeasurements,logicalCanvas:[64,64],origin:[112,148],density:4,renderer:{resolution:app.renderer.resolution,css:[896,444],canvas:[app.canvas.width,app.canvas.height],nativeDisplayFactor:2,fullCellCss:[128,128],fullCellPhysical:[256,256]},files:manifest.bankFiles,limits:['Four sheets are actual Pixi samples at native display factor2; not game scene context','Trim is tight alpha>0 packaging only; orig256/source origin112148 and alpha>=128 native geometry are separately asserted','Reconstructed RGBA hashes describe browser-decoded pixels, not an independent prepack source equality proof','No per-frame fit, no shared offset, no atlas mutation','Native numeric playback, not legacy generic English labels, is asserted']};
   return{report,sheets};
  },{base});
  assert.deepEqual(errors,[]);for(const s of result.sheets)await fs.writeFile(`${out}/${s.name}`,Buffer.from(s.png,'base64'));await fs.writeFile(`${out}/SWEEP_REPORT.json`,JSON.stringify(result.report,null,2));

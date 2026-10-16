@@ -136,14 +136,15 @@ try{
     for(let t=0;t<54;t++){const r=walkTimeline.getSnapshot();checked(r.cell===(t%27<15?4:5)&&r.cell===nativeAnimationCellAt(walk,t)&&r.active===1,'WALK_PHASE');timing.push({tick:t,cell:r.cell});walkTimeline.advanceNative(4096);}
     // Render the actual phase boundaries and cycle seam, not 54 redundant GPU readbacks.
     for(const t of [0,14,15,26,27,41,42,53])sample(2,t);
+    for(const [seq,total,boundary] of [[12,74,37],[18,27,15],[22,74,37]])for(const t of [0,boundary-1,boundary,total-1,total,total+boundary,total*2-1])sample(seq,t);
     sample(2,27,true);sample(13,37);sample(0,0);
     globalThis.__ground={sample,result:()=>({scene:sceneName,variant,records,timing,alpha,failures,renderer:{resolution:stage.app.renderer.resolution,canvas:[stage.app.canvas.width,stage.app.canvas.height],css:[stage.app.canvas.clientWidth,stage.app.canvas.clientHeight],deviceDpr:devicePixelRatio},baseline:m.baseline,limits:['Fixed verified native sequence snapshots in real Hunt/Raising scenes, not AI/binding admission or full gameplay','Raising uses actual actor initialization/entry point and projectNativeRaisingActor with controlled requestNativeRaisingSequence; world/lifecycle/state stay frozen and do not prove behavioral admission','Shadow and ground projection remain owned by each actual scene; no custom shadow geometry or per-cell normalization','Sleep baseline bottom differs from upright; uniform shift is not exact sleep proof','No art source changes, runtime registration changes, or release approval']})};
    },{base,sceneName,variant});
-   for(const [sequence,tick] of (sceneName==='hunt'?[[2,15],[21,5],[25,0],[1,0],[1,37],[17,0],[17,37]]:[[0,0],[1,0],[1,37]])){
-    const sample=await page.evaluate(([s,t])=>__ground.sample(s,t),[sequence,tick]);await page.screenshot({path:`${out}/${sceneName}-${variant}-cell${String(sample.cell).padStart(3,'0')}.png`,timeout:60000});captures++;
+   for(const [sequence,tick] of (sceneName==='hunt'?[[2,0],[2,15],[12,0],[12,37],[18,0],[18,15],[22,0],[22,37]]:[[2,0],[2,15]])){
+    const sample=await page.evaluate(([s,t])=>__ground.sample(s,t),[sequence,tick]);const clip={x:100,y:220,width:190,height:240},b=sample.sprite.bounds;assert.ok(b.x>=clip.x&&b.y>=clip.y&&b.x+b.width<=clip.x+clip.width&&b.y+b.height<=clip.y+clip.height,'MATCHED_CONTEXT_CROP_CONTAINS_FULL_TARGET');await page.screenshot({clip,path:`${out}/${sceneName}-${variant}-cell${String(sample.cell).padStart(3,'0')}.png`,timeout:60000});captures++;
    }
    const result=await page.evaluate(()=>__ground.result());assert.deepEqual(errors,[]);assert.deepEqual(result.failures,[]);assert.deepEqual(result.renderer.canvas,[780,1560]);assert.deepEqual(result.renderer.css,[390,780]);assert.equal(result.renderer.resolution,2);
-   await fs.writeFile(`${out}/${sceneName}-${variant}.json`,JSON.stringify({status:'PASS_REAL_SCENE_CONTRACTS_VISUAL_REVIEW_PENDING',...result,network,pageErrors:errors},null,2));
+   await fs.writeFile(`${out}/${sceneName}-${variant}.json`,JSON.stringify({status:'PASS_REAL_SCENE_CONTRACTS_VISUAL_REVIEW_PENDING',screenshotClipCSS:{x:100,y:220,width:190,height:240},...result,network,pageErrors:errors},null,2));
   }catch(error){await fs.writeFile(`${out}/${sceneName}-${variant}-failure.json`,JSON.stringify({error:String(error),stack:error.stack,errors,network},null,2));throw error;}finally{await page.close();}
  }
  assert.equal(captures,20);

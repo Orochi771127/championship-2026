@@ -21,7 +21,7 @@
     "shippingReady": false,
     "publicReleasePermitted": false,
     "visualAccepted": false,
-    "designVersion": "species062-action-refresh-support-registration-v2"
+    "designVersion": "species062-action-refresh-gait-support-trim-v4"
   },
   "timing": {
     "source": "ORIGINAL_NANR_DURATION_TICKS",
@@ -1271,8 +1271,8 @@
         ],
         "nativeBounds": [
           -9.25,
-          -24.75,
-          13.5,
+          -25.0,
+          17.75,
           2.0
         ]
       },
@@ -1288,10 +1288,10 @@
           256
         ],
         "nativeBounds": [
-          -8.75,
-          -24.75,
-          13.25,
-          2.0
+          -9.75,
+          -25.0,
+          17.25,
+          2.25
         ]
       },
       "m237_renamon/main/cell_006": {
@@ -1307,8 +1307,8 @@
         ],
         "nativeBounds": [
           -9.25,
-          -24.75,
-          13.5,
+          -25.0,
+          17.75,
           2.0
         ]
       },
@@ -1324,10 +1324,10 @@
           256
         ],
         "nativeBounds": [
-          -8.75,
-          -24.75,
-          13.25,
-          2.0
+          -9.75,
+          -25.0,
+          17.25,
+          2.25
         ]
       },
       "m237_renamon/main/cell_008": {
@@ -1576,10 +1576,10 @@
           256
         ],
         "nativeBounds": [
-          -9.25,
-          -26.75,
-          13.5,
-          0.25
+          -8.0,
+          -24.75,
+          17.75,
+          2.0
         ]
       },
       "m237_renamon/main/cell_022": {
@@ -1594,10 +1594,10 @@
           256
         ],
         "nativeBounds": [
-          -8.75,
-          -26.75,
-          13.25,
-          0.0
+          -8.5,
+          -25.0,
+          17.25,
+          2.0
         ]
       },
       "m237_renamon/main/cell_023": {
@@ -1756,10 +1756,10 @@
           256
         ],
         "nativeBounds": [
-          -8.25,
-          -26.75,
-          13.5,
-          0.25
+          -7.5,
+          -24.75,
+          17.5,
+          2.25
         ]
       },
       "m237_renamon/main/cell_032": {
@@ -1774,10 +1774,10 @@
           256
         ],
         "nativeBounds": [
-          -8.75,
-          -26.75,
-          13.25,
-          0.0
+          -9.0,
+          -24.75,
+          17.25,
+          2.25
         ]
       },
       "m237_renamon/main/cell_033": {
@@ -1792,10 +1792,10 @@
           256
         ],
         "nativeBounds": [
-          -8.25,
-          -26.75,
-          13.5,
-          0.25
+          -7.5,
+          -24.75,
+          17.5,
+          2.25
         ]
       },
       "m237_renamon/main/cell_034": {
@@ -1810,10 +1810,10 @@
           256
         ],
         "nativeBounds": [
-          -8.75,
-          -26.75,
-          13.25,
-          0.0
+          -9.0,
+          -24.75,
+          17.25,
+          2.25
         ]
       },
       "m237_renamon/main/cell_035": {
@@ -1882,10 +1882,10 @@
           256
         ],
         "nativeBounds": [
-          -8.5,
-          -27.0,
-          13.5,
-          0.25
+          -7.5,
+          -24.5,
+          17.75,
+          2.25
         ]
       },
       "m237_renamon/main/cell_039": {
@@ -1901,9 +1901,9 @@
         ],
         "nativeBounds": [
           -8.75,
-          -26.75,
-          13.25,
-          0.0
+          -24.75,
+          17.5,
+          2.25
         ]
       },
       "m237_renamon/main/cell_040": {
@@ -2647,13 +2647,18 @@
     }
   },
   "motionContractSha256": "8500990153ff65cab51e60baa3313947d6abceff2077db61c974b03d4b34f375",
-  "sourceBankSha256": "5fb29756fe49f4c2fd051f63f4da418d3bb93ffb64e1c61d76b79f2caf06e6fb",
+  "sourceBankSha256": "b68bb22e9d947696365376869565c52e569caa16a811ac2fd4eb83969e062dc7",
   "localPackagingProvenance": {
-    "coverageSha256": "9acd1ffe54ecfa9be7c6875ed8287e96c39bf5f3a5f5764bb88603bedaa7f78e",
+    "coverageSha256": "4f486229010ad00fd2f86d4afdd9bee3e03760749ed86928f03f832170a006dc",
     "sourceGroupMapSha256": "d631e73ee01a639b78bfb78320713a2f51bb8f592229efc5b03b795305327874",
     "motionHashScope": "Canonical numeric source sequences only; not asserted equal to preexisting renderer-bank hash.",
     "noProductionChanges": true,
     "registrationMapping": "../SLOT_MAPPING.json",
-    "playbackCompatibility": "Original legacy playback strings retained for generic loader validation only. Separate nativePlayback records frozen native semantics; numeric modes and cells/ticks unchanged."
+    "playbackCompatibility": "Original legacy playback strings retained for generic loader validation only. Separate nativePlayback records frozen native semantics; numeric modes and cells/ticks unchanged.",
+    "metadataTrimOnly": true,
+    "trimRule": "All alpha>0 bounds within each unchanged256tile; original sourceSize and spriteSourceSize offsets preserve origin.",
+    "supportRegistrationBase": "candidate-pack-support-trim-v3",
+    "gaitReceipt": "gait-support-calibrated-v1/REGISTRATION_RECEIPT.json",
+    "gaitReceiptSha256": "ad26d905ac5327b8fcbcddcd16e755d4ea588824dcdd93e16c4347991a867e78"
   }
 }
