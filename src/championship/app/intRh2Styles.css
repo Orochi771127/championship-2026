@@ -944,9 +944,10 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[
    sharing the same top corner on portrait phones. */
 body[data-tutorial-guide]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hint { display: none; }
 /* A long translated hint is itself a scroll control; only its visible text
-   region receives the gesture, not the empty overlay surrounding it. */
+   region receives the gesture, not the empty overlay surrounding it.
+   Its viewport uses the card's same 120px cap, minus 16px for insets. */
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar__tool-text {
-  max-height: max(32px, calc(22dvh - 16px)); overflow-y: auto;
+  max-height: max(32px, min(104px, calc(22dvh - 16px))); overflow-y: auto;
   pointer-events: auto; overscroll-behavior: contain;
 }
 

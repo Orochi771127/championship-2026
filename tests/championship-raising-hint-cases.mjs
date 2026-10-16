@@ -188,3 +188,14 @@ test('shrinking general text releases its bounded input surface and focus withou
   f.clock.tick(4000);f.hint.scrollHeight=80;observer.fn();assert.equal(f.document.activeElement,f.document.body);assert.equal(f.hint.tabIndex,-1);
   f.clock.tick(1000);assert.equal(f.hint.dataset.hintPhase,'fading');assert.equal(f.consumes,1);f.view.dispose();
 });
+
+
+test('tool text viewport shares the parent card height cap so scroll endpoints stay visible',()=>{
+  const css=read('intRh2Styles.css');
+  assert.match(css,/max-height: min\(22dvh, 120px\); overflow-y: auto/);
+  assert.match(css,/max-height: max\(32px, min\(104px, calc\(22dvh - 16px\)\)\); overflow-y: auto/);
+  for(const viewportHeight of [390,768,844]){
+    const cardCap=Math.min(viewportHeight*0.22,120),textCap=Math.max(32,Math.min(104,viewportHeight*0.22-16));
+    assert.ok(textCap<=cardCap-16,`text scroll viewport stays within card at ${viewportHeight}px`);
+  }
+});
