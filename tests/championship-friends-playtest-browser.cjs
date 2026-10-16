@@ -246,15 +246,39 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   assert.equal(digits(await page.locator('.cm-status-bar__bits-value').innerText()),100000);await wallet(10000);await noOverflow();await shot('01-new-wallet');await topContour('01-new-save');
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),20);assert.equal(await page.locator('[data-locked-test-row]').count(),3);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),3);assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="false"]').allTextContents().then(xs=>xs.join('')), '');await shot('02-three-row-locks');
+  assert.equal(await page.locator('[data-buy-test-row],.cm-cage-row-purchase').count(),0,'Lower purchase controls removed');
+  for(const lock of await page.locator('button[data-locked-test-row]').all()){
+   assert.equal(await lock.getAttribute('aria-haspopup'),'dialog');
+   assert.ok(['none','normal','""'].includes(await lock.evaluate(el=>getComputedStyle(el,'::before').content)),'No horizontal row-rule pseudo-element');
+  }
   for(const [row,balance,total]of [[2,9000,30],[3,8000,40],[4,7000,50]]){
-   const button=page.locator(`.cm-cage-expansion [data-buy-test-row="${row}"],button.cm-vs2-action[data-buy-test-row="${row}"]`).first();
-   const label=await button.innerText();assert.match(label.replaceAll(',',''),/1000/);assert.match(label,/測試鑽/);assert.match(label,/10/);
-   await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();assert.ok(box&&box.height>=44,'Row purchase touch target');assert.ok(box.x>=0&&box.x+box.width<=390,'Purchase label/control stays inside mobile viewport');await noOverflow();
-   await button.click();await page.waitForFunction(({key,balance})=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===balance,{key:saveKey,balance});
-   assert.equal(digits(await page.locator('[data-test-diamond-balance]').innerText()),balance);
+   const button=page.locator(`button.cm-cage-row-lock[data-locked-test-row="${row}"]`);
+   const label=await button.getAttribute('aria-label');assert.match(label.replaceAll(',',''),/1000/);assert.match(label,/測試鑽/);assert.match(label,/10/);
+   await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();assert.ok(box&&box.height>=44&&box.width>=44,'Row lock touch target');assert.ok(box.x>=0&&box.x+box.width<=390,'Lock stays inside mobile viewport');await noOverflow();
+   const beforePurchase=await saved();
+   await button.click();
+   const dialog=page.locator('dialog.cm-dialog[data-variant="ranch-row-purchase"]');await dialog.waitFor({state:'visible'});
+   assert.equal(await dialog.evaluate(el=>el.matches(':modal')),true,'Native modal owns input');
+   assert.equal(await page.evaluate(()=>document.activeElement?.dataset.action),'cancel');
+   assert.ok((await dialog.locator('.cm-dialog__title').innerText()).includes(String(row+1)));
+   const detail=await dialog.locator('.cm-dialog__message').innerText();
+   for(const value of ['10','1000',String(balance+1000)])assert.ok(detail.replaceAll(',','').includes(value),'Dialog includes count, price and balance');
+   assert.match(detail,/測試鑽/);assert.deepEqual(await saved(),beforePurchase,'Opening confirmation cannot mutate save');
+   await button.evaluate(el=>{el.click();el.click();});assert.equal(await page.locator('dialog[open]').count(),1);assert.deepEqual(await saved(),beforePurchase);
+   await shot('row-'+row+'-confirmation');
+   if(row===2){
+    await dialog.locator('[data-action="cancel"]').click();await dialog.waitFor({state:'detached'});assert.deepEqual(await saved(),beforePurchase,'Cancel cannot debit or unlock');
+    assert.equal(await button.evaluate(el=>document.activeElement===el),true,'Cancel restores lock focus');
+    await button.press('Enter');await dialog.waitFor({state:'visible'});await page.keyboard.press('Escape');await dialog.waitFor({state:'detached'});assert.deepEqual(await saved(),beforePurchase,'Escape cannot debit');
+    await button.click();await dialog.waitFor({state:'visible'});
+   }
+   await dialog.locator('[data-action="buy"]').evaluate(el=>{el.click();el.click();});
+   await page.waitForFunction(({key,balance})=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===balance,{key:saveKey,balance});
+   assert.equal(await page.locator('dialog[open]').count(),0);
    assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),total);assert.equal(await page.locator('[data-locked-test-row]').count(),4-row);await shot('row-'+row);
   }
-  assert.equal(await page.locator('button.cm-vs2-action[data-buy-test-row]').count(),0);
+  assert.equal(await page.locator('button[data-locked-test-row],[data-buy-test-row],.cm-cage-row-purchase').count(),0);
+  evidence.assertions.push({rowUnlockConfirmation:{cancelAndEscapeNoDebit:true,details:true,repeatedOpenAndBuySafe:true,noRowLinesOrLowerControls:true,slots:50,diamonds:7000}});
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await wallet(7000);await saveQuit();
   await page.reload({waitUntil:'domcontentloaded'});await continueSaved();await wallet(7000);
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),50,'Reload must restore all purchased grid rows');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
@@ -305,7 +329,8 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   const migrated=await saved();assert.deepEqual(migrated.shop,old.shop,'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,old.cageEdit.placements);assert.equal(migrated.flags.friendsPlaytest?.diamonds,10000);assert.equal(migrated.flags.friendsPlaytest.version,2);
   await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);
-  await page.locator('button[data-buy-test-row="4"]').click();
+  await page.locator('button[data-locked-test-row="4"]').click();
+  await page.locator('dialog[data-variant="ranch-row-purchase"] [data-action="buy"]').click();
   await page.waitForFunction(key=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===9000,saveKey);
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),50);
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9000);

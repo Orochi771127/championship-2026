@@ -202,6 +202,10 @@ export const UI_COPY_JA = Object.freeze({
   "FRIENDS_MEDAL_PREVIEW_NOTICE": "テスト期間中、後半のメダルは外観プレビューであり、実際の勝利には数えません。序盤のメダルはプレイして獲得してください。",
   "FRIENDS_MEDAL_PREVIEW_BADGE": "テストプレビュー",
   "CAGE_PUBLIC_TEST_GRID_HINT": "一続きの牧場・初期20マス、最大50マス。1段10マスにつきテスト用ダイヤ1000個。実際の支払いはありません。",
+  "CAGE_TEST_ROW_TITLE": "{row} 段目を解放",
+  "CAGE_TEST_ROW_DETAILS": "テストダイヤ {price} 個で {count} マスを解放します。実際の支払いはありません。",
+  "CAGE_TEST_ROW_BUY": "購入",
+  "CAGE_TEST_ROW_CANCEL": "キャンセル",
   "CAGE_TEST_BUY_ROW": "第{row}段を購入（{count}マス・テスト用ダイヤ{price}個）",
   "CAGE_TEST_ROW_PURCHASED": "テスト用ダイヤ1000個を消費して、この段を開放しました。",
   "CAGE_TEST_ROW_UNAVAILABLE": "現在、この段は購入できません。",
@@ -1321,5 +1325,6 @@ export const UNTRANSLATED_PROPER_NOUNS_JA = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+
 
 

@@ -202,6 +202,10 @@ export const UI_COPY_VI = Object.freeze({
   "FRIENDS_MEDAL_PREVIEW_NOTICE": "Trong đợt chơi thử, huy chương cuối game chỉ là bản xem trước hình ảnh, không tính là chiến thắng thật. Hãy chơi để giành huy chương đầu game.",
   "FRIENDS_MEDAL_PREVIEW_BADGE": "Xem trước thử nghiệm",
   "CAGE_PUBLIC_TEST_GRID_HINT": "Trang trại liền mạch · Ban đầu 20 ô, tối đa 50 · Mỗi hàng 10 ô giá 1000 kim cương thử nghiệm. Không thanh toán tiền thật.",
+  "CAGE_TEST_ROW_TITLE": "Mở khóa hàng {row}",
+  "CAGE_TEST_ROW_DETAILS": "Mở {count} ô bằng {price} kim cương thử nghiệm. Không thanh toán tiền thật.",
+  "CAGE_TEST_ROW_BUY": "Mua",
+  "CAGE_TEST_ROW_CANCEL": "Hủy",
   "CAGE_TEST_BUY_ROW": "Mua hàng {row} ({count} ô · {price} kim cương thử nghiệm)",
   "CAGE_TEST_ROW_PURCHASED": "Đã trừ 1000 kim cương thử nghiệm và mở hàng.",
   "CAGE_TEST_ROW_UNAVAILABLE": "Hiện chưa thể mua hàng này.",
@@ -1321,5 +1325,6 @@ export const UNTRANSLATED_PROPER_NOUNS_VI = Object.freeze(new Set([
   ...Object.values(STARTER_NAMES_ZH),
   "浩司", "惠子"
 ]));
+
 
 

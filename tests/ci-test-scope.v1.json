@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
+    "tests/championship-ranch-row-dialog-cases.mjs",
     "tests/championship-screen-load-recovery-cases.mjs",
     "tests/championship-data-arena-cases.mjs",
     "tests/alternate-form-build-boundary-cases.mjs",
@@ -360,3 +361,4 @@
     "tests/test-completed-original-m301.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression."
   }
 }
+

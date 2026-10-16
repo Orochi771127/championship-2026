@@ -12,6 +12,7 @@
     "status": "DEFERRED_UNTIL_RELEASE"
   },
   "moduleEntries": [
+    "src/championship/app/ranchRowPurchasePrompt.js",
     "node_modules/pixi.js/dist/pixi.mjs",
     "node_modules/three/build/three.core.js",
     "node_modules/three/build/three.module.js",
@@ -9662,6 +9663,7 @@
     "src/championship/app/raisingHomeP1RView.js",
     "src/championship/app/raisingPresentationSource.js",
     "src/championship/app/ranchExpansionPreview.js",
+    "src/championship/app/ranchRowPurchasePrompt.js",
     "src/championship/app/runtimeRecoveryDiagnostics.js",
     "src/championship/app/scheduleScreen.js",
     "src/championship/app/settings/preferenceEnvironment.js",
@@ -47104,6 +47106,10 @@
         "sha256": "f3c33507a969419a371b60e4c96d544a0ac3eba3965df8659eca79dbcc6403b6"
       },
       {
+        "path": "src/championship/app/ranchRowPurchasePrompt.js",
+        "sha256": "cb0af8f85c96cb9479801c722d3d55425e1e94a931e8edc95602c854d57edf11"
+      },
+      {
         "path": "src/championship/app/ranchExpansionPreview.js",
         "sha256": "72534942d89a527b9618fbff02e4ea5c90ee6373930691e38ec77c10d2ca188c"
       },
@@ -47181,7 +47187,7 @@
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "432e60598c71b0b57c2e5c59f2ca269f229f0fb2b95e3bd94e98357821ab3002"
+        "sha256": "27d6d7924734491a7af5df6ea6bd2a330a74d0551f3328a3e385ba7bd26a58fc"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
@@ -47189,7 +47195,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "97d82a437e795cc113d6c8290d66886eec14ba997a954d518a143d2f7a50af75"
+        "sha256": "357b0268436eb2cadc10e85733b816a6550c50ea1670b333a6f4c0c5e01ae9bd"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -48469,23 +48475,23 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "8bbb5dc37fc39d82eccc5e3db889b17d068d2ae0694afc80375efb76b58b1a5e"
+        "sha256": "88734479a423b883d28eaac65619ee14aea8380cfbb629f67d77b28aa6359cd6"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "a5184c96997d6f0321476ede27b27cdc56623066a2568ac962625e62fffd401c"
+        "sha256": "f52dc575bb15ecbf59f39a40a9bcf6df0ce8ba8fbb7ea5c2a0b312828a8068fe"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "4cf29450ab9ec879ebe71c1216852811f05b7bd507b00358a657b58f9d1f01e1"
+        "sha256": "d281cbc570533d7417e02beeeda02fc12b659001c4472e1ac006b9f5901d1cf2"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "d039e1fda7a55990aee4cc631c3400faac9e8d2a94f57bb2e25f06553cbc38be"
+        "sha256": "707e408d8f81cc0b68cc6382548447522f4d86d558b84a4c209f66de33bcbd53"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "b47e41cc65d82b55e9cf72a4c6acf8aa5dce298e87d9a533edb4d7d6b20819b8"
+        "sha256": "8542a7780c5f8b4d51bbc41aefc1a92bf4f72ce65b52577316a0481d7842a00c"
       },
       {
         "path": "src/championship/text/zhHant.js",
