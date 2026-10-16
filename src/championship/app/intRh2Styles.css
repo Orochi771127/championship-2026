@@ -913,7 +913,13 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hin
   bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 8px + var(--cm-tool-hint-clearance, 0px));
   transform: none; text-align: left;
   max-width: min(560px, calc(100% - 16px - var(--safe-left) - var(--safe-right)));
-  overflow-wrap: anywhere; pointer-events: none;
+  max-height: max(0px, calc(100% - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - var(--cm-tool-hint-clearance, 0px) - 24px));
+  overflow-wrap: anywhere; overflow-y: auto; pointer-events: none;
+}
+/* Extreme text expansion can scroll within the available lane without
+   covering the status row. Only this text box, never the field, owns input. */
+body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hint[data-scroll="true"] {
+  pointer-events: auto; overscroll-behavior: contain;
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-mail-icon {
   top: auto; bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 12px);

@@ -2,7 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { createTransientHint, HINT_FADE_MS, TOOL_HINT_MS, RAISING_HINT_SEEN_KEY } from '../src/championship/app/transientHint.js';
+import { createTransientHint, HINT_FADE_MS, TOOL_HINT_MS, consumeRaisingHintDuration } from '../src/championship/app/transientHint.js';
+
+import { createPreferenceStore } from '../src/championship/app/settings/preferenceStore.js';
+import { PREFERENCE_DEFINITIONS, parsePreferences } from '../src/championship/app/settings/preferenceSchema.js';
+import { createChampionshipPreferencePort, CHAMPIONSHIP_PREFERENCES_KEY } from '../src/championship/app/ChampionshipPersistentSavePort.js';
+import { CHAMPIONSHIP_MODERN_SAVE_KEY } from '../src/championship/app/championshipStandaloneSave.js';
 
 function timers() {
   let now=0,next=0;const jobs=new Map(),all=[];
@@ -20,6 +25,7 @@ class Element extends EventTarget {
   hasAttribute(k){return k in this.attributes;}
   removeAttribute(k){delete this.attributes[k];}
   focus(){this.ownerDocument.activeElement=this;}
+  blur(){if(this.ownerDocument.activeElement===this)this.ownerDocument.activeElement=this.ownerDocument.body;}
   showModal(){this.open=true;}
   close(){this.open=false;this.dispatchEvent(new Event('close'));}
   remove(){if(this.parentNode)this.parentNode.children=this.parentNode.children.filter(n=>n!==this);}
@@ -46,17 +52,46 @@ test('resolved reduced motion keeps reading duration but removes the fade',()=>{
   const clock=timers(),node=new Element('p',doc()),hint=createTransientHint(node,{...clock,reducedMotion:()=>true});
   hint.show(TOOL_HINT_MS);clock.tick(1999);assert.equal(node.hidden,false);clock.tick(1);assert.equal(node.hidden,true);assert.equal(clock.pending,0);
 });
-test('first-use persistence is a separate UI preference; no gameplay key is read or changed',async()=>{
-  const original=Object.getOwnPropertyDescriptor(globalThis,'localStorage'),values=new Map([['canonical-save','unchanged']]),reads=[],writes=[];
-  try{
-    Object.defineProperty(globalThis,'localStorage',{configurable:true,value:{getItem(k){reads.push(k);return values.get(k)??null;},setItem(k,v){writes.push(k);values.set(k,v);}}});
-    const first=await import('../src/championship/app/transientHint.js?preference-first');
-    assert.equal(first.consumeRaisingHintDuration(),5000);assert.equal(first.consumeRaisingHintDuration(),3000);
-    const reload=await import('../src/championship/app/transientHint.js?preference-reload');assert.equal(reload.consumeRaisingHintDuration(),3000);
-    assert.deepEqual(new Set([...reads,...writes]),new Set([RAISING_HINT_SEEN_KEY]));assert.equal(values.get('canonical-save'),'unchanged');
-    Object.defineProperty(globalThis,'localStorage',{configurable:true,get(){throw Error('storage denied');}});
-    const denied=await import('../src/championship/app/transientHint.js?preference-denied');assert.equal(denied.consumeRaisingHintDuration(),5000);assert.equal(denied.consumeRaisingHintDuration(),3000);
-  }finally{if(original)Object.defineProperty(globalThis,'localStorage',original);else delete globalThis.localStorage;}
+function preferenceFixture({text=null,denied=false}={}) {
+  const clock=timers(),values=new Map([[CHAMPIONSHIP_MODERN_SAVE_KEY,'unchanged']]),reads=[],writes=[];
+  if(text!==null)values.set(CHAMPIONSHIP_PREFERENCES_KEY,text);
+  const storage={getItem(k){reads.push(k);if(denied)throw Error('storage denied');return values.get(k)??null;},
+    setItem(k,v){writes.push(k);if(denied)throw Error('storage denied');values.set(k,v);},removeItem(k){values.delete(k);}};
+  const port=createChampionshipPreferencePort({storage});
+  const mount=()=>createPreferenceStore({port,setTimer:clock.setTimer,clearTimer:clock.clearTimer});
+  return {clock,values,reads,writes,mount,store:mount()};
+}
+test('first-use guidance persists through the existing guarded preference key, never the gameplay save',()=>{
+  const f=preferenceFixture();
+  assert.equal(PREFERENCE_DEFINITIONS.raisingHintSeen.scope,'device');
+  assert.equal(PREFERENCE_DEFINITIONS.raisingHintSeen.category,'access');
+  assert.equal(consumeRaisingHintDuration(f.store),5000);assert.equal(consumeRaisingHintDuration(f.store),3000);
+  f.clock.tick(300);assert.deepEqual(f.writes,[CHAMPIONSHIP_PREFERENCES_KEY]);
+  assert.equal(JSON.parse(f.values.get(CHAMPIONSHIP_PREFERENCES_KEY)).device.raisingHintSeen,true);
+  const reload=f.mount();assert.equal(consumeRaisingHintDuration(reload),3000);reload.dispose();
+  assert.deepEqual(new Set([...f.reads,...f.writes]),new Set([CHAMPIONSHIP_PREFERENCES_KEY]));
+  assert.equal(f.values.get(CHAMPIONSHIP_MODERN_SAVE_KEY),'unchanged');f.store.dispose();
+});
+test('denied preferences keep the hint marker in the existing store for this session',()=>{
+  const f=preferenceFixture({denied:true});assert.equal(consumeRaisingHintDuration(f.store),5000);
+  f.clock.tick(300);assert.equal(f.store.status().phase,'SAVE_FAILED');assert.equal(consumeRaisingHintDuration(f.store),3000);
+  assert.deepEqual(f.writes,[CHAMPIONSHIP_PREFERENCES_KEY]);assert.equal(f.values.get(CHAMPIONSHIP_MODERN_SAVE_KEY),'unchanged');f.store.dispose();
+});
+test('newer preference documents remain untouched and reset/invalid legacy markers restore first-use reading',()=>{
+  const future=JSON.stringify({schemaVersion:999,device:{raisingHintSeen:true},opaque:'preserve'}),f=preferenceFixture({text:future});
+  assert.equal(consumeRaisingHintDuration(f.store),5000);assert.equal(consumeRaisingHintDuration(f.store),3000);
+  f.clock.tick(1000);f.store.flush();assert.deepEqual(f.writes,[]);assert.equal(f.values.get(CHAMPIONSHIP_PREFERENCES_KEY),future);f.store.dispose();
+  assert.equal(parsePreferences(JSON.stringify({schemaVersion:1,device:{raisingHintSeen:'true'}})).preferences.raisingHintSeen,false);
+  const current=preferenceFixture();consumeRaisingHintDuration(current.store);current.store.resetCategory('sound');assert.equal(consumeRaisingHintDuration(current.store),3000);
+  current.store.resetCategory('access');assert.equal(consumeRaisingHintDuration(current.store),5000);
+  current.store.resetAll();assert.equal(consumeRaisingHintDuration(current.store),5000);current.store.dispose();
+});
+test('isolated presentation fallback is memory-only and does not acquire a second storage boundary',async()=>{
+  const fallback=await import('../src/championship/app/transientHint.js?memory-only');
+  assert.equal(fallback.consumeRaisingHintDuration(),5000);assert.equal(fallback.consumeRaisingHintDuration(),3000);
+  const helper=fs.readFileSync(new URL('../src/championship/app/transientHint.js',import.meta.url),'utf8');
+  assert.doesNotMatch(helper,/localStorage|\.setItem\s*\(|ChampionshipPersistentSavePort/);
+  assert.match(fs.readFileSync(new URL('../src/championship/app/main.js',import.meta.url),'utf8'),/nextHintDuration: \(\) => consumeRaisingHintDuration\(settings\.store\)/);
 });
 const read=name=>fs.readFileSync(new URL(`../src/championship/app/${name}`,import.meta.url),'utf8');
 function context(document,clock,extras={}){
@@ -95,12 +130,12 @@ test('tutorial lock is not weakened by fading or by the persistent tool toggle',
   f.button('hand').dispatchEvent(new Event('click'));assert.equal(f.toolbar.getSelectedTool(),'hand');f.toolbar.dispose();
 });
 async function raisingFixture({duration=5000,ready=true}={}){
-  const document=doc(),clock=timers(),root=document.createElement('div');let frame={revision:1,residents:[],selection:{creatureId:null},ranch:{layoutVersion:1},save:{phase:'CLEAN'}},listener,host,consumes=0,observer;
-  const c=context(document,clock,{consumeRaisingHintDuration:()=>{consumes++;return duration;},MutationObserver:class{constructor(fn){this.fn=fn;observer=this;}observe(){}disconnect(){this.disconnected=true;}}});
+  const document=doc(),clock=timers(),root=document.createElement('div');let frame={revision:1,residents:[],selection:{creatureId:null},ranch:{layoutVersion:1},save:{phase:'CLEAN'}},listener,host,consumes=0,observer;const sizeObservers=[];
+  const c=context(document,clock,{consumeRaisingHintDuration:()=>{throw Error('use injected preference owner');},ResizeObserver:class{constructor(fn){this.fn=fn;sizeObservers.push(this);}observe(target){this.target=target;}disconnect(){this.disconnected=true;}},MutationObserver:class{constructor(fn){this.fn=fn;observer=this;}observe(){}disconnect(){this.disconnected=true;}}});
   vm.runInContext(read('raisingHomeP1RView.js').replace(/^import .*;$/gm,'').replace('export async function','async function')+'\nthis.mount=createRaisingHomeP1RView;',c);
   const source={getFrame:()=>frame,subscribe:fn=>{listener=fn;return()=>listener=null;},intents:{selectCreature(){},relocateCreature(){},careForCreature(){},requestSave(){}}};
-  const view=await c.mount({root,source,firstRunHint:true,mountField:async({host:h})=>{host=h;h.setAttribute('aria-busy',String(!ready));return {get isPlayable(){return ready;},render(){},dispose(){}};}});
-  return {document,clock,root,view,get hint(){return root.querySelector('.int-rh2-hint');},get consumes(){return consumes;},get observer(){return observer;},get listener(){return listener;},ready(){ready=true;host.setAttribute('aria-busy','false');observer.fn();},render(changes={}){frame={...frame,...changes,revision:frame.revision+1};listener?.(frame);}};
+  const view=await c.mount({root,source,firstRunHint:true,nextHintDuration:()=>{consumes++;return duration;},mountField:async({host:h})=>{host=h;h.setAttribute('aria-busy',String(!ready));return {get isPlayable(){return ready;},render(){},dispose(){}};}});
+  return {document,clock,root,view,sizeObservers,get hint(){return root.querySelector('.int-rh2-hint');},get consumes(){return consumes;},get observer(){return observer;},get listener(){return listener;},ready(){ready=true;host.setAttribute('aria-busy','false');observer.fn();},render(changes={}){frame={...frame,...changes,revision:frame.revision+1};listener?.(frame);}};
 }
 for(const duration of [5000,3000])test(`Raising entry holds ${duration}ms once, not on every frame or relabel`,async()=>{
   const f=await raisingFixture({duration});assert.equal(f.consumes,1);f.clock.tick(duration-1);f.render();f.view.relabel();assert.equal(f.consumes,1);assert.equal(f.hint.dataset.hintPhase,'visible');f.clock.tick(1);assert.equal(f.hint.dataset.hintPhase,'fading');f.clock.tick(300);f.render();f.view.relabel();assert.equal(f.hint.hidden,true);assert.equal(f.consumes,1);f.view.dispose();
@@ -120,6 +155,8 @@ test('simultaneous general/tool hints reserve two measured lanes, not suppressio
   const css=read('intRh2Styles.css'),toolbar=read('championshipToolbar.js');
   assert.doesNotMatch(css,/body\[data-tool\] \.int-rh2-hint \{ display: none/);
   assert.match(css,/--cm-tool-hint-clearance, 0px/);
+  assert.match(css,/max-height: max\(0px, calc\(100% - var\(--cm-status-bar-height/);
+  assert.match(css,/\.int-rh2-hint\[data-scroll="true"\]/);
   assert.match(toolbar,/new ResizeObserver\(syncToolHintClearance\)/);
   assert.match(toolbar,/hintResizeObserver\?\.disconnect\(\)/);
   assert.match(toolbar,/removeProperty\("--cm-tool-hint-clearance"\)/);
@@ -134,4 +171,20 @@ test('disposed hint resize callbacks cannot rewrite spacing for a later screen',
   const f=toolbarFixture();f.button('clean').dispatchEvent(new Event('click'));assert.ok(f.styles.has('--cm-tool-hint-clearance'));
   f.toolbar.dispose();assert.equal(f.styles.size,0);assert.ok(f.observers.every(o=>o.disconnected));
   for(const observer of f.observers)observer.fn();assert.equal(f.styles.size,0);
+});
+
+
+test('only overflowing general text becomes scrollable/focusable; expiry and disposal clean up focus and observer',async()=>{
+  const f=await raisingFixture(),observer=f.sizeObservers[0];assert.equal(observer.target,f.hint);
+  f.hint.clientHeight=90;f.hint.scrollHeight=85;observer.fn();assert.equal(f.hint.dataset.scroll,'false');assert.equal(f.hint.tabIndex,-1);
+  f.hint.scrollHeight=190;observer.fn();assert.equal(f.hint.dataset.scroll,'true');assert.equal(f.hint.tabIndex,0);assert.equal(f.hint.getAttribute('aria-hidden'),'false');
+  const prior=f.document.createElement('button');prior.isConnected=true;
+  f.hint.dispatchEvent(Object.assign(new Event('focus'),{relatedTarget:prior}));f.hint.focus();f.clock.tick(5000);
+  assert.equal(f.document.activeElement,prior);assert.equal(f.hint.inert,true);f.clock.tick(300);assert.equal(f.hint.dataset.scroll,'false');
+  f.view.dispose();assert.equal(observer.disconnected,true);const before=f.hint;observer.fn();assert.equal(f.root.children.length,0);
+});
+test('shrinking general text releases its bounded input surface and focus without restarting its hold',async()=>{
+  const f=await raisingFixture(),observer=f.sizeObservers[0];f.hint.clientHeight=90;f.hint.scrollHeight=190;observer.fn();f.hint.focus();
+  f.clock.tick(4000);f.hint.scrollHeight=80;observer.fn();assert.equal(f.document.activeElement,f.document.body);assert.equal(f.hint.tabIndex,-1);
+  f.clock.tick(1000);assert.equal(f.hint.dataset.hintPhase,'fading');assert.equal(f.consumes,1);f.view.dispose();
 });

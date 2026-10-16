@@ -61,6 +61,9 @@ const DEFINITIONS = {
   // Language
   locale: { category: "language", scope: "account", type: "enum", values: ["zh-Hant", "en", "ja", "th", "vi"], default: "zh-Hant" },
   // Controls and accessibility
+  // Presentation-only first-use guidance. No visible settings control; reset
+  // accessibility/all preferences also restores the longer first reading.
+  raisingHintSeen: { category: "access", scope: "device", type: "boolean", default: false },
   reducedMotion: { category: "access", scope: "device", type: "enum", values: ["system", "on", "off"], default: "system" },
   flashIntensity: { category: "access", scope: "account", type: "enum", values: ["standard", "soft"], default: "standard" },
   highlightMode: { category: "access", scope: "account", type: "enum", values: ["full", "compact"], default: "full" }

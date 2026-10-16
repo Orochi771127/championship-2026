@@ -45,10 +45,10 @@ function fixture(t, { observerAvailable = true } = {}) {
   const previousDocument = globalThis.document;
   const previousObserver = globalThis.ResizeObserver;
   const observations = [];
-  let observer;
+  const observers = [];
   globalThis.document = doc;
   globalThis.ResizeObserver = observerAvailable ? class {
-    constructor(callback) { this.callback = callback; observer = this; }
+    constructor(callback) { this.callback = callback; observers.push(this); }
     observe(target, options) { observations.push({ target, options }); }
     disconnect() { this.disconnected = true; }
   } : undefined;
@@ -60,18 +60,27 @@ function fixture(t, { observerAvailable = true } = {}) {
   });
   const entries = [];
   const toolbar = createChampionshipToolbar({ root: doc.body, onMenuEntry: (entry) => entries.push(entry) });
-  const [menu, rail] = toolbar.element.children;
+  const [menu, rail, hint] = toolbar.element.children;
+  const [observer, hintObserver] = observers;
   rail.height = 52.8;
-  return { doc, toolbar, menu, rail, observer, observations, listeners, entries };
+  return { doc, toolbar, menu, rail, hint, observer, hintObserver, observations, listeners, entries };
 }
 
 test("toolbar tracks the full rail after safe-area or font changes without reserving submenu height", (t) => {
-  const { doc, toolbar, menu, rail, observer, observations } = fixture(t);
+  const { doc, toolbar, menu, rail, hint, observer, hintObserver, observations } = fixture(t);
   const height = () => doc.body.style.getPropertyValue("--cm-toolbar-height");
   assert.equal(height(), "0px");
-  assert.deepEqual(observations, [{ target: rail, options: { box: "border-box" } }]);
+  assert.deepEqual(observations, [
+    { target: rail, options: { box: "border-box" } },
+    { target: hint, options: { box: "border-box" } }
+  ]);
   toolbar.setMode(TOOLBAR_MODES.TRAINING);
   assert.equal(height(), "53px");
+  rail.children[0].events.click();
+  hint.offsetHeight = 80;
+  hintObserver.callback();
+  assert.equal(doc.body.style.getPropertyValue("--cm-tool-hint-clearance"), "88px");
+  assert.equal(height(), "53px", "hint clearance never increases the dock reservation");
   rail.children[7].events.click();
   assert.equal(menu.hidden, false);
   menu.height = 180;
@@ -85,7 +94,9 @@ test("toolbar tracks the full rail after safe-area or font changes without reser
   assert.equal(height(), "87px");
   toolbar.dispose();
   assert.equal(observer.disconnected, true);
-  observer.callback();
+  assert.equal(hintObserver.disconnected, true);
+  observer.callback(); hintObserver.callback();
+  assert.equal(doc.body.style.getPropertyValue("--cm-tool-hint-clearance"), "", "neither disposed observer rewrites hint clearance");
   assert.equal(height(), "", "a queued observer cannot recreate disposed layout state");
   assert.equal(doc.body.dataset.toolbar, undefined);
 });

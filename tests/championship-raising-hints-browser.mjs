@@ -20,13 +20,18 @@ function geometryCheck(s,kind){
   assert.ok(node.rect.left>=s.safe.left-1&&node.rect.right<=s.width-s.safe.right+1,`${name} outside horizontal safe area`);
   assert.ok(node.rect.top>=s.safe.top-1&&node.rect.bottom<=s.height-s.safe.bottom+1,`${name} outside vertical safe area`);
   assert.ok(node.rect.bottom<=s.rail.top-3.5,`${name} overlaps or touches toolbar`);
+  assert.ok(!s.statusBar.visible||!intersects(node.rect,s.statusBar.rect),`${name} overlaps status bar`);
  }
  assert.ok(!(s.general.visible&&s.tool.visible&&intersects(s.general.rect,s.tool.rect)),'General and tool hints overlap');
+ if(s.general.visible){
+  const overflow=s.general.scrollHeight>s.general.clientHeight+1;
+  if(overflow){assert.equal(s.general.scrollable,true,'Overflow general hint enables its own scroll surface');assert.equal(s.general.pointerEvents,'auto');assert.equal(s.general.tabIndex,0);assert.equal(s.general.ariaHidden,'false');}
+  else assert.equal(s.general.pointerEvents,'none','Normal general hint must not intercept field input');
+ }
  if(kind==='general'){
   assert.ok(s.general.visible,'General hint is visibly rendered');
   assert.ok(s.general.rect.left<s.width/2,'General hint is bottom-left, not centered/right');
   assert.ok(s.rail.top-s.general.rect.bottom<48,'General hint belongs immediately above dock');
-  assert.equal(s.general.pointerEvents,'none','General hint must not intercept field input');
  }else if(kind==='tool'){
   assert.ok(s.tool.visible,'Selected tool instruction is rendered');
   assert.ok(Math.abs((s.tool.rect.left+s.tool.rect.right-s.rail.left-s.rail.right)/2)<=2,'Tool instruction is centered over toolbar');
@@ -53,6 +58,11 @@ function selfTest(){
  assert.equal(intersects({left:0,right:6,top:0,bottom:5},{left:5,right:10,top:0,bottom:5}),true);
  assert.deepEqual(durationCheck([{kind:'tool',phase:'visible',time:10},{kind:'tool',phase:'fading',time:2010},{kind:'tool',phase:'opacity-sample',time:2130,opacity:0.5},{kind:'tool',phase:'hidden',time:2310}],'tool',2000),{holdObservedMs:2000,fadeObservedMs:300,expectedHoldMs:2000,expectedFadeMs:300});
  assert.throws(()=>durationCheck([{kind:'tool',phase:'visible',time:10},{kind:'tool',phase:'fading',time:4010},{kind:'tool',phase:'hidden',time:4310}],'tool',2000));
+ const state={width:390,height:844,safe:{left:0,right:0,top:0,bottom:0},overflow:false,
+  rail:{left:0,right:390,top:760,bottom:844,width:390},statusBar:{visible:true,rect:{left:0,right:390,top:0,bottom:60}},
+  general:{visible:true,rect:{left:8,right:300,top:700,bottom:750},pointerEvents:'none'},tool:{visible:false}};
+ geometryCheck(state,'general');
+ assert.throws(()=>geometryCheck({...state,general:{...state.general,rect:{...state.general.rect,top:50}}},'general'),/overlaps status bar/);
  console.log('PASS runner assertions self-test (not browser acceptance)');
 }
 // This function runs in the browser. It mounts unchanged production DOM owners.
@@ -99,10 +109,10 @@ async function mountHarness(options){
 }
 function snapshot(){
  const rect=e=>{const r=e?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}:null;};
- const node=s=>{const e=document.querySelector(s),c=e&&getComputedStyle(e),r=rect(e);return {visible:!!(e&&!e.hidden&&c.display!=='none'&&c.visibility!=='hidden'&&Number(c.opacity)>0.01&&r.width&&r.height),rect:r,phase:e?.dataset.hintPhase,pointerEvents:c?.pointerEvents,opacity:c?.opacity,transitionDuration:c?.transitionDuration,text:e?.textContent};};
+ const node=s=>{const e=document.querySelector(s),c=e&&getComputedStyle(e),r=rect(e);return {visible:!!(e&&!e.hidden&&c.display!=='none'&&c.visibility!=='hidden'&&Number(c.opacity)>0.01&&r.width&&r.height),rect:r,phase:e?.dataset.hintPhase,pointerEvents:c?.pointerEvents,opacity:c?.opacity,transitionDuration:c?.transitionDuration,text:e?.textContent,scrollable:e?.dataset.scroll==='true',scrollHeight:e?.scrollHeight,clientHeight:e?.clientHeight,scrollTop:e?.scrollTop,tabIndex:e?.tabIndex,ariaHidden:e?.getAttribute('aria-hidden')};};
  const safe=k=>parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-'+k))||0;
  return {width:innerWidth,height:innerHeight,safe:{left:safe('left'),right:safe('right'),top:safe('top'),bottom:safe('bottom')},
-  rail:rect(document.querySelector('.cm-toolbar__rail')),general:node('.int-rh2-hint'),tool:node('.cm-toolbar__tool-hint'),done:node('.cm-toolbar__tool-done'),
+  rail:rect(document.querySelector('.cm-toolbar__rail')),statusBar:node('.cm-status-bar'),general:node('.int-rh2-hint'),tool:node('.cm-toolbar__tool-hint'),toolText:node('.cm-toolbar__tool-text'),done:node('.cm-toolbar__tool-done'),
   overflow:document.documentElement.scrollWidth>innerWidth+1,selected:document.querySelector('.cm-toolbar')?.dataset.selectedTool,
   activeTool:document.activeElement?.dataset.toolId??null};
 }
@@ -114,7 +124,7 @@ async function main(){
  const {chromium}=require('playwright');
  const report={status:'RUNNING',commit:process.env.GITHUB_SHA??null,candidateHead:process.env.HINT_QA_HEAD_SHA??null,baseCommit:process.env.HINT_QA_BASE_SHA??null,
   scope:'Unmodified production DOM modules/CSS with controlled presentation seam, real wall-clock timers; separate controlled owned-party normal game/PIXI smoke.',
-  limits:['Not physical Safari/device acceptance','Stress strings and safe areas are synthetic layout inputs','DOM matrix does not assert gameplay'],geometry:[],timings:[],errors:[],sourceHashes:[]};
+  limits:['Not physical Safari/device acceptance','Stress strings and safe areas are synthetic layout inputs','DOM matrix does not assert gameplay'],geometry:[],scrollChecks:[],timings:[],errors:[],sourceHashes:[]};
  for(const file of ['src/championship/app/raisingHomeP1RView.js','src/championship/app/championshipToolbar.js','src/championship/app/transientHint.js','src/championship/app/intRh2Styles.css','src/championship/app/main.js','championship.html'])report.sourceHashes.push({file,sha256:sha256(await fs.readFile(file))});
  const write=()=>fs.writeFile(path.join(output,'result.json'),JSON.stringify(report,null,2)+'\n');
  const html=await fs.readFile('championship.html','utf8');
@@ -142,6 +152,18 @@ async function main(){
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     measured=await page.evaluate(snapshot);report.geometry.push({width,height,locale,theme,stress,state:'joint-general-and-tool',...measured});geometryCheck(measured,'tool');assert.equal(measured.general.visible,true,'Both hint lifetimes overlap: general must stay visible, not vacuously avoid collision by hiding');
     if(locale==='zh-Hant'&&!stress||locale==='vi'&&stress)await shot(page,`${width}x${height}-${locale}-${theme}-${stress?'stress':'normal'}-tool`);
+    if(measured.general.scrollable){
+     const general=page.locator(GENERAL);await general.focus();await page.keyboard.press('End');await page.waitForTimeout(180);
+     const scrolled=await page.evaluate(snapshot);assert.ok(scrolled.general.scrollTop>0,'Overflow general hint scrolls via ordinary keyboard input');
+     report.scrollChecks.push({width,height,locale,theme,stress,target:'general',scrollTop:scrolled.general.scrollTop,clientHeight:scrolled.general.clientHeight,scrollHeight:scrolled.general.scrollHeight});
+    }
+    if(measured.toolText.scrollHeight>measured.toolText.clientHeight+1){
+     const text=measured.toolText;assert.equal(text.pointerEvents,'auto','Overflow tool text keeps its existing scroll surface');
+     assert.ok(text.rect.top>=measured.tool.rect.top-1&&text.rect.bottom<=measured.tool.rect.bottom+1,'Tool text scroll viewport fits within its card');
+     await page.mouse.move((text.rect.left+text.rect.right)/2,(text.rect.top+text.rect.bottom)/2);await page.mouse.wheel(0,120);await page.waitForTimeout(180);
+     const scrolled=await page.evaluate(snapshot);assert.ok(scrolled.toolText.scrollTop>0,'Overflow tool text scrolls via ordinary wheel input');
+     report.scrollChecks.push({width,height,locale,theme,stress,target:'tool-text',scrollTop:scrolled.toolText.scrollTop,clientHeight:scrolled.toolText.clientHeight,scrollHeight:scrolled.toolText.scrollHeight});
+    }
    }catch(error){await shot(page,`failure-${width}x${height}-${locale}-${theme}-${stress?'stress':'normal'}`).catch(()=>{});throw error;}finally{await context.close();}
   }
   // One real timer run per lifecycle boundary; no timer or CSS animation mocks.
@@ -177,6 +199,34 @@ async function main(){
  finally{await browser.close();}
  console.log(JSON.stringify({status:report.status,geometryStates:report.geometry.length,timingCases:report.timings.length,output}));
 }
+async function enterControlledGame(page,evidence){
+ evidence.entryActions=[];
+ // The film is installed after login is enabled. Wait for its actual DOM owner,
+ // then use only visible controls; the fixture may already be in the game.
+ await page.waitForFunction(()=>document.querySelector('#cm-opening-film')||document.querySelector('#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])'));
+ const deadline=Date.now()+90000;
+ while(Date.now()<deadline){
+  if(await page.locator('#cm-root[data-active-screen="RAISING_HOME"]:visible').count())return;
+  const skip=page.locator('#cm-film-skip');
+  if(await skip.isVisible()){
+   await skip.click();evidence.entryActions.push('skip-opening-film');
+   await page.locator('#cm-opening-film').waitFor({state:'hidden'});
+   // Production intentionally consumes pointer/key events for 350ms after Skip.
+   // Respect that guard rather than force-clicking or changing application state.
+   await page.waitForTimeout(450);continue;
+  }
+  const resume=page.locator('#cm-continue');
+  if(await resume.isVisible()&&await resume.isEnabled()){
+   await resume.click();evidence.entryActions.push('continue-visible-save');return;
+  }
+  const login=page.locator('#cm-login');
+  if(await login.isVisible()&&await login.isEnabled()){
+   await login.click();evidence.entryActions.push('enter-visible-title');
+  }
+  await page.waitForTimeout(300);
+ }
+ throw new Error('Controlled save did not expose an ordinary visible Continue or Raising screen');
+}
 async function normalGame(browser,base,output,report){
  const context=await browser.newContext({viewport:{width:1366,height:768},locale:'zh-TW',serviceWorkers:'block'}),page=await context.newPage();page.setDefaultTimeout(90000);
  const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare',errors:[],before:null,after:null};
@@ -184,9 +234,8 @@ async function normalGame(browser,base,output,report){
  try{
   await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);await page.locator('#prepare').click();await page.locator('#status').filter({hasText:'受控存檔已準備'}).waitFor();
   // The fixture owns this throwaway origin only. Subsequent actions are production UI.
-  await page.goto(new URL('championship.html?presentation=developer',base).href);await page.locator('#cm-login').waitFor();
-  if(await page.locator('#cm-film-skip').isVisible()){await page.locator('#cm-film-skip').click();await page.locator('#cm-opening-film').waitFor({state:'hidden'});}
-  await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);await page.locator('#cm-login').click();await page.locator('#cm-continue').click();
+  await page.goto(new URL('championship.html?presentation=developer',base).href);
+  await enterControlledGame(page,evidence);
   await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();
   await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});
   assert.ok(await page.locator('.int-rh2-field-host canvas').count()>0,'Normal Raising owns a real canvas');

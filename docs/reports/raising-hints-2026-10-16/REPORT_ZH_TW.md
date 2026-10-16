@@ -12,7 +12,7 @@ Owner 的三張實際畫面將一般操作提示圈在上方、清潔工具說�
 - 兩提示同時存活時，一般提示在左下的上一列，工具提示在工具列上方置中。工具提示的實際換行高度加 8px 由既有工具列 DOM 回報；不使用語言專屬固定高度。淡出完成後才釋放這列空間。
 - 工具每次新選取重新計時 2 秒；語言更新、庫存更新、相同 mode 更新不重啟。快速換工具會取消舊的 hold/fade timer。導覽離開與 dispose 會解除 timer、observer 與 listener。
 - 降低動態偏好仍保留 5／3／2 秒閱讀時間，但不做淡出動畫。
-- 一般提示不攔截場景操作。工具選取狀態及實際操作完全保留，時間到只隱藏提示，不呼叫工具／玩法 intent。
+- 一般提示正常長度不攔截場景操作。極端加長文字超出剩餘高度時，限制在狀態列下方、工具提示上方的可用範圍內，只有文字卡本身可觸控／鍵盤捲動，不覆蓋場景其他區域；焦點會在淡出前返回原控制。工具選取狀態及實際操作完全保留，時間到只隱藏提示，不呼叫工具／玩法 intent。
 
 ## 工具退出與可及性
 
@@ -20,7 +20,7 @@ Owner 的三張實際畫面將一般操作提示圈在上方、清潔工具說�
 
 ## 首次使用偏好與保存邊界
 
-`championship-2026.ui.raising-hint-seen.v1` 僅保存字串 `1`，是瀏覽器 UI 使用偏好，不是遊戲 save、帳號識別或日曆值。只在第一次真正顯示時判定首次；首次已開始但中途離開，也算已看過。無法讀寫 localStorage 時降級成該分頁模組的記憶體狀態，不阻止遊玩，不宣稱成功持久保存。沒有讀寫遊戲存檔、錢幣、鑽石、背包或角色欄位，也沒有 save schema migration。
+`raisingHintSeen` 是既有 `settings/preferenceSchema.js` 的 device／access 布林顯示偏好，預設 false。應用程式把既有 preference store 注入提示期限 callback；只有 `ChampionshipPersistentSavePort.js` 的既有 preference port 可持久寫入 `championshipModernSave:preferences:v1`。沒有額外 storage key、第二個 writer，亦不放寬 migration firewall。只在第一次真正顯示時設為 true；首次已開始但中途離開，也算已看過。儲存被拒絕時，既有 store 保留此分頁值並誠實回報失敗；新版 preference 文件仍 read-only、不被覆寫。重設「操作與輔助」或全部偏好可恢復首次 5 秒，重設音效不會影響它。沒有讀寫遊戲存檔、錢幣、鑽石、背包或角色欄位，也沒有 save schema migration。隔離展示未注入 store 時只使用模組記憶體，不接觸 Storage。
 
 ## 驗證與界線
 
@@ -32,4 +32,13 @@ Owner 的三張實際畫面將一般操作提示圈在上方、清潔工具說�
 
 ## 打包
 
-新增的 `transientHint.js` 加入既有 build input 的 `moduleEntries`、`files`、公開選用 hash；僅更新本次四個既有 runtime 檔的 hash。其餘紀錄逐項保持不變，不重排 ledger、不加入 ledger 自己。工程測試列入既有 CI scope，瀏覽器 runner 單獨分類並由專用工作流程執行。
+新增的 `transientHint.js` 加入既有 build input 的 `moduleEntries`、`files`、公開選用 hash；後續修正只更新實際變動的 runtime／preference schema hash。其餘紀錄逐項保持不變，不重排 ledger、不加入 ledger 自己。工程測試列入既有 CI scope，瀏覽器 runner 單獨分類並由專用工作流程執行。
+
+
+## d51cd84 精準修正與驗證
+
+修正基底：`d51cd84ee8814725c300917bb6c21781f59f6fea`，tree `2e818948f4db9d805b1b6dd2914e7ff280da6323`。該次 hosted build／validate 通過，原 CI 2403／2405 通過；兩項失敗是新的直接 Storage writer 與舊測試只預期一個 ResizeObserver。現已改走既有偏好 owner，並讓工具列測試同時驗證 rail 與 hint observer、量測彼此獨立及兩者 dispose 後都不能重寫 CSS。
+
+該次瀏覽器 120 組矩形與 5／3／2 秒、300ms 檢查通過，但人工檢視發現 844×390、越南文四倍加長／130% 文字／模擬安全區的提示超出上方狀態列。此修正加上頂部界線及溢位文字捲動，不能沿用舊矩形通過當作新畫面驗收。QA 另修正開場片 Skip 尚未出現時就檢查一次的入口競態，依實際可見的片／登入／繼續／育成狀態前進，沒有跳過玩法。
+
+本機修正後 88／88 聚焦 Node 測試通過；不改動的「一個 save key／一個 persistent writer／一個 Pixi bootstrap／無第二 ticker」firewall 個案另通過。新瀏覽器 runner 語法與 self-test 通過；頂部界線、溢位捲動及正常育成 smoke 仍待下一個 exact-head hosted CI，不宣稱已通過。

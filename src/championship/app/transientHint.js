@@ -4,17 +4,15 @@ import { prefersReducedMotion } from '../presentation/presentationPreferences.js
 // simulation deadline. A new show invalidates both timers from the old hint.
 export const HINT_FADE_MS = 300;
 export const TOOL_HINT_MS = 2000;
-export const RAISING_HINT_SEEN_KEY = 'championship-2026.ui.raising-hint-seen.v1';
 let seenThisSession = false;
 
-/** A browser UI preference, separate from the canonical gameplay save.
- * Storage failure degrades to session memory; it never blocks entering play. */
-export function consumeRaisingHintDuration() {
-  let storage;
-  let seen = seenThisSession;
-  try { storage = globalThis.localStorage; seen ||= storage?.getItem(RAISING_HINT_SEEN_KEY) === '1'; } catch { /* denied storage */ }
-  seenThisSession = true;
-  try { storage?.setItem(RAISING_HINT_SEEN_KEY, '1'); } catch { /* session fallback */ }
+/** The app injects its existing preference store: one guarded writer, no new
+ * storage key or save authority. A blocked/read-only store retains the value
+ * for this session. Isolated presentations without a store use memory only. */
+export function consumeRaisingHintDuration(preferences = null) {
+  const seen = preferences ? preferences.get().raisingHintSeen === true : seenThisSession;
+  if (preferences) preferences.set('raisingHintSeen', true);
+  else seenThisSession = true;
   return seen ? 3000 : 5000;
 }
 

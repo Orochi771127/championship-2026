@@ -87,7 +87,7 @@ function cageName(frame, cageId) {
  * @param {() => void} [options.openRoster] opens the Digimon roster
  */
 export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, getRosterEntry=null,
-  renderCreatureDetail=null, openRoster=null, firstRunHint=false } = {}) {
+  renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
   if (typeof mountField !== "function") {
@@ -117,8 +117,22 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   hint.setAttribute("aria-hidden", "true");
   // The app enables entry guidance, not a gameplay/calendar predicate. The
   // first actual playable display lasts 5s; later view entries last 3s.
-  const hintTimer = createTransientHint(hint);
-  let hintStarted = false, disposed = false;
+  let hintStarted = false, disposed = false, hintFocusReturn = null;
+  function restoreHintFocus() {
+    if (root.ownerDocument?.activeElement !== hint) return;
+    if (hintFocusReturn?.isConnected) hintFocusReturn.focus?.();
+    else hint.blur?.();
+  }
+  function syncHintOverflow() {
+    if (disposed) return;
+    const overflowing = !hint.hidden && hint.scrollHeight > hint.clientHeight + 1;
+    hint.dataset.scroll = String(overflowing);
+    hint.tabIndex = overflowing ? 0 : -1;
+    hint.setAttribute('aria-hidden', String(!overflowing));
+    if (!overflowing) restoreHintFocus();
+  }
+  hint.addEventListener('focus', event => { hintFocusReturn = event.relatedTarget; });
+  const hintTimer = createTransientHint(hint, { beforeHide: restoreHintFocus, onPhaseChange: syncHintOverflow });
   function updateEntryHint(frame) {
     if (disposed || hintStarted || !firstRunHint || field.isPlayable === false) return;
     if (root.ownerDocument?.hidden || fieldHost.getAttribute('aria-busy') === 'true') return;
@@ -127,7 +141,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const body = root.ownerDocument?.body;
     if (body?.hasAttribute?.('data-tutorial-guide')) return;
     hintStarted = true;
-    hintTimer.show(consumeRaisingHintDuration());
+    hintTimer.show(nextHintDuration());
   }
 
   // ---- The resident card (a resident is picked) -------------------------
@@ -254,6 +268,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   shell.append(fieldFrame, hint, companion, notice);
   root.append(shell, detail);
+  // Only genuinely overflowing text becomes a bounded scroll/focus surface.
+  // Ordinary short hints stay transparent to field gestures.
+  const hintSizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(syncHintOverflow) : null;
+  hintSizeObserver?.observe(hint, { box: 'border-box' });
+  if (!hintSizeObserver) root.ownerDocument?.defaultView?.addEventListener?.('resize', syncHintOverflow);
 
   let noticeTimer = null;
   let stickyNotice = null;
@@ -617,6 +636,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       if (disposed) return;
       disposed = true;
       hintTimer.dispose();
+      hintSizeObserver?.disconnect();
+      root.ownerDocument?.defaultView?.removeEventListener?.('resize', syncHintOverflow);
       hintObserver?.disconnect();
       root.ownerDocument?.removeEventListener?.('visibilitychange', reconsiderHint);
       evolutionCeremony?.dispose();
