@@ -156,7 +156,7 @@ test("Database translates every registered species without revealing unregistere
   assert.equal(new Set(ids).size,226);assert.ok(!ids.includes(228));
   assert.deepEqual(ids.filter(id=>id>=8).sort((a,b)=>a-b),[...registeredSpecies].sort((a,b)=>a-b));
   assert.deepEqual(ids.filter(id=>id>=8&&![211,222,229,230].includes(id)),
-    NATIVE_REGULAR_BOOK_SPECIES.filter(id=>![211,222].includes(id)));
+    NATIVE_REGULAR_BOOK_SPECIES.filter(id=>![211,222].includes(id)).map(id=>id===121?125:id===125?121:id));
   assert.deepEqual(['EG','B1','B2','GR','MA','AW','UL'].map(prefix=>rows.filter(row=>row.dataset.displayCode.startsWith(prefix)).length),[8,12,14,38,64,51,39]);
   assert.equal(rows.at(-1).dataset.displayCode,'UL39');
   for (const row of rows) row.click();

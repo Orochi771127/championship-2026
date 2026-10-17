@@ -4,6 +4,9 @@ import {selectedShopCageProjection} from './lib/public-shop-cage-projection.mjs'
 import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS,PUBLIC_RENDER_RECIPE} from './lib/public-render-projection.mjs';
 import {selectedMapProjections,MAP_RECIPE,PUBLIC_MAP_FIELDS} from './lib/public-map-projection.mjs';
 import {projectPublicMetadata,METADATA_RECIPE} from './lib/public-metadata-projection.mjs';
+import {publicCleanMedia} from './lib/public-clean-media.mjs';
+import {publicProgramData,PROGRAM_RECIPE} from './lib/public-program-data.mjs';
+import {compileBrowserBundle} from './lib/browser-bundle.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -13,6 +16,9 @@ const index=read('assets/production/ART_PRODUCTION_INDEX.json'),heroes=read('src
 const render=projectPublicRenderSources({root,input,index}),shop=selectedShopCageProjection({root,input,index});
 const maps=selectedMapProjections({root,input});
 const metadata=projectPublicMetadata({root,input});
+const cleanMedia=publicCleanMedia({root}),cleanMap=new Map(cleanMedia.map(row=>[row.sourcePath,row]));
+const program=publicProgramData({root});
+input.importMap['pixi.js']='./assets/production/public-runtime/vendor-pixi.mjs';
 const selectedOriginal=new Map([...shop.files,...render.media,...maps.files,...metadata.media]);
 const activeHeroes=new Set(heroes.entries.map(row=>row.src));
 const excluded=[];
@@ -24,6 +30,9 @@ read(MAP_RECIPE).sources.forEach(row=>buildOnly.add(row.path));
 buildOnly.add('assets/production/hunt/licensed-runtime-v1/manifest.json');
 read(METADATA_RECIPE).sources.forEach(row=>buildOnly.add(row.path));
 buildOnly.add('assets/production/cage/licensed-runtime-v1/manifest.json');
+buildOnly.add('assets/production/medal-name-corrections-20261014/manifest.json');
+buildOnly.add('node_modules/pixi.js/dist/pixi.mjs');
+cleanMedia.forEach(row=>buildOnly.add(row.sourcePath));
 // Explicit loopback art-review tools are absent from the normal browser bundle.
 // Keep their source in Git, outside the public program entry/closure.
 for(const name of ['candidateCharacterArtReview.js','candidateCharacterHudReview.js','m001CharacterArtReview.js','m001CharacterHudReview.js'])buildOnly.add('src/championship/presentation/'+name);
@@ -36,8 +45,12 @@ allow.assets=allow.assets.filter(row=>!row.id.endsWith(':database-hero'));
 allow.assets.push(...heroes.entries.map(row=>({id:`${row.speciesId}:database-hero`,src:row.src,sha256:row.sha256,width:row.width,height:row.height})));
 const rows=new Map(allow.files.map(row=>[row.path,row]));
 const refreshed=['src/data/championship/database-hero-portraits.public.v1.json','src/championship/presentation/publicRenderDescriptors.js',
+ 'championship.html','src/championship/presentation/publicAlternateFormBindings.js',
+ ...['battleCharacterGeometry.js','battleCharacterProfiles.js','characterNativeSizing.js'].map(name=>'src/data/championship/'+name),
+ 'src/championship/presentation/dataArena/dataArenaRoster.js','src/championship/app/dataArenaScreen.js','src/championship/presentation/evolutionGlyphArt.js',
  'src/championship/presentation/publicMetadata.js','src/championship/presentation/cageForeground.js',
  'src/championship/presentation/acceptedDatabasePortraits.js',
+ 'src/championship/app/championshipStatusBar.js','src/data/championship/public-ui-selection.v1.json',
  'src/championship/presentation/vfx/licensedVfxRuntimeBundle.js',
  ...['dataArenaEnvironment.js','dataArenaInteractionArt.js','dataArenaTournamentArt.js'].map(name=>'src/championship/presentation/dataArena/'+name),
  'src/championship/presentation/publicMapRequests.js','src/championship/presentation/runtimeMapArtBundle.js',
@@ -62,15 +75,28 @@ for(const descriptor of maps.descriptors){
  allow.assets=allow.assets.filter(row=>row.id!==descriptor.id);allow.assets.push({id:descriptor.id,src:descriptor.path,sha256:descriptor.sha256});
 }
 for(const [file,hash] of maps.files){
- const existing=rows.get(file);if(existing&&existing.sha256!==hash)throw Error('PUBLIC_MAP_MEDIA_APPROVAL_CONFLICT:'+file);
+ const existing=rows.get(file),derived=metadata.descriptors.find(row=>row.path===file&&row.sha256===hash);
+ if(existing&&existing.sha256!==hash&&!derived)throw Error('PUBLIC_MAP_MEDIA_APPROVAL_CONFLICT:'+file);
  // Geometry files retain their previously selected closed schema.
- rows.set(file,existing??{path:file,sha256:hash});
+ rows.set(file,derived?{path:file,sha256:hash,jsonFields:derived.jsonFields}:existing??{path:file,sha256:hash});
 }
 for(const descriptor of metadata.descriptors){
  if(!fs.readFileSync(path.join(root,descriptor.path)).equals(descriptor.bytes))throw Error('PUBLIC_METADATA_EXPORT_REQUIRED:'+descriptor.role);
  rows.set(descriptor.path,{path:descriptor.path,sha256:descriptor.sha256,jsonFields:descriptor.jsonFields});
  allow.assets=allow.assets.filter(row=>row.id!==descriptor.id);allow.assets.push({id:descriptor.id,src:descriptor.path,sha256:descriptor.sha256});
 }
+for(const row of cleanMedia)rows.set(row.path,{path:row.path,sha256:row.sha256});
+for(const row of program)rows.set(row.path,{path:row.path,sha256:row.sha256,jsonFields:row.jsonFields});
+// Esbuild records every literal static/dynamic import in the normal program.
+// Rendering JSON requested at runtime stays explicitly selected separately.
+// Authoring/test entry modules and unused contract documents stay in Git.
+const normal=compileBrowserBundle(root,{...input,files:[...rows.keys()]}).metadata;
+const normalInputs=new Set(normal.inputFiles.map(row=>row.path));
+for(const file of rows.keys())if((/^src\/.+\.(?:m?js|json)$/.test(file)||/^docs\/contracts\//.test(file))&&!normalInputs.has(file)){
+ rows.delete(file);excluded.push(file);
+}
+rows.delete('assets/production/evolution-glyphs-v1/manifest.json');
+allow.assets=allow.assets.map(row=>{const clean=cleanMap.get(row.src);return clean?{...row,src:clean.path,sha256:clean.sha256}:row;});
 allow.files=[...rows.values()].sort((a,b)=>a.path.localeCompare(b.path,'en'));
 allow.assets.sort((a,b)=>a.id.localeCompare(b.id,'en'));
 const runtime=publicRuntimeIndex(allow,index,selectedOriginal);write(PUBLIC_RUNTIME_INDEX_PATH,runtime);
@@ -79,8 +105,9 @@ write(PUBLIC_RUNTIME_ALLOWLIST_PATH,allow);
 input.schemaVersion=2;
 input.authoring={indexPath:'assets/production/ART_PRODUCTION_INDEX.json',policyPath:'src/data/championship/public-playtest.r1.json',renderRecipePath:PUBLIC_RENDER_RECIPE};
 input.authoring.metadataRecipePath=METADATA_RECIPE;
+input.authoring.programRecipePath=PROGRAM_RECIPE;
 input.files=allow.files.map(row=>row.path);
-const available=new Set(input.files);input.moduleEntries=input.moduleEntries.filter(file=>available.has(file));
+input.moduleEntries=normal.inputFiles.map(row=>row.path).filter(file=>/\.(?:m?js)$/.test(file));
 input.publicPlaytest.files=allow.files.map(({path,sha256})=>({path,sha256}));
 write(inputPath,input);
 console.log(JSON.stringify({schemaVersion:2,publicInputFiles:input.files.length,publicAssets:runtime.assets.length,heroEntries:heroes.entries.length,

@@ -5,9 +5,24 @@ import {cageForegroundPlan} from '../src/championship/presentation/cageForegroun
 import {sampleNitroVisibility,sampleNitroMaterialAnimation} from '../src/championship/presentation/vfx/nitroVfxAnimationSidecar.js';
 import {validateRuntimeMapArtBundle} from '../src/championship/presentation/runtimeMapArtBundle.js';
 import {mountDataArenaEnvironment} from '../src/championship/presentation/dataArena/dataArenaEnvironment.js';
+import {dataArenaCast,loadDataArenaCharacter} from '../src/championship/presentation/dataArena/dataArenaRoster.js';
+import {publicCharacterConfig} from '../src/championship/presentation/publicCharacterCatalog.js';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8')),input=read('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json'),recipe=read(METADATA_RECIPE),projection=projectPublicMetadata({root:process.cwd(),input});
 const row=role=>projection.descriptors.find(r=>r.role===role),source=r=>projection.sources.get(r.sourcePath);
 const sha=b=>createHash('sha256').update(b).digest('hex');
+
+test('arena cast uses exact public character and HUD bindings; changed bytes fail before decoding',async()=>{
+ const base='https://orochi771127.github.io/championship-2026/',cast=dataArenaCast(base);
+ for(const member of [...cast.partners,cast.mate,...cast.rivals,cast.boss]){
+  if(!member.art)continue;
+  const selected=publicCharacterConfig(member.speciesId),hud=read(selected.hudPath);
+  assert.equal(member.art.runtimeUrl,new URL(selected.runtimePath,base).href);
+  assert.equal(member.art.runtimeSha256,selected.runtimeSha256);
+  assert.equal(member.art.portraitUrl,new URL(hud.portrait.src,base).href);
+  assert.equal(member.art.entityId,selected.entityId);assert.equal(member.art.sourceBankSha256,undefined);
+  await assert.rejects(loadDataArenaCharacter({art:member.art,PIXI:{},fetchImpl:async()=>new Response('{}')}),/DATA_ARENA_ART_HASH/);
+ }
+});
 test('52 source descriptions remain byte-identical; only 33 required runtime descriptions are selected',()=>{
  assert.equal(recipe.sources.length,52);assert.equal(projection.descriptors.length,33);
  for(const r of recipe.sources){assert.equal(sha(fs.readFileSync(r.path)),r.sha256);assert.ok(!input.files.includes(r.path));}

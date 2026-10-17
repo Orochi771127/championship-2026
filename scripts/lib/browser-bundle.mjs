@@ -4,7 +4,7 @@ import {fileURLToPath} from 'node:url';
 export function compileBrowserBundle(root,input){
   if(!input.browserBundle)return null;
   const result=JSON.parse(execFileSync(process.execPath,[fileURLToPath(new URL('./browser-bundle-worker.mjs',import.meta.url))],
-    {cwd:root,input:JSON.stringify({root,files:input.files,recipe:input.browserBundle}),encoding:'utf8',
+    {cwd:root,input:JSON.stringify({root,files:input.files,recipe:input.browserBundle,importMap:input.importMap}),encoding:'utf8',
       maxBuffer:64*1024*1024,windowsHide:true}));
   return {...result,files:result.files.map(file=>({path:file.path,bytes:Buffer.from(file.base64,'base64')}))};
 }

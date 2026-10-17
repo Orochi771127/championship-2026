@@ -6,7 +6,7 @@ import * as esbuild from 'esbuild';
 // Build-only packaging of the existing application. Every source read must be
 // present in the already audited public input set; no new runtime authority.
 let raw='';for await(const chunk of process.stdin)raw+=chunk;
-const {root,files,recipe}=JSON.parse(raw),allowed=new Set(files);
+const {root,files,recipe,importMap={}}=JSON.parse(raw),allowed=new Set(files);
 if(recipe.version!==1||recipe.entry!=='src/championship/app/main.js'
   ||recipe.outputDirectory!=='src/championship/app/_bundled'||recipe.toolVersion!==esbuild.version)
   throw Error('BROWSER_BUNDLE_RECIPE_MISMATCH');
@@ -16,6 +16,7 @@ const result=await esbuild.build({absWorkingDir:root,entryPoints:[recipe.entry],
   format:'esm',platform:'browser',target:'es2022',metafile:true,write:false,
   minifyWhitespace:true,minifySyntax:true,minifyIdentifiers:false,keepNames:true,charset:'utf8',
   external:['node:*'],logLevel:'silent',plugins:[{name:'approved-source-and-module-urls',setup(build){
+    build.onResolve({filter:/^pixi\.js$/},args=>importMap[args.path]?{path:path.resolve(root,importMap[args.path])}:undefined);
     build.onLoad({filter:/\.(?:m?js|json)$/},async args=>{
       const file=path.relative(root,args.path).replaceAll('\\','/');
       if(!allowed.has(file))throw Error(`BROWSER_BUNDLE_UNAPPROVED_INPUT: ${file}`);

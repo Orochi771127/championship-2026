@@ -37,7 +37,7 @@ export function projectPublicMetadata({root,input}){
  for(const row of recipe.sources){
   const bytes=fs.readFileSync(path.join(root,row.path));if(sha(bytes)!==row.sha256)throw Error('METADATA_SOURCE_CHANGED_REVIEW_REQUIRED:'+row.path);
   const source=JSON.parse(bytes);sources.set(row.path,source);if(!row.role)continue;
-  const value=metadataProjection(source,row,paths),out=Buffer.from(JSON.stringify(value,null,2)+'\n');
+  const value=metadataProjection(source,row,paths),out=Buffer.from(JSON.stringify(value)+'\n');
   const visit=v=>{if(Array.isArray(v))v.forEach(visit);else if(v&&typeof v==='object'){
    if(typeof v.src==='string'&&!v.src.endsWith('.json')){const hash=approved.get(v.src);if(!hash)throw Error('METADATA_MEDIA_NOT_APPROVED:'+v.src);media.set(v.src,hash);}
    if(typeof v.model==='string'){const hash=approved.get(v.model);if(!hash)throw Error('METADATA_MODEL_NOT_APPROVED:'+v.model);media.set(v.model,hash);}

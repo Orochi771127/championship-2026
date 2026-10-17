@@ -9,6 +9,8 @@ import {assertPublicCharacterSelection} from './public-character-boundary.mjs';
 import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS} from './public-render-projection.mjs';
 import {selectedMapProjections,PUBLIC_MAP_FIELDS} from './public-map-projection.mjs';
 import {projectPublicMetadata} from './public-metadata-projection.mjs';
+import {publicCleanMedia} from './public-clean-media.mjs';
+import {publicProgramData} from './public-program-data.mjs';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -20,7 +22,7 @@ const privateExtension=/\.(?:nds|srl|nxr|ncer|ncgr|nclr|nanr|nscr|nbs|nbsr|atr|d
 const selectedMedia=(file,hash,selection)=>/\.(?:png|webp|jpe?g|wav|mp3|mp4)$/i.test(file)
  &&selection?.get(file)===hash;
 const privateKey=/^(?:localOnly|reviewOnly|qaOnly|runtimeEligible|shippingReady|humanApproved|assistantReviewed|runtimeQaPassed|productionStatus|shippingStatus|artifactMaturity|rightsStatus|rightsEvidenceIds|ownerReply(?:Id)?|ownerInstruction|ownerDirection|scopeQuestionId|commitPushPublishInstructionId|approval.*|library(?:File)?Id|library_file_id|source(?:Reference.*|Review.*|Master.*|Archive.*|BankSha256|BindingEvidence)|prompt.*|artDirection|designRevision|selectedGenerationVersion|review|provenance|localPackagingProvenance|privateVaultReference|evidence_record)$/i;
-const privateValue=/(?:libfile_[a-z0-9]+|Sentinel_[a-z0-9]+|\b[A-Za-z]:[\\/](?:Users|Projects|Workspace|Private|Temp)|YDIJ_PRIVATE_ROM_ART_PACK|ROM_COPYRIGHTED_REFERENCE|LOOPBACK_RESEARCH_ONLY|file:\/\/)/i;
+const privateValue=/(?:libfile_[a-z0-9]+|Sentinel_[a-f0-9]{32}\b|\bSentinel_[a-z0-9]+|\b[A-Za-z]:[\\/]+(?:Users|Projects|Workspace|Private|Temp)|YDIJ_PRIVATE_ROM_ART_PACK|ROM_COPYRIGHTED_REFERENCE|LOOPBACK_RESEARCH_ONLY|file:\/\/(?=[^\s\'"<>]*[a-z0-9]))/i;
 const manifestFields=['schemaVersion','target','buildId','commit','inputSha256','entry','publicReleasePermitted','loopbackOnly','sourcePayloadIncluded','faithfulInternalVfxIncluded','romDerivedBattleCatalogsIncluded','ownerSelectedReferenceArtIncluded','staticModuleClosure','checked','moduleCount','moduleEntries','importMap','browserBundle','version','tool','toolVersion','startupModules','generatedFiles','release','approved','publicPlaytest','ownerApproved','policyId','rightsDocumentVerified','commercialReleaseAccepted','fullOriginalParityAccepted','fileCount','files','path','sha256','bytes','saveStorage'];
 
 export function forbiddenPublicPath(file){
@@ -109,8 +111,10 @@ export function publicArtifactPlan({root,input,index}){
   const allowlist=JSON.parse(fs.readFileSync(filename,'utf8'));
   const projection=selectedShopCageProjection({root,input,index});
   const render=input.files.includes('src/championship/presentation/publicRenderDescriptors.js')?projectPublicRenderSources({root,input,index}):{descriptors:[],media:new Map()};
-  const maps=selectedMapProjections({root,input});
-  const metadata=projectPublicMetadata({root,input});
+  const maps=input.files.includes('src/championship/presentation/publicMapRequests.js')?selectedMapProjections({root,input}):{descriptors:[],files:new Map()};
+  const metadata=input.files.includes('src/championship/presentation/publicMetadata.js')?projectPublicMetadata({root,input}):{descriptors:[],media:new Map()};
+  const clean=input.files.some(file=>file.startsWith('assets/production/public-media-clean-20261017/'))?publicCleanMedia({root}):[];
+  const program=input.authoring?.programRecipePath?publicProgramData({root}):[];
   const renderedMedia=new Map([...projection.files,...render.media,...maps.files,...metadata.media]);
   const runtime=publicRuntimeIndex(allowlist,index,renderedMedia),files=allowlist.files.map(row=>row.path),available=new Set(files);
   for(const descriptor of render.descriptors){
@@ -131,6 +135,11 @@ export function publicArtifactPlan({root,input,index}){
     const selected=allowlist.assets.find(row=>row.id===descriptor.id),file=path.join(root,descriptor.path);
     if(selected?.src!==descriptor.path||selected.sha256!==descriptor.sha256||!available.has(descriptor.path)||!fs.existsSync(file)||!fs.readFileSync(file).equals(descriptor.bytes))throw Error('PUBLIC_METADATA_PROJECTION_DRIFT:'+descriptor.role);
     assertPublicBytes(descriptor.path,descriptor.bytes,{jsonFields:descriptor.jsonFields});
+  }
+  for(const row of clean)if(allowlist.files.find(file=>file.path===row.path)?.sha256!==row.sha256)throw Error('PUBLIC_CLEAN_MEDIA_SELECTION:'+row.path);
+  for(const row of program){const selected=allowlist.files.find(file=>file.path===row.path);
+    if(selected?.sha256!==row.sha256||JSON.stringify(selected.jsonFields)!==JSON.stringify(row.jsonFields))throw Error('PUBLIC_PROGRAM_SELECTION:'+row.path);
+    assertPublicBytes(row.path,row.bytes,{jsonFields:row.jsonFields});
   }
   if(projection.manifest){
     const bytes=Buffer.from(JSON.stringify(projection.manifest,null,2)+'\n');

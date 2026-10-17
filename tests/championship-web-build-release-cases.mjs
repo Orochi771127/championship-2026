@@ -24,6 +24,8 @@ function fixture(t){
   const writeRaw=(f,v)=>{fs.mkdirSync(path.dirname(path.join(root,f)),{recursive:true});fs.writeFileSync(path.join(root,f),typeof v==='string'?v:JSON.stringify(v)+'\n');};
   const write=(f,v)=>{
     if(f===BUILD_INPUT_PATH){
+      v.schemaVersion=2;v.authoring={indexPath:ART_INDEX_PATH,policyPath:PLAYTEST_PATH};
+      v.files=v.files.filter(file=>![ART_INDEX_PATH,PLAYTEST_PATH].includes(file));
       if(!v.files.includes(PUBLIC_RUNTIME_INDEX_PATH))v.files.push(PUBLIC_RUNTIME_INDEX_PATH);
       const manifestPath='assets/production/test/manifest.json';
       const runtime={schemaVersion:1,assets:[{id:'TEST_ONLY',src:manifestPath,sha256:sha256(fs.readFileSync(path.join(root,manifestPath)))}]};
@@ -33,6 +35,7 @@ function fixture(t){
         files:v.files.filter(file=>file!==ART_INDEX_PATH&&fs.existsSync(path.join(root,file))).map(file=>({path:file,sha256:sha256(fs.readFileSync(path.join(root,file))),
           ...(file.endsWith('.json')&&file!==PUBLIC_RUNTIME_INDEX_PATH?{jsonFields:[...new Set(fields(JSON.parse(fs.readFileSync(path.join(root,file),'utf8'))))]}:{})}))});
     }
+    if(f===BUILD_INPUT_PATH&&v.publicPlaytest)v.publicPlaytest.files=v.files.map(file=>({path:file,sha256:fs.existsSync(path.join(root,file))?sha256(fs.readFileSync(path.join(root,file))):'0'.repeat(64)}));
     writeRaw(f,v);
   };
   const asset='assets/production/test/manifest.json';write(asset,{fixture:true});

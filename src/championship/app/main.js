@@ -473,7 +473,7 @@ function note(message) {
 let pixiModulePromise;
 let pixiStagePromise;
 function loadPixiModule(){
-  return pixiModulePromise??=import("../../../node_modules/pixi.js/dist/pixi.mjs")
+  return pixiModulePromise??=import("../../../assets/production/public-runtime/vendor-pixi.mjs")
     .catch(error=>{pixiModulePromise=null;throw error;});
 }
 // The one Application, created on first use. The Data Arena attaches to it

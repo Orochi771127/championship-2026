@@ -39,7 +39,7 @@ export function selectedMapProjections({root,input}){
     const source=geometry.get(item.src);
     if(source){
      const raw=fs.readFileSync(path.join(root,source.path));if(sha(raw)!==source.sha256||mediaPins.get(item.src)!==source.sha256||item.sha256!==source.sha256)throw Error('PUBLIC_HUNT_GEOMETRY_SOURCE_CHANGED');
-     const bytes=Buffer.from(JSON.stringify({schemaVersion:1,renderType:'HUNT_DEPTH',pieces:JSON.parse(raw).pieces},null,2)+'\n');
+     const bytes=Buffer.from(JSON.stringify({schemaVersion:1,renderType:'HUNT_DEPTH',pieces:JSON.parse(raw).pieces})+'\n');
      item.src=`assets/production/public-runtime/metadata/${source.role}.v1.json`;item.sha256=sha(bytes);
     }else if(mediaPins.get(item.src)!==item.sha256||approved.get(item.src)!==item.sha256)throw Error('PUBLIC_MAP_MEDIA_NOT_APPROVED:'+item.src);
     files.set(item.src,item.sha256);

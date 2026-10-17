@@ -5,14 +5,10 @@ import vm from 'node:vm';
 import {mountBattleAudioPresentation,BATTLE_AUDIO_MANIFEST,BATTLE_AUDIO_LOAD_CONCURRENCY} from '../src/championship/presentation/battleAudioPresentation.js';
 import {observeBattleFirstRender} from '../src/championship/app/runtimeRecoveryDiagnostics.js';
 
-const registration={assetId:'art:audio:battle:local-reference:v1',runtimeEligible:true,localOnly:true,
-  publicReleasePermitted:false,shippingReady:false,runtimeScope:'LOOPBACK_RESEARCH_ONLY'};
-const manifest={...registration,sounds:Array.from({length:54},(_,i)=>({soundId:0x200+i,
-  src:BATTLE_AUDIO_MANIFEST.replace('manifest.json',`${(0x200+i).toString(16).padStart(4,'0')}.wav`),
-  sha256:'a'.repeat(64),channels:1,sampleRate:16000,sampleFrames:16,loop:false}))};
-const index={entries:[{...registration,manifestPath:BATTLE_AUDIO_MANIFEST}]};
+const metadataPath='assets/production/public-runtime/battle-audio.render.v1.json';
+const metadataText=readFileSync(metadataPath,'utf8'),manifest=JSON.parse(metadataText);
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
-const flush=async()=>{for(let i=0;i<40;i++)await Promise.resolve();};
+const flush=async()=>{for(let i=0;i<40;i++)await new Promise(setImmediate);};
 function audioFixture({fetchSound,decode,metadata,shared=false}={}){
   const view={nativeLifecycle:{sound:{events:[]}},outcome:{ended:false}},observers=new Set(),listeners=new Set(),contexts=[];
   const source={getView:()=>view,subscribe(fn){observers.add(fn);return()=>observers.delete(fn);}};
@@ -29,8 +25,7 @@ function audioFixture({fetchSound,decode,metadata,shared=false}={}){
   const output=shared?{context:new Context(),destination:{}}:null;
   const fetchImpl=async(url,{signal}={})=>{
     const path=new URL(url).pathname.replace('/championship-2026/','');calls.push({path,signal});
-    if(path.endsWith('ART_PRODUCTION_INDEX.json'))return metadata?metadata():{ok:true,json:async()=>index};
-    if(path.endsWith('/manifest.json'))return {ok:true,json:async()=>manifest};
+    if(path===metadataPath)return metadata?metadata():{ok:true,text:async()=>metadataText};
     const sound=manifest.sounds.find(s=>s.src===path);assert.ok(sound,path);
     return fetchSound?fetchSound(sound,signal):{ok:true,arrayBuffer:async()=>sound};
   };
@@ -63,7 +58,7 @@ test('never-finishing metadata aborts promptly; late metadata cannot create an a
   const gate=deferred(),f=audioFixture({metadata:()=>gate.promise});
   const loading=f.start();const rejected=assert.rejects(loading,{name:'AbortError'});
   f.controller.abort();await rejected;assert.equal(f.contexts.length,0);
-  gate.resolve({ok:true,json:async()=>index});await flush();assert.equal(f.contexts.length,0);assert.equal(f.calls.length,1);
+  gate.resolve({ok:true,text:async()=>metadataText});await flush();assert.equal(f.contexts.length,0);assert.equal(f.calls.length,1);
 });
 
 test('never-finishing samples are bounded, cancelled without settlement, and cannot attach after re-entry',async()=>{

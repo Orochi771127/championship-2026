@@ -17,7 +17,7 @@ const legacy=[
 test('public character entries use the public adapters while legacy QA sources remain local inputs',()=>{
   for(const file of legacy){
     assert.equal(selected.has(file),false,file);
-    assert.ok(input.files.includes(file),'Keep the local source input: '+file);
+    assert.ok(!input.files.includes(file),'Authoring source is outside public build inputs: '+file);
     assert.ok(fs.existsSync(path.join(root,file)),'Keep the local source bytes: '+file);
     assert.ok(!input.publicPlaytest.files.some(row=>row.path===file),file);
   }

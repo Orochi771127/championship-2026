@@ -80,7 +80,9 @@ test('field builds language rows before art load and never overwrites them with 
   assert.ok(source.includes('fill:EVOLUTION_WRITING_COLOR'));
   assert.ok(source.includes('const i=EVOLUTION_TEXT_ROWS[index].row;'));
   assert.ok(source.includes('word.y=evolutionWritingY(i,app.screen.height)'));
-  assert.ok(source.indexOf('const evolutionWords=')<source.indexOf('void loadAssembledEvolutionArt'));
+  assert.ok(source.indexOf('const evolutionWords=')<source.indexOf('loadEvolutionGlyphArt(PIXI)'));
   assert.doesNotMatch(source,/EVOLUTION_SYMBOL_REPLACEMENT_TEXT|evolution-word-small|evolution-word'|text:i%2/);
-  assert.ok(source.includes("['ring','green','burst']"),'native non-text effects retained');
+  assert.match(source,/evolutionGlow\.ellipse\(center\.x,entry\.root\.y,radius\*1\.5,radius\/3\)/,'existing ring geometry retained');
+  assert.match(source,/evolutionGlow\.rect\(x,y,2,4\)/,'existing particle geometry retained');
+  assert.match(source,/!reducedMotion&&\(e\.phase===4\|\|e\.phase===5\)/,'existing native phase and reduced-motion gates retained');
 });

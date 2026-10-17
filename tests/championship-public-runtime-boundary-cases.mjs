@@ -6,6 +6,9 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {publicRuntimeIndex,assertPublicBytes,assertPublicArtifact,PUBLIC_RUNTIME_INDEX_PATH,forbiddenPublicPath} from '../scripts/lib/public-runtime-boundary.mjs';
 import {publicRuntimeAsset,validatePublicRuntimeAssets} from '../src/championship/presentation/publicRuntimeAssets.js';
+import {publicCleanMedia,stripPngMetadata} from '../scripts/lib/public-clean-media.mjs';
+import {publicProgramData} from '../scripts/lib/public-program-data.mjs';
+import {transform} from 'esbuild';
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 function fixture(t){
@@ -65,9 +68,43 @@ test('public JSON requires an explicit field schema, not arbitrary copied metada
   assert.throws(()=>assertPublicBytes('assets/production/a.json','{"anything":1}'),/PUBLIC_JSON_SCHEMA_REQUIRED/);
   assert.throws(()=>assertPublicBytes('assets/production/a.json','{"anything":1}',{jsonFields:['id']}),/PUBLIC_PAYLOAD_UNSELECTED_JSON_FIELD/);
 });
-test('all 96 prior and approved hero mappings retain exact ID, image hash, dimensions and per-role resolution',()=>{
-  const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.r1.json'),'utf8'));
-  assert.equal(heroes.entries.length,96);
+
+test('private reference rejection distinguishes SDK protocol examples from actual local files and human tracking IDs',()=>{
+  for(const source of ["const scheme='file://';",'// e.g. file:///, data URIs',"throw Error('PRODUCT_SPECIES_SENTINEL_NOT_ENTITY');"])
+    assert.doesNotThrow(()=>assertPublicBytes('src/example.js',source));
+  for(const value of ['file:///C:/Users/User/private.png','file:///private/image.png','file://localhost/private.png',
+    'libfile_962ab32091688191b3da3449655d2fd7','Sentinel_5afd9489c7a48191bcdd183bfe5d729c','R:\\Projects\\private.png'])
+    assert.throws(()=>assertPublicBytes('src/example.js',JSON.stringify(value)),/PUBLIC_PAYLOAD_PRIVATE_VALUE/);
+});
+
+test('clean PNG derivations retain every pixel-bearing and color chunk byte-for-byte',()=>{
+  const chunks=bytes=>{const rows=[];for(let pos=8;pos<bytes.length;){const end=pos+12+bytes.readUInt32BE(pos);rows.push({type:bytes.toString('ascii',pos+4,pos+8),bytes:bytes.subarray(pos,end)});pos=end;}return rows;};
+  const files=publicCleanMedia({root});assert.equal(files.length,17);
+  for(const file of files){
+    const source=fs.readFileSync(path.join(root,file.sourcePath)),output=file.bytesData;
+    assert.deepEqual(chunks(output),chunks(source).filter(row=>!['tEXt','iTXt','zTXt','eXIf'].includes(row.type)));
+    assert.doesNotThrow(()=>assertPublicBytes(file.path,output));
+    assert.deepEqual(stripPngMetadata(output),output);
+    assert.throws(()=>stripPngMetadata(Buffer.concat([output,Buffer.from([0])])),/PNG_TRAILING_BYTES/);
+  }
+});
+
+test('pinned gameplay data retains all values; derived vendor module has identical executable code',async()=>{
+ const recipe=JSON.parse(fs.readFileSync(path.join(root,'docs/contracts/championship/PUBLIC_PROGRAM_SOURCES.v1.json')));
+ const descriptors=publicProgramData({root});assert.equal(descriptors.length,44);
+ for(const row of descriptors)assert.doesNotThrow(()=>assertPublicBytes(row.path,row.bytes,{jsonFields:row.jsonFields}));
+ for(const row of recipe.sources.filter(row=>['NATIVE_GAMEPLAY','PRESENTATION_CONTRACT'].includes(row.kind))){
+  const selected=descriptors.find(item=>item.path===row.path);assert.deepEqual(selected.bytes,fs.readFileSync(path.join(root,row.path)));
+ }
+ const vendor=recipe.sources.find(row=>row.kind==='VENDOR_DOCUMENTATION');
+ const normalize=source=>transform(source,{loader:'js',format:'esm',minify:true,legalComments:'none'}).then(result=>result.code);
+ assert.equal(await normalize(fs.readFileSync(path.join(root,vendor.path),'utf8')),await normalize(fs.readFileSync(path.join(root,vendor.output),'utf8')));
+ assert.match(fs.readFileSync(path.join(root,vendor.output),'utf8'),/MIT|license/i);
+});
+test('selected public hero mappings retain exact ID, image hash, dimensions and per-role resolution; authoring versions remain intact',()=>{
+  const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));
+  const authoring=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.r1.json'),'utf8'));
+  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,59);
   for(const hero of heroes.entries)assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-hero`),{id:`${hero.speciesId}:database-hero`,src:hero.src,sha256:hero.sha256,width:hero.width,height:hero.height});
   assert.equal(publicRuntimeAsset('species-105:database-hero'),null);
   assert.throws(()=>validatePublicRuntimeAssets({schemaVersion:1,assets:[{...publicRuntimeAsset('species-116:database-hero'),approvalMessage:'private'}]}),/PUBLIC_RUNTIME_ASSET_INVALID/);

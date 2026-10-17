@@ -1,6 +1,6 @@
 // Owner-selected original glyphs replace the former evolution symbol row.
 // They consume only its native frame clock; this module owns no ticker or rules.
-import manifest from '../../../assets/production/evolution-glyphs-v1/manifest.json' with { type: 'json' };
+import manifest from '../../../assets/production/public-runtime/evolution-glyphs.v1.json' with { type: 'json' };
 
 import {EVOLUTION_GLYPH_ROW, EVOLUTION_WRITING_COLOR, evolutionWritingY} from '../text/evolutionPresentationText.js';
 
