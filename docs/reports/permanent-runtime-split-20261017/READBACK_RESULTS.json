@@ -1,0 +1,69 @@
+{
+  "ci": {
+    "tests": 2150,
+    "pass": 1918,
+    "fail": 232,
+    "skipped": 0,
+    "exit": 1,
+    "missingFileMentions": 314,
+    "missingExport": [
+      "does not provide an export named 'ORIGINAL_HUNT_MEAT_MANIFEST'"
+    ],
+    "log": "local-preparation/permanent-runtime-split/CURRENT_CI.log"
+  },
+  "build": {
+    "exit": 1,
+    "status": "WEB_INPUTS_NOT_CLOSED",
+    "issues": 6975,
+    "kinds": {
+      "INVALID_INPUT": 6971,
+      "EXCLUDED_STATIC_RESOURCE": 4
+    },
+    "firstIssues": [
+      {
+        "kind": "INVALID_INPUT",
+        "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm02_01/frame-00.png",
+        "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm02_01/frame-00.png"
+      },
+      {
+        "kind": "INVALID_INPUT",
+        "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm03_01/frame-00.png",
+        "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm03_01/frame-00.png"
+      },
+      {
+        "kind": "INVALID_INPUT",
+        "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm04_01/frame-00.png",
+        "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm04_01/frame-00.png"
+      },
+      {
+        "kind": "INVALID_INPUT",
+        "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm05_01/frame-00.png",
+        "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm05_01/frame-00.png"
+      },
+      {
+        "kind": "INVALID_INPUT",
+        "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm06_01/frame-00.png",
+        "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm06_01/frame-00.png"
+      }
+    ],
+    "outputCreated": false
+  },
+  "ranchReexport": {
+    "status": "PASS",
+    "characters": 222,
+    "mainCells": 13128,
+    "mainFrameReferences": 14153,
+    "subFrameReferences": 3956,
+    "descriptorBytes": 6028588,
+    "sourceDescriptorsUnchanged": 222
+  },
+  "processes": {
+    "nodeOrGitFoundInReadback": false,
+    "completed": [
+      "full CI",
+      "latest build",
+      "ranch reexport/verification"
+    ],
+    "postBuildLogReadersInterrupted": true
+  }
+}

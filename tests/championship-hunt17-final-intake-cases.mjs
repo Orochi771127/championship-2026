@@ -77,11 +77,11 @@ test('HM10 night selects art from native index 17 without inventing a second sce
 
  assert.equal(day.fieldId,'field_hm10_01');assert.equal(night.fieldId,day.fieldId);
 
- assert.equal(finalHuntArtManifestUrl(day.fieldId,16,loc),dir+'manifest.json');
+ assert.equal(finalHuntArtManifestUrl(day.fieldId,16,loc),'assets/production/public-runtime/hunt-accepted.map.v1.json');
 
- assert.equal(finalHuntArtManifestUrl(night.fieldId,17,loc),dir+'hm10-night.manifest.json');
+ assert.equal(finalHuntArtManifestUrl(night.fieldId,17,loc),'assets/production/public-runtime/hunt-night.map.v1.json');
 
- assert.equal(finalHuntArtManifestUrl('field_hm11_01',17,loc),dir+'manifest.json');
+ assert.equal(finalHuntArtManifestUrl('field_hm11_01',17,loc),'assets/production/public-runtime/hunt-accepted.map.v1.json');
 
  for(let y=0;y<128;y++)for(let x=0;x<128;x++)assert.equal(day.environment.readTerrain(x,y),night.environment.readTerrain(x,y));
 
@@ -119,7 +119,7 @@ test('explicit legacy cave and industrial reviews retain their existing selectio
 
   assert.equal(finalHuntArtManifestUrl('field_hm01_01',0,{...loc,search}),null);
 
- assert.equal(finalHuntArtManifestUrl('field_hm01_01',0,{...loc,search:'?caveReview=unknown'}),dir+'manifest.json');
+ assert.equal(finalHuntArtManifestUrl('field_hm01_01',0,{...loc,search:'?caveReview=unknown'}),'assets/production/public-runtime/hunt-accepted.map.v1.json');
 
 });
 
@@ -140,4 +140,4 @@ test('intake registration permits only local runtime and does not promote static
 });
 
 
-test("approved public hunts select only packaged normal manifests while other hosts stay closed",()=>{const url="https://orochi771127.github.io/championship-2026/";assert.equal(finalHuntArtManifestUrl("field_hm10_01",17,url),publicDir+"hm10-night.manifest.json");assert.equal(finalHuntArtManifestUrl("field_hm01_01",0,url+"?caveReview=natural-r11"),publicDir+"manifest.json");for(const u of ["http://orochi771127.github.io/championship-2026/","https://orochi771127.github.io/other/","https://orochi771127.github.io.evil.test/championship-2026/"])assert.equal(finalHuntArtManifestUrl("field_hm01_01",0,u),null);});
+test("approved public hunts select only packaged normal manifests while other hosts stay closed",()=>{const url="https://orochi771127.github.io/championship-2026/";assert.equal(finalHuntArtManifestUrl("field_hm10_01",17,url),"assets/production/public-runtime/hunt-night.map.v1.json");assert.equal(finalHuntArtManifestUrl("field_hm01_01",0,url+"?caveReview=natural-r11"),"assets/production/public-runtime/hunt-accepted.map.v1.json");for(const u of ["http://orochi771127.github.io/championship-2026/","https://orochi771127.github.io/other/","https://orochi771127.github.io.evil.test/championship-2026/"])assert.equal(finalHuntArtManifestUrl("field_hm01_01",0,u),null);});

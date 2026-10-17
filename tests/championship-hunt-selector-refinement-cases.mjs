@@ -1,3 +1,4 @@
+import {VS2_UI_AUTHORITY,VS2_PRESENTATION_MODES} from '../src/championship/app/vs2PresentationAuthority.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -79,9 +80,9 @@ class Node {
   find(cls){return this.className.split(' ').includes(cls)?this:this.children.map(n=>n.find(cls)).find(Boolean);}
 }
 function harness(){
-  const context={document:{createElement:tag=>new Node(tag)},URLSearchParams,console:{warn(){}},uiText:(s,values={})=>String(s).replace(/\{(\w+)\}/g,(_,k)=>values[k]??''),assembledHudArt:()=>null};
+  const context={VS2_UI_AUTHORITY,VS2_PRESENTATION_MODES,document:{createElement:tag=>new Node(tag)},URLSearchParams,console:{warn(){}},uiText:(s,values={})=>String(s).replace(/\{(\w+)\}/g,(_,k)=>values[k]??''),assembledHudArt:()=>null};
   vm.createContext(context);
-  vm.runInContext(screens.replace(/^import .*;\n/gm,'').replaceAll('export ','')+'; globalThis.createView=createGateSelectView;',context);
+  vm.runInContext(screens.replace(/^import[\s\S]*?;\r?\n/gm,'').replace(/^export \{[^;]+;\r?\n/gm,'').replaceAll('export ','')+'; globalThis.createView=createGateSelectView;',context);
   const gates=GATE_WORLD_REGIONS.map((r,i)=>({biomeId:r.biomeId,gateId:r.biomeId,displayName:r.biomeId,ordinal:i+1,selected:i===0,state:'LOCKED',entranceFeeBits:300,codeString:'TEST'}));
   const frame={screen:'GATE_SELECT',gateSelect:{gates,selection:{gateId:gates[0].gateId},walletBits:0,canConfirm:false,admission:{reason:'GATE_LOCKED',unlockKind:1,unlockParameter:2}}};
   const intents={selectGate(){},leaveScreen(){},confirmGate(){}};

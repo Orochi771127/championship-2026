@@ -1,6 +1,8 @@
 import {alternateFormAsset,mergeAlternateFormConfigs,bindAlternateFormManifest,rekeyAlternateDonorRuntime} from './alternateFormAssetContracts.js';
 import acceptedSelection from '../../data/championship/accepted-original-character-selection.r1.json' with {type:'json'};
 import battlePacking from '../../../assets/production/characters/battle-packed-20261013/manifest.json' with {type:'json'};
+import ranchPacking from '../../data/championship/ranch-render-selection.v1.json' with {type:'json'};
+import {PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations} from './publicCharacterRenderContract.js';
 import {isApprovedOriginalPublicLocation,isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
 import {loadLicensedCharacterRoster} from './licensedCharacterRoster.js';
 import {loadPixiCharacterRuntimeBundle} from './pixiCharacterRuntimeBundle.js';
@@ -20,29 +22,40 @@ export function completedCharacterBundleLocation(config,options,href){
     return {runtimeUrl:new URL(battlePacking.root+config.entityId+'/runtime.review.json',href).href,
       cachePrefix:config.entityId+'-battle-packed-20261013:',packed:true};
   }
+  const streamPrefix=(config.assetRoot??acceptedSelection.root)+config.folder+'/ranch-streaming-v1/';
+  const streamed=(options.ranchStreaming===true||options.battleAtlas===true)&&options.sides?.length===1&&options.sides[0]==='main'
+    &&ranchPacking.characters.find(c=>c.entityId===config.entityId&&c.runtimePath.startsWith(streamPrefix));
+  if(streamed){
+    const prefix=streamPrefix;
+    if(!streamed.runtimePath.startsWith(prefix)||!/^([a-f0-9]{16})\/runtime\.render\.json$/.test(streamed.runtimePath.slice(prefix.length)))
+      throw Error('RANCH_STREAMING_PATH_DRIFT');
+    return {runtimeUrl:new URL(streamed.runtimePath,href).href,cachePrefix:config.entityId+'-ranch-streaming:'+streamed.runtimeSha256+':',packed:false,streamed};
+  }
   const root=config.assetRoot??(isApprovedOriginalPublicLocation(href)?acceptedSelection.root:'assets/production/internal-character-review/');
   return {runtimeUrl:new URL(root+config.folder+'/runtime.review.json',href).href,
     cachePrefix:config.entityId+'-completed-original-local:',packed:false};
 }
 
 /** Existing runtime schema is the one density/motion authority for loading and QA. */
-export function validateCompletedOriginalRuntime(runtime,config,baseline){
+export function validateCompletedOriginalRuntime(runtime,config,baseline,{publicRender=false}={}){
   if(runtime?.schemaVersion!==1||runtime.renderer!=='PIXIJS_V8_SPRITESHEET')
     throw Error('COMPLETED_ORIGINAL_RUNTIME_SCHEMA');
-  const profile=runtime.artProfile,origin=config.origin;
-  if(runtime.sourceBankSha256!==config.sourceBankSha256)throw Error('COMPLETED_ORIGINAL_BANK_DRIFT');
-  if(runtime.entityId!==config.entityId||profile?.reviewOnly!==true||profile.runtimeEligible!==false
-    ||profile.publicReleasePermitted!==false||profile.scale!==config.density
+  const profile=runtime.artProfile,origin=config.origin,projected=publicRender;
+  if(projected&&runtime.kind!==PUBLIC_CHARACTER_RENDER_KIND||!projected&&runtime.kind===PUBLIC_CHARACTER_RENDER_KIND)
+    throw Error('COMPLETED_ORIGINAL_RENDER_SCOPE');
+  if(!projected&&runtime.sourceBankSha256!==config.sourceBankSha256)throw Error('COMPLETED_ORIGINAL_BANK_DRIFT');
+  if(runtime.entityId!==config.entityId||(!projected&&(profile?.reviewOnly!==true||profile.runtimeEligible!==false
+    ||profile.publicReleasePermitted!==false))||profile?.scale!==config.density
     ||JSON.stringify(profile.logicalCanvas)!==JSON.stringify(config.logicalCanvas)
     ||profile.anchor?.x!==origin[0]/config.logicalCanvas[0]||profile.anchor?.y!==origin[1]/config.logicalCanvas[1])
     throw Error('CANDIDATE_REVIEW_PROFILE_DRIFT');
   for(const side of ['main','sub']){
     const animations=runtime.sides?.[side]?.animations,original=baseline?.sides?.[side]?.animations;
     if(!Array.isArray(animations)||!Array.isArray(original)
-      ||JSON.stringify(canonical(animations))!==JSON.stringify(canonical(original)))
+      ||JSON.stringify(canonical(animations))!==JSON.stringify(canonical(projected?characterRenderAnimations(original):original)))
       throw Error('CANDIDATE_REVIEW_MOTION_DRIFT');
     for(const animation of animations)for(const frame of animation.frames){
-      const geometry=runtime.reviewGeometry?.frames?.[frame.texture];
+      const geometry=(projected?runtime.geometry:runtime.reviewGeometry)?.frames?.[frame.texture];
       if(!geometry||geometry.scale!==config.density||JSON.stringify(geometry.origin)!==JSON.stringify(config.frameOrigins[frame.texture])
         ||JSON.stringify(geometry.sourceSize)!==JSON.stringify(config.rasterCanvas))throw Error('CANDIDATE_REVIEW_ORIGIN_DRIFT');
     }
@@ -65,10 +78,8 @@ export async function loadCompletedOriginalCharacters(options,href){
     const selected=completedCharacterBundleLocation(config,options,href),{runtimeUrl}=selected;
     let bundle;
     try {
-    bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,cachePrefix:selected.cachePrefix});
-      const runtime=bundle.runtime;
       const donorUrl=config.motionDonorEntityId?new URL('../'+config.motionDonorEntityId+'/runtime.json',args.runtimeUrl).href:args.runtimeUrl;
-      const response=await fetch(donorUrl,{signal:args.signal});
+      const baselinePending=(async()=>{const response=await fetch(donorUrl,{signal:args.signal});
       if(!response.ok)throw Error('CANDIDATE_BASELINE_MOTION_UNAVAILABLE');
       let sourceBaseline;
       if(config.baselineRuntimeSha256){
@@ -80,19 +91,35 @@ export async function loadCompletedOriginalCharacters(options,href){
       }else{
         sourceBaseline=await response.json();
       }
-      const baseline=config.motionDonorEntityId?rekeyAlternateDonorRuntime(sourceBaseline,config):sourceBaseline;
-      validateCompletedOriginalRuntime(runtime,config,baseline);
+      return config.motionDonorEntityId?rekeyAlternateDonorRuntime(sourceBaseline,config):sourceBaseline;})();
+      baselinePending.catch(()=>{});
+      let runtimeDocument=null;
+      if(selected.streamed){
+        const response=await fetch(runtimeUrl,{signal:args.signal});
+        if(!response.ok)throw Error('RANCH_STREAMING_RUNTIME_HTTP_'+response.status);
+        const text=await response.text();
+        const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
+        if(hash!==selected.streamed.runtimeSha256)throw Error('RANCH_STREAMING_RUNTIME_HASH');
+        runtimeDocument=JSON.parse(text);
+        if(runtimeDocument.kind!==PUBLIC_CHARACTER_RENDER_KIND)throw Error('RANCH_PUBLIC_RENDER_KIND');
+        if(runtimeDocument.streaming?.sourceRuntimeSha256!==selected.streamed.sourceRuntimeSha256
+          ||runtimeDocument.streaming?.sourceImageSha256!==selected.streamed.sourceImageSha256)throw Error('RANCH_STREAMING_SOURCE_DRIFT');
+        validateCompletedOriginalRuntime(runtimeDocument,config,await baselinePending,{publicRender:true});
+      }
+      bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,runtimeDocument,cachePrefix:selected.cachePrefix});
+      const runtime=bundle.runtime,baseline=await baselinePending;
+      validateCompletedOriginalRuntime(runtime,config,baseline,{publicRender:Boolean(selected.streamed)});
       reviewed.add(config.entityId);
       return {...bundle,createActor(actorOptions){return bundle.createActor({...actorOptions,
-        nativeGeometry:actorOptions.nativeFramePresentation?runtime.reviewGeometry:null,
-        battleGeometry:actorOptions.battleGeometry?runtime.reviewGeometry:null});}};
+        nativeGeometry:actorOptions.nativeFramePresentation?(runtime.geometry??runtime.reviewGeometry):null,
+        battleGeometry:actorOptions.battleGeometry?(runtime.geometry??runtime.reviewGeometry):null});}};
     }catch(error){
       await bundle?.dispose();
       args.signal?.throwIfAborted();
       replacementFailures.push({entityId:config.entityId,runtimeUrl,reason:error.message});
       // A failed packed load must not decode the original large atlas or hide
       // the failure behind the historical source-art fallback.
-      if(selected.packed||config.assetRoot)throw error;
+      if(selected.packed||selected.streamed||config.assetRoot)throw error;
       return loadPixiCharacterRuntimeBundle(args);
     }
   }});

@@ -717,7 +717,7 @@ const EVENT_ROWS = [
   ],
   [
     "Blizzard Field",
-    "The stage is a snowy mountain! Beware 霜獄魔翼's icy claws and 雪燈靈偶's punches!\nสนามแข่งขันหิมะ, การต่อสู้แบบ 3 ต่อ 3"
+    "The stage is a snowy mountain! Beware 霜獄魔翼's icy claws and 雪印零偶's punches!\nสนามแข่งขันหิมะ, การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Volcano Striker",

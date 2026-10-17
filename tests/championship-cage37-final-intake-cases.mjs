@@ -42,5 +42,5 @@ test('local art approval and static completion do not imply object clock or publ
  assert.equal(isShippingArtEntry({...manifest,manifestPath:'assets/production/cage/final-intake-20261008/manifest.json'}),false);
  for(const f of manifest.fields)assert.match(f.intake.objectCellClock,/UNKNOWN_REQUIRES_TRACE/);
  const main=readFileSync('src/championship/app/main.js','utf8');
- assert.match(main,/\? "assets\/production\/cage\/final-intake-20261008\/manifest.json"\s*:\s*"assets\/production\/cage\/original-opus-v1\/manifest.json"/);
+ assert.match(main,/publicMapManifestPath\('cage-final'\)\s*:\s*publicMapManifestPath\('cage-ui'\)/);
 });

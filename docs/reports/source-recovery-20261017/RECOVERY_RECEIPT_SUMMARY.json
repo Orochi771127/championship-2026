@@ -1,0 +1,49 @@
+[
+  {
+    "receipt": "ranch-local.json",
+    "group": "ranch-local",
+    "selected": 4268,
+    "verified": 4268,
+    "restored": 4268,
+    "failed": 0,
+    "verifiedBytes": 432809495,
+    "source": "LOCAL_GIT_NO_LAZY_FETCH",
+    "runtimeOriginsChanged": false,
+    "approvalsChanged": false
+  },
+  {
+    "receipt": "other-runtime-local.json",
+    "group": "other-runtime-local",
+    "selected": 62,
+    "verified": 62,
+    "restored": 62,
+    "failed": 0,
+    "notAttempted": 0,
+    "verifiedBytes": 4758111,
+    "source": "LOCAL_GIT_NO_LAZY_FETCH",
+    "runtimeOriginsChanged": false,
+    "approvalsChanged": false
+  },
+  {
+    "receipt": "existing-pages.json",
+    "group": "existing-pages",
+    "selected": 2589,
+    "verified": 2589,
+    "restored": 2589,
+    "failed": 0,
+    "notAttempted": 0,
+    "verifiedBytes": 660879819,
+    "source": "EXISTING_PAGES_HASH_RECEIPT",
+    "runtimeOriginsChanged": false,
+    "approvalsChanged": false
+  },
+  {
+    "receipt": "source-metadata-local.json",
+    "restoredAuthoringSources": 52,
+    "sha256Verified": 52,
+    "publicSchemaGranted": false,
+    "originalsModified": false,
+    "runtimeReady": false,
+    "reason": "Closed runtime projections still required; this is local source restoration only"
+  }
+]

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import manifest from '../assets/production/cage/shop-final-20261008/manifest.json' with {type:'json'};
+import publicManifest from '../assets/production/public-runtime/shop-cage-thumbnails.v1.json' with {type:'json'};
 import {originalShopCageThumbnail,validateOriginalShopCageArt} from '../src/championship/presentation/originalShopCageArt.js';
 import {shopCageUiImage,cageUiImage} from '../src/championship/presentation/cageUiArt.js';
 import {assembledShopArt,assembledCageArt} from '../src/championship/presentation/assembledUiArt.js';
@@ -28,14 +29,15 @@ test('shop order maps to canonical field identity, including CM03 CM24 and mini 
  assert.equal(originalShopCageThumbnail(118,local),null);
  assert.equal(originalShopCageThumbnail('83',local),null);
 });
-test('wrong IDs, duplicate rows, unregistered art and altered crop/origin fail closed',()=>{
+test('public thumbnail projection rejects wrong IDs, duplicate rows, private fields and changed origin',()=>{
  for(const change of [m=>m.records.pop(),m=>m.records[0].itemIndex=1,m=>m.records[1]=m.records[0],
    m=>m.records[0].fieldId='field_cm28_01',m=>m.records[0].src='../escape.png',
-   m=>m.records[0].rasterOrigin=[128,96],m=>m.records[0].sourceCrop=[0,0,256,192],
+   m=>m.records[0].logicalOrigin=[32,24],m=>m.records[0].sourceCrop=[0,0,256,192],
    m=>m.localOnly=false]){
-  const copy=structuredClone(manifest);change(copy);assert.throws(()=>validateOriginalShopCageArt(copy),/ORIGINAL_SHOP_CAGE_ART_INVALID/);
+  const copy=structuredClone(publicManifest);change(copy);assert.throws(()=>validateOriginalShopCageArt(copy),/ORIGINAL_SHOP_CAGE_ART_INVALID/);
  }
- assert.throws(()=>validateOriginalShopCageArt(manifest,{entries:[]}),/LOCAL_REGISTRATION/);
+ assert.throws(()=>validateOriginalShopCageArt(publicManifest,()=>null),/PUBLIC_REGISTRATION/);
+ assert.throws(()=>validateOriginalShopCageArt(manifest),/SCHEMA/);
 });
 test('local thumbnails preserve outside-host fallback, editor art and goods CAGES exclusion',()=>{
  for(const host of ['https://example.com/','https://localhost.evil.test/','file:///test','http://orochi771127.github.io/championship-2026/','https://orochi771127.github.io/other-project/']){

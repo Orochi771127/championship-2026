@@ -1,0 +1,45 @@
+??exactly 31 presentation IDs change, all 61 canonical IDs remain stable (2.1999ms)
+??moon, virus, blizzard and volcano use inspected motifs without wrong-art donor backfill (0.513ms)
+??original-runtime location gate remains unchanged, not a publication authorization (0.9466ms)
+??all original delivered medal bytes and source manifest retain exact provenance (45.7121ms)
+??generated128px grids and512px details have genuine alpha and stable master provenance (317.5849ms)
+??grid payload stays128px while optional selected detail is512px (0.355ms)
+??award flags and event records are unaffected by image remapping (2.2512ms)
+??bounded correction records remaining semantic work without claiming all 61 complete (0.1881ms)
+??later batches preserve sealed first-four identities and original detail image hashes (1.076ms)
+??corrected set covers all30 original mismatches plus only the necessary ambiguous donor47 (0.9258ms)
+??VS2-P screens consume only the injected presentation source (2.5622ms)
+??unknown Hunt toolbar semantics stay neutral and developer-gated (0.2852ms)
+??the Hunt Loadout screen is built on the recovered original structure (0.2603ms)
+??VS2-P CSS carries the P1R mobile contract (0.3386ms)
+??temporary Hunt renderer preserves the shared Pixi/runtime authority boundary (1.0474ms)
+??temporary Hunt art manifest is explicit and non-promoted (0.1406ms)
+??tests 16
+??suites 0
+??pass 15
+??fail 1
+??cancelled 0
+??skipped 0
+??todo 0
+??duration_ms 534.662
+
+??failing tests:
+
+test at tests\championship-medal-art-corrections-cases.mjs:138:1
+??later batches preserve sealed first-four identities and original detail image hashes (1.076ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\User\Documents\Codex\2026-10-17\task-3\approved-hero-integration\assets\production\medal-name-corrections-20261014\batch-01-four-id-receipt.json'
+      at Object.openSync (node:fs:561:18)
+      at readFileSync (node:fs:445:35)
+      at read (file:///C:/Users/User/Documents/Codex/2026-10-17/task-3/approved-hero-integration/tests/championship-medal-art-corrections-cases.mjs:10:18)
+      at TestContext.<anonymous> (file:///C:/Users/User/Documents/Codex/2026-10-17/task-3/approved-hero-integration/tests/championship-medal-art-corrections-cases.mjs:139:27)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\User\\Documents\\Codex\\2026-10-17\\task-3\\approved-hero-integration\\assets\\production\\medal-name-corrections-20261014\\batch-01-four-id-receipt.json'
+  }

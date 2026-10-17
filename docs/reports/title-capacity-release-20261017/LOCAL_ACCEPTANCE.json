@@ -1,0 +1,91 @@
+{
+  "recordedAtUtc": "2026-10-17T23:12:45.078662+00:00",
+  "status": "LOCAL_ACCEPTANCE_PASS_REMOTE_PUBLICATION_PENDING",
+  "sourceBase": "adc36510ec71e713844deac8c32fbff0f008149e",
+  "checkedHead": "c69fc3930b198dd48941e48672e52ed2d20e5bc2",
+  "buildSourceCommit": "7095c0e4a3802aa813fb880b5b95051054541b26",
+  "buildId": "585c6c2ad59c0953db639268bc4182f48f08600e6e0e5bf9d3d6cc194965e073",
+  "artifactFiles": 7565,
+  "artifactBytesIncludingReceipt": 999249150,
+  "capacityLimitBytes": 1000000000,
+  "capacityRemainingBytes": 750850,
+  "fullCI": {
+    "tests": 2574,
+    "pass": 2574,
+    "fail": 0,
+    "skipped": 0
+  },
+  "publicPayloadValidated": true,
+  "selectedHeroCount": 59,
+  "unchangedFromMainHeroCount": 58,
+  "newHeroSpecies": [
+    125
+  ],
+  "heldHeroCount": 37,
+  "browser": {
+    "status": "PASS",
+    "version": "155.0.8059.40",
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1440,
+        "height": 1000
+      }
+    ],
+    "scope": "CONTROLLED_LOCAL_ARTIFACT_TITLE_HOME_DATABASE_125",
+    "errors": 0,
+    "missing": 0,
+    "privateRequests": 0
+  },
+  "titleFilm": "PAUSED_ORIGINAL_MEDIA_RETAINED",
+  "imageReencoding": false,
+  "unchangedSelectedImageHashes": 4622,
+  "battleSharedPages": {
+    "species": [
+      177,
+      189,
+      190,
+      207,
+      210,
+      212
+    ],
+    "rgbaEqualFrames": 370,
+    "coldABms": [
+      28060.2,
+      30562.7
+    ],
+    "warmABms": [
+      560.8,
+      679.7
+    ],
+    "downloadABbytes": [
+      33271546,
+      33132560
+    ],
+    "scope": "ONE_CONTROLLED_MICROBENCHMARK_PAIR_NOT_FULL_GAME_OR_PHYSICAL_DEVICE",
+    "estimatedTextureRgbaBytesBefore": 125843456,
+    "estimatedTextureRgbaBytesAfter": 142880768
+  },
+  "authorityIndex": {
+    "sha256": "3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f",
+    "sameGitBlobAsMain": true,
+    "includedInArtifact": false
+  },
+  "priorDeniedActionsRetried": false,
+  "pushed": false,
+  "merged": false,
+  "deployed": false,
+  "m201Browser": {
+    "status": "PASS_ISOLATED_ACTUAL_PIXI_RUNTIME",
+    "frames": 83,
+    "sequences": 53,
+    "coveredCells": 83,
+    "normalGameNavigation": "PASS_CONTROLLED_NORMAL_RAISING_BATTLE",
+    "huntSceneScope": "ISOLATED_ACTUAL_HUNT_SCENE_NOT_NORMAL_SPAWN"
+  },
+  "hostedLinuxCI7095c0e4": "PASS_2574_TESTS_BUILD_VALIDATE",
+  "lfCorrection": "Approval hashes now match the existing committed LF source; source Git blobs and executable behavior unchanged"
+}

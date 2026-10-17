@@ -2,6 +2,8 @@ import {openingFilmCopy} from '../text/openingFilmText.js';
 export {openingFilmCopy} from '../text/openingFilmText.js';
 // Owner-approved NS33 film; DOM-only TITLE presentation, no save/router/ticker.
 import {getActiveGameTitle, getTitleHeadingHtml} from '../text/brandTerms.js';
+// Release pause: keep the original player and media for an explicit restoration.
+export const OPENING_FILM_ENABLED = false;
 export const OPENING_FILM = Object.freeze({
   src:'assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4',
   sha256:'ef50993b1856da8f7fb4ec62ca6d6ab50489f5e81e4b7b799469a4b154b8831d',
@@ -38,7 +40,8 @@ export function canAutoPlayOpening({titleVisible,titleReady,menuOpen,dialogOpen,
   return Boolean(titleVisible&&titleReady&&!menuOpen&&!dialogOpen&&!hidden&&!reducedMotion&&!failed);
 }
 export function createOpeningFilm({title,controls,login,menu,opening,getPreferences,onActiveChange=()=>{},onBufferChange=()=>{},
-  document:doc=globalThis.document,window:win=globalThis.window}){
+  document:doc=globalThis.document,window:win=globalThis.window,enabled=OPENING_FILM_ENABLED}){
+  if(!enabled)return Object.freeze({start(){},sync(){},isPlaying:()=>false,canPreloadTitle:()=>false,dispose(){}});
   const node=(tag,cls)=>{const n=doc.createElement(tag);n.className=cls;return n;};
   const watch=node('button','cm-title__film-watch');watch.id='cm-watch-film';watch.type='button';controls.append(watch);
   const host=node('section','cm-title__film');host.id='cm-opening-film';host.hidden=true;

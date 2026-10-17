@@ -1,0 +1,2746 @@
+{
+  "status": "PUBLIC_SELECTION_PRUNED_ORIGINAL_FILES_UNTOUCHED",
+  "files": 456,
+  "removedBytes": 568433006,
+  "originalFilesDeleted": 0,
+  "qualityOrCreatureDesignChanged": false,
+  "consumerTests": "local-preparation/shared-atlas-consumers-tests.log:16 PASS",
+  "removed": [
+    {
+      "path": "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/main.webp",
+      "sha256": "28e30ddb5345c69c251b445f1b246676cb7f85aeb7485f81c179d80cc5e5d932",
+      "bytes": 705274,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e001_digitama-dot-intake-r01/main.webp",
+      "sha256": "2083a82c5f8b4ef5b4905b1adde5f4c6282a80d1b3d0e7b716b26f140231cd9e",
+      "bytes": 968786,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e002_digitama-dot-intake-r01/main.webp",
+      "sha256": "432aca1357d652012c5ec354b9f6649a51b6613bbacb1afca1c5f79c3fd4acd5",
+      "bytes": 773846,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e003_digitama-dot-intake-r01/main.webp",
+      "sha256": "8941e310e090ab678411fb4d1db7710c5bbc8b4d0ce445f26544c123b5aff764",
+      "bytes": 834176,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e004_digitama-dot-intake-r01/main.webp",
+      "sha256": "8f364b92fc83a7d7e9abd75cc120774cff7e96e299748a325377085d1e09aaca",
+      "bytes": 1111106,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e005_digitama-dot-intake-r01/main.webp",
+      "sha256": "718abff1df0723f163211deb6b3c78fdc9010351ab4d93a52f246bee89052398",
+      "bytes": 1069504,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e006_digitama-dot-intake-r01/main.webp",
+      "sha256": "4cf20b34a860a7d28cda4dc954bad6eed9cb79409a21453e2684d396558d3af0",
+      "bytes": 1125744,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e007_digitama-dot-intake-r01/main.webp",
+      "sha256": "225f8896031f0190f49385fa21a8d0ebc3d4eaa51f1dadcc8f5b339a69308c35",
+      "bytes": 1249826,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m001_zurumon-early64-raw-v2-r03/main.webp",
+      "sha256": "7a077fc159a16584b71c3bbd03253233b8e04c5660d700a3b2e71a04f945cb1b",
+      "bytes": 88798,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m001_zurumon-early64-raw-v2-r03/sub.webp",
+      "sha256": "2d755151aa7cc09fb05c803de0a681f3eccd853888d3700bde16a74fcf53fd5f",
+      "bytes": 29502,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m002_choromon-early64-raw-v2-r01/main.webp",
+      "sha256": "4ffe257df9f20543dfb19ff00b0e1c8e91fac3a167157dceb240fc8c5ac77c08",
+      "bytes": 245680,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m002_choromon-early64-raw-v2-r01/sub.webp",
+      "sha256": "2b5664943ca6035e28990699b8c760055b9b359e3709ed93d6bd6502b587f171",
+      "bytes": 77378,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m003_nyokimon-early64-raw-v2-r02/main.webp",
+      "sha256": "233ef3e6574e27b8d32c3480c6e29abd0098ec07cbea17f4f9e9efbe1f944b0b",
+      "bytes": 203500,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m003_nyokimon-early64-raw-v2-r02/sub.webp",
+      "sha256": "66ac01e4bfd0f69ec9eb6c6384196298978ed53b30c407839b7a038600ac7d26",
+      "bytes": 66716,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m004_bubbmon-early64-raw-v2-r01/main.webp",
+      "sha256": "9da34e1118ee0c92a673acf938489efe14e1c4664a7f3cadf6a68cd9b6a66628",
+      "bytes": 272944,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m004_bubbmon-early64-raw-v2-r01/sub.webp",
+      "sha256": "65b88848042714814a2a63dd68f48943b54c96e7833e152074b84019cb282e8a",
+      "bytes": 79126,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m005_pitchmon-early64-raw-v2-r01/main.webp",
+      "sha256": "7f53fcc92ba3b6cac594d4109942beab99b0129fb6fad35d9047711cd8cea007",
+      "bytes": 204972,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m005_pitchmon-early64-raw-v2-r01/sub.webp",
+      "sha256": "7b24e5c3af41836546f719d214164ccf8ba2f1ae25f01433ffd5fdf21a2cfbb0",
+      "bytes": 64140,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/main.webp",
+      "sha256": "25eccc707afdcc757837b0fb8aa178b2e37bc0eba16c6c3741e1e4e68af8f480",
+      "bytes": 95618,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/sub.webp",
+      "sha256": "93ef9ff6e06b24675875b957d87bb7ec8e68d39b47f0f19dd615e2e572d55259",
+      "bytes": 32942,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m007_botamon-early64-raw-v2-r01/main.webp",
+      "sha256": "9044b344b9b94d9c8c85545fa7f46a123c093e70ee09933189243eb15466fdb9",
+      "bytes": 64942,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m007_botamon-early64-raw-v2-r01/sub.webp",
+      "sha256": "0505e1cd08ebc4c7e84e32573ac59277f7b40964e0a78e8c4bb0a973030148e9",
+      "bytes": 22082,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m008_poyomon-early64-raw-v2-r01/main.webp",
+      "sha256": "b87ed35039090c6503601989bea94166fbb022a3e462697260f8f8423363691c",
+      "bytes": 122532,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m008_poyomon-early64-raw-v2-r01/sub.webp",
+      "sha256": "48448f38ec35ccc673e2a6561fdb7d19a8033fbac49148d6ae07664eed443b87",
+      "bytes": 41434,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m009_mokumon-early64-raw-v2-r01/main.webp",
+      "sha256": "631e77201b58879ce365aba01c14223bda4397ab5fa843c86e0800445a7a8242",
+      "bytes": 267910,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m009_mokumon-early64-raw-v2-r01/sub.webp",
+      "sha256": "4840737411cbf4f8bcf3f9ca868a41b4e1d52501d36e34a4b17ebbf49704ec67",
+      "bytes": 92744,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m010_yukimibotamon-early64-raw-v2-r02/main.webp",
+      "sha256": "9c29621480ed6efc9c884321b2d13ebbfebf77dd8959517f95fac4d442a4068c",
+      "bytes": 141650,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m010_yukimibotamon-early64-raw-v2-r02/sub.webp",
+      "sha256": "90b6dd9d340c8702aad607a833690cd7308632a7bc4977081f8c4a59819ba387",
+      "bytes": 49748,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m011_yuramon-early64-raw-v2-r01/main.webp",
+      "sha256": "932c38e3d3055f4330c0ffb20c923a931d0fb251c7839f5413c59adf1ef229ea",
+      "bytes": 283640,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m011_yuramon-early64-raw-v2-r01/sub.webp",
+      "sha256": "03995fdd6b0585ad6bb8b30406fb1f3301b7d64ec6fb1dcff5cdafc019ff0dc6",
+      "bytes": 88704,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m012_petimon-early64-raw-v2-r02/main.webp",
+      "sha256": "b517ffd137683fd8b96ef90b38682251146644740aa1ce11ff85f7617a36fa6a",
+      "bytes": 145954,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m012_petimon-early64-raw-v2-r02/sub.webp",
+      "sha256": "84469aac50f982f1b8cb808315720231b17a1fe361fb25fb7ea73678a47ccfa9",
+      "bytes": 48732,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m101_caprimon-early64-raw-v2-r01/main.webp",
+      "sha256": "c766a895aa300dffb7321e87d474cc17e15ac98635997b9f876dbf15bb348ec8",
+      "bytes": 279094,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m101_caprimon-early64-raw-v2-r01/sub.webp",
+      "sha256": "08f48222a3099e5ea5c59a2fbfc409a1bb23caf6d01a41dbbefb8b0927a12e1c",
+      "bytes": 80196,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m102_koromon-early64-raw-v2-r01/main.webp",
+      "sha256": "0912183031de239a90cbf421e05c70566f45c71f3f75eb0ccf330ebe294909e4",
+      "bytes": 212318,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m102_koromon-early64-raw-v2-r01/sub.webp",
+      "sha256": "781071dfaa562e51bbeabd06b37e379d8721de801d45a820a0523f5bfc4523b4",
+      "bytes": 62942,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m103_tanemon-early64-raw-v2-r01/main.webp",
+      "sha256": "38c65f34ad3734a7b3a40d846fa9804a913f0e2a2d7f5738a533eec5039b7f97",
+      "bytes": 373440,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m103_tanemon-early64-raw-v2-r01/sub.webp",
+      "sha256": "95621b5721665434c6ad6c41aeceae1752d5954de24705fd4b02b1f47ac13c03",
+      "bytes": 110432,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/main.webp",
+      "sha256": "32b9dbbf2141a8e3fc50ced49cef1f5550ad6c11beb0059ebee67ac15545f4c0",
+      "bytes": 257452,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/sub.webp",
+      "sha256": "303d5889d0e491a732d382daa97f55b6a7583961934394029b25e0314fef56cb",
+      "bytes": 85950,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m105_tokomon-early64-raw-v2-r02/main.webp",
+      "sha256": "497228f076872dc209a0072dc23a1137f47b8c31dbe713fba41a70485c371a79",
+      "bytes": 481110,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m105_tokomon-early64-raw-v2-r02/sub.webp",
+      "sha256": "dbca673a27937170cf60c7414052fdc874238a74d797e3aa13f412333aa07732",
+      "bytes": 151258,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/main.webp",
+      "sha256": "1efbc138674c1d4f513c0ef3565be2ef0436747cbaf9adeb71e9b4077bbdb40e",
+      "bytes": 306900,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/sub.webp",
+      "sha256": "5c97a5c9f34d459af4afca50b03098dd338b7c28f9b5556e52ae19f8f1779641",
+      "bytes": 99928,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m107_pagumon-early64-raw-v2-r02/main.webp",
+      "sha256": "4386bb11928a08dab7a4c9b3db65b54d1db3da55111657eb1989378982066cb8",
+      "bytes": 228006,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m107_pagumon-early64-raw-v2-r02/sub.webp",
+      "sha256": "fcdd0ca02112c514ee7f9137e643f7ff39df2d71a1ec222938ed333383116c97",
+      "bytes": 68884,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m108_pyokomon-early64-raw-v2-r02/main.webp",
+      "sha256": "bbdf6ca478a1ef96679e6390440193d7326f40e260ed7631b44cd098db452baa",
+      "bytes": 447366,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m108_pyokomon-early64-raw-v2-r02/sub.webp",
+      "sha256": "dbbbddc020b0e4f68631327d9d664b35b1b8dde7211dbcf9670edf7449d10dfe",
+      "bytes": 145948,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m109_pukamon-early64-raw-v2-r01/main.webp",
+      "sha256": "c95ef298252afeba883bdf9e66ff7c9c4c86d4ca85113db697f41f4b7378f14f",
+      "bytes": 452208,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m109_pukamon-early64-raw-v2-r01/sub.webp",
+      "sha256": "8fa3249373fff463329096491aca4cfeab03eb6efc1068e0b0bd845e5c4e7f21",
+      "bytes": 155374,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m110_petimemramon-early64-raw-v2-r02/main.webp",
+      "sha256": "47c1de4afba832a6ec632e8124ca6712aa729b6b22f6fa10a5af71c3a7375260",
+      "bytes": 256256,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m110_petimemramon-early64-raw-v2-r02/sub.webp",
+      "sha256": "868e144d6c20ea71e1ea1ad9be944b01a1e6b669ec1697ca61534f33f47d8081",
+      "bytes": 83664,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m111_mochimon-early64-raw-v2-r02/main.webp",
+      "sha256": "cb3ac027910cdcb17b9cfe435ab3f2d7d14af45f2a360158e858573c4b3c4377",
+      "bytes": 197038,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m111_mochimon-early64-raw-v2-r02/sub.webp",
+      "sha256": "2d17f7c1eb778a5ccc09b624a4ce66ea256454e5ea9620aa363306b65ec864aa",
+      "bytes": 64336,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m112_bebydomon-early64-raw-v2-r02/main.webp",
+      "sha256": "d4d5eb3887731ac401aa5d7bb20731e82271579b4b2d03e6f06cbd3c36b2a715",
+      "bytes": 506932,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m112_bebydomon-early64-raw-v2-r02/sub.webp",
+      "sha256": "8cf7d6cc1adb3234a2e5747b4d801f3c29b1ddd0c3a4071a684019fb5d16c325",
+      "bytes": 141968,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m113_sunmon-early64-raw-v2-r01/main.webp",
+      "sha256": "a7151dc67a089e304a16a68fd0050c4475b2e46b54ac05ba069c69d4062675ea",
+      "bytes": 527090,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m113_sunmon-early64-raw-v2-r01/sub.webp",
+      "sha256": "87722ec4433d5352358f3a296798da284964d32307333822ad1c7fd64159d248",
+      "bytes": 168154,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m114_moonmon-early64-raw-v2-r01/main.webp",
+      "sha256": "9ac44d24174e3edcb4b1f9c910af26de34188a6b4adf62fe8cd78826e8ac0794",
+      "bytes": 416764,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m114_moonmon-early64-raw-v2-r01/sub.webp",
+      "sha256": "d72462d447216439c6b23e0a1e105c6bb4e190602935a99e5767c94cd7bc87b9",
+      "bytes": 132246,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-delivered-r04-review-20261007/main.webp",
+      "sha256": "44d017529e82e56d75c61b0337ae4978a15a87a9dc323c21b8b20f9e9ae12633",
+      "bytes": 319802,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-delivered-r04-review-20261007/sub.webp",
+      "sha256": "8130ffce65ece91eacf27a8c72161f0e46f67771fa41153784d001c8193d088a",
+      "bytes": 114696,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/main.png",
+      "sha256": "369a5cc9189ffcff343fddbea064ceb829daedba4cd8a616b668d68f8a433039",
+      "bytes": 1570226,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/sub.png",
+      "sha256": "1c634eadb6347d61df9546dada3564704d6f0df63d6ff818fa504d61235a3246",
+      "bytes": 515730,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m202_armadimon-final-growth38-20261007/main.webp",
+      "sha256": "89942e57e2400829316e0ea928d41ef6e73cf3d7b7067aba31c7a9b8b5e4c7fc",
+      "bytes": 494050,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m202_armadimon-final-growth38-20261007/sub.webp",
+      "sha256": "3b823da02bb5d540ded1f71a526543eb5089fdfd8e4836b71aa5ff8e3c2c4c81",
+      "bytes": 161502,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m203_elecmon-final-growth38-20261007/main.webp",
+      "sha256": "d125d563dc1199d1dbd93224a8c2b59c43322ccbbcb8ba6788b8fdc95b81b5ed",
+      "bytes": 534090,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m203_elecmon-final-growth38-20261007/sub.webp",
+      "sha256": "926d931dab610d3c63e35de27235a0668e69a71d82588f6c03282397a98501e3",
+      "bytes": 169106,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m204_otamamon-final-growth38-20261007/main.webp",
+      "sha256": "49bc80dffaef44106e32a548e2982ea0e155336d2c8f07215afa087c3b031a02",
+      "bytes": 366552,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m204_otamamon-final-growth38-20261007/sub.webp",
+      "sha256": "15e4a16a9236ec29f4a58b7cceedcc9a1ba86a5f2be41f335361fb9c14569797",
+      "bytes": 115522,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m205_gaomon-final-growth38-20261007/main.webp",
+      "sha256": "361a0c5dd567b6e3d0a78789116c71685ae1ea380a48f1a1370effc120bfa194",
+      "bytes": 632614,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m205_gaomon-final-growth38-20261007/sub.webp",
+      "sha256": "422ba5bf1596497cb13cda38f091b5a61c389d4ba45498f3c6072601d2fb485c",
+      "bytes": 186726,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m206_gazimon-final-growth38-20261007/main.webp",
+      "sha256": "9680595613722695823a04c0337421a77cb8099a5879d1a3913587286d2bf35a",
+      "bytes": 895732,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m206_gazimon-final-growth38-20261007/sub.webp",
+      "sha256": "74d714e3be498c7a942b881a40ca5bbf4bfa80b3841d399b153b24f86ac0cf4f",
+      "bytes": 282734,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m208_gabumon-final-growth38-20261007/main.webp",
+      "sha256": "21f27b2774f689957a28d156fbc2e5fcf33f7720f09856c7c6c7617bbd4dbebe",
+      "bytes": 888062,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m208_gabumon-final-growth38-20261007/sub.webp",
+      "sha256": "1b53c3eb612a150c33121de9103bdc7471204b75671fe38021a4ef59c2c06015",
+      "bytes": 283712,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m209_kamemon-final-growth38-20261007/main.webp",
+      "sha256": "7cc91106eb97bfb707c17b0192238415ce8e71df11a9cd7f21e0ed46e19eb20b",
+      "bytes": 639362,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m209_kamemon-final-growth38-20261007/sub.webp",
+      "sha256": "bcbbe446f00ec5e5cf434c552903d46c7acad2eab302035defb0c9bf3ed3c35b",
+      "bytes": 188232,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m210_gizamon-final-growth38-20261007/main.webp",
+      "sha256": "20b79edb1f2cfb52596f087908e3c88af9fbb94c16203e32faed240c8b3581ad",
+      "bytes": 407428,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m210_gizamon-final-growth38-20261007/sub.webp",
+      "sha256": "1ede867da06fc81844a7e4ea2e2738dd9c7d39b1300b322bdb7ad891f0fd4a9b",
+      "bytes": 109404,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m211_candmon-final-growth38-20261007/main.webp",
+      "sha256": "90dbbd3d771280ae1619d56526635f7048e84e872a8515ecd9ab532bf4f70f1b",
+      "bytes": 477738,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m211_candmon-final-growth38-20261007/sub.webp",
+      "sha256": "22665aafa2477b49d8b308af0f8c73ec0955ea677deacb57ec9a590d83893a9c",
+      "bytes": 157172,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m214_kunemon-final-growth38-20261007/main.webp",
+      "sha256": "7f6579ae0f284f976a3efa853a8ee869df027cc8d358fec46329257c77e0366c",
+      "bytes": 711988,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m214_kunemon-final-growth38-20261007/sub.webp",
+      "sha256": "b22f88dcec9a2042fc9a120f429724c866c6e1a5a53e0031973d98bb1d30175f",
+      "bytes": 263098,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m217_gottumon-final-growth38-20261007/main.webp",
+      "sha256": "586271c1ba3907184f3036c6b4e56009b626b9af6896726cf7e8c833143915bb",
+      "bytes": 513262,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m217_gottumon-final-growth38-20261007/sub.webp",
+      "sha256": "1a59845943b37de084f778de133a4e91b90a20303f7aff8a8364ffaad623beaf",
+      "bytes": 163982,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m218_goburimon-final-growth38-20261007/main.webp",
+      "sha256": "8484517a938efbd40d34b486ba9d791fed6ddfbe243285e76af897ab570c1e30",
+      "bytes": 347120,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m218_goburimon-final-growth38-20261007/sub.webp",
+      "sha256": "fb693a915066cae5f6617a5c4294333ae9cad483cf2bcf766fe1b7dbaaaaf1ed",
+      "bytes": 112950,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m219_gomamon-final-growth38-20261007/main.webp",
+      "sha256": "2797722b66030adec6b31c6b49dccf4ae2c216f6d7de6a60c0a08ad97db71a9b",
+      "bytes": 520550,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m219_gomamon-final-growth38-20261007/sub.webp",
+      "sha256": "4c6ae4959e47fdc5d47422899963247a904f3d2ed030e168a62808f4641eccf0",
+      "bytes": 169348,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m221_terriermon-final-growth38-20261007/main.webp",
+      "sha256": "af8f306194dfc29e388778134494b71ba4dd715d8baad04eb5662d4d525152fc",
+      "bytes": 528844,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m221_terriermon-final-growth38-20261007/sub.webp",
+      "sha256": "207b6e447af85b9840c25c5986c09daa07743bd66b6b1c5338b103ea7ae01b3d",
+      "bytes": 161356,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m222_tentomon-final-growth38-20261007/main.webp",
+      "sha256": "8cff5f865df4b22f0f4fb8b0dd80e944b0ce332f60f9e2be2bfb24ea8a46e95c",
+      "bytes": 493788,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m222_tentomon-final-growth38-20261007/sub.webp",
+      "sha256": "554ce102374b31db20f5c7c53664036a2b059ceb16c0064905c4dbfbd9e9cb2b",
+      "bytes": 151290,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m223_toyagumon-final-growth38-20261007/main.webp",
+      "sha256": "a6f6ca21dd27f236c5ea0e2a5001d3ef63c7f0649e8ee72c40c61fa1031dd2f5",
+      "bytes": 410722,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m223_toyagumon-final-growth38-20261007/sub.webp",
+      "sha256": "454cea9480386877472ead2c3bfe7611be7d98d9ad4004cc205b9de1e1318fd7",
+      "bytes": 138772,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m224_dracomon-final-growth38-20261007/main.webp",
+      "sha256": "00baf72af484cdd2df0bd1ca67aba680fe96e3306d19f6073366d65abdbbb882",
+      "bytes": 451752,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m224_dracomon-final-growth38-20261007/sub.webp",
+      "sha256": "15635c4b57906c163ba3a4c7eb0c48a98ca4292308c34d38a45e4379d0fd236f",
+      "bytes": 145960,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m225_bakumon-final-growth38-20261007/main.webp",
+      "sha256": "ca13df27993e8a9ff7c08f87894b04e2bd495a98c6cf01550c473ae21a2266fc",
+      "bytes": 517330,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m225_bakumon-final-growth38-20261007/sub.webp",
+      "sha256": "dae0bf3ca45ea30469e055c56f306bb8e9aac76a6dd1f526dba50b5258ff119c",
+      "bytes": 148640,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m226_hagurumon-final-growth38-20261007/main.webp",
+      "sha256": "1f47df1defc4d5d3e0b12b8bee419c2d95a6f6e47edb8f9cb8e713644fd15cf6",
+      "bytes": 320130,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m226_hagurumon-final-growth38-20261007/sub.webp",
+      "sha256": "b35b388a861bbc5c02656947991d3fb9d32ac37f121a5d074288e2944e34ac31",
+      "bytes": 102120,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m227_patamon-final-growth38-20261007/main.webp",
+      "sha256": "9b6ab662752e0b66e8292e6f845b8cf3bd1048b0e0ed871f6dd96e8138b4c1cb",
+      "bytes": 332434,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m227_patamon-final-growth38-20261007/sub.webp",
+      "sha256": "bb38e70b294be5649e2ca506eb54ecbfade19923064813b0ece3b5471ea25dc9",
+      "bytes": 99570,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m228_palmon-final-growth38-20261007/main.webp",
+      "sha256": "bd876d6ef4d474de665dffb8c8eb40b7e614b043e3340b051ba85e95fe2e48b1",
+      "bytes": 475208,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m228_palmon-final-growth38-20261007/sub.webp",
+      "sha256": "bbb071849a323272bdde0327c5a8de2b7dd0f4fa9345f8c142afd00fe6792595",
+      "bytes": 158726,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m229_picodevimon-final-growth38-20261007/main.webp",
+      "sha256": "ab95d76e46c2f9d451d5d119786210851178db534647c325a855dd03ad73fb96",
+      "bytes": 227558,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m229_picodevimon-final-growth38-20261007/sub.webp",
+      "sha256": "c82f6f9fff21018bae389e4dd17720e2fc65c68aae1a1cdc8846048e84d0437b",
+      "bytes": 73054,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m230_piyomon-final-growth38-20261007/main.webp",
+      "sha256": "e5f4315c2f17f44bc6491b08ef65fb35319a67a43a2ea11d5b9f2d58d03d19b3",
+      "bytes": 514330,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m230_piyomon-final-growth38-20261007/sub.webp",
+      "sha256": "349ae32f05392e617ef695c68597c655f388e8963d0386b1b14198480f51fb2a",
+      "bytes": 159870,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m231_falcomon-final-growth38-20261007/main.webp",
+      "sha256": "8dcad5c223a921ba00c4c59b15aadf770f0101d4bf18bf89afbed46b04fa4797",
+      "bytes": 373972,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m231_falcomon-final-growth38-20261007/sub.webp",
+      "sha256": "eaad32332d1456e7854c4b0bac04676e8558020f47d75201c4aac68e543301c7",
+      "bytes": 107898,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m232_plotmon-final-growth38-20261007/main.webp",
+      "sha256": "2c17982854a02fe67fd5d5b4d64c733162eae193494237993bec60ff8a97c92c",
+      "bytes": 593482,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m232_plotmon-final-growth38-20261007/sub.webp",
+      "sha256": "4e6d31e200ac6956f290d32c18039d1c8ed6e668f88de0e76a6a8eee0aa28b1f",
+      "bytes": 173400,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m233_floramon-final-growth38-20261007/main.webp",
+      "sha256": "4d033950fe7453ba9ffc617e9860b3a0a388733c17ac49aba4e0cac21cea2bf0",
+      "bytes": 364674,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m233_floramon-final-growth38-20261007/sub.webp",
+      "sha256": "85e59996b1358be9dd3c2b7050c18555bf5c91c99d281523158f5418edb0a8be",
+      "bytes": 118720,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m235_mushmon-final-growth38-20261007/main.webp",
+      "sha256": "0eaf03f9bd8f0e5a1cd752864d21eb6729b4981a2f757a1917dac9a3adbc65ad",
+      "bytes": 534206,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m235_mushmon-final-growth38-20261007/sub.webp",
+      "sha256": "1b3f6af3f1b4736c042f5b30e38614389d49a05051e880d2ee21fc0d19907791",
+      "bytes": 164488,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m236_yukiagumon-final-growth38-20261007/main.webp",
+      "sha256": "79f900ac401bead53cb4be71f6b5ecd95b4560abb20f794cec05c8c463f21cfd",
+      "bytes": 356974,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m236_yukiagumon-final-growth38-20261007/sub.webp",
+      "sha256": "6ea4c4041a398ff05b8452b34b144b7c9ba3c8bd8fd8199b884f6eefcaa4ea49",
+      "bytes": 114098,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m237_renamon-final-growth38-20261007/main.webp",
+      "sha256": "e83d94ec2abdf0e8bb80a22f9332749611906bd720040b12062f1d2098d2e96d",
+      "bytes": 546192,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m237_renamon-final-growth38-20261007/sub.webp",
+      "sha256": "86f23b0ea1bda9927f21642a6f77a3155ee459775bd07541374927cf2c74add4",
+      "bytes": 187970,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m238_coronamon-final-growth38-20261007/main.webp",
+      "sha256": "ea54a2ec044a02c7a12a9dacaf66057dc9904cd287b3aacb935d298d8508f440",
+      "bytes": 743218,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m238_coronamon-final-growth38-20261007/sub.webp",
+      "sha256": "23d8046093c09fc10b9ffdd1bcd3f83544454de17760574dbec8fafe25ae8c4e",
+      "bytes": 254512,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m239_lunamon-final-growth38-20261007/main.webp",
+      "sha256": "a7b71352e2f2bcb1e8c59f72cb3bfab204de5f0d3f3f0d916d101c5de7189364",
+      "bytes": 579874,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m239_lunamon-final-growth38-20261007/sub.webp",
+      "sha256": "5a2b54c813067e483b203e1ba715c6003c33b8d9d906d414969a6e33ada1a465",
+      "bytes": 192824,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m240_kuroagumon-final-growth38-20261007/main.webp",
+      "sha256": "a105c404ffb32b36278bb388488990d526dfd7a193c612e78b27671fc4fbf0d7",
+      "bytes": 334146,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m240_kuroagumon-final-growth38-20261007/sub.webp",
+      "sha256": "10513f9f6910f7f59fd307494aa9b602e7fdb7e737ea85cfcaa1c85c8dfd85b8",
+      "bytes": 108300,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m241_psychemon-final-growth38-20261007/main.webp",
+      "sha256": "73b958d60edc65fa0ded351c69be26a7a4770d6bae09bd27ce738403d9f9725a",
+      "bytes": 731032,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m241_psychemon-final-growth38-20261007/sub.webp",
+      "sha256": "b5bfe7cb9876dd984eddde4f682c69155b1bbb302795254bee4cfb75e84eff3e",
+      "bytes": 235088,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m242_alraumon-final-growth38-20261007/main.webp",
+      "sha256": "d881ce04860cee19ed3120c8e32764d73f5c91e961042115e1bc7b12b47d38e6",
+      "bytes": 389354,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m242_alraumon-final-growth38-20261007/sub.webp",
+      "sha256": "1d205d975b039beaec00888785173d16dd84c728d103cbde64ab4bd18d8873c5",
+      "bytes": 128098,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m243_tsukaimon-final-growth38-20261007/main.webp",
+      "sha256": "da43a7bb9dd2005062f389e5b2858132f08f54a4837d8c454f8985f4dbb47104",
+      "bytes": 230888,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m243_tsukaimon-final-growth38-20261007/sub.webp",
+      "sha256": "57d029b36dc07eb82ce0eaf97f9470f114df16f00cc2ac0560c2f361b5a971d1",
+      "bytes": 82552,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m244_vmon-final-growth38-20261007/main.webp",
+      "sha256": "8af97edad89d0667ff46fa09d98976fb8e8e04b3fc98b2ae95c0e56a0b34b7ff",
+      "bytes": 503266,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m244_vmon-final-growth38-20261007/sub.webp",
+      "sha256": "0c9b79193e2d799ef545d01e5c5bf710f8f3cb05e6d19158d9f6fe4a45762ada",
+      "bytes": 156760,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m255_guilmon-final-growth38-20261007/main.webp",
+      "sha256": "12b873b750c470b382e6411d7e063748215e0731d37d941d6255fae5eff87596",
+      "bytes": 510038,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m255_guilmon-final-growth38-20261007/sub.webp",
+      "sha256": "0a0a4a3c15a74a8699bca01db312dc9772c6e5737c39889ca933753b85f00ff8",
+      "bytes": 168136,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m301_ankylomon-mature-raw-r02/main.webp",
+      "sha256": "418771ed20b6edeab8cc97a3db148551e1a7115e774dcba56e11b8e11f1b96a4",
+      "bytes": 1580794,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m301_ankylomon-mature-raw-r02/sub.webp",
+      "sha256": "41317a3b508d094ee5f7a469da7db99f3a04f54474272ae3055efbe32c840a20",
+      "bytes": 452672,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/main.webp",
+      "sha256": "c22983c925043e5b6d3536a7dfb1076a72684cda4f973bfad8dc8198e35c5653",
+      "bytes": 1198516,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/sub.webp",
+      "sha256": "a6fff20326305008fa3f3950f4c534c50ec7bd85e56c4c6a215bd03db1bd2509",
+      "bytes": 423730,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m304_wizarmon-mature-raw-r02/main.webp",
+      "sha256": "ee5a4a428e09da8ed9b47ef5e6d54a0bb8cb69f2f1d21d34121b5e323e7aaed0",
+      "bytes": 1119646,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m304_wizarmon-mature-raw-r02/sub.webp",
+      "sha256": "39b61948ca1ed59c8527459f60b892ca8d9e0d2bf947b0a9dd4103d838bebc0f",
+      "bytes": 372128,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m305_woodmon-mature-raw-r02/main.webp",
+      "sha256": "3074a756f515d96cf4704f195d1706d8358650a98f22258f34f26ab83c68c4a5",
+      "bytes": 1549526,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m305_woodmon-mature-raw-r02/sub.webp",
+      "sha256": "eac20f7aadd63bebe2b18b6f608a0ae7ba60193f6ceeeb3bb041241d43bb1612",
+      "bytes": 508332,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m306_airdramon-mature-raw-r02/main.webp",
+      "sha256": "766b3281754b52465bb72996d344aa4701b4e1177c177b81ec59db6e6836bb0f",
+      "bytes": 1529316,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m306_airdramon-mature-raw-r02/sub.webp",
+      "sha256": "0599e4e5a02bcaefa1d62ff330ac6a038239885a63faf00122dc6566aecb4d48",
+      "bytes": 440662,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m308_angemon-mature-raw-r02/main.webp",
+      "sha256": "52bb2ca4a1e81348b05c98431c5bdf17f3bbe9d933bf045f8acdab70e555a326",
+      "bytes": 1266284,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m308_angemon-mature-raw-r02/sub.webp",
+      "sha256": "8c35c1d9b27082ddaa0ee21cacf3541324933d201d898089b547e683f1f620b4",
+      "bytes": 349814,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m310_orgemon-mature-raw-r02/main.webp",
+      "sha256": "753813d8cd30764ce62eb46569670cc4286848781864933751f6a82c957718d2",
+      "bytes": 1360318,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m310_orgemon-mature-raw-r02/sub.webp",
+      "sha256": "265d9ab1587bc31b06e094d1b78eced6bcf2fc891d422ba4698399fbd31c502a",
+      "bytes": 467254,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m311_gaogamon-mature-raw-r02/main.webp",
+      "sha256": "d2543caa294b4975b424be3ede6b6a0364a10394b84ea9ba8f23a80cd154f03f",
+      "bytes": 1957734,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m311_gaogamon-mature-raw-r02/sub.webp",
+      "sha256": "0264c95597212fa6955d360aea9adc9bc63ab99971dbe98069863d54bfc6341d",
+      "bytes": 587436,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m312_kabuterimon-mature-raw-r02/main.webp",
+      "sha256": "023de6dc021c4daf29d0ef7c99e1814730a102819ddaff789cea6c78019bb139",
+      "bytes": 1810660,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m312_kabuterimon-mature-raw-r02/sub.webp",
+      "sha256": "55ee4c39d9ee5ed6e6a51dab3a0bb2047163fe1f1b7e398bac1edf4ed2a44d6f",
+      "bytes": 540536,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m313_gargomon-mature-raw-r02/main.webp",
+      "sha256": "ae658120b104bee2d4b792cd56b721399d5c7de23bde590502d4e27d4536e40f",
+      "bytes": 1578038,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m313_gargomon-mature-raw-r02/sub.webp",
+      "sha256": "5401f3df777245b3512f6e008cd87d181f4487d6e48eedf755ead88ca0d6bac3",
+      "bytes": 440244,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m314_garurumon_va-mature-raw-r02/main.webp",
+      "sha256": "b81c2f51e065dc1d061140b4c4c832097965c55e1ccb742c9f2d5e5f321d0bab",
+      "bytes": 1757704,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m314_garurumon_va-mature-raw-r02/sub.webp",
+      "sha256": "f58b409fc93dc864e7e26aa33cbe41ddc82c7ae59a86002b4195b6e33a709f2e",
+      "bytes": 474254,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m315_garurumon_vi-mature-raw-r02/main.webp",
+      "sha256": "c6642cf3625ff7e962d0afe0f14ef5a2b29cdb1f478df896fbcbea46124425d6",
+      "bytes": 1826136,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m315_garurumon_vi-mature-raw-r02/sub.webp",
+      "sha256": "a08f6a33ba564b65553c11f2f9406e020afef54678592bbf2bc6e8af54b46193",
+      "bytes": 494866,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m316_guardromon-mature-raw-r02/main.webp",
+      "sha256": "6296809bc181384625fa228e7a83241f8716d36fab75c8bd9619a6e3f647fbc3",
+      "bytes": 1156134,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m316_guardromon-mature-raw-r02/sub.webp",
+      "sha256": "7154c781ad0ba678b9b36f60c05b174b5a8204c980bf37dcff175140bbcf4e41",
+      "bytes": 394736,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m317_kiwimon-mature-raw-r02/main.webp",
+      "sha256": "0ceab82f996a30d515c3207fa5520d8ebf2dc983026c2b4b2631721466acacbe",
+      "bytes": 1719220,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m317_kiwimon-mature-raw-r02/sub.webp",
+      "sha256": "def5483e406769d0ca3e7eb64a47f72c6139ce124e091f5a8fcd9ee2af4652cc",
+      "bytes": 492628,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m318_kyubimon-mature-raw-r02/main.webp",
+      "sha256": "49914b58952d5c8d5d031544218fc93dbfaff16698302a483dbd0a0dd1862e32",
+      "bytes": 2005384,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m318_kyubimon-mature-raw-r02/sub.webp",
+      "sha256": "4a8fe6bd742fb95ec83772ffc27cff21d1a3ed0ea94f59c66b3d8a68ed22c806",
+      "bytes": 564592,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m320_graymon-mature-raw-r02/main.webp",
+      "sha256": "2b4a1af6382eedfb473433a6aa14ec0aa38568e2c21fbf7aca080a79055b6e3d",
+      "bytes": 1878184,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m320_graymon-mature-raw-r02/sub.webp",
+      "sha256": "e7616c77c9952ba1a92862242ddf0119eba6d7063c1c54aba2001cba3f499899",
+      "bytes": 604350,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m321_clockmon-mature-raw-r02/main.webp",
+      "sha256": "140746501c82f1a146e6a71b563303187c628125abd3bad7736e35809ab9722b",
+      "bytes": 2723182,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m321_clockmon-mature-raw-r02/sub.webp",
+      "sha256": "b5f651820c6ff0956a15afd416c0e088e9747354c774c1417b071c35fad7c9f2",
+      "bytes": 811042,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m322_kuwagamon-mature-raw-r02/main.webp",
+      "sha256": "cdd130d72657c66e1e4f0faa3011bde8f701eafab3955dc4e43c40e122030243",
+      "bytes": 2082370,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m322_kuwagamon-mature-raw-r02/sub.webp",
+      "sha256": "69b8ed1c5e78fe0c752a45367ac4725742ef224da5cf83a3ff686dda39177af0",
+      "bytes": 650588,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m323_gekomon-mature-raw-r02/main.webp",
+      "sha256": "0d586e5547a7a5ac34fedd243b897b263d6cd4b557d2ea5fb31ee2768cc0010b",
+      "bytes": 2432412,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m323_gekomon-mature-raw-r02/sub.webp",
+      "sha256": "d04156a7212810a250d3e3ca48f495c5c5895688e4b7d188085f61ec1c6e3b1f",
+      "bytes": 792202,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m324_gesomon-mature-raw-r02/main.webp",
+      "sha256": "b115335152ffe62c45b7f0060432644cba29412a9e90976e6f1e23b8bafc12f8",
+      "bytes": 1828766,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m324_gesomon-mature-raw-r02/sub.webp",
+      "sha256": "3b3965714bd038f551091554cf55c6a2c89630a8d3a4aef7a5cbf4a4ca32c4d8",
+      "bytes": 556004,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m325_centalmon-mature-raw-r02/main.webp",
+      "sha256": "524f91b86c15152e1d5a0b22edebb3895dbbc72b341f1f3ffcc70490f85aa29a",
+      "bytes": 2131390,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m325_centalmon-mature-raw-r02/sub.webp",
+      "sha256": "412a14dbc6b4d498732862fb9296eb59c65f9027ab13a9d010bf8b1a8ea82834",
+      "bytes": 636156,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m326_cockatrimon-mature-raw-r02/main.webp",
+      "sha256": "cf1e219d8e857371e99267ef2211c6984af58c010bfe44b2dd8c844d8e6ce335",
+      "bytes": 2053468,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m326_cockatrimon-mature-raw-r02/sub.webp",
+      "sha256": "eb499091790087fd0ec09d7d7e70220ae8ca31b6e16db9c57a6663e5d6a8824d",
+      "bytes": 680264,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m328_thanderballmon-mature-raw-r02/main.webp",
+      "sha256": "83ac70590d5f4713e4d5c9305c9610c144b6dc207e54114fda8c819eed70ad67",
+      "bytes": 1292406,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m328_thanderballmon-mature-raw-r02/sub.webp",
+      "sha256": "830bcd75f619fc5b4c75253fb29c7bb27ccf206aff1c109d57fffd3477809a05",
+      "bytes": 442624,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m329_shellmon-mature-raw-r02/main.webp",
+      "sha256": "0a9cd924011ff122efc8b403460a2c0b530289be842c747e06d577b2cedf3799",
+      "bytes": 3192064,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m329_shellmon-mature-raw-r02/sub.webp",
+      "sha256": "836f9abe267b03b975b39a1f4e516fe9a3c24caace0e059b83398ef3150afed8",
+      "bytes": 971680,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m330_geograymon-mature-raw-r02/main.webp",
+      "sha256": "3d6c5cc2adb5a567af694d9088dbd69fe5714ac72cf388fe8d2e41a647daebb2",
+      "bytes": 1647202,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m330_geograymon-mature-raw-r02/sub.webp",
+      "sha256": "99482c0e61bd240e1ddf1ddce5164004e5c5d7a8990626ba5477f14464009591",
+      "bytes": 559946,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m331_seadramon-mature-raw-r02/main.webp",
+      "sha256": "0892f7c25f0bbc5a5f1e897a1c88f73e3252cf4c38b4c46cdb057593616ae12c",
+      "bytes": 1381416,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m331_seadramon-mature-raw-r02/sub.webp",
+      "sha256": "419f9bff1ae5c02cb8e20b0e9956b965aa4d2ef647b2ba5ed029975cf69c46cb",
+      "bytes": 451034,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m333_scumon-mature-raw-r02/main.webp",
+      "sha256": "90129942535b46c41ca470efa9ac16d92b2938ab4efe20706f0ab613242b434d",
+      "bytes": 1214754,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m333_scumon-mature-raw-r02/sub.webp",
+      "sha256": "7d116b0ac79daf752b0441bf8e8a3e0fff241031cdc8fa6c40d56a0e7bd84955",
+      "bytes": 377316,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m334_starmon-mature-raw-r02/main.webp",
+      "sha256": "f8407349d0cefc10c177fd9904b7c8ab0e50d80c54bcd7832289a796dbcefbdd",
+      "bytes": 1343556,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m334_starmon-mature-raw-r02/sub.webp",
+      "sha256": "2ff9b1c255263bdd9336968e769951507ffccb7ef1014ccf80b0bea1fd87132c",
+      "bytes": 409358,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m337_darcmon-mature-raw-r02/main.webp",
+      "sha256": "5c1ebf74477193767809961566638b5e0d9dd5fab090b784db88846465d5ed34",
+      "bytes": 1296532,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m337_darcmon-mature-raw-r02/sub.webp",
+      "sha256": "cf49fb4636e62366c040a2a08f956c7ea66bd38e8bd0504cc8bcac49886428a6",
+      "bytes": 361304,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m338_darktyranomon-mature-raw-r02/main.webp",
+      "sha256": "55409fbc1dbd9df360a1279bf9121eab800e2039b1d3a2c8b78fbbd9321cb0a8",
+      "bytes": 1698028,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m338_darktyranomon-mature-raw-r02/sub.webp",
+      "sha256": "f515a61904951df532238aeb71ebed0dcf27c0de7b72e872059d0a24bf29c6a8",
+      "bytes": 525422,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m339_tyranomon-mature-raw-r02/main.webp",
+      "sha256": "ff90e56f98f7181cbcd52e8a8de3b8fc8085481097e9ded64b7f4dfbe926d07e",
+      "bytes": 1676656,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m339_tyranomon-mature-raw-r02/sub.webp",
+      "sha256": "8538896ca442b6cc2f2848775d858cb8db495106bcf3d1bb315ed5aed40e63bf",
+      "bytes": 528022,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m340_tailmon-mature-raw-r02/main.webp",
+      "sha256": "3993e28ee79a92b77a281325116ccdcfc8d20c51ccb335501de025f99f89726f",
+      "bytes": 2276298,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m340_tailmon-mature-raw-r02/sub.webp",
+      "sha256": "4f871ec114654f23c62cd1bfcfb53bec0767315307567007b064c52b61b9b69d",
+      "bytes": 669748,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m341_devidramon-mature-raw-r02/main.webp",
+      "sha256": "88c35b84670b583afde8f7fc6f0b0215a68838dad21c26878efb7be1054d0028",
+      "bytes": 1554596,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m341_devidramon-mature-raw-r02/sub.webp",
+      "sha256": "5f2605ffa3499f407de866da9e7a36c2ffa63b492152950932513f9c90f8f93c",
+      "bytes": 487962,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m342_devimon-mature-raw-r02/main.webp",
+      "sha256": "3724dca2b019130b1d423f27f444b567e110fa93c284802e3bb2a9d4ca023452",
+      "bytes": 880992,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m342_devimon-mature-raw-r02/sub.webp",
+      "sha256": "f724be1d41e418558c7b45a03ca585ae9e2a8cab5249b153e9c6e8eec4c910f0",
+      "bytes": 262792,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m343_togemon-mature-raw-r02/main.webp",
+      "sha256": "917d8c77a9dd97cdb6d8a65dede5f60bd3b973db0691e7fd47617a4dbcc372be",
+      "bytes": 1272516,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m343_togemon-mature-raw-r02/sub.webp",
+      "sha256": "ee6b975206c4d3575f74ce43d7153a5502914cfada5d624b9b1d65499fd1c8a3",
+      "bytes": 375320,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m345_tortamon-mature-raw-r02/main.webp",
+      "sha256": "17ff00df0309c5d3b17f02789a24fbe444d3dbbff33e6ff523e7b51ef0ac2464",
+      "bytes": 1087924,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m345_tortamon-mature-raw-r02/sub.webp",
+      "sha256": "f5b797513829e43ee2ba37268c5df41e1c9de09925c8d473fae07adcd3cb2005",
+      "bytes": 356608,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m346_numemon-mature-raw-r02/main.webp",
+      "sha256": "7313c1a6a1567b397a2d99e84e491ea54951e6483fa15654e01356f2e9c65b42",
+      "bytes": 1316228,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m346_numemon-mature-raw-r02/sub.webp",
+      "sha256": "1d75315b7ec2465b1bbce2081115d23ef07b0d99129de38dfac909ce3a9357cd",
+      "bytes": 406788,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m347_bakemon-mature-raw-r02/main.webp",
+      "sha256": "d24406048d6783b4b0395d51e23e0be37c797354b93e50e74fda0be84868afde",
+      "bytes": 1982402,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m347_bakemon-mature-raw-r02/sub.webp",
+      "sha256": "420c6b3a7eafd021e814e87e7b07a9db1f86710be2b8083c789f0db94ad989ca",
+      "bytes": 609856,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m349_bardramon-mature-raw-r02/main.webp",
+      "sha256": "b9311131e37277888752b24ea30e1488f5d116ea289507b8cefcaa0d76f54189",
+      "bytes": 1447686,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m349_bardramon-mature-raw-r02/sub.webp",
+      "sha256": "f42072a4787b8ad9f491eb8cb230278f1b028f6c67c74b3f15fd3734e4a59c57",
+      "bytes": 408252,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m351_vagimon-mature-raw-r02/main.webp",
+      "sha256": "b0714c17202cc6d4b0bb070a12d06f4b44df755d157e099a8982665cae49f291",
+      "bytes": 1324364,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m351_vagimon-mature-raw-r02/sub.webp",
+      "sha256": "c775d797506ee7e7dea191facb1ec204ea6c163c38e3b744b089b643d1d9065f",
+      "bytes": 381258,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m352_peckmon-mature-raw-r02/main.webp",
+      "sha256": "1ed4795589e493d6386c4ade4db19c2bfe9df1c01e06304d001626f77721a612",
+      "bytes": 1577924,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m352_peckmon-mature-raw-r02/sub.webp",
+      "sha256": "34d58970fe2731e1775cd28c131b83fb363693cf8b2bc4dffd95af8b3bae44ab",
+      "bytes": 405332,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m353_meramon-mature-raw-r02/main.webp",
+      "sha256": "f51183fbfaed901c7ee11bb1e4756a810e7c4894c49377fbc4a1e1119b78836a",
+      "bytes": 1823574,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m353_meramon-mature-raw-r02/sub.webp",
+      "sha256": "c2f8bea5cac41558be8c4d7c4101ad76fff367222944a05c5db14e89fed1b494",
+      "bytes": 625726,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m354_mojyamon-mature-raw-r02/main.webp",
+      "sha256": "ab5023405f07e07333437a5d9611b5788bac3d39ef5bfd1ad588fcf7038cf937",
+      "bytes": 1855992,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m354_mojyamon-mature-raw-r02/sub.webp",
+      "sha256": "765f1524a24eadad9af03c958c861b7fe5611ce79b83352e8edb31ed544e614d",
+      "bytes": 577718,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m355_monochromon-mature-raw-r02/main.webp",
+      "sha256": "0dd5c7e4a13775d4f301726d57c660e5faefe4977e43ae8197fc383463ae5ed1",
+      "bytes": 1922238,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m355_monochromon-mature-raw-r02/sub.webp",
+      "sha256": "3d3fff9cae9b09985f873f0366f0cf531e9e64df6d232909154047ecfc6559e2",
+      "bytes": 604210,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m356_yukidarumon-mature-raw-r02/main.webp",
+      "sha256": "a4fea095d4336ad0b87d45e61cbc7031bdac6e8edc7827f09891e031c1a73cae",
+      "bytes": 2269706,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m356_yukidarumon-mature-raw-r02/sub.webp",
+      "sha256": "5f787e807aa692ded3158be262aacc548f429cb865f80197c3e7313fd3aa1336",
+      "bytes": 734428,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m357_unimon-mature-raw-r02/main.webp",
+      "sha256": "9a2b3a69aff5ea83e69521df8e1732d26977d27681c5343573872cd265026293",
+      "bytes": 1850192,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m357_unimon-mature-raw-r02/sub.webp",
+      "sha256": "b3bd6f697a2a9a2b385b2fa62a72f5490b944814de8f33171f6749e0cbef9e5a",
+      "bytes": 511346,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m358_youkomon-mature-raw-r02/main.webp",
+      "sha256": "6e1e0c0c0be61636f6d4276486afbc2f415fe1861a7dd4341f6cff84890d8ac2",
+      "bytes": 1831150,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m358_youkomon-mature-raw-r02/sub.webp",
+      "sha256": "343a7571292bc19cd2e47ef9f8df324a81cc9b7bd0f566a1ee7fff2d8dc07a68",
+      "bytes": 510634,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m359_rynxmon-mature-raw-r02/main.webp",
+      "sha256": "c31da57c0d2653bdf7232a1488f0d6ada1f37999aa9404f1188864e5df919afd",
+      "bytes": 1643956,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m359_rynxmon-mature-raw-r02/sub.webp",
+      "sha256": "a0465dfd7925b9245b7789dcfa8187a43e50fc63f7008a0fe35782baa325030b",
+      "bytes": 527158,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m362_raremon-mature-raw-r02/main.webp",
+      "sha256": "fcc4a9761c32383ebe991179ff6664bfa6d8fb26d239e23f27639d9aae0f77e1",
+      "bytes": 1002792,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m362_raremon-mature-raw-r02/sub.webp",
+      "sha256": "540dc804bdb27ca1f9e6977c43243c5112d123d7b237f961709c7d5d2720f9ff",
+      "bytes": 299864,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m363_leomon-mature-raw-r02/main.webp",
+      "sha256": "96d942780c8e7b95085b78d91ca9c8630c0b8baedf937e7a68ce002b331ef376",
+      "bytes": 1695642,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m363_leomon-mature-raw-r02/sub.webp",
+      "sha256": "1efbd3be7147687912d8de59299f5447b6ded1713a6f9fda22247a3d0c9d96ed",
+      "bytes": 543160,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m364_redvagimon-mature-raw-r02/main.webp",
+      "sha256": "c335c42cb9acab48bdd2b5ee89bea357ba550fc4fa319b24716481a41dbace83",
+      "bytes": 1992000,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m364_redvagimon-mature-raw-r02/sub.webp",
+      "sha256": "0e4ed6a7420121e33c3c516de6e178ade151bd047b58278c8d970c82213c1b56",
+      "bytes": 690736,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m366_coredramon_ten-mature-raw-r02/main.webp",
+      "sha256": "f7150036b23fa9f55721339780f1881b15335833a07768c6e72729bddc8e3970",
+      "bytes": 1752146,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m366_coredramon_ten-mature-raw-r02/sub.webp",
+      "sha256": "3b7d2357274541872b36b4f568ee71be2b803b553f4f756bff639e5de61017b0",
+      "bytes": 521180,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m367_coredramon_ti-mature-raw-r02/main.webp",
+      "sha256": "fcf4c7ce220b899e9a105b1d6fd801824f41e95164eb620be191b4fcd3daa99c",
+      "bytes": 1704318,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m367_coredramon_ti-mature-raw-r02/sub.webp",
+      "sha256": "931b0e506670002052871f9eab7de72f4d3860c319e4115a4ed6f119ba4e0828",
+      "bytes": 530940,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m368_firamon-mature-raw-r02/main.webp",
+      "sha256": "52e397ed4bfd7bf14432f6e4a6a8613629fa1b7885f88ec727147916673f48a4",
+      "bytes": 2583488,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m368_firamon-mature-raw-r02/sub.webp",
+      "sha256": "cefba1e970b82ca87c033fc96a0bd9a47372e5a431cc779d231d0bd9da527375",
+      "bytes": 785020,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m369_lekismon-mature-raw-r02/main.webp",
+      "sha256": "2a592d1b8b2edb62a6a9d925aa7284e4681faef35fb729c33ef2acc4752176bc",
+      "bytes": 2348756,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m369_lekismon-mature-raw-r02/sub.webp",
+      "sha256": "08a7971f2ad8e0aedf86e6ff82b5f3f8ab3795df13ff2a2e678673f392b1a5ce",
+      "bytes": 741346,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m370_icedevimon-mature-raw-r02/main.webp",
+      "sha256": "973b5fd4547ddf8838cc1cc9efd87ff1c815bb347fe6c2d093fbc91b7f0d2745",
+      "bytes": 2086900,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m370_icedevimon-mature-raw-r02/sub.webp",
+      "sha256": "319b8f0880aa9d91f0ebcaeb3aa7d32fcc3244bf71ffbdc3e4cb146002cbf63d",
+      "bytes": 707352,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m371_grurumon-mature-raw-r02/main.webp",
+      "sha256": "9a5e2e0fd5266d14243f076ae17ef946bf3082f7c3decc322ad0821efe47591c",
+      "bytes": 2053108,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m371_grurumon-mature-raw-r02/sub.webp",
+      "sha256": "1a1788f6d44eb6d2b6ffe7b162497a8611cb850cd7a6c94b1d953bfb57872910",
+      "bytes": 594142,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m372_geremon-mature-raw-r02/main.webp",
+      "sha256": "d9f5a709f362d448a837912807357eac143d1cebd21dab21833ce66969fd32eb",
+      "bytes": 2039278,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m372_geremon-mature-raw-r02/sub.webp",
+      "sha256": "664d2608f42b0121c95cb5d87029091d1bd5300691a6e1287e2f95ae28e81c8f",
+      "bytes": 610988,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m373_bluemeramon-perfect-raw-r02/main.webp",
+      "sha256": "117033fd2aa7fdfbd8cf4c739465e3d3cc7f177b23f57bb88d8a62c332e3ae46",
+      "bytes": 773606,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m373_bluemeramon-perfect-raw-r02/sub.webp",
+      "sha256": "27f744ae6cd3330d4468e8d99ab470834d69f90e27b9647380ccd2e7f23617b7",
+      "bytes": 253144,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m374_sorcerimon-mature-raw-r02/main.webp",
+      "sha256": "6e318f6417359fdc07c60b0e0a05a151bf56a1c8f7c48b316ae160a3bf6c77d2",
+      "bytes": 2108458,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m374_sorcerimon-mature-raw-r02/sub.webp",
+      "sha256": "45eb01da8ead5cdc1498d34e65251b7d7c1867c4ede1e566d6f7eec33c5f6f9d",
+      "bytes": 669106,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m375_akatorimon-mature-raw-r02/main.webp",
+      "sha256": "8ab3fbf84522191ad366a1cd4b7b4b109651b85a0fb33663ece9871b47a6dad0",
+      "bytes": 2116784,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m375_akatorimon-mature-raw-r02/sub.webp",
+      "sha256": "b7dad2eefc3644e84fdbdbcb0d7ccd26c31e7dab358946dff6a84a06da0bbb7b",
+      "bytes": 625794,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m376_saverdramon-mature-raw-r02/main.webp",
+      "sha256": "0f9e65292d602999621f906b5d50378b0d5036a8450cdee9abc7f2af735ca34e",
+      "bytes": 1645250,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m376_saverdramon-mature-raw-r02/sub.webp",
+      "sha256": "8082aa43248e0acd8a41f353f8a91d19d1c8baa4bfb00e2a9b870ceda3dfb494",
+      "bytes": 482376,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m377_icemon-mature-raw-r02/main.webp",
+      "sha256": "9d75df9cf18e14663b511f2107021ec62d0c012749e3b7034c7c039c4678cdf7",
+      "bytes": 1888236,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m377_icemon-mature-raw-r02/sub.webp",
+      "sha256": "ce28f7208d7c5e2a5b3df83efd9683d05cc8f5728fa87a3f8de28b331172a19b",
+      "bytes": 629158,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m378_vdramon-mature-raw-r02/main.webp",
+      "sha256": "55f42dda9baaffb965bb26048ac165ed9b9e88058e2738f8933333a01b72e229",
+      "bytes": 1713338,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m378_vdramon-mature-raw-r02/sub.webp",
+      "sha256": "366e8ef86e7484d135d5a74411ee174732369a4666ccbb9c58bb25fbddc0db94",
+      "bytes": 585176,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m379_growmon-mature-raw-r02/main.webp",
+      "sha256": "b77af4d8fef89b951399cf815b27dd93c7dd3f34ee9bfeeb6e5c2bd5b0a1fda1",
+      "bytes": 1398296,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m379_growmon-mature-raw-r02/sub.webp",
+      "sha256": "2dc053036dec4fd98df144aad6204246508bcb711e72eab9178308fa8fd51058",
+      "bytes": 435064,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m401_atlurkabuterimon-perfect-raw-r03/main.webp",
+      "sha256": "3d735cb8c73aaff09825740e835e757870ea6a76b63481fd21d5bd1ea6867200",
+      "bytes": 1188402,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m401_atlurkabuterimon-perfect-raw-r03/sub.webp",
+      "sha256": "1c8b387c1f91050d3633c7aaa40a7deb44d1a2b901dd20b31a8286c10e23d0c1",
+      "bytes": 402504,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/main.webp",
+      "sha256": "da6639af4b2c81d72a6bc76ed5583093f160ca4c892de38ea28c47750776390d",
+      "bytes": 1377956,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/sub.webp",
+      "sha256": "c174724941fb8283570e1b5378d9de861a58a94002d24482a8e97a1b80804b82",
+      "bytes": 456856,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m403_andromon-perfect-raw-r01/main.webp",
+      "sha256": "99f7da3c3293671993cc700fe26d8604fdf5b1dbe516f168c4bc51e897d9bb86",
+      "bytes": 696398,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m403_andromon-perfect-raw-r01/sub.webp",
+      "sha256": "0cb674314d6b39a47810302ee1d1753a935297ff3273dea4efd3a0205faba1c5",
+      "bytes": 239806,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m404_etemon-perfect-raw-r01/main.webp",
+      "sha256": "7a201621bae385cc0a6a8d804c29bf87224c006157e61bd4297675d039c44631",
+      "bytes": 1188156,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m404_etemon-perfect-raw-r01/sub.webp",
+      "sha256": "2fa640ca02289d34982eb3c5a90bd1eb0d300fddd0cacfa55cfe665d44b0ddde",
+      "bytes": 417298,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m405_angewomon-perfect-raw-r01/main.webp",
+      "sha256": "097a07f8f99a431e4cfff10d51aae0ca9e81d02cdab4aa8bfc9b0b81cef16492",
+      "bytes": 1188536,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m405_angewomon-perfect-raw-r01/sub.webp",
+      "sha256": "28963fe0ff9e1473057a99f700e19800aa28749b52147f590f0d0ee79ba68e71",
+      "bytes": 286450,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m406_oukuwamon-perfect-raw-r01/main.webp",
+      "sha256": "3cea8dcd0f900b88e1e95c50b410a4f18f96ff85ecd0d3b9255be70aa356c025",
+      "bytes": 892752,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m406_oukuwamon-perfect-raw-r01/sub.webp",
+      "sha256": "b1d3816502a4c5b96de992d61d2f96fe01bcdd458ac4bfc693dc8430776b2baf",
+      "bytes": 278804,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m407_gurudamon-perfect-raw-r01/main.webp",
+      "sha256": "9d4899bab16e17819514c90f1b819395a259770c2bcb6b22c5232d5203e8a2a4",
+      "bytes": 1057552,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m407_gurudamon-perfect-raw-r01/sub.webp",
+      "sha256": "f88a10aa35911bc69e0be837de586a11910417e81373b0502565f644cc35ade1",
+      "bytes": 291584,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m408_gerbemon-perfect-raw-r01/main.webp",
+      "sha256": "0631763cd01284d95c1c658512854cd1983753cbd1bcd13ec3f7b9e90e701d42",
+      "bytes": 694968,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m408_gerbemon-perfect-raw-r01/sub.webp",
+      "sha256": "0dd68ac323d9c2b249dc3e37e719dbc9482bfe323cc5f50a13c281f0d9ed455e",
+      "bytes": 202328,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m410_cyberdramon-perfect-raw-r01/main.webp",
+      "sha256": "b43a2a4fec52c05d5793665c0e9718bf1688f5fb624a692baad3cb4e1d0c3ac5",
+      "bytes": 697530,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m410_cyberdramon-perfect-raw-r01/sub.webp",
+      "sha256": "0057b8ccc6f8ae2076c4bb251c7e3d36cf9a873290f5c3135f693203e2cebf0e",
+      "bytes": 207474,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m412_jyureimon-perfect-raw-r01/main.webp",
+      "sha256": "97b23006df570c628557e470ef887d0a72bb19bf046ef110991dac6960151bf1",
+      "bytes": 1350196,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m412_jyureimon-perfect-raw-r01/sub.webp",
+      "sha256": "90410c6ad98aef0ce942a89a1e0bd4ee33197adfdec4758ef3766913d5db99b1",
+      "bytes": 406904,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/main.webp",
+      "sha256": "e400756ade0832db26e442ecebe03f3b275bc17ee88e8df8073c21549fe3ae21",
+      "bytes": 987550,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/sub.webp",
+      "sha256": "b64ae6bfa8050c7c310f90c95f28cc4e56053fa86445459e311c057968ce13b0",
+      "bytes": 342038,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m414_zudomon-perfect-raw-r01/main.webp",
+      "sha256": "315bc17643d78a76d811b034bf2e63ba7611e944e7e6f4291388c143793628ec",
+      "bytes": 1415474,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m414_zudomon-perfect-raw-r01/sub.webp",
+      "sha256": "745ca4f8dc6f30d8d05a37d9a39f69b4002a494131fcd9da61faba3e3072411c",
+      "bytes": 469790,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m415_dagomon-perfect-raw-r01/main.webp",
+      "sha256": "8bd9ec91417b47e597bfa6dd9135c8dae15c3fcbee084e004e160490bfdd637a",
+      "bytes": 1262068,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m415_dagomon-perfect-raw-r01/sub.webp",
+      "sha256": "46fe6c334e5739a641f58776111d0861ed08a27a8fb7b07bd033c9211c537086",
+      "bytes": 366668,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m416_deathmeramon-perfect-raw-r01/main.webp",
+      "sha256": "de1dc2396351ca52d7ddcd05e1cf519fba8b6ed98589f0e4c3622bbc171bf55b",
+      "bytes": 944820,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m416_deathmeramon-perfect-raw-r01/sub.webp",
+      "sha256": "72263b8279f7c8d502853ca6d6a968f2c69b38b1dbc0cecc339158d170da2548",
+      "bytes": 290732,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m417_delumon-perfect-raw-r01/main.webp",
+      "sha256": "206802f8753c88cb588ebf4daf15d2c8e4b6fa4c1d72c97b17a4c6cb4728ea00",
+      "bytes": 1098092,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m417_delumon-perfect-raw-r01/sub.webp",
+      "sha256": "2da3af3c0ceeb0ac376bcc9632883bbee4ba846e3783b6cbddf1e7a27582946b",
+      "bytes": 399296,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m418_tonosamagekomon-perfect-raw-r01/main.webp",
+      "sha256": "16fcbf417237a4299da441f58d584bf9eafab2eda3662ee06d1754307d75f18d",
+      "bytes": 1372456,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m418_tonosamagekomon-perfect-raw-r01/sub.webp",
+      "sha256": "3f46ad8b6ae9a1b39e866f38947cc9f4907af6e93a7674dea68ebdf1213fce8e",
+      "bytes": 447030,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m419_toriceramon-perfect-raw-r01/main.webp",
+      "sha256": "1a3e97cab2c83a280df17fd5c19eb8be72396c24dc14c45b65cfae235c53cc27",
+      "bytes": 913268,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m419_toriceramon-perfect-raw-r01/sub.webp",
+      "sha256": "092a1d858f377eb3d3dba2ebc6d14f598144a21d1d07c4525528aaa24f724bd8",
+      "bytes": 313178,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m420_knightmon-perfect-raw-r01/main.webp",
+      "sha256": "5c098b4f5c1ba5169280120c657a0688c50167e257e0f3da50242cf16d9845ad",
+      "bytes": 617080,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m420_knightmon-perfect-raw-r01/sub.webp",
+      "sha256": "d4c8b162ecb400d234f08dde7e25ef82ac976f7b5d28edce8571aeff3c9733b3",
+      "bytes": 202818,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m422_parrotmon-perfect-raw-r01/main.webp",
+      "sha256": "3f20d7c4482ef1e69fc7ab2634ae1bbd423ee0234df3336e1cecffa7f77a830a",
+      "bytes": 1144796,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m422_parrotmon-perfect-raw-r01/sub.webp",
+      "sha256": "5abafb5b2a44076604ac3930726b7badafd81fd257de2907bbb2e64efeea4588",
+      "bytes": 337016,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m423_hangyomon-perfect-raw-r01/main.webp",
+      "sha256": "1dbab064ce55d13f986a971998f9832c2e2cee495fa25d654e30b100da635a57",
+      "bytes": 848244,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m423_hangyomon-perfect-raw-r01/sub.webp",
+      "sha256": "6886bfe5038635b9eac7979612922cbb57ffbaae57468f629d74c240851fed4c",
+      "bytes": 264730,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m424_pandamon-perfect-raw-r01/main.webp",
+      "sha256": "6771f55d5f999e7704db63a942d052ad93d9befc3d0475655576141caae67ebe",
+      "bytes": 943066,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m424_pandamon-perfect-raw-r01/sub.webp",
+      "sha256": "595a44c5684292f13fcb080739e3283c193ef2f4c7461d9bd20632c49ed47313",
+      "bytes": 318110,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m426_bigmamemon-perfect-raw-r01/main.webp",
+      "sha256": "63d69d2637ef6a479602945046627a97f4c19038f77363fc0dc99a9ce1a4dc1e",
+      "bytes": 1073022,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m426_bigmamemon-perfect-raw-r01/sub.webp",
+      "sha256": "0eeb855c1f563d359df0f9674aef29214503818237b1f2b98683d5354750dccf",
+      "bytes": 314798,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m427_picklemon-perfect-raw-r01/main.webp",
+      "sha256": "49c15a23ae887a84a1111b7424920efd49ff8f15d6aa1f6b62cdc7c60e5f5d03",
+      "bytes": 580968,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m427_picklemon-perfect-raw-r01/sub.webp",
+      "sha256": "6454209de0d327473151ab0f19e7d028934c5748020987e5d90788c47fe61ab9",
+      "bytes": 186672,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m428_fantomon-perfect-raw-r01/main.webp",
+      "sha256": "2ef99e2e4d087d857ff38dfcdea744acbacdedf5960e07ec1662d6e704e3f0b8",
+      "bytes": 657630,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m428_fantomon-perfect-raw-r01/sub.webp",
+      "sha256": "05db6aeab1467dcc9bc842a9af7875ad8b1b3650fa2f7fe62f5592307134a9e5",
+      "bytes": 227462,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m430_vademon-perfect-raw-r01/main.webp",
+      "sha256": "74618a466969f319f27485bd388a8274486ac6c955d867124413c4ac9ed122ac",
+      "bytes": 555184,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m430_vademon-perfect-raw-r01/sub.webp",
+      "sha256": "a2571783d5e8b044aba4a8787653095e11b11fee48c01d4580df97eeabcdd875",
+      "bytes": 163486,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m431_whamon-perfect-raw-r01/main.webp",
+      "sha256": "d91b24ee2cd1154bc3402b8918c13d87011972f8ef1162c4134117c995fac212",
+      "bytes": 1549898,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m431_whamon-perfect-raw-r01/sub.webp",
+      "sha256": "87a145da963c2b6c56b8cfcbe215c564988e2f7ebf107704698a51dfc272d1c1",
+      "bytes": 433976,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m432_holyangemon-perfect-raw-r01/main.webp",
+      "sha256": "9ee2ac8f27fa6673703ee3fb5ffbb8e883b27bdf525853638af33658b8abc3f7",
+      "bytes": 953416,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m432_holyangemon-perfect-raw-r01/sub.webp",
+      "sha256": "86933ea1652f9cca7f645d15e08f2574ab7fca2130fca8bffd67764181ca051d",
+      "bytes": 273380,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m433_machgaogamon-perfect-raw-r01/main.webp",
+      "sha256": "b4b4c484947b6e09f5a96bb2d2bd838ec0c9cefbd80fed2b6122a14ac870838d",
+      "bytes": 784922,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m433_machgaogamon-perfect-raw-r01/sub.webp",
+      "sha256": "8cdff1d5c15f08466b4fb984e7b21646124c4f824a34ce7be9a39301143db640",
+      "bytes": 236034,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m435_mamemon-perfect-raw-r01/main.webp",
+      "sha256": "85537c18c2ab35d7123a4dafd80a4c514ca4ae597da0a1acb17b154c359357c1",
+      "bytes": 148766,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m435_mamemon-perfect-raw-r01/sub.webp",
+      "sha256": "97f60b677e7bff3623d043c9bbd7947af6f044957d0f956f8181f007d63e02c2",
+      "bytes": 49582,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m437_mammon-perfect-raw-r01/main.webp",
+      "sha256": "2cf6bacb4123acb3b0032a515e5fe6d634f8f672518b9c3196e6823045fa7749",
+      "bytes": 1289360,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m437_mammon-perfect-raw-r01/sub.webp",
+      "sha256": "e0a4253b34998b32dc03e57127017853b1124e0da66f543aceb13ceafba3cfa9",
+      "bytes": 436716,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m438_megaseadramon-perfect-raw-r01/main.webp",
+      "sha256": "74869140ee8131f313b30922b1183fb74d153c339b832f2af54813f7b4eb1469",
+      "bytes": 944900,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m438_megaseadramon-perfect-raw-r01/sub.webp",
+      "sha256": "0a80811a577df67cec98d65e44605e3181c789f2dd9a6f74ed96edfdf23cb2a4",
+      "bytes": 291172,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m439_megadramon-perfect-raw-r01/main.webp",
+      "sha256": "c338e2795ed1bd0dd0eb3113e56d01143fda1d0ba41f5b71dd4ca5eca7a78ad9",
+      "bytes": 896772,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m439_megadramon-perfect-raw-r01/sub.webp",
+      "sha256": "de8d1a52a3ad2c164fd5e20d0f62eec36f5e824d66c9dd0ca00e60c3cd5bb582",
+      "bytes": 288672,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m440_metalgreymon_vi-perfect-raw-r01/main.webp",
+      "sha256": "00e3099c81c684304b0d30a4dc4e4ca8be956bb083d174fc893ca47c00baf1e5",
+      "bytes": 1232842,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m440_metalgreymon_vi-perfect-raw-r01/sub.webp",
+      "sha256": "13c095c64972f9b7ec6dfac0fe4db0d42c18f26002009c86391bc665417667fa",
+      "bytes": 369520,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m441_metalgreymon_va-perfect-raw-r01/main.webp",
+      "sha256": "2d6ee63eb7ac57506e2deeefd184bdbb4bc5bab3a5bde1d15734b91dee17f10c",
+      "bytes": 1158950,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m441_metalgreymon_va-perfect-raw-r01/sub.webp",
+      "sha256": "146543244a7cbd8c9739af2ed4776946f9ce2c687659586d7c6abf6913db71ec",
+      "bytes": 352390,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m442_metaltyranomon-perfect-raw-r01/main.webp",
+      "sha256": "dc18108f9dca4d4939c48664a70a9a11ce010b72cf5eadc3e8570bb85bd76438",
+      "bytes": 783760,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m442_metaltyranomon-perfect-raw-r01/sub.webp",
+      "sha256": "72bc5fd32f4422015b497edfea52926061fdc4bf102c3585cfba39f06615635b",
+      "bytes": 210948,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m444_monzaemon-perfect-raw-r01/main.webp",
+      "sha256": "697bde7c805039d345b63c133663f458514d66ec74ac3bcbb2e7e539893564ac",
+      "bytes": 1074268,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m444_monzaemon-perfect-raw-r01/sub.webp",
+      "sha256": "77a94536d7f604c31c3f73c10527cb7ad8b67a50ea7cdb03ab3232c357d30798",
+      "bytes": 344758,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m445_yatagaramon-perfect-raw-r01/main.webp",
+      "sha256": "1cb28f2421b4008e03abd9bfc3a624437644aa689c51ac0751a969acb52a26f6",
+      "bytes": 580520,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m445_yatagaramon-perfect-raw-r01/sub.webp",
+      "sha256": "e02dc4023df0d472d6ef7753b4448c90bb12bfaf628ea740d50f669d18176596",
+      "bytes": 154584,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m446_rizegreymon-perfect-raw-r01/main.webp",
+      "sha256": "6a0ab10c63cbb05e822dacf87a159edf461974ab55a9be983ef5642fe8e3e49a",
+      "bytes": 1064712,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m446_rizegreymon-perfect-raw-r01/sub.webp",
+      "sha256": "3d8cf63246fa6eef90e041d953eed63c3e3b91b44b52add716d11438aa943972",
+      "bytes": 341552,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m447_rapidmon-perfect-raw-r03/main.webp",
+      "sha256": "5a4635e92d17599087b6028bc2cb7d0ffc808d09a4edddfd96edbaf1196a85af",
+      "bytes": 655030,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m447_rapidmon-perfect-raw-r03/sub.webp",
+      "sha256": "2339c7b479a2cf44d826bbff415919af21268db53716bafb7dc7a8ad01197d4c",
+      "bytes": 168158,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m448_lilimon-perfect-raw-r01/main.webp",
+      "sha256": "e34dd6dee241d0c0a899ae14f7912efb6596702ee8783e3c8de0d84dc23ba1cb",
+      "bytes": 899530,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m448_lilimon-perfect-raw-r01/sub.webp",
+      "sha256": "9e3dc45aa4d163b4c67d9f821d43e7f20c18737395244c1c9504b8af59d09a90",
+      "bytes": 268712,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m449_ladydevimon-perfect-raw-r01/main.webp",
+      "sha256": "2be8dd01ea55eee1a3ed12063fcc24ddeb7654d25e184c64c0c4379c2de6fcf5",
+      "bytes": 792728,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m449_ladydevimon-perfect-raw-r01/sub.webp",
+      "sha256": "c578602010028fbb9c082b3b66dee61024ae39b4cb797cd37cb30f04a9e24bc9",
+      "bytes": 210084,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m450_warumonzaemon-perfect-raw-r01/main.webp",
+      "sha256": "58014d7520b87d03f30a26b724c3535e5c7e1a0c71363de6452b11aee1eb90aa",
+      "bytes": 812112,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m450_warumonzaemon-perfect-raw-r01/sub.webp",
+      "sha256": "eda171cfc2110e7c139bed451b8b7c3a4e7f55632a9a1d0b79738fb2b291f95b",
+      "bytes": 263160,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m451_weregarurumon_va-perfect-raw-r02/main.webp",
+      "sha256": "ecc00d213aeadfc530dea05fb925de0c1abacdb593ed62705f16c1255fc5e567",
+      "bytes": 946608,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m451_weregarurumon_va-perfect-raw-r02/sub.webp",
+      "sha256": "f52124b1aef9b51d466b0da2ec08becd24fb0e98e8e49640b1719f07715822d6",
+      "bytes": 292066,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m452_weregarurumon_vi-perfect-raw-r03/main.webp",
+      "sha256": "bc23d9bb2121368b7f2f3c4c7ef463f9d892454ba464122367a0002c7d490418",
+      "bytes": 1087454,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m452_weregarurumon_vi-perfect-raw-r03/sub.webp",
+      "sha256": "a291c56456a12662f96fb57b0d64c8e95965a6b86b98781545f1a05293e0929b",
+      "bytes": 325436,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m453_wingdramon-perfect-raw-r01/main.webp",
+      "sha256": "f6f0b94e18c2b6094a5c38b0850668b9ff980a086f55a2138c02f6428be8753e",
+      "bytes": 1639076,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m453_wingdramon-perfect-raw-r01/sub.webp",
+      "sha256": "74136492e13165236618a452b66e68bb492d72b314018b2c61b390aeb7d8ab65",
+      "bytes": 388260,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m454_grondramon-dot-intake-r01/main.webp",
+      "sha256": "53e204d1f72995c681874653280a8b2853a4bb48ba3fb7a22ff44f3e76664199",
+      "bytes": 2542116,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m454_grondramon-dot-intake-r01/sub.webp",
+      "sha256": "fac412c941946b8c36284ac91cfba9355d2238abda0cf30d03fbec178b51a899",
+      "bytes": 608822,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m455_flaremon-perfect-raw-r02/main.webp",
+      "sha256": "5a8dd352b242cdb6a6418a9b85e74cae3a7fd207193d35db8df64de465f93c8d",
+      "bytes": 1198960,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m455_flaremon-perfect-raw-r02/sub.webp",
+      "sha256": "83dc69e65fcb2fbedfafcc514398a75464804317c83660f3596e41d7604100e5",
+      "bytes": 327322,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m456_crescemon-perfect-raw-r01/main.webp",
+      "sha256": "429340bb0060f0c440d7d44c06e67f1760dcf4b051c50eb775ae9a5d71dbfe86",
+      "bytes": 1147300,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m456_crescemon-perfect-raw-r01/sub.webp",
+      "sha256": "0d5b6229588b81e1a733aa6d28f485c58ccc30aaf4a0c112ddaa3ac31ac722af",
+      "bytes": 352144,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m457_superstarmon-perfect-raw-r02/main.webp",
+      "sha256": "e98965c5ecce8c8dc76453f4d2f2858d47eda3d27b23792a7cb2f3c1d96ac3e1",
+      "bytes": 818174,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m457_superstarmon-perfect-raw-r02/sub.webp",
+      "sha256": "dd1352801ccf0d58a275262c850f0faa0013526ce5ef0164434b4d0deaacdea4",
+      "bytes": 250762,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m458_blackrapidmon-perfect-raw-r01/main.webp",
+      "sha256": "27c8f657c6eb0060b8dd47444f94aa78a8d12ca65a9ed9f7d23e352de0d49c53",
+      "bytes": 833814,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m458_blackrapidmon-perfect-raw-r01/sub.webp",
+      "sha256": "fc13ad99b4cb751b1d10743c91e51dc837e1d7b50bdde6572663724dd5f70702",
+      "bytes": 229322,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m501_vikemon-ultimate-raw-r01/main.webp",
+      "sha256": "1870aa27212be031e3e6ba35125dee9185d8b987a3dccc724b695b6291cee5ce",
+      "bytes": 1423798,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m501_vikemon-ultimate-raw-r01/sub.webp",
+      "sha256": "5be04f9ec1b9006df1b6e87296ed1d88f438e412930cac1119df6d01c140b64d",
+      "bytes": 435552,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m502_valkyrimon-ultimate-raw-r01/main.webp",
+      "sha256": "c74db739004ba4ff278287d1c051299f8a36df8bacada591d94114f1c5d46258",
+      "bytes": 3361928,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m502_valkyrimon-ultimate-raw-r01/sub.webp",
+      "sha256": "33fef5dbe69491deedc81db66cdd5cea35bd54a46bd7b638a6a642851838eb85",
+      "bytes": 966550,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/main.webp",
+      "sha256": "c53f7f80387e978c1ddd8572796800ae996422402d9f6688215ef0bedfe941e0",
+      "bytes": 4891054,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/sub.webp",
+      "sha256": "c8eefba3ca249a470c7ea51f8d8a70cef8ec1f003d79bf025c141e4d4dfec104",
+      "bytes": 1314430,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/main.webp",
+      "sha256": "4e4be4ea8dcf1edd541a61069e3f5cd1ef1723b1a12ad5f39c67e776e19334ae",
+      "bytes": 4719176,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/sub.webp",
+      "sha256": "3e122388c0a3b39a5b35fe3065630109ff551ede59dde5afe8ebd9171c359f1a",
+      "bytes": 1415424,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m505_grankuwagamon-ultimate-raw-r01/main.webp",
+      "sha256": "84b30772f6650e91eb03bc1bf9ec106ae407d9ff635c2a345fb888424abb36b6",
+      "bytes": 4915870,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m505_grankuwagamon-ultimate-raw-r01/sub.webp",
+      "sha256": "712f60d54e14724e016513424bafdfd5908cae83e02ed86144e2cdb5c6b6dfc6",
+      "bytes": 1924924,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m506_griffomon-ultimate-raw-r01/main.webp",
+      "sha256": "9f69dd2837ba25e5fc2edf227ef585df5ab2d3e0e259e6334f01189848972abc",
+      "bytes": 4179602,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m506_griffomon-ultimate-raw-r01/sub.webp",
+      "sha256": "22480053b9cb20ab6bbe68b718e3816d99cb8f9c500f5b742f0aa262f1fb6c7c",
+      "bytes": 1244698,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m507_crossmon-ultimate-raw-r01/main.webp",
+      "sha256": "225ac1c7a5fd16e464ea96b6f655c1c1ae0797375c9400e18db5586a99af00ae",
+      "bytes": 3925804,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m507_crossmon-ultimate-raw-r01/sub.webp",
+      "sha256": "34f484bdae53348c239f480dcd4ede39b67079b050cbc52e1f2fcd9640c75c4e",
+      "bytes": 1021790,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m508_saberleomon-ultimate-raw-r01/main.webp",
+      "sha256": "f2d72073adec347fb2d24db8c872a642fc7122686204384c367308cee1548735",
+      "bytes": 6775058,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m508_saberleomon-ultimate-raw-r01/sub.webp",
+      "sha256": "6fe90b8953b7b1273f3c9aa507289192ac40289a393768ad3b545e8bd0e5abb9",
+      "bytes": 2189376,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/main.webp",
+      "sha256": "4c5d0ab36564eaca1e092ef24781e3896c5fa85760e99447e18cfa52abc28b65",
+      "bytes": 3096982,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/sub.webp",
+      "sha256": "a406d097ed2164ce4761c9b75466604698a17aef02d13378d6fc52d15f41cc00",
+      "bytes": 736334,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m510_skullmammon-ultimate-raw-r01/main.webp",
+      "sha256": "ba5cc0da60f022d3712ad2d4a4eb8a8a090db96f12e5ea2d6be8a8a55eaf9a4a",
+      "bytes": 6317000,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m510_skullmammon-ultimate-raw-r01/sub.webp",
+      "sha256": "440a7d8b5b40e8c18ff475a1840d29b6589138eeda9adb94fc799690ddaf2a51",
+      "bytes": 2011104,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m511_saintgargomon-ultimate-raw-r01/main.webp",
+      "sha256": "eafdda8549aa4473bb388062f8edae18cc04c08dcc892a21e7ce595e781ccae1",
+      "bytes": 10735280,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m511_saintgargomon-ultimate-raw-r01/sub.webp",
+      "sha256": "3dcc788e217f655e295c3d0215f0ce700a7492a78d35126f7dc56edf51c4093b",
+      "bytes": 2882592,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m512_hiandromon-ultimate-raw-r01/main.webp",
+      "sha256": "328521f890db20c78374a22f36e4875cc1199929f7aef1d0dae25e01c8225d67",
+      "bytes": 2367196,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m512_hiandromon-ultimate-raw-r01/sub.webp",
+      "sha256": "efb7b6c4fb1722e7263116bfc72171b8c821b4510ec35cf7b4225bf9dd31d86f",
+      "bytes": 772024,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m513_bantyoliomon-ultimate-raw-r01/main.webp",
+      "sha256": "092b4cd6380e2d48fe4dce905cc24d9403ec179319d1e75b2cd6f5f21f25df8e",
+      "bytes": 4312740,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m513_bantyoliomon-ultimate-raw-r01/sub.webp",
+      "sha256": "7e1aee411ea4e7f78a0e0117c98ae0bc49df4004e051adbc6c8a2b8f18171ba3",
+      "bytes": 1632144,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m514_piemon-ultimate-raw-r01/main.webp",
+      "sha256": "f40986c9889034cbc245ce55f29ac180179297ff41f7e6877ca82351ba8c78de",
+      "bytes": 3562994,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m514_piemon-ultimate-raw-r01/sub.webp",
+      "sha256": "4bd3f64d65f1e009c2aecdcd7a9423a451ffbebb01f7e714fdf0881ed390a765",
+      "bytes": 996022,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m515_pinochimon-ultimate-raw-r01/main.webp",
+      "sha256": "3b609c178b02898d360d88aad78df95ce94ca3a6c8f7b83454a9011caf1a15b3",
+      "bytes": 7279448,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m515_pinochimon-ultimate-raw-r01/sub.webp",
+      "sha256": "b7f3fdebb163b94a67838ea6020a17e29da4ba646cea11b3af52befb0b3183b1",
+      "bytes": 2087364,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m516_pharaohmon-ultimate-raw-r01/main.webp",
+      "sha256": "df146d95e66d02fc488742839a089775959cb1091ecc8a1013fc32d8337b6918",
+      "bytes": 4877856,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m516_pharaohmon-ultimate-raw-r01/sub.webp",
+      "sha256": "27b1d8564bfeb6607093ad5e7dd689e3c0473ffb654c5fd64b56e0963e64ec81",
+      "bytes": 1430586,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m517_pukumon-ultimate-raw-r01/main.webp",
+      "sha256": "8adabff0902e8c0cfe1c14997e194cd9bea5ad97b8f2bb262f5037e6cf18099c",
+      "bytes": 9004480,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m517_pukumon-ultimate-raw-r01/sub.webp",
+      "sha256": "c5538708fc81b953250fe702631f59a9575dcc0cfa8846cf641cbaa347951cff",
+      "bytes": 2657944,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/main.webp",
+      "sha256": "5efac4b76370024329998aa73f45acf5a9389e0b2550f57a79430db656c33925",
+      "bytes": 9887884,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/sub.webp",
+      "sha256": "d8fe6a69f03f03970f8460bb3847710e9cfd81ff9f24160b3f543879032f2ee9",
+      "bytes": 2784316,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m519_princemamemon-ultimate-raw-r01/main.webp",
+      "sha256": "3fff9ff0e40d70d9ccaa2d36292339f181fef749467437db0a5a353db4034ecc",
+      "bytes": 7898936,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m519_princemamemon-ultimate-raw-r01/sub.webp",
+      "sha256": "8b912f0cdba2c81ed9866e6de047dc4b8336714dcf59a364506995c8aa51c1e1",
+      "bytes": 2405846,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m520_pilesiomon-ultimate-raw-r01/main.webp",
+      "sha256": "e8fa5092db2b083802f278878d23c1fd8be470b9078797074ea006b08e55b08c",
+      "bytes": 4801456,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m520_pilesiomon-ultimate-raw-r01/sub.webp",
+      "sha256": "fb7954d326908f345e8d5d0bca1cb81649e32bfaab4c09a476fcbcca5bfd1351",
+      "bytes": 1514502,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m521_heraklekabuterimon-ultimate-raw-r01/main.webp",
+      "sha256": "60668e189eaf9c2fcfb5eb31e8e17d4a3cec25d5860f657b29a112e9eed7510c",
+      "bytes": 6477670,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m521_heraklekabuterimon-ultimate-raw-r01/sub.webp",
+      "sha256": "fcbb8813ebbf1f4bdeee253198ba84c98201521966627b6e27c1526a09e4e18d",
+      "bytes": 2467008,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m522_hououmon-ultimate-raw-r01/main.webp",
+      "sha256": "b6265cba8c21deaae1feb34b26576d740de9555cdca837355cdfa465ab901222",
+      "bytes": 4759358,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m522_hououmon-ultimate-raw-r01/sub.webp",
+      "sha256": "011f2d6610487aae4b77ba27813ce9ff159e17248807455c34a6e90b32adb3e8",
+      "bytes": 1450974,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m526_miragegaogamon-ultimate-raw-r01/main.webp",
+      "sha256": "203c29d9512b900af1d3416dfffcdd1a8f0572502b19c2c6c64d5f5261c7c1be",
+      "bytes": 10320318,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m526_miragegaogamon-ultimate-raw-r01/sub.webp",
+      "sha256": "c2af04b7b1c1bbb35bd365b75ecac30f54c60cce3e3e053b96b8f0ca2dac4d9d",
+      "bytes": 2662064,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m527_mugendramon-ultimate-raw-r01/main.webp",
+      "sha256": "d9cabe4f058faa2c1dab5f3814c7befb18d0651a5910bc21c2ae3ffc09e254ea",
+      "bytes": 6647622,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m527_mugendramon-ultimate-raw-r01/sub.webp",
+      "sha256": "e2748cc00c548418b0b5ca70468cda93a3ab9d0bce2dc27eac7233cf27f0ad2c",
+      "bytes": 1870330,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/main.webp",
+      "sha256": "4e0ef4de0ae2401b27e90f67f5612fa8d8173a23b2ad3afeac29d37c4fb6f2a1",
+      "bytes": 8183640,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/sub.webp",
+      "sha256": "ab5d5e983a329c6b9b90f26b2dd8802d504a97f2243743763780cca4f4b07fa1",
+      "bytes": 2324338,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m530_metalgarurumon_vi-ultimate-raw-r01/main.webp",
+      "sha256": "f857a105159af8c919dc919fd6a515f102ee2c0a8f1af482604b7a3857cc62ae",
+      "bytes": 8289462,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m530_metalgarurumon_vi-ultimate-raw-r01/sub.webp",
+      "sha256": "5232f7006a84d5f6c5bfa16616752c673932836f776393fb32347ea2822fb54b",
+      "bytes": 2343186,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m531_metalseadramon-ultimate-raw-r01/main.webp",
+      "sha256": "eb2df69eb7df1fe03ef15335798a6c8ac051b84d18eb42336cb6a0f2efe14cb0",
+      "bytes": 8780074,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m531_metalseadramon-ultimate-raw-r01/sub.webp",
+      "sha256": "e5e6055dc7831b8458a9dbd804a22f1abe518df494132e8831657ef289afa0df",
+      "bytes": 2460886,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m532_rosemon-ultimate-raw-r01/main.webp",
+      "sha256": "68f73847ce7a1c1aa89ec50f34bf77def161f60cd5a07ca5e4c1ae009eae0c83",
+      "bytes": 5643896,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m532_rosemon-ultimate-raw-r01/sub.webp",
+      "sha256": "ae3763754e1c198936d210fda746889c6eee1e617ed4f6b83f4a00a15ef356fe",
+      "bytes": 1741094,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m533_zeedgarurumon-ultimate-raw-r01/main.webp",
+      "sha256": "ee9f06615cbb52b051d8c0d11e83a4a2336728fbc8eb596cc41a3f8b1744205f",
+      "bytes": 7105906,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m533_zeedgarurumon-ultimate-raw-r01/sub.webp",
+      "sha256": "e40d2d17188c55c0ffc3425f76cc6e1aead80a67f04090912701438d0c488aeb",
+      "bytes": 2071852,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m534_victorygreymon-ultimate-raw-r01/main.webp",
+      "sha256": "cccaa23f0617f5bdbb838602457c97da42d373a7d5bfb5e2999a7b31555ee8ae",
+      "bytes": 3089800,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m534_victorygreymon-ultimate-raw-r01/sub.webp",
+      "sha256": "282fe171a3229e54f3275bf0e5131bda50aead16cd8f3c21b28c6355d82eecff",
+      "bytes": 780092,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m535_slayerdramon-ultimate-raw-r01/main.webp",
+      "sha256": "1092ff86a6b8912c2f92fede5a4873388286507768f78d06088951f12a11a932",
+      "bytes": 8904598,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m535_slayerdramon-ultimate-raw-r01/sub.webp",
+      "sha256": "d24d617cf9812eb6f5471287620f61d0b0c08783189127d64198dde0413fff72",
+      "bytes": 2503350,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m536_brakedramon-ultimate-raw-r01/main.webp",
+      "sha256": "d59c161cd132c88fba2ed4d3fdbe640a5dbd8d8d84aef223700a1d3cdd110b7f",
+      "bytes": 4037040,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m536_brakedramon-ultimate-raw-r01/sub.webp",
+      "sha256": "28338d1e415f913b5da1f96678c5659bf1a97a519ac46c03503fd5849c1c3e21",
+      "bytes": 1051460,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m538_apollomon-ultimate-raw-r01/main.webp",
+      "sha256": "7ea89c6b3b81d13bf12daa31d86d9b41349bb864c134a253ffe34b6cb7dfe376",
+      "bytes": 4933074,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m538_apollomon-ultimate-raw-r01/sub.webp",
+      "sha256": "2d54f639dbf600fec93dcbd74351d4fc1530fa29708bec6c67b8fb63669b754a",
+      "bytes": 1630798,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m539_dianamon-ultimate-raw-r01/main.webp",
+      "sha256": "6e0f8cf21bcfcd937aec833d58153f7163781ecd3cb9cf2c59b79b39160b7171",
+      "bytes": 6020302,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m539_dianamon-ultimate-raw-r01/sub.webp",
+      "sha256": "22cd260648e867c58496bb47c52a83d66510691b40ea11b317dfc6a453f2eefb",
+      "bytes": 1495410,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/main.webp",
+      "sha256": "3dcf6079061809ef57083289b7a022e5f29ea45a7bed53e7657e24f3885c4bf5",
+      "bytes": 9460964,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/sub.webp",
+      "sha256": "3e47af7f3b7a22fed44664f0c08c7bdf5845e866efaf3ce185e74e4246a704d1",
+      "bytes": 2384038,
+      "reason": "Main presentation now uses hash-verified shared pages; result/HUD uses separate role cells. All original files remain local/history inputs."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
+      "sha256": "0a1f0077bd25a68cc1e1dafec1b1b84f6569eef3cdb77fbf9abe274bfda0880e",
+      "bytes": 69245,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-035.be1631a7ffea0de4.png",
+      "sha256": "be1631a7ffea0de43921ed7eb3e1196be6705fe026439abe9b90e14b564965c7",
+      "bytes": 1967753,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-035.png",
+      "sha256": "f2c4940a90fba6634621a5a20d545d292ab3eae4509ec13b9c357336295fa9dd",
+      "bytes": 2135523,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-039.png",
+      "sha256": "b190d04962a7e499b6b8cde5c0e830c41d7dc359f7647f97b6a12e29e2e74cbb",
+      "bytes": 2131569,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-040.4c11ede7a2b50add.png",
+      "sha256": "4c11ede7a2b50add96b482a63e77b50c65b8b9bdd09175874e2017f0c708b09d",
+      "bytes": 987384,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-040.png",
+      "sha256": "f412c7dd2fc5346ba0952707e9a4a49e7d4379c56c069eda7cacc9c776add2a0",
+      "bytes": 1827614,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-041.png",
+      "sha256": "069214988e2e8f59159c3b4b6deda913cc01b3fda974023621ae705d75a7d52b",
+      "bytes": 1423390,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-042.png",
+      "sha256": "e5e15ba6a055a218a3a03c480f28fabb570441a9f0fd146f0ea48089fdf63922",
+      "bytes": 1511921,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-045.png",
+      "sha256": "9170c136c9cdb785d31bfe74c7b4ed400e787916718d90efa5e541b379d8be28",
+      "bytes": 1919214,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-046.png",
+      "sha256": "1a8d1314517852c89eb156729ba5a0ac347ccb4d0359a556f990c5522ffb700b",
+      "bytes": 1247696,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-049.png",
+      "sha256": "423def7f7de4d82bb51ea9900474a10480518ff2007d7e976835cff0b4db98a7",
+      "bytes": 1376334,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-062.25391107e04095f4.png",
+      "sha256": "25391107e04095f4bd706ffc106e6f90d10911d0baca637db3ed2114c9a2ef91",
+      "bytes": 1834147,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-063.a2403ae4b27f60e1.png",
+      "sha256": "a2403ae4b27f60e19dab4e955f4f1dc43a85b7bce7583d0760f0759fada6f8a0",
+      "bytes": 1656109,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-070.8b5455d530173b0f.png",
+      "sha256": "8b5455d530173b0fe41963b58637e98143f90e68a5961d9997517f2148520eba",
+      "bytes": 1466415,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-070.db1fbfef597f8239.png",
+      "sha256": "db1fbfef597f82396e21c669042b9e8acbc909b3697ce45e014c24f5c43167ea",
+      "bytes": 1477574,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-portraits-b1-20261014/B102.webp",
+      "sha256": "03d2bb77ae83d1da119b7d0d4af040851bcb9f887ef939e1ac0fd3426d4252e7",
+      "bytes": 993218,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/database-portraits-b1-20261014/B103.webp",
+      "sha256": "2f1d8ae53c8e32ab2052cd528294949f6c36d905ec54f17914f824a0645a7059",
+      "bytes": 612362,
+      "reason": "Absent from the exact current hero lookup; only archived/QA source selection retains these versions."
+    },
+    {
+      "path": "assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4",
+      "sha256": "74e171baa7a3893a7e5e1274dab699339e9753733c1681ee18aff4f5dbaaf184",
+      "bytes": 14563538,
+      "reason": "No source reference; current mobile source is ef50993b, desktop/lite unchanged."
+    }
+  ]
+}

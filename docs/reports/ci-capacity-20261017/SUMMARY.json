@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-10-17T21:29:54.640817+00:00",
+  "sourceCommit": "2d92fc6dc3786d911189ddf6237cac9da40bb962",
+  "previousCheckpoint": "f10bb938e9e701740360c116949360b758665feb",
+  "focused": {
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0
+  },
+  "fullCI": {
+    "tests": 2535,
+    "passed": 2488,
+    "failed": 47,
+    "skipped": 0,
+    "cancelled": 0,
+    "fullRunsThisContinuation": 1
+  },
+  "remainingFailureRoots": {
+    "MODULE_START_MISSING_FIXTURE": 9,
+    "MISSING_FIXTURE_OR_NESTED_LOAD_FAILURE": 30,
+    "ASSERTED_FIXTURE_MISSING": 8
+  },
+  "remainingGroups": {
+    "AUTHORING_ART_OR_BASELINE": 26,
+    "RESEARCH_CPU_EVIDENCE": 20,
+    "TEST_DATA_SNAPSHOT": 1
+  },
+  "rootAttribution": "No matched baseline CI run. Same tracked source version is not evidence that failures predate integration.",
+  "normalBrowser": {
+    "status": "PASS",
+    "scope": "CONTROLLED_LOCAL_ARTIFACT_NOT_PUBLIC_READBACK",
+    "viewports": [
+      "390x844",
+      "1440x1000"
+    ],
+    "flow": "TITLE -> RAISING_HOME -> SYSTEM -> DATABASE -> species125",
+    "browser": "155.0.8059.40",
+    "errors": 0,
+    "missing": 0,
+    "privateRequests": 0,
+    "downloadedBrowser": false
+  },
+  "build": {
+    "commit": "2d92fc6dc3786d911189ddf6237cac9da40bb962",
+    "buildId": "b73ad98e986ff47b05999f1af97d1c680835a501f8b36fe7eef765cc68ddb53f",
+    "fileCountIncludingReceipt": 8000,
+    "bytesIncludingReceipt": 1146830318,
+    "limitBytes": 1000000000,
+    "overLimitBytes": 146830318,
+    "buildExit": "FAILED_CAPACITY_GATE",
+    "firstPartialAccumulationErrorBytes": 1008138213,
+    "note": "The partial accumulation error is not the artifact total. Complete upload candidate measured separately.",
+    "privacyBoundary": "Build reached the final size assertion after file-set, selected-byte/hash, runtime-index and payload-field checks.",
+    "receiptSha256": "23ad48f30d0419382bd2bd5ec37213d6b3f277c75e150564564840b8eea7acff",
+    "published": false
+  },
+  "capacityAnalysis": "READ_ONLY; no reencode, pruning, feature cuts, URL changes or external hosting applied",
+  "sharedUiPng": {
+    "count": 17,
+    "currency": 14,
+    "toolbar": 3,
+    "speciesSpecific": 0,
+    "metadataOnlySavingBytes": 2550
+  },
+  "capacityBudget": {
+    "baselineTotalBytes": 1146828708,
+    "targetReductionBytes": 146828708,
+    "exactDuplicateGrossBytes": 2503498,
+    "pngLosslessMeasuredBytes": 40116728,
+    "confirmedUnusedCurrencyBytes": 725782,
+    "rawCodeAndDataPackagingCandidateBytes": 16275951,
+    "samePixelsBattlePackageBytes": 33271546,
+    "optionalFilmFeatureBytes": 101816930,
+    "otherUnusedCandidatesNotYetProvenBytes": 2798532,
+    "plans": {
+      "losslessPngOnly": {
+        "payloadSavingBytes": 40116728,
+        "forecastTotalBytes": 1106711980,
+        "reachesCurrentLimit": false,
+        "forecastFromCurrentCandidateBytes": 1106713590
+      },
+      "pngAndExactAliasesAndConfirmedUnused": {
+        "payloadSavingBytes": 42823022,
+        "forecastTotalBytes": 1104005686,
+        "reachesCurrentLimit": false,
+        "forecastFromCurrentCandidateBytes": 1104007296
+      },
+      "plusSourcePackagingCandidates": {
+        "payloadSavingBytes": 59098973,
+        "forecastTotalBytes": 1087729735,
+        "reachesCurrentLimit": false,
+        "forecastFromCurrentCandidateBytes": 1087731345
+      },
+      "plusSharedBattleRepresentation": {
+        "payloadSavingBytes": 92370519,
+        "forecastTotalBytes": 1054458189,
+        "reachesCurrentLimit": false,
+        "forecastFromCurrentCandidateBytes": 1054459799
+      },
+      "optimisticAlsoOtherUnusedCandidates": {
+        "payloadSavingBytes": 93999899,
+        "forecastTotalBytes": 1052828809,
+        "reachesCurrentLimit": false,
+        "forecastFromCurrentCandidateBytes": 1052830419
+      },
+      "productChoiceDisableFilmPlusPackagingAndPng": {
+        "payloadSavingBytes": 160915903,
+        "forecastTotalBytes": 985912805,
+        "reachesCurrentLimit": true,
+        "forecastFromCurrentCandidateBytes": 985914415
+      },
+      "productChoiceDisableFilmAndSeparateBattlePackingWithoutImageReencode": {
+        "payloadSavingBytes": 154593707,
+        "forecastTotalBytes": 992235001,
+        "reachesCurrentLimit": true,
+        "forecastFromCurrentCandidateBytes": 992236611
+      }
+    },
+    "caveats": [
+      "Byte aliasing, source-output separation and changed URLs require implementation/validation; none applied.",
+      "The source packaging and other unused rows are candidates, not proven safe deletions.",
+      "No receipt shrink is counted; changed metadata/URL overhead is not yet measured.",
+      "Raw duplicate totals and PNG savings overlap; combined plans recompute retained costs by original content hash.",
+      "Battle fallback pixel/motion/geometry equivalence was checked; performance is not measured."
+    ],
+    "currentCandidateTotalBytes": 1146830318,
+    "currentCandidateOverLimitBytes": 146830318,
+    "newBuildOverheadCarriedConservativelyBytes": 1610
+  },
+  "authorityIndex": {
+    "sha256": "3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f",
+    "unchanged": true,
+    "uploaded": false
+  },
+  "publishedSpecies": [],
+  "pushed": false,
+  "merged": false,
+  "deployed": false,
+  "newPublicVerificationUrls": [],
+  "blockers": [
+    "47 current failures stop at missing local source fixtures; semantic acceptance beyond those reads remains untested.",
+    "Candidate is 146830318 bytes over the unchanged 1GB gate.",
+    "A product decision and implementation/measurement are needed for feature-removal options."
+  ],
+  "denialsRetried": false,
+  "deniedWorktreesRead": false,
+  "driveUploadRetried": false
+}

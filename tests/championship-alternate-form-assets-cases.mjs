@@ -1,3 +1,4 @@
+import {PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations} from '../src/championship/presentation/publicCharacterRenderContract.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,7 +11,7 @@ const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,
 const source=fs.readFileSync(path.join(root,'src/championship/presentation/completedOriginalCharacters.js'),'utf8');
 const validator=source.slice(source.indexOf('export function validateCompletedOriginalRuntime'),source.indexOf('/** Reuse the reviewed density-four adapter'));
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
-const check=new Function('canonical',validator.replace('export function','function')+';return validateCompletedOriginalRuntime;')(canonical);
+const check=new Function('canonical','PUBLIC_CHARACTER_RENDER_KIND','characterRenderAnimations',validator.replace('export function','function')+';return validateCompletedOriginalRuntime;')(canonical,PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations);
 assert.equal(configs.length,4);assert.equal(ACTIVE_ALTERNATE_FORM_ASSETS.length,4,'Accepted production assets require the recorded normal-path evidence.');
 const identities=new Set();let cells=0;
 for(const c of configs){
@@ -45,8 +46,8 @@ const calls=[];
 const fetchImpl=async url=>{const pathname=new URL(url).pathname.slice(1);const target=pathname;const text=fs.readFileSync(path.join(root,target),'utf8');return {ok:true,text:async()=>text,json:async()=>JSON.parse(text)};};
 const bundleLoader=async args=>{calls.push(args.runtimeUrl);const runtime=await(await fetchImpl(args.runtimeUrl)).json();return {runtime,dispose:async()=>{},createActor:opts=>({entityId:runtime.entityId,...opts,nativeSizing:{packedPixelsPerNativePixel:1}})};};
 const rosterLoader=async opts=>{const bundles=new Map();for(const binding of opts.manifest.speciesBindings){if(!configs.some(c=>c.speciesId===binding.speciesId))continue;const bundle=await opts.loadBundle({runtimeUrl:origin+baseRoot+binding.entityId+'/runtime.json'});bundles.set(binding.entityId,bundle);}return {createActor:opts=>bundles.get(opts.entityId).createActor(opts),getDiagnostics:()=>({})};};
-const getLoader=new Function('acceptedSelection','battlePacking','isApprovedOriginalPublicLocation','isOriginalRuntimeLocation','loadLicensedCharacterRoster','loadPixiCharacterRuntimeBundle','COMPLETED_ORIGINAL_CHARACTERS','readHudManifest','alternateFormAsset','mergeAlternateFormConfigs','bindAlternateFormManifest','rekeyAlternateDonorRuntime','fetch',stripped+';return loadCompletedOriginalCharacters;');
-const loader=getLoader({characters:[],root:'unused/'},{characters:[]},()=>true,()=>true,rosterLoader,bundleLoader,[],()=>{},()=>null,x=>mergeAlternateFormConfigs(x,configs),m=>bindAlternateFormManifest(m,configs),rekeyAlternateDonorRuntime,fetchImpl);
+const getLoader=new Function('acceptedSelection','battlePacking','isApprovedOriginalPublicLocation','isOriginalRuntimeLocation','loadLicensedCharacterRoster','loadPixiCharacterRuntimeBundle','COMPLETED_ORIGINAL_CHARACTERS','readHudManifest','alternateFormAsset','mergeAlternateFormConfigs','bindAlternateFormManifest','rekeyAlternateDonorRuntime','fetch','PUBLIC_CHARACTER_RENDER_KIND','characterRenderAnimations','ranchPacking',stripped+';return loadCompletedOriginalCharacters;');
+const loader=getLoader({characters:[],root:'unused/'},{characters:[]},()=>true,()=>true,rosterLoader,bundleLoader,[],()=>{},()=>null,x=>mergeAlternateFormConfigs(x,configs),m=>bindAlternateFormManifest(m,configs),rekeyAlternateDonorRuntime,fetchImpl,PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations,read('src/data/championship/ranch-render-selection.v1.json'));
 const roster=await loader({manifest,speciesIds:configs.map(c=>c.speciesId),sides:['main'],battleAtlas:true},origin);
 assert.equal(calls.length,4);assert(calls.every(url=>url.includes('/alternate-forms-20261015/')),'Never select stale packed atlases for alternates.');
 for(const c of configs){const actor=roster.createActor({entityId:c.entityId,nativeFramePresentation:true,battleGeometry:{}});assert.equal(actor.entityId,c.entityId);assert.equal(actor.nativeSizing.packedPixelsPerNativePixel,4);assert(actor.nativeGeometry.frames[c.entityId+'/main/cell_000']);}

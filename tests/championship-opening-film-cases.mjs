@@ -2,9 +2,25 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {OPENING_FILM,selectOpeningFilmSource,canAutoPlayOpening,hasOpeningPreloadBuffer,openingFilmCopy} from '../src/championship/app/openingFilm.js';
+import {OPENING_FILM,OPENING_FILM_ENABLED,createOpeningFilm,selectOpeningFilmSource,canAutoPlayOpening,hasOpeningPreloadBuffer,openingFilmCopy} from '../src/championship/app/openingFilm.js';
+import {openingFilmPublicationFiles,assertOpeningFilmPublication} from '../scripts/lib/opening-film-publication.mjs';
 import {APPROVED_GAME_TITLES} from '../src/championship/text/brandTerms.js';
 const eligible={titleVisible:true,titleReady:true,menuOpen:false,dialogOpen:false,hidden:false,reducedMotion:false,failed:false};
+
+test('paused TITLE creates no media, entry, timer or callback and excludes film bytes from publication',()=>{
+ assert.equal(OPENING_FILM_ENABLED,false);
+ const unavailable=new Proxy({}, {get(){throw Error('Paused film must not access DOM or window');}});
+ const controller=createOpeningFilm({document:unavailable,window:unavailable,onActiveChange(){assert.fail('No film activity');},onBufferChange(){assert.fail('No video buffering');}});
+ controller.start();controller.sync();controller.dispose();
+ assert.equal(controller.isPlaying(),false);assert.equal(controller.canPreloadTitle(),false);
+ assert.deepEqual(openingFilmPublicationFiles(),[]);
+ assert.doesNotThrow(()=>assertOpeningFilmPublication(['championship.html']));
+ assert.throws(()=>assertOpeningFilmPublication([OPENING_FILM.src]),/TITLE_FILM_PUBLICATION_POLICY/);
+ const restore=openingFilmPublicationFiles(true);
+ assert.equal(restore.length,4);assert.ok(restore.every(row=>/^[a-f0-9]{64}$/.test(row.sha256)));
+ assert.doesNotThrow(()=>assertOpeningFilmPublication(restore.map(row=>row.path),true));
+ assert.throws(()=>assertOpeningFilmPublication([],true),/TITLE_FILM_PUBLICATION_POLICY/);
+});
 test('automatic film is confined to interactive, uninterrupted TITLE',()=>{
   assert.equal(canAutoPlayOpening(eligible),true);
   for(const key of Object.keys(eligible))assert.equal(canAutoPlayOpening({...eligible,[key]:!eligible[key]}),false,key);
@@ -40,7 +56,7 @@ test('all five locales expose film controls alongside the approved brand registr
   }
   assert.deepEqual(openingFilmCopy('unknown'),openingFilmCopy('zh-Hant'));
 });
-test('the publication selection is the exact reviewed textless 58s NS33 asset and poster',()=>{
+test('the original reviewed textless 58s NS33 media remain exact while the release follows its pause policy',()=>{
   const manifest=JSON.parse(readFileSync(new URL('../assets/production/opening-film-ns33-r1/manifest.json',import.meta.url)));
   const bytes720=readFileSync(new URL('../'+OPENING_FILM.src,import.meta.url));
   assert.equal(bytes720.length,19412041);assert.equal(createHash('sha256').update(bytes720).digest('hex'),OPENING_FILM.sha256);
@@ -58,4 +74,6 @@ test('the publication selection is the exact reviewed textless 58s NS33 asset an
   assert.equal(manifest.seconds,58.0);assert.equal(manifest.frames,1392);
   assert.equal(manifest.publicPlaytestPermitted,true);
   assert.equal(manifest.fullSubjectiveListeningAccepted,false);assert.equal(manifest.physicalDeviceAccepted,false);
+  const input=JSON.parse(readFileSync(new URL('../docs/contracts/championship/WEB_BUILD_INPUTS.v1.json',import.meta.url)));
+  assert.deepEqual(input.files.filter(file=>file.startsWith('assets/production/opening-film-ns33-r1/')).sort(),openingFilmPublicationFiles().map(row=>row.path).sort());
 });

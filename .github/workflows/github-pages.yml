@@ -39,6 +39,8 @@ jobs:
         run: npm run build:playtest
       - name: Validate static game
         run: npm run validate:playtest
+      - name: Validate the exact upload payload has no private authority or metadata
+        run: node scripts/assert-public-payload.mjs dist/github-playtest
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

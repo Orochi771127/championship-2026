@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
+  "baselineCommit": "adc36510ec71e713844deac8c32fbff0f008149e",
+  "sources": [
+    {
+      "role": "battle-effects",
+      "path": "assets/production/internal-faithful-baseline/battle-effects-v1/manifest.json",
+      "sha256": "77b00e48682556c79541140ba97f83017930f1c799e5129ef336636571ef713e"
+    },
+    {
+      "role": "raising-feedback",
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/manifest.json",
+      "sha256": "3ea8a8c1596b0165b767b86e503a1c79c2815b7ec066b6bc265d0aadf5a5944e"
+    },
+    {
+      "role": "hunt-feedback",
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/manifest.json",
+      "sha256": "13255cd451d59c561f6c1f0afe41bce0d2d335b04a17b217c93afe282072f3b6"
+    },
+    {
+      "role": "battle-audio",
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/manifest.json",
+      "sha256": "480f84b95563b2eb7bc7ae197c3bc3b136a5c24190c154783f4887b44eee0865"
+    },
+    {
+      "role": "shared-vfx",
+      "path": "assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json",
+      "sha256": "eb64b9790addceffd87638cd024bbe338953547f80ef84b0f01973dfcefe46ea"
+    },
+    {
+      "role": "care-meat",
+      "path": "assets/production/original-ui-intake-20261007/care/manifest.json",
+      "sha256": "49c006667b7016f3a748873ca92df893f42c29fb13ed5b4701b6cf5eeb61e8ae"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import {publicRuntimeFetchFixture} from './helpers/public-runtime-fetch.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -47,7 +48,7 @@ function harness(){
  const art={displayObject:{children:[base]},field:{nativePixelWorldScale:4,wrapWidthPx:2688},getDiagnostics:()=>({base:true}),dispose:async()=>{baseDisposed++;}};
  return {PIXI,art,groups,sprites,masks,texture,baseDisposed:()=>baseDisposed};
 }
-const options=h=>({...h,manifest,placements,location:{hostname:'localhost'},baseHref:'http://localhost/championship.html',fetchImpl:async()=>({ok:true,json:async()=>data})});
+const options=h=>({...h,manifest,placements,location:{hostname:'localhost'},baseHref:'http://localhost/championship.html',fetchImpl:publicRuntimeFetchFixture()});
 test('shared base quads and stencil masks preserve UVs and add zero decoded texture bytes',async()=>{
  const h=harness(),result=await withCageForeground(options(h));const layer={addChild:s=>{s.parent=layer;},removeChild:s=>{s.parent=null;}};
  result.foreground.attach(layer);result.foreground.syncViewport({x:12,y:30,scale:.75});const d=result.getDiagnostics().foreground;assert.equal(d.spriteCount,42);assert.equal(d.timer,'NONE');assert.equal(d.additionalDecodedTextureBytes,0);assert.equal(d.maskRectangleCount,663);
@@ -110,7 +111,7 @@ test('CM03 and CM24 share one foreground owner, base textures and disposal witho
  const h=harness(),texture24={source:{scaleMode:'nearest'}};
  h.art.displayObject.children.push({label:'runtime map art field_cm24_01',x:cm24Lower.x,y:cm24Lower.y,texture:texture24,width:384,height:448});
  const mixed=[...placements,cm24Lower];
- const result=await withCageForeground({...options(h),placements:mixed,fetchImpl:async url=>({ok:true,json:async()=>String(url).includes('cm24-final')?cm24:data})});
+ const result=await withCageForeground({...options(h),placements:mixed,fetchImpl:publicRuntimeFetchFixture()});
  const layer={addChild:s=>{s.parent=layer;},removeChild:s=>{s.parent=null;}};result.foreground.attach(layer);result.foreground.syncViewport({x:12,y:30,scale:.75});
  const d=result.getDiagnostics().foreground;assert.deepEqual(d.fieldIds,['field_cm03_01','field_cm24_01']);assert.equal(d.objectCount,23);assert.equal(d.spriteCount,69);assert.equal(d.additionalDecodedTextureBytes,0);
  assert.equal(h.sprites.filter(s=>s.texture===texture24).length,27);assert.equal(h.sprites.filter(s=>s.texture===h.texture).length,42);
@@ -153,7 +154,7 @@ async function foldedResult(entries){
   wrapWidthPx:plan.wrapWidthPx,fold:plan.fold,presentationMode:plan.mode});
  const count=h.loaded.length;
  const result=await withCageForeground({PIXI:h.PIXI,art,manifest,placements:plan.placements,location:{hostname:'localhost'},baseHref:'http://localhost/',
-  fetchImpl:async url=>({ok:true,json:async()=>String(url).includes('cm24-final')?cm24:data})});
+  fetchImpl:publicRuntimeFetchFixture()});
  assert.equal(h.loaded.length,count,'foreground borrows loaded base textures');
  const layer=new h.PIXI.Container();result.foreground.attach(layer);
  return {...h,art,plan,result,layer};
@@ -225,7 +226,7 @@ test('partial folded allocation failure releases overlays without destroying own
   wrapWidthPx:plan.wrapWidthPx,fold:plan.fold,presentationMode:plan.mode});
  const hide=o=>{if(o.label==='runtime map art field_cm24_01')o.label='missing';for(const c of o.children??[])hide(c);};hide(art.displayObject);
  await assert.rejects(withCageForeground({PIXI:h.PIXI,art,manifest,placements:plan.placements,location:{hostname:'localhost'},baseHref:'http://localhost/',
-  fetchImpl:async url=>({ok:true,json:async()=>String(url).includes('cm24-final')?cm24:data})}),/BASE_TILE_MISSING/);
+  fetchImpl:publicRuntimeFetchFixture()}),/BASE_TILE_MISSING/);
  assert.ok(h.objects.filter(o=>o.label?.startsWith('cage foreground ')).every(o=>o.destroyed));
  assert.equal(h.unloaded.length,0);assert.ok(h.textures.every(t=>!t.destroyed),'only the art owner can release textures');
  await art.dispose();assert.deepEqual([...h.unloaded].sort(),[...h.loaded].sort());

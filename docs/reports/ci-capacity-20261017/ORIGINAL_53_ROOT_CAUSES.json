@@ -1,0 +1,1023 @@
+{
+  "referenceCICommit": "0ce003f2b6f63f7c0886a0761eeb65c9a17c33a5",
+  "currentStartHead": "f10bb938e9e701740360c116949360b758665feb",
+  "failures": [
+    {
+      "case": 1,
+      "module": "tests/championship-alternate-form-assets-cases.mjs",
+      "location": "tests\\championship-alternate-form-assets-cases.mjs:1:1",
+      "title": "??tests\\championship-alternate-form-assets-cases.mjs (84.7026ms)",
+      "rootCause": "HARNESS_MISSING_NEW_RENDER_CONSTANT",
+      "status": "HARNESS_FIXED; EXACT_ORIGIN_RESTORED; NOW_BLOCKED_MOTION_CONTRACT_SOURCE",
+      "attribution": "MISSING_DEPENDENCY_IN_STRIPPED_IMPORT_TEST_CONFIRMED",
+      "requiredPaths": [
+        "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/origin-geometry.json"
+      ],
+      "latestRequiredPath": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/motion-contract.json"
+    },
+    {
+      "case": 2,
+      "module": "tests/championship-art-a1-map-tech-cases.mjs",
+      "location": "tests\\championship-art-a1-map-tech-cases.mjs:19:1",
+      "title": "??technical review outputs are deterministic and source-hash locked (1.0803ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/proposals/a1-golden-slice/cage-12-module-direction.png"
+      ]
+    },
+    {
+      "case": 3,
+      "module": "tests/championship-art-a1-map-tech-cases.mjs",
+      "location": "tests\\championship-art-a1-map-tech-cases.mjs:60:1",
+      "title": "??all forty original CM structures are classified without copying original pixels (0.3593ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/technical/a1-cage-original-structure/CM40_ORIGINAL_STRUCTURE_CROSSWALK.csv"
+      ]
+    },
+    {
+      "case": 4,
+      "module": "tests/championship-art-production-a0-cases.mjs",
+      "location": "tests\\championship-art-production-a0-cases.mjs:1:1",
+      "title": "??tests\\championship-art-production-a0-cases.mjs (100.7037ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/ART_PRODUCTION_CROSSWALK.json"
+      ]
+    },
+    {
+      "case": 5,
+      "module": "tests/championship-assembled-ui-cases.mjs",
+      "location": "tests\\championship-assembled-ui-cases.mjs:32:1",
+      "title": "??complete cells retain PNG dimensions and exact selected source bytes (0.3501ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--000.png"
+      ]
+    },
+    {
+      "case": 6,
+      "module": "tests/championship-assembled-ui-cases.mjs",
+      "location": "tests\\championship-assembled-ui-cases.mjs:105:1",
+      "title": "??retired code-symbol cell stays archived but is neither requested nor selected for the public artifact (0.7889ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "EXACT_LOCAL_GIT_SOURCE_RESTORED; LATEST_FULL_CI_PASS",
+      "attribution": "SOURCE_AVAILABILITY_FIXED_WITH_IDENTICAL_TRACKED_BYTES; NO_BASELINE_PASS_CLAIM",
+      "requiredPaths": [
+        "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--017.png"
+      ]
+    },
+    {
+      "case": 7,
+      "module": "tests/championship-battle-owned-party-cases.mjs",
+      "location": "tests\\championship-battle-owned-party-cases.mjs:15:1",
+      "title": "??all 620 native title arena vectors preserve fixed fields and random-channel draws (1.3381ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/TITLE_ARENA_CPU_2026-09-14.json"
+      ]
+    },
+    {
+      "case": 8,
+      "module": "tests/championship-battle-owned-party-cases.mjs",
+      "location": "tests\\championship-battle-owned-party-cases.mjs:30:1",
+      "title": "??all 72 original Practice results update the correct owned side, including draws (0.59ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/PRACTICE_BATTLE_CPU_2026-09-14.json"
+      ]
+    },
+    {
+      "case": 9,
+      "module": "tests/championship-battle-packed-atlas-cases.mjs",
+      "location": "tests\\championship-battle-packed-atlas-cases.mjs:25:1",
+      "title": "??all 370 frame contracts and every native sequence/geometry survive the lossless six-character repack (4.2195ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/runtime.review.json"
+      ]
+    },
+    {
+      "case": 10,
+      "module": "tests/championship-battle-packed-atlas-cases.mjs",
+      "location": "tests\\championship-battle-packed-atlas-cases.mjs:50:1",
+      "title": "??existing Pixi loader dedupes the 11 real-size sources, keeps native sequence anchors/bounds and releases every source (35.7999ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "assets/production/internal-faithful-baseline/characters-v1/m521_heraklekabuterimon/runtime.json",
+        "assets/production/internal-faithful-baseline/characters-v1/m527_mugendramon/runtime.json",
+        "assets/production/internal-faithful-baseline/characters-v1/m450_warumonzaemon/runtime.json",
+        "assets/production/internal-faithful-baseline/characters-v1/m504_gigaseadramon/runtime.json"
+      ]
+    },
+    {
+      "case": 11,
+      "module": "tests/championship-cage-authoring-contract-cases.mjs",
+      "location": "tests\\championship-cage-authoring-contract-cases.mjs:9:1",
+      "title": "??Cage authoring fixture locks existing inputs and cannot become a runtime manifest (3.723ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/attribute-raw-classes.json"
+      ]
+    },
+    {
+      "case": 12,
+      "module": "tests/championship-cage-faithful-hd40-cases.mjs",
+      "location": "tests\\championship-cage-faithful-hd40-cases.mjs:47:1",
+      "title": "??every HD image is exactly 4x the verified native dimensions and all derived files are hash locked (1.8733ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/native-original.png"
+      ]
+    },
+    {
+      "case": 13,
+      "module": "tests/championship-cage-faithful-hd40-cases.mjs",
+      "location": "tests\\championship-cage-faithful-hd40-cases.mjs:92:1",
+      "title": "??collision, attribute, tilemap and placement data preserve original raw classes and coordinates (0.5892ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/core-tilemap.json"
+      ]
+    },
+    {
+      "case": 14,
+      "module": "tests/championship-cage-hd-remaster-cases.mjs",
+      "location": "tests\\championship-cage-hd-remaster-cases.mjs:32:1",
+      "title": "??HD components retain source dimensions, placements, flips and object bindings (0.5544ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-placement.json"
+      ]
+    },
+    {
+      "case": 15,
+      "module": "tests/championship-cage-hd-remaster-cases.mjs",
+      "location": "tests\\championship-cage-hd-remaster-cases.mjs:86:1",
+      "title": "??CM27 removes only the Owner-directed centre logo before remaster (0.5908ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/cage/hd-remaster-v1/fields/field_cm27_01/owner-adaptation-mask-native.png"
+      ]
+    },
+    {
+      "case": 16,
+      "module": "tests/championship-cage-hd-remaster-cases.mjs",
+      "location": "tests\\championship-cage-hd-remaster-cases.mjs:119:1",
+      "title": "??all Cage HD remaster outputs are present and hash locked (0.8669ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/cage/hd-remaster-v1/cage-cm01-cm40-remaster-contact.png"
+      ]
+    },
+    {
+      "case": 17,
+      "module": "tests/championship-character-animation-timeline-cases.mjs",
+      "location": "tests\\championship-character-animation-timeline-cases.mjs:128:1",
+      "title": "??Pixi runtime bundle loads all review atlases and releases them without owning a ticker (3.2088ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "assets/production/internal-character-review/m201-remix-v1/main-review-atlas-00.json"
+      ]
+    },
+    {
+      "case": 18,
+      "module": "tests/championship-character-faithful-hd-cases.mjs",
+      "location": "tests\\championship-character-faithful-hd-cases.mjs:23:1",
+      "title": "??all faithful HD character runtime contracts and previews exist without machine paths (0.9874ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/characters/faithful-hd224/batch-01/e000_digitama/runtime.json"
+      ]
+    },
+    {
+      "case": 19,
+      "module": "tests/championship-character-faithful-hd-cases.mjs",
+      "location": "tests\\championship-character-faithful-hd-cases.mjs:32:1",
+      "title": "??PixiJS atlas contract preserves Main/Sub timelines and the shared anchor (0.3043ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/characters/faithful-hd224/batch-01/e000_digitama/runtime.json"
+      ]
+    },
+    {
+      "case": 20,
+      "module": "tests/championship-completed-character-contract-cases.mjs",
+      "location": "tests\\championship-completed-character-contract-cases.mjs:1:1",
+      "title": "??tests\\championship-completed-character-contract-cases.mjs (244.709ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "assets/production/internal-faithful-baseline/characters-v1/m202_armadimon/runtime.json"
+      ]
+    },
+    {
+      "case": 21,
+      "module": "tests/championship-evolution-glyph-cases.mjs",
+      "location": "tests\\championship-evolution-glyph-cases.mjs:1:1",
+      "title": "??tests\\championship-evolution-glyph-cases.mjs (85.1675ms)",
+      "rootCause": "NPM_PACKAGE_ENTRY_METADATA_ABSENT",
+      "status": "FIXED_USING_EXACT_SELECTED_VENDOR_MODULE",
+      "attribution": "ENVIRONMENT_DEPENDENCY_RESOLUTION; BASELINE_NOT_PROVEN",
+      "requiredPaths": []
+    },
+    {
+      "case": 22,
+      "module": "tests/championship-faithful-map-technical-qa-cases.mjs",
+      "location": "tests\\championship-faithful-map-technical-qa-cases.mjs:10:1",
+      "title": "??Cage technical QA covers all 40 exact 4x fields and raw-grid alignment (2.4878ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/technical-qa/cage-hunt-exact-baseline/cage-art-master-contact-cm01-cm40.png"
+      ]
+    },
+    {
+      "case": 23,
+      "module": "tests/championship-faithful-map-technical-qa-cases.mjs",
+      "location": "tests\\championship-faithful-map-technical-qa-cases.mjs:24:1",
+      "title": "??Hunt technical QA rejects large diagnostic-red regions in all 30 variants (0.7485ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/technical-qa/cage-hunt-exact-baseline/hunt-portrait-review-contact-01.png"
+      ]
+    },
+    {
+      "case": 24,
+      "module": "tests/championship-free-battle-cases.mjs",
+      "location": "tests\\championship-free-battle-cases.mjs:7:1",
+      "title": "??all 108 original Free Battle individual settlements preserve the distinct one-point gain (1.2785ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/BATTLE_FREE_PARTY_RESULT_CPU_2026-09-14.json"
+      ]
+    },
+    {
+      "case": 25,
+      "module": "tests/championship-hunt-contact-shadow-cases.mjs",
+      "location": "tests\\championship-hunt-contact-shadow-cases.mjs:53:1",
+      "title": "??the three newly identified bodies remain pinned to the inspected approved atlas bytes (2.7656ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/main.webp"
+      ]
+    },
+    {
+      "case": 26,
+      "module": "tests/championship-hunt-direction-unassigned-cases.mjs",
+      "location": "tests\\championship-hunt-direction-unassigned-cases.mjs:99:1",
+      "title": "??an unobserved encounter steers at the swept bound instead of stopping (0.3718ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_DIRECTION_ACTOR_SWEEP_2026-09-11.json"
+      ]
+    },
+    {
+      "case": 27,
+      "module": "tests/championship-hunt-faithful-hd30-cases.mjs",
+      "location": "tests\\championship-hunt-faithful-hd30-cases.mjs:22:1",
+      "title": "??Hunt fields preserve 128x128 data and deterministic 2048px HD frame zero (1.4993ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/hunt/faithful-hd30/fields/field_hm00_01/faithful-hd2x-frame-00.png"
+      ]
+    },
+    {
+      "case": 28,
+      "module": "tests/championship-hunt-faithful-hd30-cases.mjs",
+      "location": "tests\\championship-hunt-faithful-hd30-cases.mjs:44:1",
+      "title": "??all 13 native BSAR bundles export complete layer and composite frames (0.3469ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/hunt/faithful-hd30/fields/field_hm00_01/animated-layer-frame-00.png"
+      ]
+    },
+    {
+      "case": 29,
+      "module": "tests/championship-hunt-hd-remaster-cases.mjs",
+      "location": "tests\\championship-hunt-hd-remaster-cases.mjs:42:1",
+      "title": "??source assembly, object placement records and raw gameplay maps are unchanged (0.7511ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/hunt/faithful-hd30/fields/field_hm00_01/object-placement.json"
+      ]
+    },
+    {
+      "case": 30,
+      "module": "tests/championship-hunt-hd-remaster-cases.mjs",
+      "location": "tests\\championship-hunt-hd-remaster-cases.mjs:76:1",
+      "title": "??every HD frame is hash locked and contains no large missing-region diagnostic red (0.2459ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/art/production/hunt/hd-remaster-v1/hunt-hm00-hm18-remaster-contact.jpg"
+      ]
+    },
+    {
+      "case": 31,
+      "module": "tests/championship-hunt-history-cases.mjs",
+      "location": "tests\\championship-hunt-history-cases.mjs:18:1",
+      "title": "??history constructor and first-match selection follow original CPU across all 16 biomes (3.9239ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_CARRIED_POOL_CPU_CHECK_2026-09-06.json"
+      ]
+    },
+    {
+      "case": 32,
+      "module": "tests/championship-hunt-individual-pool-cases.mjs",
+      "location": "tests\\championship-hunt-individual-pool-cases.mjs:68:1",
+      "title": "??carried individual remains slot zero, preserves existing stats and returns the original history write (0.4415ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_CARRIED_POOL_CPU_CHECK_2026-09-06.json"
+      ]
+    },
+    {
+      "case": 33,
+      "module": "tests/championship-hunt-live-encounter-cases.mjs",
+      "location": "tests\\championship-hunt-live-encounter-cases.mjs:1:1",
+      "title": "??tests\\championship-hunt-live-encounter-cases.mjs (237.9499ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_NATIVE_TOUCH_REPLAY_2026-09-05.json"
+      ]
+    },
+    {
+      "case": 34,
+      "module": "tests/championship-hunt-movement-cases.mjs",
+      "location": "tests\\championship-hunt-movement-cases.mjs:89:1",
+      "title": "??controlled ARM probes verify all direction literals, flag precedence and signed rounding (0.3853ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_MOVEMENT_CPU_CHECK_2026-09-06.json"
+      ]
+    },
+    {
+      "case": 35,
+      "module": "tests/championship-hunt-movement-cases.mjs",
+      "location": "tests\\championship-hunt-movement-cases.mjs:95:1",
+      "title": "??controlled ARM grid probes verify wrap, outside bounds and ordered terrain bit tests (0.2187ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_MOVEMENT_CPU_CHECK_2026-09-06.json"
+      ]
+    },
+    {
+      "case": 36,
+      "module": "tests/championship-hunt-movement-cases.mjs",
+      "location": "tests\\championship-hunt-movement-cases.mjs:106:1",
+      "title": "??entering native escape preserves the literal direction before its first steering blend (105.2529ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_STEERING_STACK_CPU_2026-09-09.json"
+      ]
+    },
+    {
+      "case": 37,
+      "module": "tests/championship-hunt-normal-entry-cases.mjs",
+      "location": "tests\\championship-hunt-normal-entry-cases.mjs:43:1",
+      "title": "??29 complete initial terrain readers match 475136 original CPU cell results and outside bounds (0.3965ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_SCENE_READERS_CPU_CHECK_2026-09-06.json"
+      ]
+    },
+    {
+      "case": 38,
+      "module": "tests/championship-hunt-normal-entry-cases.mjs",
+      "location": "tests\\championship-hunt-normal-entry-cases.mjs:112:1",
+      "title": "??original carried post-registration probe proves common slot binding and an additional whole-batch state update (0.4504ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_CARRIED_REGISTRATION_CPU_CHECK_2026-09-06.json"
+      ]
+    },
+    {
+      "case": 39,
+      "module": "tests/championship-hunt-original-input-evidence-cases.mjs",
+      "location": "tests\\championship-hunt-original-input-evidence-cases.mjs:1:1",
+      "title": "??tests\\championship-hunt-original-input-evidence-cases.mjs (75.4216ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/ORIGINAL_GAMEPLAY_MODE_CATALOG_2026-08-29.md"
+      ]
+    },
+    {
+      "case": 40,
+      "module": "tests/championship-hunt-persistent-sources-cases.mjs",
+      "location": "tests\\championship-hunt-persistent-sources-cases.mjs:44:1",
+      "title": "??128 normal field/season source selections match 640 original CPU candidate expansions (0.419ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_POOL_SOURCES_CPU_CHECK_2026-09-06.json"
+      ]
+    },
+    {
+      "case": 41,
+      "module": "tests/championship-hunt-spawn-cases.mjs",
+      "location": "tests\\championship-hunt-spawn-cases.mjs:1:1",
+      "title": "??tests\\championship-hunt-spawn-cases.mjs (93.2676ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/HUNT_SPAWN_CPU_CHECK_2026-09-06.json"
+      ]
+    },
+    {
+      "case": 42,
+      "module": "tests/championship-licensed-hunt-runtime-cases.mjs",
+      "location": "tests\\championship-licensed-hunt-runtime-cases.mjs:57:1",
+      "title": "??licensed Hunt frames live under production, hash-match, and keep verified tick timing (1.0264ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "assets/production/hunt/licensed-runtime-v1/fields/field_hm00_01/frame-00.png"
+      ]
+    },
+    {
+      "case": 43,
+      "module": "tests/championship-loading-optimization-cases.mjs",
+      "location": "tests\\championship-loading-optimization-cases.mjs:58:1",
+      "title": "??a ranch loads only requested original HUDs and can fill a later species without another full catalog read (164.6714ms)",
+      "rootCause": "LEGACY_HUD_TARGET_AND_PUBLIC_CACHE_REGRESSION",
+      "status": "PUBLIC_ROUTE_TEST_MIGRATED; CACHE_FIXED_4_TO_2_REQUESTS",
+      "attribution": "PUBLIC_CACHE_REGRESSION_CONFIRMED_BY_BEFORE_AFTER_TEST; LEGACY_SOURCE_ABSENCE_SEPARATE",
+      "requiredPaths": []
+    },
+    {
+      "case": 44,
+      "module": "tests/championship-medal-art-corrections-cases.mjs",
+      "location": "tests\\championship-medal-art-corrections-cases.mjs:50:1",
+      "title": "??moon, virus, blizzard and volcano use inspected motifs without wrong-art donor backfill (0.8491ms)",
+      "rootCause": "AUTHORING_FIELDS_REMOVED_FROM_PUBLIC_UI",
+      "status": "ALREADY_FIXED_AT_F10; CURRENT_FOCUSED_PASS",
+      "attribution": "PUBLIC_PRIVATE_INTERFACE_CHANGE_CONFIRMED",
+      "requiredPaths": []
+    },
+    {
+      "case": 45,
+      "module": "tests/championship-medal-art-corrections-cases.mjs",
+      "location": "tests\\championship-medal-art-corrections-cases.mjs:84:1",
+      "title": "??generated128px grids and512px details have genuine alpha and stable master provenance (22.4317ms)",
+      "rootCause": "AUTHORING_FIELDS_REMOVED_FROM_PUBLIC_UI",
+      "status": "ALREADY_FIXED_AT_F10; CURRENT_FOCUSED_PASS",
+      "attribution": "PUBLIC_PRIVATE_INTERFACE_CHANGE_CONFIRMED",
+      "requiredPaths": []
+    },
+    {
+      "case": 46,
+      "module": "tests/championship-medal-art-corrections-cases.mjs",
+      "location": "tests\\championship-medal-art-corrections-cases.mjs:135:1",
+      "title": "??later batches preserve sealed first-four identities and original detail image hashes (0.361ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "assets/production/medal-name-corrections-20261014/batch-01-four-id-receipt.json"
+      ]
+    },
+    {
+      "case": 47,
+      "module": "tests/championship-native-individual-profile-cases.mjs",
+      "location": "tests\\championship-native-individual-profile-cases.mjs:1:1",
+      "title": "??tests\\championship-native-individual-profile-cases.mjs (507.5918ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/NATIVE_INDIVIDUAL_HOME_CPU_CHECK_2026-09-08.json"
+      ]
+    },
+    {
+      "case": 48,
+      "module": "tests/championship-raising-evolution-cases.mjs",
+      "location": "tests\\championship-raising-evolution-cases.mjs:1:1",
+      "title": "??tests\\championship-raising-evolution-cases.mjs (163.7464ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/RAISING_EVOLUTION_CPU_CHECK_2026-09-08.json"
+      ]
+    },
+    {
+      "case": 49,
+      "module": "tests/championship-raising-lifecycle-cases.mjs",
+      "location": "tests\\championship-raising-lifecycle-cases.mjs:14:1",
+      "title": "??eight-day calendar registration, title wins and championship countdown match 1024 original CPU cases (1.2138ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/RAISING_CALENDAR_CPU_CHECK_2026-09-09.json"
+      ]
+    },
+    {
+      "case": 50,
+      "module": "tests/championship-rounds-cases.mjs",
+      "location": "tests\\championship-rounds-cases.mjs:90:1",
+      "title": "??all 824 original draw prefixes select the initialized team's existing presets on channel zero (0.8317ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/CHAMPIONSHIP_POOLS_CPU_2026-09-10.json"
+      ]
+    },
+    {
+      "case": 51,
+      "module": "tests/championship-tutorial-cases.mjs",
+      "location": "tests\\championship-tutorial-cases.mjs:112:1",
+      "title": "??copy covers all 72 bank messages while the legacy cursor remains the observed middle segment (0.5146ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "docs/research/TUTORIAL_MESSAGE_COVERAGE_2026-09-13.json"
+      ]
+    },
+    {
+      "case": 52,
+      "module": "tests/championship-vs2-p1r-presentation-cases.mjs",
+      "location": "tests\\championship-vs2-p1r-presentation-cases.mjs:10:1",
+      "title": "??VS2-P screens consume only the injected presentation source (3.1776ms)",
+      "rootCause": "AUTHORITY_CONSTANT_MOVED_TO_LEAF_MODULE",
+      "status": "ALREADY_FIXED_AT_F10; CURRENT_FOCUSED_PASS",
+      "attribution": "INLINE_SOURCE_EXPECTATION_MISMATCH_CONFIRMED",
+      "requiredPaths": []
+    },
+    {
+      "case": 53,
+      "module": "tests/product-species-extensions-cases.mjs",
+      "location": "tests\\product-species-extensions-cases.mjs:1:1",
+      "title": "??tests\\product-species-extensions-cases.mjs (71.3842ms)",
+      "rootCause": "MISSING_LOCAL_SOURCE_FIXTURE",
+      "status": "BLOCKED_MISSING_SOURCE",
+      "attribution": "AVAILABILITY_FAILURE; NO_MATCHED_BASELINE_EXECUTION; DO_NOT_LABEL_PREEXISTING",
+      "requiredPaths": [
+        "tests/base-display.json"
+      ]
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/main.webp",
+      "exists": false,
+      "headGitBlob": "7762de137cd5f2a96cf6f9bde7436c5ed48a252e",
+      "adcGitBlob": "7762de137cd5f2a96cf6f9bde7436c5ed48a252e",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/runtime.review.json",
+      "exists": false,
+      "headGitBlob": "fc7506a431aafb1cbfd0ba6bd01a94c3d34eadfb",
+      "adcGitBlob": "fc7506a431aafb1cbfd0ba6bd01a94c3d34eadfb",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/characters/alternate-forms-20261015/m528_metaletemon-oc220-r1/origin-geometry.json",
+      "exists": false,
+      "headGitBlob": "0481dc87b2b0bb89dac3575f29b704719697784d",
+      "adcGitBlob": "0481dc87b2b0bb89dac3575f29b704719697784d",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/hunt/licensed-runtime-v1/fields/field_hm00_01/frame-00.png",
+      "exists": false,
+      "headGitBlob": "219b59ad9f4d75d41fdda0016c04575eeb505291",
+      "adcGitBlob": "219b59ad9f4d75d41fdda0016c04575eeb505291",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/internal-character-review/m201-remix-v1/main-review-atlas-00.json",
+      "exists": false,
+      "headGitBlob": "e15752c5273a71eae5a7b97bfdc4cc7630b6a60f",
+      "adcGitBlob": "e15752c5273a71eae5a7b97bfdc4cc7630b6a60f",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--017.png",
+      "exists": false,
+      "headGitBlob": "7e126418cc81d9b0ad693a48d9bb4d7fd158d346",
+      "adcGitBlob": "7e126418cc81d9b0ad693a48d9bb4d7fd158d346",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--000.png",
+      "exists": false,
+      "headGitBlob": "806e02a3f0bca9261972fe0413b4f53ec38cff6f",
+      "adcGitBlob": "806e02a3f0bca9261972fe0413b4f53ec38cff6f",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/characters-v1/m202_armadimon/runtime.json",
+      "exists": false,
+      "headGitBlob": "e1e9b6bb145b1ca5f51f2b8a3cc960a36bc34de9",
+      "adcGitBlob": "e1e9b6bb145b1ca5f51f2b8a3cc960a36bc34de9",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/characters-v1/m450_warumonzaemon/runtime.json",
+      "exists": false,
+      "headGitBlob": "876b909f485f550e5cc1d2a836c45e81342d1175",
+      "adcGitBlob": "876b909f485f550e5cc1d2a836c45e81342d1175",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/characters-v1/m504_gigaseadramon/runtime.json",
+      "exists": false,
+      "headGitBlob": "7e2428b735bdcdbc681ca40f5adbb9a9577a8610",
+      "adcGitBlob": "7e2428b735bdcdbc681ca40f5adbb9a9577a8610",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/characters-v1/m521_heraklekabuterimon/runtime.json",
+      "exists": false,
+      "headGitBlob": "b015578f91cb340c07cb1bdd3a0b9b6ee47414bf",
+      "adcGitBlob": "b015578f91cb340c07cb1bdd3a0b9b6ee47414bf",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/characters-v1/m527_mugendramon/runtime.json",
+      "exists": false,
+      "headGitBlob": "b5bf8c7cece6b6ca2f5689ef8316b5e2a57995a4",
+      "adcGitBlob": "b5bf8c7cece6b6ca2f5689ef8316b5e2a57995a4",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "assets/production/medal-name-corrections-20261014/batch-01-four-id-receipt.json",
+      "exists": false,
+      "headGitBlob": "01ec3ee095d05b370b7e5a9c3cb82653941b568e",
+      "adcGitBlob": "01ec3ee095d05b370b7e5a9c3cb82653941b568e",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/ART_PRODUCTION_CROSSWALK.json",
+      "exists": false,
+      "headGitBlob": "6716840d18819f438bc9f1c3f8c92e7315704662",
+      "adcGitBlob": "6716840d18819f438bc9f1c3f8c92e7315704662",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/attribute-raw-classes.json",
+      "exists": false,
+      "headGitBlob": "96b5a3a9050127ea6cb36d5d84a68f88bdb3be7a",
+      "adcGitBlob": "96b5a3a9050127ea6cb36d5d84a68f88bdb3be7a",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/core-tilemap.json",
+      "exists": false,
+      "headGitBlob": "0389a194c30e84c359d6ddecf87b1e10c1ec1312",
+      "adcGitBlob": "0389a194c30e84c359d6ddecf87b1e10c1ec1312",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/native-original.png",
+      "exists": false,
+      "headGitBlob": "8070e153c72834c3e05e4e61c6dc21ba6b6210ea",
+      "adcGitBlob": "8070e153c72834c3e05e4e61c6dc21ba6b6210ea",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-placement.json",
+      "exists": false,
+      "headGitBlob": "099345d115bb36308d893e9cefb3f0425d9036a6",
+      "adcGitBlob": "099345d115bb36308d893e9cefb3f0425d9036a6",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/cage/hd-remaster-v1/cage-cm01-cm40-remaster-contact.png",
+      "exists": false,
+      "headGitBlob": "ecc2c076ea9f68151fe987cf02404c28f9b0bd6f",
+      "adcGitBlob": "ecc2c076ea9f68151fe987cf02404c28f9b0bd6f",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/cage/hd-remaster-v1/fields/field_cm27_01/owner-adaptation-mask-native.png",
+      "exists": false,
+      "headGitBlob": "9ccddbac5db7bbe9fae0fe225f5444945b719379",
+      "adcGitBlob": "9ccddbac5db7bbe9fae0fe225f5444945b719379",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/characters/faithful-hd224/batch-01/e000_digitama/runtime.json",
+      "exists": false,
+      "headGitBlob": "634a68ad5b23c822887e6225f647903e968145ed",
+      "adcGitBlob": "634a68ad5b23c822887e6225f647903e968145ed",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/hunt/faithful-hd30/fields/field_hm00_01/animated-layer-frame-00.png",
+      "exists": false,
+      "headGitBlob": "f804fa1078ab8fd9415bef0e99deaaee598368ca",
+      "adcGitBlob": "f804fa1078ab8fd9415bef0e99deaaee598368ca",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/hunt/faithful-hd30/fields/field_hm00_01/faithful-hd2x-frame-00.png",
+      "exists": false,
+      "headGitBlob": "219b59ad9f4d75d41fdda0016c04575eeb505291",
+      "adcGitBlob": "219b59ad9f4d75d41fdda0016c04575eeb505291",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/hunt/faithful-hd30/fields/field_hm00_01/object-placement.json",
+      "exists": false,
+      "headGitBlob": "de66cf768a870547d8516351599b66dcd85904ee",
+      "adcGitBlob": "de66cf768a870547d8516351599b66dcd85904ee",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/hunt/hd-remaster-v1/hunt-hm00-hm18-remaster-contact.jpg",
+      "exists": false,
+      "headGitBlob": "20ca1004334e956ae9bd7758269647c5886eed5d",
+      "adcGitBlob": "20ca1004334e956ae9bd7758269647c5886eed5d",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/technical-qa/cage-hunt-exact-baseline/cage-art-master-contact-cm01-cm40.png",
+      "exists": false,
+      "headGitBlob": "17d2dc3be890164313ac575ca0d61e8f21225347",
+      "adcGitBlob": "17d2dc3be890164313ac575ca0d61e8f21225347",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/production/technical-qa/cage-hunt-exact-baseline/hunt-portrait-review-contact-01.png",
+      "exists": false,
+      "headGitBlob": "bd705c3d4d2391dd28819cb30ddd17de35bcf07e",
+      "adcGitBlob": "bd705c3d4d2391dd28819cb30ddd17de35bcf07e",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/proposals/a1-golden-slice/cage-12-module-direction.png",
+      "exists": false,
+      "headGitBlob": "259a3dcecf31e56a23af2985c4b3e68937dcd2a4",
+      "adcGitBlob": "259a3dcecf31e56a23af2985c4b3e68937dcd2a4",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/art/technical/a1-cage-original-structure/CM40_ORIGINAL_STRUCTURE_CROSSWALK.csv",
+      "exists": false,
+      "headGitBlob": "a66e12b67868327f481f41c24705649abe37e21b",
+      "adcGitBlob": "a66e12b67868327f481f41c24705649abe37e21b",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/BATTLE_FREE_PARTY_RESULT_CPU_2026-09-14.json",
+      "exists": false,
+      "headGitBlob": "174ba361dff63185437b97dc99a59f540e8568ac",
+      "adcGitBlob": "174ba361dff63185437b97dc99a59f540e8568ac",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/CHAMPIONSHIP_POOLS_CPU_2026-09-10.json",
+      "exists": false,
+      "headGitBlob": "469f2976263ce0364e0853e3a7dff89866bf5c90",
+      "adcGitBlob": "469f2976263ce0364e0853e3a7dff89866bf5c90",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_CARRIED_POOL_CPU_CHECK_2026-09-06.json",
+      "exists": false,
+      "headGitBlob": "ea3762dec269d444708ace7cd7fe4ed16eca8492",
+      "adcGitBlob": "ea3762dec269d444708ace7cd7fe4ed16eca8492",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_CARRIED_REGISTRATION_CPU_CHECK_2026-09-06.json",
+      "exists": false,
+      "headGitBlob": "ffe18ca23baf90be792144333ccbff53936e3e78",
+      "adcGitBlob": "ffe18ca23baf90be792144333ccbff53936e3e78",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_DIRECTION_ACTOR_SWEEP_2026-09-11.json",
+      "exists": false,
+      "headGitBlob": "7aef226dbcd75f06f57a7ea93657481da2bcb5f3",
+      "adcGitBlob": "7aef226dbcd75f06f57a7ea93657481da2bcb5f3",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_MOVEMENT_CPU_CHECK_2026-09-06.json",
+      "exists": false,
+      "headGitBlob": "0c0700cab4b2443c8d0e2f794fab99ca38443ebc",
+      "adcGitBlob": "0c0700cab4b2443c8d0e2f794fab99ca38443ebc",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_NATIVE_TOUCH_REPLAY_2026-09-05.json",
+      "exists": false,
+      "headGitBlob": "6be99dbfa17719d0afc36007794a5126719134df",
+      "adcGitBlob": "6be99dbfa17719d0afc36007794a5126719134df",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_POOL_SOURCES_CPU_CHECK_2026-09-06.json",
+      "exists": false,
+      "headGitBlob": "37f64441c9862c48c79c1e2ef2c038203f264706",
+      "adcGitBlob": "37f64441c9862c48c79c1e2ef2c038203f264706",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_SCENE_READERS_CPU_CHECK_2026-09-06.json",
+      "exists": false,
+      "headGitBlob": "c1c21a622d449d8125d4a6cf66411aaa04101d0c",
+      "adcGitBlob": "c1c21a622d449d8125d4a6cf66411aaa04101d0c",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_SPAWN_CPU_CHECK_2026-09-06.json",
+      "exists": false,
+      "headGitBlob": "9eaae0480197d09df8701cdb37986f280304e62b",
+      "adcGitBlob": "9eaae0480197d09df8701cdb37986f280304e62b",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/HUNT_STEERING_STACK_CPU_2026-09-09.json",
+      "exists": false,
+      "headGitBlob": "fe0fd195e34334312b945e910d3f1b9ce0be416f",
+      "adcGitBlob": "fe0fd195e34334312b945e910d3f1b9ce0be416f",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/NATIVE_INDIVIDUAL_HOME_CPU_CHECK_2026-09-08.json",
+      "exists": false,
+      "headGitBlob": "9cd41f947279330eaf5338b8ccba33f193628fc5",
+      "adcGitBlob": "9cd41f947279330eaf5338b8ccba33f193628fc5",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/ORIGINAL_GAMEPLAY_MODE_CATALOG_2026-08-29.md",
+      "exists": false,
+      "headGitBlob": "897ce76d020a93f9ddfa22f2e909b83ad0ced04a",
+      "adcGitBlob": "897ce76d020a93f9ddfa22f2e909b83ad0ced04a",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/PRACTICE_BATTLE_CPU_2026-09-14.json",
+      "exists": false,
+      "headGitBlob": "91c3f7f7cbcbda1d838e2ace130da2ccb7e39549",
+      "adcGitBlob": "91c3f7f7cbcbda1d838e2ace130da2ccb7e39549",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/RAISING_CALENDAR_CPU_CHECK_2026-09-09.json",
+      "exists": false,
+      "headGitBlob": "d7ecf2ca2dfacd7f077adf2374163e46b9202a05",
+      "adcGitBlob": "d7ecf2ca2dfacd7f077adf2374163e46b9202a05",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/RAISING_EVOLUTION_CPU_CHECK_2026-09-08.json",
+      "exists": false,
+      "headGitBlob": "c38b36576409333d8341a5bd8c1f382583f91bb6",
+      "adcGitBlob": "c38b36576409333d8341a5bd8c1f382583f91bb6",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/TITLE_ARENA_CPU_2026-09-14.json",
+      "exists": false,
+      "headGitBlob": "54f248d3bc4c1b42e4e2692a1915a7c28a4cf0ac",
+      "adcGitBlob": "54f248d3bc4c1b42e4e2692a1915a7c28a4cf0ac",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "docs/research/TUTORIAL_MESSAGE_COVERAGE_2026-09-13.json",
+      "exists": false,
+      "headGitBlob": "7b8195bf5c40f64e98170d4c3352a12327afe399",
+      "adcGitBlob": "7b8195bf5c40f64e98170d4c3352a12327afe399",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    },
+    {
+      "path": "tests/base-display.json",
+      "exists": false,
+      "headGitBlob": "2a8e75d6f83612861fc5771aacaa197467eaea27",
+      "adcGitBlob": "2a8e75d6f83612861fc5771aacaa197467eaea27",
+      "sameGitBlob": true,
+      "interpretation": "Identical Git blob proves source version only; it does not prove the baseline CI passed or the file was available."
+    }
+  ],
+  "latestCICommit": "2d92fc6dc3786d911189ddf6237cac9da40bb962"
+}

@@ -16,7 +16,7 @@ import { DATA_ARENA_KITS, DATA_ARENA_MATE, DATA_ARENA_MAX_STEPS_PER_FRAME, DATA_
 import { dataArenaUpgrade } from "../modes/dataArena/dataArenaUpgrades.js";
 import { createDataArenaRecordStore } from "../modes/dataArena/dataArenaSave.js";
 import { createChampionshipDataArenaPort } from "./ChampionshipPersistentSavePort.js";
-import { dataArenaCast } from "../presentation/dataArena/dataArenaRoster.js";
+import { dataArenaCast, loadDataArenaCharacter } from "../presentation/dataArena/dataArenaRoster.js";
 import { mountDataArenaScene } from "../presentation/dataArena/dataArenaPixiScene.js";
 import { loadDataArenaEnvironment } from "../presentation/dataArena/dataArenaEnvironment.js";
 import { loadDataArenaInteractionArt } from "../presentation/dataArena/dataArenaInteractionArt.js";
@@ -601,12 +601,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     }
     await Promise.all(wanted.filter((member) => !bundles.has(member.speciesId)).map(async (member) => {
       try {
-        const bundle = await loadPixiCharacterRuntimeBundle({ PIXI: bundleScope, runtimeUrl: member.art.runtimeUrl, sides: ["main"],
-          cachePrefix: `data-arena:${member.art.entityId}:` });
-        // The selection's identity and source bank must match what was loaded.
-        if (bundle.runtime.entityId !== member.art.entityId || bundle.runtime.sourceBankSha256 !== member.art.sourceBankSha256) {
-          await bundle.dispose(); throw new Error("DATA_ARENA_ART_IDENTITY_MISMATCH");
-        }
+        const bundle = await loadDataArenaCharacter({PIXI:bundleScope,art:member.art,signal});
         if (signal.aborted) { await bundle.dispose(); return; }
         bundles.set(member.speciesId, bundle);
       } catch (error) {

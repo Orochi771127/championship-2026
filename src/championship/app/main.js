@@ -2,6 +2,8 @@ import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation} from '../presentation/originalRuntimeLocation.js';
 import { finalHuntArtManifestUrl } from '../presentation/finalHuntArt20261008.js';
+import {publicMapManifestPath,fetchRuntimeMapResponse} from '../presentation/publicMapRequests.js';
+import {publicMetadataPath,fetchPublicMetadataResponse} from '../presentation/publicMetadata.js';
 import {factoryShutterSpec} from '../presentation/vs2/huntFactoryShutters.js';
 import {loadHuntDepthOccluders,withHuntDepthOccluders} from '../presentation/vs2/huntDepthOccluders.js';
 import { getActiveGameTitle, getTitleEyebrow, getTitleHeadingHtml } from "../text/brandTerms.js";
@@ -39,7 +41,7 @@ import { createChampionshipPixiStage } from "../presentation/championshipPixiSta
 import { desktopRaisingViewportWidth } from "../presentation/intRh2/raisingFieldViewport.js";
 import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../presentation/battleEffectArt.js';
 import {loadRegisteredRaisingFeedbackArt} from '../presentation/raisingFeedbackArt.js';
-import {loadRegisteredCharacterHudArt} from '../presentation/characterHudArt.js';
+import {loadPublicCharacterHudArt as loadRegisteredCharacterHudArt} from '../presentation/publicCharacterHudArt.js';
 import {createTitleImageLifecycle} from '../presentation/titleImageLifecycle.js';
 import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js';
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
@@ -81,7 +83,7 @@ import { mountPortraitFrame } from './portraitFrame.js';
 import { createHuntLayoutResolver } from './huntLayoutResolver.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
-import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
+import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
@@ -159,7 +161,7 @@ const loadBattleRuntime = async () => {
 const CHARACTER_REVIEW_RUNTIME_URL = new URLSearchParams(globalThis.location?.search ?? "").get("characterArtReview") === "m201"
   ? "assets/production/internal-character-review/m201-remix-v1/runtime.review.json"
   : null;
-const LICENSED_HUNT_ART_MANIFEST_URL = "assets/production/hunt/licensed-runtime-v1/manifest.json";
+const LICENSED_HUNT_ART_MANIFEST_URL = publicMapManifestPath('hunt-accepted');
 const LOCAL_MAP_REVIEW = ["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname)
   ? new URLSearchParams(globalThis.location?.search ?? "") : new URLSearchParams();
 const ORIGINAL_HUNT_ART_MANIFEST_URL = LOCAL_MAP_REVIEW.get("industrialReview") === "r1"
@@ -177,8 +179,8 @@ const HUNT_DAY_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") === "hm2
   ? "assets/production/hunt/hm234-day-review-20261007/manifest.json" : null;
 // Owner 2026-10-09: final 37 cage fields in normal local play; existing geometry and clocks.
 const CAGE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
-  ? "assets/production/cage/final-intake-20261008/manifest.json"
-  : "assets/production/cage/original-opus-v1/manifest.json";
+  ? publicMapManifestPath('cage-final')
+  : publicMapManifestPath('cage-ui');
 // Owner 2026-10-07: completed original arenas in normal local play; publication remains gated.
 const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
   ? (LOCAL_MAP_REVIEW.get("battleReview") === "stage-20261007"
@@ -187,8 +189,8 @@ const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
     ? "assets/production/battle/bm07-quiet-review-r1/manifest.json"
     : LOCAL_MAP_REVIEW.get("battleReview") === "bm03-volcano-r2"
       ? "assets/production/battle/bm03-volcano-review-r2/manifest.json"
-      : "assets/production/battle/original-opus-v1/manifest.json")
-  : "assets/production/battle/licensed-runtime-v1/manifest.json";
+      : publicMetadataPath('battle-original'))
+  : publicMetadataPath('battle-baseline');
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
@@ -266,6 +268,36 @@ huntLayout = createHuntLayoutResolver({
 });
 const loginButton=document.getElementById('cm-login');
 const titleActions=titleScreen.querySelector('.cm-title__actions');
+let ranchTitlePreloader=null,ranchTitlePreloadToken=0,ranchTitlePreloadProgress=null;
+const titleNoteMessage=document.createElement('span'),ranchTitlePreloadStatus=document.createElement('span');
+ranchTitlePreloadStatus.dataset.prefetch='ranch';ranchTitlePreloadStatus.hidden=true;
+titleNote.replaceChildren(titleNoteMessage,ranchTitlePreloadStatus);
+function updateRanchTitlePreloadStatus(progress=ranchTitlePreloadProgress){
+  if(!progress)return;
+  ranchTitlePreloadProgress=progress;
+  ranchTitlePreloadStatus.hidden=!progress.residents;
+  titleNoteMessage.hidden=Boolean(progress.residents);
+  if(!progress.residents)return;
+  ranchTitlePreloadStatus.textContent=progress.phase==='planning'?uiText('RANCH_PREFETCH_PLANNING')
+    :progress.complete?uiText('RANCH_PREFETCH_COMPLETE')
+    :progress.failed?uiText('RANCH_PREFETCH_PARTIAL')
+    :uiText('RANCH_PREFETCH_PROGRESS',{done:progress.done,files:progress.files,mib:(progress.loaded/1048576).toFixed(1)});
+}
+function stopRanchTitlePreload(){ranchTitlePreloadToken++;ranchTitlePreloadProgress=null;ranchTitlePreloader?.stop();ranchTitlePreloadStatus.hidden=true;titleNoteMessage.hidden=false;}
+function scheduleRanchTitlePreload(){
+  const token=++ranchTitlePreloadToken;
+  // Let the existing title input and paint finish before even importing plans.
+  requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(async()=>{
+    if(token!==ranchTitlePreloadToken||titleScreen.hidden||document.hidden||navigator.connection?.saveData||!isOriginalRuntimeLocation(location))return;
+    const inspected=app.inspectSave();if(!app.canContinue().loadable)return;
+    try{
+      const {createRanchTitlePreloader}=await import('./ranchTitlePreload.js');
+      if(token!==ranchTitlePreloadToken||titleScreen.hidden)return;
+      ranchTitlePreloader??=createRanchTitlePreloader({baseUrl:location.href,createPrefetcher:createAssetPrefetcher,onProgress:updateRanchTitlePreloadStatus});
+      void ranchTitlePreloader.start(inspected.save);
+    }catch{ranchTitlePreloadProgress=null;ranchTitlePreloadStatus.hidden=true;titleNoteMessage.hidden=false;}
+  },500)));
+}
 const openingPresentation=createOpeningPresentation({host:document.getElementById('cm-opening'),onStart:startNewGame,
   allowEggChoice:shouldOfferInteractiveTutorial(location),onCancel(){
     titleActions.hidden=false;if(titleSettingsButton)titleSettingsButton.hidden=false;refreshContinue();newGameButton.focus({preventScroll:true});
@@ -435,13 +467,13 @@ function saveStatusLine() {
 }
 
 function note(message) {
-  if (titleNote) setText(titleNote, message);
+  if (titleNoteMessage) setText(titleNoteMessage, message);
 }
 
 let pixiModulePromise;
 let pixiStagePromise;
 function loadPixiModule(){
-  return pixiModulePromise??=import("../../../node_modules/pixi.js/dist/pixi.mjs")
+  return pixiModulePromise??=import("../../../assets/production/public-runtime/vendor-pixi.mjs")
     .catch(error=>{pixiModulePromise=null;throw error;});
 }
 // The one Application, created on first use. The Data Arena attaches to it
@@ -512,49 +544,15 @@ async function loadOptionalOriginalVfxReview(stage, effectArt) {
   }
 }
 
-async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal, battleAtlas=false } = {}) {
-  if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
-  const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
-  try {
-    if (!CHARACTER_REVIEW_RUNTIME_URL) {
-      // The roster module carries the battle character geometry and sizing --
-      // about 1.9MB the title screen and the ranch never read -- so it is
-      // fetched when a character bundle is actually wanted.
-      const { LICENSED_CHARACTER_ASSET_ID, LICENSED_CHARACTER_MANIFEST, loadLicensedCharacterRoster } =
-        await import("../presentation/licensedCharacterRoster.js");
-      const indexResponse = await fetch(new URL("assets/production/ART_PRODUCTION_INDEX.json", location.href), { signal });
-      if (!indexResponse.ok) return null;
-      const productionIndex = await indexResponse.json();
-      if (!productionIndex.entries.some((entry) => entry.assetId === LICENSED_CHARACTER_ASSET_ID && entry.runtimeEligible === true)) return null;
-      const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
-      const response = await fetch(manifestUrl, { signal });
-      if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
-      const rosterOptions={PIXI,speciesIds,sides,signal,battleAtlas,productionIndex,manifestUrl,manifest:await response.json()};
-      if(new URLSearchParams(location.search).get('characterArtReview')==='m001'
-        && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
-        const {loadM001CharacterArtReview}=await import('../presentation/m001CharacterArtReview.js');
-        return await loadM001CharacterArtReview(rosterOptions,location.href);
-      }
-      if(['m002','m003','m004','m005','m006','m007','m008','m009','m010','m011','m012','m101','m102','m103','m104','m105'].includes(new URLSearchParams(location.search).get('characterArtReview'))
-        && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
-        const {loadCandidateCharacterArtReview}=await import('../presentation/candidateCharacterArtReview.js');
-        return await loadCandidateCharacterArtReview(rosterOptions,location.href);
-      }
-      if(isOriginalRuntimeLocation(location)){
-        const {loadCompletedOriginalCharacters}=await import('../presentation/completedOriginalCharacters.js');
-        return await loadCompletedOriginalCharacters(rosterOptions,location.href);
-      }
-      return await loadLicensedCharacterRoster(rosterOptions);
-    }
-    return await loadPixiCharacterRuntimeBundle({
-      PIXI,
-      runtimeUrl: CHARACTER_REVIEW_RUNTIME_URL,
-      cachePrefix: "m201-internal-review:"
-    });
-  } catch (error) {
-    console.warn(`CHAMPIONSHIP_CHARACTER_REVIEW_FALLBACK: ${error.message}`);
-    return null;
-  }
+async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal, battleAtlas=false, ranchStreaming=false, initialSequences=null } = {}) {
+  if(!isOriginalRuntimeLocation(location.href))return null;
+  const scopedPIXI=createPixiAssetScope(stage.PIXI,location.href,{signal});
+  const PIXI=ranchStreaming&&ranchTitlePreloader
+    ?withPrefetchedTextures(scopedPIXI,url=>ranchTitlePreloader.blobOf(url),location.href):scopedPIXI;
+  try{
+    const {loadPublicCharacterRoster}=await import('../presentation/publicCharacterRoster.js');
+    return await loadPublicCharacterRoster({PIXI,speciesIds,sides,signal,battleAtlas,initialSequences},location.href);
+  }catch(error){console.warn(`CHAMPIONSHIP_CHARACTER_REVIEW_FALLBACK: ${error.message}`);return null;}
 }
 
 /**
@@ -573,7 +571,7 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
     let manifest = null;
     let field = null;
     for (const url of (["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)]:[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))) {
-      const response = await fetch(new URL(url, globalThis.location.href), { signal });
+      const response = await fetchRuntimeMapResponse(url, globalThis.location.href, { signal });
       if (!response.ok) {
         if (url !== LICENSED_HUNT_ART_MANIFEST_URL) continue;
         throw new Error(`HUNT_ART_MANIFEST_HTTP_${response.status}`);
@@ -628,7 +626,7 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
 async function loadOptionalCageFieldArt(stage, { signal } = {}) {
   const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
   try {
-    const response = await fetch(new URL(CAGE_ART_MANIFEST_URL, globalThis.location.href), { signal });
+    const response = await fetchRuntimeMapResponse(CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
     if (!response.ok) throw new Error(`CAGE_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
     const cageFrame = app.getCageEditFrame();
@@ -677,7 +675,7 @@ async function loadOptionalBattleFieldArt(stage, source) {
   const wanted = BATTLE_ART_PREVIEW_FIELD || source?.getFrame()?.arena?.field || null;
   if (!wanted) return null;
   try {
-    const response = await fetch(new URL(LICENSED_BATTLE_ART_MANIFEST_URL, globalThis.location.href));
+    const response = await fetchPublicMetadataResponse(LICENSED_BATTLE_ART_MANIFEST_URL, globalThis.location.href);
     if (!response.ok) throw new Error(`BATTLE_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
     if (!manifest.fields.some((field) => field.fieldId === wanted)) return null;
@@ -878,7 +876,9 @@ async function mountRaisingHome() {
             show('loading', 'FIELD_LOAD_ART');
             progress.start('facilities'); progress.start('partners');
             const [characterBundle, fieldArt] = await Promise.all([
-              owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], { signal: owner.signal }))
+              owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], {
+                signal: owner.signal,ranchStreaming:true,initialSequences:Object.fromEntries(fieldSource.getFrame().residents.map(r=>[
+                  r.speciesId,[0,fieldSource.getActorFrame?.(r.creatureId)?.sequenceId].filter(Number.isInteger)])) }))
                 .then(value => { if (value) {progress.done('partners');recoveryDiagnostics.record('LOAD',{area:'raising',stage:'partners',phase:'done'});} return value; }),
               owner.own(loadOptionalCageFieldArt(stage, { signal: owner.signal }))
                 .then(value => { if (value) {progress.done('facilities');recoveryDiagnostics.record('LOAD',{area:'raising',stage:'facilities',phase:'done'});} return value; })
@@ -1030,7 +1030,9 @@ async function mountHuntField() {
           viewportWidth: stage.app.screen.width, viewportHeight: stage.app.screen.height
         }).wildCreatures.map((wild) => wild.speciesId);
         const loaded = await Promise.allSettled([
-          own(loadOptionalCharacterReview(stage, speciesIds, ['main'], { signal })),
+          // Hunt uses the exact same lossless pages as Raising, eagerly. Every
+          // native frame is ready before entry; no Hunt clock/timing changes.
+          own(loadOptionalCharacterReview(stage, speciesIds, ['main'], { signal, ranchStreaming:true })),
           own(loadOptionalHuntFieldArt(stage, { signal, onProgress })),
           own(loadRegisteredHuntFeedbackArt({PIXI:createPixiAssetScope(stage.PIXI),baseUrl:location.href,
             kinds:fieldSource.getFrame().huntField.toolState?.tools.map(tool=>tool.subtype??tool.id)??null}))
@@ -1801,6 +1803,7 @@ function resumeTutorialPresentation() {
 }
 
 async function openGameplay() {
+  stopRanchTitlePreload();
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
   titleScreen.hidden = true;
@@ -2081,6 +2084,7 @@ async function returnToTitle(source = 'save-and-quit') {
   newGameButton.disabled = false;
   refreshContinue();
   recoveryDiagnostics.record('TITLE_RETURN',{source,phase:'done'});
+  scheduleRanchTitlePreload();
 }
 
 /**
@@ -2200,6 +2204,7 @@ async function startNewGame(names={}) {
 }
 
 async function continueGame() {
+  stopRanchTitlePreload();
   newGameButton.disabled = true;
   continueButton.disabled = true;
   try {
@@ -2285,6 +2290,7 @@ function labelDataArenaEntry() {
   void dataArenaTextModule.then(({ arenaText }) => { dataArenaButton.textContent = arenaText("entry"); });
 }
 async function enterDataArena() {
+  stopRanchTitlePreload();
   if (dataArenaSession || !dataArenaButton) return;
   dataArenaButton.disabled = true;
   dataArenaSession = "OPENING";
@@ -2335,7 +2341,7 @@ function boot() {
     titleSettingsButton.hidden = false;
   }
   relabelChrome();
-  onLocaleChange(() => { relabelChrome(); syncTitleArt(); labelDataArenaEntry(); });
+  onLocaleChange(() => { relabelChrome(); syncTitleArt(); labelDataArenaEntry(); updateRanchTitlePreloadStatus(); });
   try {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
@@ -2354,6 +2360,7 @@ function boot() {
 
   loginButton.addEventListener('click',()=>{loginButton.hidden=true;titleActions.hidden=false;refreshContinue();(continueButton.disabled?newGameButton:continueButton).focus({preventScroll:true});});
   newGameButton.addEventListener("click", async () => {
+    stopRanchTitlePreload();
     // The opening ends by replacing whatever is stored, so a player who
     // already has a game is asked first, while nothing has changed yet.
     const inspected = app.inspectSave();
@@ -2386,13 +2393,14 @@ function boot() {
   openingFilm.start();
   syncTitleArt();
   window.dispatchEvent(new Event("championship:ready"));
+  scheduleRanchTitlePreload();
   syncMusic();
   // Background/unload resets elapsed measurement, and now also writes the
   // session: the Raising Home SAVE button was removed on 2026-09-16, so leaving
   // the page is what commits it. Save & Quit still commits explicitly.
-  window.addEventListener("pagehide", () => { clockDriver?.reset(); autosaveOnHide(); });
+  window.addEventListener("pagehide", () => { stopRanchTitlePreload();clockDriver?.reset(); autosaveOnHide(); });
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") autosaveOnHide();
+    if (document.visibilityState === "hidden") {stopRanchTitlePreload();autosaveOnHide();}
   });
 }
 

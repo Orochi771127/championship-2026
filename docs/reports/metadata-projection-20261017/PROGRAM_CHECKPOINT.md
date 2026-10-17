@@ -1,0 +1,11 @@
+Historical checkpoint; see FINAL_REPORT_ZH_TW.md and FINAL_SUMMARY.json for completed checks and current blockers.
+
+Local publication repair after 25f0b9be; no push, merge or deployment.
+
+The source byte/privacy audit checks all 7,895 explicitly selected inputs with zero issues. Seventeen PNG derivatives remove only metadata chunks. Every retained PNG chunk is byte-identical, and Pillow confirms all decoded RGBA pixels and dimensions match their preserved originals. JSON whitespace is compacted without changing geometry values.
+
+Forty-one unchanged gameplay/presentation JSON inputs have closed field sets and exact source SHA-256 pins; source changes require review. Two field-by-field projections retain glyph rendering values and the four existing active alternate-form native bindings. The original character QA/source catalogs and unused program/contract files stay in Git outside public inputs. The normal esbuild graph, including literal dynamic imports, determines executable entries; explicitly selected dynamic rendering descriptions remain independently validated.
+
+The Pixi derivative removes upstream documentation lines containing example machine paths. Its executable output is compared with the preserved original distribution after identical esbuild parsing/minification. License comments remain. Data Arena now uses the same public character identity, hash, motion and geometry validation as normal character loading; it cannot request the old source-review descriptor.
+
+Historical portrait tests distinguish 96 authoring rows, the unchanged isolated QA catalog of 95, and the selected public 59. Frozen earlier identity/order/value checks remain tied to a0944833 source rows; per-role runtime comparisons omit only authoring style bookkeeping. Missing source fixtures were restored without altering their bytes. No test was deleted or skipped. Full CI/build and final dynamic browser/capacity acceptance are pending at this checkpoint.

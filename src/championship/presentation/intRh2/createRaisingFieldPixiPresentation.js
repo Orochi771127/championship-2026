@@ -1,6 +1,7 @@
 import { getReviewedRaisingContactShadow } from './raisingContactShadow.js';
 import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
 import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
+import publicCare from '../../../../assets/production/public-runtime/raising-care.v1.json' with {type:'json'};
 // INT-RH2 Raising field -- a scene on the single Championship Pixi stage.
 //
 // VS1 created its own Application here. VS2 needs a second playable field, and
@@ -14,7 +15,6 @@ import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
 import { isNativeRanchLayout } from "../../cage/ranchExpansion.js";
 import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset, getRaisingEggContactShadow } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
-import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
 import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyphArt.js';
 import {EVOLUTION_TEXT_ROWS, EVOLUTION_WRITING_COLOR, evolutionWritingY} from '../../text/evolutionPresentationText.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
@@ -167,7 +167,6 @@ export async function mountRaisingFieldPixiPresentation({
     }});
     word.eventMode='none';evolutionWriting.addChild(word);return word;
   });
-  let evolutionArt = null, evolutionCells = null;
   let evolutionGlyphArt = null, evolutionGlyphBand = null, evolutionGlyphLoad = null;
   function ensureEvolutionGlyphs() {
     if (evolutionGlyphLoad) return;
@@ -179,17 +178,8 @@ export async function mountRaisingFieldPixiPresentation({
       evolutionWriting.addChild(evolutionGlyphBand.container);
     }).catch(error => { if (!disposed && !lifetime.signal.aborted) onFallback(error); });
   }
-  // Decorative evolution cells never block the field. The same lifetime owns
-  // pending assets and ignores a success after this scene has been disposed.
-  void loadAssembledEvolutionArt(PIXI).then(art => {
-    if (disposed || lifetime.signal.aborted) { void art?.dispose(); return; }
-    evolutionArt = art;
-  evolutionCells=evolutionArt?Object.fromEntries(['ring','green','burst'].map(name=>{
-    const sprite=new PIXI.Sprite();sprite.label=`native evolution ${name}`;sprite.eventMode='none';sprite.visible=false;
-    // The floor ring belongs behind the body; emitters stay below the white flash.
-    if(name==='ring')evolutionWriting.addChild(sprite);else fxLayer.addChildAt(sprite,0);
-    return [name,sprite];})):null;
-  }).catch(error => { if (!disposed && !lifetime.signal.aborted) onFallback(error); });
+  // Reuse this presenter's existing authored vector ring/particles and the
+  // original glyph band. Private reference decorations are not a public input.
   const silhouette=new PIXI.ColorMatrixFilter();silhouette.matrix=[0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0];
   let evolutionCamera=null;
   // Licensed original cells (common/i000_item) carry their own size and sprite
@@ -200,12 +190,9 @@ export async function mountRaisingFieldPixiPresentation({
   async function loadCareArt() {
     const art=new Map();
     const local=isOriginalRuntimeLocation();
-    const licensed=new URL(local?'../../../../assets/production/original-ui-intake-20261007/care/':'../../../../assets/production/raising-care/licensed-runtime-v1/',import.meta.url);
-    const response=await fetch(new URL('manifest.json',licensed).href,{signal:lifetime.signal});
-    if(!response.ok)throw new Error('RAISING_CARE_HTTP_'+response.status);
-    const manifest=await response.json();
-    await Promise.all(manifest.cells.map(async cell=>art.set(`${cell.role}-${cell.pose}`,{
-      texture:await PIXI.Assets.load(new URL(cell.file,licensed).href),
+    if(!local)return art;
+    await Promise.all((local?publicCare.cells:[]).map(async cell=>art.set(`${cell.role}-${cell.pose}`,{
+      texture:await PIXI.Assets.load(new URL('../../../../'+cell.src,import.meta.url).href),
       width:cell.nativeWidth,height:cell.nativeHeight,
       anchorX:cell.nativeAnchorX/cell.nativeWidth,anchorY:cell.nativeAnchorY/cell.nativeHeight})));
     const authored=new URL('../../../../assets/production/raising-care-r1/',import.meta.url);
@@ -651,6 +638,34 @@ export async function mountRaisingFieldPixiPresentation({
     onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.assetState,error:e.assetError??null})));
   }
 
+  // Native animation tables and their frame clocks stay authoritative. A page
+  // that has not arrived pauses the existing scene-ready clock gate; the last
+  // verified frame remains visible until the exact requested sequence is ready.
+  function residentFrameReady(entry,frame,{retry=false}={}){
+    const presenter=entry.nativeFramePresenter;
+    if(!presenter?.isFrameReady)return true;
+    if(presenter.isFrameReady(frame)){
+      if(entry.pendingAnimation!=null){entry.animationLoadToken=(entry.animationLoadToken??0)+1;
+        entry.pendingAnimation=null;entry.pendingAnimationFrame=null;entry.assetState='ready';entry.assetError=null;reportResidentAssets();}
+      return true;
+    }
+    const sequence=frame.sequenceId;
+    entry.pendingAnimationFrame=frame;
+    if(!retry&&entry.pendingAnimation===sequence)return false;
+    const token=(entry.animationLoadToken??0)+1;entry.animationLoadToken=token;
+    entry.pendingAnimation=sequence;entry.assetState='loading';entry.assetError=null;reportResidentAssets();
+    void presenter.ensureFrame(frame).then(()=>{
+      if(disposed||entry.root.destroyed||entry.animationLoadToken!==token)return;
+      entry.pendingAnimation=null;entry.pendingAnimationFrame=null;entry.assetState='ready';entry.assetError=null;
+      reportResidentAssets();sync(source.getFrame(),{force:true});
+    },error=>{
+      if(disposed||entry.root.destroyed||entry.animationLoadToken!==token)return;
+      entry.assetState='error';entry.assetError=error.message;reportResidentAssets();
+      onFallback(`CHAMPIONSHIP_RESIDENT_ANIMATION_FAILED ${entry.speciesId}: ${error.message}`);
+    });
+    return false;
+  }
+
   function actorGeometry(entry,frameGeometry=entry.nativeFramePresenter?.getSnapshot()?.geometry,flipX=false){
     const nativeScale=getRaisingNativePixelScale(fieldArt?.field,view);
     const sizing=frameGeometry?.scale?{...entry.nativeSizing,packedPixelsPerNativePixel:frameGeometry.scale}:entry.nativeSizing;
@@ -746,7 +761,8 @@ export async function mountRaisingFieldPixiPresentation({
       }
       const nativeScale = getRaisingNativePixelScale(fieldArt?.field, view);
       const actorFrame=source.getActorFrame?.(resident.creatureId);
-      if(entry.nativeFramePresenter&&actorFrame&&entry.speciesId===`championship:creature:species-${String(actorFrame.speciesIndex).padStart(3,'0')}`){
+      if(entry.nativeFramePresenter&&actorFrame&&entry.speciesId===`championship:creature:species-${String(actorFrame.speciesIndex).padStart(3,'0')}`
+        &&residentFrameReady(entry,actorFrame)){
         applyNativeCharacterCellGeometry(entry.sprite,entry.nativeFramePresenter.apply(actorFrame));
       }
       const flipX=Boolean(entry.nativeFramePresenter&&actorFrame?.flipBits&1);
@@ -983,7 +999,6 @@ export async function mountRaisingFieldPixiPresentation({
     drawWaste();
     drawCareTool(ticker.deltaMS);
     evolutionGlow.clear();
-    if(evolutionCells)for(const sprite of Object.values(evolutionCells))sprite.visible=false;
     const lifecycle=source.getLifecycleFrame?.()?.evolution;
     const activeFrame=lifecycle?source.getActorFrame?.(lifecycle.instanceId)?.evolution:null;
     const covered=!!activeFrame&&activeFrame.phase>=1;
@@ -1023,7 +1038,7 @@ export async function mountRaisingFieldPixiPresentation({
         const frame=source.getActorFrame?.(creatureId);
         // Profile changes may precede asynchronous texture loading. Never
         // apply one species' frame index to another species' atlas.
-        if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId)
+        if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId&&residentFrameReady(entry,frame))
           {const visualFrame=entry.nativeFramePresenter.apply(frame);if(entry.sprite){
             if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
             entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
@@ -1128,25 +1143,10 @@ export async function mountRaisingFieldPixiPresentation({
           if(geometry){entry.evolutionSprite.scale.set(geometry.spriteScale);entry.evolutionSprite.position.set(geometry.offset.x,geometry.offset.y);}
         }}}
     const center={x:entry.root.x,y:entry.root.y-24*(entry.restScale??1)};
-    const useEvolutionArt=evolutionArt&&e.target>=0;
-    if(useEvolutionArt){
-      const clock=evolutionArtClock(e),scale=(entry.nativeScale??entry.restScale??1)*2;
-      const put=(name,art,visible,y)=>{
-        const sprite=evolutionCells[name];sprite.visible=Boolean(visible&&art);
-        if(!sprite.visible)return;
-        sprite.texture=art.texture;sprite.anchor.set(art.origin[0]/art.width,art.origin[1]/art.height);
-        // 0211A338 doubles the two animated emitters; the static ring keeps 1x.
-        sprite.position.set(entry.root.x,y);sprite.scale.set(name==='ring'?scale/2:scale);
-        sprite.alpha=name==='ring'?clock.ringAlpha:name==='burst'?clock.burstAlpha:1;
-      };
-      put('ring',evolutionArt.get('evolution-ring'),clock?.ring,entry.root.y);
-      put('green',clock?.greenTicks!==null?evolutionArt.frame('evolution-green',clock?.greenTicks):null,e.target>=0,entry.root.y);
-      put('burst',clock?.burstTicks!==null?evolutionArt.frame('evolution-burst',clock?.burstTicks):null,e.target>=0,center.y);
-    }
     if(e.phase>0&&e.phase<7){
       const radius=34*(entry.restScale??1);
-      if(!useEvolutionArt&&e.phase>=2&&e.target>=0)evolutionGlow.ellipse(center.x,entry.root.y,radius*1.5,radius/3).stroke({color:0x005ace,width:4,alpha:0.8});
-      if(!useEvolutionArt&&e.phase>=3)for(let i=0;i<28;i++){
+      if(e.phase>=2&&e.target>=0)evolutionGlow.ellipse(center.x,entry.root.y,radius*1.5,radius/3).stroke({color:0x005ace,width:4,alpha:0.8});
+      if(e.phase>=3)for(let i=0;i<28;i++){
         const phase=(i*17+e.elapsed*4)%120,angle=i*2.3999;
         const x=center.x+Math.cos(angle)*radius*(phase/120),y=entry.root.y-phase*(entry.restScale??1);
         evolutionGlow.rect(x,y,2,4).fill({color:e.target<0?0xffffff:e.phase<=4?0x48fa6b:0x00baff,alpha:1-phase/130});
@@ -1282,7 +1282,10 @@ export async function mountRaisingFieldPixiPresentation({
       if(disposed||!characterBundle?.ensureSpecies)return false;
       for(const resident of source.getFrame().residents){
         const entry=actors.get(resident.creatureId);
-        if(entry?.assetState==='error')void loadActorTextures(entry,resident);
+        if(entry?.assetState==='error'){
+          if(entry.pendingAnimationFrame)residentFrameReady(entry,entry.pendingAnimationFrame,{retry:true});
+          else void loadActorTextures(entry,resident);
+        }
       }
       return true;
     },
@@ -1339,7 +1342,7 @@ export async function mountRaisingFieldPixiPresentation({
         // read the pose instead of comparing pixels. 0 while reduced motion.
         carePose:carePose(),
         careTextureCount:careArt.size,
-        evolutionArt:evolutionArt?'NATIVE_CELLS_PHASE_CLOCK':'AUTHORED_VECTOR',
+        evolutionArt:'AUTHORED_VECTOR',
         evolutionActors:[...actors].filter(([,e])=>e.evolutionActive).map(([id,e])=>({id,
           target:e.evolutionTarget,visible:e.evolutionSprite?.visible??false,
           position:[e.root.x,e.root.y],scale:[e.evolutionSprite?.scale.x??null,e.evolutionSprite?.scale.y??null],
@@ -1393,7 +1396,6 @@ export async function mountRaisingFieldPixiPresentation({
       fieldArt = null;
       void characterBundle?.dispose();
       void feedbackArt?.dispose();
-      void evolutionArt?.dispose();
       void evolutionGlyphArt?.dispose();
       characterBundle = null;
       // The Application belongs to the stage and outlives this scene.

@@ -1,3 +1,4 @@
+import {PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations} from '../src/championship/presentation/publicCharacterRenderContract.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -15,7 +16,7 @@ function fixture(response,{strict=false,expectedText=null}={}){
  const fetch=async()=>({ok:true,...Object.fromEntries(Object.entries(response).map(([key,value])=>[key,async()=>{calls[key]++;return value===true?(key==='json'?baseline:JSON.stringify(baseline)):value;}]))});
  const loadBundle=async args=>{calls.loads.push(args.runtimeUrl);return {runtime,dispose:async()=>{calls.disposed++;}};};
  const loadRoster=async opts=>{const bundle=await opts.loadBundle({runtimeUrl:base+'assets/baseline/'+entity+'/runtime.json'});return {dispose:()=>bundle.dispose(),getDiagnostics:()=>({})};};
- const loader=new Function('acceptedSelection','battlePacking','isApprovedOriginalPublicLocation','isOriginalRuntimeLocation','loadLicensedCharacterRoster','loadPixiCharacterRuntimeBundle','COMPLETED_ORIGINAL_CHARACTERS','readHudManifest','alternateFormAsset','mergeAlternateFormConfigs','bindAlternateFormManifest','rekeyAlternateDonorRuntime','fetch',source+';return loadCompletedOriginalCharacters;')({characters:[config],root:'assets/accepted/'},{assetId:'packed',root:'assets/packed/',characters:[{entity}]},()=>true,()=>true,loadRoster,loadBundle,[],()=>{},()=>null,x=>x,x=>x,x=>x,fetch);
+ const loader=new Function('PUBLIC_CHARACTER_RENDER_KIND','characterRenderAnimations','ranchPacking','acceptedSelection','battlePacking','isApprovedOriginalPublicLocation','isOriginalRuntimeLocation','loadLicensedCharacterRoster','loadPixiCharacterRuntimeBundle','COMPLETED_ORIGINAL_CHARACTERS','readHudManifest','alternateFormAsset','mergeAlternateFormConfigs','bindAlternateFormManifest','rekeyAlternateDonorRuntime','fetch',source+';return loadCompletedOriginalCharacters;')(PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations,{characters:[]},{characters:[config],root:'assets/accepted/'},{assetId:'packed',root:'assets/packed/',characters:[{entity}]},()=>true,()=>true,loadRoster,loadBundle,[],()=>{},()=>null,x=>x,x=>x,x=>x,fetch);
  const run=()=>loader({sides:['main'],battleAtlas:true,manifest:{},productionIndex:{entries:[{assetId:'packed',manifestPath:'assets/packed/manifest.json',runtimeEligible:true,publicReleasePermitted:true}]}},base);
  return {run,calls};
 }

@@ -1,0 +1,904 @@
+{
+  "status": "LOCAL_INTEGRATION_PUBLIC_METADATA_PROJECTION_REQUIRED",
+  "assetCount": 4490,
+  "assetBytes": 440467249,
+  "extensions": {
+    ".webp": 2127,
+    ".json": 2363
+  },
+  "webpBytes": 430127610,
+  "jsonPassed": 2141,
+  "jsonRejected": 222,
+  "rejected": [
+    {
+      "path": "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e001_digitama-dot-intake-r01/ranch-streaming-v1/21e2cd24ebb8b3e7/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/e001_digitama-dot-intake-r01/ranch-streaming-v1/21e2cd24ebb8b3e7/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e002_digitama-dot-intake-r01/ranch-streaming-v1/045879dfbddbf229/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/e002_digitama-dot-intake-r01/ranch-streaming-v1/045879dfbddbf229/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e003_digitama-dot-intake-r01/ranch-streaming-v1/ebe9e6e9545ae2f4/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/e003_digitama-dot-intake-r01/ranch-streaming-v1/ebe9e6e9545ae2f4/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e004_digitama-dot-intake-r01/ranch-streaming-v1/58f6e794ac98ebd9/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/e004_digitama-dot-intake-r01/ranch-streaming-v1/58f6e794ac98ebd9/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e005_digitama-dot-intake-r01/ranch-streaming-v1/2deb24e3df56aa25/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/e005_digitama-dot-intake-r01/ranch-streaming-v1/2deb24e3df56aa25/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e006_digitama-dot-intake-r01/ranch-streaming-v1/3147b41ae83786c1/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/e006_digitama-dot-intake-r01/ranch-streaming-v1/3147b41ae83786c1/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/e007_digitama-dot-intake-r01/ranch-streaming-v1/b94a1eb756fcbe19/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/e007_digitama-dot-intake-r01/ranch-streaming-v1/b94a1eb756fcbe19/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m001_zurumon-early64-raw-v2-r03/ranch-streaming-v1/7bd7b0de40fbc182/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m001_zurumon-early64-raw-v2-r03/ranch-streaming-v1/7bd7b0de40fbc182/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m002_choromon-early64-raw-v2-r01/ranch-streaming-v1/c0615a90eaa2fab4/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m002_choromon-early64-raw-v2-r01/ranch-streaming-v1/c0615a90eaa2fab4/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m003_nyokimon-early64-raw-v2-r02/ranch-streaming-v1/5e3cbca29cf1ca13/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m003_nyokimon-early64-raw-v2-r02/ranch-streaming-v1/5e3cbca29cf1ca13/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m004_bubbmon-early64-raw-v2-r01/ranch-streaming-v1/172d8367ea0d60f5/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m004_bubbmon-early64-raw-v2-r01/ranch-streaming-v1/172d8367ea0d60f5/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m005_pitchmon-early64-raw-v2-r01/ranch-streaming-v1/b965c1683f57a2fd/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m005_pitchmon-early64-raw-v2-r01/ranch-streaming-v1/b965c1683f57a2fd/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/ranch-streaming-v1/eb51d4af2d99d1e3/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/ranch-streaming-v1/eb51d4af2d99d1e3/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m007_botamon-early64-raw-v2-r01/ranch-streaming-v1/2b2c23d721132453/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m007_botamon-early64-raw-v2-r01/ranch-streaming-v1/2b2c23d721132453/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m008_poyomon-early64-raw-v2-r01/ranch-streaming-v1/8f51b5acbb20ebf9/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m008_poyomon-early64-raw-v2-r01/ranch-streaming-v1/8f51b5acbb20ebf9/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m009_mokumon-early64-raw-v2-r01/ranch-streaming-v1/6e66e0e17fe9d620/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m009_mokumon-early64-raw-v2-r01/ranch-streaming-v1/6e66e0e17fe9d620/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m010_yukimibotamon-early64-raw-v2-r02/ranch-streaming-v1/1b97a34ed03adb49/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m010_yukimibotamon-early64-raw-v2-r02/ranch-streaming-v1/1b97a34ed03adb49/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m011_yuramon-early64-raw-v2-r01/ranch-streaming-v1/fbaef3195570e6b3/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m011_yuramon-early64-raw-v2-r01/ranch-streaming-v1/fbaef3195570e6b3/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m012_petimon-early64-raw-v2-r02/ranch-streaming-v1/b0e33be21d892470/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m012_petimon-early64-raw-v2-r02/ranch-streaming-v1/b0e33be21d892470/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m101_caprimon-early64-raw-v2-r01/ranch-streaming-v1/2a55c1521d6af62b/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m101_caprimon-early64-raw-v2-r01/ranch-streaming-v1/2a55c1521d6af62b/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m102_koromon-early64-raw-v2-r01/ranch-streaming-v1/0765b670a21fde29/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m102_koromon-early64-raw-v2-r01/ranch-streaming-v1/0765b670a21fde29/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m103_tanemon-early64-raw-v2-r01/ranch-streaming-v1/480d4704bc1f1252/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m103_tanemon-early64-raw-v2-r01/ranch-streaming-v1/480d4704bc1f1252/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/ranch-streaming-v1/72327cf6f56d17a5/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m104_tunomon-early64-raw-v2-r01/ranch-streaming-v1/72327cf6f56d17a5/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m105_tokomon-early64-raw-v2-r02/ranch-streaming-v1/404cd94fbc3a01ac/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m105_tokomon-early64-raw-v2-r02/ranch-streaming-v1/404cd94fbc3a01ac/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m107_pagumon-early64-raw-v2-r02/ranch-streaming-v1/dc7d150fc989768c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m107_pagumon-early64-raw-v2-r02/ranch-streaming-v1/dc7d150fc989768c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m108_pyokomon-early64-raw-v2-r02/ranch-streaming-v1/05dfff43141b0343/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m108_pyokomon-early64-raw-v2-r02/ranch-streaming-v1/05dfff43141b0343/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m109_pukamon-early64-raw-v2-r01/ranch-streaming-v1/96f9ea25f3e125c5/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m109_pukamon-early64-raw-v2-r01/ranch-streaming-v1/96f9ea25f3e125c5/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m110_petimemramon-early64-raw-v2-r02/ranch-streaming-v1/fdc1b90dcfec9632/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m110_petimemramon-early64-raw-v2-r02/ranch-streaming-v1/fdc1b90dcfec9632/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m111_mochimon-early64-raw-v2-r02/ranch-streaming-v1/301581276f0b57cb/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m111_mochimon-early64-raw-v2-r02/ranch-streaming-v1/301581276f0b57cb/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m112_bebydomon-early64-raw-v2-r02/ranch-streaming-v1/4792da0aa006285b/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m112_bebydomon-early64-raw-v2-r02/ranch-streaming-v1/4792da0aa006285b/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m113_sunmon-early64-raw-v2-r01/ranch-streaming-v1/5c21a92924c3750d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m113_sunmon-early64-raw-v2-r01/ranch-streaming-v1/5c21a92924c3750d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m114_moonmon-early64-raw-v2-r01/ranch-streaming-v1/13b5816c6be68367/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m114_moonmon-early64-raw-v2-r01/ranch-streaming-v1/13b5816c6be68367/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m202_armadimon-final-growth38-20261007/ranch-streaming-v1/089e217263f74b84/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m202_armadimon-final-growth38-20261007/ranch-streaming-v1/089e217263f74b84/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m203_elecmon-final-growth38-20261007/ranch-streaming-v1/41374ff6461c021d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m203_elecmon-final-growth38-20261007/ranch-streaming-v1/41374ff6461c021d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m204_otamamon-final-growth38-20261007/ranch-streaming-v1/8e005eb3c7cf5524/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m204_otamamon-final-growth38-20261007/ranch-streaming-v1/8e005eb3c7cf5524/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m205_gaomon-final-growth38-20261007/ranch-streaming-v1/9c8b3ec0f5d27a56/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m205_gaomon-final-growth38-20261007/ranch-streaming-v1/9c8b3ec0f5d27a56/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m206_gazimon-final-growth38-20261007/ranch-streaming-v1/9daea030238bbf4f/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m206_gazimon-final-growth38-20261007/ranch-streaming-v1/9daea030238bbf4f/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m208_gabumon-final-growth38-20261007/ranch-streaming-v1/b10fb9670033caff/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m208_gabumon-final-growth38-20261007/ranch-streaming-v1/b10fb9670033caff/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m209_kamemon-final-growth38-20261007/ranch-streaming-v1/2373632f38fd532a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m209_kamemon-final-growth38-20261007/ranch-streaming-v1/2373632f38fd532a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m210_gizamon-final-growth38-20261007/ranch-streaming-v1/56398c35e63cb033/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m210_gizamon-final-growth38-20261007/ranch-streaming-v1/56398c35e63cb033/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m211_candmon-final-growth38-20261007/ranch-streaming-v1/4d4c98ce2ea41027/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m211_candmon-final-growth38-20261007/ranch-streaming-v1/4d4c98ce2ea41027/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m214_kunemon-final-growth38-20261007/ranch-streaming-v1/f3898317f8fab0d7/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m214_kunemon-final-growth38-20261007/ranch-streaming-v1/f3898317f8fab0d7/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m217_gottumon-final-growth38-20261007/ranch-streaming-v1/a41d0bbdb21f97d3/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m217_gottumon-final-growth38-20261007/ranch-streaming-v1/a41d0bbdb21f97d3/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m218_goburimon-final-growth38-20261007/ranch-streaming-v1/4fbe69da1ec97e8d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m218_goburimon-final-growth38-20261007/ranch-streaming-v1/4fbe69da1ec97e8d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m219_gomamon-final-growth38-20261007/ranch-streaming-v1/d0c5fb6c46487d4c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m219_gomamon-final-growth38-20261007/ranch-streaming-v1/d0c5fb6c46487d4c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m221_terriermon-final-growth38-20261007/ranch-streaming-v1/58d29bd2ac0ac54b/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m221_terriermon-final-growth38-20261007/ranch-streaming-v1/58d29bd2ac0ac54b/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m222_tentomon-final-growth38-20261007/ranch-streaming-v1/76a6ca59ead651ab/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m222_tentomon-final-growth38-20261007/ranch-streaming-v1/76a6ca59ead651ab/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m223_toyagumon-final-growth38-20261007/ranch-streaming-v1/0fdbcc890d9fe60a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m223_toyagumon-final-growth38-20261007/ranch-streaming-v1/0fdbcc890d9fe60a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m224_dracomon-final-growth38-20261007/ranch-streaming-v1/c93d977d7c4902e3/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m224_dracomon-final-growth38-20261007/ranch-streaming-v1/c93d977d7c4902e3/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m225_bakumon-final-growth38-20261007/ranch-streaming-v1/aa7eac3958485ee8/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m225_bakumon-final-growth38-20261007/ranch-streaming-v1/aa7eac3958485ee8/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m226_hagurumon-final-growth38-20261007/ranch-streaming-v1/9c4ef6fab509f5e8/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m226_hagurumon-final-growth38-20261007/ranch-streaming-v1/9c4ef6fab509f5e8/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m227_patamon-final-growth38-20261007/ranch-streaming-v1/865935e5a43497d1/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m227_patamon-final-growth38-20261007/ranch-streaming-v1/865935e5a43497d1/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m228_palmon-final-growth38-20261007/ranch-streaming-v1/b789a7aeccdfa003/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m228_palmon-final-growth38-20261007/ranch-streaming-v1/b789a7aeccdfa003/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m229_picodevimon-final-growth38-20261007/ranch-streaming-v1/41f3d005ba60a382/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m229_picodevimon-final-growth38-20261007/ranch-streaming-v1/41f3d005ba60a382/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m230_piyomon-final-growth38-20261007/ranch-streaming-v1/d66a486074af9bd5/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m230_piyomon-final-growth38-20261007/ranch-streaming-v1/d66a486074af9bd5/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m231_falcomon-final-growth38-20261007/ranch-streaming-v1/31153915d2728841/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m231_falcomon-final-growth38-20261007/ranch-streaming-v1/31153915d2728841/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m232_plotmon-final-growth38-20261007/ranch-streaming-v1/8ab722a3ea75f6c7/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m232_plotmon-final-growth38-20261007/ranch-streaming-v1/8ab722a3ea75f6c7/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m233_floramon-final-growth38-20261007/ranch-streaming-v1/ebe44e2a737d371d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m233_floramon-final-growth38-20261007/ranch-streaming-v1/ebe44e2a737d371d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m235_mushmon-final-growth38-20261007/ranch-streaming-v1/26db80af64ad43b9/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m235_mushmon-final-growth38-20261007/ranch-streaming-v1/26db80af64ad43b9/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m236_yukiagumon-final-growth38-20261007/ranch-streaming-v1/d0f4b33e8f036e3a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m236_yukiagumon-final-growth38-20261007/ranch-streaming-v1/d0f4b33e8f036e3a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m237_renamon-final-growth38-20261007/ranch-streaming-v1/50ac3c11747efc32/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m237_renamon-final-growth38-20261007/ranch-streaming-v1/50ac3c11747efc32/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m238_coronamon-final-growth38-20261007/ranch-streaming-v1/c25596c677784b14/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m238_coronamon-final-growth38-20261007/ranch-streaming-v1/c25596c677784b14/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m239_lunamon-final-growth38-20261007/ranch-streaming-v1/eebf91bd8c7b5cbe/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m239_lunamon-final-growth38-20261007/ranch-streaming-v1/eebf91bd8c7b5cbe/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m240_kuroagumon-final-growth38-20261007/ranch-streaming-v1/65652baf5668a07c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m240_kuroagumon-final-growth38-20261007/ranch-streaming-v1/65652baf5668a07c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m241_psychemon-final-growth38-20261007/ranch-streaming-v1/edee3d077a53a9be/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m241_psychemon-final-growth38-20261007/ranch-streaming-v1/edee3d077a53a9be/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m242_alraumon-final-growth38-20261007/ranch-streaming-v1/64850e9eacf0499c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m242_alraumon-final-growth38-20261007/ranch-streaming-v1/64850e9eacf0499c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m243_tsukaimon-final-growth38-20261007/ranch-streaming-v1/fa2eaffc1585861d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m243_tsukaimon-final-growth38-20261007/ranch-streaming-v1/fa2eaffc1585861d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m244_vmon-final-growth38-20261007/ranch-streaming-v1/3a39b3fe77f57e2f/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m244_vmon-final-growth38-20261007/ranch-streaming-v1/3a39b3fe77f57e2f/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m255_guilmon-final-growth38-20261007/ranch-streaming-v1/01d94fc998ec1701/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m255_guilmon-final-growth38-20261007/ranch-streaming-v1/01d94fc998ec1701/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m301_ankylomon-mature-raw-r02/ranch-streaming-v1/230fc6b87f7e1ca6/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m301_ankylomon-mature-raw-r02/ranch-streaming-v1/230fc6b87f7e1ca6/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m304_wizarmon-mature-raw-r02/ranch-streaming-v1/d80609efaf8a688d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m304_wizarmon-mature-raw-r02/ranch-streaming-v1/d80609efaf8a688d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m305_woodmon-mature-raw-r02/ranch-streaming-v1/312fdd585639bb60/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m305_woodmon-mature-raw-r02/ranch-streaming-v1/312fdd585639bb60/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m306_airdramon-mature-raw-r02/ranch-streaming-v1/72dc308470f053d6/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m306_airdramon-mature-raw-r02/ranch-streaming-v1/72dc308470f053d6/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m308_angemon-mature-raw-r02/ranch-streaming-v1/4924dc0149aa13ac/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m308_angemon-mature-raw-r02/ranch-streaming-v1/4924dc0149aa13ac/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m310_orgemon-mature-raw-r02/ranch-streaming-v1/3cd8527bb5854c5e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m310_orgemon-mature-raw-r02/ranch-streaming-v1/3cd8527bb5854c5e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m311_gaogamon-mature-raw-r02/ranch-streaming-v1/8fe97489083e3e7c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m311_gaogamon-mature-raw-r02/ranch-streaming-v1/8fe97489083e3e7c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m312_kabuterimon-mature-raw-r02/ranch-streaming-v1/05cb7cec65440bdb/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m312_kabuterimon-mature-raw-r02/ranch-streaming-v1/05cb7cec65440bdb/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m313_gargomon-mature-raw-r02/ranch-streaming-v1/1a301b17f28935ef/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m313_gargomon-mature-raw-r02/ranch-streaming-v1/1a301b17f28935ef/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m314_garurumon_va-mature-raw-r02/ranch-streaming-v1/4695bfec216c76cb/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m314_garurumon_va-mature-raw-r02/ranch-streaming-v1/4695bfec216c76cb/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m315_garurumon_vi-mature-raw-r02/ranch-streaming-v1/a914898509ed53e9/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m315_garurumon_vi-mature-raw-r02/ranch-streaming-v1/a914898509ed53e9/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m316_guardromon-mature-raw-r02/ranch-streaming-v1/49677a8e4aabdbca/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m316_guardromon-mature-raw-r02/ranch-streaming-v1/49677a8e4aabdbca/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m317_kiwimon-mature-raw-r02/ranch-streaming-v1/034dd817ba555ea4/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m317_kiwimon-mature-raw-r02/ranch-streaming-v1/034dd817ba555ea4/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m318_kyubimon-mature-raw-r02/ranch-streaming-v1/2543100b050675e8/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m318_kyubimon-mature-raw-r02/ranch-streaming-v1/2543100b050675e8/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m320_graymon-mature-raw-r02/ranch-streaming-v1/f38fbc3d17ec4d6f/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m320_graymon-mature-raw-r02/ranch-streaming-v1/f38fbc3d17ec4d6f/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m321_clockmon-mature-raw-r02/ranch-streaming-v1/213a02ca8ffea043/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m321_clockmon-mature-raw-r02/ranch-streaming-v1/213a02ca8ffea043/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m322_kuwagamon-mature-raw-r02/ranch-streaming-v1/5a457a34504951e1/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m322_kuwagamon-mature-raw-r02/ranch-streaming-v1/5a457a34504951e1/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m323_gekomon-mature-raw-r02/ranch-streaming-v1/90bee18432229476/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m323_gekomon-mature-raw-r02/ranch-streaming-v1/90bee18432229476/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m324_gesomon-mature-raw-r02/ranch-streaming-v1/47f5df81b7b071db/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m324_gesomon-mature-raw-r02/ranch-streaming-v1/47f5df81b7b071db/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m325_centalmon-mature-raw-r02/ranch-streaming-v1/c79581161a2bba23/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m325_centalmon-mature-raw-r02/ranch-streaming-v1/c79581161a2bba23/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m326_cockatrimon-mature-raw-r02/ranch-streaming-v1/b0078ac5e983009e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m326_cockatrimon-mature-raw-r02/ranch-streaming-v1/b0078ac5e983009e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m328_thanderballmon-mature-raw-r02/ranch-streaming-v1/a73664b391b7db10/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m328_thanderballmon-mature-raw-r02/ranch-streaming-v1/a73664b391b7db10/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m329_shellmon-mature-raw-r02/ranch-streaming-v1/1670e2280d1b2b15/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m329_shellmon-mature-raw-r02/ranch-streaming-v1/1670e2280d1b2b15/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m330_geograymon-mature-raw-r02/ranch-streaming-v1/806da28d6a307f9e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m330_geograymon-mature-raw-r02/ranch-streaming-v1/806da28d6a307f9e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m331_seadramon-mature-raw-r02/ranch-streaming-v1/50286f0ef18ee2b4/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m331_seadramon-mature-raw-r02/ranch-streaming-v1/50286f0ef18ee2b4/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m333_scumon-mature-raw-r02/ranch-streaming-v1/9c211998a992f067/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m333_scumon-mature-raw-r02/ranch-streaming-v1/9c211998a992f067/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m334_starmon-mature-raw-r02/ranch-streaming-v1/0aefea9320608cec/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m334_starmon-mature-raw-r02/ranch-streaming-v1/0aefea9320608cec/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m337_darcmon-mature-raw-r02/ranch-streaming-v1/6372cd7705e60e33/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m337_darcmon-mature-raw-r02/ranch-streaming-v1/6372cd7705e60e33/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m338_darktyranomon-mature-raw-r02/ranch-streaming-v1/f79d725681f13503/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m338_darktyranomon-mature-raw-r02/ranch-streaming-v1/f79d725681f13503/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m339_tyranomon-mature-raw-r02/ranch-streaming-v1/f1b11c79fa43fddf/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m339_tyranomon-mature-raw-r02/ranch-streaming-v1/f1b11c79fa43fddf/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m340_tailmon-mature-raw-r02/ranch-streaming-v1/47b7b468c3b582bb/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m340_tailmon-mature-raw-r02/ranch-streaming-v1/47b7b468c3b582bb/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m341_devidramon-mature-raw-r02/ranch-streaming-v1/0128724a2f8d3e86/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m341_devidramon-mature-raw-r02/ranch-streaming-v1/0128724a2f8d3e86/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m342_devimon-mature-raw-r02/ranch-streaming-v1/31bd66076f1dbaab/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m342_devimon-mature-raw-r02/ranch-streaming-v1/31bd66076f1dbaab/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m343_togemon-mature-raw-r02/ranch-streaming-v1/8530eb2bb692e714/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m343_togemon-mature-raw-r02/ranch-streaming-v1/8530eb2bb692e714/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m345_tortamon-mature-raw-r02/ranch-streaming-v1/45e4abd97ad058b6/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m345_tortamon-mature-raw-r02/ranch-streaming-v1/45e4abd97ad058b6/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m346_numemon-mature-raw-r02/ranch-streaming-v1/a332607de8e9eea7/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m346_numemon-mature-raw-r02/ranch-streaming-v1/a332607de8e9eea7/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m347_bakemon-mature-raw-r02/ranch-streaming-v1/b57797a7bc1476d3/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m347_bakemon-mature-raw-r02/ranch-streaming-v1/b57797a7bc1476d3/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m349_bardramon-mature-raw-r02/ranch-streaming-v1/6fc7f8af503248d0/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m349_bardramon-mature-raw-r02/ranch-streaming-v1/6fc7f8af503248d0/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m351_vagimon-mature-raw-r02/ranch-streaming-v1/690b76bd8832302b/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m351_vagimon-mature-raw-r02/ranch-streaming-v1/690b76bd8832302b/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m352_peckmon-mature-raw-r02/ranch-streaming-v1/c33c13a4c5c5cbac/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m352_peckmon-mature-raw-r02/ranch-streaming-v1/c33c13a4c5c5cbac/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m353_meramon-mature-raw-r02/ranch-streaming-v1/668feb29359b9705/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m353_meramon-mature-raw-r02/ranch-streaming-v1/668feb29359b9705/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m354_mojyamon-mature-raw-r02/ranch-streaming-v1/a1e2804adb7f37e8/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m354_mojyamon-mature-raw-r02/ranch-streaming-v1/a1e2804adb7f37e8/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m355_monochromon-mature-raw-r02/ranch-streaming-v1/1bb963c66d84dcc4/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m355_monochromon-mature-raw-r02/ranch-streaming-v1/1bb963c66d84dcc4/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m356_yukidarumon-mature-raw-r02/ranch-streaming-v1/93970d356c574ead/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m356_yukidarumon-mature-raw-r02/ranch-streaming-v1/93970d356c574ead/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m357_unimon-mature-raw-r02/ranch-streaming-v1/e054750a0332231d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m357_unimon-mature-raw-r02/ranch-streaming-v1/e054750a0332231d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m358_youkomon-mature-raw-r02/ranch-streaming-v1/edb2f6c83ea9804a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m358_youkomon-mature-raw-r02/ranch-streaming-v1/edb2f6c83ea9804a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m359_rynxmon-mature-raw-r02/ranch-streaming-v1/4e3f9f6779abfea1/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m359_rynxmon-mature-raw-r02/ranch-streaming-v1/4e3f9f6779abfea1/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m362_raremon-mature-raw-r02/ranch-streaming-v1/38ba7841131367a7/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m362_raremon-mature-raw-r02/ranch-streaming-v1/38ba7841131367a7/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m363_leomon-mature-raw-r02/ranch-streaming-v1/296b8b7e6954b99c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m363_leomon-mature-raw-r02/ranch-streaming-v1/296b8b7e6954b99c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m364_redvagimon-mature-raw-r02/ranch-streaming-v1/9348f2cfeb18aa33/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m364_redvagimon-mature-raw-r02/ranch-streaming-v1/9348f2cfeb18aa33/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m366_coredramon_ten-mature-raw-r02/ranch-streaming-v1/fbd640b9d8fd9004/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m366_coredramon_ten-mature-raw-r02/ranch-streaming-v1/fbd640b9d8fd9004/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m367_coredramon_ti-mature-raw-r02/ranch-streaming-v1/77c086369b9c760e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m367_coredramon_ti-mature-raw-r02/ranch-streaming-v1/77c086369b9c760e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m368_firamon-mature-raw-r02/ranch-streaming-v1/a315d19b1a3b5f3d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m368_firamon-mature-raw-r02/ranch-streaming-v1/a315d19b1a3b5f3d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m369_lekismon-mature-raw-r02/ranch-streaming-v1/1a7a4ca75dddfc58/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m369_lekismon-mature-raw-r02/ranch-streaming-v1/1a7a4ca75dddfc58/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m370_icedevimon-mature-raw-r02/ranch-streaming-v1/5c2efea02bccb1fd/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m370_icedevimon-mature-raw-r02/ranch-streaming-v1/5c2efea02bccb1fd/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m371_grurumon-mature-raw-r02/ranch-streaming-v1/12633ef79b9e65bc/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m371_grurumon-mature-raw-r02/ranch-streaming-v1/12633ef79b9e65bc/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m372_geremon-mature-raw-r02/ranch-streaming-v1/2cbb3b78861baafb/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m372_geremon-mature-raw-r02/ranch-streaming-v1/2cbb3b78861baafb/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m373_bluemeramon-perfect-raw-r02/ranch-streaming-v1/6a3ee6304730aded/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m373_bluemeramon-perfect-raw-r02/ranch-streaming-v1/6a3ee6304730aded/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m374_sorcerimon-mature-raw-r02/ranch-streaming-v1/a6acc239c6f3bb72/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m374_sorcerimon-mature-raw-r02/ranch-streaming-v1/a6acc239c6f3bb72/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m375_akatorimon-mature-raw-r02/ranch-streaming-v1/8a108ec3ade8526d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m375_akatorimon-mature-raw-r02/ranch-streaming-v1/8a108ec3ade8526d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m376_saverdramon-mature-raw-r02/ranch-streaming-v1/375ffa5f0155e3cb/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m376_saverdramon-mature-raw-r02/ranch-streaming-v1/375ffa5f0155e3cb/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m377_icemon-mature-raw-r02/ranch-streaming-v1/f08f78a2300a16b0/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m377_icemon-mature-raw-r02/ranch-streaming-v1/f08f78a2300a16b0/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m378_vdramon-mature-raw-r02/ranch-streaming-v1/843f884f6ca2a8b6/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m378_vdramon-mature-raw-r02/ranch-streaming-v1/843f884f6ca2a8b6/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m379_growmon-mature-raw-r02/ranch-streaming-v1/ed5dabba68ccdfcc/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m379_growmon-mature-raw-r02/ranch-streaming-v1/ed5dabba68ccdfcc/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m401_atlurkabuterimon-perfect-raw-r03/ranch-streaming-v1/56fb24eb05c0e692/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m401_atlurkabuterimon-perfect-raw-r03/ranch-streaming-v1/56fb24eb05c0e692/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m403_andromon-perfect-raw-r01/ranch-streaming-v1/01d9f96da9f38a1b/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m403_andromon-perfect-raw-r01/ranch-streaming-v1/01d9f96da9f38a1b/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m404_etemon-perfect-raw-r01/ranch-streaming-v1/22ef0ff1775c6b06/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m404_etemon-perfect-raw-r01/ranch-streaming-v1/22ef0ff1775c6b06/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m405_angewomon-perfect-raw-r01/ranch-streaming-v1/a7b418df12f2d6c5/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m405_angewomon-perfect-raw-r01/ranch-streaming-v1/a7b418df12f2d6c5/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m406_oukuwamon-perfect-raw-r01/ranch-streaming-v1/fc8d49d795665414/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m406_oukuwamon-perfect-raw-r01/ranch-streaming-v1/fc8d49d795665414/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m407_gurudamon-perfect-raw-r01/ranch-streaming-v1/edb3f48e402a8d01/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m407_gurudamon-perfect-raw-r01/ranch-streaming-v1/edb3f48e402a8d01/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m408_gerbemon-perfect-raw-r01/ranch-streaming-v1/beeb2d8451eb6a63/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m408_gerbemon-perfect-raw-r01/ranch-streaming-v1/beeb2d8451eb6a63/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m410_cyberdramon-perfect-raw-r01/ranch-streaming-v1/d64b26b964b5e843/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m410_cyberdramon-perfect-raw-r01/ranch-streaming-v1/d64b26b964b5e843/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m412_jyureimon-perfect-raw-r01/ranch-streaming-v1/5d63b58ac99c06fa/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m412_jyureimon-perfect-raw-r01/ranch-streaming-v1/5d63b58ac99c06fa/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m414_zudomon-perfect-raw-r01/ranch-streaming-v1/c29be4102615f948/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m414_zudomon-perfect-raw-r01/ranch-streaming-v1/c29be4102615f948/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m415_dagomon-perfect-raw-r01/ranch-streaming-v1/744ac8429a6b060a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m415_dagomon-perfect-raw-r01/ranch-streaming-v1/744ac8429a6b060a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m416_deathmeramon-perfect-raw-r01/ranch-streaming-v1/bba60d76d9bd03e1/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m416_deathmeramon-perfect-raw-r01/ranch-streaming-v1/bba60d76d9bd03e1/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m417_delumon-perfect-raw-r01/ranch-streaming-v1/5875dc8d4c881b0d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m417_delumon-perfect-raw-r01/ranch-streaming-v1/5875dc8d4c881b0d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m418_tonosamagekomon-perfect-raw-r01/ranch-streaming-v1/9936aee77d74d685/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m418_tonosamagekomon-perfect-raw-r01/ranch-streaming-v1/9936aee77d74d685/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m419_toriceramon-perfect-raw-r01/ranch-streaming-v1/b4307012483e18e3/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m419_toriceramon-perfect-raw-r01/ranch-streaming-v1/b4307012483e18e3/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m420_knightmon-perfect-raw-r01/ranch-streaming-v1/faeda96270628345/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m420_knightmon-perfect-raw-r01/ranch-streaming-v1/faeda96270628345/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m422_parrotmon-perfect-raw-r01/ranch-streaming-v1/da460d1bd1d787b7/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m422_parrotmon-perfect-raw-r01/ranch-streaming-v1/da460d1bd1d787b7/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m423_hangyomon-perfect-raw-r01/ranch-streaming-v1/4a6ee1f0d2383f3a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m423_hangyomon-perfect-raw-r01/ranch-streaming-v1/4a6ee1f0d2383f3a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m424_pandamon-perfect-raw-r01/ranch-streaming-v1/004d46dde41b07d5/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m424_pandamon-perfect-raw-r01/ranch-streaming-v1/004d46dde41b07d5/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m426_bigmamemon-perfect-raw-r01/ranch-streaming-v1/971f29bd0250e34d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m426_bigmamemon-perfect-raw-r01/ranch-streaming-v1/971f29bd0250e34d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m427_picklemon-perfect-raw-r01/ranch-streaming-v1/359db4181141d522/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m427_picklemon-perfect-raw-r01/ranch-streaming-v1/359db4181141d522/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m428_fantomon-perfect-raw-r01/ranch-streaming-v1/251cd1f6af185273/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m428_fantomon-perfect-raw-r01/ranch-streaming-v1/251cd1f6af185273/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m430_vademon-perfect-raw-r01/ranch-streaming-v1/033d582292e36200/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m430_vademon-perfect-raw-r01/ranch-streaming-v1/033d582292e36200/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m431_whamon-perfect-raw-r01/ranch-streaming-v1/a15338b96bbe7ea5/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m431_whamon-perfect-raw-r01/ranch-streaming-v1/a15338b96bbe7ea5/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m432_holyangemon-perfect-raw-r01/ranch-streaming-v1/1c10c7902bce0056/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m432_holyangemon-perfect-raw-r01/ranch-streaming-v1/1c10c7902bce0056/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m433_machgaogamon-perfect-raw-r01/ranch-streaming-v1/6890c60bbace9680/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m433_machgaogamon-perfect-raw-r01/ranch-streaming-v1/6890c60bbace9680/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m435_mamemon-perfect-raw-r01/ranch-streaming-v1/046397b6e18cd944/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m435_mamemon-perfect-raw-r01/ranch-streaming-v1/046397b6e18cd944/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m437_mammon-perfect-raw-r01/ranch-streaming-v1/9ec2481278963b51/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m437_mammon-perfect-raw-r01/ranch-streaming-v1/9ec2481278963b51/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m438_megaseadramon-perfect-raw-r01/ranch-streaming-v1/11d19429bbeb81e8/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m438_megaseadramon-perfect-raw-r01/ranch-streaming-v1/11d19429bbeb81e8/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m439_megadramon-perfect-raw-r01/ranch-streaming-v1/2a608754b6857a5f/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m439_megadramon-perfect-raw-r01/ranch-streaming-v1/2a608754b6857a5f/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m440_metalgreymon_vi-perfect-raw-r01/ranch-streaming-v1/9de84d58bfa10d2e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m440_metalgreymon_vi-perfect-raw-r01/ranch-streaming-v1/9de84d58bfa10d2e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m441_metalgreymon_va-perfect-raw-r01/ranch-streaming-v1/2c7adbd65b018de7/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m441_metalgreymon_va-perfect-raw-r01/ranch-streaming-v1/2c7adbd65b018de7/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m442_metaltyranomon-perfect-raw-r01/ranch-streaming-v1/781c5d082a0cc65e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m442_metaltyranomon-perfect-raw-r01/ranch-streaming-v1/781c5d082a0cc65e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m444_monzaemon-perfect-raw-r01/ranch-streaming-v1/ab73334465f1fb6d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m444_monzaemon-perfect-raw-r01/ranch-streaming-v1/ab73334465f1fb6d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m445_yatagaramon-perfect-raw-r01/ranch-streaming-v1/f36792714ff848d2/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m445_yatagaramon-perfect-raw-r01/ranch-streaming-v1/f36792714ff848d2/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m446_rizegreymon-perfect-raw-r01/ranch-streaming-v1/35d728cb92e2bd13/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m446_rizegreymon-perfect-raw-r01/ranch-streaming-v1/35d728cb92e2bd13/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m447_rapidmon-perfect-raw-r03/ranch-streaming-v1/1297c0a0c22555d9/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m447_rapidmon-perfect-raw-r03/ranch-streaming-v1/1297c0a0c22555d9/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m448_lilimon-perfect-raw-r01/ranch-streaming-v1/a587a4c31fa5fa3a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m448_lilimon-perfect-raw-r01/ranch-streaming-v1/a587a4c31fa5fa3a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m449_ladydevimon-perfect-raw-r01/ranch-streaming-v1/35f3fc13f5000f38/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m449_ladydevimon-perfect-raw-r01/ranch-streaming-v1/35f3fc13f5000f38/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m450_warumonzaemon-perfect-raw-r01/ranch-streaming-v1/926665cc12a4ba9e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m450_warumonzaemon-perfect-raw-r01/ranch-streaming-v1/926665cc12a4ba9e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m451_weregarurumon_va-perfect-raw-r02/ranch-streaming-v1/163f0c2de9b23b48/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m451_weregarurumon_va-perfect-raw-r02/ranch-streaming-v1/163f0c2de9b23b48/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m452_weregarurumon_vi-perfect-raw-r03/ranch-streaming-v1/fb3dbd216f8f2975/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m452_weregarurumon_vi-perfect-raw-r03/ranch-streaming-v1/fb3dbd216f8f2975/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m453_wingdramon-perfect-raw-r01/ranch-streaming-v1/e7f272c959edd501/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m453_wingdramon-perfect-raw-r01/ranch-streaming-v1/e7f272c959edd501/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m454_grondramon-dot-intake-r01/ranch-streaming-v1/82d57cb755b358da/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m454_grondramon-dot-intake-r01/ranch-streaming-v1/82d57cb755b358da/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m455_flaremon-perfect-raw-r02/ranch-streaming-v1/ff464e5026b20ec0/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m455_flaremon-perfect-raw-r02/ranch-streaming-v1/ff464e5026b20ec0/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m456_crescemon-perfect-raw-r01/ranch-streaming-v1/32d4df66e889e4aa/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m456_crescemon-perfect-raw-r01/ranch-streaming-v1/32d4df66e889e4aa/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m457_superstarmon-perfect-raw-r02/ranch-streaming-v1/9926618e135b1689/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m457_superstarmon-perfect-raw-r02/ranch-streaming-v1/9926618e135b1689/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m458_blackrapidmon-perfect-raw-r01/ranch-streaming-v1/29b20b3610665e2b/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m458_blackrapidmon-perfect-raw-r01/ranch-streaming-v1/29b20b3610665e2b/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m501_vikemon-ultimate-raw-r01/ranch-streaming-v1/2b352fdd6b8e7acd/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m501_vikemon-ultimate-raw-r01/ranch-streaming-v1/2b352fdd6b8e7acd/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m502_valkyrimon-ultimate-raw-r01/ranch-streaming-v1/dbd8e70b0d5ad7c0/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m502_valkyrimon-ultimate-raw-r01/ranch-streaming-v1/dbd8e70b0d5ad7c0/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m505_grankuwagamon-ultimate-raw-r01/ranch-streaming-v1/38632d1e007289a3/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m505_grankuwagamon-ultimate-raw-r01/ranch-streaming-v1/38632d1e007289a3/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m506_griffomon-ultimate-raw-r01/ranch-streaming-v1/489e55b283b6cee5/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m506_griffomon-ultimate-raw-r01/ranch-streaming-v1/489e55b283b6cee5/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m507_crossmon-ultimate-raw-r01/ranch-streaming-v1/9c792a47ab8f996c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m507_crossmon-ultimate-raw-r01/ranch-streaming-v1/9c792a47ab8f996c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m508_saberleomon-ultimate-raw-r01/ranch-streaming-v1/1beb874affef3090/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m508_saberleomon-ultimate-raw-r01/ranch-streaming-v1/1beb874affef3090/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m510_skullmammon-ultimate-raw-r01/ranch-streaming-v1/ea38e78b60615e18/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m510_skullmammon-ultimate-raw-r01/ranch-streaming-v1/ea38e78b60615e18/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m511_saintgargomon-ultimate-raw-r01/ranch-streaming-v1/921a3c67a28b2f3c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m511_saintgargomon-ultimate-raw-r01/ranch-streaming-v1/921a3c67a28b2f3c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m512_hiandromon-ultimate-raw-r01/ranch-streaming-v1/7b3519c3b32de9d6/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m512_hiandromon-ultimate-raw-r01/ranch-streaming-v1/7b3519c3b32de9d6/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m513_bantyoliomon-ultimate-raw-r01/ranch-streaming-v1/90721e22023664fb/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m513_bantyoliomon-ultimate-raw-r01/ranch-streaming-v1/90721e22023664fb/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m514_piemon-ultimate-raw-r01/ranch-streaming-v1/6918483c68a4b32c/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m514_piemon-ultimate-raw-r01/ranch-streaming-v1/6918483c68a4b32c/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m515_pinochimon-ultimate-raw-r01/ranch-streaming-v1/adca69b64665a827/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m515_pinochimon-ultimate-raw-r01/ranch-streaming-v1/adca69b64665a827/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m516_pharaohmon-ultimate-raw-r01/ranch-streaming-v1/b44a5c94cccc4041/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m516_pharaohmon-ultimate-raw-r01/ranch-streaming-v1/b44a5c94cccc4041/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m517_pukumon-ultimate-raw-r01/ranch-streaming-v1/e0af151402b9a53d/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m517_pukumon-ultimate-raw-r01/ranch-streaming-v1/e0af151402b9a53d/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m519_princemamemon-ultimate-raw-r01/ranch-streaming-v1/49c365d7a6958b3a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m519_princemamemon-ultimate-raw-r01/ranch-streaming-v1/49c365d7a6958b3a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m520_pilesiomon-ultimate-raw-r01/ranch-streaming-v1/c89f0e8c5f917313/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m520_pilesiomon-ultimate-raw-r01/ranch-streaming-v1/c89f0e8c5f917313/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m521_heraklekabuterimon-ultimate-raw-r01/ranch-streaming-v1/911c6dd6c37723d6/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m521_heraklekabuterimon-ultimate-raw-r01/ranch-streaming-v1/911c6dd6c37723d6/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m522_hououmon-ultimate-raw-r01/ranch-streaming-v1/ce4bba2c3452ebef/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m522_hououmon-ultimate-raw-r01/ranch-streaming-v1/ce4bba2c3452ebef/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m526_miragegaogamon-ultimate-raw-r01/ranch-streaming-v1/5cfaae80eee57e55/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m526_miragegaogamon-ultimate-raw-r01/ranch-streaming-v1/5cfaae80eee57e55/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m527_mugendramon-ultimate-raw-r01/ranch-streaming-v1/a8c991406e841aae/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m527_mugendramon-ultimate-raw-r01/ranch-streaming-v1/a8c991406e841aae/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m530_metalgarurumon_vi-ultimate-raw-r01/ranch-streaming-v1/4c70b558c406da69/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m530_metalgarurumon_vi-ultimate-raw-r01/ranch-streaming-v1/4c70b558c406da69/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m531_metalseadramon-ultimate-raw-r01/ranch-streaming-v1/5a61ae5ee5f29e59/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m531_metalseadramon-ultimate-raw-r01/ranch-streaming-v1/5a61ae5ee5f29e59/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m532_rosemon-ultimate-raw-r01/ranch-streaming-v1/fddf95edd78363e4/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m532_rosemon-ultimate-raw-r01/ranch-streaming-v1/fddf95edd78363e4/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m533_zeedgarurumon-ultimate-raw-r01/ranch-streaming-v1/750420ae523ae084/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m533_zeedgarurumon-ultimate-raw-r01/ranch-streaming-v1/750420ae523ae084/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m534_victorygreymon-ultimate-raw-r01/ranch-streaming-v1/cfa9f871ab3125c3/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m534_victorygreymon-ultimate-raw-r01/ranch-streaming-v1/cfa9f871ab3125c3/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m535_slayerdramon-ultimate-raw-r01/ranch-streaming-v1/4638dc6d5199bde6/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m535_slayerdramon-ultimate-raw-r01/ranch-streaming-v1/4638dc6d5199bde6/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m536_brakedramon-ultimate-raw-r01/ranch-streaming-v1/903250a9b88acd2e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m536_brakedramon-ultimate-raw-r01/ranch-streaming-v1/903250a9b88acd2e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m538_apollomon-ultimate-raw-r01/ranch-streaming-v1/5e8e86bc63e24d9e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m538_apollomon-ultimate-raw-r01/ranch-streaming-v1/5e8e86bc63e24d9e/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m539_dianamon-ultimate-raw-r01/ranch-streaming-v1/aea038048c30ff67/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m539_dianamon-ultimate-raw-r01/ranch-streaming-v1/aea038048c30ff67/runtime.review.json"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/runtime.review.json",
+      "reason": "PUBLIC_PAYLOAD_PRIVATE_VALUE: assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/runtime.review.json"
+    }
+  ],
+  "rejectedFilesAddedToPublicAllowlist": 0,
+  "publicUploadAttempted": false
+}

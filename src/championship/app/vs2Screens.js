@@ -1,9 +1,10 @@
 import { uiText } from "../text/uiText.js";
 import { shopGoodsPresentation, huntToolIconPresentation } from '../presentation/shopGoodsUiArt.js';
 import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
-import { assembledHudArt } from '../presentation/assembledUiArt.js';
 import { playCeremony, ceremonyEnvironment, CEREMONY_TIMING } from '../presentation/ceremony/ceremonyRunner.js';
 import { buildGateEntry, buildCapture } from '../presentation/ceremony/ceremonyScenes.js';
+import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from './vs2PresentationAuthority.js';
+export { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from './vs2PresentationAuthority.js';
 // VS2-P -- Championship Modern P1R presentation for Gate Select, Hunt Loadout
 // and the Hunt HUD.
 //
@@ -11,12 +12,6 @@ import { buildGateEntry, buildCapture } from '../presentation/ceremony/ceremonyS
 // screen lifecycle, gameplay state, field logic, save data, Pixi bootstrap or
 // ticker. Every action below is one of the intents published by
 // VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.
-
-export const VS2_UI_AUTHORITY = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
-export const VS2_PRESENTATION_MODES = Object.freeze({
-  PLAYER: "PLAYER_MODE",
-  DEVELOPER: "DEVELOPER_EVIDENCE_MODE"
-});
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -291,11 +286,6 @@ export async function createGateSelectView({ root, source, mountWorld }) {
         button.style.setProperty("--gate-phase", String((gate.ordinal - 1) % 8));
         const aperture = element("span", "cm-vs2-gate__aperture");
         aperture.setAttribute("aria-hidden", "true");
-        const gateIcon = assembledHudArt(`gate-${gate.romRecordIndex}`);
-        if (gateIcon) {
-          aperture.style.backgroundImage = `url("${gateIcon.src}")`;
-          aperture.classList.add('cm-vs2-gate__aperture--complete');
-        }
         button.append(
           aperture,
           element("span", "cm-vs2-gate__ordinal", String(gate.ordinal).padStart(2, "0")),

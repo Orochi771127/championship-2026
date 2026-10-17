@@ -1,0 +1,318 @@
+{
+  "schemaVersion": 1,
+  "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
+  "sources": [
+    {
+      "path": "assets/production/battle/licensed-runtime-v1/manifest.json",
+      "sha256": "1c3e452810e3b4d785de479502dfcccf69742b903255ecdf726ff95e3fd9b804",
+      "role": "battle-baseline",
+      "type": "BATTLE_MAP"
+    },
+    {
+      "path": "assets/production/battle/original-opus-v1/manifest.json",
+      "sha256": "f2ef83f7bdb5e98eb5dc40115f97f4ed9bfff3e54311a2b3719bf7e528524a4d",
+      "role": "battle-original",
+      "type": "BATTLE_MAP"
+    },
+    {
+      "path": "assets/production/cage/cm03-r18-foreground-20261009/manifest.json",
+      "sha256": "0c141ffe502a022fc9faf3dcdfc9e14047864263f803335b16180c627fde7790",
+      "role": "cage-foreground-cm03",
+      "type": "CAGE_FOREGROUND"
+    },
+    {
+      "path": "assets/production/cage/cm24-final-foreground-20261010/manifest.json",
+      "sha256": "9aeca3ad908c8f64416bad69b0ce46c2da4ce662d303c5ad4ce0285182e2245d",
+      "role": "cage-foreground-cm24",
+      "type": "CAGE_FOREGROUND"
+    },
+    {
+      "path": "assets/production/cage/source-bounds-r1-20261015/provenance.json",
+      "sha256": "5718b8f88347b41fa87a0aa841f8f16e2e97cbfa2e7d974870aca1fea01a5f91",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/manifest.json",
+      "sha256": "f560ab3c5d4582175a324a5855b45b73ec39761b5737d82ec7f7a9a9474cae80",
+      "role": "arena-harbor",
+      "type": "ARENA_HARBOR"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/manifest.json",
+      "sha256": "c4d8420e9ceb97518f1cc87f2467428dd37566dfe9cacd30db31aae76773d80f",
+      "role": "arena-interactions",
+      "type": "ARENA_INTERACTIONS"
+    },
+    {
+      "path": "assets/production/data-arena/tournament-detail-r3/manifest.json",
+      "sha256": "920c7b138267b0b27e0ef3dff6916d5a6d522d76d99429d8bdb31d1a0ccfb416",
+      "role": "arena-tournament",
+      "type": "ARENA_TOURNAMENT"
+    },
+    {
+      "path": "assets/production/gate/vs2-r1/manifest.json",
+      "sha256": "76434749bb6ea6baa4050ce3cd5eabb52afd5caab397b7b652026204c9b04686",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/1026f2478622db838a11694d0d0c8f0d858e489e9604c747d3244938d3661073.json",
+      "sha256": "1026f2478622db838a11694d0d0c8f0d858e489e9604c747d3244938d3661073",
+      "role": "hunt-pieces-1026f2478622db83",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/241530dcb2297dd40ab245468bb3dee01214b9d314c3384edcf8c5e91344f791.json",
+      "sha256": "241530dcb2297dd40ab245468bb3dee01214b9d314c3384edcf8c5e91344f791",
+      "role": "hunt-pieces-241530dcb2297dd4",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/2c91b6f103681d1bec6b91fa8ddbc234fc08864b24b4659581f0985f08a4f752.json",
+      "sha256": "2c91b6f103681d1bec6b91fa8ddbc234fc08864b24b4659581f0985f08a4f752",
+      "role": "hunt-pieces-2c91b6f103681d1b",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/2f22cb70a03fbbe31b8eb6acdf61d8c9e411d647287b79d2078df9ab08d27f42.json",
+      "sha256": "2f22cb70a03fbbe31b8eb6acdf61d8c9e411d647287b79d2078df9ab08d27f42",
+      "role": "hunt-pieces-2f22cb70a03fbbe3",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/2fa4c9e40e1609952f180739eab9dc38ba66bdbec888fd64e7fa3a86b7c2fa30.json",
+      "sha256": "2fa4c9e40e1609952f180739eab9dc38ba66bdbec888fd64e7fa3a86b7c2fa30",
+      "role": "hunt-pieces-2fa4c9e40e160995",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/53f22da4aead53a00d6f3f8bdd8d78c0686ed2c74232c9488d37d4952f06835e.json",
+      "sha256": "53f22da4aead53a00d6f3f8bdd8d78c0686ed2c74232c9488d37d4952f06835e",
+      "role": "hunt-pieces-53f22da4aead53a0",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/55ec9b8e24bda09641a21f7dc3580d3fc6b123a76b63d2b738896706a749d378.json",
+      "sha256": "55ec9b8e24bda09641a21f7dc3580d3fc6b123a76b63d2b738896706a749d378",
+      "role": "hunt-pieces-55ec9b8e24bda096",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/73bf9954a5a9a88c0db7c08189d83343f0a92f928e41ae9411f15cc118a9df12.json",
+      "sha256": "73bf9954a5a9a88c0db7c08189d83343f0a92f928e41ae9411f15cc118a9df12",
+      "role": "hunt-pieces-73bf9954a5a9a88c",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/78c74373717d60139009e54d8d1902ad98bf7c9119bb3f1de73b44160afb18d9.json",
+      "sha256": "78c74373717d60139009e54d8d1902ad98bf7c9119bb3f1de73b44160afb18d9",
+      "role": "hunt-pieces-78c74373717d6013",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/8f40180df1053d356d65ce1ef2d77aba8cf1447450578165dc2afeb91602d869.json",
+      "sha256": "8f40180df1053d356d65ce1ef2d77aba8cf1447450578165dc2afeb91602d869",
+      "role": "hunt-pieces-8f40180df1053d35",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/99d912765fc8ebd9632fd09906730dd032455e63ad7950e4a357ef58db405ee2.json",
+      "sha256": "99d912765fc8ebd9632fd09906730dd032455e63ad7950e4a357ef58db405ee2",
+      "role": "hunt-pieces-99d912765fc8ebd9",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/b360f5a346a99a9925385151b09500e11acaf6e67eb531a57984cfb989c3b96e.json",
+      "sha256": "b360f5a346a99a9925385151b09500e11acaf6e67eb531a57984cfb989c3b96e",
+      "role": "hunt-pieces-b360f5a346a99a99",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/b9f654a8f3bab9838049a3a9917051299724c662b9f81760900ea2e41657136e.json",
+      "sha256": "b9f654a8f3bab9838049a3a9917051299724c662b9f81760900ea2e41657136e",
+      "role": "hunt-pieces-b9f654a8f3bab983",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/ba7a1ed0a6502364e35d75964301e99e25f141a389cec5047bb9e746088d1412.json",
+      "sha256": "ba7a1ed0a6502364e35d75964301e99e25f141a389cec5047bb9e746088d1412",
+      "role": "hunt-pieces-ba7a1ed0a6502364",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/c108e2efd05f1f25de080b0dc5de044e55fae61865d0cc771ef0128bbccbb536.json",
+      "sha256": "c108e2efd05f1f25de080b0dc5de044e55fae61865d0cc771ef0128bbccbb536",
+      "role": "hunt-pieces-c108e2efd05f1f25",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/c1c66fca38b3da70974027d186db99dd86ad7d676db970e08770e4d25fe92954.json",
+      "sha256": "c1c66fca38b3da70974027d186db99dd86ad7d676db970e08770e4d25fe92954",
+      "role": "hunt-pieces-c1c66fca38b3da70",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/c9195b3759569c56a5d2b10bae080e0764ee87b8686596c6b561be2e3aeee965.json",
+      "sha256": "c9195b3759569c56a5d2b10bae080e0764ee87b8686596c6b561be2e3aeee965",
+      "role": "hunt-pieces-c9195b3759569c56",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/cd6fb1df144a700398a2933db65102a935c4740ae12d85d0f3bc3c527fc8c150.json",
+      "sha256": "cd6fb1df144a700398a2933db65102a935c4740ae12d85d0f3bc3c527fc8c150",
+      "role": "hunt-pieces-cd6fb1df144a7003",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/d78fc01d9c429a87a810e6e3f984c8ffb4360570adf7bd8745364cb03a9b4c37.json",
+      "sha256": "d78fc01d9c429a87a810e6e3f984c8ffb4360570adf7bd8745364cb03a9b4c37",
+      "role": "hunt-pieces-d78fc01d9c429a87",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/df7808e9fb563a289bd5cc552e1f9feaf63cd50e6fe9bbf396afba781d1e1da0.json",
+      "sha256": "df7808e9fb563a289bd5cc552e1f9feaf63cd50e6fe9bbf396afba781d1e1da0",
+      "role": "hunt-pieces-df7808e9fb563a28",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/e9c1f41b8af50c56a051f1b2f417fcd51f7bd3285c2764d5a849e86bc503dfa6.json",
+      "sha256": "e9c1f41b8af50c56a051f1b2f417fcd51f7bd3285c2764d5a849e86bc503dfa6",
+      "role": "hunt-pieces-e9c1f41b8af50c56",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/eb50c8a4daea72b6efe7b7955a4d1bf1afe7546184a659455153190129f41fe1.json",
+      "sha256": "eb50c8a4daea72b6efe7b7955a4d1bf1afe7546184a659455153190129f41fe1",
+      "role": "hunt-pieces-eb50c8a4daea72b6",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/geometry/fc6037f673a7b327a60c81c49243fe808ff5dced9047c0f12df1c2c45116da91.json",
+      "sha256": "fc6037f673a7b327a60c81c49243fe808ff5dced9047c0f12df1c2c45116da91",
+      "role": "hunt-pieces-fc6037f673a7b327",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/opening-film-ns33-r1/manifest.json",
+      "sha256": "b217e66bc5d35a6310f6785c167556e364774c7b0d08d666debe99c652e1be50",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/opening/original-comic-r2-20261010/manifest.json",
+      "sha256": "520dfe41f2fbc03ca7cb9ff1ed0d7183921137a79b7e1dc7d41467b2ccc9390b",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/original-music-r1/manifest.json",
+      "sha256": "1785d8119fd44dbc63fe2e984c24b78d7489d23f46eb110a722d5da70ecd82a2",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/original-ui-intake-20261007/manifest.json",
+      "sha256": "7cf3e186ee0207584103cefb51715a2ccaf71ae7ab3b27497edfd2e9d47bfa65",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/original-ui-intake-20261007/toolbar-point64-r1-20261009/manifest.json",
+      "sha256": "36a07be2764c69c4f19958f684644c9e7317f67efb9ad81f1f80bbc61562ebd0",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/raising-care-r1/manifest.json",
+      "sha256": "15f68a0183d278e569bd5703fc0cea93648b7bfe1207f68ad44d2e76342e4558",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/raising-care/licensed-runtime-v1/manifest.json",
+      "sha256": "074237cb9727367eb3f201ec627fc31c576a0e5d07b6d14b6a547ec4713a9acc",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/scene-music-r1/manifest.json",
+      "sha256": "dd0ebd2e0ab0c1fe5fc2b434ae237859b23c5f0691a73a1bb25b7792bdd6a355",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/system-backgrounds-r1/manifest.json",
+      "sha256": "18dcdae5a93dc3a5a1976676927ce6ed9e91c85737dadbcffdd62802923d824a",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/temporary/int-rh2/environment/manifest.json",
+      "sha256": "cf6c6ab42b8d78c2909d881138006644da35cc2fab84a2bb9a9b39d3f1166960",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/temporary/int-rh2/manifest.json",
+      "sha256": "1e101147236a9e1e8ed08036a8bf2bae48fcf873bd03327a9b3fc5611e16fd94",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/temporary/vs2-hunt/manifest.json",
+      "sha256": "34460c18251f1e080a0a70537671ab0f6a1b3ebdf8be92575319b5628d2dded6",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/title-morning-r1/manifest.json",
+      "sha256": "cd429d84058ff0a0359112909e673ab4f3d08e6f542e28a346a19d764b18340c",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/title-multilingual-r1/manifest.json",
+      "sha256": "d698b24452e7975e3c999721bf40272729f0261e7756fdb3e5307a73cadf8663",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/toolbar/licensed-runtime-v1/manifest.json",
+      "sha256": "9ace4898d068426dffa4039d1b402c10b18befb2c7e7fd5d994dc01a35ea6866",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/ui/tooling-pilot-r1/manifest.json",
+      "sha256": "023f274e82f5c44f7bcc38e4a7fc7f81393647f0c0dba909561a91806236b696",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hypereffect.visibility.json",
+      "sha256": "75aa6275a4a16b76738398efab03e546e8cf450fa2dcaf1f8ff3419b286a9d39",
+      "role": "vfx-visibility",
+      "type": "VFX_VISIBILITY"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/common/spark/spark.material-animation.json",
+      "sha256": "9a0e774d16e2bf65274d69ed47afd9ed28473d49dd4691524d6ab4cd9a94a719",
+      "role": "vfx-material",
+      "type": "VFX_MATERIAL"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/manifest.json",
+      "sha256": "43bc2839d60037efab7db4eb482103c8f3fa35c6025039af5e0122aad7995eba",
+      "role": "vfx-runtime",
+      "type": "VFX_RUNTIME"
+    },
+    {
+      "path": "assets/production/vfx/original-battle-2d-v1/manifest.json",
+      "sha256": "42ce4f580e0a27eaf30550cd27ad1c108c4f7950f726da10cfaccf121b5bc18c",
+      "role": null,
+      "type": "AUTHORING_ONLY"
+    }
+  ]
+}

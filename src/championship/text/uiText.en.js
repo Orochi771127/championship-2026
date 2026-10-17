@@ -18,6 +18,11 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
+  "RANCH_PREFETCH_PLANNING": "Preparing images for your current partners…",
+  "RANCH_PREFETCH_COMPLETE": "Current partner images downloaded",
+  "RANCH_PREFETCH_PARTIAL": "Remaining images will load when you continue",
+  "RANCH_PREFETCH_PROGRESS": "Downloading partner images: {done}/{files} · {mib} MiB",
+
   "MODULE_LOAD_ERROR": "A screen module could not load. The game may have updated, or the connection may have failed. Save and reload the game; do not clear your save.",
   "SCREEN_LOAD_ERROR": "The screen could not load. Save and reload the game, or save and return to the title.",
   "CAGE_SLOT_RANK_LOCKED": "Slot {n} is locked. Unlocks at tamer rank {rank}.",

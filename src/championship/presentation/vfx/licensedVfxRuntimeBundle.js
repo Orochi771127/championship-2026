@@ -8,9 +8,10 @@ import * as THREE from "../../../../node_modules/three/build/three.module.js";
 import { GLTFLoader } from "../../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js";
 import { applyNitroMaterialAnimation, applyNitroVisibility } from "./nitroVfxAnimationSidecar.js";
 import { resolveOriginalNitroVfxSystemId } from "./originalVfxSystemBindings.js";
+import {publicMetadataPath,loadPublicMetadata,validatePublicMetadata} from '../publicMetadata.js';
 
 export const LICENSED_VFX_ASSET_ID = "art:vfx:licensed-runtime:v1";
-export const LICENSED_VFX_MANIFEST_URL = "assets/production/vfx/licensed-runtime-v1/manifest.json";
+export const LICENSED_VFX_MANIFEST_URL = publicMetadataPath('vfx-runtime');
 const PRODUCTION_PREFIX = "assets/production/vfx/licensed-runtime-v1/";
 
 function fail(reason) {
@@ -26,7 +27,7 @@ function freeze(value) {
 }
 
 function productionPath(value, label, extension) {
-  if (typeof value !== "string" || !value.startsWith(PRODUCTION_PREFIX) || !value.endsWith(extension)) {
+  if (typeof value !== "string" || !(value.startsWith(PRODUCTION_PREFIX)||extension==='.json'&&value.startsWith('assets/production/public-runtime/metadata/vfx-')) || !value.endsWith(extension)) {
     fail(`${label}:${value}`);
   }
   return value;
@@ -36,7 +37,8 @@ export function validateLicensedVfxRuntimeManifest(manifest) {
   if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)) fail("MANIFEST_REQUIRED");
   if (manifest.schemaVersion !== 1 || manifest.assetId !== LICENSED_VFX_ASSET_ID) fail("MANIFEST_IDENTITY");
   if (manifest.family !== "VFX") fail("FAMILY");
-  if (manifest.runtimeEligible !== true || manifest.shippingReady !== false) fail("RIGHTS_BOUNDARY");
+  if(manifest.renderType==='VFX_RUNTIME')validatePublicMetadata(manifest);
+  else if (manifest.runtimeEligible !== true || manifest.shippingReady !== false) fail("RIGHTS_BOUNDARY");
   if (manifest.tickerPolicy !== "CALLER_OWNED_UPDATE_DELTA_MS") fail("TICKER_POLICY");
   if (manifest.gateEarthMounted !== false) fail("GATE_EARTH_MUST_REMAIN_UNMOUNTED");
   if (!Array.isArray(manifest.systems) || manifest.systems.length !== 26) fail("SYSTEM_SET");
@@ -133,12 +135,14 @@ function disposeObject(root) {
 
 export async function loadLicensedVfxRuntimeManifest({ url = LICENSED_VFX_MANIFEST_URL, fetchImpl = globalThis.fetch } = {}) {
   if (typeof fetchImpl !== "function") fail("FETCH_REQUIRED");
+  if(url===LICENSED_VFX_MANIFEST_URL)return validateLicensedVfxRuntimeManifest(await loadPublicMetadata('vfx-runtime',{fetchImpl}));
   const response = await fetchImpl(url);
   if (!response.ok) fail(`MANIFEST_FETCH:${response.status}`);
   return validateLicensedVfxRuntimeManifest(await response.json());
 }
 
 export function createLicensedVfxRuntime({ manifest, loader = new GLTFLoader(), loadJson = async (url) => {
+  for(const role of ['vfx-visibility','vfx-material'])if(url===publicMetadataPath(role))return loadPublicMetadata(role);
   const response = await fetch(url);
   if (!response.ok) fail(`SIDECAR_FETCH:${response.status}`);
   return response.json();

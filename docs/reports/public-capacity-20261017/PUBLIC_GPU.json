@@ -1,0 +1,507 @@
+{
+  "kind": "ISOLATED_REAL_PIXI_LOADER_NOT_NORMAL_GAME_OR_PERFORMANCE_BENCHMARK",
+  "status": "PASS",
+  "requests": [
+    ".tmp/stream-loader-review/entry.js",
+    "node_modules/pixi.js/dist/pixi.mjs",
+    "src/championship/presentation/publicCharacterRoster.js",
+    "src/championship/presentation/pixiCharacterRuntimeBundle.js",
+    "src/data/championship/public-character-catalog.v1.json",
+    "src/championship/presentation/publicCharacterCatalog.js",
+    "src/championship/presentation/characterRosterCore.js",
+    "src/championship/presentation/publicCharacterRenderContract.js",
+    "src/championship/presentation/pixiCharacterAnimationController.js",
+    "src/championship/presentation/nativeHuntCharacterAction.js",
+    "src/championship/presentation/battleCharacterAction.js",
+    "src/championship/presentation/characterAnimationTimeline.js",
+    "src/championship/presentation/characterAtlasQueue.js",
+    "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/main-212474682e4cc42e.json",
+    "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/main-c1d7ac7bc70c6c8c.json",
+    "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/main-3b85426ef0612022.webp",
+    "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/main-e2b4e742e0bc0116.webp",
+    "assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/main-db47bf44c146758f.json",
+    "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/main-4dec5a073544f2a1.json",
+    "assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/main-8e9c8a41bddef827.webp",
+    "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/main-a1a98b313025cf3e.webp",
+    "assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/main-32a12d78581a17e3.json",
+    "assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/main-41327df7e047ee1a.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-f659fec94ba37c12.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-d9dd9e7a868be5fc.webp",
+    "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/main-3412a427fcd31f29.json",
+    "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/main-e4276abe4afead40.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/runtime.render.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-f659fec94ba37c12.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-d9dd9e7a868be5fc.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-33dd9333293dc573.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-87dcb77c97497bb7.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-c3ea7558c3788419.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-4343676541135565.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-b769fd409de7970d.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-9b5f0d366a613dfd.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-0ba7841008d9dc09.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-88c98a186ac893af.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-7c54d8025d39307c.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-577320ec7fb1fe06.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-6be92dc9c260af11.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-bdbc067c40c457ce.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-8a4bc603ae88431e.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-0a0823d33ea055ca.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-83eb4296ee526c23.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-5dce2b2f782efc8d.json",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-b2de6a3462d7cfb2.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/runtime.render.json"
+  ],
+  "errors": [],
+  "externalNetworkRequestsAllowed": false,
+  "browser": "155.0.8059.40",
+  "initial": {
+    "residents": 6,
+    "initialReadyMs": 254.59999999403954,
+    "diagnostics": {
+      "assetId": "art:public:characters:v1",
+      "entityCount": 226,
+      "loadedEntityIds": [
+        "e000_digitama",
+        "m503_warglaymon",
+        "m509_shinegraymon",
+        "m518_blackwargreymon",
+        "m529_metalgarurumon_va",
+        "m541_dukemon"
+      ],
+      "loadedSides": [
+        "main"
+      ],
+      "failures": [],
+      "replacementFailures": [],
+      "appearances": [],
+      "rgbaBytes": 19671040,
+      "textureMemory": {
+        "measurement": "BASE_RGBA8_ESTIMATE_NOT_GPU_USAGE",
+        "basis": "Actual loaded bundle pages; excludes mipmaps, decode copies and driver/cache overhead",
+        "estimatedBaseRgbaBytes": 19671040,
+        "pageCount": 6,
+        "sourceCount": 6,
+        "unknownEntityIds": [],
+        "atlasPages": [
+          {
+            "entityId": "e000_digitama",
+            "side": "main",
+            "page": 0,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/main-c1d7ac7bc70c6c8c.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/main-e2b4e742e0bc0116.webp",
+            "sourceIndex": 0,
+            "width": 1552,
+            "height": 368,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 2284544,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m503_warglaymon",
+            "side": "main",
+            "page": 0,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/main-212474682e4cc42e.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/main-3b85426ef0612022.webp",
+            "sourceIndex": 0,
+            "width": 1936,
+            "height": 240,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 1858560,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m509_shinegraymon",
+            "side": "main",
+            "page": 0,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/main-db47bf44c146758f.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/main-8e9c8a41bddef827.webp",
+            "sourceIndex": 0,
+            "width": 1600,
+            "height": 176,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 1126400,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m518_blackwargreymon",
+            "side": "main",
+            "page": 0,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/main-4dec5a073544f2a1.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/main-a1a98b313025cf3e.webp",
+            "sourceIndex": 0,
+            "width": 1792,
+            "height": 656,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 4702208,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m529_metalgarurumon_va",
+            "side": "main",
+            "page": 0,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/main-32a12d78581a17e3.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/main-41327df7e047ee1a.webp",
+            "sourceIndex": 0,
+            "width": 1888,
+            "height": 608,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 4591616,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 0,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-f659fec94ba37c12.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-d9dd9e7a868be5fc.webp",
+            "sourceIndex": 0,
+            "width": 1856,
+            "height": 688,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 5107712,
+            "countedInEstimate": true
+          }
+        ]
+      },
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicCharacters": {
+        "configured": 226,
+        "loaded": [
+          "e000_digitama",
+          "m503_warglaymon",
+          "m509_shinegraymon",
+          "m518_blackwargreymon",
+          "m529_metalgarurumon_va",
+          "m541_dukemon"
+        ],
+        "privateIndexRequested": false
+      }
+    },
+    "initial": {
+      "e000_digitama": {
+        "cell": 0,
+        "geometry": {
+          "blank": false,
+          "scale": 4,
+          "origin": [
+            192,
+            320
+          ],
+          "sourceSize": [
+            384,
+            352
+          ],
+          "nativeBounds": [
+            -24.5,
+            -45,
+            24.5,
+            0.75
+          ]
+        }
+      },
+      "m503_warglaymon": {
+        "cell": 0,
+        "geometry": {
+          "blank": false,
+          "scale": 4,
+          "origin": [
+            224,
+            288
+          ],
+          "sourceSize": [
+            512,
+            512
+          ],
+          "nativeBounds": [
+            -19.75,
+            -51.25,
+            45.75,
+            2.25
+          ]
+        }
+      },
+      "m509_shinegraymon": {
+        "cell": 0,
+        "geometry": {
+          "blank": false,
+          "scale": 4,
+          "origin": [
+            192,
+            320
+          ],
+          "sourceSize": [
+            512,
+            512
+          ],
+          "nativeBounds": [
+            -10.75,
+            -40.5,
+            33,
+            1.75
+          ]
+        }
+      },
+      "m518_blackwargreymon": {
+        "cell": 0,
+        "geometry": {
+          "blank": false,
+          "scale": 4,
+          "origin": [
+            368,
+            496
+          ],
+          "sourceSize": [
+            640,
+            640
+          ],
+          "nativeBounds": [
+            -42.75,
+            -78.5,
+            44.5,
+            3.75
+          ]
+        }
+      },
+      "m529_metalgarurumon_va": {
+        "cell": 0,
+        "geometry": {
+          "blank": false,
+          "scale": 4,
+          "origin": [
+            270,
+            440
+          ],
+          "sourceSize": [
+            640,
+            640
+          ],
+          "nativeBounds": [
+            -37.75,
+            -73.25,
+            52.75,
+            3.5
+          ]
+        }
+      },
+      "m541_dukemon": {
+        "cell": 0,
+        "geometry": {
+          "blank": false,
+          "scale": 4,
+          "origin": [
+            300,
+            480
+          ],
+          "sourceSize": [
+            640,
+            640
+          ],
+          "nativeBounds": [
+            -56,
+            -83,
+            58.5,
+            2.75
+          ]
+        }
+      }
+    },
+    "applicationCount": 1
+  },
+  "initialImages": [
+    "assets/production/characters/accepted-20261010/m503_warglaymon-ultimate-raw-r01/ranch-streaming-v1/5557b4e882445fa9/main-3b85426ef0612022.webp",
+    "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/ranch-streaming-v1/d449dfcc7b619a32/main-e2b4e742e0bc0116.webp",
+    "assets/production/characters/accepted-20261010/m509_shinegraymon-ultimate-raw-r01/ranch-streaming-v1/b605853a5bfd3613/main-8e9c8a41bddef827.webp",
+    "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/main-a1a98b313025cf3e.webp",
+    "assets/production/characters/accepted-20261010/m529_metalgarurumon_va-ultimate-raw-r01/ranch-streaming-v1/17221e90de1ba05a/main-41327df7e047ee1a.webp",
+    "assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-d9dd9e7a868be5fc.webp"
+  ],
+  "deferred": {
+    "pendingBefore": true,
+    "readyAfter": true,
+    "expectedCell": 62,
+    "actualCell": 62
+  },
+  "hunt": {
+    "checked": 65,
+    "diagnostics": {
+      "assetId": "art:public:characters:v1",
+      "entityCount": 226,
+      "loadedEntityIds": [
+        "m541_dukemon"
+      ],
+      "loadedSides": [
+        "main"
+      ],
+      "failures": [],
+      "replacementFailures": [],
+      "appearances": [],
+      "rgbaBytes": 43103232,
+      "textureMemory": {
+        "measurement": "BASE_RGBA8_ESTIMATE_NOT_GPU_USAGE",
+        "basis": "Actual loaded bundle pages; excludes mipmaps, decode copies and driver/cache overhead",
+        "estimatedBaseRgbaBytes": 43103232,
+        "pageCount": 10,
+        "sourceCount": 9,
+        "unknownEntityIds": [],
+        "atlasPages": [
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 0,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-f659fec94ba37c12.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-d9dd9e7a868be5fc.webp",
+            "sourceIndex": 0,
+            "width": 1856,
+            "height": 688,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 5107712,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 1,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-33dd9333293dc573.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-87dcb77c97497bb7.webp",
+            "sourceIndex": 1,
+            "width": 1872,
+            "height": 656,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 4912128,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 2,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-c3ea7558c3788419.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-4343676541135565.webp",
+            "sourceIndex": 2,
+            "width": 1888,
+            "height": 768,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 5799936,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 3,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-b769fd409de7970d.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-9b5f0d366a613dfd.webp",
+            "sourceIndex": 3,
+            "width": 1792,
+            "height": 672,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 4816896,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 4,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-0ba7841008d9dc09.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-d9dd9e7a868be5fc.webp",
+            "sourceIndex": 0,
+            "width": 1856,
+            "height": 688,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 5107712,
+            "countedInEstimate": false
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 5,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-88c98a186ac893af.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-7c54d8025d39307c.webp",
+            "sourceIndex": 4,
+            "width": 1824,
+            "height": 736,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 5369856,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 6,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-577320ec7fb1fe06.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-6be92dc9c260af11.webp",
+            "sourceIndex": 5,
+            "width": 1888,
+            "height": 688,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 5195776,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 7,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-bdbc067c40c457ce.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-8a4bc603ae88431e.webp",
+            "sourceIndex": 6,
+            "width": 1728,
+            "height": 704,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 4866048,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 8,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-0a0823d33ea055ca.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-83eb4296ee526c23.webp",
+            "sourceIndex": 7,
+            "width": 1712,
+            "height": 672,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 4601856,
+            "countedInEstimate": true
+          },
+          {
+            "entityId": "m541_dukemon",
+            "side": "main",
+            "page": 9,
+            "dataUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-5dce2b2f782efc8d.json",
+            "imageUrl": "https://orochi771127.github.io/championship-2026/assets/production/characters/accepted-20261010/m541_dukemon-ultimate-raw-r01/ranch-streaming-v1/947abd7f490ed56e/main-b2de6a3462d7cfb2.webp",
+            "sourceIndex": 8,
+            "width": 1728,
+            "height": 352,
+            "textureFormat": "bgra8unorm",
+            "baseRgbaBytes": 2433024,
+            "countedInEstimate": true
+          }
+        ]
+      },
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicCharacters": {
+        "configured": 226,
+        "loaded": [
+          "m541_dukemon"
+        ],
+        "privateIndexRequested": false
+      }
+    },
+    "applicationCount": 1
+  },
+  "disposed": {
+    "canvasCount": 0
+  }
+}

@@ -298,7 +298,7 @@ const EVENT_ROWS = [
   ["Security Line Decider", "The title match that decides the strongest Vaccine attribute partners!\nVaccine attribute and Ultimate only, 3-on-3 battle."],
   ["Giant Gatekeeper", "A one-on-one duel to decide the strongest Data-attribute partner!\nData attribute and Ultimate only, 1-on-1 battle."],
   ["Aqua Crusher", "The arena is water. Aquatic partners have the advantage.\nWater arena, 3-on-3 battle."],
-  ["Blizzard Field", "The stage is a snowy mountain! Beware 霜獄魔翼's icy claws and 雪燈靈偶's punches!\nSnow arena, 3-on-3 battle."],
+  ["Blizzard Field", "The stage is a snowy mountain! Beware 霜獄魔翼's icy claws and 雪印零偶's punches!\nSnow arena, 3-on-3 battle."],
   ["Volcano Striker", "A title match held on a volcano. Waves of heat from raging magma sweep over the partners!\nVolcano arena, 3-on-3 battle."],
   ["Desert Storm", "Set in a desert arena, for the teams that can beat the scorching heat!\nDesert arena, 3-on-3 battle."],
   ["Top of the Arena", "A title match held in the arena that every tamer is watching!\nArena, 1-on-1 battle."],

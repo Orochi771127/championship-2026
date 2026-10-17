@@ -1,13 +1,14 @@
 // Original fixed-camera tournament geometry. Owner-authorized test checkpoint.
 import {createPixiAssetScope}from '../pixiCharacterRuntimeBundle.js';
-export const TOURNAMENT_STONE_URL='assets/production/data-arena/tournament-detail-r3/manifest.json';
-export async function loadTournamentStoneArt({PIXI,map,quality='high',href,signal}){
+import {publicMetadataPath,loadPublicMetadata} from '../publicMetadata.js';
+export const TOURNAMENT_STONE_URL=publicMetadataPath('arena-tournament');
+export async function loadTournamentStoneArt({PIXI,map,quality='high',href,signal,fetchImpl}){
  const scope=createPixiAssetScope(PIXI,href,{signal}),held=new Set(),textures=new Map();let disposed=false;
  const load=async src=>{held.add(src);return scope.Assets.load(src);};
  const dispose=async()=>{if(disposed)return;disposed=true;await Promise.allSettled([...held].map(src=>scope.Assets.unload(src)));held.clear();};
  try{
-  const manifest=await load(TOURNAMENT_STONE_URL),tier=quality==='low'?'low':'high';
-  if(manifest.kind!=='TOURNAMENT_STONE'||manifest.rights!=='PROJECT_ORIGINAL'||manifest.layoutSignature!==JSON.stringify(map))throw Error('TOURNAMENT_STONE_LAYOUT_MISMATCH');
+  const manifest=await loadPublicMetadata('arena-tournament',{baseHref:href,signal,fetchImpl}),tier=quality==='low'?'low':'high';
+  if(manifest.kind!=='TOURNAMENT_STONE'||manifest.renderType!=='ARENA_TOURNAMENT'||manifest.layoutSignature!==JSON.stringify(map))throw Error('TOURNAMENT_STONE_LAYOUT_MISMATCH');
   const records=[...manifest.ground.map(r=>r.textures[tier]),manifest.foreground.textures[tier],...['props','dynamicProps'].flatMap(key=>manifest[key].flatMap(p=>Object.values(p.states).map(r=>r.textures[tier]))),...['crowd','pennants'].flatMap(key=>manifest[key].map(r=>r.textures[tier])),manifest.waves[tier]];
   const unique=[...new Map(records.map(r=>[r.src,r])).values()];
   for(let i=0;i<unique.length;i+=4){const result=await Promise.allSettled(unique.slice(i,i+4).map(async r=>textures.set(r.src,await load(r.src))));const failure=result.find(r=>r.status==='rejected');if(failure)throw failure.reason;if(signal?.aborted)throw signal.reason??Error('TOURNAMENT_STONE_ABORTED');}

@@ -75,7 +75,11 @@ export function evolutionArtClock(e) {
 
 export async function loadAssembledEvolutionArt(PIXI, baseUrl) {
   if (!isAssembledUiPreview(baseUrl)) return null;
-  const selected = checked.cells.filter(c=>c.sourceFamily==='common/e001_evolution_all'||c.sourceFamily==='common/e001_ikusei');
+  // The two word images have no drawing binding. Keep their source records for
+  // local evidence, without fetching them as unused scene dependencies.
+  const needed=new Set([checked.hud['evolution-ring']?.cellKey,
+    ...Object.values(checked.animations).flatMap(animation=>animation.frames.map(frame=>frame.cellKey))]);
+  const selected = checked.cells.filter(c=>needed.has(c.key));
   const results=await Promise.allSettled(selected.map(async c=>({c,texture:await PIXI.Assets.load(c.src)})));
   const loaded=results.filter(r=>r.status==='fulfilled').map(r=>r.value);
   const unload=()=>Promise.allSettled(loaded.map(({c})=>PIXI.Assets.unload(c.src)));

@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: v2 permanently excludes authoring index and policy from public file selection while retaining the originals
+ok 1 - v2 permanently excludes authoring index and policy from public file selection while retaining the originals
+  ---
+  duration_ms: 3.0451
+  type: 'test'
+  ...
+# Subtest: all five render descriptions re-export byte-for-byte without production, source or rights metadata
+ok 2 - all five render descriptions re-export byte-for-byte without production, source or rights metadata
+  ---
+  duration_ms: 4.5664
+  type: 'test'
+  ...
+# Subtest: runtime projection refuses a missing existing media hash rather than granting approval from a filename or production flag
+ok 3 - runtime projection refuses a missing existing media hash rather than granting approval from a filename or production flag
+  ---
+  duration_ms: 24.8326
+  type: 'test'
+  ...
+# Subtest: private or unknown fields cannot be smuggled into any render descriptor
+ok 4 - private or unknown fields cannot be smuggled into any render descriptor
+  ---
+  duration_ms: 16.4587
+  type: 'test'
+  ...
+# Subtest: all five runtime loaders fetch only the selected public descriptor and enforce its exact bytes
+ok 5 - all five runtime loaders fetch only the selected public descriptor and enforce its exact bytes
+  ---
+  duration_ms: 20.5131
+  type: 'test'
+  ...
+# Subtest: battle effect loader retains all 1231 native cells and exact frame/origin/blank bindings without loading an authority index
+ok 6 - battle effect loader retains all 1231 native cells and exact frame/origin/blank bindings without loading an authority index
+  ---
+  duration_ms: 9.0586
+  type: 'test'
+  ...
+# Subtest: raising feedback retains the same 48 selected reaction/treatment/star cells
+ok 7 - raising feedback retains the same 48 selected reaction/treatment/star cells
+  ---
+  duration_ms: 1.8821
+  type: 'test'
+  ...
+# Subtest: Hunt lazily loads only carried kinds and uses the same approved care-meat pose/scale without fetching its production manifest
+ok 8 - Hunt lazily loads only carried kinds and uses the same approved care-meat pose/scale without fetching its production manifest
+  ---
+  duration_ms: 3.3617
+  type: 'test'
+  ...
+# Subtest: shared effects preserve native blank state, full sequence coverage and locale atlas selection using only public rendering data
+ok 9 - shared effects preserve native blank state, full sequence coverage and locale atlas selection using only public rendering data
+  ---
+  duration_ms: 5.0966
+  type: 'test'
+  ...
+# Subtest: audio export preserves all 54 sample IDs, channels, rates, lengths and exact original media hashes
+ok 10 - audio export preserves all 54 sample IDs, channels, rates, lengths and exact original media hashes
+  ---
+  duration_ms: 1.8317
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 277.0132

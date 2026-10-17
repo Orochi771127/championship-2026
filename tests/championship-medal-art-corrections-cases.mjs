@@ -51,8 +51,10 @@ test('moon, virus, blizzard and volcano use inspected motifs without wrong-art d
  for(const [target,donor] of [[29,52],[57,56],[36,32],[37,36],[15,43],[45,59],[59,47]]){
   const art=originalMedalArt(target,local);
   assert.equal(art.src,original(donor).src);assert.equal(art.sha256,original(donor).sha256);
-  assert.equal(art.sourceTitleId,donor);assert.equal(art.artIdentity,original(donor).artIdentity);
-  assert.equal(art.previousArt.src,original(target).src);
+  const authoring=corrections.medals.find(row=>row.titleId===target);
+  assert.equal(authoring.sourceTitleId,donor);assert.equal(art.artIdentity,original(donor).artIdentity);
+  assert.equal(authoring.previousArt.src,original(target).src);
+  assert.equal(art.sourceTitleId,undefined);assert.equal(art.previousArt,undefined);
   assert.notEqual(originalMedalArt(donor,local).src,original(target).src,'no wrong-art backfill');
  }
  assert.match(originalMedalArt(56,local).src,/rainbow-flyer-grid\.png$/);
@@ -96,10 +98,11 @@ test('generated128px grids and512px details have genuine alpha and stable master
    assert.ok(transparent>width*height*0.1,'transparent surround');assert.ok(visible>width*height*0.05,'meaningful visible motif');assert.ok(nearlyOpaque>visible*0.5,'most meaningful artwork is nearly opaque');assert.ok(partial>0,'antialiased alpha edges');
    for(const [x,y] of [[0,0],[width-1,0],[0,height-1],[width-1,height-1]])assert.equal(image.pixels[(y*width+x)*4+3],0);
   }
-  assert.match(art.generation.masterSha256,/^[a-f0-9]{64}$/);
-  assert.match(art.generation.master,/^assets\/production\/medal-name-corrections-20261014\/masters\//);
-  assert.notEqual(art.src,art.generation.master);assert.notEqual(art.detailSrc,art.generation.master);
-  assert.equal(art.generation.tool,'host-native image_gen.imagegen');
+  const generation=corrections.medals.find(row=>row.titleId===id).generation;assert.equal(art.generation,undefined);
+  assert.match(generation.masterSha256,/^[a-f0-9]{64}$/);
+  assert.match(generation.master,/^assets\/production\/medal-name-corrections-20261014\/masters\//);
+  assert.notEqual(art.src,generation.master);assert.notEqual(art.detailSrc,generation.master);
+  assert.equal(generation.tool,'host-native image_gen.imagegen');
  }
 });
 
@@ -137,15 +140,23 @@ test('later batches preserve sealed first-four identities and original detail im
  assert.deepEqual(receipt.titleIds,[29,52,56,57]);
  for(const art of receipt.manifestSnapshot.medals){
   const current=originalMedalArt(art.titleId,local);
+  const authoring=corrections.medals.find(row=>row.titleId===art.titleId);
   if(art.generation){
    assert.equal(current.detailSrc,art.src);assert.equal(current.detailSha256,art.sha256);
-   assert.equal(current.artIdentity,art.artIdentity);assert.deepEqual(current.generation,art.generation);
-  }else assert.deepEqual(current,art);
+   assert.equal(current.artIdentity,art.artIdentity);assert.deepEqual(authoring.generation,art.generation);
+   assert.equal(authoring.detailSrc,art.src);assert.equal(authoring.detailSha256,art.sha256);
+  }else{
+   assert.deepEqual(authoring,art);
+   const displayKeys=['src','sha256','bytes','rasterSize','titleId','artIdentity','artName','width','height','density','origin'];
+   assert.deepEqual(current,Object.fromEntries(displayKeys.map(key=>[key,art[key]])));
+  }
+  for(const key of ['generation','sourceTitleId','mappingEvidence','correctionKind','previousArt'])assert.equal(current[key],undefined);
   assert.equal(hash(read(art.src)),art.sha256);
  }
  assert.deepEqual(corrections.batchEvidence.map(b=>b.titleIds),[[29,52,56,57],[32,36,37],[15,43,45,47,59],[7,8,10,11],[3,31,49,55],[22,35,38,42,54,58],[13,14,16,25,44]]);
  const divider=originalMedalArt(32,local);
- assert.equal(divider.generation.promptRecord,'batch-02-noise-divider-prompt.json');
+ assert.equal(corrections.medals.find(row=>row.titleId===32).generation.promptRecord,'batch-02-noise-divider-prompt.json');
+ assert.equal(divider.generation,undefined);
 });
 
 // Frozen categories from the original actual-PNG audit, not inferred from batch size.

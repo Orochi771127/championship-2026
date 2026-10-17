@@ -170,6 +170,7 @@ test("Pixi runtime bundle loads all review atlases and releases them without own
     entityId: "m201_agumon",
     textureCount: 83,
     sheetCount: 2,
+    streaming: null,
     reviewOnly: true,
     runtimeEligible: false,
     ticker: "SCENE_OWNED_APPLICATION_TICKER_REQUIRED"

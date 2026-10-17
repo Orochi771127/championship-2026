@@ -1,9 +1,12 @@
+import {loadRegisteredHuntFeedbackArt,originalHuntMeatCells,ORIGINAL_HUNT_MEAT_MANIFEST} from '../tools/authoring/legacy-render/huntFeedbackArt.mjs';
+import {loadRegisteredHuntFeedbackArt as loadPublicHuntFeedback} from '../src/championship/presentation/huntFeedbackArt.js';
+import {publicRuntimeFetchFixture} from './helpers/public-runtime-fetch.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createNativeCharacterAnimationTimeline} from '../src/championship/presentation/characterAnimationTimeline.js';
 import {createPixiAssetScope} from '../src/championship/presentation/pixiCharacterRuntimeBundle.js';
-import {huntFeedbackCell,huntFeedbackBinding,huntTrapLayers,loadRegisteredHuntFeedbackArt,originalHuntMeatCells,HUNT_FEEDBACK_ART_ID,HUNT_FEEDBACK_ART_MANIFEST,ORIGINAL_HUNT_MEAT_MANIFEST} from '../src/championship/presentation/huntFeedbackArt.js';
+import {huntFeedbackCell,huntFeedbackBinding,huntTrapLayers,HUNT_FEEDBACK_ART_ID,HUNT_FEEDBACK_ART_MANIFEST} from '../src/championship/presentation/huntFeedbackArt.js';
 import {loadRegisteredCharacterHudArt,validateCharacterHudArt,CHARACTER_HUD_ART_ID,CHARACTER_HUD_ART_MANIFEST} from '../src/championship/presentation/characterHudArt.js';
 
 test('Hunt feedback clock matches the verified native timeline for every catalog tool duration',()=>{
@@ -251,4 +254,17 @@ test('mountHuntFieldPixiPresentation supports dynamic setFeedbackArt recovery, s
   // Scene disposal disposes currently active art
   scene.dispose();
   assert.equal(disposed2, true, 'active art disposed on scene teardown');
+});
+// The original-source validator above remains exercised as authoring evidence.
+// This normal runtime check reads only selected public descriptions and media.
+test('public Hunt loader retains carried banks, original meat poses and exact frame clocks without authoring requests',async()=>{
+ const calls=[],descriptor=JSON.parse(readFileSync('assets/production/public-runtime/hunt-feedback.render.v1.json','utf8'));
+ const cells=new Map(descriptor.banks.flatMap(bank=>bank.cells.map(cell=>[cell.src,cell])));
+ const loaded=[],unloaded=[];
+ const art=await loadPublicHuntFeedback({baseUrl:'https://orochi771127.github.io/championship-2026/',fetchImpl:publicRuntimeFetchFixture({calls}),kinds:['MEAT','SHOT'],PIXI:{Assets:{load:async src=>{loaded.push(src);const c=cells.get(src);return {width:c.rasterWidth??c.width,height:c.rasterHeight??c.height,source:{}};},unload:async src=>unloaded.push(src)}}});
+ assert.deepEqual(loaded,descriptor.banks.filter(b=>['MEAT','SHOT'].includes(b.kind)).flatMap(b=>b.cells.map(c=>c.src)));
+ for(const tier of [0,1,2,3])assert.equal(art.getFrame({kind:'MEAT',itemIndex:0,tier}).src,`assets/production/original-ui-intake-20261007/items/care19/meat-${3-tier}.png`);
+ assert.equal(art.getFrame({kind:'TOOL_BURST',sourceKind:'MINE',itemIndex:3,sequence:0,remaining:20}),null);
+ assert.deepEqual(calls,['assets/production/public-runtime/hunt-feedback.render.v1.json']);
+ await art.dispose();await art.dispose();assert.deepEqual(unloaded,loaded);
 });

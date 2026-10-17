@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
-import * as PIXI from 'pixi.js';
+import * as PIXI from '../assets/production/public-runtime/vendor-pixi.mjs';
 import manifest from '../assets/production/evolution-glyphs-v1/manifest.json' with { type: 'json' };
 import { loadEvolutionGlyphArt, createEvolutionGlyphBand } from '../src/championship/presentation/evolutionGlyphArt.js';
 import { createPixiAssetScope } from '../src/championship/presentation/pixiCharacterRuntimeBundle.js';

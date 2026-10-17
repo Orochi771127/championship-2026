@@ -2,6 +2,13 @@ import { createPixiCharacterAnimationController } from "./pixiCharacterAnimation
 import { createNativeHuntCharacterFramePresenter } from "./nativeHuntCharacterAction.js";
 import { createBattleCharacterAnimator } from "./battleCharacterAction.js";
 import {createNativeCharacterAnimationTimeline} from './characterAnimationTimeline.js';
+import {prepareCharacterAtlasPage} from './characterAtlasQueue.js';
+const closedBitmaps=new WeakSet();
+function closeDestroyedBitmap(bitmap,source){
+  if(source?.destroyed&&typeof bitmap?.close==='function'&&!closedBitmaps.has(bitmap)){
+    closedBitmaps.add(bitmap);bitmap.close();
+  }
+}
 
 function requireRecord(value, label) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
@@ -30,7 +37,11 @@ export async function loadPixiCharacterRuntimeBundle({
   runtimeUrl,
   cachePrefix = "championship-character:",
   sides = ["main", "sub"],
-  replacementGuard = null
+  replacementGuard = null,
+  runtimeDocument = null,
+  initialSequenceIds = null,
+  signal = null,
+  fetchImpl = (...args) => globalThis.fetch(...args)
 }) {
   if (!PIXI?.Assets || typeof PIXI.Assets.load !== "function"
     || typeof PIXI.Spritesheet !== "function" || typeof PIXI.Sprite !== "function") {
@@ -44,12 +55,84 @@ export async function loadPixiCharacterRuntimeBundle({
     throw new TypeError("Character sides must be a non-empty unique Main/Sub selection");
   }
 
-  const runtime = await PIXI.Assets.load(replacementGuard ? { src: runtimeUrl, parser: "json" } : runtimeUrl);
+  const runtime = runtimeDocument ?? await PIXI.Assets.load(replacementGuard ? { src: runtimeUrl, parser: "json" } : runtimeUrl);
   const sheets = [];
-  const loadedUrls = new Set([runtimeUrl]);
+  const loadedUrls = new Set(runtimeDocument ? [] : [runtimeUrl]);
   const textures = new Map();
   const decodedSources = new Set();
   const atlasPages = [];
+  let disposed = false;
+  let disposal = null;
+  const pagePending = new Map(), readyPages = new Set();
+  const streamed = initialSequenceIds !== null && runtime.streaming?.schemaVersion === 1
+    && sides.length === 1 && sides[0] === 'main' && replacementGuard === null;
+  function sequenceTextures(id){
+    const sequence=runtime.sides.main.animations.find(a=>a.id===id);
+    if(!sequence)throw new RangeError(`Unknown character animation: ${id}`);
+    return sequence.frames.map(f=>f.texture);
+  }
+  function validateStreaming(){
+    const meta=runtime.streaming,atlases=runtime.sides.main.atlases;
+    if(meta.side!=='main'||!Array.isArray(meta.pages)||meta.pages.length!==atlases.length)
+      throw Error('CHARACTER_STREAMING_SCHEMA');
+    for(const key of runtime.sides.main.animations.flatMap(a=>a.frames.map(f=>f.texture))){
+      const page=meta.texturePages?.[key];
+      if(!Number.isInteger(page)||page<0||page>=atlases.length)throw Error('CHARACTER_STREAMING_FRAME_PAGE');
+    }
+    for(const [i,atlas] of atlases.entries()){
+      if(!/^main-[a-f0-9]{16}\.json$/.test(atlas.data)||!/^main-[a-f0-9]{16}\.webp$/.test(atlas.image)
+        ||meta.pages[i].data!==atlas.data||meta.pages[i].image!==atlas.image)
+        throw Error('CHARACTER_STREAMING_PAGE_PATH');
+    }
+  }
+  async function loadStreamPage(page){
+    if(disposed)throw Error('CHARACTER_RUNTIME_BUNDLE_DISPOSED');
+    signal?.throwIfAborted();
+    if(readyPages.has(page))return;
+    if(pagePending.has(page))return pagePending.get(page);
+    const pending=prepareCharacterAtlasPage(async()=>{
+      if(disposed)throw Error('CHARACTER_RUNTIME_BUNDLE_DISPOSED');
+      signal?.throwIfAborted();
+      const atlas=runtime.sides.main.atlases[page],dataUrl=assetUrl(atlas.data,runtimeUrl),imageUrl=assetUrl(atlas.image,runtimeUrl);
+      // Pixi's JSON load parser still runs subsequent spritesheet parsers.
+      // Read/verify metadata directly, before any image dependency is decoded.
+      const response=await fetchImpl(dataUrl,{signal});
+      if(!response.ok)throw Error('CHARACTER_STREAMING_METADATA_HTTP_'+response.status);
+      const text=await response.text();
+      const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
+      if(hash!==runtime.streaming.pages[page].dataSha256)throw Error('CHARACTER_STREAMING_METADATA_HASH');
+      const data=JSON.parse(text);
+      if(disposed)throw Error('CHARACTER_RUNTIME_BUNDLE_DISPOSED');
+      if(data.meta?.image!==atlas.image)throw Error('CHARACTER_STREAMING_IMAGE_PATH');
+      const expected=Object.keys(runtime.streaming.texturePages).filter(k=>runtime.streaming.texturePages[k]===page);
+      if(expected.length!==Object.keys(data.frames??{}).length||expected.some(k=>!data.frames[k]))
+        throw Error('CHARACTER_STREAMING_FRAME_SET');
+      for(const key of expected)if(textures.has(key))throw Error('CHARACTER_STREAMING_DUPLICATE_FRAME');
+      const texture=await PIXI.Assets.load(imageUrl);loadedUrls.add(imageUrl);
+      if(texture.source)decodedSources.add(texture.source);
+      if(disposed)throw Error('CHARACTER_RUNTIME_BUNDLE_DISPOSED');
+      signal?.throwIfAborted();
+      const size=runtime.streaming.pages[page];
+      if(texture.source?.pixelWidth!==size.width||texture.source?.pixelHeight!==size.height)throw Error('CHARACTER_STREAMING_TEXTURE_DIMENSIONS');
+      const sheet=new PIXI.Spritesheet({texture,data,cachePrefix:`${cachePrefix}${runtime.entityId}:main:${page}:`});
+      try{await sheet.parse();}catch(error){sheet.destroy(false);throw error;}
+      sheets.push({sheet,owned:true});atlasPages.push({side:'main',page,dataUrl,imageUrl,source:texture.source});
+      for(const [key,value]of Object.entries(sheet.textures)){
+        if(value.source&&runtime.artProfile?.filter==='nearest')value.source.scaleMode='nearest';
+        textures.set(key,value);
+      }
+      readyPages.add(page);
+    },signal);
+    pagePending.set(page,pending);
+    try{await pending;}finally{if(pagePending.get(page)===pending)pagePending.delete(page);}
+  }
+  async function ensureSequence(id){
+    if(disposed)throw Error('CHARACTER_RUNTIME_BUNDLE_DISPOSED');
+    const keys=sequenceTextures(id);
+    await Promise.all([...new Set(keys.filter(k=>!textures.has(k)).map(k=>runtime.streaming.texturePages[k]))].map(loadStreamPage));
+    if(!keys.every(k=>textures.has(k)))throw Error('CHARACTER_STREAMING_SEQUENCE_INCOMPLETE');
+    return true;
+  }
   async function releaseResources() {
     // Pixi's ImageSource.destroy releases GPU storage and drops .resource,
     // but does not close its decoded ImageBitmap. Explicitly close only after
@@ -58,13 +141,17 @@ export async function loadPixiCharacterRuntimeBundle({
     for(const {sheet,owned} of sheets)if(owned)sheet.destroy(false);
     textures.clear();
     await Promise.allSettled([...loadedUrls].map(url=>PIXI.Assets.unload?.(url)));
-    for(const [bitmap,source] of decoded)if(source.destroyed)bitmap.close();
+    for(const [bitmap,source] of decoded)closeDestroyedBitmap(bitmap,source);
     decodedSources.clear();sheets.length=0;loadedUrls.clear();atlasPages.length=0;
   }
 
   try {
     requireRecord(runtime, "character runtime");
     requireRecord(runtime.sides, "character runtime.sides");
+    if(streamed){
+      validateStreaming();
+      for(const id of new Set([0,...initialSequenceIds]))await ensureSequence(id);
+    }
     const guardedAtlases = new Map();
     if (replacementGuard) {
       replacementGuard.validateRuntime(runtime);
@@ -82,7 +169,7 @@ export async function loadPixiCharacterRuntimeBundle({
       }
       replacementGuard.validateComplete();
     }
-    for (const sideName of sides) {
+    for (const sideName of streamed ? [] : sides) {
       const side = requireRecord(runtime.sides[sideName], `character runtime.sides.${sideName}`);
       if (!Array.isArray(side.atlases) || !Array.isArray(side.animations)) {
         throw new TypeError(`Character side ${sideName} requires atlases and animations`);
@@ -124,7 +211,7 @@ export async function loadPixiCharacterRuntimeBundle({
         }
       }
     }
-    for (const sideName of sides) {
+    for (const sideName of streamed ? [] : sides) {
       for (const animation of runtime.sides[sideName].animations) {
         for (const frame of animation.frames) {
           if (!textures.has(frame.texture)) throw new RangeError(`Character runtime texture is missing: ${frame.texture}`);
@@ -132,12 +219,12 @@ export async function loadPixiCharacterRuntimeBundle({
       }
     }
   } catch (error) {
+    disposed=true;
+    await Promise.allSettled([...pagePending.values()]);
     await releaseResources();
     throw error;
   }
 
-  let disposed = false;
-  let disposal = null;
   return Object.freeze({
     runtime,
 
@@ -170,10 +257,14 @@ export async function loadPixiCharacterRuntimeBundle({
         tickRateHz,
         reducedMotion
       });
-      const nativeFramePresenter = nativeFramePresentation ? createNativeHuntCharacterFramePresenter({
+      const presenter = nativeFramePresentation ? createNativeHuntCharacterFramePresenter({
         sprite, animations: sideRuntime.animations, textureResolver: (key) => textures.get(key),
         entityId: runtime.entityId, reducedMotion, geometry: nativeGeometry
       }) : null;
+      const nativeFramePresenter = presenter && streamed ? Object.freeze({...presenter,
+        isFrameReady(frame){return sequenceTextures(frame.sequenceId).every(k=>textures.has(k));},
+        ensureFrame(frame){return ensureSequence(frame.sequenceId);}
+      }) : presenter;
       const battleAnimator = battleGeometry ? createBattleCharacterAnimator({sprite,
         animations:sideRuntime.animations,textureResolver:key=>textures.get(key),geometry:battleGeometry,reducedMotion}) : null;
       const timeline=nativeSequence?createNativeCharacterAnimationTimeline(firstAnimation):null;
@@ -189,6 +280,7 @@ export async function loadPixiCharacterRuntimeBundle({
         textureCount: textures.size,
         sheetCount: sheets.length,
         textureMemory: characterTextureMemory(atlasPages),
+        streaming: streamed ? {readyPages:readyPages.size,totalPages:runtime.sides.main.atlases.length,pendingPages:pagePending.size} : null,
         reviewOnly: runtime.artProfile?.reviewOnly === true,
         runtimeEligible: runtime.artProfile?.runtimeEligible === true,
         ticker: "SCENE_OWNED_APPLICATION_TICKER_REQUIRED"
@@ -198,7 +290,7 @@ export async function loadPixiCharacterRuntimeBundle({
     dispose() {
       if (disposal) return disposal;
       disposed = true;
-      disposal=releaseResources();
+      disposal=(async()=>{await Promise.allSettled([...pagePending.values()]);await releaseResources();})();
       return disposal;
     }
   });
@@ -287,8 +379,11 @@ export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, 
       if (--entry.refs > 0) return;
       entry.releasing = (async () => {
         try {
-          try { await entry.promise; } catch { return; }
+          let value;
+          try { value=await entry.promise; } catch { return; }
+          const source=value?.source??value?.textureSource,bitmap=source?.resource;
           await assets.unload(key);
+          closeDestroyedBitmap(bitmap,source);
         }
         finally { if (shared.get(key) === entry) shared.delete(key); }
       })();

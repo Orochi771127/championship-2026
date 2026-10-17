@@ -12,24 +12,35 @@
 // resolves from CPU-checked notifications (battleCharacterAction.js):
 // 0 stand, 2 walk, 7 attack, 6 hit, 15 down, 33 win.
 
-import acceptedSelection from "../../../data/championship/accepted-original-character-selection.r1.json" with { type: "json" };
+import {publicCharacterConfig} from '../publicCharacterCatalog.js';
+import {validatePublicCharacterRender} from '../publicCharacterRoster.js';
+import {loadPixiCharacterRuntimeBundle} from '../pixiCharacterRuntimeBundle.js';
 import { DATA_ARENA_BOSS, DATA_ARENA_MATE, DATA_ARENA_PARTNERS, DATA_ARENA_RIVALS } from "../../modes/dataArena/dataArenaConfig.js";
 import { speciesNameForId } from "../../text/zhHant.js";
 import { isOriginalRuntimeLocation } from "../originalRuntimeLocation.js";
 
 export const DATA_ARENA_SEQUENCES = Object.freeze({ STAND: 0, WALK: 2, ATTACK: 7, HIT: 6, DOWN: 15, WIN: 33 });
 
-const bySpecies = new Map(acceptedSelection.characters.map((entry) => [entry.speciesId, entry]));
 
 /** One cast member's art record, or null when none is selected for this species. */
 export function dataArenaArtRecord(speciesId, href = globalThis.location?.href) {
-  const entry = bySpecies.get(speciesId);
+  const entry = publicCharacterConfig(speciesId);
   if (!entry || !href || !isOriginalRuntimeLocation(href)) return null;
   return Object.freeze({
-    speciesId, entityId: entry.entityId, sourceBankSha256: entry.sourceBankSha256,
-    runtimeUrl: new URL(`${acceptedSelection.root}${entry.folder}/runtime.review.json`, href).href,
-    portraitUrl: new URL(`${acceptedSelection.root}${entry.folder}/hud-r01/main-cell_000.webp`, href).href
+    speciesId, entityId: entry.entityId, runtimeSha256:entry.runtimeSha256,
+    runtimeUrl: new URL(entry.runtimePath, href).href,
+    portraitUrl: new URL(entry.hudPath.replace('hud.render.json','main-cell_000.webp'), href).href
   });
+}
+
+export async function loadDataArenaCharacter({art,PIXI,signal,fetchImpl=globalThis.fetch}){
+ const selected=publicCharacterConfig(art.speciesId);
+ if(!selected||selected.entityId!==art.entityId||selected.runtimeSha256!==art.runtimeSha256)throw Error('DATA_ARENA_ART_IDENTITY_MISMATCH');
+ const response=await fetchImpl(art.runtimeUrl,{signal});if(!response.ok)throw Error('DATA_ARENA_ART_HTTP_'+response.status);
+ const text=await response.text(),hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
+ if(hash!==selected.runtimeSha256)throw Error('DATA_ARENA_ART_HASH');
+ const runtime=JSON.parse(text);await validatePublicCharacterRender(runtime,selected);
+ return loadPixiCharacterRuntimeBundle({PIXI,signal,fetchImpl,runtimeUrl:art.runtimeUrl,runtimeDocument:runtime,sides:['main'],cachePrefix:`data-arena:${art.entityId}:${hash}:`});
 }
 
 export function dataArenaCast(href = globalThis.location?.href) {

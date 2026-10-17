@@ -1,3 +1,4 @@
+import {publicRuntimeFetchFixture} from './helpers/public-runtime-fetch.mjs';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {createDataArenaSimulation}from '../src/championship/modes/dataArena/dataArenaSimulation.js';
 import {createDataArenaGrid}from '../src/championship/modes/dataArena/dataArenaGrid.js';
@@ -86,7 +87,7 @@ test('the original interaction kit and its collision-bound state variants retain
 test('interaction art waits for in-flight decoders and unloads the complete partial scope after failure',async()=>{
  const manifest=JSON.parse(fs.readFileSync(new URL('../assets/production/data-arena/interactions-v1/manifest.json',import.meta.url)));const live=new Set();let n=0;
  const PIXI={Assets:{async load(src){src=typeof src==='string'?src:src.src;if(src.endsWith('manifest.json')){live.add(src);return manifest;}if(n++===0)throw Error('decode failed');await new Promise(r=>setTimeout(r,4));live.add(src);return{};},async unload(src){live.delete(src);}}};
- await assert.rejects(loadDataArenaInteractionArt({PIXI,map:DATA_ARENA_DUEL_MAP,href:'http://localhost/championship.html'}),/decode failed/);assert.equal(live.size,0);
+ await assert.rejects(loadDataArenaInteractionArt({fetchImpl:publicRuntimeFetchFixture(),PIXI,map:DATA_ARENA_DUEL_MAP,href:'http://localhost/championship.html'}),/decode failed/);assert.equal(live.size,0);
 });
 test('physical damage never selects the burned texture and low debris sorts below traversing actors',()=>{
  const grid=createDataArenaGrid({map:DATA_ARENA_DUEL_MAP}),manifest=JSON.parse(fs.readFileSync(new URL('../assets/production/data-arena/interactions-v1/manifest.json',import.meta.url)));

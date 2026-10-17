@@ -1,13 +1,14 @@
 import {isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
+import {publicMetadataPath,loadPublicMetadata,validatePublicMetadata} from './publicMetadata.js';
 // Static foreground from hash-locked CM03/CM24 masters and their unchanged final pixels.
 // Geometry/collision/actor state stay with their existing owners.
 const FIELDS=Object.freeze([
- {fieldId:'field_cm03_01',manifest:'assets/production/cage/cm03-r18-foreground-20261009/manifest.json',
+ {fieldId:'field_cm03_01',role:'cage-foreground-cm03',
   prefix:'assets/production/cage/cm03-r18-foreground-20261009/',width:1152,height:800,
   sourceHash:'b757e18558a44b0f2ebd3052ae9de508258cff9b4670fe3b8215fb55bf6d70df',
   masterHash:'9b5d847bc91c587413be5baf600501ab60820517a05742a4a53af13a8cf297f0',
   depthAuthority:'EXISTING_R18_MASTER_GROUND_PROJECTION'},
- {fieldId:'field_cm24_01',manifest:'assets/production/cage/cm24-final-foreground-20261010/manifest.json',
+ {fieldId:'field_cm24_01',role:'cage-foreground-cm24',
   prefix:'assets/production/cage/cm24-final-foreground-20261010/',width:384,height:448,
   sourceHash:'601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146',
   masterHash:'dd731a1d27cec5cc19ecf67682e20a26bc3fd86c873f5e9e3c3b39b87ea28670',
@@ -26,7 +27,8 @@ export function cm24ForegroundEligible(manifest,placements,location=globalThis.l
 }
 export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null,fold=null,worldHeightPx=null}={}) {
   const config=FIELDS.find(f=>f.fieldId===data?.fieldId);
-  if(!config||data.sourceComposite?.sha256!==config.sourceHash||data.masterSha256!==config.masterHash||data.pixelScale!==unit
+  const isPublic=data?.renderType==='CAGE_FOREGROUND';if(isPublic)validatePublicMetadata(data);
+  if(!config||!isPublic&&(data.sourceComposite?.sha256!==config.sourceHash||data.masterSha256!==config.masterHash)||data.pixelScale!==unit
     ||data.width!==config.width||data.height!==config.height||!Array.isArray(data.objects))throw Error('CAGE_FOREGROUND_SOURCE_MISMATCH');
   const result=[];
   for(const p of placements.filter(p=>p.fieldId===data.fieldId)){
@@ -74,8 +76,7 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   if(!selected.length)return art;
   const bundles=[];
   for(const config of selected){
-   const response=await fetchImpl(new URL(config.manifest,baseHref));if(!response.ok)throw Error('CAGE_FOREGROUND_MANIFEST_HTTP_'+response.status);
-   const data=await response.json(),plan=cageForegroundPlan(data,placements,{unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
+   const data=await loadPublicMetadata(config.role,{fetchImpl,baseHref}),plan=cageForegroundPlan(data,placements,{unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
      fold:art.field.fold??null,worldHeightPx:art.field.worldHeightPx});
    if(data.fieldId!==config.fieldId)throw Error('CAGE_FOREGROUND_SOURCE_MISMATCH');
    bundles.push({config,data,plan});

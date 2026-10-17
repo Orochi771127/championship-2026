@@ -55,33 +55,35 @@ test('unknown source, eggs, empty group and final stages expose no invented bran
   assert.equal(book.slotCount,218);
 });
 
-test('all 214 available ordinary portraits are accepted originals with selected byte hashes; aliases preserve96/97 and gaps stay null',()=>{
-  let available=0;
-  for(let i=8;i<224;i++){
-    const config=acceptedDatabasePortraitConfig(i);if(!config){assert.ok([211,222].includes(i));continue;}
-    const manifest=read(`assets/production/characters/accepted-20261010/${config.folder}/hud-r01/manifest.json`);
-    const portrait=validateAcceptedDatabasePortrait(manifest,config);assert.ok(portrait.src.startsWith('assets/production/characters/accepted-20261010/'));
-    assert.equal(createHash('sha256').update(fs.readFileSync(portrait.src)).digest('hex'),portrait.sha256);available++;
-  }
-  assert.equal(available,214);assert.equal(acceptedDatabasePortraitConfig(96).speciesId,'species-226');assert.equal(acceptedDatabasePortraitConfig(97).speciesId,'species-227');
-  assert.equal(acceptedDatabasePortraitConfig(211),null);assert.equal(acceptedDatabasePortraitConfig(222),null);
+test('all 216 ordinary public portraits preserve exact selected HUD hashes and aliases96/97',()=>{
+ let available=0;
+ for(let i=8;i<224;i++){
+  const config=acceptedDatabasePortraitConfig(i);assert.ok(config,i);
+  const text=fs.readFileSync(config.hudPath,'utf8'),manifest=JSON.parse(text);
+  assert.equal(createHash('sha256').update(text).digest('hex'),config.hudSha256);
+  const portrait=validateAcceptedDatabasePortrait(manifest,config);assert.ok(portrait.src.startsWith('assets/production/characters/'));
+  assert.equal(createHash('sha256').update(fs.readFileSync(portrait.src)).digest('hex'),portrait.sha256);available++;
+ }
+ assert.equal(available,216);assert.equal(acceptedDatabasePortraitConfig(96).speciesId,'species-226');assert.equal(acceptedDatabasePortraitConfig(97).speciesId,'species-227');
+ for(const id of [211,222])assert.equal(acceptedDatabasePortraitConfig(id).speciesId,`species-${id}`);
 });
 
-test('research, foreign paths, identities or provenance cannot become a Database portrait',async()=>{
-  const config=acceptedDatabasePortraitConfig(8),manifest=read(`assets/production/characters/accepted-20261010/${config.folder}/hud-r01/manifest.json`);
-  for(const mutate of [m=>{m.portrait.src='assets/production/internal-faithful-baseline/x.png';},m=>{m.localPackagingProvenance.publicationStatus='RESEARCH_ONLY';},m=>{m.portrait.speciesId='species-211';}]){const m=structuredClone(manifest);mutate(m);assert.throws(()=>validateAcceptedDatabasePortrait(m,config),/DATABASE_ACCEPTED_PORTRAIT_REQUIRED/);}
-  let calls=0;
-  for(const id of [211,222,229,230]){
-    const options={fetchImpl:()=>{calls++;throw Error('STATIC_PREVIEW_MUST_NOT_FETCH_MANIFEST');},baseUrl:'https://qa.test/'};
-    const preview=await loadAcceptedDatabasePortrait(id,options),hero=databaseHeroPortrait(id);
-    assert.equal(preview.speciesIndex,id);assert.equal(preview.speciesId,`species-${id}`);
-    assert.equal(preview.src,new URL(hero.src,options.baseUrl).href);assert.equal(preview.sha256,hero.sha256);
-    assert.equal(preview.derivation,'SELECTED_PUBLIC_DATABASE_ILLUSTRATION_PREVIEW');
-    assert.equal(await loadAcceptedDatabasePortrait(id,{...options,revealed:false}),null);
-  }
-  assert.equal(calls,0);
+test('private provenance, foreign paths and changed identities cannot pass the hash-bound Database loader',async()=>{
+ const config=acceptedDatabasePortraitConfig(8),manifest=read(config.hudPath);
+ for(const mutate of [m=>{m.portrait.src='assets/production/internal-faithful-baseline/x.png';},m=>{m.localPackagingProvenance={publicationStatus:'RESEARCH_ONLY'};},m=>{m.portrait.speciesId='species-211';}]){
+  const m=structuredClone(manifest);mutate(m);
+  await assert.rejects(loadAcceptedDatabasePortrait(8,{baseUrl:'https://qa.test/',fetchImpl:async()=>({ok:true,text:async()=>JSON.stringify(m)})}),/DATABASE_PORTRAIT_HASH/);
+ }
+ let calls=0;
+ for(const id of [211,222,229,230]){
+  const selected=acceptedDatabasePortraitConfig(id),text=fs.readFileSync(selected.hudPath,'utf8'),hud=JSON.parse(text);
+  const options={fetchImpl:async url=>{calls++;assert.equal(url.pathname,'/'+selected.hudPath);return {ok:true,text:async()=>text};},baseUrl:'https://qa.test/'};
+  const portrait=await loadAcceptedDatabasePortrait(id,options);
+  assert.equal(portrait.speciesId,`species-${id}`);assert.equal(portrait.src,new URL(hud.portrait.src,options.baseUrl).href);assert.equal(portrait.sha256,hud.portrait.sha256);
+  assert.equal(await loadAcceptedDatabasePortrait(id,{...options,revealed:false}),null);
+ }
+ assert.equal(calls,4);
 });
-
 
 test('production appends exactly three product routes without borrowing the 477 native history offsets',()=>{
   const registered=[...registeredSpecies,229,230],snapshot=JSON.stringify(lifecycle),extras=[];let nativeCount=0;

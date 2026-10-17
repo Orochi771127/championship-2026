@@ -6,21 +6,29 @@ import * as esbuild from 'esbuild';
 // Build-only packaging of the existing application. Every source read must be
 // present in the already audited public input set; no new runtime authority.
 let raw='';for await(const chunk of process.stdin)raw+=chunk;
-const {root,files,recipe}=JSON.parse(raw),allowed=new Set(files);
+const {root,files,recipe,importMap={}}=JSON.parse(raw),allowed=new Set(files);
 if(recipe.version!==1||recipe.entry!=='src/championship/app/main.js'
   ||recipe.outputDirectory!=='src/championship/app/_bundled'||recipe.toolVersion!==esbuild.version)
   throw Error('BROWSER_BUNDLE_RECIPE_MISMATCH');
-const outdir=path.join(root,recipe.outputDirectory),sources=new Map();
+const outdir=path.join(root,recipe.outputDirectory),sources=new Map(),runtimeScripts=new Set();
 const result=await esbuild.build({absWorkingDir:root,entryPoints:[recipe.entry],outdir,
   entryNames:'main-[hash]',chunkNames:'chunk-[hash]',bundle:true,splitting:true,
   format:'esm',platform:'browser',target:'es2022',metafile:true,write:false,
   minifyWhitespace:true,minifySyntax:true,minifyIdentifiers:false,keepNames:true,charset:'utf8',
   external:['node:*'],logLevel:'silent',plugins:[{name:'approved-source-and-module-urls',setup(build){
+    build.onResolve({filter:/^pixi\.js$/},args=>importMap[args.path]?{path:path.resolve(root,importMap[args.path])}:undefined);
     build.onLoad({filter:/\.(?:m?js|json)$/},async args=>{
       const file=path.relative(root,args.path).replaceAll('\\','/');
       if(!allowed.has(file))throw Error(`BROWSER_BUNDLE_UNAPPROVED_INPUT: ${file}`);
       const bytes=fs.readFileSync(args.path);sources.set(file,createHash('sha256').update(bytes).digest('hex'));
       let contents=bytes.toString('utf8');const loader=file.endsWith('.json')?'json':'js';
+      if(loader==='js')for(const match of contents.matchAll(/new\s+URL\s*\(\s*(['"])([^'"\r\n]+\.m?js)(?:[?#][^'"\r\n]*)?\1/g)){
+        // A script URL is a runtime resource even when that script is also bundled.
+        for(const base of [path.dirname(args.path),root]){
+          const target=path.relative(root,path.resolve(base,match[2])).replaceAll('\\','/');
+          if(allowed.has(target))runtimeScripts.add(target);
+        }
+      }
       if(loader==='js'&&contents.includes('import.meta.url')){
         // Parse the replacement instead of changing occurrences inside strings.
         // All emitted chunks share this directory, so original relative asset
@@ -35,6 +43,9 @@ const result=await esbuild.build({absWorkingDir:root,entryPoints:[recipe.entry],
     });
   }}]});
 for(const file of Object.keys(result.metafile.inputs))if(!allowed.has(file))throw Error(`BROWSER_BUNDLE_UNAPPROVED_INPUT: ${file}`);
+const runtimeQueue=[...runtimeScripts];
+while(runtimeQueue.length){const file=runtimeQueue.pop();for(const item of result.metafile.inputs[file]?.imports??[])
+  if(!item.external&&!runtimeScripts.has(item.path)){runtimeScripts.add(item.path);runtimeQueue.push(item.path);}}
 const outputs=result.metafile.outputs,entry=Object.keys(outputs).find(file=>outputs[file].entryPoint===recipe.entry);
 if(!entry)throw Error('BROWSER_BUNDLE_ENTRY_MISSING');
 const startup=new Set();
@@ -46,5 +57,5 @@ if(generated.some(file=>!file.path.startsWith(recipe.outputDirectory+'/')||!file
   throw Error('BROWSER_BUNDLE_OUTPUT_BOUNDARY');
 process.stdout.write(JSON.stringify({files:generated,metadata:{version:1,tool:'esbuild',toolVersion:esbuild.version,
   entry,startupModules:[...startup].sort(),generatedFiles:generated.map(f=>f.path).sort(),
-  inputFiles:[...sources].sort(([a],[b])=>a.localeCompare(b,'en')).map(([file,sha256])=>({path:file,sha256}))},
+  inputFiles:[...sources].sort(([a],[b])=>a.localeCompare(b,'en')).map(([file,sha256])=>({path:file,sha256})),runtimeScriptFiles:[...runtimeScripts].sort()},
   warnings:result.warnings.map(w=>({id:w.id,text:w.text,file:w.location?.file}))}));

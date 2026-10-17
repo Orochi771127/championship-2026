@@ -1,0 +1,30 @@
+{
+  "kind": "EXACT_SOURCE_RECOVERY_NOT_PUBLICATION",
+  "initial47": {
+    "required": 47,
+    "presentAndExact": 47
+  },
+  "frozen5422": {
+    "required": 5422,
+    "presentAndExact": 5422
+  },
+  "verifiedFiles": 7975,
+  "verifiedBytes": 1153447857,
+  "missing": [],
+  "mismatches": [],
+  "authorityIndexUnchangedSha256": "3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f",
+  "runtimeBuildInputsTitleFilmChanged": false,
+  "diffPaths": [
+    "tests/championship-alternate-form-assets-cases.mjs",
+    "tests/championship-character-animation-timeline-cases.mjs",
+    "tests/championship-medal-art-corrections-cases.mjs"
+  ],
+  "uploads": 0,
+  "deniedPathsAccessed": false,
+  "fullCIRerunThisSourceRecovery": false,
+  "focused": {
+    "modules": 34,
+    "status": "PASS",
+    "log": "local-preparation/ci-source-recovery-20261017/ROUND3_FOCUSED.log"
+  }
+}

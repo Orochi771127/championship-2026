@@ -1,0 +1,57 @@
+{
+  "phase": "LOCAL_INDEX_SEPARATION_CHECKPOINT_NOT_RELEASE_READY",
+  "branch": "fix/permanent-public-runtime-20261017",
+  "baseCommit": "c479b2387a23df24a3972f3f094ba009c2e5c03b",
+  "manifestSchemaVersion": 2,
+  "selectedInputs": 7946,
+  "publicAssets": 108,
+  "publicHeroEntries": 59,
+  "authoringHeroEntriesRetained": 96,
+  "publicRenderRoles": [
+    "battle-effects",
+    "raising-feedback",
+    "hunt-feedback",
+    "battle-audio",
+    "shared-vfx"
+  ],
+  "renderedMediaPins": 361,
+  "tests": {
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "permanent index and five render-consumer migration"
+  },
+  "fullCI": "NOT_RUN",
+  "fullBuild": "NOT_PASSED",
+  "closedSourceCompileLastError": "Missing generated assets/production/public-runtime/shop-cage-thumbnails.v1.json; now regenerated at its pre-existing selected hash, no further compile run after status request.",
+  "knownRemainingPrivacyWork": [
+    "Project cage/original-opus-v1/manifest.json into a closed runtime map schema",
+    "Project Hunt accepted-20261010/manifest.json into a closed runtime map schema",
+    "Project Hunt licensed-runtime-v1/manifest.json into a closed runtime map schema"
+  ],
+  "knownSourceBytesLowerBound": 1120997013,
+  "unresolvedSizeAndMaterializationPaths": 237,
+  "capacityGate": "BLOCKED_ALREADY_OVER_1GB_WITH_UNRESOLVED_PATHS_AND_BUNDLE_NOT_COUNTED",
+  "authorityIndex": {
+    "path": "assets/production/ART_PRODUCTION_INDEX.json",
+    "sha256": "3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f",
+    "bytes": 21727,
+    "unchanged": true,
+    "backupRelativeToTaskWorkspace": "private-authoring-backup/permanent-split-3e7b7694/ART_PRODUCTION_INDEX.original.json"
+  },
+  "denial": {
+    "record": "publication-preflight.json / publication-result.json, task workspace",
+    "action": "Upload Pages artifact / deploy current playtest output",
+    "target": "dist/github-playtest/assets/production/ART_PRODUCTION_INDEX.json",
+    "exactOriginalReason": "UNAVAILABLE_IN_EXISTING_RECORDS",
+    "classification": "CONTENT_EXPOSURE_RISK_CONFIRMED_SEPARATELY_ORIGINAL_REVIEW_REASON_NOT_VERIFIED",
+    "newDenial": false,
+    "retried": false
+  },
+  "pushed": false,
+  "merged": false,
+  "deployed": false,
+  "newFullScan": false,
+  "newFullBuild": false,
+  "activeLongProcesses": false
+}

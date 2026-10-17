@@ -332,7 +332,7 @@ class Element extends EventTarget {
 test("the evolution reveal plays once, after the native sequence ends and nothing else owns the screen", async () => {
   const document = { createElement: (tag) => new Element(tag, document) };
   const ceremonies = [];
-  const context = vm.createContext({createTransientHint, consumeRaisingHintDuration, TOOL_HINT_MS, document, Date, console, setTimeout, clearTimeout, productFormText, getLocale, getProductExtension,
+  const context = vm.createContext({originalCageLocationArt:()=>null,createTransientHint, consumeRaisingHintDuration, TOOL_HINT_MS, document, Date, console, setTimeout, clearTimeout, productFormText, getLocale, getProductExtension,
     setText: (node, text) => { node.textContent = text; }, setLabel: (node, key, text) => node.setAttribute(key, text), uiText: (s, p = {}) => Object.entries(p).reduce((t, [k, v]) => t.replace(`{${k}}`, v), String(s)), retranslate: () => {},
     isNativeRanchLayout: () => true, assembledHudArt: () => null, prefersReducedMotion: () => false, speciesName, raisingMessageText: () => "", raisingMessageSender: () => "", downloadSaveBackup: () => ({ key: "ok" }),
     playCeremony: (options) => { const run = { options, disposed: false, dispose() { this.disposed = true; } }; ceremonies.push(run); return run; },

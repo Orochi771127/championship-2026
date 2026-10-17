@@ -1,3 +1,4 @@
+import {loadPublicRenderDescriptor,validatePublicRenderDescriptor} from './publicRenderDescriptors.js';
 import {isLocalBattleEffectPreview} from './battleEffectArt.js';
 import {nativeAnimationCellAt} from './characterAnimationTimeline.js';
 export const HUNT_FEEDBACK_ART_ID='art:vfx:hunt-feedback:local-reference:v1';
@@ -31,62 +32,11 @@ export function huntTrapLayers(object){
   return [object,...secondary.map(binding=>({...object,visualBinding:binding}))];
 }
 
-export function validateHuntFeedbackArt(manifest,index){
-  const entry=index?.entries?.find(e=>e.assetId===HUNT_FEEDBACK_ART_ID);
-  if(manifest?.schemaVersion!==1||manifest.assetId!==HUNT_FEEDBACK_ART_ID||!entry
-    ||[entry,manifest].some(e=>e.manifestPath!==HUNT_FEEDBACK_ART_MANIFEST||e.runtimeEligible!==true||e.localOnly!==true
-      ||e.runtimeScope!=='LOOPBACK_RESEARCH_ONLY'||e.publicReleasePermitted!==false||e.shippingReady!==false
-      ||e.rightsStatus!=='ROM_COPYRIGHTED_REFERENCE'))throw new Error('HUNT_FEEDBACK_NOT_REGISTERED');
-  if(!Array.isArray(manifest.banks)||manifest.banks.length!==19)throw new Error('HUNT_FEEDBACK_BANKS_INVALID');
-  const keys=new Set();
-  for(const bank of manifest.banks){
-    const key=`${bank.kind}:${bank.itemIndex}`;
-    if(keys.has(key)||!/^e002_hunt_[a-z0-9_]+$/.test(bank.bank)||!Number.isInteger(bank.itemIndex))throw new Error('HUNT_FEEDBACK_BANK_INVALID');
-    keys.add(key);const cells=new Set();
-    for(const c of bank.cells){
-      if(!Number.isInteger(c.cell)||c.cell<0||cells.has(c.cell)||c.src!==HUNT_FEEDBACK_ART_MANIFEST.replace('manifest.json',`${bank.bank}/cell-${String(c.cell).padStart(3,'0')}.png`)
-        ||![c.width,c.height].every(n=>Number.isInteger(n)&&n>0)||!Array.isArray(c.origin)||c.origin.length!==2
-        ||!c.origin.every(Number.isInteger)||!/^[a-f0-9]{64}$/.test(c.sha256))throw new Error('HUNT_FEEDBACK_CELL_INVALID');
-      cells.add(c.cell);
-    }
-    for(const s of bank.sequences)if(![1,2].includes(s.playbackMode)||!s.frames.length||s.frames.some(f=>!cells.has(f.cell)||!Number.isInteger(f.ticks)||f.ticks<=0))throw new Error('HUNT_FEEDBACK_TIMELINE_INVALID');
-  }
-  return structuredClone(manifest);
-}
-
-// Ordinary meat (MEAT item 0) shows the original care meat instead of the old
-// reference cells. Hunt sequence 3-tier equals the care pose (tier 3 -> meat-0
-// ... tier 0 -> meat-3), so only cells 0..3 change; timelines, consumption and
-// every other meat kind keep their existing bank. The original raster has
-// density 4, so its logical size/anchor must equal the native cell and the
-// sprite is drawn at HUNT_NATIVE_SCALE/density: the same 64x48 world size.
-export const ORIGINAL_HUNT_MEAT_ART_ID='art:original-ui:dot-intake:20261007:care';
-export const ORIGINAL_HUNT_MEAT_MANIFEST='assets/production/original-ui-intake-20261007/care/manifest.json';
-const HUNT_NATIVE_SCALE=2;
-export function originalHuntMeatCells(manifest,nativeBank){
-  const density=manifest?.scale;
-  if(manifest?.schemaVersion!==1||manifest.assetId!==ORIGINAL_HUNT_MEAT_ART_ID||density!==4
-    ||manifest.publicReleasePermitted!==false||manifest.shippingReady!==false||!Array.isArray(manifest.cells))throw new Error('HUNT_ORIGINAL_MEAT_MANIFEST_INVALID');
-  return [0,1,2,3].map(pose=>{
-    const matches=manifest.cells.filter(c=>c.role==='meat'&&c.pose===pose),c=matches[0];
-    const native=nativeBank?.cells?.find(n=>n.cell===pose);
-    if(matches.length!==1||!native||c.sequenceId!==pose
-      ||c.src!==`assets/production/original-ui-intake-20261007/items/care19/meat-${pose}.png`
-      ||c.nativeWidth!==native.width||c.nativeHeight!==native.height
-      ||c.nativeAnchorX!==native.origin[0]||c.nativeAnchorY!==native.origin[1]
-      ||!/^[a-f0-9]{64}$/.test(c.sha256))throw new Error('HUNT_ORIGINAL_MEAT_CELL_INVALID');
-    return {cell:pose,src:c.src,width:c.nativeWidth,height:c.nativeHeight,origin:[c.nativeAnchorX,c.nativeAnchorY],sha256:c.sha256,
-      rasterWidth:c.nativeWidth*density,rasterHeight:c.nativeHeight*density,displayScale:HUNT_NATIVE_SCALE/density,art:'ORIGINAL_CARE_MEAT'};
-  });
-}
+export function validateHuntFeedbackArt(manifest){return structuredClone(validatePublicRenderDescriptor(manifest,'hunt-feedback'));}
 
 export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=globalThis.fetch,kinds=null}){
   if(!isLocalBattleEffectPreview(baseUrl))return null;
-  const indexResponse=await fetchImpl(new URL('assets/production/ART_PRODUCTION_INDEX.json',baseUrl));
-  if(!indexResponse.ok)throw new Error('HUNT_FEEDBACK_INDEX_UNAVAILABLE');
-  const index=await indexResponse.json();if(!index.entries?.some(e=>e.assetId===HUNT_FEEDBACK_ART_ID&&e.runtimeEligible))return null;
-  const response=await fetchImpl(new URL(HUNT_FEEDBACK_ART_MANIFEST,baseUrl));if(!response.ok)throw new Error('HUNT_FEEDBACK_MANIFEST_UNAVAILABLE');
-  const manifest=validateHuntFeedbackArt(await response.json(),index),banks=new Map(),loaded=[];
+  const manifest=validateHuntFeedbackArt(await loadPublicRenderDescriptor('hunt-feedback',{baseUrl,fetchImpl})),banks=new Map(),loaded=[];
   // Every cell of every bank is independent, so awaiting one at a time made the
   // Hunt field wait for one round trip per cell. Load them all together and
   // assemble the banks from what arrives; failure still unloads everything that
@@ -95,15 +45,7 @@ export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=glob
   // emit mines, bombs or food; downloading all their animation cells delayed
   // the first visible map. Keep every item/sequence of each carried kind.
   const selectedBanks=kinds===null?manifest.banks:manifest.banks.filter(bank=>kinds.includes(bank.kind));
-  const meatIndex=selectedBanks.findIndex(bank=>bank.kind==='MEAT'&&bank.itemIndex===0);
-  if(meatIndex>=0){
-    // No fallback to the old reference cells: a failed original meat rejects
-    // this load exactly like any other missing cell.
-    const meatResponse=await fetchImpl(new URL(ORIGINAL_HUNT_MEAT_MANIFEST,baseUrl));
-    if(!meatResponse.ok)throw new Error('HUNT_ORIGINAL_MEAT_MANIFEST_UNAVAILABLE');
-    const bank=selectedBanks[meatIndex],original=originalHuntMeatCells(await meatResponse.json(),bank);
-    selectedBanks[meatIndex]={...bank,cells:[...original,...bank.cells.filter(c=>c.cell>3)]};
-  }
+  // The export already binds the approved care-meat cells to their native poses.
   const pending=selectedBanks.flatMap(bank=>bank.cells.map(c=>({bank,c})));
   const results=await Promise.allSettled(pending.map(async e=>({...e,texture:await PIXI.Assets.load(e.c.src)})));
   for(const r of results)if(r.status==='fulfilled')loaded.push(r.value.c.src);

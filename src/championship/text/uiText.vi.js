@@ -6,6 +6,11 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
+  "RANCH_PREFETCH_PLANNING": "Đang chuẩn bị hình ảnh các bạn đồng hành hiện tại…",
+  "RANCH_PREFETCH_COMPLETE": "Đã tải hình ảnh các bạn đồng hành hiện tại",
+  "RANCH_PREFETCH_PARTIAL": "Các hình ảnh còn lại sẽ được tải khi tiếp tục chơi",
+  "RANCH_PREFETCH_PROGRESS": "Đang tải hình ảnh bạn đồng hành: {done}/{files} · {mib} MiB",
+
   "MODULE_LOAD_ERROR": "Không thể tải chương trình màn hình. Trò chơi có thể vừa cập nhật hoặc kết nối bị gián đoạn. Hãy lưu rồi tải lại trò chơi; không cần xóa bản lưu.",
   "SCREEN_LOAD_ERROR": "Không thể tải màn hình. Hãy lưu rồi tải lại trò chơi, hoặc lưu rồi trở về màn hình tiêu đề.",
   "CAGE_SLOT_RANK_LOCKED": "Ô {n} đang khóa. Mở khóa ở hạng thuần thú sư {rank}.",

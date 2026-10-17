@@ -57,3 +57,7 @@ _tmp_*
 
 # Local editor/preview configuration. Dev-tool settings, not product source.
 .claude/
+
+# Local review descriptors contain intake metadata. Public render projections
+# must pass the closed artifact boundary before they can replace these inputs.
+assets/production/characters/accepted-20261010/*/ranch-streaming-v1/*/runtime.review.json

@@ -151,8 +151,8 @@ export function createChampionshipStatusBar({ root, onEndDay, onOpenMatches = nu
   setLabel(currencies, "aria-label", "HUD_CURRENCIES");
   function currencyIcon(kind) {
     const icon = element("img", "cm-status-bar__currency-icon");
-    icon.src = new URL(`../../../assets/production/currency-hud-r1/${kind}-24.png`, import.meta.url).href;
-    icon.srcset = `${new URL(`../../../assets/production/currency-hud-r1/${kind}-48.png`, import.meta.url).href} 2x`;
+    icon.src = new URL(`../../../assets/production/public-media-clean-20261017/currency-hud-r1/${kind}-24.png`, import.meta.url).href;
+    icon.srcset = `${new URL(`../../../assets/production/public-media-clean-20261017/currency-hud-r1/${kind}-48.png`, import.meta.url).href} 2x`;
     icon.width = 24;
     icon.height = 24;
     icon.alt = "";

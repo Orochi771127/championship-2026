@@ -6,6 +6,11 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_JA = Object.freeze({
+  "RANCH_PREFETCH_PLANNING": "現在のパートナーの画像を準備中…",
+  "RANCH_PREFETCH_COMPLETE": "現在のパートナーの画像を先にダウンロードしました",
+  "RANCH_PREFETCH_PARTIAL": "残りの画像はゲーム再開時に読み込みます",
+  "RANCH_PREFETCH_PROGRESS": "パートナーの画像をダウンロード中：{done}/{files} · {mib} MiB",
+
   "MODULE_LOAD_ERROR": "画面プログラムを読み込めませんでした。ゲームの更新または通信の中断が原因の可能性があります。保存してゲームを再読み込みしてください。セーブデータを消す必要はありません。",
   "SCREEN_LOAD_ERROR": "画面を読み込めませんでした。保存してゲームを再読み込みするか、保存してタイトルに戻ってください。",
   "CAGE_SLOT_RANK_LOCKED": "{n}番のマスは未開放です。テイマーランク{rank}で開放されます。",

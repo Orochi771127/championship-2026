@@ -2,7 +2,7 @@ import { originalShopCageThumbnail } from './originalShopCageArt.js';
 // Presentation of the existing production fields and traced editor coordinates.
 // The editor's slot ownership is authoritative; no geometry here places a cage.
 // The runtime cage fields (Owner 2026-10-06: original opus art replaces the licensed pixels).
-import manifest from '../../../assets/production/cage/original-opus-v1/manifest.json' with { type: 'json' };
+import manifest from '../../../assets/production/public-runtime/cage-ui.map.v1.json' with { type: 'json' };
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productGridCell } from '../cage/productRanchGrid.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
@@ -11,7 +11,6 @@ import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from '
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import { cageName } from '../text/zhHant.js';
 import { uiText } from '../text/uiText.js';
-import { assembledCageArt, assembledShopArt } from './assembledUiArt.js';
 
 const art = validateRuntimeMapArtBundle(manifest);
 export function cageUiName(moduleId, fallback = '') {
@@ -45,13 +44,13 @@ export function cageUiLidImage() {
 export function cageUiImage(moduleId, baseUrl) {
   // The runtime field picture comes first, so the editor shows the same cage art as the ranch.
   const definition = getCageDefinitionByModuleId(moduleId);
-  return runtimeFieldFrame(definition) ?? assembledCageArt(definition?.cageDefinitionIndex, baseUrl)?.src ?? null;
+  return runtimeFieldFrame(definition);
 }
 export function shopCageUiImage(shopRecordIndex, baseUrl) {
   const original = originalShopCageThumbnail(shopRecordIndex, baseUrl);
   if (original) return original.src;
   const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
-  return definition ? assembledShopArt(shopRecordIndex, baseUrl)?.src ?? cageUiImage(definition.moduleId, baseUrl) : null;
+  return definition ? cageUiImage(definition.moduleId, baseUrl) : null;
 }
 export function cageEditorArtCells(slots, baseUrl, { productGrid = false } = {}) {
   // An expansion annex slot (20..29) is drawn on its own board with the same
@@ -73,11 +72,10 @@ export function cageEditorArtCells(slots, baseUrl, { productGrid = false } = {})
     const width = (Math.max(...peers.map((entry) => entry.x)) - left + 24) * 2;
     const height = (Math.max(...peers.map((entry) => entry.y)) - top + 28) * 2;
     const definition = getCageDefinitionByModuleId(cell.moduleId);
-    const thumbnail = runtimeFieldFrame(definition) ? null : assembledCageArt(definition?.cageDefinitionIndex, baseUrl);
     const image = cageUiImage(cell.moduleId, baseUrl);
     const field = art.fields.find(field=>field.frames[0]?.src === image);
-    const sourceWidth = thumbnail?.width ?? field?.worldWidthPx ?? width;
-    const sourceHeight = thumbnail?.height ?? field?.worldHeightPx ?? height;
+    const sourceWidth = field?.worldWidthPx ?? width;
+    const sourceHeight = field?.worldHeightPx ?? height;
     const scale = Math.min(width / sourceWidth, height / sourceHeight);
     const imageWidth = sourceWidth * scale;
     const imageHeight = sourceHeight * scale;

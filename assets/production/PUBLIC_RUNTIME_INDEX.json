@@ -1,0 +1,932 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "art:battle-select:menu-cube:v1",
+      "src": "assets/production/battle/menu-cube-v1/public-manifest.json",
+      "sha256": "eaebcb5e4e7a6a82e4b849f3913e62c20cfa7533101f967311b753488abdc3e0"
+    },
+    {
+      "id": "art:public:battle-audio:v1",
+      "src": "assets/production/public-runtime/battle-audio.render.v1.json",
+      "sha256": "98d24b4c5f371aa29f3344fd33f050c7a46ba97f183a13c4c8dfff5e6b04fa3f"
+    },
+    {
+      "id": "art:public:battle-effects:v1",
+      "src": "assets/production/public-runtime/battle-effects.render.v1.json",
+      "sha256": "50bfda1b33cb6761318076ca88719cfadf9a05e1f6d52bf5b0faf55a6e8b41b6"
+    },
+    {
+      "id": "art:public:hunt-feedback:v1",
+      "src": "assets/production/public-runtime/hunt-feedback.render.v1.json",
+      "sha256": "b8bd1f823511a21f26953343a79647e982d59f0eb85793ca98ac7ac69e539e72"
+    },
+    {
+      "id": "art:public:map:cage-final:v1",
+      "src": "assets/production/public-runtime/cage-final.map.v1.json",
+      "sha256": "831e5b8847c9b3ecce5b9cb5e7540add262bfe0ece3ec57436b8ec8022afa70f"
+    },
+    {
+      "id": "art:public:map:cage-ui:v1",
+      "src": "assets/production/public-runtime/cage-ui.map.v1.json",
+      "sha256": "e268843d61a131d84c6f067a83ffba559f7e063a1995503fff87c234657ff14a"
+    },
+    {
+      "id": "art:public:map:hunt-accepted:v1",
+      "src": "assets/production/public-runtime/hunt-accepted.map.v1.json",
+      "sha256": "b166e93985a6db3374f2210a9c747b8cc3960f00fcbd845dcb84af47bf4ebc5a"
+    },
+    {
+      "id": "art:public:map:hunt-night:v1",
+      "src": "assets/production/public-runtime/hunt-night.map.v1.json",
+      "sha256": "378866ffeee3c1686fadd47eaba57aaf4d296eb039d892fe3bb9f7f0f67ff454"
+    },
+    {
+      "id": "art:public:metadata:arena-harbor:v1",
+      "src": "assets/production/public-runtime/metadata/arena-harbor.v1.json",
+      "sha256": "58558814387d03bf3eb61207684b4621d5c79a75e628dac2f15de6440a58c46a"
+    },
+    {
+      "id": "art:public:metadata:arena-interactions:v1",
+      "src": "assets/production/public-runtime/metadata/arena-interactions.v1.json",
+      "sha256": "4fa60b2e646abd8e70e60cab1bbfc6f311da4d68e17c91116ba8112cc26697de"
+    },
+    {
+      "id": "art:public:metadata:arena-tournament:v1",
+      "src": "assets/production/public-runtime/metadata/arena-tournament.v1.json",
+      "sha256": "af8c4713a29bb7810081242b089d72e38e75809d2d1d88412de00ed971ed78bf"
+    },
+    {
+      "id": "art:public:metadata:battle-baseline:v1",
+      "src": "assets/production/public-runtime/metadata/battle-baseline.v1.json",
+      "sha256": "10f0c8172d5d2ef9d73a059fabdef2e536f8a7a6857bb209e5cba8127e6184fb"
+    },
+    {
+      "id": "art:public:metadata:battle-original:v1",
+      "src": "assets/production/public-runtime/metadata/battle-original.v1.json",
+      "sha256": "243ef3d501ce89a1d65ce09fc55d428dbd17328fad276e085f7aa949722e1b97"
+    },
+    {
+      "id": "art:public:metadata:cage-foreground-cm03:v1",
+      "src": "assets/production/public-runtime/metadata/cage-foreground-cm03.v1.json",
+      "sha256": "55c79a382a25349c89c6147fddef9d60f59581a83224874313a2366181f6edef"
+    },
+    {
+      "id": "art:public:metadata:cage-foreground-cm24:v1",
+      "src": "assets/production/public-runtime/metadata/cage-foreground-cm24.v1.json",
+      "sha256": "d46068e01a2d830c55f24d9698410238fb8e0b75d57ee8bc67c7e864b6ec3909"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-1026f2478622db83:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-1026f2478622db83.v1.json",
+      "sha256": "8937bbbea36ac7c0a15d79893385893b924d1366c4c45c2bf59ac29d6e6d7e00"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-241530dcb2297dd4:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-241530dcb2297dd4.v1.json",
+      "sha256": "3a8b871c3f780e1b33d97fd68c2951f7083db7ca2a2abacca45ee1ab514be612"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-2c91b6f103681d1b:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-2c91b6f103681d1b.v1.json",
+      "sha256": "00324d1bf899c57f6cdc3c1868243e8dca0b0cb5b9bfdd8b0b92b6024bd1524b"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-2f22cb70a03fbbe3:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-2f22cb70a03fbbe3.v1.json",
+      "sha256": "72e2b90e43f995eeae37229ad1bf3f54dc31387e9bb9917e464cbd2be5320d25"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-2fa4c9e40e160995:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-2fa4c9e40e160995.v1.json",
+      "sha256": "ddc990e84ccb5b39987e8731c6d75738d1d786b38ce7dd0b764c808e2797b354"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-53f22da4aead53a0:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-53f22da4aead53a0.v1.json",
+      "sha256": "ecb67fa9499409f688cee4cf74e1d083e975f811964030b278cf479259fe221a"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-55ec9b8e24bda096:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-55ec9b8e24bda096.v1.json",
+      "sha256": "72d002e59ae612e8edad92185bf09fc1e1f8218d55ec8105ea1caeca27316602"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-73bf9954a5a9a88c:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-73bf9954a5a9a88c.v1.json",
+      "sha256": "a5dc9a952bf7e0b7ebb8b4f2a8e09b8109a498b7e2a970503bd1e2854d87bf5c"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-78c74373717d6013:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-78c74373717d6013.v1.json",
+      "sha256": "62627b11a0ceb4bd7cc60f0b5ba66a999018c0a900e051645fe7f44980850bb0"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-8f40180df1053d35:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-8f40180df1053d35.v1.json",
+      "sha256": "0b015c6dfbeb1eedb5e32bedc381835ba154bbe2786423d6a088563ac8accec0"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-99d912765fc8ebd9:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-99d912765fc8ebd9.v1.json",
+      "sha256": "00324d1bf899c57f6cdc3c1868243e8dca0b0cb5b9bfdd8b0b92b6024bd1524b"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-b360f5a346a99a99:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-b360f5a346a99a99.v1.json",
+      "sha256": "14ad7997aea5e83d1a687d54f952aea602af7eaea6d0c100703041a81720b19c"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-b9f654a8f3bab983:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-b9f654a8f3bab983.v1.json",
+      "sha256": "a5dc9a952bf7e0b7ebb8b4f2a8e09b8109a498b7e2a970503bd1e2854d87bf5c"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-ba7a1ed0a6502364:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-ba7a1ed0a6502364.v1.json",
+      "sha256": "56539ac49a6cd3239ad0fea2dcc4ee98b4041057ea5622c51b88cae99b937cd5"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-c108e2efd05f1f25:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-c108e2efd05f1f25.v1.json",
+      "sha256": "f8bf8fb5dd47663c5e0632647e9b4a9400924217d3f69ac5099e07e15d3aaa7a"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-c1c66fca38b3da70:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-c1c66fca38b3da70.v1.json",
+      "sha256": "ada32c2f2e18bfa094d2f6d471645560192812ffa7bf36125dedd7f5c837ad94"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-c9195b3759569c56:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-c9195b3759569c56.v1.json",
+      "sha256": "b87b6724e4da60988d4ccf42c6ed2eef3920a678e4fe0a13a6ccaa438f61b4d5"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-cd6fb1df144a7003:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-cd6fb1df144a7003.v1.json",
+      "sha256": "56539ac49a6cd3239ad0fea2dcc4ee98b4041057ea5622c51b88cae99b937cd5"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-d78fc01d9c429a87:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-d78fc01d9c429a87.v1.json",
+      "sha256": "446f5401e29d6d373bce6d4b8766d3da20d366f8784901c94eadc56463588903"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-df7808e9fb563a28:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-df7808e9fb563a28.v1.json",
+      "sha256": "cfd3296c9833129c9a7cb499b404f638603db506860d0cb9e1d3334d46a52ff1"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-e9c1f41b8af50c56:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-e9c1f41b8af50c56.v1.json",
+      "sha256": "ddc990e84ccb5b39987e8731c6d75738d1d786b38ce7dd0b764c808e2797b354"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-eb50c8a4daea72b6:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-eb50c8a4daea72b6.v1.json",
+      "sha256": "14ad7997aea5e83d1a687d54f952aea602af7eaea6d0c100703041a81720b19c"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-fc6037f673a7b327:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-fc6037f673a7b327.v1.json",
+      "sha256": "dbfed9561fe4daf9df957ace19a2ba165ebe729292c7aab9b827d6471fb6574c"
+    },
+    {
+      "id": "art:public:metadata:vfx-material:v1",
+      "src": "assets/production/public-runtime/metadata/vfx-material.v1.json",
+      "sha256": "6be11b4bc8c3af361fa3eea151fc263c8b1515b938392480e6ffc9e984b125db"
+    },
+    {
+      "id": "art:public:metadata:vfx-runtime:v1",
+      "src": "assets/production/public-runtime/metadata/vfx-runtime.v1.json",
+      "sha256": "57f61635532c290384120762f506b14b2a8040533e8bedb64d67f2a578d472d8"
+    },
+    {
+      "id": "art:public:metadata:vfx-visibility:v1",
+      "src": "assets/production/public-runtime/metadata/vfx-visibility.v1.json",
+      "sha256": "5c3763aa069bd4ccd2c77d5d8306c91dac53b4a8a2265e7060f09ab924f1de60"
+    },
+    {
+      "id": "art:public:raising-feedback:v1",
+      "src": "assets/production/public-runtime/raising-feedback.render.v1.json",
+      "sha256": "0117557917ec500cc9a8c7f8c5167b5c79cc25059dec8df07cba7d8e4891a23a"
+    },
+    {
+      "id": "art:public:shared-vfx:v1",
+      "src": "assets/production/public-runtime/shared-vfx.render.v1.json",
+      "sha256": "2ad6378d344c320c04d14a6070583f136febd9134f64b84923f79f5e1519c4ba"
+    },
+    {
+      "id": "art:shop:cage-thumbnails:v1",
+      "src": "assets/production/public-runtime/shop-cage-thumbnails.v1.json",
+      "sha256": "d049241e1a2177cee5f31baf8a606b5184fccabe3679841c5a29982002bd7098"
+    },
+    {
+      "id": "art:shop:cage:100",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-100_item-14_field_cm15_01.png",
+      "sha256": "d6e1823d3786d9945515e0ff9f9cbd4c19d3c604579815e4cf07b29b1077b520",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:101",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-101_item-29_field_cm32_01.png",
+      "sha256": "7b47ed7a29ea742f9050d4178161abf33ecc254c8aa2fc7cc36fb53dbaee7998",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:102",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-102_item-17_field_cm18_01.png",
+      "sha256": "3b5c2d85aa959bd3f2e14901d368dc25d01ba3acd7436bcbb97b6b4ba0032be2",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:103",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-103_item-13_field_cm14_01.png",
+      "sha256": "35616e22cf30f0aa2a82c3aacbf1222315ac61f3c592eb9a4a223be60239b09a",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:104",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-104_item-19_field_cm20_01.png",
+      "sha256": "d866f69a222acb6097ca6dcf8fff68a07c3ae31733a703c9a3bbd15c1a491fdd",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:105",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-105_item-20_field_cm21_01.png",
+      "sha256": "d56322b4b78742d0e04cc5acf193dcbb369c628b51efc78a786edf787d24631e",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:106",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-106_item-21_field_cm22_01.png",
+      "sha256": "e9327875fdd4f94cb2c0471d47224dd7c1319f3596e2612b40a155613fe15d14",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:107",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-107_item-12_field_cm13_01.png",
+      "sha256": "115fddecc995d13a947128f00ec247495ef7375683b2a189b7d799eb77d8c922",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:108",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-108_item-34_field_cm40_01.png",
+      "sha256": "761abd50299c1ccf4000d912a8afa1b7cfef3dad2e1715c46396073a7fd97143",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:109",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-109_item-05_field_cm06_01.png",
+      "sha256": "c4454bc76ee0246a08220f4b072364ade7691a3b6fe59697f40041f829f493ed",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:110",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-110_item-16_field_cm17_01.png",
+      "sha256": "e9356e457f8d02e4009ceefc1e154a24c03bcb7df112302e80493b7a4540f13e",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:111",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-111_item-22_field_cm23_01.png",
+      "sha256": "dbc7ab688fe4abb893d1e860aef1a6d35af1ae732a5a70115dca8017776ec192",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:112",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-112_item-15_field_cm16_01.png",
+      "sha256": "16712055cd933c3b65e479590f382f67e29eabfed923f11de8239832b8553b82",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:113",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-113_item-28_field_cm31_01.png",
+      "sha256": "20f15937f6309973c13dec1357b885973822fd44c948ab6640377cba1c18946f",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:114",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-114_item-18_field_cm19_01.png",
+      "sha256": "cc0e48209608d52eb02e71707a9c7f9483b0924c2be7220d71d583e7f7f1a540",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:115",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-115_item-24_field_cm25_01.png",
+      "sha256": "a9b0297f68687cc3f550b981319d485731adbb61c86374e43a7d7e7d0b31b461",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:116",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-116_item-25_field_cm26_01.png",
+      "sha256": "dc3f41397d59daa78dbee7c1cdb58c4b2d46cb7c009900ac62461e7f3f53909e",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:117",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-117_item-26_field_cm27_01.png",
+      "sha256": "f1ec2918de50e9183a838b8608c3530130a538f4b94b98071da972c9566fd485",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:83",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-083_item-00_field_cm01_01.png",
+      "sha256": "81074b5f0d1e22cf92bb64adf64a8bd16ff91a8d917ab9403baf89bf430adef6",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:84",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-084_item-27_field_cm30_01.png",
+      "sha256": "681cfdd027d2121301d413b5ffaea14e871743a227ff8fd95aaef2f07062d95c",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:85",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-085_item-01_field_cm02_01.png",
+      "sha256": "7d17f3f1ace05ee2af16f4761a4df22a6a163c51c322f075b5eacf0e5185e478",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:86",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-086_item-02_field_cm03_01.png",
+      "sha256": "7b26c26400adf0826263512df235938eb00574372513094808992ebabdbcdf63",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:87",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-087_item-03_field_cm04_01.png",
+      "sha256": "d646a7cb6340e0950faf7bcbda83e1ac6b21d061a54b0dda80d6e5e1c490d5a9",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:88",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-088_item-30_field_cm34_01.png",
+      "sha256": "33624555e29dba3de7e7465f196af262d7955fe4de4c118439e048f650f71361",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:89",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-089_item-04_field_cm05_01.png",
+      "sha256": "6d195c2bd46348d2f9a557a138ca374a1ac4251ccc3b40666831038c81cdbd20",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:90",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-090_item-23_field_cm24_01.png",
+      "sha256": "434bb61c87353cd5528d017ca28515d3922846afc0ae9b099682c5438d26a113",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:91",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-091_item-07_field_cm08_01.png",
+      "sha256": "51ea70dc54df9f32bcf75cb5aa2476abc5d8a24971362b6dd389c7e830903042",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:92",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-092_item-31_field_cm35_01.png",
+      "sha256": "6b748eb06d4d2f5aff54d1318972c4e395fd668583f17b335091dcc15107b8b5",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:93",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-093_item-06_field_cm07_01.png",
+      "sha256": "9e83eb03c89ec10001fc363dab779c155e974dba9825add60c8031d154d8377a",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:94",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-094_item-33_field_cm39_01.png",
+      "sha256": "c45e010b234430aad7053a36f24f35b4e7a6235090b85ab3fc71a12d0e58f670",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:95",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-095_item-08_field_cm09_01.png",
+      "sha256": "ebc119160851f6fbf0a05256eed9fef4d9b0a84a78e7cf0799eb7d3a94d2c758",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:96",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-096_item-32_field_cm37_01.png",
+      "sha256": "14bfb8f7a145e0d95df412fa71e9d4fcadc89469a28bc2b4bf76fb7f50fa0794",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:97",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-097_item-09_field_cm10_01.png",
+      "sha256": "7b2a16b9e95255ec71468233e4d858b7319265d7c1738c328e7eb329fed3b5fa",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:98",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-098_item-10_field_cm11_01.png",
+      "sha256": "fed9e25fe4051853d01c301fa5707b70a56019c49fc962ef31ac8657878c3add",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:shop:cage:99",
+      "src": "assets/production/cage/shop-final-20261008/thumbnails/shop-099_item-11_field_cm12_01.png",
+      "sha256": "0986dbecb7ee80d70dc60a2544bd336390a54267a166cee0869f2d785535b901",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "id": "art:toolbar:licensed:feed-rest",
+      "src": "assets/production/toolbar/licensed-runtime-v1/feed-rest.png",
+      "sha256": "86811d0ff41964fffe7c843b76fe44d8a6f8f33786710a6f95f0f115b5bb9fb5",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "id": "art:toolbar:licensed:medicine-rest",
+      "src": "assets/production/toolbar/licensed-runtime-v1/medicine-rest.png",
+      "sha256": "61da78324ee0ab1345e4ddcc8975b113380efdde0eab6093031972dce64cf63b",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "id": "art:toolbar:licensed:protein-rest",
+      "src": "assets/production/toolbar/licensed-runtime-v1/protein-rest.png",
+      "sha256": "6815ea424b466b3ab812041a3241046ef47b8ba194a5d629a1decd9096c5e8d4",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "id": "art:toolbar:licensed:woundMedicine-rest",
+      "src": "assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png",
+      "sha256": "6925fd121cd7cf5e9185de5e93cf8256e39038a1b9208715db3e0850728ea570",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "id": "art:ui:capture-frame:a:default",
+      "src": "assets/production/ui/capture-frame-a-v1/default.23d67f8d950520a9.svg",
+      "sha256": "23d67f8d950520a930f25630030ca4982e1e925f488d7ec296dffb35be153aab",
+      "width": 320,
+      "height": 320
+    },
+    {
+      "id": "art:ui:capture-frame:a:release-confirm",
+      "src": "assets/production/ui/capture-frame-a-v1/release-confirm.a5e9b94ce74c8825.svg",
+      "sha256": "a5e9b94ce74c88256023f5972befd295a9d9922833225fba13ab6091cc8de3ec",
+      "width": 320,
+      "height": 320
+    },
+    {
+      "id": "art:ui:capture-frame:a:selected",
+      "src": "assets/production/ui/capture-frame-a-v1/selected.2e83f9041d0f0dd4.svg",
+      "sha256": "2e83f9041d0f0dd461b689c5c3fd954b30e510216850b5c686956af862377148",
+      "width": 320,
+      "height": 320
+    },
+    {
+      "id": "species-008:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B101.webp",
+      "sha256": "8789a2abc42af316fd005e55a1b81be2e821db5e6a53f8432c238e5ad2fed782",
+      "width": 1375,
+      "height": 1144
+    },
+    {
+      "id": "species-009:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B102.eb7c0e50feb53dc2.png",
+      "sha256": "eb7c0e50feb53dc2eb16a12f0457de8911318011aea08526fea2a184472a7f72",
+      "width": 1323,
+      "height": 1189
+    },
+    {
+      "id": "species-010:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B103.db66d79eb40c3768.png",
+      "sha256": "db66d79eb40c3768b2addfa247c82d7ca2d749f5ba52d9c96778a5787cc53824",
+      "width": 1312,
+      "height": 1199
+    },
+    {
+      "id": "species-011:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B104.webp",
+      "sha256": "e2bd9568408ef0fc8bf77a17d49a1b2834f289166325e62b076a792f47c91a90",
+      "width": 1402,
+      "height": 1122
+    },
+    {
+      "id": "species-012:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B105.webp",
+      "sha256": "ed499503f3c89c6d0475152dcf89666cc8700b793462557e669c3b0c0141f8bb",
+      "width": 1312,
+      "height": 1199
+    },
+    {
+      "id": "species-013:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B107.webp",
+      "sha256": "11071954c096ee1e181f8b096ad7a191967621deff3b2b897915e0fa900dcf02",
+      "width": 1199,
+      "height": 1312
+    },
+    {
+      "id": "species-014:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B108.webp",
+      "sha256": "46dde528d8da946a954f1a81e5d8f0a35fae665b6dd2921e40a705f3bbc854a2",
+      "width": 1402,
+      "height": 1122
+    },
+    {
+      "id": "species-015:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B109.webp",
+      "sha256": "3f887bd16a8e4d7773ded040b9a5ab9d893398789999a0c1a77635a795661655",
+      "width": 1402,
+      "height": 1122
+    },
+    {
+      "id": "species-016:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B110.webp",
+      "sha256": "3664c85128f4b05addbd33a4b42d917b441fb0c7648f4ad0a1f22e90c7874172",
+      "width": 1122,
+      "height": 1402
+    },
+    {
+      "id": "species-017:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B111.webp",
+      "sha256": "65506c2a0bccd3c0c50787f7709947e96ec79d8d4a5529eddfecbb566ed05ed2",
+      "width": 1312,
+      "height": 1199
+    },
+    {
+      "id": "species-018:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B112.webp",
+      "sha256": "5ba32d312e07e8b8c8ca0095c2d05fc099f48940defaa451f47e1ff4e29922e0",
+      "width": 1312,
+      "height": 1199
+    },
+    {
+      "id": "species-019:database-hero",
+      "src": "assets/production/database-portraits-b1-20261014/B106.webp",
+      "sha256": "53b9e96e74b3077ebf2fedc2ab426e077851d2f2e6b0549f9f80d853f8bb1e65",
+      "width": 1199,
+      "height": 1312
+    },
+    {
+      "id": "species-034:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-034.png",
+      "sha256": "cc4ff1b755fbb34e88c0cb67d0ede8f0099e8ea2b38f32e6d973118a7b70b819",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-035:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png",
+      "sha256": "291db6a498c8bdbd5e5b2196c8f9a629ec44a1ba55674e103dc596e6827fe6d4",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "id": "species-036:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
+      "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d",
+      "width": 1415,
+      "height": 1111
+    },
+    {
+      "id": "species-037:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-037.png",
+      "sha256": "ec0b71f17141e05a0ef0d9dc8c0be07e3b9b881064928ba7f6baab9c7b603414",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-038:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-038.png",
+      "sha256": "6f2bd7dd3a4770fed9989ab7488e4f7a9f9d6a98f0a0aa7a7cf4a646330cb0d4",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-039:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-039.a22eae194967e17d.png",
+      "sha256": "a22eae194967e17d6aca6cac06ca249ef0fd223a0687c10923e33d78e3d710ec",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-040:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png",
+      "sha256": "a5d0d48e737f81e0c955286a94923fe3b70d6483813ee233aedb80a8d89bc3ae",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-041:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-041.679bfc5abc699a5e.png",
+      "sha256": "679bfc5abc699a5e8795443ed2cf1117087fdf8138fbcbbe5d651731b09e4a29",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-042:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-042.d5dcc1491759eea7.png",
+      "sha256": "d5dcc1491759eea7e2f02aeb4ae819997df7a67c9a50c019f3666c6da625feb4",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-043:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-043.png",
+      "sha256": "4b192def5c28832daa183c42556ad8f616f4d3e7f45a75f100c0df15b3e383ec",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-044:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-044.png",
+      "sha256": "6c05160ec1933769c1151a17f7e2006c167d2f7211413fb7149d76d449f16952",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-045:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-045.5252dd103f05bc11.png",
+      "sha256": "5252dd103f05bc111158a75d193c3dc0793051614190f42645b99bb4f00f2453",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-046:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-046.ed04f491cd22524e.png",
+      "sha256": "ed04f491cd22524e5afd9ed106318c64f3def1f789f9acde7bcf66629b555362",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-047:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-047.png",
+      "sha256": "c91b03594ac7424c879595dfd5eb7918dab740aee88f05ce61e4e437cafa9442",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-048:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-048.png",
+      "sha256": "32706df1c06c960e024dd9a39e11780201680bd552590d8b0afd17ccb1835a8c",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-049:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-049.376bd37739caf2ad.png",
+      "sha256": "376bd37739caf2ad58093c5701e313efc6ebac1f3a7ae1de363a97ee89907b55",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-050:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-050.4da662245939ae14.png",
+      "sha256": "4da662245939ae142d013e9a0a5cea1642438791d94cf1991f68c96e7a7a1b58",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-051:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-051.4005fcb499a215ca.png",
+      "sha256": "4005fcb499a215cae40c0fdd7803bae6091a5a290e33f0bafbad260b70856a24",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-052:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-052.e2a1ae73e1e1baab.png",
+      "sha256": "e2a1ae73e1e1baabf7e131067ba16d1d68f5d63eff48d8689cd5c7d4b2ac4a05",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-053:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-053.a07a52ab7f1501c4.png",
+      "sha256": "a07a52ab7f1501c40b283d43af35a2f0b07294c42541dd89c72e8dbbca366716",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-054:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-054.653364ea2b2dbdd5.png",
+      "sha256": "653364ea2b2dbdd50e3edd100da021ab1cafe2208fe1d61103bca445177fda41",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-055:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-055.32e6689b5e9669c2.png",
+      "sha256": "32e6689b5e9669c26fb0d29f3201ace2d5d619309381ab628d57f5eabc5d693e",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-056:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-056.f7c3f093351f4965.png",
+      "sha256": "f7c3f093351f49656d23822132c807f06908aad40bfd8c3e8607429424ca7eb5",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-057:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-057.001820f22618bab0.png",
+      "sha256": "001820f22618bab0360081efbc760ef15bc99969c39c5bb4c67a47c86b234295",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-058:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-058.85ac0a27d7121cef.png",
+      "sha256": "85ac0a27d7121cef246ba2c911ab452b6bcb97b3284a09edd1ae6cbfcd07d1fc",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-059:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-059.d808c556efd2a029.png",
+      "sha256": "d808c556efd2a0291a3d38973783951c41199bdb779bbff913511afbbefff9d6",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-060:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-060.7a8efa91b909b615.png",
+      "sha256": "7a8efa91b909b615bab9af95cce073d6184a5df830db6c98932c6827d1a1f523",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-061:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-061.df2dcf13586b2025.png",
+      "sha256": "df2dcf13586b20252a75c6b333034bc38f345fdb15fe099f0b826eb60410e112",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-062:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-062.ad0745c733532dc2.png",
+      "sha256": "ad0745c733532dc288c5143194e9020e35cd071e74347e7a3851911db136e52d",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-063:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-063.e403a93ec4f2d7ec.png",
+      "sha256": "e403a93ec4f2d7ec24273c2f2f3d861feeec11848d55450989230b2c93283f8a",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-064:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-064.1fd9b11486ee01a1.png",
+      "sha256": "1fd9b11486ee01a10e912aff8c0b571f8112a3c6cf9e6ee050d2807897f122b9",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-065:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-065.297304ab3fa37f43.png",
+      "sha256": "297304ab3fa37f43d5f3d07c3b4b7469d83f6d720506c11a4d651da0d7726755",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-066:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-066.18cfe71dbf919d32.png",
+      "sha256": "18cfe71dbf919d323616ec17d05ac6f59edaffac5f5e97548434463bda694e9a",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-067:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-067.d3b4711e2fef8428.png",
+      "sha256": "d3b4711e2fef84288d8f8005760a2c0e9222f5167f3eb37e9ac845cc226d7b41",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-068:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-068.fd96778e08b01ee7.png",
+      "sha256": "fd96778e08b01ee77a8a594ce29485bf0330369885b6b593cb4a8297836da20b",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-069:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-069.cf92eaf941781156.png",
+      "sha256": "cf92eaf9417811567ba46df948bd14fa7ee0f297d3a4662508771ec23a114e5a",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-070:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-070.2dc33277d80cdfb4.png",
+      "sha256": "2dc33277d80cdfb4577bee1d369adb59545b4ccc735a4f90fff342087a1ba738",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-071:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png",
+      "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-072:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-072.4ca0e10b98584a76.png",
+      "sha256": "4ca0e10b98584a76aec0c283b6c5628d34122bd7d60aa63411c7cc2156bfca43",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-117:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-117.8f7d027cdbf6d3e6.png",
+      "sha256": "8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-125:database-hero",
+      "src": "assets/production/database-approved-main-20261017/species-125.2b59a46a702490d4.webp",
+      "sha256": "2b59a46a702490d43d726166b0df35386dbd5016b8c4fa013ae7a0f4ad6454a6",
+      "width": 1448,
+      "height": 1086
+    },
+    {
+      "id": "species-189:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-189.8c9cac7746647500.png",
+      "sha256": "8c9cac7746647500066880fbd869e188d1f3c83fb1ea3069c5e1d3ba8798ee64",
+      "width": 1324,
+      "height": 1188
+    },
+    {
+      "id": "species-211:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-211.png",
+      "sha256": "20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-215:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-215.png",
+      "sha256": "5beb29a5ce1ac558404cd8430748d985f24d892e779323f0c0de441b69bd4df9",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-222:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-222.png",
+      "sha256": "4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-229:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-229.png",
+      "sha256": "f1e1a23e891b9345f4b759e910c5f67efd8a844a2de53e14183a1a2fe3310424",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "species-230:database-hero",
+      "src": "assets/production/database-handpainted-r1-20261015/species-230.png",
+      "sha256": "09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39",
+      "width": 1254,
+      "height": 1254
+    }
+  ]
+}

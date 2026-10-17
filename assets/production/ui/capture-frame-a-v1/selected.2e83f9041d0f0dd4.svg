@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320"><defs><linearGradient id="metal" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#fff7c2"/><stop offset=".16" stop-color="#f6cc5b"/><stop offset=".36" stop-color="#c68b22"/><stop offset=".56" stop-color="#f0bd42"/><stop offset=".78" stop-color="#b97b1d"/><stop offset="1" stop-color="#e3b24f"/></linearGradient><linearGradient id="chamfer" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff9db"/><stop offset=".48" stop-color="#ffe792"/><stop offset="1" stop-color="#9b641f"/></linearGradient><linearGradient id="rail" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8d5a22"/><stop offset=".5" stop-color="#f9d574"/><stop offset="1" stop-color="#6b411b"/></linearGradient></defs><path d="M14 60 56 16H150L164 26H266L306 66V262L264 306H58L14 262Z M38 64 64 38H256L282 64V256L256 282H64L38 256Z" fill="#20170c" fill-rule="evenodd" stroke="#20170c" stroke-width="7" stroke-linejoin="round" transform="translate(0 3)"/>
+ <path d="M14 60 56 16H150L164 26H266L306 66V262L264 306H58L14 262Z M38 64 64 38H256L282 64V256L256 282H64L38 256Z" fill="url(#metal)" fill-rule="evenodd" stroke="#6b4118" stroke-width="2"/>
+ <path d="M18 60 57 20H149L162 30H264L300 66" fill="none" stroke="#fff7cd" stroke-width="3"/>
+ <path d="M301 67V261L262 301H59L19 261" fill="none" stroke="#9a631e" stroke-width="5"/>
+ <path d="M39 65 65 39H255L281 65V255L255 281H65L39 255Z" fill="none" stroke="#5e401e" stroke-width="6"/>
+ <path d="M42 66 66 42H254L278 66V254L254 278H66L42 254Z" fill="none" stroke="#f6d87e" stroke-width="1.8"/>
+ <path d="M25 75V57L58 25H94L82 37H65L37 65V96Z" fill="url(#chamfer)" stroke="#a66b20" stroke-width="1.4"/>
+ <path d="M25 116V160L33 168V112Z M25 178V217L33 225V170Z" fill="url(#rail)"/>
+ <path d="M294 108V145L286 153V105Z M294 167V211L286 220V159Z" fill="url(#rail)"/>
+ <path d="M66 294H124L132 286H70Z M155 294H203L211 286H147Z" fill="#82521c"/>
+ <path d="M78 290H119 M158 290H197" stroke="#fff4bd" stroke-width="2"/>
+ <path d="M214 21H259L291 53V75L278 62V57L252 32H208Z" fill="#83531a" stroke="#5e3814" stroke-width="1.5"/>
+ <path d="M218 18H260L296 54V66L285 55 254 27H213Z" fill="url(#chamfer)" stroke="#fff1b0" stroke-width="1.2"/>
+ <path d="M235 29H252L275 50H258Z" fill="#a77327"/><path d="M238 28H250L268 44H257Z" fill="#82e5c8"/>
+ <path d="M48 272 65 289H89L79 279H69L55 265Z" fill="url(#chamfer)" stroke="#8c5b22" stroke-width="1.3"/>
+ <path d="M270 263 287 248V263L262 291H238L246 281H257Z" fill="url(#chamfer)" stroke="#81521b" stroke-width="1.4"/>
+ <path d="m265 270 10-10 m-5 18 10-10" stroke="#fff5bf" stroke-width="2"/>
+ <path d="M99 25H123 M44 221V238 M293 82V92" stroke="#fff9dc" stroke-width="2"/>
+ <circle cx="49" cy="48" r="4" fill="#7c511e"/><circle cx="49" cy="47" r="2" fill="#ffe99e"/>
+ <circle cx="272" cy="274" r="3" fill="#734817"/>
+ <path d="M142 22H157L165 30H181L176 35H161L154 28H138Z" fill="#82e5c8" stroke="#a16a26" stroke-width="1"/><path d="m7 94 5-8v42l-5-8z m306 94 5-8v42l-5-8z" fill="#82e5c8"/><path d="M11 49 49 11M271 310l39-39" stroke="#91ebd2" stroke-width="2"/></svg>

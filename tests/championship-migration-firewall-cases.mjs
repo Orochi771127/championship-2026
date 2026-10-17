@@ -43,6 +43,16 @@ const HISTORICAL_NAMESPACE = /NexusLink|NEXUS_|nexus:/i;
 
 test("runtime has no external repository, CDN, or research import", () => {
   const offenders = runtimeText().filter(({ file, text }) => {
+    if(relative(file)==='src/data/championship/public-playtest-runtime.v1.json'){
+      const policy=JSON.parse(text);assert.equal(policy.origin,'https://orochi771127.github.io');
+      assert.equal(policy.basePath,'/championship-2026/');const {origin,...rest}=policy;
+      return EXTERNAL_DEPENDENCY.test(JSON.stringify(rest));
+    }
+    if(relative(file)==='src/championship/presentation/publicMetadata.js'){
+      // The only URL literal is the controlled-reader loopback default.
+      assert.match(text,/'http:\/\/localhost\/'/);
+      return EXTERNAL_DEPENDENCY.test(text.replaceAll("'http://localhost/'","''"));
+    }
     if (relative(file) === 'src/data/championship/public-playtest.r1.json') {
       // These two exact policy values identify the Owner's destination; they
       // are not remote imports. All remaining policy text is still checked.
@@ -242,8 +252,15 @@ test("one save key, one persistent writer, one Pixi bootstrap and no second tick
   const layoutFrames=sources.filter(({text})=>/requestAnimationFrame\s*\(/.test(text));
   assert.deepEqual(layoutFrames.map(({file})=>relative(file)),[
     'src/championship/app/huntLayoutResolver.js',
+    'src/championship/app/main.js',
     'src/championship/presentation/medals/medalThreePresentation.js'
   ]);
+  const titleSource=layoutFrames.find(({file})=>relative(file).endsWith('/app/main.js')).text;
+  const titleSchedule=titleSource.slice(titleSource.indexOf('function scheduleRanchTitlePreload()'),titleSource.indexOf('const openingPresentation='));
+  assert.equal((titleSchedule.match(/requestAnimationFrame\s*\(/g)??[]).length,2);
+  assert.match(titleSchedule,/token!==ranchTitlePreloadToken\|\|titleScreen.hidden/);
+  assert.match(titleSchedule,/ranchTitlePreloader\.start\(inspected.save\)/);
+  assert.doesNotMatch(titleSchedule,/\.step\(|\.advance\(|Ticker|setInterval/);
   // Owner-approved selected medal detail uses one cancelable invalidation
   // queue, never an additional simulation or continuous animation ticker.
   const medal=layoutFrames.find(({file})=>relative(file).endsWith('/medalThreePresentation.js')).text;
