@@ -3,9 +3,8 @@
 //
 // The four care goods share the existing toolbar cells. Other goods use the
 // separately registered complete-cell selections where assembledUiArt allows.
-// Each bundle keeps its own runtime scope and production-index validation.
-import manifest from '../../../assets/production/toolbar/licensed-runtime-v1/manifest.json' with {type:'json'};
-import productionIndex from '../../../assets/production/ART_PRODUCTION_INDEX.json' with {type:'json'};
+// The licensed fallback resolves only exact public runtime selections.
+import {publicRuntimeAsset} from './publicRuntimeAssets.js';
 import {getShopRecord} from '../shop/shopCatalog.js';
 import {originalShopItemArt, originalToolbarArt} from './completedOriginalUi20261007.js';
 import {getHuntCatalogItem} from '../hunt/loadout/huntEquipmentCatalog.js';
@@ -35,15 +34,16 @@ export function shopGoodsPresentation(shopRecordIndex, baseUrl) {
   if (!binding) return null;
   const record = getShopRecord(shopRecordIndex);
   if (record.category !== 'TRAINING_GOODS' || record.itemIndex !== binding.itemIndex) return null;
-  const enabled = manifest.runtimeEligible === true && productionIndex.entries.some(entry =>
-    entry.assetId === manifest.assetId && entry.runtimeEligible === true);
   // A shop row shows an item at rest, so it takes the rest pose, not the lit
   // one the rail uses for the tool currently in hand.
-  const cell = manifest.cells.find(entry => entry.role === `${binding.icon}-rest`);
+  const role = `${binding.icon}-rest`;
+  const cell = publicRuntimeAsset(`art:toolbar:licensed:${role}`);
+  const expectedSrc = `assets/production/toolbar/licensed-runtime-v1/${role}.png`;
+  if(cell && cell.src !== expectedSrc) throw new Error('SHOP_TOOLBAR_PUBLIC_SELECTION_MISMATCH');
   return Object.freeze({name:binding.name, icon:binding.icon, itemIndex:binding.itemIndex,
-    src:enabled && cell ? cell.src : null,
+    src:cell?.src ?? null,
     backgroundPosition:'center',
-    identityEvidence:'VERIFIED_BINARY', imageEvidence:manifest.productionStatus});
+    identityEvidence:'VERIFIED_BINARY', imageEvidence:'OWNER_APPROVED_LICENSED_PIXEL_RUNTIME'});
 }
 
 // Hunt, loadout and Shop share an equipped item's canonical identity. A class

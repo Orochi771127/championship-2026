@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {auditPagesModuleClosure} from './pages-module-closure.mjs';
+import {selectedShopCageProjection,SHOP_CAGE_PUBLIC} from './public-shop-cage-projection.mjs';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -22,7 +23,7 @@ export function forbiddenPublicPath(file){
 }
 
 // This is a new, closed runtime schema. Never spread/clone an authority-index row.
-export function publicRuntimeIndex(allowlist,internalIndex={entries:[]}){
+export function publicRuntimeIndex(allowlist,internalIndex={entries:[]},selectedOriginalFiles=new Map()){
   if(!exactKeys(allowlist,['schemaVersion','files','assets'])||allowlist.schemaVersion!==1
     ||!Array.isArray(allowlist.files)||!Array.isArray(allowlist.assets))throw Error('PUBLIC_ALLOWLIST_SCHEMA');
   const fileMap=new Map(),ids=new Set(),blockedIds=new Set(),blockedRoots=[];
@@ -32,7 +33,7 @@ export function publicRuntimeIndex(allowlist,internalIndex={entries:[]}){
     }
   }
   for(const row of allowlist.files){
-    if(!exactKeys(row,['path','sha256','jsonFields'])||forbiddenPublicPath(row.path)||blockedRoots.some(root=>row.path.startsWith(root))
+    if(!exactKeys(row,['path','sha256','jsonFields'])||forbiddenPublicPath(row.path)||(blockedRoots.some(root=>row.path.startsWith(root))&&selectedOriginalFiles.get(row.path)!==row.sha256)
       ||!/^[a-f0-9]{64}$/.test(row.sha256)||fileMap.has(row.path))throw Error('PUBLIC_ALLOWLIST_FILE: '+row?.path);
     if(row.jsonFields!==undefined&&(!Array.isArray(row.jsonFields)||new Set(row.jsonFields).size!==row.jsonFields.length
       ||row.jsonFields.some(key=>typeof key!=='string'||privateKey.test(key))))throw Error('PUBLIC_JSON_SCHEMA_INVALID: '+row.path);
@@ -41,7 +42,7 @@ export function publicRuntimeIndex(allowlist,internalIndex={entries:[]}){
   const assets=allowlist.assets.map(row=>{
     if(!exactKeys(row,['id','src','sha256','width','height'])||typeof row.id!=='string'||!/^[a-z0-9][a-z0-9:._-]{1,159}$/i.test(row.id)
       ||ids.has(row.id)||blockedIds.has(row.id)||privateValue.test(row.id)||!row.src?.startsWith('assets/production/')
-      ||forbiddenPublicPath(row.src)||blockedRoots.some(root=>row.src.startsWith(root))||fileMap.get(row.src)!==row.sha256
+      ||forbiddenPublicPath(row.src)||(blockedRoots.some(root=>row.src.startsWith(root))&&selectedOriginalFiles.get(row.src)!==row.sha256)||fileMap.get(row.src)!==row.sha256
       ||!/^[a-f0-9]{64}$/.test(row.sha256))throw Error('PUBLIC_ALLOWLIST_ASSET: '+row?.id);
     ids.add(row.id);
     const result={id:row.id,src:row.src,sha256:row.sha256};
@@ -96,7 +97,14 @@ export function publicArtifactPlan({root,input,index}){
   const filename=path.join(root,PUBLIC_RUNTIME_ALLOWLIST_PATH);
   if(!fs.existsSync(filename))throw Error('PUBLIC_ALLOWLIST_REQUIRED');
   const allowlist=JSON.parse(fs.readFileSync(filename,'utf8'));
-  const runtime=publicRuntimeIndex(allowlist,index),files=allowlist.files.map(row=>row.path),available=new Set(files);
+  const projection=selectedShopCageProjection({root,input,index});
+  const runtime=publicRuntimeIndex(allowlist,index,projection.files),files=allowlist.files.map(row=>row.path),available=new Set(files);
+  if(projection.manifest){
+    const bytes=Buffer.from(JSON.stringify(projection.manifest,null,2)+'\n');
+    if(!available.has(SHOP_CAGE_PUBLIC)||!fs.readFileSync(path.join(root,SHOP_CAGE_PUBLIC)).equals(bytes)
+      ||allowlist.files.find(row=>row.path===SHOP_CAGE_PUBLIC)?.sha256!==sha(bytes)
+      ||[...projection.files].some(([file,hash])=>allowlist.files.find(row=>row.path===file)?.sha256!==hash))throw Error('PUBLIC_SHOP_CAGE_PROJECTION_MISMATCH');
+  }
   if(!available.has('championship.html')||!available.has(PUBLIC_RUNTIME_INDEX_PATH))throw Error('PUBLIC_ALLOWLIST_ENTRY_REQUIRED');
   for(const file of files)if(!input.files.includes(file))throw Error('PUBLIC_ALLOWLIST_OUTSIDE_BUILD_INPUTS: '+file);
   const expected=Buffer.from(JSON.stringify(runtime,null,2)+'\n');
