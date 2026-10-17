@@ -8,6 +8,7 @@ import {assertPagesPayloadSize} from './pages-payload-size.mjs';
 import {assertPublicCharacterSelection} from './public-character-boundary.mjs';
 import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS} from './public-render-projection.mjs';
 import {selectedMapProjections,PUBLIC_MAP_FIELDS} from './public-map-projection.mjs';
+import {projectPublicMetadata} from './public-metadata-projection.mjs';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -109,7 +110,8 @@ export function publicArtifactPlan({root,input,index}){
   const projection=selectedShopCageProjection({root,input,index});
   const render=input.files.includes('src/championship/presentation/publicRenderDescriptors.js')?projectPublicRenderSources({root,input,index}):{descriptors:[],media:new Map()};
   const maps=selectedMapProjections({root,input});
-  const renderedMedia=new Map([...projection.files,...render.media,...maps.files]);
+  const metadata=projectPublicMetadata({root,input});
+  const renderedMedia=new Map([...projection.files,...render.media,...maps.files,...metadata.media]);
   const runtime=publicRuntimeIndex(allowlist,index,renderedMedia),files=allowlist.files.map(row=>row.path),available=new Set(files);
   for(const descriptor of render.descriptors){
     const selected=allowlist.assets.find(row=>row.id===descriptor.id),file=path.join(root,descriptor.path);
@@ -125,6 +127,11 @@ export function publicArtifactPlan({root,input,index}){
     assertPublicBytes(descriptor.path,descriptor.bytes,{jsonFields:PUBLIC_MAP_FIELDS});
   }
   for(const [file,hash] of maps.files)if(allowlist.files.find(row=>row.path===file)?.sha256!==hash)throw Error('PUBLIC_MAP_MEDIA_NOT_SELECTED:'+file);
+  for(const descriptor of metadata.descriptors){
+    const selected=allowlist.assets.find(row=>row.id===descriptor.id),file=path.join(root,descriptor.path);
+    if(selected?.src!==descriptor.path||selected.sha256!==descriptor.sha256||!available.has(descriptor.path)||!fs.existsSync(file)||!fs.readFileSync(file).equals(descriptor.bytes))throw Error('PUBLIC_METADATA_PROJECTION_DRIFT:'+descriptor.role);
+    assertPublicBytes(descriptor.path,descriptor.bytes,{jsonFields:descriptor.jsonFields});
+  }
   if(projection.manifest){
     const bytes=Buffer.from(JSON.stringify(projection.manifest,null,2)+'\n');
     if(!available.has(SHOP_CAGE_PUBLIC)||!fs.readFileSync(path.join(root,SHOP_CAGE_PUBLIC)).equals(bytes)

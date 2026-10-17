@@ -3,7 +3,11 @@ import {publicHudCharacterConfig} from './publicCharacterCatalog.js';
 import {databaseHeroPortrait} from './databaseHeroPortraits.js';
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 
-export const acceptedDatabasePortraitConfig=speciesIndex=>publicHudCharacterConfig(`species-${String(speciesIndex).padStart(3,'0')}`);
+export function acceptedDatabasePortraitConfig(speciesIndex){
+ const extension=getProductExtension(speciesIndex);
+ if(extension&&(!extension.runtimeReady||!extension.evolutionReady))return null;
+ return publicHudCharacterConfig(`species-${String(speciesIndex).padStart(3,'0')}`);
+}
 export function validateAcceptedDatabasePortrait(manifest,config){
  const portrait=manifest?.portrait;
  if(!config||manifest.schemaVersion!==1||manifest.entityId!==config.entityId||portrait?.entityId!==config.entityId
@@ -38,6 +42,7 @@ export async function loadAcceptedDatabasePortrait(speciesIndex,{
  baseUrl=globalThis.document?.baseURI,fetchImpl=globalThis.fetch,signal,revealed=true
 }={}){
  if(!revealed)return null;
+ signal?.throwIfAborted();
  const config=acceptedDatabasePortraitConfig(speciesIndex);
  if(!config){const illustration=acceptedDatabaseIllustrationPreview(speciesIndex);if(!illustration)return null;signal?.throwIfAborted();return Object.freeze({...illustration,src:new URL(illustration.src,baseUrl).href});}
  const response=await fetchImpl(new URL(config.hudPath,baseUrl),{signal});if(!response.ok)throw Error('DATABASE_PORTRAIT_UNAVAILABLE');

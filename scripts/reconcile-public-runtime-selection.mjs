@@ -3,6 +3,7 @@ import {publicRuntimeIndex,PUBLIC_RUNTIME_INDEX_PATH,PUBLIC_RUNTIME_ALLOWLIST_PA
 import {selectedShopCageProjection} from './lib/public-shop-cage-projection.mjs';
 import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS,PUBLIC_RENDER_RECIPE} from './lib/public-render-projection.mjs';
 import {selectedMapProjections,MAP_RECIPE,PUBLIC_MAP_FIELDS} from './lib/public-map-projection.mjs';
+import {projectPublicMetadata,METADATA_RECIPE} from './lib/public-metadata-projection.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -11,7 +12,8 @@ const inputPath='docs/contracts/championship/WEB_BUILD_INPUTS.v1.json',input=rea
 const index=read('assets/production/ART_PRODUCTION_INDEX.json'),heroes=read('src/data/championship/database-hero-portraits.public.v1.json');
 const render=projectPublicRenderSources({root,input,index}),shop=selectedShopCageProjection({root,input,index});
 const maps=selectedMapProjections({root,input});
-const selectedOriginal=new Map([...shop.files,...render.media,...maps.files]);
+const metadata=projectPublicMetadata({root,input});
+const selectedOriginal=new Map([...shop.files,...render.media,...maps.files,...metadata.media]);
 const activeHeroes=new Set(heroes.entries.map(row=>row.src));
 const excluded=[];
 const buildOnly=new Set(['assets/production/ART_PRODUCTION_INDEX.json','src/data/championship/public-playtest.r1.json',
@@ -20,6 +22,8 @@ const buildOnly=new Set(['assets/production/ART_PRODUCTION_INDEX.json','src/data
  ...read(PUBLIC_RENDER_RECIPE).sources.map(row=>row.path)]);
 read(MAP_RECIPE).sources.forEach(row=>buildOnly.add(row.path));
 buildOnly.add('assets/production/hunt/licensed-runtime-v1/manifest.json');
+read(METADATA_RECIPE).sources.forEach(row=>buildOnly.add(row.path));
+buildOnly.add('assets/production/cage/licensed-runtime-v1/manifest.json');
 // Explicit loopback art-review tools are absent from the normal browser bundle.
 // Keep their source in Git, outside the public program entry/closure.
 for(const name of ['candidateCharacterArtReview.js','candidateCharacterHudReview.js','m001CharacterArtReview.js','m001CharacterHudReview.js'])buildOnly.add('src/championship/presentation/'+name);
@@ -32,6 +36,10 @@ allow.assets=allow.assets.filter(row=>!row.id.endsWith(':database-hero'));
 allow.assets.push(...heroes.entries.map(row=>({id:`${row.speciesId}:database-hero`,src:row.src,sha256:row.sha256,width:row.width,height:row.height})));
 const rows=new Map(allow.files.map(row=>[row.path,row]));
 const refreshed=['src/data/championship/database-hero-portraits.public.v1.json','src/championship/presentation/publicRenderDescriptors.js',
+ 'src/championship/presentation/publicMetadata.js','src/championship/presentation/cageForeground.js',
+ 'src/championship/presentation/acceptedDatabasePortraits.js',
+ 'src/championship/presentation/vfx/licensedVfxRuntimeBundle.js',
+ ...['dataArenaEnvironment.js','dataArenaInteractionArt.js','dataArenaTournamentArt.js'].map(name=>'src/championship/presentation/dataArena/'+name),
  'src/championship/presentation/publicMapRequests.js','src/championship/presentation/runtimeMapArtBundle.js',
  'src/championship/presentation/cageUiArt.js','src/championship/presentation/huntMobileReadouts.js',
  'src/championship/presentation/finalHuntArt20261008.js','src/championship/app/main.js',
@@ -58,6 +66,11 @@ for(const [file,hash] of maps.files){
  // Geometry files retain their previously selected closed schema.
  rows.set(file,existing??{path:file,sha256:hash});
 }
+for(const descriptor of metadata.descriptors){
+ if(!fs.readFileSync(path.join(root,descriptor.path)).equals(descriptor.bytes))throw Error('PUBLIC_METADATA_EXPORT_REQUIRED:'+descriptor.role);
+ rows.set(descriptor.path,{path:descriptor.path,sha256:descriptor.sha256,jsonFields:descriptor.jsonFields});
+ allow.assets=allow.assets.filter(row=>row.id!==descriptor.id);allow.assets.push({id:descriptor.id,src:descriptor.path,sha256:descriptor.sha256});
+}
 allow.files=[...rows.values()].sort((a,b)=>a.path.localeCompare(b.path,'en'));
 allow.assets.sort((a,b)=>a.id.localeCompare(b.id,'en'));
 const runtime=publicRuntimeIndex(allow,index,selectedOriginal);write(PUBLIC_RUNTIME_INDEX_PATH,runtime);
@@ -65,6 +78,7 @@ allow.files.find(row=>row.path===PUBLIC_RUNTIME_INDEX_PATH).sha256=sha(fs.readFi
 write(PUBLIC_RUNTIME_ALLOWLIST_PATH,allow);
 input.schemaVersion=2;
 input.authoring={indexPath:'assets/production/ART_PRODUCTION_INDEX.json',policyPath:'src/data/championship/public-playtest.r1.json',renderRecipePath:PUBLIC_RENDER_RECIPE};
+input.authoring.metadataRecipePath=METADATA_RECIPE;
 input.files=allow.files.map(row=>row.path);
 const available=new Set(input.files);input.moduleEntries=input.moduleEntries.filter(file=>available.has(file));
 input.publicPlaytest.files=allow.files.map(({path,sha256})=>({path,sha256}));

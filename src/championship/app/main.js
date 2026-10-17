@@ -3,6 +3,7 @@ import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTranspor
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation} from '../presentation/originalRuntimeLocation.js';
 import { finalHuntArtManifestUrl } from '../presentation/finalHuntArt20261008.js';
 import {publicMapManifestPath,fetchRuntimeMapResponse} from '../presentation/publicMapRequests.js';
+import {publicMetadataPath,fetchPublicMetadataResponse} from '../presentation/publicMetadata.js';
 import {factoryShutterSpec} from '../presentation/vs2/huntFactoryShutters.js';
 import {loadHuntDepthOccluders,withHuntDepthOccluders} from '../presentation/vs2/huntDepthOccluders.js';
 import { getActiveGameTitle, getTitleEyebrow, getTitleHeadingHtml } from "../text/brandTerms.js";
@@ -188,8 +189,8 @@ const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
     ? "assets/production/battle/bm07-quiet-review-r1/manifest.json"
     : LOCAL_MAP_REVIEW.get("battleReview") === "bm03-volcano-r2"
       ? "assets/production/battle/bm03-volcano-review-r2/manifest.json"
-      : "assets/production/battle/original-opus-v1/manifest.json")
-  : "assets/production/battle/licensed-runtime-v1/manifest.json";
+      : publicMetadataPath('battle-original'))
+  : publicMetadataPath('battle-baseline');
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
@@ -674,7 +675,7 @@ async function loadOptionalBattleFieldArt(stage, source) {
   const wanted = BATTLE_ART_PREVIEW_FIELD || source?.getFrame()?.arena?.field || null;
   if (!wanted) return null;
   try {
-    const response = await fetch(new URL(LICENSED_BATTLE_ART_MANIFEST_URL, globalThis.location.href));
+    const response = await fetchPublicMetadataResponse(LICENSED_BATTLE_ART_MANIFEST_URL, globalThis.location.href);
     if (!response.ok) throw new Error(`BATTLE_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
     if (!manifest.fields.some((field) => field.fieldId === wanted)) return null;

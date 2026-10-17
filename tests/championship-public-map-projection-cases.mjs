@@ -28,7 +28,8 @@ test('map exports preserve every frame, clock, footprint, native pixel scale and
    for(const key of ['worldWidthPx','worldHeightPx','nativeWidthPx','nativeHeightPx','nativePixelWorldScale','visualRole','gameplayBinding','gateMapping','collisionBinding','visualPaddingNative','rasterPixelsPerNative'])assert.deepEqual(b[key],a[key],key);
    assert.deepEqual(b.frames,a.frames.map(({src,sha256,durationMs,rasterWidthPx,rasterHeightPx})=>Object.fromEntries(Object.entries({src,sha256:sha256.toLowerCase(),durationMs,rasterWidthPx,rasterHeightPx}).filter(([,v])=>v!==undefined))));
    if(a.depthOccluders){
-    for(const key of ['pieceCount','bandNativePx','pieces','atlases','animationFrames'])assert.deepEqual(b.depthOccluders[key],a.depthOccluders[key]);
+    for(const key of ['pieceCount','bandNativePx','atlases','animationFrames'])assert.deepEqual(b.depthOccluders[key],a.depthOccluders[key]);
+    assert.deepEqual(read(b.depthOccluders.pieces.src).pieces,read(a.depthOccluders.pieces.src).pieces);
    }
   }
  }

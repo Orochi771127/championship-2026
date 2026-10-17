@@ -29,12 +29,19 @@ export function selectedMapProjections({root,input}){
   ||policy.acceptedOriginalRuntime.selectionId!=='ACCEPTED_ORIGINAL_RUNTIME_20261010')throw Error('PUBLIC_MAP_SOURCE_POLICY');
  const approved=new Map(input.publicPlaytest.files.map(row=>[row.path,row.sha256]));
  const mediaPins=new Map(recipe.mediaPins.map(row=>[row.path,row.sha256])),files=new Map(),descriptors=[];
+ const metadataPath=path.join(root,'docs/contracts/championship/PUBLIC_METADATA_SOURCES.v1.json');
+ const geometry=new Map(fs.existsSync(metadataPath)?JSON.parse(fs.readFileSync(metadataPath,'utf8')).sources.filter(row=>row.type==='HUNT_DEPTH').map(row=>[row.path,row]):[]);
  for(const row of recipe.sources){
   const bytes=fs.readFileSync(path.join(root,row.path));if(sha(bytes)!==row.sha256)throw Error('PUBLIC_MAP_SOURCE_CHANGED_REVIEW_REQUIRED:'+row.role);
   const value=publicMapProjection(JSON.parse(bytes));
   const visit=item=>{if(Array.isArray(item)){item.forEach(visit);return;}if(item&&typeof item==='object'){
    if(typeof item.src==='string'&&typeof item.sha256==='string'){
-    if(mediaPins.get(item.src)!==item.sha256||approved.get(item.src)!==item.sha256)throw Error('PUBLIC_MAP_MEDIA_NOT_APPROVED:'+item.src);
+    const source=geometry.get(item.src);
+    if(source){
+     const raw=fs.readFileSync(path.join(root,source.path));if(sha(raw)!==source.sha256||mediaPins.get(item.src)!==source.sha256||item.sha256!==source.sha256)throw Error('PUBLIC_HUNT_GEOMETRY_SOURCE_CHANGED');
+     const bytes=Buffer.from(JSON.stringify({schemaVersion:1,renderType:'HUNT_DEPTH',pieces:JSON.parse(raw).pieces},null,2)+'\n');
+     item.src=`assets/production/public-runtime/metadata/${source.role}.v1.json`;item.sha256=sha(bytes);
+    }else if(mediaPins.get(item.src)!==item.sha256||approved.get(item.src)!==item.sha256)throw Error('PUBLIC_MAP_MEDIA_NOT_APPROVED:'+item.src);
     files.set(item.src,item.sha256);
    }
    Object.values(item).forEach(visit);

@@ -1,3 +1,4 @@
+import {publicMapManifestPath} from '../src/championship/presentation/publicMapRequests.js';
 import {isOriginalRuntimeLocation} from '../src/championship/presentation/originalRuntimeLocation.js';
 // Owner 2026-10-06: the original Blender cage fields (opus rounds r1-r17) replace the
 // licensed pixel fields at runtime. Art only: collision, walkability, ranch placement and
@@ -55,12 +56,12 @@ test('sizes and animated ground timings match the fields they replace', () => {
 test('the ranch loader reads the new bundle; the licensed bundle stays stored but unused', () => {
   const main = fs.readFileSync('src/championship/app/main.js', 'utf8');
   const expression = main.match(/const CAGE_ART_MANIFEST_URL = ([\s\S]*?);/)[1];
-  const select = hostname => Function('isOriginalRuntimeLocation', 'return '+expression)(()=>isOriginalRuntimeLocation({hostname}));
+  const select = hostname => Function('isOriginalRuntimeLocation','publicMapManifestPath', 'return '+expression)(()=>isOriginalRuntimeLocation({hostname}),publicMapManifestPath);
   for (const host of ['localhost','127.0.0.1','[::1]'])
-    assert.equal(select(host), 'assets/production/cage/final-intake-20261008/manifest.json');
+    assert.equal(select(host), 'assets/production/public-runtime/cage-final.map.v1.json');
   for (const host of ['orochi771127.github.io','example.com','localhost.evil.test'])
-    assert.equal(select(host), 'assets/production/cage/original-opus-v1/manifest.json');
-  assert.equal(Function('isOriginalRuntimeLocation','return '+expression)(()=>isOriginalRuntimeLocation('https://orochi771127.github.io/championship-2026/')), 'assets/production/cage/final-intake-20261008/manifest.json');
+    assert.equal(select(host), 'assets/production/public-runtime/cage-ui.map.v1.json');
+  assert.equal(Function('isOriginalRuntimeLocation','publicMapManifestPath','return '+expression)(()=>isOriginalRuntimeLocation('https://orochi771127.github.io/championship-2026/'),publicMapManifestPath), 'assets/production/public-runtime/cage-final.map.v1.json');
   assert.doesNotMatch(main, /cage\/licensed-runtime-v1/);
   assert.ok(fs.existsSync('assets/production/cage/licensed-runtime-v1/manifest.json'));
 });

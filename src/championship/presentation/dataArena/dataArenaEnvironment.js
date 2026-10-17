@@ -2,9 +2,10 @@
 // its own asset scope. No model weights, custom nodes or extra ticker at runtime.
 import { createPixiAssetScope } from "../pixiCharacterRuntimeBundle.js";
 import {loadTournamentStoneArt,mountTournamentStoneArt}from './dataArenaTournamentArt.js';
+import {publicMetadataPath,loadPublicMetadata} from '../publicMetadata.js';
 
 // Owner-authorized test release. Visual checkpoint, not final art acceptance.
-export const HARBOR_ART_URL = "assets/production/data-arena/harbor-blender-r6/manifest.json";
+export const HARBOR_ART_URL = publicMetadataPath('arena-harbor');
 
 export function dataArenaEnvironmentFloorOffset(grid, x, y, manifest) {
   const col = grid.cellOf(x), row = grid.cellOf(y);
@@ -20,8 +21,8 @@ export function dataArenaEnvironmentFloorOffset(grid, x, y, manifest) {
   return floor.ground;
 }
 
-export async function loadDataArenaEnvironment({ PIXI, map, quality = "high", href, signal }) {
-  if(!map.stage&&map.cols===24&&map.rows===16)return loadTournamentStoneArt({PIXI,map,quality,href,signal});
+export async function loadDataArenaEnvironment({ PIXI, map, quality = "high", href, signal, fetchImpl }) {
+  if(!map.stage&&map.cols===24&&map.rows===16)return loadTournamentStoneArt({PIXI,map,quality,href,signal,fetchImpl});
   if (!map.stage || map.cols !== 60 || map.rows !== 40 || map.cell !== 64) return null;
   const scope = createPixiAssetScope(PIXI, href, { signal });
   const held = new Set();
@@ -35,7 +36,7 @@ export async function loadDataArenaEnvironment({ PIXI, map, quality = "high", hr
   };
   try {
     const version = 'r6';
-    const manifest = await load(HARBOR_ART_URL);
+    const manifest = await loadPublicMetadata('arena-harbor',{baseHref:href,signal,fetchImpl});
     if (manifest.id !== `data-arena:harbor:blender:${version}` || manifest.world.width !== map.cols * map.cell
       || manifest.world.height !== map.rows * map.cell || manifest.layoutSignature !== JSON.stringify(map)) {
       throw new Error("DATA_ARENA_ENVIRONMENT_GEOMETRY_MISMATCH");

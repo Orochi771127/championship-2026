@@ -1,0 +1,21 @@
+??52 source descriptions remain byte-identical; only 33 required runtime descriptions are selected (55.2119ms)
+??public descriptions cannot contain source archives, authoring flags or unknown root fields (2.6974ms)
+??all 23 Hunt occlusion piece arrays remain exactly equal, with no collision or actor-state data added (21.0679ms)
+??battle projections retain every field/frame/duration/native coordinate (0.7813ms)
+??CM03/CM24 public foreground produces exactly the same masks and depth plan as its authoring source (2.7994ms)
+??arena mounted sprites, depth, animation and reduced-motion sampling equal the original renderer inputs (10.2444ms)
+??arena render projections retain sprite placement, quality pixels, timing and immutable map signature (1.2692ms)
+??VFX visibility and material samplers are equal on every original frame, with the same model bindings (3.0518ms)
+??runtime metadata fetch is hash-bound; changed bytes and private fields fail closed (8.9685ms)
+??disabled fixture: resolution and save ancestry remain fail-closed, never cast IDs (2.7067ms)
+??disabled fixture: no new choices or inherited target activation (1.6493ms)
+??disabled fixture: every public password/link entry rejects new forms (6.8982ms)
+??disabled fixture: no live alternate assets or new Dex preview leakage (0.6919ms)
+??tests 13
+??suites 0
+??pass 13
+??fail 0
+??cancelled 0
+??skipped 0
+??todo 0
+??duration_ms 354.7297
