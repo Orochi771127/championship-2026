@@ -5,15 +5,15 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
   doc = globalThis.document, win = globalThis.window, AudioClass = globalThis.Audio,
   timers = globalThis, onState = () => {}, resolveCue = id => id } = {}) {
   let requested = null, desired = null, current = null, pending = null, serial = 0;
-  let unlocked = false, hidden = doc?.visibilityState === 'hidden', disposed = false;
+  let unlocked = false, hidden = doc?.visibilityState === 'hidden', disposed = false, scenePaused = false;
   let fadeTimer = null, error = null, starts = 0;
   const slots = [], playedResults = new Set();
-  const audible = () => { const p = bus.levels(); return !p.muted && p.masterVolume > 0 && p.musicVolume > 0; };
+  const audible = () => { const p = bus.levels(); return !scenePaused && !p.muted && p.masterVolume > 0 && p.musicVolume > 0; };
   const state = () => Object.freeze({ cue: desired?.id ?? null, key: desired?.key ?? null,
     requestedCue: requested?.id ?? null, scene: requested?.scene ?? null,
     playing: current && !current.media.paused ? current.id : null, pending: pending?.id ?? null,
     voices: slots.filter(s => !s.media.paused).length, slots: slots.length, starts, unlocked, hidden,
-    paused: Boolean(current?.media.paused), position: current?.media.currentTime ?? 0,
+    paused: Boolean(current?.media.paused), scenePaused, exclusive: Boolean(desired?.exclusive), position: current?.media.currentTime ?? 0,
     initialBuffering: Boolean(unlocked&&!hidden&&audible()&&(pending??current)&&!(pending??current).startupReady&&!(pending??current).media.paused), error });
   const emit = () => onState(state());
   function gain(slot, value, seconds = 0) {
@@ -48,11 +48,14 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     if (disposed || !desired || !unlocked || hidden || !audible()) return;
     const cue = cues[desired.id];
     if (!cue.loop && playedResults.has(desired.attemptId)) return;
+    // An exclusive scene owns one playing stream, including entry and exit.
+    // Ordinary scenes retain their existing short crossfades.
+    if (current && (desired.exclusive || current.exclusive)) release(current);
     retireOther();
     const slot = availableSlot();
     if (!slot) { error = 'MUSIC_OUTPUT_UNAVAILABLE'; emit(); return; }
     const request = serial, token = ++slot.generation, key = desired.key;
-    slot.id = desired.id; slot.key = key; slot.startupReady=false; pending = slot; error = null;
+    slot.id = desired.id; slot.key = key; slot.exclusive = Boolean(desired.exclusive); slot.startupReady=false; pending = slot; error = null;
     const valid = () => !disposed && slot.generation === token && !hidden && audible()
       && ((pending === slot && serial === request) || (current === slot && desired?.key === key));
     const fail = reason => {
@@ -60,7 +63,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
       error = String(reason?.message ?? reason ?? 'MUSIC_LOAD_FAILED');
       release(slot); release(current); emit();
     };
-    slot.media.loop = Boolean(cue.loop && !cue.crossfade);
+    slot.media.loop = Boolean(cue.loop && (slot.exclusive || !cue.crossfade));
     slot.media.onloadedmetadata = () => { if (valid()) slot.media.currentTime = cue.trimStart ?? 0; };
     const buffered = () => {
       if(!valid()||slot.startupReady)return;
@@ -77,7 +80,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
       else { release(slot); emit(); }
     };
     slot.media.ontimeupdate = () => {
-      if (current !== slot || pending || !cue.loop || !cue.crossfade || !valid()) return;
+      if (current !== slot || pending || slot.exclusive || !cue.loop || !cue.crossfade || !valid()) return;
       const end = slot.media.duration - (cue.trimEnd ?? 0);
       if (Number.isFinite(end) && slot.media.currentTime >= end - cue.crossfade) begin();
     };
@@ -112,6 +115,8 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     if (!unlocked || hidden || !audible()) { pause(); return; }
     if (!desired) { retireOther(); release(current); emit(); return; }
     if (current?.key === desired.key) {
+      current.exclusive = Boolean(desired.exclusive);
+      current.media.loop = Boolean(cues[current.id].loop && (current.exclusive || !cues[current.id].crossfade));
       if (current.media.paused) {
         const slot = current, token = serial, generation = slot.generation;
         if (slot.resuming === token) return;
@@ -149,21 +154,27 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     // A stale preference never invents a URL or replaces intentional silence.
     const id = chosen != null && cues[chosen] ? chosen : sourceId;
     const attemptId = requested?.attemptId ?? null;
-    const next = id == null ? null : { id, attemptId, key: cues[id].loop ? id : `${id}:${attemptId}` };
+    const next = id == null ? null : { id, attemptId, key: cues[id].loop ? id : `${id}:${attemptId}`, exclusive: Boolean(requested?.exclusive) };
     if (next && !cues[id].loop && attemptId == null) return false;
-    if (next?.key === desired?.key) return false;
+    if (next?.key === desired?.key && next?.exclusive === desired?.exclusive) return false;
     serial++; retireOther(); desired = next; error = null;
     if (next && !cues[id].loop && playedResults.has(attemptId)) { release(current); emit(); return true; }
     reconcile(); emit(); return true;
   }
   return Object.freeze({
-    setScene(id, attemptId = null, scene = null) {
+    setScene(id, attemptId = null, scene = null, options = {}) {
       if (id != null && !cues[id]) throw new RangeError(`UNKNOWN_MUSIC_CUE_${id}`);
       // Preserve the source cue even when two screens currently resolve to the same track.
       if (id != null && !cues[id].loop && attemptId == null) return;
-      const metadataChanged = requested?.id !== id || requested?.attemptId !== attemptId || requested?.scene !== scene;
-      requested = { id, attemptId, scene };
+      const exclusive = options?.exclusive === true;
+      const metadataChanged = requested?.id !== id || requested?.attemptId !== attemptId || requested?.scene !== scene || requested?.exclusive !== exclusive;
+      requested = { id, attemptId, scene, exclusive };
       if (!projectRequested() && metadataChanged) emit();
+    },
+    setPaused(value) {
+      const next = Boolean(value);
+      if (disposed || scenePaused === next) return;
+      scenePaused = next; reconcile();
     },
     preferencesChanged() { if (!projectRequested()) reconcile(); }, inspect: state,
     dispose() {

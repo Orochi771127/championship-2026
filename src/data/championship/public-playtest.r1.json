@@ -114,5 +114,21 @@
       "unselected map alternatives",
       "ordinary-map production"
     ]
+  },
+  "dataArenaModeMusic": {
+    "selectionId": "DATA_ARENA_MODE_MUSIC_20261017",
+    "status": "OWNER_AUTHORIZED_PUBLIC_PLAYTEST",
+    "authorizationRecordedOn": "2026-10-17",
+    "ownerReplyId": "Sentinel_e88cef2e8a308191853fa74164e79b72",
+    "ownerInstruction": "Use the two supplied tracks for the two new modes, choosing their assignments from the actual audio and replacing the old BGM. Preserve original files.",
+    "mapping": {
+      "TOURNAMENT": "unison_under_fire",
+      "HARBOR": "federation_siege"
+    },
+    "audioAssets": "Reuse existing approved original MP3 bytes; no new encoding or copies.",
+    "basis": "Full-file decoded rhythm/spectral/dynamic analysis; human listening acceptance remains pending.",
+    "mappingProvisional": true,
+    "commercialReleaseAccepted": false,
+    "scope": "Per-mode defaults, exclusive single-stream transport, scene pause/resume and existing volume/preferences only. Ordinary map music and source audio files unchanged."
   }
 }

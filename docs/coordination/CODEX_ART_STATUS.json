@@ -1536,7 +1536,7 @@
   "dataArenaMapTestRelease20261016": {
     "id": "DATA_ARENA_MAP_TEST_RELEASE_20261016",
     "owner": "CODEX_ART",
-    "status": "READY_FOR_PR_REQUIRED_CI",
+    "status": "PUBLISHED_LIVE_VERIFIED",
     "versions": [
       "harbor-blender-r6",
       "tournament-detail-r3",
@@ -1556,6 +1556,28 @@
     "publication": "Authorized through existing main GitHub Pages workflow; verify terminal run in delivery receipt",
     "localCiPassed": 2487,
     "compiledArtifactBrowserChecks": 52,
-    "validation": "docs/reports/new-mode-map-test-release-2026-10-16/RELEASE_VALIDATION.json"
+    "validation": "docs/reports/new-mode-map-test-release-2026-10-16/RELEASE_VALIDATION.json",
+    "mergeCommit": "89e15a46296f230550ae3977a482c60b5bcc0c89",
+    "pagesRunId": 38984015597,
+    "liveFileHashesPassed": 350,
+    "liveBrowserChecksPassed": 11
+  },
+  "dataArenaModeMusic20261017": {
+    "owner": "CODEX_ART",
+    "status": "VALIDATED_READY_FOR_MAIN_COORDINATION",
+    "baseMain": "adc36510ec71e713844deac8c32fbff0f008149e",
+    "mapping": {
+      "TOURNAMENT": "unison_under_fire",
+      "HARBOR": "federation_siege"
+    },
+    "report": "docs/reports/data-arena-mode-bgm-2026-10-17/REPORT_ZH_TW.md",
+    "mappingProvisional": true,
+    "newAudioAssets": 0,
+    "originalAudioPreserved": true,
+    "mergeCoordination": "Report PR before merge; coordinate shared shipping ledgers with portrait PR51.",
+    "portableTestsPassed": 2494,
+    "normalBrowserChecksPassed": 21,
+    "buildId": "f08559cd207447d50e6709705e88a1e1cc82b52f18716ef4d31412dfbc0ea3ab",
+    "portraitPr51Preserved": true
   }
 }

@@ -1,0 +1,61 @@
+{
+  "baseMain": "adc36510ec71e713844deac8c32fbff0f008149e",
+  "mapping": {
+    "TOURNAMENT": "unison_under_fire",
+    "HARBOR": "federation_siege"
+  },
+  "provisionalAudioFeatureBasedMapping": true,
+  "humanListeningAccepted": false,
+  "newAudioAssets": 0,
+  "originalAudioFilesPreserved": true,
+  "localTests": {
+    "portablePassed": 2494,
+    "failed": 0,
+    "skipped": 0,
+    "focusedPassed": 91,
+    "ciLogSha256": "efc7012c1f65c0d9326f283fba898d5aeffe4439e649f6e0eab9edd39dd64589",
+    "focusedLogSha256": "928f4dc5bd89a8af553081bbcc71a41a98917deead709c2ba2b7d07c754ae13c"
+  },
+  "build": {
+    "passed": true,
+    "validationPassed": true,
+    "fileCount": 10116,
+    "buildId": "f08559cd207447d50e6709705e88a1e1cc82b52f18716ef4d31412dfbc0ea3ab",
+    "buildLogSha256": "f622cad2224b5b0a59809052a24dd0d3e8254c0bee4bbd930f2247f97790abda",
+    "validateLogSha256": "6ce21145b0b95e73ea9347f7dd31f01faa6c6c59d79e233844a96133c8ac2f83"
+  },
+  "normalEntryNativeAudioBrowser": {
+    "passed": 21,
+    "unexpectedErrors": 0,
+    "reportSha256": "13787b476e3882f3bab19365db51085d0d71e84f72933ed4e402ffffa94e1cc4",
+    "sharedAudioContextCount": 1,
+    "maxNativePlayingMusicStreams": 1,
+    "volumeValuesTested": [
+      0,
+      35
+    ],
+    "restoredPreferencesAndHarborMode": true,
+    "physicalPhone": false,
+    "fullSongLoopAudition": false,
+    "autoplayPolicyOverrideUsed": false
+  },
+  "testHarnessCorrections": [
+    "Click the visible radio label, not its covered native input.",
+    "Wait for the real opening-film skip control on fresh load and reload.",
+    "After deliberate volume edits, compare all saved preference fields except the intentionally changed updatedAt; also verify restored visible controls."
+  ],
+  "existingGlobalBrowserContract": "Updated the intentionally replaced Data Arena tournament cue expectation; saved ordinary Battle choice and actual Raising/Practice Battle checks are preserved. Runner assertion self-test passed; full existing workflow runs on PR.",
+  "mergeStatus": "PENDING_MAIN_COORDINATION_WITH_PORTRAIT_PR51",
+  "usageObserved": {
+    "weeklyUsedPercent": 24,
+    "sharedAcrossAccount": true,
+    "hardTaskTokenLimitKnown": false
+  },
+  "portraitPr51Preserved": true,
+  "nativeAudioBrowserValidatedBase": "89e15a46296f230550ae3977a482c60b5bcc0c89",
+  "audioRuntimeSourcesByteIdenticalAfterPortraitSync": [
+    "src/championship/app/dataArenaScreen.js",
+    "src/championship/presentation/musicPresentation.js",
+    "src/championship/presentation/dataArena/dataArenaMusic.js"
+  ]
+}

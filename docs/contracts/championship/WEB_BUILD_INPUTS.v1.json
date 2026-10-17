@@ -5929,6 +5929,7 @@
     "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png",
     "assets/production/database-handpainted-r1-20261015/species-035.be1631a7ffea0de4.png",
     "assets/production/database-handpainted-r1-20261015/species-035.png",
+    "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
     "assets/production/database-handpainted-r1-20261015/species-037.png",
     "assets/production/database-handpainted-r1-20261015/species-038.png",
     "assets/production/database-handpainted-r1-20261015/species-039.a22eae194967e17d.png",
@@ -10213,6 +10214,7 @@
     "src/championship/presentation/dataArena/dataArenaEnvironment.js",
     "src/championship/presentation/dataArena/dataArenaInteractionArt.js",
     "src/championship/presentation/dataArena/dataArenaInteractionView.js",
+    "src/championship/presentation/dataArena/dataArenaMusic.js",
     "src/championship/presentation/dataArena/dataArenaPixiScene.js",
     "src/championship/presentation/dataArena/dataArenaRoster.js",
     "src/championship/presentation/dataArena/dataArenaTextures.js",
@@ -10409,12 +10411,11 @@
     "src/data/championship/product-species-extensions.r1.json",
     "src/data/championship/public-playtest.r1.json",
     "src/data/championship/qa-database-hero-portraits.r1.json",
-    "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png"
+    "src/data/championship/r2/fields/fieldInventoryR2.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
-    "authorizationRecordedOn": "2026-10-16",
+    "authorizationRecordedOn": "2026-10-17",
     "files": [
       {
         "path": "alternate-form-qa.html",
@@ -32517,6 +32518,10 @@
         "sha256": "f2c4940a90fba6634621a5a20d545d292ab3eae4509ec13b9c357336295fa9dd"
       },
       {
+        "path": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
+        "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d"
+      },
+      {
         "path": "assets/production/database-handpainted-r1-20261015/species-037.png",
         "sha256": "ec0b71f17141e05a0ef0d9dc8c0be07e3b9b881064928ba7f6baab9c7b603414"
       },
@@ -48654,7 +48659,7 @@
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "885f9f2d63bc72873e16d740207a87257a91b366752d604f3cd2a5d73bc318a1"
+        "sha256": "4d4d0060831a8c5b66e576e218ba534505b9168c46f1c7b1e3f77beabe46afe9"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -49653,6 +49658,10 @@
         "sha256": "7f7a02d15640977bacc224eb78cc3ec7664209fbaf2ef93843a9aaafa7c2eb8d"
       },
       {
+        "path": "src/championship/presentation/dataArena/dataArenaMusic.js",
+        "sha256": "878bf01578ee5361bba66c9389a84bfc7db4ca133c7cfd320669537955e1d7b3"
+      },
+      {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
         "sha256": "68f24cb077de7b2ebdd88cfabb907df1ab2d84236ff461fdc2672bd32f6bdd32"
       },
@@ -49774,7 +49783,7 @@
       },
       {
         "path": "src/championship/presentation/musicPresentation.js",
-        "sha256": "a7edc32f773c10db7da874ea960b264a7837f0dd6265af3cbf3c9485d689876f"
+        "sha256": "909e134abe10f7af7188c16ff32db87caf7b149068f5aa49e43048531ede57d4"
       },
       {
         "path": "src/championship/presentation/nativeHuntCharacterAction.js",
@@ -50430,7 +50439,7 @@
       },
       {
         "path": "src/data/championship/public-playtest.r1.json",
-        "sha256": "fec147fe6500dedcaef631dd04306404192cf1f3ef802b2492c068babbccc00e"
+        "sha256": "a90f4199fadc762678c957ccde92136837d8392c47642e5421d85fcdb0312b63"
       },
       {
         "path": "src/data/championship/qa-database-hero-portraits.r1.json",
@@ -50439,14 +50448,10 @@
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
-      },
-      {
-        "path": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
-        "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d"
       }
     ],
-    "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",
-    "ownerReplyId": "Sentinel_0842e78919c88191a5b2176fb166b67d"
+    "selectionId": "DATA_ARENA_MODE_MUSIC_20261017",
+    "ownerReplyId": "Sentinel_e88cef2e8a308191853fa74164e79b72"
   },
   "browserBundle": {
     "version": 1,

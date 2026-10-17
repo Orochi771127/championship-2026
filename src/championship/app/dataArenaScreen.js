@@ -21,6 +21,7 @@ import { mountDataArenaScene } from "../presentation/dataArena/dataArenaPixiScen
 import { loadDataArenaEnvironment } from "../presentation/dataArena/dataArenaEnvironment.js";
 import { loadDataArenaInteractionArt } from "../presentation/dataArena/dataArenaInteractionArt.js";
 import { createDataArenaAudio } from "../presentation/dataArena/dataArenaAudio.js";
+import { dataArenaMusicForMode } from "../presentation/dataArena/dataArenaMusic.js";
 import { createPixiAssetScope, loadPixiCharacterRuntimeBundle } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { arenaText as t } from "../text/dataArenaText.js";
 
@@ -462,6 +463,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     bannerTimer = setTimeout(() => { node.hidden = true; }, ms);
   }
 
+  let arenaMusicActive = false;
+  function playModeMusic() {
+    arenaMusicActive = true;
+    const cue = dataArenaMusicForMode(gameMode);
+    music?.setScene(cue.id, `arena:${matchId}`, cue.scene, { exclusive: true });
+    music?.setPaused?.(paused);
+  }
+
   // ------------------------------------------------------------------ events -> DOM/audio/music
   function handleEvents(events) {
     scene?.handleEvents(events);
@@ -509,7 +518,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           break;
         case "PHASE":
           if (event.id !== "WARMUP") banner(t(`phase.${event.id}`), event.id === "GUARDIAN" ? "boss" : "phase", 1800);
-          if (event.id === "GUARDIAN") music?.setScene("battle_final", `arena:${matchId}`);
+            if (event.id === "GUARDIAN") playModeMusic();
           break;
         case "BRIDGE_LIFTED": toast(t("toast.bridge"), { tone: "warn", key: "bridge" }); break;
         case "BOSS_SPAWN": audio?.play("roar"); break;
@@ -522,7 +531,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           const final = event.round === event.rounds - 1;
           audio?.play("warn");
           banner(t(final ? "round.final" : "round.intro", { round: event.round + 1, name: rivalName(event.rivalId) }), final ? "boss" : "phase", DATA_ARENA_TOURNAMENT.introSeconds * 1000 - 300);
-          music?.setScene(final ? "battle_final" : "battle_normal", `arena:${matchId}`);
+          playModeMusic();
           break;
         }
         case "ROUND_START": audio?.play("roar"); banner(t("round.fight"), "good", 900); break;
@@ -704,7 +713,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     hideOverlay();
     root.dataset.state = "PLAY";
     if (!tickerCallback) { tickerCallback = frame; stage.app.ticker.add(tickerCallback); }
-    music?.setScene("battle_normal", `arena:${matchId}`);
+    playModeMusic();
     if (!ok) toast(t("loading.failed"), { tone: "warn", key: "art" });
     if (gameMode === "HARBOR") banner(t("phase.WARMUP"), "phase", 2200);
     else handleEvents(sim.drainEvents()); // the first ROUND_INTRO was queued at construction
@@ -841,9 +850,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (qualityReloading) return;
     const next = force ?? root.dataset.state !== "PAUSE";
     if (next && root.dataset.state === "PLAY") {
-      paused = true; root.dataset.state = "PAUSE"; releaseInputs(); audio?.suspend(); showPause();
+      paused = true; root.dataset.state = "PAUSE"; releaseInputs(); audio?.suspend(); music?.setPaused?.(true); showPause();
     } else if (!next && root.dataset.state === "PAUSE") {
-      paused = false; hideOverlay(); root.dataset.state = sim?.getState().mode === "LEVEL_UP" ? "LEVEL" : "PLAY"; accumulator = 0;
+      paused = false; music?.setPaused?.(false); hideOverlay(); root.dataset.state = sim?.getState().mode === "LEVEL_UP" ? "LEVEL" : "PLAY"; accumulator = 0;
       if (root.dataset.state === "LEVEL") showLevelUp(sim.getState().offer);
     }
   }
@@ -903,6 +912,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     audio?.suspend();
     const { newBest, saved } = records.recordResult(result);
     const best = records.get().modes[result.mode]?.bestScore ?? records.get().bestScore;
+    music?.setPaused?.(false);
     music?.setScene(result.outcome === "VICTORY" ? "victory" : "defeat", `arena-result:${matchId}`);
     const panel = el("div", `da-panel da-panel--result da-result--${result.outcome.toLowerCase()}`);
     const cup = result.tournament;
@@ -938,6 +948,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   async function close() {
     if (closed) return;
     closed = true;
+    if (arenaMusicActive) {
+      music?.setScene(null);
+      music?.setPaused?.(false);
+    }
     if (tickerCallback && stage) stage.app.ticker.remove(tickerCallback);
     tickerCallback = null;
     lifetime.abort();
