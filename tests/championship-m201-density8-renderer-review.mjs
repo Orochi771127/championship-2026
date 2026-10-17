@@ -3,23 +3,27 @@
 import {chromium} from 'playwright';import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 const base=process.argv[2],prefix=process.argv[3],out=process.argv[4]??'qa034-density8';
 assert.ok(base&&prefix,'Usage: node renderer-review.mjs BASE_URL ASSET_PREFIX OUTPUT_DIR');
-await fs.mkdir(out,{recursive:true});const browser=await chromium.launch({headless:true});const page=await browser.newPage({viewport:{width:1060,height:760}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
+const publicCatalog=JSON.parse(await fs.readFile('src/data/championship/public-character-catalog.v1.json','utf8'));
+const publicConfig=publicCatalog.characters.find(c=>c.entityId==='m201_agumon');assert.ok(publicConfig);
+await fs.mkdir(out,{recursive:true});const browser=await chromium.launch({headless:true,...(process.env.CHAMPIONSHIP_CHROME?{executablePath:process.env.CHAMPIONSHIP_CHROME}: {})});const page=await browser.newPage({viewport:{width:1060,height:760}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
 try{
  await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);
  const network=[];page.on('response',response=>{if(/runtime\.review\.json|\/(main|sub)\.(png|webp|json)/.test(response.url()))network.push({url:response.url(),status:response.status()})});
- const result=await page.evaluate(async({prefix,base})=>{
+ const result=await page.evaluate(async({prefix,base,publicConfig})=>{
   const PIXI=await import('/node_modules/pixi.js/dist/pixi.mjs');
   const {loadPixiCharacterRuntimeBundle}=await import('/src/championship/presentation/pixiCharacterRuntimeBundle.js');
   const {applyNativeCharacterCellGeometry}=await import('/src/championship/presentation/nativeHuntCharacterAction.js');
   const {completedCharacterBundleLocation}=await import('/src/championship/presentation/completedOriginalCharacters.js');
   const selection=await (await fetch('/src/data/championship/accepted-original-character-selection.r1.json')).json();
   const config=selection.characters.find(c=>c.speciesId==='species-034');
-  const route=completedCharacterBundleLocation(config,{battleAtlas:true,sides:['main']},base);
+  // The full source atlas still proves all 83 cells and 53 sequences. Normal
+  // main-only play now uses the independently hash-validated public pages.
+  const route=completedCharacterBundleLocation(config,{battleAtlas:false,sides:['main','sub']},base);
   const expectedRuntimeUrl=new URL(prefix+'runtime.review.json',base).href;
   const publicGameUrl='https://orochi771127.github.io/championship-2026/championship.html';
   const publicRoute=completedCharacterBundleLocation(config,{battleAtlas:true,sides:['main']},publicGameUrl);
-  if(publicRoute.packed||publicRoute.runtimeUrl!==new URL(prefix+'runtime.review.json',publicGameUrl).href)throw Error('PUBLIC_SUBPATH_ROUTE_REGRESSION');
-  const fixtureRelativeRoute=completedCharacterBundleLocation(config,{battleAtlas:true,sides:['main']},location.href);
+  if(publicRoute.packed||!publicRoute.streamed||publicRoute.runtimeUrl!==new URL(publicConfig.runtimePath,publicGameUrl).href||publicRoute.streamed.runtimeSha256!==publicConfig.runtimeSha256)throw Error('PUBLIC_SUBPATH_ROUTE_REGRESSION');
+  const fixtureRelativeRoute=completedCharacterBundleLocation(config,{battleAtlas:false,sides:['main','sub']},location.href);
   if(route.packed||route.runtimeUrl!==expectedRuntimeUrl)throw Error('STALE_OR_UNEXPECTED_RUNTIME_ROUTE');
   // Fixture documents are nested; assetRoot is app-relative, never fixture-relative.
   if(new URL(location.href).pathname.includes('/tests/fixtures/')&&fixtureRelativeRoute.runtimeUrl===expectedRuntimeUrl)throw Error('FIXTURE_BASE_REGRESSION_NOT_EXERCISED');
@@ -40,7 +44,7 @@ try{
   for(const [row,pose] of [[0,0],[0,1],[2,0],[2,1],[14,0],[14,1]].entries())for(const [col,zoom] of [2,4,6].entries()){const [id,frameIndex]=pose;
    const actor=bundle.createActor({side:'main',animation:id,nativeFramePresentation:true,nativeGeometry:bundle.runtime.reviewGeometry});const p=actor.nativeFramePresenter.apply({contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:id,frameIndex,flipBits:0});applyNativeCharacterCellGeometry(actor.sprite,{geometry:p.geometry},zoom);actor.sprite.position.set(170+col*330,180+row*210);app.stage.addChild(actor.sprite);
   }app.render();return {frames,sequences,coveredCells:covered.size,route,routeRegression:{appBase:base,publicGameUrl,publicRuntimeUrl:publicRoute.runtimeUrl,fixtureUrl:location.href,expectedRuntimeUrl,fixtureRelativeRuntimeUrl:fixtureRelativeRoute.runtimeUrl},failures,diagnostics:bundle.getDiagnostics(),zoomColumns:[2,4,6],actionFrameRows:[[0,0],[0,1],[2,0],[2,1],[14,0],[14,1]],disclaimer:'Real isolated runtime renderer, not normal-game navigation acceptance'};
- },{prefix,base});
+ },{prefix,base,publicConfig});
  await page.screenshot({path:out+'/actual-pixi-2x-4x-6x.png',fullPage:true});assert.deepEqual(result.failures,[]);assert.deepEqual(errors,[]);assert.equal(result.diagnostics.textureCount,83);assert.equal(result.coveredCells,83);assert.equal(result.sequences,53);assert.ok(network.some(n=>n.url.endsWith('/'+prefix+'main.png')&&n.status===200));assert.ok(network.some(n=>n.url.endsWith('/'+prefix+'sub.png')&&n.status===200));assert.ok(!network.some(n=>n.url.includes('battle-packed-20261013')));
  const huntScene=await isolatedHuntSceneSmoke(browser,base,prefix,out);
  const normalGame=await normalOwnedPartySmoke(browser,base,prefix,out);
@@ -67,7 +71,9 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
   await game.waitForFunction(()=>JSON.parse(document.querySelector('.int-rh2-field-host')?.dataset.residentScreenPositions||'[]').some(p=>p.speciesIndex===34));
   const raising=await game.locator('.int-rh2-field-host').evaluate(h=>({assets:JSON.parse(h.dataset.residentAssets),positions:JSON.parse(h.dataset.residentScreenPositions)}));
   for(const p of raising.positions.filter(p=>p.speciesIndex===34)){assert.ok(p.nativeScreenPixels>0&&Number.isFinite(p.bodyTop)&&p.footY>p.bodyTop);assert.ok(p.groundScreen&&Math.abs(p.groundScreen.y-(p.boardTop+p.nativeY*p.nativeScreenPixels))<1,'Shared native ground transform');}
-  for(const asset of ['runtime.review.json','main.png'])assert.ok(evidence.network.some(n=>n.scene==='raising'&&n.url===new URL(prefix+asset,base).href&&n.status===200),'Raising new '+asset);
+  assert.ok(evidence.network.some(n=>n.scene==='raising'&&n.url===new URL(publicConfig.runtimePath,base).href&&n.status===200),'Raising selected public runtime');
+  assert.ok(evidence.network.some(n=>n.scene==='raising'&&n.url.includes('/ranch-streaming-v1/')&&n.url.endsWith('.webp')&&n.status===200),'Raising selected public image page');
+  assert.ok(!evidence.network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.png$/.test(n.url)),'Normal app does not request private source atlases');
   assert.ok(!evidence.network.some(n=>n.scene==='raising'&&n.url.includes('battle-packed')));evidence.scenes.push({scene:'raising',entry:'PASS',diagnostics:raising,groundShadow:'SCREENSHOT_REVIEW_REQUIRED'});await game.screenshot({path:out+'/normal-raising034.png',fullPage:true});await save();
   scene='battle';await menu('battle');await screen('BATTLE_SELECT');assert.equal(await game.locator('.int-rh2-field-host').count(),0,'Raising scene released');
   await game.locator('[data-face-id="PRACTICE_BATTLE"]:visible').first().click();
@@ -77,7 +83,8 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
   for(const c of fighters){assert.equal(c.entityId,'m201_agumon');assert.equal(c.rendered,true);assert.equal(c.nativeSizing.packedPixelsPerNativePixel,8);assert.equal(c.animation.geometry.scale,8);assert.deepEqual(c.animation.geometry.origin,[224,328]);assert.deepEqual(c.animation.geometry.sourceSize,[512,512]);}
   assert.equal(battle.art.assetId,'art:battle:original-opus:v1','Normal default arena, not opt-in baked-shadow review');assert.equal(battle.groundShadows,null,'Default arena uses existing ellipse shadows; baked-review diagnostics are absent');assert.equal(await game.locator('[data-field-fallback="true"]').count(),0);
   // Same-document PIXI cache may reuse Raising's verified atlas without another GET.
-  assert.ok(evidence.network.some(n=>n.url===new URL(prefix+'main.png',base).href&&n.status===200));assert.ok(!evidence.network.some(n=>n.url.includes('/battle-packed-20261013/m201_agumon/')));
+  assert.ok(evidence.network.some(n=>n.url.includes('/ranch-streaming-v1/')&&n.url.endsWith('.webp')&&n.status===200));assert.ok(!evidence.network.some(n=>n.url.includes('/battle-packed-20261013/m201_agumon/')));
+  assert.ok(!evidence.network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.png$/.test(n.url)),'Battle retains the selected public pages');
   evidence.scenes.push({scene:'battle',entry:'PASS',diagnostics:battle,textureBinding:'same-document cache or new request; exact entity, density8 geometry, no packed route',groundShadow:'DEFAULT_ELLIPSE_SCREENSHOT_REVIEW_REQUIRED_NOT_BAKED_REVIEW'});await game.screenshot({path:out+'/normal-battle034.png',fullPage:true});await save();
   await game.getByRole('button',{name:'離開對戰',exact:true}).first().click();const dialog=game.getByRole('dialog');await dialog.waitFor();await dialog.getByRole('button',{name:'離開對戰',exact:true}).click();await home();
   assert.equal(await game.evaluate(()=>typeof globalThis.__championshipBattleDiagnostics),'undefined','Battle diagnostics disposed on exit');await game.screenshot({path:out+'/normal-return-raising034.png',fullPage:true});
