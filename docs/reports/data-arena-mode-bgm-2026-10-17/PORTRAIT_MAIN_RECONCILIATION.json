@@ -1,0 +1,50 @@
+{
+  "previousBase": "89e15a46296f230550ae3977a482c60b5bcc0c89",
+  "newBase": "adc36510ec71e713844deac8c32fbff0f008149e",
+  "savedOriginalMusicCommit": "0bb2379efab094d2e575c789a259d795eb512c79",
+  "upstreamFilesPreservedExactly": [
+    {
+      "path": "assets/production/ART_PRODUCTION_INDEX.json",
+      "sha256": "3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f",
+      "bytes": 21727
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/manifest.json",
+      "sha256": "0a1f0077bd25a68cc1e1dafec1b1b84f6569eef3cdb77fbf9abe274bfda0880e",
+      "bytes": 69245
+    },
+    {
+      "path": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
+      "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d",
+      "bytes": 2029665
+    },
+    {
+      "path": "src/data/championship/database-hero-portraits.r1.json",
+      "sha256": "005585989cd40f22bdab1131b8eddf651f8908a196052edd9e56e3a135d83b0b",
+      "bytes": 21004
+    },
+    {
+      "path": "src/data/championship/qa-database-hero-portraits.r1.json",
+      "sha256": "f950864125beba4fb52e0aa3bfc272c2bb670095f515686ff4a49ae0b20fa216",
+      "bytes": 21137
+    },
+    {
+      "path": "tests/alternate-form-portraits-cases.mjs",
+      "sha256": "ad447ee3c6f9e07a731df8246a5ce79ab3eb0a97eef1baa310b2ba82047d6f45",
+      "bytes": 1709
+    },
+    {
+      "path": "tests/championship-database-stories-cases.mjs",
+      "sha256": "006a06587327351759da6cd25a9960be1d61fdae5be18175fe34d3efef111715",
+      "bytes": 119360
+    },
+    {
+      "path": "tests/championship-dex-portrait-browser.cjs",
+      "sha256": "9545e8c40902a448b5296512f9152f2224e6c6b52d1f7159070f9de17d802b9d",
+      "bytes": 39806
+    }
+  ],
+  "sharedContractMergedFromLatestMain": true,
+  "mainBranchModified": false,
+  "unrelatedApprovedHashesRefreshed": false
+}

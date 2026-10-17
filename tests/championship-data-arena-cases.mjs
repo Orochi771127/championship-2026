@@ -763,7 +763,7 @@ function arenaStartupHarness(failure) {
     createDataArenaSimulation: () => ({ grid:{map:{}},drainEvents: () => [] }),
     createDataArenaAudio: () => ({ dispose() { calls.disposed++; } }),
     mountScene() { fail('mount'); env.scene = { dispose() { calls.disposed++; } }; },
-    buildHud() { fail('hud'); }, hideOverlay() {}, frame() {}, music: { setScene() {} }, toast() {}, banner() {}, handleEvents() {}
+    buildHud() { fail('hud'); }, hideOverlay() {}, frame() {}, playModeMusic() {}, music: { setScene() {} }, toast() {}, banner() {}, handleEvents() {}
   };
   arenaRunSource(arenaStartupSource, env);
   return { env, calls, recover() { failing = false; } };

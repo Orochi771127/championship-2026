@@ -1,0 +1,77 @@
+{
+  "method": "Full existing MP3 decoded to mono 16 kHz float PCM with installed FFmpeg, NumPy STFT spectral/onset analysis. No re-encoding or source modification. Tempo estimates may be half/double-time; they are not a verified musical score.",
+  "auditoryListeningConfirmed": false,
+  "mappingStatus": "PROVISIONAL_AUDIO_FEATURE_BASED_NOT_FILENAME_ONLY",
+  "files": [
+    {
+      "id": "unison_under_fire",
+      "path": "assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+      "sha256": "0e01b0fa1e88831b7f16dc1024133c2d2b390c2700c6585d8c634cda2855f1b6",
+      "bytes": 4039847,
+      "durationSeconds": 168.072,
+      "audioReadAndDecoded": true,
+      "sampleRateForAnalysis": 16000,
+      "tempoCandidates": [
+        {
+          "bpm": 87.2,
+          "relativeAutocorrelation": 0.638
+        },
+        {
+          "bpm": 170.5,
+          "relativeAutocorrelation": 0.542
+        },
+        {
+          "bpm": 178.6,
+          "relativeAutocorrelation": 0.506
+        }
+      ],
+      "medianSpectralCentroidHz": 2289.6,
+      "lowBandPowerFraction20to180Hz": 0.755,
+      "upperBandPowerFractionAbove2000Hz": 0.0674,
+      "medianWindowRmsDbfs": -11.73,
+      "rmsP90MinusP10Db": 12.75,
+      "manifestIntegratedLufs": -12.35,
+      "existingPlaybackGainDb": -11.7
+    },
+    {
+      "id": "federation_siege",
+      "path": "assets/production/scene-music-r1/battle/federation_siege.mp3",
+      "sha256": "4d8b4e2782bba9e66a482a1fbf90696d65d023d3b7735884ab60cf378b282b7f",
+      "bytes": 4143919,
+      "durationSeconds": 172.408,
+      "audioReadAndDecoded": true,
+      "sampleRateForAnalysis": 16000,
+      "tempoCandidates": [
+        {
+          "bpm": 76.5,
+          "relativeAutocorrelation": 0.514
+        },
+        {
+          "bpm": 101.4,
+          "relativeAutocorrelation": 0.445
+        },
+        {
+          "bpm": 150.0,
+          "relativeAutocorrelation": 0.435
+        }
+      ],
+      "medianSpectralCentroidHz": 2121.8,
+      "lowBandPowerFraction20to180Hz": 0.7173,
+      "upperBandPowerFractionAbove2000Hz": 0.0641,
+      "medianWindowRmsDbfs": -11.29,
+      "rmsP90MinusP10Db": 10.83,
+      "manifestIntegratedLufs": -12.54,
+      "existingPlaybackGainDb": -11.5
+    }
+  ],
+  "newAudioAssetsCreated": false,
+  "originalsPreserved": true,
+  "provisionalMapping": {
+    "TOURNAMENT": "unison_under_fire",
+    "HARBOR": "federation_siege"
+  },
+  "mappingRationale": {
+    "TOURNAMENT": "Unison has a stronger faster-pulse candidate around 87/174 BPM, a brighter median centroid (2289.6 Hz), and larger 12.75 dB P90-P10 dynamics: suitable for short rounds and duel transitions. This is an inference from actual decoded audio, not instrument-listening claims.",
+    "HARBOR": "Federation has a slower primary pulse around 76.5/153 BPM, lower median centroid (2121.8 Hz), and steadier 10.83 dB dynamics: suitable for sustained objective combat. Tempo ambiguity is retained."
+  }
+}

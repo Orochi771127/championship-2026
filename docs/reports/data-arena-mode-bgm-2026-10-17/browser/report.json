@@ -1,0 +1,680 @@
+{
+  "origin": "http://127.0.0.1:8742",
+  "checks": [
+    {
+      "name": "ordinary Battle preference is set through its visible label",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "TOURNAMENT decodes and advances its assigned original MP3",
+      "ok": true,
+      "detail": {
+        "music": {
+          "cue": "unison_under_fire",
+          "key": "unison_under_fire",
+          "requestedCue": "unison_under_fire",
+          "scene": "data_arena_tournament",
+          "playing": "unison_under_fire",
+          "pending": null,
+          "voices": 1,
+          "slots": 1,
+          "starts": 2,
+          "unlocked": true,
+          "hidden": false,
+          "paused": false,
+          "scenePaused": false,
+          "exclusive": true,
+          "position": 0,
+          "initialBuffering": false,
+          "error": null
+        },
+        "native": {
+          "maxVoices": 1,
+          "mediaCreated": 1,
+          "contexts": [
+            {
+              "state": "running",
+              "sampleRate": 48000
+            }
+          ],
+          "gains": [
+            1,
+            0.3499999940395355,
+            0.26001596450805664,
+            1,
+            0.800000011920929,
+            0.00009999999747378752,
+            0.00009999999747378752
+          ],
+          "media": [
+            {
+              "src": "http://127.0.0.1:8742/assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+              "paused": false,
+              "loop": true,
+              "currentTime": 0.206735,
+              "duration": 168.071792,
+              "readyState": 4,
+              "error": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "TOURNAMENT uses one shared AudioContext and a single playing stream",
+      "ok": true,
+      "detail": {
+        "maxVoices": 1,
+        "mediaCreated": 1,
+        "contexts": [
+          {
+            "state": "running",
+            "sampleRate": 48000
+          }
+        ],
+        "gains": [
+          1,
+          0.3499999940395355,
+          0.26001596450805664,
+          1,
+          0.800000011920929,
+          0.00009999999747378752,
+          0.00009999999747378752
+        ],
+        "media": [
+          {
+            "src": "http://127.0.0.1:8742/assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+            "paused": false,
+            "loop": true,
+            "currentTime": 0.206735,
+            "duration": 168.071792,
+            "readyState": 4,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "TOURNAMENT existing volume applies to a real gain node",
+      "ok": true,
+      "detail": [
+        1,
+        0.3499999940395355,
+        0.26001596450805664,
+        1,
+        0.800000011920929,
+        0.00009999999747378752,
+        0.00009999999747378752
+      ]
+    },
+    {
+      "name": "TOURNAMENT pause stops native audio at its existing position",
+      "ok": true,
+      "detail": {
+        "paused": {
+          "cue": "unison_under_fire",
+          "key": "unison_under_fire",
+          "requestedCue": "unison_under_fire",
+          "scene": "data_arena_tournament",
+          "playing": null,
+          "pending": null,
+          "voices": 0,
+          "slots": 1,
+          "starts": 2,
+          "unlocked": true,
+          "hidden": false,
+          "paused": true,
+          "scenePaused": true,
+          "exclusive": true,
+          "position": 0.208872,
+          "initialBuffering": false,
+          "error": null
+        },
+        "s": {
+          "cue": "unison_under_fire",
+          "key": "unison_under_fire",
+          "requestedCue": "unison_under_fire",
+          "scene": "data_arena_tournament",
+          "playing": null,
+          "pending": null,
+          "voices": 0,
+          "slots": 1,
+          "starts": 2,
+          "unlocked": true,
+          "hidden": false,
+          "paused": true,
+          "scenePaused": true,
+          "exclusive": true,
+          "position": 0.208872,
+          "initialBuffering": false,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "TOURNAMENT resume retains position and avoids a new track start",
+      "ok": true,
+      "detail": {
+        "paused": {
+          "cue": "unison_under_fire",
+          "key": "unison_under_fire",
+          "requestedCue": "unison_under_fire",
+          "scene": "data_arena_tournament",
+          "playing": null,
+          "pending": null,
+          "voices": 0,
+          "slots": 1,
+          "starts": 2,
+          "unlocked": true,
+          "hidden": false,
+          "paused": true,
+          "scenePaused": true,
+          "exclusive": true,
+          "position": 0.208872,
+          "initialBuffering": false,
+          "error": null
+        },
+        "s": {
+          "cue": "unison_under_fire",
+          "key": "unison_under_fire",
+          "requestedCue": "unison_under_fire",
+          "scene": "data_arena_tournament",
+          "playing": "unison_under_fire",
+          "pending": null,
+          "voices": 1,
+          "slots": 1,
+          "starts": 2,
+          "unlocked": true,
+          "hidden": false,
+          "paused": false,
+          "scenePaused": false,
+          "exclusive": true,
+          "position": 0.22059,
+          "initialBuffering": false,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "TOURNAMENT exit returns title BGM and clears scene pause without overlapping",
+      "ok": true,
+      "detail": {
+        "music": {
+          "cue": "login",
+          "key": "login",
+          "requestedCue": "login",
+          "scene": null,
+          "playing": "login",
+          "pending": null,
+          "voices": 1,
+          "slots": 1,
+          "starts": 3,
+          "unlocked": true,
+          "hidden": false,
+          "paused": false,
+          "scenePaused": false,
+          "exclusive": false,
+          "position": 0,
+          "initialBuffering": false,
+          "error": null
+        },
+        "native": {
+          "maxVoices": 1,
+          "mediaCreated": 1,
+          "contexts": [
+            {
+              "state": "running",
+              "sampleRate": 48000
+            }
+          ],
+          "gains": [
+            1,
+            0.3499999940395355,
+            0.12094948440790176,
+            1,
+            0.800000011920929,
+            0.00009999999747378752,
+            0.00009999999747378752
+          ],
+          "media": [
+            {
+              "src": "http://127.0.0.1:8742/assets/production/original-music-r1/bgm_login_page.mp3",
+              "paused": false,
+              "loop": false,
+              "currentTime": 0.02322,
+              "duration": 164.865624,
+              "readyState": 4,
+              "error": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "HARBOR decodes and advances its assigned original MP3",
+      "ok": true,
+      "detail": {
+        "music": {
+          "cue": "federation_siege",
+          "key": "federation_siege",
+          "requestedCue": "federation_siege",
+          "scene": "data_arena_harbor",
+          "playing": "federation_siege",
+          "pending": null,
+          "voices": 1,
+          "slots": 1,
+          "starts": 4,
+          "unlocked": true,
+          "hidden": false,
+          "paused": false,
+          "scenePaused": false,
+          "exclusive": true,
+          "position": 0,
+          "initialBuffering": false,
+          "error": null
+        },
+        "native": {
+          "maxVoices": 1,
+          "mediaCreated": 1,
+          "contexts": [
+            {
+              "state": "running",
+              "sampleRate": 48000
+            }
+          ],
+          "gains": [
+            1,
+            0.3499999940395355,
+            0.26607251167297363,
+            1,
+            0.800000011920929,
+            0.00009999999747378752,
+            0.00009999999747378752,
+            0.800000011920929
+          ],
+          "media": [
+            {
+              "src": "http://127.0.0.1:8742/assets/production/scene-music-r1/battle/federation_siege.mp3",
+              "paused": false,
+              "loop": true,
+              "currentTime": 0.211882,
+              "duration": 172.408125,
+              "readyState": 4,
+              "error": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "HARBOR uses one shared AudioContext and a single playing stream",
+      "ok": true,
+      "detail": {
+        "maxVoices": 1,
+        "mediaCreated": 1,
+        "contexts": [
+          {
+            "state": "running",
+            "sampleRate": 48000
+          }
+        ],
+        "gains": [
+          1,
+          0.3499999940395355,
+          0.26607251167297363,
+          1,
+          0.800000011920929,
+          0.00009999999747378752,
+          0.00009999999747378752,
+          0.800000011920929
+        ],
+        "media": [
+          {
+            "src": "http://127.0.0.1:8742/assets/production/scene-music-r1/battle/federation_siege.mp3",
+            "paused": false,
+            "loop": true,
+            "currentTime": 0.211882,
+            "duration": 172.408125,
+            "readyState": 4,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "HARBOR existing volume applies to a real gain node",
+      "ok": true,
+      "detail": [
+        1,
+        0.3499999940395355,
+        0.26607251167297363,
+        1,
+        0.800000011920929,
+        0.00009999999747378752,
+        0.00009999999747378752,
+        0.800000011920929
+      ]
+    },
+    {
+      "name": "HARBOR pause stops native audio at its existing position",
+      "ok": true,
+      "detail": {
+        "paused": {
+          "cue": "federation_siege",
+          "key": "federation_siege",
+          "requestedCue": "federation_siege",
+          "scene": "data_arena_harbor",
+          "playing": null,
+          "pending": null,
+          "voices": 0,
+          "slots": 1,
+          "starts": 4,
+          "unlocked": true,
+          "hidden": false,
+          "paused": true,
+          "scenePaused": true,
+          "exclusive": true,
+          "position": 0.211882,
+          "initialBuffering": false,
+          "error": null
+        },
+        "s": {
+          "cue": "federation_siege",
+          "key": "federation_siege",
+          "requestedCue": "federation_siege",
+          "scene": "data_arena_harbor",
+          "playing": null,
+          "pending": null,
+          "voices": 0,
+          "slots": 1,
+          "starts": 4,
+          "unlocked": true,
+          "hidden": false,
+          "paused": true,
+          "scenePaused": true,
+          "exclusive": true,
+          "position": 0.211882,
+          "initialBuffering": false,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "HARBOR resume retains position and avoids a new track start",
+      "ok": true,
+      "detail": {
+        "paused": {
+          "cue": "federation_siege",
+          "key": "federation_siege",
+          "requestedCue": "federation_siege",
+          "scene": "data_arena_harbor",
+          "playing": null,
+          "pending": null,
+          "voices": 0,
+          "slots": 1,
+          "starts": 4,
+          "unlocked": true,
+          "hidden": false,
+          "paused": true,
+          "scenePaused": true,
+          "exclusive": true,
+          "position": 0.211882,
+          "initialBuffering": false,
+          "error": null
+        },
+        "s": {
+          "cue": "federation_siege",
+          "key": "federation_siege",
+          "requestedCue": "federation_siege",
+          "scene": "data_arena_harbor",
+          "playing": "federation_siege",
+          "pending": null,
+          "voices": 1,
+          "slots": 1,
+          "starts": 4,
+          "unlocked": true,
+          "hidden": false,
+          "paused": false,
+          "scenePaused": false,
+          "exclusive": true,
+          "position": 0.229236,
+          "initialBuffering": false,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "HARBOR exit returns title BGM and clears scene pause without overlapping",
+      "ok": true,
+      "detail": {
+        "music": {
+          "cue": "login",
+          "key": "login",
+          "requestedCue": "login",
+          "scene": null,
+          "playing": "login",
+          "pending": null,
+          "voices": 1,
+          "slots": 1,
+          "starts": 5,
+          "unlocked": true,
+          "hidden": false,
+          "paused": false,
+          "scenePaused": false,
+          "exclusive": false,
+          "position": 0,
+          "initialBuffering": false,
+          "error": null
+        },
+        "native": {
+          "maxVoices": 1,
+          "mediaCreated": 1,
+          "contexts": [
+            {
+              "state": "running",
+              "sampleRate": 48000
+            }
+          ],
+          "gains": [
+            1,
+            0.3499999940395355,
+            0,
+            1,
+            0.800000011920929,
+            0.00009999999747378752,
+            0.00009999999747378752,
+            0.800000011920929
+          ],
+          "media": [
+            {
+              "src": "http://127.0.0.1:8742/assets/production/original-music-r1/bgm_login_page.mp3",
+              "paused": false,
+              "loop": false,
+              "currentTime": 0,
+              "duration": 164.865624,
+              "readyState": 4,
+              "error": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "mode entry/exit preserves saved ordinary Battle selection and volume",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "saved zero music volume keeps arena native streams silent",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "the existing preference values survive reload",
+      "ok": true,
+      "detail": {
+        "beforeAt": "2026-10-17T00:16:14.671Z",
+        "afterAt": "2026-10-17T00:16:19.338Z",
+        "beforeValues": {
+          "schemaVersion": 1,
+          "kind": "CHAMPIONSHIP_PREFERENCES",
+          "device": {
+            "musicVolume": 35
+          },
+          "account": {
+            "battleMusic": "battle_final"
+          }
+        },
+        "afterValues": {
+          "schemaVersion": 1,
+          "kind": "CHAMPIONSHIP_PREFERENCES",
+          "device": {
+            "musicVolume": 35
+          },
+          "account": {
+            "battleMusic": "battle_final"
+          }
+        }
+      }
+    },
+    {
+      "name": "reloaded settings controls retain Battle selection and music volume",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "mode selection remembers harbor after reload",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "restored harbor mode uses its saved assignment",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "raising progress remains byte-identical",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "no page, console or HTTP errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "evidence": [
+    {
+      "mode": "TOURNAMENT",
+      "id": "unison_under_fire",
+      "music": {
+        "cue": "unison_under_fire",
+        "key": "unison_under_fire",
+        "requestedCue": "unison_under_fire",
+        "scene": "data_arena_tournament",
+        "playing": "unison_under_fire",
+        "pending": null,
+        "voices": 1,
+        "slots": 1,
+        "starts": 2,
+        "unlocked": true,
+        "hidden": false,
+        "paused": false,
+        "scenePaused": false,
+        "exclusive": true,
+        "position": 0.22059,
+        "initialBuffering": false,
+        "error": null
+      },
+      "native": {
+        "maxVoices": 1,
+        "mediaCreated": 1,
+        "contexts": [
+          {
+            "state": "running",
+            "sampleRate": 48000
+          }
+        ],
+        "gains": [
+          1,
+          0.3499999940395355,
+          0.26001596450805664,
+          1,
+          0.800000011920929,
+          0.00009999999747378752,
+          0.00009999999747378752
+        ],
+        "media": [
+          {
+            "src": "http://127.0.0.1:8742/assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+            "paused": false,
+            "loop": true,
+            "currentTime": 0.238005,
+            "duration": 168.071792,
+            "readyState": 4,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "mode": "HARBOR",
+      "id": "federation_siege",
+      "music": {
+        "cue": "federation_siege",
+        "key": "federation_siege",
+        "requestedCue": "federation_siege",
+        "scene": "data_arena_harbor",
+        "playing": "federation_siege",
+        "pending": null,
+        "voices": 1,
+        "slots": 1,
+        "starts": 4,
+        "unlocked": true,
+        "hidden": false,
+        "paused": false,
+        "scenePaused": false,
+        "exclusive": true,
+        "position": 0.229236,
+        "initialBuffering": false,
+        "error": null
+      },
+      "native": {
+        "maxVoices": 1,
+        "mediaCreated": 1,
+        "contexts": [
+          {
+            "state": "running",
+            "sampleRate": 48000
+          }
+        ],
+        "gains": [
+          1,
+          0.3499999940395355,
+          0.26607251167297363,
+          1,
+          0.800000011920929,
+          0.00009999999747378752,
+          0.00009999999747378752,
+          0.800000011920929
+        ],
+        "media": [
+          {
+            "src": "http://127.0.0.1:8742/assets/production/scene-music-r1/battle/federation_siege.mp3",
+            "paused": false,
+            "loop": true,
+            "currentTime": 0.247477,
+            "duration": 172.408125,
+            "readyState": 4,
+            "error": null
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "auditoryListeningConfirmed": false,
+  "physicalDevice": false,
+  "passed": true
+}

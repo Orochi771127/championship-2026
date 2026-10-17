@@ -4,6 +4,8 @@ import {createMusicPresentation} from '../src/championship/presentation/musicPre
 import {ORIGINAL_MUSIC_CUES,selectOriginalMusic} from '../src/championship/presentation/originalMusicCatalog.js';
 import {createAudioBus,effectiveGain} from '../src/championship/presentation/audioBus.js';
 import {normalizePreferences,DEFAULT_PREFERENCES} from '../src/championship/app/settings/preferenceSchema.js';
+import {dataArenaMusicForMode} from '../src/championship/presentation/dataArena/dataArenaMusic.js';
+import {resolveSceneMusic} from '../src/championship/presentation/sceneMusicCatalog.js';
 
 class Events {
   listeners=new Map();visibilityState='visible';
@@ -83,4 +85,53 @@ test('initial stream buffering ends at canplaythrough, releases on mute/error, a
   const active=f.media.find(m=>m.src.includes('moon'));active.error={code:2};active.onerror();
   assert.equal(f.music.inspect().initialBuffering,false);assert.equal(active.oncanplaythrough,null);
   f.music.dispose();
+});
+
+test('each arena mode uses its existing supplied MP3 independently of ordinary Battle preferences',()=>{
+  for(const [mode,id]of [['TOURNAMENT','unison_under_fire'],['HARBOR','federation_siege']]){
+    const cue=dataArenaMusicForMode(mode);
+    assert.equal(cue.id,id);assert.equal(ORIGINAL_MUSIC_CUES[id].loop,true);
+    assert.equal(ORIGINAL_MUSIC_CUES[id].path,`./assets/production/scene-music-r1/battle/${id}.mp3`);
+    const preferences={battleMusic:'battle_final',musicVolume:35};const before=JSON.stringify(preferences);
+    assert.equal(resolveSceneMusic(id,cue.scene,preferences),id);
+    assert.equal(JSON.stringify(preferences),before,'Routing cannot overwrite the saved ordinary Battle choice or volume');
+  }
+  assert.throws(()=>dataArenaMusicForMode('UNKNOWN'),/UNKNOWN_DATA_ARENA_MUSIC_MODE/);
+});
+
+test('exclusive arena entry, loop, mode switch and exit never overlap playing streams',async()=>{
+  const f=fixture();f.music.setScene('login');f.doc.emit('pointerdown');await settle();
+  for(const mode of ['TOURNAMENT','HARBOR']){
+    const cue=dataArenaMusicForMode(mode);f.music.setScene(cue.id,'arena:1',cue.scene,{exclusive:true});await settle();
+    assert.equal(f.music.inspect().playing,cue.id);assert.equal(f.music.inspect().voices,1);
+    assert.equal(f.music.inspect().exclusive,true);
+    const active=f.media.find(m=>!m.paused),starts=f.music.inspect().starts;
+    assert.equal(active.loop,true);active.currentTime=31.8;active.ontimeupdate();await settle();
+    assert.equal(f.music.inspect().starts,starts,'Native media loop cannot start an overlapping crossfade source');
+    assert.equal(f.music.inspect().voices,1);
+  }
+  f.music.setScene(null);f.music.setPaused(false);f.music.setScene('login');await settle();
+  assert.equal(f.music.inspect().playing,'login');assert.equal(f.music.inspect().voices,1);
+  assert.equal(f.contexts(),1);assert.ok(f.media.length<=2);f.music.dispose();f.bus.dispose();
+});
+
+test('arena pause keeps stream position and foreground or volume cannot bypass that pause',async()=>{
+  const f=fixture(),cue=dataArenaMusicForMode('TOURNAMENT');f.music.setScene(cue.id,'arena:1',cue.scene,{exclusive:true});f.doc.emit('pointerdown');await settle();
+  const active=f.media.find(m=>!m.paused);active.currentTime=21;const starts=f.music.inspect().starts;
+  f.music.setPaused(true);assert.equal(f.music.inspect().voices,0);assert.equal(f.music.inspect().scenePaused,true);
+  f.doc.visibilityState='hidden';f.doc.emit('visibilitychange');f.doc.visibilityState='visible';f.doc.emit('visibilitychange');
+  f.bus.setLevels({musicVolume:35});f.music.preferencesChanged();await settle();
+  assert.equal(f.music.inspect().voices,0);assert.equal(active.currentTime,21);
+  f.music.setPaused(false);await settle();assert.equal(f.music.inspect().voices,1);assert.equal(active.currentTime,21);assert.equal(f.music.inspect().starts,starts);
+  f.bus.setLevels({musicVolume:0});f.music.preferencesChanged();assert.equal(f.music.inspect().voices,0);
+  f.music.setPaused(true);f.bus.setLevels({musicVolume:50,masterVolume:80});f.music.preferencesChanged();await settle();assert.equal(f.music.inspect().voices,0);
+  f.music.setPaused(false);await settle();assert.equal(f.music.inspect().voices,1);assert.equal(f.bus.gains().musicEffective,.4);f.music.dispose();f.bus.dispose();
+});
+
+test('entering an exclusive mode with the already playing chosen track changes loop policy without restarting',async()=>{
+  const f=fixture(),cue=dataArenaMusicForMode('TOURNAMENT');f.music.setScene(cue.id);f.doc.emit('pointerdown');await settle();
+  const active=f.media.find(m=>!m.paused);active.currentTime=17;const starts=f.music.inspect().starts;
+  assert.equal(active.loop,false);f.music.setScene(cue.id,'arena:1',cue.scene,{exclusive:true});await settle();
+  assert.equal(active.loop,true);assert.equal(active.currentTime,17);assert.equal(f.music.inspect().starts,starts);assert.equal(f.music.inspect().voices,1);
+  f.music.dispose();f.bus.dispose();
 });
