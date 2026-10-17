@@ -284,7 +284,7 @@ test('the approved public playtest URL plays the selected remade shared effects 
   assert.equal(originalSharedVfxReviewRequested(publicUrl + '?vfxOriginal=shared-v1'), true);
   assert.equal(originalSharedVfxReviewRequested(publicUrl), false, 'the app opts in; ?vfxOriginal=off stays off');
   // Review revisions are loopback choices; the public URL always plays the selection.
-  assert.equal(originalSharedVfxManifestFor(publicUrl + '?vfxOriginal=shared-v1&vfxRevision=157-baseline'), ORIGINAL_SHARED_LOCAL_MANIFEST);
+  assert.equal(originalSharedVfxManifestFor(publicUrl + '?vfxOriginal=shared-v1&vfxRevision=157-baseline'), 'assets/production/public-runtime/shared-vfx.render.v1.json');
   for (const url of ['https://orochi771127.github.io/other/?vfxOriginal=shared-v1', 'https://example.org/championship-2026/?vfxOriginal=shared-v1'])
     assert.equal(originalSharedVfxReviewRequested(url), false, url);
 });

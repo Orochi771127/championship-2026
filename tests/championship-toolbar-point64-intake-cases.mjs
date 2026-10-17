@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {originalToolbarArt} from '../src/championship/presentation/completedOriginalUi20261007.js';
+import {stripPngMetadata} from '../scripts/lib/public-clean-media.mjs';
 import {isShippingArtEntry} from '../scripts/lib/public-art-boundary.mjs';
 const folder='assets/production/original-ui-intake-20261007/toolbar-point64-r1-20261009';
 const manifest=JSON.parse(readFileSync(new URL('../'+folder+'/manifest.json',import.meta.url)));
@@ -18,9 +19,10 @@ test('three local toolbar candidates retain delivered bytes, full raster and ori
  assert.deepEqual(manifest.assets.map(a=>a.role).sort(),Object.keys(delivered).sort());
  for(const [role,expected] of Object.entries(delivered)){
   const art=originalToolbarArt(role,local);
-  assert.equal(art.src,folder+'/'+role+'-rest.png');
+  const source=folder+'/'+role+'-rest.png';assert.equal(art.src,source.replace('assets/production/','assets/production/public-media-clean-20261017/'));
+  assert.equal(sha(readFileSync(new URL('../'+source,import.meta.url))),expected);
   const bytes=readFileSync(new URL('../'+art.src,import.meta.url));
-  assert.equal(sha(bytes),expected);assert.equal(art.sha256,expected);
+  assert.deepEqual(bytes,stripPngMetadata(readFileSync(new URL('../'+source,import.meta.url))));assert.equal(art.sha256,sha(bytes));
   assert.deepEqual([bytes.readUInt32BE(16),bytes.readUInt32BE(20)],[64,64]);
   assert.deepEqual(art.nativeSize,[16,16]);assert.deepEqual(art.origin,[8,8]);
   assert.equal(art.density,4);assert.deepEqual(art.rasterAnchor,[32,32]);

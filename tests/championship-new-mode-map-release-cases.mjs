@@ -1,3 +1,4 @@
+import {publicRuntimeFetchFixture} from './helpers/public-runtime-fetch.mjs';
 import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import{createHash}from'node:crypto';
 import{DATA_ARENA_MAP,DATA_ARENA_DUEL_MAP}from'../src/championship/modes/dataArena/dataArenaConfig.js';
 import{dataArenaPropSpecs}from'../src/championship/modes/dataArena/dataArenaProps.js';
@@ -16,9 +17,9 @@ test('every selected map texture matches its preserved source bytes and budgets'
 });
 for(const[mode,map,m]of[['HARBOR',DATA_ARENA_MAP,harbor],['TOURNAMENT',DATA_ARENA_DUEL_MAP,tournament]])for(const tier of['high','low'])test(mode+' '+tier+' selects its default art without a review query and releases only its own resources',async()=>{
  const held=new Set(),seen=[];let active=0,peak=0;const PIXI={Assets:{async load(v){const p=typeof v==='string'?v:v.src;held.add(p);seen.push(p);if(p.endsWith('manifest.json'))return m;active++;peak=Math.max(peak,active);await new Promise(r=>setTimeout(r,1));active--;return{};},async unload(p){held.delete(p);}}};
- const env=await loadDataArenaEnvironment({PIXI,map,quality:tier,href:'https://example.invalid/championship-2026/championship.html'});assert.equal(env.manifest.id,m.id);assert.ok(peak<=4);assert.ok(seen.every(p=>p.endsWith('.json')||p.endsWith('-'+tier+'.webp')));assert.ok(seen.every(p=>!p.includes(mode==='HARBOR'?'tournament-':'harbor-')));await env.dispose();assert.equal(held.size,0);
+ const env=await loadDataArenaEnvironment({fetchImpl:publicRuntimeFetchFixture(),PIXI,map,quality:tier,href:'https://example.invalid/championship-2026/championship.html'});assert.equal(env.manifest.id,m.id);assert.ok(peak<=4);assert.ok(seen.every(p=>p.endsWith('.json')||p.endsWith('-'+tier+'.webp')));assert.ok(seen.every(p=>!p.includes(mode==='HARBOR'?'tournament-':'harbor-')));await env.dispose();assert.equal(held.size,0);
 });
 test('an active harbor prop failing to decode releases successful partial loads',async()=>{
  const held=new Set(),fail=harbor.dynamicProps[0].states.INTACT.textures.high.src;const PIXI={Assets:{async load(v){const p=typeof v==='string'?v:v.src;if(p.endsWith('/'+fail))throw Error('test decode failure');held.add(p);return p.endsWith('manifest.json')?harbor:{};},async unload(p){held.delete(p);}}};
- await assert.rejects(loadDataArenaEnvironment({PIXI,map:DATA_ARENA_MAP,quality:'high',href:'https://example.invalid/championship.html'}),/test decode failure/);assert.equal(held.size,0);
+ await assert.rejects(loadDataArenaEnvironment({fetchImpl:publicRuntimeFetchFixture(),PIXI,map:DATA_ARENA_MAP,quality:'high',href:'https://example.invalid/championship.html'}),/test decode failure/);assert.equal(held.size,0);
 });

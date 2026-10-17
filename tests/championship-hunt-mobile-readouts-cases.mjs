@@ -30,7 +30,7 @@ import { createGateHuntPresentationSource } from '../src/championship/app/gateHu
 
 test('all sixteen Gate previews resolve real production images by field identity, including shared variants', () => {
   for (const gate of listChampionshipGates()) {
-    const thumbnail = huntGateThumbnail(gate);
+    const thumbnail = huntGateThumbnail(gate,'http://localhost/championship.html');
     assert.equal(thumbnail.fieldId, gate.originalFields.dayFieldId);
     assert.ok(thumbnail.src.startsWith('assets/production/hunt/'));
     assert.ok(fs.existsSync(thumbnail.src));
@@ -88,4 +88,4 @@ test('normal selection publishes target changes once through the existing source
   } finally { unsubscribe(); await app.dispose(); }
 });
 
-test("all sixteen public Gate previews use existing accepted original field pixels",()=>{for(const g of listChampionshipGates()){const t=huntGateThumbnail(g,"https://orochi771127.github.io/championship-2026/");assert.equal(t.fieldId,g.originalFields.dayFieldId);assert.ok(t.src.startsWith("assets/production/hunt/accepted-20261010/"));assert.ok(fs.existsSync(t.src));assert.notEqual(t.src,huntGateThumbnail(g,"https://example.com/").src);}});
+test("all sixteen public Gate previews use existing accepted original field pixels",()=>{for(const g of listChampionshipGates()){const t=huntGateThumbnail(g,"https://orochi771127.github.io/championship-2026/");assert.equal(t.fieldId,g.originalFields.dayFieldId);assert.ok(t.src.startsWith("assets/production/hunt/accepted-20261010/"));assert.ok(fs.existsSync(t.src));assert.equal(huntGateThumbnail(g,"https://example.com/"),null);}});

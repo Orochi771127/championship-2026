@@ -1,3 +1,4 @@
+import {isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
 import acceptedManifest from '../../../assets/production/public-runtime/hunt-accepted.map.v1.json' with {type:'json'};
 // Read-only projections for the continuous mobile Hunt screen.
 // Daytime field thumbnails are previews, never the original field_image_icon.
@@ -8,6 +9,7 @@ import {SPECIES_NAMES_ZH} from '../text/catalogs.zhHant.js';
 const acceptedArt = validateRuntimeMapArtBundle(acceptedManifest);
 
 export function huntGateThumbnail(gate,location=globalThis.location) {
+  if(!isOriginalRuntimeLocation(location))return null;
   const selected=acceptedArt;
   const field = selected.fields.find((entry) => entry.fieldId === gate?.originalFields?.dayFieldId);
   return field ? { src: field.frames[0].src, fieldId: field.fieldId,
