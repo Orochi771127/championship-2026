@@ -9,6 +9,8 @@ export function stripPngMetadata(bytes){
 }
 export function publicCleanMedia({root,write=false}){
  const recipe=JSON.parse(fs.readFileSync(path.join(root,CLEAN_MEDIA_RECIPE),'utf8')),files=[];
- for(const row of recipe.files){const original=fs.readFileSync(path.join(root,row.sourcePath));if(sha(original)!==row.sourceSha256)throw Error('CLEAN_MEDIA_SOURCE_CHANGED_REVIEW_REQUIRED:'+row.sourcePath);const bytes=stripPngMetadata(original);if(sha(bytes)!==row.sha256)throw Error('CLEAN_MEDIA_RECIPE_CHANGED');const target=path.join(root,row.path);if(write){fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);}else if(!fs.readFileSync(target).equals(bytes))throw Error('CLEAN_MEDIA_EXPORT_REQUIRED');files.push({...row,bytesData:bytes});}
+ const selected=new Set(recipe.publicationPaths??recipe.files.map(row=>row.path));
+ if(selected.size!==(recipe.publicationPaths?.length??recipe.files.length)||[...selected].some(file=>!recipe.files.some(row=>row.path===file)))throw Error('CLEAN_MEDIA_PUBLICATION_PATHS');
+ for(const row of recipe.files){const original=fs.readFileSync(path.join(root,row.sourcePath));if(sha(original)!==row.sourceSha256)throw Error('CLEAN_MEDIA_SOURCE_CHANGED_REVIEW_REQUIRED:'+row.sourcePath);const bytes=stripPngMetadata(original);if(sha(bytes)!==row.sha256)throw Error('CLEAN_MEDIA_RECIPE_CHANGED');const target=path.join(root,row.path);if(write){fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);}else if(!fs.readFileSync(target).equals(bytes))throw Error('CLEAN_MEDIA_EXPORT_REQUIRED');if(selected.has(row.path))files.push({...row,bytesData:bytes});}
  return files;
 }

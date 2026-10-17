@@ -79,9 +79,13 @@ test('private reference rejection distinguishes SDK protocol examples from actua
 
 test('clean PNG derivations retain every pixel-bearing and color chunk byte-for-byte',()=>{
   const chunks=bytes=>{const rows=[];for(let pos=8;pos<bytes.length;){const end=pos+12+bytes.readUInt32BE(pos);rows.push({type:bytes.toString('ascii',pos+4,pos+8),bytes:bytes.subarray(pos,end)});pos=end;}return rows;};
-  const files=publicCleanMedia({root});assert.equal(files.length,17);
-  for(const file of files){
-    const source=fs.readFileSync(path.join(root,file.sourcePath)),output=file.bytesData;
+  const recipe=JSON.parse(fs.readFileSync(path.join(root,'docs/contracts/championship/PUBLIC_CLEAN_MEDIA_SOURCES.v1.json')));
+  const files=publicCleanMedia({root});assert.equal(recipe.files.length,17);assert.equal(files.length,7);
+  assert.deepEqual(files.map(row=>row.path).sort(),[...recipe.publicationPaths].sort());
+  assert.equal(files.filter(row=>row.path.includes('/currency-hud-r1/')).length,4);
+  assert.ok(files.filter(row=>row.path.includes('/currency-hud-r1/')).every(row=>/-(?:24|48)\.png$/.test(row.path)));
+  for(const file of recipe.files){
+    const source=fs.readFileSync(path.join(root,file.sourcePath)),output=fs.readFileSync(path.join(root,file.path));
     assert.deepEqual(chunks(output),chunks(source).filter(row=>!['tEXt','iTXt','zTXt','eXIf'].includes(row.type)));
     assert.doesNotThrow(()=>assertPublicBytes(file.path,output));
     assert.deepEqual(stripPngMetadata(output),output);

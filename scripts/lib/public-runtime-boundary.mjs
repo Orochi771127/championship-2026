@@ -11,6 +11,7 @@ import {selectedMapProjections,PUBLIC_MAP_FIELDS} from './public-map-projection.
 import {projectPublicMetadata} from './public-metadata-projection.mjs';
 import {publicCleanMedia} from './public-clean-media.mjs';
 import {publicProgramData} from './public-program-data.mjs';
+import {assertOpeningFilmPublication} from './opening-film-publication.mjs';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -162,6 +163,7 @@ export function publicArtifactPlan({root,input,index}){
 
 // Inspect the actual upload directory, independently of a new JSON's contents.
 export function assertPublicArtifact({root,files,plan,manifestName='pages-build.json'}){
+  assertOpeningFilmPublication(files);
   const expected=new Set([...plan.files,...(plan.generatedFiles??[]),'index.html','.nojekyll',manifestName]);
   if(expected.size!==files.length||[...expected].some(file=>!files.includes(file)))throw Error('PUBLIC_PAYLOAD_FILE_SET');
   const actualSizes=[];

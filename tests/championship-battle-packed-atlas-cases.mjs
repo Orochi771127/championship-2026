@@ -5,9 +5,28 @@ import {createHash} from 'node:crypto';
 import {completedCharacterBundleLocation,validateCompletedOriginalRuntime,loadCompletedOriginalCharacters} from '../src/championship/presentation/completedOriginalCharacters.js';
 import * as PIXI from '../node_modules/pixi.js/dist/pixi.mjs';
 import {createPixiAssetScope} from '../src/championship/presentation/pixiCharacterRuntimeBundle.js';
+import {applyBattlePagePolicy,readBattlePagePolicy,nativeBattleContract} from '../scripts/lib/public-battle-page-policy.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8')),hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
 const pack=read('assets/production/characters/battle-packed-20261013/manifest.json'),accepted=read('src/data/championship/accepted-original-character-selection.r1.json');
 const base='https://orochi771127.github.io/championship-2026/',index=read('assets/production/ART_PRODUCTION_INDEX.json');
+
+test('public shared pages retain six native motion/geometry contracts and reversible independent bindings',()=>{
+ const catalog=read('src/data/championship/public-character-catalog.v1.json'),policy=readBattlePagePolicy(process.cwd()),before=JSON.stringify(catalog);
+ assert.equal(policy.mode,'SHARED_EXISTING_MAIN_PAGES');assert.equal(policy.independentFiles.length,28);
+ const selected=applyBattlePagePolicy(process.cwd(),catalog,policy),restored=applyBattlePagePolicy(process.cwd(),selected,{...policy,mode:'INDEPENDENT_PACKS'});
+ assert.deepEqual(selected,catalog);
+ let count=0;
+ for(const row of policy.characters){
+  const shared=selected.characters.find(c=>c.entityId===row.entityId),original=restored.characters.find(c=>c.entityId===row.entityId);
+  assert.equal(shared.battleRuntimePath,undefined);assert.equal(shared.runtimePath,row.sharedRuntimePath);
+  assert.equal(original.battleRuntimePath,row.independentRuntimePath);assert.equal(original.battleRuntimeSha256,row.independentRuntimeSha256);
+  const a=read(row.sharedRuntimePath),b=read(row.independentRuntimePath);
+  assert.deepEqual(nativeBattleContract(a),nativeBattleContract(b));count+=Object.keys(a.geometry.frames).filter(key=>key.includes('/main/')).length;
+ }
+ assert.equal(count,370);assert.equal(JSON.stringify(catalog),before);
+ assert.deepEqual(selected.speciesBindings,catalog.speciesBindings);
+ assert.throws(()=>applyBattlePagePolicy(process.cwd(),catalog,{...policy,characters:policy.characters.map((row,i)=>i?row:{...row,nativeContractSha256:'0'.repeat(64)})}),/NATIVE_CONTRACT/);
+});
 
 test('only the explicit main-only Battle context selects the six packed bundles, with separate cache namespaces',()=>{
  for(const r of pack.characters){

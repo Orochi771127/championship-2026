@@ -11,8 +11,38 @@ import {buildWebArtifact,validateWebArtifact,INTERNAL_TARGET,PUBLIC_TARGET,PLAYT
 import {isShippingArtEntry,publicArtIndex} from '../scripts/lib/public-art-boundary.mjs';
 import {isLocalBattleEffectPreview} from '../src/championship/presentation/battleEffectArt.js';
 import {PUBLIC_RUNTIME_INDEX_PATH,PUBLIC_RUNTIME_ALLOWLIST_PATH} from '../scripts/lib/public-runtime-boundary.mjs';
+import {compileBrowserBundle,compiledPublicArtifactPlan,bundledBrowserHtml} from '../scripts/lib/browser-bundle.mjs';
+import * as esbuild from 'esbuild';
 
 const repo=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+
+test('public packaging omits only hash-approved compiled scripts and keeps runtime resources',t=>{
+ const {root,write}=fixture(t),main='src/championship/app/main.js',helper='src/championship/app/helper.js',resource='src/championship/app/runtime.json',standalone='src/championship/app/standalone.js';
+ write(main,"import {answer} from './helper.js'; console.log(answer,new URL('./runtime.json',import.meta.url).href);");
+ write(helper,'export const answer=42;');write(resource,{version:1});write(standalone,'export const standalone=true;');
+ const files=[main,helper,resource,standalone];
+ const bundle=compileBrowserBundle(root,{files,importMap:{},browserBundle:{version:1,entry:main,outputDirectory:'src/championship/app/_bundled',toolVersion:esbuild.version}});
+ const source={files,moduleEntries:[main,helper,standalone],importMap:{helper:'./'+helper},allowlist:{files:files.map(file=>({path:file,sha256:sha256(fs.readFileSync(path.join(root,file)))}))}};
+ const published=compiledPublicArtifactPlan(source,bundle);
+ assert.deepEqual(published.files,[resource,standalone]);assert.deepEqual(published.omittedCompiledScripts,[helper,main].sort());
+ assert.ok(published.moduleEntries.includes(standalone));assert.ok(published.moduleEntries.includes(bundle.metadata.entry));assert.ok(!published.moduleEntries.includes(main));assert.deepEqual(published.importMap,{});
+ const forged=structuredClone(source);forged.allowlist.files[0].sha256='0'.repeat(64);
+ assert.throws(()=>compiledPublicArtifactPlan(forged,bundle),/PUBLIC_COMPILED_SOURCE_HASH/);
+ const html='<script type="importmap">{"imports":{"helper":"./'+helper+'"}}</script>\n    <!-- modulepreload: fixture -->\n    <!-- /modulepreload -->\n<script src="./src/championship/app/main.js?v=settings-2"></script>';
+ const output=bundledBrowserHtml(html,bundle.metadata,published.importMap);
+ assert.ok(output.includes('"imports":{}'));assert.ok(output.includes(bundle.metadata.entry));assert.ok(!output.includes('main.js?v=settings-2'));
+});
+
+test('a script also addressed by URL retains its complete original module closure',t=>{
+ const {root,write}=fixture(t),main='src/championship/app/main.js',worker='src/championship/app/worker.js',helper='src/championship/app/helper.js';
+ write(main,"import './worker.js'; console.log(new URL('./worker.js',import.meta.url).href);");
+ write(worker,"import {answer} from './helper.js'; console.log(answer);");write(helper,'export const answer=42;');
+ const files=[main,worker,helper],bundle=compileBrowserBundle(root,{files,importMap:{},browserBundle:{version:1,entry:main,outputDirectory:'src/championship/app/_bundled',toolVersion:esbuild.version}});
+ const source={files,moduleEntries:files,importMap:{},allowlist:{files:files.map(file=>({path:file,sha256:sha256(fs.readFileSync(path.join(root,file)))}))}};
+ const published=compiledPublicArtifactPlan(source,bundle);
+ assert.ok(!published.files.includes(main));assert.ok(published.files.includes(worker));assert.ok(published.files.includes(helper));
+ assert.ok(published.moduleEntries.includes(worker));assert.ok(published.moduleEntries.includes(helper));
+});
 function fixture(t){
   const base=path.join(repo,'.tmp');fs.mkdirSync(base,{recursive:true});
   const root=fs.mkdtempSync(path.join(base,'web-build-test-'));
