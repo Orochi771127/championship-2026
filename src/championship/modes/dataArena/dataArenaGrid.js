@@ -16,6 +16,7 @@
 //  * An EMBER shot landing on ice takes `emberIceMelt` seconds off it.
 
 import { DATA_ARENA_GRID_RULES, DATA_ARENA_MAP, DATA_ARENA_TERRAIN } from "./dataArenaConfig.js";
+import { dataArenaPropSpecs } from "./dataArenaProps.js";
 
 const T = DATA_ARENA_TERRAIN;
 
@@ -30,6 +31,9 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
   const ash = new Float32Array(count);
   const ice = new Float32Array(count); // seconds of ice left on a water cell
   const iceWarned = new Uint8Array(count);
+  // Match-scoped appearance is separate from the short anti-reignition timer.
+  const scorch = new Uint8Array(count);
+  const propIndex = new Int16Array(count); propIndex.fill(-1);
   // A monotonically increasing revision of everything navigation reads.
   let navRevision = 1;
   let fireTimer = 0;
@@ -55,6 +59,14 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
       if (inBounds(c, r) && terrain[index(c, r)] === T.GROUND) flammable[index(c, r)] = 1;
     }
   }
+  const props = dataArenaPropSpecs(map).map((spec, pi) => {
+    const cells = [];
+    for (let r=spec.row;r<spec.row+spec.height;r++) for(let c=spec.col;c<spec.col+spec.width;c++) {
+      const i=index(c,r); cells.push(i); propIndex[i]=pi;
+      if (spec.combustible) flammable[i]=1;
+    }
+    return {...spec, cells, hp:spec.maxHp, destroyed:false, charred:false, hits:0};
+  });
 
   const isWaterTerrain = (i) => terrain[i] === T.WATER;
   const isSolid = (i) => terrain[i] === T.SOLID || terrain[i] === T.STANDS;
@@ -76,7 +88,7 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
   function blocksMove(i, kind) {
     if (i < 0 || i >= count) return true;
     if (isSolid(i)) return true;
-    if (isWaterTerrain(i) && ice[i] <= 0) return kind !== "swimmer" && kind !== "player";
+    if (isWaterTerrain(i) && ice[i] <= 0) return kind !== "swimmer" && kind !== "forced";
     return false;
   }
 
@@ -85,6 +97,41 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
   }
 
   const blocksLaser = (i) => i < 0 || i >= count || isSolid(i);
+
+  function propAtCell(i) { const pi=propIndex[i]; return pi>=0 ? props[pi] : null; }
+  function propAt(x,y) { const c=cellOf(x),r=cellOf(y); return inBounds(c,r) ? propAtCell(index(c,r)) : null; }
+  function propVisualState(prop) {
+    if (prop.destroyed) return "DESTROYED";
+    if (prop.cells.some(i=>fire[i]>0)) return "BURNING";
+    if (prop.charred) return "BURNT";
+    return prop.hp < prop.maxHp*.7 ? "DAMAGED" : "INTACT";
+  }
+  function damageProp(prop, amount, events, cause="IMPACT") {
+    if (!prop || prop.destroyed || !(amount>0)) return false;
+    const beforeHp=prop.hp;prop.hp=Math.max(0,prop.hp-amount);prop.hits++;
+    if (cause==="FIRE") prop.charred=true;
+    const x=(prop.col+prop.width/2)*cell,y=(prop.row+prop.height/2)*cell;
+    // Bound impact notifications; continuous beams must not spawn 60 bursts/s.
+    const crossedDamageStep=Math.ceil(beforeHp/prop.maxHp*8)!==Math.ceil(prop.hp/prop.maxHp*8);
+    if (prop.hits===1 || crossedDamageStep || prop.hp===0) events?.push({type:"PROP_HIT",id:prop.id,x,y,hp:prop.hp,cause});
+    if (prop.hp===0) {
+      prop.destroyed=true;
+      for(const i of prop.cells) {terrain[i]=T.GROUND;if(prop.charred)scorch[i]=255;}
+      navRevision++;
+      events?.push({type:"PROP_DESTROYED",id:prop.id,x,y,charred:prop.charred,material:prop.material});
+    }
+    return true;
+  }
+  function damagePropsInRadius(x,y,radius,amount,events,cause="IMPACT") {
+    let hit=0;
+    for(const prop of props) {
+      if(prop.destroyed)continue;
+      const nx=Math.max(prop.col*cell,Math.min(x,(prop.col+prop.width)*cell));
+      const ny=Math.max(prop.row*cell,Math.min(y,(prop.row+prop.height)*cell));
+      if(Math.hypot(nx-x,ny-y)<=radius && damageProp(prop,amount,events,cause))hit++;
+    }
+    return hit;
+  }
 
   /**
    * Distance along a unit ray to the first laser-blocking cell (DDA traversal),
@@ -111,6 +158,7 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
   function ignite(i, events, source = "SPREAD") {
     if (i < 0 || i >= count || !flammable[i] || fire[i] > 0 || wet[i] > 0 || ash[i] > 0) return false;
     fire[i] = rules.fireBurnSeconds;
+    scorch[i] = Math.max(scorch[i],70);
     heat[i] = 0;
     burningCount++;
     navRevision++;
@@ -218,11 +266,13 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
       if (ash[i] > 0) ash[i] = Math.max(0, ash[i] - dt);
     }
     if (burningCount <= 0) { fireTimer = 0; return; }
+    for (const prop of props) if (!prop.destroyed && prop.cells.some(i=>fire[i]>0)) damageProp(prop,prop.burnDps*dt,events,"FIRE");
     for (let i = 0; i < count; i++) {
       if (fire[i] <= 0) continue;
+      scorch[i]=Math.min(255,Math.max(scorch[i],Math.round(70+(1-fire[i]/rules.fireBurnSeconds)*185)));
       fire[i] -= dt;
       if (fire[i] <= 0) {
-        fire[i] = 0; burningCount--; ash[i] = rules.ashSeconds; navRevision++;
+        fire[i] = 0; burningCount--; ash[i] = rules.ashSeconds; scorch[i]=255; navRevision++;
         events.push({ type: "FIRE_BURNT_OUT", cell: i });
       }
     }
@@ -246,7 +296,7 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     for (const n of toIgnite) ignite(n, events, "SPREAD");
   }
 
-  /** Clear fire, heat, wet, ash and ice (a fresh tournament round). Terrain is untouched. */
+  /** Fresh round: transient hazards clear; match damage/scorch/terrain persist. */
   function resetDynamic() {
     fire.fill(0); heat.fill(0); wet.fill(0); ash.fill(0); ice.fill(0); iceWarned.fill(0);
     burningCount = 0; iceCount = 0; fireTimer = 0; navRevision++;
@@ -254,7 +304,8 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
 
   return Object.freeze({
     resetDynamic, map,
-    cols, rows, cell, count, terrain, flammable, fire, wet, ash, ice,
+    cols, rows, cell, count, terrain, flammable, fire, wet, ash, ice, scorch, props,
+    propAtCell, propAt, propVisualState, damageProp, damagePropsInRadius,
     index, inBounds, cellOf,
     get navRevision() { return navRevision; },
     get burningCount() { return burningCount; },

@@ -1,0 +1,14 @@
+{
+  "stateAtSelection": "LOCAL_ONLY_NO_PR_NO_MERGE_NO_DEPLOY",
+  "primaryProjectArt": {
+    "harbor": {"path": "../references/harbor-visual-target-v1.png", "libraryFileId": "libfile_d80c80299678819198f45bfd49ec42f3", "sha256": "48254b3b2b670c988f11fe4a8bcc65248b1cd2c5cf0ff5717435d61a7f5a597b"},
+    "tournament": {"path": "../references/tournament-art-target-v1.png", "libraryFileId": "libfile_29b7e456c6fc8191a1a69832f9bdfcf6", "sha256": "3d4fc94c3a2366fbc2232ec79348836a15d48c2b7ff136e563b676f06a057272"}
+  },
+  "externalScreenshotRole": "Finish-quality benchmarks only: modeling, materials, light/shadow and natural layering. Never a layout or content blueprint.",
+  "selectedVersions": ["data-arena:harbor:blender:r6", "data-arena:tournament:detail:r3"],
+  "rejectedForThisRelease": {"harbor-r7": "Added northern warehouse mass replaces the intended stand composition", "harbor-r8-r9": "Office/workshop/boat additions drift from the project-specific cargo/quay design", "tournament-detail-r4": "Added pavilions depart from the original canopy/stand content"},
+  "selectionBasis": "Existing earlier full-map checkpoints retain original court, cargo/blocking footprints, water channels, crossings, stand strips, harbor mechanical arms, audience and separate water motion. No new pixels, layout edits or replacement renders.",
+  "knownArtGaps": ["Materials and object finesse remain below the primary concept quality", "Some decorative details, color variety, radial court markings and planting are sparse", "This is an authorized test release, not final art approval"],
+  "originalsAndAlternativesPreserved": true,
+  "commercialArtAccepted": false
+}

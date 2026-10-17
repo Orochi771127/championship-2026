@@ -1,0 +1,1415 @@
+{
+  "schemaVersion": 1,
+  "id": "data-arena:tournament:detail:r3",
+  "kind": "TOURNAMENT_STONE",
+  "scope": "FULL_MAP_REVIEW",
+  "layoutSignature": "{\"cell\":64,\"cols\":24,\"rows\":16,\"rects\":[[0,0,24,2,3],[0,8,5,2,2],[7,8,10,2,2],[19,8,5,2,2],[3,4,2,2,1],[19,4,2,2,1],[9,5,2,1,1],[13,5,2,1,1],[3,11,2,2,1],[19,11,2,2,1],[9,11,2,1,1],[13,11,2,1,1],[7,2,1,2,1],[16,2,1,2,1],[7,13,1,2,1],[16,13,1,2,1]],\"stage\":null,\"pylons\":[],\"flammable\":[[1,12,2,3],[21,2,2,3],[10,13,4,2],[10,2,4,2]],\"pods\":[[11,7],[12,10]],\"beacons\":[],\"fireCores\":[],\"playerSpawn\":[12,14],\"mateSpawn\":[13,14],\"rivalSpawn\":[11,3],\"bossSpawn\":[11,3],\"gates\":[]}",
+  "world": {
+    "cols": 24,
+    "rows": 16,
+    "cell": 64,
+    "width": 1536,
+    "height": 1024
+  },
+  "region": [
+    0,
+    -96,
+    1536,
+    1120
+  ],
+  "projection": {
+    "elevationDegrees": 45,
+    "groundZ": 0,
+    "waterZ": -0.235,
+    "waterSurfaceOffset": -10.634885989045674
+  },
+  "rights": "PROJECT_ORIGINAL",
+  "weights": [],
+  "externalAssets": [],
+  "ground": [
+    {
+      "x": 0,
+      "y": -96,
+      "width": 512,
+      "height": 512,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-0-0-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-0-0-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 256
+        }
+      }
+    },
+    {
+      "x": 512,
+      "y": -96,
+      "width": 512,
+      "height": 512,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-512-0-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-512-0-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 256
+        }
+      }
+    },
+    {
+      "x": 1024,
+      "y": -96,
+      "width": 512,
+      "height": 512,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-0-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-0-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 256
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 416,
+      "width": 512,
+      "height": 512,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-0-512-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-0-512-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 256
+        }
+      }
+    },
+    {
+      "x": 512,
+      "y": 416,
+      "width": 512,
+      "height": 512,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-512-512-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-512-512-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 256
+        }
+      }
+    },
+    {
+      "x": 1024,
+      "y": 416,
+      "width": 512,
+      "height": 512,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-512-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-512-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 256
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 928,
+      "width": 512,
+      "height": 96,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-0-1024-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 96
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-0-1024-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 48
+        }
+      }
+    },
+    {
+      "x": 512,
+      "y": 928,
+      "width": 512,
+      "height": 96,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-512-1024-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 96
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-512-1024-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 48
+        }
+      }
+    },
+    {
+      "x": 1024,
+      "y": 928,
+      "width": 512,
+      "height": 96,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-1024-high.webp",
+          "pixelWidth": 512,
+          "pixelHeight": 96
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-1024-low.webp",
+          "pixelWidth": 256,
+          "pixelHeight": 48
+        }
+      }
+    }
+  ],
+  "foreground": {
+    "x": 0,
+    "y": 632,
+    "width": 1536,
+    "height": 40,
+    "textures": {
+      "high": {
+        "src": "assets/production/data-arena/tournament-detail-r3/foreground-bank-high.webp",
+        "pixelWidth": 1536,
+        "pixelHeight": 40
+      },
+      "low": {
+        "src": "assets/production/data-arena/tournament-detail-r3/foreground-bank-low.webp",
+        "pixelWidth": 768,
+        "pixelHeight": 20
+      }
+    },
+    "sortY": 640
+  },
+  "props": [
+    {
+      "id": "cargo-4",
+      "rect": [
+        3,
+        4,
+        2,
+        2
+      ],
+      "sortY": 384,
+      "states": {
+        "INTACT": {
+          "x": 128,
+          "y": 112,
+          "width": 288,
+          "height": 336,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-4-intact-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 336
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-4-intact-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 168
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-5",
+      "rect": [
+        19,
+        4,
+        2,
+        2
+      ],
+      "sortY": 384,
+      "states": {
+        "INTACT": {
+          "x": 1152,
+          "y": 112,
+          "width": 288,
+          "height": 336,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-5-intact-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 336
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-5-intact-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 168
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-8",
+      "rect": [
+        3,
+        11,
+        2,
+        2
+      ],
+      "sortY": 832,
+      "states": {
+        "INTACT": {
+          "x": 128,
+          "y": 560,
+          "width": 288,
+          "height": 336,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-8-intact-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 336
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-8-intact-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 168
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-9",
+      "rect": [
+        19,
+        11,
+        2,
+        2
+      ],
+      "sortY": 832,
+      "states": {
+        "INTACT": {
+          "x": 1152,
+          "y": 560,
+          "width": 288,
+          "height": 336,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-9-intact-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 336
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-9-intact-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 168
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-12",
+      "rect": [
+        7,
+        2,
+        1,
+        2
+      ],
+      "sortY": 256,
+      "states": {
+        "INTACT": {
+          "x": 384,
+          "y": -16,
+          "width": 224,
+          "height": 336,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-12-intact-high.webp",
+              "pixelWidth": 224,
+              "pixelHeight": 336
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-12-intact-low.webp",
+              "pixelWidth": 112,
+              "pixelHeight": 168
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-13",
+      "rect": [
+        16,
+        2,
+        1,
+        2
+      ],
+      "sortY": 256,
+      "states": {
+        "INTACT": {
+          "x": 960,
+          "y": -16,
+          "width": 224,
+          "height": 336,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-13-intact-high.webp",
+              "pixelWidth": 224,
+              "pixelHeight": 336
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-13-intact-low.webp",
+              "pixelWidth": 112,
+              "pixelHeight": 168
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-14",
+      "rect": [
+        7,
+        13,
+        1,
+        2
+      ],
+      "sortY": 960,
+      "states": {
+        "INTACT": {
+          "x": 384,
+          "y": 688,
+          "width": 224,
+          "height": 336,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-14-intact-high.webp",
+              "pixelWidth": 224,
+              "pixelHeight": 336
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-14-intact-low.webp",
+              "pixelWidth": 112,
+              "pixelHeight": 168
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-15",
+      "rect": [
+        16,
+        13,
+        1,
+        2
+      ],
+      "sortY": 960,
+      "states": {
+        "INTACT": {
+          "x": 960,
+          "y": 688,
+          "width": 224,
+          "height": 336,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-15-intact-high.webp",
+              "pixelWidth": 224,
+              "pixelHeight": 336
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-15-intact-low.webp",
+              "pixelWidth": 112,
+              "pixelHeight": 168
+            }
+          }
+        }
+      }
+    }
+  ],
+  "dynamicProps": [
+    {
+      "id": "cargo-6",
+      "rect": [
+        9,
+        5,
+        2,
+        1
+      ],
+      "sortY": 384,
+      "states": {
+        "INTACT": {
+          "x": 512,
+          "y": 176,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-intact-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-intact-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "DAMAGED": {
+          "x": 512,
+          "y": 176,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-damaged-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-damaged-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "BURNT": {
+          "x": 512,
+          "y": 176,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-burnt-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-burnt-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "DESTROYED": {
+          "x": 512,
+          "y": 176,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-destroyed-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-destroyed-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-7",
+      "rect": [
+        13,
+        5,
+        2,
+        1
+      ],
+      "sortY": 384,
+      "states": {
+        "INTACT": {
+          "x": 768,
+          "y": 176,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-intact-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-intact-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "DAMAGED": {
+          "x": 768,
+          "y": 176,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-damaged-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-damaged-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "BURNT": {
+          "x": 768,
+          "y": 176,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-burnt-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-burnt-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "DESTROYED": {
+          "x": 768,
+          "y": 176,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-destroyed-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-destroyed-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-10",
+      "rect": [
+        9,
+        11,
+        2,
+        1
+      ],
+      "sortY": 768,
+      "states": {
+        "INTACT": {
+          "x": 512,
+          "y": 560,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-intact-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-intact-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "DAMAGED": {
+          "x": 512,
+          "y": 560,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-damaged-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-damaged-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "BURNT": {
+          "x": 512,
+          "y": 560,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-burnt-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-burnt-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "DESTROYED": {
+          "x": 512,
+          "y": 560,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-destroyed-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-destroyed-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-11",
+      "rect": [
+        13,
+        11,
+        2,
+        1
+      ],
+      "sortY": 768,
+      "states": {
+        "INTACT": {
+          "x": 768,
+          "y": 560,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-intact-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-intact-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "DAMAGED": {
+          "x": 768,
+          "y": 560,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-damaged-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-damaged-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "BURNT": {
+          "x": 768,
+          "y": 560,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-burnt-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-burnt-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        },
+        "DESTROYED": {
+          "x": 768,
+          "y": 560,
+          "width": 288,
+          "height": 272,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-destroyed-high.webp",
+              "pixelWidth": 288,
+              "pixelHeight": 272
+            },
+            "low": {
+              "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-destroyed-low.webp",
+              "pixelWidth": 144,
+              "pixelHeight": 136
+            }
+          }
+        }
+      }
+    }
+  ],
+  "crowd": [
+    {
+      "x": 0,
+      "y": -96,
+      "width": 1536,
+      "height": 224,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/crowd-0-high.webp",
+          "pixelWidth": 1536,
+          "pixelHeight": 224
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/crowd-0-low.webp",
+          "pixelWidth": 768,
+          "pixelHeight": 112
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -96,
+      "width": 1536,
+      "height": 224,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/crowd-1-high.webp",
+          "pixelWidth": 1536,
+          "pixelHeight": 224
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/crowd-1-low.webp",
+          "pixelWidth": 768,
+          "pixelHeight": 112
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -96,
+      "width": 1536,
+      "height": 224,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/crowd-2-high.webp",
+          "pixelWidth": 1536,
+          "pixelHeight": 224
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/crowd-2-low.webp",
+          "pixelWidth": 768,
+          "pixelHeight": 112
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -96,
+      "width": 1536,
+      "height": 224,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-detail-r3/crowd-3-high.webp",
+          "pixelWidth": 1536,
+          "pixelHeight": 224
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-detail-r3/crowd-3-low.webp",
+          "pixelWidth": 768,
+          "pixelHeight": 112
+        }
+      }
+    }
+  ],
+  "pennants": [
+    {
+      "x": 0,
+      "y": -80,
+      "width": 1536,
+      "height": 224,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-stone-r1/pennants-0-high.webp",
+          "pixelWidth": 1536,
+          "pixelHeight": 224
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-stone-r1/pennants-0-low.webp",
+          "pixelWidth": 768,
+          "pixelHeight": 112
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -80,
+      "width": 1536,
+      "height": 224,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-stone-r1/pennants-1-high.webp",
+          "pixelWidth": 1536,
+          "pixelHeight": 224
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-stone-r1/pennants-1-low.webp",
+          "pixelWidth": 768,
+          "pixelHeight": 112
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -80,
+      "width": 1536,
+      "height": 224,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-stone-r1/pennants-2-high.webp",
+          "pixelWidth": 1536,
+          "pixelHeight": 224
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-stone-r1/pennants-2-low.webp",
+          "pixelWidth": 768,
+          "pixelHeight": 112
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -80,
+      "width": 1536,
+      "height": 224,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/tournament-stone-r1/pennants-3-high.webp",
+          "pixelWidth": 1536,
+          "pixelHeight": 224
+        },
+        "low": {
+          "src": "assets/production/data-arena/tournament-stone-r1/pennants-3-low.webp",
+          "pixelWidth": 768,
+          "pixelHeight": 112
+        }
+      }
+    }
+  ],
+  "waves": {
+    "high": {
+      "src": "assets/production/data-arena/tournament-stone-r1/water-wavelets-high.webp",
+      "pixelWidth": 256,
+      "pixelHeight": 256
+    },
+    "low": {
+      "src": "assets/production/data-arena/tournament-stone-r1/water-wavelets-low.webp",
+      "pixelWidth": 128,
+      "pixelHeight": 128
+    }
+  },
+  "crowdCount": 56,
+  "frameDurationMs": {
+    "crowd": 250,
+    "pennants": 300
+  },
+  "files": [
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-burnt-high.webp",
+      "bytes": 19332,
+      "sha256": "86a0dab8f48cd0d501d5cd28b7a329fd82e978feb3622d84e42bc837e51e2601"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-burnt-low.webp",
+      "bytes": 5692,
+      "sha256": "4499099d133110f797d1a07a12f969ec10c675734ff6bd78391d4330159af88e"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-damaged-high.webp",
+      "bytes": 20392,
+      "sha256": "45801df02a30385f74d6f377717d6df5496838d1b0c05976be119c69527d0330"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-damaged-low.webp",
+      "bytes": 5796,
+      "sha256": "c76c75af0e95a8ac82934a61f639cc9b069445ba6fbaefb8a22738cb580b9a89"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-destroyed-high.webp",
+      "bytes": 5284,
+      "sha256": "e8face7e011b207f9ca049bc703ee90cc433602d386ab09115e001dd4851ca6f"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-destroyed-low.webp",
+      "bytes": 1730,
+      "sha256": "f0f249a2ad2d94eee56a2964b80b519585a4c408bd4837fc6b9a7c347519ac40"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-intact-high.webp",
+      "bytes": 20620,
+      "sha256": "b00b886d8df0639e97ac803c9ff3ba89404eacf71f00c712cc0feb013c5579a5"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-10-intact-low.webp",
+      "bytes": 5790,
+      "sha256": "669453a87ae85f5ce69626bcd8c20a9096532097f8c80f9028c4f9ccbdc41d2b"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-burnt-high.webp",
+      "bytes": 19674,
+      "sha256": "28b9ba1cb35e8060ba390488923cb3271885df187c4d65330c166acb9f0a7fe2"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-burnt-low.webp",
+      "bytes": 6024,
+      "sha256": "c6e0b765533c1d2c8c18eae4d0e2a98530e0e09e8b98aeec579d7fde5c615c14"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-damaged-high.webp",
+      "bytes": 19908,
+      "sha256": "5f059f698c80767147103a80a179432959d6f41e531e4aaeae2b8f0fbf079de7"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-damaged-low.webp",
+      "bytes": 5652,
+      "sha256": "72768548db92a64edb6b1a9ca4b09960c0644088a8c39644128da425b1f536f0"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-destroyed-high.webp",
+      "bytes": 6448,
+      "sha256": "ed671a7ebcf3ad536e37331874a25830778164ad38361c06c1e44da2014f5513"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-destroyed-low.webp",
+      "bytes": 2030,
+      "sha256": "341fb4e8feab901604744d308a7b3f26e20f030dac3f0f9d5f6f66b3ca9d0d00"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-intact-high.webp",
+      "bytes": 20258,
+      "sha256": "74f6b2951bc8182f3c29d2d0b1e24eca2ca95bd66a33d2838342b7f2610ebfe1"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-11-intact-low.webp",
+      "bytes": 5676,
+      "sha256": "2c08838be87727204311f8ebbcc1b47838f91e798c06b4b3aa86af62d65f5012"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-12-intact-high.webp",
+      "bytes": 19312,
+      "sha256": "0dfa893d67a1319ff9965b55488f1de640326dc4d3c501ad226acba5d088281f"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-12-intact-low.webp",
+      "bytes": 7132,
+      "sha256": "9af2065526bc5d10198e474da715f750417c3a06a6cb65281aa633ff67a9dc7f"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-13-intact-high.webp",
+      "bytes": 14194,
+      "sha256": "7cd3471cb33ee78b2b25c19f02ce1287672986e67c8fe529a01737162a096fc5"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-13-intact-low.webp",
+      "bytes": 6290,
+      "sha256": "22e5005c23ba4220329c91fbcc782378a6403c704ced1671e8196e7452267100"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-14-intact-high.webp",
+      "bytes": 22096,
+      "sha256": "aba63d366755f4115d192cfd5af2f0706ba97fe11433eb3b7d0c276c08368a40"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-14-intact-low.webp",
+      "bytes": 7696,
+      "sha256": "3f7eed270e3909afc50eee16367dad31a3d344e427b2877032d15b41c198f038"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-15-intact-high.webp",
+      "bytes": 20436,
+      "sha256": "bc4dc3fa620921e4c0989237c28dc94a76d6232b41d790e0c71df1e26a11ed26"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-15-intact-low.webp",
+      "bytes": 7158,
+      "sha256": "a7dd8cd151166dd4bebab073cde41956ff9c876abc3a6a27ccc9bed38d7636e9"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-4-intact-high.webp",
+      "bytes": 20674,
+      "sha256": "1dd8a479a64199e99d1cbe7f67dc1832afe61648238d24d6388df4e3843a7761"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-4-intact-low.webp",
+      "bytes": 6866,
+      "sha256": "066323e19d32fc092a3c4b987bbc3ced6cd9d811f630c0515cd9fd351cb565b5"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-5-intact-high.webp",
+      "bytes": 31200,
+      "sha256": "899e570570a11841685996b3610fbeaaa47bdecd4f1f5b2e766bf80927713ca2"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-5-intact-low.webp",
+      "bytes": 10608,
+      "sha256": "d0b6ee6d2a7a439b30e4e173ff0f97a3a23f48b4c8418d4e4bd7f67ff9b5f42f"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-burnt-high.webp",
+      "bytes": 19576,
+      "sha256": "89401721602d3e831ebb1e0cd4ca2ba8f680be990fa632df03cf26d3944ac6e6"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-burnt-low.webp",
+      "bytes": 5960,
+      "sha256": "db089b030e626a968ef458944ffbcf979fc1f44065042265f8371e46d8fe492b"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-damaged-high.webp",
+      "bytes": 21082,
+      "sha256": "8089fa8d4b83f8be2f4f1b705af530fb24a63f5c16a3ebe7b40dc197f7fc2722"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-damaged-low.webp",
+      "bytes": 6006,
+      "sha256": "b58648dbb6891e83884000d8520ad952bd81c5655a00715277558d5dd8029459"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-destroyed-high.webp",
+      "bytes": 5974,
+      "sha256": "dbb7b6c961a0d3c81c63e3ce91c699eb7314b3d798132437b767b2e880987019"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-destroyed-low.webp",
+      "bytes": 1910,
+      "sha256": "827b2fa20d1c6bdcbaa6f365e0519d9c986b00dcd7bc8df113f7ae7a3acbd9b9"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-intact-high.webp",
+      "bytes": 21022,
+      "sha256": "7107aa9b8b6c917f814c1d666473023953272d128c46f1b85166302c39081b9d"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-6-intact-low.webp",
+      "bytes": 5922,
+      "sha256": "4a8bb33670d419e952b57b6f566b56476fde3fd881b0b23af85866143763ed89"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-burnt-high.webp",
+      "bytes": 19716,
+      "sha256": "6ffff2344833e5b67bf0cabf2a924157e25f59a4fc11ac01d7419e3df5b2f482"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-burnt-low.webp",
+      "bytes": 5948,
+      "sha256": "4630b46bd76347c0b24b15631f3d08c2bd0d9854bad0647e5b58b32b1fae3c74"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-damaged-high.webp",
+      "bytes": 19648,
+      "sha256": "14f069c01bc8fa1f4451d38186b3fd61f1ef14575e47155d984cfbfc2b805ae5"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-damaged-low.webp",
+      "bytes": 5692,
+      "sha256": "b123bb4cdcdcf835282a257d8210e9c2f1f215f5e22c085045a0b8eec906b174"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-destroyed-high.webp",
+      "bytes": 4998,
+      "sha256": "c1d54ca2e9385e37ab399545a7c47e037648847f9216d9f89976a7865207c3e7"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-destroyed-low.webp",
+      "bytes": 1620,
+      "sha256": "d3e74646520439f97bf2c37d9d975d7dd35c80d594841782fab96303bcd18477"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-intact-high.webp",
+      "bytes": 19910,
+      "sha256": "8f90fd4e4c817910dcbde8d2c19a3d4dff725a460131e7d6ad30da50797cf882"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-7-intact-low.webp",
+      "bytes": 5662,
+      "sha256": "37dd8c9b0586aeea53ae65b769057c3ff65f3c3eedd799211f4824eb80c3f758"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-8-intact-high.webp",
+      "bytes": 33132,
+      "sha256": "8b1760acd31e22d3a8ac12b5651ed2eacf730e0eeacdeb30ba8904ebc0cb4086"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-8-intact-low.webp",
+      "bytes": 9024,
+      "sha256": "0c719876baec24004265390c53d421cabd43be9b9024c61819c352e52e4ebba2"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-9-intact-high.webp",
+      "bytes": 31338,
+      "sha256": "a065235e758bad8203f1f831387f6ef2c58013c91657d822d65264640b902f62"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/cargo-9-intact-low.webp",
+      "bytes": 8814,
+      "sha256": "d409f08c3cb435bf3689d9958448b026b25d1468819513921670b86cfdc61384"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/crowd-0-high.webp",
+      "bytes": 155722,
+      "sha256": "13624fbd59fb41b3be2061576dde3a48edfdcf5ae63b0ea4ddb98f62816a912c"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/crowd-0-low.webp",
+      "bytes": 68272,
+      "sha256": "b7b32ab85b757ed0d9f29cd809d424d81011b9c4d21b1a6c0e25c194fb94a64a"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/crowd-1-high.webp",
+      "bytes": 155846,
+      "sha256": "21de87b3abec8b3174cd1c1db72b2e37004aeba7f392c160ba03651a44037a08"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/crowd-1-low.webp",
+      "bytes": 68304,
+      "sha256": "bf72279d476a844fad5e840aeaa4bdec02c047c5eff7de8495295262479e79e2"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/crowd-2-high.webp",
+      "bytes": 156074,
+      "sha256": "b18189cc6523998b229664549a5f5c7cbc4a6122064d827c9ac35d2e9d360a13"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/crowd-2-low.webp",
+      "bytes": 68308,
+      "sha256": "6ffa33a0780a951e9aa7565dc1b38d06acd6b6d40683bc00d3214f497fa35529"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/crowd-3-high.webp",
+      "bytes": 155998,
+      "sha256": "28d555e51eaa73b6cb4443e5fcc2615c87d69c4a9c4321f2f6ba78a70d587214"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/crowd-3-low.webp",
+      "bytes": 68440,
+      "sha256": "db6f93f20f632de425b66a6ce4359c59692710dd176095ebfcdc66f3db090656"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/foreground-bank-high.webp",
+      "bytes": 22574,
+      "sha256": "b2f0489e67a1a60318730f42463438ec4bfc04bd76496040f096bb38fceac89e"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/foreground-bank-low.webp",
+      "bytes": 8392,
+      "sha256": "f439cbc6b1bab98cbf1ce0a8126f935453a474e909d22325bbfbd550ff28d1f0"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-0-0-high.webp",
+      "bytes": 181062,
+      "sha256": "046acf982e80fbc13d3d5770d6eccc27826a72404c4b1817ba421e4bfc0762ff"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-0-0-low.webp",
+      "bytes": 56488,
+      "sha256": "588ae9fa0aba94f60e5b1f11a700a1322105aad744462717d2da3a5c030029e7"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-0-1024-high.webp",
+      "bytes": 34022,
+      "sha256": "bdaaf50e26d452e943252313c4ce3081d7daa4969465de0d1aa00a1bdb23bd54"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-0-1024-low.webp",
+      "bytes": 10934,
+      "sha256": "034c48b4e632ddc541e7d27fce25933bc9e31435a517721cf6ffd0c43696e758"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-0-512-high.webp",
+      "bytes": 185998,
+      "sha256": "83a9fe6b034596fbc4d9364c90c56ddc62b0de61073fdbda2fd7508fa725a5d1"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-0-512-low.webp",
+      "bytes": 58212,
+      "sha256": "21aa97110bb38f628f03acb7e538a584ea645590ae60ec3463dbd4fbdd352f2f"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-0-high.webp",
+      "bytes": 185628,
+      "sha256": "cc13e9dfd5d9ad3c682ec367172b900d6f046b902b072864f8743d46388b7374"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-0-low.webp",
+      "bytes": 57104,
+      "sha256": "388f36295a6216da5b8463b8c3dd1670909f88b49cb6f82a5f4c46eb50bfafd7"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-1024-high.webp",
+      "bytes": 33114,
+      "sha256": "d0c601fbacf623d5284aabcb98967dd17247837cf762a5b4033af4cd49cd82a3"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-1024-low.webp",
+      "bytes": 10458,
+      "sha256": "dc550a04eb561e62f9bc22ed31306a6af353a7ba51f3f513452a38435c79f46b"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-512-high.webp",
+      "bytes": 180662,
+      "sha256": "e0c936725c8055891968d1b6be9e6a75814adacb2c7e789d1a1450311957e8ad"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-1024-512-low.webp",
+      "bytes": 57758,
+      "sha256": "22b1d4df343dbe5b9883c30fe05878bf48f5114d6f691e03d28a49f124d6278c"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-512-0-high.webp",
+      "bytes": 186292,
+      "sha256": "6ddebd6fff2c1c4ec5b5ebac7c136d12c9ac5f7c2f29801182c19a88b0f4ea27"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-512-0-low.webp",
+      "bytes": 57498,
+      "sha256": "8007c5baccf198584bf1e0197353a349349f7bf457a3f06487b29822b63089a7"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-512-1024-high.webp",
+      "bytes": 33810,
+      "sha256": "c444747e9caa0fc5224f6e7a4addfe673775d0d5699ce10aa7c6ba19af0d68d2"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-512-1024-low.webp",
+      "bytes": 10512,
+      "sha256": "f16d4ee027d975eb9c25b1db5f9f522a59f73b903d8d2d4966882ebad18ac357"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-512-512-high.webp",
+      "bytes": 182964,
+      "sha256": "1878bb049dea7df98880ab793cf90d9f575dd3be8762bb6e029e6f4e8529faaa"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-detail-r3/patch-512-512-low.webp",
+      "bytes": 57134,
+      "sha256": "dfcccf52fe5d7863e35e53877b8aa3eb09514de83df7be280ccd221f00b2b864"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/pennants-0-high.webp",
+      "bytes": 17650,
+      "sha256": "e75076e1c2a65efe7309951b25ec9e0c6e5056adb0a39c16bbdebdd3aff3f2cd"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/pennants-0-low.webp",
+      "bytes": 7910,
+      "sha256": "4a9ab491c5ea33e61d6ff05b49d85cb629106fa470aaf3170b07391a99c4843d"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/pennants-1-high.webp",
+      "bytes": 17502,
+      "sha256": "5e1fd841ec060930639641e6120a5e4bce7a2fcc49c20f8f9eb068b254bfef12"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/pennants-1-low.webp",
+      "bytes": 7928,
+      "sha256": "0b469d1c2450f0e936845343f5bcc4d1cf205c2772560391c18cdc51161c41d3"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/pennants-2-high.webp",
+      "bytes": 17568,
+      "sha256": "11c19778f263aad1265f09809a19411ad32d770f6e2c64e6cd213dbab9238101"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/pennants-2-low.webp",
+      "bytes": 7972,
+      "sha256": "43bfe700d4ffc92a30bdc8c54bb854a275af36bd37b202cb80abdeae67ef060a"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/pennants-3-high.webp",
+      "bytes": 17496,
+      "sha256": "6c181a1e6b0fd2c3ce2178522e00236517a3ee634996c312ef58ec239fe6932c"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/pennants-3-low.webp",
+      "bytes": 7716,
+      "sha256": "cfd3f8c194084830e14c69db4a4160629ebc17fb19fa2cfd4e5ea345e1ca857b"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/water-wavelets-high.webp",
+      "bytes": 666,
+      "sha256": "fad1b2360ad58670cd834badeeaa591b7a36d997f8a06bf906de7e78478cbf8a"
+    },
+    {
+      "src": "assets/production/data-arena/tournament-stone-r1/water-wavelets-low.webp",
+      "bytes": 2020,
+      "sha256": "5bc73b9dfff094252a13b63a33d794be32400ef39a7786e00e219369235f0ba8"
+    }
+  ],
+  "decodedBytes": {
+    "high": 26165248,
+    "low": 6541312
+  },
+  "reviewCropOnly": false,
+  "reviewCrop": [
+    0,
+    -96,
+    1536,
+    1120
+  ],
+  "humanApproved": false,
+  "shippingReady": false,
+  "detailSource": {
+    "blend": "docs/reports/authored-map-full-2026-10-16/tournament/source/tournament-authored-full.blend",
+    "generator": "scripts/render-two-map-authored-detail-crops.py",
+    "baseManifest": "assets/production/data-arena/tournament-stone-r1/manifest.json",
+    "rights": "PROJECT_ORIGINAL",
+    "weights": []
+  },
+  "artDirection": {
+    "composition": "approximate 60/30/10 dominant/secondary/accent guidance; not pixel quotas",
+    "dominant": "quiet warm stone, wood and soft water",
+    "secondary": "structural copper and grouped muted cloth",
+    "accent": "small fixtures; character, skill and important HUD feedback remain strongest"
+  }
+}

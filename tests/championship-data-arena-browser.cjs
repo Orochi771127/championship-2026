@@ -267,10 +267,24 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     check('backgrounding pauses the match and stops game time', hidden.state === 'PAUSE' && hiddenLater === hidden.time, { hidden, hiddenLater });
     await shot(page, 'desktop-05-paused-after-background');
     // Low quality from the pause menu remounts the scene at resolution 1.
-    await page.locator('.da-panel--pause .da-toggle').nth(1).click();
+    // Hold only the new low-resolution environment art response. This probes
+    // the real async transition without writing simulation or renderer state.
+    const lowPattern='**/data-arena/interactions-v1/*-low.webp';
+    let releaseLow;const lowGate=new Promise(resolve=>{releaseLow=resolve;});
+    const holdLow=async route=>{await lowGate;await route.continue();};await page.route(lowPattern,holdLow);
+    const lowRequest=page.waitForRequest(request=>request.url().includes('/data-arena/interactions-v1/')&&request.url().endsWith('-low.webp'),{timeout:10000});
+    try{
+      await page.locator('.da-panel--pause .da-toggle').nth(1).click();await lowRequest;
+      await page.keyboard.press('Escape');
+      const transition=await qa(page,()=>({state:window.__dataArenaQA.state(),disabled:document.querySelector('.da-panel--pause .da-btn--primary')?.disabled}));
+      check('quality reload blocks premature resume while textures are pending',transition.state==='PAUSE'&&transition.disabled,transition);
+    }finally{releaseLow();}
+    await page.waitForFunction(()=>window.__dataArenaQA.diagnostics().scene?.quality==='low'&&!document.querySelector('.da-panel--pause .da-btn--primary').disabled,null,{timeout:30000});
+    await page.unroute(lowPattern,holdLow);
     diag = await qa(page, () => window.__dataArenaQA.diagnostics());
     check('low quality applies (scene + pixel ratio cap)', diag.scene.quality === 'low' && diag.stage.resolution === 1, { quality: diag.scene.quality, resolution: diag.stage.resolution });
     await page.locator('.da-panel--pause .da-toggle').nth(1).click();
+    await page.waitForFunction(()=>window.__dataArenaQA.diagnostics().scene?.quality==='high'&&!document.querySelector('.da-panel--pause .da-btn--primary').disabled,null,{timeout:30000});
     await page.click('.da-panel--pause .da-btn--primary');
     await waitState(page, 'PLAY');
     // Resize mid-match.

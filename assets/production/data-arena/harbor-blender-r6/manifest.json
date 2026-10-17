@@ -1,0 +1,4358 @@
+{
+  "schemaVersion": 2,
+  "id": "data-arena:harbor:blender:r6",
+  "rightsStatus": "PROJECT_ORIGINAL",
+  "commercialUseBasis": "Original procedural Blender geometry/materials. ComfyUI core scaling only. No external pixels, meshes, checkpoints or custom nodes.",
+  "humanApproved": false,
+  "shippingReady": false,
+  "world": {
+    "width": 3840,
+    "height": 2560
+  },
+  "layout": {
+    "cell": 64,
+    "cols": 60,
+    "rows": 40,
+    "rects": [
+      [
+        0,
+        0,
+        60,
+        3,
+        3
+      ],
+      [
+        0,
+        28,
+        60,
+        4,
+        2
+      ],
+      [
+        28,
+        28,
+        4,
+        4,
+        5
+      ],
+      [
+        7,
+        7,
+        3,
+        2,
+        1
+      ],
+      [
+        14,
+        11,
+        1,
+        3,
+        1
+      ],
+      [
+        5,
+        15,
+        2,
+        2,
+        1
+      ],
+      [
+        19,
+        20,
+        3,
+        1,
+        1
+      ],
+      [
+        11,
+        24,
+        2,
+        1,
+        1
+      ],
+      [
+        23,
+        8,
+        2,
+        2,
+        1
+      ],
+      [
+        43,
+        7,
+        3,
+        2,
+        1
+      ],
+      [
+        47,
+        11,
+        1,
+        3,
+        1
+      ],
+      [
+        53,
+        15,
+        2,
+        2,
+        1
+      ],
+      [
+        38,
+        20,
+        3,
+        1,
+        1
+      ],
+      [
+        47,
+        24,
+        2,
+        1,
+        1
+      ],
+      [
+        35,
+        8,
+        2,
+        2,
+        1
+      ],
+      [
+        19,
+        34,
+        2,
+        2,
+        1
+      ],
+      [
+        39,
+        34,
+        2,
+        2,
+        1
+      ],
+      [
+        6,
+        37,
+        2,
+        1,
+        1
+      ],
+      [
+        52,
+        37,
+        2,
+        1,
+        1
+      ]
+    ],
+    "stage": {
+      "col": 30,
+      "row": 15,
+      "radius": 5.2
+    },
+    "pylons": [
+      [
+        25,
+        10
+      ],
+      [
+        35,
+        10
+      ],
+      [
+        25,
+        20
+      ],
+      [
+        35,
+        20
+      ]
+    ],
+    "flammable": [
+      [
+        3,
+        18,
+        15,
+        9
+      ],
+      [
+        42,
+        18,
+        15,
+        9
+      ],
+      [
+        24,
+        23,
+        12,
+        4
+      ]
+    ],
+    "pods": [
+      [
+        9,
+        27
+      ],
+      [
+        21,
+        27
+      ],
+      [
+        38,
+        27
+      ],
+      [
+        50,
+        27
+      ],
+      [
+        15,
+        32
+      ],
+      [
+        45,
+        32
+      ]
+    ],
+    "beacons": [
+      [
+        10,
+        35
+      ],
+      [
+        30,
+        36
+      ],
+      [
+        50,
+        35
+      ]
+    ],
+    "fireCores": [
+      [
+        9,
+        22
+      ],
+      [
+        50,
+        22
+      ],
+      [
+        30,
+        25
+      ]
+    ],
+    "playerSpawn": [
+      30,
+      23
+    ],
+    "mateSpawn": [
+      32,
+      24
+    ],
+    "bossSpawn": [
+      30,
+      15
+    ],
+    "gates": [
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        14
+      ],
+      [
+        1,
+        22
+      ],
+      [
+        58,
+        6
+      ],
+      [
+        58,
+        14
+      ],
+      [
+        58,
+        22
+      ],
+      [
+        12,
+        4
+      ],
+      [
+        48,
+        4
+      ],
+      [
+        2,
+        34
+      ],
+      [
+        57,
+        34
+      ],
+      [
+        30,
+        38
+      ]
+    ]
+  },
+  "layoutSignature": "{\"cell\":64,\"cols\":60,\"rows\":40,\"rects\":[[0,0,60,3,3],[0,28,60,4,2],[28,28,4,4,5],[7,7,3,2,1],[14,11,1,3,1],[5,15,2,2,1],[19,20,3,1,1],[11,24,2,1,1],[23,8,2,2,1],[43,7,3,2,1],[47,11,1,3,1],[53,15,2,2,1],[38,20,3,1,1],[47,24,2,1,1],[35,8,2,2,1],[19,34,2,2,1],[39,34,2,2,1],[6,37,2,1,1],[52,37,2,1,1]],\"stage\":{\"col\":30,\"row\":15,\"radius\":5.2},\"pylons\":[[25,10],[35,10],[25,20],[35,20]],\"flammable\":[[3,18,15,9],[42,18,15,9],[24,23,12,4]],\"pods\":[[9,27],[21,27],[38,27],[50,27],[15,32],[45,32]],\"beacons\":[[10,35],[30,36],[50,35]],\"fireCores\":[[9,22],[50,22],[30,25]],\"playerSpawn\":[30,23],\"mateSpawn\":[32,24],\"bossSpawn\":[30,15],\"gates\":[[1,6],[1,14],[1,22],[58,6],[58,14],[58,22],[12,4],[48,4],[2,34],[57,34],[30,38]]}",
+  "ground": {
+    "high": [
+      {
+        "x": 0,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-0-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 512,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-0-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1024,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-0-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1536,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-0-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2048,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-0-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2560,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-0-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3072,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-0-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3584,
+        "y": -128,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-0-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 512
+      },
+      {
+        "x": 0,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-512-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 512,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-512-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1024,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-512-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1536,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-512-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2048,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-512-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2560,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-512-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3072,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-512-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3584,
+        "y": 384,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-512-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 512
+      },
+      {
+        "x": 0,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-1024-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 512,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-1024-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1024,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-1024-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1536,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-1024-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2048,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-1024-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2560,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-1024-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3072,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-1024-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3584,
+        "y": 896,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-1024-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 512
+      },
+      {
+        "x": 0,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-1536-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 512,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-1536-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1024,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-1536-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1536,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-1536-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2048,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-1536-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2560,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-1536-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3072,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-1536-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3584,
+        "y": 1408,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-1536-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 512
+      },
+      {
+        "x": 0,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-2048-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 512,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-2048-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1024,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-2048-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 1536,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-2048-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2048,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-2048-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 2560,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-2048-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3072,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-2048-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 512
+      },
+      {
+        "x": 3584,
+        "y": 1920,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-2048-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 512
+      },
+      {
+        "x": 0,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-2560-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 256
+      },
+      {
+        "x": 512,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-2560-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 256
+      },
+      {
+        "x": 1024,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-2560-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 256
+      },
+      {
+        "x": 1536,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-2560-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 256
+      },
+      {
+        "x": 2048,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-2560-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 256
+      },
+      {
+        "x": 2560,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-2560-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 256
+      },
+      {
+        "x": 3072,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-2560-high.webp",
+        "pixelWidth": 512,
+        "pixelHeight": 256
+      },
+      {
+        "x": 3584,
+        "y": 2432,
+        "width": 256,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-2560-high.webp",
+        "pixelWidth": 256,
+        "pixelHeight": 256
+      }
+    ],
+    "low": [
+      {
+        "x": 0,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-0-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 512,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-0-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1024,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-0-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1536,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-0-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2048,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-0-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2560,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-0-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3072,
+        "y": -128,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-0-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3584,
+        "y": -128,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-0-low.webp",
+        "pixelWidth": 112,
+        "pixelHeight": 224
+      },
+      {
+        "x": 0,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-512-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 512,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-512-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1024,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-512-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1536,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-512-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2048,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-512-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2560,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-512-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3072,
+        "y": 384,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-512-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3584,
+        "y": 384,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-512-low.webp",
+        "pixelWidth": 112,
+        "pixelHeight": 224
+      },
+      {
+        "x": 0,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-1024-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 512,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-1024-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1024,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-1024-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1536,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-1024-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2048,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-1024-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2560,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-1024-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3072,
+        "y": 896,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-1024-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3584,
+        "y": 896,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-1024-low.webp",
+        "pixelWidth": 112,
+        "pixelHeight": 224
+      },
+      {
+        "x": 0,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-1536-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 512,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-1536-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1024,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-1536-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1536,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-1536-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2048,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-1536-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2560,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-1536-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3072,
+        "y": 1408,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-1536-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3584,
+        "y": 1408,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-1536-low.webp",
+        "pixelWidth": 112,
+        "pixelHeight": 224
+      },
+      {
+        "x": 0,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-2048-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 512,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-2048-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1024,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-2048-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 1536,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-2048-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2048,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-2048-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 2560,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-2048-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3072,
+        "y": 1920,
+        "width": 512,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-2048-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 224
+      },
+      {
+        "x": 3584,
+        "y": 1920,
+        "width": 256,
+        "height": 512,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-2048-low.webp",
+        "pixelWidth": 112,
+        "pixelHeight": 224
+      },
+      {
+        "x": 0,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-0-2560-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 112
+      },
+      {
+        "x": 512,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-512-2560-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 112
+      },
+      {
+        "x": 1024,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-2560-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 112
+      },
+      {
+        "x": 1536,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-2560-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 112
+      },
+      {
+        "x": 2048,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-2560-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 112
+      },
+      {
+        "x": 2560,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-2560-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 112
+      },
+      {
+        "x": 3072,
+        "y": 2432,
+        "width": 512,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-2560-low.webp",
+        "pixelWidth": 224,
+        "pixelHeight": 112
+      },
+      {
+        "x": 3584,
+        "y": 2432,
+        "width": 256,
+        "height": 256,
+        "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-2560-low.webp",
+        "pixelWidth": 112,
+        "pixelHeight": 112
+      }
+    ]
+  },
+  "props": [
+    {
+      "id": "cargo-3",
+      "sortY": 576,
+      "footprint": [
+        7,
+        7,
+        3,
+        2
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        373,
+        254,
+        715,
+        663
+      ],
+      "x": 373,
+      "y": 254,
+      "width": 342,
+      "height": 409,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-3-high.webp",
+          "pixelWidth": 342,
+          "pixelHeight": 409
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-3-low.webp",
+          "pixelWidth": 171,
+          "pixelHeight": 204
+        }
+      }
+    },
+    {
+      "id": "cargo-4",
+      "sortY": 896,
+      "footprint": [
+        14,
+        11,
+        1,
+        3
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        821,
+        578,
+        1035,
+        983
+      ],
+      "x": 821,
+      "y": 578,
+      "width": 214,
+      "height": 405,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-4-high.webp",
+          "pixelWidth": 214,
+          "pixelHeight": 405
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-4-low.webp",
+          "pixelWidth": 107,
+          "pixelHeight": 202
+        }
+      }
+    },
+    {
+      "id": "cargo-6",
+      "sortY": 1344,
+      "footprint": [
+        19,
+        20,
+        3,
+        1
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        1141,
+        1186,
+        1483,
+        1431
+      ],
+      "x": 1141,
+      "y": 1186,
+      "width": 342,
+      "height": 245,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r6/cargo-6-high.webp",
+          "pixelWidth": 342,
+          "pixelHeight": 245
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r6/cargo-6-low.webp",
+          "pixelWidth": 171,
+          "pixelHeight": 122
+        }
+      }
+    },
+    {
+      "id": "cargo-7",
+      "sortY": 1600,
+      "footprint": [
+        11,
+        24,
+        2,
+        1
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        629,
+        1442,
+        907,
+        1687
+      ],
+      "x": 629,
+      "y": 1442,
+      "width": 278,
+      "height": 245,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-7-high.webp",
+          "pixelWidth": 278,
+          "pixelHeight": 245
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-7-low.webp",
+          "pixelWidth": 139,
+          "pixelHeight": 122
+        }
+      }
+    },
+    {
+      "id": "cargo-8",
+      "sortY": 640,
+      "footprint": [
+        23,
+        8,
+        2,
+        2
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        1397,
+        418,
+        1675,
+        727
+      ],
+      "x": 1397,
+      "y": 418,
+      "width": 278,
+      "height": 309,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-8-high.webp",
+          "pixelWidth": 278,
+          "pixelHeight": 309
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-8-low.webp",
+          "pixelWidth": 139,
+          "pixelHeight": 154
+        }
+      }
+    },
+    {
+      "id": "cargo-9",
+      "sortY": 576,
+      "footprint": [
+        43,
+        7,
+        3,
+        2
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        2677,
+        254,
+        3019,
+        663
+      ],
+      "x": 2677,
+      "y": 254,
+      "width": 342,
+      "height": 409,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-9-high.webp",
+          "pixelWidth": 342,
+          "pixelHeight": 409
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-9-low.webp",
+          "pixelWidth": 171,
+          "pixelHeight": 204
+        }
+      }
+    },
+    {
+      "id": "cargo-10",
+      "sortY": 896,
+      "footprint": [
+        47,
+        11,
+        1,
+        3
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        2933,
+        578,
+        3147,
+        983
+      ],
+      "x": 2933,
+      "y": 578,
+      "width": 214,
+      "height": 405,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-10-high.webp",
+          "pixelWidth": 214,
+          "pixelHeight": 405
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-10-low.webp",
+          "pixelWidth": 107,
+          "pixelHeight": 202
+        }
+      }
+    },
+    {
+      "id": "cargo-12",
+      "sortY": 1344,
+      "footprint": [
+        38,
+        20,
+        3,
+        1
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        2357,
+        1186,
+        2699,
+        1431
+      ],
+      "x": 2357,
+      "y": 1186,
+      "width": 342,
+      "height": 245,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r6/cargo-12-high.webp",
+          "pixelWidth": 342,
+          "pixelHeight": 245
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r6/cargo-12-low.webp",
+          "pixelWidth": 171,
+          "pixelHeight": 122
+        }
+      }
+    },
+    {
+      "id": "cargo-13",
+      "sortY": 1600,
+      "footprint": [
+        47,
+        24,
+        2,
+        1
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        2933,
+        1442,
+        3211,
+        1687
+      ],
+      "x": 2933,
+      "y": 1442,
+      "width": 278,
+      "height": 245,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-13-high.webp",
+          "pixelWidth": 278,
+          "pixelHeight": 245
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-13-low.webp",
+          "pixelWidth": 139,
+          "pixelHeight": 122
+        }
+      }
+    },
+    {
+      "id": "cargo-14",
+      "sortY": 640,
+      "footprint": [
+        35,
+        8,
+        2,
+        2
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        2165,
+        418,
+        2443,
+        727
+      ],
+      "x": 2165,
+      "y": 418,
+      "width": 278,
+      "height": 309,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-14-high.webp",
+          "pixelWidth": 278,
+          "pixelHeight": 309
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-14-low.webp",
+          "pixelWidth": 139,
+          "pixelHeight": 154
+        }
+      }
+    },
+    {
+      "id": "cargo-16",
+      "sortY": 2304,
+      "footprint": [
+        39,
+        34,
+        2,
+        2
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        2421,
+        2082,
+        2699,
+        2391
+      ],
+      "x": 2421,
+      "y": 2082,
+      "width": 278,
+      "height": 309,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-16-high.webp",
+          "pixelWidth": 278,
+          "pixelHeight": 309
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-16-low.webp",
+          "pixelWidth": 139,
+          "pixelHeight": 154
+        }
+      }
+    },
+    {
+      "id": "cargo-17",
+      "sortY": 2432,
+      "footprint": [
+        6,
+        37,
+        2,
+        1
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        309,
+        2274,
+        587,
+        2519
+      ],
+      "x": 309,
+      "y": 2274,
+      "width": 278,
+      "height": 245,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-17-high.webp",
+          "pixelWidth": 278,
+          "pixelHeight": 245
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-17-low.webp",
+          "pixelWidth": 139,
+          "pixelHeight": 122
+        }
+      }
+    },
+    {
+      "id": "cargo-18",
+      "sortY": 2432,
+      "footprint": [
+        52,
+        37,
+        2,
+        1
+      ],
+      "kind": "harborStructure",
+      "renderInMechanism": false,
+      "crop": [
+        3253,
+        2274,
+        3531,
+        2519
+      ],
+      "x": 3253,
+      "y": 2274,
+      "width": 278,
+      "height": 245,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-18-high.webp",
+          "pixelWidth": 278,
+          "pixelHeight": 245
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/cargo-18-low.webp",
+          "pixelWidth": 139,
+          "pixelHeight": 122
+        }
+      }
+    },
+    {
+      "id": "pylon-0",
+      "sortY": 704.0,
+      "footprint": [
+        25.0,
+        10.0,
+        1,
+        1
+      ],
+      "kind": "pylon",
+      "crop": [
+        1591,
+        558,
+        1673,
+        713
+      ],
+      "x": 1591,
+      "y": 558,
+      "width": 82,
+      "height": 155,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/pylon-0-high.webp",
+          "pixelWidth": 82,
+          "pixelHeight": 155
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/pylon-0-low.webp",
+          "pixelWidth": 41,
+          "pixelHeight": 78
+        }
+      }
+    },
+    {
+      "id": "pylon-1",
+      "sortY": 704.0,
+      "footprint": [
+        35.0,
+        10.0,
+        1,
+        1
+      ],
+      "kind": "pylon",
+      "crop": [
+        2231,
+        558,
+        2313,
+        713
+      ],
+      "x": 2231,
+      "y": 558,
+      "width": 82,
+      "height": 155,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/pylon-1-high.webp",
+          "pixelWidth": 82,
+          "pixelHeight": 155
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/pylon-1-low.webp",
+          "pixelWidth": 41,
+          "pixelHeight": 78
+        }
+      }
+    },
+    {
+      "id": "pylon-2",
+      "sortY": 1344.0,
+      "footprint": [
+        25.0,
+        20.0,
+        1,
+        1
+      ],
+      "kind": "pylon",
+      "crop": [
+        1591,
+        1198,
+        1673,
+        1353
+      ],
+      "x": 1591,
+      "y": 1198,
+      "width": 82,
+      "height": 155,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/pylon-2-high.webp",
+          "pixelWidth": 82,
+          "pixelHeight": 155
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/pylon-2-low.webp",
+          "pixelWidth": 41,
+          "pixelHeight": 78
+        }
+      }
+    },
+    {
+      "id": "pylon-3",
+      "sortY": 1344.0,
+      "footprint": [
+        35.0,
+        20.0,
+        1,
+        1
+      ],
+      "kind": "pylon",
+      "crop": [
+        2231,
+        1198,
+        2313,
+        1353
+      ],
+      "x": 2231,
+      "y": 1198,
+      "width": 82,
+      "height": 155,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r4/pylon-3-high.webp",
+          "pixelWidth": 82,
+          "pixelHeight": 155
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r4/pylon-3-low.webp",
+          "pixelWidth": 41,
+          "pixelHeight": 78
+        }
+      }
+    }
+  ],
+  "mechanisms": [
+    {
+      "id": "gantry-0",
+      "colliderId": "cargo-5",
+      "crop": [
+        292,
+        848,
+        548,
+        1180
+      ],
+      "sortY": 1088.2,
+      "frameCount": 24,
+      "frameDurationMs": 125,
+      "x": 292,
+      "y": 848,
+      "width": 256,
+      "height": 332,
+      "frames": [
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-00-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-00-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-01-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-01-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-02-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-02-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-03-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-03-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-04-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-04-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-05-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-05-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-06-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-06-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-07-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-07-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-08-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-08-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-09-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-09-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-10-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-10-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-11-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-11-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-12-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-12-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-13-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-13-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-14-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-14-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-15-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-15-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-16-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-16-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-17-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-17-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-18-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-18-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-19-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-19-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-20-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-20-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-21-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-21-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-22-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-22-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-23-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-23-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        }
+      ]
+    },
+    {
+      "id": "gantry-1",
+      "colliderId": "cargo-11",
+      "crop": [
+        3364,
+        848,
+        3620,
+        1180
+      ],
+      "sortY": 1088.2,
+      "frameCount": 24,
+      "frameDurationMs": 125,
+      "x": 3364,
+      "y": 848,
+      "width": 256,
+      "height": 332,
+      "frames": [
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-00-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-00-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-01-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-01-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-02-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-02-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-03-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-03-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-04-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-04-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-05-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-05-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-06-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-06-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-07-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-07-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-08-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-08-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-09-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-09-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-10-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-10-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-11-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-11-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-12-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-12-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-13-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-13-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-14-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-14-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-15-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-15-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-16-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-16-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-17-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-17-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-18-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-18-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-19-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-19-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-20-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-20-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-21-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-21-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-22-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-22-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-23-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-23-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        }
+      ]
+    },
+    {
+      "id": "gantry-2",
+      "colliderId": "cargo-15",
+      "crop": [
+        1188,
+        2064,
+        1444,
+        2396
+      ],
+      "sortY": 2304.2,
+      "frameCount": 24,
+      "frameDurationMs": 125,
+      "x": 1188,
+      "y": 2064,
+      "width": 256,
+      "height": 332,
+      "frames": [
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-00-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-00-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-01-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-01-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-02-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-02-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-03-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-03-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-04-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-04-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-05-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-05-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-06-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-06-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-07-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-07-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-08-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-08-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-09-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-09-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-10-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-10-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-11-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-11-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-12-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-12-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-13-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-13-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-14-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-14-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-15-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-15-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-16-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-16-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-17-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-17-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-18-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-18-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-19-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-19-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-20-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-20-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-21-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-21-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-22-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-22-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        },
+        {
+          "high": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-23-high.webp",
+            "pixelWidth": 256,
+            "pixelHeight": 332
+          },
+          "low": {
+            "src": "assets/production/data-arena/harbor-blender-r4/machine-23-low.webp",
+            "pixelWidth": 128,
+            "pixelHeight": 166
+          }
+        }
+      ]
+    }
+  ],
+  "decodedBytes": {
+    "high": 79844440,
+    "low": 17419592
+  },
+  "actorFloorOffsets": {
+    "ground": 0,
+    "deck": 3.6656415536710627,
+    "stage": 11.087434329005065,
+    "bridge": 11.087434329005065,
+    "water": -10.634885989045674
+  },
+  "pylonLampHeightPx": 76.02812111317759,
+  "collision": "Exact DATA_ARENA_MAP and createDataArenaGrid remain gameplay authority.",
+  "occlusion": "Southern solid-footprint edge sorts each tall structure and crane. Ground shadows are baked separately. Mechanism frames carry their own changing shadow.",
+  "motion": {
+    "water": {
+      "pixelsPerSecond": 5,
+      "maxAlpha": 0.2
+    },
+    "caustics": {
+      "maxAlpha": 0.38,
+      "maxDisplacementPixels": 2
+    },
+    "sorterArms": {
+      "count": 3,
+      "frames": 24,
+      "fps": 8,
+      "lowFps": 4
+    },
+    "pylonLamps": {
+      "count": 4,
+      "maxAlpha": 0.75
+    },
+    "reducedMotion": "Freeze waves, localized caustics, mechanism frames and quiet lamps; gameplay telegraphs remain active."
+  },
+  "source": {
+    "blend": "docs/reports/harbor-stone-r4-2026-10-16/source/harbor-stone-r4.blend",
+    "generator": "scripts/build-harbor-stone-r4.py",
+    "rights": "PROJECT_ORIGINAL",
+    "weights": []
+  },
+  "bridge": {
+    "x": 1768,
+    "y": 1755,
+    "width": 305,
+    "height": 368,
+    "textures": {
+      "high": {
+        "src": "assets/production/data-arena/harbor-blender-r4/bridge-high.webp",
+        "pixelWidth": 305,
+        "pixelHeight": 368
+      },
+      "low": {
+        "src": "assets/production/data-arena/harbor-blender-r4/bridge-low.webp",
+        "pixelWidth": 152,
+        "pixelHeight": 184
+      }
+    }
+  },
+  "waves": {
+    "high": {
+      "src": "assets/production/data-arena/harbor-blender-r2/waves/layer-high.webp",
+      "pixelWidth": 3840,
+      "pixelHeight": 256
+    },
+    "low": {
+      "src": "assets/production/data-arena/harbor-blender-r2/waves/layer-low.webp",
+      "pixelWidth": 1920,
+      "pixelHeight": 128
+    }
+  },
+  "caustics": {
+    "high": {
+      "src": "assets/production/data-arena/harbor-blender-r2/caustics/layer-high.webp",
+      "pixelWidth": 3840,
+      "pixelHeight": 256
+    },
+    "low": {
+      "src": "assets/production/data-arena/harbor-blender-r2/caustics/layer-low.webp",
+      "pixelWidth": 1920,
+      "pixelHeight": 128
+    }
+  },
+  "files": [
+    {
+      "src": "assets/production/data-arena/harbor-blender-r2/caustics/layer-high.webp",
+      "bytes": 11120,
+      "sha256": "4d7bf8aad9541bd71530dd1976b81f729a525e4dbac3c4281f34b2c31c210a8c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r2/caustics/layer-low.webp",
+      "bytes": 3442,
+      "sha256": "ccae689f8a64cc6dc9cb3335040bebf8bb76d965f34b51bfdccc7363ebbbb848"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r2/waves/layer-high.webp",
+      "bytes": 21510,
+      "sha256": "da90e0bef4e89e97660fab86325076b1151aa4766ff7b19fd85857a848c641d1"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r2/waves/layer-low.webp",
+      "bytes": 10500,
+      "sha256": "a40f11a185e6cffb86cab128ca4a80285b6a25574348ecaf6f2a93168a44ca0b"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/bridge-high.webp",
+      "bytes": 56650,
+      "sha256": "eecc9c8af3c251cd60baff6e50f1e0e4404ba8bf95303b23c70fbbc9ebbc518a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/bridge-low.webp",
+      "bytes": 18154,
+      "sha256": "cdfe63f9557c63d6304323193989787ce3cd77fbca5cac66d889fe0a8b7b8035"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-10-high.webp",
+      "bytes": 29956,
+      "sha256": "eae3de7e01dc81cfb1cea0e43f8bb27accf0a2165d6f41c0acf57a56ed78b8d8"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-10-low.webp",
+      "bytes": 11686,
+      "sha256": "7c15a51bd1d314a3aa6c2ea0aa35f5c9af6093e9b9568129ed89e250e4e43f7d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-13-high.webp",
+      "bytes": 2508,
+      "sha256": "69a9a6599122221d552c8ef95d6040c8c581c57ff40d038c50b8b3c9285943f8"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-13-low.webp",
+      "bytes": 674,
+      "sha256": "a987b330fa97e0c62bf365298140f43c029f6ec186cfbba0a2c6f0f568ca474e"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-14-high.webp",
+      "bytes": 39390,
+      "sha256": "972d49577319e705cf964c7c621d99c5614a727c831be85feb0afc1a0539a6c0"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-14-low.webp",
+      "bytes": 11698,
+      "sha256": "4f6c89cf0f365a36382af52b4bcc0ca2e69164000c0e6792960efd4680f1ef95"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-16-high.webp",
+      "bytes": 33204,
+      "sha256": "80a5821927c1ddfc74039f2db5c85a94ad79814e3771e3815b63557ee1188985"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-16-low.webp",
+      "bytes": 9618,
+      "sha256": "c194744a0a12f18aec72b9da31234a3e355d35427e7284e942c4fc67a94a1778"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-17-high.webp",
+      "bytes": 2080,
+      "sha256": "31051da5607e5ffe234cb7aa5e7a206eb409421d63f221a485578a17759f008d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-17-low.webp",
+      "bytes": 688,
+      "sha256": "acc7417d65d29fd2650d7902e4a1be31cc3c301f0054a420867c150762d2d647"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-18-high.webp",
+      "bytes": 2272,
+      "sha256": "caad1c0281c73080fc1fa2fd29820e852dbe084c81677bc56b7452ea1739f389"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-18-low.webp",
+      "bytes": 690,
+      "sha256": "e49f616e3e4cdda295fca60453c792dcb197dfe7d4bf95fadea4027ade382e26"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-3-high.webp",
+      "bytes": 46324,
+      "sha256": "fcbce80b03b62065af910f772a7b7bf2800d2cff028bc213a247fdf38d9cfcfb"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-3-low.webp",
+      "bytes": 13002,
+      "sha256": "ee67810c5ebe9e6a90076ca988ddb2d1aad08deb4bb390f768bcbd3d4367b63a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-4-high.webp",
+      "bytes": 30628,
+      "sha256": "9da8d66f62cd3eb1403b28cb31c5923df266e4c021563b4860d35f1f81d9c653"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-4-low.webp",
+      "bytes": 12564,
+      "sha256": "6e05be880c32dff048a62e0567c6a77d0aaead0d3d8094fc9436fccf531430bf"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-7-high.webp",
+      "bytes": 2050,
+      "sha256": "6b89d2c2a0e7cfe5c1c248c6c7241f1db1d359bb9c17d4eaf09d9b38ed46eb11"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-7-low.webp",
+      "bytes": 704,
+      "sha256": "468d48b22b372026764cf6883b9cb028e5a5d152626fbcd8e14b6aea5e29357c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-8-high.webp",
+      "bytes": 42066,
+      "sha256": "350f4e3de8ad3206490f89789fb98f1edcbf529a55221e88aae57e322d290aa4"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-8-low.webp",
+      "bytes": 13188,
+      "sha256": "dfa863e1b1a5a64ee63c5faa6c46acdb671282635fc15984052285ac674ddaa7"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-9-high.webp",
+      "bytes": 54480,
+      "sha256": "40fd9d5dbefe513bbaa0c6fa7683c2635be42159dd7148ac1dab78aa32476561"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/cargo-9-low.webp",
+      "bytes": 14852,
+      "sha256": "355fea92d4dd81b29f59284e37f4997bf485fd3b340a43023e721ed5f214c02b"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-00-high.webp",
+      "bytes": 30856,
+      "sha256": "994207c387ca51e5ddfb56e215d82b573eec78e4d2f067c1ab7bc352aad851e0"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-00-low.webp",
+      "bytes": 9782,
+      "sha256": "8231a4679dd905ac7c13d4301bc55e63835c2e2726ae79464c2d4c1cfacd2860"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-01-high.webp",
+      "bytes": 31216,
+      "sha256": "2178c7bfeb826ec7ecdccdd6de1cadaa3e5220da75b1e3a7cdf7279d8e61e67b"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-01-low.webp",
+      "bytes": 9882,
+      "sha256": "9655b212693fb9a7d3ba499bc2fbc247739bb944899acc9f7f41d64643484690"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-02-high.webp",
+      "bytes": 31276,
+      "sha256": "56390710a5b21cfdc47eb6b4a228d003bd07de3b141e3a6e90895b05d56c49f7"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-02-low.webp",
+      "bytes": 10088,
+      "sha256": "dbb784b38127052e90154d39ea8b5a697593a18a79b32c27312db26809d4eb21"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-03-high.webp",
+      "bytes": 31586,
+      "sha256": "ccccabcb2f4726798b9c24167844e91484cabda00b40c84fd15157408c66375a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-03-low.webp",
+      "bytes": 10204,
+      "sha256": "d4e7e488a5c27e8690b209f1a11d97cdb71cd88b3be53f2b6f29974c9d4808aa"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-04-high.webp",
+      "bytes": 31844,
+      "sha256": "d41dd85488dd182f9839da0dd4cd15b1094e7a8877e6d97876c6c3b2da4ff684"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-04-low.webp",
+      "bytes": 10024,
+      "sha256": "592063a4ae65b112e7b12469e43fccaccd95d8a49b4f93f4587a4c29563d5936"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-05-high.webp",
+      "bytes": 31798,
+      "sha256": "4179302043ff1eb752e0efcddcad60151cac7d73b4bbf8819f86c89d67c3c43f"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-05-low.webp",
+      "bytes": 10118,
+      "sha256": "e8fcd5f68b1fbefb21bc31d7628c3efce0d0d9b78aed8c6e200dbf19e5177775"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-06-high.webp",
+      "bytes": 31576,
+      "sha256": "03b9b001ba686e9df8ef93720c4460fe3cf8453d141e69c59d6d268187069ee0"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-06-low.webp",
+      "bytes": 10138,
+      "sha256": "1bbe162909fb0650535cd0e8fd155af27a7e90816dc889c28ce9e2955ddac484"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-07-high.webp",
+      "bytes": 32014,
+      "sha256": "8204e085074e8e0f7dd5db44acff222d37a82ac6210e9916d59fa9c468f537b6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-07-low.webp",
+      "bytes": 10108,
+      "sha256": "61bf443df6cd57c30a40f3fffe94c2e17e25a51933fa53507dffbc23d90a6892"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-08-high.webp",
+      "bytes": 31884,
+      "sha256": "f3cf7c72fd5baae1ceb2ac4171d8b56ca0bda938cc696151c215f7149e672b09"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-08-low.webp",
+      "bytes": 10038,
+      "sha256": "623cbaf85292a39c411f59d01c88c3c8ad7ccd2dfba2b4c835d2f52164ff8b67"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-09-high.webp",
+      "bytes": 31748,
+      "sha256": "b79759f4eb576c249e0ee56ba1147978bc82ba0a7d49a3bcd64dbd700084e845"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-09-low.webp",
+      "bytes": 9972,
+      "sha256": "8d02f204327065ad368c3c53ed9421ac88cdc61f270f0b6e74eb9b38803e037c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-10-high.webp",
+      "bytes": 32238,
+      "sha256": "4afd24daacc5af28e0ea2b43424d25ee9843f6c632d803dbeef8cfd842020cbc"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-10-low.webp",
+      "bytes": 10040,
+      "sha256": "990c381be7db0c40e09e4f9ca231d861083a666ab4472ef86c8bbb9ac1e4c985"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-11-high.webp",
+      "bytes": 31374,
+      "sha256": "0e82d0d487aa904f07a1ea009d77afa663bffb0b1bfabac1dfc94335878bbe56"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-11-low.webp",
+      "bytes": 9818,
+      "sha256": "179a96bd8c310e327fa586183416c593d57ee1a779416c74fedeb3d896c6cd16"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-12-high.webp",
+      "bytes": 31216,
+      "sha256": "ef475bd9bf976a6b8c39e0d4e9a7f30acc2dd67524a149cb6b7158493f9718b6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-12-low.webp",
+      "bytes": 9822,
+      "sha256": "3384ad8c5022ac2c4c2639cfab33999185f471dc07dfc0869f6508e50d64ef8c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-13-high.webp",
+      "bytes": 30756,
+      "sha256": "c6a3829c1e4eb5d0acd2cfd2d98d6bbc1ea0872d9c5f2b042ebc8c7f50ac486e"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-13-low.webp",
+      "bytes": 9638,
+      "sha256": "c24aad7909c6a0ef4294b6d7bcce618499fab2e4baeff21d2943784111131e92"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-14-high.webp",
+      "bytes": 30766,
+      "sha256": "7706360b7ebdc62d3831e1fd722e3ff2be84ab54d18ea7786b29ca209692fc77"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-14-low.webp",
+      "bytes": 9580,
+      "sha256": "5c40b0f6729097b99efac308f630ec9214c4aa93cc916f0060228c12e6438928"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-15-high.webp",
+      "bytes": 30886,
+      "sha256": "95a5560a333df91616fb7b36ed9affaef149bb473e07ead753d1e3882d9d28ed"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-15-low.webp",
+      "bytes": 9482,
+      "sha256": "4f21a2a820c526207ec19f362ceed6af32155b168f1a0a0b29f0487ce1d97671"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-16-high.webp",
+      "bytes": 31082,
+      "sha256": "62be16df95966e6824ce41fd88fed60d5783ba8011f224d0a65016488c03efa9"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-16-low.webp",
+      "bytes": 9428,
+      "sha256": "951d59652659b4f55102526287427935d07c439aebd4a3ed45c6fd07030ffa8c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-17-high.webp",
+      "bytes": 30080,
+      "sha256": "b7eb6fa8fd511f0a677dd1e1a15f544ce86938d06b3daeab9719650a4d11a047"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-17-low.webp",
+      "bytes": 9454,
+      "sha256": "ef075435389933fef5e9e06bdb70dc0d0f1a7f918744d413989836d4b873ea64"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-18-high.webp",
+      "bytes": 30332,
+      "sha256": "79e3b05d526b52447c6ef105e97073aaf5e94e3cf1f1a187038410f8f8fb61f6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-18-low.webp",
+      "bytes": 9346,
+      "sha256": "8d8107585abcab4debdedc2a2219c78e68af1d07fb2a5c8398eaece6767abd72"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-19-high.webp",
+      "bytes": 30224,
+      "sha256": "fa9ef3f52b715992fc82e2527d702b6456aecf293c2931f0cc7a116b742a5bdf"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-19-low.webp",
+      "bytes": 9742,
+      "sha256": "4bb36f7cc976cb6dcd77026f2e6a9c0904d60a0a4f755501a2057724c3981b8e"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-20-high.webp",
+      "bytes": 30450,
+      "sha256": "e8f0f00ed64f57661ad19474c9757a277e803c0c763b0062479748046e7096d9"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-20-low.webp",
+      "bytes": 9558,
+      "sha256": "155a6ab443982f96c79556c4577040c778c2cae9c4ec9ae9337046f46c288a1e"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-21-high.webp",
+      "bytes": 30450,
+      "sha256": "b358af20afebb1ec4cffa9f0b252118790341ae98dda795c8731758e7a9786fb"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-21-low.webp",
+      "bytes": 9506,
+      "sha256": "525178b3d23751fefcba2864131a17910cb6113d561bc1ed04b9c6f0c32e5942"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-22-high.webp",
+      "bytes": 30538,
+      "sha256": "f6917303e0b323ae5d9f1acdbaa0d95cc81c45b33210606f947db2b7be37f0b2"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-22-low.webp",
+      "bytes": 9944,
+      "sha256": "d0f09ed5ae05d3d57d7f289f81c576d748eb9c523404f118834e26351f83829c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-23-high.webp",
+      "bytes": 30912,
+      "sha256": "7eea8eefb2638f913cc4ae83697a16acd31fe22a55c639f3d34c94c843f58240"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/machine-23-low.webp",
+      "bytes": 9896,
+      "sha256": "d63197e7fc58917e032ff3ba4c1b246e8a2b2a824349ab0dd670a3e59d848e97"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/pylon-0-high.webp",
+      "bytes": 10138,
+      "sha256": "3d86180b99e7e2027529554bec91255273ff2a814965b7a2467aab43193aa321"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/pylon-0-low.webp",
+      "bytes": 3752,
+      "sha256": "ccf0396cd77d8af24045cacd4c3f1c82c39e736c7f084363aad6d9d3aca5b631"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/pylon-1-high.webp",
+      "bytes": 11582,
+      "sha256": "67e8d4798c4f0083ff92e9c4a13eeadf37b566cad95372b03eabcbe3e23823e3"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/pylon-1-low.webp",
+      "bytes": 4104,
+      "sha256": "6eabad282a709edad44b79f63d695d8d56635c731a581e1cb812b53be48e7217"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/pylon-2-high.webp",
+      "bytes": 9706,
+      "sha256": "4872e4add71ad0718d34579d68f9151a2d198a0cfe9db6007b28852cc0f9b4f5"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/pylon-2-low.webp",
+      "bytes": 3502,
+      "sha256": "8c6c23f6b38dbf59694d0b8a32a5ed852c61ac7ae80de1dbcbdfd6495a7b6873"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/pylon-3-high.webp",
+      "bytes": 9448,
+      "sha256": "ca3db13859b7c3f763ec7be9082d4e9d86a3cdf03ee8aa67938c240957fabcdb"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r4/pylon-3-low.webp",
+      "bytes": 3504,
+      "sha256": "353e6b88632eca5aab9734e7ed62e6c985fe90fc949a1a7eab4c47ff762ff845"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-12-high.webp",
+      "bytes": 26416,
+      "sha256": "82a8bc3d182ef4e08f1ce6f0987009ac65a330faf54e991daef74f32a12901e3"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-12-low.webp",
+      "bytes": 7400,
+      "sha256": "c639a3960e601c1103fa0cdba889b51e3c53175aa646341c09e9cad10d13e73a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-burnt-high.webp",
+      "bytes": 19636,
+      "sha256": "29c9dd093b3334b57acf13faf328a35159d967023ee8f55c2df8932aee09ff72"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-burnt-low.webp",
+      "bytes": 5708,
+      "sha256": "e3e03ab6d2bd56562af120bf27b7d6839a90a18e74021b5713dc3b58a809e7a4"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-damaged-high.webp",
+      "bytes": 20044,
+      "sha256": "c0eaadd2ac25815f6b79cf17c01c9d2a641b6b65834cd664e5c354d19005ba5a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-damaged-low.webp",
+      "bytes": 5814,
+      "sha256": "c08db8a339fef6cdc92001366b16a9d87a06a7c1c2d08b7f250e9ea845d382ff"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-destroyed-high.webp",
+      "bytes": 5256,
+      "sha256": "683e848e756f3d07448e7cab25cd4f8456d6c2f628e17a633e38c83ef2571101"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-destroyed-low.webp",
+      "bytes": 1664,
+      "sha256": "61ec93d5b947d93139c754d366dee532a1c4561bf685a13981fae66cb8b05cf5"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-intact-high.webp",
+      "bytes": 19478,
+      "sha256": "c8404b149550a050d6f0bb9b454622f1354e1c46955f02e8dce33e78b8631eaa"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-intact-low.webp",
+      "bytes": 5844,
+      "sha256": "807ec63e9f0b54091463966d59e8a497843e5fe6be2fdbce8ca5c910ff84ee8a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-burnt-high.webp",
+      "bytes": 18460,
+      "sha256": "7119611d7f8792d0673a74a7f0094393d1f0d4458d6951b2f7e548ec2a391a7c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-burnt-low.webp",
+      "bytes": 5498,
+      "sha256": "adc3f3a45946de79e7f214a68036bb4a7d7ac7bcb41aaa3984602df8829688cb"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-damaged-high.webp",
+      "bytes": 19144,
+      "sha256": "0b55e3c71921f7928f841c7c9b9364564d15369d298266f58d2e428b8b96f39c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-damaged-low.webp",
+      "bytes": 5826,
+      "sha256": "39a97db01681976421d95613d75ee9af8348a456b5f7069e8efda39698525fb0"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-destroyed-high.webp",
+      "bytes": 224,
+      "sha256": "0d6dda1e47487d0a36fc42a8dac9c77f990ed7a068541d4c6bc54776f832f9c3"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-destroyed-low.webp",
+      "bytes": 48,
+      "sha256": "5bb9ac4307b395e8cdcbc06316bf806e9da92436003df3a600d710270f05da4b"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-intact-high.webp",
+      "bytes": 19424,
+      "sha256": "a01a1011c751c35433273edbbece3c2abf08a5c4830b0774ba3bf00151a2f4e6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-intact-low.webp",
+      "bytes": 5960,
+      "sha256": "b9e84bc2ffdd4101bcb77e34b006ded5f7dc118ff3602a0c568af0ea5ce36cba"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-burnt-high.webp",
+      "bytes": 18738,
+      "sha256": "d07edf4ac69261b2a55bcf6a602a750b3b837ae6e5065bef3e985f91807ffe1e"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-burnt-low.webp",
+      "bytes": 5644,
+      "sha256": "9608138ba359187796bae394d424ee1474dc870bce8e3769186997eccbb6d820"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-damaged-high.webp",
+      "bytes": 20388,
+      "sha256": "8d52e96485e067960406c8a88604b718716a98df0db4a4b449ff8da7b1bbcc9f"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-damaged-low.webp",
+      "bytes": 6214,
+      "sha256": "4b532713a58b08e1b72dcb70f4c4e206fc2043d5b2bc46b0afa7e7508352ebe2"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-destroyed-high.webp",
+      "bytes": 184,
+      "sha256": "fd03a17c1f7b3350be41117105dfbbf74c4f448e8cfbb548f5efb9af5ed23bd9"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-destroyed-low.webp",
+      "bytes": 48,
+      "sha256": "bf61363713ad75f8b1d63f5e47f7dcd5d94ab02f7b9d63dd85f063af9dcc74f2"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-intact-high.webp",
+      "bytes": 20772,
+      "sha256": "9bc81bf80a262e2d39618f1404890fca7b49dbb9e1a2ef3d054850fb94115f20"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-intact-low.webp",
+      "bytes": 6194,
+      "sha256": "b358afad415a6f4c72bce08cf8bf391194cc710093c079385c4258d7885cec2d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-6-high.webp",
+      "bytes": 26844,
+      "sha256": "e18a531ac8c97725b1d70fdc289e7629920c24de13abc6923af0660ff0a6ff84"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-6-low.webp",
+      "bytes": 7888,
+      "sha256": "092418528661064aff0d38faf31f4ce66978f094a526324627c6bf6f9799632c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-burnt-high.webp",
+      "bytes": 19048,
+      "sha256": "7619463892b647cc1a3378fd85a21121cdb66445ef73d027c1bb9688b6e57423"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-burnt-low.webp",
+      "bytes": 5916,
+      "sha256": "04097c0c90b9db78b86383fbda90acc07a452ed6c170bc4d7f1d9a20a0569680"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-damaged-high.webp",
+      "bytes": 18636,
+      "sha256": "1a52b22959c687d15e7d079ef35851409b0a6bac681790b735d9de227536230c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-damaged-low.webp",
+      "bytes": 5824,
+      "sha256": "a5979f7ecb7b5ba216b83fe6a0d08cab4de717196f892f5555c4e876547c1143"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-destroyed-high.webp",
+      "bytes": 5326,
+      "sha256": "c70af3921e904e1f06f441ba5091248c36f30eece6fc8d9f4d5683d5c373f50b"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-destroyed-low.webp",
+      "bytes": 1686,
+      "sha256": "708f2ae163100a2b8f22a7c7b4edcf39b6bc28e7466e286e6b86c27ce11d1e5f"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-intact-high.webp",
+      "bytes": 18958,
+      "sha256": "296d6b341a9035c22cd021ce1ff980dec6d305ce5ee10a87f5df25979fd3420c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-intact-low.webp",
+      "bytes": 5892,
+      "sha256": "64a680facb510faa9533ee9db40fa84b2240bd260bced292c0008e85b4be377c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/crowd-0-high.webp",
+      "bytes": 332878,
+      "sha256": "7b054677f5dc7ba5b94eee3fe066a1182a7bfb60ed4a2b9fc24ff5eab2150969"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/crowd-0-low.webp",
+      "bytes": 111500,
+      "sha256": "262ad857cc3633c132c6a9b2e00fb6e9658a6588d97072756ae450033899782c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/crowd-1-high.webp",
+      "bytes": 332798,
+      "sha256": "dc86de068988291c2b5403f05c0ce3444a9843b4e620ba655948ad1ff0f94ec6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/crowd-1-low.webp",
+      "bytes": 111376,
+      "sha256": "cd40970f3cc78433c0ab841007a81c20d26decc042653f46e0db2cfb619b65c4"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/crowd-2-high.webp",
+      "bytes": 333130,
+      "sha256": "3e53cda2d0390633801e75f5973e606aac9657710847c813f859d669e3618490"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/crowd-2-low.webp",
+      "bytes": 111348,
+      "sha256": "1ecf95822810115097a802d6ee44caba6bec12cad1fd0342e4a00dcc47cc201e"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/crowd-3-high.webp",
+      "bytes": 331528,
+      "sha256": "f93ee12ce02a5b260b29736dae108410934946c530ee2f68d7c4b47bdc35bcb2"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/crowd-3-low.webp",
+      "bytes": 111486,
+      "sha256": "a5f363658f93f13360b36772c8cd2a54ade913a8bb4163a42ebe20f406f97bb2"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/foreground-bank-high.webp",
+      "bytes": 96180,
+      "sha256": "4cc64b03ce93fb278a7e6ef8735070be0a78896471f33e3d06f64d29d78951c5"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/foreground-bank-low.webp",
+      "bytes": 32402,
+      "sha256": "7113e95425200d9bea298744755f7ccb07de1e6d1a6428ab1c94ac9867503d35"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-0-high.webp",
+      "bytes": 156640,
+      "sha256": "7bd226c19aa845f22515a889f981b4888a9eb60cded63e0af3b490cc42b20f40"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-0-low.webp",
+      "bytes": 38034,
+      "sha256": "59368cbce79c80513fadd9102cc55c13aa6c431068773fca5623443d7d4d2424"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-1024-high.webp",
+      "bytes": 165074,
+      "sha256": "a9d0aa60de723347a623fbb4065b7eb8057ba95be320833418f8a586bd4a346c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-1024-low.webp",
+      "bytes": 39992,
+      "sha256": "4a0f371d3341096faad308186db2ee6e983f556ab0ac544f4f47b9523ec5ed25"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-1536-high.webp",
+      "bytes": 172464,
+      "sha256": "f3874b1efcb48ed719ee88128d7707471807baddb34702098153e0d48000b84c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-1536-low.webp",
+      "bytes": 41476,
+      "sha256": "543e9ea119bbf27a1006d04210c27ca60cce13e0c8971258974a57f621ddf4ce"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-2048-high.webp",
+      "bytes": 171750,
+      "sha256": "66e9b78010b8b0b2532cdff56ed650bd0f3f9b3c62f816e6ea25b4b7cfc8d31e"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-2048-low.webp",
+      "bytes": 38530,
+      "sha256": "e798f11dee7f0af1415c5e2c0cb2526dbd36684977a2cf6294269619b5b87651"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-2560-high.webp",
+      "bytes": 51024,
+      "sha256": "789a24c2276a3b7eae1af1da953f0473e2c93792b7aeab040aa1a4964136a6cf"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-2560-low.webp",
+      "bytes": 11928,
+      "sha256": "9b7596f859c28c29566d8c761176a986a7def569e9f2db8e524f9b4616473ee1"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-512-high.webp",
+      "bytes": 167532,
+      "sha256": "17940c5f02a47da50df7ee743fca6a6145cc7f23b28f9b7a8ebf0269d8e0fc7e"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-0-512-low.webp",
+      "bytes": 39510,
+      "sha256": "b21cb3f9cead256ca4b9fa67b5794da23b39d2e758e01f5e6464495183c116f6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-0-high.webp",
+      "bytes": 156532,
+      "sha256": "3d1f65006dfafa36899778af138d11688240cab79d30182788bb277ea25a33bd"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-0-low.webp",
+      "bytes": 37756,
+      "sha256": "45055b7afe75c53adc5583980103bb99e026fb74bb915bb4a2ccb12150879e1f"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-1024-high.webp",
+      "bytes": 161550,
+      "sha256": "9cd693ee4474e5a3455054f9cf66369a38825374fa593ab2c928456a9c0cd107"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-1024-low.webp",
+      "bytes": 39348,
+      "sha256": "e5e677b69f0121dd245ff26ce5c191ad63b219fb5fea1780fe96286e909538f4"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-1536-high.webp",
+      "bytes": 170380,
+      "sha256": "680adcb2e714d203818c1fac2897932aa9b66e5543bdcc14a1e71d8f2428d322"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-1536-low.webp",
+      "bytes": 40538,
+      "sha256": "5e11444155024562d0fd44c967432eca9022bb2fab344ada64da7abc4681e045"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-2048-high.webp",
+      "bytes": 182146,
+      "sha256": "3f98e0e848ee6ec7a31bb97ec35c1aaffaa4f7d4665c64108ec21223f7c41976"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-2048-low.webp",
+      "bytes": 38872,
+      "sha256": "56ab5ddb284a53894efc41116532a3138ffd1f46ce179c80523e6f09d1d28833"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-2560-high.webp",
+      "bytes": 50730,
+      "sha256": "2e11090cef67a13cb228be776edab38a8a062e6f55dec6b849dd3f3dbef2d8c6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-2560-low.webp",
+      "bytes": 11734,
+      "sha256": "8eca35542d6f7360629cb15fb5fb8155ea7253cd6ab515e284ff77d9657fb74d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-512-high.webp",
+      "bytes": 164992,
+      "sha256": "c7c49da0f1ed49280daccb41b8c7801158b1ee7f8e2e0e7de9e891d8045e6103"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1024-512-low.webp",
+      "bytes": 39626,
+      "sha256": "810db9dd60ce1b23e3ff6c85aa84191b116638d1e59c459e4c44600280e97119"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-0-high.webp",
+      "bytes": 154870,
+      "sha256": "80ca7198c6a6365e03562505ba36dbae4f84917bad68d54bfde10afd3718db4d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-0-low.webp",
+      "bytes": 37176,
+      "sha256": "783d423a24a0d1769d214330ca7dc452d4bfcf77525c7d677aa14c823e4eed11"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-1024-high.webp",
+      "bytes": 170588,
+      "sha256": "8c039affbdce960ad97b320ef7397b6fc5f044731bc79b8a15b059641a1e953a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-1024-low.webp",
+      "bytes": 38542,
+      "sha256": "f814f8da4a26185175e7338ea6c29ad8ab647a97a5c5a192941718f331fecd15"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-1536-high.webp",
+      "bytes": 169882,
+      "sha256": "efd8338e383f1ad7ede725576558f2a77c4837959f2144d8417793d3da78446c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-1536-low.webp",
+      "bytes": 40202,
+      "sha256": "c4f6e7d97d0f521fcaab7ae88bb5fbbfebd54c5a845bacebb66947805b7acae3"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-2048-high.webp",
+      "bytes": 181310,
+      "sha256": "d291bb47e26bd187fcafd17cde97e9ca9e2b0b0e0c5ab60117ab222e6644c53d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-2048-low.webp",
+      "bytes": 38678,
+      "sha256": "1fc4e89b5ec228fec8198fc51bc765ed3725ae013f749222f4ded5c24db2aaca"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-2560-high.webp",
+      "bytes": 50822,
+      "sha256": "bd24ec7520e677718a10aeeb71c296d78bd3a68e5e4a7d3c0be91a1894e82bd8"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-2560-low.webp",
+      "bytes": 11768,
+      "sha256": "11101ada37ae678528ab7ad1efc6100f74d304d8dfe6113bb3fcb206debc3edf"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-512-high.webp",
+      "bytes": 171692,
+      "sha256": "dcd2f4eaa4995c39d3207a6ca5afdfce3ac367d6f5b70e980ceef71142bba7b9"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-1536-512-low.webp",
+      "bytes": 38826,
+      "sha256": "cd956315d763d5a2f22b703af77a9a54dade01f2c2a73ef56a13360302b653aa"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-0-high.webp",
+      "bytes": 154816,
+      "sha256": "3c38231a33ba6c7e8b18a2682ffb780417ad9a42402f6e4ab32ab853563c44fc"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-0-low.webp",
+      "bytes": 37434,
+      "sha256": "27c73233b4824eabc8b3cd838508de5ad6ad2f15b6fad3c1b1adef0cebcf311f"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-1024-high.webp",
+      "bytes": 175890,
+      "sha256": "cf6d597ddfd8c69ed6cca369c88d9886f67d7148942caf3abf321d0b30bb8d22"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-1024-low.webp",
+      "bytes": 40622,
+      "sha256": "d317db428bfd6253e71084f29937de9ca57fd25cc802d05b2d80e9b77eaf9f78"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-1536-high.webp",
+      "bytes": 173834,
+      "sha256": "cc864c9eb4974bb2eef6f39ff2636ce0679c9f33e9dc1b97bbf481f74aa7406f"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-1536-low.webp",
+      "bytes": 41048,
+      "sha256": "81f225f3e076c8484554a07f0be2e0557cb33d8153a51d0022d012626c7add95"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-2048-high.webp",
+      "bytes": 181032,
+      "sha256": "454706dfa1d52e5d4e48d54b7a7f8f653e47b19c6a0ec0cef2da6d88972d5055"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-2048-low.webp",
+      "bytes": 38634,
+      "sha256": "0288777f029c5de196e378ddb1da5f7a0cf2f9c9da3d40057d58f8452fad38fa"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-2560-high.webp",
+      "bytes": 50582,
+      "sha256": "dd8e39027b01e4493bf93f1d8605f0daf699b3f0e8908ccdeb4d10609420443c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-2560-low.webp",
+      "bytes": 11724,
+      "sha256": "e2d06559fc6e8e1d5cfa2216b4d51ba7ae8b144214955f2205291297f4596332"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-512-high.webp",
+      "bytes": 171338,
+      "sha256": "41329e85807747e9e3aadf5f8e5f1028990b0063bc15fb44afe435a2fd9c4ff5"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2048-512-low.webp",
+      "bytes": 39330,
+      "sha256": "aaeb1838d5e42666492db3abeb5e82435474005bdb54091bffc9aa527c0bf4c2"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-0-high.webp",
+      "bytes": 155542,
+      "sha256": "159eaa235158968beab13fa6932fe80b0598afee9c3177f224759d72d296f1eb"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-0-low.webp",
+      "bytes": 37616,
+      "sha256": "5e68d4fc3fc5572910519cd39d268201c1015c621b6ae3ec89e46eead286064d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-1024-high.webp",
+      "bytes": 164660,
+      "sha256": "ee2fec3d074ca7e4c4154623fbce57fb3d77a7a8ebb70ea1932a2eb84a47e949"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-1024-low.webp",
+      "bytes": 39424,
+      "sha256": "dd4d2998107d14cef6c71e3859fc8cf972ddfe512883d09982e26ae8c8611d95"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-1536-high.webp",
+      "bytes": 171366,
+      "sha256": "6f6b3090524d8ab9608daab4655c967919b9cee5bc524422fa4697cccab0b7c4"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-1536-low.webp",
+      "bytes": 40336,
+      "sha256": "654b6c3bc98617841199217602c706f7ae78b2a96500e60755cbe54c9b7565e8"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-2048-high.webp",
+      "bytes": 182442,
+      "sha256": "beb5e5f7bd1bca5b3d4dda9f907f059eb979b234debc3092e38e6f5d83ef3d65"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-2048-low.webp",
+      "bytes": 39304,
+      "sha256": "2919d69ea08b0320d3779ddd7fe38b82dca8c456f72d310cf440a9deb8b1c3a6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-2560-high.webp",
+      "bytes": 50978,
+      "sha256": "cc44830e470c96c8a3838fca097a72e7a18228d69a8391702728cd738e6cafdb"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-2560-low.webp",
+      "bytes": 11636,
+      "sha256": "512bfe7ffe3e0d094949f32ddfb90c56e46efcfd5e55b3276df4a55140434947"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-512-high.webp",
+      "bytes": 160308,
+      "sha256": "22c1bfabed172710daaba4b2326af9f1e83560248f442a7cefa498c1be2f6514"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-2560-512-low.webp",
+      "bytes": 38900,
+      "sha256": "cad340b9255c2356205c9c39c4d003e858fc362f2148fb0625475e16ff5e687c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-0-high.webp",
+      "bytes": 156178,
+      "sha256": "a3ad5389eddbf09e5210760340131fedfaf900bcee9d9d892d9c8f60237b645f"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-0-low.webp",
+      "bytes": 37528,
+      "sha256": "416cfaa79300a2df2edc4eab67fa7c71452cc954950abe48606fa995376a89c0"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-1024-high.webp",
+      "bytes": 158678,
+      "sha256": "c4a273d3617f9eae982c0e60ee68bf06ebbdb314baeb1eebd5c468fdd28f0f69"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-1024-low.webp",
+      "bytes": 39178,
+      "sha256": "d8c846adb68538f9ba3937df9bb155a4cead0233b9e33e0017e3b0e357315ddb"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-1536-high.webp",
+      "bytes": 171184,
+      "sha256": "56094b49aa486946cb27dfe5b72a34a739e390e50366cb423a3be90e95f3198c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-1536-low.webp",
+      "bytes": 40704,
+      "sha256": "aaa13c02535095715e3b166a5e402f0c288a20551ba1d1fddb8835a037957f3a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-2048-high.webp",
+      "bytes": 181412,
+      "sha256": "b7896f62f4dae9eddbf3674f13fe41076aaabe64a62e0495d214a04ba18d9aa9"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-2048-low.webp",
+      "bytes": 38742,
+      "sha256": "6d82580479799a9011bdf5cd808f63035557b63c71a3db9eef901a16f875e781"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-2560-high.webp",
+      "bytes": 50672,
+      "sha256": "60a5fe2c50994ee6a27438a88fcd93a24c955d85810a1cd5aea95a93a1af5384"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-2560-low.webp",
+      "bytes": 11726,
+      "sha256": "9bd20039e64602fcb6ceb03b9bf450fe488e047d82d9a90dc07b705e2653f55d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-512-high.webp",
+      "bytes": 162746,
+      "sha256": "991d95107e8f17ff88b81b87eb59fc500b2ed63733c0aeca67a7c01f18b4e26d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3072-512-low.webp",
+      "bytes": 39458,
+      "sha256": "3e409c69cb732dab04c7833b634094a302ae5d3c078942e71c86b0658ff1b32a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-0-high.webp",
+      "bytes": 79858,
+      "sha256": "65390a5eb26c8ae3511b3202d8dadfd00cb29dd0be892cf242e572bb2b922daa"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-0-low.webp",
+      "bytes": 19650,
+      "sha256": "620bfa9d1e45df7ab4da2c740ea17372d3aab47740d37cfe884728a79f050fc0"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-1024-high.webp",
+      "bytes": 82128,
+      "sha256": "e9c9a5dd3ed04e8874e4f96229fd3764e2e13aa7a088e0f66955d76aa8c264d6"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-1024-low.webp",
+      "bytes": 20432,
+      "sha256": "15e8ab30832a84e2107501f95ca3a8a2ef879575a0c5284d61980f7b52f5a44c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-1536-high.webp",
+      "bytes": 85092,
+      "sha256": "029e98882f5a3779fac88357dd9a3a24c47d5b4eff262765652821c59174748b"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-1536-low.webp",
+      "bytes": 20948,
+      "sha256": "f0aa0cf0529890fbbc188b1b6f1d7a15c200a836f50ee1e079d4ae85a53be15d"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-2048-high.webp",
+      "bytes": 88110,
+      "sha256": "c10bbebcda062d1a865607cc61c703835e797e14e088ff38895480dd7975f2c8"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-2048-low.webp",
+      "bytes": 20682,
+      "sha256": "a7d324166eb91db37979f4bdf692ed9878196f008c460bd88e87e54baa5df7c0"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-2560-high.webp",
+      "bytes": 26064,
+      "sha256": "5392ed8a754050c34e3ccae88b953b8b03e396d9502944d14441ecba556668c3"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-2560-low.webp",
+      "bytes": 6172,
+      "sha256": "c24ec63c748278eb34377ee4f614560d93902da9e87c2ac56403660e162614f1"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-512-high.webp",
+      "bytes": 84094,
+      "sha256": "a9a3b826b9a445414b3217fc7a60ecb9779fe6fd131645e1d64c02920c5a16be"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-3584-512-low.webp",
+      "bytes": 20536,
+      "sha256": "2972ab52ad5cb34dbca5b82e38abdb085997a7f452ce0578fede901885aee8ca"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-0-high.webp",
+      "bytes": 154906,
+      "sha256": "616d4fe102ef4f6e40097c2a6b8135f649283e9b459bd774475b7a6c44c32fad"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-0-low.webp",
+      "bytes": 37216,
+      "sha256": "dc90e2dd4b9de6580863af209abcf619beeb74a0d6c9370111de9bface4eac20"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-1024-high.webp",
+      "bytes": 162328,
+      "sha256": "08c2b951e398a04aa061ae534d9bd4821da691167846dc4da2442d2398527f34"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-1024-low.webp",
+      "bytes": 39518,
+      "sha256": "9d74502bdc4fa17e0dc47b12fc9cb5bdc5b00dda3d144b737af390116259c2ec"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-1536-high.webp",
+      "bytes": 169230,
+      "sha256": "f6d6d0b9889ca254017384a457342e36ad91bbaa42b4c16577b0599172999ff7"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-1536-low.webp",
+      "bytes": 40194,
+      "sha256": "e6854f3bd9d7f341d5c65d39d8226e0f2f135d733f87f4605d6a9a41224b1de5"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-2048-high.webp",
+      "bytes": 182114,
+      "sha256": "e4f5f797debef2cd674ebbbba8026c821db81d6a8016ab8eae1da1c0239aec06"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-2048-low.webp",
+      "bytes": 39002,
+      "sha256": "af13a92fefee4a8509bba753b2cbf9b53bbe6cf0766a79240e019382cb8f963a"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-2560-high.webp",
+      "bytes": 50676,
+      "sha256": "6e373c719adc6e38f4869cd20527573cb8397a894f13b192df3ebe1404c9823c"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-2560-low.webp",
+      "bytes": 11780,
+      "sha256": "3de77f359fb5ce5f2561a9f9953b3ab0d8ca4c524f06bcf65129b921b2dc5b85"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-512-high.webp",
+      "bytes": 165614,
+      "sha256": "a287979a5f7ac645ef11b835410129e25bad88d705ad9ec01bb07621f06c0075"
+    },
+    {
+      "src": "assets/production/data-arena/harbor-blender-r6/patch-512-512-low.webp",
+      "bytes": 39284,
+      "sha256": "9214c9d25b750fba5f6c7cc39b89a8ce11726d2d0b4fced90b57db91d6a3d494"
+    }
+  ],
+  "kind": "HARBOR_STONE_R4",
+  "cleanGround": true,
+  "projection": {
+    "waterSurfaceOffset": -10.634885989045674
+  },
+  "waterFxRect": [
+    0,
+    1806,
+    3840,
+    242
+  ],
+  "crowdFrames": [
+    {
+      "x": 0,
+      "y": -128,
+      "width": 3840,
+      "height": 320,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r6/crowd-0-high.webp",
+          "pixelWidth": 2880,
+          "pixelHeight": 240
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r6/crowd-0-low.webp",
+          "pixelWidth": 1440,
+          "pixelHeight": 120
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -128,
+      "width": 3840,
+      "height": 320,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r6/crowd-1-high.webp",
+          "pixelWidth": 2880,
+          "pixelHeight": 240
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r6/crowd-1-low.webp",
+          "pixelWidth": 1440,
+          "pixelHeight": 120
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -128,
+      "width": 3840,
+      "height": 320,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r6/crowd-2-high.webp",
+          "pixelWidth": 2880,
+          "pixelHeight": 240
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r6/crowd-2-low.webp",
+          "pixelWidth": 1440,
+          "pixelHeight": 120
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": -128,
+      "width": 3840,
+      "height": 320,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r6/crowd-3-high.webp",
+          "pixelWidth": 2880,
+          "pixelHeight": 240
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r6/crowd-3-low.webp",
+          "pixelWidth": 1440,
+          "pixelHeight": 120
+        }
+      }
+    }
+  ],
+  "crowdCount": 140,
+  "foregroundBanks": [
+    {
+      "x": 0,
+      "y": 2032,
+      "width": 3840,
+      "height": 64,
+      "textures": {
+        "high": {
+          "src": "assets/production/data-arena/harbor-blender-r6/foreground-bank-high.webp",
+          "pixelWidth": 3840,
+          "pixelHeight": 64
+        },
+        "low": {
+          "src": "assets/production/data-arena/harbor-blender-r6/foreground-bank-low.webp",
+          "pixelWidth": 1920,
+          "pixelHeight": 32
+        }
+      },
+      "sortY": 2048
+    }
+  ],
+  "dynamicProps": [
+    {
+      "id": "cargo-7",
+      "rect": [
+        11,
+        24,
+        2,
+        1
+      ],
+      "sortY": 1600,
+      "states": {
+        "INTACT": {
+          "x": 629,
+          "y": 1442,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-intact-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-intact-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "DAMAGED": {
+          "x": 629,
+          "y": 1442,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-damaged-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-damaged-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "BURNT": {
+          "x": 629,
+          "y": 1442,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-burnt-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-burnt-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "DESTROYED": {
+          "x": 629,
+          "y": 1442,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-destroyed-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-7-destroyed-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-13",
+      "rect": [
+        47,
+        24,
+        2,
+        1
+      ],
+      "sortY": 1600,
+      "states": {
+        "INTACT": {
+          "x": 2933,
+          "y": 1442,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-intact-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-intact-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "DAMAGED": {
+          "x": 2933,
+          "y": 1442,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-damaged-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-damaged-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "BURNT": {
+          "x": 2933,
+          "y": 1442,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-burnt-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-burnt-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "DESTROYED": {
+          "x": 2933,
+          "y": 1442,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-destroyed-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-13-destroyed-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-17",
+      "rect": [
+        6,
+        37,
+        2,
+        1
+      ],
+      "sortY": 2432,
+      "states": {
+        "INTACT": {
+          "x": 309,
+          "y": 2274,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-intact-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-intact-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "DAMAGED": {
+          "x": 309,
+          "y": 2274,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-damaged-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-damaged-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "BURNT": {
+          "x": 309,
+          "y": 2274,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-burnt-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-burnt-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "DESTROYED": {
+          "x": 309,
+          "y": 2274,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-destroyed-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-17-destroyed-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cargo-18",
+      "rect": [
+        52,
+        37,
+        2,
+        1
+      ],
+      "sortY": 2432,
+      "states": {
+        "INTACT": {
+          "x": 3253,
+          "y": 2274,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-intact-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-intact-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "DAMAGED": {
+          "x": 3253,
+          "y": 2274,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-damaged-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-damaged-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "BURNT": {
+          "x": 3253,
+          "y": 2274,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-burnt-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-burnt-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        },
+        "DESTROYED": {
+          "x": 3253,
+          "y": 2274,
+          "width": 278,
+          "height": 245,
+          "textures": {
+            "high": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-destroyed-high.webp",
+              "pixelWidth": 278,
+              "pixelHeight": 245
+            },
+            "low": {
+              "src": "assets/production/data-arena/harbor-blender-r6/cargo-18-destroyed-low.webp",
+              "pixelWidth": 139,
+              "pixelHeight": 122
+            }
+          }
+        }
+      }
+    }
+  ],
+  "reviewCropOnly": false,
+  "reviewCrop": [
+    0,
+    -128,
+    3840,
+    2816
+  ],
+  "scope": "FULL_MAP_REVIEW",
+  "detailSource": {
+    "blend": "docs/reports/authored-map-full-2026-10-16/harbor/source/harbor-authored-full.blend",
+    "generator": "scripts/render-two-map-authored-detail-crops.py",
+    "baseManifest": "assets/production/data-arena/harbor-blender-r4/manifest.json",
+    "rights": "PROJECT_ORIGINAL",
+    "weights": []
+  },
+  "artDirection": {
+    "composition": "approximate 60/30/10 dominant/secondary/accent guidance; not pixel quotas",
+    "dominant": "quiet warm stone, wood and soft water",
+    "secondary": "structural copper and grouped muted cloth",
+    "accent": "small fixtures; character, skill and important HUD feedback remain strongest"
+  }
+}

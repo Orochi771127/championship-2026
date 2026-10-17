@@ -102,6 +102,7 @@ export const DATA_ARENA_PARTNERS = deepFreeze([
 ]);
 
 export const DATA_ARENA_MATE = deepFreeze({
+  canSwim: true,
   speciesId: "species-073",
   hp: 170,
   radius: 30,

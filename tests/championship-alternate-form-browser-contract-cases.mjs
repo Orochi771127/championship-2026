@@ -8,9 +8,14 @@ const require=createRequire(import.meta.url);
 const {resolveAsset,serveBuild,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
 test('public QA server serves exact bytes and rejects traversal and symlink escapes',async()=>{
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'form-browser-'));const root=path.join(temp,'build');fs.mkdirSync(root);
- fs.writeFileSync(path.join(root,'test.js'),'export const reviewed = true;');fs.writeFileSync(path.join(temp,'outside'),'private');fs.symlinkSync(path.join(temp,'outside'),path.join(root,'link'));
+ fs.writeFileSync(path.join(root,'test.js'),'export const reviewed = true;');fs.writeFileSync(path.join(temp,'outside'),'private');
+ // Windows needs a directory junction without symlink privilege. Keep the
+ // same outside-root file escape assertion; do not weaken the server check.
+ const escapePath=process.platform==='win32'?'/link/private':'/link';
+ if(process.platform==='win32'){const outside=path.join(temp,'outside-directory');fs.mkdirSync(outside);fs.writeFileSync(path.join(outside,'private'),'private');fs.symlinkSync(outside,path.join(root,'link'),'junction');}
+ else fs.symlinkSync(path.join(temp,'outside'),path.join(root,'link'));
  let server;try{
-  assert.equal(resolveAsset(root,'/%2e%2e/outside'),null);assert.equal(resolveAsset(root,'/link'),null);assert.equal(resolveAsset(root,'/%00'),null);assert.equal(resolveAsset(root,'/..\\outside'),null);
+  assert.equal(resolveAsset(root,'/%2e%2e/outside'),null);assert.equal(resolveAsset(root,escapePath),null);assert.equal(resolveAsset(root,'/%00'),null);assert.equal(resolveAsset(root,'/..\\outside'),null);
   server=await serveBuild(root);const response=await fetch(server.origin+'/test.js');assert.equal(response.status,200);assert.equal(await response.text(),'export const reviewed = true;');assert.match(response.headers.get('content-type'),/javascript/);
   assert.equal((await fetch(server.origin+'/test.js',{method:'POST'})).status,405);assert.equal((await fetch(server.origin+'/missing')).status,404);
  }finally{await server?.close();fs.rmSync(temp,{recursive:true,force:true});}
