@@ -1,5 +1,7 @@
 # Loading repair integration checkpoint
 
+Later local progress: [public ranch render projection](../ranch-public-render-20261017/README.md) resolves the 222 streamed-descriptor part of the metadata blocker described below. This report retains the original integration checkpoint's results and size; consult the later report for the current selection and remaining blockers.
+
 This integrates the owner-authorized new local export based on `adc36510`, containing source commits `d0a3ead20730b0bf1d81578c4dc9550406c250ce` and `5ebbc02bc18e4b025c6c3ad79227eb23e7faa697`. The source repair checkout was never read again. The six named export files were copied into the receiving workspace, patch/archive/manifest hashes and all 4,490 ZIP payload hashes/member paths/CRC passed, and `git apply --check` passed before applying. Extraction validated every destination beneath this checkout, skipped no conflicting existing bytes and excluded the handoff evidence manifest from runtime.
 
 The owner-selected A frame commit `e00bc59e5d07e7a95025374c614fc4958b645575` is preserved. The 39-master history, species116 name, IDs, character art selection, animation contracts and save authorities are unchanged. Newer alternate source folders retain their original selection/fallback; a streaming record cannot match another folder's source prefix. New creature sources require their own verified page generation.

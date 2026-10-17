@@ -7,7 +7,7 @@ import {completedCharacterBundleLocation,loadCompletedOriginalCharacters} from '
 import {LICENSED_CHARACTER_ASSET_ID,LICENSED_CHARACTER_MANIFEST} from '../src/championship/presentation/licensedCharacterRoster.js';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const focus=new Set(['e000_digitama','m503_warglaymon','m509_shinegraymon','m518_blackwargreymon','m529_metalgarurumon_va','m541_dukemon']);
-const packed={characters:read('src/data/championship/ranch-streaming-selection.r1.json').characters.filter(c=>focus.has(c.entityId))};
+const packed={characters:read('src/data/championship/ranch-render-selection.v1.json').characters.filter(c=>focus.has(c.entityId))};
 const selection=read('src/data/championship/accepted-original-character-selection.r1.json');
 const base='https://orochi771127.github.io/championship-2026/';
 const manifestUrl=base+'assets/production/internal-faithful-baseline/characters-v1/manifest.json';
@@ -38,14 +38,14 @@ test('initial load prepares only required pages, every native sequence later res
   const bundle=await loadPixiCharacterRuntimeBundle({PIXI:f.PIXI,fetchImpl:f.fetchImpl,runtimeUrl:url,runtimeDocument:rt,sides:['main'],initialSequenceIds:[0]});
   const initial=bundle.getDiagnostics().streaming;
   assert.ok(initial.readyPages<initial.totalPages);assert.equal(initial.pendingPages,0);
-  const actor=bundle.createActor({animation:0,side:'main',nativeFramePresentation:true,nativeGeometry:rt.reviewGeometry});
+  const actor=bundle.createActor({animation:0,side:'main',nativeFramePresentation:true,nativeGeometry:rt.geometry});
   assert.ok(actor.nativeFramePresenter.isFrameReady(frame(rt.sides.main.animations[0])));
   const before=f.calls.length;
   for(const seq of rt.sides.main.animations){
    await Promise.all([actor.nativeFramePresenter.ensureFrame(frame(seq)),actor.nativeFramePresenter.ensureFrame(frame(seq))]);
    for(let i=0;i<seq.frames.length;i++){
     const applied=actor.nativeFramePresenter.apply(frame(seq,i));assert.equal(applied.cell,seq.frames[i].cell);
-    assert.deepEqual(applied.geometry,rt.reviewGeometry.frames[seq.frames[i].texture]);checks++;
+    assert.deepEqual(applied.geometry,rt.geometry.frames[seq.frames[i].texture]);checks++;
    }
   }
   assert.ok(f.calls.length>before);assert.equal(bundle.getDiagnostics().streaming.readyPages,rt.sides.main.atlases.length);

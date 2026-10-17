@@ -1,4 +1,4 @@
-import selection from '../../data/championship/ranch-streaming-selection.r1.json' with {type:'json'};
+import selection from '../../data/championship/ranch-render-selection.v1.json' with {type:'json'};
 
 // Download only. Pixi decoding, GPU ownership and the native clock remain with
 // the foreground scene. Completed blobs are handed to its existing loader.

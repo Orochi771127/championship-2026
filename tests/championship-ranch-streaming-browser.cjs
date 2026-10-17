@@ -6,7 +6,7 @@ const entry=`import * as PIXI from '../../node_modules/pixi.js/dist/pixi.mjs';
 import {loadCompletedOriginalCharacters} from '../../src/championship/presentation/completedOriginalCharacters.js';
 import {createPixiAssetScope} from '../../src/championship/presentation/pixiCharacterRuntimeBundle.js';
 import {LICENSED_CHARACTER_ASSET_ID,LICENSED_CHARACTER_MANIFEST} from '../../src/championship/presentation/licensedCharacterRoster.js';
-import selection from '../../src/data/championship/ranch-streaming-selection.r1.json' with {type:'json'};
+import selection from '../../src/data/championship/ranch-render-selection.v1.json' with {type:'json'};
 const base='https://orochi771127.github.io/championship-2026/',entities=${JSON.stringify(entities)},selected=selection.characters.filter(c=>entities.includes(c.entityId));
 let app,roster,actors=[];const initial={};
 const frame=seq=>({contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:seq.id,frameIndex:0,flipBits:0});
@@ -38,6 +38,7 @@ const html='<!doctype html><html><meta charset="utf-8"><meta name="viewport" con
  const page=await ctx.newPage();page.on('pageerror',e=>report.errors.push(e.message));await page.goto('http://127.0.0.1:8879/',{waitUntil:'networkidle'});await page.waitForFunction(()=>window.loadingQA);
  report.initial=await page.evaluate(()=>loadingQA.run());assert.equal(report.initial.residents,6);assert.equal(report.initial.applicationCount,1);assert.deepEqual(report.initial.diagnostics.failures,[]);
  report.initialImages=[...new Set(report.requests.filter(p=>p.endsWith('.webp')))];assert.ok(report.initialImages.length>=6);assert.ok(report.initialImages.every(p=>p.includes('/ranch-streaming-v1/')));assert.ok(report.initialImages.length<30);
+ assert.ok(!report.requests.some(p=>p.endsWith('runtime.review.json')||p.endsWith('ranch-streaming-selection.r1.json')));
  await page.screenshot({path:path.join(out,'six-initial-native-frames.png'),fullPage:true});report.deferred=await page.evaluate(()=>loadingQA.deferred());assert.equal(report.deferred.pendingBefore,true);assert.equal(report.deferred.readyAfter,true);assert.equal(report.deferred.actualCell,report.deferred.expectedCell);
  report.disposed=await page.evaluate(()=>loadingQA.dispose());assert.equal(report.disposed.canvasCount,0);assert.deepEqual(report.errors,[]);report.status='PASS';
  }finally{await browser.close();fs.writeFileSync(path.join(out,'RESULTS.json'),JSON.stringify(report,null,2)+'\n');}
