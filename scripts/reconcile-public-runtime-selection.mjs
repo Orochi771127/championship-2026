@@ -115,6 +115,17 @@ for(const file of rows.keys())if((/^src\/.+\.(?:m?js|json)$/.test(file)||/^docs\
 rows.delete('assets/production/evolution-glyphs-v1/manifest.json');
 allow.assets=allow.assets.map(row=>{const clean=cleanMap.get(row.src);return clean?{...row,src:clean.path,sha256:clean.sha256}:row;});
 allow.files=[...rows.values()].sort((a,b)=>a.path.localeCompare(b.path,'en'));
+const materializationPath='docs/contracts/championship/RUNTIME_DERIVED_MATERIALIZATION.v1.json';
+if(fs.existsSync(path.join(root,materializationPath))){
+ const materialization=read(materializationPath),allPinned=new Map([...materialization.files,...(materialization.inactiveFiles??[])].map(row=>[row.path,row]));
+ materialization.files=[];materialization.inactiveFiles=[];
+ for(const row of allPinned.values()){
+  const selected=rows.get(row.path);
+  if(selected&&selected.sha256!==row.sha256)throw Error('MATERIALIZATION_REVIEW_REQUIRED:'+row.path);
+  (selected?materialization.files:materialization.inactiveFiles).push(row);
+ }
+ write(materializationPath,materialization);
+}
 allow.assets.sort((a,b)=>a.id.localeCompare(b.id,'en'));
 const runtime=publicRuntimeIndex(allow,index,selectedOriginal);write(PUBLIC_RUNTIME_INDEX_PATH,runtime);
 allow.files.find(row=>row.path===PUBLIC_RUNTIME_INDEX_PATH).sha256=sha(fs.readFileSync(path.join(root,PUBLIC_RUNTIME_INDEX_PATH)));
