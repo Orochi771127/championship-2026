@@ -1,0 +1,125 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {auditPagesModuleClosure} from './pages-module-closure.mjs';
+
+export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
+export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
+const INTERNAL_INDEX='assets/production/ART_PRODUCTION_INDEX.json';
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+const exactKeys=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).every(key=>keys.includes(key));
+const safePath=value=>typeof value==='string'&&value.length>0&&!/[\\:\0?#]/.test(value)&&!value.startsWith('/')&&value.split('/').every(part=>part&&part!=='.'&&part!=='..');
+const privateExtension=/\.(?:nds|srl|nxr|ncer|ncgr|nclr|nanr|nscr|nbs|nbsr|atr|datr|col|esc|opm|opmd|nsbmd|nsbtx|nsbca|nsbta|nsbma|nsbva|bsar|ram|dst|psd|blend|kra)$/i;
+const privateKey=/^(?:localOnly|reviewOnly|qaOnly|runtimeEligible|shippingReady|humanApproved|assistantReviewed|runtimeQaPassed|productionStatus|shippingStatus|artifactMaturity|rightsStatus|rightsEvidenceIds|ownerReply(?:Id)?|ownerInstruction|ownerDirection|scopeQuestionId|commitPushPublishInstructionId|approval.*|library(?:File)?Id|library_file_id|source(?:Reference.*|Review.*|Master.*|Archive.*|BankSha256|BindingEvidence)|prompt.*|artDirection|designRevision|selectedGenerationVersion|review|provenance|localPackagingProvenance|privateVaultReference|evidence_record)$/i;
+const privateValue=/(?:libfile_[a-z0-9]+|Sentinel_[a-z0-9]+|\b[A-Za-z]:[\\/](?:Users|Projects|Workspace|Private|Temp)|YDIJ_PRIVATE_ROM_ART_PACK|ROM_COPYRIGHTED_REFERENCE|LOOPBACK_RESEARCH_ONLY|file:\/\/)/i;
+const manifestFields=['schemaVersion','target','buildId','commit','inputSha256','entry','publicReleasePermitted','loopbackOnly','sourcePayloadIncluded','faithfulInternalVfxIncluded','romDerivedBattleCatalogsIncluded','ownerSelectedReferenceArtIncluded','staticModuleClosure','checked','moduleCount','moduleEntries','importMap','browserBundle','version','tool','toolVersion','startupModules','generatedFiles','release','approved','publicPlaytest','ownerApproved','policyId','rightsDocumentVerified','commercialReleaseAccepted','fullOriginalParityAccepted','fileCount','files','path','sha256','bytes','saveStorage'];
+
+export function forbiddenPublicPath(file){
+  return !safePath(file)||file===INTERNAL_INDEX||privateExtension.test(file)
+    ||/(?:^|\/)(?:research|private|\.git|\.codex|\.claude|source-masters?)(?:\/|$)/i.test(file)
+    ||/^assets\/production\/internal-[^/]+\//i.test(file)
+    ||/(?:APPROVED_HERO_LEDGER|ART_PRODUCTION_INDEX|RIGHTS_EVIDENCE_REGISTRY)\.json$/i.test(file);
+}
+
+// This is a new, closed runtime schema. Never spread/clone an authority-index row.
+export function publicRuntimeIndex(allowlist,internalIndex={entries:[]}){
+  if(!exactKeys(allowlist,['schemaVersion','files','assets'])||allowlist.schemaVersion!==1
+    ||!Array.isArray(allowlist.files)||!Array.isArray(allowlist.assets))throw Error('PUBLIC_ALLOWLIST_SCHEMA');
+  const fileMap=new Map(),ids=new Set(),blockedIds=new Set(),blockedRoots=[];
+  for(const entry of internalIndex.entries??[]){
+    if(entry.localOnly===true||entry.reviewOnly===true||entry.rightsStatus==='ROM_COPYRIGHTED_REFERENCE'){
+      blockedIds.add(entry.assetId);if(safePath(entry.manifestPath))blockedRoots.push(path.posix.dirname(entry.manifestPath)+'/');
+    }
+  }
+  for(const row of allowlist.files){
+    if(!exactKeys(row,['path','sha256','jsonFields'])||forbiddenPublicPath(row.path)||blockedRoots.some(root=>row.path.startsWith(root))
+      ||!/^[a-f0-9]{64}$/.test(row.sha256)||fileMap.has(row.path))throw Error('PUBLIC_ALLOWLIST_FILE: '+row?.path);
+    if(row.jsonFields!==undefined&&(!Array.isArray(row.jsonFields)||new Set(row.jsonFields).size!==row.jsonFields.length
+      ||row.jsonFields.some(key=>typeof key!=='string'||privateKey.test(key))))throw Error('PUBLIC_JSON_SCHEMA_INVALID: '+row.path);
+    fileMap.set(row.path,row.sha256);
+  }
+  const assets=allowlist.assets.map(row=>{
+    if(!exactKeys(row,['id','src','sha256','width','height'])||typeof row.id!=='string'||!/^[a-z0-9][a-z0-9:._-]{1,159}$/i.test(row.id)
+      ||ids.has(row.id)||blockedIds.has(row.id)||privateValue.test(row.id)||!row.src?.startsWith('assets/production/')
+      ||forbiddenPublicPath(row.src)||blockedRoots.some(root=>row.src.startsWith(root))||fileMap.get(row.src)!==row.sha256
+      ||!/^[a-f0-9]{64}$/.test(row.sha256))throw Error('PUBLIC_ALLOWLIST_ASSET: '+row?.id);
+    ids.add(row.id);
+    const result={id:row.id,src:row.src,sha256:row.sha256};
+    if(row.width!==undefined||row.height!==undefined){
+      if(![row.width,row.height].every(n=>Number.isInteger(n)&&n>0&&n<=32768))throw Error('PUBLIC_ALLOWLIST_DIMENSIONS');
+      result.width=row.width;result.height=row.height;
+    }
+    return result;
+  });
+  return {schemaVersion:1,assets};
+}
+
+export function assertPublicBytes(file,bytes,{jsonFields,generated=false}={}){
+  if(forbiddenPublicPath(file))throw Error('PUBLIC_PAYLOAD_FORBIDDEN_PATH: '+file);
+  if(/\.(?:png|webp|jpe?g|gif|wav|mp3|mp4)$/i.test(file)){
+    const data=Buffer.from(bytes);
+    if(privateValue.test(data.toString('latin1')))throw Error('PUBLIC_MEDIA_PRIVATE_VALUE: '+file);
+    if(file.endsWith('.png')&&data.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))){
+      for(let pos=8;pos+12<=data.length;){const size=data.readUInt32BE(pos),type=data.toString('ascii',pos+4,pos+8);
+        if(pos+12+size>data.length)throw Error('PUBLIC_MEDIA_INVALID_PNG: '+file);
+        if(['tEXt','iTXt','zTXt','eXIf'].includes(type))throw Error('PUBLIC_MEDIA_METADATA: '+file);
+        pos+=12+size;
+      }
+    }
+    if(file.endsWith('.webp')&&data.toString('ascii',0,4)==='RIFF'&&data.toString('ascii',8,12)==='WEBP'){
+      for(let pos=12;pos+8<=data.length;){const type=data.toString('ascii',pos,pos+4),size=data.readUInt32LE(pos+4);
+        if(pos+8+size>data.length)throw Error('PUBLIC_MEDIA_INVALID_WEBP: '+file);
+        if(['EXIF','XMP '].includes(type))throw Error('PUBLIC_MEDIA_METADATA: '+file);
+        pos+=8+size+(size%2);
+      }
+    }
+    if(/\.jpe?g$/i.test(file)&&data.includes(Buffer.from('Exif\0\0')))throw Error('PUBLIC_MEDIA_METADATA: '+file);
+  }
+  if(!/\.(?:json|js|mjs|css|html|svg|txt)$/i.test(file)&&!['.nojekyll'].includes(file))return;
+  const text=Buffer.from(bytes).toString('utf8');
+  if(privateValue.test(text)||text.includes(INTERNAL_INDEX))throw Error('PUBLIC_PAYLOAD_PRIVATE_VALUE: '+file);
+  if(file.endsWith('.json')){
+    if(!generated&&file!==PUBLIC_RUNTIME_INDEX_PATH&&!Array.isArray(jsonFields))throw Error('PUBLIC_JSON_SCHEMA_REQUIRED: '+file);
+    let json;try{json=JSON.parse(text);}catch{throw Error('PUBLIC_PAYLOAD_INVALID_JSON: '+file);}
+    const visit=value=>{if(Array.isArray(value)){value.forEach(visit);return;}
+      if(value&&typeof value==='object')for(const [key,item] of Object.entries(value)){
+        if(privateKey.test(key))throw Error('PUBLIC_PAYLOAD_PRIVATE_KEY: '+file+' / '+key);
+        if(Array.isArray(jsonFields)&&!jsonFields.includes(key))throw Error('PUBLIC_PAYLOAD_UNSELECTED_JSON_FIELD: '+file+' / '+key);
+        visit(item);
+      }
+      else if(typeof value==='string'&&privateValue.test(value))throw Error('PUBLIC_PAYLOAD_PRIVATE_VALUE: '+file);
+    };visit(json);
+  }
+}
+
+export function publicArtifactPlan({root,input,index}){
+  const filename=path.join(root,PUBLIC_RUNTIME_ALLOWLIST_PATH);
+  if(!fs.existsSync(filename))throw Error('PUBLIC_ALLOWLIST_REQUIRED');
+  const allowlist=JSON.parse(fs.readFileSync(filename,'utf8'));
+  const runtime=publicRuntimeIndex(allowlist,index),files=allowlist.files.map(row=>row.path),available=new Set(files);
+  if(!available.has('championship.html')||!available.has(PUBLIC_RUNTIME_INDEX_PATH))throw Error('PUBLIC_ALLOWLIST_ENTRY_REQUIRED');
+  for(const file of files)if(!input.files.includes(file))throw Error('PUBLIC_ALLOWLIST_OUTSIDE_BUILD_INPUTS: '+file);
+  const expected=Buffer.from(JSON.stringify(runtime,null,2)+'\n');
+  if(allowlist.files.find(row=>row.path===PUBLIC_RUNTIME_INDEX_PATH)?.sha256!==sha(expected))throw Error('PUBLIC_INDEX_SELECTION_MISMATCH');
+  const moduleEntries=input.moduleEntries.filter(file=>available.has(file));
+  if(!moduleEntries.includes('src/championship/app/main.js'))throw Error('PUBLIC_MODULE_ENTRY_REQUIRED');
+  const closure=auditPagesModuleClosure({root,files,entries:moduleEntries,importMap:input.importMap});
+  if(closure.issues.length)throw Error('PUBLIC_MODULE_CLOSURE_BLOCKED: '+JSON.stringify(closure.issues.slice(0,8)));
+  return {files,moduleEntries,allowlist,runtime,indexBytes:expected,importMap:input.importMap};
+}
+
+// Inspect the actual upload directory, independently of a new JSON's contents.
+export function assertPublicArtifact({root,files,plan,manifestName='pages-build.json'}){
+  const expected=new Set([...plan.files,...(plan.generatedFiles??[]),'index.html','.nojekyll',manifestName]);
+  if(expected.size!==files.length||[...expected].some(file=>!files.includes(file)))throw Error('PUBLIC_PAYLOAD_FILE_SET');
+  for(const file of files){
+    if(!expected.has(file))throw Error('PUBLIC_PAYLOAD_UNSELECTED_FILE: '+file);
+    const selected=plan.allowlist.files.find(row=>row.path===file);
+    const bytes=fs.readFileSync(path.join(root,file));assertPublicBytes(file,bytes,{jsonFields:file===manifestName?[...manifestFields,...Object.keys(plan.importMap??{})]:selected?.jsonFields,generated:file===manifestName});
+    if(selected&&file!=='championship.html'&&selected.sha256!==sha(bytes))throw Error('PUBLIC_PAYLOAD_SELECTION_HASH: '+file);
+  }
+  if(files.some(file=>file===INTERNAL_INDEX))throw Error('PUBLIC_AUTHORITY_INDEX_INCLUDED');
+  if(!files.includes(PUBLIC_RUNTIME_INDEX_PATH))throw Error('PUBLIC_RUNTIME_INDEX_MISSING');
+  if(!fs.readFileSync(path.join(root,PUBLIC_RUNTIME_INDEX_PATH)).equals(plan.indexBytes))throw Error('PUBLIC_RUNTIME_INDEX_CHANGED');
+  return {checkedFiles:files.length,authorityIndexIncluded:false,allowlist:true};
+}

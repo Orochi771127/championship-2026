@@ -12,7 +12,7 @@
     "status": "DEFERRED_UNTIL_RELEASE"
   },
   "moduleEntries": [
-    "src/championship/app/ranchRowPurchasePrompt.js",
+    "assets/production/characters/battle-packed-20261013/manifest.json",
     "node_modules/pixi.js/dist/pixi.mjs",
     "node_modules/three/build/three.core.js",
     "node_modules/three/build/three.module.js",
@@ -20,6 +20,11 @@
     "node_modules/three/examples/jsm/utils/BufferGeometryUtils.js",
     "node_modules/three/examples/jsm/utils/SkeletonUtils.js",
     "src/championship/app/ChampionshipPersistentSavePort.js",
+    "src/championship/app/alternateFormQaApp.js",
+    "src/championship/app/alternateFormQaCharacters.js",
+    "src/championship/app/alternateFormQaDiagnostics.js",
+    "src/championship/app/alternateFormQaPorts.js",
+    "src/championship/app/alternateFormQaStorage.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
     "src/championship/app/battleFxLookups.js",
@@ -39,9 +44,9 @@
     "src/championship/app/championshipToolbar.js",
     "src/championship/app/digimonListScreen.js",
     "src/championship/app/downloadSaveBackup.js",
-    "src/championship/app/runtimeRecoveryDiagnostics.js",
     "src/championship/app/gateHuntPresentationSource.js",
     "src/championship/app/helpScreen.js",
+    "src/championship/app/huntLayoutResolver.js",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
     "src/championship/app/interactiveTutorialHuntSteps.js",
@@ -51,6 +56,7 @@
     "src/championship/app/main.js",
     "src/championship/app/medalCollection.js",
     "src/championship/app/medalCollectionScreen.js",
+    "src/championship/app/medalDetails.js",
     "src/championship/app/nativeOpeningState.js",
     "src/championship/app/nativeOpeningStory.js",
     "src/championship/app/nativeTutorialBattleEntry.js",
@@ -61,9 +67,12 @@
     "src/championship/app/openingStoryPresentation.js",
     "src/championship/app/phase1ProductCreatures.js",
     "src/championship/app/portraitFrame.js",
+    "src/championship/app/qaRanchExpansion.js",
     "src/championship/app/qaUnlock.js",
     "src/championship/app/raisingHomeP1RView.js",
     "src/championship/app/raisingPresentationSource.js",
+    "src/championship/app/ranchRowPurchasePrompt.js",
+    "src/championship/app/runtimeRecoveryDiagnostics.js",
     "src/championship/app/scheduleScreen.js",
     "src/championship/app/settings/preferenceEnvironment.js",
     "src/championship/app/settings/preferenceSchema.js",
@@ -71,6 +80,7 @@
     "src/championship/app/settings/qualityController.js",
     "src/championship/app/settings/settingsPanel.js",
     "src/championship/app/tamerInfoScreen.js",
+    "src/championship/app/transientHint.js",
     "src/championship/app/uiDialog.js",
     "src/championship/app/vs2Screens.js",
     "src/championship/app/vs3Screens.js",
@@ -79,6 +89,7 @@
     "src/championship/battle/battleActionApplication.js",
     "src/championship/battle/battleActionResource.js",
     "src/championship/battle/battleActionSelection.js",
+    "src/championship/battle/battleAiAdaptation.js",
     "src/championship/battle/battleCandidateBuckets.js",
     "src/championship/battle/battleCatalogs.js",
     "src/championship/battle/battleContactTargeting.js",
@@ -104,6 +115,7 @@
     "src/championship/battle/battleNativeMemory.js",
     "src/championship/battle/battleNormalFlow.js",
     "src/championship/battle/battleNormalRuntime.js",
+    "src/championship/battle/battleOpeningPhase.js",
     "src/championship/battle/battleOutcome.js",
     "src/championship/battle/battleParty.js",
     "src/championship/battle/battlePresentationHost.js",
@@ -140,13 +152,22 @@
     "src/championship/contracts/evidenceIngest.js",
     "src/championship/contracts/evidencePolicy.js",
     "src/championship/contracts/evidenceTaxonomy.js",
+    "src/championship/contracts/productBattleTransport.js",
+    "src/championship/contracts/productPasswordTransport.js",
+    "src/championship/contracts/productSpeciesData.js",
+    "src/championship/contracts/productSpeciesExtensions.js",
     "src/championship/database/databaseCatalog.js",
+    "src/championship/database/databaseDisplayCatalog.js",
+    "src/championship/database/databaseEvolutionConditions.js",
+    "src/championship/database/databaseEvolutionRoutes.js",
     "src/championship/database/databaseRuntime.js",
+    "src/championship/database/databaseStories.js",
     "src/championship/database/nativeBookRegistration.js",
     "src/championship/field/fieldCamera.js",
     "src/championship/field/fieldCollision.js",
     "src/championship/field/fieldConstants.js",
     "src/championship/field/fieldDefinition.js",
+    "src/championship/field/groundFootpointSeparation.js",
     "src/championship/field/index.js",
     "src/championship/gate/gateAdmission.js",
     "src/championship/gate/gateCatalog.js",
@@ -185,6 +206,8 @@
     "src/championship/hunt/capture/tetherSystem.js",
     "src/championship/hunt/capture/wildCaptureFlow.js",
     "src/championship/hunt/huntFieldCoordinates.js",
+    "src/championship/hunt/huntPresentationBinding.js",
+    "src/championship/hunt/huntPresentationViewport.js",
     "src/championship/hunt/huntRuntime.js",
     "src/championship/hunt/huntWorld.js",
     "src/championship/hunt/loadout/huntEquipmentCatalog.js",
@@ -198,6 +221,8 @@
     "src/championship/kernel/ChampionshipSavePortR2.js",
     "src/championship/modes/championshipModeRegistry.js",
     "src/championship/modes/createChampionshipModeShell.js",
+    "src/championship/presentation/acceptedDatabasePortraits.js",
+    "src/championship/presentation/alternateFormAssetContracts.js",
     "src/championship/presentation/assembledUiArt.js",
     "src/championship/presentation/audioBus.js",
     "src/championship/presentation/battleAudioPresentation.js",
@@ -227,7 +252,9 @@
     "src/championship/presentation/completedOriginalIntake20261007.js",
     "src/championship/presentation/completedOriginalM201Review20261007.js",
     "src/championship/presentation/completedOriginalUi20261007.js",
+    "src/championship/presentation/databaseHeroPortraits.js",
     "src/championship/presentation/events/championshipPresentationEvents.js",
+    "src/championship/presentation/evolutionGlyphArt.js",
     "src/championship/presentation/finalHuntArt20261008.js",
     "src/championship/presentation/highlight/createHighlightBurstThree.js",
     "src/championship/presentation/highlight/createHighlightSequence.js",
@@ -237,11 +264,20 @@
     "src/championship/presentation/huntFeedbackArt.js",
     "src/championship/presentation/huntMobileReadouts.js",
     "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+    "src/championship/presentation/intRh2/raisingContactShadow.js",
     "src/championship/presentation/intRh2/raisingFieldViewport.js",
     "src/championship/presentation/intRh2/raisingNativeSizing.js",
     "src/championship/presentation/licensedCharacterRoster.js",
     "src/championship/presentation/m001CharacterArtReview.js",
     "src/championship/presentation/m001CharacterHudReview.js",
+    "src/championship/presentation/medals/medalFaceTexture.js",
+    "src/championship/presentation/medals/medalFrameRuntime.js",
+    "src/championship/presentation/medals/medalGeometry.js",
+    "src/championship/presentation/medals/medalPresentationProfiles.js",
+    "src/championship/presentation/medals/medalPresentationText.js",
+    "src/championship/presentation/medals/medalSilhouette.js",
+    "src/championship/presentation/medals/medalThreePresentation.js",
+    "src/championship/presentation/medals/selectedMedalPresentation.js",
     "src/championship/presentation/musicPresentation.js",
     "src/championship/presentation/nativeHuntCharacterAction.js",
     "src/championship/presentation/originalBattleFieldBindings.js",
@@ -255,12 +291,15 @@
     "src/championship/presentation/pixiCharacterRuntimeBundle.js",
     "src/championship/presentation/presentationPack.js",
     "src/championship/presentation/presentationPreferences.js",
+    "src/championship/presentation/publicRuntimeAssets.js",
     "src/championship/presentation/raisingCageArtPlan.js",
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
     "src/championship/presentation/runtimeBattleArenaArtReview.js",
     "src/championship/presentation/runtimeMapArtBundle.js",
+    "src/championship/presentation/sceneMusicCatalog.js",
     "src/championship/presentation/shopGoodsUiArt.js",
+    "src/championship/presentation/systemBackgrounds.js",
     "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/battleWeatherVfxPresentation.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
@@ -269,8 +308,8 @@
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
-    "src/championship/presentation/vs2/gateWorldLayout.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+    "src/championship/presentation/vs2/gateWorldLayout.js",
     "src/championship/presentation/vs2/huntContactShadow.js",
     "src/championship/presentation/vs2/huntDepthOccluders.js",
     "src/championship/presentation/vs2/huntFactoryShutters.js",
@@ -282,6 +321,7 @@
     "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
     "src/championship/r2/createChampionshipR2Session.js",
     "src/championship/raising/createRaisingHomeRuntime.js",
+    "src/championship/raising/nativeGroundSpacing.js",
     "src/championship/raising/nativeIndividualEvolution.js",
     "src/championship/raising/nativeIndividualProfile.js",
     "src/championship/raising/nativeRaisingActivity.js",
@@ -314,6 +354,9 @@
     "src/championship/raising/statLadder.js",
     "src/championship/shop/shopCatalog.js",
     "src/championship/shop/shopRuntime.js",
+    "src/championship/text/battleMoveNames.js",
+    "src/championship/text/battleOpeningText.js",
+    "src/championship/text/battleTransportText.js",
     "src/championship/text/brandTerms.js",
     "src/championship/text/catalogs.en.js",
     "src/championship/text/catalogs.ja.js",
@@ -325,12 +368,15 @@
     "src/championship/text/gameText.ja.js",
     "src/championship/text/gameText.th.js",
     "src/championship/text/gameText.vi.js",
+    "src/championship/text/growthStageTerms.js",
     "src/championship/text/interactiveTutorialBattleText.js",
     "src/championship/text/interactiveTutorialPreviewText.js",
     "src/championship/text/locale.js",
+    "src/championship/text/medalDetailText.js",
     "src/championship/text/openingEggText.js",
     "src/championship/text/openingFilmText.js",
     "src/championship/text/openingStoryText.js",
+    "src/championship/text/productFormText.js",
     "src/championship/text/raisingMessages.en.js",
     "src/championship/text/raisingMessages.ja.js",
     "src/championship/text/raisingMessages.th.js",
@@ -353,52 +399,7 @@
     "src/data/championship/battleNativeMathTables.js",
     "src/data/championship/characterNativeSizing.js",
     "src/data/championship/nativeBookSpecies.js",
-    "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/championship/text/battleMoveNames.js",
-    "src/championship/battle/battleAiAdaptation.js",
-    "assets/production/characters/battle-packed-20261013/manifest.json",
-    "src/championship/presentation/evolutionGlyphArt.js",
-    "src/championship/text/growthStageTerms.js",
-    "src/championship/database/databaseDisplayCatalog.js",
-    "src/championship/database/databaseEvolutionRoutes.js",
-    "src/championship/presentation/acceptedDatabasePortraits.js",
-    "src/championship/app/huntLayoutResolver.js",
-    "src/championship/hunt/huntPresentationBinding.js",
-    "src/championship/hunt/huntPresentationViewport.js",
-    "src/championship/battle/battleOpeningPhase.js",
-    "src/championship/text/battleOpeningText.js",
-    "src/championship/database/databaseEvolutionConditions.js",
-    "src/championship/database/databaseStories.js",
-    "src/championship/presentation/databaseHeroPortraits.js",
-    "src/championship/raising/nativeGroundSpacing.js",
-    "src/championship/field/groundFootpointSeparation.js",
-    "src/championship/app/medalDetails.js",
-    "src/championship/text/medalDetailText.js",
-    "src/championship/presentation/medals/medalThreePresentation.js",
-    "src/championship/presentation/medals/selectedMedalPresentation.js",
-    "src/championship/presentation/medals/medalPresentationProfiles.js",
-    "src/championship/presentation/medals/medalFaceTexture.js",
-    "src/championship/presentation/medals/medalFrameRuntime.js",
-    "src/championship/presentation/medals/medalSilhouette.js",
-    "src/championship/presentation/medals/medalGeometry.js",
-    "src/championship/presentation/medals/medalPresentationText.js",
-    "src/championship/presentation/systemBackgrounds.js",
-    "src/championship/presentation/intRh2/raisingContactShadow.js",
-    "src/championship/app/qaRanchExpansion.js",
-    "src/championship/contracts/productSpeciesData.js",
-    "src/championship/contracts/productSpeciesExtensions.js",
-    "src/championship/text/productFormText.js",
-    "src/championship/app/alternateFormQaApp.js",
-    "src/championship/app/alternateFormQaCharacters.js",
-    "src/championship/app/alternateFormQaDiagnostics.js",
-    "src/championship/app/alternateFormQaPorts.js",
-    "src/championship/app/alternateFormQaStorage.js",
-    "src/championship/contracts/productBattleTransport.js",
-    "src/championship/contracts/productPasswordTransport.js",
-    "src/championship/text/battleTransportText.js",
-    "src/championship/presentation/alternateFormAssetContracts.js",
-    "src/championship/app/transientHint.js",
-    "src/championship/presentation/sceneMusicCatalog.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js"
@@ -406,6 +407,7 @@
   "files": [
     "alternate-form-qa.html",
     "assets/production/ART_PRODUCTION_INDEX.json",
+    "assets/production/PUBLIC_RUNTIME_INDEX.json",
     "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
     "assets/production/battle/licensed-runtime-v1/fields/field_bm02_01/frame-00.png",
     "assets/production/battle/licensed-runtime-v1/fields/field_bm03_01/frame-00.png",
@@ -422,6 +424,7 @@
     "assets/production/battle/menu-cube-v1/free-battle.png",
     "assets/production/battle/menu-cube-v1/link-battle.png",
     "assets/production/battle/menu-cube-v1/manifest.json",
+    "assets/production/battle/menu-cube-v1/public-manifest.json",
     "assets/production/battle/menu-cube-v1/title-match.png",
     "assets/production/battle/original-opus-v1/fields/field_bm01_01/frame-00.webp",
     "assets/production/battle/original-opus-v1/fields/field_bm02_01/frame-00.webp",
@@ -5929,6 +5932,7 @@
     "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png",
     "assets/production/database-handpainted-r1-20261015/species-035.be1631a7ffea0de4.png",
     "assets/production/database-handpainted-r1-20261015/species-035.png",
+    "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
     "assets/production/database-handpainted-r1-20261015/species-037.png",
     "assets/production/database-handpainted-r1-20261015/species-038.png",
     "assets/production/database-handpainted-r1-20261015/species-039.a22eae194967e17d.png",
@@ -5984,6 +5988,43 @@
     "assets/production/database-handpainted-r1-20261015/species-222.png",
     "assets/production/database-handpainted-r1-20261015/species-229.png",
     "assets/production/database-handpainted-r1-20261015/species-230.png",
+    "assets/production/database-heroes-20261017/species-028.d9745f89f46f9621.webp",
+    "assets/production/database-heroes-20261017/species-029.aa46ec9d6477bb75.webp",
+    "assets/production/database-heroes-20261017/species-033.eed4f22eb17230ad.webp",
+    "assets/production/database-heroes-20261017/species-073.39301b2fee1a169f.webp",
+    "assets/production/database-heroes-20261017/species-075.d38fc6867ac594a3.webp",
+    "assets/production/database-heroes-20261017/species-076.30cd2172ccff3c9f.webp",
+    "assets/production/database-heroes-20261017/species-077.30ce6a86e6febd5d.webp",
+    "assets/production/database-heroes-20261017/species-078.cb271096fa971d0b.webp",
+    "assets/production/database-heroes-20261017/species-079.dbb7c18616092ade.webp",
+    "assets/production/database-heroes-20261017/species-081.40a7e20d24f19a93.webp",
+    "assets/production/database-heroes-20261017/species-082.e72200db1609bca7.webp",
+    "assets/production/database-heroes-20261017/species-083.14381cfd571eb399.webp",
+    "assets/production/database-heroes-20261017/species-084.1fc6a4d307f403cf.webp",
+    "assets/production/database-heroes-20261017/species-089.4ed6a3c33ede12e4.webp",
+    "assets/production/database-heroes-20261017/species-090.608f4e1c14289e20.webp",
+    "assets/production/database-heroes-20261017/species-091.686226213fde12ae.webp",
+    "assets/production/database-heroes-20261017/species-092.cdf044393078ef74.webp",
+    "assets/production/database-heroes-20261017/species-093.6ca79a33ab8a042a.webp",
+    "assets/production/database-heroes-20261017/species-097.66900d62495da0f8.webp",
+    "assets/production/database-heroes-20261017/species-098.a5f298f8b605116b.webp",
+    "assets/production/database-heroes-20261017/species-099.3c322a52b8f652a0.webp",
+    "assets/production/database-heroes-20261017/species-100.930db3cc4f3366ed.webp",
+    "assets/production/database-heroes-20261017/species-101.e49b91a8b7194853.webp",
+    "assets/production/database-heroes-20261017/species-102.02a4a4755042d58d.webp",
+    "assets/production/database-heroes-20261017/species-104.e80d5654bd21cfc6.webp",
+    "assets/production/database-heroes-20261017/species-106.70cda5dceb243a7f.webp",
+    "assets/production/database-heroes-20261017/species-107.a144cf5e33a719b7.webp",
+    "assets/production/database-heroes-20261017/species-108.9a6c56b441e697d8.webp",
+    "assets/production/database-heroes-20261017/species-109.98b7aae9e5ebecf9.webp",
+    "assets/production/database-heroes-20261017/species-110.a02974fe9586826d.webp",
+    "assets/production/database-heroes-20261017/species-111.d832e8c11f2222d6.webp",
+    "assets/production/database-heroes-20261017/species-112.b19c50e763541179.webp",
+    "assets/production/database-heroes-20261017/species-113.9140176e76d4611f.webp",
+    "assets/production/database-heroes-20261017/species-114.a2653fee85ab174f.webp",
+    "assets/production/database-heroes-20261017/species-115.bc89213a41cd0faa.webp",
+    "assets/production/database-heroes-20261017/species-116.8a50d068ac5983dd.webp",
+    "assets/production/database-heroes-20261017/species-118.b4cc36f9964f606e.webp",
     "assets/production/database-portraits-b1-20261014/B101.webp",
     "assets/production/database-portraits-b1-20261014/B102.eb7c0e50feb53dc2.png",
     "assets/production/database-portraits-b1-20261014/B102.webp",
@@ -10256,6 +10297,7 @@
     "src/championship/presentation/pixiCharacterRuntimeBundle.js",
     "src/championship/presentation/presentationPack.js",
     "src/championship/presentation/presentationPreferences.js",
+    "src/championship/presentation/publicRuntimeAssets.js",
     "src/championship/presentation/raisingCageArtPlan.js",
     "src/championship/presentation/raisingExpansionPreview.js",
     "src/championship/presentation/raisingFeedbackArt.js",
@@ -10409,8 +10451,7 @@
     "src/data/championship/product-species-extensions.r1.json",
     "src/data/championship/public-playtest.r1.json",
     "src/data/championship/qa-database-hero-portraits.r1.json",
-    "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png"
+    "src/data/championship/r2/fields/fieldInventoryR2.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -10423,6 +10464,10 @@
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
         "sha256": "3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f"
+      },
+      {
+        "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
+        "sha256": "42b7c91d649127d314d0698e8be757795528f77a949d1564415f2fded6080c46"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -10487,6 +10532,10 @@
       {
         "path": "assets/production/battle/menu-cube-v1/manifest.json",
         "sha256": "ecd0fca4074ad3b4dcda83f041c98a1f56caf8c62914d9f6c9040f157a532b76"
+      },
+      {
+        "path": "assets/production/battle/menu-cube-v1/public-manifest.json",
+        "sha256": "eaebcb5e4e7a6a82e4b849f3913e62c20cfa7533101f967311b753488abdc3e0"
       },
       {
         "path": "assets/production/battle/menu-cube-v1/title-match.png",
@@ -32517,6 +32566,10 @@
         "sha256": "f2c4940a90fba6634621a5a20d545d292ab3eae4509ec13b9c357336295fa9dd"
       },
       {
+        "path": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
+        "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d"
+      },
+      {
         "path": "assets/production/database-handpainted-r1-20261015/species-037.png",
         "sha256": "ec0b71f17141e05a0ef0d9dc8c0be07e3b9b881064928ba7f6baab9c7b603414"
       },
@@ -32735,6 +32788,154 @@
       {
         "path": "assets/production/database-handpainted-r1-20261015/species-230.png",
         "sha256": "09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-028.d9745f89f46f9621.webp",
+        "sha256": "d9745f89f46f9621e5d5441c0ee6b3cd00d7c777eec0cca06f3f26571ae6f778"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-029.aa46ec9d6477bb75.webp",
+        "sha256": "aa46ec9d6477bb7523e50eebcbc01c5cde07260fea56feb51faa3225cd863eaa"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-033.eed4f22eb17230ad.webp",
+        "sha256": "eed4f22eb17230ad640e72dd9a1b577719ceca8f2842d59f9941363b671ac3ee"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-073.39301b2fee1a169f.webp",
+        "sha256": "39301b2fee1a169f8cbff0cc491ce3e220801b3452257cce797e4fbfc5419729"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-075.d38fc6867ac594a3.webp",
+        "sha256": "d38fc6867ac594a37b5f414584d04eb3378023f54290595f36646ef7bc7988c4"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-076.30cd2172ccff3c9f.webp",
+        "sha256": "30cd2172ccff3c9f11eb4b7a6f7661bf2a32c7c5b46959a4b05ade8b1b35a8ab"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-077.30ce6a86e6febd5d.webp",
+        "sha256": "30ce6a86e6febd5d3c8a7f8191ec9992f65e158f73f8845014d5931e8678582c"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-078.cb271096fa971d0b.webp",
+        "sha256": "cb271096fa971d0b468d114a0f96b7c1e301f30a5c1317b78dee95458da68628"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-079.dbb7c18616092ade.webp",
+        "sha256": "dbb7c18616092ade73e08214b965637bbccb4da67c5002c1ed4cbc797509a225"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-081.40a7e20d24f19a93.webp",
+        "sha256": "40a7e20d24f19a9332f239a6d793c333bed3d3fc7f1c04f578f1695d709adfa0"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-082.e72200db1609bca7.webp",
+        "sha256": "e72200db1609bca7b037612e9a0d6a7386a2eb20667cdd83dd21af2f64066729"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-083.14381cfd571eb399.webp",
+        "sha256": "14381cfd571eb3997e5e2fc5d4bf6b08327a20687db8d5726d50be9ba0233ced"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-084.1fc6a4d307f403cf.webp",
+        "sha256": "1fc6a4d307f403cfb53d12f61cfe432cacd63f1758e6afa9fad7456ad449a3f1"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-089.4ed6a3c33ede12e4.webp",
+        "sha256": "4ed6a3c33ede12e47a3fbc5689044917b3c96545c112ece8ae9c205bb6644f00"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-090.608f4e1c14289e20.webp",
+        "sha256": "608f4e1c14289e20ab5bf8edbc2f2f06816b7ea7ea59fc46dc830658ce665396"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-091.686226213fde12ae.webp",
+        "sha256": "686226213fde12ae02ef5a4a7e7272932bda7d677d52ace8a7768b2d80804542"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-092.cdf044393078ef74.webp",
+        "sha256": "cdf044393078ef744036175fdd9d316a46f7296d65c64bdc80952b41f80be752"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-093.6ca79a33ab8a042a.webp",
+        "sha256": "6ca79a33ab8a042a66cb16fe7616be962193716158c913b8e3ea744afe65d188"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-097.66900d62495da0f8.webp",
+        "sha256": "66900d62495da0f8d3b0de501acac56450973ceada10883aa3c4b8d995f963e1"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-098.a5f298f8b605116b.webp",
+        "sha256": "a5f298f8b605116b902f3383da07c11565ab7e2c3634c6e138056feaf3ed4d58"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-099.3c322a52b8f652a0.webp",
+        "sha256": "3c322a52b8f652a042d72b3cf8cd9a0561bf64fe8241cdf6c79a660792812e28"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-100.930db3cc4f3366ed.webp",
+        "sha256": "930db3cc4f3366ed855e1d92fd497ffe3308b7a104cd319e55095c98d4923a67"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-101.e49b91a8b7194853.webp",
+        "sha256": "e49b91a8b71948539397bcad25218f2bd2d15a19aebd54a95f6e996c9b79c96a"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-102.02a4a4755042d58d.webp",
+        "sha256": "02a4a4755042d58da03bf1b09938ef7a20322e93c20f3fc938351b1201e32571"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-104.e80d5654bd21cfc6.webp",
+        "sha256": "e80d5654bd21cfc68f4eb50cf4b552db059d8ae8e20a8e7154527bec326aa363"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-106.70cda5dceb243a7f.webp",
+        "sha256": "70cda5dceb243a7ffb8bbb7b0bebd613d0c605eaca2160047bfeecc40e4ef8b5"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-107.a144cf5e33a719b7.webp",
+        "sha256": "a144cf5e33a719b798eecc654882a6b874fa04382c9d968667b5ab2eb54d4f01"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-108.9a6c56b441e697d8.webp",
+        "sha256": "9a6c56b441e697d8280f1a9ac438631540194a9ef94b66a3b96cc859d30dad90"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-109.98b7aae9e5ebecf9.webp",
+        "sha256": "98b7aae9e5ebecf9248a3c2bacf49510f737b42076104ef0adcd6ff3e8cd1df3"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-110.a02974fe9586826d.webp",
+        "sha256": "a02974fe9586826d7227f66fc7085ebfdedcf0d3fd07864abbcf89d303ca48cd"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-111.d832e8c11f2222d6.webp",
+        "sha256": "d832e8c11f2222d620b3cae6867e992ad575db0e97832f4fbc92f28c8da6e542"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-112.b19c50e763541179.webp",
+        "sha256": "b19c50e763541179fea3cd6c73ca5c021f6caffefa3be77518c64af916703e39"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-113.9140176e76d4611f.webp",
+        "sha256": "9140176e76d4611f7719331b93ce7e09bcf01a0a590b2044889edadda36ea197"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-114.a2653fee85ab174f.webp",
+        "sha256": "a2653fee85ab174f97e06d918b55f5c22d11ecaaa2369b319fb023f8233e1ade"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-115.bc89213a41cd0faa.webp",
+        "sha256": "bc89213a41cd0faa5f3260645ca38916b1e48797e469c95388f6c4dbce3bc196"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-116.8a50d068ac5983dd.webp",
+        "sha256": "8a50d068ac5983ddb8730d7e53854b72f95a33643c5ae69f108f966ad49705d0"
+      },
+      {
+        "path": "assets/production/database-heroes-20261017/species-118.b4cc36f9964f606e.webp",
+        "sha256": "b4cc36f9964f606e6ca51024bfeecbf9ad2b3c57ffbd59bec52d8da0e23a9cca"
       },
       {
         "path": "assets/production/database-portraits-b1-20261014/B101.webp",
@@ -49670,7 +49871,7 @@
       },
       {
         "path": "src/championship/presentation/databaseHeroPortraits.js",
-        "sha256": "70c023baf2aa6ed518d3bbbc56d0e16188592367d0b8fb6d0719176e66e3a442"
+        "sha256": "4a4803d3b09ea74dfffe5e63185dae3adfbb483a587aabf0c7c82d419ce1a314"
       },
       {
         "path": "src/championship/presentation/events/championshipPresentationEvents.js",
@@ -49825,6 +50026,10 @@
         "sha256": "97bcf7ea5edbe069a6c35af34ecdcbe4901605af592b4990bd2df4378f890efe"
       },
       {
+        "path": "src/championship/presentation/publicRuntimeAssets.js",
+        "sha256": "23698f96bd1ee0e23181edba2df2fc22b5fc705977ffcfaa4920c91ed0099342"
+      },
+      {
         "path": "src/championship/presentation/raisingCageArtPlan.js",
         "sha256": "35a8a50822615efa8ac9c6756830ff0d10bc8950f375c04f5a79814bf42d1ca0"
       },
@@ -49922,7 +50127,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/battleCubeArt.js",
-        "sha256": "183b359f88ff736fe246536b01afdf03610baadf4307397c1cb574d6712da590"
+        "sha256": "16e3aaa7f1fc2137e0af0a160a53e7d42e52a9833fb147b5b72c69652e3646de"
       },
       {
         "path": "src/championship/presentation/vs5/battleCubeTrackball.js",
@@ -50082,7 +50287,7 @@
       },
       {
         "path": "src/championship/text/battleMoveNames.js",
-        "sha256": "664fc8decba6913951dd37fa89f0d7a82a2ec23bc2e6f916eda56599f76255bf"
+        "sha256": "67d078da5d6e2b0f7cd755336d5216b670f273544d4f4bf6e9e28aef0b72d02c"
       },
       {
         "path": "src/championship/text/battleOpeningText.js",
@@ -50098,23 +50303,23 @@
       },
       {
         "path": "src/championship/text/catalogs.en.js",
-        "sha256": "0aab5053e194690e6a978432d15f5736d15c7989b2a654780ebd4bca48f0a9c2"
+        "sha256": "6ab2f09c5a50ed93d0299ee770234d4a5b10d318c535d396bdb63e742a29a5b9"
       },
       {
         "path": "src/championship/text/catalogs.ja.js",
-        "sha256": "8526fbf71ebfed760343ec279677dd562a039ea881d75756399208b14a46abf7"
+        "sha256": "1f175b3b817a18d78de0018a14c1baa15d6ad7ef3104165cb81c544686a2e37d"
       },
       {
         "path": "src/championship/text/catalogs.th.js",
-        "sha256": "57be552288cf2a43805278c9ff473e56293ed6e95474968f3c4e8af562efdc5b"
+        "sha256": "12468431c3743a2b5ea034b184d33d6048931d85e0d34430c0158696561ea340"
       },
       {
         "path": "src/championship/text/catalogs.vi.js",
-        "sha256": "0ee6c6a7263af5d76b4c7296a193ddfd7cc793106fec6e8c912468a165a20604"
+        "sha256": "e8837abb7de6da5175d3306b423851a535190ee73f46ff10912ab593f8f45083"
       },
       {
         "path": "src/championship/text/catalogs.zhHant.js",
-        "sha256": "260e54b73cec0067d349f195d21601282e100cb2f930214b894910b3244bba86"
+        "sha256": "4c9b38c5b0d08cfe45d35dc9dd6a90ccededb5141eb816331a84c672ab138341"
       },
       {
         "path": "src/championship/text/dataArenaText.js",
@@ -50414,7 +50619,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.r1.json",
-        "sha256": "005585989cd40f22bdab1131b8eddf651f8908a196052edd9e56e3a135d83b0b"
+        "sha256": "856fe4832d13cf81115e385d10b4ffac6b5cae26fd5587d49ea1ab097b48a974"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
@@ -50434,15 +50639,11 @@
       },
       {
         "path": "src/data/championship/qa-database-hero-portraits.r1.json",
-        "sha256": "f950864125beba4fb52e0aa3bfc272c2bb670095f515686ff4a49ae0b20fa216"
+        "sha256": "7c288b208157b1bd0aaefd90174d5ac6e5756cdd4eddc34b407f1e51a527aa64"
       },
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
-      },
-      {
-        "path": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png",
-        "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d"
       }
     ],
     "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",

@@ -10,6 +10,7 @@ import {auditWebBuild,auditReleaseRights,sha256,BUILD_INPUT_PATH,ART_INDEX_PATH,
 import {buildWebArtifact,validateWebArtifact,INTERNAL_TARGET,PUBLIC_TARGET,PLAYTEST_TARGET} from '../scripts/lib/web-build-artifact.mjs';
 import {isShippingArtEntry,publicArtIndex} from '../scripts/lib/public-art-boundary.mjs';
 import {isLocalBattleEffectPreview} from '../src/championship/presentation/battleEffectArt.js';
+import {PUBLIC_RUNTIME_INDEX_PATH,PUBLIC_RUNTIME_ALLOWLIST_PATH} from '../scripts/lib/public-runtime-boundary.mjs';
 
 const repo=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 function fixture(t){
@@ -20,7 +21,20 @@ function fixture(t){
     assert.ok(rel.startsWith('web-build-test-')&&!rel.includes(path.sep));
     fs.rmSync(root,{recursive:true});
   });
-  const write=(f,v)=>{fs.mkdirSync(path.dirname(path.join(root,f)),{recursive:true});fs.writeFileSync(path.join(root,f),typeof v==='string'?v:JSON.stringify(v)+'\n');};
+  const writeRaw=(f,v)=>{fs.mkdirSync(path.dirname(path.join(root,f)),{recursive:true});fs.writeFileSync(path.join(root,f),typeof v==='string'?v:JSON.stringify(v)+'\n');};
+  const write=(f,v)=>{
+    if(f===BUILD_INPUT_PATH){
+      if(!v.files.includes(PUBLIC_RUNTIME_INDEX_PATH))v.files.push(PUBLIC_RUNTIME_INDEX_PATH);
+      const manifestPath='assets/production/test/manifest.json';
+      const runtime={schemaVersion:1,assets:[{id:'TEST_ONLY',src:manifestPath,sha256:sha256(fs.readFileSync(path.join(root,manifestPath)))}]};
+      writeRaw(PUBLIC_RUNTIME_INDEX_PATH,JSON.stringify(runtime,null,2)+'\n');
+      const fields=value=>Array.isArray(value)?value.flatMap(fields):value&&typeof value==='object'?Object.entries(value).flatMap(([key,item])=>[key,...fields(item)]):[];
+      writeRaw(PUBLIC_RUNTIME_ALLOWLIST_PATH,{schemaVersion:1,assets:runtime.assets,
+        files:v.files.filter(file=>file!==ART_INDEX_PATH&&fs.existsSync(path.join(root,file))).map(file=>({path:file,sha256:sha256(fs.readFileSync(path.join(root,file))),
+          ...(file.endsWith('.json')&&file!==PUBLIC_RUNTIME_INDEX_PATH?{jsonFields:[...new Set(fields(JSON.parse(fs.readFileSync(path.join(root,file),'utf8'))))]}:{})}))});
+    }
+    writeRaw(f,v);
+  };
   const asset='assets/production/test/manifest.json';write(asset,{fixture:true});
   const art={assetId:'TEST_ONLY',manifestPath:asset,rightsStatus:'OWNER_OWNED',runtimeEligible:true,humanApproved:true,
     runtimeQaPassed:true,shippingReady:true,publicReleasePermitted:true,rightsEvidenceIds:['TEST_ONLY'],
@@ -46,6 +60,9 @@ test('Owner public playtest validates exact reviewed files without claiming veri
   f.write(BUILD_INPUT_PATH,f.input);
   buildWebArtifact({root:f.root,output,target:PLAYTEST_TARGET});
   const m=validateWebArtifact({root:f.root,output,target:PLAYTEST_TARGET});
+  assert.equal(fs.existsSync(path.join(output,ART_INDEX_PATH)),false,'Playtest never uploads the authority index');
+  assert.equal(m.files.some(row=>row.path===ART_INDEX_PATH),false);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(output,PUBLIC_RUNTIME_INDEX_PATH),'utf8')).assets[0].id,'TEST_ONLY');
   assert.equal(m.publicReleasePermitted,true);assert.equal(m.release.approved,false);
   assert.equal(m.publicPlaytest.ownerApproved,true);assert.equal(m.publicPlaytest.rightsDocumentVerified,false);
   assert.throws(()=>buildWebArtifact({root:f.root,output:path.join(f.root,'dist/release'),target:PUBLIC_TARGET}),/PUBLIC_RELEASE_NOT_APPROVED/);
@@ -81,6 +98,7 @@ test('public candidate validates actual file bytes and rejects added or stale as
   const f=fixture(t),output=path.join(f.root,'dist/public');
   buildWebArtifact({root:f.root,output,target:PUBLIC_TARGET});
   assert.equal(validateWebArtifact({root:f.root,output,target:PUBLIC_TARGET}).release.approved,true);
+  assert.equal(fs.existsSync(path.join(output,ART_INDEX_PATH)),false,'Release uses the same private-data boundary as playtest');
   fs.writeFileSync(path.join(output,'extra.png'),'extra');
   assert.throws(()=>validateWebArtifact({root:f.root,output,target:PUBLIC_TARGET}),/BUILD_FILE_LIST_MISMATCH/);
   fs.unlinkSync(path.join(output,'extra.png'));
@@ -88,6 +106,21 @@ test('public candidate validates actual file bytes and rejects added or stale as
   assert.throws(()=>validateWebArtifact({root:f.root,output,target:PUBLIC_TARGET}),/BUILD_HASH_MISMATCH/);
   f.write(f.asset,{changed:true});
   assert.ok(auditWebBuild(f.root).release.issues.some(r=>r.kind==='ASSET_APPROVAL_HASH_MISMATCH'));
+});
+
+test('a real built runtime resolves the selected public asset while a private-index import fails before replacing output',async t=>{
+  const f=fixture(t),output=path.join(f.root,'dist/public');
+  f.write('src/championship/app/main.js',`import catalog from '../../../${PUBLIC_RUNTIME_INDEX_PATH}' with {type:'json'}; export const selected=catalog.assets[0];`);
+  f.write(BUILD_INPUT_PATH,f.input);
+  buildWebArtifact({root:f.root,output,target:PUBLIC_TARGET});validateWebArtifact({root:f.root,output,target:PUBLIC_TARGET});
+  const {pathToFileURL}=await import('node:url');
+  const loaded=await import(pathToFileURL(path.join(output,'src/championship/app/main.js')).href);
+  assert.equal(loaded.selected.id,'TEST_ONLY');assert.equal(loaded.selected.src,f.asset);
+  const previous=fs.readFileSync(path.join(output,'pages-build.json'));
+  f.write('src/championship/app/main.js',`import catalog from '../../../${ART_INDEX_PATH}' with {type:'json'}; export const selected=catalog.entries[0];`);
+  f.write(BUILD_INPUT_PATH,f.input);
+  assert.throws(()=>buildWebArtifact({root:f.root,output,target:PUBLIC_TARGET}),/PUBLIC_MODULE_CLOSURE_BLOCKED/);
+  assert.deepEqual(fs.readFileSync(path.join(output,'pages-build.json')),previous);
 });
 
 test('missing imports, source payloads and private legal documents cannot enter build inputs',t=>{

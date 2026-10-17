@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import {auditPagesModuleClosure} from './pages-module-closure.mjs';
 import {isPrivateRepositoryPath,isShippingArtEntry} from './public-art-boundary.mjs';
+import {PUBLIC_RUNTIME_INDEX_PATH} from './public-runtime-boundary.mjs';
 
 export const BUILD_INPUT_PATH='docs/contracts/championship/WEB_BUILD_INPUTS.v1.json';
 export const ART_INDEX_PATH='assets/production/ART_PRODUCTION_INDEX.json';
@@ -79,7 +80,7 @@ export function auditWebBuild(root,{asOf=new Date().toISOString().slice(0,10)}={
   // Every copied asset must belong to an explicitly approved bundle. The
   // actual file list is checked, not merely a filtered registration index.
   const approvals=index.entries.filter(isShippingArtEntry);
-  for(const file of input.files.filter(f=>f.startsWith('assets/production/')&&f!==ART_INDEX_PATH)){
+  for(const file of input.files.filter(f=>f.startsWith('assets/production/')&&f!==ART_INDEX_PATH&&f!==PUBLIC_RUNTIME_INDEX_PATH)){
     const owners=approvals.filter(e=>e.releaseFiles?.some(r=>r.path===file));
     if(owners.length!==1){releaseIssues.push({kind:'ASSET_FILE_NOT_APPROVED',file});continue;}
     const entry=owners[0],row=entry.releaseFiles.find(r=>r.path===file);
