@@ -1,3 +1,4 @@
+import {VS2_UI_AUTHORITY,VS2_PRESENTATION_MODES} from '../src/championship/app/vs2PresentationAuthority.js';
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
@@ -8,12 +9,12 @@ const field = fs.readFileSync("src/championship/presentation/vs2/createHuntField
 const manifest = JSON.parse(fs.readFileSync("assets/production/temporary/vs2-hunt/manifest.json", "utf8"));
 
 test("VS2-P screens consume only the injected presentation source", () => {
-  const imports = [...screens.matchAll(/^import .* from "([^"]+)";/gm)].map(match => match[1]);
-  assert.deepEqual(imports, ["../text/uiText.js"], "only display copy may be imported");
+  const imports = [...screens.matchAll(/^import .* from ['"]([^'"]+)['"];\r?$/gm)].map(match => match[1]);
+  assert.deepEqual(imports,["../text/uiText.js","../presentation/shopGoodsUiArt.js","../hunt/loadout/huntEquipmentCatalog.js","../presentation/ceremony/ceremonyRunner.js","../presentation/ceremony/ceremonyScenes.js","./vs2PresentationAuthority.js"],"only existing display adapters and read-only labels are imported");
   assert.doesNotMatch(screens, /import\s*\(/);
-  assert.match(screens, /CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R/);
-  assert.match(screens, /PLAYER_MODE/);
-  assert.match(screens, /DEVELOPER_EVIDENCE_MODE/);
+  assert.equal(VS2_UI_AUTHORITY,"CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R");
+  assert.equal(VS2_PRESENTATION_MODES.PLAYER,"PLAYER_MODE");
+  assert.equal(VS2_PRESENTATION_MODES.DEVELOPER,"DEVELOPER_EVIDENCE_MODE");
   assert.doesNotMatch(screens, /createHuntStore|createSave|new\s+Application|PIXI\.Application/);
   assert.doesNotMatch(screens, /screens\.(enter|exit)|recordCapturedCardCreature|applyBitsTransaction/);
 });

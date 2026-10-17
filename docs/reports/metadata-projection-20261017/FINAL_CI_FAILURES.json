@@ -1,0 +1,274 @@
+{
+  "testedCommit": "0ce003f2b6f63f7c0886a0761eeb65c9a17c33a5",
+  "tests": 2531,
+  "passed": 2478,
+  "failed": 53,
+  "skipped": 0,
+  "failures": [
+    {
+      "location": "tests\\championship-alternate-form-assets-cases.mjs:1:1",
+      "title": "??tests\\championship-alternate-form-assets-cases.mjs (84.7026ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-art-a1-map-tech-cases.mjs:19:1",
+      "title": "??technical review outputs are deterministic and source-hash locked (1.0803ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-art-a1-map-tech-cases.mjs:60:1",
+      "title": "??all forty original CM structures are classified without copying original pixels (0.3593ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-art-production-a0-cases.mjs:1:1",
+      "title": "??tests\\championship-art-production-a0-cases.mjs (100.7037ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-assembled-ui-cases.mjs:32:1",
+      "title": "??complete cells retain PNG dimensions and exact selected source bytes (0.3501ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-assembled-ui-cases.mjs:105:1",
+      "title": "??retired code-symbol cell stays archived but is neither requested nor selected for the public artifact (0.7889ms)",
+      "kind": "CONTRACT_OR_HARNESS_REMAINS"
+    },
+    {
+      "location": "tests\\championship-battle-owned-party-cases.mjs:15:1",
+      "title": "??all 620 native title arena vectors preserve fixed fields and random-channel draws (1.3381ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-battle-owned-party-cases.mjs:30:1",
+      "title": "??all 72 original Practice results update the correct owned side, including draws (0.59ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-battle-packed-atlas-cases.mjs:25:1",
+      "title": "??all 370 frame contracts and every native sequence/geometry survive the lossless six-character repack (4.2195ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-battle-packed-atlas-cases.mjs:50:1",
+      "title": "??existing Pixi loader dedupes the 11 real-size sources, keeps native sequence anchors/bounds and releases every source (35.7999ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-cage-authoring-contract-cases.mjs:9:1",
+      "title": "??Cage authoring fixture locks existing inputs and cannot become a runtime manifest (3.723ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-cage-faithful-hd40-cases.mjs:47:1",
+      "title": "??every HD image is exactly 4x the verified native dimensions and all derived files are hash locked (1.8733ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-cage-faithful-hd40-cases.mjs:92:1",
+      "title": "??collision, attribute, tilemap and placement data preserve original raw classes and coordinates (0.5892ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-cage-hd-remaster-cases.mjs:32:1",
+      "title": "??HD components retain source dimensions, placements, flips and object bindings (0.5544ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-cage-hd-remaster-cases.mjs:86:1",
+      "title": "??CM27 removes only the Owner-directed centre logo before remaster (0.5908ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-cage-hd-remaster-cases.mjs:119:1",
+      "title": "??all Cage HD remaster outputs are present and hash locked (0.8669ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-character-animation-timeline-cases.mjs:128:1",
+      "title": "??Pixi runtime bundle loads all review atlases and releases them without owning a ticker (3.2088ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-character-faithful-hd-cases.mjs:23:1",
+      "title": "??all faithful HD character runtime contracts and previews exist without machine paths (0.9874ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-character-faithful-hd-cases.mjs:32:1",
+      "title": "??PixiJS atlas contract preserves Main/Sub timelines and the shared anchor (0.3043ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-completed-character-contract-cases.mjs:1:1",
+      "title": "??tests\\championship-completed-character-contract-cases.mjs (244.709ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-evolution-glyph-cases.mjs:1:1",
+      "title": "??tests\\championship-evolution-glyph-cases.mjs (85.1675ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-faithful-map-technical-qa-cases.mjs:10:1",
+      "title": "??Cage technical QA covers all 40 exact 4x fields and raw-grid alignment (2.4878ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-faithful-map-technical-qa-cases.mjs:24:1",
+      "title": "??Hunt technical QA rejects large diagnostic-red regions in all 30 variants (0.7485ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-free-battle-cases.mjs:7:1",
+      "title": "??all 108 original Free Battle individual settlements preserve the distinct one-point gain (1.2785ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-contact-shadow-cases.mjs:53:1",
+      "title": "??the three newly identified bodies remain pinned to the inspected approved atlas bytes (2.7656ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-direction-unassigned-cases.mjs:99:1",
+      "title": "??an unobserved encounter steers at the swept bound instead of stopping (0.3718ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-faithful-hd30-cases.mjs:22:1",
+      "title": "??Hunt fields preserve 128x128 data and deterministic 2048px HD frame zero (1.4993ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-faithful-hd30-cases.mjs:44:1",
+      "title": "??all 13 native BSAR bundles export complete layer and composite frames (0.3469ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-hd-remaster-cases.mjs:42:1",
+      "title": "??source assembly, object placement records and raw gameplay maps are unchanged (0.7511ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-hd-remaster-cases.mjs:76:1",
+      "title": "??every HD frame is hash locked and contains no large missing-region diagnostic red (0.2459ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-history-cases.mjs:18:1",
+      "title": "??history constructor and first-match selection follow original CPU across all 16 biomes (3.9239ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-individual-pool-cases.mjs:68:1",
+      "title": "??carried individual remains slot zero, preserves existing stats and returns the original history write (0.4415ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-live-encounter-cases.mjs:1:1",
+      "title": "??tests\\championship-hunt-live-encounter-cases.mjs (237.9499ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-hunt-movement-cases.mjs:89:1",
+      "title": "??controlled ARM probes verify all direction literals, flag precedence and signed rounding (0.3853ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-movement-cases.mjs:95:1",
+      "title": "??controlled ARM grid probes verify wrap, outside bounds and ordered terrain bit tests (0.2187ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-movement-cases.mjs:106:1",
+      "title": "??entering native escape preserves the literal direction before its first steering blend (105.2529ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-normal-entry-cases.mjs:43:1",
+      "title": "??29 complete initial terrain readers match 475136 original CPU cell results and outside bounds (0.3965ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-normal-entry-cases.mjs:112:1",
+      "title": "??original carried post-registration probe proves common slot binding and an additional whole-batch state update (0.4504ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-original-input-evidence-cases.mjs:1:1",
+      "title": "??tests\\championship-hunt-original-input-evidence-cases.mjs (75.4216ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-hunt-persistent-sources-cases.mjs:44:1",
+      "title": "??128 normal field/season source selections match 640 original CPU candidate expansions (0.419ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-hunt-spawn-cases.mjs:1:1",
+      "title": "??tests\\championship-hunt-spawn-cases.mjs (93.2676ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-licensed-hunt-runtime-cases.mjs:57:1",
+      "title": "??licensed Hunt frames live under production, hash-match, and keep verified tick timing (1.0264ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-loading-optimization-cases.mjs:58:1",
+      "title": "??a ranch loads only requested original HUDs and can fill a later species without another full catalog read (164.6714ms)",
+      "kind": "CONTRACT_OR_HARNESS_REMAINS"
+    },
+    {
+      "location": "tests\\championship-medal-art-corrections-cases.mjs:50:1",
+      "title": "??moon, virus, blizzard and volcano use inspected motifs without wrong-art donor backfill (0.8491ms)",
+      "kind": "CONTRACT_OR_HARNESS_REMAINS"
+    },
+    {
+      "location": "tests\\championship-medal-art-corrections-cases.mjs:84:1",
+      "title": "??generated128px grids and512px details have genuine alpha and stable master provenance (22.4317ms)",
+      "kind": "CONTRACT_OR_HARNESS_REMAINS"
+    },
+    {
+      "location": "tests\\championship-medal-art-corrections-cases.mjs:135:1",
+      "title": "??later batches preserve sealed first-four identities and original detail image hashes (0.361ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-native-individual-profile-cases.mjs:1:1",
+      "title": "??tests\\championship-native-individual-profile-cases.mjs (507.5918ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-raising-evolution-cases.mjs:1:1",
+      "title": "??tests\\championship-raising-evolution-cases.mjs (163.7464ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    },
+    {
+      "location": "tests\\championship-raising-lifecycle-cases.mjs:14:1",
+      "title": "??eight-day calendar registration, title wins and championship countdown match 1024 original CPU cases (1.2138ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-rounds-cases.mjs:90:1",
+      "title": "??all 824 original draw prefixes select the initialized team's existing presets on channel zero (0.8317ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-tutorial-cases.mjs:112:1",
+      "title": "??copy covers all 72 bank messages while the legacy cursor remains the observed middle segment (0.5146ms)",
+      "kind": "MISSING_LOCAL_FIXTURE"
+    },
+    {
+      "location": "tests\\championship-vs2-p1r-presentation-cases.mjs:10:1",
+      "title": "??VS2-P screens consume only the injected presentation source (3.1776ms)",
+      "kind": "CONTRACT_OR_HARNESS_REMAINS"
+    },
+    {
+      "location": "tests\\product-species-extensions-cases.mjs:1:1",
+      "title": "??tests\\product-species-extensions-cases.mjs (71.3842ms)",
+      "kind": "MODULE_START_FAILURE_DETAILS_IN_FULL_LOG"
+    }
+  ]
+}

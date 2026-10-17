@@ -1,3 +1,5 @@
+Historical checkpoint; see FINAL_REPORT_ZH_TW.md and FINAL_SUMMARY.json for completed checks and current blockers.
+
 Local publication repair after 25f0b9be; no push, merge or deployment.
 
 The source byte/privacy audit checks all 7,895 explicitly selected inputs with zero issues. Seventeen PNG derivatives remove only metadata chunks. Every retained PNG chunk is byte-identical, and Pillow confirms all decoded RGBA pixels and dimensions match their preserved originals. JSON whitespace is compacted without changing geometry values.

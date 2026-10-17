@@ -1,0 +1,39 @@
+??exactly five existing languages occupy separate single-line rows; glyphs replace row four (1.546ms)
+??four unchanged glyph textures use exactly the text RGB while preserving alpha (0.5785ms)
+??replacement row retains existing frame-based travel, narrow-screen sizing and reduced-motion policy (0.3887ms)
+??glyph load failure still releases successful loads; dimension failure releases all (0.818ms)
+??field builds language rows before art load and never overwrites them with native word cells (0.9681ms)
+??arena cast uses exact public character and HUD bindings; changed bytes fail before decoding (35.9056ms)
+??52 source descriptions remain byte-identical; only 33 required runtime descriptions are selected (48.6452ms)
+??public descriptions cannot contain source archives, authoring flags or unknown root fields (1.7572ms)
+??all 23 Hunt occlusion piece arrays remain exactly equal, with no collision or actor-state data added (21.1207ms)
+??battle projections retain every field/frame/duration/native coordinate (3.4678ms)
+??CM03/CM24 public foreground produces exactly the same masks and depth plan as its authoring source (2.9421ms)
+??arena mounted sprites, depth, animation and reduced-motion sampling equal the original renderer inputs (9.7978ms)
+??arena render projections retain sprite placement, quality pixels, timing and immutable map signature (1.2734ms)
+??VFX visibility and material samplers are equal on every original frame, with the same model bindings (3.2816ms)
+??runtime metadata fetch is hash-bound; changed bytes and private fields fail closed (6.3922ms)
+??closed public schema copies only explicit IDs, relative runtime paths, hashes and dimensions (2.6923ms)
+??all localOnly authority IDs and roots are vetoed even if renamed or claimed public (1.1975ms)
+??actual upload directory passes a selected runtime-only payload and preserves resource identities (27.3198ms)
+??actual upload directory rejects a renamed full index and nested private metadata even with matching selected hash (26.7029ms)
+??actual upload rejects an extra internal index, stale bytes, missing approved files and injected metadata in the build receipt (29.5977ms)
+??raw/source payloads and media metadata are never made safe merely by a new filename (0.4835ms)
+??public JSON requires an explicit field schema, not arbitrary copied metadata (0.2396ms)
+??private reference rejection distinguishes SDK protocol examples from actual local files and human tracking IDs (0.3387ms)
+??clean PNG derivations retain every pixel-bearing and color chunk byte-for-byte (18.4373ms)
+??pinned gameplay data retains all values; derived vendor module has identical executable code (970.012ms)
+??selected public hero mappings retain exact ID, image hash, dimensions and per-role resolution; authoring versions remain intact (1.5759ms)
+??food per-frame writer matches 168 original CPU cases across every generation and protein (40.1561ms)
+??condition writes match all 90 CPU boundaries, including signed lower overflow and unknown kind no-op (18.8964ms)
+??medicine matches 140 CPU cases and draws the per-slot RNG only for the affected condition (30.7439ms)
+??new-game individual matches the complete original constructor plus 0206178C starter writes (1.3972ms)
+??one animation frame cannot consume repeatedly; frame zero rearms the next bite (0.7413ms)
+??tests 31
+??suites 0
+??pass 31
+??fail 0
+??cancelled 0
+??skipped 0
+??todo 0
+??duration_ms 1275.6175

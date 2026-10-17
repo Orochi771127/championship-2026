@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-10-17T21:01:02.988371+00:00",
+  "status": "LOCAL_REPAIR_STAGE_COMPLETE_PUBLICATION_BLOCKED",
+  "sourceCommit": "7624f2ba5a0467e0229782876ce216c0c7eab2f1",
+  "branch": "fix/permanent-public-runtime-20261017",
+  "executor": "RECOVERED_MINIMAL_CHECK_EXIT_0",
+  "sourceDescriptions": {
+    "original52Retained": true,
+    "renderProjections": 33,
+    "programContracts": 41,
+    "additionalProgramProjections": [
+      "glyphs",
+      "alternate-native-bindings",
+      "care-cells"
+    ],
+    "vendorExecutableEquivalent": true,
+    "cleanPngCount": 17,
+    "allPngRgbaExact": true
+  },
+  "selection": {
+    "publicInputFiles": 7896,
+    "publicAssetIds": 145,
+    "publicHeroRoles": 59,
+    "authoringHeroRows": 96,
+    "qaHeroRows": 95,
+    "heldNewHeroRows": 37
+  },
+  "validation": {
+    "fullCI": {
+      "commit": "0ce003f2b6f63f7c0886a0761eeb65c9a17c33a5",
+      "tests": 2531,
+      "passed": 2478,
+      "failed": 53,
+      "skipped": 0,
+      "subsequentThreeContractFailuresFixedInFocusedRun": true,
+      "notRerunAfterCareFix": true
+    },
+    "focusedNormalContracts": {
+      "passed": 116,
+      "failed": 0
+    },
+    "careAndProjection": {
+      "passed": 31,
+      "failed": 0
+    },
+    "laterMedalAndVs2Contracts": {
+      "passed": 15,
+      "failed": 1,
+      "remainingFailure": "missing batch-01-four-id-receipt.json"
+    }
+  },
+  "artifact": {
+    "target": "GITHUB_PAGES_OWNER_PLAYTEST",
+    "path": "approved-hero-integration/dist/github-playtest",
+    "buildId": "4e22a2a44b0f07c4fa73797e0aa26a8a2f62ebf25331b7a036470b3dd4f73a1c",
+    "commit": "7624f2ba5a0467e0229782876ce216c0c7eab2f1",
+    "files": 7999,
+    "actualTotalBytes": 1146828708,
+    "projectLimitBytes": 1000000000,
+    "overLimitBytes": 146828708,
+    "buildExitCode": 1,
+    "status": "FAILED_CAPACITY_NOT_DENIED",
+    "privacyChecksReachedFinalCapacityGate": true,
+    "authorityIndexIncluded": false
+  },
+  "browser": {
+    "status": "PASS",
+    "scope": "CONTROLLED_LOCAL_ARTIFACT_NORMAL_TITLE_HOME_DATABASE_125; NOT_FULL_GAME_OR_PUBLIC_READBACK",
+    "commit": "7624f2ba5a0467e0229782876ce216c0c7eab2f1",
+    "browser": "155.0.8059.40",
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1440,
+        "height": 1000
+      }
+    ],
+    "pageErrors": 0,
+    "missingRequests": 0,
+    "privateDescriptorRequests": 0,
+    "imageSha256": "2b59a46a702490d43d726166b0df35386dbd5016b8c4fa013ae7a0f4ad6454a6",
+    "imageSize": [
+      1448,
+      1086
+    ],
+    "source": "output/playwright/metadata-final/RESULTS.json"
+  },
+  "preservation": {
+    "authorityIndexSha256": "3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f",
+    "catalogsGraphStatsSavesAndDisplayIdsUnchangedFromCanonical": true,
+    "species116Name": "雪印零偶",
+    "artApprovalDoesNotCompleteMotion": true,
+    "sourceMastersDeleted": 0,
+    "deniedOperationsRetried": false,
+    "deniedWorktreeAccessRetried": false,
+    "googleDriveUploadRetried": false,
+    "externalRuntimeOriginIntroduced": false,
+    "lossyCompressionIntroduced": false
+  },
+  "pushed": false,
+  "merged": false,
+  "deployed": false,
+  "newlyPublishedSpecies": [],
+  "newPublicVerificationUrls": [],
+  "publicationAction": {
+    "action": "Upload/deploy public artifact",
+    "target": "Championship 2026 Pages",
+    "state": "NOT_ATTEMPTED_GATES_FAILED",
+    "reason": "Artifact exceeds the current site size gate and complete CI is not green"
+  }
+}
