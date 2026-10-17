@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "MAP_ART_RENDER_V1",
+  "assetId": "art:hunt:final-intake-night:20261008",
+  "family": "HUNT",
+  "fieldCount": 1,
+  "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+  "filter": "nearest",
+  "fields": [
+    {
+      "fieldId": "field_hm10_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/accepted-20261010/images/1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf.webp",
+          "sha256": "1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf",
+          "durationMs": 217.29647047014586
+        },
+        {
+          "src": "assets/production/hunt/accepted-20261010/images/77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253.webp",
+          "sha256": "77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253",
+          "durationMs": 200.58135735705773
+        },
+        {
+          "src": "assets/production/hunt/accepted-20261010/images/1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf.webp",
+          "sha256": "1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf",
+          "durationMs": 200.58135735705773
+        }
+      ],
+      "depthOccluders": {
+        "atlases": [
+          {
+            "src": "assets/production/hunt/accepted-20261010/images/aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818.webp",
+            "sha256": "aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818"
+          }
+        ],
+        "animationFrames": [
+          {
+            "atlases": [
+              {
+                "src": "assets/production/hunt/accepted-20261010/images/aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818.webp",
+                "sha256": "aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818"
+              }
+            ]
+          },
+          {
+            "atlases": [
+              {
+                "src": "assets/production/hunt/accepted-20261010/images/d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6.webp",
+                "sha256": "d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6"
+              }
+            ]
+          },
+          {
+            "atlases": [
+              {
+                "src": "assets/production/hunt/accepted-20261010/images/aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818.webp",
+                "sha256": "aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818"
+              }
+            ]
+          }
+        ],
+        "pieces": {
+          "src": "assets/production/hunt/accepted-20261010/geometry/c108e2efd05f1f25de080b0dc5de044e55fae61865d0cc771ef0128bbccbb536.json",
+          "sha256": "c108e2efd05f1f25de080b0dc5de044e55fae61865d0cc771ef0128bbccbb536"
+        },
+        "pieceCount": 3033,
+        "bandNativePx": 8
+      }
+    }
+  ]
+}

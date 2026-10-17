@@ -1,0 +1,191 @@
+{
+  "status": "EXACT_SELECTED_SOURCE_SIZES_NOT_AN_ACTUAL_VALIDATED_ARTIFACT",
+  "selectedFiles": 7980,
+  "sourceBytes": 1136108904,
+  "unknownSizes": [],
+  "localPhysicalFiles": 1009,
+  "cachedHashReceiptFiles": 6971,
+  "generatedBundleBytes": 12570189,
+  "sourcePlusBundleBytes": 1148679093,
+  "siteLimitBytes": 1000000000,
+  "sourcePlusBundleMinimumGapBytes": 148679093,
+  "actualArtifactBytes": null,
+  "originalsDeleted": 0,
+  "mediaReencoded": 0,
+  "safeExclusion": {
+    "files": 4,
+    "bytes": 14779,
+    "proof": "All four explicit loopback art-review modules absent from successful normal esbuild input graph; sources retained"
+  },
+  "formats": {
+    ".webp": 796172968,
+    ".png": 151148240,
+    ".mp4": 101583313,
+    ".mp3": 51160070,
+    ".json": 18608330,
+    ".js": 10787257,
+    ".mjs": 2087231,
+    ".m4a": 1487682,
+    ".ogg": 1002279,
+    ".wav": 920168,
+    ".css": 592305,
+    ".glb": 265304,
+    ".jpg": 233617,
+    ".html": 36812,
+    ".svg": 23328
+  },
+  "groups": [
+    [
+      "assets/production/characters/accepted-20261010",
+      480041969
+    ],
+    [
+      "assets/production/hunt/accepted-20261010",
+      240484234
+    ],
+    [
+      "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
+      73388752
+    ],
+    [
+      "assets/production/characters/alternate-forms-20261015",
+      37500159
+    ],
+    [
+      "assets/production/characters/battle-packed-20261013",
+      33271546
+    ],
+    [
+      "assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+      19412041
+    ],
+    [
+      "assets/production/cage/final-intake-20261008",
+      13102098
+    ],
+    [
+      "assets/production/data-arena/harbor-blender-r6",
+      10655589
+    ],
+    [
+      "assets/production/temporary/int-rh2",
+      9258683
+    ],
+    [
+      "assets/production/opening-film-ns33-r1/opening-540p-6869b2cb.mp4",
+      8782520
+    ],
+    [
+      "assets/production/medal-name-corrections-20261014/medals",
+      8571772
+    ],
+    [
+      "assets/production/scene-music-r1/battle",
+      8183766
+    ],
+    [
+      "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
+      6583124
+    ],
+    [
+      "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
+      6510296
+    ],
+    [
+      "assets/production/original-music-r1/bgm_eastern_mystic_mountains.mp3",
+      5558737
+    ],
+    [
+      "assets/production/original-music-r1/bgm_northern_verdant_plains.mp3",
+      4819141
+    ],
+    [
+      "assets/production/original-music-r1/bgm_southeast_forge_hills.mp3",
+      4460406
+    ],
+    [
+      "assets/production/original-music-r1/bgm_ethereal_moon_lakefront.mp3",
+      4070794
+    ]
+  ],
+  "largestFiles": [
+    {
+      "path": "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
+      "sha256": "30b173920b3ad776aa9fc85949c720715f2d0b6fad6bca2a443ae30686a770ce",
+      "bytes": 73388752,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+      "sha256": "ef50993b1856da8f7fb4ec62ca6d6ab50489f5e81e4b7b799469a4b154b8831d",
+      "bytes": 19412041,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/opening-film-ns33-r1/opening-540p-6869b2cb.mp4",
+      "sha256": "6869b2cb08b3e225b634525d350a4529ea707640a157d355abc85e283670cc46",
+      "bytes": 8782520,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
+      "sha256": "5b25c90162cabd990e21ae3f2f0597b01508d4e2fefdd94d89a4a6cb698ac250",
+      "bytes": 6583124,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
+      "sha256": "c5f46b343c78a695949dc27b216f2a2e598b6ffd09366f93799d54ad2c0b3406",
+      "bytes": 6510296,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9.webp",
+      "sha256": "fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9",
+      "bytes": 6231294,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2.webp",
+      "sha256": "cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2",
+      "bytes": 6108190,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69.webp",
+      "sha256": "4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69",
+      "bytes": 6092288,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4.webp",
+      "sha256": "32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4",
+      "bytes": 5765622,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-00.png",
+      "sha256": "1264bcabfe7ba1224a6c9a14df2ef90ec88c26eedf2de1218bbbd7f8ca8e0a16",
+      "bytes": 5594761,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_eastern_mystic_mountains.mp3",
+      "sha256": "1d25c7ff6efee6cb6362166357cbdadfc233e3280f7143c8ff1d44974507ea62",
+      "bytes": 5558737,
+      "sizeSource": "matching-approved-hash-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/6ae77617274797bcb7569bdf5b647dd167fdfc72e6f9e2563e295263061d3ee8.webp",
+      "sha256": "6ae77617274797bcb7569bdf5b647dd167fdfc72e6f9e2563e295263061d3ee8",
+      "bytes": 5553358,
+      "sizeSource": "matching-approved-hash-receipt"
+    }
+  ],
+  "ranchStreamingWebPBytes": 430127610,
+  "onePossibleDecision": {
+    "action": "Consider serving only the already hash-selected ranch page images from the existing same GitHub repository at an immutable commit, retaining the same Pages application, role loading, decoded pixels and alpha. No implementation or upload has been attempted.",
+    "requiresDecision": "This changes the media origin and requires a separate externally referenced media contract, CORS/cache/integrity and normal-flow validation; it is not approved or passed in this checkpoint. Do not include private authoring index or source metadata.",
+    "sourcePlusBundleIfAllRanchPagesExcludedFromPages": 718551483
+  }
+}

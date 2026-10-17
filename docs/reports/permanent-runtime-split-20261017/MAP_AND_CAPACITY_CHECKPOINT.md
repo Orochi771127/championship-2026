@@ -1,0 +1,26 @@
+Local checkpoint after 3a1e2ba. This is not a release or a deployment.
+
+- Four map render projections preserve the 37 Cage UI fields, 37 final Cage fields, 30 accepted Hunt fields and the explicit HM10 night variant. All 206 media/geometry references retain existing approved hashes. Source manifests remain authoring-only. The licensed Hunt baseline is retained as authoring data: its image references are not in the selected public-playtest approval list, so no new media approval was invented.
+- The normal public/loopback Hunt preview uses the existing accepted selection. Explicit local review queries remain separate. No graph, statistics, names, IDs, save authority, animation clock, frame pixel or alpha data was rewritten.
+- 237 existing approved derivative files were restored from exact local Git objects (2,028,339 bytes). The materialization recipe/script checks both SHA256 and Git blob identity, disables lazy network fetching and refuses existing-file conflicts.
+- The existing ranch exporter regenerated 222 render descriptors and verified 13,128 main cells, 14,153 main frame references, 3,956 sub frame references, 6,028,588 descriptor bytes; all 222 source descriptors remained unchanged.
+- Focused tests: 21 passed, 0 failed, 0 skipped. Normal esbuild compile: 97 generated files / 12,570,189 bytes / 446 inputs. This is not full artifact acceptance.
+- Full CI already completed: 2,150 tests; 1,918 pass, 232 fail, 0 skipped. Failures include absent local reference/media files, a legacy import of ORIGINAL_HUNT_MEAT_MANIFEST, and expectations that still use old authoring/public boundaries. No tests were disabled. Nine previously unclassified integrated test modules were registered as portable rather than skipped.
+- Latest playtest build already completed with exit 1, before output creation: 6,971 missing local inputs and 4 excluded static resources. Exact hashes/sizes for missing physical files are available in the prior same-repository published receipt; that receipt does not prove current local artifact bytes or a passed build. Full logs remain in this task workspace under local-preparation/permanent-runtime-split/.
+- Readback found no Node or Git processes. Finished build/CI were not rerun. Slow PowerShell readers of the already-finished build log were interrupted; their command outcomes are known failures.
+
+Capacity after safe exclusions
+
+Selected source: 7,980 files / 1,136,108,904 bytes; no unknown size entries. 1,009 files are physical here; 6,971 sizes use matching path+approved SHA256 receipt tuples. The generated bundle adds 12,570,189 bytes: source+bundle subtotal 1,148,679,093 bytes, 148,679,093 above the 1,000,000,000-byte gate, before generated manifest/index/HTML adjustments. An actual final artifact byte count is unavailable because the build failed before output.
+
+Four loopback-only review modules, absent from the normal bundle input graph, were excluded from publication: 14,779 bytes saved. Their source files remain in Git. No media was deleted, resized, recompressed, or converted. All accepted Hunt media are referenced; none was removed by matching a filename or hash alone. This does not establish that further lossless encoding can never save enough; with 6,971 source files absent, it would be incorrect to claim an unmeasured conversion succeeds.
+
+Major existing formats: WebP 796,172,968 bytes; PNG 151,148,240; MP4 101,583,313; MP3 51,160,070; JSON 18,608,330. Largest individual file is the existing 1080p MP4 (73,388,752 bytes), followed by the existing 720p MP4 (19,412,041) and 540p MP4 (8,782,520). Full ordered file/group/hash tables are in CURRENT_CAPACITY_EXACT.json and the task-local CURRENT_CAPACITY_FILES.json.
+
+One bounded decision option, not implemented
+
+Keep this same repository and Pages application, but assess serving only the existing hash-selected ranch page WebPs (430,127,610 bytes) from an immutable commit of the same GitHub repository instead of copying them into the Pages artifact. The source+bundle subtotal would become 718,551,483 bytes before generated manifest/index/HTML adjustments, preserving all image pixels, alpha and role-based loading. This requires an explicit media-origin decision and a closed external-media contract plus CORS/cache/integrity/performance and normal-flow checks; it has not been implemented, tested or approved here. It is not a new repository, paid service or an alternative route for the denied authority index. No private metadata/index may enter that media set. If changing the media origin is outside the requested no-move boundary, do not proceed with this option.
+
+Publication and historical blocks
+
+No push, merge, upload or deployment occurred; newly published species/hash list is empty. There is no new public verification URL. The unchanged authoring index remains SHA256 3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f and was not retried for upload. The original automatic-review reason is unavailable in the retained records; that unknown scope is not treated as permission. Earlier denied worktree reads and the denied Google Drive private-code upload remain untouched. Full CI, local input closure, static-resource closure, whole-artifact privacy/capacity validation, normal browser checks and public readback remain required before deployment.
