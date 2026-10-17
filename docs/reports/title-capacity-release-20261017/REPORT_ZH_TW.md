@@ -11,3 +11,5 @@
 Chrome 155 正常 TITLE→Continue→Home→System→Database→125，在 390×844 及 1440×1000 通過。沒有影片請求、缺檔、私有描述請求或 page error。證據與截圖保存在工作區 output/playwright/title-capacity-final；完整 CI、build、payload、逐像素與 A/B 紀錄保存在 local-preparation/title-capacity-release-20261017。
 
 此報告記錄本機候選。實際 pushed／merged／deployed 與公開讀回需以後續遠端結果為準；此處不宣稱已上線。
+
+LF 修正後 build ID 為 585c6c2ad59c0953db639268bc4182f48f08600e6e0e5bf9d3d6cc194965e073，容量仍為 999,249,150 bytes。GitHub Linux 的 2,574 項測試、build、validate 已通過。兩個 Windows CRLF 核准 hash 已對齊原有 Git LF blob，程式 Git blob 未變。M201 測試改正公開分頁路徑預期，83 格／53 組動作、真實 Hunt 與正常育成→雙方戰鬥→返回育成均通過；本機沿用現有 Chrome。該測試的原始 83 格／53 組動作證明與私有 atlas 的本機隔離檢查仍保留，公開正常流程另要求不請求私有 atlas。

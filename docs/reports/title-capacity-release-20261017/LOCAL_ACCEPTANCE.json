@@ -1,10 +1,10 @@
 {
-  "recordedAtUtc": "2026-10-17T22:59:27.517020+00:00",
+  "recordedAtUtc": "2026-10-17T23:12:45.078662+00:00",
   "status": "LOCAL_ACCEPTANCE_PASS_REMOTE_PUBLICATION_PENDING",
   "sourceBase": "adc36510ec71e713844deac8c32fbff0f008149e",
-  "checkedHead": "1dba5612762f25b60f0a24477512f7a3005780fa",
-  "buildSourceCommit": "745f5889a46bfbc227c905a93b83644cad927288",
-  "buildId": "c7b40110d913154f4eabecbc5c64e6b777f93591703c0e6c37540c653fa2e92d",
+  "checkedHead": "c69fc3930b198dd48941e48672e52ed2d20e5bc2",
+  "buildSourceCommit": "7095c0e4a3802aa813fb880b5b95051054541b26",
+  "buildId": "585c6c2ad59c0953db639268bc4182f48f08600e6e0e5bf9d3d6cc194965e073",
   "artifactFiles": 7565,
   "artifactBytesIncludingReceipt": 999249150,
   "capacityLimitBytes": 1000000000,
@@ -77,5 +77,15 @@
   "priorDeniedActionsRetried": false,
   "pushed": false,
   "merged": false,
-  "deployed": false
+  "deployed": false,
+  "m201Browser": {
+    "status": "PASS_ISOLATED_ACTUAL_PIXI_RUNTIME",
+    "frames": 83,
+    "sequences": 53,
+    "coveredCells": 83,
+    "normalGameNavigation": "PASS_CONTROLLED_NORMAL_RAISING_BATTLE",
+    "huntSceneScope": "ISOLATED_ACTUAL_HUNT_SCENE_NOT_NORMAL_SPAWN"
+  },
+  "hostedLinuxCI7095c0e4": "PASS_2574_TESTS_BUILD_VALIDATE",
+  "lfCorrection": "Approval hashes now match the existing committed LF source; source Git blobs and executable behavior unchanged"
 }
