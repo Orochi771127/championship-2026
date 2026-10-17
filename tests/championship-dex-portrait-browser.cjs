@@ -10,8 +10,10 @@ const { createHash } = require('node:crypto');
 const { pathToFileURL } = require('node:url');
 const PUBLIC_BASE = 'https://orochi771127.github.io/championship-2026/';
 const HERO = '.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero';
-const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10,35,62]);
+const EXPECTED_REGISTRY_COUNT = 58;
+const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10,35,62,36]);
 const EXPECTED = Object.freeze({
+  36: Object.freeze({"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "雷鬃獾"}),
   35: Object.freeze({"speciesIndex": 35, "speciesId": "species-035", "displayCode": "GR02", "src": "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png", "width": 1536, "height": 1024, "sha256": "291db6a498c8bdbd5e5b2196c8f9a629ec44a1ba55674e103dc596e6827fe6d4", "styleBatch": "HANDPAINTED_R1_20261015", "name": "岩甲穿獸"}),
   62: Object.freeze({"speciesIndex": 62, "speciesId": "species-062", "displayCode": "GR38", "src": "assets/production/database-handpainted-r1-20261015/species-062.ad0745c733532dc2.png", "width": 1254, "height": 1254, "sha256": "ad0745c733532dc288c5143194e9020e35cd071e74347e7a3851911db136e52d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "光綾狐"}),
 
@@ -151,7 +153,7 @@ async function main() {
     assert.ok(resolveAsset(root, '/championship.html'));
     const registryPath = 'src/data/championship/database-hero-portraits.r1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
-    assert.equal(catalog.entries.length,57,'Merged54 accepted heroes plus189 and229/230');
+    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'Existing57 heroes plus reviewed036 portrait');
     evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
     const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json';
     evidence.productionCatalogs=[];
@@ -323,7 +325,7 @@ async function main() {
     evidence.comparisonGroups=['desktop-normal','128-light','128-dark','256-light','256-dark','desktop-restored','desktop-reentry'].map(condition=>({condition,referenceSpecies:117,candidateSpecies:[40,189,63,70,71,72,9,10],visualAcceptance:'PENDING_ROOT_ACTUAL_IMAGE_REVIEW',captures:[40,189,63,70,71,72,9,10,117].map(species=>{const c=evidence.captures.find(x=>x.name===`${species}-${condition}`);assert.ok(c);return {speciesIndex:species,image:c.heroScreenshot,fullPresentation:c.screenshot};})}));
     evidence.visualChecklist=['Approved040/189 with preserved063/070, baby009/010 and071/072 against117 accepted style','Full appendages and normal mobile fit','Cyan edge fringe on light/dark','Exact CSS restoration','Promoted own hero, origin and revealed target identity'];
     // Nine matrix heroes × eight conditions, one mobile re-entry, eight production hero captures.
-    assert.equal(evidence.captures.length,105);assert.equal(evidence.promotedCaptures.length,16);
+    assert.equal(evidence.captures.length,113);assert.equal(evidence.promotedCaptures.length,16);
     evidence.status = 'CAPTURE_PASS_VISUAL_REVIEW_PENDING';
   } catch (error) {
     evidence.status = 'FAIL'; evidence.failure = error.stack || String(error);
@@ -377,13 +379,13 @@ async function selfTest() {
     imageRect: { width: 128, height: 128 }, holderRect: { width: 176, height: 176 } };
   assertMeasured(valid, 117, 128);
   for (const changed of [{ rowState: 'REGISTERED' }, { src: 'wrong.png' }, { objectFit: 'cover' }, { imageRect: { width: 80, height: 80 } }]) assert.throws(() => assertMeasured({ ...valid, ...changed }, 117, 128));
-  for (const species of [9,10,40,189,63,70,35,62]) {
+  for (const species of [9,10,40,189,63,70,35,62,36]) {
     const expected=EXPECTED[species];
     const snapshot={...valid,speciesIndex:species,displayCode:expected.displayCode,title:expected.name,natural:[expected.width ?? 1254,expected.height ?? 1254],src:new URL(expected.src,PUBLIC_BASE).href};
     assertMeasured(snapshot,species,128);
     assertMeasured({...snapshot,imageRect:{width:256,height:256},holderRect:{width:304,height:304}},species,256);
     for(const changed of [{natural:[1,1]},{src:new URL('assets/production/database-handpainted-r1-20261015/species-'+String(species).padStart(3,'0')+'.png',PUBLIC_BASE).href},{objectFit:'cover'},{padding:[0,0,0,0]},{hidden:true},{complete:false},{documentOverflow:true}]) assert.throws(()=>assertMeasured({...snapshot,...changed},species,128));
-    if([9,10,189,35].includes(species))assert.throws(()=>assertMeasured({...snapshot,natural:[1254,1254]},species,128));
+    if([9,10,189,35,36].includes(species))assert.throws(()=>assertMeasured({...snapshot,natural:[1254,1254]},species,128));
   }
   // Approved canonical name cleanup: bind independently to the requested names.
   // Keep strict title equality; reject stale names rather than weakening the assertion.
@@ -409,9 +411,10 @@ async function selfTest() {
     const oldSrc=`assets/production/database-portraits-b1-20261014/${expected.displayCode}.webp`;
     assert.throws(()=>assertAsset({...expected,src:oldSrc},bytes,expected));
   }
-  assert.equal(MATRIX_TARGETS.length,12);assert.equal(MATRIX_TARGETS.length*8+1+8,105);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(__dirname,'../src/data/championship/database-hero-portraits.r1.json'),'utf8')).entries.length,EXPECTED_REGISTRY_COUNT,'Source registry count must match browser preflight');
+  assert.equal(MATRIX_TARGETS.length,13);assert.equal(MATRIX_TARGETS.length*8+1+8,113);
   const sourceRegistry = Buffer.from(JSON.stringify({entries:Object.keys(EXPECTED).map(speciesIndex=>({speciesIndex:Number(speciesIndex)}))}));
-  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,16);
+  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,17);
   assert.throws(()=>assertRegistry(sourceRegistry,Buffer.from('{}')));
   for(const species of [9,10]){const missingBaby=Buffer.from(JSON.stringify({entries:JSON.parse(sourceRegistry).entries.filter(e=>e.speciesIndex!==species)}));assert.throws(()=>assertRegistry(missingBaby,missingBaby));}
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));
