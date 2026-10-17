@@ -1,6 +1,6 @@
 import { speciesNameForId } from "../text/zhHant.js";
 import { uiText } from "../text/uiText.js";
-import { appendMemoryCardFrame } from '../presentation/assembledUiArt.js';
+import { appendOriginalCaptureFrame } from '../presentation/originalCaptureFrameArt.js';
 // VS3 -- Hunt Result presentation.
 //
 // Consumes only the injected Gate/Hunt presentation source. Collection has
@@ -8,7 +8,7 @@ import { appendMemoryCardFrame } from '../presentation/assembledUiArt.js';
 // requests the existing app's result-to-Home save transaction.
 
 import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.js";
-import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2Screens.js";
+import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2PresentationAuthority.js";
 import { playReveal } from "../presentation/ceremony/ceremonyRunner.js";
 
 const RESULT_TITLE = "HUNT RESULT";
@@ -111,7 +111,7 @@ export function createHuntResultView({ root, source, hudArt = null }) {
   rays.setAttribute('aria-hidden', 'true');
   sweep.setAttribute('aria-hidden', 'true');
   portraitCard.append(rays, portrait);
-  appendMemoryCardFrame(portraitCard);
+  const captureFrame = appendOriginalCaptureFrame(portraitCard);
   portraitCard.append(sweep);
   body.append(
     portraitCard,
@@ -175,6 +175,8 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     // With more than one catch, each one on the card can take the name plate
     // (Owner report 2026-10-05: only the first catch could be named).
     const catches = (next.rows ?? []).filter((row) => row.kind === "CARD").length;
+    captureFrame.setState(next.pendingRelease ? 'release-confirm'
+      : catches > 1 && next.rows.some(row => row.kind === 'CARD' && row.selected) ? 'selected' : 'default');
     for (const [rowIndex, row] of (next.rows ?? []).entries()) {
       const line = element("div", "cm-vs2-result__row");
       line.style.setProperty("--row", String(Math.min(rowIndex, 6)));

@@ -3,7 +3,7 @@
   "files": [
     {
       "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-      "sha256": "e34bfaa4875fd5d75b4e90ca7a21884608947fae2f49275bdcd1036b3312a126"
+      "sha256": "1f70af71daac1bde0b1ccc50b418eb959460e90789fef1267dd21d3c0ec42b4d"
     },
     {
       "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -23902,6 +23902,27 @@
       "sha256": "a11dd5c9b8b5ddee9c81e4c7f1ecbcc83d6dd9a3b74f14957cf9e74d1b0a6030"
     },
     {
+      "path": "assets/production/public-runtime/shop-cage-thumbnails.v1.json",
+      "sha256": "d049241e1a2177cee5f31baf8a606b5184fccabe3679841c5a29982002bd7098",
+      "jsonFields": [
+        "schemaVersion",
+        "records",
+        "shopRecordIndex",
+        "itemIndex",
+        "cageDefinitionIndex",
+        "moduleId",
+        "fieldId",
+        "src",
+        "width",
+        "height",
+        "sha256",
+        "category",
+        "subcategory",
+        "logicalOrigin",
+        "density"
+      ]
+    },
+    {
       "path": "assets/production/raising-care-r1/broom.svg",
       "sha256": "7cb4cede076b09f0d3f8318b5f7f8fbbf4e2417f9f660a19b04d544f57d81332"
     },
@@ -24250,6 +24271,18 @@
       "sha256": "9ec8c04e64d00f7db52f5f33b768e0e910fee8310d944f9d43cfd4d129c4a59c"
     },
     {
+      "path": "assets/production/ui/capture-frame-a-v1/default.23d67f8d950520a9.svg",
+      "sha256": "23d67f8d950520a930f25630030ca4982e1e925f488d7ec296dffb35be153aab"
+    },
+    {
+      "path": "assets/production/ui/capture-frame-a-v1/release-confirm.a5e9b94ce74c8825.svg",
+      "sha256": "a5e9b94ce74c88256023f5972befd295a9d9922833225fba13ab6091cc8de3ec"
+    },
+    {
+      "path": "assets/production/ui/capture-frame-a-v1/selected.2e83f9041d0f0dd4.svg",
+      "sha256": "2e83f9041d0f0dd461b689c5c3fd954b30e510216850b5c686956af862377148"
+    },
+    {
       "path": "assets/production/ui/tooling-pilot-r1/manifest.json",
       "sha256": "023f274e82f5c44f7bcc38e4a7fc7f81393647f0c0dba909561a91806236b696"
     },
@@ -24511,7 +24544,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "345c6623ae4ac33d865065cb34bfa8e1060c276bb95e3aa24cf52ffe4acbe04d"
+      "sha256": "8b81aca51a1524bfda8453b7d95ad18d3d9e71a099c84822af7e9b3b50eed7e5"
     },
     {
       "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
@@ -25050,16 +25083,20 @@
       "sha256": "2a18d002c5e8ea5761a95efa74016c7bf0f0a08c25666d3d3bd42c1db65c0cb9"
     },
     {
+      "path": "src/championship/app/vs2PresentationAuthority.js",
+      "sha256": "879c0513a506d9893b55862bdb41f57639b41d11fec65ccf761cf6b9186c0438"
+    },
+    {
       "path": "src/championship/app/vs2Screens.js",
-      "sha256": "a93d68c0f544d6511f5cc6912dd2a2f87020e828ae7b33898d009a312d678c3f"
+      "sha256": "57c54a450c38881e43462dbb13f1bbf1a352dc3df9ae0021edf6a6b62cdb9515"
     },
     {
       "path": "src/championship/app/vs2Styles.css",
-      "sha256": "27d6d7924734491a7af5df6ea6bd2a330a74d0551f3328a3e385ba7bd26a58fc"
+      "sha256": "9569b7eb8eb623c0bd693fb1f5aec8ffe6bc84b77016390b5941a398da372475"
     },
     {
       "path": "src/championship/app/vs3Screens.js",
-      "sha256": "b2b4a66fa07a7985ac430fa7794f08875469fc5e7ec895d6732fb524fac6cc0f"
+      "sha256": "42c8e7ce5bafce06ad3e72493e10bd64f83dc1e572d5df591c1a87e1ecb6ea9f"
     },
     {
       "path": "src/championship/app/vs4Screens.js",
@@ -25938,6 +25975,10 @@
       "sha256": "ddee410ab9dd5bd64a8d5d2764c0f51a01a7456624fa015e03db68eb7a7cd3cd"
     },
     {
+      "path": "src/championship/presentation/originalCaptureFrameArt.js",
+      "sha256": "77e1ff0fd3f7e18380115ef1beecedf69ea3c87c8b6f8d7a8e070f3a17443b62"
+    },
+    {
       "path": "src/championship/presentation/originalMapAnimationTiming.js",
       "sha256": "2777338d6c9585e78d85d09e44dfa5e9899ca2bd1335f1f6cbbe90fcbb27fd9e"
     },
@@ -26601,27 +26642,6 @@
     {
       "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
       "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
-    },
-    {
-      "path": "assets/production/public-runtime/shop-cage-thumbnails.v1.json",
-      "sha256": "d049241e1a2177cee5f31baf8a606b5184fccabe3679841c5a29982002bd7098",
-      "jsonFields": [
-        "schemaVersion",
-        "records",
-        "shopRecordIndex",
-        "itemIndex",
-        "cageDefinitionIndex",
-        "moduleId",
-        "fieldId",
-        "src",
-        "width",
-        "height",
-        "sha256",
-        "category",
-        "subcategory",
-        "logicalOrigin",
-        "density"
-      ]
     }
   ],
   "assets": [
@@ -27572,6 +27592,27 @@
       "sha256": "61da78324ee0ab1345e4ddcc8975b113380efdde0eab6093031972dce64cf63b",
       "width": 64,
       "height": 64
+    },
+    {
+      "id": "art:ui:capture-frame:a:default",
+      "src": "assets/production/ui/capture-frame-a-v1/default.23d67f8d950520a9.svg",
+      "sha256": "23d67f8d950520a930f25630030ca4982e1e925f488d7ec296dffb35be153aab",
+      "width": 320,
+      "height": 320
+    },
+    {
+      "id": "art:ui:capture-frame:a:selected",
+      "src": "assets/production/ui/capture-frame-a-v1/selected.2e83f9041d0f0dd4.svg",
+      "sha256": "2e83f9041d0f0dd461b689c5c3fd954b30e510216850b5c686956af862377148",
+      "width": 320,
+      "height": 320
+    },
+    {
+      "id": "art:ui:capture-frame:a:release-confirm",
+      "src": "assets/production/ui/capture-frame-a-v1/release-confirm.a5e9b94ce74c8825.svg",
+      "sha256": "a5e9b94ce74c88256023f5972befd295a9d9922833225fba13ab6091cc8de3ec",
+      "width": 320,
+      "height": 320
     }
   ]
 }
