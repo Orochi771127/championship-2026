@@ -44,6 +44,24 @@ test('four licensed fallback icons keep the same rest poses without the source t
   const code=fs.readFileSync(path.join(root,'src/championship/presentation/shopGoodsUiArt.js'),'utf8');
   assert.equal(code.includes('ART_PRODUCTION_INDEX'),false);assert.equal(code.includes('licensed-runtime-v1/manifest.json'),false);
 });
+
+test('all 83 normal Shop goods retain selected original pixels without the private assembled fallback',()=>{
+  const ui=read('src/data/championship/public-ui-selection.v1.json');
+  const selected=new Map(read('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json').files.map(row=>[row.path,row.sha256]));
+  const items=ui.items.filter(row=>Number.isSafeInteger(row.shopRecordIndex));
+  assert.deepEqual(items.map(row=>row.shopRecordIndex).sort((a,b)=>a-b),Array.from({length:83},(_,i)=>i));
+  for(const item of items){
+    assert.equal(selected.get(item.src),item.sha256,item.src);
+    for(const url of ['http://127.0.0.1:18743/championship.html','https://orochi771127.github.io/championship-2026/']){
+      const shown=shopGoodsPresentation(item.shopRecordIndex,url);
+      for(const key of ['src','sha256','itemIndex','category','productItemId','nativeSize','rasterSize'])assert.deepEqual(shown[key],item[key],item.shopRecordIndex+': '+key);
+      assert.equal(shown.width,item.nativeSize[0]);assert.equal(shown.height,item.nativeSize[1]);
+    }
+  }
+  for(const id of [83,117,-1,118,1.5,'0',null])assert.equal(shopGoodsPresentation(id,'https://orochi771127.github.io/championship-2026/'),null);
+  const code=fs.readFileSync(path.join(root,'src/championship/presentation/shopGoodsUiArt.js'),'utf8');
+  assert.doesNotMatch(code,/assembledUiArt|assembledShopArt|ART_PRODUCTION_INDEX|internal-faithful-baseline/);
+});
 test('only the exact accepted original PNGs receive a projection grant, never a source manifest or ROM record',()=>{
   const selected=selectedShopCageProjection({root,input,index});
   assert.equal(selected.files.has(SHOP_CAGE_SOURCE),false);

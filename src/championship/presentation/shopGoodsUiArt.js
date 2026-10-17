@@ -1,14 +1,12 @@
 // SHOP_REVERSE_SPEC_v1.md:139-144; SHOP_REVERSE_CATALOG_118.csv:1-12.
 // Display binding only. Record order 0,1,2,3 maps to item indices 0,1,3,2.
 //
-// The four care goods share the existing toolbar cells. Other goods use the
-// separately registered complete-cell selections where assembledUiArt allows.
-// The licensed fallback resolves only exact public runtime selections.
+// The original public selection supplies every non-cage shop record. The four
+// care goods also retain their exact public toolbar fallback outside that route.
 import {publicRuntimeAsset} from './publicRuntimeAssets.js';
 import {getShopRecord} from '../shop/shopCatalog.js';
 import {originalShopItemArt, originalToolbarArt} from './completedOriginalUi20261007.js';
 import {getHuntCatalogItem} from '../hunt/loadout/huntEquipmentCatalog.js';
-import {assembledShopArt} from './assembledUiArt.js';
 
 const goods = Object.freeze([
   {itemIndex:0, name:'飼料', icon:'feed'},
@@ -25,11 +23,6 @@ export function shopGoodsPresentation(shopRecordIndex, baseUrl) {
     if(record.itemIndex!==original.itemIndex || record.category!==original.category || (original.productItemId && record.productItemId!==original.productItemId))throw new Error("ORIGINAL_ITEM_BINDING_MISMATCH");
     return Object.freeze({...original,width:original.nativeSize[0],height:original.nativeSize[1],name:goods[shopRecordIndex]?.name??null,icon:goods[shopRecordIndex]?.icon??original.subcategory.toLowerCase(),backgroundPosition:"center",identityEvidence:"VERIFIED_BINARY",imageEvidence:"OWNER_SUPPLIED_ORIGINAL_LOCAL_REVIEW"});
   }
-  const complete = assembledShopArt(shopRecordIndex, baseUrl);
-  if (complete && complete.category !== 'CAGES') return Object.freeze({
-    ...complete, name:null, icon:complete.subcategory.toLowerCase(), backgroundPosition:'center',
-    identityEvidence:'VERIFIED_BINARY', imageEvidence:'OWNER_AUTHORIZED_LOCAL_REFERENCE'
-  });
   const binding = goods[shopRecordIndex];
   if (!binding) return null;
   const record = getShopRecord(shopRecordIndex);
