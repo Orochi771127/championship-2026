@@ -140,15 +140,23 @@ test('later batches preserve sealed first-four identities and original detail im
  assert.deepEqual(receipt.titleIds,[29,52,56,57]);
  for(const art of receipt.manifestSnapshot.medals){
   const current=originalMedalArt(art.titleId,local);
+  const authoring=corrections.medals.find(row=>row.titleId===art.titleId);
   if(art.generation){
    assert.equal(current.detailSrc,art.src);assert.equal(current.detailSha256,art.sha256);
-   assert.equal(current.artIdentity,art.artIdentity);assert.deepEqual(current.generation,art.generation);
-  }else assert.deepEqual(current,art);
+   assert.equal(current.artIdentity,art.artIdentity);assert.deepEqual(authoring.generation,art.generation);
+   assert.equal(authoring.detailSrc,art.src);assert.equal(authoring.detailSha256,art.sha256);
+  }else{
+   assert.deepEqual(authoring,art);
+   const displayKeys=['src','sha256','bytes','rasterSize','titleId','artIdentity','artName','width','height','density','origin'];
+   assert.deepEqual(current,Object.fromEntries(displayKeys.map(key=>[key,art[key]])));
+  }
+  for(const key of ['generation','sourceTitleId','mappingEvidence','correctionKind','previousArt'])assert.equal(current[key],undefined);
   assert.equal(hash(read(art.src)),art.sha256);
  }
  assert.deepEqual(corrections.batchEvidence.map(b=>b.titleIds),[[29,52,56,57],[32,36,37],[15,43,45,47,59],[7,8,10,11],[3,31,49,55],[22,35,38,42,54,58],[13,14,16,25,44]]);
  const divider=originalMedalArt(32,local);
- assert.equal(divider.generation.promptRecord,'batch-02-noise-divider-prompt.json');
+ assert.equal(corrections.medals.find(row=>row.titleId===32).generation.promptRecord,'batch-02-noise-divider-prompt.json');
+ assert.equal(divider.generation,undefined);
 });
 
 // Frozen categories from the original actual-PNG audit, not inferred from batch size.
