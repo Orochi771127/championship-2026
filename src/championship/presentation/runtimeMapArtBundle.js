@@ -30,6 +30,16 @@ export const MAP_ART_MEMORY_POLICIES = Object.freeze({
   N_ACTIVE_TILES: "N_ACTIVE_TILES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT"
 });
 const KNOWN_MEMORY_POLICIES = new Set(Object.values(MAP_ART_MEMORY_POLICIES));
+export const PUBLIC_MAP_KIND='MAP_ART_RENDER_V1';
+export const PUBLIC_MAP_FIELDS=['schemaVersion','kind','assetId','family','fieldCount','defaultPreviewFieldId','tutorialFieldId','memoryPolicy','filter','fields','fieldId','worldWidthPx','worldHeightPx','nativeWidthPx','nativeHeightPx','nativePixelWorldScale','visualRole','gameplayBinding','gateMapping','collisionBinding','visualPaddingNative','rasterPixelsPerNative','left','top','right','bottom','frames','src','sha256','durationMs','rasterWidthPx','rasterHeightPx','thumbnail','width','height','depthOccluders','atlases','animationFrames','pieces','pieceCount','bandNativePx'];
+const publicRootFields=new Set(['schemaVersion','kind','assetId','family','fieldCount','defaultPreviewFieldId','tutorialFieldId','memoryPolicy','filter','fields']);
+function assertPublicMapFields(value,root=false){
+ if(Array.isArray(value)){value.forEach(entry=>assertPublicMapFields(entry));return;}
+ if(value&&typeof value==='object')for(const [key,item] of Object.entries(value)){
+  if(!(root?publicRootFields.has(key):PUBLIC_MAP_FIELDS.includes(key)))fail('PUBLIC_MAP_UNRECOGNIZED_FIELD:'+key);
+  assertPublicMapFields(item);
+ }
+}
 
 function fail(reason) {
   const error = new Error(`CHAMPIONSHIP_RUNTIME_MAP_ART_BUNDLE_INVALID: ${reason}`);
@@ -77,10 +87,13 @@ export function validateRuntimeMapArtBundle(manifest) {
   if (manifest.schemaVersion !== SCHEMA_VERSION) fail("UNSUPPORTED_SCHEMA_VERSION");
   nonEmptyString(manifest.assetId, "ASSET_ID_REQUIRED");
   if (!ALLOWED_FAMILIES.has(manifest.family)) fail("UNKNOWN_FAMILY");
-  if (manifest.runtimeEligible !== true) fail("RUNTIME_ELIGIBLE_REQUIRED");
-  if (manifest.shippingReady !== false && manifest.shippingReady !== true) fail("SHIPPING_READY_BOOLEAN_REQUIRED");
-  if (!manifest.rights || typeof manifest.rights !== "object") fail("RIGHTS_RECORD_REQUIRED");
-  nonEmptyString(manifest.rights.status, "RIGHTS_STATUS_REQUIRED");
+  if(manifest.kind===PUBLIC_MAP_KIND)assertPublicMapFields(manifest,true);
+  else {
+    if (manifest.runtimeEligible !== true) fail("RUNTIME_ELIGIBLE_REQUIRED");
+    if (manifest.shippingReady !== false && manifest.shippingReady !== true) fail("SHIPPING_READY_BOOLEAN_REQUIRED");
+    if (!manifest.rights || typeof manifest.rights !== "object") fail("RIGHTS_RECORD_REQUIRED");
+    nonEmptyString(manifest.rights.status, "RIGHTS_STATUS_REQUIRED");
+  }
   if (!Array.isArray(manifest.fields) || manifest.fields.length === 0) fail("FIELDS_REQUIRED");
   if (!KNOWN_MEMORY_POLICIES.has(manifest.memoryPolicy)) fail("KNOWN_MEMORY_POLICY_REQUIRED");
 

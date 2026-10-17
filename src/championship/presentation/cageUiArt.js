@@ -2,7 +2,7 @@ import { originalShopCageThumbnail } from './originalShopCageArt.js';
 // Presentation of the existing production fields and traced editor coordinates.
 // The editor's slot ownership is authoritative; no geometry here places a cage.
 // The runtime cage fields (Owner 2026-10-06: original opus art replaces the licensed pixels).
-import manifest from '../../../assets/production/cage/original-opus-v1/manifest.json' with { type: 'json' };
+import manifest from '../../../assets/production/public-runtime/cage-ui.map.v1.json' with { type: 'json' };
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productGridCell } from '../cage/productRanchGrid.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
