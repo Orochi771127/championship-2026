@@ -5,6 +5,7 @@ import {auditPagesModuleClosure} from './pages-module-closure.mjs';
 import {selectedShopCageProjection,SHOP_CAGE_PUBLIC} from './public-shop-cage-projection.mjs';
 import {assertPublicRanchStreaming} from './public-ranch-streaming-boundary.mjs';
 import {assertPagesPayloadSize} from './pages-payload-size.mjs';
+import {assertPublicCharacterSelection} from './public-character-boundary.mjs';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -116,6 +117,7 @@ export function publicArtifactPlan({root,input,index}){
   const closure=auditPagesModuleClosure({root,files,entries:moduleEntries,importMap:input.importMap});
   if(closure.issues.length)throw Error('PUBLIC_MODULE_CLOSURE_BLOCKED: '+JSON.stringify(closure.issues.slice(0,8)));
   assertPublicRanchStreaming({root,files,allowlist,assertBytes:assertPublicBytes});
+  assertPublicCharacterSelection({root,files,allowlist,assertBytes:assertPublicBytes});
   return {files,moduleEntries,allowlist,runtime,indexBytes:expected,importMap:input.importMap};
 }
 

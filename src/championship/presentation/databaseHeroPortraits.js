@@ -1,4 +1,4 @@
-import manifest from '../../data/championship/database-hero-portraits.r1.json' with {type:'json'};
+import manifest from '../../data/championship/database-hero-portraits.public.v1.json' with {type:'json'};
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {publicRuntimeAsset} from './publicRuntimeAssets.js';
 

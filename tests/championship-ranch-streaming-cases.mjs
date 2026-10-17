@@ -104,3 +104,27 @@ test('normal completed-original roster validates all six streamed bundles and fo
  for(const c of configs){const a=roster.createActor({speciesId:c.speciesId,presentation:'raising'});assert.ok(a.nativeFramePresenter.isFrameReady({sequenceId:1}));assert.ok(a.nativeSizing);a.sprite.destroy();}
  assert.ok(f.calls.filter(u=>/\.webp$/.test(u)).length<15);await roster.dispose();assert.ok(f.sources.every(s=>s.destroyed));
 });
+
+test('Hunt eagerly prepares every shared page and every native frame without requesting an old whole atlas',async t=>{
+ const old=globalThis.fetch;t.after(()=>{globalThis.fetch=old;});
+ globalThis.fetch=async url=>{const name=fromUrl(url);return {ok:true,json:async()=>read(name),text:async()=>fs.readFileSync(name,'utf8')};};
+ const f=fixtures(),c=packed.characters.find(c=>c.entityId==='m541_dukemon'),runtime=read(c.runtimePath);
+ const roster=await loadCompletedOriginalCharacters({PIXI:f.PIXI,speciesIds:[c.speciesId],sides:['main'],ranchStreaming:true,
+  productionIndex:publicIndex,manifestUrl,manifest:read(fromUrl(manifestUrl))},base);
+ assert.deepEqual(roster.getDiagnostics().failures,[]);
+ const actor=roster.createActor({speciesId:c.speciesId,presentation:'hunt'});
+ for(const sequence of runtime.sides.main.animations)for(let i=0;i<sequence.frames.length;i++){
+  const applied=actor.nativeFramePresenter.apply(frame(sequence,i));assert.equal(applied.cell,sequence.frames[i].cell);assert.deepEqual(applied.geometry,runtime.geometry.frames[sequence.frames[i].texture]);
+ }
+ assert.equal(f.calls.filter(url=>/\.webp$/.test(url)).length,new Set(runtime.sides.main.atlases.map(atlas=>atlas.image)).size);
+ assert.ok(!f.calls.some(url=>/\/main\.(webp|png)$/.test(url)));actor.sprite.destroy();await roster.dispose();assert.ok(f.sources.every(s=>s.destroyed));
+});
+
+test('Battle keeps its existing compact pack and reuses shared pages for every other registered base entity',()=>{
+ const packing=read('assets/production/characters/battle-packed-20261013/manifest.json');
+ const registration={entries:[{assetId:packing.assetId,manifestPath:packing.root+'manifest.json',runtimeEligible:true,publicReleasePermitted:true}]};
+ const config=selection.characters.find(c=>c.entityId===packing.characters[0].entity);
+ assert.equal(completedCharacterBundleLocation(config,{sides:['main'],battleAtlas:true,ranchStreaming:true,productionIndex:registration},base).packed,true);
+ const other=selection.characters.find(c=>!packing.characters.some(p=>p.entity===c.entityId));
+ assert.equal(completedCharacterBundleLocation(other,{sides:['main'],battleAtlas:true,productionIndex:registration},base).streamed.entityId,other.entityId);
+});

@@ -1,0 +1,13 @@
+import catalog from '../../data/championship/public-character-catalog.v1.json' with {type:'json'};
+import {deepFreeze} from '../contracts/championshipContracts.js';
+deepFreeze(catalog);
+export {catalog as PUBLIC_CHARACTER_DATA};
+export const PUBLIC_CHARACTER_CATALOG='src/data/championship/public-character-catalog.v1.json';
+const configs=new Map(catalog.characters.map(c=>[c.entityId,c]));
+const bySpecies=new Map(catalog.speciesBindings.map(binding=>[binding.speciesId,configs.get(binding.entityId)]));
+const bySourceSpecies=new Map(catalog.characters.map(config=>[config.speciesId,config]));
+const canonical=value=>value?.replace(/^championship:creature:/,'');
+const hudAliases=Object.freeze({'species-224':'species-034','species-225':'species-195','species-096':'species-226','species-097':'species-227'});
+export const publicCharacterConfig=id=>bySpecies.get(canonical(id))??null;
+export const publicCharacterConfigs=()=>catalog.characters;
+export const publicHudCharacterConfig=id=>bySourceSpecies.get(hudAliases[canonical(id)]??canonical(id))??publicCharacterConfig(id);

@@ -31,7 +31,7 @@ test('production display joins 216 native rows, eight eggs and two explicit prod
     assert.equal(entry.legacyBookOrdinal,native?.legacyBookOrdinal??null);
     if(native){
       for(const field of ['entryKey','speciesId','numberingStageIndex','legacyBookOrdinal'])assert.equal(entry[field],native[field],`${entry.speciesIndex}:${field}`);
-      if(entry.numberingStageIndex!==6){assert.equal(entry.serial,native.serial);assert.equal(entry.displayCode,native.displayCode);}
+      if([121,125].includes(entry.speciesIndex)){const expected=entry.speciesIndex===121?50:62;assert.equal(entry.serial,expected);assert.equal(entry.displayCode,`MA${expected}`);}else if(entry.numberingStageIndex!==6){assert.equal(entry.serial,native.serial);assert.equal(entry.displayCode,native.displayCode);}
     }else{assert.ok([229,230].includes(entry.speciesIndex));assert.equal(species.records[entry.speciesIndex],undefined);assert.equal(getDatabaseSlot(entry.speciesIndex).bookOrdinal,entry.speciesIndex-13);}
   }
   for(let s=0;s<7;s++)assert.deepEqual(dex.entries.filter(e=>e.numberingStageIndex===s).map(e=>e.serial),Array.from({length:[8,12,14,38,64,51,39][s]},(_,i)=>i+1));

@@ -13,15 +13,6 @@ const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof v
   ?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 
 export function completedCharacterBundleLocation(config,options,href){
-  const streamPrefix=(config.assetRoot??acceptedSelection.root)+config.folder+'/ranch-streaming-v1/';
-  const streamed=options.ranchStreaming===true&&options.sides?.length===1&&options.sides[0]==='main'
-    &&ranchPacking.characters.find(c=>c.entityId===config.entityId&&c.runtimePath.startsWith(streamPrefix));
-  if(streamed){
-    const prefix=streamPrefix;
-    if(!streamed.runtimePath.startsWith(prefix)||!/^([a-f0-9]{16})\/runtime\.render\.json$/.test(streamed.runtimePath.slice(prefix.length)))
-      throw Error('RANCH_STREAMING_PATH_DRIFT');
-    return {runtimeUrl:new URL(streamed.runtimePath,href).href,cachePrefix:config.entityId+'-ranch-streaming:'+streamed.runtimeSha256+':',packed:false,streamed};
-  }
   const packed=!config.assetRoot&&options.battleAtlas===true&&options.sides?.length===1&&options.sides[0]==='main'
     &&battlePacking.characters.find(c=>c.entity===config.entityId);
   if(packed){
@@ -30,6 +21,15 @@ export function completedCharacterBundleLocation(config,options,href){
       ||isApprovedOriginalPublicLocation(href)&&entry.publicReleasePermitted!==true)throw Error('BATTLE_PACKED_ATLAS_NOT_REGISTERED');
     return {runtimeUrl:new URL(battlePacking.root+config.entityId+'/runtime.review.json',href).href,
       cachePrefix:config.entityId+'-battle-packed-20261013:',packed:true};
+  }
+  const streamPrefix=(config.assetRoot??acceptedSelection.root)+config.folder+'/ranch-streaming-v1/';
+  const streamed=(options.ranchStreaming===true||options.battleAtlas===true)&&options.sides?.length===1&&options.sides[0]==='main'
+    &&ranchPacking.characters.find(c=>c.entityId===config.entityId&&c.runtimePath.startsWith(streamPrefix));
+  if(streamed){
+    const prefix=streamPrefix;
+    if(!streamed.runtimePath.startsWith(prefix)||!/^([a-f0-9]{16})\/runtime\.render\.json$/.test(streamed.runtimePath.slice(prefix.length)))
+      throw Error('RANCH_STREAMING_PATH_DRIFT');
+    return {runtimeUrl:new URL(streamed.runtimePath,href).href,cachePrefix:config.entityId+'-ranch-streaming:'+streamed.runtimeSha256+':',packed:false,streamed};
   }
   const root=config.assetRoot??(isApprovedOriginalPublicLocation(href)?acceptedSelection.root:'assets/production/internal-character-review/');
   return {runtimeUrl:new URL(root+config.folder+'/runtime.review.json',href).href,

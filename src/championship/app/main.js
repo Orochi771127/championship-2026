@@ -39,7 +39,7 @@ import { createChampionshipPixiStage } from "../presentation/championshipPixiSta
 import { desktopRaisingViewportWidth } from "../presentation/intRh2/raisingFieldViewport.js";
 import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../presentation/battleEffectArt.js';
 import {loadRegisteredRaisingFeedbackArt} from '../presentation/raisingFeedbackArt.js';
-import {loadRegisteredCharacterHudArt} from '../presentation/characterHudArt.js';
+import {loadPublicCharacterHudArt as loadRegisteredCharacterHudArt} from '../presentation/publicCharacterHudArt.js';
 import {createTitleImageLifecycle} from '../presentation/titleImageLifecycle.js';
 import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js';
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
@@ -543,50 +543,14 @@ async function loadOptionalOriginalVfxReview(stage, effectArt) {
 }
 
 async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal, battleAtlas=false, ranchStreaming=false, initialSequences=null } = {}) {
-  if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
-  const scopedPIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
-  const PIXI = ranchStreaming&&ranchTitlePreloader
+  if(!isOriginalRuntimeLocation(location.href))return null;
+  const scopedPIXI=createPixiAssetScope(stage.PIXI,location.href,{signal});
+  const PIXI=ranchStreaming&&ranchTitlePreloader
     ?withPrefetchedTextures(scopedPIXI,url=>ranchTitlePreloader.blobOf(url),location.href):scopedPIXI;
-  try {
-    if (!CHARACTER_REVIEW_RUNTIME_URL) {
-      // The roster module carries the battle character geometry and sizing --
-      // about 1.9MB the title screen and the ranch never read -- so it is
-      // fetched when a character bundle is actually wanted.
-      const { LICENSED_CHARACTER_ASSET_ID, LICENSED_CHARACTER_MANIFEST, loadLicensedCharacterRoster } =
-        await import("../presentation/licensedCharacterRoster.js");
-      const indexResponse = await fetch(new URL("assets/production/ART_PRODUCTION_INDEX.json", location.href), { signal });
-      if (!indexResponse.ok) return null;
-      const productionIndex = await indexResponse.json();
-      if (!productionIndex.entries.some((entry) => entry.assetId === LICENSED_CHARACTER_ASSET_ID && entry.runtimeEligible === true)) return null;
-      const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
-      const response = await fetch(manifestUrl, { signal });
-      if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
-      const rosterOptions={PIXI,speciesIds,sides,signal,battleAtlas,ranchStreaming,initialSequences,productionIndex,manifestUrl,manifest:await response.json()};
-      if(new URLSearchParams(location.search).get('characterArtReview')==='m001'
-        && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
-        const {loadM001CharacterArtReview}=await import('../presentation/m001CharacterArtReview.js');
-        return await loadM001CharacterArtReview(rosterOptions,location.href);
-      }
-      if(['m002','m003','m004','m005','m006','m007','m008','m009','m010','m011','m012','m101','m102','m103','m104','m105'].includes(new URLSearchParams(location.search).get('characterArtReview'))
-        && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
-        const {loadCandidateCharacterArtReview}=await import('../presentation/candidateCharacterArtReview.js');
-        return await loadCandidateCharacterArtReview(rosterOptions,location.href);
-      }
-      if(isOriginalRuntimeLocation(location)){
-        const {loadCompletedOriginalCharacters}=await import('../presentation/completedOriginalCharacters.js');
-        return await loadCompletedOriginalCharacters(rosterOptions,location.href);
-      }
-      return await loadLicensedCharacterRoster(rosterOptions);
-    }
-    return await loadPixiCharacterRuntimeBundle({
-      PIXI,
-      runtimeUrl: CHARACTER_REVIEW_RUNTIME_URL,
-      cachePrefix: "m201-internal-review:"
-    });
-  } catch (error) {
-    console.warn(`CHAMPIONSHIP_CHARACTER_REVIEW_FALLBACK: ${error.message}`);
-    return null;
-  }
+  try{
+    const {loadPublicCharacterRoster}=await import('../presentation/publicCharacterRoster.js');
+    return await loadPublicCharacterRoster({PIXI,speciesIds,sides,signal,battleAtlas,initialSequences},location.href);
+  }catch(error){console.warn(`CHAMPIONSHIP_CHARACTER_REVIEW_FALLBACK: ${error.message}`);return null;}
 }
 
 /**
@@ -1064,7 +1028,9 @@ async function mountHuntField() {
           viewportWidth: stage.app.screen.width, viewportHeight: stage.app.screen.height
         }).wildCreatures.map((wild) => wild.speciesId);
         const loaded = await Promise.allSettled([
-          own(loadOptionalCharacterReview(stage, speciesIds, ['main'], { signal })),
+          // Hunt uses the exact same lossless pages as Raising, eagerly. Every
+          // native frame is ready before entry; no Hunt clock/timing changes.
+          own(loadOptionalCharacterReview(stage, speciesIds, ['main'], { signal, ranchStreaming:true })),
           own(loadOptionalHuntFieldArt(stage, { signal, onProgress })),
           own(loadRegisteredHuntFeedbackArt({PIXI:createPixiAssetScope(stage.PIXI),baseUrl:location.href,
             kinds:fieldSource.getFrame().huntField.toolState?.tools.map(tool=>tool.subtype??tool.id)??null}))

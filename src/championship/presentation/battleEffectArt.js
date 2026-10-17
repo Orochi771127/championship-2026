@@ -1,6 +1,6 @@
 // Owner-supplied original cells for loopback research comparison. Numeric
 // animation/collision remain in the existing pool. No generated-art fallback.
-import publicPlaytest from '../../data/championship/public-playtest.r1.json' with {type:'json'};
+import publicPlaytest from '../../data/championship/public-playtest-runtime.v1.json' with {type:'json'};
 export const BATTLE_EFFECT_ART_MANIFEST = 'assets/production/internal-faithful-baseline/battle-effects-v1/manifest.json';
 export const BATTLE_EFFECT_ART_ID = 'art:vfx:battle-effects:local-reference:v1';
 

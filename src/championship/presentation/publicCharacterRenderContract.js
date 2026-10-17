@@ -1,4 +1,8 @@
 export const PUBLIC_CHARACTER_RENDER_KIND='CHARACTER_RENDER_V1';
+export function canonicalRenderValue(value){
+  return Array.isArray(value)?value.map(canonicalRenderValue):value&&typeof value==='object'
+    ?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonicalRenderValue(value[key])])):value;
+}
 
 // Only fields consumed by the existing controllers/native frame presenters.
 // No ownership, review status, source-bank identity or approval messages.

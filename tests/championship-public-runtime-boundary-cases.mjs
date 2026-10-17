@@ -65,9 +65,9 @@ test('public JSON requires an explicit field schema, not arbitrary copied metada
   assert.throws(()=>assertPublicBytes('assets/production/a.json','{"anything":1}'),/PUBLIC_JSON_SCHEMA_REQUIRED/);
   assert.throws(()=>assertPublicBytes('assets/production/a.json','{"anything":1}',{jsonFields:['id']}),/PUBLIC_PAYLOAD_UNSELECTED_JSON_FIELD/);
 });
-test('all 95 prior and approved hero mappings retain exact ID, image hash, dimensions and per-role resolution',()=>{
+test('all 96 prior and approved hero mappings retain exact ID, image hash, dimensions and per-role resolution',()=>{
   const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.r1.json'),'utf8'));
-  assert.equal(heroes.entries.length,95);
+  assert.equal(heroes.entries.length,96);
   for(const hero of heroes.entries)assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-hero`),{id:`${hero.speciesId}:database-hero`,src:hero.src,sha256:hero.sha256,width:hero.width,height:hero.height});
   assert.equal(publicRuntimeAsset('species-105:database-hero'),null);
   assert.throws(()=>validatePublicRuntimeAssets({schemaVersion:1,assets:[{...publicRuntimeAsset('species-116:database-hero'),approvalMessage:'private'}]}),/PUBLIC_RUNTIME_ASSET_INVALID/);

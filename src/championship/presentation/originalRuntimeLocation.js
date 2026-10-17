@@ -1,5 +1,5 @@
 // Uses the existing Owner playtest authority; private review query routes stay local.
-import policy from '../../data/championship/public-playtest.r1.json' with {type:'json'};
+import policy from '../../data/championship/public-playtest-runtime.v1.json' with {type:'json'};
 export const ACCEPTED_ORIGINAL_SELECTION_ID='ACCEPTED_ORIGINAL_RUNTIME_20261010';
 function locationUrl(value){
  try{
