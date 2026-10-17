@@ -2,10 +2,10 @@ import {publicHudCharacterConfig as publicCharacterConfig} from './publicCharact
 import {originalMedalArt} from './completedOriginalUi20261007.js';
 import {originalCageLocationArt} from './originalCageLocationArt.js';
 import {nativeAnimationCellAt} from './characterAnimationTimeline.js';
+import {readPublicHudManifest} from './publicHudManifestCache.js';
 
 const canonical=id=>id?.replace(/^championship:creature:/,'');
-const hash=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
-export async function loadPublicCharacterHudArt({baseUrl,fetchImpl=(...args)=>globalThis.fetch(...args),speciesIds=[]}){
+export async function loadPublicCharacterHudArt({baseUrl,fetchImpl=globalThis.fetch,speciesIds=[]}){
  const records=new Map(),pending=new Map(),listeners=new Set(),waiting=[];let active=0;
  async function inMetadataSlot(work){
   if(active>=6)await new Promise(resolve=>waiting.push(resolve));else active++;
@@ -17,9 +17,8 @@ export async function loadPublicCharacterHudArt({baseUrl,fetchImpl=(...args)=>gl
    if(records.has(config.entityId))return;
    if(pending.has(config.entityId))return pending.get(config.entityId);
    const task=inMetadataSlot(async()=>{
-    const response=await fetchImpl(new URL(config.hudPath,baseUrl));if(!response.ok)throw Error('PUBLIC_HUD_HTTP_'+response.status);
-    const text=await response.text();if(await hash(text)!==config.hudSha256)throw Error('PUBLIC_HUD_HASH');
-    const data=JSON.parse(text);if(data.schemaVersion!==1||data.entityId!==config.entityId||!data.portrait||!data.battle?.cells||!data.battle?.sequences)throw Error('PUBLIC_HUD_SCHEMA');
+    const data=await readPublicHudManifest(new URL(config.hudPath,baseUrl),config.hudSha256,fetchImpl);
+    if(data.schemaVersion!==1||data.entityId!==config.entityId||!data.portrait||!data.battle?.cells||!data.battle?.sequences)throw Error('PUBLIC_HUD_SCHEMA');
     for(const cell of [data.portrait,...data.battle.cells])if(!cell.src?.startsWith('assets/production/characters/')||cell.src.includes('..')||!/^[a-f0-9]{64}$/.test(cell.sha256))throw Error('PUBLIC_HUD_CELL');
     records.set(config.entityId,{portrait:data.portrait,battle:{sequences:data.battle.sequences,cells:new Map(data.battle.cells.map(c=>[c.cell,c]))}});
     for(const listener of [...listeners])listener();

@@ -1,3 +1,4 @@
+import {PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations} from '../src/championship/presentation/publicCharacterRenderContract.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,7 +11,7 @@ const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,
 const source=fs.readFileSync(path.join(root,'src/championship/presentation/completedOriginalCharacters.js'),'utf8');
 const validator=source.slice(source.indexOf('export function validateCompletedOriginalRuntime'),source.indexOf('/** Reuse the reviewed density-four adapter'));
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
-const check=new Function('canonical',validator.replace('export function','function')+';return validateCompletedOriginalRuntime;')(canonical);
+const check=new Function('canonical','PUBLIC_CHARACTER_RENDER_KIND','characterRenderAnimations',validator.replace('export function','function')+';return validateCompletedOriginalRuntime;')(canonical,PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations);
 assert.equal(configs.length,4);assert.equal(ACTIVE_ALTERNATE_FORM_ASSETS.length,4,'Accepted production assets require the recorded normal-path evidence.');
 const identities=new Set();let cells=0;
 for(const c of configs){

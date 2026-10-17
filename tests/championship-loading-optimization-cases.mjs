@@ -6,6 +6,9 @@ import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {compileBrowserBundle,bundledBrowserHtml} from '../scripts/lib/browser-bundle.mjs';
 import {readHudManifest} from '../src/championship/presentation/hudManifestCache.js';
+import {readPublicHudManifest} from '../src/championship/presentation/publicHudManifestCache.js';
+import {createHash} from 'node:crypto';
+import {loadPublicCharacterHudArt} from '../src/championship/presentation/publicCharacterHudArt.js';
 import {loadRegisteredCharacterHudArt} from '../src/championship/presentation/characterHudArt.js';
 import {TOOLBAR_PRODUCT_ENTRIES,toolbarProductEntryAvailable} from '../src/championship/app/championshipToolbar.js';
 import {createTitleImageLifecycle} from '../src/championship/presentation/titleImageLifecycle.js';
@@ -14,6 +17,21 @@ import {championshipModeRegistry,CHAMPIONSHIP_MODE_IDS} from '../src/championshi
 const root=fileURLToPath(new URL('../',import.meta.url));
 const publicUrl='https://orochi771127.github.io/championship-2026/championship.html';
 const recipe={version:1,entry:'src/championship/app/main.js',outputDirectory:'src/championship/app/_bundled',toolVersion:'0.28.2'};
+const sha=text=>createHash('sha256').update(text).digest('hex');
+
+test('public HUD metadata shares an in-flight read, separates content hashes and retries failed verification',async()=>{
+ const url='https://example.test/hud.json',one='{"value":1}',two='{"value":2}';let calls=0,release;
+ const reader=()=>{calls++;return new Promise(resolve=>{release=resolve;});};
+ const a=readPublicHudManifest(url,sha(one),reader),b=readPublicHudManifest(url,sha(one),reader);
+ assert.strictEqual(a,b);await Promise.resolve();assert.equal(calls,1);release(new Response(one));assert.deepEqual(await a,{value:1});
+ const changed=readPublicHudManifest(url,sha(two),reader);await Promise.resolve();assert.equal(calls,2);release(new Response(two));assert.deepEqual(await changed,{value:2});
+ let attempts=0;const retry=async()=>new Response(++attempts===1?two:one);
+ await assert.rejects(readPublicHudManifest(url,sha(one),retry),/PUBLIC_HUD_HASH/);
+ assert.deepEqual(await readPublicHudManifest(url,sha(one),retry),{value:1});assert.equal(attempts,2);
+ let httpCalls=0;const unavailable=async()=>++httpCalls===1?new Response('',{status:503}):new Response(one);
+ await assert.rejects(readPublicHudManifest(url,sha(one),unavailable),/PUBLIC_HUD_HTTP_503/);
+ assert.deepEqual(await readPublicHudManifest(url,sha(one),unavailable),{value:1});assert.equal(httpCalls,2);
+});
 
 test('bundled static and lazy modules share state and preserve source-relative asset URLs',async t=>{
   const temp=fs.mkdtempSync(path.join(os.tmpdir(),'championship-bundle-test-'));
@@ -56,22 +74,22 @@ test('metadata reads deduplicate in flight and retry a rejected request',async()
 });
 
 test('a ranch loads only requested original HUDs and can fill a later species without another full catalog read',async()=>{
-  const calls=[];const fetchImpl=async url=>{const file=new URL(url).pathname.replace(/^\/championship-2026\//,'');calls.push(file);return {ok:true,json:async()=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'))};};
-  const art=await loadRegisteredCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:['championship:creature:species-000']});
-  assert.equal(calls.filter(x=>x.endsWith('/hud-r01/manifest.json')).length,1);
+  const calls=[];const fetchImpl=async url=>{const file=new URL(url).pathname.replace(/^\/championship-2026\//,'');calls.push(file);return {ok:true,text:async()=>fs.readFileSync(path.join(root,file),'utf8'),json:async()=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'))};};
+  const art=await loadPublicCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:['championship:creature:species-000']});
+  assert.equal(calls.filter(x=>x.endsWith('/hud-r01/hud.render.json')).length,1);
   assert.match(art.getPortrait('species-000').src,/accepted-20261010/);
   let updates=0;const stop=art.subscribe(()=>updates++);
   assert.equal(art.getPortrait('species-001'),null);
   await art.ensureSpecies(['species-001']);
   assert.match(art.getPortrait('species-001').src,/accepted-20261010/);assert.equal(updates,1);stop();
   const count=calls.length;
-  const second=await loadRegisteredCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:['species-000','species-001']});
+  const second=await loadPublicCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:['species-000','species-001']});
   assert.equal(calls.length,count);assert.deepEqual(second.getPortrait('species-001'),art.getPortrait('species-001'));
-  assert.equal(calls.filter(x=>x.endsWith('/hud-r01/manifest.json')).length,2);
+  assert.equal(calls.filter(x=>x.endsWith('/hud-r01/hud.render.json')).length,2);
   await art.ensureSpecies(['species-224']);
   assert.match(art.getPortrait('species-224').src,/accepted-20261010/);
   assert.deepEqual(art.getPortrait('species-224'),art.getPortrait('species-034'));
-  assert.equal(calls.filter(x=>x.endsWith('/hud-r01/manifest.json')).length,3);
+  assert.equal(calls.filter(x=>x.endsWith('/hud-r01/hud.render.json')).length,3);
 });
 
 test('only the medals entry gains approved public-origin access; local experiments stay local',()=>{
@@ -89,7 +107,7 @@ test('HUD independent metadata requests start together and still validate the re
   const load=loadRegisteredCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:[]});
   await Promise.resolve();await Promise.resolve();
   assert.equal(pending.size,2,'baseline metadata starts before the production index resolves');
-  for(const [file,resolve] of pending)resolve({ok:true,json:async()=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'))});
+  for(const [file,resolve] of pending)resolve({ok:true,text:async()=>fs.readFileSync(path.join(root,file),'utf8'),json:async()=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'))});
   assert.ok(await load);
 });
 
