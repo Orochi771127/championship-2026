@@ -7,6 +7,11 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "RANCH_PREFETCH_PLANNING": "正在準備目前夥伴的圖像…",
+  "RANCH_PREFETCH_COMPLETE": "目前夥伴的圖像已預先下載",
+  "RANCH_PREFETCH_PARTIAL": "部分圖像將在繼續遊戲時補載",
+  "RANCH_PREFETCH_PROGRESS": "預先下載夥伴圖像：{done}/{files} · {mib} MiB",
+
   "MODULE_LOAD_ERROR": "畫面程式未能載入，可能是遊戲剛更新或連線中斷。請保存並重新載入遊戲；不需要清除存檔。",
   "SCREEN_LOAD_ERROR": "畫面未能載入。請保存並重新載入遊戲，或保存並返回標題。",
   "CAGE_SLOT_RANK_LOCKED": "第 {n} 格尚未開放，馴獸師階級達到 {rank} 後開放。",

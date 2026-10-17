@@ -81,7 +81,7 @@ import { mountPortraitFrame } from './portraitFrame.js';
 import { createHuntLayoutResolver } from './huntLayoutResolver.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
-import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
+import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
@@ -266,6 +266,36 @@ huntLayout = createHuntLayoutResolver({
 });
 const loginButton=document.getElementById('cm-login');
 const titleActions=titleScreen.querySelector('.cm-title__actions');
+let ranchTitlePreloader=null,ranchTitlePreloadToken=0,ranchTitlePreloadProgress=null;
+const titleNoteMessage=document.createElement('span'),ranchTitlePreloadStatus=document.createElement('span');
+ranchTitlePreloadStatus.dataset.prefetch='ranch';ranchTitlePreloadStatus.hidden=true;
+titleNote.replaceChildren(titleNoteMessage,ranchTitlePreloadStatus);
+function updateRanchTitlePreloadStatus(progress=ranchTitlePreloadProgress){
+  if(!progress)return;
+  ranchTitlePreloadProgress=progress;
+  ranchTitlePreloadStatus.hidden=!progress.residents;
+  titleNoteMessage.hidden=Boolean(progress.residents);
+  if(!progress.residents)return;
+  ranchTitlePreloadStatus.textContent=progress.phase==='planning'?uiText('RANCH_PREFETCH_PLANNING')
+    :progress.complete?uiText('RANCH_PREFETCH_COMPLETE')
+    :progress.failed?uiText('RANCH_PREFETCH_PARTIAL')
+    :uiText('RANCH_PREFETCH_PROGRESS',{done:progress.done,files:progress.files,mib:(progress.loaded/1048576).toFixed(1)});
+}
+function stopRanchTitlePreload(){ranchTitlePreloadToken++;ranchTitlePreloadProgress=null;ranchTitlePreloader?.stop();ranchTitlePreloadStatus.hidden=true;titleNoteMessage.hidden=false;}
+function scheduleRanchTitlePreload(){
+  const token=++ranchTitlePreloadToken;
+  // Let the existing title input and paint finish before even importing plans.
+  requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(async()=>{
+    if(token!==ranchTitlePreloadToken||titleScreen.hidden||document.hidden||navigator.connection?.saveData||!isOriginalRuntimeLocation(location))return;
+    const inspected=app.inspectSave();if(!app.canContinue().loadable)return;
+    try{
+      const {createRanchTitlePreloader}=await import('./ranchTitlePreload.js');
+      if(token!==ranchTitlePreloadToken||titleScreen.hidden)return;
+      ranchTitlePreloader??=createRanchTitlePreloader({baseUrl:location.href,createPrefetcher:createAssetPrefetcher,onProgress:updateRanchTitlePreloadStatus});
+      void ranchTitlePreloader.start(inspected.save);
+    }catch{ranchTitlePreloadProgress=null;ranchTitlePreloadStatus.hidden=true;titleNoteMessage.hidden=false;}
+  },500)));
+}
 const openingPresentation=createOpeningPresentation({host:document.getElementById('cm-opening'),onStart:startNewGame,
   allowEggChoice:shouldOfferInteractiveTutorial(location),onCancel(){
     titleActions.hidden=false;if(titleSettingsButton)titleSettingsButton.hidden=false;refreshContinue();newGameButton.focus({preventScroll:true});
@@ -435,7 +465,7 @@ function saveStatusLine() {
 }
 
 function note(message) {
-  if (titleNote) setText(titleNote, message);
+  if (titleNoteMessage) setText(titleNoteMessage, message);
 }
 
 let pixiModulePromise;
@@ -512,9 +542,11 @@ async function loadOptionalOriginalVfxReview(stage, effectArt) {
   }
 }
 
-async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal, battleAtlas=false } = {}) {
+async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal, battleAtlas=false, ranchStreaming=false, initialSequences=null } = {}) {
   if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
-  const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
+  const scopedPIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
+  const PIXI = ranchStreaming&&ranchTitlePreloader
+    ?withPrefetchedTextures(scopedPIXI,url=>ranchTitlePreloader.blobOf(url),location.href):scopedPIXI;
   try {
     if (!CHARACTER_REVIEW_RUNTIME_URL) {
       // The roster module carries the battle character geometry and sizing --
@@ -529,7 +561,7 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
       const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
       const response = await fetch(manifestUrl, { signal });
       if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
-      const rosterOptions={PIXI,speciesIds,sides,signal,battleAtlas,productionIndex,manifestUrl,manifest:await response.json()};
+      const rosterOptions={PIXI,speciesIds,sides,signal,battleAtlas,ranchStreaming,initialSequences,productionIndex,manifestUrl,manifest:await response.json()};
       if(new URLSearchParams(location.search).get('characterArtReview')==='m001'
         && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
         const {loadM001CharacterArtReview}=await import('../presentation/m001CharacterArtReview.js');
@@ -878,7 +910,9 @@ async function mountRaisingHome() {
             show('loading', 'FIELD_LOAD_ART');
             progress.start('facilities'); progress.start('partners');
             const [characterBundle, fieldArt] = await Promise.all([
-              owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], { signal: owner.signal }))
+              owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], {
+                signal: owner.signal,ranchStreaming:true,initialSequences:Object.fromEntries(fieldSource.getFrame().residents.map(r=>[
+                  r.speciesId,[0,fieldSource.getActorFrame?.(r.creatureId)?.sequenceId].filter(Number.isInteger)])) }))
                 .then(value => { if (value) {progress.done('partners');recoveryDiagnostics.record('LOAD',{area:'raising',stage:'partners',phase:'done'});} return value; }),
               owner.own(loadOptionalCageFieldArt(stage, { signal: owner.signal }))
                 .then(value => { if (value) {progress.done('facilities');recoveryDiagnostics.record('LOAD',{area:'raising',stage:'facilities',phase:'done'});} return value; })
@@ -1801,6 +1835,7 @@ function resumeTutorialPresentation() {
 }
 
 async function openGameplay() {
+  stopRanchTitlePreload();
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
   titleScreen.hidden = true;
@@ -2081,6 +2116,7 @@ async function returnToTitle(source = 'save-and-quit') {
   newGameButton.disabled = false;
   refreshContinue();
   recoveryDiagnostics.record('TITLE_RETURN',{source,phase:'done'});
+  scheduleRanchTitlePreload();
 }
 
 /**
@@ -2200,6 +2236,7 @@ async function startNewGame(names={}) {
 }
 
 async function continueGame() {
+  stopRanchTitlePreload();
   newGameButton.disabled = true;
   continueButton.disabled = true;
   try {
@@ -2285,6 +2322,7 @@ function labelDataArenaEntry() {
   void dataArenaTextModule.then(({ arenaText }) => { dataArenaButton.textContent = arenaText("entry"); });
 }
 async function enterDataArena() {
+  stopRanchTitlePreload();
   if (dataArenaSession || !dataArenaButton) return;
   dataArenaButton.disabled = true;
   dataArenaSession = "OPENING";
@@ -2335,7 +2373,7 @@ function boot() {
     titleSettingsButton.hidden = false;
   }
   relabelChrome();
-  onLocaleChange(() => { relabelChrome(); syncTitleArt(); labelDataArenaEntry(); });
+  onLocaleChange(() => { relabelChrome(); syncTitleArt(); labelDataArenaEntry(); updateRanchTitlePreloadStatus(); });
   try {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
@@ -2354,6 +2392,7 @@ function boot() {
 
   loginButton.addEventListener('click',()=>{loginButton.hidden=true;titleActions.hidden=false;refreshContinue();(continueButton.disabled?newGameButton:continueButton).focus({preventScroll:true});});
   newGameButton.addEventListener("click", async () => {
+    stopRanchTitlePreload();
     // The opening ends by replacing whatever is stored, so a player who
     // already has a game is asked first, while nothing has changed yet.
     const inspected = app.inspectSave();
@@ -2386,13 +2425,14 @@ function boot() {
   openingFilm.start();
   syncTitleArt();
   window.dispatchEvent(new Event("championship:ready"));
+  scheduleRanchTitlePreload();
   syncMusic();
   // Background/unload resets elapsed measurement, and now also writes the
   // session: the Raising Home SAVE button was removed on 2026-09-16, so leaving
   // the page is what commits it. Save & Quit still commits explicitly.
-  window.addEventListener("pagehide", () => { clockDriver?.reset(); autosaveOnHide(); });
+  window.addEventListener("pagehide", () => { stopRanchTitlePreload();clockDriver?.reset(); autosaveOnHide(); });
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") autosaveOnHide();
+    if (document.visibilityState === "hidden") {stopRanchTitlePreload();autosaveOnHide();}
   });
 }
 

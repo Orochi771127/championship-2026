@@ -92,7 +92,8 @@ test('evolution draws advance native sequences only in the original draw phases'
   assert.equal(assembledAnimationArt('evolution-burst',7,local).sourceCell,1);
 });
 test('failed optional evolution image load unloads all settled successes',async()=>{
-  const selected=manifest.cells.filter(c=>c.sourceFamily==='common/e001_evolution_all'||c.sourceFamily==='common/e001_ikusei');
+  const unusedWords=new Set(['evolution-word','evolution-word-small'].map(key=>manifest.hud[key].cellKey));
+  const selected=manifest.cells.filter(c=>(c.sourceFamily==='common/e001_evolution_all'||c.sourceFamily==='common/e001_ikusei')&&!unusedWords.has(c.key));
   const unloaded=[];
   const PIXI={Assets:{load:async src=>{const c=selected.find(c=>c.src===src);if(c===selected[2])throw Error('NETWORK');
     return {width:c.width,height:c.height,source:{}};},unload:async src=>unloaded.push(src)}};
@@ -111,7 +112,11 @@ test('retired code-symbol cell stays archived but is neither requested nor selec
     assert.ok(c);return {width:c.width,height:c.height,source:{}};},unload:async src=>unloaded.push(src)}};
   const art=await loadAssembledEvolutionArt(PIXI,local);
   assert.equal(requested.includes(retired),false);
-  for(const key of ['evolution-word','evolution-word-small','evolution-ring'])assert.ok(art.get(key)?.texture);
+  assert.ok(art.get('evolution-ring')?.texture);
+  for(const key of ['evolution-word','evolution-word-small']){
+    assert.equal(art.get(key),null);
+    assert.equal(requested.includes(manifest.cells.find(c=>c.key===manifest.hud[key].cellKey).src),false,'unbound word images are not preloaded');
+  }
   assert.ok(art.frame('evolution-green',2)?.texture);
   assert.ok(art.frame('evolution-burst',7)?.texture);
   await art.dispose();assert.deepEqual(unloaded,requested);

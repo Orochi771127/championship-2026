@@ -25,7 +25,7 @@ export function getCharacterStaticNativeSizing(record, runtime, side = "main", a
 /** One scene's texture resources, indexed by existing species identities. No gameplay state. */
 export async function loadLicensedCharacterRoster({
   PIXI, speciesIds, manifest, productionIndex, manifestUrl,
-  sides = ['main'], signal = null,
+  sides = ['main'], signal = null, initialSequences = null,
   loadBundle = loadPixiCharacterRuntimeBundle,
   appearanceReplacements = manifest?.appearanceReplacements ?? [],
   baselineMotionContracts = manifest?.motionContractHashes ?? {},
@@ -41,6 +41,13 @@ export async function loadLicensedCharacterRoster({
   const records = new Map(manifest.records.map((record) => [record.entityId, record]));
   const identities = new Map(manifest.speciesBindings.map((binding) => [binding.speciesId, binding.entityId]));
   const wanted = new Set(speciesIds.map(canonicalSpeciesId).map((id) => identities.get(id)).filter(Boolean));
+  const sequencesByEntity=new Map();
+  for(const [species,ids]of Object.entries(initialSequences??{})){
+    const entity=identities.get(canonicalSpeciesId(species));if(!entity)continue;
+    const selected=sequencesByEntity.get(entity)??new Set();
+    for(const id of ids)if(Number.isInteger(id))selected.add(id);
+    sequencesByEntity.set(entity,selected);
+  }
   for (const entityId of wanted) {
     if (records.get(entityId)?.runtime !== `${entityId}/runtime.json`
       || (!/^[em]\d{3}_[a-z0-9_]+$/.test(entityId)&&!isRegisteredAlternateEntity(entityId))) {
@@ -122,6 +129,7 @@ export async function loadLicensedCharacterRoster({
           if (disposed) return;
           const bundle = await loadBundle({ PIXI, runtimeUrl: appearance.runtimeUrl, sides: ["main"],
             cachePrefix: appearance.cachePrefix, signal,
+            initialSequenceIds:sequencesByEntity.has(entityId)?[...sequencesByEntity.get(entityId)]:null,
             replacementGuard: await createCharacterAppearanceGuard({ entityId, record, baselineRuntime,
               originGeometry: appearance.originGeometry, geometryContractSha256: appearance.geometryContractSha256,
               expectedGeometryContractSha256: appearance.expectedGeometryContractSha256,
@@ -140,7 +148,8 @@ export async function loadLicensedCharacterRoster({
       if (disposed) return;
       await retainBundle(entityId, await loadBundle({ PIXI,
         runtimeUrl: new URL(record.runtime, manifestUrl).href,
-        sides, signal, cachePrefix: `licensed:${entityId}:` }));
+        sides, signal, initialSequenceIds:sequencesByEntity.has(entityId)?[...sequencesByEntity.get(entityId)]:null,
+        cachePrefix: `licensed:${entityId}:` }));
     } catch (error) {
       if (!disposed) failures.push({ entityId, runtimeUrl:new URL(record.runtime,manifestUrl).href, reason: error.message });
     }

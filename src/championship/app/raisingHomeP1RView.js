@@ -7,7 +7,7 @@ import { isNativeRanchLayout } from "../cage/ranchExpansion.js";
 import { retranslate, setLabel, setText, uiText } from "../text/uiText.js";
 import {raisingMessageText,raisingMessageSender} from '../text/raisingMessages.zhHant.js';
 import { speciesName } from "../text/zhHant.js";
-import { assembledHudArt } from '../presentation/assembledUiArt.js';
+import { originalCageLocationArt } from '../presentation/originalCageLocationArt.js';
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { buildEvolve } from '../presentation/ceremony/ceremonyScenes.js';
@@ -475,9 +475,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const resident = selectedResident(frame);
     root.dataset.selection = resident ? "selected" : "none";
     if (resident) { hintStarted = true; hintTimer.hide(); }
-    const ranchImage = assembledHudArt(`ranch-${resident?.nativeCageDefinition}`);
+    const ranchImage = originalCageLocationArt(resident?.nativeCageDefinition);
     ranchIcon.hidden = !ranchImage;
-    if (ranchImage && ranchIcon.getAttribute('src') !== ranchImage.src) ranchIcon.src = ranchImage.src;
+    if (ranchImage && ranchIcon.getAttribute('src') !== ranchImage) ranchIcon.src = ranchImage;
     const image=hudArt?.getPortrait(resident?.speciesId);
     portrait.hidden=!image;
     // The portrait art is local-only, so on the public build the well would be

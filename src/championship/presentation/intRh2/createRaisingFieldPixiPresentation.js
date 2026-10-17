@@ -651,6 +651,34 @@ export async function mountRaisingFieldPixiPresentation({
     onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.assetState,error:e.assetError??null})));
   }
 
+  // Native animation tables and their frame clocks stay authoritative. A page
+  // that has not arrived pauses the existing scene-ready clock gate; the last
+  // verified frame remains visible until the exact requested sequence is ready.
+  function residentFrameReady(entry,frame,{retry=false}={}){
+    const presenter=entry.nativeFramePresenter;
+    if(!presenter?.isFrameReady)return true;
+    if(presenter.isFrameReady(frame)){
+      if(entry.pendingAnimation!=null){entry.animationLoadToken=(entry.animationLoadToken??0)+1;
+        entry.pendingAnimation=null;entry.pendingAnimationFrame=null;entry.assetState='ready';entry.assetError=null;reportResidentAssets();}
+      return true;
+    }
+    const sequence=frame.sequenceId;
+    entry.pendingAnimationFrame=frame;
+    if(!retry&&entry.pendingAnimation===sequence)return false;
+    const token=(entry.animationLoadToken??0)+1;entry.animationLoadToken=token;
+    entry.pendingAnimation=sequence;entry.assetState='loading';entry.assetError=null;reportResidentAssets();
+    void presenter.ensureFrame(frame).then(()=>{
+      if(disposed||entry.root.destroyed||entry.animationLoadToken!==token)return;
+      entry.pendingAnimation=null;entry.pendingAnimationFrame=null;entry.assetState='ready';entry.assetError=null;
+      reportResidentAssets();sync(source.getFrame(),{force:true});
+    },error=>{
+      if(disposed||entry.root.destroyed||entry.animationLoadToken!==token)return;
+      entry.assetState='error';entry.assetError=error.message;reportResidentAssets();
+      onFallback(`CHAMPIONSHIP_RESIDENT_ANIMATION_FAILED ${entry.speciesId}: ${error.message}`);
+    });
+    return false;
+  }
+
   function actorGeometry(entry,frameGeometry=entry.nativeFramePresenter?.getSnapshot()?.geometry,flipX=false){
     const nativeScale=getRaisingNativePixelScale(fieldArt?.field,view);
     const sizing=frameGeometry?.scale?{...entry.nativeSizing,packedPixelsPerNativePixel:frameGeometry.scale}:entry.nativeSizing;
@@ -746,7 +774,8 @@ export async function mountRaisingFieldPixiPresentation({
       }
       const nativeScale = getRaisingNativePixelScale(fieldArt?.field, view);
       const actorFrame=source.getActorFrame?.(resident.creatureId);
-      if(entry.nativeFramePresenter&&actorFrame&&entry.speciesId===`championship:creature:species-${String(actorFrame.speciesIndex).padStart(3,'0')}`){
+      if(entry.nativeFramePresenter&&actorFrame&&entry.speciesId===`championship:creature:species-${String(actorFrame.speciesIndex).padStart(3,'0')}`
+        &&residentFrameReady(entry,actorFrame)){
         applyNativeCharacterCellGeometry(entry.sprite,entry.nativeFramePresenter.apply(actorFrame));
       }
       const flipX=Boolean(entry.nativeFramePresenter&&actorFrame?.flipBits&1);
@@ -1023,7 +1052,7 @@ export async function mountRaisingFieldPixiPresentation({
         const frame=source.getActorFrame?.(creatureId);
         // Profile changes may precede asynchronous texture loading. Never
         // apply one species' frame index to another species' atlas.
-        if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId)
+        if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId&&residentFrameReady(entry,frame))
           {const visualFrame=entry.nativeFramePresenter.apply(frame);if(entry.sprite){
             if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
             entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
@@ -1282,7 +1311,10 @@ export async function mountRaisingFieldPixiPresentation({
       if(disposed||!characterBundle?.ensureSpecies)return false;
       for(const resident of source.getFrame().residents){
         const entry=actors.get(resident.creatureId);
-        if(entry?.assetState==='error')void loadActorTextures(entry,resident);
+        if(entry?.assetState==='error'){
+          if(entry.pendingAnimationFrame)residentFrameReady(entry,entry.pendingAnimationFrame,{retry:true});
+          else void loadActorTextures(entry,resident);
+        }
       }
       return true;
     },

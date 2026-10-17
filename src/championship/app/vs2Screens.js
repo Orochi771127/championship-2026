@@ -1,7 +1,6 @@
 import { uiText } from "../text/uiText.js";
 import { shopGoodsPresentation, huntToolIconPresentation } from '../presentation/shopGoodsUiArt.js';
 import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
-import { assembledHudArt } from '../presentation/assembledUiArt.js';
 import { playCeremony, ceremonyEnvironment, CEREMONY_TIMING } from '../presentation/ceremony/ceremonyRunner.js';
 import { buildGateEntry, buildCapture } from '../presentation/ceremony/ceremonyScenes.js';
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from './vs2PresentationAuthority.js';
@@ -287,11 +286,6 @@ export async function createGateSelectView({ root, source, mountWorld }) {
         button.style.setProperty("--gate-phase", String((gate.ordinal - 1) % 8));
         const aperture = element("span", "cm-vs2-gate__aperture");
         aperture.setAttribute("aria-hidden", "true");
-        const gateIcon = assembledHudArt(`gate-${gate.romRecordIndex}`);
-        if (gateIcon) {
-          aperture.style.backgroundImage = `url("${gateIcon.src}")`;
-          aperture.classList.add('cm-vs2-gate__aperture--complete');
-        }
         button.append(
           aperture,
           element("span", "cm-vs2-gate__ordinal", String(gate.ordinal).padStart(2, "0")),

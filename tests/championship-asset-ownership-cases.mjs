@@ -14,6 +14,15 @@ test('an initial failed runtime has no bundle disposer but can retry in the same
 const deferred = () => { let resolve; const promise = new Promise(r => resolve = r); return { promise, resolve }; };
 const base = 'https://game.invalid/championship.html';
 
+test('an aborted late texture closes its decoded bitmap once after the final source unload',async()=>{
+  const pending=deferred(),controller=new AbortController();let closed=0,unloaded=0;
+  const bitmap={close(){closed++;}},source={destroyed:false,resource:bitmap};
+  const PIXI={Assets:{load:()=>pending.promise,async unload(){unloaded++;source.destroyed=true;source.resource=null;}}};
+  const scope=createPixiAssetScope(PIXI,base,{signal:controller.signal}),loaded=scope.Assets.load('late.webp');
+  controller.abort();pending.resolve({source});await loaded;await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(unloaded,1);assert.equal(closed,1);await scope.Assets.unload('late.webp');assert.equal(closed,1);
+});
+
 test('aborting a scope releases its late pixels and blocks subsequent loads', async () => {
   const download = deferred(), controller = new AbortController(); let unloads = 0;
   const PIXI = { Assets: { load: () => download.promise, unload: () => unloads++ } };

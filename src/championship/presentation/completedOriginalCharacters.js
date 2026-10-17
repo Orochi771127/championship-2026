@@ -1,6 +1,7 @@
 import {alternateFormAsset,mergeAlternateFormConfigs,bindAlternateFormManifest,rekeyAlternateDonorRuntime} from './alternateFormAssetContracts.js';
 import acceptedSelection from '../../data/championship/accepted-original-character-selection.r1.json' with {type:'json'};
 import battlePacking from '../../../assets/production/characters/battle-packed-20261013/manifest.json' with {type:'json'};
+import ranchPacking from '../../data/championship/ranch-streaming-selection.r1.json' with {type:'json'};
 import {isApprovedOriginalPublicLocation,isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
 import {loadLicensedCharacterRoster} from './licensedCharacterRoster.js';
 import {loadPixiCharacterRuntimeBundle} from './pixiCharacterRuntimeBundle.js';
@@ -11,6 +12,15 @@ const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof v
   ?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 
 export function completedCharacterBundleLocation(config,options,href){
+  const streamPrefix=(config.assetRoot??acceptedSelection.root)+config.folder+'/ranch-streaming-v1/';
+  const streamed=options.ranchStreaming===true&&options.sides?.length===1&&options.sides[0]==='main'
+    &&ranchPacking.characters.find(c=>c.entityId===config.entityId&&c.runtimePath.startsWith(streamPrefix));
+  if(streamed){
+    const prefix=streamPrefix;
+    if(!streamed.runtimePath.startsWith(prefix)||!/^([a-f0-9]{16})\/runtime\.review\.json$/.test(streamed.runtimePath.slice(prefix.length)))
+      throw Error('RANCH_STREAMING_PATH_DRIFT');
+    return {runtimeUrl:new URL(streamed.runtimePath,href).href,cachePrefix:config.entityId+'-ranch-streaming:'+streamed.runtimeSha256+':',packed:false,streamed};
+  }
   const packed=!config.assetRoot&&options.battleAtlas===true&&options.sides?.length===1&&options.sides[0]==='main'
     &&battlePacking.characters.find(c=>c.entity===config.entityId);
   if(packed){
@@ -65,10 +75,8 @@ export async function loadCompletedOriginalCharacters(options,href){
     const selected=completedCharacterBundleLocation(config,options,href),{runtimeUrl}=selected;
     let bundle;
     try {
-    bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,cachePrefix:selected.cachePrefix});
-      const runtime=bundle.runtime;
       const donorUrl=config.motionDonorEntityId?new URL('../'+config.motionDonorEntityId+'/runtime.json',args.runtimeUrl).href:args.runtimeUrl;
-      const response=await fetch(donorUrl,{signal:args.signal});
+      const baselinePending=(async()=>{const response=await fetch(donorUrl,{signal:args.signal});
       if(!response.ok)throw Error('CANDIDATE_BASELINE_MOTION_UNAVAILABLE');
       let sourceBaseline;
       if(config.baselineRuntimeSha256){
@@ -80,7 +88,22 @@ export async function loadCompletedOriginalCharacters(options,href){
       }else{
         sourceBaseline=await response.json();
       }
-      const baseline=config.motionDonorEntityId?rekeyAlternateDonorRuntime(sourceBaseline,config):sourceBaseline;
+      return config.motionDonorEntityId?rekeyAlternateDonorRuntime(sourceBaseline,config):sourceBaseline;})();
+      baselinePending.catch(()=>{});
+      let runtimeDocument=null;
+      if(selected.streamed){
+        const response=await fetch(runtimeUrl,{signal:args.signal});
+        if(!response.ok)throw Error('RANCH_STREAMING_RUNTIME_HTTP_'+response.status);
+        const text=await response.text();
+        const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
+        if(hash!==selected.streamed.runtimeSha256)throw Error('RANCH_STREAMING_RUNTIME_HASH');
+        runtimeDocument=JSON.parse(text);
+        if(runtimeDocument.streaming?.sourceRuntimeSha256!==selected.streamed.sourceRuntimeSha256
+          ||runtimeDocument.streaming?.sourceImageSha256!==selected.streamed.sourceImageSha256)throw Error('RANCH_STREAMING_SOURCE_DRIFT');
+        validateCompletedOriginalRuntime(runtimeDocument,config,await baselinePending);
+      }
+      bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,runtimeDocument,cachePrefix:selected.cachePrefix});
+      const runtime=bundle.runtime,baseline=await baselinePending;
       validateCompletedOriginalRuntime(runtime,config,baseline);
       reviewed.add(config.entityId);
       return {...bundle,createActor(actorOptions){return bundle.createActor({...actorOptions,
@@ -92,7 +115,7 @@ export async function loadCompletedOriginalCharacters(options,href){
       replacementFailures.push({entityId:config.entityId,runtimeUrl,reason:error.message});
       // A failed packed load must not decode the original large atlas or hide
       // the failure behind the historical source-art fallback.
-      if(selected.packed||config.assetRoot)throw error;
+      if(selected.packed||selected.streamed||config.assetRoot)throw error;
       return loadPixiCharacterRuntimeBundle(args);
     }
   }});

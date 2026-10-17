@@ -3,6 +3,8 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {auditPagesModuleClosure} from './pages-module-closure.mjs';
 import {selectedShopCageProjection,SHOP_CAGE_PUBLIC} from './public-shop-cage-projection.mjs';
+import {assertPublicRanchStreaming} from './public-ranch-streaming-boundary.mjs';
+import {assertPagesPayloadSize} from './pages-payload-size.mjs';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -113,6 +115,7 @@ export function publicArtifactPlan({root,input,index}){
   if(!moduleEntries.includes('src/championship/app/main.js'))throw Error('PUBLIC_MODULE_ENTRY_REQUIRED');
   const closure=auditPagesModuleClosure({root,files,entries:moduleEntries,importMap:input.importMap});
   if(closure.issues.length)throw Error('PUBLIC_MODULE_CLOSURE_BLOCKED: '+JSON.stringify(closure.issues.slice(0,8)));
+  assertPublicRanchStreaming({root,files,allowlist,assertBytes:assertPublicBytes});
   return {files,moduleEntries,allowlist,runtime,indexBytes:expected,importMap:input.importMap};
 }
 
@@ -120,14 +123,16 @@ export function publicArtifactPlan({root,input,index}){
 export function assertPublicArtifact({root,files,plan,manifestName='pages-build.json'}){
   const expected=new Set([...plan.files,...(plan.generatedFiles??[]),'index.html','.nojekyll',manifestName]);
   if(expected.size!==files.length||[...expected].some(file=>!files.includes(file)))throw Error('PUBLIC_PAYLOAD_FILE_SET');
+  const actualSizes=[];
   for(const file of files){
     if(!expected.has(file))throw Error('PUBLIC_PAYLOAD_UNSELECTED_FILE: '+file);
     const selected=plan.allowlist.files.find(row=>row.path===file);
-    const bytes=fs.readFileSync(path.join(root,file));assertPublicBytes(file,bytes,{jsonFields:file===manifestName?[...manifestFields,...Object.keys(plan.importMap??{})]:selected?.jsonFields,generated:file===manifestName});
+    const bytes=fs.readFileSync(path.join(root,file));actualSizes.push({path:file,bytes:bytes.length});assertPublicBytes(file,bytes,{jsonFields:file===manifestName?[...manifestFields,...Object.keys(plan.importMap??{})]:selected?.jsonFields,generated:file===manifestName});
     if(selected&&file!=='championship.html'&&selected.sha256!==sha(bytes))throw Error('PUBLIC_PAYLOAD_SELECTION_HASH: '+file);
   }
   if(files.some(file=>file===INTERNAL_INDEX))throw Error('PUBLIC_AUTHORITY_INDEX_INCLUDED');
   if(!files.includes(PUBLIC_RUNTIME_INDEX_PATH))throw Error('PUBLIC_RUNTIME_INDEX_MISSING');
   if(!fs.readFileSync(path.join(root,PUBLIC_RUNTIME_INDEX_PATH)).equals(plan.indexBytes))throw Error('PUBLIC_RUNTIME_INDEX_CHANGED');
+  assertPagesPayloadSize(actualSizes);
   return {checkedFiles:files.length,authorityIndexIncluded:false,allowlist:true};
 }

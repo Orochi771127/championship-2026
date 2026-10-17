@@ -6,6 +6,11 @@ import { SPECIES_NAMES_ZH } from "./catalogs.zhHant.js";
 import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_TH = Object.freeze({
+  "RANCH_PREFETCH_PLANNING": "กำลังเตรียมภาพของคู่หูปัจจุบัน…",
+  "RANCH_PREFETCH_COMPLETE": "ดาวน์โหลดภาพคู่หูปัจจุบันแล้ว",
+  "RANCH_PREFETCH_PARTIAL": "ภาพที่เหลือจะโหลดเมื่อเล่นต่อ",
+  "RANCH_PREFETCH_PROGRESS": "กำลังดาวน์โหลดภาพคู่หู: {done}/{files} · {mib} MiB",
+
   "MODULE_LOAD_ERROR": "โหลดโปรแกรมของหน้าจอไม่สำเร็จ เกมอาจเพิ่งอัปเดตหรือการเชื่อมต่อขัดข้อง โปรดบันทึกแล้วโหลดเกมใหม่ ไม่จำเป็นต้องลบข้อมูลบันทึก",
   "SCREEN_LOAD_ERROR": "โหลดหน้าจอไม่สำเร็จ โปรดบันทึกแล้วโหลดเกมใหม่ หรือบันทึกแล้วกลับหน้าชื่อเกม",
   "CAGE_SLOT_RANK_LOCKED": "ช่องที่ {n} ยังล็อกอยู่ ปลดล็อกเมื่อถึงแรงก์เทมเมอร์ {rank}",
