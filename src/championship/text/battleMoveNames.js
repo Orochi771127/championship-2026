@@ -244,7 +244,7 @@ export const BATTLE_MOVE_NAMES = Object.freeze({
   260: ["黑曜角斬", "Obsidian Cleave", "黒曜クリーブ", "ฟันเขานิล", "Chém Sừng Hắc Diện"],
   261: ["曜角熔石", "Obsidian Ember", "黒曜の残り火", "ถ่านนิล", "Than Hắc Diện"],
   262: ["靈偶輕撞", "Doll Bump", "ドールバンプ", "ชนตุ๊กตา", "Húc Búp Bê"],
-  263: ["雪燈寒掌", "Snowglow Palm", "雪灯の掌", "ฝ่ามือโคมหิมะ", "Chưởng Đèn Tuyết"],
+  263: ["雪印寒掌", "Snowglow Palm", "雪灯の掌", "ฝ่ามือโคมหิมะ", "Chưởng Đèn Tuyết"],
   264: ["角光針", "Horn Spark", "ホーンスパーク", "ประกายเขา", "Tia Sừng"],
   265: ["曙刃光珠", "Dawnblade Orb", "曙刃の光珠", "ลูกแสงดาบอรุณ", "Cầu Kiếm Bình Minh"],
   266: ["緋尾拂", "Tail Sweep", "テールスイープ", "กวาดหาง", "Quét Đuôi"],
