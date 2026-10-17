@@ -1,0 +1,14 @@
+{
+  "commit": "2d92fc6dc3786d911189ddf6237cac9da40bb962",
+  "buildId": "b73ad98e986ff47b05999f1af97d1c680835a501f8b36fe7eef765cc68ddb53f",
+  "fileCountIncludingReceipt": 8000,
+  "bytesIncludingReceipt": 1146830318,
+  "limitBytes": 1000000000,
+  "overLimitBytes": 146830318,
+  "buildExit": "FAILED_CAPACITY_GATE",
+  "firstPartialAccumulationErrorBytes": 1008138213,
+  "note": "The partial accumulation error is not the artifact total. Complete upload candidate measured separately.",
+  "privacyBoundary": "Build reached the final size assertion after file-set, selected-byte/hash, runtime-index and payload-field checks.",
+  "receiptSha256": "23ad48f30d0419382bd2bd5ec37213d6b3f277c75e150564564840b8eea7acff",
+  "published": false
+}

@@ -1,0 +1,65 @@
+{
+  "baselineTotalBytes": 1146828708,
+  "targetReductionBytes": 146828708,
+  "exactDuplicateGrossBytes": 2503498,
+  "pngLosslessMeasuredBytes": 40116728,
+  "confirmedUnusedCurrencyBytes": 725782,
+  "rawCodeAndDataPackagingCandidateBytes": 16275951,
+  "samePixelsBattlePackageBytes": 33271546,
+  "optionalFilmFeatureBytes": 101816930,
+  "otherUnusedCandidatesNotYetProvenBytes": 2798532,
+  "plans": {
+    "losslessPngOnly": {
+      "payloadSavingBytes": 40116728,
+      "forecastTotalBytes": 1106711980,
+      "reachesCurrentLimit": false,
+      "forecastFromCurrentCandidateBytes": 1106713590
+    },
+    "pngAndExactAliasesAndConfirmedUnused": {
+      "payloadSavingBytes": 42823022,
+      "forecastTotalBytes": 1104005686,
+      "reachesCurrentLimit": false,
+      "forecastFromCurrentCandidateBytes": 1104007296
+    },
+    "plusSourcePackagingCandidates": {
+      "payloadSavingBytes": 59098973,
+      "forecastTotalBytes": 1087729735,
+      "reachesCurrentLimit": false,
+      "forecastFromCurrentCandidateBytes": 1087731345
+    },
+    "plusSharedBattleRepresentation": {
+      "payloadSavingBytes": 92370519,
+      "forecastTotalBytes": 1054458189,
+      "reachesCurrentLimit": false,
+      "forecastFromCurrentCandidateBytes": 1054459799
+    },
+    "optimisticAlsoOtherUnusedCandidates": {
+      "payloadSavingBytes": 93999899,
+      "forecastTotalBytes": 1052828809,
+      "reachesCurrentLimit": false,
+      "forecastFromCurrentCandidateBytes": 1052830419
+    },
+    "productChoiceDisableFilmPlusPackagingAndPng": {
+      "payloadSavingBytes": 160915903,
+      "forecastTotalBytes": 985912805,
+      "reachesCurrentLimit": true,
+      "forecastFromCurrentCandidateBytes": 985914415
+    },
+    "productChoiceDisableFilmAndSeparateBattlePackingWithoutImageReencode": {
+      "payloadSavingBytes": 154593707,
+      "forecastTotalBytes": 992235001,
+      "reachesCurrentLimit": true,
+      "forecastFromCurrentCandidateBytes": 992236611
+    }
+  },
+  "caveats": [
+    "Byte aliasing, source-output separation and changed URLs require implementation/validation; none applied.",
+    "The source packaging and other unused rows are candidates, not proven safe deletions.",
+    "No receipt shrink is counted; changed metadata/URL overhead is not yet measured.",
+    "Raw duplicate totals and PNG savings overlap; combined plans recompute retained costs by original content hash.",
+    "Battle fallback pixel/motion/geometry equivalence was checked; performance is not measured."
+  ],
+  "currentCandidateTotalBytes": 1146830318,
+  "currentCandidateOverLimitBytes": 146830318,
+  "newBuildOverheadCarriedConservativelyBytes": 1610
+}
