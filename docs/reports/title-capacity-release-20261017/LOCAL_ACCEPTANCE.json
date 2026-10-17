@@ -1,0 +1,81 @@
+{
+  "recordedAtUtc": "2026-10-17T22:59:27.517020+00:00",
+  "status": "LOCAL_ACCEPTANCE_PASS_REMOTE_PUBLICATION_PENDING",
+  "sourceBase": "adc36510ec71e713844deac8c32fbff0f008149e",
+  "checkedHead": "1dba5612762f25b60f0a24477512f7a3005780fa",
+  "buildSourceCommit": "745f5889a46bfbc227c905a93b83644cad927288",
+  "buildId": "c7b40110d913154f4eabecbc5c64e6b777f93591703c0e6c37540c653fa2e92d",
+  "artifactFiles": 7565,
+  "artifactBytesIncludingReceipt": 999249150,
+  "capacityLimitBytes": 1000000000,
+  "capacityRemainingBytes": 750850,
+  "fullCI": {
+    "tests": 2574,
+    "pass": 2574,
+    "fail": 0,
+    "skipped": 0
+  },
+  "publicPayloadValidated": true,
+  "selectedHeroCount": 59,
+  "unchangedFromMainHeroCount": 58,
+  "newHeroSpecies": [
+    125
+  ],
+  "heldHeroCount": 37,
+  "browser": {
+    "status": "PASS",
+    "version": "155.0.8059.40",
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1440,
+        "height": 1000
+      }
+    ],
+    "scope": "CONTROLLED_LOCAL_ARTIFACT_TITLE_HOME_DATABASE_125",
+    "errors": 0,
+    "missing": 0,
+    "privateRequests": 0
+  },
+  "titleFilm": "PAUSED_ORIGINAL_MEDIA_RETAINED",
+  "imageReencoding": false,
+  "unchangedSelectedImageHashes": 4622,
+  "battleSharedPages": {
+    "species": [
+      177,
+      189,
+      190,
+      207,
+      210,
+      212
+    ],
+    "rgbaEqualFrames": 370,
+    "coldABms": [
+      28060.2,
+      30562.7
+    ],
+    "warmABms": [
+      560.8,
+      679.7
+    ],
+    "downloadABbytes": [
+      33271546,
+      33132560
+    ],
+    "scope": "ONE_CONTROLLED_MICROBENCHMARK_PAIR_NOT_FULL_GAME_OR_PHYSICAL_DEVICE",
+    "estimatedTextureRgbaBytesBefore": 125843456,
+    "estimatedTextureRgbaBytesAfter": 142880768
+  },
+  "authorityIndex": {
+    "sha256": "3e7b7694a88c3b7d75e444b1e04bb769923480bfeecb2df19e68005c6b6eb87f",
+    "sameGitBlobAsMain": true,
+    "includedInArtifact": false
+  },
+  "priorDeniedActionsRetried": false,
+  "pushed": false,
+  "merged": false,
+  "deployed": false
+}
