@@ -1,0 +1,230 @@
+{
+  "scope": "CURRENT_SELECTED_SOURCE_SIZE_NOT_A_BUILT_ARTIFACT",
+  "baseCheckpoint": "81a05725d39cc59e0b185ebcce91a9f85a4a26df",
+  "selectedFiles": 7625,
+  "selectedBytes": 1144919258,
+  "conservativeLimitBytes": 1000000000,
+  "overLimitBytes": 144919258,
+  "unknown": [],
+  "method": "Existing sizing reports/receipt and local stat only; no image decoding, transcoding, download or new compression probe.",
+  "largest10Files": [
+    {
+      "path": "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
+      "bytes": 73388752,
+      "sha256": "30b173920b3ad776aa9fc85949c720715f2d0b6fad6bca2a443ae30686a770ce",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+      "bytes": 19412041,
+      "sha256": "ef50993b1856da8f7fb4ec62ca6d6ab50489f5e81e4b7b799469a4b154b8831d",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/opening-film-ns33-r1/opening-540p-6869b2cb.mp4",
+      "bytes": 8782520,
+      "sha256": "6869b2cb08b3e225b634525d350a4529ea707640a157d355abc85e283670cc46",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
+      "bytes": 6583124,
+      "sha256": "5b25c90162cabd990e21ae3f2f0597b01508d4e2fefdd94d89a4a6cb698ac250",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
+      "bytes": 6510296,
+      "sha256": "c5f46b343c78a695949dc27b216f2a2e598b6ffd09366f93799d54ad2c0b3406",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9.webp",
+      "bytes": 6231294,
+      "sha256": "fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2.webp",
+      "bytes": 6108190,
+      "sha256": "cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69.webp",
+      "bytes": 6092288,
+      "sha256": "4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/hunt/accepted-20261010/images/32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4.webp",
+      "bytes": 5765622,
+      "sha256": "32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4",
+      "sizeSource": "matching-existing-public-receipt"
+    },
+    {
+      "path": "assets/production/characters/alternate-forms-20261015/m540_imperialdramon_fm-r10_quadruped-r1/main-00.png",
+      "bytes": 5594761,
+      "sha256": "1264bcabfe7ba1224a6c9a14df2ef90ec88c26eedf2de1218bbbd7f8ca8e0a16",
+      "sizeSource": "matching-existing-public-receipt"
+    }
+  ],
+  "largest10Groups": [
+    {
+      "group": "ranch-streaming/webp",
+      "files": 2127,
+      "bytes": 430127610
+    },
+    {
+      "group": "assets/production/hunt/accepted-20261010",
+      "files": 126,
+      "bytes": 240551122
+    },
+    {
+      "group": "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
+      "files": 1,
+      "bytes": 73388752
+    },
+    {
+      "group": "assets/production/characters/accepted-20261010",
+      "files": 1311,
+      "bytes": 41203886
+    },
+    {
+      "group": "assets/production/characters/alternate-forms-20261015",
+      "files": 98,
+      "bytes": 37500159
+    },
+    {
+      "group": "assets/production/characters/battle-packed-20261013",
+      "files": 28,
+      "bytes": 33271546
+    },
+    {
+      "group": "assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4",
+      "files": 1,
+      "bytes": 19412041
+    },
+    {
+      "group": "src",
+      "files": 481,
+      "bytes": 14580953
+    },
+    {
+      "group": "assets/production/data-arena/harbor-blender-r6",
+      "files": 143,
+      "bytes": 10655589
+    },
+    {
+      "group": "assets/production/temporary/int-rh2",
+      "files": 12,
+      "bytes": 9258683
+    }
+  ],
+  "extensions": [
+    {
+      "extension": ".webp",
+      "files": 3784,
+      "bytes": 806937756
+    },
+    {
+      "extension": ".png",
+      "files": 557,
+      "bytes": 150419193
+    },
+    {
+      "extension": ".mp4",
+      "files": 3,
+      "bytes": 101583313
+    },
+    {
+      "extension": ".mp3",
+      "files": 12,
+      "bytes": 51160070
+    },
+    {
+      "extension": ".json",
+      "files": 2769,
+      "bytes": 18281112
+    },
+    {
+      "extension": ".js",
+      "files": 419,
+      "bytes": 10809256
+    },
+    {
+      "extension": ".mjs",
+      "files": 1,
+      "bytes": 2087231
+    },
+    {
+      "extension": ".m4a",
+      "files": 5,
+      "bytes": 1487682
+    },
+    {
+      "extension": ".ogg",
+      "files": 5,
+      "bytes": 1002279
+    },
+    {
+      "extension": ".css",
+      "files": 21,
+      "bytes": 592305
+    },
+    {
+      "extension": ".glb",
+      "files": 26,
+      "bytes": 265304
+    },
+    {
+      "extension": ".jpg",
+      "files": 1,
+      "bytes": 233617
+    },
+    {
+      "extension": ".html",
+      "files": 1,
+      "bytes": 36812
+    },
+    {
+      "extension": ".svg",
+      "files": 21,
+      "bytes": 23328
+    }
+  ],
+  "identicalHashDuplicateGroupCount": 12,
+  "identicalHashDuplicateBytesUpperBound": 2104060,
+  "bulkConversionPerformed": false,
+  "newHostingProposed": false,
+  "existingPngExample": {
+    "sourceBytes": 1765019,
+    "losslessWebpBytes": 1267930,
+    "source": "Existing MA62_HERO.json, one full-resolution exact-RGBA image; not a prediction for other images."
+  },
+  "existingRanchTrimProbes": {
+    "scope": "NONRUNTIME_BOUNDED_PROBE_NO_ASSET_OR_SELECTION_CHANGED",
+    "results": [
+      {
+        "entityId": "e000_digitama",
+        "textureCellsChecked": 13,
+        "originalBytes": 747712,
+        "trimmedBytes": 680970,
+        "savedBytes": 66742,
+        "originalPhysicalPixels": 1965056,
+        "trimmedPhysicalPixels": 564592,
+        "everyFrameRgbaExact": true
+      },
+      {
+        "entityId": "m541_dukemon",
+        "textureCellsChecked": 63,
+        "originalBytes": 10015014,
+        "trimmedBytes": 9546780,
+        "savedBytes": 468234,
+        "originalPhysicalPixels": 12052736,
+        "trimmedPhysicalPixels": 10391126,
+        "everyFrameRgbaExact": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "status": "FAILED_NOT_DENIED",
+  "buildInvocationsThisRound": 1,
+  "command": "node scripts/build-github-pages.mjs --playtest",
+  "exitCode": 1,
+  "error": "WEB_INPUTS_NOT_CLOSED",
+  "errorLocation": "scripts/lib/web-build-artifact.mjs:45",
+  "passedStage": "publicArtifactPlan returned: static selected-module closure, public Ranch selection and public character selection guards no longer blocked",
+  "failedStage": "auditWebBuild over full WEB_BUILD_INPUTS input.files, not only public selected paths",
+  "issueCount": 8429,
+  "issueKinds": {
+    "INVALID_INPUT": 8429
+  },
+  "selectedIssueCount": 2197,
+  "unselectedIssueCount": 6232,
+  "first8Issues": [
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm02_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm02_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm03_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm03_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm04_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm04_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm05_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm05_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm06_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm06_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm07_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm07_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm08_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm08_01/frame-00.png"
+    }
+  ],
+  "first8SelectedIssues": [
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm02_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm02_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm03_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm03_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm04_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm04_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm05_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm05_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm06_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm06_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm07_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm07_01/frame-00.png"
+    },
+    {
+      "kind": "INVALID_INPUT",
+      "file": "assets/production/battle/licensed-runtime-v1/fields/field_bm08_01/frame-00.png",
+      "reason": "BUILD_INPUT_MISSING: assets/production/battle/licensed-runtime-v1/fields/field_bm08_01/frame-00.png"
+    }
+  ],
+  "top10SelectedMissingGroups": {
+    "assets/production/characters/accepted-20261010": 1089,
+    "assets/production/data-arena/harbor-blender-r6": 142,
+    "assets/production/hunt/accepted-20261010": 101,
+    "assets/production/original-ui-intake-20261007/items": 100,
+    "assets/production/characters/alternate-forms-20261015": 83,
+    "assets/production/data-arena/harbor-blender-r4": 80,
+    "assets/production/data-arena/tournament-detail-r3": 76,
+    "assets/production/original-ui-intake-20261007/medals": 61,
+    "assets/production/vfx/licensed-runtime-v1": 55,
+    "assets/production/medal-name-corrections-20261014/medals": 48
+  },
+  "logPath": "C:\\Users\\User\\Documents\\Codex\\2026-10-17\\task-3\\local-preparation\\two-import-repair-preflight.log",
+  "logBytes": 2173014,
+  "logSha256": "d5c271c6f2f56c8ae930b425d8f450ea8cbe121c77f25799b02217e6b10137ad",
+  "laterGatesNotReached": [
+    "owner-playtest approval audit",
+    "browser bundle construction",
+    "complete selected payload byte/schema/hash audit",
+    "built artifact quota",
+    "normal game browser validation",
+    "deployment"
+  ],
+  "noRetry": true,
+  "publicationAttempted": false,
+  "repairCodeCommit": "9b79d884a2da0022e18d941cbc43430a3883390b"
+}
