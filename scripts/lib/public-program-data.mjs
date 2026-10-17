@@ -19,6 +19,7 @@ export function publicProgramData({root,write=false}){
   const source=JSON.parse(bytes);let value;
   if(row.kind==='NATIVE_GAMEPLAY'||row.kind==='PRESENTATION_CONTRACT'){descriptors.push({...row,bytes});continue;}
   if(row.kind==='GLYPHS')value={selectedSize:source.selectedSize,assets:source.assets.map(asset=>pick(asset,['id','src','width','height','anchor','sha256']))};
+  else if(row.kind==='CARE_CELLS')value={schemaVersion:1,cells:source.cells.map(cell=>pick(cell,['src','sha256','role','pose','nativeWidth','nativeHeight','nativeAnchorX','nativeAnchorY']))};
   else if(row.kind==='ALTERNATE_BINDINGS')value={schemaVersion:1,characters:source.characters.map(validateAlternateFormAsset).filter(c=>c.runtimeReady===true).map(c=>pick(c,['speciesId','speciesIndex','entityId','motionDonorEntityId']))};
   else throw Error('PUBLIC_PROGRAM_KIND');
   const out=Buffer.from(JSON.stringify(value)+'\n'),target=path.join(root,row.output);

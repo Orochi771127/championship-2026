@@ -1620,6 +1620,24 @@
       "sha256": "33e343d12bf00ec0eca62032eacd417d1b29b6b2fd34235c69899ecca42e1958",
       "kind": "VENDOR_DOCUMENTATION",
       "output": "assets/production/public-runtime/vendor-pixi.mjs"
+    },
+    {
+      "path": "assets/production/original-ui-intake-20261007/care/manifest.json",
+      "sha256": "49c006667b7016f3a748873ca92df893f42c29fb13ed5b4701b6cf5eeb61e8ae",
+      "kind": "CARE_CELLS",
+      "output": "assets/production/public-runtime/raising-care.v1.json",
+      "jsonFields": [
+        "schemaVersion",
+        "cells",
+        "src",
+        "sha256",
+        "role",
+        "pose",
+        "nativeWidth",
+        "nativeHeight",
+        "nativeAnchorX",
+        "nativeAnchorY"
+      ]
     }
   ]
 }

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-import {publicRuntimeIndex,assertPublicBytes,assertPublicArtifact,PUBLIC_RUNTIME_INDEX_PATH,forbiddenPublicPath} from '../scripts/lib/public-runtime-boundary.mjs';
+import {publicRuntimeIndex,assertPublicBytes,assertPublicArtifact,PUBLIC_RUNTIME_ALLOWLIST_PATH,PUBLIC_RUNTIME_INDEX_PATH,forbiddenPublicPath} from '../scripts/lib/public-runtime-boundary.mjs';
 import {publicRuntimeAsset,validatePublicRuntimeAssets} from '../src/championship/presentation/publicRuntimeAssets.js';
 import {publicCleanMedia,stripPngMetadata} from '../scripts/lib/public-clean-media.mjs';
 import {publicProgramData} from '../scripts/lib/public-program-data.mjs';
@@ -91,7 +91,7 @@ test('clean PNG derivations retain every pixel-bearing and color chunk byte-for-
 
 test('pinned gameplay data retains all values; derived vendor module has identical executable code',async()=>{
  const recipe=JSON.parse(fs.readFileSync(path.join(root,'docs/contracts/championship/PUBLIC_PROGRAM_SOURCES.v1.json')));
- const descriptors=publicProgramData({root});assert.equal(descriptors.length,44);
+ const descriptors=publicProgramData({root});assert.equal(descriptors.length,45);
  for(const row of descriptors)assert.doesNotThrow(()=>assertPublicBytes(row.path,row.bytes,{jsonFields:row.jsonFields}));
  for(const row of recipe.sources.filter(row=>['NATIVE_GAMEPLAY','PRESENTATION_CONTRACT'].includes(row.kind))){
   const selected=descriptors.find(item=>item.path===row.path);assert.deepEqual(selected.bytes,fs.readFileSync(path.join(root,row.path)));
@@ -100,6 +100,12 @@ test('pinned gameplay data retains all values; derived vendor module has identic
  const normalize=source=>transform(source,{loader:'js',format:'esm',minify:true,legalComments:'none'}).then(result=>result.code);
  assert.equal(await normalize(fs.readFileSync(path.join(root,vendor.path),'utf8')),await normalize(fs.readFileSync(path.join(root,vendor.output),'utf8')));
  assert.match(fs.readFileSync(path.join(root,vendor.output),'utf8'),/MIT|license/i);
+ const careSource=recipe.sources.find(row=>row.kind==='CARE_CELLS'),care=JSON.parse(fs.readFileSync(path.join(root,careSource.path)));
+ const projected=JSON.parse(descriptors.find(row=>row.path===careSource.output).bytes);
+ assert.equal(projected.cells.length,16);
+ for(const [i,cell] of projected.cells.entries())for(const key of careSource.jsonFields.filter(key=>!['schemaVersion','cells'].includes(key)))assert.deepEqual(cell[key],care.cells[i][key]);
+ const selected=new Map(JSON.parse(fs.readFileSync(path.join(root,PUBLIC_RUNTIME_ALLOWLIST_PATH))).files.map(row=>[row.path,row.sha256]));
+ for(const cell of projected.cells)assert.equal(selected.get(cell.src),cell.sha256);
 });
 test('selected public hero mappings retain exact ID, image hash, dimensions and per-role resolution; authoring versions remain intact',()=>{
   const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));

@@ -46,6 +46,7 @@ allow.assets.push(...heroes.entries.map(row=>({id:`${row.speciesId}:database-her
 const rows=new Map(allow.files.map(row=>[row.path,row]));
 const refreshed=['src/data/championship/database-hero-portraits.public.v1.json','src/championship/presentation/publicRenderDescriptors.js',
  'championship.html','src/championship/presentation/publicAlternateFormBindings.js',
+ 'src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js',
  ...['battleCharacterGeometry.js','battleCharacterProfiles.js','characterNativeSizing.js'].map(name=>'src/data/championship/'+name),
  'src/championship/presentation/dataArena/dataArenaRoster.js','src/championship/app/dataArenaScreen.js','src/championship/presentation/evolutionGlyphArt.js',
  'src/championship/presentation/publicMetadata.js','src/championship/presentation/cageForeground.js',

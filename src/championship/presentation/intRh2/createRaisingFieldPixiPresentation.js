@@ -1,6 +1,7 @@
 import { getReviewedRaisingContactShadow } from './raisingContactShadow.js';
 import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
 import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
+import publicCare from '../../../../assets/production/public-runtime/raising-care.v1.json' with {type:'json'};
 // INT-RH2 Raising field -- a scene on the single Championship Pixi stage.
 //
 // VS1 created its own Application here. VS2 needs a second playable field, and
@@ -189,12 +190,9 @@ export async function mountRaisingFieldPixiPresentation({
   async function loadCareArt() {
     const art=new Map();
     const local=isOriginalRuntimeLocation();
-    const licensed=new URL(local?'../../../../assets/production/original-ui-intake-20261007/care/':'../../../../assets/production/raising-care/licensed-runtime-v1/',import.meta.url);
-    const response=await fetch(new URL('manifest.json',licensed).href,{signal:lifetime.signal});
-    if(!response.ok)throw new Error('RAISING_CARE_HTTP_'+response.status);
-    const manifest=await response.json();
-    await Promise.all(manifest.cells.map(async cell=>art.set(`${cell.role}-${cell.pose}`,{
-      texture:await PIXI.Assets.load(new URL(cell.file,licensed).href),
+    if(!local)return art;
+    await Promise.all((local?publicCare.cells:[]).map(async cell=>art.set(`${cell.role}-${cell.pose}`,{
+      texture:await PIXI.Assets.load(new URL('../../../../'+cell.src,import.meta.url).href),
       width:cell.nativeWidth,height:cell.nativeHeight,
       anchorX:cell.nativeAnchorX/cell.nativeWidth,anchorY:cell.nativeAnchorY/cell.nativeHeight})));
     const authored=new URL('../../../../assets/production/raising-care-r1/',import.meta.url);
