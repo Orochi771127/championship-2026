@@ -33,9 +33,12 @@ export function checkedInput(root,file){
 }
 export function readBuildInputs(root){
   const input=JSON.parse(fs.readFileSync(checkedInput(root,BUILD_INPUT_PATH),'utf8'));
-  if(input.schemaVersion!==1||!Array.isArray(input.files)||new Set(input.files).size!==input.files.length
+  const separated=input.schemaVersion===2&&input.authoring?.indexPath===ART_INDEX_PATH
+    &&input.authoring?.policyPath===PLAYTEST_PATH&&input.files?.includes(PUBLIC_RUNTIME_INDEX_PATH)
+    &&!input.files.includes(ART_INDEX_PATH)&&!input.files.includes(PLAYTEST_PATH);
+  if(![1,2].includes(input.schemaVersion)||input.schemaVersion===2&&!separated||!Array.isArray(input.files)||new Set(input.files).size!==input.files.length
     ||!Array.isArray(input.moduleEntries)||!input.moduleEntries.includes('src/championship/app/main.js')
-    ||!input.files.includes('championship.html')||!input.files.includes(ART_INDEX_PATH)
+    ||!input.files.includes('championship.html')||!separated&&!input.files.includes(ART_INDEX_PATH)
     ||input.files.some(f=>!permittedCopyPath(f))||!input.release||typeof input.importMap!=='object')throw new Error('INVALID_WEB_BUILD_INPUTS');
   return input;
 }
@@ -101,7 +104,7 @@ export function auditOwnerPlaytest(root,audit){
   if(policy.status!=='OWNER_AUTHORIZED_PUBLIC_PLAYTEST'||approval?.policyId!==policy.id
     ||policy.origin!=='https://orochi771127.github.io'||policy.basePath!=='/championship-2026/'
     ||policy.rightsDocumentVerified!==false||policy.commercialReleaseAccepted!==false
-    ||!Array.isArray(approval?.files)||!audit.input.files.includes(PLAYTEST_PATH)){
+    ||!Array.isArray(approval?.files)||!(audit.input.schemaVersion===2&&audit.input.authoring?.policyPath===PLAYTEST_PATH)&&!audit.input.files.includes(PLAYTEST_PATH)){
     return {ok:false,issues:[{kind:'PUBLIC_PLAYTEST_NOT_AUTHORIZED'}]};
   }
   const approved=new Map(approval.files.map(row=>[row.path,row.sha256]));

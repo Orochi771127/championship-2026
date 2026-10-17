@@ -51,14 +51,14 @@ export function buildWebArtifact({root,output,target}){
   const out=checkedOutput(root,output,target);
   // Capture bytes before replacing a previous artifact.
   const sources=(internal?audit.input.files:plan.files).map(file=>({file,bytes:!internal&&file===PUBLIC_RUNTIME_INDEX_PATH?plan.indexBytes:fs.readFileSync(checkedInput(root,file))}));
-  const bundle=compileBrowserBundle(root,audit.input);
+  const bundle=compileBrowserBundle(root,internal?audit.input:{...audit.input,files:plan.files,moduleEntries:plan.moduleEntries});
   const entrySource=sources.find(r=>r.file==='championship.html').bytes;
   const entryBytes=bundle?Buffer.from(bundledBrowserHtml(entrySource.toString('utf8'),bundle.metadata)):entrySource;
   if(!internal){
     for(const {file,bytes} of sources){
       const selected=plan.allowlist.files.find(row=>row.path===file);
       if(selected?.sha256!==sha256(bytes))throw Error('PUBLIC_SOURCE_SELECTION_HASH: '+file);
-      assertPublicBytes(file,bytes,{jsonFields:selected.jsonFields});
+      assertPublicBytes(file,bytes,{jsonFields:selected.jsonFields,renderedMedia:plan.renderedMedia});
     }
     for(const file of bundle?.files??[])assertPublicBytes(file.path,file.bytes);
     assertPublicBytes('index.html',entryBytes);

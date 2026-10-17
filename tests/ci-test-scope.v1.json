@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
-    "tests/championship-public-shop-runtime-cases.mjs",
     "tests/alternate-form-build-boundary-cases.mjs",
     "tests/alternate-form-portraits-cases.mjs",
     "tests/alternate-form-qa-bootstrap-cases.mjs",
@@ -206,6 +205,7 @@
     "tests/championship-password-battle-app-cases.mjs",
     "tests/championship-password-battle-cases.mjs",
     "tests/championship-password-paste-flow-cases.mjs",
+    "tests/championship-permanent-runtime-index-cases.mjs",
     "tests/championship-pixi-context-recovery-cases.mjs",
     "tests/championship-portrait-frame-cases.mjs",
     "tests/championship-presentation-pack-cases.mjs",
@@ -220,6 +220,7 @@
     "tests/championship-product-transport-ui-cases.mjs",
     "tests/championship-public-responsive-layout-cases.mjs",
     "tests/championship-public-runtime-boundary-cases.mjs",
+    "tests/championship-public-shop-runtime-cases.mjs",
     "tests/championship-qa-ranch-expansion-cases.mjs",
     "tests/championship-qa-ranch-expansion-page-cases.mjs",
     "tests/championship-qa-unlock-cases.mjs",

@@ -6,6 +6,7 @@ import {selectedShopCageProjection,SHOP_CAGE_PUBLIC} from './public-shop-cage-pr
 import {assertPublicRanchStreaming} from './public-ranch-streaming-boundary.mjs';
 import {assertPagesPayloadSize} from './pages-payload-size.mjs';
 import {assertPublicCharacterSelection} from './public-character-boundary.mjs';
+import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS} from './public-render-projection.mjs';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -14,6 +15,8 @@ const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const exactKeys=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).every(key=>keys.includes(key));
 const safePath=value=>typeof value==='string'&&value.length>0&&!/[\\:\0?#]/.test(value)&&!value.startsWith('/')&&value.split('/').every(part=>part&&part!=='.'&&part!=='..');
 const privateExtension=/\.(?:nds|srl|nxr|ncer|ncgr|nclr|nanr|nscr|nbs|nbsr|atr|datr|col|esc|opm|opmd|nsbmd|nsbtx|nsbca|nsbta|nsbma|nsbva|bsar|ram|dst|psd|blend|kra)$/i;
+const selectedMedia=(file,hash,selection)=>/\.(?:png|webp|jpe?g|wav|mp3|mp4)$/i.test(file)
+ &&selection?.get(file)===hash;
 const privateKey=/^(?:localOnly|reviewOnly|qaOnly|runtimeEligible|shippingReady|humanApproved|assistantReviewed|runtimeQaPassed|productionStatus|shippingStatus|artifactMaturity|rightsStatus|rightsEvidenceIds|ownerReply(?:Id)?|ownerInstruction|ownerDirection|scopeQuestionId|commitPushPublishInstructionId|approval.*|library(?:File)?Id|library_file_id|source(?:Reference.*|Review.*|Master.*|Archive.*|BankSha256|BindingEvidence)|prompt.*|artDirection|designRevision|selectedGenerationVersion|review|provenance|localPackagingProvenance|privateVaultReference|evidence_record)$/i;
 const privateValue=/(?:libfile_[a-z0-9]+|Sentinel_[a-z0-9]+|\b[A-Za-z]:[\\/](?:Users|Projects|Workspace|Private|Temp)|YDIJ_PRIVATE_ROM_ART_PACK|ROM_COPYRIGHTED_REFERENCE|LOOPBACK_RESEARCH_ONLY|file:\/\/)/i;
 const manifestFields=['schemaVersion','target','buildId','commit','inputSha256','entry','publicReleasePermitted','loopbackOnly','sourcePayloadIncluded','faithfulInternalVfxIncluded','romDerivedBattleCatalogsIncluded','ownerSelectedReferenceArtIncluded','staticModuleClosure','checked','moduleCount','moduleEntries','importMap','browserBundle','version','tool','toolVersion','startupModules','generatedFiles','release','approved','publicPlaytest','ownerApproved','policyId','rightsDocumentVerified','commercialReleaseAccepted','fullOriginalParityAccepted','fileCount','files','path','sha256','bytes','saveStorage'];
@@ -21,6 +24,7 @@ const manifestFields=['schemaVersion','target','buildId','commit','inputSha256',
 export function forbiddenPublicPath(file){
   return !safePath(file)||file===INTERNAL_INDEX||privateExtension.test(file)
     ||/(?:^|\/)(?:research|private|\.git|\.codex|\.claude|source-masters?)(?:\/|$)/i.test(file)
+    ||/^tools\/authoring\//i.test(file)
     ||/^assets\/production\/internal-[^/]+\//i.test(file)
     ||/(?:APPROVED_HERO_LEDGER|ART_PRODUCTION_INDEX|RIGHTS_EVIDENCE_REGISTRY)\.json$/i.test(file);
 }
@@ -36,7 +40,7 @@ export function publicRuntimeIndex(allowlist,internalIndex={entries:[]},selected
     }
   }
   for(const row of allowlist.files){
-    if(!exactKeys(row,['path','sha256','jsonFields'])||forbiddenPublicPath(row.path)||(blockedRoots.some(root=>row.path.startsWith(root))&&selectedOriginalFiles.get(row.path)!==row.sha256)
+    if(!exactKeys(row,['path','sha256','jsonFields'])||forbiddenPublicPath(row.path)&&!selectedMedia(row.path,row.sha256,selectedOriginalFiles)||(blockedRoots.some(root=>row.path.startsWith(root))&&selectedOriginalFiles.get(row.path)!==row.sha256)
       ||!/^[a-f0-9]{64}$/.test(row.sha256)||fileMap.has(row.path))throw Error('PUBLIC_ALLOWLIST_FILE: '+row?.path);
     if(row.jsonFields!==undefined&&(!Array.isArray(row.jsonFields)||new Set(row.jsonFields).size!==row.jsonFields.length
       ||row.jsonFields.some(key=>typeof key!=='string'||privateKey.test(key))))throw Error('PUBLIC_JSON_SCHEMA_INVALID: '+row.path);
@@ -58,8 +62,8 @@ export function publicRuntimeIndex(allowlist,internalIndex={entries:[]},selected
   return {schemaVersion:1,assets};
 }
 
-export function assertPublicBytes(file,bytes,{jsonFields,generated=false}={}){
-  if(forbiddenPublicPath(file))throw Error('PUBLIC_PAYLOAD_FORBIDDEN_PATH: '+file);
+export function assertPublicBytes(file,bytes,{jsonFields,generated=false,renderedMedia}={}){
+  if(forbiddenPublicPath(file)&&!selectedMedia(file,sha(bytes),renderedMedia))throw Error('PUBLIC_PAYLOAD_FORBIDDEN_PATH: '+file);
   if(/\.(?:png|webp|jpe?g|gif|wav|mp3|mp4)$/i.test(file)){
     const data=Buffer.from(bytes);
     if(privateValue.test(data.toString('latin1')))throw Error('PUBLIC_MEDIA_PRIVATE_VALUE: '+file);
@@ -97,11 +101,21 @@ export function assertPublicBytes(file,bytes,{jsonFields,generated=false}={}){
 }
 
 export function publicArtifactPlan({root,input,index}){
+  if(input.schemaVersion!==2)throw Error('PUBLIC_MANIFEST_V2_REQUIRED_AUTHORING_INDEX_MUST_NOT_BE_A_PUBLIC_INPUT');
   const filename=path.join(root,PUBLIC_RUNTIME_ALLOWLIST_PATH);
   if(!fs.existsSync(filename))throw Error('PUBLIC_ALLOWLIST_REQUIRED');
   const allowlist=JSON.parse(fs.readFileSync(filename,'utf8'));
   const projection=selectedShopCageProjection({root,input,index});
-  const runtime=publicRuntimeIndex(allowlist,index,projection.files),files=allowlist.files.map(row=>row.path),available=new Set(files);
+  const render=input.files.includes('src/championship/presentation/publicRenderDescriptors.js')?projectPublicRenderSources({root,input,index}):{descriptors:[],media:new Map()};
+  const renderedMedia=new Map([...projection.files,...render.media]);
+  const runtime=publicRuntimeIndex(allowlist,index,renderedMedia),files=allowlist.files.map(row=>row.path),available=new Set(files);
+  for(const descriptor of render.descriptors){
+    const selected=allowlist.assets.find(row=>row.id===descriptor.id),file=path.join(root,descriptor.path);
+    if(selected?.src!==descriptor.path||selected.sha256!==descriptor.sha256||!available.has(descriptor.path)
+      ||!fs.existsSync(file)||!fs.readFileSync(file).equals(descriptor.bytes))throw Error('PUBLIC_RENDER_PROJECTION_DRIFT:'+descriptor.role);
+    assertPublicBytes(descriptor.path,descriptor.bytes,{jsonFields:PUBLIC_RENDER_FIELDS});
+  }
+  for(const [file,hash] of render.media)if(allowlist.files.find(row=>row.path===file)?.sha256!==hash)throw Error('PUBLIC_RENDER_MEDIA_NOT_SELECTED:'+file);
   if(projection.manifest){
     const bytes=Buffer.from(JSON.stringify(projection.manifest,null,2)+'\n');
     if(!available.has(SHOP_CAGE_PUBLIC)||!fs.readFileSync(path.join(root,SHOP_CAGE_PUBLIC)).equals(bytes)
@@ -118,7 +132,7 @@ export function publicArtifactPlan({root,input,index}){
   if(closure.issues.length)throw Error('PUBLIC_MODULE_CLOSURE_BLOCKED: '+JSON.stringify(closure.issues.slice(0,8)));
   assertPublicRanchStreaming({root,files,allowlist,assertBytes:assertPublicBytes});
   assertPublicCharacterSelection({root,files,allowlist,assertBytes:assertPublicBytes});
-  return {files,moduleEntries,allowlist,runtime,indexBytes:expected,importMap:input.importMap};
+  return {files,moduleEntries,allowlist,runtime,indexBytes:expected,importMap:input.importMap,renderedMedia};
 }
 
 // Inspect the actual upload directory, independently of a new JSON's contents.
@@ -129,7 +143,7 @@ export function assertPublicArtifact({root,files,plan,manifestName='pages-build.
   for(const file of files){
     if(!expected.has(file))throw Error('PUBLIC_PAYLOAD_UNSELECTED_FILE: '+file);
     const selected=plan.allowlist.files.find(row=>row.path===file);
-    const bytes=fs.readFileSync(path.join(root,file));actualSizes.push({path:file,bytes:bytes.length});assertPublicBytes(file,bytes,{jsonFields:file===manifestName?[...manifestFields,...Object.keys(plan.importMap??{})]:selected?.jsonFields,generated:file===manifestName});
+    const bytes=fs.readFileSync(path.join(root,file));actualSizes.push({path:file,bytes:bytes.length});assertPublicBytes(file,bytes,{jsonFields:file===manifestName?[...manifestFields,...Object.keys(plan.importMap??{})]:selected?.jsonFields,generated:file===manifestName,renderedMedia:plan.renderedMedia});
     if(selected&&file!=='championship.html'&&selected.sha256!==sha(bytes))throw Error('PUBLIC_PAYLOAD_SELECTION_HASH: '+file);
   }
   if(files.some(file=>file===INTERNAL_INDEX))throw Error('PUBLIC_AUTHORITY_INDEX_INCLUDED');

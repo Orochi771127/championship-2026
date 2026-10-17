@@ -2,10 +2,6 @@
   "schemaVersion": 1,
   "files": [
     {
-      "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-      "sha256": "ec3be2081eac1d4520f88d5f0e9abbc0ac060b1c9fbdedc181bee582f3c20803"
-    },
-    {
       "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
       "sha256": "5cbde044f22e406ceb856d70e91de12da4e5f80eea151bf21e8d1b86a2d728a5"
     },
@@ -110226,14 +110222,6 @@
       "sha256": "3353654b4de6ee19c61d652f4515bdc8a99e7887de613f6370a78b172872792a"
     },
     {
-      "path": "assets/production/data-arena/interactions-v1/ice-high.webp",
-      "sha256": "4cddea731f635bf221c7cdb3e207296ea1f2ccdb8a6e867d3c92847e9d45fe33"
-    },
-    {
-      "path": "assets/production/data-arena/interactions-v1/ice-low.webp",
-      "sha256": "48376d6634d26960c5a98156b3d7cfffb841414982c48ab184350f7b24f1e5c5"
-    },
-    {
       "path": "assets/production/data-arena/interactions-v1/ice_cracked-high.webp",
       "sha256": "2dc9c3b4ef6631246f25795354c6672ed85487b4f94083c6b283f3da158435b2"
     },
@@ -110248,6 +110236,14 @@
     {
       "path": "assets/production/data-arena/interactions-v1/ice_melt-low.webp",
       "sha256": "faadd3c51ea65df723e799fb60a3c9ee7d13c1e1fd28b7e8c22e96f8dadf8936"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/ice-high.webp",
+      "sha256": "4cddea731f635bf221c7cdb3e207296ea1f2ccdb8a6e867d3c92847e9d45fe33"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/ice-low.webp",
+      "sha256": "48376d6634d26960c5a98156b3d7cfffb841414982c48ab184350f7b24f1e5c5"
     },
     {
       "path": "assets/production/data-arena/interactions-v1/manifest.json",
@@ -110820,154 +110816,6 @@
     {
       "path": "assets/production/database-handpainted-r1-20261015/species-230.png",
       "sha256": "09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-028.d9745f89f46f9621.webp",
-      "sha256": "d9745f89f46f9621e5d5441c0ee6b3cd00d7c777eec0cca06f3f26571ae6f778"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-029.aa46ec9d6477bb75.webp",
-      "sha256": "aa46ec9d6477bb7523e50eebcbc01c5cde07260fea56feb51faa3225cd863eaa"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-033.eed4f22eb17230ad.webp",
-      "sha256": "eed4f22eb17230ad640e72dd9a1b577719ceca8f2842d59f9941363b671ac3ee"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-073.39301b2fee1a169f.webp",
-      "sha256": "39301b2fee1a169f8cbff0cc491ce3e220801b3452257cce797e4fbfc5419729"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-075.d38fc6867ac594a3.webp",
-      "sha256": "d38fc6867ac594a37b5f414584d04eb3378023f54290595f36646ef7bc7988c4"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-076.30cd2172ccff3c9f.webp",
-      "sha256": "30cd2172ccff3c9f11eb4b7a6f7661bf2a32c7c5b46959a4b05ade8b1b35a8ab"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-077.30ce6a86e6febd5d.webp",
-      "sha256": "30ce6a86e6febd5d3c8a7f8191ec9992f65e158f73f8845014d5931e8678582c"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-078.cb271096fa971d0b.webp",
-      "sha256": "cb271096fa971d0b468d114a0f96b7c1e301f30a5c1317b78dee95458da68628"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-079.dbb7c18616092ade.webp",
-      "sha256": "dbb7c18616092ade73e08214b965637bbccb4da67c5002c1ed4cbc797509a225"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-081.40a7e20d24f19a93.webp",
-      "sha256": "40a7e20d24f19a9332f239a6d793c333bed3d3fc7f1c04f578f1695d709adfa0"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-082.e72200db1609bca7.webp",
-      "sha256": "e72200db1609bca7b037612e9a0d6a7386a2eb20667cdd83dd21af2f64066729"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-083.14381cfd571eb399.webp",
-      "sha256": "14381cfd571eb3997e5e2fc5d4bf6b08327a20687db8d5726d50be9ba0233ced"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-084.1fc6a4d307f403cf.webp",
-      "sha256": "1fc6a4d307f403cfb53d12f61cfe432cacd63f1758e6afa9fad7456ad449a3f1"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-089.4ed6a3c33ede12e4.webp",
-      "sha256": "4ed6a3c33ede12e47a3fbc5689044917b3c96545c112ece8ae9c205bb6644f00"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-090.608f4e1c14289e20.webp",
-      "sha256": "608f4e1c14289e20ab5bf8edbc2f2f06816b7ea7ea59fc46dc830658ce665396"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-091.686226213fde12ae.webp",
-      "sha256": "686226213fde12ae02ef5a4a7e7272932bda7d677d52ace8a7768b2d80804542"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-092.cdf044393078ef74.webp",
-      "sha256": "cdf044393078ef744036175fdd9d316a46f7296d65c64bdc80952b41f80be752"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-093.6ca79a33ab8a042a.webp",
-      "sha256": "6ca79a33ab8a042a66cb16fe7616be962193716158c913b8e3ea744afe65d188"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-097.66900d62495da0f8.webp",
-      "sha256": "66900d62495da0f8d3b0de501acac56450973ceada10883aa3c4b8d995f963e1"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-098.a5f298f8b605116b.webp",
-      "sha256": "a5f298f8b605116b902f3383da07c11565ab7e2c3634c6e138056feaf3ed4d58"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-099.3c322a52b8f652a0.webp",
-      "sha256": "3c322a52b8f652a042d72b3cf8cd9a0561bf64fe8241cdf6c79a660792812e28"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-100.930db3cc4f3366ed.webp",
-      "sha256": "930db3cc4f3366ed855e1d92fd497ffe3308b7a104cd319e55095c98d4923a67"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-101.e49b91a8b7194853.webp",
-      "sha256": "e49b91a8b71948539397bcad25218f2bd2d15a19aebd54a95f6e996c9b79c96a"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-102.02a4a4755042d58d.webp",
-      "sha256": "02a4a4755042d58da03bf1b09938ef7a20322e93c20f3fc938351b1201e32571"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-104.e80d5654bd21cfc6.webp",
-      "sha256": "e80d5654bd21cfc68f4eb50cf4b552db059d8ae8e20a8e7154527bec326aa363"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-106.70cda5dceb243a7f.webp",
-      "sha256": "70cda5dceb243a7ffb8bbb7b0bebd613d0c605eaca2160047bfeecc40e4ef8b5"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-107.a144cf5e33a719b7.webp",
-      "sha256": "a144cf5e33a719b798eecc654882a6b874fa04382c9d968667b5ab2eb54d4f01"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-108.9a6c56b441e697d8.webp",
-      "sha256": "9a6c56b441e697d8280f1a9ac438631540194a9ef94b66a3b96cc859d30dad90"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-109.98b7aae9e5ebecf9.webp",
-      "sha256": "98b7aae9e5ebecf9248a3c2bacf49510f737b42076104ef0adcd6ff3e8cd1df3"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-110.a02974fe9586826d.webp",
-      "sha256": "a02974fe9586826d7227f66fc7085ebfdedcf0d3fd07864abbcf89d303ca48cd"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-111.d832e8c11f2222d6.webp",
-      "sha256": "d832e8c11f2222d620b3cae6867e992ad575db0e97832f4fbc92f28c8da6e542"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-112.b19c50e763541179.webp",
-      "sha256": "b19c50e763541179fea3cd6c73ca5c021f6caffefa3be77518c64af916703e39"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-113.9140176e76d4611f.webp",
-      "sha256": "9140176e76d4611f7719331b93ce7e09bcf01a0a590b2044889edadda36ea197"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-114.a2653fee85ab174f.webp",
-      "sha256": "a2653fee85ab174f97e06d918b55f5c22d11ecaaa2369b319fb023f8233e1ade"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-115.bc89213a41cd0faa.webp",
-      "sha256": "bc89213a41cd0faa5f3260645ca38916b1e48797e469c95388f6c4dbce3bc196"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-116.8a50d068ac5983dd.webp",
-      "sha256": "8a50d068ac5983ddb8730d7e53854b72f95a33643c5ae69f108f966ad49705d0"
-    },
-    {
-      "path": "assets/production/database-heroes-20261017/species-118.b4cc36f9964f606e.webp",
-      "sha256": "b4cc36f9964f606e6ca51024bfeecbf9ad2b3c57ffbd59bec52d8da0e23a9cca"
     },
     {
       "path": "assets/production/database-portraits-b1-20261014/B101.webp",
@@ -111550,6 +111398,1418 @@
       "sha256": "db0410246343d4ece4c21d3d5ff43668447a64f56dd890caf2bf5b2e938fc92d"
     },
     {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0200.wav",
+      "sha256": "8adb04df457c0757b542339d6ee45e2d08408f18600859cb45cfc370fb8a3699"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0201.wav",
+      "sha256": "85d82671361a339cfd816a5f7c4874671a14b7416e2bd2912ab2c9a31c19c382"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0202.wav",
+      "sha256": "68e77d01502be0274d14b9460a37c512e9b0e1573c4c03ca516f554998742648"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0203.wav",
+      "sha256": "50955ba515540975fdce342eb70303bea4acbab0978806566942a32be61b2d5e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0204.wav",
+      "sha256": "49dde7a4409737ce300d0873c08edf1d4f693a7fac1d056c18f391b44e6043a5"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0205.wav",
+      "sha256": "77f5de13f1070c47d081d97289416c203526d26a9457a641e931272d51e7a5d3"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0206.wav",
+      "sha256": "143dc2391f66bc266f506679bdc236aec535cd77c51276374b2a033fcb181ef5"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0207.wav",
+      "sha256": "a3d4138b953a7d4463a37ea3c638b72630dfde919cc1c42abb53b373ae91be64"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0208.wav",
+      "sha256": "1a792aa3b3c0fe8725238987db37dead7ef49d71ba90af5d180756c67a3ed129"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0209.wav",
+      "sha256": "7cb6ebf4776951653e2d302fdf183e6be114140241178d453321924cebf73e3a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/020a.wav",
+      "sha256": "6ba6fe9c454f31c9cead54350beab1ce353e0382f667ddbe643c56e4da6f2cc3"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/020b.wav",
+      "sha256": "169e0393cb18ff662c23459080f1b4ce76144fac390a2468f645645370a271e7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/020c.wav",
+      "sha256": "745fea33f6ff4257b3e4291bbbd06bc3bb0e22d4a83e6a32739b66d38e05f601"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/020d.wav",
+      "sha256": "140459029ef254959fe3b2e944cdb3c0293078d5ac0ab8ef68c5ec3eb9b16d51"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/020e.wav",
+      "sha256": "c17403b8a09fdef118b2ea6068fe3db75a32f0f9b5f83e35653a197121a58072"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/020f.wav",
+      "sha256": "f68c8a6246e446301b72bf5c8977e4931e018382c1c16fd200b809d14715777e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0210.wav",
+      "sha256": "fa4a78cb5d764a6fa00cc83d5859e71226bc1b9ac3993821aa18172b757f9f8b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0211.wav",
+      "sha256": "920def020a81d39da24c3a8f477c728bc825c91cc9e3580ad08a19e59522dcc4"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0212.wav",
+      "sha256": "70f811118d5bc20b7e7b97e9513f778182b0e47a69175ffe9b83074ba0d9f8f3"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0213.wav",
+      "sha256": "92b77e8c44ff9450c5edf7788330264adffcc92522a1ee1ea2085d0fbf8d2c16"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0214.wav",
+      "sha256": "08a0de75ea5a4224af99133be34882800af84384872a5deec1e193ed2eed6f6c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0215.wav",
+      "sha256": "c8c840488231a5ba82746d0d2d8b28fb9fb93c0cdaac43ef82196864ad13ab2d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0216.wav",
+      "sha256": "97cc6e247279e2cf97a623960ed63b6fdab9ddf3ea39398a39e898c6b0487f8e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0217.wav",
+      "sha256": "701a01c9538f3c00cb74402d64c43e4f4eaa8af53c9c34474a1f337a12f7e7fb"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0218.wav",
+      "sha256": "ed690172647b1886fd55774ac1f9f17d4dc2e68a38db0b5dbace8ffa5567600b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0219.wav",
+      "sha256": "21587fb16ca057faaeeea308c011baa44180ad8a92515b9ed3fd1861b83a238e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/021a.wav",
+      "sha256": "9f441af4da8ca117707763d65e4c71fefb1f68dcb6a83f058224971ce3e19265"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff01.wav",
+      "sha256": "f29296532695d8773aa96b90a2866f128b75df859e4a13aa93319abdba728599"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff02.wav",
+      "sha256": "41d8fa7ac46d783cbdfa4397adb1033237553e4ca7e47ad12d83e2486c5eeb4f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff03.wav",
+      "sha256": "8ccc4928607e29419bead62ef34aaa0e24603a1e15e75bf5bbd1086488eec0e8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff04.wav",
+      "sha256": "8b769d68966fd1c94afb778b9e57ef6a9e651a5b3832ca899e259f887120889a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff05.wav",
+      "sha256": "6c62c98d8120b9f75d9b972d0b87cc4a04898fb3125d74de2623ffc886d01b20"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff06.wav",
+      "sha256": "4606fd03ea2afe101db6a0690dbb4368ec660a05a1e0ee1a5ac62e586144d43f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff07.wav",
+      "sha256": "8be61c0af78ed955b3286f7f3f0fe7c7046e0f5777abe4fe055dcfc1febe8b70"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff08.wav",
+      "sha256": "706f0e6ee0bcdbbb9c62a3cd67ebbcb9ef35c0503b01798f06b563b20acb1d6b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff09.wav",
+      "sha256": "f8210c652163256e73961140516ea7c498d2cf810df91aa0b26306184bf3864c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff0a.wav",
+      "sha256": "0d179d1f7925ed21fd13b0f49557922dea26b3a5d980abc53812516c87287aa0"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff0b.wav",
+      "sha256": "81db439f957c2d7b7e5bca261939f486b6b3ef7a4f132570a1eaff5cfadce682"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff0c.wav",
+      "sha256": "5b85621725f3bb357e73256927786d7b10dcb45c271c9e30d23a3449444bb702"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff0d.wav",
+      "sha256": "a01147f2a82160b215c2f65174c93570ad3611906d2b7fd6adb7437d68baac41"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff0e.wav",
+      "sha256": "dec0fc91b19d3ed4d5dcafabee5e15a84185998dd18b16643c1356139ceca986"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff0f.wav",
+      "sha256": "1ca6ae5bab60256104b6663d3535cd79198b828c99cc655fb7e63a0ea73ad77c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff10.wav",
+      "sha256": "5ed0301e23958cb8ca783ff40cfb490e3b47a31c7750f4a30fd0d572f8f2c410"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff11.wav",
+      "sha256": "3aa4220ab1d6486a381b33ec13219e9a68e9f5d613b33913d912c7547715568c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff12.wav",
+      "sha256": "6520ea9343420a9f992c2b8b61a1035adcd086a777ff6afb4459467bd1ed7530"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff13.wav",
+      "sha256": "0126c1c3f6d018b3b5586b7efb8576df564710e86869fe404dd4c420b27f1b73"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff14.wav",
+      "sha256": "554ceed98b0809a4e9a874049cd9b8d085af2f59681c053cd6b549e099e14fd9"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff15.wav",
+      "sha256": "0ca91e5f0b262406ba7d14a746957e86c38244397e66ba4e80ca9af95b144610"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff16.wav",
+      "sha256": "115a76e3369ff91d73e328247bd46dcc4a91033f66188ece4d62631aa520b335"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff17.wav",
+      "sha256": "3d406d86ed90ef3078d212a79dea0fa340727cc122a8ee379e06bcb0d887ccde"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff18.wav",
+      "sha256": "59af82e959e545eb1f259bb562ee07eece525bd836b2eec16c7fe1b90e75dc00"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff19.wav",
+      "sha256": "64a26e3ed1ab9702ab5c0e7c1e37e004c153dad9dbe9afd8d9a9fa1ed8461e4a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff1a.wav",
+      "sha256": "c8adc0686455cd03894a7a7c0f3c4dc3113a99efa4e946e88953c39f65dbbdae"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-audio-v1/ff1b.wav",
+      "sha256": "2438df6b8c363a6cde6530a8f028f5c0714ac81beb15cdd544d303cc9b0afe55"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/battle-effects-v1/effects.png",
+      "sha256": "d24cebb99d921eb5288aa654d1ae91d46e6f4a3e186cc69c7aef8443d635098b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-000.png",
+      "sha256": "5a2f74fee9de8e3dd25b9e6a6e41347e77aff821b4640c7364e9f45cefa813ee"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-001.png",
+      "sha256": "07dc17518982ec9981c8a73ed6337d0de12f2bcf78367485b3e22a97b43683f7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-002.png",
+      "sha256": "69c96bc41546c45011c9c0104c2c2d05adfa080c220f7ab20feb739a242c1b14"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-003.png",
+      "sha256": "a6a2460dc09d1982990484925c8f991f8fb8d96e6b00d6d7588fd5c3ea9930e9"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-004.png",
+      "sha256": "04acc6cd4ab542563feda447a8cc60776f4b4bc10559b171e5c092da78f76153"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-005.png",
+      "sha256": "acf8ac141db706791109af48cd7bf3b7e7ebf49651a6d30fa1f6e9b94c4ef26f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-006.png",
+      "sha256": "959dc6e4e68288cbb1a28329ce221ac0af8aa9f1af57f4babc24055eca4577eb"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-007.png",
+      "sha256": "b8991b12fb2a6535d1c015edf51dcd8302cac72a9da8686802fb3ddfee0d88ff"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-008.png",
+      "sha256": "b931fd5bf4a5e2415956a428825a6b105ef8850a0aa75c3e34949b1975289977"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-009.png",
+      "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-010.png",
+      "sha256": "b623b429ee057624988751f8a1c0cd786bb6c722a726c415f4f0a946716c89ed"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-011.png",
+      "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-012.png",
+      "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-013.png",
+      "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-014.png",
+      "sha256": "f5cfe8d292acef2664387bc3594d46609ced11062aae7b2471eae7b1728b824b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-015.png",
+      "sha256": "d53fd9962ef4d2b83601559e6a2817dfac6c70739410eeb68e437e57d5013481"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-016.png",
+      "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-017.png",
+      "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-018.png",
+      "sha256": "982bab86fa92b8a42d64a2864d552ebf0bcaa2eab531c87c95887625faab361d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-019.png",
+      "sha256": "a0edc480ca868c4706712fafe1a7a5215247a7d625d6c799b38fd760db4604e0"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-020.png",
+      "sha256": "071c516c2981a14a17417733448bf3ad78fbe64c5051a447297facbba0657f12"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-000.png",
+      "sha256": "d3a8dc300863bb2d61b1ddc890232515ddcdf03bff594d432cd3569b0939598b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-001.png",
+      "sha256": "8e7020e4cc4ea27af8ced8753714e9521df052505ce069408cf472980029dd50"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-002.png",
+      "sha256": "69c96bc41546c45011c9c0104c2c2d05adfa080c220f7ab20feb739a242c1b14"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-003.png",
+      "sha256": "57b9c42abdb095e8ac044e98d0c1c486a528a442f13bc1a9cbe43d4589a5a820"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-004.png",
+      "sha256": "7784db592d2a66db3c0c9aae2c2fd863c7e5efdc68b217654201c4ddc34ca206"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-005.png",
+      "sha256": "45e8b3df1831906368b1f773071331f714332334e747ad1d9d7cb7c2edf623ef"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-006.png",
+      "sha256": "9ffa414eea254d24348ce4df78dee22542f5a078a2eb72e1d499d19a6ee49ea9"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-007.png",
+      "sha256": "e1e4eafad2f7fa119c6c3187cd82e706f980d9036e815ad2d8129d4ec76cfea0"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-008.png",
+      "sha256": "41e19e72cb442d97e742ad11bb801ae21e89f3a1f7b3299cd0e6ae781f97faba"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-009.png",
+      "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-010.png",
+      "sha256": "b623b429ee057624988751f8a1c0cd786bb6c722a726c415f4f0a946716c89ed"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-011.png",
+      "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-012.png",
+      "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-013.png",
+      "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-014.png",
+      "sha256": "f5cfe8d292acef2664387bc3594d46609ced11062aae7b2471eae7b1728b824b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-015.png",
+      "sha256": "d53fd9962ef4d2b83601559e6a2817dfac6c70739410eeb68e437e57d5013481"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-016.png",
+      "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-017.png",
+      "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-018.png",
+      "sha256": "982bab86fa92b8a42d64a2864d552ebf0bcaa2eab531c87c95887625faab361d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-019.png",
+      "sha256": "a0edc480ca868c4706712fafe1a7a5215247a7d625d6c799b38fd760db4604e0"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-020.png",
+      "sha256": "071c516c2981a14a17417733448bf3ad78fbe64c5051a447297facbba0657f12"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-000.png",
+      "sha256": "feed1c3f0853ff2648f66aab1a5dc222920f605edec47a2ae6c10aad607dd950"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-001.png",
+      "sha256": "d0069655a0b6844e6710d05ea2d375cc625c65a3ad2f98da73ead4c8c03a5687"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-002.png",
+      "sha256": "69c96bc41546c45011c9c0104c2c2d05adfa080c220f7ab20feb739a242c1b14"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-003.png",
+      "sha256": "aa7f665fdc8512792157ba0d0949b71a131c8228cda99e061576e6cbb387700c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-004.png",
+      "sha256": "102462b83420881881a089e5eac7715370d3a5c68c55959dd90e7ae8cc7cf73d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-005.png",
+      "sha256": "bf8599b097f50c456bcd8f5deb8e2a1b0601c185e8f27cd9a09a6357cb386283"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-006.png",
+      "sha256": "4093e67dad8bc9ec7ae64e4270f50f7fdefd443640b3930578fc65836330146e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-007.png",
+      "sha256": "14a10c42e4bea9b8a0e9c10e4f056ab02f56acd20ecf25db93e5bf6223eb2378"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-008.png",
+      "sha256": "7951a3ead834f80b1c762bbd08eb13d78fc54d656fcd01cc4e4ccd9bf4c018b8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-009.png",
+      "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-010.png",
+      "sha256": "b623b429ee057624988751f8a1c0cd786bb6c722a726c415f4f0a946716c89ed"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-011.png",
+      "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-012.png",
+      "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-013.png",
+      "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-014.png",
+      "sha256": "f5cfe8d292acef2664387bc3594d46609ced11062aae7b2471eae7b1728b824b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-015.png",
+      "sha256": "d53fd9962ef4d2b83601559e6a2817dfac6c70739410eeb68e437e57d5013481"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-016.png",
+      "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-017.png",
+      "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-018.png",
+      "sha256": "982bab86fa92b8a42d64a2864d552ebf0bcaa2eab531c87c95887625faab361d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-019.png",
+      "sha256": "a0edc480ca868c4706712fafe1a7a5215247a7d625d6c799b38fd760db4604e0"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-020.png",
+      "sha256": "071c516c2981a14a17417733448bf3ad78fbe64c5051a447297facbba0657f12"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-000.png",
+      "sha256": "b577e9cb8c3b6cd99489cbc720ccb6b87f13ed702985d57a2599c7c31ff87de6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-001.png",
+      "sha256": "588627cb2fd7b976cdca7f3ec1be17bc9823668d6767fdf1b239bafd39d615cf"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-002.png",
+      "sha256": "69c96bc41546c45011c9c0104c2c2d05adfa080c220f7ab20feb739a242c1b14"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-003.png",
+      "sha256": "fe93784b219ac032179c739f11fa01e5b81f8bae1929261614343af9d54c308d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-004.png",
+      "sha256": "d463e90b3dbd0ca7957792540d26c88e136ef3db402ce19caf5266bc657e7bde"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-005.png",
+      "sha256": "117dd2d1c26adaa46b0bd6c6a221ef3a23f2ed1a399044ec6d94f9b181f1a68c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-006.png",
+      "sha256": "bf3c808c1e9fffc065ce952569248769ad5e3e587c8eb7483d425e0a923669e7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-007.png",
+      "sha256": "c8c7446bc8935901ec0fa623e904522ef0fe479993ac8fd130e2a94dcb89bac7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-008.png",
+      "sha256": "fd3671665c3bedeba67c960ff88bb8ee56121b0db82580b17aa2481e016d7cd7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-009.png",
+      "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-010.png",
+      "sha256": "b623b429ee057624988751f8a1c0cd786bb6c722a726c415f4f0a946716c89ed"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-011.png",
+      "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-012.png",
+      "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-013.png",
+      "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-014.png",
+      "sha256": "f5cfe8d292acef2664387bc3594d46609ced11062aae7b2471eae7b1728b824b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-015.png",
+      "sha256": "d53fd9962ef4d2b83601559e6a2817dfac6c70739410eeb68e437e57d5013481"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-016.png",
+      "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-017.png",
+      "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-018.png",
+      "sha256": "982bab86fa92b8a42d64a2864d552ebf0bcaa2eab531c87c95887625faab361d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-019.png",
+      "sha256": "a0edc480ca868c4706712fafe1a7a5215247a7d625d6c799b38fd760db4604e0"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-020.png",
+      "sha256": "071c516c2981a14a17417733448bf3ad78fbe64c5051a447297facbba0657f12"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-000.png",
+      "sha256": "6fd5d65629449697235c102d309deb533546bb2f0d72d7df498e66e1c72a24fe"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-001.png",
+      "sha256": "0402caeda70cdfdb3db994d3f1698e5b32c24b298e94c355edf9ceb56bf1d1bf"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-002.png",
+      "sha256": "689f0dfb9b0b8d1da3382129d1d1486508dc2f83cd039ce284c0981b92426e4b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-003.png",
+      "sha256": "dc28b0986b9865108b1e1295f156a149139122fafd5301e2ebfed3bccd9cbb47"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-004.png",
+      "sha256": "54ae826a204c82383e7420bcf5d2a5214a501c01cbe46602b56c5fe50e045adc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-005.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-006.png",
+      "sha256": "e1fb084fed0ad56213535fe2f7a8ee484eee2c07edb11654c8967c8c5709abc4"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-007.png",
+      "sha256": "50196ac2bfbe6445e7feb1d3f626c4cf34b407fac34c25d60e4e5edca6d2436b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-008.png",
+      "sha256": "5b86dee0c57979dd9b67e4e670e91219852c9a98f0eb76a64019cbd3e3046335"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-009.png",
+      "sha256": "35a86143fabc7c5d32de5cdddaee240917feee01db72fa071b7a82c9e1fe9d7e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-010.png",
+      "sha256": "2870718162b9048d2561a4f5e194a6b708e2b7d7f8534bee24ef832fa8c42ad7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-011.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-012.png",
+      "sha256": "5905ce3ff14f98344c0b65411d7cdb2915db609b338d3698339700872e1bf78c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-013.png",
+      "sha256": "08660307db3ac8e30dce9c9a16f853d20ad30d693d88814e8e602b301ff29bf6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-014.png",
+      "sha256": "62da2296a0f3ac5af3eca6e6d0bf5a0fcf73326fb78d4e99d448523b5e82c767"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-015.png",
+      "sha256": "aebcdacbdcd3928065cf62e163c2491df4b7c4528c937e7bd89fc2b038e6e738"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-016.png",
+      "sha256": "2a7d70269c87378af5d87a93923b22b3ff05a62a43f7bc77d351c06457a0a4e6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-017.png",
+      "sha256": "8ac109ac96a7410289db2d7437ca6bd553427594713c8348e2f3ebda4782af1a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-000.png",
+      "sha256": "6fd5d65629449697235c102d309deb533546bb2f0d72d7df498e66e1c72a24fe"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-001.png",
+      "sha256": "0402caeda70cdfdb3db994d3f1698e5b32c24b298e94c355edf9ceb56bf1d1bf"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-002.png",
+      "sha256": "689f0dfb9b0b8d1da3382129d1d1486508dc2f83cd039ce284c0981b92426e4b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-003.png",
+      "sha256": "dc28b0986b9865108b1e1295f156a149139122fafd5301e2ebfed3bccd9cbb47"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-004.png",
+      "sha256": "54ae826a204c82383e7420bcf5d2a5214a501c01cbe46602b56c5fe50e045adc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-005.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-006.png",
+      "sha256": "e1fb084fed0ad56213535fe2f7a8ee484eee2c07edb11654c8967c8c5709abc4"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-007.png",
+      "sha256": "50196ac2bfbe6445e7feb1d3f626c4cf34b407fac34c25d60e4e5edca6d2436b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-008.png",
+      "sha256": "5b86dee0c57979dd9b67e4e670e91219852c9a98f0eb76a64019cbd3e3046335"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-009.png",
+      "sha256": "35a86143fabc7c5d32de5cdddaee240917feee01db72fa071b7a82c9e1fe9d7e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-010.png",
+      "sha256": "2870718162b9048d2561a4f5e194a6b708e2b7d7f8534bee24ef832fa8c42ad7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-011.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-012.png",
+      "sha256": "6fb6c8f621a4ec72d2932b63a9c14eb0d483593ea5a8d8a4de8b7963ef063436"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-013.png",
+      "sha256": "f0c447664ef4ea23de0ce5f58a6a69e17df4e28f29dcf22916c13e951872e3bd"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-014.png",
+      "sha256": "84436231b6a121f52981803c3da2f32db3685dfcdf7025fa5e271fa5f851833a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-015.png",
+      "sha256": "a772f1aad56cbaee6e6b66f4944b57502772f100a4ced7a00229693b0818113e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-016.png",
+      "sha256": "91b621b5a3b22953b2c8e72d384d3adb0d1e4035e1c695a1855253e1da2a40fa"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-017.png",
+      "sha256": "fc529c39b1850659dbfe1d10a6bcc50377c43605c637ca09075534df4cda2853"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-000.png",
+      "sha256": "6fd5d65629449697235c102d309deb533546bb2f0d72d7df498e66e1c72a24fe"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-001.png",
+      "sha256": "0402caeda70cdfdb3db994d3f1698e5b32c24b298e94c355edf9ceb56bf1d1bf"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-002.png",
+      "sha256": "689f0dfb9b0b8d1da3382129d1d1486508dc2f83cd039ce284c0981b92426e4b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-003.png",
+      "sha256": "dc28b0986b9865108b1e1295f156a149139122fafd5301e2ebfed3bccd9cbb47"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-004.png",
+      "sha256": "54ae826a204c82383e7420bcf5d2a5214a501c01cbe46602b56c5fe50e045adc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-005.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-006.png",
+      "sha256": "e1fb084fed0ad56213535fe2f7a8ee484eee2c07edb11654c8967c8c5709abc4"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-007.png",
+      "sha256": "50196ac2bfbe6445e7feb1d3f626c4cf34b407fac34c25d60e4e5edca6d2436b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-008.png",
+      "sha256": "5b86dee0c57979dd9b67e4e670e91219852c9a98f0eb76a64019cbd3e3046335"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-009.png",
+      "sha256": "35a86143fabc7c5d32de5cdddaee240917feee01db72fa071b7a82c9e1fe9d7e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-010.png",
+      "sha256": "2870718162b9048d2561a4f5e194a6b708e2b7d7f8534bee24ef832fa8c42ad7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-011.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-012.png",
+      "sha256": "8e57b9dcb8f9c57b22e2936b89a489af0dd4fb14d8ef45bc553a99f05f5bf01c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-013.png",
+      "sha256": "45dad9829cb6740e527c06d6000992400a60ab241cd0a350a28cfbd74ec1a705"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-014.png",
+      "sha256": "bfd275f3da938246e78ad1c0d4e7a3eb638b4a44dfd5088f914ca6d311cd8f7e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-015.png",
+      "sha256": "c93ee9760d5252dcb77c2f14d16c4b4059c1ec245292392f706261db2cebfca2"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-016.png",
+      "sha256": "8e1216df24b187f7f653f6863922c67cd651ad8533421178a4be6d6ff912a76a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-017.png",
+      "sha256": "9ee232ee103c9cdade42dd0e201a3e9452000fbb71419f65f47c0be6e958acda"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-000.png",
+      "sha256": "9d37df3a11fa27bde88db469cb66951684a9ce1442f6b4ec1e193b3b209fa185"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-001.png",
+      "sha256": "11b8cc548a03958e7ff719ef30a74d1d5dbd6ba73e0dda030c1cfaa1afbbc94d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-002.png",
+      "sha256": "dbb5fc1ae23c78ffd882f8200a88605c6a4741ee92b5871b784968aa1b42d68d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-003.png",
+      "sha256": "d8ab5a94b031acf441e7e6b9a9d02c270902af8ee0a2635f7484b66f6269f918"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-004.png",
+      "sha256": "b2f0ab773b3189ee028769ddfe6fcd66d09fbd5e846993962f4461b2140d4b6e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-000.png",
+      "sha256": "50a43f1722adf63496a634fe25474d3c0ebf1159356401286e358066a5f6b1a6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-001.png",
+      "sha256": "24c3a984c8ebed08c37e524799e8cb6727377ebcec4a2beba080f58084fd2c3c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-002.png",
+      "sha256": "cfdb0b371d29fb1e76bcbb068ccd7b6c923aaff6ef1a932e833796717c9692bd"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-003.png",
+      "sha256": "9907a7074a09a9a6f32d234086ba5ef3a9aec0b47df151f421fe181468de1f38"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-004.png",
+      "sha256": "f68d8d11d54eba150d7889c980e8bd60cfac28feda71cb6d87e857c5bab1f002"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-000.png",
+      "sha256": "a09a658cdd53f6f619300d5b30d49eb1c6ecde9e352a6ddf5d492dbe5a1b76e8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-001.png",
+      "sha256": "a09a658cdd53f6f619300d5b30d49eb1c6ecde9e352a6ddf5d492dbe5a1b76e8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-002.png",
+      "sha256": "650c40524486b1e03428be4c242f04fbf3fddd5fc237301e67e1d8127304dc32"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-003.png",
+      "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-004.png",
+      "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-005.png",
+      "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-006.png",
+      "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-007.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-008.png",
+      "sha256": "29c1ef8e83efdb065701987ae02a036f8f8a23a4e4feef0dd43d0708b0ba9940"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-009.png",
+      "sha256": "ec48eb4bb331ef8c52d51e47028ff8cb6ea70926ef4c531a4f98b0375fbe1e13"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-010.png",
+      "sha256": "d41c5a81028258418bf4b2402dad459136f22898ebd53a22f45522427e98421a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-011.png",
+      "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-012.png",
+      "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digilight/cell-000.png",
+      "sha256": "ceb291b01c62c271f7e999c482890fb8da9730e66c33357da0af87d8ca7780ab"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digilight/cell-001.png",
+      "sha256": "285cfdfdfe23c6d6ba156945be09dc897643a5cb8f84df2ba991a44687b4a38c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digilight2/cell-000.png",
+      "sha256": "c7cd60281e98063f841107b6ce8d6094f911272cae3691d7aaf5b983a1567983"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digilight2/cell-001.png",
+      "sha256": "e07fac6c8b584ac71a87058d8709c28701a45c7007fc0d01e3745cb81bd6a09a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-000.png",
+      "sha256": "f7f8ccf4b6a55af9d74c0f48772708d6ac10233cbd4998bce7af8a11d9eda982"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-001.png",
+      "sha256": "f7f8ccf4b6a55af9d74c0f48772708d6ac10233cbd4998bce7af8a11d9eda982"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-002.png",
+      "sha256": "2c811449ced701e60a7bf524ad92879ee9690a01284a97d8e21accb533e58374"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-003.png",
+      "sha256": "f3a10a977b8fec8f10bf81fa8a8652496ad165002fe73ee01862e9bb59ec3128"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-004.png",
+      "sha256": "edaa52705bceb92d02254b56e658eeb8b0c5e7ddc1462d54a6ad541fc2855f9f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-005.png",
+      "sha256": "21e36f0b4e2120693810e3c6f23b2cfb6ba07703e5d1d42507c76a827288a5cc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-006.png",
+      "sha256": "21e36f0b4e2120693810e3c6f23b2cfb6ba07703e5d1d42507c76a827288a5cc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-007.png",
+      "sha256": "21e36f0b4e2120693810e3c6f23b2cfb6ba07703e5d1d42507c76a827288a5cc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-008.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-009.png",
+      "sha256": "a71adc40e116d5c1a14b12d0b2aebbf03ac2300f91a66d83e1726ca718ccff35"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-010.png",
+      "sha256": "5d338bd8e8cd5086aadda254f1b43ef3d35516c099478f0019460e53a0affe38"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-011.png",
+      "sha256": "20749d672e3cf2a2d7d9af552527df75bdef50d7a309e07c62a157b2c7607f8e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-012.png",
+      "sha256": "f328a8e38ad84743a3869f1d1275e441c43eb5d32a27b07336908adb7d937a76"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-013.png",
+      "sha256": "f328a8e38ad84743a3869f1d1275e441c43eb5d32a27b07336908adb7d937a76"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-014.png",
+      "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-015.png",
+      "sha256": "8693703cb64423f6488a9ca1f1f9ee8a78ec3eabdcaaa2329c60fc8633e03149"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-016.png",
+      "sha256": "904e92a030fc68c4c3910ea894fb85a8576c583b1d7877bc7d38735fb322c1cd"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-017.png",
+      "sha256": "b162661647dec2ecfdfd5c630312ebd808904b2fddb95e700515fbffbc583c8a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-018.png",
+      "sha256": "17652db76f264c2ee0c796feac10d086f5bcec2721ba0426a7eeb90ff4656f06"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-019.png",
+      "sha256": "a44533f42ec7e9ce004c5a3ba6b80150da54ae01b52707499c047b0b9a5cf675"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-020.png",
+      "sha256": "21e36f0b4e2120693810e3c6f23b2cfb6ba07703e5d1d42507c76a827288a5cc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-021.png",
+      "sha256": "f328a8e38ad84743a3869f1d1275e441c43eb5d32a27b07336908adb7d937a76"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-022.png",
+      "sha256": "5d10a5536d25d4ad6733714d8720b6bb97c20b345a04b7f8ab3c885883dd1ce3"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-000.png",
+      "sha256": "5d9ea084aa2e016103e9046a6401fea55d3b09ec2fdf1a75f381bcf582756af0"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-001.png",
+      "sha256": "56b9a1f6dac6ea7ee846fa7101dd296779328de777fccb988f8b63398d6517c4"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-002.png",
+      "sha256": "c946837909897fe2f3baa36f49dae892b5cf8bb7f61f59088f97697680bcf1a7"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-003.png",
+      "sha256": "5905ce3ff14f98344c0b65411d7cdb2915db609b338d3698339700872e1bf78c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-004.png",
+      "sha256": "08660307db3ac8e30dce9c9a16f853d20ad30d693d88814e8e602b301ff29bf6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-005.png",
+      "sha256": "62da2296a0f3ac5af3eca6e6d0bf5a0fcf73326fb78d4e99d448523b5e82c767"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-006.png",
+      "sha256": "aebcdacbdcd3928065cf62e163c2491df4b7c4528c937e7bd89fc2b038e6e738"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-007.png",
+      "sha256": "2a7d70269c87378af5d87a93923b22b3ff05a62a43f7bc77d351c06457a0a4e6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-008.png",
+      "sha256": "8ac109ac96a7410289db2d7437ca6bd553427594713c8348e2f3ebda4782af1a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-009.png",
+      "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-010.png",
+      "sha256": "a56a05b5c28af4806667587da42d254102e518fc6636a605b587bd17f74e2554"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-011.png",
+      "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-012.png",
+      "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-013.png",
+      "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-014.png",
+      "sha256": "666fc037637654a1ee4cf346c2bfb149f2774641dfd7e02aa7368e8897bd3a16"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-015.png",
+      "sha256": "6b97a58b484b65bfa6a11f89dd772086091f2394b031b490890687d723cec83a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-016.png",
+      "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-017.png",
+      "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-018.png",
+      "sha256": "83e606ba0cc56de6cb69d0a8174d88ee79b7f7d3dca7e79515fe5ac873d43a76"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-019.png",
+      "sha256": "eb6fe5bbdd9ba34f984b8797981a1829ce2978b05900af7dc54017b329dda4e5"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-020.png",
+      "sha256": "a18a376602502d1295e45c1b3c0adc5fc08556c7b56673bdc7497a0dbb4b0d68"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-000.png",
+      "sha256": "70475f4013eaf13c5ffcd808bfc3a78250cc297947d353081d3f2f23b1cf1fe3"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-001.png",
+      "sha256": "12d40f8b520339d58d1f259988ddd0ba0f51f35dcd0276cbf5061cfa4286678f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-002.png",
+      "sha256": "83144cb02e7d05e26d0f0afa2742bc62eef65d36de1db236501ebdc73f0faf6e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-003.png",
+      "sha256": "73b39f6347700fb9afeca1de49c511ebbf31f9305a0343b1ed33d1a814847dd0"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-004.png",
+      "sha256": "930c6cf47d5f273a992a69af13a121e84cd7e46aa0fc0516efc53fd66ace95c5"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-005.png",
+      "sha256": "cbfa24cf7ce6692bf9b7472c3238bc0e2db2b41a62caeb2ca6c9807d09c5007e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_nomal/cell-004.png",
+      "sha256": "d706516c6cafd1f3c1a583d234cf1bc61b103a74b3bbd1bb3262e0a14e9c8098"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_nomal/cell-005.png",
+      "sha256": "ae69665e7fe11cb4044507c1a4ad25727fbd50671589fbd7212049ba7c8759bb"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-000.png",
+      "sha256": "9ce5e8c1a51797db305a74cca9c051297dc91b17d08dcfa5e364932c392902ad"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-001.png",
+      "sha256": "5464e9ced947eed415bb016173c0e19f2c70a2c555f3d46e1c88e95e408587be"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-002.png",
+      "sha256": "de29c551419b2967d898c8b19247bae0f356326590ff2604bbe5d222a5c87d89"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-003.png",
+      "sha256": "225d4e2662e47a37d23bc0c24a304112218a67537a4e7efb5b73c3f3b1b970f5"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-004.png",
+      "sha256": "d706516c6cafd1f3c1a583d234cf1bc61b103a74b3bbd1bb3262e0a14e9c8098"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-005.png",
+      "sha256": "ae69665e7fe11cb4044507c1a4ad25727fbd50671589fbd7212049ba7c8759bb"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-000.png",
+      "sha256": "766af17c8ed13ea347fd0905ef63a678d15725c5c60dd68f8bfbc8addeec2649"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-001.png",
+      "sha256": "44f8be50fef313958086e2c9f55f9383130575f33cbc8060856014604b5df5ae"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-002.png",
+      "sha256": "528ba812ed6ddd31e364aa73ae02c45d2918326dacbda8be158bc15b44fe2eea"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-003.png",
+      "sha256": "2ca109189271ab16ce9f616e4439804ec1042c047e13b68ad5eee5f5ec464092"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-004.png",
+      "sha256": "d706516c6cafd1f3c1a583d234cf1bc61b103a74b3bbd1bb3262e0a14e9c8098"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-005.png",
+      "sha256": "ae69665e7fe11cb4044507c1a4ad25727fbd50671589fbd7212049ba7c8759bb"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-000.png",
+      "sha256": "e92b2ab29a9ae73a514c83b27ead810d25da0d6e6a6895d41e843fac6cba19ff"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-001.png",
+      "sha256": "37f996a7abfb673392e3b0bee47fbcf2a62e410dc51e9a3a248b00e7ca4dce01"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-002.png",
+      "sha256": "011cabd21e1033c843f2393ea937bd53851c9108dc65a94adcd300a775ea90f6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-003.png",
+      "sha256": "5905ce3ff14f98344c0b65411d7cdb2915db609b338d3698339700872e1bf78c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-004.png",
+      "sha256": "08660307db3ac8e30dce9c9a16f853d20ad30d693d88814e8e602b301ff29bf6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-005.png",
+      "sha256": "62da2296a0f3ac5af3eca6e6d0bf5a0fcf73326fb78d4e99d448523b5e82c767"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-006.png",
+      "sha256": "aebcdacbdcd3928065cf62e163c2491df4b7c4528c937e7bd89fc2b038e6e738"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-007.png",
+      "sha256": "2a7d70269c87378af5d87a93923b22b3ff05a62a43f7bc77d351c06457a0a4e6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-008.png",
+      "sha256": "8ac109ac96a7410289db2d7437ca6bd553427594713c8348e2f3ebda4782af1a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-009.png",
+      "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-010.png",
+      "sha256": "a56a05b5c28af4806667587da42d254102e518fc6636a605b587bd17f74e2554"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-011.png",
+      "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-012.png",
+      "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-013.png",
+      "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-014.png",
+      "sha256": "666fc037637654a1ee4cf346c2bfb149f2774641dfd7e02aa7368e8897bd3a16"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-015.png",
+      "sha256": "6b97a58b484b65bfa6a11f89dd772086091f2394b031b490890687d723cec83a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-016.png",
+      "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-017.png",
+      "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-018.png",
+      "sha256": "83e606ba0cc56de6cb69d0a8174d88ee79b7f7d3dca7e79515fe5ac873d43a76"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-019.png",
+      "sha256": "eb6fe5bbdd9ba34f984b8797981a1829ce2978b05900af7dc54017b329dda4e5"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-020.png",
+      "sha256": "a18a376602502d1295e45c1b3c0adc5fc08556c7b56673bdc7497a0dbb4b0d68"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-000.png",
+      "sha256": "f11895b091145a7aa652d3d77cd50ccbd58617751965c2a5118cd8257825586c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-001.png",
+      "sha256": "69522d2860ad55efdc33790940e13b00b684faa556d96c2201ebeb1b45e3ff44"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-002.png",
+      "sha256": "5e41ca92f3b6e760f77ad3efa98ef7a7e5d79098c612c840b5a1bfa7942ffdff"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-003.png",
+      "sha256": "90920107aed9309feeb80b2a72e36b50eec160d59e80c33e43d190838e8d56ad"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-004.png",
+      "sha256": "a70abb8a47eb74d87f91a56c620487d918041b1e770c29960b90c5c510ad9130"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-005.png",
+      "sha256": "07d717d1c6f7623cc742fe97f4b5cd6b3868c78a91c0bc6343ae5f41ab97204c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-006.png",
+      "sha256": "4e13f0190f190a3eeea6eafbd3f2a3106c22f870e3fff035929ef7b3ba6e62db"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-007.png",
+      "sha256": "a0aff83c2f0a2ccb07be053deae7e753e10d78f3e3365c772768681414c5d65d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-008.png",
+      "sha256": "5b6f42939802c671acc165b140d0886b5c694cad787c05147faef121ffbf190d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-009.png",
+      "sha256": "a0efd9010dc3ed68b44b0b98b6b10e15e6591d51e76e29fdee76c8c20201872f"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-010.png",
+      "sha256": "7fcea3a72943bcd5094e25a2f7fc04d6f12989af8e0b1668e11b03c0ddfaaea2"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-011.png",
+      "sha256": "ae34d7a038efc5d13809a63ae2e1f03fb22347424b77103d74a5f43234b6a05d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-012.png",
+      "sha256": "c29951a0ff0426e3e2400cb1194e8e2a5369037dde0d45424c5ae71d2df020da"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-013.png",
+      "sha256": "aafd8d6c73ffedd007f175175682799d890eaade4e7055aa2b9927af72724bcc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-014.png",
+      "sha256": "ea66ba240c8fe586002317ff7961e7e549f1f6f19cec8b39490751c301200088"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-015.png",
+      "sha256": "5ae738b80112e5ada3254500e41df8cd0f2208abeef1083402ea04db47336863"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-016.png",
+      "sha256": "e7f3235b06c98eb20a064e45412c7b70a23b62b1e2d4df352656d1c2ddcb22e1"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-017.png",
+      "sha256": "8934fbbd47da9630891e87104cedac23f359a98cacb66145cea923982e26d764"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-018.png",
+      "sha256": "ea66ba240c8fe586002317ff7961e7e549f1f6f19cec8b39490751c301200088"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-019.png",
+      "sha256": "5ae738b80112e5ada3254500e41df8cd0f2208abeef1083402ea04db47336863"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-020.png",
+      "sha256": "e7f3235b06c98eb20a064e45412c7b70a23b62b1e2d4df352656d1c2ddcb22e1"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-021.png",
+      "sha256": "ea66ba240c8fe586002317ff7961e7e549f1f6f19cec8b39490751c301200088"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-022.png",
+      "sha256": "5ae738b80112e5ada3254500e41df8cd0f2208abeef1083402ea04db47336863"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-023.png",
+      "sha256": "e7f3235b06c98eb20a064e45412c7b70a23b62b1e2d4df352656d1c2ddcb22e1"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-024.png",
+      "sha256": "e41cdd67523b84e04cfbdacfb0e4a7dab4d6c14af18f19b7fba82f75c5438feb"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-025.png",
+      "sha256": "b9114b8944fc63859e3ecc7750738681868370fb2bd9224e190a8fffe48744dd"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-026.png",
+      "sha256": "945d587ef9c3510974b23d48ff7165f5127bb6ecab08dbbe4668d804e89b7ca6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-027.png",
+      "sha256": "a5db2a80575523dfb3495bb9fb7a33e10b9be090bd8f9dbf820b9fc5f0b3b37d"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-028.png",
+      "sha256": "ad64dcf125c82ef323c293055fdd90e430fd8aa1c47e528ca066bdf14a747509"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-029.png",
+      "sha256": "945d587ef9c3510974b23d48ff7165f5127bb6ecab08dbbe4668d804e89b7ca6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-030.png",
+      "sha256": "b93a76223c4323c8a274196975e1935653e1b555c3d93227a15ba3ad996b744a"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-031.png",
+      "sha256": "2256acacfa18a6ac05289317ff3a85c29dad93d4f6dfa3c5e7bf0d4d9e4471cd"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-032.png",
+      "sha256": "f47154e46655baeb298d6a0cd8e9d5813e95db64953302ec1c09718b8526c998"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-033.png",
+      "sha256": "352908df83ffdfd41faa5f20b6c274732c6ae2b14a7b43127e952522469e138c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-034.png",
+      "sha256": "9c719b1349e82a94aa2fbac12ba4e72d5dd048f2fc8cd300ae8e6f789b76910c"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-035.png",
+      "sha256": "2e9ac30d93ed00a1d1433fb64b78ebdc345d9ae00bd302531b516706dd38feb6"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-036.png",
+      "sha256": "6e464c6fd46ce45457a7ece4d17691359a52cdac100e170fe54cd23e6153cc47"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-144.png",
+      "sha256": "88eac362a00cdced788857b97cb5c9b6921fdf585e201e2ac973d451546f34fc"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-145.png",
+      "sha256": "b3bfc331f92b24d037a47aa90ab405dcfc286ce22da91d581fbfd622777830de"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-146.png",
+      "sha256": "4a13204df27a191c721ee265a3fddd47717dc9abed9956f5ab6f2f94454bdecd"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-147.png",
+      "sha256": "544e297cad9be425d5f432edf10383ea665eecd1d3e7ca9c75f9236d06609210"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-148.png",
+      "sha256": "17a72575bb74d697e06f798010104f933f76aabc44bb35985d75c877dcd38953"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-149.png",
+      "sha256": "15a2f6731352730a3344430f6471c791c387c78f84987679e0b3ba7a425ffaab"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-150.png",
+      "sha256": "bfa3fbeca693f5c4ead18375939359c02c32f7edc65e92edc3715d28322ce04b"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-151.png",
+      "sha256": "d589b958b31f5bd78d303e32fc5a1575a8ad78cbfe01da97b2fc437239121984"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-152.png",
+      "sha256": "de2b5780440a0cf8e4e45b5f72a92c54628efaa2a01f1d6fa58f89f85afc33b5"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-153.png",
+      "sha256": "b14dfa02dd6fe1f6abb3080871515e4a51109b443244282dd4ba1333588c41a5"
+    },
+    {
+      "path": "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-154.png",
+      "sha256": "85a1f16f330fc08564bef192f2f596594055ff8ed8a7b7dfefd8a6d8f784ac11"
+    },
+    {
       "path": "assets/production/medal-name-corrections-20261014/manifest.json",
       "sha256": "29b5b08e1ecb68dcc0991fe036395da8bdceda53864fd383ed477775202ab10a"
     },
@@ -111868,10 +113128,6 @@
     {
       "path": "assets/production/original-music-r1/manifest.json",
       "sha256": "1785d8119fd44dbc63fe2e984c24b78d7489d23f46eb110a722d5da70ecd82a2"
-    },
-    {
-      "path": "assets/production/original-ui-intake-20261007/care/manifest.json",
-      "sha256": "49c006667b7016f3a748873ca92df893f42c29fb13ed5b4701b6cf5eeb61e8ae"
     },
     {
       "path": "assets/production/original-ui-intake-20261007/database/cell-000.png",
@@ -112550,6 +113806,280 @@
       "sha256": "a11dd5c9b8b5ddee9c81e4c7f1ecbcc83d6dd9a3b74f14957cf9e74d1b0a6030"
     },
     {
+      "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
+      "sha256": "92b5f7704e9c5eed9de99d4b4dde744c39b71fb81e176f7915aa7871ef47776e"
+    },
+    {
+      "path": "assets/production/public-runtime/battle-audio.render.v1.json",
+      "sha256": "98d24b4c5f371aa29f3344fd33f050c7a46ba97f183a13c4c8dfff5e6b04fa3f",
+      "jsonFields": [
+        "schemaVersion",
+        "kind",
+        "assetId",
+        "image",
+        "cells",
+        "banks",
+        "sounds",
+        "timing",
+        "blend",
+        "pixelsPerNativePixel",
+        "localizedText",
+        "schema",
+        "bankId",
+        "sequences",
+        "selection",
+        "source",
+        "sets",
+        "zh-Hant",
+        "ja",
+        "en",
+        "family",
+        "itemIndex",
+        "id",
+        "playbackMode",
+        "loopStartFrame",
+        "frames",
+        "cell",
+        "ticks",
+        "durationTicks",
+        "totalTicks",
+        "src",
+        "sha256",
+        "width",
+        "height",
+        "scaleMode",
+        "origin",
+        "frame",
+        "blank",
+        "rgbaSha256",
+        "rasterWidth",
+        "rasterHeight",
+        "displayScale",
+        "art",
+        "soundId",
+        "channels",
+        "sampleRate",
+        "sampleFrames",
+        "loop"
+      ]
+    },
+    {
+      "path": "assets/production/public-runtime/battle-effects.render.v1.json",
+      "sha256": "50bfda1b33cb6761318076ca88719cfadf9a05e1f6d52bf5b0faf55a6e8b41b6",
+      "jsonFields": [
+        "schemaVersion",
+        "kind",
+        "assetId",
+        "image",
+        "cells",
+        "banks",
+        "sounds",
+        "timing",
+        "blend",
+        "pixelsPerNativePixel",
+        "localizedText",
+        "schema",
+        "bankId",
+        "sequences",
+        "selection",
+        "source",
+        "sets",
+        "zh-Hant",
+        "ja",
+        "en",
+        "family",
+        "itemIndex",
+        "id",
+        "playbackMode",
+        "loopStartFrame",
+        "frames",
+        "cell",
+        "ticks",
+        "durationTicks",
+        "totalTicks",
+        "src",
+        "sha256",
+        "width",
+        "height",
+        "scaleMode",
+        "origin",
+        "frame",
+        "blank",
+        "rgbaSha256",
+        "rasterWidth",
+        "rasterHeight",
+        "displayScale",
+        "art",
+        "soundId",
+        "channels",
+        "sampleRate",
+        "sampleFrames",
+        "loop"
+      ]
+    },
+    {
+      "path": "assets/production/public-runtime/hunt-feedback.render.v1.json",
+      "sha256": "b8bd1f823511a21f26953343a79647e982d59f0eb85793ca98ac7ac69e539e72",
+      "jsonFields": [
+        "schemaVersion",
+        "kind",
+        "assetId",
+        "image",
+        "cells",
+        "banks",
+        "sounds",
+        "timing",
+        "blend",
+        "pixelsPerNativePixel",
+        "localizedText",
+        "schema",
+        "bankId",
+        "sequences",
+        "selection",
+        "source",
+        "sets",
+        "zh-Hant",
+        "ja",
+        "en",
+        "family",
+        "itemIndex",
+        "id",
+        "playbackMode",
+        "loopStartFrame",
+        "frames",
+        "cell",
+        "ticks",
+        "durationTicks",
+        "totalTicks",
+        "src",
+        "sha256",
+        "width",
+        "height",
+        "scaleMode",
+        "origin",
+        "frame",
+        "blank",
+        "rgbaSha256",
+        "rasterWidth",
+        "rasterHeight",
+        "displayScale",
+        "art",
+        "soundId",
+        "channels",
+        "sampleRate",
+        "sampleFrames",
+        "loop"
+      ]
+    },
+    {
+      "path": "assets/production/public-runtime/raising-feedback.render.v1.json",
+      "sha256": "0117557917ec500cc9a8c7f8c5167b5c79cc25059dec8df07cba7d8e4891a23a",
+      "jsonFields": [
+        "schemaVersion",
+        "kind",
+        "assetId",
+        "image",
+        "cells",
+        "banks",
+        "sounds",
+        "timing",
+        "blend",
+        "pixelsPerNativePixel",
+        "localizedText",
+        "schema",
+        "bankId",
+        "sequences",
+        "selection",
+        "source",
+        "sets",
+        "zh-Hant",
+        "ja",
+        "en",
+        "family",
+        "itemIndex",
+        "id",
+        "playbackMode",
+        "loopStartFrame",
+        "frames",
+        "cell",
+        "ticks",
+        "durationTicks",
+        "totalTicks",
+        "src",
+        "sha256",
+        "width",
+        "height",
+        "scaleMode",
+        "origin",
+        "frame",
+        "blank",
+        "rgbaSha256",
+        "rasterWidth",
+        "rasterHeight",
+        "displayScale",
+        "art",
+        "soundId",
+        "channels",
+        "sampleRate",
+        "sampleFrames",
+        "loop"
+      ]
+    },
+    {
+      "path": "assets/production/public-runtime/shared-vfx.render.v1.json",
+      "sha256": "2ad6378d344c320c04d14a6070583f136febd9134f64b84923f79f5e1519c4ba",
+      "jsonFields": [
+        "schemaVersion",
+        "kind",
+        "assetId",
+        "image",
+        "cells",
+        "banks",
+        "sounds",
+        "timing",
+        "blend",
+        "pixelsPerNativePixel",
+        "localizedText",
+        "schema",
+        "bankId",
+        "sequences",
+        "selection",
+        "source",
+        "sets",
+        "zh-Hant",
+        "ja",
+        "en",
+        "family",
+        "itemIndex",
+        "id",
+        "playbackMode",
+        "loopStartFrame",
+        "frames",
+        "cell",
+        "ticks",
+        "durationTicks",
+        "totalTicks",
+        "src",
+        "sha256",
+        "width",
+        "height",
+        "scaleMode",
+        "origin",
+        "frame",
+        "blank",
+        "rgbaSha256",
+        "rasterWidth",
+        "rasterHeight",
+        "displayScale",
+        "art",
+        "soundId",
+        "channels",
+        "sampleRate",
+        "sampleFrames",
+        "loop"
+      ]
+    },
+    {
       "path": "assets/production/public-runtime/shop-cage-thumbnails.v1.json",
       "sha256": "d049241e1a2177cee5f31baf8a606b5184fccabe3679841c5a29982002bd7098",
       "jsonFields": [
@@ -112951,20 +114481,20 @@
       "sha256": "8b28839ad0e910a78cbfbd457ae0f73ed0ec5439e530188a34ad39a7f81b8add"
     },
     {
-      "path": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
-      "sha256": "c9ecb319c8ff83f5e236d6e1495b26a071f89727441c5fdbd190ad5123bb0034"
-    },
-    {
-      "path": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
-      "sha256": "8144f3df78fc748ea492c61ab77e0bc1f6da8c12a82c46980cb05937387f7df4"
-    },
-    {
       "path": "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.glb",
       "sha256": "703ce76be930ab7bb0618c42aa6185b2ae344ea63099b9cc533130a00c403a7b"
     },
     {
       "path": "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.png",
       "sha256": "fdc12aacc071a2f1458877d361595d5700aba115b393d1127ecd3b136ea492bc"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
+      "sha256": "c9ecb319c8ff83f5e236d6e1495b26a071f89727441c5fdbd190ad5123bb0034"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
+      "sha256": "8144f3df78fc748ea492c61ab77e0bc1f6da8c12a82c46980cb05937387f7df4"
     },
     {
       "path": "assets/production/vfx/licensed-runtime-v1/battle/critup/critup.glb",
@@ -113023,6 +114553,14 @@
       "sha256": "3206af081f636bc8e3569f7a449e41c9032ff50562c4e433657e10f71abc6ff1"
     },
     {
+      "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
+      "sha256": "79e708a16bcbd3c5df0ca5a5cdc03a9a0a6024a487673f61c02a459b05f18d02"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
+      "sha256": "5e4641ef0731f62ec2d44a7076457e29bcb1d0d1ea8a2f7e86cd6a9f3f809621"
+    },
+    {
       "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hitmark.png",
       "sha256": "b65c00106eb65e79745538572cc1dd4a8338b633b0a7be9ab1a4afece02da763"
     },
@@ -113037,14 +114575,6 @@
     {
       "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/new1.png",
       "sha256": "4a491ed0096631c28affa4742b1a2a3791ceac597862dadbf830a4a8cde59f84"
-    },
-    {
-      "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
-      "sha256": "79e708a16bcbd3c5df0ca5a5cdc03a9a0a6024a487673f61c02a459b05f18d02"
-    },
-    {
-      "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
-      "sha256": "5e4641ef0731f62ec2d44a7076457e29bcb1d0d1ea8a2f7e86cd6a9f3f809621"
     },
     {
       "path": "assets/production/vfx/licensed-runtime-v1/battle/s_impact_b/ip_circle.png",
@@ -113103,20 +114633,20 @@
       "sha256": "cae56317ef555af59c105d905af887348c0b88bb0880bf7d966352f5bb4cf53d"
     },
     {
-      "path": "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
-      "sha256": "c607d1033cfddca39d4a03b5e51cf93cd79d30de1748824b4f49a4c38268ef13"
-    },
-    {
       "path": "assets/production/vfx/licensed-runtime-v1/common/mist/mist_eff.png",
       "sha256": "6bb310d51570d446082edc8acef8a94a693a9d4b7b6c28147320840e4b21f53d"
     },
     {
-      "path": "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
-      "sha256": "4ebc766b968c7b17dc097b1f7566212134346d768ed17dcd840e11f4fe4b6294"
+      "path": "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
+      "sha256": "c607d1033cfddca39d4a03b5e51cf93cd79d30de1748824b4f49a4c38268ef13"
     },
     {
       "path": "assets/production/vfx/licensed-runtime-v1/common/rain/rain_eff.png",
       "sha256": "5eb28a78831fee5e8f83a44ed35d93c245e04b38d8aa48cc5207b56dca6bdc8e"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
+      "sha256": "4ebc766b968c7b17dc097b1f7566212134346d768ed17dcd840e11f4fe4b6294"
     },
     {
       "path": "assets/production/vfx/licensed-runtime-v1/common/sandstome/sand_eff.png",
@@ -113127,20 +114657,20 @@
       "sha256": "9ec983f0f7b8b3ac77f1734a5931ace55bbb8998b291e7d12a7f62225b30a38e"
     },
     {
-      "path": "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
-      "sha256": "2a4434d8f50dcf1c4bca9ad8e9cf1ec31380a5f23973fa83d6ae3a4c60882ea1"
-    },
-    {
       "path": "assets/production/vfx/licensed-runtime-v1/common/snow/snow_eff.png",
       "sha256": "bdf6ea83bd6110d82a1c1b18922efef62626a8d3515d187b27aa21d8423b019e"
     },
     {
-      "path": "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
-      "sha256": "9ec4556ebe1d91cf78eccdc8ec60629dbdbb3292f760fcd09dff24be233b96d3"
+      "path": "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
+      "sha256": "2a4434d8f50dcf1c4bca9ad8e9cf1ec31380a5f23973fa83d6ae3a4c60882ea1"
     },
     {
       "path": "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome_eff.png",
       "sha256": "6972369b5153792d62af2f475a5bc833146a31f2ea451baaf27dc4e48a6423bc"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
+      "sha256": "9ec4556ebe1d91cf78eccdc8ec60629dbdbb3292f760fcd09dff24be233b96d3"
     },
     {
       "path": "assets/production/vfx/licensed-runtime-v1/common/spark/m_spark_eff.png",
@@ -113163,12 +114693,12 @@
       "sha256": "f80e1b07c7a9950f7d2ead83ab2fab176b777cc71f4ac37eeb99134564238129"
     },
     {
-      "path": "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
-      "sha256": "cb1d2d276e3d8f9a3bcce981f01a6c291c491e0eed67951ec3e4bac499a8f997"
-    },
-    {
       "path": "assets/production/vfx/licensed-runtime-v1/common/wind/wind_eff.png",
       "sha256": "4165afd3ac3e165958ae406d4dfca6b2aa49d665ae16ca633f9a683211108d8a"
+    },
+    {
+      "path": "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
+      "sha256": "cb1d2d276e3d8f9a3bcce981f01a6c291c491e0eed67951ec3e4bac499a8f997"
     },
     {
       "path": "assets/production/vfx/licensed-runtime-v1/manifest.json",
@@ -113187,20 +114717,64 @@
       "sha256": "992850bf24b0594b727ba2a45e2d484d8277e3c31e8bf48ae6af67b7f5f985a0"
     },
     {
-      "path": "assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json",
-      "sha256": "eb64b9790addceffd87638cd024bbe338953547f80ef84b0f01973dfcefe46ea"
+      "path": "assets/production/vfx/original-shared-review-v1/text-en.png",
+      "sha256": "c73848c392baa1d61a920fb7b2db4ce01056550c8829416e6c01e7280a3da436"
+    },
+    {
+      "path": "assets/production/vfx/original-shared-review-v1/text-ja.png",
+      "sha256": "b507a807759c972c8164d6c2c05836e09d7bb58142f56b46461f2347dcd09c8f"
+    },
+    {
+      "path": "assets/production/vfx/original-shared-review-v1/text-zh-Hant.png",
+      "sha256": "6ef0d9aaf695ef300ae2f11e2b984aa91866aad35e07303b518737259da9f884"
     },
     {
       "path": "championship.html",
       "sha256": "8b81aca51a1524bfda8453b7d95ad18d3d9e71a099c84822af7e9b3b50eed7e5"
     },
     {
-      "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
-      "sha256": "1ad2094b2c2ca1fb5aeef9bec63f5aa29f4f7e7a74a576f49e63734ffcaf03c9"
+      "path": "docs/contracts/championship/battle-economy-runtime.v1.json",
+      "sha256": "ed97f14b226d22b322873971ce178f4bfc0da15cf09c58de272a273fa5c7207f"
+    },
+    {
+      "path": "docs/contracts/championship/battle-effect-pool.v1.json",
+      "sha256": "9931053ed06ca2a76a12a81d5103a2b5642f03900b6ef909664f2b8f07e5561d"
+    },
+    {
+      "path": "docs/contracts/championship/battle-field-presentation.v1.json",
+      "sha256": "d80ed00c964928da89345b949ed29602631b7d1ffaa3b5c25b016570b5a46251"
+    },
+    {
+      "path": "docs/contracts/championship/battle-hit-recovery.v1.json",
+      "sha256": "9c017f10110d54f51d7d9bc029daff292e8866b299e696ce9ad7bed41f967344"
+    },
+    {
+      "path": "docs/contracts/championship/battle-impact-continuation.v1.json",
+      "sha256": "c0e14a96cf530f72693940c7d17215e827d643a7507505556190fb17bc814ef8"
+    },
+    {
+      "path": "docs/contracts/championship/battle-native-lifecycle.v1.json",
+      "sha256": "488c2d234c156335729641a65c95e04b91afbc1384b4e0f0260492da3abae877"
+    },
+    {
+      "path": "docs/contracts/championship/battle-normal-flow.v1.json",
+      "sha256": "90d48482b930fc6abc3eb807ad59a866c2f37595f6d384e3c85fc0c7a429f644"
+    },
+    {
+      "path": "docs/contracts/championship/battle-original-effect-preview.v1.json",
+      "sha256": "32600929fe12c3a9f23bbb8e4e7ba637b0ea979f0aafb3ac31f32ecf990f4f81"
+    },
+    {
+      "path": "docs/contracts/championship/battle-player-roster.v1.json",
+      "sha256": "769e16c0b9710eb024f50e6596ef798869106b8d655d534a622a48c9723e3d20"
     },
     {
       "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTER_ANIMATION.v1.json",
       "sha256": "bb34aee3d99dd6b4f80d3e83ab80142d58a7f37fe287f5f09fb9660a4469d811"
+    },
+    {
+      "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
+      "sha256": "1ad2094b2c2ca1fb5aeef9bec63f5aa29f4f7e7a74a576f49e63734ffcaf03c9"
     },
     {
       "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_WEATHER_VFX_EVENTS.v1.json",
@@ -113243,6 +114817,22 @@
       "sha256": "ad5a9285baa66419efdc3df6ec3f2b1afae8c6611af12ded8d8b47e64a3aaa41"
     },
     {
+      "path": "docs/contracts/championship/championship-save-envelope.v2.json",
+      "sha256": "1676d599ddd7b77d80826b8f9bbcd6145536554291b5d6d00a849c503176332e"
+    },
+    {
+      "path": "docs/contracts/championship/championship-save-envelope.v3.json",
+      "sha256": "5ebc4dfb76adbf393b2137039698c10e08b581286db723913fc26362c68dc303"
+    },
+    {
+      "path": "docs/contracts/championship/championship-save-envelope.v4.json",
+      "sha256": "e214c047918ae6caffd2b87e51187e56a72f9fa25051f4097050cb3df52a1fde"
+    },
+    {
+      "path": "docs/contracts/championship/championship-save-envelope.v5.json",
+      "sha256": "03b72167f544821736aaa7bd36cabb8f64dc228e45b5f0efb87b20f9767245f3"
+    },
+    {
       "path": "docs/contracts/championship/HUNT_CAPTURE_DATAFLOW.v1.json",
       "sha256": "7ee232ab3c30d781f1b437681daf7c0e7aabc4b9ae7fbf64f6b6f42c70eea24c"
     },
@@ -113283,6 +114873,14 @@
       "sha256": "2b2737b13f3cc6e87d4cac362b30b37a223bc6948422d53b39d85bf0fa643332"
     },
     {
+      "path": "docs/contracts/championship/raising-home-presentation.v1.json",
+      "sha256": "31bfef5e17bf7e8872c0246c7cca51a6512f0384201e238d2fca4bfa271eaa1b"
+    },
+    {
+      "path": "docs/contracts/championship/raising-instance-identity.v1.json",
+      "sha256": "6c0b1fc0281a011300a6c295f6db6923b0f2dce5f814061c942faf3557d4b583"
+    },
+    {
       "path": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
       "sha256": "d595386c31b7ce5b1eac0bf2035705392f27dd1cecab82e036d3c5e0ae4490cb"
     },
@@ -113297,66 +114895,6 @@
     {
       "path": "docs/contracts/championship/VS3_HUNT_INPUT_CAPTURE_BOUNDARY.v1.json",
       "sha256": "9014531cd0be0b7c6fff634cad4fa75257bdb9b46e03c7c137650c27aecc6b51"
-    },
-    {
-      "path": "docs/contracts/championship/battle-economy-runtime.v1.json",
-      "sha256": "ed97f14b226d22b322873971ce178f4bfc0da15cf09c58de272a273fa5c7207f"
-    },
-    {
-      "path": "docs/contracts/championship/battle-effect-pool.v1.json",
-      "sha256": "9931053ed06ca2a76a12a81d5103a2b5642f03900b6ef909664f2b8f07e5561d"
-    },
-    {
-      "path": "docs/contracts/championship/battle-field-presentation.v1.json",
-      "sha256": "d80ed00c964928da89345b949ed29602631b7d1ffaa3b5c25b016570b5a46251"
-    },
-    {
-      "path": "docs/contracts/championship/battle-hit-recovery.v1.json",
-      "sha256": "9c017f10110d54f51d7d9bc029daff292e8866b299e696ce9ad7bed41f967344"
-    },
-    {
-      "path": "docs/contracts/championship/battle-impact-continuation.v1.json",
-      "sha256": "c0e14a96cf530f72693940c7d17215e827d643a7507505556190fb17bc814ef8"
-    },
-    {
-      "path": "docs/contracts/championship/battle-native-lifecycle.v1.json",
-      "sha256": "488c2d234c156335729641a65c95e04b91afbc1384b4e0f0260492da3abae877"
-    },
-    {
-      "path": "docs/contracts/championship/battle-normal-flow.v1.json",
-      "sha256": "90d48482b930fc6abc3eb807ad59a866c2f37595f6d384e3c85fc0c7a429f644"
-    },
-    {
-      "path": "docs/contracts/championship/battle-original-effect-preview.v1.json",
-      "sha256": "32600929fe12c3a9f23bbb8e4e7ba637b0ea979f0aafb3ac31f32ecf990f4f81"
-    },
-    {
-      "path": "docs/contracts/championship/battle-player-roster.v1.json",
-      "sha256": "769e16c0b9710eb024f50e6596ef798869106b8d655d534a622a48c9723e3d20"
-    },
-    {
-      "path": "docs/contracts/championship/championship-save-envelope.v2.json",
-      "sha256": "1676d599ddd7b77d80826b8f9bbcd6145536554291b5d6d00a849c503176332e"
-    },
-    {
-      "path": "docs/contracts/championship/championship-save-envelope.v3.json",
-      "sha256": "5ebc4dfb76adbf393b2137039698c10e08b581286db723913fc26362c68dc303"
-    },
-    {
-      "path": "docs/contracts/championship/championship-save-envelope.v4.json",
-      "sha256": "e214c047918ae6caffd2b87e51187e56a72f9fa25051f4097050cb3df52a1fde"
-    },
-    {
-      "path": "docs/contracts/championship/championship-save-envelope.v5.json",
-      "sha256": "03b72167f544821736aaa7bd36cabb8f64dc228e45b5f0efb87b20f9767245f3"
-    },
-    {
-      "path": "docs/contracts/championship/raising-home-presentation.v1.json",
-      "sha256": "31bfef5e17bf7e8872c0246c7cca51a6512f0384201e238d2fca4bfa271eaa1b"
-    },
-    {
-      "path": "docs/contracts/championship/raising-instance-identity.v1.json",
-      "sha256": "6c0b1fc0281a011300a6c295f6db6923b0f2dce5f814061c942faf3557d4b583"
     },
     {
       "path": "docs/contracts/championship/world-clock-runtime.v1.json",
@@ -113385,10 +114923,6 @@
     {
       "path": "node_modules/three/examples/jsm/utils/SkeletonUtils.js",
       "sha256": "b1632a703206c3d830de9fcbe515696770d04b71a15ee6b50afa6d2c3298c86f"
-    },
-    {
-      "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-      "sha256": "165912a541e507db570f7c630baefd4913fe20699eb150d9f5fe98ef7917b6e3"
     },
     {
       "path": "src/championship/app/alternateFormQaDiagnostics.js",
@@ -113433,6 +114967,10 @@
     {
       "path": "src/championship/app/championshipClockDriver.js",
       "sha256": "bf06f2d0758338711b1fe1985ee70085781076073ebf3dc550735c4de8c46c80"
+    },
+    {
+      "path": "src/championship/app/ChampionshipPersistentSavePort.js",
+      "sha256": "165912a541e507db570f7c630baefd4913fe20699eb150d9f5fe98ef7917b6e3"
     },
     {
       "path": "src/championship/app/championshipRaisingProduction.js",
@@ -113519,10 +115057,6 @@
       "sha256": "5475fd905537cddb001fe2bfd91a20f36baa7a23d8def934c41af30858730413"
     },
     {
-      "path": "src/championship/app/intRh2Styles.css",
-      "sha256": "da3322b2b2d18bc602ba91686c6dd76d918c518ddbd4a2003e56d64625ee23d0"
-    },
-    {
       "path": "src/championship/app/interactiveTutorial.css",
       "sha256": "213a6871cf9929d462a03706c50d101e9c21b5e59efcfca91d1cd9a8aeefe22f"
     },
@@ -113545,6 +115079,10 @@
     {
       "path": "src/championship/app/interactiveTutorialRaisingSteps.js",
       "sha256": "b02d6a8d7f7f4ebdce51d658ef34e35cd8de7c001c6a3383476bbb220bfb8884"
+    },
+    {
+      "path": "src/championship/app/intRh2Styles.css",
+      "sha256": "da3322b2b2d18bc602ba91686c6dd76d918c518ddbd4a2003e56d64625ee23d0"
     },
     {
       "path": "src/championship/app/loadProgress.js",
@@ -114344,7 +115882,7 @@
     },
     {
       "path": "src/championship/presentation/battleAudioPresentation.js",
-      "sha256": "9464331d6caa3795e37829874afe8cf6629d111aa07660bf9ffde5868d13e97e"
+      "sha256": "751c0f598b7a9de7062b9d392d7af2574f27f41e0350fc83199953cbb1f16737"
     },
     {
       "path": "src/championship/presentation/battleCharacterAction.js",
@@ -114352,7 +115890,7 @@
     },
     {
       "path": "src/championship/presentation/battleEffectArt.js",
-      "sha256": "f80922cd6e4c5794f4031f211bc39bf71e57e32bfdac4e13d823a73cd744aa97"
+      "sha256": "31142c5661759f4674391449eeeb5bdc8703087343466a6762b4239ef80bd6fa"
     },
     {
       "path": "src/championship/presentation/battleEffectSprites.js",
@@ -114536,7 +116074,7 @@
     },
     {
       "path": "src/championship/presentation/huntFeedbackArt.js",
-      "sha256": "10ea802f76aab52d9c82c9533234bac814af3ccdd329d4ecf0b9a1524d9350f0"
+      "sha256": "3d74d448d788351afc5d2e71ad62818a1f6e60f73db5f0a88ef1ac470a8a6d05"
     },
     {
       "path": "src/championship/presentation/huntMobileReadouts.js",
@@ -114557,10 +116095,6 @@
     {
       "path": "src/championship/presentation/intRh2/raisingNativeSizing.js",
       "sha256": "b6930acefb76ceda18742d5f5382e618995607eca544e25463250e07c9e91fae"
-    },
-    {
-      "path": "src/championship/presentation/licensedCharacterRoster.js",
-      "sha256": "fc0a817bc77d393e78dc94869e3db28e43eac3ef1ffc58a4b5f26b5416c39811"
     },
     {
       "path": "src/championship/presentation/m001CharacterArtReview.js",
@@ -114640,7 +116174,7 @@
     },
     {
       "path": "src/championship/presentation/originalSharedVfxReview.js",
-      "sha256": "ee69ac3aadb912978f730e36016d321094dfb658d8d746b38e827d9bd4263508"
+      "sha256": "e0b24be2a9bb279cd3c2b8eb227489dc76a1ed35de1c9d62bd630b4ca74fda8a"
     },
     {
       "path": "src/championship/presentation/originalShopCageArt.js",
@@ -114679,6 +116213,10 @@
       "sha256": "5a810256912ba9faec9825480ccf789b78537848742e2163f4aa0bf695d6e4b5"
     },
     {
+      "path": "src/championship/presentation/publicRenderDescriptors.js",
+      "sha256": "54a948e7fc27785fdee34c37ad81ac40dbd71167eca05877d26d313db7fd4300"
+    },
+    {
       "path": "src/championship/presentation/publicRuntimeAssets.js",
       "sha256": "23698f96bd1ee0e23181edba2df2fc22b5fc705977ffcfaa4920c91ed0099342"
     },
@@ -114692,7 +116230,7 @@
     },
     {
       "path": "src/championship/presentation/raisingFeedbackArt.js",
-      "sha256": "edb8ffe3b733d23655e49c89786871ec2a584d8b6409107cd38ea8b0afa21d14"
+      "sha256": "e754898656cf18e79d2f0e95c70ac8b51c322e0eb28176c37d3694e30a693841"
     },
     {
       "path": "src/championship/presentation/raisingRanchArtPlan.js",
@@ -115272,7 +116810,7 @@
     },
     {
       "path": "src/data/championship/database-hero-portraits.public.v1.json",
-      "sha256": "d51fe8e1d333b044d58159bb2b2f4ad3e19f6b5fdbf56699c11b9e933b654e8e",
+      "sha256": "44c09543109906084184c7cf7a98cebf384e867592b14b1028d6cbac2f53e6d1",
       "jsonFields": [
         "schemaVersion",
         "entries",
@@ -115353,10 +116891,6 @@
       ]
     },
     {
-      "path": "src/data/championship/public-playtest.r1.json",
-      "sha256": "fec147fe6500dedcaef631dd04306404192cf1f3ef802b2492c068babbccc00e"
-    },
-    {
       "path": "src/data/championship/public-ui-selection.v1.json",
       "sha256": "709b4685f66c47f1f36909e3b5ab36ee8846ed3989c923f285981968039122d1",
       "jsonFields": [
@@ -115433,6 +116967,31 @@
       "id": "art:battle-select:menu-cube:v1",
       "src": "assets/production/battle/menu-cube-v1/public-manifest.json",
       "sha256": "eaebcb5e4e7a6a82e4b849f3913e62c20cfa7533101f967311b753488abdc3e0"
+    },
+    {
+      "id": "art:public:battle-audio:v1",
+      "src": "assets/production/public-runtime/battle-audio.render.v1.json",
+      "sha256": "98d24b4c5f371aa29f3344fd33f050c7a46ba97f183a13c4c8dfff5e6b04fa3f"
+    },
+    {
+      "id": "art:public:battle-effects:v1",
+      "src": "assets/production/public-runtime/battle-effects.render.v1.json",
+      "sha256": "50bfda1b33cb6761318076ca88719cfadf9a05e1f6d52bf5b0faf55a6e8b41b6"
+    },
+    {
+      "id": "art:public:hunt-feedback:v1",
+      "src": "assets/production/public-runtime/hunt-feedback.render.v1.json",
+      "sha256": "b8bd1f823511a21f26953343a79647e982d59f0eb85793ca98ac7ac69e539e72"
+    },
+    {
+      "id": "art:public:raising-feedback:v1",
+      "src": "assets/production/public-runtime/raising-feedback.render.v1.json",
+      "sha256": "0117557917ec500cc9a8c7f8c5167b5c79cc25059dec8df07cba7d8e4891a23a"
+    },
+    {
+      "id": "art:public:shared-vfx:v1",
+      "src": "assets/production/public-runtime/shared-vfx.render.v1.json",
+      "sha256": "2ad6378d344c320c04d14a6070583f136febd9134f64b84923f79f5e1519c4ba"
     },
     {
       "id": "art:shop:cage-thumbnails:v1",
@@ -115818,27 +117377,6 @@
       "height": 1312
     },
     {
-      "id": "species-028:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-028.d9745f89f46f9621.webp",
-      "sha256": "d9745f89f46f9621e5d5441c0ee6b3cd00d7c777eec0cca06f3f26571ae6f778",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-029:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-029.aa46ec9d6477bb75.webp",
-      "sha256": "aa46ec9d6477bb7523e50eebcbc01c5cde07260fea56feb51faa3225cd863eaa",
-      "width": 1024,
-      "height": 819
-    },
-    {
-      "id": "species-033:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-033.eed4f22eb17230ad.webp",
-      "sha256": "eed4f22eb17230ad640e72dd9a1b577719ceca8f2842d59f9941363b671ac3ee",
-      "width": 952,
-      "height": 1024
-    },
-    {
       "id": "species-034:database-hero",
       "src": "assets/production/database-handpainted-r1-20261015/species-034.png",
       "sha256": "cc4ff1b755fbb34e88c0cb67d0ede8f0099e8ea2b38f32e6d973118a7b70b819",
@@ -116112,249 +117650,11 @@
       "height": 1254
     },
     {
-      "id": "species-073:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-073.39301b2fee1a169f.webp",
-      "sha256": "39301b2fee1a169f8cbff0cc491ce3e220801b3452257cce797e4fbfc5419729",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-075:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-075.d38fc6867ac594a3.webp",
-      "sha256": "d38fc6867ac594a37b5f414584d04eb3378023f54290595f36646ef7bc7988c4",
-      "width": 936,
-      "height": 1024
-    },
-    {
-      "id": "species-076:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-076.30cd2172ccff3c9f.webp",
-      "sha256": "30cd2172ccff3c9f11eb4b7a6f7661bf2a32c7c5b46959a4b05ade8b1b35a8ab",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-077:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-077.30ce6a86e6febd5d.webp",
-      "sha256": "30ce6a86e6febd5d3c8a7f8191ec9992f65e158f73f8845014d5931e8678582c",
-      "width": 936,
-      "height": 1024
-    },
-    {
-      "id": "species-078:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-078.cb271096fa971d0b.webp",
-      "sha256": "cb271096fa971d0b468d114a0f96b7c1e301f30a5c1317b78dee95458da68628",
-      "width": 974,
-      "height": 1024
-    },
-    {
-      "id": "species-079:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-079.dbb7c18616092ade.webp",
-      "sha256": "dbb7c18616092ade73e08214b965637bbccb4da67c5002c1ed4cbc797509a225",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-081:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-081.40a7e20d24f19a93.webp",
-      "sha256": "40a7e20d24f19a9332f239a6d793c333bed3d3fc7f1c04f578f1695d709adfa0",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-082:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-082.e72200db1609bca7.webp",
-      "sha256": "e72200db1609bca7b037612e9a0d6a7386a2eb20667cdd83dd21af2f64066729",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-083:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-083.14381cfd571eb399.webp",
-      "sha256": "14381cfd571eb3997e5e2fc5d4bf6b08327a20687db8d5726d50be9ba0233ced",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-084:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-084.1fc6a4d307f403cf.webp",
-      "sha256": "1fc6a4d307f403cfb53d12f61cfe432cacd63f1758e6afa9fad7456ad449a3f1",
-      "width": 936,
-      "height": 1024
-    },
-    {
-      "id": "species-089:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-089.4ed6a3c33ede12e4.webp",
-      "sha256": "4ed6a3c33ede12e47a3fbc5689044917b3c96545c112ece8ae9c205bb6644f00",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-090:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-090.608f4e1c14289e20.webp",
-      "sha256": "608f4e1c14289e20ab5bf8edbc2f2f06816b7ea7ea59fc46dc830658ce665396",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-091:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-091.686226213fde12ae.webp",
-      "sha256": "686226213fde12ae02ef5a4a7e7272932bda7d677d52ace8a7768b2d80804542",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-092:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-092.cdf044393078ef74.webp",
-      "sha256": "cdf044393078ef744036175fdd9d316a46f7296d65c64bdc80952b41f80be752",
-      "width": 915,
-      "height": 1024
-    },
-    {
-      "id": "species-093:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-093.6ca79a33ab8a042a.webp",
-      "sha256": "6ca79a33ab8a042a66cb16fe7616be962193716158c913b8e3ea744afe65d188",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-097:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-097.66900d62495da0f8.webp",
-      "sha256": "66900d62495da0f8d3b0de501acac56450973ceada10883aa3c4b8d995f963e1",
-      "width": 962,
-      "height": 1024
-    },
-    {
-      "id": "species-098:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-098.a5f298f8b605116b.webp",
-      "sha256": "a5f298f8b605116b902f3383da07c11565ab7e2c3634c6e138056feaf3ed4d58",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-099:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-099.3c322a52b8f652a0.webp",
-      "sha256": "3c322a52b8f652a042d72b3cf8cd9a0561bf64fe8241cdf6c79a660792812e28",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-100:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-100.930db3cc4f3366ed.webp",
-      "sha256": "930db3cc4f3366ed855e1d92fd497ffe3308b7a104cd319e55095c98d4923a67",
-      "width": 852,
-      "height": 1024
-    },
-    {
-      "id": "species-101:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-101.e49b91a8b7194853.webp",
-      "sha256": "e49b91a8b71948539397bcad25218f2bd2d15a19aebd54a95f6e996c9b79c96a",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-102:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-102.02a4a4755042d58d.webp",
-      "sha256": "02a4a4755042d58da03bf1b09938ef7a20322e93c20f3fc938351b1201e32571",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-104:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-104.e80d5654bd21cfc6.webp",
-      "sha256": "e80d5654bd21cfc68f4eb50cf4b552db059d8ae8e20a8e7154527bec326aa363",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-106:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-106.70cda5dceb243a7f.webp",
-      "sha256": "70cda5dceb243a7ffb8bbb7b0bebd613d0c605eaca2160047bfeecc40e4ef8b5",
-      "width": 683,
-      "height": 1024
-    },
-    {
-      "id": "species-107:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-107.a144cf5e33a719b7.webp",
-      "sha256": "a144cf5e33a719b798eecc654882a6b874fa04382c9d968667b5ab2eb54d4f01",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-108:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-108.9a6c56b441e697d8.webp",
-      "sha256": "9a6c56b441e697d8280f1a9ac438631540194a9ef94b66a3b96cc859d30dad90",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-109:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-109.98b7aae9e5ebecf9.webp",
-      "sha256": "98b7aae9e5ebecf9248a3c2bacf49510f737b42076104ef0adcd6ff3e8cd1df3",
-      "width": 683,
-      "height": 1024
-    },
-    {
-      "id": "species-110:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-110.a02974fe9586826d.webp",
-      "sha256": "a02974fe9586826d7227f66fc7085ebfdedcf0d3fd07864abbcf89d303ca48cd",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-111:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-111.d832e8c11f2222d6.webp",
-      "sha256": "d832e8c11f2222d620b3cae6867e992ad575db0e97832f4fbc92f28c8da6e542",
-      "width": 874,
-      "height": 1024
-    },
-    {
-      "id": "species-112:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-112.b19c50e763541179.webp",
-      "sha256": "b19c50e763541179fea3cd6c73ca5c021f6caffefa3be77518c64af916703e39",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-113:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-113.9140176e76d4611f.webp",
-      "sha256": "9140176e76d4611f7719331b93ce7e09bcf01a0a590b2044889edadda36ea197",
-      "width": 683,
-      "height": 1024
-    },
-    {
-      "id": "species-114:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-114.a2653fee85ab174f.webp",
-      "sha256": "a2653fee85ab174f97e06d918b55f5c22d11ecaaa2369b319fb023f8233e1ade",
-      "width": 1024,
-      "height": 936
-    },
-    {
-      "id": "species-115:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-115.bc89213a41cd0faa.webp",
-      "sha256": "bc89213a41cd0faa5f3260645ca38916b1e48797e469c95388f6c4dbce3bc196",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-116:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-116.8a50d068ac5983dd.webp",
-      "sha256": "8a50d068ac5983ddb8730d7e53854b72f95a33643c5ae69f108f966ad49705d0",
-      "width": 683,
-      "height": 1024
-    },
-    {
       "id": "species-117:database-hero",
       "src": "assets/production/database-handpainted-r1-20261015/species-117.8f7d027cdbf6d3e6.png",
       "sha256": "8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681",
       "width": 1254,
       "height": 1254
-    },
-    {
-      "id": "species-118:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-118.b4cc36f9964f606e.webp",
-      "sha256": "b4cc36f9964f606e6ca51024bfeecbf9ad2b3c57ffbd59bec52d8da0e23a9cca",
-      "width": 1024,
-      "height": 768
     },
     {
       "id": "species-125:database-hero",

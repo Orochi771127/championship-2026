@@ -7,6 +7,31 @@
       "sha256": "eaebcb5e4e7a6a82e4b849f3913e62c20cfa7533101f967311b753488abdc3e0"
     },
     {
+      "id": "art:public:battle-audio:v1",
+      "src": "assets/production/public-runtime/battle-audio.render.v1.json",
+      "sha256": "98d24b4c5f371aa29f3344fd33f050c7a46ba97f183a13c4c8dfff5e6b04fa3f"
+    },
+    {
+      "id": "art:public:battle-effects:v1",
+      "src": "assets/production/public-runtime/battle-effects.render.v1.json",
+      "sha256": "50bfda1b33cb6761318076ca88719cfadf9a05e1f6d52bf5b0faf55a6e8b41b6"
+    },
+    {
+      "id": "art:public:hunt-feedback:v1",
+      "src": "assets/production/public-runtime/hunt-feedback.render.v1.json",
+      "sha256": "b8bd1f823511a21f26953343a79647e982d59f0eb85793ca98ac7ac69e539e72"
+    },
+    {
+      "id": "art:public:raising-feedback:v1",
+      "src": "assets/production/public-runtime/raising-feedback.render.v1.json",
+      "sha256": "0117557917ec500cc9a8c7f8c5167b5c79cc25059dec8df07cba7d8e4891a23a"
+    },
+    {
+      "id": "art:public:shared-vfx:v1",
+      "src": "assets/production/public-runtime/shared-vfx.render.v1.json",
+      "sha256": "2ad6378d344c320c04d14a6070583f136febd9134f64b84923f79f5e1519c4ba"
+    },
+    {
       "id": "art:shop:cage-thumbnails:v1",
       "src": "assets/production/public-runtime/shop-cage-thumbnails.v1.json",
       "sha256": "d049241e1a2177cee5f31baf8a606b5184fccabe3679841c5a29982002bd7098"
@@ -390,27 +415,6 @@
       "height": 1312
     },
     {
-      "id": "species-028:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-028.d9745f89f46f9621.webp",
-      "sha256": "d9745f89f46f9621e5d5441c0ee6b3cd00d7c777eec0cca06f3f26571ae6f778",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-029:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-029.aa46ec9d6477bb75.webp",
-      "sha256": "aa46ec9d6477bb7523e50eebcbc01c5cde07260fea56feb51faa3225cd863eaa",
-      "width": 1024,
-      "height": 819
-    },
-    {
-      "id": "species-033:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-033.eed4f22eb17230ad.webp",
-      "sha256": "eed4f22eb17230ad640e72dd9a1b577719ceca8f2842d59f9941363b671ac3ee",
-      "width": 952,
-      "height": 1024
-    },
-    {
       "id": "species-034:database-hero",
       "src": "assets/production/database-handpainted-r1-20261015/species-034.png",
       "sha256": "cc4ff1b755fbb34e88c0cb67d0ede8f0099e8ea2b38f32e6d973118a7b70b819",
@@ -684,249 +688,11 @@
       "height": 1254
     },
     {
-      "id": "species-073:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-073.39301b2fee1a169f.webp",
-      "sha256": "39301b2fee1a169f8cbff0cc491ce3e220801b3452257cce797e4fbfc5419729",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-075:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-075.d38fc6867ac594a3.webp",
-      "sha256": "d38fc6867ac594a37b5f414584d04eb3378023f54290595f36646ef7bc7988c4",
-      "width": 936,
-      "height": 1024
-    },
-    {
-      "id": "species-076:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-076.30cd2172ccff3c9f.webp",
-      "sha256": "30cd2172ccff3c9f11eb4b7a6f7661bf2a32c7c5b46959a4b05ade8b1b35a8ab",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-077:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-077.30ce6a86e6febd5d.webp",
-      "sha256": "30ce6a86e6febd5d3c8a7f8191ec9992f65e158f73f8845014d5931e8678582c",
-      "width": 936,
-      "height": 1024
-    },
-    {
-      "id": "species-078:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-078.cb271096fa971d0b.webp",
-      "sha256": "cb271096fa971d0b468d114a0f96b7c1e301f30a5c1317b78dee95458da68628",
-      "width": 974,
-      "height": 1024
-    },
-    {
-      "id": "species-079:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-079.dbb7c18616092ade.webp",
-      "sha256": "dbb7c18616092ade73e08214b965637bbccb4da67c5002c1ed4cbc797509a225",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-081:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-081.40a7e20d24f19a93.webp",
-      "sha256": "40a7e20d24f19a9332f239a6d793c333bed3d3fc7f1c04f578f1695d709adfa0",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-082:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-082.e72200db1609bca7.webp",
-      "sha256": "e72200db1609bca7b037612e9a0d6a7386a2eb20667cdd83dd21af2f64066729",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-083:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-083.14381cfd571eb399.webp",
-      "sha256": "14381cfd571eb3997e5e2fc5d4bf6b08327a20687db8d5726d50be9ba0233ced",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-084:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-084.1fc6a4d307f403cf.webp",
-      "sha256": "1fc6a4d307f403cfb53d12f61cfe432cacd63f1758e6afa9fad7456ad449a3f1",
-      "width": 936,
-      "height": 1024
-    },
-    {
-      "id": "species-089:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-089.4ed6a3c33ede12e4.webp",
-      "sha256": "4ed6a3c33ede12e47a3fbc5689044917b3c96545c112ece8ae9c205bb6644f00",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-090:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-090.608f4e1c14289e20.webp",
-      "sha256": "608f4e1c14289e20ab5bf8edbc2f2f06816b7ea7ea59fc46dc830658ce665396",
-      "width": 1024,
-      "height": 683
-    },
-    {
-      "id": "species-091:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-091.686226213fde12ae.webp",
-      "sha256": "686226213fde12ae02ef5a4a7e7272932bda7d677d52ace8a7768b2d80804542",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-092:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-092.cdf044393078ef74.webp",
-      "sha256": "cdf044393078ef744036175fdd9d316a46f7296d65c64bdc80952b41f80be752",
-      "width": 915,
-      "height": 1024
-    },
-    {
-      "id": "species-093:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-093.6ca79a33ab8a042a.webp",
-      "sha256": "6ca79a33ab8a042a66cb16fe7616be962193716158c913b8e3ea744afe65d188",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-097:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-097.66900d62495da0f8.webp",
-      "sha256": "66900d62495da0f8d3b0de501acac56450973ceada10883aa3c4b8d995f963e1",
-      "width": 962,
-      "height": 1024
-    },
-    {
-      "id": "species-098:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-098.a5f298f8b605116b.webp",
-      "sha256": "a5f298f8b605116b902f3383da07c11565ab7e2c3634c6e138056feaf3ed4d58",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-099:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-099.3c322a52b8f652a0.webp",
-      "sha256": "3c322a52b8f652a042d72b3cf8cd9a0561bf64fe8241cdf6c79a660792812e28",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-100:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-100.930db3cc4f3366ed.webp",
-      "sha256": "930db3cc4f3366ed855e1d92fd497ffe3308b7a104cd319e55095c98d4923a67",
-      "width": 852,
-      "height": 1024
-    },
-    {
-      "id": "species-101:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-101.e49b91a8b7194853.webp",
-      "sha256": "e49b91a8b71948539397bcad25218f2bd2d15a19aebd54a95f6e996c9b79c96a",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-102:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-102.02a4a4755042d58d.webp",
-      "sha256": "02a4a4755042d58da03bf1b09938ef7a20322e93c20f3fc938351b1201e32571",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-104:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-104.e80d5654bd21cfc6.webp",
-      "sha256": "e80d5654bd21cfc68f4eb50cf4b552db059d8ae8e20a8e7154527bec326aa363",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-106:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-106.70cda5dceb243a7f.webp",
-      "sha256": "70cda5dceb243a7ffb8bbb7b0bebd613d0c605eaca2160047bfeecc40e4ef8b5",
-      "width": 683,
-      "height": 1024
-    },
-    {
-      "id": "species-107:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-107.a144cf5e33a719b7.webp",
-      "sha256": "a144cf5e33a719b798eecc654882a6b874fa04382c9d968667b5ab2eb54d4f01",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-108:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-108.9a6c56b441e697d8.webp",
-      "sha256": "9a6c56b441e697d8280f1a9ac438631540194a9ef94b66a3b96cc859d30dad90",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-109:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-109.98b7aae9e5ebecf9.webp",
-      "sha256": "98b7aae9e5ebecf9248a3c2bacf49510f737b42076104ef0adcd6ff3e8cd1df3",
-      "width": 683,
-      "height": 1024
-    },
-    {
-      "id": "species-110:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-110.a02974fe9586826d.webp",
-      "sha256": "a02974fe9586826d7227f66fc7085ebfdedcf0d3fd07864abbcf89d303ca48cd",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-111:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-111.d832e8c11f2222d6.webp",
-      "sha256": "d832e8c11f2222d620b3cae6867e992ad575db0e97832f4fbc92f28c8da6e542",
-      "width": 874,
-      "height": 1024
-    },
-    {
-      "id": "species-112:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-112.b19c50e763541179.webp",
-      "sha256": "b19c50e763541179fea3cd6c73ca5c021f6caffefa3be77518c64af916703e39",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-113:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-113.9140176e76d4611f.webp",
-      "sha256": "9140176e76d4611f7719331b93ce7e09bcf01a0a590b2044889edadda36ea197",
-      "width": 683,
-      "height": 1024
-    },
-    {
-      "id": "species-114:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-114.a2653fee85ab174f.webp",
-      "sha256": "a2653fee85ab174f97e06d918b55f5c22d11ecaaa2369b319fb023f8233e1ade",
-      "width": 1024,
-      "height": 936
-    },
-    {
-      "id": "species-115:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-115.bc89213a41cd0faa.webp",
-      "sha256": "bc89213a41cd0faa5f3260645ca38916b1e48797e469c95388f6c4dbce3bc196",
-      "width": 1024,
-      "height": 768
-    },
-    {
-      "id": "species-116:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-116.8a50d068ac5983dd.webp",
-      "sha256": "8a50d068ac5983ddb8730d7e53854b72f95a33643c5ae69f108f966ad49705d0",
-      "width": 683,
-      "height": 1024
-    },
-    {
       "id": "species-117:database-hero",
       "src": "assets/production/database-handpainted-r1-20261015/species-117.8f7d027cdbf6d3e6.png",
       "sha256": "8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681",
       "width": 1254,
       "height": 1254
-    },
-    {
-      "id": "species-118:database-hero",
-      "src": "assets/production/database-heroes-20261017/species-118.b4cc36f9964f606e.webp",
-      "sha256": "b4cc36f9964f606e6ca51024bfeecbf9ad2b3c57ffbd59bec52d8da0e23a9cca",
-      "width": 1024,
-      "height": 768
     },
     {
       "id": "species-125:database-hero",

@@ -1,3 +1,4 @@
+import {loadPublicRenderDescriptor,validatePublicRenderDescriptor} from './publicRenderDescriptors.js';
 // Opt-in loopback review of original-created shared battle VFX. Whole native
 // sequences of the existing effect pool are drawn with original cells; the pool,
 // sequence ticks, play modes, collision, damage and every other bank stay on the
@@ -8,7 +9,7 @@
 // every other language -> en. Only the active set's atlas is loaded; a settings change
 // swaps the set in place and the previous atlas is released after the scene has drawn.
 import profiles from '../../data/championship/battleEffectProfiles.json' with {type:'json'};
-import playtestPolicy from '../../data/championship/public-playtest.r1.json' with {type:'json'};
+import {publicRuntimeAsset} from './publicRuntimeAssets.js';
 import {isApprovedOriginalPublicLocation} from './originalRuntimeLocation.js';
 import {getLocale as settingLocale, onLocaleChange as onSettingLocaleChange} from '../text/locale.js';
 export const ORIGINAL_SHARED_VFX_ID = 'art:vfx:original-shared:review:v1';
@@ -22,21 +23,9 @@ export const ORIGINAL_SHARED_LOCAL_MANIFEST = 'assets/production/vfx/original-sh
 // review flags inside its manifest stay as provenance, as for the accepted
 // original characters, and the playtest policy record is the approval.
 export const ORIGINAL_SHARED_PUBLIC_SELECTION_ID = 'ACCEPTED_ORIGINAL_SHARED_VFX_20261012';
-export function originalSharedVfxPublicSelected(href) {
-  const selection = playtestPolicy.acceptedOriginalSharedVfx;
-  return selection?.status === 'OWNER_AUTHORIZED_PUBLIC_PLAYTEST'
-    && selection.selectionId === ORIGINAL_SHARED_PUBLIC_SELECTION_ID
-    && selection.manifestPath === ORIGINAL_SHARED_LOCAL_MANIFEST
-    && isApprovedOriginalPublicLocation(href);
-}
-export function originalSharedVfxManifestFor(href) {
-  const url = new URL(href), query = url.searchParams;
-  // Review revisions are loopback choices; the public URL always plays the selection.
-  if (!loopback(url.hostname)) return ORIGINAL_SHARED_LOCAL_MANIFEST;
-  if (query.get('vfxCandidate') === 'beam-body-seamfix-r1') return ORIGINAL_SHARED_BEAM_MANIFEST;
-  if (query.get('vfxRevision') === '157-seamfix') return ORIGINAL_SHARED_157_MANIFEST;
-  return query.get('vfxRevision') === '157-baseline' ? ORIGINAL_SHARED_VFX_MANIFEST : ORIGINAL_SHARED_LOCAL_MANIFEST;
-}
+export function originalSharedVfxPublicSelected(href){return Boolean(publicRuntimeAsset('art:public:shared-vfx:v1'))&&isApprovedOriginalPublicLocation(href);}
+export function originalSharedVfxManifestFor(){return publicRuntimeAsset('art:public:shared-vfx:v1')?.src??null;}
+
 export const ORIGINAL_SHARED_TEXT_SETS = Object.freeze(['zh-Hant', 'ja', 'en']);
 const DENSITY = 4;
 const loopback = hostname => ['localhost', '127.0.0.1', '[::1]'].includes(hostname);
@@ -117,19 +106,10 @@ export function originalSharedVfxReviewRequested(href) {
   } catch { return false; }
 }
 
-export function validateOriginalSharedVfx(manifest, productionIndex, {manifestPath = ORIGINAL_SHARED_VFX_MANIFEST} = {}) {
-  if (![ORIGINAL_SHARED_VFX_MANIFEST, ORIGINAL_SHARED_BEAM_MANIFEST, ORIGINAL_SHARED_157_MANIFEST, ORIGINAL_SHARED_LOCAL_MANIFEST].includes(manifestPath)) throw new Error('ORIGINAL_SHARED_VFX_PATH_INVALID');
-  const entry = productionIndex?.entries?.find(item => item.assetId === ORIGINAL_SHARED_VFX_ID);
-  if (manifest?.schemaVersion !== 1 || manifest.assetId !== ORIGINAL_SHARED_VFX_ID
-    || entry?.manifestPath !== ORIGINAL_SHARED_VFX_MANIFEST || entry.rightsStatus !== 'ORIGINAL_CREATED'
-    || manifest.rightsStatus !== 'ORIGINAL_CREATED' || manifest.gameplayBinding !== 'EXTERNAL_EXISTING_RUNTIME'
-    || manifest.timing !== 'NATIVE_SEQUENCES_UNCHANGED' || manifest.blend !== 'NORMAL_ALPHA'
-    || manifest.pixelsPerNativePixel !== DENSITY
-    || [manifest, entry].some(item => item.reviewOnly !== true || item.runtimeEligible !== false
-      || item.localOnly !== true || item.runtimeScope !== 'LOOPBACK_REVIEW_ONLY' || item.publicReleasePermitted !== false
-      || item.shippingReady !== false || item.humanApproved !== false)) {
-    throw new Error('ORIGINAL_SHARED_VFX_NOT_REGISTERED');
-  }
+export function validateOriginalSharedVfx(manifest){
+  validatePublicRenderDescriptor(manifest,'shared-vfx');
+  const manifestPath=ORIGINAL_SHARED_LOCAL_MANIFEST;
+  if(manifest.timing!=='NATIVE_SEQUENCES_UNCHANGED'||manifest.blend!=='NORMAL_ALPHA'||manifest.pixelsPerNativePixel!==DENSITY)throw Error('PUBLIC_SHARED_VFX_RENDER_CONTRACT');
   const image = manifest.image;
   if (image?.src !== manifestPath.replace('manifest.json', 'effects.png') || image.scaleMode !== 'nearest'
     || !/^[a-f0-9]{64}$/.test(image.sha256) || ![image.width, image.height].every(v => Number.isInteger(v) && v > 0)) {
@@ -176,14 +156,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
   baseUrl = globalThis.document?.baseURI ?? href, fetchImpl = globalThis.fetch, onFirstUse = null,
   getLocale = settingLocale, onLocaleChange = onSettingLocaleChange, deferRelease = afterTwoFrames, onTextSet = null}) {
   if (!baseArt || !originalSharedVfxReviewRequested(href)) return baseArt;
-  const indexResponse = await fetchImpl(new URL('assets/production/ART_PRODUCTION_INDEX.json', baseUrl));
-  if (!indexResponse.ok) throw new Error(`ORIGINAL_SHARED_VFX_INDEX_HTTP_${indexResponse.status}`);
-  // A separate local review choice; the saved 157-cell artwork stays unchanged.
-  const candidate = new URL(href).searchParams.get('vfxCandidate') === 'beam-body-seamfix-r1';
-  const manifestPath = originalSharedVfxManifestFor(href);
-  const response = await fetchImpl(new URL(manifestPath, baseUrl));
-  if (!response.ok) throw new Error(`ORIGINAL_SHARED_VFX_MANIFEST_HTTP_${response.status}`);
-  const checked = validateOriginalSharedVfx(await response.json(), await indexResponse.json(), {manifestPath});
+  const checked=validateOriginalSharedVfx(await loadPublicRenderDescriptor('shared-vfx',{baseUrl,fetchImpl}));
   const text = checked.localizedText ?? null;
   for (const cell of [...checked.cells, ...(text ? text.cells.map(id => ({bankId:text.bankId, cell:id, blank:false})) : [])]) {
     // The native blank state is the visibility truth; a remake never fills or empties a cell.
@@ -277,7 +250,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
       return own;
     },
     getReviewDiagnostics:() => ({reviewAssetId:ORIGINAL_SHARED_VFX_ID, banks:checked.banks.map(bank => bank.bankId),
-      cells:cells.size, seenCells:[...seen], manifestPath, revision:checked.provenance?.localRevision ?? checked.provenance?.revision, candidate:candidate ? 'beam-body-seamfix-r1' : null,
+      cells:cells.size, seenCells:[...seen], manifestPath:originalSharedVfxManifestFor(href), revision:'PUBLIC_RENDER_V1', candidate:null,
       text:text ? {source:'GAME_SETTING_LOCALE', set:textActive?.name ?? null, requested:textRequested, src:textActive?.src ?? null,
         sha256:textActive?.sha256 ?? null, activations:textActivations, retiring:[...textRetiring.keys()], cells:text.cells.length} : null}),
     dispose() {

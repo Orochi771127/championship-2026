@@ -1,3 +1,4 @@
+import {loadPublicRenderDescriptor,validatePublicRenderDescriptor} from './publicRenderDescriptors.js';
 import {isLocalBattleEffectPreview} from './battleEffectArt.js';
 
 export const BATTLE_AUDIO_ID='art:audio:battle:local-reference:v1';
@@ -17,22 +18,7 @@ function waitForAudio(operation,signal) {
   });
 }
 
-export function validateBattleAudio(manifest,index) {
-  const entry=index?.entries?.find(e=>e.assetId===BATTLE_AUDIO_ID);
-  if(manifest?.assetId!==BATTLE_AUDIO_ID || entry?.manifestPath!==BATTLE_AUDIO_MANIFEST
-    || [entry,manifest].some(e=>!e?.runtimeEligible || !e.localOnly || e.publicReleasePermitted!==false
-      || e.shippingReady!==false || e.runtimeScope!=='LOOPBACK_RESEARCH_ONLY')) throw Error('BATTLE_AUDIO_NOT_REGISTERED');
-  const ids=new Set();
-  for(const sound of manifest.sounds??[]) {
-    if(ids.has(sound.soundId) || sound.src!==BATTLE_AUDIO_MANIFEST.replace('manifest.json',`${sound.soundId.toString(16).padStart(4,'0')}.wav`)
-      || !/^[a-f0-9]{64}$/.test(sound.sha256) || sound.channels!==1 || !Number.isInteger(sound.sampleRate)
-      || sound.sampleRate<8000 || sound.sampleRate>48000 || !Number.isInteger(sound.sampleFrames) || sound.sampleFrames<1
-      || sound.loop!==false) throw Error('BATTLE_AUDIO_SAMPLE_INVALID');
-    ids.add(sound.soundId);
-  }
-  if(ids.size!==54)throw Error('BATTLE_AUDIO_SAMPLE_SET');
-  return manifest;
-}
+export function validateBattleAudio(manifest){return validatePublicRenderDescriptor(manifest,'battle-audio');}
 
 // A single, scene-owned Web Audio graph. Original sample IDs and frame events
 // supply every sound; this adapter has no RNG, synthesis or gameplay authority.
@@ -68,8 +54,7 @@ export async function mountBattleAudioPresentation({source,baseUrl=globalThis.lo
   const abort=()=>{void dispose().catch(()=>{});};
   signal?.addEventListener('abort',abort,{once:true});
   try {
-    const index=await loadJson('assets/production/ART_PRODUCTION_INDEX.json');
-    const manifest=validateBattleAudio(await loadJson(BATTLE_AUDIO_MANIFEST),index);
+    const manifest=validateBattleAudio(await wait(loadPublicRenderDescriptor('battle-audio',{baseUrl,fetchImpl,signal:loadSignal})));
     loadSignal.throwIfAborted();
     context=ownsContext?new AudioContextClass():output.context;master=context.createGain();
     master.connect(ownsContext?context.destination:output.destination);
