@@ -1,5 +1,7 @@
 # NS33 opening film — bounded presentation contract
 
+The [2026-10-18 restoration supplement](OPENING_FILM_RESTORE_2026-10-18.md) supersedes automatic startup/idle playback and the old multi-resolution publication selection. Historical behavior below remains provenance.
+
 Authority: the 2026-10-12 NS33 entry in [Owner Direction](../../coordination/OWNER_DIRECTION.md). This is `OWNER_APPROVED_ADAPTATION`, not ROM evidence. The exact media source, hash, size and incomplete acceptance labels are in [the production manifest](../../../assets/production/opening-film-ns33-r1/manifest.json).
 
 - Reuse the existing TITLE DOM, approved brand registry and preferences. The independent new-game story/onboarding still follows New Game. No new router, save, global state, Pixi application/ticker or simulation authority.

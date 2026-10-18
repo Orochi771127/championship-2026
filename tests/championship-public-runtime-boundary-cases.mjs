@@ -9,6 +9,7 @@ import {publicRuntimeAsset,validatePublicRuntimeAssets} from '../src/championshi
 import {publicCleanMedia,stripPngMetadata} from '../scripts/lib/public-clean-media.mjs';
 import {publicProgramData} from '../scripts/lib/public-program-data.mjs';
 import {transform} from 'esbuild';
+import {openingFilmPublicationFiles} from '../scripts/lib/opening-film-publication.mjs';
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 function fixture(t){
@@ -20,6 +21,10 @@ function fixture(t){
   allowlist.files.push({path:PUBLIC_RUNTIME_INDEX_PATH,sha256:sha(indexBytes)});
   const files=[manifest,PUBLIC_RUNTIME_INDEX_PATH,'index.html','.nojekyll','pages-build.json'];
   const write=(file,data)=>{fs.mkdirSync(path.dirname(path.join(dir,file)),{recursive:true});fs.writeFileSync(path.join(dir,file),data);};
+  for(const row of openingFilmPublicationFiles()){
+    write(row.path,fs.readFileSync(path.join(root,row.path)));
+    allowlist.files.push({...row});files.push(row.path);
+  }
   write(manifest,bytes);write(PUBLIC_RUNTIME_INDEX_PATH,indexBytes);write('index.html','<main>game</main>');write('.nojekyll','');write('pages-build.json','{"schemaVersion":2,"files":[]}');
   const plan={files:allowlist.files.map(f=>f.path),allowlist,runtime,indexBytes,importMap:{}};
   return {dir,manifest,bytes,allowlist,runtime,files,write,plan};

@@ -2,30 +2,28 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {OPENING_FILM,OPENING_FILM_ENABLED,createOpeningFilm,selectOpeningFilmSource,canAutoPlayOpening,hasOpeningPreloadBuffer,openingFilmCopy} from '../src/championship/app/openingFilm.js';
+import {OPENING_FILM,OPENING_FILM_ENABLED,createOpeningFilm,selectOpeningFilmSource,hasOpeningPreloadBuffer,openingFilmCopy} from '../src/championship/app/openingFilm.js';
 import {openingFilmPublicationFiles,assertOpeningFilmPublication} from '../scripts/lib/opening-film-publication.mjs';
 import {APPROVED_GAME_TITLES} from '../src/championship/text/brandTerms.js';
-const eligible={titleVisible:true,titleReady:true,menuOpen:false,dialogOpen:false,hidden:false,reducedMotion:false,failed:false};
 
-test('paused TITLE creates no media, entry, timer or callback and excludes film bytes from publication',()=>{
- assert.equal(OPENING_FILM_ENABLED,false);
+test('restoration publishes only the small web film and poster; explicit disabling still creates no media',()=>{
+ assert.equal(OPENING_FILM_ENABLED,true);
  const unavailable=new Proxy({}, {get(){throw Error('Paused film must not access DOM or window');}});
- const controller=createOpeningFilm({document:unavailable,window:unavailable,onActiveChange(){assert.fail('No film activity');},onBufferChange(){assert.fail('No video buffering');}});
+ const controller=createOpeningFilm({enabled:false,document:unavailable,window:unavailable,onActiveChange(){assert.fail('No film activity');},onBufferChange(){assert.fail('No video buffering');}});
  controller.start();controller.sync();controller.dispose();
  assert.equal(controller.isPlaying(),false);assert.equal(controller.canPreloadTitle(),false);
- assert.deepEqual(openingFilmPublicationFiles(),[]);
- assert.doesNotThrow(()=>assertOpeningFilmPublication(['championship.html']));
+ assert.deepEqual(openingFilmPublicationFiles(false),[]);
+ assert.doesNotThrow(()=>assertOpeningFilmPublication(['championship.html'],false));
  assert.throws(()=>assertOpeningFilmPublication([OPENING_FILM.src]),/TITLE_FILM_PUBLICATION_POLICY/);
  const restore=openingFilmPublicationFiles(true);
- assert.equal(restore.length,4);assert.ok(restore.every(row=>/^[a-f0-9]{64}$/.test(row.sha256)));
+ assert.equal(restore.length,2);assert.ok(restore.every(row=>/^[a-f0-9]{64}$/.test(row.sha256)));
+ assert.deepEqual(restore.map(row=>row.path),[OPENING_FILM.webSrc,OPENING_FILM.poster]);
  assert.doesNotThrow(()=>assertOpeningFilmPublication(restore.map(row=>row.path),true));
  assert.throws(()=>assertOpeningFilmPublication([],true),/TITLE_FILM_PUBLICATION_POLICY/);
 });
-test('automatic film is confined to interactive, uninterrupted TITLE',()=>{
-  assert.equal(canAutoPlayOpening(eligible),true);
-  for(const key of Object.keys(eligible))assert.equal(canAutoPlayOpening({...eligible,[key]:!eligible[key]}),false,key);
+test('restored film retains its approved timeline and bounded startup/stall waits',()=>{
   assert.equal(OPENING_FILM.duration,58.0);assert.equal(OPENING_FILM.logoTime,55.71);
-  assert.equal(OPENING_FILM.idleMs,15000);assert.equal(OPENING_FILM.startupWaitMs,8000);assert.equal(OPENING_FILM.waitMs,3000);
+  assert.equal(OPENING_FILM.startupWaitMs,8000);assert.equal(OPENING_FILM.waitMs,3000);
 });
 test('TITLE preload requires actual playback and six seconds in the current buffered range',()=>{
  const video={paused:false,seeking:false,readyState:3,currentTime:5,duration:58,buffered:{length:1,start:()=>0,end:()=>11}};
@@ -34,19 +32,12 @@ test('TITLE preload requires actual playback and six seconds in the current buff
  assert.equal(hasOpeningPreloadBuffer({...video,buffered:{length:1,start:()=>0,end:()=>10.9}}),false);
  assert.equal(hasOpeningPreloadBuffer({...video,currentTime:57,buffered:{length:1,start:()=>50,end:()=>58}}),true);
 });
-test('film selects one existing portrait source: mobile 720p, desktop 1080p, constrained 540p',()=>{
-  assert.equal(selectOpeningFilmSource({connection:{saveData:true}}),OPENING_FILM.liteSrc);
-  assert.equal(selectOpeningFilmSource({connection:{effectiveType:'2g'}}),OPENING_FILM.liteSrc);
-  assert.equal(selectOpeningFilmSource({connection:{effectiveType:'slow-2g'}}),OPENING_FILM.liteSrc);
-  assert.equal(selectOpeningFilmSource({connection:{effectiveType:'4g'}}),OPENING_FILM.src);
-  assert.equal(selectOpeningFilmSource({}),OPENING_FILM.src);
-  assert.equal(selectOpeningFilmSource(null),OPENING_FILM.src);
+test('all displays and connections select one web source with no HD fallback download',()=>{
+  for(const nav of [null,{}, {connection:{saveData:true}},{connection:{effectiveType:'2g'}},{connection:{effectiveType:'4g'}}])assert.equal(selectOpeningFilmSource(nav),OPENING_FILM.webSrc);
   const desktop={innerWidth:1366,matchMedia:()=>({matches:false})};
   const phone={innerWidth:390,matchMedia:()=>({matches:true})};
-  assert.equal(selectOpeningFilmSource({},desktop),OPENING_FILM.desktopSrc);
-  assert.equal(selectOpeningFilmSource({},phone),OPENING_FILM.src);
-  assert.equal(selectOpeningFilmSource({userAgentData:{mobile:true}},desktop),OPENING_FILM.src);
-  assert.equal(selectOpeningFilmSource({connection:{saveData:true}},desktop),OPENING_FILM.liteSrc);
+  assert.equal(selectOpeningFilmSource({},desktop),OPENING_FILM.webSrc);
+  assert.equal(selectOpeningFilmSource({},phone),OPENING_FILM.webSrc);
 });
 test('all five locales expose film controls alongside the approved brand registry',()=>{
   for(const locale of Object.keys(APPROVED_GAME_TITLES)){
@@ -56,7 +47,7 @@ test('all five locales expose film controls alongside the approved brand registr
   }
   assert.deepEqual(openingFilmCopy('unknown'),openingFilmCopy('zh-Hant'));
 });
-test('the original reviewed textless 58s NS33 media remain exact while the release follows its pause policy',()=>{
+test('reviewed originals stay exact; the separately pinned web derivative is below 5MB',()=>{
   const manifest=JSON.parse(readFileSync(new URL('../assets/production/opening-film-ns33-r1/manifest.json',import.meta.url)));
   const bytes720=readFileSync(new URL('../'+OPENING_FILM.src,import.meta.url));
   assert.equal(bytes720.length,19412041);assert.equal(createHash('sha256').update(bytes720).digest('hex'),OPENING_FILM.sha256);
@@ -72,6 +63,11 @@ test('the original reviewed textless 58s NS33 media remain exact while the relea
   assert.equal(bytesPoster.length,233617);assert.equal(createHash('sha256').update(bytesPoster).digest('hex'),OPENING_FILM.posterSha256);
   assert.equal(manifest.posterSha256,OPENING_FILM.posterSha256);
   assert.equal(manifest.seconds,58.0);assert.equal(manifest.frames,1392);
+  const web=readFileSync(new URL('../'+OPENING_FILM.webSrc,import.meta.url));
+  assert.equal(web.length,OPENING_FILM.webBytes);assert.ok(web.length<5_000_000);
+  assert.equal(createHash('sha256').update(web).digest('hex'),OPENING_FILM.webSha256);
+  assert.equal(manifest.webRestore.sha256,OPENING_FILM.webSha256);
+  assert.equal(manifest.webRestore.sourceSha256,OPENING_FILM.desktopSha256);
   assert.equal(manifest.publicPlaytestPermitted,true);
   assert.equal(manifest.fullSubjectiveListeningAccepted,false);assert.equal(manifest.physicalDeviceAccepted,false);
   const input=JSON.parse(readFileSync(new URL('../docs/contracts/championship/WEB_BUILD_INPUTS.v1.json',import.meta.url)));

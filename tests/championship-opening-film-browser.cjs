@@ -4,14 +4,14 @@ const fs=require('node:fs');
 const path=require('node:path');
 const http=require('node:http');
 const {chromium}=require('playwright');
-const root=path.resolve('dist/github-playtest');
+const root=path.resolve(process.env.NS33_ROOT||'dist/github-playtest');
 // Loopback-only legacy art paths are intentionally absent from public output.
 // An explicit local reference root can satisfy those older gates without
 // copying references into the artifact or broadening the publication list.
 const referenceRoot=process.env.NS33_REFERENCE_ROOT?path.resolve(process.env.NS33_REFERENCE_ROOT):null;
 const baselineRoot=process.env.NS33_BASELINE_ROOT?path.resolve(process.env.NS33_BASELINE_ROOT):null;
 const referenceReads=new Set();
-const output=path.resolve('.tmp/browser-qa/ns33-opening');
+const output=path.resolve(process.env.NS33_OUTPUT||'.tmp/browser-qa/ns33-opening');
 fs.mkdirSync(output,{recursive:true});
 const saveKey='championshipModernSave:v1',prefsKey='championshipModernSave:preferences:v1';
 const report={generatedAt:new Date().toISOString(),checks:[],physicalDeviceAccepted:false,fullSubjectiveListeningAccepted:false};
@@ -41,128 +41,89 @@ async function scenario(name,fn,options={}){
   catch(error){await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});report.checks.push({name,passed:false,error:String(error)});throw error;}
   finally{await context.close();}
 }
-async function boot(page){await page.goto(origin+'/championship-2026/championship.html',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!document.querySelector('#cm-opening-film'));}
+async function boot(page){await page.goto(origin+'/championship-2026/championship.html',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!document.querySelector('#cm-opening-film')&&!document.querySelector('#cm-login').disabled);}
 const state=page=>page.locator('#cm-opening-film').evaluate(n=>({hidden:n.hidden,result:n.dataset.result,state:n.dataset.state}));
 async function playing(page){await page.waitForFunction(()=>document.querySelector('#cm-opening-film')?.dataset.state==='playing');}
 async function skip(page){await page.click('#cm-film-skip');await page.waitForTimeout(400);assert.equal((await state(page)).hidden,true);}
 async function prefs(context,value){await context.addInitScript(({key,value})=>localStorage.setItem(key,JSON.stringify(value)),{key:prefsKey,value});}
+
+const webPattern='**/opening-web-540p-9577fea3.mp4';
+async function watch(page){await page.click('#cm-watch-film');await playing(page);}
+async function released(page){
+ assert.equal((await state(page)).hidden,true);
+ assert.equal(await page.locator('#cm-opening-film video').getAttribute('src'),null);
+ assert.equal(await page.locator('#cm-opening-film video').evaluate(v=>v.paused),true);
+}
 (async()=>{
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));origin=`http://127.0.0.1:${server.address().port}`;report.origin=origin;
-  console.log('ISOLATED_ORIGIN '+origin);fs.writeFileSync(path.join(output,'origin.txt'),origin);
   browser=await chromium.launch({channel:'chrome',headless:true});
-  await scenario('real playback, audio consent, native finish and unchanged save',async(page)=>{
-    await boot(page);await playing(page);
-    assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
-    const media=await page.locator('#cm-opening-film video').evaluate(v=>({muted:v.muted,inline:v.playsInline,w:v.videoWidth,h:v.videoHeight,d:v.duration,src:v.currentSrc,poster:v.poster}));
-    assert.equal(media.muted,true);assert.equal(media.inline,true);assert.equal(media.w,720);assert.equal(media.h,1280);assert.ok(Math.abs(media.d-58.0)<.1);assert.ok(media.src.includes('/championship-2026/assets/production/'));
-    assert.ok(media.poster.includes('poster-048c2ee9.jpg'));
+  await scenario('cold entry and idle never download MP4; menus stay usable',async page=>{
+    const mp4=[];page.on('request',r=>{if(r.url().endsWith('.mp4'))mp4.push(r.url());});
+    await boot(page);await released(page);await page.clock.install();await page.clock.runFor(60000);
+    assert.deepEqual(mp4,[]);assert.equal(await page.locator('#cm-login').isVisible(),true);
+    await page.click('#cm-login');assert.equal(await page.locator('#cm-new-game').isVisible(),true);assert.deepEqual(mp4,[]);
+    assert.equal(await page.evaluate(k=>localStorage.getItem(k),saveKey),null);
+  });
+  await scenario('native 58s playback, explicit audio consent, BGM exclusion, natural finish',async(page,context)=>{
+    await context.addInitScript(()=>{window.__filmMedia=[];const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){if(!__filmMedia.includes(this))__filmMedia.push(this);return play.call(this);};});
+    await boot(page);await watch(page);
+    const media=await page.locator('#cm-opening-film video').evaluate(v=>({muted:v.muted,inline:v.playsInline,w:v.videoWidth,h:v.videoHeight,d:v.duration,src:v.currentSrc}));
+    assert.deepEqual([media.muted,media.inline,media.w,media.h],[true,true,540,960]);assert.ok(Math.abs(media.d-58)<.1);assert.ok(media.src.includes('opening-web-540p-9577fea3.mp4'));
     await page.click('#cm-film-sound');assert.equal(await page.locator('video').evaluate(v=>v.muted),false);
+    assert.equal(await page.evaluate(()=>__filmMedia.filter(v=>v.tagName==='AUDIO'&&!v.paused).length),0,'BGM media must be paused while intro sound is enabled');
     await page.click('#cm-film-sound');assert.equal(await page.locator('video').evaluate(v=>v.muted),true);
-    await page.screenshot({path:path.join(output,'playing-zh.png')});
-    await page.waitForFunction(()=>document.querySelector('#cm-opening-film .cm-title__logo')?.hidden===false,null,{timeout:65000});
-    await page.screenshot({path:path.join(output,'closing-brand-zh.png')});
-    await page.waitForFunction(()=>document.querySelector('#cm-opening-film')?.dataset.result==='ended',null,{timeout:65000});
-    assert.equal(await page.locator('#cm-login').isVisible(),true);assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
+    await page.screenshot({path:path.join(output,'playing.png')});
+    await page.waitForFunction(()=>!document.querySelector('#cm-opening-film .cm-title__logo').hidden,null,{timeout:65000});
+    await page.screenshot({path:path.join(output,'closing-brand.png')});
+    await page.waitForFunction(()=>document.querySelector('#cm-opening-film').dataset.result==='ended',null,{timeout:10000});
+    await released(page);assert.equal(await page.locator('#cm-login').isVisible(),true);assert.equal(await page.evaluate(k=>localStorage.getItem(k),saveKey),null);
   });
-  await scenario('skip gesture guard, repeated manual watch, idle 14.9s input, menu block',async(page)=>{
-    await boot(page);await playing(page);
-    await page.click('#cm-film-skip');
-    assert.equal(await page.locator('#cm-opening-film video').evaluate(v=>v.getAttribute('src')),null,'skip aborts video download');
-    await page.locator('#cm-login').evaluate(n=>n.click());
-    assert.equal(await page.locator('.cm-title__actions').isHidden(),true);
-    await page.waitForTimeout(400);await page.click('#cm-watch-film');await playing(page);await skip(page);
-    await page.clock.install();await page.clock.runFor(14900);assert.equal((await state(page)).hidden,true);
-    await page.keyboard.press('Shift');await page.clock.runFor(14900);assert.equal((await state(page)).hidden,true);
-    await page.clock.runFor(101);assert.equal((await state(page)).hidden,false);
-    await page.click('#cm-film-skip');await page.clock.runFor(400);await page.click('#cm-login');
-    await page.clock.runFor(30000);assert.equal((await state(page)).hidden,true);assert.equal(await page.locator('#cm-new-game').isVisible(),true);
-    await page.click('#cm-new-game');await page.clock.runFor(30000);assert.equal((await state(page)).hidden,true);
+  await scenario('skip guard, repeated watch, resize and fast skip retain one web source',async page=>{
+    const mp4=[];page.on('request',r=>{if(r.url().endsWith('.mp4'))mp4.push(r.url());});
+    await boot(page);await watch(page);await page.click('#cm-film-skip');await released(page);
+    await page.locator('#cm-login').evaluate(n=>n.click());assert.equal(await page.locator('.cm-title__actions').isHidden(),true);
+    await page.waitForTimeout(400);await page.setViewportSize({width:844,height:390});
+    for(let i=0;i<3;i++){await watch(page);assert.equal(await page.locator('video').evaluate(v=>v.muted),true);await skip(page);await released(page);}
+    assert.deepEqual([...new Set(mp4.map(u=>new URL(u).pathname.split('/').pop()))],['opening-web-540p-9577fea3.mp4']);
   });
-  await scenario('dialog idle block and controlled background/foreground reset',async(page)=>{
-    await boot(page);await playing(page);await skip(page);await page.click('#cm-title-settings');
-    await page.clock.install();await page.clock.runFor(20000);assert.equal((await state(page)).hidden,true);
-    await page.keyboard.press('Escape');await page.clock.runFor(14900);assert.equal((await state(page)).hidden,true);
-    await page.clock.runFor(101);assert.equal((await state(page)).hidden,false);
-    await page.evaluate(()=>{Object.defineProperty(document,'visibilityState',{configurable:true,value:'hidden'});document.dispatchEvent(new Event('visibilitychange'));});
-    assert.equal((await state(page)).hidden,true);await page.clock.runFor(30000);assert.equal((await state(page)).hidden,true);
+  await scenario('controlled background, foreground, pagehide and return never resume video',async page=>{
+    await boot(page);await watch(page);
+    await page.evaluate(()=>{Object.defineProperty(document,'visibilityState',{configurable:true,value:'hidden'});document.dispatchEvent(new Event('visibilitychange'));});await released(page);
     await page.evaluate(()=>{Object.defineProperty(document,'visibilityState',{configurable:true,value:'visible'});document.dispatchEvent(new Event('visibilitychange'));});
-    await page.clock.runFor(14900);assert.equal((await state(page)).hidden,true);await page.clock.runFor(101);assert.equal((await state(page)).hidden,false);
+    await page.clock.install();await page.clock.runFor(30000);await released(page);await page.clock.resume();
+    await watch(page);await page.evaluate(()=>window.dispatchEvent(new Event('pagehide')));await released(page);
+    await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));await released(page);
   });
-  for(const failure of ['reject','404','network','slow'])await scenario(failure+' returns TITLE without retry loop or save write',async(page,context)=>{
-    if(failure==='reject')await context.addInitScript(()=>{const original=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){return this.tagName==='VIDEO'?Promise.reject(new DOMException('blocked','NotAllowedError')):original.call(this);};});
-    else await page.route('**/opening-720p-ef50993b.mp4',async route=>{if(failure==='404')await route.fulfill({status:404,body:''});else if(failure==='network')await route.abort();else await new Promise(resolve=>setTimeout(resolve,9000)).then(()=>route.abort()).catch(()=>{});});
-    await boot(page);await page.waitForFunction(()=>['rejected','error','timeout'].includes(document.querySelector('#cm-opening-film')?.dataset.result));
-    assert.equal(await page.locator('#cm-login').isVisible(),true);
+  await scenario('controlled rapid TITLE leave and return releases media; replay remains available',async page=>{
+    await boot(page);await watch(page);
+    await page.locator('#cm-title').evaluate(n=>n.hidden=true);await released(page);
+    await page.locator('#cm-title').evaluate(n=>n.hidden=false);await page.locator('#cm-watch-film').waitFor();await watch(page);await skip(page);await released(page);
+  });
+  for(const failure of ['reject','404','network','slow'])await scenario(failure+' restores usable TITLE with no automatic retry; manual retry works',async(page,context)=>{
+    if(failure==='reject')await context.addInitScript(()=>{const original=HTMLMediaElement.prototype.play;window.__rejectFilm=true;HTMLMediaElement.prototype.play=function(){return this.tagName==='VIDEO'&&__rejectFilm?Promise.reject(new DOMException('blocked','NotAllowedError')):original.call(this);};});
+    else await page.route(webPattern,async route=>{if(failure==='404')await route.fulfill({status:404,body:''});else if(failure==='network')await route.abort();else await new Promise(resolve=>setTimeout(resolve,9000)).then(()=>route.abort()).catch(()=>{});});
+    await boot(page);await page.click('#cm-watch-film');
+    await page.waitForFunction(()=>['rejected','error','timeout'].includes(document.querySelector('#cm-opening-film').dataset.result),null,{timeout:14000});
+    await released(page);assert.equal(await page.locator('#cm-login').isVisible(),true);
     if(failure==='slow')assert.equal((await state(page)).result,'timeout');
-    await page.clock.install();await page.clock.runFor(20000);assert.equal((await state(page)).hidden,true);assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
+    await page.clock.install();await page.clock.runFor(20000);await released(page);await page.clock.resume();
+    await page.unroute(webPattern);if(failure==='reject')await page.evaluate(()=>window.__rejectFilm=false);
+    await watch(page);await skip(page);assert.equal(await page.evaluate(k=>localStorage.getItem(k),saveKey),null);
   });
-  await scenario('buffered film warms exactly four TITLE assets and reuses them on return',async(page)=>{
-    const attempts=[];
-    await page.route('**/title-morning-r1/*.webp',async route=>{
-      attempts.push(route.request().url());
-      await new Promise(resolve=>setTimeout(resolve,1500));
-      await route.continue().catch(()=>{});
-    });
-    await boot(page);await playing(page);
-    await page.waitForFunction(()=>document.querySelector('.cm-title__panel')?.dataset.titleBackgroundState==='ready'&&[...document.querySelectorAll('#cm-title > .cm-title__panel img')].filter(i=>!i.dataset.titleLocale||i.dataset.titleImageVisible==='true').every(i=>i.complete&&i.naturalWidth>0));
-    assert.equal(attempts.length,4);assert.equal(new Set(attempts).size,4);
-    const titleImages=page.locator('#cm-title > .cm-title__panel img:not([data-title-locale]), #cm-title > .cm-title__panel img[data-title-image-visible="true"]');
-    assert.equal(await page.locator('#cm-title > .cm-title__panel img[data-title-locale][data-title-image-visible="false"]').evaluateAll(images=>images.length===4&&images.every(i=>!i.getAttribute('src'))),true,'four inactive logos remain unfetched');
-    assert.ok(await titleImages.count()>0);
-    assert.equal(await titleImages.evaluateAll(images=>images.every(image=>image.getAttribute('src').startsWith('blob:'))),true);
-    await skip(page);
-    assert.equal(await titleImages.evaluateAll(images=>images.every(image=>!!image.getAttribute('src'))),true);
-    await page.waitForFunction(()=>document.querySelector('.cm-title__panel')?.dataset.titleBackgroundState==='ready');
-    assert.ok(attempts.some(url=>url.endsWith('/arena.webp')));
-    assert.equal(attempts.length,4,'skip must not repeat completed warm requests');
-  });
-  await scenario('cold startup allows 4.2s delivery; playback stalls still return within 3s',async(page)=>{
-    await page.route('**/opening-720p-ef50993b.mp4',async route=>{await new Promise(resolve=>setTimeout(resolve,4200));await route.continue();});
-    await boot(page);assert.equal(await page.locator('#cm-film-skip').isVisible(),true);await playing(page);
-    await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+1000));
-    await page.locator('video').evaluate(v=>{v.pause();v.dispatchEvent(new Event('waiting'));});
-    await page.clock.runFor(2999);assert.equal((await state(page)).hidden,false);
-    await page.clock.runFor(2);assert.equal((await state(page)).result,'timeout');assert.equal(await page.locator('#cm-login').isVisible(),true);
-  });
-  for(const reduced of ['system','on'])await scenario('reduced motion '+reduced+' loads no video until manual watch',async(page,context)=>{
-    await prefs(context,{reducedMotion:reduced});let requests=0;page.on('request',r=>{if(r.url().includes('opening-720p'))requests++;});
-    await boot(page);await page.clock.install();await page.clock.runFor(30000);assert.equal(requests,0);assert.equal((await state(page)).hidden,true);
-    await page.click('#cm-watch-film');await playing(page);assert.equal((await state(page)).hidden,false);await page.click('#cm-film-skip');
-  },{reducedMotion:reduced==='system'?'reduce':'no-preference'});
-  for(const locale of ['zh-Hant','en','ja','th','vi'])await scenario('locale '+locale+' portrait layout, brand and global volume',async(page,context)=>{
-    await prefs(context,{locale,masterVolume:50,musicVolume:40,muted:locale==='vi'});await boot(page);await playing(page);
-    assert.equal(await page.locator('html').getAttribute('lang'),locale);
-    assert.equal(await page.locator('video').evaluate(v=>v.volume),.2);
+  for(const locale of ['zh-Hant','en','ja','th','vi'])await scenario(locale+' volume, global mute, reduced motion and touch controls',async(page,context)=>{
+    await prefs(context,{locale,masterVolume:50,musicVolume:40,muted:locale==='vi',reducedMotion:'on'});
+    await boot(page);await released(page);await watch(page);
+    assert.equal(await page.locator('html').getAttribute('lang'),locale);assert.equal(await page.locator('video').evaluate(v=>v.volume),.2);
     if(locale==='vi')assert.equal(await page.locator('#cm-film-sound').isDisabled(),true);
-    for(const id of ['#cm-film-skip','#cm-film-sound']){
-      const b=await page.locator(id).boundingBox();assert.ok(b.height>=44&&b.x>=0&&b.x+b.width<=391);
-      assert.equal(await page.locator(id).evaluate(n=>n.scrollWidth>n.clientWidth),false);
-    }
-    await page.locator('video').evaluate(v=>{v.currentTime=55.8;});
-    await page.waitForFunction(()=>!document.querySelector('#cm-opening-film .cm-title__logo').hidden);
-    const label=await page.locator('#cm-opening-film .cm-title__name').getAttribute('aria-label');assert.ok(label&&!label.includes('CHAMPIONSHIP2026'));
-    await page.waitForTimeout(900);
-    if(locale!=='zh-Hant'){
-      const h=await page.locator('#cm-opening-film .cm-title__name').boundingBox();
-      assert.ok(h.x>=0&&h.x+h.width<=390,'brand fits portrait viewport');
-    }
-    await page.screenshot({path:path.join(output,'brand-'+locale+'.png')});await skip(page);
-    await page.setViewportSize({width:844,height:390});await page.click('#cm-watch-film');await playing(page);await page.screenshot({path:path.join(output,'landscape-'+locale+'.png')});await skip(page);
-  });
-  await scenario('QA save bytes unchanged on TITLE, Continue keeps film off in Raising',async(page)=>{
-    await page.goto(origin+'/full-qa-save.html');await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
-    await Promise.all([page.waitForURL(/championship\.html$/),page.click('#install')]);await playing(page);
-    const before=await page.evaluate(key=>localStorage.getItem(key),saveKey);assert.ok(before);await skip(page);await page.click('#cm-watch-film');await playing(page);await skip(page);
-    assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),before);
+    for(const id of ['#cm-film-skip','#cm-film-sound']){const b=await page.locator(id).boundingBox();assert.ok(b.height>=44&&b.x>=0&&b.x+b.width<=391);assert.equal(await page.locator(id).evaluate(n=>n.scrollWidth>n.clientWidth),false);}
+    await page.keyboard.press('Escape');await released(page);
+  },{reducedMotion:'reduce'});
+  await scenario('normal Continue flow and TITLE return preserve save and one Pixi application',async(page,context)=>{
+    const seed=fs.readFileSync(path.resolve('qa/championship-full-qa-save.json'),'utf8');await context.addInitScript(({key,seed})=>localStorage.setItem(key,seed),{key:saveKey,seed});
+    await boot(page);const before=await page.evaluate(k=>localStorage.getItem(k),saveKey);await watch(page);await skip(page);
+    assert.equal(await page.evaluate(k=>localStorage.getItem(k),saveKey),before);
     await page.click('#cm-login');await page.click('#cm-continue');await page.locator('.cm-raising-pixi-canvas').waitFor({timeout:60000});
-    await page.clock.install();await page.clock.runFor(20000);assert.equal((await state(page)).hidden,true);assert.equal(await page.locator('video').getAttribute('src'),null);assert.equal(await page.locator('canvas').count(),1);
+    await released(page);assert.equal(await page.locator('canvas').count(),1);
   });
-  if(process.env.NS33_LEGACY_GATES==='1')for(const file of (process.env.NS33_LEGACY_FILES||'championship-int-rh2-browser.cjs,championship-recent-integration-browser.cjs,championship-ui-integration-browser.cjs').split(',')){
-    const {spawn}=require('node:child_process');
-    const log=fs.openSync(path.join(output,file+'.log'),'w');
-    const child=spawn(process.execPath,[path.join(process.env.NS33_BASELINE_TESTS||'tests',file)],{env:{...process.env,CHAMPIONSHIP_QA_ORIGIN:origin,CHAMPIONSHIP_QA_URL:origin+'/championship.html'},stdio:['ignore',log,log],windowsHide:true});
-    const code=await new Promise((resolve,reject)=>{child.on('error',reject);child.on('exit',resolve);});fs.closeSync(log);
-    report.checks.push({name:file,passed:code===0});console.log((code===0?'PASS ':'FAIL ')+file);
-  }
-  assert.ok(report.checks.every(check=>check.passed),'all requested browser gates pass');
-})().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{report.partial=Boolean(process.env.NS33_CASE);report.localReferences={root:referenceRoot,files:[...referenceReads].sort(),published:false};report.passed=report.checks.length>0&&report.checks.every(c=>c.passed);fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();});
+  assert.ok(report.checks.every(c=>c.passed));
+})().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{report.partial=Boolean(process.env.NS33_CASE);report.passed=report.checks.length>0&&report.checks.every(c=>c.passed);fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();});

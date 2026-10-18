@@ -8457,7 +8457,9 @@
     "assets/production/database-display-20261018/species-054.thumbnail.4ad2692c6f79115c.webp",
     "assets/production/database-display-20261018/species-059.display.d65af3374e14305c.webp",
     "assets/production/database-display-20261018/species-059.thumbnail.133ac3f1f9d74ca7.webp",
-    "assets/production/scene-music-r1/system/podium_geometry.mp3"
+    "assets/production/scene-music-r1/system/podium_geometry.mp3",
+    "assets/production/opening-film-ns33-r1/opening-web-540p-9577fea3.mp4",
+    "assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -38809,7 +38811,7 @@
       },
       {
         "path": "src/championship/app/openingFilm.js",
-        "sha256": "4db98aefbdbabd333bdc2cadc3cb0f5cc181ce8dfcf17a1190ceb6b8c9244dc6"
+        "sha256": "4d7fbee263823055ccaf293d18ddc6a16aa70425245f92617717c6a767df7919"
       },
       {
         "path": "src/championship/app/openingPresentation.js",
@@ -40638,6 +40640,14 @@
       {
         "path": "assets/production/scene-music-r1/system/podium_geometry.mp3",
         "sha256": "f149580019ec9fd123b52e7fc0824cd6612874a5571e5632995d77531edbeb12"
+      },
+      {
+        "path": "assets/production/opening-film-ns33-r1/opening-web-540p-9577fea3.mp4",
+        "sha256": "9577fea3e9558d63e77dad185c3b420793aaad54eb181b813fd03ccce0e5c84e"
+      },
+      {
+        "path": "assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg",
+        "sha256": "048c2ee9cd049398421631536e99e3b72aaa8f79c53068ecf3617371ef183b38"
       }
     ],
     "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",

@@ -12,6 +12,7 @@ import {isShippingArtEntry,publicArtIndex} from '../scripts/lib/public-art-bound
 import {isLocalBattleEffectPreview} from '../src/championship/presentation/battleEffectArt.js';
 import {PUBLIC_RUNTIME_INDEX_PATH,PUBLIC_RUNTIME_ALLOWLIST_PATH} from '../scripts/lib/public-runtime-boundary.mjs';
 import {compileBrowserBundle,compiledPublicArtifactPlan,bundledBrowserHtml} from '../scripts/lib/browser-bundle.mjs';
+import {openingFilmPublicationFiles} from '../scripts/lib/opening-film-publication.mjs';
 import * as esbuild from 'esbuild';
 
 const repo=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -54,6 +55,12 @@ function fixture(t){
   const writeRaw=(f,v)=>{fs.mkdirSync(path.dirname(path.join(root,f)),{recursive:true});fs.writeFileSync(path.join(root,f),typeof v==='string'?v:JSON.stringify(v)+'\n');};
   const write=(f,v)=>{
     if(f===BUILD_INPUT_PATH){
+      // Exercise the enabled film policy with its real, exact selected bytes.
+      for(const row of openingFilmPublicationFiles()){
+        const dest=path.join(root,row.path);fs.mkdirSync(path.dirname(dest),{recursive:true});
+        if(!fs.existsSync(dest))fs.copyFileSync(path.join(repo,row.path),dest);
+        if(!v.files.includes(row.path))v.files.push(row.path);
+      }
       v.schemaVersion=2;v.authoring={indexPath:ART_INDEX_PATH,policyPath:PLAYTEST_PATH};
       v.files=v.files.filter(file=>![ART_INDEX_PATH,PLAYTEST_PATH].includes(file));
       if(!v.files.includes(PUBLIC_RUNTIME_INDEX_PATH))v.files.push(PUBLIC_RUNTIME_INDEX_PATH);
@@ -71,7 +78,7 @@ function fixture(t){
   const asset='assets/production/test/manifest.json';write(asset,{fixture:true});
   const art={assetId:'TEST_ONLY',manifestPath:asset,rightsStatus:'OWNER_OWNED',runtimeEligible:true,humanApproved:true,
     runtimeQaPassed:true,shippingReady:true,publicReleasePermitted:true,rightsEvidenceIds:['TEST_ONLY'],
-    releaseFiles:[{path:asset,sha256:sha256(fs.readFileSync(path.join(root,asset)))}]};
+    releaseFiles:[{path:asset,sha256:sha256(fs.readFileSync(path.join(root,asset)))},...openingFilmPublicationFiles()]};
   const evidence={evidenceId:'TEST_ONLY',authorizationRecordedOn:'2026-01-01',expiresOn:'2099-01-01',
     scope:{platforms:['WEB'],territories:['TW']},document:{status:'VERIFIED',sha256:'a'.repeat(64),privateVaultReference:'fixture-only',verifiedBy:'test',verifiedOn:'2026-01-02'},decisions:{shippingPermitted:true}};
   write(ART_INDEX_PATH,{entries:[art],summary:{registeredRuntimeBundles:1,shippingReadyBundles:1}});

@@ -90,7 +90,13 @@
     "scope": "Existing textless 58s NS33 film; mobile 720p / desktop 1080p; one pinned source; bounded TITLE-only warmup during buffered playback",
     "manifestPath": "assets/production/opening-film-ns33-r1/manifest.json",
     "commercialReleaseAccepted": false,
-    "physicalDeviceAccepted": false
+    "physicalDeviceAccepted": false,
+    "webRestore": {
+      "ownerAuthorizedOn": "2026-10-18",
+      "scope": "Approved 58s source compressed to one 540p web derivative; manual Watch only; no startup/idle media download; immediate skip, background/leave release and shared BGM exclusion.",
+      "commercialReleaseAccepted": false,
+      "physicalDeviceAccepted": false
+    }
   },
   "newModeMapTestRelease": {
     "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",

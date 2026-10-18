@@ -38,5 +38,27 @@
   "commercialReleaseAccepted": false,
   "fullSubjectiveListeningAccepted": false,
   "physicalDeviceAccepted": false,
-  "scope": "Existing approved Pages origin; textless final video only. No production sources, stems, raw music, or private documents."
+  "scope": "Existing approved Pages origin; textless final video only. No production sources, stems, raw music, or private documents.",
+  "webRestore": {
+    "ownerAuthorizedOn": "2026-10-18",
+    "classification": "OWNER_APPROVED_ADAPTATION",
+    "instruction": "Restore approved opening; self-review then publish. Allow a compressed web derivative, preserve original, no new film or paid service. On demand, skippable, no entry blocking; honor mute/gesture and stop on leave/background.",
+    "file": "assets/production/opening-film-ns33-r1/opening-web-540p-9577fea3.mp4",
+    "sha256": "9577fea3e9558d63e77dad185c3b420793aaad54eb181b813fd03ccce0e5c84e",
+    "bytes": 4755124,
+    "sourceFile": "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
+    "sourceSha256": "30b173920b3ad776aa9fc85949c720715f2d0b6fad6bca2a443ae30686a770ce",
+    "width": 540,
+    "height": 960,
+    "seconds": 58,
+    "frames": 1392,
+    "fps": 24,
+    "videoCodec": "H.264 High level 3.1 yuv420p",
+    "audioCodec": "AAC LC 48kHz stereo 80kbps",
+    "recipe": "ffmpeg -map 0:v:0 -map 0:a:0 -vf scale=540:960:flags=lanczos -c:v libx264 -preset slow -crf 28 -maxrate 600k -bufsize 1200k -profile:v high -level:v 3.1 -pix_fmt yuv420p -c:a aac -b:a 80k -ac 2 -ar 48000 -movflags +faststart -map_metadata -1",
+    "trigger": "manual Watch only; no startup or idle video request",
+    "publicSelection": "web derivative and poster only; retain all originals outside public build",
+    "physicalDeviceAccepted": false,
+    "fullSubjectiveListeningAccepted": false
+  }
 }

@@ -2,8 +2,8 @@ import {openingFilmCopy} from '../text/openingFilmText.js';
 export {openingFilmCopy} from '../text/openingFilmText.js';
 // Owner-approved NS33 film; DOM-only TITLE presentation, no save/router/ticker.
 import {getActiveGameTitle, getTitleHeadingHtml} from '../text/brandTerms.js';
-// Release pause: keep the original player and media for an explicit restoration.
-export const OPENING_FILM_ENABLED = false;
+// Owner-approved restoration: one small source, fetched only by manual Watch.
+export const OPENING_FILM_ENABLED = true;
 export const OPENING_FILM = Object.freeze({
   src:'assets/production/opening-film-ns33-r1/opening-720p-ef50993b.mp4',
   sha256:'ef50993b1856da8f7fb4ec62ca6d6ab50489f5e81e4b7b799469a4b154b8831d',
@@ -14,19 +14,14 @@ export const OPENING_FILM = Object.freeze({
   liteSrc:'assets/production/opening-film-ns33-r1/opening-540p-6869b2cb.mp4',
   liteSha256:'6869b2cb08b3e225b634525d350a4529ea707640a157d355abc85e283670cc46',
   liteBytes:8782520,
+  webSrc:'assets/production/opening-film-ns33-r1/opening-web-540p-9577fea3.mp4',
+  webSha256:'9577fea3e9558d63e77dad185c3b420793aaad54eb181b813fd03ccce0e5c84e',
+  webBytes:4755124,
   poster:'assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg',
   posterSha256:'048c2ee9cd049398421631536e99e3b72aaa8f79c53068ecf3617371ef183b38',
-  duration:58.0, logoTime:55.71, idleMs:15000, startupWaitMs:8000, waitMs:3000
+  duration:58.0, logoTime:55.71, startupWaitMs:8000, waitMs:3000
 });
-export function selectOpeningFilmSource(nav = globalThis.navigator, win = globalThis.window) {
-  const conn = nav?.connection;
-  if (conn?.saveData || conn?.effectiveType === '2g' || conn?.effectiveType === 'slow-2g') {
-    return OPENING_FILM.liteSrc;
-  }
-  const mobile = nav?.userAgentData?.mobile === true
-    || (win?.matchMedia?.('(pointer: coarse)').matches && win.innerWidth < 1024);
-  return win?.innerWidth && !mobile ? OPENING_FILM.desktopSrc : OPENING_FILM.src;
-}
+export function selectOpeningFilmSource() {return OPENING_FILM.webSrc;}
 export function hasOpeningPreloadBuffer(video) {
   if (video.paused || video.seeking || video.readyState < 3) return false;
   const remaining = video.duration - video.currentTime;
@@ -35,9 +30,6 @@ export function hasOpeningPreloadBuffer(video) {
     if (video.buffered.start(i) <= video.currentTime && video.buffered.end(i) - video.currentTime >= Math.min(6,remaining)) return true;
   }
   return false;
-}
-export function canAutoPlayOpening({titleVisible,titleReady,menuOpen,dialogOpen,hidden,reducedMotion,failed}){
-  return Boolean(titleVisible&&titleReady&&!menuOpen&&!dialogOpen&&!hidden&&!reducedMotion&&!failed);
 }
 export function createOpeningFilm({title,controls,login,menu,opening,getPreferences,onActiveChange=()=>{},onBufferChange=()=>{},
   document:doc=globalThis.document,window:win=globalThis.window,enabled=OPENING_FILM_ENABLED}){
@@ -56,24 +48,20 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
   sound.id='cm-film-sound';skip.id='cm-film-skip';sound.type=skip.type='button';bar.append(sound,skip);
   const status=node('p','cm-title__film-status');status.setAttribute('role','status');
   host.append(video,art,bar,status);title.append(host);
-  let active=false,attached=false,disposed=false,failed=false,token=0,wantsSound=false,autoPlaying=false,lastLocale=null;
-  let idle=null,wait=null,deadline=null,guardUntil=0,oldFocus=null,restoreInert=[];
+  let active=false,attached=false,disposed=false,token=0,wantsSound=false,lastLocale=null;
+  let wait=null,deadline=null,guardUntil=0,oldFocus=null,restoreInert=[];
   let selectedSrc=null,bufferBlocked=true;
   const canPreloadTitle=()=>active&&!bufferBlocked&&hasOpeningPreloadBuffer(video);
   // Finish owns the handoff through onActiveChange (music first, art second).
   // A synchronous pause or late progress event must not start art beforehand.
   const bufferChange=()=>{if(active)onBufferChange();};
   const clear=key=>{if(key!==null)win.clearTimeout(key);};
-  function clearIdle(){clear(idle);idle=null;}
   function clearWait(){clear(wait);wait=null;}
   const locale=()=>doc.documentElement.lang||'zh-Hant';
-  const reduced=()=>doc.documentElement.dataset.motion==='reduced';
   const visible=()=>!title.hidden;
   const dialogOpen=()=>[...doc.querySelectorAll('dialog[open],[role="dialog"],[role="menu"]')]
     .some(n=>n!==host&&!host.contains(n)&&!n.closest('[hidden]')&&n.getClientRects().length>0);
   const ready=()=>visible()&&!login.disabled&&menu.hidden&&opening.hidden&&!dialogOpen()&&doc.visibilityState!=='hidden';
-  const autoReady=()=>canAutoPlayOpening({titleVisible:visible(),titleReady:!login.disabled,
-    menuOpen:!menu.hidden||!opening.hidden,dialogOpen:dialogOpen(),hidden:doc.visibilityState==='hidden',reducedMotion:reduced(),failed});
   function labels(){
     if(lastLocale===locale()){audio();return;}lastLocale=locale();
     const c=openingFilmCopy(locale());watch.textContent=c[0];skip.textContent=c[1];
@@ -89,26 +77,19 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
     if(sound.textContent!==label)sound.textContent=label;sound.disabled=p.muted;
     sound.setAttribute('aria-pressed',String(!video.muted));
   }
-  function resetIdle(){
-    clearIdle();
-    if(!active&&autoReady())idle=win.setTimeout(()=>{idle=null;if(autoReady())play(false);},OPENING_FILM.idleMs);
-  }
   function finish(reason){
     if(!active)return;
-    active=false;bufferBlocked=true;++token;clearIdle();clearWait();clear(deadline);deadline=null;
+    active=false;bufferBlocked=true;++token;clearWait();clear(deadline);deadline=null;
     video.pause();video.muted=true;video.preload='none';wantsSound=false;
     host.hidden=true;host.dataset.state='idle';host.dataset.result=reason;brand.hidden=true;
     for(const [n,inert] of restoreInert)n.inert=inert;restoreInert=[];
-    if(['error','timeout','rejected'].includes(reason))failed=true;
-    // Cancel an unfinished request; finished media can reuse the browser cache.
-    // Skip immediately aborts in-flight downloads so user entering game never waits on video.
-    if(video.readyState<2||failed||reason==='skip'||reason==='leave'){video.removeAttribute('src');video.load();}
+    // Release on every exit, including background and natural end; HTTP cache may reuse bytes.
+    video.removeAttribute('src');video.load();
     onActiveChange(false);
     if(reason==='skip')guardUntil=win.performance.now()+350;
     if(visible()&&doc.visibilityState!=='hidden'&&reason!=='leave'){
       (oldFocus?.isConnected&&oldFocus!==doc.body&&!oldFocus.closest('[hidden]')?oldFocus:login).focus({preventScroll:true});
     }
-    resetIdle();
   }
   function armWait(){
     if(!active||wait!==null)return;
@@ -123,10 +104,10 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
   function time(){if(active){const show=video.currentTime>=OPENING_FILM.logoTime;if(brand.hidden===show)brand.hidden=!show;bufferChange();}}
   function ended(){finish('ended');}
   function error(){finish('error');}
-  function play(manual=false){
-    if(disposed||active||!ready()||(!manual&&!autoReady()))return false;
-    failed=false;clearIdle();oldFocus=doc.activeElement;
-    active=true;bufferBlocked=true;autoPlaying=!manual;const request=++token;wantsSound=false;labels();
+  function play(){
+    if(disposed||active||!ready())return false;
+    oldFocus=doc.activeElement;
+    active=true;bufferBlocked=true;const request=++token;wantsSound=false;labels();
     restoreInert=[...title.children].filter(n=>n!==host).map(n=>[n,n.inert]);
     for(const [n] of restoreInert)n.inert=true;
     host.hidden=false;host.dataset.state='loading';status.hidden=false;brand.hidden=true;
@@ -146,7 +127,7 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
   function consume(e){e.preventDefault();e.stopImmediatePropagation();}
   function input(e){
     if(win.performance.now()<guardUntil&&['pointerdown','pointerup','click','keydown','keyup'].includes(e.type)){consume(e);return;}
-    if(!active){resetIdle();return;}
+    if(!active)return;
     if(e.type==='keydown'){
       if(e.key==='Escape'){consume(e);finish('skip');}
       else if(e.key==='Tab'){
@@ -156,9 +137,9 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
       }
     }
   }
-  function visibility(){if(doc.visibilityState==='hidden'){finish('hidden');clearIdle();}else resetIdle();}
-  function hide(){finish('hidden');clearIdle();}
-  const events=['pointerdown','pointerup','pointermove','click','keydown','keyup','wheel','focusin'];
+  function visibility(){if(doc.visibilityState==='hidden')finish('hidden');}
+  function hide(){finish('hidden');}
+  const events=['pointerdown','pointerup','click','keydown','keyup'];
   const mediaEvents={playing,timeupdate:time,progress:bufferChange,pause,ended,error,waiting,stalled:waiting};
   const observer=new win.MutationObserver(()=>sync());
   function attach(){
@@ -170,7 +151,7 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
     observer.observe(doc.documentElement,{attributes:true,attributeFilter:['lang','data-motion']});
   }
   function detach(){
-    if(!attached)return;attached=false;observer.disconnect();clearIdle();clearWait();clear(deadline);deadline=null;
+    if(!attached)return;attached=false;observer.disconnect();clearWait();clear(deadline);deadline=null;
     for(const e of events)doc.removeEventListener(e,input,true);
     doc.removeEventListener('visibilitychange',visibility);win.removeEventListener('pagehide',hide);win.removeEventListener('pageshow',visibility);
     for(const [e,fn] of Object.entries(mediaEvents))video.removeEventListener(e,fn);
@@ -180,14 +161,13 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
     if(disposed)return;
     if(!visible()){finish('leave');detach();return;}
     attach();labels();
-    if(active&&(!ready()||(reduced()&&autoPlaying)))finish(reduced()&&autoPlaying?'motion':'blocked');
+    if(active&&!ready())finish('blocked');
     const show=ready();if(watch.hidden===show)watch.hidden=!show;
-    if(!active){if(!autoReady())clearIdle();else if(idle===null)resetIdle();}
   }
-  watch.addEventListener('click',e=>{consume(e);play(true);});
+  watch.addEventListener('click',e=>{consume(e);play();});
   skip.addEventListener('click',e=>{consume(e);finish('skip');});
   sound.addEventListener('click',e=>{consume(e);if(e.isTrusted===false)return;wantsSound=!wantsSound;audio();});
   // The app owns the title-hidden observer and calls sync on title transitions.
-  return Object.freeze({start(){sync();if(autoReady())play(false);},sync,isPlaying:()=>active,canPreloadTitle,
+  return Object.freeze({start(){sync();},sync,isPlaying:()=>active,canPreloadTitle,
     dispose(){if(disposed)return;finish('leave');disposed=true;detach();watch.remove();host.remove();}});
 }
