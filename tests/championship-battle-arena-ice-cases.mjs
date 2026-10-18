@@ -161,7 +161,7 @@ function practice(seed, options, a = [135, 113, 101]) {
 // specials only occasionally, so a melt is an occasional battle event. Seed 16
 // with this fire team is a recorded case where one connects and opens ice.
 test('opt-in BM05 battle: a landed fire special opens the sheet, deterministically; off keeps the original', () => {
-  const off = practice(16, {}), on = practice(16, {arenaHazards:true}), again = practice(16, {arenaHazards:true});
+  const off = practice(16, {}), on = practice(16, {arenaHazards:createBattleArenaHazards}), again = practice(16, {arenaHazards:createBattleArenaHazards});
   assert.equal(off.hazards, null);
   assert.deepEqual(on.events, again.events);
   const kinds = new Set(on.events.map(e => e.type));

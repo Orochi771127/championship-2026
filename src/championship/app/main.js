@@ -210,6 +210,9 @@ const ARENA_HAZARDS_REVIEW = ["localhost", "127.0.0.1", "[::1]", "::1"].includes
   && new URLSearchParams(globalThis.location?.search ?? "").get("arenaHazards") === "1";
 // Loopback review QA for arena hazards: heat/water/place at a slot and read the
 // hazard snapshot. Bound where a Free/Practice runtime is prepared.
+// The hazard layer loads only for that review, so public builds never carry it.
+const loadArenaHazards = async () => ARENA_HAZARDS_REVIEW
+  ? (await import("../battle/battleArenaHazards.js")).createBattleArenaHazards : null;
 function exposeArenaHazardsQa(runtime) {
   if (!ARENA_HAZARDS_REVIEW || !String(globalThis.location?.search ?? '').includes('battleFxDebug')) return;
   globalThis.__championshipArenaHazardsQa = { heatAt: slot => runtime.qaArenaHeat?.(slot) ?? 0,
@@ -1281,7 +1284,7 @@ async function mountBattleSelect() {
       if(mode==='FREE_BATTLE'){
         const party=await app.prepareFreeBattle(recordIndex,playerInstanceIds,selectedArena);if(!party.ok)return party;
         const prepared=(await loadBattleRuntime())({mode:2,battleType:0,playerIndividuals:party.individuals,rng:party.rngPreparation.rng,
-          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY,arenaHazards:ARENA_HAZARDS_REVIEW});
+          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY,arenaHazards:await loadArenaHazards()});
         try{
           prepared.chooseFreeBattle({presetIndices:party.match.presetIndices,arenaIndex:party.arenaIndex});prepared.startMatch();exposeArenaHazardsQa(prepared);
           const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
@@ -1291,7 +1294,7 @@ async function mountBattleSelect() {
       if(mode==='PRACTICE_BATTLE'){
         const party=await app.preparePracticeBattle(playerInstanceIds,selectedArena);if(!party.ok)return party;
         const prepared=(await loadBattleRuntime())({mode:5,battleType:0,playerIndividuals:party.parties[0],opponentIndividuals:party.parties[1],rng:party.rngPreparation.rng,
-          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY,arenaHazards:ARENA_HAZARDS_REVIEW});
+          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY,arenaHazards:await loadArenaHazards()});
         try{
           prepared.choosePracticeBattle({arenaIndex:party.arenaIndex});prepared.startMatch();exposeArenaHazardsQa(prepared);
           const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;

@@ -102,7 +102,7 @@ test('off by default: a BM04 practice battle keeps the original rules and expose
 });
 
 test('opt-in BM04 battle: thunder charges the lagoon, shocks only opponents of the charge, deterministically', () => {
-  const on = practice(3, {arenaHazards:true}), again = practice(3, {arenaHazards:true});
+  const on = practice(3, {arenaHazards:createBattleArenaHazards}), again = practice(3, {arenaHazards:createBattleArenaHazards});
   assert.deepEqual(on.events, again.events);
   const charges = on.events.filter(e => e.type === 'SHOCK_CHARGE');
   const shocks = on.events.filter(e => e.type === 'SHOCKED');

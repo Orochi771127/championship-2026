@@ -63,7 +63,6 @@ import { createBattleImpactEffects } from '../battle/battleImpactEffects.js';
 import {createBattleSoundEvents} from '../battle/battleSoundEvents.js';
 import {beginBattlePresentationEngagement,endBattlePresentationEngagement,writeBattleHitTiming,advanceBattlePresentationTiming} from '../battle/battlePresentationHost.js';
 import { createBattleHitRuntime } from '../battle/battleHitRuntime.js';
-import { createBattleArenaHazards } from '../battle/battleArenaHazards.js';
 import {createBattleNormalRuntime} from '../battle/battleNormalRuntime.js';
 import {normalBattleStands,normalBattleLaunchGuard} from '../battle/battleNormalFlow.js';
 import { battleHitEligible } from '../battle/battleHitState.js';
@@ -122,7 +121,9 @@ export function createBattleRuntime(options = {}) {
   const aiPolicy=options.aiPolicy??BATTLE_AI_ORIGINAL;
   // Owner-approved arena hazards (2026-10-18) are opt-in per battle. Off keeps
   // every parity fixture and replay byte-for-byte on the original rules.
-  const arenaHazardsEnabled=options.arenaHazards===true;
+  // Arena hazards are injected (createBattleArenaHazards), never imported here,
+  // so the public module closure stays free of the local-review hazard layer.
+  const createArenaHazards=typeof options.arenaHazards==='function'?options.arenaHazards:null;
   let arenaHazards=null;
   // A fall ends ashore: move the native world point the VM reads (the actor
   // copies it next advance). x/y in native px only; height and facing stay.
@@ -739,7 +740,7 @@ export function createBattleRuntime(options = {}) {
       demand.forEach((n,id)=>nativeActors.memory.writeU16(effectActors.base,4+id*2,n));
       nativeActors.memory.writeU32(0x02131c40,0,nativeActors.worldAddress);
       const arenaIndex=chosen.championship?10:chosen.arenaIndex;
-      arenaHazards=arenaHazardsEnabled?createBattleArenaHazards({fieldId:BATTLE_PRESENTATION_ARENAS[arenaIndex]?.field,teamOfSlot:battleTeamOfSlot}):null;
+      arenaHazards=createArenaHazards?createArenaHazards({fieldId:BATTLE_PRESENTATION_ARENAS[arenaIndex]?.field,teamOfSlot:battleTeamOfSlot}):null;
       hitRuntime=createBattleHitRuntime({session,actors:nativeActors,
         onSound:id=>soundEvents.call(0x0203ea30,[id,127,0],session.frame),
         onHitTiming:detail=>{const issue=writeBattleHitTiming(nativeActors.memory,nativeActors.worldAddress,detail);if(issue)timingIssues.add(issue);},
