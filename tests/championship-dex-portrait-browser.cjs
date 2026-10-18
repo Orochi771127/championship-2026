@@ -141,12 +141,15 @@ async function checkPolicy(repo) {
     sourceHashes: files.map(file => ({ file, sha256: sha256(fs.readFileSync(path.join(repo, file))) })) };
 }
 // The comic can advance itself between visibility inspection and an optional tap.
-// Accept that race only when its removal AND the ordinary next envelope are observed.
+// Accept removal only with an observed next envelope or a still-visible comic panel.
 async function clickOptionalComicControl(page, control, options = {}) {
   if (!await control.isVisible()) return;
   try {
     await control.click({ ...options, timeout: 1000 });
   } catch (error) {
+    if (error.name === 'TimeoutError' && typeof control.count === 'function'
+      && await control.count() === 0 && await page.locator('.cm-opening-story').count() === 1
+      && await page.locator('.cm-opening-story').isVisible()) return;
     if (error.name !== 'TimeoutError'
       || await page.locator('.cm-opening-story').count() !== 0
       || !await page.locator('.cm-opening__envelope').isVisible()) throw error;
@@ -411,6 +414,11 @@ async function selfTestOptionalComicClick() {
   await clickOptionalComicControl(absent.page, absent.control); assert.equal(absent.calls.length, 0);
   const advanced = testCase({ error: timeout });
   await clickOptionalComicControl(advanced.page, advanced.control); assert.equal(advanced.calls.length, 1);
+  const nextPanel = testCase({ error: timeout, storyCount: 1 });
+  nextPanel.control.count = async () => 0;
+  nextPanel.page.locator = selector => selector === '.cm-opening-story'
+    ? { count: async () => 1, isVisible: async () => true } : { isVisible: async () => false };
+  await clickOptionalComicControl(nextPanel.page, nextPanel.control);
   for (const options of [{ storyCount: 1 }, { envelopeVisible: false }, { storyCount: 1, envelopeVisible: false }]) {
     const blocked = testCase({ error: timeout, ...options });
     await assert.rejects(() => clickOptionalComicControl(blocked.page, blocked.control), error => error === timeout);
