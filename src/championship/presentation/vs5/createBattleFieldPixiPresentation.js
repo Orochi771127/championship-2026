@@ -460,9 +460,10 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       width:worldWidthPx*fit, height:worldHeightPx*fit};
   }
 
-  function redraw() {
+  // The view is rebuilt and frozen on every getView(); callers that already
+  // hold the current one (nothing stepped since) pass it in.
+  function redraw(view = source.getView()) {
     if (disposed) return;
-    const view = source.getView();
     onView?.({...view,openingFxVisible:Boolean(fxLayer && fieldArt && view.opening?.cue)});
     const frame = source.getFrame();
     lastViewport = { width: app.screen.width, height: app.screen.height };
@@ -537,7 +538,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     if (disposed) return;
     if(globalThis.document?.hidden){pendingFrames=0;resumeWithoutDelta=true;return;}
     if(resumeWithoutDelta){resumeWithoutDelta=false;pendingFrames=0;redraw();return;}
-    const openingCue=source.getView().opening?.cue ?? null;
+    let current=source.getView();
+    const openingCue=current.opening?.cue ?? null;
     if(openingCue && openingCue!==lastTickerOpeningCue){
       // Assets may become ready between callbacks. Present the first cue before
       // consuming any elapsed time from the task that loaded those assets.
@@ -551,7 +553,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       pendingFrames += elapsed/nativeFrameMs;
       while(pendingFrames+1e-9>=1 && !disposed && !source.getFrame().outcome.ended){
         pendingFrames=Math.max(0,pendingFrames-1);
-        const beforeOpening=source.getView().opening;
+        const beforeOpening=(current ?? source.getView()).opening;
+        current=null;
         source.tick();
         frames += 1;
         if(beforeOpening?.armed && beforeOpening.phase!=='ACTIVE'){
@@ -563,13 +566,14 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     }
     if(disposed)return;
     fieldArt?.update(ticker?.deltaMS ?? 0);
+    const view=current ?? source.getView();
     // Ambient art reads the published view (positions, terrain state); read only.
-    fieldArt?.observe?.(source.getView());
+    fieldArt?.observe?.(view);
     // Presentation time for the dynamic layer; it keeps animating through the
     // original hit pause, when the battle frame itself holds still.
     pendingDtMs += Math.min(100, Math.max(0, ticker?.deltaMS ?? nativeFrameMs));
-    lastTickerOpeningCue=source.getView().opening?.cue ?? null;
-    redraw();
+    lastTickerOpeningCue=view.opening?.cue ?? null;
+    redraw(view);
   }
 
   let unobserveResize=()=>{};
@@ -598,7 +602,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
 
   presentation = Object.freeze({
     /** Exposed so a test can drive the scene without a ticker. */
-    redraw,
+    redraw:()=>redraw(),
     advance,
     getFocusPlacement:()=>focusPlacement ? Object.freeze({...focusPlacement}) : null,
     getFieldPlacement:()=>fieldPlacement ? Object.freeze({...fieldPlacement,artRect:{...fieldPlacement.artRect}}) : null,
@@ -666,7 +670,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     }
   });
   try {
-    unobserveResize=stage.onResize(redraw);
+    unobserveResize=stage.onResize(()=>redraw());
     globalThis.document?.addEventListener?.('visibilitychange',visibilityChanged);
     app.ticker.add(advance);
     redraw();

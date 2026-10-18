@@ -113,6 +113,11 @@ export async function mountBattleVfxThreeOverlay({
   }catch(error){await runtime.unloadAll();renderer.dispose();renderer.domElement.remove();throw error;}
 
   let disposed = false;
+  // Nothing visible and already cleared: skip the Three render (it would walk
+  // every pooled impact group and clear the canvas again each frame).
+  let cleared = false;
+  const lastData = { focus: null, impacts: null };
+  const setData = (key, value) => { if (lastData[key] !== value) { lastData[key] = value; renderer.domElement.dataset[key] = value; } };
 
   function resize() {
     if (disposed) return;
@@ -127,8 +132,10 @@ export async function mountBattleVfxThreeOverlay({
 
   function advance(ticker) {
     if (disposed) return;
+    const view = live ? source.getView() : null;
+    let visibleImpacts = 0;
     if (live) {
-      const view=source.getView(),focus = view.specialPrelude;
+      const focus = view.specialPrelude;
       const placement = getFocusPlacement();
       model.visible = Boolean(focus?.hyperVisible && placement);
       if (model.visible) {
@@ -143,13 +150,14 @@ export async function mountBattleVfxThreeOverlay({
         model.position.set(placement.anchorX-placement.width/2,
           placement.height/2-placement.anchorY,0);
       }
-      renderer.domElement.dataset.focus = JSON.stringify(focus ? {slot:focus.slot,frame:focus.frame,
-        phase:focus.phase,zoomQ12:focus.zoomQ12,visible:model.visible} : null);
+      setData('focus', JSON.stringify(focus ? {slot:focus.slot,frame:focus.frame,
+        phase:focus.phase,zoomQ12:focus.zoomQ12,visible:model.visible} : null));
       const field=getFieldPlacement(),active=view.impactEffects??[];
       for(const item of impacts){
         const effect=active.find(e=>e.type===item.type&&e.slot===item.slot);
         item.container.visible=Boolean(effect&&field);
         if(!item.container.visible)continue;
+        visibleImpacts++;
         item.fx.sampleNativeFrame(field.reducedMotion?0:effect.frame);
         // Native copied-sprite projection and offsets, using the same phone
         // viewport transform as Pixi. Depth is retained across all five pools.
@@ -159,16 +167,18 @@ export async function mountBattleVfxThreeOverlay({
           field.height/2-(y*field.zoom+field.y),effect.nativeCopy?effect.depthQ12/4096:1);
         item.container.scale.setScalar(field.nativeScale*field.zoom);
       }
-      renderer.domElement.dataset.impacts=JSON.stringify({active:active.length,
-        visible:impacts.filter(e=>e.container.visible).length,
-        instances:active.map(e=>({id:e.id,type:e.type,slot:e.slot,frame:e.frame,systemId:e.systemId}))});
+      setData('impacts', JSON.stringify({active:active.length,
+        visible:visibleImpacts,
+        instances:active.map(e=>({id:e.id,type:e.type,slot:e.slot,frame:e.frame,systemId:e.systemId}))}));
     } else instance.update(ticker?.deltaMS ?? 0);
     // Original one-frame hit flash, adapted to the unified phone battlefield.
     // Reduced motion suppresses presentation flashing without changing hits.
     // The flash-intensity preference makes it a translucent white instead.
-    if(live&&source.getView().nativeLifecycle?.flash?.active&&!getFieldPlacement()?.reducedMotion){
-      renderer.setClearColor(0xffffff,flashScale());renderer.clear();
-    }else{renderer.setClearColor(0x000000,0);renderer.render(scene, camera);}
+    if(live&&view.nativeLifecycle?.flash?.active&&!getFieldPlacement()?.reducedMotion){
+      renderer.setClearColor(0xffffff,flashScale());renderer.clear();cleared=false;
+    }else if(live&&!model.visible&&visibleImpacts===0){
+      if(!cleared){renderer.setClearColor(0x000000,0);renderer.clear();cleared=true;}
+    }else{renderer.setClearColor(0x000000,0);renderer.render(scene, camera);cleared=false;}
   }
 
   resize();
