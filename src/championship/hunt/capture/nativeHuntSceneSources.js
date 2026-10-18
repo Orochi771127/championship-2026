@@ -18,12 +18,20 @@ if (source.schemaVersion !== 1 || source.contract !== "HUNT_SCENE_SOURCES.v1"
   || source.gates.length !== 16 || source.fields.length !== 32) throw Error("HUNT_SCENE_SOURCE_INVALID");
 deepFreeze(source);
 
-export function resolveNativeHuntEnvironment(fieldId) {
-  return createNativeHuntEnvironment(source.environments[fieldId]);
+// Owner 2026-10-19 (local review): hunt fields may grow their exploration
+// area. An expansion keeps the original grid at the origin and appends tiles
+// east/south, so no original coordinate moves; it is used only when supplied.
+export const NATIVE_HUNT_EXPANSION_ADAPTATION = 'OWNER_APPROVED_HUNT_EXPANSION_REVIEW_20261019';
+export function resolveNativeHuntEnvironment(fieldId, { expansion = null } = {}) {
+  const expanded = expansion?.adaptation === NATIVE_HUNT_EXPANSION_ADAPTATION ? expansion.environments?.[fieldId] : null;
+  return createNativeHuntEnvironment(expanded ?? source.environments[fieldId]);
 }
 
 export function createNativeHuntEnvironment(data) {
-  if (!data || data.width !== 128 || data.height !== 128 || data.wrap !== false) throw Error("HUNT_SCENE_ENVIRONMENT_REQUIRED");
+  const expanded = data?.adaptation === NATIVE_HUNT_EXPANSION_ADAPTATION && data.base?.widthTiles === 128 && data.base?.heightTiles === 128
+    && data.base?.originTile?.[0] === 0 && data.base?.originTile?.[1] === 0
+    && Number.isInteger(data.width) && Number.isInteger(data.height) && data.width >= 128 && data.height >= 128 && data.width <= 256 && data.height <= 256;
+  if (!data || (!expanded && (data.width !== 128 || data.height !== 128)) || data.wrap !== false) throw Error("HUNT_SCENE_ENVIRONMENT_REQUIRED");
   const length = data.width * data.height;
   const terrain = expand(data.terrainRuns, length, 4);
   const direction = expand(data.directionRuns, length, data.directionPalette.length - 1);
@@ -35,6 +43,7 @@ export function createNativeHuntEnvironment(data) {
   const outsideDirection = deepFreeze({ targetQ12:[0,-4096,0], blendQ12:0xcd });
   const readTerrain = (x,y) => { validate(x,y); return outside(x,y) ? 1 : terrain[y * data.width + x]; };
   return Object.freeze({ width:data.width, height:data.height, wrap:false, readTerrain,
+    ...(expanded ? { adaptation:NATIVE_HUNT_EXPANSION_ADAPTATION } : {}),
     isBlocked:(x,y) => readTerrain(x,y) === 1,
     readDirectionCell(x,y) {
       validate(x,y);
@@ -43,7 +52,7 @@ export function createNativeHuntEnvironment(data) {
   });
 }
 
-export function resolveNativeHuntSceneSources({ biomeId, hour, season } = {}) {
+export function resolveNativeHuntSceneSources({ biomeId, hour, season, expansion = null } = {}) {
   const gate = source.gates.find(row => row.biomeId === biomeId);
   if (!gate) throw Error("HUNT_SCENE_GATE_REQUIRED");
   if (!Number.isInteger(season) || season < 0 || season > 3) throw Error("HUNT_SCENE_SEASON_REQUIRED");
@@ -53,5 +62,5 @@ export function resolveNativeHuntSceneSources({ biomeId, hour, season } = {}) {
   if (field.nativeHuntIndex !== nativeHuntIndex) throw Error("HUNT_SCENE_FIELD_ORDER_INVALID");
   return Object.freeze({ biomeId, biomeIndex:nativeHuntIndex >> 1, nativeHuntIndex,
     fieldId:field.fieldId, season, hour, variant,
-    environment:resolveNativeHuntEnvironment(field.fieldId), sceneEffect:field.sceneEffects[season] });
+    environment:resolveNativeHuntEnvironment(field.fieldId, { expansion }), sceneEffect:field.sceneEffects[season] });
 }

@@ -148,7 +148,7 @@ function validateProfile(profile, family) {
   return expected;
 }
 
-function validateDimensions(dimensions, expected) {
+function validateDimensions(dimensions, expected, hmExpansion = false) {
   assertExactKeys(dimensions, ["heightTiles", "widthTiles"], "Field dimensions");
   assertPositiveBoundedInteger(
     dimensions.widthTiles,
@@ -166,7 +166,10 @@ function validateDimensions(dimensions, expected) {
   if (!Number.isSafeInteger(totalTiles) || totalTiles > FIELD_RUNTIME_LIMITS.maxTotalTiles) {
     throw new RangeError("Field tile count exceeds the R2 runtime security bound");
   }
-  if (expected.fixedDimensions && (
+  if (hmExpansion) {
+    if (dimensions.widthTiles < 128 || dimensions.heightTiles < 128 || dimensions.widthTiles > 256 || dimensions.heightTiles > 256)
+      throw new Error("HM expansion review must keep at least the original 128 by 128 tiles and at most 256");
+  } else if (expected.fixedDimensions && (
     dimensions.widthTiles !== expected.fixedDimensions.widthTiles
     || dimensions.heightTiles !== expected.fixedDimensions.heightTiles
   )) throw new Error("HM FieldDefinition dimensions must be exactly 128 by 128 tiles");
@@ -195,7 +198,10 @@ function validateCollisionData(collisionData, family, totalTiles) {
   }
 }
 
-export function createFieldDefinition(draft, familyProfile) {
+// options.hmExpansion: the Owner-approved hunt expansion review (2026-10-19)
+// may exceed 128x128 by appending tiles; every other HM field stays exact.
+const HM_EXPANSION_ADAPTATION = 'OWNER_APPROVED_HUNT_EXPANSION_REVIEW_20261019';
+export function createFieldDefinition(draft, familyProfile, options = {}) {
   const input = clonePlainData(draft);
   const profile = clonePlainData(familyProfile);
   assertExactKeys(input, DRAFT_KEYS, "FieldDefinition draft");
@@ -208,7 +214,7 @@ export function createFieldDefinition(draft, familyProfile) {
   if (!Object.values(FIELD_FAMILIES).includes(input.family)) throw new Error("Unknown FieldDefinition family");
   const expected = validateProfile(profile, input.family);
   if (input.collisionProfileId !== expected.profileId) throw new Error("FieldDefinition collision profile mismatch");
-  validateDimensions(input.dimensions, expected);
+  validateDimensions(input.dimensions, expected, input.family === FIELD_FAMILIES.HM && options.hmExpansion === HM_EXPANSION_ADAPTATION);
   assertPositiveBoundedInteger(
     input.tileSizePx,
     FIELD_RUNTIME_LIMITS.minTileSizePx,

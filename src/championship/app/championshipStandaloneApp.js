@@ -140,6 +140,8 @@ export function createChampionshipStandaloneApp({
   slotId = STANDALONE_SLOT_ID,
   huntStartingInventory = HUNT_STARTING_INVENTORY,
   huntCaptureReplay = null,
+  // Local review only: async (gate) => expansion catalogue or null.
+  huntExpansionLoader = null,
   // Null means the built-in one, fetched when a hunt starts. Its subtree is
   // the field controls, the wild actors and their tables, which nothing before
   // the field reads. A caller that supplies its own factory never fetches it.
@@ -2994,7 +2996,8 @@ export function createChampionshipStandaloneApp({
         // touches it, so it is fetched here; main.js warms it once a screen is
         // up, which is several taps before anyone can reach this.
         const { prepareNativeHuntEntry } = await import("../hunt/capture/nativeHuntEntryTransaction.js");
-        const entry = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId,
+        const expansion = huntCaptureReplay === null && typeof huntExpansionLoader === 'function' ? await huntExpansionLoader(gate) : null;
+        const entry = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId, expansion,
           clock:requireSession().getRaisingHomeSnapshot(),
           rngSnapshot:gameplayRngSnapshot(), persistentState:huntPersistentState }) : null;
         const world = createHuntWorld(gate, entry);
