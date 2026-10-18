@@ -194,6 +194,8 @@ async function main() {
     for(const entry of promotedAssets){assert.equal(entry.runtimeReady,true);assert.equal(entry.qa.normalPath,'PASS');}
     assert.equal(publicBindings.length,4);
     for(const entry of promotedAssets){const binding=publicBindings.find(row=>row.speciesIndex===entry.speciesIndex);assert.ok(binding);for(const key of ['speciesId','speciesIndex','entityId','motionDonorEntityId'])assert.equal(binding[key],entry[key]);}
+    const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root);
+    evidence.previewAssetChecks=[...previewExpected.values()];
     for (const expected of Object.values(EXPECTED)) {
       const entry = catalog.entries.find(e => e.speciesIndex === expected.speciesIndex);
       assert.ok(entry, `Normal production registry missing ${expected.speciesId}`);
@@ -346,7 +348,8 @@ async function main() {
       const img=holder.locator('img');await img.waitFor({state:'visible',timeout:30000});await holder.scrollIntoViewIfNeeded();await img.evaluate(image=>image.decode());
       await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
       const actual=await holder.evaluate(n=>{const image=n.querySelector('img'),r=image.getBoundingClientRect();return {art:n.dataset.art,revealed:n.dataset.revealed,src:image.currentSrc||image.src,complete:image.complete,hidden:image.hidden,natural:[image.naturalWidth,image.naturalHeight],objectFit:getComputedStyle(image).objectFit,imageRect:{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};});
-      assert.equal(actual.art,'ready');assert.equal(actual.revealed,'true');assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.objectFit,'contain');assert.deepEqual(actual.natural,[EXPECTED[species].width,EXPECTED[species].height]);assert.equal(actual.src,new URL(EXPECTED[species].src,PUBLIC_BASE).href);
+      const expectedPreview=previewExpected.get(species);
+      assert.equal(actual.art,'ready');assert.equal(actual.revealed,'true');assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.objectFit,'contain');assert.deepEqual(actual.natural,[expectedPreview.width,expectedPreview.height]);assert.equal(actual.src,expectedPreview.url);
       assert.ok(actual.imageRect.width>0&&actual.imageRect.height>0);assert.ok(actual.imageRect.x>=-1&&actual.imageRect.right<=viewport.width+1&&actual.imageRect.y>=-1&&actual.imageRect.bottom<=viewport.height+1);
       const name=`production-${species}-${kind}-${viewport.width}`;await shot(name);await holder.screenshot({path:path.join(output,name+'-image.png')});evidence.promotedCaptures.push({speciesIndex:species,displayCode:EXPECTED[species].displayCode,kind,viewport,screenshot:name+'.png',imageScreenshot:name+'-image.png',...actual});write();
     }
@@ -375,6 +378,7 @@ async function main() {
     evidence.status = 'CAPTURE_PASS_VISUAL_REVIEW_PENDING';
   } catch (error) {
     evidence.status = 'FAIL'; evidence.failure = error.stack || String(error);
+    console.error(evidence.failure);
     await shot('failure').catch(() => {});
     if (page) evidence.failureDom = await page.locator('#cm-root').innerText().catch(() => null);
     process.exitCode = 1;

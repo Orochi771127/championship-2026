@@ -69,6 +69,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    const derivations=JSON.parse(fs.readFileSync('docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json'));
    const approvedHashes={222:'4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3',230:'09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39',211:'20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634',229:'f1e1a23e891b9345f4b759e910c5f67efd8a844a2de53e14183a1a2fe3310424'};
    const codes=new Map([[222,'UL02'],[230,'UL03'],[211,'UL33'],[229,'UL34']]);
+   const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root);
    const expected=new Map([...codes].map(([id,code])=>{
     const art=registry.entries.find(e=>e.speciesIndex===id);assert.ok(art);
     assert.equal(art.src,`assets/production/database-display-20261018/species-${id}.display.${art.sha256.slice(0,16)}.webp`);
@@ -99,7 +100,8 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
     await holder.scrollIntoViewIfNeeded();await img.evaluate(image=>image.decode());
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     const snapshot=await holder.evaluate(n=>{const image=n.querySelector('img'),rect=el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom};};return {art:n.dataset.art,revealed:n.dataset.revealed??null,src:image.currentSrc||image.src,complete:image.complete,hidden:image.hidden,natural:[image.naturalWidth,image.naturalHeight],imageRect:rect(image),holderRect:rect(n),objectFit:getComputedStyle(image).objectFit};});
-    assert.equal(snapshot.art,'ready');assert.equal(snapshot.hidden,false);assert.equal(snapshot.complete,true);assert.deepEqual(snapshot.natural,[expected.get(id).width,expected.get(id).height]);assert.equal(snapshot.src,expected.get(id).url);assert.ok(snapshot.imageRect.width>0&&snapshot.imageRect.height>0);assert.equal(snapshot.objectFit,'contain');
+    const imageExpected=kind==='hero'?expected.get(id):previewExpected.get(id);
+    assert.equal(snapshot.art,'ready');assert.equal(snapshot.hidden,false);assert.equal(snapshot.complete,true);assert.deepEqual(snapshot.natural,[imageExpected.width,imageExpected.height]);assert.equal(snapshot.src,imageExpected.url);assert.ok(snapshot.imageRect.width>0&&snapshot.imageRect.height>0);assert.equal(snapshot.objectFit,'contain');
     const name=`dex-${id}-${kind}-${viewport.width}`;await shot(name);await holder.screenshot({path:path.join(output,name+'-image.png')});evidence.dexCaptures.push({speciesIndex:id,displayCode:codes.get(id),kind,viewport,screenshot:name+'.png',imageScreenshot:name+'-image.png',...snapshot});write();
    }
    for(const viewport of [{width:844,height:390},{width:390,height:844}]){
