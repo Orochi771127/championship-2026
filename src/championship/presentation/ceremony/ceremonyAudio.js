@@ -127,7 +127,12 @@ export function playCeremonyCue(name, output, { gain = 0.5 } = {}) {
     source.stop(stop + 0.02);
   }
   let stopped = false;
+  // Existing major presentation cues are the event boundary. Keep this small
+  // and optional so sample fixtures and non-product callers retain their graph.
+  const restoreMusic = ['medal', 'evolve', 'versus'].includes(name)
+    ? output.duckMusic?.({ seconds: end - context.currentTime }) : null;
   const release = () => {
+    if (typeof restoreMusic === 'function') restoreMusic();
     for (const node of nodes) { try { node.disconnect(); } catch { /* already gone */ } }
     nodes.clear();
     try { master.disconnect(); } catch { /* already gone */ }

@@ -24,12 +24,12 @@ const param=()=>({value:0,cancelScheduledValues(){},setValueAtTime(v){this.value
 const node=()=>({gain:param(),connect(){},disconnect(){}});
 const settle=async()=>{await Promise.resolve();await Promise.resolve();};
 function fixture({muted=false,delayed=false,ogg=true,levels={}}={}){
-  const doc=new Events(),win=new Events(),media=[],pending=[],timers=new Map();let contexts=0,timerId=0,delayPlay=delayed;const preferences={...DEFAULT_PREFERENCES};
-  class Context {state='running';currentTime=0;destination={};constructor(){contexts++;}createGain(){return node();}createMediaElementSource(){return node();}resume(){return Promise.resolve();}close(){this.state='closed';return Promise.resolve();}}
+  const doc=new Events(),win=new Events(),media=[],pending=[],timers=new Map();let contexts=0,timerId=0,delayPlay=delayed,contextRef;const preferences={...DEFAULT_PREFERENCES};
+  class Context {state='running';currentTime=0;destination={};constructor(){contexts++;contextRef=this;}createGain(){return node();}createMediaElementSource(){return node();}resume(){return Promise.resolve();}close(){this.state='closed';return Promise.resolve();}}
   class Media {paused=true;currentTime=0;duration=32;src='';plays=0;constructor(){media.push(this);}canPlayType(){return ogg?'probably':'';}load(){}removeAttribute(){this.src='';}pause(){this.paused=true;}play(){this.plays++;if(delayPlay)return new Promise(resolve=>pending.push(()=>{if(this.src)this.paused=false;resolve();}));this.paused=false;return Promise.resolve();}}
   const bus=createAudioBus({AudioContextClass:Context,eventTarget:doc,levels:{muted,...levels}});
   const music=createMusicPresentation({bus,cues:ORIGINAL_MUSIC_CUES,resolveCue:(id,scene)=>resolveSceneMusic(id,scene,preferences),baseUrl:'https://example.test/game/',doc,win,AudioClass:Media,timers:{setTimeout(f){timers.set(++timerId,f);return timerId;},clearTimeout(id){timers.delete(id);}}});
-  return{bus,music,doc,win,media,pending,timers,preferences,delay(value){delayPlay=value;},choose(id,value){preferences[id]=value;music.preferencesChanged();},dispose(){music.dispose();bus.dispose();},contexts:()=>contexts,finishFades(){for(const [id,f]of [...timers]){timers.delete(id);f();}}};
+  return{bus,music,doc,win,media,pending,timers,preferences,delay(value){delayPlay=value;},choose(id,value){preferences[id]=value;music.preferencesChanged();},dispose(){music.dispose();bus.dispose();},contexts:()=>contexts,finishFades(){contextRef.currentTime+=1;for(const [id,f]of [...timers]){timers.delete(id);f();}}};
 }
 
 test('complete catalog has one categorized Chinese/English record per actual cue, including all existing encodings',()=>{
@@ -47,9 +47,9 @@ test('complete catalog has one categorized Chinese/English record per actual cue
 test('all Chinese locales show Chinese and en/ja/th/vi show only English for every track',()=>{
  for(const t of SCENE_MUSIC_TRACKS){for(const locale of ['zh-Hant','zh-TW','zh-Hans'])assert.equal(musicTrackTitle(t.id,locale),t.titles.zh);for(const locale of ['en','ja','th','vi'])assert.equal(musicTrackTitle(t.id,locale),t.titles.en);}assert.equal(musicTrackTitle('missing','en'),'');
 });
-test('canonical title registration covers all 23 bilingual records, not stray literals or other files',()=>{
+test('canonical title registration covers all 24 bilingual records, not stray literals or other files',()=>{
  const file='src/championship/presentation/sceneMusicCatalog.js',checked=inspectSceneMusicLocaleCopy(SCENE_MUSIC_TRACKS);
- assert.equal(checked.keys.length,23);assert.deepEqual(checked.gaps,[]);
+ assert.equal(checked.keys.length,24);assert.deepEqual(checked.gaps,[]);
  for(const track of SCENE_MUSIC_TRACKS)for(const locale of ['zh-Hant','en','ja','th','vi']){
   const title=musicTrackTitle(track.id,locale);
   assert.equal(title,track.titles[locale==='zh-Hant'?'zh':'en']);
@@ -69,7 +69,7 @@ test('every missing or blank Chinese/English music title remains a canonical loc
 });
 test('global locale gate registers all scene titles with zero missing titles or raw display literals',async()=>{
  const report=await buildLocaleCoverage(),file='src/championship/presentation/sceneMusicCatalog.js';
- assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:23,gaps:[]});
+ assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:24,gaps:[]});
  assert.equal(report.counts.missing,0,JSON.stringify(report.missing));
  assert.equal(report.counts.uiCopyMissing,0);assert.equal(report.counts.catalogGaps,0);
 });
@@ -80,7 +80,7 @@ test('music control copy exists deliberately in all five UI languages',()=>{
 test('old, invalid and cross-scene preference IDs preserve scene defaults without inventing paths',()=>{
  for(const input of [{},{raisingMusic:'bogus',battleMusic:'../other.mp3'},{raisingMusic:'victory',battleMusic:'moon'}]){
   const prefs=normalizePreferences(input);assert.equal(prefs.raisingMusic,'default');assert.equal(prefs.battleMusic,'default');
-  for(const [screen,tutorial,id]of [['RAISING_HOME',false,'a_quiet_evening_training'],['RAISING_HOME',true,'a_quiet_evening_training'],['CAGE_EDIT',false,'a_quiet_evening_training']])assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial}).id,'raising',prefs),id);
+  for(const [screen,tutorial,id]of [['RAISING_HOME',false,'a_quiet_evening_training'],['RAISING_HOME',true,'a_quiet_evening_training'],['CAGE_EDIT',false,'podium_geometry']])assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial}).id,'raising',prefs),id);
   assert.equal(resolveSceneMusic('battle_normal',null,prefs),'battle_normal');assert.equal(resolveSceneMusic('battle_final',null,prefs),'battle_final');
  }assert.equal(parsePreferences('{"schemaVersion":1,"account":{"locale":"en"}}').preferences.raisingMusic,'default');
 });
@@ -130,7 +130,7 @@ test('settings use native radio groups and literal localized titles without rela
 });
 test('new original MP3 bytes and scene assignments match the verified import manifest',()=>{
  const manifest=JSON.parse(fs.readFileSync(new URL('../assets/production/scene-music-r1/manifest.json',import.meta.url)));
- assert.equal(manifest.files.length,9);assert.equal(SCENE_MUSIC_TRACKS.length,23);
+ assert.equal(manifest.files.length,10);assert.equal(SCENE_MUSIC_TRACKS.length,24);
  for(const file of manifest.files){
   const data=fs.readFileSync(new URL(`../assets/production/scene-music-r1/${file.path}`,import.meta.url));
   assert.equal(data.length,file.bytes);assert.equal(createHash('sha256').update(data).digest('hex'),file.sha256);

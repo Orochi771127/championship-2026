@@ -757,6 +757,33 @@
       "runtimeGainDb": -12.4,
       "projectedLufs": -24.06,
       "projectedTruePeakDbtp": -11.82
+    },
+    {
+      "path": "assets/production/scene-music-r1/system/podium_geometry.mp3",
+      "sha256": "f149580019ec9fd123b52e7fc0824cd6612874a5571e5632995d77531edbeb12",
+      "bytes": 1442442,
+      "sampleRate": 44100,
+      "channels": 2,
+      "seconds": 59.846458,
+      "lufs": -12.16,
+      "truePeakDbtp": 0.6,
+      "lra": 6.6,
+      "threshold": -22.61,
+      "monoDecodePeak": 1.4424700736999512,
+      "spectralEnergyShare": {
+        "low": 0.75811,
+        "mid": 0.172663,
+        "presence": 0.042945,
+        "high": 0.022926
+      },
+      "spectralCentroidHz": 494.5,
+      "edgePeakFirst20ms": 0.0,
+      "edgePeakLast20ms": 6.56511474517174e-05,
+      "decodeErrors": null,
+      "listeningCompleted": false,
+      "runtimeGainDb": -11.9,
+      "projectedLufs": -24.06,
+      "projectedTruePeakDbtp": -11.3
     }
   ],
   "listeningCompleted": false,

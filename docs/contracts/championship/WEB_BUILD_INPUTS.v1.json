@@ -8456,7 +8456,8 @@
     "assets/production/database-display-20261018/species-054.display.862dd05e6371806b.webp",
     "assets/production/database-display-20261018/species-054.thumbnail.4ad2692c6f79115c.webp",
     "assets/production/database-display-20261018/species-059.display.d65af3374e14305c.webp",
-    "assets/production/database-display-20261018/species-059.thumbnail.133ac3f1f9d74ca7.webp"
+    "assets/production/database-display-20261018/species-059.thumbnail.133ac3f1f9d74ca7.webp",
+    "assets/production/scene-music-r1/system/podium_geometry.mp3"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -39516,7 +39517,7 @@
       },
       {
         "path": "src/championship/presentation/audioBus.js",
-        "sha256": "cb2c8d510e94073a2ff4f6fd8cad7480abf25c7b3f0e3fc78b304b493cc21aab"
+        "sha256": "c539e6f1234de28448b0d2c05dc9d8bd96dd53d98d52c0948f60fbc1ebba7073"
       },
       {
         "path": "src/championship/presentation/battleAudioPresentation.js",
@@ -39572,7 +39573,7 @@
       },
       {
         "path": "src/championship/presentation/ceremony/ceremonyAudio.js",
-        "sha256": "b119c6929ff4f068fff735df2d96c79da8ee8e2762debe2eeb4e8bfc09a99ce2"
+        "sha256": "263ccd33101a75985959eb43fe076e8bd91259e90716eaab77dc09c635cc9231"
       },
       {
         "path": "src/championship/presentation/ceremony/ceremonyRunner.js",
@@ -39724,7 +39725,7 @@
       },
       {
         "path": "src/championship/presentation/musicPresentation.js",
-        "sha256": "38de4ed07e742708b94db26e908911f5bbc05da7b794cbbe77292efc421addc5"
+        "sha256": "67f9748700e1429e6674b336b0fddef87b1f4ac343cb2cb6af1cd4d37e94fe82"
       },
       {
         "path": "src/championship/presentation/nativeHuntCharacterAction.js",
@@ -39744,7 +39745,7 @@
       },
       {
         "path": "src/championship/presentation/originalMusicCatalog.js",
-        "sha256": "dd4e52cd02bd2bbd551e9c5e7c156e6a569f5c9853cebf9cf034cf2914e2face"
+        "sha256": "d204cc4dda90fe462725653c21ad8dd9412ba3379a4daa045803c8318341a15d"
       },
       {
         "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -39832,7 +39833,7 @@
       },
       {
         "path": "src/championship/presentation/sceneMusicCatalog.js",
-        "sha256": "e3f09cb1efcb8da1bd9f1a5751ff6cca0da6d0d9185c4a42f819b421cfbdc19e"
+        "sha256": "ca864ea42d70f5aeb5b12ccd4dca0f692e605e88cf50c62954d4e6a8cc7aa698"
       },
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
@@ -40633,6 +40634,10 @@
       {
         "path": "assets/production/database-display-20261018/species-059.thumbnail.133ac3f1f9d74ca7.webp",
         "sha256": "133ac3f1f9d74ca792af4230837e61e15ea1f559b4960f19d8866246f6345987"
+      },
+      {
+        "path": "assets/production/scene-music-r1/system/podium_geometry.mp3",
+        "sha256": "f149580019ec9fd123b52e7fc0824cd6612874a5571e5632995d77531edbeb12"
       }
     ],
     "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",

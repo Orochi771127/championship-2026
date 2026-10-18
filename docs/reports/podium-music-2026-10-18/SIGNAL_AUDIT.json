@@ -1,0 +1,61 @@
+{
+  "id": "podium_geometry",
+  "path": "assets/production/scene-music-r1/system/podium_geometry.mp3",
+  "sampleRate": 44100,
+  "channels": 2,
+  "decodedSamplesPerChannel": 2639232,
+  "sourceSamplePeakDbfs": 0.473,
+  "projectedSamplePeakAfterGainDbfs": -11.427,
+  "sourceOverZeroDbfsSamples": 12,
+  "nearRailFlatRunSamplesPerChannel": [
+    0,
+    0
+  ],
+  "dcOffsetDbfs": -44.604,
+  "maxSourceAdjacentSampleStepDbfs": -3.522,
+  "sourceDerivativeP999Dbfs": -11.431,
+  "quiet20msRmsP05Dbfs": -46.849,
+  "max20msRmsDbfs": -8.391,
+  "spectralEnergyShareNativeMono": {
+    "20-250": 0.7537949,
+    "250-2000": 0.1696371,
+    "2000-5000": 0.0431495,
+    "5000-10000": 0.0226661,
+    "10000-20000": 0.0075012
+  },
+  "strongPresenceBins": [
+    {
+      "hz": 2217.9,
+      "prominenceDbVs31BinMean": 7.77
+    },
+    {
+      "hz": 2228.7,
+      "prominenceDbVs31BinMean": 6.88
+    },
+    {
+      "hz": 2207.2,
+      "prominenceDbVs31BinMean": 4.68
+    },
+    {
+      "hz": 2239.5,
+      "prominenceDbVs31BinMean": 3.62
+    },
+    {
+      "hz": 2960.8,
+      "prominenceDbVs31BinMean": 5.65
+    }
+  ],
+  "strongPresenceExcerptSecond": 38.359,
+  "loop": {
+    "trimmedDecodedSeconds": 59.846531,
+    "nativeHardJoinJumpDbfs": -117.128,
+    "crossfadeSeconds": 0.8,
+    "simulatedBoundaryStepAfterGainDbfs": -46.52,
+    "simulatedSeamPeakAfterGainDbfs": -17.799,
+    "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+  },
+  "decodeError": null,
+  "listeningCompleted": false,
+  "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+  "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+}

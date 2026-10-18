@@ -15,12 +15,12 @@ const param=()=>({value:0,cancelScheduledValues(){},setValueAtTime(v){this.value
 const node=()=>({gain:param(),connect(){},disconnect(){}});
 const settle=async()=>{await Promise.resolve();await Promise.resolve();};
 function fixture({muted=false,delayed=false,ogg=true}={}){
-  const doc=new Events(),win=new Events(),media=[],pending=[],timers=new Map();let contexts=0,timerId=0;
-  class Context {state='running';currentTime=0;destination={};constructor(){contexts++;}createGain(){return node();}createMediaElementSource(){return node();}resume(){return Promise.resolve();}close(){this.state='closed';return Promise.resolve();}}
+  const doc=new Events(),win=new Events(),media=[],pending=[],timers=new Map();let contexts=0,timerId=0,contextRef;
+  class Context {state='running';currentTime=0;destination={};constructor(){contexts++;contextRef=this;}createGain(){return node();}createMediaElementSource(){return node();}resume(){return Promise.resolve();}close(){this.state='closed';return Promise.resolve();}}
   class Media {paused=true;currentTime=0;duration=32;src='';plays=0;constructor(){media.push(this);}canPlayType(){return ogg?'probably':'';}load(){}removeAttribute(){this.src='';}pause(){this.paused=true;}play(){this.plays++;if(delayed)return new Promise(resolve=>pending.push(()=>{this.paused=false;resolve();}));this.paused=false;return Promise.resolve();}}
   const bus=createAudioBus({AudioContextClass:Context,eventTarget:doc,levels:{muted}});
   const music=createMusicPresentation({bus,cues:ORIGINAL_MUSIC_CUES,baseUrl:'https://example.test/game/',doc,win,AudioClass:Media,timers:{setTimeout(f){timers.set(++timerId,f);return timerId;},clearTimeout(id){timers.delete(id);}}});
-  return{bus,music,doc,win,media,pending,timers,contexts:()=>contexts,finishFades(){for(const [id,f]of [...timers]){timers.delete(id);f();}}};
+  return{bus,music,doc,win,media,pending,timers,contexts:()=>contexts,finishFades(){contextRef.currentTime+=1;for(const [id,f]of [...timers]){timers.delete(id);f();}}};
 }
 
 test('music waits for a gesture, streams only the selected cue, and uses the shared bus',async()=>{
