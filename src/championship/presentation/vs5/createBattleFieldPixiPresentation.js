@@ -221,6 +221,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   scene.addChild(letterbox,world,fxScreen,curtain,clip);
   world.mask=clip;
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
+  // Optional art foreground (e.g. palm canopies) draws over the fighters.
+  if (fieldArt?.foregroundObject) world.addChildAt(fieldArt.foregroundObject, world.getChildIndex(fxFront));
   const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
   const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen,
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
@@ -335,11 +337,19 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       sprite.rotation=Math.atan2(combatant.nativeMotion?.rotationSinQ12??0,
         combatant.nativeMotion?.rotationCosQ12??4096);
       const lift=(combatant.nativeMotion?.heightNativePx ?? 0)*nativeScale;
+      // Opt-in arena hazards: a fall sinks the fighter into the opened water
+      // before the simulation puts it ashore; ashore, it blinks while its grace
+      // lasts. Read only from the published hazard snapshot.
+      const fall=view.arenaHazards?.falls?.[combatant.slot];
+      const sink=fall ? Math.min(1, fall.progress) : 0;
+      const sinkDrop=sink*sink*10*nativeScale;
       sprite.position.set(x - center * scale * mirror * (dress?.squashX ?? 1) + (dress?.offsetX ?? 0),
-        y - bottom * scale * (dress?.squashY ?? 1) - lift);
+        y - bottom * scale * (dress?.squashY ?? 1) - lift + sinkDrop);
       sprite.zIndex = y;
       // Down remains a session fact; original effect/return-to-idle timing is separate.
       sprite.alpha = combatant.nativeMotion?.alpha ?? (combatant.down ? 0.35 : 1);
+      if(fall)sprite.alpha*=1-0.85*sink;
+      else if(view.arenaHazards?.grace?.[combatant.slot]>0&&!reducedMotion)sprite.alpha*=Math.floor(view.arenaHazards.frame/7)%2?0.45:1;
       const fxBrightness = fxLayer?.brightnessFor(combatant.slot) ?? 1;
       const brightness=Math.round((focus ? 255 : 255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096)*fxBrightness);
       const nativeTint=combatant.nativeMotion?.tintRgb;
@@ -553,6 +563,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     }
     if(disposed)return;
     fieldArt?.update(ticker?.deltaMS ?? 0);
+    // Ambient art reads the published view (positions, terrain state); read only.
+    fieldArt?.observe?.(source.getView());
     // Presentation time for the dynamic layer; it keeps animating through the
     // original hit pause, when the battle frame itself holds still.
     pendingDtMs += Math.min(100, Math.max(0, ticker?.deltaMS ?? nativeFrameMs));
@@ -622,7 +634,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
             assetId: fieldArt.assetId,
             role: "LICENSED_PIXEL_RUNTIME",
             promoted: true,
-            fieldId: fieldArt.field.fieldId
+            fieldId: fieldArt.field.fieldId,
+            diagnostics: fieldArt.getDiagnostics()
           })
           : Object.freeze({ assetId: TEMPORARY_ART_ID, role: "PROCEDURAL_FALLBACK", promoted: false })
       });
@@ -637,6 +650,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if (fieldArt?.displayObject.parent === productionArtLayer) {
         productionArtLayer.removeChild(fieldArt.displayObject);
       }
+      if (fieldArt?.foregroundObject?.parent === world) world.removeChild(fieldArt.foregroundObject);
       if (scene.parent) scene.parent.removeChild(scene);
       effectSprites?.dispose();
       fxLayer?.dispose();
