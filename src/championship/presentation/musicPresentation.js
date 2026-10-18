@@ -14,6 +14,9 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     playing: current && !current.media.paused ? current.id : null, pending: pending?.id ?? null,
     voices: slots.filter(s => !s.media.paused).length, slots: slots.length, starts, unlocked, hidden,
     paused: Boolean(current?.media.paused), position: current?.media.currentTime ?? 0,
+    playbackRate: current?.media.playbackRate ?? 1, defaultPlaybackRate: current?.media.defaultPlaybackRate ?? 1,
+    preservesPitch: current?.media.preservesPitch ?? current?.media.webkitPreservesPitch ?? true,
+    contextState: bus.state?.() ?? null, sampleRate: current?.context.sampleRate ?? null,
     initialBuffering: Boolean(unlocked&&!hidden&&audible()&&(pending??current)&&!(pending??current).startupReady&&!(pending??current).media.paused), error });
   const emit = () => onState(state());
   function gain(slot, value, seconds = 0) {
@@ -32,13 +35,18 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     if (current === slot) current = null;
   }
   function clearFade() { if (fadeTimer !== null) timers.clearTimeout(fadeTimer); fadeTimer = null; }
+  function stableRate(media) {
+    media.defaultPlaybackRate = 1; media.playbackRate = 1;
+    if ('preservesPitch' in media) media.preservesPitch = true;
+    if ('webkitPreservesPitch' in media) media.webkitPreservesPitch = true;
+  }
   function retireOther() { clearFade(); for (const s of slots) if (s !== current) release(s); }
   function availableSlot() {
     let slot = slots.find(s => s !== current);
     if (slot) return slot;
     const output = bus.output('music');
     if (!output || typeof AudioClass !== 'function') return null;
-    const media = new AudioClass(); media.preload = 'none'; media.volume = 1;
+    const media = new AudioClass(); media.preload = 'none'; media.volume = 1; stableRate(media);
     const source = output.context.createMediaElementSource(media), amp = output.context.createGain();
     amp.gain.value = 0; source.connect(amp); amp.connect(output.destination);
     slot = { media, source, gain: amp, context: output.context, generation: 0, id: null, key: null };
@@ -51,6 +59,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     retireOther();
     const slot = availableSlot();
     if (!slot) { error = 'MUSIC_OUTPUT_UNAVAILABLE'; emit(); return; }
+    stableRate(slot.media);
     const request = serial, token = ++slot.generation, key = desired.key;
     slot.id = desired.id; slot.key = key; slot.startupReady=false; pending = slot; error = null;
     const valid = () => !disposed && slot.generation === token && !hidden && audible()
@@ -112,6 +121,9 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     if (!unlocked || hidden || !audible()) { pause(); return; }
     if (!desired) { retireOther(); release(current); emit(); return; }
     if (current?.key === desired.key) {
+      // A returning page may have a running media element but an interrupted
+      // graph. Resume both independently, preserving position and one source.
+      stableRate(current.media); bus.resume();
       if (current.media.paused) {
         const slot = current, token = serial, generation = slot.generation;
         if (slot.resuming === token) return;

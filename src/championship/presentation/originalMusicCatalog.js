@@ -11,7 +11,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
   "mystic": {
     "path": "./assets/production/original-music-r1/bgm_eastern_mystic_mountains.mp3",
     "loop": true,
-    "gainDb": 6,
+    "gainDb": 9.3,
     "trimStart": 1.9463,
     "trimEnd": 0.6961,
     "crossfade": 0.8
@@ -27,7 +27,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
   "lofi": {
     "path": "./assets/production/original-music-r1/bgm_linkara_lofi.mp3",
     "loop": true,
-    "gainDb": 6,
+    "gainDb": 12,
     "trimStart": 0.5888,
     "trimEnd": 2.0086,
     "crossfade": 0.8
@@ -51,7 +51,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
   "forge": {
     "path": "./assets/production/original-music-r1/bgm_southeast_forge_hills.mp3",
     "loop": true,
-    "gainDb": 6,
+    "gainDb": 7.6,
     "trimStart": 0,
     "trimEnd": 0.6285,
     "crossfade": 0.8
@@ -67,7 +67,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
   "tidal": {
     "path": "./assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
     "loop": true,
-    "gainDb": 6,
+    "gainDb": 9.4,
     "trimStart": 0,
     "trimEnd": 1.9305,
     "crossfade": 0.8
@@ -133,6 +133,22 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "trimEnd": 0,
     "crossfade": 0.8
   },
+  "south_pole_siege": {
+    "path": "./assets/production/scene-music-r1/battle/south_pole_siege.mp3",
+    "loop": true, "gainDb": -11.7, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+  },
+  "titan_s_final_strike": {
+    "path": "./assets/production/scene-music-r1/battle/titan_s_final_strike.mp3",
+    "loop": true, "gainDb": -11.7, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+  },
+  "mirage_of_the_arena": {
+    "path": "./assets/production/scene-music-r1/battle/mirage_of_the_arena.mp3",
+    "loop": true, "gainDb": -11.6, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+  },
+  "inferno_overdrive": {
+    "path": "./assets/production/scene-music-r1/battle/inferno_overdrive.mp3",
+    "loop": true, "gainDb": -10.7, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+  },
   "federation_siege": {
     "path": "./assets/production/scene-music-r1/battle/federation_siege.mp3",
     "loop": true,
@@ -149,10 +165,23 @@ const BIOMES = Object.freeze({grass:'plains',savanna:'plains',forest:'plains',ju
 const SCREENS = Object.freeze({RAISING_HOME:'moon',CAGE_EDIT:'moon',DATABASE:'moon',DIGIMON_LIST:'moon',
   HELP:'moon',TAMER_INFO:'moon',SHOP:'harbor',GATE_SELECT:'harbor',HUNT_LOADOUT:'harbor',
   MEDALS:'core',SCHEDULE:'core',BATTLE_SELECT:'core',CHAMPIONSHIP:'core'});
+// Owner-specified field assignments; unassigned fields retain the prior normal/final cues.
+export const BATTLE_FIELD_MUSIC = Object.freeze({
+  3: 'titan_s_final_strike', 4: 'south_pole_siege', 5: 'mirage_of_the_arena', 7: 'inferno_overdrive'
+});
+// Owner delegated these two reversible product assignments on 2026-10-18.
+// Paired survival -> Unison; successive tournament opponents -> Federation.
+// This is a gameplay/title-informed choice, not a listening acceptance claim.
+export const DATA_ARENA_MUSIC = Object.freeze({HARBOR:'unison_under_fire',TOURNAMENT:'federation_siege'});
+export function selectDataArenaMusic(mode) { return DATA_ARENA_MUSIC[mode] ?? 'battle_normal'; }
 export function selectOriginalMusic({titleVisible=false,openingVisible=false,screen=null,tutorial=false,
   biome=null,chosen=null,outcome=null,attemptId=null}={}) {
   if (titleVisible) return {id:openingVisible?'lofi':'login'};
-  if (screen==='BATTLE_FIELD') return {id:chosen?.championship===true && chosen.cursor===chosen.totalRounds-1?'battle_final':'battle_normal'};
+  if (screen==='BATTLE_FIELD') {
+    // Championship presentation uses arena 10 regardless of the match record.
+    const arenaIndex = chosen?.championship ? 10 : chosen?.arenaIndex;
+    return {id:BATTLE_FIELD_MUSIC[arenaIndex] ?? (chosen?.championship===true && chosen.cursor===chosen.totalRounds-1?'battle_final':'battle_normal')};
+  }
   if (screen==='BATTLE_RESULT') return outcome?.ended && attemptId!=null
     ? {id:outcome.winningTeam===0?'victory':outcome.winningTeam===1?'defeat':'draw',attemptId}: {id:null};
   if (screen==='HUNT_FIELD'||screen==='HUNT_RESULT') return {id:tutorial?'plains':BIOMES[String(biome).toLowerCase()]??'plains'};

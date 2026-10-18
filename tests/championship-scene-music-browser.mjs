@@ -12,11 +12,7 @@ const LOCALES = ['zh-Hant', 'en', 'ja', 'th', 'vi'];
 const SIZES = [[320,568], [390,844], [844,390], [1366,768]];
 const PREF = 'championshipModernSave:preferences:v1';
 const SAVE = 'championshipModernSave:v1';
-const TRACKS = [
- {id:'a_quiet_evening_training',scene:'raising',path:'assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3',sha256:'269c85f148c2c8f09a7ee0fff2fcf9b7b181adc2a9f8613c67b1993a7b26c568',bytes:3199122,seconds:133.041583,zh:'靜夜修練',en:'A Quiet Evening Training'},
- {id:'unison_under_fire',scene:'battle',path:'assets/production/scene-music-r1/battle/unison_under_fire.mp3',sha256:'0e01b0fa1e88831b7f16dc1024133c2d2b390c2700c6585d8c634cda2855f1b6',bytes:4039847,seconds:168.071792,zh:'烽火同心',en:'Unison Under Fire'},
- {id:'federation_siege',scene:'battle',path:'assets/production/scene-music-r1/battle/federation_siege.mp3',sha256:'4d8b4e2782bba9e66a482a1fbf90696d65d023d3b7735884ab60cf378b282b7f',bytes:4143919,seconds:172.408125,zh:'聯邦圍城',en:'Federation Siege'}
-];
+const TRACKS = JSON.parse(await fs.readFile('assets/production/scene-music-r1/manifest.json','utf8')).files.map(f=>({...f,scene:f.category,path:'assets/production/scene-music-r1/'+f.path,zh:f.titles.zh,en:f.titles.en}));
 const NAMES = {
  moon:['空靈月湖畔','Ethereal Moon Lakefront'],lofi:['林卡拉慢拍','Linkara Lo-fi'],
  battle_normal:['錦標賽對戰','Championship Battle'],battle_final:['錦標賽決戰','Championship Final'],
@@ -215,7 +211,7 @@ async function main() {
   const {context,page}=await fresh(undefined,{seed:{locale:'zh-Hant',masterVolume:65,sfxVolume:35,musicVolume:45}});
   try{
    await page.waitForTimeout(200);assert.equal((await page.evaluate(()=>musicQA.inspect())).native.media.length,0,'No autoplay bypass');
-   await page.locator('#open').click();await waitCue(page,'moon');
+   await page.locator('#open').click();await waitCue(page,'a_quiet_evening_training');
    for(const t of TRACKS){
     if(t.scene==='battle')await page.evaluate(()=>musicQA.music.setScene('battle_normal'));
     await select(page,t.scene+'Music',t.id);const evidence=await nativeEvidence(page,t.id);checkNativeMedia(evidence,t);
@@ -246,7 +242,7 @@ async function main() {
    for(const [scene,expected] of [['battle_normal','federation_siege'],['battle_final','federation_siege'],['login','login'],['moon','a_quiet_evening_training']]){
     if(scene==='moon')await select(page,'raisingMusic','a_quiet_evening_training');await page.evaluate(({scene})=>musicQA.music.setScene(scene,null,scene==='moon'?'raising':null),{scene});await waitCue(page,expected);report.transport.push({case:'scene-switch',source:scene,expected,evidence:await assertBounded(page)});
    }
-   await select(page,'raisingMusic','default');await page.evaluate(()=>musicQA.project('RAISING_HOME',{tutorial:true}));await waitCue(page,'lofi');await page.evaluate(()=>musicQA.project('RAISING_HOME'));await waitCue(page,'moon');await select(page,'raisingMusic','a_quiet_evening_training');await waitCue(page,'a_quiet_evening_training');
+   await select(page,'raisingMusic','default');await page.evaluate(()=>musicQA.project('RAISING_HOME',{tutorial:true}));await waitCue(page,'a_quiet_evening_training');await page.evaluate(()=>musicQA.project('RAISING_HOME'));await waitCue(page,'a_quiet_evening_training');await select(page,'raisingMusic','a_quiet_evening_training');await waitCue(page,'a_quiet_evening_training');
    await page.evaluate(()=>musicQA.project('BATTLE_FIELD',{chosen:{championship:true,cursor:2,totalRounds:3}}));await waitCue(page,'federation_siege');
    for(const id of ['victory','defeat','draw']){await page.evaluate(id=>musicQA.music.setScene(id,'test-result-'+id),id);await waitCue(page,id);const result=await page.evaluate(()=>musicQA.inspect());assert.equal(result.native.media.find(m=>!m.paused)?.loop,false);const starts=result.music.starts;
     await page.evaluate(id=>{musicQA.music.setScene(id,'test-result-'+id);musicQA.store.set('battleMusic','unison_under_fire');},id);assert.equal((await page.evaluate(()=>musicQA.inspect())).music.starts,starts,'Result ignores BGM choice and repeated projection');
@@ -262,7 +258,7 @@ async function main() {
    await page.waitForFunction(()=>JSON.parse(document.documentElement.dataset.musicState||'{}').error?.startsWith('MUSIC_MEDIA_ERROR'),null,{timeout:30000});assert.equal((await page.evaluate(()=>musicQA.inspect())).music.voices,0);await select(page,'battleMusic','unison_under_fire');checkNativeMedia(await nativeEvidence(page,'unison_under_fire'),TRACKS[1]);
    await page.locator('.cm-settings__reset').click();restored=await page.evaluate(()=>musicQA.inspect());assert.equal(restored.preferences.raisingMusic,'default');assert.equal(restored.preferences.battleMusic,'default');assert.equal(restored.progress,persisted.progress);
    await page.waitForTimeout(450);await page.evaluate(key=>{const d=JSON.parse(localStorage.getItem(key));d.account={...d.account,raisingMusic:'removed_track',battleMusic:'not-a-file.mp3'};localStorage.setItem(key,JSON.stringify(d));},PREF);
-   await page.reload();await page.evaluate(mountHarness,{});restored=await page.evaluate(()=>musicQA.inspect());assert.equal(restored.preferences.raisingMusic,'default');assert.equal(restored.preferences.battleMusic,'default');assert.equal(restored.progress,persisted.progress);await page.locator('#open').click();await waitCue(page,'moon');
+   await page.reload();await page.evaluate(mountHarness,{});restored=await page.evaluate(()=>musicQA.inspect());assert.equal(restored.preferences.raisingMusic,'default');assert.equal(restored.preferences.battleMusic,'default');assert.equal(restored.progress,persisted.progress);await page.locator('#open').click();await waitCue(page,'a_quiet_evening_training');
    report.transport.push({case:'persistence-reset-invalid-id-and-404-recovery',status:'PASS',progressBytesUnchanged:true});
   }catch(error){report.failureDiagnostic={scope:'production-module-transport-harness',error:String(error.stack??error),live:await page.evaluate(()=>({snapshot:musicQA.inspect(),states:musicQA.states.slice(-100),events:nativeAudioQA.events.slice(-200),samples:nativeAudioQA.samples.slice(-100)})).catch(e=>({diagnosticError:String(e)}))};await write();await page.screenshot({path:path.join(output,'transport-failure.png')}).catch(()=>{});throw error;}finally{await context.close();}
   report.normalGame=await normalGame(browser,base,output);
@@ -300,7 +296,7 @@ async function normalGame(browser,base,output) {
  await context.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
  try{
   await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);await page.locator('#prepare-practice').click();await page.locator('#status').filter({hasText:'受控存檔已準備'}).waitFor();
-  await page.goto(new URL('championship.html?presentation=developer',base).href);await enterGame(page);await waitCue(page,'moon');
+  await page.goto(new URL('championship.html?presentation=developer',base).href);await enterGame(page);await waitCue(page,'a_quiet_evening_training');
   await menu(page,'SYSTEM','settings');await category(page,'sound');await select(page,'raisingMusic','a_quiet_evening_training');checkNativeMedia(await nativeEvidence(page,'a_quiet_evening_training'),TRACKS[0]);await select(page,'battleMusic','unison_under_fire');
   const before=JSON.parse(await page.locator('html').getAttribute('data-music-state'));await category(page,'language');await select(page,'locale','en');await category(page,'sound');checkLabels(await page.evaluate(labelsSnapshot),'en');assert.equal(JSON.parse(await page.locator('html').getAttribute('data-music-state')).starts,before.starts);await closeGameSettings(page);
   evidence.steps.push({case:'actual-raising-settings-immediate-change-locale',native:await assertBounded(page)});await page.screenshot({path:path.join(output,'normal-game-raising-selected.png')});

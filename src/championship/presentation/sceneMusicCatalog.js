@@ -19,12 +19,17 @@ const entries = [
   ['draw', '平手之聲', 'Draw', ['result']],
   ['a_quiet_evening_training', '靜夜修練', 'A Quiet Evening Training', ['raising']],
   ['unison_under_fire', '烽火同心', 'Unison Under Fire', ['battle']],
-  ['federation_siege', '聯邦圍城', 'Federation Siege', ['battle']]
+  ['federation_siege', '聯邦圍城', 'Federation Siege', ['battle']],
+  ['south_pole_siege', '南極圍攻', 'South Pole Siege', ['battle']],
+  ['titan_s_final_strike', '泰坦終擊', "Titan's Final Strike", ['battle']],
+  ['mirage_of_the_arena', '競技場蜃景', 'Mirage of the Arena', ['battle']],
+  ['inferno_overdrive', '地獄超速', 'Inferno Overdrive', ['battle']]
 ];
 
 export const SCENE_MUSIC_TRACKS = Object.freeze(entries.map(([id, zh, en, categories]) =>
   Object.freeze({ id, titles: Object.freeze({ zh, en }), categories: Object.freeze(categories) })));
 export const SCENE_MUSIC_PREFERENCES = Object.freeze({ raising: 'raisingMusic', battle: 'battleMusic' });
+export const DEFAULT_RAISING_MUSIC = 'a_quiet_evening_training';
 
 /** Result stingers stay outcome-driven, and cannot be selected as looping BGM. */
 export function musicChoicesForScene(scene) {
@@ -42,7 +47,8 @@ export function musicTrackTitle(id, locale = 'zh-Hant') {
 export function resolveSceneMusic(id, scene, preferences = {}) {
   if (!ORIGINAL_MUSIC_CUES[id]?.loop) return id;
   // Arena routes use these same combat IDs directly, so they share the player's choice.
-  const category = scene ?? (id === 'battle_normal' || id === 'battle_final' ? 'battle' : null);
+  const category = scene ?? (musicChoicesForScene('battle').some(track => track.id === id) ? 'battle' : null);
   const preference = preferences[SCENE_MUSIC_PREFERENCES[category]];
-  return musicChoicesForScene(category).some(track => track.id === preference) ? preference : id;
+  return musicChoicesForScene(category).some(track => track.id === preference)
+    ? preference : category === 'raising' ? DEFAULT_RAISING_MUSIC : id;
 }
