@@ -9,6 +9,7 @@ import {publicRuntimeIndex,assertPublicArtifact,assertPublicBytes,PUBLIC_RUNTIME
 import {originalShopCageThumbnail} from '../src/championship/presentation/originalShopCageArt.js';
 import {publicRuntimeAsset} from '../src/championship/presentation/publicRuntimeAssets.js';
 import {shopGoodsPresentation} from '../src/championship/presentation/shopGoodsUiArt.js';
+import {openingFilmPublicationFiles} from '../scripts/lib/opening-film-publication.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const input=read('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json'),index=read('assets/production/ART_PRODUCTION_INDEX.json');
@@ -88,12 +89,13 @@ test('actual thumbnail upload payload keeps original bytes and rejects copied pr
   const f=fixture(t),selected=selectedShopCageProjection({root,input,index});
   const manifestBytes=fs.readFileSync(path.join(root,SHOP_CAGE_PUBLIC));
   const allowlist={schemaVersion:1,files:[{path:SHOP_CAGE_PUBLIC,sha256:hash(manifestBytes),jsonFields:SHOP_CAGE_FIELDS},...[...selected.files].map(([file,sha256])=>({path:file,sha256}))],assets:[{id:'art:shop:cage-thumbnails:v1',src:SHOP_CAGE_PUBLIC,sha256:hash(manifestBytes)}]};
+  allowlist.files.push(...openingFilmPublicationFiles());
   const runtime=publicRuntimeIndex(allowlist,index,selected.files),indexBytes=Buffer.from(JSON.stringify(runtime,null,2)+'\n');
   allowlist.files.push({path:PUBLIC_RUNTIME_INDEX_PATH,sha256:hash(indexBytes)});
   for(const row of allowlist.files)f.write(row.path,row.path===PUBLIC_RUNTIME_INDEX_PATH?indexBytes:fs.readFileSync(path.join(root,row.path)));
   f.write('index.html','<main>shop</main>');f.write('.nojekyll','');f.write('pages-build.json','{"schemaVersion":2,"files":[]}');
   const plan={files:allowlist.files.map(row=>row.path),allowlist,runtime,indexBytes,importMap:{}},files=[...plan.files,'index.html','.nojekyll','pages-build.json'];
-  assert.equal(assertPublicArtifact({root:f.dir,files,plan}).checkedFiles,40);
+  assert.equal(assertPublicArtifact({root:f.dir,files,plan}).checkedFiles,40+openingFilmPublicationFiles().length);
   const injected={...selected.manifest,records:selected.manifest.records.map((row,i)=>i===0?{...row,source:{path:'/workspace/private/master.png'}}:row)};
   f.write(SHOP_CAGE_PUBLIC,JSON.stringify(injected));
   assert.throws(()=>assertPublicArtifact({root:f.dir,files,plan}),/PUBLIC_PAYLOAD_UNSELECTED_JSON_FIELD/);
