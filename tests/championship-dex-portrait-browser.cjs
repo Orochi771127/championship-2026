@@ -180,16 +180,20 @@ async function main() {
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
     assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'59 existing plus36 approved portraits; MA15 is held');
     evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
-    const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json';
+    const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json',bindingPath='src/data/championship/public-alternate-form-bindings.v1.json';
     evidence.productionCatalogs=[];
-    for(const file of [productPath,assetPath]){
+    for(const file of [productPath,bindingPath]){
       const sourceBytes=fs.readFileSync(path.join(process.cwd(),file)),builtBytes=fs.readFileSync(path.join(root,file));
       assert.equal(sha256(sourceBytes),sha256(builtBytes));evidence.productionCatalogs.push({file,sha256:sha256(builtBytes)});
     }
     for(const entry of JSON.parse(fs.readFileSync(path.join(root,productPath))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true);
-    const promotedAssets=JSON.parse(fs.readFileSync(path.join(root,assetPath))).characters;
+    assert.equal(resolveAsset(root,'/'+assetPath),null,'Authoring metadata must stay outside the public artifact');
+    const promotedAssets=JSON.parse(fs.readFileSync(path.join(process.cwd(),assetPath))).characters;
+    const publicBindings=JSON.parse(fs.readFileSync(path.join(root,bindingPath))).characters;
     assert.deepEqual(promotedAssets.map(e=>e.speciesIndex).sort((a,b)=>a-b),[211,222,229,230]);
     for(const entry of promotedAssets){assert.equal(entry.runtimeReady,true);assert.equal(entry.qa.normalPath,'PASS');}
+    assert.equal(publicBindings.length,4);
+    for(const entry of promotedAssets){const binding=publicBindings.find(row=>row.speciesIndex===entry.speciesIndex);assert.ok(binding);for(const key of ['speciesId','speciesIndex','entityId','motionDonorEntityId'])assert.equal(binding[key],entry[key]);}
     for (const expected of Object.values(EXPECTED)) {
       const entry = catalog.entries.find(e => e.speciesIndex === expected.speciesIndex);
       assert.ok(entry, `Normal production registry missing ${expected.speciesId}`);
