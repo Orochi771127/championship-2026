@@ -31,11 +31,11 @@ test('all ordinary battle types use actual field identity and preserve result st
  assert.equal(selectDataArenaMusic('HARBOR'),'unison_under_fire');
  assert.equal(selectDataArenaMusic('TOURNAMENT'),'federation_siege');
  assert.equal(selectDataArenaMusic('UNKNOWN'),'battle_normal');
- for(const [arenaIndex,id] of [[3,'titan_s_final_strike'],[4,'south_pole_siege'],[5,'mirage_of_the_arena'],[7,'inferno_overdrive']]){
+ for(const [arenaIndex,id] of [[1,'clash_at_the_emerald_edge'],[2,'magma_breach'],[3,'titan_s_final_strike'],[4,'south_pole_siege'],[5,'mirage_of_the_arena'],[7,'inferno_overdrive']]){
   for(const type of ['freeBattle','practice','password','link'])assert.equal(selectOriginalMusic({screen:'BATTLE_FIELD',chosen:{arenaIndex,[type]:true}}).id,id);
   assert.equal(resolveSceneMusic(id,null,{battleMusic:'federation_siege'}),'federation_siege');
  }
- for(const arenaIndex of [0,1,2,6,8,9,10])assert.equal(selectOriginalMusic({screen:'BATTLE_FIELD',chosen:{arenaIndex}}).id,'battle_normal');
+ for(const arenaIndex of [0,6,8,9,10])assert.equal(selectOriginalMusic({screen:'BATTLE_FIELD',chosen:{arenaIndex}}).id,'battle_normal');
  assert.equal(selectOriginalMusic({screen:'BATTLE_FIELD',chosen:{championship:true,arenaIndex:4,cursor:2,totalRounds:3}}).id,'battle_final');
  assert.equal(selectOriginalMusic({screen:'BATTLE_RESULT',outcome:{ended:true,winningTeam:0},attemptId:1}).id,'victory');
 });
@@ -58,7 +58,7 @@ test('visible interrupted graph resumes even when native media still reports pla
 });
 test('every measured encoding retains headroom and looping cues have matched projected loudness',()=>{
  const report=JSON.parse(fs.readFileSync(new URL('../docs/reports/music-repair-2026-10-18/MEASUREMENTS.json',import.meta.url),'utf8'));
- assert.equal(report.files.length,26);assert.equal(report.allOriginalBytesPreserved,true);
+ assert.equal(report.files.length,28);assert.equal(report.allOriginalBytesPreserved,true);
  const looping=[];
  for(const row of report.files){
   const cue=Object.values(ORIGINAL_MUSIC_CUES).find(c=>[c.path,c.fallbackPath].includes('./'+row.path));assert.ok(cue,row.path);

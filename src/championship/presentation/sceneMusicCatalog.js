@@ -23,7 +23,9 @@ const entries = [
   ['south_pole_siege', '南極圍攻', 'South Pole Siege', ['battle']],
   ['titan_s_final_strike', '泰坦終擊', "Titan's Final Strike", ['battle']],
   ['mirage_of_the_arena', '競技場蜃景', 'Mirage of the Arena', ['battle']],
-  ['inferno_overdrive', '地獄超速', 'Inferno Overdrive', ['battle']]
+  ['inferno_overdrive', '地獄超速', 'Inferno Overdrive', ['battle']],
+  ['clash_at_the_emerald_edge', '翠緣交鋒', 'Clash at the Emerald Edge', ['battle']],
+  ['magma_breach', '熔岩突破', 'Magma Breach', ['battle']]
 ];
 
 export const SCENE_MUSIC_TRACKS = Object.freeze(entries.map(([id, zh, en, categories]) =>

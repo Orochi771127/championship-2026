@@ -8448,7 +8448,9 @@
     "assets/production/scene-music-r1/battle/south_pole_siege.mp3",
     "assets/production/scene-music-r1/battle/titan_s_final_strike.mp3",
     "assets/production/database-display-20261018/species-206.display.08a4d0cfea842d7b.webp",
-    "assets/production/database-display-20261018/species-206.thumbnail.2ee70cc859d4486a.webp"
+    "assets/production/database-display-20261018/species-206.thumbnail.2ee70cc859d4486a.webp",
+    "assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
+    "assets/production/scene-music-r1/battle/magma_breach.mp3"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -39736,7 +39738,7 @@
       },
       {
         "path": "src/championship/presentation/originalMusicCatalog.js",
-        "sha256": "46333b3dc7de365bb9dc3717cd7c0526776d37d45e42e28ca1a2af71649ecf11"
+        "sha256": "dd4e52cd02bd2bbd551e9c5e7c156e6a569f5c9853cebf9cf034cf2914e2face"
       },
       {
         "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -39824,7 +39826,7 @@
       },
       {
         "path": "src/championship/presentation/sceneMusicCatalog.js",
-        "sha256": "500329186cf6bda00c733c6dffd88b3196d1f9e19b9b4b6077c5438522a81c1d"
+        "sha256": "e3f09cb1efcb8da1bd9f1a5751ff6cca0da6d0d9185c4a42f819b421cfbdc19e"
       },
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
@@ -40593,6 +40595,14 @@
       {
         "path": "assets/production/database-display-20261018/species-206.thumbnail.2ee70cc859d4486a.webp",
         "sha256": "2ee70cc859d4486a762abe7f663d9513b1fd91383f9f93b08fdb7affc9a6b3a4"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
+        "sha256": "0e1b1827622b9636e5846f2c8096f18b36c5d1b38867cb0095a5b43c3e29c77f"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/magma_breach.mp3",
+        "sha256": "232997b238af3957e8ee1a2f9df320c3de688e8e9727a54314c90232f512e414"
       }
     ],
     "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",

@@ -1,8 +1,8 @@
 {
   "id": "CHAMPIONSHIP_SCENE_MUSIC_R1_20261016",
-  "scope": "Seven Owner-supplied MP3 tracks; exact original bytes retained. Four field assignments added 2026-10-18.",
+  "scope": "Exactly nine Owner-delivered scene MP3s: six field tracks, two shared/new-mode tracks, and Quiet Evening raising; three were already registered at baseline 19c91ac8. Original bytes retained.",
   "processing": "Measured runtime gain only, approximately -24 LUFS and <= -3 dBTP; no speed/pitch changes, no low-pass or transcoding. 0.8 second loop crossfade. Listening pending.",
-  "acceptance": "Technical local checks only; browser/device decoding, transition/loop listening and final Chinese display-name acceptance pending.",
+  "acceptance": "Seven earlier MP3s passed actual Chromium decode/transport in integration main929f07cd; the two new field MP3s have local FFmpeg checks pending integration browser/public verification. All human listening and physical iPhone acceptance remain pending.",
   "files": [
     {
       "id": "a_quiet_evening_training",
@@ -143,6 +143,56 @@
       "measuredIntegratedLufs": -13.31,
       "measuredTruePeakDbtp": 1.4,
       "playbackGainDb": -10.7
+    },
+    {
+      "id": "clash_at_the_emerald_edge",
+      "path": "battle/clash_at_the_emerald_edge.mp3",
+      "sha256": "0e1b1827622b9636e5846f2c8096f18b36c5d1b38867cb0095a5b43c3e29c77f",
+      "bytes": 3085363,
+      "seconds": 128.287292,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner 2026-10-16 grass then volcano delivery; authorized Google Drive original download 2026-10-18",
+      "sourceUrl": "https://drive.google.com/file/d/1Y1vihOitFGFg7FhIWzkAHRIBoogY4iEb/view",
+      "historyEvidence": [
+        "Sentinel_088014acbd788191ba9b0e124962bfa5",
+        "Sentinel_af49ea6ce1bc8191a0cd846704bc6d49"
+      ],
+      "originalUnchanged": true,
+      "category": "battle",
+      "titles": {
+        "zh": "翠緣交鋒",
+        "en": "Clash at the Emerald Edge"
+      },
+      "titleStatus": "Product display translation, not embedded artist metadata",
+      "measuredIntegratedLufs": -11.55,
+      "measuredTruePeakDbtp": 0.74,
+      "playbackGainDb": -12.5
+    },
+    {
+      "id": "magma_breach",
+      "path": "battle/magma_breach.mp3",
+      "sha256": "232997b238af3957e8ee1a2f9df320c3de688e8e9727a54314c90232f512e414",
+      "bytes": 3056225,
+      "seconds": 127.059542,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner 2026-10-16 grass then volcano delivery; authorized Google Drive original download 2026-10-18",
+      "sourceUrl": "https://drive.google.com/file/d/1lUxavv_4XWZGOtspImvZ1ferQPWcxO1I/view",
+      "historyEvidence": [
+        "Sentinel_088014acbd788191ba9b0e124962bfa5",
+        "Sentinel_b3a56a8198d88191a10154ffd371730a"
+      ],
+      "originalUnchanged": true,
+      "category": "battle",
+      "titles": {
+        "zh": "熔岩突破",
+        "en": "Magma Breach"
+      },
+      "titleStatus": "Product display translation, not embedded artist metadata",
+      "measuredIntegratedLufs": -11.66,
+      "measuredTruePeakDbtp": 0.58,
+      "playbackGainDb": -12.4
     }
   ],
   "cues": {
@@ -198,6 +248,22 @@
       "path": "./assets/production/scene-music-r1/battle/inferno_overdrive.mp3",
       "loop": true,
       "gainDb": -10.7,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "clash_at_the_emerald_edge": {
+      "path": "./assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
+      "loop": true,
+      "gainDb": -12.5,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "magma_breach": {
+      "path": "./assets/production/scene-music-r1/battle/magma_breach.mp3",
+      "loop": true,
+      "gainDb": -12.4,
       "trimStart": 0,
       "trimEnd": 0,
       "crossfade": 0.8

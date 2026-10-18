@@ -375,25 +375,25 @@
   },
   {
     "surface": "BATTLE_FIELD:1",
-    "key": "battle_normal",
-    "path": "./assets/production/original-music-r1/championship_battle_normal_r1.ogg",
-    "fallbackPath": "./assets/production/original-music-r1/championship_battle_normal_r1.m4a",
-    "assignment": "Owner confirms every battle field already has a dedicated song. Current battle_normal fallback is unresolved wiring, not evidence of a missing composition.",
+    "key": "clash_at_the_emerald_edge",
+    "path": "./assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
+    "fallbackPath": null,
+    "assignment": "Owner 2026-10-16 delivery: first grass, second volcano; confirmed historical transcript",
     "needsNewSong": false,
-    "status": "專屬映射待查（現有共用曲不是完成配置）",
-    "newSongReason": "查找既有專屬曲與可信映射；不要求重新創作，不以共用曲關閉工作",
-    "dedicatedMappingUnresolved": true
+    "status": "專屬",
+    "newSongReason": "已交付原曲已接線；不需要新增創作",
+    "dedicatedMappingUnresolved": false
   },
   {
     "surface": "BATTLE_FIELD:2",
-    "key": "battle_normal",
-    "path": "./assets/production/original-music-r1/championship_battle_normal_r1.ogg",
-    "fallbackPath": "./assets/production/original-music-r1/championship_battle_normal_r1.m4a",
-    "assignment": "Owner confirms every battle field already has a dedicated song. Current battle_normal fallback is unresolved wiring, not evidence of a missing composition.",
+    "key": "magma_breach",
+    "path": "./assets/production/scene-music-r1/battle/magma_breach.mp3",
+    "fallbackPath": null,
+    "assignment": "Owner 2026-10-16 delivery: first grass, second volcano; confirmed historical transcript",
     "needsNewSong": false,
-    "status": "專屬映射待查（現有共用曲不是完成配置）",
-    "newSongReason": "查找既有專屬曲與可信映射；不要求重新創作，不以共用曲關閉工作",
-    "dedicatedMappingUnresolved": true
+    "status": "專屬",
+    "newSongReason": "已交付原曲已接線；不需要新增創作",
+    "dedicatedMappingUnresolved": false
   },
   {
     "surface": "BATTLE_FIELD:3",
