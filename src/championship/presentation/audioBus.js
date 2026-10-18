@@ -21,6 +21,8 @@ export function createAudioBus({
   let unlockInstalled = false;
   let previewVoice = null;
   let previews = 0;
+  let musicDuck = null, duckSerial = 0;
+  const ducks = new Map();
 
   const masterLevel = () => (levels.muted ? 0 : Math.max(0, Math.min(1, levels.masterVolume / 100)));
   const categoryLevel = (name) => Math.max(0, Math.min(1, (name === "sfx" ? levels.sfxVolume : name === "music" ? levels.musicVolume : 100) / 100));
@@ -58,7 +60,10 @@ export function createAudioBus({
     if (!categories.has(name)) {
       const gain = context.createGain();
       gain.gain.value = categoryLevel(name);
-      gain.connect(master);
+      if (name === 'music') {
+        musicDuck = context.createGain(); musicDuck.gain.value = 1;
+        gain.connect(musicDuck); musicDuck.connect(master);
+      } else gain.connect(master);
       categories.set(name, gain);
     }
     return categories.get(name);
@@ -73,6 +78,30 @@ export function createAudioBus({
     } catch { param.value = value; }
   }
 
+  function scheduleDucking() {
+    if (!musicDuck || context?.state === 'closed') return;
+    const now = context.currentTime, param = musicDuck.gain;
+    for (const [id, until] of ducks) if (until <= now) ducks.delete(id);
+    const until = Math.max(now, ...ducks.values());
+    if (typeof param.cancelAndHoldAtTime === 'function') param.cancelAndHoldAtTime(now);
+    else { param.cancelScheduledValues(now); param.setValueAtTime(param.value, now); }
+    if (until > now) {
+      const level = 10 ** (-4 / 20);
+      param.linearRampToValueAtTime(level, now + .025);
+      param.setValueAtTime(level, Math.max(now + .025, until));
+      param.linearRampToValueAtTime(1, Math.max(now + .025, until) + .3);
+    } else param.linearRampToValueAtTime(1, now + .2);
+  }
+  function duckMusic({ seconds = 1 } = {}) {
+    // A separate envelope never edits or restores the player's volume values.
+    if (!musicDuck || levels.muted || categoryLevel('music') === 0 || masterLevel() === 0) return null;
+    const id = ++duckSerial;
+    ducks.set(id, context.currentTime + Math.max(.1, Math.min(3, Number(seconds) || 1)));
+    scheduleDucking();
+    let released = false;
+    return () => { if (!released) { released = true; ducks.delete(id); scheduleDucking(); } };
+  }
+
   return Object.freeze({
     /**
      * An output for one source: the shared context and the category's input.
@@ -80,7 +109,7 @@ export function createAudioBus({
      */
     output(name = "sfx") {
       const destination = category(name);
-      return destination ? Object.freeze({ context, destination, category: name }) : null;
+      return destination ? Object.freeze({ context, destination, category: name, duckMusic }) : null;
     },
     setLevels(next = {}) {
       levels = { ...levels, ...next };
@@ -101,6 +130,7 @@ export function createAudioBus({
     },
     state: () => context?.state ?? "none",
     resume,
+    duckMusic,
     /**
      * A short test chime through the sfx category. A second press stops the
      * first chime before starting, so presses never stack. Returns whether a
@@ -139,6 +169,7 @@ export function createAudioBus({
       }
       unlockInstalled = false;
       categories.clear();
+      ducks.clear(); musicDuck = null;
       if (context) void context.close().catch(() => {});
       context = null;
       master = null;

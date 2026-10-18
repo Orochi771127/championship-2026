@@ -1,8 +1,8 @@
 {
   "id": "CHAMPIONSHIP_SCENE_MUSIC_R1_20261016",
-  "scope": "Exactly nine Owner-delivered scene MP3s: six field tracks, two shared/new-mode tracks, and Quiet Evening raising; three were already registered at baseline 19c91ac8. Original bytes retained.",
+  "scope": "Nine previously delivered scene MP3s retained unchanged, plus Owner-supplied Podium Geometry for CAGE_EDIT field/facility setup. Nine-track historical ledger remains a separate closed cohort.",
   "processing": "Measured runtime gain only, approximately -24 LUFS and <= -3 dBTP; no speed/pitch changes, no low-pass or transcoding. 0.8 second loop crossfade. Listening pending.",
-  "acceptance": "Seven earlier MP3s passed actual Chromium decode/transport in integration main929f07cd; the two new field MP3s have local FFmpeg checks pending integration browser/public verification. All human listening and physical iPhone acceptance remain pending.",
+  "acceptance": "Podium: technical decode/measurement only; browser and human listening pending. No BPM or 8-56 second loop assumed. Prior nine retain their recorded verification.",
   "files": [
     {
       "id": "a_quiet_evening_training",
@@ -193,6 +193,26 @@
       "measuredIntegratedLufs": -11.66,
       "measuredTruePeakDbtp": 0.58,
       "playbackGainDb": -12.4
+    },
+    {
+      "id": "podium_geometry",
+      "path": "system/podium_geometry.mp3",
+      "sha256": "f149580019ec9fd123b52e7fc0824cd6612874a5571e5632995d77531edbeb12",
+      "bytes": 1442442,
+      "seconds": 59.846458,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner downloaded original; Downloads retained and copied without overwrite to existing private R music-intake; SHA-256 verified",
+      "originalUnchanged": true,
+      "category": "raising",
+      "titles": {
+        "zh": "幾何舞台",
+        "en": "Podium Geometry"
+      },
+      "titleStatus": "Product display translation, not artist metadata",
+      "measuredIntegratedLufs": -12.16,
+      "measuredTruePeakDbtp": 0.6,
+      "playbackGainDb": -11.9
     }
   ],
   "cues": {
@@ -264,6 +284,14 @@
       "path": "./assets/production/scene-music-r1/battle/magma_breach.mp3",
       "loop": true,
       "gainDb": -12.4,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "podium_geometry": {
+      "path": "./assets/production/scene-music-r1/system/podium_geometry.mp3",
+      "loop": true,
+      "gainDb": -11.9,
       "trimStart": 0,
       "trimEnd": 0,
       "crossfade": 0.8

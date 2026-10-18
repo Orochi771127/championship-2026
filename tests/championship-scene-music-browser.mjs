@@ -20,6 +20,8 @@ const NAMES = {
 };
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const choice = (key,value) => `[data-setting="${key}"] input[value="${value}"]`;
+const sourceForTrack = track => track.scene === 'battle'
+ ? {id:'battle_normal',scene:null} : {id:'moon',scene:'raising'};
 function checkLabels(rows, locale) {
  assert.deepEqual(rows.map(r=>r.id).sort(), Object.keys(NAMES).sort(), 'Exactly the allowed scene choices');
  for (const row of rows) {
@@ -91,6 +93,8 @@ async function serveRangeRoot(port=8765, root='.') {
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,'127.0.0.1',resolve);});console.log(`Scene-music range server listening on 127.0.0.1:${port}`);
 }
 function selfTest() {
+ assert.deepEqual(sourceForTrack({scene:'raising',id:'podium_geometry'}),{id:'moon',scene:'raising'});
+ assert.deepEqual(sourceForTrack({scene:'battle',id:'magma_breach'}),{id:'battle_normal',scene:null});
  assert.equal(parseByteRange(undefined,100),null);assert.deepEqual(parseByteRange('bytes=0-15',100),{start:0,end:15});assert.deepEqual(parseByteRange('bytes=90-',100),{start:90,end:99});assert.deepEqual(parseByteRange('bytes=-12',100),{start:88,end:99});assert.deepEqual(parseByteRange('bytes=90-500',100),{start:90,end:99});for(const h of ['bytes=100-','bytes=90-50','bytes=-0','bytes=-','bytes=0-1,3-4','bad'])assert.equal(parseByteRange(h,100),false);
  const rows=Object.entries(NAMES).map(([id,n])=>({id,name:n[1],lang:'en',width:100,labelWidth:200,labelHeight:44,left:10,right:200,containerLeft:0,containerRight:390,textScrollWidth:150,textClientWidth:150}));
  checkLabels(rows,'th');assert.throws(()=>checkLabels(rows.map(r=>({...r,name:r.name+' 中文'})),'th'));
@@ -213,7 +217,7 @@ async function main() {
    await page.waitForTimeout(200);assert.equal((await page.evaluate(()=>musicQA.inspect())).native.media.length,0,'No autoplay bypass');
    await page.locator('#open').click();await waitCue(page,'a_quiet_evening_training');
    for(const t of TRACKS){
-    if(t.scene==='battle')await page.evaluate(()=>musicQA.music.setScene('battle_normal'));
+    await page.evaluate(({id,scene})=>musicQA.music.setScene(id,null,scene),sourceForTrack(t));
     await select(page,t.scene+'Music',t.id);const evidence=await nativeEvidence(page,t.id);checkNativeMedia(evidence,t);
     // Full response byte identity is additional evidence, not the decoder claim.
     const fetched=await page.evaluate(async pathname=>{const r=await fetch('/'+pathname,{cache:'reload'});const b=await r.arrayBuffer();return {status:r.status,bytes:b.byteLength,sha256:[...new Uint8Array(await crypto.subtle.digest('SHA-256',b))].map(x=>x.toString(16).padStart(2,'0')).join('')};},t.path);
@@ -224,7 +228,9 @@ async function main() {
     await page.waitForFunction(starts=>JSON.parse(document.documentElement.dataset.musicState).starts>starts,loopStarts,{timeout:10000});await waitCue(page,t.id);const loop=await page.evaluate(()=>musicQA.inspect());const seekEvents=await page.evaluate(at=>nativeAudioQA.events.filter(e=>e.time>=at&&['seeking','seeked','timeupdate','ended','playing'].includes(e.type)),seek.at);
     assert.ok(seekEvents.some(e=>e.type==='seeked'&&e.src===seek.before.src&&e.position>=seek.target-.2),'Observe native seeked at the requested end boundary');assert.ok(loop.music.position<5,'Real loop restarts near cue head');await assertBounded(page);Object.assign(loopRecord,{status:'PASS',after:loop.music,seekEvents});
    }
+   await page.evaluate(()=>musicQA.music.setScene('battle_normal'));
    for(const id of ['battle_normal','battle_final']){await select(page,'battleMusic',id);await waitCue(page,id);report.transport.push({case:'existing-battle-choice',id,native:await assertBounded(page)});}await select(page,'battleMusic','federation_siege');
+   await select(page,'raisingMusic','a_quiet_evening_training');
    await page.evaluate(()=>musicQA.music.setScene('moon',null,'raising'));await waitCue(page,'a_quiet_evening_training');
    const before=await page.evaluate(()=>musicQA.inspect());
    for(const locale of LOCALES){await category(page,'language');await select(page,'locale',locale);await category(page,'sound');checkLabels(await page.evaluate(labelsSnapshot),locale);const after=await page.evaluate(()=>musicQA.inspect());assert.equal(after.music.starts,before.music.starts,'Locale must not restart effective cue');assert.equal(after.music.playing,'a_quiet_evening_training');assert.ok(after.music.position>=before.music.position);assert.equal(after.preferences.masterVolume,65);assert.equal(after.preferences.musicVolume,45);assert.equal(after.preferences.sfxVolume,35);assert.equal(after.preferences.muted,false);}
@@ -242,7 +248,12 @@ async function main() {
    for(const [scene,expected] of [['battle_normal','federation_siege'],['battle_final','federation_siege'],['login','login'],['moon','a_quiet_evening_training']]){
     if(scene==='moon')await select(page,'raisingMusic','a_quiet_evening_training');await page.evaluate(({scene})=>musicQA.music.setScene(scene,null,scene==='moon'?'raising':null),{scene});await waitCue(page,expected);report.transport.push({case:'scene-switch',source:scene,expected,evidence:await assertBounded(page)});
    }
-   await select(page,'raisingMusic','default');await page.evaluate(()=>musicQA.project('RAISING_HOME',{tutorial:true}));await waitCue(page,'a_quiet_evening_training');await page.evaluate(()=>musicQA.project('RAISING_HOME'));await waitCue(page,'a_quiet_evening_training');await select(page,'raisingMusic','a_quiet_evening_training');await waitCue(page,'a_quiet_evening_training');
+   await select(page,'raisingMusic','default');await page.evaluate(()=>musicQA.project('RAISING_HOME',{tutorial:true}));await waitCue(page,'a_quiet_evening_training');await page.evaluate(()=>musicQA.project('RAISING_HOME'));await waitCue(page,'a_quiet_evening_training');
+   await page.evaluate(()=>musicQA.project('CAGE_EDIT'));await waitCue(page,'podium_geometry');checkNativeMedia(await nativeEvidence(page,'podium_geometry'),TRACKS.find(t=>t.id==='podium_geometry'));
+   await muted(page,true);assert.equal((await page.evaluate(()=>musicQA.inspect())).music.voices,0);await muted(page,false);await waitCue(page,'podium_geometry');
+   await page.evaluate(()=>window.dispatchEvent(new PageTransitionEvent('pagehide')));assert.equal((await page.evaluate(()=>musicQA.inspect())).music.voices,0);await page.evaluate(()=>window.dispatchEvent(new PageTransitionEvent('pageshow')));await waitCue(page,'podium_geometry');
+   report.transport.push({case:'field-setup-default-mute-background-return',native:await assertBounded(page)});
+   await page.evaluate(()=>musicQA.project('RAISING_HOME'));await waitCue(page,'a_quiet_evening_training');await select(page,'raisingMusic','a_quiet_evening_training');await waitCue(page,'a_quiet_evening_training');
    await page.evaluate(()=>musicQA.project('BATTLE_FIELD',{chosen:{championship:true,cursor:2,totalRounds:3}}));await waitCue(page,'federation_siege');
    for(const id of ['victory','defeat','draw']){await page.evaluate(id=>musicQA.music.setScene(id,'test-result-'+id),id);await waitCue(page,id);const result=await page.evaluate(()=>musicQA.inspect());assert.equal(result.native.media.find(m=>!m.paused)?.loop,false);const starts=result.music.starts;
     await page.evaluate(id=>{musicQA.music.setScene(id,'test-result-'+id);musicQA.store.set('battleMusic','unison_under_fire');},id);assert.equal((await page.evaluate(()=>musicQA.inspect())).music.starts,starts,'Result ignores BGM choice and repeated projection');
@@ -254,8 +265,11 @@ async function main() {
    await page.reload();await page.evaluate(mountHarness,{});await page.locator('#open').click();let restored=await page.evaluate(()=>musicQA.inspect());
    for(const key of ['raisingMusic','battleMusic','masterVolume','sfxVolume','musicVolume','muted','locale'])assert.equal(restored.preferences[key],persisted.preferences[key],key+' persists');assert.equal(restored.progress,persisted.progress);
    // Network missing-file negative control, not an automatic fallback claim.
-   await page.route('**/scene-music-r1/battle/federation_siege.mp3',r=>r.fulfill({status:404,body:'intentional isolated QA 404'}));await page.evaluate(()=>musicQA.music.setScene('battle_normal'));await select(page,'battleMusic','federation_siege');
-   await page.waitForFunction(()=>JSON.parse(document.documentElement.dataset.musicState||'{}').error?.startsWith('MUSIC_MEDIA_ERROR'),null,{timeout:30000});assert.equal((await page.evaluate(()=>musicQA.inspect())).music.voices,0);await select(page,'battleMusic','unison_under_fire');checkNativeMedia(await nativeEvidence(page,'unison_under_fire'),TRACKS[1]);
+   await select(page,'battleMusic','unison_under_fire');await page.evaluate(()=>musicQA.music.setScene('battle_normal'));await waitCue(page,'unison_under_fire');
+   await page.route('**/scene-music-r1/battle/federation_siege.mp3',r=>r.fulfill({status:404,body:'intentional isolated QA 404'}));await select(page,'battleMusic','federation_siege');
+   await page.waitForFunction(()=>JSON.parse(document.documentElement.dataset.musicState||'{}').error?.startsWith('MUSIC_MEDIA_ERROR'),null,{timeout:30000});const failed=await page.evaluate(()=>musicQA.inspect());assert.equal(failed.music.voices,1);assert.equal(failed.music.playing,'unison_under_fire');assert.equal(failed.music.retryable,true);
+   await page.unroute('**/scene-music-r1/battle/federation_siege.mp3');assert.equal(await page.evaluate(()=>musicQA.music.retry()),true);checkNativeMedia(await nativeEvidence(page,'federation_siege'),TRACKS[2]);report.transport.push({case:'replacement-404-retains-old-and-retry-recovers',native:await assertBounded(page)});
+   await select(page,'battleMusic','unison_under_fire');await waitCue(page,'unison_under_fire');
    await page.locator('.cm-settings__reset').click();restored=await page.evaluate(()=>musicQA.inspect());assert.equal(restored.preferences.raisingMusic,'default');assert.equal(restored.preferences.battleMusic,'default');assert.equal(restored.progress,persisted.progress);
    await page.waitForTimeout(450);await page.evaluate(key=>{const d=JSON.parse(localStorage.getItem(key));d.account={...d.account,raisingMusic:'removed_track',battleMusic:'not-a-file.mp3'};localStorage.setItem(key,JSON.stringify(d));},PREF);
    await page.reload();await page.evaluate(mountHarness,{});restored=await page.evaluate(()=>musicQA.inspect());assert.equal(restored.preferences.raisingMusic,'default');assert.equal(restored.preferences.battleMusic,'default');assert.equal(restored.progress,persisted.progress);await page.locator('#open').click();await waitCue(page,'a_quiet_evening_training');
@@ -300,6 +314,8 @@ async function normalGame(browser,base,output) {
  try{
   await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);await page.locator('#prepare-practice').click();await page.locator('#status').filter({hasText:'受控存檔已準備'}).waitFor();
   await page.goto(new URL('championship.html?presentation=developer',base).href);await enterGame(page);await waitCue(page,'a_quiet_evening_training');
+  await menu(page,'MANAGEMENT','cageEdit');await page.locator('#cm-root[data-active-screen="CAGE_EDIT"]').waitFor();checkNativeMedia(await nativeEvidence(page,'podium_geometry'),TRACKS.find(t=>t.id==='podium_geometry'));evidence.steps.push({case:'actual-cage-edit-podium-default',native:await assertBounded(page)});
+  await page.locator('#cm-root .cm-vs2-cage-edit .cm-vs2-footer button').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await waitCue(page,'a_quiet_evening_training');evidence.steps.push({case:'actual-cage-edit-return-quiet-evening',native:await assertBounded(page)});
   await menu(page,'SYSTEM','settings');await category(page,'sound');await select(page,'raisingMusic','a_quiet_evening_training');checkNativeMedia(await nativeEvidence(page,'a_quiet_evening_training'),TRACKS[0]);await select(page,'battleMusic','unison_under_fire');
   const before=JSON.parse(await page.locator('html').getAttribute('data-music-state'));await category(page,'language');await select(page,'locale','en');await category(page,'sound');checkLabels(await page.evaluate(labelsSnapshot),'en');assert.equal(JSON.parse(await page.locator('html').getAttribute('data-music-state')).starts,before.starts);await closeGameSettings(page);
   evidence.steps.push({case:'actual-raising-settings-immediate-change-locale',native:await assertBounded(page)});await page.screenshot({path:path.join(output,'normal-game-raising-selected.png')});

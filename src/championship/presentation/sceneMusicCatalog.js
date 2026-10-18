@@ -3,6 +3,7 @@
 import { ORIGINAL_MUSIC_CUES } from './originalMusicCatalog.js';
 
 const entries = [
+  ['podium_geometry', '幾何舞台', 'Podium Geometry', ['raising', 'system']],
   ['core', '中央輝光核心', 'Central Radiant Core', ['system']],
   ['mystic', '東方秘境群山', 'Eastern Mystic Mountains', ['exploration']],
   ['moon', '空靈月湖畔', 'Ethereal Moon Lakefront', ['raising', 'exploration', 'system']],
@@ -32,6 +33,7 @@ export const SCENE_MUSIC_TRACKS = Object.freeze(entries.map(([id, zh, en, catego
   Object.freeze({ id, titles: Object.freeze({ zh, en }), categories: Object.freeze(categories) })));
 export const SCENE_MUSIC_PREFERENCES = Object.freeze({ raising: 'raisingMusic', battle: 'battleMusic' });
 export const DEFAULT_RAISING_MUSIC = 'a_quiet_evening_training';
+export const DEFAULT_FIELD_SETUP_MUSIC = 'podium_geometry';
 
 /** Result stingers stay outcome-driven, and cannot be selected as looping BGM. */
 export function musicChoicesForScene(scene) {
@@ -52,5 +54,7 @@ export function resolveSceneMusic(id, scene, preferences = {}) {
   const category = scene ?? (musicChoicesForScene('battle').some(track => track.id === id) ? 'battle' : null);
   const preference = preferences[SCENE_MUSIC_PREFERENCES[category]];
   return musicChoicesForScene(category).some(track => track.id === preference)
-    ? preference : category === 'raising' ? DEFAULT_RAISING_MUSIC : id;
+    ? preference : category === 'raising'
+      ? id === DEFAULT_FIELD_SETUP_MUSIC ? DEFAULT_FIELD_SETUP_MUSIC : DEFAULT_RAISING_MUSIC
+      : id;
 }

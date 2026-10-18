@@ -1,5 +1,9 @@
 // Owner-approved original audio presentation; provisional mapping and gain, listening acceptance pending.
 export const ORIGINAL_MUSIC_CUES = Object.freeze({
+  "podium_geometry": {
+    "path": "./assets/production/scene-music-r1/system/podium_geometry.mp3",
+    "loop": true, "gainDb": -11.9, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+  },
   "core": {
     "path": "./assets/production/original-music-r1/bgm_central_radiant_core.mp3",
     "loop": true,
@@ -178,7 +182,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
 const BIOMES = Object.freeze({grass:'plains',savanna:'plains',forest:'plains',jungle:'plains',
   factory:'forge',mine:'forge',sewer:'forge',volcano:'forge',seaside:'harbor',ice:'moon',
   damp:'tidal',oasis:'tidal',canyon:'mystic',crag:'mystic',desert:'mystic',ruins:'mystic'});
-const SCREENS = Object.freeze({RAISING_HOME:'moon',CAGE_EDIT:'moon',DATABASE:'moon',DIGIMON_LIST:'moon',
+const SCREENS = Object.freeze({RAISING_HOME:'moon',CAGE_EDIT:'podium_geometry',DATABASE:'moon',DIGIMON_LIST:'moon',
   HELP:'moon',TAMER_INFO:'moon',SHOP:'harbor',GATE_SELECT:'harbor',HUNT_LOADOUT:'harbor',
   MEDALS:'core',SCHEDULE:'core',BATTLE_SELECT:'core',CHAMPIONSHIP:'core'});
 // Owner-specified field assignments; unassigned fields retain the prior normal/final cues.

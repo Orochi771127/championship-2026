@@ -22,7 +22,7 @@ function fixture(){
 test('missing, invalid, explicit default and tutorial raising use Quiet Evening; explicit player choices persist',()=>{
  for(const input of [{},{raisingMusic:'default'},{raisingMusic:'stale'},{raisingMusic:'victory'}]){
   const prefs=normalizePreferences(input);
-  for(const screen of ['RAISING_HOME','CAGE_EDIT'])for(const tutorial of [false,true])assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial}).id,'raising',prefs),'a_quiet_evening_training');
+  for(const screen of ['RAISING_HOME','CAGE_EDIT'])for(const tutorial of [false,true])assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial}).id,'raising',prefs),screen==='CAGE_EDIT'?'podium_geometry':'a_quiet_evening_training');
  }
  for(const id of ['moon','lofi','a_quiet_evening_training'])assert.equal(resolveSceneMusic('moon','raising',{raisingMusic:id}),id);
  for(const id of ['login','core','moon','harbor','victory','defeat','draw',null])assert.equal(resolveSceneMusic(id,null,{}),id);
@@ -70,7 +70,7 @@ test('paused and interrupted returns ramp from zero over 20ms without seeking or
 });
 test('every measured encoding retains headroom and looping cues have matched projected loudness',()=>{
  const report=JSON.parse(fs.readFileSync(new URL('../docs/reports/music-repair-2026-10-18/MEASUREMENTS.json',import.meta.url),'utf8'));
- assert.equal(report.files.length,28);assert.equal(report.allOriginalBytesPreserved,true);
+ assert.equal(report.files.length,29);assert.equal(report.allOriginalBytesPreserved,true);
  const looping=[];
  for(const row of report.files){
   const cue=Object.values(ORIGINAL_MUSIC_CUES).find(c=>[c.path,c.fallbackPath].includes('./'+row.path));assert.ok(cue,row.path);

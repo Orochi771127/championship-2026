@@ -1,0 +1,27 @@
+{
+  "baseMain": "fa09a6cf0",
+  "newFocused": 9,
+  "combinedFocused": {
+    "pass": 96,
+    "fail": 0
+  },
+  "technicalBuildAudit": {
+    "ok": true,
+    "issues": [],
+    "moduleCount": 451
+  },
+  "genericCommercialReleaseAudit": {
+    "ok": false,
+    "issueCounts": {
+      "RELEASE_SCOPE_OR_RIGHTS_NOT_DECLARED": 1,
+      "PRIVATE_INPUT_NOT_DISTRIBUTABLE": 368,
+      "ASSET_FILE_NOT_APPROVED": 7577
+    }
+  },
+  "publicPlaytestPublication": "NOT_RUN_FOR_THIS_BATCH",
+  "browserRunnerSelfTest": "PASS assertions only; no browser launched",
+  "actualBrowser": "Pending authorized integration environment; this sandbox previously could not launch installed Chromium (0xC0000022), not retried or bypassed",
+  "physicalIphoneAccepted": false,
+  "listeningAccepted": false,
+  "rCopy": "PASS exact SHA-256 and source retained"
+}
