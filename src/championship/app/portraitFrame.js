@@ -37,6 +37,18 @@ export function isLandscapeEntryLayout({width,height,hidden=false}) {
   return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
     &&width>=height+160&&!hidden;
 }
+// The standalone viewport can be taller than CSS dvh on iOS. Paint the title
+// to the measured viewport, while the existing controls retain safe-area insets.
+export function titleViewportMetrics(win, doc, editing = false) {
+  const visual = win.visualViewport;
+  const unzoomed = visual && Math.abs((visual.scale ?? 1) - 1) < .01 && visual.height > 0;
+  const standalone = win.navigator?.standalone === true || win.matchMedia?.('(display-mode: standalone)')?.matches === true
+    || win.matchMedia?.('(display-mode: fullscreen)')?.matches === true;
+  const height = standalone && !editing && (!visual || unzoomed)
+    ? Math.max(win.innerHeight || 0, doc.documentElement?.clientHeight || 0, unzoomed ? visual.height : 0)
+    : unzoomed ? visual.height : win.innerHeight;
+  return {height, top:unzoomed ? visual.offsetTop || 0 : 0};
+}
 export function mountPortraitFrame({window:win=globalThis.window,document:doc=globalThis.document,responsiveRaising=false,responsiveBattle=false,responsiveMenus=false,responsiveEntry=false,isHuntWide=()=>false}={}) {
   const body=doc.body,visual=win.visualViewport;
   const screenOrientation=win.screen?.orientation;
@@ -48,6 +60,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   const title=responsiveEntry?doc.getElementById?.('cm-title'):null;
   const menuProperties=['--cm-menu-viewport-height','--cm-menu-viewport-top'];
   const visibleProperties=['--cm-visible-viewport-height','--cm-visible-viewport-top'];
+  const titleProperties=['--cm-title-viewport-height','--cm-title-viewport-top'];
   const properties=['--cm-frame-scale','--cm-viewport-height','--cm-frame-center-x','--cm-frame-center-y'];
   let sideways=null,inputBaseline=null,disposed=false;
   const layoutHeight=()=>inputBaseline&&Math.abs(win.innerWidth-inputBaseline.width)<=1&&win.innerHeight<inputBaseline.height
@@ -86,6 +99,11 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
       body.style.setProperty('--cm-visible-viewport-top',`${cardViewport.offsetTop??0}px`);
     }else for(const name of visibleProperties)body.style.removeProperty(name);
     const hasInput=editing();
+    if(title){
+      const titleViewport=titleViewportMetrics(win,doc,hasInput);
+      body.style.setProperty('--cm-title-viewport-height',`${titleViewport.height}px`);
+      body.style.setProperty('--cm-title-viewport-top',`${titleViewport.top}px`);
+    }
     const axis=orientationAxis();
     // A resize may expose the new type before its change event. Remember only
     // editing context, including a following blur, until that event verifies it.
@@ -162,6 +180,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     revealInput();
   }
   win.addEventListener('resize',update);
+  win.addEventListener('pageshow',update);
   visual?.addEventListener('resize',update);
   visual?.addEventListener('scroll',update);
   screenOrientation?.addEventListener?.('change',orientationChanged);
@@ -175,6 +194,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   return {refresh(){update();},isBrowseWide(activeScreen){return !disposed&&browseWide(activeScreen);},dispose(){
     if(disposed)return;disposed=true;
     win.removeEventListener('resize',update);
+    win.removeEventListener('pageshow',update);
     visual?.removeEventListener('resize',update);
     visual?.removeEventListener('scroll',update);
     screenOrientation?.removeEventListener?.('change',orientationChanged);
@@ -189,6 +209,6 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     body.removeAttribute('data-cage-landscape');
     body.removeAttribute('data-hunt-wide');
     observer?.disconnect();
-    for(const name of [...properties,...menuProperties,...visibleProperties])body.style.removeProperty(name);
+    for(const name of [...properties,...menuProperties,...visibleProperties,...titleProperties])body.style.removeProperty(name);
   }};
 }

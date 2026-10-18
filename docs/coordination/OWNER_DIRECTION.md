@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: IPHONE_HOME_SCREEN_REPAIR_20261018 -->
+## 2026-10-18 — iPhone Home Screen repair and publication
+
+Owner requests the standalone bottom-gap repair and a compact top install entry, preserving touch safe areas and existing saves. Existing explicit commit/push/main/Pages and R-drive synchronization authorization applies to this focused repair. Use only supported installation APIs with system confirmation. Do not merge independent PR56 or replace concurrent Dex commits. See [implementation, platform evidence and device limits](../reports/iphone-home-screen-2026-10-18/REPORT_ZH_TW.md).
+
 <!-- record-id: REFERENCE_POLISH_PUBLICATION_20261018 -->
 ## 2026-10-18 — Publish the reviewed reference polish and synchronize local main
 
