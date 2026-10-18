@@ -291,6 +291,21 @@ async function main() {
         screenshot: name + '.png', heroScreenshot: name + '-hero.png' }); write();
       return snapshot;
     }
+    async function measureListCards(viewport) {
+      const detail=page.locator('.cm-vs2-database__detail');
+      if(await detail.isVisible()){await listReturn.click();await detail.waitFor({state:'hidden'});}
+      await page.locator('.cm-vs2-database__catalog').waitFor({state:'visible'});
+      const measured=await page.locator('.cm-vs2-database__row--thumb').evaluateAll(rows=>rows.map(row=>{
+        const box=row.getBoundingClientRect();
+        return {id:Number(row.dataset.speciesIndex),visible:box.width>0&&box.height>0,
+          inside:[...row.querySelectorAll('img,strong,.cm-vs2-shop__meta')].every(child=>{const r=child.getBoundingClientRect();return r.left>=box.left-.75&&r.right<=box.right+.75&&r.top>=box.top-.75&&r.bottom<=box.bottom+.75;}),
+          lazy:row.querySelector('img').loading==='lazy'};
+      }));
+      assert.equal(measured.length,95);assert.ok(measured.every(row=>row.visible&&row.inside&&row.lazy),'All list thumbnail/name/code bounds remain inside their cards');
+      assert.equal(await page.locator('[data-species-index="82"] .cm-dex-list-thumb').count(),0,'MA15 remains held');
+      (evidence.listCardChecks??=[]).push({viewport,checked:measured.length,status:'PASS'});
+    }
+    await measureListCards({width:1440,height:1000});
     for (const species of MATRIX_TARGETS) {
       await openSpecies(species);
       const normal = await capture(`${species}-desktop-normal`, species);
@@ -318,7 +333,9 @@ async function main() {
     // Normal re-entry and responsive rendering, still using the same session/UI.
     for(const species of MATRIX_TARGETS){await openSpecies(species);await capture(`${species}-desktop-reentry`,species);}
     await page.setViewportSize({ width: 390, height: 844 });
+    await measureListCards({width:390,height:844});
     for (const species of [...MATRIX_TARGETS,70]) { await openSpecies(species); await capture(`${species}-mobile-normal-${evidence.captures.length}`, species); }
+    await page.setViewportSize({width:360,height:800});await measureListCards({width:360,height:800});
     // Production entry only: ordinary rows and route nodes, no fixture/catalog swap.
     evidence.promotedCaptures=[];
     async function capturePreview(holder,species,kind,viewport){
