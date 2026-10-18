@@ -1,0 +1,36 @@
+{
+  "baseMain": "21624c982151d065fbc158e145b9466ff9366404",
+  "focusedMusic": {
+    "pass": 41,
+    "fail": 0
+  },
+  "affectedArenaAndMusic": {
+    "pass": 92,
+    "fail": 0
+  },
+  "initialFullCi": {
+    "tests": 2599,
+    "pass": 2593,
+    "fail": 6,
+    "fourFixtureFailuresFixedAndRetested": true,
+    "remainingEnvironmentBlocks": [
+      "EPERM creating test symlink",
+      "EACCES connecting to 127.0.0.1 test server"
+    ]
+  },
+  "browser": {
+    "status": "BLOCKED",
+    "action": "Playwright Chromium launch",
+    "target": "existing installed chromium-1234/chrome-win64/chrome.exe",
+    "reason": "Process exited 0xC0000022; no extra permission requested",
+    "noListeningClaim": true
+  },
+  "network": {
+    "status": "BLOCKED",
+    "action": "Git/gh HTTPS read; no push attempted",
+    "target": "GitHub championship-2026",
+    "reason": "getaddrinfo thread failure / API connection unavailable",
+    "approvalDenied": false
+  },
+  "physicalIphoneAccepted": false
+}

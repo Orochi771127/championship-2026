@@ -26,7 +26,10 @@ export function createAudioBus({
   const categoryLevel = (name) => Math.max(0, Math.min(1, (name === "sfx" ? levels.sfxVolume : name === "music" ? levels.musicVolume : 100) / 100));
 
   function resume() {
-    if (context?.state === "suspended") void context.resume().catch(() => {});
+    // Safari exposes an external interruption separately from app suspension.
+    // Keep the same native-rate context and graph; never resample decoded audio
+    // or rebuild media sources when returning from another app.
+    if (context?.state === "suspended" || context?.state === "interrupted") void context.resume().catch(() => {});
   }
 
   function installUnlock() {
@@ -128,7 +131,7 @@ export function createAudioBus({
       // Pressed inside a user gesture, so a suspended context resumes now.
       return context.state !== "closed";
     },
-    stats: () => Object.freeze({ state: context?.state ?? "none", previews, previewing: Boolean(previewVoice) }),
+    stats: () => Object.freeze({ state: context?.state ?? "none", sampleRate: context?.sampleRate ?? null, previews, previewing: Boolean(previewVoice) }),
     dispose() {
       if (unlockInstalled) {
         eventTarget.removeEventListener("pointerdown", resume, { capture: true });

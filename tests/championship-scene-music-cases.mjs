@@ -49,7 +49,7 @@ test('all Chinese locales show Chinese and en/ja/th/vi show only English for eve
 });
 test('canonical title registration covers all 17 bilingual records, not stray literals or other files',()=>{
  const file='src/championship/presentation/sceneMusicCatalog.js',checked=inspectSceneMusicLocaleCopy(SCENE_MUSIC_TRACKS);
- assert.equal(checked.keys.length,17);assert.deepEqual(checked.gaps,[]);
+ assert.equal(checked.keys.length,21);assert.deepEqual(checked.gaps,[]);
  for(const track of SCENE_MUSIC_TRACKS)for(const locale of ['zh-Hant','en','ja','th','vi']){
   const title=musicTrackTitle(track.id,locale);
   assert.equal(title,track.titles[locale==='zh-Hant'?'zh':'en']);
@@ -69,7 +69,7 @@ test('every missing or blank Chinese/English music title remains a canonical loc
 });
 test('global locale gate registers all scene titles with zero missing titles or raw display literals',async()=>{
  const report=await buildLocaleCoverage(),file='src/championship/presentation/sceneMusicCatalog.js';
- assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:17,gaps:[]});
+ assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:21,gaps:[]});
  assert.equal(report.counts.missing,0,JSON.stringify(report.missing));
  assert.equal(report.counts.uiCopyMissing,0);assert.equal(report.counts.catalogGaps,0);
 });
@@ -80,7 +80,7 @@ test('music control copy exists deliberately in all five UI languages',()=>{
 test('old, invalid and cross-scene preference IDs preserve scene defaults without inventing paths',()=>{
  for(const input of [{},{raisingMusic:'bogus',battleMusic:'../other.mp3'},{raisingMusic:'victory',battleMusic:'moon'}]){
   const prefs=normalizePreferences(input);assert.equal(prefs.raisingMusic,'default');assert.equal(prefs.battleMusic,'default');
-  for(const [screen,tutorial,id]of [['RAISING_HOME',false,'moon'],['RAISING_HOME',true,'lofi'],['CAGE_EDIT',false,'moon']])assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial}).id,'raising',prefs),id);
+  for(const [screen,tutorial,id]of [['RAISING_HOME',false,'a_quiet_evening_training'],['RAISING_HOME',true,'a_quiet_evening_training'],['CAGE_EDIT',false,'a_quiet_evening_training']])assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial}).id,'raising',prefs),id);
   assert.equal(resolveSceneMusic('battle_normal',null,prefs),'battle_normal');assert.equal(resolveSceneMusic('battle_final',null,prefs),'battle_final');
  }assert.equal(parsePreferences('{"schemaVersion":1,"account":{"locale":"en"}}').preferences.raisingMusic,'default');
 });
@@ -105,10 +105,10 @@ for(const levels of [{muted:true},{musicVolume:0},{masterVolume:0}])test(`silent
  const f=fixture({levels});f.music.setScene('moon',null,'raising');f.doc.emit('pointerdown');f.choose('raisingMusic','lofi');await settle();assert.equal(f.media.length,0);f.bus.setLevels({muted:false,masterVolume:80,musicVolume:25,sfxVolume:65});f.music.preferencesChanged();await settle();assert.equal(f.music.inspect().playing,'lofi');assert.equal(f.bus.gains().musicEffective,.2);assert.equal(f.bus.levels().sfxVolume,65);f.dispose();
 });
 test('active selection fades at most two slots, retires old stream and restores scene default',async()=>{
- const f=fixture();f.music.setScene('moon',null,'raising');f.doc.emit('pointerdown');await settle();f.choose('raisingMusic','lofi');await settle();assert.equal(f.music.inspect().playing,'lofi');assert.equal(f.music.inspect().voices,2);f.finishFades();assert.equal(f.music.inspect().voices,1);assert.equal(f.media.find(m=>m.src.includes('moon')),undefined);f.choose('raisingMusic','default');await settle();f.finishFades();assert.equal(f.music.inspect().playing,'moon');assert.equal(f.media.length,2);f.dispose();
+ const f=fixture();f.music.setScene('moon',null,'raising');f.doc.emit('pointerdown');await settle();f.choose('raisingMusic','lofi');await settle();assert.equal(f.music.inspect().playing,'lofi');assert.equal(f.music.inspect().voices,2);f.finishFades();assert.equal(f.music.inspect().voices,1);assert.equal(f.media.find(m=>m.src.includes('moon')),undefined);f.choose('raisingMusic','default');await settle();f.finishFades();assert.equal(f.music.inspect().playing,'a_quiet_evening_training');assert.equal(f.media.length,2);f.dispose();
 });
 test('same effective selection and every locale preserve source, position and start count',async()=>{
- const f=fixture();f.music.setScene('moon',null,'raising');f.doc.emit('pointerdown');await settle();const a=f.media[0];a.currentTime=18;f.choose('raisingMusic','moon');for(const locale of ['zh-Hant','en','ja','th','vi']){f.preferences.locale=locale;f.music.preferencesChanged();await settle();}assert.equal(a.currentTime,18);assert.equal(a.plays,1);assert.equal(f.music.inspect().starts,1);assert.equal(f.media.length,1);f.dispose();
+ const f=fixture();f.choose('raisingMusic','moon');f.music.setScene('moon',null,'raising');f.doc.emit('pointerdown');await settle();const a=f.media[0];a.currentTime=18;f.choose('raisingMusic','moon');for(const locale of ['zh-Hant','en','ja','th','vi']){f.preferences.locale=locale;f.music.preferencesChanged();await settle();}assert.equal(a.currentTime,18);assert.equal(a.plays,1);assert.equal(f.music.inspect().starts,1);assert.equal(f.media.length,1);f.dispose();
 });
 test('same effective cue still records a new scene before a later preference change',async()=>{
  const f=fixture();f.music.setScene('moon',null,'raising');f.doc.emit('pointerdown');await settle();f.music.setScene('moon');f.choose('raisingMusic','lofi');await settle();assert.equal(f.music.inspect().playing,'moon');f.music.setScene('moon',null,'raising');await settle();assert.equal(f.music.inspect().playing,'lofi');f.dispose();
@@ -123,14 +123,14 @@ test('rapid delayed selection cannot let stale streams win or allocate a third s
  const f=fixture({delayed:true});f.music.setScene('moon',null,'raising');f.doc.emit('pointerdown');const old=f.pending.shift();f.choose('raisingMusic','lofi');const second=f.pending.shift();f.choose('raisingMusic','moon');const last=f.pending.shift();old();second();await settle();assert.equal(f.music.inspect().playing,null);last();await settle();assert.equal(f.music.inspect().playing,'moon');f.choose('raisingMusic','lofi');f.pending.shift()();await settle();f.finishFades();assert.equal(f.music.inspect().playing,'lofi');assert.equal(f.music.inspect().voices,1);assert.ok(f.media.length<=2);f.dispose();
 });
 test('arena normal/final calls share choice, preserve once-only results and clear on exit',async()=>{
- const f=fixture();f.choose('battleMusic','battle_final');f.music.setScene('battle_normal','arena:1');f.doc.emit('pointerdown');await settle();assert.equal(f.music.inspect().playing,'battle_final');const starts=f.music.inspect().starts;f.music.setScene('battle_final','arena:1');await settle();assert.equal(f.music.inspect().starts,starts);f.music.setScene('victory','arena-result:1');await settle();assert.equal(f.music.inspect().playing,'victory');f.choose('battleMusic','battle_normal');await settle();assert.equal(f.music.inspect().playing,'victory');f.finishFades();f.media.find(m=>m.src.includes('victory')).onended();f.music.preferencesChanged();await settle();assert.equal(f.music.inspect().playing,null);f.music.setScene('moon',null,'raising');await settle();assert.equal(f.music.inspect().playing,'moon');f.dispose();
+ const f=fixture();f.choose('battleMusic','battle_final');f.music.setScene('battle_normal','arena:1');f.doc.emit('pointerdown');await settle();assert.equal(f.music.inspect().playing,'battle_final');const starts=f.music.inspect().starts;f.music.setScene('battle_final','arena:1');await settle();assert.equal(f.music.inspect().starts,starts);f.music.setScene('victory','arena-result:1');await settle();assert.equal(f.music.inspect().playing,'victory');f.choose('battleMusic','battle_normal');await settle();assert.equal(f.music.inspect().playing,'victory');f.finishFades();f.media.find(m=>m.src.includes('victory')).onended();f.music.preferencesChanged();await settle();assert.equal(f.music.inspect().playing,null);f.music.setScene('moon',null,'raising');await settle();assert.equal(f.music.inspect().playing,'a_quiet_evening_training');f.dispose();
 });
 test('settings use native radio groups and literal localized titles without relabeling SFX preview as BGM',()=>{
  const s=fs.readFileSync(new URL('../src/championship/app/settings/settingsPanel.js',import.meta.url),'utf8');assert.match(s,/radioGroup\("raisingMusic"/);assert.match(s,/radioGroup\("battleMusic"/);assert.match(s,/if \(choice\.literal\) name\.textContent = choice\.name/);assert.match(s,/musicTrackTitle\(track\.id, store\.get\(\)\.locale\)/);assert.match(s,/MUSIC_TEST_SFX/);
 });
 test('new original MP3 bytes and scene assignments match the verified import manifest',()=>{
  const manifest=JSON.parse(fs.readFileSync(new URL('../assets/production/scene-music-r1/manifest.json',import.meta.url)));
- assert.equal(manifest.files.length,3);assert.equal(SCENE_MUSIC_TRACKS.length,17);
+ assert.equal(manifest.files.length,7);assert.equal(SCENE_MUSIC_TRACKS.length,21);
  for(const file of manifest.files){
   const data=fs.readFileSync(new URL(`../assets/production/scene-music-r1/${file.path}`,import.meta.url));
   assert.equal(data.length,file.bytes);assert.equal(createHash('sha256').update(data).digest('hex'),file.sha256);
@@ -144,7 +144,7 @@ for(const [scene,id]of [['raising','a_quiet_evening_training'],['battle','unison
  const f=fixture();f.choose(scene+'Music',id);const source=scene==='raising'?'moon':'battle_normal';f.music.setScene(source,null,scene);assert.equal(f.media.length,0);f.doc.emit('pointerdown');await settle();
  assert.equal(f.music.inspect().playing,id);assert.ok(f.media[0].src.endsWith(`/${scene}/${id}.mp3`));assert.equal(f.media[0].volume,1);
  f.media[0].currentTime=59.3;f.media[0].duration=60;f.media[0].ontimeupdate();await settle();f.finishFades();assert.equal(f.music.inspect().playing,id);assert.equal(f.music.inspect().voices,1);assert.equal(f.music.inspect().starts,2);
- f.choose(scene+'Music','default');await settle();f.finishFades();assert.equal(f.music.inspect().playing,source);f.dispose();
+ f.choose(scene+'Music','default');await settle();f.finishFades();assert.equal(f.music.inspect().playing,scene==='raising'?'a_quiet_evening_training':source);f.dispose();
 });
 test('failed selected stream is released and a subsequent valid selection recovers without overlap',async()=>{
  const f=fixture();f.choose('raisingMusic','a_quiet_evening_training');f.music.setScene('moon',null,'raising');f.doc.emit('pointerdown');await settle();const a=f.media[0];a.error={code:2};a.onerror();assert.equal(f.music.inspect().voices,0);assert.equal(a.src,'');assert.equal(a.oncanplaythrough,null);f.choose('raisingMusic','moon');await settle();f.finishFades();assert.equal(f.music.inspect().playing,'moon');assert.equal(f.music.inspect().voices,1);assert.equal(f.music.inspect().error,null);f.dispose();

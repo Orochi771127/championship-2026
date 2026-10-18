@@ -1,7 +1,7 @@
 {
   "id": "CHAMPIONSHIP_SCENE_MUSIC_R1_20261016",
-  "scope": "Three Owner-supplied optional Raising/Battle tracks; original MP3 bytes preserved. Existing default routes and existing 19 encoded files unchanged.",
-  "processing": "Read-only loudness analysis. Runtime GainNode targets approximately -24 LUFS, capped to -2 dBTP and maximum +6 dB; no rendered/transcoded audio. No edge trims; 0.8 second loop crossfade.",
+  "scope": "Seven Owner-supplied MP3 tracks; exact original bytes retained. Four field assignments added 2026-10-18.",
+  "processing": "Measured runtime gain only, approximately -24 LUFS and <= -3 dBTP; no speed/pitch changes, no low-pass or transcoding. 0.8 second loop crossfade. Listening pending.",
   "acceptance": "Technical local checks only; browser/device decoding, transition/loop listening and final Chinese display-name acceptance pending.",
   "files": [
     {
@@ -63,6 +63,86 @@
       "measuredIntegratedLufs": -12.54,
       "measuredTruePeakDbtp": 1.33,
       "playbackGainDb": -11.5
+    },
+    {
+      "id": "south_pole_siege",
+      "path": "battle/south_pole_siege.mp3",
+      "sha256": "27d2c70afad96a40bfd80bc3bf638f0d1d11d5b1755148facba735e57c0a1023",
+      "bytes": 1735893,
+      "seconds": 72.045667,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner supplied Downloads file, explicitly assigned to battle field on 2026-10-18",
+      "originalUnchanged": true,
+      "category": "battle",
+      "titles": {
+        "zh": "南極圍攻",
+        "en": "South Pole Siege"
+      },
+      "titleStatus": "Product display translation, not embedded artist metadata",
+      "measuredIntegratedLufs": -12.37,
+      "measuredTruePeakDbtp": 0.39,
+      "playbackGainDb": -11.7
+    },
+    {
+      "id": "titan_s_final_strike",
+      "path": "battle/titan_s_final_strike.mp3",
+      "sha256": "0bbc592b6f26d02df836c7fccd25d177b1e173864b94a872750f882504dbc963",
+      "bytes": 3648683,
+      "seconds": 151.74525,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner supplied Downloads file, explicitly assigned to battle field on 2026-10-18",
+      "originalUnchanged": true,
+      "category": "battle",
+      "titles": {
+        "zh": "泰坦終擊",
+        "en": "Titan's Final Strike"
+      },
+      "titleStatus": "Product display translation, not embedded artist metadata",
+      "measuredIntegratedLufs": -12.37,
+      "measuredTruePeakDbtp": 0.28,
+      "playbackGainDb": -11.7
+    },
+    {
+      "id": "mirage_of_the_arena",
+      "path": "battle/mirage_of_the_arena.mp3",
+      "sha256": "177ed094d8677a76ec9ff453d5dda11b1030bf3ff3681aa43a6065e41e2ac16e",
+      "bytes": 2003596,
+      "seconds": 83.199958,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner supplied Downloads file, explicitly assigned to battle field on 2026-10-18",
+      "originalUnchanged": true,
+      "category": "battle",
+      "titles": {
+        "zh": "競技場蜃景",
+        "en": "Mirage of the Arena"
+      },
+      "titleStatus": "Product display translation, not embedded artist metadata",
+      "measuredIntegratedLufs": -12.47,
+      "measuredTruePeakDbtp": 0.36,
+      "playbackGainDb": -11.6
+    },
+    {
+      "id": "inferno_overdrive",
+      "path": "battle/inferno_overdrive.mp3",
+      "sha256": "1abdbb1431c0df7cb27ccd4137f3edfacb8664c443fc0343aae34d2ed2d1e796",
+      "bytes": 2234309,
+      "seconds": 92.813,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner supplied Downloads file, explicitly assigned to battle field on 2026-10-18",
+      "originalUnchanged": true,
+      "category": "battle",
+      "titles": {
+        "zh": "地獄超速",
+        "en": "Inferno Overdrive"
+      },
+      "titleStatus": "Product display translation, not embedded artist metadata",
+      "measuredIntegratedLufs": -13.31,
+      "measuredTruePeakDbtp": 1.4,
+      "playbackGainDb": -10.7
     }
   ],
   "cues": {
@@ -86,6 +166,38 @@
       "path": "./assets/production/scene-music-r1/battle/federation_siege.mp3",
       "loop": true,
       "gainDb": -11.5,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "south_pole_siege": {
+      "path": "./assets/production/scene-music-r1/battle/south_pole_siege.mp3",
+      "loop": true,
+      "gainDb": -11.7,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "titan_s_final_strike": {
+      "path": "./assets/production/scene-music-r1/battle/titan_s_final_strike.mp3",
+      "loop": true,
+      "gainDb": -11.7,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "mirage_of_the_arena": {
+      "path": "./assets/production/scene-music-r1/battle/mirage_of_the_arena.mp3",
+      "loop": true,
+      "gainDb": -11.6,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "inferno_overdrive": {
+      "path": "./assets/production/scene-music-r1/battle/inferno_overdrive.mp3",
+      "loop": true,
+      "gainDb": -10.7,
       "trimStart": 0,
       "trimEnd": 0,
       "crossfade": 0.8

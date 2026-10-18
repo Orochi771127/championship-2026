@@ -828,3 +828,8 @@ This round remains `SYNC ONLY`:
 - ART-P2/P2R Modern Environment: technical/visual proof retained; no automatic
   production-standard or shipping promotion.
 - P3-P6 and further modern original production remain frozen.
+
+
+## 2026-10-18 Music default, lifecycle and field repair
+
+Owner explicitly requested public release of Quiet Evening Training as the Raising default, preserve explicit player selections, conservative all-track audio repair, stable pitch/rate after foreground return including iPhone/PWA, and existing specified field songs in combat and new modes. Four exact Owner Downloads tracks are assigned to island/south pole/desert/hell. Owner delegated the two Data Arena assignments: paired Harbor survival uses Unison Under Fire; Tournament uses Federation Siege, recorded as reversible inference without human listening. Grass/volcano retain current cues pending earlier dedicated-file identification. See docs/reports/music-repair-2026-10-18/REPORT_ZH_TW.md, all 26 encoded-file measurements and 53 route inventory. No new generation, paid service or source modification; listening and physical iPhone acceptance remain pending. Preserve current Dex/icon/viewport changes; normal main integration only, no force push or unrelated PR56.
