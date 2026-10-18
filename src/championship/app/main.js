@@ -180,7 +180,9 @@ const HUNT_DAY_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") === "hm2
   ? "assets/production/hunt/hm234-day-review-20261007/manifest.json" : null;
 // Owner 2026-10-09: final 37 cage fields in normal local play; existing geometry and clocks.
 const CAGE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
-  ? publicMapManifestPath('cage-final')
+  ? (LOCAL_MAP_REVIEW.get("cageReview") === "polish-20261019"
+    ? "assets/production/cage/polish-review-20261019/manifest.json"
+    : publicMapManifestPath('cage-final'))
   : publicMapManifestPath('cage-ui');
 // Owner 2026-10-07: completed original arenas in normal local play; publication remains gated.
 const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()

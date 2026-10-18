@@ -1,18 +1,21 @@
 import {isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
 import {publicMetadataPath,loadPublicMetadata,validatePublicMetadata} from './publicMetadata.js';
 // Static foreground from hash-locked CM03/CM24 masters and their unchanged final pixels.
+// The local polish review (2026-10-19) keeps the CM03/CM24 frames unchanged.
+const FINAL_CAGE_ASSET='art:cage:final-intake:20261008';
+const POLISH_CAGE_ASSET='art:cage:polish-review:20261019';
 // Geometry/collision/actor state stay with their existing owners.
 const FIELDS=Object.freeze([
  {fieldId:'field_cm03_01',role:'cage-foreground-cm03',
   prefix:'assets/production/cage/cm03-r18-foreground-20261009/',width:1152,height:800,
   sourceHash:'b757e18558a44b0f2ebd3052ae9de508258cff9b4670fe3b8215fb55bf6d70df',
   masterHash:'9b5d847bc91c587413be5baf600501ab60820517a05742a4a53af13a8cf297f0',
-  depthAuthority:'EXISTING_R18_MASTER_GROUND_PROJECTION'},
+  depthAuthority:'EXISTING_R18_MASTER_GROUND_PROJECTION',assetIds:[FINAL_CAGE_ASSET,POLISH_CAGE_ASSET]},
  {fieldId:'field_cm24_01',role:'cage-foreground-cm24',
   prefix:'assets/production/cage/cm24-final-foreground-20261010/',width:384,height:448,
   sourceHash:'601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146',
   masterHash:'dd731a1d27cec5cc19ecf67682e20a26bc3fd86c873f5e9e3c3b39b87ea28670',
-  depthAuthority:'EXACT_FINAL_MASTER_Z0_CONTACT_GROUND_PROJECTION'},
+  depthAuthority:'EXACT_FINAL_MASTER_Z0_CONTACT_GROUND_PROJECTION',assetIds:[FINAL_CAGE_ASSET,POLISH_CAGE_ASSET]},
  // Local review (2026-10-19): the athletics goal net. Wire pixels of the padded
  // runtime frame, stencilled from the reviewed master; strips take the goal
  // footprint's front edge in their column, so residents inside stand on the
@@ -21,12 +24,18 @@ const FIELDS=Object.freeze([
   prefix:'assets/production/cage/cm02-goal-foreground-20261019/',width:768,height:800,
   sourceHash:'930dcd6253af5a9d26c71546ccdf0b420d7fd75c0ff5e66df0ed4218655ae6b0',
   masterHash:'469b1a6f6d261938e19dba0f335dffcfdc245f4903bb26a4de4e766c3aa0ebe2',
+  depthAuthority:'GOAL_FOOTPRINT_FRONT_EDGE_MASTER_PROJECTION'},
+ // The same goal net over the polish review's re-lit CM02 frame.
+ {fieldId:'field_cm02_01',localManifest:'assets/production/cage/cm02-goal-foreground-polish-20261019/manifest.json',stencilOnly:true,
+  prefix:'assets/production/cage/cm02-goal-foreground-polish-20261019/',width:768,height:800,assetIds:[POLISH_CAGE_ASSET],
+  sourceHash:'f46ab00764f67d336ad96884bf9bb5b51e6856f09752d698ea6c23e992771ab1',
+  masterHash:'469b1a6f6d261938e19dba0f335dffcfdc245f4903bb26a4de4e766c3aa0ebe2',
   depthAuthority:'GOAL_FOOTPRINT_FRONT_EDGE_MASTER_PROJECTION'}
 ]);
 // Visual padding is at most 8 native pixels at density four (32 world px).
 const MAX_PADDING_WORLD_PX=32;
 function eligible(config,manifest,placements,location){
- return isOriginalRuntimeLocation(location)&&manifest?.assetId==='art:cage:final-intake:20261008'
+ return isOriginalRuntimeLocation(location)&&(config.assetIds??[FINAL_CAGE_ASSET]).includes(manifest?.assetId)
   &&manifest.fields?.find(f=>f.fieldId===config.fieldId)?.frames?.[0]?.sha256===config.sourceHash
   &&placements.some(p=>p.fieldId===config.fieldId);
 }
@@ -93,23 +102,29 @@ async function loadLocalForeground(config,{fetchImpl,baseHref}){
 // Local review (2026-10-19): generated occluders for the other cages, one
 // stencil per depth band from each reviewed master's ID render and ground
 // contacts. Listed in a local index; never part of the public selection.
-const LOCAL_REVIEW_INDEX='assets/production/cage/foreground-review-20261019/index.json';
-async function localReviewConfigs({location,fetchImpl,baseHref}){
-  if(!isOriginalRuntimeLocation(location))return [];
+const LOCAL_REVIEWS=Object.freeze({
+  [FINAL_CAGE_ASSET]:{tag:'20261019'},
+  [POLISH_CAGE_ASSET]:{tag:'polish-20261019'}});
+async function localReviewConfigs({manifest,location,fetchImpl,baseHref}){
+  const review=LOCAL_REVIEWS[manifest?.assetId];
+  if(!review||!isOriginalRuntimeLocation(location))return [];
+  const dir=`assets/production/cage/foreground-review-${review.tag}/`;
   try{
-    const response=await fetchImpl(new URL(LOCAL_REVIEW_INDEX,baseHref));
+    const response=await fetchImpl(new URL(dir+'index.json',baseHref));
     if(!response.ok)return [];
     const index=await response.json();
-    if(index.assetId!=='art:cage:foreground-review:20261019'||!Array.isArray(index.fields))return [];
-    return index.fields.filter(f=>!FIELDS.some(c=>c.fieldId===f.fieldId)&&typeof f.manifest==='string'
-      &&f.manifest.startsWith('assets/production/cage/foreground-review-20261019/')&&!f.manifest.includes('..'))
-      .map(f=>Object.freeze({fieldId:f.fieldId,localManifest:f.manifest,stencilOnly:true,
-        prefix:'assets/production/cage/foreground-review-20261019/',width:f.width,height:f.height,
+    if(index.assetId!==`art:cage:foreground-review:${review.tag}`||!Array.isArray(index.fields))return [];
+    const curated=FIELDS.filter(c=>(c.assetIds??[FINAL_CAGE_ASSET]).includes(manifest.assetId));
+    return index.fields.filter(f=>!curated.some(c=>c.fieldId===f.fieldId)&&typeof f.manifest==='string'
+      &&f.manifest.startsWith(dir)&&!f.manifest.includes('..'))
+      .map(f=>Object.freeze({fieldId:f.fieldId,localManifest:f.manifest,stencilOnly:true,assetIds:[manifest.assetId],
+        prefix:dir,width:f.width,height:f.height,
         sourceHash:f.sourceHash,masterHash:f.masterHash,depthAuthority:index.depthAuthority}));
   }catch(error){console.warn('CHAMPIONSHIP_CAGE_FOREGROUND_REVIEW_INDEX_FALLBACK',error?.message);return [];}
 }
 export async function withCageForeground({PIXI,art,manifest,placements,location=globalThis.location,fetchImpl=globalThis.fetch,baseHref=globalThis.location?.href}) {
-  const review=placements.some(p=>!FIELDS.some(c=>c.fieldId===p.fieldId))?await localReviewConfigs({location,fetchImpl,baseHref}):[];
+  const review=placements.some(p=>!FIELDS.some(c=>c.fieldId===p.fieldId&&(c.assetIds??[FINAL_CAGE_ASSET]).includes(manifest?.assetId)))
+    ?await localReviewConfigs({manifest,location,fetchImpl,baseHref}):[];
   const selected=[...FIELDS,...review].filter(config=>eligible(config,manifest,placements,location));
   if(!selected.length)return art;
   const bundles=[];
@@ -126,7 +141,7 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   try{
     for(const {data}of bundles){
       if(!data.atlas)continue;
-      if(typeof data.atlas.src!=='string'||!data.atlas.src.startsWith('assets/production/cage/foreground-review-20261019/')||data.atlas.src.includes('..'))
+      if(typeof data.atlas.src!=='string'||!/^assets\/production\/cage\/foreground-review-[a-z0-9-]+\//.test(data.atlas.src)||data.atlas.src.includes('..'))
         throw Error('CAGE_FOREGROUND_ATLAS_INVALID');
       atlasLoads.push(data.atlas.src);
       const texture=await PIXI.Assets.load(data.atlas.src);

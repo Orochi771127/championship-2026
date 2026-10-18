@@ -15,8 +15,8 @@
 
 import {isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
 
-const INDEX = 'assets/production/cage/ambient-review-20261019/index.json';
-const PREFIX = 'assets/production/cage/ambient-review-20261019/';
+// Review tag per cage manifest: the final intake, or its local polish review.
+const REVIEWS = Object.freeze({'art:cage:final-intake:20261008': '20261019', 'art:cage:polish-review:20261019': 'polish-20261019'});
 const WATER_TILE = 'assets/production/battle/bm04-island-polish-r2/caustic-tile.webp';
 const MAX_PADDING_WORLD_PX = 32;
 const BASE_LAYER_Z = -1e6, TOP_Z = 1e7, TAU = Math.PI * 2;
@@ -147,13 +147,16 @@ const PARTICLES = Object.freeze({
 export async function withCageAmbient({PIXI, art, manifest, placements, renderer = null, quality = 'high', reducedMotion = false,
   location = globalThis.location, fetchImpl = globalThis.fetch, baseHref = globalThis.location?.href}) {
   if (!art || !isOriginalRuntimeLocation(location) || art.field?.fold || renderer?.type !== PIXI.RendererType?.WEBGL) return art;
+  const tag = REVIEWS[manifest?.assetId];
+  if (!tag) return art;
+  const PREFIX = `assets/production/cage/ambient-review-${tag}/`;
   let index;
   try {
-    const response = await fetchImpl(new URL(INDEX, baseHref));
+    const response = await fetchImpl(new URL(PREFIX + 'index.json', baseHref));
     if (!response.ok) return art;
     index = await response.json();
   } catch { return art; }
-  if (index?.assetId !== 'art:cage:ambient-review:20261019' || !Array.isArray(index.fields)) return art;
+  if (index?.assetId !== `art:cage:ambient-review:${tag}` || !Array.isArray(index.fields)) return art;
   const low = quality === 'low';
   const wanted = index.fields.filter(f => placements.some(p => p.fieldId === f.fieldId)
     && typeof f.manifest === 'string' && f.manifest.startsWith(PREFIX) && !f.manifest.includes('..')
