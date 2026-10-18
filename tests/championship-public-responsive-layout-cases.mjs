@@ -4,6 +4,20 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {isLandscapeEntryLayout,mountPortraitFrame} from '../src/championship/app/portraitFrame.js';
 const source=p=>readFileSync(new URL(`../src/championship/app/${p}`,import.meta.url),'utf8');
+test('standalone viewport authority survives all game routes, rotation, keyboard and disposal',()=>{
+ const f=fixture(393,852);f.window.navigator={standalone:true};
+ f.title.hidden=true;f.root.hidden=false;
+ for(const screen of ['RAISING_HOME','SHOP','DATABASE','CAGE_EDIT','GATE_SELECT','HUNT_LOADOUT','HUNT_FIELD','HUNT_RESULT','BATTLE_SELECT','BATTLE_FIELD','BATTLE_RESULT','CHAMPIONSHIP','DIGIMON_LIST','SCHEDULE','TAMER_INFO','HELP','MEDALS']){
+  f.root.dataset.activeScreen=screen;f.notify();assert.ok(f.attrs.has('data-web-app'));
+  assert.equal(f.styles.get('--cm-app-viewport-height'),'852px',screen);
+  f.resize(852,393);assert.equal(f.styles.get('--cm-app-viewport-height'),'393px',screen);
+  f.resize(393,852);
+ }
+ f.focus();Object.assign(f.window.visualViewport,{height:420,offsetTop:18});f.window.visualViewport.dispatchEvent(new Event('resize'));
+ assert.equal(f.styles.get('--cm-app-viewport-height'),'420px');
+ assert.equal(f.document.activeElement.value,'Draft');
+ f.controller.dispose();assert.equal(f.styles.size,0);assert.equal(f.attrs.size,0);
+});
 function fixture(width=1366,height=768,enabled=true) {
  const attrs=new Set(),styles=new Map(),observed=new Set();let notify;
  const root={dataset:{activeScreen:'RAISING_HOME'},hidden:true},title={hidden:false};

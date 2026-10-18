@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: INSTALLED_GAME_SAFE_AREA_20261018 -->
+## 2026-10-18 — Inner-page standalone safe area
+
+Owner confirms the title bottom strip is fixed on iPhone, but reports the strip on every game inner page. Authorizes shared game container/viewport/canvas repair across portrait and landscape, tests and publication, preserving saves and all latest icons/Dex work. Coordinate with art and music publishers and fetch current main before integration. No cache clearing, save reset, app deletion or repeated title acceptance required. See [scope and validation boundaries](../reports/installed-game-safe-area-2026-10-18/REPORT_ZH_TW.md).
+
 <!-- record-id: IPHONE_CANVAS_FOLLOWUP_20261018 -->
 ## 2026-10-18 — Actual iPhone bottom strip persists
 

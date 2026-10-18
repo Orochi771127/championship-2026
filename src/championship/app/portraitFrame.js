@@ -62,7 +62,7 @@ export function readTitleViewportDiagnostics(win = globalThis.window, doc = glob
   };
   const moduleName=doc.querySelector?.('script[type="module"][src]')?.getAttribute('src')?.split('/').pop();
   return {
-    revision:'PWA-20261018B', build:/^main-[A-Z0-9]+\.js$/.test(moduleName??'')?moduleName:'source',
+    revision:'PWA-20261018C', build:/^main-[A-Z0-9]+\.js$/.test(moduleName??'')?moduleName:'source',
     installed:installedTitle(win), inner:[win.innerWidth,win.innerHeight],
     client:[doc.documentElement?.clientWidth,doc.documentElement?.clientHeight],
     screen:[win.screen?.width,win.screen?.height], dpr:win.devicePixelRatio,
@@ -71,6 +71,9 @@ export function readTitleViewportDiagnostics(win = globalThis.window, doc = glob
     safeBottom:rootStyle?.getPropertyValue('--cm-title-safe-bottom')?.trim()??'',
     canvasColor:rootStyle?.backgroundColor??'',bodyColor:win.getComputedStyle?.(doc.body)?.backgroundColor??'',
     title:rect('#cm-title'),panel:rect('#cm-title > .cm-title__panel'),
+    game:rect('#cm-root'),toolbar:rect('.cm-toolbar'),
+    screenId:doc.getElementById?.('cm-root')?.dataset.activeScreen??'TITLE',
+    appHeight:win.getComputedStyle?.(doc.body)?.getPropertyValue('--cm-app-viewport-height')?.trim()??'',
     viewport:doc.querySelector?.('meta[name="viewport"]')?.getAttribute('content')??'',
     themeColor:doc.querySelector?.('meta[name="theme-color"]')?.getAttribute('content')??'',
     statusBar:doc.querySelector?.('meta[name="apple-mobile-web-app-status-bar-style"]')?.getAttribute('content')??''
@@ -88,6 +91,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   const menuProperties=['--cm-menu-viewport-height','--cm-menu-viewport-top'];
   const visibleProperties=['--cm-visible-viewport-height','--cm-visible-viewport-top'];
   const titleProperties=['--cm-title-viewport-height','--cm-title-viewport-top'];
+  const appProperties=['--cm-app-viewport-height'];
   const properties=['--cm-frame-scale','--cm-viewport-height','--cm-frame-center-x','--cm-frame-center-y'];
   let sideways=null,inputBaseline=null,disposed=false;
   const layoutHeight=()=>inputBaseline&&Math.abs(win.innerWidth-inputBaseline.width)<=1&&win.innerHeight<inputBaseline.height
@@ -126,6 +130,13 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
       body.style.setProperty('--cm-visible-viewport-top',`${cardViewport.offsetTop??0}px`);
     }else for(const name of visibleProperties)body.style.removeProperty(name);
     const hasInput=editing();
+    // The standalone canvas belongs to the whole application, not just TITLE.
+    // Keep native-size game screens on the same measured viewport budget;
+    // the legacy sideways frame still owns its separate logical 390px space.
+    const standalone=installedTitle(win);
+    body.toggleAttribute('data-web-app',standalone);
+    if(standalone)body.style.setProperty('--cm-app-viewport-height',`${titleViewportMetrics(win,doc,hasInput).height}px`);
+    else for(const name of appProperties)body.style.removeProperty(name);
     if(title){
       body.toggleAttribute('data-title-standalone',installedTitle(win));
       const titleViewport=titleViewportMetrics(win,doc,hasInput);
@@ -230,6 +241,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     body.removeAttribute('data-portrait-frame');
     body.removeAttribute('data-landscape-entry');
     body.removeAttribute('data-title-standalone');
+    body.removeAttribute('data-web-app');
     body.removeAttribute('data-desktop-raising');
     body.removeAttribute('data-responsive-raising');
     body.removeAttribute('data-desktop-browse');
@@ -238,6 +250,6 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     body.removeAttribute('data-cage-landscape');
     body.removeAttribute('data-hunt-wide');
     observer?.disconnect();
-    for(const name of [...properties,...menuProperties,...visibleProperties,...titleProperties])body.style.removeProperty(name);
+    for(const name of [...properties,...menuProperties,...visibleProperties,...titleProperties,...appProperties])body.style.removeProperty(name);
   }};
 }

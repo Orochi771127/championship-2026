@@ -41,6 +41,19 @@ body {
     linear-gradient(180deg, var(--c-backdrop-top) 0%, var(--c-ground) 45%, var(--c-backdrop-bottom) 100%);
 }
 
+/* The installed application's unsafe canvas persists after leaving TITLE.
+   Paint the shared game backdrop behind the Home indicator, rather than the
+   html c-void fallback. Foreground controls keep their existing safe padding. */
+html:has(body[data-web-app]):not(:has(#cm-title:not([hidden]))) {
+  min-height:100lvh;
+  background-color:var(--c-backdrop-bottom);
+  background-image:var(--bg-pattern),
+    radial-gradient(90% 60% at 50% 48%,var(--c-stage-glow) 0%,transparent 70%),
+    linear-gradient(180deg,var(--c-backdrop-top) 0%,var(--c-ground) 45%,var(--c-backdrop-bottom) 100%);
+}
+body[data-web-app]:not([data-portrait-frame]) { min-height:var(--cm-app-viewport-height,100dvh); }
+html.da-open:has(body[data-web-app]):not(:has(#cm-title:not([hidden]))) { background:#070b14; }
+
 button, input, select, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: default; }
@@ -102,18 +115,27 @@ body[data-portrait-frame] .cm-toolbar { left: 0; right: 0; width: auto; transfor
 :root {
   --cm-screen-top: 0px;
   --cm-screen-bottom: 0px;
-  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, 100dvh)) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 body[data-status-bar="on"] {
   --cm-screen-top: var(--cm-status-bar-height, var(--hud-height));
-  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, 100dvh)) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 body[data-status-bar="on"] #cm-root { top: var(--cm-screen-top); }
 body[data-toolbar="on"] {
   --cm-screen-bottom: var(--cm-toolbar-height, var(--dock-height));
-  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, 100dvh)) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 body[data-toolbar="on"] #cm-root { bottom: var(--cm-screen-bottom); }
+/* Native-size installed screens must use the same measured height as their
+   inner scaffold. Do not stretch the logical, scaled sideways game frame. */
+body[data-web-app]:not([data-portrait-frame]) #cm-root {
+  bottom:auto; height:var(--cm-screen-height);
+}
+body[data-web-app]:not([data-portrait-frame]) #cm-root[data-active-screen="RAISING_HOME"] {
+  height:var(--cm-app-viewport-height);
+}
+body[data-web-app] .da-root { bottom:auto; height:var(--cm-app-viewport-height); }
 
 /* ======================================================================= *
  * 3. Top HUD — the original's info_bar fields plus bits and the save state
