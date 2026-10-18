@@ -10,7 +10,7 @@ const { createHash } = require('node:crypto');
 const { pathToFileURL } = require('node:url');
 const PUBLIC_BASE = 'https://orochi771127.github.io/championship-2026/';
 const HERO = '.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero';
-const EXPECTED_REGISTRY_COUNT = 95;
+const EXPECTED_REGISTRY_COUNT = 104;
 const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10,35,62,36]);
 const EXPECTED_MASTERS = Object.freeze({
   36: Object.freeze({"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "雷鬃獾"}),
@@ -39,7 +39,8 @@ const EXPECTED_MASTERS = Object.freeze({
 });
 const publicHeroes = require('../src/data/championship/database-hero-portraits.public.v1.json');
 const displayRecipe = require('../docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json');
-const EXPECTED = Object.freeze(Object.fromEntries(Object.entries(EXPECTED_MASTERS).map(([id,master])=>{
+const APPROVED_INTAKE = Object.freeze({"207": {"speciesIndex": 207, "speciesId": "species-207", "displayCode": "UL30", "src": "assets/production/database-display-20261018/species-207.display.c58a022ba5c009c0.webp", "width": 768, "height": 576, "sha256": "c58a022ba5c009c0b2d6fc389c9018b50c7e2206ea4c673a6e7720f133c78d91", "thumbnail": {"src": "assets/production/database-display-20261018/species-207.thumbnail.6c3aada38673cc74.webp", "width": 128, "height": 96, "sha256": "6c3aada38673cc74e8d107fc222e799f3e8481f6e6955f78c0d81b0d8172e51d"}, "ownerCompressed": true}, "208": {"speciesIndex": 208, "speciesId": "species-208", "displayCode": "UL31", "src": "assets/production/database-display-20261018/species-208.display.37a7c2836136cd96.webp", "width": 768, "height": 576, "sha256": "37a7c2836136cd96c9bb9e5f58d131263b18d1e7602a5d91fef7858076f53d9a", "thumbnail": {"src": "assets/production/database-display-20261018/species-208.thumbnail.c0ec507c5e72ea8d.webp", "width": 128, "height": 96, "sha256": "c0ec507c5e72ea8d682f3c4582b7cb606a2aee0bdbca12d25a99f3c04722b0dc"}, "ownerCompressed": true}, "209": {"speciesIndex": 209, "speciesId": "species-209", "displayCode": "UL32", "src": "assets/production/database-display-20261018/species-209.display.75f8e1f19f95d161.webp", "width": 637, "height": 768, "sha256": "75f8e1f19f95d1615b335be2be0feabcaa06216e35612f96e6d8043482055e67", "thumbnail": {"src": "assets/production/database-display-20261018/species-209.thumbnail.1a6ed4a9d8112f3a.webp", "width": 106, "height": 128, "sha256": "1a6ed4a9d8112f3ab82e1bf4928397d10a22d913b3cf8aabbc80941de47f4658"}, "ownerCompressed": true}, "210": {"speciesIndex": 210, "speciesId": "species-210", "displayCode": "UL35", "src": "assets/production/database-display-20261018/species-210.display.e3eb624541031d79.webp", "width": 768, "height": 576, "sha256": "e3eb624541031d799749b8a951cbf559fe570260115116025406335284d26dde", "thumbnail": {"src": "assets/production/database-display-20261018/species-210.thumbnail.5d38c2cecb0810a8.webp", "width": 128, "height": 96, "sha256": "5d38c2cecb0810a87613a407a7c974d9a1307ff058d58224211ddc6d8afb0e6b"}, "ownerCompressed": true}, "212": {"speciesIndex": 212, "speciesId": "species-212", "displayCode": "UL36", "src": "assets/production/database-display-20261018/species-212.display.3d8b44c8d1135b9f.webp", "width": 768, "height": 512, "sha256": "3d8b44c8d1135b9fae435c761ff0cb99edeabfc2e5b42e8b4b2b5b15bdaf241a", "thumbnail": {"src": "assets/production/database-display-20261018/species-212.thumbnail.5bcda0d097b4cc9d.webp", "width": 128, "height": 86, "sha256": "5bcda0d097b4cc9d69d10030d57f8d7e86e8b9139cd62c20929d3ab851c94436"}, "ownerCompressed": true}, "213": {"speciesIndex": 213, "speciesId": "species-213", "displayCode": "UL37", "src": "assets/production/database-display-20261018/species-213.display.50c57f149312986b.webp", "width": 768, "height": 512, "sha256": "50c57f149312986bbbdb6c2b821ac571bb933b668caa45248bb54df71b210a81", "thumbnail": {"src": "assets/production/database-display-20261018/species-213.thumbnail.91ae9e09433a0516.webp", "width": 128, "height": 86, "sha256": "91ae9e09433a05169f373178eb42bb391e8c8f3a5c9e7cc387b20c3662fb2ef0"}, "ownerCompressed": true}, "214": {"speciesIndex": 214, "speciesId": "species-214", "displayCode": "UL38", "src": "assets/production/database-display-20261018/species-214.display.9d0ad4251a75eca4.webp", "width": 768, "height": 576, "sha256": "9d0ad4251a75eca4467dda372dd5520438039d24143e0c1071592d72ae43ae6e", "thumbnail": {"src": "assets/production/database-display-20261018/species-214.thumbnail.a4dc0936be5dcc08.webp", "width": 128, "height": 96, "sha256": "a4dc0936be5dcc0809510421f26daa751e884140cebef90aa7c1a74cbeaa3a5e"}, "ownerCompressed": true}, "216": {"speciesIndex": 216, "speciesId": "species-216", "displayCode": "UL13", "src": "assets/production/database-display-20261018/species-216.display.25e50fe4d6f6367d.webp", "width": 768, "height": 576, "sha256": "25e50fe4d6f6367df0145323618747bc257196b16868380c9956b9366e4585ff", "thumbnail": {"src": "assets/production/database-display-20261018/species-216.thumbnail.859c850b972aa5d9.webp", "width": 128, "height": 96, "sha256": "859c850b972aa5d9ac1018ace90deec9bff578b2a939073ff636d1eb5fb958c6"}, "ownerCompressed": true}, "217": {"speciesIndex": 217, "speciesId": "species-217", "displayCode": "UL22", "src": "assets/production/database-display-20261018/species-217.display.b8013deb58b3b4b8.webp", "width": 702, "height": 768, "sha256": "b8013deb58b3b4b85b5a5b9123c79addedb581bc35d2ed1e74edbe70ec40cb2f", "thumbnail": {"src": "assets/production/database-display-20261018/species-217.thumbnail.56f6a1fa7761a2bc.webp", "width": 117, "height": 128, "sha256": "56f6a1fa7761a2bca81d86b0a612b590eb51cf608d0a591740940d36edf89f85"}, "ownerCompressed": true}});
+const EXPECTED = Object.freeze(Object.fromEntries(Object.entries({...EXPECTED_MASTERS,...APPROVED_INTAKE}).map(([id,master])=>{
   const display=publicHeroes.entries.find(row=>row.speciesIndex===Number(id));
   assert.ok(display,`Missing public display rendition ${id}`);
   return [id,Object.freeze({...master,...display})];
@@ -66,7 +67,7 @@ function assertAsset(entry, bytes, expected) {
     assert.equal(bytes.readUInt32BE(16), expected.width ?? 1254); assert.equal(bytes.readUInt32BE(20), expected.height ?? 1254);
   } else {
     assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');
-    assert.ok(bytes.includes(Buffer.from('VP8L')),'Approved display images use lossless WebP');
+    if(!expected.ownerCompressed)assert.ok(bytes.includes(Buffer.from('VP8L')),'Existing display images use lossless WebP');
   }
 }
 function assertRegistry(sourceBytes, builtBytes) {
@@ -140,12 +141,15 @@ async function checkPolicy(repo) {
     sourceHashes: files.map(file => ({ file, sha256: sha256(fs.readFileSync(path.join(repo, file))) })) };
 }
 // The comic can advance itself between visibility inspection and an optional tap.
-// Accept that race only when its removal AND the ordinary next envelope are observed.
+// Accept removal only with an observed next envelope or a still-visible comic panel.
 async function clickOptionalComicControl(page, control, options = {}) {
   if (!await control.isVisible()) return;
   try {
     await control.click({ ...options, timeout: 1000 });
   } catch (error) {
+    if (error.name === 'TimeoutError' && typeof control.count === 'function'
+      && await control.count() === 0 && await page.locator('.cm-opening-story').count() === 1
+      && await page.locator('.cm-opening-story').isVisible()) return;
     if (error.name !== 'TimeoutError'
       || await page.locator('.cm-opening-story').count() !== 0
       || !await page.locator('.cm-opening__envelope').isVisible()) throw error;
@@ -178,7 +182,7 @@ async function main() {
     assertOriginalApprovalLineage();
     const registryPath = 'src/data/championship/database-hero-portraits.public.v1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
-    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'59 existing plus36 approved portraits; MA15 is held');
+    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'95 existing plus nine owner-approved portraits; MA15 is held');
     evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
     const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json',bindingPath='src/data/championship/public-alternate-form-bindings.v1.json';
     evidence.productionCatalogs=[];
@@ -307,7 +311,7 @@ async function main() {
           inside:[...row.querySelectorAll('img,strong,.cm-vs2-shop__meta')].every(child=>{const r=child.getBoundingClientRect();return r.left>=box.left-.75&&r.right<=box.right+.75&&r.top>=box.top-.75&&r.bottom<=box.bottom+.75;}),
           lazy:row.querySelector('img').loading==='lazy'};
       }));
-      assert.equal(measured.length,95);assert.ok(measured.every(row=>row.visible&&row.inside&&row.lazy),'All list thumbnail/name/code bounds remain inside their cards');
+      assert.equal(measured.length,EXPECTED_REGISTRY_COUNT);assert.ok(measured.every(row=>row.visible&&row.inside&&row.lazy),'All list thumbnail/name/code bounds remain inside their cards');
       assert.equal(await page.locator('[data-species-index="82"] .cm-dex-list-thumb').count(),0,'MA15 remains held');
       (evidence.listCardChecks??=[]).push({viewport,checked:measured.length,status:'PASS'});
     }
@@ -337,10 +341,10 @@ async function main() {
       assert.deepEqual(restored.cssHolderSize, normal.cssHolderSize);
     }
     // Normal re-entry and responsive rendering, still using the same session/UI.
-    for(const species of MATRIX_TARGETS){await openSpecies(species);await capture(`${species}-desktop-reentry`,species);}
+    for(const species of [...MATRIX_TARGETS,...Object.keys(APPROVED_INTAKE).map(Number)]){await openSpecies(species);await capture(`${species}-desktop-reentry`,species);}
     await page.setViewportSize({ width: 390, height: 844 });
     await measureListCards({width:390,height:844});
-    for (const species of [...MATRIX_TARGETS,70]) { await openSpecies(species); await capture(`${species}-mobile-normal-${evidence.captures.length}`, species); }
+    for (const species of [...MATRIX_TARGETS,70,...Object.keys(APPROVED_INTAKE).map(Number)]) { await openSpecies(species); await capture(`${species}-mobile-normal-${evidence.captures.length}`, species); }
     await page.setViewportSize({width:360,height:800});await measureListCards({width:360,height:800});
     // Production entry only: ordinary rows and route nodes, no fixture/catalog swap.
     evidence.promotedCaptures=[];
@@ -374,7 +378,7 @@ async function main() {
     evidence.comparisonGroups=['desktop-normal','128-light','128-dark','256-light','256-dark','desktop-restored','desktop-reentry'].map(condition=>({condition,referenceSpecies:117,candidateSpecies:[40,189,63,70,71,72,9,10],visualAcceptance:'PENDING_ROOT_ACTUAL_IMAGE_REVIEW',captures:[40,189,63,70,71,72,9,10,117].map(species=>{const c=evidence.captures.find(x=>x.name===`${species}-${condition}`);assert.ok(c);return {speciesIndex:species,image:c.heroScreenshot,fullPresentation:c.screenshot};})}));
     evidence.visualChecklist=['Approved040/189 with preserved063/070, baby009/010 and071/072 against117 accepted style','Full appendages and normal mobile fit','Cyan edge fringe on light/dark','Exact CSS restoration','Promoted own hero, origin and revealed target identity'];
     // Nine matrix heroes × eight conditions, one mobile re-entry, eight production hero captures.
-    assert.equal(evidence.captures.length,113);assert.equal(evidence.promotedCaptures.length,16);
+    assert.equal(evidence.captures.length,113+Object.keys(APPROVED_INTAKE).length*2);assert.equal(evidence.promotedCaptures.length,16);
     evidence.status = 'CAPTURE_PASS_VISUAL_REVIEW_PENDING';
   } catch (error) {
     evidence.status = 'FAIL'; evidence.failure = error.stack || String(error);
@@ -410,6 +414,11 @@ async function selfTestOptionalComicClick() {
   await clickOptionalComicControl(absent.page, absent.control); assert.equal(absent.calls.length, 0);
   const advanced = testCase({ error: timeout });
   await clickOptionalComicControl(advanced.page, advanced.control); assert.equal(advanced.calls.length, 1);
+  const nextPanel = testCase({ error: timeout, storyCount: 1 });
+  nextPanel.control.count = async () => 0;
+  nextPanel.page.locator = selector => selector === '.cm-opening-story'
+    ? { count: async () => 1, isVisible: async () => true } : { isVisible: async () => false };
+  await clickOptionalComicControl(nextPanel.page, nextPanel.control);
   for (const options of [{ storyCount: 1 }, { envelopeVisible: false }, { storyCount: 1, envelopeVisible: false }]) {
     const blocked = testCase({ error: timeout, ...options });
     await assert.rejects(() => clickOptionalComicControl(blocked.page, blocked.control), error => error === timeout);
@@ -465,7 +474,7 @@ async function selfTest() {
   assert.equal(publicHeroes.entries.length,EXPECTED_REGISTRY_COUNT,'Public registry count must match browser preflight');
   assert.equal(MATRIX_TARGETS.length,13);assert.equal(MATRIX_TARGETS.length*8+1+8,113);
   const sourceRegistry = Buffer.from(JSON.stringify({entries:Object.keys(EXPECTED).map(speciesIndex=>({speciesIndex:Number(speciesIndex)}))}));
-  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,17);
+  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,26);
   assert.throws(()=>assertRegistry(sourceRegistry,Buffer.from('{}')));
   for(const species of [9,10]){const missingBaby=Buffer.from(JSON.stringify({entries:JSON.parse(sourceRegistry).entries.filter(e=>e.speciesIndex!==species)}));assert.throws(()=>assertRegistry(missingBaby,missingBaby));}
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));
