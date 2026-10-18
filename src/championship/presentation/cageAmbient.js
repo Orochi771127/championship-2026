@@ -106,6 +106,7 @@ const PARTICLES = Object.freeze({
   spirit: {count: 14, color: [0x9fd8ff, 0xc9b3ff], size: [1.4, 2.6], vx: [-3, 3], vy: [-16, -8], life: [1800, 3000], add: true, z: 'top'},
   fog: {count: 8, color: [0xdfe6ee], size: [14, 26], vx: [3, 7], vy: [-1, 1], life: [5000, 8000], alpha: 0.10, grow: true, z: 'top'},
   sand: {count: 24, color: [0xf6deb0, 0xe9c48e], size: [0.8, 1.6], vx: [50, 90], vy: [-3, 3], life: [900, 1600], alpha: 0.5, streak: true, z: 'top'},
+  incense: {count: 8, color: [0xe8e4dc, 0xd8d2c8], size: [1.4, 2.8], vx: [-2, 2], vy: [-11, -6], life: [2600, 3800], alpha: 0.26, grow: true, flutter: true, z: 'top'},
   gas: {count: 10, color: [0xa6e36a, 0xc8f08a], size: [6, 12], vx: [-3, 3], vy: [-8, -4], life: [2600, 4200], alpha: 0.12, grow: true, z: 'top'}
 });
 
