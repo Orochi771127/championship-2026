@@ -14,6 +14,7 @@ import {createChampionshipStandaloneApp} from '../src/championship/app/champions
 import {restoreLegacyIndividual} from './fixtures/championship-legacy-collection.mjs';
 import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
 import baseline from './fixtures/database-lion-preservation-20261017.json' with {type:'json'};
+import unarmedStoryBefore from './fixtures/dex-unarmed-stories-before-20261018.json' with {type:'json'};
 import lifecycle from '../src/data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
 import rawMoves from '../src/data/championship/catalogs/battle-moves.r1.json' with {type:'json'};
 
@@ -98,14 +99,15 @@ test('native data and saves remain byte-identical, the original95 heroes stay in
   for(const entry of before.entries)assert.deepEqual(current.entries.find(e=>e.speciesIndex===entry.speciesIndex),entry);
   assert.equal(databaseHeroPortrait(121),null);
   assert.equal(databaseHeroPortrait(125).displayCode,'MA62');
-  assert.equal(databaseHeroPortrait(125).sha256,'2b59a46a702490d43d726166b0df35386dbd5016b8c4fa013ae7a0f4ad6454a6');
-  assert.deepEqual([databaseHeroPortrait(125).width,databaseHeroPortrait(125).height],[1448,1086]);
+  assert.equal(current.entries.find(e=>e.speciesIndex===125).sha256,'2b59a46a702490d43d726166b0df35386dbd5016b8c4fa013ae7a0f4ad6454a6');
+  const display=JSON.parse(fs.readFileSync('docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json','utf8')).rows.find(e=>e.speciesIndex===125);assert.equal(databaseHeroPortrait(125).sha256,display.display.sha256);assert.equal(display.source.sha256,current.entries.find(e=>e.speciesIndex===125).sha256);
+  assert.deepEqual([databaseHeroPortrait(125).width,databaseHeroPortrait(125).height],[864,648]);
 });
 
-test('all 214 unrelated profiles and all unrelated move labels retain exact base content',()=>{
+test('212 unrelated profiles retain exact content with the approved 077/078 copy correction isolated; unrelated move labels remain intact',()=>{
   const unrelatedProfiles=DATABASE_ORIGINAL_PROFILES.entries.filter(e=>![121,125].includes(e.speciesIndex));
   assert.equal(unrelatedProfiles.length,214);
-  assert.equal(hash(JSON.stringify(unrelatedProfiles)),baseline.unaffectedProfilesSha256);
+  assert.equal(hash(JSON.stringify(unrelatedProfiles.map(row=>unarmedStoryBefore.entries.find(old=>old.speciesIndex===row.speciesIndex)??row))),baseline.unaffectedProfilesSha256);
   const currentText=fs.readFileSync('src/championship/text/battleMoveNames.js','utf8');
   const exclude=new Set([273,274,285,286,287,288]);
   const unrelated=text=>text.split(/\r?\n/).filter(line=>!exclude.has(Number(/^\s*(\d+):/.exec(line)?.[1]))).join('\n');

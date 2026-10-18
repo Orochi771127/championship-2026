@@ -114,8 +114,35 @@ test('pinned gameplay data retains all values; derived vendor module has identic
 test('selected public hero mappings retain exact ID, image hash, dimensions and per-role resolution; authoring versions remain intact',()=>{
   const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));
   const authoring=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.r1.json'),'utf8'));
-  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,59);
+  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,95);
   for(const hero of heroes.entries)assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-hero`),{id:`${hero.speciesId}:database-hero`,src:hero.src,sha256:hero.sha256,width:hero.width,height:hero.height});
   assert.equal(publicRuntimeAsset('species-105:database-hero'),null);
   assert.throws(()=>validatePublicRuntimeAssets({schemaVersion:1,assets:[{...publicRuntimeAsset('species-116:database-hero'),approvalMessage:'private'}]}),/PUBLIC_RUNTIME_ASSET_INVALID/);
+});
+
+test('95 display renditions and thumbnails preserve exact approved source identity while retaining owner-confirmed unarmed designs',()=>{
+ const recipe=JSON.parse(fs.readFileSync('docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json','utf8'));
+ const masters=JSON.parse(fs.readFileSync('src/data/championship/database-hero-portraits.r1.json','utf8')).entries;
+ const heroes=JSON.parse(fs.readFileSync('src/data/championship/database-hero-portraits.public.v1.json','utf8')).entries;
+ assert.equal(recipe.rows.length,95);assert.equal(masters.length,96);assert.equal(recipe.displayMaxEdge,864);assert.equal(recipe.thumbnailMaxEdge,128);
+ assert.equal(recipe.encoding,'WEBP_LOSSLESS_RGBA_EXACT_AFTER_RESIZE');assert.equal(recipe.framingChanged,false);
+ const dimensions=bytes=>{for(let offset=12;offset+8<bytes.length;){const type=bytes.toString('ascii',offset,offset+4),n=bytes.readUInt32LE(offset+4),start=offset+8;
+  if(type==='VP8X')return [bytes.readUIntLE(start+4,3)+1,bytes.readUIntLE(start+7,3)+1];
+  if(type==='VP8L'){const bits=bytes.readUInt32LE(start+1);return [(bits&16383)+1,((bits>>>14)&16383)+1];}offset=start+n+(n%2);
+ }throw Error('WEBP_DIMENSIONS_MISSING');};
+ for(const row of recipe.rows){
+  const master=masters.find(e=>e.speciesIndex===row.speciesIndex),hero=heroes.find(e=>e.speciesIndex===row.speciesIndex);
+  for(const field of ['speciesId','displayCode'])assert.equal(hero[field],master[field]);
+  for(const field of ['src','sha256','width','height'])assert.equal(row.source[field],master[field]);
+  assert.equal(sha(fs.readFileSync(master.src)),master.sha256,'Original approved media remains intact');
+  for(const [kind,edge,actual] of [['display',864,hero],['thumbnail',128,hero.thumbnail]]){
+   const media=row[kind],bytes=fs.readFileSync(media.src);assert.equal(sha(bytes),media.sha256);assert.equal(bytes.length,media.bytes);
+   assert.deepEqual(dimensions(bytes),[media.width,media.height]);assert.ok(bytes.includes(Buffer.from('VP8L')),'Lossless WebP payload');
+   assert.equal(media.rgbaExactlyMatchesResizedSource,true);assert.ok(Math.max(media.width,media.height)<=edge);
+   const scale=Math.min(1,edge/Math.max(master.width,master.height));assert.ok(Math.abs(media.width-master.width*scale)<=0.500001);assert.ok(Math.abs(media.height-master.height*scale)<=0.500001);
+   for(const key of ['src','sha256','width','height'])assert.equal(actual[key],media[key]);
+   assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`),{id:`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`,src:media.src,sha256:media.sha256,width:media.width,height:media.height});
+  }
+ }
+ for(const id of [82,124,184,185,186,187,188])assert.equal(heroes.some(row=>row.speciesIndex===id),false);
 });

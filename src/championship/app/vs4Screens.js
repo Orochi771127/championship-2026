@@ -524,6 +524,12 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         const name = element("div", "cm-vs2-shop__name");
         name.append(element("strong", "", (!row.viewable && row.state === 'UNDISCOVERED') ? '????' : visibleName));
         name.append(element("span", "cm-vs2-shop__meta", row.displayCode));
+        const thumbnail = (row.viewable || row.state === 'REGISTERED') && databaseHeroPortrait(row.speciesIndex)?.thumbnail;
+        if(thumbnail){
+          const image=element('img','cm-dex-list-thumb');
+          image.setAttribute('loading','lazy');image.decoding='async';image.alt='';image.width=32;image.height=32;
+          image.src=thumbnail.src;item.classList.add('cm-vs2-database__row--thumb');item.append(image);
+        }
         item.append(name);
         item.addEventListener("click", () => {
           listScroll = list.scrollTop ?? 0;
