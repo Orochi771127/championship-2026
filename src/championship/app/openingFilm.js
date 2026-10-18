@@ -140,7 +140,7 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
       }
     }
   }
-  function visibility(){if(doc.visibilityState==='hidden')finish('hidden');}
+  function visibility(){if(doc.visibilityState==='hidden')finish('hidden');else sync();}
   function hide(){finish('hidden');}
   const events=['pointerdown','pointerup','click','keydown','keyup'];
   const mediaEvents={playing,timeupdate:time,progress:bufferChange,pause,ended,error,waiting,stalled:waiting};
