@@ -12,8 +12,19 @@ const FIELDS=Object.freeze([
   prefix:'assets/production/cage/cm24-final-foreground-20261010/',width:384,height:448,
   sourceHash:'601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146',
   masterHash:'dd731a1d27cec5cc19ecf67682e20a26bc3fd86c873f5e9e3c3b39b87ea28670',
-  depthAuthority:'EXACT_FINAL_MASTER_Z0_CONTACT_GROUND_PROJECTION'}
+  depthAuthority:'EXACT_FINAL_MASTER_Z0_CONTACT_GROUND_PROJECTION'},
+ // Local review (2026-10-19): the athletics goal net. Wire pixels of the padded
+ // runtime frame, stencilled from the reviewed master; strips take the goal
+ // footprint's front edge in their column, so residents inside stand on the
+ // floor behind the net and the gaps between wires stay open.
+ {fieldId:'field_cm02_01',localManifest:'assets/production/cage/cm02-goal-foreground-20261019/manifest.json',stencilOnly:true,
+  prefix:'assets/production/cage/cm02-goal-foreground-20261019/',width:768,height:800,
+  sourceHash:'930dcd6253af5a9d26c71546ccdf0b420d7fd75c0ff5e66df0ed4218655ae6b0',
+  masterHash:'469b1a6f6d261938e19dba0f335dffcfdc245f4903bb26a4de4e766c3aa0ebe2',
+  depthAuthority:'GOAL_FOOTPRINT_FRONT_EDGE_MASTER_PROJECTION'}
 ]);
+// Visual padding is at most 8 native pixels at density four (32 world px).
+const MAX_PADDING_WORLD_PX=32;
 function eligible(config,manifest,placements,location){
  return isOriginalRuntimeLocation(location)&&manifest?.assetId==='art:cage:final-intake:20261008'
   &&manifest.fields?.find(f=>f.fieldId===config.fieldId)?.frames?.[0]?.sha256===config.sourceHash
@@ -34,7 +45,7 @@ export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null,fold
   for(const p of placements.filter(p=>p.fieldId===data.fieldId)){
     const rect=p.sourceRect??{x:0,y:0,width:data.width,height:data.height};
     for(const o of data.objects){
-      if((!o.src?.startsWith(config.prefix)||o.src.includes('..'))
+      if((o.src!==undefined||!config.stencilOnly)&&(!o.src?.startsWith(config.prefix)||o.src.includes('..'))
         || ![o.x,o.y,o.width,o.height].every(Number.isInteger)||o.x<0||o.y<0||o.width<=0||o.height<=0
         ||o.x+o.width>data.width||o.y+o.height>data.height||!Number.isFinite(o.depthNative))throw Error('CAGE_FOREGROUND_PIECE_INVALID');
       const x=Math.max(o.x,rect.x),y=Math.max(o.y,rect.y),right=Math.min(o.x+o.width,rect.x+rect.width),bottom=Math.min(o.y+o.height,rect.y+rect.height);
@@ -71,12 +82,19 @@ export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null,fold
       depthWorldPx:piece.depth*unit+band.dy}];
   }));
 }
+// Local-review manifests are fetched directly (never through the public index);
+// cageForegroundPlan then checks their frame and master hashes.
+async function loadLocalForeground(config,{fetchImpl,baseHref}){
+  const response=await fetchImpl(new URL(config.localManifest,baseHref));
+  if(!response.ok)throw Error('CAGE_FOREGROUND_LOCAL_MANIFEST_UNAVAILABLE');
+  return response.json();
+}
 export async function withCageForeground({PIXI,art,manifest,placements,location=globalThis.location,fetchImpl=globalThis.fetch,baseHref=globalThis.location?.href}) {
   const selected=FIELDS.filter(config=>eligible(config,manifest,placements,location));
   if(!selected.length)return art;
   const bundles=[];
   for(const config of selected){
-   const data=await loadPublicMetadata(config.role,{fetchImpl,baseHref}),plan=cageForegroundPlan(data,placements,{unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
+   const data=config.localManifest?await loadLocalForeground(config,{fetchImpl,baseHref}):await loadPublicMetadata(config.role,{fetchImpl,baseHref}),plan=cageForegroundPlan(data,placements,{unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
      fold:art.field.fold??null,worldHeightPx:art.field.worldHeightPx});
    if(data.fieldId!==config.fieldId)throw Error('CAGE_FOREGROUND_SOURCE_MISMATCH');
    bundles.push({config,data,plan});
@@ -88,21 +106,28 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   // extra decoded image, offscreen surface, or a second asset owner.
   // Index only quads owned by this art tree. Folded tiles live inside band
   // containers; caps live in the second band. No texture is loaded or owned here.
-  const bases=new Map();
-  const key=(fieldId,x,y)=>`${fieldId}:${x}:${y}`;
+  // A padded frame's quad starts up to its padding before the placement on
+  // exterior edges; match it there and offset the revealed sprite to it.
+  const bases=[];
   const collect=object=>{
     if(object.texture&&object.label?.startsWith('runtime map art '))
-      bases.set(key(object.label.slice('runtime map art '.length),object.x,object.y),object);
+      bases.push({fieldId:object.label.slice('runtime map art '.length),object});
     for(const child of object.children??[])collect(child);
   };
   collect(art.displayObject);
+  const baseFor=piece=>{let best=null,bestD=Infinity;
+    for(const {fieldId,object}of bases){const dx=piece.sourceTileX-object.x,dy=piece.sourceTileY-object.y;
+      if(fieldId!==piece.fieldId||dx<0||dy<0||dx>MAX_PADDING_WORLD_PX||dy>MAX_PADDING_WORLD_PX)continue;
+      if(dx+dy<bestD){best=object;bestD=dx+dy;}}
+    return best;};
   const groups=[];let disposed=false,parent=null;
   try {
     for(const piece of plan){
-      const base=bases.get(key(piece.fieldId,piece.sourceTileX,piece.sourceTileY));
+      const base=baseFor(piece);
       if(!base?.texture)throw Error('CAGE_FOREGROUND_BASE_TILE_MISSING');
       const root=new PIXI.Container({label:'cage foreground '+piece.id});root.zIndex=piece.depth;root.eventMode='none';
       const sprite=new PIXI.Sprite(base.texture);sprite.width=base.width;sprite.height=base.height;
+      if(base.x!==piece.sourceTileX||base.y!==piece.sourceTileY){sprite.x=base.x-piece.sourceTileX;sprite.y=base.y-piece.sourceTileY;}
       const mask=new PIXI.Graphics();for(const rect of piece.maskRects)mask.rect(...rect);mask.fill(0xffffff);
       root.addChild(sprite,mask);sprite.mask=mask;groups.push({root,piece});
     }
