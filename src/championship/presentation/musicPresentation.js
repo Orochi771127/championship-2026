@@ -123,16 +123,25 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     if (current?.key === desired.key) {
       // A returning page may have a running media element but an interrupted
       // graph. Resume both independently, preserving position and one source.
-      stableRate(current.media); bus.resume();
+      stableRate(current.media);
+      const recoveringGraph = ['suspended', 'interrupted'].includes(bus.state?.());
+      if (recoveringGraph && !current.media.paused) {
+        // Resume at zero rather than reconnecting an arbitrary nonzero sample
+        // at full cue gain. This short ramp preserves position and timbre.
+        gain(current, 0); bus.resume();
+        gain(current, 10 ** (cues[current.id].gainDb / 20), .02);
+      } else bus.resume();
       if (current.media.paused) {
         const slot = current, token = serial, generation = slot.generation;
         if (slot.resuming === token) return;
-        slot.resuming = token; bus.resume();
+        slot.resuming = token; gain(slot, 0); bus.resume();
         Promise.resolve(slot.media.play()).then(() => {
           if (slot.resuming === token) slot.resuming = null;
           // A late resume cannot make a hidden/muted or superseded scene audible.
           if (slot.generation === generation && (disposed || hidden || !audible() || current !== slot || desired?.key !== slot.key)) slot.media.pause();
-          if (current === slot && serial === token) emit();
+          if (current === slot && serial === token && !hidden && audible()) {
+            gain(slot, 10 ** (cues[slot.id].gainDb / 20), .02); emit();
+          }
         }).catch(e => {
           if (slot.resuming === token) slot.resuming = null;
           if (current === slot && serial === token) { error = e.message; emit(); }
