@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import {createAudioBus} from '../src/championship/presentation/audioBus.js';
 import {createMusicPresentation} from '../src/championship/presentation/musicPresentation.js';
 import {ORIGINAL_MUSIC_CUES,selectOriginalMusic,selectDataArenaMusic} from '../src/championship/presentation/originalMusicCatalog.js';
@@ -54,4 +55,16 @@ test('repeated background/page cache returns keep rate, pitch, gains, context an
 test('visible interrupted graph resumes even when native media still reports playing',async()=>{
  const f=fixture();f.music.setScene('login');f.doc.emit('pointerdown');await settle();const a=f.media[0],context=f.contexts[0],plays=a.plays;
  context.state='interrupted';f.win.emit('pageshow');await settle();assert.equal(context.state,'running');assert.equal(a.plays,plays);assert.equal(f.music.inspect().voices,1);f.dispose();
+});
+test('every measured encoding retains headroom and looping cues have matched projected loudness',()=>{
+ const report=JSON.parse(fs.readFileSync(new URL('../docs/reports/music-repair-2026-10-18/MEASUREMENTS.json',import.meta.url),'utf8'));
+ assert.equal(report.files.length,26);assert.equal(report.allOriginalBytesPreserved,true);
+ const looping=[];
+ for(const row of report.files){
+  const cue=Object.values(ORIGINAL_MUSIC_CUES).find(c=>[c.path,c.fallbackPath].includes('./'+row.path));assert.ok(cue,row.path);
+  assert.equal(row.runtimeGainDb,cue.gainDb);assert.ok(row.truePeakDbtp+cue.gainDb<=-3,row.path);
+  assert.equal(row.decodeErrors,null);assert.equal(row.listeningCompleted,false);
+  if(cue.loop)looping.push(row.lufs+cue.gainDb);
+ }
+ assert.ok(Math.max(...looping)-Math.min(...looping)<.75);
 });

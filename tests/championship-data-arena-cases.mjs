@@ -13,6 +13,7 @@ import {
 } from "../src/championship/modes/dataArena/dataArenaConfig.js";
 import { dataArenaCast, DATA_ARENA_SEQUENCES } from "../src/championship/presentation/dataArena/dataArenaRoster.js";
 import { createDataArenaCamera, dataArenaBaseZoom } from "../src/championship/presentation/dataArena/dataArenaCamera.js";
+import { selectDataArenaMusic } from "../src/championship/presentation/originalMusicCatalog.js";
 
 const DT = DATA_ARENA_STEP_SECONDS;
 const C = 64;
@@ -752,6 +753,7 @@ function arenaStartupHarness(failure) {
   const ticker = { remove() { calls.removed++; }, add() { calls.added++; } };
   const shared = { app: { ticker }, setResolutionCap() {} };
   const env = {
+    selectDataArenaMusic,
     signal: { aborted: false }, stage: null, scene: null, environment: null, interactionArt:null, qaRecentEvents:[], qa:false, URL, loadDataArenaEnvironment:async()=>null, loadDataArenaInteractionArt:async()=>null, audio: null, sim: null, result: null, paused: false, qualityReloading:false, accumulator: 1,
     tickerCallback: null, bundles: new Map(), bundleScope: null, root: makeNode(), field: {}, bannerTimer: null, vignetteTimer: null,
     matchId: 0, seed: 1, partnerId: 'ember-lizard', quality: 'low', gameMode: 'TOURNAMENT', audioBus: null, resolutionCap: 2, href:'http://localhost/championship.html',

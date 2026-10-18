@@ -8442,7 +8442,11 @@
     "assets/production/database-display-20261018/species-221.display.067d872c8c8e4493.webp",
     "assets/production/database-display-20261018/species-221.thumbnail.34b96a365d1efa36.webp",
     "assets/production/database-display-20261018/species-223.display.cb48ee8d8d939913.webp",
-    "assets/production/database-display-20261018/species-223.thumbnail.134e7d079ee91627.webp"
+    "assets/production/database-display-20261018/species-223.thumbnail.134e7d079ee91627.webp",
+    "assets/production/scene-music-r1/battle/inferno_overdrive.mp3",
+    "assets/production/scene-music-r1/battle/mirage_of_the_arena.mp3",
+    "assets/production/scene-music-r1/battle/south_pole_siege.mp3",
+    "assets/production/scene-music-r1/battle/titan_s_final_strike.mp3"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -38666,7 +38670,7 @@
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "ab884d0cd766e648887dbd936049f98835e06ab643bc20c869e15ee27ce6984e"
+        "sha256": "7f46d237e6442df91af6ce5062781b7966da5c49433d316a3d83dfc7591742fe"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -39502,7 +39506,7 @@
       },
       {
         "path": "src/championship/presentation/audioBus.js",
-        "sha256": "cf6f75e5c64e1e63ba41d5a6453194a01d209101bf401e0b04c54dcc145dd3f5"
+        "sha256": "cb2c8d510e94073a2ff4f6fd8cad7480abf25c7b3f0e3fc78b304b493cc21aab"
       },
       {
         "path": "src/championship/presentation/battleAudioPresentation.js",
@@ -39710,7 +39714,7 @@
       },
       {
         "path": "src/championship/presentation/musicPresentation.js",
-        "sha256": "a7edc32f773c10db7da874ea960b264a7837f0dd6265af3cbf3c9485d689876f"
+        "sha256": "0380c094257a3f6f66794a580a789798f43f51e9244d03c23406c32775bbca1c"
       },
       {
         "path": "src/championship/presentation/nativeHuntCharacterAction.js",
@@ -39730,7 +39734,7 @@
       },
       {
         "path": "src/championship/presentation/originalMusicCatalog.js",
-        "sha256": "4c730d7f5c8490feca19d93b2dca93e4539796cd62f65d345268aa1e3af09674"
+        "sha256": "46333b3dc7de365bb9dc3717cd7c0526776d37d45e42e28ca1a2af71649ecf11"
       },
       {
         "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -39818,7 +39822,7 @@
       },
       {
         "path": "src/championship/presentation/sceneMusicCatalog.js",
-        "sha256": "3ec2382f965f475f78d26285dea3e558b96881b40ad1f0b0f6192f646a1581bc"
+        "sha256": "500329186cf6bda00c733c6dffd88b3196d1f9e19b9b4b6077c5438522a81c1d"
       },
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
@@ -40563,6 +40567,22 @@
       {
         "path": "assets/production/database-display-20261018/species-223.thumbnail.134e7d079ee91627.webp",
         "sha256": "134e7d079ee91627498a42319a178d4d6da7b8e7289fcc46027c56e394a244f0"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/inferno_overdrive.mp3",
+        "sha256": "1abdbb1431c0df7cb27ccd4137f3edfacb8664c443fc0343aae34d2ed2d1e796"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/mirage_of_the_arena.mp3",
+        "sha256": "177ed094d8677a76ec9ff453d5dda11b1030bf3ff3681aa43a6065e41e2ac16e"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/south_pole_siege.mp3",
+        "sha256": "27d2c70afad96a40bfd80bc3bf638f0d1d11d5b1755148facba735e57c0a1023"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/titan_s_final_strike.mp3",
+        "sha256": "0bbc592b6f26d02df836c7fccd25d177b1e173864b94a872750f882504dbc963"
       }
     ],
     "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",

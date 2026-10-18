@@ -751,6 +751,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const note = el("p", "da-note"), best = el("p", "da-note"), goal = el('p', 'da-next-goal');
     function refresh() {
       root.dataset.mode = gameMode;
+      music?.setScene(selectDataArenaMusic(gameMode), `arena-select:${gameMode}`);
       eyebrow.textContent = t(`mode.${gameMode}`);
       for (const node of modes.children) node.setAttribute("aria-checked", String(node.dataset.mode === gameMode));
       for (const node of list.children) node.setAttribute("aria-checked", String(node.dataset.partner === partnerId));
