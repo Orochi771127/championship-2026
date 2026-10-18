@@ -43,6 +43,7 @@ import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../prese
 import {loadRegisteredRaisingFeedbackArt} from '../presentation/raisingFeedbackArt.js';
 import {loadPublicCharacterHudArt as loadRegisteredCharacterHudArt} from '../presentation/publicCharacterHudArt.js';
 import {createTitleImageLifecycle} from '../presentation/titleImageLifecycle.js';
+import {mountWebAppInstall} from './webAppInstall.js';
 import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js';
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
@@ -2327,6 +2328,7 @@ async function enterDataArena() {
 }
 
 function boot() {
+  mountWebAppInstall(titleScreen);
   // Title labels that the language setting can change.
   setText(loginButton, "ENTER_GAME");
   setText(newGameButton, "開始新遊戲");

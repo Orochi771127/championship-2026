@@ -1,0 +1,526 @@
+{
+  "checks": [
+    "normal title entry and all four delivery assets ready",
+    "install guide opens/closes and restores focus",
+    "grounded idle and reduced-motion override",
+    "normal title to arena selection, next goal visible",
+    "arena closes and returns to title",
+    "landscape screenshot",
+    "real inputs reach first upgrade; three previews, pause, choice/resume and raising-save isolation"
+  ],
+  "pageErrors": [],
+  "requests": [
+    {
+      "path": "championship.html",
+      "bytes": 18798,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/tokens.css",
+      "bytes": 29183,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/styles.css",
+      "bytes": 67279,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/intRh2Styles.css",
+      "bytes": 44542,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/interactiveTutorial.css",
+      "bytes": 522,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/vs2Styles.css",
+      "bytes": 86168,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/medalCollection.css",
+      "bytes": 7936,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/vs5Styles.css",
+      "bytes": 42159,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/opening.css",
+      "bytes": 37825,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/ceremony.css",
+      "bytes": 19944,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/highlight.css",
+      "bytes": 8603,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/settings.css",
+      "bytes": 20535,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/nativeUiSkin.css",
+      "bytes": 105558,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/systemBackgrounds.css",
+      "bytes": 1152,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/mobileTouch.css",
+      "bytes": 1581,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-26LCF4SA.js",
+      "bytes": 15394,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/main-KTHVSNIG.js",
+      "bytes": 1058960,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-2I7QH2EI.js",
+      "bytes": 5835,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-2U4Q5GVI.js",
+      "bytes": 213143,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-2XTOXRXY.js",
+      "bytes": 2833,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-3EE5UGTH.js",
+      "bytes": 4122,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-3KOK3EMP.js",
+      "bytes": 10358,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-4B6KPAM2.js",
+      "bytes": 11160,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-5GS6YMSP.js",
+      "bytes": 2130,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-5JXZWLGY.js",
+      "bytes": 186321,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-5LKOLLK5.js",
+      "bytes": 3748,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-63AUTE3B.js",
+      "bytes": 212851,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+      "bytes": 128,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-6YDHWW5L.js",
+      "bytes": 39089,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-76ZC3FHS.js",
+      "bytes": 4594,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-7AHIFSAW.js",
+      "bytes": 1014,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-BLZ5W6UO.js",
+      "bytes": 5943,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-BRAAK57Y.js",
+      "bytes": 61785,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-CP2YQEHU.js",
+      "bytes": 11742,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-E24MEMQO.js",
+      "bytes": 3136,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-EDX32OYJ.js",
+      "bytes": 5599,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-F3FBFM2Z.js",
+      "bytes": 37905,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-FCZZIUEE.js",
+      "bytes": 49171,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-FISDLEE7.js",
+      "bytes": 82771,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-HJT2XZI5.js",
+      "bytes": 16782,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-HWEW6EFZ.js",
+      "bytes": 5830,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-I2YS4PHE.js",
+      "bytes": 9529,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-IEAV3GJM.js",
+      "bytes": 21157,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-IUREUP45.js",
+      "bytes": 9123,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-IXCG7OJG.js",
+      "bytes": 411708,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-KQJ5VZY2.js",
+      "bytes": 278126,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-JFMZVZSC.js",
+      "bytes": 954588,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-KU6AII7O.js",
+      "bytes": 4534,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-NSKFJZMJ.js",
+      "bytes": 17696,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-NIVT7QYV.js",
+      "bytes": 17689,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-NX22FAOD.js",
+      "bytes": 849,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-OQI2MNU7.js",
+      "bytes": 38500,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-QJGX3CVJ.js",
+      "bytes": 22591,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-QSUAC3EG.js",
+      "bytes": 23099,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-R3MR4GAS.js",
+      "bytes": 4026,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-RHFFJENV.js",
+      "bytes": 38249,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-RPEJ26XX.js",
+      "bytes": 127165,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-S5RPZJVL.js",
+      "bytes": 6330,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-S6WVMFAZ.js",
+      "bytes": 4192,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-SG3BYFV6.js",
+      "bytes": 3168,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-TQ5ILF4U.js",
+      "bytes": 1318,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-TR4EUADO.js",
+      "bytes": 6903,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-VRDJHBL2.js",
+      "bytes": 201886,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-VSA4L6J6.js",
+      "bytes": 35031,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-VUHVDNG5.js",
+      "bytes": 7689,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-XWTFIRDY.js",
+      "bytes": 2524,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-YQQHTSRK.js",
+      "bytes": 3610,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-ZTPHHVHU.js",
+      "bytes": 7339,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-NZFZUBAV.js",
+      "bytes": 150,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/logo-zh-Hant-compact.webp",
+      "bytes": 78794,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/blaze-compact.webp",
+      "bytes": 51546,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/cloud-compact.webp",
+      "bytes": 37684,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/arena-compact.webp",
+      "bytes": 249784,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-EC5PFXFA.js",
+      "bytes": 22831,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_login_page.mp3",
+      "bytes": 3959486,
+      "source": "fallback"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-BNS3XVKK.js",
+      "bytes": 259727,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-YMP36A5D.js",
+      "bytes": 34767,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-W3TBMQOY.js",
+      "bytes": 5353,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-PMJ7AXTA.js",
+      "bytes": 12467,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-2QWLSHAX.js",
+      "bytes": 513,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-7NJLQW25.js",
+      "bytes": 94276,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/dataArena.css",
+      "bytes": 23197,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/hud-r01/main-cell_000.webp",
+      "bytes": 7382,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m238_coronamon-final-growth38-20261007/hud-r01/main-cell_000.webp",
+      "bytes": 16206,
+      "source": "fallback"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m236_yukiagumon-final-growth38-20261007/hud-r01/main-cell_000.webp",
+      "bytes": 8074,
+      "source": "fallback"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-GKOTW2GH.js",
+      "bytes": 1172194,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/runtime.render.json",
+      "status": 404
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/runtime.render.json",
+      "status": 404
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/runtime.render.json",
+      "status": 404
+    },
+    {
+      "path": "assets/production/public-runtime/metadata/arena-harbor.v1.json",
+      "bytes": 48397,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-512-0-low.webp",
+      "status": 404
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1024-0-low.webp",
+      "status": 404
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1536-0-low.webp",
+      "status": 404
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-0-0-low.webp",
+      "status": 404
+    },
+    {
+      "path": "assets/production/public-runtime/metadata/arena-interactions.v1.json",
+      "bytes": 3251,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/timber-intact-low.webp",
+      "status": 404
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/timber-destroyed-low.webp",
+      "status": 404
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/timber-damaged-low.webp",
+      "status": 404
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/timber-burnt-low.webp",
+      "status": 404
+    },
+    {
+      "path": "assets/production/original-music-r1/championship_battle_normal_r1.ogg",
+      "bytes": 459255,
+      "source": "fallback"
+    }
+  ],
+  "physicalDeviceAccepted": false,
+  "titleAssets": [
+    {
+      "path": "assets/production/title-morning-r1/delivery/logo-zh-Hant-compact.webp",
+      "bytes": 78794,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/blaze-compact.webp",
+      "bytes": 51546,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/cloud-compact.webp",
+      "bytes": 37684,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/arena-compact.webp",
+      "bytes": 249784,
+      "source": "candidate"
+    }
+  ]
+}

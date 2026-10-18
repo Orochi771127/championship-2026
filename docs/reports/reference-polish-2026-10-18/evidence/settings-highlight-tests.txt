@@ -1,0 +1,48 @@
+✔ the five phases run in order and the charge stays inside 0.6 - 1.0 s (3.6712ms)
+✔ reduced motion keeps only a short reveal: nothing travels, flashes or bursts (0.3757ms)
+✔ the count only rises, never passes the settled figure and ends exactly on it (1.1478ms)
+✔ only this attempt's own won, settled and paying receipt earns the highlight (0.5301ms)
+✔ a run moves through every phase with its cues and lands on the exact figure (3.676ms)
+✔ a skip lands the plate at once with the real figure and no burst cue (0.3981ms)
+✔ reduced motion goes straight to a short reveal with no shards (0.3651ms)
+✔ the result view hands the plate to the template and shows the settled figure (26.5876ms)
+✔ an ordinary result never calls the template or shows a settlement line (2.2759ms)
+✔ a clamped win says so, and a template that fails to start lands the plate (1.6501ms)
+✔ every preference has a category, a scope and a valid default (1.7312ms)
+✔ invalid values fall back to the default and numbers snap to the slider step (0.2192ms)
+✔ the stored document keeps only non-defaults, split by scope (0.2851ms)
+✔ reading: absent, current, older flat map, unreadable and newer versions (0.3179ms)
+✔ theme and motion resolution: the explicit choice wins, system follows the OS (0.1794ms)
+✔ preferences have their own key inside the product namespace, beside the one save key (0.6572ms)
+✔ a change applies at once and is written once, after the burst (0.9647ms)
+✔ a failed write is reported honestly and can be retried; the settings stay in effect (0.4252ms)
+✔ a document from a newer version is never overwritten (0.3882ms)
+✔ resetting a category or everything touches preferences only (0.6745ms)
+✔ settings writes and game saves never overwrite each other (45.2959ms)
+✔ the environment writes one resolved attribute per preference (1.5593ms)
+✔ the boot script is read-only and names the same key (2.391ms)
+✔ the boot script and the modules map every case the same way (7.7578ms)
+✔ every tier is a set of real parameters and auto starts conservatively (0.3793ms)
+✔ auto steps down once after two slow settled windows, never up, and ignores stalls (1.302ms)
+✔ effective volume is master times the category, and zero while muted (0.2115ms)
+✔ a muted game is silent from its first sound, and changes ramp without a click (1.3902ms)
+✔ the test sound never stacks and plays nothing while muted (0.4912ms)
+✔ the highlight plays through the shared bus, stops on skip, and leaves the shared context open (0.9137ms)
+✔ compact highlight is shorter and lands on the same settled figure (0.5518ms)
+✔ the highlight's effects sit behind the plate and its light falls on the characters (1.7447ms)
+✔ the result characters stand low on the stage and the hero anchor follows them (0.2956ms)
+✔ presentations read the resolved attributes, with the system as the fallback (0.1519ms)
+✔ every palette keeps text, status and readouts legible on its surfaces (1.5422ms)
+✔ a selected option and the current category stay legible on the accent tint (1.2506ms)
+✔ the title keeps its key-art palette, and retired skins stay unlinked (1.0981ms)
+✔ the earlier interface skin returns only as the retro blue & gold theme (3.2879ms)
+✔ result group fitting retains common scale and keeps large alpha cell unions inside padding (0.1933ms)
+✔ mounted result actors normalize 4x HUD cells, retain legacy size and normalize each new pose (1.4621ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 625.5582

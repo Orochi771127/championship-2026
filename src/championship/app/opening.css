@@ -1,6 +1,28 @@
 /* Owner-supplied morning arena, 2026-10-10. DOM presentation only.
    Palette: deep teal #075e65, gold #ebcb77, cream #fff4d2.
    Original title and two decorative partners stay separate; no gameplay state. */
+
+/* Grounded breathing uses the independent scale property, preserving arrival
+   transforms and the measured footpoints. No timer or gameplay state. */
+@keyframes cm-title-breathe { 0%,100% { scale:1; } 46% { scale:1.014 .986; } 62% { scale:.996 1.006; } }
+:root[data-motion="full"]:not([data-quality="saver"]) #cm-title:not([hidden]) .cm-title__partner[data-title-image-state="ready"] {
+  animation:cm-title-breathe 5.6s ease-in-out infinite;
+}
+#cm-title .cm-title__partner--blaze { transform-origin:60.606% 97.246%; }
+#cm-title .cm-title__partner--cloud { transform-origin:41.069% 87.161%; }
+:root[data-motion="full"]:not([data-quality="saver"]) #cm-title .cm-title__partner--cloud[data-title-image-state="ready"] { animation-duration:6.7s; animation-delay:-2.3s; }
+#cm-title:has(.cm-title__film:not([hidden])) .cm-title__partner { animation-play-state:paused !important; }
+#cm-title .cm-title__install { position:absolute; top:max(68px,calc(env(safe-area-inset-top,0px) + 64px)); right:max(16px,env(safe-area-inset-right,0px)); z-index:6; max-width:160px; min-height:44px; padding:6px 10px; border:1px solid #075e65; border-radius:12px; background:#fff4d2; color:#12343e; font:inherit; font-size:12px; font-weight:700; }
+body[data-landscape-entry] #cm-title .cm-title__install { position:fixed; }
+#cm-title[data-motion-paused="true"] :is(.cm-title__partner,.cm-title__light,.cm-title__spark) { animation-play-state:paused !important; }
+.cm-install { box-sizing:border-box; width:min(440px,calc(100vw - 32px)); max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 32px); padding:22px; overflow:auto; border:2px solid #075e65; border-radius:18px; background:#f6fbeb; color:#12343e; font-family:system-ui,sans-serif; }
+.cm-install::backdrop { background:#071d2bbb; }
+.cm-install h2 { font-size:20px; margin:0 0 12px; }
+.cm-install p { line-height:1.7; }
+.cm-install button { min-height:44px; min-width:80px; padding:8px 16px; border:1px solid #075e65; border-radius:10px; background:#075e65; color:white; font:inherit; }
+@media (hover:hover) {
+  #cm-title :is(.cm-title__login,.cm-title__actions .cm-button):not(:disabled):hover { translate:0 -2px; }
+}
 .cm-title { position:fixed; inset:0; z-index:var(--z-dialog); display:grid; place-items:center; padding:0; overflow:hidden; background:#12343e; }
 .cm-title[hidden] { display:none; }
 #cm-title .cm-title__panel {

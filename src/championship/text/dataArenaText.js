@@ -6,6 +6,21 @@
 import { getLocale } from "./locale.js";
 
 const ZH = {
+  "level.change": "等級 {before} → {after} / {max}",
+  "level.bonusNote": "升級加成合計；不是最終戰鬥數值",
+  "level.healNow": "立即回復最大生命值的比例",
+  "goal.first.TOURNAMENT": "本次目標：先擊敗第一位對手，熟悉閃避與技能。",
+  "goal.first.HARBOR": "本次目標：取得第一次升級，試出你的戰鬥風格。",
+  "goal.win.TOURNAMENT": "下個目標：連勝三場，拿下冠軍。",
+  "goal.win.HARBOR": "下個目標：完成港灣挑戰。",
+  "goal.best": "下個目標：超越此模式的最佳分數 {score}。",
+  "effect.laserDps": "光束傷害", "effect.heatCapacity": "熱量容量", "effect.cooling": "冷卻速度",
+  "effect.pierce": "穿透數", "effect.frostLens": "冰凍鏡片", "effect.dashCharges": "閃避次數",
+  "effect.dashDamage": "殘影傷害", "effect.perfectRefund": "完美閃避回充", "effect.nearMiss": "擦身判定範圍",
+  "effect.speed": "移動速度", "effect.energyRegen": "能量回復", "effect.cooldown": "技能冷卻時間",
+  "effect.skillDamage": "技能傷害", "effect.ultGain": "絕招充能", "effect.surgeRadius": "潮湧半徑",
+  "effect.surgeCooldown": "潮湧冷卻時間", "effect.iceDuration": "冰面持續時間", "effect.mateHp": "隊友生命",
+  "effect.reviveSpeed": "救援速度", "effect.hypeGain": "喝采累積", "effect.heal": "生命回復",
   "mode.heading": "選擇模式",
   "mode.TOURNAMENT": "數據錦標賽",
   "mode.TOURNAMENT.desc": "短局淘汰賽：3 輪 1v1，每輪 90 秒。走位、四招冷卻、閃避與掩體決勝；輪間三選一強化。",
@@ -221,6 +236,21 @@ const ZH = {
 };
 
 const EN = {
+  "level.change": "Rank {before} → {after} / {max}",
+  "level.bonusNote": "Total upgrade bonus, not final combat stats",
+  "level.healNow": "Immediate recovery as a share of maximum HP",
+  "goal.first.TOURNAMENT": "This run: beat your first rival and learn to dodge and cast.",
+  "goal.first.HARBOR": "This run: earn your first upgrade and try a build.",
+  "goal.win.TOURNAMENT": "Next goal: win three rounds and take the cup.",
+  "goal.win.HARBOR": "Next goal: complete the harbor challenge.",
+  "goal.best": "Next goal: beat this mode's best score of {score}.",
+  "effect.laserDps": "Beam damage", "effect.heatCapacity": "Heat capacity", "effect.cooling": "Cooling rate",
+  "effect.pierce": "Pierce count", "effect.frostLens": "Frost lens", "effect.dashCharges": "Dash charges",
+  "effect.dashDamage": "Afterimage damage", "effect.perfectRefund": "Perfect dodge refund", "effect.nearMiss": "Near-miss radius",
+  "effect.speed": "Move speed", "effect.energyRegen": "Energy recovery", "effect.cooldown": "Skill cooldown",
+  "effect.skillDamage": "Skill damage", "effect.ultGain": "Ultimate charge", "effect.surgeRadius": "Surge radius",
+  "effect.surgeCooldown": "Surge cooldown", "effect.iceDuration": "Ice duration", "effect.mateHp": "Teammate HP",
+  "effect.reviveSpeed": "Rescue speed", "effect.hypeGain": "Hype gain", "effect.heal": "HP recovery",
   "mode.heading": "Choose a mode",
   "mode.TOURNAMENT": "Data Tournament",
   "mode.TOURNAMENT.desc": "Short knockout cup: three 1v1 rounds of 90 seconds. Footwork, four-move cooldowns, dodges and cover decide it; pick an upgrade between rounds.",

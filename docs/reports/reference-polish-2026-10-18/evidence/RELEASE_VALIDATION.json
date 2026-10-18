@@ -1,0 +1,57 @@
+{
+  "stage": "PRE_PUBLICATION_VALIDATED",
+  "baseCommit": "700996df05a598b88dce79285615753f3beed9b5",
+  "tests": {
+    "pass": 2585,
+    "fail": 0,
+    "skipped": 0
+  },
+  "artifact": {
+    "buildId": "1dcc44cb892330c86653211c1f25e0369c0f68f619108c36f4c3a5764636b288",
+    "fileCount": 7708
+  },
+  "normalBrowser": {
+    "checks": [
+      "normal title entry and all four delivery assets ready",
+      "install guide opens/closes and restores focus",
+      "grounded idle and reduced-motion override",
+      "normal title to arena selection, next goal visible",
+      "arena closes and returns to title",
+      "landscape screenshot",
+      "real inputs reach first upgrade; three previews, pause, choice/resume and raising-save isolation"
+    ],
+    "pageErrors": 0,
+    "missingRequests": 0,
+    "fallbackRequests": 0
+  },
+  "physicalIPhoneAccepted": false,
+  "commercialReleaseAccepted": false,
+  "logs": [
+    {
+      "name": "full-ci-final.txt",
+      "sha256": "cd9cad3f74265c5124841df7049b10e99f7bab9ac1c81f7e82136c7ccee269a7",
+      "bytes": 257745
+    },
+    {
+      "name": "build-final.txt",
+      "sha256": "745054afd4d24564f02ce128c1d607dab35fc992030355e9df29ba0ac7cf7dc6",
+      "bytes": 334
+    },
+    {
+      "name": "validate-final.txt",
+      "sha256": "291c0661a5db0952ce94c875e1d1ec05f256562ef40749cc7d396a1c621ac1f4",
+      "bytes": 238
+    },
+    {
+      "name": "payload-final.txt",
+      "sha256": "659ef0fa3eff1440dceef4d04283576f01324d99f315b64a896dd9e78bd4aa44",
+      "bytes": 164
+    }
+  ],
+  "localDraftPreservation": {
+    "backup": "R:/Projects/Championship2026/local-backups/reference-polish-20261018",
+    "stash": "70e9a37336c8a070b34bff8dc0dc6c9eed81c178",
+    "branch": "preserve/local-hatch-draft-20261018",
+    "preservedFiles": 10
+  }
+}

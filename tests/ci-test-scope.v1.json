@@ -327,7 +327,8 @@
     "tests/product-form-public-content-cases.mjs",
     "tests/product-gameplay-compat-cases.mjs",
     "tests/product-promotion-disabled-fixture-cases.mjs",
-    "tests/product-species-extensions-cases.mjs"
+    "tests/product-species-extensions-cases.mjs",
+    "tests/championship-reference-polish-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",

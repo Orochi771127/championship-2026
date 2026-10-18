@@ -1,6 +1,14 @@
 /* Data Arena (OWNER_APPROVED_ADAPTATION 2026-10-15). Loaded only when the
    arena opens. Full-viewport, landscape and portrait, touch and mouse. */
 
+.da-card__preview { display:grid; gap:5px; border-top:1px solid var(--da-edge); padding-top:10px; font-variant-numeric:tabular-nums; font-size:13px; line-height:1.5; text-align:left; }
+.da-card__preview small { color:var(--da-dim); font-size:11px; }
+.da-next-goal { padding:10px 12px; border-left:3px solid var(--da-accent); background:#10283d; color:var(--da-ink); line-height:1.6; }
+.da-root :is(.da-btn,.da-card,.da-mode,.da-partner) { transition:transform 120ms ease-out,box-shadow 120ms ease-out; }
+.da-root :is(.da-btn,.da-card,.da-mode,.da-partner):not(:disabled):active { transform:translateY(2px) scale(.99); }
+.da-root[data-motion="reduced"] *, .da-root[data-quality="low"] * { animation:none !important; transition:none !important; }
+@media (prefers-reduced-motion:reduce) { .da-root * { animation:none !important; transition:none !important; } }
+
 html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 
 .da-root {
@@ -265,4 +273,14 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   .da-boss { top: calc(max(8px, env(safe-area-inset-top)) + 84px); }
 }
 @media (pointer: coarse) { .da-root[data-state="PLAY"] .da-hud__bottom .da-chip, .da-root[data-state="PLAY"] .da-hud__bottom .da-kit { display: none; } }
+/* Short landscape screens can compare all three choices without scrolling
+   through three phone-width cards. Portrait keeps the accessible single column. */
+@media (orientation:landscape) and (min-width:700px) and (max-height:520px) {
+  .da-panel--level { padding:14px; }
+  .da-panel--level .da-title { font-size:22px; margin:0 0 6px; }
+  .da-panel--level .da-cards { grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+  .da-panel--level .da-card { padding:10px; gap:5px; }
+  .da-panel--level .da-card__name { font-size:16px; }
+  .da-panel--level .da-card__effect, .da-panel--level .da-card__preview { font-size:12px; }
+}
 @media (prefers-reduced-motion: reduce) { .da-banner.is-showing { animation: none; } .da-bar__fill { transition: none; } }

@@ -56,3 +56,10 @@ This inventory answers: “What has already been built, and what can the next sl
 - online service replacement.
 
 These belong to the current production backlog; they should extend the reusable foundations above rather than start parallel implementations.
+
+## 2026-10-18 — Candidate additions (not published)
+
+- `app/loadStylesheet.js`: document/URL-scoped single-flight CSS loader, bounded timeout, failed-link removal and retry. No global ticker or save state.
+- `presentation/titleAssetVariant.js`: one delivery choice per title lifetime, DPR capped at two and data-saver aware; the existing title image owner still handles cancellation/cache.
+- `dataArenaUpgrades.previewDataArenaUpgrade`: read-only additive bonus projection over the existing upgrade table, not final combat stats.
+- Focused evidence: `tests/championship-reference-polish-cases.mjs`; [candidate report](reports/reference-polish-2026-10-18/REPORT_ZH_TW.md).

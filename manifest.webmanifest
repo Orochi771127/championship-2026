@@ -1,0 +1,14 @@
+{
+  "id": "./",
+  "name": "Cyber Partner: Tournament",
+  "short_name": "Cyber Partner",
+  "start_url": "./championship.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#12343e",
+  "theme_color": "#eef5fa",
+  "icons": [
+    {"src":"assets/production/web-app/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"assets/production/web-app/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}

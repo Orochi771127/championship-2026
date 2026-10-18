@@ -1,0 +1,1397 @@
+{
+  "checks": [
+    "normal title entry and all four delivery assets ready",
+    "install guide opens/closes and restores focus",
+    "grounded idle and reduced-motion override",
+    "normal title to arena selection, next goal visible",
+    "arena closes and returns to title",
+    "landscape screenshot",
+    "real inputs reach first upgrade; three previews, pause, choice/resume and raising-save isolation"
+  ],
+  "pageErrors": [],
+  "requests": [
+    {
+      "path": "championship.html",
+      "bytes": 18729,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/interactiveTutorial.css",
+      "bytes": 522,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/styles.css",
+      "bytes": 67279,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/medalCollection.css",
+      "bytes": 7936,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/vs2Styles.css",
+      "bytes": 86168,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/intRh2Styles.css",
+      "bytes": 44542,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/vs5Styles.css",
+      "bytes": 42159,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/systemBackgrounds.css",
+      "bytes": 1152,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/highlight.css",
+      "bytes": 8603,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/opening.css",
+      "bytes": 37825,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/ceremony.css",
+      "bytes": 19944,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/settings.css",
+      "bytes": 20535,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-2I7QH2EI.js",
+      "bytes": 5835,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-26LCF4SA.js",
+      "bytes": 15394,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/main-KTHVSNIG.js",
+      "bytes": 1058960,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/mobileTouch.css",
+      "bytes": 1581,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-2XTOXRXY.js",
+      "bytes": 2833,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-2U4Q5GVI.js",
+      "bytes": 213143,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-3EE5UGTH.js",
+      "bytes": 4122,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/nativeUiSkin.css",
+      "bytes": 105558,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-3KOK3EMP.js",
+      "bytes": 10358,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-4B6KPAM2.js",
+      "bytes": 11160,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-5GS6YMSP.js",
+      "bytes": 2130,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-5JXZWLGY.js",
+      "bytes": 186321,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-5LKOLLK5.js",
+      "bytes": 3748,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-6Q5PLGH7.js",
+      "bytes": 128,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-63AUTE3B.js",
+      "bytes": 212851,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-6YDHWW5L.js",
+      "bytes": 39089,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-76ZC3FHS.js",
+      "bytes": 4594,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-7AHIFSAW.js",
+      "bytes": 1014,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-BLZ5W6UO.js",
+      "bytes": 5943,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-BRAAK57Y.js",
+      "bytes": 61785,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-E24MEMQO.js",
+      "bytes": 3136,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-CP2YQEHU.js",
+      "bytes": 11742,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-F3FBFM2Z.js",
+      "bytes": 37905,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-EDX32OYJ.js",
+      "bytes": 5599,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-FCZZIUEE.js",
+      "bytes": 49171,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-FISDLEE7.js",
+      "bytes": 82771,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-HJT2XZI5.js",
+      "bytes": 16782,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-HWEW6EFZ.js",
+      "bytes": 5830,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-I2YS4PHE.js",
+      "bytes": 9529,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-IEAV3GJM.js",
+      "bytes": 21157,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-IUREUP45.js",
+      "bytes": 9123,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-IXCG7OJG.js",
+      "bytes": 411708,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-KQJ5VZY2.js",
+      "bytes": 278126,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-JFMZVZSC.js",
+      "bytes": 954588,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-KU6AII7O.js",
+      "bytes": 4534,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-NIVT7QYV.js",
+      "bytes": 17689,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-NX22FAOD.js",
+      "bytes": 849,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-NSKFJZMJ.js",
+      "bytes": 17696,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-OQI2MNU7.js",
+      "bytes": 38500,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-QJGX3CVJ.js",
+      "bytes": 22591,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-QSUAC3EG.js",
+      "bytes": 23099,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-S5RPZJVL.js",
+      "bytes": 6330,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-RHFFJENV.js",
+      "bytes": 38249,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-R3MR4GAS.js",
+      "bytes": 4026,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-RPEJ26XX.js",
+      "bytes": 127165,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-S6WVMFAZ.js",
+      "bytes": 4192,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-SG3BYFV6.js",
+      "bytes": 3168,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/ui/tokens.css",
+      "bytes": 29183,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-TQ5ILF4U.js",
+      "bytes": 1318,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-VRDJHBL2.js",
+      "bytes": 201886,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-TR4EUADO.js",
+      "bytes": 6903,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-VSA4L6J6.js",
+      "bytes": 35031,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-VUHVDNG5.js",
+      "bytes": 7689,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-XWTFIRDY.js",
+      "bytes": 2524,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-YQQHTSRK.js",
+      "bytes": 3610,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-ZTPHHVHU.js",
+      "bytes": 7339,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-NZFZUBAV.js",
+      "bytes": 150,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/logo-zh-Hant-compact.webp",
+      "bytes": 78794,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/cloud-compact.webp",
+      "bytes": 37684,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/blaze-compact.webp",
+      "bytes": 51546,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/arena-compact.webp",
+      "bytes": 249784,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-EC5PFXFA.js",
+      "bytes": 22831,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_login_page.mp3",
+      "bytes": 3959486,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-BNS3XVKK.js",
+      "bytes": 259727,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-YMP36A5D.js",
+      "bytes": 34767,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-W3TBMQOY.js",
+      "bytes": 5353,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-2QWLSHAX.js",
+      "bytes": 513,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-PMJ7AXTA.js",
+      "bytes": 12467,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-7NJLQW25.js",
+      "bytes": 94276,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/dataArena.css",
+      "bytes": 23197,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/hud-r01/main-cell_000.webp",
+      "bytes": 7382,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m236_yukiagumon-final-growth38-20261007/hud-r01/main-cell_000.webp",
+      "bytes": 8074,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m238_coronamon-final-growth38-20261007/hud-r01/main-cell_000.webp",
+      "bytes": 16206,
+      "source": "candidate"
+    },
+    {
+      "path": "src/championship/app/_bundled/chunk-GKOTW2GH.js",
+      "bytes": 1172194,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/runtime.render.json",
+      "bytes": 27935,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/runtime.render.json",
+      "bytes": 27592,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/runtime.render.json",
+      "bytes": 28534,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-2c34d864c34cce49.json",
+      "bytes": 1595,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-16f12581d18e57a6.json",
+      "bytes": 1415,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-83005a6ad44012bc.json",
+      "bytes": 1437,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-29f30d43d79a07fb.webp",
+      "bytes": 213722,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-bb0abb6359cc66f7.webp",
+      "bytes": 121172,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-952694613937f21d.webp",
+      "bytes": 198818,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-66aad313da81dabc.json",
+      "bytes": 1224,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-5ddb07e4025f4b11.json",
+      "bytes": 1245,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-d701048a1bc9b19b.json",
+      "bytes": 1037,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-0fe3fd60ae9c1ae9.webp",
+      "bytes": 144942,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-88ff53173fcb9de7.webp",
+      "bytes": 122344,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-0f6c0cfd2bb12ed9.webp",
+      "bytes": 113636,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-e1130e24147a0bda.json",
+      "bytes": 1596,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-9efab4211895e0fa.json",
+      "bytes": 1625,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-d2c2842f44f178b4.json",
+      "bytes": 1595,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-1a44ca1a01e86ad1.webp",
+      "bytes": 151190,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-6a84f64ab060ba11.webp",
+      "bytes": 202448,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-ce52956b449ed6ff.webp",
+      "bytes": 222734,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-d11f487a9b9dbdf5.json",
+      "bytes": 1246,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-27375ac4925bda9a.json",
+      "bytes": 1228,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-ee8a3bc4d308e119.json",
+      "bytes": 1220,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-723b32c630a9dead.webp",
+      "bytes": 120382,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-7ff09b0ea75c1e50.webp",
+      "bytes": 146154,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-693afe10eaa6ec6c.json",
+      "bytes": 1437,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-ce314571e68ba286.webp",
+      "bytes": 161124,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-bdbeea77bf14cf30.webp",
+      "bytes": 141882,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-c509c43ac8be1376.json",
+      "bytes": 1595,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-6d50c6dd95c76d0e.json",
+      "bytes": 1415,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-2eb348ac04f8ccda.webp",
+      "bytes": 145772,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-f6e93f691315fb27.json",
+      "bytes": 1245,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-8d8e4326adc1da52.webp",
+      "bytes": 195690,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-d2a7521ede6fb372.webp",
+      "bytes": 104726,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-407d7346216722db.json",
+      "bytes": 1222,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-cf5a50bc0fb9f370.json",
+      "bytes": 1222,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-feb0ff9fa14d7a06.json",
+      "bytes": 1816,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-b46ac2be223387b6.webp",
+      "bytes": 119820,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-22824a5fcef59df5.webp",
+      "bytes": 130570,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-045b7c6834248f3c.webp",
+      "bytes": 123744,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-5709a60f4fc53ad4.json",
+      "bytes": 1414,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-c9aab1c0da860d5a.json",
+      "bytes": 1594,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-0c0f4a1003f90c4a.json",
+      "bytes": 1245,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-457372805d88bb5b.webp",
+      "bytes": 125954,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-5c64925bd3cc8f23.webp",
+      "bytes": 93746,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-c6fd903ea922dcf3.webp",
+      "bytes": 124972,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-95a6436a86d71c1c.json",
+      "bytes": 1409,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-a0734d04adc13efa.json",
+      "bytes": 1227,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-74057be61e8f20ef.json",
+      "bytes": 869,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-52761a98e7a3cb2e.webp",
+      "bytes": 166684,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-a16f5f5c2285b62e.webp",
+      "bytes": 185404,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-eb5255cd77ec124f.webp",
+      "bytes": 69150,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-ba65308ae302847b.json",
+      "bytes": 1037,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-69156b66d20360b3.json",
+      "bytes": 856,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-48cddd6725f51445.webp",
+      "bytes": 122252,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-7bfa1f72cf9c1d71.json",
+      "bytes": 493,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-f3ba0c1b07cd1208.webp",
+      "bytes": 86152,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m413_skullgreymon-perfect-raw-r01/ranch-streaming-v1/eaa496c8ca23c3df/main-1ae9d1822cfa6f9e.webp",
+      "bytes": 22286,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-b055cf8e2d0457c7.json",
+      "bytes": 854,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-43870c529d07ca42.json",
+      "bytes": 486,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m201_agumon-r04-density8-07a10bca9765903c/ranch-streaming-v1/edcb7c3e6139bfb7/main-493c473d24b4fe36.webp",
+      "bytes": 50844,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/characters/accepted-20261010/m303_ikkakumon-mature-raw-r02/ranch-streaming-v1/e13b529747144bfb/main-12a8acf6749f4bce.webp",
+      "bytes": 24268,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/public-runtime/metadata/arena-harbor.v1.json",
+      "bytes": 48397,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-0-0-low.webp",
+      "bytes": 38034,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1024-0-low.webp",
+      "bytes": 37756,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-512-0-low.webp",
+      "bytes": 37216,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1536-0-low.webp",
+      "bytes": 37176,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2560-0-low.webp",
+      "bytes": 37616,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3584-0-low.webp",
+      "bytes": 19650,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3072-0-low.webp",
+      "bytes": 37528,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2048-0-low.webp",
+      "bytes": 37434,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-0-512-low.webp",
+      "bytes": 39510,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1024-512-low.webp",
+      "bytes": 39626,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1536-512-low.webp",
+      "bytes": 38826,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-512-512-low.webp",
+      "bytes": 39284,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2048-512-low.webp",
+      "bytes": 39330,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3584-512-low.webp",
+      "bytes": 20536,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2560-512-low.webp",
+      "bytes": 38900,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3072-512-low.webp",
+      "bytes": 39458,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1024-1024-low.webp",
+      "bytes": 39348,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-0-1024-low.webp",
+      "bytes": 39992,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-512-1024-low.webp",
+      "bytes": 39518,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1536-1024-low.webp",
+      "bytes": 38542,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2560-1024-low.webp",
+      "bytes": 39424,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3072-1024-low.webp",
+      "bytes": 39178,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3584-1024-low.webp",
+      "bytes": 20432,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2048-1024-low.webp",
+      "bytes": 40622,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-512-1536-low.webp",
+      "bytes": 40194,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1536-1536-low.webp",
+      "bytes": 40202,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-0-1536-low.webp",
+      "bytes": 41476,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1024-1536-low.webp",
+      "bytes": 40538,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3584-1536-low.webp",
+      "bytes": 20948,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2048-1536-low.webp",
+      "bytes": 41048,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2560-1536-low.webp",
+      "bytes": 40336,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3072-1536-low.webp",
+      "bytes": 40704,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-512-2048-low.webp",
+      "bytes": 39002,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1536-2048-low.webp",
+      "bytes": 38678,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1024-2048-low.webp",
+      "bytes": 38872,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-0-2048-low.webp",
+      "bytes": 38530,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2560-2048-low.webp",
+      "bytes": 39304,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2048-2048-low.webp",
+      "bytes": 38634,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3072-2048-low.webp",
+      "bytes": 38742,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3584-2048-low.webp",
+      "bytes": 20682,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-0-2560-low.webp",
+      "bytes": 11928,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-512-2560-low.webp",
+      "bytes": 11780,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1536-2560-low.webp",
+      "bytes": 11768,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-1024-2560-low.webp",
+      "bytes": 11734,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2048-2560-low.webp",
+      "bytes": 11724,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3072-2560-low.webp",
+      "bytes": 11726,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-2560-2560-low.webp",
+      "bytes": 11636,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/patch-3584-2560-low.webp",
+      "bytes": 6172,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/cargo-8-low.webp",
+      "bytes": 13188,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/cargo-3-low.webp",
+      "bytes": 13002,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/cargo-4-low.webp",
+      "bytes": 12564,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-6-low.webp",
+      "bytes": 7888,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/cargo-10-low.webp",
+      "bytes": 11686,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/cargo-9-low.webp",
+      "bytes": 14852,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-12-low.webp",
+      "bytes": 7400,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/cargo-14-low.webp",
+      "bytes": 11698,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/pylon-2-low.webp",
+      "bytes": 3502,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/pylon-1-low.webp",
+      "bytes": 4104,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/cargo-16-low.webp",
+      "bytes": 9618,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/pylon-0-low.webp",
+      "bytes": 3752,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-7-burnt-low.webp",
+      "bytes": 5916,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-7-damaged-low.webp",
+      "bytes": 5824,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/pylon-3-low.webp",
+      "bytes": 3504,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-7-intact-low.webp",
+      "bytes": 5892,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-7-destroyed-low.webp",
+      "bytes": 1686,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-13-intact-low.webp",
+      "bytes": 5844,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-13-damaged-low.webp",
+      "bytes": 5814,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-13-burnt-low.webp",
+      "bytes": 5708,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-17-intact-low.webp",
+      "bytes": 5960,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-13-destroyed-low.webp",
+      "bytes": 1664,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-17-damaged-low.webp",
+      "bytes": 5826,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-17-burnt-low.webp",
+      "bytes": 5498,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-17-destroyed-low.webp",
+      "bytes": 48,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-18-intact-low.webp",
+      "bytes": 6194,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-18-damaged-low.webp",
+      "bytes": 6214,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-18-burnt-low.webp",
+      "bytes": 5644,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/bridge-low.webp",
+      "bytes": 18154,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r2/waves/layer-low.webp",
+      "bytes": 10500,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r2/caustics/layer-low.webp",
+      "bytes": 3442,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/cargo-18-destroyed-low.webp",
+      "bytes": 48,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-01-low.webp",
+      "bytes": 9882,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-02-low.webp",
+      "bytes": 10088,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-00-low.webp",
+      "bytes": 9782,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-03-low.webp",
+      "bytes": 10204,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-07-low.webp",
+      "bytes": 10108,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-06-low.webp",
+      "bytes": 10138,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-05-low.webp",
+      "bytes": 10118,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-04-low.webp",
+      "bytes": 10024,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-09-low.webp",
+      "bytes": 9972,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-10-low.webp",
+      "bytes": 10040,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-11-low.webp",
+      "bytes": 9818,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-08-low.webp",
+      "bytes": 10038,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-13-low.webp",
+      "bytes": 9638,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-15-low.webp",
+      "bytes": 9482,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-12-low.webp",
+      "bytes": 9822,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-14-low.webp",
+      "bytes": 9580,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-18-low.webp",
+      "bytes": 9346,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-17-low.webp",
+      "bytes": 9454,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-19-low.webp",
+      "bytes": 9742,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-16-low.webp",
+      "bytes": 9428,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-20-low.webp",
+      "bytes": 9558,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-23-low.webp",
+      "bytes": 9896,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-21-low.webp",
+      "bytes": 9506,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r4/machine-22-low.webp",
+      "bytes": 9944,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/crowd-2-low.webp",
+      "bytes": 111348,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/crowd-1-low.webp",
+      "bytes": 111376,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/crowd-3-low.webp",
+      "bytes": 111486,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/crowd-0-low.webp",
+      "bytes": 111500,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/harbor-blender-r6/foreground-bank-low.webp",
+      "bytes": 32402,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/public-runtime/metadata/arena-interactions.v1.json",
+      "bytes": 3251,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/timber-destroyed-low.webp",
+      "bytes": 3070,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/timber-burnt-low.webp",
+      "bytes": 6074,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/timber-damaged-low.webp",
+      "bytes": 7182,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/timber-intact-low.webp",
+      "bytes": 7156,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-low.webp",
+      "bytes": 12970,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/ice_melt-low.webp",
+      "bytes": 1426,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/ice_cracked-low.webp",
+      "bytes": 2040,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/ice-low.webp",
+      "bytes": 1610,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/cargo-13-clean-ground-low.webp",
+      "bytes": 12558,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/cargo-18-clean-ground-low.webp",
+      "bytes": 14152,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/data-arena/interactions-v1/cargo-17-clean-ground-low.webp",
+      "bytes": 13158,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/original-music-r1/championship_battle_normal_r1.ogg",
+      "bytes": 459255,
+      "source": "candidate"
+    }
+  ],
+  "physicalDeviceAccepted": false,
+  "titleAssets": [
+    {
+      "path": "assets/production/title-morning-r1/delivery/logo-zh-Hant-compact.webp",
+      "bytes": 78794,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/cloud-compact.webp",
+      "bytes": 37684,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/blaze-compact.webp",
+      "bytes": 51546,
+      "source": "candidate"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/arena-compact.webp",
+      "bytes": 249784,
+      "source": "candidate"
+    }
+  ]
+}

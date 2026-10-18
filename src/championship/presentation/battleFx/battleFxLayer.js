@@ -261,6 +261,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     banner = {node, age: 0, life};
   }
   function showCallout({team, name, move, tier, palette}) {
+    // Let a signature move remain readable; ordinary skills cannot erase it.
+    if (callout && callout.age < 650 && (callout.tier === 'ultimate' || tier !== 'ultimate')) return;
     callout?.node.destroy({children: true});
     const node = new PIXI.Container({label: 'battle fx move callout'});
     const bg = new PIXI.Graphics();
@@ -381,7 +383,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const attacker = event.attackerSlot !== null ? slot(event.attackerSlot) : null;
         const look = event.moveId !== null ? describeMove(event.attackerSlot, event.moveId) : null;
         const palette = BATTLE_FX_PALETTES[look?.palette] ?? BATTLE_FX_PALETTES.neutral;
-        const critical = events.some(e => e.type === 'FLASH');
+        // A native screen flash has no target/critical attribution. Only an
+        // explicitly attributed HIT may label itself critical.
+        const critical = event.critical === true;
         const tier = battleFxHitTier({ratio: event.ratio, ultimate: look?.tier === 'ultimate', critical});
         const hit = battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
         anchors[hit.source]++;
@@ -403,10 +407,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           spawnRing({x: hit.x, groundY: hit.groundY, radius: target.width * 0.8, tint: palette.core, life: 280, delay: 60});
           debris({x: hit.x, y: hit.groundY, groundY: hit.groundY, count: rich ? 10 : 5, palette});
           spawnScorch({x: hit.x, groundY: hit.groundY, size: target.width * 1.1});
-          director?.punch(0.07); director?.shake(0.5);
+          director?.impact('heavy');
           screenFlash = Math.max(screenFlash, 0.18);
-        } else if (tier === 'medium') { director?.punch(0.035); director?.shake(0.22); }
-        else director?.shake(0.08);
+        } else if (tier === 'medium') { director?.impact('medium'); }
+        // Light hits keep local sparks/squash, leaving the camera readable.
         const p = toScreen(ctx, hit.x, hit.y);
         if (critical) word({screenX: p.x, screenY: p.y - 14, content: text('會心一擊！'), size: 20, fill: 0xffe36a});
         else if (tier === 'heavy') word({screenX: p.x, screenY: p.y - 14, content: text('重擊！'), size: 20, fill: palette.core});

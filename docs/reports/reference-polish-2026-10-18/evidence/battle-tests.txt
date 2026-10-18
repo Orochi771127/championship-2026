@@ -1,0 +1,14 @@
+✔ the tracker turns successive views into launch, hit, status, knockout and end events once each (3.6104ms)
+✔ the camera fills the field with the arena and looks past an edge only as far as the fighters need (1.0565ms)
+✔ camera punch and shake decay, and reduced motion keeps a steady shot (9.0233ms)
+✔ the camera opens wide, pushes in for a launch, pulls out after, and follows a live shot (4.812ms)
+✔ layer helpers: hit tiers, colour mix, seeded noise, and no layer without a 2D canvas (0.9822ms)
+✔ reading every view for the presentation never changes the battle (1280.0315ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1852.0691

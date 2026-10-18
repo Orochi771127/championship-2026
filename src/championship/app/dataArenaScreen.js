@@ -13,7 +13,8 @@
 import { createDataArenaSimulation } from "../modes/dataArena/dataArenaSimulation.js";
 import { DATA_ARENA_KITS, DATA_ARENA_MATE, DATA_ARENA_MAX_STEPS_PER_FRAME, DATA_ARENA_PARTNERS, DATA_ARENA_STEP_SECONDS, DATA_ARENA_TIMELINE,
   DATA_ARENA_TOURNAMENT } from "../modes/dataArena/dataArenaConfig.js";
-import { dataArenaUpgrade } from "../modes/dataArena/dataArenaUpgrades.js";
+import { dataArenaUpgrade, previewDataArenaUpgrade } from "../modes/dataArena/dataArenaUpgrades.js";
+import { loadStylesheet } from './loadStylesheet.js';
 import { createDataArenaRecordStore } from "../modes/dataArena/dataArenaSave.js";
 import { createChampionshipDataArenaPort } from "./ChampionshipPersistentSavePort.js";
 import { dataArenaCast, loadDataArenaCharacter } from "../presentation/dataArena/dataArenaRoster.js";
@@ -53,19 +54,8 @@ function formatTime(seconds) {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }
 
-let stylesheetPromise = null;
 function ensureStylesheet() {
-  if (document.querySelector("link[data-data-arena-style]")) return Promise.resolve();
-  stylesheetPromise ??= new Promise((resolve) => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = new URL("./dataArena.css?v=data-arena-r1", import.meta.url).href;
-    link.dataset.dataArenaStyle = "1";
-    link.addEventListener("load", () => resolve(), { once: true });
-    link.addEventListener("error", () => resolve(), { once: true });
-    document.head.appendChild(link);
-  });
-  return stylesheetPromise;
+  return loadStylesheet(new URL('./dataArena.css', import.meta.url).href);
 }
 
 /**
@@ -710,6 +700,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   function showOverlay(panel) {
     overlay.replaceChildren(panel);
     overlay.hidden = false;
+    if (!reducedMotion && quality !== 'low') panel.animate?.(
+      [{opacity:0, transform:'translateY(8px)'}, {opacity:1, transform:'translateY(0)'}],
+      {duration:180, easing:'cubic-bezier(.2,.8,.2,1)'});
     const first = panel.querySelector("[data-autofocus]") ?? panel.querySelector("button");
     first?.focus({ preventScroll: true });
   }
@@ -741,7 +734,12 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       const card = button("da-partner", "", () => { partnerId = partner.id; refresh(); }, signal);
       card.setAttribute("role", "radio");
       card.dataset.partner = partner.id;
-      if (member.art) { const img = el("img", "da-partner__art"); img.src = member.art.portraitUrl; img.alt = ""; img.decoding = "async"; card.appendChild(img); }
+      if (member.art) {
+        const img = el('img', 'da-partner__art');
+        img.alt = ''; img.decoding = 'async';
+        img.addEventListener('error', () => img.replaceWith(el('span', 'da-partner__art da-partner__art--fallback')), {once:true, signal});
+        img.src = member.art.portraitUrl; card.appendChild(img);
+      }
       else card.appendChild(el("span", "da-partner__art da-partner__art--fallback"));
       const stats = el("span", "da-partner__stats");
       const meter = (label, value, max) => { const row = el("span", "da-meter"); row.append(el("span", "", label)); const bar = el("span", "da-meter__bar"); bar.style.setProperty("--v", (value / max).toFixed(2)); row.append(bar); return row; };
@@ -749,7 +747,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       card.append(el("strong", "da-partner__name", member.name), el("span", "da-partner__perk", t(`perk.${partner.perk}`)), stats);
       list.appendChild(card);
     }
-    const note = el("p", "da-note"), best = el("p", "da-note");
+    const note = el("p", "da-note"), best = el("p", "da-note"), goal = el('p', 'da-next-goal');
     function refresh() {
       root.dataset.mode = gameMode;
       eyebrow.textContent = t(`mode.${gameMode}`);
@@ -767,13 +765,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       note.textContent = gameMode === "TOURNAMENT" ? t("select.rivals", { names: cast.rivals.map((r) => r.name).join("、") }) : t("select.mate", { name: cast.mate.name });
       const entry = records.get().modes[gameMode] ?? { bestScore: 0, wins: 0, runs: 0 };
       best.textContent = t(gameMode === "TOURNAMENT" ? "select.best.T" : "select.best", { score: entry.bestScore.toLocaleString(), wins: entry.wins, runs: entry.runs });
+      goal.textContent = t(entry.runs === 0 ? `goal.first.${gameMode}` : entry.wins === 0 ? `goal.win.${gameMode}` : 'goal.best', {score:entry.bestScore.toLocaleString()});
     }
     refresh();
     const actions = el("div", "da-actions");
     const start = button("da-btn da-btn--primary", t("select.start"), () => { records.setLastPartner(partnerId); records.setLastMode(gameMode); audio?.play?.("ui"); showBriefing(); }, signal);
     start.dataset.autofocus = "1";
     actions.append(start, button("da-btn", t("select.back"), () => close(), signal));
-    panel.append(head, el("h3", "da-subtitle", t("mode.heading")), modes, el("h3", "da-subtitle", t("select.heading")), list, kitPreview, note, best, actions);
+    panel.append(head, el("h3", "da-subtitle", t("mode.heading")), modes, el("h3", "da-subtitle", t("select.heading")), list, kitPreview, note, best, goal, actions);
     showOverlay(panel);
   }
 
@@ -815,16 +814,25 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     options.forEach((id, index) => {
       const upgrade = dataArenaUpgrade(id);
       const [name, effect] = t(`up.${id}`).split(/\s*[｜|]\s*/);
-      const level = (sim.getState().upgrades[id] ?? 0) + 1;
+      const preview = previewDataArenaUpgrade(sim.getState().upgrades, id);
       const card = button(`da-card da-card--${upgrade.track.toLowerCase()}`, "", () => {
-        if (!sim.choose(id)) return;
+        if (root.dataset.state !== 'LEVEL' || !sim.choose(id)) return;
+        for (const control of cards.children) control.disabled = true;
         audio?.play("ui");
         if (sim.getState().mode === "PLAY") { hideOverlay(); root.dataset.state = "PLAY"; }
       }, signal);
       card.append(el("span", "da-card__key", String(index + 1)), el("span", "da-card__track", t(`level.track.${upgrade.track}`)),
         el("strong", "da-card__name", name), el("span", "da-card__effect", effect ?? ""),
-        el("span", "da-card__rank", Number.isFinite(upgrade.max) ? t("level.rank", { level, max: upgrade.max }) : ""));
+        el("span", "da-card__rank", Number.isFinite(upgrade.max) ? t('level.change', {before:preview.before, after:preview.after, max:upgrade.max}) : ""));
       card.dataset.upgrade = id;
+      const values = el('span', 'da-card__preview');
+      for (const effect of preview.effects) {
+        const format = value => effect.kind === 'toggle' ? t(value ? 'pause.on' : 'pause.off')
+          : `${value > 0 ? '+' : ''}${Number((value * (effect.kind === 'percent' ? 100 : 1)).toFixed(2))}${effect.kind === 'percent' ? '%' : ''}`;
+        values.append(el('span', '', `${t(`effect.${effect.key}`)}: ${format(effect.before)} → ${format(effect.after)}`));
+      }
+      values.append(el('small', '', t(id === 'patch' ? 'level.healNow' : 'level.bonusNote')));
+      card.append(values);
       if (index === 0) card.dataset.autofocus = "1";
       cards.appendChild(card);
     });

@@ -95,6 +95,7 @@ function shakeNoise(t, seed) {
 export function createBattleFxCamera({reducedMotion = false, responsiveLayout = false} = {}) {
   let zoom = null, cx = 0, cy = 0, over = {left: 0, right: 0, top: 0, bottom: 0};
   let punch = 0, trauma = 0, time = 0;
+  let lastImpact = -Infinity, lastImpactStrength = 0;
   let previousViewport = null;
   let stages = []; // [{slots:Set|null, boost, includeDown, endMs, priority}]
   const current = () => { while (stages.length && time >= stages[0].endMs) stages.shift(); return stages[0] ?? null; };
@@ -123,6 +124,15 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
     punch(amount) { if (!reducedMotion) punch = Math.min(0.14, punch + amount); },
     /** Trauma in 0..1; displacement grows with its square. */
     shake(amount) { if (!reducedMotion) trauma = Math.min(1, trauma + amount); },
+    /** A burst of ordinary hits gets one camera response; a heavy hit can override it. */
+    impact(tier) {
+      const strength = tier === 'heavy' ? 2 : tier === 'medium' ? 1 : 0;
+      if (reducedMotion || !strength || (time - lastImpact < 180 && strength <= lastImpactStrength)) return false;
+      lastImpact = time; lastImpactStrength = strength;
+      punch = Math.min(0.14, punch + (strength === 2 ? 0.07 : 0.035));
+      trauma = Math.min(1, trauma + (strength === 2 ? 0.5 : 0.22));
+      return true;
+    },
     /** points are live projectiles: the shot follows a move to its target. */
     update({dtMs = 16.7, viewport, art, subjects, points = []}) {
       time += Math.max(0, dtMs);

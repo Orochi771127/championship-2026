@@ -6,6 +6,11 @@
     <meta name="color-scheme" content="light">
     <meta name="theme-color" content="#eef5fa">
     <link rel="icon" href="data:,">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="apple-touch-icon" href="./assets/production/web-app/icon-180.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Cyber Partner">
     <title>網線拍檔：錦標賽</title>
     <script>
       // Player preferences before the first paint (settings round, 2026-09-29).
@@ -97,6 +102,7 @@
     <link rel="modulepreload" href="./src/championship/presentation/raisingFeedbackArt.js">
     <link rel="modulepreload" href="./src/championship/presentation/publicCharacterHudArt.js">
     <link rel="modulepreload" href="./src/championship/presentation/titleImageLifecycle.js">
+    <link rel="modulepreload" href="./src/championship/app/webAppInstall.js">
     <link rel="modulepreload" href="./src/championship/presentation/huntFeedbackArt.js">
     <link rel="modulepreload" href="./src/championship/presentation/battleResultCharacters.js">
     <link rel="modulepreload" href="./src/championship/battle/nativeTitleProgression.js">
@@ -222,6 +228,7 @@
     <link rel="modulepreload" href="./src/championship/presentation/originalCageLocationArt.js">
     <link rel="modulepreload" href="./src/championship/presentation/characterAnimationTimeline.js">
     <link rel="modulepreload" href="./src/championship/presentation/publicHudManifestCache.js">
+    <link rel="modulepreload" href="./src/championship/presentation/titleAssetVariant.js">
     <link rel="modulepreload" href="./src/championship/battle/titleEventSchedule.js">
     <link rel="modulepreload" href="./src/championship/text/growthStageTerms.js">
     <link rel="modulepreload" href="./src/championship/text/catalogs.zhHant.js">
@@ -356,11 +363,11 @@
     <!-- The title and the opening are drawn key art: they keep the night
          palette whichever theme is chosen (data-palette, ui/tokens.css). -->
     <div id="cm-title" class="cm-title" data-palette="night">
-      <div class="cm-title__panel" data-opening="login" data-background-src="./assets/production/title-morning-r1/arena.webp">
+      <div class="cm-title__panel" data-opening="login" data-background-src="./assets/production/title-morning-r1/arena.webp" data-title-optimized-src="./assets/production/title-morning-r1/delivery/arena-large.webp" data-title-compact-src="./assets/production/title-morning-r1/delivery/arena-compact.webp">
         <div class="cm-title__art">
         <div class="cm-title__light" aria-hidden="true"></div>
         <div class="cm-title__logo">
-          <img class="cm-title__logo-art" data-title-locale="zh-Hant" data-title-src="./assets/production/title-morning-r1/logo-zh-Hant.webp" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
+          <img class="cm-title__logo-art" data-title-locale="zh-Hant" data-title-src="./assets/production/title-morning-r1/logo-zh-Hant.webp" data-title-optimized-src="./assets/production/title-morning-r1/delivery/logo-zh-Hant-large.webp" data-title-compact-src="./assets/production/title-morning-r1/delivery/logo-zh-Hant-compact.webp" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
           <img class="cm-title__logo-art" data-title-locale="en" data-title-src="./assets/production/title-multilingual-r1/logo-en.png" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
           <img class="cm-title__logo-art" data-title-locale="ja" data-title-src="./assets/production/title-multilingual-r1/logo-ja.png" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
           <img class="cm-title__logo-art" data-title-locale="th" data-title-src="./assets/production/title-multilingual-r1/logo-th.png" width="1774" height="887" alt="" aria-hidden="true" fetchpriority="low">
@@ -370,8 +377,8 @@
         <div class="cm-title__partners" aria-hidden="true">
           <span class="cm-title__spark cm-title__spark--one"></span>
           <span class="cm-title__spark cm-title__spark--two"></span>
-          <img class="cm-title__partner cm-title__partner--blaze" data-title-src="./assets/production/title-morning-r1/blaze.webp" width="1353" height="1162" alt="" fetchpriority="low">
-          <img class="cm-title__partner cm-title__partner--cloud" data-title-src="./assets/production/title-morning-r1/cloud.webp" width="1254" height="1254" alt="" fetchpriority="low">
+          <img class="cm-title__partner cm-title__partner--blaze" data-title-src="./assets/production/title-morning-r1/blaze.webp" data-title-optimized-src="./assets/production/title-morning-r1/delivery/blaze-large.webp" data-title-compact-src="./assets/production/title-morning-r1/delivery/blaze-compact.webp" width="1353" height="1162" alt="" fetchpriority="low">
+          <img class="cm-title__partner cm-title__partner--cloud" data-title-src="./assets/production/title-morning-r1/cloud.webp" data-title-optimized-src="./assets/production/title-morning-r1/delivery/cloud-large.webp" data-title-compact-src="./assets/production/title-morning-r1/delivery/cloud-compact.webp" width="1254" height="1254" alt="" fetchpriority="low">
         </div>
         </div>
       </div>

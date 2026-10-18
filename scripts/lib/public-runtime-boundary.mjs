@@ -88,10 +88,10 @@ export function assertPublicBytes(file,bytes,{jsonFields,generated=false,rendere
     }
     if(/\.jpe?g$/i.test(file)&&data.includes(Buffer.from('Exif\0\0')))throw Error('PUBLIC_MEDIA_METADATA: '+file);
   }
-  if(!/\.(?:json|js|mjs|css|html|svg|txt)$/i.test(file)&&!['.nojekyll'].includes(file))return;
+  if(!/\.(?:json|webmanifest|js|mjs|css|html|svg|txt)$/i.test(file)&&!['.nojekyll'].includes(file))return;
   const text=Buffer.from(bytes).toString('utf8');
   if(privateValue.test(text)||text.includes(INTERNAL_INDEX))throw Error('PUBLIC_PAYLOAD_PRIVATE_VALUE: '+file);
-  if(file.endsWith('.json')){
+  if(file.endsWith('.json')||file.endsWith('.webmanifest')){
     if(!generated&&file!==PUBLIC_RUNTIME_INDEX_PATH&&!Array.isArray(jsonFields))throw Error('PUBLIC_JSON_SCHEMA_REQUIRED: '+file);
     let json;try{json=JSON.parse(text);}catch{throw Error('PUBLIC_PAYLOAD_INVALID_JSON: '+file);}
     const visit=value=>{if(Array.isArray(value)){value.forEach(visit);return;}

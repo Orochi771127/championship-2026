@@ -51,6 +51,21 @@ export function upgradeValue(levels, key) {
   return total;
 }
 
+/** Read-only card projection of additive upgrade bonuses, not final combat stats. */
+export function previewDataArenaUpgrade(levels, id) {
+  const upgrade = dataArenaUpgrade(id);
+  if (!upgrade) return null;
+  const raw = levels[id];
+  const before = Number.isFinite(raw) ? Math.max(0, Math.min(upgrade.max, Math.floor(raw))) : 0;
+  const after = Math.min(upgrade.max, before + 1);
+  const next = {...levels, [id]:after};
+  return {before, after, effects:Object.keys(upgrade.effect).map(key => ({
+    key, kind:['frostLens','perfectRefund'].includes(key) ? 'toggle' : ['pierce','dashCharges','dashDamage','nearMiss'].includes(key) ? 'number' : 'percent',
+    before:id === 'patch' ? 0 : upgradeValue(levels, key),
+    after:id === 'patch' ? upgrade.effect.heal : upgradeValue(next, key)
+  }))};
+}
+
 /**
  * Three distinct options from the non-maxed upgrades, preferring one per track
  * when possible so each offer presents different builds. `random` is the

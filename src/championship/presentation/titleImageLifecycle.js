@@ -2,6 +2,8 @@
 // once per unfinished attempt, never independently by CSS. A complete decoded
 // Blob may be reused on return. Film warmup selects only these TITLE images,
 // one low-priority request at a time, after the player grants buffer headroom.
+import {selectTitleAsset} from './titleAssetVariant.js';
+
 export function createTitleImageLifecycle(title, {
   fetchImpl = (...args) => globalThis.fetch(...args),
   urls = globalThis.URL,
@@ -13,11 +15,11 @@ export function createTitleImageLifecycle(title, {
   onSettled = () => {}
 } = {}) {
   const images = [...title.querySelectorAll('img')].map(image => ({
-    image, src: image.getAttribute('src') ?? image.dataset?.titleSrc,
+    image, src: selectTitleAsset(image, image.getAttribute('src') ?? image.dataset?.titleSrc),
     released: !image.getAttribute('src')
   }));
   const panel = title.querySelector?.('.cm-title__panel');
-  const source = panel?.dataset.backgroundSrc;
+  const source = selectTitleAsset(panel, panel?.dataset.backgroundSrc);
   const backgroundUrl = source ? new URL(source, title.ownerDocument.baseURI).href : null;
   if (backgroundUrl) for (const entry of images) entry.managed = true;
   let paused = null, titleWasHidden = null, visibleKey = null, disposed = false, generation = 0, active = null, cachedBlob = null;
@@ -154,6 +156,7 @@ export function createTitleImageLifecycle(title, {
   function syncTitleImages(nextPaused = title.hidden) {
     if (disposed) return;
     const hidden = Boolean(title.hidden), wantPause = Boolean(nextPaused) || hidden;
+    if (title.dataset) title.dataset.motionPaused = String(wantPause);
     const nextVisibleKey = images.map(entry=>Number(visible(entry))).join('');
     const visibilityChanged = visibleKey !== nextVisibleKey;
     visibleKey = nextVisibleKey;
@@ -202,6 +205,7 @@ export function createTitleImageLifecycle(title, {
   };
   syncTitleImages.suspend = () => {
     if (disposed) return;
+    if (title.dataset) title.dataset.motionPaused = 'true';
     if (active && !active.ready && !active.released) { release(active); active = null; state('paused'); }
     for (const entry of images) if (entry.request && !entry.request.ready) releaseImage(entry);
     paused = true;

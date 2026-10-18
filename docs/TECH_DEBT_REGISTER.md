@@ -126,3 +126,7 @@ The infirmary heal effect is unaffected: three cages carry `RECOVER_HP_STRESS`
 (definitions 15, 18, 28) and HP recovery is an existing traced writer, so its
 trigger is reachable in ordinary play. Still unseen, as no fixture mounts the
 Raising field.
+
+## 2026-10-18 — Reference polish candidate (not published)
+
+Bounded fixes: Data Arena stylesheet failure/timeout now removes the failed link and retries; concurrent opens share one pending request. A global FLASH no longer labels unrelated HIT events critical. Camera impact cooldowns and callout reading windows prevent dense events overwriting feedback. Upgrade previews derive from the existing rules table. Missing portraits use the existing fallback. These changes do not close unrelated restoration or global CSS debt. Evidence and remaining release/device gates: [report](reports/reference-polish-2026-10-18/REPORT_ZH_TW.md).

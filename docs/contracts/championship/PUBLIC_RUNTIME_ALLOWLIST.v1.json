@@ -114459,7 +114459,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "71b96440facab8055db02b57768ef617ae6e670595d81cd5548fa29d06b4c99e"
+      "sha256": "520c70f43c6382ae72e6fe24346ee9c1eabd00bad9dcb82f1360e3e6c0163366"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -114860,11 +114860,11 @@
     },
     {
       "path": "src/championship/app/dataArena.css",
-      "sha256": "2176f283fc8753829aac799159bc443d3f37c2d07158958296c0d877686b78a5"
+      "sha256": "b191a615be4fc46e70f5ec6338b8cccd2d610f5990f6c9ef12061525ec5d4519"
     },
     {
       "path": "src/championship/app/dataArenaScreen.js",
-      "sha256": "4f9fb32f8e0e61d621417690715057f3a01d476fa5c1b5969d467aef6398d632"
+      "sha256": "ab884d0cd766e648887dbd936049f98835e06ab643bc20c869e15ee27ce6984e"
     },
     {
       "path": "src/championship/app/daylightSkin.css",
@@ -114940,7 +114940,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "ac594c619fd509a51a23f8ee185e2b25e961c0eeca08b9fa775283694ccfeb07"
+      "sha256": "1cdbccdff1360c4ffffe387baaafa1fd7a477c8f059693cc929966849c4a2f5b"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -114984,7 +114984,7 @@
     },
     {
       "path": "src/championship/app/opening.css",
-      "sha256": "3583bf99cf8674c2185f91bb553f95355aa707f3251a220d05b08f5b9802f0fb"
+      "sha256": "b7d39bf222006c5f89825649241ec46999dbfcf3d5e6a0f2c677d91c8c2b5a44"
     },
     {
       "path": "src/championship/app/openingEggChoices.js",
@@ -115692,7 +115692,7 @@
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
-      "sha256": "44f454c553d0a1ac82063b2a1adf36d76df79e2238b385d2d9cc6b7bb4453e71"
+      "sha256": "4a4bdfde2f79b2295b36f2f55c4e2e6b9889af2bfdb59d3960358604d9df86cd"
     },
     {
       "path": "src/championship/presentation/acceptedDatabasePortraits.js",
@@ -115724,7 +115724,7 @@
     },
     {
       "path": "src/championship/presentation/battleFx/battleFxCamera.js",
-      "sha256": "d28f1124c6dc5c4c1f9ea6552d6539440a925672a6a4751c0844cbd176638f35"
+      "sha256": "49cab37c7d50a8ad1acb913c1726a047ff4c7594fec82e249ce9286a593e37ce"
     },
     {
       "path": "src/championship/presentation/battleFx/battleFxEvents.js",
@@ -115732,7 +115732,7 @@
     },
     {
       "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-      "sha256": "59c23111cdf77c8b75e989d673d44ef4daaf58310474cdd982b45481ad9e4423"
+      "sha256": "447c4da795724b691346c36a61c77b0482710ab9ade5cab588a3d888d6b87301"
     },
     {
       "path": "src/championship/presentation/battleFx/battleFxRecipes.js",
@@ -116028,7 +116028,7 @@
     },
     {
       "path": "src/championship/presentation/titleImageLifecycle.js",
-      "sha256": "dd05d57ad57c681a145a7ee9c35455bf2ce35766fc074ad696c8566dbb00867a"
+      "sha256": "dc1d1d211d8d148ec79aa55022ced692da3e3a7f066db6671c09172e0ab99d6b"
     },
     {
       "path": "src/championship/presentation/vfx/captureStorageVfx.js",
@@ -116268,7 +116268,7 @@
     },
     {
       "path": "src/championship/text/dataArenaText.js",
-      "sha256": "1bae72aa9e644be5b84d7ee3e267742890d03546eb9bc19370e12b42ceb0854b"
+      "sha256": "fe88fe8d46a441a6191f06ba84237071dfcebef1bb0fadad83374822f1bdf2fa"
     },
     {
       "path": "src/championship/text/evolutionPresentationText.js",
@@ -117808,6 +117808,81 @@
         "sourceImageSha256",
         "sourceRuntimeSha256",
         "speciesId"
+      ]
+    },
+    {
+      "path": "src/championship/app/webAppInstall.js",
+      "sha256": "8325b37a1d63ad24593262b8e24e47ce6fbcb7da3cba83fdb0ab780bfed3855c"
+    },
+    {
+      "path": "src/championship/app/loadStylesheet.js",
+      "sha256": "9d8f26ac18b56bd82012fd07e8a5091f611bcf4c49ff5c3ac6a62f7c6bc37e5b"
+    },
+    {
+      "path": "src/championship/presentation/titleAssetVariant.js",
+      "sha256": "75d90d857efdce5558111a717e6badb88677038990689de24fd2f8468ccb72e0"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/arena-compact.webp",
+      "sha256": "f85e2b2d0fd7415c429ef1b5c3ca8760aa8cf345aa2d06afce26e1d6f69101f1"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/arena-large.webp",
+      "sha256": "112a97795ab9d40257502e014ce8a99df6317b762f90366b212420473d8f8cf7"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/logo-zh-Hant-compact.webp",
+      "sha256": "6dadc579652298e29f4bde56047986206387f1521e3b719160bf322efa321080"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/logo-zh-Hant-large.webp",
+      "sha256": "03286c641f9dc49dab8d9d663ab23250eaadb85cf96480dc96f2e591440f3235"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/blaze-compact.webp",
+      "sha256": "de1c92032733ab37df86e8e8b84c902378c2b5a7077f8a9352db5ad3d3708de9"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/blaze-large.webp",
+      "sha256": "2c99d776a37b37264749dac3ff1b8f740fb7de74ba2fa8729ac531a1770333de"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/cloud-compact.webp",
+      "sha256": "5845adcd1ed228e3bdcd9243e0e6ad8ec81ce66a700c2757a96dd683933cb5fc"
+    },
+    {
+      "path": "assets/production/title-morning-r1/delivery/cloud-large.webp",
+      "sha256": "365d87ccff90a8a9a6a0fcc71532c8701a9258505d2837858fe357d85e262383"
+    },
+    {
+      "path": "assets/production/web-app/icon-180.png",
+      "sha256": "4379663d3aa0d4e699ce3ed93bdde73405af2189e866e3ca171491b31a4ca3c0"
+    },
+    {
+      "path": "assets/production/web-app/icon-192.png",
+      "sha256": "268343bb5966f78225ae94f9c6605125016a215bada22f1fad552ce8b9ed4685"
+    },
+    {
+      "path": "assets/production/web-app/icon-512.png",
+      "sha256": "b5daad29ef6772ba6724aa60e542c0508b86285bed410708341e83bf21767be1"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "sha256": "7b326b833b7901c6336589a714850f7db916d13b65ace55ee8757566c81e3cca",
+      "jsonFields": [
+        "id",
+        "name",
+        "short_name",
+        "start_url",
+        "scope",
+        "display",
+        "background_color",
+        "theme_color",
+        "icons",
+        "src",
+        "sizes",
+        "type",
+        "purpose"
       ]
     }
   ],

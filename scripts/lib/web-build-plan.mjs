@@ -13,7 +13,7 @@ export const SOURCE_PAYLOAD=/\.(?:nds|srl|nxr|ncer|ncgr|nclr|nanr|nscr|nbs|nbsr|
 export const sha256=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 export function permittedCopyPath(file){
   return safeInputPath(file) && !SOURCE_PAYLOAD.test(file)
-    && (file==='championship.html'||file==='full-qa-save.html'||file==='alternate-form-qa.html'||file==='qa/championship-full-qa-save.json'
+    && (file==='championship.html'||file==='manifest.webmanifest'||file==='full-qa-save.html'||file==='alternate-form-qa.html'||file==='qa/championship-full-qa-save.json'
       ||['qa/alternate-form-save.json','qa/alternate-form-product-catalog.json','qa/alternate-form-asset-catalog.json'].includes(file)
       ||file.startsWith('src/championship/')||file.startsWith('src/data/championship/')
       ||file.startsWith('assets/production/')||/^docs\/contracts\/championship\/[^/]+\.json$/.test(file)

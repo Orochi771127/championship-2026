@@ -141,7 +141,9 @@ export async function buildLocaleCoverage() {
   const { BATTLE_TRANSPORT_COPY } = await import("../src/championship/text/battleTransportText.js");
   const { PRODUCT_FORM_TEXT } = await import("../src/championship/text/productFormText.js");
   const { SCENE_MUSIC_TRACKS } = await import("../src/championship/presentation/sceneMusicCatalog.js");
+  const { WEB_APP_INSTALL_COPY } = await import('../src/championship/app/webAppInstall.js');
   const scopedCopy = [
+    inspectScopedLocaleCopy('src/championship/app/webAppInstall.js', WEB_APP_INSTALL_COPY),
     inspectSceneMusicLocaleCopy(SCENE_MUSIC_TRACKS),
     inspectScopedLocaleCopy("src/championship/text/battleTransportText.js", BATTLE_TRANSPORT_COPY),
     inspectScopedLocaleCopy("src/championship/text/productFormText.js", PRODUCT_FORM_TEXT),

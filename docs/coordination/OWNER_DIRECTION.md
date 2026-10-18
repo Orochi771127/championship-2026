@@ -1,5 +1,16 @@
 # Championship Owner Direction
 
+<!-- record-id: REFERENCE_POLISH_PUBLICATION_20261018 -->
+## 2026-10-18 — Publish the reviewed reference polish and synchronize local main
+
+The Owner explicitly directs: 「是 請 COMMIT 跟PUSH 並整合發布至MAIN 並確認本機端跟GITHUB的進度一致」.
+This authorizes the scoped title-delivery, idle/feedback, upgrade-preview, Web App installation and reliability candidate,
+its necessary build/public allowlist hashes and release records, commit/push to the existing main and Pages playtest,
+and safe synchronization of the existing R-drive checkout. Preserve unreviewed local hatch-cutscene work and unrelated
+untracked research; do not publish them or overwrite them. Complete existing CI, formal playtest build/validate and
+payload checks, then verify remote workflows, public hashes and both local/main commits. Physical iPhone acceptance,
+commercial rights and unrelated technical debt remain separate. See [candidate and release evidence](../reports/reference-polish-2026-10-18/REPORT_ZH_TW.md).
+
 ## 2026-10-15 — UI/HUD, scene presentation and ceremony upgrade (arena daylight)
 
 The Owner hands over the UI/HUD, scene presentation and animation upgrade for direct integration, with a sellable, polished 2.5D monster game as the quality bar: 「先同步最新 main，理解現有引擎與流程，再訂一套一致的視覺與動效規範。設計要明亮、俐落、有輕科技感與世界觀辨識度；場景滿版、HUD 浮層、資訊清楚」. Scope: desktop, portrait and landscape UI/HUD with stable layouts and 44px targets; complete presentations for medal acquisition, hunt entry, capture success, evolution, battle opening and settlement, with skip, reduced motion and power saving; one art language; reuse approved original art (character art and style calibration stay with dot) and keep source/licence records; load only what a screen needs and release it on exit; keep gameplay, save, reward settlement and evolution/capture timing exactly. Build Raising → Hunt → reward/medal first as the quality template, then extend the rules. Verify at 390×844, 844×390 and 1366×768 with before/after captures, list what tools cannot verify, then 「自行審查修正通過後，依 repo 現有流程提交與發布」.

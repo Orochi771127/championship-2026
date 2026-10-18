@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: REFERENCE_POLISH_CANDIDATE_20261018 -->
+**2026-10-18 — Reference polish 發佈快照。** Owner 已明確授權 commit/push/main/Pages 與本機同步。首頁四圖手機 418 KB／大尺寸 626 KB、grounded idle、分級戰鬥回饋、規則表升級預覽及 iPhone Web App；CSS 重試、誤標暴擊與頭像破圖已修正。完整 CI **2,585／2,585**、正式 build/validate/payload 與完整素材正常入口／首次升級通過，0 缺檔／fallback／page error。保留本機孵化草稿，實機驗收仍開放；遠端／公開狀態以該提交的 GitHub CI/Pages 為準。[報告](reports/reference-polish-2026-10-18/REPORT_ZH_TW.md)。
+
 <!-- record-id: UI_CEREMONY_ARENA_20261015 -->
 **2026-10-15 — Arena Daylight UI and ceremony layer.** The bright 「晴空競技」 palette is the default theme (explicit saved themes kept); primary actions read as game keys and page titles carry the link-line mark. A presentation-only ceremony layer adds gate entry, capture confirmation, hunt reward reveal, title medal, post-sequence evolution reveal and battle versus, with skip, reduced motion, saver and hidden-tab handling, synthesized cues and no extra ticker; gameplay, save, settlement and native evolution/READY-FIGHT timing are unchanged. Short landscape Gate Select fits the globe and the companion card keeps full names. See [spec](reports/ui-ceremony-2026-10-15/SPEC_ZH_TW.md) and [before/after and validation](reports/ui-ceremony-2026-10-15/REPORT_ZH_TW.md); physical devices and in-play medal/evolution triggering are not accepted by these checks.
 
