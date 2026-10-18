@@ -130,8 +130,10 @@ test('95 display renditions and thumbnails preserve exact approved source identi
   if(type==='VP8X')return [bytes.readUIntLE(start+4,3)+1,bytes.readUIntLE(start+7,3)+1];
   if(type==='VP8L'){const bits=bytes.readUInt32LE(start+1);return [(bits&16383)+1,((bits>>>14)&16383)+1];}offset=start+n+(n%2);
  }throw Error('WEBP_DIMENSIONS_MISSING');};
+ const replacement=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-215-20261018/manifest.json','utf8'));
+ const superseded=[...replacement.supersededEntries];
  for(const row of recipe.rows){
-  const master=masters.find(e=>e.speciesIndex===row.speciesIndex),hero=heroes.find(e=>e.speciesIndex===row.speciesIndex);
+  const master=masters.find(e=>e.speciesIndex===row.speciesIndex),liveHero=heroes.find(e=>e.speciesIndex===row.speciesIndex),hero=superseded.find(e=>e.speciesIndex===row.speciesIndex)??liveHero;
   for(const field of ['speciesId','displayCode'])assert.equal(hero[field],master[field]);
   for(const field of ['src','sha256','width','height'])assert.equal(row.source[field],master[field]);
   assert.equal(sha(fs.readFileSync(master.src)),master.sha256,'Original approved media remains intact');
@@ -141,7 +143,7 @@ test('95 display renditions and thumbnails preserve exact approved source identi
    assert.equal(media.rgbaExactlyMatchesResizedSource,true);assert.ok(Math.max(media.width,media.height)<=edge);
    const scale=Math.min(1,edge/Math.max(master.width,master.height));assert.ok(Math.abs(media.width-master.width*scale)<=0.500001);assert.ok(Math.abs(media.height-master.height*scale)<=0.500001);
    for(const key of ['src','sha256','width','height'])assert.equal(actual[key],media[key]);
-   assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`),{id:`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`,src:media.src,sha256:media.sha256,width:media.width,height:media.height});
+   if(!superseded.some(e=>e.speciesIndex===row.speciesIndex))assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`),{id:`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`,src:media.src,sha256:media.sha256,width:media.width,height:media.height});
   }
  }
  for(const id of [82,124,184,185,186,187,188])assert.equal(heroes.some(row=>row.speciesIndex===id),false);

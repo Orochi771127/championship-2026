@@ -1,0 +1,66 @@
+{
+  "scope": "EXACT_OWNER_APPROVED_REPLACEMENT_ONLY_215",
+  "baseCommit": "929f07cd71c6eb931275155e804ec4ae23977c45",
+  "previousPublicHeroes": {
+    "count": 109,
+    "sha256": "81d383c6042f6134ea32a965fdfb9379b7a4adf42ee365b80e5550ef6614765c"
+  },
+  "supersededEntries": [
+    {
+      "speciesIndex": 215,
+      "speciesId": "species-215",
+      "displayCode": "UL37",
+      "src": "assets/production/database-display-20261018/species-215.display.07f1c714d48701b1.webp",
+      "width": 864,
+      "height": 864,
+      "sha256": "07f1c714d48701b1c1564ec0f350a86004d8299a776f22e64c3117eef7ed454e",
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-215.thumbnail.861468bb2a1c3fb2.webp",
+        "width": 128,
+        "height": 128,
+        "sha256": "861468bb2a1c3fb29f2d3a50cd097c452e2dca133d70e2cfccf06c23893a6225"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "speciesIndex": 215,
+      "speciesId": "species-215",
+      "displayCode": "UL39",
+      "masterLibraryId": "libfile_dd86cb583d908191beb405d7751c8f53",
+      "masterSourceFileId": "file_000000004cec81fda70659532b9da992",
+      "masterFile": "exec-74813b1b-588f-4678-93af-6a97350de7ba.png",
+      "masterSha256": "83e561d247d0d1edfdb743f67b89d16586f0a98401d0af41512ecb62ba27647b",
+      "selectedForm": "PALM_EMITTED_ROSE_VINE_WHIP_NOT_HELD_STAFF",
+      "approval": [
+        "Sentinel_a95bb547abec8191b64686d2bb081648",
+        "Sentinel_d7254cdbcd748191a33e4aa2ba0db124"
+      ],
+      "display": {
+        "src": "assets/production/database-display-20261018/species-215.display.8cf984cef9c5a3f4.webp",
+        "width": 768,
+        "height": 768,
+        "sha256": "8cf984cef9c5a3f402f022b8c2aa17751ca3e2613b1b5b4aa992c5c5a420ce4f",
+        "bytes": 166608,
+        "libraryFileId": "libfile_dd86cb583d908191beb405d7751c8f53",
+        "sourceFileId": "file_000000004cec81fda70659532b9da992",
+        "inputSha256": "83e561d247d0d1edfdb743f67b89d16586f0a98401d0af41512ecb62ba27647b",
+        "operation": "CONTAIN_768_WEBP_Q86_ALPHA100"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-215.thumbnail.69e09565bac6a967.webp",
+        "width": 128,
+        "height": 128,
+        "sha256": "69e09565bac6a967a5c42c59f441ca38fda27a17a37cf68dd1756639ce02efd7",
+        "bytes": 30762,
+        "libraryFileId": "libfile_dd86cb583d908191beb405d7751c8f53",
+        "sourceFileId": "file_000000004cec81fda70659532b9da992",
+        "inputSha256": "83e561d247d0d1edfdb743f67b89d16586f0a98401d0af41512ecb62ba27647b",
+        "operation": "CONTAIN_128_LOSSLESS_WEBP"
+      }
+    }
+  ],
+  "approvalBoundary": "New exact approval after broad publication denial; other candidates remain held. Separate 215 and 054/059 commits. Stop the denied action on any new rejection; no alternate publishing path.",
+  "masterPreservation": "Exact master PNG retained in Library and isolated ignored source-masters with verified Library identity. Previous master/hero/thumbnail files, approvals and authoring catalogs remain unchanged. No R access or permission changes.",
+  "releaseCoordination": "Hand off this isolated commit to existing UI publisher; no direct main push. Full combined gates and live verification remain pending."
+}
