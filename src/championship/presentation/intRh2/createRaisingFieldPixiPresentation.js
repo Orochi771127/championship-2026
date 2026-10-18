@@ -835,6 +835,7 @@ export async function mountRaisingFieldPixiPresentation({
   // Reframe the existing scene after the shared stage resized its renderer.
   // No actor reload, selection intent, scene, application or clock is created.
   function resize() {
+    canvasRect = null;
     if (disposed) return;
     if (!responsiveLayout) {
     if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
@@ -1257,7 +1258,7 @@ export async function mountRaisingFieldPixiPresentation({
   const cancelHiddenInput=()=>{if(globalThis.document?.hidden)cancelInput();};
   globalThis.addEventListener?.('blur',cancelInput);
   globalThis.document?.addEventListener('visibilitychange',cancelHiddenInput);
-  const unobserveResize = stage.onResize(()=>{canvasRect=null;cancelInput('viewport-resize');resize();});
+  const unobserveResize = stage.onResize(()=>{cancelInput('viewport-resize');resize();});
   const unobserveContextLost = stage.onContextLost(() => {
     cancelInput();
     onFallback("The 2D field context was lost. DOM screen controls remain available; reload to restore the field.");
