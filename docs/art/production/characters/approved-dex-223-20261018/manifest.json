@@ -1,0 +1,45 @@
+{
+  "scope": "One owner-approved opened Dex illustration and thumbnail for species223 only, supplementing the completed 218–221 integration in the same publication. No animation, stats, story, weapon creation or alternate species.",
+  "baseCommit": "19c91ac8faf688398f33236032f5b4c129fb2e09",
+  "previousPublicHeroes": {
+    "count": 108,
+    "sha256": "755a3eaaf8222a87f6700cf46445e305a6bf58ec093821410b66d831e0575037"
+  },
+  "entries": [
+    {
+      "speciesIndex": 223,
+      "speciesId": "species-223",
+      "displayCode": "UL18",
+      "masterLibraryId": "libfile_7da62d9890948191ad75672ef4987903",
+      "masterSourceFileId": "file_00000000cb8881f5a0d10e283b4ca53b",
+      "masterSha256": "da3c1f878148b92031ec56787fa39462d60b7c1f04b84441513107a69a3685d0",
+      "masterFile": "exec-323a62f3-7816-472b-9ee5-b98be20d0549.png",
+      "approval": "Sentinel_33c62001da448191ae0fb6671fee5f39",
+      "selectedForm": "LATEST_BLUE_WHITE_GOLD_DARK_EYES",
+      "variants": "Earlier blue-eyed and black-color versions are not published; other color concepts remain future variants, not additional species.",
+      "display": {
+        "src": "assets/production/database-display-20261018/species-223.display.cb48ee8d8d939913.webp",
+        "width": 719,
+        "height": 768,
+        "sha256": "cb48ee8d8d939913cd789b8ae25cd830408d35df77149ccf1fb3be8305b22a55",
+        "bytes": 163708,
+        "inputSha256": "da3c1f878148b92031ec56787fa39462d60b7c1f04b84441513107a69a3685d0",
+        "sourceLibraryId": "libfile_7da62d9890948191ad75672ef4987903",
+        "sourceFileId": "file_00000000cb8881f5a0d10e283b4ca53b",
+        "operation": "LANCZOS_CONTAIN_768_WEBP_Q86_ALPHA100"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-223.thumbnail.134e7d079ee91627.webp",
+        "width": 120,
+        "height": 128,
+        "sha256": "134e7d079ee91627498a42319a178d4d6da7b8e7289fcc46027c56e394a244f0",
+        "bytes": 32394,
+        "inputSha256": "da3c1f878148b92031ec56787fa39462d60b7c1f04b84441513107a69a3685d0",
+        "sourceLibraryId": "libfile_7da62d9890948191ad75672ef4987903",
+        "sourceFileId": "file_00000000cb8881f5a0d10e283b4ca53b",
+        "operation": "LANCZOS_CONTAIN_128_LOSSLESS_WEBP"
+      }
+    }
+  ],
+  "masterPreservation": "Unmodified latest approved PNG kept in Library and ignored source-masters with verified identity metadata. Existing body references and other palettes are retained as references; no R access or permission changes."
+}
