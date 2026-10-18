@@ -714,7 +714,7 @@ async function loadOptionalBattleFieldArt(stage, source) {
     if (!art?.field?.ambient) return art;
     try {
       const { withBattleFieldAmbient } = await import('../presentation/battleFieldAmbient.js');
-      return await withBattleFieldAmbient({ PIXI: stage.PIXI, art, quality: currentQualityTier() === 'saver' ? 'low' : 'high', reducedMotion: prefersReducedMotion() });
+      return await withBattleFieldAmbient({ PIXI: stage.PIXI, art, quality: currentQualityTier() === 'saver' ? 'low' : 'high', reducedMotion: prefersReducedMotion(), renderer: stage.app?.renderer ?? null });
     } catch (error) {
       console.warn(`CHAMPIONSHIP_BATTLE_AMBIENT_FALLBACK: ${error.message}`);
       return art;

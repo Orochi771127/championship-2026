@@ -53,14 +53,97 @@ function linear(texture) {
   return texture;
 }
 
+const MASKED_TILING_VERTEX = `in vec2 aPosition;
+in vec2 aUV;
+out vec2 vUV;
+uniform mat3 uProjectionMatrix;
+uniform mat3 uWorldTransformMatrix;
+uniform mat3 uTransformMatrix;
+void main() {
+  mat3 mvp = uProjectionMatrix * uWorldTransformMatrix * uTransformMatrix;
+  gl_Position = vec4((mvp * vec3(aPosition, 1.0)).xy, 0.0, 1.0);
+  vUV = aUV;
+}`;
+// Same coverage as Pixi's red-channel sprite mask on a premultiplied white
+// mask (alpha x red), in one pass with no offscreen render target.
+const MASKED_TILING_FRAGMENT = `in vec2 vUV;
+uniform sampler2D uTile;
+uniform sampler2D uMask;
+uniform vec2 uRepeat;
+uniform vec2 uOffset;
+uniform vec3 uTint;
+uniform vec4 uColor;
+out vec4 finalColor;
+void main() {
+  vec4 m = texture(uMask, vUV);
+  vec4 t = texture(uTile, vUV * uRepeat + uOffset);
+  finalColor = vec4(t.rgb * uTint, t.a) * (m.a * m.r) * uColor;
+}`;
+
+/**
+ * A tiling layer shown only inside a mask texture covering the same rectangle.
+ * On WebGL this is one mesh with a two-texture shader; otherwise (or if the
+ * shader cannot be built) the original Container + sprite mask + TilingSprite.
+ * Returns {displayObject, tilePosition.set(x, y), alpha} like a TilingSprite.
+ */
+export function maskedTiling(PIXI, renderer, { tile, mask, rect, tileScale, tint = 0xffffff, alpha = 1, blendMode = "add", label }) {
+  const [sx, sy] = Array.isArray(tileScale) ? tileScale : [tileScale, tileScale];
+  if (renderer?.type === PIXI.RendererType?.WEBGL && PIXI.Mesh && PIXI.GlProgram && PIXI.Geometry && PIXI.UniformGroup) {
+    try {
+      tile.source.addressMode = "repeat";
+      const tw = tile.width * sx, th = tile.height * sy;
+      const uniforms = new PIXI.UniformGroup({
+        uRepeat: { value: new Float32Array([rect.width / tw, rect.height / th]), type: "vec2<f32>" },
+        uOffset: { value: new Float32Array([0, 0]), type: "vec2<f32>" },
+        uTint: { value: new Float32Array([(tint >> 16 & 255) / 255, (tint >> 8 & 255) / 255, (tint & 255) / 255]), type: "vec3<f32>" }
+      });
+      const geometry = new PIXI.Geometry({
+        attributes: { aPosition: [0, 0, rect.width, 0, rect.width, rect.height, 0, rect.height], aUV: [0, 0, 1, 0, 1, 1, 0, 1] },
+        indexBuffer: [0, 1, 2, 0, 2, 3]
+      });
+      const shader = new PIXI.Shader({
+        glProgram: new PIXI.GlProgram({ vertex: MASKED_TILING_VERTEX, fragment: MASKED_TILING_FRAGMENT, name: "ambient-masked-tiling" }),
+        resources: { uTile: tile.source, uMask: mask.source, ambientTiling: uniforms }
+      });
+      const mesh = new PIXI.Mesh({ geometry, shader, label });
+      mesh.position.set(rect.x, rect.y);
+      // The sprite-mask path renders its children into a filter texture and
+      // composites that normally, so its "add" never reached the scene; the
+      // shader composites normally too, to keep the approved look.
+      mesh.blendMode = "normal"; mesh.alpha = alpha;
+      const offset = uniforms.uniforms.uOffset;
+      return {
+        displayObject: mesh, technique: "MESH_SHADER",
+        destroy() { geometry.destroy(); shader.destroy(); },
+        tilePosition: { set(x, y) { offset[0] = -x / tw; offset[1] = -y / th; uniforms.update(); } },
+        get alpha() { return mesh.alpha; }, set alpha(v) { mesh.alpha = v; }
+      };
+    } catch (error) {
+      console.warn(`CHAMPIONSHIP_AMBIENT_MASKED_TILING_FALLBACK: ${error.message}`);
+    }
+  }
+  const fx = new PIXI.Container({ label });
+  const maskSprite = new PIXI.Sprite(mask);
+  maskSprite.position.set(rect.x, rect.y);
+  maskSprite.width = rect.width; maskSprite.height = rect.height;
+  fx.addChild(maskSprite); fx.mask = maskSprite;
+  const t = new PIXI.TilingSprite({ texture: tile, width: rect.width, height: rect.height });
+  t.position.set(rect.x, rect.y);
+  t.tileScale.set(sx, sy); t.tint = tint; t.alpha = alpha; t.blendMode = blendMode;
+  fx.addChild(t);
+  return { displayObject: fx, technique: "SPRITE_MASK", tilePosition: t.tilePosition, destroy() {},
+    get alpha() { return t.alpha; }, set alpha(v) { t.alpha = v; } };
+}
+
 /**
  * @param {object} options
  * @param {object} options.PIXI
  * @param {object} options.art   a loaded runtime map field
  * @param {"high"|"low"} [options.quality]
  * @param {boolean} [options.reducedMotion]
+ * @param {object} [options.renderer]  the stage renderer; WebGL enables single-pass masked layers
  */
-export async function withBattleFieldAmbient({ PIXI, art, quality = "high", reducedMotion = false }) {
+export async function withBattleFieldAmbient({ PIXI, art, quality = "high", reducedMotion = false, renderer = null }) {
   const ambient = art?.field?.ambient;
   if (!ambient || !KINDS.has(ambient.kind)) return art;
   const low = quality === "low";
@@ -113,32 +196,18 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   // --- BM05 polar sea: drifting wave glints inside the sea mask.
   let seaFx = null, waveLayer = null;
   if (ambient.sea) {
-    seaFx = new PIXI.Container({ label: "polar sea fx" });
-    const mask = new PIXI.Sprite(tex(ambient.sea.src));
-    mask.position.set(ambient.sea.x, ambient.sea.y);
-    mask.width = ambient.sea.width; mask.height = ambient.sea.height;
-    seaFx.addChild(mask);
-    seaFx.mask = mask;
-    waveLayer = new PIXI.TilingSprite({ texture: tex(ambient.waves.src), width: ambient.sea.width, height: ambient.sea.height });
-    waveLayer.position.set(ambient.sea.x, ambient.sea.y);
-    waveLayer.tileScale.set(1.3); waveLayer.alpha = 0.45; waveLayer.blendMode = "add";
-    seaFx.addChild(waveLayer);
+    waveLayer = maskedTiling(PIXI, renderer, { tile: tex(ambient.waves.src), mask: tex(ambient.sea.src), rect: ambient.sea,
+      tileScale: 1.3, alpha: 0.45, label: "polar sea fx" });
+    seaFx = waveLayer.displayObject;
     root.addChild(seaFx);
   }
 
   // --- BM03 lava: a slow flowing glow inside the lava mask.
   let lavaFx = null, flowLayer = null;
   if (ambient.lava) {
-    lavaFx = new PIXI.Container({ label: "molten lava fx" });
-    const mask = new PIXI.Sprite(tex(ambient.lava.src));
-    mask.position.set(ambient.lava.x, ambient.lava.y);
-    mask.width = ambient.lava.width; mask.height = ambient.lava.height;
-    lavaFx.addChild(mask);
-    lavaFx.mask = mask;
-    flowLayer = new PIXI.TilingSprite({ texture: tex(ambient.flow.src), width: ambient.lava.width, height: ambient.lava.height });
-    flowLayer.position.set(ambient.lava.x, ambient.lava.y);
-    flowLayer.tileScale.set(1.6); flowLayer.tint = 0xffb347; flowLayer.alpha = 0.5; flowLayer.blendMode = "add";
-    lavaFx.addChild(flowLayer);
+    flowLayer = maskedTiling(PIXI, renderer, { tile: tex(ambient.flow.src), mask: tex(ambient.lava.src), rect: ambient.lava,
+      tileScale: 1.6, tint: 0xffb347, alpha: 0.5, label: "molten lava fx" });
+    lavaFx = flowLayer.displayObject;
     root.addChild(lavaFx);
   }
   // --- BM03 lava states: crust and reheating crust revealed per cell.
@@ -154,6 +223,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     };
     crust = { cooled: make(ambient.lavaStates.cooled, "cooled crust"), reheat: make(ambient.lavaStates.reheat, "reheating crust"),
       rim: new PIXI.Graphics({ label: "reheat warning" }), key: "" };
+    for (const state of [crust.cooled, crust.reheat]) state.s.visible = state.m.visible = false;
     root.addChild(crust.rim);
   }
 
@@ -176,6 +246,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       key: ""
     };
     ice.worn.s.alpha = 0.55;
+    for (const layer of [ice.worn, ice.cracking, ice.open]) layer.s.visible = layer.m.visible = false;
     root.addChild(ice.rim);
   }
 
@@ -188,18 +259,10 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   }
   let gust = null;
   if (ambient.gustTile && ambient.floorMask && !low) {
-    const fx = new PIXI.Container({ label: "floor gusts" });
-    const mask = new PIXI.Sprite(tex(ambient.floorMask.src));
-    mask.position.set(ambient.floorMask.x, ambient.floorMask.y);
-    mask.width = ambient.floorMask.width; mask.height = ambient.floorMask.height;
-    fx.addChild(mask); fx.mask = mask;
-    gust = new PIXI.TilingSprite({ texture: tex(ambient.gustTile.src), width: ambient.floorMask.width, height: ambient.floorMask.height });
-    gust.position.set(ambient.floorMask.x, ambient.floorMask.y);
-    gust.tileScale.set(ambient.gust === "sand" ? 2.2 : 1.6, ambient.gust === "sand" ? 0.9 : 1.2);
-    gust.tint = ambient.gust === "sand" ? 0xfff0d2 : 0xf2ffd8;
-    gust.alpha = ambient.gust === "sand" ? 0.16 : 0.12; gust.blendMode = "add";
-    fx.addChild(gust);
-    root.addChild(fx);
+    gust = maskedTiling(PIXI, renderer, { tile: tex(ambient.gustTile.src), mask: tex(ambient.floorMask.src), rect: ambient.floorMask,
+      tileScale: ambient.gust === "sand" ? [2.2, 0.9] : [1.6, 1.2], tint: ambient.gust === "sand" ? 0xfff0d2 : 0xf2ffd8,
+      alpha: ambient.gust === "sand" ? 0.16 : 0.12, label: "floor gusts" });
+    root.addChild(gust.displayObject);
   }
   let scan = null;
   if (ambient.scan && ambient.floorMask) {
@@ -370,12 +433,14 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     const key = states.map(([i, s]) => `${i}:${s}`).join(",");
     if (key !== ice.key) {
       ice.key = key;
-      for (const layer of [ice.worn, ice.cracking, ice.open]) layer.m.clear();
+      for (const layer of [ice.worn, ice.cracking, ice.open]) { layer.m.clear(); layer.used = 0; }
       for (const [i, state] of states) {
         const x = (i % cols + 0.5) * cell, y = (Math.floor(i / cols) + 0.5) * cell;
         const target = state === 1 ? ice.worn : state === 2 ? ice.cracking : state === 3 ? ice.open : null;
-        if (target) target.m.circle(x, y, cell * 0.72).fill(0xffffff);
+        if (target) { target.m.circle(x, y, cell * 0.72).fill(0xffffff); target.used++; }
       }
+      // Full-field state sprites are skipped (with their stencil) while empty.
+      for (const layer of [ice.worn, ice.cracking, ice.open]) layer.s.visible = layer.m.visible = layer.used > 0;
     }
     ice.rim.clear();
     for (const [i, state, value] of states) {
@@ -395,10 +460,15 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     if (key !== crust.key) {
       crust.key = key;
       crust.cooled.m.clear(); crust.reheat.m.clear();
+      let cooled = 0, reheating = 0;
       for (const [i, sec] of cells) {
         const x = (i % cols + 0.5) * cell, y = (Math.floor(i / cols) + 0.5) * cell;
         (sec <= warn ? crust.reheat : crust.cooled).m.circle(x, y, cell * 0.74).fill(0xffffff);
+        if (sec <= warn) reheating++; else cooled++;
       }
+      // Full-field crust sprites are skipped (with their stencil) while empty.
+      crust.cooled.s.visible = crust.cooled.m.visible = cooled > 0;
+      crust.reheat.s.visible = crust.reheat.m.visible = reheating > 0;
     }
     // The reheat warning pulses (steady when motion is reduced) before lava returns.
     crust.reheat.s.alpha = reducedMotion ? 1 : 0.65 + 0.35 * Math.abs(Math.sin(elapsed / 120));
@@ -643,6 +713,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
           boundary: Boolean(boundary), iceStates: Boolean(ice), snow: snow.length, lava: Boolean(lavaFx), crust: Boolean(crust), embers: embers.length,
           emissive: Boolean(emissive), clouds: Boolean(clouds), gust: Boolean(gust), scan: Boolean(scan), rotors: rotors.length,
           particles: motes.length, smoke: smoke.length },
+        maskedTechnique: [flowLayer, waveLayer, gust].filter(Boolean).map(l => l.technique),
         live: { ripples: rippleRings.length, charged: hazards?.charged?.length ?? 0, arcs: arcs.length, swell: swellT >= 0,
           iceCells: hazards?.ice?.length ?? 0, openCells: openCells.size, cooledCells: hazards?.lava?.length ?? 0,
           burning: hazards?.burningSlots?.length ?? 0, bursts: bursts.length } });
@@ -653,6 +724,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       root.removeChild(art.displayObject);
       foreground.destroy({ children: true });
       root.destroy({ children: true });
+      for (const layer of [flowLayer, waveLayer, gust]) layer?.destroy();
       await art.dispose();
       await Promise.allSettled(sources.map(src => PIXI.Assets.unload(src)));
     }
