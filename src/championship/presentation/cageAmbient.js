@@ -55,6 +55,40 @@ void main() {
   float a = max(w.a, atlasAt(src).a);
   finalColor = texture(uBase, uBaseMap.xy + src * uBaseMap.zw) * a * uColor.a;
 }`;
+// Rigid parts (spin / swing / slide) resample the frame through the inverse
+// transform inside the union of their still and moved outlines; belts sample
+// upstream along their axis and wrap back one slat period at the ends.
+const RIG_FRAGMENT = `in vec2 vUV;
+uniform sampler2D uBase;
+uniform sampler2D uAtlas;
+uniform vec2 uSize;
+uniform vec4 uBaseMap;
+uniform vec4 uAtlasMap;
+uniform vec4 uXf;
+uniform vec4 uOff;
+uniform vec4 uBelt;
+uniform float uMode;
+uniform vec4 uColor;
+out vec4 finalColor;
+float maskAt(vec2 p) {
+  if (p.x < 0.0 || p.y < 0.0 || p.x > uSize.x || p.y > uSize.y) return 0.0;
+  return texture(uAtlas, uAtlasMap.xy + p * uAtlasMap.zw).a;
+}
+void main() {
+  vec2 p = vUV * uSize;
+  vec2 src;
+  float a;
+  if (uMode < 0.5) {
+    vec2 q = p - uOff.xy;
+    src = vec2(uXf.x * q.x + uXf.y * q.y, uXf.z * q.x + uXf.w * q.y) + uOff.xy - uOff.zw;
+    a = max(maskAt(p), maskAt(src));
+  } else {
+    src = p - uBelt.xy * uBelt.w;
+    if (maskAt(src) < 0.5) src += uBelt.xy * uBelt.z;
+    a = maskAt(p);
+  }
+  finalColor = texture(uBase, uBaseMap.xy + src * uBaseMap.zw) * a * uColor.a;
+}`;
 const WATER_FRAGMENT = `in vec2 vUV;
 uniform sampler2D uTile;
 uniform sampler2D uAtlas;
@@ -165,7 +199,7 @@ export async function withCageAmbient({PIXI, art, manifest, placements, renderer
     return best;
   };
 
-  const roots = [], glows = [], systems = [], disposers = [];
+  const roots = [], glows = [], rigs = [], systems = [], disposers = [];
   let winds = 0, waters = 0;
   // One time uniform shared by every wind and water mesh: a single update per frame.
   const clock = new PIXI.UniformGroup({uTime: {value: 0, type: 'f32'}});
@@ -205,6 +239,24 @@ export async function withCageAmbient({PIXI, art, manifest, placements, renderer
             resources: {uBase: base.texture.source, uAtlas: atlas.source, cageWind: uniforms, cageClock: clock}});
           place(m.mesh, e, depth ?? BASE_LAYER_Z);
           winds += 1; disposers.push(m.destroy);
+        } else if (e.kind === 'rig') {
+          if (reducedMotion) continue;
+          const uniforms = new PIXI.UniformGroup({
+            uSize: {value: new Float32Array([e.width, e.height]), type: 'vec2<f32>'},
+            uBaseMap: {value: new Float32Array([
+              (base.texture.frame.x + (e.x - offX) * scaleX) / base.texture.source.width,
+              (base.texture.frame.y + (e.y - offY) * scaleY) / base.texture.source.height,
+              scaleX / base.texture.source.width, scaleY / base.texture.source.height]), type: 'vec4<f32>'},
+            uAtlasMap: {value: new Float32Array(mapRect(atlas, e.atlasX, e.atlasY)), type: 'vec4<f32>'},
+            uXf: {value: new Float32Array([1, 0, 0, 1]), type: 'vec4<f32>'},
+            uOff: {value: new Float32Array([e.pivot?.[0] ?? 0, e.pivot?.[1] ?? 0, 0, 0]), type: 'vec4<f32>'},
+            uBelt: {value: new Float32Array([e.dir?.[0] ?? 0, e.dir?.[1] ?? 0, e.period ?? 12, 0]), type: 'vec4<f32>'},
+            uMode: {value: e.mode === 'belt' ? 1 : 0, type: 'f32'}
+          });
+          const m = shaderMesh(PIXI, {w: e.width, h: e.height, fragment: RIG_FRAGMENT, label: 'cage-rig',
+            resources: {uBase: base.texture.source, uAtlas: atlas.source, cageRig: uniforms}});
+          place(m.mesh, e, depth ?? BASE_LAYER_Z);
+          rigs.push({e, group: uniforms, u: uniforms.uniforms}); disposers.push(m.destroy);
         } else if (e.kind === 'glow') {
           const s = new PIXI.Sprite(new PIXI.Texture({source: atlas.source, frame: new PIXI.Rectangle(e.atlasX, e.atlasY, e.width, e.height)}));
           s.blendMode = 'add'; s.alpha = reducedMotion ? 0.25 : 0;
@@ -260,6 +312,17 @@ export async function withCageAmbient({PIXI, art, manifest, placements, renderer
     elapsed += dt;
     const s = elapsed / 1000;
     clock.uniforms.uTime = s; clock.update();
+    for (const r of rigs) {
+      const {e, u} = r;
+      if (e.mode === 'belt') u.uBelt[3] = (s * e.speed) % e.period;
+      else if (e.mode === 'slide') { const k = e.amp * (0.5 + 0.5 * Math.sin(s * e.speed + e.phase)); u.uOff[2] = e.dir[0] * k; u.uOff[3] = e.dir[1] * k; }
+      else {
+        const angle = e.mode === 'spin' ? s * e.speed : e.amp * Math.sin(s * e.speed + e.phase);
+        const c = Math.cos(angle), sn = Math.sin(angle);
+        u.uXf[0] = c; u.uXf[1] = sn; u.uXf[2] = -sn; u.uXf[3] = c;  // inverse rotation
+      }
+      r.group.update();
+    }
     if (!reducedMotion) for (const gl of glows) {
       const k = gl.mode === 'flicker' ? 0.55 + 0.25 * Math.sin(s * 9 + gl.phase) * Math.sin(s * 3.7 + gl.seed)
         : gl.mode === 'screen' ? 0.32 + 0.12 * Math.sin(s * 6 + gl.phase) + (Math.sin(s * 23 + gl.seed) > 0.96 ? 0.25 : 0)
@@ -309,7 +372,7 @@ export async function withCageAmbient({PIXI, art, manifest, placements, renderer
       for (const r of roots) { r.root.position.set(fit.x + r.tileX * fit.scale, fit.y + r.tileY * fit.scale); r.root.scale.set(fit.scale); }
     },
     getDiagnostics() {
-      return {fields: [...cages.keys()], winds, glows: glows.length, waters,
+      return {fields: [...cages.keys()], winds, glows: glows.length, waters, rigs: rigs.length,
         particleSystems: systems.length, roots: roots.length, reducedMotion, quality,
         decodedBytes: [...cages.values()].reduce((n, c) => n + c.data.atlas.decodedBytes, 0) + (waterTile ? waterTile.width * waterTile.height * 4 : 0)};
     }
