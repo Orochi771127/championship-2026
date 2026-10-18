@@ -1,0 +1,32 @@
+{
+  "checkedAtUtc": "2026-10-18T10:28:50.163582+00:00",
+  "origin": "https://orochi771127.github.io/championship-2026/",
+  "buildId": "29b2177bb3beb90bf379a8c3ccd83aabc96b5d320fbaf6887d84fc9ed62020a7",
+  "builtAt": null,
+  "registry": {
+    "id": "art:public:metadata:battle-original:v1",
+    "src": "assets/production/public-runtime/metadata/battle-original.v1.json",
+    "sha256": "243ef3d501ce89a1d65ce09fc55d428dbd17328fad276e085f7aa949722e1b97"
+  },
+  "actualMetadataSha256": "243ef3d501ce89a1d65ce09fc55d428dbd17328fad276e085f7aa949722e1b97",
+  "assetId": "art:battle:original-opus:v1",
+  "bm04": {
+    "fieldId": "field_bm04_01",
+    "worldWidthPx": 1664,
+    "worldHeightPx": 1088,
+    "nativeWidthPx": 416,
+    "nativeHeightPx": 272,
+    "visualRole": "BATTLE_ARENA",
+    "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+    "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+    "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+    "frames": [
+      {
+        "src": "assets/production/battle/original-opus-v1/fields/field_bm04_01/frame-00.webp",
+        "sha256": "34daac1e539da6544057feb0d38200f37d51a8ae29b4773fec62456d7628b320",
+        "durationMs": null
+      }
+    ]
+  },
+  "commit": "75806702b41dbef09003e70260a2ec2398de6f24"
+}

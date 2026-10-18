@@ -517,3 +517,17 @@ test('review-stage ground shadows mount and look up the stamp for the drawn mirr
   }
   await scene?.dispose();
 });
+
+
+test('a loaded map covers every viewport edge through native prelude zoom without FX capability',async()=>{
+  const fieldArt={assetId:'test',field:{fieldId:'field_bm04_01',worldWidthPx:1664,worldHeightPx:1088,nativeWidthPx:416},
+    displayObject:{},update(){},dispose(){},getDiagnostics(){return {};}};
+  const {stage,scene}=await mount({fieldArt,sourceOptions:{getSpecialPrelude:()=>({slot:0,zoomQ12:8192,overlayVisible:false,brightnessQ12:4096})}});
+  for(const [width,height] of [[390,255],[641,338],[1086,716],[390,255]]){
+    Object.assign(stage.app.screen,{width,height});for(const resize of stage.resizers)resize();
+    const p=scene.getFieldPlacement(),a=p.artRect;
+    assert.ok(a.x*p.zoom+p.x<=1e-8&&a.y*p.zoom+p.y<=1e-8);
+    assert.ok((a.x+a.width)*p.zoom+p.x>=width-1e-8&&(a.y+a.height)*p.zoom+p.y>=height-1e-8);
+  }
+  await scene.dispose();
+});

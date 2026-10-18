@@ -59,7 +59,7 @@ import { prefersReducedMotion, currentQualityTier, flashScale as currentFlashSca
 import {battleFocusViewport,drawBattleDigitalCurtain} from '../battleFocusViewport.js';
 import {createBattleEffectSprites} from '../battleEffectSprites.js';
 import {createBm03GroundShadows} from '../bm03GroundShadows.js';
-import {createBattleFxCamera} from '../battleFx/battleFxCamera.js';
+import {createBattleFxCamera,clampBattleCameraToMap} from '../battleFx/battleFxCamera.js';
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
 import {createBattleFxLayer} from '../battleFx/battleFxLayer.js';
 
@@ -227,48 +227,10 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text}) : null;
   // A failed FX capability probe has no camera: retain contain-fit fallback.
   responsiveLayout = responsiveLayout && Boolean(fxLayer);
-  const director = fxLayer ? createBattleFxCamera({reducedMotion, responsiveLayout}) : null;
+  const director = fxLayer ? createBattleFxCamera({reducedMotion, responsiveLayout, boundedMap:true}) : null;
   const tracker = fxLayer ? createBattleFxEventTracker() : null;
-  // The dynamic camera follows fighters wherever the original's movement takes
-  // them, sometimes past the arena picture. Continue the floor with eight
-  // mirrored, darkened copies of the arena (rendered once, no per-frame cost);
-  // a mirror keeps every seam continuous. Presentation only.
-  let continuation = null, continuationTexture = null;
-  if (fxLayer && fieldArt) {
-    try {
-      const {worldWidthPx:W, worldHeightPx:H} = fieldArt.field;
-      continuationTexture = app.renderer.generateTexture({target:fieldArt.displayObject, frame:new stage.PIXI.Rectangle(0, 0, W, H), resolution:0.5});
-      continuation = new stage.PIXI.Container({label:'battle fx arena continuation'});
-      for (const [dx, dy] of [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]) {
-        const tile = new stage.PIXI.Sprite(continuationTexture);
-        tile.anchor.set(0.5); tile.tint = 0xb8b8b8;
-        tile.width = W; tile.height = H;
-        tile.scale.set((dx ? -1 : 1) * Math.abs(tile.scale.x), (dy ? -1 : 1) * Math.abs(tile.scale.y));
-        tile.position.set(W / 2 + dx * W, H / 2 + dy * H);
-        continuation.addChild(tile);
-      }
-      // A stepped fade outward from every arena edge: no hard seam at the edge,
-      // darker the further the floor is from the real arena.
-      const fade = new stage.PIXI.Graphics();
-      const steps = 10;
-      for (let i = 0; i < steps; i++) {
-        const near = i / steps * 0.6, alpha = 0.05 + 0.055 * i, bandW = W * 0.6 / steps, bandH = H * 0.6 / steps;
-        fade.rect(-W * near - bandW, -H, bandW, H * 3).fill({color:0x000000, alpha});
-        fade.rect(W + W * near, -H, bandW, H * 3).fill({color:0x000000, alpha});
-        fade.rect(0, -H * near - bandH, W, bandH).fill({color:0x000000, alpha});
-        fade.rect(0, H + H * near, W, bandH).fill({color:0x000000, alpha});
-      }
-      fade.rect(-W, -H, W * 0.4, H * 3).fill({color:0x000000, alpha:0.6});
-      fade.rect(W + W * 0.6, -H, W * 0.4, H * 3).fill({color:0x000000, alpha:0.6});
-      fade.rect(0, -H, W, H * 0.4).fill({color:0x000000, alpha:0.6});
-      fade.rect(0, H + H * 0.6, W, H * 0.4).fill({color:0x000000, alpha:0.6});
-      continuation.addChild(fade);
-      productionArtLayer.addChildAt(continuation, 0);
-    } catch (error) {
-      console.warn('CHAMPIONSHIP_BATTLE_FX_CONTINUATION_UNAVAILABLE', error?.message);
-      continuation?.destroy({children:true}); continuationTexture?.destroy(true); continuation = continuationTexture = null;
-    }
-  }
+  // One authored map only. The camera covers the viewport and stays within
+  // the real arena throughout tracking, zoom and shake; no duplicated terrain.
   const slotInfos = new Map();
   let pendingDtMs = 0;
   let layoutDtMs = 0;
@@ -410,9 +372,19 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         const top = motion ? motion.baseBounds[1] * packedScale / resolution : trim.y - texture.orig.height * sprite.anchor.y;
         const bodyHeight = Math.max(8, (bottom - top) * scale);
         const bodyWidth = Math.max(8, (motion ? (motion.baseBounds[2] - motion.baseBounds[0]) * packedScale / resolution : trim.width) * scale);
+        // Camera framing follows the actually drawn animation cell, including
+        // wide wings, facing, squash and rotation; VFX keep native body geometry.
+        const angle=sprite.rotation??0,cos=Math.cos(angle),sin=Math.sin(angle);
+        const lx=trim.x-texture.orig.width*sprite.anchor.x-(sprite.pivot?.x??0);
+        const ly=trim.y-texture.orig.height*sprite.anchor.y-(sprite.pivot?.y??0);
+        const corners=[[lx,ly],[lx+trim.width,ly],[lx,ly+trim.height],[lx+trim.width,ly+trim.height]]
+          .map(([px,py])=>({x:sprite.x+px*sprite.scale.x*cos-py*sprite.scale.y*sin,
+            y:sprite.y+px*sprite.scale.x*sin+py*sprite.scale.y*cos}));
+        const framingBounds={left:Math.min(...corners.map(p=>p.x)),right:Math.max(...corners.map(p=>p.x)),
+          top:Math.min(...corners.map(p=>p.y)),bottom:Math.max(...corners.map(p=>p.y))};
         slotInfos.set(combatant.slot, {slot:combatant.slot, x, y:y-lift, groundY:y, liftNative:(combatant.nativeMotion?.heightNativePx ?? 0),
           top:y-lift-bodyHeight, height:bodyHeight, width:bodyWidth,
-          facing:combatant.stand.facing, team:combatant.team, down:combatant.down,
+          facing:combatant.stand.facing, team:combatant.team, down:combatant.down, engaged:combatant.engaged,framingBounds,
           left:x-bodyWidth/2, right:x+bodyWidth/2, bottom:y});
       }
       if (fxLayer) {
@@ -494,14 +466,17 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     clip.clear().rect(0,0,rect.width,rect.height).fill(0xffffff);
     let artRect=rect;
     if (fieldArt) {
-      // Under the dynamic camera the mirrored arena continues the floor; the
-      // letterbox only shows beyond it, painted as a dark stage edge.
+      // Unused viewport space is visibly outside the authored arena.
       letterbox.rect(rect.x, rect.y, rect.width, rect.height).fill(fxLayer ? 0x0a1419 : PALETTE.letterbox);
       artRect = layoutFieldArt();
       drawStandMarkers(graphic, artRect, view, layoutCharacters(artRect, view));
     } else {
       productionArtLayer.visible = false;
       drawField(graphic, rect, frame, view);
+    }
+    if (fieldArt?.foregroundObject) {
+      fieldArt.foregroundObject.position.copyFrom(productionArtLayer.position);
+      fieldArt.foregroundObject.scale.copyFrom(productionArtLayer.scale);
     }
     const nativeScale = artRect.width / (fieldArt?.field.nativeWidthPx ?? 416);
     // Dynamic presentation: events from this view, then the camera for it.
@@ -527,8 +502,10 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     const prelude=battleFocusViewport({width:rect.width,height:rect.height,
       anchorX:camera.zoom*anchorLocalX+camera.x, anchorY:camera.zoom*anchorLocalY+camera.y,
       zoomQ12:focus?.zoomQ12,reducedMotion});
-    const transform=Object.freeze({zoom:prelude.zoom*camera.zoom, x:prelude.zoom*camera.x+prelude.x, y:prelude.zoom*camera.y+prelude.y,
+    const composed=Object.freeze({zoom:prelude.zoom*camera.zoom, x:prelude.zoom*camera.x+prelude.x, y:prelude.zoom*camera.y+prelude.y,
       anchorX:prelude.anchorX, anchorY:prelude.anchorY});
+    const transform=fieldArt ? clampBattleCameraToMap({viewport:rect,art:artRect,transform:composed,
+      anchor:{x:anchorLocalX,y:anchorLocalY},box:camera.framingBox??null}) : composed;
     world.scale.set(transform.zoom);
     world.position.set(transform.x,transform.y);
     lastCamera = fxLayer ? {...camera, total:transform.zoom} : null;
@@ -662,7 +639,6 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       }
       if (scene.parent) scene.parent.removeChild(scene);
       effectSprites?.dispose();
-      continuation?.destroy({children:true}); continuationTexture?.destroy(true);
       fxLayer?.dispose();
       if (debugHook && globalThis.__championshipBattleDiagnostics) delete globalThis.__championshipBattleDiagnostics;
       if (debugHook && globalThis.__championshipBattleState) delete globalThis.__championshipBattleState;

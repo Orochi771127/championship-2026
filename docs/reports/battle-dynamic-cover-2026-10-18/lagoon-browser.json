@@ -1,0 +1,3390 @@
+{
+  "phase": "final",
+  "profile": "lagoon-r2",
+  "runtimeBaseline": null,
+  "sourceRoot": "R:\\Projects\\Championship2026\\championship-2026",
+  "origin": "http://127.0.0.1:8879/",
+  "entryQuery": "gateMode=fallback&battleReview=bm04-lagoon-r2",
+  "expectedMap": {
+    "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+    "manifest": "assets/production/battle/bm04-island-polish-r2/manifest.json",
+    "manifestSha256": "e2c794c1216e3f2d49539fc5c7f5cf35735fe953104468840493ef1d3388d807",
+    "frame": "assets/production/battle/bm04-island-polish-r2/base.webp",
+    "frameSha256": "63bfe8e326e63fe3bbae2aa40560d0e966c6e975b4725c8c34903f828ce0480e"
+  },
+  "requests": [
+    "assets/production/battle/bm04-island-polish-r2/manifest.json",
+    "assets/production/battle/bm04-island-polish-r2/base.webp"
+  ],
+  "cases": [
+    {
+      "screen": "BATTLE_FIELD",
+      "viewport": [
+        390,
+        844
+      ],
+      "placement": {
+        "zoom": 0.7297542489532173,
+        "x": -718.3223924927189,
+        "y": -112.7347780341737,
+        "anchorX": -111.16685736364218,
+        "anchorY": 284.2515333963765,
+        "centerX": 1251.5478927362433,
+        "centerY": 477.87974997666674,
+        "artRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1664,
+          "height": 1088
+        },
+        "width": 390,
+        "height": 472,
+        "nativeScale": 4,
+        "reducedMotion": false
+      },
+      "diagnostics": {
+        "scene": "VS5_BATTLE_FIELD",
+        "contractVersion": "championship-modern-battle-field-presentation",
+        "frames": 306,
+        "pendingFrames": 0.8553346257519809,
+        "specialPrelude": null,
+        "focusPlacement": null,
+        "arena": "BATTLE_ISLAND",
+        "outcome": {
+          "ended": false,
+          "reason": "RUNNING",
+          "verdict": "RUNNING",
+          "winningTeam": null
+        },
+        "viewport": {
+          "width": 390,
+          "height": 472
+        },
+        "effectSprites": {
+          "assetId": "art:public:battle-effects:v1",
+          "active": 0,
+          "created": 2,
+          "released": 2,
+          "visible": 0,
+          "missingCells": [],
+          "seenCells": [
+            "1:118",
+            "1:117"
+          ],
+          "sprites": []
+        },
+        "dynamicFx": {
+          "particles": 14,
+          "peakParticles": 19,
+          "created": 53,
+          "cap": 240,
+          "flashes": 0,
+          "rings": 1,
+          "scorches": 0,
+          "words": 1,
+          "ghosts": 3,
+          "tracked": 0,
+          "eventsHandled": 23,
+          "hitAnchors": {
+            "NATIVE_IMPACT": 1,
+            "PROJECTILE_END": 0,
+            "BODY_SIDE": 0
+          },
+          "callout": null,
+          "banner": null,
+          "dim": false,
+          "camera": {
+            "zoom": 0.7297542489532173,
+            "x": -718.3223924927189,
+            "y": -112.7347780341737,
+            "centerX": 1251.5478927362433,
+            "centerY": 477.87974997666674,
+            "punch": 0.003990511786864666,
+            "trauma": 0,
+            "focused": [],
+            "framedSlots": [
+              0,
+              3
+            ],
+            "framingBox": {
+              "left": 1127.197265625,
+              "top": 361.55078125,
+              "right": 1490.197265625,
+              "bottom": 642.55078125
+            },
+            "total": 0.7297542489532173
+          },
+          "bodies": [
+            {
+              "slot": 0,
+              "x": 1145,
+              "groundY": 588,
+              "top": 374,
+              "width": 262
+            },
+            {
+              "slot": 3,
+              "x": 1343,
+              "groundY": 615,
+              "top": 446,
+              "width": 175
+            }
+          ],
+          "director": {
+            "zoom": 0.7268537305740351,
+            "cx": 1251.5478927362433,
+            "cy": 477.87974997666674,
+            "punch": 0.003990511786864666,
+            "trauma": 0,
+            "stages": []
+          }
+        },
+        "groundShadows": {
+          "candidate": true,
+          "approximate": true,
+          "disposed": false,
+          "bakedPoses": 256,
+          "cacheEntries": 0,
+          "created": 512,
+          "released": 0,
+          "generationMs": 0,
+          "maxGenerationMs": 0,
+          "rotatedFallback": "EXISTING_CHEAP_BLOB",
+          "fallbacks": [],
+          "seenFrames": [],
+          "actors": [],
+          "receiver": "AUTHOR_RECEIVER_INTERSECT_CAMERA_DEPTH_Z0_0.08_WORLD_UNITS",
+          "fieldId": "field_bm04_01",
+          "assetRoot": "assets/production/battle/stage-review-20261007/fields/field_bm04_01/"
+        },
+        "characters": [
+          {
+            "slot": 0,
+            "speciesId": "species-189",
+            "entityId": "m503_warglaymon",
+            "rendered": true,
+            "position": {
+              "x": 1197.197265625,
+              "y": 578.55078125
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m503_warglaymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 1,
+              "cell": 14,
+              "texture": "m503_warglaymon/main/cell_014",
+              "elapsedQ12": 53248,
+              "active": 1,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  293,
+                  288
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -73.25,
+                  -54.25,
+                  17.5,
+                  16
+                ]
+              },
+              "baseBounds": [
+                -19.75,
+                -51.25,
+                45.75,
+                2.25
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          },
+          {
+            "slot": 3,
+            "speciesId": "species-195",
+            "entityId": "m509_shinegraymon",
+            "rendered": true,
+            "position": {
+              "x": 1298.4951171875,
+              "y": 608.349609375
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m509_shinegraymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 6,
+              "frameIndex": 0,
+              "cell": 10,
+              "texture": "m509_shinegraymon/main/cell_010",
+              "elapsedQ12": 0,
+              "active": 0,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  192,
+                  320
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -11,
+                  -38.5,
+                  41.75,
+                  2.25
+                ]
+              },
+              "baseBounds": [
+                -10.75,
+                -40.5,
+                33,
+                1.75
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          }
+        ],
+        "art": {
+          "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+          "role": "LICENSED_PIXEL_RUNTIME",
+          "promoted": true,
+          "fieldId": "field_bm04_01",
+          "diagnostics": {
+            "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+            "fieldId": "field_bm04_01",
+            "frameCount": 1,
+            "frameIndex": 0,
+            "worldWidthPx": 1664,
+            "worldHeightPx": 1088,
+            "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+            "disposed": false,
+            "ambient": "BM04_LAGOON_R2",
+            "quality": "high",
+            "reducedMotion": false,
+            "layers": {
+              "caustics": 2,
+              "sea": false,
+              "foamRegions": 3,
+              "canopies": 5,
+              "boundary": true,
+              "iceStates": false,
+              "snow": 0
+            },
+            "live": {
+              "ripples": 1,
+              "charged": 0,
+              "arcs": 0,
+              "swell": false,
+              "iceCells": 0,
+              "openCells": 0,
+              "bursts": 0
+            }
+          }
+        }
+      },
+      "canvas": {
+        "x": 0,
+        "y": 195.421875,
+        "width": 390,
+        "height": 472,
+        "right": 390,
+        "bottom": 667.421875
+      },
+      "field": {
+        "x": 0,
+        "y": 193.421875,
+        "width": 390,
+        "height": 475.796875,
+        "right": 390,
+        "bottom": 669.21875
+      },
+      "clock": {
+        "x": 0,
+        "y": 105.53125,
+        "width": 390,
+        "height": 32,
+        "right": 390,
+        "bottom": 137.53125
+      },
+      "opponents": {
+        "x": 0,
+        "y": 137.53125,
+        "width": 390,
+        "height": 55.890625,
+        "right": 390,
+        "bottom": 193.421875
+      },
+      "players": {
+        "x": 0,
+        "y": 669.21875,
+        "width": 390,
+        "height": 49.25,
+        "right": 390,
+        "bottom": 718.46875
+      },
+      "log": {
+        "x": 0,
+        "y": 718.46875,
+        "width": 390,
+        "height": 68,
+        "right": 390,
+        "bottom": 786.46875
+      },
+      "sameMatch": true,
+      "sameApp": true,
+      "sameTicker": true,
+      "overflow": false,
+      "sceneLabels": [
+        "Graphics",
+        "battle field camera",
+        "battle fx screen",
+        "Graphics",
+        "Graphics"
+      ],
+      "layout": {
+        "rows": "32px 55.8906px 475.797px 49.25px 68px",
+        "alignContent": "safe center",
+        "shellTop": 48,
+        "shellBottom": 844,
+        "logHeight": 68,
+        "blankBelowLogContent": 8,
+        "centerDelta": 0,
+        "url": "http://127.0.0.1:8879/championship.html?gateMode=fallback&battleReview=bm04-lagoon-r2"
+      },
+      "mapBounds": {
+        "left": -718.3223924927189,
+        "top": -112.7347780341737,
+        "right": 495.98867776543455,
+        "bottom": 681.2378448269267
+      },
+      "alignment": [
+        {
+          "slot": 0,
+          "localError": 0.44921875,
+          "screenError": 0
+        },
+        {
+          "slot": 3,
+          "localError": 0.349609375,
+          "screenError": 0
+        }
+      ],
+      "exitDialogAndResume": true,
+      "screenshot": "final-0-390x844.png"
+    },
+    {
+      "screen": "BATTLE_FIELD",
+      "viewport": [
+        844,
+        390
+      ],
+      "placement": {
+        "zoom": 0.6558020733645631,
+        "x": -449.7974000555056,
+        "y": -151.74611360678978,
+        "anchorX": 95.82992498381088,
+        "anchorY": 205.01021430353256,
+        "centerX": 1174.5882352941176,
+        "centerY": 489.08981327432565,
+        "artRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1664,
+          "height": 1088
+        },
+        "width": 641,
+        "height": 338,
+        "nativeScale": 4,
+        "reducedMotion": false
+      },
+      "diagnostics": {
+        "scene": "VS5_BATTLE_FIELD",
+        "contractVersion": "championship-modern-battle-field-presentation",
+        "frames": 315,
+        "pendingFrames": 0.47029277923562063,
+        "specialPrelude": null,
+        "focusPlacement": null,
+        "arena": "BATTLE_ISLAND",
+        "outcome": {
+          "ended": false,
+          "reason": "RUNNING",
+          "verdict": "RUNNING",
+          "winningTeam": null
+        },
+        "viewport": {
+          "width": 641,
+          "height": 338
+        },
+        "effectSprites": {
+          "assetId": "art:public:battle-effects:v1",
+          "active": 0,
+          "created": 2,
+          "released": 2,
+          "visible": 0,
+          "missingCells": [],
+          "seenCells": [
+            "1:118",
+            "1:117"
+          ],
+          "sprites": []
+        },
+        "dynamicFx": {
+          "particles": 8,
+          "peakParticles": 19,
+          "created": 53,
+          "cap": 240,
+          "flashes": 0,
+          "rings": 0,
+          "scorches": 0,
+          "words": 1,
+          "ghosts": 0,
+          "tracked": 0,
+          "eventsHandled": 23,
+          "hitAnchors": {
+            "NATIVE_IMPACT": 1,
+            "PROJECTILE_END": 0,
+            "BODY_SIDE": 0
+          },
+          "callout": null,
+          "banner": null,
+          "dim": false,
+          "camera": {
+            "zoom": 0.6558020733645631,
+            "x": -449.7974000555056,
+            "y": -151.74611360678978,
+            "centerX": 1174.5882352941176,
+            "centerY": 489.08981327432565,
+            "punch": 0.001426677139242818,
+            "trauma": 0,
+            "focused": [],
+            "framedSlots": [
+              0,
+              3
+            ],
+            "framingBox": {
+              "left": 1138.8154296875,
+              "top": 363.1826171875,
+              "right": 1501.8154296875,
+              "bottom": 644.1826171875
+            },
+            "total": 0.6558020733645631
+          },
+          "bodies": [
+            {
+              "slot": 0,
+              "x": 1157,
+              "groundY": 589,
+              "top": 375,
+              "width": 262
+            },
+            {
+              "slot": 3,
+              "x": 1370,
+              "groundY": 619,
+              "top": 450,
+              "width": 175
+            }
+          ],
+          "director": {
+            "zoom": 0.6548677884615385,
+            "cx": 1174.5882352941176,
+            "cy": 489.08981327432565,
+            "punch": 0.001426677139242818,
+            "trauma": 0,
+            "stages": []
+          }
+        },
+        "groundShadows": {
+          "candidate": true,
+          "approximate": true,
+          "disposed": false,
+          "bakedPoses": 256,
+          "cacheEntries": 0,
+          "created": 512,
+          "released": 0,
+          "generationMs": 0,
+          "maxGenerationMs": 0,
+          "rotatedFallback": "EXISTING_CHEAP_BLOB",
+          "fallbacks": [],
+          "seenFrames": [],
+          "actors": [],
+          "receiver": "AUTHOR_RECEIVER_INTERSECT_CAMERA_DEPTH_Z0_0.08_WORLD_UNITS",
+          "fieldId": "field_bm04_01",
+          "assetRoot": "assets/production/battle/stage-review-20261007/fields/field_bm04_01/"
+        },
+        "characters": [
+          {
+            "slot": 0,
+            "speciesId": "species-189",
+            "entityId": "m503_warglaymon",
+            "rendered": true,
+            "position": {
+              "x": 1208.8154296875,
+              "y": 580.1826171875
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m503_warglaymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 1,
+              "cell": 14,
+              "texture": "m503_warglaymon/main/cell_014",
+              "elapsedQ12": 90112,
+              "active": 1,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  293,
+                  288
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -73.25,
+                  -54.25,
+                  17.5,
+                  16
+                ]
+              },
+              "baseBounds": [
+                -19.75,
+                -51.25,
+                45.75,
+                2.25
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          },
+          {
+            "slot": 3,
+            "speciesId": "species-195",
+            "entityId": "m509_shinegraymon",
+            "rendered": true,
+            "position": {
+              "x": 1325.6943359375,
+              "y": 612.1708984375
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m509_shinegraymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 6,
+              "frameIndex": 0,
+              "cell": 10,
+              "texture": "m509_shinegraymon/main/cell_010",
+              "elapsedQ12": 0,
+              "active": 0,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  192,
+                  320
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -11,
+                  -38.5,
+                  41.75,
+                  2.25
+                ]
+              },
+              "baseBounds": [
+                -10.75,
+                -40.5,
+                33,
+                1.75
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          }
+        ],
+        "art": {
+          "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+          "role": "LICENSED_PIXEL_RUNTIME",
+          "promoted": true,
+          "fieldId": "field_bm04_01",
+          "diagnostics": {
+            "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+            "fieldId": "field_bm04_01",
+            "frameCount": 1,
+            "frameIndex": 0,
+            "worldWidthPx": 1664,
+            "worldHeightPx": 1088,
+            "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+            "disposed": false,
+            "ambient": "BM04_LAGOON_R2",
+            "quality": "high",
+            "reducedMotion": false,
+            "layers": {
+              "caustics": 2,
+              "sea": false,
+              "foamRegions": 3,
+              "canopies": 5,
+              "boundary": true,
+              "iceStates": false,
+              "snow": 0
+            },
+            "live": {
+              "ripples": 1,
+              "charged": 0,
+              "arcs": 0,
+              "swell": false,
+              "iceCells": 0,
+              "openCells": 0,
+              "bursts": 0
+            }
+          }
+        }
+      },
+      "canvas": {
+        "x": 0,
+        "y": 50,
+        "width": 641,
+        "height": 338,
+        "right": 641,
+        "bottom": 388
+      },
+      "field": {
+        "x": 0,
+        "y": 48,
+        "width": 641.453125,
+        "height": 342,
+        "right": 641.453125,
+        "bottom": 390
+      },
+      "clock": {
+        "x": 641.453125,
+        "y": 48,
+        "width": 202.546875,
+        "height": 32,
+        "right": 844,
+        "bottom": 80
+      },
+      "opponents": {
+        "x": 641.453125,
+        "y": 80,
+        "width": 202.546875,
+        "height": 110.703125,
+        "right": 844,
+        "bottom": 190.703125
+      },
+      "players": {
+        "x": 641.453125,
+        "y": 190.703125,
+        "width": 202.546875,
+        "height": 110.71875,
+        "right": 844,
+        "bottom": 301.421875
+      },
+      "log": {
+        "x": 641.453125,
+        "y": 301.421875,
+        "width": 202.546875,
+        "height": 88.578125,
+        "right": 844,
+        "bottom": 390
+      },
+      "sameMatch": true,
+      "sameApp": true,
+      "sameTicker": true,
+      "overflow": false,
+      "sceneLabels": [
+        "Graphics",
+        "battle field camera",
+        "battle fx screen",
+        "Graphics",
+        "Graphics"
+      ],
+      "layout": {
+        "rows": "32px 110.703px 110.719px 88.5781px",
+        "alignContent": "safe center",
+        "shellTop": 48,
+        "shellBottom": 390,
+        "logHeight": 88.578125,
+        "blankBelowLogContent": 12.578125,
+        "centerDelta": 0,
+        "url": "http://127.0.0.1:8879/championship.html?gateMode=fallback&battleReview=bm04-lagoon-r2"
+      },
+      "mapBounds": {
+        "left": -449.7974000555056,
+        "top": -151.74611360678978,
+        "right": 641.4572500231274,
+        "bottom": 561.7665422138549
+      },
+      "alignment": [
+        {
+          "slot": 0,
+          "localError": 0.1845703125,
+          "screenError": 0
+        },
+        {
+          "slot": 3,
+          "localError": 0.1943359375,
+          "screenError": 0
+        }
+      ],
+      "exitDialogAndResume": true,
+      "screenshot": "final-1-844x390.png"
+    },
+    {
+      "screen": "BATTLE_FIELD",
+      "viewport": [
+        1366,
+        768
+      ],
+      "placement": {
+        "zoom": 1.1193206316484805,
+        "x": -776.2725675009488,
+        "y": -190.8195381722909,
+        "anchorX": 155.002198030587,
+        "anchorY": 418.0908854444825,
+        "centerX": 1178.63687150838,
+        "centerY": 490.31485943756473,
+        "artRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1664,
+          "height": 1088
+        },
+        "width": 1086,
+        "height": 716,
+        "nativeScale": 4,
+        "reducedMotion": false
+      },
+      "diagnostics": {
+        "scene": "VS5_BATTLE_FIELD",
+        "contractVersion": "championship-modern-battle-field-presentation",
+        "frames": 324,
+        "pendingFrames": 0.08525093271926032,
+        "specialPrelude": null,
+        "focusPlacement": null,
+        "arena": "BATTLE_ISLAND",
+        "outcome": {
+          "ended": false,
+          "reason": "RUNNING",
+          "verdict": "RUNNING",
+          "winningTeam": null
+        },
+        "viewport": {
+          "width": 1086,
+          "height": 716
+        },
+        "effectSprites": {
+          "assetId": "art:public:battle-effects:v1",
+          "active": 0,
+          "created": 2,
+          "released": 2,
+          "visible": 0,
+          "missingCells": [],
+          "seenCells": [
+            "1:118",
+            "1:117"
+          ],
+          "sprites": []
+        },
+        "dynamicFx": {
+          "particles": 5,
+          "peakParticles": 19,
+          "created": 53,
+          "cap": 240,
+          "flashes": 0,
+          "rings": 0,
+          "scorches": 0,
+          "words": 0,
+          "ghosts": 0,
+          "tracked": 0,
+          "eventsHandled": 23,
+          "hitAnchors": {
+            "NATIVE_IMPACT": 1,
+            "PROJECTILE_END": 0,
+            "BODY_SIDE": 0
+          },
+          "callout": null,
+          "banner": null,
+          "dim": false,
+          "camera": {
+            "zoom": 1.1193206316484805,
+            "x": -776.2725675009488,
+            "y": -190.8195381722909,
+            "centerX": 1178.63687150838,
+            "centerY": 490.31485943756473,
+            "punch": 0.0005100618086977974,
+            "trauma": 0,
+            "focused": [],
+            "framedSlots": [
+              0,
+              3
+            ],
+            "framingBox": {
+              "left": 1143.3056640625,
+              "top": 363.8046875,
+              "right": 1506.3056640625,
+              "bottom": 644.8046875
+            },
+            "total": 1.1193206316484805
+          },
+          "bodies": [
+            {
+              "slot": 0,
+              "x": 1161,
+              "groundY": 590,
+              "top": 376,
+              "width": 262
+            },
+            {
+              "slot": 3,
+              "x": 1376,
+              "groundY": 620,
+              "top": 451,
+              "width": 175
+            }
+          ],
+          "director": {
+            "zoom": 1.11875,
+            "cx": 1178.63687150838,
+            "cy": 490.31485943756473,
+            "punch": 0.0005100618086977974,
+            "trauma": 0,
+            "stages": []
+          }
+        },
+        "groundShadows": {
+          "candidate": true,
+          "approximate": true,
+          "disposed": false,
+          "bakedPoses": 256,
+          "cacheEntries": 0,
+          "created": 512,
+          "released": 0,
+          "generationMs": 0,
+          "maxGenerationMs": 0,
+          "rotatedFallback": "EXISTING_CHEAP_BLOB",
+          "fallbacks": [],
+          "seenFrames": [],
+          "actors": [],
+          "receiver": "AUTHOR_RECEIVER_INTERSECT_CAMERA_DEPTH_Z0_0.08_WORLD_UNITS",
+          "fieldId": "field_bm04_01",
+          "assetRoot": "assets/production/battle/stage-review-20261007/fields/field_bm04_01/"
+        },
+        "characters": [
+          {
+            "slot": 0,
+            "speciesId": "species-189",
+            "entityId": "m503_warglaymon",
+            "rendered": true,
+            "position": {
+              "x": 1213.3056640625,
+              "y": 580.8046875
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m503_warglaymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 1,
+              "cell": 14,
+              "texture": "m503_warglaymon/main/cell_014",
+              "elapsedQ12": 126976,
+              "active": 1,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  293,
+                  288
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -73.25,
+                  -54.25,
+                  17.5,
+                  16
+                ]
+              },
+              "baseBounds": [
+                -19.75,
+                -51.25,
+                45.75,
+                2.25
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          },
+          {
+            "slot": 3,
+            "speciesId": "species-195",
+            "entityId": "m509_shinegraymon",
+            "rendered": true,
+            "position": {
+              "x": 1331.6650390625,
+              "y": 613.01171875
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m509_shinegraymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 0,
+              "frameIndex": 0,
+              "cell": 0,
+              "texture": "m509_shinegraymon/main/cell_000",
+              "elapsedQ12": 4096,
+              "active": 1,
+              "playMode": 2,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  192,
+                  320
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -10.75,
+                  -40.5,
+                  33,
+                  1.75
+                ]
+              },
+              "baseBounds": [
+                -10.75,
+                -40.5,
+                33,
+                1.75
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          }
+        ],
+        "art": {
+          "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+          "role": "LICENSED_PIXEL_RUNTIME",
+          "promoted": true,
+          "fieldId": "field_bm04_01",
+          "diagnostics": {
+            "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+            "fieldId": "field_bm04_01",
+            "frameCount": 1,
+            "frameIndex": 0,
+            "worldWidthPx": 1664,
+            "worldHeightPx": 1088,
+            "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+            "disposed": false,
+            "ambient": "BM04_LAGOON_R2",
+            "quality": "high",
+            "reducedMotion": false,
+            "layers": {
+              "caustics": 2,
+              "sea": false,
+              "foamRegions": 3,
+              "canopies": 5,
+              "boundary": true,
+              "iceStates": false,
+              "snow": 0
+            },
+            "live": {
+              "ripples": 1,
+              "charged": 0,
+              "arcs": 0,
+              "swell": false,
+              "iceCells": 0,
+              "openCells": 0,
+              "bursts": 0
+            }
+          }
+        }
+      },
+      "canvas": {
+        "x": 0,
+        "y": 50,
+        "width": 1086,
+        "height": 716,
+        "right": 1086,
+        "bottom": 766
+      },
+      "field": {
+        "x": 0,
+        "y": 48,
+        "width": 1086,
+        "height": 720,
+        "right": 1086,
+        "bottom": 768
+      },
+      "clock": {
+        "x": 1086,
+        "y": 48,
+        "width": 280,
+        "height": 32,
+        "right": 1366,
+        "bottom": 80
+      },
+      "opponents": {
+        "x": 1086,
+        "y": 80,
+        "width": 280,
+        "height": 245.703125,
+        "right": 1366,
+        "bottom": 325.703125
+      },
+      "players": {
+        "x": 1086,
+        "y": 325.703125,
+        "width": 280,
+        "height": 245.71875,
+        "right": 1366,
+        "bottom": 571.421875
+      },
+      "log": {
+        "x": 1086,
+        "y": 571.421875,
+        "width": 280,
+        "height": 196.578125,
+        "right": 1366,
+        "bottom": 768
+      },
+      "sameMatch": true,
+      "sameApp": true,
+      "sameTicker": true,
+      "overflow": false,
+      "sceneLabels": [
+        "Graphics",
+        "battle field camera",
+        "battle fx screen",
+        "Graphics",
+        "Graphics"
+      ],
+      "layout": {
+        "rows": "32px 245.703px 245.719px 196.578px",
+        "alignContent": "safe center",
+        "shellTop": 48,
+        "shellBottom": 768,
+        "logHeight": 196.578125,
+        "blankBelowLogContent": 120.578125,
+        "centerDelta": 0,
+        "url": "http://127.0.0.1:8879/championship.html?gateMode=fallback&battleReview=bm04-lagoon-r2"
+      },
+      "mapBounds": {
+        "left": -776.2725675009488,
+        "top": -190.8195381722909,
+        "right": 1086.2769635621228,
+        "bottom": 1027.001309061256
+      },
+      "alignment": [
+        {
+          "slot": 0,
+          "localError": 0.3056640625,
+          "screenError": 0
+        },
+        {
+          "slot": 3,
+          "localError": 0.1650390625,
+          "screenError": 0
+        }
+      ],
+      "exitDialogAndResume": true,
+      "screenshot": "final-2-1366x768.png"
+    },
+    {
+      "screen": "BATTLE_FIELD",
+      "viewport": [
+        320,
+        568
+      ],
+      "placement": {
+        "zoom": 0.47507726447633125,
+        "x": -469.69312455778777,
+        "y": -81.15527518531567,
+        "anchorX": -74.42884051348017,
+        "anchorY": 177.28675668980853,
+        "centerX": 1325.454134817179,
+        "centerY": 490.7733807095954,
+        "artRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1664,
+          "height": 1088
+        },
+        "width": 320,
+        "height": 304,
+        "nativeScale": 4,
+        "reducedMotion": false
+      },
+      "diagnostics": {
+        "scene": "VS5_BATTLE_FIELD",
+        "contractVersion": "championship-modern-battle-field-presentation",
+        "frames": 333,
+        "pendingFrames": 0.6574266588121933,
+        "specialPrelude": null,
+        "focusPlacement": null,
+        "arena": "BATTLE_ISLAND",
+        "outcome": {
+          "ended": false,
+          "reason": "RUNNING",
+          "verdict": "RUNNING",
+          "winningTeam": null
+        },
+        "viewport": {
+          "width": 320,
+          "height": 304
+        },
+        "effectSprites": {
+          "assetId": "art:public:battle-effects:v1",
+          "active": 0,
+          "created": 2,
+          "released": 2,
+          "visible": 0,
+          "missingCells": [],
+          "seenCells": [
+            "1:118",
+            "1:117"
+          ],
+          "sprites": []
+        },
+        "dynamicFx": {
+          "particles": 1,
+          "peakParticles": 19,
+          "created": 53,
+          "cap": 240,
+          "flashes": 0,
+          "rings": 0,
+          "scorches": 0,
+          "words": 0,
+          "ghosts": 0,
+          "tracked": 0,
+          "eventsHandled": 23,
+          "hitAnchors": {
+            "NATIVE_IMPACT": 1,
+            "PROJECTILE_END": 0,
+            "BODY_SIDE": 0
+          },
+          "callout": null,
+          "banner": null,
+          "dim": false,
+          "camera": {
+            "zoom": 0.47507726447633125,
+            "x": -469.69312455778777,
+            "y": -81.15527518531567,
+            "centerX": 1325.454134817179,
+            "centerY": 490.7733807095954,
+            "punch": 0.00016266205543425218,
+            "trauma": 0,
+            "focused": [],
+            "framedSlots": [
+              0,
+              3
+            ],
+            "framingBox": {
+              "left": 1144.6376953125,
+              "top": 363.986328125,
+              "right": 1507.6376953125,
+              "bottom": 644.986328125
+            },
+            "total": 0.47507726447633125
+          },
+          "bodies": [
+            {
+              "slot": 0,
+              "x": 1163,
+              "groundY": 590,
+              "top": 376,
+              "width": 262
+            },
+            {
+              "slot": 3,
+              "x": 1324,
+              "groundY": 610,
+              "top": 441,
+              "width": 175
+            }
+          ],
+          "director": {
+            "zoom": 0.475,
+            "cx": 1325.454134817179,
+            "cy": 490.7733807095954,
+            "punch": 0.00016266205543425218,
+            "trauma": 0,
+            "stages": []
+          }
+        },
+        "groundShadows": {
+          "candidate": true,
+          "approximate": true,
+          "disposed": false,
+          "bakedPoses": 256,
+          "cacheEntries": 0,
+          "created": 512,
+          "released": 0,
+          "generationMs": 0,
+          "maxGenerationMs": 0,
+          "rotatedFallback": "EXISTING_CHEAP_BLOB",
+          "fallbacks": [],
+          "seenFrames": [],
+          "actors": [],
+          "receiver": "AUTHOR_RECEIVER_INTERSECT_CAMERA_DEPTH_Z0_0.08_WORLD_UNITS",
+          "fieldId": "field_bm04_01",
+          "assetRoot": "assets/production/battle/stage-review-20261007/fields/field_bm04_01/"
+        },
+        "characters": [
+          {
+            "slot": 0,
+            "speciesId": "species-189",
+            "entityId": "m503_warglaymon",
+            "rendered": true,
+            "position": {
+              "x": 1214.6376953125,
+              "y": 580.986328125
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m503_warglaymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 1,
+              "cell": 14,
+              "texture": "m503_warglaymon/main/cell_014",
+              "elapsedQ12": 0,
+              "active": 0,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  293,
+                  288
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -73.25,
+                  -54.25,
+                  17.5,
+                  16
+                ]
+              },
+              "baseBounds": [
+                -19.75,
+                -51.25,
+                45.75,
+                2.25
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          },
+          {
+            "slot": 3,
+            "speciesId": "species-195",
+            "entityId": "m509_shinegraymon",
+            "rendered": true,
+            "position": {
+              "x": 1279.0625,
+              "y": 602.7470703125
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m509_shinegraymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 3,
+              "frameIndex": 1,
+              "cell": 7,
+              "texture": "m509_shinegraymon/main/cell_007",
+              "elapsedQ12": 8192,
+              "active": 1,
+              "playMode": 2,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  192,
+                  320
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -4.25,
+                  -41,
+                  50.5,
+                  2.5
+                ]
+              },
+              "baseBounds": [
+                -10.75,
+                -40.5,
+                33,
+                1.75
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          }
+        ],
+        "art": {
+          "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+          "role": "LICENSED_PIXEL_RUNTIME",
+          "promoted": true,
+          "fieldId": "field_bm04_01",
+          "diagnostics": {
+            "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+            "fieldId": "field_bm04_01",
+            "frameCount": 1,
+            "frameIndex": 0,
+            "worldWidthPx": 1664,
+            "worldHeightPx": 1088,
+            "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+            "disposed": false,
+            "ambient": "BM04_LAGOON_R2",
+            "quality": "high",
+            "reducedMotion": false,
+            "layers": {
+              "caustics": 2,
+              "sea": false,
+              "foamRegions": 3,
+              "canopies": 5,
+              "boundary": true,
+              "iceStates": false,
+              "snow": 0
+            },
+            "live": {
+              "ripples": 1,
+              "charged": 0,
+              "arcs": 0,
+              "swell": false,
+              "iceCells": 0,
+              "openCells": 0,
+              "bursts": 0
+            }
+          }
+        }
+      },
+      "canvas": {
+        "x": 0,
+        "y": 141.3125,
+        "width": 320,
+        "height": 304,
+        "right": 320,
+        "bottom": 445.3125
+      },
+      "field": {
+        "x": 0,
+        "y": 139.3125,
+        "width": 320,
+        "height": 308,
+        "right": 320,
+        "bottom": 447.3125
+      },
+      "clock": {
+        "x": 0,
+        "y": 51.421875,
+        "width": 320,
+        "height": 32,
+        "right": 320,
+        "bottom": 83.421875
+      },
+      "opponents": {
+        "x": 0,
+        "y": 83.421875,
+        "width": 320,
+        "height": 55.890625,
+        "right": 320,
+        "bottom": 139.3125
+      },
+      "players": {
+        "x": 0,
+        "y": 447.3125,
+        "width": 320,
+        "height": 49.25,
+        "right": 320,
+        "bottom": 496.5625
+      },
+      "log": {
+        "x": 0,
+        "y": 496.5625,
+        "width": 320,
+        "height": 68,
+        "right": 320,
+        "bottom": 564.5625
+      },
+      "sameMatch": true,
+      "sameApp": true,
+      "sameTicker": true,
+      "overflow": false,
+      "sceneLabels": [
+        "Graphics",
+        "battle field camera",
+        "battle fx screen",
+        "Graphics",
+        "Graphics"
+      ],
+      "layout": {
+        "rows": "32px 55.8906px 308px 49.25px 68px",
+        "alignContent": "safe center",
+        "shellTop": 48,
+        "shellBottom": 568,
+        "logHeight": 68,
+        "blankBelowLogContent": 8,
+        "centerDelta": 0.0078125,
+        "url": "http://127.0.0.1:8879/championship.html?gateMode=fallback&battleReview=bm04-lagoon-r2"
+      },
+      "mapBounds": {
+        "left": -469.69312455778777,
+        "top": -81.15527518531567,
+        "right": 320.83544353082743,
+        "bottom": 435.72878856493276
+      },
+      "alignment": [
+        {
+          "slot": 0,
+          "localError": 0.3623046875,
+          "screenError": 0
+        },
+        {
+          "slot": 3,
+          "localError": 0.4375,
+          "screenError": 0
+        }
+      ],
+      "exitDialogAndResume": true,
+      "screenshot": "final-3-320x568.png"
+    },
+    {
+      "screen": "BATTLE_FIELD",
+      "viewport": [
+        568,
+        320
+      ],
+      "placement": {
+        "zoom": 0.41877435219878495,
+        "x": -296.82889115786594,
+        "y": -71.56222857674308,
+        "anchorX": 51.59136987152311,
+        "anchorY": 156.25101901939593,
+        "centerX": 1186.3880597014925,
+        "centerY": 490.866328125,
+        "artRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1664,
+          "height": 1088
+        },
+        "width": 400,
+        "height": 268,
+        "nativeScale": 4,
+        "reducedMotion": false
+      },
+      "diagnostics": {
+        "scene": "VS5_BATTLE_FIELD",
+        "contractVersion": "championship-modern-battle-field-presentation",
+        "frames": 342,
+        "pendingFrames": 0.272384812295833,
+        "specialPrelude": null,
+        "focusPlacement": null,
+        "arena": "BATTLE_ISLAND",
+        "outcome": {
+          "ended": false,
+          "reason": "RUNNING",
+          "verdict": "RUNNING",
+          "winningTeam": null
+        },
+        "viewport": {
+          "width": 400,
+          "height": 268
+        },
+        "effectSprites": {
+          "assetId": "art:public:battle-effects:v1",
+          "active": 0,
+          "created": 2,
+          "released": 2,
+          "visible": 0,
+          "missingCells": [],
+          "seenCells": [
+            "1:118",
+            "1:117"
+          ],
+          "sprites": []
+        },
+        "dynamicFx": {
+          "particles": 0,
+          "peakParticles": 19,
+          "created": 53,
+          "cap": 240,
+          "flashes": 0,
+          "rings": 0,
+          "scorches": 0,
+          "words": 0,
+          "ghosts": 0,
+          "tracked": 0,
+          "eventsHandled": 24,
+          "hitAnchors": {
+            "NATIVE_IMPACT": 1,
+            "PROJECTILE_END": 0,
+            "BODY_SIDE": 0
+          },
+          "callout": null,
+          "banner": null,
+          "dim": false,
+          "camera": {
+            "zoom": 0.41877435219878495,
+            "x": -296.82889115786594,
+            "y": -71.56222857674308,
+            "centerX": 1186.3880597014925,
+            "centerY": 490.866328125,
+            "punch": 0.00005815450456108773,
+            "trauma": 0,
+            "focused": [],
+            "framedSlots": [
+              0,
+              3
+            ],
+            "framingBox": {
+              "left": 1144.6376953125,
+              "top": 363.986328125,
+              "right": 1507.6376953125,
+              "bottom": 644.986328125
+            },
+            "total": 0.41877435219878495
+          },
+          "bodies": [
+            {
+              "slot": 0,
+              "x": 1163,
+              "groundY": 590,
+              "top": 376,
+              "width": 262
+            },
+            {
+              "slot": 3,
+              "x": 1271,
+              "groundY": 600,
+              "top": 431,
+              "width": 175
+            }
+          ],
+          "director": {
+            "zoom": 0.41875,
+            "cx": 1186.3880597014925,
+            "cy": 490.866328125,
+            "punch": 0.00005815450456108773,
+            "trauma": 0,
+            "stages": []
+          }
+        },
+        "groundShadows": {
+          "candidate": true,
+          "approximate": true,
+          "disposed": false,
+          "bakedPoses": 256,
+          "cacheEntries": 0,
+          "created": 512,
+          "released": 0,
+          "generationMs": 0,
+          "maxGenerationMs": 0,
+          "rotatedFallback": "EXISTING_CHEAP_BLOB",
+          "fallbacks": [],
+          "seenFrames": [],
+          "actors": [],
+          "receiver": "AUTHOR_RECEIVER_INTERSECT_CAMERA_DEPTH_Z0_0.08_WORLD_UNITS",
+          "fieldId": "field_bm04_01",
+          "assetRoot": "assets/production/battle/stage-review-20261007/fields/field_bm04_01/"
+        },
+        "characters": [
+          {
+            "slot": 0,
+            "speciesId": "species-189",
+            "entityId": "m503_warglaymon",
+            "rendered": true,
+            "position": {
+              "x": 1214.6376953125,
+              "y": 580.986328125
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m503_warglaymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 1,
+              "cell": 14,
+              "texture": "m503_warglaymon/main/cell_014",
+              "elapsedQ12": 0,
+              "active": 0,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  293,
+                  288
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -73.25,
+                  -54.25,
+                  17.5,
+                  16
+                ]
+              },
+              "baseBounds": [
+                -19.75,
+                -51.25,
+                45.75,
+                2.25
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          },
+          {
+            "slot": 3,
+            "speciesId": "species-195",
+            "entityId": "m509_shinegraymon",
+            "rendered": true,
+            "position": {
+              "x": 1226.43359375,
+              "y": 592.8154296875
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m509_shinegraymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 0,
+              "cell": 13,
+              "texture": "m509_shinegraymon/main/cell_013",
+              "elapsedQ12": 4096,
+              "active": 1,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  192,
+                  320
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -13.25,
+                  -40.25,
+                  42.75,
+                  2.5
+                ]
+              },
+              "baseBounds": [
+                -10.75,
+                -40.5,
+                33,
+                1.75
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          }
+        ],
+        "art": {
+          "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+          "role": "LICENSED_PIXEL_RUNTIME",
+          "promoted": true,
+          "fieldId": "field_bm04_01",
+          "diagnostics": {
+            "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+            "fieldId": "field_bm04_01",
+            "frameCount": 1,
+            "frameIndex": 0,
+            "worldWidthPx": 1664,
+            "worldHeightPx": 1088,
+            "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+            "disposed": false,
+            "ambient": "BM04_LAGOON_R2",
+            "quality": "high",
+            "reducedMotion": false,
+            "layers": {
+              "caustics": 2,
+              "sea": false,
+              "foamRegions": 3,
+              "canopies": 5,
+              "boundary": true,
+              "iceStates": false,
+              "snow": 0
+            },
+            "live": {
+              "ripples": 0,
+              "charged": 0,
+              "arcs": 0,
+              "swell": false,
+              "iceCells": 0,
+              "openCells": 0,
+              "bursts": 0
+            }
+          }
+        }
+      },
+      "canvas": {
+        "x": 0,
+        "y": 50,
+        "width": 400,
+        "height": 268,
+        "right": 400,
+        "bottom": 318
+      },
+      "field": {
+        "x": 0,
+        "y": 48,
+        "width": 400,
+        "height": 272,
+        "right": 400,
+        "bottom": 320
+      },
+      "clock": {
+        "x": 400,
+        "y": 48,
+        "width": 168,
+        "height": 32,
+        "right": 568,
+        "bottom": 80
+      },
+      "opponents": {
+        "x": 400,
+        "y": 80,
+        "width": 168,
+        "height": 85.703125,
+        "right": 568,
+        "bottom": 165.703125
+      },
+      "players": {
+        "x": 400,
+        "y": 165.703125,
+        "width": 168,
+        "height": 85.71875,
+        "right": 568,
+        "bottom": 251.421875
+      },
+      "log": {
+        "x": 400,
+        "y": 251.421875,
+        "width": 168,
+        "height": 68.578125,
+        "right": 568,
+        "bottom": 320
+      },
+      "sameMatch": true,
+      "sameApp": true,
+      "sameTicker": true,
+      "overflow": false,
+      "sceneLabels": [
+        "Graphics",
+        "battle field camera",
+        "battle fx screen",
+        "Graphics",
+        "Graphics"
+      ],
+      "layout": {
+        "rows": "32px 85.7031px 85.7188px 68.5781px",
+        "alignContent": "safe center",
+        "shellTop": 48,
+        "shellBottom": 320,
+        "logHeight": 68.578125,
+        "blankBelowLogContent": -7.421875,
+        "centerDelta": 0,
+        "url": "http://127.0.0.1:8879/championship.html?gateMode=fallback&battleReview=bm04-lagoon-r2"
+      },
+      "mapBounds": {
+        "left": -296.82889115786594,
+        "top": -71.56222857674308,
+        "right": 400.01163090091217,
+        "bottom": 384.06426661553496
+      },
+      "alignment": [
+        {
+          "slot": 0,
+          "localError": 0.3623046875,
+          "screenError": 0
+        },
+        {
+          "slot": 3,
+          "localError": 0.1845703125,
+          "screenError": 0
+        }
+      ],
+      "exitDialogAndResume": true,
+      "screenshot": "final-4-568x320.png"
+    },
+    {
+      "screen": "BATTLE_FIELD",
+      "viewport": [
+        390,
+        844
+      ],
+      "placement": {
+        "zoom": 0.7375136775664715,
+        "x": -728.3065751020168,
+        "y": -115.65019565007964,
+        "anchorX": -114.6951953667126,
+        "anchorY": 285.55724494608086,
+        "centerX": 1251.9179008972346,
+        "centerY": 476.80498185524937,
+        "artRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1664,
+          "height": 1088
+        },
+        "width": 390,
+        "height": 472,
+        "nativeScale": 4,
+        "reducedMotion": false
+      },
+      "diagnostics": {
+        "scene": "VS5_BATTLE_FIELD",
+        "contractVersion": "championship-modern-battle-field-presentation",
+        "frames": 351,
+        "pendingFrames": 0.844560538388766,
+        "specialPrelude": null,
+        "focusPlacement": null,
+        "arena": "BATTLE_ISLAND",
+        "outcome": {
+          "ended": false,
+          "reason": "RUNNING",
+          "verdict": "RUNNING",
+          "winningTeam": null
+        },
+        "viewport": {
+          "width": 390,
+          "height": 472
+        },
+        "effectSprites": {
+          "assetId": "art:public:battle-effects:v1",
+          "active": 0,
+          "created": 2,
+          "released": 2,
+          "visible": 0,
+          "missingCells": [],
+          "seenCells": [
+            "1:118",
+            "1:117"
+          ],
+          "sprites": []
+        },
+        "dynamicFx": {
+          "particles": 8,
+          "peakParticles": 19,
+          "created": 61,
+          "cap": 240,
+          "flashes": 0,
+          "rings": 0,
+          "scorches": 0,
+          "words": 0,
+          "ghosts": 1,
+          "tracked": 0,
+          "eventsHandled": 28,
+          "hitAnchors": {
+            "NATIVE_IMPACT": 1,
+            "PROJECTILE_END": 0,
+            "BODY_SIDE": 0
+          },
+          "callout": null,
+          "banner": null,
+          "dim": false,
+          "camera": {
+            "zoom": 0.7375136775664715,
+            "x": -728.306575102017,
+            "y": -115.65019565007964,
+            "centerX": 1251.9179008972346,
+            "centerY": 476.80498185524937,
+            "punch": 0.000018545852842457624,
+            "trauma": 0,
+            "focused": [],
+            "framedSlots": [
+              0,
+              3
+            ],
+            "framingBox": {
+              "left": 998.36328125,
+              "top": 348.203125,
+              "right": 1316.6591796875,
+              "bottom": 590.7783203125
+            },
+            "total": 0.7375136775664715
+          },
+          "bodies": [
+            {
+              "slot": 0,
+              "x": 1124,
+              "groundY": 570,
+              "top": 356,
+              "width": 262
+            },
+            {
+              "slot": 3,
+              "x": 1190,
+              "groundY": 588,
+              "top": 419,
+              "width": 175
+            }
+          ],
+          "director": {
+            "zoom": 0.7375,
+            "cx": 1258.9482019625632,
+            "cy": 476.8049818552493,
+            "punch": 0.000018545852842457624,
+            "trauma": 0,
+            "stages": []
+          }
+        },
+        "groundShadows": {
+          "candidate": true,
+          "approximate": true,
+          "disposed": false,
+          "bakedPoses": 256,
+          "cacheEntries": 0,
+          "created": 512,
+          "released": 0,
+          "generationMs": 0,
+          "maxGenerationMs": 0,
+          "rotatedFallback": "EXISTING_CHEAP_BLOB",
+          "fallbacks": [],
+          "seenFrames": [],
+          "actors": [],
+          "receiver": "AUTHOR_RECEIVER_INTERSECT_CAMERA_DEPTH_Z0_0.08_WORLD_UNITS",
+          "fieldId": "field_bm04_01",
+          "assetRoot": "assets/production/battle/stage-review-20261007/fields/field_bm04_01/"
+        },
+        "characters": [
+          {
+            "slot": 0,
+            "speciesId": "species-189",
+            "entityId": "m503_warglaymon",
+            "rendered": true,
+            "position": {
+              "x": 1072.36328125,
+              "y": 561.203125
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m503_warglaymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 3,
+              "frameIndex": 1,
+              "cell": 7,
+              "texture": "m503_warglaymon/main/cell_007",
+              "elapsedQ12": 0,
+              "active": 1,
+              "playMode": 2,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  224,
+                  288
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -18.5,
+                  -53.25,
+                  35.75,
+                  1
+                ]
+              },
+              "baseBounds": [
+                -19.75,
+                -51.25,
+                45.75,
+                2.25
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          },
+          {
+            "slot": 3,
+            "speciesId": "species-195",
+            "entityId": "m509_shinegraymon",
+            "rendered": true,
+            "position": {
+              "x": 1145.6591796875,
+              "y": 580.7783203125
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m509_shinegraymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 0,
+              "cell": 13,
+              "texture": "m509_shinegraymon/main/cell_013",
+              "elapsedQ12": 40960,
+              "active": 1,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  192,
+                  320
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -13.25,
+                  -40.25,
+                  42.75,
+                  2.5
+                ]
+              },
+              "baseBounds": [
+                -10.75,
+                -40.5,
+                33,
+                1.75
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          }
+        ],
+        "art": {
+          "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+          "role": "LICENSED_PIXEL_RUNTIME",
+          "promoted": true,
+          "fieldId": "field_bm04_01",
+          "diagnostics": {
+            "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+            "fieldId": "field_bm04_01",
+            "frameCount": 1,
+            "frameIndex": 0,
+            "worldWidthPx": 1664,
+            "worldHeightPx": 1088,
+            "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+            "disposed": false,
+            "ambient": "BM04_LAGOON_R2",
+            "quality": "high",
+            "reducedMotion": false,
+            "layers": {
+              "caustics": 2,
+              "sea": false,
+              "foamRegions": 3,
+              "canopies": 5,
+              "boundary": true,
+              "iceStates": false,
+              "snow": 0
+            },
+            "live": {
+              "ripples": 1,
+              "charged": 0,
+              "arcs": 0,
+              "swell": false,
+              "iceCells": 0,
+              "openCells": 0,
+              "bursts": 0
+            }
+          }
+        }
+      },
+      "canvas": {
+        "x": 0,
+        "y": 195.421875,
+        "width": 390,
+        "height": 472,
+        "right": 390,
+        "bottom": 667.421875
+      },
+      "field": {
+        "x": 0,
+        "y": 193.421875,
+        "width": 390,
+        "height": 475.796875,
+        "right": 390,
+        "bottom": 669.21875
+      },
+      "clock": {
+        "x": 0,
+        "y": 105.53125,
+        "width": 390,
+        "height": 32,
+        "right": 390,
+        "bottom": 137.53125
+      },
+      "opponents": {
+        "x": 0,
+        "y": 137.53125,
+        "width": 390,
+        "height": 55.890625,
+        "right": 390,
+        "bottom": 193.421875
+      },
+      "players": {
+        "x": 0,
+        "y": 669.21875,
+        "width": 390,
+        "height": 49.25,
+        "right": 390,
+        "bottom": 718.46875
+      },
+      "log": {
+        "x": 0,
+        "y": 718.46875,
+        "width": 390,
+        "height": 68,
+        "right": 390,
+        "bottom": 786.46875
+      },
+      "sameMatch": true,
+      "sameApp": true,
+      "sameTicker": true,
+      "overflow": false,
+      "sceneLabels": [
+        "Graphics",
+        "battle field camera",
+        "battle fx screen",
+        "Graphics",
+        "Graphics"
+      ],
+      "layout": {
+        "rows": "32px 55.8906px 475.797px 49.25px 68px",
+        "alignContent": "safe center",
+        "shellTop": 48,
+        "shellBottom": 844,
+        "logHeight": 68,
+        "blankBelowLogContent": 8,
+        "centerDelta": 0,
+        "url": "http://127.0.0.1:8879/championship.html?gateMode=fallback&battleReview=bm04-lagoon-r2"
+      },
+      "mapBounds": {
+        "left": -728.3065751020168,
+        "top": -115.65019565007964,
+        "right": 498.91618436859164,
+        "bottom": 686.7646855422413
+      },
+      "alignment": [
+        {
+          "slot": 0,
+          "localError": 0.36328125,
+          "screenError": 0
+        },
+        {
+          "slot": 3,
+          "localError": 0.2216796875,
+          "screenError": 0
+        }
+      ],
+      "exitDialogAndResume": true,
+      "screenshot": "final-5-390x844.png"
+    },
+    {
+      "screen": "BATTLE_FIELD",
+      "viewport": [
+        844,
+        390
+      ],
+      "placement": {
+        "zoom": 0.6731091710629669,
+        "x": -446.9602129803757,
+        "y": -133.2388643466815,
+        "anchorX": 113.0666173440128,
+        "anchorY": 232.93252471157246,
+        "centerX": 1140.1719750280786,
+        "centerY": 449.01908537271765,
+        "artRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1664,
+          "height": 1088
+        },
+        "width": 641,
+        "height": 338,
+        "nativeScale": 4,
+        "reducedMotion": false
+      },
+      "diagnostics": {
+        "scene": "VS5_BATTLE_FIELD",
+        "contractVersion": "championship-modern-battle-field-presentation",
+        "frames": 360,
+        "pendingFrames": 0.4595186918724057,
+        "specialPrelude": null,
+        "focusPlacement": null,
+        "arena": "BATTLE_ISLAND",
+        "outcome": {
+          "ended": false,
+          "reason": "RUNNING",
+          "verdict": "RUNNING",
+          "winningTeam": null
+        },
+        "viewport": {
+          "width": 641,
+          "height": 338
+        },
+        "effectSprites": {
+          "assetId": "art:public:battle-effects:v1",
+          "active": 1,
+          "created": 3,
+          "released": 2,
+          "visible": 1,
+          "missingCells": [],
+          "seenCells": [
+            "1:118",
+            "1:117"
+          ],
+          "sprites": [
+            {
+              "id": 3,
+              "bankId": 1,
+              "cell": 117,
+              "visible": true,
+              "x": 1085.240234375,
+              "y": 458.119140625,
+              "depth": 558.119140625,
+              "scaleX": 0.333251953125,
+              "scaleY": 0.333251953125,
+              "rotation": 0,
+              "alpha": 1,
+              "tint": 16777215,
+              "anchorX": 0.4074074074074074,
+              "anchorY": 0.46
+            }
+          ]
+        },
+        "dynamicFx": {
+          "particles": 27,
+          "peakParticles": 27,
+          "created": 80,
+          "cap": 240,
+          "flashes": 1,
+          "rings": 1,
+          "scorches": 0,
+          "words": 1,
+          "ghosts": 0,
+          "tracked": 0,
+          "eventsHandled": 31,
+          "hitAnchors": {
+            "NATIVE_IMPACT": 2,
+            "PROJECTILE_END": 0,
+            "BODY_SIDE": 0
+          },
+          "callout": null,
+          "banner": null,
+          "dim": false,
+          "camera": {
+            "zoom": 0.6731091710629669,
+            "x": -446.9602129803757,
+            "y": -133.2388643466815,
+            "centerX": 1140.1719750280786,
+            "centerY": 449.01908537271765,
+            "punch": 0.027855061621342405,
+            "trauma": 0.15919999999999998,
+            "focused": [],
+            "framedSlots": [
+              0,
+              3
+            ],
+            "framingBox": {
+              "left": 982.0046033710689,
+              "top": 326.73422222222223,
+              "right": 1257.212890625,
+              "bottom": 575.8203125
+            },
+            "total": 0.6731091710629669
+          },
+          "bodies": [
+            {
+              "slot": 0,
+              "x": 1085,
+              "groundY": 550,
+              "top": 336,
+              "width": 262
+            },
+            {
+              "slot": 3,
+              "x": 1145,
+              "groundY": 573,
+              "top": 404,
+              "width": 175
+            }
+          ],
+          "director": {
+            "zoom": 0.6548677884615385,
+            "cx": 1140.077052097017,
+            "cy": 449.11901054518273,
+            "punch": 0.027855061621342405,
+            "trauma": 0.15919999999999998,
+            "stages": []
+          }
+        },
+        "groundShadows": {
+          "candidate": true,
+          "approximate": true,
+          "disposed": false,
+          "bakedPoses": 256,
+          "cacheEntries": 0,
+          "created": 512,
+          "released": 0,
+          "generationMs": 0,
+          "maxGenerationMs": 0,
+          "rotatedFallback": "EXISTING_CHEAP_BLOB",
+          "fallbacks": [],
+          "seenFrames": [],
+          "actors": [],
+          "receiver": "AUTHOR_RECEIVER_INTERSECT_CAMERA_DEPTH_Z0_0.08_WORLD_UNITS",
+          "fieldId": "field_bm04_01",
+          "assetRoot": "assets/production/battle/stage-review-20261007/fields/field_bm04_01/"
+        },
+        "characters": [
+          {
+            "slot": 0,
+            "speciesId": "species-189",
+            "entityId": "m503_warglaymon",
+            "rendered": true,
+            "position": {
+              "x": 1138.78571448218,
+              "y": 541.376
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m503_warglaymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 3,
+              "frameIndex": 0,
+              "cell": 6,
+              "texture": "m503_warglaymon/main/cell_006",
+              "elapsedQ12": 0,
+              "active": 1,
+              "playMode": 2,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  224,
+                  288
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -22.5,
+                  -56,
+                  37.25,
+                  -0.25
+                ]
+              },
+              "baseBounds": [
+                -19.75,
+                -51.25,
+                45.75,
+                2.25
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          },
+          {
+            "slot": 3,
+            "speciesId": "species-195",
+            "entityId": "m509_shinegraymon",
+            "rendered": true,
+            "position": {
+              "x": 1100.212890625,
+              "y": 565.8203125
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m509_shinegraymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 1,
+              "cell": 14,
+              "texture": "m509_shinegraymon/main/cell_014",
+              "elapsedQ12": 8192,
+              "active": 1,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  192,
+                  320
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -25,
+                  -40.25,
+                  39.25,
+                  2.5
+                ]
+              },
+              "baseBounds": [
+                -10.75,
+                -40.5,
+                33,
+                1.75
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          }
+        ],
+        "art": {
+          "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+          "role": "LICENSED_PIXEL_RUNTIME",
+          "promoted": true,
+          "fieldId": "field_bm04_01",
+          "diagnostics": {
+            "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+            "fieldId": "field_bm04_01",
+            "frameCount": 1,
+            "frameIndex": 0,
+            "worldWidthPx": 1664,
+            "worldHeightPx": 1088,
+            "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+            "disposed": false,
+            "ambient": "BM04_LAGOON_R2",
+            "quality": "high",
+            "reducedMotion": false,
+            "layers": {
+              "caustics": 2,
+              "sea": false,
+              "foamRegions": 3,
+              "canopies": 5,
+              "boundary": true,
+              "iceStates": false,
+              "snow": 0
+            },
+            "live": {
+              "ripples": 1,
+              "charged": 0,
+              "arcs": 0,
+              "swell": false,
+              "iceCells": 0,
+              "openCells": 0,
+              "bursts": 0
+            }
+          }
+        }
+      },
+      "canvas": {
+        "x": 0,
+        "y": 50,
+        "width": 641,
+        "height": 338,
+        "right": 641,
+        "bottom": 388
+      },
+      "field": {
+        "x": 0,
+        "y": 48,
+        "width": 641.453125,
+        "height": 342,
+        "right": 641.453125,
+        "bottom": 390
+      },
+      "clock": {
+        "x": 641.453125,
+        "y": 48,
+        "width": 202.546875,
+        "height": 32,
+        "right": 844,
+        "bottom": 80
+      },
+      "opponents": {
+        "x": 641.453125,
+        "y": 80,
+        "width": 202.546875,
+        "height": 110.703125,
+        "right": 844,
+        "bottom": 190.703125
+      },
+      "players": {
+        "x": 641.453125,
+        "y": 190.703125,
+        "width": 202.546875,
+        "height": 110.71875,
+        "right": 844,
+        "bottom": 301.421875
+      },
+      "log": {
+        "x": 641.453125,
+        "y": 301.421875,
+        "width": 202.546875,
+        "height": 88.578125,
+        "right": 844,
+        "bottom": 390
+      },
+      "sameMatch": true,
+      "sameApp": true,
+      "sameTicker": true,
+      "overflow": false,
+      "sceneLabels": [
+        "Graphics",
+        "battle field camera",
+        "battle fx screen",
+        "Graphics",
+        "Graphics"
+      ],
+      "layout": {
+        "rows": "32px 110.703px 110.719px 88.5781px",
+        "alignContent": "safe center",
+        "shellTop": 48,
+        "shellBottom": 390,
+        "logHeight": 88.578125,
+        "blankBelowLogContent": 12.578125,
+        "centerDelta": 0,
+        "url": "http://127.0.0.1:8879/championship.html?gateMode=fallback&battleReview=bm04-lagoon-r2"
+      },
+      "mapBounds": {
+        "left": -446.9602129803757,
+        "top": -133.2388643466815,
+        "right": 673.0934476684013,
+        "bottom": 599.1039137698265
+      },
+      "alignment": [
+        {
+          "slot": 0,
+          "localError": 0.080078125,
+          "screenError": 0
+        },
+        {
+          "slot": 3,
+          "localError": 0.287109375,
+          "screenError": 0
+        }
+      ],
+      "exitDialogAndResume": true,
+      "screenshot": "final-6-844x390.png"
+    },
+    {
+      "screen": "BATTLE_FIELD",
+      "viewport": [
+        390,
+        844
+      ],
+      "placement": {
+        "zoom": 0.7440513318317108,
+        "x": -626.4730611290303,
+        "y": -85.29791918441839,
+        "anchorX": -7.4223530450468616,
+        "anchorY": 319.4660053320323,
+        "centerX": 1104.0542849466074,
+        "centerY": 431.82224859868865,
+        "artRect": {
+          "x": 0,
+          "y": 0,
+          "width": 1664,
+          "height": 1088
+        },
+        "width": 390,
+        "height": 472,
+        "nativeScale": 4,
+        "reducedMotion": false
+      },
+      "diagnostics": {
+        "scene": "VS5_BATTLE_FIELD",
+        "contractVersion": "championship-modern-battle-field-presentation",
+        "frames": 370,
+        "pendingFrames": 0.03169441796533867,
+        "specialPrelude": null,
+        "focusPlacement": null,
+        "arena": "BATTLE_ISLAND",
+        "outcome": {
+          "ended": false,
+          "reason": "RUNNING",
+          "verdict": "RUNNING",
+          "winningTeam": null
+        },
+        "viewport": {
+          "width": 390,
+          "height": 472
+        },
+        "effectSprites": {
+          "assetId": "art:public:battle-effects:v1",
+          "active": 1,
+          "created": 3,
+          "released": 2,
+          "visible": 1,
+          "missingCells": [],
+          "seenCells": [
+            "1:118",
+            "1:117"
+          ],
+          "sprites": [
+            {
+              "id": 3,
+              "bankId": 1,
+              "cell": 117,
+              "visible": true,
+              "x": 1085.240234375,
+              "y": 458.119140625,
+              "depth": 558.119140625,
+              "scaleX": 1.99951171875,
+              "scaleY": 1.99951171875,
+              "rotation": 0,
+              "alpha": 1,
+              "tint": 16777215,
+              "anchorX": 0.4074074074074074,
+              "anchorY": 0.46
+            }
+          ]
+        },
+        "dynamicFx": {
+          "particles": 27,
+          "peakParticles": 28,
+          "created": 82,
+          "cap": 240,
+          "flashes": 0,
+          "rings": 1,
+          "scorches": 0,
+          "words": 1,
+          "ghosts": 2,
+          "tracked": 0,
+          "eventsHandled": 32,
+          "hitAnchors": {
+            "NATIVE_IMPACT": 2,
+            "PROJECTILE_END": 0,
+            "BODY_SIDE": 0
+          },
+          "callout": null,
+          "banner": null,
+          "dim": false,
+          "camera": {
+            "zoom": 0.7440513318317108,
+            "x": -626.4730611290303,
+            "y": -85.29791918441839,
+            "centerX": 1104.0542849466074,
+            "centerY": 431.82224859868865,
+            "punch": 0.008883161805709363,
+            "trauma": 0,
+            "focused": [],
+            "framedSlots": [
+              0,
+              3
+            ],
+            "framingBox": {
+              "left": 852.7275390625,
+              "top": 286.4716796875,
+              "right": 1233.82421875,
+              "bottom": 566.888671875
+            },
+            "total": 0.7440513318317108
+          },
+          "bodies": [
+            {
+              "slot": 0,
+              "x": 974,
+              "groundY": 508,
+              "top": 294,
+              "width": 262
+            },
+            {
+              "slot": 3,
+              "x": 1121,
+              "groundY": 564,
+              "top": 395,
+              "width": 175
+            }
+          ],
+          "director": {
+            "zoom": 0.7375,
+            "cx": 1104.194714282579,
+            "cy": 431.82224859868865,
+            "punch": 0.008883161805709363,
+            "trauma": 0,
+            "stages": []
+          }
+        },
+        "groundShadows": {
+          "candidate": true,
+          "approximate": true,
+          "disposed": false,
+          "bakedPoses": 256,
+          "cacheEntries": 0,
+          "created": 512,
+          "released": 0,
+          "generationMs": 0,
+          "maxGenerationMs": 0,
+          "rotatedFallback": "EXISTING_CHEAP_BLOB",
+          "fallbacks": [],
+          "seenFrames": [],
+          "actors": [],
+          "receiver": "AUTHOR_RECEIVER_INTERSECT_CAMERA_DEPTH_Z0_0.08_WORLD_UNITS",
+          "fieldId": "field_bm04_01",
+          "assetRoot": "assets/production/battle/stage-review-20261007/fields/field_bm04_01/"
+        },
+        "characters": [
+          {
+            "slot": 0,
+            "speciesId": "species-189",
+            "entityId": "m503_warglaymon",
+            "rendered": true,
+            "position": {
+              "x": 1025.7275390625,
+              "y": 499.4716796875
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m503_warglaymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 6,
+              "frameIndex": 0,
+              "cell": 10,
+              "texture": "m503_warglaymon/main/cell_010",
+              "elapsedQ12": 20480,
+              "active": 1,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  224,
+                  288
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -29.25,
+                  -53.25,
+                  43.25,
+                  1
+                ]
+              },
+              "baseBounds": [
+                -19.75,
+                -51.25,
+                45.75,
+                2.25
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          },
+          {
+            "slot": 3,
+            "speciesId": "species-195",
+            "entityId": "m509_shinegraymon",
+            "rendered": true,
+            "position": {
+              "x": 1076.82421875,
+              "y": 556.888671875
+            },
+            "alpha": 1,
+            "tint": 16777215,
+            "nativeSizing": {
+              "texture": "m509_shinegraymon/main/cell_000",
+              "packedPixelsPerNativePixel": 4,
+              "evidence": "COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY"
+            },
+            "animation": {
+              "sequenceId": 8,
+              "frameIndex": 1,
+              "cell": 14,
+              "texture": "m509_shinegraymon/main/cell_014",
+              "elapsedQ12": 28672,
+              "active": 1,
+              "playMode": 1,
+              "geometry": {
+                "blank": false,
+                "scale": 4,
+                "origin": [
+                  192,
+                  320
+                ],
+                "sourceSize": [
+                  512,
+                  512
+                ],
+                "nativeBounds": [
+                  -25,
+                  -40.25,
+                  39.25,
+                  2.5
+                ]
+              },
+              "baseBounds": [
+                -10.75,
+                -40.5,
+                33,
+                1.75
+              ],
+              "reducedMotion": false,
+              "originalTimingParity": false
+            },
+            "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL"
+          }
+        ],
+        "art": {
+          "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+          "role": "LICENSED_PIXEL_RUNTIME",
+          "promoted": true,
+          "fieldId": "field_bm04_01",
+          "diagnostics": {
+            "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+            "fieldId": "field_bm04_01",
+            "frameCount": 1,
+            "frameIndex": 0,
+            "worldWidthPx": 1664,
+            "worldHeightPx": 1088,
+            "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+            "disposed": false,
+            "ambient": "BM04_LAGOON_R2",
+            "quality": "high",
+            "reducedMotion": false,
+            "layers": {
+              "caustics": 2,
+              "sea": false,
+              "foamRegions": 3,
+              "canopies": 5,
+              "boundary": true,
+              "iceStates": false,
+              "snow": 0
+            },
+            "live": {
+              "ripples": 2,
+              "charged": 0,
+              "arcs": 0,
+              "swell": false,
+              "iceCells": 0,
+              "openCells": 0,
+              "bursts": 0
+            }
+          }
+        }
+      },
+      "canvas": {
+        "x": 0,
+        "y": 195.421875,
+        "width": 390,
+        "height": 472,
+        "right": 390,
+        "bottom": 667.421875
+      },
+      "field": {
+        "x": 0,
+        "y": 193.421875,
+        "width": 390,
+        "height": 475.796875,
+        "right": 390,
+        "bottom": 669.21875
+      },
+      "clock": {
+        "x": 0,
+        "y": 105.53125,
+        "width": 390,
+        "height": 32,
+        "right": 390,
+        "bottom": 137.53125
+      },
+      "opponents": {
+        "x": 0,
+        "y": 137.53125,
+        "width": 390,
+        "height": 55.890625,
+        "right": 390,
+        "bottom": 193.421875
+      },
+      "players": {
+        "x": 0,
+        "y": 669.21875,
+        "width": 390,
+        "height": 49.25,
+        "right": 390,
+        "bottom": 718.46875
+      },
+      "log": {
+        "x": 0,
+        "y": 718.46875,
+        "width": 390,
+        "height": 68,
+        "right": 390,
+        "bottom": 786.46875
+      },
+      "sameMatch": true,
+      "sameApp": true,
+      "sameTicker": true,
+      "overflow": false,
+      "sceneLabels": [
+        "Graphics",
+        "battle field camera",
+        "battle fx screen",
+        "Graphics",
+        "Graphics"
+      ],
+      "layout": {
+        "rows": "32px 55.8906px 475.797px 49.25px 68px",
+        "alignContent": "safe center",
+        "shellTop": 48,
+        "shellBottom": 844,
+        "logHeight": 68,
+        "blankBelowLogContent": 8,
+        "centerDelta": 0,
+        "url": "http://127.0.0.1:8879/championship.html?gateMode=fallback&battleReview=bm04-lagoon-r2"
+      },
+      "mapBounds": {
+        "left": -626.4730611290303,
+        "top": -85.29791918441839,
+        "right": 611.6283550389365,
+        "bottom": 724.2299298484829
+      },
+      "alignment": [
+        {
+          "slot": 0,
+          "localError": 0.4716796875,
+          "screenError": 0
+        },
+        {
+          "slot": 3,
+          "localError": 0.32421875,
+          "screenError": 0
+        }
+      ],
+      "exitDialogAndResume": true,
+      "screenshot": "final-7-390x844.png"
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "physicalDevice": false,
+  "publication": "NOT_PUBLISHED",
+  "syntheticSafeArea": {
+    "x": 30,
+    "y": 68,
+    "right": 611.453125,
+    "bottom": 374
+  },
+  "liveFrames": [
+    {
+      "special": false,
+      "fx": 35,
+      "zoom": 0.593677978271497,
+      "left": -305.93058095857964,
+      "top": -83.92931017081139,
+      "right": 681.9495748851914,
+      "bottom": 561.9923301885774,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 38,
+      "zoom": 0.5935759295805192,
+      "left": -341.37928052692337,
+      "top": -111.18817682730713,
+      "right": 646.3310662950605,
+      "bottom": 534.6224345562978,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 43,
+      "zoom": 0.5935700686569035,
+      "left": -393.2208526630219,
+      "top": -139.56933573289842,
+      "right": 594.4797415820656,
+      "bottom": 506.23489896581265,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 47,
+      "zoom": 0.6001949966120569,
+      "left": -412.0875551189,
+      "top": -191.13485714049654,
+      "right": 586.6369192435626,
+      "bottom": 461.87729917342136,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 48,
+      "zoom": 0.5939502190136328,
+      "left": -406.730679788815,
+      "top": -237.92963380943365,
+      "right": 581.6024846498699,
+      "bottom": 408.28820447739884,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 50,
+      "zoom": 0.5935915650794115,
+      "left": -406.6525874192995,
+      "top": -235.03872646552537,
+      "right": 581.0837768728412,
+      "bottom": 410.78889634087426,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 52,
+      "zoom": 0.5988424873329113,
+      "left": -412.8803883944023,
+      "top": -215.45329296500609,
+      "right": 583.5935105275622,
+      "bottom": 436.08733325320145,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 53,
+      "zoom": 0.5938725408631477,
+      "left": -407.04125041447276,
+      "top": -175.66166535808242,
+      "right": 581.162657581805,
+      "bottom": 470.4716591010222,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 58,
+      "zoom": 0.5935871038197693,
+      "left": -406.7178916274472,
+      "top": -179.58914937594932,
+      "right": 581.0110491286489,
+      "bottom": 466.23361957995974,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 60,
+      "zoom": 0.5977650984508668,
+      "left": -411.6274032651753,
+      "top": -206.1944722022772,
+      "right": 583.053720557067,
+      "bottom": 444.1739549122658,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 61,
+      "zoom": 0.593810663597682,
+      "left": -406.9829411257243,
+      "top": -224.0360583960549,
+      "right": 581.1180031008184,
+      "bottom": 422.02994359822304,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 64,
+      "zoom": 0.5935835500463404,
+      "left": -406.7162407936356,
+      "top": -225.27884496255626,
+      "right": 581.0067864834749,
+      "bottom": 420.5400574878621,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 67,
+      "zoom": 0.5935705063202157,
+      "left": -406.70093112498296,
+      "top": -264.41016266339614,
+      "right": 581.0003913918559,
+      "bottom": 381.39454821299853,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 69,
+      "zoom": 0.5935697571848594,
+      "left": -386.74440305184066,
+      "top": -297.20775532346755,
+      "right": 600.9556729037654,
+      "bottom": 348.59614049365945,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 72,
+      "zoom": 0.5935697141600537,
+      "left": -401.12450568368297,
+      "top": -276.5883028072243,
+      "right": 586.5754986786463,
+      "bottom": 369.2155461989141,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 75,
+      "zoom": 0.5935697116890264,
+      "left": -405.7205353060268,
+      "top": -221.60762879940705,
+      "right": 581.9794649445131,
+      "bottom": 424.19621751825366,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 80,
+      "zoom": 0.5935697115471088,
+      "left": -406.52793438643334,
+      "top": -194.79329502104235,
+      "right": 581.1720656279557,
+      "bottom": 451.01055114221197,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 82,
+      "zoom": 0.5595252007288761,
+      "left": -330.5775335567297,
+      "top": -170.3327040597565,
+      "right": 600.4724004561202,
+      "bottom": 438.4307143332607,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 83,
+      "zoom": 0.4537338869941541,
+      "left": -161.34348252809343,
+      "top": -102.74109497606244,
+      "right": 593.6697054301791,
+      "bottom": 390.9213740735772,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 87,
+      "zoom": 0.5535060770336129,
+      "left": -339.1701422134912,
+      "top": -186.01310419269976,
+      "right": 581.8639699704406,
+      "bottom": 416.2015076198711,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 90,
+      "zoom": 0.5820912880731687,
+      "left": -387.59990335375255,
+      "top": -227.70457591432051,
+      "right": 581.0000000000001,
+      "bottom": 405.610745509287,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 98,
+      "zoom": 0.6067194904023046,
+      "left": -371.7798467855433,
+      "top": -258.6689372066544,
+      "right": 637.8013852438914,
+      "bottom": 401.441868351053,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 100,
+      "zoom": 0.5935753585406729,
+      "left": -284.1487043581095,
+      "top": -242.7943268843709,
+      "right": 703.5606922535702,
+      "bottom": 403.0156632078812,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 102,
+      "zoom": 0.5933542643472504,
+      "left": -242.6336256632187,
+      "top": -229.52021207898161,
+      "right": 744.7078702106058,
+      "bottom": 416.0492275308267,
+      "width": 581,
+      "height": 302
+    },
+    {
+      "special": false,
+      "fx": 106,
+      "zoom": 0.5934955015920711,
+      "left": -200.06391342702221,
+      "top": -182.24032853254505,
+      "right": 787.512601222184,
+      "bottom": 463.48277719962834,
+      "width": 581,
+      "height": 302
+    }
+  ],
+  "cameraAudit": {
+    "frames": 1021,
+    "violations": [],
+    "primaryViolations": [],
+    "byViewport": {
+      "390x472": {
+        "frames": 342,
+        "minZoom": 0.4338235294117647,
+        "maxZoom": 0.7538455236396342
+      },
+      "641x338": {
+        "frames": 18,
+        "minZoom": 0.6548732455984891,
+        "maxZoom": 0.6753176987698201
+      },
+      "1086x716": {
+        "frames": 9,
+        "minZoom": 1.1192590051774067,
+        "maxZoom": 1.120019964088787
+      },
+      "320x304": {
+        "frames": 10,
+        "minZoom": 0.4750689201494291,
+        "maxZoom": 0.47519277428724693
+      },
+      "400x268": {
+        "frames": 9,
+        "minZoom": 0.4187717222358693,
+        "maxZoom": 0.41880419681509473
+      },
+      "581x302": {
+        "frames": 633,
+        "minZoom": 0.4227738497504484,
+        "maxZoom": 0.6121054347248556
+      }
+    },
+    "minZoom": 0.4187717222358693,
+    "maxZoom": 1.120019964088787
+  },
+  "exitScreen": "RAISING_HOME"
+}

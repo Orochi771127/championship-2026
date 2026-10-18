@@ -7,6 +7,8 @@
 // battle clock are untouched. It advances on the presentation's elapsed time
 // handed in by the scene (the one Pixi ticker), never on its own clock.
 //
+// The ordinary battle scene uses boundedMap: cover with dynamic tracking.
+// Legacy focus framing remains available to bounded presentation callers.
 // Framing follows the action the way an arena broadcast does: the arena always
 // fills the field (no letterbox), the shot frames every fighter, and while a
 // move or a knockout is in focus it tightens on that pair. Hits add a short
@@ -36,7 +38,7 @@ export function battleFxUnionBox(boxes) {
  * The shot for one framing box: zoom and centre, clamped so the visible region
  * never leaves the arena. `art` is the arena rectangle in local coordinates.
  */
-export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boost = 0, responsiveLayout = false}) {
+export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boost = 0, responsiveLayout = false, boundedMap = false}) {
   const cover = Math.max(viewport.width / art.width, viewport.height / art.height);
   const maxZoom = cover * maxZoomFactor;
   let minimumZoom = cover;
@@ -47,8 +49,8 @@ export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boo
     const padX = width * 0.12 + 16, padTop = height * 0.12 + 28, padBottom = height * 0.08 + 12;
     const fit = Math.min(viewport.width / (width + padX * 2), viewport.height / (height + padTop + padBottom));
     // The wide host must fit the selected action, even when arena cover would
-    // cut off a tall group. Mirrored floor continuation remains presentation.
-    if (responsiveLayout) minimumZoom = Math.min(cover, fit);
+    // cut off a tall group. Space outside the art belongs to the stage backdrop.
+    if (responsiveLayout && !boundedMap) minimumZoom = Math.min(cover, fit);
     zoom = clamp(fit * (1 + boost), minimumZoom, maxZoom);
     want = {left: box.left - padX, right: box.right + padX, top: box.top - padTop, bottom: box.bottom + padBottom};
     cx = (want.left + want.right) / 2;
@@ -57,13 +59,13 @@ export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boo
   const place = z => {
     const halfW = viewport.width / (2 * z), halfH = viewport.height / (2 * z);
     // The original's movement can carry fighters past the arena picture; the
-    // shot follows them there (the scene continues the floor with mirrored
-    // arena copies). Without that need the arena fills the frame.
+    // legacy shot may follow them there. Ordinary battles use boundedMap
+    // and constrain the visible viewport to the real map.
     const over = {
-      left: want ? Math.min(Math.max(0, art.x - want.left), halfW) : 0,
-      right: want ? Math.min(Math.max(0, want.right - art.x - art.width), halfW) : 0,
-      top: want ? Math.min(Math.max(0, art.y - want.top), halfH) : 0,
-      bottom: want ? Math.min(Math.max(0, want.bottom - art.y - art.height), halfH) : 0
+      left: !boundedMap && want ? Math.min(Math.max(0, art.x - want.left), halfW) : 0,
+      right: !boundedMap && want ? Math.min(Math.max(0, want.right - art.x - art.width), halfW) : 0,
+      top: !boundedMap && want ? Math.min(Math.max(0, art.y - want.top), halfH) : 0,
+      bottom: !boundedMap && want ? Math.min(Math.max(0, want.bottom - art.y - art.height), halfH) : 0
     };
     return {...battleFxClampCentre({cx, cy, halfW, halfH, art, over}), halfW, halfH, over};
   };
@@ -87,12 +89,36 @@ export function battleFxClampCentre({cx, cy, halfW, halfH, art, over = {left: 0,
   return {x: lowX > highX ? (lowX + highX) / 2 : clamp(cx, lowX, highX), y: lowY > highY ? (lowY + highY) / 2 : clamp(cy, lowY, highY)};
 }
 
+/** Constrain the composed camera on every frame, including shake and native zoom. */
+export function clampBattleCameraToMap({viewport, art, transform, anchor = null, box = null}) {
+  const cover=Math.max(viewport.width/art.width,viewport.height/art.height);
+  const fit=box ? Math.min(Math.max(1,viewport.width-16)/Math.max(1,box.right-box.left),
+    Math.max(1,viewport.height-32)/Math.max(1,box.bottom-box.top)) : Infinity;
+  const zoom=Math.max(cover,Math.min(transform.zoom,fit));
+  const cx=(viewport.width/2-transform.x)/transform.zoom,cy=(viewport.height/2-transform.y)/transform.zoom;
+  const minX=viewport.width-(art.x+art.width)*zoom,maxX=-art.x*zoom;
+  const minY=viewport.height-(art.y+art.height)*zoom,maxY=-art.y*zoom;
+  let x=clamp(viewport.width/2-cx*zoom,minX,maxX),y=clamp(viewport.height/2-cy*zoom,minY,maxY);
+  if(box){
+    let lowX=Math.max(minX,8-box.left*zoom),highX=Math.min(maxX,viewport.width-8-box.right*zoom);
+    let lowY=Math.max(minY,24-box.top*zoom),highY=Math.min(maxY,viewport.height-8-box.bottom*zoom);
+    // Near cover capacity, give up padding before clipping a body that can fit.
+    if(lowX>highX){lowX=Math.max(minX,-box.left*zoom);highX=Math.min(maxX,viewport.width-box.right*zoom);}
+    if(lowY>highY){lowY=Math.max(minY,-box.top*zoom);highY=Math.min(maxY,viewport.height-box.bottom*zoom);}
+    if(lowX<=highX)x=clamp(x,lowX,highX);
+    if(lowY<=highY)y=clamp(y,lowY,highY);
+  }
+  return Object.freeze({...transform,zoom,x,y,
+    centerX:(viewport.width/2-x)/zoom,centerY:(viewport.height/2-y)/zoom,
+    ...(anchor ? {anchorX:anchor.x*zoom+x,anchorY:anchor.y*zoom+y} : {})});
+}
+
 // Smooth, deterministic noise for shake (no Math.random on the ticker).
 function shakeNoise(t, seed) {
   return Math.sin(t * 0.037 + seed) * 0.55 + Math.sin(t * 0.061 + seed * 2.3) * 0.3 + Math.sin(t * 0.113 + seed * 4.1) * 0.15;
 }
 
-export function createBattleFxCamera({reducedMotion = false, responsiveLayout = false} = {}) {
+export function createBattleFxCamera({reducedMotion = false, responsiveLayout = false, fullArena = false, boundedMap = false} = {}) {
   let zoom = null, cx = 0, cy = 0, over = {left: 0, right: 0, top: 0, bottom: 0};
   let punch = 0, trauma = 0, time = 0;
   let lastImpact = -Infinity, lastImpactStrength = 0;
@@ -105,7 +131,7 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
    * one. A running signature shot (boost >= 0.25) is not cut by a lesser one.
    */
   function sequence(list) {
-    if (reducedMotion || !Array.isArray(list) || !list.length) return;
+    if (fullArena || reducedMotion || !Array.isArray(list) || !list.length) return;
     const active = current();
     if (active && active.priority > 0 && (list[0].boost ?? 0) < 0.25) return;
     let start = time;
@@ -121,13 +147,13 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
     /** One-stage shot on these slots for durationMs, tightened by boost. */
     focus(slots, durationMs, boost = 0.12) { sequence([{slots, durationMs, boost}]); },
     /** A short zoom punch, e.g. 0.04 for a solid hit. */
-    punch(amount) { if (!reducedMotion) punch = Math.min(0.14, punch + amount); },
+    punch(amount) { if (!fullArena && !reducedMotion) punch = Math.min(0.14, punch + amount); },
     /** Trauma in 0..1; displacement grows with its square. */
-    shake(amount) { if (!reducedMotion) trauma = Math.min(1, trauma + amount); },
+    shake(amount) { if (!fullArena && !reducedMotion) trauma = Math.min(1, trauma + amount); },
     /** A burst of ordinary hits gets one camera response; a heavy hit can override it. */
     impact(tier) {
       const strength = tier === 'heavy' ? 2 : tier === 'medium' ? 1 : 0;
-      if (reducedMotion || !strength || (time - lastImpact < 180 && strength <= lastImpactStrength)) return false;
+      if (fullArena || reducedMotion || !strength || (time - lastImpact < 180 && strength <= lastImpactStrength)) return false;
       lastImpact = time; lastImpactStrength = strength;
       punch = Math.min(0.14, punch + (strength === 2 ? 0.07 : 0.035));
       trauma = Math.min(1, trauma + (strength === 2 ? 0.5 : 0.22));
@@ -136,16 +162,53 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
     /** points are live projectiles: the shot follows a move to its target. */
     update({dtMs = 16.7, viewport, art, subjects, points = []}) {
       time += Math.max(0, dtMs);
+      if (fullArena) {
+        // Keep the complete authored map and any edge-crossing bodies in one
+        // contain transform. Recompute immediately on resize, with no stale
+        // camera tween, focus zoom or impact shake that could crop the map.
+        const bounds = battleFxUnionBox([
+          {left:art.x, top:art.y, right:art.x+art.width, bottom:art.y+art.height},
+          ...subjects.filter(Boolean).map(s => ({left:s.left-8, top:s.top-28, right:s.right+8, bottom:s.bottom+12})),
+          ...points.map(p => ({left:p.x-12, top:p.y-12, right:p.x+12, bottom:p.y+12}))
+        ]);
+        zoom = Math.min(viewport.width / Math.max(1, bounds.right-bounds.left),
+          viewport.height / Math.max(1, bounds.bottom-bounds.top));
+        cx = (bounds.left+bounds.right)/2; cy = (bounds.top+bounds.bottom)/2;
+        return Object.freeze({zoom, x:viewport.width/2-zoom*cx, y:viewport.height/2-zoom*cy,
+          centerX:cx, centerY:cy, punch:0, trauma:0, focused:[]});
+      }
       const stage = current();
-      const standing = subjects.filter(s => s && !s.down);
-      let framing = stage?.slots ? subjects.filter(s => s && stage.slots.has(s.slot) && (stage.includeDown || !s.down)) : [];
+      const cameraSubjects=boundedMap ? subjects.map(s=>s?.framingBounds?{...s,...s.framingBounds}:s) : subjects;
+      const standing = cameraSubjects.filter(s => s && !s.down);
+      let framing = stage?.slots ? cameraSubjects.filter(s => s && stage.slots.has(s.slot) && (stage.includeDown || !s.down)) : [];
       const focused = framing.map(s => s.slot);
-      if (!framing.length) framing = standing.length ? standing : subjects.filter(Boolean);
+      if (!framing.length) {
+        framing = standing.length ? standing : cameraSubjects.filter(Boolean);
+        if (boundedMap && framing.length > 2) {
+          const all = battleFxUnionBox(framing), cover = Math.max(viewport.width/art.width, viewport.height/art.height);
+          // When scattered groups cannot share the frame, follow the active
+          // engagement or nearest opposing pair. Other actors keep real positions.
+          if (all && ((all.right-all.left)*cover>viewport.width || (all.bottom-all.top)*cover>viewport.height)) {
+            let pair = null, score = Infinity;
+            for (const a of standing) for (const b of standing) if (a.slot<b.slot && a.team!==b.team) {
+              const distance = Math.hypot((a.left+a.right-b.left-b.right)/2, a.bottom-b.bottom)
+                + (a.engaged||b.engaged ? 0 : art.width+art.height);
+              if (distance<score) {score=distance;pair=[a,b];}
+            }
+            if (pair) framing=pair;
+          }
+        }
+      }
+      if(boundedMap&&framing.length>1){
+        const group=battleFxUnionBox(framing),cover=Math.max(viewport.width/art.width,viewport.height/art.height);
+        if(group&&((group.right-group.left)*cover>viewport.width || (group.bottom-group.top)*cover>viewport.height))
+          framing=[framing.find(s=>s.engaged)??framing[0]];
+      }
       // A close push-in on one fighter holds; otherwise a live shot widens the frame to its path.
       const follow = stage && stage.boost >= 0.3 ? [] : points.map(p => ({left: p.x - 12, right: p.x + 12, top: p.y - 12, bottom: p.y + 12}));
       const shot = battleFxFrameShot({viewport, art, box: battleFxUnionBox([...framing, ...follow]),
         // An ordinary shot stays within 1.7x cover; a staged push-in may reach 2.3x.
-        boost: focused.length ? stage.boost : 0, responsiveLayout, maxZoomFactor: reducedMotion ? 1.3 : focused.length ? 2.3 : 1.7});
+        boost: focused.length ? stage.boost : 0, responsiveLayout, boundedMap, maxZoomFactor: reducedMotion ? 1.3 : focused.length ? 2.3 : 1.7});
       const resized = responsiveLayout && previousViewport !== null
         && (previousViewport.width !== viewport.width || previousViewport.height !== viewport.height);
       previousViewport = {width:viewport.width, height:viewport.height};
@@ -164,6 +227,7 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
       }
       punch *= 1 - battleFxApproach(dtMs, 140);
       trauma = Math.max(0, trauma - dtMs / 1000 * 1.9);
+      if (boundedMap) zoom = Math.max(shot.cover, zoom);
       const total = zoom * (1 + punch);
       // Re-clamp after the punch so a punched frame looks no further past an
       // arena edge than the shot needed.
@@ -173,8 +237,9 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
       const {x: px, y: py} = battleFxClampCentre({cx, cy, halfW, halfH, art, over: limit});
       const amplitude = Math.min(viewport.width, viewport.height) * 0.022 * trauma * trauma;
       const sx = amplitude * shakeNoise(time, 1.7), sy = amplitude * shakeNoise(time, 5.3);
-      return Object.freeze({zoom: total, x: viewport.width / 2 - total * px + sx, y: viewport.height / 2 - total * py + sy,
-        centerX: px, centerY: py, punch, trauma, focused});
+      const result = {zoom: total, x: viewport.width / 2 - total * px + sx, y: viewport.height / 2 - total * py + sy,
+        centerX: px, centerY: py, punch, trauma, focused, framedSlots:framing.map(s=>s.slot),framingBox:battleFxUnionBox(framing)};
+      return boundedMap ? clampBattleCameraToMap({viewport,art,transform:result,box:result.framingBox}) : Object.freeze(result);
     },
     getState: () => Object.freeze({zoom, cx, cy, punch, trauma,
       stages: stages.map(s => ({slots: s.slots ? [...s.slots] : null, boost: s.boost, endMs: s.endMs}))})
