@@ -131,7 +131,8 @@ test('95 display renditions and thumbnails preserve exact approved source identi
   if(type==='VP8L'){const bits=bytes.readUInt32LE(start+1);return [(bits&16383)+1,((bits>>>14)&16383)+1];}offset=start+n+(n%2);
  }throw Error('WEBP_DIMENSIONS_MISSING');};
  const replacement=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-215-20261018/manifest.json','utf8'));
- const superseded=[...replacement.supersededEntries];
+ const replacementFlowers=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-054-059-20261018/manifest.json','utf8'));
+ const superseded=[...replacement.supersededEntries,...replacementFlowers.supersededEntries];
  for(const row of recipe.rows){
   const master=masters.find(e=>e.speciesIndex===row.speciesIndex),liveHero=heroes.find(e=>e.speciesIndex===row.speciesIndex),hero=superseded.find(e=>e.speciesIndex===row.speciesIndex)??liveHero;
   for(const field of ['speciesId','displayCode'])assert.equal(hero[field],master[field]);

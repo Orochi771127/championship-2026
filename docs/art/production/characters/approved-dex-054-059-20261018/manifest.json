@@ -1,0 +1,117 @@
+{
+  "scope": "EXACT_OWNER_APPROVED_REPLACEMENT_ONLY_054-059",
+  "baseCommit": "412c5ea988961226ebf8f523b26064e4d429c3f9",
+  "previousPublicHeroes": {
+    "count": 108,
+    "sha256": "097febb6211b416e5febc06948ac042653aef8741c3b834813cffc3f1e97786d"
+  },
+  "supersededEntries": [
+    {
+      "speciesIndex": 54,
+      "speciesId": "species-054",
+      "displayCode": "GR28",
+      "src": "assets/production/database-display-20261018/species-054.display.4e351684b6f41e20.webp",
+      "width": 864,
+      "height": 864,
+      "sha256": "4e351684b6f41e20a018cf33216bf212a691a2f8345f542392767f09bc2e6ea1",
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-054.thumbnail.0a2537d044543156.webp",
+        "width": 128,
+        "height": 128,
+        "sha256": "0a2537d044543156c104232311765f00aa1722e0df6730a4230a624507413f31"
+      }
+    },
+    {
+      "speciesIndex": 59,
+      "speciesId": "species-059",
+      "displayCode": "GR34",
+      "src": "assets/production/database-display-20261018/species-059.display.de461f2a2d8818cf.webp",
+      "width": 864,
+      "height": 864,
+      "sha256": "de461f2a2d8818cf7457b092200e40744118c3a7b408c0b6b47d37bfd83c9ea5",
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-059.thumbnail.a522ffa2325c06df.webp",
+        "width": 128,
+        "height": 128,
+        "sha256": "a522ffa2325c06dff23102b9a12c368af0483c25a4c56c1770ddcb8e036c6d93"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "speciesIndex": 54,
+      "speciesId": "species-054",
+      "displayCode": "GR28",
+      "masterLibraryId": "libfile_32253614b720819182a689bfee238b53",
+      "masterSourceFileId": "file_000000002b6c8230b5e2a5a79e79cdc1",
+      "masterFile": "exec-c14764a0-99a4-4fd0-9709-d39eee749f88.png",
+      "masterSha256": "7f5f2afa9f34d17881e982a6f824a45a8b4fa9552f46ae5fd0809df41ee49f4e",
+      "selectedForm": "BOLD_PURPLE_BLUE_MORNING_GLORY_TEAL_LEMON",
+      "approval": [
+        "Sentinel_e70fd1876fc08191a111dc79edb30a9e",
+        "Sentinel_bffbf535de208191b41d92db282efee7"
+      ],
+      "display": {
+        "src": "assets/production/database-display-20261018/species-054.display.862dd05e6371806b.webp",
+        "width": 1024,
+        "height": 1024,
+        "sha256": "862dd05e6371806b06f360e832d08a3b8e92ffa90e6ecdd9902806c7d22dcdcc",
+        "bytes": 203208,
+        "libraryFileId": "libfile_319e2629196c8191be5a8a3b42269035",
+        "sourceFileId": "file_00000000393c81fd93c7465b3bcd535d",
+        "inputSha256": "862dd05e6371806b06f360e832d08a3b8e92ffa90e6ecdd9902806c7d22dcdcc",
+        "operation": "EXACT_APPROVED_BYTES"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-054.thumbnail.4ad2692c6f79115c.webp",
+        "width": 128,
+        "height": 128,
+        "sha256": "4ad2692c6f79115c5ffa66840b2ceceedffa78af40e9b3f5298477244f40f0f6",
+        "bytes": 24894,
+        "libraryFileId": "libfile_ea291e8496c881919faf8b0595c04d68",
+        "sourceFileId": "file_0000000040dc81f6b3e0e1b2075e5a75",
+        "inputSha256": "38ef6546dac78ca7f08780f5951eb99bd0dd7035e5b98a3bb707e93930604398",
+        "operation": "CONTAIN_128_LOSSLESS_WEBP"
+      }
+    },
+    {
+      "speciesIndex": 59,
+      "speciesId": "species-059",
+      "displayCode": "GR34",
+      "masterLibraryId": "libfile_d783e909f2688191aacadbbf69ef4837",
+      "masterSourceFileId": "file_0000000035008230931e06a8d62e7867",
+      "masterFile": "exec-a5097583-c0c3-416c-91e9-5645855571c5.png",
+      "masterSha256": "7b64a5323d4091c341e3039f6028ccf57a37d465af9f703098e3fed390d8f884",
+      "selectedForm": "BOLD_RED_SPIDER_LILY_DARK_PURPLE_TEAL",
+      "approval": [
+        "Sentinel_e70fd1876fc08191a111dc79edb30a9e",
+        "Sentinel_bffbf535de208191b41d92db282efee7"
+      ],
+      "display": {
+        "src": "assets/production/database-display-20261018/species-059.display.d65af3374e14305c.webp",
+        "width": 1024,
+        "height": 1024,
+        "sha256": "d65af3374e14305c5fff2de0cb93aeb711d8d4c018454ce034d205582eded1bd",
+        "bytes": 207868,
+        "libraryFileId": "libfile_84c29a2db2348191a2db5aa1fcde532a",
+        "sourceFileId": "file_000000007fc88230bb222a749eee8e3e",
+        "inputSha256": "d65af3374e14305c5fff2de0cb93aeb711d8d4c018454ce034d205582eded1bd",
+        "operation": "EXACT_APPROVED_BYTES"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-059.thumbnail.133ac3f1f9d74ca7.webp",
+        "width": 128,
+        "height": 128,
+        "sha256": "133ac3f1f9d74ca792af4230837e61e15ea1f559b4960f19d8866246f6345987",
+        "bytes": 22020,
+        "libraryFileId": "libfile_0f08ec6882688191a7b13fe17a6d95f7",
+        "sourceFileId": "file_000000002ef081fdb2d5f82165183898",
+        "inputSha256": "d4b589ac543728c475925c7213b17be596946f11645200d1c8140db4104e3430",
+        "operation": "CONTAIN_128_LOSSLESS_WEBP"
+      }
+    }
+  ],
+  "approvalBoundary": "New exact approval after broad publication denial; other candidates remain held. Separate 215 and 054/059 commits. Stop the denied action on any new rejection; no alternate publishing path.",
+  "masterPreservation": "Exact master PNG retained in Library and isolated ignored source-masters with verified Library identity. Previous master/hero/thumbnail files, approvals and authoring catalogs remain unchanged. No R access or permission changes.",
+  "releaseCoordination": "Hand off this isolated commit to existing UI publisher; no direct main push. Full combined gates and live verification remain pending."
+}
