@@ -133,6 +133,22 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "trimEnd": 0,
     "crossfade": 0.8
   },
+  "clash_at_the_emerald_edge": {
+    "path": "./assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
+    "loop": true,
+    "gainDb": -12.5,
+    "trimStart": 0,
+    "trimEnd": 0,
+    "crossfade": 0.8
+},
+  "magma_breach": {
+    "path": "./assets/production/scene-music-r1/battle/magma_breach.mp3",
+    "loop": true,
+    "gainDb": -12.4,
+    "trimStart": 0,
+    "trimEnd": 0,
+    "crossfade": 0.8
+},
   "south_pole_siege": {
     "path": "./assets/production/scene-music-r1/battle/south_pole_siege.mp3",
     "loop": true, "gainDb": -11.7, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
@@ -167,6 +183,7 @@ const SCREENS = Object.freeze({RAISING_HOME:'moon',CAGE_EDIT:'moon',DATABASE:'mo
   MEDALS:'core',SCHEDULE:'core',BATTLE_SELECT:'core',CHAMPIONSHIP:'core'});
 // Owner-specified field assignments; unassigned fields retain the prior normal/final cues.
 export const BATTLE_FIELD_MUSIC = Object.freeze({
+  1: 'clash_at_the_emerald_edge', 2: 'magma_breach',
   3: 'titan_s_final_strike', 4: 'south_pole_siege', 5: 'mirage_of_the_arena', 7: 'inferno_overdrive'
 });
 // Owner delegated these two reversible product assignments on 2026-10-18.

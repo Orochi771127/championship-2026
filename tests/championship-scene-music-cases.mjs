@@ -47,9 +47,9 @@ test('complete catalog has one categorized Chinese/English record per actual cue
 test('all Chinese locales show Chinese and en/ja/th/vi show only English for every track',()=>{
  for(const t of SCENE_MUSIC_TRACKS){for(const locale of ['zh-Hant','zh-TW','zh-Hans'])assert.equal(musicTrackTitle(t.id,locale),t.titles.zh);for(const locale of ['en','ja','th','vi'])assert.equal(musicTrackTitle(t.id,locale),t.titles.en);}assert.equal(musicTrackTitle('missing','en'),'');
 });
-test('canonical title registration covers all 17 bilingual records, not stray literals or other files',()=>{
+test('canonical title registration covers all 23 bilingual records, not stray literals or other files',()=>{
  const file='src/championship/presentation/sceneMusicCatalog.js',checked=inspectSceneMusicLocaleCopy(SCENE_MUSIC_TRACKS);
- assert.equal(checked.keys.length,21);assert.deepEqual(checked.gaps,[]);
+ assert.equal(checked.keys.length,23);assert.deepEqual(checked.gaps,[]);
  for(const track of SCENE_MUSIC_TRACKS)for(const locale of ['zh-Hant','en','ja','th','vi']){
   const title=musicTrackTitle(track.id,locale);
   assert.equal(title,track.titles[locale==='zh-Hant'?'zh':'en']);
@@ -69,7 +69,7 @@ test('every missing or blank Chinese/English music title remains a canonical loc
 });
 test('global locale gate registers all scene titles with zero missing titles or raw display literals',async()=>{
  const report=await buildLocaleCoverage(),file='src/championship/presentation/sceneMusicCatalog.js';
- assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:21,gaps:[]});
+ assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:23,gaps:[]});
  assert.equal(report.counts.missing,0,JSON.stringify(report.missing));
  assert.equal(report.counts.uiCopyMissing,0);assert.equal(report.counts.catalogGaps,0);
 });
@@ -130,7 +130,7 @@ test('settings use native radio groups and literal localized titles without rela
 });
 test('new original MP3 bytes and scene assignments match the verified import manifest',()=>{
  const manifest=JSON.parse(fs.readFileSync(new URL('../assets/production/scene-music-r1/manifest.json',import.meta.url)));
- assert.equal(manifest.files.length,7);assert.equal(SCENE_MUSIC_TRACKS.length,21);
+ assert.equal(manifest.files.length,9);assert.equal(SCENE_MUSIC_TRACKS.length,23);
  for(const file of manifest.files){
   const data=fs.readFileSync(new URL(`../assets/production/scene-music-r1/${file.path}`,import.meta.url));
   assert.equal(data.length,file.bytes);assert.equal(createHash('sha256').update(data).digest('hex'),file.sha256);
