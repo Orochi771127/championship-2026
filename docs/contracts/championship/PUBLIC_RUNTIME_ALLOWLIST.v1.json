@@ -112856,7 +112856,7 @@
     },
     {
       "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-      "sha256": "3cb6358cbbb7c2c9af90c969605fea49d7769dc6f8a7ef1a802628053bbdf32e"
+      "sha256": "01a7409a43072ac18607e6a66cf5cdfb09bd3e12629c66fee5b6e527ff9a7835"
     },
     {
       "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -117619,7 +117619,7 @@
     },
     {
       "path": "src/data/championship/database-hero-portraits.public.v1.json",
-      "sha256": "8e637ef0a222151ac703fb11b62a07a826ee71b01b57606cbbf1183b8f5e1746",
+      "sha256": "ca4f36795b760acda29fd8fe03b152c8276e3c2874c62b77c72e5bc7292dcad0",
       "jsonFields": [
         "schemaVersion",
         "entries",
@@ -118020,6 +118020,14 @@
     {
       "path": "assets/production/database-display-20261018/species-206.thumbnail.2ee70cc859d4486a.webp",
       "sha256": "2ee70cc859d4486a762abe7f663d9513b1fd91383f9f93b08fdb7affc9a6b3a4"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-215.display.8cf984cef9c5a3f4.webp",
+      "sha256": "8cf984cef9c5a3f402f022b8c2aa17751ca3e2613b1b5b4aa992c5c5a420ce4f"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-215.thumbnail.69e09565bac6a967.webp",
+      "sha256": "69e09565bac6a967a5c42c59f441ca38fda27a17a37cf68dd1756639ce02efd7"
     }
   ],
   "assets": [
@@ -119925,17 +119933,17 @@
     },
     {
       "id": "species-215:database-hero",
-      "src": "assets/production/database-display-20261018/species-215.display.07f1c714d48701b1.webp",
-      "sha256": "07f1c714d48701b1c1564ec0f350a86004d8299a776f22e64c3117eef7ed454e",
-      "width": 864,
-      "height": 864
+      "src": "assets/production/database-display-20261018/species-215.display.8cf984cef9c5a3f4.webp",
+      "width": 768,
+      "height": 768,
+      "sha256": "8cf984cef9c5a3f402f022b8c2aa17751ca3e2613b1b5b4aa992c5c5a420ce4f"
     },
     {
       "id": "species-215:database-thumbnail",
-      "src": "assets/production/database-display-20261018/species-215.thumbnail.861468bb2a1c3fb2.webp",
+      "src": "assets/production/database-display-20261018/species-215.thumbnail.69e09565bac6a967.webp",
       "width": 128,
       "height": 128,
-      "sha256": "861468bb2a1c3fb29f2d3a50cd097c452e2dca133d70e2cfccf06c23893a6225"
+      "sha256": "69e09565bac6a967a5c42c59f441ca38fda27a17a37cf68dd1756639ce02efd7"
     },
     {
       "id": "species-216:database-hero",
