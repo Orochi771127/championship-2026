@@ -1,0 +1,335 @@
+{
+  "baseCommit": "700996df05a598b88dce79285615753f3beed9b5",
+  "physicalDevice": false,
+  "host": "Windows desktop Chrome headless",
+  "network": "NO NETWORK: local files fulfilled by Playwright; timings are fixture execution only, not HTTP/network performance",
+  "cache": "route fulfillment disables HTTP caching; no cold/warm conclusion",
+  "cases": [
+    {
+      "label": "before",
+      "profile": "portrait-390x844-dpr3",
+      "cache": "fixture",
+      "marks": {
+        "operable": 1037.7000000476837,
+        "primary": 1233.5,
+        "composition": 1247.9000000357628
+      },
+      "lcp": {
+        "time": 1284,
+        "size": 113100,
+        "tag": "IMG",
+        "url": "blob:http://championship-uplift.test/7abee1cd-5004-4180-8e91-eeaf443eb833"
+      },
+      "titleImageBodyBytes": 5350394,
+      "totalBodyBytes": 10147982,
+      "totalTransferBytes": 10169882,
+      "completedTransferByOperable": 4797270,
+      "art": [
+        {
+          "url": "http://championship-uplift.test/before/assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "start": 897,
+          "end": 1075.9000000357628,
+          "encoded": 1393020,
+          "transfer": 1393320
+        },
+        {
+          "url": "http://championship-uplift.test/before/assets/production/title-morning-r1/blaze.webp",
+          "start": 899.9000000357628,
+          "end": 1083.7000000476837,
+          "encoded": 1063356,
+          "transfer": 1063656
+        },
+        {
+          "url": "http://championship-uplift.test/before/assets/production/title-morning-r1/cloud.webp",
+          "start": 901.3000000119209,
+          "end": 1090.1000000238419,
+          "encoded": 836484,
+          "transfer": 836784
+        },
+        {
+          "url": "http://championship-uplift.test/before/assets/production/title-morning-r1/arena.webp",
+          "start": 903.5,
+          "end": 1103.4000000357628,
+          "encoded": 2057534,
+          "transfer": 2057834
+        }
+      ],
+      "errors": [],
+      "failed": [],
+      "images": [
+        {
+          "src": "./assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "width": 1774,
+          "box": {
+            "width": 399,
+            "height": 199.5
+          }
+        },
+        {
+          "src": "./assets/production/title-morning-r1/blaze.webp",
+          "width": 1353,
+          "box": {
+            "width": 197.59375,
+            "height": 211
+          }
+        },
+        {
+          "src": "./assets/production/title-morning-r1/cloud.webp",
+          "width": 1254,
+          "box": {
+            "width": 186.1875,
+            "height": 211
+          }
+        }
+      ],
+      "actualMenuOpened": true
+    },
+    {
+      "label": "after",
+      "profile": "portrait-390x844-dpr3",
+      "cache": "fixture",
+      "marks": {
+        "operable": 903.1000000238419,
+        "primary": 1014.8000000119209,
+        "composition": 1109.6000000238419
+      },
+      "lcp": {
+        "time": 1092,
+        "size": 113100,
+        "tag": "IMG",
+        "url": "blob:http://championship-uplift.test/98a8ed4d-6b01-4b91-9912-b6fc1b5ac606"
+      },
+      "titleImageBodyBytes": 994412,
+      "totalBodyBytes": 5793601,
+      "totalTransferBytes": 5815501,
+      "completedTransferByOperable": 4798871,
+      "art": [
+        {
+          "url": "http://championship-uplift.test/after/assets/production/title-responsive-r1/arena-941.webp",
+          "start": 886,
+          "end": 916.5,
+          "encoded": 445854,
+          "transfer": 446154
+        },
+        {
+          "url": "http://championship-uplift.test/after/assets/production/title-responsive-r1/logo-zh-Hant-1774.webp",
+          "start": 893.8000000119209,
+          "end": 919.6999999880791,
+          "encoded": 357280,
+          "transfer": 357580
+        },
+        {
+          "url": "http://championship-uplift.test/after/assets/production/title-responsive-r1/blaze-640.webp",
+          "start": 1059.4000000357628,
+          "end": 1070.9000000357628,
+          "encoded": 107702,
+          "transfer": 108002
+        },
+        {
+          "url": "http://championship-uplift.test/after/assets/production/title-responsive-r1/cloud-640.webp",
+          "start": 1064.699999988079,
+          "end": 1072.199999988079,
+          "encoded": 83576,
+          "transfer": 83876
+        }
+      ],
+      "errors": [],
+      "failed": [],
+      "images": [
+        {
+          "src": "./assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "width": 1774,
+          "box": {
+            "width": 399,
+            "height": 199.5
+          }
+        },
+        {
+          "src": "./assets/production/title-morning-r1/blaze.webp",
+          "width": 640,
+          "box": {
+            "width": 197.59375,
+            "height": 211
+          }
+        },
+        {
+          "src": "./assets/production/title-morning-r1/cloud.webp",
+          "width": 640,
+          "box": {
+            "width": 186.1875,
+            "height": 211
+          }
+        }
+      ],
+      "actualMenuOpened": true
+    },
+    {
+      "label": "before",
+      "profile": "desktop-1366x768-dpr1",
+      "cache": "fixture",
+      "marks": {
+        "operable": 864.2000000476837,
+        "primary": 1059.300000011921,
+        "composition": 1073.4000000357628
+      },
+      "lcp": {
+        "time": 1072,
+        "size": 186120,
+        "tag": "IMG",
+        "url": "blob:http://championship-uplift.test/bf5bef70-d71c-40e6-8db3-aed0c2dfe3b9"
+      },
+      "titleImageBodyBytes": 5350394,
+      "totalBodyBytes": 10147982,
+      "totalTransferBytes": 10169882,
+      "completedTransferByOperable": 4797270,
+      "art": [
+        {
+          "url": "http://championship-uplift.test/before/assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "start": 735.1000000238419,
+          "end": 908.6000000238419,
+          "encoded": 1393020,
+          "transfer": 1393320
+        },
+        {
+          "url": "http://championship-uplift.test/before/assets/production/title-morning-r1/blaze.webp",
+          "start": 736.5,
+          "end": 916.1000000238419,
+          "encoded": 1063356,
+          "transfer": 1063656
+        },
+        {
+          "url": "http://championship-uplift.test/before/assets/production/title-morning-r1/cloud.webp",
+          "start": 737.7000000476837,
+          "end": 922.4000000357628,
+          "encoded": 836484,
+          "transfer": 836784
+        },
+        {
+          "url": "http://championship-uplift.test/before/assets/production/title-morning-r1/arena.webp",
+          "start": 739.7000000476837,
+          "end": 935.9000000357628,
+          "encoded": 2057534,
+          "transfer": 2057834
+        }
+      ],
+      "errors": [],
+      "failed": [],
+      "images": [
+        {
+          "src": "./assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "width": 1774,
+          "box": {
+            "width": 480,
+            "height": 240
+          }
+        },
+        {
+          "src": "./assets/production/title-morning-r1/blaze.webp",
+          "width": 1353,
+          "box": {
+            "width": 171.28125,
+            "height": 147.09375
+          }
+        },
+        {
+          "src": "./assets/production/title-morning-r1/cloud.webp",
+          "width": 1254,
+          "box": {
+            "width": 319.359375,
+            "height": 319.359375
+          }
+        }
+      ],
+      "actualMenuOpened": true
+    },
+    {
+      "label": "after",
+      "profile": "desktop-1366x768-dpr1",
+      "cache": "fixture",
+      "marks": {
+        "operable": 887.1000000238419,
+        "primary": 959.3000000119209,
+        "composition": 1023
+      },
+      "lcp": {
+        "time": 1004,
+        "size": 186120,
+        "tag": "IMG",
+        "url": "blob:http://championship-uplift.test/d66157ce-fb55-4c12-b81d-26e61ba08631"
+      },
+      "titleImageBodyBytes": 597482,
+      "totalBodyBytes": 5396671,
+      "totalTransferBytes": 5418571,
+      "completedTransferByOperable": 4798871,
+      "art": [
+        {
+          "url": "http://championship-uplift.test/after/assets/production/title-responsive-r1/arena-941.webp",
+          "start": 871,
+          "end": 897.8000000119209,
+          "encoded": 445854,
+          "transfer": 446154
+        },
+        {
+          "url": "http://championship-uplift.test/after/assets/production/title-responsive-r1/logo-zh-Hant-720.webp",
+          "start": 878.2000000476837,
+          "end": 899.3000000119209,
+          "encoded": 93908,
+          "transfer": 94208
+        },
+        {
+          "url": "http://championship-uplift.test/after/assets/production/title-responsive-r1/blaze-192.webp",
+          "start": 975.3000000119209,
+          "end": 988.1000000238419,
+          "encoded": 18132,
+          "transfer": 18432
+        },
+        {
+          "url": "http://championship-uplift.test/after/assets/production/title-responsive-r1/cloud-384.webp",
+          "start": 982.8000000119209,
+          "end": 988.5,
+          "encoded": 39588,
+          "transfer": 39888
+        }
+      ],
+      "errors": [],
+      "failed": [],
+      "images": [
+        {
+          "src": "./assets/production/title-morning-r1/logo-zh-Hant.webp",
+          "width": 720,
+          "box": {
+            "width": 480,
+            "height": 240
+          }
+        },
+        {
+          "src": "./assets/production/title-morning-r1/blaze.webp",
+          "width": 192,
+          "box": {
+            "width": 171.28125,
+            "height": 147.1875
+          }
+        },
+        {
+          "src": "./assets/production/title-morning-r1/cloud.webp",
+          "width": 384,
+          "box": {
+            "width": 319.359375,
+            "height": 319.359375
+          }
+        }
+      ],
+      "actualMenuOpened": true
+    }
+  ],
+  "httpBlocked": {
+    "action": "Chrome navigation",
+    "url": "http://127.0.0.1:50746/before/index.html",
+    "reason": "net::ERR_NETWORK_ACCESS_DENIED",
+    "outcome": "denied; no permission escalation or retry"
+  },
+  "browser": "155.0.8059.40",
+  "failureFallback": {
+    "menuOpened": true
+  }
+}

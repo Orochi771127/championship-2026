@@ -1,8 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createTitleImageLifecycle} from '../src/championship/presentation/titleImageLifecycle.js';
+import {createTitleImageLifecycle,selectTitleDisplaySource} from '../src/championship/presentation/titleImageLifecycle.js';
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
+test('display selection uses transformed CSS pixels and DPR, with cover versus contain geometry',()=>{
+ const element={dataset:{titleVariants:'400:small.webp,800:medium.webp,1600:large.webp'},ownerDocument:{defaultView:{devicePixelRatio:2}},
+  getAttribute:key=>key==='width'?'1000':'2000',getBoundingClientRect:()=>({width:300,height:400})};
+ assert.equal(selectTitleDisplaySource(element,'original.webp'),'small.webp');
+ assert.equal(selectTitleDisplaySource(element,'original.webp',{background:true}),'medium.webp');
+ element.ownerDocument.defaultView.devicePixelRatio=3;
+ assert.equal(selectTitleDisplaySource(element,'original.webp',{background:true}),'large.webp');
+ element.getBoundingClientRect=()=>({width:0,height:0});assert.equal(selectTitleDisplaySource(element,'original.webp'),'original.webp');
+});
 test('deferred TITLE pixels remain unrequested during the film and restore immediately on skip',()=>{
  const src='assets/production/title-morning-r1/cloud.webp',attrs=new Map();
  const image={dataset:{titleSrc:src},complete:true,getAttribute:k=>attrs.get(k)??null,
@@ -33,6 +42,20 @@ function titleImage(name){
   getAttribute:key=>attrs.get(key)??null,setAttribute:(key,value)=>attrs.set(key,value),removeAttribute:key=>attrs.delete(key)};
 }
 async function complete(h,index){h.calls[index].resolve({ok:true,blob:async()=>({index})});await flush();h.decodes.at(-1).resolve();await flush();}
+test('responsive title gives key art priority, delays partners, and aborts deferred work on exit',async()=>{
+ const logo=titleImage('logo'),partner=titleImage('cloud');logo.dataset.titleLocale='zh-Hant';
+ const h=harness([logo,partner]);h.panel.dataset.titleVariants='480:arena-480.webp';h.panel.getBoundingClientRect=()=>({width:300,height:600});
+ // Staging is selected at construction, matching real markup.
+ h.sync.dispose();
+ const title={...h.title,querySelector:()=>h.panel},calls=[],images=[];
+ const sync=createTitleImageLifecycle(title,{fetchImpl:(url,options)=>{const d=deferred();calls.push({url,options,...d});return d.promise;},
+  urls:{createObjectURL:()=>`blob:${images.length}`,revokeObjectURL(){}},createImage:()=>{const d=deferred();images.push(d);return {decode:()=>d.promise,removeAttribute(){}};}});
+ sync(false);assert.equal(calls.length,2);assert.ok(calls[0].url.endsWith('arena-480.webp'));assert.ok(calls[1].url.endsWith('logo.webp'));
+ assert.ok(calls.every(c=>c.options.priority==='high'));
+ for(let i=0;i<2;i++){calls[i].resolve({ok:true,blob:async()=>({})});await flush();images.at(-1).resolve();await flush();}
+ assert.equal(calls.length,3);assert.ok(calls[2].url.endsWith('cloud.webp'));assert.equal(calls[2].options.priority,'low');
+ title.hidden=true;sync(true);assert.equal(calls[2].options.signal.aborted,true);sync.dispose();
+});
 test('film warmup owns exactly four TITLE assets with one pending request at a time',async()=>{
  const images=['logo','blaze','cloud'].map(titleImage),h=harness(images);h.sync(true);
  for(let i=0;i<4;i++){

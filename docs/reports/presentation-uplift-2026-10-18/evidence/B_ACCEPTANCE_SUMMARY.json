@@ -1,0 +1,525 @@
+{
+  "method": "Windows desktop Chrome; intercepted local artifact bytes, no HTTP/network; headless WebGL is not physical-phone performance",
+  "browser": "155.0.8059.40",
+  "physicalDevice": false,
+  "sameScenario": {
+    "viewport": [
+      1280,
+      720
+    ],
+    "dpr": 1,
+    "seed": 7,
+    "partner": "species-034",
+    "mate": "species-073",
+    "map": "HARBOR",
+    "inputs": "same normal UI and D/A/J keys; no simulation writes"
+  },
+  "visualReview": {
+    "recordedGameplaySeconds": 7.1,
+    "inspected": "full-clip one-second contact sheets, 4fps action-frame sheets, original idle and walk screenshots",
+    "actorsAndHud": "no observed grounding, clipping or layout regression",
+    "mechanisms": "outside captured view; not visually accepted",
+    "httpPerformance": "pending after ERR_NETWORK_ACCESS_DENIED"
+  },
+  "cases": [
+    {
+      "label": "before",
+      "errors": [],
+      "failed": [],
+      "saveUnchanged": true,
+      "exitDisposed": true,
+      "timeAtStart": 0,
+      "timeAtPause": 7.067,
+      "timeStillPaused": 7.067,
+      "waterOffsets": [
+        0.13280000000000292,
+        5.7320000000000055,
+        11.064800000000005,
+        16.265600000000003,
+        21.46559999999999,
+        26.931999999999977,
+        32.13199999999996,
+        39.59840000000003,
+        44.532000000000075,
+        51.86480000000016,
+        56.66480000000021,
+        56.66480000000021
+      ],
+      "armFrames": [
+        [
+          0,
+          4,
+          8
+        ],
+        [
+          5,
+          9,
+          13
+        ],
+        [
+          11,
+          15,
+          19
+        ],
+        [
+          16,
+          20,
+          0
+        ],
+        [
+          21,
+          1,
+          5
+        ],
+        [
+          2,
+          6,
+          10
+        ],
+        [
+          8,
+          12,
+          16
+        ],
+        [
+          15,
+          19,
+          23
+        ],
+        [
+          20,
+          0,
+          4
+        ],
+        [
+          3,
+          7,
+          11
+        ],
+        [
+          8,
+          12,
+          16
+        ],
+        [
+          8,
+          12,
+          16
+        ]
+      ],
+      "visibleMechanisms": [],
+      "actorsAtIdle": null
+    },
+    {
+      "label": "after",
+      "errors": [],
+      "failed": [],
+      "saveUnchanged": true,
+      "exitDisposed": true,
+      "timeAtStart": 0.017,
+      "timeAtPause": 7.133,
+      "timeStillPaused": 7.133,
+      "waterOffsets": [
+        0.13360000000000036,
+        6.400000000000001,
+        11.600000000000001,
+        16.932800000000004,
+        22.132799999999992,
+        27.466399999999982,
+        32.79919999999998,
+        40.13280000000007,
+        45.066400000000115,
+        52.39920000000019,
+        57.19920000000024,
+        57.19920000000024
+      ],
+      "armFrames": [
+        [
+          0,
+          11,
+          22
+        ],
+        [
+          6,
+          17,
+          4
+        ],
+        [
+          11,
+          22,
+          9
+        ],
+        [
+          16,
+          3,
+          14
+        ],
+        [
+          22,
+          9,
+          20
+        ],
+        [
+          3,
+          14,
+          0
+        ],
+        [
+          8,
+          19,
+          0
+        ],
+        [
+          16,
+          0,
+          0
+        ],
+        [
+          21,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "visibleMechanisms": [],
+      "actorsAtIdle": [
+        {
+          "role": "PLAYER",
+          "speciesId": "species-034",
+          "pilot": true,
+          "sequence": 0,
+          "life": {
+            "deltaMS": 14.361999999999844,
+            "facing": -1,
+            "phase": 4099.9,
+            "glance": true,
+            "shadowWidth": 52,
+            "shadowHeight": 11
+          },
+          "foot": {
+            "x": 1952,
+            "y": 1504
+          },
+          "shadow": {
+            "x": 0,
+            "y": 1,
+            "width": 52,
+            "height": 11
+          }
+        },
+        {
+          "role": "MATE",
+          "speciesId": "species-073",
+          "pilot": true,
+          "sequence": 0,
+          "life": {
+            "deltaMS": 10.687999999999883,
+            "facing": -1,
+            "phase": 3366.5999999999995,
+            "glance": false,
+            "shadowWidth": 84,
+            "shadowHeight": 15
+          },
+          "foot": {
+            "x": 1863.4715215203946,
+            "y": 1459.1516893878763
+          },
+          "shadow": {
+            "x": 0,
+            "y": 1,
+            "width": 84,
+            "height": 15
+          }
+        }
+      ]
+    },
+    {
+      "label": "reduced",
+      "errors": [],
+      "failed": [],
+      "saveUnchanged": true,
+      "exitDisposed": true,
+      "timeAtStart": 0.017,
+      "timeAtPause": 7.15,
+      "timeStillPaused": 7.15,
+      "waterOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "armFrames": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "visibleMechanisms": [],
+      "actorsAtIdle": [
+        {
+          "role": "PLAYER",
+          "speciesId": "species-034",
+          "pilot": true,
+          "sequence": 0,
+          "life": {
+            "deltaMS": 0,
+            "facing": 1,
+            "phase": 4100,
+            "glance": false,
+            "shadowWidth": 52,
+            "shadowHeight": 11
+          },
+          "foot": {
+            "x": 1952,
+            "y": 1504
+          },
+          "shadow": {
+            "x": 0,
+            "y": 1,
+            "width": 52,
+            "height": 11
+          }
+        },
+        {
+          "role": "MATE",
+          "speciesId": "species-073",
+          "pilot": true,
+          "sequence": 0,
+          "life": {
+            "deltaMS": 0,
+            "facing": -1,
+            "phase": 3383.3,
+            "glance": false,
+            "shadowWidth": 84,
+            "shadowHeight": 15
+          },
+          "foot": {
+            "x": 1863.4715215203946,
+            "y": 1459.1516893878763
+          },
+          "shadow": {
+            "x": 0,
+            "y": 1,
+            "width": 84,
+            "height": 15
+          }
+        }
+      ]
+    },
+    {
+      "label": "low",
+      "errors": [],
+      "failed": [],
+      "saveUnchanged": true,
+      "exitDisposed": true,
+      "timeAtStart": 0,
+      "timeAtPause": 7.05,
+      "timeStillPaused": 7.05,
+      "waterOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "armFrames": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "visibleMechanisms": [],
+      "actorsAtIdle": [
+        {
+          "role": "PLAYER",
+          "speciesId": "species-034",
+          "pilot": true,
+          "sequence": 0,
+          "life": {
+            "deltaMS": 0,
+            "facing": 1,
+            "phase": 4099.799999999999,
+            "glance": false,
+            "shadowWidth": 52,
+            "shadowHeight": 11
+          },
+          "foot": {
+            "x": 1952,
+            "y": 1504
+          },
+          "shadow": {
+            "x": 0,
+            "y": 1,
+            "width": 52,
+            "height": 11
+          }
+        },
+        {
+          "role": "MATE",
+          "speciesId": "species-073",
+          "pilot": true,
+          "sequence": 0,
+          "life": {
+            "deltaMS": 0,
+            "facing": -1,
+            "phase": 3366.6,
+            "glance": false,
+            "shadowWidth": 84,
+            "shadowHeight": 15
+          },
+          "foot": {
+            "x": 1863.4715215203946,
+            "y": 1459.1516893878763
+          },
+          "shadow": {
+            "x": 0,
+            "y": 1,
+            "width": 84,
+            "height": 15
+          }
+        }
+      ]
+    }
+  ]
+}

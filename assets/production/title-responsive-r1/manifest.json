@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "arena": {
+      "source": "assets/production/title-morning-r1/arena.webp",
+      "sourceSha256": "a7c8f01413abe0b8448bfeb33266753f35f96bbb2e3d106169ec3eba3564eca1",
+      "width": 941,
+      "height": 1672,
+      "variants": [
+        {
+          "src": "assets/production/title-responsive-r1/arena-480.webp",
+          "width": 480,
+          "height": 853,
+          "bytes": 151412,
+          "sha256": "41f9e4ec9fc999a80641f6c429ae444c4e30dbe5a8f39d657b7be9424276c7d1"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/arena-768.webp",
+          "width": 768,
+          "height": 1365,
+          "bytes": 323518,
+          "sha256": "e6fabae196b4223d7b4787326f15ec935946a3c07d40faee4d7bf9113a2fcb36"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/arena-941.webp",
+          "width": 941,
+          "height": 1672,
+          "bytes": 445854,
+          "sha256": "313b823ef6e890e07031fb73cad994b2388293c0d79849611882605d8128641e"
+        }
+      ]
+    },
+    "logo-zh-Hant": {
+      "source": "assets/production/title-morning-r1/logo-zh-Hant.webp",
+      "sourceSha256": "b9d05cab400546c6b100993e074e5e660d357bc841f709bd561018d4db6a805a",
+      "width": 1774,
+      "height": 887,
+      "variants": [
+        {
+          "src": "assets/production/title-responsive-r1/logo-zh-Hant-400.webp",
+          "width": 400,
+          "height": 200,
+          "bytes": 40676,
+          "sha256": "37ebf6c8591db4b149cc6f28b99b928154477aaa26f23e1e36cdf5ca93cf0430"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/logo-zh-Hant-720.webp",
+          "width": 720,
+          "height": 360,
+          "bytes": 93908,
+          "sha256": "26a4eb5dbcb6bafff4f430155ef1c0b8a1445bde5c95d73dc24d89158bb58ac2"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/logo-zh-Hant-1080.webp",
+          "width": 1080,
+          "height": 540,
+          "bytes": 175948,
+          "sha256": "c2522c0b17f74c49bbdfbe674b83e86907680bf020db68e6919f268b1b27a414"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/logo-zh-Hant-1774.webp",
+          "width": 1774,
+          "height": 887,
+          "bytes": 357280,
+          "sha256": "0904fbf56663d7b13b7bd5e1c2a65340a32b42a932db8f1c921a7d50424a98c3"
+        }
+      ]
+    },
+    "blaze": {
+      "source": "assets/production/title-morning-r1/blaze.webp",
+      "sourceSha256": "12813a7468665413497fbdb851715c0336fd10c2c8d219a5991e30bba7927e57",
+      "width": 1353,
+      "height": 1162,
+      "variants": [
+        {
+          "src": "assets/production/title-responsive-r1/blaze-192.webp",
+          "width": 192,
+          "height": 165,
+          "bytes": 18132,
+          "sha256": "70244a316f87c80ae7233ef1cdbf381d8280bff7858156908617a3acb7b1055f"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/blaze-384.webp",
+          "width": 384,
+          "height": 330,
+          "bytes": 49106,
+          "sha256": "ae8a1a673dc8ba79a14368f35954a1dbeaf1059615f07c0007a809a47784cb66"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/blaze-640.webp",
+          "width": 640,
+          "height": 550,
+          "bytes": 107702,
+          "sha256": "fad70022d871d5f034ce2954da3cff70968985f437a685e9b74354f7871a22b8"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/blaze-960.webp",
+          "width": 960,
+          "height": 824,
+          "bytes": 206784,
+          "sha256": "5bc90bbd2cbcd8c0563f458278e20444d4648b5ac0d70617a30a78360e9ba8e2"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/blaze-1353.webp",
+          "width": 1353,
+          "height": 1162,
+          "bytes": 341934,
+          "sha256": "f812e9da918465d4161b25d1936625cc9d20fd493e0df69c1624848059ce6f97"
+        }
+      ]
+    },
+    "cloud": {
+      "source": "assets/production/title-morning-r1/cloud.webp",
+      "sourceSha256": "2d218508c3caa0b3ddaae6ccbaee495bfd4f845dc8a4a4e1a7fb0aad6d7ddb67",
+      "width": 1254,
+      "height": 1254,
+      "variants": [
+        {
+          "src": "assets/production/title-responsive-r1/cloud-192.webp",
+          "width": 192,
+          "height": 192,
+          "bytes": 15236,
+          "sha256": "7f7dbea8942f55a5866eab143b4acb2a2c234d04ed90e49c8b56687debf4105b"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/cloud-384.webp",
+          "width": 384,
+          "height": 384,
+          "bytes": 39588,
+          "sha256": "983adefe8017e798e549ae4dcc43c3937b3d2260c1d3861adc73a406fb435dc4"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/cloud-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 83576,
+          "sha256": "ec8eb314a90b2816519838723ae4d49d214bee0c0d4426af630665a5fdac1806"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/cloud-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 155734,
+          "sha256": "42dc534d30b1a9b449d405d86233f85fcc0a18c86bd48ac4aeb7f17b26810b0b"
+        },
+        {
+          "src": "assets/production/title-responsive-r1/cloud-1254.webp",
+          "width": 1254,
+          "height": 1254,
+          "bytes": 217100,
+          "sha256": "d45aa2edd72690816943269d46752c83d3954c28f9d768788305d881929b22e5"
+        }
+      ]
+    }
+  }
+}
