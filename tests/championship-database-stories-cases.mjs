@@ -19,8 +19,9 @@ const locales=['zh-Hant','en','ja','th','vi'];
 const critical=({styleBatch,...value})=>value;
 import publicHeroes from '../src/data/championship/database-hero-portraits.public.v1.json' with {type:'json'};
 import replacement215 from '../docs/art/production/characters/approved-dex-215-20261018/manifest.json' with {type:'json'};
+import replacementFlowers from '../docs/art/production/characters/approved-dex-054-059-20261018/manifest.json' with {type:'json'};
 // Preserve historical approvals by comparing their superseded rows; latest bindings have independent tests.
-const historicalPublicRows=entries=>entries.map(e=>replacement215.supersededEntries.find(old=>old.speciesIndex===e.speciesIndex)??e);
+const historicalPublicRows=entries=>entries.map(e=>[...replacement215.supersededEntries,...replacementFlowers.supersededEntries].find(old=>old.speciesIndex===e.speciesIndex)??e);
 import previousHeroRows from './fixtures/authoring-heroes-a0944833.json' with {type:'json'};
 const historicalEntries=(file,entries)=>previousHeroRows[file]?previousHeroRows[file].map(old=>entries.find(row=>row.speciesIndex===old.speciesIndex)):entries;
 import previousLionProfiles from './fixtures/database-lion-profiles-before-20261017.json' with {type:'json'};
@@ -628,7 +629,7 @@ test('approved207208209210212213214216217 bind exact owner hero bytes, preserve 
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
-  assert.equal(art.speciesId,`species-${id}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
+  assert.equal(art.speciesId,`species-${String(id).padStart(3,'0')}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
   for(const media of [art,art.thumbnail]){const bytes=fs.readFileSync(media.src);assert.equal(createHash('sha256').update(bytes).digest('hex'),media.sha256);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
   assert.ok(Math.max(art.thumbnail.width,art.thumbnail.height)<=128);assert.ok(record.display.bytes<=160000);
   for(const locale of locales)for(const registered of [true,false]){
@@ -651,7 +652,7 @@ test('approved218219220221 bind exact owner hero bytes, preserve previous104 and
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
-  assert.equal(art.speciesId,`species-${id}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
+  assert.equal(art.speciesId,`species-${String(id).padStart(3,'0')}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
   for(const media of [art,art.thumbnail]){const bytes=fs.readFileSync(media.src);assert.equal(createHash('sha256').update(bytes).digest('hex'),media.sha256);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
   assert.ok(Math.max(art.thumbnail.width,art.thumbnail.height)<=128);assert.ok(record.display.bytes<=180000);
   for(const locale of locales)for(const registered of [true,false]){
@@ -674,7 +675,7 @@ test('approved223DarkEyes bind exact owner hero bytes, preserve previous108 and 
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
-  assert.equal(art.speciesId,`species-${id}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
+  assert.equal(art.speciesId,`species-${String(id).padStart(3,'0')}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
   for(const media of [art,art.thumbnail]){const bytes=fs.readFileSync(media.src);assert.equal(createHash('sha256').update(bytes).digest('hex'),media.sha256);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
   assert.ok(Math.max(art.thumbnail.width,art.thumbnail.height)<=128);assert.ok(record.display.bytes<=180000);
   for(const locale of locales)for(const registered of [true,false]){
@@ -697,7 +698,7 @@ test('approved206Simplified bind exact owner hero bytes, preserve previous109 an
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
-  assert.equal(art.speciesId,`species-${id}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
+  assert.equal(art.speciesId,`species-${String(id).padStart(3,'0')}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
   for(const media of [art,art.thumbnail]){const bytes=fs.readFileSync(media.src);assert.equal(createHash('sha256').update(bytes).digest('hex'),media.sha256);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
   assert.ok(Math.max(art.thumbnail.width,art.thumbnail.height)<=128);assert.ok(record.display.bytes<=180000);
   for(const locale of locales)for(const registered of [true,false]){
@@ -718,7 +719,28 @@ test('approvedPalm215 bind exact owner hero bytes, retain superseded originals a
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
-  assert.equal(art.speciesId,`species-${id}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
+  assert.equal(art.speciesId,`species-${String(id).padStart(3,'0')}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
+  for(const media of [art,art.thumbnail]){const bytes=fs.readFileSync(media.src);assert.equal(createHash('sha256').update(bytes).digest('hex'),media.sha256);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
+  assert.ok(Math.max(art.thumbnail.width,art.thumbnail.height)<=128);assert.ok(record.display.bytes<=260000);
+  for(const locale of locales)for(const registered of [true,false]){
+   const f=makeView({locale,selectedSpeciesIndex:id,registeredSpecies:registered?[id]:[],collection:[]});
+   try{const holder=f.root.querySelector('.cm-dex-hero');
+    if(!registered)assert.equal(holder,null);
+    else{const img=holder.querySelector('img');assert.equal(img.src,art.src);img.naturalWidth=art.width;img.naturalHeight=art.height;img.onload();assert.equal(holder.dataset.art,'ready');assert.equal(img.hidden,false);}
+    f.assertUnchanged();
+   }finally{f.dispose();}
+  }
+ }}finally{setLocale('zh-Hant');}
+});
+
+test('approvedBoldFlowers054059 bind exact owner hero bytes, retain superseded originals and keep locked detail private',async()=>{
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');
+ const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-054-059-20261018/manifest.json','utf8'));
+ const ids=[54, 59],codes=["GR28", "GR34"];
+ assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
+ try{for(const [i,id] of ids.entries()){
+  const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
+  assert.equal(art.speciesId,`species-${String(id).padStart(3,'0')}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
   for(const media of [art,art.thumbnail]){const bytes=fs.readFileSync(media.src);assert.equal(createHash('sha256').update(bytes).digest('hex'),media.sha256);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
   assert.ok(Math.max(art.thumbnail.width,art.thumbnail.height)<=128);assert.ok(record.display.bytes<=260000);
   for(const locale of locales)for(const registered of [true,false]){
