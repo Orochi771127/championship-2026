@@ -143,10 +143,10 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('95 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('100 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,95);
- for(const e of art.entries){const id=e.speciesIndex===189?getDatabaseDisplayEntry(189):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-display-20261018\/species-\d{3}\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,100);
+ for(const e of art.entries){const id=[189,207,208,209,212,213].includes(e.speciesIndex)?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-display-20261018\/species-\d{3}\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,20,195,'8',NaN])assert.equal(get(id),null);
 });
 
@@ -224,7 +224,7 @@ test('confirmed ultimate heroes are present with exact PNG bytes and selected so
  const {DATABASE_HERO_PORTRAITS:art}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- assert.equal(art.entries.length,95);assert.equal(manifest.count,44);
+ assert.equal(art.entries.length,100);assert.equal(manifest.count,44);
  for(const [sp,version,form] of [[211,'v1','OWNER_CONFIRMED_BRASS_CROWN_MANDRILL'],[222,'v2','R10_QUADRUPED_LEFT_PANEL']]){
   const entry=approvedHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(metadata.selectedSourceForm,form);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
@@ -615,3 +615,27 @@ test('candidate036 exact identity raw bytes and privacy in every locale',async()
 test('036 preserves all d1d698 prior portrait and provenance entries',async()=>{const fs=await import('node:fs'),{createHash}=await import('node:crypto');for(const b of [{"path": "src/data/championship/database-hero-portraits.r1.json", "count": 57, "sha256": "5d849e21114d2c49d1a59e53b2433ab8ced6dbbd51bcd65a1496beee7de4c597"}, {"path": "src/data/championship/qa-database-hero-portraits.r1.json", "count": 57, "sha256": "9476e5bf002f66560d6f2f24363bafebadc5e6d29b6438172b7f184671025793"}, {"path": "assets/production/database-handpainted-r1-20261015/manifest.json", "count": 43, "sha256": "f9c98af34fa6f4c1d401345e29ee8e61bdd32d8782de662b0367b1c2c6ceb264"}]){const entries=historicalEntries(b.path,JSON.parse(fs.readFileSync(b.path,'utf8')).entries).filter(e=>e.speciesIndex!==36);assert.equal(entries.length,b.count);assert.equal(createHash('sha256').update(JSON.stringify(entries)).digest('hex'),b.sha256,b.path);}});
 
 test('036 production QA provenance exact binding and candidate status',async()=>{const fs=await import('node:fs');const expected={"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015"};for(const p of ["src/data/championship/database-hero-portraits.r1.json", "src/data/championship/qa-database-hero-portraits.r1.json"]){const j=JSON.parse(fs.readFileSync(p,'utf8'));assert.equal(j.entries.length,p.includes('qa-')?95:96);assert.equal(j.entries.filter(e=>e.speciesIndex===36).length,1);assert.deepEqual(j.entries.find(e=>e.speciesIndex===36),expected);}const m=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));assert.equal(m.count,44);assert.equal(m.entries.length,44);assert.deepEqual(m.entries.find(e=>e.speciesIndex===36),{"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "bytes": 2029665, "generation": "Hand-painted redesign candidate refined to preserve fine thunder-fur spikes; unchanged native PNG bytes", "selectedGenerationVersion": "bold-handpaint-v2", "designRevision": "THUNDER_FUR_MAIN_PORTRAIT_CANDIDATE_20261016", "sourceReferenceSha256": "bdd38a45671fd9b7e467f69996fb83a5feab66a734027784f7a2af4217e769f6", "sourceBindingEvidence": "Existing species-036 / GR04 display identity; v2 refinement of v1 candidate", "promptSha256": "ffe8d493eeeefe3d07659a83ad7c81e5def8bc7041c5ad973f944f919e9a5384", "artDirection": "Gold, aubergine-charcoal, ivory and burnt-orange palette; fine mane, ear and tail tips retained", "review": {"rootReview": "STATIC_CANDIDATE_REVIEWED_RELEASE_PENDING", "actualAlpha": true, "ownerSpecificImageApproval": false, "runtimeBrowser": "PENDING", "actionsUpdated": false, "scope": "MAIN PORTRAIT ONLY. No action atlas, story, stats or other character palette changes.", "runtimeContainPadding": "Preserve native PNG and existing 24px padded contain; no crop, repaint or resampling."}});});
+
+test('approved207208209212213 bind exact owner hero bytes, preserve previous95 and keep locked detail private',async()=>{
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');
+ const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-20261018/manifest.json','utf8'));
+ const ids=[207,208,209,212,213],codes=['UL30','UL31','UL32','UL36','UL37'];
+ assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
+ const prior=publicHeroes.entries.filter(e=>!ids.includes(e.speciesIndex));assert.equal(prior.length,95);
+ assert.equal(createHash('sha256').update(JSON.stringify(prior)).digest('hex'),ledger.previousPublicHeroes.sha256);
+ try{for(const [i,id] of ids.entries()){
+  const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
+  assert.equal(art.speciesId,`species-${id}`);assert.equal(art.src,record.display.src);assert.equal(art.sha256,record.display.sha256);
+  for(const media of [art,art.thumbnail]){const bytes=fs.readFileSync(media.src);assert.equal(createHash('sha256').update(bytes).digest('hex'),media.sha256);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
+  assert.ok(Math.max(art.thumbnail.width,art.thumbnail.height)<=128);assert.ok(record.display.bytes<=131000);
+  for(const locale of locales)for(const registered of [true,false]){
+   const f=makeView({locale,selectedSpeciesIndex:id,registeredSpecies:registered?[id]:[],collection:[]});
+   try{const holder=f.root.querySelector('.cm-dex-hero');
+    if(!registered)assert.equal(holder,null);
+    else{const img=holder.querySelector('img');assert.equal(img.src,art.src);img.naturalWidth=art.width;img.naturalHeight=art.height;img.onload();assert.equal(holder.dataset.art,'ready');assert.equal(img.hidden,false);}
+    f.assertUnchanged();
+   }finally{f.dispose();}
+  }
+ }}finally{setLocale('zh-Hant');}
+ for(const id of [210,214,216,217])assert.equal(databaseHeroPortrait(id),null);
+});

@@ -8414,7 +8414,17 @@
     "manifest.webmanifest",
     "src/championship/app/loadStylesheet.js",
     "src/championship/app/webAppInstall.js",
-    "src/championship/presentation/titleAssetVariant.js"
+    "src/championship/presentation/titleAssetVariant.js",
+    "assets/production/database-display-20261018/species-207.display.c58a022ba5c009c0.webp",
+    "assets/production/database-display-20261018/species-207.thumbnail.6c3aada38673cc74.webp",
+    "assets/production/database-display-20261018/species-208.display.37a7c2836136cd96.webp",
+    "assets/production/database-display-20261018/species-208.thumbnail.c0ec507c5e72ea8d.webp",
+    "assets/production/database-display-20261018/species-209.display.75f8e1f19f95d161.webp",
+    "assets/production/database-display-20261018/species-209.thumbnail.1a6ed4a9d8112f3a.webp",
+    "assets/production/database-display-20261018/species-212.display.3d8b44c8d1135b9f.webp",
+    "assets/production/database-display-20261018/species-212.thumbnail.5bcda0d097b4cc9d.webp",
+    "assets/production/database-display-20261018/species-213.display.50c57f149312986b.webp",
+    "assets/production/database-display-20261018/species-213.thumbnail.91ae9e09433a0516.webp"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -37734,7 +37744,7 @@
       },
       {
         "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-        "sha256": "c73e17263633ff64698eda41c2a8a5c265fc777d4d94821a4a59d4da1fbac2fa"
+        "sha256": "fc39a7f6925cdc2d14bf70825eafb491f30e53215739e15333c4b32a9c8f238e"
       },
       {
         "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -40326,7 +40336,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.public.v1.json",
-        "sha256": "dcec9e8eae23b7f45be4a48f4d7590224c07694287b6d987dbd99a6d453cbedb"
+        "sha256": "4c457ad0d1b2124f9febb8381cb5f9e9aadededb9877a4f3d5d9eaf5d9cc0ce0"
       },
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
@@ -40423,6 +40433,46 @@
       {
         "path": "manifest.webmanifest",
         "sha256": "7b326b833b7901c6336589a714850f7db916d13b65ace55ee8757566c81e3cca"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-207.display.c58a022ba5c009c0.webp",
+        "sha256": "c58a022ba5c009c0b2d6fc389c9018b50c7e2206ea4c673a6e7720f133c78d91"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-207.thumbnail.6c3aada38673cc74.webp",
+        "sha256": "6c3aada38673cc74e8d107fc222e799f3e8481f6e6955f78c0d81b0d8172e51d"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-208.display.37a7c2836136cd96.webp",
+        "sha256": "37a7c2836136cd96c9bb9e5f58d131263b18d1e7602a5d91fef7858076f53d9a"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-208.thumbnail.c0ec507c5e72ea8d.webp",
+        "sha256": "c0ec507c5e72ea8d682f3c4582b7cb606a2aee0bdbca12d25a99f3c04722b0dc"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-209.display.75f8e1f19f95d161.webp",
+        "sha256": "75f8e1f19f95d1615b335be2be0feabcaa06216e35612f96e6d8043482055e67"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-209.thumbnail.1a6ed4a9d8112f3a.webp",
+        "sha256": "1a6ed4a9d8112f3ab82e1bf4928397d10a22d913b3cf8aabbc80941de47f4658"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-212.display.3d8b44c8d1135b9f.webp",
+        "sha256": "3d8b44c8d1135b9fae435c761ff0cb99edeabfc2e5b42e8b4b2b5b15bdaf241a"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-212.thumbnail.5bcda0d097b4cc9d.webp",
+        "sha256": "5bcda0d097b4cc9d69d10030d57f8d7e86e8b9139cd62c20929d3ab851c94436"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-213.display.50c57f149312986b.webp",
+        "sha256": "50c57f149312986bbbdb6c2b821ac571bb933b668caa45248bb54df71b210a81"
+      },
+      {
+        "path": "assets/production/database-display-20261018/species-213.thumbnail.91ae9e09433a0516.webp",
+        "sha256": "91ae9e09433a05169f373178eb42bb391e8c8f3a5c9e7cc387b20c3662fb2ef0"
       }
     ],
     "selectionId": "DATA_ARENA_MAP_TEST_RELEASE_20261016",
