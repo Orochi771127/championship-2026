@@ -46,7 +46,8 @@ test('polished occluders, ambient and the CM02 goal net bind the polished frames
 
 test('the review manifest is reachable only through the loopback cageReview switch', () => {
   const main = fs.readFileSync(new URL('../src/championship/app/main.js', import.meta.url), 'utf8');
-  assert.match(main, /LOCAL_MAP_REVIEW\.get\("cageReview"\) === "polish-20261019"/);
+  assert.match(main, /CAGE_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW\.get\("cageReview"\) === "polish-20261019"/);
+  assert.match(main, /fetchRuntimeMapResponse\(CAGE_REVIEW_MANIFEST_URL \?\? CAGE_ART_MANIFEST_URL/);
   const requests = fs.readFileSync(new URL('../src/championship/presentation/publicMapRequests.js', import.meta.url), 'utf8');
   assert.match(requests, /'cageReview'\]/);
   assert.match(requests, /\['localhost','127\.0\.0\.1','\[::1\]'\]\.includes\(base\.hostname\)/);

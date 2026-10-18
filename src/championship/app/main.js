@@ -180,10 +180,11 @@ const HUNT_DAY_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") === "hm2
   ? "assets/production/hunt/hm234-day-review-20261007/manifest.json" : null;
 // Owner 2026-10-09: final 37 cage fields in normal local play; existing geometry and clocks.
 const CAGE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
-  ? (LOCAL_MAP_REVIEW.get("cageReview") === "polish-20261019"
-    ? "assets/production/cage/polish-review-20261019/manifest.json"
-    : publicMapManifestPath('cage-final'))
+  ? publicMapManifestPath('cage-final')
   : publicMapManifestPath('cage-ui');
+// Local review (2026-10-19): the re-lit cage polish, loopback ?cageReview only.
+const CAGE_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("cageReview") === "polish-20261019"
+  ? "assets/production/cage/polish-review-20261019/manifest.json" : null;
 // Owner 2026-10-07: completed original arenas in normal local play; publication remains gated.
 const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
   ? (LOCAL_MAP_REVIEW.get("battleReview") === "stage-20261007"
@@ -652,7 +653,7 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
 async function loadOptionalCageFieldArt(stage, { signal } = {}) {
   const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
   try {
-    const response = await fetchRuntimeMapResponse(CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
+    const response = await fetchRuntimeMapResponse(CAGE_REVIEW_MANIFEST_URL ?? CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
     if (!response.ok) throw new Error(`CAGE_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
     const cageFrame = app.getCageEditFrame();
