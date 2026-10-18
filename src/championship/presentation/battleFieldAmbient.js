@@ -65,12 +65,16 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   if (!ambient || !KINDS.has(ambient.kind)) return art;
   const low = quality === "low";
   const polar = ambient.kind === "BM05_POLAR_R2";
+  // Saver tier: every other foam frame at twice the frame time (half the
+  // decoded foam memory, same loop length).
+  const foamRegions = (ambient.foam?.regions ?? []).map(r => low ? { ...r, frames: r.frames.filter((_, i) => i % 2 === 0) } : r);
+  const foamFrameMs = (ambient.foam?.frameMs ?? 260) * (low ? 2 : 1);
   const sources = [ambient.waterMask?.src, ambient.caustics?.src, ambient.sea?.src, ambient.waves?.src, ambient.boundaryGlow?.src,
     ambient.iceStates?.openWater?.src, ambient.iceStates?.cracked?.src,
     ambient.lava?.src, ambient.flow?.src, ambient.lavaStates?.cooled?.src, ambient.lavaStates?.reheat?.src,
     ambient.foliageStatic?.src, ambient.emissive?.src, ambient.floorMask?.src, ambient.cloudTile?.src, ambient.gustTile?.src,
     ...(ambient.rotors ?? []).map(r => r.src),
-    ...(ambient.canopies ?? []).map(c => c.src), ...(ambient.foam?.regions ?? []).flatMap(r => r.frames.map(f => f.src))].filter(Boolean);
+    ...(ambient.canopies ?? []).map(c => c.src), ...foamRegions.flatMap(r => r.frames.map(f => f.src))].filter(Boolean);
   let textures;
   try {
     textures = new Map(await Promise.all(sources.map(async src => [src, linear(await PIXI.Assets.load(src))])));
@@ -227,7 +231,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
 
   // --- Foam: two sprites per region crossfade through the authored loop.
   const foamRoot = new PIXI.Container({ label: "shore foam" });
-  const foam = (ambient.foam?.regions ?? []).map(region => {
+  const foam = foamRegions.map(region => {
     const make = () => {
       const s = new PIXI.Sprite(tex(region.frames[0].src));
       s.position.set(region.x, region.y); s.scale.set(region.scale);
@@ -614,7 +618,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     }
     // Foam loop with crossfade; reduced motion holds a single readable frame.
     if (foam.length) {
-      const pos = reducedMotion ? 0 : elapsed / ambient.foam.frameMs;
+      const pos = reducedMotion ? 0 : elapsed / foamFrameMs;
       for (const f of foam) {
         const n = f.region.frames.length, i = Math.floor(pos) % n, j = (i + 1) % n, k = pos - Math.floor(pos);
         f.a.texture = tex(f.region.frames[i].src); f.b.texture = tex(f.region.frames[j].src);
