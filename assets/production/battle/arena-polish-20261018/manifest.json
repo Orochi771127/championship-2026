@@ -1,0 +1,1464 @@
+{
+ "schemaVersion": 1,
+ "assetId": "art:battle:original-opus:v1:arena-polish-20261018",
+ "family": "BATTLE",
+ "artifactMaturity": "LOCAL_REVIEW_BLENDER_LAYERED_R2",
+ "productionStatus": "LOCAL_REVIEW_NOT_PUBLISHED",
+ "runtimeEligible": true,
+ "shippingReady": false,
+ "humanApproved": false,
+ "rights": {
+  "status": "PROJECT_ORIGINAL",
+  "romDerivedPixels": false,
+  "authority": "R1 original Blender sources (BM03: Owner-selected R2) polished in Blender 5.2 via MCP; dot corrected images used for material/lighting only"
+ },
+ "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+ "filter": "linear",
+ "fields": [
+  {
+   "fieldId": "field_bm01_01",
+   "identifier": "BATTLE_NORMAL",
+   "arenaIndex": 0,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm01-polish-r2/base.webp",
+     "sha256": "5e4a3b7b25c1fbb8f8d9d88d1bbd6cef9287583bdd3464790cc796a458785b9e",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "R1_POLISH_R2",
+    "clouds": 0.16,
+    "particles": "dust",
+    "emissiveMode": "pulse",
+    "foliageStatic": {
+     "src": "assets/production/battle/bm01-polish-r2/foliage-small.webp",
+     "sha256": "5f36ca811a8a99e8a2b0ab2a2c4270bc8fe22e17fbe68249509c97eabc6ca80c",
+     "x": 24,
+     "y": 168
+    },
+    "canopies": [
+     {
+      "src": "assets/production/battle/bm01-polish-r2/foliage-0.webp",
+      "sha256": "f47c7dc61bc708dd2ca13546d453a13a623db59436f368f3feb43b6ebfd86fbf",
+      "x": 527,
+      "y": 7,
+      "pivot": [
+       592.5,
+       128.44
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm01-polish-r2/foliage-1.webp",
+      "sha256": "818c143a555669d973e0bc5fa6f83e6608d7498cf71f04134f9bbefeffb0033a",
+      "x": 348,
+      "y": 17,
+      "pivot": [
+       411.0,
+       137.56
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm01-polish-r2/foliage-2.webp",
+      "sha256": "3feab364df51c0951e668e533e7a27dae11a23884a51eb7fe12d68af30b2ee52",
+      "x": 1407,
+      "y": 18,
+      "pivot": [
+       1459.5,
+       128.0
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm01-polish-r2/foliage-3.webp",
+      "sha256": "2572033634cfece4dd2c5282cad766f33785874153d6b0338c4cc4efbdf641f3",
+      "x": 1054,
+      "y": 26,
+      "pivot": [
+       1104.0,
+       128.08
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm01-polish-r2/foliage-4.webp",
+      "sha256": "c1a022d0f8ad8200cf10aec259b2bfaf151dafbf7887b267992e5f460d7cc39f",
+      "x": 1238,
+      "y": 28,
+      "pivot": [
+       1288.0,
+       133.6
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm01-polish-r2/foliage-5.webp",
+      "sha256": "e28af5098e0afe7032b3e6c7fc0c058c467300879c927794d0e295c0514cf5f2",
+      "x": 1591,
+      "y": 64,
+      "pivot": [
+       1627.5,
+       161.68
+      ]
+     }
+    ],
+    "emissive": {
+     "src": "assets/production/battle/bm01-polish-r2/emissive.webp",
+     "sha256": "eade6c7a4831a11c40e24af483413bbfe82c81fd97e64bb887887bb646bcebce",
+     "x": 53,
+     "y": 212
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm01-polish-r2/boundary-glow.webp",
+     "sha256": "735dd20f4ff24a677c100a48407c07feeff9e687dea16fbfab97f53fd35b069b",
+     "x": 94,
+     "y": 221
+    },
+    "floorMask": {
+     "src": "assets/production/battle/bm01-polish-r2/floor-mask.webp",
+     "sha256": "2538a9c5a87c7519a7f1d830c35d7ec7723021d03589439d1e03fcc6d58c9bda",
+     "x": 0,
+     "y": 0,
+     "width": 1664,
+     "height": 1088
+    },
+    "cloudTile": {
+     "src": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+     "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
+    }
+   }
+  },
+  {
+   "fieldId": "field_bm02_01",
+   "identifier": "BATTLE_GRASS",
+   "arenaIndex": 1,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm02-polish-r2/base.webp",
+     "sha256": "d80a381cc0b71d811620abc75f1507daf5a430851ed77d1316aee766c487d6a6",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "R1_POLISH_R2",
+    "clouds": 0.18,
+    "gust": "grass",
+    "particles": "petals",
+    "foliageStatic": {
+     "src": "assets/production/battle/bm02-polish-r2/foliage-small.webp",
+     "sha256": "a4b98b9990b23a5e8c79ea9e22f28dc57f929c4241fbb6e3962e64d3c84c7a90",
+     "x": 103,
+     "y": 298
+    },
+    "canopies": [
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-0.webp",
+      "sha256": "ec2f96391000aa36efd190a0641a17f08f96c00e989bc3bad2eba034600e6d58",
+      "x": 0,
+      "y": 0,
+      "pivot": [
+       328.0,
+       359.04
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-1.webp",
+      "sha256": "24ab66c2a9f8f5038bb86affab02ae436559fbd0a9fa0cde0537da5abd353559",
+      "x": 850,
+      "y": 0,
+      "pivot": [
+       1179.0,
+       148.72
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-2.webp",
+      "sha256": "d11516c34426272b1b821fa5447ed1e5f809067a04cf27e847fc491905f484bb",
+      "x": 1475,
+      "y": 69,
+      "pivot": [
+       1569.5,
+       271.4
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-3.webp",
+      "sha256": "e5afc55c72ae79c13bbb570491964f31bd8a0a4267fa18dba94a2237e8fe599f",
+      "x": 1626,
+      "y": 414,
+      "pivot": [
+       1645.0,
+       543.36
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-4.webp",
+      "sha256": "6b63c63349469fbadeb7deb867ee9c1f35e5f2802fb27b1c5713b30141440bd8",
+      "x": 1529,
+      "y": 744,
+      "pivot": [
+       1569.0,
+       828.48
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-5.webp",
+      "sha256": "37f8fbae193d1e76d169e698b779a1a0f09f6e7bb68d2a076fc980d3cac178f2",
+      "x": 0,
+      "y": 786,
+      "pivot": [
+       19.5,
+       831.76
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-6.webp",
+      "sha256": "9af8b6344a98357cf31cb5b8227bddc628ca0c3ae03b2e5432db83e96822ad70",
+      "x": 0,
+      "y": 886,
+      "pivot": [
+       61.5,
+       1063.76
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-7.webp",
+      "sha256": "cb93e9094137c0764c6ea429d40360ad3e87623e59efcf52ff94dfb226be1585",
+      "x": 1538,
+      "y": 890,
+      "pivot": [
+       1601.0,
+       1064.24
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-8.webp",
+      "sha256": "edc3ef38f0d554fc0a63cf8a9a1de71d57ad4cbc40d2c6b510fc78bf6e946a42",
+      "x": 233,
+      "y": 976,
+      "pivot": [
+       274.0,
+       1056.08
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm02-polish-r2/foliage-9.webp",
+      "sha256": "0bcbaeca45f26a1c330fd9f711b9e34281089c5f76d6fc063c25686579353002",
+      "x": 1355,
+      "y": 979,
+      "pivot": [
+       1405.0,
+       1049.4
+      ]
+     }
+    ],
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm02-polish-r2/boundary-glow.webp",
+     "sha256": "6f10f18f2bcaf9ef89bee219bde7c55aaecdab3f5c593808f53bbbbc644af1f0",
+     "x": 76,
+     "y": 169
+    },
+    "floorMask": {
+     "src": "assets/production/battle/bm02-polish-r2/floor-mask.webp",
+     "sha256": "7d1da214a9c7a03a69a9091b9ec9b12104f1147eca6cfedefe9d6be0ff0e6e34",
+     "x": 0,
+     "y": 0,
+     "width": 1664,
+     "height": 1088
+    },
+    "cloudTile": {
+     "src": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+     "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
+    },
+    "gustTile": {
+     "src": "assets/production/battle/shared-ambient-r2/gust-streak-tile.webp",
+     "sha256": "92377e537d49bf9cf9a469bfbf4e6ff5a7aecd4911d20e95a3d68cc4ad3b07c7"
+    }
+   }
+  },
+  {
+   "fieldId": "field_bm03_01",
+   "identifier": "BATTLE_VOLCANO",
+   "arenaIndex": 2,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm03-volcano-polish-r3/base.webp",
+     "sha256": "6544dd57212a9834547c38a098a7b6c27b73522d8be8e7116f5fd403c174be05",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "BM03_VOLCANO_R3",
+    "lava": {
+     "src": "assets/production/battle/bm03-volcano-polish-r3/lava-mask.webp",
+     "sha256": "16d0b35001797fa91a4de904d44a1f1c9ef504bfd4c693d2219af2bf5f8d048a",
+     "x": 0,
+     "y": 286,
+     "width": 1664,
+     "height": 802
+    },
+    "flow": {
+     "src": "assets/production/battle/bm03-volcano-polish-r3/flow-tile.webp",
+     "sha256": "42176465a589a29441ebf1b03f7809317adb1d1662fea0e02aa1500221468b07"
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm03-volcano-polish-r3/boundary-glow.webp",
+     "sha256": "280b72f37c79ed0f9c330cc3fd29ea2285ade50a5b0819a43b3a295111c84541",
+     "x": 214,
+     "y": 169
+    },
+    "lavaStates": {
+     "cooled": {
+      "src": "assets/production/battle/bm03-volcano-polish-r3/cooled.webp",
+      "sha256": "939b04b97425abea1365bb7b45a70201ad7b9fa832c64568ae9dc721abc0c9d3",
+      "x": 0,
+      "y": 224
+     },
+     "reheat": {
+      "src": "assets/production/battle/bm03-volcano-polish-r3/reheat.webp",
+      "sha256": "fced6cdf96c2b6a07493c93ad3b30518b5df7a734034119ed75b753f93180979",
+      "x": 0,
+      "y": 224
+     }
+    },
+    "embers": [
+     [
+      80.0,
+      272.0
+     ],
+     [
+      48.0,
+      304.0
+     ],
+     [
+      144.0,
+      304.0
+     ],
+     [
+      48.0,
+      336.0
+     ],
+     [
+      144.0,
+      336.0
+     ],
+     [
+      48.0,
+      368.0
+     ],
+     [
+      144.0,
+      368.0
+     ],
+     [
+      48.0,
+      400.0
+     ],
+     [
+      144.0,
+      400.0
+     ],
+     [
+      80.0,
+      432.0
+     ],
+     [
+      16.0,
+      464.0
+     ],
+     [
+      112.0,
+      464.0
+     ],
+     [
+      80.0,
+      496.0
+     ],
+     [
+      1040.0,
+      496.0
+     ],
+     [
+      80.0,
+      528.0
+     ],
+     [
+      16.0,
+      560.0
+     ],
+     [
+      112.0,
+      560.0
+     ],
+     [
+      16.0,
+      592.0
+     ],
+     [
+      112.0,
+      592.0
+     ],
+     [
+      944.0,
+      592.0
+     ],
+     [
+      48.0,
+      624.0
+     ],
+     [
+      848.0,
+      624.0
+     ],
+     [
+      944.0,
+      624.0
+     ],
+     [
+      48.0,
+      656.0
+     ],
+     [
+      848.0,
+      656.0
+     ],
+     [
+      944.0,
+      656.0
+     ],
+     [
+      80.0,
+      688.0
+     ],
+     [
+      48.0,
+      720.0
+     ],
+     [
+      976.0,
+      720.0
+     ],
+     [
+      80.0,
+      752.0
+     ],
+     [
+      944.0,
+      752.0
+     ],
+     [
+      80.0,
+      784.0
+     ],
+     [
+      16.0,
+      816.0
+     ],
+     [
+      112.0,
+      816.0
+     ],
+     [
+      48.0,
+      848.0
+     ],
+     [
+      144.0,
+      848.0
+     ],
+     [
+      80.0,
+      880.0
+     ],
+     [
+      16.0,
+      912.0
+     ],
+     [
+      112.0,
+      912.0
+     ],
+     [
+      48.0,
+      944.0
+     ],
+     [
+      144.0,
+      944.0
+     ],
+     [
+      80.0,
+      976.0
+     ],
+     [
+      176.0,
+      976.0
+     ],
+     [
+      48.0,
+      1008.0
+     ],
+     [
+      144.0,
+      1008.0
+     ],
+     [
+      1584.0,
+      1008.0
+     ],
+     [
+      16.0,
+      1040.0
+     ],
+     [
+      112.0,
+      1040.0
+     ],
+     [
+      208.0,
+      1040.0
+     ],
+     [
+      1552.0,
+      1040.0
+     ],
+     [
+      1648.0,
+      1040.0
+     ],
+     [
+      80.0,
+      1072.0
+     ],
+     [
+      176.0,
+      1072.0
+     ],
+     [
+      272.0,
+      1072.0
+     ],
+     [
+      1552.0,
+      1072.0
+     ],
+     [
+      1648.0,
+      1072.0
+     ]
+    ]
+   }
+  },
+  {
+   "fieldId": "field_bm04_01",
+   "identifier": "BATTLE_ISLAND",
+   "arenaIndex": 3,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm04-island-polish-r2/base.webp",
+     "sha256": "8e85338ca1a15c896d2c84e7e1d5e2b57810ae49b325b329d2e76c54ad2e4b5a",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "BM04_LAGOON_R2",
+    "waterMask": {
+     "src": "assets/production/battle/bm04-island-polish-r2/water-mask.webp",
+     "sha256": "0584135749ce0c066915a8c59a10db4f08d8d620ce11ba0a3d5d727de9ebf087",
+     "scale": 2
+    },
+    "caustics": {
+     "src": "assets/production/battle/bm04-island-polish-r2/caustic-tile.webp",
+     "sha256": "2dadf0d364cc93381d9bd68fb3431042a9e3c59405e73b0e4311b582de5f3f0f"
+    },
+    "foam": {
+     "frameMs": 260,
+     "regions": [
+      {
+       "id": "shore-0",
+       "x": 0.0,
+       "y": 0.0,
+       "scale": 2.0,
+       "frames": [
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-0.webp",
+         "sha256": "036f02f328763e7943d238b969515a1850221a8088a96d49dd391e2ae6d5d260"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-1.webp",
+         "sha256": "ad0f01d8a77180b2aa89cd0254f18d7f2d0e676a5d23f3233d1091bdff3f2aa9"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-2.webp",
+         "sha256": "91fe18f3e80f9bb16213469115ed8d8ff1b8d64d7530c4f2cb60a57eb405c22d"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-3.webp",
+         "sha256": "08f0748369fdbaec2bc378c56516997e8dc268cc6464dc0eeece085dd76a1ef0"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-4.webp",
+         "sha256": "035426677a03189a0949631f7898046ce8e1fd2b648ecef3f5b444d1fa28747b"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-5.webp",
+         "sha256": "b7017133113aa3c9e667ffd9ad9955fd3e6fc47c6601056cd48413ed5fb4e0c3"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-6.webp",
+         "sha256": "99833ea46b5bf13c83ca4b8798be028fbb3d00ede839a50a1f222cb28cb537fd"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-7.webp",
+         "sha256": "f7e650390eea05412c3b8c109db396c77b1130d6890babe8da4013f9ee9c7491"
+        }
+       ]
+      },
+      {
+       "id": "shore-1",
+       "x": 1048.0,
+       "y": 0.0,
+       "scale": 2.0,
+       "frames": [
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-0.webp",
+         "sha256": "7a417163e2890ea97990defc972b422b11a2d3e1f81a5eaa318263d3de139608"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-1.webp",
+         "sha256": "d30209f82cf6116d7d2fb768378d7ba46783a9ea2621fdf216b2d66ff3661606"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-2.webp",
+         "sha256": "a88f8bebac515f4986ea787d45a7cfd715fb5f3044e5a2de0eec862a68ea2f4c"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-3.webp",
+         "sha256": "1fb15c83d8ed97a743c36b693a44cf7d4f6e7660cfdf004dfb67cd9a776167b3"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-4.webp",
+         "sha256": "652ac32797e9635680af00c8a944f6ab2d565e848360f267c8f2d22debfbb950"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-5.webp",
+         "sha256": "1451e66f0250cc529e19e849ee750b848161b59dbdb17903244dfe972b3f3e0d"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-6.webp",
+         "sha256": "997839f20d0cba3142c1acdcaeecf5b9ab7064831583fe995aa91bd1ee3f12b3"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-7.webp",
+         "sha256": "2fd8a4c6352e98387891a521fc3fcb143ad8d2ce7ea9ce9ba85997285f76bd5c"
+        }
+       ]
+      },
+      {
+       "id": "shore-2",
+       "x": 1342.0,
+       "y": 852.0,
+       "scale": 2.0,
+       "frames": [
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-0.webp",
+         "sha256": "10c433ff57c770d9db74f19d5b3ca75512cef617d519664a5eb155b890e82b27"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-1.webp",
+         "sha256": "2ae26c91eb59e45894d52a3795d51957861ae1ea6aa535dab2e09fc981306025"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-2.webp",
+         "sha256": "507e1a80eefdb53a929907b1f46d2525fb70285cd68da8cd2ee4902dc0fea771"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-3.webp",
+         "sha256": "d44209e42e5f0de7e830e24b71cb28eeb248b271fcb68006015e07f9f4d27cf7"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-4.webp",
+         "sha256": "ca99b2e4a30a685559b6b361ee3b2553418cc453926ee8fc5cb19e6b20756b53"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-5.webp",
+         "sha256": "6b5f67e1f94a142bb65d9c389aa7146a63265d4c5ed72b4e71cc7d6956c439ff"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-6.webp",
+         "sha256": "5487788ac25d6130d42f0276652ff0ff4b67bd1bf6c7c055db365a6aa4470481"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-7.webp",
+         "sha256": "0b15e18f9d7ab11fec3cab634eb351057d04b04e62dfacda3234ae9f77abbefb"
+        }
+       ]
+      }
+     ]
+    },
+    "canopies": [
+     {
+      "id": "northwest-leaning-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-northwest-leaning-palm.webp",
+      "sha256": "dd43e0751a88a42bf6435acbe4f1562c06745c1c0e66f299bfa1fc9737b273c0",
+      "x": 153,
+      "y": 0,
+      "pivot": [
+       266.95,
+       33.6
+      ]
+     },
+     {
+      "id": "northwest-younger-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-northwest-younger-palm.webp",
+      "sha256": "ca44d768f664477a922b2d93c49200e1ff83cad2f81e441c1a7a89704b98e216",
+      "x": 442,
+      "y": 0,
+      "pivot": [
+       486.95,
+       -70.85
+      ]
+     },
+     {
+      "id": "eastern-windward-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-eastern-windward-palm.webp",
+      "sha256": "7705ebbffdd363a8f3bf4d08e0b36fa5eefdfcc7b4b7e3f69c20edcc36f3ab0e",
+      "x": 1401,
+      "y": 0,
+      "pivot": [
+       1462.95,
+       -56.53
+      ]
+     },
+     {
+      "id": "foreground-hero-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-foreground-hero-palm.webp",
+      "sha256": "c9b6409d77a5723f546fbbd8ada63d58168c4a671377650c20ecf1adf7adb74c",
+      "x": 1433,
+      "y": 853,
+      "pivot": [
+       1554.95,
+       938.69
+      ]
+     },
+     {
+      "id": "foreground-companion-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-foreground-companion-palm.webp",
+      "sha256": "3d0b7c42e6bb2d62284066732cb4923c0f86a899b4c61354765adbac6660914c",
+      "x": 1357,
+      "y": 948,
+      "pivot": [
+       1442.95,
+       1028.66
+      ]
+     }
+    ],
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm04-island-polish-r2/boundary-glow.webp",
+     "sha256": "ab92daca89cf2f0ea2b8f72de9ed306262aab3b8933b85f9239bc565840dec85",
+     "x": 82,
+     "y": 128
+    }
+   }
+  },
+  {
+   "fieldId": "field_bm05_01",
+   "identifier": "BATTLE_SOUTHPOLE",
+   "arenaIndex": 4,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm05-southpole-polish-r2/base.webp",
+     "sha256": "7af187cf2eeed9229ca71d9abf96f783a82ab904420732e446c1fba5e821370a",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "BM05_POLAR_R2",
+    "sea": {
+     "src": "assets/production/battle/bm05-southpole-polish-r2/sea-mask.webp",
+     "sha256": "4730ed096936a469932ee58e27c5a9ddefe8d97cdebd53d058b089efd07d731a",
+     "x": 0,
+     "y": 0,
+     "width": 1582,
+     "height": 213
+    },
+    "waves": {
+     "src": "assets/production/battle/bm05-southpole-polish-r2/wave-tile.webp",
+     "sha256": "062b1b64b3a5f7405cb18a64b5e9e582e2193440b7261389162da8daacbb3718"
+    },
+    "foam": {
+     "frameMs": 300,
+     "regions": [
+      {
+       "id": "lead-0",
+       "x": 560.0,
+       "y": 34.0,
+       "scale": 2.0,
+       "frames": [
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-0.webp",
+         "sha256": "2373b168e9bb7de81f473d73af4ed9032639b710706992b9f681fdd58ae71dfa"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-1.webp",
+         "sha256": "d2ba0e8bd9c606b06fa88c14230988e4012f3dc38ab270a709793828a18b569c"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-2.webp",
+         "sha256": "872a2808b409231afa6eae59162626173d9fca55697297ab56c592066f3a231d"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-3.webp",
+         "sha256": "3975edb879b4969e7277d5bb44cb517d1db207c39bc9923f64f842f392e67014"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-4.webp",
+         "sha256": "1277abe44566a4e93fba7f0f2b6e1c965bdfbcce34dc2960e911d61368e4c9c2"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-5.webp",
+         "sha256": "b07d6bd29e490dfd50a55f9293fc2822a6d5732dcaed0d96aa95093e1bcf51a9"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-6.webp",
+         "sha256": "ccfe8a06207db70de18914acaf2a7eb4736df5613ace487541a86f02f1d7cafc"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-7.webp",
+         "sha256": "d31d5f93f31ab2355a00ac65c9e8977868f91da0acfbf026636adf392faed884"
+        }
+       ]
+      }
+     ]
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm05-southpole-polish-r2/boundary-glow.webp",
+     "sha256": "4f62e306d208ecf787e40f5d0e1ca9f8984d7ba7f68c7a41a42d67eaa9152d4c",
+     "x": 139,
+     "y": 182
+    },
+    "iceStates": {
+     "openWater": {
+      "src": "assets/production/battle/bm05-southpole-polish-r2/open-water.webp",
+      "sha256": "f696fca9e005cc6aac3077ee5e69ce04d7c0d6fe24a9161ece2209e785396477",
+      "x": 160,
+      "y": 192
+     },
+     "cracked": {
+      "src": "assets/production/battle/bm05-southpole-polish-r2/cracked.webp",
+      "sha256": "4e1dad172f4f0cfaac814258a04f99564f4527aef13709ccb017bd0265744731",
+      "x": 160,
+      "y": 192
+     }
+    }
+   }
+  },
+  {
+   "fieldId": "field_bm06_01",
+   "identifier": "BATTLE_DESERT",
+   "arenaIndex": 5,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm06-polish-r2/base.webp",
+     "sha256": "33d4b5f39fb709572a857d37c1d02b1e30b2afe1dc57d0db6431a7958ce387c9",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "R1_POLISH_R2",
+    "clouds": 0.1,
+    "gust": "sand",
+    "particles": "sand",
+    "canopies": [
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-0.webp",
+      "sha256": "53b1744fc2e1dfa1f478244000d1ce4adbded3da74f7e9ef74509b27c0b9bffc",
+      "x": 523,
+      "y": 130,
+      "pivot": [
+       543.0,
+       163.44
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-1.webp",
+      "sha256": "0a0e6ae5087f23d5ce8b3fb47e90f1b8383b5ddd9844f22597c7a5e7e10072c2",
+      "x": 1327,
+      "y": 139,
+      "pivot": [
+       1362.0,
+       204.12
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-2.webp",
+      "sha256": "04d9e8e087d0952d16f6c893baedf58f4ad11adf1072c0b29c3a90e723cd2cc3",
+      "x": 1128,
+      "y": 146,
+      "pivot": [
+       1151.0,
+       181.2
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-3.webp",
+      "sha256": "bb03573fd68fa1c6c7223dda91df94799f0585812b4359eb01ee2cc46ce2b8ce",
+      "x": 188,
+      "y": 204,
+      "pivot": [
+       210.5,
+       237.44
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-4.webp",
+      "sha256": "c5ca44755ac461dcb2ce855f2ce6c907117bcd150b0bacd9e3cadae186a2cf48",
+      "x": 1445,
+      "y": 244,
+      "pivot": [
+       1465.0,
+       279.2
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-5.webp",
+      "sha256": "045bbb1a2f72afcd7d7420f9d78d6d13a66710bace5e7c487853e892e28d85a1",
+      "x": 114,
+      "y": 284,
+      "pivot": [
+       150.5,
+       344.72
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-6.webp",
+      "sha256": "76637433382e37d2a9e72c183291fdbb548109493e92a371ccdf6ef2ef6d57a3",
+      "x": 1590,
+      "y": 561,
+      "pivot": [
+       1621.0,
+       616.44
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-7.webp",
+      "sha256": "2d53eb20b8349481579c14078e028e54d8437c6e4709bb27b0980fbcb848a1e4",
+      "x": 63,
+      "y": 626,
+      "pivot": [
+       82.5,
+       662.96
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-8.webp",
+      "sha256": "ea6a2afd3ed24769947d6d57f9a8df2b8737207f2123b36c0b372edc0871d60e",
+      "x": 1558,
+      "y": 851,
+      "pivot": [
+       1577.0,
+       890.6
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-9.webp",
+      "sha256": "c836387762fa57cc88bb969a39b1bd316b3213c46b3edde0166360e544642ced",
+      "x": 1447,
+      "y": 892,
+      "pivot": [
+       1478.0,
+       942.16
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-10.webp",
+      "sha256": "49d97eaf3740ec92a46c385b45919325f69907df610ded5b735b2f858e094518",
+      "x": 225,
+      "y": 926,
+      "pivot": [
+       271.5,
+       999.04
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-11.webp",
+      "sha256": "769e1bec11e6ffa934b5914c75530c12a5a99e0ecbc3d9dcc6ef3d13ddfd57f3",
+      "x": 697,
+      "y": 1013,
+      "pivot": [
+       724.5,
+       1059.64
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm06-polish-r2/foliage-12.webp",
+      "sha256": "bffafd73de801e198ba571391efcfa9db915664ec24d3802c1ebcfa0c1ffb4e7",
+      "x": 999,
+      "y": 1040,
+      "pivot": [
+       1023.0,
+       1079.6
+      ]
+     }
+    ],
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm06-polish-r2/boundary-glow.webp",
+     "sha256": "c0bee4b9c850cb9d786d2e3b4155b57c1d68db0ac44ca1358c019a7b1a06a6c2",
+     "x": 76,
+     "y": 169
+    },
+    "floorMask": {
+     "src": "assets/production/battle/bm06-polish-r2/floor-mask.webp",
+     "sha256": "a125615ac7f80f6480371a018307cca03c35d64a9252f3e99dbe49fdf62d6b57",
+     "x": 0,
+     "y": 25,
+     "width": 1664,
+     "height": 1063
+    },
+    "cloudTile": {
+     "src": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+     "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
+    },
+    "gustTile": {
+     "src": "assets/production/battle/shared-ambient-r2/gust-streak-tile.webp",
+     "sha256": "92377e537d49bf9cf9a469bfbf4e6ff5a7aecd4911d20e95a3d68cc4ad3b07c7"
+    }
+   }
+  },
+  {
+   "fieldId": "field_bm07_01",
+   "identifier": "BATTLE_CYBERSPACE",
+   "arenaIndex": 6,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm07-polish-r2/base.webp",
+     "sha256": "c9cf929035cc0d6ecc2014d1feec03fc40a43e928dff11d620c66d5b263b7cbf",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "R1_POLISH_R2",
+    "particles": "data",
+    "emissiveMode": "pulse",
+    "scan": true,
+    "emissive": {
+     "src": "assets/production/battle/bm07-polish-r2/emissive.webp",
+     "sha256": "79e3664f8b272e13d55e356ae5717e25ef58096b758954c2f8f854414e8dce18",
+     "x": 7,
+     "y": 14
+    },
+    "floorMask": {
+     "src": "assets/production/battle/bm07-polish-r2/floor-mask.webp",
+     "sha256": "26bde99891c4404e8cd2c000f6b614649beaa82184db3215004d9ba9a2877e11",
+     "x": 107,
+     "y": 183,
+     "width": 1346,
+     "height": 772
+    },
+    "rotors": [
+     {
+      "src": "assets/production/battle/bm07-polish-r2/rotor-0.webp",
+      "sha256": "cef3310c9072fc5f0e0f73b3101d1ced0be18d2dc3406ace5ef6d91ebdb20cae",
+      "x": 1318,
+      "y": 130,
+      "pivot": [
+       1356.0,
+       161.0
+      ],
+      "speed": 2.4
+     },
+     {
+      "src": "assets/production/battle/bm07-polish-r2/rotor-1.webp",
+      "sha256": "970ec76fd175152bfa8abb469bc5e74d8d2e71b827f8a4bceb0679fbebb9605f",
+      "x": 1402,
+      "y": 131,
+      "pivot": [
+       1440.0,
+       162.0
+      ],
+      "speed": 2.4
+     }
+    ]
+   }
+  },
+  {
+   "fieldId": "field_bm08_01",
+   "identifier": "BATTLE_HELL",
+   "arenaIndex": 7,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm08-polish-r2/base.webp",
+     "sha256": "05ec202651aebda84deffeba196a7cceb233c7c60e3ab42ae44e637fa698dde1",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "R1_POLISH_R2",
+    "particles": "spirit",
+    "emissiveMode": "flicker",
+    "smoke": true,
+    "emissive": {
+     "src": "assets/production/battle/bm08-polish-r2/emissive.webp",
+     "sha256": "86d3371b298750f68c751f1b39e0ef7f7f3cb6dfd297b622cf97c8d1c6dca049",
+     "x": 52,
+     "y": 86
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm08-polish-r2/boundary-glow.webp",
+     "sha256": "efa148f3fff45606a66f255a250f5a0f7de7de4623e3051452aa91619a862e10",
+     "x": 99,
+     "y": 181
+    },
+    "floorMask": {
+     "src": "assets/production/battle/bm08-polish-r2/floor-mask.webp",
+     "sha256": "53af9cbd6967e5108e282eab66fc85b5969427bb5c2f2673b5aad6465e02d306",
+     "x": 0,
+     "y": 144,
+     "width": 1664,
+     "height": 944
+    },
+    "emitters": {
+     "pits": [
+      [
+       804.0,
+       52.36
+      ],
+      [
+       194.67,
+       653.27
+      ],
+      [
+       1461.26,
+       351.44
+      ],
+      [
+       1031.97,
+       1158.59
+      ]
+     ],
+     "lamps": [
+      [
+       360.0,
+       135.75
+      ],
+      [
+       1204.0,
+       103.75
+      ],
+      [
+       64.0,
+       983.75
+      ],
+      [
+       1612.0,
+       979.75
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "fieldId": "field_bm09_01",
+   "identifier": "BATTLE_COLOSSEUM",
+   "arenaIndex": 8,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm09-polish-r2/base.webp",
+     "sha256": "fd8ef743a0dae7b585c244986dde602bb45e1bc04b0d45bc9f868c5391d8e87c",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "R1_POLISH_R2",
+    "clouds": 0.14,
+    "particles": "dust",
+    "emissiveMode": "pulse",
+    "foliageStatic": {
+     "src": "assets/production/battle/bm09-polish-r2/foliage-small.webp",
+     "sha256": "d2cd9fa59d81dab1eeb7396bf35719f81bc101411db0fa23eb8d0036a0b217f5",
+     "x": 56,
+     "y": 285
+    },
+    "canopies": [
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-0.webp",
+      "sha256": "9cca0bd2d983a4316d1193b0722bd5efe66aa11197a295817d03d6acd31aea68",
+      "x": 819,
+      "y": 164,
+      "pivot": [
+       840.0,
+       193.04
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-1.webp",
+      "sha256": "77998995674ad4b439d129f48fd6bd11329059acb52b504400f107a852ab373e",
+      "x": 124,
+      "y": 209,
+      "pivot": [
+       148.0,
+       251.24
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-2.webp",
+      "sha256": "2942a560b32a8489fb34cae0bcb8f89ec3a60a5d7e608adc47df8931ee06fcaf",
+      "x": 424,
+      "y": 209,
+      "pivot": [
+       440.0,
+       243.32
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-3.webp",
+      "sha256": "1acaa3d37d5ca3e1a1cad7e054d789f1e333aa8105c80d8d04ca0e6a030bd38b",
+      "x": 1212,
+      "y": 209,
+      "pivot": [
+       1228.0,
+       243.32
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-4.webp",
+      "sha256": "9b6fe84bf2fe993ff475cae0a931a27975dca73e185174938c94686063f56321",
+      "x": 1483,
+      "y": 209,
+      "pivot": [
+       1507.5,
+       251.24
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-5.webp",
+      "sha256": "1bdbafbe06e11e36b31f3e5d8d89a30943a0dfa7c875313e17fdeac045b5ffba",
+      "x": 1599,
+      "y": 500,
+      "pivot": [
+       1615.5,
+       525.52
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-6.webp",
+      "sha256": "bdce25ec499e5cd6557c26cdc5c23754f5159ba2ab261de46eac3ba7b95baac3",
+      "x": 0,
+      "y": 841,
+      "pivot": [
+       28.0,
+       936.92
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-7.webp",
+      "sha256": "bd27ca966700e50b53a64ce7f94cf1d23cd113ec09dfeacc36d3cc678c71d7e5",
+      "x": 39,
+      "y": 950,
+      "pivot": [
+       55.0,
+       976.4
+      ]
+     },
+     {
+      "src": "assets/production/battle/bm09-polish-r2/foliage-8.webp",
+      "sha256": "194a77e83353fdb71e647c4e4ad71c68eea493542d6d0b631e5c57892dd47035",
+      "x": 1582,
+      "y": 977,
+      "pivot": [
+       1601.5,
+       1003.4
+      ]
+     }
+    ],
+    "emissive": {
+     "src": "assets/production/battle/bm09-polish-r2/emissive.webp",
+     "sha256": "16ffca4f3451677ffcffcb172242a2efc789feb9f01655d49e15690d4070a364",
+     "x": 136,
+     "y": 273
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm09-polish-r2/boundary-glow.webp",
+     "sha256": "3c16d28b7d453e565f422ce5e72ef9c945120069e8ecb55637d2b22bf05d86f6",
+     "x": 138,
+     "y": 283
+    },
+    "floorMask": {
+     "src": "assets/production/battle/bm09-polish-r2/floor-mask.webp",
+     "sha256": "f7d5ce80f4cebfb69d77b9b8d1af29f7af265814e605044e938606b66ba72c31",
+     "x": 0,
+     "y": 152,
+     "width": 1664,
+     "height": 936
+    },
+    "cloudTile": {
+     "src": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+     "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
+    }
+   }
+  },
+  {
+   "fieldId": "field_bm10_01",
+   "identifier": "BATTLE_STADIUM",
+   "arenaIndex": 9,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm10-polish-r2/base.webp",
+     "sha256": "7e22cf75df427fcc34fd68addf4257882d5272782c6954d8dc7ce6623b674c32",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "R1_POLISH_R2",
+    "clouds": 0.12,
+    "emissiveMode": "screen",
+    "emissive": {
+     "src": "assets/production/battle/bm10-polish-r2/emissive.webp",
+     "sha256": "95bd156241ca7530ad60aba9dadf90b86460e838cce8880a1293823e0ad7f590",
+     "x": 53,
+     "y": 42
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm10-polish-r2/boundary-glow.webp",
+     "sha256": "fa148d436be7ff4637eb9a7f081b37e44b52e0b08b741bddac2eca89adb5bc0b",
+     "x": 62,
+     "y": 283
+    },
+    "floorMask": {
+     "src": "assets/production/battle/bm10-polish-r2/floor-mask.webp",
+     "sha256": "5e12c68e56f405794b51b452204f9f1fd743f2f3c04323b5e46bf7268249bead",
+     "x": 99,
+     "y": 250,
+     "width": 1467,
+     "height": 833
+    },
+    "cloudTile": {
+     "src": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+     "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
+    }
+   }
+  },
+  {
+   "fieldId": "field_bm11_01",
+   "identifier": "BATTLE_DOMESTADIUM",
+   "arenaIndex": 10,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm11-polish-r2/base.webp",
+     "sha256": "797e5043caddfabd36ba59aaf28f2fb8cba1a4190e748d9d205ebbdd932abb6c",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "R1_POLISH_R2",
+    "emissiveMode": "screen",
+    "particles": "motes",
+    "emissive": {
+     "src": "assets/production/battle/bm11-polish-r2/emissive.webp",
+     "sha256": "e13e920233ff6c72fe37c0e211236a5e5eab18e909177392c7639ae722c01193",
+     "x": 60,
+     "y": 113
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm11-polish-r2/boundary-glow.webp",
+     "sha256": "f96520d762aa8814a7bc8ebb14fbc5605ec707ffe85376d3c8edfe416baa3806",
+     "x": 62,
+     "y": 283
+    },
+    "floorMask": {
+     "src": "assets/production/battle/bm11-polish-r2/floor-mask.webp",
+     "sha256": "41b2ff8a7d865991b6537050fe759c71ad1a1aea1ece5b788454a48dc71df7ba",
+     "x": 99,
+     "y": 249,
+     "width": 1467,
+     "height": 834
+    }
+   }
+  }
+ ]
+}

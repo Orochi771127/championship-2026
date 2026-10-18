@@ -1,0 +1,300 @@
+{
+ "schemaVersion": 1,
+ "assetId": "art:battle:original-opus:v1:bm03-volcano-polish-r3",
+ "family": "BATTLE",
+ "artifactMaturity": "LOCAL_REVIEW_BLENDER_LAYERED_R3",
+ "productionStatus": "LOCAL_REVIEW_NOT_PUBLISHED",
+ "runtimeEligible": true,
+ "shippingReady": false,
+ "humanApproved": false,
+ "rights": {
+  "status": "PROJECT_ORIGINAL",
+  "romDerivedPixels": false,
+  "authority": "BM03 Owner-selected R2 original Blender source polished in Blender 5.2 via MCP toward dot candidate look"
+ },
+ "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+ "filter": "linear",
+ "fields": [
+  {
+   "fieldId": "field_bm03_01",
+   "identifier": "BATTLE_VOLCANO",
+   "arenaIndex": 2,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm03-volcano-polish-r3/base.webp",
+     "sha256": "6544dd57212a9834547c38a098a7b6c27b73522d8be8e7116f5fd403c174be05",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "BM03_VOLCANO_R3",
+    "lava": {
+     "src": "assets/production/battle/bm03-volcano-polish-r3/lava-mask.webp",
+     "sha256": "16d0b35001797fa91a4de904d44a1f1c9ef504bfd4c693d2219af2bf5f8d048a",
+     "x": 0,
+     "y": 286,
+     "width": 1664,
+     "height": 802
+    },
+    "flow": {
+     "src": "assets/production/battle/bm03-volcano-polish-r3/flow-tile.webp",
+     "sha256": "42176465a589a29441ebf1b03f7809317adb1d1662fea0e02aa1500221468b07"
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm03-volcano-polish-r3/boundary-glow.webp",
+     "sha256": "280b72f37c79ed0f9c330cc3fd29ea2285ade50a5b0819a43b3a295111c84541",
+     "x": 214,
+     "y": 169
+    },
+    "lavaStates": {
+     "cooled": {
+      "src": "assets/production/battle/bm03-volcano-polish-r3/cooled.webp",
+      "sha256": "939b04b97425abea1365bb7b45a70201ad7b9fa832c64568ae9dc721abc0c9d3",
+      "x": 0,
+      "y": 224
+     },
+     "reheat": {
+      "src": "assets/production/battle/bm03-volcano-polish-r3/reheat.webp",
+      "sha256": "fced6cdf96c2b6a07493c93ad3b30518b5df7a734034119ed75b753f93180979",
+      "x": 0,
+      "y": 224
+     }
+    },
+    "embers": [
+     [
+      80.0,
+      272.0
+     ],
+     [
+      48.0,
+      304.0
+     ],
+     [
+      144.0,
+      304.0
+     ],
+     [
+      48.0,
+      336.0
+     ],
+     [
+      144.0,
+      336.0
+     ],
+     [
+      48.0,
+      368.0
+     ],
+     [
+      144.0,
+      368.0
+     ],
+     [
+      48.0,
+      400.0
+     ],
+     [
+      144.0,
+      400.0
+     ],
+     [
+      80.0,
+      432.0
+     ],
+     [
+      16.0,
+      464.0
+     ],
+     [
+      112.0,
+      464.0
+     ],
+     [
+      80.0,
+      496.0
+     ],
+     [
+      1040.0,
+      496.0
+     ],
+     [
+      80.0,
+      528.0
+     ],
+     [
+      16.0,
+      560.0
+     ],
+     [
+      112.0,
+      560.0
+     ],
+     [
+      16.0,
+      592.0
+     ],
+     [
+      112.0,
+      592.0
+     ],
+     [
+      944.0,
+      592.0
+     ],
+     [
+      48.0,
+      624.0
+     ],
+     [
+      848.0,
+      624.0
+     ],
+     [
+      944.0,
+      624.0
+     ],
+     [
+      48.0,
+      656.0
+     ],
+     [
+      848.0,
+      656.0
+     ],
+     [
+      944.0,
+      656.0
+     ],
+     [
+      80.0,
+      688.0
+     ],
+     [
+      48.0,
+      720.0
+     ],
+     [
+      976.0,
+      720.0
+     ],
+     [
+      80.0,
+      752.0
+     ],
+     [
+      944.0,
+      752.0
+     ],
+     [
+      80.0,
+      784.0
+     ],
+     [
+      16.0,
+      816.0
+     ],
+     [
+      112.0,
+      816.0
+     ],
+     [
+      48.0,
+      848.0
+     ],
+     [
+      144.0,
+      848.0
+     ],
+     [
+      80.0,
+      880.0
+     ],
+     [
+      16.0,
+      912.0
+     ],
+     [
+      112.0,
+      912.0
+     ],
+     [
+      48.0,
+      944.0
+     ],
+     [
+      144.0,
+      944.0
+     ],
+     [
+      80.0,
+      976.0
+     ],
+     [
+      176.0,
+      976.0
+     ],
+     [
+      48.0,
+      1008.0
+     ],
+     [
+      144.0,
+      1008.0
+     ],
+     [
+      1584.0,
+      1008.0
+     ],
+     [
+      16.0,
+      1040.0
+     ],
+     [
+      112.0,
+      1040.0
+     ],
+     [
+      208.0,
+      1040.0
+     ],
+     [
+      1552.0,
+      1040.0
+     ],
+     [
+      1648.0,
+      1040.0
+     ],
+     [
+      80.0,
+      1072.0
+     ],
+     [
+      176.0,
+      1072.0
+     ],
+     [
+      272.0,
+      1072.0
+     ],
+     [
+      1552.0,
+      1072.0
+     ],
+     [
+      1648.0,
+      1072.0
+     ]
+    ]
+   }
+  }
+ ]
+}

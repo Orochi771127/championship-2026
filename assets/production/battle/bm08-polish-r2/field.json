@@ -1,0 +1,84 @@
+{
+ "fieldId": "field_bm08_01",
+ "identifier": "BATTLE_HELL",
+ "arenaIndex": 7,
+ "worldWidthPx": 1664,
+ "worldHeightPx": 1088,
+ "nativeWidthPx": 416,
+ "nativeHeightPx": 272,
+ "visualRole": "BATTLE_ARENA",
+ "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+ "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+ "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+ "frames": [
+  {
+   "src": "assets/production/battle/bm08-polish-r2/base.webp",
+   "sha256": "05ec202651aebda84deffeba196a7cceb233c7c60e3ab42ae44e637fa698dde1",
+   "durationMs": null
+  }
+ ],
+ "ambient": {
+  "kind": "R1_POLISH_R2",
+  "particles": "spirit",
+  "emissiveMode": "flicker",
+  "smoke": true,
+  "emissive": {
+   "src": "assets/production/battle/bm08-polish-r2/emissive.webp",
+   "sha256": "86d3371b298750f68c751f1b39e0ef7f7f3cb6dfd297b622cf97c8d1c6dca049",
+   "x": 52,
+   "y": 86
+  },
+  "boundaryGlow": {
+   "src": "assets/production/battle/bm08-polish-r2/boundary-glow.webp",
+   "sha256": "efa148f3fff45606a66f255a250f5a0f7de7de4623e3051452aa91619a862e10",
+   "x": 99,
+   "y": 181
+  },
+  "floorMask": {
+   "src": "assets/production/battle/bm08-polish-r2/floor-mask.webp",
+   "sha256": "53af9cbd6967e5108e282eab66fc85b5969427bb5c2f2673b5aad6465e02d306",
+   "x": 0,
+   "y": 144,
+   "width": 1664,
+   "height": 944
+  },
+  "emitters": {
+   "pits": [
+    [
+     804.0,
+     52.36
+    ],
+    [
+     194.67,
+     653.27
+    ],
+    [
+     1461.26,
+     351.44
+    ],
+    [
+     1031.97,
+     1158.59
+    ]
+   ],
+   "lamps": [
+    [
+     360.0,
+     135.75
+    ],
+    [
+     1204.0,
+     103.75
+    ],
+    [
+     64.0,
+     983.75
+    ],
+    [
+     1612.0,
+     979.75
+    ]
+   ]
+  }
+ }
+}

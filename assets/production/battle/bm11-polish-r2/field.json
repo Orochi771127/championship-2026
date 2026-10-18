@@ -1,0 +1,45 @@
+{
+ "fieldId": "field_bm11_01",
+ "identifier": "BATTLE_DOMESTADIUM",
+ "arenaIndex": 10,
+ "worldWidthPx": 1664,
+ "worldHeightPx": 1088,
+ "nativeWidthPx": 416,
+ "nativeHeightPx": 272,
+ "visualRole": "BATTLE_ARENA",
+ "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+ "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+ "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+ "frames": [
+  {
+   "src": "assets/production/battle/bm11-polish-r2/base.webp",
+   "sha256": "797e5043caddfabd36ba59aaf28f2fb8cba1a4190e748d9d205ebbdd932abb6c",
+   "durationMs": null
+  }
+ ],
+ "ambient": {
+  "kind": "R1_POLISH_R2",
+  "emissiveMode": "screen",
+  "particles": "motes",
+  "emissive": {
+   "src": "assets/production/battle/bm11-polish-r2/emissive.webp",
+   "sha256": "e13e920233ff6c72fe37c0e211236a5e5eab18e909177392c7639ae722c01193",
+   "x": 60,
+   "y": 113
+  },
+  "boundaryGlow": {
+   "src": "assets/production/battle/bm11-polish-r2/boundary-glow.webp",
+   "sha256": "f96520d762aa8814a7bc8ebb14fbc5605ec707ffe85376d3c8edfe416baa3806",
+   "x": 62,
+   "y": 283
+  },
+  "floorMask": {
+   "src": "assets/production/battle/bm11-polish-r2/floor-mask.webp",
+   "sha256": "41b2ff8a7d865991b6537050fe759c71ad1a1aea1ece5b788454a48dc71df7ba",
+   "x": 99,
+   "y": 249,
+   "width": 1467,
+   "height": 834
+  }
+ }
+}

@@ -1,0 +1,64 @@
+{
+ "fieldId": "field_bm07_01",
+ "identifier": "BATTLE_CYBERSPACE",
+ "arenaIndex": 6,
+ "worldWidthPx": 1664,
+ "worldHeightPx": 1088,
+ "nativeWidthPx": 416,
+ "nativeHeightPx": 272,
+ "visualRole": "BATTLE_ARENA",
+ "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+ "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+ "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+ "frames": [
+  {
+   "src": "assets/production/battle/bm07-polish-r2/base.webp",
+   "sha256": "c9cf929035cc0d6ecc2014d1feec03fc40a43e928dff11d620c66d5b263b7cbf",
+   "durationMs": null
+  }
+ ],
+ "ambient": {
+  "kind": "R1_POLISH_R2",
+  "particles": "data",
+  "emissiveMode": "pulse",
+  "scan": true,
+  "emissive": {
+   "src": "assets/production/battle/bm07-polish-r2/emissive.webp",
+   "sha256": "79e3664f8b272e13d55e356ae5717e25ef58096b758954c2f8f854414e8dce18",
+   "x": 7,
+   "y": 14
+  },
+  "floorMask": {
+   "src": "assets/production/battle/bm07-polish-r2/floor-mask.webp",
+   "sha256": "26bde99891c4404e8cd2c000f6b614649beaa82184db3215004d9ba9a2877e11",
+   "x": 107,
+   "y": 183,
+   "width": 1346,
+   "height": 772
+  },
+  "rotors": [
+   {
+    "src": "assets/production/battle/bm07-polish-r2/rotor-0.webp",
+    "sha256": "cef3310c9072fc5f0e0f73b3101d1ced0be18d2dc3406ace5ef6d91ebdb20cae",
+    "x": 1318,
+    "y": 130,
+    "pivot": [
+     1356.0,
+     161.0
+    ],
+    "speed": 2.4
+   },
+   {
+    "src": "assets/production/battle/bm07-polish-r2/rotor-1.webp",
+    "sha256": "970ec76fd175152bfa8abb469bc5e74d8d2e71b827f8a4bceb0679fbebb9605f",
+    "x": 1402,
+    "y": 131,
+    "pivot": [
+     1440.0,
+     162.0
+    ],
+    "speed": 2.4
+   }
+  ]
+ }
+}

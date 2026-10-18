@@ -1,0 +1,119 @@
+{
+ "schemaVersion": 1,
+ "assetId": "art:battle:original-opus:v1:bm05-southpole-polish-r2",
+ "family": "BATTLE",
+ "artifactMaturity": "LOCAL_REVIEW_BLENDER_LAYERED_R2",
+ "productionStatus": "LOCAL_REVIEW_NOT_PUBLISHED",
+ "runtimeEligible": true,
+ "shippingReady": false,
+ "humanApproved": false,
+ "rights": {
+  "status": "PROJECT_ORIGINAL",
+  "romDerivedPixels": false,
+  "authority": "BM05 R1 original Blender source (layout per Owner 2026-10-18) polished in Blender 5.2 via MCP toward dot candidate look"
+ },
+ "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+ "filter": "linear",
+ "fields": [
+  {
+   "fieldId": "field_bm05_01",
+   "identifier": "BATTLE_SOUTHPOLE",
+   "arenaIndex": 4,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm05-southpole-polish-r2/base.webp",
+     "sha256": "7af187cf2eeed9229ca71d9abf96f783a82ab904420732e446c1fba5e821370a",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "BM05_POLAR_R2",
+    "sea": {
+     "src": "assets/production/battle/bm05-southpole-polish-r2/sea-mask.webp",
+     "sha256": "4730ed096936a469932ee58e27c5a9ddefe8d97cdebd53d058b089efd07d731a",
+     "x": 0,
+     "y": 0,
+     "width": 1582,
+     "height": 213
+    },
+    "waves": {
+     "src": "assets/production/battle/bm05-southpole-polish-r2/wave-tile.webp",
+     "sha256": "062b1b64b3a5f7405cb18a64b5e9e582e2193440b7261389162da8daacbb3718"
+    },
+    "foam": {
+     "frameMs": 300,
+     "regions": [
+      {
+       "id": "lead-0",
+       "x": 560.0,
+       "y": 34.0,
+       "scale": 2.0,
+       "frames": [
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-0.webp",
+         "sha256": "2373b168e9bb7de81f473d73af4ed9032639b710706992b9f681fdd58ae71dfa"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-1.webp",
+         "sha256": "d2ba0e8bd9c606b06fa88c14230988e4012f3dc38ab270a709793828a18b569c"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-2.webp",
+         "sha256": "872a2808b409231afa6eae59162626173d9fca55697297ab56c592066f3a231d"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-3.webp",
+         "sha256": "3975edb879b4969e7277d5bb44cb517d1db207c39bc9923f64f842f392e67014"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-4.webp",
+         "sha256": "1277abe44566a4e93fba7f0f2b6e1c965bdfbcce34dc2960e911d61368e4c9c2"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-5.webp",
+         "sha256": "b07d6bd29e490dfd50a55f9293fc2822a6d5732dcaed0d96aa95093e1bcf51a9"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-6.webp",
+         "sha256": "ccfe8a06207db70de18914acaf2a7eb4736df5613ace487541a86f02f1d7cafc"
+        },
+        {
+         "src": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-7.webp",
+         "sha256": "d31d5f93f31ab2355a00ac65c9e8977868f91da0acfbf026636adf392faed884"
+        }
+       ]
+      }
+     ]
+    },
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm05-southpole-polish-r2/boundary-glow.webp",
+     "sha256": "4f62e306d208ecf787e40f5d0e1ca9f8984d7ba7f68c7a41a42d67eaa9152d4c",
+     "x": 139,
+     "y": 182
+    },
+    "iceStates": {
+     "openWater": {
+      "src": "assets/production/battle/bm05-southpole-polish-r2/open-water.webp",
+      "sha256": "f696fca9e005cc6aac3077ee5e69ce04d7c0d6fe24a9161ece2209e785396477",
+      "x": 160,
+      "y": 192
+     },
+     "cracked": {
+      "src": "assets/production/battle/bm05-southpole-polish-r2/cracked.webp",
+      "sha256": "4e1dad172f4f0cfaac814258a04f99564f4527aef13709ccb017bd0265744731",
+      "x": 160,
+      "y": 192
+     }
+    }
+   }
+  }
+ ]
+}

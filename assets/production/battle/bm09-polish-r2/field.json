@@ -1,0 +1,148 @@
+{
+ "fieldId": "field_bm09_01",
+ "identifier": "BATTLE_COLOSSEUM",
+ "arenaIndex": 8,
+ "worldWidthPx": 1664,
+ "worldHeightPx": 1088,
+ "nativeWidthPx": 416,
+ "nativeHeightPx": 272,
+ "visualRole": "BATTLE_ARENA",
+ "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+ "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+ "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+ "frames": [
+  {
+   "src": "assets/production/battle/bm09-polish-r2/base.webp",
+   "sha256": "fd8ef743a0dae7b585c244986dde602bb45e1bc04b0d45bc9f868c5391d8e87c",
+   "durationMs": null
+  }
+ ],
+ "ambient": {
+  "kind": "R1_POLISH_R2",
+  "clouds": 0.14,
+  "particles": "dust",
+  "emissiveMode": "pulse",
+  "foliageStatic": {
+   "src": "assets/production/battle/bm09-polish-r2/foliage-small.webp",
+   "sha256": "d2cd9fa59d81dab1eeb7396bf35719f81bc101411db0fa23eb8d0036a0b217f5",
+   "x": 56,
+   "y": 285
+  },
+  "canopies": [
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-0.webp",
+    "sha256": "9cca0bd2d983a4316d1193b0722bd5efe66aa11197a295817d03d6acd31aea68",
+    "x": 819,
+    "y": 164,
+    "pivot": [
+     840.0,
+     193.04
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-1.webp",
+    "sha256": "77998995674ad4b439d129f48fd6bd11329059acb52b504400f107a852ab373e",
+    "x": 124,
+    "y": 209,
+    "pivot": [
+     148.0,
+     251.24
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-2.webp",
+    "sha256": "2942a560b32a8489fb34cae0bcb8f89ec3a60a5d7e608adc47df8931ee06fcaf",
+    "x": 424,
+    "y": 209,
+    "pivot": [
+     440.0,
+     243.32
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-3.webp",
+    "sha256": "1acaa3d37d5ca3e1a1cad7e054d789f1e333aa8105c80d8d04ca0e6a030bd38b",
+    "x": 1212,
+    "y": 209,
+    "pivot": [
+     1228.0,
+     243.32
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-4.webp",
+    "sha256": "9b6fe84bf2fe993ff475cae0a931a27975dca73e185174938c94686063f56321",
+    "x": 1483,
+    "y": 209,
+    "pivot": [
+     1507.5,
+     251.24
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-5.webp",
+    "sha256": "1bdbafbe06e11e36b31f3e5d8d89a30943a0dfa7c875313e17fdeac045b5ffba",
+    "x": 1599,
+    "y": 500,
+    "pivot": [
+     1615.5,
+     525.52
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-6.webp",
+    "sha256": "bdce25ec499e5cd6557c26cdc5c23754f5159ba2ab261de46eac3ba7b95baac3",
+    "x": 0,
+    "y": 841,
+    "pivot": [
+     28.0,
+     936.92
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-7.webp",
+    "sha256": "bd27ca966700e50b53a64ce7f94cf1d23cd113ec09dfeacc36d3cc678c71d7e5",
+    "x": 39,
+    "y": 950,
+    "pivot": [
+     55.0,
+     976.4
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm09-polish-r2/foliage-8.webp",
+    "sha256": "194a77e83353fdb71e647c4e4ad71c68eea493542d6d0b631e5c57892dd47035",
+    "x": 1582,
+    "y": 977,
+    "pivot": [
+     1601.5,
+     1003.4
+    ]
+   }
+  ],
+  "emissive": {
+   "src": "assets/production/battle/bm09-polish-r2/emissive.webp",
+   "sha256": "16ffca4f3451677ffcffcb172242a2efc789feb9f01655d49e15690d4070a364",
+   "x": 136,
+   "y": 273
+  },
+  "boundaryGlow": {
+   "src": "assets/production/battle/bm09-polish-r2/boundary-glow.webp",
+   "sha256": "3c16d28b7d453e565f422ce5e72ef9c945120069e8ecb55637d2b22bf05d86f6",
+   "x": 138,
+   "y": 283
+  },
+  "floorMask": {
+   "src": "assets/production/battle/bm09-polish-r2/floor-mask.webp",
+   "sha256": "f7d5ce80f4cebfb69d77b9b8d1af29f7af265814e605044e938606b66ba72c31",
+   "x": 0,
+   "y": 152,
+   "width": 1664,
+   "height": 936
+  },
+  "cloudTile": {
+   "src": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+   "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
+  }
+ }
+}

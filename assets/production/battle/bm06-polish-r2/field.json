@@ -1,0 +1,180 @@
+{
+ "fieldId": "field_bm06_01",
+ "identifier": "BATTLE_DESERT",
+ "arenaIndex": 5,
+ "worldWidthPx": 1664,
+ "worldHeightPx": 1088,
+ "nativeWidthPx": 416,
+ "nativeHeightPx": 272,
+ "visualRole": "BATTLE_ARENA",
+ "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+ "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+ "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+ "frames": [
+  {
+   "src": "assets/production/battle/bm06-polish-r2/base.webp",
+   "sha256": "33d4b5f39fb709572a857d37c1d02b1e30b2afe1dc57d0db6431a7958ce387c9",
+   "durationMs": null
+  }
+ ],
+ "ambient": {
+  "kind": "R1_POLISH_R2",
+  "clouds": 0.1,
+  "gust": "sand",
+  "particles": "sand",
+  "canopies": [
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-0.webp",
+    "sha256": "53b1744fc2e1dfa1f478244000d1ce4adbded3da74f7e9ef74509b27c0b9bffc",
+    "x": 523,
+    "y": 130,
+    "pivot": [
+     543.0,
+     163.44
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-1.webp",
+    "sha256": "0a0e6ae5087f23d5ce8b3fb47e90f1b8383b5ddd9844f22597c7a5e7e10072c2",
+    "x": 1327,
+    "y": 139,
+    "pivot": [
+     1362.0,
+     204.12
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-2.webp",
+    "sha256": "04d9e8e087d0952d16f6c893baedf58f4ad11adf1072c0b29c3a90e723cd2cc3",
+    "x": 1128,
+    "y": 146,
+    "pivot": [
+     1151.0,
+     181.2
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-3.webp",
+    "sha256": "bb03573fd68fa1c6c7223dda91df94799f0585812b4359eb01ee2cc46ce2b8ce",
+    "x": 188,
+    "y": 204,
+    "pivot": [
+     210.5,
+     237.44
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-4.webp",
+    "sha256": "c5ca44755ac461dcb2ce855f2ce6c907117bcd150b0bacd9e3cadae186a2cf48",
+    "x": 1445,
+    "y": 244,
+    "pivot": [
+     1465.0,
+     279.2
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-5.webp",
+    "sha256": "045bbb1a2f72afcd7d7420f9d78d6d13a66710bace5e7c487853e892e28d85a1",
+    "x": 114,
+    "y": 284,
+    "pivot": [
+     150.5,
+     344.72
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-6.webp",
+    "sha256": "76637433382e37d2a9e72c183291fdbb548109493e92a371ccdf6ef2ef6d57a3",
+    "x": 1590,
+    "y": 561,
+    "pivot": [
+     1621.0,
+     616.44
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-7.webp",
+    "sha256": "2d53eb20b8349481579c14078e028e54d8437c6e4709bb27b0980fbcb848a1e4",
+    "x": 63,
+    "y": 626,
+    "pivot": [
+     82.5,
+     662.96
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-8.webp",
+    "sha256": "ea6a2afd3ed24769947d6d57f9a8df2b8737207f2123b36c0b372edc0871d60e",
+    "x": 1558,
+    "y": 851,
+    "pivot": [
+     1577.0,
+     890.6
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-9.webp",
+    "sha256": "c836387762fa57cc88bb969a39b1bd316b3213c46b3edde0166360e544642ced",
+    "x": 1447,
+    "y": 892,
+    "pivot": [
+     1478.0,
+     942.16
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-10.webp",
+    "sha256": "49d97eaf3740ec92a46c385b45919325f69907df610ded5b735b2f858e094518",
+    "x": 225,
+    "y": 926,
+    "pivot": [
+     271.5,
+     999.04
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-11.webp",
+    "sha256": "769e1bec11e6ffa934b5914c75530c12a5a99e0ecbc3d9dcc6ef3d13ddfd57f3",
+    "x": 697,
+    "y": 1013,
+    "pivot": [
+     724.5,
+     1059.64
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm06-polish-r2/foliage-12.webp",
+    "sha256": "bffafd73de801e198ba571391efcfa9db915664ec24d3802c1ebcfa0c1ffb4e7",
+    "x": 999,
+    "y": 1040,
+    "pivot": [
+     1023.0,
+     1079.6
+    ]
+   }
+  ],
+  "boundaryGlow": {
+   "src": "assets/production/battle/bm06-polish-r2/boundary-glow.webp",
+   "sha256": "c0bee4b9c850cb9d786d2e3b4155b57c1d68db0ac44ca1358c019a7b1a06a6c2",
+   "x": 76,
+   "y": 169
+  },
+  "floorMask": {
+   "src": "assets/production/battle/bm06-polish-r2/floor-mask.webp",
+   "sha256": "a125615ac7f80f6480371a018307cca03c35d64a9252f3e99dbe49fdf62d6b57",
+   "x": 0,
+   "y": 25,
+   "width": 1664,
+   "height": 1063
+  },
+  "cloudTile": {
+   "src": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+   "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
+  },
+  "gustTile": {
+   "src": "assets/production/battle/shared-ambient-r2/gust-streak-tile.webp",
+   "sha256": "92377e537d49bf9cf9a469bfbf4e6ff5a7aecd4911d20e95a3d68cc4ad3b07c7"
+  }
+ }
+}
