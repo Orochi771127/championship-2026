@@ -118,6 +118,10 @@ async function released(page){
     for(const id of ['#cm-film-skip','#cm-film-sound']){const b=await page.locator(id).boundingBox();assert.ok(b.height>=44&&b.x>=0&&b.x+b.width<=391);assert.equal(await page.locator(id).evaluate(n=>n.scrollWidth>n.clientWidth),false);}
     await page.keyboard.press('Escape');await released(page);
   },{reducedMotion:'reduce'});
+  for(const zero of ['masterVolume','musicVolume'])await scenario(zero+' zero remains muted even on browsers ignoring element volume',async(page,context)=>{
+    await prefs(context,{masterVolume:100,musicVolume:100,[zero]:0});await boot(page);await watch(page);
+    assert.equal(await page.locator('video').evaluate(v=>v.muted),true);assert.equal(await page.locator('#cm-film-sound').isDisabled(),true);await skip(page);
+  });
   await scenario('normal Continue flow and TITLE return preserve save and one Pixi application',async(page,context)=>{
     const seed=fs.readFileSync(path.resolve('qa/championship-full-qa-save.json'),'utf8');await context.addInitScript(({key,seed})=>localStorage.setItem(key,seed),{key:saveKey,seed});
     await boot(page);const before=await page.evaluate(k=>localStorage.getItem(k),saveKey);await watch(page);await skip(page);

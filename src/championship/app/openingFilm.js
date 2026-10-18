@@ -72,9 +72,12 @@ export function createOpeningFilm({title,controls,login,menu,opening,getPreferen
   }
   function audio(){
     const p=getPreferences(),c=openingFilmCopy(locale());
-    video.muted=p.muted||!wantsSound;video.volume=Math.max(0,Math.min(1,p.masterVolume*p.musicVolume/10000));
-    const label=p.muted?c[4]:video.muted?c[2]:c[3];
-    if(sound.textContent!==label)sound.textContent=label;sound.disabled=p.muted;
+    const volume=Math.max(0,Math.min(1,p.masterVolume*p.musicVolume/10000));
+    // Mobile browsers may ignore element.volume; zero levels must also mute.
+    const silent=p.muted||volume===0;
+    video.muted=silent||!wantsSound;video.volume=volume;
+    const label=silent?c[4]:video.muted?c[2]:c[3];
+    if(sound.textContent!==label)sound.textContent=label;sound.disabled=silent;
     sound.setAttribute('aria-pressed',String(!video.muted));
   }
   function finish(reason){

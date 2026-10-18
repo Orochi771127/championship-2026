@@ -20,7 +20,7 @@ The published camera baseline `e14e7c82cf24ca40d3cf34d6a169092888d2809c` measure
 ## Playback contract
 
 - Startup and idle show a usable TITLE and request no MP4. The existing translated Watch button explicitly starts the one small source on every viewport. No HD fallback or second download is selected on resize.
-- Playback is inline and initially muted. The existing trusted sound button respects global mute and master × music volume. Browser gesture restrictions still apply; audible autoplay on an iPhone is not promised.
+- Playback is inline and initially muted. The existing trusted sound button respects global mute and master × music volume. A zero master/music level explicitly mutes the element and disables its sound button, including on browsers that ignore element volume. Browser gesture restrictions still apply; audible autoplay on an iPhone is not promised.
 - The existing `onActiveChange` → `syncMusic()` path requests no BGM scene during playback. It restores the current TITLE music only after the movie stops. No second music bus is introduced.
 - Skip is immediate during loading or playback, consumes the trailing gesture, and restores entry controls. Escape also skips; keyboard focus stays within the film controls while active.
 - Natural end, skip, errors, rejected play, startup/stall timeout, background, pagehide and TITLE departure pause/mute the video, remove its source, call `load()` to cancel/release it and clear deadlines. Foreground and TITLE return never restart it automatically. Explicit Watch can retry.
