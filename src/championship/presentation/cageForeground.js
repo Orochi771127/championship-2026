@@ -36,8 +36,8 @@ export function cm03ForegroundEligible(manifest,placements,location=globalThis.l
 export function cm24ForegroundEligible(manifest,placements,location=globalThis.location){
  return eligible(FIELDS[1],manifest,placements,location);
 }
-export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null,fold=null,worldHeightPx=null}={}) {
-  const config=FIELDS.find(f=>f.fieldId===data?.fieldId);
+export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null,fold=null,worldHeightPx=null,config:given=null}={}) {
+  const config=given??FIELDS.find(f=>f.fieldId===data?.fieldId);
   const isPublic=data?.renderType==='CAGE_FOREGROUND';if(isPublic)validatePublicMetadata(data);
   if(!config||!isPublic&&(data.sourceComposite?.sha256!==config.sourceHash||data.masterSha256!==config.masterHash)||data.pixelScale!==unit
     ||data.width!==config.width||data.height!==config.height||!Array.isArray(data.objects))throw Error('CAGE_FOREGROUND_SOURCE_MISMATCH');
@@ -58,6 +58,7 @@ export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null,fold
         x:p.x+x-rect.x+repeat,y:p.y+y-rect.y,width:right-x,height:bottom-y,
         crop:{x:x-o.x,y:y-o.y,width:right-x,height:bottom-y},depth:(p.y-rect.y)/unit+o.depthNative,
         slotIndex:p.slotIndex??p.fragmentOfSlot??p.capOfSlot??null,repeat,
+        ...(Number.isInteger(o.atlasX)&&Number.isInteger(o.atlasY)?{atlas:{x:o.atlasX,y:o.atlasY,originX:o.x-rect.x,originY:o.y-rect.y}}:{}),
         ...(fold?{foldCap:p.foldCap===true}:{})});
     }
   }
@@ -89,17 +90,50 @@ async function loadLocalForeground(config,{fetchImpl,baseHref}){
   if(!response.ok)throw Error('CAGE_FOREGROUND_LOCAL_MANIFEST_UNAVAILABLE');
   return response.json();
 }
+// Local review (2026-10-19): generated occluders for the other cages, one
+// stencil per depth band from each reviewed master's ID render and ground
+// contacts. Listed in a local index; never part of the public selection.
+const LOCAL_REVIEW_INDEX='assets/production/cage/foreground-review-20261019/index.json';
+async function localReviewConfigs({location,fetchImpl,baseHref}){
+  if(!isOriginalRuntimeLocation(location))return [];
+  try{
+    const response=await fetchImpl(new URL(LOCAL_REVIEW_INDEX,baseHref));
+    if(!response.ok)return [];
+    const index=await response.json();
+    if(index.assetId!=='art:cage:foreground-review:20261019'||!Array.isArray(index.fields))return [];
+    return index.fields.filter(f=>!FIELDS.some(c=>c.fieldId===f.fieldId)&&typeof f.manifest==='string'
+      &&f.manifest.startsWith('assets/production/cage/foreground-review-20261019/')&&!f.manifest.includes('..'))
+      .map(f=>Object.freeze({fieldId:f.fieldId,localManifest:f.manifest,stencilOnly:true,
+        prefix:'assets/production/cage/foreground-review-20261019/',width:f.width,height:f.height,
+        sourceHash:f.sourceHash,masterHash:f.masterHash,depthAuthority:index.depthAuthority}));
+  }catch(error){console.warn('CHAMPIONSHIP_CAGE_FOREGROUND_REVIEW_INDEX_FALLBACK',error?.message);return [];}
+}
 export async function withCageForeground({PIXI,art,manifest,placements,location=globalThis.location,fetchImpl=globalThis.fetch,baseHref=globalThis.location?.href}) {
-  const selected=FIELDS.filter(config=>eligible(config,manifest,placements,location));
+  const review=placements.some(p=>!FIELDS.some(c=>c.fieldId===p.fieldId))?await localReviewConfigs({location,fetchImpl,baseHref}):[];
+  const selected=[...FIELDS,...review].filter(config=>eligible(config,manifest,placements,location));
   if(!selected.length)return art;
   const bundles=[];
   for(const config of selected){
-   const data=config.localManifest?await loadLocalForeground(config,{fetchImpl,baseHref}):await loadPublicMetadata(config.role,{fetchImpl,baseHref}),plan=cageForegroundPlan(data,placements,{unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
+   const data=config.localManifest?await loadLocalForeground(config,{fetchImpl,baseHref}):await loadPublicMetadata(config.role,{fetchImpl,baseHref}),plan=cageForegroundPlan(data,placements,{config,unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
      fold:art.field.fold??null,worldHeightPx:art.field.worldHeightPx});
    if(data.fieldId!==config.fieldId)throw Error('CAGE_FOREGROUND_SOURCE_MISMATCH');
    bundles.push({config,data,plan});
   }
   const plan=bundles.flatMap(bundle=>bundle.plan);
+  // Generated review occluders ship their exact frame pixels in one atlas per
+  // cage: plain sprites, no stencil, so per-frame resident sorting stays cheap.
+  const atlases=new Map(),atlasLoads=[];
+  try{
+    for(const {data}of bundles){
+      if(!data.atlas)continue;
+      if(typeof data.atlas.src!=='string'||!data.atlas.src.startsWith('assets/production/cage/foreground-review-20261019/')||data.atlas.src.includes('..'))
+        throw Error('CAGE_FOREGROUND_ATLAS_INVALID');
+      atlasLoads.push(data.atlas.src);
+      const texture=await PIXI.Assets.load(data.atlas.src);
+      if(texture.width!==data.atlas.width||texture.height!==data.atlas.height)throw Error('CAGE_FOREGROUND_ATLAS_SIZE');
+      atlases.set(data.fieldId,texture);
+    }
+  }catch(error){await Promise.allSettled(atlasLoads.map(src=>PIXI.Assets.unload(src)));throw error;}
   // Reuse the exact base tile quad/UVs. A packed RGB overlay at a 1.5-device-
   // pixel scale can pick the neighbouring texel at nearest-sampling ties.
   // Stencil geometry reveals the same shared texture without a colour filter,
@@ -123,6 +157,16 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   const groups=[];let disposed=false,parent=null;
   try {
     for(const piece of plan){
+      const atlas=piece.atlas?atlases.get(piece.fieldId):null;
+      if(atlas){
+        const root=new PIXI.Container({label:'cage foreground '+piece.id});root.zIndex=piece.depth;root.eventMode='none';
+        for(const [mx,my,mw,mh] of piece.maskRects){
+          const sprite=new PIXI.Sprite(new PIXI.Texture({source:atlas.source,
+            frame:new PIXI.Rectangle(piece.atlas.x+mx-piece.atlas.originX,piece.atlas.y+my-piece.atlas.originY,mw,mh)}));
+          sprite.x=mx;sprite.y=my;root.addChild(sprite);
+        }
+        groups.push({root,piece});continue;
+      }
       const base=baseFor(piece);
       if(!base?.texture)throw Error('CAGE_FOREGROUND_BASE_TILE_MISSING');
       const root=new PIXI.Container({label:'cage foreground '+piece.id});root.zIndex=piece.depth;root.eventMode='none';
@@ -131,7 +175,7 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
       const mask=new PIXI.Graphics();for(const rect of piece.maskRects)mask.rect(...rect);mask.fill(0xffffff);
       root.addChild(sprite,mask);sprite.mask=mask;groups.push({root,piece});
     }
-  } catch(error){for(const {root}of groups)root.destroy({children:true});throw error;}
+  } catch(error){for(const {root}of groups)root.destroy({children:true});await Promise.allSettled(atlasLoads.map(src=>PIXI.Assets.unload(src)));throw error;}
   const foreground={
     attach(layer){parent=layer;for(const {root}of groups)layer.addChild(root);},
     syncViewport(fit){if(disposed)return;for(const {root,piece:p}of groups){
@@ -142,7 +186,7 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
     }},
     getDiagnostics(){return {fieldId:bundles.length===1?bundles[0].data.fieldId:null,fieldIds:bundles.map(b=>b.data.fieldId),
       objectCount:bundles.reduce((n,b)=>n+b.data.objects.length,0),spriteCount:groups.length,
-      deliveredPackedRgbaBytes:bundles.reduce((n,b)=>n+b.data.objects.reduce((n,o)=>n+o.width*o.height*4,0),0),additionalDecodedTextureBytes:0,
+      deliveredPackedRgbaBytes:bundles.reduce((n,b)=>n+b.data.objects.reduce((n,o)=>n+o.width*o.height*4,0),0),additionalDecodedTextureBytes:bundles.reduce((n,b)=>n+(b.data.atlas?b.data.atlas.width*b.data.atlas.height*4:0),0),atlasCount:atlases.size,
       maskRectangleCount:plan.reduce((n,p)=>n+p.maskRects.length,0),sourceHash:bundles.length===1?bundles[0].config.sourceHash:null,
       sourceHashes:Object.fromEntries(bundles.map(b=>[b.data.fieldId,b.config.sourceHash])),disposed,
       depthAuthority:bundles.length===1?bundles[0].config.depthAuthority:'EXACT_MASTER_GROUND_PROJECTION_PER_FIELD',
@@ -151,5 +195,5 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   };
   return Object.freeze({...art,foreground,getDiagnostics(){return {...art.getDiagnostics(),foreground:foreground.getDiagnostics()};},
     async dispose(){if(disposed)return;disposed=true;for(const {root}of groups)if(!root.destroyed){root.parent?.removeChild(root);root.destroy({children:true});}
-      parent=null;await art.dispose();}});
+      parent=null;await Promise.allSettled(atlasLoads.map(src=>PIXI.Assets.unload(src)));await art.dispose();}});
 }
