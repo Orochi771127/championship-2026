@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import {deepFreeze} from '../../src/championship/contracts/championshipContracts.js';
 import {projectDatabase} from '../../src/championship/database/databaseRuntime.js';
 import {databaseDisplayRows,getDatabaseDisplayEntry} from '../../src/championship/database/databaseDisplayCatalog.js';
+import {databaseIllustrationText} from '../../src/championship/database/databaseIllustrations.js';
 import {speciesName,generationName} from '../../src/championship/text/zhHant.js';
 import {setLabel,setText,uiText} from '../../src/championship/text/uiText.js';
 import {setLocale} from '../../src/championship/text/locale.js';
@@ -40,7 +41,7 @@ export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpec
     setTimeout:forbidden('TIMER'),setInterval:forbidden('TIMER'),requestAnimationFrame:forbidden('RAF'),
     addEventListener(type,fn){if(!listeners.has(type))listeners.set(type,new Set());listeners.get(type).add(fn);},
     removeEventListener(type,fn){listeners.get(type)?.delete(fn);},
-    databaseHeroPortrait,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading,databaseDisplayRows,getDatabaseDisplayEntry,speciesName,generationName,setLabel,setText,uiText,isDesktopBrowseLayout,
+    databaseHeroPortrait,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading,databaseDisplayRows,getDatabaseDisplayEntry,databaseIllustrationText,speciesName,generationName,setLabel,setText,uiText,isDesktopBrowseLayout,
     originalDatabaseIcon:()=>null,
     openingEggChoices:()=>Array.from({length:8},(_,speciesIndex)=>({speciesIndex,formalName:`Fixture egg ${speciesIndex}`,src:''})),
     openingEggText:()=>({nameNote:''}),

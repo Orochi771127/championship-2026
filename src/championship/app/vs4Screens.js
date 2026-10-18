@@ -5,6 +5,7 @@ import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerif
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
 import {databaseDisplayRows, getDatabaseDisplayEntry} from '../database/databaseDisplayCatalog.js';
+import {databaseIllustrationText} from '../database/databaseIllustrations.js';
 import {openingEggChoices} from './openingEggChoices.js';
 import {openingEggText} from '../text/openingEggText.js';
 import {loadAcceptedDatabasePortrait} from '../presentation/acceptedDatabasePortraits.js';
@@ -402,8 +403,8 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
   filterLabel.append(element('span', '', 'DEX_STAGE'));
   const stageFilter = element('select', 'cm-vs2-database__stage');
   stageFilter.setAttribute('aria-label', uiText('DEX_STAGE'));
-  for (const value of ['', '0', '1', '2', '3', '4', '5', '6']) {
-    const option = element('option', '', value === '' ? uiText('DEX_ALL') : generationName(Number(value)));
+  for (const value of ['', '0', '1', '2', '3', '4', '5', '6', 'ART']) {
+    const option = element('option', '', value === '' ? uiText('DEX_ALL') : value === 'ART' ? databaseIllustrationText('label') : generationName(Number(value)));
     option.value = value;
     stageFilter.append(option);
   }
@@ -463,12 +464,13 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     else source.intents.leaveScreen();
   });
   stageFilter.addEventListener('change', () => {
-    activeStage = stageFilter.value === '' ? null : Number(stageFilter.value);
+    activeStage = stageFilter.value === '' ? null : stageFilter.value === 'ART' ? 'ART' : Number(stageFilter.value);
     listScroll = null;
     lastOpened = null;
     list.scrollTop = 0;
     const selected = selectedEgg ?? source.getFrame().database?.selected;
-    if (selected && activeStage !== null && getDatabaseDisplayEntry(selected.speciesIndex)?.numberingStageIndex !== activeStage) {
+    if (selected && activeStage !== null && (activeStage === 'ART'
+      ? selected.kind !== 'ILLUSTRATION' : getDatabaseDisplayEntry(selected.speciesIndex)?.numberingStageIndex !== activeStage)) {
       selectedEgg = null;
       source.intents.selectDatabaseSpecies(null);
     }
@@ -520,7 +522,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         item.dataset.state = row.state;
         item.dataset.displayCode = row.displayCode;
         const visibleName = row.kind === 'EGG' ? eggs.get(row.speciesIndex).formalName : (row.viewable || row.state === 'REGISTERED') ? speciesName(row.speciesIndex, row.displayName) : uiText('Undiscovered');
-        item.setAttribute("aria-label", `${row.displayCode} · ${generationName(row.numberingStageIndex)} · ${visibleName}`);
+        item.setAttribute("aria-label", `${row.displayCode} · ${row.kind==='ILLUSTRATION'?databaseIllustrationText('label'):generationName(row.numberingStageIndex)} · ${visibleName}`);
         const name = element("div", "cm-vs2-shop__name");
         name.append(element("strong", "", (!row.viewable && row.state === 'UNDISCOVERED') ? '????' : visibleName));
         name.append(element("span", "cm-vs2-shop__meta", row.displayCode));
@@ -578,7 +580,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         ? "已登錄"
         : "尚未登錄這隻拍檔。"
     );
-    detail.append(title, element('p','cm-vs2-shop__meta', `${selected.displayCode} · ${generationName(selected.numberingStageIndex)}`));
+    detail.append(title, element('p','cm-vs2-shop__meta', `${selected.displayCode} · ${selected.kind==='ILLUSTRATION'?databaseIllustrationText('label'):generationName(selected.numberingStageIndex)}`));
     if (egg) {
       const image = element('img','cm-vs2-database__egg');
       image.src = egg.src;
@@ -587,6 +589,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       if (openingEggText().nameNote) detail.append(element('p','cm-vs2-shop__meta',openingEggText().nameNote));
       return;
     }
+    if (selected.kind==='ILLUSTRATION') meta.textContent=databaseIllustrationText('status');
     detail.append(meta);
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) {
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
@@ -615,6 +618,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       holder.append(image,placeholder); detail.append(holder);
       image.src = hero.src;
     }
+    if (selected.kind==='ILLUSTRATION') return;
     const story = databaseStory(selected.speciesIndex);
     if (story) {
       const profile = element('section','cm-dex-profile');

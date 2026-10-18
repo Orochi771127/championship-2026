@@ -1,0 +1,9 @@
+# Six approved encyclopedia illustrations
+
+This batch connects the six approved illustrations to full-size details and small list thumbnails, including the two newly revised boars. Existing 134 public selections remain exact. Identities 231–236 use ART01–ART06 in a separate Character art filter; they do not receive gameplay stats, moves, evolution stages, routes, registration history or instances. The original 218 playable book entries and counts remain unchanged.
+
+Six originals remain byte-identical in the recorded local source-master locations and original Library identities. The two new boars match root-provided SHA-256 values. The official Library transfer helper downloaded to a temporary file, then failed before atomic installation because Windows Python has no os.setxattr. No downloaded bytes survived the failed attempt. Root explicitly authorized a wrapper that only stores xattrs in a verified sidecar; official transfer parsing, authentication, redirects, path checks and atomic installation were retained, and size plus expected SHA-256 checks were added before install. This was a platform compatibility error, not an approval or access denial.
+
+Public derivatives contain at most 768px with WebP Q90/alpha100 and lossless 128px thumbnails. No crop, recolor, weapon addition or regenerated image. The private manifest binds each original, approved version and Library ID to both public hashes. Approval of the revised boars supersedes the old hold; old mature-v1 and awakened-tailfix-v2 are excluded.
+
+The existing source names are descriptive art labels, not new approved combat species definitions. No draft story is published. Publication is handed to the existing single publisher after CI, normal desktop/mobile detail checks and precise artifact capacity measurement. Final public status is recorded separately after deployment and independent live hash checks.

@@ -1,0 +1,96 @@
+{
+  "checkedAt": "2026-10-18T12:53:06.317227+00:00",
+  "remoteMain": "f1674db642f9039978ba85c53c27ae666fa755c5",
+  "inputs": [
+    {
+      "path": "src/data/championship/catalogs/creature-species.r1.json",
+      "sha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba",
+      "bytes": 63261,
+      "sourceCommit": "f1674db642f9039978ba85c53c27ae666fa755c5"
+    },
+    {
+      "path": "src/data/championship/product-species-extensions.r1.json",
+      "sha256": "ea565e079fafaf72d86008d2df0fb94fe482a57922bb29e4a466b73201851a9e",
+      "bytes": 5325,
+      "sourceCommit": "f1674db642f9039978ba85c53c27ae666fa755c5"
+    },
+    {
+      "path": "src/data/championship/database-display.r1.json",
+      "sha256": "a0b5b54308962928e1cebf6a488765a594bd644c35b8bab15baf0199bf8975c6",
+      "bytes": 48643,
+      "sourceCommit": "f1674db642f9039978ba85c53c27ae666fa755c5"
+    },
+    {
+      "path": "src/data/championship/public-character-catalog.v1.json",
+      "sha256": "f4ea02c71a3f6057ec0411760f2555c87036f97bea1c682ce3b1a34e243615c6",
+      "bytes": 209192,
+      "sourceCommit": "f1674db642f9039978ba85c53c27ae666fa755c5"
+    }
+  ],
+  "nativeIds": {
+    "count": 228,
+    "min": 0,
+    "max": 227
+  },
+  "existingExtensionIds": [
+    229,
+    230
+  ],
+  "existingReservedSpeciesCount": 230,
+  "absentSentinel": 228,
+  "sentinelMustNotReuse": true,
+  "highestAllocatedId": 230,
+  "nextAvailableNumericIdAtCheckedCommit": 231,
+  "allocatedScope": "ENCYCLOPEDIA_ILLUSTRATIONS_ONLY",
+  "identities": [
+    {
+      "speciesIndex": 231,
+      "speciesId": "species-231",
+      "displayCode": "ART01",
+      "numberingStageIndex": null,
+      "numericCollision": false,
+      "displayCodeCollision": false
+    },
+    {
+      "speciesIndex": 232,
+      "speciesId": "species-232",
+      "displayCode": "ART02",
+      "numberingStageIndex": null,
+      "numericCollision": false,
+      "displayCodeCollision": false
+    },
+    {
+      "speciesIndex": 233,
+      "speciesId": "species-233",
+      "displayCode": "ART03",
+      "numberingStageIndex": null,
+      "numericCollision": false,
+      "displayCodeCollision": false
+    },
+    {
+      "speciesIndex": 234,
+      "speciesId": "species-234",
+      "displayCode": "ART04",
+      "numberingStageIndex": null,
+      "numericCollision": false,
+      "displayCodeCollision": false
+    },
+    {
+      "speciesIndex": 235,
+      "speciesId": "species-235",
+      "displayCode": "ART05",
+      "numberingStageIndex": null,
+      "numericCollision": false,
+      "displayCodeCollision": false
+    },
+    {
+      "speciesIndex": 236,
+      "speciesId": "species-236",
+      "displayCode": "ART06",
+      "numberingStageIndex": null,
+      "numericCollision": false,
+      "displayCodeCollision": false
+    }
+  ],
+  "reason": "Evolution design is deferred. ART gallery codes do not assign gameplay evolution stages or borrow unapproved stats. Native and existing extension identities/codes unchanged."
+}

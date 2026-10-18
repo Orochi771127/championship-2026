@@ -82,6 +82,7 @@ import {
 } from "../shop/shopRuntime.js";
 import { projectDatabase } from "../database/databaseRuntime.js";
 import { getDatabaseSlot } from "../database/databaseCatalog.js";
+import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
 import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
 import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
@@ -2257,7 +2258,7 @@ export function createChampionshipStandaloneApp({
         publishScreens();
         return this.getDatabaseFrame();
       }
-      getDatabaseSlot(speciesIndex);
+      if (!getDatabaseIllustration(speciesIndex)) getDatabaseSlot(speciesIndex);
       selectedDatabaseSpeciesIndex = speciesIndex;
       publishScreens();
       return this.getDatabaseFrame();

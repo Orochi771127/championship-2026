@@ -149,10 +149,10 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('134 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('140 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,134);
- for(const e of art.entries){const id=[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex)?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-display(?:-gap)?-20261018\/species-\d{3}\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,140);
+ for(const e of art.entries){const id=(e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:display(?:-gap)?|illustrations)-20261018\/species-\d{3}\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,20,195,'8',NaN])assert.equal(get(id),null);
 });
 
@@ -230,7 +230,7 @@ test('confirmed ultimate heroes are present with exact PNG bytes and selected so
  const {DATABASE_HERO_PORTRAITS:art}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- assert.equal(art.entries.length,134);assert.equal(manifest.count,44);
+ assert.equal(art.entries.length,140);assert.equal(manifest.count,44);
  for(const [sp,version,form] of [[211,'v1','OWNER_CONFIRMED_BRASS_CROWN_MANDRILL'],[222,'v2','R10_QUADRUPED_LEFT_PANEL']]){
   const entry=approvedHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(metadata.selectedSourceForm,form);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
@@ -627,7 +627,7 @@ test('approved207208209210212213214216217 bind exact owner hero bytes, preserve 
  const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-20261018/manifest.json','utf8'));
  const ids=[207,208,209,210,212,213,214,216,217],codes=['UL30','UL31','UL32','UL35','UL36','UL37','UL38','UL13','UL22'];
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
- const prior=publicHeroes.entries.filter(e=>!gapApprovedIds.has(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&![206,218,219,220,221,223].includes(e.speciesIndex));assert.equal(prior.length,95);
+ const prior=publicHeroes.entries.filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&![206,218,219,220,221,223].includes(e.speciesIndex));assert.equal(prior.length,95);
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
@@ -650,7 +650,7 @@ test('approved218219220221 bind exact owner hero bytes, preserve previous104 and
  const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-218-221-20261018/manifest.json','utf8'));
  const ids=[218,219,220,221],codes=['UL15','UL28','UL01','UL17'];
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
- const prior=publicHeroes.entries.filter(e=>!gapApprovedIds.has(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&![206,223].includes(e.speciesIndex));assert.equal(prior.length,104);
+ const prior=publicHeroes.entries.filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&![206,223].includes(e.speciesIndex));assert.equal(prior.length,104);
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
@@ -673,7 +673,7 @@ test('approved223DarkEyes bind exact owner hero bytes, preserve previous108 and 
  const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-223-20261018/manifest.json','utf8'));
  const ids=[223],codes=['UL18'];
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
- const prior=publicHeroes.entries.filter(e=>!gapApprovedIds.has(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&e.speciesIndex!==206);assert.equal(prior.length,108);
+ const prior=publicHeroes.entries.filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&e.speciesIndex!==206);assert.equal(prior.length,108);
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
@@ -696,7 +696,7 @@ test('approved206Simplified bind exact owner hero bytes, preserve previous109 an
  const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-206-20261018/manifest.json','utf8'));
  const ids=[206],codes=['UL29'];
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
- const prior=publicHeroes.entries.filter(e=>!gapApprovedIds.has(e.speciesIndex)&&!ids.includes(e.speciesIndex));assert.equal(prior.length,109);
+ const prior=publicHeroes.entries.filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&!ids.includes(e.speciesIndex));assert.equal(prior.length,109);
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);

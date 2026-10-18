@@ -141,10 +141,13 @@ test("Database translates every registered species without revealing unregistere
   const frame = { screen: "DATABASE", database: { entries, selected: null, registeredCount: 218, slotCount: 218 } };
   const selected = [];
   const view = createDatabaseView({ root, source: { getFrame: () => frame, intents: { selectDatabaseSpecies: id => selected.push(id) } } });
-  const rows=root.querySelectorAll(".cm-vs2-database__row");
-  assert.equal(rows.length,226);assert.equal(DATABASE_DISPLAY_CATALOG.entries.length,226);
+  const allRows=root.querySelectorAll(".cm-vs2-database__row");
+  assert.equal(allRows.length,232);
+  const rows=allRows.filter(row=>Number(row.dataset.speciesIndex)<231);
+  const playableDisplay=DATABASE_DISPLAY_CATALOG.entries.filter(row=>row.kind!=='ILLUSTRATION');
+  assert.equal(rows.length,226);assert.equal(playableDisplay.length,226);
   assert.deepEqual(rows.map(row=>[Number(row.dataset.speciesIndex),row.dataset.displayCode]),
-    DATABASE_DISPLAY_CATALOG.entries.map(row=>[row.speciesIndex,row.displayCode]));
+    playableDisplay.map(row=>[row.speciesIndex,row.displayCode]));
   // These explicit owner-approved identities and raw-order checks are independent
   // of the display catalog/renderer, so a shared projection error cannot self-pass.
   for(const [id,code] of [[222,'UL02'],[230,'UL03'],[211,'UL33'],[229,'UL34']]){
@@ -160,8 +163,8 @@ test("Database translates every registered species without revealing unregistere
   assert.deepEqual(['EG','B1','B2','GR','MA','AW','UL'].map(prefix=>rows.filter(row=>row.dataset.displayCode.startsWith(prefix)).length),[8,12,14,38,64,51,39]);
   assert.equal(rows.at(-1).dataset.displayCode,'UL39');
   for (const row of rows) row.click();
-  assert.deepEqual(selected,DATABASE_DISPLAY_CATALOG.entries.map(row=>row.numberingStageIndex===0?null:row.speciesIndex));
-  assert.doesNotMatch(visibleCopy(root).replace(/\b(?:EG|B1|B2|GR|MA|AW|UL)\d{2,}\b/g,''), /[a-zA-Z\p{Script=Katakana}\p{Script=Hiragana}]/u);
+  assert.deepEqual(selected,playableDisplay.map(row=>row.numberingStageIndex===0?null:row.speciesIndex));
+  assert.doesNotMatch(visibleCopy(root).replace(/\b(?:EG|B1|B2|GR|MA|AW|UL|ART)\d{2,}\b/g,''), /[a-zA-Z\p{Script=Katakana}\p{Script=Hiragana}]/u);
   view.render({ ...frame, database: { ...frame.database, entries: [{ ...entries[0], state: "UNDISCOVERED" }] } });
   assert.doesNotMatch(visibleCopy(root), /黏液獸|M_8/);
 });

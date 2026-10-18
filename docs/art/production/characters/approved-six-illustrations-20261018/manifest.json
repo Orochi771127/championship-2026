@@ -1,0 +1,287 @@
+{
+  "scope": "Six approved encyclopedia illustrations; no raising, battle, evolution, save or native species changes.",
+  "baseCommit": "f1674db642f9039978ba85c53c27ae666fa755c5",
+  "identityAllocation": "231-236 are encyclopedia-only identities; ART01-ART06 are gallery codes with no evolution stage assignment. Existing 0-230 unchanged; absent sentinel 228 retained.",
+  "sourcePreservation": "Six byte-identical PNG originals kept outside public artifact, at the exact source paths and Library identities below.",
+  "supersedes": "Only the two newly approved family-style boar revisions selected. Old mature-v1 and awakened-tailfix-v2 are historical and excluded.",
+  "mediaBytes": 818364,
+  "entries": [
+    {
+      "speciesIndex": 231,
+      "speciesId": "species-231",
+      "displayCode": "ART01",
+      "displayName": "星河山豬・成長期",
+      "candidateKey": "boar-growth",
+      "master": {
+        "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\source-masters\\galactic-boar-growth-v4.png",
+        "originalPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-growth\\galactic-boar-growth-v4.png",
+        "libraryFileId": "libfile_37dafc40c4688191b91c39d498dfe096",
+        "sha256": "bac83873481e94ad14cb4bbaef684284252e25574fb27416c0aa5b5ac9395995",
+        "bytes": 1370466,
+        "preservation": "BYTE_IDENTICAL_LOCAL_COPY_OF_EXISTING_VERIFIED_SOURCE",
+        "dimensions": [
+          1374,
+          1145
+        ]
+      },
+      "approval": {
+        "status": "owner_approved",
+        "evidence": "Sentinel_113f15d8467881919fceeea8cf9ad3cc"
+      },
+      "purpose": "FULL_ENCYCLOPEDIA_ILLUSTRATION_ONLY",
+      "gameplayRegistration": false,
+      "evolutionStageAssigned": false,
+      "display": {
+        "src": "assets/production/database-illustrations-20261018/species-231.display.af59af31bb743f84.webp",
+        "sha256": "af59af31bb743f84daae65d129c3a5b65773cdce4815ead65cf4f654d492f2aa",
+        "width": 768,
+        "height": 640,
+        "bytes": 85300,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": false,
+        "operation": "CONTAIN_768_Q90_ALPHA100"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-illustrations-20261018/species-231.thumbnail.7bf467318818f2c0.webp",
+        "sha256": "7bf467318818f2c0f9bea6adad77ccb4f50e0241ff4a5c28618de0810de791ac",
+        "width": 128,
+        "height": 107,
+        "bytes": 16980,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": true,
+        "operation": "CONTAIN_128_LOSSLESS"
+      }
+    },
+    {
+      "speciesIndex": 232,
+      "speciesId": "species-232",
+      "displayCode": "ART02",
+      "displayName": "星河山豬・成熟期",
+      "candidateKey": "boar-mature",
+      "master": {
+        "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\source-masters\\山豬_成熟期_血統風格修正版.png",
+        "libraryFileId": "libfile_0a9e3d9f3eac8191976a44462149e9b3",
+        "libraryVersion": 0,
+        "sha256": "79541efce40c55a366c21116509d4dd4a8356d9a62713980170fb0b8bb55e004",
+        "bytes": 2056256,
+        "metadataSidecar": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\source-masters\\山豬_成熟期_血統風格修正版.png.library.json",
+        "dimensions": [
+          1502,
+          1047
+        ]
+      },
+      "approval": {
+        "status": "owner_approved",
+        "evidence": "Sentinel_36cbd7c744f48191b4c53aadd39fe851"
+      },
+      "purpose": "FULL_ENCYCLOPEDIA_ILLUSTRATION_ONLY",
+      "gameplayRegistration": false,
+      "evolutionStageAssigned": false,
+      "display": {
+        "src": "assets/production/database-illustrations-20261018/species-232.display.e21e59d73bb64d4a.webp",
+        "sha256": "e21e59d73bb64d4ad085af309347932baea5c8a963ff4983640ddb1e3f76bcb2",
+        "width": 768,
+        "height": 535,
+        "bytes": 111274,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": false,
+        "operation": "CONTAIN_768_Q90_ALPHA100"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-illustrations-20261018/species-232.thumbnail.d77e393e621c8bd0.webp",
+        "sha256": "d77e393e621c8bd06bceec62e5cac135a26d4078353ea21899f2334ee64f1076",
+        "width": 128,
+        "height": 89,
+        "bytes": 19094,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": true,
+        "operation": "CONTAIN_128_LOSSLESS"
+      }
+    },
+    {
+      "speciesIndex": 233,
+      "speciesId": "species-233",
+      "displayCode": "ART03",
+      "displayName": "星河山豬・覺醒體",
+      "candidateKey": "boar-awakened",
+      "master": {
+        "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\source-masters\\山豬_覺醒體_血統風格修正版.png",
+        "libraryFileId": "libfile_a8ccd01f8df08191912c6db5f3099f92",
+        "libraryVersion": 0,
+        "sha256": "8b91df854871ed98da64c0b776246209efcdadedf08da6d25c7be27a092abf59",
+        "bytes": 1839848,
+        "metadataSidecar": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\source-masters\\山豬_覺醒體_血統風格修正版.png.library.json",
+        "dimensions": [
+          1166,
+          1349
+        ]
+      },
+      "approval": {
+        "status": "owner_approved",
+        "evidence": "Sentinel_36cbd7c744f48191b4c53aadd39fe851"
+      },
+      "purpose": "FULL_ENCYCLOPEDIA_ILLUSTRATION_ONLY",
+      "gameplayRegistration": false,
+      "evolutionStageAssigned": false,
+      "display": {
+        "src": "assets/production/database-illustrations-20261018/species-233.display.ed39cbed2696f49d.webp",
+        "sha256": "ed39cbed2696f49dd5bfd53e1781eaf5096f98ae6e317e8c3b4e7a1080c20232",
+        "width": 664,
+        "height": 768,
+        "bytes": 132982,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": false,
+        "operation": "CONTAIN_768_Q90_ALPHA100"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-illustrations-20261018/species-233.thumbnail.00c9703341769faf.webp",
+        "sha256": "00c9703341769faf14826e0b6f9e1a667ea205048b4ad613fd7ff71bdfb44b83",
+        "width": 111,
+        "height": 128,
+        "bytes": 22700,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": true,
+        "operation": "CONTAIN_128_LOSSLESS"
+      }
+    },
+    {
+      "speciesIndex": 234,
+      "speciesId": "species-234",
+      "displayCode": "ART04",
+      "displayName": "星海母",
+      "candidateKey": "astral-jelly",
+      "master": {
+        "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\source-masters\\OC015-astral-jelly-hero-v2.png",
+        "originalPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC015_星海母\\10_candidates\\OC015-astral-jelly-hero-v2.png",
+        "libraryFileId": "libfile_94a903407f2c8191b912cef525ac0bac",
+        "sha256": "18db199351f6f4026fa6e28e0ef475b93581a57064b60378bec40974f46203bf",
+        "bytes": 1002399,
+        "preservation": "BYTE_IDENTICAL_LOCAL_COPY_OF_EXISTING_VERIFIED_SOURCE",
+        "dimensions": [
+          1254,
+          1254
+        ]
+      },
+      "approval": {
+        "status": "owner_approved",
+        "evidence": "Sentinel_113f15d8467881919fceeea8cf9ad3cc"
+      },
+      "purpose": "FULL_ENCYCLOPEDIA_ILLUSTRATION_ONLY",
+      "gameplayRegistration": false,
+      "evolutionStageAssigned": false,
+      "display": {
+        "src": "assets/production/database-illustrations-20261018/species-234.display.9dc96de5f947b5da.webp",
+        "sha256": "9dc96de5f947b5dadf78d5c3b816566aa5cadfb6eadc558a775c60779fc053c7",
+        "width": 768,
+        "height": 768,
+        "bytes": 104742,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": false,
+        "operation": "CONTAIN_768_Q90_ALPHA100"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-illustrations-20261018/species-234.thumbnail.aedbafc9b85dba37.webp",
+        "sha256": "aedbafc9b85dba37de709f4865b7e311eb836f609b154221e31ca6de70996176",
+        "width": 128,
+        "height": 128,
+        "bytes": 16882,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": true,
+        "operation": "CONTAIN_128_LOSSLESS"
+      }
+    },
+    {
+      "speciesIndex": 235,
+      "speciesId": "species-235",
+      "displayCode": "ART05",
+      "displayName": "極光鯊",
+      "candidateKey": "aurora-shark",
+      "master": {
+        "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\source-masters\\aurora-shark-hero-v1.png",
+        "originalPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC019_極光鯊\\10_candidates\\aurora-shark-hero-v1.png",
+        "libraryFileId": "libfile_b1a2e1e8b50081918c24cfa5898f6df6",
+        "sha256": "e8c5fb59d1f01f1b8323e5b9bd1b9f5e54e00d08520e5550f19008cc8f27230a",
+        "bytes": 1763631,
+        "preservation": "BYTE_IDENTICAL_LOCAL_COPY_OF_EXISTING_VERIFIED_SOURCE",
+        "dimensions": [
+          1460,
+          1077
+        ]
+      },
+      "approval": {
+        "status": "owner_approved",
+        "evidence": "Sentinel_113f15d8467881919fceeea8cf9ad3cc"
+      },
+      "purpose": "FULL_ENCYCLOPEDIA_ILLUSTRATION_ONLY",
+      "gameplayRegistration": false,
+      "evolutionStageAssigned": false,
+      "display": {
+        "src": "assets/production/database-illustrations-20261018/species-235.display.6ddf92ecfd8a77ea.webp",
+        "sha256": "6ddf92ecfd8a77eaaa066c25697cec00a6500fb69f7ea5aaf5d6b2d6cfb018a8",
+        "width": 768,
+        "height": 567,
+        "bytes": 131990,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": false,
+        "operation": "CONTAIN_768_Q90_ALPHA100"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-illustrations-20261018/species-235.thumbnail.ee40628ed6cb6bbc.webp",
+        "sha256": "ee40628ed6cb6bbc78a94c9f4581fe4e64f952c3e48a09c4fcae058f587b2aad",
+        "width": 128,
+        "height": 94,
+        "bytes": 19710,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": true,
+        "operation": "CONTAIN_128_LOSSLESS"
+      }
+    },
+    {
+      "speciesIndex": 236,
+      "speciesId": "species-236",
+      "displayCode": "ART06",
+      "displayName": "天穹螳",
+      "candidateKey": "celestial-mantis",
+      "master": {
+        "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\source-masters\\OC020_celestial-mantis_master-v2.png",
+        "originalPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC020_天穹螳\\10_candidates\\OC020_celestial-mantis_master-v2.png",
+        "libraryFileId": "libfile_1e05539a7ae08191b918bad18f06bb42",
+        "sha256": "36b69a23f9d5dc80eac51711f869cc219db70feff07713428e6a0676cfea3451",
+        "bytes": 2482498,
+        "preservation": "BYTE_IDENTICAL_LOCAL_COPY_OF_EXISTING_VERIFIED_SOURCE",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "approval": {
+        "status": "owner_approved",
+        "evidence": "Sentinel_113f15d8467881919fceeea8cf9ad3cc"
+      },
+      "purpose": "FULL_ENCYCLOPEDIA_ILLUSTRATION_ONLY",
+      "gameplayRegistration": false,
+      "evolutionStageAssigned": false,
+      "display": {
+        "src": "assets/production/database-illustrations-20261018/species-236.display.c0ee654853c2d66e.webp",
+        "sha256": "c0ee654853c2d66e7d876a389bb9ab9498c48753f78d414164196034fa243fba",
+        "width": 768,
+        "height": 512,
+        "bytes": 137532,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": false,
+        "operation": "CONTAIN_768_Q90_ALPHA100"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-illustrations-20261018/species-236.thumbnail.bee4bdaf14a89612.webp",
+        "sha256": "bee4bdaf14a896122f538cfd1cac4978f63993411afe5a93df55e65a694368e7",
+        "width": 128,
+        "height": 85,
+        "bytes": 19178,
+        "alphaExactlyMatchesResizedMaster": true,
+        "rgbaExactlyMatchesResizedMaster": true,
+        "operation": "CONTAIN_128_LOSSLESS"
+      }
+    }
+  ],
+  "publicReleaseStatus": "LOCAL_QA_PASS_READY_FOR_EXISTING_SINGLE_PUBLISHER"
+}

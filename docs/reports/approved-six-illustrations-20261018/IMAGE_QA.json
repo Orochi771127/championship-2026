@@ -1,0 +1,151 @@
+{
+  "rows": [
+    {
+      "speciesIndex": 231,
+      "masterSha256": "bac83873481e94ad14cb4bbaef684284252e25574fb27416c0aa5b5ac9395995",
+      "sourceDimensions": [
+        1374,
+        1145
+      ],
+      "heroDimensions": [
+        768,
+        640
+      ],
+      "alphaExactToResizedMaster": true,
+      "thumbnailRgbaExactToResizedMaster": true,
+      "heroAlphaExtrema": [
+        0,
+        255
+      ],
+      "compositePsnrWhiteAndDark": [
+        35.501,
+        35.478
+      ],
+      "noCrop": true
+    },
+    {
+      "speciesIndex": 232,
+      "masterSha256": "79541efce40c55a366c21116509d4dd4a8356d9a62713980170fb0b8bb55e004",
+      "sourceDimensions": [
+        1502,
+        1047
+      ],
+      "heroDimensions": [
+        768,
+        535
+      ],
+      "alphaExactToResizedMaster": true,
+      "thumbnailRgbaExactToResizedMaster": true,
+      "heroAlphaExtrema": [
+        0,
+        255
+      ],
+      "compositePsnrWhiteAndDark": [
+        37.518,
+        37.514
+      ],
+      "noCrop": true
+    },
+    {
+      "speciesIndex": 233,
+      "masterSha256": "8b91df854871ed98da64c0b776246209efcdadedf08da6d25c7be27a092abf59",
+      "sourceDimensions": [
+        1166,
+        1349
+      ],
+      "heroDimensions": [
+        664,
+        768
+      ],
+      "alphaExactToResizedMaster": true,
+      "thumbnailRgbaExactToResizedMaster": true,
+      "heroAlphaExtrema": [
+        0,
+        255
+      ],
+      "compositePsnrWhiteAndDark": [
+        37.194,
+        37.177
+      ],
+      "noCrop": true
+    },
+    {
+      "speciesIndex": 234,
+      "masterSha256": "18db199351f6f4026fa6e28e0ef475b93581a57064b60378bec40974f46203bf",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "heroDimensions": [
+        768,
+        768
+      ],
+      "alphaExactToResizedMaster": true,
+      "thumbnailRgbaExactToResizedMaster": true,
+      "heroAlphaExtrema": [
+        0,
+        255
+      ],
+      "compositePsnrWhiteAndDark": [
+        38.453,
+        38.436
+      ],
+      "noCrop": true
+    },
+    {
+      "speciesIndex": 235,
+      "masterSha256": "e8c5fb59d1f01f1b8323e5b9bd1b9f5e54e00d08520e5550f19008cc8f27230a",
+      "sourceDimensions": [
+        1460,
+        1077
+      ],
+      "heroDimensions": [
+        768,
+        567
+      ],
+      "alphaExactToResizedMaster": true,
+      "thumbnailRgbaExactToResizedMaster": true,
+      "heroAlphaExtrema": [
+        0,
+        255
+      ],
+      "compositePsnrWhiteAndDark": [
+        36.378,
+        36.371
+      ],
+      "noCrop": true
+    },
+    {
+      "speciesIndex": 236,
+      "masterSha256": "36b69a23f9d5dc80eac51711f869cc219db70feff07713428e6a0676cfea3451",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "heroDimensions": [
+        768,
+        512
+      ],
+      "alphaExactToResizedMaster": true,
+      "thumbnailRgbaExactToResizedMaster": true,
+      "heroAlphaExtrema": [
+        0,
+        255
+      ],
+      "compositePsnrWhiteAndDark": [
+        34.523,
+        34.512
+      ],
+      "noCrop": true
+    }
+  ],
+  "mediaBytes": 818364,
+  "visualReview": {
+    "status": "PASS_SAVED_IMAGES",
+    "reviewed": [
+      "six-selected-web-contact.png",
+      "six-32px-light-dark.png"
+    ],
+    "findings": "All six silhouettes remain complete, uncropped and readable at 32px on light/dark backgrounds. New mature/awakened boars retain the approved blue-purple eyes, purple hooves/claws and gold armor. Original PNG pixels are unchanged. Lossy Q90 RGB is not claimed pixel-exact."
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "status": "LOCAL_CANDIDATE_ALL_REQUIRED_CHECKS_PASS",
+  "portableCi": {
+    "passed": 2633,
+    "failed": 0,
+    "log": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\ci-tests-final.log"
+  },
+  "focusedOriginalGalleryAndDatabase": {
+    "passed": 76,
+    "failed": 0,
+    "note": "Full final CI additionally includes the completed locale dictionary test."
+  },
+  "publicArtifactValidation": {
+    "fileCount": 7814,
+    "buildId": "4dac14815e3336da16bc63d5931f9cb14744346ebf18a0bbf26e17c079e06eb8",
+    "allFileSizesAndSha256Verified": true,
+    "log": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\validate.log"
+  },
+  "normalChrome": {
+    "desktopViewport": [
+      1440,
+      1000
+    ],
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "detailViewsPassed": 12,
+    "independentHeroThumbnailResponseIdentities": 12,
+    "httpErrors": 0,
+    "pageErrors": 0,
+    "registrationBefore": [],
+    "registrationAfter": [],
+    "artOnlyDetailsOmitStatsStoryEvolutionAndInstanceControls": true,
+    "savedResult": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\approved-six-20261018\\browser\\result.json"
+  },
+  "imageQa": {
+    "rows": [
+      {
+        "speciesIndex": 231,
+        "masterSha256": "bac83873481e94ad14cb4bbaef684284252e25574fb27416c0aa5b5ac9395995",
+        "sourceDimensions": [
+          1374,
+          1145
+        ],
+        "heroDimensions": [
+          768,
+          640
+        ],
+        "alphaExactToResizedMaster": true,
+        "thumbnailRgbaExactToResizedMaster": true,
+        "heroAlphaExtrema": [
+          0,
+          255
+        ],
+        "compositePsnrWhiteAndDark": [
+          35.501,
+          35.478
+        ],
+        "noCrop": true
+      },
+      {
+        "speciesIndex": 232,
+        "masterSha256": "79541efce40c55a366c21116509d4dd4a8356d9a62713980170fb0b8bb55e004",
+        "sourceDimensions": [
+          1502,
+          1047
+        ],
+        "heroDimensions": [
+          768,
+          535
+        ],
+        "alphaExactToResizedMaster": true,
+        "thumbnailRgbaExactToResizedMaster": true,
+        "heroAlphaExtrema": [
+          0,
+          255
+        ],
+        "compositePsnrWhiteAndDark": [
+          37.518,
+          37.514
+        ],
+        "noCrop": true
+      },
+      {
+        "speciesIndex": 233,
+        "masterSha256": "8b91df854871ed98da64c0b776246209efcdadedf08da6d25c7be27a092abf59",
+        "sourceDimensions": [
+          1166,
+          1349
+        ],
+        "heroDimensions": [
+          664,
+          768
+        ],
+        "alphaExactToResizedMaster": true,
+        "thumbnailRgbaExactToResizedMaster": true,
+        "heroAlphaExtrema": [
+          0,
+          255
+        ],
+        "compositePsnrWhiteAndDark": [
+          37.194,
+          37.177
+        ],
+        "noCrop": true
+      },
+      {
+        "speciesIndex": 234,
+        "masterSha256": "18db199351f6f4026fa6e28e0ef475b93581a57064b60378bec40974f46203bf",
+        "sourceDimensions": [
+          1254,
+          1254
+        ],
+        "heroDimensions": [
+          768,
+          768
+        ],
+        "alphaExactToResizedMaster": true,
+        "thumbnailRgbaExactToResizedMaster": true,
+        "heroAlphaExtrema": [
+          0,
+          255
+        ],
+        "compositePsnrWhiteAndDark": [
+          38.453,
+          38.436
+        ],
+        "noCrop": true
+      },
+      {
+        "speciesIndex": 235,
+        "masterSha256": "e8c5fb59d1f01f1b8323e5b9bd1b9f5e54e00d08520e5550f19008cc8f27230a",
+        "sourceDimensions": [
+          1460,
+          1077
+        ],
+        "heroDimensions": [
+          768,
+          567
+        ],
+        "alphaExactToResizedMaster": true,
+        "thumbnailRgbaExactToResizedMaster": true,
+        "heroAlphaExtrema": [
+          0,
+          255
+        ],
+        "compositePsnrWhiteAndDark": [
+          36.378,
+          36.371
+        ],
+        "noCrop": true
+      },
+      {
+        "speciesIndex": 236,
+        "masterSha256": "36b69a23f9d5dc80eac51711f869cc219db70feff07713428e6a0676cfea3451",
+        "sourceDimensions": [
+          1536,
+          1024
+        ],
+        "heroDimensions": [
+          768,
+          512
+        ],
+        "alphaExactToResizedMaster": true,
+        "thumbnailRgbaExactToResizedMaster": true,
+        "heroAlphaExtrema": [
+          0,
+          255
+        ],
+        "compositePsnrWhiteAndDark": [
+          34.523,
+          34.512
+        ],
+        "noCrop": true
+      }
+    ],
+    "mediaBytes": 818364,
+    "visualReview": {
+      "status": "PASS_SAVED_IMAGES",
+      "reviewed": [
+        "six-selected-web-contact.png",
+        "six-32px-light-dark.png"
+      ],
+      "findings": "All six silhouettes remain complete, uncropped and readable at 32px on light/dark backgrounds. New mature/awakened boars retain the approved blue-purple eyes, purple hooves/claws and gold armor. Original PNG pixels are unchanged. Lossy Q90 RGB is not claimed pixel-exact."
+    }
+  },
+  "sourcePreservation": "Six original PNGs remain byte-identical; two new Library PNGs match root-supplied expected SHA-256. Windows sidecars preserve Library file ID and version0.",
+  "existing134RegistrySha256": "5c6491b57edad00bb1caba25398aca1a5da432be7dba25aa463ee07fe41d705b",
+  "gameplayPreservation": "218 playable book slots, canonical save, RNG and branch history unchanged; 228 native identities and sentinel preserved; six ART identities remain outside playable species and registration.",
+  "sharedRWorktree": {
+    "head": "2c1cc29d26d375ab35c47224c75a276634dae9f2",
+    "lastObservedOtherModifiedFiles": 20,
+    "writesByThisTask": 0,
+    "original12AndLaterChangesPreserved": true
+  },
+  "visualReview": {
+    "status": "PASS_SAVED_WEB_AND_NORMAL_BROWSER_IMAGES",
+    "reviewed": [
+      "six-selected-web-contact.png",
+      "six-32px-light-dark.png",
+      "browser/232-390-hero.png",
+      "browser/233-390-hero.png"
+    ],
+    "physicalIphoneAcceptance": false
+  },
+  "correctedPreflightFailures": [
+    "Initial VM fixture lacked the new locale function import; added the real function to the fixture.",
+    "Initial CI found new locale dictionary unregistered and two old counts; registered only exact dictionary values and preserved baseline slices.",
+    "An early build overlapped source edits and correctly rejected a changed source hash; final stable build and full validation passed."
+  ],
+  "publication": "PENDING_EXISTING_SINGLE_PUBLISHER; local candidate metadata commit is pre-commit f1674db6, publisher must rebuild the exact new commit and verify live commit/buildId/hashes. No public success claimed."
+}

@@ -4,6 +4,7 @@
 // form or leaves Home. Held instances remain a separate projection.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
+import {databaseIllustrationRow} from './databaseIllustrations.js';
 import {projectDatabaseEvolutionRoutes} from './databaseEvolutionRoutes.js';
 import {projectDatabaseEvolutionConditions} from './databaseEvolutionConditions.js';
 import {
@@ -84,7 +85,9 @@ export function projectDatabase({
   }
 
   let selected = null;
-  if (selectedSpeciesIndex !== null) {
+  if (databaseIllustrationRow(selectedSpeciesIndex)) {
+    selected = databaseIllustrationRow(selectedSpeciesIndex);
+  } else if (selectedSpeciesIndex !== null) {
     const slot = getDatabaseSlot(selectedSpeciesIndex);
     const row = entries[slot.bookOrdinal];
     const routeContext = {
