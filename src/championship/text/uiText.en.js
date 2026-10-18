@@ -28,11 +28,11 @@ export const UI_COPY_EN = Object.freeze({
   "CAGE_SLOT_RANK_LOCKED": "Slot {n} is locked. Unlocks at tamer rank {rank}.",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "System background",
-  "SYSTEM_BACKGROUND_HINT": "Only for system pages such as the encyclopedia, shop, help and records. The city title and playable scenes stay unchanged.",
+  "SYSTEM_BACKGROUND_HINT": "Close Settings, then open Shop, Database or Help from System. The image appears around and between cards. Title, ranch and battle scenes stay unchanged.",
   "SYSTEM_BACKGROUND_DEFAULT": "Default",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "Keep the original interface background.",
   "SYSTEM_BACKGROUND_CUSTOM": "Choose an image",
-  "SYSTEM_BACKGROUND_CUSTOM_HINT": "Select a thumbnail below to apply and remember it.",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "Your choice is saved automatically. View it in Shop, Database or Help.",
   "SYSTEM_BACKGROUND_RANDOM": "Random",
   "SYSTEM_BACKGROUND_RANDOM_HINT": "Choose once on your next system-page entry; keep it while you stay.",
   "SYSTEM_BACKGROUND_PICK": "Choose an image (applies immediately)",

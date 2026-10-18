@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {medalCollection} from '../src/championship/app/medalCollection.js';
 import {createChampionshipScreenStack} from '../src/championship/app/championshipScreenStack.js';
-import {originalMedalArt,originalShopItemArt,originalDatabaseIcon,isOriginalUiIntakeLocal} from '../src/championship/presentation/completedOriginalUi20261007.js';
+import {originalMedalArt,originalShopItemArt,originalCareItemArt,originalDatabaseIcon,isOriginalUiIntakeLocal} from '../src/championship/presentation/completedOriginalUi20261007.js';
 import {shopGoodsPresentation} from '../src/championship/presentation/shopGoodsUiArt.js';
 import {getShopRecord} from '../src/championship/shop/shopCatalog.js';
 const local='http://127.0.0.1:8766/championship.html';
@@ -25,7 +25,7 @@ test('all 164 delivered PNGs retain exact hashes and full fourfold raster densit
  for(const a of all){const data=readFileSync(new URL('../'+a.src,import.meta.url));assert.equal(createHash('sha256').update(data).digest('hex'),a.sha256,a.src);const native=a.nativeSize??[a.width,a.height];assert.deepEqual(a.rasterSize,native.map(n=>n*4),a.src);}
 });
 test('83 non-cage goods preserve record/item identity and deferred cage icons',()=>{
- for(let i=0;i<83;i++){const a=originalShopItemArt(i,local),record=getShopRecord(i);assert.equal(a.itemIndex,record.itemIndex);assert.equal(a.category,record.category);assert.equal(shopGoodsPresentation(i,local).src,a.src);}
+ for(let i=0;i<83;i++){const a=originalShopItemArt(i,local),record=getShopRecord(i);assert.equal(a.itemIndex,record.itemIndex);assert.equal(a.category,record.category);assert.equal(shopGoodsPresentation(i,local).src,i===0?originalCareItemArt('meat',0,local).src:a.src);}
  for(let i=83;i<118;i++)assert.equal(originalShopItemArt(i,local),null);
  assert.deepEqual([0,1,2,3].map(i=>shopGoodsPresentation(i,local).itemIndex),[0,1,3,2]);
 });

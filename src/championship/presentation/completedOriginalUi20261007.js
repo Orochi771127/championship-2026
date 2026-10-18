@@ -17,6 +17,10 @@ export function originalDatabaseIcon(screen, baseUrl) {
 export function originalShopItemArt(recordIndex, baseUrl) {
   return isOriginalRuntimeLocation(baseUrl) ? manifest.items.find(a=>a.shopRecordIndex===recordIndex) ?? null : null;
 }
+export function originalCareItemArt(role, pose, baseUrl) {
+  return isOriginalRuntimeLocation(baseUrl)
+    ? manifest.items.find(a=>a.frame?.role===role && a.frame.pose===pose) ?? null : null;
+}
 export function originalToolbarArt(toolId, baseUrl) {
   if (!isOriginalRuntimeLocation(baseUrl)) return null;
   return manifest.toolbar.find(a=>a.role===toolId)

@@ -16,11 +16,11 @@ export const UI_COPY_JA = Object.freeze({
   "CAGE_SLOT_RANK_LOCKED": "{n}番のマスは未開放です。テイマーランク{rank}で開放されます。",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "システム背景",
-  "SYSTEM_BACKGROUND_HINT": "図鑑、ショップ、ヘルプ、記録などのシステム画面のみ。城邦のタイトル画面とプレイ中の背景は変わりません。",
+  "SYSTEM_BACKGROUND_HINT": "設定を閉じ、システムからショップ・図鑑・ヘルプを開くと、カードの周囲や隙間に画像が表示されます。タイトル・牧場・戦闘シーンは変わりません。",
   "SYSTEM_BACKGROUND_DEFAULT": "標準",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "元の画面背景を使います。",
   "SYSTEM_BACKGROUND_CUSTOM": "画像を選択",
-  "SYSTEM_BACKGROUND_CUSTOM_HINT": "下のサムネイルを選ぶと、すぐに適用して記憶します。",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "選択は自動保存されます。ショップ・図鑑・ヘルプで背景を確認できます。",
   "SYSTEM_BACKGROUND_RANDOM": "ランダム",
   "SYSTEM_BACKGROUND_RANDOM_HINT": "次にシステム画面へ入るときに1枚選び、その画面では変更しません。",
   "SYSTEM_BACKGROUND_PICK": "画像を選択（すぐに適用）",

@@ -16,11 +16,11 @@ export const UI_COPY_TH = Object.freeze({
   "CAGE_SLOT_RANK_LOCKED": "ช่องที่ {n} ยังล็อกอยู่ ปลดล็อกเมื่อถึงแรงก์เทมเมอร์ {rank}",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "พื้นหลังหน้าระบบ",
-  "SYSTEM_BACKGROUND_HINT": "ใช้เฉพาะหน้าระบบ เช่น สารานุกรม ร้านค้า วิธีเล่น และบันทึก หน้าชื่อเกมรูปนครและฉากเล่นยังเหมือนเดิม",
+  "SYSTEM_BACKGROUND_HINT": "ปิดการตั้งค่า แล้วเปิดร้านค้า ฐานข้อมูล หรือวิธีเล่นจากเมนูระบบ ภาพจะแสดงรอบและระหว่างการ์ด หน้าชื่อเกม ฟาร์ม และฉากต่อสู้จะไม่เปลี่ยน",
   "SYSTEM_BACKGROUND_DEFAULT": "ค่าเริ่มต้น",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "ใช้พื้นหลังเดิมของหน้าจอ",
   "SYSTEM_BACKGROUND_CUSTOM": "เลือกรูปภาพ",
-  "SYSTEM_BACKGROUND_CUSTOM_HINT": "แตะภาพตัวอย่างด้านล่างเพื่อใช้และบันทึกตัวเลือกทันที",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "บันทึกตัวเลือกอัตโนมัติ ดูพื้นหลังได้ในร้านค้า ฐานข้อมูล หรือวิธีเล่น",
   "SYSTEM_BACKGROUND_RANDOM": "สุ่ม",
   "SYSTEM_BACKGROUND_RANDOM_HINT": "สุ่มหนึ่งภาพเมื่อเข้าสู่หน้าระบบครั้งถัดไป และไม่เปลี่ยนระหว่างอยู่ในหน้านั้น",
   "SYSTEM_BACKGROUND_PICK": "เลือกรูปภาพ (ใช้ทันที)",

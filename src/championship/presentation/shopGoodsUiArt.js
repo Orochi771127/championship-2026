@@ -5,7 +5,7 @@
 // care goods also retain their exact public toolbar fallback outside that route.
 import {publicRuntimeAsset} from './publicRuntimeAssets.js';
 import {getShopRecord} from '../shop/shopCatalog.js';
-import {originalShopItemArt, originalToolbarArt} from './completedOriginalUi20261007.js';
+import {originalShopItemArt, originalCareItemArt, originalToolbarArt} from './completedOriginalUi20261007.js';
 import {getHuntCatalogItem} from '../hunt/loadout/huntEquipmentCatalog.js';
 
 const goods = Object.freeze([
@@ -21,7 +21,13 @@ export function shopGoodsPresentation(shopRecordIndex, baseUrl) {
   if(original){
     const record=getShopRecord(shopRecordIndex);
     if(record.itemIndex!==original.itemIndex || record.category!==original.category || (original.productItemId && record.productItemId!==original.productItemId))throw new Error("ORIGINAL_ITEM_BINDING_MISMATCH");
-    return Object.freeze({...original,width:original.nativeSize[0],height:original.nativeSize[1],name:goods[shopRecordIndex]?.name??null,icon:goods[shopRecordIndex]?.icon??original.subcategory.toLowerCase(),backgroundPosition:"center",identityEvidence:"VERIFIED_BINARY",imageEvidence:"OWNER_SUPPLIED_ORIGINAL_LOCAL_REVIEW"});
+    // Feed is a product, not the toolbar's unselected tool. Use the exact
+    // full-quantity meat cell drawn by the raising field, with its own size.
+    // Keep the shop record identity and every other item's selected artwork.
+    const care = shopRecordIndex===0 ? originalCareItemArt('meat',0,baseUrl) : null;
+    const art = care ? {...original, ...Object.fromEntries(
+      ['src','sha256','bytes','rasterSize','nativeSize','origin','density','assetId','frame'].map(key=>[key,care[key]]))} : original;
+    return Object.freeze({...art,width:art.nativeSize[0],height:art.nativeSize[1],name:goods[shopRecordIndex]?.name??null,icon:goods[shopRecordIndex]?.icon??original.subcategory.toLowerCase(),backgroundPosition:"center",identityEvidence:"VERIFIED_BINARY",imageEvidence:"OWNER_SUPPLIED_ORIGINAL_LOCAL_REVIEW"});
   }
   const binding = goods[shopRecordIndex];
   if (!binding) return null;

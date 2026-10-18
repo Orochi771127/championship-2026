@@ -18,7 +18,7 @@
   height: 100%;
   object-fit: cover;
   object-position: 50% 50%;
-  opacity: 0.65;
+  opacity: 1;
   pointer-events: none;
 }
 .cm-system-background::after {
@@ -26,10 +26,8 @@
   position: absolute;
   inset: 0;
   background: var(--c-ground);
-  opacity: 0.88;
+  opacity: 0.58;
 }
-:root[data-theme='clear'] .cm-system-background::after { opacity: 0.82; }
-:root[data-theme='warm'] .cm-system-background::after { opacity: 0.5; }
 /* Only thumbnail pixels enter Settings; their dimensions never drive layout. */
 .cm-system-background-preview {
   display: block;

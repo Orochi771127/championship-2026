@@ -3,6 +3,22 @@ import test from 'node:test';
 import {shopGoodsPresentation,huntToolIconPresentation} from '../src/championship/presentation/shopGoodsUiArt.js';
 import {HUNT_EQUIPMENT_ITEMS} from '../src/championship/hunt/loadout/huntEquipmentCatalog.js';
 import {createBattlePresentationSource} from '../src/championship/app/battlePresentationSource.js';
+import {originalToolbarArt} from '../src/championship/presentation/completedOriginalUi20261007.js';
+import publicCare from '../assets/production/public-runtime/raising-care.v1.json' with {type:'json'};
+
+test('Shop feed shares the full-quantity raising meat pixels while tools and hunt bait keep their identities',()=>{
+  const field=publicCare.cells.find(cell=>cell.role==='meat'&&cell.pose===0);
+  for(const url of ['http://127.0.0.1:18743/championship.html','https://orochi771127.github.io/championship-2026/']){
+    const feed=shopGoodsPresentation(0,url);
+    assert.equal(feed.src,field.src);assert.equal(feed.sha256,field.sha256);
+    assert.equal(feed.width,field.nativeWidth);assert.equal(feed.height,field.nativeHeight);
+    assert.equal(feed.itemIndex,0);assert.equal(feed.category,'TRAINING_GOODS');
+    assert.match(originalToolbarArt('feed',url).src,/feed-rest\.png$/);
+    assert.notEqual(originalToolbarArt('feed',url).src,feed.src);
+    for(const item of HUNT_EQUIPMENT_ITEMS.filter(item=>item.equipmentClass==='ENTRAP'))
+      assert.notEqual(shopGoodsPresentation(item.shopRecordIndex,url).src,feed.src,item.itemId);
+  }
+});
 
 test('shop display follows original record/item permutation, including wound versus illness medicine',()=>{
   const rows=[0,1,2,3].map(shopGoodsPresentation);

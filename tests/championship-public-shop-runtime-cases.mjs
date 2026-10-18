@@ -54,8 +54,11 @@ test('all 83 normal Shop goods retain selected original pixels without the priva
     assert.equal(selected.get(item.src),item.sha256,item.src);
     for(const url of ['http://127.0.0.1:18743/championship.html','https://orochi771127.github.io/championship-2026/']){
       const shown=shopGoodsPresentation(item.shopRecordIndex,url);
-      for(const key of ['src','sha256','itemIndex','category','productItemId','nativeSize','rasterSize'])assert.deepEqual(shown[key],item[key],item.shopRecordIndex+': '+key);
-      assert.equal(shown.width,item.nativeSize[0]);assert.equal(shown.height,item.nativeSize[1]);
+      const art=item.shopRecordIndex===0?ui.items.find(row=>row.assetId==='care19/meat-0'):item;
+      for(const key of ['src','sha256','nativeSize','rasterSize'])assert.deepEqual(shown[key],art[key],item.shopRecordIndex+': '+key);
+      for(const key of ['itemIndex','category','productItemId'])assert.deepEqual(shown[key],item[key],item.shopRecordIndex+': '+key);
+      assert.equal(selected.get(shown.src),shown.sha256);
+      assert.equal(shown.width,art.nativeSize[0]);assert.equal(shown.height,art.nativeSize[1]);
     }
   }
   for(const id of [83,117,-1,118,1.5,'0',null])assert.equal(shopGoodsPresentation(id,'https://orochi771127.github.io/championship-2026/'),null);

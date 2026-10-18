@@ -16,11 +16,11 @@ export const UI_COPY_VI = Object.freeze({
   "CAGE_SLOT_RANK_LOCKED": "Ô {n} đang khóa. Mở khóa ở hạng thuần thú sư {rank}.",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "Nền trang hệ thống",
-  "SYSTEM_BACKGROUND_HINT": "Chỉ áp dụng cho các trang hệ thống như bách khoa, cửa hàng, hướng dẫn và hồ sơ. Giữ nguyên màn hình tiêu đề thành bang và cảnh chơi.",
+  "SYSTEM_BACKGROUND_HINT": "Đóng Cài đặt rồi mở Cửa hàng, Bách khoa hoặc Trợ giúp từ Hệ thống. Ảnh hiện quanh và giữa các thẻ. Màn hình đầu, trang trại và cảnh chiến đấu không đổi.",
   "SYSTEM_BACKGROUND_DEFAULT": "Mặc định",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "Giữ nền giao diện ban đầu.",
   "SYSTEM_BACKGROUND_CUSTOM": "Chọn ảnh",
-  "SYSTEM_BACKGROUND_CUSTOM_HINT": "Chọn ảnh thu nhỏ bên dưới để áp dụng và lưu lựa chọn ngay.",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "Lựa chọn được lưu tự động. Xem nền tại Cửa hàng, Bách khoa hoặc Trợ giúp.",
   "SYSTEM_BACKGROUND_RANDOM": "Ngẫu nhiên",
   "SYSTEM_BACKGROUND_RANDOM_HINT": "Chọn một ảnh khi vào trang hệ thống lần tới và giữ nguyên trong trang đó.",
   "SYSTEM_BACKGROUND_PICK": "Chọn ảnh (áp dụng ngay)",

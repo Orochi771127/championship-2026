@@ -53,7 +53,7 @@
         root.dataset.quality = quality;
         root.lang = pick(p.locale, ["zh-Hant", "en", "ja", "th", "vi"], "zh-Hant");
         var color = document.querySelector('meta[name="theme-color"]');
-        if (color) color.setAttribute("content", { arena: "#eef5fa", night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
+        if (color) color.setAttribute("content", { arena: "#eef5fa", night: "#080b0a", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
         var scheme = document.querySelector('meta[name="color-scheme"]');
         if (scheme) scheme.setAttribute("content", theme === "night" || theme === "classic" ? "dark" : "light");
       })();

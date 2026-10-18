@@ -17,11 +17,11 @@ export const UI_COPY = Object.freeze({
   "CAGE_SLOT_RANK_LOCKED": "第 {n} 格尚未開放，馴獸師階級達到 {rank} 後開放。",
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "系統背景",
-  "SYSTEM_BACKGROUND_HINT": "只用於圖鑑、商店、說明與紀錄等系統頁；城邦標題與遊玩場景不變。",
+  "SYSTEM_BACKGROUND_HINT": "關閉設定後，從「系統」開啟商店、圖鑑或說明；圖片顯示在卡片外圍與空隙。標題、牧場與戰鬥場景不變。",
   "SYSTEM_BACKGROUND_DEFAULT": "預設",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "保留原本的介面背景。",
   "SYSTEM_BACKGROUND_CUSTOM": "自選",
-  "SYSTEM_BACKGROUND_CUSTOM_HINT": "點選下方縮圖，立即套用並記住選擇。",
+  "SYSTEM_BACKGROUND_CUSTOM_HINT": "選擇會自動保存；請到商店、圖鑑或說明查看背景。",
   "SYSTEM_BACKGROUND_RANDOM": "隨機",
   "SYSTEM_BACKGROUND_RANDOM_HINT": "下次進入系統頁時選一張，停留期間不更換。",
   "SYSTEM_BACKGROUND_PICK": "自選圖片（點選即套用）",

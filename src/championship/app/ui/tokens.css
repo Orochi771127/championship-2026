@@ -30,27 +30,27 @@
   color-scheme: dark;
 
   /* Ground */
-  --c-void: #071114;          /* outside the portrait frame */
-  --c-ground: #0b181c;        /* app background */
-  --c-ground-raised: #10222a; /* bands inside a page */
-  --c-stage-light: #1d4a4d;   /* the lamp behind the habitat */
-  --c-stage-glow: rgba(29, 74, 77, 0.55);
-  --c-backdrop-top: #0a171b;
-  --c-backdrop-bottom: #081316;
-  --c-scene-backdrop: #0d1a1c; /* behind a scene canvas while it loads */
+  --c-void: #050706;          /* outside the portrait frame */
+  --c-ground: #080b0a;        /* app background */
+  --c-ground-raised: #101713; /* bands inside a page */
+  --c-stage-light: #0d1912;   /* the lamp behind the habitat */
+  --c-stage-glow: rgba(13, 25, 18, 0.16);
+  --c-backdrop-top: #080b0a;
+  --c-backdrop-bottom: #050706;
+  --c-scene-backdrop: #0a0e0b; /* behind a scene canvas while it loads */
 
   /* Surfaces */
-  --c-surface-1: #13262c;     /* cards, rows */
-  --c-surface-2: #192f36;     /* raised / hover */
-  --c-surface-3: #213a42;     /* pressed, meter tracks */
-  --c-surface-glass: rgba(11, 24, 28, 0.82);  /* soft chips over the scene */
+  --c-surface-1: #121c17;     /* cards, rows */
+  --c-surface-2: #18261e;     /* raised / hover */
+  --c-surface-3: #203128;     /* pressed, meter tracks */
+  --c-surface-glass: rgba(8, 11, 10, 0.82);  /* soft chips over the scene */
   /* A panel floating over a live scene (Home, Hunt, the battle result) is
      denser and never blurs what is behind it: a backdrop blur over a canvas
      that redraws every frame costs a GPU read-back per frame (measured: it
      caused the only long frames while dragging the habitat). */
-  --c-surface-hud: rgba(11, 24, 28, 0.92);
+  --c-surface-hud: rgba(8, 11, 10, 0.92);
   /* Bars and footers over page content (status bar, sticky footers). */
-  --c-surface-bar: rgba(8, 18, 21, 0.94);
+  --c-surface-bar: rgba(5, 7, 6, 0.94);
   --c-scrim: rgba(3, 9, 11, 0.62);
   --c-selection: rgba(86, 227, 194, 0.28);
 
@@ -521,7 +521,7 @@
   --c-paper-muted: #6b5d44;
   --c-paper-line: rgba(80, 60, 20, 0.14);
 
-  /* Only the arena palette draws a ground pattern. */
+  /* Retro keeps its existing ground; requested palettes set the shared grid. */
   --bg-pattern: none;
 
   /* The highlight's own darkness is a stage, not a panel: the same in every
@@ -616,6 +616,17 @@
   --icon-alert: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 12 12'%3E%3Cpath fill-rule='evenodd' d='M6 .5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zM5.2 2.8h1.6l-.25 4.4h-1.1zM6 8.1a.95.95 0 110 1.9.95.95 0 010-1.9z'/%3E%3C/svg%3E");
   --icon-chevron-right: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 8 14'%3E%3Cpath d='M1 1l6 6-6 6' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --icon-gear: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 20 20'%3E%3Cpath fill-rule='evenodd' d='M8.6 1h2.8l.5 2.3 1.6.7 2-1.3 2 2-1.3 2 .7 1.6 2.3.5v2.8l-2.3.5-.7 1.6 1.3 2-2 2-2-1.3-1.6.7-.5 2.3H8.6l-.5-2.3-1.6-.7-2 1.3-2-2 1.3-2-.7-1.6L1 11.4V8.6l2.3-.5.7-1.6-1.3-2 2-2 2 1.3 1.6-.7zM10 6.6a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8z'/%3E%3C/svg%3E");
+}
+
+/* Arena geometry in every requested palette; only the ink changes. */
+:root[data-theme="night"], [data-palette="night"] {
+  --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M0 .5h48M.5 0v48' stroke='%23286045' stroke-opacity='.38'/%3E%3Ccircle cx='.5' cy='.5' r='1.5' fill='%23286045' fill-opacity='.45'/%3E%3C/svg%3E");
+}
+:root[data-theme="clear"], [data-palette="clear"] {
+  --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M0 .5h48M.5 0v48' stroke='%231a68c6' stroke-opacity='.06'/%3E%3Ccircle cx='.5' cy='.5' r='1.5' fill='%231a68c6' fill-opacity='.10'/%3E%3C/svg%3E");
+}
+:root[data-theme="warm"], [data-palette="warm"] {
+  --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M0 .5h48M.5 0v48' stroke='%23a84c08' stroke-opacity='.06'/%3E%3Ccircle cx='.5' cy='.5' r='1.5' fill='%23a84c08' fill-opacity='.10'/%3E%3C/svg%3E");
 }
 
 /* ---- Words drawn by CSS (content:) -------------------------------------- *
