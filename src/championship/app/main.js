@@ -107,7 +107,7 @@ import { createAudioBus } from '../presentation/audioBus.js';
 import { createMusicPresentation } from '../presentation/musicPresentation.js';
 import { resolveSceneMusic } from '../presentation/sceneMusicCatalog.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
-import { cappedPixelRatio, currentQuality, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
+import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
@@ -188,6 +188,14 @@ const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
      ? "assets/production/battle/stage-review-20261007/manifest.json"
      : LOCAL_MAP_REVIEW.get("battleReview") === "bm07-quiet-r1"
     ? "assets/production/battle/bm07-quiet-review-r1/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "bm04-lagoon-r2"
+    ? "assets/production/battle/bm04-island-polish-r2/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "bm05-polar-r2"
+    ? "assets/production/battle/bm05-southpole-polish-r2/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "arena-polish-20261018"
+    ? "assets/production/battle/arena-polish-20261018/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "bm03-volcano-r3"
+    ? "assets/production/battle/bm03-volcano-polish-r3/manifest.json"
     : LOCAL_MAP_REVIEW.get("battleReview") === "bm03-volcano-r2"
       ? "assets/production/battle/bm03-volcano-review-r2/manifest.json"
       : publicMetadataPath('battle-original'))
@@ -196,6 +204,18 @@ const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
 const VFX_ART_PREVIEW_SYSTEM = new URLSearchParams(globalThis.location?.search ?? "").get("vfxArt");
+// Owner 2026-10-18: arena hazards (BM04 lagoon, BM05 ice, BM03 lava) are a local
+// review in Free and Practice battles until accepted; other modes stay original.
+const ARENA_HAZARDS_REVIEW = ["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname)
+  && new URLSearchParams(globalThis.location?.search ?? "").get("arenaHazards") === "1";
+// Loopback review QA for arena hazards: heat/water/place at a slot and read the
+// hazard snapshot. Bound where a Free/Practice runtime is prepared.
+function exposeArenaHazardsQa(runtime) {
+  if (!ARENA_HAZARDS_REVIEW || !String(globalThis.location?.search ?? '').includes('battleFxDebug')) return;
+  globalThis.__championshipArenaHazardsQa = { heatAt: slot => runtime.qaArenaHeat?.(slot) ?? 0,
+    waterAt: slot => runtime.qaArenaWater?.(slot) ?? 0, place: (slot, x, y) => runtime.qaArenaPlace?.(slot, x, y),
+    snapshot: () => runtime.startMatch().getView().arenaHazards };
+}
 // Free and Practice battles run the original personality wiring (2026-10-05):
 // personality picks the target selector and temper threshold, the team policy
 // picks the AI profile. Every other mode keeps the baseline. ?battlePolicy=baseline
@@ -676,11 +696,26 @@ async function loadOptionalBattleFieldArt(stage, source) {
   const wanted = BATTLE_ART_PREVIEW_FIELD || source?.getFrame()?.arena?.field || null;
   if (!wanted) return null;
   try {
-    const response = await fetchPublicMetadataResponse(LICENSED_BATTLE_ART_MANIFEST_URL, globalThis.location.href);
-    if (!response.ok) throw new Error(`BATTLE_ART_MANIFEST_HTTP_${response.status}`);
-    const manifest = validateRuntimeMapArtBundle(await response.json());
+    const fetchManifest = async url => {
+      const response = await fetchPublicMetadataResponse(url, globalThis.location.href);
+      if (!response.ok) throw new Error(`BATTLE_ART_MANIFEST_HTTP_${response.status}`);
+      return validateRuntimeMapArtBundle(await response.json());
+    };
+    let manifest = await fetchManifest(LICENSED_BATTLE_ART_MANIFEST_URL);
+    // A single-field local review (BM03 / BM04 / BM05 polish) leaves other
+    // arenas on the normal original arena set instead of failing the battle.
+    if (!manifest.fields.some((field) => field.fieldId === wanted) && /bm0[345]-[a-z]+-polish-r[23]/.test(LICENSED_BATTLE_ART_MANIFEST_URL))
+      manifest = await fetchManifest(publicMetadataPath('battle-original'));
     if (!manifest.fields.some((field) => field.fieldId === wanted)) return null;
-    return createRuntimeMapArtFieldLoader({ PIXI: stage.PIXI }).load({ manifest, fieldId: wanted });
+    const art = await createRuntimeMapArtFieldLoader({ PIXI: stage.PIXI }).load({ manifest, fieldId: wanted });
+    if (!art?.field?.ambient) return art;
+    try {
+      const { withBattleFieldAmbient } = await import('../presentation/battleFieldAmbient.js');
+      return await withBattleFieldAmbient({ PIXI: stage.PIXI, art, quality: currentQualityTier() === 'saver' ? 'low' : 'high', reducedMotion: prefersReducedMotion() });
+    } catch (error) {
+      console.warn(`CHAMPIONSHIP_BATTLE_AMBIENT_FALLBACK: ${error.message}`);
+      return art;
+    }
   } catch (error) {
     console.warn(`CHAMPIONSHIP_BATTLE_ART_FALLBACK: ${error.message}`);
     return null;
@@ -1246,9 +1281,9 @@ async function mountBattleSelect() {
       if(mode==='FREE_BATTLE'){
         const party=await app.prepareFreeBattle(recordIndex,playerInstanceIds,selectedArena);if(!party.ok)return party;
         const prepared=(await loadBattleRuntime())({mode:2,battleType:0,playerIndividuals:party.individuals,rng:party.rngPreparation.rng,
-          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY});
+          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY,arenaHazards:ARENA_HAZARDS_REVIEW});
         try{
-          prepared.chooseFreeBattle({presetIndices:party.match.presetIndices,arenaIndex:party.arenaIndex});prepared.startMatch();
+          prepared.chooseFreeBattle({presetIndices:party.match.presetIndices,arenaIndex:party.arenaIndex});prepared.startMatch();exposeArenaHazardsQa(prepared);
           const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
           return await enterPreparedBattle(prepared,attemptId,()=>app.enterFreeBattle({attemptId,playerInstanceIds,rngPreparation:party.rngPreparation}));
         }catch(error){prepared.dispose();console.warn(`FREE_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
@@ -1256,9 +1291,9 @@ async function mountBattleSelect() {
       if(mode==='PRACTICE_BATTLE'){
         const party=await app.preparePracticeBattle(playerInstanceIds,selectedArena);if(!party.ok)return party;
         const prepared=(await loadBattleRuntime())({mode:5,battleType:0,playerIndividuals:party.parties[0],opponentIndividuals:party.parties[1],rng:party.rngPreparation.rng,
-          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY});
+          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY,arenaHazards:ARENA_HAZARDS_REVIEW});
         try{
-          prepared.choosePracticeBattle({arenaIndex:party.arenaIndex});prepared.startMatch();
+          prepared.choosePracticeBattle({arenaIndex:party.arenaIndex});prepared.startMatch();exposeArenaHazardsQa(prepared);
           const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
           return await enterPreparedBattle(prepared,attemptId,()=>app.enterPracticeBattle({attemptId,playerInstanceIds:playerInstanceIds.flat(),rngPreparation:party.rngPreparation}));
         }catch(error){prepared.dispose();console.warn(`PRACTICE_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}

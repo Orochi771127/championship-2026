@@ -9,7 +9,7 @@
 //  fireproof walker (ember wisp): burning cells cost nothing extra.
 //  swimmer : open water is cheaper than land (the mate prefers the channel).
 
-import { DATA_ARENA_GRID_RULES } from "./dataArenaConfig.js";
+import { DATA_ARENA_GRID_RULES, DATA_ARENA_TERRAIN } from "./dataArenaConfig.js";
 
 const DIRS = [[1, 0, 1], [-1, 0, 1], [0, 1, 1], [0, -1, 1], [1, 1, Math.SQRT2], [1, -1, Math.SQRT2], [-1, 1, Math.SQRT2], [-1, -1, Math.SQRT2]];
 
@@ -19,6 +19,8 @@ export function cellCost(grid, i, profile) {
   const ice = grid.ice[i];
   if (water && ice <= 0) return profile === "swimmer" ? 0.8 : Infinity;
   let cost = 1;
+  // Molten lava (arena maps only) is a strong deterrent unless crusted over.
+  if (grid.terrain[i] === DATA_ARENA_TERRAIN.LAVA && !(grid.cooled?.[i] > 0) && profile !== "fireproof") cost += 30;
   if (water && ice > 0 && ice <= DATA_ARENA_GRID_RULES.iceWarnSeconds && profile !== "swimmer") cost += 40;
   if (grid.fire[i] > 0 && profile !== "fireproof") cost += 14;
   return cost;
