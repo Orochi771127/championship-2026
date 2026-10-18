@@ -24,6 +24,7 @@ import {
 import { musicChoicesForScene, musicTrackTitle } from "../../presentation/sceneMusicCatalog.js";
 import { SYSTEM_BACKGROUNDS } from "../../presentation/systemBackgrounds.js";
 import { QUALITY_TIERS } from "../../presentation/presentationPreferences.js";
+import { readTitleViewportDiagnostics } from '../portraitFrame.js';
 
 const CATEGORY_TITLES = Object.freeze({
   appearance: "外觀與顯示", quality: "畫面品質", sound: "聲音",
@@ -431,6 +432,15 @@ export function createSettingsPanel({
           setText(result,outcome?.key??'DIAGNOSTIC_FAILED');result.hidden=false;
         });
         diagnostics.append(note('DIAGNOSTIC_HINT'),download,result);
+        const viewport=node('details','cm-settings__block');
+        const summary=node('summary','cm-settings__action','DIAGNOSTIC_TITLE');
+        summary.style.minHeight='44px';
+        const values=node('pre','cm-settings__text');
+        values.style.whiteSpace='pre-wrap';values.style.overflowWrap='anywhere';
+        viewport.addEventListener('toggle',()=>{
+          if(viewport.open)values.textContent=JSON.stringify(readTitleViewportDiagnostics(win,doc),null,2);
+        });
+        viewport.append(summary,values);diagnostics.append(viewport);
       }
       const account = block("帳號");
       account.append(node("p", "cm-settings__text", "尚未提供帳號登入與雲端同步，這台裝置的資料不會上傳。"));

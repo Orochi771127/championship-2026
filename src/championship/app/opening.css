@@ -4,6 +4,15 @@
 
 /* Grounded breathing uses the independent scale property, preserving arrival
    transforms and the measured footpoints. No timer or gameplay state. */
+:root { --cm-title-safe-bottom:env(safe-area-inset-bottom,0px); }
+/* WebKit may paint the Home indicator inset from the page canvas rather than
+   the fixed title child. Keep that canvas on the same owned artwork, not the
+   arena theme's pale blue. No padding is added to the viewport or controls. */
+html:has(body[data-title-standalone] #cm-title:not([hidden])) {
+  min-height:100lvh;
+  background:#daeee6 var(--cm-title-backdrop,none) center / cover no-repeat;
+}
+body[data-title-standalone]:has(#cm-title:not([hidden])) { background:transparent; }
 @keyframes cm-title-breathe { 0%,100% { scale:1; } 46% { scale:1.014 .986; } 62% { scale:.996 1.006; } }
 :root[data-motion="full"]:not([data-quality="saver"]) #cm-title:not([hidden]) .cm-title__partner[data-title-image-state="ready"] {
   animation:cm-title-breathe 5.6s ease-in-out infinite;

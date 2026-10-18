@@ -39,15 +39,42 @@ export function isLandscapeEntryLayout({width,height,hidden=false}) {
 }
 // The standalone viewport can be taller than CSS dvh on iOS. Paint the title
 // to the measured viewport, while the existing controls retain safe-area insets.
+function installedTitle(win) {
+  return win.navigator?.standalone === true || win.matchMedia?.('(display-mode: standalone)')?.matches === true
+    || win.matchMedia?.('(display-mode: fullscreen)')?.matches === true;
+}
 export function titleViewportMetrics(win, doc, editing = false) {
   const visual = win.visualViewport;
   const unzoomed = visual && Math.abs((visual.scale ?? 1) - 1) < .01 && visual.height > 0;
-  const standalone = win.navigator?.standalone === true || win.matchMedia?.('(display-mode: standalone)')?.matches === true
-    || win.matchMedia?.('(display-mode: fullscreen)')?.matches === true;
+  const standalone = installedTitle(win);
   const height = standalone && !editing && (!visual || unzoomed)
     ? Math.max(win.innerHeight || 0, doc.documentElement?.clientHeight || 0, unzoomed ? visual.height : 0)
     : unzoomed ? visual.height : win.innerHeight;
   return {height, top:unzoomed ? visual.offsetTop || 0 : 0};
+}
+// Read only, shown on demand in Settings > Data for an actual-device report.
+// No save, user text, URL query, local storage or network is read here.
+export function readTitleViewportDiagnostics(win = globalThis.window, doc = globalThis.document) {
+  const rootStyle=win.getComputedStyle?.(doc.documentElement);
+  const rect=selector=>{
+    const box=doc.querySelector?.(selector)?.getBoundingClientRect?.();
+    return box?{top:Math.round(box.top),bottom:Math.round(box.bottom),height:Math.round(box.height)}:null;
+  };
+  const moduleName=doc.querySelector?.('script[type="module"][src]')?.getAttribute('src')?.split('/').pop();
+  return {
+    revision:'PWA-20261018B', build:/^main-[A-Z0-9]+\.js$/.test(moduleName??'')?moduleName:'source',
+    installed:installedTitle(win), inner:[win.innerWidth,win.innerHeight],
+    client:[doc.documentElement?.clientWidth,doc.documentElement?.clientHeight],
+    screen:[win.screen?.width,win.screen?.height], dpr:win.devicePixelRatio,
+    visual:win.visualViewport?{width:win.visualViewport.width,height:win.visualViewport.height,
+      top:win.visualViewport.offsetTop,scale:win.visualViewport.scale}:null,
+    safeBottom:rootStyle?.getPropertyValue('--cm-title-safe-bottom')?.trim()??'',
+    canvasColor:rootStyle?.backgroundColor??'',bodyColor:win.getComputedStyle?.(doc.body)?.backgroundColor??'',
+    title:rect('#cm-title'),panel:rect('#cm-title > .cm-title__panel'),
+    viewport:doc.querySelector?.('meta[name="viewport"]')?.getAttribute('content')??'',
+    themeColor:doc.querySelector?.('meta[name="theme-color"]')?.getAttribute('content')??'',
+    statusBar:doc.querySelector?.('meta[name="apple-mobile-web-app-status-bar-style"]')?.getAttribute('content')??''
+  };
 }
 export function mountPortraitFrame({window:win=globalThis.window,document:doc=globalThis.document,responsiveRaising=false,responsiveBattle=false,responsiveMenus=false,responsiveEntry=false,isHuntWide=()=>false}={}) {
   const body=doc.body,visual=win.visualViewport;
@@ -100,6 +127,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     }else for(const name of visibleProperties)body.style.removeProperty(name);
     const hasInput=editing();
     if(title){
+      body.toggleAttribute('data-title-standalone',installedTitle(win));
       const titleViewport=titleViewportMetrics(win,doc,hasInput);
       body.style.setProperty('--cm-title-viewport-height',`${titleViewport.height}px`);
       body.style.setProperty('--cm-title-viewport-top',`${titleViewport.top}px`);
@@ -201,6 +229,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     doc.removeEventListener('focusin',update);doc.removeEventListener('focusout',update);
     body.removeAttribute('data-portrait-frame');
     body.removeAttribute('data-landscape-entry');
+    body.removeAttribute('data-title-standalone');
     body.removeAttribute('data-desktop-raising');
     body.removeAttribute('data-responsive-raising');
     body.removeAttribute('data-desktop-browse');

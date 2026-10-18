@@ -17,11 +17,12 @@ test('deferred TITLE pixels remain unrequested during the film and restore immed
 function harness(images=[],locale='zh-Hant'){
  const timers=new Map();let nextTimer=0;
  const calls=[],created=[],revoked=[],decodes=[],panel={style:{backgroundImage:''},dataset:{backgroundSrc:'assets/production/title-morning-r1/arena.webp'}};
- const title={hidden:false,ownerDocument:{baseURI:'https://example.test/game/',documentElement:{lang:locale}},querySelectorAll:()=>images,querySelector:()=>panel};
+ const canvas=new Map();
+ const title={hidden:false,ownerDocument:{baseURI:'https://example.test/game/',documentElement:{lang:locale,style:{setProperty:(k,v)=>canvas.set(k,v),removeProperty:k=>canvas.delete(k)}}},querySelectorAll:()=>images,querySelector:()=>panel};
  const sync=createTitleImageLifecycle(title,{setTimer:fn=>{const id=++nextTimer;timers.set(id,fn);return id;},clearTimer:id=>timers.delete(id),fetchImpl:(url,options)=>{const d=deferred();calls.push({url,options,...d});return d.promise;},
   urls:{createObjectURL:blob=>{const url='blob:qa-'+created.length;created.push({url,blob});return url;},revokeObjectURL:url=>revoked.push(url)},
   createImage:()=>{const d=deferred(),image={src:'',decode:()=>d.promise,removeAttribute(){this.src='';}};decodes.push({image,...d});return image;}});
- return {calls,created,revoked,decodes,panel,title,sync,timers,expire:()=>{for(const fn of [...timers.values()])fn();}};
+ return {calls,created,revoked,decodes,panel,title,sync,timers,canvas,expire:()=>{for(const fn of [...timers.values()])fn();}};
 }
 test('title exclusively owns one background request and aborts it when paused',async()=>{
  const h=harness();h.sync(false);h.sync(false);assert.equal(h.calls.length,1);assert.equal(h.calls[0].url,'https://example.test/game/assets/production/title-morning-r1/arena.webp');
@@ -33,6 +34,15 @@ function titleImage(name){
   getAttribute:key=>attrs.get(key)??null,setAttribute:(key,value)=>attrs.set(key,value),removeAttribute:key=>attrs.delete(key)};
 }
 async function complete(h,index){h.calls[index].resolve({ok:true,blob:async()=>({index})});await flush();h.decodes.at(-1).resolve();await flush();}
+test('installed page canvas shares the owned background Blob and clears before leaving/revocation',async()=>{
+ const h=harness();h.sync(false);await complete(h,0);
+ assert.equal(h.canvas.get('--cm-title-backdrop'),h.panel.style.backgroundImage);assert.equal(h.calls.length,1);
+ h.sync(true);assert.ok(h.canvas.has('--cm-title-backdrop'),'ready art stays while music buffer pauses');
+ h.title.hidden=true;h.sync(true);assert.equal(h.canvas.has('--cm-title-backdrop'),false);assert.deepEqual(h.revoked,['blob:qa-0']);
+ h.title.hidden=false;h.sync(false);h.decodes.at(-1).resolve();await flush();
+ assert.equal(h.canvas.get('--cm-title-backdrop'),h.panel.style.backgroundImage);assert.equal(h.calls.length,1);
+ h.sync.dispose();assert.equal(h.canvas.has('--cm-title-backdrop'),false);assert.equal(h.revoked.length,2);
+});
 test('film warmup owns exactly four TITLE assets with one pending request at a time',async()=>{
  const images=['logo','blaze','cloud'].map(titleImage),h=harness(images);h.sync(true);
  for(let i=0;i<4;i++){

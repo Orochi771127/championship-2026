@@ -19,6 +19,7 @@ export function createTitleImageLifecycle(title, {
     released: !image.getAttribute('src')
   }));
   const panel = title.querySelector?.('.cm-title__panel');
+  const canvasStyle = title.ownerDocument?.documentElement?.style;
   const source = selectTitleAsset(panel, panel?.dataset.backgroundSrc);
   const backgroundUrl = source ? new URL(source, title.ownerDocument.baseURI).href : null;
   if (backgroundUrl) for (const entry of images) entry.managed = true;
@@ -44,6 +45,7 @@ export function createTitleImageLifecycle(title, {
     clearDeadline(entry);
     entry.controller.abort();
     entry.image?.removeAttribute('src');
+    if (entry === active) canvasStyle?.removeProperty?.('--cm-title-backdrop');
     if (entry.url) urls.revokeObjectURL(entry.url);
   }
   function current(entry) {
@@ -80,6 +82,9 @@ export function createTitleImageLifecycle(title, {
         clearDeadline(entry);
         cachedBlob = blob; entry.ready = true;
         panel.style.backgroundImage = `url("${entry.url}")`;
+        // Reuse this same decoded Blob on the page canvas behind iOS safe areas.
+        // This is paint only: controls keep their existing safe-area geometry.
+        canvasStyle?.setProperty?.('--cm-title-backdrop', panel.style.backgroundImage);
         state('ready'); onSettled();
       } catch {
         fail(entry);

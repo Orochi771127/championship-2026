@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: IPHONE_CANVAS_FOLLOWUP_20261018 -->
+## 2026-10-18 — Actual iPhone bottom strip persists
+
+Owner reports the pale bottom strip remains after reopening standalone; do not mark the prior height change as device accepted. Authorizes focused canvas/background investigation and minimal visible build/viewport evidence, preserving saves and control safe areas. Publish through existing main gates; keep approved icon and concurrent Dex work. See [separate evidence and device limits](../reports/iphone-canvas-followup-2026-10-18/REPORT_ZH_TW.md).
+
 <!-- record-id: APP_ICON_APPROVED_20261018 -->
 ## 2026-10-18 — Publish the approved app icon
 

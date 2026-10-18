@@ -6,7 +6,7 @@ import {getActiveGameTitle,getTitleEyebrow} from '../src/championship/text/brand
 import {selectTitleAsset} from '../src/championship/presentation/titleAssetVariant.js';
 import {loadStylesheet} from '../src/championship/app/loadStylesheet.js';
 import {isInstalledWebApp, mountWebAppInstall} from '../src/championship/app/webAppInstall.js';
-import {titleViewportMetrics} from '../src/championship/app/portraitFrame.js';
+import {titleViewportMetrics,readTitleViewportDiagnostics} from '../src/championship/app/portraitFrame.js';
 import {DATA_ARENA_UPGRADES, previewDataArenaUpgrade, upgradeValue} from '../src/championship/modes/dataArena/dataArenaUpgrades.js';
 import {createBattleFxCamera} from '../src/championship/presentation/battleFx/battleFxCamera.js';
 import {DATA_ARENA_TEXT} from '../src/championship/text/dataArenaText.js';
@@ -24,6 +24,16 @@ test('title fills standalone viewport, follows browser chrome/keyboard, and resp
   assert.deepEqual(titleViewportMetrics(win,doc),{height:852,top:0});
   delete win.visualViewport;
   assert.equal(titleViewportMetrics(win,doc).height,852);
+});
+test('on-demand viewport evidence records geometry and revision without reading storage',()=>{
+ const view={innerWidth:393,innerHeight:798,navigator:{standalone:true},screen:{width:393,height:852},devicePixelRatio:3,
+   visualViewport:{width:393,height:798,offsetTop:0,scale:1},getComputedStyle:()=>({backgroundColor:'rgb(218, 238, 230)',getPropertyValue:()=> '34px'})};
+ Object.defineProperty(view,'localStorage',{get(){throw Error('MUST_NOT_READ_SAVE');}});
+ const doc={documentElement:{clientWidth:393,clientHeight:798},body:{},querySelector:()=>null};
+ const evidence=readTitleViewportDiagnostics(view,doc);
+ assert.equal(evidence.revision,'PWA-20261018B');assert.equal(evidence.installed,true);
+ assert.deepEqual(evidence.inner,[393,798]);assert.deepEqual(evidence.screen,[393,852]);assert.equal(evidence.safeBottom,'34px');
+ assert.equal(evidence.build,'source');assert.equal(evidence.title,null);
 });
 
 function installFixture(ios=false) {
