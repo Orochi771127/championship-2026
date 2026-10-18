@@ -112856,7 +112856,7 @@
     },
     {
       "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-      "sha256": "fc39a7f6925cdc2d14bf70825eafb491f30e53215739e15333c4b32a9c8f238e"
+      "sha256": "d074eb46bb15831d0c4a472501e98af336691f2a01cc0ff8a9edb45fe5d8076e"
     },
     {
       "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -117619,7 +117619,7 @@
     },
     {
       "path": "src/data/championship/database-hero-portraits.public.v1.json",
-      "sha256": "4c457ad0d1b2124f9febb8381cb5f9e9aadededb9877a4f3d5d9eaf5d9cc0ce0",
+      "sha256": "b2ef6c9e032e2c5dcacc331e00c7a36e9bfe6112f39ffcdca17af18c370d7744",
       "jsonFields": [
         "schemaVersion",
         "entries",
@@ -117924,6 +117924,38 @@
     {
       "path": "assets/production/database-display-20261018/species-213.thumbnail.91ae9e09433a0516.webp",
       "sha256": "91ae9e09433a05169f373178eb42bb391e8c8f3a5c9e7cc387b20c3662fb2ef0"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-210.display.e3eb624541031d79.webp",
+      "sha256": "e3eb624541031d799749b8a951cbf559fe570260115116025406335284d26dde"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-210.thumbnail.5d38c2cecb0810a8.webp",
+      "sha256": "5d38c2cecb0810a87613a407a7c974d9a1307ff058d58224211ddc6d8afb0e6b"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-214.display.9d0ad4251a75eca4.webp",
+      "sha256": "9d0ad4251a75eca4467dda372dd5520438039d24143e0c1071592d72ae43ae6e"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-214.thumbnail.a4dc0936be5dcc08.webp",
+      "sha256": "a4dc0936be5dcc0809510421f26daa751e884140cebef90aa7c1a74cbeaa3a5e"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-216.display.25e50fe4d6f6367d.webp",
+      "sha256": "25e50fe4d6f6367df0145323618747bc257196b16868380c9956b9366e4585ff"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-216.thumbnail.859c850b972aa5d9.webp",
+      "sha256": "859c850b972aa5d9ac1018ace90deec9bff578b2a939073ff636d1eb5fb958c6"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-217.display.b8013deb58b3b4b8.webp",
+      "sha256": "b8013deb58b3b4b85b5a5b9123c79addedb581bc35d2ed1e74edbe70ec40cb2f"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-217.thumbnail.56f6a1fa7761a2bc.webp",
+      "sha256": "56f6a1fa7761a2bca81d86b0a612b590eb51cf608d0a591740940d36edf89f85"
     }
   ],
   "assets": [
@@ -119744,6 +119776,20 @@
       "sha256": "1a6ed4a9d8112f3ab82e1bf4928397d10a22d913b3cf8aabbc80941de47f4658"
     },
     {
+      "id": "species-210:database-hero",
+      "src": "assets/production/database-display-20261018/species-210.display.e3eb624541031d79.webp",
+      "width": 768,
+      "height": 576,
+      "sha256": "e3eb624541031d799749b8a951cbf559fe570260115116025406335284d26dde"
+    },
+    {
+      "id": "species-210:database-thumbnail",
+      "src": "assets/production/database-display-20261018/species-210.thumbnail.5d38c2cecb0810a8.webp",
+      "width": 128,
+      "height": 96,
+      "sha256": "5d38c2cecb0810a87613a407a7c974d9a1307ff058d58224211ddc6d8afb0e6b"
+    },
+    {
       "id": "species-211:database-hero",
       "src": "assets/production/database-display-20261018/species-211.display.e669c90a86a67c70.webp",
       "sha256": "e669c90a86a67c7053564e7977a2b99d72458c34c2628786b815e33c90b6a725",
@@ -119786,6 +119832,20 @@
       "sha256": "91ae9e09433a05169f373178eb42bb391e8c8f3a5c9e7cc387b20c3662fb2ef0"
     },
     {
+      "id": "species-214:database-hero",
+      "src": "assets/production/database-display-20261018/species-214.display.9d0ad4251a75eca4.webp",
+      "width": 768,
+      "height": 576,
+      "sha256": "9d0ad4251a75eca4467dda372dd5520438039d24143e0c1071592d72ae43ae6e"
+    },
+    {
+      "id": "species-214:database-thumbnail",
+      "src": "assets/production/database-display-20261018/species-214.thumbnail.a4dc0936be5dcc08.webp",
+      "width": 128,
+      "height": 96,
+      "sha256": "a4dc0936be5dcc0809510421f26daa751e884140cebef90aa7c1a74cbeaa3a5e"
+    },
+    {
       "id": "species-215:database-hero",
       "src": "assets/production/database-display-20261018/species-215.display.07f1c714d48701b1.webp",
       "sha256": "07f1c714d48701b1c1564ec0f350a86004d8299a776f22e64c3117eef7ed454e",
@@ -119798,6 +119858,34 @@
       "width": 128,
       "height": 128,
       "sha256": "861468bb2a1c3fb29f2d3a50cd097c452e2dca133d70e2cfccf06c23893a6225"
+    },
+    {
+      "id": "species-216:database-hero",
+      "src": "assets/production/database-display-20261018/species-216.display.25e50fe4d6f6367d.webp",
+      "width": 768,
+      "height": 576,
+      "sha256": "25e50fe4d6f6367df0145323618747bc257196b16868380c9956b9366e4585ff"
+    },
+    {
+      "id": "species-216:database-thumbnail",
+      "src": "assets/production/database-display-20261018/species-216.thumbnail.859c850b972aa5d9.webp",
+      "width": 128,
+      "height": 96,
+      "sha256": "859c850b972aa5d9ac1018ace90deec9bff578b2a939073ff636d1eb5fb958c6"
+    },
+    {
+      "id": "species-217:database-hero",
+      "src": "assets/production/database-display-20261018/species-217.display.b8013deb58b3b4b8.webp",
+      "width": 702,
+      "height": 768,
+      "sha256": "b8013deb58b3b4b85b5a5b9123c79addedb581bc35d2ed1e74edbe70ec40cb2f"
+    },
+    {
+      "id": "species-217:database-thumbnail",
+      "src": "assets/production/database-display-20261018/species-217.thumbnail.56f6a1fa7761a2bc.webp",
+      "width": 117,
+      "height": 128,
+      "sha256": "56f6a1fa7761a2bca81d86b0a612b590eb51cf608d0a591740940d36edf89f85"
     },
     {
       "id": "species-222:database-hero",

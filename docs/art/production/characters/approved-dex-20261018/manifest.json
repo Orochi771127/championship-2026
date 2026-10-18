@@ -90,6 +90,34 @@
       }
     },
     {
+      "speciesIndex": 210,
+      "speciesId": "species-210",
+      "displayCode": "UL35",
+      "masterLibraryId": "libfile_4f8ac9c5df9081919034e85a37b6459e",
+      "masterSha256": "78be07ae4cad05107220444a29542f6f2c7fd4559978a3d1cad22d7a10ae6f46",
+      "masterFile": "exec-d23b8b9b-d817-42f6-989c-50c16b91da33.png",
+      "approval": "Sentinel_fd221f07cef48191815a28dce236cbe0",
+      "preservedBodyReferenceLibraryId": "libfile_411491dd463c8191bd475c218d3ea624",
+      "display": {
+        "src": "assets/production/database-display-20261018/species-210.display.e3eb624541031d79.webp",
+        "width": 768,
+        "height": 576,
+        "sha256": "e3eb624541031d799749b8a951cbf559fe570260115116025406335284d26dde",
+        "bytes": 116354,
+        "inputSha256": "e3eb624541031d799749b8a951cbf559fe570260115116025406335284d26dde",
+        "operation": "EXACT_APPROVED_BYTES"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-210.thumbnail.5d38c2cecb0810a8.webp",
+        "width": 128,
+        "height": 96,
+        "sha256": "5d38c2cecb0810a87613a407a7c974d9a1307ff058d58224211ddc6d8afb0e6b",
+        "bytes": 18700,
+        "inputSha256": "0f0d92dfa4bc5f999aced91d0f22ec37f4e565d02f0e92631d63ff25ee4474b0",
+        "operation": "LANCZOS_CONTAIN_128_LOSSLESS_WEBP"
+      }
+    },
+    {
       "speciesIndex": 212,
       "speciesId": "species-212",
       "displayCode": "UL36",
@@ -142,13 +170,89 @@
         "inputSha256": "6b75dd841e219939fcdf24fe94cb2df5bc4c75ed7ec1ad1bc73bd3935af28880",
         "operation": "LANCZOS_CONTAIN_128_LOSSLESS_WEBP"
       }
+    },
+    {
+      "speciesIndex": 214,
+      "speciesId": "species-214",
+      "displayCode": "UL38",
+      "masterLibraryId": "libfile_f5b3ebfe7974819180e911384ab1e55b",
+      "masterSha256": "66616bd6107d4cbc8a674cf4f2afa2567d57a680a77379ee3cac4b940bc8b465",
+      "masterFile": "exec-2df5983c-b96e-4d3f-a33d-71f1b7026fb8.png",
+      "approval": "Sentinel_aaa8f112c2f48191b59b03c6118d8022",
+      "display": {
+        "src": "assets/production/database-display-20261018/species-214.display.9d0ad4251a75eca4.webp",
+        "width": 768,
+        "height": 576,
+        "sha256": "9d0ad4251a75eca4467dda372dd5520438039d24143e0c1071592d72ae43ae6e",
+        "bytes": 133878,
+        "inputSha256": "9d0ad4251a75eca4467dda372dd5520438039d24143e0c1071592d72ae43ae6e",
+        "operation": "EXACT_APPROVED_BYTES"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-214.thumbnail.a4dc0936be5dcc08.webp",
+        "width": 128,
+        "height": 96,
+        "sha256": "a4dc0936be5dcc0809510421f26daa751e884140cebef90aa7c1a74cbeaa3a5e",
+        "bytes": 22382,
+        "inputSha256": "cbc048e9f1192bc2c1bd8db71097fc54959f87ec948eca1ecce34e3cfcc25a52",
+        "operation": "LANCZOS_CONTAIN_128_LOSSLESS_WEBP"
+      }
+    },
+    {
+      "speciesIndex": 216,
+      "speciesId": "species-216",
+      "displayCode": "UL13",
+      "masterLibraryId": "libfile_f40695674b9081918ee04b1dcb36f81d",
+      "masterSha256": "3ee91616fbc4612017a0e445417955959d145ee675477074a774e105ad8e5473",
+      "masterFile": "exec-33ece5e9-ae0c-478e-a95f-ca012f91bb25.png",
+      "approval": "Sentinel_534bc300fc848191a26c7093f99798b7",
+      "display": {
+        "src": "assets/production/database-display-20261018/species-216.display.25e50fe4d6f6367d.webp",
+        "width": 768,
+        "height": 576,
+        "sha256": "25e50fe4d6f6367df0145323618747bc257196b16868380c9956b9366e4585ff",
+        "bytes": 146912,
+        "inputSha256": "25e50fe4d6f6367df0145323618747bc257196b16868380c9956b9366e4585ff",
+        "operation": "EXACT_APPROVED_BYTES"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-216.thumbnail.859c850b972aa5d9.webp",
+        "width": 128,
+        "height": 96,
+        "sha256": "859c850b972aa5d9ac1018ace90deec9bff578b2a939073ff636d1eb5fb958c6",
+        "bytes": 21090,
+        "inputSha256": "6faed1259afc3b295e8dc1d5935719ca824c36f42810799780f50fe97b336bd0",
+        "operation": "LANCZOS_CONTAIN_128_LOSSLESS_WEBP"
+      }
+    },
+    {
+      "speciesIndex": 217,
+      "speciesId": "species-217",
+      "displayCode": "UL22",
+      "masterLibraryId": "libfile_04bdbccc0fe88191a5ed18a533a2534d",
+      "masterSha256": "2f5f5b84836d6f18d33f97d6b05c8c3ff8065be72b5650894a7ccdf663ad556b",
+      "masterFile": "exec-f074cd87-8d73-440b-8bbc-1a004942651a.png",
+      "approval": "Sentinel_aaa8f112c2f48191b59b03c6118d8022",
+      "display": {
+        "src": "assets/production/database-display-20261018/species-217.display.b8013deb58b3b4b8.webp",
+        "width": 702,
+        "height": 768,
+        "sha256": "b8013deb58b3b4b85b5a5b9123c79addedb581bc35d2ed1e74edbe70ec40cb2f",
+        "bytes": 159906,
+        "inputSha256": "b8013deb58b3b4b85b5a5b9123c79addedb581bc35d2ed1e74edbe70ec40cb2f",
+        "operation": "EXACT_APPROVED_BYTES"
+      },
+      "thumbnail": {
+        "src": "assets/production/database-display-20261018/species-217.thumbnail.56f6a1fa7761a2bc.webp",
+        "width": 117,
+        "height": 128,
+        "sha256": "56f6a1fa7761a2bca81d86b0a612b590eb51cf608d0a591740940d36edf89f85",
+        "bytes": 27196,
+        "inputSha256": "01e313c4f81a5ec17bf5884d566399d775d8bc44c37f6fb9eca72e51fb381e66",
+        "operation": "LANCZOS_CONTAIN_128_LOSSLESS_WEBP"
+      }
     }
   ],
   "masterPreservation": "Unmodified approved and body-reference PNGs retained in Library, isolated approved-assets directory and this folder's local source-masters backup (excluded from Git/public build); only compressed display derivatives are published. R drive not accessed or permissions changed.",
-  "pendingSpecies": [
-    210,
-    214,
-    216,
-    217
-  ]
+  "pendingSpecies": []
 }
