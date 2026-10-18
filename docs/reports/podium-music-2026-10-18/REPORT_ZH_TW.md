@@ -10,7 +10,7 @@
 
 ## 已完成：頁面接線
 
-使用者說的場地／設施設置，實際對應 `CAGE_EDIT`：`championshipToolbar.js` 的管理選單進入 `vs4Screens.js:createCageEditView`，畫面標題為「設施配置」。`main.js:syncMusic` 原本即把此畫面送入 raising 選曲類別，無需新增路由或播放器。
+本批依「調整牧場設施位置」用途，將使用者說的「場地設置」對應到 `CAGE_EDIT`：`championshipToolbar.js` 的管理選單進入 `vs4Screens.js:createCageEditView`，畫面實際標題為「設施配置」。程式中未找到另一個字面叫「場地設置」的獨立頁面；先前回報的「設施設置」並非正式介面名稱。`main.js:syncMusic` 原本即把此畫面送入 raising 選曲類別，無需新增路由或播放器。
 
 `selectOriginalMusic` 的 CAGE_EDIT cue 改為 `podium_geometry`；`resolveSceneMusic` 在「依場景預設」時保留此 cue，RAISING_HOME／育成教學仍為 `a_quiet_evening_training`。玩家明確 raisingMusic 選曲仍優先。新曲亦出現在既有 raising 選曲清單，沒有新增設定存檔欄位。
 

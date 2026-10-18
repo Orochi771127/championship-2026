@@ -20,6 +20,8 @@ const NAMES = {
 };
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const choice = (key,value) => `[data-setting="${key}"] input[value="${value}"]`;
+const sourceForTrack = track => track.scene === 'battle'
+ ? {id:'battle_normal',scene:null} : {id:'moon',scene:'raising'};
 function checkLabels(rows, locale) {
  assert.deepEqual(rows.map(r=>r.id).sort(), Object.keys(NAMES).sort(), 'Exactly the allowed scene choices');
  for (const row of rows) {
@@ -91,6 +93,8 @@ async function serveRangeRoot(port=8765, root='.') {
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,'127.0.0.1',resolve);});console.log(`Scene-music range server listening on 127.0.0.1:${port}`);
 }
 function selfTest() {
+ assert.deepEqual(sourceForTrack({scene:'raising',id:'podium_geometry'}),{id:'moon',scene:'raising'});
+ assert.deepEqual(sourceForTrack({scene:'battle',id:'magma_breach'}),{id:'battle_normal',scene:null});
  assert.equal(parseByteRange(undefined,100),null);assert.deepEqual(parseByteRange('bytes=0-15',100),{start:0,end:15});assert.deepEqual(parseByteRange('bytes=90-',100),{start:90,end:99});assert.deepEqual(parseByteRange('bytes=-12',100),{start:88,end:99});assert.deepEqual(parseByteRange('bytes=90-500',100),{start:90,end:99});for(const h of ['bytes=100-','bytes=90-50','bytes=-0','bytes=-','bytes=0-1,3-4','bad'])assert.equal(parseByteRange(h,100),false);
  const rows=Object.entries(NAMES).map(([id,n])=>({id,name:n[1],lang:'en',width:100,labelWidth:200,labelHeight:44,left:10,right:200,containerLeft:0,containerRight:390,textScrollWidth:150,textClientWidth:150}));
  checkLabels(rows,'th');assert.throws(()=>checkLabels(rows.map(r=>({...r,name:r.name+' 中文'})),'th'));
@@ -213,7 +217,7 @@ async function main() {
    await page.waitForTimeout(200);assert.equal((await page.evaluate(()=>musicQA.inspect())).native.media.length,0,'No autoplay bypass');
    await page.locator('#open').click();await waitCue(page,'a_quiet_evening_training');
    for(const t of TRACKS){
-    if(t.scene==='battle')await page.evaluate(()=>musicQA.music.setScene('battle_normal'));
+    await page.evaluate(({id,scene})=>musicQA.music.setScene(id,null,scene),sourceForTrack(t));
     await select(page,t.scene+'Music',t.id);const evidence=await nativeEvidence(page,t.id);checkNativeMedia(evidence,t);
     // Full response byte identity is additional evidence, not the decoder claim.
     const fetched=await page.evaluate(async pathname=>{const r=await fetch('/'+pathname,{cache:'reload'});const b=await r.arrayBuffer();return {status:r.status,bytes:b.byteLength,sha256:[...new Uint8Array(await crypto.subtle.digest('SHA-256',b))].map(x=>x.toString(16).padStart(2,'0')).join('')};},t.path);
