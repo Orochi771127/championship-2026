@@ -112856,7 +112856,7 @@
     },
     {
       "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-      "sha256": "faf238e3dee2464bd13db51b107796beff96365cb334f6443c23028a4ab75cfa"
+      "sha256": "3cb6358cbbb7c2c9af90c969605fea49d7769dc6f8a7ef1a802628053bbdf32e"
     },
     {
       "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -117619,7 +117619,7 @@
     },
     {
       "path": "src/data/championship/database-hero-portraits.public.v1.json",
-      "sha256": "bc02b6bfea84f43c3eff732bb24a0d766cd2fc57cd8dec587c2733bea991151c",
+      "sha256": "8e637ef0a222151ac703fb11b62a07a826ee71b01b57606cbbf1183b8f5e1746",
       "jsonFields": [
         "schemaVersion",
         "entries",
@@ -117996,6 +117996,14 @@
     {
       "path": "assets/production/database-display-20261018/species-223.thumbnail.134e7d079ee91627.webp",
       "sha256": "134e7d079ee91627498a42319a178d4d6da7b8e7289fcc46027c56e394a244f0"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-206.display.08a4d0cfea842d7b.webp",
+      "sha256": "08a4d0cfea842d7bf91f3304f933d2bf7ff54f3ffe73f068ebb85e90008071c9"
+    },
+    {
+      "path": "assets/production/database-display-20261018/species-206.thumbnail.2ee70cc859d4486a.webp",
+      "sha256": "2ee70cc859d4486a762abe7f663d9513b1fd91383f9f93b08fdb7affc9a6b3a4"
     }
   ],
   "assets": [
@@ -119772,6 +119780,20 @@
       "width": 128,
       "height": 115,
       "sha256": "e4c867bd55e48020a4ef0753f095f7c8559e2c99df60fbe49f2da92a91c71933"
+    },
+    {
+      "id": "species-206:database-hero",
+      "src": "assets/production/database-display-20261018/species-206.display.08a4d0cfea842d7b.webp",
+      "width": 1024,
+      "height": 683,
+      "sha256": "08a4d0cfea842d7bf91f3304f933d2bf7ff54f3ffe73f068ebb85e90008071c9"
+    },
+    {
+      "id": "species-206:database-thumbnail",
+      "src": "assets/production/database-display-20261018/species-206.thumbnail.2ee70cc859d4486a.webp",
+      "width": 128,
+      "height": 85,
+      "sha256": "2ee70cc859d4486a762abe7f663d9513b1fd91383f9f93b08fdb7affc9a6b3a4"
     },
     {
       "id": "species-207:database-hero",
