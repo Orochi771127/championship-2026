@@ -61,9 +61,12 @@ test('never-finishing metadata aborts promptly; late metadata cannot create an a
   gate.resolve({ok:true,text:async()=>metadataText});await flush();assert.equal(f.contexts.length,0);assert.equal(f.calls.length,1);
 });
 
-test('never-finishing samples are bounded, cancelled without settlement, and cannot attach after re-entry',async()=>{
-  const gate=deferred(),f=audioFixture({fetchSound:()=>gate.promise});
-  const loading=f.start();await flush();assert.equal(f.calls.filter(c=>c.path.endsWith('.wav')).length,4);
+test('never-finishing samples are bounded, cancelled without settlement, and cannot attach after re-entry',{timeout:5000},async()=>{
+  const gate=deferred(),started=deferred();let requests=0;
+  const f=audioFixture({fetchSound:()=>{if(++requests===BATTLE_AUDIO_LOAD_CONCURRENCY)started.resolve();return gate.promise;}});
+  // Metadata uses real asynchronous hashing. Event-loop turns do not establish
+  // that hashing has finished on every platform; observe sample admission.
+  const loading=f.start();await started.promise;assert.equal(f.calls.filter(c=>c.path.endsWith('.wav')).length,4);
   const rejected=assert.rejects(loading,{name:'AbortError'});f.controller.abort();await rejected;
   assert.equal(f.contexts[0].state,'closed');assert.equal(f.contexts[0].gains[0].disconnected,true);
   const next=audioFixture();const current=await next.start();assert.equal(next.observers.size,1);
