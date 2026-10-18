@@ -213,6 +213,16 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-btn:focus-visible, .da-card:focus-visible, .da-partner:focus-visible, .da-hud__pause:focus-visible { outline: 3px solid var(--da-gold); outline-offset: 2px; }
 .da-btn:active, .da-card:active, .da-partner:active { transform: scale(0.97); }
 .da-btn:disabled { opacity: 0.5; cursor: default; }
+/* Bounded harbor pilot: immediate press/focus feedback; stable hit targets. */
+.da-root[data-mode="HARBOR"] :is(.da-btn,.da-partner) { transition:transform 100ms ease-out,background-color 100ms ease-out; }
+.da-root[data-mode="HARBOR"] :is(.da-btn,.da-partner):active { transform:translateY(2px) scale(.985); }
+.da-root[data-mode="HARBOR"] .da-partner[aria-checked="true"] { background-color:#163c45; }
+.da-root[data-mode="HARBOR"][data-motion="reduced"] :is(.da-btn,.da-partner),
+.da-root[data-mode="HARBOR"][data-quality="low"] :is(.da-btn,.da-partner) { transition:none; }
+.da-root[data-mode="HARBOR"][data-motion="reduced"] :is(.da-btn,.da-partner):active,
+.da-root[data-mode="HARBOR"][data-quality="low"] :is(.da-btn,.da-partner):active { transform:none; filter:brightness(1.12); }
+:root[data-quality="saver"] .da-root[data-mode="HARBOR"] :is(.da-btn,.da-partner) { transition:none; }
+:root[data-quality="saver"] .da-root[data-mode="HARBOR"] :is(.da-btn,.da-partner):active { transform:none; filter:brightness(1.12); }
 .da-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
 .da-card {
   display: grid; gap: 6px; align-content: start; text-align: left; padding: 14px; border-radius: 16px; min-height: 150px; cursor: pointer; color: var(--da-ink);

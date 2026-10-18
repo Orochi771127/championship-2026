@@ -3,6 +3,7 @@
 import { createPixiAssetScope } from "../pixiCharacterRuntimeBundle.js";
 import {loadTournamentStoneArt,mountTournamentStoneArt}from './dataArenaTournamentArt.js';
 import {publicMetadataPath,loadPublicMetadata} from '../publicMetadata.js';
+import {harborMechanismFrame} from './dataArenaHarborLife.js';
 
 // Owner-authorized test release. Visual checkpoint, not final art acceptance.
 export const HARBOR_ART_URL = publicMetadataPath('arena-harbor');
@@ -135,32 +136,33 @@ export function mountDataArenaEnvironment({ PIXI, environment, ground, objects, 
     objects.addChild(lamp); pulses.push(lamp);
   }
   return {
-    update({ elapsed, reducedMotion, left, right, top, bottom, low, focus,reaction }) {
+    update({ elapsed, reducedMotion, left, right, top, bottom, low, focus,focusPoints=focus?[focus]:[],reaction }) {
+      const quiet=reducedMotion||low;
       for (const record of [...groundSprites, ...propSprites,...foregroundSprites]) record.sprite.visible =
         record.x < right && record.x + record.width > left && record.y < bottom && record.y + record.height > top;
-      if(modeledCrowd){crowdFrame=reducedMotion?0:Math.floor(elapsed*(reaction?.t>0?6:4)/(low?2:1))%manifest.crowdFrames.length;modeledCrowd.texture=textures.get(manifest.crowdFrames[crowdFrame].textures[tier].src);modeledCrowd.visible=top<crowdRecord.y+crowdRecord.height&&bottom>crowdRecord.y;}
-      wave.tilePosition.x = reducedMotion ? 0 : elapsed * (low ? 5 : 8);
-      wave.tilePosition.y = reducedMotion ? 0 : Math.sin(elapsed * .55) * 1.5;
+      if(modeledCrowd){crowdFrame=quiet?0:Math.floor(elapsed*(reaction?.t>0?6:4))%manifest.crowdFrames.length;modeledCrowd.texture=textures.get(manifest.crowdFrames[crowdFrame].textures[tier].src);modeledCrowd.visible=top<crowdRecord.y+crowdRecord.height&&bottom>crowdRecord.y;}
+      wave.tilePosition.x = quiet ? 0 : elapsed * 8;
+      wave.tilePosition.y = quiet ? 0 : Math.sin(elapsed * .55) * 1.5;
+      wave.alpha=(manifest.waterWaveAlpha??.20)*(quiet?1:.94+.06*Math.sin(elapsed*.4));
       wave.visible = bottom > 1792 && top < 2048;
       if (caustic) {
         caustic.visible = wave.visible;
-        caustic.tilePosition.x = reducedMotion ? 0 : Math.sin(elapsed * .35) * 2;
-        caustic.tilePosition.y = reducedMotion ? 0 : Math.cos(elapsed * .28) * 1.2;
+        caustic.tilePosition.x = quiet ? 0 : Math.sin(elapsed * .35) * 2;
+        caustic.tilePosition.y = quiet ? 0 : Math.cos(elapsed * .28) * 1.2;
       }
-      for (let i = 0; i < pulses.length; i++) pulses[i].alpha = reducedMotion ? .65 : .6 + Math.sin(elapsed * 1.7 + i * .7) * .15;
+      for (let i = 0; i < pulses.length; i++) pulses[i].alpha = quiet ? .65 : .6 + Math.sin(elapsed * 1.1 + i * 1.7) * .15;
       for (let i = 0; i < mechanisms.length; i++) {
         const record = mechanisms[i];
         if (version2) {
-          const step = low ? 2 : 1;
-          record.frame = reducedMotion ? 0 : (Math.floor(elapsed * 1000 / (record.frameDurationMs * step)) * step + i * 4) % record.frameCount;
+          record.frame = harborMechanismFrame({elapsed,index:i,frameCount:record.frameCount,frameDurationMs:record.frameDurationMs,quiet});
           record.sprite.texture = textures.get(record.frames[record.frame][tier].src);
           record.sprite.visible = record.x < right && record.x + record.width > left && record.y < bottom && record.y + record.height > top;
         } else record.sprite.rotation = reducedMotion ? 0 : Math.sin(elapsed * .65 + i * 1.6) * .15;
       }
       // Keep tall geometry while exposing an actor immediately behind its base.
       for (const record of [...propSprites, ...mechanisms]) {
-        const behind = version2 && focus && focus.y < record.sortY && focus.y > record.y
-          && focus.x > record.x && focus.x < record.x + record.width;
+        const behind = version2 && focusPoints.some(point=>point&&point.y < record.sortY && point.y > record.y
+          && point.x > record.x && point.x < record.x + record.width);
         record.sprite.alpha = behind ? .48 : 1;
       }
     },

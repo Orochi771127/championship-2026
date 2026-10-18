@@ -19,6 +19,7 @@ import { createDataArenaTextures } from "./dataArenaTextures.js";
 import { DATA_ARENA_SEQUENCES } from "./dataArenaRoster.js";
 import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./dataArenaEnvironment.js";
 import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
+import {harborActorLife} from './dataArenaHarborLife.js';
 
 const T = DATA_ARENA_TERRAIN;
 const TAU = Math.PI * 2;
@@ -299,6 +300,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
     sprite.scale.set(scale);
     shadow.scale.set((ROLE_HEIGHT[role] / 64) * 0.9, (ROLE_HEIGHT[role] / 64) * 0.75);
+      const lifePilot=harborLayout&&Boolean(bundle)&&((role==='PLAYER'&&member.speciesId==='species-034')||(role==='MATE'&&member.speciesId==='species-073'));
+      let idleMS=0,life=null;
     container.addChild(shadow, sprite);
     objects.addChild(container);
     const ringGfx = role === "PLAYER" ? new PIXI.Graphics() : null;
@@ -309,18 +312,22 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         if (!controller || sequence === id) return;
         try { controller.setAnimation(id); sequence = id; } catch { /* a missing raw sequence keeps the current pose */ }
       },
-      update(dtMs, { x, y, facing, flash = 0, alpha = 1, lift = 0, seq = DATA_ARENA_SEQUENCES.STAND, sink = 0 }) {
+      update(dtMs, { x, y, facing, speed=0, flash = 0, alpha = 1, lift = 0, seq = DATA_ARENA_SEQUENCES.STAND, sink = 0 }) {
         container.position.set(x, y - floorOffset(x,y));
         container.zIndex = y;
         this.setSequence(seq);
-        if (controller&&dtMs>0) controller.update({ deltaMS: dtMs });
+          idleMS=seq===DATA_ARENA_SEQUENCES.STAND?idleMS+Math.max(0,dtMs):0;
+          life=lifePilot?harborActorLife({role,sequence:seq,deltaMS:dtMs,idleMS,elapsedMS:elapsed*1000,facing,speed,quiet:reducedMotion||!rich||globalThis.document?.documentElement?.dataset.quality==='saver'}):null;
+          if (controller&&dtMs>0) controller.update({ deltaMS: life?.deltaMS??dtMs });
         // Art faces left; mirror for rightward facing.
-        sprite.scale.set(scale * (facing > 0 ? -1 : 1), scale * (1 - sink * 0.5));
+          sprite.scale.set(scale * ((life?.facing??facing) > 0 ? -1 : 1), scale * (1 - sink * 0.5));
         sprite.y = -lift + sink * 30;
         sprite.alpha = alpha;
         sprite.tint = flash > 0 ? 0xff7a7a : 0xffffff;
         shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.6 : 1);
-      }
+          if(life){shadow.width=life.shadowWidth;shadow.height=life.shadowHeight;shadow.y=1;}
+        },
+        diagnostics(){return {role,speciesId:member?.speciesId,pilot:lifePilot,sequence,life,foot:{x:container.x,y:container.y},shadow:{x:shadow.x,y:shadow.y,width:shadow.width,height:shadow.height}};}
     };
   }
   const playerMember = cast.partners.find((member) => member.partnerId === partnerId) ?? cast.partners[0];
@@ -671,7 +678,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       strip.tilePosition.x = reducedMotion ? 0 : elapsed * 28;
       strip.tilePosition.y = reducedMotion ? 0 : Math.sin(elapsed * 0.8) * 6;
     }
-    environmentView?.update({ elapsed: ambientElapsed, reducedMotion, left, right, top, bottom, low: !rich, focus,reaction:crowd });
+    environmentView?.update({ elapsed: ambientElapsed, reducedMotion, left, right, top, bottom, low: !rich||globalThis.document?.documentElement?.dataset.quality==='saver', focus,focusPoints:[focus,{x:mate.x,y:mate.y}],reaction:crowd });
     interactionView.update({left,right,top,bottom});
     if (bridgeLift >= 0) {
       bridgeLift += dt;
@@ -714,7 +721,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const blink = !reducedMotion && player.invulnerable > 0 && player.state !== "DASH" && Math.floor(elapsed * 14) % 2 === 0;
     const sink = player.state === "FALLING" ? clamp(player.stateTime / 0.7, 0, 1) : 0;
     playerView.update(dtMs, { x: player.x, y: riding ? mate.y - 2 : player.y, facing: player.facing, flash: player.hitFlash,
-      alpha: blink ? 0.35 : 1, lift: riding ? 44 : 0, seq: playerSeq, sink });
+      alpha: blink ? 0.35 : 1, lift: riding ? 44 : 0, seq: playerSeq, sink,speed:Math.hypot(player.vx,player.vy) });
     if (riding) playerView.container.zIndex = mate.y + 1;
     if (playerView.ringGfx) {
       const g = playerView.ringGfx;
@@ -728,7 +735,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const mateSeq = mate.state === "DOWNED" ? DATA_ARENA_SEQUENCES.DOWN : mate.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
       : mate.surgeAim ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(mate.vx, mate.vy) > 30 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
     mateView.update(dtMs, { x: mate.x, y: mate.y, facing: mate.facing, flash: mate.hitFlash, alpha: mate.state === "DOWNED" ? 0.7 : 1,
-      seq: mateSeq, sink: mate.swimming ? 0.35 : 0 });
+      seq: mateSeq, sink: mate.swimming ? 0.35 : 0,speed:Math.hypot(mate.vx,mate.vy) });
     if (boss && !bossView) bossView = createActorView("BOSS", cast.boss, boss);
     if (bossView) {
       const entering = boss.state === "ENTRANCE";
@@ -1030,6 +1037,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       return {
         renderer: "CHAMPIONSHIP_SINGLE_PIXI_STAGE", scene: "DATA_ARENA", quality, reducedMotion, hasCreatureArt: playerView.hasArt,
         environment: environmentView?.diagnostics() ?? null,
+        harborLife:[playerView.diagnostics(),mateView.diagnostics()],
         interactions:interactionView.diagnostics(),effectsElapsed:elapsed,
         particleAgeTotal:live.reduce((n,p)=>n+p.age,0),scorchSprites:[...decalSprites.values()].filter(d=>d.kind!=="wet").length,
         fireMotion:[...fireSprites].slice(0,8).map(([cell,s])=>({cell,x:s.scale.x,y:s.scale.y,frame:textures.flame.indexOf(s.texture)})),

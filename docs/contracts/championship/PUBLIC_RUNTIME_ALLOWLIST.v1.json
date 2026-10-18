@@ -114134,6 +114134,74 @@
       "sha256": "5688a98ccd9a21256d309f98ee3ba4658eaa7e0c633dfaed16311145659a30dd"
     },
     {
+      "path": "assets/production/title-responsive-r1/arena-480.webp",
+      "sha256": "41f9e4ec9fc999a80641f6c429ae444c4e30dbe5a8f39d657b7be9424276c7d1"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/arena-768.webp",
+      "sha256": "e6fabae196b4223d7b4787326f15ec935946a3c07d40faee4d7bf9113a2fcb36"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/arena-941.webp",
+      "sha256": "313b823ef6e890e07031fb73cad994b2388293c0d79849611882605d8128641e"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/blaze-1353.webp",
+      "sha256": "f812e9da918465d4161b25d1936625cc9d20fd493e0df69c1624848059ce6f97"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/blaze-192.webp",
+      "sha256": "70244a316f87c80ae7233ef1cdbf381d8280bff7858156908617a3acb7b1055f"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/blaze-384.webp",
+      "sha256": "ae8a1a673dc8ba79a14368f35954a1dbeaf1059615f07c0007a809a47784cb66"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/blaze-640.webp",
+      "sha256": "fad70022d871d5f034ce2954da3cff70968985f437a685e9b74354f7871a22b8"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/blaze-960.webp",
+      "sha256": "5bc90bbd2cbcd8c0563f458278e20444d4648b5ac0d70617a30a78360e9ba8e2"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/cloud-1254.webp",
+      "sha256": "d45aa2edd72690816943269d46752c83d3954c28f9d768788305d881929b22e5"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/cloud-192.webp",
+      "sha256": "7f7dbea8942f55a5866eab143b4acb2a2c234d04ed90e49c8b56687debf4105b"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/cloud-384.webp",
+      "sha256": "983adefe8017e798e549ae4dcc43c3937b3d2260c1d3861adc73a406fb435dc4"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/cloud-640.webp",
+      "sha256": "ec8eb314a90b2816519838723ae4d49d214bee0c0d4426af630665a5fdac1806"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/cloud-960.webp",
+      "sha256": "42dc534d30b1a9b449d405d86233f85fcc0a18c86bd48ac4aeb7f17b26810b0b"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/logo-zh-Hant-1080.webp",
+      "sha256": "c2522c0b17f74c49bbdfbe674b83e86907680bf020db68e6919f268b1b27a414"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/logo-zh-Hant-1774.webp",
+      "sha256": "0904fbf56663d7b13b7bd5e1c2a65340a32b42a932db8f1c921a7d50424a98c3"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/logo-zh-Hant-400.webp",
+      "sha256": "37ebf6c8591db4b149cc6f28b99b928154477aaa26f23e1e36cdf5ca93cf0430"
+    },
+    {
+      "path": "assets/production/title-responsive-r1/logo-zh-Hant-720.webp",
+      "sha256": "26a4eb5dbcb6bafff4f430155ef1c0b8a1445bde5c95d73dc24d89158bb58ac2"
+    },
+    {
       "path": "assets/production/toolbar/licensed-runtime-v1/clean-rest.png",
       "sha256": "b021bf21c4fd4b609ec6e9892fc574dff0d1e9e67b0615865fefc20003ebb2f2"
     },
@@ -114459,7 +114527,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "71b96440facab8055db02b57768ef617ae6e670595d81cd5548fa29d06b4c99e"
+      "sha256": "7a2af4b6426df38da76029cc4f9933246342dfe667d82ef23830d9cd3c6ea6fb"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -114860,7 +114928,7 @@
     },
     {
       "path": "src/championship/app/dataArena.css",
-      "sha256": "2176f283fc8753829aac799159bc443d3f37c2d07158958296c0d877686b78a5"
+      "sha256": "151343fb4c7651b2f6d250e8cdd9283f1bb2033d9ed0852b48f6d523b60d27f0"
     },
     {
       "path": "src/championship/app/dataArenaScreen.js",
@@ -115796,7 +115864,11 @@
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
-      "sha256": "5275b5b3ad0ce2d65fbc46665e32d117329d2320490d85373d9c8ceccdef3fae"
+      "sha256": "dfea3da5d687be1df408b512faa956ca417e5cac88a068be27c9a332164dd316"
+    },
+    {
+      "path": "src/championship/presentation/dataArena/dataArenaHarborLife.js",
+      "sha256": "af986321622147b0be5431247097c0feb380dd361700ac4634fa3723a95a864b"
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaInteractionArt.js",
@@ -115808,7 +115880,7 @@
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-      "sha256": "68f24cb077de7b2ebdd88cfabb907df1ab2d84236ff461fdc2672bd32f6bdd32"
+      "sha256": "23b83fa2c9513bbfcb31ccf3be0ff192bd8d70d542aa6d90d1a3087821fdff69"
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaRoster.js",
@@ -116028,7 +116100,7 @@
     },
     {
       "path": "src/championship/presentation/titleImageLifecycle.js",
-      "sha256": "dd05d57ad57c681a145a7ee9c35455bf2ce35766fc074ad696c8566dbb00867a"
+      "sha256": "012f66d7a1657e1f26c9e7b40c85beb62797b5d268a105057a87165b4394ccab"
     },
     {
       "path": "src/championship/presentation/vfx/captureStorageVfx.js",

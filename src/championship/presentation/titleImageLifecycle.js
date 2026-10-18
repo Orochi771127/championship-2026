@@ -1,7 +1,22 @@
-// Title-owned decoration lifetime. The background's original bytes are fetched
+// Title-owned decoration lifetime. Display-sized bytes are fetched
 // once per unfinished attempt, never independently by CSS. A complete decoded
 // Blob may be reused on return. Film warmup selects only these TITLE images,
 // one low-priority request at a time, after the player grants buffer headroom.
+export function selectTitleDisplaySource(element, fallback, { background = false } = {}) {
+  const variants = (element?.dataset?.titleVariants ?? '').split(',').map(value => {
+    const colon = value.indexOf(':');
+    return { width: Number(value.slice(0, colon)), src: value.slice(colon + 1) };
+  }).filter(row => row.width > 0 && row.src).sort((a,b) => a.width-b.width);
+  if (!variants.length) return fallback;
+  const view = element.ownerDocument?.defaultView ?? globalThis;
+  const box = (element.classList?.contains('cm-title__logo-art') ? element.parentElement : element)?.getBoundingClientRect?.();
+  if (!box?.width || !box?.height) return fallback;
+  const ratio = background ? 941/1672 : Number(element.getAttribute('width'))/Number(element.getAttribute('height'));
+  const cssWidth = background ? Math.max(box.width, box.height*ratio) : Math.min(box.width, box.height*ratio);
+  const required = cssWidth * Math.max(1, Number(view.devicePixelRatio) || 1);
+  return (variants.find(row => row.width >= required) ?? variants.at(-1)).src;
+}
+
 export function createTitleImageLifecycle(title, {
   fetchImpl = (...args) => globalThis.fetch(...args),
   urls = globalThis.URL,
@@ -17,6 +32,7 @@ export function createTitleImageLifecycle(title, {
     released: !image.getAttribute('src')
   }));
   const panel = title.querySelector?.('.cm-title__panel');
+  const staged = Boolean(panel?.dataset.titleVariants);
   const source = panel?.dataset.backgroundSrc;
   const backgroundUrl = source ? new URL(source, title.ownerDocument.baseURI).href : null;
   if (backgroundUrl) for (const entry of images) entry.managed = true;
@@ -64,7 +80,8 @@ export function createTitleImageLifecycle(title, {
       try {
         let blob = cachedBlob;
         if (!blob) {
-          const response = await fetchImpl(backgroundUrl, { signal: entry.controller.signal, priority: 'low' });
+          const selected = selectTitleDisplaySource(panel, source, { background: true });
+          const response = await fetchImpl(new URL(selected,title.ownerDocument.baseURI).href, { signal: entry.controller.signal, priority: staged && !warm ? 'high' : 'low' });
           if (!current(entry)) return;
           if (!response.ok) throw new Error('TITLE_BACKGROUND_RESPONSE');
           blob = await response.blob();
@@ -79,6 +96,7 @@ export function createTitleImageLifecycle(title, {
         cachedBlob = blob; entry.ready = true;
         panel.style.backgroundImage = `url("${entry.url}")`;
         state('ready'); onSettled();
+        if (staged && !paused) syncTitleImages(false);
       } catch {
         fail(entry);
       }
@@ -110,7 +128,8 @@ export function createTitleImageLifecycle(title, {
       try {
         let blob = entry.blob;
         if (!blob) {
-          const response = await fetchImpl(new URL(entry.src,title.ownerDocument.baseURI).href,{signal:request.controller.signal,priority:'low'});
+          const selected = selectTitleDisplaySource(entry.image,entry.src);
+          const response = await fetchImpl(new URL(selected,title.ownerDocument.baseURI).href,{signal:request.controller.signal,priority:staged && entry.image.dataset?.titleLocale && !warm ? 'high' : 'low'});
           if (!currentImage()) return;
           if (!response.ok) throw new Error('TITLE_IMAGE_RESPONSE');
           blob = await response.blob();
@@ -128,6 +147,7 @@ export function createTitleImageLifecycle(title, {
         clearDeadline(request); request.ready = true; entry.blob = blob; entry.warmed = true;
         imageState(entry,'ready');
         state(active?.ready ? 'ready' : 'loading'); onSettled();
+        if (staged && !paused) syncTitleImages(false);
       } catch { failImage(); }
     })();
   }
@@ -157,6 +177,10 @@ export function createTitleImageLifecycle(title, {
     const nextVisibleKey = images.map(entry=>Number(visible(entry))).join('');
     const visibilityChanged = visibleKey !== nextVisibleKey;
     visibleKey = nextVisibleKey;
+    // Key composition has priority; optional partners cannot compete with it.
+    // Controls are already wired independently of all title decoration.
+    if (staged && !wantPause && !active) startBackground();
+    const decorationReady = !staged || (active?.ready && images.filter(e => visible(e) && e.image.dataset?.titleLocale).every(e => e.request?.ready));
     for (const entry of images) {
       if (entry.image.dataset) entry.image.dataset.titleImageVisible = String(!hidden && visible(entry));
       if (hidden) { releaseImage(entry); entry.failed = false; }
@@ -167,13 +191,14 @@ export function createTitleImageLifecycle(title, {
         continue;
       }
       else if (wantPause && entry.request && !entry.request.ready && !entry.request.warm && !entry.request.fromCache) { releaseImage(entry); }
-      else if (entry.managed && !entry.request && (entry.blob || !wantPause)) { startImage(entry); }
+      else if (entry.managed && !entry.request && (entry.blob || (!wantPause && (entry.image.dataset?.titleLocale || decorationReady)))) { startImage(entry); }
       // A warm request becomes the normal TITLE request on skip; no duplicate
-      // image.src download is issued while its body/decode is still pending.
+// image.src download is issued while its body/decode is still pending.
       if (entry.request) { bindImage(entry); continue; }
       if (wantPause && !entry.image.complete && entry.src && !entry.released) {
         entry.image.removeAttribute('src'); entry.released = true;
       } else if (!wantPause && entry.released && !entry.failed) {
+        if (staged && !entry.image.dataset?.titleLocale && !decorationReady) continue;
         entry.image.setAttribute('src', entry.src); entry.released = false;
       }
     }
