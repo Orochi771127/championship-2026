@@ -228,7 +228,9 @@ async function main() {
     await page.waitForFunction(starts=>JSON.parse(document.documentElement.dataset.musicState).starts>starts,loopStarts,{timeout:10000});await waitCue(page,t.id);const loop=await page.evaluate(()=>musicQA.inspect());const seekEvents=await page.evaluate(at=>nativeAudioQA.events.filter(e=>e.time>=at&&['seeking','seeked','timeupdate','ended','playing'].includes(e.type)),seek.at);
     assert.ok(seekEvents.some(e=>e.type==='seeked'&&e.src===seek.before.src&&e.position>=seek.target-.2),'Observe native seeked at the requested end boundary');assert.ok(loop.music.position<5,'Real loop restarts near cue head');await assertBounded(page);Object.assign(loopRecord,{status:'PASS',after:loop.music,seekEvents});
    }
+   await page.evaluate(()=>musicQA.music.setScene('battle_normal'));
    for(const id of ['battle_normal','battle_final']){await select(page,'battleMusic',id);await waitCue(page,id);report.transport.push({case:'existing-battle-choice',id,native:await assertBounded(page)});}await select(page,'battleMusic','federation_siege');
+   await select(page,'raisingMusic','a_quiet_evening_training');
    await page.evaluate(()=>musicQA.music.setScene('moon',null,'raising'));await waitCue(page,'a_quiet_evening_training');
    const before=await page.evaluate(()=>musicQA.inspect());
    for(const locale of LOCALES){await category(page,'language');await select(page,'locale',locale);await category(page,'sound');checkLabels(await page.evaluate(labelsSnapshot),locale);const after=await page.evaluate(()=>musicQA.inspect());assert.equal(after.music.starts,before.music.starts,'Locale must not restart effective cue');assert.equal(after.music.playing,'a_quiet_evening_training');assert.ok(after.music.position>=before.music.position);assert.equal(after.preferences.masterVolume,65);assert.equal(after.preferences.musicVolume,45);assert.equal(after.preferences.sfxVolume,35);assert.equal(after.preferences.muted,false);}
