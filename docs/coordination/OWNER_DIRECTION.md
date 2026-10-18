@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: APP_ICON_APPROVED_20261018 -->
+## 2026-10-18 — Publish the approved app icon
+
+Owner approved the exact head-and-shoulder fire dragon icon and manually downloaded its master. Authorizes three opaque square downsampled icons, versioned install references and existing approved zh-Hant brand labels; commit/push/main/Pages and safe R-main synchronization. Preserve current viewport repair and concurrent Dex changes; no PR56 merge, regenerated art or save changes. See [source identity and validation](../reports/app-icon-2026-10-18/REPORT_ZH_TW.md).
+
 <!-- record-id: IPHONE_HOME_SCREEN_REPAIR_20261018 -->
 ## 2026-10-18 — iPhone Home Screen repair and publication
 

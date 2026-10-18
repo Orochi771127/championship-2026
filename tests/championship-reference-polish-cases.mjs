@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {getActiveGameTitle,getTitleEyebrow} from '../src/championship/text/brandTerms.js';
 import {selectTitleAsset} from '../src/championship/presentation/titleAssetVariant.js';
 import {loadStylesheet} from '../src/championship/app/loadStylesheet.js';
 import {isInstalledWebApp, mountWebAppInstall} from '../src/championship/app/webAppInstall.js';
@@ -129,6 +131,29 @@ test('web manifests receive the same schema and private-content checks as public
   assert.doesNotThrow(()=>assertPublicBytes('manifest.webmanifest',bytes,{jsonFields}));
   assert.throws(()=>assertPublicBytes('manifest.webmanifest',bytes),/SCHEMA_REQUIRED/);
   assert.throws(()=>assertPublicBytes('manifest.webmanifest',Buffer.from('{"privateVaultReference":"hidden"}'),{jsonFields}),/PRIVATE_KEY/);
+});
+
+test('approved opaque icons and installation links agree without changing app identity',()=>{
+  const manifest=JSON.parse(fs.readFileSync('manifest.webmanifest','utf8'));
+  const html=fs.readFileSync('championship.html','utf8');
+  const evidence=JSON.parse(fs.readFileSync('docs/reports/app-icon-2026-10-18/ICON_BYTES.json','utf8'));
+  assert.equal(evidence.sourceSha256,'33f557a1549bbd82f97ff873f0be4b8370a16aa45138b0d55cc88602e34841c6');
+  assert.equal(manifest.name,getActiveGameTitle('zh-Hant'));
+  assert.equal(manifest.short_name,getTitleEyebrow('zh-Hant'));
+  assert.ok(html.includes(`name="apple-mobile-web-app-title" content="${manifest.short_name}"`));
+  assert.deepEqual([manifest.id,manifest.scope,manifest.start_url],['./','./','./championship.html']);
+  const version='?v=icon-'+evidence.sourceSha256.slice(0,12);
+  assert.ok(html.includes(`href="./manifest.webmanifest${version}"`));
+  assert.ok(html.includes(`href="./assets/production/web-app/icon-180.png${version}"`));
+  assert.deepEqual(manifest.icons.map(x=>x.src),[192,512].map(n=>`assets/production/web-app/icon-${n}.png${version}`));
+  for(const row of evidence.files){
+    const bytes=fs.readFileSync(row.path);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'),row.sha256);
+    assert.equal(bytes.length,row.bytes);
+    assert.equal(bytes.subarray(1,4).toString(),'PNG');
+    assert.equal(bytes.readUInt32BE(16),row.width);assert.equal(bytes.readUInt32BE(20),row.height);
+    assert.equal(bytes[24],8);assert.equal(bytes[25],2,'PNG must be opaque RGB');
+  }
 });
 test('delivery assets fit the budget, retain masters, and enter the build allowlist', () => {
   const variants=JSON.parse(fs.readFileSync('assets/production/title-morning-r1/delivery/manifest.json'));
