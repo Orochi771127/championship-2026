@@ -31,7 +31,7 @@ test('on-demand viewport evidence records geometry and revision without reading 
  Object.defineProperty(view,'localStorage',{get(){throw Error('MUST_NOT_READ_SAVE');}});
  const doc={documentElement:{clientWidth:393,clientHeight:798},body:{},querySelector:()=>null};
  const evidence=readTitleViewportDiagnostics(view,doc);
- assert.equal(evidence.revision,'PWA-20261018B');assert.equal(evidence.installed,true);
+ assert.equal(evidence.revision,'PWA-20261018C');assert.equal(evidence.installed,true);
  assert.deepEqual(evidence.inner,[393,798]);assert.deepEqual(evidence.screen,[393,852]);assert.equal(evidence.safeBottom,'34px');
  assert.equal(evidence.build,'source');assert.equal(evidence.title,null);
 });
