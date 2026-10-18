@@ -37,8 +37,8 @@
 
 ## 前後比較與重現
 
-`scripts/audit-music-signals.py` 重跑訊號檢查；`scripts/build-music-listening-review.py` 產生本機 `reports/music-listening-review/index.html`、23 cue 原生 stereo WAV 摘錄及循環模擬（約 55 MB，非公開遊戲 payload）。使用現有 FFmpeg／Python／NumPy，不安裝軟體、不連付費服務。
+`scripts/audit-music-signals.py` 重跑訊號檢查；`scripts/build-music-listening-review.py` 產生本機 `reports/music-listening-review/index.html`、23 cue 原生 stereo WAV 摘錄及循環模擬（約 73 MB，非公開遊戲 payload）。使用現有 FFmpeg／Python／NumPy，不安裝軟體、不連付費服務。
 
-比較頁 A 為 `19c91ac8` 的實際先前增益；當時未登記的六首場地曲，以原檔安全峰值參考取代，不冒稱那時已在遊戲播放。B 為目前增益。預設匹配兩邊到較小音量，避免「比較小聲所以比較順耳」的偏差；只調過增益的 A/B 音色本來應該相同。短摘錄兩端 10ms fade 僅避免產生取樣切割假 click，並非修改原曲。所有 WAV 均檢查不削波。
+比較頁 A 為 `19c91ac8` 的實際先前增益；當時未登記的六首場地曲，以原檔安全峰值參考取代，不冒稱那時已在遊戲播放。B 為目前增益。匹配增益直接寫入 WAV，不依賴 HTMLMediaElement.volume；預設匹配兩邊到較小音量，避免「比較小聲所以比較順耳」的偏差；只調過增益的 A/B 音色本來應該相同。短摘錄兩端 10ms fade 僅避免產生取樣切割假 click，並非修改原曲。所有 WAV 均檢查不削波。
 
 這些比較檔是技術／聽感交接材料，尚無真人完成逐曲評分。需要針對可辨識時間點再決定是否逐曲窄幅 EQ、去噪、declip／limiter 或循環修整。尚未確認的缺陷不能藉降低音量改寫成已完成音質修復。
