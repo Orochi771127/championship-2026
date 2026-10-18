@@ -4,6 +4,20 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {isLandscapeEntryLayout,mountPortraitFrame} from '../src/championship/app/portraitFrame.js';
 const source=p=>readFileSync(new URL(`../src/championship/app/${p}`,import.meta.url),'utf8');
+test('opening names retain native width through keyboard, blur and compact rotation; legacy frame returns only after opening closes',()=>{
+ const f=fixture(568,320);assert.ok(f.attrs.has('data-portrait-frame'));
+ f.opening.hidden=false;f.notify();assert.ok(!f.attrs.has('data-portrait-frame'));
+ f.focus();const input=f.document.activeElement;
+ for(const [w,h] of [[393,852],[393,280],[568,210],[852,393],[393,280],[393,852]]){
+  f.resize(w,h);assert.ok(!f.attrs.has('data-portrait-frame'));assert.equal(input.value,'Draft');
+ }
+ f.resize(393,280);f.blur();assert.ok(!f.attrs.has('data-portrait-frame'));
+ f.resize(568,320);f.opening.hidden=true;f.notify();assert.ok(f.attrs.has('data-portrait-frame'));
+ assert.ok(f.observed.has(f.opening));f.controller.dispose();assert.equal(f.styles.size,0);assert.equal(f.attrs.size,0);
+ const css=source('opening.css');
+ assert.match(css,/#cm-title:has\(#cm-opening:not\(\[hidden\]\)\) > \.cm-title__panel \{ width:100%; \}/);
+ assert.match(css,/#cm-title:has\(#cm-opening:not\(\[hidden\]\)\) > \.cm-title__controls \{\s*top:0; bottom:auto; left:0; width:100%; height:var\(--cm-visible-viewport-height,100%\); transform:none;/);
+});
 test('standalone viewport authority survives all game routes, rotation, keyboard and disposal',()=>{
  const f=fixture(393,852);f.window.navigator={standalone:true};
  f.title.hidden=true;f.root.hidden=false;
@@ -20,14 +34,14 @@ test('standalone viewport authority survives all game routes, rotation, keyboard
 });
 function fixture(width=1366,height=768,enabled=true) {
  const attrs=new Set(),styles=new Map(),observed=new Set();let notify;
- const root={dataset:{activeScreen:'RAISING_HOME'},hidden:true},title={hidden:false};
+ const root={dataset:{activeScreen:'RAISING_HOME'},hidden:true},title={hidden:false},opening={hidden:true};
  const body={style:{setProperty:(k,v)=>styles.set(k,v),removeProperty:k=>styles.delete(k)},toggleAttribute(k,v){v?attrs.add(k):attrs.delete(k);},removeAttribute:k=>attrs.delete(k)};
  const orientation=Object.assign(new EventTarget(),{type:width>height?'landscape-primary':'portrait-primary'});
  const window=Object.assign(new EventTarget(),{innerWidth:width,innerHeight:height,screen:{width,height,orientation},MutationObserver:class{constructor(fn){notify=fn;}observe(n){observed.add(n);}disconnect(){observed.clear();}}});
  window.visualViewport=Object.assign(new EventTarget(),{width,height,offsetTop:0,offsetLeft:0,scale:1});
- const document=Object.assign(new EventTarget(),{body,activeElement:null,getElementById:id=>id==='cm-root'?root:id==='cm-title'?title:null});
+ const document=Object.assign(new EventTarget(),{body,activeElement:null,getElementById:id=>id==='cm-root'?root:id==='cm-title'?title:id==='cm-opening'?opening:null});
  const controller=mountPortraitFrame({window,document,responsiveRaising:enabled,responsiveMenus:enabled,responsiveEntry:enabled});
- return {attrs,styles,observed,root,title,window,document,controller,notify:()=>notify(),
+ return {attrs,styles,observed,root,title,opening,window,document,controller,notify:()=>notify(),
  resize(w,h){window.innerWidth=w;window.innerHeight=h;Object.assign(window.visualViewport,{width:w,height:h});window.dispatchEvent(new Event('resize'));},
  focus(){document.activeElement={tagName:'INPUT',type:'text',value:'Draft',scrollIntoView(){this.reveals=(this.reveals??0)+1;}};document.dispatchEvent(new Event('focusin'));},
  blur(){document.activeElement=null;document.dispatchEvent(new Event('focusout'));}};

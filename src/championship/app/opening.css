@@ -143,6 +143,12 @@ body[data-portrait-frame] #cm-title .cm-title__note {
 body[data-portrait-frame] #cm-title .cm-title__note:empty { display:none; }
 
 /* ---- Opening: overlay, letters, naming ----------------------------------- */
+/* Keyboard height is a vertical budget, never the width of a naming stage.
+   The title's 9:16 poster/control bounds otherwise shrink on iPhone focus. */
+#cm-title:has(#cm-opening:not([hidden])) > .cm-title__panel { width:100%; }
+#cm-title:has(#cm-opening:not([hidden])) > .cm-title__controls {
+  top:0; bottom:auto; left:0; width:100%; height:var(--cm-visible-viewport-height,100%); transform:none;
+}
 #cm-opening {
   position: absolute;
   z-index: 4;

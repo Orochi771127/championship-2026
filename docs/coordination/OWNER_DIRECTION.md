@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: OPENING_NAMING_VIEWPORT_20261018 -->
+## 2026-10-18 — iPhone naming keyboard regression
+
+Owner reports the opening trainer/egg naming became a narrow central stage and says it was not previously like this (Sentinel_fb01128052c88191b3b157dbdf202658; Sentinel_fe82186527cc8191a64201409cbaf927). Authorizes a precise fix and existing commit/push/main publication workflow after verification. Inspect both supplied screenshots; keep accepted title and inner-page safe-area fixes, original artwork/style, save authority and all exact approved art/music. Cover focus/blur, keyboard open/close, rotation and ordinary pages. Film restoration remains a separate read-only investigation. See [evidence and scope](../reports/opening-naming-viewport-2026-10-18/REPORT_ZH_TW.md).
+
 <!-- record-id: INSTALLED_GAME_SAFE_AREA_20261018 -->
 ## 2026-10-18 — Inner-page standalone safe area
 

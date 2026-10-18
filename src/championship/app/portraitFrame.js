@@ -88,6 +88,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   let knownOrientation=orientationAxis(),portraitRotation=null,unverifiedEditingAxis=null,pendingKeyboardWidth=null;
   const root=doc.getElementById?.('cm-root');
   const title=responsiveEntry?doc.getElementById?.('cm-title'):null;
+  const opening=responsiveEntry?doc.getElementById?.('cm-opening'):null;
   const menuProperties=['--cm-menu-viewport-height','--cm-menu-viewport-top'];
   const visibleProperties=['--cm-visible-viewport-height','--cm-visible-viewport-top'];
   const titleProperties=['--cm-title-viewport-height','--cm-title-viewport-top'];
@@ -201,7 +202,10 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
       body.style.setProperty('--cm-menu-viewport-height',`${visible?.height??height}px`);
       body.style.setProperty('--cm-menu-viewport-top',`${visible?.offsetTop??0}px`);
     }else for(const name of menuProperties)body.style.removeProperty(name);
-    sideways=!(portraitRotation&&!portraitRotation.waiting)&&!entry&&!battle&&!menu&&!compactMenu&&!cage&&!desktop&&!browse&&!hunt&&(keyboard?inputBaseline.sideways:width>height);
+    // Opening forms own native DOM geometry, including short keyboard and
+    // compact landscape viewports. Never fit their input into the legacy frame.
+    const openingVisible=!!opening&&!opening.hidden&&!!title&&!title.hidden;
+    sideways=!openingVisible&&!(portraitRotation&&!portraitRotation.waiting)&&!entry&&!battle&&!menu&&!compactMenu&&!cage&&!desktop&&!browse&&!hunt&&(keyboard?inputBaseline.sideways:width>height);
     if(!hasInput&&!keyboard)inputBaseline=null;
     body.toggleAttribute('data-portrait-frame',sideways);
     if(!sideways){for(const name of properties)body.style.removeProperty(name);revealInput();return;}
@@ -229,6 +233,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   const observer=root&&Observer?new Observer(()=>update()):null;
   observer?.observe(root,{attributes:true,attributeFilter:['data-active-screen','hidden']});
   if(title)observer?.observe(title,{attributes:true,attributeFilter:['hidden']});
+  if(opening)observer?.observe(opening,{attributes:true,attributeFilter:['hidden']});
   update();
   return {refresh(){update();},isBrowseWide(activeScreen){return !disposed&&browseWide(activeScreen);},dispose(){
     if(disposed)return;disposed=true;

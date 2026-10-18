@@ -1,0 +1,191 @@
+{
+  "scope": "Controlled Chromium normal new-game UI; synthetic visualViewport keyboard budget; not physical iPhone",
+  "checks": [
+    {
+      "stage": "trainer",
+      "state": "closed",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "visibleHeight": 852,
+        "top": 0
+      },
+      "panel": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852,
+        "right": 393,
+        "bottom": 852
+      },
+      "controls": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852,
+        "right": 393,
+        "bottom": 852
+      },
+      "opening": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852,
+        "right": 393,
+        "bottom": 852
+      },
+      "form": {
+        "x": 19.550552368164062,
+        "y": 321.05615234375,
+        "width": 353.89892578125,
+        "height": 208.5296630859375,
+        "right": 373.44947814941406,
+        "bottom": 529.5858154296875
+      },
+      "input": {
+        "x": 40.604026794433594,
+        "y": 380.2063903808594,
+        "width": 260.6620788574219,
+        "height": 56.142608642578125,
+        "right": 301.26610565185547,
+        "bottom": 436.3489990234375
+      },
+      "submit": {
+        "x": 136.3472137451172,
+        "y": 456.39990234375,
+        "width": 120.30555725097656,
+        "height": 48.12225341796875,
+        "right": 256.65277099609375,
+        "bottom": 504.52215576171875
+      },
+      "frame": false,
+      "scrollWidth": 393,
+      "draft": "視窗測試"
+    },
+    {
+      "stage": "trainer",
+      "state": "focused",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "visibleHeight": 852,
+        "top": 0
+      },
+      "panel": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852,
+        "right": 393,
+        "bottom": 852
+      },
+      "controls": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852,
+        "right": 393,
+        "bottom": 852
+      },
+      "opening": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852,
+        "right": 393,
+        "bottom": 852
+      },
+      "form": {
+        "x": 20,
+        "y": 322,
+        "width": 353,
+        "height": 208,
+        "right": 373,
+        "bottom": 530
+      },
+      "input": {
+        "x": 41,
+        "y": 381,
+        "width": 260,
+        "height": 56,
+        "right": 301,
+        "bottom": 437
+      },
+      "submit": {
+        "x": 136.5,
+        "y": 457,
+        "width": 120,
+        "height": 48,
+        "right": 256.5,
+        "bottom": 505
+      },
+      "frame": false,
+      "scrollWidth": 393,
+      "draft": "視窗測試"
+    },
+    {
+      "stage": "trainer",
+      "state": "keyboard",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "visibleHeight": 474,
+        "top": 0
+      },
+      "panel": {
+        "x": 63.1875,
+        "y": 0,
+        "width": 266.625,
+        "height": 474,
+        "right": 329.8125,
+        "bottom": 474
+      },
+      "controls": {
+        "x": 63.1875,
+        "y": 0,
+        "width": 266.625,
+        "height": 474,
+        "right": 329.8125,
+        "bottom": 474
+      },
+      "opening": {
+        "x": 63.1875,
+        "y": 0,
+        "width": 266.625,
+        "height": 474,
+        "right": 329.8125,
+        "bottom": 474
+      },
+      "form": {
+        "x": 83.1875,
+        "y": 133,
+        "width": 226.625,
+        "height": 208,
+        "right": 309.8125,
+        "bottom": 341
+      },
+      "input": {
+        "x": 104.1875,
+        "y": 192,
+        "width": 184.625,
+        "height": 56,
+        "right": 288.8125,
+        "bottom": 248
+      },
+      "submit": {
+        "x": 136.5,
+        "y": 268,
+        "width": 120,
+        "height": 48,
+        "right": 256.5,
+        "bottom": 316
+      },
+      "frame": false,
+      "scrollWidth": 393,
+      "draft": "視窗測試"
+    }
+  ],
+  "errors": [],
+  "status": "REPRODUCED",
+  "note": "Only the first trainer-name pass is included; raw diagnostic runner repeated the trainer form under a second label."
+}
