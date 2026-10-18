@@ -14,9 +14,9 @@ export const OPENING_FILM = Object.freeze({
   liteSrc:'assets/production/opening-film-ns33-r1/opening-540p-6869b2cb.mp4',
   liteSha256:'6869b2cb08b3e225b634525d350a4529ea707640a157d355abc85e283670cc46',
   liteBytes:8782520,
-  webSrc:'assets/production/opening-film-ns33-r1/opening-web-540p-9577fea3.mp4',
-  webSha256:'9577fea3e9558d63e77dad185c3b420793aaad54eb181b813fd03ccce0e5c84e',
-  webBytes:4755124,
+  webSrc:'assets/production/opening-film-ns33-r1/opening-web-540p-00ce0c94.mp4',
+  webSha256:'00ce0c94264357ccb6549b2ad3162ccf3ccfd7f72f513fb764bc8e4166098f1d',
+  webBytes:4793340,
   poster:'assets/production/opening-film-ns33-r1/poster-048c2ee9.jpg',
   posterSha256:'048c2ee9cd049398421631536e99e3b72aaa8f79c53068ecf3617371ef183b38',
   duration:58.0, logoTime:55.71, startupWaitMs:8000, waitMs:3000

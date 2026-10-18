@@ -43,9 +43,9 @@
     "ownerAuthorizedOn": "2026-10-18",
     "classification": "OWNER_APPROVED_ADAPTATION",
     "instruction": "Restore approved opening; self-review then publish. Allow a compressed web derivative, preserve original, no new film or paid service. On demand, skippable, no entry blocking; honor mute/gesture and stop on leave/background.",
-    "file": "assets/production/opening-film-ns33-r1/opening-web-540p-9577fea3.mp4",
-    "sha256": "9577fea3e9558d63e77dad185c3b420793aaad54eb181b813fd03ccce0e5c84e",
-    "bytes": 4755124,
+    "file": "assets/production/opening-film-ns33-r1/opening-web-540p-00ce0c94.mp4",
+    "sha256": "00ce0c94264357ccb6549b2ad3162ccf3ccfd7f72f513fb764bc8e4166098f1d",
+    "bytes": 4793340,
     "sourceFile": "assets/production/opening-film-ns33-r1/opening-1080p-30b17392.mp4",
     "sourceSha256": "30b173920b3ad776aa9fc85949c720715f2d0b6fad6bca2a443ae30686a770ce",
     "width": 540,
@@ -55,10 +55,11 @@
     "fps": 24,
     "videoCodec": "H.264 High level 3.1 yuv420p",
     "audioCodec": "AAC LC 48kHz stereo 80kbps",
-    "recipe": "ffmpeg -map 0:v:0 -map 0:a:0 -vf scale=540:960:flags=lanczos -c:v libx264 -preset slow -crf 28 -maxrate 600k -bufsize 1200k -profile:v high -level:v 3.1 -pix_fmt yuv420p -c:a aac -b:a 80k -ac 2 -ar 48000 -movflags +faststart -map_metadata -1",
+    "recipe": "Two-pass FFmpeg: -vf scale=540:960:flags=lanczos -c:v libx264 -preset veryslow -refs 6 -b:v 570k -maxrate 2000k -bufsize 4000k -qcomp 0.7 -profile:v high -level:v 3.1 -pix_fmt yuv420p; pass 1 -an -f null; pass 2 -c:a aac -b:a 80k -ac 2 -ar 48000 -movflags +faststart -map_metadata -1",
     "trigger": "manual Watch only; no startup or idle video request",
     "publicSelection": "web derivative and poster only; retain all originals outside public build",
     "physicalDeviceAccepted": false,
-    "fullSubjectiveListeningAccepted": false
+    "fullSubjectiveListeningAccepted": false,
+    "qualityReview": "Replaces the 600k-VBV first candidate after full-frame comparison revealed block artifacts in fast battle motion. Two-pass allocation and wider VBV prioritize difficult frames without increasing the total budget."
   }
 }

@@ -47,7 +47,8 @@ async function playing(page){await page.waitForFunction(()=>document.querySelect
 async function skip(page){await page.click('#cm-film-skip');await page.waitForTimeout(400);assert.equal((await state(page)).hidden,true);}
 async function prefs(context,value){await context.addInitScript(({key,value})=>localStorage.setItem(key,JSON.stringify(value)),{key:prefsKey,value});}
 
-const webPattern='**/opening-web-540p-9577fea3.mp4';
+const selectedWeb=JSON.parse(fs.readFileSync(path.resolve('assets/production/opening-film-ns33-r1/manifest.json'),'utf8')).webRestore;
+const webName=path.basename(selectedWeb.file),webPattern='**/'+webName;
 async function watch(page){await page.click('#cm-watch-film');await playing(page);}
 async function released(page){
  assert.equal((await state(page)).hidden,true);
@@ -68,7 +69,7 @@ async function released(page){
     await context.addInitScript(()=>{window.__filmMedia=[];const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){if(!__filmMedia.includes(this))__filmMedia.push(this);return play.call(this);};});
     await boot(page);await watch(page);
     const media=await page.locator('#cm-opening-film video').evaluate(v=>({muted:v.muted,inline:v.playsInline,w:v.videoWidth,h:v.videoHeight,d:v.duration,src:v.currentSrc}));
-    assert.deepEqual([media.muted,media.inline,media.w,media.h],[true,true,540,960]);assert.ok(Math.abs(media.d-58)<.1);assert.ok(media.src.includes('opening-web-540p-9577fea3.mp4'));
+    assert.deepEqual([media.muted,media.inline,media.w,media.h],[true,true,540,960]);assert.ok(Math.abs(media.d-58)<.1);assert.ok(media.src.includes(webName));
     await page.click('#cm-film-sound');assert.equal(await page.locator('video').evaluate(v=>v.muted),false);
     assert.equal(await page.evaluate(()=>__filmMedia.filter(v=>v.tagName==='AUDIO'&&!v.paused).length),0,'BGM media must be paused while intro sound is enabled');
     await page.click('#cm-film-sound');assert.equal(await page.locator('video').evaluate(v=>v.muted),true);
@@ -84,7 +85,7 @@ async function released(page){
     await page.locator('#cm-login').evaluate(n=>n.click());assert.equal(await page.locator('.cm-title__actions').isHidden(),true);
     await page.waitForTimeout(400);await page.setViewportSize({width:844,height:390});
     for(let i=0;i<3;i++){await watch(page);assert.equal(await page.locator('video').evaluate(v=>v.muted),true);await skip(page);await released(page);}
-    assert.deepEqual([...new Set(mp4.map(u=>new URL(u).pathname.split('/').pop()))],['opening-web-540p-9577fea3.mp4']);
+    assert.deepEqual([...new Set(mp4.map(u=>new URL(u).pathname.split('/').pop()))],[webName]);
   });
   await scenario('controlled background, foreground, pagehide and return never resume video',async page=>{
     await boot(page);await watch(page);

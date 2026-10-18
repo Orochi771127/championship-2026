@@ -10,12 +10,12 @@ The exact approved 58-second 1080×1920 master remains unchanged (`30b173920b3ad
 
 | Candidate | Actual bytes | Publication choice |
 | --- | ---: | --- |
-| 540×960, H.264 High level 3.1, 24 fps, AAC LC 48 kHz stereo | 4,755,124 | Selected |
+| 540×960, H.264 High level 3.1, 24 fps, AAC LC 48 kHz stereo | 4,793,340 | Selected |
 | 720×1280, H.264 High level 3.1, 24 fps, AAC LC 48 kHz stereo | 7,046,343 | Local comparison only |
 
-Representative frames at 12, 28, 41 and 53 seconds were inspected. Both preserve recognizable characters and scenes; 720p is sharper, but adds 2,291,219 bytes. These samples and full-frame comparison do not establish subjective full-motion or listening acceptance. The selected 540p file decodes completely, has 1,392 video frames / 58.000 seconds, uses faststart, and has integrated loudness −15.9 LUFS, LRA 8.5 LU and true peak −3.1 dBFS. There is no measured clipping or retiming. The compression recipe and exact hash are in the [production manifest](../../../assets/production/opening-film-ns33-r1/manifest.json).
+Representative frames at 12, 28, 41 and 53 seconds and the worst full-frame comparisons were inspected. The first one-pass candidate showed visible block artifacts at 40.67 seconds and was rejected before publication. The final two-pass encoding allocates a higher instantaneous bitrate to difficult motion/crossfades while retaining the total byte budget. Both preserve recognizable characters and scenes; 720p is sharper, but adds 2,253,003 bytes. These samples and full-frame comparison do not establish subjective full-motion or listening acceptance. The selected 540p file decodes completely, has 1,392 video frames / 58.000 seconds, uses faststart, and has integrated loudness −15.9 LUFS, LRA 8.5 LU and true peak −3.1 dBFS. There is no measured clipping or retiming. The compression recipe and exact hash are in the [production manifest](../../../assets/production/opening-film-ns33-r1/manifest.json).
 
-The published camera baseline `e14e7c82cf24ca40d3cf34d6a169092888d2809c` measured 7,751 files / 988,881,946 bytes. Adding this file and the unchanged 233,617-byte poster gives 993,870,687 bytes before program/metadata changes, approximately 6.13 MB below a conservative 1,000,000,000-byte ceiling. This is an estimate only: the final build must be measured, remain below 1 GB, and preserve at least 6 MB of headroom. Only the new derivative and poster are public; all old movie files stay in the source repository and outside the artifact. No other assets are deleted to create space.
+The published camera baseline `e14e7c82cf24ca40d3cf34d6a169092888d2809c` measured 7,751 files / 988,881,946 bytes. Adding this file and the unchanged 233,617-byte poster gives 993,908,903 bytes before program/metadata changes, approximately 6.09 MB below a conservative 1,000,000,000-byte ceiling. This is an estimate only: the final build must be measured, remain below 1 GB, and preserve at least 6 MB of headroom. Only the new derivative and poster are public; all old movie files stay in the source repository and outside the artifact. No other assets are deleted to create space.
 
 ## Playback contract
 
