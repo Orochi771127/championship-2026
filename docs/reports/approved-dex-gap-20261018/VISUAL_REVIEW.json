@@ -1,0 +1,36 @@
+{
+  "status": "PASS_BOUNDED_NORMAL_DISPLAY_VISUAL_REVIEW",
+  "scope": "All 24 approved sources versus compressed display and 32px light/dark thumbnails; all 24 mobile normal-flow hero captures reviewed as contact sheet, 130 staff and 153 equipment captures additionally inspected at native capture size.",
+  "reviewedAt": "2026-10-18T12:11:17.101349+00:00",
+  "observations": [
+    "Full source compositions retained with contain, without clipping.",
+    "130 staff and 153 approved equipment remain in the complete hero, and thumbnail derives from the same selected master.",
+    "Transparent alpha exactly matches the unmodified master after documented LANCZOS resizing. No opaque rectangle observed on light/dark proofs or mounted default Dex background.",
+    "32px thumbnail silhouettes and main colors remain readable. Small details naturally reduce at icon size.",
+    "Lossy RGB compression differences exist; no claim of pixel-identical RGB or physical device acceptance."
+  ],
+  "proofImages": [
+    {
+      "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\web-selected\\source-vs-web-272.png",
+      "sha256": "6e2211f925d3660c1de6af0275c63595c263edd1e2ac2a7abfa99350d7f02286"
+    },
+    {
+      "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\web-selected\\thumbnail32-light-dark.png",
+      "sha256": "6a18d981c4a0bf1eff41f06dad569cff16df7ff719d24724dbe367b26b17aacc"
+    },
+    {
+      "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\browser\\mobile-24-contact.png",
+      "sha256": "451cc90acef6ffc8b91bcc4c063fd7569b2f513a290c6a52a80a9296b7b99bc7"
+    },
+    {
+      "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\browser\\130-390-hero.png",
+      "sha256": "255bfc91584c34ee7801a1826b2893da90c73ddec62ceb65460e257353cb63e8"
+    },
+    {
+      "path": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\browser\\153-390-hero.png",
+      "sha256": "90a57d9cd313f606ca6a63b302b1030a1791edc2cd303d9fd86d37770c217bd9"
+    }
+  ],
+  "physicalDeviceAcceptance": false,
+  "animationAcceptance": false
+}

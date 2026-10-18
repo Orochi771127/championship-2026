@@ -1,0 +1,388 @@
+{
+  "scope": "4 requested families, 6 supplied current form images; entire entries absent, not merely missing pictures. No IDs allocated or evolution edges created.",
+  "baseCommit": "89685e24819694244fc803b3dd0f34c777b745bf",
+  "existingFormalExtensionIds": [
+    229,
+    230
+  ],
+  "absentSentinelNeverUse": 228,
+  "proposalAuthority": "NON_AUTHORITATIVE_LOCAL_REVIEW_PROPOSAL_NOT_PRODUCT_REGISTRY",
+  "rows": [
+    {
+      "candidateKey": "boar-growth",
+      "reviewLabel": "星河山豬・成長期",
+      "exactLocalMasterPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-growth\\galactic-boar-growth-v4.png",
+      "sha256": "bac83873481e94ad14cb4bbaef684284252e25574fb27416c0aa5b5ac9395995",
+      "bytes": 1370466,
+      "dimensions": [
+        1374,
+        1145
+      ],
+      "mode": "RGBA",
+      "sourceLibraryId": null,
+      "sourceLibraryIdStatus": "NOT_RECORDED_IN_LOCAL_SOURCE_METADATA",
+      "metadataPaths": [
+        "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-growth\\galactic-boar-growth-v4.review.json",
+        "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-growth\\galactic-boar-growth-v4.source.json"
+      ],
+      "formalSpeciesIndex": null,
+      "formalSpeciesId": null,
+      "formalDisplayCode": null,
+      "proposalOnlyIdentity": {
+        "speciesIndex": 231,
+        "speciesId": "species-231",
+        "numberingStageIndex": 3,
+        "serial": 39,
+        "displayCode": "GR39",
+        "status": "REVIEW_PROPOSAL_NOT_RESERVED_OR_ASSIGNED"
+      },
+      "currentNameAndProposal": {
+        "sourceNameZhHant": null,
+        "formalNameZhHant": null,
+        "nicknameZhHant": null,
+        "nameOwnerApproved": false,
+        "nameStatus": "FINAL_STAGE_NAME_UNASSIGNED",
+        "suggestedFormalNameZhHant": "星河山豬",
+        "nameSuggestionStatus": "DRAFT_PENDING_OWNER_CONFIRMATION",
+        "otherLocalizedNamesFinalized": false
+      },
+      "proposedStage": {
+        "generationIndex": 3,
+        "label": "成長期",
+        "sourceConfirmedForCurrentDoudou": false,
+        "status": "PROPOSED_STAGE_NOT_REGISTERED"
+      },
+      "missingApprovalFields": [
+        "portrait.appearanceOwnerAccepted=false",
+        "candidate-manifest: OWNER_REVIEW_CANDIDATE_NOT_APPROVED; later exact final-design approval not present in local package",
+        "galactic-boar-growth-v4.source.json: ownerApproved=false"
+      ],
+      "runtimeEntryPresent": false,
+      "publicHeroPresent": false,
+      "publicThumbnailPresent": false,
+      "visibility": "ABSENT_ENTRY_NOT_A_CACHE_OR_UNLOCK_PROBLEM",
+      "evolution": {
+        "runtimeLinks": [],
+        "status": "SOURCE_SERIES_PROPOSAL_ONLY_NO_CONDITIONS_OR_RUNTIME_LINKS"
+      },
+      "implementationGates": {
+        "noRuntimeActionBank": true,
+        "mustNotEnableRaisingCaptureBattleArena": true,
+        "newIdentityNeedsRegistrySaveCompatibilityCheck": true
+      },
+      "requiredRootEvidence": "Match the exact SHA/version above to the later accepted final design in the original conversation; confirm final name/story or permit marked working text. Today request authorizes integrating that final design, not picking arbitrary candidates."
+    },
+    {
+      "candidateKey": "boar-mature",
+      "reviewLabel": "星河山豬系列・成熟期（正式名待定）",
+      "exactLocalMasterPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-mature\\galactic-boar-mature-v1.png",
+      "sha256": "8a4403b8c3d825e4d79dd11319d965aed08c5d501e8e647e635f8e3cb8f32e04",
+      "bytes": 2139718,
+      "dimensions": [
+        1502,
+        1047
+      ],
+      "mode": "RGBA",
+      "sourceLibraryId": null,
+      "sourceLibraryIdStatus": "NOT_RECORDED_IN_LOCAL_SOURCE_METADATA",
+      "metadataPaths": [
+        "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-mature\\galactic-boar-mature-v1.review.json",
+        "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-mature\\galactic-boar-mature-v1.source.json"
+      ],
+      "formalSpeciesIndex": null,
+      "formalSpeciesId": null,
+      "formalDisplayCode": null,
+      "proposalOnlyIdentity": {
+        "speciesIndex": 232,
+        "speciesId": "species-232",
+        "numberingStageIndex": 4,
+        "serial": 65,
+        "displayCode": "MA65",
+        "status": "REVIEW_PROPOSAL_NOT_RESERVED_OR_ASSIGNED"
+      },
+      "currentNameAndProposal": {
+        "sourceNameZhHant": null,
+        "formalNameZhHant": null,
+        "nicknameZhHant": null,
+        "nameOwnerApproved": false,
+        "nameStatus": "FINAL_STAGE_NAME_UNASSIGNED",
+        "suggestedFormalNameZhHant": "彗甲山豬",
+        "nameSuggestionStatus": "DRAFT_PENDING_OWNER_CONFIRMATION",
+        "otherLocalizedNamesFinalized": false
+      },
+      "proposedStage": {
+        "generationIndex": 4,
+        "label": "成熟期",
+        "sourceConfirmedForCurrentDoudou": false,
+        "status": "PROPOSED_STAGE_NOT_REGISTERED"
+      },
+      "missingApprovalFields": [
+        "portrait.appearanceOwnerAccepted=false",
+        "candidate-manifest: OWNER_REVIEW_CANDIDATE_NOT_APPROVED; later exact final-design approval not present in local package"
+      ],
+      "runtimeEntryPresent": false,
+      "publicHeroPresent": false,
+      "publicThumbnailPresent": false,
+      "visibility": "ABSENT_ENTRY_NOT_A_CACHE_OR_UNLOCK_PROBLEM",
+      "evolution": {
+        "runtimeLinks": [],
+        "status": "SOURCE_SERIES_PROPOSAL_ONLY_NO_CONDITIONS_OR_RUNTIME_LINKS"
+      },
+      "implementationGates": {
+        "noRuntimeActionBank": true,
+        "mustNotEnableRaisingCaptureBattleArena": true,
+        "newIdentityNeedsRegistrySaveCompatibilityCheck": true
+      },
+      "requiredRootEvidence": "Match the exact SHA/version above to the later accepted final design in the original conversation; confirm final name/story or permit marked working text. Today request authorizes integrating that final design, not picking arbitrary candidates."
+    },
+    {
+      "candidateKey": "boar-awakened",
+      "reviewLabel": "星河山豬系列・覺醒體（正式名待定）",
+      "exactLocalMasterPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-awakened\\galactic-boar-awakened-tailfix-v2.png",
+      "sha256": "141f33ddab5564785a90df0f35848d4392e5eff41b6b12a527f32586b57ff850",
+      "bytes": 1945385,
+      "dimensions": [
+        1166,
+        1349
+      ],
+      "mode": "RGBA",
+      "sourceLibraryId": null,
+      "sourceLibraryIdStatus": "NOT_RECORDED_IN_LOCAL_SOURCE_METADATA",
+      "metadataPaths": [
+        "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\boar-awakened\\galactic-boar-awakened-tailfix-v2.review.json"
+      ],
+      "formalSpeciesIndex": null,
+      "formalSpeciesId": null,
+      "formalDisplayCode": null,
+      "proposalOnlyIdentity": {
+        "speciesIndex": 233,
+        "speciesId": "species-233",
+        "numberingStageIndex": 5,
+        "serial": 52,
+        "displayCode": "AW52",
+        "status": "REVIEW_PROPOSAL_NOT_RESERVED_OR_ASSIGNED"
+      },
+      "currentNameAndProposal": {
+        "sourceNameZhHant": null,
+        "formalNameZhHant": null,
+        "nicknameZhHant": null,
+        "nameOwnerApproved": false,
+        "nameStatus": "FINAL_STAGE_NAME_UNASSIGNED",
+        "suggestedFormalNameZhHant": "星穹獠王",
+        "nameSuggestionStatus": "DRAFT_PENDING_OWNER_CONFIRMATION",
+        "otherLocalizedNamesFinalized": false
+      },
+      "proposedStage": {
+        "generationIndex": 5,
+        "label": "覺醒體",
+        "sourceConfirmedForCurrentDoudou": false,
+        "status": "PROPOSED_STAGE_NOT_REGISTERED"
+      },
+      "missingApprovalFields": [
+        "portrait.appearanceOwnerAccepted=false",
+        "candidate-manifest: OWNER_REVIEW_CANDIDATE_NOT_APPROVED; later exact final-design approval not present in local package"
+      ],
+      "runtimeEntryPresent": false,
+      "publicHeroPresent": false,
+      "publicThumbnailPresent": false,
+      "visibility": "ABSENT_ENTRY_NOT_A_CACHE_OR_UNLOCK_PROBLEM",
+      "evolution": {
+        "runtimeLinks": [],
+        "status": "SOURCE_SERIES_PROPOSAL_ONLY_NO_CONDITIONS_OR_RUNTIME_LINKS"
+      },
+      "implementationGates": {
+        "noRuntimeActionBank": true,
+        "mustNotEnableRaisingCaptureBattleArena": true,
+        "newIdentityNeedsRegistrySaveCompatibilityCheck": true
+      },
+      "requiredRootEvidence": "Match the exact SHA/version above to the later accepted final design in the original conversation; confirm final name/story or permit marked working text. Today request authorizes integrating that final design, not picking arbitrary candidates."
+    },
+    {
+      "candidateKey": "astral-jelly",
+      "reviewLabel": "星海母",
+      "exactLocalMasterPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC015_星海母\\10_candidates\\OC015-astral-jelly-hero-v2.png",
+      "sha256": "18db199351f6f4026fa6e28e0ef475b93581a57064b60378bec40974f46203bf",
+      "bytes": 1002399,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sourceLibraryId": "libfile_94a903407f2c8191b912cef525ac0bac",
+      "sourceLibraryIdStatus": "PRESENT_EXACT_SELECTED_VERSION",
+      "metadataPaths": [
+        "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC015_星海母\\MANIFEST.json"
+      ],
+      "formalSpeciesIndex": null,
+      "formalSpeciesId": null,
+      "formalDisplayCode": null,
+      "proposalOnlyIdentity": {
+        "speciesIndex": 234,
+        "speciesId": "species-234",
+        "numberingStageIndex": 4,
+        "serial": 66,
+        "displayCode": "MA66",
+        "status": "REVIEW_PROPOSAL_NOT_RESERVED_OR_ASSIGNED"
+      },
+      "currentNameAndProposal": {
+        "sourceNameZhHant": "星海母",
+        "formalNameZhHant": "星海母",
+        "nicknameZhHant": null,
+        "nameOwnerApproved": false,
+        "nameStatus": "CARRIED_FROM_CURRENT_REGISTRATION_REQUEST",
+        "suggestedFormalNameZhHant": null,
+        "nameSuggestionStatus": null,
+        "otherLocalizedNamesFinalized": false
+      },
+      "proposedStage": {
+        "generationIndex": 4,
+        "label": "成熟期",
+        "sourceConfirmedForCurrentDoudou": false,
+        "status": "PROPOSED_STAGE_NOT_REGISTERED"
+      },
+      "missingApprovalFields": [
+        "currentStatusAtSnapshot.specificOwnerApproved=false",
+        "versions[selected].specificOwnerImageApproval=false"
+      ],
+      "runtimeEntryPresent": false,
+      "publicHeroPresent": false,
+      "publicThumbnailPresent": false,
+      "visibility": "ABSENT_ENTRY_NOT_A_CACHE_OR_UNLOCK_PROBLEM",
+      "evolution": {
+        "runtimeLinks": [],
+        "status": "NO_PREDECESSOR_OR_SUCCESSOR_AUTHORIZED"
+      },
+      "implementationGates": {
+        "noRuntimeActionBank": true,
+        "mustNotEnableRaisingCaptureBattleArena": true,
+        "newIdentityNeedsRegistrySaveCompatibilityCheck": true
+      },
+      "requiredRootEvidence": "Match the exact SHA/version above to the later accepted final design in the original conversation; confirm final name/story or permit marked working text. Today request authorizes integrating that final design, not picking arbitrary candidates."
+    },
+    {
+      "candidateKey": "aurora-shark",
+      "reviewLabel": "極光鯊",
+      "exactLocalMasterPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC019_極光鯊\\10_candidates\\aurora-shark-hero-v1.png",
+      "sha256": "e8c5fb59d1f01f1b8323e5b9bd1b9f5e54e00d08520e5550f19008cc8f27230a",
+      "bytes": 1763631,
+      "dimensions": [
+        1460,
+        1077
+      ],
+      "mode": "RGBA",
+      "sourceLibraryId": "libfile_b1a2e1e8b50081918c24cfa5898f6df6",
+      "sourceLibraryIdStatus": "PRESENT_EXACT_SELECTED_VERSION",
+      "metadataPaths": [
+        "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC019_極光鯊\\MANIFEST.json"
+      ],
+      "formalSpeciesIndex": null,
+      "formalSpeciesId": null,
+      "formalDisplayCode": null,
+      "proposalOnlyIdentity": {
+        "speciesIndex": 235,
+        "speciesId": "species-235",
+        "numberingStageIndex": 4,
+        "serial": 67,
+        "displayCode": "MA67",
+        "status": "REVIEW_PROPOSAL_NOT_RESERVED_OR_ASSIGNED"
+      },
+      "currentNameAndProposal": {
+        "sourceNameZhHant": "極光鯊",
+        "formalNameZhHant": "極光鯊",
+        "nicknameZhHant": null,
+        "nameOwnerApproved": false,
+        "nameStatus": "CARRIED_FROM_CURRENT_REGISTRATION_REQUEST",
+        "suggestedFormalNameZhHant": null,
+        "nameSuggestionStatus": null,
+        "otherLocalizedNamesFinalized": false
+      },
+      "proposedStage": {
+        "generationIndex": 4,
+        "label": "成熟期",
+        "sourceConfirmedForCurrentDoudou": false,
+        "status": "PROPOSED_STAGE_NOT_REGISTERED"
+      },
+      "missingApprovalFields": [
+        "currentStatusAtSnapshot.specificOwnerApproved=false",
+        "versions[selected].specificOwnerImageApproval=false"
+      ],
+      "runtimeEntryPresent": false,
+      "publicHeroPresent": false,
+      "publicThumbnailPresent": false,
+      "visibility": "ABSENT_ENTRY_NOT_A_CACHE_OR_UNLOCK_PROBLEM",
+      "evolution": {
+        "runtimeLinks": [],
+        "status": "NO_PREDECESSOR_OR_SUCCESSOR_AUTHORIZED"
+      },
+      "implementationGates": {
+        "noRuntimeActionBank": true,
+        "mustNotEnableRaisingCaptureBattleArena": true,
+        "newIdentityNeedsRegistrySaveCompatibilityCheck": true
+      },
+      "requiredRootEvidence": "Match the exact SHA/version above to the later accepted final design in the original conversation; confirm final name/story or permit marked working text. Today request authorizes integrating that final design, not picking arbitrary candidates."
+    },
+    {
+      "candidateKey": "celestial-mantis",
+      "reviewLabel": "天穹螳",
+      "exactLocalMasterPath": "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC020_天穹螳\\10_candidates\\OC020_celestial-mantis_master-v2.png",
+      "sha256": "36b69a23f9d5dc80eac51711f869cc219db70feff07713428e6a0676cfea3451",
+      "bytes": 2482498,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sourceLibraryId": "libfile_1e05539a7ae08191b918bad18f06bb42",
+      "sourceLibraryIdStatus": "PRESENT_EXACT_SELECTED_VERSION",
+      "metadataPaths": [
+        "R:\\Projects\\Championship2026\\自創腳色\\新增角色補件_圖鑑登錄_20261017\\characters\\OC020_天穹螳\\MANIFEST.json"
+      ],
+      "formalSpeciesIndex": null,
+      "formalSpeciesId": null,
+      "formalDisplayCode": null,
+      "proposalOnlyIdentity": {
+        "speciesIndex": 236,
+        "speciesId": "species-236",
+        "numberingStageIndex": 4,
+        "serial": 68,
+        "displayCode": "MA68",
+        "status": "REVIEW_PROPOSAL_NOT_RESERVED_OR_ASSIGNED"
+      },
+      "currentNameAndProposal": {
+        "sourceNameZhHant": "天穹螳",
+        "formalNameZhHant": "天穹螳",
+        "nicknameZhHant": null,
+        "nameOwnerApproved": false,
+        "nameStatus": "CARRIED_FROM_CURRENT_REGISTRATION_REQUEST",
+        "suggestedFormalNameZhHant": null,
+        "nameSuggestionStatus": null,
+        "otherLocalizedNamesFinalized": false
+      },
+      "proposedStage": {
+        "generationIndex": 4,
+        "label": "成熟期",
+        "sourceConfirmedForCurrentDoudou": false,
+        "status": "PROPOSED_STAGE_NOT_REGISTERED"
+      },
+      "missingApprovalFields": [
+        "currentStatusAtSnapshot.specificOwnerApproved=false",
+        "versions[selected].specificOwnerImageApproval=false"
+      ],
+      "runtimeEntryPresent": false,
+      "publicHeroPresent": false,
+      "publicThumbnailPresent": false,
+      "visibility": "ABSENT_ENTRY_NOT_A_CACHE_OR_UNLOCK_PROBLEM",
+      "evolution": {
+        "runtimeLinks": [],
+        "status": "NO_PREDECESSOR_OR_SUCCESSOR_AUTHORIZED"
+      },
+      "implementationGates": {
+        "noRuntimeActionBank": true,
+        "mustNotEnableRaisingCaptureBattleArena": true,
+        "newIdentityNeedsRegistrySaveCompatibilityCheck": true
+      },
+      "requiredRootEvidence": "Match the exact SHA/version above to the later accepted final design in the original conversation; confirm final name/story or permit marked working text. Today request authorizes integrating that final design, not picking arbitrary candidates."
+    }
+  ],
+  "otherLocalCandidateOutsideFourRequestedFamilies": "dot-doudou / 星核豆獸 is present in seven-character package but not included in these six requested images."
+}

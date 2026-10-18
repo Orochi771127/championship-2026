@@ -1,0 +1,35 @@
+{
+  "baseCommit": "89685e24819694244fc803b3dd0f34c777b745bf",
+  "fullCI": {
+    "tests": 2626,
+    "pass": 2626,
+    "fail": 0,
+    "skipped": 0,
+    "logSha256": "623052a281d64ee5c311f479e694122d34fc0224b6b6e47f52440d59acc09336",
+    "execution": "Escalated local Windows required for temporary symlink and loopback tests. First sandbox attempt preserved separately; seven stale snapshot assertions were corrected while preserving their original historical slices."
+  },
+  "focused": {
+    "pass": 77,
+    "fail": 0,
+    "logSha256": "1aaea5f390032ea52518f04dd8a4e603e52b905e6a8b3dada9994e519fe770c6"
+  },
+  "browser": {
+    "normalUiViews": 48,
+    "distinctHeroThumbnailResponses": 48,
+    "pageErrors": [],
+    "networkErrors": [],
+    "registrySha256": "5c6491b57edad00bb1caba25398aca1a5da432be7dba25aa463ee07fe41d705b",
+    "registrationUnchanged": true,
+    "reportPath": "C:\\Users\\User\\Documents\\Codex\\2026-10-18\\task-10\\evidence\\browser\\result.json",
+    "reportSha256": "ad91a895170f7dd6e4a867ac8db8daf314dfeb68f09dd052bdddb621fc084372"
+  },
+  "sourceMastersRehashedUnchanged": 24,
+  "build": {
+    "buildId": "ae773b820ddd85aac172ed28e858e3b9d042d5d87d04b816ce2da51adde949ac",
+    "buildLogSha256": "987476951965e92389c62fe2c5683b4f72419cd27efde9e79a9bfa55ce45dbaf",
+    "validateLogSha256": "243e557d7cc03b1b01e65bd072728a552fa4a93cf5abcd93b7f351dd0638cb10",
+    "payloadLogSha256": "8ef2b2affbdb8f1e8606760d1f5a7843e843a820d252128dc2e022c48b53778a"
+  },
+  "publicRelease": "PENDING_SINGLE_PUBLISHER; this branch does not push main.",
+  "rPreservation": "Shared R HEAD remains 2c1cc29d; 12 modified tracked paths at start, 13 at final read due to independent dataArenaSimulation.js work. No R file was written by this task."
+}
