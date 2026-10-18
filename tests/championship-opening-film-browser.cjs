@@ -122,8 +122,13 @@ async function released(page){
     const seed=fs.readFileSync(path.resolve('qa/championship-full-qa-save.json'),'utf8');await context.addInitScript(({key,seed})=>localStorage.setItem(key,seed),{key:saveKey,seed});
     await boot(page);const before=await page.evaluate(k=>localStorage.getItem(k),saveKey);await watch(page);await skip(page);
     assert.equal(await page.evaluate(k=>localStorage.getItem(k),saveKey),before);
-    await page.click('#cm-login');await page.click('#cm-continue');await page.locator('.cm-raising-pixi-canvas').waitFor({timeout:60000});
+    await page.click('#cm-login');await page.click('#cm-continue');
+    await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});
     await released(page);assert.equal(await page.locator('canvas').count(),1);
+    await page.locator('.cm-toolbar button[data-menu-id="SYSTEM"]:visible').click();
+    await page.locator('.cm-toolbar__menu[data-menu-id="SYSTEM"]:not([hidden]) button[data-entry-id="saveQuit"]').click();
+    await page.locator('#cm-login:visible').waitFor();await released(page);
+    await watch(page);await skip(page);await released(page);
   });
   assert.ok(report.checks.every(c=>c.passed));
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{report.partial=Boolean(process.env.NS33_CASE);report.passed=report.checks.length>0&&report.checks.every(c=>c.passed);fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();});
