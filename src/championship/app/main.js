@@ -674,6 +674,14 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
     let art;
     try{art=await withCageForeground({PIXI,art:fieldArt,manifest,placements:plan.placements,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
     catch(error){await fieldArt.dispose();throw error;}
+    // Local review (2026-10-19): generated cage motion (wind, glow, water,
+    // particles); any failure keeps the static ranch.
+    try{
+      const { withCageAmbient } = await import('../presentation/cageAmbient.js');
+      art=await withCageAmbient({PIXI,art,manifest,placements:plan.placements,renderer:stage.app?.renderer??null,
+        quality:currentQualityTier()==='saver'?'low':'high',reducedMotion:prefersReducedMotion(),
+        fetchImpl:(url,options)=>fetch(url,{...options,signal})});
+    }catch(error){console.warn(`CHAMPIONSHIP_CAGE_AMBIENT_FALLBACK: ${error.message}`);}
     // A ranch without the expansion shows its locked rows below the board
     // (2026-10-12). Decoration only, so a failure keeps the ranch as it was.
     const preview = app.getInteractiveTutorial()?.finished === false ? null
