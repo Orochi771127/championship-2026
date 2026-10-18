@@ -268,8 +268,11 @@ async function main() {
  console.log(JSON.stringify({status:report.status,layoutCases:report.layouts.length,decodedMP3s:report.media.length,output}));
 }
 async function titleReady(page) {
- await page.waitForFunction(()=>document.querySelector('#cm-opening-film'));
+ // Some valid title routes have no film node. Wait for the real boot gate,
+ // then skip the optional film only when its visible control is mounted.
+ await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
  if(await page.locator('#cm-film-skip').isVisible()){await page.locator('#cm-film-skip').click();await page.locator('#cm-opening-film').waitFor({state:'hidden'});await page.waitForTimeout(450);}
+ await page.waitForFunction(()=>{const film=document.querySelector('#cm-opening-film');return !film||film.hidden;});
  await page.locator('#cm-login:visible').waitFor();await page.waitForFunction(()=>!document.querySelector('#cm-login').disabled);
 }
 async function enterGame(page) {
