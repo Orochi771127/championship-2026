@@ -716,7 +716,9 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
         maskedTechnique: [flowLayer, waveLayer, gust].filter(Boolean).map(l => l.technique),
         live: { ripples: rippleRings.length, charged: hazards?.charged?.length ?? 0, arcs: arcs.length, swell: swellT >= 0,
           iceCells: hazards?.ice?.length ?? 0, openCells: openCells.size, cooledCells: hazards?.lava?.length ?? 0,
-          burning: hazards?.burningSlots?.length ?? 0, bursts: bursts.length } });
+          burning: hazards?.burningSlots?.length ?? 0, bursts: bursts.length,
+          stateLayersVisible: { crust: crust ? [crust.cooled.s.visible, crust.reheat.s.visible] : null,
+            ice: ice ? [ice.worn.s.visible, ice.cracking.s.visible, ice.open.s.visible] : null } } });
     },
     async dispose() {
       if (disposed) return;
