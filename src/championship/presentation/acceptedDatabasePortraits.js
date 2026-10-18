@@ -19,10 +19,10 @@ export function validateAcceptedDatabasePortrait(manifest,config){
 }
 // Static encyclopedia previews never promote animation selection or borrow a donor image.
 const ILLUSTRATION_PREVIEW_HASHES = Object.freeze({
-  211: '20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634',
-  222: '4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3',
-  229: 'f1e1a23e891b9345f4b759e910c5f67efd8a844a2de53e14183a1a2fe3310424',
-  230: '09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39'
+  211: 'e669c90a86a67c7053564e7977a2b99d72458c34c2628786b815e33c90b6a725',
+  222: 'a05cfd23e6344551fc82de18d85a84a922966eff1cb6a1c124523004a13c6f33',
+  229: '10e56e970dc275ec8e5691de3379f200bde41fe2d207efc14f53af5042aca55f',
+  230: 'e729e08f354c47b537596bb0ff1782044ec45b327a23c074224a78dd1029fb8f'
 });
 export function acceptedDatabaseIllustrationPreview(speciesIndex) {
   if (![211,222,229,230].includes(speciesIndex)) return null;
@@ -33,7 +33,7 @@ export function acceptedDatabaseIllustrationPreview(speciesIndex) {
   }
   const art = databaseHeroPortrait(speciesIndex);
   if (art?.speciesIndex !== speciesIndex || art.speciesId !== `species-${speciesIndex}`
-    || art.src !== `assets/production/database-handpainted-r1-20261015/species-${speciesIndex}.png`
+    || art.src !== `assets/production/database-display-20261018/species-${String(speciesIndex).padStart(3,'0')}.display.${ILLUSTRATION_PREVIEW_HASHES[speciesIndex].slice(0,16)}.webp`
     || art.sha256 !== ILLUSTRATION_PREVIEW_HASHES[speciesIndex]
     || ![art.width,art.height].every(value=>Number.isInteger(value)&&value>0)) return null;
   return Object.freeze({...art,derivation:'SELECTED_PUBLIC_DATABASE_ILLUSTRATION_PREVIEW'});

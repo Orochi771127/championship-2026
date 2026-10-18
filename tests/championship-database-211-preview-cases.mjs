@@ -4,7 +4,7 @@ import fs from 'node:fs';
 const read=path=>JSON.parse(fs.readFileSync(new URL(path,import.meta.url),'utf8'));
 const selection=read('../src/data/championship/public-character-catalog.v1.json');
 const policy=read('../src/data/championship/public-playtest.r1.json');
-const heroes=read('../src/data/championship/database-hero-portraits.r1.json');
+const heroes=read('../src/data/championship/database-hero-portraits.public.v1.json');
 const source=fs.readFileSync(new URL('../src/championship/presentation/acceptedDatabasePortraits.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const hero211=heroes.entries.find(e=>e.speciesIndex===211);
 const create=(hero,{runtimeReady=false,evolutionReady=false,assetReady=false}={})=>new Function('publicHudCharacterConfig','databaseHeroPortrait','getProductExtension',source+';return {acceptedDatabasePortraitConfig,acceptedDatabaseIllustrationPreview,loadAcceptedDatabasePortrait};')(id=>{
@@ -49,7 +49,7 @@ for(const id of [229,230])test(`${id} illustration preview is gated and preserve
 test('222 quadruped uses only its own selected hero without changing animation selection',async()=>{
  const api=create(),own=heroes.entries.find(e=>e.speciesIndex===222);assert.equal(api.acceptedDatabasePortraitConfig(222),null);let calls=0;
  const result=await api.loadAcceptedDatabasePortrait(222,{baseUrl:base,fetchImpl:()=>{calls++;throw Error('NO_MANIFEST_FETCH');}});
- assert.equal(calls,0);assert.equal(result.speciesId,'species-222');assert.equal(result.sha256,'4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3');assert.equal(result.src,base+own.src);
+ assert.equal(calls,0);assert.equal(result.speciesId,'species-222');assert.equal(result.sha256,own.sha256);assert.equal(result.src,base+own.src);
  const humanoid=heroes.entries.find(e=>e.speciesIndex===230);assert.equal(create(()=>humanoid).acceptedDatabaseIllustrationPreview(222),null);
  assert.equal(await api.loadAcceptedDatabasePortrait(222,{baseUrl:base,revealed:false}),null);
 });

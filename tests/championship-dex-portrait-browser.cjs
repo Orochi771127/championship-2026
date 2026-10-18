@@ -12,7 +12,7 @@ const PUBLIC_BASE = 'https://orochi771127.github.io/championship-2026/';
 const HERO = '.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero';
 const EXPECTED_REGISTRY_COUNT = 95;
 const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10,35,62,36]);
-const EXPECTED = Object.freeze({
+const EXPECTED_MASTERS = Object.freeze({
   36: Object.freeze({"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "雷鬃獾"}),
   35: Object.freeze({"speciesIndex": 35, "speciesId": "species-035", "displayCode": "GR02", "src": "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png", "width": 1536, "height": 1024, "sha256": "291db6a498c8bdbd5e5b2196c8f9a629ec44a1ba55674e103dc596e6827fe6d4", "styleBatch": "HANDPAINTED_R1_20261015", "name": "岩甲穿獸"}),
   62: Object.freeze({"speciesIndex": 62, "speciesId": "species-062", "displayCode": "GR38", "src": "assets/production/database-handpainted-r1-20261015/species-062.ad0745c733532dc2.png", "width": 1254, "height": 1254, "sha256": "ad0745c733532dc288c5143194e9020e35cd071e74347e7a3851911db136e52d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "光綾狐"}),
@@ -37,13 +37,37 @@ const EXPECTED = Object.freeze({
     src: 'assets/production/database-handpainted-r1-20261015/species-055.32e6689b5e9669c2.png',
     sha256: '32e6689b5e9669c26fb0d29f3201ace2d5d619309381ab628d57f5eabc5d693e' })
 });
+const publicHeroes = require('../src/data/championship/database-hero-portraits.public.v1.json');
+const displayRecipe = require('../docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json');
+const EXPECTED = Object.freeze(Object.fromEntries(Object.entries(EXPECTED_MASTERS).map(([id,master])=>{
+  const display=publicHeroes.entries.find(row=>row.speciesIndex===Number(id));
+  assert.ok(display,`Missing public display rendition ${id}`);
+  return [id,Object.freeze({...master,...display})];
+})));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
+function assertOriginalApprovalLineage() {
+  const authoring=require('../src/data/championship/database-hero-portraits.r1.json');
+  assert.equal(authoring.entries.length,96,'Original authoring registry remains intact');
+  for(const master of Object.values(EXPECTED_MASTERS)) {
+    const original=authoring.entries.find(row=>row.speciesIndex===master.speciesIndex);
+    assert.ok(original);assertAsset(original,fs.readFileSync(master.src),master);
+    const derived=displayRecipe.rows.find(row=>row.speciesIndex===master.speciesIndex);
+    for(const key of ['src','sha256','width','height'])assert.equal(derived.source[key],original[key]);
+    assert.equal(derived.display.rgbaExactlyMatchesResizedSource,true);
+    assert.equal(EXPECTED[master.speciesIndex].sha256,derived.display.sha256);
+  }
+}
 function assertAsset(entry, bytes, expected) {
   for (const key of ['speciesIndex', 'speciesId', 'displayCode', 'src', 'sha256']) assert.equal(entry[key], expected[key], `Hero ${key} binding drift`);
   assert.equal(entry.width, expected.width ?? 1254); assert.equal(entry.height, expected.height ?? 1254);
   assert.equal(sha256(bytes), expected.sha256, 'Selected hero bytes drift');
-  assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
-  assert.equal(bytes.readUInt32BE(16), expected.width ?? 1254); assert.equal(bytes.readUInt32BE(20), expected.height ?? 1254);
+  if(expected.src.endsWith('.png')) {
+    assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+    assert.equal(bytes.readUInt32BE(16), expected.width ?? 1254); assert.equal(bytes.readUInt32BE(20), expected.height ?? 1254);
+  } else {
+    assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');
+    assert.ok(bytes.includes(Buffer.from('VP8L')),'Approved display images use lossless WebP');
+  }
 }
 function assertRegistry(sourceBytes, builtBytes) {
   assert.equal(sha256(builtBytes), sha256(sourceBytes), 'Built hero registry must equal this exact candidate source');
@@ -151,24 +175,31 @@ async function main() {
     if(process.env.GITHUB_SHA)assert.equal(build.commit,process.env.GITHUB_SHA,'Built checkout must match tested commit');
     evidence.build = { buildId: build.buildId, commit:build.commit, inputSha256:build.inputSha256, target: build.target, manifestSha256: sha256(buildBytes) };
     assert.ok(resolveAsset(root, '/championship.html'));
-    const registryPath = 'src/data/championship/database-hero-portraits.r1.json';
+    assertOriginalApprovalLineage();
+    const registryPath = 'src/data/championship/database-hero-portraits.public.v1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
-    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'Existing58 heroes plus37 approved encyclopedia portraits');
+    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'59 existing plus36 approved portraits; MA15 is held');
     evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
-    const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json';
+    const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json',bindingPath='src/data/championship/public-alternate-form-bindings.v1.json';
     evidence.productionCatalogs=[];
-    for(const file of [productPath,assetPath]){
+    for(const file of [productPath,bindingPath]){
       const sourceBytes=fs.readFileSync(path.join(process.cwd(),file)),builtBytes=fs.readFileSync(path.join(root,file));
       assert.equal(sha256(sourceBytes),sha256(builtBytes));evidence.productionCatalogs.push({file,sha256:sha256(builtBytes)});
     }
     for(const entry of JSON.parse(fs.readFileSync(path.join(root,productPath))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true);
-    const promotedAssets=JSON.parse(fs.readFileSync(path.join(root,assetPath))).characters;
+    assert.equal(resolveAsset(root,'/'+assetPath),null,'Authoring metadata must stay outside the public artifact');
+    const promotedAssets=JSON.parse(fs.readFileSync(path.join(process.cwd(),assetPath))).characters;
+    const publicBindings=JSON.parse(fs.readFileSync(path.join(root,bindingPath))).characters;
     assert.deepEqual(promotedAssets.map(e=>e.speciesIndex).sort((a,b)=>a-b),[211,222,229,230]);
     for(const entry of promotedAssets){assert.equal(entry.runtimeReady,true);assert.equal(entry.qa.normalPath,'PASS');}
+    assert.equal(publicBindings.length,4);
+    for(const entry of promotedAssets){const binding=publicBindings.find(row=>row.speciesIndex===entry.speciesIndex);assert.ok(binding);for(const key of ['speciesId','speciesIndex','entityId','motionDonorEntityId'])assert.equal(binding[key],entry[key]);}
+    const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root);
+    evidence.previewAssetChecks=[...previewExpected.values()];
     for (const expected of Object.values(EXPECTED)) {
       const entry = catalog.entries.find(e => e.speciesIndex === expected.speciesIndex);
       assert.ok(entry, `Normal production registry missing ${expected.speciesId}`);
-      const asset = resolveAsset(root, '/' + expected.src); assert.ok(asset, 'Selected PNG absent from approved build');
+      const asset = resolveAsset(root, '/' + expected.src); assert.ok(asset, 'Selected display image absent from approved build');
       const bytes = fs.readFileSync(asset); assertAsset(entry, bytes, expected);
       evidence.assetChecks.push({ speciesIndex: expected.speciesIndex, source: 'EXACT_BUILT_ARTIFACT', sha256: sha256(bytes), bytes: bytes.length });
     }
@@ -266,6 +297,21 @@ async function main() {
         screenshot: name + '.png', heroScreenshot: name + '-hero.png' }); write();
       return snapshot;
     }
+    async function measureListCards(viewport) {
+      const detail=page.locator('.cm-vs2-database__detail');
+      if(await detail.isVisible()){await listReturn.click();await detail.waitFor({state:'hidden'});}
+      await page.locator('.cm-vs2-database__catalog').waitFor({state:'visible'});
+      const measured=await page.locator('.cm-vs2-database__row--thumb').evaluateAll(rows=>rows.map(row=>{
+        const box=row.getBoundingClientRect();
+        return {id:Number(row.dataset.speciesIndex),visible:box.width>0&&box.height>0,
+          inside:[...row.querySelectorAll('img,strong,.cm-vs2-shop__meta')].every(child=>{const r=child.getBoundingClientRect();return r.left>=box.left-.75&&r.right<=box.right+.75&&r.top>=box.top-.75&&r.bottom<=box.bottom+.75;}),
+          lazy:row.querySelector('img').loading==='lazy'};
+      }));
+      assert.equal(measured.length,95);assert.ok(measured.every(row=>row.visible&&row.inside&&row.lazy),'All list thumbnail/name/code bounds remain inside their cards');
+      assert.equal(await page.locator('[data-species-index="82"] .cm-dex-list-thumb').count(),0,'MA15 remains held');
+      (evidence.listCardChecks??=[]).push({viewport,checked:measured.length,status:'PASS'});
+    }
+    await measureListCards({width:1440,height:1000});
     for (const species of MATRIX_TARGETS) {
       await openSpecies(species);
       const normal = await capture(`${species}-desktop-normal`, species);
@@ -293,14 +339,17 @@ async function main() {
     // Normal re-entry and responsive rendering, still using the same session/UI.
     for(const species of MATRIX_TARGETS){await openSpecies(species);await capture(`${species}-desktop-reentry`,species);}
     await page.setViewportSize({ width: 390, height: 844 });
+    await measureListCards({width:390,height:844});
     for (const species of [...MATRIX_TARGETS,70]) { await openSpecies(species); await capture(`${species}-mobile-normal-${evidence.captures.length}`, species); }
+    await page.setViewportSize({width:360,height:800});await measureListCards({width:360,height:800});
     // Production entry only: ordinary rows and route nodes, no fixture/catalog swap.
     evidence.promotedCaptures=[];
     async function capturePreview(holder,species,kind,viewport){
       const img=holder.locator('img');await img.waitFor({state:'visible',timeout:30000});await holder.scrollIntoViewIfNeeded();await img.evaluate(image=>image.decode());
       await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
       const actual=await holder.evaluate(n=>{const image=n.querySelector('img'),r=image.getBoundingClientRect();return {art:n.dataset.art,revealed:n.dataset.revealed,src:image.currentSrc||image.src,complete:image.complete,hidden:image.hidden,natural:[image.naturalWidth,image.naturalHeight],objectFit:getComputedStyle(image).objectFit,imageRect:{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};});
-      assert.equal(actual.art,'ready');assert.equal(actual.revealed,'true');assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.objectFit,'contain');assert.deepEqual(actual.natural,[1254,1254]);assert.equal(actual.src,new URL(EXPECTED[species].src,PUBLIC_BASE).href);
+      const expectedPreview=previewExpected.get(species);
+      assert.equal(actual.art,'ready');assert.equal(actual.revealed,'true');assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.objectFit,'contain');assert.deepEqual(actual.natural,[expectedPreview.width,expectedPreview.height]);assert.equal(actual.src,expectedPreview.url);
       assert.ok(actual.imageRect.width>0&&actual.imageRect.height>0);assert.ok(actual.imageRect.x>=-1&&actual.imageRect.right<=viewport.width+1&&actual.imageRect.y>=-1&&actual.imageRect.bottom<=viewport.height+1);
       const name=`production-${species}-${kind}-${viewport.width}`;await shot(name);await holder.screenshot({path:path.join(output,name+'-image.png')});evidence.promotedCaptures.push({speciesIndex:species,displayCode:EXPECTED[species].displayCode,kind,viewport,screenshot:name+'.png',imageScreenshot:name+'-image.png',...actual});write();
     }
@@ -329,6 +378,7 @@ async function main() {
     evidence.status = 'CAPTURE_PASS_VISUAL_REVIEW_PENDING';
   } catch (error) {
     evidence.status = 'FAIL'; evidence.failure = error.stack || String(error);
+    console.error(evidence.failure);
     await shot('failure').catch(() => {});
     if (page) evidence.failureDom = await page.locator('#cm-root').innerText().catch(() => null);
     process.exitCode = 1;
@@ -369,13 +419,14 @@ async function selfTestOptionalComicClick() {
   await assert.rejects(() => clickOptionalComicControl(broken.page, broken.control), error => error === otherError);
 }
 async function selfTest() {
+  assertOriginalApprovalLineage();
   await selfTestOptionalComicClick();
   new (require('node:vm').Script)('('+mountedSnapshot.toString()+')');
   assert.deepEqual(sizePlan(128, [24, 24, 24, 24]), { size: 128, width: 176, height: 176 });
   assert.deepEqual(sizePlan(256, [24, 24, 24, 24]), { size: 256, width: 304, height: 304 });
   assert.throws(() => sizePlan(80, [24, 24, 24, 24])); assert.throws(() => sizePlan(128, [0, 0, 0, 0]));
   const valid = { speciesIndex: 117, displayCode: 'MA58', rowState: 'UNDISCOVERED', title: '曙刃天駒', src: new URL(EXPECTED[117].src, PUBLIC_BASE).href,
-    art: 'ready', complete: true, hidden: false, natural: [1254, 1254], objectFit: 'contain', padding: [24, 24, 24, 24], documentOverflow: false,
+    art: 'ready', complete: true, hidden: false, natural: [EXPECTED[117].width, EXPECTED[117].height], objectFit: 'contain', padding: [24, 24, 24, 24], documentOverflow: false,
     imageRect: { width: 128, height: 128 }, holderRect: { width: 176, height: 176 } };
   assertMeasured(valid, 117, 128);
   for (const changed of [{ rowState: 'REGISTERED' }, { src: 'wrong.png' }, { objectFit: 'cover' }, { imageRect: { width: 80, height: 80 } }]) assert.throws(() => assertMeasured({ ...valid, ...changed }, 117, 128));
@@ -411,7 +462,7 @@ async function selfTest() {
     const oldSrc=`assets/production/database-portraits-b1-20261014/${expected.displayCode}.webp`;
     assert.throws(()=>assertAsset({...expected,src:oldSrc},bytes,expected));
   }
-  assert.equal(JSON.parse(fs.readFileSync(path.join(__dirname,'../src/data/championship/database-hero-portraits.r1.json'),'utf8')).entries.length,EXPECTED_REGISTRY_COUNT,'Source registry count must match browser preflight');
+  assert.equal(publicHeroes.entries.length,EXPECTED_REGISTRY_COUNT,'Public registry count must match browser preflight');
   assert.equal(MATRIX_TARGETS.length,13);assert.equal(MATRIX_TARGETS.length*8+1+8,113);
   const sourceRegistry = Buffer.from(JSON.stringify({entries:Object.keys(EXPECTED).map(speciesIndex=>({speciesIndex:Number(speciesIndex)}))}));
   assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,17);

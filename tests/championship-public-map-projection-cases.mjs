@@ -75,11 +75,11 @@ test('runtime map request validates selected hash and refuses raw metadata on a 
  await assert.rejects(()=>fetchRuntimeMapResponse(recipe.sources[0].path,base,{fetchImpl}),/PRIVATE_MAP_METADATA_NOT_A_PUBLIC_RUNTIME_INPUT/);assert.equal(calls,1);
 });
 
-test('231 active derivatives remain reproducible and six inactive packs retain their original pinned bytes',()=>{
+test('230 active derivatives remain reproducible and seven inactive sources retain their original pinned bytes',()=>{
  const result=JSON.parse(execFileSync(process.execPath,['scripts/materialize-approved-runtime.mjs','--check'],{encoding:'utf8',windowsHide:true}));
- assert.equal(result.checked,231);assert.equal(result.restored,0);assert.equal(result.bytes,1889206);assert.equal(result.networkUsed,false);assert.equal(result.approvalsChanged,false);
+ assert.equal(result.checked,230);assert.equal(result.restored,0);assert.equal(result.bytes,621276);assert.equal(result.networkUsed,false);assert.equal(result.approvalsChanged,false);
  const materialization=read('docs/contracts/championship/RUNTIME_DERIVED_MATERIALIZATION.v1.json');
- assert.equal(materialization.files.length+materialization.inactiveFiles.length,237);assert.equal(materialization.inactiveFiles.length,6);
+ assert.equal(materialization.files.length+materialization.inactiveFiles.length,237);assert.equal(materialization.inactiveFiles.length,7);
  let archivedBytes=0;
  for(const row of materialization.inactiveFiles){
   const bytes=fs.readFileSync(row.path);archivedBytes+=bytes.length;

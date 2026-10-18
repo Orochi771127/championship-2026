@@ -81,8 +81,8 @@ test('sample rejection cancels outstanding peers and releases graph without wait
 test('decoder rejection and abort during a non-cancellable decoder do not retain buffers or listeners',async()=>{
   const bad=audioFixture({decode:()=>Promise.reject(Error('DECODE_FAIL'))});await assert.rejects(bad.start(),/DECODE_FAIL/);
   assert.equal(bad.contexts[0].state,'closed');
-  const gate=deferred(),f=audioFixture({decode:()=>gate.promise});
-  const loading=f.start();await flush();const rejected=assert.rejects(loading,{name:'AbortError'});f.controller.abort();await rejected;
+  const gate=deferred(),decoding=deferred(),f=audioFixture({decode:()=>{decoding.resolve();return gate.promise;}});
+  const loading=f.start();await decoding.promise;const rejected=assert.rejects(loading,{name:'AbortError'});f.controller.abort();await rejected;
   gate.resolve({numberOfChannels:1,duration:1});await flush();assert.equal(f.observers.size,0);assert.equal(f.listeners.size,0);
   assert.equal(f.contexts[0].state,'closed');assert.equal(f.calls.filter(c=>c.path.endsWith('.wav')).length,4);
 });
