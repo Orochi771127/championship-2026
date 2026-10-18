@@ -141,7 +141,7 @@ export function createChampionshipView({ root, source }) {
     panel.append(marks);
 
     if (run.continues) {
-      panel.append(element("p", "cm-championship-opponent",uiText("選擇本輪參賽數碼獸；確認後抽出對手。")));
+      panel.append(element("p", "cm-championship-opponent",uiText("選擇本輪參賽拍檔；確認後抽出對手。")));
       // The round is fought as an ordinary battle; the verdict it settles on is
       // what writes the flag, so this board never judges a round itself.
       const actions = element("div", "cm-championship-actions");
@@ -152,7 +152,7 @@ export function createChampionshipView({ root, source }) {
       let selectedIds=[],busy=false;
       if(source.getPartySelection){
         fight.disabled=true;
-        const party=element('div','cm-vs5-party');party.append(element('h2','cm-vs5-title',uiText('選擇參賽數碼獸')));
+        const party=element('div','cm-vs5-party');party.append(element('h2','cm-vs5-title',uiText('選擇參賽拍檔')));
         panel.append(party);
         const version=renderVersion;
         Promise.resolve(source.getPartySelection()).then(({candidates,limit})=>{
@@ -173,7 +173,7 @@ export function createChampionshipView({ root, source }) {
             });
             controls.push([entry,button]);party.append(button);
           }
-          if(!candidates.some(c=>c.admission.ok))party.append(element('p','cm-championship-notice',uiText('目前沒有可以參賽的數碼獸。')));
+          if(!candidates.some(c=>c.admission.ok))party.append(element('p','cm-championship-notice',uiText('目前沒有可以參賽的拍檔。')));
         }).catch(()=>{if(!disposed&&version===renderVersion)say(uiText('隊伍資料讀取失敗，請返回後再試。'));});
       }
       fight.addEventListener("click", async () => {

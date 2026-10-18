@@ -164,12 +164,12 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       if(step.panel==='kind')add('頭銜賽','kind','TITLE_MATCH');
       else if(step.panel==='list')add(titleEventText(61,'name',match.title),'match',61);
       else if(step.panel==='party'){
-        panel.append(element('h2','cm-vs5-title','選擇參賽數碼獸'));
+        panel.append(element('h2','cm-vs5-title','選擇參賽拍檔'));
         individuals.forEach((entry,slot)=>add(memberName(entry),'member',slot,{slot}));
         if(step.mask===7)add('返回','return',null,{primary:true});
       }else{
         panel.append(element('h2','cm-vs5-title',titleEventText(61,'name',match.title)));
-        add(step.panel==='ready'?'開始對戰':'選擇參賽數碼獸',step.panel==='ready'?'start':'party',null,{primary:true});
+        add(step.panel==='ready'?'開始對戰':'選擇參賽拍檔',step.panel==='ready'?'start':'party',null,{primary:true});
       }
     }
     const stop=tutorial.subscribe(render);render();
@@ -281,7 +281,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     }
     if(cubeDisposed||request!==partyRequest)return;
     const {candidates,limit}=selection;
-    partyPanel.append(element('h2','cm-vs5-title','選擇參賽數碼獸'),element('p','cm-vs5-entry-notice',uiText('最多 {limit} 隻',{limit})));
+    partyPanel.append(element('h2','cm-vs5-title','選擇參賽拍檔'),element('p','cm-vs5-entry-notice',uiText('最多 {limit} 隻',{limit})));
     const arena=mode==='FREE_BATTLE'?arenaSelector():null;if(arena)partyPanel.append(arena.node);
     const controls=[];
     const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
@@ -298,7 +298,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       });
       controls.push([entry,button]);partyPanel.append(button);
     }
-    if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的數碼獸。'));
+    if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的拍檔。'));
     confirm.addEventListener('click',async()=>{if(confirm.disabled||entering)return;confirm.disabled=true;entering=true;back.disabled=true;
       try{showRefusal(await onEnter(match.recordIndex,[...selectedIds],mode,...(arena?[arena.value()]:[])),match);}
       catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'對戰準備失敗，請再試一次。'},match);}
@@ -312,7 +312,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
     for(const node of matchOnlyNodes)node.hidden=true;
     const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
-    partyPanel.append(element('h2','cm-vs5-title','練習對戰'),element('p','cm-vs5-entry-notice','將自己培育的數碼獸分成兩隊，每隊最多 3 隻。'));
+    partyPanel.append(element('h2','cm-vs5-title','練習對戰'),element('p','cm-vs5-entry-notice','將自己培育的拍檔分成兩隊，每隊最多 3 隻。'));
     let candidates;
     try{({candidates}=await getPracticeSelection());}
     catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'參賽隊伍載入失敗，請再試一次。'},{});setPanelFooter(back);}return;}
@@ -336,7 +336,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         controls.push({button,entry,team});row.append(button);}
       partyPanel.append(row);
     }
-    if(candidates.filter(c=>c.admission.ok).length<2)partyPanel.append(element('p','cm-vs5-entry-notice','練習對戰需要至少兩隻可以參賽的數碼獸。'));
+    if(candidates.filter(c=>c.admission.ok).length<2)partyPanel.append(element('p','cm-vs5-entry-notice','練習對戰需要至少兩隻可以參賽的拍檔。'));
     confirm.addEventListener('click',async()=>{
       if(confirm.disabled)return;entering=true;refresh();
       try{showRefusal(await onEnter(-1,teams.map(ids=>[...ids]),'PRACTICE_BATTLE',arena.value()),{});}
@@ -393,7 +393,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     if(Array.isArray(setup?.candidates)&&typeof setup.createPassword==='function'){
       maker=element('section','cm-vs5-password-maker');
       maker.append(element('h3','cm-vs5-link__heading','我的隊伍密碼'),
-        element('p','cm-vs5-entry-notice','選擇最多 3 隻自己的數碼獸，產生可以分享給朋友的密碼。密碼保存的是現在的狀態。'));
+        element('p','cm-vs5-entry-notice','選擇最多 3 隻自己的拍檔，產生可以分享給朋友的密碼。密碼保存的是現在的狀態。'));
       const chosen=[],picks=[],preview=element('section','cm-vs5-team-preview');
       let generation=0,making=false,locked=[];
       const output=element('input','cm-vs5-password-input');output.value='';output.readOnly=true;
@@ -418,7 +418,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         });
         picks.push({entry,button});maker.append(button);
       }
-      if(!setup.candidates.some(entry=>entry.admission.ok))maker.append(element('p','cm-vs5-entry-notice','目前沒有可以密碼化的數碼獸。'));
+      if(!setup.candidates.some(entry=>entry.admission.ok))maker.append(element('p','cm-vs5-entry-notice','目前沒有可以密碼化的拍檔。'));
       make.addEventListener('click',async()=>{
         if(make.disabled)return;passwordRevision++;const token=++generation,ids=[...chosen];making=true;sync();
         let made;
@@ -456,7 +456,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     let roleRevision=0;
 
     const teamPicker=(container,selected,refresh)=>{
-      const controls=[];container.append(element('h3','cm-vs5-link__heading','選擇參賽數碼獸（1 至 3 隻）'));
+      const controls=[];container.append(element('h3','cm-vs5-link__heading','選擇參賽拍檔（1 至 3 隻）'));
       for(const entry of setup.candidates){
         const button=actionButton(memberName(entry));button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
         button.disabled=!entry.admission.ok;
@@ -1046,7 +1046,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
 
   const body = element("div", "cm-vs5-result__body");
   const characterHost=element('div','cm-vs5-result__characters');
-  characterHost.setAttribute('aria-label',uiText('參賽數碼獸'));
+  characterHost.setAttribute('aria-label',uiText('參賽拍檔'));
   const resultStage=element('div','cm-vs5-result__stage');resultStage.append(characterHost,body);
   let index = 0;
   // Ceremony (2026-10-15): the first time the title page (result_sub_titleget)

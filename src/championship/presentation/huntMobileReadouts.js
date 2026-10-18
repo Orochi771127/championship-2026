@@ -27,7 +27,7 @@ export function huntTargetReadout(runtime, capabilities) {
     hpEvidence: hpAllowed ? target.hpEvidence : 'PLUGIN_GATED',
     generation: '???', family: '???', alignment: '???', personality: '???', capacity: '???',
     ...nativeHuntAnalyzedFields(target,capabilities?.analyzerFields),
-    name:capabilities?.analyzerFields?.length?SPECIES_NAMES_ZH[target.speciesIndex]??'野生數碼獸':'???'
+    name:capabilities?.analyzerFields?.length?SPECIES_NAMES_ZH[target.speciesIndex]??'野生夥伴':'???'
   };
 }
 

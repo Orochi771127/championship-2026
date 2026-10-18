@@ -168,8 +168,8 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     if (document.activeElement !== nameInput) nameInput.value = next.displayName ?? "";
     presentedName = next.displayName ?? "";
     error.textContent = uiText(next.commitError === "SAVE_FAILED"
-      ? "Save failed. Your Digimon is still on the memory card. Return Home again to retry."
-      : next.commitError === "HOME_ROSTER_FULL" ? "Your home roster is full. Your Digimon remains on the memory card." : "");
+      ? "Save failed. Your partner is still on the memory card. Return Home again to retry."
+      : next.commitError === "HOME_ROSTER_FULL" ? "Your home roster is full. Your partner remains on the memory card." : "");
     error.hidden = !error.textContent;
     roster.replaceChildren();
     // With more than one catch, each one on the card can take the name plate

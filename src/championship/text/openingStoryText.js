@@ -11,7 +11,14 @@ const SOURCE = [
   '好像已經收到郵件了。',
   '從現在起，你也是數碼獸馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。',
   '這顆數碼蛋送給你。\n請替牠取個名字。',
-  '請替數碼蛋取名字'
+  '請替數碼蛋取名字',
+  '每四年舉辦一次的\n拍檔錦標賽。',
+  '取得參賽資格，\n正是身為真正拍檔馴獸師的證明。',
+  '而今天，你也迎來了\n參加拍檔錦標賽的機會。\n\n奪下勝利吧！\n拍檔錦標賽！',
+  '好像已經收到郵件了。',
+  '從現在起，你也是拍檔馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。',
+  '這顆培育蛋送給你。\n請替牠取個名字。',
+  '請替培育蛋取名字'
 ];
 const COPY = {
   'zh-Hant': ({creature:c,tournament:t}) => [
@@ -31,8 +38,9 @@ const COPY = {
     `Và hôm nay, bạn cũng đã có cơ hội\ntham gia ${t}.\n\nHãy giành chiến thắng!\n${t}!`, 'Có vẻ như thư đã đến.']
 };
 export function openingStoryText(source) {
-  const index = SOURCE.indexOf(source);
-  if (index < 0) return uiText(source);
+  const rawIndex = SOURCE.indexOf(source);
+  if (rawIndex < 0) return uiText(source);
+  const index = rawIndex % 7;
   const locale = getLocale();
   const terms=getOpeningBrandTerms(locale);
   if(index>=4)return (LETTER_COPY[locale]??LETTER_COPY['zh-Hant'])(terms)[index-4];

@@ -156,10 +156,10 @@ function speciesAdmissible(speciesIndex){
 export function nativePasswordTeamAdmission(team){
   if(!team||!Array.isArray(team.members)||team.members.length!==3)throw new Error('PASSWORD_BATTLE_TEAM_REQUIRED');
   const members=team.members.filter(Boolean);
-  if(!members.length)return deepFreeze({ok:false,reason:'EMPTY_TEAM',message:'密碼中沒有可參戰的數碼獸。'});
+  if(!members.length)return deepFreeze({ok:false,reason:'EMPTY_TEAM',message:'密碼中沒有可參戰的夥伴。'});
   for(const member of members){
     if(!speciesAdmissible(member.nativeProfile.fields['000']))
-      return deepFreeze({ok:false,reason:'INELIGIBLE_SPECIES',message:'密碼中含有目前不能參戰的數碼獸。'});
+      return deepFreeze({ok:false,reason:'INELIGIBLE_SPECIES',message:'密碼中含有目前不能參戰的夥伴。'});
   }
   return deepFreeze({ok:true,members:members.length});
 }
@@ -167,9 +167,9 @@ export function nativePasswordTeamAdmission(team){
 // A code for an individual this game's own Password Battle would refuse is
 // never offered: the same species rule as nativePasswordTeamAdmission.
 export function nativePasswordProfileAdmission(profile){
-  if(!profile?.fields)return deepFreeze({ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻數碼獸的個體資料尚未完整。'});
+  if(!profile?.fields)return deepFreeze({ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻夥伴的個體資料尚未完整。'});
   if(!speciesAdmissible(profile.fields['000']))
-    return deepFreeze({ok:false,reason:'INELIGIBLE_SPECIES',message:'這隻數碼獸還不能密碼化。'});
+    return deepFreeze({ok:false,reason:'INELIGIBLE_SPECIES',message:'這隻夥伴還不能密碼化。'});
   return deepFreeze({ok:true});
 }
 

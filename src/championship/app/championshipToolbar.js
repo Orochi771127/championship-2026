@@ -77,8 +77,8 @@ export const TOOLBAR_MENUS = Object.freeze([
     entries: Object.freeze([
       { id: "help", label: "Help", screen: "HELP", hint: "操作與規則說明" },
       { id: "saveQuit", label: "Save & Quit", action: "SAVE_AND_QUIT", hint: "儲存進度並回到標題" },
-      { id: "database", label: "Database", screen: "DATABASE", hint: "已登錄的數碼獸" },
-      { id: "hunt", label: "Hunt", screen: "GATE_SELECT", hint: "前往傳送門捕捉數碼獸" },
+      { id: "database", label: "Database", screen: "DATABASE", hint: "已登錄的夥伴" },
+      { id: "hunt", label: "Hunt", screen: "GATE_SELECT", hint: "前往傳送門捕捉夥伴" },
       { id: "battle", label: "Battle", screen: "BATTLE_SELECT", hint: "參加比賽贏得獎金" },
       { id: "shop", label: "Shop", screen: "SHOP", hint: "購買食物、道具與設施" }
     ])

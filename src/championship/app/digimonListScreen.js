@@ -151,7 +151,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     detail.replaceChildren();
     const entry = entries[selectedIndex];
     if (!entry) {
-      detail.append(element("p", "cm-digimon-empty", "No Digimon in the roster."));
+      detail.append(element("p", "cm-digimon-empty", "No partner in the roster."));
       return;
     }
     appendCreatureDetail(detail, entry);
@@ -252,7 +252,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     }
     const result = onRename?.(entry.instanceId, name);
     if (!result?.ok) {
-      editorMessage.textContent = result?.reason === "NOT_RENAMEABLE" ? uiText("這隻數碼獸的名字無法更改。") : uiText("名稱需為 1 至 {max} 個字。", { max: ROSTER_NAME_MAX_LENGTH });
+      editorMessage.textContent = result?.reason === "NOT_RENAMEABLE" ? uiText("這隻拍檔的名字無法更改。") : uiText("名稱需為 1 至 {max} 個字。", { max: ROSTER_NAME_MAX_LENGTH });
       return;
     }
     if (Array.isArray(result.entries)) entries = result.entries;

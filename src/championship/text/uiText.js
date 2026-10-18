@@ -7,6 +7,12 @@ import { PATTERNS_TH, TEXT_TH, UI_COPY_TH } from "./uiText.th.js";
 import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
+  "輕觸夥伴查看": "輕觸夥伴查看",
+  "野生夥伴": "野生夥伴",
+  "Save failed. Your partner is still on the memory card. Return Home again to retry.": "儲存失敗，夥伴仍在記憶卡中。請再次返回育成基地以重試。",
+  "Your home roster is full. Your partner remains on the memory card.": "育成夥伴名單已滿，夥伴仍在記憶卡中。",
+  "No partner in the roster.": "目前沒有夥伴。",
+  "One cage per hex. Rank opens 14–20. Overfill is allowed; extra partners stress more easily.": "每個六角格可放一座設施，隨階級開放 14 至 20 格。可以超過建議容納數，但夥伴較容易累積壓力。",
   "RANCH_PREFETCH_PLANNING": "正在準備目前夥伴的圖像…",
   "RANCH_PREFETCH_COMPLETE": "目前夥伴的圖像已預先下載",
   "RANCH_PREFETCH_PARTIAL": "部分圖像將在繼續遊戲時補載",

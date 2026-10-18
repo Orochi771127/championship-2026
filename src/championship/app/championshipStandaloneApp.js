@@ -2439,7 +2439,7 @@ export function createChampionshipStandaloneApp({
 
     async preparePracticeBattle(teams,selectedArena=null){
       if(!Array.isArray(teams)||teams.length!==2||teams.some(ids=>!Array.isArray(ids)||ids.length<1||ids.length>3))return {ok:false,reason:'TWO_PARTIES_REQUIRED'};
-      const ids=teams.flat();if(new Set(ids).size!==ids.length)return {ok:false,reason:'DUPLICATE_PARTICIPANT',message:'同一隻數碼獸只能加入一隊。'};
+      const ids=teams.flat();if(new Set(ids).size!==ids.length)return {ok:false,reason:'DUPLICATE_PARTICIPANT',message:'同一隻拍檔只能加入一隊。'};
       const parties=[];
       for(const team of teams){const party=await this.prepareBattleParty(null,team);if(!party.ok)return party;parties.push(party.individuals);}
       if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
@@ -2480,7 +2480,7 @@ export function createChampionshipStandaloneApp({
         const {battlePartyAdmission,buildOwnedBattleCreature}=await loadBattleParty();
         for(const individual of [...hostIndividuals,...guestIndividuals]){
           const admission=battlePartyAdmission(individual.nativeProfile,null);if(!admission.ok)
-            return {ok:false,reason:'LINK_TEAM_INELIGIBLE',message:'通訊碼內含不能參戰的數碼獸。'};
+            return {ok:false,reason:'LINK_TEAM_INELIGIBLE',message:'通訊碼內含不能參戰的拍檔。'};
           buildOwnedBattleCreature(individual);
         }
         const rng=link.createNativeLinkBattleRng(),rngPreparation=Object.freeze({rng});
@@ -2511,7 +2511,7 @@ export function createChampionshipStandaloneApp({
     async createTeamPassword(instanceIds){
       requireSession();
       if(!Array.isArray(instanceIds)||instanceIds.length<1||instanceIds.length>3||new Set(instanceIds).size!==instanceIds.length)
-        return {ok:false,reason:'PARTY_SIZE',message:'請選擇 1 至 3 隻數碼獸。'};
+        return {ok:false,reason:'PARTY_SIZE',message:'請選擇 1 至 3 隻拍檔。'};
       const {encodeChampionshipPasswordTeamFromProfiles,championshipPasswordProfileAdmission}=await loadPasswordBattle();
       const owned=new Set(this.getRaisingInstances().map(entry=>entry.instanceId)),profiles=[];
       for(const instanceId of instanceIds){
@@ -2768,11 +2768,11 @@ export function createChampionshipStandaloneApp({
       const {battlePartyCondition,buildOwnedBattleCreature}=await loadBattleParty();
       const limit=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
       if(!Array.isArray(instanceIds)||!instanceIds.length||instanceIds.length>limit||new Set(instanceIds).size!==instanceIds.length)
-        return {ok:false,reason:'PARTY_SIZE',message:uiText('請選擇 1 至 {limit} 隻符合條件的數碼獸。',{limit})};
+        return {ok:false,reason:'PARTY_SIZE',message:uiText('請選擇 1 至 {limit} 隻符合條件的拍檔。',{limit})};
       const candidates=await this.getBattlePartyCandidates(recordIndex),individuals=[];
       for(const instanceId of instanceIds){
         const entry=candidates.find(c=>c.instanceId===instanceId);
-        if(!entry)return {ok:false,reason:'UNKNOWN_INDIVIDUAL',message:'選擇的數碼獸已不在目前名冊。'};
+        if(!entry)return {ok:false,reason:'UNKNOWN_INDIVIDUAL',message:'選擇的拍檔已不在目前名冊。'};
         if(!entry.admission.ok)return entry.admission;
         const nativeProfile=instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);
         buildOwnedBattleCreature({instanceId,nativeProfile});

@@ -18,7 +18,7 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
     const b=el('button','','確認');b.type='button';b.addEventListener('click',next,{once:true});n.append(b);show(n);b.focus({preventScroll:true});
   }
   function name(kind,next){
-    const n=el('form','cm-opening__name'),label=el('label','',kind==='trainer'?'請輸入馴獸師姓名':openingStoryText('請替數碼蛋取名字'));
+    const n=el('form','cm-opening__name'),label=el('label','',kind==='trainer'?'請輸入馴獸師姓名':openingStoryText('請替培育蛋取名字'));
     const input=el('input','');input.id='cm-opening-name';input.name=kind;input.maxLength=5;input.required=true;input.autocomplete='off';input.value=kind==='trainer'?trainerName:eggName;label.htmlFor=input.id;
     const b=el('button','','決定');b.type='submit';n.append(label,input,b);
     if(kind==='egg'&&allowEggChoice){const back=el('button','cm-opening__back',openingEggText().back);back.type='button';back.dataset.eggBack='true';back.addEventListener('click',()=>{eggName=input.value.trim();chooseEgg();});n.append(back);}
@@ -27,7 +27,7 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
   }
   function confirmTrainer(){const n=el('section','cm-opening__name');n.append(el('p','',uiText('馴獸師姓名使用「{name}」嗎？',{name:trainerName})));const row=el('div','cm-opening__choices');
     for(const [label,next] of [['是',giftMail],['否',()=>name('trainer',confirmTrainer)]]){const b=el('button','',label);b.type='button';b.addEventListener('click',next,{once:true});row.append(b);}n.append(row);show(n);}
-  function giftMail(){envelope(()=>letter('從現在起，你也是數碼獸馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。',()=>letter('這顆數碼蛋送給你。\n請替牠取個名字。',()=>allowEggChoice?chooseEgg():name('egg',start),{egg:true})));}
+  function giftMail(){envelope(()=>letter('從現在起，你也是拍檔馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。',()=>letter('這顆培育蛋送給你。\n請替牠取個名字。',()=>allowEggChoice?chooseEgg():name('egg',start),{egg:true})));}
   function chooseEgg(){
     const copy=openingEggText(),n=el('form','cm-opening__egg-choice'),title=el('h2','',copy.title),hint=el('p','',copy.hint);
     title.id='cm-egg-choice-title';n.setAttribute('aria-labelledby',title.id);

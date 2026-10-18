@@ -42,14 +42,14 @@ export function nativeBattleQualification(profile, condition) {
 }
 
 export function battlePartyAdmission(profile,recordIndex=null) {
-  if(!profile)return {ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻數碼獸的個體資料尚未完整。'};
+  if(!profile)return {ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻夥伴的個體資料尚未完整。'};
   const extension=getProductExtension(profile.fields?.['000']);
   if(extension&&!extension.runtimeReady)return {ok:false,reason:'PRODUCT_SPECIES_NOT_READY',message:productFormText('notReady')};
   const f=profile.fields,s=conditions.species[isKnownSpeciesIndex(f['000'])?productBaseSpeciesIndex(f['000']):-1];
-  if(!s||s.fields['0c']<=1)return {ok:false,reason:'TOO_YOUNG',message:'這隻數碼獸還太幼小，暫時無法參賽。'};
-  if(['134','138','13c'].some(k=>f[k]!==0))return {ok:false,reason:'CONDITION_UNFIT',message:'這隻數碼獸目前的身體狀況無法參賽。'};
+  if(!s||s.fields['0c']<=1)return {ok:false,reason:'TOO_YOUNG',message:'這隻夥伴還太幼小，暫時無法參賽。'};
+  if(['134','138','13c'].some(k=>f[k]!==0))return {ok:false,reason:'CONDITION_UNFIT',message:'這隻夥伴目前的身體狀況無法參賽。'};
   if(!nativeBattleQualification(profile,battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C)))
-    return {ok:false,reason:'MATCH_CONDITION',message:'這隻數碼獸不符合本場比賽的參賽條件。'};
+    return {ok:false,reason:'MATCH_CONDITION',message:'這隻夥伴不符合本場比賽的參賽條件。'};
   return {ok:true};
 }
 

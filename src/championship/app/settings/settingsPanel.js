@@ -388,7 +388,7 @@ export function createSettingsPanel({
     language(section) {
       section.append(radioGroup("locale", "顯示語言", LOCALE_CHOICES, { hint: "切換後立即生效，不會重新開始或改變目前進度。" }));
       section.append(note("英文翻譯尚未經母語編輯審校。"));
-      section.append(note("數碼獸物種名稱與初始夥伴的自動名稱在英文正式名稱核定前，沿用已核定的繁體中文名稱；你取的名字不會被翻譯。"));
+      section.append(note("拍檔物種名稱與初始夥伴的自動名稱在英文正式名稱核定前，沿用已核定的繁體中文名稱；你取的名字不會被翻譯。"));
     },
     access(section) {
       const resolved = environment?.resolved?.() ?? {};

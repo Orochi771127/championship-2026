@@ -388,7 +388,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
   copy.append(
     element("span", "cm-vs2-kicker", "HOME"),
     element("h1", "cm-vs2-title", "DATABASE"),
-    element("p", "cm-vs2-subtitle", "數碼獸圖鑑")
+    element("p", "cm-vs2-subtitle", "拍檔圖鑑")
   );
   const census = element("div", "cm-vs2-shop__wallet");
   census.setAttribute("aria-live", "polite");
@@ -576,7 +576,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       "cm-vs2-shop__meta",
       selected.state === "REGISTERED"
         ? "已登錄"
-        : "尚未登錄這隻數碼獸。"
+        : "尚未登錄這隻拍檔。"
     );
     detail.append(title, element('p','cm-vs2-shop__meta', `${selected.displayCode} · ${generationName(selected.numberingStageIndex)}`));
     if (egg) {
@@ -913,7 +913,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     element("h1", "cm-vs2-title", "設施配置"),
     element("p", "cm-vs2-subtitle", block.layoutVersion
       ? "待機區固定。點選設施取回，再選擇空格放置。"
-      : "One cage per hex. Rank opens 14–20. Overfill is allowed; extra Digimon stress more easily.")
+      : "One cage per hex. Rank opens 14–20. Overfill is allowed; extra partners stress more easily.")
   );
   const census = element("div", "cm-vs2-cage-rank");
   census.setAttribute("aria-live", "polite");

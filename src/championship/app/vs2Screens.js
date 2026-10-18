@@ -613,7 +613,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   }
   const target = element("section", "cm-vs2-target");
   target.setAttribute('aria-label', uiText('狩獵目標資訊'));
-  const targetName = element('strong', 'cm-vs2-target__name', '輕觸數碼獸查看');
+  const targetName = element('strong', 'cm-vs2-target__name', '輕觸夥伴查看');
   const targetStats = element('dl', 'cm-vs2-target__stats');
   const targetValues = new Map();
   for (const [key, label] of [['generation', '世代'], ['family', '種族'], ['hp', 'HP'], ['alignment', '屬性'], ['personality', '性格'], ['capacity', '容量']]) {
@@ -645,7 +645,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     button.addEventListener("click",()=>source.intents.selectHuntTool(tool.id,checkpoint));
     toolButtons.set(tool.id,button);tools.append(button);
   }
-  const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸數碼獸選取");
+  const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸夥伴選取");
   const info = element('div', 'cm-hunt-info');
   info.append(target, pluginHud);
   // display:contents in legacy; one scrollable controls column when wide.
@@ -782,7 +782,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       if (!nextFrame.tutorial) announceCapture(caught, onCard.length);
     }
     const selected = next.hud.target;
-    targetName.textContent = uiText(selected ? selected.name??'野生數碼獸' : '輕觸數碼獸查看');
+    targetName.textContent = uiText(selected ? selected.name??'野生夥伴' : '輕觸夥伴查看');
     target.dataset.selected = String(Boolean(selected));
     for (const [key, value] of targetValues) value.textContent = uiText(selected?.[key] ?? '—');
     const plugins=next.hud.plugins;
