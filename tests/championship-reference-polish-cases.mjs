@@ -3,11 +3,53 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {selectTitleAsset} from '../src/championship/presentation/titleAssetVariant.js';
 import {loadStylesheet} from '../src/championship/app/loadStylesheet.js';
-import {isInstalledWebApp} from '../src/championship/app/webAppInstall.js';
+import {isInstalledWebApp, mountWebAppInstall} from '../src/championship/app/webAppInstall.js';
+import {titleViewportMetrics} from '../src/championship/app/portraitFrame.js';
 import {DATA_ARENA_UPGRADES, previewDataArenaUpgrade, upgradeValue} from '../src/championship/modes/dataArena/dataArenaUpgrades.js';
 import {createBattleFxCamera} from '../src/championship/presentation/battleFx/battleFxCamera.js';
 import {DATA_ARENA_TEXT} from '../src/championship/text/dataArenaText.js';
 import {assertPublicBytes} from '../scripts/lib/public-runtime-boundary.mjs';
+
+test('title fills standalone viewport, follows browser chrome/keyboard, and respects zoom', () => {
+  const win={innerHeight:852,navigator:{standalone:true},visualViewport:{height:818,scale:1,offsetTop:0}};
+  const doc={documentElement:{clientHeight:818}};
+  assert.deepEqual(titleViewportMetrics(win,doc),{height:852,top:0});
+  win.navigator.standalone=false;
+  assert.equal(titleViewportMetrics(win,doc).height,818);
+  win.navigator.standalone=true;win.visualViewport.height=420;win.visualViewport.offsetTop=20;
+  assert.deepEqual(titleViewportMetrics(win,doc,true),{height:420,top:20});
+  win.visualViewport.scale=2;
+  assert.deepEqual(titleViewportMetrics(win,doc),{height:852,top:0});
+  delete win.visualViewport;
+  assert.equal(titleViewportMetrics(win,doc).height,852);
+});
+
+function installFixture(ios=false) {
+  const elements=[];
+  function element(){const e=Object.assign(new EventTarget(),{hidden:false,open:false,setAttribute(){},append(){},remove(){this.removed=true;},focus(){},showModal(){this.open=true;},close(){this.open=false;this.dispatchEvent(new Event('close'));}});elements.push(e);return e;}
+  const view=Object.assign(new EventTarget(),{navigator:{userAgent:ios?'iPhone':'desktop'},matchMedia:()=>({matches:false,addEventListener(){}})});
+  const title=element();title.ownerDocument={createElement:element};title.querySelector=()=>({append(){}});
+  const dispose=mountWebAppInstall(title,view);
+  return {view,trigger:elements[1],dialog:elements[2],dispose,elements};
+}
+test('install needs a real prompt event and click; dismissal is consumed, installed event hides it', async()=>{
+  const f=installFixture();assert.equal(f.trigger.hidden,true);
+  let calls=0,resolve;const choice=new Promise(r=>resolve=r);
+  const event=new Event('beforeinstallprompt',{cancelable:true});
+  event.prompt=()=>{calls++;return Promise.resolve();};event.userChoice=choice;
+  f.view.dispatchEvent(event);assert.equal(event.defaultPrevented,true);assert.equal(calls,0);assert.equal(f.trigger.hidden,false);
+  f.trigger.dispatchEvent(new Event('click'));f.trigger.dispatchEvent(new Event('click'));assert.equal(calls,1);
+  resolve({outcome:'dismissed'});await new Promise(r=>setImmediate(r));assert.equal(f.trigger.hidden,true);
+  f.view.dispatchEvent(new Event('appinstalled'));assert.equal(f.trigger.hidden,true);
+  f.dispose();assert.ok(f.trigger.removed&&f.dialog.removed);
+});
+test('iPhone opens instructions, fake install events are ignored and installed iPhone adds no UI',()=>{
+  const f=installFixture(true);assert.equal(f.trigger.hidden,false);
+  const fake=new Event('beforeinstallprompt',{cancelable:true});f.view.dispatchEvent(fake);assert.equal(fake.defaultPrevented,false);
+  f.trigger.dispatchEvent(new Event('click'));assert.equal(f.dialog.open,true);
+  f.view.dispatchEvent(new Event('appinstalled'));assert.equal(f.dialog.open,false);assert.equal(f.trigger.hidden,true);f.dispose();
+  assert.doesNotThrow(()=>mountWebAppInstall({}, {navigator:{standalone:true}})());
+});
 
 test('delivery choice covers portrait, DPR, landscape, saver and old markup', () => {
   const el = {dataset:{titleCompactSrc:'small', titleOptimizedSrc:'large'}};

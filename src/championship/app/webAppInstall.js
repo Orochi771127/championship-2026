@@ -17,7 +17,8 @@ export function isInstalledWebApp(view = globalThis.window) {
 export function mountWebAppInstall(title, view = globalThis.window) {
   if (!title || isInstalledWebApp(view)) return () => {};
   const nav = view.navigator;
-  if (!/iPhone|iPad|iPod/.test(nav.userAgent) && !(nav.platform === 'MacIntel' && nav.maxTouchPoints > 1)) return () => {};
+  const ios = /iPhone|iPad|iPod/.test(nav.userAgent) || (nav.platform === 'MacIntel' && nav.maxTouchPoints > 1);
+  let installPrompt = null, prompting = false, disposed = false;
   const doc = title.ownerDocument, lifetime = new AbortController();
   const trigger = doc.createElement('button'), dialog = doc.createElement('dialog');
   trigger.type = 'button'; trigger.className = 'cm-title__install';
@@ -28,14 +29,32 @@ export function mountWebAppInstall(title, view = globalThis.window) {
   close.type = 'button'; dialog.append(heading, message, close);
   title.querySelector('.cm-title__controls')?.append(trigger);
   title.append(dialog);
-  const relabel = () => { const copy = WEB_APP_INSTALL_COPY[getLocale()] ?? WEB_APP_INSTALL_COPY.en; trigger.textContent = heading.textContent = copy[0]; message.textContent = copy[1]; close.textContent = copy[2]; };
+  const relabel = () => { const copy = WEB_APP_INSTALL_COPY[getLocale()] ?? WEB_APP_INSTALL_COPY.en; trigger.textContent = heading.textContent = copy[0]; trigger.title = copy[0]; message.textContent = copy[1]; close.textContent = copy[2]; };
   relabel(); const unsubscribe = onLocaleChange(relabel);
-  trigger.addEventListener('click', () => { if (!dialog.open) dialog.showModal(); }, {signal:lifetime.signal});
+  trigger.addEventListener('click', async () => {
+    if (prompting || disposed) return;
+    if (!installPrompt) { if (ios && !dialog.open) dialog.showModal(); return; }
+    const pending = installPrompt; installPrompt = null;
+    prompting = true; trigger.disabled = true;
+    try {
+      // Only an actual browser-provided event can open its confirmation UI.
+      await pending.prompt();
+      await pending.userChoice;
+    } catch { /* A dismissed/expired prompt is not an installation. */ }
+    finally { prompting = false; if (!disposed) { trigger.disabled = false; update(); } }
+  }, {signal:lifetime.signal});
   close.addEventListener('click', () => dialog.close(), {signal:lifetime.signal});
   dialog.addEventListener('close', () => { if (!title.hidden) trigger.focus({preventScroll:true}); }, {signal:lifetime.signal});
   // An install/orientation change can update display-mode without a reload.
   const display = view.matchMedia?.('(display-mode: standalone)');
-  const update = () => { trigger.hidden = isInstalledWebApp(view); if (trigger.hidden && dialog.open) dialog.close(); };
+  let installed = false;
+  const update = () => { trigger.hidden = installed || isInstalledWebApp(view) || (!ios && !installPrompt && !prompting); if (trigger.hidden && dialog.open) dialog.close(); };
+  view.addEventListener('beforeinstallprompt', event => {
+    if (typeof event.prompt !== 'function' || installed || isInstalledWebApp(view)) return;
+    event.preventDefault(); installPrompt = event; update();
+  }, {signal:lifetime.signal});
+  view.addEventListener('appinstalled', () => { installed = true; installPrompt = null; update(); }, {signal:lifetime.signal});
   display?.addEventListener('change', update, {signal:lifetime.signal});
-  return () => { lifetime.abort(); unsubscribe(); dialog.remove(); trigger.remove(); };
+  update();
+  return () => { disposed = true; installPrompt = null; lifetime.abort(); unsubscribe(); dialog.remove(); trigger.remove(); };
 }

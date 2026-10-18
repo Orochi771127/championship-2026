@@ -12,7 +12,7 @@
 #cm-title .cm-title__partner--cloud { transform-origin:41.069% 87.161%; }
 :root[data-motion="full"]:not([data-quality="saver"]) #cm-title .cm-title__partner--cloud[data-title-image-state="ready"] { animation-duration:6.7s; animation-delay:-2.3s; }
 #cm-title:has(.cm-title__film:not([hidden])) .cm-title__partner { animation-play-state:paused !important; }
-#cm-title .cm-title__install { position:absolute; top:max(68px,calc(env(safe-area-inset-top,0px) + 64px)); right:max(16px,env(safe-area-inset-right,0px)); z-index:6; max-width:160px; min-height:44px; padding:6px 10px; border:1px solid #075e65; border-radius:12px; background:#fff4d2; color:#12343e; font:inherit; font-size:12px; font-weight:700; }
+#cm-title .cm-title__install { position:absolute; top:max(12px,env(safe-area-inset-top,0px)); right:calc(max(16px,env(safe-area-inset-right,0px)) + 56px); z-index:6; max-width:min(156px,calc(100% - 148px)); height:44px; min-height:44px; padding:6px 8px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; border:1px solid #075e65; border-radius:12px; background:#fff4d2; color:#12343e; font:inherit; font-size:12px; font-weight:700; }
 body[data-landscape-entry] #cm-title .cm-title__install { position:fixed; }
 #cm-title[data-motion-paused="true"] :is(.cm-title__partner,.cm-title__light,.cm-title__spark) { animation-play-state:paused !important; }
 .cm-install { box-sizing:border-box; width:min(440px,calc(100vw - 32px)); max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 32px); padding:22px; overflow:auto; border:2px solid #075e65; border-radius:18px; background:#f6fbeb; color:#12343e; font-family:system-ui,sans-serif; }
@@ -23,11 +23,11 @@ body[data-landscape-entry] #cm-title .cm-title__install { position:fixed; }
 @media (hover:hover) {
   #cm-title :is(.cm-title__login,.cm-title__actions .cm-button):not(:disabled):hover { translate:0 -2px; }
 }
-.cm-title { position:fixed; inset:0; z-index:var(--z-dialog); display:grid; place-items:center; padding:0; overflow:hidden; background:#12343e; }
+.cm-title { position:fixed; inset:0; top:var(--cm-title-viewport-top,0px); bottom:auto; height:var(--cm-title-viewport-height,100dvh); z-index:var(--z-dialog); display:grid; place-items:center; padding:0; overflow:hidden; background:#12343e; }
 .cm-title[hidden] { display:none; }
 #cm-title .cm-title__panel {
-  --cm-title-height:100dvh;
-  position:relative; isolation:isolate; width:min(100vw,56.25dvh,520px); height:var(--cm-title-height);
+  --cm-title-height:var(--cm-title-viewport-height,100dvh);
+  position:relative; isolation:isolate; width:min(100vw,calc(var(--cm-title-height) * .5625),520px); height:var(--cm-title-height);
   container-type:inline-size;
   padding:0;
   overflow:hidden; text-align:center; color:#12343e;
@@ -35,7 +35,7 @@ body[data-landscape-entry] #cm-title .cm-title__install { position:fixed; }
 }
 #cm-title[hidden] .cm-title__panel { background-image:none; }
 /* Controls share the portrait bounds, independently of the fixed art canvas. */
-#cm-title .cm-title__controls { position:absolute; top:0; left:50%; width:min(100vw,56.25dvh,520px); height:100%; transform:translateX(-50%); }
+#cm-title .cm-title__controls { position:absolute; top:0; left:50%; width:min(100vw,calc(var(--cm-title-viewport-height,100dvh) * .5625),520px); height:100%; transform:translateX(-50%); }
 /* Match the 941 × 1672 background cover rectangle. Art anchors are source-image
    coordinates; text, status and safe-area controls cannot move the partners. */
 #cm-title .cm-title__art { position:absolute; top:0; left:50%; width:max(100%,calc(var(--cm-title-height) * 941 / 1672)); height:100%; transform:translateX(-50%); pointer-events:none; }
@@ -368,6 +368,7 @@ body[data-portrait-frame] #cm-title .cm-title__note:empty { display:none; }
 
 /* NS33 film shares the TITLE portrait frame and approved DOM brand. */
 #cm-title .cm-title__film-watch { position:absolute; top:max(12px,env(safe-area-inset-top)); left:12px; z-index:6; min-height:44px; max-width:65%; padding:8px 12px; border:1px solid #fff4d2; border-radius:10px; background:#12343edb; color:#fff4d2; font-size:13px; }
+#cm-title:has(.cm-title__install:not([hidden])) .cm-title__film-watch { left:max(12px,env(safe-area-inset-left,0px)); max-width:calc(100% - max(12px,env(safe-area-inset-left,0px)) - max(16px,env(safe-area-inset-right,0px)) - 224px); height:44px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 #cm-title .cm-title__film { position:absolute; inset:0; margin:auto; width:min(100vw,56.25dvh,520px); height:100%; overflow:hidden; background:#12343e; z-index:20; --cm-title-height:100dvh; }
 #cm-title .cm-title__film-video { display:block; width:100%; height:100%; object-fit:cover; }
 #cm-title .cm-title__film .cm-title__art { width:100%; text-align:center; }
@@ -386,11 +387,11 @@ body[data-landscape-entry] #cm-title {
   --cm-entry-action-width: min(32vw, 340px);
   --cm-entry-action-top: calc(var(--cm-entry-logo-top) + var(--cm-entry-logo-width) / 2 + 24px);
   top: var(--cm-visible-viewport-top, 0px); bottom: auto;
-  height: var(--cm-visible-viewport-height, 100dvh);
+  height: var(--cm-title-viewport-height, var(--cm-visible-viewport-height, 100dvh));
   grid-template: none; gap: 0; padding: 0;
 }
 body[data-landscape-entry] #cm-title > .cm-title__panel {
-  --cm-title-height: var(--cm-visible-viewport-height, 100dvh);
+  --cm-title-height: var(--cm-title-viewport-height, var(--cm-visible-viewport-height, 100dvh));
   position: absolute; inset: 0;
   width: 100%; height: 100%; max-height: none;
   transform: none; background-size: cover; background-position: center 58%;
@@ -504,6 +505,9 @@ body[data-landscape-entry] #cm-title :is(.cm-title__boot-status, .cm-title__back
 }
 body[data-landscape-entry] #cm-title .cm-title__background-feedback[aria-hidden="true"],
 body[data-landscape-entry] #cm-title .cm-title__note:empty { display: none; }
+/* The note owns two persistent spans. :empty alone does not match an empty
+   message plus a hidden prefetch status, leaving a padded blank landscape row. */
+#cm-title #cm-title-note:has(> span):not(:has(> span:not([hidden]):not(:empty))) { display:none; }
 /* These utility buttons stay on the viewport, not inside the narrow action
    group. The existing hidden state and keyboard targets remain authoritative. */
 body[data-landscape-entry] #cm-title :is(.cm-title__settings, .cm-title__film-watch) {
