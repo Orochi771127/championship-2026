@@ -358,9 +358,6 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       else if (e.type === "ICE_HEATED" || e.type === "LAVA_COOLED") bursts.push({ x, y, age: 0, life: 1400, kind: "steam" });
       else if (e.type === "LAVA_BURN") bursts.push({ x, y, age: 0, life: 500, kind: "burn" });
       else if (e.type === "LAVA_RESISTED") bursts.push({ x, y, age: 0, life: 500, kind: "heatproof" });
-      else if (e.type === "WATERSPOUT_SPAWN") { ring(x, y, 76, 800, 3.5, 0x56d8ff, 0.9); bursts.push({ x, y, age: 0, life: 700, kind: "splash" }); }
-      else if (e.type === "WATERSPOUT_FREEZE") { ring(x, y, 86, 900, 4, 0xd8f6ff, 0.95); bursts.push({ x, y, age: 0, life: 800, kind: "freeze_pillar" }); }
-      else if (e.type === "FROZEN_PILLAR_SHATTER") { ring(x, y, 96, 850, 4, 0x9ce8ff, 0.95); bursts.push({ x, y, age: 0, life: 750, kind: "shatter_pillar" }); }
     }
   }
 
@@ -468,41 +465,13 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
 
   function drawBursts(dt) {
     puffs.clear();
-    const spin = elapsed / 1000 * 6;
-    for (const ws of hazards?.waterspouts ?? []) {
-      const wx = ws.x * RASTER_PER_NATIVE, wy = ws.y * RASTER_PER_NATIVE, r = (ws.radius ?? 22) * RASTER_PER_NATIVE;
-      puffs.ellipse(wx, wy, r, r * 0.6).fill({ color: 0x2aa8e6, alpha: 0.32 }).stroke({ color: 0x9ce8ff, width: 3, alpha: 0.85 });
-      for (let ringIdx = 0; ringIdx < 4; ringIdx++) {
-        const h = ringIdx * 24, rr = r * (0.45 + ringIdx * 0.16), ox = Math.sin(spin + ringIdx * 1.4) * 10;
-        puffs.ellipse(wx + ox, wy - h, rr, rr * 0.44).stroke({ color: ringIdx === 3 ? 0xffffff : 0x6ce0ff, width: 2.5, alpha: 0.82 });
-      }
-    }
-    for (const fp of hazards?.frozenPillars ?? []) {
-      const fx = fp.x * RASTER_PER_NATIVE, fy = fp.y * RASTER_PER_NATIVE, r = (fp.radius ?? 18) * RASTER_PER_NATIVE;
-      const ratio = Math.max(0.2, Math.min(1, (fp.integrity ?? 100) / (fp.maxIntegrity ?? 100)));
-      puffs.ellipse(fx, fy + 8, r * 1.2, r * 0.62).fill({ color: 0x061b2e, alpha: 0.42 });
-      puffs.poly([
-        fx - r * 0.78, fy,
-        fx - r * 0.52, fy - 96 * ratio,
-        fx, fy - 118 * ratio,
-        fx + r * 0.52, fy - 92 * ratio,
-        fx + r * 0.78, fy,
-        fx, fy + r * 0.35
-      ], true).fill({ color: 0x8fe8ff, alpha: 0.85 }).stroke({ color: 0xffffff, width: 3, alpha: 0.95 });
-    }
     for (let i = bursts.length - 1; i >= 0; i--) {
       const b = bursts[i];
       b.age += dt;
       if (b.age >= b.life) { bursts.splice(i, 1); continue; }
       const k = b.age / b.life, alpha = 1 - k;
       if (b.kind === "charge") puffs.circle(b.x, b.y, 18 + 60 * k).fill({ color: 0xfff6c0, alpha: 0.35 * alpha });
-      else if (b.kind === "freeze_pillar" || b.kind === "shatter_pillar") {
-        for (let r = 0; r < 8; r++) {
-          const ang = r / 8 * TAU + k * 0.6, d = 12 + 48 * k;
-          puffs.circle(b.x + Math.cos(ang) * d, b.y + Math.sin(ang) * d * 0.6 - 24 * (1 - k), 4.5 * alpha + 1)
-            .fill({ color: b.kind === "freeze_pillar" ? 0xd8f8ff : 0x7ce0ff, alpha: 0.92 * alpha });
-        }
-      } else if (b.kind === "splash") {
+      else if (b.kind === "splash") {
         for (let r = 0; r < 10; r++) {
           const ang = r / 10 * TAU, d = 10 + 34 * k;
           puffs.circle(b.x + Math.cos(ang) * d, b.y + Math.sin(ang) * d * 0.6 - 30 * Math.sin(k * Math.PI), 3.5 * alpha + 1)
