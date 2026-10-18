@@ -1,0 +1,1671 @@
+{
+  "method": "Native stereo float PCM; exact sample/rail, DC, derivative, quiet-window, spectral and trim/crossfade screening. All candidates require listening; no claim to remove baked-in source distortion.",
+  "files": [
+    {
+      "id": "core",
+      "path": "assets/production/original-music-r1/bgm_central_radiant_core.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 3338240,
+      "sourceSamplePeakDbfs": -6.427,
+      "projectedSamplePeakAfterGainDbfs": -11.527,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -81.508,
+      "maxSourceAdjacentSampleStepDbfs": -24.049,
+      "sourceDerivativeP999Dbfs": -26.714,
+      "quiet20msRmsP05Dbfs": -37.689,
+      "max20msRmsDbfs": -12.78,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.2745871,
+        "250-2000": 0.7249863,
+        "2000-5000": 0.0002607,
+        "5000-10000": 1.15e-05,
+        "10000-20000": 7e-07
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2497.9,
+          "prominenceDbVs31BinMean": 9.05
+        },
+        {
+          "hz": 2508.6,
+          "prominenceDbVs31BinMean": 9.12
+        },
+        {
+          "hz": 2228.7,
+          "prominenceDbVs31BinMean": 8.72
+        },
+        {
+          "hz": 2239.5,
+          "prominenceDbVs31BinMean": 8.25
+        },
+        {
+          "hz": 2799.3,
+          "prominenceDbVs31BinMean": 8.73
+        }
+      ],
+      "strongPresenceExcerptSecond": 19.319,
+      "loop": {
+        "trimmedDecodedSeconds": 73.969048,
+        "nativeHardJoinJumpDbfs": -49.978,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -40.173,
+        "simulatedSeamPeakAfterGainDbfs": -14.972,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "mystic",
+      "path": "assets/production/original-music-r1/bgm_eastern_mystic_mountains.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 9206649,
+      "sourceSamplePeakDbfs": -17.425,
+      "projectedSamplePeakAfterGainDbfs": -8.125,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -115.308,
+      "maxSourceAdjacentSampleStepDbfs": -27.171,
+      "sourceDerivativeP999Dbfs": -36.125,
+      "quiet20msRmsP05Dbfs": -49.902,
+      "max20msRmsDbfs": -26.6,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.4812461,
+        "250-2000": 0.487003,
+        "2000-5000": 0.0263695,
+        "5000-10000": 0.0044493,
+        "10000-20000": 0.0008209
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2810.1,
+          "prominenceDbVs31BinMean": 8.57
+        },
+        {
+          "hz": 2799.3,
+          "prominenceDbVs31BinMean": 8.13
+        },
+        {
+          "hz": 2497.9,
+          "prominenceDbVs31BinMean": 6.01
+        },
+        {
+          "hz": 2820.8,
+          "prominenceDbVs31BinMean": 4.46
+        },
+        {
+          "hz": 2487.1,
+          "prominenceDbVs31BinMean": 4.33
+        }
+      ],
+      "strongPresenceExcerptSecond": 188.175,
+      "loop": {
+        "trimmedDecodedSeconds": 206.125147,
+        "nativeHardJoinJumpDbfs": -43.93,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -64.901,
+        "simulatedSeamPeakAfterGainDbfs": -27.043,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "moon",
+      "path": "assets/production/original-music-r1/bgm_ethereal_moon_lakefront.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 6773005,
+      "sourceSamplePeakDbfs": -10.126,
+      "projectedSamplePeakAfterGainDbfs": -6.426,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -92.009,
+      "maxSourceAdjacentSampleStepDbfs": -23.484,
+      "sourceDerivativeP999Dbfs": -35.542,
+      "quiet20msRmsP05Dbfs": -49.175,
+      "max20msRmsDbfs": -15.344,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.9234582,
+        "250-2000": 0.0734572,
+        "2000-5000": 0.0016037,
+        "5000-10000": 0.000774,
+        "10000-20000": 0.0002018
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2067.2,
+          "prominenceDbVs31BinMean": 2.18
+        },
+        {
+          "hz": 2078.0,
+          "prominenceDbVs31BinMean": 1.91
+        },
+        {
+          "hz": 2056.4,
+          "prominenceDbVs31BinMean": 1.66
+        },
+        {
+          "hz": 2088.7,
+          "prominenceDbVs31BinMean": 1.47
+        },
+        {
+          "hz": 2099.5,
+          "prominenceDbVs31BinMean": 1.03
+        }
+      ],
+      "strongPresenceExcerptSecond": 98.174,
+      "loop": {
+        "trimmedDecodedSeconds": 152.350975,
+        "nativeHardJoinJumpDbfs": -49.756,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -60.056,
+        "simulatedSeamPeakAfterGainDbfs": -28.868,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "lofi",
+      "path": "assets/production/original-music-r1/bgm_linkara_lofi.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 4744083,
+      "sourceSamplePeakDbfs": -20.77,
+      "projectedSamplePeakAfterGainDbfs": -8.77,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -107.814,
+      "maxSourceAdjacentSampleStepDbfs": -34.014,
+      "sourceDerivativeP999Dbfs": -43.022,
+      "quiet20msRmsP05Dbfs": -55.806,
+      "max20msRmsDbfs": -26.857,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.7765133,
+        "250-2000": 0.2157806,
+        "2000-5000": 0.0051917,
+        "5000-10000": 0.0023805,
+        "10000-20000": 3.83e-05
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 7.52
+        },
+        {
+          "hz": 2971.6,
+          "prominenceDbVs31BinMean": 7.25
+        },
+        {
+          "hz": 2347.1,
+          "prominenceDbVs31BinMean": 7.16
+        },
+        {
+          "hz": 2960.8,
+          "prominenceDbVs31BinMean": 7.32
+        },
+        {
+          "hz": 3962.1,
+          "prominenceDbVs31BinMean": 6.37
+        }
+      ],
+      "strongPresenceExcerptSecond": 90.001,
+      "loop": {
+        "trimmedDecodedSeconds": 104.978186,
+        "nativeHardJoinJumpDbfs": -44.302,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -56.72,
+        "simulatedSeamPeakAfterGainDbfs": -15.594,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "login",
+      "path": "assets/production/original-music-r1/bgm_login_page.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 7270574,
+      "sourceSamplePeakDbfs": -10.432,
+      "projectedSamplePeakAfterGainDbfs": -9.332,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -100.273,
+      "maxSourceAdjacentSampleStepDbfs": -29.583,
+      "sourceDerivativeP999Dbfs": -36.018,
+      "quiet20msRmsP05Dbfs": -36.066,
+      "max20msRmsDbfs": -16.397,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.3414377,
+        "250-2000": 0.6581029,
+        "2000-5000": 0.0002784,
+        "5000-10000": 2.31e-05,
+        "10000-20000": 1.1e-06
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2228.7,
+          "prominenceDbVs31BinMean": 10.22
+        },
+        {
+          "hz": 2217.9,
+          "prominenceDbVs31BinMean": 8.44
+        },
+        {
+          "hz": 2239.5,
+          "prominenceDbVs31BinMean": 5.95
+        },
+        {
+          "hz": 2002.6,
+          "prominenceDbVs31BinMean": 4.47
+        },
+        {
+          "hz": 2207.2,
+          "prominenceDbVs31BinMean": 2.19
+        }
+      ],
+      "strongPresenceExcerptSecond": 95.016,
+      "loop": {
+        "trimmedDecodedSeconds": 163.419229,
+        "nativeHardJoinJumpDbfs": -50.02,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -51.585,
+        "simulatedSeamPeakAfterGainDbfs": -15.572,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "plains",
+      "path": "assets/production/original-music-r1/bgm_northern_verdant_plains.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 8000998,
+      "sourceSamplePeakDbfs": -3.244,
+      "projectedSamplePeakAfterGainDbfs": -8.644,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -79.132,
+      "maxSourceAdjacentSampleStepDbfs": -24.177,
+      "sourceDerivativeP999Dbfs": -35.135,
+      "quiet20msRmsP05Dbfs": -46.846,
+      "max20msRmsDbfs": -7.686,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.8344571,
+        "250-2000": 0.1650396,
+        "2000-5000": 0.000257,
+        "5000-10000": 3.26e-05,
+        "10000-20000": 3.41e-05
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2217.9,
+          "prominenceDbVs31BinMean": 7.59
+        },
+        {
+          "hz": 2207.2,
+          "prominenceDbVs31BinMean": 6.5
+        },
+        {
+          "hz": 2228.7,
+          "prominenceDbVs31BinMean": 5.74
+        },
+        {
+          "hz": 2196.4,
+          "prominenceDbVs31BinMean": 3.86
+        },
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 2.64
+        }
+      ],
+      "strongPresenceExcerptSecond": 130.032,
+      "loop": {
+        "trimmedDecodedSeconds": 178.644535,
+        "nativeHardJoinJumpDbfs": -67.754,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -67.479,
+        "simulatedSeamPeakAfterGainDbfs": -40.092,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "forge",
+      "path": "assets/production/original-music-r1/bgm_southeast_forge_hills.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 7268288,
+      "sourceSamplePeakDbfs": -16.253,
+      "projectedSamplePeakAfterGainDbfs": -8.653,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -89.905,
+      "maxSourceAdjacentSampleStepDbfs": -23.655,
+      "sourceDerivativeP999Dbfs": -31.401,
+      "quiet20msRmsP05Dbfs": -44.93,
+      "max20msRmsDbfs": -25.059,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.5311208,
+        "250-2000": 0.3700471,
+        "2000-5000": 0.0821111,
+        "5000-10000": 0.0139345,
+        "10000-20000": 0.0025004
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2347.1,
+          "prominenceDbVs31BinMean": 3.99
+        },
+        {
+          "hz": 2099.5,
+          "prominenceDbVs31BinMean": 4.15
+        },
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 2.58
+        },
+        {
+          "hz": 2336.4,
+          "prominenceDbVs31BinMean": 2.59
+        },
+        {
+          "hz": 2110.3,
+          "prominenceDbVs31BinMean": 3.06
+        }
+      ],
+      "strongPresenceExcerptSecond": 154.366,
+      "loop": {
+        "trimmedDecodedSeconds": 164.185283,
+        "nativeHardJoinJumpDbfs": -49.662,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -52.379,
+        "simulatedSeamPeakAfterGainDbfs": -13.255,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "harbor",
+      "path": "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 10334144,
+      "sourceSamplePeakDbfs": -10.632,
+      "projectedSamplePeakAfterGainDbfs": -8.932,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -97.099,
+      "maxSourceAdjacentSampleStepDbfs": -20.091,
+      "sourceDerivativeP999Dbfs": -27.301,
+      "quiet20msRmsP05Dbfs": -37.909,
+      "max20msRmsDbfs": -19.604,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.4654049,
+        "250-2000": 0.4550444,
+        "2000-5000": 0.0561242,
+        "5000-10000": 0.0208735,
+        "10000-20000": 0.0024868
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2110.3,
+          "prominenceDbVs31BinMean": 4.39
+        },
+        {
+          "hz": 2099.5,
+          "prominenceDbVs31BinMean": 4.19
+        },
+        {
+          "hz": 2347.1,
+          "prominenceDbVs31BinMean": 5.45
+        },
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 5.32
+        },
+        {
+          "hz": 2336.4,
+          "prominenceDbVs31BinMean": 4.78
+        }
+      ],
+      "strongPresenceExcerptSecond": 146.286,
+      "loop": {
+        "trimmedDecodedSeconds": 233.84712,
+        "nativeHardJoinJumpDbfs": -50.014,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -41.341,
+        "simulatedSeamPeakAfterGainDbfs": -14.69,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "tidal",
+      "path": "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 10109888,
+      "sourceSamplePeakDbfs": -17.727,
+      "projectedSamplePeakAfterGainDbfs": -8.327,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -115.166,
+      "maxSourceAdjacentSampleStepDbfs": -26.788,
+      "sourceDerivativeP999Dbfs": -36.554,
+      "quiet20msRmsP05Dbfs": -47.244,
+      "max20msRmsDbfs": -25.544,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.5298373,
+        "250-2000": 0.4573663,
+        "2000-5000": 0.0092369,
+        "5000-10000": 0.002414,
+        "10000-20000": 0.0009692
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2099.5,
+          "prominenceDbVs31BinMean": 3.65
+        },
+        {
+          "hz": 2088.7,
+          "prominenceDbVs31BinMean": 2.72
+        },
+        {
+          "hz": 2110.3,
+          "prominenceDbVs31BinMean": 1.51
+        },
+        {
+          "hz": 2196.4,
+          "prominenceDbVs31BinMean": 1.12
+        },
+        {
+          "hz": 2207.2,
+          "prominenceDbVs31BinMean": 1.05
+        }
+      ],
+      "strongPresenceExcerptSecond": 101.146,
+      "loop": {
+        "trimmedDecodedSeconds": 227.318662,
+        "nativeHardJoinJumpDbfs": -52.929,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -65.287,
+        "simulatedSeamPeakAfterGainDbfs": -29.258,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "battle_final",
+      "path": "assets/production/original-music-r1/championship_battle_final_r1.m4a",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 1536000,
+      "sourceSamplePeakDbfs": -3.836,
+      "projectedSamplePeakAfterGainDbfs": -12.436,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -81.968,
+      "maxSourceAdjacentSampleStepDbfs": -24.25,
+      "sourceDerivativeP999Dbfs": -28.705,
+      "quiet20msRmsP05Dbfs": -21.305,
+      "max20msRmsDbfs": -12.593,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.2098086,
+        "250-2000": 0.7872452,
+        "2000-5000": 0.0028232,
+        "5000-10000": 6.78e-05,
+        "10000-20000": 1.2e-06
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2097.7,
+          "prominenceDbVs31BinMean": 9.23
+        },
+        {
+          "hz": 2085.9,
+          "prominenceDbVs31BinMean": 6.89
+        },
+        {
+          "hz": 2636.7,
+          "prominenceDbVs31BinMean": 9.61
+        },
+        {
+          "hz": 2355.5,
+          "prominenceDbVs31BinMean": 8.71
+        },
+        {
+          "hz": 2343.8,
+          "prominenceDbVs31BinMean": 8.25
+        }
+      ],
+      "strongPresenceExcerptSecond": 18.517,
+      "loop": {
+        "trimmedDecodedSeconds": 32.0,
+        "nativeHardJoinJumpDbfs": -40.827,
+        "crossfadeSeconds": 0,
+        "simulatedBoundaryStepAfterGainDbfs": -49.427,
+        "simulatedSeamPeakAfterGainDbfs": -12.436,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "battle_final",
+      "path": "assets/production/original-music-r1/championship_battle_final_r1.ogg",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 1536000,
+      "sourceSamplePeakDbfs": -3.818,
+      "projectedSamplePeakAfterGainDbfs": -12.418,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -83.095,
+      "maxSourceAdjacentSampleStepDbfs": -23.973,
+      "sourceDerivativeP999Dbfs": -28.677,
+      "quiet20msRmsP05Dbfs": -21.275,
+      "max20msRmsDbfs": -12.657,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.2098291,
+        "250-2000": 0.7872089,
+        "2000-5000": 0.0028383,
+        "5000-10000": 7.24e-05,
+        "10000-20000": 1.6e-06
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2097.7,
+          "prominenceDbVs31BinMean": 9.24
+        },
+        {
+          "hz": 2085.9,
+          "prominenceDbVs31BinMean": 6.91
+        },
+        {
+          "hz": 2636.7,
+          "prominenceDbVs31BinMean": 9.61
+        },
+        {
+          "hz": 2355.5,
+          "prominenceDbVs31BinMean": 8.72
+        },
+        {
+          "hz": 2343.8,
+          "prominenceDbVs31BinMean": 8.25
+        }
+      ],
+      "strongPresenceExcerptSecond": 18.517,
+      "loop": {
+        "trimmedDecodedSeconds": 32.0,
+        "nativeHardJoinJumpDbfs": -35.597,
+        "crossfadeSeconds": 0,
+        "simulatedBoundaryStepAfterGainDbfs": -44.197,
+        "simulatedSeamPeakAfterGainDbfs": -12.418,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "battle_normal",
+      "path": "assets/production/original-music-r1/championship_battle_normal_r1.m4a",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 1536000,
+      "sourceSamplePeakDbfs": -3.87,
+      "projectedSamplePeakAfterGainDbfs": -12.37,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -83.198,
+      "maxSourceAdjacentSampleStepDbfs": -24.405,
+      "sourceDerivativeP999Dbfs": -28.85,
+      "quiet20msRmsP05Dbfs": -21.626,
+      "max20msRmsDbfs": -12.804,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.2192116,
+        "250-2000": 0.7779,
+        "2000-5000": 0.0027703,
+        "5000-10000": 6.98e-05,
+        "10000-20000": 1.2e-06
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2097.7,
+          "prominenceDbVs31BinMean": 9.21
+        },
+        {
+          "hz": 2085.9,
+          "prominenceDbVs31BinMean": 6.87
+        },
+        {
+          "hz": 2636.7,
+          "prominenceDbVs31BinMean": 9.57
+        },
+        {
+          "hz": 2355.5,
+          "prominenceDbVs31BinMean": 8.7
+        },
+        {
+          "hz": 2343.8,
+          "prominenceDbVs31BinMean": 8.42
+        }
+      ],
+      "strongPresenceExcerptSecond": 18.517,
+      "loop": {
+        "trimmedDecodedSeconds": 32.0,
+        "nativeHardJoinJumpDbfs": -40.882,
+        "crossfadeSeconds": 0,
+        "simulatedBoundaryStepAfterGainDbfs": -49.382,
+        "simulatedSeamPeakAfterGainDbfs": -12.464,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "battle_normal",
+      "path": "assets/production/original-music-r1/championship_battle_normal_r1.ogg",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 1536000,
+      "sourceSamplePeakDbfs": -3.826,
+      "projectedSamplePeakAfterGainDbfs": -12.326,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -82.961,
+      "maxSourceAdjacentSampleStepDbfs": -24.178,
+      "sourceDerivativeP999Dbfs": -28.82,
+      "quiet20msRmsP05Dbfs": -21.608,
+      "max20msRmsDbfs": -12.775,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.2191774,
+        "250-2000": 0.7779126,
+        "2000-5000": 0.0027895,
+        "5000-10000": 7.45e-05,
+        "10000-20000": 1.6e-06
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2097.7,
+          "prominenceDbVs31BinMean": 9.21
+        },
+        {
+          "hz": 2085.9,
+          "prominenceDbVs31BinMean": 6.88
+        },
+        {
+          "hz": 2636.7,
+          "prominenceDbVs31BinMean": 9.56
+        },
+        {
+          "hz": 2355.5,
+          "prominenceDbVs31BinMean": 8.7
+        },
+        {
+          "hz": 2343.8,
+          "prominenceDbVs31BinMean": 8.41
+        }
+      ],
+      "strongPresenceExcerptSecond": 18.517,
+      "loop": {
+        "trimmedDecodedSeconds": 32.0,
+        "nativeHardJoinJumpDbfs": -39.293,
+        "crossfadeSeconds": 0,
+        "simulatedBoundaryStepAfterGainDbfs": -47.793,
+        "simulatedSeamPeakAfterGainDbfs": -12.476,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "defeat",
+      "path": "assets/production/original-music-r1/championship_defeat_r1.m4a",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 206400,
+      "sourceSamplePeakDbfs": -3.817,
+      "projectedSamplePeakAfterGainDbfs": -12.217,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -92.596,
+      "maxSourceAdjacentSampleStepDbfs": -29.686,
+      "sourceDerivativeP999Dbfs": -32.293,
+      "quiet20msRmsP05Dbfs": -300.0,
+      "max20msRmsDbfs": -13.323,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.3329583,
+        "250-2000": 0.6668394,
+        "2000-5000": 0.0001276,
+        "5000-10000": 0.0,
+        "10000-20000": 0.0
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2203.1,
+          "prominenceDbVs31BinMean": 10.34
+        },
+        {
+          "hz": 2097.7,
+          "prominenceDbVs31BinMean": 7.25
+        },
+        {
+          "hz": 2191.4,
+          "prominenceDbVs31BinMean": 7.73
+        },
+        {
+          "hz": 2085.9,
+          "prominenceDbVs31BinMean": 4.46
+        },
+        {
+          "hz": 2636.7,
+          "prominenceDbVs31BinMean": 12.66
+        }
+      ],
+      "strongPresenceExcerptSecond": 0.085,
+      "loop": null,
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "defeat",
+      "path": "assets/production/original-music-r1/championship_defeat_r1.ogg",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 206400,
+      "sourceSamplePeakDbfs": -3.896,
+      "projectedSamplePeakAfterGainDbfs": -12.296,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -92.235,
+      "maxSourceAdjacentSampleStepDbfs": -29.637,
+      "sourceDerivativeP999Dbfs": -32.279,
+      "quiet20msRmsP05Dbfs": -300.0,
+      "max20msRmsDbfs": -13.309,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.3322387,
+        "250-2000": 0.6675637,
+        "2000-5000": 0.0001284,
+        "5000-10000": 0.0,
+        "10000-20000": 0.0
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2203.1,
+          "prominenceDbVs31BinMean": 10.32
+        },
+        {
+          "hz": 2097.7,
+          "prominenceDbVs31BinMean": 7.28
+        },
+        {
+          "hz": 2191.4,
+          "prominenceDbVs31BinMean": 7.75
+        },
+        {
+          "hz": 2085.9,
+          "prominenceDbVs31BinMean": 4.48
+        },
+        {
+          "hz": 2636.7,
+          "prominenceDbVs31BinMean": 12.66
+        }
+      ],
+      "strongPresenceExcerptSecond": 0.085,
+      "loop": null,
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "draw",
+      "path": "assets/production/original-music-r1/championship_draw_r1.m4a",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 182400,
+      "sourceSamplePeakDbfs": -4.052,
+      "projectedSamplePeakAfterGainDbfs": -13.152,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -103.235,
+      "maxSourceAdjacentSampleStepDbfs": -28.232,
+      "sourceDerivativeP999Dbfs": -31.007,
+      "quiet20msRmsP05Dbfs": -132.689,
+      "max20msRmsDbfs": -13.954,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.1502923,
+        "250-2000": 0.8494573,
+        "2000-5000": 0.0002411,
+        "5000-10000": 0.0,
+        "10000-20000": 0.0
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2203.1,
+          "prominenceDbVs31BinMean": 12.27
+        },
+        {
+          "hz": 2191.4,
+          "prominenceDbVs31BinMean": 9.3
+        },
+        {
+          "hz": 2636.7,
+          "prominenceDbVs31BinMean": 12.63
+        },
+        {
+          "hz": 2648.4,
+          "prominenceDbVs31BinMean": 10.24
+        },
+        {
+          "hz": 2214.8,
+          "prominenceDbVs31BinMean": 3.03
+        }
+      ],
+      "strongPresenceExcerptSecond": 0.256,
+      "loop": null,
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "draw",
+      "path": "assets/production/original-music-r1/championship_draw_r1.ogg",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 182400,
+      "sourceSamplePeakDbfs": -4.048,
+      "projectedSamplePeakAfterGainDbfs": -13.148,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -111.395,
+      "maxSourceAdjacentSampleStepDbfs": -28.22,
+      "sourceDerivativeP999Dbfs": -30.993,
+      "quiet20msRmsP05Dbfs": -132.86,
+      "max20msRmsDbfs": -13.949,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.1505566,
+        "250-2000": 0.8491922,
+        "2000-5000": 0.0002432,
+        "5000-10000": 0.0,
+        "10000-20000": 0.0
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2203.1,
+          "prominenceDbVs31BinMean": 12.27
+        },
+        {
+          "hz": 2191.4,
+          "prominenceDbVs31BinMean": 9.33
+        },
+        {
+          "hz": 2636.7,
+          "prominenceDbVs31BinMean": 12.64
+        },
+        {
+          "hz": 2648.4,
+          "prominenceDbVs31BinMean": 10.24
+        },
+        {
+          "hz": 2214.8,
+          "prominenceDbVs31BinMean": 3.03
+        }
+      ],
+      "strongPresenceExcerptSecond": 0.256,
+      "loop": null,
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "victory",
+      "path": "assets/production/original-music-r1/championship_victory_r1.m4a",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 211200,
+      "sourceSamplePeakDbfs": -4.013,
+      "projectedSamplePeakAfterGainDbfs": -13.613,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -103.042,
+      "maxSourceAdjacentSampleStepDbfs": -24.065,
+      "sourceDerivativeP999Dbfs": -27.593,
+      "quiet20msRmsP05Dbfs": -300.0,
+      "max20msRmsDbfs": -12.95,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.0536016,
+        "250-2000": 0.9434827,
+        "2000-5000": 0.0029155,
+        "5000-10000": 0.0,
+        "10000-20000": 0.0
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2214.8,
+          "prominenceDbVs31BinMean": 10.82
+        },
+        {
+          "hz": 2226.6,
+          "prominenceDbVs31BinMean": 10.22
+        },
+        {
+          "hz": 2964.8,
+          "prominenceDbVs31BinMean": 11.26
+        },
+        {
+          "hz": 2953.1,
+          "prominenceDbVs31BinMean": 10.31
+        },
+        {
+          "hz": 2343.8,
+          "prominenceDbVs31BinMean": 4.43
+        }
+      ],
+      "strongPresenceExcerptSecond": 1.28,
+      "loop": null,
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "victory",
+      "path": "assets/production/original-music-r1/championship_victory_r1.ogg",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedSamplesPerChannel": 211200,
+      "sourceSamplePeakDbfs": -4.014,
+      "projectedSamplePeakAfterGainDbfs": -13.614,
+      "sourceOverZeroDbfsSamples": 0,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -102.947,
+      "maxSourceAdjacentSampleStepDbfs": -24.058,
+      "sourceDerivativeP999Dbfs": -27.59,
+      "quiet20msRmsP05Dbfs": -300.0,
+      "max20msRmsDbfs": -12.946,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.0536279,
+        "250-2000": 0.9434531,
+        "2000-5000": 0.0029187,
+        "5000-10000": 0.0,
+        "10000-20000": 0.0
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2214.8,
+          "prominenceDbVs31BinMean": 10.82
+        },
+        {
+          "hz": 2226.6,
+          "prominenceDbVs31BinMean": 10.22
+        },
+        {
+          "hz": 2964.8,
+          "prominenceDbVs31BinMean": 11.26
+        },
+        {
+          "hz": 2953.1,
+          "prominenceDbVs31BinMean": 10.31
+        },
+        {
+          "hz": 2343.8,
+          "prominenceDbVs31BinMean": 4.44
+        }
+      ],
+      "strongPresenceExcerptSecond": 1.28,
+      "loop": null,
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "federation_siege",
+      "path": "assets/production/scene-music-r1/battle/federation_siege.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 7603200,
+      "sourceSamplePeakDbfs": 1.29,
+      "projectedSamplePeakAfterGainDbfs": -10.21,
+      "sourceOverZeroDbfsSamples": 21,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -42.161,
+      "maxSourceAdjacentSampleStepDbfs": 3.468,
+      "sourceDerivativeP999Dbfs": -11.158,
+      "quiet20msRmsP05Dbfs": -26.583,
+      "max20msRmsDbfs": -9.299,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.724289,
+        "250-2000": 0.1874687,
+        "2000-5000": 0.0481338,
+        "5000-10000": 0.0243908,
+        "10000-20000": 0.010528
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2217.9,
+          "prominenceDbVs31BinMean": 4.6
+        },
+        {
+          "hz": 2228.7,
+          "prominenceDbVs31BinMean": 4.12
+        },
+        {
+          "hz": 2799.3,
+          "prominenceDbVs31BinMean": 4.05
+        },
+        {
+          "hz": 2497.9,
+          "prominenceDbVs31BinMean": 3.31
+        },
+        {
+          "hz": 2487.1,
+          "prominenceDbVs31BinMean": 3.17
+        }
+      ],
+      "strongPresenceExcerptSecond": 22.941,
+      "loop": {
+        "trimmedDecodedSeconds": 172.408163,
+        "nativeHardJoinJumpDbfs": -300.0,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -48.443,
+        "simulatedSeamPeakAfterGainDbfs": -17.906,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "unison_under_fire",
+      "path": "assets/production/scene-music-r1/battle/unison_under_fire.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 7411968,
+      "sourceSamplePeakDbfs": 0.903,
+      "projectedSamplePeakAfterGainDbfs": -10.797,
+      "sourceOverZeroDbfsSamples": 43,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -43.378,
+      "maxSourceAdjacentSampleStepDbfs": 2.949,
+      "sourceDerivativeP999Dbfs": -9.738,
+      "quiet20msRmsP05Dbfs": -33.712,
+      "max20msRmsDbfs": -8.231,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.7641477,
+        "250-2000": 0.1399997,
+        "2000-5000": 0.0490411,
+        "5000-10000": 0.0285361,
+        "10000-20000": 0.0138407
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2347.1,
+          "prominenceDbVs31BinMean": 5.96
+        },
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 4.99
+        },
+        {
+          "hz": 2336.4,
+          "prominenceDbVs31BinMean": 2.95
+        },
+        {
+          "hz": 2368.7,
+          "prominenceDbVs31BinMean": 1.74
+        },
+        {
+          "hz": 2487.1,
+          "prominenceDbVs31BinMean": 1.6
+        }
+      ],
+      "strongPresenceExcerptSecond": 46.254,
+      "loop": {
+        "trimmedDecodedSeconds": 168.071837,
+        "nativeHardJoinJumpDbfs": -300.0,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -40.179,
+        "simulatedSeamPeakAfterGainDbfs": -25.557,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "a_quiet_evening_training",
+      "path": "assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 5867136,
+      "sourceSamplePeakDbfs": 0.466,
+      "projectedSamplePeakAfterGainDbfs": -11.234,
+      "sourceOverZeroDbfsSamples": 21,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -45.899,
+      "maxSourceAdjacentSampleStepDbfs": -2.428,
+      "sourceDerivativeP999Dbfs": -13.3,
+      "quiet20msRmsP05Dbfs": -30.566,
+      "max20msRmsDbfs": -7.616,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.7133692,
+        "250-2000": 0.2415094,
+        "2000-5000": 0.0260402,
+        "5000-10000": 0.0122193,
+        "10000-20000": 0.0038841
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2347.1,
+          "prominenceDbVs31BinMean": 4.93
+        },
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 4.42
+        },
+        {
+          "hz": 2487.1,
+          "prominenceDbVs31BinMean": 3.97
+        },
+        {
+          "hz": 2799.3,
+          "prominenceDbVs31BinMean": 5.99
+        },
+        {
+          "hz": 2497.9,
+          "prominenceDbVs31BinMean": 3.92
+        }
+      ],
+      "strongPresenceExcerptSecond": 113.778,
+      "loop": {
+        "trimmedDecodedSeconds": 133.041633,
+        "nativeHardJoinJumpDbfs": -110.048,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -69.379,
+        "simulatedSeamPeakAfterGainDbfs": -29.38,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "inferno_overdrive",
+      "path": "assets/production/scene-music-r1/battle/inferno_overdrive.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 4093056,
+      "sourceSamplePeakDbfs": 1.044,
+      "projectedSamplePeakAfterGainDbfs": -9.656,
+      "sourceOverZeroDbfsSamples": 7,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -41.841,
+      "maxSourceAdjacentSampleStepDbfs": 0.207,
+      "sourceDerivativeP999Dbfs": -13.184,
+      "quiet20msRmsP05Dbfs": -23.867,
+      "max20msRmsDbfs": -7.657,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.8442378,
+        "250-2000": 0.1067408,
+        "2000-5000": 0.0252327,
+        "5000-10000": 0.0132146,
+        "10000-20000": 0.0048626
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2347.1,
+          "prominenceDbVs31BinMean": 4.69
+        },
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 4.53
+        },
+        {
+          "hz": 2368.7,
+          "prominenceDbVs31BinMean": 3.67
+        },
+        {
+          "hz": 2099.5,
+          "prominenceDbVs31BinMean": 3.5
+        },
+        {
+          "hz": 2336.4,
+          "prominenceDbVs31BinMean": 2.47
+        }
+      ],
+      "strongPresenceExcerptSecond": 30.557,
+      "loop": {
+        "trimmedDecodedSeconds": 92.813061,
+        "nativeHardJoinJumpDbfs": -300.0,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -59.367,
+        "simulatedSeamPeakAfterGainDbfs": -17.16,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "mirage_of_the_arena",
+      "path": "assets/production/scene-music-r1/battle/mirage_of_the_arena.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 3669120,
+      "sourceSamplePeakDbfs": 0.225,
+      "projectedSamplePeakAfterGainDbfs": -11.375,
+      "sourceOverZeroDbfsSamples": 9,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -42.881,
+      "maxSourceAdjacentSampleStepDbfs": 0.318,
+      "sourceDerivativeP999Dbfs": -12.767,
+      "quiet20msRmsP05Dbfs": -36.07,
+      "max20msRmsDbfs": -7.354,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.7275786,
+        "250-2000": 0.1865234,
+        "2000-5000": 0.0633099,
+        "5000-10000": 0.0138351,
+        "10000-20000": 0.0041038
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2099.5,
+          "prominenceDbVs31BinMean": 5.46
+        },
+        {
+          "hz": 2088.7,
+          "prominenceDbVs31BinMean": 5.29
+        },
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 4.81
+        },
+        {
+          "hz": 2347.1,
+          "prominenceDbVs31BinMean": 4.61
+        },
+        {
+          "hz": 2110.3,
+          "prominenceDbVs31BinMean": 3.96
+        }
+      ],
+      "strongPresenceExcerptSecond": 42.446,
+      "loop": {
+        "trimmedDecodedSeconds": 83.2,
+        "nativeHardJoinJumpDbfs": -183.119,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -48.295,
+        "simulatedSeamPeakAfterGainDbfs": -18.755,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "south_pole_siege",
+      "path": "assets/production/scene-music-r1/battle/south_pole_siege.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 3177216,
+      "sourceSamplePeakDbfs": 0.401,
+      "projectedSamplePeakAfterGainDbfs": -11.299,
+      "sourceOverZeroDbfsSamples": 2,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -43.499,
+      "maxSourceAdjacentSampleStepDbfs": -1.741,
+      "sourceDerivativeP999Dbfs": -11.681,
+      "quiet20msRmsP05Dbfs": -32.079,
+      "max20msRmsDbfs": -8.977,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.7616168,
+        "250-2000": 0.1562421,
+        "2000-5000": 0.0424964,
+        "5000-10000": 0.0241092,
+        "10000-20000": 0.0112185
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2487.1,
+          "prominenceDbVs31BinMean": 8.01
+        },
+        {
+          "hz": 2497.9,
+          "prominenceDbVs31BinMean": 7.08
+        },
+        {
+          "hz": 2217.9,
+          "prominenceDbVs31BinMean": 6.81
+        },
+        {
+          "hz": 2476.3,
+          "prominenceDbVs31BinMean": 4.79
+        },
+        {
+          "hz": 2228.7,
+          "prominenceDbVs31BinMean": 4.96
+        }
+      ],
+      "strongPresenceExcerptSecond": 50.712,
+      "loop": {
+        "trimmedDecodedSeconds": 72.045714,
+        "nativeHardJoinJumpDbfs": -300.0,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -52.037,
+        "simulatedSeamPeakAfterGainDbfs": -18.121,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "titan_s_final_strike",
+      "path": "assets/production/scene-music-r1/battle/titan_s_final_strike.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 6691968,
+      "sourceSamplePeakDbfs": 0.176,
+      "projectedSamplePeakAfterGainDbfs": -11.524,
+      "sourceOverZeroDbfsSamples": 5,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -42.774,
+      "maxSourceAdjacentSampleStepDbfs": 0.717,
+      "sourceDerivativeP999Dbfs": -11.047,
+      "quiet20msRmsP05Dbfs": -30.914,
+      "max20msRmsDbfs": -8.687,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.7634514,
+        "250-2000": 0.1383431,
+        "2000-5000": 0.0472572,
+        "5000-10000": 0.0310136,
+        "10000-20000": 0.0147337
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2487.1,
+          "prominenceDbVs31BinMean": 4.83
+        },
+        {
+          "hz": 2217.9,
+          "prominenceDbVs31BinMean": 4.67
+        },
+        {
+          "hz": 2497.9,
+          "prominenceDbVs31BinMean": 4.17
+        },
+        {
+          "hz": 2799.3,
+          "prominenceDbVs31BinMean": 4.74
+        },
+        {
+          "hz": 2476.3,
+          "prominenceDbVs31BinMean": 3.1
+        }
+      ],
+      "strongPresenceExcerptSecond": 76.719,
+      "loop": {
+        "trimmedDecodedSeconds": 151.745306,
+        "nativeHardJoinJumpDbfs": -123.968,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -75.529,
+        "simulatedSeamPeakAfterGainDbfs": -44.843,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "clash_at_the_emerald_edge",
+      "path": "assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 5657472,
+      "sourceSamplePeakDbfs": 0.357,
+      "projectedSamplePeakAfterGainDbfs": -12.143,
+      "sourceOverZeroDbfsSamples": 15,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -44.908,
+      "maxSourceAdjacentSampleStepDbfs": -1.138,
+      "sourceDerivativeP999Dbfs": -11.003,
+      "quiet20msRmsP05Dbfs": -25.732,
+      "max20msRmsDbfs": -8.913,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.6307966,
+        "250-2000": 0.249878,
+        "2000-5000": 0.0694735,
+        "5000-10000": 0.0349842,
+        "10000-20000": 0.0119134
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2099.5,
+          "prominenceDbVs31BinMean": 7.37
+        },
+        {
+          "hz": 2088.7,
+          "prominenceDbVs31BinMean": 7.23
+        },
+        {
+          "hz": 2347.1,
+          "prominenceDbVs31BinMean": 5.8
+        },
+        {
+          "hz": 2487.1,
+          "prominenceDbVs31BinMean": 5.44
+        },
+        {
+          "hz": 2357.9,
+          "prominenceDbVs31BinMean": 4.99
+        }
+      ],
+      "strongPresenceExcerptSecond": 100.96,
+      "loop": {
+        "trimmedDecodedSeconds": 128.287347,
+        "nativeHardJoinJumpDbfs": -300.0,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -45.894,
+        "simulatedSeamPeakAfterGainDbfs": -13.437,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    },
+    {
+      "id": "magma_breach",
+      "path": "assets/production/scene-music-r1/battle/magma_breach.mp3",
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedSamplesPerChannel": 5603328,
+      "sourceSamplePeakDbfs": 0.575,
+      "projectedSamplePeakAfterGainDbfs": -11.825,
+      "sourceOverZeroDbfsSamples": 14,
+      "nearRailFlatRunSamplesPerChannel": [
+        0,
+        0
+      ],
+      "dcOffsetDbfs": -44.183,
+      "maxSourceAdjacentSampleStepDbfs": -0.464,
+      "sourceDerivativeP999Dbfs": -11.497,
+      "quiet20msRmsP05Dbfs": -30.656,
+      "max20msRmsDbfs": -8.873,
+      "spectralEnergyShareNativeMono": {
+        "20-250": 0.6862441,
+        "250-2000": 0.1859672,
+        "2000-5000": 0.0868856,
+        "5000-10000": 0.0273079,
+        "10000-20000": 0.009657
+      },
+      "strongPresenceBins": [
+        {
+          "hz": 2239.5,
+          "prominenceDbVs31BinMean": 3.4
+        },
+        {
+          "hz": 2228.7,
+          "prominenceDbVs31BinMean": 3.18
+        },
+        {
+          "hz": 2002.6,
+          "prominenceDbVs31BinMean": 1.53
+        },
+        {
+          "hz": 2487.1,
+          "prominenceDbVs31BinMean": 3.65
+        },
+        {
+          "hz": 2476.3,
+          "prominenceDbVs31BinMean": 3.39
+        }
+      ],
+      "strongPresenceExcerptSecond": 44.582,
+      "loop": {
+        "trimmedDecodedSeconds": 127.059592,
+        "nativeHardJoinJumpDbfs": -300.0,
+        "crossfadeSeconds": 0.8,
+        "simulatedBoundaryStepAfterGainDbfs": -52.014,
+        "simulatedSeamPeakAfterGainDbfs": -19.477,
+        "simulation": "Linear 0.8s ramps at exact trim points; not a captured browser render. Native loop when crossfade=0. Jitter/codec buffering need real-browser/device listening."
+      },
+      "decodeError": null,
+      "listeningCompleted": false,
+      "noiseAssessment": "Unknown: musical tails, intentional distortion and noise textures cannot be separated from unwanted noise by these statistics.",
+      "eqDecision": "No automatic EQ or denoise from energy/tonality alone. Retain original until matched-level listening identifies a specific defect."
+    }
+  ]
+}

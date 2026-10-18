@@ -8,12 +8,12 @@ import {resolveSceneMusic} from '../src/championship/presentation/sceneMusicCata
 import {normalizePreferences} from '../src/championship/app/settings/preferenceSchema.js';
 
 class Events {visibilityState='visible';listeners=new Map();addEventListener(t,f){this.listeners.set(t,[...(this.listeners.get(t)??[]),f]);}removeEventListener(t,f){this.listeners.set(t,(this.listeners.get(t)??[]).filter(x=>x!==f));}emit(t){for(const f of this.listeners.get(t)??[])f({isTrusted:true});}}
-const param=()=>({value:0,cancelScheduledValues(){},setValueAtTime(v){this.value=v;},linearRampToValueAtTime(v){this.value=v;},setTargetAtTime(v){this.value=v;}});
+const param=()=>({value:0,events:[],cancelScheduledValues(){},setValueAtTime(v,t){this.value=v;this.events.push(['set',v,t]);},linearRampToValueAtTime(v,t){this.value=v;this.events.push(['ramp',v,t]);},setTargetAtTime(v){this.value=v;}});
 const node=()=>({gain:param(),connect(){},disconnect(){}});
 const settle=async()=>{for(let n=0;n<5;n++)await Promise.resolve();};
 function fixture(){
  const doc=new Events(),win=new Events(),media=[],contexts=[];
- class Context {state='running';sampleRate=48000;currentTime=0;destination={};resumes=0;constructor(){contexts.push(this);}createGain(){return node();}createMediaElementSource(){return node();}resume(){this.resumes++;this.state='running';return Promise.resolve();}close(){return Promise.resolve();}}
+ class Context {state='running';sampleRate=48000;currentTime=0;destination={};resumes=0;gainNodes=[];constructor(){contexts.push(this);}createGain(){const n=node();this.gainNodes.push(n);return n;}createMediaElementSource(){return node();}resume(){this.resumes++;this.state='running';return Promise.resolve();}close(){return Promise.resolve();}}
  class Media {paused=true;currentTime=0;duration=133;src='';preservesPitch=true;webkitPreservesPitch=true;plays=0;constructor(){media.push(this);}load(){}removeAttribute(){this.src='';}pause(){this.paused=true;}play(){this.plays++;this.paused=false;return Promise.resolve();}}
  const bus=createAudioBus({AudioContextClass:Context,eventTarget:doc,levels:{masterVolume:80,musicVolume:40}});
  const music=createMusicPresentation({bus,cues:ORIGINAL_MUSIC_CUES,doc,win,AudioClass:Media,baseUrl:'https://example.test/',resolveCue:(id,scene)=>resolveSceneMusic(id,scene,{})});
@@ -55,6 +55,18 @@ test('repeated background/page cache returns keep rate, pitch, gains, context an
 test('visible interrupted graph resumes even when native media still reports playing',async()=>{
  const f=fixture();f.music.setScene('login');f.doc.emit('pointerdown');await settle();const a=f.media[0],context=f.contexts[0],plays=a.plays;
  context.state='interrupted';f.win.emit('pageshow');await settle();assert.equal(context.state,'running');assert.equal(a.plays,plays);assert.equal(f.music.inspect().voices,1);f.dispose();
+});
+
+test('paused and interrupted returns ramp from zero over 20ms without seeking or restarting a running media source',async()=>{
+ const f=fixture();f.music.setScene('login');f.doc.emit('pointerdown');await settle();
+ const a=f.media[0],context=f.contexts[0],amp=context.gainNodes.at(-1).gain;
+ a.currentTime=17;f.win.emit('pagehide');amp.events=[];f.win.emit('pageshow');
+ assert.equal(amp.value,0,'paused media never resumes at full cue gain');await settle();
+ assert.equal(a.currentTime,17);assert.deepEqual(amp.events.at(-1),['ramp',10**(ORIGINAL_MUSIC_CUES.login.gainDb/20),.02]);
+ const plays=a.plays;context.state='interrupted';amp.events=[];f.win.emit('pageshow');await settle();
+ assert.equal(a.plays,plays,'a running source is not restarted');assert.equal(a.currentTime,17);
+ assert.ok(amp.events.some(e=>e[0]==='set'&&e[1]===0));assert.deepEqual(amp.events.at(-1),['ramp',10**(ORIGINAL_MUSIC_CUES.login.gainDb/20),.02]);
+ assert.equal(f.contexts.length,1);assert.equal(f.media.length,1);f.dispose();
 });
 test('every measured encoding retains headroom and looping cues have matched projected loudness',()=>{
  const report=JSON.parse(fs.readFileSync(new URL('../docs/reports/music-repair-2026-10-18/MEASUREMENTS.json',import.meta.url),'utf8'));
