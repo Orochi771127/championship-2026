@@ -13,7 +13,7 @@ const sha=b=>createHash('sha256').update(b).digest('hex');
 test('four confirmed revisions preserve the previous184 selected images',()=>{
  assert.deepEqual(manifest.entries.map(e=>e.speciesIndex),[126,169,170,173]);
  assert.ok(manifest.entries.every(e=>e.approval.status==='owner_approved'));
- const prior=registry.entries.filter(e=>![126,169,170,173].includes(e.speciesIndex));
+ const prior=registry.entries.filter(e=>![126,140,169,170,171,172,173].includes(e.speciesIndex));
  assert.equal(prior.length,184);assert.equal(sha(Buffer.from(JSON.stringify(prior))),manifest.priorEntriesSha256);
  const masters={"126": "60b176f6c4ef2e3314c3bd1435b59b90dfd0a2967a748f3724b80448ba419641", "169": "8e194fcfd408e80ac502b2c74ae8f5414feebba6d930a9056c94d2448daf2b74", "170": "eb0da79b79cb49a495f915868883ae4c8881fa34182c79596f906ed243089d5d", "173": "f4c30e15489143da8826c107577592cc11f46446b43f41286a4f5d853f9ab65f"};
  for(const row of manifest.entries){

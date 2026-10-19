@@ -6,6 +6,7 @@ import {isPrivateRepositoryPath} from './public-art-boundary.mjs';
 import {assertPagesModuleClosure} from './pages-module-closure.mjs';
 import {compileBrowserBundle,bundledBrowserHtml,compiledPublicArtifactPlan} from './browser-bundle.mjs';
 import {publicArtifactPlan,assertPublicBytes,assertPublicArtifact,PUBLIC_RUNTIME_INDEX_PATH} from './public-runtime-boundary.mjs';
+import {encodePublicBuildManifest,decodeBuildManifest} from './build-manifest-codec.mjs';
 export const INTERNAL_TARGET='LOCAL_INTERNAL_REVIEW';
 export const PUBLIC_TARGET='GITHUB_PAGES_STATIC';
 export const PLAYTEST_TARGET='GITHUB_PAGES_OWNER_PLAYTEST';
@@ -93,16 +94,15 @@ export function buildWebArtifact({root,output,target}){
     ...(playtest?{publicPlaytest:{ownerApproved:true,policyId:audit.input.publicPlaytest.policyId,
       rightsDocumentVerified:false,commercialReleaseAccepted:false,fullOriginalParityAccepted:false}}:{}),
     fileCount:rows.length+1,files:rows,saveStorage:'BROWSER_LOCAL_STORAGE'};
-  // The public diagnostic receipt retains every field/hash without indentation.
-  // Save site bytes here instead of reducing approved image quality.
-  fs.writeFileSync(path.join(out,manifestName(target)),JSON.stringify(manifest,null,internal?2:undefined)+'\n');
+  // Lossless receipt compression only: every published runtime byte is unchanged.
+  fs.writeFileSync(path.join(out,manifestName(target)),JSON.stringify(internal?manifest:encodePublicBuildManifest(manifest),null,internal?2:undefined)+'\n');
   if(!internal)assertPublicArtifact({root:out,files:collectArtifactFiles(out),plan:publication});
   return {root:out,manifest};
 }
 export function validateWebArtifact({root,output,target}){
   const out=checkedOutput(root,output,target),name=manifestName(target),internal=target===INTERNAL_TARGET,playtest=target===PLAYTEST_TARGET;
-  const m=JSON.parse(fs.readFileSync(path.join(out,name),'utf8'));
-  if(m.schemaVersion!==2||m.target!==target||m.publicReleasePermitted!==!internal||m.loopbackOnly!==internal
+  const m=decodeBuildManifest(JSON.parse(fs.readFileSync(path.join(out,name),'utf8')));
+  if(![2,3].includes(m.schemaVersion)||(internal&&m.schemaVersion!==2)||m.target!==target||m.publicReleasePermitted!==!internal||m.loopbackOnly!==internal
     ||m.release?.approved!==(!internal&&!playtest)||m.sourcePayloadIncluded!==false||!Array.isArray(m.files))throw Error('BUILD_BOUNDARY_INVALID');
   if(playtest&&(m.publicPlaytest?.ownerApproved!==true||m.publicPlaytest.rightsDocumentVerified!==false
     ||m.publicPlaytest.commercialReleaseAccepted!==false||m.publicPlaytest.fullOriginalParityAccepted!==false))throw Error('PLAYTEST_BOUNDARY_INVALID');

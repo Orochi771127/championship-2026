@@ -35,7 +35,7 @@ test('the nine explicitly approved equipped versions use their own identity and 
   assert.deepEqual(equipped.entries.map(e=>e.speciesIndex),[142,143,145,149,151,155,156,158,183]);
   assert.equal(equipped.approval.status,'owner_approved');
   assert.match(equipped.approval.evidence,/確認，9 張持裝圖都採用並整合/);
-  assert.equal(registry.entries.length,188);
+  assert.equal(registry.entries.length,191);
   try{for(const row of equipped.entries){
     assert.match(row.master.path,/equipped_hero/);
     for(const media of [row.display,row.thumbnail]){

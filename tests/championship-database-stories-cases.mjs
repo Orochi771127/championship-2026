@@ -20,7 +20,7 @@ const critical=({styleBatch,...value})=>value;
 import publicHeroes from '../src/data/championship/database-hero-portraits.public.v1.json' with {type:'json'};
 import approvedGap from '../docs/art/production/characters/approved-dex-gap-20261018/manifest.json' with {type:'json'};
 import approvedRepair from '../docs/art/production/characters/approved-dex-repair-20261019/manifest.json' with {type:'json'};
-const gapApprovedIds=new Set([...approvedGap.entries,...approvedRepair.entries,...[126,169,170,173,201,202].map(speciesIndex=>({speciesIndex}))].map(row=>row.speciesIndex));
+const gapApprovedIds=new Set([...approvedGap.entries,...approvedRepair.entries,...[126,140,169,170,171,172,173,201,202].map(speciesIndex=>({speciesIndex}))].map(row=>row.speciesIndex));
 import replacement215 from '../docs/art/production/characters/approved-dex-215-20261018/manifest.json' with {type:'json'};
 import replacementFlowers from '../docs/art/production/characters/approved-dex-054-059-20261018/manifest.json' with {type:'json'};
 // Preserve historical approvals by comparing their superseded rows; latest bindings have independent tests.
@@ -150,9 +150,9 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('188 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('191 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,188);
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,191);
  for(const e of art.entries){const id=(e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|(?:closeout|repair)-20261019)\/species-\d{3}\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,20,187,'8',NaN])assert.equal(get(id),null);
 });
@@ -231,7 +231,7 @@ test('confirmed ultimate heroes are present with exact PNG bytes and selected so
  const {DATABASE_HERO_PORTRAITS:art}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- assert.equal(art.entries.length,188);assert.equal(manifest.count,44);
+ assert.equal(art.entries.length,191);assert.equal(manifest.count,44);
  for(const [sp,version,form] of [[211,'v1','OWNER_CONFIRMED_BRASS_CROWN_MANDRILL'],[222,'v2','R10_QUADRUPED_LEFT_PANEL']]){
   const entry=approvedHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(metadata.selectedSourceForm,form);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }

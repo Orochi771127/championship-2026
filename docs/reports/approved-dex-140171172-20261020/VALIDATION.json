@@ -1,0 +1,50 @@
+{
+  "status": "LOCAL_PASS",
+  "baseCommit": "84a537240db5f97ea16801838893749908cce186",
+  "added": [
+    140,
+    171,
+    172
+  ],
+  "totalPortraits": 191,
+  "remaining": 28,
+  "ci": {
+    "total": 2712,
+    "initialPass": 2711,
+    "initialFailure": "Historical test still required140 to have no image. Updated only that expectation after recovered approval.",
+    "affectedModuleRecheck": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    "receiptCodecAndBuildRecheck": {
+      "tests": 13,
+      "pass": 13,
+      "fail": 0
+    }
+  },
+  "build": {
+    "schemaVersion": 3,
+    "roundtripRows": 7874,
+    "fileCount": 7875,
+    "actualArtifactBytes": 999647925,
+    "remainingBytes": 352075,
+    "receiptBytes": 908937,
+    "previousAssetRowsByteIdentical": 7734,
+    "buildId": "0614409a0579cf4f5aa95069c4c4c2424cda6a7afae08a9ce72d5a4172d966b2"
+  },
+  "browser": {
+    "status": "PASS_AUTOMATED_NORMAL_UI_HASH_AND_LAYOUT",
+    "hosted": false,
+    "checks": 72,
+    "imageRoleResponses": 72,
+    "pageErrors": [],
+    "networkErrors": [],
+    "registrationBefore": [],
+    "registrationAfter": [],
+    "visualReview": "PASS_NEW_THREE_LIGHT_DARK_CSS272_AND_PHONE",
+    "physicalDeviceAcceptance": false
+  },
+  "publication": "NOT_YET_PUSHED",
+  "independentArtifactValidation": "PASS"
+}

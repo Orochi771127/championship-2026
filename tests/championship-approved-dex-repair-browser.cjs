@@ -12,6 +12,7 @@ const manifest=JSON.parse(fs.readFileSync(process.env.DEX_REPAIR_MANIFEST||'docs
 
 if(!process.env.DEX_REPAIR_MANIFEST)manifest.entries.push(...JSON.parse(fs.readFileSync('docs/art/production/characters/approved-equipped-201202-20261019/manifest.json','utf8')).entries);
 if(!process.env.DEX_REPAIR_MANIFEST)manifest.entries.push(...JSON.parse(fs.readFileSync('docs/art/production/characters/confirmed-dex-next-four-20261019/manifest.json','utf8')).entries);
+if(!process.env.DEX_REPAIR_MANIFEST)manifest.entries.push(...JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-140171172-20261020/manifest.json','utf8')).entries);
 const registryPath='src/data/championship/database-hero-portraits.public.v1.json';
 const registryBytes=fs.readFileSync(fs.existsSync(path.join(root,registryPath))?path.join(root,registryPath):registryPath);
 const registry=JSON.parse(registryBytes);
@@ -23,7 +24,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
 async function main(){let browser,context,server,page;const jobs=[];
  try{
   const policy=await import('../src/championship/app/friendsPlaytestPolicy.js');assert.equal(policy.FRIENDS_PLAYTEST_POLICY.fullDexView,true);
-  assert.equal(registry.entries.length,Number(process.env.DEX_REPAIR_REGISTRY_COUNT||188));
+  assert.equal(registry.entries.length,Number(process.env.DEX_REPAIR_REGISTRY_COUNT||191));
   report.registrySha256=sha(registryBytes);
   report.build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8')).buildId;
   browser=await chromium.launch({executablePath:process.env.DEX_REPAIR_CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,chromiumSandbox:true});

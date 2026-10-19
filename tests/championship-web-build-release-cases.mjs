@@ -157,6 +157,11 @@ test('public candidate validates actual file bytes and rejects added or stale as
   const f=fixture(t),output=path.join(f.root,'dist/public');
   buildWebArtifact({root:f.root,output,target:PUBLIC_TARGET});
   assert.equal(validateWebArtifact({root:f.root,output,target:PUBLIC_TARGET}).release.approved,true);
+  const receiptPath=path.join(output,'pages-build.json'),receiptBytes=fs.readFileSync(receiptPath);
+  const compressed=JSON.parse(receiptBytes);assert.equal(compressed.schemaVersion,3);
+  compressed.fileTable.rows[0][2]='0'.repeat(64);fs.writeFileSync(receiptPath,JSON.stringify(compressed));
+  assert.throws(()=>validateWebArtifact({root:f.root,output,target:PUBLIC_TARGET}),/BUILD_HASH_MISMATCH/);
+  fs.writeFileSync(receiptPath,receiptBytes);
   assert.equal(fs.existsSync(path.join(output,ART_INDEX_PATH)),false,'Release uses the same private-data boundary as playtest');
   fs.writeFileSync(path.join(output,'extra.png'),'extra');
   assert.throws(()=>validateWebArtifact({root:f.root,output,target:PUBLIC_TARGET}),/BUILD_FILE_LIST_MISMATCH/);
