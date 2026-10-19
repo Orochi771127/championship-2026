@@ -28,7 +28,7 @@ const FIELDS=Object.freeze([
  // The same goal net over the polish review's re-lit CM02 frame.
  {fieldId:'field_cm02_01',localManifest:'assets/production/cage/cm02-goal-foreground-polish-20261019/manifest.json',stencilOnly:true,
   prefix:'assets/production/cage/cm02-goal-foreground-polish-20261019/',width:768,height:800,assetIds:[POLISH_CAGE_ASSET],
-  sourceHash:'56a6669be47214486554591840a11c072eae6e0a659c639cd1638913b74b2c77',
+  sourceHash:'b7760c89fb6c33104dbc39da104f48b5038b99e2592b74e191b5f1c4596a28d2',
   masterHash:'469b1a6f6d261938e19dba0f335dffcfdc245f4903bb26a4de4e766c3aa0ebe2',
   depthAuthority:'GOAL_FOOTPRINT_FRONT_EDGE_MASTER_PROJECTION'}
 ]);

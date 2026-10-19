@@ -38,14 +38,14 @@
  "fields": [
   {
    "fieldId": "field_cm02_01",
-   "sourceHash": "56a6669be47214486554591840a11c072eae6e0a659c639cd1638913b74b2c77",
+   "sourceHash": "b7760c89fb6c33104dbc39da104f48b5038b99e2592b74e191b5f1c4596a28d2",
    "raster": [
     832,
     864
    ],
    "atlas": {
     "src": "assets/production/cage/shared-edges-polish-20261019/field_cm02_01-edges.webp",
-    "sha256": "0a2052b5f2e40c677738793006a8ba4c03d773f3f7a0153c6422cb9abe9c9059",
+    "sha256": "89cd626aaf51433efc878f4dfe92dbd096d25f979ee4fc4114ab835fd757c11b",
     "width": 1024,
     "height": 365
    },
@@ -64,7 +64,7 @@
      "y": 29,
      "width": 196,
      "height": 102,
-     "pixels": 765,
+     "pixels": 668,
      "atlasX": 450,
      "atlasY": 0
     },
@@ -82,7 +82,7 @@
      "y": 30,
      "width": 196,
      "height": 99,
-     "pixels": 788,
+     "pixels": 821,
      "atlasX": 398,
      "atlasY": 264
     },
@@ -100,7 +100,7 @@
      "y": 29,
      "width": 200,
      "height": 99,
-     "pixels": 797,
+     "pixels": 819,
      "atlasX": 596,
      "atlasY": 264
     },
@@ -115,10 +115,10 @@
       126.1
      ],
      "x": 605,
-     "y": 29,
+     "y": 28,
      "width": 199,
-     "height": 101,
-     "pixels": 753,
+     "height": 102,
+     "pixels": 774,
      "atlasX": 648,
      "atlasY": 0
     },
@@ -136,7 +136,7 @@
      "y": 125,
      "width": 7,
      "height": 261,
-     "pixels": 1040,
+     "pixels": 1099,
      "atlasX": 8,
      "atlasY": 0
     },
@@ -151,11 +151,11 @@
       384.81
      ],
      "x": 607,
-     "y": 383,
+     "y": 382,
      "width": 197,
-     "height": 100,
-     "pixels": 1750,
-     "atlasX": 199,
+     "height": 101,
+     "pixels": 1748,
+     "atlasX": 0,
      "atlasY": 264
     },
     {
@@ -190,7 +190,7 @@
      "y": 734,
      "width": 202,
      "height": 105,
-     "pixels": 1752,
+     "pixels": 1783,
      "atlasX": 43,
      "atlasY": 0
     },
@@ -208,7 +208,7 @@
      "y": 734,
      "width": 201,
      "height": 105,
-     "pixels": 1814,
+     "pixels": 1833,
      "atlasX": 247,
      "atlasY": 0
     },
@@ -244,8 +244,8 @@
      "y": 382,
      "width": 197,
      "height": 101,
-     "pixels": 1751,
-     "atlasX": 0,
+     "pixels": 1662,
+     "atlasX": 199,
      "atlasY": 264
     },
     {
@@ -262,7 +262,7 @@
      "y": 124,
      "width": 6,
      "height": 262,
-     "pixels": 1193,
+     "pixels": 1282,
      "atlasX": 0,
      "atlasY": 0
     }
@@ -270,15 +270,15 @@
   },
   {
    "fieldId": "field_cm30_01",
-   "sourceHash": "a29af061b90f2c1212e449e6e160303c76753da8989e0e3f9a12def87c91abf1",
+   "sourceHash": "161442aea55535f86eafd942fcc125f11683e138396a0aa66176a0034711b048",
    "raster": [
     448,
     512
    ],
    "atlas": {
     "src": "assets/production/cage/shared-edges-polish-20261019/field_cm30_01-edges.webp",
-    "sha256": "96c8a3e55a57d18b984251c8582c6965332e72101eb12c67ee0950ea7c0defd9",
-    "width": 828,
+    "sha256": "348c07879e93f66349259ad15ea16ac484ffe472778b9ac19f866b21c96fc33e",
+    "width": 829,
     "height": 270
    },
    "edges": [
@@ -296,7 +296,7 @@
      "y": 26,
      "width": 200,
      "height": 103,
-     "pixels": 759,
+     "pixels": 813,
      "atlasX": 223,
      "atlasY": 0
     },
@@ -313,9 +313,9 @@
      "x": 223,
      "y": 26,
      "width": 198,
-     "height": 101,
-     "pixels": 756,
-     "atlasX": 628,
+     "height": 103,
+     "pixels": 814,
+     "atlasX": 425,
      "atlasY": 0
     },
     {
@@ -332,7 +332,7 @@
      "y": 124,
      "width": 6,
      "height": 270,
-     "pixels": 1177,
+     "pixels": 1224,
      "atlasX": 0,
      "atlasY": 0
     },
@@ -350,7 +350,7 @@
      "y": 383,
      "width": 205,
      "height": 110,
-     "pixels": 1801,
+     "pixels": 1836,
      "atlasX": 16,
      "atlasY": 0
     },
@@ -366,10 +366,10 @@
      ],
      "x": 25,
      "y": 385,
-     "width": 201,
+     "width": 202,
      "height": 103,
-     "pixels": 1818,
-     "atlasX": 425,
+     "pixels": 1837,
+     "atlasX": 625,
      "atlasY": 0
     },
     {
@@ -386,7 +386,7 @@
      "y": 123,
      "width": 6,
      "height": 266,
-     "pixels": 1207,
+     "pixels": 1210,
      "atlasX": 8,
      "atlasY": 0
     }
