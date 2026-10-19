@@ -38,16 +38,16 @@
  "fields": [
   {
    "fieldId": "field_cm02_01",
-   "sourceHash": "f46ab00764f67d336ad96884bf9bb5b51e6856f09752d698ea6c23e992771ab1",
+   "sourceHash": "56a6669be47214486554591840a11c072eae6e0a659c639cd1638913b74b2c77",
    "raster": [
     832,
     864
    ],
    "atlas": {
     "src": "assets/production/cage/shared-edges-polish-20261019/field_cm02_01-edges.webp",
-    "sha256": "a9141e50191d08798d744c3b6058625a6f6abf0f9330dfd0ad239f8838cc51dd",
+    "sha256": "0a2052b5f2e40c677738793006a8ba4c03d773f3f7a0153c6422cb9abe9c9059",
     "width": 1024,
-    "height": 362
+    "height": 365
    },
    "edges": [
     {
@@ -60,13 +60,13 @@
       222.63,
       29.8
      ],
-     "x": 30,
-     "y": 31,
-     "width": 194,
-     "height": 99,
-     "pixels": 428,
-     "atlasX": 0,
-     "atlasY": 263
+     "x": 28,
+     "y": 29,
+     "width": 196,
+     "height": 102,
+     "pixels": 765,
+     "atlasX": 450,
+     "atlasY": 0
     },
     {
      "id": "flush-porcelain-joint.001",
@@ -79,12 +79,12 @@
       29.8
      ],
      "x": 222,
-     "y": 31,
+     "y": 30,
      "width": 196,
-     "height": 98,
-     "pixels": 538,
-     "atlasX": 196,
-     "atlasY": 263
+     "height": 99,
+     "pixels": 788,
+     "atlasX": 398,
+     "atlasY": 264
     },
     {
      "id": "flush-porcelain-joint.002",
@@ -97,12 +97,12 @@
       126.1
      ],
      "x": 413,
-     "y": 31,
-     "width": 198,
-     "height": 97,
-     "pixels": 544,
-     "atlasX": 593,
-     "atlasY": 263
+     "y": 29,
+     "width": 200,
+     "height": 99,
+     "pixels": 797,
+     "atlasX": 596,
+     "atlasY": 264
     },
     {
      "id": "flush-porcelain-joint.003",
@@ -115,12 +115,12 @@
       126.1
      ],
      "x": 605,
-     "y": 31,
-     "width": 197,
-     "height": 98,
-     "pixels": 411,
-     "atlasX": 394,
-     "atlasY": 263
+     "y": 29,
+     "width": 199,
+     "height": 101,
+     "pixels": 753,
+     "atlasX": 648,
+     "atlasY": 0
     },
     {
      "id": "flush-porcelain-joint.004",
@@ -134,10 +134,10 @@
      ],
      "x": 797,
      "y": 125,
-     "width": 6,
-     "height": 260,
-     "pixels": 536,
-     "atlasX": 26,
+     "width": 7,
+     "height": 261,
+     "pixels": 1040,
+     "atlasX": 8,
      "atlasY": 0
     },
     {
@@ -152,11 +152,11 @@
      ],
      "x": 607,
      "y": 383,
-     "width": 195,
+     "width": 197,
      "height": 100,
-     "pixels": 1735,
-     "atlasX": 642,
-     "atlasY": 0
+     "pixels": 1750,
+     "atlasX": 199,
+     "atlasY": 264
     },
     {
      "id": "flush-porcelain-joint.006",
@@ -172,8 +172,8 @@
      "y": 478,
      "width": 11,
      "height": 261,
-     "pixels": 851,
-     "atlasX": 0,
+     "pixels": 1096,
+     "atlasX": 17,
      "atlasY": 0
     },
     {
@@ -187,11 +187,11 @@
       737.9
      ],
      "x": 410,
-     "y": 735,
-     "width": 200,
-     "height": 104,
-     "pixels": 1745,
-     "atlasX": 41,
+     "y": 734,
+     "width": 202,
+     "height": 105,
+     "pixels": 1752,
+     "atlasX": 43,
      "atlasY": 0
     },
     {
@@ -204,12 +204,12 @@
       222.63,
       737.9
      ],
-     "x": 222,
-     "y": 735,
-     "width": 200,
-     "height": 104,
-     "pixels": 1823,
-     "atlasX": 243,
+     "x": 221,
+     "y": 734,
+     "width": 201,
+     "height": 105,
+     "pixels": 1814,
+     "atlasX": 247,
      "atlasY": 0
     },
     {
@@ -226,8 +226,8 @@
      "y": 478,
      "width": 11,
      "height": 261,
-     "pixels": 858,
-     "atlasX": 13,
+     "pixels": 1094,
+     "atlasX": 30,
      "atlasY": 0
     },
     {
@@ -240,13 +240,13 @@
       30.04,
       384.81
      ],
-     "x": 30,
+     "x": 28,
      "y": 382,
-     "width": 195,
+     "width": 197,
      "height": 101,
-     "pixels": 1734,
-     "atlasX": 445,
-     "atlasY": 0
+     "pixels": 1751,
+     "atlasX": 0,
+     "atlasY": 264
     },
     {
      "id": "flush-porcelain-joint.011",
@@ -258,136 +258,136 @@
       29.37,
       383.85
      ],
-     "x": 29,
-     "y": 125,
-     "width": 5,
-     "height": 260,
-     "pixels": 774,
-     "atlasX": 34,
+     "x": 28,
+     "y": 124,
+     "width": 6,
+     "height": 262,
+     "pixels": 1193,
+     "atlasX": 0,
      "atlasY": 0
     }
    ]
   },
   {
    "fieldId": "field_cm30_01",
-   "sourceHash": "d1fc560feb29fc13fc109987519eeb1165d5a264f3e7f507b0368a04f6450172",
+   "sourceHash": "a29af061b90f2c1212e449e6e160303c76753da8989e0e3f9a12def87c91abf1",
    "raster": [
-    384,
-    448
+    448,
+    512
    ],
    "atlas": {
     "src": "assets/production/cage/shared-edges-polish-20261019/field_cm30_01-edges.webp",
-    "sha256": "e72cbb63325a9a6862a91d979a858ced3d55edfc3ab6af2eda7bad8afbafa9da",
-    "width": 790,
-    "height": 261
+    "sha256": "96c8a3e55a57d18b984251c8582c6965332e72101eb12c67ee0950ea7c0defd9",
+    "width": 828,
+    "height": 270
    },
    "edges": [
     {
      "id": "flush-porcelain-joint",
      "a": [
-      0.77,
-      96.96
+      28.79,
+      126.31
      ],
      "b": [
-      191.23,
-      -0.96
+      223.21,
+      26.36
      ],
-     "x": 0,
-     "y": 0,
-     "width": 193,
-     "height": 99,
-     "pixels": 707,
-     "atlasX": 205,
+     "x": 25,
+     "y": 26,
+     "width": 200,
+     "height": 103,
+     "pixels": 759,
+     "atlasX": 223,
      "atlasY": 0
     },
     {
      "id": "flush-porcelain-joint.001",
      "a": [
-      383.23,
-      96.96
+      419.21,
+      126.31
      ],
      "b": [
-      192.77,
-      -0.96
+      224.79,
+      26.36
      ],
-     "x": 191,
-     "y": 0,
-     "width": 193,
-     "height": 100,
-     "pixels": 711,
-     "atlasX": 10,
+     "x": 223,
+     "y": 26,
+     "width": 198,
+     "height": 101,
+     "pixels": 756,
+     "atlasX": 628,
      "atlasY": 0
     },
     {
      "id": "flush-porcelain-joint.002",
      "a": [
-      382.56,
-      352.0
+      418.53,
+      386.67
      ],
      "b": [
-      385.44,
-      96.0
+      421.47,
+      125.33
      ],
-     "x": 381,
-     "y": 98,
-     "width": 3,
-     "height": 261,
-     "pixels": 521,
+     "x": 417,
+     "y": 124,
+     "width": 6,
+     "height": 270,
+     "pixels": 1177,
      "atlasX": 0,
      "atlasY": 0
     },
     {
      "id": "flush-porcelain-joint.003",
      "a": [
-      383.23,
-      351.04
+      419.21,
+      385.69
      ],
      "b": [
-      192.77,
-      448.96
+      224.79,
+      485.65
      ],
-     "x": 193,
-     "y": 349,
-     "width": 191,
-     "height": 99,
-     "pixels": 1690,
-     "atlasX": 400,
+     "x": 218,
+     "y": 383,
+     "width": 205,
+     "height": 110,
+     "pixels": 1801,
+     "atlasX": 16,
      "atlasY": 0
     },
     {
      "id": "flush-porcelain-joint.004",
      "a": [
-      192.77,
-      447.04
+      224.79,
+      483.69
      ],
      "b": [
-      -0.77,
-      352.96
+      27.21,
+      387.65
      ],
-     "x": 0,
-     "y": 350,
-     "width": 195,
-     "height": 98,
-     "pixels": 1725,
-     "atlasX": 593,
+     "x": 25,
+     "y": 385,
+     "width": 201,
+     "height": 103,
+     "pixels": 1818,
+     "atlasX": 425,
      "atlasY": 0
     },
     {
      "id": "flush-porcelain-joint.005",
      "a": [
-      1.44,
-      96.0
+      29.47,
+      125.33
      ],
      "b": [
-      -1.44,
-      352.0
+      26.53,
+      386.67
      ],
-     "x": 0,
-     "y": 93,
-     "width": 3,
-     "height": 259,
-     "pixels": 517,
-     "atlasX": 5,
+     "x": 25,
+     "y": 123,
+     "width": 6,
+     "height": 266,
+     "pixels": 1207,
+     "atlasX": 8,
      "atlasY": 0
     }
    ]

@@ -3,6 +3,7 @@
 import source from "../../data/championship/catalogs/raising-ground.r1.json" with {type:"json"};
 import {originalRanchFieldTileOrigin,ORIGINAL_CAGE_DEFINITION_SHAPES} from "../cage/ranchSlotGeometry.js";
 import {getCageDefinitionByModuleId} from "../cage/cageCatalog.js";
+import {reviewGroundField} from "./raisingGroundReview.js";
 import {nativePlacementMask,validateNativeRanch,NATIVE_RANCH_LAYOUT} from "../cage/nativeRanchLayout.js";
 
 const fields=source.fields.map(field=>{
@@ -26,7 +27,7 @@ export function createNativeRaisingGround(frame) {
   const steps=[...placements,...Array.from({length:frame.unlockedCount},(_,slotIndex)=>slotIndex)
     .filter(slot=>!(occupied&(1<<slot))).map(slotIndex=>({definitionIndex:36,slotIndex}))];
   for(const p of steps) {
-    const f=fields[p.definitionIndex],row=p.slotIndex%2,col=Math.floor(p.slotIndex/2);
+    const f=reviewGroundField(p.definitionIndex)??fields[p.definitionIndex],row=p.slotIndex%2,col=Math.floor(p.slotIndex/2);
     const x=p.definitionIndex===36 ? col*12+row*6 : originalRanchFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]).tileX;
     const y=row*8,crop=row===0?3:0;
     for(let sy=crop;sy<f.height;sy++)for(let sx=0;sx<f.width;sx++) {
@@ -54,7 +55,7 @@ export function createNativeRaisingGround(frame) {
 // Complete 020500BC source-clearance sampler. Rejected candidates consume the
 // second channel-1 draw too. The guard only protects malformed external RNG.
 export function nativeRaisingSpawnPosition(ground,definition,rng) {
-  const p=ground.placement(definition),f=fields[definition];
+  const p=ground.placement(definition),f=reviewGroundField(definition)??fields[definition];
   if(!p||!f||typeof rng?.next!=="function")throw new TypeError("NATIVE_RAISING_SPAWN_CONTEXT_REQUIRED");
   const origin=originalRanchFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[definition]);
   const max=f.width*f.height-1;

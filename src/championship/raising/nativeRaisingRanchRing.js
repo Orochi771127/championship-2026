@@ -17,6 +17,7 @@ import { createNativeRaisingGround, findNativeRaisingOpenTile, nativeRaisingEntr
 import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT,
   productFieldTileOrigin, productPlacementCells, productUnlockedSlots, validateProductRanch } from '../cage/productRanchGrid.js';
 
+import { reviewGroundField } from "./raisingGroundReview.js";
 const fields = source.fields.map((field) => {
   const cells = field.runs.flatMap(([count, ...v]) => Array.from({ length: count }, () => v));
   const clearance = field.clearanceRuns.flatMap(([count, v]) => Array(count).fill(v));
@@ -37,7 +38,7 @@ export function composeRanchRingGround(ring) {
   const placements = ring.placements.map((p) => ({ ...p, definitionIndex: getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex }));
   const steps = [...placements, ...ring.uncovered.map((slotIndex) => ({ definitionIndex: 36, slotIndex }))];
   for (const p of steps) {
-    const f = fields[p.definitionIndex], row = p.slotIndex % 2, col = Math.floor(p.slotIndex / 2);
+    const f = reviewGroundField(p.definitionIndex) ?? fields[p.definitionIndex], row = p.slotIndex % 2, col = Math.floor(p.slotIndex / 2);
     const x = p.definitionIndex === 36 ? col * 12 + row * 6 : ringFieldTileOrigin(p.slotIndex, ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]).tileX;
     const y = row * 8, crop = row === 0 ? 3 : 0;
     for (let sy = crop; sy < f.height; sy++) for (let sx = 0; sx < f.width; sx++) {
@@ -77,7 +78,7 @@ export function createRanchRaisingGround(frame) {
 
 /** 020500BC's sampler with ring-slot origins (repeat of nativeRaisingSpawnPosition). */
 export function ringRaisingSpawnPosition(ground, definition, rng) {
-  const p = ground.placement(definition), f = fields[definition];
+  const p = ground.placement(definition), f = reviewGroundField(definition) ?? fields[definition];
   if (!p || !f || typeof rng?.next !== "function") throw new TypeError("NATIVE_RAISING_SPAWN_CONTEXT_REQUIRED");
   const origin = ringFieldTileOrigin(p.slotIndex, ORIGINAL_CAGE_DEFINITION_SHAPES[definition]);
   const max = f.width * f.height - 1;
@@ -120,7 +121,7 @@ export function composeProductRanchGround(frame) {
   const steps = [...placements, ...unlocked.filter(slot=>!occupied.has(slot)).map(slotIndex=>({slotIndex,definitionIndex:36}))];
   const wrap = n=>((n % width)+width)%width;
   for (const p of steps) {
-    const field = fields[p.definitionIndex];
+    const field = reviewGroundField(p.definitionIndex) ?? fields[p.definitionIndex];
     const origin = productFieldTileOrigin(p.slotIndex, p.definitionIndex === 36 ? 0 : ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);
     for (let sy=origin.cropTopTiles; sy<field.height; sy++) for (let sx=0; sx<field.width; sx++) {
       const y=origin.tileY+sy;
@@ -143,7 +144,7 @@ export function composeProductRanchGround(frame) {
 }
 
 function productRaisingSpawnPosition(ground,definition,rng) {
-  const p=ground.placement(definition), field=fields[definition];
+  const p=ground.placement(definition), field=reviewGroundField(definition) ?? fields[definition];
   if(!p||!field||typeof rng?.next!=='function')throw new TypeError('NATIVE_RAISING_SPAWN_CONTEXT_REQUIRED');
   const origin=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[definition]);
   const candidates=[];

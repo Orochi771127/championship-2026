@@ -46,7 +46,7 @@
    "frames": [
     {
      "src": "assets/production/cage/polish-review-20261019/fields/field_cm02_01/frame-00.webp",
-     "sha256": "f46ab00764f67d336ad96884bf9bb5b51e6856f09752d698ea6c23e992771ab1",
+     "sha256": "56a6669be47214486554591840a11c072eae6e0a659c639cd1638913b74b2c77",
      "durationMs": null,
      "rasterWidthPx": 832,
      "rasterHeightPx": 864
@@ -573,11 +573,20 @@
    "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
    "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
    "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "rasterPixelsPerNative": 4,
+   "visualPaddingNative": {
+    "left": 8,
+    "top": 8,
+    "right": 8,
+    "bottom": 8
+   },
    "frames": [
     {
      "src": "assets/production/cage/polish-review-20261019/fields/field_cm30_01/frame-00.webp",
-     "sha256": "d1fc560feb29fc13fc109987519eeb1165d5a264f3e7f507b0368a04f6450172",
-     "durationMs": null
+     "sha256": "a29af061b90f2c1212e449e6e160303c76753da8989e0e3f9a12def87c91abf1",
+     "durationMs": null,
+     "rasterWidthPx": 448,
+     "rasterHeightPx": 512
     }
    ]
   },

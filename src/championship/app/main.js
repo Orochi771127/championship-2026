@@ -2471,6 +2471,15 @@ function boot() {
   });
 }
 
+// Local cage review (2026-10-19): redesigned review cages carry walkability
+// that matches their art; applied before the ranch is built, loopback only.
+if (CAGE_REVIEW_MANIFEST_URL) {
+  try {
+    const [{ applyRaisingGroundReview }, review] = await Promise.all([import("../raising/raisingGroundReview.js"),
+      import("../../data/championship/catalogs/raising-ground.review-20261019.json", { with: { type: "json" } })]);
+    applyRaisingGroundReview(review.default);
+  } catch (error) { console.warn(`CHAMPIONSHIP_CAGE_WALKABILITY_REVIEW_FALLBACK: ${error.message}`); }
+}
 boot();
 
 export { adaptFeedback };
