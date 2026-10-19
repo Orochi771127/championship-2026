@@ -4,7 +4,7 @@ export function publicMapManifestPath(role){const row=publicRuntimeAsset(`art:pu
 export async function fetchRuntimeMapResponse(url,baseUrl,{signal,fetchImpl=globalThis.fetch}={}){
  const absolute=new URL(url,baseUrl);const selected=roles.map(role=>publicRuntimeAsset(`art:public:map:${role}:v1`)).find(row=>row&&new URL(row.src,baseUrl).href===absolute.href);
  if(!selected){
-  const base=new URL(baseUrl);const review=['industrialReview','caveReview','factoryShutters','huntReview','battleReview'].some(key=>base.searchParams.has(key));
+  const base=new URL(baseUrl);const review=['industrialReview','caveReview','factoryShutters','huntReview','battleReview','cageReview'].some(key=>base.searchParams.has(key));
   if(!['localhost','127.0.0.1','[::1]'].includes(base.hostname)||!review)throw Error('PRIVATE_MAP_METADATA_NOT_A_PUBLIC_RUNTIME_INPUT');
   return fetchImpl(absolute,{signal});
  }

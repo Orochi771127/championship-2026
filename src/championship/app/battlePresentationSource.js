@@ -174,7 +174,8 @@ function requireSession(session) {
  * and so this module never becomes a second clock.
  */
 export function createBattlePresentationSource({ session, step, arenaIndex = 0, getSpecialPrelude = () => null,
-  getOpening = () => null, getNativeActor = () => null, getNativeLifecycle = () => null, getImpactEffects = () => [] } = {}) {
+  getOpening = () => null, getNativeActor = () => null, getNativeLifecycle = () => null, getImpactEffects = () => [],
+  getArenaHazards = () => null } = {}) {
   requireSession(session);
   if (typeof step !== "function") {
     throw sourceError("REQUIRES_A_STEP_FUNCTION");
@@ -265,6 +266,8 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
         specialPrelude: getSpecialPrelude(),
         nativeLifecycle: getNativeLifecycle(),
         impactEffects: getImpactEffects(),
+        // Opt-in Owner-approved terrain state (charge, later ice/lava); null off.
+        arenaHazards: getArenaHazards(),
         combatants: deepFreeze(session.slots.map(projectSlot)),
         outcome: projectOutcome(session)
       });

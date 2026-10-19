@@ -280,7 +280,8 @@ export function createHuntWorld(gate, nativeEntry = null) {
 function createNativeEntryWorld(gate, entry) {
   const { scene, encounter } = entry;
   const env = scene.environment;
-  if (scene.biomeId !== gate.biomeId || env.width !== 128 || env.height !== 128
+  const expanded = env.adaptation === 'OWNER_APPROVED_HUNT_EXPANSION_REVIEW_20261019';
+  if (scene.biomeId !== gate.biomeId || (!expanded && (env.width !== 128 || env.height !== 128))
     || !encounter.actors.length) throw Error("HUNT_WORLD_NATIVE_ENTRY_INVALID");
   const values = Array.from({ length:env.width * env.height }, (_,i) =>
     env.isBlocked(i % env.width, Math.floor(i / env.width)) ? BLOCKED : OPEN);
@@ -290,7 +291,7 @@ function createNativeEntryWorld(gate, entry) {
     family:"HM", collisionProfileId:profile.profileId,
     dimensions:{ widthTiles:env.width, heightTiles:env.height }, tileSizePx:HUNT_TILE_SIZE_PX,
     chunkSizeTiles:HUNT_CHUNK_SIZE_TILES, collisionData:{ kind:"HM_SANITIZED_ATTRIBUTE_GRID", values }
-  }, profile);
+  }, profile, expanded ? { hmExpansion:env.adaptation } : {});
   // Retain the existing product camera centre; never alter native actor positions
   // to fit the viewport or apply prototype reachability filtering to them.
   return Object.freeze({ gateId:gate.gateId, definition, collision:createFieldCollisionAdapter(definition),

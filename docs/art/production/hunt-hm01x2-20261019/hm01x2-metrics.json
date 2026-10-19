@@ -1,0 +1,172 @@
+{
+ "before": {
+  "frameTiles": 16384,
+  "frameWorldPx2": 4194304,
+  "walkTiles": 9412,
+  "waterTiles": 1826,
+  "blockedTiles": 5146,
+  "explorableUnionTiles": 11238,
+  "mainComponentTiles": 9546,
+  "mainComponentWalk": 7720,
+  "mainComponentWater": 1826,
+  "components4": 5,
+  "componentSizes": [
+   9546,
+   1244,
+   442,
+   5,
+   1
+  ]
+ },
+ "after": {
+  "frameTiles": 32400,
+  "frameWorldPx2": 8294400,
+  "walkTiles": 18723,
+  "waterTiles": 3590,
+  "blockedTiles": 10087,
+  "explorableUnionTiles": 22313,
+  "mainComponentTiles": 21063,
+  "mainComponentWalk": 17473,
+  "mainComponentWater": 3590,
+  "components4": 4,
+  "componentSizes": [
+   21063,
+   1244,
+   5,
+   1
+  ]
+ },
+ "ratio": {
+  "frameTiles": 1.978,
+  "walkTiles": 1.989,
+  "waterTiles": 1.966,
+  "explorableUnionTiles": 1.985,
+  "mainComponentTiles": 2.206
+ },
+ "flags": {
+  "field_hm01_01": {
+   "clearedOldEdgeFlags": 71,
+   "newBoundaryTiles": 77,
+   "newEdgeAnchors": [
+    [
+     134,
+     0
+    ],
+    [
+     146,
+     0
+    ],
+    [
+     160,
+     0
+    ],
+    [
+     179,
+     54
+    ],
+    [
+     179,
+     122
+    ],
+    [
+     44,
+     179
+    ],
+    [
+     116,
+     179
+    ]
+   ],
+   "caveAnchors": [
+    [
+     79,
+     156
+    ],
+    [
+     80,
+     156
+    ]
+   ]
+  },
+  "field_hm01_02": {
+   "clearedOldEdgeFlags": 37,
+   "newBoundaryTiles": 36,
+   "newEdgeAnchors": [
+    [
+     179,
+     54
+    ],
+    [
+     179,
+     122
+    ],
+    [
+     44,
+     179
+    ],
+    [
+     116,
+     179
+    ]
+   ],
+   "caveAnchors": [
+    [
+     79,
+     156
+    ],
+    [
+     80,
+     156
+    ]
+   ]
+  }
+ },
+ "car": [
+  131,
+  146,
+  152,
+  150
+ ],
+ "props": [
+  [
+   "data-terminal",
+   [
+    126,
+    141,
+    129,
+    144
+   ]
+  ],
+  [
+   "circuit-cabinet",
+   [
+    155,
+    140,
+    158,
+    143
+   ]
+  ],
+  [
+   "bench",
+   [
+    138,
+    154,
+    143,
+    155
+   ]
+  ],
+  [
+   "stop-sign",
+   [
+    128,
+    152,
+    129,
+    153
+   ]
+  ]
+ ],
+ "cave": [
+  79,
+  156
+ ]
+}

@@ -2,6 +2,7 @@
 import { nativeHuntSpeciesByIndex } from "./nativeHuntSources.js";
 import { nativeHuntToolSpecies, nativeShotReaction } from "./nativeHuntToolRules.js";
 import { nativeHuntActorBounds, nativeHuntEscapePosition } from "./nativeWildSpatial.js";
+import { beginNativeHuntEscape, stepNativeHuntPassage, endNativeHuntPassage } from "./nativeHuntCavePassage.js";
 import { nativeHuntDegreeVector, resolveNativeHuntFollow } from "./nativeHuntDirection.js";
 import { stepNativeHuntMovement } from "./nativeHuntMovement.js";
 import { stepNativeWildStatus, stepNativeBindingBounce } from "./nativeWildStatus.js";
@@ -172,8 +173,14 @@ function decide(a, events, host) {
     if (a.counter===0) { if (a.aiState===4) a.awakeCounter=0; return 1; }
   } else if (a.aiState===6 && a.bounce.amplitude===0) return a.returnAiState;
   else if (a.aiState===8) {
-    const escaped=nativeHuntEscapePosition(a.positionQ12,host.environment,host.nextChannel);
-    if (escaped) { a.positionQ12=escaped; host.stopRope?.(a); return 1; }
+    if (host.environment.caveGroups) {
+      // Owner-approved shared cave passages (rebuilt maps only): same draws, same individual.
+      const escape=beginNativeHuntEscape(a,host.environment,host.nextChannel);
+      if (escape) { host.stopRope?.(a); if (escape.kind==="NATIVE") { a.positionQ12=escape.positionQ12; return 1; } return -1; }
+    } else {
+      const escaped=nativeHuntEscapePosition(a.positionQ12,host.environment,host.nextChannel);
+      if (escaped) { a.positionQ12=escaped; host.stopRope?.(a); return 1; }
+    }
   } else if ([9,10].includes(a.aiState) && a.shake?.ticks===0) {
     if (a.aiState===9) a.shotShakeTicks=0;
     return a.returnAiState;
@@ -189,6 +196,7 @@ function decide(a, events, host) {
 }
 
 export function stepNativeWildActor(a, host) {
+  if (a.passage && (!a.actorActive || a.cardState)) endNativeHuntPassage(a,host.environment);
   if (!a.actorActive || a.cardState && a.cardState!=="HAND_ANIMATION") return;
   const previous=[...a.positionQ12], events=a.events.splice(0);
   if (a.tutorialScripted && !a.cardState) {
@@ -211,6 +219,8 @@ export function stepNativeWildActor(a, host) {
       else enterNativeWildState(a,12,host);
     }
     a.shotShakeTicks=a.tutorialShot?(a.shake?.ticks??0):0;
+  } else if (!a.cardState && a.passage) {
+    if (stepNativeHuntPassage(a,host.environment)) enterNativeWildState(a,1,host);
   } else if (!a.cardState) {
     const next=decide(a,events,host);
     if (next>=0) enterNativeWildState(a,next,host);

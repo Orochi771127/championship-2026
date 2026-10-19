@@ -119,6 +119,19 @@ export function createBattleRuntime(options = {}) {
   // Owner-approved improved AI (2026-10-13) is opt-in; the runtime default is
   // the original rule so parity fixtures and replays keep their behaviour.
   const aiPolicy=options.aiPolicy??BATTLE_AI_ORIGINAL;
+  // Owner-approved arena hazards (2026-10-18) are opt-in per battle. Off keeps
+  // every parity fixture and replay byte-for-byte on the original rules.
+  // Arena hazards are injected (createBattleArenaHazards), never imported here,
+  // so the public module closure stays free of the local-review hazard layer.
+  const createArenaHazards=typeof options.arenaHazards==='function'?options.arenaHazards:null;
+  let arenaHazards=null;
+  // A fall ends ashore: move the native world point the VM reads (the actor
+  // copies it next advance). x/y in native px only; height and facing stay.
+  function writeNativePoint(s,[x,y]){
+    const m=nativeActors.memory,p=m.readU32(nativeActors.address(s),0x2c);
+    if(!p)return;m.writeU32(p,0,Math.round(x*4096));m.writeU32(p,4,Math.round(y*4096));
+    const actor=nativeActors.actorOf(s);if(actor){m.writeU32(actor,0x24,Math.round(x*4096));m.writeU32(actor,0x28,Math.round(y*4096));}
+  }
   if(!BATTLE_AI_POLICIES.includes(aiPolicy))throw runtimeError('AI_POLICY_UNKNOWN');
   if(!['BASELINE','ORIGINAL'].includes(personalityPolicy))throw runtimeError('PERSONALITY_POLICY_UNKNOWN');
   if(![0,1].includes(localTeamIndex)||localTeamIndex!==0&&mode!==3)throw runtimeError('LOCAL_TEAM_CONTEXT_REQUIRED');
@@ -390,6 +403,7 @@ export function createBattleRuntime(options = {}) {
         actor:parameters,sourcePoint:effectActors.position(parameters),hpAfter:defender.currentHp,result:result.code});
         if(contacts.history.length>128)contacts.history.shift();}
       hits.push({ slot: targetSlot, damage: resolved.damage, critical: resolved.critical });
+      arenaHazards?.onHit({move,attackerSlot:slot,targetPosition:nativeActors?.position(targetSlot)});
       state?.launch?.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot),
         targetBox:nativeActors.box(targetSlot),resultCode:result.code,nativeKind,offset:impactOffset,
         onSpark:kind=>{
@@ -461,6 +475,14 @@ export function createBattleRuntime(options = {}) {
     const result = stepBattleSession(liveSession);
     nativeActors?.advance();
     effectActors?.advance();
+    if(arenaHazards&&!liveSession.ended){
+      // After the native step, outside AI dispatch: read positions, write HP only.
+      const changed=arenaHazards.step({slots:liveSession.slots,positionOf:s=>nativeActors.position(s),
+        thunderStatOf:s=>builtRoster?.[s]?.stats?.field80??0,
+        heatStatOf:s=>builtRoster?.[s]?.stats?.field70??0,
+        setPositionOf:writeNativePoint});
+      if(changed.length)nativeActors.syncCombatants();
+    }
     if (liveSession.ended && completedRound === null) {
       // A stopped session receives no more VM frames. Release at the owning
       // runtime boundary so result navigation cannot strand scripts or VFX.
@@ -562,6 +584,23 @@ export function createBattleRuntime(options = {}) {
     },
 
     listSelectableArenas(){return FREE_BATTLE_ARENAS.map(index=>({index,identifier:BATTLE_PRESENTATION_ARENAS[index].identifier}));},
+    // Local review QA only (the app exposes it on loopback with arenaHazards):
+    // the same heat rule a landed 400-power fire special applies, at a slot's
+    // feet, so melt -> warning -> fall -> recovery can be exercised on demand.
+    qaArenaHeat(slot){
+      if(!arenaHazards||!nativeActors||!session?.slots?.[slot])return 0;
+      const [x,y]=nativeActors.position(slot).map(v=>v/4096);
+      const r=arenaHazards.rules.heat;
+      return arenaHazards.grid.heatIceAt(x,y,{radius:r.radiusCells,amount:r.base+400*r.perPower,source:'QA_REVIEW'},[]);
+    },
+    // Same water rule a landed water-palette hit applies, at a slot's feet.
+    qaArenaWater(slot){
+      if(!arenaHazards||!nativeActors||!session?.slots?.[slot])return 0;
+      const [x,y]=nativeActors.position(slot).map(v=>v/4096);
+      return arenaHazards.grid.coolLavaAt(x,y,{radius:arenaHazards.rules.lava.coolRadiusCells,seconds:arenaHazards.rules.lava.coolSeconds,source:'QA_REVIEW'},[]);
+    },
+    // Place a slot at native (x, y) with the same write a fall recovery uses.
+    qaArenaPlace(slot,x,y){if(arenaHazards&&nativeActors&&session?.slots?.[slot])writeNativePoint(slot,[x,y]);},
 
     getChosenMatch() {
       return chosen;
@@ -700,6 +739,8 @@ export function createBattleRuntime(options = {}) {
         loadedBankIds:demand.flatMap((n,id)=>id&&n?[id]:[])});
       demand.forEach((n,id)=>nativeActors.memory.writeU16(effectActors.base,4+id*2,n));
       nativeActors.memory.writeU32(0x02131c40,0,nativeActors.worldAddress);
+      const arenaIndex=chosen.championship?10:chosen.arenaIndex;
+      arenaHazards=createArenaHazards?createArenaHazards({fieldId:BATTLE_PRESENTATION_ARENAS[arenaIndex]?.field,teamOfSlot:battleTeamOfSlot}):null;
       hitRuntime=createBattleHitRuntime({session,actors:nativeActors,
         onSound:id=>soundEvents.call(0x0203ea30,[id,127,0],session.frame),
         onHitTiming:detail=>{const issue=writeBattleHitTiming(nativeActors.memory,nativeActors.worldAddress,detail);if(issue)timingIssues.add(issue);},
@@ -714,7 +755,8 @@ export function createBattleRuntime(options = {}) {
           if(tally&&ok)tally.launched+=1;
           else if(tally){const reason=scriptStateFor(action).guard?.reason??'NO_ACTOR';tally.refused+=1;tally.refusedBy[reason]=(tally.refusedBy[reason]??0)+1;}
           return ok;}});
-      source = createBattlePresentationSource({ session, step: stepMatch, getOpening:opening.snapshot, arenaIndex:chosen.championship?10:chosen.arenaIndex, getSpecialPrelude,
+      source = createBattlePresentationSource({ session, step: stepMatch, getOpening:opening.snapshot, arenaIndex, getSpecialPrelude,
+        getArenaHazards:()=>arenaHazards?.snapshot()??null,
         getNativeActor:slot=>nativeActors.project(slot),getImpactEffects:()=>impactEffects.snapshot({
           exclusiveOwner:session.slots.find(c=>c?.field94)?.field94??0}),getNativeLifecycle:()=>({
           active:[...nativeLaunches].map(v=>v.snapshot()),recent:[...nativeHistory],impacts:impactEffects.diagnostics(),sound:soundEvents.snapshot(),

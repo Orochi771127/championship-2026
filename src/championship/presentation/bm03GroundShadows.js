@@ -13,6 +13,25 @@ export function isBm03ShadowCandidate(fieldArt,location=globalThis.location) {
 // cache. Scene-specific light/receiver data are selected only on local review.
 export function resolveGroundShadowCandidateRoot(fieldArt,location=globalThis.location) {
   if(isBm03ShadowCandidate(fieldArt,location))return ROOT;
+  // The combined 2026-10-18 arena polish keeps every source camera and sun:
+  // BM03 uses its R2 receiver, the R1 arenas their stage-review receivers.
+  if(['localhost','127.0.0.1','[::1]','::1'].includes(location?.hostname)
+    && fieldArt?.assetId==='art:battle:original-opus:v1:arena-polish-20261018'){
+    const id=fieldArt?.field?.fieldId;
+    if(id==='field_bm03_01')return ROOT;
+    if(/^field_bm(?:01|02|04|05|06|07|08|09|10|11)_01$/.test(id??''))return `assets/production/battle/stage-review-20261007/fields/${id}/`;
+  }
+  // BM03 volcano R3 is the Owner-selected R2 scene: same camera, sun and receiver.
+  if(['localhost','127.0.0.1','[::1]','::1'].includes(location?.hostname)
+    && fieldArt?.assetId==='art:battle:original-opus:v1:bm03-volcano-polish-r3' && fieldArt?.field?.fieldId==='field_bm03_01')
+    return ROOT;
+  // BM04 lagoon R2 keeps the R1 camera, sun and Z0 plane: reuse its receiver.
+  if(['localhost','127.0.0.1','[::1]','::1'].includes(location?.hostname)
+    && fieldArt?.assetId==='art:battle:original-opus:v1:bm04-island-polish-r2' && fieldArt?.field?.fieldId==='field_bm04_01')
+    return 'assets/production/battle/stage-review-20261007/fields/field_bm04_01/';
+  if(['localhost','127.0.0.1','[::1]','::1'].includes(location?.hostname)
+    && fieldArt?.assetId==='art:battle:original-opus:v1:bm05-southpole-polish-r2' && fieldArt?.field?.fieldId==='field_bm05_01')
+    return 'assets/production/battle/stage-review-20261007/fields/field_bm05_01/';
   if(!['localhost','127.0.0.1','[::1]','::1'].includes(location?.hostname)
     || fieldArt?.assetId!=='art:battle:original-opus:v1:stage-review-20261007')return null;
   const fieldId=fieldArt?.field?.fieldId;

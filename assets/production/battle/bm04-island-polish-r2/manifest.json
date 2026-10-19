@@ -1,0 +1,239 @@
+{
+ "schemaVersion": 1,
+ "assetId": "art:battle:original-opus:v1:bm04-island-polish-r2",
+ "family": "BATTLE",
+ "artifactMaturity": "LOCAL_REVIEW_BLENDER_LAYERED_R2",
+ "productionStatus": "LOCAL_REVIEW_NOT_PUBLISHED",
+ "runtimeEligible": true,
+ "shippingReady": false,
+ "humanApproved": false,
+ "rights": {
+  "status": "PROJECT_ORIGINAL",
+  "romDerivedPixels": false,
+  "authority": "R1 BM04 original Blender source polished in Blender 5.2 via MCP (2026-10-18)"
+ },
+ "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+ "filter": "linear",
+ "fields": [
+  {
+   "fieldId": "field_bm04_01",
+   "identifier": "BATTLE_ISLAND",
+   "arenaIndex": 3,
+   "worldWidthPx": 1664,
+   "worldHeightPx": 1088,
+   "nativeWidthPx": 416,
+   "nativeHeightPx": 272,
+   "visualRole": "BATTLE_ARENA",
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/battle/bm04-island-polish-r2/base.webp",
+     "sha256": "8e85338ca1a15c896d2c84e7e1d5e2b57810ae49b325b329d2e76c54ad2e4b5a",
+     "durationMs": null
+    }
+   ],
+   "ambient": {
+    "kind": "BM04_LAGOON_R2",
+    "waterMask": {
+     "src": "assets/production/battle/bm04-island-polish-r2/water-mask.webp",
+     "sha256": "0584135749ce0c066915a8c59a10db4f08d8d620ce11ba0a3d5d727de9ebf087",
+     "scale": 2
+    },
+    "caustics": {
+     "src": "assets/production/battle/bm04-island-polish-r2/caustic-tile.webp",
+     "sha256": "2dadf0d364cc93381d9bd68fb3431042a9e3c59405e73b0e4311b582de5f3f0f"
+    },
+    "foam": {
+     "frameMs": 260,
+     "regions": [
+      {
+       "id": "shore-0",
+       "x": 0.0,
+       "y": 0.0,
+       "scale": 2.0,
+       "frames": [
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-0.webp",
+         "sha256": "036f02f328763e7943d238b969515a1850221a8088a96d49dd391e2ae6d5d260"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-1.webp",
+         "sha256": "ad0f01d8a77180b2aa89cd0254f18d7f2d0e676a5d23f3233d1091bdff3f2aa9"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-2.webp",
+         "sha256": "91fe18f3e80f9bb16213469115ed8d8ff1b8d64d7530c4f2cb60a57eb405c22d"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-3.webp",
+         "sha256": "08f0748369fdbaec2bc378c56516997e8dc268cc6464dc0eeece085dd76a1ef0"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-4.webp",
+         "sha256": "035426677a03189a0949631f7898046ce8e1fd2b648ecef3f5b444d1fa28747b"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-5.webp",
+         "sha256": "b7017133113aa3c9e667ffd9ad9955fd3e6fc47c6601056cd48413ed5fb4e0c3"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-6.webp",
+         "sha256": "99833ea46b5bf13c83ca4b8798be028fbb3d00ede839a50a1f222cb28cb537fd"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r0-7.webp",
+         "sha256": "f7e650390eea05412c3b8c109db396c77b1130d6890babe8da4013f9ee9c7491"
+        }
+       ]
+      },
+      {
+       "id": "shore-1",
+       "x": 1048.0,
+       "y": 0.0,
+       "scale": 2.0,
+       "frames": [
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-0.webp",
+         "sha256": "7a417163e2890ea97990defc972b422b11a2d3e1f81a5eaa318263d3de139608"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-1.webp",
+         "sha256": "d30209f82cf6116d7d2fb768378d7ba46783a9ea2621fdf216b2d66ff3661606"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-2.webp",
+         "sha256": "a88f8bebac515f4986ea787d45a7cfd715fb5f3044e5a2de0eec862a68ea2f4c"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-3.webp",
+         "sha256": "1fb15c83d8ed97a743c36b693a44cf7d4f6e7660cfdf004dfb67cd9a776167b3"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-4.webp",
+         "sha256": "652ac32797e9635680af00c8a944f6ab2d565e848360f267c8f2d22debfbb950"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-5.webp",
+         "sha256": "1451e66f0250cc529e19e849ee750b848161b59dbdb17903244dfe972b3f3e0d"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-6.webp",
+         "sha256": "997839f20d0cba3142c1acdcaeecf5b9ab7064831583fe995aa91bd1ee3f12b3"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r1-7.webp",
+         "sha256": "2fd8a4c6352e98387891a521fc3fcb143ad8d2ce7ea9ce9ba85997285f76bd5c"
+        }
+       ]
+      },
+      {
+       "id": "shore-2",
+       "x": 1342.0,
+       "y": 852.0,
+       "scale": 2.0,
+       "frames": [
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-0.webp",
+         "sha256": "10c433ff57c770d9db74f19d5b3ca75512cef617d519664a5eb155b890e82b27"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-1.webp",
+         "sha256": "2ae26c91eb59e45894d52a3795d51957861ae1ea6aa535dab2e09fc981306025"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-2.webp",
+         "sha256": "507e1a80eefdb53a929907b1f46d2525fb70285cd68da8cd2ee4902dc0fea771"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-3.webp",
+         "sha256": "d44209e42e5f0de7e830e24b71cb28eeb248b271fcb68006015e07f9f4d27cf7"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-4.webp",
+         "sha256": "ca99b2e4a30a685559b6b361ee3b2553418cc453926ee8fc5cb19e6b20756b53"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-5.webp",
+         "sha256": "6b5f67e1f94a142bb65d9c389aa7146a63265d4c5ed72b4e71cc7d6956c439ff"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-6.webp",
+         "sha256": "5487788ac25d6130d42f0276652ff0ff4b67bd1bf6c7c055db365a6aa4470481"
+        },
+        {
+         "src": "assets/production/battle/bm04-island-polish-r2/foam-r2-7.webp",
+         "sha256": "0b15e18f9d7ab11fec3cab634eb351057d04b04e62dfacda3234ae9f77abbefb"
+        }
+       ]
+      }
+     ]
+    },
+    "canopies": [
+     {
+      "id": "northwest-leaning-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-northwest-leaning-palm.webp",
+      "sha256": "dd43e0751a88a42bf6435acbe4f1562c06745c1c0e66f299bfa1fc9737b273c0",
+      "x": 153,
+      "y": 0,
+      "pivot": [
+       266.95,
+       33.6
+      ]
+     },
+     {
+      "id": "northwest-younger-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-northwest-younger-palm.webp",
+      "sha256": "ca44d768f664477a922b2d93c49200e1ff83cad2f81e441c1a7a89704b98e216",
+      "x": 442,
+      "y": 0,
+      "pivot": [
+       486.95,
+       -70.85
+      ]
+     },
+     {
+      "id": "eastern-windward-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-eastern-windward-palm.webp",
+      "sha256": "7705ebbffdd363a8f3bf4d08e0b36fa5eefdfcc7b4b7e3f69c20edcc36f3ab0e",
+      "x": 1401,
+      "y": 0,
+      "pivot": [
+       1462.95,
+       -56.53
+      ]
+     },
+     {
+      "id": "foreground-hero-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-foreground-hero-palm.webp",
+      "sha256": "c9b6409d77a5723f546fbbd8ada63d58168c4a671377650c20ecf1adf7adb74c",
+      "x": 1433,
+      "y": 853,
+      "pivot": [
+       1554.95,
+       938.69
+      ]
+     },
+     {
+      "id": "foreground-companion-palm",
+      "src": "assets/production/battle/bm04-island-polish-r2/canopy-foreground-companion-palm.webp",
+      "sha256": "3d0b7c42e6bb2d62284066732cb4923c0f86a899b4c61354765adbac6660914c",
+      "x": 1357,
+      "y": 948,
+      "pivot": [
+       1442.95,
+       1028.66
+      ]
+     }
+    ],
+    "boundaryGlow": {
+     "src": "assets/production/battle/bm04-island-polish-r2/boundary-glow.webp",
+     "sha256": "ab92daca89cf2f0ea2b8f72de9ed306262aab3b8933b85f9239bc565840dec85",
+     "x": 82,
+     "y": 128
+    }
+   }
+  }
+ ]
+}

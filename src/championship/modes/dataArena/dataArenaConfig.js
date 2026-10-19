@@ -21,7 +21,13 @@ export const DATA_ARENA_TERRAIN = deepFreeze({
   WATER: 2, // the tide channel: walkers sink, swimmers pass, cryo freezes
   STANDS: 3, // the crowd stands along the north edge (solid)
   STAGE: 4, // the raised central stage (walkable)
-  BRIDGE: 5 // the retractable data bridge; becomes WATER when the tide opens
+  BRIDGE: 5, // the retractable data bridge; becomes WATER when the tide opens
+  // Ankle-deep lagoon (Battle BM04): walkable by everyone, conducts charge,
+  // never sinks a walker. Only arena terrain maps use it; the harbor does not.
+  SHALLOW: 6,
+  // Molten lava (Battle BM03): walkable but hot; whoever owns damage reads
+  // it. Water can crust it into cooled rock for a while. Arena maps only.
+  LAVA: 7
 });
 
 const T = DATA_ARENA_TERRAIN;
@@ -132,7 +138,23 @@ export const DATA_ARENA_GRID_RULES = deepFreeze({
   podHp: 18,
   emberIceMelt: 3,
   coreIgniteInterval: 2.6,
-  coreIgniteRadius: 2.2
+  coreIgniteRadius: 2.2,
+  // Charge: a thunder hit on conductive water (open WATER or SHALLOW, never
+  // ice or dry ground) spreads through connected cells within the radius.
+  shockSeconds: 3,
+  shockRadius: 7, // cells
+  shockWarnSeconds: 0.8, // the last stretch flickers so the fade is readable
+  // Natural ice (arena maps only): authored sheets over WATER that never time
+  // out on their own. Heat wears `naturalIceIntegrity` down; at zero the cell
+  // enters the normal CRACKING warning (iceWarnSeconds) and then opens. An
+  // opened natural cell refreezes after `naturalRefreezeSeconds`, or at once
+  // when cold reaches it.
+  naturalIceIntegrity: 100,
+  naturalRefreezeSeconds: 9,
+  // Lava cooled by water stays rock for `lavaCoolSeconds`; the last
+  // `lavaWarnSeconds` are the reheat warning (cooling again resets, never stacks).
+  lavaCoolSeconds: 8,
+  lavaWarnSeconds: 2
 });
 
 export const DATA_ARENA_ENEMIES = deepFreeze({

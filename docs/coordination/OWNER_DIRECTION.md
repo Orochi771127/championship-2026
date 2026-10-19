@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: DEX_WORKSPACE_CLOSEOUT_20261019 -->
+## 2026-10-19 — Final single-image encyclopedia art and workspace closeout
+
+Owner directs a complete character finalization inventory, integration of finalized portraits into the existing encyclopedia, commit/push/main integration after validation, a census and closeout of all workspaces, and updating Codebase Memory. Later clarifications define a finalized portrait as one complete single image: a character originally carrying a removable weapon must use its complete equipped hero, not the later empty-handed body reference or separate accessory file. Naturally unarmed designs do not need invented weapons. Owner explicitly confirms the exact nine equipped sources142/143/145/149/151/155/156/158/183: 「確認，9 張持裝圖都採用並整合」. Preserve unfinished candidates and existing player/save/gameplay authorities; static encyclopedia acceptance is separate from new animation completion. See [scope, per-character inventory, source hashes and all-worktree disposition](../reports/dex-workspace-closeout-2026-10-19/REPORT_ZH_TW.md).
+
 <!-- record-id: OPENING_NAMING_VIEWPORT_20261018 -->
 ## 2026-10-18 — iPhone naming keyboard regression
 

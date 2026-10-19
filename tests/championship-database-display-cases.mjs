@@ -17,8 +17,8 @@ const nativeEntries=new Map(nativeDisplay.entries.map(e=>[e.speciesIndex,e]));
 
 test('production display joins 216 native rows, eight eggs and two explicit product forms without sentinel or alias rows',()=>{
   assert.equal(nativeDisplay.entries.length,224);assert.equal(species.records.length,228);
-  assert.equal(dex.entries.length,232);
-  for(const field of ['entryKey','speciesIndex','speciesId','displayCode'])assert.equal(new Set(dex.entries.map(e=>e[field])).size,232,field);
+  assert.equal(dex.entries.length,238);
+  for(const field of ['entryKey','speciesIndex','speciesId','displayCode'])assert.equal(new Set(dex.entries.map(e=>e[field])).size,238,field);
   assert.deepEqual(dex.stagePrefixes,['EG','B1','B2','GR','MA','AW','UL']);
   assert.deepEqual(dex.stagePrefixes.map((_,s)=>dex.entries.filter(e=>e.numberingStageIndex===s).length),[8,12,14,38,64,51,39]);
   for(const entry of dex.entries.filter(e=>e.kind!=='ILLUSTRATION')){
@@ -57,7 +57,7 @@ test('archived revision-one identity receipt stays immutable while the explicit 
 test('eggs stay an untracked content index outside normal registration and selectors',()=>{
   const book=projectDatabase({starterSpeciesId:'species-000'}),before=JSON.stringify(book);
   const rows=databaseDisplayRows(book);
-  assert.equal(rows.length,232);assert.equal(book.slotCount,218);assert.equal(book.registeredCount,0);
+  assert.equal(rows.length,238);assert.equal(book.slotCount,218);assert.equal(book.registeredCount,0);
   assert.ok(rows.filter(e=>e.kind==='EGG').every(e=>e.state==='NOT_TRACKED'&&e.legacyBookOrdinal===null));
   assert.ok(rows.filter(e=>e.kind==='REGULAR').every(e=>e.state==='UNDISCOVERED'));
   assert.throws(()=>getDatabaseSlot(0),/UNKNOWN_DATABASE_SLOT/);

@@ -1,6 +1,6 @@
 import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
-import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation} from '../presentation/originalRuntimeLocation.js';
+import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation,isOriginalLoopbackLocation} from '../presentation/originalRuntimeLocation.js';
 import { finalHuntArtManifestUrl } from '../presentation/finalHuntArt20261008.js';
 import {publicMapManifestPath,fetchRuntimeMapResponse} from '../presentation/publicMapRequests.js';
 import {publicMetadataPath,fetchPublicMetadataResponse} from '../presentation/publicMetadata.js';
@@ -107,7 +107,7 @@ import { createAudioBus } from '../presentation/audioBus.js';
 import { createMusicPresentation } from '../presentation/musicPresentation.js';
 import { resolveSceneMusic } from '../presentation/sceneMusicCatalog.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
-import { cappedPixelRatio, currentQuality, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
+import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
@@ -182,20 +182,58 @@ const HUNT_DAY_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") === "hm2
 const CAGE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
   ? publicMapManifestPath('cage-final')
   : publicMapManifestPath('cage-ui');
+// Local review (2026-10-19): the re-lit cage polish, loopback ?cageReview only.
+const CAGE_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("cageReview") === "polish-20261019"
+  ? "assets/production/cage/polish-review-20261019/manifest.json" : null;
 // Owner 2026-10-07: completed original arenas in normal local play; publication remains gated.
 const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
   ? (LOCAL_MAP_REVIEW.get("battleReview") === "stage-20261007"
      ? "assets/production/battle/stage-review-20261007/manifest.json"
      : LOCAL_MAP_REVIEW.get("battleReview") === "bm07-quiet-r1"
     ? "assets/production/battle/bm07-quiet-review-r1/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "bm04-lagoon-r2"
+    ? "assets/production/battle/bm04-island-polish-r2/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "bm05-polar-r2"
+    ? "assets/production/battle/bm05-southpole-polish-r2/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "arena-polish-20261018"
+    ? "assets/production/battle/arena-polish-20261018/manifest.json"
+    : LOCAL_MAP_REVIEW.get("battleReview") === "bm03-volcano-r3"
+    ? "assets/production/battle/bm03-volcano-polish-r3/manifest.json"
     : LOCAL_MAP_REVIEW.get("battleReview") === "bm03-volcano-r2"
       ? "assets/production/battle/bm03-volcano-review-r2/manifest.json"
       : publicMetadataPath('battle-original'))
   : publicMetadataPath('battle-baseline');
+// Owner 2026-10-19 (local review): each hunt theme is rebuilt as one map with
+// about twice the explorable area. ?huntReview=hm01x2-20261019 on loopback loads
+// the rebuilt HM01 (180x180 terrain via the app's hunt entry, and its art);
+// every other field and every non-review session is unchanged.
+const HUNT_EXPANSION_REVIEW = LOCAL_MAP_REVIEW.get("huntReview") === "hm01x2-20261019";
+const HUNT_EXPANSION_REVIEW_MANIFEST_URL = HUNT_EXPANSION_REVIEW ? "assets/production/hunt/hm01x2-review-20261019/manifest.json" : null;
+// Keep local review modules outside the approved public bundle. Resolve from
+// this source module so the existing loopback-only gates can load them locally.
+const importLocalReviewModule = (relative, options) => import(new URL(relative, import.meta.url).href, options);
+const loadHuntExpansionReview = HUNT_EXPANSION_REVIEW
+  ? async () => (await importLocalReviewModule("../../data/championship/catalogs/hunt-hm01x2.review-20261019.json", { with: { type: "json" } })).default
+  : null;
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
 const VFX_ART_PREVIEW_SYSTEM = new URLSearchParams(globalThis.location?.search ?? "").get("vfxArt");
+// Owner 2026-10-18: arena hazards (BM04 lagoon, BM05 ice, BM03 lava) are a local
+// review in Free and Practice battles until accepted; other modes stay original.
+const ARENA_HAZARDS_REVIEW = ["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname)
+  && new URLSearchParams(globalThis.location?.search ?? "").get("arenaHazards") === "1";
+// Loopback review QA for arena hazards: heat/water/place at a slot and read the
+// hazard snapshot. Bound where a Free/Practice runtime is prepared.
+// The hazard layer loads only for that review, so public builds never carry it.
+const loadArenaHazards = async () => ARENA_HAZARDS_REVIEW
+  ? (await importLocalReviewModule("../battle/battleArenaHazards.js")).createBattleArenaHazards : null;
+function exposeArenaHazardsQa(runtime) {
+  if (!ARENA_HAZARDS_REVIEW || !String(globalThis.location?.search ?? '').includes('battleFxDebug')) return;
+  globalThis.__championshipArenaHazardsQa = { heatAt: slot => runtime.qaArenaHeat?.(slot) ?? 0,
+    waterAt: slot => runtime.qaArenaWater?.(slot) ?? 0, place: (slot, x, y) => runtime.qaArenaPlace?.(slot, x, y),
+    snapshot: () => runtime.startMatch().getView().arenaHazards };
+}
 // Free and Practice battles run the original personality wiring (2026-10-05):
 // personality picks the target selector and temper threshold, the team policy
 // picks the AI profile. Every other mode keeps the baseline. ?battlePolicy=baseline
@@ -571,7 +609,7 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
   try {
     let manifest = null;
     let field = null;
-    for (const url of (["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)]:[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))) {
+    for (const url of (["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_EXPANSION_REVIEW_MANIFEST_URL, HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)]:[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))) {
       const response = await fetchRuntimeMapResponse(url, globalThis.location.href, { signal });
       if (!response.ok) {
         if (url !== LICENSED_HUNT_ART_MANIFEST_URL) continue;
@@ -627,7 +665,7 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
 async function loadOptionalCageFieldArt(stage, { signal } = {}) {
   const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
   try {
-    const response = await fetchRuntimeMapResponse(CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
+    const response = await fetchRuntimeMapResponse(CAGE_REVIEW_MANIFEST_URL ?? CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
     if (!response.ok) throw new Error(`CAGE_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
     const cageFrame = app.getCageEditFrame();
@@ -651,6 +689,22 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
     let art;
     try{art=await withCageForeground({PIXI,art:fieldArt,manifest,placements:plan.placements,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
     catch(error){await fieldArt.dispose();throw error;}
+    // Local review (2026-10-19): a same-theme large/small pair that really
+    // shares an edge hides the duplicate rim there; any failure keeps full rims.
+    if(isOriginalLoopbackLocation()) {
+    try{
+      const { withCageSharedEdges } = await importLocalReviewModule('../presentation/cageSharedEdges.js');
+      art=await withCageSharedEdges({PIXI,art,manifest,fetchImpl:(url,options)=>fetch(url,{...options,signal})});
+    }catch(error){console.warn(`CHAMPIONSHIP_CAGE_SHARED_EDGES_FALLBACK: ${error.message}`);}
+    // Local review (2026-10-19): generated cage motion (wind, glow, water,
+    // particles); any failure keeps the static ranch.
+    try{
+      const { withCageAmbient } = await importLocalReviewModule('../presentation/cageAmbient.js');
+      art=await withCageAmbient({PIXI,art,manifest,placements:plan.placements,renderer:stage.app?.renderer??null,
+        quality:currentQualityTier()==='saver'?'low':'high',reducedMotion:prefersReducedMotion(),
+        fetchImpl:(url,options)=>fetch(url,{...options,signal})});
+    }catch(error){console.warn(`CHAMPIONSHIP_CAGE_AMBIENT_FALLBACK: ${error.message}`);}
+    }
     // A ranch without the expansion shows its locked rows below the board
     // (2026-10-12). Decoration only, so a failure keeps the ranch as it was.
     const preview = app.getInteractiveTutorial()?.finished === false ? null
@@ -676,11 +730,26 @@ async function loadOptionalBattleFieldArt(stage, source) {
   const wanted = BATTLE_ART_PREVIEW_FIELD || source?.getFrame()?.arena?.field || null;
   if (!wanted) return null;
   try {
-    const response = await fetchPublicMetadataResponse(LICENSED_BATTLE_ART_MANIFEST_URL, globalThis.location.href);
-    if (!response.ok) throw new Error(`BATTLE_ART_MANIFEST_HTTP_${response.status}`);
-    const manifest = validateRuntimeMapArtBundle(await response.json());
+    const fetchManifest = async url => {
+      const response = await fetchPublicMetadataResponse(url, globalThis.location.href);
+      if (!response.ok) throw new Error(`BATTLE_ART_MANIFEST_HTTP_${response.status}`);
+      return validateRuntimeMapArtBundle(await response.json());
+    };
+    let manifest = await fetchManifest(LICENSED_BATTLE_ART_MANIFEST_URL);
+    // A single-field local review (BM03 / BM04 / BM05 polish) leaves other
+    // arenas on the normal original arena set instead of failing the battle.
+    if (!manifest.fields.some((field) => field.fieldId === wanted) && /bm0[345]-[a-z]+-polish-r[23]/.test(LICENSED_BATTLE_ART_MANIFEST_URL))
+      manifest = await fetchManifest(publicMetadataPath('battle-original'));
     if (!manifest.fields.some((field) => field.fieldId === wanted)) return null;
-    return createRuntimeMapArtFieldLoader({ PIXI: stage.PIXI }).load({ manifest, fieldId: wanted });
+    const art = await createRuntimeMapArtFieldLoader({ PIXI: stage.PIXI }).load({ manifest, fieldId: wanted });
+    if (!art?.field?.ambient || !isOriginalLoopbackLocation()) return art;
+    try {
+      const { withBattleFieldAmbient } = await importLocalReviewModule('../presentation/battleFieldAmbient.js');
+      return await withBattleFieldAmbient({ PIXI: stage.PIXI, art, quality: currentQualityTier() === 'saver' ? 'low' : 'high', reducedMotion: prefersReducedMotion(), renderer: stage.app?.renderer ?? null });
+    } catch (error) {
+      console.warn(`CHAMPIONSHIP_BATTLE_AMBIENT_FALLBACK: ${error.message}`);
+      return art;
+    }
   } catch (error) {
     console.warn(`CHAMPIONSHIP_BATTLE_ART_FALLBACK: ${error.message}`);
     return null;
@@ -1246,9 +1315,9 @@ async function mountBattleSelect() {
       if(mode==='FREE_BATTLE'){
         const party=await app.prepareFreeBattle(recordIndex,playerInstanceIds,selectedArena);if(!party.ok)return party;
         const prepared=(await loadBattleRuntime())({mode:2,battleType:0,playerIndividuals:party.individuals,rng:party.rngPreparation.rng,
-          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY});
+          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY,arenaHazards:await loadArenaHazards()});
         try{
-          prepared.chooseFreeBattle({presetIndices:party.match.presetIndices,arenaIndex:party.arenaIndex});prepared.startMatch();
+          prepared.chooseFreeBattle({presetIndices:party.match.presetIndices,arenaIndex:party.arenaIndex});prepared.startMatch();exposeArenaHazardsQa(prepared);
           const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
           return await enterPreparedBattle(prepared,attemptId,()=>app.enterFreeBattle({attemptId,playerInstanceIds,rngPreparation:party.rngPreparation}));
         }catch(error){prepared.dispose();console.warn(`FREE_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
@@ -1256,9 +1325,9 @@ async function mountBattleSelect() {
       if(mode==='PRACTICE_BATTLE'){
         const party=await app.preparePracticeBattle(playerInstanceIds,selectedArena);if(!party.ok)return party;
         const prepared=(await loadBattleRuntime())({mode:5,battleType:0,playerIndividuals:party.parties[0],opponentIndividuals:party.parties[1],rng:party.rngPreparation.rng,
-          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY});
+          personalityPolicy:FREE_PRACTICE_PERSONALITY_POLICY,arenaHazards:await loadArenaHazards()});
         try{
-          prepared.choosePracticeBattle({arenaIndex:party.arenaIndex});prepared.startMatch();
+          prepared.choosePracticeBattle({arenaIndex:party.arenaIndex});prepared.startMatch();exposeArenaHazardsQa(prepared);
           const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
           return await enterPreparedBattle(prepared,attemptId,()=>app.enterPracticeBattle({attemptId,playerInstanceIds:playerInstanceIds.flat(),rngPreparation:party.rngPreparation}));
         }catch(error){prepared.dispose();console.warn(`PRACTICE_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
@@ -2348,6 +2417,7 @@ function boot() {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
       storage: window.localStorage,
+      huntExpansionLoader: loadHuntExpansionReview,
       catalog: productEntities,
       cages: RAISING_CAGES
     });
@@ -2406,6 +2476,15 @@ function boot() {
   });
 }
 
+// Local cage review (2026-10-19): redesigned review cages carry walkability
+// that matches their art; applied before the ranch is built, loopback only.
+if (CAGE_REVIEW_MANIFEST_URL) {
+  try {
+    const [{ applyRaisingGroundReview }, review] = await Promise.all([import("../raising/raisingGroundReview.js"),
+      importLocalReviewModule("../../data/championship/catalogs/raising-ground.review-20261019.json", { with: { type: "json" } })]);
+    applyRaisingGroundReview(review.default);
+  } catch (error) { console.warn(`CHAMPIONSHIP_CAGE_WALKABILITY_REVIEW_FALLBACK: ${error.message}`); }
+}
 boot();
 
 export { adaptFeedback };

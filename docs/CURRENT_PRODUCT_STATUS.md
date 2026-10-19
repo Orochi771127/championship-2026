@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: DEX_WORKSPACE_CLOSEOUT_20261019 -->
+**2026-10-19 — 圖鑑定稿與工作區整合。** 以遠端 140 張為基準補入15張完整單張：Owner 本輪核准的9張完整持裝版本，以及豆豆／雷霆戰狼6張既有核准圖。現有155張專用圖，230個非蛋身分中75個仍缺專用單張，另077／078舊空手圖按新規則列完整持裝替換待辦；不宣稱全角色或新動畫已定稿。追加 ART07–ART12，普通218筆登錄與存檔規則不變。36個工作樹逐個盤點；整合30筆有界地圖／效能／本機審核提交，修正100格副本生成衝突、還原原生 hash-locked ground、隔離本機審核打包。HM02及Gemini戰術等未完成候選保留，具體阻擋另列。[完整盤點與驗證](reports/dex-workspace-closeout-2026-10-19/REPORT_ZH_TW.md)。
+
 <!-- record-id: REFERENCE_POLISH_CANDIDATE_20261018 -->
 **2026-10-18 — Reference polish 發佈快照。** Owner 已明確授權 commit/push/main/Pages 與本機同步。首頁四圖手機 418 KB／大尺寸 626 KB、grounded idle、分級戰鬥回饋、規則表升級預覽及 iPhone Web App；CSS 重試、誤標暴擊與頭像破圖已修正。完整 CI **2,585／2,585**、正式 build/validate/payload 與完整素材正常入口／首次升級通過，0 缺檔／fallback／page error。保留本機孵化草稿，實機驗收仍開放；遠端／公開狀態以該提交的 GitHub CI/Pages 為準。[報告](reports/reference-polish-2026-10-18/REPORT_ZH_TW.md)。
 

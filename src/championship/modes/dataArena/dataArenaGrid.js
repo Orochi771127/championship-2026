@@ -14,6 +14,19 @@
 //    routing new paths over it. When it melts, anything standing on it falls
 //    into the water (the simulation handles the safe recovery).
 //  * An EMBER shot landing on ice takes `emberIceMelt` seconds off it.
+//  * THUNDER on conductive water (open WATER or SHALLOW; ice insulates, dry
+//    ground never conducts) charges every connected conductive cell within
+//    `shockRadius` for `shockSeconds`, owned by the caster's team. Charge is
+//    read by whoever owns damage; the grid only holds where and how long.
+//    Freezing a charged cell clears its charge.
+//  * NATURAL ICE (arena maps with `naturalIce` rects): a permanent sheet over
+//    WATER (ice = Infinity, so the existing countdown never touches it). HEAT
+//    wears its integrity down; at zero it joins the ordinary CRACKING warning
+//    and melt, so walkers on it fall exactly as on melted temporary ice. An
+//    opened natural cell refreezes on a timer or at once under COLD.
+//  * LAVA (arena maps): walkable and hot. WATER/COLD crusts it into cooled rock
+//    for `lavaCoolSeconds`; the last `lavaWarnSeconds` announce the reheat once,
+//    then the cell is lava again. Re-cooling resets the timer (no stacking).
 
 import { DATA_ARENA_GRID_RULES, DATA_ARENA_MAP, DATA_ARENA_TERRAIN } from "./dataArenaConfig.js";
 import { dataArenaPropSpecs } from "./dataArenaProps.js";
@@ -33,12 +46,25 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
   const iceWarned = new Uint8Array(count);
   // Match-scoped appearance is separate from the short anti-reignition timer.
   const scorch = new Uint8Array(count);
+  const charge = new Float32Array(count); // seconds of charge left
+  const chargeTeam = new Int8Array(count).fill(-1);
+  const naturalIce = new Uint8Array(count);
+  const iceIntegrity = new Float32Array(count);
+  const refreeze = new Float32Array(count); // seconds until an opened natural cell refreezes
+  const cooled = new Float32Array(count); // seconds of crust left on a lava cell
+  const cooledWarned = new Uint8Array(count);
   const propIndex = new Int16Array(count); propIndex.fill(-1);
   // A monotonically increasing revision of everything navigation reads.
   let navRevision = 1;
   let fireTimer = 0;
   let burningCount = 0;
   let iceCount = 0;
+  let chargedCount = 0;
+  let chargeWarned = false;
+  let naturalCount = 0;
+  let refreezeCount = 0;
+  let cooledCount = 0;
+  let lavaCount = 0;
 
   const index = (c, r) => r * cols + c;
   const inBounds = (c, r) => c >= 0 && r >= 0 && c < cols && r < rows;
@@ -59,6 +85,22 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
       if (inBounds(c, r) && terrain[index(c, r)] === T.GROUND) flammable[index(c, r)] = 1;
     }
   }
+  for (const [c0, r0, w, h] of map.naturalIce ?? []) {
+    for (let r = r0; r < r0 + h; r++) for (let c = c0; c < c0 + w; c++) {
+      const i = index(c, r);
+      if (inBounds(c, r) && terrain[i] === T.WATER && !naturalIce[i]) { naturalIce[i] = 1; naturalCount++; }
+    }
+  }
+  function restoreNaturalIce() {
+    iceCount = 0;
+    for (let i = 0; i < count; i++) {
+      if (naturalIce[i]) { ice[i] = Infinity; iceIntegrity[i] = rules.naturalIceIntegrity; refreeze[i] = 0; iceWarned[i] = 0; }
+      if (ice[i] > 0) iceCount++;
+    }
+    refreezeCount = 0;
+  }
+  restoreNaturalIce();
+  for (let i = 0; i < count; i++) if (terrain[i] === T.LAVA) lavaCount++;
   const props = dataArenaPropSpecs(map).map((spec, pi) => {
     const cells = [];
     for (let r=spec.row;r<spec.row+spec.height;r++) for(let c=spec.col;c<spec.col+spec.width;c++) {
@@ -70,12 +112,15 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
 
   const isWaterTerrain = (i) => terrain[i] === T.WATER;
   const isSolid = (i) => terrain[i] === T.SOLID || terrain[i] === T.STANDS;
+  const isConductive = (i) => (terrain[i] === T.WATER && ice[i] <= 0) || terrain[i] === T.SHALLOW;
 
   /** What a body standing on this cell stands on. */
   function surface(i) {
     if (i < 0 || i >= count) return "OUT";
     if (isSolid(i)) return "SOLID";
     if (isWaterTerrain(i)) return ice[i] > 0 ? (ice[i] <= rules.iceWarnSeconds ? "ICE_CRACKING" : "ICE") : "WATER";
+    if (terrain[i] === T.SHALLOW) return "SHALLOW";
+    if (terrain[i] === T.LAVA) return cooled[i] > 0 ? (cooled[i] <= rules.lavaWarnSeconds ? "COOLED_ROCK_REHEATING" : "COOLED_ROCK") : "LAVA";
     return "GROUND";
   }
 
@@ -199,6 +244,7 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     const was = ice[i];
     if (was >= seconds) return false;
     if (was <= 0) { iceCount++; navRevision++; }
+    if (charge[i] > 0) { charge[i] = 0; chargeTeam[i] = -1; chargedCount--; }
     ice[i] = seconds;
     iceWarned[i] = 0;
     events?.push({ type: "ICE_FORM", cell: i, x: (i % cols + 0.5) * cell, y: (Math.floor(i / cols) + 0.5) * cell, source, seconds });
@@ -236,6 +282,112 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     return true;
   }
 
+  /**
+   * Heat lands at (x, y): natural ice inside `radius` cells loses integrity
+   * with linear falloff; temporary ice loses `amount / 25` seconds. One call
+   * is one application per cell (callers dedupe repeated hits). Returns the
+   * number of cells that started cracking.
+   */
+  function heatIceAt(x, y, { radius = 2.5, amount = 50, source = "HEAT" } = {}, events) {
+    let cracked = 0, heated = 0;
+    forCellsInRadius(x, y, radius, (i, cx, cy) => {
+      if (!(ice[i] > 0)) return;
+      // Full strength within one cell of the impact, then linear to the edge.
+      const d = Math.hypot(cx - x, cy - y), reach = (radius + 0.5) * cell;
+      const falloff = d <= cell ? 1 : Math.max(0, 1 - (d - cell) / Math.max(1, reach - cell));
+      if (falloff <= 0) return;
+      heated++;
+      if (ice[i] === Infinity) {
+        iceIntegrity[i] -= amount * falloff;
+        if (iceIntegrity[i] <= 0) { iceIntegrity[i] = 0; ice[i] = rules.iceWarnSeconds; cracked++; }
+      } else {
+        ice[i] = Math.max(0.01, ice[i] - amount * falloff / 25);
+      }
+    });
+    if (heated) events?.push({ type: "ICE_HEATED", x, y, cells: heated, cracked, source });
+    return cracked;
+  }
+
+  /**
+   * Cold lands at (x, y): opened natural cells refreeze at once; other open
+   * water freezes temporarily for `seconds`. Returns the cells frozen.
+   */
+  function coolAt(x, y, { radius = 2, seconds = rules.lensIceSeconds, source = "COLD" } = {}, events) {
+    let frozen = 0;
+    forCellsInRadius(x, y, radius, (i) => {
+      if (!isWaterTerrain(i) || ice[i] > 0) return;
+      if (naturalIce[i]) {
+        ice[i] = Infinity; iceIntegrity[i] = rules.naturalIceIntegrity; iceWarned[i] = 0;
+        if (refreeze[i] > 0) { refreeze[i] = 0; refreezeCount--; }
+        if (charge[i] > 0) { charge[i] = 0; chargeTeam[i] = -1; chargedCount--; }
+        iceCount++; navRevision++; frozen++;
+        events?.push({ type: "ICE_FORM", cell: i, x: (i % cols + 0.5) * cell, y: (Math.floor(i / cols) + 0.5) * cell, source, seconds: Infinity });
+      } else if (freezeCell(i, seconds, events, source)) frozen++;
+    });
+    return frozen;
+  }
+
+  /**
+   * Water or cold lands at (x, y): lava inside `radius` cells crusts over for
+   * `seconds` (a re-cooled cell is reset to the full time, never extended past
+   * it). Returns the number of lava cells cooled.
+   */
+  function coolLavaAt(x, y, { radius = 2.5, seconds = rules.lavaCoolSeconds, source = "WATER" } = {}, events) {
+    let n = 0;
+    forCellsInRadius(x, y, radius, (i) => {
+      if (terrain[i] !== T.LAVA) return;
+      if (!(cooled[i] > 0)) { cooledCount++; navRevision++; }
+      cooled[i] = Math.max(cooled[i], seconds);
+      cooledWarned[i] = 0;
+      n++;
+    });
+    if (n) events?.push({ type: "LAVA_COOLED", x, y, cells: n, seconds, source });
+    return n;
+  }
+
+  /**
+   * Thunder lands at (x, y). Charge floods the connected conductive cells
+   * (4-neighbour) within `radius` cells. Dry ground stops it, so a bank or a
+   * sandbar is a refuge. Returns the cells charged (0 on dry ground).
+   */
+  function applyShock(x, y, { team = -1, seconds = rules.shockSeconds, radius = rules.shockRadius, source = "THUNDER" } = {}, events) {
+    const c0 = cellOf(x), r0 = cellOf(y);
+    if (!inBounds(c0, r0) || !isConductive(index(c0, r0)) || !(seconds > 0)) return 0;
+    const start = index(c0, r0);
+    const seen = new Uint8Array(count);
+    const queue = [start];
+    seen[start] = 1;
+    const cells = [];
+    const limit = radius * radius;
+    while (queue.length) {
+      const i = queue.pop();
+      const c = i % cols, r = (i - c) / cols;
+      if ((c - c0) * (c - c0) + (r - r0) * (r - r0) > limit) continue;
+      cells.push(i);
+      for (const [dc, dr] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        if (!inBounds(c + dc, r + dr)) continue;
+        const n = index(c + dc, r + dr);
+        if (!seen[n] && isConductive(n)) { seen[n] = 1; queue.push(n); }
+      }
+    }
+    for (const i of cells) {
+      if (charge[i] <= 0) chargedCount++;
+      charge[i] = Math.max(charge[i], seconds);
+      chargeTeam[i] = team;
+    }
+    chargeWarned = false;
+    events?.push({ type: "SHOCK_CHARGE", x: (c0 + 0.5) * cell, y: (r0 + 0.5) * cell, cells: cells.length, team, seconds, source });
+    return cells.length;
+  }
+
+  /** The charge under a point, or null when the cell is not charged. */
+  function chargeAt(x, y) {
+    const c = cellOf(x), r = cellOf(y);
+    if (!inBounds(c, r)) return null;
+    const i = index(c, r);
+    return charge[i] > 0 ? { seconds: charge[i], team: chargeTeam[i], cell: i, fading: charge[i] <= rules.shockWarnSeconds } : null;
+  }
+
   /** The tide opens: the retractable bridge lifts and its cells become water. */
   function openTide(events) {
     let changed = 0;
@@ -245,6 +397,18 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
   }
 
   function step(dt, events) {
+    // Charge: count down; announce the fade once per burst, then the clear.
+    if (chargedCount > 0) {
+      let fading = 0;
+      for (let i = 0; i < count; i++) {
+        if (charge[i] <= 0) continue;
+        charge[i] -= dt;
+        if (charge[i] <= 0) { charge[i] = 0; chargeTeam[i] = -1; chargedCount--; }
+        else if (charge[i] <= rules.shockWarnSeconds) fading++;
+      }
+      if (fading && !chargeWarned) { chargeWarned = true; events.push({ type: "SHOCK_FADING", cells: fading }); }
+      if (chargedCount === 0) events.push({ type: "SHOCK_CLEARED" });
+    }
     // Ice: count down, warn once, melt.
     if (iceCount > 0) {
       for (let i = 0; i < count; i++) {
@@ -257,8 +421,34 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
         }
         if (ice[i] <= 0 && before > 0) {
           ice[i] = 0; iceCount--; navRevision++;
-          events.push({ type: "ICE_MELT", cell: i, x: (i % cols + 0.5) * cell, y: (Math.floor(i / cols) + 0.5) * cell });
+          if (naturalIce[i]) { refreeze[i] = rules.naturalRefreezeSeconds; refreezeCount++; }
+          events.push({ type: "ICE_MELT", cell: i, x: (i % cols + 0.5) * cell, y: (Math.floor(i / cols) + 0.5) * cell, natural: Boolean(naturalIce[i]) });
         }
+      }
+    }
+    // Cooled lava: count down, warn once per cell, then molten again.
+    if (cooledCount > 0) {
+      let warned = 0, restored = 0;
+      for (let i = 0; i < count; i++) {
+        if (!(cooled[i] > 0)) continue;
+        cooled[i] -= dt;
+        if (cooled[i] <= 0) { cooled[i] = 0; cooledWarned[i] = 0; cooledCount--; navRevision++; restored++; }
+        else if (!cooledWarned[i] && cooled[i] <= rules.lavaWarnSeconds) { cooledWarned[i] = 1; warned++; }
+      }
+      if (warned) events.push({ type: "LAVA_REHEAT_WARN", cells: warned });
+      if (restored) events.push({ type: "LAVA_RESTORED", cells: restored });
+    }
+    // Opened natural ice closes again on its own timer.
+    if (refreezeCount > 0) {
+      for (let i = 0; i < count; i++) {
+        if (!(refreeze[i] > 0)) continue;
+        refreeze[i] -= dt;
+        if (refreeze[i] > 0) continue;
+        refreeze[i] = 0; refreezeCount--;
+        if (ice[i] > 0) continue;
+        ice[i] = Infinity; iceIntegrity[i] = rules.naturalIceIntegrity; iceWarned[i] = 0; iceCount++; navRevision++;
+        if (charge[i] > 0) { charge[i] = 0; chargeTeam[i] = -1; chargedCount--; }
+        events.push({ type: "ICE_FORM", cell: i, x: (i % cols + 0.5) * cell, y: (Math.floor(i / cols) + 0.5) * cell, source: "NATURAL_REFREEZE", seconds: Infinity });
       }
     }
     for (let i = 0; i < count; i++) {
@@ -299,19 +489,28 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
   /** Fresh round: transient hazards clear; match damage/scorch/terrain persist. */
   function resetDynamic() {
     fire.fill(0); heat.fill(0); wet.fill(0); ash.fill(0); ice.fill(0); iceWarned.fill(0);
+    charge.fill(0); chargeTeam.fill(-1); chargedCount = 0; chargeWarned = false;
     burningCount = 0; iceCount = 0; fireTimer = 0; navRevision++;
+    restoreNaturalIce(); // authored sheets are terrain, not transient hazards
+    cooled.fill(0); cooledWarned.fill(0); cooledCount = 0;
   }
 
   return Object.freeze({
     resetDynamic, map,
-    cols, rows, cell, count, terrain, flammable, fire, wet, ash, ice, scorch, props,
+    cols, rows, cell, count, terrain, flammable, fire, wet, ash, ice, scorch, props, charge, chargeTeam,
+    naturalIce, iceIntegrity, refreeze, cooled,
     propAtCell, propAt, propVisualState, damageProp, damagePropsInRadius,
     index, inBounds, cellOf,
     get navRevision() { return navRevision; },
     get burningCount() { return burningCount; },
     get iceCount() { return iceCount; },
-    surface, surfaceAt, blocksMove, blocksMoveAt, blocksLaser, isSolid, isWaterTerrain,
-    raycast, ignite, igniteAt, applyWater, freezeCell, applyCryoColumn, meltAt, openTide, step,
+    get chargedCount() { return chargedCount; },
+    get naturalCount() { return naturalCount; },
+    get lavaCount() { return lavaCount; },
+    get cooledCount() { return cooledCount; },
+    surface, surfaceAt, blocksMove, blocksMoveAt, blocksLaser, isSolid, isWaterTerrain, isConductive,
+    raycast, ignite, igniteAt, applyWater, freezeCell, applyCryoColumn, meltAt, openTide, applyShock, chargeAt,
+    heatIceAt, coolAt, coolLavaAt, step,
     burningAt(x, y) { const c = cellOf(x), r = cellOf(y); return inBounds(c, r) && fire[index(c, r)] > 0; },
     /** Nearest cell a walker may safely stand on (not solid, not open water, not burning). */
     nearestSafeCell(x, y) {

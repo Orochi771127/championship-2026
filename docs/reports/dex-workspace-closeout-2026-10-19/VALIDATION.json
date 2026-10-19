@@ -1,0 +1,53 @@
+{
+  "status": "PASS_LOCAL_INTEGRATION",
+  "ci": {
+    "tests": 2701,
+    "passed": 2701,
+    "failed": 0,
+    "portableModules": 348,
+    "localReferenceModulesSeparate": 47
+  },
+  "artifact": {
+    "buildId": "5ba6ba25bfb0bb5c7fca8ab1b5dc823046770a576d5cd1faa9c5500bb8f3c246",
+    "fileCount": 7848,
+    "actualSiteBytes": 999631230,
+    "siteByteLimit": 1000000000,
+    "privateAuthorityIndexIncluded": false,
+    "buildAndIndependentValidation": "PASS",
+    "independentPayloadCheck": "PASS",
+    "sourceCheckoutBaseCommit": "8d9864dcd176a2439d7cae9bc7f7efc0cf498de7",
+    "scope": "Pre-commit compiled candidate. Publication commit and hosted workflows are verified separately; this old manifest commit is not a claim of final deployment."
+  },
+  "browser": [
+    {
+      "scope": "equipped",
+      "checks": 66,
+      "uniqueImageResponses": 66,
+      "pageErrors": 0,
+      "networkErrors": 0,
+      "registrationUnchanged": true,
+      "report": "browser/equipped/result.json",
+      "buildId": "5ba6ba25bfb0bb5c7fca8ab1b5dc823046770a576d5cd1faa9c5500bb8f3c246"
+    },
+    {
+      "scope": "gallery",
+      "checks": 24,
+      "uniqueImageResponses": 24,
+      "pageErrors": 0,
+      "networkErrors": 0,
+      "registrationUnchanged": true,
+      "report": "browser/gallery/result.json",
+      "buildId": "5ba6ba25bfb0bb5c7fca8ab1b5dc823046770a576d5cd1faa9c5500bb8f3c246"
+    }
+  ],
+  "manualVisualReview": {
+    "scope": "All 15 new source single images and all 15 captured mobile heroes actually inspected; 9 equipped heroes retain matching held weapons, grip and full composition. Other desktop captures have automated contain/bounds/hash checks.",
+    "status": "PASS_SCOPED_VISUAL_REVIEW",
+    "physicalDevicesVerified": false
+  },
+  "originalPlayerSaveTouched": false,
+  "originalDirtyCheckoutPreserved": true,
+  "mainWorkspaceCensus": 36,
+  "additionalRecentClonePathsIncludingDuplicates": 19,
+  "unfinishedWorkspacesMerged": false
+}

@@ -13,8 +13,8 @@ const ids=[122,123,127,128,129,130,131,132,133,134,135,137,144,150,152,153,154,1
 
 test('the missing approved full-art batch selects exactly its 24 immutable identities',()=>{
   assert.deepEqual(manifest.entries.map(row=>row.speciesIndex),ids);
-  assert.equal(registry.entries.length,140);
-  assert.equal(new Set(registry.entries.map(row=>row.speciesIndex)).size,140);
+  assert.equal(registry.entries.length,155);
+  assert.equal(new Set(registry.entries.map(row=>row.speciesIndex)).size,155);
   for(const row of manifest.entries){
     assert.ok(row.approval.evidence,'Explicit approval evidence is required');
     assert.match(row.approval.status,/^owner_approved$/i);
@@ -36,10 +36,10 @@ test('the missing approved full-art batch selects exactly its 24 immutable ident
 });
 
 test('the 110 published selections and raw authoring registry remain intact',()=>{
-  const preserved={schemaVersion:1,entries:registry.entries.filter(row=>row.speciesIndex<231&&!ids.includes(row.speciesIndex))};
+  const preserved={schemaVersion:1,entries:registry.entries.filter(row=>row.speciesIndex<231&&!ids.includes(row.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(row.speciesIndex))};
   assert.equal(preserved.entries.length,110);
   assert.equal(sha(Buffer.from(JSON.stringify(preserved,null,2)+'\n')),'8686f2e91e776cd465ee427622b3bde0de08377024d144821e654da3ec93f1e1');
   assert.equal(read('src/data/championship/database-hero-portraits.r1.json').entries.length,96);
-  for(const id of [82,136,138,139,140,141,142,143,145,146,147,148,149,151,155,156,158,159,160,162,168,183])assert.equal(databaseHeroPortrait(id),null);
+  for(const id of [82,136,138,139,140,141,146,147,148,159,160,162,168])assert.equal(databaseHeroPortrait(id),null);
   assert.ok(!inputs.files.some(file=>file.includes('approved-dex-gap-20261018')||file.includes('source-masters')));
 });

@@ -117,6 +117,10 @@ test("only the authorized source families are present", () => {
       // Owner 2026-10-13: the bounded improved AI (OWNER_APPROVED_ADAPTATION),
       // opt-in through the existing runtime; the original rule stays the default.
       "battleAiAdaptation.js",
+      // Owner 2026-10-18: opt-in arena hazards (BM03 lava, BM04 conduction,
+      // BM05 ice) on the shared Data Arena grid; a local review that reads the
+      // session and never changes the original AI.
+      "battleArenaHazards.js",
       "battleCandidateBuckets.js",
       "battleCatalogs.js",
       "battleContactTargeting.js",

@@ -14,7 +14,9 @@ const outdir=path.join(root,recipe.outputDirectory),sources=new Map(),runtimeScr
 const result=await esbuild.build({absWorkingDir:root,entryPoints:[recipe.entry],outdir,
   entryNames:'main-[hash]',chunkNames:'chunk-[hash]',bundle:true,splitting:true,
   format:'esm',platform:'browser',target:'es2022',metafile:true,write:false,
-  minifyWhitespace:true,minifySyntax:true,minifyIdentifiers:false,keepNames:true,charset:'utf8',
+  // Compact internal identifiers to keep the complete reviewed playtest below
+  // the site byte cap. Public exports and function/class names remain intact.
+  minifyWhitespace:true,minifySyntax:true,minifyIdentifiers:true,keepNames:true,charset:'utf8',
   external:['node:*'],logLevel:'silent',plugins:[{name:'approved-source-and-module-urls',setup(build){
     build.onResolve({filter:/^pixi\.js$/},args=>importMap[args.path]?{path:path.resolve(root,importMap[args.path])}:undefined);
     build.onLoad({filter:/\.(?:m?js|json)$/},async args=>{

@@ -11,7 +11,7 @@ import {separateGroundFootpoints,canTraverseGroundStep} from '../../field/ground
 const Q12=4096;
 const FRAME_MS=1000*560190/33513982;
 export function nativeHuntGroundSpacingEligible(a){
-  return !!(a.actorActive&&a.wildActive&&!a.hidden&&!a.cardState&&!a.tutorialScripted&&[1,2,3].includes(a.aiState)
+  return !!(a.actorActive&&a.wildActive&&!a.hidden&&!a.passage&&!a.cardState&&!a.tutorialScripted&&[1,2,3].includes(a.aiState)
     &&a.positionQ12?.[2]===0&&a.currentHp>0&&!a.bound&&!a.pull11&&!a.pull13&&!a.movementRestricted
     &&!a.shake&&!a.shotShakeTicks&&!a.handReady&&!a.trapReady&&!a.foodTarget&&!a.seekingFood&&!a.decoyCenter);
 }
@@ -163,6 +163,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       facing:a.facing?"right":"left",moving:[2,3,8].includes(a.aiState),state:nativeWildCaptureSnapshot(a).state,
       aiState:a.aiState,speciesIndex:a.speciesIndex,personalityIndex:a.individual.fields['018'],
       currentHp:a.currentHp,maxHp:a.maxHp,bound:!!a.bound,stunTicks:a.shotShakeTicks,nativeAnimation:nativeWildCharacterFrame(a),
+      ...(a.passage?{passage:a.passage.phase,passageAlpha:a.passageAlpha??1}:{}),
       hpEvidence:"NATIVE_NORMAL_HUNT_CONTROLLER",behaviourEvidence:"NATIVE_HUNT_AI_TRANSLATION"})),
     getCaptureRecord:id=>{const a=actors.find(a=>a.wildId===id);return a?nativeWildCaptureSnapshot(a):null;},
     getOnCardEntries:cardEntries,

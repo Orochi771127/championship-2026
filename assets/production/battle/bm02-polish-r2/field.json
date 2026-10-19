@@ -1,0 +1,156 @@
+{
+ "fieldId": "field_bm02_01",
+ "identifier": "BATTLE_GRASS",
+ "arenaIndex": 1,
+ "worldWidthPx": 1664,
+ "worldHeightPx": 1088,
+ "nativeWidthPx": 416,
+ "nativeHeightPx": 272,
+ "visualRole": "BATTLE_ARENA",
+ "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+ "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+ "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+ "frames": [
+  {
+   "src": "assets/production/battle/bm02-polish-r2/base.webp",
+   "sha256": "d80a381cc0b71d811620abc75f1507daf5a430851ed77d1316aee766c487d6a6",
+   "durationMs": null
+  }
+ ],
+ "ambient": {
+  "kind": "R1_POLISH_R2",
+  "clouds": 0.18,
+  "gust": "grass",
+  "particles": "petals",
+  "foliageStatic": {
+   "src": "assets/production/battle/bm02-polish-r2/foliage-small.webp",
+   "sha256": "a4b98b9990b23a5e8c79ea9e22f28dc57f929c4241fbb6e3962e64d3c84c7a90",
+   "x": 103,
+   "y": 298
+  },
+  "canopies": [
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-0.webp",
+    "sha256": "ec2f96391000aa36efd190a0641a17f08f96c00e989bc3bad2eba034600e6d58",
+    "x": 0,
+    "y": 0,
+    "pivot": [
+     328.0,
+     359.04
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-1.webp",
+    "sha256": "24ab66c2a9f8f5038bb86affab02ae436559fbd0a9fa0cde0537da5abd353559",
+    "x": 850,
+    "y": 0,
+    "pivot": [
+     1179.0,
+     148.72
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-2.webp",
+    "sha256": "d11516c34426272b1b821fa5447ed1e5f809067a04cf27e847fc491905f484bb",
+    "x": 1475,
+    "y": 69,
+    "pivot": [
+     1569.5,
+     271.4
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-3.webp",
+    "sha256": "e5afc55c72ae79c13bbb570491964f31bd8a0a4267fa18dba94a2237e8fe599f",
+    "x": 1626,
+    "y": 414,
+    "pivot": [
+     1645.0,
+     543.36
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-4.webp",
+    "sha256": "6b63c63349469fbadeb7deb867ee9c1f35e5f2802fb27b1c5713b30141440bd8",
+    "x": 1529,
+    "y": 744,
+    "pivot": [
+     1569.0,
+     828.48
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-5.webp",
+    "sha256": "37f8fbae193d1e76d169e698b779a1a0f09f6e7bb68d2a076fc980d3cac178f2",
+    "x": 0,
+    "y": 786,
+    "pivot": [
+     19.5,
+     831.76
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-6.webp",
+    "sha256": "9af8b6344a98357cf31cb5b8227bddc628ca0c3ae03b2e5432db83e96822ad70",
+    "x": 0,
+    "y": 886,
+    "pivot": [
+     61.5,
+     1063.76
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-7.webp",
+    "sha256": "cb93e9094137c0764c6ea429d40360ad3e87623e59efcf52ff94dfb226be1585",
+    "x": 1538,
+    "y": 890,
+    "pivot": [
+     1601.0,
+     1064.24
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-8.webp",
+    "sha256": "edc3ef38f0d554fc0a63cf8a9a1de71d57ad4cbc40d2c6b510fc78bf6e946a42",
+    "x": 233,
+    "y": 976,
+    "pivot": [
+     274.0,
+     1056.08
+    ]
+   },
+   {
+    "src": "assets/production/battle/bm02-polish-r2/foliage-9.webp",
+    "sha256": "0bcbaeca45f26a1c330fd9f711b9e34281089c5f76d6fc063c25686579353002",
+    "x": 1355,
+    "y": 979,
+    "pivot": [
+     1405.0,
+     1049.4
+    ]
+   }
+  ],
+  "boundaryGlow": {
+   "src": "assets/production/battle/bm02-polish-r2/boundary-glow.webp",
+   "sha256": "6f10f18f2bcaf9ef89bee219bde7c55aaecdab3f5c593808f53bbbbc644af1f0",
+   "x": 76,
+   "y": 169
+  },
+  "floorMask": {
+   "src": "assets/production/battle/bm02-polish-r2/floor-mask.webp",
+   "sha256": "7d1da214a9c7a03a69a9091b9ec9b12104f1147eca6cfedefe9d6be0ff0e6e34",
+   "x": 0,
+   "y": 0,
+   "width": 1664,
+   "height": 1088
+  },
+  "cloudTile": {
+   "src": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+   "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
+  },
+  "gustTile": {
+   "src": "assets/production/battle/shared-ambient-r2/gust-streak-tile.webp",
+   "sha256": "92377e537d49bf9cf9a469bfbf4e6ff5a7aecd4911d20e95a3d68cc4ad3b07c7"
+  }
+ }
+}

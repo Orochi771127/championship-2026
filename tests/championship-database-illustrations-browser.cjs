@@ -10,6 +10,7 @@ const output=path.resolve(process.env.DEX_SIX_OUTPUT||'output/playwright/dex-app
 const base='https://orochi771127.github.io/championship-2026/';
 const publicMode=process.env.DEX_SIX_PUBLIC==='1';
 const manifest=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-six-illustrations-20261018/manifest.json','utf8'));
+manifest.entries.push(...JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-closeout-20261019/manifest.json','utf8')).entries);
 const registry=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const report={status:'RUNNING',pageErrors:[],networkErrors:[],checks:[],captures:[],responseHashes:[],visualReview:'PENDING_SEPARATE_SAVED_IMAGE_REVIEW',physicalDeviceAcceptance:false};
@@ -17,7 +18,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
 async function main(){let browser,context,server,page;const jobs=[];
  try{
   const policy=await import('../src/championship/app/friendsPlaytestPolicy.js');assert.equal(policy.FRIENDS_PLAYTEST_POLICY.fullDexView,true);
-  assert.equal(registry.entries.length,140);
+  assert.equal(registry.entries.length,155);
   report.registrySha256=sha(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json')));
   report.build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8')).buildId;
   if(!publicMode)server=await serveBuild(root);browser=await chromium.launch({executablePath:process.env.DEX_SIX_CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,chromiumSandbox:true});
@@ -49,7 +50,7 @@ async function main(){let browser,context,server,page;const jobs=[];
   const registration=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('championshipModernSave:v1'))?.progression?.registeredSpecies??[]);
   report.registrationBefore=await registration();assert.deepEqual(report.registrationBefore,[]);
   await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();await page.locator('.cm-toolbar__menu:not([hidden]) button[data-entry-id="database"]').click();await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor();await page.locator('.cm-vs2-database__stage').selectOption('ART');
-  assert.equal(await page.locator('.cm-vs2-database__row').count(),6);
+  assert.equal(await page.locator('.cm-vs2-database__row').count(),12);
   for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
    await page.setViewportSize(viewport);
    for(const e of manifest.entries){
@@ -64,7 +65,7 @@ async function main(){let browser,context,server,page;const jobs=[];
     const filename=`${e.speciesIndex}-${viewport.width}-hero.png`;await hero.screenshot({path:path.join(output,filename)});report.captures.push({speciesIndex:e.speciesIndex,viewport,filename,...actual});report.checks.push({speciesIndex:e.speciesIndex,viewport:viewport.width,heroAndThumbnail:'PASS'});write();
    }
   }
-  await Promise.all(jobs);report.registrationAfter=await registration();assert.deepEqual(report.registrationAfter,report.registrationBefore);assert.equal(report.checks.length,12);assert.equal(new Set(report.responseHashes.map(r=>r.speciesIndex+':'+r.role)).size,12);assert.deepEqual(report.pageErrors,[]);assert.deepEqual(report.networkErrors,[]);report.status='PASS_AUTOMATED_NORMAL_UI_HASH_AND_LAYOUT';
+  await Promise.all(jobs);report.registrationAfter=await registration();assert.deepEqual(report.registrationAfter,report.registrationBefore);assert.equal(report.checks.length,24);assert.equal(new Set(report.responseHashes.map(r=>r.speciesIndex+':'+r.role)).size,24);assert.deepEqual(report.pageErrors,[]);assert.deepEqual(report.networkErrors,[]);report.status='PASS_AUTOMATED_NORMAL_UI_HASH_AND_LAYOUT';
  }catch(error){report.status='FAIL';report.error=String(error);await page?.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});throw error;}
  finally{write();await context?.close();await browser?.close();await server?.close();}
  console.log(JSON.stringify({status:report.status,checks:report.checks.length,responseIdentities:new Set(report.responseHashes.map(r=>r.speciesIndex+':'+r.role)).size}));

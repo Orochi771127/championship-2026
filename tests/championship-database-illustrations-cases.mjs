@@ -16,7 +16,7 @@ import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
 import {setLocale} from '../src/championship/text/locale.js';
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 const sha=b=>createHash('sha256').update(b).digest('hex');
-const ids=[231,232,233,234,235,236];
+const ids=[231,232,233,234,235,236,237,238,239,240,241,242];
 const manifest=read('docs/art/production/characters/approved-six-illustrations-20261018/manifest.json');
 
 test('gallery locale coverage recognizes only the exact complete five-language dictionary',()=>{
@@ -45,18 +45,18 @@ test('every art-only detail shows its selected full illustration and omits playa
 
 test('all 134 prior published hero selections remain exact',()=>{
   const registry=read('src/data/championship/database-hero-portraits.public.v1.json');
-  const preserved={...registry,entries:registry.entries.filter(e=>e.speciesIndex<231)};
+  const preserved={...registry,entries:registry.entries.filter(e=>e.speciesIndex<231&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex))};
   assert.equal(preserved.entries.length,134);
   assert.equal(sha(Buffer.from(JSON.stringify(preserved,null,2)+'\n')),'5c6491b57edad00bb1caba25398aca1a5da432be7dba25aa463ee07fe41d705b');
 });
 
-test('six immutable encyclopedia identities use independent ART codes without assigning evolution stages',()=>{
+test('twelve immutable encyclopedia identities use independent ART codes without assigning evolution stages',()=>{
   assert.deepEqual(listDatabaseIllustrations().map(e=>e.speciesIndex),ids);
   const codes=ids.map(id=>getDatabaseIllustration(id).displayCode);
-  assert.deepEqual(codes,['ART01','ART02','ART03','ART04','ART05','ART06']);
-  assert.equal(DATABASE_DISPLAY_CATALOG.entries.length,232);
-  assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.speciesIndex)).size,232);
-  assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,232);
+  assert.deepEqual(codes,['ART01','ART02','ART03','ART04','ART05','ART06','ART07','ART08','ART09','ART10','ART11','ART12']);
+  assert.equal(DATABASE_DISPLAY_CATALOG.entries.length,238);
+  assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.speciesIndex)).size,238);
+  assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,238);
   const book=projectDatabase(),rows=databaseDisplayRows(book,'ART');
   assert.deepEqual(rows.map(e=>e.speciesIndex),ids);
   for(const row of rows){
@@ -79,11 +79,11 @@ test('art-only browsing cannot register, instantiate or invent gameplay/evolutio
     assert.equal(book.entries.length,218);assert.equal(book.selected.state,'NOT_TRACKED');assert.equal(book.selected.source,null);
     assert.deepEqual(book.selected.instances,[]);assert.deepEqual(book.selected.evolutionRoutes,[]);
   }
-  assert.throws(()=>projectDatabase({selectedSpeciesIndex:237}),/UNKNOWN_DATABASE_SLOT/);
+  assert.throws(()=>projectDatabase({selectedSpeciesIndex:243}),/UNKNOWN_DATABASE_SLOT/);
 });
 
 test('approved new boar revisions and all six hero/thumbnail pairs match public selected bytes',()=>{
-  assert.deepEqual(manifest.entries.map(e=>e.speciesIndex),ids);
+  assert.deepEqual(manifest.entries.map(e=>e.speciesIndex),ids.slice(0,6));
   assert.equal(manifest.entries[1].master.sha256,'79541efce40c55a366c21116509d4dd4a8356d9a62713980170fb0b8bb55e004');
   assert.equal(manifest.entries[2].master.sha256,'8b91df854871ed98da64c0b776246209efcdadedf08da6d25c7be27a092abf59');
   const allow=read('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json');

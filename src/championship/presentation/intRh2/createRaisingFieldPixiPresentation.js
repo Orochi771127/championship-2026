@@ -666,13 +666,21 @@ export async function mountRaisingFieldPixiPresentation({
     return false;
   }
 
+  // The canvas CSS rect only changes with the viewport; reading it per actor
+  // per frame forced a full layout whenever the HUD had touched the DOM.
+  let canvasRect=null,canvasRectKey='';
+  function canvasCssRect(){
+    const key=`${app.screen.width}x${app.screen.height}:${globalThis.innerWidth}x${globalThis.innerHeight}`;
+    if(!canvasRect||key!==canvasRectKey){canvasRectKey=key;canvasRect=app.canvas.getBoundingClientRect?.()??null;}
+    return canvasRect;
+  }
   function actorGeometry(entry,frameGeometry=entry.nativeFramePresenter?.getSnapshot()?.geometry,flipX=false){
     const nativeScale=getRaisingNativePixelScale(fieldArt?.field,view);
     const sizing=frameGeometry?.scale?{...entry.nativeSizing,packedPixelsPerNativePixel:frameGeometry.scale}:entry.nativeSizing;
     const displayOffset=raisingOriginalBodyOffset(entry.entityId,entry.nativeSizing);
     // A fixed offset identifies only the eight normalized original eggs.
     // Read the rendered canvas rect so orientation-only CSS scaling is covered.
-    const rect=displayOffset?app.canvas.getBoundingClientRect?.():null;
+    const rect=displayOffset?canvasCssRect():null;
     const hitAreaCssScale=rect?{x:rect.width/app.screen.width,y:rect.height/app.screen.height}:null;
     const geometry=getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing),displayOffset,hitAreaCssScale});
     if(geometry){
@@ -827,6 +835,7 @@ export async function mountRaisingFieldPixiPresentation({
   // Reframe the existing scene after the shared stage resized its renderer.
   // No actor reload, selection intent, scene, application or clock is created.
   function resize() {
+    canvasRect = null;
     if (disposed) return;
     if (!responsiveLayout) {
     if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
