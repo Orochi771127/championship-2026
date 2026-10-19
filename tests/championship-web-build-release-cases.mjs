@@ -44,6 +44,25 @@ test('a script also addressed by URL retains its complete original module closur
  assert.ok(!published.files.includes(main));assert.ok(published.files.includes(worker));assert.ok(published.files.includes(helper));
  assert.ok(published.moduleEntries.includes(worker));assert.ok(published.moduleEntries.includes(helper));
 });
+
+test('compiled catalog data ships once, while a JSON URL keeps the original resource',async t=>{
+ for(const resourceMode of ['compiled','url','fetch']){
+  const addressedByUrl=resourceMode!=='compiled';
+  const {root,write}=fixture(t),main='src/championship/app/main.js',data='src/data/championship/catalogs/hunt-scene.r1.json';
+  write(data,{answer:42,label:'COMPLETE_STATIC_DATA'});
+  write(main,"import data from '../../data/championship/catalogs/hunt-scene.r1.json' with {type:'json'}; export const answer=data.answer; export const label=data.label;"+(resourceMode==='url'?"console.log(new URL('../../data/championship/catalogs/hunt-scene.r1.json',import.meta.url).href);":resourceMode==='fetch'?"export const read=()=>fetch('src/data/championship/catalogs/hunt-scene.r1.json');":""));
+  const files=[main,data],bundle=compileBrowserBundle(root,{files,importMap:{},browserBundle:{version:1,entry:main,outputDirectory:'src/championship/app/_bundled',toolVersion:esbuild.version}});
+  const source={files,moduleEntries:[main],allowlist:{files:files.map(file=>({path:file,sha256:sha256(fs.readFileSync(path.join(root,file)))}))}};
+  const published=compiledPublicArtifactPlan(source,bundle);
+  assert.equal(published.files.includes(data),addressedByUrl);
+  assert.deepEqual(published.omittedCompiledData,addressedByUrl?[]:[data]);
+  if(!addressedByUrl){
+   const output=bundle.files.find(f=>f.path===bundle.metadata.entry);
+   const result=await import('data:text/javascript;base64,'+output.bytes.toString('base64'));
+   assert.equal(result.answer,42);assert.equal(result.label,'COMPLETE_STATIC_DATA');
+  }
+ }
+});
 function fixture(t){
   const base=path.join(repo,'.tmp');fs.mkdirSync(base,{recursive:true});
   const root=fs.mkdtempSync(path.join(base,'web-build-test-'));

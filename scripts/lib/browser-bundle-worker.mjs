@@ -24,7 +24,10 @@ const result=await esbuild.build({absWorkingDir:root,entryPoints:[recipe.entry],
       if(!allowed.has(file))throw Error(`BROWSER_BUNDLE_UNAPPROVED_INPUT: ${file}`);
       const bytes=fs.readFileSync(args.path);sources.set(file,createHash('sha256').update(bytes).digest('hex'));
       let contents=bytes.toString('utf8');const loader=file.endsWith('.json')?'json':'js';
-      if(loader==='js')for(const match of contents.matchAll(/new\s+URL\s*\(\s*(['"])([^'"\r\n]+\.m?js)(?:[?#][^'"\r\n]*)?\1/g)){
+      if(loader==='js')for(const match of [
+        ...contents.matchAll(/new\s+URL\s*\(\s*(['"])([^'"\r\n]+\.(?:m?js|json))(?:[?#][^'"\r\n]*)?\1/g),
+        ...contents.matchAll(/\b(?:fetch|fetchImpl)\s*\(\s*(['"])([^'"\r\n]+\.json)(?:[?#][^'"\r\n]*)?\1/g)
+      ]){
         // A script URL is a runtime resource even when that script is also bundled.
         for(const base of [path.dirname(args.path),root]){
           const target=path.relative(root,path.resolve(base,match[2])).replaceAll('\\','/');

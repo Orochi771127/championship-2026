@@ -1,6 +1,14 @@
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 
+// Imported data already ships inside the compiled program. Keep the two
+// public inspection manifests, and every resource addressed at runtime.
+// All source bytes still pass the exact selection/hash audit before bundling.
+const PUBLIC_INSPECTION_DATA=new Set([
+  'src/data/championship/database-hero-portraits.public.v1.json',
+  'src/data/championship/public-character-catalog.v1.json'
+]);
+
 // Compilation inputs retain their approved hashes. Only the deterministic
 // compiled program is published; explicit runtime script URLs keep their files.
 export function compiledPublicArtifactPlan(source,bundle){
@@ -8,16 +16,18 @@ export function compiledPublicArtifactPlan(source,bundle){
   const approved=new Map(source.allowlist.files.map(row=>[row.path,row.sha256]));
   const runtime=new Set(bundle.metadata.runtimeScriptFiles??[]);
   for(const row of source.runtime?.assets??[])if(row.src)runtime.add(row.src);
-  const omitted=new Set();
+  const omitted=new Set(),omittedData=new Set();
   for(const row of bundle.metadata.inputFiles){
     if(approved.get(row.path)!==row.sha256)throw Error('PUBLIC_COMPILED_SOURCE_HASH: '+row.path);
     if(/\.m?js$/.test(row.path)&&!runtime.has(row.path))omitted.add(row.path);
+    if(row.path.startsWith('src/data/championship/')&&row.path.endsWith('.json')
+      &&!PUBLIC_INSPECTION_DATA.has(row.path)&&!runtime.has(row.path))omittedData.add(row.path);
   }
   const generatedFiles=bundle.metadata.generatedFiles;
-  return {...source,files:source.files.filter(file=>!omitted.has(file)),
-    moduleEntries:[...source.moduleEntries.filter(file=>!omitted.has(file)),...generatedFiles],generatedFiles,
+  return {...source,files:source.files.filter(file=>!omitted.has(file)&&!omittedData.has(file)),
+    moduleEntries:[...source.moduleEntries.filter(file=>!omitted.has(file)&&!omittedData.has(file)),...generatedFiles],generatedFiles,
     importMap:Object.fromEntries(Object.entries(source.importMap??{}).filter(([,file])=>!omitted.has(file.replace(/^\.\//,'')))),
-    omittedCompiledScripts:[...omitted].sort()};
+    omittedCompiledScripts:[...omitted].sort(),omittedCompiledData:[...omittedData].sort()};
 }
 
 export function compileBrowserBundle(root,input){
