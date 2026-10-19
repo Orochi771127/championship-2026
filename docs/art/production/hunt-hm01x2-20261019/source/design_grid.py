@@ -252,7 +252,12 @@ def build_env(field_id):
     for x in (CAVE[0], CAVE[0] + 1): d[CAVE[1], x] = cave_entry
     out = {k: v for k, v in env.items()}
     out.update(width=W, height=H, terrainRuns=to_runs(t), directionRuns=to_runs(d), adaptation=ADAPT,
-               base={'widthTiles': W0, 'heightTiles': H0, 'originTile': [0, 0]})
+               base={'widthTiles': W0, 'heightTiles': H0, 'originTile': [0, 0]},
+               # Owner 2026-10-19: the caves share one passage group (enter one, come out of another)
+               caveGroups=[{'id': 'hm01-grove-caves', 'caves': [
+                   {'id': 'hm01-cave-north', 'anchorTiles': [[35, 4], [36, 4]], 'mouthTile': [35, 11]},
+                   {'id': 'hm01-cave-centre', 'anchorTiles': [[79, 59], [80, 59]], 'mouthTile': [79, 66]},
+                   {'id': 'hm01-cave-south', 'anchorTiles': [[CAVE[0], CAVE[1]], [CAVE[0] + 1, CAVE[1]]], 'mouthTile': [CAVE[0], 163]}]}])
     return out, d, pal, {'clearedOldEdgeFlags': cleared, 'newBoundaryTiles': newb, 'newEdgeAnchors': newa,
                           'caveAnchors': [[CAVE[0], CAVE[1]], [CAVE[0] + 1, CAVE[1]]]}
 

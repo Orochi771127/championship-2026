@@ -1,11 +1,13 @@
 --- scripts/build-hunt-opus.py	2026-10-19 08:25:25.994550600 +0800
-+++ scripts/build-hunt-opus.py	2026-10-19 08:34:25.796986800 +0800
-@@ -37,12 +37,14 @@
++++ scripts/build-hunt-opus.py	2026-10-19 10:18:36.604800700 +0800
+@@ -37,12 +37,16 @@
  from lib import hunt_opus_terrain as t  # noqa: E402
  from lib import hunt_opus_themes as themes  # noqa: E402
  from lib import maps_art_standard as standard  # noqa: E402
 +from lib import hm01x2_landmarks as landmarks  # noqa: E402
 +landmarks.register()
++if __import__('os').environ.get('HM01_REFINE') == '1':
++    landmarks.register_everyday()
  
  PRODUCERS = ('scripts/build-hunt-opus.py', 'scripts/lib/hunt_opus_terrain.py', 'scripts/lib/hunt_opus_kit.py',
               'scripts/lib/hunt_opus_themes.py', 'scripts/lib/hunt_opus_props.py', 'scripts/lib/hunt_opus_caves.py',
@@ -16,7 +18,17 @@
  FOOT_FACTOR = math.sqrt(2) * 16 / 2 * math.sin(math.radians(52))   # native ground y per (X - Y) world unit
  DEVICE_USED = 'CPU'
  
-@@ -239,6 +241,9 @@
+@@ -94,7 +98,8 @@
+     scene.render.threads_mode = 'FIXED'
+     scene.render.threads = 2
+     scene.cycles.samples = samples
+-    scene.cycles.use_denoising = False  # cloud Blender lacks OpenImageDenoise
++    import os as _os
++    scene.cycles.use_denoising = _os.environ.get('HM01_REFINE') == '1'  # refine pass: Blender 5.2 has OpenImageDenoise
+     global DEVICE_USED
+     DEVICE_USED = use_device(scene, device)
+     scene.render.image_settings.file_format = 'PNG'
+@@ -239,6 +244,9 @@
      d.FIELD_ID = day_id
      d.LOOK = 'seam-v3'
      grid = t.load_terrain_grid(ROOT, key)
@@ -27,7 +39,7 @@
          raise ValueError(f'NIGHT_TERRAIN_DIFFERS:{key}')
      scene, calibration = setup_scene(args.samples, args.scale, args.device)
 --- scripts/lib/hunt_opus_themes.py	2026-10-19 08:25:26.012081800 +0800
-+++ scripts/lib/hunt_opus_themes.py	2026-10-19 08:46:55.243065300 +0800
++++ scripts/lib/hunt_opus_themes.py	2026-10-19 10:16:10.028114700 +0800
 @@ -67,6 +67,11 @@
          self.blocked = grid == t.BLOCK
          self.comps, self.label = t.components(self.blocked)
@@ -91,7 +103,21 @@
          if kind == 'stone-arch':
              left, right = gap_at(ctx.grid, tx, ty)
              span = (right - left + 1) * t.TILE
-@@ -375,7 +388,10 @@
+@@ -358,7 +371,12 @@
+     ctx.light = c2.get('light', cfg.get('light', {}))
+     ctx.tuft_values = cfg.get('tuftValues', (t.WALK,))
+     g2 = c2.get('ground')
+-    if g2 and g2['kind'] == 'grass':
++    import os as _os
++    REFINE = _os.environ.get('HM01_REFINE') == '1'
++    if REFINE and g2 and g2['kind'] == 'grass':
++        from . import hm01x2_refine as rf
++        rf.grass_ground(d, 'hn-ground')
++    elif g2 and g2['kind'] == 'grass':
+         mv.grass_ground(d, 'hn-ground', g2['warm'], g2['cool'], g2['dirt'], g2.get('dirtAmount', .22), dry=g2.get('dry'))
+     elif g2 and g2['kind'] == 'sand':
+         mv.sand_ground(d, 'hn-ground', g2['low'], g2['mid'], g2['high'], g2.get('ripple', 2.2), g2.get('rippleStrength', .5))
+@@ -375,7 +393,10 @@
      w2 = c2.get('water')
      if w2:
          mv.wet_bed(d, 'hn-bed', w2['shoreBed'], w2['deepBed'])
@@ -103,7 +129,30 @@
      else:
          d.material('hn-bed', cfg.get('bed', (.26, .30, .20)), .9, .0)
          w = cfg.get('water', ((.20, .52, .62), (.08, .30, .44), .78))
-@@ -442,7 +458,7 @@
+@@ -388,7 +409,11 @@
+     hk.SHORE_SEED = cfg['seed']
+     heights = cfg.get('componentHeights')
+     tile_height = component_heights(ctx, *heights) if heights else None
+-    h = t.relief(grid, ctx.large_mask, height=cfg['height'], rise_px=cfg.get('rise', 6.0), roughness=cfg.get('roughness', .28),
++    relief_fn = t.relief
++    if REFINE:
++        from . import hm01x2_refine as rf
++        relief_fn = rf.rounded_relief(t.relief)
++    h = relief_fn(grid, ctx.large_mask, height=cfg['height'], rise_px=cfg.get('rise', 6.0), roughness=cfg.get('roughness', .28),
+                  seed=cfg['seed'], tile_height=tile_height)
+     if CAVE_APERTURE:
+         # Clear only the visual heightfield below the candidate roof. Never modify
+@@ -420,6 +445,9 @@
+             ctx.large_mask[envelope] = False
+     for step in c2.get('dress', cfg.get('dress', ())):
+         step(d, ctx, h)
++    if REFINE:
++        from . import hm01x2_refine as rf
++        rf.dress(d, ctx, h)
+     return ctx
+ 
+ 
+@@ -442,7 +470,7 @@
              rr = rnd.uniform(0, 1) ** .6 * 28
              x, y = hp.gpt(cx, cy, math.cos(a) * rr, math.sin(a) * rr)
              tx, ty = int(x // t.TILE), int(y // t.TILE)
@@ -112,7 +161,7 @@
                  continue
              sp = rnd.choices(names, weights)[0]
              sz = rnd.uniform(*size) * (.9 if sp == 'birch' else 1.0)
-@@ -479,8 +495,8 @@
+@@ -479,8 +507,8 @@
      rnd = random.Random(ctx.seed * 7 + seed)
      blocked = ctx.large_mask
      lips = []
@@ -123,7 +172,7 @@
              if blocked[ty, tx] and not ctx.blocked[ty + 1, tx]:
                  for k in range(int(t.TILE / lip_spacing) + 1):
                      if rnd.random() < .7:
-@@ -617,11 +633,69 @@
+@@ -617,11 +645,73 @@
              ctx.count('ridge:rock')
  
  
@@ -188,12 +237,16 @@
      forest_v2(d, ctx, h, cluster_spacing=42.0, per_cluster=(4, 8), clearing=.10)
      ridge_v2(d, ctx, h)
      cliff_details(d, ctx, h)
++    import os as _os
++    if _os.environ.get('HM01_REFINE') == '1':
++        walk_decor(d, ctx, tufts=None, flowers=False)      # reeds only; lawn/clover/rocks come from the refine pass
++        return
      walk_decor(d, ctx)
 +    flower_patches(d, ctx, h)
  
  
  V2_MEADOW = dict(
-@@ -630,7 +704,9 @@
+@@ -630,7 +720,9 @@
              'dirt': ((.40, .30, .18), (.50, .38, .23), (.60, .48, .32)), 'dirtAmount': .22},
      relief={'top': ((.09, .22, .07), (.15, .30, .09), (.24, .38, .13)),
              'face': ((.30, .24, .18), (.46, .38, .29), (.62, .54, .42)), 'strata': 1.6, 'tilt': .35},

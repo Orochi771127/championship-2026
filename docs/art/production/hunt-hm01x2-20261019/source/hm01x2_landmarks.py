@@ -201,3 +201,95 @@ BUILDERS = {'tram-car': tram_car, 'stop-sign': stop_sign, 'bench': bench}
 
 def register():
     hp.BUILDERS.update(BUILDERS)
+
+
+# --------------------------------------------------------------------------- everyday objects stuck in the meadow
+# The original HM01 already plants out-of-place real objects in the grass (a white vending machine,
+# a green mailbox). Same footprints and positions; rebuilt so they read as those objects, leaning a
+# little and sunk into the earth, in the map's own style.
+
+def _lean(d, objs, x, y, degrees):
+    """Lean objects left/right (screen) about their front ground point."""
+    import mathutils
+    pivot = d.world(x, y, 0.0)
+    axis = (d.world(x, y + 10, 0.0) - pivot).normalized()      # the ground direction toward the camera
+    R = mathutils.Matrix.Translation(pivot) @ mathutils.Matrix.Rotation(math.radians(degrees), 4, axis) @ mathutils.Matrix.Translation(-pivot)
+    for o in objs:
+        o.matrix_world = R @ o.matrix_world
+
+
+def _mound(d, n, x, y, r, seed):
+    """A low dirt collar where the object went into the ground, ringed by grass."""
+    rnd = random.Random(seed)
+    hp.rlathe(d, n + '-mound', x, y - 2, [(-.02, r * 1.25), (.10, r * 1.0), (.20, r * .55), (.22, .2)], 'lm-soil', 16)
+    tufts = []
+    for k in range(26):
+        a = k * math.tau / 26 + rnd.uniform(-.1, .1)
+        rr = r * rnd.uniform(1.05, 1.4)
+        tx, ty = hp.gpt(x, y - 2, math.cos(a) * rr, math.sin(a) * rr)
+        tufts.append((tx, ty, 0.0))
+    hk.tufts_at(d, n + '-collar', tufts, ('hn-tuft-1', 'hn-tuft-2'), height=(.16, .32), lean_dir=(0.0, 1.0))
+
+
+def _prepare_everyday(d):
+    if 'lm-vend-white' in d.M:
+        return
+    m = d.material
+    m('lm-vend-white', (.84, .85, .84), .32, .05)
+    m('lm-vend-trim', (.40, .44, .48), .35, .5)
+    m('lm-vend-dark', (.08, .09, .11), .45, .2)
+    m('lm-soil', (.36, .25, .14), .95, .0)
+    m('lm-post-green', (.08, .44, .22), .38, .1)
+    m('lm-post-green-dark', (.04, .26, .13), .45, .1)
+    for k, col in enumerate(((.92, .20, .16), (.18, .52, .92), (.98, .80, .18), (.26, .72, .34), (.96, .52, .16))):
+        m(f'lm-can-{k}', col, .25, .6)
+    hp.glow(d, 'lm-vend-glass', (.80, .92, 1.0), .25, 2.2)
+    hp.glow(d, 'lm-vend-header', (.30, .66, 1.0), .6, 4.0)
+    hp.glow(d, 'lm-vend-button', (.98, .55, .20), .4, 3.0)
+
+
+def vending_machine(d, n, x, y, size=48, seed=0, z0=0.0):
+    prepare(d); _prepare_everyday(d)
+    s = size / 48
+    w, dp, top = 24 * s, 17 * s, 3.1 * s
+    sink = -.32
+    cy = y - 9
+    objs = [hp.gbox(d, n + '-body', x, cy, w, dp, sink, top, 'lm-vend-white', 0, .10),
+            hp.gbox(d, n + '-cap', x, cy, w + 1.2, dp + 1.2, top - .05, top + .14, 'lm-vend-trim', 0, .06)]
+    fx_, fy_ = hp.gpt(x, cy, 0, -dp / 2 - .4)
+    objs.append(hp.gbox(d, n + '-header', fx_, fy_, w * .86, .7, top - .62, top - .22, 'lm-vend-header', 0, .03))
+    objs.append(hp.gbox(d, n + '-glass', fx_ - w * .08, fy_, w * .62, .6, 1.05, top - .78, 'lm-vend-glass', 0, .03))
+    for r in range(3):
+        for c in range(4):
+            cx = fx_ - w * .08 + (c - 1.5) * w * .14
+            z = 1.25 + r * (top - 2.15) / 3
+            objs.append(hp.cyl(d, f'{n}-can-{r}-{c}', cx, fy_ - .7, 1.1 * s, z, z + .42 * s, f'lm-can-{(r * 4 + c + seed) % 5}', 10))
+    px_, py_ = fx_ + w * .34, fy_
+    objs.append(hp.gbox(d, n + '-panel', px_, py_, w * .2, .7, 1.0, top - .78, 'lm-vend-trim', 0, .02))
+    for k in range(4):
+        objs.append(hp.gbox(d, f'{n}-btn{k}', px_, py_ - .3, w * .1, .5, 1.5 + k * .32, 1.62 + k * .32, 'lm-vend-button', 0, .02))
+    objs.append(hp.gbox(d, n + '-slot', px_, py_ - .3, w * .08, .5, 2.9 * s, 3.0 * s - .05, 'lm-vend-dark', 0, .01))
+    objs.append(hp.gbox(d, n + '-flap', fx_ - w * .08, fy_ - .2, w * .55, .6, .38, .78, 'lm-vend-dark', 0, .04))
+    _lean(d, objs, x, y - 2, (-7 if seed % 2 else 6))
+    _mound(d, n, x, y, 12 * s, seed)
+
+
+def postbox(d, n, x, y, size=48, seed=0, z0=0.0):
+    prepare(d); _prepare_everyday(d)
+    s = size / 48
+    cy = y - 7
+    r = 7.2 * s
+    objs = [hp.rlathe(d, n + '-body', x, cy, [(-.30, r * 1.06), (.10, r), (2.35 * s, r), (2.42 * s, r * 1.08)], 'lm-post-green', 18),
+            hp.rlathe(d, n + '-dome', x, cy, [(2.42 * s, r * 1.08), (2.62 * s, r * .9), (2.80 * s, r * .55), (2.86 * s, .2)], 'lm-post-green', 18),
+            hp.rlathe(d, n + '-band', x, cy, [(.08, r * 1.04), (.22, r * 1.04)], 'lm-post-green-dark', 18)]
+    fx_, fy_ = hp.gpt(x, cy, 0, -r - .3)
+    objs.append(hp.gbox(d, n + '-slot', fx_, fy_, r * 1.1, .6, 1.95 * s, 2.06 * s, 'lm-vend-dark', 0, .02))
+    objs.append(hp.gbox(d, n + '-lip', fx_, fy_ - .3, r * 1.25, .7, 2.07 * s, 2.13 * s, 'lm-post-green-dark', 0, .02))
+    objs.append(hp.gbox(d, n + '-plate', fx_, fy_, r * .8, .6, 1.25 * s, 1.62 * s, 'hp-white', 0, .03))
+    objs.append(hp.gbox(d, n + '-door', fx_, fy_, r * .95, .5, .45, 1.05 * s, 'lm-post-green-dark', 0, .04))
+    _lean(d, objs, x, y - 2, (5 if seed % 2 else -8))
+    _mound(d, n, x, y, 9 * s, seed + 3)
+
+
+def register_everyday():
+    hp.BUILDERS.update({'data-terminal': vending_machine, 'circuit-cabinet': postbox})
