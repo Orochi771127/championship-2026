@@ -1,0 +1,302 @@
+--- scripts/build-hunt-opus.py	2026-10-19 08:25:25.994550600 +0800
++++ scripts/build-hunt-opus.py	2026-10-19 08:34:25.796986800 +0800
+@@ -37,12 +37,14 @@
+ from lib import hunt_opus_terrain as t  # noqa: E402
+ from lib import hunt_opus_themes as themes  # noqa: E402
+ from lib import maps_art_standard as standard  # noqa: E402
++from lib import hm01x2_landmarks as landmarks  # noqa: E402
++landmarks.register()
+ 
+ PRODUCERS = ('scripts/build-hunt-opus.py', 'scripts/lib/hunt_opus_terrain.py', 'scripts/lib/hunt_opus_kit.py',
+              'scripts/lib/hunt_opus_themes.py', 'scripts/lib/hunt_opus_props.py', 'scripts/lib/hunt_opus_caves.py',
+              'scripts/lib/hunt_opus_inventory.py', 'scripts/lib/battle_opus_quality.py', 'scripts/build-cage-base3d.py',
+              'scripts/lib/hunt_opus_trees.py', 'scripts/lib/maps_materials_v2.py', 'scripts/lib/maps_art_standard.py')
+-INVENTORY = ROOT / 'docs/art/production/original-maps-r1/hunt/object-inventory.json'
++INVENTORY = ROOT / 'docs/art/production/original-maps-r1/hunt/object-inventory.json'  # HM01x2 inventory (180x180)
+ FOOT_FACTOR = math.sqrt(2) * 16 / 2 * math.sin(math.radians(52))   # native ground y per (X - Y) world unit
+ DEVICE_USED = 'CPU'
+ 
+@@ -239,6 +241,9 @@
+     d.FIELD_ID = day_id
+     d.LOOK = 'seam-v3'
+     grid = t.load_terrain_grid(ROOT, key)
++    if grid.shape[0] != grid.shape[1]:
++        raise ValueError('SQUARE_GRID_REQUIRED')
++    t.NATIVE = grid.shape[1] * t.TILE      # HM01x2: 180 tiles -> 1440 native px
+     if night_id is not None and not (t.load_grid(ROOT, night_id) == grid).all():
+         raise ValueError(f'NIGHT_TERRAIN_DIFFERS:{key}')
+     scene, calibration = setup_scene(args.samples, args.scale, args.device)
+--- scripts/lib/hunt_opus_themes.py	2026-10-19 08:25:26.012081800 +0800
++++ scripts/lib/hunt_opus_themes.py	2026-10-19 08:46:55.243065300 +0800
+@@ -67,6 +67,11 @@
+         self.blocked = grid == t.BLOCK
+         self.comps, self.label = t.components(self.blocked)
+         self.small_ids = [c['id'] for c in self.comps if c['area'] <= SMALL_AREA and not c['edge']]
++        # HM01x2: world-intrusion landmark footprints stand on blocked tiles but carry no forest
++        for lm in inventory.get('landmarks', ()):
++            x0, y0, x1, y1 = lm['bboxTiles']
++            ids = set(np.unique(self.label[y0:y1 + 1, x0:x1 + 1]).tolist()) - {0}
++            self.small_ids += [i for i in ids if i not in self.small_ids]
+         self.large_mask = np.isin(self.label, [c['id'] for c in self.comps if c['id'] not in self.small_ids])
+         self.depth = t.inside_distance(self.blocked)
+         self.up_tiles = up_blocked_tiles(self.blocked)
+@@ -103,7 +108,7 @@
+ 
+ def max_top_units(ctx, x, y):
+     """Highest a prop standing at native (x, y) may reach so its top leans at most OVERHANG_PX past its blocked ground."""
+-    tx, ty = min(127, max(0, int(x // t.TILE))), min(127, max(0, int(y // t.TILE)))
++    tx, ty = min(ctx.grid.shape[1] - 1, max(0, int(x // t.TILE))), min(ctx.grid.shape[0] - 1, max(0, int(y // t.TILE)))
+     clear = (ctx.up_tiles[ty, tx] - 1) * t.TILE + (y - ty * t.TILE)
+     return max(0.0, (clear + OVERHANG_PX) / t.LIFT)
+ 
+@@ -160,7 +165,7 @@
+         while top > 0 and grid[top - 1, x] != t.BLOCK and grid[top - 1, x + 1] != t.BLOCK:
+             top -= 1
+         bottom = ty
+-        while bottom < 127 and grid[bottom + 1, x - 1] == t.BLOCK and grid[bottom + 1, x + 2] == t.BLOCK \
++        while bottom < grid.shape[0] - 1 and grid[bottom + 1, x - 1] == t.BLOCK and grid[bottom + 1, x + 2] == t.BLOCK \
+                 and grid[bottom + 1, x] != t.BLOCK:
+             bottom += 1
+         return {'kind': 'cave', 'corridorTiles': [x, top, x + 1, bottom], 'mouthYNative': (bottom + 1) * t.TILE,
+@@ -174,7 +179,7 @@
+     while left > 0 and grid[ty, left - 1] != t.BLOCK:
+         left -= 1
+     right = tx
+-    while right < 127 and grid[ty, right + 1] != t.BLOCK:
++    while right < grid.shape[1] - 1 and grid[ty, right + 1] != t.BLOCK:
+         right += 1
+     return left, right
+ 
+@@ -199,13 +204,21 @@
+                 ctx.count('island:' + kind)
+             else:
+                 ctx.count('missing:' + kind)
++    for k, lm in enumerate(inv.get('landmarks', ())):
++        # HM01x2 world-intrusion landmark on its blocked footprint (scenery only)
++        x0, y0, x1, y1 = lm['bboxTiles']
++        cx = (x0 + x1 + 1) * t.TILE / 2
++        if hp.build(d, lm['kind'], f'landmark-{k}-{lm["kind"]}', cx, (y1 + 1) * t.TILE, (x1 - x0 + 1) * t.TILE, k, 0.0):
++            ctx.count('landmark:' + lm['kind'])
++        else:
++            ctx.count('missing:' + lm['kind'])
+     skip = SKIP_KINDS | set(cfg.get('skipKinds', ()))
+     for k, obj in enumerate(inv['layerObjects']):
+         kind = cfg.get('replace', {}).get(obj['kind'], obj['kind'])
+         x, y = obj['anchorNative']
+-        if kind in skip or not (0 <= x < 1040 and 0 <= y < 1040):
++        if kind in skip or not (0 <= x < t.NATIVE + 16 and 0 <= y < t.NATIVE + 16):
+             continue
+-        tx, ty = min(127, max(0, int(x // 8))), min(127, max(0, int(y // 8)))
++        tx, ty = min(ctx.grid.shape[1] - 1, max(0, int(x // 8))), min(ctx.grid.shape[0] - 1, max(0, int(y // 8)))
+         if kind == 'stone-arch':
+             left, right = gap_at(ctx.grid, tx, ty)
+             span = (right - left + 1) * t.TILE
+@@ -375,7 +388,10 @@
+     w2 = c2.get('water')
+     if w2:
+         mv.wet_bed(d, 'hn-bed', w2['shoreBed'], w2['deepBed'])
+-        mv.water_v2(d, 'hn-water', w2['shallow'], w2['deep'], w2.get('foam', (.92, .97, 1.0)))
++        if w2.get('v3'):
++            mv.water_v3(d, 'hn-water', w2['shallow3'], w2['deep3'], w2['bedShore'], w2['bedDeep'])
++        else:
++            mv.water_v2(d, 'hn-water', w2['shallow'], w2['deep'], w2.get('foam', (.92, .97, 1.0)))
+     else:
+         d.material('hn-bed', cfg.get('bed', (.26, .30, .20)), .9, .0)
+         w = cfg.get('water', ((.20, .52, .62), (.08, .30, .44), .78))
+@@ -442,7 +458,7 @@
+             rr = rnd.uniform(0, 1) ** .6 * 28
+             x, y = hp.gpt(cx, cy, math.cos(a) * rr, math.sin(a) * rr)
+             tx, ty = int(x // t.TILE), int(y // t.TILE)
+-            if not (0 <= tx < 128 and 0 <= ty < 128) or not ctx.large_mask[ty, tx] or ctx.depth[ty, tx] < depth:
++            if not (0 <= tx < ctx.grid.shape[1] and 0 <= ty < ctx.grid.shape[0]) or not ctx.large_mask[ty, tx] or ctx.depth[ty, tx] < depth:
+                 continue
+             sp = rnd.choices(names, weights)[0]
+             sz = rnd.uniform(*size) * (.9 if sp == 'birch' else 1.0)
+@@ -479,8 +495,8 @@
+     rnd = random.Random(ctx.seed * 7 + seed)
+     blocked = ctx.large_mask
+     lips = []
+-    for ty in range(127):
+-        for tx in range(128):
++    for ty in range(ctx.grid.shape[0] - 1):
++        for tx in range(ctx.grid.shape[1]):
+             if blocked[ty, tx] and not ctx.blocked[ty + 1, tx]:
+                 for k in range(int(t.TILE / lip_spacing) + 1):
+                     if rnd.random() < .7:
+@@ -617,11 +633,69 @@
+             ctx.count('ridge:rock')
+ 
+ 
++def flower_heads(d, name, points, mats, seed=7):
++    """Small open flowers: a short stem and a five-petal head tilted toward the camera, with a
++    yellow eye; one mesh per petal colour (cheap, one object each)."""
++    import random
++    from . import cage_opus_facility_authoring as fx
++    rnd = random.Random(seed)
++    buckets = {m: ([], []) for m in mats}
++    stems, eyes = ([], []), ([], [])
++    for k, (x, y) in enumerate(points):
++        mat = mats[k % len(mats)]
++        z = rnd.uniform(.13, .24)
++        r = rnd.uniform(1.3, 2.1)
++        sv, sf = stems
++        n = len(sv)
++        sv += [d.world(x - .25, y, 0), d.world(x + .25, y, 0), d.world(x + .1, y - .2, z)]
++        sf.append((n, n + 1, n + 2))
++        verts, faces = buckets[mat]
++        c = len(verts)
++        verts.append(d.world(x, y - .3, z + .02))
++        rot = rnd.uniform(0, math.tau)
++        for j in range(10):
++            a = rot + j * math.tau / 10
++            rr = r if j % 2 == 0 else r * .55
++            verts.append(d.world(x + math.cos(a) * rr, y - .3 + math.sin(a) * rr * .55, z + .04 * math.sin(a)))
++        faces += [(c, c + 1 + j, c + 1 + (j + 1) % 10) for j in range(10)]
++        ev, ef = eyes
++        e = len(ev)
++        ev.append(d.world(x, y - .35, z + .05))
++        for j in range(5):
++            a = j * math.tau / 5
++            ev.append(d.world(x + math.cos(a) * r * .32, y - .35 + math.sin(a) * r * .18, z + .05))
++        ef += [(e, e + 1 + j, e + 1 + (j + 1) % 5) for j in range(5)]
++    for mat, (verts, faces) in list(buckets.items()) + [('hn-tuft-1', stems), ('hn-flower-y', eyes)]:
++        if faces:
++            obj = fx._object(d, f'{name}-{mat}-{len(faces)}', verts, faces, mat, 0.0)
++            obj['huntLayer'] = 'ground'
++
++
++def flower_patches(d, ctx, h, spacing=100.0, per=(12, 24), radius=17.0, seed=61):
++    """HM01x2: wildflower drifts in the meadow (clusters, not an even sprinkle), kept off paths
++    near caves by walk_points' own exclusions."""
++    import random
++    rnd = random.Random(ctx.seed * 13 + seed)
++    pts = []
++    ok = ctx.grid == t.WALK
++    for cx, cy in walk_points(ctx, spacing, ctx.seed + seed, clearance=3.0):
++        for _ in range(rnd.randint(*per)):
++            a, r = rnd.uniform(0, math.tau), radius * rnd.random() ** .7
++            x, y = cx + math.cos(a) * r, cy + math.sin(a) * r * .8
++            tx, ty = int(x // t.TILE), int(y // t.TILE)
++            if 0 <= tx < ok.shape[1] and 0 <= ty < ok.shape[0] and ok[ty, tx]:
++                pts.append((x, y))
++    flower_heads(d, 'ground-flower-drifts', pts, ('hn-flower-y', 'hn-flower-w', 'hn-flower-p', 'hn-flower-w'))
++    hk.tuft_field(d, 'ground-flower-leaves', pts[::2], ('hn-tuft-1', 'hn-tuft-2'), height=(.10, .18), width=.5)
++    ctx.count('flowerDrifts', len(pts))
++
++
+ def _grass_dress_v2(d, ctx, h):
+     forest_v2(d, ctx, h, cluster_spacing=42.0, per_cluster=(4, 8), clearing=.10)
+     ridge_v2(d, ctx, h)
+     cliff_details(d, ctx, h)
+     walk_decor(d, ctx)
++    flower_patches(d, ctx, h)
+ 
+ 
+ V2_MEADOW = dict(
+@@ -630,7 +704,9 @@
+             'dirt': ((.40, .30, .18), (.50, .38, .23), (.60, .48, .32)), 'dirtAmount': .22},
+     relief={'top': ((.09, .22, .07), (.15, .30, .09), (.24, .38, .13)),
+             'face': ((.30, .24, .18), (.46, .38, .29), (.62, .54, .42)), 'strata': 1.6, 'tilt': .35},
+-    water={'shallow': (.30, .70, .70), 'deep': (.10, .36, .56), 'shoreBed': (.44, .40, .27), 'deepBed': (.10, .20, .22)},
++    water={'shallow': (.30, .70, .70), 'deep': (.10, .36, .56), 'shoreBed': (.44, .40, .27), 'deepBed': (.10, .20, .22),
++           # HM01x2 benchmark water: painted clear bottom, caustics, foam and wave lines
++           'v3': True, 'shallow3': (.12, .74, .70), 'deep3': (.04, .30, .56), 'bedShore': (.50, .54, .34), 'bedDeep': (.08, .26, .30)},
+     dress=(_grass_dress_v2,))
+ 
+ 
+--- scripts/lib/maps_materials_v2.py	2026-10-19 08:25:26.014592000 +0800
++++ scripts/lib/maps_materials_v2.py	2026-10-19 08:43:48.703649400 +0800
+@@ -312,3 +312,93 @@
+     col = _ramp(nodes, links, n.outputs['Fac'], [(.42 if birch else .3, dark), (.5 if birch else .7, base)])
+     links.new(_ao(nodes, links, col, .3, .5), sh.inputs['Base Color'])
+     return mat
++
++
++# --------------------------------------------------------------------------- HM01x2 water (benchmark pass)
++
++def water_v3(d, name, shallow, deep, bed_shore=(.56, .54, .38), bed_deep=(.16, .30, .30), foam=(.96, .99, 1.0),
++             depth_px=72.0):
++    """Clear stylised water painted with its own visible bottom (the bed is only ~.14 units deep, too
++    shallow to read through real transparency): sandy shallows with pebbles and weed, caustic light
++    lines that fade with depth, turquoise-to-deep-blue tint, a broken foam line on the shore and a
++    softer wave line a little out. Animated nodes are named hunt-water-phase* (hk.set_phase)."""
++    mat = d.material(name, shallow, .22, .0)
++    nodes, links = mat.node_tree.nodes, mat.node_tree.links
++    sh = nodes.get('Principled BSDF')
++    geo = nodes.new('ShaderNodeNewGeometry')
++    attr = nodes.new('ShaderNodeAttribute')
++    attr.attribute_type = 'GEOMETRY'
++    attr.attribute_name = 'shore'
++    dist = attr.outputs['Fac']
++    depth = _m(nodes, links, 'MINIMUM', _m(nodes, links, 'DIVIDE', dist, depth_px), 1.0)
++    depth_s = _m(nodes, links, 'POWER', depth, .7)
++    # bottom: sand -> darker green-grey with depth, broken by low-frequency mottling
++    mot = _n(nodes, 'ShaderNodeTexNoise', Scale=1.4, Detail=3.0, Roughness=.55)
++    links.new(geo.outputs['Position'], mot.inputs['Vector'])
++    bed = _ramp(nodes, links, depth_s, [(.0, bed_shore), (.55, tuple(.5 * a + .5 * b for a, b in zip(bed_shore, bed_deep))), (1.0, bed_deep)])
++    bed = _mix(nodes, links, .22, bed, mot.outputs['Fac'], 'OVERLAY')
++    # pebbles in the shallows (Voronoi cells, varied tone), fading out with depth
++    peb = _n(nodes, 'ShaderNodeTexVoronoi', Scale=3.2, Randomness=1.0)
++    links.new(geo.outputs['Position'], peb.inputs['Vector'])
++    peb_shape = _ramp(nodes, links, peb.outputs['Distance'], [(.18, (1, 1, 1)), (.30, (0, 0, 0))])
++    peb_gate = _ramp(nodes, links, depth, [(.0, (1, 1, 1)), (.5, (.5, .5, .5)), (.85, (0, 0, 0))])
++    peb_mask = _mix(nodes, links, 1.0, peb_shape, peb_gate, 'MULTIPLY')
++    peb_col = _ramp(nodes, links, peb.outputs['Color'], [(.0, (.30, .30, .27)), (.5, (.66, .62, .52)), (1.0, (.42, .36, .28))])
++    bed = _mix(nodes, links, _grey(nodes, links, peb_mask), bed, peb_col)
++    # weed patches at mid depth
++    weed = _n(nodes, 'ShaderNodeTexNoise', Scale=2.6, Detail=5.0, Roughness=.65)
++    links.new(geo.outputs['Position'], weed.inputs['Vector'])
++    weed_m = _ramp(nodes, links, weed.outputs['Fac'], [(.56, (0, 0, 0)), (.66, (1, 1, 1))])
++    weed_gate = _ramp(nodes, links, depth, [(.12, (0, 0, 0)), (.35, (.85, .85, .85)), (.9, (.4, .4, .4))])
++    bed = _mix(nodes, links, _grey(nodes, links, _mix(nodes, links, 1.0, weed_m, weed_gate, 'MULTIPLY')), bed, (.12, .30, .14))
++    # caustics: thin bright cell edges, animated, strongest in the shallows
++    cau = _n(nodes, 'ShaderNodeTexVoronoi', Scale=1.9, Randomness=.9)
++    cau.voronoi_dimensions = '4D'
++    cau.feature = 'DISTANCE_TO_EDGE'
++    cau.name = 'hunt-water-phase-caustic'
++    cau['phaseScale'] = .18
++    warp = _n(nodes, 'ShaderNodeTexNoise', Scale=.9, Detail=2.0)
++    links.new(geo.outputs['Position'], warp.inputs['Vector'])
++    wpos = nodes.new('ShaderNodeVectorMath')
++    wpos.operation = 'MULTIPLY_ADD'
++    links.new(warp.outputs['Color'], wpos.inputs[0])
++    wpos.inputs[1].default_value = (.6, .6, .0)
++    links.new(geo.outputs['Position'], wpos.inputs[2])
++    links.new(wpos.outputs[0], cau.inputs['Vector'])
++    cau_l = _ramp(nodes, links, cau.outputs['Distance'], [(.0, (1, 1, 1)), (.022, (0, 0, 0))])
++    cau_gate = _ramp(nodes, links, depth, [(.0, (.42, .42, .42)), (.6, (.22, .22, .22)), (1.0, (.08, .08, .08))])
++    bed = _mix(nodes, links, _grey(nodes, links, _mix(nodes, links, 1.0, cau_l, cau_gate, 'MULTIPLY')), bed, (.80, 1.0, .95), 'SCREEN')
++    # water tint over the bottom: clear at the edge, turquoise, then deep blue
++    tint = _ramp(nodes, links, depth_s, [(.0, shallow), (1.0, deep)])
++    cover = _ramp(nodes, links, depth_s, [(.0, (.30, .30, .30)), (.5, (.55, .55, .55)), (1.0, (.80, .80, .80))])
++    col = _mix(nodes, links, _grey(nodes, links, cover), bed, tint)
++    col = _mix(nodes, links, .45, col, tint, 'MULTIPLY')
++    # surface ripples: soft highlights, not speckles
++    ripple = _n(nodes, 'ShaderNodeTexNoise', Scale=5.0, Detail=2.0, Roughness=.45)
++    ripple.noise_dimensions = '4D'
++    ripple.name = 'hunt-water-phase'
++    links.new(geo.outputs['Position'], ripple.inputs['Vector'])
++    # foam: broken bright line at the shore, softer wave line a little out (moves with phase)
++    fn = _n(nodes, 'ShaderNodeTexNoise', Scale=2.4, Detail=4.0)
++    fn.noise_dimensions = '4D'
++    fn.name = 'hunt-water-phase-foam'
++    fn['phaseScale'] = .35
++    links.new(geo.outputs['Position'], fn.inputs['Vector'])
++    near_map = nodes.new('ShaderNodeMapRange')
++    near_map.inputs['From Min'].default_value = 0.0
++    near_map.inputs['From Max'].default_value = 14.0
++    links.new(dist, near_map.inputs['Value'])
++    nd = near_map.outputs['Result']
++    edge = _ramp(nodes, links, nd, [(.0, (1, 1, 1)), (.12, (1, 1, 1)), (.20, (0, 0, 0))])
++    wave = _ramp(nodes, links, nd, [(.30, (0, 0, 0)), (.40, (.65, .65, .65)), (.50, (0, 0, 0))])
++    broken = _ramp(nodes, links, fn.outputs['Fac'], [(.40, (0, 0, 0)), (.52, (1, 1, 1))])
++    broken2 = _ramp(nodes, links, fn.outputs['Fac'], [(.50, (0, 0, 0)), (.60, (1, 1, 1))])
++    foam_m = _mix(nodes, links, 1.0, _mix(nodes, links, 1.0, edge, broken, 'MULTIPLY'),
++                  _mix(nodes, links, 1.0, wave, broken2, 'MULTIPLY'), 'LIGHTEN')
++    col = _mix(nodes, links, _grey(nodes, links, foam_m), col, foam)
++    links.new(col, sh.inputs['Base Color'])
++    sh.inputs['Alpha'].default_value = 1.0
++    bump = _n(nodes, 'ShaderNodeBump', Strength=.10, Distance=.03)
++    links.new(ripple.outputs['Fac'], bump.inputs['Height'])
++    links.new(bump.outputs[0], sh.inputs['Normal'])
++    return mat

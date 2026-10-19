@@ -203,6 +203,15 @@ const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
       ? "assets/production/battle/bm03-volcano-review-r2/manifest.json"
       : publicMetadataPath('battle-original'))
   : publicMetadataPath('battle-baseline');
+// Owner 2026-10-19 (local review): each hunt theme is rebuilt as one map with
+// about twice the explorable area. ?huntReview=hm01x2-20261019 on loopback loads
+// the rebuilt HM01 (180x180 terrain via the app's hunt entry, and its art);
+// every other field and every non-review session is unchanged.
+const HUNT_EXPANSION_REVIEW = LOCAL_MAP_REVIEW.get("huntReview") === "hm01x2-20261019";
+const HUNT_EXPANSION_REVIEW_MANIFEST_URL = HUNT_EXPANSION_REVIEW ? "assets/production/hunt/hm01x2-review-20261019/manifest.json" : null;
+const loadHuntExpansionReview = HUNT_EXPANSION_REVIEW
+  ? async () => (await import("../../data/championship/catalogs/hunt-hm01x2.review-20261019.json", { with: { type: "json" } })).default
+  : null;
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
@@ -597,7 +606,7 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
   try {
     let manifest = null;
     let field = null;
-    for (const url of (["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)]:[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))) {
+    for (const url of (["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_EXPANSION_REVIEW_MANIFEST_URL, HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)]:[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))) {
       const response = await fetchRuntimeMapResponse(url, globalThis.location.href, { signal });
       if (!response.ok) {
         if (url !== LICENSED_HUNT_ART_MANIFEST_URL) continue;
@@ -2397,6 +2406,7 @@ function boot() {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
       storage: window.localStorage,
+      huntExpansionLoader: loadHuntExpansionReview,
       catalog: productEntities,
       cages: RAISING_CAGES
     });

@@ -1,0 +1,172 @@
+{
+ "schemaVersion": 1,
+ "assetId": "art:hunt:hm01x2-review:20261019",
+ "family": "HUNT",
+ "product": "DIGIMON CHAMPIONSHIP \u2014 2026 MODERN REBUILD",
+ "artifactMaturity": "FINAL_STATIC_DELIVERY_LOCAL_RUNTIME_INTEGRATION",
+ "productionStatus": "LOCAL_REVIEW_CANDIDATE_NOT_PUBLISHED",
+ "shippingStatus": "NOT_SHIPPING_READY",
+ "humanApproved": false,
+ "runtimeEligible": true,
+ "shippingReady": false,
+ "rightsStatus": "PROJECT_ORIGINAL",
+ "fieldCount": 2,
+ "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+ "filter": "nearest",
+ "rights": {
+  "status": "PROJECT_ORIGINAL",
+  "romDerivedPixels": false,
+  "sourceRastersLoaded": false,
+  "authority": "Owner final 21-part local intake authorization 2026-10-09; publication remains gated"
+ },
+ "localOnly": true,
+ "runtimeScope": "LOOPBACK_ONLY",
+ "publicReleasePermitted": false,
+ "runtimeQaPassed": false,
+ "runtimeAccepted": false,
+ "ownerDirection": "Owner 2026-10-19: rebuild each hunt theme as one map with about twice the explorable area; HM01 sample first.",
+ "fields": [
+  {
+   "fieldId": "field_hm01_01",
+   "worldWidthPx": 2880,
+   "worldHeightPx": 2880,
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/hunt/hm01x2-review-20261019/images/11e7cd2334152311218b2e5ef8ba18e7a74ff9db70b69fa1b33fbf85043a0342.webp",
+     "sha256": "11e7cd2334152311218b2e5ef8ba18e7a74ff9db70b69fa1b33fbf85043a0342",
+     "durationMs": 334.30226226176285
+    },
+    {
+     "src": "assets/production/hunt/hm01x2-review-20261019/images/b1aa6949c892ba1b4b31fb9be724942f4c5e6e85c76b53d440b3b45d75d240b7.webp",
+     "sha256": "b1aa6949c892ba1b4b31fb9be724942f4c5e6e85c76b53d440b3b45d75d240b7",
+     "durationMs": 334.30226226176285
+    }
+   ],
+   "depthOccluders": {
+    "bandNativePx": 8,
+    "zIndex": "world y of source piece ground row; existing actor depth and source solid flags",
+    "atlases": [
+     {
+      "src": "assets/production/hunt/hm01x2-review-20261019/images/b044082558d4d6d805b5b484351b20417413c88c04cde68a6c7785d744b08f83.webp",
+      "sha256": "b044082558d4d6d805b5b484351b20417413c88c04cde68a6c7785d744b08f83"
+     },
+     {
+      "src": "assets/production/hunt/hm01x2-review-20261019/images/0e258ad6ff234adf64aa07fd2fb2262364e29ef7abf556b6200fe62287db2dd3.webp",
+      "sha256": "0e258ad6ff234adf64aa07fd2fb2262364e29ef7abf556b6200fe62287db2dd3"
+     }
+    ],
+    "animationFrames": [
+     {
+      "atlases": [
+       {
+        "src": "assets/production/hunt/hm01x2-review-20261019/images/b044082558d4d6d805b5b484351b20417413c88c04cde68a6c7785d744b08f83.webp",
+        "sha256": "b044082558d4d6d805b5b484351b20417413c88c04cde68a6c7785d744b08f83"
+       },
+       {
+        "src": "assets/production/hunt/hm01x2-review-20261019/images/0e258ad6ff234adf64aa07fd2fb2262364e29ef7abf556b6200fe62287db2dd3.webp",
+        "sha256": "0e258ad6ff234adf64aa07fd2fb2262364e29ef7abf556b6200fe62287db2dd3"
+       }
+      ]
+     },
+     {
+      "atlases": [
+       {
+        "src": "assets/production/hunt/hm01x2-review-20261019/images/6c5b159ac892205d84fa50b634c7a27c55041058f8206c8b176a528e9dbecea4.webp",
+        "sha256": "6c5b159ac892205d84fa50b634c7a27c55041058f8206c8b176a528e9dbecea4"
+       },
+       {
+        "src": "assets/production/hunt/hm01x2-review-20261019/images/432d326ca577f5c80f693cacdb103b54a516f705f54e83816676e3d3a9e7db38.webp",
+        "sha256": "432d326ca577f5c80f693cacdb103b54a516f705f54e83816676e3d3a9e7db38"
+       }
+      ]
+     }
+    ],
+    "pieces": {
+     "src": "assets/production/hunt/hm01x2-review-20261019/geometry/9c250726044bcd2bc2100965d17a6396d64a28e937b56f5b053ed1957c928433.json",
+     "sha256": "9c250726044bcd2bc2100965d17a6396d64a28e937b56f5b053ed1957c928433"
+    },
+    "pieceCount": 4414
+   },
+   "reviewProvenance": {
+    "terrain": "hm01x2 180x180",
+    "round": "hm01x2-r2",
+    "producer": "R11 build-hunt-opus.py (patched copy, map-polish-20261018/hunt/hm01x2/pipeline)",
+    "atlasCoupling": "EXISTING_BACKGROUND_PHASE_NO_INDEPENDENT_TIMER"
+   }
+  },
+  {
+   "fieldId": "field_hm01_02",
+   "worldWidthPx": 2880,
+   "worldHeightPx": 2880,
+   "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+   "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+   "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+   "frames": [
+    {
+     "src": "assets/production/hunt/hm01x2-review-20261019/images/ede69a9d0184b3b4ee28f4af25ac7ae41389a25b7da460cbb5685365dd295631.webp",
+     "sha256": "ede69a9d0184b3b4ee28f4af25ac7ae41389a25b7da460cbb5685365dd295631",
+     "durationMs": 334.30226226176285
+    },
+    {
+     "src": "assets/production/hunt/hm01x2-review-20261019/images/201d381a295c70fd32e12645040db8bbdff87b407b916dc67f106a9acf104555.webp",
+     "sha256": "201d381a295c70fd32e12645040db8bbdff87b407b916dc67f106a9acf104555",
+     "durationMs": 334.30226226176285
+    }
+   ],
+   "depthOccluders": {
+    "bandNativePx": 8,
+    "zIndex": "world y of source piece ground row; existing actor depth and source solid flags",
+    "atlases": [
+     {
+      "src": "assets/production/hunt/hm01x2-review-20261019/images/544eaee27e83cf9f822ac0424bd11e222f5d332e771d9903e594ce4ca5446a25.webp",
+      "sha256": "544eaee27e83cf9f822ac0424bd11e222f5d332e771d9903e594ce4ca5446a25"
+     },
+     {
+      "src": "assets/production/hunt/hm01x2-review-20261019/images/b0af820cb514e24552069311c23f0cbbdcaac08d02284f1d91c4f8358e374410.webp",
+      "sha256": "b0af820cb514e24552069311c23f0cbbdcaac08d02284f1d91c4f8358e374410"
+     }
+    ],
+    "animationFrames": [
+     {
+      "atlases": [
+       {
+        "src": "assets/production/hunt/hm01x2-review-20261019/images/544eaee27e83cf9f822ac0424bd11e222f5d332e771d9903e594ce4ca5446a25.webp",
+        "sha256": "544eaee27e83cf9f822ac0424bd11e222f5d332e771d9903e594ce4ca5446a25"
+       },
+       {
+        "src": "assets/production/hunt/hm01x2-review-20261019/images/b0af820cb514e24552069311c23f0cbbdcaac08d02284f1d91c4f8358e374410.webp",
+        "sha256": "b0af820cb514e24552069311c23f0cbbdcaac08d02284f1d91c4f8358e374410"
+       }
+      ]
+     },
+     {
+      "atlases": [
+       {
+        "src": "assets/production/hunt/hm01x2-review-20261019/images/2c9243ddcb3b726c2bfa5a0da3fda9537a7b4478df04fa7cb98682d4c487d221.webp",
+        "sha256": "2c9243ddcb3b726c2bfa5a0da3fda9537a7b4478df04fa7cb98682d4c487d221"
+       },
+       {
+        "src": "assets/production/hunt/hm01x2-review-20261019/images/3f0a7bf0685133d1ffb8fca12dc3804d906aea0ebefc94c777e233d2b62225f5.webp",
+        "sha256": "3f0a7bf0685133d1ffb8fca12dc3804d906aea0ebefc94c777e233d2b62225f5"
+       }
+      ]
+     }
+    ],
+    "pieces": {
+     "src": "assets/production/hunt/hm01x2-review-20261019/geometry/43db1cd33613dbf7994824fc3ec9ec01f48895d022e0816e3be1157629e33e1f.json",
+     "sha256": "43db1cd33613dbf7994824fc3ec9ec01f48895d022e0816e3be1157629e33e1f"
+    },
+    "pieceCount": 4414
+   },
+   "reviewProvenance": {
+    "terrain": "hm01x2 180x180",
+    "round": "hm01x2-r2",
+    "producer": "R11 build-hunt-opus.py (patched copy, map-polish-20261018/hunt/hm01x2/pipeline)",
+    "atlasCoupling": "EXISTING_BACKGROUND_PHASE_NO_INDEPENDENT_TIMER"
+   }
+  }
+ ]
+}
