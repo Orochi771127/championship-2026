@@ -29,7 +29,6 @@
     "tests/championship-battle-damage-core-cases.mjs",
     "tests/championship-battle-damage-inputs-cases.mjs",
     "tests/championship-battle-dynamic-fx-cases.mjs",
-    "tests/championship-battle-full-arena-cases.mjs",
     "tests/championship-battle-economy-app-cases.mjs",
     "tests/championship-battle-economy-transaction-cases.mjs",
     "tests/championship-battle-economy-views-cases.mjs",
@@ -37,6 +36,7 @@
     "tests/championship-battle-entry-handoff-cases.mjs",
     "tests/championship-battle-field-scene-cases.mjs",
     "tests/championship-battle-frame-loop-cases.mjs",
+    "tests/championship-battle-full-arena-cases.mjs",
     "tests/championship-battle-hit-recovery-cpu-cases.mjs",
     "tests/championship-battle-hit-runtime-cases.mjs",
     "tests/championship-battle-impact-continuation-cases.mjs",
@@ -87,6 +87,7 @@
     "tests/championship-cage-landscape-cases.mjs",
     "tests/championship-cage-original-opus-runtime-cases.mjs",
     "tests/championship-cage-rank-lock-labels-cases.mjs",
+    "tests/championship-cage100-instances-cases.mjs",
     "tests/championship-cage37-final-intake-cases.mjs",
     "tests/championship-ceremony-cases.mjs",
     "tests/championship-character-animation-timeline-cases.mjs",
@@ -272,6 +273,7 @@
     "tests/championship-ranch-tile-composite-cases.mjs",
     "tests/championship-ranch-tile-composition-cases.mjs",
     "tests/championship-ranch-title-preload-cases.mjs",
+    "tests/championship-reference-polish-cases.mjs",
     "tests/championship-responsive-carry-cases.mjs",
     "tests/championship-responsive-raising-cases.mjs",
     "tests/championship-rom-art-census-cases.mjs",
@@ -332,8 +334,7 @@
     "tests/product-form-public-content-cases.mjs",
     "tests/product-gameplay-compat-cases.mjs",
     "tests/product-promotion-disabled-fixture-cases.mjs",
-    "tests/product-species-extensions-cases.mjs",
-    "tests/championship-reference-polish-cases.mjs"
+    "tests/product-species-extensions-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",

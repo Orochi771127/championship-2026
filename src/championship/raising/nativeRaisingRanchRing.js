@@ -115,7 +115,7 @@ export function composeProductRanchGround(frame) {
   const width = PRODUCT_RANCH_WORLD_WIDTH / 8, height = PRODUCT_RANCH_WORLD_HEIGHT / 8;
   const terrain = new Uint8Array(width * height).fill(1), clearance = new Uint8Array(width * height);
   const owners = new Int16Array(width * height).fill(-1);
-  const placements = frame.placements.map(p=>({...p, definitionIndex:getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex}));
+  const placements = frame.placements.map((p,ownerIndex)=>({...p,ownerIndex,definitionIndex:getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex}));
   const occupied = new Set(placements.flatMap(productPlacementCells));
   const steps = [...placements, ...unlocked.filter(slot=>!occupied.has(slot)).map(slotIndex=>({slotIndex,definitionIndex:36}))];
   const wrap = n=>((n % width)+width)%width;
@@ -126,30 +126,32 @@ export function composeProductRanchGround(frame) {
       const y=origin.tileY+sy;
       if (y<0 || y>=height) continue;
       const [owner,type,distance]=field.cells[sy*field.width+sx], index=y*width+wrap(origin.tileX+sx);
-      if (owner) { owners[index]=p.definitionIndex; terrain[index]=type; }
+      if (owner) { owners[index]=p.ownerIndex??-1; terrain[index]=type; }
       if (distance) clearance[index]=distance;
     }
   }
-  const map = new Map(placements.map(p=>[p.definitionIndex,p]));
+  const map = new Map(placements.map(p=>[p.ownerIndex,p]));
+  const byInstance=new Map(placements.map(p=>[p.instanceId,p]));
+  const placement=reference=>typeof reference==='string'?byInstance.get(reference)??null:placements.find(p=>p.definitionIndex===reference)??null;
   const read = (values,x,y,fallback)=>!Number.isInteger(x)||!Number.isInteger(y)||y<0||y>=height ? fallback : values[y*width+wrap(x)];
   return Object.freeze({layoutVersion:PRODUCT_RANCH_GRID,width,height,pixelWidth:width*8,pixelHeight:height*8,
     placements,terrain,clearance,owners,
     readTerrain:(x,y)=>read(terrain,x,y,1), readClearance:(x,y)=>read(clearance,x,y,0),
     cageAt:(x,y)=>Number.isFinite(x)&&Number.isFinite(y)?map.get(read(owners,Math.floor(x/8),Math.floor(y/8),-1))??null:null,
-    placement:definition=>map.get(definition)??null,
-    origin:definition=>{const p=map.get(definition);if(!p)return null;
-      const o=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[definition]);return [o.tileX*8,o.tileY*8,0];}
+    placement,
+    origin:reference=>{const p=placement(reference);if(!p)return null;
+      const o=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);return [o.tileX*8,o.tileY*8,0];}
   });
 }
 
 function productRaisingSpawnPosition(ground,definition,rng) {
-  const p=ground.placement(definition), field=fields[definition];
+  const p=ground.placement(definition), field=fields[p?.definitionIndex];
   if(!p||!field||typeof rng?.next!=='function')throw new TypeError('NATIVE_RAISING_SPAWN_CONTEXT_REQUIRED');
-  const origin=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[definition]);
+  const origin=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);
   const candidates=[];
   for(let sy=origin.cropTopTiles;sy<field.height;sy++)for(let sx=0;sx<field.width;sx++){
     const x=((origin.tileX+sx)%ground.width+ground.width)%ground.width,y=origin.tileY+sy;
-    if(ground.readClearance(x,y)>1 && ground.readTerrain(x,y)!==1 && ground.cageAt(x*8,y*8)?.definitionIndex===definition)candidates.push([x,y]);
+    if(ground.readClearance(x,y)>1 && ground.readTerrain(x,y)!==1 && ground.cageAt(x*8,y*8)?.ownerIndex===p.ownerIndex)candidates.push([x,y]);
   }
   if(!candidates.length)throw new Error('PRODUCT_RANCH_NO_SPAWN_GROUND');
   const [x,y]=candidates[Math.min(candidates.length-1,Math.max(0,Math.trunc(candidates.length*rng.next(1)/102)))];

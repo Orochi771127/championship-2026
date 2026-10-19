@@ -1,0 +1,1229 @@
+{
+  "started": "2026-10-19T07:43:35.963Z",
+  "completed": "2026-10-19T07:47:21.664Z",
+  "scope": "12 isolated QA saves, normal Continue and UI; desktop only",
+  "limitations": [
+    "30/50/80/100 unlocked cells because ordinary land purchases use ten-cell rows; world extent always100",
+    "static CM01 versus animated CM39 substitutions is not a same-art animation-off A/B",
+    "RAF interval is browser frame cadence, not GPU render duration; pointerup-to-second-RAF is a paint opportunity proxy, not physical input latency",
+    "cold local artifact loads, not public internet download speed; 390px viewport is not phone hardware",
+    "normal runtime has no map zoom gesture; responsive resize and canvas drag measured"
+  ],
+  "environment": {
+    "browser": "151.0.7922.34",
+    "headless": true,
+    "sandbox": true,
+    "customArgs": [],
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "dpr": 1,
+    "os": "win32",
+    "node": "v24.18.0",
+    "physicalHardware": {
+      "capturedAt": "2026-10-19T07:43:22.1701545Z",
+      "source": "read-only Windows CIM",
+      "cpu": [
+        {
+          "Name": "AMD Ryzen 5 3600 6-Core Processor              ",
+          "NumberOfCores": 6,
+          "NumberOfLogicalProcessors": 12
+        }
+      ],
+      "physicalRamBytes": 17099829248,
+      "gpu": [
+        {
+          "Name": "NVIDIA GeForce RTX 4070 Ti",
+          "DriverVersion": "32.0.16.1714"
+        }
+      ]
+    }
+  },
+  "passed": true,
+  "errors": [],
+  "buildId": "ad99bd325a14c7c35216ddcb80a2be2385b1e02708982918b16b68780410e282",
+  "sourceState": "Final runtime bytes measured before commit; the receipt still names the base commit. Public deployment must independently match this buildId and its exact final Git commit.",
+  "cases": [
+    {
+      "requestedCells": 25,
+      "cells": 30,
+      "phase": "static-map",
+      "actorCount": 0,
+      "moduleCount": 27,
+      "animatedModuleCount": 0,
+      "coldLocalReadyMs": 1983,
+      "continueToReadyMs": 1035,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.699999999999818,
+          "p95": 16.799999999999272,
+          "max": 17.400000000001455
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 1,
+          "max": 2.399999976158142
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 128,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 258,
+          "p50": 0.10000002384185791,
+          "p95": 0.9000000357627869,
+          "max": 2.399999976158142
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1392,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 28.5,
+          "p95": 29.099999964237213,
+          "max": 29.099999964237213
+        }
+      },
+      "saveQuitUiMs": 496,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1021,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 0,
+      "observedEntities": [],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 26581186,
+        "total": 36437602,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 10239,
+        "placementCount": 27,
+        "uniqueIds": 27,
+        "bits": 8000000,
+        "diamonds": 19000,
+        "heap": {
+          "used": 31020189,
+          "total": 43719145
+        },
+        "setItemMs": {
+          "samples": 2,
+          "p50": 0,
+          "p95": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "requestedCells": 25,
+      "cells": 30,
+      "phase": "animated-map",
+      "actorCount": 0,
+      "moduleCount": 27,
+      "animatedModuleCount": 9,
+      "coldLocalReadyMs": 1391,
+      "continueToReadyMs": 748,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.699999999999818,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 0.8999999761581421,
+          "max": 3.700000047683716
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 127,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 256,
+          "p50": 0.10000002384185791,
+          "p95": 0.8999999761581421,
+          "max": 2.5
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1198,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 28.600000023841858,
+          "p95": 29.600000023841858,
+          "max": 29.600000023841858
+        }
+      },
+      "saveQuitUiMs": 473,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1016,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 0,
+      "observedEntities": [],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 25698561,
+        "total": 39318221,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 10247,
+        "placementCount": 27,
+        "uniqueIds": 27,
+        "bits": 8000000,
+        "diamonds": 19000,
+        "heap": {
+          "used": 30628800,
+          "total": 43457164
+        },
+        "setItemMs": {
+          "samples": 2,
+          "p50": 0,
+          "p95": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "requestedCells": 25,
+      "cells": 30,
+      "phase": "animated-with16",
+      "actorCount": 16,
+      "moduleCount": 27,
+      "animatedModuleCount": 9,
+      "coldLocalReadyMs": 1582,
+      "continueToReadyMs": 943,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.699999999999818,
+          "p95": 16.700000000000728,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 5.600000023841858,
+          "max": 14.800000011920929
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 127,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 256,
+          "p50": 0.10000002384185791,
+          "p95": 4.899999976158142,
+          "max": 12.799999952316284
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1260,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 28.69999998807907,
+          "p95": 37.19999998807907,
+          "max": 37.19999998807907
+        }
+      },
+      "saveQuitUiMs": 542,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1021,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 16,
+      "observedEntities": [
+        "e000_digitama",
+        "m503_warglaymon",
+        "m509_shinegraymon",
+        "m518_blackwargreymon",
+        "m529_metalgarurumon_va",
+        "m541_dukemon"
+      ],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 30828545,
+        "total": 42402701,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 32995,
+        "placementCount": 27,
+        "uniqueIds": 27,
+        "bits": 8000000,
+        "diamonds": 19000,
+        "heap": {
+          "used": 29366141,
+          "total": 83273941
+        },
+        "setItemMs": {
+          "samples": 2,
+          "p50": 0.09999996423721313,
+          "p95": 0.19999998807907104,
+          "max": 0.19999998807907104
+        }
+      }
+    },
+    {
+      "requestedCells": 50,
+      "cells": 50,
+      "phase": "static-map",
+      "actorCount": 0,
+      "moduleCount": 47,
+      "animatedModuleCount": 0,
+      "coldLocalReadyMs": 1297,
+      "continueToReadyMs": 689,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 479,
+          "p50": 16.699999999999818,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 960,
+          "p50": 0.10000002384185791,
+          "p95": 0.800000011920929,
+          "max": 2.399999976158142
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 127,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.799999999999272
+        },
+        "rafCallbackCpuMs": {
+          "samples": 256,
+          "p50": 0.10000002384185791,
+          "p95": 0.8999999761581421,
+          "max": 2.200000047683716
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1412,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 28.899999976158142,
+          "p95": 31.19999998807907,
+          "max": 31.19999998807907
+        }
+      },
+      "saveQuitUiMs": 510,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1021,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 0,
+      "observedEntities": [],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 27652773,
+        "total": 39885005,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 11906,
+        "placementCount": 47,
+        "uniqueIds": 47,
+        "bits": 8000000,
+        "diamonds": 17000,
+        "heap": {
+          "used": 31450274,
+          "total": 43478214
+        },
+        "setItemMs": {
+          "samples": 2,
+          "p50": 0.09999996423721313,
+          "p95": 0.10000002384185791,
+          "max": 0.10000002384185791
+        }
+      }
+    },
+    {
+      "requestedCells": 50,
+      "cells": 50,
+      "phase": "animated-map",
+      "actorCount": 0,
+      "moduleCount": 47,
+      "animatedModuleCount": 12,
+      "coldLocalReadyMs": 1391,
+      "continueToReadyMs": 703,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.69999999999891,
+          "p95": 16.800000000000182,
+          "max": 16.899999999999636
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 1.0999999642372131,
+          "max": 3.5
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 129,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.899999999999636
+        },
+        "rafCallbackCpuMs": {
+          "samples": 260,
+          "p50": 0.10000002384185791,
+          "p95": 1,
+          "max": 2.199999988079071
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1475,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 29.30000001192093,
+          "p95": 38.80000001192093,
+          "max": 38.80000001192093
+        }
+      },
+      "saveQuitUiMs": 481,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1022,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 0,
+      "observedEntities": [],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 26744971,
+        "total": 39321563,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 11919,
+        "placementCount": 47,
+        "uniqueIds": 47,
+        "bits": 8000000,
+        "diamonds": 17000,
+        "heap": {
+          "used": 27900132,
+          "total": 44191400
+        },
+        "setItemMs": {
+          "samples": 3,
+          "p50": 0.10000002384185791,
+          "p95": 0.10000002384185791,
+          "max": 0.10000002384185791
+        }
+      }
+    },
+    {
+      "requestedCells": 50,
+      "cells": 50,
+      "phase": "animated-with16",
+      "actorCount": 16,
+      "moduleCount": 47,
+      "animatedModuleCount": 12,
+      "coldLocalReadyMs": 1420,
+      "continueToReadyMs": 827,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.699999999999818,
+          "p95": 16.800000000000182,
+          "max": 16.899999999999636
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 5,
+          "max": 14.699999988079071
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 132,
+          "p50": 16.69999999999891,
+          "p95": 16.80000000000109,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 266,
+          "p50": 0.10000002384185791,
+          "p95": 7,
+          "max": 19.599999964237213
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1380,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 29.30000001192093,
+          "p95": 31.69999998807907,
+          "max": 31.69999998807907
+        }
+      },
+      "saveQuitUiMs": 526,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1023,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 16,
+      "observedEntities": [
+        "e000_digitama",
+        "m503_warglaymon",
+        "m509_shinegraymon",
+        "m518_blackwargreymon",
+        "m529_metalgarurumon_va",
+        "m541_dukemon"
+      ],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 25914708,
+        "total": 43256768,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 34667,
+        "placementCount": 47,
+        "uniqueIds": 47,
+        "bits": 8000000,
+        "diamonds": 17000,
+        "heap": {
+          "used": 45863116,
+          "total": 77855432
+        },
+        "setItemMs": {
+          "samples": 2,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "max": 0.10000002384185791
+        }
+      }
+    },
+    {
+      "requestedCells": 75,
+      "cells": 80,
+      "phase": "static-map",
+      "actorCount": 0,
+      "moduleCount": 77,
+      "animatedModuleCount": 0,
+      "coldLocalReadyMs": 1216,
+      "continueToReadyMs": 630,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.699999999999818,
+          "p95": 16.800000000000182,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 0.7000000476837158,
+          "max": 2.399999976158142
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 128,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 258,
+          "p50": 0.10000002384185791,
+          "p95": 0.800000011920929,
+          "max": 2.199999988079071
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1563,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 30.299999952316284,
+          "p95": 44.60000002384186,
+          "max": 44.60000002384186
+        }
+      },
+      "saveQuitUiMs": 477,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1026,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 0,
+      "observedEntities": [],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 26547049,
+        "total": 37753249,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 14408,
+        "placementCount": 77,
+        "uniqueIds": 77,
+        "bits": 8000000,
+        "diamonds": 14000,
+        "heap": {
+          "used": 30123049,
+          "total": 47552057
+        },
+        "setItemMs": {
+          "samples": 3,
+          "p50": 0.10000002384185791,
+          "p95": 0.10000002384185791,
+          "max": 0.10000002384185791
+        }
+      }
+    },
+    {
+      "requestedCells": 75,
+      "cells": 80,
+      "phase": "animated-map",
+      "actorCount": 0,
+      "moduleCount": 77,
+      "animatedModuleCount": 19,
+      "coldLocalReadyMs": 1231,
+      "continueToReadyMs": 655,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.699999999999818,
+          "p95": 16.800000000000182,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 0.7999999523162842,
+          "max": 2.899999976158142
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 128,
+          "p50": 16.69999999999891,
+          "p95": 16.80000000000109,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 258,
+          "p50": 0.10000002384185791,
+          "p95": 1,
+          "max": 2.699999988079071
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1531,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 31.5,
+          "p95": 45.39999997615814,
+          "max": 45.39999997615814
+        }
+      },
+      "saveQuitUiMs": 406,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1017,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 0,
+      "observedEntities": [],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 25517973,
+        "total": 39098609,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 14428,
+        "placementCount": 77,
+        "uniqueIds": 77,
+        "bits": 8000000,
+        "diamonds": 14000,
+        "heap": {
+          "used": 31701529,
+          "total": 44034897
+        },
+        "setItemMs": {
+          "samples": 3,
+          "p50": 0.09999996423721313,
+          "p95": 0.10000002384185791,
+          "max": 0.10000002384185791
+        }
+      }
+    },
+    {
+      "requestedCells": 75,
+      "cells": 80,
+      "phase": "animated-with16",
+      "actorCount": 16,
+      "moduleCount": 77,
+      "animatedModuleCount": 19,
+      "coldLocalReadyMs": 1442,
+      "continueToReadyMs": 837,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.699999999999818,
+          "p95": 16.800000000000182,
+          "max": 16.900000000000546
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 5.399999976158142,
+          "max": 15.100000023841858
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 128,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 258,
+          "p50": 0.10000002384185791,
+          "p95": 5,
+          "max": 13.300000011920929
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1506,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 31.099999964237213,
+          "p95": 50.89999997615814,
+          "max": 50.89999997615814
+        }
+      },
+      "saveQuitUiMs": 394,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1014,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 16,
+      "observedEntities": [
+        "e000_digitama",
+        "m503_warglaymon",
+        "m509_shinegraymon",
+        "m518_blackwargreymon",
+        "m529_metalgarurumon_va",
+        "m541_dukemon"
+      ],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 31232275,
+        "total": 42935347,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 37174,
+        "placementCount": 77,
+        "uniqueIds": 77,
+        "bits": 8000000,
+        "diamonds": 14000,
+        "heap": {
+          "used": 29519209,
+          "total": 78327629
+        },
+        "setItemMs": {
+          "samples": 3,
+          "p50": 0.19999998807907104,
+          "p95": 0.2999999523162842,
+          "max": 0.2999999523162842
+        }
+      }
+    },
+    {
+      "requestedCells": 100,
+      "cells": 100,
+      "phase": "static-map",
+      "actorCount": 0,
+      "moduleCount": 97,
+      "animatedModuleCount": 0,
+      "coldLocalReadyMs": 1166,
+      "continueToReadyMs": 603,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 479,
+          "p50": 16.699999999999818,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 960,
+          "p50": 0.10000002384185791,
+          "p95": 0.800000011920929,
+          "max": 3.800000011920929
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 128,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 258,
+          "p50": 0.10000002384185791,
+          "p95": 0.9000000357627869,
+          "max": 2.699999988079071
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 2177,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 58.09999996423721,
+          "p95": 81.20000004768372,
+          "max": 81.20000004768372
+        }
+      },
+      "saveQuitUiMs": 503,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1027,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 0,
+      "observedEntities": [],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 25904710,
+        "total": 39329242,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 16076,
+        "placementCount": 97,
+        "uniqueIds": 97,
+        "bits": 8000000,
+        "diamonds": 12000,
+        "heap": {
+          "used": 26594278,
+          "total": 43306290
+        },
+        "setItemMs": {
+          "samples": 3,
+          "p50": 0.19999998807907104,
+          "p95": 0.19999998807907104,
+          "max": 0.19999998807907104
+        }
+      }
+    },
+    {
+      "requestedCells": 100,
+      "cells": 100,
+      "phase": "animated-map",
+      "actorCount": 0,
+      "moduleCount": 97,
+      "animatedModuleCount": 24,
+      "coldLocalReadyMs": 2358,
+      "continueToReadyMs": 1351,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 480,
+          "p50": 16.699999999999818,
+          "p95": 16.800000000000182,
+          "max": 16.900000000000546
+        },
+        "rafCallbackCpuMs": {
+          "samples": 962,
+          "p50": 0.10000002384185791,
+          "p95": 1.4000000357627869,
+          "max": 4.800000011920929
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 127,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 16.899999999999636
+        },
+        "rafCallbackCpuMs": {
+          "samples": 256,
+          "p50": 0.10000002384185791,
+          "p95": 1,
+          "max": 3.300000011920929
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1994,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 60.799999952316284,
+          "p95": 67.20000004768372,
+          "max": 67.20000004768372
+        }
+      },
+      "saveQuitUiMs": 513,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1029,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 0,
+      "observedEntities": [],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 29301239,
+        "total": 38538979,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 16101,
+        "placementCount": 97,
+        "uniqueIds": 97,
+        "bits": 8000000,
+        "diamonds": 12000,
+        "heap": {
+          "used": 31467719,
+          "total": 44623047
+        },
+        "setItemMs": {
+          "samples": 3,
+          "p50": 0.19999998807907104,
+          "p95": 0.20000004768371582,
+          "max": 0.20000004768371582
+        }
+      }
+    },
+    {
+      "requestedCells": 100,
+      "cells": 100,
+      "phase": "animated-with16",
+      "actorCount": 16,
+      "moduleCount": 97,
+      "animatedModuleCount": 24,
+      "coldLocalReadyMs": 2106,
+      "continueToReadyMs": 1277,
+      "idle": {
+        "frameIntervalMs": {
+          "samples": 479,
+          "p50": 16.699999999999818,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000109
+        },
+        "rafCallbackCpuMs": {
+          "samples": 960,
+          "p50": 0.10000002384185791,
+          "p95": 4.900000035762787,
+          "max": 16
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "drag": {
+        "frameIntervalMs": {
+          "samples": 128,
+          "p50": 16.69999999999891,
+          "p95": 16.80000000000109,
+          "max": 16.899999999999636
+        },
+        "rafCallbackCpuMs": {
+          "samples": 258,
+          "p50": 0.10000002384185791,
+          "p95": 5.200000047683716,
+          "max": 14
+        },
+        "longTasksMs": {
+          "samples": 0,
+          "p50": null,
+          "p95": null,
+          "max": null
+        },
+        "over33ms": 0
+      },
+      "continuousPlacement": {
+        "withdraw": 5,
+        "replace": 5,
+        "automationElapsedMs": 1556,
+        "pointerupToSecondRafMs": {
+          "samples": 17,
+          "p50": 34.39999997615814,
+          "p95": 51.700000047683716,
+          "max": 51.700000047683716
+        }
+      },
+      "saveQuitUiMs": 414,
+      "smallViewportOverflow": false,
+      "resizeAndOneSecondSettleMs": 1026,
+      "passed": true,
+      "errors": [],
+      "observedResidentCount": 16,
+      "observedEntities": [
+        "e000_digitama",
+        "m503_warglaymon",
+        "m509_shinegraymon",
+        "m518_blackwargreymon",
+        "m529_metalgarurumon_va",
+        "m541_dukemon"
+      ],
+      "gpu": {
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "loadHeapBytes": {
+        "used": 30567206,
+        "total": 44635466,
+        "limit": 4395630592
+      },
+      "storage": {
+        "bytes": 38849,
+        "placementCount": 97,
+        "uniqueIds": 97,
+        "bits": 8000000,
+        "diamonds": 12000,
+        "heap": {
+          "used": 44017765,
+          "total": 86985769
+        },
+        "setItemMs": {
+          "samples": 3,
+          "p50": 0.10000002384185791,
+          "p95": 0.19999998807907104,
+          "max": 0.19999998807907104
+        }
+      }
+    }
+  ]
+}

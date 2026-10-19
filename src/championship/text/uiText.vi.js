@@ -212,7 +212,7 @@ export const UI_COPY_VI = Object.freeze({
   "Your home roster is full. Your Digimon remains on the memory card.": "Danh sách trang trại đã đầy. Bạn đồng hành vẫn ở lại trong thẻ nhớ.",
   "FRIENDS_MEDAL_PREVIEW_NOTICE": "Trong đợt chơi thử, huy chương cuối game chỉ là bản xem trước hình ảnh, không tính là chiến thắng thật. Hãy chơi để giành huy chương đầu game.",
   "FRIENDS_MEDAL_PREVIEW_BADGE": "Xem trước thử nghiệm",
-  "CAGE_PUBLIC_TEST_GRID_HINT": "Trang trại liền mạch · Ban đầu 20 ô, tối đa 50 · Mỗi hàng 10 ô giá 1000 kim cương thử nghiệm. Không thanh toán tiền thật.",
+  "CAGE_PUBLIC_TEST_GRID_HINT": "Trang trại liền mạch · Ban đầu 20 ô, tối đa 100 · Mỗi hàng 10 ô giá 1000 kim cương thử nghiệm. Không thanh toán tiền thật.",
   "CAGE_TEST_ROW_TITLE": "Mở khóa hàng {row}",
   "CAGE_TEST_ROW_DETAILS": "Mở {count} ô bằng {price} kim cương thử nghiệm. Không thanh toán tiền thật.",
   "CAGE_TEST_ROW_BUY": "Mua",

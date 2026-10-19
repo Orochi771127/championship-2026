@@ -1,5 +1,11 @@
 # Verification
 
+The bounded 2026-10-19 public ranch adaptation is covered by `node --test tests/championship-cage100-instances-cases.mjs tests/championship-ranch-row-dialog-cases.mjs tests/championship-friends-playtest-cases.mjs`. It preserves the first fifty stable cell IDs, starts with twenty open cells and sixteen residents, supports up to one hundred total cells and independent copies of cage templates, and grants the larger test wallets only when creating a new save. Template prices and native rules are unchanged. These cases are in `test:ci`.
+
+After `npm run build:playtest` and `npm run validate:playtest`, run `node tests/championship-cage100-browser.cjs` for a fresh isolated public UI flow: onboarding, eight land confirmations, three paid purchases, independent placement/move/withdrawal and real save/reload. Set `CAGE100_TARGET=live` to verify the actual published site, without local asset interception. It never opens a persistent browser profile or injects a save. Reports go to `.tmp/browser-qa/cage100/`, with live results in its `live/` subdirectory.
+
+For controlled desktop performance, first run `node tests/helpers/prepare-cage100-performance.mjs`, then `node tests/championship-cage100-performance-browser.cjs`. The twelve isolated QA saves use 30/50/80/100 open cells (25 and 75 round up to legal ten-cell purchase rows), static modules, approved animated modules, and animation with sixteen partners. Their world extent remains one hundred cells in every case. Measurements distinguish RAF cadence, callback CPU, pointerup-to-second-RAF paint opportunity, storage writes, UI save/quit and local cold load. This is neither a same-art animation-off comparison nor physical-phone acceptance. See `docs/qa/CAGE100_20261019.md` for scope and device checks.
+
 `npm test` runs deterministic runtime, presentation-contract, migration-firewall, and asset-registry checks. `npm run test:browser` performs the VS1 real reload/continue flow and responsive gate. `npm run test:browser:vs2` walks the VS2-P Gate/Hunt/Return flow at every contract viewport, captures 390x844 and 393x852 evidence, and verifies the Player/Developer evidence split. `npm run test:browser:vs2-r1` verifies the bounded Three.js Gate presentation, the 2D fallback and the transition to Hunt Loadout.
 
 

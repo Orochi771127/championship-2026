@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {createRanchRowPurchasePrompt} from '../src/championship/app/ranchRowPurchasePrompt.js';
 import {purchaseTestRanchRow} from '../src/championship/app/friendsPlaytestPolicy.js';
 import {LOCALES,setLocale} from '../src/championship/text/locale.js';
-function harness(diamonds=10000){
- let wallet={version:2,grants:[],diamonds,purchases:[]},frame={screen:'CAGE_EDIT',cageEdit:{testDiamonds:diamonds,slots:Array.from({length:50},(_,i)=>({row:Math.floor(i/10),unlocked:i<20}))}},resolve,options,calls=0,dialogs=0;
+function harness(diamonds=10000,rows=5){
+ let wallet={version:2,grants:[],diamonds,purchases:[]},frame={screen:'CAGE_EDIT',cageEdit:{productGrid:{rows},testDiamonds:diamonds,slots:Array.from({length:rows*10},(_,i)=>({row:Math.floor(i/10),unlocked:i<20}))}},resolve,options,calls=0,dialogs=0;
  const source={getFrame:()=>frame,intents:{buyRanchTestRow(row){calls++;const buy=purchaseTestRanchRow(wallet,row);if(buy.ok){wallet=buy.state;frame.cageEdit.testDiamonds=wallet.diamonds;for(const slot of frame.cageEdit.slots)if(slot.row===row)slot.unlocked=true;}}}};
  const prompt=createRanchRowPurchasePrompt({source,ask:opts=>{dialogs++;options=opts;return new Promise(r=>resolve=r);}});
  return{prompt,source,get wallet(){return wallet},get frame(){return frame},get options(){return options},get calls(){return calls},get dialogs(){return dialogs},resolve:value=>resolve(value)};
@@ -28,4 +28,10 @@ test('all three purchases preserve 20 base + 30 unlocked = 50 and 7000 balance',
 });
 test('dialog copy resolves row, count, price, balance and actions across five locales',async()=>{
  try{for(const locale of LOCALES){setLocale(locale);const h=harness(),p=h.prompt.open(2);assert.match(h.options.title,/3/);for(const n of ['10','1000','10000'])assert.ok(h.options.message.replace(/[^0-9]/g,'').includes(n),locale+': '+n);assert.doesNotMatch(JSON.stringify(h.options),/CAGE_TEST_|\{(?:row|count|price|amount)\}/);h.resolve('cancel');await p;}}finally{setLocale('zh-Hant');}
+});
+
+test('100-cell dialog permits all eight expansion rows and rejects row11',async()=>{
+ const h=harness(20000,10);
+ for(let row=2;row<10;row++){const pending=h.prompt.open(row);assert.ok(h.options.title.includes(String(row+1)));h.resolve('buy');await pending;}
+ await h.prompt.open(10);assert.equal(h.dialogs,8);assert.equal(h.calls,8);assert.equal(h.wallet.diamonds,12000);assert.equal(h.frame.cageEdit.slots.filter(s=>s.unlocked).length,100);
 });

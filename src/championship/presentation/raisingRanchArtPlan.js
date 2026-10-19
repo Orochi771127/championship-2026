@@ -178,8 +178,8 @@ export function createProductGridArtPlan({manifest,placements,unlockedSlots=null
   const occupied=new Set(),modules=new Set();
   for(const placement of placements){
     const cells=productPlacementCells(placement);
-    if(!Array.isArray(cells)||!cells.length||modules.has(placement.moduleId))fail("PRODUCT_GRID_LAYOUT_INVALID");
-    modules.add(placement.moduleId);
+    if(!Array.isArray(cells)||!cells.length||modules.has(placement.instanceId??placement.moduleId))fail("PRODUCT_GRID_LAYOUT_INVALID");
+    modules.add(placement.instanceId??placement.moduleId);
     for(const cell of cells){if(occupied.has(cell))fail("PRODUCT_GRID_OCCUPANCY_OVERLAP");occupied.add(cell);}
   }
   if(unlockedSlots!==null&&(!Array.isArray(unlockedSlots)||unlockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=PRODUCT_RANCH_SLOT_COUNT)))fail("PRODUCT_GRID_ACCESS_INVALID");
@@ -205,7 +205,7 @@ export function createProductGridArtPlan({manifest,placements,unlockedSlots=null
     const y=origin.tileY*8*unit;
     const width=Math.min(field.worldWidthPx,wrapWidthPx-x),height=field.worldHeightPx-cropTop;
     if(width<=0||height<=0)fail("PRODUCT_GRID_SOURCE_BOUNDS");
-    const identity={moduleId:p.moduleId,cageDefinitionIndex:definitionIndex,
+    const identity={moduleId:p.moduleId,instanceId:p.instanceId??null,cageDefinitionIndex:definitionIndex,
       ...(definitionIndex===null?{structuralRole:'LID'}:{})};
     result.push({slotIndex:p.slotIndex,fieldId:field.fieldId,worldWidthPx:field.worldWidthPx,worldHeightPx:field.worldHeightPx,
       ...identity,x,y,sourceRect:{x:0,y:cropTop,width,height}});
@@ -215,7 +215,7 @@ export function createProductGridArtPlan({manifest,placements,unlockedSlots=null
     if(definitionIndex===35){const inset=origin.cropTopTiles*8*unit;
       residentViewport={x,y:y+inset,width,height:height-inset};}
   }
-  return deepFreeze({mode:'NATIVE_RANCH',placementEvidence:'PRODUCT_AUTHORED_CONTINUOUS_GRID50',wrapWidthPx,residentViewport,
-    placements:result,productGrid:{columns:10,rows:5,worldWidthNative:PRODUCT_RANCH_WORLD_WIDTH,worldHeightNative:PRODUCT_RANCH_WORLD_HEIGHT,sizingHeightNative:192,lockedSlots}});
+  return deepFreeze({mode:'NATIVE_RANCH',placementEvidence:'PRODUCT_AUTHORED_CONTINUOUS_GRID100_INSTANCES',wrapWidthPx,residentViewport,
+    placements:result,productGrid:{columns:10,rows:10,worldWidthNative:PRODUCT_RANCH_WORLD_WIDTH,worldHeightNative:PRODUCT_RANCH_WORLD_HEIGHT,sizingHeightNative:192,lockedSlots}});
 }
 

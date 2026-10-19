@@ -1059,7 +1059,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     expansionControls.dataset.productGrid = productGrid ? 'true' : 'false';
     expansionControls.replaceChildren();
     if (productGrid) {
-      for (let row = 2; row < 5; row++) {
+      for (let row = 2; row < cage.productGrid.rows; row++) {
         const lockedSlots = cage.slots.filter(slot=>slot.row === row && !slot.unlocked);
         const remaining = lockedSlots.length;
         if (!remaining) continue;
@@ -1141,7 +1141,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       cell.textContent = uiText(slot.moduleId ? '' : slot.unlocked ? '+' : productGrid ? '' : '🔒');
       cell.addEventListener("click", () => {
         if (!slot.unlocked || slot.fixed) return;
-        if (slot.moduleId) source.intents.removeCagePlacement(slot.moduleId);
+        if (slot.moduleId) source.intents.removeCagePlacement(slot.instanceId??slot.moduleId);
         else source.intents.placeCageAt(slot.slotIndex);
       });
       cell.dataset.deck = String(slot.deck ?? 0);
@@ -1158,7 +1158,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       const src = cageUiImage(placement.moduleId);
       if (src) { const image = element('img', 'cm-facility-thumb'); image.src = src; image.alt = ''; tile.append(image); }
       tile.append(element('strong', '', displayName), element('span', '', cageUiSummary(placement.moduleId, placement.trainingSummary)));
-      tile.addEventListener('click', () => source.intents.removeCagePlacement(placement.moduleId));
+      tile.addEventListener('click', () => source.intents.removeCagePlacement(placement.instanceId??placement.moduleId));
       facilities.append(tile);
     }
 
@@ -1177,7 +1177,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       const src = cageUiImage(item.moduleId);
       if (src) { const image = element('img', 'cm-facility-thumb'); image.src = src; image.alt = ''; row.append(image); }
       row.append(
-        element("span", "cm-vs2-cage-tray__name", cageUiName(item.moduleId, item.displayName)),
+        element("span", "cm-vs2-cage-tray__name", `${cageUiName(item.moduleId, item.displayName)} ×${item.availableCount??1}`),
         element("span", "cm-vs2-cage-tray__effect", cageUiSummary(item.moduleId, item.trainingSummary))
       );
       row.addEventListener("click", () => {

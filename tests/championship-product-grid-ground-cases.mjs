@@ -7,14 +7,14 @@ import {WAITING_ROOM_MODULE} from '../src/championship/cage/nativeRanchLayout.js
 import {ORIGINAL_CAGE_DEFINITION_SHAPES} from '../src/championship/cage/ranchSlotGeometry.js';
 import {nativeCarryPosition,stepNativeRaisingFlight} from '../src/championship/raising/nativeRaisingCarry.js';
 const waiting={moduleId:WAITING_ROOM_MODULE,slotIndex:0};
-const frame=(placements=[waiting],rows=[0,1,2,3,4])=>({layoutVersion:PRODUCT_RANCH_GRID,unlockedCount:20,placements,gridAccess:{version:1,legacyUnlockedSlots:Array.from({length:20},(_,i)=>i),purchasedRows:[],testUnlockedRows:rows}});
+const frame=(placements=[waiting],rows=[0,1,2,3,4,5,6,7,8,9])=>({layoutVersion:PRODUCT_RANCH_GRID,unlockedCount:20,placements,gridAccess:{version:1,legacyUnlockedSlots:Array.from({length:20},(_,i)=>i),purchasedRows:[],testUnlockedRows:rows}});
 test('all legal facility anchors share terrain/art origin and spawn on their owning facility',()=>{
  let count=0;
- for(const d of listCageDefinitions())for(let slotIndex=0;slotIndex<50;slotIndex++){
+ for(const d of listCageDefinitions())for(let slotIndex=0;slotIndex<100;slotIndex++){
   if(d.moduleId===WAITING_ROOM_MODULE)continue;
   const p={moduleId:d.moduleId,slotIndex};if(!validateProductRanch([waiting,p]))continue;
   const g=createRanchRaisingGround(frame([waiting,p]));
-  assert.equal(g.pixelWidth,960);assert.equal(g.pixelHeight,440);
+  assert.equal(g.pixelWidth,960);assert.equal(g.pixelHeight,880);
   const o=productFieldTileOrigin(slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[d.cageDefinitionIndex]);
   assert.deepEqual(g.origin(d.cageDefinitionIndex),[o.tileX*8,o.tileY*8,0]);
   const spawn=ranchRaisingSpawnPosition(g,d.cageDefinitionIndex,{next:()=>51});
@@ -30,7 +30,7 @@ test('locked lower rows are not walkable; explicit test-row grant changes only a
   assert.equal(closed.readTerrain(x,y),1);
  }
  assert.deepEqual(closed.placements,open.placements);
- assert.equal(closed.readTerrain(1,-1),1);assert.equal(open.readTerrain(1,55),1);
+ assert.equal(closed.readTerrain(1,-1),1);assert.equal(open.readTerrain(1,110),1);
 });
 test('carry and landing retain lower-row coordinates instead of native150/160 clamps',()=>{
  const d=listCageDefinitions().find(d=>d.cageDefinitionIndex===0),g=createRanchRaisingGround(frame([waiting,{moduleId:d.moduleId,slotIndex:45}]));

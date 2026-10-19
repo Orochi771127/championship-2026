@@ -37,20 +37,20 @@ function render(runtime,diamonds=10000){
 }
 function coordinates(view){return view.cells.map(c=>[c.dataset.slotIndex,c.style.left,c.style.top]);}
 
-test('new 20-cell ranch has three clickable icons with no lower purchase block, never 30 per-cell locks',()=>{
+test('new 20-cell ranch has eight clickable icons with no lower purchase block, never 30 per-cell locks',()=>{
  const view=render(fresh());
- assert.equal(view.cells.length,50);assert.equal(view.locks.length,3);assert.equal(view.ctas.length,0);
- assert.deepEqual(view.locks.map(n=>n.dataset.lockedTestRow),['2','3','4']);
+ assert.equal(view.cells.length,100);assert.equal(view.locks.length,8);assert.equal(view.ctas.length,0);
+ assert.deepEqual(view.locks.map(n=>n.dataset.lockedTestRow),['2','3','4','5','6','7','8','9']);
  for(const lock of view.locks){assert.equal(lock.children.length,1);assert.equal(lock.children[0].textContent,'🔒');assert.equal(lock.attributes['aria-haspopup'],'dialog');assert.equal(lock.tag,'button');}
- assert.deepEqual(view.locks.map(n=>[n.style.left,n.style.top]),[['222px','94px'],['246px','138px'],['222px','182px']]);
+ assert.deepEqual(view.locks.map(n=>[n.style.left,n.style.top]),Array.from({length:8},(_,i)=>[i%2?'246px':'222px',`${94+i*44}px`]));
  for(const cell of view.cells.filter(n=>n.dataset.unlocked==='false')){assert.equal(cell.disabled,true);assert.equal(cell.textContent,'');}
  assert.equal(view.cells.filter(n=>n.textContent==='🔒').length,0);
 });
 
-test('old 40-cell QA ranch has exactly one last-row icon and one 1000-diamond accessible lock',()=>{
+test('old 40-cell QA ranch has six remaining row icons and one 1000-diamond accessible lock',()=>{
  const view=render(legacy());
  assert.equal(view.cells.filter(c=>c.dataset.unlocked==='true').length,40);
- assert.equal(view.locks.length,1);assert.equal(view.locks[0].dataset.lockedTestRow,'4');assert.equal(view.ctas.length,0);
+ assert.equal(view.locks.length,6);assert.equal(view.locks[0].dataset.lockedTestRow,'4');assert.equal(view.ctas.length,0);
  assert.equal(view.locks[0].dataset.lockedTestRow,'4');assert.equal(view.locks[0].attributes['aria-label'],uiText('CAGE_TEST_BUY_ROW',{row:5,count:10,price:1000}));
 });
 
@@ -59,17 +59,17 @@ test('only the row lock opens confirmation; no direct purchase intent in render'
  for(const cell of view.cells.filter(n=>n.dataset.unlocked==='false')){cell.click();cell.clickHandler?.();}
  assert.deepEqual(view.actions,[]);
  for(const lock of view.locks)lock.click();
- assert.deepEqual(view.actions,[['open',2],['open',3],['open',4]]);
+ assert.deepEqual(view.actions,Array.from({length:8},(_,i)=>['open',i+2]));
  assert.equal((renderSource.match(/buyRanchTestRow/g)??[]).length,0);
 });
 
 test('purchases remove only their row indicator without moving any slot or placement',()=>{
  const runtime=fresh(),before=render(runtime),anchors=coordinates(before),placements=runtime.toSave().placements;
- for(const row of [2,3,4]){
+ for(const row of [2,3,4,5,6,7,8,9]){
   runtime.applyTestRowPurchase(row,owned,9);
   const after=render(runtime,10000-(row-1)*1000);
   assert.deepEqual(coordinates(after),anchors);assert.deepEqual(runtime.toSave().placements,placements);
-  assert.equal(after.locks.length,4-row);assert.equal(after.ctas.length,0);
+  assert.equal(after.locks.length,9-row);assert.equal(after.ctas.length,0);
   assert.equal(after.cells.filter(c=>c.dataset.unlocked==='true').length,10*(row+1));
   assert.equal(after.locks.some(n=>n.dataset.lockedTestRow===String(row)),false);
  }
@@ -80,11 +80,11 @@ test('purchases remove only their row indicator without moving any slot or place
 test('a refused purchase leaves its row indicator and CTA available for an authorized retry',()=>{
  const runtime=fresh(),first=render(runtime,0);first.locks[0].click();
  const after=render(runtime,0);assert.deepEqual(coordinates(after),coordinates(first));
- assert.equal(after.locks.length,3);assert.equal(after.ctas.length,0);assert.equal(after.cage.unlockedCount,20);
+ assert.equal(after.locks.length,8);assert.equal(after.ctas.length,0);assert.equal(after.cage.unlockedCount,20);
 });
 
 test('row CTA uses the existing complete price, count and test-currency copy in every locale',()=>{
- try{for(const locale of LOCALES){setLocale(locale);const view=render(fresh());for(let i=0;i<3;i++){
+ try{for(const locale of LOCALES){setLocale(locale);const view=render(fresh());for(let i=0;i<8;i++){
   assert.equal(view.locks[i].attributes['aria-label'],uiText('CAGE_TEST_BUY_ROW',{row:i+3,count:10,price:1000}));
   assert.match(view.locks[i].attributes['aria-label'].replace(/[^0-9]/g,''),/1000/);assert.doesNotMatch(view.locks[i].attributes['aria-label'],/CAGE_TEST_BUY_ROW|\{(?:row|count|price)\}/);
  }}}finally{setLocale('zh-Hant');}

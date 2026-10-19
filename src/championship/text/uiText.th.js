@@ -212,7 +212,7 @@ export const UI_COPY_TH = Object.freeze({
   "Your home roster is full. Your Digimon remains on the memory card.": "รายชื่อในฟาร์มเต็มแล้ว พาร์ตเนอร์จะยังคงอยู่ในการ์ดความจำ",
   "FRIENDS_MEDAL_PREVIEW_NOTICE": "ระหว่างการทดสอบ เหรียญช่วงท้ายเป็นเพียงภาพตัวอย่าง ไม่นับเป็นชัยชนะจริง ส่วนเหรียญช่วงต้นต้องเล่นเพื่อรับเอง",
   "FRIENDS_MEDAL_PREVIEW_BADGE": "ตัวอย่างทดสอบ",
-  "CAGE_PUBLIC_TEST_GRID_HINT": "ฟาร์มต่อเนื่อง เริ่ม 20 ช่อง สูงสุด 50 ช่อง แต่ละแถว 10 ช่อง ราคา 1000 เพชรทดสอบ ไม่มีการชำระเงินจริง",
+  "CAGE_PUBLIC_TEST_GRID_HINT": "ฟาร์มต่อเนื่อง เริ่ม 20 ช่อง สูงสุด 100 ช่อง แต่ละแถว 10 ช่อง ราคา 1000 เพชรทดสอบ ไม่มีการชำระเงินจริง",
   "CAGE_TEST_ROW_TITLE": "ปลดล็อกแถวที่ {row}",
   "CAGE_TEST_ROW_DETAILS": "เปิด {count} ช่องด้วยเพชรทดสอบ {price} เม็ด ไม่มีการชำระเงินจริง",
   "CAGE_TEST_ROW_BUY": "ซื้อ",

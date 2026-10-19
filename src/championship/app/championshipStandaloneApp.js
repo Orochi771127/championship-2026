@@ -84,6 +84,7 @@ import { projectDatabase } from "../database/databaseRuntime.js";
 import { getDatabaseSlot } from "../database/databaseCatalog.js";
 import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
 import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
+import {getShopRecord} from '../shop/shopCatalog.js';
 import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
 import { validateRanchLayout } from '../cage/ranchExpansion.js';
@@ -307,7 +308,7 @@ export function createChampionshipStandaloneApp({
   }
 
   function shopCageOwned() {
-    return shop?.toSave()?.cageOwned ?? [];
+    return shop?.toSave() ?? [];
   }
 
   function tamerRank() {
@@ -355,13 +356,13 @@ export function createChampionshipStandaloneApp({
       // Continue: Shop snapshot is the inventory authority. Hunt starts empty
       // and receives only the mapped SKUs the Shop currently owns.
       huntInventory = createHuntInventory({ entries: [], ...progression });
-      shop = createShopRuntime({ allItemsVisible: playtestPolicy?.enabled === true && playtestPolicy.shopOpen, huntInventory, snapshot: shopSnapshot, progression });
+      shop = createShopRuntime({ allowRepeatedCages:playtestPolicy?.enabled===true, allItemsVisible: playtestPolicy?.enabled === true && playtestPolicy.shopOpen, huntInventory, snapshot: shopSnapshot, progression });
       applyMappedHuntInventoryFromShop(shop, huntInventory);
     } else {
       huntInventory = createHuntInventory({ entries: huntStartingInventory, ...progression });
       // Custom starting inventories are a controlled fixture seam. Seed the
       // same Shop authority that purchases, consumption and saves will use.
-      shop = createShopRuntime({ allItemsVisible: playtestPolicy?.enabled === true && playtestPolicy.shopOpen, huntInventory, progression, initialHuntInventory:huntInventory });
+      shop = createShopRuntime({ allowRepeatedCages:playtestPolicy?.enabled===true, allItemsVisible: playtestPolicy?.enabled === true && playtestPolicy.shopOpen, huntInventory, progression, initialHuntInventory:huntInventory });
     }
     const grant = newSave ? grantFriendsPlaytestCoins(shop.getBits(), friendsPlaytest, shop.getFrame().bitsCap, playtestPolicy) : {bits:shop.getBits(),state:friendsPlaytest,granted:0};
     if (grant.granted) shop.applyBitsTransaction({expectedBits:shop.getBits(),bits:grant.bits});
@@ -500,15 +501,16 @@ export function createChampionshipStandaloneApp({
 
   function storeNativeRaisingHome() {
     if(tutorialBaseline||!raisingGround)return;
-    const foods=raisingFoods.filter(f=>f.present&&raisingGround.origin(f.cageDefinitionIndex)).map(f=>{
-      const origin=raisingGround.origin(f.cageDefinitionIndex);
-      return {slot:f.slot,cageDefinitionIndex:f.cageDefinitionIndex,localPositionQ12:f.positionQ12.map((n,i)=>n-origin[i]*4096),
+    const foods=raisingFoods.filter(f=>f.present&&raisingGround.origin(f.cageInstanceId??f.cageDefinitionIndex)).map(f=>{
+      const origin=raisingGround.origin(f.cageInstanceId??f.cageDefinitionIndex);
+      return {slot:f.slot,cageDefinitionIndex:f.cageDefinitionIndex,...(f.cageInstanceId?{cageInstanceId:f.cageInstanceId}:{}),localPositionQ12:f.positionQ12.map((n,i)=>n-origin[i]*4096),
         protein:f.protein,...(f.kind>=2?{kind:f.kind}:{}),remaining:f.remaining,freshness:f.freshness};
     });
-    const waste=raisingWaste.filter(w=>w.present&&raisingGround.origin(w.cageDefinitionIndex)).map(w=>{
-      const origin=raisingGround.origin(w.cageDefinitionIndex);return {slot:w.slot,speciesIndex:w.speciesIndex,cageDefinitionIndex:w.cageDefinitionIndex,
+    const waste=raisingWaste.filter(w=>w.present&&raisingGround.origin(w.cageInstanceId??w.cageDefinitionIndex)).map(w=>{
+      const origin=raisingGround.origin(w.cageInstanceId??w.cageDefinitionIndex);return {slot:w.slot,speciesIndex:w.speciesIndex,cageDefinitionIndex:w.cageDefinitionIndex,...(w.cageInstanceId?{cageInstanceId:w.cageInstanceId}:{}),
         localPositionQ12:w.positionQ12.map((n,i)=>n-origin[i]*4096)};});
     raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({version:1,poolSlots:raisingPoolSlots,foods,waste,
+      cageAssignments:Object.fromEntries([...raisingActors].filter(([,a])=>a.cageInstanceId).map(([id,a])=>[id,a.cageInstanceId])),
       evolutionBranches:raising.nativeHome?.evolutionBranches??[],
       ...(raising.nativeHome?.productEvolutionBranches?{productEvolutionBranches:raising.nativeHome.productEvolutionBranches}:{}),
       ...(raising.nativeHome?.pendingOvernightMinutes!==undefined?{pendingOvernightMinutes:raising.nativeHome.pendingOvernightMinutes}:{})})});
@@ -517,7 +519,7 @@ export function createChampionshipStandaloneApp({
   function storeNativeRaisingPositions() {
     if(tutorialBaseline||!raisingGround)return;
     for(const [id,actor] of raisingActors) {
-      const current=raisingNativeProfile(id),origin=raisingGround.origin(actor.cageDefinitionIndex);
+      const current=raisingNativeProfile(id),origin=raisingGround.origin(actor.cageInstanceId??actor.cageDefinitionIndex);
       if(!current||!origin||!actor.positionQ12)continue;
       const x=((actor.positionQ12[0]-origin[0]*4096)>>12)>>>0,y=((actor.positionQ12[1]-origin[1]*4096)>>12)>>>0;
       if(current.fields["014"]!==actor.cageDefinitionIndex||current.fields["1c0"]!==x||current.fields["1c4"]!==y) {
@@ -532,11 +534,11 @@ export function createChampionshipStandaloneApp({
     raisingFoods=[];raisingWaste=[];raisingDayTransition=null;raisingDayConfirmation=false;raisingLifecycleMessage=null;raisingDirtySignals.clear();raisingPoolSlots={...raising?.nativeHome?.poolSlots};
     if(!raisingGround)return;
     for(const f of raising.nativeHome?.foods??[]) {
-      const origin=raisingGround.origin(f.cageDefinitionIndex);
-      if(origin)raisingFoods.push(createNativeRaisingFood({...f,positionQ12:f.localPositionQ12.map((n,i)=>n+origin[i]*4096),restored:true}));
+      const origin=raisingGround.origin(f.cageInstanceId??f.cageDefinitionIndex);
+      if(origin)raisingFoods.push(createNativeRaisingFood({...f,cageInstanceId:f.cageInstanceId??raisingGround.placement(f.cageDefinitionIndex)?.instanceId,positionQ12:f.localPositionQ12.map((n,i)=>n+origin[i]*4096),restored:true}));
     }
-    for(const w of raising.nativeHome?.waste??[]){const origin=raisingGround.origin(w.cageDefinitionIndex);
-      if(origin)raisingWaste.push({...w,present:true,positionQ12:w.localPositionQ12.map((n,i)=>n+origin[i]*4096)});}
+    for(const w of raising.nativeHome?.waste??[]){const origin=raisingGround.origin(w.cageInstanceId??w.cageDefinitionIndex);
+      if(origin)raisingWaste.push({...w,cageInstanceId:w.cageInstanceId??raisingGround.placement(w.cageDefinitionIndex)?.instanceId,present:true,positionQ12:w.localPositionQ12.map((n,i)=>n+origin[i]*4096)});}
     if(restoreInteractiveTutorialActor()) {storeNativeRaisingHome();return;}
     if(raising.nativeHome?.pendingOvernightMinutes!==undefined&&!tutorialBoundary)settleRaisingOvernight();
     else synchronizeNativeRaisingActors(tutorialBoundary?{
@@ -545,10 +547,10 @@ export function createChampionshipStandaloneApp({
     storeNativeRaisingHome();
   }
 
-  function spawnRaisingWaste(definition,speciesIndex,positionQ12) {
+  function spawnRaisingWaste(definition,speciesIndex,positionQ12,cageInstanceId=null) {
     const waste=allocateNativeRaisingWaste(raisingWaste,{speciesIndex,cageDefinitionIndex:definition,positionQ12});
-    if(!waste)return false;raisingWaste=raisingWaste.filter(w=>w.present);raisingWaste.push(waste);
-    raisingDirtySignals.set(definition,{dirtyAdded:true});savePort.markDirty();return true;
+    if(!waste)return false;if(cageInstanceId)waste.cageInstanceId=cageInstanceId;raisingWaste=raisingWaste.filter(w=>w.present);raisingWaste.push(waste);
+    raisingDirtySignals.set(cageInstanceId??definition,{dirtyAdded:true});savePort.markDirty();return true;
   }
 
   function settleRaisingOvernight() {
@@ -562,13 +564,13 @@ export function createChampionshipStandaloneApp({
     for(const food of raisingFoods){food.occupants.fill(null);food.positionQ12[2]=0;}
     for(const [minutes,night] of [[remaining,false],[540,true]]) {
       for(const placement of raisingGround.placements){
-        const definition=placement.definitionIndex;
-        const entries=nativeRaisingRebuiltListOrder([...raisingActors].filter(([,actor])=>actor.cageDefinitionIndex===definition).sort((a,b)=>a[1].poolSlot-b[1].poolSlot));
-        const foods=nativeRaisingRebuiltListOrder(raisingFoods.filter(f=>f.present&&f.cageDefinitionIndex===definition).sort((a,b)=>a.slot-b.slot));
+        const definition=placement.definitionIndex,owner=placement.instanceId??definition;
+        const entries=nativeRaisingRebuiltListOrder([...raisingActors].filter(([,actor])=>(actor.cageInstanceId??actor.cageDefinitionIndex)===owner).sort((a,b)=>a[1].poolSlot-b[1].poolSlot));
+        const foods=nativeRaisingRebuiltListOrder(raisingFoods.filter(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===owner).sort((a,b)=>a.slot-b.slot));
         const result=settleNativeRaisingCage(entries.map(([id])=>raisingNativeProfile(id)),{
-          definition,minutes,night,foods,wasteCount:raisingWaste.filter(w=>w.present&&w.cageDefinitionIndex===definition).length,rng,
+          definition,minutes,night,foods,wasteCount:raisingWaste.filter(w=>w.present&&(w.cageInstanceId??w.cageDefinitionIndex)===owner).length,rng,
           effects:nativeCageConditionEffects(definition,requireSession().getRaisingHomeSnapshot().season),
-          spawnWaste:species=>spawnRaisingWaste(definition,species,nativeRaisingSpawnPosition(raisingGround,definition,rng))});
+          spawnWaste:species=>spawnRaisingWaste(definition,species,nativeRaisingSpawnPosition(raisingGround,owner,rng),placement.instanceId)});
         entries.forEach(([id],i)=>writeRaisingNativeProfile(id,result.profiles[i]));foods.forEach((food,i)=>Object.assign(food,result.foods[i]));
       }
     }
@@ -596,19 +598,22 @@ export function createChampionshipStandaloneApp({
       }
       const actor=nativeRaisingActor(id);if(actor.positionQ12)continue;
       let definition=profile.fields["014"];
-      if(!raisingGround.placement(definition)) {
+      const savedOwner=raising.nativeHome?.cageAssignments?.[id];
+      let placement=raisingGround.placement(savedOwner??definition);
+      if(!placement) {
         profile=structuredClone(profile);profile.fields["014"]=35;profile.fields["1c0"]=0;profile.fields["1c4"]=0;
-        definition=35;writeRaisingNativeProfile(id,profile);
+        definition=35;placement=raisingGround.placement(35);writeRaisingNativeProfile(id,profile);
       }
-      const origin=raisingGround.origin(definition),rng=initializationRng??{next:nextGameplayRandom};
+      actor.cageInstanceId=placement.instanceId;
+      const origin=raisingGround.origin(placement.instanceId??definition),rng=initializationRng??{next:nextGameplayRandom};
       const position=[(profile.fields["1c0"]|0)*4096+origin[0]*4096,(profile.fields["1c4"]|0)*4096+origin[1]*4096,0];
       // Initialize the per-slot RNG fields before the original source-grid
       // spawn. Hatch keeps the same body; adults entering Home select a point.
       actor.poolSlot=raisingPoolSlots[id];
       initializeNativeRaisingActor(actor,profile,position,definition,rng,
         !restorePositions&&(actor.speciesIndex>=8||(profile.fields["1c0"]===0&&profile.fields["1c4"]===0))
-          ? ()=>actor.speciesIndex>=8?nativeRaisingEntryPosition(raisingGround,definition,rng,actor.poolSlot)
-            :nativeRaisingSpawnPosition(raisingGround,definition,rng):null,{deferActivity,
+          ? ()=>actor.speciesIndex>=8?nativeRaisingEntryPosition(raisingGround,placement.instanceId??definition,rng,actor.poolSlot)
+            :nativeRaisingSpawnPosition(raisingGround,placement.instanceId??definition,rng):null,{deferActivity,
               onJoin:()=>notifyNativeRaisingResidentAdded(actor,raisingActors.values(),rng)});
     }
   }
@@ -626,24 +631,24 @@ export function createChampionshipStandaloneApp({
       for(const food of raisingFoods) {
         const wasFresh=food.present&&food.freshness>0;
         const result=stepNativeRaisingFood(food,age.ageDelta);
-        if(wasFresh&&food.freshness<=0)raisingDirtySignals.set(food.cageDefinitionIndex,{dirtyAdded:true});
-        if(result.search||result.landed){const previous=signals.get(food.cageDefinitionIndex)??{};
-          signals.set(food.cageDefinitionIndex,{search:previous.search||result.search,landed:previous.landed||result.landed});}
+        if(wasFresh&&food.freshness<=0)raisingDirtySignals.set(food.cageInstanceId??food.cageDefinitionIndex,{dirtyAdded:true});
+        if(result.search||result.landed){const previous=signals.get(food.cageInstanceId??food.cageDefinitionIndex)??{};
+          signals.set(food.cageInstanceId??food.cageDefinitionIndex,{search:previous.search||result.search,landed:previous.landed||result.landed});}
       }
       reconcileNativeFoodReservations(raisingActors.values(),raisingFoods);
       for(const id of ids.sort((a,b)=>raisingPoolSlots[a]-raisingPoolSlots[b])) {
         const actor=nativeRaisingActor(id);
         if(!actor)continue;
-        const residents=[...raisingActors].filter(([,other])=>!other.detached&&other.cageDefinitionIndex===actor.cageDefinitionIndex).sort((a,b)=>a[1].poolSlot-b[1].poolSlot);
+        const residents=[...raisingActors].filter(([,other])=>!other.detached&&(other.cageInstanceId??other.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot);
         const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta:age.ageDelta,rng:{next:nextGameplayRandom},
           feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
           lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
-            getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&a.cageDefinitionIndex===actor.cageDefinitionIndex).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
+            getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
             roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
-            residents:residents.map(([other])=>raisingNativeProfile(other)),wasteCount:raisingWaste.filter(w=>w.present&&w.cageDefinitionIndex===actor.cageDefinitionIndex).length,
-            rottenFoodCount:raisingFoods.filter(f=>f.present&&f.cageDefinitionIndex===actor.cageDefinitionIndex&&f.freshness<=0).length,
-            ...raisingDirtySignals.get(actor.cageDefinitionIndex),spawnWaste:(species,position)=>spawnRaisingWaste(actor.cageDefinitionIndex,species,position)}:null});
+            residents:residents.map(([other])=>raisingNativeProfile(other)),wasteCount:raisingWaste.filter(w=>w.present&&(w.cageInstanceId??w.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).length,
+            rottenFoodCount:raisingFoods.filter(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)&&f.freshness<=0).length,
+            ...raisingDirtySignals.get(actor.cageInstanceId??actor.cageDefinitionIndex),spawnWaste:(species,position)=>spawnRaisingWaste(actor.cageDefinitionIndex,species,position,actor.cageInstanceId)}:null});
         if(result.changed) {writeRaisingNativeProfile(id,result.profile);changed=true;}
         if(result.landed){storeNativeRaisingPositions();savePort.markDirty();}
         if(result.evolutionStarted){publishRaising();return;}
@@ -1410,7 +1415,7 @@ export function createChampionshipStandaloneApp({
         else interruptNativeRaisingFeeding(actor,raisingFoods,{next:nextGameplayRandom});}
       const previousDefinition=actor.cageDefinitionIndex;
       actor.positionQ12=[Math.trunc(x)*4096,Math.trunc(y)*4096,0];actor.destinationQ12=[...actor.positionQ12];
-      actor.cageDefinitionIndex=cage.definitionIndex;
+      actor.cageDefinitionIndex=cage.definitionIndex;actor.cageInstanceId=cage.instanceId;
       if(actor.speciesIndex>=8)writeRaisingNativeProfile(instanceId,enterNativeRaisingCage(actor,raisingNativeProfile(instanceId),{
         previousDefinition,ground:raisingGround,foods:raisingFoods,season:requireSession().getRaisingHomeSnapshot().season}, {next:nextGameplayRandom}));
       storeNativeRaisingPositions();storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;
@@ -1455,12 +1460,12 @@ export function createChampionshipStandaloneApp({
       if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!Number.isFinite(x)||!Number.isFinite(y))return false;
       // 02121308 and live body +5A: inclusive native box [-6,-19,10,5].
       const waste=raisingWaste.find(w=>w.present&&x>=(w.positionQ12[0]>>12)-6&&x<=(w.positionQ12[0]>>12)+10&&y>=(w.positionQ12[1]>>12)-19&&y<=(w.positionQ12[1]>>12)+5);
-      if(waste){waste.present=false;raisingDirtySignals.set(waste.cageDefinitionIndex,{dirtyRemoved:true});storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;}
+      if(waste){waste.present=false;raisingDirtySignals.set(waste.cageInstanceId??waste.cageDefinitionIndex,{dirtyRemoved:true});storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;}
       const food=raisingFoods.find(f=>f.present&&x>=(f.positionQ12[0]>>12)-15&&x<=(f.positionQ12[0]>>12)+17
         &&y>=(f.positionQ12[1]>>12)-19&&y<=(f.positionQ12[1]>>12)+5);
       if(!food)return false;
       food.present=false;
-      if(food.freshness<=0)raisingDirtySignals.set(food.cageDefinitionIndex,{dirtyRemoved:true});
+      if(food.freshness<=0)raisingDirtySignals.set(food.cageInstanceId??food.cageDefinitionIndex,{dirtyRemoved:true});
       for(const actor of raisingActors.values())if(actor.foodSlot===food.slot)removeNativeRaisingFoodTarget(actor,raisingFoods,{next:nextGameplayRandom});
       storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;
     },
@@ -1481,12 +1486,12 @@ export function createChampionshipStandaloneApp({
       // Food's native touch box is inclusive; a touch already on an object
       // cannot place a second object or consume another inventory unit.
       const px=Math.trunc(x),py=Math.trunc(y);
-      if(raisingFoods.some(f=>f.present&&f.cageDefinitionIndex===cage.definitionIndex&&px>=(f.positionQ12[0]>>12)-15&&px<=(f.positionQ12[0]>>12)+17
+      if(raisingFoods.some(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===(cage.instanceId??cage.definitionIndex)&&px>=(f.positionQ12[0]>>12)-15&&px<=(f.positionQ12[0]>>12)+17
         &&py>=(f.positionQ12[1]>>12)-19&&py<=(f.positionQ12[1]>>12)+5))return Object.freeze({ok:false,reason:"FOOD_AT_POINT"});
       const used=new Set(raisingFoods.filter(f=>f.present).map(f=>f.slot)),slot=Array.from({length:10},(_,i)=>i).find(i=>!used.has(i));
       if(slot===undefined)return Object.freeze({ok:false,reason:"FOOD_POOL_FULL"});
       if(requireShop().toSave().quantities[protein?1:0]<1)return Object.freeze({ok:false,reason:"EMPTY"});
-      const food=createNativeRaisingFood({slot,cageDefinitionIndex:cage.definitionIndex,positionQ12:[px*4096,py*4096,0],protein});
+      const food=createNativeRaisingFood({slot,cageDefinitionIndex:cage.definitionIndex,cageInstanceId:cage.instanceId,positionQ12:[px*4096,py*4096,0],protein});
       raisingFoods=raisingFoods.filter(f=>f.present);raisingFoods.push(food);storeNativeRaisingHome();
       const consumed=shop.consumeRaisingFood(protein);
       if(!consumed.ok)throw new Error("RAISING_FOOD_INVENTORY_DRIFT");
@@ -1743,7 +1748,7 @@ export function createChampionshipStandaloneApp({
         const slot=Array.from({length:6},(_,i)=>i+10).find(i=>!used.has(i));
         if(slot===undefined)continue;
         const positionQ12=nativeRaisingSpawnPosition(raisingGround,35,{next:nextGameplayRandom});
-        raisingFoods.push(createNativeRaisingFood({slot,cageDefinitionIndex:35,positionQ12,kind,heightQ12:height*4096}));
+        raisingFoods.push(createNativeRaisingFood({slot,cageDefinitionIndex:35,cageInstanceId:raisingGround.placement(35)?.instanceId,positionQ12,kind,heightQ12:height*4096}));
       }
       nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,cake:0});storeNativeRaisingHome();savePort.markDirty();publishRaising();return true;
     },
@@ -2158,6 +2163,17 @@ export function createChampionshipStandaloneApp({
     buyShopItem(shopRecordIndex, quantity = 1) {
       if (screens.current() !== CHAMPIONSHIP_SCREENS.SHOP) {
         throw new Error("CHAMPIONSHIP_SHOP_NOT_ACTIVE");
+      }
+      // Cage copies and wallet become visible only after one durable save.
+      let record;try{record=getShopRecord(shopRecordIndex);}catch{lastShopReceipt=Object.freeze({ok:false,reason:"UNAVAILABLE"});publishScreens();return lastShopReceipt;}
+      if(playtestPolicy?.enabled && record.purchaseDomain==='CAGE_OWNERSHIP'){
+        const candidate=createShopRuntime({snapshot:requireShop().toSave(),huntInventory,allowRepeatedCages:true,
+          allItemsVisible:playtestPolicy.shopOpen,progression:progressionContext()});
+        const receipt=candidate.buy(shopRecordIndex,quantity);
+        if(!receipt.ok){lastShopReceipt=receipt;publishScreens();return receipt;}
+        const status=savePort.save({...liveSaveRequest(revision+1),shop:candidate.toSave()});
+        if(status.phase!=='SAVED'){savePort.discardPendingWrite();lastShopReceipt=Object.freeze({ok:false,reason:'SAVE_FAILED'});publishScreens();return lastShopReceipt;}
+        shop=candidate;bindShopRuntime();revision++;lastShopReceipt=receipt;publishScreens();return receipt;
       }
       lastShopReceipt = requireShop().buy(shopRecordIndex, quantity);
       if (lastShopReceipt.ok) savePort.markDirty();

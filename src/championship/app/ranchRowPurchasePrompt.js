@@ -10,7 +10,7 @@ export function createRanchRowPurchasePrompt({ source, ask = showChoiceDialog, r
   return {
     async open(row) {
       const frame = current(), cage = frame?.cageEdit;
-      if (pending || controller.signal.aborted || frame?.screen !== 'CAGE_EDIT' || ![2, 3, 4].includes(row)) return;
+      if (pending || controller.signal.aborted || frame?.screen !== 'CAGE_EDIT' || !Number.isInteger(row) || row < 2 || row >= (cage?.productGrid?.rows ?? 5)) return;
       const count = lockedCount(cage, row);
       if (!count) return;
       pending = true;

@@ -66,7 +66,7 @@ export function cageEditorArtCells(slots, baseUrl, { productGrid = false } = {})
     return { ...slot, ...cell, slotIndex: slot.slotIndex, deck: annex ? 1 : 0 };
   });
   return cells.map((cell) => {
-    const peers = cell.moduleId ? cells.filter((other) => other.moduleId === cell.moduleId && other.deck === cell.deck) : [cell];
+    const peers = cell.moduleId ? cells.filter((other) => (cell.instanceId?other.instanceId===cell.instanceId:other.moduleId===cell.moduleId) && other.deck === cell.deck) : [cell];
     const left = Math.min(...peers.map((entry) => entry.x));
     const top = Math.min(...peers.map((entry) => entry.y));
     const width = (Math.max(...peers.map((entry) => entry.x)) - left + 24) * 2;

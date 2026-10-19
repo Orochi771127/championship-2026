@@ -51,6 +51,7 @@ export function createShopRuntime({
   bits = STARTING_BITS,
   progression = { tamerRank: 0, battleBadges: [] },
   allItemsVisible = false,
+  allowRepeatedCages = false,
   snapshot = null
 } = {}) {
   if (!catalog || catalog.records?.length !== SHOP_RECORD_COUNT) {
@@ -67,6 +68,8 @@ export function createShopRuntime({
   const visibility = new Array(SHOP_RECORD_COUNT);
   const quantities = new Array(SHOP_RECORD_COUNT).fill(0);
   const cageOwned = new Set();
+  const cageQuantities = {};
+  const maxOwnedOf=record=>allowRepeatedCages&&record.purchaseDomain===SHOP_PURCHASE_DOMAIN.CAGE_OWNERSHIP?100:record.maxOwned;
 
   if (snapshot) {
     wallet = Math.min(BITS_WALLET_CAP, Math.max(0, snapshot.bits | 0));
@@ -74,12 +77,17 @@ export function createShopRuntime({
       visibility[index] = snapshot.visibility?.[index] ?? initialVisibility(records[index]);
       quantities[index] = snapshot.quantities?.[index] ?? 0;
     }
-    for (const recordIndex of snapshot.cageOwned ?? []) cageOwned.add(recordIndex);
+    for (const recordIndex of snapshot.cageOwned ?? []) {
+      cageOwned.add(recordIndex);
+      const count=snapshot.cageQuantities?.[recordIndex]??1;
+      if(!Number.isSafeInteger(count)||count<1||count>100)throw shopError("INVALID_CAGE_STOCK");
+      cageQuantities[recordIndex]=count;
+    }
   } else {
     for (const record of records) {
       visibility[record.shopRecordIndex] = initialVisibility(record);
       if (record.purchaseDomain === SHOP_PURCHASE_DOMAIN.CAGE_OWNERSHIP) {
-        if (record.initialOwned > 0) cageOwned.add(record.shopRecordIndex);
+        if (record.initialOwned > 0) {cageOwned.add(record.shopRecordIndex);cageQuantities[record.shopRecordIndex]=record.initialOwned;}
       } else {
         quantities[record.shopRecordIndex] = initialHuntInventory && record.productItemId
           ? initialHuntInventory.getQuantity(record.productItemId) : record.initialOwned;
@@ -89,7 +97,7 @@ export function createShopRuntime({
 
   function ownedOf(record) {
     if (record.purchaseDomain === SHOP_PURCHASE_DOMAIN.CAGE_OWNERSHIP) {
-      return cageOwned.has(record.shopRecordIndex) ? 1 : 0;
+      return cageOwned.has(record.shopRecordIndex) ? cageQuantities[record.shopRecordIndex]??1 : 0;
     }
     return quantities[record.shopRecordIndex];
   }
@@ -125,7 +133,7 @@ export function createShopRuntime({
         subcategory: record.subcategory,
         displayName: record.displayName,
         unitPriceBits: record.unitPriceBits,
-        maxOwned: record.maxOwned,
+        maxOwned: maxOwnedOf(record),
         owned,
         visibility: vis === SHOP_VISIBILITY.NEW ? "NEW" : "SEEN",
         purchaseDomain: record.purchaseDomain,
@@ -177,7 +185,7 @@ export function createShopRuntime({
         return deepFreeze({ ok: false, reason: "UNAVAILABLE" });
       }
       const owned = ownedOf(record);
-      if (owned + quantity > record.maxOwned) {
+      if (owned + quantity > maxOwnedOf(record)) {
         return deepFreeze({ ok: false, reason: "MAX_OWNED" });
       }
       const cost = record.unitPriceBits * quantity;
@@ -195,6 +203,7 @@ export function createShopRuntime({
       wallet -= cost;
       if (record.purchaseDomain === SHOP_PURCHASE_DOMAIN.CAGE_OWNERSHIP) {
         cageOwned.add(shopRecordIndex);
+        cageQuantities[shopRecordIndex]=owned+quantity;
       } else {
         quantities[shopRecordIndex] += quantity;
       }
@@ -295,7 +304,8 @@ export function createShopRuntime({
         bits: wallet,
         visibility: [...visibility],
         quantities: [...quantities],
-        cageOwned: [...cageOwned].sort((a, b) => a - b)
+        cageOwned: [...cageOwned].sort((a, b) => a - b),
+        ...(allowRepeatedCages||snapshot?.cageQuantities?{cageQuantities:{...cageQuantities}}:{})
       });
     },
 

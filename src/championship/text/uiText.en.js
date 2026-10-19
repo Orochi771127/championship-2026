@@ -214,7 +214,7 @@ export const UI_COPY_EN = Object.freeze({
   "Your home roster is full. Your Digimon remains on the memory card.": "Your ranch is full. The partner stays on the memory card.",
   "FRIENDS_MEDAL_PREVIEW_NOTICE": "Playtest: late-game medals are visual previews, not actual victories. Earn early-game medals through play.",
   "FRIENDS_MEDAL_PREVIEW_BADGE": "Test preview",
-  "CAGE_PUBLIC_TEST_GRID_HINT": "Continuous ranch · Starts with 20 cells, up to 50 · Each 10-cell row costs 1000 test diamonds. No real payment.",
+  "CAGE_PUBLIC_TEST_GRID_HINT": "Continuous ranch · Starts with 20 cells, up to 100 · Each 10-cell row costs 1000 test diamonds. No real payment.",
   "CAGE_TEST_ROW_TITLE": "Unlock row {row}",
   "CAGE_TEST_ROW_DETAILS": "Open {count} cells for {price} test diamonds. No real payment.",
   "CAGE_TEST_ROW_BUY": "Buy",

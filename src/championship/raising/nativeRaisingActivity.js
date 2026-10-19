@@ -51,7 +51,7 @@ export function selectNativeIdleActivity(actor,profile,{ground,actors,rng,reques
   if(choice===1)return beginNativeActivityReaction(actor,selectNativePersonalityReaction(profile.fields['018'],actor.poolSlot,rng),ground,request);
   const walk=()=>{actor.state=2;actor.mode=0;actor.destinationState=1;actor.destinationQ12=nativeRaisingWanderTarget(actor,rng);request(actor,nativeSequence(actor,2));return 0;};
   // 02050010 -> Cage resident list, with its original physical slot order.
-  const peers=[...actors].filter(other=>other!==actor&&!other.detached&&other.cageDefinitionIndex===actor.cageDefinitionIndex);
+  const peers=[...actors].filter(other=>other!==actor&&!other.detached&&(other.cageInstanceId??other.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex));
   if(choice===4||!peers.length||nativeActivityRandom(actor,rng,3)===0)return walk();
   let peer=null,distance=-1;
   for(const other of peers){const dx=(other.positionQ12[0]>>12)-(actor.positionQ12[0]>>12),dy=(other.positionQ12[1]>>12)-(actor.positionQ12[1]>>12),d=dx*dx+dy*dy;

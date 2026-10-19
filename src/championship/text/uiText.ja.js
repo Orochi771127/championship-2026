@@ -212,7 +212,7 @@ export const UI_COPY_JA = Object.freeze({
   "Your home roster is full. Your Digimon remains on the memory card.": "牧場リストがいっぱいです。パートナーはメモリーカードに残っています。",
   "FRIENDS_MEDAL_PREVIEW_NOTICE": "テスト期間中、後半のメダルは外観プレビューであり、実際の勝利には数えません。序盤のメダルはプレイして獲得してください。",
   "FRIENDS_MEDAL_PREVIEW_BADGE": "テストプレビュー",
-  "CAGE_PUBLIC_TEST_GRID_HINT": "一続きの牧場・初期20マス、最大50マス。1段10マスにつきテスト用ダイヤ1000個。実際の支払いはありません。",
+  "CAGE_PUBLIC_TEST_GRID_HINT": "一続きの牧場・初期20マス、最大100マス。1段10マスにつきテスト用ダイヤ1000個。実際の支払いはありません。",
   "CAGE_TEST_ROW_TITLE": "{row} 段目を解放",
   "CAGE_TEST_ROW_DETAILS": "テストダイヤ {price} 個で {count} マスを解放します。実際の支払いはありません。",
   "CAGE_TEST_ROW_BUY": "購入",

@@ -13,11 +13,15 @@ export function normalizeNativeRaisingHome(input) {
   if(input.version!==1||!input.poolSlots||typeof input.poolSlots!=="object"||Array.isArray(input.poolSlots)
       ||!Array.isArray(input.foods)||input.foods.length>16
       ||(input.waste!==undefined&&(!Array.isArray(input.waste)||input.waste.length>40)))fail();
+  const cageAssignments=input.cageAssignments??{};
+  if(!cageAssignments||typeof cageAssignments!=="object"||Array.isArray(cageAssignments)||Object.keys(cageAssignments).length>16||Object.entries(cageAssignments).some(([id,owner])=>typeof owner!=="string"||!/^[a-z0-9:_-]{3,96}$/i.test(id)||!/^[a-z0-9:_-]{3,96}$/i.test(owner)))fail();
+  const cageOwner=f=>{if(f.cageInstanceId!==undefined&&(typeof f.cageInstanceId!=="string"||!/^[a-z0-9:_-]{3,96}$/i.test(f.cageInstanceId)))fail();return f.cageInstanceId?{cageInstanceId:f.cageInstanceId}:{};};
   const poolSlots={},used=new Set(),foodSlots=new Set();
   for(const [id,slot] of Object.entries(input.poolSlots)) {
     if(!/^[a-z0-9:_-]{3,96}$/i.test(id)||!Number.isInteger(slot)||slot<0||slot>15||used.has(slot))fail();
     used.add(slot);poolSlots[id]=slot;
   }
+  if(Object.keys(cageAssignments).some(id=>poolSlots[id]===undefined))fail();
   const foods=input.foods.map(f=>{
     const kind=f?.kind??(f?.protein?1:0);
     if(!f||!Number.isInteger(f.slot)||f.slot<0||f.slot>15||foodSlots.has(f.slot)
@@ -28,7 +32,7 @@ export function normalizeNativeRaisingHome(input) {
       ||typeof f.protein!=="boolean"||!Number.isInteger(f.remaining)||f.remaining<1||f.remaining>(kind===2?32:16)
       ||!Number.isInteger(f.freshness)||f.freshness<0||f.freshness>1440)fail();
     foodSlots.add(f.slot);
-    return Object.freeze({slot:f.slot,cageDefinitionIndex:f.cageDefinitionIndex,localPositionQ12:Object.freeze([...f.localPositionQ12]),
+    return Object.freeze({slot:f.slot,cageDefinitionIndex:f.cageDefinitionIndex,...cageOwner(f),localPositionQ12:Object.freeze([...f.localPositionQ12]),
       protein:f.protein,...(f.kind!==undefined?{kind}:{}),remaining:f.remaining,freshness:f.freshness});
   });
   const wasteSlots=new Set(),waste=(input.waste??[]).map(w=>{
@@ -37,7 +41,7 @@ export function normalizeNativeRaisingHome(input) {
       ||!Number.isInteger(w.cageDefinitionIndex)||w.cageDefinitionIndex<0||w.cageDefinitionIndex>35
       ||!Array.isArray(w.localPositionQ12)||w.localPositionQ12.length!==3||w.localPositionQ12[2]!==0
       ||w.localPositionQ12.some(n=>!Number.isInteger(n)||Math.abs(n)>0x1000000))fail();
-    wasteSlots.add(w.slot);return Object.freeze({slot:w.slot,speciesIndex:w.speciesIndex,cageDefinitionIndex:w.cageDefinitionIndex,localPositionQ12:Object.freeze([...w.localPositionQ12])});
+    wasteSlots.add(w.slot);return Object.freeze({slot:w.slot,speciesIndex:w.speciesIndex,cageDefinitionIndex:w.cageDefinitionIndex,...cageOwner(w),localPositionQ12:Object.freeze([...w.localPositionQ12])});
   });
   const productBranches=input.productEvolutionBranches??[];
   if(!Array.isArray(productBranches)||productBranches.length>3||new Set(productBranches).size!==productBranches.length||productBranches.some(x=>!['139:211:229','143:211:229','144:222:230'].includes(x)))fail();
@@ -48,7 +52,7 @@ export function normalizeNativeRaisingHome(input) {
   const pending=input.pendingOvernightMinutes;
   if(pending!==undefined&&(!Number.isInteger(pending)||pending<0||pending>1320))fail();
   if(!Array.isArray(branches)||branches.length>895||branches.some(n=>!Number.isInteger(n)||n<0||n>=895)||new Set(branches).size!==branches.length)fail();
-  return Object.freeze({version:1,...(input.productEvolutionBranches!==undefined?{productEvolutionBranches:Object.freeze([...productBranches].sort())}:{}),poolSlots:Object.freeze(poolSlots),foods:Object.freeze(foods),
+  return Object.freeze({version:1,...(input.cageAssignments?{cageAssignments:Object.freeze({...cageAssignments})}:{}),...(input.productEvolutionBranches!==undefined?{productEvolutionBranches:Object.freeze([...productBranches].sort())}:{}),poolSlots:Object.freeze(poolSlots),foods:Object.freeze(foods),
     ...(input.waste!==undefined?{waste:Object.freeze(waste)}:{}),...(input.evolutionBranches!==undefined?{evolutionBranches:Object.freeze([...branches].sort((a,b)=>a-b))}:{}),
     ...(pending!==undefined?{pendingOvernightMinutes:pending}:{})});
 }

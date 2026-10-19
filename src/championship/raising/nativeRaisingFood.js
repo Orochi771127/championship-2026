@@ -6,7 +6,7 @@ export function reconcileNativeFoodReservations(actors,foods){
   for(const food of foods)food.occupants?.forEach((slot,station)=>{
     if(slot===null)return;
     const actor=members.find(a=>a.poolSlot===slot);
-    if(!food.present||!actor||actor.detached||![2,5].includes(actor.state)||actor.foodSlot!==food.slot||actor.station!==station||actor.cageDefinitionIndex!==food.cageDefinitionIndex)
+    if(!food.present||!actor||actor.detached||![2,5].includes(actor.state)||actor.foodSlot!==food.slot||actor.station!==station||(actor.cageInstanceId??actor.cageDefinitionIndex)!==(food.cageInstanceId??food.cageDefinitionIndex))
       food.occupants[station]=null;
   });
 }
@@ -25,11 +25,11 @@ export function selectNativeFoodStation(food,positionQ12) {
   }
   return best;
 }
-export function findNativeRaisingFood(profile,positionQ12,foods,cageDefinitionIndex,satietyMaximum) {
+export function findNativeRaisingFood(profile,positionQ12,foods,cageDefinitionIndex,satietyMaximum,cageInstanceId=null) {
   if(profile.fields["138"]===1 || (profile.fields["008"]|0)>=satietyMaximum)return null;
   let selected=null,distance=0;
   for(const food of foods) {
-    if(!food.present||food.cageDefinitionIndex!==cageDefinitionIndex)continue;
+    if(!food.present||(cageInstanceId?(food.cageInstanceId!==cageInstanceId):food.cageDefinitionIndex!==cageDefinitionIndex))continue;
     const dx=(food.positionQ12[0]>>12)-(positionQ12[0]>>12),dy=(food.positionQ12[1]>>12)-(positionQ12[1]>>12),d=dx*dx+dy*dy;
     if(distance===0||d<distance){distance=d;selected=food;}
   }
@@ -37,8 +37,8 @@ export function findNativeRaisingFood(profile,positionQ12,foods,cageDefinitionIn
   const station=selectNativeFoodStation(selected,positionQ12);
   return {food:selected,station,target:station<0?null:nativeFoodStation(selected,station)};
 }
-export function createNativeRaisingFood({slot,cageDefinitionIndex,positionQ12,protein=false,kind=protein?1:0,remaining=kind===2?32:16,freshness=1440,restored=false,heightQ12=65536}) {
-  return {slot,cageDefinitionIndex,positionQ12:[...positionQ12],protein:kind===1,kind,remaining,freshness,present:true,
+export function createNativeRaisingFood({slot,cageDefinitionIndex,cageInstanceId=null,positionQ12,protein=false,kind=protein?1:0,remaining=kind===2?32:16,freshness=1440,restored=false,heightQ12=65536}) {
+  return {slot,cageDefinitionIndex,...(cageInstanceId?{cageInstanceId}:{}),positionQ12:[...positionQ12],protein:kind===1,kind,remaining,freshness,present:true,
     occupants:[null,null,null,null],counter:0,heightQ12:restored?0:heightQ12,velocityQ12:0,falling:!restored};
 }
 export function stepNativeRaisingFood(food,ageDelta) {

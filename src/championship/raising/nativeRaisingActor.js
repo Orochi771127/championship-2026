@@ -46,7 +46,7 @@ export function createNativeRaisingActor(profile, poolSlot) {
 export function projectNativeRaisingActor(actor) {
   return Object.freeze({...actor.animator.getSnapshot(),contract:NATIVE_HUNT_CHARACTER_FRAME_CONTRACT,
     flipBits:actor.flipBits??0,speciesIndex:actor.speciesIndex,nativeFrame:actor.nativeFrame,eggPhase:actor.eggPhase,
-    positionQ12:actor.positionQ12?Object.freeze([...actor.positionQ12]):null,cageDefinitionIndex:actor.cageDefinitionIndex??null,
+    positionQ12:actor.positionQ12?Object.freeze([...actor.positionQ12]):null,cageDefinitionIndex:actor.cageDefinitionIndex??null,cageInstanceId:actor.cageInstanceId??null,
     actorAuthority:actor.tutorialSpecial?'TUTORIAL_SPECIAL_19_STATE':'NORMAL_RAISING',
     state:actor.state??(actor.speciesIndex<8?26:1),foodSlot:actor.foodSlot??null,
     feedback:projectNativeRaisingFeedback(actor),
@@ -128,7 +128,7 @@ export function initializeNativeRaisingActor(actor,profile,positionQ12,cageDefin
 // 0204FE20 notifies the existing residents in insertion order. 02116B70
 // refreshes their occupancy fields and consumes their own channel draw.
 export function notifyNativeRaisingResidentAdded(actor,existing,rng){
-  const members=[...existing].filter(a=>a!==actor&&a.positionQ12&&a.cageDefinitionIndex===actor.cageDefinitionIndex).sort((a,b)=>a.poolSlot-b.poolSlot);
+  const members=[...existing].filter(a=>a!==actor&&a.positionQ12&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a.poolSlot-b.poolSlot);
   const count=members.length+1,capacity=lifecycleRules.cages[actor.cageDefinitionIndex].capacity;
   for(const member of members){member.growthFields['40c']=count;member.growthFields['410']=(count-capacity)>>>0;
     member.growthFields['438']=nativeRandom(member,rng,60);}
@@ -168,7 +168,7 @@ export function beginNativeRaisingCarry(actor,profile,pointer,{foods,rng,ground=
   if(!nativeRaisingHandAdmission(actor,0x80))return null;
   // Transient input rollback, never serialized. Record actor ground position,
   // not the pointer (which may start on the head or cross a periodic seam).
-  actor.carryOrigin={speciesIndex:actor.speciesIndex,positionQ12:[...actor.positionQ12],cageDefinitionIndex:actor.cageDefinitionIndex,
+  actor.carryOrigin={speciesIndex:actor.speciesIndex,positionQ12:[...actor.positionQ12],cageDefinitionIndex:actor.cageDefinitionIndex,cageInstanceId:actor.cageInstanceId,
     idleCounter:actor.idleCounter??0,occupancy:actor.growthFields['40c'],
     // Re-catching an airborne resident is admitted by the original hand table.
     // Cancellation resumes that pre-gesture trajectory, never a floating idle.
@@ -223,7 +223,7 @@ export function cancelNativeRaisingCarry(actor) {
   if(actor.state!==6||!origin||origin.speciesIndex!==actor.speciesIndex)return false;
   actor.positionQ12=[...origin.positionQ12];
   actor.destinationQ12=[...origin.positionQ12];
-  actor.cageDefinitionIndex=origin.cageDefinitionIndex;
+  actor.cageDefinitionIndex=origin.cageDefinitionIndex;actor.cageInstanceId=origin.cageInstanceId;
   actor.carryPointer=null;actor.carryOrigin=null;
   if(origin.flight){
     const f=origin.flight;actor.state=7;actor.detached=true;
@@ -270,7 +270,7 @@ function stepCarry(actor,profile,ground,rng,season,onJoin){
   let x=Math.trunc((actor.positionQ12[0]>>12)/8),y=Math.trunc((actor.positionQ12[1]>>12)/8),cage=ground.cageAt(x*8,y*8);
   for(let guard=0;!cage&&guard<100000;guard++){const open=findNativeRaisingOpenTile(ground,x,y,{rng,poolSlot:actor.poolSlot});x=open.x;y=open.y;cage=ground.cageAt(x*8,y*8);}
   if(!cage)throw new Error('NATIVE_LANDING_CAGE_REQUIRED');
-  actor.cageDefinitionIndex=cage.definitionIndex;actor.detached=false;
+  actor.cageDefinitionIndex=cage.definitionIndex;actor.cageInstanceId=cage.instanceId;actor.detached=false;
   onJoin?.();
   let p=structuredClone(profile);p.fields['014']=cage.definitionIndex;
   p=enterNativeRaisingCage(actor,p,{previousDefinition:actor.previousCageDefinition,ground,season},rng);
@@ -300,7 +300,7 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
   const species=nativeHuntSpeciesByIndex(actor.speciesIndex);
   if(actor.foodSlot!=null){
     const target=foods.find(food=>food.slot===actor.foodSlot);
-    if(!target?.present||target.cageDefinitionIndex!==actor.cageDefinitionIndex||target.occupants[actor.station]!==actor.poolSlot){detachFood(actor,foods);enterIdle(actor,rng);}
+    if(!target?.present||(target.cageInstanceId??target.cageDefinitionIndex)!==(actor.cageInstanceId??actor.cageDefinitionIndex)||target.occupants[actor.station]!==actor.poolSlot){detachFood(actor,foods);enterIdle(actor,rng);}
   }
   actor.slow=f["134"]===1||f["138"]===1||(f["00c"]|0)>=Math.trunc((f["178"]|0)/10)*9
     ||(f["050"]|0)<=Math.trunc((f["058"]|0)/10)*2?1:0;
@@ -319,7 +319,7 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
     if(stepNativeActivityReaction(actor,ground,request))enterIdle(actor,rng);
     return {profile:changed?normalizeNativeIndividualProfile(next):profile,changed,hatched:false,foodChanged};
   }
-  const notice=signals.get(actor.cageDefinitionIndex);
+  const notice=signals.get(actor.cageInstanceId??actor.cageDefinitionIndex);
   if(notice?.landed&&(actor.state===1||actor.state===2)) {
     const roll=nativeRandom(actor,rng,32767)%100;
     if(roll<50&&[0,4,5,6,7].includes(f["018"])) {
@@ -333,7 +333,7 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
     }
   }
   if(notice?.search&&(actor.state===1||actor.state===2)&&actor.foodSlot===null) {
-    const found=findNativeRaisingFood(next,actor.positionQ12,foods,actor.cageDefinitionIndex,species.field1c);
+    const found=findNativeRaisingFood(next,actor.positionQ12,foods,actor.cageDefinitionIndex,species.field1c,actor.cageInstanceId);
     if(found&&found.station>=0) {
       found.food.occupants[found.station]=actor.poolSlot;
       actor.foodSlot=found.food.slot;actor.station=found.station;actor.destinationQ12=found.target;actor.mode=0;
@@ -364,7 +364,7 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
           actor.biteLatched=false;request(actor,14);
         } else {
           detachFood(actor,foods);
-          const found=findNativeRaisingFood(next,actor.positionQ12,foods,actor.cageDefinitionIndex,species.field1c);
+          const found=findNativeRaisingFood(next,actor.positionQ12,foods,actor.cageDefinitionIndex,species.field1c,actor.cageInstanceId);
           if(found&&found.station>=0){found.food.occupants[found.station]=actor.poolSlot;actor.foodSlot=found.food.slot;actor.station=found.station;actor.destinationQ12=found.target;actor.mode=0;
             actor.state=2;request(actor,actor.slow?12:2);}
           else enterIdle(actor,rng);

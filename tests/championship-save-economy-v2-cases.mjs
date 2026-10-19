@@ -77,7 +77,7 @@ test("unknown fields, malformed histories and missing v2 slices fail closed", ()
     { ...save, battleEconomy: { ...save.battleEconomy, lastReceipt: { ...save.battleEconomy.lastReceipt, evidence: {} } } },
     { ...save, battleEconomy: { ...save.battleEconomy, lastReceipt: { ...save.battleEconomy.lastReceipt, rewardBits: 9999 } } },
     { ...save, surprise: 1 },
-    { ...save, schemaVersion: 7 }, // v6 is the explicit product-form save envelope; v7 is unsupported.
+    { ...save, schemaVersion: 8 }, // v7 supports cage instances; unknown v8 remains unsupported.
     { ...save, schemaVersion: 1 }
   ];
   for (const mutated of mutations) assert.throws(() => deserializeChampionshipModernSave(JSON.stringify(mutated)));

@@ -5,23 +5,25 @@ import { getCageDefinitionByModuleId } from './cageCatalog.js';
 import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from './ranchSlotGeometry.js';
 import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, validateNativeRanch } from './nativeRanchLayout.js';
 
-export const PRODUCT_RANCH_GRID = 'PRODUCT_GRID50_V1';
+export const LEGACY_PRODUCT_RANCH_GRID = 'PRODUCT_GRID50_V1';
+// OWNER_APPROVED_ADAPTATION 2026-10-19: total land cap 100; repeated template instances.
+export const PRODUCT_RANCH_GRID = 'PRODUCT_GRID100_INSTANCES_V1';
 export const PRODUCT_RANCH_COLUMNS = 10;
-export const PRODUCT_RANCH_ROWS = 5;
-export const PRODUCT_RANCH_SLOT_COUNT = 50;
+export const PRODUCT_RANCH_ROWS = 10;
+export const PRODUCT_RANCH_SLOT_COUNT = 100;
 export const PUBLIC_TEST_RANCH_ACCESS = 'PUBLIC_TEST_DIAMOND_ROW_PURCHASE';
 export const PRODUCT_RANCH_WORLD_WIDTH = 960;
-export const PRODUCT_RANCH_WORLD_HEIGHT = 440;
+export const PRODUCT_RANCH_WORLD_HEIGHT = 880;
 
 export function productGridCell(slotIndex) {
-  if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= 50) throw new RangeError('PRODUCT_RANCH_SLOT_OUT_OF_RANGE');
-  const row = slotIndex < 40 ? Math.floor(slotIndex / 20) * 2 + slotIndex % 2 : 4;
-  const column = slotIndex < 40 ? Math.floor((slotIndex % 20) / 2) : slotIndex - 40;
+  if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= PRODUCT_RANCH_SLOT_COUNT) throw new RangeError('PRODUCT_RANCH_SLOT_OUT_OF_RANGE');
+  const row = slotIndex < 40 ? Math.floor(slotIndex / 20) * 2 + slotIndex % 2 : 4 + Math.floor((slotIndex - 40) / 10);
+  const column = slotIndex < 40 ? Math.floor((slotIndex % 20) / 2) : (slotIndex - 40) % 10;
   return { slotIndex, row, column, x: column * 96 + (row % 2) * 48, y: row * 88 };
 }
 export function productGridSlot(row, column) {
-  if (!Number.isInteger(row) || !Number.isInteger(column) || row < 0 || row >= 5 || column < 0 || column >= 10) return null;
-  return row === 4 ? 40 + column : Math.floor(row / 2) * 20 + column * 2 + row % 2;
+  if (!Number.isInteger(row) || !Number.isInteger(column) || row < 0 || row >= PRODUCT_RANCH_ROWS || column < 0 || column >= PRODUCT_RANCH_COLUMNS) return null;
+  return row >= 4 ? 40 + (row - 4) * 10 + column : Math.floor(row / 2) * 20 + column * 2 + row % 2;
 }
 export function productFieldTileOrigin(slotIndex, shapeIndex) {
   const cell = productGridCell(slotIndex), shape = ORIGINAL_CAGE_SHAPE_MASKS[shapeIndex];
@@ -31,7 +33,7 @@ export function productFieldTileOrigin(slotIndex, shapeIndex) {
 }
 export function productPlacementCells(entry) {
   const definition = getCageDefinitionByModuleId(entry?.moduleId);
-  if (!definition || !Number.isSafeInteger(entry.slotIndex) || entry.slotIndex < 0 || entry.slotIndex >= 50) return null;
+  if (!definition || !Number.isSafeInteger(entry.slotIndex) || entry.slotIndex < 0 || entry.slotIndex >= PRODUCT_RANCH_SLOT_COUNT) return null;
   const anchor = productGridCell(entry.slotIndex);
   const shape = ORIGINAL_CAGE_SHAPE_MASKS[ORIGINAL_CAGE_DEFINITION_SHAPES[definition.cageDefinitionIndex]];
   const cells = [];
@@ -49,15 +51,18 @@ export function validateProductRanch(placements, unlockedSlots = null) {
   if (!Array.isArray(placements)) return false;
   const available = unlockedSlots == null ? null : new Set(unlockedSlots);
   const occupied = new Set(), modules = new Set();
+  let waitingCount=0;
   for (const entry of placements) {
     const cells = productPlacementCells(entry);
-    if (!cells || modules.has(entry.moduleId)) return false;
+    const identity=entry.instanceId ?? entry.moduleId;
+    if (!cells || modules.has(identity) || (entry.instanceId !== undefined && !/^[a-z0-9:_-]{3,96}$/i.test(entry.instanceId))) return false;
+    if(entry.moduleId===WAITING_ROOM_MODULE && ++waitingCount>1)return false;
     if (entry.moduleId === WAITING_ROOM_MODULE && entry.slotIndex !== 0) return false;
     if (cells.some(cell => occupied.has(cell) || (available && !available.has(cell)))) return false;
     for (const cell of cells) occupied.add(cell);
-    modules.add(entry.moduleId);
+    modules.add(identity);
   }
-  return modules.has(WAITING_ROOM_MODULE);
+  return waitingCount===1;
 }
 
 // Persist historical access separately from the temporary public-test override.
@@ -71,8 +76,8 @@ export function normalizeProductRanchAccess(raw) {
   const legacyUnlockedSlots = [...raw.legacyUnlockedSlots], purchasedRows = [...raw.purchasedRows], testUnlockedRows = [...raw.testUnlockedRows];
   if (legacyUnlockedSlots.some(slot => !Number.isSafeInteger(slot) || slot < 0 || slot >= 40) ||
       new Set(legacyUnlockedSlots).size !== legacyUnlockedSlots.length ||
-      purchasedRows.some(row => !Number.isInteger(row) || row < 2 || row >= 5) ||
-      new Set(purchasedRows).size !== purchasedRows.length || testUnlockedRows.some(row=>!Number.isInteger(row)||row<0||row>=5) || new Set(testUnlockedRows).size !== testUnlockedRows.length) throw new Error('INVALID_PRODUCT_RANCH_ACCESS');
+      purchasedRows.some(row => !Number.isInteger(row) || row < 2 || row >= PRODUCT_RANCH_ROWS) ||
+      new Set(purchasedRows).size !== purchasedRows.length || testUnlockedRows.some(row=>!Number.isInteger(row)||row<0||row>=PRODUCT_RANCH_ROWS) || new Set(testUnlockedRows).size !== testUnlockedRows.length) throw new Error('INVALID_PRODUCT_RANCH_ACCESS');
   return { version: 1, legacyUnlockedSlots: legacyUnlockedSlots.sort((a,b)=>a-b), purchasedRows: purchasedRows.sort((a,b)=>a-b), testUnlockedRows:testUnlockedRows.sort((a,b)=>a-b), legacyGrants:[...legacyGrants] };
 }
 export function productUnlockedSlots(access, mainUnlocked, testAccessOverride = null) {
@@ -86,10 +91,12 @@ export function productUnlockedSlots(access, mainUnlocked, testAccessOverride = 
 }
 
 export function migrateProductRanch(snapshot, mainUnlocked = 20) {
-  if (snapshot?.layoutVersion === PRODUCT_RANCH_GRID) {
+  if ([PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID].includes(snapshot?.layoutVersion)) {
+    if(snapshot.layoutVersion===LEGACY_PRODUCT_RANCH_GRID && snapshot.placements.some(p=>p.slotIndex>=50))throw new Error('INVALID_LEGACY_PRODUCT_RANCH');
     if (!validateProductRanch(snapshot.placements)) throw new Error('INVALID_PRODUCT_RANCH');
     return { layoutVersion: PRODUCT_RANCH_GRID, gridAccess: normalizeProductRanchAccess(snapshot.gridAccess),
-      placements: snapshot.placements.map(p=>({ moduleId:p.moduleId, slotIndex:p.slotIndex })) };
+      nextInstanceSequence:snapshot.nextInstanceSequence ?? 1,
+      placements: snapshot.placements.map(p=>({ moduleId:p.moduleId, slotIndex:p.slotIndex, instanceId:p.instanceId ?? `cage:legacy:${getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex}` })) };
   }
   const native = snapshot?.layoutVersion === NATIVE_RANCH_LAYOUT;
   const expanded = snapshot?.layoutVersion === 'NATIVE_DECKS_V1';
@@ -109,5 +116,6 @@ export function migrateProductRanch(snapshot, mainUnlocked = 20) {
   }
   const legacyUnlockedSlots = [...Array.from({length:20},(_,i)=>i), ...Array.from({length:expanded ? 20 : 0},(_,i)=>20+i)];
   return { layoutVersion:PRODUCT_RANCH_GRID, gridAccess:{version:1,legacyUnlockedSlots,purchasedRows:[],testUnlockedRows:[],legacyGrants:['NATIVE_RANK_CELLS_TEST_OPEN_V1',...(annexCount===10?['ANNEX10_GEOMETRY_GRANDFATHER_V1']:[])]},
-    placements:snapshot.placements.map(p=>({moduleId:p.moduleId,slotIndex:p.slotIndex})) };
+    nextInstanceSequence:1,
+    placements:snapshot.placements.map(p=>({moduleId:p.moduleId,slotIndex:p.slotIndex,instanceId:`cage:legacy:${getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex}`})) };
 }

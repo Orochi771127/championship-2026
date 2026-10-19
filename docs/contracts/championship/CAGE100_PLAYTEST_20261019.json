@@ -1,0 +1,22 @@
+{
+  "id": "CAGE100_REPEATED_INSTANCES_PLAYTEST_20261019",
+  "classification": "OWNER_APPROVED_ADAPTATION",
+  "totalCellCap": 100,
+  "columns": 10,
+  "rows": 10,
+  "initialCells": 20,
+  "residentCap": 16,
+  "newSaveBits": 8000000,
+  "newSaveTestDiamonds": 20000,
+  "rowCostTestDiamonds": 1000,
+  "existingSaveTopUp": false,
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "05350ff7222b3a258ce3acfde530739ac858883f9f811519665d4d7b6f45fbf0"
+  },
+  "historicalSourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "7b0e177ba7d313bbadd5133ea8e68fad337f1179dfac2cf44e11fd1bcc195614"
+  },
+  "authorization": "Owner requested 100 total cells, repeat purchases at existing prices, larger new-save funds and tested public playtest publication. Existing wallets and approved map assets are preserved.",
+  "scope": "Bounded extension through existing app, native templates and single SavePort; no additional global stat stacking, real payment or new artwork.",
+  "physicalDeviceAccepted": false
+}

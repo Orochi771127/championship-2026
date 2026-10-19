@@ -25,7 +25,8 @@ import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages
 import { normalizeNativeOpening } from './nativeOpeningState.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
-import { PRODUCT_RANCH_GRID, normalizeProductRanchAccess, validateProductRanch } from '../cage/productRanchGrid.js';
+import {getCageDefinitionByModuleId} from "../cage/cageCatalog.js";
+import { PRODUCT_RANCH_GRID, LEGACY_PRODUCT_RANCH_GRID, normalizeProductRanchAccess, validateProductRanch } from '../cage/productRanchGrid.js';
 
 export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
 export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 5;
@@ -53,12 +54,12 @@ const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "hun
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
 const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu"]);
-const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned"]);
+const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned", "cageQuantities"]);
 // `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
 // the ranch expansion prototype versions its own slice, so a save that never
 // takes the grant keeps exactly its old shape and schemaVersion stays 5.
-const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion", "expansion", "gridAccess"]);
-const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex"]);
+const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion", "expansion", "gridAccess", "nextInstanceSequence"]);
+const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex", "instanceId"]);
 
 // Every one of these names identifies forensic/evidence data, catalog structure,
 // binary provenance, or promotion bookkeeping. None of them has any business in
@@ -155,7 +156,19 @@ function normalizeShopSlice(shop) {
     }
     cageOwned.push(recordIndex);
   }
+  let cageQuantities;
+  if(shop.cageQuantities!==undefined){
+    if(!shop.cageQuantities||typeof shop.cageQuantities!=='object'||Array.isArray(shop.cageQuantities))throw saveError('INVALID_CAGE_STOCK');
+    cageQuantities={};
+    for(const [key,value]of Object.entries(shop.cageQuantities)){
+      const index=Number(key);
+      if(!/^(0|[1-9][0-9]*)$/.test(key)||!cageOwned.includes(index)||!Number.isSafeInteger(value)||value<1||value>100)throw saveError('INVALID_CAGE_STOCK');
+      cageQuantities[index]=value;
+    }
+    if(cageOwned.some(index=>cageQuantities[index]===undefined))throw saveError('INVALID_CAGE_STOCK');
+  }
   return {
+    ...(cageQuantities?{cageQuantities}:{}),
     bits: shop.bits,
     visibility: [...shop.visibility],
     quantities: [...shop.quantities],
@@ -176,14 +189,18 @@ function normalizeCageEditSlice(cageEdit) {
     if (!Number.isSafeInteger(entry.slotIndex) || entry.slotIndex < 0) {
       throw saveError("INVALID_CAGE_EDIT_SLOT");
     }
-    placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex });
+    if(entry.instanceId!==undefined)assertStableId(entry.instanceId,"cageEdit.placement.instanceId");
+    placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex, ...(entry.instanceId?{instanceId:entry.instanceId}:{}) });
   }
-  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1' && cageEdit.layoutVersion !== RANCH_DECKS_LAYOUT && cageEdit.layoutVersion !== PRODUCT_RANCH_GRID) {
+  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1' && cageEdit.layoutVersion !== RANCH_DECKS_LAYOUT && cageEdit.layoutVersion !== PRODUCT_RANCH_GRID && cageEdit.layoutVersion !== LEGACY_PRODUCT_RANCH_GRID) {
     throw saveError('INVALID_RANCH_LAYOUT_VERSION');
   }
-  if (cageEdit.layoutVersion === PRODUCT_RANCH_GRID) {
+  if ([PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID].includes(cageEdit.layoutVersion)) {
+    if(cageEdit.layoutVersion===PRODUCT_RANCH_GRID && placements.some(p=>!p.instanceId))throw saveError("CAGE_INSTANCE_ID_REQUIRED");
+    if(cageEdit.layoutVersion===LEGACY_PRODUCT_RANCH_GRID && placements.some(p=>p.slotIndex>=50||p.instanceId!==undefined))throw saveError("INVALID_LEGACY_PRODUCT_RANCH");
+    if(cageEdit.nextInstanceSequence!==undefined&&(!Number.isSafeInteger(cageEdit.nextInstanceSequence)||cageEdit.nextInstanceSequence<1))throw saveError("INVALID_CAGE_INSTANCE_SEQUENCE");
     if (cageEdit.expansion !== undefined || !validateProductRanch(placements)) throw saveError('INVALID_PRODUCT_RANCH');
-    return { layoutVersion:PRODUCT_RANCH_GRID, gridAccess:normalizeProductRanchAccess(cageEdit.gridAccess), placements };
+    return { layoutVersion:cageEdit.layoutVersion, gridAccess:normalizeProductRanchAccess(cageEdit.gridAccess), placements, ...(cageEdit.nextInstanceSequence!==undefined?{nextInstanceSequence:cageEdit.nextInstanceSequence}:{}) };
   }
   if (cageEdit.gridAccess !== undefined) throw saveError('INVALID_PRODUCT_RANCH_ACCESS');
   let expansion = null;
@@ -339,7 +356,19 @@ export function createChampionshipModernSave({
     updatedAt
   };
 
+  if(save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID){
+    const placedCounts=new Map();
+    for(const placement of save.cageEdit.placements){
+      const definition=getCageDefinitionByModuleId(placement.moduleId);
+      if(definition.alwaysOwned)continue;
+      const count=(placedCounts.get(placement.moduleId)??0)+1;
+      const stock=save.shop?.cageQuantities?.[definition.shopRecordIndex]??(save.shop?.cageOwned.includes(definition.shopRecordIndex)?1:0);
+      if(count>stock)throw saveError('CAGE_INSTANCE_STOCK_MISMATCH');
+      placedCounts.set(placement.moduleId,count);
+    }
+  }
   if(requiresProductSaveVersion(save))save.schemaVersion=6;
+  if(save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID||save.shop?.cageQuantities)save.schemaVersion=7;
   assertAllowedKeys(save, ALLOWED_TOP_LEVEL_KEYS, "save");
   if (save.battleEconomy.settledThrough > 0 && save.shop === null) throw saveError("MISSING_BATTLE_WALLET_SLICE");
   assertNoForensicPayload(save);
@@ -348,8 +377,9 @@ export function createChampionshipModernSave({
 
 export function serializeChampionshipModernSave(save) {
   if(save?.schemaVersion===5&&requiresProductSaveVersion(save))throw saveError('PRODUCT_SPECIES_REQUIRES_SAVE_V6');
+  if((save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID||save.shop?.cageQuantities)&&save.schemaVersion!==7)throw saveError('CAGE_INSTANCES_REQUIRE_SAVE_V7');
   assertAllowedKeys(save, ALLOWED_TOP_LEVEL_KEYS, "save");
-  if (![CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION,6].includes(save.schemaVersion)) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
+  if (![CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION,6,7].includes(save.schemaVersion)) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
   assertNoForensicPayload(save);
   const text = JSON.stringify(save);
   const bytes = byteLength(text);
@@ -383,9 +413,10 @@ export function deserializeChampionshipModernSave(text) {
   const isV4 = parsed.schemaVersion === 4;
   const missingRngHistory = isV1 || isV2 || isV3;
   const legacy = missingRngHistory || isV4;
-  if (!legacy && ![CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION,6].includes(parsed.schemaVersion)) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
+  if (!legacy && ![CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION,6,7].includes(parsed.schemaVersion)) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
   assertAllowedKeys(parsed, isV1 ? ALLOWED_TOP_LEVEL_KEYS_V1 : isV2 ? ALLOWED_TOP_LEVEL_KEYS_V2 : isV3 ? ALLOWED_TOP_LEVEL_KEYS_V3 : isV4 ? ALLOWED_TOP_LEVEL_KEYS_V4 : ALLOWED_TOP_LEVEL_KEYS, "save");
   assertNoForensicPayload(parsed);
+  if(parsed.schemaVersion<7&&(parsed.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID||parsed.shop?.cageQuantities))throw saveError('CAGE_INSTANCES_REQUIRE_SAVE_V7');
   if(parsed.schemaVersion<6&&requiresProductSaveVersion(parsed))throw saveError('PRODUCT_SPECIES_REQUIRES_SAVE_V6');
   if (!isV1 && !Object.hasOwn(parsed, "battleEconomy")) throw saveError("MISSING_BATTLE_ECONOMY_SLICE");
   if (!isV1 && !isV2 && !Object.hasOwn(parsed, "instanceIdentity")) throw saveError("MISSING_INSTANCE_IDENTITY_SLICE");

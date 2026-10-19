@@ -355,9 +355,9 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // rows, with capPx of cropped hex tops (foldCap tiles) drawn above it.
   if(fold!==null&&(presentationMode!=='NATIVE_RANCH'||!['splitPx','ringPx','bandOffsetPx','capPx'].every(k=>Number.isFinite(fold[k]))
     ||!(fold.splitPx>0)||!(fold.ringPx>fold.splitPx)||!(fold.bandOffsetPx>0)||fold.capPx<0))fail('TILE_SET_FOLD_INVALID');
-  if(productGrid!==null&&(presentationMode!=='NATIVE_RANCH'||checked.family!=='CAGE'||fold!==null||productGrid.columns!==10||productGrid.rows!==5
-    ||productGrid.worldWidthNative!==960||productGrid.worldHeightNative!==440||productGrid.sizingHeightNative!==192
-    ||!Array.isArray(productGrid.lockedSlots)||productGrid.lockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=50)))fail('PRODUCT_GRID_GEOMETRY_INVALID');
+  if(productGrid!==null&&(presentationMode!=='NATIVE_RANCH'||checked.family!=='CAGE'||fold!==null||productGrid.columns!==10||![5,10].includes(productGrid.rows)
+    ||productGrid.worldWidthNative!==960||productGrid.worldHeightNative!==productGrid.rows*88||productGrid.sizingHeightNative!==192
+    ||!Array.isArray(productGrid.lockedSlots)||productGrid.lockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=productGrid.columns*productGrid.rows)))fail('PRODUCT_GRID_GEOMETRY_INVALID');
   const residentBounds = residentViewport ? freezeRecord({...residentViewport}) : null;
   if (residentBounds && (!['x','y','width','height'].every(key=>Number.isFinite(residentBounds[key]))
     || residentBounds.x<0 || residentBounds.y<0 || residentBounds.width<=0 || residentBounds.height<=0)) fail('RESIDENT_VIEWPORT_INVALID');
@@ -390,6 +390,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     }
     return { fieldId: placement.fieldId, x: placement.x, y: placement.y,
       slotIndex: placement.slotIndex ?? null, moduleId: placement.moduleId ?? null,
+      instanceId:placement.instanceId??null,
       ...(placement.sourceRect ? {sourceRect:{...placement.sourceRect}} : {}),
       ...(placement.fragmentOfSlot !== undefined ? {fragmentOfSlot:placement.fragmentOfSlot} : {}),
       ...(cap ? {foldCap:true} : {}),

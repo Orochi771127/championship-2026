@@ -21,15 +21,15 @@ import {
   TAMER_RANK_TABLE_LAST_INDEX,
   getCageDefinitionByModuleId,
   listCageDefinitions,
-  ownedModuleIds,
   slotCountForTamerRank
 } from "./cageCatalog.js";
+import {ownedModuleIds,ownedModuleCount} from "./cageInventory.js";
 import { trainingViewFromDefinition } from "./cageEffects.js";
 import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, originalStartingRanch, nativePlacementMask, validateNativeRanch } from './nativeRanchLayout.js';
 import { RANCH_DECKS_LAYOUT, RANCH_EXPANSION_DECK_SLOTS, RANCH_EXPANSION_EVIDENCE, RANCH_EXPANSION_FIRST_SLOT, annexPlacementCells,
   annexSlotCount, isAnnexSlot, normalizeRanchExpansion, prototypeRanchExpansion, validateRanchLayout } from './ranchExpansion.js';
 
-import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_SLOT_COUNT, PUBLIC_TEST_RANCH_ACCESS, productGridCell, productPlacementCells,
+import { PRODUCT_RANCH_GRID, LEGACY_PRODUCT_RANCH_GRID, PRODUCT_RANCH_SLOT_COUNT, PUBLIC_TEST_RANCH_ACCESS, productGridCell, productPlacementCells,
   productUnlockedSlots, normalizeProductRanchAccess, migrateProductRanch, validateProductRanch } from './productRanchGrid.js';
 
 export const CAGE_EDIT_AUTHORITY = "CHAMPIONSHIP_2026_PRODUCT";
@@ -41,7 +41,7 @@ function cageError(message) {
 }
 
 function clonePlacements(placements) {
-  return placements.map((entry) => ({ moduleId: entry.moduleId, slotIndex: entry.slotIndex }));
+  return placements.map((entry) => ({ moduleId: entry.moduleId, slotIndex: entry.slotIndex, ...(entry.instanceId?{instanceId:entry.instanceId}:{}) }));
 }
 
 function placementView(entry) {
@@ -49,6 +49,7 @@ function placementView(entry) {
   const training = trainingViewFromDefinition(definition);
   return {
     moduleId: entry.moduleId,
+    ...(entry.instanceId?{instanceId:entry.instanceId}:{}),
     slotIndex: entry.slotIndex,
     displayName: definition?.displayName ?? null,
     trainingSummary: training.summary,
@@ -57,7 +58,7 @@ function placementView(entry) {
   };
 }
 
-function normalizePlacements(raw, slotLimit = MAX_SLOT_COUNT) {
+function normalizePlacements(raw, slotLimit = MAX_SLOT_COUNT, instances=false) {
   if (raw == null) return [];
   if (!Array.isArray(raw)) throw cageError("INVALID_CAGE_EDIT_PLACEMENTS");
   const placements = [];
@@ -69,12 +70,13 @@ function normalizePlacements(raw, slotLimit = MAX_SLOT_COUNT) {
     const definition = getCageDefinitionByModuleId(entry.moduleId);
     if (!definition) continue;
     if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= slotLimit) continue;
-    if (seenModules.has(definition.moduleId) || seenSlots.has(slotIndex)) {
+    const identity=instances?entry.instanceId:definition.moduleId;
+    if (seenModules.has(identity) || seenSlots.has(slotIndex)) {
       throw cageError("DUPLICATE_CAGE_PLACEMENT");
     }
-    seenModules.add(definition.moduleId);
+    seenModules.add(identity);
     seenSlots.add(slotIndex);
-    placements.push({ moduleId: definition.moduleId, slotIndex });
+    placements.push({ moduleId: definition.moduleId, slotIndex, ...(instances?{instanceId:entry.instanceId}:{}) });
   }
   return placements;
 }
@@ -86,6 +88,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       mainUnlocked: slotCountForTamerRank(initialTamerRank), expansion: snapshot.expansion ?? null })) throw cageError('INVALID_NATIVE_RANCH_MIGRATION');
     snapshot = migrateProductRanch(snapshot, MAX_SLOT_COUNT);
   }
+  if([PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID].includes(snapshot?.layoutVersion))snapshot=migrateProductRanch(snapshot,MAX_SLOT_COUNT);
   // NATIVE_DECKS_V1 is the original layout plus the expansion prototype's
   // annex (ranchExpansion.js). Only the prototype grant writes it.
   let layoutVersion = snapshot?.layoutVersion ?? null;
@@ -98,10 +101,14 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
   let gridAccess = grid ? normalizeProductRanchAccess(snapshot.gridAccess) : null;
   if (grid && !validateProductRanch(snapshot.placements, productUnlockedSlots(gridAccess,20))) throw cageError('PRODUCT_RANCH_PLACEMENT_NOT_UNLOCKED');
   const testAccessOverride = publicTestGrid ? PUBLIC_TEST_RANCH_ACCESS : null;
-  let committed = normalizePlacements(snapshot?.placements, grid ? PRODUCT_RANCH_SLOT_COUNT : MAX_SLOT_COUNT + annexSlotCount(expansion));
+  let committed = normalizePlacements(snapshot?.placements, grid ? PRODUCT_RANCH_SLOT_COUNT : MAX_SLOT_COUNT + annexSlotCount(expansion),grid);
+  let nextInstanceSequence=snapshot?.nextInstanceSequence??1;
+  if(!Number.isSafeInteger(nextInstanceSequence)||nextInstanceSequence<1)throw cageError("INVALID_CAGE_INSTANCE_SEQUENCE");
+  const allocateInstance=()=>{let id;do{if(nextInstanceSequence>=Number.MAX_SAFE_INTEGER)throw cageError("CAGE_INSTANCE_SEQUENCE_EXHAUSTED");id=`cage:instance:${nextInstanceSequence++}`;}while([...committed,...draft].some(p=>p.instanceId===id));return id;};
   if (layoutVersion && !validateRanchLayout(committed, { layoutVersion, mainUnlocked: MAX_SLOT_COUNT, expansion })) throw cageError('INVALID_NATIVE_RANCH');
   let draft = clonePlacements(committed);
   let selectedModuleId = null;
+  const withdrawnCopies=new Map();
   let lastVerdict = null;
 
   function dropInvalid(placements, owned, unlockedCount) {
@@ -121,6 +128,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
     const owned = ownedModuleIds(shopCageOwned);
     const unlockedCount = slotCountForTamerRank(tamerRank);
     draft = dropInvalid(draft, owned, unlockedCount);
+    if(grid)for(const moduleId of new Set(draft.map(p=>p.moduleId)))if(draft.filter(p=>p.moduleId===moduleId).length>ownedModuleCount(moduleId,shopCageOwned))throw cageError("CAGE_INSTANCE_STOCK_MISMATCH");
     committed = dropInvalid(committed, owned, unlockedCount);
     // A native entry stores an anchor, but several original masks do not
     // occupy that anchor bit. Build those cells only from the traced mask;
@@ -135,6 +143,8 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       const mask = nativePlacementMask(entry);
       for (let slot = 0; slot < MAX_SLOT_COUNT; slot++) if (mask & (1 << slot)) occupied.set(slot, entry.moduleId);
     }
+    const instanceAt=new Map();
+    if(grid)for(const entry of draft)for(const slot of productPlacementCells(entry))instanceAt.set(slot,entry.instanceId);
     const slots = [];
     for (let slotIndex = 0; slotIndex < MAX_SLOT_COUNT; slotIndex += 1) {
       const moduleId = occupied.get(slotIndex) ?? null;
@@ -173,18 +183,20 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
         const moduleId = occupied.get(slotIndex) ?? null;
         const definition = moduleId ? getCageDefinitionByModuleId(moduleId) : null;
         const training = trainingViewFromDefinition(definition);
-        slots.push({ ...productGridCell(slotIndex), unlocked: unlockedSlots.has(slotIndex),
+        slots.push({ ...productGridCell(slotIndex), instanceId:instanceAt.get(slotIndex)??null, unlocked: unlockedSlots.has(slotIndex),
           fixed: moduleId === WAITING_ROOM_MODULE, moduleId, displayName: definition?.displayName ?? null,
           trainingSummary: moduleId ? training.summary : null });
       }
     }
     const placed = new Set(draft.map((entry) => entry.moduleId));
     const tray = listCageDefinitions()
-      .filter((record) => owned.has(record.moduleId) && !placed.has(record.moduleId))
+      .filter((record) => owned.has(record.moduleId) && (grid?draft.filter(p=>p.moduleId===record.moduleId).length<ownedModuleCount(record.moduleId,shopCageOwned):!placed.has(record.moduleId)))
       .map((record) => {
         const training = trainingViewFromDefinition(record);
         return {
           moduleId: record.moduleId,
+          availableCount:ownedModuleCount(record.moduleId,shopCageOwned)-draft.filter(p=>p.moduleId===record.moduleId).length,
+          ownedCount:ownedModuleCount(record.moduleId,shopCageOwned),
           displayName: record.displayName,
           alwaysOwned: record.alwaysOwned,
           selected: record.moduleId === selectedModuleId,
@@ -206,7 +218,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       unlockedCount: grid ? slots.filter(slot=>slot.unlocked).length : unlockedCount,
       ...(grid ? { gridAccess: normalizeProductRanchAccess(gridAccess), testAccessOverride,
         mainUnlockedCount: unlockedCount, unlockedSlots:slots.filter(slot=>slot.unlocked).map(slot=>slot.slotIndex),
-        productGrid: { columns:10, rows:5, lockedSlots:slots.filter(slot=>!slot.unlocked).map(slot=>slot.slotIndex) } } : {}),
+        productGrid: { columns:10, rows:10, lockedSlots:slots.filter(slot=>!slot.unlocked).map(slot=>slot.slotIndex) } } : {}),
       slotCountEvidence: SLOT_COUNT_EVIDENCE,
       placementModel: layoutVersion ? 'ORIGINAL_MULTI_CELL_FOOTPRINT' : PLACEMENT_MODEL,
       placementEvidence: grid ? 'OWNER_APPROVED_ADAPTATION' : layoutVersion ? 'VERIFIED_BINARY_NATIVE_REPLAY' : PLACEMENT_EVIDENCE,
@@ -232,7 +244,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
 
     quoteTestRow(row, shopCageOwned = [], tamerRank = 0) {
       const frame = getFrame(shopCageOwned,tamerRank);
-      if (!grid || testAccessOverride !== PUBLIC_TEST_RANCH_ACCESS || !Number.isInteger(row) || row < 2 || row >= 5) {
+      if (!grid || testAccessOverride !== PUBLIC_TEST_RANCH_ACCESS || !Number.isInteger(row) || row < 2 || row >= 10) {
         return { ok:false, reason:'TEST_ROW_PURCHASE_UNAVAILABLE' };
       }
       if (frame.slots.filter(slot=>slot.row===row).every(slot=>slot.unlocked)) return { ok:false, reason:'TEST_ROW_ALREADY_OPEN' };
@@ -287,7 +299,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
         lastVerdict = { ok: false, reason: "UNOWNED" };
         return getFrame(shopCageOwned, tamerRank);
       }
-      if (draft.some((entry) => entry.moduleId === selectedModuleId)) {
+      if (grid ? draft.filter(entry=>entry.moduleId===selectedModuleId).length>=ownedModuleCount(selectedModuleId,shopCageOwned) : draft.some((entry) => entry.moduleId === selectedModuleId)) {
         lastVerdict = { ok: false, reason: "ALREADY_PLACED" };
         return getFrame(shopCageOwned, tamerRank);
       }
@@ -299,10 +311,12 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
         if (!available.includes(slotIndex)) {
           lastVerdict = { ok:false, reason:'SLOT_LOCKED' }; return getFrame(shopCageOwned, tamerRank);
         }
-        const candidate = { moduleId:selectedModuleId, slotIndex };
+        const withdrawn=withdrawnCopies.get(selectedModuleId),reusedId=withdrawn?.at(-1);
+        const candidate = { moduleId:selectedModuleId, slotIndex, instanceId:reusedId??allocateInstance() };
         if (!validateProductRanch([...draft,candidate], available)) {
           lastVerdict = { ok:false, reason:'FOOTPRINT_BLOCKED' }; return getFrame(shopCageOwned, tamerRank);
         }
+        if(reusedId)withdrawn.pop();
         draft = [...draft,candidate]; selectedModuleId = null;
         lastVerdict = { ok:true, reason:'PLACED' }; return getFrame(shopCageOwned, tamerRank);
       }
@@ -332,7 +346,9 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       return getFrame(shopCageOwned, tamerRank);
     },
 
-    removePlacement(moduleId, shopCageOwned = [], tamerRank = 0) {
+    removePlacement(reference, shopCageOwned = [], tamerRank = 0) {
+      const target=draft.find(p=>(p.instanceId??p.moduleId)===reference)??draft.find(p=>p.moduleId===reference);
+      const moduleId=target?.moduleId??reference;
       if (layoutVersion && moduleId === WAITING_ROOM_MODULE) {
         lastVerdict = { ok: false, reason: 'FIXED_WAITING_ROOM' };
         return getFrame(shopCageOwned, tamerRank);
@@ -341,7 +357,8 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
         lastVerdict = { ok: false, reason: "NOT_PLACED" };
         return getFrame(shopCageOwned, tamerRank);
       }
-      draft = draft.filter((entry) => entry.moduleId !== moduleId);
+      draft = draft.filter((entry) => entry !== target);
+      if(grid&&target?.instanceId){const free=withdrawnCopies.get(moduleId)??[];free.push(target.instanceId);withdrawnCopies.set(moduleId,free);selectedModuleId=moduleId;}
       lastVerdict = { ok: true, reason: "REMOVED" };
       return getFrame(shopCageOwned, tamerRank);
     },
@@ -350,7 +367,9 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       const owned = ownedModuleIds(shopCageOwned);
       const unlockedCount = slotCountForTamerRank(tamerRank);
       draft = dropInvalid(draft, owned, unlockedCount);
+    if(grid)for(const moduleId of new Set(draft.map(p=>p.moduleId)))if(draft.filter(p=>p.moduleId===moduleId).length>ownedModuleCount(moduleId,shopCageOwned))throw cageError("CAGE_INSTANCE_STOCK_MISMATCH");
       committed = clonePlacements(draft);
+      withdrawnCopies.clear();
       selectedModuleId = null;
       lastVerdict = { ok: true, reason: "CONFIRMED" };
       return getFrame(shopCageOwned, tamerRank);
@@ -358,6 +377,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
 
     revert(shopCageOwned = [], tamerRank = 0) {
       draft = clonePlacements(committed);
+      withdrawnCopies.clear();
       selectedModuleId = null;
       lastVerdict = { ok: true, reason: "REVERTED" };
       return getFrame(shopCageOwned, tamerRank);
@@ -402,7 +422,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
     toSave() {
       return deepFreeze({
         ...(layoutVersion ? { layoutVersion } : {}),
-        ...(grid ? { gridAccess: normalizeProductRanchAccess(gridAccess) } : {}),
+        ...(grid ? { gridAccess: normalizeProductRanchAccess(gridAccess), nextInstanceSequence } : {}),
         ...(expansion ? { expansion: { ...expansion } } : {}),
         placements: clonePlacements(committed)
       });

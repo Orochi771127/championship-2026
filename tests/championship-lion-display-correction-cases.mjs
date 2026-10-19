@@ -88,8 +88,11 @@ test('normal Database component selects corrected codes, navigates both routes a
   }}finally{setLocale('zh-Hant');}
 });
 
-test('native data and saves remain byte-identical, the original95 heroes stay intact and only the approved MA62 hero is added',()=>{
-  for(const [path,sha256] of Object.entries(baseline.unchangedFiles))assert.equal(hash(fs.readFileSync(path)),sha256,path);
+test('native data stays pinned, separately authorized savev7 is reviewed, the original95 heroes stay intact and only the approved MA62 hero is added',()=>{
+  // The later Owner-authorized100-cell save extension supersedes this one source pin only.
+  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/CAGE100_PLAYTEST_20261019.json","utf8"));
+  assert.deepEqual(Object.keys(followup.sourceLocks),["src/championship/app/championshipStandaloneSave.js"]);
+  for(const [path,sha256] of Object.entries(baseline.unchangedFiles))assert.equal(hash(fs.readFileSync(path)),followup.sourceLocks[path]??sha256,path);
   for(const [id,entity] of [[121,'m363_leomon'],[125,'m368_firamon']]){
     assert.equal(acceptedDatabasePortraitConfig(id).entityId,entity);
   }
