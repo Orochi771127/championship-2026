@@ -686,6 +686,12 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
     let art;
     try{art=await withCageForeground({PIXI,art:fieldArt,manifest,placements:plan.placements,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
     catch(error){await fieldArt.dispose();throw error;}
+    // Local review (2026-10-19): a same-theme large/small pair that really
+    // shares an edge hides the duplicate rim there; any failure keeps full rims.
+    try{
+      const { withCageSharedEdges } = await import('../presentation/cageSharedEdges.js');
+      art=await withCageSharedEdges({PIXI,art,manifest,fetchImpl:(url,options)=>fetch(url,{...options,signal})});
+    }catch(error){console.warn(`CHAMPIONSHIP_CAGE_SHARED_EDGES_FALLBACK: ${error.message}`);}
     // Local review (2026-10-19): generated cage motion (wind, glow, water,
     // particles); any failure keeps the static ranch.
     try{

@@ -1,0 +1,396 @@
+{
+ "schemaVersion": 1,
+ "assetId": "art:cage:shared-edges:polish-20261019",
+ "scope": "LOCAL_REVIEW_ONLY",
+ "publicReleasePermitted": false,
+ "rule": "Draw a field edge patch only while a paired field has an edge on the same world segment.",
+ "toleranceWorldPx": 8,
+ "pairs": [
+  [
+   "field_cm02_01",
+   "field_cm30_01"
+  ],
+  [
+   "field_cm05_01",
+   "field_cm34_01"
+  ],
+  [
+   "field_cm07_01",
+   "field_cm35_01"
+  ],
+  [
+   "field_cm10_01",
+   "field_cm37_01"
+  ],
+  [
+   "field_cm09_01",
+   "field_cm39_01"
+  ],
+  [
+   "field_cm18_01",
+   "field_cm32_01"
+  ],
+  [
+   "field_cm31_01",
+   "field_cm16_01"
+  ]
+ ],
+ "fields": [
+  {
+   "fieldId": "field_cm02_01",
+   "sourceHash": "f46ab00764f67d336ad96884bf9bb5b51e6856f09752d698ea6c23e992771ab1",
+   "raster": [
+    832,
+    864
+   ],
+   "atlas": {
+    "src": "assets/production/cage/shared-edges-polish-20261019/field_cm02_01-edges.webp",
+    "sha256": "a9141e50191d08798d744c3b6058625a6f6abf0f9330dfd0ad239f8838cc51dd",
+    "width": 1024,
+    "height": 362
+   },
+   "edges": [
+    {
+     "id": "flush-porcelain-joint",
+     "a": [
+      31.59,
+      128.02
+     ],
+     "b": [
+      222.63,
+      29.8
+     ],
+     "x": 30,
+     "y": 31,
+     "width": 194,
+     "height": 99,
+     "pixels": 428,
+     "atlasX": 0,
+     "atlasY": 263
+    },
+    {
+     "id": "flush-porcelain-joint.001",
+     "a": [
+      415.23,
+      128.02
+     ],
+     "b": [
+      224.18,
+      29.8
+     ],
+     "x": 222,
+     "y": 31,
+     "width": 196,
+     "height": 98,
+     "pixels": 538,
+     "atlasX": 196,
+     "atlasY": 263
+    },
+    {
+     "id": "flush-porcelain-joint.002",
+     "a": [
+      609.37,
+      31.73
+     ],
+     "b": [
+      415.23,
+      126.1
+     ],
+     "x": 413,
+     "y": 31,
+     "width": 198,
+     "height": 97,
+     "pixels": 544,
+     "atlasX": 593,
+     "atlasY": 263
+    },
+    {
+     "id": "flush-porcelain-joint.003",
+     "a": [
+      607.82,
+      31.73
+     ],
+     "b": [
+      801.96,
+      126.1
+     ],
+     "x": 605,
+     "y": 31,
+     "width": 197,
+     "height": 98,
+     "pixels": 411,
+     "atlasX": 394,
+     "atlasY": 263
+    },
+    {
+     "id": "flush-porcelain-joint.004",
+     "a": [
+      799.74,
+      127.06
+     ],
+     "b": [
+      802.63,
+      383.85
+     ],
+     "x": 797,
+     "y": 125,
+     "width": 6,
+     "height": 260,
+     "pixels": 536,
+     "atlasX": 26,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.005",
+     "a": [
+      607.82,
+      479.19
+     ],
+     "b": [
+      801.96,
+      384.81
+     ],
+     "x": 607,
+     "y": 383,
+     "width": 195,
+     "height": 100,
+     "pixels": 1735,
+     "atlasX": 642,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.006",
+     "a": [
+      607.15,
+      736.94
+     ],
+     "b": [
+      610.04,
+      480.15
+     ],
+     "x": 606,
+     "y": 478,
+     "width": 11,
+     "height": 261,
+     "pixels": 851,
+     "atlasX": 0,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.007",
+     "a": [
+      415.23,
+      832.27
+     ],
+     "b": [
+      609.37,
+      737.9
+     ],
+     "x": 410,
+     "y": 735,
+     "width": 200,
+     "height": 104,
+     "pixels": 1745,
+     "atlasX": 41,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.008",
+     "a": [
+      416.77,
+      832.27
+     ],
+     "b": [
+      222.63,
+      737.9
+     ],
+     "x": 222,
+     "y": 735,
+     "width": 200,
+     "height": 104,
+     "pixels": 1823,
+     "atlasX": 243,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.009",
+     "a": [
+      224.85,
+      736.94
+     ],
+     "b": [
+      221.96,
+      480.15
+     ],
+     "x": 215,
+     "y": 478,
+     "width": 11,
+     "height": 261,
+     "pixels": 858,
+     "atlasX": 13,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.010",
+     "a": [
+      224.18,
+      479.19
+     ],
+     "b": [
+      30.04,
+      384.81
+     ],
+     "x": 30,
+     "y": 382,
+     "width": 195,
+     "height": 101,
+     "pixels": 1734,
+     "atlasX": 445,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.011",
+     "a": [
+      32.26,
+      127.06
+     ],
+     "b": [
+      29.37,
+      383.85
+     ],
+     "x": 29,
+     "y": 125,
+     "width": 5,
+     "height": 260,
+     "pixels": 774,
+     "atlasX": 34,
+     "atlasY": 0
+    }
+   ]
+  },
+  {
+   "fieldId": "field_cm30_01",
+   "sourceHash": "d1fc560feb29fc13fc109987519eeb1165d5a264f3e7f507b0368a04f6450172",
+   "raster": [
+    384,
+    448
+   ],
+   "atlas": {
+    "src": "assets/production/cage/shared-edges-polish-20261019/field_cm30_01-edges.webp",
+    "sha256": "e72cbb63325a9a6862a91d979a858ced3d55edfc3ab6af2eda7bad8afbafa9da",
+    "width": 790,
+    "height": 261
+   },
+   "edges": [
+    {
+     "id": "flush-porcelain-joint",
+     "a": [
+      0.77,
+      96.96
+     ],
+     "b": [
+      191.23,
+      -0.96
+     ],
+     "x": 0,
+     "y": 0,
+     "width": 193,
+     "height": 99,
+     "pixels": 707,
+     "atlasX": 205,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.001",
+     "a": [
+      383.23,
+      96.96
+     ],
+     "b": [
+      192.77,
+      -0.96
+     ],
+     "x": 191,
+     "y": 0,
+     "width": 193,
+     "height": 100,
+     "pixels": 711,
+     "atlasX": 10,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.002",
+     "a": [
+      382.56,
+      352.0
+     ],
+     "b": [
+      385.44,
+      96.0
+     ],
+     "x": 381,
+     "y": 98,
+     "width": 3,
+     "height": 261,
+     "pixels": 521,
+     "atlasX": 0,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.003",
+     "a": [
+      383.23,
+      351.04
+     ],
+     "b": [
+      192.77,
+      448.96
+     ],
+     "x": 193,
+     "y": 349,
+     "width": 191,
+     "height": 99,
+     "pixels": 1690,
+     "atlasX": 400,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.004",
+     "a": [
+      192.77,
+      447.04
+     ],
+     "b": [
+      -0.77,
+      352.96
+     ],
+     "x": 0,
+     "y": 350,
+     "width": 195,
+     "height": 98,
+     "pixels": 1725,
+     "atlasX": 593,
+     "atlasY": 0
+    },
+    {
+     "id": "flush-porcelain-joint.005",
+     "a": [
+      1.44,
+      96.0
+     ],
+     "b": [
+      -1.44,
+      352.0
+     ],
+     "x": 0,
+     "y": 93,
+     "width": 3,
+     "height": 259,
+     "pixels": 517,
+     "atlasX": 5,
+     "atlasY": 0
+    }
+   ]
+  }
+ ]
+}
