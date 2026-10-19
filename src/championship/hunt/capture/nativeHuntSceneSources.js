@@ -21,6 +21,7 @@ deepFreeze(source);
 // Owner 2026-10-19 (local review): hunt fields may grow their exploration
 // area. An expansion keeps the original grid at the origin and appends tiles
 // east/south, so no original coordinate moves; it is used only when supplied.
+import { validateCaveGroups } from "./nativeHuntCavePassage.js";
 export const NATIVE_HUNT_EXPANSION_ADAPTATION = 'OWNER_APPROVED_HUNT_EXPANSION_REVIEW_20261019';
 export function resolveNativeHuntEnvironment(fieldId, { expansion = null } = {}) {
   const expanded = expansion?.adaptation === NATIVE_HUNT_EXPANSION_ADAPTATION ? expansion.environments?.[fieldId] : null;
@@ -44,6 +45,7 @@ export function createNativeHuntEnvironment(data) {
   const readTerrain = (x,y) => { validate(x,y); return outside(x,y) ? 1 : terrain[y * data.width + x]; };
   return Object.freeze({ width:data.width, height:data.height, wrap:false, readTerrain,
     ...(expanded ? { adaptation:NATIVE_HUNT_EXPANSION_ADAPTATION } : {}),
+    ...(expanded && data.caveGroups ? { caveGroups:validateCaveGroups(data.caveGroups, data.width, data.height) } : {}),
     isBlocked:(x,y) => readTerrain(x,y) === 1,
     readDirectionCell(x,y) {
       validate(x,y);

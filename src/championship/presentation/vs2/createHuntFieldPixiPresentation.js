@@ -439,6 +439,8 @@ export async function mountHuntFieldPixiPresentation({
       }
       node.position.set(wild.worldX, wild.worldY - (wild.worldZ ?? 0));
       node.zIndex = Math.round(wild.worldY);
+      // Shared cave passage (rebuilt review maps): fade into / out of the cave dark.
+      node.alpha = wild.passageAlpha ?? 1;
       const nativeFrame = node.nativeFramePresenter?.apply(wild.nativeAnimation ?? null);
       if (node.characterSprite) applyNativeCharacterCellGeometry(node.characterSprite,nativeFrame,2);
       node.scale.x = nativeFrame ? (nativeFrame.flipX ? -1 : 1) : (wild.facing === "left" ? -1 : 1);

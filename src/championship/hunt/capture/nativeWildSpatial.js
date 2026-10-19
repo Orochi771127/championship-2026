@@ -19,7 +19,7 @@ export function queryNativeHuntActors(actors, centerQ12, rect) {
   const hits = [];
   let bestY = -Q12;
   for (const actor of actors.slice(0, 32)) {
-    if (!actor || !actor.actorActive || actor.hidden) continue;
+    if (!actor || !actor.actorActive || actor.hidden || actor.passage) continue;   // passage: rebuilt-map caves only
     const [x,y] = actor.positionQ12;
     if (y <= bestY) continue;
     const box = actor.bounds.rect;
