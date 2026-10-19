@@ -19,7 +19,7 @@ function fixture({tamper=null}={}){
  },async unload(url){const value=cache.get(url);if(value instanceof PIXI.Texture)value.destroy(true);cache.delete(url);}};
  return {PIXI:createPixiAssetScope({...PIXI,Assets},base),fetchImpl,calls,sources,cache,get peak(){return peak;}};
 }
-const forbidden=path=>path.includes('ART_PRODUCTION_INDEX')||path.includes('/internal-')||path.endsWith('runtime.review.json')||path.endsWith('/manifest.json');
+const forbidden=path=>path==='src/data/championship/public-character-catalog.v1.json'||path.includes('ART_PRODUCTION_INDEX')||path.includes('/internal-')||path.endsWith('runtime.review.json')||path.endsWith('/manifest.json');
 test('public character loading renders native frames with no private index, source manifest or synthesized review registration',async()=>{
  const configs=['e000_digitama','m201_agumon','m503_warglaymon','m529_metalgarurumon_va','m541_dukemon'].map(id=>catalog.characters.find(c=>c.entityId===id));
  const f=fixture(),roster=await loadPublicCharacterRoster({...f,speciesIds:configs.map(c=>c.speciesId),initialSequences:Object.fromEntries(configs.map(c=>[c.speciesId,[0]]))},base);

@@ -15,10 +15,10 @@ const sha=b=>createHash('sha256').update(b).digest('hex');
 
 test('approved repair selects exact species identities and retains all 155 previous selections',()=>{
   assert.deepEqual(manifest.entries.map(e=>e.speciesIndex),ids);
-  const prior=registry.entries.filter(e=>!ids.includes(e.speciesIndex));
+  const prior=registry.entries.filter(e=>!ids.includes(e.speciesIndex)&&![126,169,170,173,201,202].includes(e.speciesIndex));
   assert.equal(prior.length,155);
   assert.equal(sha(Buffer.from(JSON.stringify(prior))),manifest.priorEntriesSha256);
-  assert.equal(registry.entries.length,182);
+  assert.equal(registry.entries.length,188);
   const allow=read('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json');
   const inputs=read('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json');
   for(const row of manifest.entries){
@@ -36,7 +36,7 @@ test('approved repair selects exact species identities and retains all 155 previ
     }
   }
   assert.equal(manifest.entries.find(e=>e.speciesIndex===105).master.sha256,'90b4834b1048497840aaadf9142791e08158f0771c27e01a69e99ce362481804');
-  for(const id of [82,184,186,187,188,200,201,202])assert.equal(databaseHeroPortrait(id),null);
+  for(const id of [82,184,186,187,188,200])assert.equal(databaseHeroPortrait(id),null);
 });
 
 test('new hero and thumbnail load in five locales while registration masking and player state remain unchanged',()=>{

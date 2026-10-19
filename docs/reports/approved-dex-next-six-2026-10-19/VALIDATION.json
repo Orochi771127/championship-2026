@@ -1,0 +1,53 @@
+{
+  "status": "LOCAL_PASS",
+  "baseCommit": "374686287dae6a55ab9c5eae75f823b9fed67d66",
+  "newSpecies": [
+    126,
+    169,
+    170,
+    173,
+    201,
+    202
+  ],
+  "heroRegistryCount": 188,
+  "ci": {
+    "total": 2708,
+    "firstPass": 2706,
+    "environmentBlocked": 2,
+    "environmentRecheck": {
+      "testModules": [
+        "championship-alternate-form-browser-contract-cases.mjs",
+        "championship-web-build-release-cases.mjs"
+      ],
+      "tests": 17,
+      "pass": 17,
+      "fail": 0
+    }
+  },
+  "browser": {
+    "status": "PASS_AUTOMATED_NORMAL_UI_HASH_AND_LAYOUT",
+    "checks": 66,
+    "uniqueImageResponses": 66,
+    "pageErrors": [],
+    "networkErrors": [],
+    "registrationBefore": [],
+    "registrationAfter": [],
+    "physicalDeviceAcceptance": false,
+    "visualReview": "PASS_NEXT_SIX_PHONE_CSS272_AND_LIGHT_DARK_MASTER_COMPARISON"
+  },
+  "build": "9e044861200957a40cb89032f4bd8c8461dca82f8b421a92fadaf17d0955fb69",
+  "capacity": {
+    "actualArtifactBytes": 999966291,
+    "fileCount": 7869,
+    "remainingBytes": 33709
+  },
+  "publication": {
+    "nextSixPushed": false,
+    "prior27Run": "39281217973",
+    "prior27Status": "PASS_REAL_PUBLIC_HTTP54_AND_NORMAL_UI54",
+    "publicCommit": "374686287dae6a55ab9c5eae75f823b9fed67d66",
+    "officialIncident": "https://www.githubstatus.com/incidents/8tzbpcnl75jp",
+    "prior27WorkflowUI": "waiting"
+  },
+  "independentArtifactValidation": "PASS"
+}

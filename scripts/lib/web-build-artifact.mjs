@@ -93,7 +93,9 @@ export function buildWebArtifact({root,output,target}){
     ...(playtest?{publicPlaytest:{ownerApproved:true,policyId:audit.input.publicPlaytest.policyId,
       rightsDocumentVerified:false,commercialReleaseAccepted:false,fullOriginalParityAccepted:false}}:{}),
     fileCount:rows.length+1,files:rows,saveStorage:'BROWSER_LOCAL_STORAGE'};
-  fs.writeFileSync(path.join(out,manifestName(target)),JSON.stringify(manifest,null,2)+'\n');
+  // The public diagnostic receipt retains every field/hash without indentation.
+  // Save site bytes here instead of reducing approved image quality.
+  fs.writeFileSync(path.join(out,manifestName(target)),JSON.stringify(manifest,null,internal?2:undefined)+'\n');
   if(!internal)assertPublicArtifact({root:out,files:collectArtifactFiles(out),plan:publication});
   return {root:out,manifest};
 }

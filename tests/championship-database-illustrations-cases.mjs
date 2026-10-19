@@ -46,7 +46,7 @@ test('every art-only detail shows its selected full illustration and omits playa
 test('all 134 prior published hero selections remain exact',()=>{
   const registry=read('src/data/championship/database-hero-portraits.public.v1.json');
   const repairIds=new Set(read('docs/art/production/characters/approved-dex-repair-20261019/manifest.json').entries.map(e=>e.speciesIndex));
-  const preserved={...registry,entries:registry.entries.filter(e=>e.speciesIndex<231&&!repairIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex))};
+  const preserved={...registry,entries:registry.entries.filter(e=>e.speciesIndex<231&&!repairIds.has(e.speciesIndex)&&![126,169,170,173,201,202].includes(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex))};
   assert.equal(preserved.entries.length,134);
   assert.equal(sha(Buffer.from(JSON.stringify(preserved,null,2)+'\n')),'5c6491b57edad00bb1caba25398aca1a5da432be7dba25aa463ee07fe41d705b');
 });

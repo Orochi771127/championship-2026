@@ -1,5 +1,5 @@
 {
-  "status": "PASS_LOCAL_PUBLICATION_PENDING",
+  "status": "PASS_LOCAL_AND_REAL_PUBLIC",
   "baseCommit": "a8337dc64622111e57f972ba2ef67cca131abc35",
   "added": [
     103,
@@ -1961,5 +1961,6 @@
     "method": "Full composition LANCZOS to max768, WebP Q90 alpha100; thumbnails max96 lossless RGBA. Visual review is separate from decode/HTTP pass.",
     "notes": "27 actual phone images reviewed at272 CSS image box in320 CSS padded holder. All 27 compared to uncompressed proportional originals on light/dark; no clear new halo, block, ringing or clipped appendage observed. No sharpen, mirror, crop, background removal or redesign.",
     "metrics": "quality-metrics.json"
-  }
+  },
+  "publicationEvidence": "PUBLICATION.json"
 }

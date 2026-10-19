@@ -1,13 +1,12 @@
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 
-// Imported data already ships inside the compiled program. Keep the two
-// public inspection manifests, and every resource addressed at runtime.
+// Imported data already ships inside the compiled program. Keep every resource
+// addressed at runtime; the public runtime index remains the asset audit source.
+// Public character loading passes its inlined catalog directly to rosterCore;
+// PUBLIC_CHARACTER_CATALOG supplies the relative URL base, never a fetch.
 // All source bytes still pass the exact selection/hash audit before bundling.
-const PUBLIC_INSPECTION_DATA=new Set([
-  'src/data/championship/database-hero-portraits.public.v1.json',
-  'src/data/championship/public-character-catalog.v1.json'
-]);
+const PUBLIC_INSPECTION_DATA=new Set();
 
 // Compilation inputs retain their approved hashes. Only the deterministic
 // compiled program is published; explicit runtime script URLs keep their files.

@@ -8,17 +8,23 @@ const {clickOptionalComicControl}=require('./championship-dex-portrait-browser.c
 const root=path.resolve(process.env.DEX_REPAIR_ROOT||'dist/github-playtest');
 const output=path.resolve(process.env.DEX_REPAIR_OUTPUT||'output/playwright/dex-approved-repair');fs.mkdirSync(output,{recursive:true});
 const base='https://orochi771127.github.io/championship-2026/';
-const manifest=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-repair-20261019/manifest.json','utf8'));
+const manifest=JSON.parse(fs.readFileSync(process.env.DEX_REPAIR_MANIFEST||'docs/art/production/characters/approved-dex-repair-20261019/manifest.json','utf8'));
 
-const registry=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));
+if(!process.env.DEX_REPAIR_MANIFEST)manifest.entries.push(...JSON.parse(fs.readFileSync('docs/art/production/characters/approved-equipped-201202-20261019/manifest.json','utf8')).entries);
+if(!process.env.DEX_REPAIR_MANIFEST)manifest.entries.push(...JSON.parse(fs.readFileSync('docs/art/production/characters/confirmed-dex-next-four-20261019/manifest.json','utf8')).entries);
+const registryPath='src/data/championship/database-hero-portraits.public.v1.json';
+const registryBytes=fs.readFileSync(fs.existsSync(path.join(root,registryPath))?path.join(root,registryPath):registryPath);
+const registry=JSON.parse(registryBytes);
+const runtime=JSON.parse(fs.readFileSync(path.join(root,'assets/production/PUBLIC_RUNTIME_INDEX.json'),'utf8'));
+for(const row of registry.entries)for(const [role,media]of[['hero',row],['thumbnail',row.thumbnail]]){const asset=runtime.assets.find(a=>a.id===`${row.speciesId}:database-${role}`);assert.equal(asset.src,media.src);assert.equal(asset.sha256,media.sha256);}
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const report={status:'RUNNING',hosted:Boolean(process.env.DEX_REPAIR_PUBLIC),pageErrors:[],networkErrors:[],checks:[],captures:[],responseHashes:[],visualReview:'PENDING_SEPARATE_SAVED_IMAGE_REVIEW',physicalDeviceAcceptance:false};
 const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(report,null,2)+'\n');
 async function main(){let browser,context,server,page;const jobs=[];
  try{
   const policy=await import('../src/championship/app/friendsPlaytestPolicy.js');assert.equal(policy.FRIENDS_PLAYTEST_POLICY.fullDexView,true);
-  assert.equal(registry.entries.length,182);
-  report.registrySha256=sha(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json')));
+  assert.equal(registry.entries.length,Number(process.env.DEX_REPAIR_REGISTRY_COUNT||188));
+  report.registrySha256=sha(registryBytes);
   report.build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8')).buildId;
   browser=await chromium.launch({executablePath:process.env.DEX_REPAIR_CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,chromiumSandbox:true});
   context=await browser.newContext({viewport:{width:1440,height:1000},deviceScaleFactor:1,locale:'zh-TW',serviceWorkers:'block'});
