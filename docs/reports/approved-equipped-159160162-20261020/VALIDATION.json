@@ -1,0 +1,42 @@
+{
+  "status": "LOCAL_PASS",
+  "baseCommit": "4ff116e263625b00a5e21b52af6e61b70ff143f9",
+  "added": [
+    159,
+    160,
+    162
+  ],
+  "totalPortraits": 194,
+  "remainingTargetStageGaps": 25,
+  "ci": {
+    "tests": 2715,
+    "pass": 2715,
+    "fail": 0
+  },
+  "build": {
+    "schemaVersion": 3,
+    "fileTableVersion": 2,
+    "roundtripRows": 7880,
+    "actualArtifactBytes": 999717366,
+    "remainingBytes": 282634,
+    "fileCount": 7881,
+    "receiptBytes": 495972,
+    "previousAssetRowsByteIdentical": 7740,
+    "buildId": "cbd37bf5b22f78dbaea6c9d150f2f8b28543d2b658405c6157bafc37693a4761"
+  },
+  "browser": {
+    "status": "PASS_AUTOMATED_NORMAL_UI_HASH_AND_LAYOUT",
+    "hosted": false,
+    "checks": 78,
+    "uniqueImageRoleResponses": 78,
+    "pageErrors": [],
+    "networkErrors": [],
+    "registrationBefore": [],
+    "registrationAfter": [],
+    "physicalDeviceAcceptance": false,
+    "visualReview": "PASS_NEW_THREE_LOCAL_PHONE_AND_LIGHT_DARK_CSS272"
+  },
+  "generatedEditBodyPixelParityClaim": false,
+  "publication": "NOT_YET_PUSHED",
+  "independentArtifactValidation": "PASS"
+}

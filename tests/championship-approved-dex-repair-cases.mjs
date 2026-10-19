@@ -15,10 +15,10 @@ const sha=b=>createHash('sha256').update(b).digest('hex');
 
 test('approved repair selects exact species identities and retains all 155 previous selections',()=>{
   assert.deepEqual(manifest.entries.map(e=>e.speciesIndex),ids);
-  const prior=registry.entries.filter(e=>!ids.includes(e.speciesIndex)&&![126,140,169,170,171,172,173,201,202].includes(e.speciesIndex));
+  const prior=registry.entries.filter(e=>!ids.includes(e.speciesIndex)&&![126,140,159,160,162,169,170,171,172,173,201,202].includes(e.speciesIndex));
   assert.equal(prior.length,155);
   assert.equal(sha(Buffer.from(JSON.stringify(prior))),manifest.priorEntriesSha256);
-  assert.equal(registry.entries.length,191);
+  assert.equal(registry.entries.length,194);
   const allow=read('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json');
   const inputs=read('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json');
   for(const row of manifest.entries){
