@@ -47,13 +47,23 @@ test('horizontal copies query one owner and do not create placements',()=>{
  assert.equal(g.placements.length,1);
 });
 
-test('native twenty-slot terrain and facility-local saved coordinates are preserved',async()=>{
+test('native twenty-slot terrain outside the selected sports grounds and facility-local saved coordinates are preserved',async()=>{
  const {createNativeRaisingGround}=await import('../src/championship/raising/nativeRaisingGround.js');
  const {NATIVE_RANCH_LAYOUT,originalStartingRanch}=await import('../src/championship/cage/nativeRanchLayout.js');
  const placements=originalStartingRanch().placements;
  const native=createNativeRaisingGround({layoutVersion:NATIVE_RANCH_LAYOUT,unlockedCount:20,placements});
  const product=createRanchRaisingGround(frame(placements,[]));
- assert.deepEqual(product.terrain.slice(0,native.terrain.length),native.terrain);
+ // Owner selected the new CM02/CM30 design and matching ground on 2026-10-21.
+ // Only those owners may differ; every unrelated native cell remains exact.
+ const sports=new Set([1,27]);
+ for(let i=0;i<native.terrain.length;i++){
+  const x=i%native.width*8,y=Math.floor(i/native.width)*8;
+  if(sports.has(native.cageAt(x,y)?.definitionIndex)||sports.has(product.cageAt(x,y)?.definitionIndex))continue;
+  assert.equal(product.terrain[i],native.terrain[i],`unrelated cell ${i}`);
+ }
+ const unchanged=placements.filter(p=>!sports.has(listCageDefinitions().find(d=>d.moduleId===p.moduleId).cageDefinitionIndex));
+ assert.deepEqual(createRanchRaisingGround(frame(unchanged,[])).terrain.slice(0,native.terrain.length),
+  createNativeRaisingGround({layoutVersion:NATIVE_RANCH_LAYOUT,unlockedCount:20,placements:unchanged}).terrain);
  for(const p of product.placements)assert.deepEqual(product.origin(p.definitionIndex),native.origin(p.definitionIndex));
  const d=listCageDefinitions().find(d=>d.cageDefinitionIndex===0);
  const lower=createRanchRaisingGround(frame([waiting,{moduleId:d.moduleId,slotIndex:45}]));

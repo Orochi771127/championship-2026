@@ -65,7 +65,7 @@ test('edge scroll continues at stationary pointer, respects direction and stops 
   assert.ok(raisingEdgeScroll({x:5,y:100},viewport,16)<0);
   assert.ok(raisingEdgeScroll({x:385,y:100},viewport,16)>0);
   for(const p of [{x:-1,y:100},{x:391,y:100},{x:2,y:-1},{x:388,y:331}])assert.equal(raisingEdgeScroll(p,viewport,16),0);
-  assert.equal(raisingEdgeScroll({x:390,y:100},viewport,1000),9,'background resume does not jump the camera');
+  assert.equal(raisingEdgeScroll({x:390,y:100},viewport,1000),10.8,'background resume is capped at 50ms even with the approved carry speed');
 });
 
 test('the ranch takes the largest whole pixel scale that fits with its headroom, keeps neighbouring cells in view and retains pointer round trips',()=>{

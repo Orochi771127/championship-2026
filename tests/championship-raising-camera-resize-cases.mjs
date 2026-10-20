@@ -159,7 +159,7 @@ const cancelSource = sceneFunction('  function cancelInput(', '\n  const cancelH
 function callbackHarness(extra = {}) {
   const frame = Object.freeze({ selection: Object.freeze({ creatureId: 'resident-1' }), residents: Object.freeze([]) });
   const context = {
-    responsiveLayout: true, disposed: false, scene: {}, fieldArt: { field: fold }, cameraX: 900, cameraY: 73,
+    responsiveLayout: true, disposed: false, scene: {}, fieldArt: { field: fold }, cameraX: 900, cameraY: 73, zoom: 1,
     app: { screen: { width: views[1].width, height: views[1].height } },
     view: { ...views[1] }, cameraViewport: { ...views[0], referenceViewport:{width:390,height:675} },
     raisingReference:{reference:{width:390,height:675},measured:true,pending:null},
@@ -240,7 +240,7 @@ test('controlled cancellation clears input before intent publication and keeps s
 });
 
 test('source contract: resize keeps one stage subscription/ticker and loading/disposal guards', () => {
-  assert.match(sceneSource, /stage\.onResize\(\(\)=>\{cancelInput\([^)]*\);resize\(\);\}\)/);
+  assert.match(sceneSource, /stage\.onResize\(\(\)=>\{zoomInput\?\.reset\(\);cancelInput\([^)]*\);resize\(\);\}\)/);
   assert.equal((sceneSource.match(/app\.ticker\.add\(updateAnimations\)/g) ?? []).length, 1);
   assert.equal((sceneSource.match(/app\.ticker\.remove\(updateAnimations\)/g) ?? []).length, 1);
   assert.doesNotMatch(resizeSource, /createSceneRoot|new\s+(?:PIXI\.)?Application|setTimeout|setInterval|loadActorTextures|selectCreature|relocateCreature/);
@@ -400,5 +400,5 @@ test('visibility/blur cancellation invalidates a pending reference sample withou
  const context=callbackHarness({raisingReference:{reference:{width:320,height:399},measured:true,pending:{width:320,height:350}}});
  const reference=context.raisingReference.reference;context.cancelInput();
  assert.equal(context.raisingReference.pending,null);assert.equal(context.raisingReference.reference,reference);
- assert.match(sceneSource,/const cancelHiddenInput=\(\)=>\{if\(globalThis.document\?\.hidden\)cancelInput\(\);\}/);
+ assert.match(sceneSource,/const cancelHiddenInput=\(\)=>\{if\(globalThis.document\?\.hidden\)\{zoomInput\?\.reset\(\);cancelInput\(\);\}\}/);
 });

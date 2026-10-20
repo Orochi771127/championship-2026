@@ -193,6 +193,7 @@ export function createRaisingPresentationSource(app) {
       contractVersion: RAISING_PRESENTATION_CONTRACT_VERSION,
       revision: frameRevision,
       ranch: { layoutVersion: app.getCageEditFrame()?.layoutVersion ?? null },
+      exploration:app.getRanchExplorationFrame?.()??null,
       tutorial: app.getInteractiveTutorial?.()??null,
       foods: app.getRaisingFoodFrame?.()??[],
       lifecycle:app.getRaisingLifecycleFrame?.()??null,
@@ -324,6 +325,8 @@ export function createRaisingPresentationSource(app) {
   currentFrame = buildFrame();
 
     const intents = Object.freeze({
+      refreshDiscoveries(){const result=app.refreshRanchDiscoveries?.()??false;publish();return result;},
+      collectDiscoveries(){const result=app.collectRanchDiscoveries?.()??{ok:false,reason:'UNAVAILABLE'};publish();return result;},
       openMail(){return app.openRaisingMail?.()??false;},
       acknowledgeMail(){return app.acknowledgeRaisingMail?.()??false;},
       acknowledgeCalendar(){return app.acknowledgeRaisingCalendar?.()??false;},

@@ -11,12 +11,17 @@
   "rowCostTestDiamonds": 1000,
   "existingSaveTopUp": false,
   "sourceLocks": {
-    "src/championship/app/championshipStandaloneSave.js": "05350ff7222b3a258ce3acfde530739ac858883f9f811519665d4d7b6f45fbf0"
+    "src/championship/app/championshipStandaloneSave.js": "db8d3cebd6cf597699e4f0595d266b7f52d5371645dac094970ee93eb26e6d05"
   },
   "historicalSourceLocks": {
     "src/championship/app/championshipStandaloneSave.js": "7b0e177ba7d313bbadd5133ea8e68fad337f1179dfac2cf44e11fd1bcc195614"
   },
   "authorization": "Owner requested 100 total cells, repeat purchases at existing prices, larger new-save funds and tested public playtest publication. Existing wallets and approved map assets are preserved.",
   "scope": "Bounded extension through existing app, native templates and single SavePort; no additional global stat stacking, real payment or new artwork.",
-  "physicalDeviceAccepted": false
+  "physicalDeviceAccepted": false,
+  "rotationCancellation20261021": {
+    "previousSourceLock": "05350ff7222b3a258ce3acfde530739ac858883f9f811519665d4d7b6f45fbf0",
+    "contract": "docs/contracts/championship/RANCH_CONNECTIONS_AND_DISCOVERIES_2026-10-21.md",
+    "authorization": "Owner cancelled rotation and authorized commit, push and main integration on 2026-10-21. Legacy rotated saves restore to fixed footprints; discoveries use the existing save authority."
+  }
 }

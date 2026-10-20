@@ -122,8 +122,9 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   // readout: cards float over the margin and never move the board.
   const nativeWindow = field.presentationMode === 'NATIVE_RANCH' && field.nativePixelWorldScale > 0;
   const heightScale = Math.max(1, viewport.height - padding * 2) / field.worldHeightPx;
+  const zoom = viewport.zoom === 0.7 ? 0.7 : 1;
   const scale = nativeWindow
-    ? raisingNativeScreenPixels(field, viewport, padding) / field.nativePixelWorldScale
+    ? raisingNativeScreenPixels(field, viewport, padding) * zoom / field.nativePixelWorldScale
     : Math.min(Math.max(1, viewport.width - padding * 2) / field.worldWidthPx, heightScale);
   const width = field.worldWidthPx * scale;
   const height = field.worldHeightPx * scale;
@@ -187,12 +188,27 @@ export function desktopRaisingViewportWidth(field,padding=12,referenceViewport=R
 
 export function wrapRaisingCamera(value,width){return ((value%width)+width)%width;}
 
+/** Keep the native point under the pinch midpoint / mouse cursor. */
+export function zoomRaisingCamera(field, viewport, nextZoom, point, {cameraX=0,cameraY=0}={}) {
+  const before=raisingFieldViewport(field,{...viewport,scrollY:cameraY},12,cameraX);
+  const after=raisingFieldViewport(field,{...viewport,zoom:nextZoom,scrollY:0},12,0);
+  const px=point?.x??viewport.width/2,py=point?.y??viewport.height/2;
+  const x=(px-before.x)/before.scale-(px-12)/after.scale;
+  const y=py-(py-before.y)/before.scale*after.scale-after.y;
+  const maxX=Math.max(0,field.worldWidthPx-(viewport.width-24)/after.scale);
+  return {
+    cameraX:field.wrapWidthPx?wrapRaisingCamera(x,field.wrapWidthPx):Math.max(0,Math.min(maxX,x)),
+    cameraY:Math.max(0,Math.min(after.scrollMaxY??0,y))
+  };
+}
+
 // Touch presentation speed, not a change to actor movement or native timing.
+export const RAISING_CARRY_EDGE_SPEED = 216; // 180 → 216 CSS px/s, +20%.
 export function raisingEdgeScroll(point,viewport,deltaMs){
   if(!point||point.y<0||point.y>viewport.height||point.x<0||point.x>viewport.width)return 0;
   const edge=Math.min(48,viewport.width/6);
   const strength=point.x<edge?-(edge-point.x)/edge:point.x>viewport.width-edge?(point.x-viewport.width+edge)/edge:0;
-  return strength*180*Math.min(50,Math.max(0,deltaMs))/1000;
+  return strength*RAISING_CARRY_EDGE_SPEED*Math.min(50,Math.max(0,deltaMs))/1000;
 }
 
 export function raisingRegionBounds(region, viewport) {

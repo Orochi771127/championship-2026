@@ -77,6 +77,8 @@ import {
 } from "../presentation/runtimeMapArtBundle.js";
 import { createRanchCageArtPlan as createRaisingCageArtPlan, ranchExpansionPreviewPlan } from "../presentation/raisingRanchArtPlan.js";
 import { withCageForeground } from "../presentation/cageForeground.js";
+import { withRanchPassages } from "../presentation/ranchPassages.js";
+import {selectRanchCageArt,ranchCageLayerGroups} from "../presentation/ranchCageArtSelection.js";
 import { withRanchExpansionPreview } from "../presentation/raisingExpansionPreview.js";
 import { openRanchExpansionPreview } from './ranchExpansionPreview.js';
 import { createLoadProgressView, observeLoadActivity } from './loadProgress.js';
@@ -671,7 +673,7 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
   try {
     const response = await fetchRuntimeMapResponse(CAGE_REVIEW_MANIFEST_URL ?? CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
     if (!response.ok) throw new Error(`CAGE_ART_MANIFEST_HTTP_${response.status}`);
-    const manifest = validateRuntimeMapArtBundle(await response.json());
+    const manifest = validateRuntimeMapArtBundle(selectRanchCageArt(await response.json()));
     const cageFrame = app.getCageEditFrame();
     const plan = createRaisingCageArtPlan({ manifest,
       placements: cageFrame?.placements ?? [],
@@ -690,21 +692,23 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       presentationMode: plan.mode,
       productGrid: plan.productGrid ?? null
     });
-    let art;
-    try{art=await withCageForeground({PIXI,art:fieldArt,manifest,placements:plan.placements,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
+    let art=fieldArt;
+    const layerGroups=ranchCageLayerGroups(manifest,plan.placements);
+    try{for(const group of layerGroups)art=await withCageForeground({PIXI,art,...group,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
     catch(error){await fieldArt.dispose();throw error;}
-    // Polish (2026-10-19): a same-theme large/small pair that really
-    // shares an edge hides the duplicate rim there; any failure keeps full rims.
+    art=withRanchPassages({PIXI,art,connections:app.getRanchExplorationFrame()?.connections??[]});
+    // Hide a shared rim only where navigation actually permits crossing.
     if(isOriginalRuntimeLocation()) {
     try{
       const { withCageSharedEdges } = await import('../presentation/cageSharedEdges.js');
-      art=await withCageSharedEdges({PIXI,art,manifest,fetchImpl:(url,options)=>fetch(url,{...options,signal})});
+      art=await withCageSharedEdges({PIXI,art,manifest,connections:app.getRanchExplorationFrame()?.connections??[],
+        fetchImpl:(url,options)=>fetch(url,{...options,signal})});
     }catch(error){console.warn(`CHAMPIONSHIP_CAGE_SHARED_EDGES_FALLBACK: ${error.message}`);}
     // Polish (2026-10-19): generated cage motion (wind, glow, water,
     // particles); any failure keeps the static ranch.
     try{
       const { withCageAmbient } = await import('../presentation/cageAmbient.js');
-      art=await withCageAmbient({PIXI,art,manifest,placements:plan.placements,renderer:stage.app?.renderer??null,
+      for(const group of layerGroups)art=await withCageAmbient({PIXI,art,...group,renderer:stage.app?.renderer??null,
         quality:currentQualityTier()==='saver'?'low':'high',reducedMotion:prefersReducedMotion(),
         fetchImpl:(url,options)=>fetch(url,{...options,signal})});
     }catch(error){console.warn(`CHAMPIONSHIP_CAGE_AMBIENT_FALLBACK: ${error.message}`);}

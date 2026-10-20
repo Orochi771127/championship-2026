@@ -1,4 +1,5 @@
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {advanceRanchExplorationWalk} from './ranchExplorationWalk.js';
 import {productEvolutionOptions} from '../contracts/productSpeciesData.js';
 // Child of the application-owned Raising lifecycle. Numeric sequences reuse
 // the existing character metadata and native animator; no renderer or ticker.
@@ -343,7 +344,7 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
   if([2,3,16].includes(actor.state)) {
     if(actor.state===3&&(f['00c']|0)>=Math.trunc((f['178']|0)/10)*9){actor.state=2;request(actor,actor.slow?12:2);}
     const movement=stepNativeRaisingMovement({...actor,fast:f["01c"]>=90?1:0,hasFood:actor.foodSlot!==null},ground);Object.assign(actor,movement);
-    if(nativeRaisingMovementArrived(actor)){
+    if(!advanceRanchExplorationWalk(actor,ground)&&nativeRaisingMovementArrived(actor)){
       if(actor.foodSlot!==null)actor.state=5;
       else if(finishNativeActivityMovement(actor,request))enterIdle(actor,rng);
     }

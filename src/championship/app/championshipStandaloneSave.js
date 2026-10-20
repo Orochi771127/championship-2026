@@ -18,6 +18,7 @@ import { normalizeNativeHuntPersistentSave } from "../hunt/capture/nativeHuntPer
 import { assertRaisingNativeProfiles, normalizeNativeIndividualProfile } from "../raising/nativeIndividualProfile.js";
 import { normalizeRegisteredSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
 import { normalizeNativeRaisingHome } from "../raising/nativeRaisingHomeState.js";
+import { composeProductRanchGround } from '../raising/nativeRaisingRanchRing.js';
 import { normalizeNativeTitleProgress } from "../battle/nativeTitleProgression.js";
 import { normalizeNativeChampionshipRun } from "../battle/nativeChampionshipRounds.js";
 import { normalizeFreeBattleMenu } from "../battle/nativeFreeBattle.js";
@@ -26,7 +27,7 @@ import { normalizeNativeOpening } from './nativeOpeningState.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
 import {getCageDefinitionByModuleId} from "../cage/cageCatalog.js";
-import { PRODUCT_RANCH_GRID, LEGACY_PRODUCT_RANCH_GRID, normalizeProductRanchAccess, validateProductRanch } from '../cage/productRanchGrid.js';
+import { PRODUCT_RANCH_GRID, LEGACY_PRODUCT_RANCH_GRID, normalizeProductRanchAccess, productUnlockedSlots, restoreFixedRanchPlacements } from '../cage/productRanchGrid.js';
 
 export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
 export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 5;
@@ -59,7 +60,8 @@ const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "ca
 // the ranch expansion prototype versions its own slice, so a save that never
 // takes the grant keeps exactly its old shape and schemaVersion stays 5.
 const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion", "expansion", "gridAccess", "nextInstanceSequence"]);
-const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex", "instanceId"]);
+// rotation is accepted only as legacy input and removed by the normalizer.
+const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex", "instanceId", "rotation"]);
 
 // Every one of these names identifies forensic/evidence data, catalog structure,
 // binary provenance, or promotion bookkeeping. None of them has any business in
@@ -190,7 +192,10 @@ function normalizeCageEditSlice(cageEdit) {
       throw saveError("INVALID_CAGE_EDIT_SLOT");
     }
     if(entry.instanceId!==undefined)assertStableId(entry.instanceId,"cageEdit.placement.instanceId");
-    placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex, ...(entry.instanceId?{instanceId:entry.instanceId}:{}) });
+    if(entry.rotation!==undefined&&(!Number.isInteger(entry.rotation)||entry.rotation<0||entry.rotation>5
+      ||cageEdit.layoutVersion!==PRODUCT_RANCH_GRID))throw saveError('INVALID_CAGE_ROTATION');
+    placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex, ...(entry.instanceId?{instanceId:entry.instanceId}:{}),
+      ...(entry.rotation?{rotation:entry.rotation}:{}) });
   }
   if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1' && cageEdit.layoutVersion !== RANCH_DECKS_LAYOUT && cageEdit.layoutVersion !== PRODUCT_RANCH_GRID && cageEdit.layoutVersion !== LEGACY_PRODUCT_RANCH_GRID) {
     throw saveError('INVALID_RANCH_LAYOUT_VERSION');
@@ -199,8 +204,10 @@ function normalizeCageEditSlice(cageEdit) {
     if(cageEdit.layoutVersion===PRODUCT_RANCH_GRID && placements.some(p=>!p.instanceId))throw saveError("CAGE_INSTANCE_ID_REQUIRED");
     if(cageEdit.layoutVersion===LEGACY_PRODUCT_RANCH_GRID && placements.some(p=>p.slotIndex>=50||p.instanceId!==undefined))throw saveError("INVALID_LEGACY_PRODUCT_RANCH");
     if(cageEdit.nextInstanceSequence!==undefined&&(!Number.isSafeInteger(cageEdit.nextInstanceSequence)||cageEdit.nextInstanceSequence<1))throw saveError("INVALID_CAGE_INSTANCE_SEQUENCE");
-    if (cageEdit.expansion !== undefined || !validateProductRanch(placements)) throw saveError('INVALID_PRODUCT_RANCH');
-    return { layoutVersion:cageEdit.layoutVersion, gridAccess:normalizeProductRanchAccess(cageEdit.gridAccess), placements, ...(cageEdit.nextInstanceSequence!==undefined?{nextInstanceSequence:cageEdit.nextInstanceSequence}:{}) };
+    if (cageEdit.expansion !== undefined) throw saveError('INVALID_PRODUCT_RANCH');
+    const gridAccess = normalizeProductRanchAccess(cageEdit.gridAccess);
+    const fixedPlacements = restoreFixedRanchPlacements(placements, productUnlockedSlots(gridAccess, 20));
+    return { layoutVersion:cageEdit.layoutVersion, gridAccess, placements:fixedPlacements, ...(cageEdit.nextInstanceSequence!==undefined?{nextInstanceSequence:cageEdit.nextInstanceSequence}:{}) };
   }
   if (cageEdit.gridAccess !== undefined) throw saveError('INVALID_PRODUCT_RANCH_ACCESS');
   let expansion = null;
@@ -220,6 +227,40 @@ function normalizeBattleEconomySlice(battleEconomy) {
   // its fee, inventing a refund, or restoring a fabricated result.
   if (normalized.active !== null) throw saveError("SAVE_WHILE_BATTLE_ACTIVE");
   return normalized;
+}
+
+function restoreFixedRanchContents(save, previousLayout) {
+  const rotated = new Map(previousLayout?.placements?.filter(p => p.rotation).map(p => [p.instanceId, p]) ?? []);
+  const home = save.raising?.nativeHome;
+  if (!rotated.size || !home) return;
+  const layout = save.cageEdit;
+  const ground = composeProductRanchGround({...layout, unlockedSlots:productUnlockedSlots(layout.gridAccess, 20)});
+  const destination = id => ground.placement(id) ?? ground.placement(35);
+  const profiles = [save.creature, ...(save.raising.collection ?? [])];
+  for (const [id, owner] of Object.entries(home.cageAssignments ?? {})) {
+    if (!rotated.has(owner)) continue;
+    const target = destination(owner);
+    home.cageAssignments[id] = target.instanceId;
+    for (const profile of profiles.filter(p => (p.creatureId ?? p.instanceId) === id && p.nativeProfile)) {
+      // Existing actor hydration chooses an open native spawn for zero local XY.
+      profile.nativeProfile = normalizeNativeIndividualProfile({...profile.nativeProfile,
+        fields:{...profile.nativeProfile.fields, '014':target.definitionIndex, '1c0':0, '1c4':0}}, profile.speciesId);
+    }
+  }
+  for (const item of [...(home.foods ?? []), ...(home.waste ?? [])]) {
+    if (!rotated.has(item.cageInstanceId)) continue;
+    const target = destination(item.cageInstanceId), origin = ground.origin(target.instanceId);
+    const desired = [origin[0]+item.localPositionQ12[0]/4096, origin[1]+item.localPositionQ12[1]/4096];
+    let best = null;
+    for (let y=0; y<ground.height; y++) for (let x=0; x<ground.width; x++) {
+      if (ground.readTerrain(x,y)===1 || ground.readClearance(x,y)<2 || ground.cageAt(x*8,y*8)?.ownerIndex!==target.ownerIndex) continue;
+      const point=[x*8+4,y*8+4], distance=(point[0]-desired[0])**2+(point[1]-desired[1])**2;
+      if (!best || distance<best.distance) best={point,distance};
+    }
+    if (!best) throw saveError('RANCH_MIGRATION_NO_SAFE_GROUND');
+    item.cageInstanceId=target.instanceId; item.cageDefinitionIndex=target.definitionIndex;
+    item.localPositionQ12=[Math.round((best.point[0]-origin[0])*4096),Math.round((best.point[1]-origin[1])*4096),0];
+  }
 }
 
 function assertStableId(value, label) {
@@ -358,7 +399,7 @@ export function createChampionshipModernSave({
 
   if(save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID){
     const placedCounts=new Map();
-    for(const placement of save.cageEdit.placements){
+    for(const placement of cageEdit.placements){
       const definition=getCageDefinitionByModuleId(placement.moduleId);
       if(definition.alwaysOwned)continue;
       const count=(placedCounts.get(placement.moduleId)??0)+1;
@@ -367,6 +408,7 @@ export function createChampionshipModernSave({
       placedCounts.set(placement.moduleId,count);
     }
   }
+  restoreFixedRanchContents(save, cageEdit);
   if(requiresProductSaveVersion(save))save.schemaVersion=6;
   if(save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID||save.shop?.cageQuantities)save.schemaVersion=7;
   assertAllowedKeys(save, ALLOWED_TOP_LEVEL_KEYS, "save");

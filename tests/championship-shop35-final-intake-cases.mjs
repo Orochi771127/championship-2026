@@ -1,4 +1,5 @@
 import publishedCages from '../assets/production/cage/original-opus-v1/manifest.json' with {type:'json'};
+import {selectRanchCageArt} from '../src/championship/presentation/ranchCageArtSelection.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -46,7 +47,7 @@ test('local thumbnails preserve outside-host fallback, editor art and goods CAGE
  const publicUrl='https://orochi771127.github.io/championship-2026/';
  for(const r of manifest.records){
   assert.equal(shopCageUiImage(r.shopRecordIndex,publicUrl),r.src);
-  assert.equal(cageUiImage(r.moduleId,local),publishedCages.fields.find(f=>f.fieldId===r.fieldId).frames[0].src);
+  assert.equal(cageUiImage(r.moduleId,local),selectRanchCageArt(publishedCages).fields.find(f=>f.fieldId===r.fieldId).frames[0].src);
   assert.equal(shopGoodsPresentation(r.shopRecordIndex,local),null);
  }
  assert.equal(manifest.publicReleasePermitted,false);assert.equal(manifest.shippingReady,false);

@@ -1,4 +1,5 @@
 import {productBaseSpeciesIndex} from '../contracts/productSpeciesData.js';
+import {beginRanchExplorationWalk} from './ranchExplorationWalk.js';
 // OVL18 idle tail 02117B90, selectors 02115B8C/02115CD8, target 02113AF4.
 // Numeric source columns and original Main sequences; no presentation RNG.
 import data from '../../data/championship/catalogs/raising-activity.r1.json' with {type:'json'};
@@ -49,7 +50,12 @@ export function selectNativeIdleActivity(actor,profile,{ground,actors,rng,reques
   const draw=nativeActivityRandom(actor,rng,4),choice=actor.slow?4:draw;
   if(choice===0)return beginNativeActivityReaction(actor,selectNativeCageReaction(actor.cageDefinitionIndex,data.species[productBaseSpeciesIndex(actor.speciesIndex)].field18,actor.poolSlot,rng),ground,request);
   if(choice===1)return beginNativeActivityReaction(actor,selectNativePersonalityReaction(profile.fields['018'],actor.poolSlot,rng),ground,request);
-  const walk=()=>{actor.state=2;actor.mode=0;actor.destinationState=1;actor.destinationQ12=nativeRaisingWanderTarget(actor,rng);request(actor,nativeSequence(actor,2));return 0;};
+  const walk=()=>{actor.state=2;actor.mode=0;actor.destinationState=1;actor.destinationQ12=nativeRaisingWanderTarget(actor,rng);
+    beginRanchExplorationWalk(actor,ground);
+    // The existing displeased idle has no condition penalty. In product
+    // exploration a partner may decline an outing instead of entering disliked land.
+    if(actor.explorationMood==='RESTING')return beginNativeActivityReaction(actor,22,ground,request);
+    request(actor,nativeSequence(actor,2));return 0;};
   // 02050010 -> Cage resident list, with its original physical slot order.
   const peers=[...actors].filter(other=>other!==actor&&!other.detached&&(other.cageInstanceId??other.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex));
   if(choice===4||!peers.length||nativeActivityRandom(actor,rng,3)===0)return walk();

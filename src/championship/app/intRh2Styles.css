@@ -720,6 +720,28 @@ body[data-desktop-raising] .int-rh2-companion__name { white-space: normal; overf
 /* The disclosure is landscape-only; portrait keeps its existing readout. */
 .int-rh2-companion__toggle { display: none; }
 
+/* A quiet journal entry clear of the status bar; no countdown or expiry. */
+.int-rh2-discoveries {
+  position:absolute;top:calc(60px + env(safe-area-inset-top));right:12px;z-index:12;
+  min-height:44px;padding:8px 14px;border:1px solid #b9cbb5;border-radius:14px;
+  background:#f6faedee;color:#304b3d;font-family:inherit;font-size:14px;font-weight:600;line-height:1.25;
+  box-shadow:0 3px 10px #1c392014;cursor:pointer;max-width:calc(100% - 24px);
+}
+.int-rh2-discoveries[hidden]{display:none;}
+.int-rh2-discoveries:focus-visible{outline:3px solid #398c85;outline-offset:2px;}
+.int-rh2-discovery-list{max-height:40dvh;overflow:auto;overscroll-behavior:contain;}
+.int-rh2-discovery-item{padding:8px 10px;border-radius:10px;background:#edf4e9;color:#304b3d;}
+@media (max-height:450px){.int-rh2-discoveries{right:8px;padding:6px 10px;}}
+.cm-ranch-zoom {
+  position:absolute;right:12px;
+  bottom:calc(var(--cm-toolbar-height, 74px) + var(--cm-raising-dock-gap, 12px) + 12px);z-index:4;
+  min-width:72px;min-height:44px;border:1px solid #8eb2bb;border-radius:14px;
+  background:rgba(244,252,255,.92);color:#244b57;font:600 14px system-ui;
+  touch-action:manipulation;cursor:pointer;box-shadow:0 2px 8px #16344120;
+}
+.cm-ranch-zoom:focus-visible {outline:3px solid #008e8e;outline-offset:2px;}
+.cm-ranch-zoom:disabled {opacity:.5;cursor:default;}
+
 /* Owner 2026-10-15: the habitat fills the available screen. Readouts float
    over it instead of reserving a sidebar. Keep the existing DOM/input owners
    and native zoom adapter; these are CSS pixels, never device pixels. */

@@ -197,9 +197,10 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
       root.addChild(sprite,mask);sprite.mask=mask;groups.push({root,piece});
     }
   } catch(error){for(const {root}of groups)root.destroy({children:true});await Promise.allSettled(atlasLoads.map(src=>PIXI.Assets.unload(src)));throw error;}
+  const inner=art.foreground??null;
   const foreground={
-    attach(layer){parent=layer;for(const {root}of groups)layer.addChild(root);},
-    syncViewport(fit){if(disposed)return;for(const {root,piece:p}of groups){
+    attach(layer){inner?.attach(layer);parent=layer;for(const {root}of groups)layer.addChild(root);},
+    syncViewport(fit){if(disposed)return;inner?.syncViewport(fit);for(const {root,piece:p}of groups){
       root.position.set(fit.x+p.tileX*fit.scale,fit.y+p.tileY*fit.scale);root.scale.set(fit.scale);
       // Folded actors, food and waste sort by projected screen Y in the shared
       // actor layer. Unfolded ranches retain their original native-depth order.

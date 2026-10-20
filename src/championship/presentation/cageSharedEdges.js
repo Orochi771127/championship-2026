@@ -31,7 +31,12 @@ export function matchSharedEdges(tiles, pairs, tolerance) {
   const shown = new Set();
   for (let i = 0; i < tiles.length; i++) for (let j = i + 1; j < tiles.length; j++) {
     const A = tiles[i], B = tiles[j];
-    if (!partner.get(A.fieldId)?.has(B.fieldId)) continue;
+    // Same authored field is the conservative same-type fallback. Paired
+    // fields remain explicit; height is physical metadata, never inferred
+    // from screen Y (the two native hex rows have different screen Y).
+    if (A.fieldId !== B.fieldId && !partner.get(A.fieldId)?.has(B.fieldId)) continue;
+    const ah = A.height ?? 0, bh = B.height ?? 0;
+    if (!Number.isFinite(ah) || !Number.isFinite(bh) || ah !== bh) continue;
     for (const e of A.edges) for (const f of B.edges) {
       if (same(e, f)) {
         shown.add(`${A.key}|${e.id}`); shown.add(`${B.key}|${f.id}`);
@@ -42,7 +47,7 @@ export function matchSharedEdges(tiles, pairs, tolerance) {
 }
 
 export async function withCageSharedEdges({PIXI, art, manifest, location = globalThis.location, fetchImpl = globalThis.fetch,
-  baseHref = globalThis.location?.href}) {
+  baseHref = globalThis.location?.href, connections = null}) {
   const tag = REVIEWS[manifest?.assetId];
   if (!tag || !isOriginalRuntimeLocation(location)) return art;
   const dir = `assets/production/cage/shared-edges-${tag}/`;
@@ -55,7 +60,7 @@ export async function withCageSharedEdges({PIXI, art, manifest, location = globa
     && typeof f.atlas?.src === 'string' && f.atlas.src.startsWith(dir) && !f.atlas.src.includes('..')).map(f => [f.fieldId, f]));
   const bases = [];
   const collect = object => {
-    if (object.texture && object.label?.startsWith(BASE_LABEL)) {
+    if (object.visible!==false && object.texture && object.label?.startsWith(BASE_LABEL)) {
       const fieldId = object.label.slice(BASE_LABEL.length);
       if (records.has(fieldId)) bases.push({fieldId, object});
     }
@@ -64,16 +69,22 @@ export async function withCageSharedEdges({PIXI, art, manifest, location = globa
   collect(art.displayObject);
   const tiles = bases.map(({fieldId, object}, k) => {
     const r = records.get(fieldId), sx = object.width / r.raster[0], sy = object.height / r.raster[1];
-    return {key: k, fieldId, object, record: r, sx, sy,
+    return {key: k, fieldId, object, record: r, sx, sy, height: r.groundHeight ?? 0,
       edges: r.edges.map(e => ({...e, a: [object.x + e.a[0] * sx, object.y + e.a[1] * sy], b: [object.x + e.b[0] * sx, object.y + e.b[1] * sy]}))};
   });
   const tolerance = (index.toleranceWorldPx ?? 8) * Math.max(1, ...tiles.map(t => t.sx));
   const shown = matchSharedEdges(tiles, index.pairs, tolerance);
+  const unit=art.field?.nativePixelWorldScale??4;
+  // A rim patch must never advertise an obstructed joint as an open crossing.
+  const isOpen=e=>connections===null||connections.some(c=>{
+    const ax=(c.a[0]+c.b[0])*unit/2,ay=(c.a[1]+c.b[1])*unit/2;
+    return Math.hypot((e.a[0]+e.b[0])/2-ax,(e.a[1]+e.b[1])/2-ay)<=tolerance;
+  });
   const loads = [], sprites = [];
   try {
     const textures = new Map();
     for (const t of tiles) {
-      const wanted = t.edges.filter(e => shown.has(`${t.key}|${e.id}`));
+      const wanted = t.edges.filter(e => shown.has(`${t.key}|${e.id}`)&&isOpen(e));
       if (!wanted.length) continue;
       if (!textures.has(t.fieldId)) {
         loads.push(t.record.atlas.src);

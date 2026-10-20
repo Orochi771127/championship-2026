@@ -6,13 +6,14 @@ import manifest from '../../../assets/production/public-runtime/cage-ui.map.v1.j
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productGridCell } from '../cage/productRanchGrid.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
+import {selectRanchCageArt} from './ranchCageArtSelection.js';
 import { RANCH_EXPANSION_FIRST_SLOT, isAnnexSlot } from '../cage/ranchExpansion.js';
 import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from './originalCageVisualBindings.js';
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import { cageName } from '../text/zhHant.js';
 import { uiText } from '../text/uiText.js';
 
-const art = validateRuntimeMapArtBundle(manifest);
+const art = validateRuntimeMapArtBundle(selectRanchCageArt(manifest));
 export function cageUiName(moduleId, fallback = '') {
   const definition = getCageDefinitionByModuleId(moduleId);
   return cageName(definition?.cageDefinitionIndex, fallback);
@@ -77,11 +78,14 @@ export function cageEditorArtCells(slots, baseUrl, { productGrid = false } = {})
     const sourceWidth = field?.worldWidthPx ?? width;
     const sourceHeight = field?.worldHeightPx ?? height;
     const scale = Math.min(width / sourceWidth, height / sourceHeight);
-    const imageWidth = sourceWidth * scale;
-    const imageHeight = sourceHeight * scale;
+    const padding=field?.visualPaddingNative??{};
+    const unit=field?.nativePixelWorldScale??4;
+    const padX=(padding.left??0)*unit,padY=(padding.top??0)*unit;
+    const imageWidth = (sourceWidth+padX+(padding.right??0)*unit) * scale;
+    const imageHeight = (sourceHeight+padY+(padding.bottom??0)*unit) * scale;
     return { slotIndex: cell.slotIndex, deck: cell.deck, x: cell.x * 2, y: (cell.y - 8) * 2,
       image, imageWidth, imageHeight,
-      imageX: (left - cell.x) * 2 + (width-imageWidth)/2,
-      imageY: (top - cell.y) * 2 + (height-imageHeight)/2 };
+      imageX: (left - cell.x) * 2 + (width-sourceWidth*scale)/2-padX*scale,
+      imageY: (top - cell.y) * 2 + (height-sourceHeight*scale)/2-padY*scale };
   });
 }

@@ -1,4 +1,5 @@
 import {isKnownSpeciesIndex} from '../contracts/productSpeciesData.js';
+import {normalizeRanchDiscoveries} from './ranchDiscoveries.js';
 // Optional child of the existing v5 Raising save. Physical pool slots remain
 // stable after release. Food coordinates are Q12 relative to their Cage origin.
 // 0204FC8C inserts a new head immediately before the oldest linked member.
@@ -52,7 +53,7 @@ export function normalizeNativeRaisingHome(input) {
   const pending=input.pendingOvernightMinutes;
   if(pending!==undefined&&(!Number.isInteger(pending)||pending<0||pending>1320))fail();
   if(!Array.isArray(branches)||branches.length>895||branches.some(n=>!Number.isInteger(n)||n<0||n>=895)||new Set(branches).size!==branches.length)fail();
-  return Object.freeze({version:1,...(input.cageAssignments?{cageAssignments:Object.freeze({...cageAssignments})}:{}),...(input.productEvolutionBranches!==undefined?{productEvolutionBranches:Object.freeze([...productBranches].sort())}:{}),poolSlots:Object.freeze(poolSlots),foods:Object.freeze(foods),
+  return Object.freeze({version:1,...(input.discoveries!=null?{discoveries:normalizeRanchDiscoveries(input.discoveries)}:{}),...(input.cageAssignments?{cageAssignments:Object.freeze({...cageAssignments})}:{}),...(input.productEvolutionBranches!==undefined?{productEvolutionBranches:Object.freeze([...productBranches].sort())}:{}),poolSlots:Object.freeze(poolSlots),foods:Object.freeze(foods),
     ...(input.waste!==undefined?{waste:Object.freeze(waste)}:{}),...(input.evolutionBranches!==undefined?{evolutionBranches:Object.freeze([...branches].sort((a,b)=>a-b))}:{}),
     ...(pending!==undefined?{pendingOvernightMinutes:pending}:{})});
 }

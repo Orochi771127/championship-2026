@@ -17,13 +17,16 @@ import { createNativeRaisingGround, findNativeRaisingOpenTile, nativeRaisingEntr
 import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT,
   productFieldTileOrigin, productPlacementCells, productUnlockedSlots, validateProductRanch } from '../cage/productRanchGrid.js';
 
-import { reviewGroundField } from "./raisingGroundReview.js";
+import { reviewGroundField,parseRaisingGroundField } from "./raisingGroundReview.js";
+import sportsGround from '../../data/championship/catalogs/ranch-sports-ground.r1.json' with {type:'json'};
+import { connectRanchGround } from "../cage/ranchConnections.js";
 const fields = source.fields.map((field) => {
   const cells = field.runs.flatMap(([count, ...v]) => Array.from({ length: count }, () => v));
   const clearance = field.clearanceRuns.flatMap(([count, v]) => Array(count).fill(v));
   if (cells.length !== field.width * field.height || clearance.length !== cells.length) throw new Error("INVALID_RAISING_GROUND_SOURCE");
   return { ...field, cells, clearance };
 });
+const selectedSportsGround=new Map(sportsGround.fields.map(f=>[f.definitionIndex,parseRaisingGroundField(f)]));
 
 /** 020502D8's origin for a ring slot. */
 export function ringCageOrigin(definitionIndex, ringSlot) {
@@ -121,7 +124,7 @@ export function composeProductRanchGround(frame) {
   const steps = [...placements, ...unlocked.filter(slot=>!occupied.has(slot)).map(slotIndex=>({slotIndex,definitionIndex:36}))];
   const wrap = n=>((n % width)+width)%width;
   for (const p of steps) {
-    const field = reviewGroundField(p.definitionIndex) ?? fields[p.definitionIndex];
+    const field = reviewGroundField(p.definitionIndex) ?? selectedSportsGround.get(p.definitionIndex) ?? fields[p.definitionIndex];
     const origin = productFieldTileOrigin(p.slotIndex, p.definitionIndex === 36 ? 0 : ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);
     for (let sy=origin.cropTopTiles; sy<field.height; sy++) for (let sx=0; sx<field.width; sx++) {
       const y=origin.tileY+sy;
@@ -135,23 +138,21 @@ export function composeProductRanchGround(frame) {
   const byInstance=new Map(placements.map(p=>[p.instanceId,p]));
   const placement=reference=>typeof reference==='string'?byInstance.get(reference)??null:placements.find(p=>p.definitionIndex===reference)??null;
   const read = (values,x,y,fallback)=>!Number.isInteger(x)||!Number.isInteger(y)||y<0||y>=height ? fallback : values[y*width+wrap(x)];
-  return Object.freeze({layoutVersion:PRODUCT_RANCH_GRID,width,height,pixelWidth:width*8,pixelHeight:height*8,
+  return Object.freeze(connectRanchGround({layoutVersion:PRODUCT_RANCH_GRID,width,height,pixelWidth:width*8,pixelHeight:height*8,
     placements,terrain,clearance,owners,
     readTerrain:(x,y)=>read(terrain,x,y,1), readClearance:(x,y)=>read(clearance,x,y,0),
     cageAt:(x,y)=>Number.isFinite(x)&&Number.isFinite(y)?map.get(read(owners,Math.floor(x/8),Math.floor(y/8),-1))??null:null,
     placement,
     origin:reference=>{const p=placement(reference);if(!p)return null;
       const o=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);return [o.tileX*8,o.tileY*8,0];}
-  });
+  }));
 }
 
 function productRaisingSpawnPosition(ground,definition,rng) {
   const p=ground.placement(definition), field=reviewGroundField(p?.definitionIndex) ?? fields[p?.definitionIndex];
   if(!p||!field||typeof rng?.next!=='function')throw new TypeError('NATIVE_RAISING_SPAWN_CONTEXT_REQUIRED');
-  const origin=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);
   const candidates=[];
-  for(let sy=origin.cropTopTiles;sy<field.height;sy++)for(let sx=0;sx<field.width;sx++){
-    const x=((origin.tileX+sx)%ground.width+ground.width)%ground.width,y=origin.tileY+sy;
+  for(let y=0;y<ground.height;y++)for(let x=0;x<ground.width;x++){
     if(ground.readClearance(x,y)>1 && ground.readTerrain(x,y)!==1 && ground.cageAt(x*8,y*8)?.ownerIndex===p.ownerIndex)candidates.push([x,y]);
   }
   if(!candidates.length)throw new Error('PRODUCT_RANCH_NO_SPAWN_GROUND');

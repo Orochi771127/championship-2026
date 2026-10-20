@@ -1,3 +1,4 @@
+import {selectRanchCageArt} from '../src/championship/presentation/ranchCageArtSelection.js';
 import test from 'node:test';
 import cageFieldManifest from '../assets/production/cage/original-opus-v1/manifest.json' with { type: 'json' };
 import assert from 'node:assert/strict';
@@ -56,11 +57,11 @@ test('editor cells show the runtime cage field and retain one shared origin acro
     const peers=f.slots.filter(s=>s.moduleId===d.moduleId).map(s=>cells[s.slotIndex]);
     if(!peers.length) continue;
     // Owner 2026-10-06: the runtime field picture wins over the assembled thumbnail.
-    const field=cageFieldManifest.fields.find(f=>f.frames[0].src===peers[0].image);
+    const field=selectRanchCageArt(cageFieldManifest).fields.find(f=>f.frames[0].src===peers[0].image);
     assert.ok(field, d.moduleId);
     for(const p of peers) {
       assert.equal(p.image,field.frames[0].src);
-      assert.ok(Math.abs(p.imageWidth/p.imageHeight-field.worldWidthPx/field.worldHeightPx)<1e-9);
+      assert.ok(Math.abs(p.imageWidth/p.imageHeight-(field.worldWidthPx+((field.visualPaddingNative?.left??0)+(field.visualPaddingNative?.right??0))*(field.nativePixelWorldScale??4))/(field.worldHeightPx+((field.visualPaddingNative?.top??0)+(field.visualPaddingNative?.bottom??0))*(field.nativePixelWorldScale??4)))<1e-9);
       assert.ok(Math.abs((p.x+p.imageX)-(peers[0].x+peers[0].imageX))<1e-9);
       assert.ok(Math.abs((p.y+p.imageY)-(peers[0].y+peers[0].imageY))<1e-9);
     }

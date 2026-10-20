@@ -1,3 +1,4 @@
+import {selectedRanchSportsField} from '../src/championship/presentation/ranchCageArtSelection.js';
 import {publicMapManifestPath} from '../src/championship/presentation/publicMapRequests.js';
 import {isOriginalRuntimeLocation} from '../src/championship/presentation/originalRuntimeLocation.js';
 // Owner 2026-10-06: the original Blender cage fields (opus rounds r1-r17) replace the
@@ -37,7 +38,7 @@ test('every cage definition binds to a field of the new bundle', () => {
   for (const definition of definitions) {
     const binding = getOriginalCageVisualBinding(definition.cageDefinitionIndex);
     assert.ok(ids.has(binding.fieldId), binding.fieldId);
-    assert.ok(cageUiImage(definition.moduleId).startsWith('assets/production/cage/original-opus-v1/'));
+    assert.equal(cageUiImage(definition.moduleId),(selectedRanchSportsField(binding.fieldId)??manifest.fields.find(f=>f.fieldId===binding.fieldId)).frames[0].src);
   }
 });
 

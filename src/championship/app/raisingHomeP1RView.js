@@ -1,5 +1,6 @@
 import { createTransientHint, consumeRaisingHintDuration } from './transientHint.js';
 import {getLocale} from '../text/locale.js';
+import {mountRanchDiscoveryJournal} from './ranchDiscoveryJournal.js';
 import {productFormText} from '../text/productFormText.js';
 const evolutionChoiceTitle=()=>productFormText('choose');
 import { downloadSaveBackup } from './downloadSaveBackup.js';
@@ -268,6 +269,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   shell.append(fieldFrame, hint, companion, notice);
   root.append(shell, detail);
+  const discoveryJournal=mountRanchDiscoveryJournal(root,presentation);
   // Only genuinely overflowing text becomes a bounded scroll/focus surface.
   // Ordinary short hints stay transparent to field gestures.
   const hintSizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(syncHintOverflow) : null;
@@ -466,6 +468,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   let pendingEvolution = null, evolutionCeremony = null;
   function render(frame) {
     if (disposed || !frame) return;
+    discoveryJournal.update(frame);
     updateEntryHint(frame);
     if (frame.revision === lastRevision) return;
     lastRevision = frame.revision;
@@ -635,6 +638,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     dispose() {
       if (disposed) return;
       disposed = true;
+      discoveryJournal.dispose();
       hintTimer.dispose();
       hintSizeObserver?.disconnect();
       root.ownerDocument?.defaultView?.removeEventListener?.('resize', syncHintOverflow);

@@ -1,3 +1,4 @@
+import {selectRanchCageArt} from '../src/championship/presentation/ranchCageArtSelection.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -32,9 +33,9 @@ test('native multi-cell editor thumbnails share one image origin and retain its 
   for(const d of listCageDefinitions()) {
     const peers=frame.slots.filter(s=>s.moduleId===d.moduleId).map(s=>cells[s.slotIndex]);
     if(!peers.length) continue;
-    const source=manifest.fields.find(f=>f.frames[0].src===peers[0].image);
+    const source=selectRanchCageArt(manifest).fields.find(f=>f.frames[0].src===peers[0].image);
     for(const p of peers) {
-      assert.ok(Math.abs(p.imageWidth/p.imageHeight-source.worldWidthPx/source.worldHeightPx)<1e-9);
+      assert.ok(Math.abs(p.imageWidth/p.imageHeight-(source.worldWidthPx+((source.visualPaddingNative?.left??0)+(source.visualPaddingNative?.right??0))*(source.nativePixelWorldScale??4))/(source.worldHeightPx+((source.visualPaddingNative?.top??0)+(source.visualPaddingNative?.bottom??0))*(source.nativePixelWorldScale??4)))<1e-9);
       assert.equal(p.x+p.imageX,peers[0].x+peers[0].imageX);
       assert.equal(p.y+p.imageY,peers[0].y+peers[0].imageY);
     }

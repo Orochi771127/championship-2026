@@ -35,6 +35,7 @@ export function productPlacementCells(entry) {
   const definition = getCageDefinitionByModuleId(entry?.moduleId);
   if (!definition || !Number.isSafeInteger(entry.slotIndex) || entry.slotIndex < 0 || entry.slotIndex >= PRODUCT_RANCH_SLOT_COUNT) return null;
   const anchor = productGridCell(entry.slotIndex);
+  if (entry.rotation !== undefined && entry.rotation !== 0) return null;
   const shape = ORIGINAL_CAGE_SHAPE_MASKS[ORIGINAL_CAGE_DEFINITION_SHAPES[definition.cageDefinitionIndex]];
   const cells = [];
   for (let bit = 0; bit < 8; bit++) if (shape & (1 << bit)) {
@@ -48,12 +49,15 @@ export function productPlacementCells(entry) {
   return cells;
 }
 export function validateProductRanch(placements, unlockedSlots = null) {
+  return validatePlacementCells(placements, unlockedSlots, productPlacementCells);
+}
+function validatePlacementCells(placements, unlockedSlots, readCells) {
   if (!Array.isArray(placements)) return false;
   const available = unlockedSlots == null ? null : new Set(unlockedSlots);
   const occupied = new Set(), modules = new Set();
   let waitingCount=0;
   for (const entry of placements) {
-    const cells = productPlacementCells(entry);
+    const cells = readCells(entry);
     const identity=entry.instanceId ?? entry.moduleId;
     if (!cells || modules.has(identity) || (entry.instanceId !== undefined && !/^[a-z0-9:_-]{3,96}$/i.test(entry.instanceId))) return false;
     if(entry.moduleId===WAITING_ROOM_MODULE && ++waitingCount>1)return false;
@@ -63,6 +67,57 @@ export function validateProductRanch(placements, unlockedSlots = null) {
     modules.add(identity);
   }
   return waitingCount===1;
+}
+
+// Read-only compatibility for the cancelled local rotation prototype. These
+// cells validate old saves only; runtime geometry always uses the fixed shape.
+function legacyRotationCells(entry) {
+  const rotation = entry?.rotation ?? 0;
+  if (!Number.isInteger(rotation) || rotation < 0 || rotation > 5) return null;
+  if (!rotation) return productPlacementCells(entry);
+  const definition = getCageDefinitionByModuleId(entry?.moduleId);
+  if (!definition || entry.moduleId === WAITING_ROOM_MODULE ||
+      !Number.isSafeInteger(entry.slotIndex) || entry.slotIndex < 0 || entry.slotIndex >= 100) return null;
+  const mask = ORIGINAL_CAGE_SHAPE_MASKS[ORIGINAL_CAGE_DEFINITION_SHAPES[definition.cageDefinitionIndex]];
+  const source = [];
+  for (let bit = 0; bit < 8; bit++) if (mask & (1 << bit)) source.push([Math.floor(bit / 2), bit % 2]);
+  const [pq, pr] = source[0], anchor = productGridCell(entry.slotIndex);
+  const cells = source.map(([q, r]) => {
+    q -= pq; r -= pr;
+    for (let step = 0; step < rotation; step++) [q, r] = [-r, q + r];
+    const row = anchor.row + r + pr;
+    return productGridSlot(row, anchor.column - Math.floor(anchor.row / 2) + q + pq + Math.floor(row / 2));
+  });
+  return cells.includes(null) ? null : cells;
+}
+
+export function restoreFixedRanchPlacements(placements, unlockedSlots) {
+  const hasRotation = Array.isArray(placements) && placements.some(p => p.rotation);
+  if (!validatePlacementCells(placements, hasRotation ? unlockedSlots : null, legacyRotationCells)) {
+    throw new Error('INVALID_PRODUCT_RANCH');
+  }
+  const fixed = p => ({moduleId:p.moduleId, slotIndex:p.slotIndex, ...(p.instanceId ? {instanceId:p.instanceId} : {})});
+  if (!hasRotation) return placements.map(fixed);
+  // Reserve untouched facilities first. Only formerly rotated copies may move.
+  const result = placements.filter(p => !p.rotation).map(fixed);
+  const occupied = new Set(result.flatMap(productPlacementCells));
+  const available = new Set(unlockedSlots);
+  for (const entry of placements.filter(p => p.rotation)) {
+    const start = productGridCell(entry.slotIndex);
+    const candidates = [...available].sort((a,b) => {
+      const distance = slot => {const p=productGridCell(slot); return (p.x-start.x)**2+(p.y-start.y)**2;};
+      return distance(a)-distance(b) || a-b;
+    });
+    for (const slotIndex of candidates) {
+      const candidate = {...fixed(entry), slotIndex}, cells = productPlacementCells(candidate);
+      if (!cells || cells.some(slot => !available.has(slot) || occupied.has(slot))) continue;
+      result.push(candidate); cells.forEach(slot => occupied.add(slot)); break;
+    }
+    // No free footprint: the shop's owned quantity stays unchanged, so this
+    // copy is available in the placement tray. Never create land or currency.
+  }
+  const byIdentity = new Map(result.map(p => [p.instanceId ?? p.moduleId, p]));
+  return placements.flatMap(p => byIdentity.has(p.instanceId ?? p.moduleId) ? [byIdentity.get(p.instanceId ?? p.moduleId)] : []);
 }
 
 // Persist historical access separately from the temporary public-test override.
@@ -93,10 +148,11 @@ export function productUnlockedSlots(access, mainUnlocked, testAccessOverride = 
 export function migrateProductRanch(snapshot, mainUnlocked = 20) {
   if ([PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID].includes(snapshot?.layoutVersion)) {
     if(snapshot.layoutVersion===LEGACY_PRODUCT_RANCH_GRID && snapshot.placements.some(p=>p.slotIndex>=50))throw new Error('INVALID_LEGACY_PRODUCT_RANCH');
-    if (!validateProductRanch(snapshot.placements)) throw new Error('INVALID_PRODUCT_RANCH');
-    return { layoutVersion: PRODUCT_RANCH_GRID, gridAccess: normalizeProductRanchAccess(snapshot.gridAccess),
+    const gridAccess = normalizeProductRanchAccess(snapshot.gridAccess);
+    const placements = restoreFixedRanchPlacements(snapshot.placements, productUnlockedSlots(gridAccess, mainUnlocked));
+    return { layoutVersion: PRODUCT_RANCH_GRID, gridAccess,
       nextInstanceSequence:snapshot.nextInstanceSequence ?? 1,
-      placements: snapshot.placements.map(p=>({ moduleId:p.moduleId, slotIndex:p.slotIndex, instanceId:p.instanceId ?? `cage:legacy:${getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex}` })) };
+      placements: placements.map(p=>({ moduleId:p.moduleId, slotIndex:p.slotIndex, instanceId:p.instanceId ?? `cage:legacy:${getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex}` })) };
   }
   const native = snapshot?.layoutVersion === NATIVE_RANCH_LAYOUT;
   const expanded = snapshot?.layoutVersion === 'NATIVE_DECKS_V1';

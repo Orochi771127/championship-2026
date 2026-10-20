@@ -1,7 +1,9 @@
 import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
+import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {settleRanchDiscoveries,removeCollectedDiscoveries,RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
 import { panHuntPresentationCamera } from "../hunt/huntPresentationBinding.js";
 import {tutorialHuntStep,TUTORIAL_GATE} from './interactiveTutorialHuntSteps.js';
 import {tutorialBattleStep} from './interactiveTutorialBattleSteps.js';
@@ -84,7 +86,7 @@ import { projectDatabase } from "../database/databaseRuntime.js";
 import { getDatabaseSlot } from "../database/databaseCatalog.js";
 import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
 import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
-import {getShopRecord} from '../shop/shopCatalog.js';
+import {getShopRecord,BITS_WALLET_CAP} from '../shop/shopCatalog.js';
 import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
 import { validateRanchLayout } from '../cage/ranchExpansion.js';
@@ -168,6 +170,7 @@ export function createChampionshipStandaloneApp({
   const raisingActors = new Map();
   let raisingHand=null;
   let raisingGround=null;
+  let discoveryCheckAt=0;
   let raisingFoods=[];
   let raisingWaste=[];
   let raisingDayTransition=null;
@@ -512,10 +515,25 @@ export function createChampionshipStandaloneApp({
       const origin=raisingGround.origin(w.cageInstanceId??w.cageDefinitionIndex);return {slot:w.slot,speciesIndex:w.speciesIndex,cageDefinitionIndex:w.cageDefinitionIndex,...(w.cageInstanceId?{cageInstanceId:w.cageInstanceId}:{}),
         localPositionQ12:w.positionQ12.map((n,i)=>n-origin[i]*4096)};});
     raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({version:1,poolSlots:raisingPoolSlots,foods,waste,
+      ...(raising.nativeHome?.discoveries?{discoveries:raising.nativeHome.discoveries}:{}),
       cageAssignments:Object.fromEntries([...raisingActors].filter(([,a])=>a.cageInstanceId).map(([id,a])=>[id,a.cageInstanceId])),
       evolutionBranches:raising.nativeHome?.evolutionBranches??[],
       ...(raising.nativeHome?.productEvolutionBranches?{productEvolutionBranches:raising.nativeHome.productEvolutionBranches}:{}),
       ...(raising.nativeHome?.pendingOvernightMinutes!==undefined?{pendingOvernightMinutes:raising.nativeHome.pendingOvernightMinutes}:{})})});
+    settleDiscoveries();
+  }
+
+  function settleDiscoveries() {
+    if(tutorialBaseline||!raisingGround?.navigation||!raising?.nativeHome)return;
+    const time=new Date(now()).getTime();if(!Number.isSafeInteger(time)||time<0)return;
+    const participants=[...raisingActors].filter(([,a])=>a.speciesIndex>=8&&a.cageInstanceId&&raisingGround.placement(a.cageInstanceId))
+      .map(([id,a])=>({id,cageId:a.cageInstanceId}));
+    const previous=raising.nativeHome.discoveries;
+    const discoveries=settleRanchDiscoveries(previous,time,participants);
+    discoveryCheckAt=time;
+    if(JSON.stringify(previous)===JSON.stringify(discoveries))return;
+    raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,discoveries})});
+    savePort.markDirty();
   }
 
   function storeNativeRaisingPositions() {
@@ -531,7 +549,7 @@ export function createChampionshipStandaloneApp({
     }
   }
 
-  function initializeNativeRaisingHome({tutorialBoundary=false}={}) {
+  function initializeNativeRaisingHome({tutorialBoundary=false,restoreLayoutPositions=false}={}) {
     raisingGround=createNativeRaisingGround({...cageEdit.toSave(),unlockedCount:slotCountForTamerRank(tamerRankValue)});
     raisingFoods=[];raisingWaste=[];raisingDayTransition=null;raisingDayConfirmation=false;raisingLifecycleMessage=null;raisingDirtySignals.clear();raisingPoolSlots={...raising?.nativeHome?.poolSlots};
     if(!raisingGround)return;
@@ -543,7 +561,7 @@ export function createChampionshipStandaloneApp({
       if(origin)raisingWaste.push({...w,cageInstanceId:w.cageInstanceId??raisingGround.placement(w.cageDefinitionIndex)?.instanceId,present:true,positionQ12:w.localPositionQ12.map((n,i)=>n+origin[i]*4096)});}
     if(restoreInteractiveTutorialActor()) {storeNativeRaisingHome();return;}
     if(raising.nativeHome?.pendingOvernightMinutes!==undefined&&!tutorialBoundary)settleRaisingOvernight();
-    else synchronizeNativeRaisingActors(tutorialBoundary?{
+    else synchronizeNativeRaisingActors(tutorialBoundary||restoreLayoutPositions?{
       restorePositions:true,initializationRng:restoreChannelRng(gameplayRngSnapshot())
     }:{});
     storeNativeRaisingHome();
@@ -1526,6 +1544,58 @@ export function createChampionshipStandaloneApp({
       return listRaisingInstances(instanceSources());
     },
 
+    getRanchExplorationFrame() {
+      if(tutorialBaseline||!raisingGround?.navigation)return null;
+      const nav=raisingGround.navigation,state=raising?.nativeHome?.discoveries;
+      const instances=new Map(listRaisingInstances(instanceSources()).map(p=>[p.instanceId,p]));
+      return Object.freeze({
+        connections:nav.connections,boundaries:nav.boundaries.map(({id,reason})=>({id,reason})),
+        pending:state?.pending.map(p=>({...p,name:instances.get(p.partnerId)?.displayName??null}))??[],
+        collected:state?.collected??0,active:!!state?.participants.length,
+        resting:state?.pending.length===12,
+        walkers:[...raisingActors].filter(([,a])=>a.explorationRoute?.length).map(([id,a])=>({id,target:a.explorationTarget}))
+      });
+    },
+
+    refreshRanchDiscoveries() {
+      if(!session||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||this.hasRaisingPresentation())return false;
+      settleDiscoveries();publishRaising();return true;
+    },
+
+    collectRanchDiscoveries() {
+      if(!session||tutorialBaseline||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME
+        ||this.hasRaisingPresentation()||battleTransactionActive||huntCommitActive)return {ok:false,reason:'UNAVAILABLE'};
+      storeNativeRaisingPositions();storeNativeRaisingHome();
+      const state=raising.nativeHome?.discoveries;
+      if(!state?.pending.length)return {ok:false,reason:'EMPTY'};
+      // Speculative inventory has no live Hunt binding or observers.
+      const candidate=createShopRuntime({snapshot:requireShop().toSave(),allowRepeatedCages:playtestPolicy?.enabled===true,
+        allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+      const accepted=[];
+      for(const entry of state.pending){
+        const reward=RANCH_DISCOVERY_REWARDS[entry.kind];
+        if(reward.bits){
+          const before=candidate.getBits();
+          if(before+reward.bits>BITS_WALLET_CAP)continue;
+          candidate.creditBits(reward.bits);accepted.push(entry.id);
+        }else{
+          const record=getShopRecord(reward.record);
+          if(candidate.toSave().quantities[reward.record]+reward.quantity>record.maxOwned)continue;
+          candidate.receiveNativeGift(reward.record,reward.quantity);accepted.push(entry.id);
+        }
+      }
+      if(!accepted.length)return {ok:false,reason:'INVENTORY_FULL'};
+      const nextRaising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({
+        ...raising.nativeHome,discoveries:removeCollectedDiscoveries(state,accepted)})});
+      const status=savePort.save({...liveSaveRequest(revision+1),raising:nextRaising,shop:candidate.toSave()});
+      if(status.phase!=='SAVED'){savePort.discardPendingWrite();return {ok:false,reason:'SAVE_FAILED'};}
+      raising=nextRaising;
+      shop=createShopRuntime({snapshot:candidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
+        allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+      applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();revision++;
+      publishRaising();return {ok:true,collected:accepted.length,remaining:raising.nativeHome.discoveries.pending.length};
+    },
+
     resolveRaisingInstance(instanceId) {
       requireSession();
       return resolveRaisingInstance(instanceSources(), instanceId);
@@ -1858,6 +1928,7 @@ export function createChampionshipStandaloneApp({
 
     advanceNaturalClock({ frames } = {}) {
       if (!Number.isSafeInteger(frames) || frames < 0 || frames > 120) throw new TypeError("INVALID_NATIVE_CLOCK_FRAME_COUNT");
+      if(new Date(now()).getTime()-discoveryCheckAt>=5000)settleDiscoveries();
       const runState = this.getClockRunState();
       if (!runState.running || frames === 0) return Object.freeze({ accepted: false, code: runState.reason ?? "NO_ELAPSED_FRAMES" });
       const snapshot = requireSession().getRaisingHomeSnapshot();
@@ -2403,7 +2474,13 @@ export function createChampionshipStandaloneApp({
       storeNativeRaisingPositions();storeNativeRaisingHome();
       editor.confirm(...cageEditArgs());
       if (JSON.stringify(editor.toSave()) !== before) {
-        raisingActors.clear();initializeNativeRaisingHome();savePort.markDirty();
+        const nextGround=createNativeRaisingGround({...editor.toSave(),unlockedCount:slotCountForTamerRank(tamerRankValue)});
+        if(raisingGround?.navigation&&nextGround?.navigation){
+          for(const actor of raisingActors.values())actor.positionQ12=ranchPositionAfterLayout(raisingGround,nextGround,actor.positionQ12,actor.cageInstanceId??actor.cageDefinitionIndex);
+          for(const item of [...raisingFoods,...raisingWaste])item.positionQ12=ranchPositionAfterLayout(raisingGround,nextGround,item.positionQ12,item.cageInstanceId??item.cageDefinitionIndex);
+          raisingGround=nextGround;storeNativeRaisingPositions();storeNativeRaisingHome();
+        }
+        raisingActors.clear();initializeNativeRaisingHome({restoreLayoutPositions:true});savePort.markDirty();
       }
       publishScreens();
       return this.getCageEditFrame();

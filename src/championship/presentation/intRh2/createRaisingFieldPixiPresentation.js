@@ -19,6 +19,8 @@ import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyph
 import {EVOLUTION_TEXT_ROWS, EVOLUTION_WRITING_COLOR, evolutionWritingY} from '../../text/evolutionPresentationText.js';
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
+import {bindRaisingZoomInput,RAISING_OVERVIEW_ZOOM} from './raisingZoomInput.js';
+import {zoomRaisingCamera} from './raisingFieldViewport.js';
 import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
 
 const DRAG_THRESHOLD_PX = 6;
@@ -220,6 +222,7 @@ export async function mountRaisingFieldPixiPresentation({
   // frame too short for the board and its headroom ever lets this leave 0; a
   // folded ring (expansion annex below the board) scrolls over both bands.
   let cameraY = 0;
+  let zoom = 1;
   // Every placement on this scene reads the frame through this one view, so
   // the vertical scroll moves art, residents, shadows and input together.
   let raisingReference = null;
@@ -228,6 +231,7 @@ export async function mountRaisingFieldPixiPresentation({
     get height() { return app.screen.height; },
     get desktopRaising() { return globalThis.document?.body?.hasAttribute('data-desktop-raising')??false; },
     get scrollY() { return cameraY; },
+    get zoom() { return zoom; },
     get referenceViewport() { return raisingReference?.reference; }
   });
   // The shared stage updates app.screen BEFORE notifying scenes. Keep plain
@@ -249,7 +253,7 @@ export async function mountRaisingFieldPixiPresentation({
     backdrop.cursor = 'grab';
     scene.on('pointerdown', event => {
       if(source.getLifecycleFrame?.()?.day||source.getLifecycleFrame?.()?.evolution)return;
-      if (drag) return;
+      if (drag || zoomInput?.isActive()) return;
       event.stopPropagation();
       cameraDrag = {pointerId:event.pointerId,startX:event.global.x,startY:event.global.y,origin:cameraX,originY:cameraY,tool:getSelectedTool(),moved:false,tutorialCheckpoint:source.getFrame().tutorial?.checkpoint??null};
       pointerPreview={x:event.global.x,y:event.global.y,touch:event.pointerType==='touch',held:true};
@@ -485,7 +489,7 @@ export async function mountRaisingFieldPixiPresentation({
     entry.root.cursor = "grab";
     entry.root.hitArea = new PIXI.Rectangle(-62, -124, 124, 132);
     entry.root.on("pointerdown", (event) => {
-      if (disposed||drag||cameraDrag) return;
+      if (disposed||drag||cameraDrag||zoomInput?.isActive()) return;
       if(source.getLifecycleFrame?.()?.day||source.getLifecycleFrame?.()?.evolution)return;
       event.stopPropagation();
       // The camera lesson precedes carry: a swipe beginning on the resident
@@ -859,7 +863,7 @@ export async function mountRaisingFieldPixiPresentation({
       width:globalThis.window?.innerWidth??view.width,height:globalThis.window?.innerHeight??view.height
     }),measured:false,pending:null};
     const nextViewport = { width: view.width, height: view.height, desktopRaising: view.desktopRaising,
-      referenceViewport:raisingReference.reference };
+      referenceViewport:raisingReference.reference, zoom };
     // An attaching/hidden host can briefly collapse to the renderer's 1px
     // minimum. Do not turn that intermediate size into a camera movement.
     if (nextViewport.width <= 24 || nextViewport.height <= 24) return;
@@ -921,7 +925,7 @@ export async function mountRaisingFieldPixiPresentation({
   let cameraFocus = null;
   function stepCameraFocus(deltaMs) {
     if (!cameraFocus || !fieldArt?.field) return;
-    if (drag || cameraDrag) { cameraFocus = null; return; }
+    if (drag || cameraDrag || zoomInput?.isActive()) { cameraFocus = null; return; }
     cameraFocus.elapsed += Math.min(50, Math.max(0, deltaMs));
     const t = Math.min(1, cameraFocus.elapsed / cameraFocus.duration);
     const eased = 1 - Math.pow(1 - t, 3);
@@ -963,6 +967,7 @@ export async function mountRaisingFieldPixiPresentation({
 
   function updateAnimations(ticker) {
     samplePortraitReference();
+    if(zoomButton&&zoomButton.disabled===canZoom())describeZoom();
     const tutorial=source.getFrame().tutorial;
     const viewKey=tutorial&&!tutorial.finished?tutorial.checkpoint.stage+":"+tutorial.checkpoint.message+":"+tutorial.viewRevision:null;
     if(viewKey!==tutorialViewKey){
@@ -1230,12 +1235,42 @@ export async function mountRaisingFieldPixiPresentation({
   app.ticker.add(updateAnimations);
 
   const unsubscribe = source.subscribe(sync);
+  const canZoom=()=>!disposed&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'
+    &&!source.getLifecycleFrame?.()?.day&&!source.getLifecycleFrame?.()?.evolution
+    &&!(source.getFrame().tutorial&&!source.getFrame().tutorial.finished);
+  const zoomButton=globalThis.document?.createElement('button')??null;
+  const describeZoom=()=>{
+    if(!zoomButton)return;
+    zoomButton.textContent=zoom===1?'− 100%':'+ 70%';
+    zoomButton.setAttribute('aria-label',uiText(zoom===1?'Zoom out ranch (overview)':'Zoom in ranch (detail)'));
+    zoomButton.title=uiText('Pinch or scroll over the ranch to zoom');
+    zoomButton.disabled=!canZoom();
+  };
+  const setZoom=(next,point)=>{
+    if(!canZoom()||zoom===next)return;
+    const camera=zoomRaisingCamera(fieldArt.field,view,next,point,{cameraX,cameraY});
+    const beforeX=cameraX;
+    zoom=next;cameraX=camera.cameraX;cameraY=camera.cameraY;cameraFocus=null;
+    tutorialCameraOffset+=(cameraX-beforeX)/fieldArt.field.nativePixelWorldScale;
+    if(cameraViewport)cameraViewport={...cameraViewport,zoom};
+    describeZoom();sync(source.getFrame(),{force:true});
+  };
+  const zoomInput=fieldArt?.field?.presentationMode==='NATIVE_RANCH'
+    ?bindRaisingZoomInput({canvas:app.canvas,getViewport:()=>app.screen,getLevel:()=>zoom,setLevel:setZoom,
+      cancelGesture:()=>cancelInput('viewport-resize'),enabled:canZoom}):null;
+  if(zoomButton&&zoomInput){
+    zoomButton.type='button';zoomButton.className='cm-ranch-zoom';
+    zoomButton.addEventListener('click',()=>{cancelInput('viewport-resize');setZoom(zoom===1?RAISING_OVERVIEW_ZOOM:1);});
+    app.canvas.parentElement?.append(zoomButton);describeZoom();
+  }
   function cancelInput(reason = null){
     if (!responsiveLayout) {
-    if(drag?.nativeHand)source.intents.endHand?.(drag.creatureId,{cancelled:true,checkpoint:drag.tutorialCheckpoint});
-    else if(drag?.carried)source.intents.releaseCarry?.(drag.creatureId);
+    const options={cancelled:true,checkpoint:drag?.tutorialCheckpoint,
+      ...(reason==='viewport-resize'?{reason}:{})};
+    if(drag?.nativeHand)source.intents.endHand?.(drag.creatureId,options);
+    else if(drag?.carried)source.intents.releaseCarry?.(drag.creatureId,options);
     if(drag)drag.entry.root.cursor='grab';
-    drag=null;cameraDrag=null;
+    drag=null;cameraDrag=null;pointerPreview=null;cleanFeedback=null;backdrop.cursor='grab';
       return;
     }
     // Blur/hidden/context loss may suspend the existing ticker between samples.
@@ -1255,11 +1290,12 @@ export async function mountRaisingFieldPixiPresentation({
     if(cancelled?.nativeHand)source.intents.endHand?.(cancelled.creatureId,options);
     else if(cancelled?.carried)source.intents.releaseCarry?.(cancelled.creatureId,options);
   }
-  const cancelHiddenInput=()=>{if(globalThis.document?.hidden)cancelInput();};
+  const cancelHiddenInput=()=>{if(globalThis.document?.hidden){zoomInput?.reset();cancelInput();}};
   globalThis.addEventListener?.('blur',cancelInput);
   globalThis.document?.addEventListener('visibilitychange',cancelHiddenInput);
-  const unobserveResize = stage.onResize(()=>{cancelInput('viewport-resize');resize();});
+  const unobserveResize = stage.onResize(()=>{zoomInput?.reset();cancelInput('viewport-resize');resize();});
   const unobserveContextLost = stage.onContextLost(() => {
+    zoomInput?.reset();
     cancelInput();
     onFallback("The 2D field context was lost. DOM screen controls remain available; reload to restore the field.");
   });
@@ -1364,6 +1400,7 @@ export async function mountRaisingFieldPixiPresentation({
         assetFailures,
         cameraX,
         cameraY,
+        zoom,
         cameraViewport: cameraViewport ? Object.freeze({ ...cameraViewport }) : null,
         characterArt: characterBundle?.getDiagnostics() ?? null,
         art: fieldArt?.getDiagnostics() ?? null,
@@ -1376,6 +1413,7 @@ export async function mountRaisingFieldPixiPresentation({
       disposed = true;
       lifetime.abort(); signal?.removeEventListener('abort', abort);
       cancelInput();
+      zoomInput?.dispose();zoomButton?.remove();
       globalThis.removeEventListener?.('blur',cancelInput);
       globalThis.document?.removeEventListener('visibilitychange',cancelHiddenInput);
       cameraDrag = null;
