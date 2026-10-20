@@ -408,6 +408,7 @@
     "tests/championship-vfx157-settings-cases.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
     "tests/create-character-save.mjs": "Local fixture-generation CLI, not a portable test; reads the private m301 review save template.",
     "tests/test-all-completed-original-characters.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
-    "tests/test-completed-original-m301.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression."
+    "tests/test-completed-original-m301.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
+    "tests/championship-species035-idle-candidate-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; candidate-only two-frame035 review runs in its dedicated QA workflow, not production acceptance."
   }
 }
