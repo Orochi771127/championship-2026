@@ -20,7 +20,7 @@ test('production display joins 216 native rows, eight eggs and two explicit prod
   assert.equal(dex.entries.length,238);
   for(const field of ['entryKey','speciesIndex','speciesId','displayCode'])assert.equal(new Set(dex.entries.map(e=>e[field])).size,238,field);
   assert.deepEqual(dex.stagePrefixes,['EG','B1','B2','GR','MA','AW','UL']);
-  assert.deepEqual(dex.stagePrefixes.map((_,s)=>dex.entries.filter(e=>e.numberingStageIndex===s).length),[8,12,14,38,64,51,39]);
+  assert.deepEqual(dex.stagePrefixes.map((_,s)=>dex.entries.filter(e=>e.numberingStageIndex===s).length),[8,12,15,41,69,53,40]);
   for(const entry of dex.entries.filter(e=>e.kind!=='ILLUSTRATION')){
     assert.equal(entry.speciesId,`species-${String(entry.speciesIndex).padStart(3,'0')}`);
     const definition=resolveProductSpeciesDefinition(entry.speciesIndex,species.records);
@@ -34,10 +34,10 @@ test('production display joins 216 native rows, eight eggs and two explicit prod
       if([121,125].includes(entry.speciesIndex)){const expected=entry.speciesIndex===121?50:62;assert.equal(entry.serial,expected);assert.equal(entry.displayCode,`MA${expected}`);}else if(entry.numberingStageIndex!==6){assert.equal(entry.serial,native.serial);assert.equal(entry.displayCode,native.displayCode);}
     }else{assert.ok([229,230].includes(entry.speciesIndex));assert.equal(species.records[entry.speciesIndex],undefined);assert.equal(getDatabaseSlot(entry.speciesIndex).bookOrdinal,entry.speciesIndex-13);}
   }
-  for(let s=0;s<7;s++)assert.deepEqual(dex.entries.filter(e=>e.numberingStageIndex===s).map(e=>e.serial),Array.from({length:[8,12,14,38,64,51,39][s]},(_,i)=>i+1));
+  for(let s=0;s<7;s++)assert.deepEqual(dex.entries.filter(e=>e.numberingStageIndex===s).map(e=>e.serial),Array.from({length:[8,12,15,41,69,53,40][s]},(_,i)=>i+1));
   for(let i=224;i<=228;i++)assert.equal(getDatabaseDisplayEntry(i),null);
   assert.deepEqual([222,230,211,229].map(id=>getDatabaseDisplayEntry(id).displayCode),['UL02','UL03','UL33','UL34']);
-  assert.equal(dex.entries.filter(e=>e.numberingStageIndex===6).at(-1).displayCode,'UL39');
+  assert.equal(dex.entries.filter(e=>e.numberingStageIndex===6).at(-1).displayCode,'UL40');
   assert.equal(getDatabaseDisplayEntry(19).displayCode,'B106');assert.equal(getDatabaseDisplayEntry(19).legacyBookOrdinal,5);
   assert.deepEqual(dex.entries.filter(e=>e.numberingStageIndex===0).map(e=>e.speciesIndex),openingEggChoices().map(e=>e.speciesIndex));
 });
@@ -47,8 +47,8 @@ test('archived revision-one identity receipt stays immutable while the explicit 
   // product-only Ultimate ordering is tested above, never written into this oracle.
   const vector=Array.from({length:224},(_,i)=>{const e=nativeEntries.get(i);assert.ok(e);return [e.entryKey,e.speciesIndex,e.speciesId,e.numberingStageIndex,e.serial,e.displayCode,e.legacyBookOrdinal];});
   assert.equal(createHash('sha256').update(JSON.stringify(vector)).digest('hex'),'121321ce0fad08d324f379c75c6c846f8f24f04bb0ac33eaff834995d2469195');
-  const future=[...dex.entries.map(e=>({...e,contentStatus:e.speciesIndex===19?'RETIRED':e.contentStatus})).reverse(),{numberingStageIndex:4,serial:65,displayCode:'MA65'}];
-  assert.equal(Math.max(...future.filter(e=>e.numberingStageIndex===4).map(e=>e.serial))+1,66);
+  const future=[...dex.entries.map(e=>({...e,contentStatus:e.speciesIndex===19?'RETIRED':e.contentStatus})).reverse(),{numberingStageIndex:4,serial:70,displayCode:'MA70'}];
+  assert.equal(Math.max(...future.filter(e=>e.numberingStageIndex===4).map(e=>e.serial))+1,71);
   assert.equal(future.find(e=>e.speciesIndex===19).displayCode,'B106');
   assert.equal('MA'+String(100).padStart(2,'0'),'MA100');
   assert.ok(Object.isFrozen(dex.entries[0]));

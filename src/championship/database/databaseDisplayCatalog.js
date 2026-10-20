@@ -13,11 +13,12 @@ const enabled=listProductExtensions().every(e=>e.runtimeReady&&e.evolutionReady)
 const planned=enabled?planUltimateDisplayOrder(correctedNative.entries):[];
 const ultimate=new Map(planned.map(e=>[e.speciesIndex,e]));
 const catalog=enabled?{...correctedNative,entries:[...correctedNative.entries.map(e=>ultimate.get(e.speciesIndex)??e),...listProductExtensions().map(e=>({...ultimate.get(e.speciesIndex),entryKey:`dex-species-${e.speciesIndex}`,contentStatus:'PUBLISHED',legacyBookOrdinal:null,firstPublishedRevision:2}))].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)}:{...correctedNative,entries:[...correctedNative.entries].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)};
-// Art-only entries have a separate ART code and no assigned evolution stage.
+// Illustration entries have their assigned evolution stage and serial.
 const displayCatalog={...catalog,entries:[...catalog.entries,...listDatabaseIllustrations().map(entry=>({
   ...databaseIllustrationRow(entry.speciesIndex),entryKey:`dex-illustration-${entry.speciesIndex}`,
-  numberingStageIndex:null,legacyBookOrdinal:null,contentStatus:'PUBLISHED'
-}))]};
+  numberingStageIndex:entry.numberingStageIndex,serial:entry.serial,
+  legacyBookOrdinal:null,contentStatus:'PUBLISHED'
+}))].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)};
 export const DATABASE_DISPLAY_CATALOG = deepFreeze(displayCatalog);
 const bySpecies = new Map(displayCatalog.entries.map(entry=>[entry.speciesIndex,entry]));
 export function getDatabaseDisplayEntry(speciesIndex) { return bySpecies.get(speciesIndex) ?? null; }
@@ -32,4 +33,3 @@ export function databaseDisplayRows(book, stageIndex = null) {
       ...entry
     }));
 }
-

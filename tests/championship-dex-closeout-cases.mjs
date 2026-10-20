@@ -18,7 +18,7 @@ test('closeout preserves all 140 previous portraits and selects only six approve
   const allow=read('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json');
   for(const row of manifest.entries){
     assert.equal(row.approval.status,'owner_approved');assert.match(row.approval.evidence,/^Sentinel_/);
-    assert.equal(row.evolutionStageAssigned,false);
+    assert.equal(row.evolutionStageAssigned,true);
     assert.equal(getDatabaseIllustration(row.speciesIndex).displayCode,row.displayCode);
     for(const [kind,asset] of [['display',databaseHeroPortrait(row.speciesIndex)],['thumbnail',databaseHeroPortrait(row.speciesIndex).thumbnail]]){
       const bytes=fs.readFileSync(asset.src);

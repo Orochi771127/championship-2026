@@ -29,14 +29,15 @@ test('gallery locale coverage recognizes only the exact complete five-language d
   assert.equal(databaseIllustrationText('constructor'), '');
 });
 
-test('every art-only detail shows its selected full illustration and omits playable controls in five locales',()=>{
+test('every art-only detail shows its selected full illustration and authored story in five locales while omitting playable controls',()=>{
   try{for(const locale of ['zh-Hant','en','ja','th','vi'])for(const id of ids){
     const f=makeView({locale,selectedSpeciesIndex:id,registeredSpecies:[],collection:[]});
     try{
       const hero=f.root.querySelector('.cm-dex-hero__image'),art=databaseHeroPortrait(id);
       assert.equal(hero.src,art.src);hero.naturalWidth=art.width;hero.naturalHeight=art.height;hero.onload();
       assert.equal(f.root.querySelector('.cm-dex-hero').dataset.art,'ready');
-      for(const selector of ['.cm-dex-profile','.cm-dex-data','.cm-dex-conditions__toggle','input'])assert.equal(f.root.querySelector(selector),null);
+      assert.equal(f.root.querySelector('.cm-dex-profile__text')?.textContent,databaseStory(id,locale));
+      for(const selector of ['.cm-dex-data','.cm-dex-conditions__toggle','input'])assert.equal(f.root.querySelector(selector),null);
       assert.ok(f.root.textContent.includes(databaseIllustrationText('status',locale)));
       f.assertUnchanged();
     }finally{f.dispose();}
@@ -51,21 +52,39 @@ test('all 134 prior published hero selections remain exact',()=>{
   assert.equal(sha(Buffer.from(JSON.stringify(preserved,null,2)+'\n')),'5c6491b57edad00bb1caba25398aca1a5da432be7dba25aa463ee07fe41d705b');
 });
 
-test('twelve immutable encyclopedia identities use independent ART codes without assigning evolution stages',()=>{
+test('twelve encyclopedia identities are classified into confirmed stages with sequential display codes and stories',()=>{
   assert.deepEqual(listDatabaseIllustrations().map(e=>e.speciesIndex),ids);
   const codes=ids.map(id=>getDatabaseIllustration(id).displayCode);
-  assert.deepEqual(codes,['ART01','ART02','ART03','ART04','ART05','ART06','ART07','ART08','ART09','ART10','ART11','ART12']);
+  const expectedCodes=['GR39','MA65','AW52','MA66','MA67','MA68','GR40','B215','GR41','MA69','AW53','UL40'];
+  assert.deepEqual(codes,expectedCodes);
   assert.equal(DATABASE_DISPLAY_CATALOG.entries.length,238);
   assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.speciesIndex)).size,238);
   assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,238);
   const book=projectDatabase(),rows=databaseDisplayRows(book,'ART');
-  assert.deepEqual(rows.map(e=>e.speciesIndex),ids);
+  assert.deepEqual(rows.map(e=>e.speciesIndex),[238, 231, 237, 239, 232, 234, 235, 236, 240, 233, 241, 242]);
   for(const row of rows){
     assert.equal(row.kind,'ILLUSTRATION');assert.equal(row.state,'NOT_TRACKED');assert.equal(row.viewable,true);
-    assert.equal(row.numberingStageIndex,null);assert.equal(row.legacyBookOrdinal,null);assert.equal(row.instanceCount,0);
+    assert.equal(typeof row.numberingStageIndex,'number');assert.equal(row.legacyBookOrdinal,null);assert.equal(row.instanceCount,0);
   }
-  for(let stage=0;stage<7;stage++)assert.ok(!databaseDisplayRows(book,stage).some(e=>ids.includes(e.speciesIndex)));
-  for(const locale of ['zh-Hant','en','ja','th','vi'])for(const key of ['label','status'])assert.ok(databaseIllustrationText(key,locale).length>0);
+  const stageSpecies=[
+    [],
+    [],
+    [238],
+    [231,237,239],
+    [232,234,235,236,240],
+    [233,241],
+    [242]
+  ];
+  for(let stage=0;stage<7;stage++){
+    const stageRows=databaseDisplayRows(book,stage);
+    for(const sp of stageSpecies[stage]){
+      assert.ok(stageRows.some(e=>e.speciesIndex===sp),`stage ${stage} should include species ${sp}`);
+    }
+  }
+  for(const locale of ['zh-Hant','en','ja','th','vi']){
+    for(const key of ['label','status'])assert.ok(databaseIllustrationText(key,locale).length>0);
+    for(const id of ids)assert.ok(databaseStory(id,locale)?.length>25,`species ${id} should have story in ${locale}`);
+  }
 });
 
 test('art-only browsing cannot register, instantiate or invent gameplay/evolution data',()=>{
@@ -74,7 +93,7 @@ test('art-only browsing cannot register, instantiate or invent gameplay/evolutio
     assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);
     assert.throws(()=>normalizeRegisteredSpecies([id]));
     assert.equal(getProductExtension(id),null);assert.throws(()=>requirePlayableProductExtension(id));
-    assert.equal(databaseStory(id),null);assert.equal(databaseVerifiedData(id),null);
+    assert.ok(databaseStory(id));assert.equal(databaseVerifiedData(id),null);
     const book=projectDatabase({selectedSpeciesIndex:id,registeredSpecies:[id],starterSpeciesId:`species-${id}`,collection:[{speciesId:`species-${id}`,instanceId:'invalid-art-instance'}]});
     assert.equal(book.slotCount,218);assert.equal(book.regularCount,218);assert.equal(book.registeredCount,0);
     assert.equal(book.entries.length,218);assert.equal(book.selected.state,'NOT_TRACKED');assert.equal(book.selected.source,null);

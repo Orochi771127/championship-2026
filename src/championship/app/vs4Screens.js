@@ -522,7 +522,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         item.dataset.state = row.state;
         item.dataset.displayCode = row.displayCode;
         const visibleName = row.kind === 'EGG' ? eggs.get(row.speciesIndex).formalName : (row.viewable || row.state === 'REGISTERED') ? speciesName(row.speciesIndex, row.displayName) : uiText('Undiscovered');
-        item.setAttribute("aria-label", `${row.displayCode} · ${row.kind==='ILLUSTRATION'?databaseIllustrationText('label'):generationName(row.numberingStageIndex)} · ${visibleName}`);
+        item.setAttribute("aria-label", `${row.displayCode} · ${row.numberingStageIndex !== null ? generationName(row.numberingStageIndex) : databaseIllustrationText('label')} · ${visibleName}`);
         const name = element("div", "cm-vs2-shop__name");
         name.append(element("strong", "", (!row.viewable && row.state === 'UNDISCOVERED') ? '????' : visibleName));
         name.append(element("span", "cm-vs2-shop__meta", row.displayCode));
@@ -580,7 +580,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         ? "已登錄"
         : "尚未登錄這隻拍檔。"
     );
-    detail.append(title, element('p','cm-vs2-shop__meta', `${selected.displayCode} · ${selected.kind==='ILLUSTRATION'?databaseIllustrationText('label'):generationName(selected.numberingStageIndex)}`));
+    detail.append(title, element('p','cm-vs2-shop__meta', `${selected.displayCode} · ${selected.numberingStageIndex !== null ? generationName(selected.numberingStageIndex) : databaseIllustrationText('label')}`));
     if (egg) {
       const image = element('img','cm-vs2-database__egg');
       image.src = egg.src;
@@ -618,7 +618,6 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       holder.append(image,placeholder); detail.append(holder);
       image.src = hero.src;
     }
-    if (selected.kind==='ILLUSTRATION') return;
     const story = databaseStory(selected.speciesIndex);
     if (story) {
       const profile = element('section','cm-dex-profile');
@@ -632,6 +631,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       profile.append(title,prose);
       detail.append(profile);
     }
+    if (selected.kind==='ILLUSTRATION') return;
     const verifiedData = databaseVerifiedData(selected.speciesIndex);
     if (verifiedData) {
       const dataSection = element('section', 'cm-dex-data');

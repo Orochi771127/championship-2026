@@ -1,5 +1,6 @@
 import {productSpeciesRecord,productBaseSpeciesIndex} from '../contracts/productSpeciesData.js';
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {getDatabaseIllustrationStory} from './databaseIllustrations.js';
 import catalog from '../../data/championship/database-original-profiles.r1.json' with {type:'json'};
 import speciesCatalog from '../../data/championship/catalogs/creature-species.r1.json' with {type:'json'};
 import battleMovesCatalog from '../../data/championship/catalogs/battle-moves.r1.json' with {type:'json'};
@@ -15,7 +16,7 @@ const headings = Object.freeze({'zh-Hant':'角色故事',en:'Profile',ja:'プロ
 // Missing content stays absent. No cross-language or unrelated-species fallback.
 export function databaseStory(speciesIndex, locale = getLocale()) {
   if (!Number.isSafeInteger(speciesIndex) || !Object.hasOwn(headings,locale)) return null;
-  return bySpecies.get(speciesIndex)?.textByLocale[locale] ?? getProductExtension(speciesIndex)?.profileByLocale?.[locale] ?? null;
+  return bySpecies.get(speciesIndex)?.textByLocale[locale] ?? getProductExtension(speciesIndex)?.profileByLocale?.[locale] ?? getDatabaseIllustrationStory(speciesIndex, locale) ?? null;
 }
 export function databaseStoryHeading(locale = getLocale()) {
   return Object.hasOwn(headings,locale) ? headings[locale] : null;

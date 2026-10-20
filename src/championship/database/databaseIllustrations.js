@@ -8,14 +8,20 @@ const ids=new Set(),codes=new Set();
 for(const entry of catalog.entries){
   if(!Number.isSafeInteger(entry.speciesIndex)||entry.speciesIndex<=230
     ||entry.speciesId!==`species-${entry.speciesIndex}`||ids.has(entry.speciesIndex)
-    ||!/^ART\d{2}$/.test(entry.displayCode)||codes.has(entry.displayCode)
+    ||!/^(ART\d{2}|(EG|B1|B2|GR|MA|AW|UL)\d{2,})$/.test(entry.displayCode)||codes.has(entry.displayCode)
     ||typeof entry.displayName!=='string'||!entry.displayName.trim())throw Error('DATABASE_ILLUSTRATION_IDENTITY');
+  if(entry.numberingStageIndex!==null&&entry.numberingStageIndex!==undefined&&(!Number.isSafeInteger(entry.numberingStageIndex)||entry.numberingStageIndex<0||entry.numberingStageIndex>6))throw Error('DATABASE_ILLUSTRATION_STAGE');
+  if(entry.serial!==null&&entry.serial!==undefined&&(!Number.isSafeInteger(entry.serial)||entry.serial<=0))throw Error('DATABASE_ILLUSTRATION_SERIAL');
   ids.add(entry.speciesIndex);codes.add(entry.displayCode);
 }
 export const DATABASE_ILLUSTRATIONS=deepFreeze(catalog);
 const bySpecies=new Map(catalog.entries.map(entry=>[entry.speciesIndex,entry]));
 export function getDatabaseIllustration(speciesIndex){return bySpecies.get(speciesIndex)??null;}
 export function listDatabaseIllustrations(){return catalog.entries;}
+export function getDatabaseIllustrationStory(speciesIndex, locale = getLocale()) {
+  const entry = getDatabaseIllustration(speciesIndex);
+  return entry?.profileByLocale?.[locale] ?? null;
+}
 export function databaseIllustrationRow(speciesIndex){
   const entry=getDatabaseIllustration(speciesIndex);
   return entry?deepFreeze({...entry,kind:'ILLUSTRATION',state:'NOT_TRACKED',viewable:true,
