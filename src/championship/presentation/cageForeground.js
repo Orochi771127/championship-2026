@@ -26,7 +26,7 @@ const FIELDS=Object.freeze([
   masterHash:'469b1a6f6d261938e19dba0f335dffcfdc245f4903bb26a4de4e766c3aa0ebe2',
   depthAuthority:'GOAL_FOOTPRINT_FRONT_EDGE_MASTER_PROJECTION'},
  // The same goal net over the polish review's re-lit CM02 frame.
- {fieldId:'field_cm02_01',localManifest:'assets/production/cage/cm02-goal-foreground-polish-20261019/manifest.json',stencilOnly:true,
+ {fieldId:'field_cm02_01',localManifest:'assets/production/cage/cm02-goal-foreground-polish-20261019/manifest.json',stencilOnly:true,publicOk:true,
   prefix:'assets/production/cage/cm02-goal-foreground-polish-20261019/',width:768,height:800,assetIds:[POLISH_CAGE_ASSET],
   sourceHash:'b7760c89fb6c33104dbc39da104f48b5038b99e2592b74e191b5f1c4596a28d2',
   masterHash:'469b1a6f6d261938e19dba0f335dffcfdc245f4903bb26a4de4e766c3aa0ebe2',
@@ -35,7 +35,7 @@ const FIELDS=Object.freeze([
 // Visual padding is at most 8 native pixels at density four (32 world px).
 const MAX_PADDING_WORLD_PX=32;
 function eligible(config,manifest,placements,location){
- return isOriginalRuntimeLocation(location)&&(!config.localManifest||isOriginalLoopbackLocation(location))
+ return isOriginalRuntimeLocation(location)&&(!config.localManifest||config.publicOk===true||isOriginalLoopbackLocation(location))
   &&(config.assetIds??[FINAL_CAGE_ASSET]).includes(manifest?.assetId)
   &&manifest.fields?.find(f=>f.fieldId===config.fieldId)?.frames?.[0]?.sha256===config.sourceHash
   &&placements.some(p=>p.fieldId===config.fieldId);
@@ -93,7 +93,7 @@ export function cageForegroundPlan(data,placements,{unit=4,wrapWidthPx=null,fold
       depthWorldPx:piece.depth*unit+band.dy}];
   }));
 }
-// Local-review manifests are fetched directly (never through the public index);
+// Review and polish manifests are fetched directly (not through the public index);
 // cageForegroundPlan then checks their frame and master hashes.
 async function loadLocalForeground(config,{fetchImpl,baseHref}){
   const response=await fetchImpl(new URL(config.localManifest,baseHref));
@@ -102,13 +102,13 @@ async function loadLocalForeground(config,{fetchImpl,baseHref}){
 }
 // Local review (2026-10-19): generated occluders for the other cages, one
 // stencil per depth band from each reviewed master's ID render and ground
-// contacts. Listed in a local index; never part of the public selection.
+// contacts. The polish set is published; the earlier review set stays loopback-only.
 const LOCAL_REVIEWS=Object.freeze({
   [FINAL_CAGE_ASSET]:{tag:'20261019'},
-  [POLISH_CAGE_ASSET]:{tag:'polish-20261019'}});
+  [POLISH_CAGE_ASSET]:{tag:'polish-20261019',public:true}});
 async function localReviewConfigs({manifest,location,fetchImpl,baseHref}){
   const review=LOCAL_REVIEWS[manifest?.assetId];
-  if(!review||!isOriginalLoopbackLocation(location))return [];
+  if(!review||!(review.public===true?isOriginalRuntimeLocation(location):isOriginalLoopbackLocation(location)))return [];
   const dir=`assets/production/cage/foreground-review-${review.tag}/`;
   try{
     const response=await fetchImpl(new URL(dir+'index.json',baseHref));
@@ -118,7 +118,7 @@ async function localReviewConfigs({manifest,location,fetchImpl,baseHref}){
     const curated=FIELDS.filter(c=>(c.assetIds??[FINAL_CAGE_ASSET]).includes(manifest.assetId));
     return index.fields.filter(f=>!curated.some(c=>c.fieldId===f.fieldId)&&typeof f.manifest==='string'
       &&f.manifest.startsWith(dir)&&!f.manifest.includes('..'))
-      .map(f=>Object.freeze({fieldId:f.fieldId,localManifest:f.manifest,stencilOnly:true,assetIds:[manifest.assetId],
+      .map(f=>Object.freeze({fieldId:f.fieldId,localManifest:f.manifest,stencilOnly:true,publicOk:review.public===true,assetIds:[manifest.assetId],
         prefix:dir,width:f.width,height:f.height,
         sourceHash:f.sourceHash,masterHash:f.masterHash,depthAuthority:index.depthAuthority}));
   }catch(error){console.warn('CHAMPIONSHIP_CAGE_FOREGROUND_REVIEW_INDEX_FALLBACK',error?.message);return [];}
@@ -130,11 +130,16 @@ export async function withCageForeground({PIXI,art,manifest,placements,location=
   if(!selected.length)return art;
   const bundles=[];
   for(const config of selected){
-   const data=config.localManifest?await loadLocalForeground(config,{fetchImpl,baseHref}):await loadPublicMetadata(config.role,{fetchImpl,baseHref}),plan=cageForegroundPlan(data,placements,{config,unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
+   // A published polish piece (the CM02 goal net) is decoration: when it cannot load, the cage keeps its base art.
+   let data;
+   try{data=config.localManifest?await loadLocalForeground(config,{fetchImpl,baseHref}):await loadPublicMetadata(config.role,{fetchImpl,baseHref});}
+   catch(error){if(config.publicOk===true){console.warn('CHAMPIONSHIP_CAGE_FOREGROUND_POLISH_FALLBACK',error?.message);continue;}throw error;}
+   const plan=cageForegroundPlan(data,placements,{config,unit:art.field.nativePixelWorldScale,wrapWidthPx:art.field.wrapWidthPx,
      fold:art.field.fold??null,worldHeightPx:art.field.worldHeightPx});
    if(data.fieldId!==config.fieldId)throw Error('CAGE_FOREGROUND_SOURCE_MISMATCH');
    bundles.push({config,data,plan});
   }
+  if(!bundles.length)return art;
   const plan=bundles.flatMap(bundle=>bundle.plan);
   // Generated review occluders ship their exact frame pixels in one atlas per
   // cage: plain sprites, no stencil, so per-frame resident sorting stays cheap.

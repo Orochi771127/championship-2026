@@ -5,13 +5,17 @@ export const MAP_RECIPE='docs/contracts/championship/PUBLIC_MAP_RENDER_SOURCES.v
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const pick=(value,fields)=>Object.fromEntries(fields.filter(key=>Object.hasOwn(value,key)).map(key=>[key,value[key]]));
 const media=value=>({...pick(value,['src','sha256','width','height']),sha256:value.sha256.toLowerCase()});
-export function publicMapProjection(source){
+export function publicMapProjection(source,{excludeFields=[]}={}){
+ if(excludeFields.length){source={...source,fields:source.fields.filter(field=>!excludeFields.includes(field.fieldId))};
+  if(source.fieldCount!==undefined)source.fieldCount=source.fields.length;}
  validateRuntimeMapArtBundle(source);
  const result={schemaVersion:1,kind:PUBLIC_MAP_KIND,...pick(source,['assetId','family','fieldCount','defaultPreviewFieldId','tutorialFieldId','memoryPolicy','filter']),fields:source.fields.map(field=>{
   const out=pick(field,['fieldId','worldWidthPx','worldHeightPx','nativeWidthPx','nativeHeightPx','visualRole','gameplayBinding','gateMapping','collisionBinding','rasterPixelsPerNative']);
   if(field.visualPaddingNative)out.visualPaddingNative=pick(field.visualPaddingNative,['left','top','right','bottom']);
   out.frames=field.frames.map(frame=>({...pick(frame,['src','sha256','durationMs','rasterWidthPx','rasterHeightPx']),sha256:frame.sha256.toLowerCase()}));
   if(field.thumbnail)out.thumbnail=media(field.thumbnail);
+  // Polished battle fields carry presentation-only ambient layers (clouds, water, lava, foliage).
+  if(field.ambient)out.ambient=structuredClone(field.ambient);
   const depth=field.depthOccluders;
   if(depth)out.depthOccluders={atlases:depth.atlases.map(media),
    ...(depth.animationFrames?{animationFrames:depth.animationFrames.map(frame=>({atlases:frame.atlases.map(media)}))}:{}),
@@ -33,7 +37,7 @@ export function selectedMapProjections({root,input}){
  const geometry=new Map(fs.existsSync(metadataPath)?JSON.parse(fs.readFileSync(metadataPath,'utf8')).sources.filter(row=>row.type==='HUNT_DEPTH').map(row=>[row.path,row]):[]);
  for(const row of recipe.sources){
   const bytes=fs.readFileSync(path.join(root,row.path));if(sha(bytes)!==row.sha256)throw Error('PUBLIC_MAP_SOURCE_CHANGED_REVIEW_REQUIRED:'+row.role);
-  const value=publicMapProjection(JSON.parse(bytes));
+  const value=publicMapProjection(JSON.parse(bytes),row);
   const visit=item=>{if(Array.isArray(item)){item.forEach(visit);return;}if(item&&typeof item==='object'){
    if(typeof item.src==='string'&&typeof item.sha256==='string'){
     const source=geometry.get(item.src);

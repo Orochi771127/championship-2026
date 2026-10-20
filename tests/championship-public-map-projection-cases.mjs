@@ -16,9 +16,11 @@ const maps=selectedMapProjections({root:process.cwd(),input});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 
 test('map exports preserve every frame, clock, footprint, native pixel scale and occlusion reference',()=>{
- assert.equal(maps.descriptors.length,4);assert.equal(maps.files.size,206);
+ assert.equal(maps.descriptors.length,5);assert.equal(maps.files.size,209);
  for(const descriptor of maps.descriptors){
-  const source=read(recipe.sources.find(row=>row.role===descriptor.role).path);
+  const row=recipe.sources.find(row=>row.role===descriptor.role),source=read(row.path);
+  // The rebuilt HM01 replaces the two earlier HM01 fields in the accepted hunt set (2026-10-21).
+  source.fields=source.fields.filter(f=>!(row.excludeFields??[]).includes(f.fieldId));
   const before=validateRuntimeMapArtBundle(source),after=validateRuntimeMapArtBundle(descriptor.value);
   assert.ok(fs.readFileSync(descriptor.path).equals(descriptor.bytes));
   assert.equal(before.family,after.family);assert.equal(before.memoryPolicy,after.memoryPolicy);

@@ -3,7 +3,7 @@
   "kind": "MAP_ART_RENDER_V1",
   "assetId": "art:hunt:final-intake:20261008",
   "family": "HUNT",
-  "fieldCount": 30,
+  "fieldCount": 28,
   "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
   "filter": "nearest",
   "fields": [
@@ -56,134 +56,6 @@
           "sha256": "0b015c6dfbeb1eedb5e32bedc381835ba154bbe2786423d6a088563ac8accec0"
         },
         "pieceCount": 2288,
-        "bandNativePx": 8
-      }
-    },
-    {
-      "fieldId": "field_hm01_01",
-      "worldWidthPx": 2048,
-      "worldHeightPx": 2048,
-      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
-      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
-      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "frames": [
-        {
-          "src": "assets/production/hunt/accepted-20261010/images/6f543a8e6cbc97bccee5863e6f862c15705eb925f84e8eb82757e4e4193029fc.webp",
-          "sha256": "6f543a8e6cbc97bccee5863e6f862c15705eb925f84e8eb82757e4e4193029fc",
-          "durationMs": 334.30226226176285
-        },
-        {
-          "src": "assets/production/hunt/accepted-20261010/images/32f64bc246c20b12ad1724c1a4fdf96ceed6c973f2b3e04f163c2897ee03ee40.webp",
-          "sha256": "32f64bc246c20b12ad1724c1a4fdf96ceed6c973f2b3e04f163c2897ee03ee40",
-          "durationMs": 334.30226226176285
-        }
-      ],
-      "depthOccluders": {
-        "atlases": [
-          {
-            "src": "assets/production/hunt/accepted-20261010/images/c66ccd29b2a8786edbcaa99d1564a875dec9e9b3e3e947ec5860d5f113920e69.webp",
-            "sha256": "c66ccd29b2a8786edbcaa99d1564a875dec9e9b3e3e947ec5860d5f113920e69"
-          },
-          {
-            "src": "assets/production/hunt/accepted-20261010/images/f5549db0a4fcabc4e2f17e9f103913237f84d7fba8d9b1fd03995fa0c3c4a64f.webp",
-            "sha256": "f5549db0a4fcabc4e2f17e9f103913237f84d7fba8d9b1fd03995fa0c3c4a64f"
-          }
-        ],
-        "animationFrames": [
-          {
-            "atlases": [
-              {
-                "src": "assets/production/hunt/accepted-20261010/images/c66ccd29b2a8786edbcaa99d1564a875dec9e9b3e3e947ec5860d5f113920e69.webp",
-                "sha256": "c66ccd29b2a8786edbcaa99d1564a875dec9e9b3e3e947ec5860d5f113920e69"
-              },
-              {
-                "src": "assets/production/hunt/accepted-20261010/images/f5549db0a4fcabc4e2f17e9f103913237f84d7fba8d9b1fd03995fa0c3c4a64f.webp",
-                "sha256": "f5549db0a4fcabc4e2f17e9f103913237f84d7fba8d9b1fd03995fa0c3c4a64f"
-              }
-            ]
-          },
-          {
-            "atlases": [
-              {
-                "src": "assets/production/hunt/accepted-20261010/images/33e63cd40b610771eee6480f457ebd634067740912f815b7f63de0f16df002d8.webp",
-                "sha256": "33e63cd40b610771eee6480f457ebd634067740912f815b7f63de0f16df002d8"
-              },
-              {
-                "src": "assets/production/hunt/accepted-20261010/images/0df07476010b63e65dbc4406e334bbcaa93002365de452ff9a82d6d68529a202.webp",
-                "sha256": "0df07476010b63e65dbc4406e334bbcaa93002365de452ff9a82d6d68529a202"
-              }
-            ]
-          }
-        ],
-        "pieces": {
-          "src": "assets/production/public-runtime/metadata/hunt-pieces-2f22cb70a03fbbe3.v1.json",
-          "sha256": "72e2b90e43f995eeae37229ad1bf3f54dc31387e9bb9917e464cbd2be5320d25"
-        },
-        "pieceCount": 2530,
-        "bandNativePx": 8
-      }
-    },
-    {
-      "fieldId": "field_hm01_02",
-      "worldWidthPx": 2048,
-      "worldHeightPx": 2048,
-      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
-      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
-      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "frames": [
-        {
-          "src": "assets/production/hunt/accepted-20261010/images/b73357ac76a1161e9145b1801c65abcefa78d413fb07df701374dcdf10ff7075.webp",
-          "sha256": "b73357ac76a1161e9145b1801c65abcefa78d413fb07df701374dcdf10ff7075",
-          "durationMs": 334.30226226176285
-        },
-        {
-          "src": "assets/production/hunt/accepted-20261010/images/a4f4da756ed3d03742230f29ada3f14866c85ca3493d02642a1e520568c62497.webp",
-          "sha256": "a4f4da756ed3d03742230f29ada3f14866c85ca3493d02642a1e520568c62497",
-          "durationMs": 334.30226226176285
-        }
-      ],
-      "depthOccluders": {
-        "atlases": [
-          {
-            "src": "assets/production/hunt/accepted-20261010/images/00069061462d8b7c0a8c41acbc194a137fa54d5159871b9b15ef896523e2ebce.webp",
-            "sha256": "00069061462d8b7c0a8c41acbc194a137fa54d5159871b9b15ef896523e2ebce"
-          },
-          {
-            "src": "assets/production/hunt/accepted-20261010/images/391d91cc20d39a78b821f651912ae38f8b26a96caf8eb990e6b2a542f5904e2b.webp",
-            "sha256": "391d91cc20d39a78b821f651912ae38f8b26a96caf8eb990e6b2a542f5904e2b"
-          }
-        ],
-        "animationFrames": [
-          {
-            "atlases": [
-              {
-                "src": "assets/production/hunt/accepted-20261010/images/00069061462d8b7c0a8c41acbc194a137fa54d5159871b9b15ef896523e2ebce.webp",
-                "sha256": "00069061462d8b7c0a8c41acbc194a137fa54d5159871b9b15ef896523e2ebce"
-              },
-              {
-                "src": "assets/production/hunt/accepted-20261010/images/391d91cc20d39a78b821f651912ae38f8b26a96caf8eb990e6b2a542f5904e2b.webp",
-                "sha256": "391d91cc20d39a78b821f651912ae38f8b26a96caf8eb990e6b2a542f5904e2b"
-              }
-            ]
-          },
-          {
-            "atlases": [
-              {
-                "src": "assets/production/hunt/accepted-20261010/images/da7c5a2d62673ae1fa56b716c5ebdc82e1f318665fb2e2e25fd0b99769bb4bf6.webp",
-                "sha256": "da7c5a2d62673ae1fa56b716c5ebdc82e1f318665fb2e2e25fd0b99769bb4bf6"
-              },
-              {
-                "src": "assets/production/hunt/accepted-20261010/images/a17cc986a57df68b7a73eaf66b01c225322b5f67536da0519ee9f580c3bdbcf7.webp",
-                "sha256": "a17cc986a57df68b7a73eaf66b01c225322b5f67536da0519ee9f580c3bdbcf7"
-              }
-            ]
-          }
-        ],
-        "pieces": {
-          "src": "assets/production/public-runtime/metadata/hunt-pieces-2f22cb70a03fbbe3.v1.json",
-          "sha256": "72e2b90e43f995eeae37229ad1bf3f54dc31387e9bb9917e464cbd2be5320d25"
-        },
-        "pieceCount": 2530,
         "bandNativePx": 8
       }
     },

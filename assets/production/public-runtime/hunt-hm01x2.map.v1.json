@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "kind": "MAP_ART_RENDER_V1",
+  "assetId": "art:hunt:hm01x2-public:20261021",
+  "family": "HUNT",
+  "fieldCount": 2,
+  "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+  "filter": "nearest",
+  "fields": [
+    {
+      "fieldId": "field_hm01_01",
+      "worldWidthPx": 2880,
+      "worldHeightPx": 2880,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/hm01x2-public-20261021/images/c5761cafdb4447aa01645fa46750c5b6ef0b561ed9af1aeddfa066a664009e0a.webp",
+          "sha256": "c5761cafdb4447aa01645fa46750c5b6ef0b561ed9af1aeddfa066a664009e0a",
+          "durationMs": 334.30226226176285
+        },
+        {
+          "src": "assets/production/hunt/hm01x2-public-20261021/images/394fad8b5764d045c432b81e5c1a369d79c65d8e8ad04b71bca3422aab7ee126.webp",
+          "sha256": "394fad8b5764d045c432b81e5c1a369d79c65d8e8ad04b71bca3422aab7ee126",
+          "durationMs": 334.30226226176285
+        }
+      ],
+      "thumbnail": {
+        "src": "assets/production/hunt/hm01x2-public-20261021/images/4ec6da6c0e87ae2c9d94c81616de2f69764d9968dd93b76fcf9c81a0e9409047.webp",
+        "sha256": "4ec6da6c0e87ae2c9d94c81616de2f69764d9968dd93b76fcf9c81a0e9409047",
+        "width": 1440,
+        "height": 1440
+      },
+      "depthOccluders": {
+        "atlases": [
+          {
+            "src": "assets/production/hunt/hm01x2-public-20261021/images/090498c7fc9d16035628c45380caa9468719a1ee59c7bf21af4d57db0e4beeca.webp",
+            "sha256": "090498c7fc9d16035628c45380caa9468719a1ee59c7bf21af4d57db0e4beeca"
+          },
+          {
+            "src": "assets/production/hunt/hm01x2-public-20261021/images/679ad69cc97b312c614c11788f5edd95193dff78b24bed0b9d43d18389bc2f14.webp",
+            "sha256": "679ad69cc97b312c614c11788f5edd95193dff78b24bed0b9d43d18389bc2f14"
+          }
+        ],
+        "animationFrames": [
+          {
+            "atlases": [
+              {
+                "src": "assets/production/hunt/hm01x2-public-20261021/images/090498c7fc9d16035628c45380caa9468719a1ee59c7bf21af4d57db0e4beeca.webp",
+                "sha256": "090498c7fc9d16035628c45380caa9468719a1ee59c7bf21af4d57db0e4beeca"
+              },
+              {
+                "src": "assets/production/hunt/hm01x2-public-20261021/images/679ad69cc97b312c614c11788f5edd95193dff78b24bed0b9d43d18389bc2f14.webp",
+                "sha256": "679ad69cc97b312c614c11788f5edd95193dff78b24bed0b9d43d18389bc2f14"
+              }
+            ]
+          },
+          {
+            "atlases": [
+              {
+                "src": "assets/production/hunt/hm01x2-public-20261021/images/cb1ecd832fa0eb2b1f037e49a08e8471c6329dd2d255cf7c82bf8021ef92ed35.webp",
+                "sha256": "cb1ecd832fa0eb2b1f037e49a08e8471c6329dd2d255cf7c82bf8021ef92ed35"
+              },
+              {
+                "src": "assets/production/hunt/hm01x2-public-20261021/images/d03bcaacdc76049c015b135b6b6b8d4d2ef69d1b991f86492c50053eac489f1f.webp",
+                "sha256": "d03bcaacdc76049c015b135b6b6b8d4d2ef69d1b991f86492c50053eac489f1f"
+              }
+            ]
+          }
+        ],
+        "pieces": {
+          "src": "assets/production/public-runtime/metadata/hunt-pieces-e3712e583a18e9c4.v1.json",
+          "sha256": "e0ece76d10b4af4fb256dc8740a9de6606c420a97142e0861d72170ec60c25e9"
+        },
+        "pieceCount": 4675,
+        "bandNativePx": 8
+      }
+    },
+    {
+      "fieldId": "field_hm01_02",
+      "worldWidthPx": 2880,
+      "worldHeightPx": 2880,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/hm01x2-public-20261021/images/d7b61d809f9ce3736a9676801a501767b38960ef83c6b707c26870c40179aa63.webp",
+          "sha256": "d7b61d809f9ce3736a9676801a501767b38960ef83c6b707c26870c40179aa63",
+          "durationMs": 334.30226226176285
+        },
+        {
+          "src": "assets/production/hunt/hm01x2-public-20261021/images/fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80.webp",
+          "sha256": "fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80",
+          "durationMs": 334.30226226176285
+        }
+      ],
+      "thumbnail": {
+        "src": "assets/production/hunt/hm01x2-public-20261021/images/4c19a4630915698c96ea53b85b811243f7b274b0b7ee99c3f8cfa53443ff7793.webp",
+        "sha256": "4c19a4630915698c96ea53b85b811243f7b274b0b7ee99c3f8cfa53443ff7793",
+        "width": 1440,
+        "height": 1440
+      },
+      "depthOccluders": {
+        "atlases": [
+          {
+            "src": "assets/production/hunt/hm01x2-public-20261021/images/d9ae2de83b3c7f2e4aebe9cfdd6a7caa4b2ea0bb85eef4baf1e7a61db1f960b1.webp",
+            "sha256": "d9ae2de83b3c7f2e4aebe9cfdd6a7caa4b2ea0bb85eef4baf1e7a61db1f960b1"
+          },
+          {
+            "src": "assets/production/hunt/hm01x2-public-20261021/images/ed007c6350bfbc037a1e4df08ed4ea6329e5c58bb76f6ac00652ef84ba521dbe.webp",
+            "sha256": "ed007c6350bfbc037a1e4df08ed4ea6329e5c58bb76f6ac00652ef84ba521dbe"
+          }
+        ],
+        "animationFrames": [
+          {
+            "atlases": [
+              {
+                "src": "assets/production/hunt/hm01x2-public-20261021/images/d9ae2de83b3c7f2e4aebe9cfdd6a7caa4b2ea0bb85eef4baf1e7a61db1f960b1.webp",
+                "sha256": "d9ae2de83b3c7f2e4aebe9cfdd6a7caa4b2ea0bb85eef4baf1e7a61db1f960b1"
+              },
+              {
+                "src": "assets/production/hunt/hm01x2-public-20261021/images/ed007c6350bfbc037a1e4df08ed4ea6329e5c58bb76f6ac00652ef84ba521dbe.webp",
+                "sha256": "ed007c6350bfbc037a1e4df08ed4ea6329e5c58bb76f6ac00652ef84ba521dbe"
+              }
+            ]
+          },
+          {
+            "atlases": [
+              {
+                "src": "assets/production/hunt/hm01x2-public-20261021/images/6f00e48547adc48abbc2e63e55578bf5a8b4d0e49095d8350911044cd7235810.webp",
+                "sha256": "6f00e48547adc48abbc2e63e55578bf5a8b4d0e49095d8350911044cd7235810"
+              },
+              {
+                "src": "assets/production/hunt/hm01x2-public-20261021/images/b74ce94e01c9523024f936e5a791b24beab78f0f489549f5ef165a6cc67b78fe.webp",
+                "sha256": "b74ce94e01c9523024f936e5a791b24beab78f0f489549f5ef165a6cc67b78fe"
+              }
+            ]
+          }
+        ],
+        "pieces": {
+          "src": "assets/production/public-runtime/metadata/hunt-pieces-0370ad9efa4eac35.v1.json",
+          "sha256": "e0ece76d10b4af4fb256dc8740a9de6606c420a97142e0861d72170ec60c25e9"
+        },
+        "pieceCount": 4675,
+        "bandNativePx": 8
+      }
+    }
+  ]
+}

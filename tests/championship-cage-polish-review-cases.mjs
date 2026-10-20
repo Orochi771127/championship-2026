@@ -9,7 +9,7 @@ const read = p => JSON.parse(fs.readFileSync(new URL('../' + p, import.meta.url)
 const bytes = p => fs.readFileSync(new URL('../' + p, import.meta.url));
 const sha = b => crypto.createHash('sha256').update(b).digest('hex');
 const polish = read('assets/production/cage/polish-review-20261019/manifest.json');
-const final = read('assets/production/public-runtime/cage-final.map.v1.json');
+const final = read('assets/production/cage/final-intake-20261008/manifest.json');
 
 test('polish review keeps every field, size and duration; untouched cages keep their exact frames', () => {
   assert.equal(polish.assetId, 'art:cage:polish-review:20261019');
@@ -21,7 +21,7 @@ test('polish review keeps every field, size and duration; untouched cages keep t
     f.frames.forEach((fr, i) => {
       assert.equal(fr.durationMs, o.frames[i].durationMs);
       assert.equal(sha(bytes(fr.src)), fr.sha256, fr.src);
-      if (['field_cm03_01', 'field_cm24_01', 'field_cm28_01', 'field_cm29_01'].includes(f.fieldId)) assert.deepEqual(fr, o.frames[i]);
+      if (['field_cm03_01', 'field_cm24_01', 'field_cm28_01', 'field_cm29_01'].includes(f.fieldId)) assert.deepEqual({src: fr.src, sha256: fr.sha256}, {src: o.frames[i].src, sha256: o.frames[i].sha256});
       else assert.match(fr.src, /^assets\/production\/cage\/polish-review-20261019\/fields\//);
     });
   }

@@ -88,4 +88,4 @@ test('normal selection publishes target changes once through the existing source
   } finally { unsubscribe(); await app.dispose(); }
 });
 
-test("all sixteen public Gate previews use existing accepted original field pixels",()=>{for(const g of listChampionshipGates()){const t=huntGateThumbnail(g,"https://orochi771127.github.io/championship-2026/");assert.equal(t.fieldId,g.originalFields.dayFieldId);assert.ok(t.src.startsWith("assets/production/hunt/accepted-20261010/"));assert.ok(fs.existsSync(t.src));assert.equal(huntGateThumbnail(g,"https://example.com/"),null);}});
+test("all sixteen public Gate previews use existing accepted original field pixels",()=>{for(const g of listChampionshipGates()){const t=huntGateThumbnail(g,"https://orochi771127.github.io/championship-2026/");assert.equal(t.fieldId,g.originalFields.dayFieldId);assert.ok(t.src.startsWith(g.originalFields.dayFieldId.startsWith("field_hm01_")?"assets/production/hunt/hm01x2-public-20261021/":"assets/production/hunt/accepted-20261010/"));assert.ok(fs.existsSync(t.src));assert.equal(huntGateThumbnail(g,"https://example.com/"),null);}});

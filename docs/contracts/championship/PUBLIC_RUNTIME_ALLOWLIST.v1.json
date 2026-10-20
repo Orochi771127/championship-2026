@@ -2,6 +2,506 @@
   "schemaVersion": 1,
   "files": [
     {
+      "path": "assets/production/battle/bm01-polish-r2/base.webp",
+      "sha256": "5e4a3b7b25c1fbb8f8d9d88d1bbd6cef9287583bdd3464790cc796a458785b9e"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/boundary-glow.webp",
+      "sha256": "735dd20f4ff24a677c100a48407c07feeff9e687dea16fbfab97f53fd35b069b"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/emissive.webp",
+      "sha256": "eade6c7a4831a11c40e24af483413bbfe82c81fd97e64bb887887bb646bcebce"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/floor-mask.webp",
+      "sha256": "2538a9c5a87c7519a7f1d830c35d7ec7723021d03589439d1e03fcc6d58c9bda"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/foliage-0.webp",
+      "sha256": "f47c7dc61bc708dd2ca13546d453a13a623db59436f368f3feb43b6ebfd86fbf"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/foliage-1.webp",
+      "sha256": "818c143a555669d973e0bc5fa6f83e6608d7498cf71f04134f9bbefeffb0033a"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/foliage-2.webp",
+      "sha256": "3feab364df51c0951e668e533e7a27dae11a23884a51eb7fe12d68af30b2ee52"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/foliage-3.webp",
+      "sha256": "2572033634cfece4dd2c5282cad766f33785874153d6b0338c4cc4efbdf641f3"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/foliage-4.webp",
+      "sha256": "c1a022d0f8ad8200cf10aec259b2bfaf151dafbf7887b267992e5f460d7cc39f"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/foliage-5.webp",
+      "sha256": "e28af5098e0afe7032b3e6c7fc0c058c467300879c927794d0e295c0514cf5f2"
+    },
+    {
+      "path": "assets/production/battle/bm01-polish-r2/foliage-small.webp",
+      "sha256": "5f36ca811a8a99e8a2b0ab2a2c4270bc8fe22e17fbe68249509c97eabc6ca80c"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/base.webp",
+      "sha256": "d80a381cc0b71d811620abc75f1507daf5a430851ed77d1316aee766c487d6a6"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/boundary-glow.webp",
+      "sha256": "6f10f18f2bcaf9ef89bee219bde7c55aaecdab3f5c593808f53bbbbc644af1f0"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/floor-mask.webp",
+      "sha256": "7d1da214a9c7a03a69a9091b9ec9b12104f1147eca6cfedefe9d6be0ff0e6e34"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-0.webp",
+      "sha256": "ec2f96391000aa36efd190a0641a17f08f96c00e989bc3bad2eba034600e6d58"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-1.webp",
+      "sha256": "24ab66c2a9f8f5038bb86affab02ae436559fbd0a9fa0cde0537da5abd353559"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-2.webp",
+      "sha256": "d11516c34426272b1b821fa5447ed1e5f809067a04cf27e847fc491905f484bb"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-3.webp",
+      "sha256": "e5afc55c72ae79c13bbb570491964f31bd8a0a4267fa18dba94a2237e8fe599f"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-4.webp",
+      "sha256": "6b63c63349469fbadeb7deb867ee9c1f35e5f2802fb27b1c5713b30141440bd8"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-5.webp",
+      "sha256": "37f8fbae193d1e76d169e698b779a1a0f09f6e7bb68d2a076fc980d3cac178f2"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-6.webp",
+      "sha256": "9af8b6344a98357cf31cb5b8227bddc628ca0c3ae03b2e5432db83e96822ad70"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-7.webp",
+      "sha256": "cb93e9094137c0764c6ea429d40360ad3e87623e59efcf52ff94dfb226be1585"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-8.webp",
+      "sha256": "edc3ef38f0d554fc0a63cf8a9a1de71d57ad4cbc40d2c6b510fc78bf6e946a42"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-9.webp",
+      "sha256": "0bcbaeca45f26a1c330fd9f711b9e34281089c5f76d6fc063c25686579353002"
+    },
+    {
+      "path": "assets/production/battle/bm02-polish-r2/foliage-small.webp",
+      "sha256": "a4b98b9990b23a5e8c79ea9e22f28dc57f929c4241fbb6e3962e64d3c84c7a90"
+    },
+    {
+      "path": "assets/production/battle/bm03-volcano-polish-r3/base.webp",
+      "sha256": "6544dd57212a9834547c38a098a7b6c27b73522d8be8e7116f5fd403c174be05"
+    },
+    {
+      "path": "assets/production/battle/bm03-volcano-polish-r3/boundary-glow.webp",
+      "sha256": "280b72f37c79ed0f9c330cc3fd29ea2285ade50a5b0819a43b3a295111c84541"
+    },
+    {
+      "path": "assets/production/battle/bm03-volcano-polish-r3/cooled.webp",
+      "sha256": "939b04b97425abea1365bb7b45a70201ad7b9fa832c64568ae9dc721abc0c9d3"
+    },
+    {
+      "path": "assets/production/battle/bm03-volcano-polish-r3/flow-tile.webp",
+      "sha256": "42176465a589a29441ebf1b03f7809317adb1d1662fea0e02aa1500221468b07"
+    },
+    {
+      "path": "assets/production/battle/bm03-volcano-polish-r3/lava-mask.webp",
+      "sha256": "16d0b35001797fa91a4de904d44a1f1c9ef504bfd4c693d2219af2bf5f8d048a"
+    },
+    {
+      "path": "assets/production/battle/bm03-volcano-polish-r3/reheat.webp",
+      "sha256": "fced6cdf96c2b6a07493c93ad3b30518b5df7a734034119ed75b753f93180979"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/base.webp",
+      "sha256": "8e85338ca1a15c896d2c84e7e1d5e2b57810ae49b325b329d2e76c54ad2e4b5a"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/boundary-glow.webp",
+      "sha256": "ab92daca89cf2f0ea2b8f72de9ed306262aab3b8933b85f9239bc565840dec85"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/canopy-eastern-windward-palm.webp",
+      "sha256": "7705ebbffdd363a8f3bf4d08e0b36fa5eefdfcc7b4b7e3f69c20edcc36f3ab0e"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/canopy-foreground-companion-palm.webp",
+      "sha256": "3d0b7c42e6bb2d62284066732cb4923c0f86a899b4c61354765adbac6660914c"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/canopy-foreground-hero-palm.webp",
+      "sha256": "c9b6409d77a5723f546fbbd8ada63d58168c4a671377650c20ecf1adf7adb74c"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/canopy-northwest-leaning-palm.webp",
+      "sha256": "dd43e0751a88a42bf6435acbe4f1562c06745c1c0e66f299bfa1fc9737b273c0"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/canopy-northwest-younger-palm.webp",
+      "sha256": "ca44d768f664477a922b2d93c49200e1ff83cad2f81e441c1a7a89704b98e216"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/caustic-tile.webp",
+      "sha256": "2dadf0d364cc93381d9bd68fb3431042a9e3c59405e73b0e4311b582de5f3f0f"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r0-0.webp",
+      "sha256": "036f02f328763e7943d238b969515a1850221a8088a96d49dd391e2ae6d5d260"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r0-1.webp",
+      "sha256": "ad0f01d8a77180b2aa89cd0254f18d7f2d0e676a5d23f3233d1091bdff3f2aa9"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r0-2.webp",
+      "sha256": "91fe18f3e80f9bb16213469115ed8d8ff1b8d64d7530c4f2cb60a57eb405c22d"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r0-3.webp",
+      "sha256": "08f0748369fdbaec2bc378c56516997e8dc268cc6464dc0eeece085dd76a1ef0"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r0-4.webp",
+      "sha256": "035426677a03189a0949631f7898046ce8e1fd2b648ecef3f5b444d1fa28747b"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r0-5.webp",
+      "sha256": "b7017133113aa3c9e667ffd9ad9955fd3e6fc47c6601056cd48413ed5fb4e0c3"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r0-6.webp",
+      "sha256": "99833ea46b5bf13c83ca4b8798be028fbb3d00ede839a50a1f222cb28cb537fd"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r0-7.webp",
+      "sha256": "f7e650390eea05412c3b8c109db396c77b1130d6890babe8da4013f9ee9c7491"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r1-0.webp",
+      "sha256": "7a417163e2890ea97990defc972b422b11a2d3e1f81a5eaa318263d3de139608"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r1-1.webp",
+      "sha256": "d30209f82cf6116d7d2fb768378d7ba46783a9ea2621fdf216b2d66ff3661606"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r1-2.webp",
+      "sha256": "a88f8bebac515f4986ea787d45a7cfd715fb5f3044e5a2de0eec862a68ea2f4c"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r1-3.webp",
+      "sha256": "1fb15c83d8ed97a743c36b693a44cf7d4f6e7660cfdf004dfb67cd9a776167b3"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r1-4.webp",
+      "sha256": "652ac32797e9635680af00c8a944f6ab2d565e848360f267c8f2d22debfbb950"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r1-5.webp",
+      "sha256": "1451e66f0250cc529e19e849ee750b848161b59dbdb17903244dfe972b3f3e0d"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r1-6.webp",
+      "sha256": "997839f20d0cba3142c1acdcaeecf5b9ab7064831583fe995aa91bd1ee3f12b3"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r1-7.webp",
+      "sha256": "2fd8a4c6352e98387891a521fc3fcb143ad8d2ce7ea9ce9ba85997285f76bd5c"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r2-0.webp",
+      "sha256": "10c433ff57c770d9db74f19d5b3ca75512cef617d519664a5eb155b890e82b27"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r2-1.webp",
+      "sha256": "2ae26c91eb59e45894d52a3795d51957861ae1ea6aa535dab2e09fc981306025"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r2-2.webp",
+      "sha256": "507e1a80eefdb53a929907b1f46d2525fb70285cd68da8cd2ee4902dc0fea771"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r2-3.webp",
+      "sha256": "d44209e42e5f0de7e830e24b71cb28eeb248b271fcb68006015e07f9f4d27cf7"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r2-4.webp",
+      "sha256": "ca99b2e4a30a685559b6b361ee3b2553418cc453926ee8fc5cb19e6b20756b53"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r2-5.webp",
+      "sha256": "6b5f67e1f94a142bb65d9c389aa7146a63265d4c5ed72b4e71cc7d6956c439ff"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r2-6.webp",
+      "sha256": "5487788ac25d6130d42f0276652ff0ff4b67bd1bf6c7c055db365a6aa4470481"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/foam-r2-7.webp",
+      "sha256": "0b15e18f9d7ab11fec3cab634eb351057d04b04e62dfacda3234ae9f77abbefb"
+    },
+    {
+      "path": "assets/production/battle/bm04-island-polish-r2/water-mask.webp",
+      "sha256": "0584135749ce0c066915a8c59a10db4f08d8d620ce11ba0a3d5d727de9ebf087"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/base.webp",
+      "sha256": "7af187cf2eeed9229ca71d9abf96f783a82ab904420732e446c1fba5e821370a"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/boundary-glow.webp",
+      "sha256": "4f62e306d208ecf787e40f5d0e1ca9f8984d7ba7f68c7a41a42d67eaa9152d4c"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/cracked.webp",
+      "sha256": "4e1dad172f4f0cfaac814258a04f99564f4527aef13709ccb017bd0265744731"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-0.webp",
+      "sha256": "2373b168e9bb7de81f473d73af4ed9032639b710706992b9f681fdd58ae71dfa"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-1.webp",
+      "sha256": "d2ba0e8bd9c606b06fa88c14230988e4012f3dc38ab270a709793828a18b569c"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-2.webp",
+      "sha256": "872a2808b409231afa6eae59162626173d9fca55697297ab56c592066f3a231d"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-3.webp",
+      "sha256": "3975edb879b4969e7277d5bb44cb517d1db207c39bc9923f64f842f392e67014"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-4.webp",
+      "sha256": "1277abe44566a4e93fba7f0f2b6e1c965bdfbcce34dc2960e911d61368e4c9c2"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-5.webp",
+      "sha256": "b07d6bd29e490dfd50a55f9293fc2822a6d5732dcaed0d96aa95093e1bcf51a9"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-6.webp",
+      "sha256": "ccfe8a06207db70de18914acaf2a7eb4736df5613ace487541a86f02f1d7cafc"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/foam-r0-7.webp",
+      "sha256": "d31d5f93f31ab2355a00ac65c9e8977868f91da0acfbf026636adf392faed884"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/open-water.webp",
+      "sha256": "f696fca9e005cc6aac3077ee5e69ce04d7c0d6fe24a9161ece2209e785396477"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/sea-mask.webp",
+      "sha256": "4730ed096936a469932ee58e27c5a9ddefe8d97cdebd53d058b089efd07d731a"
+    },
+    {
+      "path": "assets/production/battle/bm05-southpole-polish-r2/wave-tile.webp",
+      "sha256": "062b1b64b3a5f7405cb18a64b5e9e582e2193440b7261389162da8daacbb3718"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/base.webp",
+      "sha256": "33d4b5f39fb709572a857d37c1d02b1e30b2afe1dc57d0db6431a7958ce387c9"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/boundary-glow.webp",
+      "sha256": "c0bee4b9c850cb9d786d2e3b4155b57c1d68db0ac44ca1358c019a7b1a06a6c2"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/floor-mask.webp",
+      "sha256": "a125615ac7f80f6480371a018307cca03c35d64a9252f3e99dbe49fdf62d6b57"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-0.webp",
+      "sha256": "53b1744fc2e1dfa1f478244000d1ce4adbded3da74f7e9ef74509b27c0b9bffc"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-1.webp",
+      "sha256": "0a0e6ae5087f23d5ce8b3fb47e90f1b8383b5ddd9844f22597c7a5e7e10072c2"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-10.webp",
+      "sha256": "49d97eaf3740ec92a46c385b45919325f69907df610ded5b735b2f858e094518"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-11.webp",
+      "sha256": "769e1bec11e6ffa934b5914c75530c12a5a99e0ecbc3d9dcc6ef3d13ddfd57f3"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-12.webp",
+      "sha256": "bffafd73de801e198ba571391efcfa9db915664ec24d3802c1ebcfa0c1ffb4e7"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-2.webp",
+      "sha256": "04d9e8e087d0952d16f6c893baedf58f4ad11adf1072c0b29c3a90e723cd2cc3"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-3.webp",
+      "sha256": "bb03573fd68fa1c6c7223dda91df94799f0585812b4359eb01ee2cc46ce2b8ce"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-4.webp",
+      "sha256": "c5ca44755ac461dcb2ce855f2ce6c907117bcd150b0bacd9e3cadae186a2cf48"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-5.webp",
+      "sha256": "045bbb1a2f72afcd7d7420f9d78d6d13a66710bace5e7c487853e892e28d85a1"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-6.webp",
+      "sha256": "76637433382e37d2a9e72c183291fdbb548109493e92a371ccdf6ef2ef6d57a3"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-7.webp",
+      "sha256": "2d53eb20b8349481579c14078e028e54d8437c6e4709bb27b0980fbcb848a1e4"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-8.webp",
+      "sha256": "ea6a2afd3ed24769947d6d57f9a8df2b8737207f2123b36c0b372edc0871d60e"
+    },
+    {
+      "path": "assets/production/battle/bm06-polish-r2/foliage-9.webp",
+      "sha256": "c836387762fa57cc88bb969a39b1bd316b3213c46b3edde0166360e544642ced"
+    },
+    {
+      "path": "assets/production/battle/bm07-polish-r2/base.webp",
+      "sha256": "c9cf929035cc0d6ecc2014d1feec03fc40a43e928dff11d620c66d5b263b7cbf"
+    },
+    {
+      "path": "assets/production/battle/bm07-polish-r2/emissive.webp",
+      "sha256": "79e3664f8b272e13d55e356ae5717e25ef58096b758954c2f8f854414e8dce18"
+    },
+    {
+      "path": "assets/production/battle/bm07-polish-r2/floor-mask.webp",
+      "sha256": "26bde99891c4404e8cd2c000f6b614649beaa82184db3215004d9ba9a2877e11"
+    },
+    {
+      "path": "assets/production/battle/bm07-polish-r2/rotor-0.webp",
+      "sha256": "cef3310c9072fc5f0e0f73b3101d1ced0be18d2dc3406ace5ef6d91ebdb20cae"
+    },
+    {
+      "path": "assets/production/battle/bm07-polish-r2/rotor-1.webp",
+      "sha256": "970ec76fd175152bfa8abb469bc5e74d8d2e71b827f8a4bceb0679fbebb9605f"
+    },
+    {
+      "path": "assets/production/battle/bm08-polish-r2/base.webp",
+      "sha256": "05ec202651aebda84deffeba196a7cceb233c7c60e3ab42ae44e637fa698dde1"
+    },
+    {
+      "path": "assets/production/battle/bm08-polish-r2/boundary-glow.webp",
+      "sha256": "efa148f3fff45606a66f255a250f5a0f7de7de4623e3051452aa91619a862e10"
+    },
+    {
+      "path": "assets/production/battle/bm08-polish-r2/emissive.webp",
+      "sha256": "86d3371b298750f68c751f1b39e0ef7f7f3cb6dfd297b622cf97c8d1c6dca049"
+    },
+    {
+      "path": "assets/production/battle/bm08-polish-r2/floor-mask.webp",
+      "sha256": "53af9cbd6967e5108e282eab66fc85b5969427bb5c2f2673b5aad6465e02d306"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/base.webp",
+      "sha256": "fd8ef743a0dae7b585c244986dde602bb45e1bc04b0d45bc9f868c5391d8e87c"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/boundary-glow.webp",
+      "sha256": "3c16d28b7d453e565f422ce5e72ef9c945120069e8ecb55637d2b22bf05d86f6"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/emissive.webp",
+      "sha256": "16ffca4f3451677ffcffcb172242a2efc789feb9f01655d49e15690d4070a364"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/floor-mask.webp",
+      "sha256": "f7d5ce80f4cebfb69d77b9b8d1af29f7af265814e605044e938606b66ba72c31"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-0.webp",
+      "sha256": "9cca0bd2d983a4316d1193b0722bd5efe66aa11197a295817d03d6acd31aea68"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-1.webp",
+      "sha256": "77998995674ad4b439d129f48fd6bd11329059acb52b504400f107a852ab373e"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-2.webp",
+      "sha256": "2942a560b32a8489fb34cae0bcb8f89ec3a60a5d7e608adc47df8931ee06fcaf"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-3.webp",
+      "sha256": "1acaa3d37d5ca3e1a1cad7e054d789f1e333aa8105c80d8d04ca0e6a030bd38b"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-4.webp",
+      "sha256": "9b6fe84bf2fe993ff475cae0a931a27975dca73e185174938c94686063f56321"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-5.webp",
+      "sha256": "1bdbafbe06e11e36b31f3e5d8d89a30943a0dfa7c875313e17fdeac045b5ffba"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-6.webp",
+      "sha256": "bdce25ec499e5cd6557c26cdc5c23754f5159ba2ab261de46eac3ba7b95baac3"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-7.webp",
+      "sha256": "bd27ca966700e50b53a64ce7f94cf1d23cd113ec09dfeacc36d3cc678c71d7e5"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-8.webp",
+      "sha256": "194a77e83353fdb71e647c4e4ad71c68eea493542d6d0b631e5c57892dd47035"
+    },
+    {
+      "path": "assets/production/battle/bm09-polish-r2/foliage-small.webp",
+      "sha256": "d2cd9fa59d81dab1eeb7396bf35719f81bc101411db0fa23eb8d0036a0b217f5"
+    },
+    {
+      "path": "assets/production/battle/bm10-polish-r2/base.webp",
+      "sha256": "7e22cf75df427fcc34fd68addf4257882d5272782c6954d8dc7ce6623b674c32"
+    },
+    {
+      "path": "assets/production/battle/bm10-polish-r2/boundary-glow.webp",
+      "sha256": "fa148d436be7ff4637eb9a7f081b37e44b52e0b08b741bddac2eca89adb5bc0b"
+    },
+    {
+      "path": "assets/production/battle/bm10-polish-r2/emissive.webp",
+      "sha256": "95bd156241ca7530ad60aba9dadf90b86460e838cce8880a1293823e0ad7f590"
+    },
+    {
+      "path": "assets/production/battle/bm10-polish-r2/floor-mask.webp",
+      "sha256": "5e12c68e56f405794b51b452204f9f1fd743f2f3c04323b5e46bf7268249bead"
+    },
+    {
+      "path": "assets/production/battle/bm11-polish-r2/base.webp",
+      "sha256": "797e5043caddfabd36ba59aaf28f2fb8cba1a4190e748d9d205ebbdd932abb6c"
+    },
+    {
+      "path": "assets/production/battle/bm11-polish-r2/boundary-glow.webp",
+      "sha256": "f96520d762aa8814a7bc8ebb14fbc5605ec707ffe85376d3c8edfe416baa3806"
+    },
+    {
+      "path": "assets/production/battle/bm11-polish-r2/emissive.webp",
+      "sha256": "e13e920233ff6c72fe37c0e211236a5e5eab18e909177392c7639ae722c01193"
+    },
+    {
+      "path": "assets/production/battle/bm11-polish-r2/floor-mask.webp",
+      "sha256": "41b2ff8a7d865991b6537050fe759c71ad1a1aea1ece5b788454a48dc71df7ba"
+    },
+    {
       "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
       "sha256": "5cbde044f22e406ceb856d70e91de12da4e5f80eea151bf21e8d1b86a2d728a5"
     },
@@ -78,48 +578,1327 @@
       "sha256": "fe495111ed5b04a0509c44a8135e1d354b7a5d421710e3e4658758c11e8dcebf"
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm01_01/frame-00.webp",
-      "sha256": "c9201ed52c4bdec86912b05a656c90c6a0fae709816aa8f7cf0e169c3cd34b96"
+      "path": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
+      "sha256": "8722ddb69ae4dbdd98276997f96676d0db4b739254da299ac4cdf1ef64de3ca5"
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm02_01/frame-00.webp",
-      "sha256": "f552042965b3256da3e1e86781ab17cfd899371bb688c26066b61af5f619fd19"
+      "path": "assets/production/battle/shared-ambient-r2/gust-streak-tile.webp",
+      "sha256": "92377e537d49bf9cf9a469bfbf4e6ff5a7aecd4911d20e95a3d68cc4ad3b07c7"
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm03_01/frame-00.webp",
-      "sha256": "f26de416ea74900d152b80797343120fa8d40f553ceca2c200409a02ddb99bfe"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm01_01-ambient.webp",
+      "sha256": "2ed38fa002e52435f8fdd7425d050b6b21c16ea6533c9e1a501fd1a2e888088d"
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm04_01/frame-00.webp",
-      "sha256": "34daac1e539da6544057feb0d38200f37d51a8ae29b4773fec62456d7628b320"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm01_01.json",
+      "sha256": "c7ec044ec04517cef296a3cd182974ad7bacf5deb350ae1627449350cb412c8c",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm05_01/frame-00.webp",
-      "sha256": "e15d75b484f0d8b52694a97efa57e5b64c1d8a9a58fa37cd61eb9ba3c5eae880"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm02_01-ambient.webp",
+      "sha256": "a3f888f78a3ce4751282dd88bdfb62bd393c7c28aff438d8822b53b22720b7dc"
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm06_01/frame-00.webp",
-      "sha256": "0b80cf6732b8b081defd9cbae6e607fa86e87e36f5709b329abdef46e501465e"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm02_01.json",
+      "sha256": "3df30070be01357a26893e78a64b6e6ade2aaf1eb96b2da43630d14b68d17779",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm07_01/frame-00.webp",
-      "sha256": "bc55d5290abfa61a463e092dd6b09489dd3ba0450021b76a84eb4dcf9e973a34"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm04_01-ambient.webp",
+      "sha256": "81d07bad7c31d17773152ae538d61aeee495daa93de07773393160a6ff363cb9"
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm08_01/frame-00.webp",
-      "sha256": "415deb6de2eb6de9d39a51654ac1785923da9bf00d97624bf06799ec1a2a3516"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm04_01.json",
+      "sha256": "4c34d3936f0db258fa907b3f7ef8db93888f7aac384cbac57956fa753d8d4547",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm09_01/frame-00.webp",
-      "sha256": "643dd330a11da432030f705aa789f707631891cef3839275934e17d4b797ac00"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm05_01-ambient.webp",
+      "sha256": "a746c93914918e7d6278146865fde344506bf4827bcae9d5a5b1296e288e7f88"
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm10_01/frame-00.webp",
-      "sha256": "4da0d95aa333e38f2902a8c574edd6ca71256d293fe2cc385808c769900bee1a"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm05_01.json",
+      "sha256": "19162e8ad5eaae50497ef6eda282b76e434764d613b959b489b7d2d3ffc2f85f",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "dir",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "period",
+        "phase",
+        "pivot",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
     },
     {
-      "path": "assets/production/battle/original-opus-v1/fields/field_bm11_01/frame-00.webp",
-      "sha256": "96083d18f000574304012884a9b106040251ef124a4f7fa08bb053977dc574c2"
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm06_01-ambient.webp",
+      "sha256": "277152f3fa9219c9eccf97b365a8cb93e2acc8f80e6bf6da8156623559a73108"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm06_01.json",
+      "sha256": "19ec4f16fd50d09dc4eaa8af08e6843a8f672d666a50d376da33c4b15fc73342",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm07_01-ambient.webp",
+      "sha256": "84e7f89e81f2b2409416a02303f8b24156c4893e70c95327de4331cfe5d69e70"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm07_01.json",
+      "sha256": "4e5f857ee58c3007852d92f0843a8460b23cb71229f5a71d5f8bf4f55ebe3f60",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "boxes",
+        "decodedBytes",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "particles",
+        "pixelScale",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm08_01-ambient.webp",
+      "sha256": "294ba6cab3cdcc5837642c455fd3a5eae310c1cfb22fa5ccdb4b5855536aea01"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm08_01.json",
+      "sha256": "3cd896b1dbd5ff94d965fac0683d3eeb725605a1b8283f99f499fcb134908913",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm09_01-ambient.webp",
+      "sha256": "4bf16b433f68d7fb3e5352108188d999e18fba7e822e492d58b45dbf1b5b2f44"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm09_01.json",
+      "sha256": "fe50e03c414ccb57aba4c2d91efce0fb8307d7ae9865a346368c0ef1142e7455",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm10_01-ambient.webp",
+      "sha256": "7da74119f30b9afdb8f1e5ea5d9b94c80e8535031e20912c459fc282dd9dce90"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm10_01.json",
+      "sha256": "626998c68b0df9f881552dfb0223e2bd89251b7a555e2e4ed597effb035768d5",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm11_01-ambient.webp",
+      "sha256": "f157e539928786ce8e8141a57ed788147a4813f3bee8bef98b14df6a617f8ac8"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm11_01.json",
+      "sha256": "2bf07f81ad4a4007eb153beeeda4e9fad514dd19251e52f6ec181918adbc357a",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm12_01-ambient.webp",
+      "sha256": "81fb8bf215d309fdafd974b8dd858b94b636b86cd89789b04f770fd7a8a60e25"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm12_01.json",
+      "sha256": "6a2edd92d402dc163eb16042700c054f34f223eb6b2a862b795a4c6015b5d9c3",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm13_01-ambient.webp",
+      "sha256": "ad54ddd45d7af6e2aaf87b5c3abe81072c6298529e160d57358122338263c8a4"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm13_01.json",
+      "sha256": "376f8acbde92b8eaa62c5cdc22560378aaccc0960be957ab39aa4fb68d2599f7",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm14_01-ambient.webp",
+      "sha256": "3aa309f63df714dcecf9c58c5a2f1e1bdc5493f128e6182f788435cc1e997445"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm14_01.json",
+      "sha256": "162beb3790c8e9538edc8c6fb40cb2d1b70d1297a53cb5bbb73fc5e9e3f29976",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm15_01-ambient.webp",
+      "sha256": "b6d1e0dfcf65e536b8dd1a22d4ad8af3ceb69cba97367d85a8d5262ff83c5674"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm15_01.json",
+      "sha256": "fe82bf13fdb6f80754d649a0b686581a80af6c902f88d6899e3667a969add137",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "dir",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "period",
+        "phase",
+        "pivot",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm16_01-ambient.webp",
+      "sha256": "8e151570b118202d36131cf0f09c55738a74576e12f2ee9e4b913093e99180b1"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm16_01.json",
+      "sha256": "44e9f9db219d7ba0f122e2f8a1219a754b29f82f32135ed362a30929d14de608",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm17_01-ambient.webp",
+      "sha256": "fd9500e87b308ee66dddd4fe05640511f2b5ce358d680c40458e6cd9cee80df2"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm17_01.json",
+      "sha256": "464358c761cace9031c83347903581d79a3c148addfc23c9b26b8242b73e45e9",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm18_01-ambient.webp",
+      "sha256": "820ad217e4172b1b44b8eddfc84f8f335444e456d60c0103dabb9bd4a4cc95f6"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm18_01.json",
+      "sha256": "17441d6a440a4f9ab3c16ce1c202026bf36b388e624510fba28a955872f8895d",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm19_01-ambient.webp",
+      "sha256": "e5e3a5307ede4a56988ceb41e3b5d98a44119b34abda4bf2050ea2e8909a0bc0"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm19_01.json",
+      "sha256": "f5984ac38c6c4c8033c00782de6a26d73f89dc2a3f19480098d805571801da3d",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm20_01-ambient.webp",
+      "sha256": "c79443e4c137c62a68f667f56708612798601931114be5a65cd3cc39b2f82dad"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm20_01.json",
+      "sha256": "6b0a4a65e002c29b83f9c4a1efb9c3b2542d5c89217f565ea96afc6318c7392b",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm21_01-ambient.webp",
+      "sha256": "9ae0d905e899b33049f838fba8dcfe1a480c1093eb7cd18d5eda022de6a15dd9"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm21_01.json",
+      "sha256": "9f5740a3b068ceefa0cbf83052bde663eee0b85f89c096e8cc1cf806450b6d87",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm22_01-ambient.webp",
+      "sha256": "109350961e5ffb3e165188bb0bdc4ca69d0bf94ebab6359f0e3c254de6a101c5"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm22_01.json",
+      "sha256": "bd0cc2f876214daed38c5532c0f19e6d6c62075162b175509b13b9aa64aa1952",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm23_01-ambient.webp",
+      "sha256": "81df76628cee52664adfddb5ed98031bb9f9a13cde265836ba04aa3498ed706a"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm23_01.json",
+      "sha256": "a9df357a431808c011e80c89bc59b970edcf93714a72bfb8f8a937d9c9249c08",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm24_01-ambient.webp",
+      "sha256": "0df2dc9c475c44ea6d046aae3a891c76ff7f61fe946dc92ba2e00ec851d2e260"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm24_01.json",
+      "sha256": "808b6cb19c926a45e8b9e3c936fb6e5b8bcfb0c89451ece5821526ca73a02e84",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "source",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm25_01-ambient.webp",
+      "sha256": "46957466da7f45ac3dc1b732e08735e5649bbe430a9772a0532919351bedcbeb"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm25_01.json",
+      "sha256": "e97fcbf030ec034bb87e96ab7d1e3d41b6e414b275400975d2f63072f71a73d7",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm26_01-ambient.webp",
+      "sha256": "8d91929ba8e3ffab12ba034b130d32ebe0c8996bd722d4de9a5bc78777363136"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm26_01.json",
+      "sha256": "23c506c92c36706ca928f8d6f879fefed1722066910a90c5b80f81b750c7a7d6",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm27_01-ambient.webp",
+      "sha256": "8c60fc0a156abecbb4b9ac6a4fe86bf986faf128a6f3e8ef8a8a8ef9d620a7ab"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm27_01.json",
+      "sha256": "a47774800c1a8c1aeaea4d4d4ce06ec17d5d5d44d486b40160eef2cb460172ff",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm30_01-ambient.webp",
+      "sha256": "befdd52789fe4f1eb13a389e09a0834f0ca44ea1d2e18b975b0f00cfca0ef1be"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm30_01.json",
+      "sha256": "242e25a53350cd83c6bcb1d300be49d9bfaeea31b3a2f2524512464d69f358d0",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm31_01-ambient.webp",
+      "sha256": "a19db9a7798e8689608c21135a72a6ad02eb7a6b7e0c1cf6e249dbbc66595c81"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm31_01.json",
+      "sha256": "dd76c5f13d44123f7fd9f478a009801f78b515dc13a52c3dc92ead9fc388bea6",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm32_01-ambient.webp",
+      "sha256": "0c9e781fae602dd045a8fe4cf98150af75cc878bfcfe6864898c0a87c6ef7d40"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm32_01.json",
+      "sha256": "c991c7b72515b12c20b0568daf3c878e9d2f002b1a0acfc3fc21270578266b72",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm34_01-ambient.webp",
+      "sha256": "1aa114a75a0c6a4a8f7b4a9ed83414bb9e7d087f170426d7fe944b9599b4cfd0"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm34_01.json",
+      "sha256": "cf87609ff7af90926550a1386497e105aca3e4b95b632a91fd655167b40b07d0",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pivot",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm35_01-ambient.webp",
+      "sha256": "84e7f89e81f2b2409416a02303f8b24156c4893e70c95327de4331cfe5d69e70"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm35_01.json",
+      "sha256": "95704265b3050661407970110d9037e93d6e1908ebd5f955f31661a9b0b06dd0",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "boxes",
+        "decodedBytes",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "particles",
+        "pixelScale",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm37_01-ambient.webp",
+      "sha256": "6256a02c24d8913fa863fa7484668f7e5f0e97ea9a613d456c38cd0dbfdec7af"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm37_01.json",
+      "sha256": "b4f9d47e712a3a43d984b6364394663d534da5374b691ea71298c2f900d6c9b2",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm39_01-ambient.webp",
+      "sha256": "71775b1a43a70d30729171f9baf83d419a1cab7b16e35e2ff9892c595047b58a"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm39_01.json",
+      "sha256": "ed88887aa1d53e9a5afdcc13e1eee47e067b634e7f1cca73e679fecb2418ecdd",
+      "jsonFields": [
+        "amp",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "speed",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm40_01-ambient.webp",
+      "sha256": "eca52408ff9afcf23aac7d29869979dc89e09ee0a06b777251aad84da50f042a"
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/field_cm40_01.json",
+      "sha256": "798fe957ae3cbcbd9d1634db52289c8a2f4d34396c6246a2737a3abcf37be5b1",
+      "jsonFields": [
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "boxes",
+        "decodedBytes",
+        "depthNative",
+        "elements",
+        "fieldId",
+        "height",
+        "kind",
+        "mode",
+        "objects",
+        "particles",
+        "phase",
+        "pixelScale",
+        "pixels",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/ambient-review-polish-20261019/index.json",
+      "sha256": "1e4ccee23c287ca2d8fa42d0116e6bc4866b4b59ef8a25d086cd345ce62b5490",
+      "jsonFields": [
+        "assetId",
+        "fieldId",
+        "fields",
+        "manifest",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sourceHash"
+      ]
+    },
+    {
+      "path": "assets/production/cage/cm02-goal-foreground-polish-20261019/manifest.json",
+      "sha256": "441531b7361fc7d00da166939c0847ad7f37b2538f3d9b884057764a7642a136",
+      "jsonFields": [
+        "alphaPolicy",
+        "animationClock",
+        "assetId",
+        "depthNative",
+        "fieldId",
+        "footprintRaster",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "mask-mouth.png",
+        "mask-net.png",
+        "maskPngsKeptOutsideRepository",
+        "maskRects",
+        "masterSha256",
+        "method",
+        "mouth",
+        "mouthY",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "rear",
+        "rearY",
+        "runtimeLoadsMaskPngs",
+        "runtimeLoadsPackedPngs",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "visualPaddingRaster",
+        "width",
+        "x",
+        "y"
+      ]
     },
     {
       "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-00-0.png",
@@ -214,116 +1993,12 @@
       "sha256": "ddbdca6347bd44944f7826439ce6f4a78fadf623fa3517366d0db53a3863a038"
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm01_01/frame-00.webp",
-      "sha256": "d58df0d87a5a47da445ffe7f5dc75a86cf26dba91c266f32717cf9d92a71752f"
-    },
-    {
       "path": "assets/production/cage/final-intake-20261008/fields/field_cm03_01/frame-00.webp",
       "sha256": "b757e18558a44b0f2ebd3052ae9de508258cff9b4670fe3b8215fb55bf6d70df"
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm04_01/frame-00.webp",
-      "sha256": "61860fe8881bb13a8ebbcc3318a2f48a01abe973f9eee041ab577f69eee06cc7"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm05_01/frame-00.webp",
-      "sha256": "9209b1a1b6de1678575aa9e24e624d41d47116aec2d073bb3a9e3e4ed5cd6daf"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm06_01/frame-00.webp",
-      "sha256": "69236570228b748f7b3a96672f1ac52a2321387a419bd9b05ac047adeca5a761"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm07_01/frame-00.webp",
-      "sha256": "8b852f1e1a448d9e4262e881428ad1eb10feaf387689c59454897a09a521d839"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm07_01/frame-01.webp",
-      "sha256": "43c3c4d03d2a461c5ef42b25cf76c1f41fc1db6a3596fdb7bd99f13bef322b61"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm08_01/frame-00.webp",
-      "sha256": "262bcbafd77b26abc04b7f9eda83207178847e73a72321a83f0f4858a3ccba00"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm09_01/frame-00.webp",
-      "sha256": "914abd00861147a3c90bac76a23fa74028c2d38a9410cdde56c29beab58c87dc"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm09_01/frame-01.webp",
-      "sha256": "0868f0e9dbe4a0adf6d6b06d1af96f30fcd2beed83d2c53f3585a9c67026a3e0"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm10_01/frame-00.webp",
-      "sha256": "ea829d993f39e1fa2cc7c301d396a9dba1a444602389a838aeca2fbe12d8b75e"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm11_01/frame-00.webp",
-      "sha256": "b20ae37023342d6abf63aba4afe825af65da1bc75a0b934c1f978682edb30343"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm12_01/frame-00.webp",
-      "sha256": "34c566b7714e70003a21c9de7488e0978275136f14171f7d59b9ad857f5bf8dc"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm13_01/frame-00.webp",
-      "sha256": "07bb4525268db41509a0aa4afbaaaf11dcbc019c8a885a686dccb8a6d3755881"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm14_01/frame-00.webp",
-      "sha256": "6f97cf360f40d137473f938008e70c837d8c10cc476a759f18c527bc3e54f442"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm15_01/frame-00.webp",
-      "sha256": "7ca03ad74f6be32da16bb78a11064954b86d190061c550abe35efb61348ffa44"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm16_01/frame-00.webp",
-      "sha256": "fde2a4a230a0e99ac9a814f7b9e897f97e1f671e25c4aa1b0e8378b5be2fd099"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm17_01/frame-00.webp",
-      "sha256": "13b16eab8b99175503fdb346da13b3d7352d7aacc9690abe843da28261edd2e5"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm19_01/frame-00.webp",
-      "sha256": "8bfcb86cabd8a8bc7dabb8475e7393541586e90a74255f901c60db3d76cda1b8"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm20_01/frame-00.webp",
-      "sha256": "982d06c7d2fd60230d436fc77d745ec6dad8db78bd19e886a2bf68fcc01223f5"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm21_01/frame-00.webp",
-      "sha256": "d4f6a91a70107fff39057a0b01e0b84a2f1f45f0628eacaaa22c5337183cb4f0"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm21_01/frame-01.webp",
-      "sha256": "d1b03ebe8103ea5449d2de07f11cbcbb39c39e6765a71037bda51dd19b49e6d9"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm22_01/frame-00.webp",
-      "sha256": "632a0d52553a80be787fcfdd317a62298c15ffdcd4ac80d3f7d8bc25b425a7a7"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm23_01/frame-00.webp",
-      "sha256": "8033c103f23bd720c0282d27c8780bf33ca0016974c81e7e0ddac70cc75c7601"
-    },
-    {
       "path": "assets/production/cage/final-intake-20261008/fields/field_cm24_01/frame-00.webp",
       "sha256": "601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm25_01/frame-00.webp",
-      "sha256": "0b2df5476e6fc7e5e2ce0ef86c414734fde4dd32f4d96bafd8c082edcaf13fb4"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm26_01/frame-00.webp",
-      "sha256": "c2b556e66bc1f4d4a0be4b576e362dcfeafa9047e8364635fe3dfc32fe168d19"
-    },
-    {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm27_01/frame-00.webp",
-      "sha256": "38a756affa4304d3eeb5f3e8b22e82f2e770f0adb0dcbfd824a20e07e393290a"
     },
     {
       "path": "assets/production/cage/final-intake-20261008/fields/field_cm28_01/frame-00.webp",
@@ -334,32 +2009,1558 @@
       "sha256": "44ef978cb914e7249fe308f63e1b4c21135b9eb7594a93352177dde85b20fd56"
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm30_01/frame-00.webp",
-      "sha256": "24f108db6bb5b9826bfd01eb576479e7fb33b889476b8e1962e42678dbb07913"
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm01_01-occluders.webp",
+      "sha256": "e9dd807577e05cd875991c0c2c9db377036ddec7bee00a958a8c3954e3508217"
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm31_01/frame-00.webp",
-      "sha256": "b4805ac5b9bc7030c13e49dddaaf60ffee6512c26d2becfacfc3519571145dd6"
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm01_01.json",
+      "sha256": "21d71754201e56829e6c12a4683455f5afc4d7a6cc3f26856ec028b8b1ce74d6",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm32_01/frame-00.webp",
-      "sha256": "606fe143d6718d33efc2ac570cd69dd726c996453943b3b363d5d9decd27e73f"
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm04_01-occluders.webp",
+      "sha256": "bfed973ea67ad0d073ca325fc69df8954e7ea7ba113c78da1c990bbb4b9fd6df"
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm34_01/frame-00.webp",
-      "sha256": "83e8ca9a18c4e3364ba58cad6bc81440e64f3dbd5452339a52428485e55dd41b"
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm04_01.json",
+      "sha256": "4371cadffec80b95d301529f4b451189d0955d757f46cefb9ab95a13da2bd2ba",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm35_01/frame-00.webp",
-      "sha256": "feaa658ea72ca88d67c480a2891091cd2edd5658003b94fcd286eaf2beff28e3"
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm05_01-occluders.webp",
+      "sha256": "60f55b6da22066913a0656f7f780c140d8db4ada1b21e817485f4fcd4b32a5a7"
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm37_01/frame-00.webp",
-      "sha256": "ce27eae8b2ab9c98a622dc5bbbca6457a028022ab58113a3ac8a77513766e7bb"
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm05_01.json",
+      "sha256": "f413969e7f38e5a924e501fb5a78d52a9321ad159aedbcaade6f98b19ef9c5b1",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
     },
     {
-      "path": "assets/production/cage/final-intake-20261008/fields/field_cm40_01/frame-00.webp",
-      "sha256": "9368a25066552a72d5469b3b5db7136dd886b181d2ff7d8ae02e166074905c1d"
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm06_01-occluders.webp",
+      "sha256": "088fa06e6ffc4b88738955a8c38e14c6e6e21577fdfe806d335c4d2905c1397a"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm06_01.json",
+      "sha256": "6e24c5e326c0d808bd537e3ac6ea0435886b9d5705ca67e60641f1bb00668371",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm07_01-occluders.webp",
+      "sha256": "60ebc55ac69f292d1a7789c7956090b6e51879dadfecd0980698a17c1b071da4"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm07_01.json",
+      "sha256": "358e7bcf5f6032f2ed1e33415b5d16888b85834d62be765a2bfb2da4bed1cf8e",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm08_01-occluders.webp",
+      "sha256": "b68c0d93ccb9f4ec50a726c579a941dd2c1bd39e753e2508e589d4292de3ff68"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm08_01.json",
+      "sha256": "c63d16f4fc341b57d48a9ead5805ff69b6b312af4b4c20669890964a531372c0",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm09_01-occluders.webp",
+      "sha256": "2de7f9097cb25427edf9299158c2eceb5020a28ff852260756a921a46e34eb0e"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm09_01.json",
+      "sha256": "cbf52ecbb83f55110bea7c2f830a6a0cb459fb885ca529185ad14dde744146f4",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm10_01-occluders.webp",
+      "sha256": "2c881b6142d4a9924fc22c10db134192656d78297614fd14c85d91bf68e68838"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm10_01.json",
+      "sha256": "2f4842df48dbaacc4872197d9992586db32e83d4d9c35b07b6f53172c9ef4638",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm11_01-occluders.webp",
+      "sha256": "9fd767ea35fa8921c232bcbab4773b553666cfb8e5edc3a9dedcfa91891774af"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm11_01.json",
+      "sha256": "f85c3fc509b7e20604972eb208f8ebd4f48d5a048d02a4d0de0d241623a7afe2",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm12_01-occluders.webp",
+      "sha256": "7634d3c4d4e53eb9e2db4d5a8c29e8ff043627e65804a21bc254f9a90636d403"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm12_01.json",
+      "sha256": "ad3c1846e267fa818ce316e0148bf1616c7e99137e048c8b952cc4adbe1c78f0",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm13_01-occluders.webp",
+      "sha256": "fa590e9c23cb2bbe9868377ca8c963c75252ada8f9dc54816d405b02525ec716"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm13_01.json",
+      "sha256": "11dd0c9de08cc6b52a05784bcee6c29831f653bcdd0c5428ee5365c7dd8c093a",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm14_01-occluders.webp",
+      "sha256": "62e665ad8b8ca0f079469a7fd7767bc9626ffd3b86e55e91ed5834231e4a076a"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm14_01.json",
+      "sha256": "1eafbb30333b63b31cb6b780ad8b447925f277781fd2d5372d5c3f009acadc25",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm15_01-occluders.webp",
+      "sha256": "bddecea159d5d850e89a014b7c9d4b3d5acfac893d44fe3e7c7ffa7c33d86148"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm15_01.json",
+      "sha256": "a4340872dab83814b8d4d9538216e8ee5c58ead7f13a1a5f40f2a11455fe02bc",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm16_01-occluders.webp",
+      "sha256": "5f1bb466dbad4a22909bf9658c70149e3a0e2ac3fbcfc92f0fdac04ccf4a3a6f"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm16_01.json",
+      "sha256": "c4959ac32666811a0e745af6e167a2f955a23a2e0c37d89b11a0fc8bfc24936e",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm17_01-occluders.webp",
+      "sha256": "206bacf05af67cd50084955e45df14cd1ad7cc390b9d1530f65af9cde904e8f2"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm17_01.json",
+      "sha256": "c179cd694c42d9fc8065475394b85f6ae537905bdd6ff8888d666bf27fa7cb5b",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm18_01-occluders.webp",
+      "sha256": "d5d24dd0765a2472be2b4b4a261b0b46d3203e9ce810cce82a77e65d59f7a1c3"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm18_01.json",
+      "sha256": "1fe19645e545e9f31071a4073e3c56edfb972dcc62b5cb6f63694d9451733540",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm19_01-occluders.webp",
+      "sha256": "b5d4fc5a35cea0391bd0bdd48973eaf54cae2ad49ea6dbed1ae56e0087d4d4c4"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm19_01.json",
+      "sha256": "836faafb592c9ea427d6cd49f41cc184a93962d1074f623b1f13e5bd1214aa38",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm20_01-occluders.webp",
+      "sha256": "27f9035a0ebe7aec20133fe190ea92562abf2cabbc84bc88d3f78c394e2e5bc3"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm20_01.json",
+      "sha256": "c053d0b90782ad8175873261fdb242d75fb3b4fb1498ce878832d553f1b892c0",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm21_01-occluders.webp",
+      "sha256": "11f2fb61d5c7f74e2ddffb7f744b8610864c54eccd1bb8e2c75f203f3492c7f0"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm21_01.json",
+      "sha256": "b1a457ae420c297f858a1cd7919a2c336471d254dadb378bf56fa8bb7deed0ac",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm22_01-occluders.webp",
+      "sha256": "83d68caabf0e2e97f329f0afd4af369f1174d7934a0b7cadbf31f32f547aaf24"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm22_01.json",
+      "sha256": "b1d6e07ec43a1972c23585754d16ec1150dbb8efbde26f23dcdd2622ca1153ef",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm23_01-occluders.webp",
+      "sha256": "6d67fb5f09c6a649e68ea3789fd646a47935fa7089463277aa250571e9caf092"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm23_01.json",
+      "sha256": "f2145bff4ac71499f29a51bbed5065a947630f5c22a49bbe28f51558385bf2dc",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm25_01-occluders.webp",
+      "sha256": "ff73e8cdbf65412244035215ae09789316e378d0c076bad2bf062657eaefe5ec"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm25_01.json",
+      "sha256": "261f7f36e7ea33a9d22f22ed399840a1253161bc1f548096551baa24c3e35293",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm26_01-occluders.webp",
+      "sha256": "ca5d5a62cdb7ca8b7c6d7da70278b75c6a7368be6a7a31f6425e127116f555e1"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm26_01.json",
+      "sha256": "0979082fe2f0d09168753d63d27b06db7f76f4fdeeed34402dc121f652dfdef4",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm27_01-occluders.webp",
+      "sha256": "6d73b0e693c8707b3471d4b3e87f2788c7d114fe10f0b91ab6a9ecf84a9073af"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm27_01.json",
+      "sha256": "b31031254f77828b8e43ca13b69c0865c534412530beeac22cc17d0466e65c05",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm30_01-occluders.webp",
+      "sha256": "13e453cd0cbf096fb80608606eb236e3b0a052bdad6b03d928fe4382957b7fc5"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm30_01.json",
+      "sha256": "9986dfcdcb7854730d37bd233705bad387cc558a50c69f43a3ca349ea11678ec",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm31_01-occluders.webp",
+      "sha256": "07d9f853359d009403e978e436e68470bf8660aec12fcf13b576796237db80a7"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm31_01.json",
+      "sha256": "a0bfa94b28a6f115da4d2990119754b83f02a5a2a574706854297635dacf1b6f",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm32_01-occluders.webp",
+      "sha256": "47e26d79d056433407c397ee8dc83f34612134f37c40db40950c46f93b5c3092"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm32_01.json",
+      "sha256": "e0b83c8ff8caa6dac0516bb6cbb7a7cc8df1cda045c63664cf6160d838e30db5",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm34_01-occluders.webp",
+      "sha256": "de744c17801bb47f418a3f3ce21b74f3580fd6b7ed568ba5b80c45391c812190"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm34_01.json",
+      "sha256": "0415329f3827c0c68d5ba6da4e7dbb9400a9825605d0db9bf99f9aa431c35031",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm35_01-occluders.webp",
+      "sha256": "63a49a8296069e19a2606439b05b0430a2671c9f1f633214a4939c825eb6388b"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm35_01.json",
+      "sha256": "baa127f517b1fcfee76b6f7050986b5588b15187a4c5843ea5ae4b8b96279633",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm37_01-occluders.webp",
+      "sha256": "16cfef3e4e8526ded916c55b2bf5dbce58abe4f7ebaaf8eb78ec1e2aa4ed9bdf"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm37_01.json",
+      "sha256": "96dd659cc079c4f6b428e60e3cd33caad51652fe0ce623dc3e4465dbf5fdcc73",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm39_01-occluders.webp",
+      "sha256": "2013f3c87dcd81f652ae2e6c8070da4743fca4613390a6cdcca0648719acac55"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm39_01.json",
+      "sha256": "671e4b08065eb380e184a78ad4aea5008245c1d9a997e39a05e339b8bf21ea80",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm40_01-occluders.webp",
+      "sha256": "99d19ffe6babfb4897e5776199328bd2b4b4eb5cedba10f1632fd45606556721"
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/field_cm40_01.json",
+      "sha256": "ee8ca26bac926b6cd717d36203aeec9be26e0f75bb4046381790c8b8aab6d2f4",
+      "jsonFields": [
+        "alphaPolicy",
+        "animatedPixelsExcluded",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "compactBaseRaster",
+        "decodedBytes",
+        "depthBandRaster",
+        "depthNative",
+        "fieldId",
+        "groundContactMethod",
+        "groundContactRaster",
+        "height",
+        "id",
+        "maskRects",
+        "masterSha256",
+        "mergedPieces",
+        "method",
+        "nativeOrigin",
+        "objects",
+        "opaquePixelCount",
+        "pixelScale",
+        "publicReleasePermitted",
+        "runtimeMethod",
+        "schemaVersion",
+        "scope",
+        "selectors",
+        "sha256",
+        "sourceComposite",
+        "src",
+        "stripWidthRaster",
+        "unmergedPieces",
+        "visualPaddingRaster",
+        "width",
+        "windPixelsExcluded",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/cage/foreground-review-polish-20261019/index.json",
+      "sha256": "5b43b82df86be119c583471d3ab23b43dd5f8ea93d2ad52719a12fa2ccba7f13",
+      "jsonFields": [
+        "assetId",
+        "depthAuthority",
+        "fieldId",
+        "fields",
+        "height",
+        "manifest",
+        "masterHash",
+        "publicReleasePermitted",
+        "schemaVersion",
+        "scope",
+        "sourceHash",
+        "width"
+      ]
     },
     {
       "path": "assets/production/cage/licensed-runtime-v1/fields/field_cm01_01/frame-00.png",
@@ -702,6 +3903,193 @@
       "sha256": "cb0953765013c0ce69423ded9282f4fd795edb159f285fd491ebc19a120158ab"
     },
     {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm01_01/frame-00.webp",
+      "sha256": "6bda4c412a5c5773742fdb405922cd5f1694fc0079dbe4329627721d8ab31acc"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm02_01/frame-00.webp",
+      "sha256": "b7760c89fb6c33104dbc39da104f48b5038b99e2592b74e191b5f1c4596a28d2"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm04_01/frame-00.webp",
+      "sha256": "7a9d1d081cba3a82dff6526e3b802ca168f09bd8a01eaaaee8324351b1822af2"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm05_01/frame-00.webp",
+      "sha256": "7be1fa1266b67d4c1c0bd66e912c779a5f0f12cf58905d86315b59de8f5be1ff"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm06_01/frame-00.webp",
+      "sha256": "5dd804c73a276988aa246f154d968066c31699050b49f4558acb7db495cc7380"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm07_01/frame-00.webp",
+      "sha256": "a266049bd318c127cc99c38ff1447432d894f30bef24b579065fc09b4c5f916c"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm07_01/frame-01.webp",
+      "sha256": "e0543c7717bafc77db2833c7f7ece676902c5ddc4af32e1e2bbc86c8b2fc095d"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm08_01/frame-00.webp",
+      "sha256": "854e5d0dfe17447af7079b4bcd07f47a27f698c93a7e3ddd2f5740bf93a1d0fd"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm09_01/frame-00.webp",
+      "sha256": "9d6c44a541507e9dde2ad22f9eafa62d288057b1fb77d708c6c183ae19caf580"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm09_01/frame-01.webp",
+      "sha256": "14e765b1fd8aa82f9f6025c234b7eaa816c78aba19122204d16411cf60c21674"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm10_01/frame-00.webp",
+      "sha256": "170c5970b4bc9c3e7ffc700d1137938967084c66191b9f0bc7958f21d49329c2"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm11_01/frame-00.webp",
+      "sha256": "350642bc8e32b7df58243a4193bd3dbd4ea412109359a2bc44fc630ceba77879"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm12_01/frame-00.webp",
+      "sha256": "1784ba0e4c5a9692885c9024ca5856649d5235dc135f7fbad633765070878b52"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm13_01/frame-00.webp",
+      "sha256": "50d30cb4068fba2d28240bf807a61d625ac69236c887e06fec58539765b462da"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm14_01/frame-00.webp",
+      "sha256": "c4aaf5912bf68f760d3cd0577983b949495cabb981a92dabf9cc371a543ba1f5"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm15_01/frame-00.webp",
+      "sha256": "ec347b6f2358fd8d84d3297eb8027bf50549eb30a37cd95fecf15a8a506c4dbe"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm16_01/frame-00.webp",
+      "sha256": "342634b6b050541947e39679ee2050ee5ed33f88e1b2739fd562838014f88700"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm17_01/frame-00.webp",
+      "sha256": "8b710a39e7fcbfac1e6287c2855ad1a2550137278cc184aea878017ba2f3b4d7"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm18_01/frame-00.webp",
+      "sha256": "aa03997619e93f3dd24150f34bd287d1e6fd5c423309f51be4e99a9377f37755"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm19_01/frame-00.webp",
+      "sha256": "4093ce6c393ee75dea914d8b72350d03ee5d13577feec7b94ea785dc7bb371ce"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm20_01/frame-00.webp",
+      "sha256": "872276ccd922e6428ce09b838707535b6c98fdb131a41f0506ae9b8f0e7579c0"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm21_01/frame-00.webp",
+      "sha256": "a6992a24bb926b2cfcce6cb5249bf5827a4a7bfbef037a90ae0e0bdb9dddbb22"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm21_01/frame-01.webp",
+      "sha256": "9249cad938fd9dd61871343ce57757b66d22c0aa0b55bc414a66426b4bf17f12"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm22_01/frame-00.webp",
+      "sha256": "3e8db1fa9f7da133c620e528484e0ba8f95a37571f1b15a63798c67516dd5ecd"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm23_01/frame-00.webp",
+      "sha256": "c33bb2ec7632c5bc3af588ea69f85788a79ca4e8c449a942a7ef02acbd9ded78"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm25_01/frame-00.webp",
+      "sha256": "a8bf3c24afca5197539d2da01febdbddd6379b43f2520ff95dcb2cd0f94c131b"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm26_01/frame-00.webp",
+      "sha256": "d758b8f04673239aa5582448b2a3cf7034d4255432d460cc9c37d7c232cd0d70"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm27_01/frame-00.webp",
+      "sha256": "84e9da60d78ae5a34de49111a6dc8b7a9db3a004afa72bf385da46c1d99f1bec"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm30_01/frame-00.webp",
+      "sha256": "161442aea55535f86eafd942fcc125f11683e138396a0aa66176a0034711b048"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm31_01/frame-00.webp",
+      "sha256": "c32b0211618757ce2f32b509c5875bae94c44540a89b8bfad69c6b0a1fb9e6e0"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm32_01/frame-00.webp",
+      "sha256": "c139f1a03c8d61ce41ae1458e9ac55cecf9eff67bcfdab25037b53ff260a0f0f"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm34_01/frame-00.webp",
+      "sha256": "0cbfd19c5b07a862cd537f35b91a5f0a640eccde0432c3743dff45028ba8aa5e"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm35_01/frame-00.webp",
+      "sha256": "75ad216aac52fdf4387d503c1497de67d89b2ce17f463e9ca4db8e1b78a99f22"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm37_01/frame-00.webp",
+      "sha256": "813188ad88e6c65915caa8fbc26d64f3faa9f346345c17f0e8249dcc8609f021"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm39_01/frame-00.webp",
+      "sha256": "10e0d45931237b8d54792004d6a770992408d1c530c95d9deaaf1ce37f0fa3b6"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm39_01/frame-01.webp",
+      "sha256": "05768cd893c03afd539fb7ce9ce7f613bdd51cc254cbaba38baab8c6ad1625ca"
+    },
+    {
+      "path": "assets/production/cage/polish-review-20261019/fields/field_cm40_01/frame-00.webp",
+      "sha256": "54be15762f3c5fd41dee9a261e735d9c41cebd029b218da2ed3476e9169696c4"
+    },
+    {
+      "path": "assets/production/cage/shared-edges-polish-20261019/field_cm02_01-edges.webp",
+      "sha256": "89cd626aaf51433efc878f4dfe92dbd096d25f979ee4fc4114ab835fd757c11b"
+    },
+    {
+      "path": "assets/production/cage/shared-edges-polish-20261019/field_cm30_01-edges.webp",
+      "sha256": "348c07879e93f66349259ad15ea16ac484ffe472778b9ac19f866b21c96fc33e"
+    },
+    {
+      "path": "assets/production/cage/shared-edges-polish-20261019/index.json",
+      "sha256": "06a700dbe0a5022a6ea9e90d683daf9c8a6f48e4b23b9c81cee065cd0484bec5",
+      "jsonFields": [
+        "a",
+        "assetId",
+        "atlas",
+        "atlasX",
+        "atlasY",
+        "b",
+        "edges",
+        "fieldId",
+        "fields",
+        "height",
+        "id",
+        "pairs",
+        "pixels",
+        "publicReleasePermitted",
+        "raster",
+        "rule",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "sourceHash",
+        "src",
+        "toleranceWorldPx",
+        "width",
+        "x",
+        "y"
+      ]
+    },
+    {
       "path": "assets/production/cage/shop-final-20261008/thumbnails/shop-083_item-00_field_cm01_01.png",
       "sha256": "81074b5f0d1e22cf92bb64adf64a8bd16ff91a8d917ab9403baf89bf430adef6"
     },
@@ -840,22 +4228,6 @@
     {
       "path": "assets/production/cage/shop-final-20261008/thumbnails/shop-117_item-26_field_cm27_01.png",
       "sha256": "f1ec2918de50e9183a838b8608c3530130a538f4b94b98071da972c9566fd485"
-    },
-    {
-      "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm02_01/frame-00.webp",
-      "sha256": "930dcd6253af5a9d26c71546ccdf0b420d7fd75c0ff5e66df0ed4218655ae6b0"
-    },
-    {
-      "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm18_01/frame-00.webp",
-      "sha256": "9591d0ff3957d6b7860eff5d37363c4ce3cae481abcecf1b8cfb3287a72efed4"
-    },
-    {
-      "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-00.webp",
-      "sha256": "0917d613efdccd5f3177a11844d331a26589e72ed4a34e08c39053190782cbf6"
-    },
-    {
-      "path": "assets/production/cage/source-bounds-r1-20261015/fields/field_cm39_01/frame-01.webp",
-      "sha256": "b7fb200850748fbbb4a795f92433de30a71bb5ed622d8e1787ace49951cdf883"
     },
     {
       "path": "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/hud.render.json",
@@ -110911,10 +114283,6 @@
       "sha256": "1ddb2de43e5ef7fbc89c9773debf01d4e6b10f90a81bb23e52ae87ac2aacf106"
     },
     {
-      "path": "assets/production/hunt/accepted-20261010/images/00069061462d8b7c0a8c41acbc194a137fa54d5159871b9b15ef896523e2ebce.webp",
-      "sha256": "00069061462d8b7c0a8c41acbc194a137fa54d5159871b9b15ef896523e2ebce"
-    },
-    {
       "path": "assets/production/hunt/accepted-20261010/images/000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c.webp",
       "sha256": "000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c"
     },
@@ -110925,10 +114293,6 @@
     {
       "path": "assets/production/hunt/accepted-20261010/images/0c11f1e05326d1e31d24f0dea684b892f174af539aba08858d092beabfa77a53.webp",
       "sha256": "0c11f1e05326d1e31d24f0dea684b892f174af539aba08858d092beabfa77a53"
-    },
-    {
-      "path": "assets/production/hunt/accepted-20261010/images/0df07476010b63e65dbc4406e334bbcaa93002365de452ff9a82d6d68529a202.webp",
-      "sha256": "0df07476010b63e65dbc4406e334bbcaa93002365de452ff9a82d6d68529a202"
     },
     {
       "path": "assets/production/hunt/accepted-20261010/images/0fbd38dbf56d7a905d6afec9a3c50e2007e30b30cc627345007984c58770aa26.webp",
@@ -110983,14 +114347,6 @@
       "sha256": "32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4"
     },
     {
-      "path": "assets/production/hunt/accepted-20261010/images/32f64bc246c20b12ad1724c1a4fdf96ceed6c973f2b3e04f163c2897ee03ee40.webp",
-      "sha256": "32f64bc246c20b12ad1724c1a4fdf96ceed6c973f2b3e04f163c2897ee03ee40"
-    },
-    {
-      "path": "assets/production/hunt/accepted-20261010/images/33e63cd40b610771eee6480f457ebd634067740912f815b7f63de0f16df002d8.webp",
-      "sha256": "33e63cd40b610771eee6480f457ebd634067740912f815b7f63de0f16df002d8"
-    },
-    {
       "path": "assets/production/hunt/accepted-20261010/images/347d11467f2be954fe4b6949e28f69a43901b7230d11c2fc79d5f3bdc87100b3.webp",
       "sha256": "347d11467f2be954fe4b6949e28f69a43901b7230d11c2fc79d5f3bdc87100b3"
     },
@@ -111001,10 +114357,6 @@
     {
       "path": "assets/production/hunt/accepted-20261010/images/36c910a8d17222d9df4f3faff9a2806fe4c97cf44ad9769075e7f777b4b38995.webp",
       "sha256": "36c910a8d17222d9df4f3faff9a2806fe4c97cf44ad9769075e7f777b4b38995"
-    },
-    {
-      "path": "assets/production/hunt/accepted-20261010/images/391d91cc20d39a78b821f651912ae38f8b26a96caf8eb990e6b2a542f5904e2b.webp",
-      "sha256": "391d91cc20d39a78b821f651912ae38f8b26a96caf8eb990e6b2a542f5904e2b"
     },
     {
       "path": "assets/production/hunt/accepted-20261010/images/3aa60f86c9b04af7995eceabd310d6ecf722a8a531da5b13f24108d27b9ed56e.webp",
@@ -111067,10 +114419,6 @@
       "sha256": "6ae77617274797bcb7569bdf5b647dd167fdfc72e6f9e2563e295263061d3ee8"
     },
     {
-      "path": "assets/production/hunt/accepted-20261010/images/6f543a8e6cbc97bccee5863e6f862c15705eb925f84e8eb82757e4e4193029fc.webp",
-      "sha256": "6f543a8e6cbc97bccee5863e6f862c15705eb925f84e8eb82757e4e4193029fc"
-    },
-    {
       "path": "assets/production/hunt/accepted-20261010/images/701bdced29a1c30bd41d1494a1e03c3929532f08f3028b731b033abc72f815ce.webp",
       "sha256": "701bdced29a1c30bd41d1494a1e03c3929532f08f3028b731b033abc72f815ce"
     },
@@ -111123,10 +114471,6 @@
       "sha256": "a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc"
     },
     {
-      "path": "assets/production/hunt/accepted-20261010/images/a17cc986a57df68b7a73eaf66b01c225322b5f67536da0519ee9f580c3bdbcf7.webp",
-      "sha256": "a17cc986a57df68b7a73eaf66b01c225322b5f67536da0519ee9f580c3bdbcf7"
-    },
-    {
       "path": "assets/production/hunt/accepted-20261010/images/a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031.webp",
       "sha256": "a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031"
     },
@@ -111137,10 +114481,6 @@
     {
       "path": "assets/production/hunt/accepted-20261010/images/a4439317de55ac8b7794c77d3a4f13fb4b19659925e98d08db74966141312a17.webp",
       "sha256": "a4439317de55ac8b7794c77d3a4f13fb4b19659925e98d08db74966141312a17"
-    },
-    {
-      "path": "assets/production/hunt/accepted-20261010/images/a4f4da756ed3d03742230f29ada3f14866c85ca3493d02642a1e520568c62497.webp",
-      "sha256": "a4f4da756ed3d03742230f29ada3f14866c85ca3493d02642a1e520568c62497"
     },
     {
       "path": "assets/production/hunt/accepted-20261010/images/a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee.webp",
@@ -111179,10 +114519,6 @@
       "sha256": "b32c70aac78eb73ea5699e5d2f8a71ec1c98bcc3cbb257512fc00fde3bc2ae99"
     },
     {
-      "path": "assets/production/hunt/accepted-20261010/images/b73357ac76a1161e9145b1801c65abcefa78d413fb07df701374dcdf10ff7075.webp",
-      "sha256": "b73357ac76a1161e9145b1801c65abcefa78d413fb07df701374dcdf10ff7075"
-    },
-    {
       "path": "assets/production/hunt/accepted-20261010/images/bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d.webp",
       "sha256": "bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d"
     },
@@ -111197,10 +114533,6 @@
     {
       "path": "assets/production/hunt/accepted-20261010/images/c47ff11e6b06fa3798a96aeafaf207c3f753f2e19ac3295586df2993de277fc6.webp",
       "sha256": "c47ff11e6b06fa3798a96aeafaf207c3f753f2e19ac3295586df2993de277fc6"
-    },
-    {
-      "path": "assets/production/hunt/accepted-20261010/images/c66ccd29b2a8786edbcaa99d1564a875dec9e9b3e3e947ec5860d5f113920e69.webp",
-      "sha256": "c66ccd29b2a8786edbcaa99d1564a875dec9e9b3e3e947ec5860d5f113920e69"
     },
     {
       "path": "assets/production/hunt/accepted-20261010/images/c7267ac7cb9142f03031bca0a387e41e975e73f97c2532518f907e9931be6ef0.webp",
@@ -111241,10 +114573,6 @@
     {
       "path": "assets/production/hunt/accepted-20261010/images/d9899893de9b8c13ab26564137bc0a1c399981af73c07a697b7898e512c8276e.webp",
       "sha256": "d9899893de9b8c13ab26564137bc0a1c399981af73c07a697b7898e512c8276e"
-    },
-    {
-      "path": "assets/production/hunt/accepted-20261010/images/da7c5a2d62673ae1fa56b716c5ebdc82e1f318665fb2e2e25fd0b99769bb4bf6.webp",
-      "sha256": "da7c5a2d62673ae1fa56b716c5ebdc82e1f318665fb2e2e25fd0b99769bb4bf6"
     },
     {
       "path": "assets/production/hunt/accepted-20261010/images/dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd.webp",
@@ -111291,10 +114619,6 @@
       "sha256": "f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc"
     },
     {
-      "path": "assets/production/hunt/accepted-20261010/images/f5549db0a4fcabc4e2f17e9f103913237f84d7fba8d9b1fd03995fa0c3c4a64f.webp",
-      "sha256": "f5549db0a4fcabc4e2f17e9f103913237f84d7fba8d9b1fd03995fa0c3c4a64f"
-    },
-    {
       "path": "assets/production/hunt/accepted-20261010/images/f5758d56212824f676b22e975d762fa59e550a7eee2f562987d771f35deb39d4.webp",
       "sha256": "f5758d56212824f676b22e975d762fa59e550a7eee2f562987d771f35deb39d4"
     },
@@ -111313,6 +114637,62 @@
     {
       "path": "assets/production/hunt/accepted-20261010/images/ff67f8822972b585f3bee77d56b31c1d188f97b6e23fb69c24653e4f64aa6c95.webp",
       "sha256": "ff67f8822972b585f3bee77d56b31c1d188f97b6e23fb69c24653e4f64aa6c95"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/090498c7fc9d16035628c45380caa9468719a1ee59c7bf21af4d57db0e4beeca.webp",
+      "sha256": "090498c7fc9d16035628c45380caa9468719a1ee59c7bf21af4d57db0e4beeca"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/394fad8b5764d045c432b81e5c1a369d79c65d8e8ad04b71bca3422aab7ee126.webp",
+      "sha256": "394fad8b5764d045c432b81e5c1a369d79c65d8e8ad04b71bca3422aab7ee126"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/4c19a4630915698c96ea53b85b811243f7b274b0b7ee99c3f8cfa53443ff7793.webp",
+      "sha256": "4c19a4630915698c96ea53b85b811243f7b274b0b7ee99c3f8cfa53443ff7793"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/4ec6da6c0e87ae2c9d94c81616de2f69764d9968dd93b76fcf9c81a0e9409047.webp",
+      "sha256": "4ec6da6c0e87ae2c9d94c81616de2f69764d9968dd93b76fcf9c81a0e9409047"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/679ad69cc97b312c614c11788f5edd95193dff78b24bed0b9d43d18389bc2f14.webp",
+      "sha256": "679ad69cc97b312c614c11788f5edd95193dff78b24bed0b9d43d18389bc2f14"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/6f00e48547adc48abbc2e63e55578bf5a8b4d0e49095d8350911044cd7235810.webp",
+      "sha256": "6f00e48547adc48abbc2e63e55578bf5a8b4d0e49095d8350911044cd7235810"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/b74ce94e01c9523024f936e5a791b24beab78f0f489549f5ef165a6cc67b78fe.webp",
+      "sha256": "b74ce94e01c9523024f936e5a791b24beab78f0f489549f5ef165a6cc67b78fe"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/c5761cafdb4447aa01645fa46750c5b6ef0b561ed9af1aeddfa066a664009e0a.webp",
+      "sha256": "c5761cafdb4447aa01645fa46750c5b6ef0b561ed9af1aeddfa066a664009e0a"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/cb1ecd832fa0eb2b1f037e49a08e8471c6329dd2d255cf7c82bf8021ef92ed35.webp",
+      "sha256": "cb1ecd832fa0eb2b1f037e49a08e8471c6329dd2d255cf7c82bf8021ef92ed35"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/d03bcaacdc76049c015b135b6b6b8d4d2ef69d1b991f86492c50053eac489f1f.webp",
+      "sha256": "d03bcaacdc76049c015b135b6b6b8d4d2ef69d1b991f86492c50053eac489f1f"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/d7b61d809f9ce3736a9676801a501767b38960ef83c6b707c26870c40179aa63.webp",
+      "sha256": "d7b61d809f9ce3736a9676801a501767b38960ef83c6b707c26870c40179aa63"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/d9ae2de83b3c7f2e4aebe9cfdd6a7caa4b2ea0bb85eef4baf1e7a61db1f960b1.webp",
+      "sha256": "d9ae2de83b3c7f2e4aebe9cfdd6a7caa4b2ea0bb85eef4baf1e7a61db1f960b1"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/ed007c6350bfbc037a1e4df08ed4ea6329e5c58bb76f6ac00652ef84ba521dbe.webp",
+      "sha256": "ed007c6350bfbc037a1e4df08ed4ea6329e5c58bb76f6ac00652ef84ba521dbe"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/images/fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80.webp",
+      "sha256": "fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80"
     },
     {
       "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0200.wav",
@@ -113680,7 +117060,7 @@
     },
     {
       "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-      "sha256": "6020237fbffe602080f75451fd1413b7b19341e3546f5577b24116689a78616f"
+      "sha256": "1bc6d652023911683ce82a9d1d88aeeafed8dcfa8a05862e8788cd5bacf480e4"
     },
     {
       "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -113820,7 +117200,7 @@
     },
     {
       "path": "assets/production/public-runtime/cage-final.map.v1.json",
-      "sha256": "831e5b8847c9b3ecce5b9cb5e7540add262bfe0ece3ec57436b8ec8022afa70f",
+      "sha256": "bdd39492c2566a7bb00181d44eb3a41af23c925c2d376735edf25c7346fc37c9",
       "jsonFields": [
         "schemaVersion",
         "kind",
@@ -113862,7 +117242,47 @@
         "animationFrames",
         "pieces",
         "pieceCount",
-        "bandNativePx"
+        "bandNativePx",
+        "ambient",
+        "boundaryGlow",
+        "canopies",
+        "caustics",
+        "cloudTile",
+        "clouds",
+        "cooled",
+        "cracked",
+        "embers",
+        "emissive",
+        "emissiveMode",
+        "emitters",
+        "floorMask",
+        "flow",
+        "foam",
+        "foliageStatic",
+        "frameMs",
+        "gust",
+        "gustTile",
+        "iceStates",
+        "id",
+        "lamps",
+        "lava",
+        "lavaStates",
+        "openWater",
+        "particles",
+        "pits",
+        "pivot",
+        "regions",
+        "reheat",
+        "rotors",
+        "scale",
+        "scan",
+        "sea",
+        "smoke",
+        "speed",
+        "waterMask",
+        "waves",
+        "x",
+        "y"
       ]
     },
     {
@@ -113909,7 +117329,47 @@
         "animationFrames",
         "pieces",
         "pieceCount",
-        "bandNativePx"
+        "bandNativePx",
+        "ambient",
+        "boundaryGlow",
+        "canopies",
+        "caustics",
+        "cloudTile",
+        "clouds",
+        "cooled",
+        "cracked",
+        "embers",
+        "emissive",
+        "emissiveMode",
+        "emitters",
+        "floorMask",
+        "flow",
+        "foam",
+        "foliageStatic",
+        "frameMs",
+        "gust",
+        "gustTile",
+        "iceStates",
+        "id",
+        "lamps",
+        "lava",
+        "lavaStates",
+        "openWater",
+        "particles",
+        "pits",
+        "pivot",
+        "regions",
+        "reheat",
+        "rotors",
+        "scale",
+        "scan",
+        "sea",
+        "smoke",
+        "speed",
+        "waterMask",
+        "waves",
+        "x",
+        "y"
       ]
     },
     {
@@ -113928,7 +117388,7 @@
     },
     {
       "path": "assets/production/public-runtime/hunt-accepted.map.v1.json",
-      "sha256": "b166e93985a6db3374f2210a9c747b8cc3960f00fcbd845dcb84af47bf4ebc5a",
+      "sha256": "21a89dc8f8175edf4cb17e047f12cc61560892d5d3098227e9f891c62f43597c",
       "jsonFields": [
         "schemaVersion",
         "kind",
@@ -113970,7 +117430,47 @@
         "animationFrames",
         "pieces",
         "pieceCount",
-        "bandNativePx"
+        "bandNativePx",
+        "ambient",
+        "boundaryGlow",
+        "canopies",
+        "caustics",
+        "cloudTile",
+        "clouds",
+        "cooled",
+        "cracked",
+        "embers",
+        "emissive",
+        "emissiveMode",
+        "emitters",
+        "floorMask",
+        "flow",
+        "foam",
+        "foliageStatic",
+        "frameMs",
+        "gust",
+        "gustTile",
+        "iceStates",
+        "id",
+        "lamps",
+        "lava",
+        "lavaStates",
+        "openWater",
+        "particles",
+        "pits",
+        "pivot",
+        "regions",
+        "reheat",
+        "rotors",
+        "scale",
+        "scan",
+        "sea",
+        "smoke",
+        "speed",
+        "waterMask",
+        "waves",
+        "x",
+        "y"
       ]
     },
     {
@@ -114028,6 +117528,93 @@
       ]
     },
     {
+      "path": "assets/production/public-runtime/hunt-hm01x2.map.v1.json",
+      "sha256": "e97742da6252377a2e0df15c8457d55e61c55bc9171aab96f43aa3f65f0a61d2",
+      "jsonFields": [
+        "schemaVersion",
+        "kind",
+        "assetId",
+        "family",
+        "fieldCount",
+        "defaultPreviewFieldId",
+        "tutorialFieldId",
+        "memoryPolicy",
+        "filter",
+        "fields",
+        "fieldId",
+        "worldWidthPx",
+        "worldHeightPx",
+        "nativeWidthPx",
+        "nativeHeightPx",
+        "nativePixelWorldScale",
+        "visualRole",
+        "gameplayBinding",
+        "gateMapping",
+        "collisionBinding",
+        "visualPaddingNative",
+        "rasterPixelsPerNative",
+        "left",
+        "top",
+        "right",
+        "bottom",
+        "frames",
+        "src",
+        "sha256",
+        "durationMs",
+        "rasterWidthPx",
+        "rasterHeightPx",
+        "thumbnail",
+        "width",
+        "height",
+        "depthOccluders",
+        "atlases",
+        "animationFrames",
+        "pieces",
+        "pieceCount",
+        "bandNativePx",
+        "ambient",
+        "boundaryGlow",
+        "canopies",
+        "caustics",
+        "cloudTile",
+        "clouds",
+        "cooled",
+        "cracked",
+        "embers",
+        "emissive",
+        "emissiveMode",
+        "emitters",
+        "floorMask",
+        "flow",
+        "foam",
+        "foliageStatic",
+        "frameMs",
+        "gust",
+        "gustTile",
+        "iceStates",
+        "id",
+        "lamps",
+        "lava",
+        "lavaStates",
+        "openWater",
+        "particles",
+        "pits",
+        "pivot",
+        "regions",
+        "reheat",
+        "rotors",
+        "scale",
+        "scan",
+        "sea",
+        "smoke",
+        "speed",
+        "waterMask",
+        "waves",
+        "x",
+        "y"
+      ]
+    },
+    {
       "path": "assets/production/public-runtime/hunt-night.map.v1.json",
       "sha256": "378866ffeee3c1686fadd47eaba57aaf4d296eb039d892fe3bb9f7f0f67ff454",
       "jsonFields": [
@@ -114071,7 +117658,47 @@
         "animationFrames",
         "pieces",
         "pieceCount",
-        "bandNativePx"
+        "bandNativePx",
+        "ambient",
+        "boundaryGlow",
+        "canopies",
+        "caustics",
+        "cloudTile",
+        "clouds",
+        "cooled",
+        "cracked",
+        "embers",
+        "emissive",
+        "emissiveMode",
+        "emitters",
+        "floorMask",
+        "flow",
+        "foam",
+        "foliageStatic",
+        "frameMs",
+        "gust",
+        "gustTile",
+        "iceStates",
+        "id",
+        "lamps",
+        "lava",
+        "lavaStates",
+        "openWater",
+        "particles",
+        "pits",
+        "pivot",
+        "regions",
+        "reheat",
+        "rotors",
+        "scale",
+        "scan",
+        "sea",
+        "smoke",
+        "speed",
+        "waterMask",
+        "waves",
+        "x",
+        "y"
       ]
     },
     {
@@ -114234,30 +117861,70 @@
     },
     {
       "path": "assets/production/public-runtime/metadata/battle-original.v1.json",
-      "sha256": "243ef3d501ce89a1d65ce09fc55d428dbd17328fad276e085f7aa949722e1b97",
+      "sha256": "58eb2d588c0299c260f5655f6b937541ad95d06892a16dbfb596f5a632b8b899",
       "jsonFields": [
+        "ambient",
         "assetId",
+        "boundaryGlow",
+        "canopies",
+        "caustics",
+        "cloudTile",
+        "clouds",
         "collisionBinding",
-        "defaultPreviewFieldId",
+        "cooled",
+        "cracked",
         "durationMs",
+        "embers",
+        "emissive",
+        "emissiveMode",
+        "emitters",
         "family",
-        "fieldCount",
         "fieldId",
         "fields",
         "filter",
+        "floorMask",
+        "flow",
+        "foam",
+        "foliageStatic",
+        "frameMs",
         "frames",
         "gameplayBinding",
         "gateMapping",
+        "gust",
+        "gustTile",
+        "height",
+        "iceStates",
+        "id",
         "kind",
+        "lamps",
+        "lava",
+        "lavaStates",
         "memoryPolicy",
         "nativeHeightPx",
         "nativeWidthPx",
+        "openWater",
+        "particles",
+        "pits",
+        "pivot",
+        "regions",
+        "reheat",
+        "rotors",
+        "scale",
+        "scan",
         "schemaVersion",
+        "sea",
         "sha256",
+        "smoke",
+        "speed",
         "src",
         "visualRole",
+        "waterMask",
+        "waves",
+        "width",
         "worldHeightPx",
-        "worldWidthPx"
+        "worldWidthPx",
+        "x",
+        "y"
       ]
     },
     {
@@ -114299,6 +117966,15 @@
         "width",
         "x",
         "y"
+      ]
+    },
+    {
+      "path": "assets/production/public-runtime/metadata/hunt-pieces-0370ad9efa4eac35.v1.json",
+      "sha256": "e0ece76d10b4af4fb256dc8740a9de6606c420a97142e0861d72170ec60c25e9",
+      "jsonFields": [
+        "pieces",
+        "renderType",
+        "schemaVersion"
       ]
     },
     {
@@ -114475,6 +118151,15 @@
     {
       "path": "assets/production/public-runtime/metadata/hunt-pieces-df7808e9fb563a28.v1.json",
       "sha256": "cfd3296c9833129c9a7cb499b404f638603db506860d0cb9e1d3334d46a52ff1",
+      "jsonFields": [
+        "pieces",
+        "renderType",
+        "schemaVersion"
+      ]
+    },
+    {
+      "path": "assets/production/public-runtime/metadata/hunt-pieces-e3712e583a18e9c4.v1.json",
+      "sha256": "e0ece76d10b4af4fb256dc8740a9de6606c420a97142e0861d72170ec60c25e9",
       "jsonFields": [
         "pieces",
         "renderType",
@@ -115859,7 +119544,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "ce1d5e633243cc047308a71eebc658dcfb2e03d7a6f0b06864a19fcd830f67df"
+      "sha256": "4152c28f482cfd90e02dd36e5886edf9ccfa70c4b5e9d9ad86eae215e469b2a9"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -116654,6 +120339,10 @@
       "sha256": "0ac964135f1b59bbb82610d11e87781f27f84a781a220c4d743e0d1892a787e4"
     },
     {
+      "path": "src/championship/presentation/battleFieldAmbient.js",
+      "sha256": "1ee3783072469273e6ca905f2bc98d05e23c3788404a5d3137984cdaf0b92a79"
+    },
+    {
       "path": "src/championship/presentation/battleFocusViewport.js",
       "sha256": "f19fbf5b546ee347a6af24b7f6b4ea9352609d507e9695f713a53f73a72b0f24"
     },
@@ -116682,8 +120371,16 @@
       "sha256": "f50cf01885872b2c8a5a1e3bc7bf0612999ba35c5f38ead66a58568a3ecd0193"
     },
     {
+      "path": "src/championship/presentation/cageAmbient.js",
+      "sha256": "6a0167f9674e8243cab6a980ecd3851f87a5f306b1a48f9f92aa78a5350da558"
+    },
+    {
       "path": "src/championship/presentation/cageForeground.js",
-      "sha256": "3a151f3472e6d835f33d24bf926c725d2d4b5c57d9e9d63e75b6b8a75ab66034"
+      "sha256": "c67dd3b53792703a07d3d9d9cdae98589b9abd687fb2d285f65fb6f424a7c15e"
+    },
+    {
+      "path": "src/championship/presentation/cageSharedEdges.js",
+      "sha256": "1e5012a0c3f3cb2a899bb72fec89ce73a58bc2dba6a03be9ba01643ce3196b0d"
     },
     {
       "path": "src/championship/presentation/cageUiArt.js",
@@ -116795,7 +120492,7 @@
     },
     {
       "path": "src/championship/presentation/huntMobileReadouts.js",
-      "sha256": "f912247ed45ab9061eb1fda5c95b3b18a5de6ef20700b763c21ca8e3fa73bad9"
+      "sha256": "3a5e1918b0da216c8184283d1e3c563b1edfbb97ebc274f9956946340ae02336"
     },
     {
       "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
@@ -116919,7 +120616,7 @@
     },
     {
       "path": "src/championship/presentation/publicMapRequests.js",
-      "sha256": "2fa093efcd08b1d3e3ae1f5a435d427eb654535bbefa21966d63e8be92b17d20"
+      "sha256": "a0a0ac67782f85e0031c53eafdc7d8d8285c755e5bd3a884d87c76c88f05f38e"
     },
     {
       "path": "src/championship/presentation/publicMetadata.js",
@@ -116951,7 +120648,7 @@
     },
     {
       "path": "src/championship/presentation/runtimeMapArtBundle.js",
-      "sha256": "d83a937f6d3f783de46c17f1328b15ef51eb74c1d23aa12db19eab1d25909c36"
+      "sha256": "82247e471c995a5bb3d90fcc267e758d58aaa2404123771ef95640f5c83306a4"
     },
     {
       "path": "src/championship/presentation/sceneMusicCatalog.js",
@@ -118121,6 +121818,40 @@
       ]
     },
     {
+      "path": "src/data/championship/catalogs/hunt-hm01x2.review-20261019.json",
+      "sha256": "96c08652454cf2474372da63a5e84a5c50c2e10a736256dc4b5bd269620d45be",
+      "jsonFields": [
+        "adaptation",
+        "anchorTiles",
+        "base",
+        "blendQ12",
+        "caveGroups",
+        "caves",
+        "contract",
+        "directionPalette",
+        "directionRuns",
+        "environments",
+        "escapeAnchor",
+        "escapeBoundary",
+        "field_hm01_01",
+        "field_hm01_02",
+        "height",
+        "heightTiles",
+        "id",
+        "mouthTile",
+        "originTile",
+        "owner",
+        "schemaVersion",
+        "scope",
+        "targetQ12",
+        "terrainRuns",
+        "unknownDirection",
+        "width",
+        "widthTiles",
+        "wrap"
+      ]
+    },
+    {
       "path": "src/data/championship/catalogs/hunt-scene.r1.json",
       "sha256": "95c4c21f616a5f860c4db9abf2cb4ee5b866c240a5cafadf5e733d63d02aacd5",
       "jsonFields": [
@@ -118333,6 +122064,25 @@
         "height",
         "runs",
         "schemaVersion",
+        "width"
+      ]
+    },
+    {
+      "path": "src/data/championship/catalogs/raising-ground.review-20261019.json",
+      "sha256": "f709498f90b9dd71d232a1274301a24b29431772e9c1dd87e23919038bc20a74",
+      "jsonFields": [
+        "1",
+        "27",
+        "adaptation",
+        "clearanceRuns",
+        "definitionIndex",
+        "fields",
+        "height",
+        "notes",
+        "owner",
+        "runs",
+        "schemaVersion",
+        "scope",
         "width"
       ]
     },
@@ -118802,7 +122552,7 @@
     {
       "id": "art:public:map:cage-final:v1",
       "src": "assets/production/public-runtime/cage-final.map.v1.json",
-      "sha256": "831e5b8847c9b3ecce5b9cb5e7540add262bfe0ece3ec57436b8ec8022afa70f"
+      "sha256": "bdd39492c2566a7bb00181d44eb3a41af23c925c2d376735edf25c7346fc37c9"
     },
     {
       "id": "art:public:map:cage-ui:v1",
@@ -118812,7 +122562,12 @@
     {
       "id": "art:public:map:hunt-accepted:v1",
       "src": "assets/production/public-runtime/hunt-accepted.map.v1.json",
-      "sha256": "b166e93985a6db3374f2210a9c747b8cc3960f00fcbd845dcb84af47bf4ebc5a"
+      "sha256": "21a89dc8f8175edf4cb17e047f12cc61560892d5d3098227e9f891c62f43597c"
+    },
+    {
+      "id": "art:public:map:hunt-hm01x2:v1",
+      "src": "assets/production/public-runtime/hunt-hm01x2.map.v1.json",
+      "sha256": "e97742da6252377a2e0df15c8457d55e61c55bc9171aab96f43aa3f65f0a61d2"
     },
     {
       "id": "art:public:map:hunt-night:v1",
@@ -118842,7 +122597,7 @@
     {
       "id": "art:public:metadata:battle-original:v1",
       "src": "assets/production/public-runtime/metadata/battle-original.v1.json",
-      "sha256": "243ef3d501ce89a1d65ce09fc55d428dbd17328fad276e085f7aa949722e1b97"
+      "sha256": "58eb2d588c0299c260f5655f6b937541ad95d06892a16dbfb596f5a632b8b899"
     },
     {
       "id": "art:public:metadata:cage-foreground-cm03:v1",
@@ -118853,6 +122608,11 @@
       "id": "art:public:metadata:cage-foreground-cm24:v1",
       "src": "assets/production/public-runtime/metadata/cage-foreground-cm24.v1.json",
       "sha256": "d46068e01a2d830c55f24d9698410238fb8e0b75d57ee8bc67c7e864b6ec3909"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-0370ad9efa4eac35:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-0370ad9efa4eac35.v1.json",
+      "sha256": "e0ece76d10b4af4fb256dc8740a9de6606c420a97142e0861d72170ec60c25e9"
     },
     {
       "id": "art:public:metadata:hunt-pieces-1026f2478622db83:v1",
@@ -118953,6 +122713,11 @@
       "id": "art:public:metadata:hunt-pieces-df7808e9fb563a28:v1",
       "src": "assets/production/public-runtime/metadata/hunt-pieces-df7808e9fb563a28.v1.json",
       "sha256": "cfd3296c9833129c9a7cb499b404f638603db506860d0cb9e1d3334d46a52ff1"
+    },
+    {
+      "id": "art:public:metadata:hunt-pieces-e3712e583a18e9c4:v1",
+      "src": "assets/production/public-runtime/metadata/hunt-pieces-e3712e583a18e9c4.v1.json",
+      "sha256": "e0ece76d10b4af4fb256dc8740a9de6606c420a97142e0861d72170ec60c25e9"
     },
     {
       "id": "art:public:metadata:hunt-pieces-e9c1f41b8af50c56:v1",

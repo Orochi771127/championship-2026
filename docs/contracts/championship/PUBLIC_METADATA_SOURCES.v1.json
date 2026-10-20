@@ -9,8 +9,8 @@
       "type": "BATTLE_MAP"
     },
     {
-      "path": "assets/production/battle/original-opus-v1/manifest.json",
-      "sha256": "f2ef83f7bdb5e98eb5dc40115f97f4ed9bfff3e54311a2b3719bf7e528524a4d",
+      "path": "assets/production/battle/arena-polish-20261018/manifest.json",
+      "sha256": "10971c66650839660b2caffe975b895447d8f6b11f686e81d7864a90b8f80220",
       "role": "battle-original",
       "type": "BATTLE_MAP"
     },
@@ -313,6 +313,18 @@
       "sha256": "42ce4f580e0a27eaf30550cd27ad1c108c4f7950f726da10cfaccf121b5bc18c",
       "role": null,
       "type": "AUTHORING_ONLY"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/geometry/e3712e583a18e9c4c5966ac511c409f65d8aee9d3350892adbe948dfba26dbfb.json",
+      "sha256": "e3712e583a18e9c4c5966ac511c409f65d8aee9d3350892adbe948dfba26dbfb",
+      "role": "hunt-pieces-e3712e583a18e9c4",
+      "type": "HUNT_DEPTH"
+    },
+    {
+      "path": "assets/production/hunt/hm01x2-public-20261021/geometry/0370ad9efa4eac35152ecd51cffcb617d5e4463c5c609da4b59e79dbe91fe570.json",
+      "sha256": "0370ad9efa4eac35152ecd51cffcb617d5e4463c5c609da4b59e79dbe91fe570",
+      "role": "hunt-pieces-0370ad9efa4eac35",
+      "type": "HUNT_DEPTH"
     }
   ]
 }

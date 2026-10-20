@@ -23,8 +23,8 @@ test('arena cast uses exact public character and HUD bindings; changed bytes fai
   await assert.rejects(loadDataArenaCharacter({art:member.art,PIXI:{},fetchImpl:async()=>new Response('{}')}),/DATA_ARENA_ART_HASH/);
  }
 });
-test('52 source descriptions remain byte-identical; only 33 required runtime descriptions are selected',()=>{
- assert.equal(recipe.sources.length,52);assert.equal(projection.descriptors.length,33);
+test('54 source descriptions remain byte-identical; only 35 required runtime descriptions are selected',()=>{
+ assert.equal(recipe.sources.length,54);assert.equal(projection.descriptors.length,35);
  for(const r of recipe.sources){assert.equal(sha(fs.readFileSync(r.path)),r.sha256);assert.ok(!input.files.includes(r.path));}
  for(const r of projection.descriptors){assert.ok(input.files.includes(r.path));assert.ok(fs.readFileSync(r.path).equals(r.bytes));validatePublicMetadata(r.value);}
 });
@@ -33,10 +33,10 @@ test('public descriptions cannot contain source archives, authoring flags or unk
   if(r.type!=='BATTLE_MAP')assert.throws(()=>validatePublicMetadata({...r.value,sourceArchive:'private'}),/PUBLIC_METADATA_SCHEMA/);
  }
 });
-test('all 23 Hunt occlusion piece arrays remain exactly equal, with no collision or actor-state data added',()=>{
- const geometry=projection.descriptors.filter(r=>r.type==='HUNT_DEPTH');assert.equal(geometry.length,23);
+test('all 25 Hunt occlusion piece arrays remain exactly equal, with no collision or actor-state data added',()=>{
+ const geometry=projection.descriptors.filter(r=>r.type==='HUNT_DEPTH');assert.equal(geometry.length,25);
  for(const r of geometry){assert.deepEqual(r.value.pieces,source(r).pieces);assert.deepEqual(Object.keys(r.value),['schemaVersion','renderType','pieces']);}
- const selected=[...read('assets/production/public-runtime/hunt-accepted.map.v1.json').fields,...read('assets/production/public-runtime/hunt-night.map.v1.json').fields];
+ const selected=[...read('assets/production/public-runtime/hunt-accepted.map.v1.json').fields,...read('assets/production/public-runtime/hunt-night.map.v1.json').fields,...read('assets/production/public-runtime/hunt-hm01x2.map.v1.json').fields];
  for(const field of selected)if(field.depthOccluders){const d=geometry.find(r=>r.path===field.depthOccluders.pieces.src);assert.ok(d);assert.equal(field.depthOccluders.pieces.sha256,d.sha256);}
 });
 test('battle projections retain every field/frame/duration/native coordinate',()=>{

@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import {cageForegroundPlan,withCageForeground} from '../src/championship/presentation/cageForeground.js';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url),'utf8'));
 const data=read('assets/production/cage/cm02-goal-foreground-20261019/manifest.json');
-const manifest=read('assets/production/public-runtime/cage-final.map.v1.json');
+const manifest=read('assets/production/cage/final-intake-20261008/manifest.json');
 const placements=[{fieldId:'field_cm02_01',x:200,y:40,slotIndex:4}];
 
 test('approved public origin never requests the private CM02 goal manifest',async()=>{

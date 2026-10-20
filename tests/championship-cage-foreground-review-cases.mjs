@@ -7,7 +7,7 @@ import crypto from 'node:crypto';
 import {withCageForeground,cageForegroundPlan} from '../src/championship/presentation/cageForeground.js';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url),'utf8'));
 const index=read('assets/production/cage/foreground-review-20261019/index.json');
-const manifest=read('assets/production/public-runtime/cage-final.map.v1.json');
+const manifest=read('assets/production/cage/final-intake-20261008/manifest.json');
 
 test('approved public origin never requests the private generated foreground index',async()=>{
  const art={};let requests=0;

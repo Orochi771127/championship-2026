@@ -7,7 +7,7 @@ import crypto from 'node:crypto';
 import {withCageAmbient} from '../src/championship/presentation/cageAmbient.js';
 const read = p => JSON.parse(fs.readFileSync(new URL('../' + p, import.meta.url), 'utf8'));
 const index = read('assets/production/cage/ambient-review-20261019/index.json');
-const manifest = read('assets/production/public-runtime/cage-final.map.v1.json');
+const manifest = read('assets/production/cage/final-intake-20261008/manifest.json');
 
 function fakePixi() {
   const made = {meshes: 0, sprites: 0, graphics: 0, loads: [], unloads: []};
