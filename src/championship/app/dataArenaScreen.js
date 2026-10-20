@@ -524,7 +524,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           else if (event.reason === "COOLDOWN") toast(t("toast.cooldown"), { tone: "info", key: "cooldown", gap: 900 });
           break;
         case "ULT_READY": audio?.play("level"); toast(t("hud.ultReady"), { tone: "good", key: "ult-ready", gap: 3000 }); break;
-        case "CAST": if (event.team === "player") audio?.play("dash"); break;
+        case "CAST_RELEASE": if (event.team === "player") audio?.play(event.moveType === 'LUNGE' ? 'dash' : 'burst'); break;
         case "ULT_CAST": audio?.play("roar"); break;
         case "NOVA": case "ZONE_BURST": audio?.play("burst"); break;
         case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.play("block"); toast(t("toast.blocked"), { x: event.x, y: event.y, tone: "good", key: "blocked", gap: 1200 }); } break;

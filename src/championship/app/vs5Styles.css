@@ -34,6 +34,16 @@
 .cm-vs5-root *::before,
 .cm-vs5-root *::after { box-sizing: border-box; }
 
+.cm-vs5-data-arena {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 52px;
+  margin: 8px 0 0;
+  text-align: left;
+}
+
 /* The shell IS the 9:16 frame, so a band's percentage height is a percentage
    of that frame and not of whatever the viewport happens to be. Without this
    the five proportions drift on any screen that is not exactly 9:16. */

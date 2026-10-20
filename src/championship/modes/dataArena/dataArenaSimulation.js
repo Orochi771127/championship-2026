@@ -75,6 +75,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   const events = [];
   const emit = (event) => { event.t = state.time; events.push(event); return event; };
   let nextId = 1;
+  let nextActionId = 1;
 
   const upgrades = { ...partner.startingUpgrades };
   const playerSpawn = at(map.playerSpawn), mateSpawn = at(map.mateSpawn);
@@ -608,7 +609,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const reach = Math.min(range || Infinity, distance(aimX, aimY, caster.x, caster.y));
     const targetX = move.type === "ZONE" ? caster.x + Math.cos(angle) * Math.min(reach, range) : aimX;
     const targetY = move.type === "ZONE" ? caster.y + Math.sin(angle) * Math.min(reach, range) : aimY;
-    caster.cast = { moveId, move, t: 0, windup: move.windup ?? 0, angle, aimX: targetX, aimY: targetY, ultimate };
+    caster.cast = { actionId: nextActionId++, moveId, move, t: 0, windup: move.windup ?? 0, angle, aimX: targetX, aimY: targetY, ultimate };
     caster.facing = Math.cos(angle) >= 0 ? 1 : -1;
     if (caster === player) { state.stats.movesCast++; if (ultimate) state.stats.ultimates++; }
     const telegraph = { owner: `cast:${caster.id}`, team: caster.team, duration: Math.max(0.12, move.windup ?? 0), follow: null };
@@ -617,7 +618,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     else if (move.type === "LUNGE") addTelegraph({ ...telegraph, kind: "LINE", x: caster.x, y: caster.y, angle, length: move.distance, width: move.width });
     else if (move.type === "ZONE") addTelegraph({ ...telegraph, kind: "CIRCLE", x: targetX, y: targetY, radius: move.radius, danger: caster.team !== "player" });
     else if (move.type === "NOVA") addTelegraph({ ...telegraph, kind: "CIRCLE", x: caster.x, y: caster.y, radius: move.radius, danger: caster.team !== "player" });
-    emit({ type: ultimate ? "ULT_CAST" : "CAST", team: caster.team, moveId, moveType: move.type, x: caster.x, y: caster.y, angle });
+    emit({ type: ultimate ? "ULT_CAST" : "CAST", actionId: caster.cast.actionId, casterId: caster.id, team: caster.team, moveId, moveType: move.type, x: caster.x, y: caster.y, angle });
     if (caster.cast.windup <= 0) finishCast(caster);
     return true;
   }
@@ -640,15 +641,17 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   }
 
   function finishCast(caster) {
-    const { move, angle, aimX, aimY } = caster.cast;
+    const { actionId, moveId, move, angle, aimX, aimY, ultimate } = caster.cast;
     const owner = `cast:${caster.id}`;
     removeTelegraph(owner);
     caster.cast = null;
+    emit({ type: 'CAST_RELEASE', actionId, casterId: caster.id, team: caster.team, moveId, moveType: move.type,
+      x: caster.x, y: caster.y, angle, ultimate });
     const damageScale = caster === player ? stat.skillDamage : caster.damageScale ?? 1;
     switch (move.type) {
-      case "BOLT": case "WAVE": shootBolt(caster, move, angle); break;
+      case "BOLT": case "WAVE": shootBolt(caster, move, angle, { actionId }); break;
       case "SPREAD": case "LANCE":
-        for (let i = 0; i < move.count; i++) shootBolt(caster, move, angle - move.spread / 2 + (move.spread * i) / (move.count - 1));
+        for (let i = 0; i < move.count; i++) shootBolt(caster, move, angle - move.spread / 2 + (move.spread * i) / (move.count - 1), { actionId });
         break;
       case "LUNGE":
         caster.lunge = { dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
@@ -1188,7 +1191,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (distance(target.x, target.y, projectile.x, projectile.y) > (target.radius ?? 20) + projectile.radius) continue;
       projectile.hits.add(target.id);
       strike(target, projectile.damage, "SKILL", projectile.onHit, projectile.x, projectile.y);
-      emit({ type: "SKILL_HIT", x: projectile.x, y: projectile.y, moveId: projectile.moveId });
+      emit({ type: "SKILL_HIT", actionId: projectile.actionId, x: projectile.x, y: projectile.y, moveId: projectile.moveId });
       if (projectile.pierce <= 0) { projectile.dead = true; terrainEffect(projectile); return; }
       projectile.pierce--;
     }

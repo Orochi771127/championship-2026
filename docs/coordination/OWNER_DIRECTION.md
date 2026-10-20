@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: DATA_ARENA_BATTLE_ENTRY_RELEASE_20261020 -->
+## 2026-10-20 — Publish Data Arena battle entry and action timing repair
+
+Owner explicitly directs: 「好幫我提交並部署上線確認線上版本，也能從對戰頁進入數據競技場，並正常遊玩跟返回」. This authorizes the reviewed Battle-page entry/return and character action-timing batch, its exact public-playtest input hashes, scoped commit and normal main push through existing CI/Pages. Verify the deployed commit and hosted bytes, then use the normal Battle entry to play both existing modes and return to Battle. Preserve unrelated candidate work, existing gameplay/save authority and the approved asset selection. No new art, dependency, multiplayer or physical-device acceptance is implied. See the [slice contract](../contracts/championship/DATA_ARENA_SLICE_2026-10-15.md).
+
 <!-- record-id: DEX_WORKSPACE_CLOSEOUT_20261019 -->
 ## 2026-10-19 — Final single-image encyclopedia art and workspace closeout
 

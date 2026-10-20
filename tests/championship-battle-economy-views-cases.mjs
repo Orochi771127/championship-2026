@@ -50,6 +50,20 @@ function useDocument(t) {
 
 const outcome = { ended: true, verdict: "TEAM_ZERO_AHEAD", reason: "TEAM_DOWN", winningTeam: 0 };
 
+test('Data Arena is an additional battle-menu entry and hands the actual trigger to its owner', (t) => {
+  const root = useDocument(t);
+  let trigger = null;
+  const view = createBattleSelectView({ root, matches: [], onEnter() {}, onOpenDataArena(button) { trigger = button; },
+    menuCopy: { menu: '對戰', chooseMatch: '選擇對戰', availableMatches: '賽事' } });
+  const button = descendants(root).find(node => node.id === 'cm-data-arena');
+  assert.ok(button);
+  assert.match(textOf(button), /數據競技場|Data Arena/);
+  button.click();
+  assert.equal(trigger, button);
+  assert.equal(view.inspect().screen, 'BATTLE_SELECT');
+  view.dispose();
+});
+
 test('rank and title pages require actual newly committed winning progress',(t)=>{
   const root=useDocument(t),receipt={status:'SETTLED',won:true,credited:7000,walletAfter:7100};
   const progression={rankBefore:0,rankAfter:1,earnedTitles:[{id:4,name:'測試頭銜'}]};

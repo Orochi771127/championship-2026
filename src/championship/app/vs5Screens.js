@@ -2,8 +2,9 @@ import {battleTransportText} from '../text/battleTransportText.js';
 import {battleOpeningText} from '../text/battleOpeningText.js';
 import { bindCodePaste } from "./codeClipboard.js";
 import { titleEventText, raisingDisplayName, speciesName } from "../text/zhHant.js";
-import { uiText } from "../text/uiText.js";
+import { uiText, retranslate } from "../text/uiText.js";
 import {tutorialBattleText} from '../text/interactiveTutorialBattleText.js';
+import { arenaText } from '../text/dataArenaText.js';
 // VS5-P — Championship Modern presentation for the Battle menu, the match and
 // the result.
 //
@@ -134,7 +135,7 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, arenaChoices=[], tutorial=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, arenaChoices=[], tutorial=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -204,6 +205,17 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   let cubeFailed = typeof mountCube !== "function";
   let selectedMode='TITLE_MATCH',modeRequest=0,partyRequest=0,entering=false;
   const matchOnlyNodes = [];
+  let arenaLabels = null;
+  if (typeof onOpenDataArena === 'function') {
+    const arena = actionButton('');
+    arena.id = 'cm-data-arena';
+    arena.classList.add('cm-vs5-data-arena');
+    arenaLabels = [element('span', '', arenaText('entry'), false), element('span', 'cm-vs5-match__fee', arenaText('entry.description'), false)];
+    arena.append(...arenaLabels);
+    arena.addEventListener('click', () => { if (!entering) void onOpenDataArena(arena); });
+    header.append(arena);
+    matchOnlyNodes.push(arena);
+  }
   async function selectMode(id){
     if(cubeDisposed||entering)return;
     if(id==='CHAMPIONSHIP'){onOpenChampionship?.();return;}
@@ -613,6 +625,10 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
 
   return Object.freeze({
     render(reading = {}) { if(selectedMode==='TITLE_MATCH')renderMatches(reading.matches); },
+    relabel() {
+      retranslate(root);
+      if (arenaLabels) { arenaLabels[0].textContent = arenaText('entry'); arenaLabels[1].textContent = arenaText('entry.description'); }
+    },
     inspect() {
       return Object.freeze({
         screen: "BATTLE_SELECT",

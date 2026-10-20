@@ -3,7 +3,60 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createDataArenaSimulation } from "../src/championship/modes/dataArena/dataArenaSimulation.js";
+import { createDataArenaCharacterAction } from '../src/championship/presentation/dataArena/dataArenaCharacterAction.js';
 import { createDataArenaGrid } from "../src/championship/modes/dataArena/dataArenaGrid.js";
+
+test('skill poses hold preparation until the actual release, finish the supplied clip and restart for a new cast', () => {
+  const animation = { id: 7, frames: [{ ticks: 15 }, { ticks: 37 }] };
+  const action = createDataArenaCharacterAction({ animation });
+  action.observe({ type: 'CAST', actionId: 1, moveId: 'emberBolt', t: 1 });
+  assert.equal(action.sample(1.1).phase, 'WINDUP');
+  assert.equal(action.sample(1.1).elapsedMs, 0);
+  action.observe({ type: 'CAST_RELEASE', actionId: 1, moveId: 'emberBolt', t: 1.12 });
+  assert.equal(action.sample(1.12).elapsedMs, 250);
+  assert.ok(Math.abs(action.sample(1.32).elapsedMs - 450) < 0.001);
+  assert.equal(action.sample(1.8), null);
+  action.observe({ type: 'CAST', actionId: 2, moveId: 'emberBolt', t: 2 });
+  assert.equal(action.sample(2).id, 2);
+  assert.equal(action.sample(2).elapsedMs, 0);
+  action.observe({ type: 'CAST_RELEASE', actionId: 1, moveId: 'emberBolt', t: 1.12 });
+  assert.equal(action.sample(2).phase, 'WINDUP', 'late old events cannot release a newer action');
+  action.clear();
+  assert.equal(action.sample(2), null);
+});
+
+test('a render batch that contains an entire short windup still displays the release; reduced motion stays still', () => {
+  const animation = { id: 7, frames: [{ ticks: 15 }, { ticks: 37 }] };
+  for (const reducedMotion of [false, true]) {
+    const action = createDataArenaCharacterAction({ animation, reducedMotion });
+    action.observe({ type: 'CAST_RELEASE', actionId: 1, moveId: 'sunShield', t: 0 });
+    assert.equal(action.sample(0).phase, 'RELEASE');
+    assert.equal(action.sample(0).elapsedMs, reducedMotion ? 0 : 250);
+  }
+});
+
+test('projectile, lunge, zone and ultimate release events follow their real windup with one action identity', () => {
+  for (const request of [{ cast: 0 }, { cast: 1 }, { cast: 2 }, { ult: true }]) {
+    const sim = createDataArenaSimulation({ seed: 7, partnerId: 'ember-lizard', mode: 'HARBOR' });
+    const state = sim.getState();
+    state.player.ult = 100;
+    sim.drainEvents();
+    sim.step({ ...request, aimX: state.player.x + 400, aimY: state.player.y });
+    const start = sim.drainEvents().find(e => ['CAST', 'ULT_CAST'].includes(e.type) && e.team === 'player');
+    assert.ok(start);
+    const windup = state.player.cast.windup;
+    let release = null;
+    for (let i = 0; i < 90 && !release; i++) {
+      sim.step({ aimX: state.player.x + 400, aimY: state.player.y });
+      release = sim.drainEvents().find(e => e.type === 'CAST_RELEASE' && e.actionId === start.actionId);
+    }
+    assert.ok(release, `release for ${start.moveId}`);
+    assert.equal(release.casterId, start.casterId);
+    assert.equal(release.moveId, start.moveId);
+    assert.ok(release.t - start.t >= windup - 1 / 60 - 1e-8);
+    assert.ok(release.t - start.t <= windup + 1 / 60 + 1e-8);
+  }
+});
 import { createFlowField } from "../src/championship/modes/dataArena/dataArenaNav.js";
 import { DATA_ARENA_UPGRADES, createArenaRandom, drawUpgradeOffer, upgradeValue } from "../src/championship/modes/dataArena/dataArenaUpgrades.js";
 import { createDataArenaRecordStore, DATA_ARENA_RECORD_SCHEMA } from "../src/championship/modes/dataArena/dataArenaSave.js";

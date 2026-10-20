@@ -1,6 +1,6 @@
 // Data Arena real-browser acceptance gate (OWNER_APPROVED_ADAPTATION 2026-10-15).
 //
-// Drives the normal title entry with real keyboard, mouse and touch input in an
+// Drives the normal Continue -> Battle entry with real keyboard, mouse and touch input in an
 // isolated browser context. The page's ?arenaQa=1 hook is READ-ONLY: the QA
 // autopilot decides from observation and Playwright performs the input; no
 // arena state is written and no phase is skipped. Screenshots, a JSON log and
@@ -12,7 +12,7 @@
 //   npm run test:browser:data-arena
 //   CHROME=/path/to/chrome  ARENA_SEED=7  ARENA_SKIP_FULL=1  ARENA_SKIP_HARBOR=1  (optional)
 //
-// Order: title entry -> select (tournament default) -> briefing -> controls
+// Order: Continue -> Battle -> select (tournament default) -> briefing -> controls
 // (beam, skills, dash) -> pause/background/quality/resize -> a full 3-round
 // tournament -> mode switch -> a full harbor match (regression) -> restarts ->
 // exit/re-enter -> raising-save isolation -> phone touch (tournament + harbor).
@@ -28,6 +28,7 @@ const seed = Number(process.env.ARENA_SEED || 7);
 const partnerIndex = Number(process.env.ARENA_PARTNER || 0);
 const SAVE_KEY = 'championshipModernSave:v1';
 const ARENA_KEY = 'championshipModernSave:dataArena:v1';
+const qaSave = fs.readFileSync(path.join(__dirname, '../qa/championship-full-qa-save.json'), 'utf8');
 fs.mkdirSync(output, { recursive: true });
 
 const report = { schemaVersion: 1, generatedAt: new Date().toISOString(), origin, seed, partnerIndex, renderer: null, softwareRendering: null,
@@ -52,13 +53,29 @@ async function shot(page, name) {
   report.screenshots.push(path.basename(file));
 }
 const qa = (page, expression) => page.evaluate(expression);
+function raisingGameplay(text) {
+  const value = JSON.parse(text);
+  // Backgrounding a live game legitimately saves it through the canonical
+  // writer. Its timestamp and save revisions are bookkeeping, not arena gains.
+  delete value.updatedAt;
+  delete value.progression.revision;
+  const home = JSON.parse(value.raisingHome);
+  delete home.revision;
+  value.raisingHome = home;
+  return value;
+}
 /** LOGIN as a player does (the shared helper's networkidle wait is unreliable while title media streams). */
 async function login(page) {
   await page.waitForFunction(() => document.querySelector('#cm-login')?.disabled === false, null, { timeout: 60000 });
   await page.locator('#cm-opening-film video').evaluateAll((videos) => { for (const video of videos) video.playbackRate = 8; });
   await page.waitForFunction(() => { const film = document.querySelector('#cm-opening-film'); return !film || film.hidden; }, null, { timeout: 55000 });
   await page.click('#cm-login');
-  await page.waitForSelector('#cm-data-arena', { state: 'visible' });
+  check('the title no longer offers the Data Arena entry', await page.locator('#cm-title #cm-data-arena').count() === 0);
+  await page.click('#cm-continue');
+  await page.waitForSelector('#cm-root[data-active-screen="RAISING_HOME"]');
+  await page.click('button[data-menu-id="SYSTEM"]');
+  await page.click('[data-entry-id="battle"]');
+  await page.waitForSelector('#cm-root[data-active-screen="BATTLE_SELECT"] #cm-data-arena');
 }
 async function waitState(page, state, timeout = 30000) {
   await page.waitForFunction((s) => window.__dataArenaQA?.state() === s, state, { timeout });
@@ -181,13 +198,18 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     const page = await context.newPage();
     page.setDefaultTimeout(30000);
     watch(page, 'desktop');
+    await context.addInitScript(({key, text}) => localStorage.setItem(key, text), {key:SAVE_KEY, text:qaSave});
     await page.goto(`${origin}/championship.html?arenaQa=1&arenaSeed=${seed}`, { waitUntil: 'domcontentloaded' });
-    // A pre-existing raising save must survive every arena action untouched.
-    await page.evaluate((key) => localStorage.setItem(key, JSON.stringify({ sentinel: 'raising-save-must-not-change' })), SAVE_KEY);
-    const saveBefore = await page.evaluate((key) => localStorage.getItem(key), SAVE_KEY);
     await login(page);
-    check('title menu shows the Data Arena entry', await page.locator('#cm-data-arena').isVisible());
-    await shot(page, 'desktop-00-title-entry');
+    // A valid existing player save survives the arena after normal Continue.
+    // Flush the ordinary pre-entry ranch state, just as pagehide does, so the
+    // fixture's old on-disk clock is not compared with a later background save.
+    await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
+    const saveBefore = await page.evaluate((key) => localStorage.getItem(key), SAVE_KEY);
+    check('the battle menu shows the Data Arena entry', await page.locator('#cm-data-arena').isVisible());
+    const entryBounds = await page.locator('#cm-data-arena').boundingBox();
+    check('the battle entry is fully on screen and at least 44px tall', entryBounds.y >= 0 && entryBounds.y + entryBounds.height <= 720 && entryBounds.height >= 44, entryBounds);
+    await shot(page, 'desktop-00-battle-entry');
     await openArena(page);
     check('a fresh player lands on the tournament mode', await page.locator('.da-mode[data-mode="TOURNAMENT"][aria-checked="true"]').count() === 1);
     check('the select screen previews the four-move kit', await page.locator('.da-kitview__row').count() === 5);
@@ -230,6 +252,17 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     check('holding the mouse fires a sustained, heating beam', heating.firing && heating.heat >= heating.gameSeconds * 25, heating);
     check('releasing cools the beam', !cooled.firing && cooled.heat < heating.heat, cooled);
     // Skill on the 2 key: energy spent, cooldown shown on the slot.
+    await page.evaluate(() => {
+      window.__arenaMotionSamples = [];
+      const end = performance.now() + 2500;
+      const observe = () => {
+        const q = window.__dataArenaQA;
+        if (!q) return;
+        window.__arenaMotionSamples.push({ time: q.snapshot()?.time, laser: q.snapshot()?.laser.firing, ...q.diagnostics().scene?.playerAnimation });
+        if (performance.now() < end) requestAnimationFrame(observe);
+      };
+      requestAnimationFrame(observe);
+    });
     const energyBefore = await qa(page, () => window.__dataArenaQA.snapshot().kit.energy);
     await page.keyboard.press('Digit2');
     // Game time, not wall time: a starved software frame may not step within a fixed sleep.
@@ -240,6 +273,13 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     const refusal = page.locator('.da-toast.is-showing', { hasText: /冷卻中|cooling/i });
     await refusal.first().waitFor({ timeout: 3000 }).catch(() => {});
     check('casting again while cooling is refused with feedback', await refusal.count() >= 1);
+    await page.waitForFunction(() => window.__arenaMotionSamples.some(s => !s.laser && s.sequenceId === 7 && s.phase === 'RELEASE' && s.frameIndex === 1), null, { timeout: 4000 }).catch(async error => {
+      report.playerSkillMotion = await page.evaluate(() => window.__arenaMotionSamples);
+      await shot(page, 'skill-motion-failure');
+      throw error;
+    });
+    report.playerSkillMotion = await page.evaluate(() => window.__arenaMotionSamples);
+    check('a skill without the beam shows the attack release cell', report.playerSkillMotion.some(s => !s.laser && s.sequenceId === 7 && s.phase === 'RELEASE' && s.frameIndex === 1));
     await shot(page, 'desktop-04-skill-cast');
     // Dash on Space.
     const beforeDash = await qa(page, () => window.__dataArenaQA.snapshot().player.dashCharges);
@@ -359,10 +399,13 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await page.keyboard.press('Escape');
     await waitState(page, 'PAUSE');
     await page.locator('.da-panel--pause .da-btn', { hasText: /離開競技場|Leave the arena/ }).click();
-    await page.waitForFunction(() => !document.querySelector('.da-root') && !document.getElementById('cm-title').hidden);
-    check('exit returns to the title and removes the arena', await page.locator('#cm-data-arena').isVisible());
-    diag = await page.evaluate(() => ({ qa: typeof window.__dataArenaQA, canvases: document.querySelectorAll('canvas').length }));
-    check('exit releases the QA hook and leaves no arena canvas in the page', diag.qa === 'undefined' && diag.canvases === 0, diag);
+    await page.waitForFunction(() => !document.querySelector('.da-root') && document.getElementById('cm-title').hidden && !document.getElementById('cm-root').hidden);
+    check('exit returns to the same battle menu and removes the arena', await page.locator('#cm-data-arena').isVisible());
+    check('exit restores keyboard focus to the battle entry', await page.locator('#cm-data-arena').evaluate(node => node === document.activeElement));
+    diag = await page.evaluate(() => ({ qa: typeof window.__dataArenaQA, canvases: document.querySelectorAll('canvas').length,
+      cubeCanvases: document.querySelectorAll('.cm-vs5-cube canvas').length, arenaCanvases: document.querySelectorAll('.da-root canvas').length }));
+    // The cube mount is asynchronous and may finish while the arena is open.
+    check('exit releases the QA hook and only the battle cube owns a canvas', diag.qa === 'undefined' && diag.arenaCanvases === 0 && diag.canvases === diag.cubeCanvases && diag.cubeCanvases <= 1, diag);
     await openArena(page);
     const remembered = await page.$eval('.da-mode[aria-checked="true"]', (node) => node.dataset.mode);
     check('re-entering remembers the last mode played', remembered === (process.env.ARENA_SKIP_FULL ? 'TOURNAMENT' : process.env.ARENA_SKIP_HARBOR ? 'TOURNAMENT' : 'HARBOR'), remembered);
@@ -375,7 +418,9 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     await page.waitForFunction(() => !document.querySelector('.da-root'));
     const saveAfter = await page.evaluate((key) => localStorage.getItem(key), SAVE_KEY);
     const arenaRecord = await page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? 'null'), ARENA_KEY);
-    check('the raising save is byte-identical after arena play', saveAfter === saveBefore);
+    const beforeGameplay = raisingGameplay(saveBefore), afterGameplay = raisingGameplay(saveAfter);
+    report.raisingSaveChangedFields = Object.keys(beforeGameplay).filter(key => JSON.stringify(beforeGameplay[key]) !== JSON.stringify(afterGameplay[key]));
+    check('arena play preserves all raising gameplay, RNG, wallet, inventory and progress across normal background saves', report.raisingSaveChangedFields.length === 0, report.raisingSaveChangedFields);
     check('arena records live under their own key', arenaRecord?.schema === 'dataArena.v1', arenaRecord && { runs: arenaRecord.runs, wins: arenaRecord.wins, best: arenaRecord.bestScore });
     if (!process.env.ARENA_SKIP_FULL) check('records keep a separate entry per mode', arenaRecord.modes?.TOURNAMENT?.runs >= 1 && (process.env.ARENA_SKIP_HARBOR || arenaRecord.modes?.HARBOR?.runs >= 1),
       arenaRecord.modes);
@@ -383,10 +428,14 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
 
     // ------------------------------------------------------------ phone 390x844 touch
     const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 3 });
+    await phone.addInitScript(({key, text}) => localStorage.setItem(key, text), {key:SAVE_KEY, text:qaSave});
     const mobile = await phone.newPage();
     watch(mobile, 'phone');
     await mobile.goto(`${origin}/championship.html?arenaQa=1&arenaSeed=${seed + 1}`, { waitUntil: 'domcontentloaded' });
     await login(mobile);
+    const phoneEntry = await mobile.locator('#cm-data-arena').boundingBox();
+    check('the phone battle entry is on screen with a 44px touch target', phoneEntry.y >= 0 && phoneEntry.y + phoneEntry.height <= 844 && phoneEntry.height >= 44, phoneEntry);
+    await shot(mobile, 'phone-00-battle-entry');
     await mobile.tap('#cm-data-arena');
     await mobile.waitForSelector('.da-panel--select');
     await shot(mobile, 'phone-01-select');

@@ -131,7 +131,7 @@ test("observers are given the current view and stop on dispose", () => {
 
 test("the screens import display copy and the clipboard UI helper without reaching into the runtime", () => {
   const imports = [...screens.matchAll(/^import .*from\s*["']([^"']+)["'];/gm)].map(match => match[1]);
-  assert.deepEqual(imports.sort(), ["../text/battleOpeningText.js", "../text/battleTransportText.js", "../text/interactiveTutorialBattleText.js", "../text/uiText.js", "../text/zhHant.js", "./codeClipboard.js"]);
+  assert.deepEqual(imports.sort(), ["../text/battleOpeningText.js", "../text/battleTransportText.js", "../text/dataArenaText.js", "../text/interactiveTutorialBattleText.js", "../text/uiText.js", "../text/zhHant.js", "./codeClipboard.js"]);
   const clipboard = fs.readFileSync(path.join(root, "src/championship/app/codeClipboard.js"), "utf8");
   assert.doesNotMatch(clipboard, /\bimport\s*(?:[({*]|["'])/);
   assert.doesNotMatch(screens, /import\s*\(/);

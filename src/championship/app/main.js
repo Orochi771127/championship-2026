@@ -1306,6 +1306,7 @@ async function mountBattleSelect() {
       ...match,recordIndex:match.id,title:uiText('{kind} — {species}',{kind:uiText(match.kind==='SINGLE'?'單隻對戰':'三隻對戰'),species:formatList(match.speciesIndices.map(index=>speciesName(index)))})})),
     menuCopy: battleMenuLabels(),
     onOpenChampionship() { app.openChampionship(); },
+    onOpenDataArena: enterDataArena,
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
@@ -2350,20 +2351,24 @@ function relabelChrome() {
 }
 
 // ---- Data Arena entry (OWNER_APPROVED_ADAPTATION 2026-10-15) ----------------
-// One title button opens the arena over the title. It needs no game session,
-// writes only its own record key and hands back the title when it closes.
-const dataArenaButton = document.getElementById("cm-data-arena");
-let dataArenaTextModule = null;
-function labelDataArenaEntry() {
-  if (!dataArenaButton) return;
-  dataArenaTextModule ??= import("../text/dataArenaText.js");
-  void dataArenaTextModule.then(({ arenaText }) => { dataArenaButton.textContent = arenaText("entry"); });
-}
-async function enterDataArena() {
+// Battle owns the entry; the existing arena temporarily borrows the shared
+// stage. Its close callback restores the same menu and its keyboard focus.
+async function enterDataArena(dataArenaButton) {
   stopRanchTitlePreload();
-  if (dataArenaSession || !dataArenaButton) return;
+  if (dataArenaSession || app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT || !dataArenaButton?.isConnected) return;
   dataArenaButton.disabled = true;
   dataArenaSession = "OPENING";
+  clockDriver?.setActive(false);
+  root.inert = true;
+  const restoreBattle = () => {
+    dataArenaSession = null;
+    root.hidden = false;
+    root.inert = false;
+    clockDriver?.setActive(true);
+    dataArenaButton.disabled = false;
+    syncMusic();
+    dataArenaButton.focus({ preventScroll: true });
+  };
   let storage = null;
   try { storage = window.localStorage; } catch { storage = null; }
   // ?arenaQa=1 exposes read-only observation for browser QA; ?arenaSeed=N replays a match seed.
@@ -2377,22 +2382,15 @@ async function enterDataArena() {
       resolutionCap: currentQuality().pixiResolutionCap,
       qa: arenaParams.get("arenaQa") === "1",
       seed: /^\d{1,10}$/.test(seedParam) ? Number(seedParam) >>> 0 : null,
-      onExit() {
-        dataArenaSession = null;
-        titleScreen.hidden = false;
-        dataArenaButton.disabled = false;
-        syncMusic();
-        dataArenaButton.focus({ preventScroll: true });
-      }
+      onExit: restoreBattle
     });
     dataArenaSession = session;
-    titleScreen.hidden = true;
+    root.hidden = true;
   } catch (error) {
     console.warn("DATA_ARENA_OPEN_FAILED", error);
-    dataArenaSession = null;
-    titleScreen.hidden = false;
-    dataArenaButton.disabled = false;
-    note(error.message);
+    restoreBattle();
+    await showChoiceDialog({ title: battleMenuLabels().menu, message: uiText('對戰準備失敗，請再試一次。'),
+      actions: [{ id: 'close', label: uiText('返回') }], cancelId: 'close' });
   }
 }
 
@@ -2402,7 +2400,6 @@ function boot() {
   setText(loginButton, "ENTER_GAME");
   setText(newGameButton, "開始新遊戲");
   setText(continueButton, "繼續遊戲");
-  labelDataArenaEntry();
   if (titleSettingsButton) {
     setLabel(titleSettingsButton, "aria-label", "設定");
     setLabel(titleSettingsButton, "title", "設定");
@@ -2412,7 +2409,7 @@ function boot() {
     titleSettingsButton.hidden = false;
   }
   relabelChrome();
-  onLocaleChange(() => { relabelChrome(); syncTitleArt(); labelDataArenaEntry(); updateRanchTitlePreloadStatus(); });
+  onLocaleChange(() => { relabelChrome(); syncTitleArt(); updateRanchTitlePreloadStatus(); });
   try {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
@@ -2454,7 +2451,6 @@ function boot() {
     titleActions.hidden=true;note('');if(titleSettingsButton)titleSettingsButton.hidden=true;openingPresentation.begin();
   });
   continueButton.addEventListener("click", () => { void continueGame(); });
-  dataArenaButton?.addEventListener("click", () => { void enterDataArena(); });
   installHomeEntries();
   refreshContinue();
   loginButton.disabled=false;

@@ -17,6 +17,7 @@ import { mixColor } from "../battleFx/battleFxLayer.js";
 import { createDataArenaCamera } from "./dataArenaCamera.js";
 import { createDataArenaTextures } from "./dataArenaTextures.js";
 import { DATA_ARENA_SEQUENCES } from "./dataArenaRoster.js";
+import { createDataArenaCharacterAction } from './dataArenaCharacterAction.js';
 import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./dataArenaEnvironment.js";
 import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
@@ -280,6 +281,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   }
 
   // ------------------------------------------------------------------ actors
+  const actionEvents = new Map();
   function createActorView(role, member, body) {
     const container = new PIXI.Container({ label: `arena ${role}` });
     const shadow = new PIXI.Sprite(textures.shadow);
@@ -298,6 +300,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       scale = ROLE_HEIGHT[role] / 96;
     }
     sprite.scale.set(scale);
+    const action = createDataArenaCharacterAction({
+      animation: bundle?.runtime.sides.main.animations.find(a => a.id === DATA_ARENA_SEQUENCES.ATTACK),
+      tickRateHz: bundle?.runtime.timing?.tickRateHz ?? 60, reducedMotion
+    });
+    let actionRequest = null, actionElapsed = 0, motion = null;
     shadow.scale.set((ROLE_HEIGHT[role] / 64) * 0.9, (ROLE_HEIGHT[role] / 64) * 0.75);
     container.addChild(shadow, sprite);
     objects.addChild(container);
@@ -305,22 +312,34 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (ringGfx) container.addChildAt(ringGfx, 1);
     return {
       role, container, sprite, shadow, ringGfx, scale, controller, hasArt: Boolean(bundle),
-      setSequence(id) {
-        if (!controller || sequence === id) return;
-        try { controller.setAnimation(id); sequence = id; } catch { /* a missing raw sequence keeps the current pose */ }
+      setSequence(id, request = null) {
+        if (!controller || (sequence === id && actionRequest === request)) return;
+        try { controller.setAnimation(id); sequence = id; actionRequest = request; actionElapsed = 0; } catch { /* a missing raw sequence keeps the current pose */ }
       },
       update(dtMs, { x, y, facing, flash = 0, alpha = 1, lift = 0, seq = DATA_ARENA_SEQUENCES.STAND, sink = 0 }) {
         container.position.set(x, y - floorOffset(x,y));
         container.zIndex = y;
-        this.setSequence(seq);
-        if (controller&&dtMs>0) controller.update({ deltaMS: dtMs });
+        const event = actionEvents.get(body.id);
+        if (body.hp <= 0) { action.clear(); actionEvents.delete(body.id); }
+        else if (event && (event.type === 'CAST_RELEASE' || body.cast?.actionId === event.actionId)) action.observe(event);
+        else if (event) { action.clear(); actionEvents.delete(body.id); }
+        else action.clear();
+        motion = [DATA_ARENA_SEQUENCES.HIT, DATA_ARENA_SEQUENCES.DOWN, DATA_ARENA_SEQUENCES.WIN].includes(seq) ? null : action.sample(state.time);
+        this.setSequence(motion?.sequenceId ?? seq, motion?.id ?? null);
+        if (controller && motion) {
+          const deltaMS = Math.max(0, motion.elapsedMs - actionElapsed);
+          if (deltaMS > 0) controller.update({ deltaMS });
+          actionElapsed = motion.elapsedMs;
+        } else if (controller && dtMs > 0) controller.update({ deltaMS: dtMs });
         // Art faces left; mirror for rightward facing.
         sprite.scale.set(scale * (facing > 0 ? -1 : 1), scale * (1 - sink * 0.5));
         sprite.y = -lift + sink * 30;
         sprite.alpha = alpha;
         sprite.tint = flash > 0 ? 0xff7a7a : 0xffffff;
         shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.6 : 1);
-      }
+      },
+      diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
+        actionId: motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null })
     };
   }
   const playerMember = cast.partners.find((member) => member.partnerId === partnerId) ?? cast.partners[0];
@@ -541,6 +560,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const elementTint = { BURN: 0xff7a2a, DROWN: 0x4fc3ff, STEAM: 0xeef7ff, FROST: 0xb8f0ff, CRYO_BRIDGE: 0xb8f0ff };
   function handleEvents(events) {
     for (const event of events) {
+      if (event.type === 'ROUND_INTRO') actionEvents.clear();
+      else if (['PLAYER_DOWN', 'PLAYER_RESPAWN'].includes(event.type)) actionEvents.delete(state.player.id);
+      else if (['CAST', 'ULT_CAST', 'CAST_RELEASE'].includes(event.type)) actionEvents.set(event.casterId, event);
+    }
+    for (const event of events) {
       switch (event.type) {
         case "LASER_HIT": spawn({ x: event.x, y: event.y - BEAM_ELEVATION, texture: textures.glow, tint: 0xffffff, scale: 0.5, scaleTo: 0.2, life: 0.1 }); burst(event.x, event.y - BEAM_ELEVATION, { count: 3, speed: 260, tint: PARTNER_BEAM[partnerId] ?? 0x6ff7ff, life: 0.22 }); break;
         case "ENEMY_KILLED": {
@@ -601,7 +625,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "MOUNTED": ring(event.x, event.y, 70, 0x7fe9ff, 0.35); break;
         case "OVERHEAT": puff(state.player.x, state.player.y - 40, 0xdddddd, 6, 1.2); break;
         case "BRIDGE_LIFTED": bridgeLift = 0; camera.addTrauma(0.25); break;
-        case "CAST": if (event.team === "player") spawn({ x: event.x + Math.cos(event.angle) * 26, y: event.y - BEAM_ELEVATION + Math.sin(event.angle) * 26, texture: textures.glow, tint: 0x6ff7ff, scale: 0.45, scaleTo: 0.1, life: 0.14 }); break;
+        case "CAST_RELEASE": if (event.team === "player") spawn({ x: event.x + Math.cos(event.angle) * 26, y: event.y - BEAM_ELEVATION + Math.sin(event.angle) * 26, texture: textures.glow, tint: 0x6ff7ff, scale: 0.45, scaleTo: 0.1, life: 0.14 }); break;
         case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); crowdReact("CHEER", event.x, 1.2); break;
         case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
           burst(event.x, event.y - 20, { count: 24, speed: 380, tint: event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5); break;
@@ -709,7 +733,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const playerSeq = player.state === "DOWNED" || player.state === "DEFEATED" ? DATA_ARENA_SEQUENCES.DOWN
       : player.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
       : state.mode === "VICTORY_POSE" || state.result?.outcome === "VICTORY" ? DATA_ARENA_SEQUENCES.WIN
-      : state.laser.firing ? DATA_ARENA_SEQUENCES.ATTACK
+      : state.laser.firing || player.cast || player.lunge ? DATA_ARENA_SEQUENCES.ATTACK
       : Math.hypot(player.vx, player.vy) > 30 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
     const blink = !reducedMotion && player.invulnerable > 0 && player.state !== "DASH" && Math.floor(elapsed * 14) % 2 === 0;
     const sink = player.state === "FALLING" ? clamp(player.stateTime / 0.7, 0, 1) : 0;
@@ -1030,7 +1054,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       return {
         renderer: "CHAMPIONSHIP_SINGLE_PIXI_STAGE", scene: "DATA_ARENA", quality, reducedMotion, hasCreatureArt: playerView.hasArt,
         environment: environmentView?.diagnostics() ?? null,
-        interactions:interactionView.diagnostics(),effectsElapsed:elapsed,
+        interactions:interactionView.diagnostics(),effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
         particleAgeTotal:live.reduce((n,p)=>n+p.age,0),scorchSprites:[...decalSprites.values()].filter(d=>d.kind!=="wet").length,
         fireMotion:[...fireSprites].slice(0,8).map(([cell,s])=>({cell,x:s.scale.x,y:s.scale.y,frame:textures.flame.indexOf(s.texture)})),
         playerDrawIndex: objects.children.indexOf(playerView.container),
