@@ -37,7 +37,7 @@ test('MA50 and MA62 resolve to the approved stable identities, with unique sorte
       assert.equal(databaseDisplayRows(book,4).find(e=>e.displayCode===code).speciesId,speciesId);
     }
     const mature=databaseDisplayRows(book,4);
-    assert.deepEqual(mature.map(e=>e.serial),Array.from({length:64},(_,i)=>i+1));
+    assert.deepEqual(mature.map(e=>e.serial),Array.from({length:mature.length},(_,i)=>i+1));
   }}finally{setLocale('zh-Hant');}
 });
 

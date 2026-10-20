@@ -65,6 +65,9 @@ const refreshed=['src/data/championship/database-hero-portraits.public.v1.json',
  'src/championship/presentation/publicMapRequests.js','src/championship/presentation/runtimeMapArtBundle.js',
  'src/championship/presentation/cageUiArt.js','src/championship/presentation/huntMobileReadouts.js',
  'src/championship/presentation/finalHuntArt20261008.js','src/championship/app/main.js',
+ 'src/championship/app/vs4Screens.js','src/championship/database/databaseDisplayCatalog.js',
+ 'src/championship/database/databaseIllustrations.js','src/championship/database/databaseStories.js',
+ 'src/championship/presentation/databaseHeroPortraits.js','src/data/championship/database-illustrations.r1.json',
  ...['battleEffectArt.js','raisingFeedbackArt.js','huntFeedbackArt.js','battleAudioPresentation.js','originalSharedVfxReview.js'].map(name=>'src/championship/presentation/'+name)];
 for(const file of refreshed){
  const previous=rows.get(file);rows.set(file,{...previous,path:file,sha256:sha(fs.readFileSync(path.join(root,file)))});
