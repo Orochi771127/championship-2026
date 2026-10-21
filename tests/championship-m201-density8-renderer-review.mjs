@@ -62,9 +62,10 @@ try{
 async function normalOwnedPartySmoke(browser,base,prefix,out){
  const url=new URL(base);assert.ok(['127.0.0.1','localhost','[::1]'].includes(url.hostname),'Controlled QA requires loopback');
  const game=await browser.newPage({viewport:{width:1280,height:900},locale:'zh-TW'});game.setDefaultTimeout(90000);
- const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',network:[],errors:[],scenes:[],huntNormal034:'NOT_COVERED_NO_GUARANTEED_WILD_SPAWN_FIXTURE'};let scene='fixture';
- game.on('response',r=>{if(r.url().includes('/m201_agumon'))evidence.network.push({scene,url:r.url(),status:r.status()})});
- game.on('pageerror',e=>evidence.errors.push(e.message));game.on('console',m=>{if(/FALLBACK|CHARACTER_REVIEW_FAILED|CANDIDATE_.*DRIFT/.test(m.text()))evidence.errors.push(m.text())});
+ const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',network:[],errors:[],pageErrors:[],consoleFailures:[],httpFailures:[],requestFailures:[],scenes:[],huntNormal034:'NOT_COVERED_NO_GUARANTEED_WILD_SPAWN_FIXTURE'};let scene='fixture';
+ game.on('response',r=>{if(r.url().includes('/m201_agumon'))evidence.network.push({scene,url:r.url(),status:r.status()});if(r.status()>=400)evidence.httpFailures.push({scene,url:r.url(),status:r.status()})});
+ game.on('requestfailed',r=>evidence.requestFailures.push({scene,url:r.url(),failure:r.failure()?.errorText}));
+ game.on('pageerror',e=>{evidence.pageErrors.push(e.message);evidence.errors.push(e.message)});game.on('console',m=>{if(/FALLBACK|CHARACTER_REVIEW_FAILED|CANDIDATE_.*DRIFT/.test(m.text())){evidence.consoleFailures.push({type:m.type(),message:m.text()});evidence.errors.push(m.text())}});
  const save=()=>fs.writeFile(out+'/normal-game-result.json',JSON.stringify(evidence,null,2));
  const screen=async name=>game.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();
  async function home(){await screen('RAISING_HOME');await game.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host'),a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.some(x=>x.speciesId==='championship:creature:species-034'&&x.entityId==='m201_agumon'&&x.state==='ready')},{},{timeout:180000});assert.equal(await game.locator('[data-field-fallback="true"],.int-rh2-field-fallback').count(),0);}
@@ -94,7 +95,20 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
   evidence.scenes.push({scene:'battle',entry:'PASS',diagnostics:battle,textureBinding:'same-document cache or new request; exact entity, frozen density4 trial geometry, no packed route',groundShadow:'DEFAULT_ELLIPSE_SCREENSHOT_REVIEW_REQUIRED_NOT_BAKED_REVIEW'});await game.screenshot({path:out+'/normal-battle034.png',fullPage:true});await save();
   await game.getByRole('button',{name:'離開對戰',exact:true}).first().click();const dialog=game.getByRole('dialog');await dialog.waitFor();await dialog.getByRole('button',{name:'離開對戰',exact:true}).click();await home();
   assert.equal(await game.evaluate(()=>typeof globalThis.__championshipBattleDiagnostics),'undefined','Battle diagnostics disposed on exit');await game.screenshot({path:out+'/normal-return-raising034.png',fullPage:true});
-  evidence.scenes.push({scene:'raising-return',entry:'PASS',battleExit:'PASS'});assert.deepEqual(evidence.errors,[]);evidence.status='PASS_CONTROLLED_NORMAL_RAISING_BATTLE';await save();return evidence;
+  evidence.scenes.push({scene:'raising-return',entry:'PASS',battleExit:'PASS'});
+  // a540 and current bm03GroundShadows.js share blob ff3327693ec6fe1df788d53da36ec8705a7ae523.
+  // Loopback arena-polish selects PRIVATE review shadows, absent from the Pages payload.
+  // Published non-loopback resolves null (source evidence, not a live-public-browser claim).
+  const shadowRoots=Object.fromEntries(['01','02','04','05','06','07','08','09','10','11'].map(n=>[`field_bm${n}_01`,`assets/production/battle/stage-review-20261007/fields/field_bm${n}_01/`]));
+  shadowRoots.field_bm03_01='assets/production/battle/bm03-volcano-review-r2/';
+  assert.ok(Object.hasOwn(shadowRoots,battle.art.fieldId),'Approved arena field has independently frozen private shadow route');
+  const expectedShadowUrl=new URL(shadowRoots[battle.art.fieldId]+'shadows.json',base).href;
+  assert.deepEqual(evidence.httpFailures,[{scene:'battle',url:expectedShadowUrl,status:404}],'Only the exact baseline private shadow metadata 404 is expected');
+  assert.deepEqual(evidence.requestFailures,[],'No failed network requests');
+  assert.deepEqual(evidence.pageErrors,[],'No page errors, including errors resembling the known warning');
+  assert.deepEqual(evidence.consoleFailures,[{type:'warning',message:'CHAMPIONSHIP_BM03_SHADOW_FALLBACK BM03_SHADOW_METADATA_UNAVAILABLE'}],'Exactly one warning-level baseline diagnostic');
+  assert.deepEqual(evidence.errors,['CHAMPIONSHIP_BM03_SHADOW_FALLBACK BM03_SHADOW_METADATA_UNAVAILABLE'],'Exactly one known loopback-only baseline warning; all other errors/fallbacks fail');
+  evidence.baselineWarning={message:evidence.errors[0],count:1,metadataUrl:expectedShadowUrl,httpStatus:404,bakedShadows:battle.groundShadows,rendering:'EXISTING_ELLIPSE',baselineSourceBlob:'ff3327693ec6fe1df788d53da36ec8705a7ae523'};evidence.status='PASS_CONTROLLED_NORMAL_RAISING_BATTLE';await save();return evidence;
  }catch(error){evidence.status='FAIL';evidence.error=String(error);evidence.failureDiagnostics=await game.evaluate(()=>{const h=document.querySelector('.int-rh2-field-host');return {activeScreen:document.querySelector('#cm-root')?.dataset.activeScreen,loadState:h?.dataset.loadState,residentAssets:h?.dataset.residentAssets,residentScreenPositions:h?.dataset.residentScreenPositions,battle:globalThis.__championshipBattleDiagnostics?.()??null}}).catch(e=>({unavailable:String(e)}));await save();await game.screenshot({path:out+'/normal-game-failure.png',fullPage:true}).catch(()=>{});throw error;}finally{await game.close();}
 }
 
@@ -131,3 +145,4 @@ async function isolatedHuntSceneSmoke(browser,base,prefix,out){
  await review.screenshot({path:out+'/isolated-hunt034-contact.png',fullPage:true});const disposal=await review.evaluate(()=>globalThis.__qa034Dispose());assert.equal(disposal.ticker,disposal.baselineTicker);assert.equal(disposal.rootDestroyed,true);assert.ok(network.some(n=>n.url===new URL(publicConfig.runtimePath,base).href&&n.status===200));assert.ok(network.some(n=>n.url.startsWith(new URL(prefix+'ranch-streaming-v1/',base).href)&&/main-[a-f0-9]{16}\.webp$/.test(n.url)&&n.status===200));assert.ok(!network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.(?:png|webp)$/.test(n.url)));await fs.writeFile(out+'/isolated-hunt034-result.json',JSON.stringify({status:'PASS_ISOLATED_HUNT_SCENE',...evidence,disposal,network},null,2));return evidence;
  }finally{await review.close();}
 }
+

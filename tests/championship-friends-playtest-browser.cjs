@@ -58,7 +58,10 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#cm-login').click();await page.locator('#cm-new-game').waitFor({state:'visible'});
  }
  async function screen(name){await page.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();}
- async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().waitFor({state:'visible',timeout:180000});await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
+ // Three supplies visuals underneath; the unique Pixi canvas owns real input.
+ const ranchCanvasSelector='#cm-root[data-active-screen="RAISING_HOME"] canvas.cm-raising-pixi-canvas';
+ async function ranchCanvas(){const canvas=page.locator(ranchCanvasSelector);await canvas.waitFor({state:'visible',timeout:180000});assert.equal(await canvas.count(),1,'Exactly one ranch input canvas');assert.notEqual(await canvas.evaluate(el=>getComputedStyle(el).pointerEvents),'none','Ranch canvas must receive ordinary input');return canvas;}
+ async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await ranchCanvas();await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
  async function menu(group,entry){await page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`).click();await page.locator(`.cm-toolbar__menu:not([hidden]) button[data-entry-id="${entry}"]`).click();}
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
@@ -72,7 +75,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
    let state=await read();assert.ok(state.positions.length,'Top-edge evidence needs renderer diagnostics');
    for(let gesture=0;gesture<8&&state.positions[0].scrollY<state.positions[0].scrollMaxY-1;gesture++){
-    const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+    const canvas=await ranchCanvas();
     // Start in empty upper sky, excluding generous bounds around every actor.
     const previous=state.positions[0].scrollY;
     const {box,start:{x,y}}=await beginCanvasDrag(canvas,box=>[80,180,Math.min(320,box.height/2)].flatMap(y=>[20,box.width/4,box.width/2,box.width*3/4,box.width-20].map(x=>({x,y}))).filter(({x,y})=>state.positions.every(p=>Math.abs(p.x-x)>110||y<p.bodyTop-35||y>p.footY+35)),'A safe empty canvas drag origin must exist',{width:0,height:160});
@@ -94,13 +97,13 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    // Native lifecycle completion can launch a separate evolution ceremony.
    // Wait for the real hit-test target, not just the native lifecycle flag.
    for(;;){
-    await page.waitForFunction(()=>{
+    await page.waitForFunction(selector=>{
      const layer=document.querySelector('.int-rh2-lifecycle'),calendar=document.querySelector('.int-rh2-calendar');
      if(calendar&&!calendar.hidden&&!calendar.disabled)return true;
      if(layer&&!layer.hidden||document.querySelector('.cm-ceremony'))return false;
-     const canvas=document.querySelector('#cm-root[data-active-screen="RAISING_HOME"] canvas');if(!canvas)return false;
+     const canvases=document.querySelectorAll(selector);if(canvases.length!==1)return false;const canvas=canvases[0];if(getComputedStyle(canvas).pointerEvents==='none')return false;
      const box=canvas.getBoundingClientRect();return [180,260,Math.min(360,box.height-150)].some(y=>document.elementFromPoint(box.right-35,box.top+y)===canvas);
-    });
+    },ranchCanvasSelector);
     const calendar=page.locator('.int-rh2-calendar');
     if(!await calendar.isVisible())return;
     await calendar.click();await page.waitForTimeout(250);
@@ -144,7 +147,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    await clearCalendar();
    await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
    await page.waitForFunction(()=>document.body.dataset.tool==='clean');
-   const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+   const canvas=await ranchCanvas();
    for(let gesture=0;gesture<4;gesture++){
     const {box,start}=await beginCanvasDrag(canvas,box=>[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y}))),'Legacy camera swipe must start on unobstructed canvas',{width:0,height:500});
     await page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
@@ -183,7 +186,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
     await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);await clearCalendar();
     await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();await page.waitForFunction(()=>document.body.dataset.tool==='clean');
-    const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+    const canvas=await ranchCanvas();
     // Top-headroom proof was captured above; lift the field 100px so lower tips clear the toolbar.
     if(viewport.width===1280){
      const {box,start}=await beginCanvasDrag(canvas,box=>[260,320,380].map(y=>({x:box.width-35,y})),'Lower-tip framing must begin on unobstructed canvas');
