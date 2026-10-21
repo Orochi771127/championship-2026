@@ -4,10 +4,10 @@ on:
     branches: ['fix/ranch-floor-contact-audit-20261021']
     paths:
       - '.github/workflows/ranch-normal-support-review.yml'
-      - 'tests/ranch-normal-support.mjs'
-      - 'tests/fixtures/ranch-normal-support.html'
+      - 'tests/ranch-normal-support-v2.mjs'
+      - 'tests/fixtures/ranch-normal-support-v2.html'
       - 'tests/normal-support-candidate/**'
-      - 'tests/ranch-support-probe/inject-support-diagnostics.mjs'
+      - 'tests/ranch-support-probe/inject-support-diagnostics-v2.mjs'
       - 'tests/ranch-floor-data/admitted-probes-v2.json'
       - 'tests/normal-lifecycle/**'
 permissions:
@@ -38,19 +38,19 @@ jobs:
           BROWSER_ENGINE: ${{ matrix.engine }}
         run: |
           set -euo pipefail
-          mkdir -p .tmp/normal-support-candidate .tmp/normal-support-probe .tmp/normal-support/${{ matrix.engine }}
+          mkdir -p .tmp/normal-support-candidate .tmp/normal-support-probe-v2 .tmp/normal-support/${{ matrix.engine }}
           cp -R tests/normal-support-candidate/. .tmp/normal-support-candidate/
-          node tests/ranch-support-probe/inject-support-diagnostics.mjs --input .tmp/normal-support-candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/normal-support-probe/createRaisingFieldPixiPresentation.js --expected-sha 38f81afdeee79d0d6205c5769225b90ae4f1bcd3b074cee22d13561606f310f9
+          node tests/ranch-support-probe/inject-support-diagnostics-v2.mjs --input .tmp/normal-support-candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/normal-support-probe-v2/createRaisingFieldPixiPresentation.js --expected-sha 38f81afdeee79d0d6205c5769225b90ae4f1bcd3b074cee22d13561606f310f9
           python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/normal-support/${{ matrix.engine }}/server.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support.html > /dev/null; then break; fi
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null; then break; fi
             kill -0 "$server_pid"
             sleep 1
           done
-          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support.html > /dev/null
-          node tests/ranch-normal-support.mjs http://127.0.0.1:8765/ .tmp/normal-support/${{ matrix.engine }}/cases .tmp/normal-support-candidate .tmp/normal-support-probe/createRaisingFieldPixiPresentation.js tests/ranch-floor-data/admitted-probes-v2.json
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null
+          node tests/ranch-normal-support-v2.mjs http://127.0.0.1:8765/ .tmp/normal-support/${{ matrix.engine }}/cases .tmp/normal-support-candidate .tmp/normal-support-probe-v2/createRaisingFieldPixiPresentation.js tests/ranch-floor-data/admitted-probes-v2.json
       - name: Retain required captures and partial natural-waste attempts
         if: always()
         uses: actions/upload-artifact@v4

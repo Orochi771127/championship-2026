@@ -1,0 +1,57 @@
+<!doctype html><html><meta charset="utf-8"><title>Fresh six-field normal support audit</title>
+<script type="module">
+import {createChampionshipStandaloneApp} from '../../src/championship/app/championshipStandaloneApp.js';
+import {FRIENDS_PLAYTEST_POLICY} from '../../src/championship/app/friendsPlaytestPolicy.js';
+import {createNativeHuntIndividual} from '../../src/championship/hunt/capture/nativeHuntIndividual.js';
+import {nativeHuntSpeciesByIndex} from '../../src/championship/hunt/capture/nativeHuntSources.js';
+import {nativeIndividualProfile} from '../../src/championship/raising/nativeIndividualProfile.js';
+import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../../src/championship/app/championshipStandaloneSave.js';
+import {getCageDefinition} from '../../src/championship/cage/cageCatalog.js';
+import {validateProductRanch} from '../../src/championship/cage/productRanchGrid.js';
+import {createProductGridArtPlan} from '../../src/championship/presentation/raisingRanchArtPlan.js';
+import {selectRanchCageArt} from '../../src/championship/presentation/ranchCageArtSelection.js';
+import {validateRuntimeMapArtBundle} from '../../src/championship/presentation/runtimeMapArtBundle.js';
+import {ranchThreeField} from '../../src/championship/presentation/ranchThreeCoordinates.js';
+const requireValue=(v,m)=>{if(!v)throw Error(m);};
+const json=async p=>{const r=await fetch(p);requireValue(r.ok,'HTTP_'+p);return r.json();};
+globalThis.prepareNormalSupport = async function({fieldId,attemptWaste=false}){
+ const definitions={field_cm02_01:1,field_cm09_01:8,field_cm19_01:18,field_cm21_01:20,field_cm35_01:31,field_cm39_01:33};
+ requireValue(Object.hasOwn(definitions,fieldId),'EXPLICIT_SIX_FIELD_REQUIRED');requireValue(localStorage.length===0,'FRESH_CONTEXT_REQUIRED');
+ const definitionIndex=definitions[fieldId],species=25;
+ const probes=await json('../ranch-floor-data/admitted-probes-v2.json'),probe=probes.probes.find(p=>p.fieldId===fieldId);requireValue(probe,'PINNED_ADMITTED_POINT_REQUIRED');
+ const catalog=await json('../../src/data/championship/catalogs/creature-species.r1.json'),{cages}=await json('../../docs/contracts/championship/raising-home-presentation.v1.json');
+ const app=createChampionshipStandaloneApp({storage:localStorage,catalog,cages,playtestPolicy:FRIENDS_PLAYTEST_POLICY,rngClock:()=>({hour:13,minute:20,second:50})});
+ const ledger=[];globalThis.__normalSupportPreparationLedger=ledger;
+ const record=(action,result)=>{ledger.push({action,result});return result;};
+ try{
+  await app.newGame();requireValue(record('initialSave',app.save()).phase==='SAVED','INITIAL_SAVE_FAILED');
+  // Same reviewed fresh-CI species contract as the existing normal pair fixture.
+  const save=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));save.creature.nativeProfile=nativeIndividualProfile(createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(species),rng:{next:()=>11}}));save.creature.speciesId='species-025';save.creature.displayName='Controlled support audit';localStorage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(save));await app.continueGame();
+  const definition=getCageDefinition(definitionIndex);requireValue(definition.moduleId==='championship:2026:cage:'+definitionIndex,'CANONICAL_MODULE_REQUIRED');
+  app.openShop();requireValue(record('buyCage',app.buyShopItem(definition.shopRecordIndex)).ok,'CAGE_PURCHASE_FAILED');requireValue(record('buyFood',app.buyShopItem(0,2)).ok,'FOOD_PURCHASE_FAILED');requireValue(record('buyProtein',app.buyShopItem(1,2)).ok,'PROTEIN_PURCHASE_FAILED');app.leaveScreen();
+  app.openCageEdit();let frame=app.getCageEditFrame();const selected=frame.unlockedSlots.map(slotIndex=>({moduleId:definition.moduleId,slotIndex})).find(p=>!frame.placements.some(existing=>existing.slotIndex===p.slotIndex)&&validateProductRanch([...frame.placements,p],frame.unlockedSlots));requireValue(selected,'NO_LEGAL_SLOT');
+  requireValue(record('selectCage',app.selectCageModule(definition.moduleId)).lastVerdict?.ok,'SELECT_FAILED');frame=record('placeCage',app.placeCageAt(selected.slotIndex));requireValue(frame.lastVerdict?.ok,'PLACE_FAILED');frame=record('confirmCage',app.confirmCageEdit());requireValue(frame.lastVerdict?.ok&&!frame.dirty,'CONFIRM_FAILED');app.leaveScreen();requireValue(app.save().phase==='SAVED','LAYOUT_SAVE_FAILED');
+  const committed=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY)),placed=committed.cageEdit.placements.find(p=>p.moduleId===definition.moduleId&&p.slotIndex===selected.slotIndex);requireValue(placed?.instanceId,'SAVED_INSTANCE_REQUIRED');
+  const manifest=validateRuntimeMapArtBundle(selectRanchCageArt(await json('../../assets/production/public-runtime/cage-final.map.v1.json'))),plan=createProductGridArtPlan({manifest,placements:committed.cageEdit.placements,unlockedSlots:frame.unlockedSlots}),field=ranchThreeField(manifest,plan);
+  const tile=plan.placements.find(p=>p.fieldId===fieldId&&p.instanceId===placed.instanceId&&p.fragmentOfSlot===undefined);requireValue(tile,'ACTUAL_PLANNER_TILE_REQUIRED');
+  const origin=[tile.x/field.nativePixelWorldScale,tile.y/field.nativePixelWorldScale],requestedPoint={x:origin[0]+probe.pointLocalNative[0],y:origin[1]+probe.pointLocalNative[1]},point={x:Math.trunc(requestedPoint.x),y:Math.trunc(requestedPoint.y)};
+  const admission=record('actualGroundQuery',app.getRaisingGroundSupport(point.x,point.y));requireValue(admission?.instanceId===placed.instanceId&&admission.definitionIndex===definitionIndex,'ACTUAL_APP_ADMISSION_REQUIRED');
+  const residentId=committed.creature.creatureId;requireValue(record('moveResident',app.moveRaisingResidentToGround(residentId,point)),'REAL_MOVE_REJECTED');const moved=record('actorReadback',app.getRaisingActorFrame(residentId));requireValue(moved?.positionQ12?.[0]===point.x*4096&&moved.positionQ12[1]===point.y*4096&&moved.cageInstanceId===placed.instanceId,'REAL_MOVE_READBACK_REQUIRED');
+  const offsets=[[36,0],[-36,0],[0,36],[0,-36],[48,24],[-48,24],[24,48],[-24,-48]],foodPlacements=[];
+  if(attemptWaste)for(const protein of [false,true]){
+   let accepted=false;for(const [dx,dy] of offsets){const foodPoint={x:point.x+dx,y:point.y+dy},support=app.getRaisingGroundSupport(foodPoint.x,foodPoint.y);if(support?.instanceId!==placed.instanceId)continue;const result=record('placeFood',{point:foodPoint,protein,result:app.placeRaisingFood({...foodPoint,protein})});if(result.result.ok){foodPlacements.push({...result,support});accepted=true;break;}}
+   requireValue(accepted,'ACTUAL_FOOD_PLACE_FAILED');
+  }
+  const naturalClockLedger=[];
+  if(attemptWaste){
+   for(let batch=0;batch<120&&app.getRaisingWasteFrame().length===0;batch++){
+    const runState=app.getClockRunState();if(!runState.running){naturalClockLedger.push({batch,runState,stop:'REAL_CLOCK_NOT_RUNNING',lifecycle:app.getRaisingLifecycleFrame()});break;}
+    const result=app.advanceNaturalClock({frames:120});naturalClockLedger.push({batch,requestedFrames:120,result,runState,actor:app.getRaisingActorFrame(residentId),waste:app.getRaisingWasteFrame()});if(!result.accepted||app.hasRaisingPresentation()){naturalClockLedger.push({stop:'REAL_CLOCK_OR_PRESENTATION_STOP',lifecycle:app.getRaisingLifecycleFrame()});break;}
+   }
+  }
+  const foods=app.getRaisingFoodFrame(),waste=app.getRaisingWasteFrame();requireValue(app.save().phase==='SAVED','CONTACT_SAVE_FAILED');
+  const final=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));requireValue(final.raising.nativeHome.cageAssignments[residentId]===placed.instanceId,'ASSIGNMENT_READBACK_REQUIRED');
+  return {fieldId,definitionIndex,species,residentId,placement:placed,probeId:probe.id,planningTriangleNative:probe.supportEvidence.sourceTriangleNativeGroundXY,requestedPoint,point,admission,moved,foodPlacements,foods,waste,naturalClockLedger,ledger,attemptWaste,wasteScope:attemptWaste?(waste.length?'NATURAL_WASTE_OBSERVED':'NO_WASTE_WITHIN_BOUNDED_REAL_CLOCK_ATTEMPT'):'WASTE_NOT_SEEDED',manualHints:false,proof:'REAL_APP_QUERY_MOVE_AND_PRODUCTION_PLANNER_FOOD_POSTREADY_OR_NATURAL_ATTEMPT',scope:'FRESH_CI_CONTEXT_ONLY'};
+ }finally{await app.dispose();}
+};
+</script></html>
