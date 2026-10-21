@@ -27,10 +27,15 @@ try{for(const mode of ['baseline','floor-only']){
   const viewport=await page.evaluate(()=>({width:innerWidth,height:innerHeight,dpr:devicePixelRatio,visualWidth:visualViewport.width,visualScale:visualViewport.scale,pixiWidth:document.querySelector('canvas').getBoundingClientRect().width,pixiHeight:document.querySelector('canvas').getBoundingClientRect().height}));assert.deepEqual(viewport,{width:390,height:844,dpr:1,visualWidth:390,visualScale:1,pixiWidth:390,pixiHeight:844},'Actual CSS phone viewport');
   const fixtures=await page.evaluate(m=>globalThis.ranchAudit.buildBindings(m,['field_cm07_01']),matrix);
   for(const test of plan.cases){
+   assert.equal(test.fieldId,'field_cm07_01','Stationary reuse is same verified model only');
    const fixture=fixtures[test.fieldId];assert.ok(fixture);const prefix=mode+'-'+test.id;
-   await page.evaluate(({test,fixture})=>globalThis.ranchAudit.beginMotion(test,fixture),{test,fixture});
+   // Stationary samples all use deltaMS0. Reuse the single real CM07 scene/context;
+   // beginMotion intentionally creates fresh contexts for time-advancing clips.
+   await page.evaluate(({test,fixture})=>globalThis.ranchAudit.render({...test,subjectKind:'actor'},fixture),{test,fixture});
    const sample={...test.sample,index:0,animated:false,nativeTicks:0,deltaMS:0,pointNative:test.sample.pointLocalNative.map((v,k)=>v+fixture.targetOriginNative[k]),cameraCenterNative:test.sample.cameraCenterLocalNative.map((v,k)=>v+fixture.targetOriginNative[k])};
    const data=await page.evaluate(s=>globalThis.ranchAudit.stepMotion(s),sample);
+   assert.equal(await page.evaluate(()=>globalThis.ranchAudit.maskState().sceneClock),0,'Stationary reused scene must remain at zero time');
+   assert.equal(await page.locator('.cm-ranch-three-canvas').count(),1,'One actual Three canvas per mode');
    assert.ok(Number.isFinite(data.projectionError)&&data.projectionError<=.5);assert.ok(data.diagnostics.frames>0&&!data.diagnostics.lost);assert.deepEqual(errors,[]);
    const rect=await page.locator('.cm-ranch-three-canvas').evaluate(c=>({width:c.getBoundingClientRect().width,height:c.getBoundingClientRect().height}));assert.deepEqual(rect,{width:390,height:844});
    let actual=await page.screenshot({path:out+'/'+prefix+'-actual.png'});assert.equal(actual.readUInt32BE(16),390);assert.equal(actual.readUInt32BE(20),844);

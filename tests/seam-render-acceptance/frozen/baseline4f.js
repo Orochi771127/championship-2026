@@ -111,6 +111,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         if(t.image?.close)modelBitmaps.add(t.image);
       }
       for(const original of resized.keys())original.close?.();
+      gltf.scene.traverse(o=>{const a=gltf.parser.associations.get(o);if(a)o.userData.seamAuditIdentity={nodeIndex:a.nodes??null,meshIndex:a.meshes??null,primitiveIndex:a.primitives??null};});
       gltf.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;
         for(const m of [].concat(o.material)){m.transparent=false;m.alphaTest=.12;m.depthWrite=true;}
       }});
@@ -534,7 +535,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     scene.updateMatrixWorld(true);
     return {camera:{projection:camera.projectionMatrix.toArray(),world:camera.matrixWorld.toArray()},
       clones:instances.filter(i=>i.p.fieldId==='field_cm07_01').map(({object,p,shift})=>{
-        const meshes=[];object.traverse(o=>{if(o.isMesh)meshes.push({name:o.name,visible:o.visible,
+        const meshes=[];object.traverse(o=>{if(o.isMesh)meshes.push({name:o.name,sourceIdentity:o.userData.seamAuditIdentity??null,visible:o.visible,
           effectiveVisible:(()=>{for(let a=o;a&&a!==object;a=a.parent)if(!a.visible)return false;return true;})(),worldMatrix:o.matrixWorld.toArray(),positionCount:o.geometry.attributes.position.count,indexCount:o.geometry.index?.count??null,
           material:[].concat(o.material).map(m=>({type:m.type,depthWrite:m.depthWrite,alphaTest:m.alphaTest,transparent:m.transparent,side:m.side}))});});
         const box=new THREE.Box3().setFromObject(object),corners=[];
