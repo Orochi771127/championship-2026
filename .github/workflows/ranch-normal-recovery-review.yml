@@ -1,0 +1,59 @@
+name: Ranch real normal stock-plus-recovery diagnostic
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-normal-recovery-review.yml'
+      - 'tests/ranch-normal-recovery.mjs'
+      - 'tests/fixtures/ranch-normal-support-v2.html'
+      - 'tests/ranch-normal-recovery/**'
+      - 'tests/ranch-floor-data/admitted-probes-v2.json'
+      - 'tests/normal-lifecycle/**'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Preserve unchanged production build
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Observe actual app ground admission without manual tokens
+        shell: bash
+        env:
+          BROWSER_ENGINE: ${{ matrix.engine }}
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/normal-recovery/${{ matrix.engine }}
+          node tests/ranch-normal-recovery/inject-normal-recovery.mjs --input tests/ranch-normal-recovery/candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/recovery-normal-probe.mjs --expected-sha bc704ecab9429dd4e2796b95c3d57b463068d716620fd1fecde6954910a73f77
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/normal-recovery/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null
+          node tests/ranch-normal-recovery.mjs http://127.0.0.1:8765/ .tmp/normal-recovery/${{ matrix.engine }}/cases tests/ranch-normal-recovery/candidate .tmp/recovery-normal-probe.mjs tests/ranch-floor-data/admitted-probes-v2.json
+      - name: Retain required captures and partial natural-waste attempts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-normal-recovery-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/normal-recovery/
+          if-no-files-found: error
+          retention-days: 14

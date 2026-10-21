@@ -1,0 +1,82 @@
+name: Ranch stock-plus-recovery continuous foreground review
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-recovery-motion-review.yml'
+      - 'src/championship/presentation/ranchThreeScene.js'
+      - 'src/championship/presentation/ranchPhysicalSupport.js'
+      - 'src/championship/presentation/ranchSupportOwner.js'
+      - 'src/championship/app/raisingGroundSupport.js'
+      - 'tests/ranch-recovery-motion/runner.mjs'
+      - 'tests/ranch-recovery-motion/compare.py'
+      - 'tests/fixtures/ranch-recovery-motion-audit.html'
+      - 'tests/ranch-a2-final/**'
+      - 'tests/ranch-grass-probe/**'
+      - 'tests/ranch-recovery-motion/**'
+      - 'tests/ranch-recovery/source/**'
+      - 'tests/ranch-split/probe/**'
+      - 'tests/ranch-coverage-intensity.mjs'
+      - 'tests/ranch-floor-data/motion-mask-plan.json'
+      - 'tests/ranch-floor-data/coverage-37fields-100slots.json'
+      - 'tests/ranch-b1-batch/calibration-*-39622727547.json'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+        clip: [cm07-orbit-frozen-walk-cell-fixed-zoom1, cm07-orbit-native-walk-timeline-pan-zoom0.7]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy==2.2.6 Pillow==11.3.0 shapely==2.1.2
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify pure support and resolved-coverage controls
+        run: node tests/ranch-support-review/support-cases.mjs && node tests/test-ranch-coverage-intensity.mjs
+      - name: Preserve existing build validation
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Pin genuine prior calibration evidence
+        run: |
+          echo "c411e6caf9d2ad282a7466582fd1635f6f1c4b16d1f75b64fecd997d19d3dc81  tests/ranch-b1-batch/calibration-chromium-39622727547.json" | sha256sum -c -
+          echo "b4e280b065a0e4557c1990a60bb75cbf679381f3f8af9e2c0c1e7e8d119fcea7  tests/ranch-b1-batch/calibration-webkit-39622727547.json" | sha256sum -c -
+      - name: Capture final-source continuous route with exact own-target and restoration guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/baseline .tmp/recovery-motion/${{ matrix.engine }}/${{ matrix.clip }}
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/ranchThreeScene.js > .tmp/baseline/ranchThreeScene.js
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/recovery-motion/${{ matrix.engine }}/${{ matrix.clip }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-recovery-motion-audit.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-recovery-motion-audit.html > /dev/null
+          node tests/ranch-recovery-motion/runner.mjs http://127.0.0.1:8765/ ${{ matrix.engine }} .tmp/recovery-motion/${{ matrix.engine }}/${{ matrix.clip }}/cases .tmp/baseline/ranchThreeScene.js tests/ranch-floor-data/motion-mask-plan.json tests/ranch-floor-data/coverage-37fields-100slots.json tests/ranch-b1-batch/calibration-${{ matrix.engine }}-39622727547.json ${{ matrix.clip }}
+          python tests/ranch-recovery-motion/compare.py .tmp/recovery-motion/${{ matrix.engine }}/${{ matrix.clip }}/cases tests/ranch-a2-final/oracle
+      - name: Preserve continuous clips, exact masks and retained-column oracle evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-recovery-motion-${{ matrix.engine }}-${{ matrix.clip }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/recovery-motion/
+          if-no-files-found: error
+          retention-days: 14
