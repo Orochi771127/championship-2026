@@ -1,0 +1,92 @@
+name: Ranch floor-only actual renderer pilot
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/ranch-floor-review.yml'
+      - 'src/championship/presentation/ranchThreeScene.js'
+      - 'src/championship/presentation/ranchThreeCoordinates.js'
+      - 'tests/ranch-floor-*.mjs'
+      - 'tests/ranch-normal-audit.mjs'
+      - 'tests/audit-runtime-alpha.py'
+      - 'tests/fixtures/ranch-audit.html'
+      - 'tests/fixtures/ranch-normal-audit.html'
+      - 'tests/ranch-floor-data/**'
+permissions:
+  contents: read
+jobs:
+  all-roster-alpha:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow==11.3.0
+      - name: Actual alpha coverage for all 226 selected routes and forms
+        run: |
+          mkdir -p .tmp/ranch-floor-alpha
+          python tests/audit-runtime-alpha.py --repo . --coverage tests/ranch-floor-data/all226-alpha-inputs.json --out .tmp/ranch-floor-alpha/all226-alpha.json
+      - name: Preserve independent source-alpha evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-floor-alpha-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/ranch-floor-alpha/
+          if-no-files-found: error
+          retention-days: 14
+  mobile-renderer-pilot:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --check tests/ranch-floor-pilot.mjs && node --check tests/ranch-normal-audit.mjs
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Keep the existing release build and validation intact
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Real CM07 shader smoke and normal presenter, isolated phone contexts
+        shell: bash
+        env:
+          BROWSER_ENGINE: ${{ matrix.engine }}
+          AUDIT_NORMAL_SPECIES: '25,13'
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/baseline .tmp/browser-qa/ranch-floor/${{ matrix.engine }}
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/ranchThreeScene.js > .tmp/baseline/ranchThreeScene.js
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/browser-qa/ranch-floor/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-audit.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-audit.html > /dev/null
+          node tests/ranch-floor-pilot.mjs http://127.0.0.1:8765/ ${{ matrix.engine }} .tmp/browser-qa/ranch-floor/${{ matrix.engine }}/pilot .tmp/baseline/ranchThreeScene.js
+          node tests/ranch-normal-audit.mjs http://127.0.0.1:8765/ .tmp/browser-qa/ranch-floor/${{ matrix.engine }}/normal
+      - name: Preserve screenshots, shader logs and exact source identities
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-floor-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/browser-qa/ranch-floor/
+          if-no-files-found: error
+          retention-days: 14
+# This is an early diagnostic gate, not release approval. Full finite map/roster
+# renders, complete continuous occlusion comparisons and reviewed support heights
+# remain mandatory follow-up checks before any merge decision.

@@ -416,6 +416,8 @@
     "tests/create-character-save.mjs": "Local fixture-generation CLI, not a portable test; reads the private m301 review save template.",
     "tests/test-all-completed-original-characters.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
     "tests/test-completed-original-m301.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
-    "tests/championship-ma05-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the MA05 motion v7 actual renderer review workflow, covering all 77 cells and 53 sequences plus controlled normal Raising and Battle."
+    "tests/championship-ma05-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the MA05 motion v7 actual renderer review workflow, covering all 77 cells and 53 sequences plus controlled normal Raising and Battle.",
+    "tests/ranch-floor-pilot.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; explicitly runs in ranch-floor-review workflow. Bounded shader/render smoke is not full release or visual acceptance.",
+    "tests/ranch-normal-audit.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; explicitly runs in ranch-floor-review workflow with fresh controlled browser storage and the real Raising presenter."
   }
 }
