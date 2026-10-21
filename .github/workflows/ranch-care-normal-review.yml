@@ -1,0 +1,65 @@
+name: Ranch natural waste owned image diagnostic
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-care-normal-review.yml'
+      - 'tests/ranch-care-image-normal.mjs'
+      - 'tests/fixtures/ranch-normal-support-v2.html'
+      - 'tests/normal-support-candidate/**'
+      - 'tests/ranch-care-image-experiment/**'
+      - 'tests/ranch-waste-probe/**'
+      - 'tests/ranch-floor-data/admitted-probes-v2.json'
+      - 'tests/normal-lifecycle/**'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Preserve unchanged production build
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Verify actual natural waste source pixels with owned image scope
+        shell: bash
+        env:
+          BROWSER_ENGINE: ${{ matrix.engine }}
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/care-normal-candidate .tmp/care-normal-probe .tmp/care-normal/${{ matrix.engine }}
+          cp -R tests/normal-support-candidate/. .tmp/care-normal-candidate/
+          cp tests/ranch-care-image-experiment/candidate/src/championship/presentation/intRh2/careImageTextureScope.js .tmp/care-normal-candidate/src/championship/presentation/intRh2/
+          cp tests/ranch-care-image-experiment/candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js .tmp/care-normal-candidate/src/championship/presentation/intRh2/
+          node tests/ranch-waste-probe/inject-presenter-care-identity.mjs --input .tmp/care-normal-candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/care-normal-probe/presenter.mjs --expected-sha bc704ecab9429dd4e2796b95c3d57b463068d716620fd1fecde6954910a73f77
+          node tests/ranch-waste-probe/inject-scene-texture-timing.mjs .tmp/care-normal-candidate/src/championship/presentation/ranchThreeScene.js .tmp/care-normal-probe/scene.mjs
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/care-normal/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null
+          node tests/ranch-care-image-normal.mjs http://127.0.0.1:8765/ .tmp/care-normal/${{ matrix.engine }}/cases .tmp/care-normal-candidate .tmp/care-normal-probe/presenter.mjs tests/ranch-floor-data/admitted-probes-v2.json .tmp/care-normal-probe/scene.mjs
+      - name: Retain immediate, two-RAF and decoded capture evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-care-normal-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/care-normal/
+          if-no-files-found: error
+          retention-days: 14

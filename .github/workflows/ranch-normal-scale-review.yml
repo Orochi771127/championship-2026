@@ -1,0 +1,89 @@
+name: Ranch normal UI scale and flight diagnostics
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-normal-scale-review.yml'
+      - 'src/championship/presentation/ranchThreeScene.js'
+      - 'src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js'
+      - 'tests/fixtures/ranch-normal-pairs.html'
+      - 'tests/ranch-normal-scale-calibration-v3.mjs'
+      - 'tests/ranch-normal-zoom-flight-v3.mjs'
+      - 'tests/ranch-mask-probe/inject-contact-diagnostics-v2.mjs'
+      - 'src/championship/presentation/publicCharacterRoster.js'
+      - 'src/championship/presentation/vs2/huntContactShadow.js'
+      - 'tests/ranch-mask-probe/inject-contact-diagnostics.mjs'
+      - 'tests/normal-lifecycle/**'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Verify narrow request lifecycle observer
+        run: node tests/normal-lifecycle/request-audit.test.mjs && node tests/normal-lifecycle/request-audit-watcher.test.mjs
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Preserve existing build validation
+        id: build_validation
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Measure actual normal UI zoom without forcing scale
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/baseline/contact .tmp/contact-probe .tmp/normal-scale/${{ matrix.engine }}
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/ranchThreeScene.js > .tmp/baseline/ranchThreeScene.js
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/publicCharacterRoster.js > .tmp/baseline/contact/publicCharacterRoster.js
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/vs2/huntContactShadow.js > .tmp/baseline/contact/huntContactShadow.js
+          node tests/ranch-mask-probe/inject-contact-diagnostics.mjs --input src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/contact-probe/createRaisingFieldPixiPresentation.js --expected-sha 865286f7f74ddbdc9391244d623c0cc4d10f2c9031feb4821375d688c7659793
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/normal-scale/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-pairs.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-pairs.html > /dev/null
+          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-scale-calibration-v3.mjs http://127.0.0.1:8765/ .tmp/normal-scale/${{ matrix.engine }}/cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
+      - name: Observe actual public hand flight independently
+        if: ${{ !cancelled() && steps.build_validation.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .tmp/baseline/ranchThreeScene.js
+          test -s .tmp/baseline/contact/publicCharacterRoster.js
+          test -s .tmp/baseline/contact/huntContactShadow.js
+          mkdir -p .tmp/contact-probe-v2
+          node tests/ranch-mask-probe/inject-contact-diagnostics-v2.mjs --input src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/contact-probe-v2/createRaisingFieldPixiPresentation.js --expected-sha 865286f7f74ddbdc9391244d623c0cc4d10f2c9031feb4821375d688c7659793
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/normal-scale/${{ matrix.engine }}/flight-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-pairs.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-pairs.html > /dev/null
+          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-zoom-flight-v3.mjs http://127.0.0.1:8765/ .tmp/normal-scale/${{ matrix.engine }}/flight-cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe-v2/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
+      - name: Preserve diagnostic captures, not release acceptance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-normal-scale-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/normal-scale/
+          if-no-files-found: error
+          retention-days: 14

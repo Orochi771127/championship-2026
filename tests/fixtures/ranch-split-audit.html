@@ -1,0 +1,325 @@
+<!doctype html><html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><base href="/"><style>html,body{margin:0;background:#18212d}#fixture{position:relative}</style><div id="fixture"></div>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script>
+<script type="module">
+// ISOLATED actual production Three/Pixi adapter. Not normal-game shadow approval.
+
+import {readRaisingGroundSupport} from '/src/championship/app/raisingGroundSupport.js';
+import {measureResolvedCoverage} from '/tests/ranch-coverage-intensity.mjs';
+import {composeProductRanchGround} from '/src/championship/raising/nativeRaisingRanchRing.js';
+import * as PIXI from '/node_modules/pixi.js/dist/pixi.mjs';
+import {createRanchThreeScene} from '/src/championship/presentation/ranchThreeScene.js';
+import {loadPixiCharacterRuntimeBundle} from '/src/championship/presentation/pixiCharacterRuntimeBundle.js';
+import {applyNativeCharacterCellGeometry} from '/src/championship/presentation/nativeHuntCharacterAction.js';
+import {getRaisingNativeActorGeometry,raisingOriginalBodyScale,raisingOriginalBodyOffset,getRaisingEggContactShadow} from '/src/championship/presentation/intRh2/raisingNativeSizing.js';
+import {createProductGridArtPlan} from '/src/championship/presentation/raisingRanchArtPlan.js';
+import {selectRanchCageArt} from '/src/championship/presentation/ranchCageArtSelection.js';
+import {validateRuntimeMapArtBundle} from '/src/championship/presentation/runtimeMapArtBundle.js';
+import {ranchThreeField} from '/src/championship/presentation/ranchThreeCoordinates.js';
+import {ranchSpriteScreenQuad} from '/src/championship/presentation/ranchThreeCoordinates.js';
+import {getCageDefinition} from '/src/championship/cage/cageCatalog.js';
+import {raisingNativeScreenPixels,RAISING_DESKTOP_REFERENCE_VIEWPORT} from '/src/championship/presentation/intRh2/raisingFieldViewport.js';
+import {productPlacementCells,validateProductRanch} from '/src/championship/cage/productRanchGrid.js';
+const app=new PIXI.Application();await app.init({width:390,height:844,backgroundAlpha:0,autoStart:false});
+document.querySelector('#fixture').append(app.canvas);
+let scene=null,bundle=null,root=null,actor=null,props=[],sceneKey=null,bundleKey=null,loadedRuntime=null,runtimeHash=null,motion=null;
+const requireValue=(condition,message)=>{if(!condition)throw Error(message)};
+globalThis.ranchAudit={
+ async buildBindings(matrix,requestedFieldIds=null){
+  const response=await fetch('/assets/production/public-runtime/cage-final.map.v1.json');requireValue(response.ok,'CAGE_PLAN_MANIFEST_REQUIRED');
+  const bytes=await response.arrayBuffer();const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
+  requireValue(hash==='bdd39492c2566a7bb00181d44eb3a41af23c925c2d376735edf25c7346fc37c9','CAGE_MANIFEST_HASH_DRIFT');
+  // Match normal app: sports selection precedes production validation/normalization.
+  const manifest=validateRuntimeMapArtBundle(selectRanchCageArt(JSON.parse(new TextDecoder().decode(bytes))));
+  const wait=matrix.fields.find(f=>f.cageDefinitionIndex===35);requireValue(wait,'WAITING_ROOM_BINDING_REQUIRED');
+  const waitingModuleId=getCageDefinition(35).moduleId;requireValue(wait.moduleId===waitingModuleId,'WAITING_MODULE_METADATA_DRIFT');
+  const waiting={moduleId:waitingModuleId,slotIndex:0,instanceId:'audit:waiting'};
+  requireValue(requestedFieldIds===null||requestedFieldIds.every(id=>matrix.fields.some(f=>f.fieldId===id)),'REQUESTED_FIELD_UNKNOWN');
+  const occupied=new Set(productPlacementCells(waiting));const result={};
+  for(const spec of matrix.fields.filter(f=>requestedFieldIds===null||requestedFieldIds.includes(f.fieldId))){
+   const moduleId=spec.cageDefinitionIndex===null?null:getCageDefinition(spec.cageDefinitionIndex).moduleId;
+   requireValue(moduleId===spec.moduleId,'MODULE_METADATA_DRIFT_'+spec.fieldId);
+   let layout=[waiting];
+   if(moduleId&&moduleId!==waitingModuleId){
+    const anchor=spec.legalAnchorSlots.find(p=>p.occupiedCells.every(c=>!occupied.has(c)));requireValue(anchor,'LEGAL_NONOVERLAPPING_SLOT_REQUIRED');
+    const placement={moduleId,slotIndex:anchor.slotIndex,instanceId:'audit:target'};
+    const actualCells=productPlacementCells(placement);
+    requireValue(actualCells&&JSON.stringify([...actualCells].sort((a,b)=>a-b))===JSON.stringify([...anchor.occupiedCells].sort((a,b)=>a-b)),'ANCHOR_FOOTPRINT_METADATA_DRIFT_'+spec.fieldId);
+    layout.push(placement);
+   }
+   requireValue(validateProductRanch(layout),'PRODUCTION_LAYOUT_REJECTED');
+   const plan=createProductGridArtPlan({manifest,placements:layout,unlockedSlots:Array.from({length:100},(_,i)=>i)});
+   const field=ranchThreeField(manifest,plan),p=plan.placements.find(p=>p.fieldId===spec.fieldId&&p.fragmentOfSlot===undefined);
+   requireValue(p,'FIELD_PLACEMENT_MISSING_'+spec.fieldId);
+   const sourcePlacement=layout.find(q=>q.moduleId===moduleId);requireValue(sourcePlacement,'SOURCE_PLACEMENT_REQUIRED');
+   requireValue(p.instanceId===sourcePlacement.instanceId&&p.moduleId===sourcePlacement.moduleId&&p.slotIndex===sourcePlacement.slotIndex&&p.cageDefinitionIndex===spec.cageDefinitionIndex,'STABLE_SOURCE_TO_RENDERED_PLACEMENT_JOIN_REQUIRED');
+
+   const polygon=spec.polygonsLocalNative[0],local=[0,1].map(k=>polygon.reduce((s,p)=>s+p[k],0)/polygon.length);
+   result[spec.fieldId]={field,placements:plan.placements,cagePlacements:layout,connections:[],
+     point:[p.x/field.nativePixelWorldScale+local[0],p.y/field.nativePixelWorldScale+local[1]],
+     targetOriginNative:[p.x/field.nativePixelWorldScale,p.y/field.nativePixelWorldScale],
+     targetSupportOwner:{ownerIndex:p.ownerIndex??plan.placements.indexOf(p),fieldId:p.fieldId,shift:0},targetCageInstanceId:sourcePlacement.instanceId,targetSourcePlacement:{instanceId:sourcePlacement.instanceId,moduleId:sourcePlacement.moduleId,slotIndex:sourcePlacement.slotIndex,definitionIndex:spec.cageDefinitionIndex},
+     baseNativePixels:raisingNativeScreenPixels(field,RAISING_DESKTOP_REFERENCE_VIEWPORT),nativeScaleAuthority:{function:'raisingNativeScreenPixels',referenceViewport:RAISING_DESKTOP_REFERENCE_VIEWPORT,scope:'CANONICAL_PRODUCTION_PHONE_REFERENCE_NOT_MEASURED_NORMAL_HOST'},proof:'PRODUCTION_PLAN_AND_VALIDATION',connectionsScope:'NOT_ROUTING_TESTED'};
+  }
+  return result;
+ },
+ async render(test,fixture){
+  requireValue(fixture?.field&&fixture?.placements&&fixture?.point,'PRODUCTION_MAP_BINDING_REQUIRED');
+  root?.destroy({children:true});for(const prop of props)prop.destroy({children:true});props=[];
+  app.renderer.resize(test.viewport.width,test.viewport.height);
+  if(sceneKey!==test.fieldId){scene?.dispose();scene=await createRanchThreeScene({stage:{app},field:fixture.field,placements:fixture.placements,
+    cagePlacements:fixture.cagePlacements,connections:fixture.connections,semanticDepthClasses:fixture.semanticDepthClasses??null,allowIncompleteSemanticDiagnostic:false,supportAudit:fixture.supportAudit??null});sceneKey=test.fieldId;}
+  const runtimeUrl=new URL(test.character.runtimePath,location.origin+'/').href;
+  const key=test.character.runtimeSha256+':'+test.sequenceId;
+  if(bundleKey!==key){
+    await bundle?.dispose?.();const response=await fetch(runtimeUrl);requireValue(response.ok,'RUNTIME_HTTP_'+response.status);
+    const bytes=await response.arrayBuffer();runtimeHash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
+    requireValue(runtimeHash===test.character.runtimeSha256,'RUNTIME_HASH_DRIFT');
+    loadedRuntime=JSON.parse(new TextDecoder().decode(bytes));
+    bundle=await loadPixiCharacterRuntimeBundle({PIXI,runtimeUrl,runtimeDocument:loadedRuntime,sides:['main'],initialSequenceIds:[test.sequenceId],cachePrefix:'ranch-audit:'});
+    bundleKey=key;
+  }
+  const runtime=loadedRuntime,hash=runtimeHash;
+  actor=bundle.createActor({side:'main',animation:test.sequenceId,nativeFramePresentation:true,nativeGeometry:runtime.geometry??runtime.reviewGeometry,nativeSequence:true});
+  const frame={contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:test.sequenceId,frameIndex:test.frameIndex,flipBits:0};
+  await actor.nativeFramePresenter.ensureFrame?.(frame);const presentation=actor.nativeFramePresenter.apply(frame);
+  const boundFrame=runtime.sides.main.animations.find(a=>a.id===test.sequenceId)?.frames[test.frameIndex];
+  requireValue(boundFrame?.texture===test.texture&&presentation.cell===boundFrame.cell,'FRAME_BINDING_DRIFT');
+  const scale=test.zoom*(fixture.baseNativePixels??1),g=presentation.geometry;
+  applyNativeCharacterCellGeometry(actor.sprite,{geometry:g},scale);
+  const sizing={packedPixelsPerNativePixel:g.scale,evidence:'COMPLETED_ORIGINAL_DENSITY4_LOCAL_PLAY'};
+  const geometry=getRaisingNativeActorGeometry(actor.sprite,sizing,scale,{frameGeometry:g,
+    displayScale:raisingOriginalBodyScale(runtime.entityId,sizing),displayOffset:raisingOriginalBodyOffset(runtime.entityId,sizing)});
+  requireValue(geometry,'NATIVE_GEOMETRY_REQUIRED');
+  root=new PIXI.Container();app.stage.addChild(root);root.scale.set(scale);
+  // Exact current fallback decorator formula, not an anatomical contact proof.
+  // Three reviewed bespoke contacts require the real presenter smoke separately.
+  const visible=geometry.visible,contact=getRaisingEggContactShadow(runtime.entityId,sizing)??{
+    x:visible.x+visible.width/2,y:visible.y+visible.height+1,
+    radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
+  root.threeShadowEllipses=[contact];
+  const shadow=new PIXI.Graphics().ellipse(contact.x,contact.y,contact.radiusX,contact.radiusY).fill({color:0x02070a,alpha:.26});
+  root.addChild(shadow,actor.sprite);
+  actor.sprite.scale.set(geometry.spriteScale);
+  actor.sprite.position.set(geometry.offset.x,geometry.offset.y-test.nativeZ);
+  const [x,y]=test.pointNative??fixture.point,height=scene.groundHeight(x,y);
+  const nativeGround=composeProductRanchGround({placements:fixture.cagePlacements,unlockedSlots:Array.from({length:100},(_,i)=>i)});
+  const cage=nativeGround.cageAt(x,y),tx=Math.trunc(x/8),ty=Math.trunc(y/8),terrain=nativeGround.readTerrain(tx,ty);
+  const admitted=cage?.instanceId===fixture.targetCageInstanceId&&terrain!==1;
+  if(test.navigationPolicy!=='SCRIPTED_NO_ADMISSION_CLAIM')requireValue(cage?.moduleId===fixture.targetSourcePlacement.moduleId&&cage?.slotIndex===fixture.targetSourcePlacement.slotIndex&&cage?.definitionIndex===fixture.targetSourcePlacement.definitionIndex,'NATIVE_TO_RENDERED_STABLE_ID_JOIN_REQUIRED');
+  const admission={nativeOwnerIndex:cage?.ownerIndex??null,rendererOwnerIndex:fixture.targetSupportOwner.ownerIndex,stableSourcePlacement:fixture.targetSourcePlacement,ownerInstance:cage?.instanceId??null,expectedInstance:fixture.targetCageInstanceId,terrain,navigationComponent:nativeGround.navigation.component[ty*nativeGround.width+tx],nativeXY:[x,y],actualAppMoveCalled:false,groundComponentMeaning:'FIXTURE_NOMINAL_SHEET_ADMISSION_CONVENTION_NOT_VERTICAL_NAVIGATION_AUTHORITY'};
+  if(test.navigationPolicy!=='SCRIPTED_NO_ADMISSION_CLAIM')requireValue(admitted,'ACTUAL_PRODUCTION_GROUND_ADMISSION_REQUIRED');
+  const ownerToken=test.ownerMode==='missing'?undefined:{...fixture.targetSupportOwner,ownerIndex:fixture.targetSupportOwner.ownerIndex+(test.ownerMode==='wrong-index'?1000:0),groundComponent:'NOMINAL_GROUND'};
+  requireValue(test.ownerMode!=='verified'||admitted,'VERIFIED_OWNER_REQUIRES_ADMISSION');
+  root.threeSupportOwner=ownerToken;
+
+  const bounds={x:test.viewport.width/2-x*scale,y:test.viewport.height*.62-y*scale,scale:scale/fixture.field.nativePixelWorldScale};
+  root.position.set(bounds.x+x*scale,bounds.y+y*scale-height*16*Math.cos(52*Math.PI/180)*scale);
+  root.threeGroundScreen={x:bounds.x+x*scale,y:bounds.y+y*scale};root.threeGroundHeight=height;
+  const care=await (await fetch('/assets/production/public-runtime/raising-care.v1.json')).json();
+  const food=new Map(),waste=new Map();
+  for(const [kind,dx] of [['meat',-40],['waste',40]]){
+    const spec=care.cells.find(c=>c.role===kind&&c.pose===0);requireValue(spec,'CARE_CELL_REQUIRED');
+    const texture=await PIXI.Assets.load('/'+spec.src),sprite=new PIXI.Sprite(texture);
+    sprite.anchor.set(spec.nativeAnchorX/spec.nativeWidth,spec.nativeAnchorY/spec.nativeHeight);
+    sprite.width=spec.nativeWidth*scale*(kind==='waste'?.6:1);sprite.height=spec.nativeHeight*scale*(kind==='waste'?.6:1);
+    const prop=kind==='meat'?new PIXI.Container():sprite;app.stage.addChild(prop);props.push(prop);
+    const px=x+(test.subjectKind?0:dx),py=y,ph=scene.groundHeight(px,py);
+    prop.threeSupportOwner=ownerToken;
+    prop.threeGroundScreen={x:bounds.x+px*scale,y:bounds.y+py*scale};prop.threeGroundHeight=ph;
+    prop.position.set(prop.threeGroundScreen.x,prop.threeGroundScreen.y-ph*16*Math.cos(52*Math.PI/180)*scale);
+    if(kind==='meat'){
+      const ellipse={x:0,y:2*scale,radiusX:10*scale,radiusY:3*scale};prop.threeShadowEllipses=[ellipse];
+      prop.addChild(new PIXI.Graphics().ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY).fill({color:0x02070a,alpha:.26}),sprite);food.set('probe',prop);
+    }else waste.set('probe',prop);
+  }
+  root.visible=!test.subjectKind||test.subjectKind==='actor';
+  for(const prop of food.values())prop.visible=!test.subjectKind||test.subjectKind==='food';
+  for(const prop of waste.values())prop.visible=!test.subjectKind||test.subjectKind==='waste';
+  app.render();scene.render({bounds,actors:new Map([['audit',{root,sprite:actor.sprite,shadow}]]),food,waste,deltaMS:0});app.render();
+  motion={test,fixture,shadow,food,waste,bounds,sizing,scale,geometry,nativeGround};
+  const canvas=document.querySelector('.cm-ranch-three-canvas');
+  const boxes=[root,...props].filter(p=>p.visible).map(p=>p.getBounds());
+  const left=Math.max(0,Math.floor(Math.min(...boxes.map(b=>b.x))-24)),top=Math.max(0,Math.floor(Math.min(...boxes.map(b=>b.y))-40));
+  const right=Math.min(app.screen.width,Math.ceil(Math.max(...boxes.map(b=>b.x+b.width))+24)),bottom=Math.min(app.screen.height,Math.ceil(Math.max(...boxes.map(b=>b.y+b.height))+40));
+  const roi={x:left,y:top,width:Math.max(1,right-left),height:Math.max(1,bottom-top)};
+  const subjectRoot=test.subjectKind==='food'?[...food.values()][0]:test.subjectKind==='waste'?[...waste.values()][0]:root;
+  return {admission,supportOwner:subjectRoot.threeSupportOwner,subjectScreen:{x:subjectRoot.x,y:subjectRoot.y},subjectGroundScreen:subjectRoot.threeGroundScreen,id:test.id,scope:'REAL_THREE_PIXI_ISOLATED_BODY_NOT_NORMAL_PRESENTER_SHADOW',runtimeHash:hash,
+   roi,nativeScaleAuthority:fixture.nativeScaleAuthority,baseNativePixels:fixture.baseNativePixels,surfaceEvidence:{unverifiedCount:canvas.dataset.depthEnvelopeUnverifiedSurfaces??null,envelopeMaxNative:canvas.dataset.depthEnvelopeMaxNative??null,heightAuthority:'EXISTING_WALK_SURFACE_ONLY_UNLESS_VERIFIED_OVERRIDE'},semanticDepth:{ready:canvas.dataset.semanticDepthReady??null,reason:canvas.dataset.semanticDepthReason??null},projectionError:Number(canvas.dataset.actorProjectionError),nativeZ:test.nativeZ,height,
+   diagnostics:scene.getDiagnostics(),geometry,canvas:{width:app.screen.width,height:app.screen.height},
+   shadowScope:'PRODUCTION_SIZING_AND_EGG_FUNCTIONS_REPLICATED_FALLBACK_DECORATOR',normalPresenterShadow:'NOT_TESTED',reviewedSpeciesContacts:'REQUIRE_NORMAL_PRESENTER',props:'REAL_CARE_CELLS_REPLICATED_PLACEMENT',depthEnvelopeMaxNative:canvas.dataset.depthEnvelopeMaxNative??null,visualReview:'PENDING'};
+ },
+ async beginMotion(test,fixture){
+  scene?.dispose();scene=null;sceneKey=null; // reset scene clock per control clip
+  await this.render({...test,subjectKind:'actor'},fixture);
+  return {status:'READY',sequence:loadedRuntime.sides.main.animations.find(a=>a.id===test.sequenceId),runtimeHash};
+ },
+ async stepMotion(sample){
+  requireValue(motion,'MOTION_NOT_STARTED');
+  const m=motion,frame=sample.animated?(()=>{
+    let f=actor.sequencePlayer.getSnapshot();
+    for(let tick=0;tick<sample.nativeTicks;tick++)f=actor.sequencePlayer.advanceNative(4096);
+    return f;
+  })():{sequenceId:m.test.sequenceId,frameIndex:m.test.frameIndex};
+  const presentation=actor.nativeFramePresenter.apply({contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:frame.sequenceId,frameIndex:frame.frameIndex,flipBits:0});
+  requireValue(actor.nativeFramePresenter.isFrameReady?.(frame)!==false,'MOTION_STREAM_PAGE_NOT_READY');
+  const boundFrame=loadedRuntime.sides.main.animations.find(a=>a.id===frame.sequenceId)?.frames[frame.frameIndex];
+  requireValue(boundFrame&&presentation.cell===boundFrame.cell,'MOTION_FRAME_BINDING_DRIFT');
+  const g=presentation.geometry,scale=sample.zoom*(m.fixture.baseNativePixels??1);
+  applyNativeCharacterCellGeometry(actor.sprite,{geometry:g},scale);
+  const geometry=getRaisingNativeActorGeometry(actor.sprite,{...m.sizing,packedPixelsPerNativePixel:g.scale},scale,{frameGeometry:g,
+    displayScale:raisingOriginalBodyScale(loadedRuntime.entityId,m.sizing),displayOffset:raisingOriginalBodyOffset(loadedRuntime.entityId,m.sizing)});
+  root.scale.set(scale);actor.sprite.scale.set(geometry.spriteScale);actor.sprite.position.set(geometry.offset.x,geometry.offset.y-sample.nativeZ);
+  const visible=geometry.visible,contact=getRaisingEggContactShadow(loadedRuntime.entityId,m.sizing)??{
+    x:visible.x+visible.width/2,y:visible.y+visible.height+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
+  root.threeShadowEllipses=[contact];m.shadow.clear().ellipse(contact.x,contact.y,contact.radiusX,contact.radiusY).fill({color:0x02070a,alpha:.26});
+  const [x,y]=sample.pointNative,height=scene.groundHeight(x,y),[cx,cy]=sample.cameraCenterNative;
+  const bounds={x:app.screen.width/2-cx*scale,y:app.screen.height*.62-cy*scale,scale:scale/m.fixture.field.nativePixelWorldScale};
+  root.position.set(bounds.x+x*scale,bounds.y+y*scale-height*16*Math.cos(52*Math.PI/180)*scale);
+  root.threeGroundScreen={x:bounds.x+x*scale,y:bounds.y+y*scale};root.threeGroundHeight=height;
+  root.threeGroundAdmission=readRaisingGroundSupport(m.nativeGround,x,y);
+  m.bounds=bounds;m.scale=scale;m.geometry=geometry;actor.sprite.visible=true;root.visible=true;m.shadow.visible=true;
+  for(const prop of props)prop.visible=false;
+  const render=deltaMS=>{app.render();scene.render({bounds,actors:new Map([['audit',{root,sprite:actor.sprite,shadow:m.shadow}]]),food:m.food,waste:m.waste,deltaMS});app.render();};
+  m.render=render;render(sample.deltaMS);
+  const quad=ranchSpriteScreenQuad(actor.sprite),canvas=document.querySelector('.cm-ranch-three-canvas');
+  const shadowCenter=root.toGlobal({x:contact.x,y:contact.y});
+  return {frameIndex:sample.index,nativeFrame:frame,texture:boundFrame.texture,nativePoint:[x,y],nativeZ:sample.nativeZ,
+    cameraCenterNative:[cx,cy],zoom:sample.zoom,baseNativePixels:m.fixture.baseNativePixels,nativeScaleAuthority:m.fixture.nativeScaleAuthority,groundHeight:height,screenQuad:quad,rootScreen:{x:root.x,y:root.y},
+    groundScreen:root.threeGroundScreen,groundAdmission:root.threeGroundAdmission,shadowCenter,contact,projectionError:Number(canvas.dataset.actorProjectionError),
+    shadowAnchorScope:'REPLICATED_PRODUCTION_FALLBACK_NOT_ANATOMICAL_PROOF',diagnostics:scene.getDiagnostics(),
+    surfaceEvidence:{unverifiedCount:canvas.dataset.depthEnvelopeUnverifiedSurfaces??null,envelopeMaxNative:canvas.dataset.depthEnvelopeMaxNative??null,heightAuthority:'EXISTING_WALK_SURFACE_ONLY_UNLESS_VERIFIED_OVERRIDE'},semanticDepth:{ready:canvas.dataset.semanticDepthReady??null,reason:canvas.dataset.semanticDepthReason??null}};
+ },
+ async columnGeometryHashes(){return scene.captureColumnGeometryHashes();},
+ async captureMotionIntensity(frameIndex){
+  requireValue(Number.isInteger(frameIndex)&&frameIndex>=0&&frameIndex<240,'FRAME_ID_REQUIRED');globalThis.lastMotionDiagnostic={frameIndex,stage:'START'};
+  requireValue(motion&&scene,'MOTION_REQUIRED');
+  const digest=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
+  const encode=x=>new TextEncoder().encode(JSON.stringify(x));
+  const rle=mask=>{const runs=[];let value=mask.rgba[0],count=0;for(let i=0;i<mask.rgba.length;i+=4){const v=mask.rgba[i];requireValue(mask.rgba[i+1]===v&&mask.rgba[i+2]===v,'MASK_GRAYSCALE_REQUIRED');if(v===value)count++;else{runs.push([count,value]);value=v;count=1;}}runs.push([count,value]);return {width:mask.width,height:mask.height,runs,encoding:'GRAYSCALE_RLE_COUNT_VALUE_TOP_LEFT'};};
+  const normal=()=>{const layout=[app.canvas,document.querySelector('.cm-ranch-three-canvas')].map(c=>{const r=c.getBoundingClientRect();const v=[r.x,r.y,r.width,r.height];requireValue(v.join(',')==='0,0,390,844','EXACT_CSS_CANVAS_RECT_REQUIRED');return v;});const three=scene.captureNormalDrawingBuffer();app.render();const gl=app.renderer.gl;requireValue(gl&&gl.getParameter(gl.FRAMEBUFFER_BINDING)===null&&!gl.getParameter(gl.SCISSOR_TEST),'PIXI_DEFAULT_UNSCISSORED_REQUIRED');const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;requireValue(w===390&&h===844&&three.width===w&&three.height===h,'EXACT_PHONE_DRAWING_BUFFER_REQUIRED');requireValue(Array.from(gl.getParameter(gl.VIEWPORT)).join(',')==='0,0,390,844','PIXI_FULL_VIEWPORT_REQUIRED');requireValue(gl.PIXEL_PACK_BUFFER_BINDING===undefined||gl.getParameter(gl.PIXEL_PACK_BUFFER_BINDING)===null,'PIXI_PACK_BUFFER_UNEXPECTED');const pixi=new Uint8Array(w*h*4);gl.readPixels(0,0,w,h,gl.RGBA,gl.UNSIGNED_BYTE,pixi);requireValue(gl.getError()===gl.NO_ERROR,'PIXI_READ_FAILED');return {three:three.rgba,pixi,layout,state:scene.captureActorMaskState()};};
+  const before=normal(),pairs=[],rawDiagnostics=[];let failure=null;
+  try{
+   for(const target of ['default','offscreen']){
+    const clearRef=scene.captureActorMask({key:'audit',target,reference:true,control:'clear'}),clear=scene.captureActorMask({key:'audit',target,reference:false,control:'clear'}),blocked=scene.captureActorMask({key:'audit',target,reference:false,control:'blocked'});
+    rawDiagnostics.push({target,controls:{reference:rle(clearRef),clear:rle(clear),blocked:rle(blocked)}});requireValue([clear,blocked].every(m=>m.width===clearRef.width&&m.height===clearRef.height),'CONTROL_DIMENSION_DRIFT');
+    let nonempty=false;for(let i=0;i<clearRef.rgba.length;i+=4){nonempty ||= clearRef.rgba[i]>0;for(let k=0;k<3;k++)requireValue(clearRef.rgba[i+k]===clear.rgba[i+k]&&blocked.rgba[i+k]===0,'KNOWN_CLEAR_BLOCK_CONTROL_FAILED');}requireValue(nonempty,'CONTROL_REFERENCE_EMPTY');
+    const reference=scene.captureActorMask({key:'audit',target,reference:true,debugGPU:true}),actual=scene.captureActorMask({key:'audit',target,reference:false,debugGPU:true});
+    rawDiagnostics[rawDiagnostics.length-1].masks={reference:rle(reference),actual:rle(actual),gpuDebug:actual.gpuDebug};
+    const coverage=measureResolvedCoverage(reference.rgba,actual.rgba,reference.width,reference.height);requireValue(coverage.excessIntensity===0,'MASK_EXCESS_INTENSITY');
+    pairs.push({target,reference,actual,coverage,controls:'EXACT_CLEAR_REFERENCE_AND_ZERO_BLOCKED'});
+   }
+  }catch(e){failure=e;}finally{globalThis.lastMotionDiagnostic={frameIndex,stage:'RAW_CAPTURE_BEFORE_RESTORE',beforeState:before.state,rawFailureEvidence:rawDiagnostics,failure:failure?String(failure):null};motion.render(0);}
+  // Restore synchronously before any digest await can yield a paint opportunity.
+  const after=normal();
+  const normalHashes={beforeThree:await digest(before.three),afterThree:await digest(after.three),beforePixi:await digest(before.pixi),afterPixi:await digest(after.pixi)};
+  globalThis.lastMotionDiagnostic={frameIndex,normalHashes,beforeState:before.state,afterState:after.state,failure:failure?String(failure):null,rawFailureEvidence:rawDiagnostics};
+  if(failure)throw failure;
+  requireValue(normalHashes.beforeThree===normalHashes.afterThree&&normalHashes.beforePixi===normalHashes.afterPixi,'EXACT_RAW_LAYER_RESTORATION_FAILED');
+  const shape=s=>({camera:s.camera,objects:s.objects,materials:s.materials,sceneClock:s.sceneClock});requireValue(JSON.stringify(shape(before.state))===JSON.stringify(shape(after.state)),'SAME_FRAME_SCENE_STATE_DRIFT');
+  requireValue(motion.test.fieldId==='field_cm07_01'&&root.threeGroundHeight===0,'CM07_NOMINAL_H0_ONLY');for(const pair of pairs){for(const logical of pair.actual.gpuDebug.logicalMeshes){const u=logical.mask.uniforms;requireValue((u.uRanchSupportCount??0)===0,'NO_PHYSICAL_SUPPORT_ALLOWED_IN_CM07_UPPER_PROOF');if(u.uRanchFloor!==undefined)requireValue(Math.abs(u.uRanchFloor-.015)<1e-8,'EXACT_NOMINAL_CAP_REQUIRED');}}
+  const unchangedRows=Math.max(0,Math.floor(root.y-1));requireValue((.015*16*Math.cos(52*Math.PI/180)*motion.scale)<=1,'UPPER_REGION_NOT_CONSERVATIVE');
+  const targetGeometry=await scene.captureMotionTargetGeometry('audit');
+  const output=[];for(const pair of pairs){
+   const {reference,actual}=pair;requireValue(reference.width===390&&reference.height===844&&actual.width===390&&actual.height===844,'MASK_DIMENSION_DRIFT');
+   const gpu=actual.gpuDebug.mask;const originalGpu=actual.gpuDebug.original;for(const part of actual.gpuDebug.logicalMeshes)requireValue(part.mask.programAvailable&&part.mask.shaders?.length,'EVERY_ACTIVE_PART_SHADER_REQUIRED');requireValue(gpu.programAvailable&&gpu.shaders,'ACTUAL_COMPILED_SHADER_REQUIRED');const shaderSha256=await digest(encode(gpu.shaders));gpu.shaderFlags=gpu.shaders.map(({type,hasFloorProxy,hasFragDepth})=>({type,hasFloorProxy,hasFragDepth}));gpu.compiledShaderSources=gpu.shaders;delete gpu.shaders;if(originalGpu.shaders){originalGpu.shaderSha256=await digest(encode(originalGpu.shaders));delete originalGpu.shaders;}
+   const upperNormal=[];for(let y=0;y<unchangedRows;y++)for(let x=0;x<390;x++)if(reference.rgba[(y*390+x)*4]>0){const p=((843-y)*390+x)*4;for(let k=0;k<4;k++)upperNormal.push(before.three[p+k]);}
+   output.push({upperNormalThreeSha256:await digest(new Uint8Array(upperNormal)),target:pair.target,reference:rle(reference),actual:rle(actual),coverage:pair.coverage,controls:pair.controls,referenceSha256:await digest(reference.rgba),actualSha256:await digest(actual.rgba),upperReferenceSha256:await digest(reference.rgba.slice(0,unchangedRows*390*4)),upperActualSha256:await digest(actual.rgba.slice(0,unchangedRows*390*4)),unchangedRows,gpuDebug:{actual:{original:originalGpu,mask:gpu,logicalMeshes:actual.gpuDebug.logicalMeshes,originalLogicalMeshes:actual.gpuDebug.originalLogicalMeshes}},shaderSha256});
+  }
+  requireValue(JSON.stringify(before.layout)===JSON.stringify(after.layout),'LAYOUT_RESTORATION_DRIFT');
+  const result={frameIndex,targetGeometry,layout:before.layout,normalHashes,beforeState:before.state,pairs:output,sceneClock:before.state.sceneClock,groundAdmission:root.threeGroundAdmission,maskScope:'ISOLATED_TARGET_TERRAIN_ONLY_EQUAL_DEPTH_ORDER_LIMITATION;OWN_TARGET_MSAA_INTENSITY',shadowScope:'EXACT_REPLICATED_FALLBACK_PIXI_LAYER_NOT_NORMAL_REVIEWED_CONTACT'};globalThis.lastMotionDiagnostic=result;return result;
+ },
+ async motionDiagnosticPass(kind){
+  requireValue(motion?.render,'MOTION_FRAME_REQUIRED');
+  if(kind==='body-hidden'){
+    actor.sprite.visible=false;motion.render(0);return {shadowRetained:true};
+  }
+  if(kind==='unoccluded-reference'){
+    actor.sprite.visible=true;actor.sprite.renderable=true;motion.shadow.visible=false;
+    // Capture same actual Pixi frame/transform, transparent canvas, no Three
+    // canvas compositing. This is alpha support, not a replacement game render.
+    app.render();const png=app.canvas.toDataURL('image/png');
+    motion.shadow.visible=true;motion.render(0);return {png};
+  }
+  if(kind==='restore'){actor.sprite.visible=true;motion.shadow.visible=true;motion.render(0);return {};}
+  throw Error('UNKNOWN_DIAGNOSTIC_PASS');
+ },
+ async settleNormalFrame(){
+  requireValue(scene&&motion,'MOTION_REQUIRED');
+  const pose=()=>{const frame=actor.nativeFramePresenter.getSnapshot();return {sequenceId:frame.sequenceId,frameIndex:frame.frameIndex,cell:frame.cell,root:[root.x,root.y,root.scale.x,root.scale.y],sprite:[actor.sprite.x,actor.sprite.y,actor.sprite.scale.x,actor.sprite.scale.y]};};
+  const before=pose(),clockBefore=scene.captureActorMaskState().sceneClock;
+  // No ticker/native tick is advanced. Give compositor a frame boundary, then
+  // explicitly update actual Pixi parent/child world transforms before drawing.
+  await new Promise(requestAnimationFrame);
+  for(const item of [root,actor.sprite,motion.shadow,...props])item.toGlobal({x:0,y:0});
+  const pixi={root:root.toGlobal({x:0,y:0}),shadow:motion.shadow.toGlobal({x:0,y:0}),sprite:actor.sprite.toGlobal({x:0,y:0})};
+  await this.redrawNormal();
+  const after=pose(),clockAfter=scene.captureActorMaskState().sceneClock;
+  requireValue(JSON.stringify(before)===JSON.stringify(after)&&clockBefore===clockAfter,'SETTLE_MUST_NOT_ADVANCE_POSE_OR_SCENE_CLOCK');
+  return {pose:after,sceneClock:clockAfter,pixi,method:'RAF_BOUNDARY_EXPLICIT_PIXI_WORLD_TRANSFORMS_ZERO_DELTA_RENDER'};
+ },
+ environmentEffectState(){requireValue(scene?.captureEnvironmentEffectState,'TEST_EFFECT_DIAGNOSTIC_REQUIRED');return scene.captureEnvironmentEffectState();},
+ advanceEnvironment(steps){
+  requireValue(Number.isInteger(steps)&&steps>0&&steps<=40&&motion,'BOUNDED_EFFECT_STEPS_REQUIRED');
+  const before=actor.nativeFramePresenter.getSnapshot();
+  for(let i=0;i<steps;i++){app.render();scene.render({bounds:motion.bounds,actors:new Map([['audit',{root,sprite:actor.sprite,shadow:motion.shadow}]]),food:motion.food,waste:motion.waste,deltaMS:50});app.render();}
+  requireValue(JSON.stringify(before)===JSON.stringify(actor.nativeFramePresenter.getSnapshot()),'ENVIRONMENT_ONLY_MUST_NOT_ADVANCE_NATIVE_POSE');return scene.captureEnvironmentEffectState();
+ },
+ maskState(){requireValue(scene?.captureActorMaskState,'TEST_MASK_STATE_PROBE_REQUIRED');return scene.captureActorMaskState();},
+ async redrawNormal(){
+  requireValue(scene&&motion,'MOTION_REQUIRED');app.render();scene.render({bounds:motion.bounds,actors:new Map([['audit',{root,sprite:actor.sprite,shadow:motion.shadow}]]),food:motion.food,waste:motion.waste,deltaMS:0});app.render();return scene.getDiagnostics();
+ },
+ stashDepthDiagnostic(stage,masks){
+  globalThis.lastDepthDiagnostic={stage,masks:Object.fromEntries(Object.entries(masks).map(([key,value])=>{const {rgba,...metadata}=value;const c=document.createElement('canvas');c.width=value.width;c.height=value.height;c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(rgba),value.width,value.height),0,0);return [key,{...metadata,png:c.toDataURL('image/png')}];}))};
+ },
+ async validateTerrainMaskControls(subjectKind='actor',target='offscreen'){
+  try{
+  requireValue(scene?.captureActorMask&&motion,'TEST_ONLY_MASK_SHIM_REQUIRED');
+  const key={actor:'audit',food:'food:probe',waste:'waste:probe'}[subjectKind];requireValue(key,'MASK_SUBJECT_REQUIRED');
+  const beforeControls=scene.captureActorMaskState();
+  const clearReference=scene.captureActorMask({key,target,reference:true,control:'clear'}),clear=scene.captureActorMask({key,target,reference:false,control:'clear'}),blockedReference=scene.captureActorMask({key,target,reference:true,control:'blocked'}),blocked=scene.captureActorMask({key,target,reference:false,control:'blocked'});
+  this.stashDepthDiagnostic('KNOWN_CONTROLS',{clearReference,clear,blockedReference,blocked});
+  for(const m of [clear,blockedReference,blocked])requireValue(m.width===clearReference.width&&m.height===clearReference.height,'CONTROL_DIMENSION_DRIFT');
+  requireValue(clearReference.whitePixels>0&&blockedReference.whitePixels>0,'CONTROL_REFERENCE_EMPTY');
+  let clearMismatch=0,referenceMismatch=0;for(let i=0;i<clearReference.rgba.length;i+=4){if((clear.rgba[i]>=128)!==(clearReference.rgba[i]>=128))clearMismatch++;if((blockedReference.rgba[i]>=128)!==(clearReference.rgba[i]>=128))referenceMismatch++;}
+  requireValue(clearMismatch===0&&referenceMismatch===0,'KNOWN_CLEAR_OR_REFERENCE_CONTROL_FAILED');
+  requireValue(blocked.whitePixels===0,'KNOWN_FULL_DEPTH_BLOCKER_CONTROL_FAILED');
+  return {debugStates:{beforeControls,afterControls:scene.captureActorMaskState()},status:'GPU_KNOWN_CONTROL_ASSERTIONS_PASSED',clearReferencePixels:clearReference.whitePixels,clearVisiblePixels:clear.whitePixels,blockedReferencePixels:blockedReference.whitePixels,blockedVisiblePixels:blocked.whitePixels,clearMismatch,referenceMismatch,scope:'TEST_ONLY_CLEAR_AND_NEAR_PLANE_BLOCKER_NOT_REAL_COLUMN_EXPECTATION'};
+  }finally{if(scene&&motion)await this.redrawNormal();}
+ },
+ async captureTerrainMask(subjectKind='actor',retainPng=false,options={}){
+  try{
+  requireValue(scene?.captureActorMask&&motion,'TEST_ONLY_MASK_SHIM_REQUIRED');
+  const key={actor:'audit',food:'food:probe',waste:'waste:probe'}[subjectKind];requireValue(key,'MASK_SUBJECT_REQUIRED');
+  const beforeMasks=scene.captureActorMaskState();
+  const capture=options.triangleMode?scene.captureActorMaskTriangleControl:scene.captureActorMask;requireValue(capture,'REQUESTED_MASK_CONTROL_API_REQUIRED');
+  const reference=await capture({key,...options,reference:true}),actual=await capture({key,...options,reference:false});
+  this.stashDepthDiagnostic('MASK_PAIR',{reference,actual});
+  requireValue(reference.width===actual.width&&reference.height===actual.height,'MASK_DIMENSION_DRIFT');
+  const w=reference.width,h=reference.height;let minX=w,minY=h,maxX=-1,maxY=-1,refCount=0,visibleCount=0,outside=0;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=(y*w+x)*4,r=reference.rgba[i]>=128,a=actual.rgba[i]>=128;if(r){refCount++;minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);}if(a)visibleCount++;if(a&&!r)outside++;}
+  requireValue(refCount>0,'EMPTY_ALPHA_REFERENCE_REQUIRES_EXPLICIT_BLANK_CASE');requireValue(outside===0,'VISIBLE_MASK_OUTSIDE_REFERENCE');
+  const box=[minX,minY,maxX-minX+1,maxY-minY+1],pack=data=>{const bytes=new Uint8Array(Math.ceil(box[2]*box[3]/8));let n=0;for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++,n++)if(data[(y*w+x)*4]>=128)bytes[n>>3]|=1<<(7-(n&7));return btoa(String.fromCharCode(...bytes));};
+  const encode=data=>{const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(data),w,h),0,0);return c.toDataURL('image/png');};
+  const subjectRoot=subjectKind==='food'?[...motion.food.values()][0]:subjectKind==='waste'?[...motion.waste.values()][0]:root;
+  const support=scene.getDiagnostics().spriteDiagnostics?.find(x=>x.key===key)?.physicalSupport;
+  const physicalTop=support?.maxHeight??subjectRoot.threeGroundHeight;
+  const maxSupportLiftPixels=(Math.max(subjectRoot.threeGroundHeight,physicalTop)+.015-subjectRoot.threeGroundHeight)*16*Math.cos(52*Math.PI/180)*motion.scale;
+  requireValue(Number.isFinite(maxSupportLiftPixels)&&maxSupportLiftPixels<=1,'ROOT_MINUS_ONE_NOT_CONSERVATIVE_FOR_ACTUAL_SUPPORT_AND_SCALE');
+  const upperRows=Math.max(0,Math.min(h,Math.floor(subjectRoot.threeGroundScreen.y-1)));
+  const digest=async data=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',data)),v=>v.toString(16).padStart(2,'0')).join('');
+  const coverageHashes={maxSupportLiftPixels,referenceRGBA:await digest(reference.rgba),actualRGBA:await digest(actual.rgba),upperRows,referenceUpperRGBA:await digest(reference.rgba.slice(0,upperRows*w*4)),actualUpperRGBA:await digest(actual.rgba.slice(0,upperRows*w*4)),upperScope:'CONSERVATIVE_ABOVE_NOMINAL_ROOT_SCREEN_MINUS_ONE_NOT_EXACT_SUPPORT_BOUNDARY'};
+  const evidencePixel=options.evidencePixel??null;const pixelOffset=evidencePixel?(evidencePixel[1]*w+evidencePixel[0])*4:null;
+  const pixelEvidence=evidencePixel?{pixel:evidencePixel,referenceRGBA:Array.from(reference.rgba.slice(pixelOffset,pixelOffset+4)),actualRGBA:Array.from(actual.rgba.slice(pixelOffset,pixelOffset+4))}:null;
+  const result={triangleControl:actual.triangleControl??null,pixelEvidence,coverageHashes,resolvedCoverage:measureResolvedCoverage(reference.rgba,actual.rgba,w,h),gpuDebug:{reference:reference.gpuDebug,actual:actual.gpuDebug},options,debugStates:{beforeMasks,afterMasks:scene.captureActorMaskState()},kind:actual.kind,equalDepthTieOrder:actual.equalDepthTieOrder,otherSpriteInteractions:actual.otherSpriteInteractions,nonDepthWritingParticleColor:actual.nonDepthWritingParticleColor,width:w,height:h,pixelBox:box,referencePixels:refCount,visiblePixels:visibleCount,referenceMask:pack(reference.rgba),visibleMask:pack(actual.rgba),referencePng:retainPng?encode(reference.rgba):null,visiblePng:retainPng?encode(actual.rgba):null};
+  // Re-render restored normal scene at identical clock before comparison capture.
+  app.render();scene.render({bounds:motion.bounds,actors:new Map([['audit',{root,sprite:actor.sprite,shadow:motion.shadow}]]),food:motion.food,waste:motion.waste,deltaMS:0});app.render();
+  result.debugStates.afterRedraw=scene.captureActorMaskState();return result;
+  }finally{if(scene&&motion)await this.redrawNormal();}
+ },
+ async captureDrawAndLayers(){
+  const traced=await scene.captureNormalDrawTrace();app.render();
+  return {...traced,pixiPng:app.canvas.toDataURL('image/png'),state:scene.captureActorMaskState()};
+ },
+ async dispose(){scene?.dispose();root?.destroy({children:true});for(const prop of props)prop.destroy({children:true});props=[];await bundle?.dispose?.();app.destroy(true)}
+};
+</script></html>

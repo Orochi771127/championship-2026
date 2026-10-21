@@ -1,0 +1,934 @@
+{
+  "schema": "CM07_ACTUAL_RAISING_EXTREME_CONTROLS.v1",
+  "baselineRevision": "4f64421314f0d0f5d0c04b916d30e821587c1a6a",
+  "cases": [
+    {
+      "id": "m504_gigaseadramon-s6-c8-near-z1",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "zoom": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 0,
+        "timeSeconds": 0.0,
+        "pointLocalNative": [
+          145.01851760230966,
+          34.62525681614585
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 0,
+        "deltaMS": 0,
+        "signedCameraDepthWorld": 0.44409257621480014,
+        "geometricSide": "near",
+        "animated": false,
+        "zoom": 1
+      }
+    },
+    {
+      "id": "m504_gigaseadramon-s6-c8-far-z1",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "zoom": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 120,
+        "timeSeconds": 4.0,
+        "pointLocalNative": [
+          130.90156601935027,
+          23.353751468215325
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 2,
+        "deltaMS": 33.333333333333336,
+        "signedCameraDepthWorld": -0.4498915236484389,
+        "geometricSide": "far",
+        "animated": false,
+        "zoom": 1
+      }
+    },
+    {
+      "id": "m504_gigaseadramon-s6-c8-near-z0.7",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "zoom": 0.7,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 0,
+        "timeSeconds": 0.0,
+        "pointLocalNative": [
+          145.01851760230966,
+          34.62525681614585
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 0,
+        "deltaMS": 0,
+        "signedCameraDepthWorld": 0.44409257621480014,
+        "geometricSide": "near",
+        "animated": false,
+        "zoom": 0.7
+      }
+    },
+    {
+      "id": "m504_gigaseadramon-s6-c8-far-z0.7",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "zoom": 0.7,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 120,
+        "timeSeconds": 4.0,
+        "pointLocalNative": [
+          130.90156601935027,
+          23.353751468215325
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 2,
+        "deltaMS": 33.333333333333336,
+        "signedCameraDepthWorld": -0.4498915236484389,
+        "geometricSide": "far",
+        "animated": false,
+        "zoom": 0.7
+      }
+    },
+    {
+      "id": "m518_blackwargreymon-s8-c14-near-z1",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m518_blackwargreymon@ed1bf7bc",
+        "entityId": "m518_blackwargreymon",
+        "speciesId": "species-204",
+        "runtimePath": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+        "runtimeSha256": "2bf62f68781056a52738401f681f29c8489484ed21a037017497df8d52b08589",
+        "idle": [
+          0,
+          0,
+          "m518_blackwargreymon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m518_blackwargreymon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 8,
+      "frameIndex": 1,
+      "texture": "m518_blackwargreymon/main/cell_014",
+      "nativeZ": 0,
+      "zoom": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 0,
+        "timeSeconds": 0.0,
+        "pointLocalNative": [
+          145.01851760230966,
+          34.62525681614585
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 0,
+        "deltaMS": 0,
+        "signedCameraDepthWorld": 0.44409257621480014,
+        "geometricSide": "near",
+        "animated": false,
+        "zoom": 1
+      }
+    },
+    {
+      "id": "m518_blackwargreymon-s8-c14-far-z1",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m518_blackwargreymon@ed1bf7bc",
+        "entityId": "m518_blackwargreymon",
+        "speciesId": "species-204",
+        "runtimePath": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+        "runtimeSha256": "2bf62f68781056a52738401f681f29c8489484ed21a037017497df8d52b08589",
+        "idle": [
+          0,
+          0,
+          "m518_blackwargreymon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m518_blackwargreymon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 8,
+      "frameIndex": 1,
+      "texture": "m518_blackwargreymon/main/cell_014",
+      "nativeZ": 0,
+      "zoom": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 120,
+        "timeSeconds": 4.0,
+        "pointLocalNative": [
+          130.90156601935027,
+          23.353751468215325
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 2,
+        "deltaMS": 33.333333333333336,
+        "signedCameraDepthWorld": -0.4498915236484389,
+        "geometricSide": "far",
+        "animated": false,
+        "zoom": 1
+      }
+    },
+    {
+      "id": "m518_blackwargreymon-s8-c14-near-z0.7",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m518_blackwargreymon@ed1bf7bc",
+        "entityId": "m518_blackwargreymon",
+        "speciesId": "species-204",
+        "runtimePath": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+        "runtimeSha256": "2bf62f68781056a52738401f681f29c8489484ed21a037017497df8d52b08589",
+        "idle": [
+          0,
+          0,
+          "m518_blackwargreymon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m518_blackwargreymon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 8,
+      "frameIndex": 1,
+      "texture": "m518_blackwargreymon/main/cell_014",
+      "nativeZ": 0,
+      "zoom": 0.7,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 0,
+        "timeSeconds": 0.0,
+        "pointLocalNative": [
+          145.01851760230966,
+          34.62525681614585
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 0,
+        "deltaMS": 0,
+        "signedCameraDepthWorld": 0.44409257621480014,
+        "geometricSide": "near",
+        "animated": false,
+        "zoom": 0.7
+      }
+    },
+    {
+      "id": "m518_blackwargreymon-s8-c14-far-z0.7",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m518_blackwargreymon@ed1bf7bc",
+        "entityId": "m518_blackwargreymon",
+        "speciesId": "species-204",
+        "runtimePath": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+        "runtimeSha256": "2bf62f68781056a52738401f681f29c8489484ed21a037017497df8d52b08589",
+        "idle": [
+          0,
+          0,
+          "m518_blackwargreymon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m518_blackwargreymon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 8,
+      "frameIndex": 1,
+      "texture": "m518_blackwargreymon/main/cell_014",
+      "nativeZ": 0,
+      "zoom": 0.7,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 120,
+        "timeSeconds": 4.0,
+        "pointLocalNative": [
+          130.90156601935027,
+          23.353751468215325
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 2,
+        "deltaMS": 33.333333333333336,
+        "signedCameraDepthWorld": -0.4498915236484389,
+        "geometricSide": "far",
+        "animated": false,
+        "zoom": 0.7
+      }
+    },
+    {
+      "id": "m402_anomalocarimon-s13-c23-near-z1",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 13,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_023",
+      "nativeZ": 0,
+      "zoom": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 0,
+        "timeSeconds": 0.0,
+        "pointLocalNative": [
+          145.01851760230966,
+          34.62525681614585
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 0,
+        "deltaMS": 0,
+        "signedCameraDepthWorld": 0.44409257621480014,
+        "geometricSide": "near",
+        "animated": false,
+        "zoom": 1
+      }
+    },
+    {
+      "id": "m402_anomalocarimon-s13-c23-far-z1",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 13,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_023",
+      "nativeZ": 0,
+      "zoom": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 120,
+        "timeSeconds": 4.0,
+        "pointLocalNative": [
+          130.90156601935027,
+          23.353751468215325
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 2,
+        "deltaMS": 33.333333333333336,
+        "signedCameraDepthWorld": -0.4498915236484389,
+        "geometricSide": "far",
+        "animated": false,
+        "zoom": 1
+      }
+    },
+    {
+      "id": "m402_anomalocarimon-s13-c23-near-z0.7",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 13,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_023",
+      "nativeZ": 0,
+      "zoom": 0.7,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 0,
+        "timeSeconds": 0.0,
+        "pointLocalNative": [
+          145.01851760230966,
+          34.62525681614585
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 0,
+        "deltaMS": 0,
+        "signedCameraDepthWorld": 0.44409257621480014,
+        "geometricSide": "near",
+        "animated": false,
+        "zoom": 0.7
+      }
+    },
+    {
+      "id": "m402_anomalocarimon-s13-c23-far-z0.7",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 13,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_023",
+      "nativeZ": 0,
+      "zoom": 0.7,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 120,
+        "timeSeconds": 4.0,
+        "pointLocalNative": [
+          130.90156601935027,
+          23.353751468215325
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 2,
+        "deltaMS": 33.333333333333336,
+        "signedCameraDepthWorld": -0.4498915236484389,
+        "geometricSide": "far",
+        "animated": false,
+        "zoom": 0.7
+      }
+    },
+    {
+      "id": "m402_anomalocarimon-s15-c26-near-z1",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 15,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_026",
+      "nativeZ": 0,
+      "zoom": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 0,
+        "timeSeconds": 0.0,
+        "pointLocalNative": [
+          145.01851760230966,
+          34.62525681614585
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 0,
+        "deltaMS": 0,
+        "signedCameraDepthWorld": 0.44409257621480014,
+        "geometricSide": "near",
+        "animated": false,
+        "zoom": 1
+      }
+    },
+    {
+      "id": "m402_anomalocarimon-s15-c26-far-z1",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 15,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_026",
+      "nativeZ": 0,
+      "zoom": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 120,
+        "timeSeconds": 4.0,
+        "pointLocalNative": [
+          130.90156601935027,
+          23.353751468215325
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 2,
+        "deltaMS": 33.333333333333336,
+        "signedCameraDepthWorld": -0.4498915236484389,
+        "geometricSide": "far",
+        "animated": false,
+        "zoom": 1
+      }
+    },
+    {
+      "id": "m402_anomalocarimon-s15-c26-near-z0.7",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 15,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_026",
+      "nativeZ": 0,
+      "zoom": 0.7,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 0,
+        "timeSeconds": 0.0,
+        "pointLocalNative": [
+          145.01851760230966,
+          34.62525681614585
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 0,
+        "deltaMS": 0,
+        "signedCameraDepthWorld": 0.44409257621480014,
+        "geometricSide": "near",
+        "animated": false,
+        "zoom": 0.7
+      }
+    },
+    {
+      "id": "m402_anomalocarimon-s15-c26-far-z0.7",
+      "fieldId": "field_cm07_01",
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 15,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_026",
+      "nativeZ": 0,
+      "zoom": 0.7,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sample": {
+        "index": 120,
+        "timeSeconds": 4.0,
+        "pointLocalNative": [
+          130.90156601935027,
+          23.353751468215325
+        ],
+        "cameraCenterLocalNative": [
+          137.91303638287286,
+          29.026061205679042
+        ],
+        "nativeZ": 0,
+        "nativeTicks": 2,
+        "deltaMS": 33.333333333333336,
+        "signedCameraDepthWorld": -0.4498915236484389,
+        "geometricSide": "far",
+        "animated": false,
+        "zoom": 0.7
+      }
+    }
+  ],
+  "count": 16,
+  "authority": "Actual static Raising requests; scripted geometry probe, NOT verified walk route or state reachability",
+  "routeAuthority": "SCRIPTED_GEOMETRIC_OCCLUSION_PROBE_NAVIGATION_NOT_VALIDATED",
+  "modelSha256": "de0117594f79f4573e1d2537c033bac5fa2752deb2f0aa7abba26d3c7f264260",
+  "column": {
+    "nodeIndex": 5,
+    "meshIndex": 5,
+    "primitiveIndex": 0,
+    "nodeName": "crags-el-basalt",
+    "componentRootVertexIndex": 1155,
+    "triangleIndices": [
+      2256,
+      2257,
+      2258,
+      2259,
+      2260,
+      2261,
+      2262,
+      2263,
+      2264,
+      2265,
+      2266,
+      2267,
+      2268,
+      2269,
+      2270,
+      2271,
+      2272,
+      2273,
+      2274,
+      2275,
+      2276,
+      2277,
+      2278,
+      2279,
+      2280,
+      2281,
+      2282,
+      2283,
+      2284,
+      2285,
+      2286,
+      2287,
+      2288,
+      2289,
+      2290,
+      2291,
+      2292,
+      2293,
+      2294,
+      2295,
+      2296,
+      2297,
+      2298,
+      2299,
+      2300,
+      2301,
+      2302,
+      2303,
+      2304,
+      2305,
+      2306,
+      2307,
+      2308,
+      2309,
+      2310,
+      2311,
+      2312,
+      2313,
+      2314,
+      2315,
+      2316,
+      2317,
+      2318,
+      2319,
+      2320,
+      2321,
+      2322,
+      2323,
+      2324,
+      2325,
+      2326,
+      2327,
+      2328,
+      2329,
+      2330,
+      2331,
+      2332,
+      2333,
+      2334,
+      2335,
+      2336,
+      2337,
+      2338,
+      2339,
+      2340,
+      2341,
+      2342,
+      2343,
+      2344,
+      2345,
+      2346,
+      2347,
+      2348,
+      2349
+    ],
+    "boundsWorld": [
+      [
+        7.594785690307617,
+        0.0,
+        -4.580721378326416
+      ],
+      [
+        7.850869178771973,
+        1.790527105331421,
+        -4.3534345626831055
+      ]
+    ]
+  },
+  "status": "NOT_EXECUTED",
+  "releaseApproval": false,
+  "requiredReview": [
+    "baseline/candidate foreground above-floor invariance",
+    "below-floor pillar/depth ordering",
+    "full silhouette and ground contact",
+    "support-height validity",
+    "unchanged original Pixi shadow"
+  ]
+}

@@ -1,0 +1,59 @@
+<!doctype html><html><meta charset="utf-8"><title>Isolated normal CM07 paired fixture</title><p>Test-only fresh CI context; no user's save.</p>
+<script type="module">
+import {createChampionshipStandaloneApp} from '../../src/championship/app/championshipStandaloneApp.js';
+import {FRIENDS_PLAYTEST_POLICY} from '../../src/championship/app/friendsPlaytestPolicy.js';
+import {createNativeHuntIndividual} from '../../src/championship/hunt/capture/nativeHuntIndividual.js';
+import {nativeHuntSpeciesByIndex} from '../../src/championship/hunt/capture/nativeHuntSources.js';
+import {nativeIndividualProfile} from '../../src/championship/raising/nativeIndividualProfile.js';
+import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../../src/championship/app/championshipStandaloneSave.js';
+import {getCageDefinition} from '../../src/championship/cage/cageCatalog.js';
+import {validateProductRanch} from '../../src/championship/cage/productRanchGrid.js';
+import {createProductGridArtPlan} from '../../src/championship/presentation/raisingRanchArtPlan.js';
+import {selectRanchCageArt} from '../../src/championship/presentation/ranchCageArtSelection.js';
+import {validateRuntimeMapArtBundle} from '../../src/championship/presentation/runtimeMapArtBundle.js';
+import {ranchThreeField} from '../../src/championship/presentation/ranchThreeCoordinates.js';
+import {createRanchRaisingGround} from '../../src/championship/raising/nativeRaisingRanchRing.js';
+const requireValue=(v,m)=>{if(!v)throw Error(m);};
+const json=async p=>{const r=await fetch(p);requireValue(r.ok,'HTTP_'+p);return r.json();};
+globalThis.prepareNormalContactPair=async function(species){
+ requireValue([13,25,23,36,73].includes(species),'EXPLICIT_REPRESENTATIVE_REQUIRED');
+ requireValue(localStorage.length===0,'FRESH_CONTEXT_REQUIRED');
+ const catalog=await json('../../src/data/championship/catalogs/creature-species.r1.json');
+ const {cages}=await json('../../docs/contracts/championship/raising-home-presentation.v1.json');
+ const app=createChampionshipStandaloneApp({storage:localStorage,catalog,cages,playtestPolicy:FRIENDS_PLAYTEST_POLICY,rngClock:()=>({hour:13,minute:20,second:50})});
+ try{
+  await app.newGame();requireValue(app.save().phase==='SAVED','INITIAL_SAVE_FAILED');
+  const save=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
+  save.creature.nativeProfile=nativeIndividualProfile(createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(species),rng:{next:()=>11}}));
+  save.creature.speciesId=`species-${String(species).padStart(3,'0')}`;save.creature.displayName='Controlled contact audit';
+  localStorage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(save));await app.continueGame();
+  const definition=getCageDefinition(6);requireValue(definition.moduleId==='championship:2026:cage:6','CM07_IDENTITY_DRIFT');
+  app.openShop();requireValue(app.buyShopItem(definition.shopRecordIndex).ok,'CM07_PURCHASE_FAILED');
+  // Real ordinary/protein food purchases and placement; no fabricated visual props.
+  requireValue(app.buyShopItem(0,2).ok,'FOOD_PURCHASE_FAILED');requireValue(app.buyShopItem(1,2).ok,'PROTEIN_PURCHASE_FAILED');app.leaveScreen();
+  app.openCageEdit();let frame=app.getCageEditFrame();
+  const candidate=frame.unlockedSlots.map(slotIndex=>({moduleId:definition.moduleId,slotIndex})).find(p=>validateProductRanch([...frame.placements,p],frame.unlockedSlots));
+  requireValue(candidate,'NO_LEGAL_CM07_SLOT');requireValue(app.selectCageModule(definition.moduleId).lastVerdict?.ok,'SELECT_FAILED');
+  frame=app.placeCageAt(candidate.slotIndex);requireValue(frame.lastVerdict?.ok,'PLACE_FAILED');
+  frame=app.confirmCageEdit();requireValue(frame.lastVerdict?.ok&&!frame.dirty,'CONFIRM_FAILED');app.leaveScreen();
+  requireValue(app.save().phase==='SAVED','LAYOUT_SAVE_FAILED');
+  const committed=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
+  const placed=committed.cageEdit.placements.find(p=>p.moduleId===definition.moduleId&&p.slotIndex===candidate.slotIndex);requireValue(placed?.instanceId,'CM07_INSTANCE_NOT_SAVED');
+  const manifest=validateRuntimeMapArtBundle(selectRanchCageArt(await json('../../assets/production/public-runtime/cage-final.map.v1.json')));
+  const plan=createProductGridArtPlan({manifest,placements:committed.cageEdit.placements,unlockedSlots:frame.unlockedSlots}),field=ranchThreeField(manifest,plan);
+  const tile=plan.placements.find(p=>p.fieldId==='field_cm07_01'&&p.slotIndex===placed.slotIndex&&p.fragmentOfSlot===undefined);requireValue(tile,'PRODUCTION_CM07_PLAN_MISSING');
+  const ground=createRanchRaisingGround({...committed.cageEdit,unlockedCount:frame.mainUnlockedCount,unlockedSlots:frame.unlockedSlots});requireValue(ground,'REAL_GAMEPLAY_GROUND_REQUIRED');
+  const origin=[tile.x/field.nativePixelWorldScale,tile.y/field.nativePixelWorldScale];
+  const points=[];for(let y=origin[1]+4;y<origin[1]+200;y+=8)for(let x=origin[0]+4;x<origin[0]+240;x+=8){const p=ground.cageAt(x,y);if(p?.instanceId===placed.instanceId&&ground.readTerrain(Math.trunc(x/8),Math.trunc(y/8))!==1)points.push({x,y});}
+  requireValue(points.length>0,'NO_REAL_CM07_CONTACT_POINT');
+  points.sort((a,b)=>Math.hypot(a.x-origin[0]-120,a.y-origin[1]-100)-Math.hypot(b.x-origin[0]-120,b.y-origin[1]-100));
+  const residentId=committed.creature.creatureId,point=points[0];requireValue(app.moveRaisingResidentToGround(residentId,point),'MOVE_REJECTED');
+  const foodPoints=points.filter(p=>Math.hypot(p.x-point.x,p.y-point.y)>40);const first=foodPoints[0],second=foodPoints.find(p=>Math.hypot(p.x-first.x,p.y-first.y)>40);requireValue(first&&second,'CARE_POINTS_MISSING');
+  requireValue(app.placeRaisingFood({...first,protein:false}).ok,'FOOD_PLACE_FAILED');requireValue(app.placeRaisingFood({...second,protein:true}).ok,'PROTEIN_PLACE_FAILED');
+  requireValue(app.save().phase==='SAVED','CONTACT_SAVE_FAILED');const final=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
+  requireValue(final.raising.nativeHome.cageAssignments[residentId]===placed.instanceId,'SAVED_CM07_ASSIGNMENT_MISMATCH');
+  const foods=app.getRaisingFoodFrame();requireValue(foods.some(f=>f.cageDefinitionIndex===6&&!f.protein)&&foods.some(f=>f.cageDefinitionIndex===6&&f.protein),'REAL_CARE_PROPS_MISSING');
+  return {species,residentId,placement:placed,point,foodPoints:[first,second],foods,proof:'REAL_APP_SHOP_EDIT_MOVE_FOOD_AND_PRODUCTION_PLANNER',waste:'NOT_SEEDED_NO_PUBLIC_SPAWN_API',scope:'NEW_ISOLATED_CI_CONTEXT_ONLY'};
+ }finally{await app.dispose();}
+};
+</script></html>

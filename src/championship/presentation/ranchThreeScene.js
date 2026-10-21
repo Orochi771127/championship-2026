@@ -1,3 +1,4 @@
+// LOCAL MINIMAL FLOOR-ONLY EXPERIMENT: existing Pixi shadows/occluder passes unchanged.
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { GLTFLoader } from '../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from '../../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
@@ -400,19 +401,53 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     return entry.material;
   }
+  // LOCAL EXPERIMENT ONLY. A 2.5D depth proxy, not anatomical foot inference.
+  // Upper fragments retain the RO vertical plane; submerged fragments use the
+  // same orthographic screen ray intersected with the verified support plane.
+  // Never changes native state, sprite screen coordinates, UVs or jump lift.
+  function depthEnvelopeMaterial(base) {
+    const material=base.clone();
+    const uniforms={
+      uRanchFloor:{value:0},
+      uRanchDirection:{value:direction},
+      uRanchViewProjection:{value:new THREE.Matrix4()}
+    };
+    material.userData.depthEnvelopeUniforms=uniforms;
+    material.onBeforeCompile=shader=>{
+      Object.assign(shader.uniforms,uniforms);
+      shader.vertexShader='varying vec3 vRanchWorldPosition;\n'+shader.vertexShader;
+      shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',
+        '#include <project_vertex>\nvRanchWorldPosition=(modelMatrix*vec4(transformed,1.0)).xyz;');
+      shader.fragmentShader='varying vec3 vRanchWorldPosition;\nuniform float uRanchFloor;\nuniform vec3 uRanchDirection;\nuniform mat4 uRanchViewProjection;\n'+shader.fragmentShader;
+      shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`#include <opaque_fragment>
+        // Preserve the rasterizer's exact original depth above the support.
+        gl_FragDepth=gl_FragCoord.z;
+        if(vRanchWorldPosition.y<uRanchFloor){
+          float clearance=(uRanchFloor-vRanchWorldPosition.y)/uRanchDirection.y;
+          vec3 proxy=vRanchWorldPosition+uRanchDirection*clearance;
+          vec4 clip=uRanchViewProjection*vec4(proxy,1.0);
+          gl_FragDepth=clamp(clip.z/clip.w*0.5+0.5,0.0,1.0);
+        }`);
+    };
+    material.customProgramCacheKey=()=> 'ranch-local-floor-envelope-v1';
+    return material;
+  }
   function syncSprite(key, sprite, root, bounds, pixelScale) {
     if(!sprite || sprite.destroyed || !sprite.visible || !root.visible)return;
     const material=materialFor(sprite.texture);if(!material)return;
     let item=sprites.get(key);
     if(!item){
-      const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),material);
+      const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),depthEnvelopeMaterial(material));
       mesh.quaternion.copy(rotY);
       scene.add(mesh);
       item={mesh,sprite};
       sprites.set(key,item);
     }
-    item.seen=true;item.mesh.visible=true;item.mesh.material=material;item.sprite=sprite;
-    const box=ranchSpriteScreenQuad(sprite);
+    item.seen=true;item.mesh.visible=true;item.sprite=sprite;
+    if(item.mesh.material.map!==material.map){
+      item.mesh.material.dispose();item.mesh.material=depthEnvelopeMaterial(material);
+    }
+    const box=ranchSpriteScreenQuad(sprite);item.screenQuad={...box};
     const foot=root.threeGroundScreen??root;
     const groundHeight=root.threeGroundHeight??0;
     const ground=ranchNativeToWorld((foot.x-bounds.x)/pixelScale,(foot.y-bounds.y)/pixelScale,groundHeight);
@@ -426,6 +461,14 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     item.mesh.scale.set(worldW,worldH,1);
     item.mesh.position.set(ground.x+right.x*dx, y_bottom+worldH/2, ground.z+right.z*dx);
     item.mesh.quaternion.copy(rotY);
+    const uniforms=item.mesh.material.userData.depthEnvelopeUniforms;
+    // Explicit override is a fixture/review hook, not a guessed model maxY.
+    const supportHeight=root.threeVerifiedSupportHeight??groundHeight;
+    uniforms.uRanchFloor.value=supportHeight+.015;
+    uniforms.uRanchViewProjection.value.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);
+    item.envelopeNativeExtent=Math.max(0,(supportHeight+.015-y_bottom)*16*Math.cos(RANCH_ELEVATION));
+    item.supportStatus='UNCHANGED_NATIVE_ORIGIN';
+    item.surfaceStatus=root.threeVerifiedSupportHeight!==undefined?'EXPLICIT_VERIFIED_HEIGHT':'EXISTING_WALK_SURFACE_ONLY';
 
     const projected=item.mesh.position.clone().project(camera);
     item.projectionError=Math.hypot((projected.x+1)*width/2-box.x-box.width/2,(1-projected.y)*height/2-box.y-box.height/2);
@@ -434,6 +477,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     item.mesh.geometry.attributes.uv.array.set(values);item.mesh.geometry.attributes.uv.needsUpdate=true;
     sprite.renderable=false;
   }
+
   function render({bounds,actors,food,waste,covered=false,deltaMS=0}) {
     if(disposed||lost){for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
     if(document.hidden)return true;
@@ -481,14 +525,16 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     for(const [id,root] of food??[])syncSprite('food:'+id,root.children?.[1],root,bounds,pixelScale);
     for(const [id,sprite] of waste??[])syncSprite('waste:'+id,sprite,sprite,bounds,pixelScale);
-    for(const [key,item] of sprites){if(!item.seen){item.mesh.visible=false;if(item.sprite.destroyed){scene.remove(item.mesh);item.mesh.geometry.dispose();sprites.delete(key);}else item.sprite.renderable=true;}}
-    const usedMaterials=new Set([...sprites.values()].map(item=>item.mesh.material));
-    for(const [source,entry] of textures)if(!usedMaterials.has(entry.material)){
+    for(const [key,item] of sprites){if(!item.seen){item.mesh.visible=false;if(item.sprite.destroyed){scene.remove(item.mesh);item.mesh.geometry.dispose();item.mesh.material.dispose();sprites.delete(key);}else item.sprite.renderable=true;}}
+    const usedMaps=new Set([...sprites.values()].map(item=>item.mesh.material.map));
+    for(const [source,entry] of textures)if(!usedMaps.has(entry.texture)){
       entry.texture.dispose();entry.material.dispose();textures.delete(source);
     }
     renderer.render(scene,camera);frames++;lastRenderMs=performance.now()-start;
     canvas.dataset.frames=String(frames);canvas.dataset.drawCalls=String(renderer.info.render.calls);
     canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.actors=String([...sprites.values()].filter(i=>i.mesh.visible).length);
+    canvas.dataset.depthEnvelopeMaxNative=String(Math.max(0,...[...sprites.values()].filter(i=>i.mesh.visible).map(i=>i.envelopeNativeExtent??0)));
+    canvas.dataset.depthEnvelopeUnverifiedSurfaces=String([...sprites.values()].filter(i=>i.mesh.visible&&i.surfaceStatus!=='EXPLICIT_VERIFIED_HEIGHT').length);
     canvas.dataset.actorProjectionError=String(Math.max(0,...[...sprites.values()].filter(i=>i.mesh.visible).map(i=>i.projectionError??0)));
     canvas.dataset.animatedInstances=String(instances.filter(i=>i.mixer&&i.object.visible).length);
     canvas.dataset.textureCount=String(renderer.info.memory.textures);
@@ -501,7 +547,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     for(const ps of dynamicParticles)ps.dispose();dynamicParticles.length=0;
     for(const g of dynamicMachines){g.geometry.dispose();g.material.dispose();}dynamicMachines.length=0;
     for(const b of dynamicBeacons){b.geometry.dispose();b.material.dispose();}dynamicBeacons.length=0;
-    for(const {mesh,sprite} of sprites.values()){if(!sprite.destroyed)sprite.renderable=true;mesh.geometry.dispose();}
+    for(const {mesh,sprite} of sprites.values()){if(!sprite.destroyed)sprite.renderable=true;mesh.geometry.dispose();mesh.material.dispose();}
     for(const {texture,material} of textures.values()){texture.dispose();material.dispose();}
     for(const {object,mixer} of instances)if(mixer){mixer.stopAllAction();mixer.uncacheRoot(object);}
     const geometries=new Set(),materials=new Set(),maps=new Set();
@@ -528,5 +574,6 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     return {x:best.x,y:best.y};
   }
-  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections.length,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost})};
+  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible).map(([key,item])=>({key,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections.length,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost})};
 }
+

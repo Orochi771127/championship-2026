@@ -1,0 +1,21 @@
+<!doctype html><html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><base href="/"><style>html,body{margin:0;background:#18212d}#fixture{position:relative}</style><div id="fixture"></div><script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script><script type="module">
+import * as PIXI from '/node_modules/pixi.js/dist/pixi.mjs';
+import {createRanchThreeScene} from '/src/championship/presentation/ranchThreeScene.js';
+import {createProductGridArtPlan} from '/src/championship/presentation/raisingRanchArtPlan.js';
+import {selectRanchCageArt} from '/src/championship/presentation/ranchCageArtSelection.js';
+import {validateRuntimeMapArtBundle} from '/src/championship/presentation/runtimeMapArtBundle.js';
+import {ranchThreeField} from '/src/championship/presentation/ranchThreeCoordinates.js';
+import {getCageDefinition} from '/src/championship/cage/cageCatalog.js';
+import {validateProductRanch} from '/src/championship/cage/productRanchGrid.js';
+import {ranchSharedBoundaries} from '/src/championship/cage/ranchConnections.js';
+const app=new PIXI.Application();await app.init({width:900,height:700,backgroundAlpha:0,autoStart:false});document.querySelector('#fixture').append(app.canvas);let scene,field;
+const check=(x,s)=>{if(!x)throw Error(s)};
+globalThis.seamAudit={async init(plan){
+ check(plan.placements.every(p=>p.moduleId===getCageDefinition(p.slotIndex===0?35:6).moduleId),'MODULE_BINDING');check(validateProductRanch(plan.placements),'LAYOUT');
+ const r=await fetch('/assets/production/public-runtime/cage-final.map.v1.json');check(r.ok,'MANIFEST_HTTP');const bytes=await r.arrayBuffer();const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');check(hash==='bdd39492c2566a7bb00181d44eb3a41af23c925c2d376735edf25c7346fc37c9','MANIFEST_HASH');
+ const manifest=validateRuntimeMapArtBundle(selectRanchCageArt(JSON.parse(new TextDecoder().decode(bytes))));const art=createProductGridArtPlan({manifest,placements:plan.placements});field=ranchThreeField(manifest,art);
+ const tagged=art.placements.map((p,ownerIndex)=>({...p,ownerIndex}));check(JSON.stringify(tagged)===JSON.stringify(plan.taggedScenePlacements),'EXACT_PLANNER_DRIFT');const edges=ranchSharedBoundaries(tagged).filter(b=>b.compatible&&plan.sharedBoundaries.some(e=>e.id===b.id));check(edges.length===3,'EMPTY_OR_CHANGED_SEAMS');
+ const modelR=await fetch(plan.model.url);check(modelR.ok,'MODEL_HTTP');const modelBytes=await modelR.arrayBuffer();const mh=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',modelBytes)),v=>v.toString(16).padStart(2,'0')).join('');check(mh===plan.model.sha256,'MODEL_HASH');
+ scene=await createRanchThreeScene({stage:{app},field,placements:art.placements,cagePlacements:plan.placements,connections:[]});check(typeof scene.seamAuditSnapshot==='function','TEST_OVERLAY_REQUIRED');return {snapshot:scene.seamAuditSnapshot(),manifestHash:hash,modelHash:mh,sharedEdges:edges};
+},render(view,zoom=1){const scale=zoom/field.nativePixelWorldScale,bounds={x:app.screen.width/2-view.centerNativeXY[0]*zoom,y:app.screen.height/2-view.centerNativeXY[1]*zoom,scale};app.render();scene.render({bounds,actors:new Map(),food:new Map(),waste:new Map(),deltaMS:0});app.render();return {snapshot:scene.seamAuditSnapshot(),diagnostics:scene.getDiagnostics(),bounds,view,zoom};},dispose(){scene?.dispose();app.destroy(true)}};
+</script></html>

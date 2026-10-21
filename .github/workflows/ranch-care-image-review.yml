@@ -1,0 +1,56 @@
+name: Ranch care image identity workaround diagnostic
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-care-image-review.yml'
+      - 'tests/ranch-care-image-experiment/**'
+      - 'tests/ranch-care-image-comparison.mjs'
+      - 'tests/fixtures/ranch-care-image-comparison.html'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify image ownership and disposal regressions
+        run: node --test tests/ranch-care-image-experiment/test-care-image-scope.mjs
+      - name: Preserve existing build validation
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Compare exact sixteen care image identities across two load cycles
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/care-image/${{ matrix.engine }}
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/care-image/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-care-image-comparison.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-care-image-comparison.html > /dev/null
+          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-care-image-comparison.mjs http://127.0.0.1:8765/ .tmp/care-image/${{ matrix.engine }}/cases tests/ranch-care-image-experiment/candidate/src/championship/presentation/intRh2/careImageTextureScope.js
+      - name: Preserve exact decoded image identities and lifecycle evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-care-image-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/care-image/
+          if-no-files-found: error
+          retention-days: 14

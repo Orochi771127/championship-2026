@@ -1,0 +1,858 @@
+{
+  "baselineRevision": "4f64421314f0d0f5d0c04b916d30e821587c1a6a",
+  "models": [
+    {
+      "fieldId": "field_cm02_01",
+      "sha256": "801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e"
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "sha256": "b5033322edb9e7905ff6d604b44ecc239b8f6cd89f817d51058c1835cc6db0e4"
+    },
+    {
+      "fieldId": "field_cm19_01",
+      "sha256": "7192630e17f179fbf729919aff920ed20d64bc172581afcdddbcf5ba89e30dac"
+    },
+    {
+      "fieldId": "field_cm21_01",
+      "sha256": "4f4163c0c0a552b211df77bdeae30e96b708ca12431e50892ae2ae90608d891a"
+    },
+    {
+      "fieldId": "field_cm35_01",
+      "sha256": "61ff3a730a23677b3da58c71734535ce3e9028dda4830cf7e5d997411e1b14a7"
+    },
+    {
+      "fieldId": "field_cm39_01",
+      "sha256": "272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0"
+    }
+  ],
+  "probes": [
+    {
+      "id": "field_cm02_01-low-overlay-interior-01",
+      "fieldId": "field_cm02_01",
+      "kind": "interior",
+      "pointLocalNative": [
+        112.9923976398997,
+        49.65467032335772
+      ],
+      "supportEvidence": {
+        "modelSha256": "801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e",
+        "sourceTriangleIndex": 79301,
+        "sourceTriangleWorldXYZ": [
+          [
+            6.487890243530273,
+            0.01627787947654724,
+            -1.9973912239074707
+          ],
+          [
+            9.476969718933105,
+            0.01627787947654724,
+            -0.953035831451416
+          ],
+          [
+            7.75004768371582,
+            0.01627787947654724,
+            -3.2322089672088623
+          ]
+        ],
+        "sourceTriangleNativeGroundXY": [
+          [
+            96.00000105442828,
+            40.034253503669056
+          ],
+          [
+            118.00204243984358,
+            75.99363202369028
+          ],
+          [
+            124.25005040959849,
+            40.27799575836966
+          ]
+        ],
+        "overlayHeightWorldY": 0.01627787947654724,
+        "overlayUnionBoundaryClearanceNative": 9.598438446640364,
+        "projectedRaisedTriangleHitsAtPoint": 0,
+        "selection": "triangle incenter chosen for no raised projected triangles then maximal overlay boundary clearance",
+        "geometryClassification": "ENTIRE_LOW_COMPONENT_TOP_VERIFIED",
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "notGlobalSupportOverride": true
+      }
+    },
+    {
+      "id": "field_cm02_01-low-overlay-boundary-minus",
+      "fieldId": "field_cm02_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        108.56753401541437,
+        40.55050313620622
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            121.13635992713904,
+            40.066753604604536
+          ],
+          [
+            96.00000105442828,
+            40.034253503669056
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.01627787947654724,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm02_01-low-overlay-boundary-center",
+      "fieldId": "field_cm02_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        108.56818049078366,
+        40.050503554136796
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            121.13635992713904,
+            40.066753604604536
+          ],
+          [
+            96.00000105442828,
+            40.034253503669056
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.01627787947654724,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm02_01-low-overlay-boundary-plus",
+      "fieldId": "field_cm02_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        108.56882696615295,
+        39.550503972067375
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            121.13635992713904,
+            40.066753604604536
+          ],
+          [
+            96.00000105442828,
+            40.034253503669056
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.01627787947654724,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm09_01-low-overlay-interior-01",
+      "fieldId": "field_cm09_01",
+      "kind": "interior",
+      "pointLocalNative": [
+        192.16087701467492,
+        147.11232849860983
+      ],
+      "supportEvidence": {
+        "modelSha256": "b5033322edb9e7905ff6d604b44ecc239b8f6cd89f817d51058c1835cc6db0e4",
+        "sourceTriangleIndex": 3984,
+        "sourceTriangleWorldXYZ": [
+          [
+            13.48446273803711,
+            0.016480714082717896,
+            -3.564098358154297
+          ],
+          [
+            16.184276580810547,
+            0.016480714082717896,
+            3.4563560485839844
+          ],
+          [
+            20.414806365966797,
+            0.016480714082717896,
+            -0.7285318374633789
+          ]
+        ],
+        "sourceTriangleNativeGroundXY": [
+          [
+            192.88245056944163,
+            88.44326225158774
+          ],
+          [
+            143.99998269985429,
+            175.1026026777004
+          ],
+          [
+            239.20956512905713,
+            175.50951499442272
+          ]
+        ],
+        "overlayHeightWorldY": 0.016480714082717896,
+        "overlayUnionBoundaryClearanceNative": 46.43660788011462,
+        "projectedRaisedTriangleHitsAtPoint": 0,
+        "selection": "triangle incenter chosen for no raised projected triangles then maximal overlay boundary clearance",
+        "geometryClassification": "ENTIRE_LOW_COMPONENT_TOP_VERIFIED",
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "notGlobalSupportOverride": true
+      }
+    },
+    {
+      "id": "field_cm09_01-low-overlay-boundary-minus",
+      "fieldId": "field_cm09_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        49.29703046495487,
+        143.55750462866763
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            48.8036498911241,
+            111.6052785939117
+          ],
+          [
+            48.79041106024465,
+            175.5095234967382
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.016480714082717896,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm09_01-low-overlay-boundary-center",
+      "fieldId": "field_cm09_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        48.79703047568438,
+        143.55740104532495
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            48.8036498911241,
+            111.6052785939117
+          ],
+          [
+            48.79041106024465,
+            175.5095234967382
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.016480714082717896,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm09_01-low-overlay-boundary-plus",
+      "fieldId": "field_cm09_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        48.29703048641389,
+        143.55729746198227
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            48.8036498911241,
+            111.6052785939117
+          ],
+          [
+            48.79041106024465,
+            175.5095234967382
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.016480714082717896,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm19_01-low-overlay-interior-01",
+      "fieldId": "field_cm19_01",
+      "kind": "interior",
+      "pointLocalNative": [
+        242.88972761037584,
+        50.759323520723
+      ],
+      "supportEvidence": {
+        "modelSha256": "7192630e17f179fbf729919aff920ed20d64bc172581afcdddbcf5ba89e30dac",
+        "sourceTriangleIndex": 26515,
+        "sourceTriangleWorldXYZ": [
+          [
+            13.82463264465332,
+            0.016068875789642334,
+            -10.571310043334961
+          ],
+          [
+            10.03209400177002,
+            0.016068875789642334,
+            -6.938469886779785
+          ],
+          [
+            16.20880126953125,
+            0.016068875789642334,
+            -5.888480186462402
+          ]
+        ],
+        "sourceTriangleNativeGroundXY": [
+          [
+            276.00858412983814,
+            29.004424938352543
+          ],
+          [
+            192.00001289844977,
+            27.580661196756303
+          ],
+          [
+            250.0022010131337,
+            92.00900583061349
+          ]
+        ],
+        "overlayHeightWorldY": 0.016068875789642334,
+        "overlayUnionBoundaryClearanceNative": 29.89674669055004,
+        "projectedRaisedTriangleHitsAtPoint": 0,
+        "selection": "triangle incenter chosen for no raised projected triangles then maximal overlay boundary clearance",
+        "geometryClassification": "ENTIRE_LOW_COMPONENT_TOP_VERIFIED",
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "notGlobalSupportOverride": true
+      }
+    },
+    {
+      "id": "field_cm19_01-low-overlay-boundary-minus",
+      "fieldId": "field_cm19_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        230.98781756484502,
+        21.000827462278554
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            248.01047447372494,
+            20.99992002646061
+          ],
+          [
+            213.99447998942549,
+            20.00216480216253
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.016068875789642334,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm19_01-low-overlay-boundary-center",
+      "fieldId": "field_cm19_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        231.0024772315752,
+        20.50104241431157
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            248.01047447372494,
+            20.99992002646061
+          ],
+          [
+            213.99447998942549,
+            20.00216480216253
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.016068875789642334,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm19_01-low-overlay-boundary-plus",
+      "fieldId": "field_cm19_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        231.01713689830538,
+        20.001257366344586
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            248.01047447372494,
+            20.99992002646061
+          ],
+          [
+            213.99447998942549,
+            20.00216480216253
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.016068875789642334,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm21_01-low-overlay-interior-01",
+      "fieldId": "field_cm21_01",
+      "kind": "interior",
+      "pointLocalNative": [
+        143.73658215136658,
+        147.04203342549067
+      ],
+      "supportEvidence": {
+        "modelSha256": "4f4163c0c0a552b211df77bdeae30e96b708ca12431e50892ae2ae90608d891a",
+        "sourceTriangleIndex": 39072,
+        "sourceTriangleWorldXYZ": [
+          [
+            11.299186706542969,
+            0.01648092269897461,
+            -1.4287357330322266
+          ],
+          [
+            14.063365936279297,
+            0.01648092269897461,
+            5.577675819396973
+          ],
+          [
+            18.292724609375,
+            0.01648092269897461,
+            1.3927879333496094
+          ]
+        ],
+        "sourceTriangleNativeGroundXY": [
+          [
+            144.00000427904072,
+            87.99826806381505
+          ],
+          [
+            96.00462439512253,
+            175.1062501710428
+          ],
+          [
+            191.2009572038527,
+            175.50272164435145
+          ]
+        ],
+        "overlayHeightWorldY": 0.01648092269897461,
+        "overlayUnionBoundaryClearanceNative": 46.45251907605888,
+        "projectedRaisedTriangleHitsAtPoint": 0,
+        "selection": "triangle incenter chosen for no raised projected triangles then maximal overlay boundary clearance",
+        "geometryClassification": "ENTIRE_LOW_COMPONENT_TOP_VERIFIED",
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "notGlobalSupportOverride": true
+      }
+    },
+    {
+      "id": "field_cm21_01-low-overlay-boundary-minus",
+      "fieldId": "field_cm21_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        49.297041254548084,
+        56.44251350234022
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            48.79042184983787,
+            24.490503136612688
+          ],
+          [
+            48.80366068071732,
+            88.39473103480822
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.01648092269897461,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm21_01-low-overlay-boundary-center",
+      "fieldId": "field_cm21_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        48.7970412652776,
+        56.44261708571045
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            48.79042184983787,
+            24.490503136612688
+          ],
+          [
+            48.80366068071732,
+            88.39473103480822
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.01648092269897461,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm21_01-low-overlay-boundary-plus",
+      "fieldId": "field_cm21_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        48.297041276007114,
+        56.442720669080686
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            48.79042184983787,
+            24.490503136612688
+          ],
+          [
+            48.80366068071732,
+            88.39473103480822
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.01648092269897461,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm35_01-low-overlay-interior-01",
+      "fieldId": "field_cm35_01",
+      "kind": "interior",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "supportEvidence": {
+        "modelSha256": "61ff3a730a23677b3da58c71734535ce3e9028dda4830cf7e5d997411e1b14a7",
+        "sourceTriangleIndex": 4981,
+        "sourceTriangleWorldXYZ": [
+          [
+            2.17116117477417,
+            0.015835285186767578,
+            -2.071479558944702
+          ],
+          [
+            4.943119049072266,
+            0.015835285186767578,
+            4.87235164642334
+          ],
+          [
+            9.114992141723633,
+            0.015835285186767578,
+            0.7004780769348145
+          ]
+        ],
+        "sourceTriangleNativeGroundXY": [
+          [
+            48.00000052721414,
+            0.8886938980130267
+          ],
+          [
+            0.8006417648002282,
+            87.50810107387879
+          ],
+          [
+            95.19935928962805,
+            87.50809682272106
+          ]
+        ],
+        "overlayHeightWorldY": 0.015835285186767578,
+        "overlayUnionBoundaryClearanceNative": 46.18311348534222,
+        "projectedRaisedTriangleHitsAtPoint": 0,
+        "selection": "triangle incenter chosen for no raised projected triangles then maximal overlay boundary clearance",
+        "geometryClassification": "ENTIRE_LOW_COMPONENT_TOP_VERIFIED",
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "notGlobalSupportOverride": true
+      }
+    },
+    {
+      "id": "field_cm35_01-low-overlay-boundary-minus",
+      "fieldId": "field_cm35_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        1.30064311349938,
+        56.00000675604385
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            0.8006444621985329,
+            24.49191239540407
+          ],
+          [
+            0.8006417648002282,
+            87.50810107387879
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.015835285186767578,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm35_01-low-overlay-boundary-center",
+      "fieldId": "field_cm35_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        0.8006431134993806,
+        56.00000673464143
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            0.8006444621985329,
+            24.49191239540407
+          ],
+          [
+            0.8006417648002282,
+            87.50810107387879
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.015835285186767578,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm35_01-low-overlay-boundary-plus",
+      "fieldId": "field_cm35_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        0.300643113499381,
+        56.00000671323901
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            0.8006444621985329,
+            24.49191239540407
+          ],
+          [
+            0.8006417648002282,
+            87.50810107387879
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.015835285186767578,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm39_01-low-overlay-interior-01",
+      "fieldId": "field_cm39_01",
+      "kind": "interior",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "supportEvidence": {
+        "modelSha256": "272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0",
+        "sourceTriangleIndex": 3838,
+        "sourceTriangleWorldXYZ": [
+          [
+            2.17116117477417,
+            0.015835285186767578,
+            -2.071479558944702
+          ],
+          [
+            4.943119049072266,
+            0.015835285186767578,
+            4.87235164642334
+          ],
+          [
+            9.114992141723633,
+            0.015835285186767578,
+            0.7004780769348145
+          ]
+        ],
+        "sourceTriangleNativeGroundXY": [
+          [
+            48.00000052721414,
+            0.8886938980130267
+          ],
+          [
+            0.8006417648002282,
+            87.50810107387879
+          ],
+          [
+            95.19935928962805,
+            87.50809682272106
+          ]
+        ],
+        "overlayHeightWorldY": 0.015835285186767578,
+        "overlayUnionBoundaryClearanceNative": 46.18311348534222,
+        "projectedRaisedTriangleHitsAtPoint": 0,
+        "selection": "triangle incenter chosen for no raised projected triangles then maximal overlay boundary clearance",
+        "geometryClassification": "ENTIRE_LOW_COMPONENT_TOP_VERIFIED",
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "notGlobalSupportOverride": true
+      }
+    },
+    {
+      "id": "field_cm39_01-low-overlay-boundary-minus",
+      "fieldId": "field_cm39_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        1.30064311349938,
+        56.00000675604385
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            0.8006444621985329,
+            24.49191239540407
+          ],
+          [
+            0.8006417648002282,
+            87.50810107387879
+          ]
+        ],
+        "pointInVerifiedOverlay": true,
+        "overlayHeightWorldY": 0.015835285186767578,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm39_01-low-overlay-boundary-center",
+      "fieldId": "field_cm39_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        0.8006431134993806,
+        56.00000673464143
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            0.8006444621985329,
+            24.49191239540407
+          ],
+          [
+            0.8006417648002282,
+            87.50810107387879
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.015835285186767578,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    },
+    {
+      "id": "field_cm39_01-low-overlay-boundary-plus",
+      "fieldId": "field_cm39_01",
+      "kind": "boundary",
+      "pointLocalNative": [
+        0.300643113499381,
+        56.00000671323901
+      ],
+      "supportEvidence": {
+        "boundaryNative": [
+          [
+            0.8006444621985329,
+            24.49191239540407
+          ],
+          [
+            0.8006417648002282,
+            87.50810107387879
+          ]
+        ],
+        "pointInVerifiedOverlay": false,
+        "overlayHeightWorldY": 0.015835285186767578,
+        "outsideHeightWorldY": null,
+        "supportSemanticStatus": "UNKNOWN_GAMEPLAY_SUPPORT_AUTHORITY_NOT_APPROVED",
+        "unknownBlocksAcceptance": true,
+        "navigationReachabilityVerified": false,
+        "expectedOutsideHeightScope": "NOT_ASSUMED_ZERO"
+      }
+    }
+  ],
+  "supportSemantics": {
+    "status": "GEOMETRY_VERIFIED_GAMEPLAY_SUPPORT_UNKNOWN",
+    "unknownBlocksAcceptance": true,
+    "scope": "Diagnostic original runtime support; do not inject height override. Known exact low-component tops, not universal walk permission or ground classification."
+  }
+}

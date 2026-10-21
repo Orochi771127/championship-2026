@@ -1,0 +1,62 @@
+name: Ranch natural waste texture identity diagnostic
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-waste-texture-review.yml'
+      - 'tests/ranch-waste-texture-identity.mjs'
+      - 'tests/fixtures/ranch-normal-support-v2.html'
+      - 'tests/normal-support-candidate/**'
+      - 'tests/ranch-waste-probe/**'
+      - 'tests/ranch-floor-data/admitted-probes-v2.json'
+      - 'tests/normal-lifecycle/**'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Preserve unchanged production build
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Observe actual natural waste sprite, crop and sampler identity
+        shell: bash
+        env:
+          BROWSER_ENGINE: ${{ matrix.engine }}
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/normal-support-candidate .tmp/waste-probe .tmp/waste-texture/${{ matrix.engine }}
+          cp -R tests/normal-support-candidate/. .tmp/normal-support-candidate/
+          node tests/ranch-waste-probe/inject-presenter-care-identity.mjs --input .tmp/normal-support-candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/waste-probe/presenter.mjs --expected-sha 38f81afdeee79d0d6205c5769225b90ae4f1bcd3b074cee22d13561606f310f9
+          node tests/ranch-waste-probe/inject-scene-texture-identity.mjs .tmp/normal-support-candidate/src/championship/presentation/ranchThreeScene.js .tmp/waste-probe/scene.mjs
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/waste-texture/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null
+          node tests/ranch-waste-texture-identity.mjs http://127.0.0.1:8765/ .tmp/waste-texture/${{ matrix.engine }}/cases .tmp/normal-support-candidate .tmp/waste-probe/presenter.mjs tests/ranch-floor-data/admitted-probes-v2.json .tmp/waste-probe/scene.mjs
+      - name: Retain actual sprite textures and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-waste-texture-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/waste-texture/
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,3446 @@
+import {readRaisingGroundSupport} from './raisingGroundSupport.js';
+import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
+import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
+import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
+import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
+import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {settleRanchDiscoveries,removeCollectedDiscoveries,RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
+import { panHuntPresentationCamera } from "../hunt/huntPresentationBinding.js";
+import {tutorialHuntStep,TUTORIAL_GATE} from './interactiveTutorialHuntSteps.js';
+import {tutorialBattleStep} from './interactiveTutorialBattleSteps.js';
+// Championship Modern -- standalone application core.
+//
+// Owns the standalone game lifecycle: New Game, Continue, interaction, save,
+// and restore-after-reload. Deliberately DOM-free so the whole loop is testable
+// without a browser; main.js is the thin browser shell on top of it.
+//
+// The only durable write is the standalone Championship 2026 save key.
+
+import { createChampionshipR2Session } from "../r2/createChampionshipR2Session.js";
+import { createChampionshipSavePortR2 } from "../kernel/ChampionshipSavePortR2.js";
+import {
+  deserializeRaisingHomeSaveR2,
+  restoreRaisingHomeSnapshotR2,
+  stageRaisingResidentRelease
+} from "../raising/raisingHomePersistenceR2.js";
+import { RAISING_HOME_COMMANDS } from "../raising/raisingHomeDefinition.js";
+import {
+  assignCreatureToCage,
+  createRaisingProductionState,
+  normalizeRaisingProductionState,
+  recordCareInteraction,
+  recordCapturedCardCreature,
+  recordNativeGiftCreature,
+  releaseRaisingMembership,
+  normalizeProductGivenName,
+  renameEnclosedCreature
+} from "./championshipRaisingProduction.js";
+import { deserializeChampionshipModernSave } from "./championshipStandaloneSave.js";
+import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
+import {normalizeNativeIndividualProfile} from '../raising/nativeIndividualProfile.js';
+import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
+import { CHAMPIONSHIP_SCREENS, createChampionshipScreenStack } from "./championshipScreenStack.js";
+import { getChampionshipGate, listChampionshipGates } from "../gate/gateCatalog.js";
+import { gateAdmission, isGateUnlocked } from "../gate/gateAdmission.js";
+import { createHuntWorld } from "../hunt/huntWorld.js";
+import { applyNativeHuntReturn } from "../hunt/capture/nativeHuntHistory.js";
+import { nativeHuntCatalogForBiome, nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
+import { nativeIndividualProfile } from "../raising/nativeIndividualProfile.js";
+import { createNativeRaisingStarter } from "../raising/nativeRaisingStarter.js";
+import {createNativeHuntIndividual} from '../hunt/capture/nativeHuntIndividual.js';
+import {createNativeRaisingMessages,normalizeNativeRaisingMessages,selectNativeMorningMessages,enqueueNativeRaisingMessage,
+  ageNativeRaisingMessages,openNativeRaisingMessage,closeNativeRaisingMessage,nativeRaisingMessageEffect} from '../raising/nativeRaisingMessages.js';
+import {normalizeNativeOpening} from './nativeOpeningState.js';
+import {deepFreeze} from '../contracts/championshipContracts.js';
+import {interactiveTutorialInProgress, sameInteractiveTutorialCheckpoint} from './interactiveTutorialCheckpoint.js';
+import {initializeNativeTutorialRaisingActor,requestNativeTutorialHatch,stepNativeTutorialRaisingActor,restoreNativeTutorialHatchedActor,tutorialRaisingIdle,tutorialRaisingPosition,tutorialRaisingCondition,tutorialRaisingSleep,tutorialRaisingFeed,tutorialRaisingTreat,tutorialRaisingCarry,tutorialRaisingRelease,tutorialRaisingTraining,tutorialRaisingStatus} from '../raising/nativeTutorialRaisingActor.js';
+import {tutorialRaisingStep,TUTORIAL_RAISING_STEPS} from './interactiveTutorialRaisingSteps.js';
+import {TUTORIAL_STEP_COUNT,createTutorialCursor, tutorialFinished, tutorialStepAt, advanceTutorial as advanceTutorialStep,
+  skipTutorial as skipTutorialCursor} from './nativeTutorialProgression.js';
+import {tutorialLine, tutorialPrompt} from '../text/tutorialMessages.zhHant.js';
+import { uiText } from '../text/uiText.js';
+import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
+import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,cancelNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
+import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
+import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage} from "../raising/nativeRaisingActor.js";
+// The ranch ground for either layout: the original board, or (expansion
+// prototype) the same ring continued into its annex.
+import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnPosition as nativeRaisingSpawnPosition,
+  ranchRaisingEntryPosition as nativeRaisingEntryPosition,alignRanchRaisingPosition} from "../raising/nativeRaisingRanchRing.js";
+import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast,reconcileNativeFoodReservations} from "../raising/nativeRaisingFood.js";
+import {separateNativeRaisingGroundActors} from '../raising/nativeGroundSpacing.js';
+import {stepRanchConveyor} from '../raising/ranchConveyor.js';
+import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raising/nativeRaisingHomeState.js";
+import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
+import {projectNativeRaisingCalendar} from '../raising/nativeRaisingCalendar.js';
+import {createNativeTitleProgress,emptyNativeTitleProgress,normalizeNativeTitleProgress,
+  toggleNativeTitleRegistration,toggleNativeChampionshipRegistration,resolveNativeTitleResult,applyNativeBattleRecord} from '../battle/nativeTitleProgression.js';
+import {settleNativeRaisingCage,nativeCageConditionEffects} from '../raising/nativeRaisingOvernight.js';
+import { maxGFromInventory } from "../hunt/capture/memoryCardCapacity.js";
+import { createHuntInventory } from "../hunt/loadout/huntInventory.js";
+import { createHuntLoadout } from "../hunt/loadout/huntLoadoutRuntime.js";
+import { HUNT_STARTING_INVENTORY } from "../hunt/loadout/huntEquipmentCatalog.js";
+import {
+  applyMappedHuntInventoryFromShop,
+  createShopRuntime
+} from "../shop/shopRuntime.js";
+import { projectDatabase } from "../database/databaseRuntime.js";
+import { getDatabaseSlot } from "../database/databaseCatalog.js";
+import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
+import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
+import {getShopRecord,BITS_WALLET_CAP} from '../shop/shopCatalog.js';
+import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
+import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
+import { validateRanchLayout } from '../cage/ranchExpansion.js';
+import { getMatchRecord, matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
+import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
+import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX, createNativeChampionshipRun,
+  normalizeNativeChampionshipRun, recordNativeChampionshipRound, nativeChampionshipContinues,
+  nativeChampionshipFinalRound, nativeChampionshipPayable, selectNativeChampionshipOpponent } from "../battle/nativeChampionshipRounds.js";
+import {generateNativeFreeBattleMenu,listNativeFreeBattleMatches,FREE_BATTLE_ARENAS} from '../battle/nativeFreeBattle.js';
+import { DAY_END_MINUTES, projectWorldClockDisplay } from "../time/championshipWorldClock.js";
+import { NATIVE_CLOCK_CADENCE } from "./championshipClockDriver.js";
+import { createClockChannelRng, restoreChannelRng } from "../battle/battleRngChannel.js";
+import { createNativeHuntPersistentState, projectNativeHuntPersistentSave,
+  restoreNativeHuntPersistentSave } from "../hunt/capture/nativeHuntPersistentState.js";
+import {
+  createRaisingInstanceIdentityState,
+  normalizeRaisingInstanceIdentityState,
+  listRaisingInstances,
+  resolveRaisingInstance,
+  allocateRaisingInstanceIdentity
+} from "../raising/raisingInstanceIdentity.js";
+import {
+  createBattleEconomyState,
+  normalizeBattleEconomyState,
+  nextBattleAttemptId,
+  beginBattleAttempt,
+  settleBattleAttempt,
+  abandonBattleAttempt
+} from "../battle/battleEconomyTransaction.js";
+
+export const STANDALONE_SESSION_ID = "championship-modern-home";
+export const STANDALONE_SLOT_ID = "raising-home";
+
+// Copy for the standalone build. The R2 defaults say "in memory ... this page
+// session", which is true of the research port and false here: this save
+// survives a reload.
+export const STANDALONE_SAVE_PHASE_COPY = Object.freeze({
+  DIRTY: "Unsaved changes. Save to keep them after you close the game.",
+  CLEAN: "Your saved game matches what is on screen.",
+  SAVED: "Saved. This game will still be here after you close and reopen it.",
+  RESTORED: "Restored from your saved game.",
+  RECOVERED: "Recovered your last good saved game.",
+  DISPOSED: "This session is closed."
+});
+export const STANDALONE_SAVE_UNAVAILABLE_COPY = "Save status is unavailable.";
+
+export function createChampionshipStandaloneApp({
+  storage,
+  playtestPolicy = null,
+  locks = globalThis.window?.navigator?.locks,
+  catalog,
+  cages = [],
+  sessionId = STANDALONE_SESSION_ID,
+  slotId = STANDALONE_SLOT_ID,
+  huntStartingInventory = HUNT_STARTING_INVENTORY,
+  huntCaptureReplay = null,
+  // Local review only: async (gate) => expansion catalogue or null.
+  huntExpansionLoader = null,
+  // Null means the built-in one, fetched when a hunt starts. Its subtree is
+  // the field controls, the wild actors and their tables, which nothing before
+  // the field reads. A caller that supplies its own factory never fetches it.
+  huntRuntimeFactory = null,
+  rngClock = () => {
+    const date = new Date();
+    return { hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds() };
+  },
+  now = () => new Date().toISOString(),
+  deviceBirthday = () => null
+} = {}) {
+  if (!catalog) throw new TypeError("Championship standalone app requires a product entities catalog");
+  const savePort = createChampionshipPersistentSavePort({ storage, now, locks });
+
+  const cageIds = cages.map((cage) => cage.cageId);
+  let session = null;
+  let creature = null;
+  let revision = 0;
+  let interactionCount = 0;
+  // Production Raising state. Owned here, never by the frozen R2 reducer.
+  let raising = null;
+  let selectedCreatureId = null;
+  const raisingActors = new Map();
+  let raisingHand=null;
+  let raisingGround=null;
+  let discoveryCheckAt=0;
+  let raisingFoods=[];
+  let raisingWaste=[];
+  let raisingDayTransition=null;
+  let raisingDayConfirmation=false;
+  let raisingLifecycleMessage=null;
+  const raisingDirtySignals=new Map();
+  let raisingPoolSlots={};
+  const raisingListeners = new Set();
+  let raisingAgeRemainder = 0;
+  let instanceIdentity = null;
+  let battleEconomy = createBattleEconomyState();
+  let battleTransactionActive = false;
+  let battlePartyIds = null;
+  // Party admission, slot rules and owned-creature building are only read while
+  // the player is picking a team at the battle menu. Fetched then, cached after,
+  // and warmed in the background by main.js once any screen is up.
+  let battlePartyModule = null;
+  const loadBattleParty = async () =>
+    (battlePartyModule ??= await import("../battle/battleParty.js"));
+  let passwordBattleModule = null;
+  const loadPasswordBattle = async () =>
+    (passwordBattleModule ??= await import("../battle/nativePasswordBattle.js"));
+  let linkBattleModule = null;
+  const loadLinkBattle = async () =>
+    (linkBattleModule ??= await import("../battle/nativeLinkBattle.js"));
+  // The attempt a tournament round is being fought under, if any. A round is an
+  // ordinary battle; what differs is that its verdict belongs to the run, and
+  // the title result waits for the whole run rather than reading one round.
+  let championshipAttemptId = null;
+  const battleRngPreparations = new WeakMap();
+  let huntCommitActive = false;
+  // One application-owned sequence. Expedition resets never replace it.
+  // Legacy saves lack history: initialize on the first native RNG use only.
+  let gameplayRng = null;
+  // Durable history belongs to the same application as RNG and Raising. It is
+  // independent of the transient expedition and never reconstructed from art.
+  let huntPersistentState = null;
+
+  function gameplayRngSnapshot() {
+    return gameplayRng ? { version: 1, ...gameplayRng.snapshot() } : null;
+  }
+
+  function nextGameplayRandom(channel) {
+    requireSession();
+    if (huntCommitActive) throw new Error("CHAMPIONSHIP_RNG_WHILE_HUNT_COMMIT_ACTIVE");
+    // Validate before even reading the clock, so rejected requests do not
+    // initialize or mutate the durable sequence.
+    if (!Number.isInteger(channel) || channel < 0 || channel >= 217) {
+      throw new RangeError("CHAMPIONSHIP_RNG_CHANNEL_OUT_OF_RANGE");
+    }
+    if (!gameplayRng) gameplayRng = createClockChannelRng(rngClock());
+    const value = gameplayRng.next(channel);
+    savePort.markDirty();
+    return value;
+  }
+
+  // Expedition state stays session-scoped. Original history/modifiers above
+  // have their own verified durable projection; Gate choice, field positions
+  // and live individuals do not survive a reload.
+  const screens = createChampionshipScreenStack({ initial: CHAMPIONSHIP_SCREENS.RAISING_HOME });
+  let selectedGateId = null;
+  let confirmedGateId = null;
+  let huntRuntime = null;
+  let huntDeadlineMinute = null;
+  let huntEntryError = null;
+  // The Shop owns the inventory; the loadout only reads it.
+  let huntInventory = null;
+  let huntLoadout = null;
+  let shop = null;
+  let friendsPlaytest = null;
+  let lastShopReceipt = null;
+  let selectedDatabaseSpeciesIndex = null;
+  let cageEdit = null;
+  // Original PlayerData +0xAE8. Title matches write it; until battle exists this
+  // is a PRODUCT_AUTHORED seam (setTamerRank), same shape as creditBits.
+  let tamerRankValue = 0;
+  let battleBadgesValue = [];
+  let nativeTitles=emptyNativeTitleProgress();
+  // The tournament in progress, or null. Carried through save so a round
+  // boundary is not a place the player can lose a run by closing the tab.
+  let championshipRun=null;
+  let freeBattleMenu=null;
+  let nativeMessages=createNativeRaisingMessages();
+  let nativeOpening=null;
+  // Immutable rollback data, never another live session/store or storage key.
+  let tutorialBaseline=null;
+  let tutorialPendingOpening=null;
+  let tutorialTransitionActive=false;
+  let tutorialCommitActive=false;
+  let tutorialOfferEligible=false;
+  let tutorialHuntCandidate=null;
+  let tutorialBattleCandidate=null;
+  let registeredSpeciesValue = Object.freeze([]);
+  // Snapshot of the last enclosed wild, for Hunt Result. Session-scoped: the
+  // durable write is the raising.collection entry, not this screen payload.
+  let huntResult = null;
+  const screenListeners = new Set();
+  const shopListeners = new Set();
+  let shopRuntimeUnsubscribe = null;
+
+  function speciesDisplayName(speciesId) {
+    const slug = String(speciesId ?? "").split(":").pop() || "creature";
+    return slug.replace(/-/g, " ").toUpperCase();
+  }
+
+  function publishScreens() {
+    if(screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)cancelRaisingHand();
+    for (const listener of [...screenListeners]) {
+      try { listener(screens.current()); } catch { /* observers never break navigation */ }
+    }
+  }
+
+  /** Drop every expedition choice and leave the player at Raising Home. */
+  function resetExpedition() {
+    tutorialBattleCandidate?.runtime.dispose();tutorialBattleCandidate=null;
+    tutorialHuntCandidate=null;
+    huntRuntime = null;
+    huntDeadlineMinute = null;
+    huntEntryError = null;
+    huntLoadout = null;
+    huntResult = null;
+    selectedGateId = null;
+    confirmedGateId = null;
+    if (screens.canExit()) screens.exit();
+    else while (screens.canGoBack()) screens.back();
+  }
+
+  function requireShop() {
+    if (!shop) throw new Error("CHAMPIONSHIP_SHOP_NOT_OPEN");
+    return shop;
+  }
+
+  function bindShopRuntime() {
+    shopRuntimeUnsubscribe?.();
+    shopRuntimeUnsubscribe = shop.subscribe(() => {
+      for (const listener of [...shopListeners]) {
+        try { listener(shop.getFrame()); } catch { /* observers never break the shop */ }
+      }
+    });
+  }
+
+  function shopCageOwned() {
+    return shop?.toSave() ?? [];
+  }
+
+  function tamerRank() {
+    return tamerRankValue;
+  }
+
+  function progressionContext() {
+    return { tamerRank: tamerRankValue, battleBadges: [...battleBadgesValue],feeWaiver:nativeTitles.feeWaiver, playtestUnlocks: playtestPolicy?.enabled === true && playtestPolicy.huntOpen };
+  }
+
+  function applyProgression() {
+    const progression = progressionContext();
+    shop?.setProgression(progression);
+    huntInventory?.setProgression(progression);
+  }
+
+  function cageEditArgs() {
+    return [shopCageOwned(), tamerRank()];
+  }
+
+  // The grant changes the saved layout version, so the ground is rebuilt from
+  // the committed layout exactly as a confirmed edit rebuilds it.
+  function changeRanchExpansion(change) {
+    if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+    const editor = requireCageEdit();
+    const before = JSON.stringify(editor.toSave());
+    storeNativeRaisingPositions(); storeNativeRaisingHome();
+    const frame = change(editor);
+    if (JSON.stringify(editor.toSave()) !== before) {
+      raisingActors.clear(); initializeNativeRaisingHome(); savePort.markDirty();
+    }
+    publishScreens();
+    return frame;
+  }
+
+  function requireCageEdit() {
+    if (!cageEdit) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_OPEN");
+    return cageEdit;
+  }
+
+  function openShopAndHunt({ shopSnapshot = null, newSave = false } = {}) {
+    lastShopReceipt = null;
+    const progression = progressionContext();
+    if (shopSnapshot) {
+      // Continue: Shop snapshot is the inventory authority. Hunt starts empty
+      // and receives only the mapped SKUs the Shop currently owns.
+      huntInventory = createHuntInventory({ entries: [], ...progression });
+      shop = createShopRuntime({ allowRepeatedCages:playtestPolicy?.enabled===true, allItemsVisible: playtestPolicy?.enabled === true && playtestPolicy.shopOpen, huntInventory, snapshot: shopSnapshot, progression });
+      applyMappedHuntInventoryFromShop(shop, huntInventory);
+    } else {
+      huntInventory = createHuntInventory({ entries: huntStartingInventory, ...progression });
+      // Custom starting inventories are a controlled fixture seam. Seed the
+      // same Shop authority that purchases, consumption and saves will use.
+      shop = createShopRuntime({ allowRepeatedCages:playtestPolicy?.enabled===true, allItemsVisible: playtestPolicy?.enabled === true && playtestPolicy.shopOpen, huntInventory, progression, initialHuntInventory:huntInventory });
+    }
+    const grant = newSave ? grantFriendsPlaytestCoins(shop.getBits(), friendsPlaytest, shop.getFrame().bitsCap, playtestPolicy) : {bits:shop.getBits(),state:friendsPlaytest,granted:0};
+    if (grant.granted) shop.applyBitsTransaction({expectedBits:shop.getBits(),bits:grant.bits});
+    friendsPlaytest = grant.state;
+    if (grant.granted) savePort.markDirty();
+    bindShopRuntime();
+  }
+
+  function requireLoadout() {
+    if (!huntLoadout) throw new Error("CHAMPIONSHIP_HUNT_LOADOUT_NOT_ACTIVE");
+    return huntLoadout;
+  }
+
+  function requireSession() {
+    if (!session) throw new Error("CHAMPIONSHIP_SESSION_NOT_OPEN");
+    return session;
+  }
+
+  /** Seed a fresh in-memory R2 port with a restored snapshot, so the existing
+   *  coordinator restore path -- savePort.readSnapshot() -> initialSnapshot --
+   *  does the rehydration instead of a second, parallel one. */
+  function seededRealmPort(restoredSnapshot) {
+    const port = createChampionshipSavePortR2();
+    port.issueWriterToken();
+    const seeded = port.requestWrite({
+      requestId: `${sessionId}:restore`,
+      expectedRevision: 0,
+      slotId,
+      snapshot: restoredSnapshot
+    });
+    if (!seeded.accepted) throw new Error(`CHAMPIONSHIP_RESTORE_SEED_FAILED: ${seeded.code}`);
+    return port;
+  }
+
+  async function openSession(realmPort) {
+    const opened = createChampionshipR2Session({
+      sessionId,
+      raisingSavePort: realmPort,
+      raisingSaveSlotId: slotId
+    });
+    await opened.open();
+    session = opened;
+    return opened;
+  }
+
+  /** Shared by dispatch() and endDay() so neither depends on `this`. */
+  function dispatchRaisingHomeCommand(command) {
+    if(tutorialBaseline)return Object.freeze({accepted:false,code:"INTERACTIVE_TUTORIAL_ACTIVE"});
+    if (huntCommitActive) return Object.freeze({ accepted: false, code: "HUNT_HOME_COMMIT_ACTIVE" });
+    const active = requireSession();
+    const snapshot = active.getRaisingHomeSnapshot();
+    const publication = active.dispatchRaisingHome({
+      ...command,
+      commandId: command.commandId ?? `${sessionId}:${command.type}:${interactionCount + 1}`,
+      expectedRevision: command.expectedRevision ?? snapshot.revision
+    });
+    if (publication?.accepted) interactionCount += 1;
+    return publication;
+  }
+
+  function instanceSources() {
+    const residents = session?.getRaisingHomeSnapshot().residents ?? [];
+    return {
+      creature: residents.some((entry) => entry.residentId === creature?.creatureId) ? creature : null,
+      residents,
+      collection: raising?.collection ?? [],
+      assignments: raising?.assignments ?? {},
+      interactions: raising?.interactions ?? {}
+    };
+  }
+
+  // listRaisingInstances answers by deep-cloning every source, revalidating each
+  // individual's hundred-odd ROM words twice and freezing the result, and the
+  // raising frame advance asks it for the roster on every frame. Profiled in the
+  // enclosure on a throttled phone that was about a fifth of the main thread
+  // with a single resident, and it grows with the collection.
+  //
+  // Every source here is immutable: a change replaces the object rather than
+  // writing into it, and the results are deep-frozen, so when all five are the
+  // same objects as last time the answer cannot have changed. Any new reference
+  // recomputes, so this sees a change exactly when the old code did -- it only
+  // stops redoing the work on data that did not move.
+  //
+  // Only the frame advance uses this. The public roster readers keep calling
+  // listRaisingInstances directly: they hand the array outward, and callers
+  // there are entitled to a fresh one.
+  //
+  // Every caller gets its own copy. Both frame-advance callers sort the list in
+  // place, which was harmless while each call built a new array and corrupts a
+  // shared one: caching without the copy fails the enclosure carry gate. The
+  // copy is sixteen strings; the work being skipped is the clone and the
+  // revalidation.
+  let instanceListCache = null;
+  function currentInstanceIds() {
+    const sources = instanceSources();
+    const cached = instanceListCache;
+    if (cached
+      && cached.creature === sources.creature
+      && cached.residents === sources.residents
+      && cached.collection === sources.collection
+      && cached.assignments === sources.assignments
+      && cached.interactions === sources.interactions) return cached.entries.slice();
+    const entries = listRaisingInstances(sources).map((entry) => entry.instanceId);
+    instanceListCache = { ...sources, entries };
+    return entries.slice();
+  }
+
+  function raisingNativeProfile(instanceId) {
+    if(instanceId===creature?.creatureId && raising?.assignments[instanceId]) return creature.nativeProfile ?? null;
+    return raising?.collection.find(entry=>entry.instanceId===instanceId)?.nativeProfile ?? null;
+  }
+
+  function publishRaising() {
+    for(const listener of [...raisingListeners])try {listener();} catch { /* observers cannot change native state */ }
+  }
+
+  function writeRaisingNativeProfile(instanceId,profile,{markDirty=true}={}) {
+    registeredSpeciesValue = registerNativeBookSpecies(registeredSpeciesValue, profile.fields["000"]);
+    const speciesId=`species-${String(profile.fields["000"]).padStart(3,"0")}`;
+    if(instanceId===creature?.creatureId) creature=Object.freeze({...creature,speciesId,nativeProfile:profile});
+    else raising=Object.freeze({...raising,collection:Object.freeze(raising.collection.map(entry=>entry.instanceId===instanceId
+      ? Object.freeze({...entry,speciesId,nativeProfile:profile}) : entry))});
+    if(markDirty)savePort.markDirty();
+  }
+
+  function nativeRaisingActor(instanceId) {
+    const profile=raisingNativeProfile(instanceId);
+    if(!profile)return null;
+    let actor=raisingActors.get(instanceId);
+    if(!actor || actor.speciesIndex!==profile.fields["000"]) {
+      const slot=raisingPoolSlots[instanceId]??listRaisingInstances(instanceSources()).findIndex(entry=>entry.instanceId===instanceId);
+      actor=createNativeRaisingActor(profile,slot);raisingActors.set(instanceId,actor);
+    }
+    return actor;
+  }
+
+  function storeNativeRaisingHome() {
+    if(tutorialBaseline||!raisingGround)return;
+    const foods=raisingFoods.filter(f=>f.present&&raisingGround.origin(f.cageInstanceId??f.cageDefinitionIndex)).map(f=>{
+      const origin=raisingGround.origin(f.cageInstanceId??f.cageDefinitionIndex);
+      return {slot:f.slot,cageDefinitionIndex:f.cageDefinitionIndex,...(f.cageInstanceId?{cageInstanceId:f.cageInstanceId}:{}),localPositionQ12:f.positionQ12.map((n,i)=>n-origin[i]*4096),
+        protein:f.protein,...(f.kind>=2?{kind:f.kind}:{}),remaining:f.remaining,freshness:f.freshness};
+    });
+    const waste=raisingWaste.filter(w=>w.present&&raisingGround.origin(w.cageInstanceId??w.cageDefinitionIndex)).map(w=>{
+      const origin=raisingGround.origin(w.cageInstanceId??w.cageDefinitionIndex);return {slot:w.slot,speciesIndex:w.speciesIndex,cageDefinitionIndex:w.cageDefinitionIndex,...(w.cageInstanceId?{cageInstanceId:w.cageInstanceId}:{}),
+        localPositionQ12:w.positionQ12.map((n,i)=>n-origin[i]*4096)};});
+    raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({version:1,poolSlots:raisingPoolSlots,foods,waste,
+      ...(raising.nativeHome?.discoveries?{discoveries:raising.nativeHome.discoveries}:{}),
+      cageAssignments:Object.fromEntries([...raisingActors].filter(([,a])=>a.cageInstanceId).map(([id,a])=>[id,a.cageInstanceId])),
+      evolutionBranches:raising.nativeHome?.evolutionBranches??[],
+      ...(raising.nativeHome?.productEvolutionBranches?{productEvolutionBranches:raising.nativeHome.productEvolutionBranches}:{}),
+      ...(raising.nativeHome?.pendingOvernightMinutes!==undefined?{pendingOvernightMinutes:raising.nativeHome.pendingOvernightMinutes}:{})})});
+    settleDiscoveries();
+  }
+
+  function settleDiscoveries() {
+    if(tutorialBaseline||!raisingGround?.navigation||!raising?.nativeHome)return;
+    const time=new Date(now()).getTime();if(!Number.isSafeInteger(time)||time<0)return;
+    const participants=[...raisingActors].filter(([,a])=>a.speciesIndex>=8&&a.cageInstanceId&&raisingGround.placement(a.cageInstanceId))
+      .map(([id,a])=>({id,cageId:a.cageInstanceId}));
+    const previous=raising.nativeHome.discoveries;
+    const discoveries=settleRanchDiscoveries(previous,time,participants);
+    discoveryCheckAt=time;
+    if(JSON.stringify(previous)===JSON.stringify(discoveries))return;
+    raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,discoveries})});
+    savePort.markDirty();
+  }
+
+  function storeNativeRaisingPositions() {
+    if(tutorialBaseline||!raisingGround)return;
+    for(const [id,actor] of raisingActors) {
+      const current=raisingNativeProfile(id),origin=raisingGround.origin(actor.cageInstanceId??actor.cageDefinitionIndex);
+      if(!current||!origin||!actor.positionQ12)continue;
+      const x=((actor.positionQ12[0]-origin[0]*4096)>>12)>>>0,y=((actor.positionQ12[1]-origin[1]*4096)>>12)>>>0;
+      if(current.fields["014"]!==actor.cageDefinitionIndex||current.fields["1c0"]!==x||current.fields["1c4"]!==y) {
+        const next=structuredClone(current);next.fields["014"]=actor.cageDefinitionIndex;next.fields["1c0"]=x;next.fields["1c4"]=y;
+        writeRaisingNativeProfile(id,next);
+      }
+    }
+  }
+
+  function initializeNativeRaisingHome({tutorialBoundary=false,restoreLayoutPositions=false}={}) {
+    raisingGround=createNativeRaisingGround({...cageEdit.toSave(),unlockedCount:slotCountForTamerRank(tamerRankValue)});
+    raisingFoods=[];raisingWaste=[];raisingDayTransition=null;raisingDayConfirmation=false;raisingLifecycleMessage=null;raisingDirtySignals.clear();raisingPoolSlots={...raising?.nativeHome?.poolSlots};
+    if(!raisingGround)return;
+    for(const f of raising.nativeHome?.foods??[]) {
+      const origin=raisingGround.origin(f.cageInstanceId??f.cageDefinitionIndex);
+      if(origin)raisingFoods.push(createNativeRaisingFood({...f,cageInstanceId:f.cageInstanceId??raisingGround.placement(f.cageDefinitionIndex)?.instanceId,positionQ12:f.localPositionQ12.map((n,i)=>n+origin[i]*4096),restored:true}));
+    }
+    for(const w of raising.nativeHome?.waste??[]){const origin=raisingGround.origin(w.cageInstanceId??w.cageDefinitionIndex);
+      if(origin)raisingWaste.push({...w,cageInstanceId:w.cageInstanceId??raisingGround.placement(w.cageDefinitionIndex)?.instanceId,present:true,positionQ12:w.localPositionQ12.map((n,i)=>n+origin[i]*4096)});}
+    if(restoreInteractiveTutorialActor()) {storeNativeRaisingHome();return;}
+    if(raising.nativeHome?.pendingOvernightMinutes!==undefined&&!tutorialBoundary)settleRaisingOvernight();
+    else synchronizeNativeRaisingActors(tutorialBoundary||restoreLayoutPositions?{
+      restorePositions:true,initializationRng:restoreChannelRng(gameplayRngSnapshot())
+    }:{});
+    storeNativeRaisingHome();
+  }
+
+  function spawnRaisingWaste(definition,speciesIndex,positionQ12,cageInstanceId=null) {
+    const waste=allocateNativeRaisingWaste(raisingWaste,{speciesIndex,cageDefinitionIndex:definition,positionQ12});
+    if(!waste)return false;if(cageInstanceId)waste.cageInstanceId=cageInstanceId;raisingWaste=raisingWaste.filter(w=>w.present);raisingWaste.push(waste);
+    raisingDirtySignals.set(cageInstanceId??definition,{dirtyAdded:true});savePort.markDirty();return true;
+  }
+
+  function settleRaisingOvernight() {
+    const remaining=raising?.nativeHome?.pendingOvernightMinutes;
+    if(!raisingGround||remaining===undefined)return;
+    // 02083358 constructs all actors (including their new positions) before
+    // 02083910 settles daylight and night. Cage pool record order is distinct
+    // from screen slot order: the original start is definitions 35, 0, 1, 15.
+    const rng={next:nextGameplayRandom};
+    raisingHand=null;raisingActors.clear();synchronizeNativeRaisingActors({deferActivity:true});
+    for(const food of raisingFoods){food.occupants.fill(null);food.positionQ12[2]=0;}
+    for(const [minutes,night] of [[remaining,false],[540,true]]) {
+      for(const placement of raisingGround.placements){
+        const definition=placement.definitionIndex,owner=placement.instanceId??definition;
+        const entries=nativeRaisingRebuiltListOrder([...raisingActors].filter(([,actor])=>(actor.cageInstanceId??actor.cageDefinitionIndex)===owner).sort((a,b)=>a[1].poolSlot-b[1].poolSlot));
+        const foods=nativeRaisingRebuiltListOrder(raisingFoods.filter(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===owner).sort((a,b)=>a.slot-b.slot));
+        const result=settleNativeRaisingCage(entries.map(([id])=>raisingNativeProfile(id)),{
+          definition,minutes,night,foods,wasteCount:raisingWaste.filter(w=>w.present&&(w.cageInstanceId??w.cageDefinitionIndex)===owner).length,rng,
+          effects:nativeCageConditionEffects(definition,requireSession().getRaisingHomeSnapshot().season),
+          spawnWaste:species=>spawnRaisingWaste(definition,species,nativeRaisingSpawnPosition(raisingGround,owner,rng),placement.instanceId)});
+        entries.forEach(([id],i)=>writeRaisingNativeProfile(id,result.profiles[i]));foods.forEach((food,i)=>Object.assign(food,result.foods[i]));
+      }
+    }
+    for(const [id,actor] of [...raisingActors].sort((a,b)=>a[1].poolSlot-b[1].poolSlot)) {
+      const profile=raisingNativeProfile(id);if(!profile)continue;
+      const next=startNativeRaisingMorning(actor,profile,rng);if(next!==profile)writeRaisingNativeProfile(id,next);
+    }
+    const {pendingOvernightMinutes,...completedHome}=raising.nativeHome;
+    raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome(completedHome)});
+    raisingAgeRemainder=0;storeNativeRaisingHome();
+  }
+
+  function synchronizeNativeRaisingActors({deferActivity=false,restorePositions=false,initializationRng=null}={}) {
+    if(!raisingGround)return;
+    const ids=currentInstanceIds(),live=new Set(ids);
+    for(const id of Object.keys(raisingPoolSlots))if(!live.has(id)) {
+      const actor=raisingActors.get(id);if(actor)interruptNativeRaisingFeeding(actor,raisingFoods,{next:nextGameplayRandom});
+      delete raisingPoolSlots[id];raisingActors.delete(id);
+    }
+    for(const id of ids.sort((a,b)=>(raisingPoolSlots[a]??16)-(raisingPoolSlots[b]??16))) {
+      let profile=raisingNativeProfile(id);if(!profile)continue;
+      if(raisingPoolSlots[id]===undefined) {
+        const used=new Set(Object.values(raisingPoolSlots)),slot=Array.from({length:16},(_,i)=>i).find(i=>!used.has(i));
+        if(slot===undefined)throw new Error("NATIVE_RAISING_POOL_FULL");raisingPoolSlots[id]=slot;
+      }
+      const actor=nativeRaisingActor(id);if(actor.positionQ12)continue;
+      let definition=profile.fields["014"];
+      const savedOwner=raising.nativeHome?.cageAssignments?.[id];
+      let placement=raisingGround.placement(savedOwner??definition);
+      if(!placement) {
+        profile=structuredClone(profile);profile.fields["014"]=35;profile.fields["1c0"]=0;profile.fields["1c4"]=0;
+        definition=35;placement=raisingGround.placement(35);writeRaisingNativeProfile(id,profile);
+      }
+      actor.cageInstanceId=placement.instanceId;
+      const origin=raisingGround.origin(placement.instanceId??definition),rng=initializationRng??{next:nextGameplayRandom};
+      const position=[(profile.fields["1c0"]|0)*4096+origin[0]*4096,(profile.fields["1c4"]|0)*4096+origin[1]*4096,0];
+      // Initialize the per-slot RNG fields before the original source-grid
+      // spawn. Hatch keeps the same body; adults entering Home select a point.
+      actor.poolSlot=raisingPoolSlots[id];
+      initializeNativeRaisingActor(actor,profile,position,definition,rng,
+        !restorePositions&&(actor.speciesIndex>=8||(profile.fields["1c0"]===0&&profile.fields["1c4"]===0))
+          ? ()=>actor.speciesIndex>=8?nativeRaisingEntryPosition(raisingGround,placement.instanceId??definition,rng,actor.poolSlot)
+            :nativeRaisingSpawnPosition(raisingGround,placement.instanceId??definition,rng):null,{deferActivity,
+              onJoin:()=>notifyNativeRaisingResidentAdded(actor,raisingActors.values(),rng)});
+      const aligned=alignRanchRaisingPosition(raisingGround,actor.positionQ12,placement.instanceId??definition);
+      if(aligned!==actor.positionQ12){actor.positionQ12=aligned;actor.destinationQ12=[...aligned];}
+    }
+  }
+
+  function advanceNativeRaising(frames,before) {
+    synchronizeNativeRaisingActors();
+    const ids=currentInstanceIds();
+    let priorMinutes=0,changed=false;
+    for(let frame=1;frame<=frames;frame++) {
+      advanceRaisingHand();
+      const minutes=Math.floor((before.clockUnits+before.clockSubunits/1000+frame*NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame)/NATIVE_CLOCK_CADENCE.trainingDivisor);
+      const age=stepNativeRaisingAgeClock(raisingAgeRemainder,minutes-priorMinutes);
+      priorMinutes=minutes;raisingAgeRemainder=age.remainder;
+      const signals=new Map();
+      for(const food of raisingFoods) {
+        const wasFresh=food.present&&food.freshness>0;
+        const result=stepNativeRaisingFood(food,age.ageDelta);
+        if(wasFresh&&food.freshness<=0)raisingDirtySignals.set(food.cageInstanceId??food.cageDefinitionIndex,{dirtyAdded:true});
+        if(result.search||result.landed){const previous=signals.get(food.cageInstanceId??food.cageDefinitionIndex)??{};
+          signals.set(food.cageInstanceId??food.cageDefinitionIndex,{search:previous.search||result.search,landed:previous.landed||result.landed});}
+      }
+      reconcileNativeFoodReservations(raisingActors.values(),raisingFoods);
+      for(const id of ids.sort((a,b)=>raisingPoolSlots[a]-raisingPoolSlots[b])) {
+        const actor=nativeRaisingActor(id);
+        if(!actor)continue;
+        const residents=[...raisingActors].filter(([,other])=>!other.detached&&(other.cageInstanceId??other.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot);
+        const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta:age.ageDelta,rng:{next:nextGameplayRandom},
+          feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
+          lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
+            onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
+            getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
+            roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
+            residents:residents.map(([other])=>raisingNativeProfile(other)),wasteCount:raisingWaste.filter(w=>w.present&&(w.cageInstanceId??w.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).length,
+            rottenFoodCount:raisingFoods.filter(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)&&f.freshness<=0).length,
+            ...raisingDirtySignals.get(actor.cageInstanceId??actor.cageDefinitionIndex),spawnWaste:(species,position)=>spawnRaisingWaste(actor.cageDefinitionIndex,species,position,actor.cageInstanceId)}:null});
+        if(result.changed) {writeRaisingNativeProfile(id,result.profile);changed=true;}
+        if(result.landed){storeNativeRaisingPositions();savePort.markDirty();}
+        if(result.evolutionStarted){publishRaising();return;}
+      }
+      reconcileNativeFoodReservations(raisingActors.values(),raisingFoods);
+      if(raisingGround)for(const actor of raisingActors.values())if(stepRanchConveyor(actor,raisingGround))changed=true;
+      if(raisingGround&&separateNativeRaisingGroundActors(raisingActors.values(),raisingGround).changed)changed=true;
+      raisingDirtySignals.clear();
+    }
+    if(raisingGround)storeNativeRaisingHome();
+    if(changed)publishRaising();
+  }
+
+  function advanceRaisingHand(){
+    const hand=raisingHand;if(!hand)return;
+    const actor=raisingActors.get(hand.id),profile=raisingNativeProfile(hand.id);
+    if(!actor||!profile){raisingHand=null;return;}
+    const write=p=>{if(p){writeRaisingNativeProfile(hand.id,p);savePort.markDirty();}};
+    if(hand.mode===3){
+      if(!hand.held){write(releaseNativeRaisingCarry(actor,profile));raisingHand=null;}
+      else if(actor.state===6){actor.carryPointer={...hand.pointer};actor.carryCameraX=hand.pointer.cameraX??0;}
+      else raisingHand=null;
+      return;
+    }
+    if(hand.mode===4){
+      const step=stepNativeRaisingStrokeInput({held:hand.held,elapsed:hand.elapsed,previous:hand.previous,pointer:hand.pointer,
+        actorScreen:{x:actor.positionQ12[0]/4096,y:(actor.positionQ12[1]-actor.positionQ12[2])/4096}});
+      hand.elapsed=step.counter;hand.previous={...hand.pointer};
+      if(step.result===0){releaseNativeRaisingStroke(actor);raisingHand=null;}
+      return;
+    }
+    const result=classifyNativeRaisingHand({held:hand.held,elapsed:hand.elapsed,origin:hand.origin,pointer:hand.pointer,
+      admit:command=>nativeRaisingHandAdmission(actor,command),inside:hand.inside});
+    hand.elapsed=(hand.elapsed+1)&65535;
+    if(result===-1)return;
+    if(result===3){const p=beginNativeRaisingCarry(actor,profile,hand.pointer,{ground:raisingGround,foods:raisingFoods,rng:{next:nextGameplayRandom}});
+      if(p){actor.carryCameraX=hand.pointer.cameraX??0;write(p);hand.mode=3;return;}}
+    if(result===4){const p=beginNativeRaisingStroke(actor,profile,{foods:raisingFoods,rng:{next:nextGameplayRandom}});
+      if(p){write(p);hand.mode=4;hand.elapsed=0;hand.previous={...hand.pointer};return;}}
+    if(result===2)write(touchNativeRaisingActor(actor,profile,{foods:raisingFoods,rng:{next:nextGameplayRandom}}));
+    raisingHand=null;
+  }
+
+  function cancelRaisingHand(){
+    if(!raisingHand)return;
+    if(raisingHand.mode===1){raisingHand=null;return;}
+    raisingHand.held=false;advanceRaisingHand();
+  }
+
+  function battleSchedule() {
+    const snapshot = requireSession().getRaisingHomeSnapshot();
+    if (!Number.isInteger(snapshot.season) || !Number.isInteger(snapshot.dayOfSeason)) return null;
+    return Object.freeze({
+      // Keep the current ordinary-list entry fixture. This is not the
+      // untraced mapping of the four cube buttons to original modes.
+      entryMode: 0,
+      scheduleSlotA: snapshot.season,
+      scheduleSlotB: snapshot.dayOfSeason,
+      progressCounter: tamerRankValue
+    });
+  }
+
+  function rebuildFreeBattleMenu(){
+    const season=requireSession().getRaisingHomeSnapshot().season;
+    if(!Number.isInteger(season)||season<0||season>3){freeBattleMenu=null;return;}
+    freeBattleMenu=generateNativeFreeBattleMenu({season,nextChannel:nextGameplayRandom});
+    savePort.markDirty();
+  }
+
+  function enterPreparedLocalBattle({mode,attemptId,playerInstanceIds=[],passwords=null,linkKey=null,rngPreparation}){
+    requireSession();
+    if(battleTransactionActive)return {ok:false,reason:'TRANSACTION_ACTIVE'};
+    if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+    const prepared=battleRngPreparations.get(rngPreparation);
+    const passwordMode=mode===4,linkMode=mode===3,transientMode=passwordMode||linkMode;
+    if(!prepared||prepared.localMode!==mode||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
+      ||(mode===2&&prepared.freeMenu!==freeBattleMenu)
+      ||(transientMode
+        ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
+        :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile))))
+      return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
+    const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
+      entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng);
+    if(!result.ok||result.duplicate)return result;
+    battleRngPreparations.delete(rngPreparation);battlePartyIds=transientMode?null:[...playerInstanceIds];
+    screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);publishScreens();return result;
+  }
+
+  function restoreCandidate(save) {
+    assertPlayableProductSaveData(save);
+    for(const entry of [save.creature,...(save.raising?.collection??[])]){
+      const index=entry?.nativeProfile?.fields?.['000']??Number(entry?.speciesId?.replace(/^championship:creature:/,'').replace(/^species-/,''));
+      if(getProductExtension(index))requirePlayableProductExtension(index);
+    }
+    if(interactiveTutorialInProgress(save.progression.nativeOpening)&&save.gameplayRng===null)
+      throw new Error("INTERACTIVE_TUTORIAL_RNG_REQUIRED");
+    const { document } = deserializeRaisingHomeSaveR2(save.raisingHome);
+    const snapshot = restoreRaisingHomeSnapshotR2(document, { sessionId });
+    for(const entry of snapshot.residents){const index=entry?.nativeProfile?.fields?.['000']??Number(entry?.speciesId?.replace(/^championship:creature:/,'').replace(/^species-/,''));if(getProductExtension(index))requirePlayableProductExtension(index);}
+    const sources = {
+      creature: snapshot.residents.some((entry) => entry.residentId === save.creature.creatureId) ? save.creature : null,
+      residents: snapshot.residents,
+      collection: save.raising?.collection ?? [],
+      assignments: save.raising?.assignments ?? {},
+      interactions: save.raising?.interactions ?? {}
+    };
+    // Validate raw identities before legacy normalization can discard a
+    // duplicate collection entry, and before replacing an open session.
+    listRaisingInstances(sources);
+    const identity = normalizeRaisingInstanceIdentityState(save.instanceIdentity, sources);
+    const production = normalizeRaisingProductionState(save.raising, {
+      cageIds, creatureIds: snapshot.residents.map((resident) => resident.residentId)
+    });
+    const rng = save.gameplayRng === null ? null : restoreChannelRng(save.gameplayRng);
+    const huntHistory = restoreNativeHuntPersistentSave(save.huntHistory);
+    return { snapshot, identity, production, rng, huntHistory };
+  }
+
+  function liveSaveRequest(nextRevision=revision) {
+    return {
+      snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
+      interactionCount,friendsPlaytest,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
+      championshipRun,freeBattleMenu,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
+      instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
+    };
+  }
+
+  function requestFromSavedGame(saved,candidate) {
+    return {
+      ...saved.progression,friendsPlaytest:saved.flags.friendsPlaytest??null,snapshot:candidate.snapshot,creature:saved.creature,sessionId,
+      raising:candidate.production,shop:saved.shop,cageEdit:saved.cageEdit,battleEconomy:saved.battleEconomy,
+      instanceIdentity:candidate.identity,gameplayRng:saved.gameplayRng,huntHistory:saved.huntHistory
+    };
+  }
+
+  function retainTutorialBaseline(request) {
+    return deepFreeze(structuredClone({...request,nativeOpening:{
+      version:1,trainerName:request.nativeOpening.trainerName,tutorialStep:null
+    }}));
+  }
+
+  function interactiveOpening(checkpoint) {
+    return normalizeNativeOpening({version:2,trainerName:tutorialBaseline.nativeOpening.trainerName,
+      tutorialStep:null,checkpoint:{version:1,...checkpoint}});
+  }
+
+  function tutorialInput(expected,action=null,tool=null){
+    if(!tutorialBaseline||tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive
+      ||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!expected)return false;
+    try{if(!sameInteractiveTutorialCheckpoint(nativeOpening.checkpoint,expected))return false;}catch{return false;}
+    const step=tutorialRaisingStep(nativeOpening.checkpoint),actor=raisingActors.get(creature.creatureId);
+    return Boolean(actor?.tutorialSpecial&&step&&!step.dialogue&&(!action||step.action===action)
+      &&(!tool||actor.tutorialSelectedTool===tool));
+  }
+  const tutorialNext=(stage,message=0)=>commitTutorialOpening(interactiveOpening({stage,message}));
+  const tutorialStep=cp=>tutorialRaisingStep(cp)??tutorialHuntStep(cp)??tutorialBattleStep(cp);
+  function tutorialBattleInput(expected,action){
+    if(!tutorialBaseline||tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive||!expected)return false;
+    try{if(!sameInteractiveTutorialCheckpoint(nativeOpening.checkpoint,expected))return false;}catch{return false;}
+    const step=tutorialBattleStep(nativeOpening.checkpoint);
+    return Boolean(step&&!step.dialogue&&step.action===action&&screens.current()===step.screen);
+  }
+  async function prepareTutorialBattle(){
+    const {prepareNativeTutorialBattleEntry}=await import('./nativeTutorialBattleEntry.js');
+    return prepareNativeTutorialBattleEntry(tutorialBaseline.gameplayRng);
+  }
+  function tutorialExpeditionInput(expected,action=null){
+    if(!tutorialBaseline||tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive||!expected)return false;
+    try{if(!sameInteractiveTutorialCheckpoint(nativeOpening.checkpoint,expected))return false;}catch{return false;}
+    const step=tutorialHuntStep(nativeOpening.checkpoint);
+    return Boolean(step&&!step.dialogue&&!step.boundary&&(!action||step.action===action));
+  }
+  async function prepareTutorialHunt(){
+    const {prepareNativeTutorialHuntEntry}=await import('../hunt/capture/nativeTutorialHuntEntry.js');
+    const {createHuntRuntime}=await import('../hunt/huntRuntime.js');
+    const entry=prepareNativeTutorialHuntEntry(tutorialBaseline.gameplayRng);
+    const world=createHuntWorld(TUTORIAL_GATE,entry);
+    const runtime=createHuntRuntime({world,nativeEntry:entry,maxCardG:32,fieldActor:{actorId:'championship:2026:actor:tamer',displayName:'Tamer'},
+      nativeControls:{loadout:entry.loadout,consumeItem:(id,n=1)=>{
+        const quantity=entry.inventory.getQuantity(id);if(quantity<n)return {ok:false,reason:'NOT_OWNED'};
+        entry.inventory.setQuantityFromShop(id,quantity-n);return {ok:true};
+      },onChange:publishScreens}});
+    return {runtime,loadout:entry.loadout};
+  }
+  function restoreTutorialScreen(){
+    if(!tutorialBaseline)return;
+    const cp=nativeOpening.checkpoint,step=tutorialHuntStep(cp)??tutorialBattleStep(cp);if(!step)return;
+    if(step.screen.startsWith('BATTLE_')){
+      if(!tutorialBattleCandidate)return;
+      if(screens.current()==='RAISING_HOME')screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_SELECT);
+      if(step.screen==='BATTLE_FIELD'||step.screen==='BATTLE_RESULT'){
+        if(step.screen==='BATTLE_FIELD')tutorialBattleCandidate.runtime.startMatch();
+        if(screens.current()==='BATTLE_SELECT')screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+        if(step.screen==='BATTLE_RESULT'&&screens.current()==='BATTLE_FIELD')screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_RESULT);
+      }
+      publishScreens();return;
+    }
+    if(step.screen==='GATE_SELECT'){
+      if(screens.current()==='RAISING_HOME')screens.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
+    }else if(step.screen==='HUNT_FIELD'){
+      if(!tutorialHuntCandidate)return;
+      huntRuntime=tutorialHuntCandidate.runtime;huntLoadout=tutorialHuntCandidate.loadout;
+      selectedGateId=confirmedGateId=TUTORIAL_GATE.gateId;huntDeadlineMinute=null;
+      if(screens.current()==='RAISING_HOME')screens.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
+      if(screens.current()==='GATE_SELECT')screens.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
+      if(screens.current()==='HUNT_LOADOUT')screens.enter(CHAMPIONSHIP_SCREENS.HUNT_FIELD);
+      huntRuntime.configureTutorialHunt(cp,step);
+    }else if(step.screen==='RAISING_HOME'){
+      // OVL0 0211EA94 discards demo cards. Never ordinary Hunt return or Home commit.
+      if(screens.canExit())screens.exit();
+      huntRuntime=null;huntLoadout=null;huntResult=null;tutorialHuntCandidate=null;selectedGateId=confirmedGateId=null;
+    }
+    publishScreens();
+  }
+  async function confirmTutorialGate(expected){
+    if(screens.current()!=='GATE_SELECT'||selectedGateId!==TUTORIAL_GATE.gateId||!tutorialExpeditionInput(expected,'gate'))return screens.current();
+    tutorialTransitionActive=true;publishRaising();
+    try{tutorialHuntCandidate=await prepareTutorialHunt();}
+    catch(error){huntEntryError=error.message;return screens.current();}
+    finally{tutorialTransitionActive=false;publishRaising();}
+    tutorialNext('hunt-intro');return screens.current();
+  }
+
+  function restoreInteractiveTutorialActor() {
+    const cp=nativeOpening?.checkpoint,stage=cp?.stage,step=tutorialRaisingStep(cp)??(tutorialStep(cp)?.screen==='RAISING_HOME'?tutorialStep(cp):null);
+    if(!tutorialBaseline||tutorialTransitionActive||['declined','completed'].includes(tutorialPendingOpening?.checkpoint?.stage)||!step)return false;
+    const id=creature.creatureId;
+    let actor=raisingActors.get(id),rebuilding=!actor?.tutorialSpecial;
+    if(rebuilding){
+      raisingActors.clear();raisingHand=null;raisingFoods=[];raisingWaste=[];
+      // The tutorial always starts with its original species0 demo egg.
+      // Preserve any selected egg (and older hatched web baseline) unchanged.
+      if(creature.nativeProfile.fields['000']!==0){
+        const demo=createNativeRaisingStarter({next:nextGameplayRandom});
+        writeRaisingNativeProfile(id,{...demo,name:creature.nativeProfile.name},{markDirty:false});
+      }
+      actor=createNativeRaisingActor(creature.nativeProfile,raisingPoolSlots[id]??0);
+      initializeNativeTutorialRaisingActor(actor);raisingActors.set(id,actor);
+      if(!["raising-intro","raising-hatch"].includes(stage)){
+        const result=restoreNativeTutorialHatchedActor(actor,creature.nativeProfile,{next:nextGameplayRandom});
+        writeRaisingNativeProfile(id,result.profile,{markDirty:false});
+      }
+    }
+    const key=stage+":"+cp.message;
+    if(actor.tutorialCheckpointKey===key)return true;
+    const prior=actor.tutorialStage,changed=prior!==stage;
+    actor.tutorialCheckpointKey=key;actor.tutorialStage=stage;actor.tutorialElapsed=0;actor.tutorialCleanPending=[0,0,0];raisingHand=null;
+    actor.tutorialSelectedTool=step.action==="select"||step.action==="camera"?null:step.tool??"hand";
+    const stages=Object.keys(TUTORIAL_RAISING_STEPS),index=stages.indexOf(stage),at=name=>index>=stages.indexOf(name);
+    actor.tutorialCameraX=at("raising-injury-intro")?200:at("raising-recovery-intro")?260:at("raising-carry-intro")?100:0;
+    let profile=raisingNativeProfile(id);
+    if(stage.startsWith("raising-clean")){
+      if(rebuilding||stage==="raising-clean"||changed&&stage==="raising-clean-intro"){
+        tutorialRaisingIdle(actor);tutorialRaisingPosition(actor,120,100);
+        raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:[100*4096,120*4096,0],freshness:6,restored:true}),
+          createNativeRaisingFood({slot:1,cageDefinitionIndex:35,positionQ12:[80*4096,80*4096,0],freshness:-1,restored:true})];
+        raisingWaste=[{slot:0,speciesIndex:17,present:true,cageDefinitionIndex:35,positionQ12:[160*4096,100*4096,0]}];
+      }
+      const mask=stage==="raising-clean"?Math.max(0,cp.message-1):stage==="raising-clean-wait"?7:0;
+      if(mask&1)raisingFoods[0].present=false;if(mask&2)raisingWaste[0].present=false;if(mask&4)raisingFoods[1].present=false;
+    }else if(stage==="raising-feed-eat"&&rebuilding){
+      raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:[100*4096,120*4096,0]})];
+      tutorialRaisingFeed(actor,profile,raisingFoods);
+    }else if(stage.startsWith("raising-illness")){
+      if(rebuilding||changed&&stage==="raising-illness-intro"){raisingFoods=[];raisingWaste=[];tutorialRaisingIdle(actor);tutorialRaisingPosition(actor,100,100);}
+      if(stage!=="raising-illness-wait")profile=tutorialRaisingCondition(profile,cp.message===0&&stage==="raising-illness-intro"?3:2);
+      else if(rebuilding)profile=tutorialRaisingTreat(actor,tutorialRaisingCondition(profile,2),1,{next:nextGameplayRandom}).profile;
+    }else if(["raising-camera-intro","raising-camera","raising-carry-intro","raising-training-drop"].includes(stage)){
+      if(rebuilding||changed){tutorialRaisingIdle(actor);tutorialRaisingPosition(actor,150,100);profile=tutorialRaisingCondition(profile,3);}
+    }else if(stage==="raising-training-wait"&&rebuilding){
+      tutorialRaisingPosition(actor,280,100,1);profile=tutorialRaisingTraining(actor,profile,{rng:{next:nextGameplayRandom},season:requireSession().getRaisingHomeSnapshot().season});
+    }else if(stage==="raising-training-done"&&rebuilding){tutorialRaisingIdle(actor);tutorialRaisingPosition(actor,280,100,1);}
+    else if(stage.startsWith("raising-recovery")){
+      if(rebuilding||changed&&stage==="raising-recovery-intro"){
+        tutorialRaisingPosition(actor,stage==="raising-recovery-done"?380:280,stage==="raising-recovery-done"?132:110,stage==="raising-recovery-done"?15:1);
+        profile=tutorialRaisingCondition(profile,4);actor.state=stage==="raising-recovery-done"?16:15;
+        actor.sequenceId=null; // next step selects the special weak pose
+      }
+    }else if(stage.startsWith("raising-injury")){
+      if(rebuilding||changed&&stage==="raising-injury-intro"){tutorialRaisingIdle(actor);tutorialRaisingPosition(actor,280,100,1);profile=tutorialRaisingCondition(profile,5);}
+      if(stage!=="raising-injury-wait")profile=tutorialRaisingCondition(profile,cp.message===0&&stage==="raising-injury-intro"?7:6);
+      else if(rebuilding)profile=tutorialRaisingTreat(actor,tutorialRaisingCondition(profile,6),0,{next:nextGameplayRandom}).profile;
+    }else if(stage.startsWith("raising-sleep")||stage.startsWith("raising-gate")||stage==="raising-after-hunt"||stage==="raising-battle-ready"||stage==="raising-after-battle"){
+      if(stage==="raising-after-hunt"||stage==="raising-battle-ready")actor.tutorialCameraX=200;
+      if(rebuilding||changed&&stage==="raising-sleep-wait"){profile=tutorialRaisingCondition(tutorialRaisingCondition(profile,5),7);tutorialRaisingPosition(actor,280,100,1);tutorialRaisingSleep(actor);}
+    }
+    if(profile!==raisingNativeProfile(id))writeRaisingNativeProfile(id,profile,{markDirty:false});
+    tutorialRaisingStatus(actor,profile,stage.startsWith("raising-feed"));
+    return true;
+  }
+  function advanceInteractiveRaising(frames){
+    if(tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive)return false;
+    const cp=nativeOpening?.checkpoint,step=tutorialRaisingStep(cp),actor=raisingActors.get(creature.creatureId);
+    if(!step||!actor?.tutorialSpecial||step.dialogue||step.boundary)return false;
+    const key=actor.tutorialCheckpointKey,id=creature.creatureId,rng={next:nextGameplayRandom};
+    for(let i=0;i<frames&&actor.tutorialCheckpointKey===key&&!tutorialPendingOpening;i++){
+      let profile=raisingNativeProfile(id);
+      if(cp.stage==="raising-hatch"&&actor.eggPhase===0&&!actor.pendingHatch&&++actor.hatchWait>=180)requestNativeTutorialHatch(actor);
+      if(raisingHand?.tutorialKey===key&&raisingHand.held){
+        if(raisingHand.mode===1){
+          const result=classifyNativeRaisingHand({held:true,elapsed:raisingHand.elapsed,origin:raisingHand.origin,pointer:raisingHand.pointer,
+            inside:raisingHand.inside,admit:command=>command===0x80&&[1,15,16].includes(actor.state)});
+          raisingHand.elapsed++;
+          if(result===3&&tutorialRaisingCarry(actor,raisingHand.pointer))raisingHand.mode=3;
+          else if(result!==-1)raisingHand=null;
+        }
+        if(raisingHand?.mode===3)actor.carryPointer={...raisingHand.pointer};
+      }
+      for(const food of raisingFoods)stepNativeRaisingFood(food,0);
+      const result=stepNativeTutorialRaisingActor(actor,profile,{rng,ground:raisingGround,foods:raisingFoods,season:requireSession().getRaisingHomeSnapshot().season});
+      if(result.profile!==profile)writeRaisingNativeProfile(id,result.profile,{markDirty:false});
+      if(result.hatched){tutorialNext("raising-hatched");break;}
+      actor.tutorialElapsed++;
+      if(cp.stage==="raising-hunger-wait"&&actor.tutorialElapsed>=40)tutorialRaisingStatus(actor,raisingNativeProfile(id),true);
+      if(step.action==="carry"&&result.landed){
+        if(actor.cageDefinitionIndex===step.cage&&actor.state!==7){tutorialNext(step.cage===1?"raising-training-wait":"raising-recovery-done");break;}
+        actor.tutorialViewRevision=(actor.tutorialViewRevision??0)+1;
+        tutorialRaisingIdle(actor);tutorialRaisingPosition(actor,step.cage===1?150:280,step.cage===1?100:110,step.cage===1?35:1);
+        if(step.cage===15){actor.state=15;actor.sequenceId=null;}
+      }
+      if(step.action==="clean"){
+        const pending=actor.tutorialCleanPending,mask=Math.max(0,cp.message-1);
+        let next=mask;
+        pending.forEach((count,index)=>{if(count>0&&++pending[index]>20)next|=1<<index;});
+        if(next!==mask){tutorialNext("raising-clean",next+1);break;}
+        if(mask===7){tutorialNext("raising-clean-wait");break;}
+      }
+      if(step.wait&&actor.tutorialElapsed>=step.wait&&(cp.stage!=="raising-training-wait"||actor.state===1)){tutorialNext(step.next);break;}
+    }
+    publishRaising();return true;
+  }
+
+  function commitTutorialOpening(nextOpening) {
+    if(tutorialTransitionActive)throw new Error("INTERACTIVE_TUTORIAL_TRANSITION_ACTIVE");
+    if(tutorialCommitActive)return savePort.getStatus();
+    tutorialPendingOpening=normalizeNativeOpening(nextOpening);
+    tutorialCommitActive=true;
+    let status;
+    try {
+      if(['declined','completed'].includes(tutorialPendingOpening.checkpoint.stage)) {
+        // A failed exit can be retried after more transient changes. Reapply the
+        // baseline on EVERY attempt before releasing isolation, not only once.
+        // The R2 snapshot is already restored; ordinary clock/Hunt writers are
+        // blocked throughout this interval.
+        const {save:normal}=savePort.prepare({...tutorialBaseline,nativeOpening,revision});
+        applySavedGameData(normal,restoreCandidate(normal),{tutorialBoundary:true});
+      }
+      status=savePort.save({...tutorialBaseline,revision:revision+1,nativeOpening:tutorialPendingOpening});
+      if(status.phase==="SAVED") {
+        revision+=1;nativeOpening=tutorialPendingOpening;tutorialPendingOpening=null;
+        if(!interactiveTutorialInProgress(nativeOpening)){tutorialBaseline=null;publishScreens();}
+        else {restoreInteractiveTutorialActor();restoreTutorialScreen();}
+      }
+    } finally {tutorialCommitActive=false;}
+    publishRaising();
+    return status;
+  }
+
+  function applySavedGameData(saved,candidate,{tutorialBoundary=false}={}) {
+    creature = Object.freeze({ ...saved.creature });
+    revision = saved.progression.revision ?? 0;
+    interactionCount = saved.progression.interactionCount ?? 0;
+    tamerRankValue = normalizeTamerRank(saved.progression.tamerRank);
+    battleBadgesValue = [...saved.progression.battleBadges];
+    nativeTitles=normalizeNativeTitleProgress(saved.progression.nativeTitles)??emptyNativeTitleProgress();
+    championshipRun=saved.progression.championshipRun==null?null
+      :normalizeNativeChampionshipRun(saved.progression.championshipRun);
+    nativeMessages=normalizeNativeRaisingMessages(saved.progression.nativeMessages)??createNativeRaisingMessages();
+    nativeOpening=normalizeNativeOpening(saved.progression.nativeOpening);
+    registeredSpeciesValue = Object.freeze([...saved.progression.registeredSpecies]);
+    battleEconomy = normalizeBattleEconomyState(saved.battleEconomy);
+    gameplayRng = candidate.rng;
+    huntPersistentState = candidate.huntHistory;
+    raising = candidate.production;
+    raisingHand=null;raisingActors.clear();raisingAgeRemainder=0;
+    instanceIdentity = candidate.identity;
+    selectedCreatureId = null;
+    friendsPlaytest = saved.flags.friendsPlaytest ?? null;
+    openShopAndHunt({ shopSnapshot: saved.shop });
+    cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
+    freeBattleMenu=saved.progression.freeBattleMenu??null;
+    initializeNativeRaisingHome({tutorialBoundary});
+    selectedDatabaseSpeciesIndex = null;
+    resetExpedition();
+  }
+
+  async function hydrateSavedGame(saved,candidate,options={}) {
+    if(session){const closing=session;session=null;await closing.dispose();battlePartyIds=null;}
+    await openSession(seededRealmPort(candidate.snapshot));
+    applySavedGameData(saved,candidate,options);
+  }
+
+  function applyBattleTransaction(result, individualResults=[], preparedRng=null) {
+    if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+    if (!result.ok || result.duplicate) return result;
+    const before = battleEconomy;
+    const beforeCreature=creature,beforeRaising=raising,beforeRegistered=registeredSpeciesValue;
+    const beforeRng=gameplayRng;
+    const beforeBadges = battleBadgesValue;
+    const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages,beforeRun=championshipRun;
+    const expectedBits = requireShop().getBits();
+    // One rollback for both ways this can fail. The wallet is committed last, so
+    // until it succeeds every one of these is still the pre-transaction value.
+    const rollback = () => {
+      battleEconomy = before;
+      creature=beforeCreature;raising=beforeRaising;registeredSpeciesValue=beforeRegistered;
+      gameplayRng=beforeRng;
+      battleBadgesValue = beforeBadges;
+      tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;championshipRun=beforeRun;
+    };
+    battleTransactionActive = true;
+    try {
+      // Publish the wallet only after its matching transaction state exists.
+      // A synchronous observer therefore sees one consistent app snapshot.
+      battleEconomy = result.state;
+      if(preparedRng)gameplayRng=preparedRng;
+      for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
+      if (result.receipt?.status === "SETTLED") {
+        nativeTitles=applyNativeBattleRecord(nativeTitles,result.receipt);
+        // A tournament round is not a title on its own: the payout gate and the
+        // title result both read the whole run, so settleChampionship resolves
+        // it once the last round is in.
+        const r=championshipAttemptId===result.receipt.attemptId?null
+          :resolveNativeTitleResult({rank:tamerRankValue,category:result.receipt.mode,matchIndex:result.receipt.matchIndex,
+            won:battleBadgesValue,...nativeTitles,rounds:[result.receipt.won?1:0]});
+        if(r){
+        battleBadgesValue=[...r.won];tamerRankValue=r.rank;
+        nativeTitles=normalizeNativeTitleProgress({...nativeTitles,registered:r.registered,championship:r.championship,feeWaiver:r.feeWaiver});
+        if(r.rankNotice!==null)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,r.rankNotice);
+        }
+      }
+      const committed = requireShop().applyBitsTransaction({ expectedBits, bits: result.wallet });
+      if (!committed.ok) {
+        rollback();
+        return Object.freeze({ ok: false, reason: committed.reason });
+      }
+      if (battleBadgesValue !== beforeBadges) applyProgression();
+      interactionCount += 1;
+      savePort.markDirty();
+      return result;
+    } catch (error) {
+      // The title/rank writers run between the economy state and the wallet
+      // commit. A throw there used to leave the attempt settled with its payout
+      // never credited -- the one shape of this transaction that loses a
+      // player's prize. Unwind to the pre-transaction state and let the error
+      // out unchanged; a caller that saw an exception must not also inherit a
+      // half-applied match.
+      rollback();
+      throw error;
+    } finally {
+      battleTransactionActive = false;
+    }
+  }
+
+  return Object.freeze({
+    savePort,
+    // Core consumers share this draw boundary; projections receive copies.
+    nextGameplayRandom,
+    getGameplayRngState: gameplayRngSnapshot,
+    getHuntPersistentState: () => structuredClone(huntPersistentState),
+
+    hasSave() {
+      return savePort.read().present;
+    },
+
+    inspectSave() {
+      return savePort.read();
+    },
+
+    getCreature() {
+      return creature;
+    },
+
+    getSession() {
+      return session;
+    },
+
+    getSnapshot() {
+      return session ? session.getRaisingHomeSnapshot() : null;
+    },
+
+    getInteractionCount() {
+      return interactionCount;
+    },
+
+    async newGame({trainerName=null,eggName=null,eggSpeciesIndex=0}={}) {
+      if(tutorialTransitionActive||tutorialCommitActive)return null;
+      if (huntCommitActive) return null;
+      const opening=trainerName===null?null:normalizeNativeOpening({version:1,trainerName:trainerName.trim(),tutorialStep:null});
+      const givenName=eggName===null?null:normalizeProductGivenName(eggName);
+      if(givenName!==null&&givenName.length>5)throw new TypeError('INVALID_NATIVE_OPENING_EGG_NAME');
+      if(!Number.isInteger(eggSpeciesIndex)||eggSpeciesIndex<0||eggSpeciesIndex>7)throw new TypeError('INVALID_STARTER_EGG_SELECTION');
+      // Species choice must retain the existing R2 starter slot identity, just
+      // as evolution changes its species without creating a second resident.
+      const startingIdentity={
+        ...selectPhase1FirstCreature(catalog,{residentId:`resident:species-${String(eggSpeciesIndex).padStart(3,'0')}`}),
+        creatureId:selectPhase1FirstCreature(catalog).creatureId
+      };
+      const initialRng = createClockChannelRng(rngClock());
+      const initialHuntHistory = createNativeHuntPersistentState();
+      if (session) await this.dispose();
+      if(!await savePort.acquireSession())throw new Error('另一個分頁正在遊玩。請先關閉該分頁，再開始遊戲。');
+      try {savePort.clear();}catch(error){await savePort.releaseSession();throw error;}
+      let nativeProfile = createNativeRaisingStarter(initialRng,eggSpeciesIndex);
+      if(givenName!==null)nativeProfile=Object.freeze({...nativeProfile,name:givenName});
+      creature = Object.freeze({ ...startingIdentity, displayName:nativeProfile.name, nativeProfile });
+      revision = 0;
+      interactionCount = 0;
+      tamerRankValue = 0;
+      battleBadgesValue = [];
+      nativeTitles=createNativeTitleProgress();
+      championshipRun=null;
+      nativeMessages=createNativeRaisingMessages();
+      nativeOpening=opening;
+      tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
+      registeredSpeciesValue = Object.freeze([]);
+      battleEconomy = createBattleEconomyState();
+      gameplayRng = initialRng;
+      huntPersistentState = initialHuntHistory;
+      await openSession(createChampionshipSavePortR2());
+      const creatureIds = session.getRaisingHomeSnapshot().residents.map((r) => r.residentId);
+      raising = createRaisingProductionState({ cageIds, creatureIds });
+      raisingHand=null;raisingActors.clear();raisingAgeRemainder=0;
+      instanceIdentity = createRaisingInstanceIdentityState(instanceSources());
+      selectedCreatureId = null;
+      friendsPlaytest = null;
+      openShopAndHunt({newSave:true});
+      cageEdit = createCageEditRuntime({ initializeOriginal: true, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
+      rebuildFreeBattleMenu();
+      initializeNativeRaisingHome();
+      selectedDatabaseSpeciesIndex = null;
+      resetExpedition();
+      return { creature, snapshot: session.getRaisingHomeSnapshot(), raising };
+    },
+
+    /** Restore a previously saved standalone game. Returns null when there is
+     *  nothing loadable, so the shell can fall back to New Game rather than
+     *  stranding the player on an error. */
+    /**
+     * Whether the stored save can actually be opened.
+     *
+     * `savePort.read()` reports `present` for anything that deserializes as JSON,
+     * which is a weaker test than the R2 layer applies: a save written before a
+     * schema change can be present and still be rejected by
+     * restoreRaisingHomeSnapshotR2. Offering Continue on `present` alone therefore
+     * enables a button that is guaranteed to fail. This dry-runs the same restore
+     * the real load performs, changing no state, so the title screen can tell the
+     * truth about what the button will do.
+     */
+    canContinue() {
+      const read = savePort.read();
+      if (!read.present) return Object.freeze({ loadable: false, reason: read.error ?? null });
+      try {
+        restoreCandidate(read.save);
+        return Object.freeze({ loadable: true, reason: null });
+      } catch (error) {
+        return Object.freeze({ loadable: false, reason: error.message });
+      }
+    },
+
+    async continueGame() {
+      if(tutorialTransitionActive||tutorialCommitActive)return null;
+      if (huntCommitActive) return null;
+      if(!await savePort.acquireSession())throw new Error('另一個分頁正在遊玩。請先關閉該分頁，再繼續遊戲。');
+      let read = savePort.read({adopt:true});
+      if (!read.present) {if(!session)await savePort.releaseSession();return null;}
+      let candidate;
+      try {candidate=restoreCandidate(read.save);}catch(error){if(!session)await savePort.releaseSession();throw error;}
+      const migration=migrateFriendsPlaytestDiamonds(read.save.flags.friendsPlaytest,playtestPolicy);
+      if(migration.changed){
+        // Grant+marker are one durable transaction before hydration. Failure
+        // leaves the original save intact and never exposes spendable credit.
+        const status=savePort.save({...requestFromSavedGame(read.save,candidate),
+          revision:(read.save.progression.revision??0)+1,friendsPlaytest:migration.state});
+        if(status.phase!=='SAVED'){
+          savePort.discardPendingWrite();if(!session)await savePort.releaseSession();
+          throw new Error('TEST_DIAMOND_MIGRATION_SAVE_FAILED');
+        }
+        read=savePort.read({adopt:true});
+        if(!read.present){if(!session)await savePort.releaseSession();throw new Error('TEST_DIAMOND_MIGRATION_READ_FAILED');}
+      }
+      tutorialOfferEligible=false;tutorialPendingOpening=null;
+      tutorialBaseline=interactiveTutorialInProgress(read.save.progression.nativeOpening)
+        ?retainTutorialBaseline(requestFromSavedGame(read.save,candidate)):null;
+      await hydrateSavedGame(read.save,candidate,{tutorialBoundary:tutorialBaseline!==null});
+      if(tutorialBaseline){
+        if(tutorialHuntStep(nativeOpening.checkpoint)?.screen==='HUNT_FIELD'){
+          tutorialTransitionActive=true;
+          try{tutorialHuntCandidate=await prepareTutorialHunt();}finally{tutorialTransitionActive=false;}
+        }
+        if(tutorialBattleStep(nativeOpening.checkpoint)?.screen.startsWith('BATTLE_')){
+          tutorialTransitionActive=true;
+          try{tutorialBattleCandidate=await prepareTutorialBattle();}finally{tutorialTransitionActive=false;}
+        }
+        restoreTutorialScreen();restoreInteractiveTutorialActor();
+      }
+      return { creature, snapshot: session.getRaisingHomeSnapshot(), save: read.save, raising };
+    },
+
+    dispatch(command) {
+      return dispatchRaisingHomeCommand(command);
+    },
+
+    getRaisingState() {
+      return raising;
+    },
+
+    getRaisingGroundSupport(x,y){return readRaisingGroundSupport(raisingGround,x,y);},
+
+    getRaisingActorFrame(instanceId) {
+      const actor=nativeRaisingActor(instanceId);
+      const profile=raisingNativeProfile(instanceId);
+      return actor&&profile ? Object.freeze({
+        ...projectNativeRaisingActor(actor),
+        // Current and maximum HP for frame readers. These reads do not create
+        // a second HP owner; the recovery-cage stars do not read them.
+        currentHp:profile.fields["050"],
+        maxHp:profile.fields["058"]
+      }) : null;
+    },
+
+    getRaisingFoodFrame() {
+      return Object.freeze(raisingFoods.filter(f=>f.present).map(f=>Object.freeze({slot:f.slot,cageDefinitionIndex:f.cageDefinitionIndex,
+        positionQ12:Object.freeze([...f.positionQ12]),heightQ12:f.heightQ12,protein:f.protein,kind:f.kind,remaining:f.remaining,
+        freshness:f.freshness,quarter:foodVisualQuarter(f)})));
+    },
+
+    getRaisingWasteFrame(){return Object.freeze(raisingWaste.filter(w=>w.present).map(w=>Object.freeze({slot:w.slot,speciesIndex:w.speciesIndex,cageDefinitionIndex:w.cageDefinitionIndex,present:true,positionQ12:Object.freeze([...w.positionQ12])})));},
+    getRaisingLifecycleFrame(){
+      const evolving=[...raisingActors].find(([,actor])=>actor.evolution);
+      return Object.freeze({confirmation:raisingDayConfirmation,day:raisingDayTransition?Object.freeze({...raisingDayTransition,
+        calendar:projectNativeRaisingCalendar({...requireSession().getRaisingHomeSnapshot(),progressCounter:tamerRankValue,
+          won:battleBadgesValue,registered:nativeTitles.registered,championship:nativeTitles.championship})}):null,
+        evolution:evolving?Object.freeze({instanceId:evolving[0],...projectNativeRaisingActor(evolving[1]).evolution}):null,
+        mailbox:nativeMessages,message:raisingLifecycleMessage});
+    },
+    hasRaisingPresentation(){return tutorialBaseline!==null||raisingDayConfirmation||raisingDayTransition!==null||nativeMessages.activeId!==null||[...raisingActors.values()].some(a=>a.evolution);},
+    requestRaisingDayEnd(){
+      if(this.hasRaisingPresentation()||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return false;
+      raisingDayConfirmation=true;publishRaising();return true;
+    },
+    confirmRaisingDayEnd(accepted){
+      if(!raisingDayConfirmation||typeof accepted!=='boolean')return false;
+      raisingDayConfirmation=false;
+      if(accepted)return this.endDay();
+      publishRaising();return true;
+    },
+    selectRaisingEvolutionChoice(instanceId,target){
+      const actor=raisingActors.get(instanceId);
+      if(!actor||!selectNativeRaisingEvolutionChoice(actor,target,{next:nextGameplayRandom}))return false;
+      savePort.markDirty();publishRaising();return true;
+    },
+    advanceRaisingPresentation({frames}={}) {
+      if(!Number.isInteger(frames)||frames<0||frames>120)throw new TypeError('INVALID_RAISING_PRESENTATION_FRAMES');
+      if(tutorialBaseline)return advanceInteractiveRaising(frames);
+      if(raisingDayTransition){for(let i=0;i<frames&&raisingDayTransition;i++){
+        if(raisingDayTransition.phase==='calendar'||(raisingDayTransition.phase==='saving'&&raisingDayTransition.savePhase==='SAVE_FAILED'))break;
+        raisingDayTransition.frames++;
+        if(raisingDayTransition.phase==='fade-out'&&raisingDayTransition.frames>=8){raisingDayTransition.phase='saving';raisingDayTransition.frames=0;const status=this.save();raisingDayTransition.savePhase=status.phase;}
+        else if(raisingDayTransition.phase==='saving'&&raisingDayTransition.savePhase==='SAVED'){raisingDayTransition.phase='calendar-in';raisingDayTransition.frames=0;}
+        else if(raisingDayTransition.phase==='calendar-in'&&raisingDayTransition.frames>=16){raisingDayTransition.phase='calendar';raisingDayTransition.frames=0;}
+        else if(raisingDayTransition.phase==='calendar-out'&&raisingDayTransition.frames>=16){settleRaisingOvernight();raisingDayTransition.phase='fade-in';raisingDayTransition.frames=0;}
+        else if(raisingDayTransition.phase==='fade-in'&&raisingDayTransition.frames>=8){raisingDayTransition=null;this.prepareMorningMessages();}
+      }
+        publishRaising();return true;
+      }
+      if(nativeMessages.activeId!==null){nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,activeFrames:Math.min(61,nativeMessages.activeFrames+frames)});publishRaising();return true;}
+      const entry=[...raisingActors].find(([,actor])=>actor.evolution);if(!entry)return false;
+      const [id,actor]=entry;
+      for(let i=0;i<frames&&actor.evolution;i++){
+        const result=stepNativeRaisingEvolution(actor,raisingNativeProfile(id),{next:nextGameplayRandom});
+        if(result.changed)writeRaisingNativeProfile(id,result.profile);
+        if(result.disappeared){
+          const prior=requireSession().getRaisingHomeSnapshot();
+          if(prior.residents.some(r=>r.residentId===id))requireSession().commitRaisingResidentRelease([id],prior.revision);
+          raising=releaseRaisingMembership(raising,id);delete raisingPoolSlots[id];raisingActors.delete(id);
+          if(selectedCreatureId===id)selectedCreatureId=null;
+          raisingLifecycleMessage={kind:'DISAPPEARED',instanceId:id};storeNativeRaisingHome();savePort.markDirty();break;
+        }
+        if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target};
+          if(event.productRouteId){const productEvolutionBranches=[...new Set([...(raising.nativeHome?.productEvolutionBranches??[]),event.productRouteId])];
+            raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,productEvolutionBranches})});}
+          else if(event.target>=8&&!event.inherited){const branches=[...new Set([...(raising.nativeHome?.evolutionBranches??[]),(event.oldSpecies-8)*5+event.index])];
+            raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,evolutionBranches:branches})});}
+          savePort.markDirty();}
+      }
+      publishRaising();return true;
+    },
+    acknowledgeRaisingCalendar(){
+      if(raisingDayTransition?.phase!=='calendar')return false;
+      raisingDayTransition.phase='calendar-out';raisingDayTransition.frames=0;publishRaising();return true;
+    },
+
+    beginRaisingHand(instanceId,pointer){
+      if(tutorialBaseline){
+        if(instanceId!==creature.creatureId||raisingHand||!tutorialInput(pointer?.checkpoint,"carry","hand")
+          ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+        raisingHand={id:instanceId,mode:1,elapsed:0,held:true,inside:true,origin:{...pointer},pointer:{...pointer},tutorialKey:raisingActors.get(instanceId).tutorialCheckpointKey};
+        return true;
+      }
+      if(raisingHand||this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME
+        ||!raisingGround||!raisingActors.has(instanceId)||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+      const point={...pointer,x:Math.floor(pointer.x),y:Math.floor(pointer.y)};
+      raisingHand={id:instanceId,mode:1,elapsed:0,held:true,inside:true,origin:{...point},pointer:{...point},previous:{...point}};return true;
+    },
+    updateRaisingHand(instanceId,pointer){
+      if(tutorialBaseline&&!tutorialInput(pointer?.checkpoint,"carry","hand"))return false;
+      if(raisingHand?.id!==instanceId||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+      raisingHand.pointer={...pointer,x:Math.floor(pointer.x),y:Math.floor(pointer.y)};raisingHand.inside=pointer.inside!==false;return true;
+    },
+    endRaisingHand(instanceId,{cancelled=false,checkpoint=null,reason=null}={}){
+      if(tutorialBaseline){
+        if(raisingHand?.id!==instanceId||!tutorialInput(checkpoint,"carry","hand"))return false;
+        const actor=raisingActors.get(instanceId),hand=raisingHand;raisingHand=null;
+        if(cancelled){actor.tutorialViewRevision=(actor.tutorialViewRevision??0)+1;tutorialRaisingIdle(actor);const recovery=nativeOpening.checkpoint.stage==="raising-recovery-drop";
+          tutorialRaisingPosition(actor,recovery?280:150,recovery?110:100,recovery?1:35);if(recovery){actor.state=15;actor.sequenceId=null;}publishRaising();return true;}
+        if(hand.mode!==3)return false;
+        const released=tutorialRaisingRelease(actor);publishRaising();return released;
+      }
+      if(raisingHand?.id!==instanceId)return false;
+      if(cancelled&&raisingHand.mode===1){raisingHand=null;return true;}
+      if(cancelled&&reason==='viewport-resize'&&raisingHand.mode===3){
+        const actor=raisingActors.get(instanceId);
+        if(actor&&cancelNativeRaisingCarry(actor)){
+          raisingHand=null;publishRaising();return true;
+        }
+        // Missing rollback data must never route a resize into normal drop.
+        return false;
+      }
+      raisingHand.held=false;advanceRaisingHand();publishRaising();return true;
+    },
+    beginRaisingCarry(instanceId,pointer){
+      if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!raisingGround
+        ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+      const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);
+      if(!actor||!profile||[...raisingActors.values()].some(a=>a.state===6))return false;
+      const p=beginNativeRaisingCarry(actor,profile,pointer,{ground:raisingGround,foods:raisingFoods,rng:{next:nextGameplayRandom}});if(!p)return false;
+      actor.carryCameraX=pointer.cameraX??0;writeRaisingNativeProfile(instanceId,p);savePort.markDirty();publishRaising();return true;
+    },
+    updateRaisingCarry(instanceId,pointer){
+      if(tutorialBaseline)return false;
+      const actor=raisingActors.get(instanceId);if(actor?.state!==6||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+      actor.carryPointer={x:pointer.x,y:pointer.y};actor.carryCameraX=pointer.cameraX??actor.carryCameraX;return true;
+    },
+    releaseRaisingCarry(instanceId,{cancelled=false,reason=null}={}){
+      if(tutorialBaseline)return false;
+      const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);if(!actor||!profile)return false;
+      if(cancelled&&reason==='viewport-resize'){
+        if(!cancelNativeRaisingCarry(actor))return false;
+        publishRaising();return true;
+      }
+      const p=releaseNativeRaisingCarry(actor,profile);if(!p)return false;
+      writeRaisingNativeProfile(instanceId,p);interactionCount++;savePort.markDirty();publishRaising();return true;
+    },
+    // OVL18 02119280..021192A0: settled ground determines native membership.
+    // This binds position/membership only; training-module reaction/effect
+    // programs after 021192A8 remain a separate lifecycle boundary.
+    moveRaisingResidentToGround(instanceId,{x,y}={}) {
+      if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!raisingGround
+        ||!Number.isFinite(x)||!Number.isFinite(y)||x<0||x>=raisingGround.pixelWidth)return false;
+      const cage=raisingGround.cageAt(x,y),actor=raisingActors.get(instanceId);
+      if(!cage||!actor?.positionQ12||raisingGround.readTerrain(Math.trunc(x/8),Math.trunc(y/8))===1)return false;
+      const profile=raisingNativeProfile(instanceId);if(!profile)return false;
+      if(actor.speciesIndex>=8){const woke=wakeNativeRaisingActor(actor,profile,raisingFoods,{next:nextGameplayRandom});if(woke)writeRaisingNativeProfile(instanceId,woke);
+        else interruptNativeRaisingFeeding(actor,raisingFoods,{next:nextGameplayRandom});}
+      const previousDefinition=actor.cageDefinitionIndex;
+      actor.positionQ12=[Math.trunc(x)*4096,Math.trunc(y)*4096,0];actor.destinationQ12=[...actor.positionQ12];
+      actor.cageDefinitionIndex=cage.definitionIndex;actor.cageInstanceId=cage.instanceId;
+      if(actor.speciesIndex>=8)writeRaisingNativeProfile(instanceId,enterNativeRaisingCage(actor,raisingNativeProfile(instanceId),{
+        previousDefinition,ground:raisingGround,foods:raisingFoods,season:requireSession().getRaisingHomeSnapshot().season}, {next:nextGameplayRandom}));
+      storeNativeRaisingPositions();storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;
+    },
+
+    treatRaisingResident(instanceId,kind,checkpoint=null) {
+      if(tutorialBaseline){
+        const illness=kind===1,action=illness?"illness":"injury";
+        if((kind!==0&&kind!==1)||instanceId!==creature.creatureId||!tutorialInput(checkpoint,action,illness?"medicine":"woundMedicine"))return {ok:false};
+        const actor=raisingActors.get(instanceId),result=tutorialRaisingTreat(actor,raisingNativeProfile(instanceId),kind,{next:nextGameplayRandom});
+        if(!result)return {ok:false};
+        writeRaisingNativeProfile(instanceId,result.profile,{markDirty:false});
+        tutorialNext(illness?"raising-illness-wait":"raising-injury-wait");
+        return {ok:true,applied:true,success:result.success,consumed:false};
+      }
+      if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!raisingGround
+        ||(kind!==0&&kind!==1))return Object.freeze({ok:false,reason:'HOME_REQUIRED'});
+      const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);
+      if(!actor||!profile)return Object.freeze({ok:false,reason:'UNKNOWN_RESIDENT'});
+      const stock=requireShop().toSave().quantities[kind===0?3:2];
+      const admission=nativeTreatmentAdmission({species:actor.speciesIndex,state:actor.state,condition:profile.fields[kind===0?'134':'138'],stock});
+      if(!admission.dispatch)return Object.freeze({ok:false,reason:stock<1?'EMPTY':'EGG'});
+      const result=treatNativeRaisingActor(actor,profile,kind,{foods:raisingFoods,ground:raisingGround,rng:{next:nextGameplayRandom}});
+      if(result.profile!==profile)writeRaisingNativeProfile(instanceId,result.profile);
+      // Commit the corresponding individual/reaction before inventory observers
+      // run, so they cannot save a debited item with the old condition fields.
+      if(admission.consume&&!shop.consumeRaisingMedicine(kind).ok)throw new Error('RAISING_MEDICINE_INVENTORY_DRIFT');
+      if(result.applied||admission.consume){interactionCount++;savePort.markDirty();publishRaising();}
+      return Object.freeze({ok:true,consumed:admission.consume,applied:result.applied,success:result.success});
+    },
+
+    cleanRaisingFood({x,y,checkpoint=null}={}) {
+      if(tutorialBaseline){
+        if(!tutorialInput(checkpoint,"clean","clean")||!Number.isFinite(x)||!Number.isFinite(y))return false;
+        const actor=raisingActors.get(creature.creatureId),mask=Math.max(0,nativeOpening.checkpoint.message-1);
+        const targets=[[100,120,15,17],[160,100,6,10],[80,80,15,17]];
+        const hit=targets.findIndex(([px,py,l,r],i)=>!(mask&(1<<i))&&!actor.tutorialCleanPending[i]&&x>=px-l&&x<=px+r&&y>=py-19&&y<=py+5);
+        if(hit<0)return false;
+        actor.tutorialCleanPending[hit]=1;
+        [raisingFoods[0],raisingWaste[0],raisingFoods[1]][hit].present=false;publishRaising();return true;
+      }
+      if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!Number.isFinite(x)||!Number.isFinite(y))return false;
+      // 02121308 and live body +5A: inclusive native box [-6,-19,10,5].
+      const waste=raisingWaste.find(w=>w.present&&x>=(w.positionQ12[0]>>12)-6&&x<=(w.positionQ12[0]>>12)+10&&y>=(w.positionQ12[1]>>12)-19&&y<=(w.positionQ12[1]>>12)+5);
+      if(waste){waste.present=false;raisingDirtySignals.set(waste.cageInstanceId??waste.cageDefinitionIndex,{dirtyRemoved:true});storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;}
+      const food=raisingFoods.find(f=>f.present&&x>=(f.positionQ12[0]>>12)-15&&x<=(f.positionQ12[0]>>12)+17
+        &&y>=(f.positionQ12[1]>>12)-19&&y<=(f.positionQ12[1]>>12)+5);
+      if(!food)return false;
+      food.present=false;
+      if(food.freshness<=0)raisingDirtySignals.set(food.cageInstanceId??food.cageDefinitionIndex,{dirtyRemoved:true});
+      for(const actor of raisingActors.values())if(actor.foodSlot===food.slot)removeNativeRaisingFoodTarget(actor,raisingFoods,{next:nextGameplayRandom});
+      storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;
+    },
+
+    placeRaisingFood({x,y,protein=false,checkpoint=null}={}) {
+      if(tutorialBaseline){
+        if(protein||!tutorialInput(checkpoint,"feed","feed")||!Number.isFinite(x)||!Number.isFinite(y)||Math.abs(x-100)>12||Math.abs(y-120)>12)return {ok:false,reason:"TUTORIAL_TARGET_REQUIRED"};
+        const actor=raisingActors.get(creature.creatureId);
+        raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:[100*4096,120*4096,0]})];
+        if(!tutorialRaisingFeed(actor,raisingNativeProfile(creature.creatureId),raisingFoods)){raisingFoods=[];return {ok:false,reason:"TUTORIAL_FOOD_TARGET_UNAVAILABLE"};}
+        tutorialNext("raising-feed-eat");return {ok:true,slot:0};
+      }
+      if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return Object.freeze({ok:false,reason:"HOME_REQUIRED"});
+      if(!raisingGround)return Object.freeze({ok:false,reason:"NATIVE_RANCH_REQUIRED"});
+      if(!Number.isFinite(x)||!Number.isFinite(y)||typeof protein!=="boolean"||x<0||x>=raisingGround.pixelWidth)return Object.freeze({ok:false,reason:"INVALID_POSITION"});
+      const cage=raisingGround.cageAt(x,y);
+      if(!cage||raisingGround.readTerrain(Math.trunc(x/8),Math.trunc(y/8))===1)return Object.freeze({ok:false,reason:"INVALID_GROUND"});
+      // Food's native touch box is inclusive; a touch already on an object
+      // cannot place a second object or consume another inventory unit.
+      const px=Math.trunc(x),py=Math.trunc(y);
+      if(raisingFoods.some(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===(cage.instanceId??cage.definitionIndex)&&px>=(f.positionQ12[0]>>12)-15&&px<=(f.positionQ12[0]>>12)+17
+        &&py>=(f.positionQ12[1]>>12)-19&&py<=(f.positionQ12[1]>>12)+5))return Object.freeze({ok:false,reason:"FOOD_AT_POINT"});
+      const used=new Set(raisingFoods.filter(f=>f.present).map(f=>f.slot)),slot=Array.from({length:10},(_,i)=>i).find(i=>!used.has(i));
+      if(slot===undefined)return Object.freeze({ok:false,reason:"FOOD_POOL_FULL"});
+      if(requireShop().toSave().quantities[protein?1:0]<1)return Object.freeze({ok:false,reason:"EMPTY"});
+      const food=createNativeRaisingFood({slot,cageDefinitionIndex:cage.definitionIndex,cageInstanceId:cage.instanceId,positionQ12:[px*4096,py*4096,0],protein});
+      raisingFoods=raisingFoods.filter(f=>f.present);raisingFoods.push(food);storeNativeRaisingHome();
+      const consumed=shop.consumeRaisingFood(protein);
+      if(!consumed.ok)throw new Error("RAISING_FOOD_INVENTORY_DRIFT");
+      interactionCount++;savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,slot,owned:consumed.owned});
+    },
+
+    subscribeRaising(listener) {
+      if(typeof listener!=="function")throw new TypeError("RAISING_LISTENER_REQUIRED");
+      raisingListeners.add(listener);return ()=>raisingListeners.delete(listener);
+    },
+
+    touchRaisingEgg(instanceId,expectedCheckpoint=null) {
+      if(tutorialBaseline){
+        if(tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive
+          ||nativeOpening?.checkpoint?.stage!=="raising-hatch"||!expectedCheckpoint
+          ||!sameInteractiveTutorialCheckpoint(nativeOpening.checkpoint,expectedCheckpoint)
+          ||instanceId!==creature.creatureId||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return false;
+        return requestNativeTutorialHatch(raisingActors.get(instanceId));
+      }
+      if(huntCommitActive || screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return false;
+      const actor=nativeRaisingActor(instanceId);
+      return actor ? touchNativeRaisingEgg(actor) : false;
+    },
+
+    getInstanceIdentityState() { return instanceIdentity; },
+
+    getRaisingInstances() {
+      requireSession();
+      return listRaisingInstances(instanceSources());
+    },
+
+    getRanchExplorationFrame() {
+      if(tutorialBaseline||!raisingGround?.navigation)return null;
+      const nav=raisingGround.navigation,state=raising?.nativeHome?.discoveries;
+      const instances=new Map(listRaisingInstances(instanceSources()).map(p=>[p.instanceId,p]));
+      return Object.freeze({
+        connections:nav.connections,boundaries:nav.boundaries.map(({id,reason})=>({id,reason})),
+        pending:state?.pending.map(p=>({...p,name:instances.get(p.partnerId)?.displayName??null}))??[],
+        collected:state?.collected??0,active:!!state?.participants.length,
+        resting:state?.pending.length===12,
+        walkers:[...raisingActors].filter(([,a])=>a.explorationRoute?.length).map(([id,a])=>({id,target:a.explorationTarget}))
+      });
+    },
+
+    refreshRanchDiscoveries() {
+      if(!session||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||this.hasRaisingPresentation())return false;
+      settleDiscoveries();publishRaising();return true;
+    },
+
+    collectRanchDiscoveries() {
+      if(!session||tutorialBaseline||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME
+        ||this.hasRaisingPresentation()||battleTransactionActive||huntCommitActive)return {ok:false,reason:'UNAVAILABLE'};
+      storeNativeRaisingPositions();storeNativeRaisingHome();
+      const state=raising.nativeHome?.discoveries;
+      if(!state?.pending.length)return {ok:false,reason:'EMPTY'};
+      // Speculative inventory has no live Hunt binding or observers.
+      const candidate=createShopRuntime({snapshot:requireShop().toSave(),allowRepeatedCages:playtestPolicy?.enabled===true,
+        allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+      const accepted=[];
+      for(const entry of state.pending){
+        const reward=RANCH_DISCOVERY_REWARDS[entry.kind];
+        if(reward.bits){
+          const before=candidate.getBits();
+          if(before+reward.bits>BITS_WALLET_CAP)continue;
+          candidate.creditBits(reward.bits);accepted.push(entry.id);
+        }else{
+          const record=getShopRecord(reward.record);
+          if(candidate.toSave().quantities[reward.record]+reward.quantity>record.maxOwned)continue;
+          candidate.receiveNativeGift(reward.record,reward.quantity);accepted.push(entry.id);
+        }
+      }
+      if(!accepted.length)return {ok:false,reason:'INVENTORY_FULL'};
+      const nextRaising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({
+        ...raising.nativeHome,discoveries:removeCollectedDiscoveries(state,accepted)})});
+      const status=savePort.save({...liveSaveRequest(revision+1),raising:nextRaising,shop:candidate.toSave()});
+      if(status.phase!=='SAVED'){savePort.discardPendingWrite();return {ok:false,reason:'SAVE_FAILED'};}
+      raising=nextRaising;
+      shop=createShopRuntime({snapshot:candidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
+        allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+      applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();revision++;
+      publishRaising();return {ok:true,collected:accepted.length,remaining:raising.nativeHome.discoveries.pending.length};
+    },
+
+    resolveRaisingInstance(instanceId) {
+      requireSession();
+      return resolveRaisingInstance(instanceSources(), instanceId);
+    },
+
+    getCalendar() {
+      const snapshot = requireSession().getRaisingHomeSnapshot();
+      return projectWorldClockDisplay(snapshot);
+    },
+
+    getBattleSchedule() { return battleSchedule(); },
+
+    getTitleProgress(){return Object.freeze({...nativeTitles,rank:tamerRankValue,won:Object.freeze([...battleBadgesValue])});},
+    getRaisingMailbox(){return nativeMessages;},
+    getOpeningState(){return nativeOpening;},
+
+    getInteractiveTutorial() {
+      const opening=nativeOpening?.version===2?nativeOpening:tutorialPendingOpening;
+      if(!opening)return null;
+      const checkpoint=opening.checkpoint,step=tutorialStep(checkpoint),actor=raisingActors.get(creature?.creatureId);
+      const mask=checkpoint.stage==="raising-clean"?Math.max(0,checkpoint.message-1):0;
+      const targets=step?.action==="feed"?[[100,120]]:step?.action==="clean"?[[100,112],[160,92],[80,72]].filter((_,i)=>!(mask&(1<<i))):step?.cage===1?[[280,100]]:step?.cage===15?[[380,132]]:[];
+      return Object.freeze({checkpoint,finished:['declined','completed'].includes(checkpoint.stage),textId:step?.textId??null,
+        dialogue:step?.dialogue??false,action:step?.action??null,waiting:Boolean(step?.wait)||checkpoint.stage==="raising-hatch",
+        tool:step?.tool??"hand",menuEntry:step?.menuEntry??'hunt',selectTool:step?.action!=="select"&&step?.action!=="camera",
+        targets:Object.freeze(targets.map(Object.freeze)),cameraX:actor?.tutorialCameraX??0,viewRevision:actor?.tutorialViewRevision??0,
+        boundary:step?.boundary??false,pendingSave:tutorialPendingOpening!==null,restoring:tutorialTransitionActive,
+        available:!step?.boundary});
+    },
+    selectInteractiveTutorialTool(tool,checkpoint){
+      if(!tutorialInput(checkpoint))return false;
+      const step=tutorialRaisingStep(nativeOpening.checkpoint),actor=raisingActors.get(creature.creatureId);
+      if(step.tool!==tool)return false;actor.tutorialSelectedTool=tool;
+      if(step.action==="select")tutorialNext(step.next);else publishRaising();return true;
+    },
+    panInteractiveTutorial({x,checkpoint,tool}={}){
+      if(!tutorialInput(checkpoint,"camera","hand")||tool!=="hand"||!Number.isFinite(x)||x<100)return false;
+      tutorialNext("raising-carry-intro");return true;
+    },
+    openInteractiveTutorialMenu(entry,checkpoint){
+      if(entry==='battle'){
+        if(!tutorialExpeditionInput(checkpoint,'menu')||checkpoint.stage!=='raising-battle-ready'||screens.current()!=='RAISING_HOME')return false;
+        return (async()=>{
+        tutorialTransitionActive=true;publishRaising();
+        try{tutorialBattleCandidate=await prepareTutorialBattle();}
+        finally{tutorialTransitionActive=false;publishRaising();}
+        tutorialNext('battle-kind-intro');return true;
+        })();
+      }
+      if(entry!=="hunt"||!tutorialInput(checkpoint,"menu"))return false;
+      tutorialNext("raising-gate-wait");return true; // Gate16 adapter is the next bounded slice.
+    },
+
+    getInteractiveTutorialBattle(){
+      if(!tutorialBaseline||!tutorialBattleCandidate)return null;
+      const step=tutorialBattleStep(nativeOpening.checkpoint);if(!step?.screen.startsWith('BATTLE_'))return null;
+      const {runtime,individuals}=tutorialBattleCandidate;
+      // Reload projects the previously judged verdict, without rerunning combat.
+      return {runtime,individuals,step,match:runtime.getChosenMatch(),
+        participants:individuals.map(({instanceId,speciesId})=>({instanceId,speciesId})),
+        outcome:step.verdict?{ended:true,reason:nativeOpening.checkpoint.message===1?'TIME_UP':'TEAM_DOWN',verdict:step.verdict,winningTeam:step.winningTeam}:null};
+    },
+    interactiveBattleInput(action,value,checkpoint){
+      if(!tutorialBattleInput(checkpoint,action))return false;
+      const step=tutorialBattleStep(checkpoint);
+      if(action==='kind'&&value!=='TITLE_MATCH'||action==='match'&&value!==61)return false;
+      if(action==='member'){
+        if(!Number.isInteger(value)||value<0||value>2)return false;
+        const mask=checkpoint.message^(1<<value);
+        tutorialNext(mask===7?'battle-options-intro':'battle-party-select',mask===7?0:mask);return true;
+      }
+      if(action==='judged'||action==='end')return false;
+      if(action==='start')tutorialBattleCandidate.runtime.startMatch();
+      tutorialNext(step.next);return true;
+    },
+    finishInteractiveTutorialBattle(expected){
+      if(!tutorialBattleInput(expected,'judged')||!tutorialBattleCandidate)return false;
+      const runtime=tutorialBattleCandidate.runtime,result=runtime.getSettlementResult(),outcome=runtime.outcome();
+      if(!result.ended||result.matchIndex!==61||result.mode!==1||result.battleType!==0)return false;
+      const stage={TEAM_ZERO_AHEAD:'battle-result-win',TEAM_ONE_AHEAD:'battle-result-loss',LEVEL:'battle-result-draw'}[outcome.verdict];
+      if(!stage)return false;
+      if(!['TIME_UP','TEAM_DOWN'].includes(outcome.reason))return false;
+      tutorialNext(stage,outcome.reason==='TIME_UP'?1:0);return true;
+    },
+    endInteractiveTutorialBattle(expected){
+      if(!tutorialBattleInput(expected,'end'))return false;
+      tutorialNext('raising-after-battle');return true;
+    },
+
+    // Main offers this only for loopback new games, including the explicit review preview.
+    // A Continue session (including every V1 legacy cursor) cannot opt in.
+    offerInteractiveTutorial() {
+      requireSession();
+      if(!tutorialOfferEligible||nativeOpening?.version!==1||nativeOpening.tutorialStep!==null)
+        return Object.freeze({ok:false,reason:"INTERACTIVE_TUTORIAL_NEW_GAME_REQUIRED"});
+      if(tutorialBaseline||tutorialTransitionActive||tutorialCommitActive||battleTransactionActive
+        ||battleEconomy.active||huntCommitActive||huntRuntime||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME
+        ||this.hasRaisingPresentation())return Object.freeze({ok:false,reason:"INTERACTIVE_TUTORIAL_UNSAFE_ENTRY"});
+      storeNativeRaisingPositions();storeNativeRaisingHome();
+      const request=liveSaveRequest();
+      savePort.prepare(request); // Strict normal-save validation before isolation.
+      tutorialBaseline=retainTutorialBaseline(request);tutorialOfferEligible=false;
+      const status=commitTutorialOpening(interactiveOpening({stage:"invitation",message:0}));
+      return Object.freeze({ok:status.phase==="SAVED",status,tutorial:this.getInteractiveTutorial()});
+    },
+
+    async chooseInteractiveTutorial(accepted,expectedCheckpoint=null) {
+      requireSession();
+      if(typeof accepted!=="boolean")throw new TypeError("INTERACTIVE_TUTORIAL_BOOLEAN_REQUIRED");
+      if(!tutorialBaseline||tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive
+        ||nativeOpening?.checkpoint?.stage!=="invitation")
+        return Object.freeze({ok:false,reason:"INTERACTIVE_TUTORIAL_CHOICE_UNAVAILABLE"});
+      if(expectedCheckpoint&&!sameInteractiveTutorialCheckpoint(nativeOpening.checkpoint,expectedCheckpoint))
+        return Object.freeze({ok:false,reason:"INTERACTIVE_TUTORIAL_STALE_CHECKPOINT"});
+      const next=interactiveOpening({stage:accepted?"raising-intro":"declined",message:0});
+      if(!accepted) {
+        // Restore via the same hydration as Continue before committing the exit.
+        // Until a successful save, the baseline and pending exit remain isolated.
+        const {save:normal}=savePort.prepare({...tutorialBaseline,nativeOpening,revision});
+        const candidate=restoreCandidate(normal);
+        tutorialTransitionActive=true;
+        try {await hydrateSavedGame(normal,candidate,{tutorialBoundary:true});}
+        finally {tutorialTransitionActive=false;}
+      }
+      const status=commitTutorialOpening(next);
+      return Object.freeze({ok:status.phase==="SAVED",status,tutorial:this.getInteractiveTutorial()});
+    },
+
+    async exitInteractiveTutorial(expectedCheckpoint) {
+      requireSession();
+      if(!tutorialBaseline||tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive)
+        return Object.freeze({ok:false,reason:"INTERACTIVE_TUTORIAL_EXIT_UNAVAILABLE"});
+      if(!sameInteractiveTutorialCheckpoint(nativeOpening.checkpoint,expectedCheckpoint))
+        return Object.freeze({ok:false,reason:"INTERACTIVE_TUTORIAL_STALE_CHECKPOINT"});
+      const next=interactiveOpening({stage:"declined",message:0});
+      const {save:normal}=savePort.prepare({...tutorialBaseline,nativeOpening,revision});
+      const candidate=restoreCandidate(normal);
+      tutorialTransitionActive=true;
+      try {await hydrateSavedGame(normal,candidate,{tutorialBoundary:true});}
+      finally {tutorialTransitionActive=false;}
+      const status=commitTutorialOpening(next);
+      publishScreens();
+      return Object.freeze({ok:status.phase==="SAVED",status,tutorial:this.getInteractiveTutorial()});
+    },
+
+    acknowledgeInteractiveTutorial(expectedCheckpoint) {
+      requireSession();
+      if(!tutorialBaseline||tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive
+        ||!tutorialStep(nativeOpening?.checkpoint)?.dialogue)
+        return Object.freeze({ok:false,reason:"INTERACTIVE_TUTORIAL_ACK_UNAVAILABLE"});
+      if(!sameInteractiveTutorialCheckpoint(nativeOpening.checkpoint,expectedCheckpoint))
+        return Object.freeze({ok:false,reason:"INTERACTIVE_TUTORIAL_STALE_CHECKPOINT"});
+      const message=nativeOpening.checkpoint.message+1;
+      const step=tutorialStep(nativeOpening.checkpoint);
+      const next=interactiveOpening(message<step.texts.length||step.action?{stage:nativeOpening.checkpoint.stage,message}:{stage:step.next,message:0});
+      if(next.checkpoint.stage==='completed')return (async()=>{
+        const {save:normal}=savePort.prepare({...tutorialBaseline,nativeOpening,revision});
+        tutorialTransitionActive=true;publishRaising();
+        try{await hydrateSavedGame(normal,restoreCandidate(normal),{tutorialBoundary:true});}
+        finally{tutorialTransitionActive=false;}
+        const status=commitTutorialOpening(next);publishScreens();
+        return Object.freeze({ok:status.phase==='SAVED',status,tutorial:this.getInteractiveTutorial()});
+      })();
+      const status=commitTutorialOpening(next);
+      return Object.freeze({ok:status.phase==="SAVED",status,tutorial:this.getInteractiveTutorial()});
+    },
+
+
+    /**
+     * The guided tutorial's cursor and the line it is on. The step catalogue is
+     * built from the observed original run; the wording is product copy. New
+     * games still start with no cursor, so this reads null until a caller opens
+     * the tutorial — turning it on for every new game is a separate change that
+     * has to move the existing flows with it.
+     */
+    getTutorial(){
+      const step=nativeOpening?.tutorialStep;
+      if(step===null||step===undefined)return null;
+      if(step>=TUTORIAL_STEP_COUNT)return Object.freeze({step,finished:false,available:false,reason:'TUTORIAL_CURSOR_REQUIRES_TRACE'});
+      if(tutorialFinished(step))return Object.freeze({step,finished:true,phase:null,textId:null,line:null,prompt:null,expected:null});
+      const record=tutorialStepAt(step);
+      return Object.freeze({step,finished:false,phase:record.phase,textId:record.textId,
+        line:tutorialLine(record.textId),prompt:tutorialPrompt(record.advance),expected:record.advance});
+    },
+
+    beginTutorial(){
+      requireSession();
+      if(!nativeOpening)return Object.freeze({ok:false,reason:'TUTORIAL_REQUIRES_OPENING'});
+      if(nativeOpening.version===2||tutorialBaseline)return Object.freeze({ok:false,reason:'INTERACTIVE_TUTORIAL_OWNS_OPENING'});
+      nativeOpening=normalizeNativeOpening({...nativeOpening,tutorialStep:createTutorialCursor()});
+      savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,tutorial:this.getTutorial()});
+    },
+
+    /** One taught action. A mismatch leaves the cursor and the save untouched. */
+    advanceTutorial(action){
+      requireSession();
+      const step=nativeOpening?.tutorialStep;
+      if(step===null||step===undefined)return Object.freeze({ok:false,reason:'TUTORIAL_NOT_STARTED'});
+      if(step>=TUTORIAL_STEP_COUNT)return Object.freeze({ok:false,reason:'TUTORIAL_CURSOR_REQUIRES_TRACE'});
+      const result=advanceTutorialStep(step,action);
+      if(!result.ok)return result;
+      nativeOpening=normalizeNativeOpening({...nativeOpening,tutorialStep:result.step});
+      savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,finished:result.finished,completed:result.completed,
+        phase:result.phase,tutorial:this.getTutorial()});
+    },
+
+    skipTutorial(){
+      requireSession();
+      const step=nativeOpening?.tutorialStep;
+      if(step===null||step===undefined)return Object.freeze({ok:false,reason:'TUTORIAL_NOT_STARTED'});
+      if(step>=TUTORIAL_STEP_COUNT)return Object.freeze({ok:false,reason:'TUTORIAL_CURSOR_REQUIRES_TRACE'});
+      nativeOpening=normalizeNativeOpening({...nativeOpening,tutorialStep:skipTutorialCursor(step)});
+      savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,tutorial:this.getTutorial()});
+    },
+    deliverRaisingFeast(){
+      if(!nativeMessages.cake||nativeMessages.activeId!==null||raisingDayTransition||!raisingGround)return false;
+      for(const [kind,height] of nativeRaisingFeast(nativeMessages.cake)){
+        const used=new Set(raisingFoods.filter(f=>f.present).map(f=>f.slot));
+        const slot=Array.from({length:6},(_,i)=>i+10).find(i=>!used.has(i));
+        if(slot===undefined)continue;
+        const positionQ12=nativeRaisingSpawnPosition(raisingGround,35,{next:nextGameplayRandom});
+        raisingFoods.push(createNativeRaisingFood({slot,cageDefinitionIndex:35,cageInstanceId:raisingGround.placement(35)?.instanceId,positionQ12,kind,heightQ12:height*4096}));
+      }
+      nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,cake:0});storeNativeRaisingHome();savePort.markDirty();publishRaising();return true;
+    },
+    prepareMorningMessages(){
+      if(!nativeMessages.morningPending)return false;
+      const c=this.getCalendar(),roster=this.getRaisingInstances(),birthday=deviceBirthday(),date=new Date(now());
+      const match=!!birthday&&birthday.month===date.getMonth()+1&&birthday.day===date.getDate();
+      const selection=selectNativeMorningMessages({...c,cursor:nativeMessages.cursor,birthday:match,
+        birthdayClaimed:nativeMessages.birthdayClaimed,rosterCount:roster.length},{next:nextGameplayRandom});
+      nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,cursor:selection.cursor,morningPending:false});
+      for(const id of selection.ids)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,id,{subjectName:selection.selected===null?'':raisingNativeProfile(roster[selection.selected].instanceId)?.name??''});
+      savePort.markDirty();publishRaising();return true;
+    },
+    openRaisingMail(){
+      if(raisingDayTransition||raisingDayConfirmation||[...raisingActors.values()].some(a=>a.evolution))return false;
+      nativeMessages=openNativeRaisingMessage(nativeMessages);
+      const q=nativeMessages.queue.find(q=>q.id===nativeMessages.activeId);
+      if(!q)return false;
+      // Money is applied when the original opens the letter (0208CED4),
+      // inventory/individual effects follow its acknowledgement.
+      const effect=nativeRaisingMessageEffect(q.effectId);
+      if(!q.effectApplied&&effect?.kind===4){
+        const amount=effect.extra?effect.value+Math.trunc((effect.extra-effect.value)*nextGameplayRandom(199)/102):effect.value;
+        nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,queue:nativeMessages.queue.map(n=>n.id===q.id?{...n,effectApplied:true}:n)});
+        requireShop().creditBits(amount,{evidence:'ROM_VERIFIED'});
+      }
+      savePort.markDirty();publishRaising();return true;
+    },
+    acknowledgeRaisingMail(){
+      const q=nativeMessages.queue.find(q=>q.id===nativeMessages.activeId);
+      if(!q||(!q.system&&nativeMessages.activeFrames<61))return false;
+      const effect=nativeRaisingMessageEffect(q.effectId);
+      if(!q.effectApplied&&effect){
+        if(effect.kind===3)requireShop().receiveNativeGift(effect.value,effect.extra);
+        else if(effect.kind===2){
+          if(this.getRaisingInstances().length>=16)return false;
+          const profile=nativeIndividualProfile(createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(effect.value),rng:{next:nextGameplayRandom}}));
+          const allocation=allocateRaisingInstanceIdentity(instanceIdentity,instanceSources());
+          raising=recordNativeGiftCreature(raising,{instanceId:allocation.instanceId,speciesId:`species-${String(effect.value).padStart(3,'0')}`,
+            displayName:profile.name,enclosedAt:now(),cageId:cageIds[0],nativeProfile:profile});
+          instanceIdentity=allocation.state;synchronizeNativeRaisingActors();
+          registeredSpeciesValue=retainOwnedBookSpecies(registeredSpeciesValue,creature,raising.collection);
+        }else if(effect.kind===5)nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,cake:effect.value});
+      }
+      nativeMessages=closeNativeRaisingMessage(nativeMessages);savePort.markDirty();publishRaising();return true;
+    },
+    toggleTitleRegistration(recordIndex){
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.SCHEDULE||battleTransactionActive)return false;
+      const next=toggleNativeTitleRegistration(nativeTitles,{recordIndex,rank:tamerRankValue,won:battleBadgesValue});
+      if(!next)return false;nativeTitles=next;interactionCount++;savePort.markDirty();return true;
+    },
+    toggleChampionshipRegistration(){
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.SCHEDULE||battleTransactionActive)return false;
+      const next=toggleNativeChampionshipRegistration(nativeTitles,this.getCalendar().year);
+      if(!next)return false;nativeTitles=next;interactionCount++;savePort.markDirty();return true;
+    },
+
+    getAvailableBattleRecordIndices() {
+      const schedule = battleSchedule();
+      return schedule ? resolveMatchList(schedule).records : Object.freeze([]);
+    },
+
+    // A narrow pure-clock seam, not a raising action. It consumes no player
+    // command IDs and never invokes the old ADVANCE resident side effects.
+    advanceClock({ units, subunits = 0, divisor = 400, clearElapsed = false, expectedClockRevision } = {}) {
+      if(tutorialBaseline)return Object.freeze({accepted:false,code:"INTERACTIVE_TUTORIAL_ACTIVE"});
+      if (huntCommitActive) return Object.freeze({ accepted: false, code: "HUNT_HOME_COMMIT_ACTIVE" });
+      const active = requireSession();
+      const before = active.getRaisingHomeSnapshot();
+      const result = active.advanceRaisingClock({ units, subunits, divisor, clearElapsed,
+        expectedClockRevision: expectedClockRevision ?? before.clockRevision });
+      const after=active.getRaisingHomeSnapshot();
+      if(after.season!==before.season||after.dayOfSeason!==before.dayOfSeason)rebuildFreeBattleMenu();
+      if (active.getRaisingHomeSnapshot() !== before) savePort.markDirty();
+      return result;
+    },
+
+    getClockRunState() {
+      if (!session) return Object.freeze({ running: false, reason: "NO_SESSION" });
+      if(tutorialBaseline)return Object.freeze({running:false,reason:"INTERACTIVE_TUTORIAL_ACTIVE"});
+      if(this.hasRaisingPresentation())return Object.freeze({running:false,reason:'RAISING_PRESENTATION'});
+      const snapshot = session.getRaisingHomeSnapshot();
+      if (snapshot.paused) return Object.freeze({ running: false, reason: "PAUSED" });
+      if (snapshot.clockMinutes >= DAY_END_MINUTES) return Object.freeze({ running: false, reason: "DAY_END" });
+      // OVL0 02116CB0 resumes normal Hunt (the tutorial mode 2 is separate).
+      // 02116D28 stores min(entry minute + 8 hours, 22:00) in session+18.
+      if (screens.current() === CHAMPIONSHIP_SCREENS.HUNT_FIELD && huntDeadlineMinute !== null) {
+        return Object.freeze({ running: snapshot.clockMinutes < huntDeadlineMinute,
+          reason: snapshot.clockMinutes < huntDeadlineMinute ? "NORMAL_HUNT" : "HUNT_TIME_UP" });
+      }
+      // Only normal Raising entry is mapped in this slice. Other screens and
+      // modal identities have unresolved original session/handler conditions.
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) {
+        return Object.freeze({ running: false, reason: "MODE_REQUIRES_TRACE" });
+      }
+      return Object.freeze({ running: true, reason: "NORMAL_RAISING" });
+    },
+
+    settleNaturalRaisingDay() {
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||this.getClockRunState().reason!=='DAY_END')return false;
+      // OVL18 0210D610 -> state 10 -> 0210FAFC. Reuse the existing calendar
+      // command; overnight growth/evolution effects retain their own boundary.
+      return this.endDay()?.accepted===true;
+    },
+
+    advanceNaturalClock({ frames } = {}) {
+      if (!Number.isSafeInteger(frames) || frames < 0 || frames > 120) throw new TypeError("INVALID_NATIVE_CLOCK_FRAME_COUNT");
+      if(new Date(now()).getTime()-discoveryCheckAt>=5000)settleDiscoveries();
+      const runState = this.getClockRunState();
+      if (!runState.running || frames === 0) return Object.freeze({ accepted: false, code: runState.reason ?? "NO_ELAPSED_FRAMES" });
+      const snapshot = requireSession().getRaisingHomeSnapshot();
+      const inHunt = runState.reason === "NORMAL_HUNT";
+      const divisor = inHunt ? 400 : NATIVE_CLOCK_CADENCE.trainingDivisor;
+      const endMinute = inHunt ? huntDeadlineMinute : DAY_END_MINUTES;
+      const remaining = (endMinute - snapshot.clockMinutes) * divisor
+        - snapshot.clockUnits - snapshot.clockSubunits / 1000;
+      // Original update first carries raw units into minutes, then checks 22
+      // and calls stop (which clears the remainder). Even a restored raw
+      // remainder above the Training divisor must receive its first update.
+      const framesUntilStop = Math.max(1, Math.ceil(remaining / NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame));
+      const activeFrames = Math.min(frames, framesUntilStop);
+      if(!inHunt){let last={accepted:false,code:'NO_ELAPSED_FRAMES'};
+        for(let i=0;i<activeFrames;i++){
+          const beforeFrame=requireSession().getRaisingHomeSnapshot();
+          last=this.advanceClock({units:NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame,divisor,clearElapsed:frames>=framesUntilStop&&i===activeFrames-1});
+          if(last.accepted){advanceNativeRaising(1,beforeFrame);
+            const c=this.getCalendar();nativeMessages=ageNativeRaisingMessages(nativeMessages,c.clockMinutes-beforeFrame.clockMinutes);
+            if(nativeMessages.morningPending)this.prepareMorningMessages();
+            this.deliverRaisingFeast();
+            if(!nativeMessages.entryChecked&&c.clockMinutes>=420&&c.clockMinutes<900){
+              const championship=c.season===2&&c.dayOfSeason===4&&nativeTitles.championship[c.year%4===3?'worldEntry':'entry'];
+              const registered=this.getAvailableBattleRecordIndices().some(id=>nativeTitles.registered.includes(id)&&!battleBadgesValue.includes(id));
+              if(championship||registered){nativeMessages=enqueueNativeRaisingMessage(nativeMessages,null,{system:true,textId:94,minutes:900-c.clockMinutes,required:false});}
+              nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,entryChecked:true});
+            }
+            if(nativeMessages.queue.some(q=>q.system&&!q.opened)||(nativeMessages.activeId!==null&&nativeMessages.queue.some(q=>q.id===nativeMessages.activeId&&!q.opened)))this.openRaisingMail();
+          }
+          if(this.hasRaisingPresentation())break;
+        }
+        return last;
+      }
+      const result = this.advanceClock({ units: activeFrames * NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame,
+        divisor, clearElapsed: frames >= framesUntilStop });
+      if (inHunt) this.checkHuntDeadline();
+      return result;
+    },
+
+    getSelectedCreatureId() {
+      return selectedCreatureId;
+    },
+
+    getCages() {
+      return cages;
+    },
+
+    /** Direct touch selection. Product-owned: it never reaches the R2 reducer. */
+    select(creatureId) {
+      if (huntCommitActive) return selectedCreatureId;
+      if (creatureId !== null && !raising?.assignments[creatureId]) {
+        throw new Error(`CHAMPIONSHIP_UNKNOWN_CREATURE: ${creatureId}`);
+      }
+      selectedCreatureId = creatureId;
+      return selectedCreatureId;
+    },
+
+    /** Drag-and-drop relocation. No effect is applied, because none is verified. */
+    moveToCage(creatureId, cageId) {
+      if (huntCommitActive) throw new Error("HUNT_HOME_COMMIT_ACTIVE");
+      raising = assignCreatureToCage(raising, creatureId, cageId, { cageIds });
+      interactionCount += 1;
+      savePort.markDirty();
+      return raising;
+    },
+
+    /**
+     * Use a care tool.
+     *
+     * Records a product-authored interaction flag and nothing else. The R2
+     * `+14 satiety / +5 ease` numbers are adaptation-only (see
+     * ORIGINAL_RAISING_GAMEPLAY_CONTRACT), so production mutates no stat and
+     * invents no replacement number. The player gets a reaction, not arithmetic.
+     */
+    care(creatureId) {
+      if (huntCommitActive) throw new Error("HUNT_HOME_COMMIT_ACTIVE");
+      raising = recordCareInteraction(raising, creatureId, now());
+      interactionCount += 1;
+      savePort.markDirty();
+      return raising;
+    },
+
+    /**
+     * Close the calendar day.
+     *
+     * The original's Raising Home submenu carries an End Day entry, so a day can
+     * be ended on demand rather than only running out. This goes through the R2
+     * reducer like any other raising command; the clock cascade lives there.
+     */
+    endDay() {
+      if(this.hasRaisingPresentation())return Object.freeze({accepted:false,code:'RAISING_PRESENTATION'});
+      cancelRaisingHand();
+      const before=requireSession().getRaisingHomeSnapshot();
+      const result = dispatchRaisingHomeCommand({ type: RAISING_HOME_COMMANDS.END_DAY });
+      if (result?.accepted){
+        rebuildFreeBattleMenu();
+        storeNativeRaisingPositions();storeNativeRaisingHome();
+        if(raisingGround)raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,pendingOvernightMinutes:Math.max(0,1320-before.clockMinutes)})});
+        nativeMessages=normalizeNativeRaisingMessages({...ageNativeRaisingMessages(nativeMessages,1440-before.clockMinutes+420),entryChecked:false,morningPending:true});
+        raisingDayTransition={phase:'fade-out',frames:0,savePhase:null};savePort.markDirty();publishRaising();
+      }
+      return result;
+    },
+
+    save() {
+      requireSession();
+      if(tutorialTransitionActive)throw new Error("INTERACTIVE_TUTORIAL_TRANSITION_ACTIVE");
+      if(tutorialBaseline)return commitTutorialOpening(tutorialPendingOpening??nativeOpening);
+      if (!creature) throw new Error("CHAMPIONSHIP_NO_CREATURE");
+      if (battleTransactionActive || battleEconomy.active) throw new Error("CHAMPIONSHIP_SAVE_WHILE_BATTLE_ACTIVE");
+      if (huntCommitActive) throw new Error("CHAMPIONSHIP_SAVE_WHILE_HUNT_COMMIT_ACTIVE");
+      if (huntRuntime?.getOnCardEntries().length) throw new Error("CHAMPIONSHIP_SAVE_REQUIRES_CAPTURE_HOME_COMMIT");
+      storeNativeRaisingPositions();storeNativeRaisingHome();
+      revision += 1;
+      const status=savePort.save(liveSaveRequest());
+      if(raisingDayTransition?.phase==='saving'){raisingDayTransition.savePhase=status.phase;publishRaising();}
+      return status;
+    },
+
+    // ---------------------------------------------------------------------
+    // VS2 -- Gate Select, Hunt Loadout, Hunt Field
+    // ---------------------------------------------------------------------
+
+    getScreen() {
+      return screens.current();
+    },
+
+    getScreenTrail() {
+      return screens.trail();
+    },
+
+    subscribeScreen(listener) {
+      if (typeof listener !== "function") throw new TypeError("A screen observer must be a function");
+      screenListeners.add(listener);
+      return () => screenListeners.delete(listener);
+    },
+
+    getGates() {
+      if(tutorialBaseline)return Object.freeze([TUTORIAL_GATE]);
+      return Object.freeze(listChampionshipGates().map(gate => Object.freeze({ ...gate,
+        state: isGateUnlocked(gate, progressionContext()) ? "AVAILABLE" : "LOCKED" })));
+    },
+
+    getGateAdmission(gateId = confirmedGateId ?? selectedGateId) {
+      if(tutorialBaseline)return Object.freeze({canConfigure:gateId===TUTORIAL_GATE.gateId&&!tutorialPendingOpening&&!tutorialTransitionActive&&nativeOpening.checkpoint.stage==='gate-select',
+        canEnter:false,chargeBits:0,walletBits:requireShop().getBits(),reason:gateId===TUTORIAL_GATE.gateId?'AVAILABLE':'NO_GATE_SELECTED'});
+      return gateAdmission(getChampionshipGate(gateId), requireShop().getBits(), progressionContext());
+    },
+
+    getSelectedGateId() {
+      return selectedGateId;
+    },
+
+    getConfirmedGate() {
+      return confirmedGateId === null ? null : tutorialBaseline&&confirmedGateId===TUTORIAL_GATE.gateId?TUTORIAL_GATE:getChampionshipGate(confirmedGateId);
+    },
+
+    getHuntInventory() {
+      return huntInventory;
+    },
+
+    getHuntLoadout() {
+      return huntLoadout;
+    },
+
+
+    getHuntRuntime() {
+      return huntRuntime;
+    },
+
+    getHuntEntryError() { return huntEntryError; },
+    advanceHunt(deltaMs){
+      if(!huntRuntime)return;
+      if(!tutorialBaseline){huntRuntime.tick(deltaMs);return;}
+      const step=tutorialHuntStep(nativeOpening.checkpoint);
+      if(!step||step.dialogue||tutorialPendingOpening||tutorialTransitionActive||tutorialCommitActive)return;
+      huntRuntime.tick(deltaMs);
+      if(huntRuntime.getTutorialHuntProgress()?.ready)tutorialNext(step.next);
+    },
+    interactiveHuntInput(kind,args,expected){
+      if(!tutorialExpeditionInput(expected)||screens.current()!=='HUNT_FIELD'||!huntRuntime)return false;
+      const step=tutorialHuntStep(nativeOpening.checkpoint);
+      if(kind==='select'){
+        if(args[0]!==step.tool||step.action!=='select')return false;
+        const ok=huntRuntime.selectTool(args[0]);if(ok)tutorialNext(step.next);return ok;
+      }
+      if(kind==='camera'){
+        if(step.action!=='camera')return false;
+        const target=huntRuntime.getWildCreatures()[0];
+        const projected=panHuntPresentationCamera(huntRuntime,args[0],args[1],args[4],target);
+        const ok=projected?projected.accepted:huntRuntime.panCamera(...args);
+        const camera=projected?null:huntRuntime.getCamera(args[2],args[3]);
+        const visible=projected?projected.targetVisible:target&&target.worldX>=camera.left&&target.worldX<=camera.right&&target.worldY>=camera.top&&target.worldY<=camera.bottom;
+        if(ok&&args.some((v,i)=>i<2&&Math.abs(v)>0)&&visible) tutorialNext(step.next);
+        return ok;
+      }
+      if(step.action==='select'||step.demo||step.wait||step.action==='camera')return false;
+      if(kind==='down'&&step.action==='food'&&(Math.abs(args[0]/2-640)>12||Math.abs(args[1]/2-584)>12))return false;
+      return ({down:()=>huntRuntime.toolPointerDown(...args),move:()=>huntRuntime.toolPointerMove(...args),up:()=>huntRuntime.toolPointerUp(...args)})[kind]?.()??false;
+    },
+
+
+    getHuntResult() {
+      if (!huntResult?.pendingHomeCommit) return huntResult;
+      const released = new Set(huntResult.releasedHomeIds ?? []);
+      const rows = [
+        ...(huntRuntime?.getOnCardEntries() ?? []).map((entry) => Object.freeze({
+          key: `card:${entry.wildId}`, kind: "CARD", id: entry.wildId, speciesId: entry.speciesId,
+          displayName: entry.displayName ?? speciesDisplayName(entry.speciesId), canRelease: true,
+          selected: entry.wildId === huntResult.wildId })),
+        ...listRaisingInstances(instanceSources()).filter((entry) => !released.has(entry.instanceId)).map((entry) => Object.freeze({
+          key: `home:${entry.instanceId}`, kind: "HOME", id: entry.instanceId, speciesId: entry.speciesId,
+          displayName: entry.displayName ?? speciesDisplayName(entry.speciesId),
+          canRelease: true }))
+      ];
+      return Object.freeze({ ...huntResult, rows: Object.freeze(rows),
+        pendingRelease: rows.find((row) => row.key === huntResult.pendingReleaseKey) ?? null });
+    },
+
+    getShopFrame() {
+      if (!shop) return null;
+      return Object.freeze({ ...shop.getFrame(), lastReceipt: lastShopReceipt });
+    },
+
+    subscribeShop(listener) {
+      if (typeof listener !== "function") throw new TypeError("A shop observer must be a function");
+      shopListeners.add(listener);
+      return () => shopListeners.delete(listener);
+    },
+
+    /** Explicit test / other income seam; battle settlement does not use it. */
+    creditBits(amount) {
+      if (battleTransactionActive) throw new Error("CHAMPIONSHIP_BATTLE_TRANSACTION_ACTIVE");
+      if (huntCommitActive) throw new Error("CHAMPIONSHIP_HUNT_TRANSACTION_ACTIVE");
+      const result = requireShop().creditBits(amount);
+      savePort.markDirty();
+      return result;
+    },
+
+    getTamerRank() {
+      return tamerRankValue;
+    },
+    getBattleBadges() { return Object.freeze([...battleBadgesValue]); },
+
+    /**
+     * Write tamer rank. Original store is PlayerData +0xAE8 after battle result.
+     * Until title matches exist this is the same PRODUCT_AUTHORED seam as creditBits.
+     */
+    setTamerRank(nextRank) {
+      requireSession();
+      if (huntCommitActive) throw new Error("CHAMPIONSHIP_HUNT_TRANSACTION_ACTIVE");
+      if (battleTransactionActive) throw new Error("CHAMPIONSHIP_BATTLE_TRANSACTION_ACTIVE");
+      if (!Number.isSafeInteger(nextRank) || nextRank < 0) {
+        throw new Error("INVALID_TAMER_RANK");
+      }
+      const previousRank = tamerRankValue;
+      const ranch = this.getCageEditFrame();
+      // Rank opens the main board's slots only; an expansion annex is not rank-gated.
+      const layout = { layoutVersion: ranch?.layoutVersion, mainUnlocked: slotCountForTamerRank(nextRank), expansion: ranch?.expansion ?? null };
+      if (ranch?.layoutVersion && (!validateRanchLayout(ranch.placements, layout)
+        || !validateRanchLayout(cageEdit.toSave().placements, layout))) return previousRank;
+      tamerRankValue = normalizeTamerRank(nextRank);
+      applyProgression();
+      if (tamerRankValue !== previousRank) savePort.markDirty();
+      publishScreens();
+      return tamerRankValue;
+    },
+
+    /**
+     * Write the earned battle badges. Gate unlock kind 2 reads this list, and
+     * until every title match exists the only other writer is a battle result,
+     * so this is the same PRODUCT_AUTHORED seam `setTamerRank` is -- symmetric
+     * with it on purpose, so a caller that can set one can set the other.
+     */
+    setBattleBadges(badges) {
+      requireSession();
+      if (huntCommitActive) throw new Error("CHAMPIONSHIP_HUNT_TRANSACTION_ACTIVE");
+      if (battleTransactionActive) throw new Error("CHAMPIONSHIP_BATTLE_TRANSACTION_ACTIVE");
+      if (!Array.isArray(badges) || badges.length > 62
+        || [...badges].some((badge) => !Number.isSafeInteger(badge) || badge < 0 || badge > 61)) {
+        throw new Error("INVALID_BATTLE_BADGES");
+      }
+      const next = [...new Set(badges)].sort((a, b) => a - b);
+      const changed = next.length !== battleBadgesValue.length
+        || next.some((badge, index) => badge !== battleBadgesValue[index]);
+      battleBadgesValue = next;
+      applyProgression();
+      if (changed) savePort.markDirty();
+      publishScreens();
+      return Object.freeze([...battleBadgesValue]);
+    },
+
+    openShop() {
+      requireSession();
+      requireShop();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.SHOP) return screens.current();
+      lastShopReceipt = null;
+      // OVL18 exit and OVL17 entry both call the shared clock stop routine.
+      if (screens.current() === CHAMPIONSHIP_SCREENS.RAISING_HOME) this.advanceClock({ units: 0, clearElapsed: true });
+      screens.enter(CHAMPIONSHIP_SCREENS.SHOP);
+      publishScreens();
+      return screens.current();
+    },
+
+    buyShopItem(shopRecordIndex, quantity = 1) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.SHOP) {
+        throw new Error("CHAMPIONSHIP_SHOP_NOT_ACTIVE");
+      }
+      // Cage copies and wallet become visible only after one durable save.
+      let record;try{record=getShopRecord(shopRecordIndex);}catch{lastShopReceipt=Object.freeze({ok:false,reason:"UNAVAILABLE"});publishScreens();return lastShopReceipt;}
+      if(playtestPolicy?.enabled && record.purchaseDomain==='CAGE_OWNERSHIP'){
+        const candidate=createShopRuntime({snapshot:requireShop().toSave(),huntInventory,allowRepeatedCages:true,
+          allItemsVisible:playtestPolicy.shopOpen,progression:progressionContext()});
+        const receipt=candidate.buy(shopRecordIndex,quantity);
+        if(!receipt.ok){lastShopReceipt=receipt;publishScreens();return receipt;}
+        const status=savePort.save({...liveSaveRequest(revision+1),shop:candidate.toSave()});
+        if(status.phase!=='SAVED'){savePort.discardPendingWrite();lastShopReceipt=Object.freeze({ok:false,reason:'SAVE_FAILED'});publishScreens();return lastShopReceipt;}
+        shop=candidate;bindShopRuntime();revision++;lastShopReceipt=receipt;publishScreens();return receipt;
+      }
+      lastShopReceipt = requireShop().buy(shopRecordIndex, quantity);
+      if (lastShopReceipt.ok) savePort.markDirty();
+      publishScreens();
+      return lastShopReceipt;
+    },
+
+    getDatabaseFrame() {
+      const frame = projectDatabase({
+        fullView: playtestPolicy?.enabled === true && playtestPolicy.fullDexView,
+        starterSpeciesId: creature?.speciesId ?? null,
+        collection: raising?.collection ?? [],
+        registeredSpecies: registeredSpeciesValue,
+        evolutionBranches: raising?.nativeHome?.evolutionBranches ?? [],
+        productEvolutionBranches: raising?.nativeHome?.productEvolutionBranches ?? [],
+        selectedSpeciesIndex: selectedDatabaseSpeciesIndex
+      });
+      if (!frame.selected) return frame;
+      const instances = frame.selected.instances.map((entry) => {
+        const gate = entry.originGateId ? getChampionshipGate(entry.originGateId) : null;
+        return { ...entry, originGateName: gate?.displayName ?? null };
+      });
+      return Object.freeze({
+        ...frame,
+        selected: Object.freeze({ ...frame.selected, instances })
+      });
+    },
+
+    /** The toolbar's management submenu reaches the roster through here. */
+    openDigimonList() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) return screens.current();
+      screens.enter(CHAMPIONSHIP_SCREENS.DIGIMON_LIST);
+      publishScreens();
+      return screens.current();
+    },
+
+    /** The toolbar's management submenu reaches the fixture board through here. */
+    /** The tournaments board, reached from the battle menu as the original does. */
+    openChampionship() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) return screens.current();
+      screens.enter(CHAMPIONSHIP_SCREENS.CHAMPIONSHIP);
+      publishScreens();
+      return screens.current();
+    },
+
+    openSchedule() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.SCHEDULE) return screens.current();
+      screens.enter(CHAMPIONSHIP_SCREENS.SCHEDULE);
+      publishScreens();
+      return screens.current();
+    },
+
+    /** The toolbar's system submenu reaches the cartridge's help through here. */
+    openHelp() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.HELP) return screens.current();
+      screens.enter(CHAMPIONSHIP_SCREENS.HELP);
+      publishScreens();
+      return screens.current();
+    },
+
+    /** The toolbar's management submenu reaches the tamer profile through here. */
+    openTamerInfo() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.TAMER_INFO) return screens.current();
+      screens.enter(CHAMPIONSHIP_SCREENS.TAMER_INFO);
+      publishScreens();
+      return screens.current();
+    },
+
+    // Owner 2026-10-07: read the existing won-title flags; no new save authority.
+    openMedals() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.MEDALS) return screens.current();
+      screens.enter(CHAMPIONSHIP_SCREENS.MEDALS);
+      publishScreens();
+      return screens.current();
+    },
+
+    openDatabase() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.DATABASE) return screens.current();
+      selectedDatabaseSpeciesIndex = null;
+      screens.enter(CHAMPIONSHIP_SCREENS.DATABASE);
+      publishScreens();
+      return screens.current();
+    },
+
+    selectDatabaseSpecies(speciesIndex) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.DATABASE) {
+        throw new Error("CHAMPIONSHIP_DATABASE_NOT_ACTIVE");
+      }
+      if (speciesIndex === null) {
+        selectedDatabaseSpeciesIndex = null;
+        publishScreens();
+        return this.getDatabaseFrame();
+      }
+      if (!getDatabaseIllustration(speciesIndex)) getDatabaseSlot(speciesIndex);
+      selectedDatabaseSpeciesIndex = speciesIndex;
+      publishScreens();
+      return this.getDatabaseFrame();
+    },
+
+    renameDatabaseInstance(instanceId, displayName) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.DATABASE) {
+        throw new Error("CHAMPIONSHIP_DATABASE_NOT_ACTIVE");
+      }
+      raising = renameEnclosedCreature(raising, instanceId, displayName);
+      savePort.markDirty();
+      publishScreens();
+      return raising.collection.find((entry) => entry.instanceId === instanceId)?.displayName ?? null;
+    },
+
+    /**
+     * The roster's Name Edit, on the same product given-name rule the
+     * Database and Hunt Result already apply to collected individuals. The
+     * starter's name lives in its native profile, which this rule does not
+     * write, so it is refused rather than half-renamed.
+     */
+    renameRosterInstance(instanceId, displayName) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.DIGIMON_LIST) {
+        throw new Error("CHAMPIONSHIP_DIGIMON_LIST_NOT_ACTIVE");
+      }
+      if (!raising?.collection?.some((entry) => entry.instanceId === instanceId)) {
+        return Object.freeze({ ok: false, reason: "NOT_RENAMEABLE" });
+      }
+      try { raising = renameEnclosedCreature(raising, instanceId, displayName); }
+      catch { return Object.freeze({ ok: false, reason: "INVALID_GIVEN_NAME" }); }
+      savePort.markDirty();
+      publishScreens();
+      return Object.freeze({ ok: true, displayName: raising.collection.find((entry) => entry.instanceId === instanceId)?.displayName ?? null });
+    },
+
+    getCageEditFrame() {
+      if (!cageEdit) return null;
+      return Object.freeze({...requireCageEdit().getFrame(...cageEditArgs()),testDiamonds:friendsPlaytest?.diamonds??0});
+    },
+
+    openCageEdit() {
+      requireSession();
+      requireCageEdit();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.CAGE_EDIT) return screens.current();
+      cageEdit.selectModule(null, ...cageEditArgs());
+      screens.enter(CHAMPIONSHIP_SCREENS.CAGE_EDIT);
+      publishScreens();
+      return screens.current();
+    },
+
+    selectCageModule(moduleId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      requireCageEdit().selectModule(moduleId, ...cageEditArgs());
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    placeCageAt(slotIndex) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      requireCageEdit().placeAt(slotIndex, ...cageEditArgs());
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    removeCagePlacement(moduleId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      requireCageEdit().removePlacement(moduleId, ...cageEditArgs());
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    /**
+     * Ranch expansion PROTOTYPE (2026-10-05): grant or revoke one annex deck
+     * without any payment. Price, free unlock path, cap and competitive rules
+     * are undecided; nothing here charges, sells or records a purchase.
+     */
+    grantRanchExpansionPrototype() {
+      return changeRanchExpansion((editor) => editor.grantExpansion(...cageEditArgs()));
+    },
+
+    // Stage row entitlement and simulated diamond debit together; publish only
+    // after the same durable save succeeds. A failed write cannot be retried as
+    // a hidden purchase after the UI has reported rollback.
+    buyRanchTestRow(row) {
+      requireSession();
+      if (!playtestPolicy?.enabled || screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT || tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return {ok:false,reason:'TEST_ROW_PURCHASE_UNAVAILABLE'};
+      const editor = requireCageEdit();
+      const quote = editor.quoteTestRow(row, ...cageEditArgs());
+      const purchase = quote.ok ? purchaseTestRanchRow(friendsPlaytest,row) : quote;
+      if (!purchase.ok) {
+        editor.rejectTestRowPurchase(purchase.reason,...cageEditArgs());publishScreens();
+        return Object.freeze({...this.getCageEditFrame(),ok:false,reason:purchase.reason});
+      }
+      const candidateEditor = createCageEditRuntime({snapshot:editor.toSave(),publicTestGrid:true,initialTamerRank:tamerRankValue});
+      candidateEditor.applyTestRowPurchase(row,...cageEditArgs());
+      storeNativeRaisingPositions();storeNativeRaisingHome();
+      const status = savePort.save({...liveSaveRequest(revision+1),friendsPlaytest:purchase.state,cageEdit:candidateEditor.toSave()});
+      if (status.phase !== 'SAVED') {
+        savePort.discardPendingWrite();
+        editor.rejectTestRowPurchase('SAVE_FAILED',...cageEditArgs());publishScreens();
+        return Object.freeze({...this.getCageEditFrame(),ok:false,reason:'SAVE_FAILED'});
+      }
+      friendsPlaytest=purchase.state;editor.applyTestRowPurchase(row,...cageEditArgs());revision+=1;
+      raisingActors.clear();initializeNativeRaisingHome();publishScreens();
+      return Object.freeze({...this.getCageEditFrame(),ok:true,receipt:purchase.receipt});
+    },
+
+    revokeRanchExpansionPrototype() {
+      return changeRanchExpansion((editor) => editor.revokeExpansion(...cageEditArgs()));
+    },
+
+    confirmCageEdit() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      const editor = requireCageEdit();
+      const before = JSON.stringify(editor.toSave());
+      storeNativeRaisingPositions();storeNativeRaisingHome();
+      editor.confirm(...cageEditArgs());
+      if (JSON.stringify(editor.toSave()) !== before) {
+        const nextGround=createNativeRaisingGround({...editor.toSave(),unlockedCount:slotCountForTamerRank(tamerRankValue)});
+        if(raisingGround?.navigation&&nextGround?.navigation){
+          for(const actor of raisingActors.values())actor.positionQ12=ranchPositionAfterLayout(raisingGround,nextGround,actor.positionQ12,actor.cageInstanceId??actor.cageDefinitionIndex);
+          for(const item of [...raisingFoods,...raisingWaste])item.positionQ12=ranchPositionAfterLayout(raisingGround,nextGround,item.positionQ12,item.cageInstanceId??item.cageDefinitionIndex);
+          raisingGround=nextGround;storeNativeRaisingPositions();storeNativeRaisingHome();
+        }
+        raisingActors.clear();initializeNativeRaisingHome({restoreLayoutPositions:true});savePort.markDirty();
+      }
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    openGate() {
+      requireSession();
+      screens.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
+      publishScreens();
+      return screens.current();
+    },
+
+    // --- VS5 Auto Battle ---------------------------------------------------
+    // Three named intents rather than a generic enter, so the stack keeps its
+    // declared-transition guarantee: a match cannot be reached except from the
+    // menu, and the result cannot be reached except from a match.
+
+    openBattle() {
+      requireSession();
+      if(tutorialBaseline)return screens.current();
+      screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_SELECT);
+      publishScreens();
+      return screens.current();
+    },
+
+    getBattleEconomyState() {
+      return battleEconomy;
+    },
+
+    getFreeBattleMatches(){return listNativeFreeBattleMatches(freeBattleMenu);},
+
+    openFreeBattle(){
+      requireSession();if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return [];
+      // Old saves contain no daily menu. Resolve the missing slice only on an
+      // explicit mode-entry action; Continue and inspection never spend RNG.
+      if(!freeBattleMenu)rebuildFreeBattleMenu();return this.getFreeBattleMatches();
+    },
+
+    async prepareFreeBattle(matchId,instanceIds,selectedArena=null){
+      const match=this.getFreeBattleMatches().find(row=>row.id===matchId);
+      if(!match)return {ok:false,reason:'MATCH_NOT_AVAILABLE'};
+      const party=await this.prepareBattleParty(null,instanceIds);
+      if(!party.ok)return party;
+      if(instanceIds.length>match.slots)return {ok:false,reason:'PARTY_SIZE',message:uiText('這場對戰最多 {count} 隻。',{count:match.slots})};
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      prepared.localMode=2;prepared.freeMatch=match;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
+      const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+      if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
+      const arenaIndex=selectedArena??drawnArena;
+      return {ok:true,match,arenaIndex,individuals:party.individuals,rngPreparation};
+    },
+
+    async preparePracticeBattle(teams,selectedArena=null){
+      if(!Array.isArray(teams)||teams.length!==2||teams.some(ids=>!Array.isArray(ids)||ids.length<1||ids.length>3))return {ok:false,reason:'TWO_PARTIES_REQUIRED'};
+      const ids=teams.flat();if(new Set(ids).size!==ids.length)return {ok:false,reason:'DUPLICATE_PARTICIPANT',message:'同一隻拍檔只能加入一隊。'};
+      const parties=[];
+      for(const team of teams){const party=await this.prepareBattleParty(null,team);if(!party.ok)return party;parties.push(party.individuals);}
+      if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+      prepared.localMode=5;prepared.individuals=parties.flat();
+      return {ok:true,parties,arenaIndex:selectedArena??drawnArena,rngPreparation};
+    },
+
+    async createLinkBattleInvite(instanceIds,{transportVersion}={}){
+      requireSession();
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+      const party=await this.prepareBattleParty(null,instanceIds);if(!party.ok)return party;
+      const preview=this.prepareBattleRng(),prepared=battleRngPreparations.get(preview);
+      try{
+        const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+        const {createChampionshipLinkInvite}=await loadLinkBattle();
+        const invite=createChampionshipLinkInvite({individuals:party.individuals,arenaIndex,transportVersion});
+        return {ok:true,inviteCode:invite.code,arenaIndex};
+      }catch(error){
+        return {ok:false,reason:error?.message??'LINK_BATTLE_INVITE_FAILED',message:'無法建立通訊邀請碼，請重新選擇隊伍。'};
+      }finally{battleRngPreparations.delete(preview);}
+    },
+
+    async prepareLinkBattle({role,inviteCode,replyCode=null,instanceIds=[]}={}){
+      requireSession();
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+      if(!['HOST','GUEST'].includes(role))return {ok:false,reason:'LINK_ROLE_REQUIRED'};
+      try{
+        const link=await loadLinkBattle();let packet,responseCode=null,hostIndividuals,guestIndividuals;
+        if(role==='GUEST'){
+          const party=await this.prepareBattleParty(null,instanceIds);if(!party.ok)return party;
+          const response=link.createChampionshipLinkReply({inviteCode,individuals:party.individuals});responseCode=response.code;
+          packet=link.readChampionshipLinkInvite(inviteCode);hostIndividuals=packet.hostIndividuals;guestIndividuals=party.individuals;
+        }else{
+          packet=link.readChampionshipLinkReply(inviteCode,replyCode);hostIndividuals=packet.hostIndividuals;guestIndividuals=packet.guestIndividuals;
+        }
+        const {battlePartyAdmission,buildOwnedBattleCreature}=await loadBattleParty();
+        for(const individual of [...hostIndividuals,...guestIndividuals]){
+          const admission=battlePartyAdmission(individual.nativeProfile,null);if(!admission.ok)
+            return {ok:false,reason:'LINK_TEAM_INELIGIBLE',message:'通訊碼內含不能參戰的拍檔。'};
+          buildOwnedBattleCreature(individual);
+        }
+        const rng=link.createNativeLinkBattleRng(),rngPreparation=Object.freeze({rng});
+        const replyId=(responseCode??replyCode).split('.')[1],linkKey=`${role}:${packet.id??packet.inviteId}:${replyId}`;
+        battleRngPreparations.set(rngPreparation,{base:JSON.stringify(gameplayRngSnapshot()),rng,session,localMode:3,linkKey,
+          individuals:[...hostIndividuals,...guestIndividuals]});
+        return {ok:true,role,inviteCode:packet.code??inviteCode,replyCode:responseCode??replyCode,linkKey,
+          parties:[hostIndividuals,guestIndividuals],localTeamIndex:role==='HOST'?0:1,arenaIndex:packet.arenaIndex,rngPreparation};
+      }catch(error){
+        const known=/^(?:LINK_BATTLE_|PRODUCT_BATTLE_TRANSPORT_)/.test(error?.message??'');
+        return {ok:false,reason:known?error.message:'LINK_BATTLE_CODE_INVALID',
+          message:known?'通訊碼無法辨識、已損壞，或不是同一場邀請。':'通訊對戰準備失敗，請重新交換通訊碼。'};
+      }
+    },
+
+    async getPasswordTeamCandidates(){
+      requireSession();
+      const {championshipPasswordProfileAdmission}=await loadPasswordBattle();
+      return this.getRaisingInstances().map(entry=>{
+        const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
+        return Object.freeze({...entry,admission:championshipPasswordProfileAdmission(nativeProfile)});
+      });
+    },
+
+    // The original team panel prints the code of the team on it (ARM9 020511A4
+    // -> 020950B8). Making a code reads current profiles only: no save, RNG,
+    // roster or screen state changes.
+    async createTeamPassword(instanceIds){
+      requireSession();
+      if(!Array.isArray(instanceIds)||instanceIds.length<1||instanceIds.length>3||new Set(instanceIds).size!==instanceIds.length)
+        return {ok:false,reason:'PARTY_SIZE',message:'請選擇 1 至 3 隻拍檔。'};
+      const {encodeChampionshipPasswordTeamFromProfiles,championshipPasswordProfileAdmission}=await loadPasswordBattle();
+      const owned=new Set(this.getRaisingInstances().map(entry=>entry.instanceId)),profiles=[];
+      for(const instanceId of instanceIds){
+        const nativeProfile=!owned.has(instanceId)?null
+          :instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);
+        const admission=championshipPasswordProfileAdmission(nativeProfile);
+        if(!admission.ok)return admission;
+        profiles.push(nativeProfile);
+      }
+      return {ok:true,password:encodeChampionshipPasswordTeamFromProfiles(profiles),members:profiles.length};
+    },
+
+    async preparePasswordBattle(passwords){
+      requireSession();
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+      if(!Array.isArray(passwords)||passwords.length!==2||passwords.some(value=>typeof value!=='string'||value.length<1))
+        return {ok:false,reason:'TWO_PASSWORDS_REQUIRED',message:'請輸入 A 隊與 B 隊的密碼。'};
+      const {createNativePasswordPlaceholders,decodeChampionshipPasswordTeam,championshipPasswordTeamAdmission}=await loadPasswordBattle();
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      try{
+        const teams=passwords.map((password,index)=>decodeChampionshipPasswordTeam(password,{
+          placeholders:createNativePasswordPlaceholders(prepared.rng),instancePrefix:`password-${index===0?'a':'b'}`
+        }));
+        for(const team of teams){const admission=championshipPasswordTeamAdmission(team);if(!admission.ok){
+          battleRngPreparations.delete(rngPreparation);return admission;
+        }}
+        const normalized=teams.map(team=>team.password);
+        const parties=teams.map(team=>team.members.filter(Boolean).map(member=>({
+          instanceId:member.instanceId,nativeProfile:member.nativeProfile
+        })));
+        const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+        prepared.localMode=4;prepared.passwords=normalized;prepared.individuals=parties.flat();
+        return {ok:true,passwords:normalized,teams,parties,arenaIndex,rngPreparation};
+      }catch(error){
+        battleRngPreparations.delete(rngPreparation);
+        const known=/^(?:PASSWORD_BATTLE_|PRODUCT_BATTLE_TRANSPORT_)/.test(error?.message??'');
+        return {ok:false,reason:known?error.message:'PASSWORD_BATTLE_INVALID',
+          message:known?'密碼無法辨識或校驗不正確，請確認後再輸入。':'密碼隊伍準備失敗，請重新輸入。'};
+      }
+    },
+
+    enterPracticeBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:5,attemptId,playerInstanceIds,rngPreparation});
+    },
+
+    enterFreeBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+    },
+
+    enterPasswordBattle({attemptId=nextBattleAttemptId(battleEconomy),passwords,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:4,attemptId,passwords,rngPreparation});
+    },
+
+    enterLinkBattle({attemptId=nextBattleAttemptId(battleEconomy),linkKey,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:3,attemptId,linkKey,rngPreparation});
+    },
+
+    getBattleReceipt() {
+      return battleEconomy.lastReceipt;
+    },
+
+    async getBattlePartyCandidates(recordIndex) {
+      const {battlePartyAdmission}=await loadBattleParty();
+      return this.getRaisingInstances().map(entry=>{
+        const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
+        return Object.freeze({...entry,admission:battlePartyAdmission(nativeProfile,recordIndex)});
+      });
+    },
+
+    async getBattlePartyLimit(recordIndex) {
+      const {battlePartyCondition}=await loadBattleParty();
+      return battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
+    },
+
+    /**
+     * The two multi-round tournaments as OVL10 sets them up: how many rounds,
+     * what a clean sweep pays, and how large the draw is each round. The round
+     * pools and bookkeeping feed the same owned-party battle and durable
+     * settlement path as the ordinary title match.
+     * See docs/research/CHAMPIONSHIP_POOLS_CPU_2026-09-10.json.
+     */
+    getChampionshipCategories() {
+      // stage 1 opens the Championship; winning it opens the World tournament.
+      // Registration is the existing native flag, not a new gate.
+      const stage=nativeTitles.championship.stage;
+      return NATIVE_CHAMPIONSHIP_CATEGORIES.map(record => Object.freeze({
+        category:record.category, id:record.id, rounds:record.rounds, prize:record.prize,
+        poolSizes:record.poolSizes, arenaIndex:CHAMPIONSHIP_ARENA_INDEX,
+        unlocked:stage>=record.category+1,
+        registered:(record.category===0?nativeTitles.championship.entry:nativeTitles.championship.worldEntry)===1,
+        active:championshipRun?.category===record.category,
+      }));
+    },
+
+    /** The tournament in progress, with the round it is waiting on. */
+    getChampionshipRun() {
+      if(!championshipRun)return null;
+      const record=NATIVE_CHAMPIONSHIP_CATEGORIES[championshipRun.category];
+      return Object.freeze({...championshipRun, id:record.id,
+        round:championshipRun.cursor, finalRound:nativeChampionshipFinalRound(championshipRun),
+        continues:nativeChampionshipContinues(championshipRun),
+        payable:nativeChampionshipPayable(championshipRun)});
+    },
+
+    /**
+     * Open a tournament. The original starts a run by zeroing the cursor and
+     * taking the round count from the category descriptor; entry is refused
+     * unless the category is unlocked and entered, and a run already in
+     * progress is never replaced.
+     */
+    beginChampionship(category) {
+      requireSession();
+      if(battleTransactionActive)return Object.freeze({ok:false,reason:'TRANSACTION_ACTIVE'});
+      if(championshipRun)return Object.freeze({ok:false,reason:'CHAMPIONSHIP_ALREADY_RUNNING'});
+      const record=NATIVE_CHAMPIONSHIP_CATEGORIES[category];
+      if(!record)return Object.freeze({ok:false,reason:'UNKNOWN_CATEGORY'});
+      if(nativeTitles.championship.stage<record.category+1)
+        return Object.freeze({ok:false,reason:'CHAMPIONSHIP_LOCKED'});
+      const entered=(record.category===0?nativeTitles.championship.entry:nativeTitles.championship.worldEntry)===1;
+      if(!entered)return Object.freeze({ok:false,reason:'CHAMPIONSHIP_NOT_ENTERED'});
+      championshipRun=createNativeChampionshipRun(record.category);
+      savePort.markDirty();
+      return Object.freeze({ok:true,run:this.getChampionshipRun()});
+    },
+
+    /** The round's opponent, drawn on channel 0 over that round's pool. */
+    drawChampionshipOpponent() {
+      requireSession();
+      if(!championshipRun)return Object.freeze({ok:false,reason:'NO_CHAMPIONSHIP_RUNNING'});
+      if(!nativeChampionshipContinues(championshipRun))
+        return Object.freeze({ok:false,reason:'CHAMPIONSHIP_ALREADY_ENDED'});
+      const opponent=selectNativeChampionshipOpponent({category:championshipRun.category,
+        round:championshipRun.cursor,nextChannel:nextGameplayRandom});
+      return Object.freeze({ok:true,opponent});
+    },
+
+    /**
+     * Fight the round the run is waiting on. The tournament descriptor carries
+     * rounds, prize and two more fields and no entry fee, so a round is entered
+     * free; the prize is the run's, paid once at 0210D0C8's gate rather than per
+     * round. Everything else is an ordinary battle attempt.
+     */
+    enterChampionshipRound({ attemptId, playerInstanceIds = null, opponent = null, rngPreparation=null } = {}) {
+      requireSession();
+      if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
+      if (!championshipRun) return Object.freeze({ ok: false, reason: "NO_CHAMPIONSHIP_RUNNING" });
+      if (!nativeChampionshipContinues(championshipRun))
+        return Object.freeze({ ok: false, reason: "CHAMPIONSHIP_ALREADY_ENDED" });
+      if (battleEconomy.active) return Object.freeze({ ok: false, reason: "BATTLE_ATTEMPT_ACTIVE" });
+      const prepared=rngPreparation===null?null:battleRngPreparations.get(rngPreparation);
+      if(playerInstanceIds!==null||rngPreparation!==null){
+        if(!prepared||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
+          ||prepared.championshipRun!==JSON.stringify(championshipRun)
+          ||JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals?.map(p=>p.instanceId))
+          ||prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile)))
+          return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇參賽隊伍。'};
+        opponent=prepared.opponent;
+      }
+      // The caller may have drawn already to build the match; drawing twice
+      // would spend the channel twice.
+      const drawn = opponent ? { ok: true, opponent } : this.drawChampionshipOpponent();
+      if (!drawn.ok) return drawn;
+      const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
+        attemptId, matchIndex: championshipRun.category, mode: 0, battleType: 0,
+        entryFee: 0, payout: 0, expectedRounds: 1
+      }, requireShop().getBits()),[],prepared?.rng??null);
+      if (!result.ok || result.duplicate) return result;
+      if(rngPreparation)battleRngPreparations.delete(rngPreparation);
+      championshipAttemptId = attemptId;
+      battlePartyIds = playerInstanceIds === null ? null : [...playerInstanceIds];
+      screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+      publishScreens();
+      return Object.freeze({ ...result, opponent: drawn.opponent, round: championshipRun.cursor });
+    },
+
+    /**
+     * One round's verdict. A lost round ends the run where it stands, which is
+     * what the payout gate at 0210D0C8 then reads.
+     */
+    recordChampionshipRound({verdict,battleType=0}={}) {
+      requireSession();
+      if(!championshipRun)return Object.freeze({ok:false,reason:'NO_CHAMPIONSHIP_RUNNING'});
+      if(!nativeChampionshipContinues(championshipRun))
+        return Object.freeze({ok:false,reason:'CHAMPIONSHIP_ALREADY_ENDED'});
+      const recorded=recordNativeChampionshipRound(championshipRun,{verdict,battleType});
+      championshipRun=recorded.run;
+      savePort.markDirty();
+      return Object.freeze({ok:true,won:recorded.won,complete:recorded.complete,
+        payable:recorded.payable,run:this.getChampionshipRun()});
+    },
+
+    /**
+     * Close a finished run. Every round played must be a win for the prize, and
+     * the title result reads the same flags, so a run that ended early settles
+     * to nothing rather than being abandoned silently.
+     */
+    settleChampionship() {
+      requireSession();
+      if(battleTransactionActive)return Object.freeze({ok:false,reason:'TRANSACTION_ACTIVE'});
+      if(!championshipRun)return Object.freeze({ok:false,reason:'NO_CHAMPIONSHIP_RUNNING'});
+      if(nativeChampionshipContinues(championshipRun))
+        return Object.freeze({ok:false,reason:'CHAMPIONSHIP_STILL_RUNNING'});
+      const run=championshipRun,payable=nativeChampionshipPayable(run);
+      const before=nativeTitles,beforeRank=tamerRankValue,beforeBadges=battleBadgesValue,beforeMessages=nativeMessages;
+      const r=resolveNativeTitleResult({rank:tamerRankValue,category:0,matchIndex:run.category,
+        won:battleBadgesValue,...nativeTitles,rounds:run.flags});
+      battleBadgesValue=[...r.won];tamerRankValue=r.rank;
+      nativeTitles=normalizeNativeTitleProgress({...nativeTitles,registered:r.registered,
+        championship:r.championship,feeWaiver:r.feeWaiver});
+      if(r.rankNotice!==null)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,r.rankNotice);
+      if(r.championshipNotice)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,r.championshipNotice);
+      // creditBits throws on an invalid amount and otherwise reports the wallet;
+      // the descriptor prize is always a valid amount, so a throw here is a bug
+      // rather than a refusal, and the title result is rolled back with it.
+      let wallet=null;
+      if(payable){
+        try{wallet=requireShop().creditBits(run.prize,{evidence:'ROM_VERIFIED'}).bits;}
+        catch(error){
+          nativeTitles=before;tamerRankValue=beforeRank;battleBadgesValue=beforeBadges;nativeMessages=beforeMessages;
+          return Object.freeze({ok:false,reason:'PRIZE_CREDIT_FAILED',message:error.message});
+        }
+      }
+      championshipRun=null;
+      if(battleBadgesValue!==beforeBadges)applyProgression();
+      savePort.markDirty();
+      return Object.freeze({ok:true,payable,prize:payable?run.prize:0,bits:wallet,
+        flags:Object.freeze([...run.flags]),rank:tamerRankValue,
+        championship:nativeTitles.championship});
+    },
+
+    prepareBattleRng() {
+      requireSession();
+      const base=gameplayRngSnapshot();
+      const rng=base?restoreChannelRng(base):createClockChannelRng(rngClock());
+      const preparation=Object.freeze({rng});
+      battleRngPreparations.set(preparation,{base:JSON.stringify(base),rng,session});
+      return preparation;
+    },
+
+    async prepareChampionshipBattle(instanceIds) {
+      const run=championshipRun;
+      if(!run||!nativeChampionshipContinues(run))return {ok:false,reason:'NO_CHAMPIONSHIP_ROUND'};
+      const party=await this.prepareBattleParty(null,instanceIds);
+      if(!party.ok)return party;
+      if(championshipRun!==run)return {ok:false,reason:'BATTLE_PREPARATION_STALE'};
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      const opponent=selectNativeChampionshipOpponent({category:run.category,round:run.cursor,
+        nextChannel:channel=>prepared.rng.next(channel)});
+      prepared.championshipRun=JSON.stringify(run);prepared.individuals=party.individuals;prepared.opponent=opponent;
+      return {ok:true,individuals:party.individuals,opponent,rngPreparation};
+    },
+
+    async prepareBattleParty(recordIndex,instanceIds) {
+      const {battlePartyCondition,buildOwnedBattleCreature}=await loadBattleParty();
+      const limit=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
+      if(!Array.isArray(instanceIds)||!instanceIds.length||instanceIds.length>limit||new Set(instanceIds).size!==instanceIds.length)
+        return {ok:false,reason:'PARTY_SIZE',message:uiText('請選擇 1 至 {limit} 隻符合條件的拍檔。',{limit})};
+      const candidates=await this.getBattlePartyCandidates(recordIndex),individuals=[];
+      for(const instanceId of instanceIds){
+        const entry=candidates.find(c=>c.instanceId===instanceId);
+        if(!entry)return {ok:false,reason:'UNKNOWN_INDIVIDUAL',message:'選擇的拍檔已不在目前名冊。'};
+        if(!entry.admission.ok)return entry.admission;
+        const nativeProfile=instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);
+        buildOwnedBattleCreature({instanceId,nativeProfile});
+        individuals.push({instanceId,nativeProfile:structuredClone(nativeProfile)});
+      }
+      return {ok:true,individuals};
+    },
+
+    async enterMatch({ attemptId = nextBattleAttemptId(battleEconomy), recordIndex, mode, battleType, playerInstanceIds=null, rngPreparation=null } = {}) {
+      requireSession();
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
+      const duplicateActive = battleEconomy.active?.attemptId === attemptId;
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT && !duplicateActive) {
+        throw new Error("CHAMPIONSHIP_BATTLE_SELECT_NOT_ACTIVE");
+      }
+      // Recheck today's date/rank at the actual debit, not only at menu mount.
+      if (!duplicateActive && !this.getAvailableBattleRecordIndices().includes(recordIndex)) {
+        return Object.freeze({ ok: false, reason: "MATCH_NOT_AVAILABLE",
+          message: "這場比賽不符合目前日期或資格，請重新選擇。" });
+      }
+      if(!duplicateActive && playerInstanceIds!==null){
+        const admission=await this.prepareBattleParty(recordIndex,playerInstanceIds);
+        if(!admission.ok)return admission;
+        if(mode!==1||battleType!==0)return {ok:false,reason:'OWNED_PARTY_MODE_REQUIRES_TRACE'};
+      }
+      const preparedRng=rngPreparation===null?null:battleRngPreparations.get(rngPreparation);
+      if(!duplicateActive && rngPreparation!==null && (!preparedRng||preparedRng.session!==session||preparedRng.base!==JSON.stringify(gameplayRngSnapshot())))
+        return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'遊戲進度已更新，請重新選擇參賽隊伍。'};
+      const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
+        attemptId, matchIndex: recordIndex, mode, battleType,
+        entryFee: matchEntryFee(recordIndex), payout: matchPayout(recordIndex), expectedRounds: 1
+      }, requireShop().getBits()),[],preparedRng?.rng);
+      if (!result.ok || result.duplicate) return result;
+      if(rngPreparation)battleRngPreparations.delete(rngPreparation);
+      battlePartyIds=playerInstanceIds===null?null:[...playerInstanceIds];
+      screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+      publishScreens();
+      return result;
+    },
+
+    /** The battle judges itself; nothing else may push the result screen. */
+    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries, individualResults=[] } = {}) {
+      requireSession();
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
+      // A result already consumed can be queried after returning or reloading,
+      // but it can never reopen the match or credit the wallet again.
+      if (!battleEconomy.active) {
+        // Every other refusal on this method is a reason, not a throw. An
+        // unparseable attempt id was the one input that escaped as an
+        // exception, which a caller reading `.ok` would never see coming.
+        try {
+          return settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries }, requireShop().getBits());
+        } catch {
+          return Object.freeze({ ok: false, reason: "BATTLE_ATTEMPT_NOT_ACTIVE" });
+        }
+      }
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
+        return Object.freeze({ ok: false, reason: "BATTLE_FIELD_NOT_ACTIVE" });
+      }
+      const active = battleEconomy.active;
+      if (ended !== true || mode !== active.mode || battleType !== active.battleType || matchIndex !== active.matchIndex) {
+        return Object.freeze({ ok: false, reason: "BATTLE_RESULT_CONTEXT_MISMATCH" });
+      }
+      let updates=[];
+      if(battlePartyIds){
+        if(!Array.isArray(individualResults)||individualResults.length!==battlePartyIds.length||
+          individualResults.some((entry,i)=>entry.instanceId!==battlePartyIds[i]))
+          return {ok:false,reason:'BATTLE_PARTY_RESULT_MISMATCH'};
+        updates=individualResults.map(entry=>({instanceId:entry.instanceId,nativeProfile:normalizeNativeIndividualProfile(
+          entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)}));
+      }
+      const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries }, requireShop().getBits()),updates);
+      if (!result.ok || result.duplicate) return result;
+      for(const entry of updates)raisingActors.delete(entry.instanceId);
+      battlePartyIds=null;
+      // A round fought under a run writes its flag here, from the same verdict
+      // the economy just settled on, so nothing judges the round twice.
+      if(championshipAttemptId===attemptId){
+        championshipAttemptId=null;
+        if(championshipRun&&nativeChampionshipContinues(championshipRun)){
+          championshipRun=recordNativeChampionshipRound(championshipRun,
+            {verdict:result.receipt.won?BATTLE_OUTCOME_TEAM_ZERO_AHEAD:BATTLE_OUTCOME_TEAM_ONE_AHEAD}).run;
+          savePort.markDirty();
+        }
+      }
+      screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_RESULT);
+      publishScreens();
+      return result;
+    },
+
+    /** Leaving a match or its result unwinds to Home rather than popping back
+     *  into a round that has already been judged. */
+    exitBattle() {
+      const from = screens.current();
+      if (from !== CHAMPIONSHIP_SCREENS.BATTLE_FIELD && from !== CHAMPIONSHIP_SCREENS.BATTLE_RESULT) {
+        return screens.current();
+      }
+      if (battleTransactionActive) return screens.current();
+      if (battleEconomy.active) {
+        // Preserve the existing LEAVE seam without inventing a fee refund.
+        // Original cancellation/refund semantics remain a separate trace gate.
+        const result = applyBattleTransaction(abandonBattleAttempt(battleEconomy, {
+          attemptId: battleEconomy.active.attemptId
+        }, requireShop().getBits()));
+        if (!result.ok) return screens.current();
+      }
+      battlePartyIds = null;
+      championshipAttemptId = null;
+      screens.exit();
+      // A run still owed a round sends the player back to its board rather than
+      // to Home. The judged round is behind the reset either way.
+      if (championshipRun && nativeChampionshipContinues(championshipRun)
+        && screens.current() === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
+        screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_SELECT);
+        screens.enter(CHAMPIONSHIP_SCREENS.CHAMPIONSHIP);
+      }
+      publishScreens();
+      return screens.current();
+    },
+
+    selectGate(gateId,expected=null) {
+      if(tutorialBaseline){
+        if(screens.current()==='GATE_SELECT'&&gateId===TUTORIAL_GATE.gateId&&tutorialExpeditionInput(expected,'gate')){selectedGateId=gateId;publishScreens();}
+        return selectedGateId;
+      }
+      if (huntCommitActive) return selectedGateId;
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.GATE_SELECT) {
+        throw new Error("CHAMPIONSHIP_GATE_SELECT_NOT_ACTIVE");
+      }
+      if (gateId !== null && !getChampionshipGate(gateId)) {
+        throw new Error(`CHAMPIONSHIP_UNKNOWN_GATE: ${gateId}`);
+      }
+      selectedGateId = gateId;
+      huntEntryError = null;
+      publishScreens();
+      return selectedGateId;
+    },
+
+    /** Commit the gate choice and move to loadout. A no-op with no selection. */
+    confirmGate(expected=null) {
+      if(tutorialBaseline)return confirmTutorialGate(expected);
+      if (huntCommitActive) return screens.current();
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.GATE_SELECT) return screens.current();
+      if (selectedGateId === null) return screens.current();
+      if (!this.getGateAdmission(selectedGateId).canConfigure) return screens.current();
+      confirmedGateId = selectedGateId;
+      // Entering the loadout builds it over the Shop-owned inventory.
+      huntLoadout = createHuntLoadout({ inventory: huntInventory });
+      screens.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
+      publishScreens();
+      return screens.current();
+    },
+
+    selectHuntEquipment(equipmentClass, itemId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) {
+        throw new Error("CHAMPIONSHIP_HUNT_LOADOUT_NOT_ACTIVE");
+      }
+      const result = requireLoadout().selectEquipment(equipmentClass, itemId);
+      publishScreens();
+      return result;
+    },
+
+    fitHuntPlugin(position, itemId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) {
+        throw new Error("CHAMPIONSHIP_HUNT_LOADOUT_NOT_ACTIVE");
+      }
+      const result = requireLoadout().fitPlugin(position, itemId);
+      publishScreens();
+      return result;
+    },
+
+    selectHuntMemoryCard(itemId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) {
+        throw new Error("CHAMPIONSHIP_HUNT_LOADOUT_NOT_ACTIVE");
+      }
+      const result = requireLoadout().selectMemoryCard(itemId);
+      publishScreens();
+      return result;
+    },
+
+    /**
+     * DEVELOPER_PROTOTYPE_ONLY.
+     *
+     * The VS2 companion placeholder, kept for developer inspection and never
+     * surfaced by the Player Mode seam. It gates nothing and enters nothing.
+     */
+
+    /**
+     * Enter the field.
+     *
+     * Prepare the native encounter on isolated RNG/history candidates, then
+     * commit only after the existing world and runtime both construct.
+     */
+    async beginHunt() {
+      if(tutorialBaseline)return screens.current(); // Dedicated tutorial entry adapter is not bound yet.
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) return screens.current();
+      if (confirmedGateId === null) return screens.current();
+      requireSession();
+      // Entry is gated on the loadout being internally consistent, not on
+      // anything being equipped: no original rule requires a full loadout.
+      if (!requireLoadout().getConfirmationState().canConfirm) return screens.current();
+      if (huntCommitActive) return screens.current();
+      const gate = getChampionshipGate(confirmedGateId);
+      const admission = this.getGateAdmission(gate.gateId);
+      if (!admission.canEnter) {
+        huntEntryError = admission.reason;
+        publishScreens();
+        return screens.current();
+      }
+      huntCommitActive = true;
+      try {
+        // Replay is explicitly requested by research fixtures only. Normal
+        // startup has no recorded actor, fixed seed or prototype encounter.
+        // The scene catalog behind this is 1.5MB of run-length direction data
+        // for all 29 fields, and a hunt reads one. Nothing before this screen
+        // touches it, so it is fetched here; main.js warms it once a screen is
+        // up, which is several taps before anyone can reach this.
+        const { prepareNativeHuntEntry } = await import("../hunt/capture/nativeHuntEntryTransaction.js");
+        const expansion = huntCaptureReplay === null && typeof huntExpansionLoader === 'function' ? await huntExpansionLoader(gate) : null;
+        const entry = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId, expansion,
+          clock:requireSession().getRaisingHomeSnapshot(),
+          rngSnapshot:gameplayRngSnapshot(), persistentState:huntPersistentState }) : null;
+        const world = createHuntWorld(gate, entry);
+        const factory = huntRuntimeFactory
+          ?? (await import("../hunt/huntRuntime.js")).createHuntRuntime;
+        const candidateRuntime = factory({ world, nativeEntry:entry,
+          captureReplay:huntCaptureReplay, maxCardG:maxGFromInventory(huntInventory),
+          nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>requireShop().consumeHuntItem(id,n),onChange:publishScreens} : null,
+          fieldActor:{ actorId:"championship:2026:actor:tamer", displayName:"Tamer" } });
+        if (!candidateRuntime || candidateRuntime.world !== world) throw Error("HUNT_ENTRY_RUNTIME_INVALID");
+        if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT || confirmedGateId !== gate.gateId) {
+          throw Error("HUNT_ENTRY_CONTEXT_CHANGED");
+        }
+        if (requireShop().getBits() !== admission.walletBits) throw Error("HUNT_ENTRY_WALLET_CHANGED");
+        screens.enter(CHAMPIONSHIP_SCREENS.HUNT_FIELD);
+        if (entry) { gameplayRng = entry.rng; huntPersistentState = entry.persistentState; }
+        huntRuntime = candidateRuntime;
+        huntDeadlineMinute = entry ? Math.min(requireSession().getRaisingHomeSnapshot().clockMinutes + 480, DAY_END_MINUTES) : null;
+        // Hunt resume discards the prior scene's raw sub-minute remainder.
+        if (entry) requireSession().advanceRaisingClock({ units: 0, divisor: 400, clearElapsed: true,
+          expectedClockRevision: requireSession().getRaisingHomeSnapshot().clockRevision });
+        huntEntryError = null;
+        // The candidate is now complete. Publish one wallet debit while the
+        // commit guard prevents callbacks from entering/saving a partial Hunt.
+        if (admission.chargeBits > 0) {
+          const paid = requireShop().applyBitsTransaction({ expectedBits: admission.walletBits, bits: admission.afterBits });
+          if (!paid.ok) throw Error("HUNT_ENTRY_WALLET_CHANGED");
+        }
+        // Save observers see a fully committed screen/runtime/RNG/history set.
+        if (entry || admission.chargeBits > 0) savePort.markDirty();
+      } catch (error) {
+        huntEntryError = error instanceof Error ? error.message : "HUNT_ENTRY_FAILED";
+        publishScreens();
+        return screens.current();
+      } finally { huntCommitActive = false; }
+      publishScreens();
+      return screens.current();
+    },
+
+    /**
+     * Leave an empty expedition, or enter Result with already-inserted card
+     * records. A gesture or unfinished animation is never a Home commit.
+     */
+    getHuntTimeState() {
+      if (huntDeadlineMinute === null || screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return null;
+      return Object.freeze({ deadlineMinute: huntDeadlineMinute,
+        remainingMinutes: Math.max(0, huntDeadlineMinute - requireSession().getRaisingHomeSnapshot().clockMinutes),
+        evidence: "ROM_NORMAL_HUNT_CLOCK_AND_DEADLINE" });
+    },
+
+    checkHuntDeadline() {
+      if (screens.current() === CHAMPIONSHIP_SCREENS.HUNT_FIELD && huntDeadlineMinute !== null
+        && requireSession().getRaisingHomeSnapshot().clockMinutes >= huntDeadlineMinute) this.exitHunt();
+    },
+
+    exitHunt() {
+      if(tutorialBaseline)return screens.current();
+      if (huntCommitActive) return screens.current();
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return screens.current();
+      if (huntRuntime?.hasPendingCaptureAnimation()) return screens.current();
+      huntCommitActive = true;
+      try {
+        const returnContext = huntRuntime?.getNativeReturnContext?.();
+        if (returnContext) {
+          const cards = huntRuntime.getOnCardEntries();
+          const returnRng = restoreChannelRng(gameplayRngSnapshot());
+          const returned = applyNativeHuntReturn({ ...returnContext, ...huntPersistentState,
+            catalog:nativeHuntCatalogForBiome(returnContext.biomeIndex), speciesByIndex:nativeHuntSpeciesByIndex, rng:returnRng,
+            records:cards.map(({nativeProfile:{fields,narrowFields,name}}) => ({fields,narrowFields,name})) });
+          // Validate every candidate before publishing any record, RNG or history.
+          const candidates = returned.records.map((individual,i) => {
+            nativeIndividualProfile(individual, cards[i].speciesId);
+            return {wildId:cards[i].wildId,individual};
+          });
+          huntRuntime.applyReturnedIndividuals(candidates);
+          gameplayRng = returnRng;
+          huntPersistentState = {history:returned.history,modifiers:returned.modifiers};
+        }
+        huntRuntime?.abortEnclosureStroke();
+        if (huntDeadlineMinute !== null) {
+          const active = requireSession();
+          active.advanceRaisingClock({ units: 0, divisor: 400, clearElapsed: true,
+            expectedClockRevision: active.getRaisingHomeSnapshot().clockRevision });
+        }
+        huntDeadlineMinute = null;
+        const entries = huntRuntime?.getOnCardEntries() ?? [];
+        if (entries.length > 0) {
+          const entry = entries[0];
+          huntResult = Object.freeze({ ...entry, displayName: entry.displayName ?? speciesDisplayName(entry.speciesId),
+            title: "HUNT RESULT", outcomeLabel: "ON MEMORY CARD", speciesLabel: speciesDisplayName(entry.speciesId),
+            outcome: "ON_CARD", originGateId: confirmedGateId, pendingHomeCommit: true });
+          screens.enter(CHAMPIONSHIP_SCREENS.HUNT_RESULT);
+          if (returnContext) savePort.markDirty();
+          return screens.current();
+        }
+        huntRuntime = null;
+        huntLoadout = null;
+        huntResult = null;
+        confirmedGateId = null;
+        selectedGateId = null;
+        screens.exit();
+        if (returnContext) savePort.markDirty();
+        return screens.current();
+      } finally {
+        huntCommitActive = false;
+        publishScreens();
+      }
+    },
+
+    beginEnclosureStroke(worldX, worldY) {
+      if (tutorialBaseline || screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return false;
+      return huntRuntime.beginEnclosureStroke(worldX, worldY);
+    },
+
+    extendEnclosureStroke(worldX, worldY) {
+      if (tutorialBaseline || screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return false;
+      return huntRuntime.extendEnclosureStroke(worldX, worldY);
+    },
+
+    // Geometry cannot allocate a Raising ID or change the wallet/save/roster.
+    // Native replay card insertion and Home commit use separate methods below.
+    endEnclosureStroke() {
+      if (tutorialBaseline || screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return null;
+      return huntRuntime.endEnclosureStroke();
+    },
+
+    abortEnclosureStroke() {
+      return huntRuntime?.abortEnclosureStroke() ?? false;
+    },
+
+    /** Close Hunt Result and return to Raising Home. */
+    confirmHuntResult() {
+      if(tutorialBaseline)return screens.current(); // No ordinary Home commit for demo cards.
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT) return screens.current();
+      if (huntCommitActive) return screens.current();
+      if (huntResult?.pendingReleaseKey) return screens.current();
+      const entries = huntRuntime?.getOnCardEntries() ?? [];
+      const releasedHomeIds = huntResult?.releasedHomeIds ?? [];
+      if (entries.length > 0 || releasedHomeIds.length > 0) {
+        let candidateRaising = raising, candidateIdentity = instanceIdentity;
+        const beforeSnapshot = requireSession().getRaisingHomeSnapshot();
+        const releasedResidents = releasedHomeIds.filter((id) => beforeSnapshot.residents.some((entry) => entry.residentId === id));
+        const candidateSnapshot = releasedResidents.length ? stageRaisingResidentRelease(beforeSnapshot, releasedResidents) : beforeSnapshot;
+        for (const id of releasedHomeIds) candidateRaising = releaseRaisingMembership(candidateRaising, id);
+        const sources = { ...instanceSources(), residents: candidateSnapshot.residents,
+          creature: releasedHomeIds.includes(creature.creatureId) ? null : instanceSources().creature,
+          collection: candidateRaising.collection,
+          assignments: candidateRaising.assignments, interactions: candidateRaising.interactions };
+        // Native pool 02061BB4 has 16 slots. A confirmed release is staged in
+        // this same Home transaction; failure cannot remove a saved individual.
+        if (listRaisingInstances(sources).length + entries.length > 16) {
+          huntResult = Object.freeze({ ...huntResult, commitError: "HOME_ROSTER_FULL" });
+          publishScreens(); return screens.current();
+        }
+        for (const entry of entries) {
+          const allocation = allocateRaisingInstanceIdentity(candidateIdentity, { ...sources, collection: candidateRaising.collection,
+            assignments: candidateRaising.assignments });
+          candidateIdentity = allocation.state;
+          candidateRaising = recordCapturedCardCreature(candidateRaising, { instanceId: allocation.instanceId,
+            speciesId: entry.speciesId, displayName: entry.displayName, enclosedAt: now(), originGateId: confirmedGateId,
+            cageId: Object.values(candidateRaising.assignments)[0] ?? cageIds[0],
+            capturedVitals: { ...entry.sourceVitals, traceId: entry.traceId },
+            nativeProfile: entry.nativeProfile });
+        }
+        const candidateBook = retainOwnedBookSpecies(registeredSpeciesValue, creature, candidateRaising.collection);
+        huntCommitActive = true;
+        let status;
+        try {
+          status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
+            revision: revision + 1, interactionCount, friendsPlaytest, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, raising: candidateRaising,
+            registeredSpecies: candidateBook,
+            shop: shop ? shop.toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
+            battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),
+            huntHistory: projectNativeHuntPersistentSave(huntPersistentState) });
+          if (status.phase === "SAVED") {
+            raising = candidateRaising; instanceIdentity = candidateIdentity; revision += 1;
+            registeredSpeciesValue = candidateBook;
+            if (releasedHomeIds.includes(selectedCreatureId)) selectedCreatureId = null;
+            if (releasedResidents.length) requireSession().commitRaisingResidentRelease(releasedResidents, beforeSnapshot.revision);
+            huntRuntime.completeHomeCaptureCommit();
+          }
+        } finally { huntCommitActive = false; }
+        if (status.phase !== "SAVED") {
+          huntResult = Object.freeze({ ...huntResult, commitError: "SAVE_FAILED" });
+          publishScreens(); return screens.current();
+        }
+      }
+      huntRuntime?.abortEnclosureStroke();
+      huntRuntime = null;
+      huntLoadout = null;
+      huntResult = null;
+      confirmedGateId = null;
+      selectedGateId = null;
+      screens.exit();
+      publishScreens();
+      return screens.current();
+    },
+
+    requestHuntResultRelease(key) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || huntCommitActive) return false;
+      const row = this.getHuntResult()?.rows?.find((entry) => entry.key === key);
+      if (!row?.canRelease) return false;
+      huntResult = Object.freeze({ ...huntResult, pendingReleaseKey: key });
+      publishScreens(); return true;
+    },
+    cancelHuntResultRelease() {
+      if (!huntResult?.pendingReleaseKey || huntCommitActive) return false;
+      huntResult = Object.freeze({ ...huntResult, pendingReleaseKey: null });
+      publishScreens(); return true;
+    },
+    confirmHuntResultRelease() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || huntCommitActive) return false;
+      const row = this.getHuntResult()?.pendingRelease;
+      if (!row?.canRelease) return false;
+      let releasedHomeIds = huntResult.releasedHomeIds ?? [];
+      if (row.kind === "CARD") {
+        if (!huntRuntime.releaseOnCardEntry(row.id)) return false;
+      } else releasedHomeIds = [...releasedHomeIds, row.id];
+      const selected = huntRuntime.getOnCardEntries()[0] ?? null;
+      huntResult = Object.freeze({ ...huntResult, wildId: selected?.wildId ?? null,
+        speciesId: selected?.speciesId ?? null, speciesLabel: selected ? speciesDisplayName(selected.speciesId) : null,
+        displayName: selected ? selected.displayName ?? speciesDisplayName(selected.speciesId) : null,
+        releasedHomeIds: Object.freeze(releasedHomeIds), pendingReleaseKey: null, commitError: null });
+      publishScreens(); return true;
+    },
+
+    /**
+     * Which catch on the memory card the name plate edits. Every catch is
+     * brought Home with its own name; the plate used to stay on the first one,
+     * so a second or third catch could not be named (Owner report, 2026-10-05).
+     */
+    selectHuntResultEntry(wildId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || !huntResult?.pendingHomeCommit || huntCommitActive) return false;
+      const entry = (huntRuntime?.getOnCardEntries() ?? []).find((candidate) => candidate.wildId === wildId);
+      if (!entry) return false;
+      if (entry.wildId !== huntResult.wildId) {
+        huntResult = Object.freeze({ ...huntResult, wildId: entry.wildId, speciesId: entry.speciesId,
+          speciesLabel: speciesDisplayName(entry.speciesId),
+          displayName: entry.displayName ?? speciesDisplayName(entry.speciesId) });
+        publishScreens();
+      }
+      return true;
+    },
+
+    /**
+     * Hunt Result name edit (original OVL4 plate).
+     *
+     * The original charset is untraced; this uses the product given-name rule.
+     */
+    setHuntResultName(displayName) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || !huntResult) {
+        throw new Error("CHAMPIONSHIP_HUNT_RESULT_NOT_ACTIVE");
+      }
+      if (huntResult.pendingHomeCommit) {
+        if (!huntResult.wildId) return null;
+        const name = normalizeProductGivenName(displayName);
+        huntRuntime.renameOnCardEntry(huntResult.wildId, name);
+        huntResult = Object.freeze({ ...huntResult, displayName: name });
+        publishScreens(); return name;
+      }
+      raising = renameEnclosedCreature(raising, huntResult.instanceId, displayName);
+      const givenName = raising.collection.find((entry) => entry.instanceId === huntResult.instanceId)?.displayName;
+      huntResult = Object.freeze({ ...huntResult, displayName: givenName });
+      publishScreens();
+      return huntResult.displayName;
+    },
+
+    /** Step one screen back. Clears the choice the popped screen owned. */
+    leaveScreen() {
+      if(tutorialBaseline)return screens.current();
+      if (huntCommitActive) return screens.current();
+      const from = screens.current();
+      if (from === CHAMPIONSHIP_SCREENS.HUNT_FIELD) return this.exitHunt();
+      if (from === CHAMPIONSHIP_SCREENS.BATTLE_FIELD || from === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) {
+        return this.exitBattle();
+      }
+      if (from === CHAMPIONSHIP_SCREENS.HUNT_RESULT) return this.confirmHuntResult();
+      if (from === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) {
+        huntLoadout = null;
+        confirmedGateId = null;
+      }
+      if (from === CHAMPIONSHIP_SCREENS.GATE_SELECT) selectedGateId = null;
+      if (from === CHAMPIONSHIP_SCREENS.SHOP) {
+        this.advanceClock({ units: 0, clearElapsed: true });
+        shop?.markNewSeen();
+        lastShopReceipt = null;
+      }
+      if (from === CHAMPIONSHIP_SCREENS.DATABASE) selectedDatabaseSpeciesIndex = null;
+      if (from === CHAMPIONSHIP_SCREENS.CAGE_EDIT) cageEdit?.revert(...cageEditArgs());
+      screens.back();
+      publishScreens();
+      return screens.current();
+    },
+
+    /** The controller dispatches through here, so interactions driven from the
+     *  UI are counted the same as ones driven from a test. */
+    runtimeFacade() {
+      const active = requireSession();
+      const app = this;
+      return Object.freeze({
+        getSnapshot: active.getRaisingHomeSnapshot,
+        dispatch: (command) => app.dispatch(command),
+        subscribe: active.subscribeRaisingHome
+      });
+    },
+
+    persistenceFacade() {
+      const app = this;
+      return Object.freeze({
+        getStatus: () => savePort.getStatus(),
+        subscribe: (listener) => savePort.subscribe(listener),
+        save: () => app.save(),
+        retry: () => {
+          if (huntResult?.pendingHomeCommit) {
+            app.confirmHuntResult();
+            return savePort.getStatus();
+          }
+          return app.save();
+        },
+        exportRecovery: () => {
+          const recovery = savePort.exportRecovery();
+          // Use the same complete validation as Continue, without adopting,
+          // writing, migrating stored bytes, or replacing the active session.
+          const save = deserializeChampionshipModernSave(recovery.text);
+          restoreCandidate(save);
+          return Object.freeze({ ...recovery, backupSource: recovery.pendingText ? 'pending' : 'stored' });
+        }
+      });
+    },
+
+    async dispose() {
+      if(tutorialTransitionActive||tutorialCommitActive)return false;
+      if (huntCommitActive) return false;
+      cancelRaisingHand();
+      battlePartyIds = null;
+      resetExpedition();
+      if (!session) {await savePort.releaseSession();return;}
+      const closing = session;
+      session = null;
+      await closing.dispose();
+      tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=false;
+      await savePort.releaseSession();
+    }
+  });
+}
+

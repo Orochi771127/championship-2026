@@ -1,0 +1,35 @@
+name: Ranch missing map source evidence
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-map-source-review.yml'
+      - 'tests/ranch-map-decode.py'
+permissions:
+  contents: read
+jobs:
+  decode-selected:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy==2.2.6 DracoPy==2.2.0
+      - name: Hash verify and decode only three connector-limited map sources
+        run: |
+          mkdir -p artifacts/map-glb-decode
+          git rev-parse HEAD > artifacts/map-glb-decode/checkout-commit.txt
+          cp assets/production/cage/three-20261021/manifest.json artifacts/map-glb-decode/source-manifest.json
+          python tests/ranch-map-decode.py --repo . --out artifacts/map-glb-decode
+      - name: Preserve bounded source evidence, not visual acceptance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-map-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/map-glb-decode/
+          if-no-files-found: error
+          retention-days: 14

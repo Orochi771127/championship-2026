@@ -1,0 +1,27 @@
+<!doctype html><html><meta charset="utf-8"><title>Controlled ranch audit fixture</title><p id="status">Preparing test-only save in isolated CI browser context.</p>
+<script type="module">
+// Real app source and native profiles, never the user's save/browser context.
+import {createChampionshipStandaloneApp} from '../../src/championship/app/championshipStandaloneApp.js';
+import {createNativeHuntIndividual} from '../../src/championship/hunt/capture/nativeHuntIndividual.js';
+import {nativeHuntSpeciesByIndex} from '../../src/championship/hunt/capture/nativeHuntSources.js';
+import {nativeIndividualProfile} from '../../src/championship/raising/nativeIndividualProfile.js';
+import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../../src/championship/app/championshipStandaloneSave.js';
+globalThis.prepareNormalRanchAudit=async function(species){
+ if(!Array.isArray(species)||!species.length||species.some(i=>!Number.isInteger(i)||i<0||i>300))throw Error('EXPLICIT_SPECIES_REQUIRED');
+ const catalog=await fetch('../../src/data/championship/catalogs/creature-species.r1.json').then(r=>r.json());
+ const {cages}=await fetch('../../docs/contracts/championship/raising-home-presentation.v1.json').then(r=>r.json());
+ const app=createChampionshipStandaloneApp({storage:localStorage,catalog,cages,rngClock:()=>({hour:13,minute:20,second:50})});
+ try{
+  await app.newGame();app.save();const save=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
+  const profile=i=>nativeIndividualProfile(createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(i),rng:{next:()=>11}}));
+  const sid=i=>`species-${String(i).padStart(3,'0')}`;
+  save.creature.nativeProfile=profile(species[0]);save.creature.speciesId=sid(species[0]);save.creature.displayName='Controlled audit';
+  for(const [n,i] of species.slice(1).entries()){
+   const id='audit:resident:'+n;save.raising.collection.push({instanceId:id,speciesId:sid(i),displayName:'Audit '+i,nativeProfile:profile(i),enclosedAt:null,originGateId:null,successAuthority:'CONTROLLED_TEST_PROFILE'});
+   save.raising.assignments[id]=save.raising.assignments[save.creature.creatureId];
+  }
+  localStorage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(save));
+  return {species,saveScope:'NEW_ISOLATED_CI_CONTEXT_ONLY'};
+ }finally{await app.dispose();}
+};
+</script></html>

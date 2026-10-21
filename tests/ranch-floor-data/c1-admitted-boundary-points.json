@@ -1,0 +1,151 @@
+{
+  "metadataSha256": "ea99645776fb657de4d91baf9853583af51f677fad39c3fda73ba5b37fb065d5",
+  "navigationQuerySha256": "a1059ec8ed07c82bc55f2e61c7755838e73dbea5aafe98fc0c2ac45b5509b3c8",
+  "probes": [
+    {
+      "id": "field_cm02_01-admitted-inside-nearest-edge",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        140,
+        44
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "overlayInside": true,
+      "distanceNativeToPhysicalBoundary": 0.21194770916746414,
+      "nearestBoundaryLocalNative": [
+        140.07601949476015,
+        43.802154434374316
+      ],
+      "actualAppMoveCalled": false,
+      "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+    },
+    {
+      "id": "field_cm02_01-admitted-outside-nearest-edge",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        116,
+        76
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "overlayInside": false,
+      "distanceNativeToPhysicalBoundary": 0.009325262883203934,
+      "nearestBoundaryLocalNative": [
+        116.00001377470275,
+        75.99067474729037
+      ],
+      "actualAppMoveCalled": false,
+      "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+    },
+    {
+      "id": "field_cm09_01-admitted-inside-nearest-edge",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        228,
+        108
+      ],
+      "terrainType": 2,
+      "navigationComponent": 1,
+      "overlayInside": true,
+      "distanceNativeToPhysicalBoundary": 1.78350892610267,
+      "nearestBoundaryLocalNative": [
+        228.79774941008336,
+        106.40485111409639
+      ],
+      "actualAppMoveCalled": false,
+      "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+    },
+    {
+      "id": "field_cm19_01-admitted-inside-nearest-edge",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        188,
+        28
+      ],
+      "terrainType": 2,
+      "navigationComponent": 1,
+      "overlayInside": true,
+      "distanceNativeToPhysicalBoundary": 2.1656090718625767,
+      "nearestBoundaryLocalNative": [
+        188.96945022935628,
+        26.06350086368867
+      ],
+      "actualAppMoveCalled": false,
+      "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+    },
+    {
+      "id": "field_cm19_01-admitted-outside-nearest-edge",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        300,
+        76
+      ],
+      "terrainType": 0,
+      "navigationComponent": 3,
+      "overlayInside": false,
+      "distanceNativeToPhysicalBoundary": 6.259117414391599,
+      "nearestBoundaryLocalNative": [
+        294.4019715200105,
+        73.20024502065507
+      ],
+      "actualAppMoveCalled": false,
+      "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+    },
+    {
+      "id": "field_cm21_01-admitted-inside-nearest-edge",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        180,
+        108
+      ],
+      "terrainType": 3,
+      "navigationComponent": 2,
+      "overlayInside": true,
+      "distanceNativeToPhysicalBoundary": 1.7833085516321212,
+      "nearestBoundaryLocalNative": [
+        180.79779493830367,
+        106.40509792565773
+      ],
+      "actualAppMoveCalled": false,
+      "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+    },
+    {
+      "id": "field_cm35_01-admitted-inside-nearest-edge",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        12,
+        44
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "overlayInside": true,
+      "distanceNativeToPhysicalBoundary": 11.199356372842159,
+      "nearestBoundaryLocalNative": [
+        0.8006436271578514,
+        43.999999520613265
+      ],
+      "actualAppMoveCalled": false,
+      "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+    },
+    {
+      "id": "field_cm39_01-admitted-inside-nearest-edge",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        68,
+        92
+      ],
+      "terrainType": 2,
+      "navigationComponent": 1,
+      "overlayInside": true,
+      "distanceNativeToPhysicalBoundary": 8.147826392011757,
+      "nearestBoundaryLocalNative": [
+        71.64425689650044,
+        99.28741837598696
+      ],
+      "actualAppMoveCalled": false,
+      "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+    }
+  ],
+  "selection": "Nearest admitted tile centers inside/outside actual physical top union, no nav collision-mask clipping of surface"
+}
