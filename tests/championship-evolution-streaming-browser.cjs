@@ -144,13 +144,16 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
      await page.waitForFunction(()=>!__freezeApp.getRaisingLifecycleFrame().evolution&&__freezeScene.isPlayable===true);
      mark('native-evolution-completed');
      evidence.after=await snapshot();assert.deepEqual(evidence.after.residents,evidence.before.residents.map(r=>r.id===ownedId?{...r,speciesId:r.speciesId.replace(/species-\d+$/, 'species-035')}:r),'Same owned resident, no duplication/reset');assert.equal(evidence.after.life.message?.target,35);assert.equal(evidence.after.life.message?.kind,'EVOLVED');
-     assert.equal(await page.locator('.int-rh2-field-host').evaluate(e=>e.inert),false);
-     assert.equal(await page.locator('.int-rh2-resident-assets--recovery').isVisible(),false);
-     // The production completion ceremony is a separate real UI owner.
+     // Evolution completion starts ordinary idle streaming and a 2.8-second
+     // auto-dismiss ceremony. Either may finish between protocol round-trips.
+     // Do not require permanent readiness or force the overlay off.
      const ceremony=page.locator('.cm-ceremony[data-kind="evolve"]');
-     await ceremony.waitFor({state:'visible'});await ceremony.tap();
-     if(await ceremony.isVisible())await ceremony.tap();
+     evidence.ceremonyObserved=await ceremony.isVisible();
+     // Let the production auto-dismiss timer finish; no synthetic dismissal.
      await ceremony.waitFor({state:'detached'});
+     await page.waitForFunction(()=>__freezeScene.isPlayable===true&&
+       document.querySelector('.int-rh2-field-host')?.inert===false&&
+       document.querySelector('.int-rh2-resident-assets--recovery')?.hidden===true);
      // Real browser pointer input after recovery, not a direct camera mutation.
      const canvas=page.locator('.int-rh2-field-host canvas').first();
      const box=await canvas.boundingBox();assert.ok(box&&box.width>0&&box.height>0);

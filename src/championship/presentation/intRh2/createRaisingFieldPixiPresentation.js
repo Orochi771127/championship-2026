@@ -1375,7 +1375,16 @@ export async function mountRaisingFieldPixiPresentation({
     get isPlayable() {
       return !disposed && !lifetime.signal.aborted && source.getFrame().residents.every(resident => {
         const entry = actors.get(resident.creatureId);
-        return entry?.speciesId === resident.speciesId && entry.assetState === 'ready' && !['loading','error'].includes(entry.evolutionAssetState);
+        if (!(entry?.speciesId === resident.speciesId && entry.assetState === 'ready' && !['loading','error'].includes(entry.evolutionAssetState))) return false;
+        // The clock callback runs before the scene's draw callback. Inspect the
+        // current native frame, not only loading flags set by a previous draw.
+        // This getter stays read-only; the still-running scene ticker starts
+        // the existing async loads while the simulation gate discards elapsed.
+        const frame=source.getActorFrame?.(resident.creatureId),e=frame?.evolution;
+        if(frame&&entry.nativeFramePresenter?.isFrameReady&&!entry.nativeFramePresenter.isFrameReady(frame))return false;
+        if(!e||e.choicePending||e.target<0)return true;
+        if(entry.evolutionTarget!==e.target||!entry.evolutionSprite||!entry.evolutionPresenter||entry.evolutionAssetState!=='ready')return false;
+        return !e.targetFrame||!entry.evolutionPresenter.isFrameReady||entry.evolutionPresenter.isFrameReady(e.targetFrame);
       });
     },
     // The P1R DOM shell calls render(frame) after its own DOM repaint. The
