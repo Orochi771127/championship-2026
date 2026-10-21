@@ -3,9 +3,9 @@ const {createHash}=require('node:crypto');const {pathToFileURL}=require('node:ur
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 // Preview contracts follow the existing accepted HUD route. A large encyclopedia
 // painting is only the established fallback when that route has no config.
-async function previewExpectations(root){
+async function previewExpectations(root, verifiedHeroes){
  const {publicHudCharacterConfig}=await import(pathToFileURL(path.resolve('src/championship/presentation/publicCharacterCatalog.js')).href);
- const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'))).entries;
+ const heroes=(verifiedHeroes ?? JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json')))).entries;
  const result=new Map();
  for(const id of [211,222,229,230]){
   const config=publicHudCharacterConfig(`species-${id}`);
@@ -23,3 +23,4 @@ async function previewExpectations(root){
  return result;
 }
 module.exports={previewExpectations};
+

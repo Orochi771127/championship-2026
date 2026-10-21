@@ -1,10 +1,16 @@
 // Execute only inside an authorized repo browser-QA environment after applying overlay.
 // Uses the existing owned-party fixture and actual PIXI/runtime/presenters; no mock renderer.
 import {chromium} from 'playwright';import assert from 'node:assert/strict';import fs from 'node:fs/promises';
-const base=process.argv[2],prefix=process.argv[3],out=process.argv[4]??'qa034-density8';
+const base=process.argv[2],prefix=process.argv[3],out=process.argv[4]??'qa034-clarity-trial';
+// Independently frozen trial expectations, not values inferred from rendered output.
+const EXPECTED_PREFIX='assets/production/characters/accepted-20261010/m201_agumon-clarity-trial-20261021-r01/';
+assert.equal(prefix,EXPECTED_PREFIX,'Exact trial source route');
 assert.ok(base&&prefix,'Usage: node renderer-review.mjs BASE_URL ASSET_PREFIX OUTPUT_DIR');
 const publicCatalog=JSON.parse(await fs.readFile('src/data/championship/public-character-catalog.v1.json','utf8'));
 const publicConfig=publicCatalog.characters.find(c=>c.entityId==='m201_agumon');assert.ok(publicConfig);
+assert.equal(publicConfig.density,4);assert.deepEqual(publicConfig.logicalCanvas,[64,64]);assert.deepEqual(publicConfig.origin,[28,41]);
+assert.equal(publicConfig.runtimePath,EXPECTED_PREFIX+'ranch-streaming-v1/ab20986d3006da84/runtime.render.json');
+assert.equal(publicConfig.runtimeSha256,'5120d252e8bdc64eeb62357d4a140f3225dc46ddca40351f1c6f12ff3cd3d0d6');
 await fs.mkdir(out,{recursive:true});const browser=await chromium.launch({headless:true,...(process.env.CHAMPIONSHIP_CHROME?{executablePath:process.env.CHAMPIONSHIP_CHROME}: {})});const page=await browser.newPage({viewport:{width:1060,height:760}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
 try{
  await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);
@@ -36,7 +42,7 @@ try{
     const projected=actor.nativeFramePresenter.apply({contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:sequence.id,frameIndex:index,flipBits:0});
     const battle=actor.battleAnimator.apply({battleFrame:frames,sequenceId:sequence.id,nativeRequest:true,nativeSample:{sequenceId:sequence.id,frameIndex:index,cell:frame.cell,active:1,elapsedQ12:0,playMode:sequence.playbackMode}});
     if(projected.cell!==frame.cell||battle.cell!==frame.cell)failures.push('projection');
-    for(const zoom of [2,4,6]){applyNativeCharacterCellGeometry(actor.sprite,{geometry:projected.geometry},zoom);if(projected.geometry.scale!==8||actor.sprite.scale.x!==zoom*actor.sprite.texture.source.resolution/8||actor.sprite.anchor.x!==.4375||actor.sprite.anchor.y!==.640625)failures.push('native scale/origin');app.render();}
+    for(const zoom of [2,4,6]){applyNativeCharacterCellGeometry(actor.sprite,{geometry:projected.geometry},zoom);if(projected.geometry.scale!==4||JSON.stringify(projected.geometry.sourceSize)!=='[256,256]'||JSON.stringify(projected.geometry.origin)!=='[112,164]'||actor.sprite.scale.x!==zoom*actor.sprite.texture.source.resolution/4||actor.sprite.anchor.x!==.4375||actor.sprite.anchor.y!==.640625)failures.push('native scale/origin');app.render();}
     for(let t=0;t<frame.ticks;t++)actor.sequencePlayer.advanceNative(4096);frames++;
    }actor.sprite.destroy();sequences++;
   }
@@ -45,7 +51,7 @@ try{
    const actor=bundle.createActor({side:'main',animation:id,nativeFramePresentation:true,nativeGeometry:bundle.runtime.reviewGeometry});const p=actor.nativeFramePresenter.apply({contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:id,frameIndex,flipBits:0});applyNativeCharacterCellGeometry(actor.sprite,{geometry:p.geometry},zoom);actor.sprite.position.set(170+col*330,180+row*210);app.stage.addChild(actor.sprite);
   }app.render();return {frames,sequences,coveredCells:covered.size,route,routeRegression:{appBase:base,publicGameUrl,publicRuntimeUrl:publicRoute.runtimeUrl,fixtureUrl:location.href,expectedRuntimeUrl,fixtureRelativeRuntimeUrl:fixtureRelativeRoute.runtimeUrl},failures,diagnostics:bundle.getDiagnostics(),zoomColumns:[2,4,6],actionFrameRows:[[0,0],[0,1],[2,0],[2,1],[14,0],[14,1]],disclaimer:'Real isolated runtime renderer, not normal-game navigation acceptance'};
  },{prefix,base,publicConfig});
- await page.screenshot({path:out+'/actual-pixi-2x-4x-6x.png',fullPage:true});assert.deepEqual(result.failures,[]);assert.deepEqual(errors,[]);assert.equal(result.diagnostics.textureCount,83);assert.equal(result.coveredCells,83);assert.equal(result.sequences,53);assert.ok(network.some(n=>n.url.endsWith('/'+prefix+'main.png')&&n.status===200));assert.ok(network.some(n=>n.url.endsWith('/'+prefix+'sub.png')&&n.status===200));assert.ok(!network.some(n=>n.url.includes('battle-packed-20261013')));
+ await page.screenshot({path:out+'/actual-pixi-2x-4x-6x.png',fullPage:true});assert.deepEqual(result.failures,[]);assert.deepEqual(errors,[]);assert.equal(result.diagnostics.textureCount,83);assert.equal(result.coveredCells,83);assert.equal(result.sequences,53);assert.ok(network.some(n=>n.url.endsWith('/'+prefix+'main.webp')&&n.status===200));assert.ok(network.some(n=>n.url.endsWith('/'+prefix+'sub.webp')&&n.status===200));assert.ok(!network.some(n=>n.url.includes('battle-packed-20261013')));
  const huntScene=await isolatedHuntSceneSmoke(browser,base,prefix,out);
  const normalGame=await normalOwnedPartySmoke(browser,base,prefix,out);
  await fs.writeFile(out+'/renderer-result.json',JSON.stringify({status:'PASS_ISOLATED_ACTUAL_PIXI_RUNTIME',...result,network,pageErrors:errors,normalGameNavigation:normalGame.status,huntSceneScope:huntScene.scope},null,2));
@@ -56,9 +62,10 @@ try{
 async function normalOwnedPartySmoke(browser,base,prefix,out){
  const url=new URL(base);assert.ok(['127.0.0.1','localhost','[::1]'].includes(url.hostname),'Controlled QA requires loopback');
  const game=await browser.newPage({viewport:{width:1280,height:900},locale:'zh-TW'});game.setDefaultTimeout(90000);
- const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',network:[],errors:[],scenes:[],huntNormal034:'NOT_COVERED_NO_GUARANTEED_WILD_SPAWN_FIXTURE'};let scene='fixture';
- game.on('response',r=>{if(r.url().includes('/m201_agumon'))evidence.network.push({scene,url:r.url(),status:r.status()})});
- game.on('pageerror',e=>evidence.errors.push(e.message));game.on('console',m=>{if(/FALLBACK|CHARACTER_REVIEW_FAILED|CANDIDATE_.*DRIFT/.test(m.text()))evidence.errors.push(m.text())});
+ const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',network:[],errors:[],pageErrors:[],consoleFailures:[],httpFailures:[],requestFailures:[],scenes:[],huntNormal034:'NOT_COVERED_NO_GUARANTEED_WILD_SPAWN_FIXTURE'};let scene='fixture';
+ game.on('response',r=>{if(r.url().includes('/m201_agumon'))evidence.network.push({scene,url:r.url(),status:r.status()});if(r.status()>=400)evidence.httpFailures.push({scene,url:r.url(),status:r.status()})});
+ game.on('requestfailed',r=>evidence.requestFailures.push({scene,url:r.url(),failure:r.failure()?.errorText,method:r.method(),resourceType:r.resourceType()}));
+ game.on('pageerror',e=>{evidence.pageErrors.push(e.message);evidence.errors.push(e.message)});game.on('console',m=>{if(/FALLBACK|CHARACTER_REVIEW_FAILED|CANDIDATE_.*DRIFT/.test(m.text())){evidence.consoleFailures.push({type:m.type(),message:m.text()});evidence.errors.push(m.text())}});
  const save=()=>fs.writeFile(out+'/normal-game-result.json',JSON.stringify(evidence,null,2));
  const screen=async name=>game.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();
  async function home(){await screen('RAISING_HOME');await game.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host'),a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.some(x=>x.speciesId==='championship:creature:species-034'&&x.entityId==='m201_agumon'&&x.state==='ready')},{},{timeout:180000});assert.equal(await game.locator('[data-field-fallback="true"],.int-rh2-field-fallback').count(),0);}
@@ -73,22 +80,48 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
   for(const p of raising.positions.filter(p=>p.speciesIndex===34)){assert.ok(p.nativeScreenPixels>0&&Number.isFinite(p.bodyTop)&&p.footY>p.bodyTop);assert.ok(p.groundScreen&&Math.abs(p.groundScreen.y-(p.boardTop+p.nativeY*p.nativeScreenPixels))<1,'Shared native ground transform');}
   assert.ok(evidence.network.some(n=>n.scene==='raising'&&n.url===new URL(publicConfig.runtimePath,base).href&&n.status===200),'Raising selected public runtime');
   assert.ok(evidence.network.some(n=>n.scene==='raising'&&n.url.includes('/ranch-streaming-v1/')&&n.url.endsWith('.webp')&&n.status===200),'Raising selected public image page');
-  assert.ok(!evidence.network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.png$/.test(n.url)),'Normal app does not request private source atlases');
+  assert.ok(!evidence.network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.(?:png|webp)$/.test(n.url)),'Normal app does not request private source atlases');
   assert.ok(!evidence.network.some(n=>n.scene==='raising'&&n.url.includes('battle-packed')));evidence.scenes.push({scene:'raising',entry:'PASS',diagnostics:raising,groundShadow:'SCREENSHOT_REVIEW_REQUIRED'});await game.screenshot({path:out+'/normal-raising034.png',fullPage:true});await save();
   scene='battle';await menu('battle');await screen('BATTLE_SELECT');assert.equal(await game.locator('.int-rh2-field-host').count(),0,'Raising scene released');
   await game.locator('[data-face-id="PRACTICE_BATTLE"]:visible').first().click();
   const members=game.locator('.cm-vs5-practice-member');await members.nth(1).waitFor();await members.nth(0).getByRole('button',{name:/A 隊$/}).click();await members.nth(1).getByRole('button',{name:/B 隊$/}).click();await game.getByRole('button',{name:'開始練習',exact:true}).click();await screen('BATTLE_FIELD');
-  await game.waitForFunction(()=>{const d=globalThis.__championshipBattleDiagnostics?.();return d?.characters?.some(c=>c.speciesId==='species-034'&&c.rendered&&c.animation?.geometry?.scale===8)},{},{timeout:180000});
+  await game.waitForFunction(()=>{const d=globalThis.__championshipBattleDiagnostics?.();return d?.characters?.some(c=>c.speciesId==='species-034'&&c.rendered&&c.animation?.geometry?.scale===4)},{},{timeout:180000});
   const battle=await game.evaluate(()=>globalThis.__championshipBattleDiagnostics());const fighters=battle.characters.filter(c=>c.speciesId==='species-034');assert.equal(fighters.length,2);
-  for(const c of fighters){assert.equal(c.entityId,'m201_agumon');assert.equal(c.rendered,true);assert.equal(c.nativeSizing.packedPixelsPerNativePixel,8);assert.equal(c.animation.geometry.scale,8);assert.deepEqual(c.animation.geometry.origin,[224,328]);assert.deepEqual(c.animation.geometry.sourceSize,[512,512]);}
-  assert.equal(battle.art.assetId,'art:battle:original-opus:v1','Normal default arena, not opt-in baked-shadow review');assert.equal(battle.groundShadows,null,'Default arena uses existing ellipse shadows; baked-review diagnostics are absent');assert.equal(await game.locator('[data-field-fallback="true"]').count(),0);
+  for(const c of fighters){assert.equal(c.entityId,'m201_agumon');assert.equal(c.rendered,true);assert.equal(c.nativeSizing.packedPixelsPerNativePixel,4);assert.equal(c.animation.geometry.scale,4);assert.deepEqual(c.animation.geometry.origin,[112,164]);assert.deepEqual(c.animation.geometry.sourceSize,[256,256]);}
+  assert.equal(battle.art.assetId,'art:battle:original-opus:v1:arena-polish-20261018','Normal approved default arena, not opt-in baked-shadow review');assert.equal(battle.groundShadows,null,'Default arena uses existing ellipse shadows; baked-review diagnostics are absent');assert.equal(await game.locator('[data-field-fallback="true"]').count(),0);
   // Same-document PIXI cache may reuse Raising's verified atlas without another GET.
   assert.ok(evidence.network.some(n=>n.url.includes('/ranch-streaming-v1/')&&n.url.endsWith('.webp')&&n.status===200));assert.ok(!evidence.network.some(n=>n.url.includes('/battle-packed-20261013/m201_agumon/')));
-  assert.ok(!evidence.network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.png$/.test(n.url)),'Battle retains the selected public pages');
-  evidence.scenes.push({scene:'battle',entry:'PASS',diagnostics:battle,textureBinding:'same-document cache or new request; exact entity, density8 geometry, no packed route',groundShadow:'DEFAULT_ELLIPSE_SCREENSHOT_REVIEW_REQUIRED_NOT_BAKED_REVIEW'});await game.screenshot({path:out+'/normal-battle034.png',fullPage:true});await save();
+  assert.ok(!evidence.network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.(?:png|webp)$/.test(n.url)),'Battle retains the selected public pages');
+  evidence.scenes.push({scene:'battle',entry:'PASS',diagnostics:battle,textureBinding:'same-document cache or new request; exact entity, frozen density4 trial geometry, no packed route',groundShadow:'DEFAULT_ELLIPSE_SCREENSHOT_REVIEW_REQUIRED_NOT_BAKED_REVIEW'});await game.screenshot({path:out+'/normal-battle034.png',fullPage:true});await save();
   await game.getByRole('button',{name:'離開對戰',exact:true}).first().click();const dialog=game.getByRole('dialog');await dialog.waitFor();await dialog.getByRole('button',{name:'離開對戰',exact:true}).click();await home();
   assert.equal(await game.evaluate(()=>typeof globalThis.__championshipBattleDiagnostics),'undefined','Battle diagnostics disposed on exit');await game.screenshot({path:out+'/normal-return-raising034.png',fullPage:true});
-  evidence.scenes.push({scene:'raising-return',entry:'PASS',battleExit:'PASS'});assert.deepEqual(evidence.errors,[]);evidence.status='PASS_CONTROLLED_NORMAL_RAISING_BATTLE';await save();return evidence;
+  evidence.scenes.push({scene:'raising-return',entry:'PASS',battleExit:'PASS'});
+  // a540 and current bm03GroundShadows.js share blob ff3327693ec6fe1df788d53da36ec8705a7ae523.
+  // Loopback arena-polish selects PRIVATE review shadows, absent from the Pages payload.
+  // Published non-loopback resolves null (source evidence, not a live-public-browser claim).
+  const shadowRoots=Object.fromEntries(['01','02','04','05','06','07','08','09','10','11'].map(n=>[`field_bm${n}_01`,`assets/production/battle/stage-review-20261007/fields/field_bm${n}_01/`]));
+  shadowRoots.field_bm03_01='assets/production/battle/bm03-volcano-review-r2/';
+  assert.ok(Object.hasOwn(shadowRoots,battle.art.fieldId),'Approved arena field has independently frozen private shadow route');
+  const expectedShadowUrl=new URL(shadowRoots[battle.art.fieldId]+'shadows.json',base).href;
+  assert.deepEqual(evidence.httpFailures,[{scene:'battle',url:expectedShadowUrl,status:404}],'Only the exact baseline private shadow metadata 404 is expected');
+  // Actual run39558366558 observed only these streaming-media cancellations across scene changes.
+  // Unchanged musicPresentation.js release(): pause(), removeAttribute('src'), load().
+  const allowedMediaAborts=new Map([
+   [new URL('assets/production/original-music-r1/bgm_login_page.mp3',base).href,'raising'],
+   [new URL('assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3',base).href,'battle']
+  ]);
+  assert.ok(evidence.requestFailures.length<=2,'At most the two observed scene-transition media cancellations');
+  assert.equal(new Set(evidence.requestFailures.map(r=>r.url)).size,evidence.requestFailures.length,'No repeated media failure');
+  for(const r of evidence.requestFailures){
+   assert.ok(allowedMediaAborts.has(r.url),'No failed character image/JSON/module or unlisted audio request');
+   assert.equal(r.scene,allowedMediaAborts.get(r.url),'Only the corresponding controlled scene transition');
+   assert.equal(r.failure,'net::ERR_ABORTED');assert.equal(r.method,'GET');assert.equal(r.resourceType,'media');
+  }
+  evidence.mediaLifecycle={abortedRequests:evidence.requestFailures,completePlayback:'NOT_TESTED',sourceBlob:'da504c9c1f76235f4fb6314b0218bbda41107186'};
+  assert.deepEqual(evidence.pageErrors,[],'No page errors, including errors resembling the known warning');
+  assert.deepEqual(evidence.consoleFailures,[{type:'warning',message:'CHAMPIONSHIP_BM03_SHADOW_FALLBACK BM03_SHADOW_METADATA_UNAVAILABLE'}],'Exactly one warning-level baseline diagnostic');
+  assert.deepEqual(evidence.errors,['CHAMPIONSHIP_BM03_SHADOW_FALLBACK BM03_SHADOW_METADATA_UNAVAILABLE'],'Exactly one known loopback-only baseline warning; all other errors/fallbacks fail');
+  evidence.baselineWarning={message:evidence.errors[0],count:1,metadataUrl:expectedShadowUrl,httpStatus:404,bakedShadows:battle.groundShadows,rendering:'EXISTING_ELLIPSE',baselineSourceBlob:'ff3327693ec6fe1df788d53da36ec8705a7ae523'};evidence.status='PASS_CONTROLLED_NORMAL_RAISING_BATTLE';await save();return evidence;
  }catch(error){evidence.status='FAIL';evidence.error=String(error);evidence.failureDiagnostics=await game.evaluate(()=>{const h=document.querySelector('.int-rh2-field-host');return {activeScreen:document.querySelector('#cm-root')?.dataset.activeScreen,loadState:h?.dataset.loadState,residentAssets:h?.dataset.residentAssets,residentScreenPositions:h?.dataset.residentScreenPositions,battle:globalThis.__championshipBattleDiagnostics?.()??null}}).catch(e=>({unavailable:String(e)}));await save();await game.screenshot({path:out+'/normal-game-failure.png',fullPage:true}).catch(()=>{});throw error;}finally{await game.close();}
 }
 
@@ -101,26 +134,29 @@ async function isolatedHuntSceneSmoke(browser,base,prefix,out){
   const PIXI=await import('/node_modules/pixi.js/dist/pixi.mjs');
   const {createChampionshipPixiStage}=await import('/src/championship/presentation/championshipPixiStage.js');
   const {mountHuntFieldPixiPresentation}=await import('/src/championship/presentation/vs2/createHuntFieldPixiPresentation.js');
-  const {loadCompletedOriginalCharacters}=await import('/src/championship/presentation/completedOriginalCharacters.js');
-  const {LICENSED_CHARACTER_MANIFEST}=await import('/src/championship/presentation/licensedCharacterRoster.js');
+  const {loadPublicCharacterRoster}=await import('/src/championship/presentation/publicCharacterRoster.js');
   const {huntContactShadow}=await import('/src/championship/presentation/vs2/huntContactShadow.js');
   const read=async p=>{const r=await fetch(new URL(p,base));if(!r.ok)throw Error('INPUT_MISSING:'+p);return r.json()};
-  const roster=await loadCompletedOriginalCharacters({PIXI,speciesIds:['species-034'],manifest:await read(LICENSED_CHARACTER_MANIFEST),productionIndex:await read('assets/production/ART_PRODUCTION_INDEX.json'),manifestUrl:new URL(LICENSED_CHARACTER_MANIFEST,base).href},new URL('championship.html',base).href);
-  const loaded=roster.getDiagnostics().completedOriginalArt;if(!loaded.loaded.includes('m201_agumon')||loaded.failures.length)throw Error('HUNT_SELECTED_ADAPTER_FAILED');
+  // Exercise the actual selected public roster; loopback legacy catalog intentionally retains historical density8.
+  const roster=await loadPublicCharacterRoster({PIXI,speciesIds:['species-034']},new URL('championship.html',base).href);
+  const loaded=roster.getDiagnostics().publicCharacters;if(!loaded.loaded.includes('m201_agumon')||loaded.privateIndexRequested!==false)throw Error('HUNT_SELECTED_ADAPTER_FAILED');
   const host=document.createElement('div');host.style.cssText='width:980px;height:650px';document.body.replaceChildren(host);const shared=await createChampionshipPixiStage({PIXI,canvasHost:host,resolutionCap:1,antialias:false});shared.app.stop();const baselineTicker=shared.app.ticker.count;let root;
   const stage={...shared,createSceneRoot(label){root=shared.createSceneRoot(label);return root;}};
   const wilds=[0,1].map(i=>({wildId:'qa034-'+i,speciesId:'species-034',worldX:90+i*130,worldY:100,worldZ:0,facing:i?'left':'right',nativeAnimation:{contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:0,frameIndex:0,flipBits:i}}));
   const view={gateId:'isolated034-contact',worldWidthPx:2048,worldHeightPx:2048,transform:{scale:3},camera:{left:0,top:0},visibleChunks:[],objects:[],player:{worldX:0,worldY:0,facing:'right'},wildCreatures:wilds,selectedWildId:null};
   const scene=await mountHuntFieldPixiPresentation({stage,source:{field:{tick(){},getView:()=>view},intents:{panCamera(){},selectWildAt(){},abortEnclosureStroke(){}}},characterBundle:roster});
-  const descendants=n=>[n,...(n.children??[]).flatMap(descendants)];const actors=descendants(root).filter(n=>n.label==='wild creature'),samples=[];
+  const descendants=n=>[n,...(n.children??[]).flatMap(descendants)];const actors=descendants(root).filter(n=>n.label==='wild creature'),samples=[];if(actors.length!==2)throw Error('HUNT_ACTOR_COVERAGE');
   for(const sequenceId of [0,2])for(const frameIndex of [0,1])for(const height of [0,3]){
    wilds.forEach((w,i)=>{w.worldZ=height;w.nativeAnimation={...w.nativeAnimation,sequenceId,frameIndex}});scene.render();shared.app.renderer.render(shared.app.stage);
-   for(const [i,n] of actors.entries()){const frame=n.nativeFramePresenter.getSnapshot(),contact=huntContactShadow('species-034',frame,height,n.contactShadowArt);if(!contact||n.contactShadow.y!==contact.localY||n.contactShadow.scale.y!==contact.scaleY||frame.geometry.scale!==8||n.characterSprite.scale.x!==2*n.characterSprite.texture.source.resolution/8||n.characterSprite.anchor.x!==.4375||n.characterSprite.anchor.y!==.640625)throw Error('HUNT_SCALE_PIVOT_OR_CONTACT');samples.push({sequenceId,frameIndex,height,flip:i,geometry:frame.geometry,contact,shadowY:n.contactShadow.y,bodyY:n.y});}
+   for(const [i,n] of actors.entries()){const frame=n.nativeFramePresenter.getSnapshot(),contact=huntContactShadow('species-034',frame,height,n.contactShadowArt);if(!contact||n.contactShadow.y!==contact.localY||n.contactShadow.scale.y!==contact.scaleY||frame.geometry.scale!==4||JSON.stringify(frame.geometry.origin)!=='[112,164]'||JSON.stringify(frame.geometry.sourceSize)!=='[256,256]'||n.characterSprite.scale.x!==2*n.characterSprite.texture.source.resolution/4||n.characterSprite.anchor.x!==.4375||n.characterSprite.anchor.y!==.640625)throw Error('HUNT_SCALE_PIVOT_OR_CONTACT');samples.push({sequenceId,frameIndex,height,flip:i,geometry:frame.geometry,contact,shadowY:n.contactShadow.y,bodyY:n.y});}
   }
   wilds.forEach(w=>{w.worldZ=0;w.nativeAnimation={...w.nativeAnimation,sequenceId:0,frameIndex:0}});scene.render();shared.app.renderer.render(shared.app.stage);
   globalThis.__qa034Dispose=async()=>{scene.dispose();await roster.dispose();const d={ticker:shared.app.ticker.count,baselineTicker,rootDestroyed:root.destroyed};shared.destroy();return d;};
+  if(samples.length!==16)throw Error('HUNT_SAMPLE_COVERAGE');
   return {scope:'ISOLATED_ACTUAL_HUNT_SCENE_NOT_NORMAL_SPAWN',samples,roster:loaded};
  },{base,prefix});
- await review.screenshot({path:out+'/isolated-hunt034-contact.png',fullPage:true});const disposal=await review.evaluate(()=>globalThis.__qa034Dispose());assert.equal(disposal.ticker,disposal.baselineTicker);assert.equal(disposal.rootDestroyed,true);assert.ok(network.some(n=>n.url===new URL(prefix+'main.png',base).href&&n.status===200));await fs.writeFile(out+'/isolated-hunt034-result.json',JSON.stringify({status:'PASS_ISOLATED_HUNT_SCENE',...evidence,disposal,network},null,2));return evidence;
+ await review.screenshot({path:out+'/isolated-hunt034-contact.png',fullPage:true});const disposal=await review.evaluate(()=>globalThis.__qa034Dispose());assert.equal(disposal.ticker,disposal.baselineTicker);assert.equal(disposal.rootDestroyed,true);assert.ok(network.some(n=>n.url===new URL(publicConfig.runtimePath,base).href&&n.status===200));assert.ok(network.some(n=>n.url.startsWith(new URL(prefix+'ranch-streaming-v1/',base).href)&&/main-[a-f0-9]{16}\.webp$/.test(n.url)&&n.status===200));assert.ok(!network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.(?:png|webp)$/.test(n.url)));await fs.writeFile(out+'/isolated-hunt034-result.json',JSON.stringify({status:'PASS_ISOLATED_HUNT_SCENE',...evidence,disposal,network},null,2));return evidence;
  }finally{await review.close();}
 }
+
+

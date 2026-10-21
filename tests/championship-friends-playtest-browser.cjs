@@ -1,8 +1,11 @@
-// Real public UI, fresh isolated profiles, exact built bytes. No app/state injection,
-// fake timers, private gameplay methods, fixture edits or custom browser/GPU flags.
+// Real game UI, fresh isolated profiles, exact built game bytes. Private installer
+// fixtures are routed only inside this test. No app/state injection,
+// fake timers, private gameplay methods or custom browser/GPU flags. The original
+// QA seed stays unchanged; one explicitly historical-wallet derivative is test-only.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
+const {createInstallerFixtures}=require('./friends-installer-fixture-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
 const output=require('./browser-qa-output.cjs')('friends-playtest');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/',saveKey='championshipModernSave:v1';
@@ -11,7 +14,14 @@ const digits=s=>Number(String(s).replace(/[^0-9]/g,''));
 const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(evidence,null,2)+'\n');
 (async()=>{
  const build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=build.buildId;assert.equal(build.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(build.publicPlaytest?.ownerApproved,true);
- assert.ok(resolveAsset(root,'/championship.html'));assert.ok(resolveAsset(root,'/full-qa-save.html'));
+ assert.ok(resolveAsset(root,'/championship.html'));
+ assert.equal(resolveAsset(root,'/full-qa-save.html'),null,'Private QA installer must stay outside the public build');
+ assert.equal(resolveAsset(root,'/qa/championship-full-qa-save.json'),null,'Private QA seed must stay outside the public build');
+ const fixtures=await createInstallerFixtures(path.resolve(__dirname,'..'));
+ // Explicit historical wallet, not a grant from the game or a change to the QA seed.
+ const historicalWalletSeed={...fixtures.seed,flags:{...fixtures.seed.flags,friendsPlaytest:{version:1,grants:[],diamonds:10000,purchases:[]}}};
+ const expectedShop=shop=>({...shop,cageQuantities:shop.cageQuantities??Object.fromEntries(shop.cageOwned.map(id=>[id,1]))});
+ const expectedPlacements=placements=>placements.map(p=>({...p,instanceId:p.instanceId??`cage:legacy:${p.moduleId.endsWith(':waiting-room')?35:p.moduleId.split(':').at(-1)}`}));
  const server=await serveBuild(root);let browser,context,page;
  async function fresh(label){
   if(context){await context.tracing.stop({path:path.join(output,evidence.context+'-trace.zip')});await context.close();}
@@ -23,6 +33,9 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    if(url.startsWith(server.origin+'/'))return route.continue();
    if(url.startsWith(publicBase)){
     const parsed=new URL(url),relative=parsed.pathname.slice(new URL(publicBase).pathname.length);
+    const fixture=fixtures.route('/'+relative);
+    if(fixture&&label==='historical-wallet'&&relative==='qa/championship-full-qa-save.json')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(historicalWalletSeed),headers:{'Cache-Control':'no-store'}});
+    if(fixture)return route.fulfill({status:200,...fixture,headers:{'Cache-Control':'no-store'}});
     if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:server.origin+'/'+relative+parsed.search,maxRedirects:0});return route.fulfill({response});}
    }
    evidence.networkErrors.push({context:label,url,error:'NON_BUILD_REQUEST_BLOCKED'});return route.abort();
@@ -45,8 +58,24 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.locator('#cm-login').click();await page.locator('#cm-new-game').waitFor({state:'visible'});
  }
  async function screen(name){await page.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();}
- async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().waitFor({state:'visible',timeout:180000});await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
- async function menu(group,entry){await page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`).click();await page.locator(`.cm-toolbar__menu:not([hidden]) button[data-entry-id="${entry}"]`).click();}
+ // Three supplies visuals underneath; the unique Pixi canvas owns real input.
+ const ranchCanvasSelector='#cm-root[data-active-screen="RAISING_HOME"] canvas.cm-raising-pixi-canvas';
+ async function ranchCanvas(){const canvas=page.locator(ranchCanvasSelector);await canvas.waitFor({state:'visible',timeout:180000});assert.equal(await canvas.count(),1,'Exactly one ranch input canvas');assert.notEqual(await canvas.evaluate(el=>getComputedStyle(el).pointerEvents),'none','Ranch canvas must receive ordinary input');return canvas;}
+ async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await ranchCanvas();await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
+ async function menu(group,entry){
+  // Long real-time visual sweeps can cross midnight before either menu click.
+  // Acknowledge only the ordinary calendar; unknown obstructions still fail.
+  async function click(target){
+   const deadline=Date.now()+90000;
+   for(;;){
+    await clearCalendar();
+    try{await target.click({timeout:Math.min(30000,Math.max(1,deadline-Date.now()))});return;}
+    catch(error){if(error.name!=='TimeoutError'||Date.now()>=deadline||!await page.locator('.int-rh2-calendar').isVisible())throw error;}
+   }
+  }
+  await click(page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`));
+  await click(page.locator(`.cm-toolbar__menu:not([hidden]) button[data-entry-id="${entry}"]`));
+ }
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
  async function noOverflow(){assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Mobile document must not overflow');}
@@ -59,7 +88,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
    let state=await read();assert.ok(state.positions.length,'Top-edge evidence needs renderer diagnostics');
    for(let gesture=0;gesture<8&&state.positions[0].scrollY<state.positions[0].scrollMaxY-1;gesture++){
-    const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+    const canvas=await ranchCanvas();
     // Start in empty upper sky, excluding generous bounds around every actor.
     const previous=state.positions[0].scrollY;
     const {box,start:{x,y}}=await beginCanvasDrag(canvas,box=>[80,180,Math.min(320,box.height/2)].flatMap(y=>[20,box.width/4,box.width/2,box.width*3/4,box.width-20].map(x=>({x,y}))).filter(({x,y})=>state.positions.every(p=>Math.abs(p.x-x)>110||y<p.bodyTop-35||y>p.footY+35)),'A safe empty canvas drag origin must exist',{width:0,height:160});
@@ -81,13 +110,13 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    // Native lifecycle completion can launch a separate evolution ceremony.
    // Wait for the real hit-test target, not just the native lifecycle flag.
    for(;;){
-    await page.waitForFunction(()=>{
+    await page.waitForFunction(selector=>{
      const layer=document.querySelector('.int-rh2-lifecycle'),calendar=document.querySelector('.int-rh2-calendar');
      if(calendar&&!calendar.hidden&&!calendar.disabled)return true;
      if(layer&&!layer.hidden||document.querySelector('.cm-ceremony'))return false;
-     const canvas=document.querySelector('#cm-root[data-active-screen="RAISING_HOME"] canvas');if(!canvas)return false;
+     const canvases=document.querySelectorAll(selector);if(canvases.length!==1)return false;const canvas=canvases[0];if(getComputedStyle(canvas).pointerEvents==='none')return false;
      const box=canvas.getBoundingClientRect();return [180,260,Math.min(360,box.height-150)].some(y=>document.elementFromPoint(box.right-35,box.top+y)===canvas);
-    });
+    },ranchCanvasSelector);
     const calendar=page.locator('.int-rh2-calendar');
     if(!await calendar.isVisible())return;
     await calendar.click();await page.waitForTimeout(250);
@@ -131,7 +160,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    await clearCalendar();
    await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
    await page.waitForFunction(()=>document.body.dataset.tool==='clean');
-   const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+   const canvas=await ranchCanvas();
    for(let gesture=0;gesture<4;gesture++){
     const {box,start}=await beginCanvasDrag(canvas,box=>[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y}))),'Legacy camera swipe must start on unobstructed canvas',{width:0,height:500});
     await page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
@@ -164,13 +193,13 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    assert.deepEqual(placed.cageEdit.placements.map(p=>({moduleId:p.moduleId,slotIndex:p.slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),[
     {moduleId:'championship:2026:cage:waiting-room',slotIndex:0},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
    ].sort((a,b)=>a.moduleId.localeCompare(b.moduleId)));
-   assert.deepEqual(placed.shop,installed.shop,'Editor-only inspection must preserve entire wallet and inventory');await continueSaved();
+   assert.deepEqual(placed.shop,expectedShop(installed.shop),'Editor-only inspection must preserve entire wallet and inventory');await continueSaved();
    // The existing legacy helper reaches upper headroom through real tool swipes.
    await legacyTopContour('08-source-'+scenario.name);
    for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
     await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);await clearCalendar();
     await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();await page.waitForFunction(()=>document.body.dataset.tool==='clean');
-    const canvas=page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first();
+    const canvas=await ranchCanvas();
     // Top-headroom proof was captured above; lift the field 100px so lower tips clear the toolbar.
     if(viewport.width===1280){
      const {box,start}=await beginCanvasDrag(canvas,box=>[260,320,380].map(y=>({x:box.width-35,y})),'Lower-tip framing must begin on unobstructed canvas');
@@ -189,7 +218,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    for(const asset of ['field_cm02_01/frame-00.webp','field_cm18_01/frame-00.webp','field_cm39_01/frame-00.webp','field_cm39_01/frame-01.webp']){
     assert.ok(resourceUrls.some(url=>url.includes('source-bounds-r1-20261015/fields/'+asset)),'Exact padded phase must load: '+asset);
    }
-   await clearCalendar();await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,installed.shop);await continueSaved();
+   await clearCalendar();await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,expectedShop(installed.shop));await continueSaved();
    evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom','three unchanged source-art styles']});write();
   }
  }
@@ -242,16 +271,16 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    settledActors.push(state);
   }
   evidence.assertions.push({settledNewSaveActors:settledActors});write();
-  const initial=await saved();assert.equal(initial.shop.bits,100000);assert.equal(initial.flags.friendsPlaytest.diamonds,10000);
-  assert.equal(digits(await page.locator('.cm-status-bar__bits-value').innerText()),100000);await wallet(10000);await noOverflow();await shot('01-new-wallet');await topContour('01-new-save');
+  const initial=await saved();assert.equal(initial.shop.bits,8000000);assert.equal(initial.flags.friendsPlaytest.diamonds,20000);
+  assert.equal(digits(await page.locator('.cm-status-bar__bits-value').innerText()),8000000);await wallet(20000);await noOverflow();await shot('01-new-wallet');await topContour('01-new-save');
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
-  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),20);assert.equal(await page.locator('[data-locked-test-row]').count(),3);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),3);assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="false"]').allTextContents().then(xs=>xs.join('')), '');await shot('02-three-row-locks');
+  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),20);assert.equal(await page.locator('[data-locked-test-row]').count(),8);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),8);assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="false"]').allTextContents().then(xs=>xs.join('')), '');await shot('02-eight-row-locks');
   assert.equal(await page.locator('[data-buy-test-row],.cm-cage-row-purchase').count(),0,'Lower purchase controls removed');
   for(const lock of await page.locator('button[data-locked-test-row]').all()){
    assert.equal(await lock.getAttribute('aria-haspopup'),'dialog');
    assert.ok(['none','normal','""'].includes(await lock.evaluate(el=>getComputedStyle(el,'::before').content)),'No horizontal row-rule pseudo-element');
   }
-  for(const [row,balance,total]of [[2,9000,30],[3,8000,40],[4,7000,50]]){
+  for(const [row,balance,total]of [[2,19000,30],[3,18000,40],[4,17000,50],[5,16000,60],[6,15000,70],[7,14000,80],[8,13000,90],[9,12000,100]]){
    const button=page.locator(`button.cm-cage-row-lock[data-locked-test-row="${row}"]`);
    const label=await button.getAttribute('aria-label');assert.match(label.replaceAll(',',''),/1000/);assert.match(label,/測試鑽/);assert.match(label,/10/);
    await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();assert.ok(box&&box.height>=44&&box.width>=44,'Row lock touch target');assert.ok(box.x>=0&&box.x+box.width<=390,'Lock stays inside mobile viewport');await noOverflow();
@@ -275,14 +304,14 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    await dialog.locator('[data-action="buy"]').evaluate(el=>{el.click();el.click();});
    await page.waitForFunction(({key,balance})=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===balance,{key:saveKey,balance});
    assert.equal(await page.locator('dialog[open]').count(),0);
-   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),total);assert.equal(await page.locator('[data-locked-test-row]').count(),4-row);await shot('row-'+row);
+   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),total);assert.equal(await page.locator('[data-locked-test-row]').count(),9-row);await shot('row-'+row);
   }
   assert.equal(await page.locator('button[data-locked-test-row],[data-buy-test-row],.cm-cage-row-purchase').count(),0);
-  evidence.assertions.push({rowUnlockConfirmation:{cancelAndEscapeNoDebit:true,details:true,repeatedOpenAndBuySafe:true,noRowLinesOrLowerControls:true,slots:50,diamonds:7000}});
-  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await wallet(7000);await saveQuit();
-  await page.reload({waitUntil:'domcontentloaded'});await continueSaved();await wallet(7000);
-  await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),50,'Reload must restore all purchased grid rows');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
-  const afterRows=await saved();assert.equal(afterRows.shop.bits,100000);assert.deepEqual(afterRows.flags.friendsPlaytest.purchases,[2,3,4]);assert.equal(afterRows.flags.friendsPlaytest.diamonds,7000);
+  evidence.assertions.push({rowUnlockConfirmation:{cancelAndEscapeNoDebit:true,details:true,repeatedOpenAndBuySafe:true,noRowLinesOrLowerControls:true,slots:100,diamonds:12000}});
+  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await wallet(12000);await saveQuit();
+  await page.reload({waitUntil:'domcontentloaded'});await continueSaved();await wallet(12000);
+  await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),100,'Reload must restore all purchased grid rows');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
+  const afterRows=await saved();assert.equal(afterRows.shop.bits,8000000);assert.deepEqual(afterRows.flags.friendsPlaytest.purchases,[2,3,4,5,6,7,8,9]);assert.equal(afterRows.flags.friendsPlaytest.diamonds,12000);
   await menu('SYSTEM','shop');await screen('SHOP');
   let purchase;
   for(const tab of await page.locator('.cm-vs2-shop__tab').all()){
@@ -294,9 +323,9 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   }
   assert.ok(purchase,'A normally paid, not fully owned item must be purchasable');
   const purchasedMeta=(await page.locator('.cm-vs2-shop__detail-meta').innerText()).replaceAll(',','').match(/\d+/g).map(Number);assert.equal(purchasedMeta[1],purchase.owned+1,'Paid purchase must increase actual displayed ownership');
-  assert.equal(digits(await page.locator('.cm-vs2-shop__wallet').innerText()),100000-purchase.price);
+  assert.equal(digits(await page.locator('.cm-vs2-shop__wallet').innerText()),8000000-purchase.price);
   await shot('05-shop-purchased');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();
-  const afterShop=await saved();assert.equal(afterShop.shop.bits,100000-purchase.price);assert.notDeepEqual({quantities:afterShop.shop.quantities,cageOwned:afterShop.shop.cageOwned},{quantities:afterRows.shop.quantities,cageOwned:afterRows.shop.cageOwned},'Persisted inventory, not just wallet, must change');assert.equal(afterShop.flags.friendsPlaytest.diamonds,7000);
+  const afterShop=await saved();assert.equal(afterShop.shop.bits,8000000-purchase.price);assert.notDeepEqual({quantities:afterShop.shop.quantities,cageOwned:afterShop.shop.cageOwned,cageQuantities:afterShop.shop.cageQuantities},{quantities:afterRows.shop.quantities,cageOwned:afterRows.shop.cageOwned,cageQuantities:afterRows.shop.cageQuantities},'Persisted inventory, not just wallet, must change');assert.equal(afterShop.flags.friendsPlaytest.diamonds,12000);
   await menu('SYSTEM','shop');await screen('SHOP');await page.locator(`.cm-vs2-shop__tab[data-category="${purchase.category}"]`).click();await page.locator('.cm-vs2-shop__row').nth(purchase.cardIndex).click();
   assert.equal(await page.locator('.cm-vs2-shop__detail-name').innerText(),purchase.itemName);
   const restoredItem=(await page.locator('.cm-vs2-shop__detail-meta').innerText()).replaceAll(',','').match(/\d+/g).map(Number);assert.equal(restoredItem[1],purchase.owned+1,'Purchased item ownership survives reload');
@@ -318,15 +347,24 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   const huntCanvas=page.locator('.cm-vs2-field__canvas canvas').first();await huntCanvas.waitFor({state:'visible'});
   const huntBox=await huntCanvas.boundingBox();assert.ok(huntBox&&huntBox.width>0&&huntBox.height>0,'Normal Pixi hunt canvas must be visible');await shot('06-paid-hunt');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
-  const afterHunt=await saved();assert.equal(afterHunt.shop.bits,afterShop.shop.bits-fee);assert.equal(afterHunt.flags.friendsPlaytest.diamonds,7000);
-  evidence.assertions.push({freshUi:true,rowBalances:[10000,9000,8000,7000],shopPrice:purchase.price,huntFee:fee,finalBits:afterHunt.shop.bits});write();
-  // A separate empty browser profile uses the existing QA installer UI, not an edited save.
-  await fresh('old-qa');await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
+  const afterHunt=await saved();assert.equal(afterHunt.shop.bits,afterShop.shop.bits-fee);assert.equal(afterHunt.flags.friendsPlaytest.diamonds,12000);
+  evidence.assertions.push({freshUi:true,rowBalances:[20000,19000,18000,17000,16000,15000,14000,13000,12000],shopPrice:purchase.price,huntFee:fee,finalBits:afterHunt.shop.bits});write();
+  // Unmodified old QA profile: no new-save grant, including after save/reload.
+  await fresh('old-qa-no-topup');await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);await page.locator('#install').click();await page.waitForURL(/championship\.html$/);
-  const old=await saved();const oldFixture=JSON.parse(fs.readFileSync(path.join(root,'qa/championship-full-qa-save.json')));assert.deepEqual(old.shop,oldFixture.shop,'Installer must preserve fixture economy/inventory');assert.deepEqual(old.cageEdit.placements,oldFixture.cageEdit.placements,'Installer must preserve fixture anchors');await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
-  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);assert.equal(await page.locator('[data-locked-test-row]').count(),1);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),1);await shot('07-legacy-one-row-lock');
+  assert.deepEqual((await saved()).shop,fixtures.seed.shop);assert.deepEqual((await saved()).cageEdit.placements,fixtures.seed.cageEdit.placements);
+  await continueSaved();await wallet(0);await saveQuit();await continueSaved();await wallet(0);await saveQuit();
+  const noTopup=await saved();assert.equal(noTopup.flags.friendsPlaytest.version,2);assert.equal(noTopup.flags.friendsPlaytest.diamonds,0);assert.deepEqual(noTopup.flags.friendsPlaytest.purchases,[]);
+  assert.deepEqual(noTopup.shop,expectedShop(fixtures.seed.shop));assert.deepEqual(noTopup.cageEdit.placements,expectedPlacements(fixtures.seed.cageEdit.placements));
+  assert.deepEqual(noTopup.progression.battleBadges,fixtures.seed.progression.battleBadges);assert.equal(noTopup.progression.tamerRank,fixtures.seed.progression.tamerRank);
+  evidence.assertions.push({legacyNoTopup:true,diamonds:0,saveReloadPreserved:true});write();
+  // Separate historical-wallet fixture preserves purchase/reload coverage without a grant.
+  await fresh('historical-wallet');await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
+  await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);await page.locator('#install').click();await page.waitForURL(/championship\.html$/);
+  const old=await saved();const oldFixture=historicalWalletSeed;assert.deepEqual(old.shop,oldFixture.shop,'Installer must preserve fixture economy/inventory');assert.deepEqual(old.cageEdit.placements,oldFixture.cageEdit.placements,'Installer must preserve fixture anchors');await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
+  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);assert.equal(await page.locator('[data-locked-test-row]').count(),6);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),6);await shot('07-legacy-six-row-locks');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
-  const migrated=await saved();assert.deepEqual(migrated.shop,old.shop,'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,old.cageEdit.placements);assert.equal(migrated.flags.friendsPlaytest?.diamonds,10000);assert.equal(migrated.flags.friendsPlaytest.version,2);
+  const migrated=await saved();assert.deepEqual(migrated.shop,expectedShop(old.shop),'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,expectedPlacements(old.cageEdit.placements));assert.equal(migrated.flags.friendsPlaytest?.diamonds,10000);assert.equal(migrated.flags.friendsPlaytest.version,2);
   await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);
   await page.locator('button[data-locked-test-row="4"]').click();
@@ -334,8 +372,8 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   await page.waitForFunction(key=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===9000,saveKey);
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),50);
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9000);
-  const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,old.shop);assert.deepEqual(legacyAfterPurchase.cageEdit.placements,old.cageEdit.placements);
-  evidence.assertions.push({oldQaOneTimeDiamonds:10000,afterPurchaseAndReload:9000});
+  const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,expectedShop(old.shop));assert.deepEqual(legacyAfterPurchase.cageEdit.placements,expectedPlacements(old.cageEdit.placements));
+  evidence.assertions.push({historicalWalletPreserved:10000,legacyGrant:0,afterPurchaseAndReload:9000});
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
   await sourceCornerReview();
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);

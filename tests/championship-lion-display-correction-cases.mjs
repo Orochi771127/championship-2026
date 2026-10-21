@@ -92,7 +92,15 @@ test('native data stays pinned, separately authorized savev7 is reviewed, the or
   // The later Owner-authorized100-cell save extension supersedes this one source pin only.
   const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/CAGE100_PLAYTEST_20261019.json","utf8"));
   assert.deepEqual(Object.keys(followup.sourceLocks),["src/championship/app/championshipStandaloneSave.js"]);
-  for(const [path,sha256] of Object.entries(baseline.unchangedFiles))assert.equal(hash(fs.readFileSync(path)),followup.sourceLocks[path]??sha256,path);
+  // Owner-authorized AW40/GR01 clarity trial replaces only these two character selections;
+  // all unrelated native/gameplay pins remain exact. This pins the entire reviewed new file.
+  const stable=v=>Array.isArray(v)?v.map(stable):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,stable(v[k])])):v;
+  const claritySelection=JSON.parse(fs.readFileSync('src/data/championship/accepted-original-character-selection.r1.json','utf8'));
+  const clarityEntities=new Set(['m201_agumon','m440_metalgreymon_vi']);
+  const unrelatedCharacters=claritySelection.characters.filter(c=>!clarityEntities.has(c.entityId));
+  assert.equal(unrelatedCharacters.length,220);assert.equal(hash(JSON.stringify(stable(unrelatedCharacters))),'ae00e76c6b1ed03af20bf6f28b2080d1508f9a01e6c50734f64285d5019278f5','All other220 character selections retain exact canonical content');
+  const clarityTrialLocks={'src/data/championship/accepted-original-character-selection.r1.json':'19d8fb29077010df0e571606a06d5e7915b25ab8e75154b500b60599f59cf25c'};
+  for(const [path,sha256] of Object.entries(baseline.unchangedFiles))assert.equal(hash(fs.readFileSync(path)),followup.sourceLocks[path]??clarityTrialLocks[path]??sha256,path);
   for(const [id,entity] of [[121,'m363_leomon'],[125,'m368_firamon']]){
     assert.equal(acceptedDatabasePortraitConfig(id).entityId,entity);
   }
