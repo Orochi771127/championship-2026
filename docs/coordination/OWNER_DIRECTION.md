@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: UI_HUD_SECOND_ROUND_20261021 -->
+## 2026-10-21 — Whole-game UI/HUD second round and new-mode entry interface
+
+Owner directed a second UI/HUD round covering desktop, portrait and landscape: find why previews still showed old characters, old terrain and debug panels; re-capture with the latest accepted original art; build shared entry points for new modes (configurable hidden/preview, no empty slots) and publish through the existing flow after self-verification. Result and remaining items: [report](../reports/ui-ceremony-2026-10-21/REPORT_ZH_TW.md); interface: [MODE_ENTRY_INTERFACE_2026-10-21](../contracts/championship/MODE_ENTRY_INTERFACE_2026-10-21.md). Presentation-only `OWNER_APPROVED_ADAPTATION`; no gameplay, save or timing change.
+
 <!-- record-id: DATA_ARENA_BATTLE_ENTRY_RELEASE_20261020 -->
 ## 2026-10-20 — Publish Data Arena battle entry and action timing repair
 

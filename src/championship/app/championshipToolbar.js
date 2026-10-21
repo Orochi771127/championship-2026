@@ -1,3 +1,4 @@
+import { modeMenuEntries } from "./modeEntries.js";
 import { createTransientHint, TOOL_HINT_MS } from './transientHint.js';
 import {isOriginalUiIntakeLocal,originalToolbarArt,originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import {isOriginalRuntimeLocation} from "../presentation/originalRuntimeLocation.js";
@@ -200,7 +201,11 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     const reachable = Boolean(entry.screen || entry.action);
     button.disabled = !reachable || (tutorialTool!==null&&!(tutorialTool==="SYSTEM"&&entry.id===tutorialMenuEntry));
     const tutorialCheckpoint=getTutorialCheckpoint();
-    if (!reachable) {
+    if (entry.preview) {
+      // A mode that is announced but not open: one inert row, no empty slot.
+      button.dataset.state = "PREVIEW";
+      button.append(element("span", "cm-toolbar__entry-soon", "即將開放"));
+    } else if (!reachable) {
       // The original has this destination; this build has not made it yet.
       button.dataset.state = "NOT_IMPLEMENTED";
       button.title = uiText("In the original, not yet in this build");
@@ -219,10 +224,12 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     openMenuId = menu.id;
     menuPanel.replaceChildren();
     menuPanel.dataset.menuId = menu.id;
-    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? []).filter(entry=>toolbarProductEntryAvailable(entry))].map((entry) => [entry.id, entry]));
+    // Additional modes join the 出發 group from data (modeEntries.js).
+    const modes = menu.id === "SYSTEM" ? modeMenuEntries() : [];
+    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? []).filter(entry=>toolbarProductEntryAvailable(entry)), ...modes].map((entry) => [entry.id, entry]));
     const placed = new Set();
     for (const group of TOOLBAR_MENU_GROUPS[menu.id] ?? []) {
-      const entries = group.entries.map((id) => byId.get(id)).filter(Boolean);
+      const entries = [...group.entries, ...(group.id === "go" ? modes.map((mode) => mode.id) : [])].map((id) => byId.get(id)).filter(Boolean);
       if (!entries.length) continue;
       const block = element("div", "cm-toolbar__group");
       block.setAttribute("role", "group");
