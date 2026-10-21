@@ -1,0 +1,46 @@
+  function drawEvolution(entry,native){
+    const e=native?.evolution;
+    if(!e){if(entry.evolutionSprite){entry.evolutionSprite.destroy();entry.evolutionSprite=null;entry.evolutionPresenter=null;}
+      if(entry.evolutionActive){if(entry.sprite){entry.sprite.visible=true;entry.sprite.filters=null;}entry.root.scale.set(entry.restScale??1);entry.evolutionActive=false;entry.evolutionTarget=null;}
+      if(!source.getLifecycleFrame?.()?.evolution)evolutionCamera=null;return;}
+    entry.evolutionActive=true;
+    if(!evolutionCamera||evolutionCamera.id!==source.getLifecycleFrame?.()?.evolution?.instanceId){
+      const fit=raisingFieldViewport(fieldArt.field,view);const max=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
+      evolutionCamera={id:source.getLifecycleFrame?.()?.evolution?.instanceId,start:cameraX,
+        target:clamp(bandWorldX(fieldArt.field,native.positionQ12[0]/4096)-(app.screen.width-24)/fit.scale/2,0,max)};}
+    if(e.phase===0){cameraX=evolutionCamera.start+(evolutionCamera.target-evolutionCamera.start)*e.elapsed/15;layoutFieldArt();}
+    if(e.target>=0&&entry.evolutionTarget!==e.target){entry.evolutionTarget=e.target;
+      void characterBundle?.ensureSpecies?.(`championship:creature:species-${String(e.target).padStart(3,'0')}`).then(ready=>{
+        if(!ready||disposed||entry.root.destroyed||!entry.evolutionActive||entry.evolutionTarget!==e.target)return;
+        const visual=characterBundle.createActor({speciesId:`championship:creature:species-${String(e.target).padStart(3,'0')}`,side:'main',presentation:'raising',reducedMotion:false});
+        if(!visual)return;entry.evolutionSprite=visual.sprite;entry.evolutionPresenter=visual.nativeFramePresenter;
+        entry.evolutionSizing=visual.nativeSizing;entry.evolutionEntity=visual.entityId;
+        const geometry=getRaisingNativeActorGeometry(visual.sprite,visual.nativeSizing,getRaisingNativePixelScale(fieldArt?.field,view));
+        visual.sprite.scale.set(geometry?.spriteScale??120/352);entry.root.addChildAt(visual.sprite,2);
+      });}
+    const enlarge=e.phase===0?0:e.phase===1?Math.min(19,e.elapsed)/19:e.phase===7?Math.max(0,1-e.elapsed/30):1;
+    const point=raisingNativeToScreen(native.positionQ12,fieldArt.field,view,cameraX);
+    entry.root.position.set(point.x,point.y+(app.screen.height/2-point.y)*enlarge);
+    entry.root.scale.set((entry.restScale??1)*(1+19*204/4096*enlarge));
+    if(entry.sprite){entry.sprite.visible=e.target<0?!e.reveal:!e.reveal||!entry.evolutionSprite;entry.sprite.filters=e.phase>=2&&e.phase<=4?[silhouette]:null;}
+    if(entry.evolutionSprite){entry.evolutionSprite.visible=e.reveal;
+      entry.evolutionSprite.filters=e.phase<=4?[silhouette]:null;
+      if(e.targetFrame){const frame=entry.evolutionPresenter?.apply(e.targetFrame);
+        if(entry.nativeScale!==null&&e.reveal){
+          applyNativeCharacterCellGeometry(entry.evolutionSprite,frame);
+          const geometry=getRaisingNativeActorGeometry(entry.evolutionSprite,entry.evolutionSizing,entry.nativeScale,{frameGeometry:frame?.geometry,displayScale:raisingOriginalBodyScale(entry.evolutionEntity,entry.evolutionSizing),displayOffset:raisingOriginalBodyOffset(entry.evolutionEntity,entry.evolutionSizing)});
+          if(geometry){entry.evolutionSprite.scale.set(geometry.spriteScale);entry.evolutionSprite.position.set(geometry.offset.x,geometry.offset.y);}
+        }}}
+    const center={x:entry.root.x,y:entry.root.y-24*(entry.restScale??1)};
+    if(e.phase>0&&e.phase<7){
+      const radius=34*(entry.restScale??1);
+      if(e.phase>=2&&e.target>=0)evolutionGlow.ellipse(center.x,entry.root.y,radius*1.5,radius/3).stroke({color:0x005ace,width:4,alpha:0.8});
+      if(e.phase>=3)for(let i=0;i<28;i++){
+        const phase=(i*17+e.elapsed*4)%120,angle=i*2.3999;
+        const x=center.x+Math.cos(angle)*radius*(phase/120),y=entry.root.y-phase*(entry.restScale??1);
+        evolutionGlow.rect(x,y,2,4).fill({color:e.target<0?0xffffff:e.phase<=4?0x48fa6b:0x00baff,alpha:1-phase/130});
+      }
+      if(!reducedMotion&&(e.phase===4||e.phase===5))evolutionGlow.rect(0,0,app.screen.width,app.screen.height).fill({color:0xffffff,alpha:e.phase===4?Math.min(1,e.elapsed/4):Math.max(0,1-e.elapsed/8)});
+    }
+  }
+

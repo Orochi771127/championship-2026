@@ -639,7 +639,7 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function reportResidentAssets(){
-    onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.assetState,error:e.assetError??null})));
+    onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,error:e.evolutionAssetError??e.assetError??null})));
   }
 
   // Native animation tables and their frame clocks stay authoritative. A page
@@ -1144,9 +1144,63 @@ export async function mountRaisingFieldPixiPresentation({
       if(point){g.position.set(point.x,point.y);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(item.positionQ12[1]/4096);alignThreeGround(g,point,item.positionQ12);}}
   }
 
+  // Evolution uses the same streamed atlas contract as residents. Readiness
+  // must precede apply(), including phase 0 when the target is still invisible.
+  function evolutionLoadFailed(entry,token,error){
+    if(disposed||entry.root.destroyed||entry.evolutionLoadToken!==token)return;
+    entry.evolutionAssetState='error';entry.evolutionAssetError=error.message;reportResidentAssets();
+    onFallback(`CHAMPIONSHIP_EVOLUTION_ART_FAILED ${entry.evolutionTarget}: ${error.message}`);
+  }
+  function loadEvolutionTarget(entry,e){
+    const token=(entry.evolutionLoadToken??0)+1;entry.evolutionLoadToken=token;
+    entry.evolutionSprite?.destroy();entry.evolutionSprite=null;entry.evolutionPresenter=null;
+    entry.evolutionTarget=e.target;entry.evolutionPendingFrame=e.targetFrame;
+    entry.evolutionAssetState='loading';entry.evolutionAssetError=null;reportResidentAssets();
+    const active=()=>!disposed&&!entry.root.destroyed&&entry.evolutionActive&&entry.evolutionLoadToken===token;
+    void (async()=>{
+      let visual=null,attached=false;
+      try{
+        const speciesId=`championship:creature:species-${String(e.target).padStart(3,'0')}`;
+        const ready=await characterBundle?.ensureSpecies?.(speciesId);
+        if(!active())return;
+        if(!ready)throw Error(`RESIDENT_ART_UNAVAILABLE:${speciesId}`);
+        visual=characterBundle.createActor({speciesId,side:'main',presentation:'raising',reducedMotion:false});
+        if(!visual)throw Error(`RESIDENT_ART_UNAVAILABLE:${speciesId}`);
+        if(e.targetFrame&&visual.nativeFramePresenter?.ensureFrame)await visual.nativeFramePresenter.ensureFrame(e.targetFrame);
+        if(!active())return;
+        entry.evolutionSprite?.destroy();
+        entry.evolutionSprite=visual.sprite;entry.evolutionPresenter=visual.nativeFramePresenter;
+        entry.evolutionSizing=visual.nativeSizing;entry.evolutionEntity=visual.entityId;
+        const geometry=getRaisingNativeActorGeometry(visual.sprite,visual.nativeSizing,getRaisingNativePixelScale(fieldArt?.field,view));
+        visual.sprite.scale.set(geometry?.spriteScale??120/352);entry.root.addChildAt(visual.sprite,2);attached=true;
+        entry.evolutionPendingFrame=null;entry.evolutionAssetState='ready';reportResidentAssets();
+      }catch(error){evolutionLoadFailed(entry,token,error);}
+      finally{if(visual&&!attached)visual.sprite.destroy();}
+    })();
+  }
+  function evolutionFrameReady(entry,frame,{retry=false}={}){
+    const presenter=entry.evolutionPresenter;
+    if(!presenter?.isFrameReady)return true;
+    if(presenter.isFrameReady(frame)){
+      if(entry.evolutionPendingFrame){entry.evolutionLoadToken=(entry.evolutionLoadToken??0)+1;
+        entry.evolutionPendingFrame=null;entry.evolutionAssetState='ready';entry.evolutionAssetError=null;reportResidentAssets();}
+      return true;
+    }
+    if(!retry&&entry.evolutionPendingFrame?.sequenceId===frame.sequenceId)return false;
+    const token=(entry.evolutionLoadToken??0)+1;entry.evolutionLoadToken=token;
+    entry.evolutionPendingFrame=frame;entry.evolutionAssetState='loading';entry.evolutionAssetError=null;reportResidentAssets();
+    void Promise.resolve().then(()=>presenter.ensureFrame(frame)).then(()=>{
+      if(disposed||entry.root.destroyed||entry.evolutionLoadToken!==token)return;
+      entry.evolutionPendingFrame=null;entry.evolutionAssetState='ready';reportResidentAssets();
+    },error=>evolutionLoadFailed(entry,token,error));
+    return false;
+  }
+
   function drawEvolution(entry,native){
     const e=native?.evolution;
-    if(!e){if(entry.evolutionSprite){entry.evolutionSprite.destroy();entry.evolutionSprite=null;entry.evolutionPresenter=null;}
+    if(!e){if(entry.evolutionActive){entry.evolutionLoadToken=(entry.evolutionLoadToken??0)+1;
+      entry.evolutionAssetState=null;entry.evolutionAssetError=null;entry.evolutionPendingFrame=null;reportResidentAssets();}
+      if(entry.evolutionSprite){entry.evolutionSprite.destroy();entry.evolutionSprite=null;entry.evolutionPresenter=null;}
       if(entry.evolutionActive){if(entry.sprite){entry.sprite.visible=true;entry.sprite.filters=null;}entry.root.scale.set(entry.restScale??1);entry.evolutionActive=false;entry.evolutionTarget=null;}
       if(!source.getLifecycleFrame?.()?.evolution)evolutionCamera=null;return;}
     entry.evolutionActive=true;
@@ -1155,15 +1209,7 @@ export async function mountRaisingFieldPixiPresentation({
       evolutionCamera={id:source.getLifecycleFrame?.()?.evolution?.instanceId,start:cameraX,
         target:clamp(bandWorldX(fieldArt.field,native.positionQ12[0]/4096)-(app.screen.width-24)/fit.scale/2,0,max)};}
     if(e.phase===0){cameraX=evolutionCamera.start+(evolutionCamera.target-evolutionCamera.start)*e.elapsed/15;layoutFieldArt();}
-    if(e.target>=0&&entry.evolutionTarget!==e.target){entry.evolutionTarget=e.target;
-      void characterBundle?.ensureSpecies?.(`championship:creature:species-${String(e.target).padStart(3,'0')}`).then(ready=>{
-        if(!ready||disposed||entry.root.destroyed||!entry.evolutionActive||entry.evolutionTarget!==e.target)return;
-        const visual=characterBundle.createActor({speciesId:`championship:creature:species-${String(e.target).padStart(3,'0')}`,side:'main',presentation:'raising',reducedMotion:false});
-        if(!visual)return;entry.evolutionSprite=visual.sprite;entry.evolutionPresenter=visual.nativeFramePresenter;
-        entry.evolutionSizing=visual.nativeSizing;entry.evolutionEntity=visual.entityId;
-        const geometry=getRaisingNativeActorGeometry(visual.sprite,visual.nativeSizing,getRaisingNativePixelScale(fieldArt?.field,view));
-        visual.sprite.scale.set(geometry?.spriteScale??120/352);entry.root.addChildAt(visual.sprite,2);
-      });}
+    if(e.target>=0&&entry.evolutionTarget!==e.target)loadEvolutionTarget(entry,e);
     const enlarge=e.phase===0?0:e.phase===1?Math.min(19,e.elapsed)/19:e.phase===7?Math.max(0,1-e.elapsed/30):1;
     const point=raisingNativeToScreen(native.positionQ12,fieldArt.field,view,cameraX);
     entry.root.position.set(point.x,point.y+(app.screen.height/2-point.y)*enlarge);
@@ -1171,7 +1217,7 @@ export async function mountRaisingFieldPixiPresentation({
     if(entry.sprite){entry.sprite.visible=e.target<0?!e.reveal:!e.reveal||!entry.evolutionSprite;entry.sprite.filters=e.phase>=2&&e.phase<=4?[silhouette]:null;}
     if(entry.evolutionSprite){entry.evolutionSprite.visible=e.reveal;
       entry.evolutionSprite.filters=e.phase<=4?[silhouette]:null;
-      if(e.targetFrame){const frame=entry.evolutionPresenter?.apply(e.targetFrame);
+      if(e.targetFrame&&evolutionFrameReady(entry,e.targetFrame)){const frame=entry.evolutionPresenter?.apply(e.targetFrame);
         if(entry.nativeScale!==null&&e.reveal){
           applyNativeCharacterCellGeometry(entry.evolutionSprite,frame);
           const geometry=getRaisingNativeActorGeometry(entry.evolutionSprite,entry.evolutionSizing,entry.nativeScale,{frameGeometry:frame?.geometry,displayScale:raisingOriginalBodyScale(entry.evolutionEntity,entry.evolutionSizing),displayOffset:raisingOriginalBodyOffset(entry.evolutionEntity,entry.evolutionSizing)});
@@ -1329,7 +1375,16 @@ export async function mountRaisingFieldPixiPresentation({
     get isPlayable() {
       return !disposed && !lifetime.signal.aborted && source.getFrame().residents.every(resident => {
         const entry = actors.get(resident.creatureId);
-        return entry?.speciesId === resident.speciesId && entry.assetState === 'ready';
+        if (!(entry?.speciesId === resident.speciesId && entry.assetState === 'ready' && !['loading','error'].includes(entry.evolutionAssetState))) return false;
+        // The clock callback runs before the scene's draw callback. Inspect the
+        // current native frame, not only loading flags set by a previous draw.
+        // This getter stays read-only; the still-running scene ticker starts
+        // the existing async loads while the simulation gate discards elapsed.
+        const frame=source.getActorFrame?.(resident.creatureId),e=frame?.evolution;
+        if(frame&&entry.nativeFramePresenter?.isFrameReady&&!entry.nativeFramePresenter.isFrameReady(frame))return false;
+        if(!e||e.choicePending||e.target<0)return true;
+        if(entry.evolutionTarget!==e.target||!entry.evolutionSprite||!entry.evolutionPresenter||entry.evolutionAssetState!=='ready')return false;
+        return !e.targetFrame||!entry.evolutionPresenter.isFrameReady||entry.evolutionPresenter.isFrameReady(e.targetFrame);
       });
     },
     // The P1R DOM shell calls render(frame) after its own DOM repaint. The
@@ -1348,6 +1403,11 @@ export async function mountRaisingFieldPixiPresentation({
       if(disposed||!characterBundle?.ensureSpecies)return false;
       for(const resident of source.getFrame().residents){
         const entry=actors.get(resident.creatureId);
+        if(entry?.evolutionAssetState==='error'){
+          const evolution=source.getActorFrame?.(resident.creatureId)?.evolution;
+          if(evolution&&entry.evolutionPresenter&&entry.evolutionPendingFrame)evolutionFrameReady(entry,entry.evolutionPendingFrame,{retry:true});
+          else if(evolution)loadEvolutionTarget(entry,evolution);
+        }
         if(entry?.assetState==='error'){
           if(entry.pendingAnimationFrame)residentFrameReady(entry,entry.pendingAnimationFrame,{retry:true});
           else void loadActorTextures(entry,resident);
@@ -1400,7 +1460,7 @@ export async function mountRaisingFieldPixiPresentation({
         threeUsed: false,
         frameRevision: latestRevision,
         residentCount: actors.size,
-        residentAssets:[...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.assetState,error:e.assetError??null,visible:e.visibleGeometry??null})),
+        residentAssets:[...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,error:e.evolutionAssetError??e.assetError??null,visible:e.visibleGeometry??null})),
         foodCount:foodGraphics.size,
         wasteCount:wasteGraphics.size,
         careArt:'LICENSED_PIXEL_FAITHFUL_WITH_AUTHORED_CELEBRATION',

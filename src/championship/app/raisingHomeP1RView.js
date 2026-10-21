@@ -337,7 +337,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     }
     for(const [id,n] of trainingNodes)if(!live.has(id)){n.remove();trainingNodes.delete(id);}
   }
-  const field = await mountField({ host: fieldHost, source: presentation,onTrainingFrame:renderTrainingLabels });
+  const field = await mountField({ host: fieldHost, recoveryHost: root, source: presentation,onTrainingFrame:renderTrainingLabels });
   if (!field || typeof field.render !== "function" || typeof field.dispose !== "function") {
     throw new TypeError("Claude-owned field presenter must expose render(frame) and dispose()");
   }
