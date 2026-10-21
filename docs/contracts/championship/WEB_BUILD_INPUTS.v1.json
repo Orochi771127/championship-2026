@@ -54,6 +54,7 @@
     "src/championship/app/loadStylesheet.js",
     "src/championship/app/loadWatchdog.js",
     "src/championship/app/main.js",
+    "src/championship/app/modeEntries.js",
     "src/championship/app/medalCollection.js",
     "src/championship/app/medalCollectionScreen.js",
     "src/championship/app/medalDetails.js",
@@ -8526,6 +8527,7 @@
     "src/championship/app/loadStylesheet.js",
     "src/championship/app/loadWatchdog.js",
     "src/championship/app/main.js",
+    "src/championship/app/modeEntries.js",
     "src/championship/app/medalCollection.css",
     "src/championship/app/medalCollection.js",
     "src/championship/app/medalCollectionScreen.js",
@@ -41121,7 +41123,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "3830a902ce5c19b28da71eee2bbfe162955d7e75f2390f8506545a766f69eab7"
+        "sha256": "51274faeb451f14075b1f0eec01eb0fb5a23049200010323cb8144e6b5c3861a"
       },
       {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -41245,7 +41247,7 @@
       },
       {
         "path": "src/championship/app/championshipToolbar.js",
-        "sha256": "cc7f2d88bf02af7cdc0367fdd23b3e55bc208fd9ecb7aa8b36c6220a74486157"
+        "sha256": "f6eb5e641211bd988a885bdc40b6b1e589858ea7473b372b6fdd6bee3c9445e9"
       },
       {
         "path": "src/championship/app/codeClipboard.js",
@@ -41337,7 +41339,11 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "1750846f87076dc9e1fe4a19073be4f46666bdce956e35d5e29d8b218eb365e9"
+        "sha256": "2f7ad99db84f618446a8769818932f172e094d4b2d28eaf8d57cbf1fb833adcb"
+      },
+      {
+        "path": "src/championship/app/modeEntries.js",
+        "sha256": "0854d15419822f0e6bd21cc5b4e0bbe5072e19527259f8578640e42e36fdd6ea"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -41473,7 +41479,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "8aede440e073d46b9087f3beb5ac0de48e5f9d48361ec9fb32800a8417daba1f"
+        "sha256": "5873a98a6fc84cc5d3b1cdc8b61c4f529adcb5d4ae29c5e8d4e8fddbe0e500a4"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -42849,11 +42855,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "bad30c0df7ff28ce57e1c16e951d6b66d6e6119f6707052f47ca137d8b00464a"
+        "sha256": "f14f4b01e935e25f5749f82b42cef459d0bb96f893a27084549af4a541f821bb"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "b8ccb96cbd30c202d226ca7d9c631a0b684d377aa285202cfbb00a336b53201f"
+        "sha256": "096c13f7523df5bae5fca3472b86bd4cc8a01933b51b7763e39c0ee305c216bf"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -42861,11 +42867,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "82e825da337677f3269524c7c8030a4cf07a7ec2dfb8272a13307298490590bf"
+        "sha256": "c1696cc7432eb32ac4b251c478496b8a3ba4576cd0ca046ca715057a1fd99dca"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "fcd6107561817464949e8a7204aaffdab0d7c118fea06afa70d24eef99955b98"
+        "sha256": "8f22c7109f7ff6441cbe3f48066bd7aca94371c121a99ac75a65e2020857b0ba"
       },
       {
         "path": "src/championship/text/zhHant.js",

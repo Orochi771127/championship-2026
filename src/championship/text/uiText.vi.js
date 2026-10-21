@@ -590,6 +590,9 @@ export const TEXT_VI = Object.freeze({
   "這隻夥伴還不能密碼化。": "Người bạn đồng hành này chưa thể được mã hóa.",
   "培育蛋": "trứng nuôi",
   // 2026-10-15 arena UI / ceremony copy (PRODUCT_AUTHORED).
+  "即將開放": "Sắp ra mắt",
+  "數據競技場": "Đấu trường Dữ liệu",
+  "即時操作的原創挑戰賽": "Thử thách nguyên bản thời gian thực",
   "我方": "PHE TA",
   "對手": "ĐỐI THỦ",
   "進化": "TIẾN HÓA",

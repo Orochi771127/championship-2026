@@ -1,3 +1,4 @@
+import { modeEntryState, MODE_ENTRY_STATES } from './modeEntries.js';
 import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation,isOriginalLoopbackLocation} from '../presentation/originalRuntimeLocation.js';
@@ -1332,7 +1333,8 @@ async function mountBattleSelect() {
       ...match,recordIndex:match.id,title:uiText('{kind} — {species}',{kind:uiText(match.kind==='SINGLE'?'單隻對戰':'三隻對戰'),species:formatList(match.speciesIndices.map(index=>speciesName(index)))})})),
     menuCopy: battleMenuLabels(),
     onOpenChampionship() { app.openChampionship(); },
-    onOpenDataArena: enterDataArena,
+    // Hidden or teased modes get no Battle entry (modeEntries.js MODE_ENTRY_RECORD).
+    onOpenDataArena: modeEntryState('dataArena') === MODE_ENTRY_STATES.OPEN ? enterDataArena : undefined,
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.

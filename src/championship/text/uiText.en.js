@@ -428,6 +428,9 @@ export const TEXT_EN = Object.freeze({
   "這隻夥伴還不能密碼化。": "This partner can't be saved as a password yet.",
   "培育蛋": "Creature Egg",
   // 2026-10-15 arena UI / ceremony copy (PRODUCT_AUTHORED).
+  "即將開放": "Coming soon",
+  "數據競技場": "Data Arena",
+  "即時操作的原創挑戰賽": "A real-time original challenge",
   "我方": "YOU",
   "對手": "RIVAL",
   "進化": "EVOLUTION",
