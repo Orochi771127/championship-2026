@@ -92,14 +92,14 @@ test('native data stays pinned, separately authorized savev7 is reviewed, the or
   // The later Owner-authorized100-cell save extension supersedes this one source pin only.
   const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/CAGE100_PLAYTEST_20261019.json","utf8"));
   assert.deepEqual(Object.keys(followup.sourceLocks),["src/championship/app/championshipStandaloneSave.js"]);
-  // Owner-authorized AW40/GR01 clarity trial replaces only these two character selections;
+  // Owner-authorized MA05 replacement preserves the deployed AW40/GR01 trial and all other221 selections;
   // all unrelated native/gameplay pins remain exact. This pins the entire reviewed new file.
   const stable=v=>Array.isArray(v)?v.map(stable):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,stable(v[k])])):v;
   const claritySelection=JSON.parse(fs.readFileSync('src/data/championship/accepted-original-character-selection.r1.json','utf8'));
-  const clarityEntities=new Set(['m201_agumon','m440_metalgreymon_vi']);
+  const clarityEntities=new Set(['m303_ikkakumon']);
   const unrelatedCharacters=claritySelection.characters.filter(c=>!clarityEntities.has(c.entityId));
-  assert.equal(unrelatedCharacters.length,220);assert.equal(hash(JSON.stringify(stable(unrelatedCharacters))),'ae00e76c6b1ed03af20bf6f28b2080d1508f9a01e6c50734f64285d5019278f5','All other220 character selections retain exact canonical content');
-  const clarityTrialLocks={'src/data/championship/accepted-original-character-selection.r1.json':'19d8fb29077010df0e571606a06d5e7915b25ab8e75154b500b60599f59cf25c'};
+  assert.equal(unrelatedCharacters.length,221);assert.equal(hash(JSON.stringify(stable(unrelatedCharacters))),'7db493f46530c65cf896685ba7c2dbe944def17c6a311c5ec6fbc103b8d48eea','All other221 character selections retain exact canonical content');
+  const clarityTrialLocks={'src/data/championship/accepted-original-character-selection.r1.json':'d0574afef0b12ad67eb8c0c54f8c0317ddb140bdda5d9df4c6fb6b6ebb468c13'};
   for(const [path,sha256] of Object.entries(baseline.unchangedFiles))assert.equal(hash(fs.readFileSync(path)),followup.sourceLocks[path]??clarityTrialLocks[path]??sha256,path);
   for(const [id,entity] of [[121,'m363_leomon'],[125,'m368_firamon']]){
     assert.equal(acceptedDatabasePortraitConfig(id).entityId,entity);
@@ -150,3 +150,4 @@ test('legacy MA50/MA62 individuals retain stable IDs, nicknames, branch history 
     assert.equal(JSON.stringify(reloaded.getRaisingState()),state);assert.equal(storage.getItem(key),saved);
   }finally{await app.dispose();if(reloaded)await reloaded.dispose();}
 });
+
