@@ -419,6 +419,7 @@
     "tests/championship-ma05-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the MA05 motion v7 actual renderer review workflow, covering all 77 cells and 53 sequences plus controlled normal Raising and Battle.",
     "tests/ranch-floor-pilot.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; explicitly runs in ranch-floor-review workflow. Bounded shader/render smoke is not full release or visual acceptance.",
     "tests/ranch-normal-audit.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; explicitly runs in ranch-floor-review workflow with fresh controlled browser storage and the real Raising presenter.",
-    "tests/ranch-cm07-terrain-mask.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; runs in ranch-terrain-mask-review workflow with hash-gated test-only source injection and known depth controls. Diagnostic measurements do not approve release."
+    "tests/ranch-cm07-terrain-mask.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; runs in ranch-terrain-mask-review workflow with hash-gated test-only source injection and known depth controls. Diagnostic measurements do not approve release.",
+    "tests/ranch-normal-pairs.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; runs in ranch-normal-pairs-review workflow with hash-gated test-only presenter diagnostics, fresh controlled storage and matched source frames. Captures are not a pixel oracle or release acceptance."
   }
 }
