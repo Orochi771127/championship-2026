@@ -31,11 +31,11 @@ function contextEvidence(){const records=window.__hmContextRecords??[];return {
 };}
 let lastRenderTrace=[];
 class TrackedRenderer extends THREE.WebGLRenderer{
- constructor(options){super(options);renderers.push(this);}
- render(scene,camera){const originals=[],shadows=new Set();scene.traverse(o=>{if(o.userData.shadow)shadows.add(o.userData.shadow);});lastRenderTrace=[];
+ constructor(options){super(options);renderers.push(this);const originalRender=this.render;
+ this.render=(scene,camera)=>{const originals=[],shadows=new Set();scene.traverse(o=>{if(o.userData.shadow)shadows.add(o.userData.shadow);});lastRenderTrace=[];
   scene.traverse(o=>{if(!o.isMesh)return;const original=o.onBeforeRender;originals.push([o,original]);o.onBeforeRender=function(...args){const m=args[4];lastRenderTrace.push({kind:shadows.has(o)?'contact-shadow':o.userData.shadow?'actor':'scenery',name:o.name,transparent:m.transparent,depthTest:m.depthTest,depthWrite:m.depthWrite,renderOrder:o.renderOrder});return original.apply(this,args);};});
-  try{return super.render(scene,camera);}finally{for(const [o,fn]of originals)o.onBeforeRender=fn;}
- }
+  try{return originalRender.call(this,scene,camera);}finally{for(const [o,fn]of originals)o.onBeforeRender=fn;}
+ };}
 }
 class DiagnosticScene extends THREE.Scene{constructor(){super();if(mode==='pillar'){const m=new THREE.Mesh(new THREE.BoxGeometry(1.1,2,1),new THREE.MeshBasicMaterial({color:0xff0000}));m.position.set(...map.ground(2500,2530,-.005));m.position.y+=1;this.add(m);fixtures.push(m);}}}
 class InjectableMaterial extends THREE.MeshBasicMaterial{constructor(options){super(options);if(mode==='badShader'){Object.defineProperty(this,'onBeforeCompile',{configurable:true,set(fn){this._fn=fn;},get(){return shader=>{this._fn?.(shader);shader.fragmentShader+='\nTHIS_IS_AN_INTENTIONAL_SHADER_FAILURE';};}});}}}

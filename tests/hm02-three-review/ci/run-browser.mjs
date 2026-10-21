@@ -22,7 +22,7 @@ try{
  });
  page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
  await page.goto(`${origin}/hm02-review.html?hm02ThreeReview=1`);await page.waitForFunction(()=>window.hm02?.ready,{timeout:30000});
- const call=async(method,...args)=>{await page.evaluate(method=>window.__hmTextureAudit?.setPhase(method),method);const r=await page.evaluate(([method,args])=>window.hm02[method](...args),[method,args]);if(r?.contextEvidence){results.push({case:`${method}-context-evidence`,evidence:r.contextEvidence});assertSharedContext(r);}return r;};
+ const call=async(method,...args)=>{await page.evaluate(method=>window.__hmTextureAudit?.setPhase(method),method);const r=await page.evaluate(([method,args])=>window.hm02[method](...args),[method,args]);if(r?.contextEvidence){results.push({case:`${method}-draw-evidence`,...r});assertSharedContext(r);}return r;};
  const assertSharedContext=r=>{assert.equal(r.canvasCount,1,'exactly one DOM game canvas');assert.equal(r.contextEvidence.sceneContexts,1,'exactly one game WebGL context');assert.equal(r.contextEvidence.addedAfterPixiBaseline,0,'pilot must create zero extra WebGL contexts');for(const identity of r.contextEvidence.sharedRenderers){assert(identity.sameCanvas,'Three must use the Pixi canvas');assert(identity.sameContext,'Three must use the Pixi context');}};
  results.push({case:'original-Pixi-before-pilot',evidence:await call('contextEvidence')});
  const yellow=p=>p[0]>220&&p[1]>220&&p[2]<35;
