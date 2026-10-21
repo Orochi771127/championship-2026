@@ -1,0 +1,28 @@
+--- a/src/championship/app/main.js
++++ b/src/championship/app/main.js
+@@ -1201,7 +1201,25 @@
+           releaseArt();
+           return { isPlayable: false, render() {}, dispose() {} };
+         }
++        // HM02_REVIEW_ENTRY_BEGIN: zero pilot imports outside this cheap gate.
++        let threePilot = null;
++        const hm02ReviewUrl = new URL(location.href);
++        if (['localhost','127.0.0.1','[::1]'].includes(hm02ReviewUrl.hostname)
++          && hm02ReviewUrl.searchParams.get('hm02ThreeReview') === '1'
++          && ['field_hm02_01','field_hm02_02'].includes(fieldArt?.getDiagnostics?.().fieldId)) {
++          try {
++            const {loadHM02ThreePilot} = await import('../presentation/vs2/loadHM02ThreePilot.mjs');
++            signal.throwIfAborted();
++            threePilot = await own(loadHM02ThreePilot({stage,fieldArt,fieldSource,signal,
++              onFallback:error=>console.warn('HM02_THREE_REVIEW_FALLBACK',error)}));
++          } catch(error) {
++            if (!signal.aborted) console.warn('HM02_THREE_REVIEW_ENTRY_FALLBACK',error);
++          }
++        }
++        signal.throwIfAborted();
++        // HM02_REVIEW_ENTRY_END
+         const scene = await mountHuntFieldPixiPresentation({
++          threePilot,
+           onActorFrame,
+           stage,
+           source: fieldSource,

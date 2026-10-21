@@ -1,0 +1,46 @@
+name: HM02 isolated Three review
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tests/hm02-three-review/**'
+      - '.github/workflows/hm02-three-review.yml'
+permissions:
+  contents: read
+concurrency:
+  group: hm02-three-review-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Unchanged public build validation (no review assets in publish contracts)
+        run: npm run build:pages && npm run validate:pages
+      - name: Exact staged dependencies and actual caller overlay compile FIRST
+        run: node tests/hm02-three-review/ci/build-preflight.mjs
+      - name: Offline math and lifecycle gates
+        env:
+          HM02_THREE_MODULE: ${{ github.workspace }}/node_modules/three/build/three.module.js
+        run: |
+          node tests/hm02-three-review/ci/native-catalog-tests.mjs
+          node tests/hm02-three-review/tests.mjs
+          node tests/hm02-three-review/lifecycle-tests.mjs
+          node tests/hm02-three-review/pilot-lifecycle-tests.mjs
+      - name: Install isolated CI Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Synthetic GPU diagnostics (not real gameplay/mobile acceptance)
+        run: node tests/hm02-three-review/ci/run-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hm02-isolated-review-${{ github.run_id }}
+          path: artifacts/hm02-three-review
+          if-no-files-found: warn
+          retention-days: 7
