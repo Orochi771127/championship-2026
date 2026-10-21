@@ -65,9 +65,10 @@ import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRai
 // The ranch ground for either layout: the original board, or (expansion
 // prototype) the same ring continued into its annex.
 import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnPosition as nativeRaisingSpawnPosition,
-  ranchRaisingEntryPosition as nativeRaisingEntryPosition} from "../raising/nativeRaisingRanchRing.js";
+  ranchRaisingEntryPosition as nativeRaisingEntryPosition,alignRanchRaisingPosition} from "../raising/nativeRaisingRanchRing.js";
 import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast,reconcileNativeFoodReservations} from "../raising/nativeRaisingFood.js";
 import {separateNativeRaisingGroundActors} from '../raising/nativeGroundSpacing.js';
+import {stepRanchConveyor} from '../raising/ranchConveyor.js';
 import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raising/nativeRaisingHomeState.js";
 import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
 import {projectNativeRaisingCalendar} from '../raising/nativeRaisingCalendar.js';
@@ -635,6 +636,8 @@ export function createChampionshipStandaloneApp({
           ? ()=>actor.speciesIndex>=8?nativeRaisingEntryPosition(raisingGround,placement.instanceId??definition,rng,actor.poolSlot)
             :nativeRaisingSpawnPosition(raisingGround,placement.instanceId??definition,rng):null,{deferActivity,
               onJoin:()=>notifyNativeRaisingResidentAdded(actor,raisingActors.values(),rng)});
+      const aligned=alignRanchRaisingPosition(raisingGround,actor.positionQ12,placement.instanceId??definition);
+      if(aligned!==actor.positionQ12){actor.positionQ12=aligned;actor.destinationQ12=[...aligned];}
     }
   }
 
@@ -674,6 +677,7 @@ export function createChampionshipStandaloneApp({
         if(result.evolutionStarted){publishRaising();return;}
       }
       reconcileNativeFoodReservations(raisingActors.values(),raisingFoods);
+      if(raisingGround)for(const actor of raisingActors.values())if(stepRanchConveyor(actor,raisingGround))changed=true;
       if(raisingGround&&separateNativeRaisingGroundActors(raisingActors.values(),raisingGround).changed)changed=true;
       raisingDirtySignals.clear();
     }

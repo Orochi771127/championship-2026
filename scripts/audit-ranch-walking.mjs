@@ -6,12 +6,14 @@ import {composeProductRanchGround} from '../src/championship/raising/nativeRaisi
 import {applyRaisingGroundReview} from '../src/championship/raising/raisingGroundReview.js';
 import {stepNativeRaisingMovement,nativeRaisingMovementArrived} from '../src/championship/raising/nativeRaisingMovement.js';
 import {advanceRanchExplorationWalk} from '../src/championship/raising/ranchExplorationWalk.js';
+import {stepRanchConveyor} from '../src/championship/raising/ranchConveyor.js';
 import review from '../src/data/championship/catalogs/raising-ground.review-20261019.json' with {type:'json'};
 applyRaisingGroundReview(review);
 const root=path.resolve(process.argv[2]),audit=JSON.parse(fs.readFileSync(path.join(root,'all-cages.json')));
 const defs=listCageDefinitions(),results=[];
 for(const record of audit.records)for(const speed of ['normal','fast','slow']){
   const e=record.examples[0];
+  if(!e){results.push({definition:record.definition,speed,status:'NO_CONNECTION'});continue;}
   const ground=composeProductRanchGround({layoutVersion:PRODUCT_RANCH_GRID,unlockedSlots:Array.from({length:100},(_,i)=>i),placements:[
     {moduleId:defs[35].moduleId,slotIndex:0,instanceId:'cage:waiting'},
     {moduleId:defs[record.definition].moduleId,slotIndex:productGridSlot(5,4),rotation:record.rotation,instanceId:'cage:a'},
@@ -25,6 +27,7 @@ for(const record of audit.records)for(const speed of ['normal','fast','slow']){
   let status='TIMEOUT',steps=0;
   for(;steps<6000;steps++){
     Object.assign(actor,stepNativeRaisingMovement({...actor,fast:speed==='fast'?1:0,hasFood:false},ground));
+    stepRanchConveyor(actor,ground);
     if(ground.readTerrain(Math.floor(actor.positionQ12[0]/32768),Math.floor(actor.positionQ12[1]/32768))===1){status='OBSTACLE';break;}
     const continuing=advanceRanchExplorationWalk(actor,ground);
     if(!continuing){

@@ -1,7 +1,7 @@
 // Isolated loopback QA; route-only read access to the current scene.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
-const root=path.resolve(__dirname,'..'),origin='http://127.0.0.1:8741';
+const root=path.resolve(__dirname,'..'),origin=process.env.CHAMPIONSHIP_QA_ORIGIN??'http://127.0.0.1:8741';
 const out=process.env.CHAMPIONSHIP_QA_OUTPUT;
 if(!out)throw Error('CHAMPIONSHIP_QA_OUTPUT required');
 fs.mkdirSync(out,{recursive:true});

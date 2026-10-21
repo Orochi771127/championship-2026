@@ -425,7 +425,7 @@ export async function mountRaisingFieldPixiPresentation({
       cameraDrag = null;
       backdrop.cursor = 'grab';
       if(!completed.moved&&event.type!=="pointercancel"&&event.type!=="pointerupoutside"&&["feed","protein","clean"].includes(completed.tool)) {
-        const point=raisingScreenToNative(event.global??{x:completed.startX,y:completed.startY},fieldArt?.field,view,cameraX);
+        const point=screenToNativeGround(event.global??{x:completed.startX,y:completed.startY});
         if(point){if(completed.tool==='clean') {
           source.intents.cleanFood?.({...point,checkpoint:completed.tutorialCheckpoint});
           // Tool feedback is transient presentation; removal stays app-owned.
@@ -464,7 +464,7 @@ export async function mountRaisingFieldPixiPresentation({
       source.intents.touchEgg?.(completed.creatureId,completed.tutorialCheckpoint);
     if (completed.moved && point && event.type!=="pointercancel" && event.type!=="pointerupoutside") {
       if(isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)) {
-        const nativePoint=raisingScreenToNative(point,fieldArt?.field,view,cameraX);
+        const nativePoint=screenToNativeGround(point);
         // Native short touches do not teleport a resident. Adult relocation
         // completes through the held/flight owner after the ten-frame gate.
         if(completed.tool==='hand'&&nativePoint&&source.getActorFrame?.(completed.creatureId)?.speciesIndex<8)
@@ -514,7 +514,7 @@ export async function mountRaisingFieldPixiPresentation({
         moved: false
       };
       if(drag.tool==='hand'&&isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)){
-        const point=raisingScreenToNative(event.global,fieldArt?.field,view,cameraX);
+        const point=screenToNativeGround(event.global);
         if(point)drag.nativeHand=source.intents.beginHand?.(creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,checkpoint:drag.tutorialCheckpoint})??false;
       }
       entry.root.cursor = "grabbing";
@@ -812,14 +812,14 @@ export async function mountRaisingFieldPixiPresentation({
     }
     if (!drag || event.pointerId !== drag.pointerId) return;
     drag.lastPoint = { x: event.global.x, y: event.global.y };
-    if(drag.nativeHand){const point=raisingScreenToNative(event.global,fieldArt?.field,view,cameraX);
+    if(drag.nativeHand){const point=screenToNativeGround(event.global);
       const local=drag.entry.root.toLocal(event.global);
       if(point)source.intents.updateHand?.(drag.creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,
         inside:drag.entry.root.hitArea?.contains(local.x,local.y)??true,checkpoint:drag.tutorialCheckpoint});}
     if (!drag.moved) {
       drag.moved = Math.hypot(event.global.x - drag.startPoint.x, event.global.y - drag.startPoint.y) >= DRAG_THRESHOLD_PX;
     }
-    if(drag.carried){const point=raisingScreenToNative(event.global,fieldArt?.field,view,cameraX);
+    if(drag.carried){const point=screenToNativeGround(event.global);
       if(point)source.intents.updateCarry?.(drag.creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale});}
     else if(drag.moved&&!isNativeRanchLayout(latestFrame?.ranch?.layoutVersion))drag.entry.root.position.set(event.global.x,event.global.y);
   }
@@ -1001,7 +1001,7 @@ export async function mountRaisingFieldPixiPresentation({
         const next=cameraX+delta,maxX=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
         cameraX=fieldArt.field.wrapWidthPx?wrapRaisingCamera(next,fieldArt.field.wrapWidthPx):clamp(next,0,maxX);
         layoutFieldArt();
-        const point=raisingScreenToNative(drag.lastPoint,fieldArt.field,view,cameraX);
+        const point=screenToNativeGround(drag.lastPoint);
         const pointer={...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,inside:true,checkpoint:drag.tutorialCheckpoint};
         if(drag.nativeHand)source.intents.updateHand?.(drag.creatureId,pointer);
         source.intents.updateCarry?.(drag.creatureId,pointer);
@@ -1046,6 +1046,7 @@ export async function mountRaisingFieldPixiPresentation({
         const point=raisingNativeToScreen(native.positionQ12,fieldArt.field,view,cameraX);
         // A folded ring orders by screen row, so the second band draws in front.
         entry.root.position.set(point.x,point.y);entry.root.zIndex=native.state===6?100000:fieldArt?.field?.fold?Math.round(point.y):Math.round(native.positionQ12[1]/4096);
+        alignThreeGround(entry.root,point,native.positionQ12);
         entry.shadow?.scale.set(native.state===6?3277/4096:1);
       }
       if (entry.nativeFramePresenter) {
@@ -1075,6 +1076,14 @@ export async function mountRaisingFieldPixiPresentation({
       drawEvolution(entry,native);
     }
     onTrainingFrame(trainingLabels);
+    if(fieldArt?.threeScene){
+      const rendered=fieldArt.threeScene.render({
+        bounds:raisingFieldViewport(fieldArt.field,view,12,cameraX),
+        actors,food:foodGraphics,waste:wasteGraphics,covered,deltaMS:ticker.deltaMS
+      });
+      productionArtLayer.visible=!rendered;
+      backgroundLayer.visible=!rendered;
+    }
     if(onActorFrame){
       // Developer-only readout. Screen pixels per native pixel, so a browser
       // check can size a gesture in the original's native units at any zoom.
@@ -1108,6 +1117,18 @@ export async function mountRaisingFieldPixiPresentation({
     sprite.position.set((p.x-body.x)/scale,(p.y-body.y)/scale-feedback.positionQ12[2]/4096);
   }
 
+  function screenToNativeGround(point){
+    const native=raisingScreenToNative(point,fieldArt?.field,view,cameraX);
+    return native&&fieldArt?.threeScene?fieldArt.threeScene.pickGroundNative(native):native;
+  }
+
+  function alignThreeGround(root,point,positionQ12){
+    if(!fieldArt?.threeScene||!point)return;
+    const height=fieldArt.threeScene.groundHeight(positionQ12[0]/4096,positionQ12[1]/4096);
+    root.threeGroundScreen=point;root.threeGroundHeight=height;
+    root.y=point.y-height*16*Math.cos(52*Math.PI/180)*getRaisingNativePixelScale(fieldArt.field,view);
+  }
+
   function drawWaste(){
     const waste=source.getWasteFrame?.()??[],live=new Set(waste.map(w=>w.slot));
     for(const [slot,g] of wasteGraphics)if(!live.has(slot)){g.destroy();wasteGraphics.delete(slot);}
@@ -1120,7 +1141,7 @@ export async function mountRaisingFieldPixiPresentation({
       placeCare(g,art);// Owner 2026-10-10: 60% visual candidate; native cleanup hit area stays unchanged.
       g.width=art.width*scale*0.6;g.height=art.height*scale*0.6;
       const point=raisingNativeToScreen(item.positionQ12,fieldArt?.field,view,cameraX);
-      if(point){g.position.set(point.x,point.y);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(item.positionQ12[1]/4096);}}
+      if(point){g.position.set(point.x,point.y);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(item.positionQ12[1]/4096);alignThreeGround(g,point,item.positionQ12);}}
   }
 
   function drawEvolution(entry,native){
@@ -1205,7 +1226,7 @@ export async function mountRaisingFieldPixiPresentation({
       sprite.width=art.width;sprite.height=art.height;sprite.y=-food.heightQ12/4096;
       sprite.tint=spoiled&&!original?0x8ca273:0xffffff;
       const point=raisingNativeToScreen(food.positionQ12,fieldArt?.field,view,cameraX);
-      if(point){g.position.set(point.x,point.y);g.scale.set(scale);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(food.positionQ12[1]/4096);}
+      if(point){g.position.set(point.x,point.y);g.scale.set(scale);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(food.positionQ12[1]/4096);alignThreeGround(g,point,food.positionQ12);}
     }
   }
 

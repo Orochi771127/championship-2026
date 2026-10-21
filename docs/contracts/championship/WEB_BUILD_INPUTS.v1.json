@@ -15,6 +15,7 @@
     "assets/production/public-runtime/vendor-pixi.mjs",
     "node_modules/three/build/three.core.js",
     "node_modules/three/build/three.module.js",
+    "node_modules/three/examples/jsm/loaders/DRACOLoader.js",
     "node_modules/three/examples/jsm/loaders/GLTFLoader.js",
     "node_modules/three/examples/jsm/utils/BufferGeometryUtils.js",
     "node_modules/three/examples/jsm/utils/SkeletonUtils.js",
@@ -318,6 +319,8 @@
     "src/championship/presentation/raisingRanchArtPlan.js",
     "src/championship/presentation/ranchCageArtSelection.js",
     "src/championship/presentation/ranchPassages.js",
+    "src/championship/presentation/ranchThreeCoordinates.js",
+    "src/championship/presentation/ranchThreeScene.js",
     "src/championship/presentation/runtimeMapArtBundle.js",
     "src/championship/presentation/sceneMusicCatalog.js",
     "src/championship/presentation/shopGoodsUiArt.js",
@@ -373,6 +376,7 @@
     "src/championship/raising/raisingHomeDefinition.js",
     "src/championship/raising/raisingHomePersistenceR2.js",
     "src/championship/raising/raisingInstanceIdentity.js",
+    "src/championship/raising/ranchConveyor.js",
     "src/championship/raising/ranchDiscoveries.js",
     "src/championship/raising/ranchExplorationWalk.js",
     "src/championship/raising/ranchLayoutPositions.js",
@@ -895,6 +899,45 @@
     "assets/production/cage/shop-final-20261008/thumbnails/shop-115_item-24_field_cm25_01.png",
     "assets/production/cage/shop-final-20261008/thumbnails/shop-116_item-25_field_cm26_01.png",
     "assets/production/cage/shop-final-20261008/thumbnails/shop-117_item-26_field_cm27_01.png",
+    "assets/production/cage/three-20261021/field_cm01_01.glb",
+    "assets/production/cage/three-20261021/field_cm02_01.glb",
+    "assets/production/cage/three-20261021/field_cm03_01.glb",
+    "assets/production/cage/three-20261021/field_cm04_01.glb",
+    "assets/production/cage/three-20261021/field_cm05_01.glb",
+    "assets/production/cage/three-20261021/field_cm06_01.glb",
+    "assets/production/cage/three-20261021/field_cm07_01.glb",
+    "assets/production/cage/three-20261021/field_cm08_01.glb",
+    "assets/production/cage/three-20261021/field_cm09_01.glb",
+    "assets/production/cage/three-20261021/field_cm10_01.glb",
+    "assets/production/cage/three-20261021/field_cm11_01.glb",
+    "assets/production/cage/three-20261021/field_cm12_01.glb",
+    "assets/production/cage/three-20261021/field_cm13_01.glb",
+    "assets/production/cage/three-20261021/field_cm14_01.glb",
+    "assets/production/cage/three-20261021/field_cm15_01.glb",
+    "assets/production/cage/three-20261021/field_cm16_01.glb",
+    "assets/production/cage/three-20261021/field_cm17_01.glb",
+    "assets/production/cage/three-20261021/field_cm18_01.glb",
+    "assets/production/cage/three-20261021/field_cm19_01.glb",
+    "assets/production/cage/three-20261021/field_cm20_01.glb",
+    "assets/production/cage/three-20261021/field_cm21_01.glb",
+    "assets/production/cage/three-20261021/field_cm22_01.glb",
+    "assets/production/cage/three-20261021/field_cm23_01.glb",
+    "assets/production/cage/three-20261021/field_cm24_01.glb",
+    "assets/production/cage/three-20261021/field_cm25_01.glb",
+    "assets/production/cage/three-20261021/field_cm26_01.glb",
+    "assets/production/cage/three-20261021/field_cm27_01.glb",
+    "assets/production/cage/three-20261021/field_cm28_01.glb",
+    "assets/production/cage/three-20261021/field_cm29_01.glb",
+    "assets/production/cage/three-20261021/field_cm30_01.glb",
+    "assets/production/cage/three-20261021/field_cm31_01.glb",
+    "assets/production/cage/three-20261021/field_cm32_01.glb",
+    "assets/production/cage/three-20261021/field_cm34_01.glb",
+    "assets/production/cage/three-20261021/field_cm35_01.glb",
+    "assets/production/cage/three-20261021/field_cm37_01.glb",
+    "assets/production/cage/three-20261021/field_cm39_01.glb",
+    "assets/production/cage/three-20261021/field_cm40_01.glb",
+    "assets/production/cage/three-20261021/manifest.json",
+    "assets/production/cage/three-20261021/walk-surfaces.json",
     "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/hud.render.json",
     "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/main-cell_000.webp",
     "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/sub-cell_001.webp",
@@ -8445,6 +8488,9 @@
     "manifest.webmanifest",
     "node_modules/three/build/three.core.js",
     "node_modules/three/build/three.module.js",
+    "node_modules/three/examples/jsm/libs/draco/draco_decoder.wasm",
+    "node_modules/three/examples/jsm/libs/draco/draco_wasm_wrapper.js",
+    "node_modules/three/examples/jsm/loaders/DRACOLoader.js",
     "node_modules/three/examples/jsm/loaders/GLTFLoader.js",
     "node_modules/three/examples/jsm/utils/BufferGeometryUtils.js",
     "node_modules/three/examples/jsm/utils/SkeletonUtils.js",
@@ -8769,6 +8815,8 @@
     "src/championship/presentation/raisingRanchArtPlan.js",
     "src/championship/presentation/ranchCageArtSelection.js",
     "src/championship/presentation/ranchPassages.js",
+    "src/championship/presentation/ranchThreeCoordinates.js",
+    "src/championship/presentation/ranchThreeScene.js",
     "src/championship/presentation/runtimeMapArtBundle.js",
     "src/championship/presentation/sceneMusicCatalog.js",
     "src/championship/presentation/shopGoodsUiArt.js",
@@ -8824,6 +8872,7 @@
     "src/championship/raising/raisingHomeDefinition.js",
     "src/championship/raising/raisingHomePersistenceR2.js",
     "src/championship/raising/raisingInstanceIdentity.js",
+    "src/championship/raising/ranchConveyor.js",
     "src/championship/raising/ranchDiscoveries.js",
     "src/championship/raising/ranchExplorationWalk.js",
     "src/championship/raising/ranchLayoutPositions.js",
@@ -8905,8 +8954,10 @@
     "src/data/championship/catalogs/raising-ground.review-20261019.json",
     "src/data/championship/catalogs/raising-lifecycle.r1.json",
     "src/data/championship/catalogs/raising-messages.r1.json",
+    "src/data/championship/catalogs/ranch-conveyor.r1.json",
     "src/data/championship/catalogs/ranch-sports-art.r1.json",
     "src/data/championship/catalogs/ranch-sports-ground.r1.json",
+    "src/data/championship/catalogs/ranch-three-ground.r1.json",
     "src/data/championship/catalogs/rng-channels.r1.json",
     "src/data/championship/catalogs/shop.r1.json",
     "src/data/championship/catalogs/species-names.r1.json",
@@ -10788,6 +10839,162 @@
       {
         "path": "assets/production/cage/shop-final-20261008/thumbnails/shop-117_item-26_field_cm27_01.png",
         "sha256": "f1ec2918de50e9183a838b8608c3530130a538f4b94b98071da972c9566fd485"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm01_01.glb",
+        "sha256": "1ad3ebec161bdc0774f0f11db00071a4b57ce63d01b0c88601324f20060e3e35"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm02_01.glb",
+        "sha256": "611739a954fc40a684550f93b85dd658310924d72db31475aa6109a2e6c59235"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm03_01.glb",
+        "sha256": "d3f44085482344523db2765e4538e29466cad53f35207ecb6b8fa31e3411a200"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm04_01.glb",
+        "sha256": "c46ff837d2d08d6a82174b97b811cf128221b9e7b2471c1a023cdd64ce2e4bc5"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm05_01.glb",
+        "sha256": "661c5eb6297248eaa2c7b82c4fd320919aa2add2703f0568c192325581eeff7f"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm06_01.glb",
+        "sha256": "fca01102e777283ed80ecb3456dfe7f63efaeb48f58f8091281c0baf21c314f0"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm07_01.glb",
+        "sha256": "0e0ebd9095a2f4cb5943622c031b26632d39fae1e5163823de552841e6cf446c"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm08_01.glb",
+        "sha256": "51fec235bc1ca6829656db8859bdaaf0562a31b4199ae4ddc4a4e86e116b5b4a"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm09_01.glb",
+        "sha256": "8a9e356125ca980073ae93347f18b89adef9a6a401a33fb9a74eba2b2820237e"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm10_01.glb",
+        "sha256": "332630da73d9f70162af13512ca6bbe984b474c69d07e7d3b2289977e2c422b3"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm11_01.glb",
+        "sha256": "934240f06875bda2d80e8c9977199cc97ef082c74f5852c86b54a703889162e4"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm12_01.glb",
+        "sha256": "d19abd69c098083dd3e3bcfa54a4a13815057173d6efc0437663512eb9300170"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm13_01.glb",
+        "sha256": "d07f43ffa2c61581297f4bb521d1b1f6538d91de5db63b5836e40122d047dc6c"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm14_01.glb",
+        "sha256": "c666e25bbfbf80d82edea91e7a6a3cbc146a4f3248d993d9ab336bfc82eb7081"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm15_01.glb",
+        "sha256": "755cd15ca42cfa28e14965fe9dac86ed740b4814fcaca6050d55b36e058dd678"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm16_01.glb",
+        "sha256": "6f6472e5b051da022bf7f0999c1050794d0bb502550db0c8fda9837a6a1a6816"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm17_01.glb",
+        "sha256": "5267531087515b0d766875c8ed8b122ad7b5995a6adc8261904657a6ed5e08f2"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm18_01.glb",
+        "sha256": "bc0cb63e918d753c0fbc53ecfe112cec323d951f1c4d9a441d36ccfc4ec4c0fe"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm19_01.glb",
+        "sha256": "615dd5bd57717e81faabe5230b8a4e00ae4554ea1fd8427a46efc182a4eeb574"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm20_01.glb",
+        "sha256": "6ac38b740f4bca916c562dcdfa62d0b3fd7346ccac43d97d0f2937a17b15ef81"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm21_01.glb",
+        "sha256": "760518adf59c1c8940a11e624725df1c13804a5629f8a7454e5ca1e5b282e9a8"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm22_01.glb",
+        "sha256": "a8169303d160318d63102dd888451ad3fffa4edd7407d94197c30624aacd5475"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm23_01.glb",
+        "sha256": "f5de7be39038b9b80470b25622bd734511fde9edf68ad73e3fa0a3fb0f2cd067"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm24_01.glb",
+        "sha256": "54e14bd55a0551420254386e2db9cde7526f934203c15d6320aa66867c83af34"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm25_01.glb",
+        "sha256": "775f8833c80684c6dbfcbebc4ed9678cad7c38a56f927d6e4ef0285b72549c3d"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm26_01.glb",
+        "sha256": "9863e9a26d3bc2d3ffc7c7927cd3c71d07a4062a3dfc43de922eee79d47270f2"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm27_01.glb",
+        "sha256": "a8becfd289d53cc4f0f4b2efc89bd59af2e9211f9388813a04e006b6dd7f94db"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm28_01.glb",
+        "sha256": "90876c1ae66a9d2d48920badcdaedcc8e6251e72e16a9837e6eda7f919657e37"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm29_01.glb",
+        "sha256": "86a1477443316456cf09744f343988858a5b16402b15a1328649e2c3c0ca7989"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm30_01.glb",
+        "sha256": "e53b900d950057fa3d4a905d062c10756f9e0ee0b2a98bd2ad80a4a0f0df7053"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm31_01.glb",
+        "sha256": "ff2e729c68ad1868d4d950b471560de26b918a08e902a624e8799891a413593e"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm32_01.glb",
+        "sha256": "d216f57c9e86686ca16fac059d502d5a0accb0cc1d6c600d524bc6d79f2a29f8"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm34_01.glb",
+        "sha256": "3924c075a6be3bc8c2cdc9620f42baca4da6b599fd677b0c5e949ad1b5d2112e"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm35_01.glb",
+        "sha256": "972e7b77e87f2339a7df5a1336e5daef060aba4b83fb449666482f097501bdde"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm37_01.glb",
+        "sha256": "c900d5bd298c74048088ab60aa46c30d1094e7c6db7917cf97467a87e9ca88d0"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm39_01.glb",
+        "sha256": "30ef7ccb80d855f71a803964ce1811cb0e6900a72b69676f0635ae657780cc20"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_cm40_01.glb",
+        "sha256": "1dbcf419f18a4353d9db5f36da61d744cc0e676f212457dd90822ef9e6e2a613"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/manifest.json",
+        "sha256": "33be312d2a951a793f193aa3c581f5833c81b84e03a6121c205267779bd15fc8"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/walk-surfaces.json",
+        "sha256": "8a7d5683320edc7b6f2604c2ea26332e44353dc29afa43522af1c2438b65c254"
       },
       {
         "path": "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/hud.render.json",
@@ -40959,7 +41166,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "3a18423b21ec54bb3f0cbcf42da82735ed075b837115e511d3a36b8f250541f4"
+        "sha256": "3830a902ce5c19b28da71eee2bbfe162955d7e75f2390f8506545a766f69eab7"
       },
       {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -40988,6 +41195,18 @@
       {
         "path": "node_modules/three/build/three.module.js",
         "sha256": "bbf5ed13fe4373f5bd38b14ea8e62e9f157327da5638edc6d3863e08b167c9c7"
+      },
+      {
+        "path": "node_modules/three/examples/jsm/libs/draco/draco_decoder.wasm",
+        "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+      },
+      {
+        "path": "node_modules/three/examples/jsm/libs/draco/draco_wasm_wrapper.js",
+        "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+      },
+      {
+        "path": "node_modules/three/examples/jsm/loaders/DRACOLoader.js",
+        "sha256": "fdafdf4aa11bbc65d89adb338efd844bedf94073702f9049240ff1f1ea48ad5f"
       },
       {
         "path": "node_modules/three/examples/jsm/loaders/GLTFLoader.js",
@@ -41051,7 +41270,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "9f63ecef9a8f3b71dcc215ecc614cf543b03e97e45f13cd3429c4f985b95c982"
+        "sha256": "4b3166e43507615e653077d18629aafe165bd23f0920caf72f9dcdf36b520068"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -41163,7 +41382,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "7405daa3099b76ec7a9828d8ed19c48cee26710631906ef8cb7a66eb04f94665"
+        "sha256": "1750846f87076dc9e1fe4a19073be4f46666bdce956e35d5e29d8b218eb365e9"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -41607,7 +41826,7 @@
       },
       {
         "path": "src/championship/cage/ranchConnections.js",
-        "sha256": "78c3ed8def7076845c83aa3e217147c5ad247abd6d2d3aea0caf062bdc9a1799"
+        "sha256": "36c486ede6616407ffed30ad824789fc2159f9f68972808b2032f021cbee6242"
       },
       {
         "path": "src/championship/cage/ranchExpansion.js",
@@ -42123,7 +42342,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "48db58cdc19b0c15d7faa346c6a9f31ad9f71b82c5a0c612ccc387956b7d3b85"
+        "sha256": "74366f18b405adf389beeffc012041c7b0c1076e2eb6303ae35a1aa9366d2995"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -42283,7 +42502,15 @@
       },
       {
         "path": "src/championship/presentation/ranchPassages.js",
-        "sha256": "8956022c0edb88fe0c6c1dea6b27ae409fa0a877b9877119d35176b2f531c76b"
+        "sha256": "c47e9a6e7fb3053f3be9aa40053db4329ea87971e0ca03463f014863e444484d"
+      },
+      {
+        "path": "src/championship/presentation/ranchThreeCoordinates.js",
+        "sha256": "69952f92e0ff2dfe1092df544837eecb946d32225a008fa7dec5e387bef02d97"
+      },
+      {
+        "path": "src/championship/presentation/ranchThreeScene.js",
+        "sha256": "ac9ecd813b76f649fb1f9146ee39434867d0ff6980884e481e81c92865be6767"
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
@@ -42459,7 +42686,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingRanchRing.js",
-        "sha256": "969b7bcdf139474a08a3181234532335b813df7223a24a3bd51968010affe76f"
+        "sha256": "bf644add9ae14fb7a82f94530c2386459d121e66d69dfa7bf081cadab2a94f97"
       },
       {
         "path": "src/championship/raising/nativeRaisingRecoveryStars.js",
@@ -42504,6 +42731,10 @@
       {
         "path": "src/championship/raising/raisingInstanceIdentity.js",
         "sha256": "9bcaf9873fc5431ad25df2ae395e042ad8c7a2d88b6d3b6e0764694f0600e3ad"
+      },
+      {
+        "path": "src/championship/raising/ranchConveyor.js",
+        "sha256": "2c6320434433788904300094530553e7a699d83536cd94f6825a6011aba3eac6"
       },
       {
         "path": "src/championship/raising/ranchDiscoveries.js",
@@ -42830,12 +43061,20 @@
         "sha256": "e5d21144d9afd70bd09b76468d50e813c0c0f089ceff4fcee0f12e09a6b5c3f4"
       },
       {
+        "path": "src/data/championship/catalogs/ranch-conveyor.r1.json",
+        "sha256": "0e0996a024e157c1ea3d3fb0bed6d22259c823759ef36cd757c75e1b7d2d6b57"
+      },
+      {
         "path": "src/data/championship/catalogs/ranch-sports-art.r1.json",
         "sha256": "9b6b5ed6b9b25e4043ed5aca8d05b5fd85608432313fbfc9022d2a5e3b31ea98"
       },
       {
         "path": "src/data/championship/catalogs/ranch-sports-ground.r1.json",
         "sha256": "e5584fe5c8b3382cfad97f793b1ed01d9039396dea67537e490dd130a22ead80"
+      },
+      {
+        "path": "src/data/championship/catalogs/ranch-three-ground.r1.json",
+        "sha256": "c062cea37b0609e81ae3a9122bf3dcdd4cefffe890ce24f3002f83b65db83167"
       },
       {
         "path": "src/data/championship/catalogs/rng-channels.r1.json",
@@ -42906,8 +43145,8 @@
         "sha256": "72fb436efbb85ce09ecbc860ef9ec385bdc632456e16b1de7498f49d3399b861"
       }
     ],
-    "selectionId": "DATA_ARENA_BATTLE_ENTRY_RELEASE_20261020",
-    "ownerInstruction": "好幫我提交並部署上線確認線上版本，也能從對戰頁進入數據競技場，並正常遊玩跟返回"
+    "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
+    "ownerInstruction": "請自我審查沒問題後commit 跟push；還有部署"
   },
   "browserBundle": {
     "version": 1,

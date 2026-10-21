@@ -13,13 +13,14 @@ import {cageName} from '../src/championship/text/zhHant.js';
 import review from '../src/data/championship/catalogs/raising-ground.review-20261019.json' with {type:'json'};
 import source from '../src/data/championship/catalogs/raising-ground.r1.json' with {type:'json'};
 import sports from '../src/data/championship/catalogs/ranch-sports-art.r1.json' with {type:'json'};
+import modelGround from '../src/data/championship/catalogs/ranch-three-ground.r1.json' with {type:'json'};
 applyRaisingGroundReview(review);
 const defs=listCageDefinitions(),unlockedSlots=Array.from({length:100},(_,i)=>i);
 const waiting={moduleId:defs[35].moduleId,slotIndex:0,instanceId:'cage:waiting',ownerIndex:0};
 const output=path.resolve(process.argv[2]??'artifacts/ranch-audit');
 fs.mkdirSync(output,{recursive:true});
 const records=[],failures=[];let combinations=0,open=0,closed=0;
-const fields=new Map([...source.fields,...review.fields].map(f=>[f.definitionIndex,{...f,cells:f.runs.flatMap(([n,...v])=>Array.from({length:n},()=>v))}]));
+const fields=new Map([...source.fields,...review.fields,...modelGround.fields].map(f=>[f.definitionIndex,{...f,cells:f.runs.flatMap(([n,...v])=>Array.from({length:n},()=>v))}]));
 for(let d=0;d<35;d++){
   const rotation=0;
   const a={moduleId:defs[d].moduleId,slotIndex:productGridSlot(5,4),rotation,instanceId:'cage:a',ownerIndex:1};
@@ -58,15 +59,16 @@ for(let d=0;d<35;d++){
     }
   records.push(record);
 }
-const report={schemaVersion:1,status:failures.length?'FAIL':'GEOMETRY_AND_NAVIGATION_CHECKED',
+const noConnection=records.filter(r=>!r.connectedLayouts).map(({definition,rotation,name})=>({definition,rotation,name}));
+const report={schemaVersion:1,status:failures.length||noConnection.length?'FAIL':'GEOMETRY_AND_NAVIGATION_CHECKED',
   scope:'Controlled data audit, not visual acceptance or physical-device QA',
   selectedSports:sports.fields.map(f=>({fieldId:f.fieldId,sha256:f.frames[0].sha256})),
   movableDefinitions:35,orientations:35,combinations,openEdges:open,closedEdges:closed,
   fixed:{definition:35,rotationEnabled:false,reason:'FIXED_WAITING_ROOM'},
-  noConnection:records.filter(r=>!r.connectedLayouts).map(({definition,rotation,name})=>({definition,rotation,name})),
+  noConnection,
   failures,records};
 fs.writeFileSync(path.join(output,'all-cages.json'),JSON.stringify(report,null,2));
 const cols=['definition','name','fieldId','rotation','cells','walkable','blocked','escaped','obstacleMismatches','adjacentLayouts','connectedLayouts','openEdges','closedEdges'];
 fs.writeFileSync(path.join(output,'all-cages.csv'),'\uFEFF'+[cols.join(','),...records.map(r=>cols.map(k=>JSON.stringify(r[k])).join(','))].join('\n'));
 console.log(JSON.stringify({...report,records:undefined,selectedSports:undefined},null,2));
-if(failures.length)process.exitCode=1;
+if(failures.length||noConnection.length)process.exitCode=1;

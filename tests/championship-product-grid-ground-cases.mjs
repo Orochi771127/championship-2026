@@ -6,6 +6,7 @@ import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 import {WAITING_ROOM_MODULE} from '../src/championship/cage/nativeRanchLayout.js';
 import {ORIGINAL_CAGE_DEFINITION_SHAPES} from '../src/championship/cage/ranchSlotGeometry.js';
 import {nativeCarryPosition,stepNativeRaisingFlight} from '../src/championship/raising/nativeRaisingCarry.js';
+import modelGround from '../src/data/championship/catalogs/ranch-three-ground.r1.json' with {type:'json'};
 const waiting={moduleId:WAITING_ROOM_MODULE,slotIndex:0};
 const frame=(placements=[waiting],rows=[0,1,2,3,4,5,6,7,8,9])=>({layoutVersion:PRODUCT_RANCH_GRID,unlockedCount:20,placements,gridAccess:{version:1,legacyUnlockedSlots:Array.from({length:20},(_,i)=>i),purchasedRows:[],testUnlockedRows:rows}});
 test('all legal facility anchors share terrain/art origin and spawn on their owning facility',()=>{
@@ -47,15 +48,16 @@ test('horizontal copies query one owner and do not create placements',()=>{
  assert.equal(g.placements.length,1);
 });
 
-test('native twenty-slot terrain outside the selected sports grounds and facility-local saved coordinates are preserved',async()=>{
+test('native terrain outside owner-approved model contacts and facility-local saved coordinates are preserved',async()=>{
  const {createNativeRaisingGround}=await import('../src/championship/raising/nativeRaisingGround.js');
  const {NATIVE_RANCH_LAYOUT,originalStartingRanch}=await import('../src/championship/cage/nativeRanchLayout.js');
  const placements=originalStartingRanch().placements;
  const native=createNativeRaisingGround({layoutVersion:NATIVE_RANCH_LAYOUT,unlockedCount:20,placements});
  const product=createRanchRaisingGround(frame(placements,[]));
- // Owner selected the new CM02/CM30 design and matching ground on 2026-10-21.
- // Only those owners may differ; every unrelated native cell remains exact.
- const sports=new Set([1,27]);
+ // Owner 2026-10-21 expanded this adaptation to actual 3D cage models.
+ // The original native layout remains intact; product cage contacts follow
+ // the exported model catalogue, without changing local saved coordinates.
+ const sports=new Set([1,27,...modelGround.fields.map(f=>f.definitionIndex)]);
  for(let i=0;i<native.terrain.length;i++){
   const x=i%native.width*8,y=Math.floor(i/native.width)*8;
   if(sports.has(native.cageAt(x,y)?.definitionIndex)||sports.has(product.cageAt(x,y)?.definitionIndex))continue;

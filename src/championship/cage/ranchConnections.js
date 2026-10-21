@@ -63,6 +63,15 @@ function search(start,goals,ground,allowed) {
 export function connectRanchGround(ground) {
   const {width,height,owners,terrain,clearance}=ground;
   const boundaries=ranchSharedBoundaries(ground.placements),connections=[],corridorOwner=new Int16Array(terrain.length).fill(-1);
+  // Real model obstacles can leave a walkable border pocket with no access
+  // to the cage interior. An entrance must reach an existing safe standing
+  // cell on BOTH sides before any seam floor is opened.
+  const reachesInterior=new Uint8Array(terrain.length),interiorQueue=[];
+  for(let i=0;i<terrain.length;i++)if(owners[i]>=0&&terrain[i]!==1&&clearance[i]>1){reachesInterior[i]=1;interiorQueue.push(i);}
+  for(let n=0;n<interiorQueue.length;n++){
+    const i=interiorQueue[n];
+    for(const j of neighbors(i,width,height))if(!reachesInterior[j]&&owners[j]===owners[i]&&terrain[j]!==1){reachesInterior[j]=1;interiorQueue.push(j);}
+  }
   for(const edge of boundaries){
     if(!edge.compatible)continue;
     const mid=[(edge.a[0]+edge.b[0])/2,(edge.a[1]+edge.b[1])/2];
@@ -72,7 +81,7 @@ export function connectRanchGround(ground) {
       &&Math.hypot(point(i,width)[0]-mid[0],point(i,width)[1]-mid[1])<=40
       &&edge.polygons.some(poly=>inside(point(i,width),poly));
     const candidates=owner=>{
-      const result=[];for(let i=0;i<owners.length;i++)if(owners[i]===owner&&terrain[i]!==1&&inPortal(i))result.push(i);
+      const result=[];for(let i=0;i<owners.length;i++)if(owners[i]===owner&&terrain[i]!==1&&reachesInterior[i]&&inPortal(i))result.push(i);
       return result.sort((a,b)=>Math.hypot(...point(a,width).map((v,n)=>v-mid[n]))-Math.hypot(...point(b,width).map((v,n)=>v-mid[n])));
     };
     const left=candidates(edge.left),right=candidates(edge.right),goals=new Set(right);

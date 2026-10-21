@@ -19,6 +19,7 @@ import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIG
 
 import { reviewGroundField,parseRaisingGroundField } from "./raisingGroundReview.js";
 import sportsGround from '../../data/championship/catalogs/ranch-sports-ground.r1.json' with {type:'json'};
+import threeGround from '../../data/championship/catalogs/ranch-three-ground.r1.json' with {type:'json'};
 import { connectRanchGround } from "../cage/ranchConnections.js";
 const fields = source.fields.map((field) => {
   const cells = field.runs.flatMap(([count, ...v]) => Array.from({ length: count }, () => v));
@@ -27,6 +28,7 @@ const fields = source.fields.map((field) => {
   return { ...field, cells, clearance };
 });
 const selectedSportsGround=new Map(sportsGround.fields.map(f=>[f.definitionIndex,parseRaisingGroundField(f)]));
+const modelContactGround=new Map(threeGround.fields.map(f=>[f.definitionIndex,parseRaisingGroundField(f)]));
 
 /** 020502D8's origin for a ring slot. */
 export function ringCageOrigin(definitionIndex, ringSlot) {
@@ -124,7 +126,7 @@ export function composeProductRanchGround(frame) {
   const steps = [...placements, ...unlocked.filter(slot=>!occupied.has(slot)).map(slotIndex=>({slotIndex,definitionIndex:36}))];
   const wrap = n=>((n % width)+width)%width;
   for (const p of steps) {
-    const field = reviewGroundField(p.definitionIndex) ?? selectedSportsGround.get(p.definitionIndex) ?? fields[p.definitionIndex];
+    const field = modelContactGround.get(p.definitionIndex) ?? reviewGroundField(p.definitionIndex) ?? selectedSportsGround.get(p.definitionIndex) ?? fields[p.definitionIndex];
     const origin = productFieldTileOrigin(p.slotIndex, p.definitionIndex === 36 ? 0 : ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);
     for (let sy=origin.cropTopTiles; sy<field.height; sy++) for (let sx=0; sx<field.width; sx++) {
       const y=origin.tileY+sy;
@@ -158,6 +160,27 @@ function productRaisingSpawnPosition(ground,definition,rng) {
   if(!candidates.length)throw new Error('PRODUCT_RANCH_NO_SPAWN_GROUND');
   const [x,y]=candidates[Math.min(candidates.length-1,Math.max(0,Math.trunc(candidates.length*rng.next(1)/102)))];
   return [(x*8+4)*4096,(y*8+4)*4096,0];
+}
+
+/** Reconcile a saved contact point after Owner-approved prop relocation.
+ * Valid positions and native layouts keep their original bytes/RNG sequence.
+ * The nearest safe point stays in the actor's assigned instance.
+ */
+export function alignRanchRaisingPosition(ground,position,reference) {
+  if(ground?.layoutVersion!==PRODUCT_RANCH_GRID)return position;
+  const owner=ground.placement(reference);if(!owner)return position;
+  const x=position[0]/4096,y=position[1]/4096;
+  if(ground.readTerrain(Math.floor(x/8),Math.floor(y/8))!==1&&ground.cageAt(x,y)?.ownerIndex===owner.ownerIndex)return position;
+  let best=null;
+  for(let ty=0;ty<ground.height;ty++)for(let tx=0;tx<ground.width;tx++){
+    if(ground.readTerrain(tx,ty)===1||ground.cageAt(tx*8,ty*8)?.ownerIndex!==owner.ownerIndex)continue;
+    const px=tx*8+4,py=ty*8+4,dx=Math.abs(px-x)%ground.pixelWidth;
+    const distance=Math.min(dx,ground.pixelWidth-dx)**2+(py-y)**2;
+    const safe=ground.readClearance(tx,ty)>1;
+    if(!best||(safe&&!best.safe)||(safe===best.safe&&distance<best.distance))best={px,py,distance,safe};
+  }
+  if(!best)throw Error('PRODUCT_RANCH_NO_OPEN_GROUND');
+  return [best.px*4096,best.py*4096,position[2]??0];
 }
 
 // The native fallback is restricted to y=3..18. Product rows use a bounded

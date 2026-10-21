@@ -17,6 +17,8 @@ export function permittedCopyPath(file){
       ||['qa/alternate-form-save.json','qa/alternate-form-product-catalog.json','qa/alternate-form-asset-catalog.json'].includes(file)
       ||file.startsWith('src/championship/')||file.startsWith('src/data/championship/')
       ||file.startsWith('assets/production/')||/^docs\/contracts\/championship\/[^/]+\.json$/.test(file)
+      ||/^node_modules\/three\/examples\/jsm\/loaders\/DRACOLoader\.js$/.test(file)
+      ||/^node_modules\/three\/examples\/jsm\/libs\/draco\/(?:draco_wasm_wrapper\.js|draco_decoder\.wasm)$/.test(file)
       ||/^node_modules\/(?:pixi\.js\/dist\/pixi\.mjs|three\/(?:build\/three\.(?:module|core)\.js|examples\/jsm\/(?:loaders\/GLTFLoader|utils\/(?:BufferGeometryUtils|SkeletonUtils))\.js))$/.test(file));
 }
 export function safeInputPath(file){

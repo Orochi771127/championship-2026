@@ -682,6 +682,24 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       unlockedSlots: cageFrame?.unlockedSlots ?? null,
       expansion: cageFrame?.expansion ?? null,
       previewFieldId: CAGE_ART_PREVIEW_FIELD || null });
+    // Owner 2026-10-21: geometry replaces the ranch's image presentation. Read
+    // its established placement metadata without loading unused 2D atlases.
+    if(plan.productGrid) {
+      try {
+        const [{createRanchThreeScene},{ranchThreeField}]=await Promise.all([
+          import('../presentation/ranchThreeScene.js'),import('../presentation/ranchThreeCoordinates.js')]);
+        const field=ranchThreeField(manifest,plan);
+        const threeScene=await createRanchThreeScene({stage,placements:plan.placements,field,signal,
+          connections:app.getRanchExplorationFrame()?.connections??[],cagePlacements:cageFrame?.placements??[]});
+        const displayObject=new PIXI.Container({label:'3D ranch metadata bridge'});
+        return {assetId:'art:cage:three-20261021',field,displayObject,threeScene,update(){},
+          getDiagnostics:()=>({assetId:'art:cage:three-20261021',three:threeScene.getDiagnostics()}),
+          dispose:async()=>{threeScene.dispose();if(!displayObject.destroyed)displayObject.destroy();}};
+      } catch(error) {
+        if(signal?.aborted)throw error;
+        console.warn(`CHAMPIONSHIP_RANCH_3D_FALLBACK: ${error.message}`);
+      }
+    }
     const fieldArt=await createRuntimeMapArtTileSetLoader({ PIXI }).load({
       manifest,
       placements: plan.placements,
@@ -696,7 +714,7 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
     const layerGroups=ranchCageLayerGroups(manifest,plan.placements);
     try{for(const group of layerGroups)art=await withCageForeground({PIXI,art,...group,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
     catch(error){await fieldArt.dispose();throw error;}
-    art=withRanchPassages({PIXI,art,connections:app.getRanchExplorationFrame()?.connections??[]});
+    art=await withRanchPassages({art,connections:app.getRanchExplorationFrame()?.connections??[]});
     // Hide a shared rim only where navigation actually permits crossing.
     if(isOriginalRuntimeLocation()) {
     try{

@@ -261,7 +261,11 @@ test("INT-RH2 Pixi field is a scene on the one shared stage and owns no bootstra
     "Pixi field created a second ticker or frame loop");
   assert.match(source, /app\.ticker\.add\(updateAnimations\)/, "animation does not use the Application-owned ticker");
   assert.match(source, /autoUpdate: false/, "AnimatedSprite would attach itself to the shared ticker");
-  assert.equal(/Three|three\.js|WebGLRenderer/.test(source), false, "Three.js entered the Raising slice");
+  // The fixed-camera ranch now has a separate Three scene. The Pixi field may
+  // coordinate it, but renderer creation still belongs to that scene module.
+  assert.match(source, /fieldArt\.threeScene\.render\(/, "the field coordinates the 3D ranch on its existing ticker");
+  assert.equal(/new\s+(?:THREE\.)?WebGLRenderer|from ['"]three['"]/.test(source), false,
+    "the Pixi field must not bootstrap a second renderer");
   assert.equal(/localStorage|saveManager|championshipStandaloneApp|championshipRaisingProduction|entities\.r1/.test(source), false,
     "Pixi presentation reached around the runtime presentation source");
   assert.match(source, /source\.intents\.selectCreature/);
