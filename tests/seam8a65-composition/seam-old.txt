@@ -1,0 +1,17 @@
+        // Dissolve outer rim joints, fascia and border lights between same-theme neighbors
+        const myEdges=sharedEdges.filter(e=>e.left===p.ownerIndex||e.right===p.ownerIndex);
+        if(myEdges.length>0){
+          object.traverse(o=>{
+            if(!o.name)return;
+            const isBorder=o.name.includes('joint')||o.name.includes('fascia')||o.name.includes('rim-light');
+            if(!isBorder)return;
+            const wx=point.x+o.position.x, wz=point.z+o.position.z;
+            for(const e of myEdges){
+              const dx=e.b.x-e.a.x, dz=e.b.z-e.a.z, lenSq=dx*dx+dz*dz;
+              const t=lenSq>0?Math.max(0,Math.min(1,((wx-e.a.x)*dx+(wz-e.a.z)*dz)/lenSq)):0;
+              const dist=Math.hypot(wx-e.a.x-t*dx, wz-e.a.z-t*dz);
+              if(dist<2.2){o.visible=false;break;}
+            }
+          });
+        }
+

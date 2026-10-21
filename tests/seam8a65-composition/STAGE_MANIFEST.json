@@ -1,0 +1,83 @@
+{
+  "status": "LOCAL_REVIEW_PENDING_NOT_LAUNCHED",
+  "publishRoot": "tests/seam8a65-composition/",
+  "manifestDeployment": "tests/seam8a65-composition/STAGE_MANIFEST.json",
+  "command": "node tests/seam8a65-composition/runner.mjs http://127.0.0.1:4173/ artifacts/seam8a65-composition",
+  "files": [
+    {
+      "path": "plan.json",
+      "bytes": 346317,
+      "sha256": "7778a5ecdbd8fc92d94945ac3ce36b4eaa6d5db51f0776d0c23e6665e3160fc4"
+    },
+    {
+      "path": "fixture.html",
+      "bytes": 3493,
+      "sha256": "3c78d6ac1b82e46945784ab85ab91264ab2477601dc235bd9d70709892cdb2dc"
+    },
+    {
+      "path": "runner.mjs",
+      "bytes": 8429,
+      "sha256": "0091669c075acaaf6a0f9321ae7d3b60373617be82880fed609f9eb46725dd2e"
+    },
+    {
+      "path": "source/recovery8a65.js",
+      "bytes": 44053,
+      "sha256": "8a65acb62685e1c00dec88b3023301dcfba332c33b9378ebb6bb1366b9228284"
+    },
+    {
+      "path": "source/recovery8a65-plus-seam.js",
+      "bytes": 44715,
+      "sha256": "256919ce036206dae0f5d2564a5dd7c938d54e6d91b2437b0f0a04b4b2e6340b"
+    },
+    {
+      "path": "source/ranchBorderMembership.js",
+      "bytes": 1335,
+      "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
+    },
+    {
+      "path": "seam-old.txt",
+      "bytes": 845,
+      "sha256": "e746b5ef5b5a36763ab93831ab0dfd90fb33775316506ec63975a71e7277cf8e"
+    },
+    {
+      "path": "seam-new.txt",
+      "bytes": 1429,
+      "sha256": "7cf633f12fa39a95e22cbf0f0755f71e3c9b000b11d1cbf17a503872ebbe6441"
+    },
+    {
+      "path": "frozen/identity-tag.txt",
+      "bytes": 193,
+      "sha256": "6532b4eb5e09716e72b5de9be094f4aaa3b7a2b83aa88d7faca5db71a6377540"
+    },
+    {
+      "path": "frozen/test-hook.txt",
+      "bytes": 1351,
+      "sha256": "efd15cb66138785098d99de631ff95a024b799e4beb408acdc2aedd2b790608c"
+    },
+    {
+      "path": "frozen/recovery8a65.js",
+      "bytes": 45615,
+      "sha256": "bcd75509a48e55cc5ee3478fa4ae16e71d3c7afa574fc667212a06935504aa0e"
+    },
+    {
+      "path": "frozen/recovery8a65-plus-seam.js",
+      "bytes": 46277,
+      "sha256": "9ee56924f12c7bf023c16e05a59ad7a5e0923c1630a47fdf8a24806f264f51a6"
+    },
+    {
+      "path": "frozen/ranchBorderMembership.js",
+      "bytes": 1335,
+      "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
+    },
+    {
+      "path": "frozen/overlay-manifest.json",
+      "bytes": 791,
+      "sha256": "b9fb86ff09dddf08ed1b71908b866d4b033c9970ece25a8afbaca24b10fde42c"
+    }
+  ],
+  "dependencies": [
+    "Pinned tests/ranch-a2-final/source/{ranchPhysicalSupport,ranchSupportOwner}.js",
+    "Pinned tests/six-field-support-proposal/physical-top-triangles.proposed.json"
+  ],
+  "productionSourceUnmodified": true
+}

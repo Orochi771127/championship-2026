@@ -1,0 +1,26 @@
+        // Remove only complete authored strips on compatible shared boundaries.
+        // Classify in unwrapped placement-local coordinates: all wrap copies agree.
+        const myEdges=sharedEdges.filter(e=>e.left===p.ownerIndex||e.right===p.ownerIndex);
+        if(myEdges.length>0){
+          const unwrapped=ranchNativeToWorld(p.x/unit,p.y/unit);
+          const localEdges=myEdges.map(e=>({
+            a:{x:e.a.x-unwrapped.x,z:e.a.z-unwrapped.z},
+            b:{x:e.b.x-unwrapped.x,z:e.b.z-unwrapped.z}
+          }));
+          object.updateMatrixWorld(true);
+          object.traverse(o=>{
+            if(!o.isMesh||!o.geometry||!o.name)return;
+            const isBorder=o.name.includes('joint')||o.name.includes('fascia')||o.name.includes('rim-light');
+            if(!isBorder)return;
+            if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();
+            const box=o.geometry.boundingBox;if(!box||box.isEmpty())return;
+            const corners=[];
+            for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){
+              // Full child hierarchy transforms, not point + child.position.
+              const v=object.worldToLocal(o.localToWorld(new THREE.Vector3(x,y,z)));
+              corners.push({x:v.x,z:v.z});
+            }
+            if(ranchBorderWithinSharedSegments(corners,localEdges))o.visible=false;
+          });
+        }
+

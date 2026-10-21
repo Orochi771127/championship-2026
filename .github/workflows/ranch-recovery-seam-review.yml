@@ -1,0 +1,51 @@
+name: Ranch recovery composition seam diagnostic
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-recovery-seam-review.yml'
+      - 'tests/seam8a65-composition/**'
+      - 'tests/ranch-a2-final/source/**'
+      - 'tests/six-field-support-proposal/**'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Preserve existing build validation
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Capture isolated CM07 seam variants without source modifications
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/seam8a65-composition
+          python3 -u -m http.server 4173 --bind 127.0.0.1 > artifacts/seam8a65-composition/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/tests/seam8a65-composition/fixture.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/tests/seam8a65-composition/fixture.html > /dev/null
+          node tests/seam8a65-composition/runner.mjs http://127.0.0.1:4173/ artifacts/seam8a65-composition
+      - name: Preserve mesh assertions and diagnostic renders for human review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-recovery-seam-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/seam8a65-composition/
+          if-no-files-found: error
+          retention-days: 14

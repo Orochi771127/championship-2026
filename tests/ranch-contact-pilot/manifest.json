@@ -1,6 +1,6 @@
 {
-  "schema": "BOUNDED_EIGHT_ROUTE_CONTACT_PILOT_V1",
-  "status": "LOCAL_PENDING_INDEPENDENT_REVIEW_NO_GPU_AUTHORIZATION",
+  "schema": "BOUNDED_EIGHT_ROUTE_CONTACT_PILOT_RESTORE_V2",
+  "status": "LOCAL_PENDING_REVIEW",
   "candidateSha256": "8a65acb62685e1c00dec88b3023301dcfba332c33b9378ebb6bb1366b9228284",
   "expectedRoutes": 8,
   "expectedRowsPerEngine": 32,
@@ -9,16 +9,16 @@
   "allBindingSweepAuthorized": false,
   "files": [
     {
-      "source": "shadow-map-audit/all226-contact-pilot/runner.mjs",
+      "source": "shadow-map-audit/all226-contact-pilot-restore-v2/runner.mjs",
       "target": "tests/ranch-contact-pilot/runner.mjs",
-      "sha256": "81d7160bc07181f9fa8e6cc89e01af5674705ca41bcf60454098616b69e28c6c",
-      "bytes": 11060
+      "sha256": "9d8d254ce9e62284afe48d595ad13145a0c08cbddcd4305ce5a4de59ab92b5c8",
+      "bytes": 11451
     },
     {
-      "source": "shadow-map-audit/all226-contact-pilot/fixture.html",
+      "source": "shadow-map-audit/all226-contact-pilot-restore-v2/fixture.html",
       "target": "tests/fixtures/ranch-contact-pilot.html",
-      "sha256": "22ab32ad5bcee4ce7093250ab3f1d4e899f3979fcb96723ed43632dc2c355ce3",
-      "bytes": 42658
+      "sha256": "1318faff84890276171cb13be432b0e5bc1ae895582411daf084f139df4b2d55",
+      "bytes": 44289
     },
     {
       "source": "shadow-map-audit/all226-contact-pilot/core.mjs",
@@ -89,6 +89,12 @@
       "target": "tests/ranch-split/probe/actor-mask-probe.fragment.js",
       "sha256": "d714504491ff157e41ebe58c19e3a35d460d680ddda5fcc1b62a4b7ce66efba0",
       "bytes": 18797
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot-restore-v2/restore-contract.mjs",
+      "target": "tests/ranch-contact-pilot/restore-contract.mjs",
+      "sha256": "9b332940edc86dca9821beb0a3fdfad596f91934e4fa795192936e47f6d84fe4",
+      "bytes": 627
     }
   ]
 }

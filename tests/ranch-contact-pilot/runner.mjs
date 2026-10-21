@@ -52,7 +52,9 @@ try{for(const route of selection.routes){
     delete evidence.masks;await page.screenshot({path:out+'/'+prefix+'-normal.png'});
     assert.deepEqual(errors,[]);results.push({formIndex:form.formIndex,entityId:form.entityId,form:form.form,mode,role,frameId:frame.id,sourceSha256:sha(mode==='raw4f'?baseline:candidate),viewport:{width,height:844,dpr:1},omittedStaticTextures:form.frames.length-new Set(seedCases.map(s=>s.frame.id)).size,nativeZ:0,scope:'NO_LIVE_JUMP_OR_TRANSITION_COVERAGE',prefix,initial,fit,batch,evidence});await save();
    }
-  }catch(e){await fs.writeFile(out+`/route-${form.formIndex}-${mode}-failure.json`,JSON.stringify(await page.evaluate(()=>({atlas:globalThis.lastContactAtlasIdentity??null,batch:globalThis.lastBatchFailure??null})).catch(()=>({})),null,2));await page.screenshot({path:out+`/route-${form.formIndex}-${mode}-failure.png`}).catch(()=>{});throw e;}finally{await context.close();}
+  }catch(e){const failureEvidence=await page.evaluate(()=>({atlas:globalThis.lastContactAtlasIdentity??null,batch:globalThis.lastBatchFailure??null,restoration:globalThis.lastContactRestoration??null})).catch(()=>({}));
+   for(const phase of ['before','after']){const record=failureEvidence.restoration?.[phase];if(record?.pngs){for(const[layer,b64]of Object.entries(record.pngs))await fs.writeFile(out+`/route-${form.formIndex}-${mode}-restore-${phase}-${layer}.png`,Buffer.from(b64,'base64'));delete record.pngs;}}
+   await fs.writeFile(out+`/route-${form.formIndex}-${mode}-failure.json`,JSON.stringify(failureEvidence,null,2));await page.screenshot({path:out+`/route-${form.formIndex}-${mode}-failure.png`}).catch(()=>{});throw e;}finally{await context.close();}
  }
 }}catch(e){failure=String(e);throw e;}finally{await browser.close();await save();}
 assert.equal(results.length,selection.routes.length*4);

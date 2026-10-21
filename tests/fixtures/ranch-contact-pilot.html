@@ -2,6 +2,7 @@
 <script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script>
 <script type="module">
 // ISOLATED actual production Three/Pixi adapter. Not normal-game shadow approval.
+import {assertContactRestoration} from '/tests/ranch-contact-pilot/restore-contract.mjs';
 import {measureResolvedCoverage} from '/tests/ranch-coverage-intensity.mjs';
 import {composeProductRanchGround} from '/src/championship/raising/nativeRaisingRanchRing.js';
 import * as PIXI from '/node_modules/pixi.js/dist/pixi.mjs';
@@ -297,6 +298,8 @@ globalThis.ranchAudit={
   return {fits:rectangles.every(r=>r.x>=0&&r.y>=0&&r.x+r.width<=app.screen.width&&r.y+r.height<=app.screen.height),rectangles,viewport:[app.screen.width,app.screen.height],nativeUnitPixels:scale};
  },
  async captureContactEvidence(){
+  globalThis.lastContactRestoration={stage:'ENTRY',frameIdentity:lastContactPresentation?{texture:lastContactPresentation.texture,nativeFrame:lastContactPresentation.nativeFrame}:null,expectedRenderFrameDelta:1,reason:'redrawNormal performs exactly one scene.render(deltaMS:0); direct mask/normal drawingbuffer reads do not increment scene frames'};
+  try{
   requireValue(lastContactPresentation&&actor&&motion,'CONTACT_FRAME_REQUIRED');
   const digest=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
   const pixels=image=>{const c=document.createElement('canvas');c.width=image.width;c.height=image.height;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(image,0,0);return {width:c.width,height:c.height,rgba:x.getImageData(0,0,c.width,c.height).data};};
@@ -318,11 +321,19 @@ globalThis.ranchAudit={
   requireValue(actual.width===decoded.width&&actual.height===decoded.height&&actualSha===independentSha,'LOADED_ATLAS_DECODE_IDENTITY_MISMATCH');
   const threeConfig=await scene.captureBatchMaterialConfiguration('audit');requireValue(threeConfig.imagePixelSha256===actualSha,'THREE_PIXI_ATLAS_IDENTITY_MISMATCH');
   const png=mask=>{const c=document.createElement('canvas');c.width=mask.width;c.height=mask.height;const ctx=c.getContext('2d'),out=new Uint8ClampedArray(mask.rgba);ctx.putImageData(new ImageData(out,mask.width,mask.height),0,0);return c.toDataURL('image/png').split(',')[1];};
-  const normalState=async()=>{const t=scene.captureNormalDrawingBuffer();app.render();const gl=app.renderer.gl;requireValue(gl&&gl.getParameter(gl.FRAMEBUFFER_BINDING)===null,'CONTACT_PIXI_DEFAULT_REQUIRED');const rgba=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,rgba);requireValue(gl.getError()===gl.NO_ERROR,'CONTACT_PIXI_READ_ERROR');return {three:await digest(t.rgba),pixi:await digest(rgba),sceneClock:t.sceneClock,frames:t.frames};};
-  const before=await normalState();
+  const normalState=async()=>{const t=scene.captureNormalDrawingBuffer();app.render();const gl=app.renderer.gl;requireValue(gl&&gl.getParameter(gl.FRAMEBUFFER_BINDING)===null,'CONTACT_PIXI_DEFAULT_REQUIRED');const rgba=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,rgba);requireValue(gl.getError()===gl.NO_ERROR,'CONTACT_PIXI_READ_ERROR');const {frames:observedFrames,...state}=scene.captureActorMaskState();requireValue(observedFrames===t.frames,'CONTACT_CAPTURE_FRAME_DRIFT');
+   const pose={frame:actor.nativeFramePresenter.getSnapshot(),root:[root.x,root.y,root.scale.x,root.scale.y],sprite:[actor.sprite.x,actor.sprite.y,actor.sprite.scale.x,actor.sprite.scale.y]};
+   const normalPng=(bytes,width,height)=>{const top=new Uint8Array(bytes.length);for(let y=0;y<height;y++)top.set(bytes.subarray((height-1-y)*width*4,(height-y)*width*4),y*width*4);return png({rgba:top,width,height});};
+   return {three:await digest(t.rgba),pixi:await digest(rgba),sceneClock:t.sceneClock,frames:t.frames,state,pose,pngs:{three:normalPng(t.rgba,t.width,t.height),pixi:normalPng(rgba,gl.drawingBufferWidth,gl.drawingBufferHeight)}};};
+  globalThis.lastContactRestoration.stage='BEFORE_READ';
+  const before=await normalState();globalThis.lastContactRestoration.before=before;globalThis.lastContactRestoration.stage='MASKS_AND_RESTORE';
   const masks={};try{for(const target of ['default','offscreen'])masks[target]={reference:png(scene.captureActorMask({key:'audit',target,reference:true})),actual:png(scene.captureActorMask({key:'audit',target,reference:false}))};}finally{await this.redrawNormal();}
-  const after=await normalState();requireValue(JSON.stringify(before)===JSON.stringify(after),'CONTACT_EVIDENCE_NORMAL_RESTORE_FAILED');
-  return {normalRestore:{before,after},presentation:lastContactPresentation,profile:contactProfile,ellipses:contactEllipses,source:{atlasByteAuthority:'SAME_FETCHED_BYTES_AT_RUNTIME_PINNED_URL_NOT_EXTERNAL_FULL_HASH_ALLOWLIST',runtimeSha256:runtimeHash,textureName,atlasPage:selected.page,atlasMetadataUrl:selected.dataUrl,atlasMetadataSha256:selected.metadataSha256,imageUrl:String(imageUrl),imageBytesSha256:await digest(bytes),actualDecodedRgbaSha256:actualSha,independentDecodedRgbaSha256:independentSha,width:actual.width,height:actual.height,atlasFrame:selected.frame,pixiFrame:{x:texture.frame.x,y:texture.frame.y,width:texture.frame.width,height:texture.frame.height},pixiUvs:JSON.parse(JSON.stringify(texture.uvs)),resourceClass:resource.constructor.name},masks,anatomicalVerdict:'MANUAL_PENDING',nativeZScope:'GROUNDED_REQUEST_ONLY_NO_JUMP_OR_FLOAT_CORRECTION'};
+  globalThis.lastContactRestoration.stage='AFTER_READ';const after=await normalState();
+  globalThis.lastContactRestoration.after=after;globalThis.lastContactRestoration.stage='ASSERT';
+  assertContactRestoration(before,after);globalThis.lastContactRestoration.stage='PASS';
+  const {pngs:beforePngs,...beforeSummary}=before,{pngs:afterPngs,...afterSummary}=after;
+  return {normalRestore:{before:beforeSummary,after:afterSummary},presentation:lastContactPresentation,profile:contactProfile,ellipses:contactEllipses,source:{atlasByteAuthority:'SAME_FETCHED_BYTES_AT_RUNTIME_PINNED_URL_NOT_EXTERNAL_FULL_HASH_ALLOWLIST',runtimeSha256:runtimeHash,textureName,atlasPage:selected.page,atlasMetadataUrl:selected.dataUrl,atlasMetadataSha256:selected.metadataSha256,imageUrl:String(imageUrl),imageBytesSha256:await digest(bytes),actualDecodedRgbaSha256:actualSha,independentDecodedRgbaSha256:independentSha,width:actual.width,height:actual.height,atlasFrame:selected.frame,pixiFrame:{x:texture.frame.x,y:texture.frame.y,width:texture.frame.width,height:texture.frame.height},pixiUvs:JSON.parse(JSON.stringify(texture.uvs)),resourceClass:resource.constructor.name},masks,anatomicalVerdict:'MANUAL_PENDING',nativeZScope:'GROUNDED_REQUEST_ONLY_NO_JUMP_OR_FLOAT_CORRECTION'};
+  }catch(error){globalThis.lastContactRestoration.error=String(error);throw error;}
  },
 
  async runRaisingFrameBatch(frames,authority){

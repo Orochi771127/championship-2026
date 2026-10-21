@@ -1,0 +1,20 @@
+{
+  "status": "LOCAL_COMPOSED_REVIEW_PENDING_NO_GPU",
+  "inputSourceSha256": "8a65acb62685e1c00dec88b3023301dcfba332c33b9378ebb6bb1366b9228284",
+  "composedSourceSha256": "256919ce036206dae0f5d2564a5dd7c938d54e6d91b2437b0f0a04b4b2e6340b",
+  "helperSha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb",
+  "overlays": [
+    {
+      "name": "recovery8a65",
+      "file": "frozen/recovery8a65.js",
+      "sha256": "bcd75509a48e55cc5ee3478fa4ae16e71d3c7afa574fc667212a06935504aa0e"
+    },
+    {
+      "name": "recovery8a65-plus-seam",
+      "file": "frozen/recovery8a65-plus-seam.js",
+      "sha256": "9ee56924f12c7bf023c16e05a59ad7a5e0923c1630a47fdf8a24806f264f51a6"
+    }
+  ],
+  "changes": "ONLY_SEAM_MEMBERSHIP_BLOCK_AND_IMPORT",
+  "productionCandidateUntouched": true
+}

@@ -1,0 +1,1 @@
+      gltf.scene.traverse(o=>{const a=gltf.parser.associations.get(o);if(a)o.userData.seamAuditIdentity={nodeIndex:a.nodes??null,meshIndex:a.meshes??null,primitiveIndex:a.primitives??null};});
