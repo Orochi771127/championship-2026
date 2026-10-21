@@ -7,6 +7,9 @@ on:
       - 'src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js'
       - 'tests/fixtures/ranch-normal-pairs.html'
       - 'tests/ranch-normal-pairs.mjs'
+      - 'tests/ranch-normal-contact-identity.mjs'
+      - 'src/championship/presentation/publicCharacterRoster.js'
+      - 'src/championship/presentation/vs2/huntContactShadow.js'
       - 'tests/ranch-mask-probe/inject-contact-diagnostics.mjs'
 permissions:
   contents: read
@@ -35,8 +38,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p .tmp/baseline .tmp/contact-probe .tmp/normal-pairs/${{ matrix.engine }}
+          mkdir -p .tmp/baseline/contact .tmp/contact-probe .tmp/normal-pairs/${{ matrix.engine }}
           git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/ranchThreeScene.js > .tmp/baseline/ranchThreeScene.js
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/publicCharacterRoster.js > .tmp/baseline/contact/publicCharacterRoster.js
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/vs2/huntContactShadow.js > .tmp/baseline/contact/huntContactShadow.js
           node tests/ranch-mask-probe/inject-contact-diagnostics.mjs --input src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/contact-probe/createRaisingFieldPixiPresentation.js --expected-sha 865286f7f74ddbdc9391244d623c0cc4d10f2c9031feb4821375d688c7659793
           python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/normal-pairs/${{ matrix.engine }}/server.log 2>&1 &
           server_pid=$!
@@ -48,6 +53,7 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-pairs.html > /dev/null
           BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-pairs.mjs http://127.0.0.1:8765/ .tmp/normal-pairs/${{ matrix.engine }}/cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe/createRaisingFieldPixiPresentation.js
+          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-contact-identity.mjs http://127.0.0.1:8765/ .tmp/normal-pairs/${{ matrix.engine }}/identity-cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
       - name: Preserve diagnostic captures, not release acceptance
         if: always()
         uses: actions/upload-artifact@v4

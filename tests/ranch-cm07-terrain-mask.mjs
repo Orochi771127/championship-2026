@@ -33,7 +33,17 @@ try{for(const mode of ['baseline','floor-only']){
    const data=await page.evaluate(s=>globalThis.ranchAudit.stepMotion(s),sample);
    assert.ok(Number.isFinite(data.projectionError)&&data.projectionError<=.5);assert.ok(data.diagnostics.frames>0&&!data.diagnostics.lost);assert.deepEqual(errors,[]);
    const rect=await page.locator('.cm-ranch-three-canvas').evaluate(c=>({width:c.getBoundingClientRect().width,height:c.getBoundingClientRect().height}));assert.deepEqual(rect,{width:390,height:844});
-   const actual=await page.screenshot({path:out+'/'+prefix+'-actual.png'});assert.equal(actual.readUInt32BE(16),390);assert.equal(actual.readUInt32BE(20),844);
+   let actual=await page.screenshot({path:out+'/'+prefix+'-actual.png'});assert.equal(actual.readUInt32BE(16),390);assert.equal(actual.readUInt32BE(20),844);
+   const initialActual=actual,settling={limit:4,frames:[{sha256:sha(actual),stage:'INITIAL_ORDINARY_FRAME'}],converged:false};
+   for(let attempt=1;attempt<=settling.limit;attempt++){
+    const state=await page.evaluate(()=>globalThis.ranchAudit.settleNormalFrame()),next=await page.screenshot();settling.frames.push({attempt,sha256:sha(next),state});
+    if(sha(next)===sha(actual)){actual=next;settling.converged=true;break;}
+    actual=next;
+   }
+   await fs.writeFile(out+'/'+prefix+'-settling.json',JSON.stringify(settling,null,2));
+   if(sha(initialActual)!==sha(actual))await fs.writeFile(out+'/'+prefix+'-initial-unsettled.png',initialActual);
+   if(!settling.converged){await fs.writeFile(out+'/'+prefix+'-settle-last.png',actual);throw Error('ORDINARY_FRAME_SETTLE_DID_NOT_CONVERGE_WITHIN_4_REDRAWS');}
+   await fs.writeFile(out+'/'+prefix+'-actual.png',actual);
    const redrawStates=await page.evaluate(async()=>{const before=globalThis.ranchAudit.maskState();await globalThis.ranchAudit.redrawNormal();return {before,after:globalThis.ranchAudit.maskState()};});const preprobeRedraw=await page.screenshot();
    if(sha(preprobeRedraw)!==sha(actual)){await fs.writeFile(out+'/'+prefix+'-preprobe-redraw.png',preprobeRedraw);await fs.writeFile(out+'/'+prefix+'-failure.json',JSON.stringify({stage:'BEFORE_PROBE_ZERO_DELTA_REDRAW',redrawStates,data,actualSha256:sha(actual),redrawSha256:sha(preprobeRedraw),errors},null,2));}
    assert.equal(sha(preprobeRedraw),sha(actual),'Normal zero-delta redraw must be reproducible before diagnostic');
@@ -42,7 +52,7 @@ try{for(const mode of ['baseline','floor-only']){
    for(const kind of ['reference','visible']){await fs.writeFile(out+'/'+prefix+'-'+kind+'-mask.png',Buffer.from(mask[kind+'Png'].split(',')[1],'base64'));delete mask[kind+'Png'];}
    const restored=await page.screenshot();if(sha(restored)!==sha(actual)){await fs.writeFile(out+'/'+prefix+'-restored-mismatch.png',restored);await fs.writeFile(out+'/'+prefix+'-failure.json',JSON.stringify({stage:'POST_PROBE_RESTORATION',data,controls,mask,actualSha256:sha(actual),restoredSha256:sha(restored),errors},null,2));}assert.equal(sha(restored),sha(actual),'Diagnostic must restore identical normal image at same scene clock');
    const stateHashes=Object.fromEntries(Object.entries({...controls.debugStates,...mask.debugStates}).map(([k,v])=>[k,sha(JSON.stringify(v))]));delete controls.debugStates;delete mask.debugStates;
-   results.push({id:test.id,mode,engine,stateHashes,sceneSha256:sha(mode==='baseline'?baseline:candidate),injectedSourceSha256:sha(injected),data,controls,mask,images:{actual:prefix+'-actual.png',reference:prefix+'-reference-mask.png',visible:prefix+'-visible-mask.png'},normalImageSha256:sha(actual),restoredImageSha256:sha(restored),status:'TERRAIN_MASK_MEASURED_NOT_EXPECTED_DEPTH_APPROVAL'});
+   results.push({id:test.id,mode,engine,settling,stateHashes,sceneSha256:sha(mode==='baseline'?baseline:candidate),injectedSourceSha256:sha(injected),data,controls,mask,images:{actual:prefix+'-actual.png',reference:prefix+'-reference-mask.png',visible:prefix+'-visible-mask.png'},normalImageSha256:sha(actual),restoredImageSha256:sha(restored),status:'TERRAIN_MASK_MEASURED_NOT_EXPECTED_DEPTH_APPROVAL'});
    await fs.writeFile(out+'/terrain-mask-results.json',JSON.stringify({results,releaseApproved:false,expectedCount:32,coverageAuthority:plan.authority,pending:plan.requiredReview},null,2));
   }
   assert.ok(baselineRequests>0,'Injected scene module actually served for '+mode);

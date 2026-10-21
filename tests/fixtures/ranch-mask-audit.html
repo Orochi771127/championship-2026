@@ -183,6 +183,20 @@ globalThis.ranchAudit={
   if(kind==='restore'){actor.sprite.visible=true;motion.shadow.visible=true;motion.render(0);return {};}
   throw Error('UNKNOWN_DIAGNOSTIC_PASS');
  },
+ async settleNormalFrame(){
+  requireValue(scene&&motion,'MOTION_REQUIRED');
+  const pose=()=>{const frame=actor.nativeFramePresenter.getSnapshot();return {sequenceId:frame.sequenceId,frameIndex:frame.frameIndex,cell:frame.cell,root:[root.x,root.y,root.scale.x,root.scale.y],sprite:[actor.sprite.x,actor.sprite.y,actor.sprite.scale.x,actor.sprite.scale.y]};};
+  const before=pose(),clockBefore=scene.captureActorMaskState().sceneClock;
+  // No ticker/native tick is advanced. Give compositor a frame boundary, then
+  // explicitly update actual Pixi parent/child world transforms before drawing.
+  await new Promise(requestAnimationFrame);
+  for(const item of [root,actor.sprite,motion.shadow,...props])item.toGlobal({x:0,y:0});
+  const pixi={root:root.toGlobal({x:0,y:0}),shadow:motion.shadow.toGlobal({x:0,y:0}),sprite:actor.sprite.toGlobal({x:0,y:0})};
+  await this.redrawNormal();
+  const after=pose(),clockAfter=scene.captureActorMaskState().sceneClock;
+  requireValue(JSON.stringify(before)===JSON.stringify(after)&&clockBefore===clockAfter,'SETTLE_MUST_NOT_ADVANCE_POSE_OR_SCENE_CLOCK');
+  return {pose:after,sceneClock:clockAfter,pixi,method:'RAF_BOUNDARY_EXPLICIT_PIXI_WORLD_TRANSFORMS_ZERO_DELTA_RENDER'};
+ },
  maskState(){requireValue(scene?.captureActorMaskState,'TEST_MASK_STATE_PROBE_REQUIRED');return scene.captureActorMaskState();},
  async redrawNormal(){
   requireValue(scene&&motion,'MOTION_REQUIRED');app.render();scene.render({bounds:motion.bounds,actors:new Map([['audit',{root,sprite:actor.sprite,shadow:motion.shadow}]]),food:motion.food,waste:motion.waste,deltaMS:0});app.render();return scene.getDiagnostics();

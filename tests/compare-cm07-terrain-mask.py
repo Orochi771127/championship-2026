@@ -12,6 +12,7 @@ for index,key in enumerate(sorted(r['id'] for r in rows if r['mode']=='baseline'
  b,c=[by[(mode,key)] for mode in ['baseline','floor-only']]
  for name in ['nativePoint','nativeZ','groundHeight','screenQuad','rootScreen','texture']:assert b['data'][name]==c['data'][name],(key,name,'controlled geometry drift')
  for r in [b,c]:
+  settled=r['settling'];assert settled['converged'] and len(settled['frames'])>=2 and settled['frames'][-1]['sha256']==settled['frames'][-2]['sha256']
   assert r['normalImageSha256']==r['restoredImageSha256'],(key,'normal render changed by probe')
   control=r['controls'];assert control['status']=='GPU_KNOWN_CONTROL_ASSERTIONS_PASSED' and control['clearReferencePixels']>0 and control['blockedReferencePixels']>0 and control['blockedVisiblePixels']==0 and control['clearMismatch']==control['referenceMismatch']==0
  bm,cm=b['mask'],c['mask'];assert bm['pixelBox']==cm['pixelBox'] and bm['referenceMask']==cm['referenceMask'],(key,'GPU reference drift')

@@ -287,6 +287,7 @@
     "tests/championship-raising-reaction-dispatch-cases.mjs",
     "tests/championship-raising-recovery-stars-cases.mjs",
     "tests/championship-raising-reviewed-contact-cases.mjs",
+    "tests/championship-raising-reviewed-contact-identity-cases.mjs",
     "tests/championship-raising-training-lifetime-cases.mjs",
     "tests/championship-raising-treatment-cases.mjs",
     "tests/championship-ranch-conveyor-cases.mjs",
@@ -420,6 +421,7 @@
     "tests/ranch-floor-pilot.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; explicitly runs in ranch-floor-review workflow. Bounded shader/render smoke is not full release or visual acceptance.",
     "tests/ranch-normal-audit.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; explicitly runs in ranch-floor-review workflow with fresh controlled browser storage and the real Raising presenter.",
     "tests/ranch-cm07-terrain-mask.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; runs in ranch-terrain-mask-review workflow with hash-gated test-only source injection and known depth controls. Diagnostic measurements do not approve release.",
-    "tests/ranch-normal-pairs.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; runs in ranch-normal-pairs-review workflow with hash-gated test-only presenter diagnostics, fresh controlled storage and matched source frames. Captures are not a pixel oracle or release acceptance."
+    "tests/ranch-normal-pairs.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; runs in ranch-normal-pairs-review workflow with hash-gated test-only presenter diagnostics, fresh controlled storage and matched source frames. Captures are not a pixel oracle or release acceptance.",
+    "tests/ranch-normal-contact-identity.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP server; runs in ranch-normal-pairs-review workflow with exact old/new contact-source routes and three-mode source-cell-matched captures. Helper lift checks do not claim actual airborne GPU coverage."
   }
 }

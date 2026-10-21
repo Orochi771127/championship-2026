@@ -1,3 +1,4 @@
+import {getPublicReviewedRaisingContactArt} from './vs2/huntContactShadow.js';
 import {PUBLIC_CHARACTER_DATA as catalog,PUBLIC_CHARACTER_CATALOG} from './publicCharacterCatalog.js';
 export {publicCharacterConfig,publicCharacterConfigs} from './publicCharacterCatalog.js';
 import {loadCharacterRosterCore} from './characterRosterCore.js';
@@ -27,7 +28,7 @@ export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],
  const records=catalog.characters.map(c=>({entityId:c.entityId,runtime:'../../../'+c.runtimePath}));
  const fromUrl=new Map(records.map(record=>[new URL(record.runtime,manifestUrl).href,configs.get(record.entityId)]));
  const manifest={assetId:catalog.assetId,records,speciesBindings:catalog.speciesBindings};
- const loaded=new Set();
+ const loaded=new Set(),loadedRuntimeHashes=new Map();
  const roster=await loadCharacterRosterCore({PIXI,speciesIds,sides,signal,initialSequences,manifest,manifestUrl,manifestPath:PUBLIC_CHARACTER_CATALOG,
   validateRecordRuntime:(record,entityId)=>record?.entityId===entityId&&record.runtime==='../../../'+configs.get(entityId)?.runtimePath,
   nativeSizingResolver:record=>configs.get(record.entityId)?.nativeSizing??null,
@@ -41,11 +42,19 @@ export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],
    const text=await response.text();if(await hash(text)!==expected)throw Error('PUBLIC_CHARACTER_RUNTIME_HASH');
    const runtime=JSON.parse(text);await validatePublicCharacterRender(runtime,config);
    const bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,runtimeDocument:runtime,fetchImpl,cachePrefix:'public:'+config.entityId+':'+expected+':' });
-   loaded.add(config.entityId);
+   loaded.add(config.entityId);loadedRuntimeHashes.set(config.entityId,expected);
    return {...bundle,createActor:options=>bundle.createActor({...options,
     nativeGeometry:options.nativeFramePresentation?runtime.geometry:null,
     battleGeometry:options.battleGeometry?runtime.geometry:null})};
   }});
  return Object.freeze({...roster,
+  createActor(options){
+   const actor=roster.createActor(options);
+   if(!actor||options?.presentation!=='raising'||!loaded.has(actor.entityId))return actor;
+   const config=configs.get(actor.entityId);
+   if(loadedRuntimeHashes.get(actor.entityId)!==config?.runtimeSha256)return actor;
+   const contactShadowArt=getPublicReviewedRaisingContactArt(config,options?.side??'main');
+   return contactShadowArt?Object.freeze({...actor,contactShadowArt}):actor;
+  },
   getDiagnostics:()=>({...roster.getDiagnostics(),publicCharacters:{configured:configs.size,loaded:[...loaded],privateIndexRequested:false}})});
 }

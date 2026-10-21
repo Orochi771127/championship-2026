@@ -545,4 +545,3 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   }
   return {seamAuditSnapshot,render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections.length,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost})};
 }
-
