@@ -3,6 +3,7 @@ import { GLTFLoader } from '../../../node_modules/three/examples/jsm/loaders/GLT
 import { DRACOLoader } from '../../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
 import { ranchNativeToWorld, ranchSurfaceHeight, ranchPickWalkSurface, ranchSpriteScreenQuad, ranchSpriteUvs, RANCH_ELEVATION } from './ranchThreeCoordinates.js';
 import { currentQualityTier, prefersReducedMotion } from './presentationPreferences.js';
+import { ranchSharedBoundaries } from '../cage/ranchConnections.js';
 
 const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
 const right = new THREE.Vector3(Math.SQRT1_2, 0, -Math.SQRT1_2);
@@ -43,6 +44,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   scene.add(sun,sun.target);
   const models=new Map(), instances=[], textures=new Map(), sprites=new Map();
   const modelBitmaps=new Set();
+  const lavaMaterials=new Set(), smokeNodes=[];
+  let sceneClock=0;
   const textureCap=currentQualityTier()==='saver'?512:currentQualityTier()==='high'?2048:1024;
   let disposed=false, lost=false, width=0,height=0,frames=0, lastRenderMs=0;
   const loader=new GLTFLoader();
@@ -81,11 +84,74 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       }});
     }
     const unit=field.nativePixelWorldScale, wrap=field.wrapWidthPx/unit;
-    for(const p of placements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap)) {
+
+    // Detect compatible boundaries between same-theme adjacent placements to dissolve borders
+    const taggedPlacements=placements.map((p,idx)=>({...p,ownerIndex:p.ownerIndex??idx}));
+    let sharedEdges=[];
+    try {
+      const boundaries=ranchSharedBoundaries(taggedPlacements).filter(b=>b.compatible);
+      sharedEdges=boundaries.map(b=>({
+        left:b.left,right:b.right,
+        a:ranchNativeToWorld(b.a[0],b.a[1]),
+        b:ranchNativeToWorld(b.b[0],b.b[1])
+      }));
+    } catch(_){/* fall back to distinct bounded cages */}
+
+    for(const p of taggedPlacements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap)) {
       for(const shift of [-wrap,0,wrap]) {
         const object=models.get(p.fieldId).scene.clone(true);
         const point=ranchNativeToWorld(p.x/unit+shift,p.y/unit);
         object.position.set(point.x,point.y,point.z);scene.add(object);
+
+        // Direction A: Hexagonal checkerboard layering for unplaced slots (field_cm29_01)
+        const isLid=p.structuralRole==='LID'||p.fieldId==='field_cm29_01';
+        if(isLid&&Number.isInteger(p.slotIndex)&&p.slotIndex>=0){
+          const row=p.slotIndex<40?Math.floor(p.slotIndex/20)*2+p.slotIndex%2:4+Math.floor((p.slotIndex-40)/10);
+          const col=p.slotIndex<40?Math.floor((p.slotIndex%20)/2):(p.slotIndex-40)%10;
+          if((row+col)%2!==0){
+            object.traverse(o=>{
+              if(o.isMesh&&o.material){
+                o.material=o.material.clone();
+                o.material.color=new THREE.Color(1.30,1.38,1.52);
+              }
+            });
+          }
+        }
+
+        // Dissolve outer rim joints, fascia and border lights between same-theme neighbors
+        const myEdges=sharedEdges.filter(e=>e.left===p.ownerIndex||e.right===p.ownerIndex);
+        if(myEdges.length>0){
+          object.traverse(o=>{
+            if(!o.name)return;
+            const isBorder=o.name.includes('joint')||o.name.includes('fascia')||o.name.includes('rim-light');
+            if(!isBorder)return;
+            const wx=point.x+o.position.x, wz=point.z+o.position.z;
+            for(const e of myEdges){
+              const dx=e.b.x-e.a.x, dz=e.b.z-e.a.z, lenSq=dx*dx+dz*dz;
+              const t=lenSq>0?Math.max(0,Math.min(1,((wx-e.a.x)*dx+(wz-e.a.z)*dz)/lenSq)):0;
+              const dist=Math.hypot(wx-e.a.x-t*dx, wz-e.a.z-t*dz);
+              if(dist<2.2){o.visible=false;break;}
+            }
+          });
+        }
+
+        // Collect dynamic lava materials and smoke nodes
+        object.traverse(o=>{
+          if(o.isMesh&&o.material){
+            for(const m of [].concat(o.material)){
+              if(m.emissiveMap&&(m.name?.includes('cm07')||m.name?.includes('terrain-pbr'))){
+                m.emissiveMap.wrapS=THREE.RepeatWrapping;
+                m.emissiveMap.wrapT=THREE.RepeatWrapping;
+                m.emissiveMap.needsUpdate=true;
+                lavaMaterials.add(m);
+              }
+            }
+          }
+          if(o.name&&o.name.startsWith('volcano-smoke')){
+            smokeNodes.push({node:o,baseY:o.position.y,offset:smokeNodes.length*1.8});
+          }
+        });
+
         const clips=models.get(p.fieldId).animations;
         const mixer=clips.length?new THREE.AnimationMixer(object):null;
         if(mixer)for(const clip of clips)mixer.clipAction(clip).play();
@@ -164,6 +230,21 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       object.visible=x+p.worldWidthPx*bounds.scale>-80&&x<width+80&&y+p.worldHeightPx*bounds.scale>-80&&y<height+180;
       if(mixer&&object.visible&&!prefersReducedMotion())mixer.update(Math.min(50,Math.max(0,deltaMS))/1000);
     }
+    const deltaSec=Math.min(50,Math.max(0,deltaMS))/1000;
+    sceneClock+=deltaSec;
+    if(!prefersReducedMotion()){
+      for(const m of lavaMaterials){
+        if(m.emissiveMap){
+          m.emissiveMap.offset.x=(sceneClock*0.016)%1;
+          m.emissiveMap.offset.y=(sceneClock*0.010)%1;
+        }
+        m.emissiveIntensity=1.15+0.35*Math.sin(sceneClock*2.2);
+      }
+      for(const s of smokeNodes){
+        s.node.position.y=s.baseY+0.07*Math.sin(sceneClock*1.5+s.offset);
+        s.node.rotation.y=(sceneClock*0.35+s.offset)%(Math.PI*2);
+      }
+    }
     for(const item of sprites.values())item.seen=false;
     for(const [id,entry] of actors){
       // Evolution is a screen-space presentation owned by the existing scene.
@@ -188,6 +269,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   }
   function dispose(){
     if(disposed)return;disposed=true;
+    lavaMaterials.clear();smokeNodes.length=0;
     for(const {mesh,sprite} of sprites.values()){if(!sprite.destroyed)sprite.renderable=true;mesh.geometry.dispose();}
     for(const {texture,material} of textures.values()){texture.dispose();material.dispose();}
     for(const {object,mixer} of instances)if(mixer){mixer.stopAllAction();mixer.uncacheRoot(object);}
