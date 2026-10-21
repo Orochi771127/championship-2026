@@ -9,6 +9,7 @@ import {applyNativeCharacterCellGeometry} from '/src/championship/presentation/n
 import {getRaisingNativeActorGeometry,raisingOriginalBodyScale,raisingOriginalBodyOffset,getRaisingEggContactShadow} from '/src/championship/presentation/intRh2/raisingNativeSizing.js';
 import {createProductGridArtPlan} from '/src/championship/presentation/raisingRanchArtPlan.js';
 import {selectRanchCageArt} from '/src/championship/presentation/ranchCageArtSelection.js';
+import {validateRuntimeMapArtBundle} from '/src/championship/presentation/runtimeMapArtBundle.js';
 import {ranchThreeField} from '/src/championship/presentation/ranchThreeCoordinates.js';
 import {ranchSpriteScreenQuad} from '/src/championship/presentation/ranchThreeCoordinates.js';
 import {productPlacementCells,validateProductRanch} from '/src/championship/cage/productRanchGrid.js';
@@ -21,7 +22,8 @@ globalThis.ranchAudit={
   const response=await fetch('/assets/production/public-runtime/cage-final.map.v1.json');requireValue(response.ok,'CAGE_PLAN_MANIFEST_REQUIRED');
   const bytes=await response.arrayBuffer();const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
   requireValue(hash==='bdd39492c2566a7bb00181d44eb3a41af23c925c2d376735edf25c7346fc37c9','CAGE_MANIFEST_HASH_DRIFT');
-  const manifest=selectRanchCageArt(JSON.parse(new TextDecoder().decode(bytes)));
+  // Match normal app: sports selection precedes production validation/normalization.
+  const manifest=validateRuntimeMapArtBundle(selectRanchCageArt(JSON.parse(new TextDecoder().decode(bytes))));
   const wait=matrix.fields.find(f=>f.cageDefinitionIndex===35);requireValue(wait,'WAITING_ROOM_BINDING_REQUIRED');
   const waiting={moduleId:wait.moduleId,slotIndex:0,instanceId:'audit:waiting'};
   const occupied=new Set(productPlacementCells(waiting));const result={};
