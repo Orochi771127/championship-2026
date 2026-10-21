@@ -1,3 +1,4 @@
+import {createCareImageTextureScope} from './careImageTextureScope.js';
 import { getReviewedRaisingContactShadow } from './raisingContactShadow.js';
 import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
 import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
@@ -124,6 +125,7 @@ export async function mountRaisingFieldPixiPresentation({
   signal?.addEventListener('abort', abort, { once: true });
   if (signal?.aborted) abort();
   const PIXI = createPixiAssetScope(stage.PIXI, globalThis.location?.href, { signal: lifetime.signal });
+  const careImageTextures=createCareImageTextureScope(stage.PIXI,{signal:lifetime.signal});
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
     || typeof fieldArt.dispose !== "function" || typeof fieldArt.getDiagnostics !== "function")) {
     throw new TypeError("The Raising field art binding must be a loaded runtime map-art field");
@@ -194,7 +196,7 @@ export async function mountRaisingFieldPixiPresentation({
     const local=isOriginalRuntimeLocation();
     if(!local)return art;
     await Promise.all((local?publicCare.cells:[]).map(async cell=>art.set(`${cell.role}-${cell.pose}`,{
-      texture:await PIXI.Assets.load(new URL('../../../../'+cell.src,import.meta.url).href),
+      texture:await careImageTextures.load(new URL('../../../../'+cell.src,import.meta.url).href),
       width:cell.nativeWidth,height:cell.nativeHeight,
       anchorX:cell.nativeAnchorX/cell.nativeWidth,anchorY:cell.nativeAnchorY/cell.nativeHeight})));
     const authored=new URL('../../../../assets/production/raising-care-r1/',import.meta.url);
