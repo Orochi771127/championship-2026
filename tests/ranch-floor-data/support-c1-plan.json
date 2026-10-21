@@ -1,0 +1,3425 @@
+{
+  "schema": 1,
+  "baselineRevision": "4f64421314f0d0f5d0c04b916d30e821587c1a6a",
+  "supportMetadataSha256": "ea99645776fb657de4d91baf9853583af51f677fad39c3fda73ba5b37fb065d5",
+  "referenceSceneSha256": "184d6c5322242bb45d2346d5a536c8844157d59723504bb48e99010abe79b1d7",
+  "candidateSceneSha256": "1639fed915ac80207177e1339b0f8725f832f446c1d61ec6d7c467c98e9eec40",
+  "models": [
+    {
+      "fieldId": "field_cm02_01",
+      "sha256": "801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e"
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "sha256": "b5033322edb9e7905ff6d604b44ecc239b8f6cd89f817d51058c1835cc6db0e4"
+    },
+    {
+      "fieldId": "field_cm19_01",
+      "sha256": "7192630e17f179fbf729919aff920ed20d64bc172581afcdddbcf5ba89e30dac"
+    },
+    {
+      "fieldId": "field_cm21_01",
+      "sha256": "4f4163c0c0a552b211df77bdeae30e96b708ca12431e50892ae2ae90608d891a"
+    },
+    {
+      "fieldId": "field_cm35_01",
+      "sha256": "61ff3a730a23677b3da58c71734535ce3e9028dda4830cf7e5d997411e1b14a7"
+    },
+    {
+      "fieldId": "field_cm39_01",
+      "sha256": "272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0"
+    },
+    {
+      "fieldId": "field_cm07_01",
+      "sha256": "de0117594f79f4573e1d2537c033bac5fa2752deb2f0aa7abba26d3c7f264260"
+    }
+  ],
+  "count": 72,
+  "cases": [
+    {
+      "id": "c1-boundary-field_cm02_01-admitted-inside-nearest-edge-actor-z1",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        140,
+        44
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm02_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm02_01",
+        "pointLocalNative": [
+          140,
+          44
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 0.21194770916746414,
+        "nearestBoundaryLocalNative": [
+          140.07601949476015,
+          43.802154434374316
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm02_01-admitted-inside-nearest-edge-actor-z0.7",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        140,
+        44
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm02_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm02_01",
+        "pointLocalNative": [
+          140,
+          44
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 0.21194770916746414,
+        "nearestBoundaryLocalNative": [
+          140.07601949476015,
+          43.802154434374316
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm02_01-admitted-inside-nearest-edge-food-z1",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        140,
+        44
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm02_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm02_01",
+        "pointLocalNative": [
+          140,
+          44
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 0.21194770916746414,
+        "nearestBoundaryLocalNative": [
+          140.07601949476015,
+          43.802154434374316
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm02_01-admitted-inside-nearest-edge-food-z0.7",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        140,
+        44
+      ],
+      "subjectKind": "food",
+      "zoom": 0.7,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm02_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm02_01",
+        "pointLocalNative": [
+          140,
+          44
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 0.21194770916746414,
+        "nearestBoundaryLocalNative": [
+          140.07601949476015,
+          43.802154434374316
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm02_01-admitted-outside-nearest-edge-actor-z1",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        116,
+        76
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm02_01-admitted-outside-nearest-edge",
+        "fieldId": "field_cm02_01",
+        "pointLocalNative": [
+          116,
+          76
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": false,
+        "distanceNativeToPhysicalBoundary": 0.009325262883203934,
+        "nearestBoundaryLocalNative": [
+          116.00001377470275,
+          75.99067474729037
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm02_01-admitted-outside-nearest-edge-actor-z0.7",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        116,
+        76
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm02_01-admitted-outside-nearest-edge",
+        "fieldId": "field_cm02_01",
+        "pointLocalNative": [
+          116,
+          76
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": false,
+        "distanceNativeToPhysicalBoundary": 0.009325262883203934,
+        "nearestBoundaryLocalNative": [
+          116.00001377470275,
+          75.99067474729037
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm02_01-admitted-outside-nearest-edge-food-z1",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        116,
+        76
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm02_01-admitted-outside-nearest-edge",
+        "fieldId": "field_cm02_01",
+        "pointLocalNative": [
+          116,
+          76
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": false,
+        "distanceNativeToPhysicalBoundary": 0.009325262883203934,
+        "nearestBoundaryLocalNative": [
+          116.00001377470275,
+          75.99067474729037
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm02_01-admitted-outside-nearest-edge-food-z0.7",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        116,
+        76
+      ],
+      "subjectKind": "food",
+      "zoom": 0.7,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm02_01-admitted-outside-nearest-edge",
+        "fieldId": "field_cm02_01",
+        "pointLocalNative": [
+          116,
+          76
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": false,
+        "distanceNativeToPhysicalBoundary": 0.009325262883203934,
+        "nearestBoundaryLocalNative": [
+          116.00001377470275,
+          75.99067474729037
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm09_01-admitted-inside-nearest-edge-actor-z1",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        228,
+        108
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm09_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm09_01",
+        "pointLocalNative": [
+          228,
+          108
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 1.78350892610267,
+        "nearestBoundaryLocalNative": [
+          228.79774941008336,
+          106.40485111409639
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm09_01-admitted-inside-nearest-edge-actor-z0.7",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        228,
+        108
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm09_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm09_01",
+        "pointLocalNative": [
+          228,
+          108
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 1.78350892610267,
+        "nearestBoundaryLocalNative": [
+          228.79774941008336,
+          106.40485111409639
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm09_01-admitted-inside-nearest-edge-food-z1",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        228,
+        108
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm09_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm09_01",
+        "pointLocalNative": [
+          228,
+          108
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 1.78350892610267,
+        "nearestBoundaryLocalNative": [
+          228.79774941008336,
+          106.40485111409639
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm09_01-admitted-inside-nearest-edge-food-z0.7",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        228,
+        108
+      ],
+      "subjectKind": "food",
+      "zoom": 0.7,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm09_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm09_01",
+        "pointLocalNative": [
+          228,
+          108
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 1.78350892610267,
+        "nearestBoundaryLocalNative": [
+          228.79774941008336,
+          106.40485111409639
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm19_01-admitted-inside-nearest-edge-actor-z1",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        188,
+        28
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm19_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm19_01",
+        "pointLocalNative": [
+          188,
+          28
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 2.1656090718625767,
+        "nearestBoundaryLocalNative": [
+          188.96945022935628,
+          26.06350086368867
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm19_01-admitted-inside-nearest-edge-actor-z0.7",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        188,
+        28
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm19_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm19_01",
+        "pointLocalNative": [
+          188,
+          28
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 2.1656090718625767,
+        "nearestBoundaryLocalNative": [
+          188.96945022935628,
+          26.06350086368867
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm19_01-admitted-inside-nearest-edge-food-z1",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        188,
+        28
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm19_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm19_01",
+        "pointLocalNative": [
+          188,
+          28
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 2.1656090718625767,
+        "nearestBoundaryLocalNative": [
+          188.96945022935628,
+          26.06350086368867
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm19_01-admitted-inside-nearest-edge-food-z0.7",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        188,
+        28
+      ],
+      "subjectKind": "food",
+      "zoom": 0.7,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm19_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm19_01",
+        "pointLocalNative": [
+          188,
+          28
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 2.1656090718625767,
+        "nearestBoundaryLocalNative": [
+          188.96945022935628,
+          26.06350086368867
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm19_01-admitted-outside-nearest-edge-actor-z1",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        300,
+        76
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm19_01-admitted-outside-nearest-edge",
+        "fieldId": "field_cm19_01",
+        "pointLocalNative": [
+          300,
+          76
+        ],
+        "terrainType": 0,
+        "navigationComponent": 3,
+        "overlayInside": false,
+        "distanceNativeToPhysicalBoundary": 6.259117414391599,
+        "nearestBoundaryLocalNative": [
+          294.4019715200105,
+          73.20024502065507
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm19_01-admitted-outside-nearest-edge-actor-z0.7",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        300,
+        76
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm19_01-admitted-outside-nearest-edge",
+        "fieldId": "field_cm19_01",
+        "pointLocalNative": [
+          300,
+          76
+        ],
+        "terrainType": 0,
+        "navigationComponent": 3,
+        "overlayInside": false,
+        "distanceNativeToPhysicalBoundary": 6.259117414391599,
+        "nearestBoundaryLocalNative": [
+          294.4019715200105,
+          73.20024502065507
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm19_01-admitted-outside-nearest-edge-food-z1",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        300,
+        76
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm19_01-admitted-outside-nearest-edge",
+        "fieldId": "field_cm19_01",
+        "pointLocalNative": [
+          300,
+          76
+        ],
+        "terrainType": 0,
+        "navigationComponent": 3,
+        "overlayInside": false,
+        "distanceNativeToPhysicalBoundary": 6.259117414391599,
+        "nearestBoundaryLocalNative": [
+          294.4019715200105,
+          73.20024502065507
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm19_01-admitted-outside-nearest-edge-food-z0.7",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        300,
+        76
+      ],
+      "subjectKind": "food",
+      "zoom": 0.7,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm19_01-admitted-outside-nearest-edge",
+        "fieldId": "field_cm19_01",
+        "pointLocalNative": [
+          300,
+          76
+        ],
+        "terrainType": 0,
+        "navigationComponent": 3,
+        "overlayInside": false,
+        "distanceNativeToPhysicalBoundary": 6.259117414391599,
+        "nearestBoundaryLocalNative": [
+          294.4019715200105,
+          73.20024502065507
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm21_01-admitted-inside-nearest-edge-actor-z1",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        180,
+        108
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm21_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm21_01",
+        "pointLocalNative": [
+          180,
+          108
+        ],
+        "terrainType": 3,
+        "navigationComponent": 2,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 1.7833085516321212,
+        "nearestBoundaryLocalNative": [
+          180.79779493830367,
+          106.40509792565773
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm21_01-admitted-inside-nearest-edge-actor-z0.7",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        180,
+        108
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm21_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm21_01",
+        "pointLocalNative": [
+          180,
+          108
+        ],
+        "terrainType": 3,
+        "navigationComponent": 2,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 1.7833085516321212,
+        "nearestBoundaryLocalNative": [
+          180.79779493830367,
+          106.40509792565773
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm21_01-admitted-inside-nearest-edge-food-z1",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        180,
+        108
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm21_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm21_01",
+        "pointLocalNative": [
+          180,
+          108
+        ],
+        "terrainType": 3,
+        "navigationComponent": 2,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 1.7833085516321212,
+        "nearestBoundaryLocalNative": [
+          180.79779493830367,
+          106.40509792565773
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm21_01-admitted-inside-nearest-edge-food-z0.7",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        180,
+        108
+      ],
+      "subjectKind": "food",
+      "zoom": 0.7,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm21_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm21_01",
+        "pointLocalNative": [
+          180,
+          108
+        ],
+        "terrainType": 3,
+        "navigationComponent": 2,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 1.7833085516321212,
+        "nearestBoundaryLocalNative": [
+          180.79779493830367,
+          106.40509792565773
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm35_01-admitted-inside-nearest-edge-actor-z1",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        12,
+        44
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm35_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm35_01",
+        "pointLocalNative": [
+          12,
+          44
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 11.199356372842159,
+        "nearestBoundaryLocalNative": [
+          0.8006436271578514,
+          43.999999520613265
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm35_01-admitted-inside-nearest-edge-actor-z0.7",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        12,
+        44
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm35_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm35_01",
+        "pointLocalNative": [
+          12,
+          44
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 11.199356372842159,
+        "nearestBoundaryLocalNative": [
+          0.8006436271578514,
+          43.999999520613265
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm35_01-admitted-inside-nearest-edge-food-z1",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        12,
+        44
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm35_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm35_01",
+        "pointLocalNative": [
+          12,
+          44
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 11.199356372842159,
+        "nearestBoundaryLocalNative": [
+          0.8006436271578514,
+          43.999999520613265
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm35_01-admitted-inside-nearest-edge-food-z0.7",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        12,
+        44
+      ],
+      "subjectKind": "food",
+      "zoom": 0.7,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm35_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm35_01",
+        "pointLocalNative": [
+          12,
+          44
+        ],
+        "terrainType": 0,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 11.199356372842159,
+        "nearestBoundaryLocalNative": [
+          0.8006436271578514,
+          43.999999520613265
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm39_01-admitted-inside-nearest-edge-actor-z1",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        68,
+        92
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm39_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm39_01",
+        "pointLocalNative": [
+          68,
+          92
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 8.147826392011757,
+        "nearestBoundaryLocalNative": [
+          71.64425689650044,
+          99.28741837598696
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm39_01-admitted-inside-nearest-edge-actor-z0.7",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        68,
+        92
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm39_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm39_01",
+        "pointLocalNative": [
+          68,
+          92
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 8.147826392011757,
+        "nearestBoundaryLocalNative": [
+          71.64425689650044,
+          99.28741837598696
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm39_01-admitted-inside-nearest-edge-food-z1",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        68,
+        92
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm39_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm39_01",
+        "pointLocalNative": [
+          68,
+          92
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 8.147826392011757,
+        "nearestBoundaryLocalNative": [
+          71.64425689650044,
+          99.28741837598696
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-boundary-field_cm39_01-admitted-inside-nearest-edge-food-z0.7",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        68,
+        92
+      ],
+      "subjectKind": "food",
+      "zoom": 0.7,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "ADMITTED_PHYSICAL_BOUNDARY_STRADDLE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION",
+      "boundaryEvidence": {
+        "id": "field_cm39_01-admitted-inside-nearest-edge",
+        "fieldId": "field_cm39_01",
+        "pointLocalNative": [
+          68,
+          92
+        ],
+        "terrainType": 2,
+        "navigationComponent": 1,
+        "overlayInside": true,
+        "distanceNativeToPhysicalBoundary": 8.147826392011757,
+        "nearestBoundaryLocalNative": [
+          71.64425689650044,
+          99.28741837598696
+        ],
+        "actualAppMoveCalled": false,
+        "scope": "ACTUAL_PRODUCTION_XY_GATE_TILE_CENTER; NOT_PROP_CLEARANCE_OR_VISUAL_ACCEPTANCE"
+      }
+    },
+    {
+      "id": "c1-denied-field_cm02_01-missing",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        112.9923976398997,
+        49.65467032335772
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "missing",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm02_01-wrong-index",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        112.9923976398997,
+        49.65467032335772
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "wrong-index",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm02_01-8",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        112.9923976398997,
+        49.65467032335772
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 8,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm02_01-32",
+      "fieldId": "field_cm02_01",
+      "pointLocalNative": [
+        112.9923976398997,
+        49.65467032335772
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 32,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm09_01-missing",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        192.16087701467492,
+        147.11232849860983
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "missing",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm09_01-wrong-index",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        192.16087701467492,
+        147.11232849860983
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "wrong-index",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm09_01-8",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        192.16087701467492,
+        147.11232849860983
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 8,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm09_01-32",
+      "fieldId": "field_cm09_01",
+      "pointLocalNative": [
+        192.16087701467492,
+        147.11232849860983
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 32,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm19_01-missing",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        194,
+        44
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "missing",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm19_01-wrong-index",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        194,
+        44
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "wrong-index",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm19_01-8",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        194,
+        44
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 8,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm19_01-32",
+      "fieldId": "field_cm19_01",
+      "pointLocalNative": [
+        194,
+        44
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 32,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm21_01-missing",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        46,
+        158
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "missing",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm21_01-wrong-index",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        46,
+        158
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "wrong-index",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm21_01-8",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        46,
+        158
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 8,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm21_01-32",
+      "fieldId": "field_cm21_01",
+      "pointLocalNative": [
+        46,
+        158
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 32,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm35_01-missing",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "missing",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm35_01-wrong-index",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "wrong-index",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm35_01-8",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 8,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm35_01-32",
+      "fieldId": "field_cm35_01",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 32,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm39_01-missing",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "missing",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-denied-field_cm39_01-wrong-index",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "subjectKind": "food",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "EXACT_FLOOR_REFERENCE_OWNER_DENIAL",
+      "ownerMode": "wrong-index",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm39_01-8",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 8,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-lift-field_cm39_01-32",
+      "fieldId": "field_cm39_01",
+      "pointLocalNative": [
+        48.000001131258536,
+        59.475478258802376
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "nativeZ": 32,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SYNTHETIC_NATIVE_Z_NOT_AUTHORED_AIRBORNE",
+      "ownerMode": "verified",
+      "navigationPolicy": "REQUIRE_ADMISSION"
+    },
+    {
+      "id": "c1-foreground-m504_gigaseadramon-s6-c8-near-z1",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        145.01851760230966,
+        34.62525681614585
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m504_gigaseadramon-s6-c8-far-z1",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        130.90156601935027,
+        23.353751468215325
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m504_gigaseadramon-s6-c8-near-z0.7",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        145.01851760230966,
+        34.62525681614585
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m504_gigaseadramon-s6-c8-far-z0.7",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        130.90156601935027,
+        23.353751468215325
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m504_gigaseadramon@40722c3d",
+        "entityId": "m504_gigaseadramon",
+        "speciesId": "species-190",
+        "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+        "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+        "idle": [
+          0,
+          0,
+          "m504_gigaseadramon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m504_gigaseadramon/main/cell_053"
+        ],
+        "frameCount": 73
+      },
+      "sequenceId": 6,
+      "frameIndex": 0,
+      "texture": "m504_gigaseadramon/main/cell_008",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m518_blackwargreymon-s8-c14-near-z1",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        145.01851760230966,
+        34.62525681614585
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m518_blackwargreymon@ed1bf7bc",
+        "entityId": "m518_blackwargreymon",
+        "speciesId": "species-204",
+        "runtimePath": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+        "runtimeSha256": "2bf62f68781056a52738401f681f29c8489484ed21a037017497df8d52b08589",
+        "idle": [
+          0,
+          0,
+          "m518_blackwargreymon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m518_blackwargreymon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 8,
+      "frameIndex": 1,
+      "texture": "m518_blackwargreymon/main/cell_014",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m518_blackwargreymon-s8-c14-far-z1",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        130.90156601935027,
+        23.353751468215325
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m518_blackwargreymon@ed1bf7bc",
+        "entityId": "m518_blackwargreymon",
+        "speciesId": "species-204",
+        "runtimePath": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+        "runtimeSha256": "2bf62f68781056a52738401f681f29c8489484ed21a037017497df8d52b08589",
+        "idle": [
+          0,
+          0,
+          "m518_blackwargreymon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m518_blackwargreymon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 8,
+      "frameIndex": 1,
+      "texture": "m518_blackwargreymon/main/cell_014",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m518_blackwargreymon-s8-c14-near-z0.7",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        145.01851760230966,
+        34.62525681614585
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m518_blackwargreymon@ed1bf7bc",
+        "entityId": "m518_blackwargreymon",
+        "speciesId": "species-204",
+        "runtimePath": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+        "runtimeSha256": "2bf62f68781056a52738401f681f29c8489484ed21a037017497df8d52b08589",
+        "idle": [
+          0,
+          0,
+          "m518_blackwargreymon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m518_blackwargreymon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 8,
+      "frameIndex": 1,
+      "texture": "m518_blackwargreymon/main/cell_014",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m518_blackwargreymon-s8-c14-far-z0.7",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        130.90156601935027,
+        23.353751468215325
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m518_blackwargreymon@ed1bf7bc",
+        "entityId": "m518_blackwargreymon",
+        "speciesId": "species-204",
+        "runtimePath": "assets/production/characters/accepted-20261010/m518_blackwargreymon-ultimate-raw-r01/ranch-streaming-v1/e547200c8539c1d4/runtime.render.json",
+        "runtimeSha256": "2bf62f68781056a52738401f681f29c8489484ed21a037017497df8d52b08589",
+        "idle": [
+          0,
+          0,
+          "m518_blackwargreymon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m518_blackwargreymon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 8,
+      "frameIndex": 1,
+      "texture": "m518_blackwargreymon/main/cell_014",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m402_anomalocarimon-s13-c23-near-z1",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        145.01851760230966,
+        34.62525681614585
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 13,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_023",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m402_anomalocarimon-s13-c23-far-z1",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        130.90156601935027,
+        23.353751468215325
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 13,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_023",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m402_anomalocarimon-s13-c23-near-z0.7",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        145.01851760230966,
+        34.62525681614585
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 13,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_023",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m402_anomalocarimon-s13-c23-far-z0.7",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        130.90156601935027,
+        23.353751468215325
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 13,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_023",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m402_anomalocarimon-s15-c26-near-z1",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        145.01851760230966,
+        34.62525681614585
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 15,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_026",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m402_anomalocarimon-s15-c26-far-z1",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        130.90156601935027,
+        23.353751468215325
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 15,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_026",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m402_anomalocarimon-s15-c26-near-z0.7",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        145.01851760230966,
+        34.62525681614585
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 15,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_026",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    },
+    {
+      "id": "c1-foreground-m402_anomalocarimon-s15-c26-far-z0.7",
+      "fieldId": "field_cm07_01",
+      "pointLocalNative": [
+        130.90156601935027,
+        23.353751468215325
+      ],
+      "subjectKind": "actor",
+      "zoom": 0.7,
+      "character": {
+        "id": "m402_anomalocarimon@4221a5d8",
+        "entityId": "m402_anomalocarimon",
+        "speciesId": "species-137",
+        "runtimePath": "assets/production/characters/accepted-20261010/m402_anomalocarimon-perfect-raw-r01/ranch-streaming-v1/115712993d3929ee/runtime.render.json",
+        "runtimeSha256": "5dd717d3c80882f422107ea8e2c4005a52885e5dac0c3b7ab66e666cb67ad26d",
+        "idle": [
+          0,
+          0,
+          "m402_anomalocarimon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m402_anomalocarimon/main/cell_061"
+        ],
+        "frameCount": 81
+      },
+      "sequenceId": 15,
+      "frameIndex": 0,
+      "texture": "m402_anomalocarimon/main/cell_026",
+      "nativeZ": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lane": "SCRIPTED_CM07_EXISTING_FLOOR_FALLBACK_INVARIANCE_NOT_NAVIGATION_ORIGINAL4F_MOTION_PASS",
+      "ownerMode": "missing",
+      "navigationPolicy": "SCRIPTED_NO_ADMISSION_CLAIM"
+    }
+  ],
+  "scope": "C1 exact support-only incremental comparison; raw4f foreground motion remains separate. Boundary/straddle coverage not everypoint, script lift not authored airborne. Other-owner adjacent support not implemented; explicit gap required separately before all-map claim."
+}

@@ -1,0 +1,582 @@
+{
+  "method": "Exact composeProductRanchGround function body from pinned4f evaluated with actual imported production grid/catalog/connectRanchGround and unmodified decoded source catalogs. Normal review hook null. No app actor mutation.",
+  "supportSheetAuthority": "UNKNOWN: navigation components are XY connectivity only; no vertical level or triangle owner map",
+  "fields": [
+    {
+      "fieldId": "field_cm02_01",
+      "sha256": "801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e",
+      "definitionIndex": 1,
+      "moduleId": "championship:2026:cage:1",
+      "placement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "authority-target"
+      },
+      "originNative": [
+        192,
+        -24,
+        0
+      ],
+      "activeGroundSource": "ranch-three-ground.r1.json (precedence before review/sports/original)",
+      "activeGroundHasGLBHashOrTriangleLevelMapping": false,
+      "probes": [
+        {
+          "id": "field_cm02_01-low-overlay-interior-01",
+          "kind": "interior",
+          "pointLocalNative": [
+            112.9923976398997,
+            49.65467032335772
+          ],
+          "pointWorldNative": [
+            304.9923976398997,
+            25.65467032335772
+          ],
+          "terrainType": 0,
+          "clearance": 3,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 1,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm02_01-low-overlay-boundary-minus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            108.56753401541437,
+            40.55050313620622
+          ],
+          "pointWorldNative": [
+            300.56753401541437,
+            16.550503136206217
+          ],
+          "terrainType": 0,
+          "clearance": 2,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 1,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm02_01-low-overlay-boundary-center",
+          "kind": "boundary",
+          "pointLocalNative": [
+            108.56818049078366,
+            40.050503554136796
+          ],
+          "pointWorldNative": [
+            300.5681804907837,
+            16.050503554136796
+          ],
+          "terrainType": 0,
+          "clearance": 2,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 1,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm02_01-low-overlay-boundary-plus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            108.56882696615295,
+            39.550503972067375
+          ],
+          "pointWorldNative": [
+            300.568826966153,
+            15.550503972067375
+          ],
+          "terrainType": 0,
+          "clearance": 2,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 1,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "sha256": "b5033322edb9e7905ff6d604b44ecc239b8f6cd89f817d51058c1835cc6db0e4",
+      "definitionIndex": 8,
+      "moduleId": "championship:2026:cage:8",
+      "placement": {
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "instanceId": "authority-target"
+      },
+      "originNative": [
+        192,
+        -24,
+        0
+      ],
+      "activeGroundSource": "ranch-three-ground.r1.json (precedence before review/sports/original)",
+      "activeGroundHasGLBHashOrTriangleLevelMapping": false,
+      "probes": [
+        {
+          "id": "field_cm09_01-low-overlay-interior-01",
+          "kind": "interior",
+          "pointLocalNative": [
+            192.16087701467492,
+            147.11232849860983
+          ],
+          "pointWorldNative": [
+            384.16087701467495,
+            123.11232849860983
+          ],
+          "terrainType": 2,
+          "clearance": 4,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 1,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm09_01-low-overlay-boundary-minus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            49.29703046495487,
+            143.55750462866763
+          ],
+          "pointWorldNative": [
+            241.29703046495487,
+            119.55750462866763
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm09_01-low-overlay-boundary-center",
+          "kind": "boundary",
+          "pointLocalNative": [
+            48.79703047568438,
+            143.55740104532495
+          ],
+          "pointWorldNative": [
+            240.79703047568438,
+            119.55740104532495
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm09_01-low-overlay-boundary-plus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            48.29703048641389,
+            143.55729746198227
+          ],
+          "pointWorldNative": [
+            240.2970304864139,
+            119.55729746198227
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm19_01",
+      "sha256": "7192630e17f179fbf729919aff920ed20d64bc172581afcdddbcf5ba89e30dac",
+      "definitionIndex": 18,
+      "moduleId": "championship:2026:cage:18",
+      "placement": {
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "instanceId": "authority-target"
+      },
+      "originNative": [
+        192,
+        -24,
+        0
+      ],
+      "activeGroundSource": "ranch-three-ground.r1.json (precedence before review/sports/original)",
+      "activeGroundHasGLBHashOrTriangleLevelMapping": false,
+      "probes": [
+        {
+          "id": "field_cm19_01-navigation-admitted-interior-v2",
+          "kind": "interior",
+          "pointLocalNative": [
+            194,
+            44
+          ],
+          "pointWorldNative": [
+            386,
+            20
+          ],
+          "terrainType": 2,
+          "clearance": 2,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 1,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm19_01-low-overlay-boundary-minus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            230.98781756484502,
+            21.000827462278554
+          ],
+          "pointWorldNative": [
+            422.98781756484505,
+            -2.9991725377214458
+          ],
+          "terrainType": 2,
+          "clearance": 1,
+          "ownerInstance": null,
+          "navigationComponent": 1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm19_01-low-overlay-boundary-center",
+          "kind": "boundary",
+          "pointLocalNative": [
+            231.0024772315752,
+            20.50104241431157
+          ],
+          "pointWorldNative": [
+            423.0024772315752,
+            -3.49895758568843
+          ],
+          "terrainType": 2,
+          "clearance": 1,
+          "ownerInstance": null,
+          "navigationComponent": 1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm19_01-low-overlay-boundary-plus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            231.01713689830538,
+            20.001257366344586
+          ],
+          "pointWorldNative": [
+            423.01713689830535,
+            -3.9987426336554144
+          ],
+          "terrainType": 2,
+          "clearance": 1,
+          "ownerInstance": null,
+          "navigationComponent": 1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm21_01",
+      "sha256": "4f4163c0c0a552b211df77bdeae30e96b708ca12431e50892ae2ae90608d891a",
+      "definitionIndex": 20,
+      "moduleId": "championship:2026:cage:20",
+      "placement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "authority-target"
+      },
+      "originNative": [
+        192,
+        64,
+        0
+      ],
+      "activeGroundSource": "ranch-three-ground.r1.json (precedence before review/sports/original)",
+      "activeGroundHasGLBHashOrTriangleLevelMapping": false,
+      "probes": [
+        {
+          "id": "field_cm21_01-navigation-admitted-interior-v2",
+          "kind": "interior",
+          "pointLocalNative": [
+            46,
+            158
+          ],
+          "pointWorldNative": [
+            238,
+            222
+          ],
+          "terrainType": 0,
+          "clearance": 3,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 2,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm21_01-low-overlay-boundary-minus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            49.297041254548084,
+            56.44251350234022
+          ],
+          "pointWorldNative": [
+            241.29704125454808,
+            120.44251350234022
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm21_01-low-overlay-boundary-center",
+          "kind": "boundary",
+          "pointLocalNative": [
+            48.7970412652776,
+            56.44261708571045
+          ],
+          "pointWorldNative": [
+            240.79704126527758,
+            120.44261708571045
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm21_01-low-overlay-boundary-plus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            48.297041276007114,
+            56.442720669080686
+          ],
+          "pointWorldNative": [
+            240.29704127600712,
+            120.44272066908069
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm35_01",
+      "sha256": "61ff3a730a23677b3da58c71734535ce3e9028dda4830cf7e5d997411e1b14a7",
+      "definitionIndex": 31,
+      "moduleId": "championship:2026:cage:31",
+      "placement": {
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "instanceId": "authority-target"
+      },
+      "originNative": [
+        192,
+        -24,
+        0
+      ],
+      "activeGroundSource": "ranch-three-ground.r1.json (precedence before review/sports/original)",
+      "activeGroundHasGLBHashOrTriangleLevelMapping": false,
+      "probes": [
+        {
+          "id": "field_cm35_01-low-overlay-interior-01",
+          "kind": "interior",
+          "pointLocalNative": [
+            48.000001131258536,
+            59.475478258802376
+          ],
+          "pointWorldNative": [
+            240.00000113125853,
+            35.475478258802376
+          ],
+          "terrainType": 0,
+          "clearance": 1,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 1,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm35_01-low-overlay-boundary-minus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            1.30064311349938,
+            56.00000675604385
+          ],
+          "pointWorldNative": [
+            193.30064311349938,
+            32.00000675604385
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm35_01-low-overlay-boundary-center",
+          "kind": "boundary",
+          "pointLocalNative": [
+            0.8006431134993806,
+            56.00000673464143
+          ],
+          "pointWorldNative": [
+            192.80064311349938,
+            32.00000673464143
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm35_01-low-overlay-boundary-plus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            0.300643113499381,
+            56.00000671323901
+          ],
+          "pointWorldNative": [
+            192.30064311349938,
+            32.00000671323901
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": null,
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm39_01",
+      "sha256": "272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0",
+      "definitionIndex": 33,
+      "moduleId": "championship:2026:cage:33",
+      "placement": {
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "instanceId": "authority-target"
+      },
+      "originNative": [
+        192,
+        -24,
+        0
+      ],
+      "activeGroundSource": "ranch-three-ground.r1.json (precedence before review/sports/original)",
+      "activeGroundHasGLBHashOrTriangleLevelMapping": false,
+      "probes": [
+        {
+          "id": "field_cm39_01-low-overlay-interior-01",
+          "kind": "interior",
+          "pointLocalNative": [
+            48.000001131258536,
+            59.475478258802376
+          ],
+          "pointWorldNative": [
+            240.00000113125853,
+            35.475478258802376
+          ],
+          "terrainType": 2,
+          "clearance": 3,
+          "ownerInstance": "authority-target",
+          "navigationComponent": 1,
+          "geometricMoveGatePass": true,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm39_01-low-overlay-boundary-minus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            1.30064311349938,
+            56.00000675604385
+          ],
+          "pointWorldNative": [
+            193.30064311349938,
+            32.00000675604385
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": "authority-target",
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm39_01-low-overlay-boundary-center",
+          "kind": "boundary",
+          "pointLocalNative": [
+            0.8006431134993806,
+            56.00000673464143
+          ],
+          "pointWorldNative": [
+            192.80064311349938,
+            32.00000673464143
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": "authority-target",
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        },
+        {
+          "id": "field_cm39_01-low-overlay-boundary-plus",
+          "kind": "boundary",
+          "pointLocalNative": [
+            0.300643113499381,
+            56.00000671323901
+          ],
+          "pointWorldNative": [
+            192.30064311349938,
+            32.00000671323901
+          ],
+          "terrainType": 1,
+          "clearance": 0,
+          "ownerInstance": "authority-target",
+          "navigationComponent": -1,
+          "geometricMoveGatePass": false,
+          "actualActorMoveCalled": false,
+          "nativeMoveWritesZ": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+name: Ranch physical support C1 boundary diagnostics
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/ranch-support-c1-review.yml'
+      - 'src/championship/presentation/ranchThreeScene.js'
+      - 'tests/ranch-support-c1.mjs'
+      - 'tests/fixtures/ranch-support-c1-audit.html'
+      - 'tests/ranch-support-probe/**'
+      - 'tests/ranch-support-review/**'
+      - 'tests/six-field-support-proposal/**'
+      - 'tests/compare-support-c1.mjs'
+      - 'tests/ranch-coverage-intensity.mjs'
+      - 'tests/test-ranch-coverage-intensity.mjs'
+      - 'tests/ranch-depth-review/**'
+      - 'tests/ranch-water-review/inject-effect-diagnostics.mjs'
+      - 'tests/ranch-floor-data/**'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify pure support and resolved-coverage controls
+        run: node tests/ranch-support-review/support-cases.mjs && node tests/test-ranch-coverage-intensity.mjs
+      - name: Preserve existing build validation
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Measure owner-bound physical support with explicit shared effect repairs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/baseline .tmp/support-c1/${{ matrix.engine }}
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/ranchThreeScene.js > .tmp/baseline/ranchThreeScene.js
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/support-c1/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-support-c1-audit.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-support-c1-audit.html > /dev/null
+          node tests/ranch-support-c1.mjs http://127.0.0.1:8765/ ${{ matrix.engine }} .tmp/support-c1/${{ matrix.engine }}/cases .tmp/baseline/ranchThreeScene.js tests/ranch-floor-data/support-c1-plan.json tests/ranch-floor-data/coverage-37fields-100slots.json tests/ranch-floor-data/coverage-plan.json tests/ranch-depth-review/floor-water-ice-repair.js tests/ranch-support-review/ranchThreeScene.js tests/six-field-support-proposal/physical-top-triangles.proposed.json
+          node tests/compare-support-c1.mjs .tmp/support-c1/${{ matrix.engine }}/cases tests/ranch-floor-data/support-c1-plan.json
+      - name: Preserve C1 boundary and isolated occluder evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-support-c1-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/support-c1/
+          if-no-files-found: error
+          retention-days: 14
