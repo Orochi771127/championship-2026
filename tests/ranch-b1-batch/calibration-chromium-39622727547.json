@@ -1,0 +1,1210 @@
+{
+  "engine": "chromium",
+  "runnerSha256": "5d165899817841f75fcccf136231d984a4f2ddf1167c0975bccb4953711363db",
+  "fixtureSha256": "e2a7ffcab9d0e37ea15fafcdc312aed4ea5d2c3afdc218c2de1467ac117c3211",
+  "baselineRevision": "4f64421314f0d0f5d0c04b916d30e821587c1a6a",
+  "releaseApproved": false,
+  "results": [
+    {
+      "species": 25,
+      "mode": "baseline",
+      "requestAuditEvidence": {
+        "rawFailures": [],
+        "observedNativeReleases": [
+          {
+            "id": 1,
+            "elementId": 1,
+            "url": "http://127.0.0.1:8765/assets/production/original-music-r1/bgm_login_page.mp3",
+            "at": 1792595321739,
+            "nativeLoadWithoutSrc": true,
+            "loadAt": 1792595321740
+          }
+        ],
+        "finalState": {
+          "screen": "RAISING_HOME",
+          "titleHidden": true,
+          "music": {
+            "cue": "a_quiet_evening_training",
+            "key": "a_quiet_evening_training",
+            "requestedCue": "moon",
+            "scene": "raising",
+            "playing": "a_quiet_evening_training",
+            "pending": null,
+            "voices": 1,
+            "slots": 2,
+            "starts": 2,
+            "unlocked": true,
+            "hidden": false,
+            "paused": false,
+            "position": 0.818503,
+            "playbackRate": 1,
+            "defaultPlaybackRate": 1,
+            "preservesPitch": true,
+            "contextState": "running",
+            "sampleRate": 44100,
+            "retryable": false,
+            "loopDeadline": 132.4331980612245,
+            "prepared": null,
+            "initialBuffering": false,
+            "error": null
+          }
+        },
+        "expectedDisposals": []
+      },
+      "zoom": 1,
+      "contactVariant": "old",
+      "contactSourceSha256": {
+        "roster": "5a810256912ba9faec9825480ccf789b78537848742e2163f4aa0bf695d6e4b5",
+        "helper": "5db6ea2ee5e4d06bc2b52a70fed79fa94cec55e6cb3e96caec114c152f4efe17"
+      },
+      "contactRequests": {
+        "roster": 1,
+        "helper": 1
+      },
+      "liftedHelperChecks": null,
+      "liftedChecksScope": "PURE_HELPER_ONLY_NOT_NATIVE_AIRBORNE_RENDER",
+      "cameraCalibration": {
+        "host": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "threeCanvas": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "zoomButtonText": "− 100%",
+        "hostLoadState": "ready",
+        "hostAriaBusy": "false"
+      },
+      "status": "PAIRED_IDENTITY_ACTIVATION_CAPTURED_VISUAL_PENDING",
+      "sceneSha256": "1d60444883f996bcf939a4989b84bd602efe03cbe7ec35db59ef84f3abb134a6",
+      "probeSha256": "325ad54f05ff89b01b7bdb69d3cfc10357a462b12019134b87eb32e42e161224",
+      "screenshot": "baseline-zoom1-normal-contact-25.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "preparation": {
+        "species": 25,
+        "residentId": "resident:species-000",
+        "placement": {
+          "moduleId": "championship:2026:cage:6",
+          "slotIndex": 10,
+          "instanceId": "cage:instance:1"
+        },
+        "point": {
+          "x": 596,
+          "y": 76
+        },
+        "foodPoints": [
+          {
+            "x": 636,
+            "y": 68
+          },
+          {
+            "x": 604,
+            "y": 36
+          }
+        ],
+        "foods": [
+          {
+            "slot": 0,
+            "cageDefinitionIndex": 6,
+            "positionQ12": [
+              2605056,
+              278528,
+              0
+            ],
+            "heightQ12": 65536,
+            "protein": false,
+            "kind": 0,
+            "remaining": 16,
+            "freshness": 1440,
+            "quarter": 0
+          },
+          {
+            "slot": 1,
+            "cageDefinitionIndex": 6,
+            "positionQ12": [
+              2473984,
+              147456,
+              0
+            ],
+            "heightQ12": 65536,
+            "protein": true,
+            "kind": 1,
+            "remaining": 16,
+            "freshness": 1440,
+            "quarter": 0
+          }
+        ],
+        "proof": "REAL_APP_SHOP_EDIT_MOVE_FOOD_AND_PRODUCTION_PLANNER",
+        "waste": "NOT_SEEDED_NO_PUBLIC_SPAWN_API",
+        "scope": "NEW_ISOLATED_CI_CONTEXT_ONLY"
+      },
+      "readyProgress": {
+        "threeFrames": 8,
+        "nativeFrame": 123
+      },
+      "evidence": {
+        "serial": 15,
+        "positions": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 184.654541015625,
+            "y": 145.48876953125,
+            "state": 5,
+            "speciesIndex": 25,
+            "nativeFrame": 348,
+            "sequenceId": 14,
+            "nativeScreenPixels": 3,
+            "testOnlyContactDiagnostic": {
+              "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+              "entityId": "m106_nyaromon",
+              "speciesId": "championship:creature:species-025",
+              "mode": "fallback",
+              "ellipses": [
+                {
+                  "x": 0.25,
+                  "y": 2,
+                  "radiusX": 9.66,
+                  "radiusY": 2.99
+                }
+              ],
+              "visible": {
+                "x": -11.25,
+                "y": -10,
+                "width": 23,
+                "height": 11
+              },
+              "contactShadowArt": null,
+              "frame": {
+                "sequenceId": 14,
+                "cell": 25,
+                "flipX": false,
+                "flipY": false,
+                "geometry": {
+                  "blank": false,
+                  "scale": 4,
+                  "origin": [
+                    128,
+                    168
+                  ],
+                  "sourceSize": [
+                    256,
+                    256
+                  ],
+                  "nativeBounds": [
+                    -11.25,
+                    -10,
+                    11.75,
+                    1
+                  ]
+                }
+              },
+              "nativeLift": 0,
+              "root": {
+                "x": 183.904541015625,
+                "y": 158.98876953125,
+                "scaleX": 3,
+                "scaleY": 3
+              },
+              "shadow": {
+                "x": 0,
+                "y": 0,
+                "scaleX": 1,
+                "scaleY": 1,
+                "visible": true
+              },
+              "ellipseScreen": [
+                {
+                  "x": 184.654541015625,
+                  "y": 164.98876953125
+                }
+              ]
+            },
+            "bodyTop": 128.98876953125,
+            "footY": 158.98876953125,
+            "nativeY": 39.32958984375,
+            "boardTop": 41,
+            "scrollY": 1849,
+            "scrollMaxY": 2060,
+            "nativePositionQ12": [
+              2557139,
+              161094,
+              0
+            ],
+            "groundScreen": {
+              "x": 183.904541015625,
+              "y": 158.98876953125
+            }
+          }
+        ],
+        "three": {
+          "mode": "TRUE_3D_FIXED_CAMERA_2D_ACTORS",
+          "passageAppearance": "invisible",
+          "navigationConnections": 0,
+          "frames": 15,
+          "lastRenderMs": 1.6999999999825377,
+          "models": 6,
+          "textureCap": 1024,
+          "animatedInstances": 0,
+          "drawCalls": 74,
+          "triangles": 65442,
+          "memory": {
+            "geometries": 36,
+            "textures": 12
+          },
+          "lost": false
+        }
+      },
+      "sourceFrameKey": "{\"entityId\":\"m106_nyaromon\",\"speciesId\":\"championship:creature:species-025\",\"sequenceId\":14,\"cell\":25,\"geometry\":{\"blank\":false,\"scale\":4,\"origin\":[128,168],\"sourceSize\":[256,256],\"nativeBounds\":[-11.25,-10,11.75,1]},\"flipX\":false,\"flipY\":false}"
+    },
+    {
+      "species": 25,
+      "mode": "floor-only",
+      "requestAuditEvidence": {
+        "rawFailures": [],
+        "observedNativeReleases": [
+          {
+            "id": 1,
+            "elementId": 1,
+            "url": "http://127.0.0.1:8765/assets/production/original-music-r1/bgm_login_page.mp3",
+            "at": 1792595334117,
+            "nativeLoadWithoutSrc": true,
+            "loadAt": 1792595334119
+          }
+        ],
+        "finalState": {
+          "screen": "RAISING_HOME",
+          "titleHidden": true,
+          "music": {
+            "cue": "a_quiet_evening_training",
+            "key": "a_quiet_evening_training",
+            "requestedCue": "moon",
+            "scene": "raising",
+            "playing": "a_quiet_evening_training",
+            "pending": null,
+            "voices": 1,
+            "slots": 2,
+            "starts": 2,
+            "unlocked": true,
+            "hidden": false,
+            "paused": false,
+            "position": 0.818503,
+            "playbackRate": 1,
+            "defaultPlaybackRate": 1,
+            "preservesPitch": true,
+            "contextState": "running",
+            "sampleRate": 44100,
+            "retryable": false,
+            "loopDeadline": 132.42449008390022,
+            "prepared": null,
+            "initialBuffering": false,
+            "error": null
+          }
+        },
+        "expectedDisposals": []
+      },
+      "zoom": 1,
+      "contactVariant": "old",
+      "contactSourceSha256": {
+        "roster": "5a810256912ba9faec9825480ccf789b78537848742e2163f4aa0bf695d6e4b5",
+        "helper": "5db6ea2ee5e4d06bc2b52a70fed79fa94cec55e6cb3e96caec114c152f4efe17"
+      },
+      "contactRequests": {
+        "roster": 1,
+        "helper": 1
+      },
+      "liftedHelperChecks": null,
+      "liftedChecksScope": "PURE_HELPER_ONLY_NOT_NATIVE_AIRBORNE_RENDER",
+      "cameraCalibration": {
+        "host": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "threeCanvas": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "zoomButtonText": "− 100%",
+        "hostLoadState": "ready",
+        "hostAriaBusy": "false"
+      },
+      "status": "PAIRED_IDENTITY_ACTIVATION_CAPTURED_VISUAL_PENDING",
+      "sceneSha256": "1ae46df21194a20536fb8319681cce06026c058c94bce5c2b1c0d3d09ea5b9bb",
+      "probeSha256": "325ad54f05ff89b01b7bdb69d3cfc10357a462b12019134b87eb32e42e161224",
+      "screenshot": "floor-only-zoom1-normal-contact-25.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "preparation": {
+        "species": 25,
+        "residentId": "resident:species-000",
+        "placement": {
+          "moduleId": "championship:2026:cage:6",
+          "slotIndex": 10,
+          "instanceId": "cage:instance:1"
+        },
+        "point": {
+          "x": 596,
+          "y": 76
+        },
+        "foodPoints": [
+          {
+            "x": 636,
+            "y": 68
+          },
+          {
+            "x": 604,
+            "y": 36
+          }
+        ],
+        "foods": [
+          {
+            "slot": 0,
+            "cageDefinitionIndex": 6,
+            "positionQ12": [
+              2605056,
+              278528,
+              0
+            ],
+            "heightQ12": 65536,
+            "protein": false,
+            "kind": 0,
+            "remaining": 16,
+            "freshness": 1440,
+            "quarter": 0
+          },
+          {
+            "slot": 1,
+            "cageDefinitionIndex": 6,
+            "positionQ12": [
+              2473984,
+              147456,
+              0
+            ],
+            "heightQ12": 65536,
+            "protein": true,
+            "kind": 1,
+            "remaining": 16,
+            "freshness": 1440,
+            "quarter": 0
+          }
+        ],
+        "proof": "REAL_APP_SHOP_EDIT_MOVE_FOOD_AND_PRODUCTION_PLANNER",
+        "waste": "NOT_SEEDED_NO_PUBLIC_SPAWN_API",
+        "scope": "NEW_ISOLATED_CI_CONTEXT_ONLY"
+      },
+      "readyProgress": {
+        "threeFrames": 9,
+        "nativeFrame": 123
+      },
+      "evidence": {
+        "serial": 17,
+        "positions": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 184.654541015625,
+            "y": 145.48876953125,
+            "state": 5,
+            "speciesIndex": 25,
+            "nativeFrame": 350,
+            "sequenceId": 14,
+            "nativeScreenPixels": 3,
+            "testOnlyContactDiagnostic": {
+              "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+              "entityId": "m106_nyaromon",
+              "speciesId": "championship:creature:species-025",
+              "mode": "fallback",
+              "ellipses": [
+                {
+                  "x": 0.25,
+                  "y": 2,
+                  "radiusX": 9.66,
+                  "radiusY": 2.99
+                }
+              ],
+              "visible": {
+                "x": -11.25,
+                "y": -10,
+                "width": 23,
+                "height": 11
+              },
+              "contactShadowArt": null,
+              "frame": {
+                "sequenceId": 14,
+                "cell": 25,
+                "flipX": false,
+                "flipY": false,
+                "geometry": {
+                  "blank": false,
+                  "scale": 4,
+                  "origin": [
+                    128,
+                    168
+                  ],
+                  "sourceSize": [
+                    256,
+                    256
+                  ],
+                  "nativeBounds": [
+                    -11.25,
+                    -10,
+                    11.75,
+                    1
+                  ]
+                }
+              },
+              "nativeLift": 0,
+              "root": {
+                "x": 183.904541015625,
+                "y": 158.98876953125,
+                "scaleX": 3,
+                "scaleY": 3
+              },
+              "shadow": {
+                "x": 0,
+                "y": 0,
+                "scaleX": 1,
+                "scaleY": 1,
+                "visible": true
+              },
+              "ellipseScreen": [
+                {
+                  "x": 184.654541015625,
+                  "y": 164.98876953125
+                }
+              ]
+            },
+            "bodyTop": 128.98876953125,
+            "footY": 158.98876953125,
+            "nativeY": 39.32958984375,
+            "boardTop": 41,
+            "scrollY": 1849,
+            "scrollMaxY": 2060,
+            "nativePositionQ12": [
+              2557139,
+              161094,
+              0
+            ],
+            "groundScreen": {
+              "x": 183.904541015625,
+              "y": 158.98876953125
+            }
+          }
+        ],
+        "three": {
+          "spriteDiagnostics": [
+            {
+              "key": "resident:species-000",
+              "screenQuad": {
+                "x": 150.154541015625,
+                "y": 128.98876953125,
+                "width": 69,
+                "height": 33
+              },
+              "worldCenter": [
+                29.807267866033943,
+                0.47182572529202177,
+                -25.395808448679244
+              ],
+              "worldScale": [
+                1.4375,
+                1.1166851062693866,
+                1
+              ],
+              "projectionError": 0.44327626223295624,
+              "envelopeNativeExtent": 0.9999999999999999,
+              "supportStatus": "UNCHANGED_NATIVE_ORIGIN",
+              "depthTest": true,
+              "depthWrite": true
+            },
+            {
+              "key": "food:0",
+              "screenQuad": {
+                "x": 174,
+                "y": 188,
+                "width": 96,
+                "height": 72
+              },
+              "worldCenter": [
+                31.965347113629466,
+                0.7256177948987006,
+                -24.338030338349377
+              ],
+              "worldScale": [
+                2,
+                2.436403868224116,
+                1
+              ],
+              "projectionError": 0.4432762622327573,
+              "envelopeNativeExtent": 4.999999999999999,
+              "supportStatus": "UNCHANGED_NATIVE_ORIGIN",
+              "depthTest": true,
+              "depthWrite": true
+            },
+            {
+              "key": "food:1",
+              "screenQuad": {
+                "x": 78,
+                "y": 92,
+                "width": 72,
+                "height": 72
+              },
+              "worldCenter": [
+                28.57969408530559,
+                0.7256177948987006,
+                -24.541702851333785
+              ],
+              "worldScale": [
+                1.5,
+                2.436403868224116,
+                1
+              ],
+              "projectionError": 0.4432762622330415,
+              "envelopeNativeExtent": 4.999999999999999,
+              "supportStatus": "UNCHANGED_NATIVE_ORIGIN",
+              "depthTest": true,
+              "depthWrite": true
+            }
+          ],
+          "mode": "TRUE_3D_FIXED_CAMERA_2D_ACTORS",
+          "passageAppearance": "invisible",
+          "navigationConnections": 0,
+          "frames": 17,
+          "lastRenderMs": 1.5,
+          "models": 6,
+          "textureCap": 1024,
+          "animatedInstances": 0,
+          "drawCalls": 74,
+          "triangles": 65442,
+          "memory": {
+            "geometries": 36,
+            "textures": 12
+          },
+          "lost": false
+        }
+      },
+      "sourceFrameKey": "{\"entityId\":\"m106_nyaromon\",\"speciesId\":\"championship:creature:species-025\",\"sequenceId\":14,\"cell\":25,\"geometry\":{\"blank\":false,\"scale\":4,\"origin\":[128,168],\"sourceSize\":[256,256],\"nativeBounds\":[-11.25,-10,11.75,1]},\"flipX\":false,\"flipY\":false}"
+    },
+    {
+      "species": 25,
+      "mode": "baseline",
+      "requestAuditEvidence": {
+        "rawFailures": [],
+        "observedNativeReleases": [
+          {
+            "id": 1,
+            "elementId": 1,
+            "url": "http://127.0.0.1:8765/assets/production/original-music-r1/bgm_login_page.mp3",
+            "at": 1792595345202,
+            "nativeLoadWithoutSrc": true,
+            "loadAt": 1792595345204
+          }
+        ],
+        "finalState": {
+          "screen": "RAISING_HOME",
+          "titleHidden": true,
+          "music": {
+            "cue": "a_quiet_evening_training",
+            "key": "a_quiet_evening_training",
+            "requestedCue": "moon",
+            "scene": "raising",
+            "playing": "a_quiet_evening_training",
+            "pending": null,
+            "voices": 1,
+            "slots": 2,
+            "starts": 2,
+            "unlocked": true,
+            "hidden": false,
+            "paused": false,
+            "position": 0.818503,
+            "playbackRate": 1,
+            "defaultPlaybackRate": 1,
+            "preservesPitch": true,
+            "contextState": "running",
+            "sampleRate": 44100,
+            "retryable": false,
+            "loopDeadline": 132.424490600907,
+            "prepared": null,
+            "initialBuffering": false,
+            "error": null
+          }
+        },
+        "expectedDisposals": []
+      },
+      "zoom": 0.7,
+      "contactVariant": "old",
+      "contactSourceSha256": {
+        "roster": "5a810256912ba9faec9825480ccf789b78537848742e2163f4aa0bf695d6e4b5",
+        "helper": "5db6ea2ee5e4d06bc2b52a70fed79fa94cec55e6cb3e96caec114c152f4efe17"
+      },
+      "contactRequests": {
+        "roster": 1,
+        "helper": 1
+      },
+      "liftedHelperChecks": null,
+      "liftedChecksScope": "PURE_HELPER_ONLY_NOT_NATIVE_AIRBORNE_RENDER",
+      "cameraCalibration": {
+        "host": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "threeCanvas": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "zoomButtonText": "+ 70%",
+        "hostLoadState": "ready",
+        "hostAriaBusy": "false"
+      },
+      "status": "PAIRED_IDENTITY_ACTIVATION_CAPTURED_VISUAL_PENDING",
+      "sceneSha256": "1d60444883f996bcf939a4989b84bd602efe03cbe7ec35db59ef84f3abb134a6",
+      "probeSha256": "325ad54f05ff89b01b7bdb69d3cfc10357a462b12019134b87eb32e42e161224",
+      "screenshot": "baseline-zoom0.7-normal-contact-25.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "preparation": {
+        "species": 25,
+        "residentId": "resident:species-000",
+        "placement": {
+          "moduleId": "championship:2026:cage:6",
+          "slotIndex": 10,
+          "instanceId": "cage:instance:1"
+        },
+        "point": {
+          "x": 596,
+          "y": 76
+        },
+        "foodPoints": [
+          {
+            "x": 636,
+            "y": 68
+          },
+          {
+            "x": 604,
+            "y": 36
+          }
+        ],
+        "foods": [
+          {
+            "slot": 0,
+            "cageDefinitionIndex": 6,
+            "positionQ12": [
+              2605056,
+              278528,
+              0
+            ],
+            "heightQ12": 65536,
+            "protein": false,
+            "kind": 0,
+            "remaining": 16,
+            "freshness": 1440,
+            "quarter": 0
+          },
+          {
+            "slot": 1,
+            "cageDefinitionIndex": 6,
+            "positionQ12": [
+              2473984,
+              147456,
+              0
+            ],
+            "heightQ12": 65536,
+            "protein": true,
+            "kind": 1,
+            "remaining": 16,
+            "freshness": 1440,
+            "quarter": 0
+          }
+        ],
+        "proof": "REAL_APP_SHOP_EDIT_MOVE_FOOD_AND_PRODUCTION_PLANNER",
+        "waste": "NOT_SEEDED_NO_PUBLIC_SPAWN_API",
+        "scope": "NEW_ISOLATED_CI_CONTEXT_ONLY"
+      },
+      "readyProgress": {
+        "threeFrames": 21,
+        "nativeFrame": 465
+      },
+      "evidence": {
+        "serial": 28,
+        "positions": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 187.75817871093741,
+            "y": 228.142138671875,
+            "state": 5,
+            "speciesIndex": 25,
+            "nativeFrame": 681,
+            "sequenceId": 14,
+            "nativeScreenPixels": 2.0999999999999996,
+            "testOnlyContactDiagnostic": {
+              "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+              "entityId": "m106_nyaromon",
+              "speciesId": "championship:creature:species-025",
+              "mode": "fallback",
+              "ellipses": [
+                {
+                  "x": 0.25,
+                  "y": 2,
+                  "radiusX": 9.66,
+                  "radiusY": 2.99
+                }
+              ],
+              "visible": {
+                "x": -11.25,
+                "y": -10,
+                "width": 23,
+                "height": 11
+              },
+              "contactShadowArt": null,
+              "frame": {
+                "sequenceId": 14,
+                "cell": 25,
+                "flipX": false,
+                "flipY": false,
+                "geometry": {
+                  "blank": false,
+                  "scale": 4,
+                  "origin": [
+                    128,
+                    168
+                  ],
+                  "sourceSize": [
+                    256,
+                    256
+                  ],
+                  "nativeBounds": [
+                    -11.25,
+                    -10,
+                    11.75,
+                    1
+                  ]
+                }
+              },
+              "nativeLift": 0,
+              "root": {
+                "x": 187.2331787109374,
+                "y": 237.59213867187498,
+                "scaleX": 2.0999999999999996,
+                "scaleY": 2.0999999999999996
+              },
+              "shadow": {
+                "x": 0,
+                "y": 0,
+                "scaleX": 1,
+                "scaleY": 1,
+                "visible": true
+              },
+              "ellipseScreen": [
+                {
+                  "x": 187.75817871093741,
+                  "y": 241.79213867187497
+                }
+              ]
+            },
+            "bodyTop": 216.59213867187498,
+            "footY": 237.59213867187498,
+            "nativeY": 39.32958984375,
+            "boardTop": 155,
+            "scrollY": 1171.3000000000002,
+            "scrollMaxY": 1192.3999999999996,
+            "nativePositionQ12": [
+              2557139,
+              161094,
+              0
+            ],
+            "groundScreen": {
+              "x": 187.2331787109374,
+              "y": 237.59213867187498
+            }
+          }
+        ],
+        "three": {
+          "mode": "TRUE_3D_FIXED_CAMERA_2D_ACTORS",
+          "passageAppearance": "invisible",
+          "navigationConnections": 0,
+          "frames": 28,
+          "lastRenderMs": 1.5,
+          "models": 6,
+          "textureCap": 1024,
+          "animatedInstances": 0,
+          "drawCalls": 88,
+          "triangles": 99770,
+          "memory": {
+            "geometries": 36,
+            "textures": 12
+          },
+          "lost": false
+        }
+      },
+      "sourceFrameKey": "{\"entityId\":\"m106_nyaromon\",\"speciesId\":\"championship:creature:species-025\",\"sequenceId\":14,\"cell\":25,\"geometry\":{\"blank\":false,\"scale\":4,\"origin\":[128,168],\"sourceSize\":[256,256],\"nativeBounds\":[-11.25,-10,11.75,1]},\"flipX\":false,\"flipY\":false}"
+    },
+    {
+      "species": 25,
+      "mode": "floor-only",
+      "requestAuditEvidence": {
+        "rawFailures": [],
+        "observedNativeReleases": [
+          {
+            "id": 1,
+            "elementId": 1,
+            "url": "http://127.0.0.1:8765/assets/production/original-music-r1/bgm_login_page.mp3",
+            "at": 1792595361902,
+            "nativeLoadWithoutSrc": true,
+            "loadAt": 1792595361903
+          }
+        ],
+        "finalState": {
+          "screen": "RAISING_HOME",
+          "titleHidden": true,
+          "music": {
+            "cue": "a_quiet_evening_training",
+            "key": "a_quiet_evening_training",
+            "requestedCue": "moon",
+            "scene": "raising",
+            "playing": "a_quiet_evening_training",
+            "pending": null,
+            "voices": 1,
+            "slots": 2,
+            "starts": 2,
+            "unlocked": true,
+            "hidden": false,
+            "paused": false,
+            "position": 0.825825,
+            "playbackRate": 1,
+            "defaultPlaybackRate": 1,
+            "preservesPitch": true,
+            "contextState": "running",
+            "sampleRate": 44100,
+            "retryable": false,
+            "loopDeadline": 132.42449008390022,
+            "prepared": null,
+            "initialBuffering": false,
+            "error": null
+          }
+        },
+        "expectedDisposals": []
+      },
+      "zoom": 0.7,
+      "contactVariant": "old",
+      "contactSourceSha256": {
+        "roster": "5a810256912ba9faec9825480ccf789b78537848742e2163f4aa0bf695d6e4b5",
+        "helper": "5db6ea2ee5e4d06bc2b52a70fed79fa94cec55e6cb3e96caec114c152f4efe17"
+      },
+      "contactRequests": {
+        "roster": 1,
+        "helper": 1
+      },
+      "liftedHelperChecks": null,
+      "liftedChecksScope": "PURE_HELPER_ONLY_NOT_NATIVE_AIRBORNE_RENDER",
+      "cameraCalibration": {
+        "host": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "threeCanvas": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "zoomButtonText": "+ 70%",
+        "hostLoadState": "ready",
+        "hostAriaBusy": "false"
+      },
+      "status": "PAIRED_IDENTITY_ACTIVATION_CAPTURED_VISUAL_PENDING",
+      "sceneSha256": "1ae46df21194a20536fb8319681cce06026c058c94bce5c2b1c0d3d09ea5b9bb",
+      "probeSha256": "325ad54f05ff89b01b7bdb69d3cfc10357a462b12019134b87eb32e42e161224",
+      "screenshot": "floor-only-zoom0.7-normal-contact-25.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "preparation": {
+        "species": 25,
+        "residentId": "resident:species-000",
+        "placement": {
+          "moduleId": "championship:2026:cage:6",
+          "slotIndex": 10,
+          "instanceId": "cage:instance:1"
+        },
+        "point": {
+          "x": 596,
+          "y": 76
+        },
+        "foodPoints": [
+          {
+            "x": 636,
+            "y": 68
+          },
+          {
+            "x": 604,
+            "y": 36
+          }
+        ],
+        "foods": [
+          {
+            "slot": 0,
+            "cageDefinitionIndex": 6,
+            "positionQ12": [
+              2605056,
+              278528,
+              0
+            ],
+            "heightQ12": 65536,
+            "protein": false,
+            "kind": 0,
+            "remaining": 16,
+            "freshness": 1440,
+            "quarter": 0
+          },
+          {
+            "slot": 1,
+            "cageDefinitionIndex": 6,
+            "positionQ12": [
+              2473984,
+              147456,
+              0
+            ],
+            "heightQ12": 65536,
+            "protein": true,
+            "kind": 1,
+            "remaining": 16,
+            "freshness": 1440,
+            "quarter": 0
+          }
+        ],
+        "proof": "REAL_APP_SHOP_EDIT_MOVE_FOOD_AND_PRODUCTION_PLANNER",
+        "waste": "NOT_SEEDED_NO_PUBLIC_SPAWN_API",
+        "scope": "NEW_ISOLATED_CI_CONTEXT_ONLY"
+      },
+      "readyProgress": {
+        "threeFrames": 22,
+        "nativeFrame": 493
+      },
+      "evidence": {
+        "serial": 30,
+        "positions": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 187.75817871093741,
+            "y": 228.142138671875,
+            "state": 5,
+            "speciesIndex": 25,
+            "nativeFrame": 742,
+            "sequenceId": 14,
+            "nativeScreenPixels": 2.0999999999999996,
+            "testOnlyContactDiagnostic": {
+              "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+              "entityId": "m106_nyaromon",
+              "speciesId": "championship:creature:species-025",
+              "mode": "fallback",
+              "ellipses": [
+                {
+                  "x": 0.25,
+                  "y": 2,
+                  "radiusX": 9.66,
+                  "radiusY": 2.99
+                }
+              ],
+              "visible": {
+                "x": -11.25,
+                "y": -10,
+                "width": 23,
+                "height": 11
+              },
+              "contactShadowArt": null,
+              "frame": {
+                "sequenceId": 14,
+                "cell": 25,
+                "flipX": false,
+                "flipY": false,
+                "geometry": {
+                  "blank": false,
+                  "scale": 4,
+                  "origin": [
+                    128,
+                    168
+                  ],
+                  "sourceSize": [
+                    256,
+                    256
+                  ],
+                  "nativeBounds": [
+                    -11.25,
+                    -10,
+                    11.75,
+                    1
+                  ]
+                }
+              },
+              "nativeLift": 0,
+              "root": {
+                "x": 187.2331787109374,
+                "y": 237.59213867187498,
+                "scaleX": 2.0999999999999996,
+                "scaleY": 2.0999999999999996
+              },
+              "shadow": {
+                "x": 0,
+                "y": 0,
+                "scaleX": 1,
+                "scaleY": 1,
+                "visible": true
+              },
+              "ellipseScreen": [
+                {
+                  "x": 187.75817871093741,
+                  "y": 241.79213867187497
+                }
+              ]
+            },
+            "bodyTop": 216.59213867187498,
+            "footY": 237.59213867187498,
+            "nativeY": 39.32958984375,
+            "boardTop": 155,
+            "scrollY": 1171.3000000000002,
+            "scrollMaxY": 1192.3999999999996,
+            "nativePositionQ12": [
+              2557139,
+              161094,
+              0
+            ],
+            "groundScreen": {
+              "x": 187.2331787109374,
+              "y": 237.59213867187498
+            }
+          }
+        ],
+        "three": {
+          "spriteDiagnostics": [
+            {
+              "key": "resident:species-000",
+              "screenQuad": {
+                "x": 163.6081787109374,
+                "y": 216.59213867187498,
+                "width": 48.30000000000001,
+                "height": 23.099999999999994
+              },
+              "worldCenter": [
+                29.807267866033946,
+                0.47182572529202205,
+                -25.395808448679247
+              ],
+              "worldScale": [
+                1.4375000000000007,
+                1.1166851062693866,
+                1
+              ],
+              "projectionError": 0.31029338356525216,
+              "envelopeNativeExtent": 0.9999999999999976,
+              "supportStatus": "UNCHANGED_NATIVE_ORIGIN",
+              "depthTest": true,
+              "depthWrite": true
+            },
+            {
+              "key": "food:0",
+              "screenQuad": {
+                "x": 180.29999999999973,
+                "y": 257.9,
+                "width": 67.19999999999999,
+                "height": 50.39999999999998
+              },
+              "worldCenter": [
+                31.965347113629466,
+                0.7256177948986999,
+                -24.338030338349377
+              ],
+              "worldScale": [
+                2,
+                2.436403868224115,
+                1
+              ],
+              "projectionError": 0.31029338356512426,
+              "envelopeNativeExtent": 5.000000000000002,
+              "supportStatus": "UNCHANGED_NATIVE_ORIGIN",
+              "depthTest": true,
+              "depthWrite": true
+            },
+            {
+              "key": "food:1",
+              "screenQuad": {
+                "x": 113.09999999999991,
+                "y": 207.5,
+                "width": 33.599999999999994,
+                "height": 33.599999999999994
+              },
+              "worldCenter": [
+                28.402917390008955,
+                0.3195504835280144,
+                -24.36492615603715
+              ],
+              "worldScale": [
+                1,
+                1.624269245482744,
+                1
+              ],
+              "projectionError": 0.310293383565309,
+              "envelopeNativeExtent": 5.000000000000002,
+              "supportStatus": "UNCHANGED_NATIVE_ORIGIN",
+              "depthTest": true,
+              "depthWrite": true
+            }
+          ],
+          "mode": "TRUE_3D_FIXED_CAMERA_2D_ACTORS",
+          "passageAppearance": "invisible",
+          "navigationConnections": 0,
+          "frames": 30,
+          "lastRenderMs": 1.2999999999883585,
+          "models": 6,
+          "textureCap": 1024,
+          "animatedInstances": 0,
+          "drawCalls": 88,
+          "triangles": 99770,
+          "memory": {
+            "geometries": 36,
+            "textures": 12
+          },
+          "lost": false
+        }
+      },
+      "sourceFrameKey": "{\"entityId\":\"m106_nyaromon\",\"speciesId\":\"championship:creature:species-025\",\"sequenceId\":14,\"cell\":25,\"geometry\":{\"blank\":false,\"scale\":4,\"origin\":[128,168],\"sourceSize\":[256,256],\"nativeBounds\":[-11.25,-10,11.75,1]},\"flipX\":false,\"flipY\":false}"
+    }
+  ],
+  "coverage": {
+    "expectedCases": 4,
+    "successfulCases": 4
+  },
+  "visualReview": "PENDING",
+  "uncovered": [
+    "native authored airborne",
+    "waste real lifecycle",
+    "care prop source-frame pairing",
+    "CM28",
+    "pan/wrap",
+    "all character routes"
+  ]
+}
