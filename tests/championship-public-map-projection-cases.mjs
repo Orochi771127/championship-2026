@@ -77,15 +77,16 @@ test('runtime map request validates selected hash and refuses raw metadata on a 
  await assert.rejects(()=>fetchRuntimeMapResponse(recipe.sources[0].path,base,{fetchImpl}),/PRIVATE_MAP_METADATA_NOT_A_PUBLIC_RUNTIME_INPUT/);assert.equal(calls,1);
 });
 
-test('230 active derivatives remain reproducible and seven inactive sources retain their original pinned bytes',()=>{
+test('230 active derivatives remain reproducible and nine inactive sources retain their original pinned bytes',()=>{
  const result=JSON.parse(execFileSync(process.execPath,['scripts/materialize-approved-runtime.mjs','--check'],{encoding:'utf8',windowsHide:true}));
- assert.equal(result.checked,230);assert.equal(result.restored,0);assert.equal(result.bytes,621276);assert.equal(result.networkUsed,false);assert.equal(result.approvalsChanged,false);
+ // Two clarity-trial HUD descriptors replace their old active entries; old bytes stay pinned inactive.
+ assert.equal(result.checked,230);assert.equal(result.restored,0);assert.equal(result.bytes,621358);assert.equal(result.networkUsed,false);assert.equal(result.approvalsChanged,false);
  const materialization=read('docs/contracts/championship/RUNTIME_DERIVED_MATERIALIZATION.v1.json');
- assert.equal(materialization.files.length+materialization.inactiveFiles.length,237);assert.equal(materialization.inactiveFiles.length,7);
+ assert.equal(materialization.files.length+materialization.inactiveFiles.length,239);assert.equal(materialization.inactiveFiles.length,9);
  let archivedBytes=0;
  for(const row of materialization.inactiveFiles){
   const bytes=fs.readFileSync(row.path);archivedBytes+=bytes.length;
   assert.equal(createHash('sha256').update(bytes).digest('hex'),row.sha256);assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),row.gitBlobSha1);
  }
- assert.equal(result.bytes+archivedBytes,2028339);
+ assert.equal(result.bytes+archivedBytes,2033030);
 });

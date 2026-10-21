@@ -174,31 +174,33 @@ async function main() {
   try {
     evidence.policy = await checkPolicy(process.cwd());
     const buildBytes = fs.readFileSync(path.join(root, 'pages-build.json'));
-    const build = JSON.parse(buildBytes);
+    const compiledCatalogs = await require('./compiled-catalog-evidence.cjs').compiledCatalogEvidence(root);
+    const build = compiledCatalogs.build;
+    evidence.compiledCatalogProvenance = compiledCatalogs.records;
     assert.equal(build.target, 'GITHUB_PAGES_OWNER_PLAYTEST'); assert.equal(build.publicPlaytest?.ownerApproved, true);
     if(process.env.GITHUB_SHA)assert.equal(build.commit,process.env.GITHUB_SHA,'Built checkout must match tested commit');
     evidence.build = { buildId: build.buildId, commit:build.commit, inputSha256:build.inputSha256, target: build.target, manifestSha256: sha256(buildBytes) };
     assert.ok(resolveAsset(root, '/championship.html'));
     assertOriginalApprovalLineage();
     const registryPath = 'src/data/championship/database-hero-portraits.public.v1.json';
-    const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), fs.readFileSync(path.join(root, registryPath)));
+    const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), compiledCatalogs.read(registryPath));
     assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'110 preserved plus 24 explicitly approved full heroes; MA15 is held');
-    evidence.registry = { count: catalog.entries.length, sourceAndBuildSha256: sha256(fs.readFileSync(path.join(root, registryPath))) };
+    evidence.registry = { count: catalog.entries.length, sourceAndCompiledInputSha256: sha256(compiledCatalogs.read(registryPath)) };
     const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json',bindingPath='src/data/championship/public-alternate-form-bindings.v1.json';
     evidence.productionCatalogs=[];
     for(const file of [productPath,bindingPath]){
-      const sourceBytes=fs.readFileSync(path.join(process.cwd(),file)),builtBytes=fs.readFileSync(path.join(root,file));
+      const sourceBytes=fs.readFileSync(path.join(process.cwd(),file)),builtBytes=compiledCatalogs.read(file);
       assert.equal(sha256(sourceBytes),sha256(builtBytes));evidence.productionCatalogs.push({file,sha256:sha256(builtBytes)});
     }
-    for(const entry of JSON.parse(fs.readFileSync(path.join(root,productPath))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true);
+    for(const entry of JSON.parse(compiledCatalogs.read(productPath)).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true);
     assert.equal(resolveAsset(root,'/'+assetPath),null,'Authoring metadata must stay outside the public artifact');
     const promotedAssets=JSON.parse(fs.readFileSync(path.join(process.cwd(),assetPath))).characters;
-    const publicBindings=JSON.parse(fs.readFileSync(path.join(root,bindingPath))).characters;
+    const publicBindings=JSON.parse(compiledCatalogs.read(bindingPath)).characters;
     assert.deepEqual(promotedAssets.map(e=>e.speciesIndex).sort((a,b)=>a-b),[211,222,229,230]);
     for(const entry of promotedAssets){assert.equal(entry.runtimeReady,true);assert.equal(entry.qa.normalPath,'PASS');}
     assert.equal(publicBindings.length,4);
     for(const entry of promotedAssets){const binding=publicBindings.find(row=>row.speciesIndex===entry.speciesIndex);assert.ok(binding);for(const key of ['speciesId','speciesIndex','entityId','motionDonorEntityId'])assert.equal(binding[key],entry[key]);}
-    const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root);
+    const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root, JSON.parse(compiledCatalogs.read(registryPath)));
     evidence.previewAssetChecks=[...previewExpected.values()];
     for (const expected of Object.values(EXPECTED)) {
       const entry = catalog.entries.find(e => e.speciesIndex === expected.speciesIndex);
@@ -487,3 +489,4 @@ if (require.main === module) {
   if (process.argv.includes('--self-test')) selfTest().catch(error => { console.error(error); process.exitCode = 1; });
   else main().catch(error => { console.error(error); process.exitCode = 1; });
 }
+
