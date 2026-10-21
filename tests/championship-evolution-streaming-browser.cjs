@@ -51,7 +51,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     getRaisingState() {`);
     await route.fulfill({response,body:text});
    });
-   await page.route('**/src/championship/app/main.js',async route=>{
+   await page.route(url=>url.origin===new URL(base).origin&&url.pathname==='/src/championship/app/main.js',async route=>{
     const response=await route.fetch();let text=await response.text();
     text=exactReplace(text,'scene = next; owner.stopTimer();','scene = next; globalThis.__freezeScene = scene; owner.stopTimer();');
     text+='\nObject.defineProperty(globalThis,"__freezeApp",{get:()=>app});Object.defineProperty(globalThis,"__freezeSource",{get:()=>raisingSource});\n';
@@ -67,7 +67,9 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
    });
    const save=async()=>{evidence.writes=await page.evaluate(()=>[...new Set(globalThis.__freezeWrites)]).catch(()=>[]);await fs.writeFile(`${out}/${engine}-${mode}.json`,JSON.stringify(evidence,null,2));};
    const snapshot=()=>page.evaluate(()=>({life:__freezeApp.getRaisingLifecycleFrame(),scene:__freezeScene.getDiagnostics(),playable:__freezeScene.isPlayable,raf:__freezeRaf,residents:__freezeSource.getFrame().residents.map(r=>({id:r.creatureId,speciesId:r.speciesId})),actor:__freezeApp.getRaisingActorFrame(__freezeApp.getRaisingLifecycleFrame().evolution?.instanceId)}));
+   const mark=phase=>console.log(JSON.stringify({engine,mode,phase,time:new Date().toISOString()}));
    try{
+    mark('prepare-valid-owned-fixture');
     // Existing fixture constructs a valid isolated local profile, not user data.
     await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);
     await page.locator('#prepare').click();await page.locator('#status').filter({hasText:'受控存檔已準備'}).waitFor();
@@ -75,8 +77,10 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     await page.locator('#cm-login').waitFor();
     if(await page.locator('#cm-film-skip').isVisible()){await page.locator('#cm-film-skip').click();await page.locator('#cm-opening-film').waitFor({state:'hidden'});}
     await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
+    assert.equal(await page.evaluate(()=>Object.getOwnPropertyDescriptor(globalThis,'__freezeApp')?.get instanceof Function),true,'Exact main.js test seam installed (including cache query)');
     await page.locator('#cm-login').click();await page.locator('#cm-continue').click();
     await page.waitForFunction(()=>globalThis.__freezeScene?.isPlayable===true&&document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready');
+    mark('actual-home-ready');
     evidence.before=await snapshot();assert.equal(evidence.before.life.evolution,null);
     const storageBefore=await page.evaluate(()=>Object.keys(localStorage));
     const ownedId=evidence.before.residents[0].id;assert.equal(evidence.before.residents.length,1);
@@ -84,6 +88,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     evidence.preparation={console:evidence.console,httpFailures:evidence.httpFailures,requestFailures:evidence.requestFailures};
     evidence.console=[];evidence.httpFailures=[];evidence.requestFailures=[];
     await page.evaluate(()=>{globalThis.__freezeWrites=[]});
+    mark('begin-native-evolution-target35-sequence39');
     await page.evaluate(()=>__freezeApp.__testBeginEvolution(35));
     if(baseline){
      await page.waitForFunction(()=>globalThis.__freezeApp.getRaisingLifecycleFrame().evolution!==null);
@@ -94,6 +99,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
      await page.waitForFunction(expected=>JSON.parse(document.querySelector('.int-rh2-field-host').dataset.residentAssets||'[]').some(x=>x.state===expected),mode==='reject'?'error':'loading');
      for(let i=0;i<1200&&blocked===0;i++)await delay(100);
      assert.ok(blocked>0,'Actual sequence39 image intercepted');
+     mark('target39-intercepted');
      evidence.pending=await snapshot();assert.equal(evidence.pending.playable,false);
      assert.equal(evidence.pending.life.evolution.phase,0);assert.equal(evidence.pending.life.evolution.reveal,false);
      await delay(700);evidence.stillPending=await snapshot();
@@ -112,9 +118,10 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
       const retry=page.locator('.int-rh2-resident-assets--recovery [data-load-action="retry"]');await retry.waitFor({state:'visible'});
       evidence.retry=await retry.evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {inert:!!el.closest('[inert]'),hit:hit===el||el.contains(hit),rect:r.toJSON(),viewport:[innerWidth,innerHeight],z:getComputedStyle(el.parentElement).zIndex}});
       assert.equal(evidence.retry.inert,false);assert.equal(evidence.retry.hit,true);assert.ok(evidence.retry.rect.y>=0&&evidence.retry.rect.bottom<=evidence.retry.viewport[1]);
-      allow=true;release();await retry.click();
+      mark('real-retry-click');allow=true;release();await retry.click();
      }else{allow=true;release();}
      await page.waitForFunction(()=>!__freezeApp.getRaisingLifecycleFrame().evolution&&__freezeScene.isPlayable===true);
+     mark('native-evolution-completed');
      evidence.after=await snapshot();assert.deepEqual(evidence.after.residents,[{id:ownedId,speciesId:evidence.before.residents[0].speciesId.replace(/species-\d+$/, 'species-035')}],'Same owned resident, no duplication/reset');assert.equal(evidence.after.life.message?.target,35);assert.equal(evidence.after.life.message?.kind,'EVOLVED');
      assert.equal(await page.locator('.int-rh2-field-host').evaluate(e=>e.inert),false);
      assert.equal(await page.locator('.int-rh2-resident-assets--recovery').isVisible(),false);
@@ -159,7 +166,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
      assert.ok(evidence.console.length<=10*targetPaths.size,'Bounded expected warnings');
      evidence.status='PASS_ACTUAL_APP_NATIVE_EVOLUTION_AND_RETRY';
     }
-    await save();results.push({mode,status:evidence.status});
+    mark(evidence.status);await save();results.push({mode,status:evidence.status});
    }catch(error){evidence.status='FAIL';evidence.failure=String(error);await page.screenshot({path:`${out}/${engine}-${mode}-failure.png`,fullPage:true}).catch(()=>{});await save();throw error;}
    finally{allow=true;release();await context.close();}
   }
