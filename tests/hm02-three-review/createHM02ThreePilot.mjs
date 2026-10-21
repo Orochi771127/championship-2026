@@ -1,5 +1,5 @@
 import {actorLocalQuad} from './hm02ActorBounds.mjs';
-import {abortable,createResourceDisposer,shaderFailureGuard} from './hm02Lifecycle.mjs';
+import {abortable,createResourceDisposer,shaderFailureGuard,leaseHM02Renderer} from './hm02Lifecycle.mjs';
 import {projection,hm02PilotAllowed} from './hm02Projection.mjs';
 import {installSharedPass} from './hm02SharedPass.mjs';
 import {installFlatGroundDepthCandidate} from './hm02FlatGroundDepthCandidate.mjs';
@@ -12,7 +12,7 @@ export async function createHM02ThreePilot({THREE,GLTFLoader,stage,enabled=false
   if (!hm02PilotAllowed({enabled,fieldId,manifest,renderer:app.renderer,reviewHarness})) return null;
   if (THREE.REVISION!=='185' || stage.PIXI.VERSION!=='8.19.0' || typeof resolveSupport!=='function') return null;
   const map=projection(manifest.projection), scene=new THREE.Scene();
-  let renderer=null, shaderGuard=null;
+  let renderer=null, rendererLease=null, shaderGuard=null;
   const camera=new THREE.OrthographicCamera(-1,1,1,-1,0.01,1000);
   const ambient=new THREE.HemisphereLight(0xfff4dd,0x66543b,1.6);
   const sun=new THREE.DirectionalLight(0xffe3b0,2.2);sun.position.set(-30,65,40);
@@ -31,7 +31,7 @@ export async function createHM02ThreePilot({THREE,GLTFLoader,stage,enabled=false
     for(const t of textures.values())t.dispose();textures.clear();
     for(const batch of batches)resourceDisposer.once(batch);batches.clear();
     resourceDisposer.gltf(gltf);resourceDisposer.gltf(prototypeGltf);
-    try {renderer?.dispose();} finally {if(renderer)app.renderer.resetState();}
+    rendererLease?.release();
 
   }
   const fail=(error)=>{const notify=active&&!signal?.aborted;dispose();if(notify)onFallback(error);};
@@ -90,7 +90,7 @@ export async function createHM02ThreePilot({THREE,GLTFLoader,stage,enabled=false
     // All await boundaries are complete before touching the shared GL state.
     controller.signal.throwIfAborted();
     try {
-      renderer=new THREE.WebGLRenderer({canvas:app.canvas,context:app.renderer.gl});
+      rendererLease=leaseHM02Renderer({THREE,app,onInvalidate:fail});renderer=rendererLease.renderer;
       renderer.autoClear=true;renderer.setClearColor(0x0a222a,1);renderer.outputColorSpace=THREE.SRGBColorSpace;
       shaderGuard=shaderFailureGuard(renderer);
     } finally {app.renderer.resetState();}

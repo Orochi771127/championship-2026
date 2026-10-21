@@ -12,9 +12,9 @@ async function exercise({cut=null,failure=null,shader=false,raceDepth=0,raceAsse
  const events=[],signalOwner=new AbortController();let release,startedResolve,listenerCount=0,created=0,disposed=0,assetDisposals=0,batchDisposals=0;
  const started=new Promise(r=>startedResolve=r),hold=new Promise(r=>release=r);
  async function phase(name){events.push(name);if(name===cut){startedResolve();await hold;}if(name===failure)throw new Error(name);}
- const canvas={},root={},gl={getContextAttributes:()=>({stencil:true})};
+ const canvas={addEventListener(){},removeEventListener(){}},root={},gl={getContextAttributes:()=>({stencil:true})};
  const pixi={gl,resolution:1,resetState(){events.push('reset');},render(){events.push('originalRender');}};
- const stage={PIXI:{VERSION:'8.19.0'},app:{renderer:pixi,canvas,stage:root,screen:{width:390,height:844}},onContextLost(){listenerCount++;return ()=>listenerCount--;}};
+ const stage={PIXI:{VERSION:'8.19.0'},app:{destroy(){events.push("appDestroy");},renderer:pixi,canvas,stage:root,screen:{width:390,height:844}},onContextLost(){listenerCount++;return ()=>listenerCount--;}};
  class Renderer{constructor(){created++;events.push('constructor');this.debug={};this.domElement=canvas;this.info={};}getContext(){return gl;}resetState(){}setClearColor(){}setPixelRatio(){}setSize(){}setScissorTest(){}dispose(){disposed++;events.push('rendererDispose');}render(){events.push('threeDraw');if(shader)this.debug.onShaderError();events.push('threeDrawDone');}}
  class Batch extends THREE.InstancedMesh{dispose(){batchDisposals++;super.dispose();}}
  class Loader{async parseAsync(b){const name=new Uint8Array(b)[0]===1?'terrain':'trees';const scene=new THREE.Scene(),geometry=new THREE.BufferGeometry(),material=new THREE.MeshBasicMaterial();geometry.addEventListener('dispose',()=>assetDisposals++);material.addEventListener('dispose',()=>assetDisposals++);const mesh=new THREE.Mesh(geometry,material);mesh.name='tree';scene.add(mesh);await phase('parse:'+name);if(raceDepth&&name===raceAsset){let n=raceDepth;const tick=()=>{if(--n===0)signalOwner.abort();else queueMicrotask(tick);};queueMicrotask(tick);}return {scene};}}
@@ -25,8 +25,8 @@ async function exercise({cut=null,failure=null,shader=false,raceDepth=0,raceAsse
  if(cut){await started;signalOwner.abort();const pilot=await Promise.race([result,new Promise((_,reject)=>setTimeout(()=>reject(Error('abort did not settle promptly')),1000))]);assert.equal(pilot,null);assert.equal(created,0);assert.equal(listenerCount,0);release();await new Promise(r=>setTimeout(r,0));if(cut.startsWith('parse:'))assert(assetDisposals>=2);}
  else{const pilot=await result;if(failure){assert.equal(pilot,null);assert.equal(created,0);assert.equal(listenerCount,0);pixi.render({container:root});assert.equal(events.at(-1),'originalRender');}
  else {assert(pilot);assert.equal(events[events.indexOf('constructor')+1],'reset');const background={renderable:true};pilot.setFallbackRestore(()=>events.push('occluderRestore'));pilot.sync({view:{wildCreatures:[],transform:{scale:1},viewRect:{left:0,top:0}},wildNodes:new Map(),backgroundNodes:[background]});assert.equal(background.renderable,false);
- if(shader){pixi.render({container:root});assert.equal(background.renderable,true);assert(events.indexOf('threeDrawDone')<events.indexOf('rendererDispose'));assert.equal(events.at(-1),'originalRender');assert(events.indexOf('occluderRestore')<events.indexOf('originalRender'));}
- pilot.dispose();pilot.dispose();assert.equal(disposed,1);assert.equal(batchDisposals,1);assert.equal(listenerCount,0);assert.equal(assetDisposals,4);}}
+ if(shader){pixi.render({container:root});assert.equal(background.renderable,true);assert(events.indexOf('threeDrawDone')<events.indexOf('occluderRestore'));assert.equal(events.at(-1),'originalRender');assert(events.indexOf('occluderRestore')<events.indexOf('originalRender'));}
+ pilot.dispose();pilot.dispose();assert.equal(disposed,0);stage.app.destroy();assert.equal(disposed,1);assert.equal(batchDisposals,1);assert.equal(listenerCount,0);assert.equal(assetDisposals,4);}}
  return events;
 }
 try{

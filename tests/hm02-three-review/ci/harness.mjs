@@ -6,7 +6,7 @@ import {loadHM02ThreePilot} from '/src/championship/presentation/vs2/loadHM02Thr
 import {projection} from '/src/championship/presentation/vs2/hm02Projection.mjs';
 const manifest=await (await fetch('/src/championship/presentation/vs2/manifest.candidate.json')).json();
 const map=projection(manifest.projection),app=new PIXI.Application();
-await app.init({width:390,height:844,resolution:1,autoStart:false,preference:'webgl',backgroundAlpha:0,antialias:false});document.body.append(app.canvas);app.canvas.dataset.hm02GameCanvas='true';
+await app.init({width:390,height:844,resolution:1,autoStart:false,autoDensity:true,preference:'webgl',backgroundAlpha:0,antialias:false});document.body.append(app.canvas);app.canvas.dataset.hm02GameCanvas='true';
 const background=new PIXI.Graphics().rect(0,0,390,844).fill(0xff00ff);app.stage.addChild(background);
 const overlay=new PIXI.Graphics().rect(5,5,10,10).fill(0x00ffff);app.stage.addChild(overlay);
 const actorCanvas=document.createElement('canvas');actorCanvas.width=32;actorCanvas.height=96;actorCanvas.getContext('2d').fillStyle='#ffff00';actorCanvas.getContext('2d').fillRect(0,0,32,96);actorCanvas.getContext('2d').clearRect(14,50,4,4);
@@ -27,14 +27,14 @@ function contextEvidence(){const records=window.__hmContextRecords??[];return {
  sceneContexts:records.filter(r=>r.canvas===app.canvas).length,
  sharedRenderers:renderers.map(r=>({sameCanvas:r.domElement===app.canvas,sameContext:r.getContext()===app.renderer.gl})),
  records:records.map(r=>({kind:r.kind,stack:r.stack,baseline:baselineContexts.has(r.context),scene:r.canvas===app.canvas,connected:r.canvas.isConnected,width:r.canvas.width,height:r.canvas.height,parent:r.canvas.parentElement?.tagName??null,display:r.canvas.isConnected?getComputedStyle(r.canvas).display:null,lost:r.context.isContextLost()})),
- domCanvases:[...document.querySelectorAll('canvas')].map(c=>({scene:c===app.canvas,width:c.width,height:c.height,parent:c.parentElement?.tagName,display:getComputedStyle(c).display}))
+ domCanvases:[...document.querySelectorAll('canvas')].map(c=>({scene:c===app.canvas,width:c.width,height:c.height,parent:c.parentElement?.tagName,display:getComputedStyle(c).display,cssWidth:c.getBoundingClientRect().width,cssHeight:c.getBoundingClientRect().height}))
 };}
-let lastRenderTrace=[];
+let lastRenderTrace=[];const trackedTextures=new WeakSet();
 class TrackedRenderer extends THREE.WebGLRenderer{
  constructor(options){super(options);renderers.push(this);const originalRender=this.render;
  this.render=(scene,camera)=>{const originals=[],shadows=new Set();scene.traverse(o=>{if(o.userData.shadow)shadows.add(o.userData.shadow);});lastRenderTrace=[];
   scene.traverse(o=>{if(!o.isMesh)return;const original=o.onBeforeRender;originals.push([o,original]);o.onBeforeRender=function(...args){const m=args[4];lastRenderTrace.push({kind:shadows.has(o)?'contact-shadow':o.userData.shadow?'actor':'scenery',name:o.name,transparent:m.transparent,depthTest:m.depthTest,depthWrite:m.depthWrite,renderOrder:o.renderOrder});return original.apply(this,args);};});
-  try{return originalRender.call(this,scene,camera);}finally{for(const [o,fn]of originals)o.onBeforeRender=fn;}
+  try{const result=originalRender.call(this,scene,camera);scene.traverse(o=>{for(const m of [].concat(o.material??[])){for(const [slot,t]of [...Object.entries(m),...Object.entries(this.properties.get(m).uniforms??{}).map(([k,v])=>['uniform:'+k,v.value])]){if(!t?.isTexture)continue;const owner={uuid:t.uuid,slot,material:m.name,object:o.name,actor:!!o.userData.shadow,width:t.image?.width,height:t.image?.height};window.__hmTextureAudit?.identify(this.properties.get(t).__webglTexture,owner);if(!trackedTextures.has(t)){trackedTextures.add(t);t.addEventListener('dispose',()=>window.__hmTextureAudit?.disposedOwner(t.uuid));}}}});return result;}finally{for(const [o,fn]of originals)o.onBeforeRender=fn;}
  };}
 }
 class DiagnosticScene extends THREE.Scene{constructor(){super();if(mode==='pillar'){const m=new THREE.Mesh(new THREE.BoxGeometry(1.1,2,1),new THREE.MeshBasicMaterial({color:0xff0000}));m.position.set(...map.ground(2500,2530,-.005));m.position.y+=1;this.add(m);fixtures.push(m);}}}

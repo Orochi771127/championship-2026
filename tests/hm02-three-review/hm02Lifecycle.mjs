@@ -26,3 +26,34 @@ export function shaderFailureGuard(renderer){
   renderer.debug.onShaderError=()=>{failure=new Error('HM02_SHADER_COMPILE_OR_LINK_FAILED');};
   return {draw(callback){callback();if(failure)throw failure;}};
 }
+
+// One renderer generation per owning Pixi Application/context, not per field.
+// No unknown GL resources are deleted and the Pixi context is never lost here.
+const appRenderers=new WeakMap();
+export function leaseHM02Renderer({THREE,app,onInvalidate}){
+  let entry=appRenderers.get(app);
+  if(entry&&entry.gl!==app.renderer.gl){entry.retire(new Error('HM02_CONTEXT_GENERATION_CHANGED'));entry=null;}
+  if(entry?.leased)throw new Error('HM02_RENDERER_ALREADY_LEASED');
+  if(!entry){
+    if(typeof app.destroy!=='function'||typeof app.canvas.addEventListener!=='function')throw new Error('HM02_APP_LIFETIME_UNAVAILABLE');
+    const renderer=new THREE.WebGLRenderer({canvas:app.canvas,context:app.renderer.gl});
+    entry={renderer,gl:app.renderer.gl,leased:false,retired:false,onInvalidate:null};
+    const originalDestroy=app.destroy;
+    const lost=()=>entry.retire(new Error('HM02_CONTEXT_LOST_USE_2D'));
+    const destroy=function(...args){let result;try{entry.retire(new Error('HM02_APP_DESTROYED'));}finally{result=originalDestroy.apply(this,args);}return result;};
+    entry.retire=error=>{
+      if(entry.retired)return;entry.retired=true;appRenderers.delete(app);
+      app.canvas.removeEventListener('webglcontextlost',lost);if(app.destroy===destroy)app.destroy=originalDestroy;
+      const callback=entry.onInvalidate;entry.onInvalidate=null;
+      try{callback?.(error);}finally{renderer.dispose();app.renderer.resetState();}
+    };
+    app.destroy=destroy;app.canvas.addEventListener('webglcontextlost',lost);appRenderers.set(app,entry);
+  }
+  entry.leased=true;entry.onInvalidate=onInvalidate;let released=false;
+  return {renderer:entry.renderer,release(){
+    if(released)return;released=true;entry.leased=false;entry.onInvalidate=null;
+    // Drop field/scene render lists; retain only app-lifetime renderer internals.
+    entry.renderer.renderLists?.dispose();
+    if(!entry.retired){entry.renderer.resetState();app.renderer.resetState();}
+  }};
+}
