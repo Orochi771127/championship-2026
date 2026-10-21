@@ -9,6 +9,7 @@ const plan=JSON.parse(await fs.readFile('tests/ranch-floor-data/coverage-plan.js
 const matrix=JSON.parse(await fs.readFile('tests/ranch-floor-data/coverage-37fields-100slots.json','utf8'));
 const motion=JSON.parse(await fs.readFile('tests/ranch-floor-data/cm07-motion-plan.json','utf8'));
 const cat=plan.characters.find(c=>c.entityId==='m106_nyaromon');assert.ok(cat);
+const capturePhone=async(page,file)=>{const bytes=await page.screenshot({path:file});assert.equal(bytes.readUInt32BE(16),390,'PNG physical width at DPR1');assert.equal(bytes.readUInt32BE(20),844,'PNG physical height at DPR1');return bytes;};
 await fs.mkdir(out,{recursive:true});const results=[],browser=await ({chromium,webkit}[engine]).launch({headless:true});let failure=null;
 try{
  for(const mode of ['baseline','floor-only']){
@@ -20,11 +21,14 @@ try{
   const record={mode,engine,sceneSha256:sha(mode==='baseline'?baseline:candidate),samples:[],motionSamples:[],errors,consoleMessages,status:'RUNNING'};results.push(record);
   try{
    await page.goto(new URL('tests/fixtures/ranch-audit.html',base).href);await page.waitForFunction(()=>!!globalThis.ranchAudit);
+   const viewport=await page.evaluate(()=>({width:innerWidth,height:innerHeight,dpr:devicePixelRatio,visualWidth:visualViewport.width,visualScale:visualViewport.scale,pixiWidth:document.querySelector('canvas').getBoundingClientRect().width,pixiHeight:document.querySelector('canvas').getBoundingClientRect().height}));
+   assert.deepEqual(viewport,{width:390,height:844,dpr:1,visualWidth:390,visualScale:1,pixiWidth:390,pixiHeight:844},'Actual phone CSS viewport and Pixi canvas must match');record.viewport=viewport;
    const bindings=await page.evaluate(matrix=>globalThis.ranchAudit.buildBindings(matrix,['field_cm07_01']),matrix),fixture=bindings.field_cm07_01;assert.ok(fixture);
    for(const zoom of [1,.7])for(const [pose,ref] of [['idle',cat.idle],['lower-extent',cat.supportExtreme]]){
     const test={id:mode+'-cat-'+pose+'-'+zoom,fieldId:'field_cm07_01',character:cat,sequenceId:ref[0],frameIndex:ref[1],texture:ref[2],nativeZ:0,zoom,viewport:{width:390,height:844}};
     const data=await page.evaluate(({test,fixture})=>globalThis.ranchAudit.render(test,fixture),{test,fixture});
-    await page.screenshot({path:path.join(out,test.id+'.png')});record.samples.push(data);
+    await capturePhone(page,path.join(out,test.id+'.png'));
+    const threeRect=await page.locator('.cm-ranch-three-canvas').evaluate(c=>({width:c.getBoundingClientRect().width,height:c.getBoundingClientRect().height}));assert.deepEqual(threeRect,{width:390,height:844},'Three CSS canvas must match phone viewport');record.samples.push(data);
     assert.ok(Number.isFinite(data.projectionError)&&data.projectionError<=.5,'Actual Three subpixel projection bound');assert.ok(data.diagnostics.frames>0&&!data.diagnostics.lost);assert.deepEqual(errors,[]);
    }
    // Eight consecutive real native-tick samples per mode, not a full orbit gate.
@@ -34,7 +38,7 @@ try{
     for(const source of motion.clips.find(c=>c.zoom===.7&&c.camera==='fixed'&&c.animated===animated&&c.lift==='ground').samples.slice(0,8)){
      const sample={...source,pointNative:source.pointLocalNative.map((v,k)=>v+fixture.targetOriginNative[k]),cameraCenterNative:source.cameraCenterLocalNative.map((v,k)=>v+fixture.targetOriginNative[k])};
      const data=await page.evaluate(s=>globalThis.ranchAudit.stepMotion(s),sample);record.motionSamples.push(data);assert.ok(Number.isFinite(data.projectionError)&&data.projectionError<=.5,'Actual Three subpixel projection bound');assert.deepEqual(errors,[]);
-     if(source.index===0||source.index===7)await page.screenshot({path:path.join(out,mode+'-motion-'+(animated?'native':'frozen')+'-'+source.index+'.png')});
+     if(source.index===0||source.index===7)await capturePhone(page,path.join(out,mode+'-motion-'+(animated?'native':'frozen')+'-'+source.index+'.png'));
     }
    }
    if(mode==='baseline')assert.ok(baselineRequests>0,'Baseline module was actually served');
