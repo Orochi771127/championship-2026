@@ -1,0 +1,97 @@
+{
+  "fieldId": "field_cm07_01",
+  "glbSha256": "de0117594f79f4573e1d2537c033bac5fa2752deb2f0aa7abba26d3c7f264260",
+  "coordinateFrame": "ORIGINAL_PRIMITIVE_LOCAL_APPLY_CAPTURED_MESH_MATRIXWORLD_ONCE",
+  "nodes": [
+    {
+      "nodeIndex": 5,
+      "nodeName": "crags-el-basalt",
+      "meshIndex": 5,
+      "primitiveIndex": 0,
+      "positionCount": 10192,
+      "indexCount": 15792,
+      "positionSha256Float32LE": "fc760bb5d28536b70ccbe1d61d17c09f97ec972fe5f4df6ddb8bcaf037cd0638",
+      "indexSha256Uint32LE": "0f00528e1bf309580e6d8e9003c9360a30a642206659cb6fe397d8fe312ecd40",
+      "authoredNode": {
+        "mesh": 5,
+        "name": "crags-el-basalt"
+      },
+      "material": {
+        "doubleSided": true,
+        "name": "el-basalt",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.11999999731779099,
+            0.10999999940395355,
+            0.10999999940395355,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.8500000238418579
+        }
+      }
+    },
+    {
+      "nodeIndex": 6,
+      "nodeName": "crags-el-basalt-light",
+      "meshIndex": 6,
+      "primitiveIndex": 0,
+      "positionCount": 10010,
+      "indexCount": 15510,
+      "positionSha256Float32LE": "95196d90ffd738940f6e23fe67bdcd04543724e0d5d7d32cb4981ce309a3511e",
+      "indexSha256Uint32LE": "fa3752ba392a326199315ab10f32723f1094f64c4b862a5f3974023231206d07",
+      "authoredNode": {
+        "mesh": 6,
+        "name": "crags-el-basalt-light",
+        "translation": [
+          -0.625442385673523,
+          0,
+          -0.27188900113105774
+        ]
+      },
+      "material": {
+        "doubleSided": true,
+        "name": "el-basalt-light",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.2800000011920929,
+            0.25,
+            0.23000000417232513,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.8199999928474426
+        }
+      }
+    },
+    {
+      "nodeIndex": 7,
+      "nodeName": "crags-el-basalt-mid",
+      "meshIndex": 7,
+      "primitiveIndex": 0,
+      "positionCount": 10010,
+      "indexCount": 15510,
+      "positionSha256Float32LE": "befce2e8c6d1a9f9e34d8fbd67293966cecf2191fede9838c4ad93a531bc140a",
+      "indexSha256Uint32LE": "fa3752ba392a326199315ab10f32723f1094f64c4b862a5f3974023231206d07",
+      "authoredNode": {
+        "mesh": 7,
+        "name": "crags-el-basalt-mid"
+      },
+      "material": {
+        "doubleSided": true,
+        "name": "el-basalt-mid",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.1899999976158142,
+            0.17000000178813934,
+            0.1599999964237213,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.8500000238418579
+        }
+      }
+    }
+  ],
+  "npzSha256": "f089189956ec7fae7478d18b3e8671e2e3b4e5f734ef29450b3ea4a60881b10e"
+}
