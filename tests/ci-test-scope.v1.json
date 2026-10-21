@@ -427,6 +427,9 @@
     "tests/ranch-support-water-overlays.mjs": "Requires Playwright Chromium/WebKit and loopback HTTP; explicitly compares shared water-UV-repair reference and floor candidate, preserving raw failures. Diagnostic only, not support-semantic acceptance.",
     "tests/ranch-normal-contact-identity-v2.mjs": "Requires Playwright Chromium/WebKit and loopback HTTP; three-mode identity captures with strict native audio lifecycle evidence, no retrospective pass of prior failures.",
     "tests/ranch-normal-scale-calibration-v2.mjs": "Requires Playwright Chromium/WebKit and loopback HTTP; four actual production UI zoom captures per engine with lifecycle evidence. Calibration only.",
-    "tests/ranch-normal-zoom-flight-v2.mjs": "Requires Playwright Chromium/WebKit and loopback HTTP; actual public carry/release/landing with measured canvas coordinates and lifecycle evidence. Bounded diagnostic, not full airborne coverage."
+    "tests/ranch-normal-zoom-flight-v2.mjs": "Requires Playwright Chromium/WebKit and loopback HTTP; actual public carry/release/landing with measured canvas coordinates and lifecycle evidence. Bounded diagnostic, not full airborne coverage.",
+    "tests/ranch-normal-scale-calibration-v3.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP; production UI zoom calibration with same-zoom/source-cell paired fallback assertions and strict lifecycle evidence.",
+    "tests/ranch-normal-zoom-flight-v3.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP; bounded prearmed actual-pointerup/native-flight observer with strict readiness, landing and lifecycle evidence. Metadata does not approve panel-occluded visuals.",
+    "tests/ranch-depth-pipelines.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP; bounded default/offscreen framebuffer, compiled shader and thin-plane diagnostics using explicitly matched water/ice repair overlays. Not support authority or release acceptance."
   }
 }

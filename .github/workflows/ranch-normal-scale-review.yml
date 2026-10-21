@@ -6,8 +6,8 @@ on:
       - 'src/championship/presentation/ranchThreeScene.js'
       - 'src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js'
       - 'tests/fixtures/ranch-normal-pairs.html'
-      - 'tests/ranch-normal-scale-calibration-v2.mjs'
-      - 'tests/ranch-normal-zoom-flight-v2.mjs'
+      - 'tests/ranch-normal-scale-calibration-v3.mjs'
+      - 'tests/ranch-normal-zoom-flight-v3.mjs'
       - 'tests/ranch-mask-probe/inject-contact-diagnostics-v2.mjs'
       - 'src/championship/presentation/publicCharacterRoster.js'
       - 'src/championship/presentation/vs2/huntContactShadow.js'
@@ -57,7 +57,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-pairs.html > /dev/null
-          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-scale-calibration-v2.mjs http://127.0.0.1:8765/ .tmp/normal-scale/${{ matrix.engine }}/cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
+          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-scale-calibration-v3.mjs http://127.0.0.1:8765/ .tmp/normal-scale/${{ matrix.engine }}/cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
       - name: Observe actual public hand flight independently
         if: ${{ !cancelled() && steps.build_validation.outcome == 'success' }}
         shell: bash
@@ -77,7 +77,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-pairs.html > /dev/null
-          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-zoom-flight-v2.mjs http://127.0.0.1:8765/ .tmp/normal-scale/${{ matrix.engine }}/flight-cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe-v2/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
+          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-zoom-flight-v3.mjs http://127.0.0.1:8765/ .tmp/normal-scale/${{ matrix.engine }}/flight-cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe-v2/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
       - name: Preserve diagnostic captures, not release acceptance
         if: always()
         uses: actions/upload-artifact@v4
