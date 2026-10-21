@@ -67,9 +67,9 @@ try{
 async function normalOwnedPartySmoke(browser,base,prefix,out){
  const url=new URL(base);assert.ok(['127.0.0.1','localhost','[::1]'].includes(url.hostname),'Controlled QA requires loopback');
  const game=await browser.newPage({viewport:{width:1280,height:900},locale:'zh-TW'});game.setDefaultTimeout(90000);
- const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-ma05-owned-party.html#prepare-practice',network:[],errors:[],pageErrors:[],consoleFailures:[],httpFailures:[],requestFailures:[],scenes:[]};let scene='fixture';
+ const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-ma05-owned-party.html#prepare-practice',network:[],errors:[],pageErrors:[],consoleFailures:[],httpFailures:[],requestFailures:[],scenes:[]};let scene='fixture',phase='navigation';
  game.on('response',r=>{if(r.url().includes('/m303_ikkakumon'))evidence.network.push({scene,url:r.url(),status:r.status()});if(r.status()>=400)evidence.httpFailures.push({scene,url:r.url(),status:r.status()})});
- game.on('requestfailed',r=>evidence.requestFailures.push({scene,url:r.url(),failure:r.failure()?.errorText,method:r.method(),resourceType:r.resourceType()}));
+ game.on('requestfailed',r=>evidence.requestFailures.push({scene,phase,url:r.url(),failure:r.failure()?.errorText,method:r.method(),resourceType:r.resourceType()}));
  game.on('pageerror',e=>{evidence.pageErrors.push(e.message);evidence.errors.push(e.message)});game.on('console',m=>{if(/FALLBACK|CHARACTER_REVIEW_FAILED|CANDIDATE_.*DRIFT/.test(m.text())){evidence.consoleFailures.push({type:m.type(),message:m.text()});evidence.errors.push(m.text())}});
  const save=()=>fs.writeFile(out+'/normal-game-result.json',JSON.stringify(evidence,null,2));
  const screen=async name=>game.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();
@@ -98,7 +98,7 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
   assert.ok(evidence.network.some(n=>n.url.includes('/ranch-streaming-v1/')&&n.url.endsWith('.webp')&&n.status===200));assert.ok(!evidence.network.some(n=>n.url.includes('/battle-packed-20261013/m303_ikkakumon/')));
   assert.ok(!evidence.network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.(?:png|webp)$/.test(n.url)),'Battle retains the selected public pages');
   evidence.scenes.push({scene:'battle',entry:'PASS',diagnostics:battle,textureBinding:'same-document cache or new request; exact entity, frozen density4 trial geometry, no packed route',groundShadow:'DEFAULT_ELLIPSE_SCREENSHOT_REVIEW_REQUIRED_NOT_BAKED_REVIEW'});await game.screenshot({path:out+'/normal-battle073.png',fullPage:true});await save();
-  await game.getByRole('button',{name:'離開對戰',exact:true}).first().click();const dialog=game.getByRole('dialog');await dialog.waitFor();await dialog.getByRole('button',{name:'離開對戰',exact:true}).click();await home();
+  await game.getByRole('button',{name:'離開對戰',exact:true}).first().click();const dialog=game.getByRole('dialog');await dialog.waitFor();phase='battle-exit';await dialog.getByRole('button',{name:'離開對戰',exact:true}).click();await home();
   assert.equal(await game.evaluate(()=>typeof globalThis.__championshipBattleDiagnostics),'undefined','Battle diagnostics disposed on exit');await game.screenshot({path:out+'/normal-return-raising073.png',fullPage:true});
   evidence.scenes.push({scene:'raising-return',entry:'PASS',battleExit:'PASS'});
   // a540 and current bm03GroundShadows.js share blob ff3327693ec6fe1df788d53da36ec8705a7ae523.
@@ -115,14 +115,25 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
    [new URL('assets/production/original-music-r1/bgm_login_page.mp3',base).href,'raising'],
    [new URL('assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3',base).href,'battle']
   ]);
-  assert.ok(evidence.requestFailures.length<=2,'At most the two observed scene-transition media cancellations');
-  assert.equal(new Set(evidence.requestFailures.map(r=>r.url)).size,evidence.requestFailures.length,'No repeated media failure');
+  // Scene-owned sample fetches are cancelled by battleAudioPresentation.dispose().
+  // Only the four exact requests observed in run39586767530 are permitted here,
+  // and only after this test confirms the ordinary battle-exit dialog.
+  const allowedSampleAborts=new Set(['0201','0202','0203','0204'].map(id=>new URL(`assets/production/internal-faithful-baseline/battle-audio-v1/${id}.wav`,base).href));
+  const mediaAborts=[],sampleAborts=[];
   for(const r of evidence.requestFailures){
-   assert.ok(allowedMediaAborts.has(r.url),'No failed character image/JSON/module or unlisted audio request');
-   assert.equal(r.scene,allowedMediaAborts.get(r.url),'Only the corresponding controlled scene transition');
-   assert.equal(r.failure,'net::ERR_ABORTED');assert.equal(r.method,'GET');assert.equal(r.resourceType,'media');
+   assert.equal(r.failure,'net::ERR_ABORTED');assert.equal(r.method,'GET');
+   if(allowedMediaAborts.has(r.url)){
+    assert.equal(r.scene,allowedMediaAborts.get(r.url));assert.equal(r.resourceType,'media');mediaAborts.push(r);
+   }else{
+    assert.ok(allowedSampleAborts.has(r.url),'No failed character image/JSON/module or unlisted audio request');
+    assert.equal(r.scene,'battle');assert.equal(r.phase,'battle-exit','Sample cancellation only during confirmed exit');
+    assert.equal(r.resourceType,'fetch');sampleAborts.push(r);
+   }
   }
-  evidence.mediaLifecycle={abortedRequests:evidence.requestFailures,completePlayback:'NOT_TESTED',sourceBlob:'da504c9c1f76235f4fb6314b0218bbda41107186'};
+  assert.ok(mediaAborts.length<=2);assert.ok(sampleAborts.length<=4,'At most four scene-owned concurrent sample fetches');
+  assert.equal(new Set(evidence.requestFailures.map(r=>r.url)).size,evidence.requestFailures.length,'No repeated request failure');
+  evidence.mediaLifecycle={abortedRequests:mediaAborts,completePlayback:'NOT_TESTED',sourceBlob:'da504c9c1f76235f4fb6314b0218bbda41107186'};
+  evidence.sampleLifecycle={abortedRequests:sampleAborts,completePlayback:'NOT_TESTED',sourceBlob:'ac83749c1d1318d74547542d07d8e60467d118c8',phase:'confirmed battle-exit'};
   assert.deepEqual(evidence.pageErrors,[],'No page errors, including errors resembling the known warning');
   assert.deepEqual(evidence.consoleFailures,[{type:'warning',message:'CHAMPIONSHIP_BM03_SHADOW_FALLBACK BM03_SHADOW_METADATA_UNAVAILABLE'}],'Exactly one warning-level baseline diagnostic');
   assert.deepEqual(evidence.errors,['CHAMPIONSHIP_BM03_SHADOW_FALLBACK BM03_SHADOW_METADATA_UNAVAILABLE'],'Exactly one known loopback-only baseline warning; all other errors/fallbacks fail');
