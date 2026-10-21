@@ -9,6 +9,12 @@ const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
 const right = new THREE.Vector3(Math.SQRT1_2, 0, -Math.SQRT1_2);
 const up = new THREE.Vector3(-Math.sin(RANCH_ELEVATION)*Math.SQRT1_2, Math.cos(RANCH_ELEVATION), -Math.sin(RANCH_ELEVATION)*Math.SQRT1_2);
 const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math.sin(RANCH_ELEVATION), Math.cos(RANCH_ELEVATION)*Math.SQRT1_2);
+const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
+
+const WATER_FIELDS = new Set(['field_cm04_01', 'field_cm05_01', 'field_cm10_01', 'field_cm09_01', 'field_cm19_01', 'field_cm39_01']);
+const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm03_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
+const ICE_FIELDS = new Set(['field_cm06_01', 'field_cm16_01', 'field_cm21_01']);
+const INDUSTRIAL_FIELDS = new Set(['field_cm17_01', 'field_cm20_01', 'field_cm25_01', 'field_cm15_01', 'field_cm22_01']);
 
 /** Bounded rendering adapter, driven only by the existing Pixi scene ticker.
  * The native simulation, pointer targets, camera pan/zoom and save stay owned
@@ -44,13 +50,39 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   scene.add(sun,sun.target);
   const models=new Map(), instances=[], textures=new Map(), sprites=new Map();
   const modelBitmaps=new Set();
-  const lavaMaterials=new Set(), smokeNodes=[];
+  const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
+  const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
   let sceneClock=0;
   const textureCap=currentQualityTier()==='saver'?512:currentQualityTier()==='high'?2048:1024;
   let disposed=false, lost=false, width=0,height=0,frames=0, lastRenderMs=0;
   const loader=new GLTFLoader();
   const draco=new DRACOLoader().setDecoderPath('node_modules/three/examples/jsm/libs/draco/');
   loader.setDRACOLoader(draco);
+
+  function createParticleSystem({count,color,size,opacity,initParticle,updateParticle}){
+    const geo=new THREE.BufferGeometry();
+    const positions=new Float32Array(count*3);
+    const pdata=[];
+    for(let i=0;i<count;i++){
+      const p=initParticle(i);
+      pdata.push(p);
+      positions[i*3]=p.x;positions[i*3+1]=p.y;positions[i*3+2]=p.z;
+    }
+    geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+    const mat=new THREE.PointsMaterial({color,size,transparent:true,opacity,blending:THREE.AdditiveBlending,depthWrite:false});
+    const points=new THREE.Points(geo,mat);
+    return {points,geo,mat,
+      update(dt,t){
+        const arr=geo.attributes.position.array;
+        for(let i=0;i<count;i++){
+          updateParticle(pdata[i],dt,t,i);
+          arr[i*3]=pdata[i].x;arr[i*3+1]=pdata[i].y;arr[i*3+2]=pdata[i].z;
+        }
+        geo.attributes.position.needsUpdate=true;
+      },
+      dispose(){geo.dispose();mat.dispose();}
+    };
+  }
   try {
     // Fetch through the view lifetime; GLTFLoader.load alone cannot abort.
     for(const id of new Set(placements.map(p=>p.fieldId))) {
@@ -135,15 +167,118 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
           });
         }
 
-        // Collect dynamic lava materials and smoke nodes
+        // Bounding box for local centers
+        const bBox=new THREE.Box3().setFromObject(object);
+        const lCenter=bBox.getCenter(new THREE.Vector3()).sub(object.position);
+        const lMaxY=bBox.max.y-object.position.y;
+
+        // Dynamic Suite: Shaders
         object.traverse(o=>{
           if(o.isMesh&&o.material){
             for(const m of [].concat(o.material)){
-              if(m.emissiveMap&&(m.name?.includes('cm07')||m.name?.includes('terrain-pbr'))){
-                m.emissiveMap.wrapS=THREE.RepeatWrapping;
-                m.emissiveMap.wrapT=THREE.RepeatWrapping;
-                m.emissiveMap.needsUpdate=true;
+              // Volcano (field_cm07_01): Internal fluid lava churning & heat pulsing
+              if(p.fieldId==='field_cm07_01'||m.name?.includes('cm07')||m.name?.includes('terrain-pbr')){
                 lavaMaterials.add(m);
+                if(!m.userData.lavaHooked){
+                  m.userData.lavaHooked=true;
+                  m.onBeforeCompile=(shader)=>{
+                    shader.uniforms.uLavaTime={value:0};
+                    m.userData.shader=shader;
+                    shader.fragmentShader='uniform float uLavaTime;\n'+shader.fragmentShader;
+                    shader.fragmentShader=shader.fragmentShader.replace(
+                      '#include <emissivemap_fragment>',
+                      `#include <emissivemap_fragment>
+                      #ifdef USE_EMISSIVEMAP
+                        float lavaMask=clamp(totalEmissiveRadiance.r*1.5,0.0,1.0);
+                        if(lavaMask>0.02){
+                          vec2 flow1=vEmissiveMapUv*14.0+vec2(uLavaTime*0.14,uLavaTime*0.08);
+                          vec2 flow2=vEmissiveMapUv*22.0-vec2(uLavaTime*0.10,uLavaTime*0.15);
+                          float fluid=0.5+0.25*(sin(flow1.x+sin(flow1.y))+cos(flow2.x-cos(flow2.y)));
+                          float pulse=0.9+0.22*sin(uLavaTime*2.4);
+                          vec3 magmaHot=vec3(1.3,1.15,0.45);
+                          vec3 magmaDeep=vec3(1.0,0.35,0.08);
+                          vec3 fluidHeat=mix(magmaDeep,magmaHot,fluid)*pulse;
+                          totalEmissiveRadiance*=fluidHeat;
+                        }
+                      #endif`
+                    );
+                  };
+                  m.needsUpdate=true;
+                }
+              }
+
+              // Water / Waterfall (CM04, CM05, CM10)
+              if(WATER_FIELDS.has(p.fieldId)){
+                dynamicShaders.add(m);
+                if(!m.userData.waterHooked){
+                  m.userData.waterHooked=true;
+                  m.onBeforeCompile=(shader)=>{
+                    shader.uniforms.uWaterTime={value:0};
+                    m.userData.shader=shader;
+                    shader.fragmentShader='uniform float uWaterTime;\n'+shader.fragmentShader;
+                    shader.fragmentShader=shader.fragmentShader.replace(
+                      '#include <roughnessmap_fragment>',
+                      `#include <roughnessmap_fragment>
+                      vec2 wUv1=vUv*26.0+vec2(uWaterTime*0.40,uWaterTime*0.20);
+                      vec2 wUv2=vUv*36.0-vec2(uWaterTime*0.25,uWaterTime*0.45);
+                      float ripple=sin(wUv1.x+sin(wUv1.y))*cos(wUv2.y-cos(wUv2.x));
+                      float glint=pow(max(0.0,0.5+0.5*ripple),6.0)*0.35;
+                      float flow=sin(vUv.y*45.0-uWaterTime*3.2)*0.08;
+                      diffuseColor.rgb+=vec3(0.05,0.12,0.18)*glint+vec3(0.04,0.08,0.12)*max(0.0,flow);`
+                    );
+                  };
+                  m.needsUpdate=true;
+                }
+              }
+
+              // Forest / Grassland Wind Sway (CM01, CM03, CM14)
+              if(FOREST_FIELDS.has(p.fieldId)){
+                dynamicShaders.add(m);
+                if(!m.userData.windHooked){
+                  m.userData.windHooked=true;
+                  m.onBeforeCompile=(shader)=>{
+                    shader.uniforms.uWindTime={value:0};
+                    m.userData.shader=shader;
+                    shader.vertexShader='uniform float uWindTime;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace(
+                      '#include <begin_vertex>',
+                      `#include <begin_vertex>
+                      float windElev=max(0.0,position.y-0.35);
+                      if(windElev>0.0){
+                        float flex=windElev*windElev*0.022;
+                        float sway=sin(uWindTime*2.2+position.x*0.7+position.z*0.7);
+                        float cross=cos(uWindTime*1.6+position.z*0.9);
+                        transformed.x+=(sway*0.6+cross*0.4)*flex;
+                        transformed.z+=(sway*0.4+cross*0.6)*flex;
+                        transformed.y-=abs(sway)*flex*0.12;
+                      }`
+                    );
+                  };
+                  m.needsUpdate=true;
+                }
+              }
+
+              // Snow / Ice Fresnel Shimmer (CM06, CM16)
+              if(ICE_FIELDS.has(p.fieldId)){
+                dynamicShaders.add(m);
+                if(!m.userData.iceHooked){
+                  m.userData.iceHooked=true;
+                  m.onBeforeCompile=(shader)=>{
+                    shader.uniforms.uIceTime={value:0};
+                    m.userData.shader=shader;
+                    shader.fragmentShader='uniform float uIceTime;\n'+shader.fragmentShader;
+                    shader.fragmentShader=shader.fragmentShader.replace(
+                      '#include <roughnessmap_fragment>',
+                      `#include <roughnessmap_fragment>
+                      float fresnel=pow(1.0-max(0.0,dot(geometryNormal,geometryViewDir)),2.8);
+                      float shimmer=sin(uIceTime*3.5+vUv.x*65.0)*cos(uIceTime*2.8+vUv.y*65.0);
+                      float iceBreath=0.5+0.5*sin(uIceTime*1.8);
+                      diffuseColor.rgb+=vec3(0.08,0.16,0.25)*fresnel*(0.7+0.3*iceBreath+0.25*max(0.0,shimmer));
+                      roughnessFactor=clamp(roughnessFactor*(0.85+0.15*iceBreath),0.1,1.0);`
+                    );
+                  };
+                  m.needsUpdate=true;
+                }
               }
             }
           }
@@ -151,6 +286,89 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
             smokeNodes.push({node:o,baseY:o.position.y,offset:smokeNodes.length*1.8});
           }
         });
+
+        // Dynamic Suite: Particles and Machinery
+        if(currentQualityTier()!=='saver'){
+          if(WATER_FIELDS.has(p.fieldId)){
+            const ps=createParticleSystem({
+              count:24,color:0xc0e8ff,size:0.14,opacity:0.75,
+              initParticle:()=>({
+                x:lCenter.x+(Math.random()-0.5)*5.0,
+                y:0.1+Math.random()*0.1,
+                z:lCenter.z+(Math.random()-0.5)*5.0,
+                vx:(Math.random()-0.5)*0.4,
+                vy:0.5+Math.random()*0.6,
+                vz:(Math.random()-0.5)*0.4,
+                life:0.4+Math.random()*0.6
+              }),
+              updateParticle:(pt,dt)=>{
+                pt.x+=pt.vx*dt;pt.y+=pt.vy*dt;pt.z+=pt.vz*dt;pt.vy-=1.8*dt;pt.life-=dt;
+                if(pt.life<=0||pt.y<0.05){
+                  pt.x=lCenter.x+(Math.random()-0.5)*5.0;pt.y=0.1;pt.z=lCenter.z+(Math.random()-0.5)*5.0;
+                  pt.vx=(Math.random()-0.5)*0.4;pt.vy=0.5+Math.random()*0.6;pt.vz=(Math.random()-0.5)*0.4;
+                  pt.life=0.4+Math.random()*0.6;
+                }
+              }
+            });
+            object.add(ps.points);dynamicParticles.push(ps);
+          }
+
+          if(ICE_FIELDS.has(p.fieldId)){
+            const ps=createParticleSystem({
+              count:20,color:0xd0f2ff,size:0.18,opacity:0.45,
+              initParticle:(i)=>({
+                x:lCenter.x+(Math.random()-0.5)*6.0,
+                y:0.1+Math.random()*0.5,
+                z:lCenter.z+(Math.random()-0.5)*6.0,
+                life:1.0+Math.random()*1.5,
+                seed:i*1.3
+              }),
+              updateParticle:(pt,dt,t)=>{
+                pt.y+=0.18*dt;pt.x+=Math.sin(t*1.5+pt.seed)*0.08*dt;pt.z+=Math.cos(t*1.2+pt.seed)*0.08*dt;pt.life-=dt;
+                if(pt.life<=0||pt.y>1.4){
+                  pt.x=lCenter.x+(Math.random()-0.5)*6.0;pt.y=0.1;pt.z=lCenter.z+(Math.random()-0.5)*6.0;
+                  pt.life=1.0+Math.random()*1.5;
+                }
+              }
+            });
+            object.add(ps.points);dynamicParticles.push(ps);
+          }
+
+          if(INDUSTRIAL_FIELDS.has(p.fieldId)){
+            const chimX=lCenter.x-1.2, chimY=Math.max(1.8,lMaxY), chimZ=lCenter.z+0.8;
+            const ps=createParticleSystem({
+              count:20,color:0x788088,size:0.22,opacity:0.45,
+              initParticle:(i)=>({
+                x:chimX+(Math.random()-0.5)*0.2,
+                y:chimY+Math.random()*0.3,
+                z:chimZ+(Math.random()-0.5)*0.2,
+                life:1.2+Math.random()*0.8,
+                seed:i*1.1
+              }),
+              updateParticle:(pt,dt,t)=>{
+                pt.y+=0.45*dt;pt.x+=Math.sin(t*2.0+pt.seed)*0.1*dt;pt.z+=Math.cos(t*1.8+pt.seed)*0.1*dt;pt.life-=dt;
+                if(pt.life<=0){
+                  pt.x=chimX+(Math.random()-0.5)*0.2;pt.y=chimY;pt.z=chimZ+(Math.random()-0.5)*0.2;
+                  pt.life=1.2+Math.random()*0.8;
+                }
+              }
+            });
+            object.add(ps.points);dynamicParticles.push(ps);
+
+            const gearGeo=new THREE.CylinderGeometry(0.32,0.32,0.06,10);
+            const gearMat=new THREE.MeshStandardMaterial({color:0x5a626a,metalness:0.85,roughness:0.35});
+            const gear=new THREE.Mesh(gearGeo,gearMat);
+            gear.position.set(lCenter.x-0.6,Math.max(1.0,lMaxY*0.5),lCenter.z-0.5);
+            gear.rotation.x=Math.PI/2;
+            object.add(gear);dynamicMachines.push(gear);
+
+            const beaconGeo=new THREE.SphereGeometry(0.08,8,8);
+            const beaconMat=new THREE.MeshStandardMaterial({color:0x221100,emissive:0xff3300,emissiveIntensity:2.0});
+            const beacon=new THREE.Mesh(beaconGeo,beaconMat);
+            beacon.position.set(chimX,chimY+0.12,chimZ);
+            object.add(beacon);dynamicBeacons.push(beacon);
+          }
+        }
 
         const clips=models.get(p.fieldId).animations;
         const mixer=clips.length?new THREE.AnimationMixer(object):null;
@@ -186,28 +404,31 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     if(!sprite || sprite.destroyed || !sprite.visible || !root.visible)return;
     const material=materialFor(sprite.texture);if(!material)return;
     let item=sprites.get(key);
-    if(!item){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),material);mesh.quaternion.copy(camera.quaternion);scene.add(mesh);item={mesh,sprite};sprites.set(key,item);}
+    if(!item){
+      const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),material);
+      mesh.quaternion.copy(rotY);
+      scene.add(mesh);
+      item={mesh,sprite};
+      sprites.set(key,item);
+    }
     item.seen=true;item.mesh.visible=true;item.mesh.material=material;item.sprite=sprite;
-    // Pixi computes the same cell trim, native anchor, flip and animation frame
-    // used by input/feedback. Convert its four displayed corners, not an atlas
-    // rectangle guessed from a species size.
-    // getBounds() uses the untrimmed original canvas. Pixi renders the trimmed
-    // visualBounds quad; mapping the frame onto orig stretches packed sprites.
     const box=ranchSpriteScreenQuad(sprite);
     const foot=root.threeGroundScreen??root;
-    const ground=ranchNativeToWorld((foot.x-bounds.x)/pixelScale,(foot.y-bounds.y)/pixelScale,(root.threeGroundHeight??0)+.035);
-    const position=new THREE.Vector3(ground.x,ground.y,ground.z);
-    position.addScaledVector(right,(box.x+box.width/2-root.x)/(16*pixelScale));
-    position.addScaledVector(up,-(box.y+box.height/2-root.y)/(16*pixelScale));
-    // Native sprite anchors can sit a few pixels above the bottom of the
-    // visible feet. Move only along the orthographic view ray so the complete
-    // quad clears its supporting floor without changing its screen position.
-    const bottomY=position.y-box.height/(32*pixelScale)*up.y;
-    position.addScaledVector(direction,Math.max(0,((root.threeGroundHeight??0)+.015-bottomY)/direction.y));
-    item.mesh.position.copy(position);item.mesh.scale.set(box.width/(16*pixelScale),box.height/(16*pixelScale),1);
-    item.mesh.quaternion.copy(camera.quaternion);
-    const projected=position.clone().project(camera);
-    item.projectionError=Math.hypot((projected.x+1)*width/2-box.x-box.width/2,(1-projected.y)*height/2-box.y-box.height/2+.035*Math.cos(RANCH_ELEVATION)*16*pixelScale);
+    const groundHeight=root.threeGroundHeight??0;
+    const ground=ranchNativeToWorld((foot.x-bounds.x)/pixelScale,(foot.y-bounds.y)/pixelScale,groundHeight);
+
+    const worldW=box.width/(16*pixelScale);
+    const worldH=(box.height/(16*pixelScale))/Math.cos(RANCH_ELEVATION);
+    const dx=(box.x+box.width/2-root.x)/(16*pixelScale);
+    // Align base of sprite with foot anchor; ensure it sits slightly above floor to prevent z-fighting
+    const y_bottom=groundHeight+0.015+(root.y-(box.y+box.height))/(16*pixelScale*Math.cos(RANCH_ELEVATION));
+
+    item.mesh.scale.set(worldW,worldH,1);
+    item.mesh.position.set(ground.x+right.x*dx, y_bottom+worldH/2, ground.z+right.z*dx);
+    item.mesh.quaternion.copy(rotY);
+
+    const projected=item.mesh.position.clone().project(camera);
+    item.projectionError=Math.hypot((projected.x+1)*width/2-box.x-box.width/2,(1-projected.y)*height/2-box.y-box.height/2);
     const u=sprite.texture.uvs,flip=sprite.scale.x*root.scale.x<0;
     const values=ranchSpriteUvs(u,flip);
     item.mesh.geometry.attributes.uv.array.set(values);item.mesh.geometry.attributes.uv.needsUpdate=true;
@@ -234,12 +455,19 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     sceneClock+=deltaSec;
     if(!prefersReducedMotion()){
       for(const m of lavaMaterials){
-        if(m.emissiveMap){
-          m.emissiveMap.offset.x=(sceneClock*0.016)%1;
-          m.emissiveMap.offset.y=(sceneClock*0.010)%1;
-        }
-        m.emissiveIntensity=1.15+0.35*Math.sin(sceneClock*2.2);
+        if(m.userData.shader)m.userData.shader.uniforms.uLavaTime.value=sceneClock;
+        m.emissiveIntensity=1.15+0.25*Math.sin(sceneClock*2.2);
       }
+      for(const m of dynamicShaders){
+        if(m.userData.shader){
+          if(m.userData.shader.uniforms.uWaterTime)m.userData.shader.uniforms.uWaterTime.value=sceneClock;
+          if(m.userData.shader.uniforms.uWindTime)m.userData.shader.uniforms.uWindTime.value=sceneClock;
+          if(m.userData.shader.uniforms.uIceTime)m.userData.shader.uniforms.uIceTime.value=sceneClock;
+        }
+      }
+      for(const ps of dynamicParticles)ps.update(deltaSec,sceneClock);
+      for(const g of dynamicMachines)g.rotation.z+=deltaSec*1.8;
+      for(const b of dynamicBeacons)b.material.emissiveIntensity=Math.sin(sceneClock*8.0)>0.35?3.0:0.2;
       for(const s of smokeNodes){
         s.node.position.y=s.baseY+0.07*Math.sin(sceneClock*1.5+s.offset);
         s.node.rotation.y=(sceneClock*0.35+s.offset)%(Math.PI*2);
@@ -269,7 +497,10 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   }
   function dispose(){
     if(disposed)return;disposed=true;
-    lavaMaterials.clear();smokeNodes.length=0;
+    lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
+    for(const ps of dynamicParticles)ps.dispose();dynamicParticles.length=0;
+    for(const g of dynamicMachines){g.geometry.dispose();g.material.dispose();}dynamicMachines.length=0;
+    for(const b of dynamicBeacons){b.geometry.dispose();b.material.dispose();}dynamicBeacons.length=0;
     for(const {mesh,sprite} of sprites.values()){if(!sprite.destroyed)sprite.renderable=true;mesh.geometry.dispose();}
     for(const {texture,material} of textures.values()){texture.dispose();material.dispose();}
     for(const {object,mixer} of instances)if(mixer){mixer.stopAllAction();mixer.uncacheRoot(object);}
