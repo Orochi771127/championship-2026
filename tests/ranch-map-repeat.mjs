@@ -16,7 +16,7 @@ assert.equal(sha(await fs.readFile('tests/ranch-grass-probe/inject-actor-mask.mj
 const trace=await fs.readFile('tests/ranch-map-repeat/draw-trace.fragment.js','utf8');assert.equal(sha(trace),'f591d7f795789976460fc498cf6fdcbd55ca2649731774279d93834e29f8628c');
 for(const mode of Object.keys(probesByMode)){
  let source=probesByMode[mode];const seam='  function dispose(){';assert.equal(source.split(seam).length,2);source=source.replace(seam,trace+'\n'+seam);
- const api='captureActorMask,captureActorMaskState,';assert.equal(source.split(api).length,2);source=source.replace(api,api+'captureNormalDrawTrace,');probesByMode[mode]=source;
+ const api='captureActorMask,captureActorMaskTriangleControl,captureActorMaskState,';assert.equal(source.split(api).length,2);source=source.replace(api,api+'captureNormalDrawTrace,');probesByMode[mode]=source;
 }
 const browser=await({chromium,webkit}[engine]).launch({headless:true}),results=[];let failure=null;
 const save=()=>fs.writeFile(out+'/map-repeat-results.json',JSON.stringify({engine,baselineRevision,expectedRows:12,results,failure,scope:'SAME_VARIANT_FRESH_CONTEXT_BACKGROUND_DIAGNOSIS_NO_TOLERANCE_OR_PRODUCTION_CHANGE',releaseApproved:false},null,2));

@@ -1,6 +1,7 @@
 name: Ranch real normal support diagnostic
 on:
-  pull_request:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
     paths:
       - '.github/workflows/ranch-normal-support-review.yml'
       - 'tests/ranch-normal-support.mjs'

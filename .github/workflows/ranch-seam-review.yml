@@ -1,6 +1,7 @@
 name: Ranch CM07 seam diagnostic renders
 on:
-  pull_request:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
     paths:
       - '.github/workflows/ranch-seam-review.yml'
       - 'tests/seam-render-acceptance/**'

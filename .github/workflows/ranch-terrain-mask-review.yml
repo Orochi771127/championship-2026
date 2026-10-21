@@ -1,6 +1,7 @@
 name: Ranch terrain visibility mask diagnostics
 on:
-  pull_request:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
     paths:
       - '.github/workflows/ranch-terrain-mask-review.yml'
       - 'src/championship/presentation/ranchThreeScene.js'

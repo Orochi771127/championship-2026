@@ -1,6 +1,7 @@
 name: Ranch missing map source evidence
 on:
-  pull_request:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
     paths:
       - '.github/workflows/ranch-map-source-review.yml'
       - 'tests/ranch-map-decode.py'

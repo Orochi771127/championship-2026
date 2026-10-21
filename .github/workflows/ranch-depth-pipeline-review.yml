@@ -1,6 +1,7 @@
 name: Ranch actual depth pipeline diagnostics
 on:
-  pull_request:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
     paths:
       - '.github/workflows/ranch-depth-pipeline-review.yml'
       - 'src/championship/presentation/ranchThreeScene.js'
