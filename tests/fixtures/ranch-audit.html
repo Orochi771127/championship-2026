@@ -12,26 +12,34 @@ import {selectRanchCageArt} from '/src/championship/presentation/ranchCageArtSel
 import {validateRuntimeMapArtBundle} from '/src/championship/presentation/runtimeMapArtBundle.js';
 import {ranchThreeField} from '/src/championship/presentation/ranchThreeCoordinates.js';
 import {ranchSpriteScreenQuad} from '/src/championship/presentation/ranchThreeCoordinates.js';
+import {getCageDefinition} from '/src/championship/cage/cageCatalog.js';
 import {productPlacementCells,validateProductRanch} from '/src/championship/cage/productRanchGrid.js';
 const app=new PIXI.Application();await app.init({width:390,height:844,backgroundAlpha:0,autoStart:false});
 document.querySelector('#fixture').append(app.canvas);
 let scene=null,bundle=null,root=null,actor=null,props=[],sceneKey=null,bundleKey=null,loadedRuntime=null,runtimeHash=null,motion=null;
 const requireValue=(condition,message)=>{if(!condition)throw Error(message)};
 globalThis.ranchAudit={
- async buildBindings(matrix){
+ async buildBindings(matrix,requestedFieldIds=null){
   const response=await fetch('/assets/production/public-runtime/cage-final.map.v1.json');requireValue(response.ok,'CAGE_PLAN_MANIFEST_REQUIRED');
   const bytes=await response.arrayBuffer();const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
   requireValue(hash==='bdd39492c2566a7bb00181d44eb3a41af23c925c2d376735edf25c7346fc37c9','CAGE_MANIFEST_HASH_DRIFT');
   // Match normal app: sports selection precedes production validation/normalization.
   const manifest=validateRuntimeMapArtBundle(selectRanchCageArt(JSON.parse(new TextDecoder().decode(bytes))));
   const wait=matrix.fields.find(f=>f.cageDefinitionIndex===35);requireValue(wait,'WAITING_ROOM_BINDING_REQUIRED');
-  const waiting={moduleId:wait.moduleId,slotIndex:0,instanceId:'audit:waiting'};
+  const waitingModuleId=getCageDefinition(35).moduleId;requireValue(wait.moduleId===waitingModuleId,'WAITING_MODULE_METADATA_DRIFT');
+  const waiting={moduleId:waitingModuleId,slotIndex:0,instanceId:'audit:waiting'};
+  requireValue(requestedFieldIds===null||requestedFieldIds.every(id=>matrix.fields.some(f=>f.fieldId===id)),'REQUESTED_FIELD_UNKNOWN');
   const occupied=new Set(productPlacementCells(waiting));const result={};
-  for(const spec of matrix.fields){
+  for(const spec of matrix.fields.filter(f=>requestedFieldIds===null||requestedFieldIds.includes(f.fieldId))){
+   const moduleId=spec.cageDefinitionIndex===null?null:getCageDefinition(spec.cageDefinitionIndex).moduleId;
+   requireValue(moduleId===spec.moduleId,'MODULE_METADATA_DRIFT_'+spec.fieldId);
    let layout=[waiting];
-   if(spec.moduleId&&spec.moduleId!==wait.moduleId){
+   if(moduleId&&moduleId!==waitingModuleId){
     const anchor=spec.legalAnchorSlots.find(p=>p.occupiedCells.every(c=>!occupied.has(c)));requireValue(anchor,'LEGAL_NONOVERLAPPING_SLOT_REQUIRED');
-    layout.push({moduleId:spec.moduleId,slotIndex:anchor.slotIndex,instanceId:'audit:target'});
+    const placement={moduleId,slotIndex:anchor.slotIndex,instanceId:'audit:target'};
+    const actualCells=productPlacementCells(placement);
+    requireValue(actualCells&&JSON.stringify([...actualCells].sort((a,b)=>a-b))===JSON.stringify([...anchor.occupiedCells].sort((a,b)=>a-b)),'ANCHOR_FOOTPRINT_METADATA_DRIFT_'+spec.fieldId);
+    layout.push(placement);
    }
    requireValue(validateProductRanch(layout),'PRODUCTION_LAYOUT_REJECTED');
    const plan=createProductGridArtPlan({manifest,placements:layout,unlockedSlots:Array.from({length:100},(_,i)=>i)});

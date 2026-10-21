@@ -20,7 +20,7 @@ try{
   const record={mode,engine,sceneSha256:sha(mode==='baseline'?baseline:candidate),samples:[],motionSamples:[],errors,consoleMessages,status:'RUNNING'};results.push(record);
   try{
    await page.goto(new URL('tests/fixtures/ranch-audit.html',base).href);await page.waitForFunction(()=>!!globalThis.ranchAudit);
-   const bindings=await page.evaluate(matrix=>globalThis.ranchAudit.buildBindings(matrix),matrix),fixture=bindings.field_cm07_01;assert.ok(fixture);
+   const bindings=await page.evaluate(matrix=>globalThis.ranchAudit.buildBindings(matrix,['field_cm07_01']),matrix),fixture=bindings.field_cm07_01;assert.ok(fixture);
    for(const zoom of [1,.7])for(const [pose,ref] of [['idle',cat.idle],['lower-extent',cat.supportExtreme]]){
     const test={id:mode+'-cat-'+pose+'-'+zoom,fieldId:'field_cm07_01',character:cat,sequenceId:ref[0],frameIndex:ref[1],texture:ref[2],nativeZ:0,zoom,viewport:{width:390,height:844}};
     const data=await page.evaluate(({test,fixture})=>globalThis.ranchAudit.render(test,fixture),{test,fixture});
