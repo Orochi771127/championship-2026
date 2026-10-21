@@ -69,7 +69,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    const deadline=Date.now()+90000;
    for(;;){
     await clearCalendar();
-    try{await target.click({timeout:Math.min(3000,Math.max(1,deadline-Date.now()))});return;}
+    try{await target.click({timeout:Math.min(30000,Math.max(1,deadline-Date.now()))});return;}
     catch(error){if(error.name!=='TimeoutError'||Date.now()>=deadline||!await page.locator('.int-rh2-calendar').isVisible())throw error;}
    }
   }
