@@ -62,7 +62,20 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  const ranchCanvasSelector='#cm-root[data-active-screen="RAISING_HOME"] canvas.cm-raising-pixi-canvas';
  async function ranchCanvas(){const canvas=page.locator(ranchCanvasSelector);await canvas.waitFor({state:'visible',timeout:180000});assert.equal(await canvas.count(),1,'Exactly one ranch input canvas');assert.notEqual(await canvas.evaluate(el=>getComputedStyle(el).pointerEvents),'none','Ranch canvas must receive ordinary input');return canvas;}
  async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await ranchCanvas();await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
- async function menu(group,entry){await page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`).click();await page.locator(`.cm-toolbar__menu:not([hidden]) button[data-entry-id="${entry}"]`).click();}
+ async function menu(group,entry){
+  // Long real-time visual sweeps can cross midnight before either menu click.
+  // Acknowledge only the ordinary calendar; unknown obstructions still fail.
+  async function click(target){
+   const deadline=Date.now()+90000;
+   for(;;){
+    await clearCalendar();
+    try{await target.click({timeout:Math.min(3000,Math.max(1,deadline-Date.now()))});return;}
+    catch(error){if(error.name!=='TimeoutError'||Date.now()>=deadline||!await page.locator('.int-rh2-calendar').isVisible())throw error;}
+   }
+  }
+  await click(page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`));
+  await click(page.locator(`.cm-toolbar__menu:not([hidden]) button[data-entry-id="${entry}"]`));
+ }
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
  async function noOverflow(){assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Mobile document must not overflow');}
