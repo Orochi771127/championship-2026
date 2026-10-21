@@ -35,7 +35,10 @@ test('floating controls retain input holes and legacy shared-bar rules; Raising 
   assert.match(responsive, /\.int-rh2-mail-icon \{[^}]*left: calc\(8px \+ var\(--safe-left\)\); right: auto; top: auto; bottom: 8px;/);
   assert.match(responsive, /\.int-rh2-companion\[data-expanded="false"\] > \.int-rh2-vitals \{ display: none; \}/);
   assert.doesNotMatch(responsive, /\.int-rh2-companion\[data-expanded="false"\][^}]*__(?:copy|nav|close)[^}]*display: none/);
-  assert.doesNotMatch(responsive, /z-index:/, 'no promotion above existing toolbar/dialog/lifecycle layers');
+  // Only the recoverable asset card may rise above the inert lifecycle world.
+  const recoveryRule = '.int-rh2-root > .int-rh2-resident-assets--recovery { z-index:calc(var(--z-lifecycle) + 1); }';
+  assert.equal(responsive.split(recoveryRule).length, 2, 'one exact root-sibling recovery layer, lifecycle80 + 1');
+  assert.doesNotMatch(responsive.replace(recoveryRule, ''), /z-index:/, 'all other floating controls retain their existing layers');
   const shared = read('app/styles.css');
   assert.match(shared, /body\[data-status-bar="on"\] #cm-root \{ top: var\(--cm-screen-top\); \}/);
   assert.match(shared, /body\[data-toolbar="on"\] #cm-root \{ bottom: var\(--cm-screen-bottom\); \}/);
@@ -64,10 +67,10 @@ async function fixture() {
   vm.runInContext(read('app/raisingHomeP1RView.js').replace(/^import .*;$/gm,'').replace(/export async function /,'async function ')+'\nthis.mount=createRaisingHomeP1RView;',context);
   const root=new Element('div',document),calls=[];
   let frame={revision:1,residents:[{creatureId:'a',displayName:'Partner A',speciesId:'a',stats:{currentHp:8,maxHp:10,maxTp:4},displayCapacityG:3},{creatureId:'b',displayName:'Partner B',speciesId:'b',stats:{currentHp:9,maxHp:10,maxTp:4},displayCapacityG:4}],selection:{creatureId:'a'},ranch:{layoutVersion:1},save:{phase:'CLEAN'}};
-  let listener,host,disposed=false,mounts=0;
+  let listener,host,recoveryHost,disposed=false,mounts=0;
   const source={getFrame:()=>frame,subscribe:fn=>{listener=fn;return()=>listener=null;},intents:{selectEvolutionChoice:(id,target)=>calls.push(['evolution',id,target]),selectCreature:id=>calls.push(['select',id]),relocateCreature:()=>{},careForCreature:()=>{},requestSave:()=>{}}};
-  const view=await context.mount({root,source,mountField:async({host:fieldHost})=>{host=fieldHost;mounts++;return {render:()=>{},dispose:()=>disposed=true,focusResident:id=>calls.push(['focus',id])};}});
-  return {root,document,view,calls,get host(){return host;},get mounts(){return mounts;},get disposed(){return disposed;},get listener(){return listener;},render(changes={}){frame={...frame,...changes,revision:frame.revision+1};listener(frame);}};
+  const view=await context.mount({root,source,mountField:async({host:fieldHost,recoveryHost:assetRecoveryHost})=>{host=fieldHost;recoveryHost=assetRecoveryHost;mounts++;return {render:()=>{},dispose:()=>disposed=true,focusResident:id=>calls.push(['focus',id])};}});
+  return {root,document,view,calls,get host(){return host;},get recoveryHost(){return recoveryHost;},get mounts(){return mounts;},get disposed(){return disposed;},get listener(){return listener;},render(changes={}){frame={...frame,...changes,revision:frame.revision+1};listener(frame);}};
 }
 
 test('collapse/expand preserves selection, dimensions and one field; details/nav/deselect remain operable', async () => {
@@ -98,7 +101,9 @@ test('calendar/mail interruption still closes details and suspends field, then r
     {mailbox:{queue:[{id:'mail',system:true,sender:0,textId:0}],activeId:'mail',activeFrames:61}}
   ]) {
     copy.dispatchEvent(new Event('click'));
-    f.render({lifecycle}); assert.equal(f.host.inert,true); assert.equal(f.root.dataset.detail,undefined); assert.equal(f.root.dataset.lifecycle,'active');
+    f.render({lifecycle}); assert.equal(f.host.inert,true);
+    assert.equal(f.recoveryHost,f.root,'asset recovery mounts at the root, not the inert world host');
+    assert.notEqual(f.recoveryHost,f.host); assert.notEqual(f.recoveryHost.inert,true);  assert.equal(f.root.dataset.detail,undefined); assert.equal(f.root.dataset.lifecycle,'active');
     if(lifecycle.day) assert.equal(find(f.root,'int-rh2-calendar')[0].hidden,false);
     if(lifecycle.mailbox) assert.equal(find(f.root,'int-rh2-letter')[0].hidden,false);
     f.render({lifecycle:null}); assert.equal(f.host.inert,false); assert.equal(f.root.dataset.lifecycle,'idle'); assert.equal(f.mounts,1);
