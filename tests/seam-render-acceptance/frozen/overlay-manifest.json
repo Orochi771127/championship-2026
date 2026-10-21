@@ -1,0 +1,24 @@
+{
+  "status": "FROZEN_TEST_ONLY_NOT_RENDERED",
+  "baselineCommit": "4f64421314f0d0f5d0c04b916d30e821587c1a6a",
+  "floorInputSha256": "1ae46df21194a20536fb8319681cce06026c058c94bce5c2b1c0d3d09ea5b9bb",
+  "overlays": [
+    {
+      "name": "baseline4f",
+      "file": "frozen/baseline4f.js",
+      "sha256": "f9a89e233f3e078310c5451b746e970168ca216c073dbedaf688d539ecca315d"
+    },
+    {
+      "name": "floor-only",
+      "file": "frozen/floor-only.js",
+      "sha256": "0db34d3f42e5c1282abcfb35f81337c6671eeb01de8ca53765a4041e8222b071"
+    },
+    {
+      "name": "floor-plus-seam",
+      "file": "frozen/floor-plus-seam.js",
+      "sha256": "875c9b15fcbb320a0dae0cece9fa7886cd7ba165e93c758deaeb9bd5ca4f47a0"
+    }
+  ],
+  "helperSha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb",
+  "productionCandidateUntouched": true
+}

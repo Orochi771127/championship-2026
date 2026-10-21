@@ -183,20 +183,26 @@ globalThis.ranchAudit={
   if(kind==='restore'){actor.sprite.visible=true;motion.shadow.visible=true;motion.render(0);return {};}
   throw Error('UNKNOWN_DIAGNOSTIC_PASS');
  },
+ maskState(){requireValue(scene?.captureActorMaskState,'TEST_MASK_STATE_PROBE_REQUIRED');return scene.captureActorMaskState();},
+ async redrawNormal(){
+  requireValue(scene&&motion,'MOTION_REQUIRED');app.render();scene.render({bounds:motion.bounds,actors:new Map([['audit',{root,sprite:actor.sprite,shadow:motion.shadow}]]),food:motion.food,waste:motion.waste,deltaMS:0});app.render();return scene.getDiagnostics();
+ },
  async validateTerrainMaskControls(subjectKind='actor'){
   requireValue(scene?.captureActorMask&&motion,'TEST_ONLY_MASK_SHIM_REQUIRED');
   const key={actor:'audit',food:'food:probe',waste:'waste:probe'}[subjectKind];requireValue(key,'MASK_SUBJECT_REQUIRED');
+  const beforeControls=scene.captureActorMaskState();
   const clearReference=scene.captureActorMask({key,reference:true,control:'clear'}),clear=scene.captureActorMask({key,reference:false,control:'clear'}),blockedReference=scene.captureActorMask({key,reference:true,control:'blocked'}),blocked=scene.captureActorMask({key,reference:false,control:'blocked'});
   for(const m of [clear,blockedReference,blocked])requireValue(m.width===clearReference.width&&m.height===clearReference.height,'CONTROL_DIMENSION_DRIFT');
   requireValue(clearReference.whitePixels>0&&blockedReference.whitePixels>0,'CONTROL_REFERENCE_EMPTY');
   let clearMismatch=0,referenceMismatch=0;for(let i=0;i<clearReference.rgba.length;i+=4){if((clear.rgba[i]>=128)!==(clearReference.rgba[i]>=128))clearMismatch++;if((blockedReference.rgba[i]>=128)!==(clearReference.rgba[i]>=128))referenceMismatch++;}
   requireValue(clearMismatch===0&&referenceMismatch===0,'KNOWN_CLEAR_OR_REFERENCE_CONTROL_FAILED');
   requireValue(blocked.whitePixels===0,'KNOWN_FULL_DEPTH_BLOCKER_CONTROL_FAILED');
-  return {status:'GPU_KNOWN_CONTROL_ASSERTIONS_PASSED',clearReferencePixels:clearReference.whitePixels,clearVisiblePixels:clear.whitePixels,blockedReferencePixels:blockedReference.whitePixels,blockedVisiblePixels:blocked.whitePixels,clearMismatch,referenceMismatch,scope:'TEST_ONLY_CLEAR_AND_NEAR_PLANE_BLOCKER_NOT_REAL_COLUMN_EXPECTATION'};
+  return {debugStates:{beforeControls,afterControls:scene.captureActorMaskState()},status:'GPU_KNOWN_CONTROL_ASSERTIONS_PASSED',clearReferencePixels:clearReference.whitePixels,clearVisiblePixels:clear.whitePixels,blockedReferencePixels:blockedReference.whitePixels,blockedVisiblePixels:blocked.whitePixels,clearMismatch,referenceMismatch,scope:'TEST_ONLY_CLEAR_AND_NEAR_PLANE_BLOCKER_NOT_REAL_COLUMN_EXPECTATION'};
  },
  async captureTerrainMask(subjectKind='actor',retainPng=false){
   requireValue(scene?.captureActorMask&&motion,'TEST_ONLY_MASK_SHIM_REQUIRED');
   const key={actor:'audit',food:'food:probe',waste:'waste:probe'}[subjectKind];requireValue(key,'MASK_SUBJECT_REQUIRED');
+  const beforeMasks=scene.captureActorMaskState();
   const reference=scene.captureActorMask({key,reference:true}),actual=scene.captureActorMask({key,reference:false});
   requireValue(reference.width===actual.width&&reference.height===actual.height,'MASK_DIMENSION_DRIFT');
   const w=reference.width,h=reference.height;let minX=w,minY=h,maxX=-1,maxY=-1,refCount=0,visibleCount=0,outside=0;
@@ -204,10 +210,10 @@ globalThis.ranchAudit={
   requireValue(refCount>0,'EMPTY_ALPHA_REFERENCE_REQUIRES_EXPLICIT_BLANK_CASE');requireValue(outside===0,'VISIBLE_MASK_OUTSIDE_REFERENCE');
   const box=[minX,minY,maxX-minX+1,maxY-minY+1],pack=data=>{const bytes=new Uint8Array(Math.ceil(box[2]*box[3]/8));let n=0;for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++,n++)if(data[(y*w+x)*4]>=128)bytes[n>>3]|=1<<(7-(n&7));return btoa(String.fromCharCode(...bytes));};
   const encode=data=>{const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(data),w,h),0,0);return c.toDataURL('image/png');};
-  const result={kind:actual.kind,equalDepthTieOrder:actual.equalDepthTieOrder,otherSpriteInteractions:actual.otherSpriteInteractions,nonDepthWritingParticleColor:actual.nonDepthWritingParticleColor,width:w,height:h,pixelBox:box,referencePixels:refCount,visiblePixels:visibleCount,referenceMask:pack(reference.rgba),visibleMask:pack(actual.rgba),referencePng:retainPng?encode(reference.rgba):null,visiblePng:retainPng?encode(actual.rgba):null};
+  const result={debugStates:{beforeMasks,afterMasks:scene.captureActorMaskState()},kind:actual.kind,equalDepthTieOrder:actual.equalDepthTieOrder,otherSpriteInteractions:actual.otherSpriteInteractions,nonDepthWritingParticleColor:actual.nonDepthWritingParticleColor,width:w,height:h,pixelBox:box,referencePixels:refCount,visiblePixels:visibleCount,referenceMask:pack(reference.rgba),visibleMask:pack(actual.rgba),referencePng:retainPng?encode(reference.rgba):null,visiblePng:retainPng?encode(actual.rgba):null};
   // Re-render restored normal scene at identical clock before comparison capture.
   app.render();scene.render({bounds:motion.bounds,actors:new Map([['audit',{root,sprite:actor.sprite,shadow:motion.shadow}]]),food:motion.food,waste:motion.waste,deltaMS:0});app.render();
-  return result;
+  result.debugStates.afterRedraw=scene.captureActorMaskState();return result;
  },
  async dispose(){scene?.dispose();root?.destroy({children:true});for(const prop of props)prop.destroy({children:true});props=[];await bundle?.dispose?.();app.destroy(true)}
 };

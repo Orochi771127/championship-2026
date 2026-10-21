@@ -21,6 +21,15 @@
     material.customProgramCacheKey=()=>original.customProgramCacheKey.call(original)+'|TEST_ACTOR_ID_MASK_V1';
     pair[mode]=material;return material;
   }
+  function captureActorMaskState(){
+    const objects=[],materials=new Map();
+    scene.traverse(o=>{
+      objects.push({id:o.id,parent:o.parent?.id??null,visible:o.visible,renderOrder:o.renderOrder,position:o.position.toArray(),quaternion:o.quaternion.toArray(),scale:o.scale.toArray(),matrix:o.matrix.toArray(),matrixWorld:o.matrixWorld.toArray(),materialIds:[].concat(o.material??[]).map(m=>m.id)});
+      for(const m of [].concat(o.material??[]))if(!materials.has(m.id))materials.set(m.id,{id:m.id,version:m.version,visible:m.visible,colorWrite:m.colorWrite,depthWrite:m.depthWrite,depthTest:m.depthTest,depthFunc:m.depthFunc,transparent:m.transparent,opacity:m.opacity,alphaTest:m.alphaTest,side:m.side,blending:m.blending});
+    });
+    const t=renderer.getRenderTarget();
+    return {sceneClock,frames,width,height,renderer:{target:t?{uuid:t.uuid,width:t.width,height:t.height}:null,viewport:renderer.getViewport(new THREE.Vector4()).toArray(),scissor:renderer.getScissor(new THREE.Vector4()).toArray(),scissorTest:renderer.getScissorTest(),clearColor:renderer.getClearColor(new THREE.Color()).toArray(),clearAlpha:renderer.getClearAlpha(),autoClear:renderer.autoClear,autoClearColor:renderer.autoClearColor,autoClearDepth:renderer.autoClearDepth,autoClearStencil:renderer.autoClearStencil,shadowAutoUpdate:renderer.shadowMap.autoUpdate,shadowNeedsUpdate:renderer.shadowMap.needsUpdate,outputColorSpace:renderer.outputColorSpace,toneMapping:renderer.toneMapping},camera:{projection:camera.projectionMatrix.toArray(),world:camera.matrixWorld.toArray(),inverse:camera.matrixWorldInverse.toArray()},objects,materials:[...materials.values()]};
+  }
   function captureActorMask({key,reference=false,control=null}={}){
     if(![null,'blocked','clear'].includes(control))throw Error('ACTOR_MASK_UNKNOWN_CONTROL');
     if(control&&!camera.isOrthographicCamera)throw Error('ACTOR_MASK_CONTROL_REQUIRES_ORTHOGRAPHIC');

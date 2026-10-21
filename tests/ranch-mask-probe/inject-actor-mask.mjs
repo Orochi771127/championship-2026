@@ -13,7 +13,7 @@ const shim=fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)
 function once(s,needle,replacement){if(s.split(needle).length!==2)throw Error('ACTOR_MASK_SOURCE_SEAM_NOT_UNIQUE:'+needle);return s.replace(needle,replacement);}
 let patched=once(source,'  function dispose(){',shim+'\n  function dispose(){');
 patched=once(patched,'    if(disposed)return;disposed=true;','    if(disposed)return;disposed=true;\n    disposeActorMaskProbe();');
-patched=once(patched,'return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:','return {render,dispose,groundHeight,pickGroundNative,captureActorMask,getDiagnostics:');
+patched=once(patched,'return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:','return {render,dispose,groundHeight,pickGroundNative,captureActorMask,captureActorMaskState,getDiagnostics:');
 patched='// GENERATED TEST-ONLY MASK PROBE. MUST NOT REPLACE PRODUCTION MODULE.\n'+patched;
 fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,patched,{flag:'wx'});
 console.log(JSON.stringify({inputSha256:sha,output,outputSha256:crypto.createHash('sha256').update(patched).digest('hex'),productionSourceUnchanged:fs.readFileSync(input,'utf8')===source}));

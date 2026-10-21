@@ -1,0 +1,15 @@
+
+  // TEST ONLY: expose actual production instances/camera; no substitute meshes.
+  function seamAuditSnapshot(){
+    scene.updateMatrixWorld(true);
+    return {camera:{projection:camera.projectionMatrix.toArray(),world:camera.matrixWorld.toArray()},
+      clones:instances.filter(i=>i.p.fieldId==='field_cm07_01').map(({object,p,shift})=>{
+        const meshes=[];object.traverse(o=>{if(o.isMesh)meshes.push({name:o.name,visible:o.visible,
+          effectiveVisible:(()=>{for(let a=o;a&&a!==object;a=a.parent)if(!a.visible)return false;return true;})(),worldMatrix:o.matrixWorld.toArray(),positionCount:o.geometry.attributes.position.count,indexCount:o.geometry.index?.count??null,
+          material:[].concat(o.material).map(m=>({type:m.type,depthWrite:m.depthWrite,alphaTest:m.alphaTest,transparent:m.transparent,side:m.side}))});});
+        const box=new THREE.Box3().setFromObject(object),corners=[];
+        for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){
+          const v=new THREE.Vector3(x,y,z).project(camera);corners.push([v.x,v.y,v.z]);}
+        return {instanceId:p.instanceId,slotIndex:p.slotIndex,ownerIndex:p.ownerIndex,shiftNative:shift,rootVisible:object.visible,meshes,projectedBoxCorners:corners};
+      })};
+  }
