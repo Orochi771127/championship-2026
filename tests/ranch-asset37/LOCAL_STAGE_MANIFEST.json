@@ -1,0 +1,49 @@
+{
+  "status": "LOCAL_UNREVIEWED_NO_LAUNCH",
+  "files": [
+    {
+      "path": "fixture.html",
+      "publishPath": "tests/fixtures/ranch-asset37-audit.html",
+      "sha256": "cbaddac269dbddbcf36c3830d56f20841b82b5fe90ec16b4b9f59c3322e3b128",
+      "bytes": 28550
+    },
+    {
+      "path": "runner.mjs",
+      "publishPath": "tests/ranch-asset37/runner.mjs",
+      "sha256": "7e5229252ac5dab9fe2e7028a34edb6fc4633ff47b50130b6ab078c8e7367e97",
+      "bytes": 16503
+    },
+    {
+      "path": "asset-state.fragment.js",
+      "publishPath": "tests/ranch-asset37/asset-state.fragment.js",
+      "sha256": "9d102cb11b1ae8d996e86559873e5fa31b7f96afbf74eebdd7806e1611af4b4f",
+      "bytes": 2914
+    },
+    {
+      "path": "asset-plan.json",
+      "publishPath": "tests/ranch-asset37/asset-plan.json",
+      "sha256": "75c73d1929cf5e33e080d7a63811fb86f7fafa55efe9a0556ec23c0158bddbfc",
+      "bytes": 49481
+    },
+    {
+      "path": "execution-contract.json",
+      "publishPath": "tests/ranch-asset37/execution-contract.json",
+      "sha256": "94bac909c4a19a45bf633e779cdfb4384d83673c8c3b3f50b46f43eb671e6eb8",
+      "bytes": 43852
+    },
+    {
+      "path": "contact-character.json",
+      "publishPath": "tests/ranch-asset37/contact-character.json",
+      "sha256": "95ee51d288497d88e6d1b70d1283ae5c7663fa8b6295882289c8e2b5e7c75875",
+      "bytes": 501
+    }
+  ],
+  "dependencies": "Existing reviewed final32 care/helpers/mask probe/normal-read, matchedUV baseline, recovery8a65, actual37 manifest/matrix, engine-specific calibration receipt",
+  "runtimeChanges": false,
+  "launchAuthorized": false,
+  "manifestDeployment": {
+    "localPath": "LOCAL_STAGE_MANIFEST.json",
+    "publishPath": "tests/ranch-asset37/LOCAL_STAGE_MANIFEST.json",
+    "requirement": "Publish this manifest itself IN ADDITION to all6 hash-bound payload files. No recursive self-hash; publisher review pins exact manifest externally."
+  }
+}

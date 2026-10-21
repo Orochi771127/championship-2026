@@ -1,0 +1,1403 @@
+{
+  "schema": 1,
+  "status": "PREPARED_CONTRACT_FIXTURE_IMPLEMENTATION_AND_REVIEW_PENDING",
+  "assetPlanSha256": "75c73d1929cf5e33e080d7a63811fb86f7fafa55efe9a0556ec23c0158bddbfc",
+  "candidateSceneSha256": "8a65acb62685e1c00dec88b3023301dcfba332c33b9378ebb6bb1366b9228284",
+  "shards": [
+    {
+      "id": "asset37-00",
+      "fieldIds": [
+        "field_cm01_01",
+        "field_cm02_01",
+        "field_cm03_01",
+        "field_cm04_01",
+        "field_cm05_01"
+      ],
+      "sceneEvaluationsPerEngine": 10
+    },
+    {
+      "id": "asset37-01",
+      "fieldIds": [
+        "field_cm06_01",
+        "field_cm07_01",
+        "field_cm08_01",
+        "field_cm09_01",
+        "field_cm10_01"
+      ],
+      "sceneEvaluationsPerEngine": 10
+    },
+    {
+      "id": "asset37-02",
+      "fieldIds": [
+        "field_cm11_01",
+        "field_cm12_01",
+        "field_cm13_01",
+        "field_cm14_01",
+        "field_cm15_01"
+      ],
+      "sceneEvaluationsPerEngine": 10
+    },
+    {
+      "id": "asset37-03",
+      "fieldIds": [
+        "field_cm16_01",
+        "field_cm17_01",
+        "field_cm18_01",
+        "field_cm19_01",
+        "field_cm20_01"
+      ],
+      "sceneEvaluationsPerEngine": 10
+    },
+    {
+      "id": "asset37-04",
+      "fieldIds": [
+        "field_cm21_01",
+        "field_cm22_01",
+        "field_cm23_01",
+        "field_cm24_01",
+        "field_cm25_01"
+      ],
+      "sceneEvaluationsPerEngine": 10
+    },
+    {
+      "id": "asset37-05",
+      "fieldIds": [
+        "field_cm26_01",
+        "field_cm27_01",
+        "field_cm28_01",
+        "field_cm29_01",
+        "field_cm30_01"
+      ],
+      "sceneEvaluationsPerEngine": 10
+    },
+    {
+      "id": "asset37-06",
+      "fieldIds": [
+        "field_cm31_01",
+        "field_cm32_01",
+        "field_cm34_01",
+        "field_cm35_01",
+        "field_cm37_01"
+      ],
+      "sceneEvaluationsPerEngine": 10
+    },
+    {
+      "id": "asset37-07",
+      "fieldIds": [
+        "field_cm39_01",
+        "field_cm40_01"
+      ],
+      "sceneEvaluationsPerEngine": 4
+    }
+  ],
+  "rows": [
+    {
+      "fieldId": "field_cm01_01",
+      "modelSha256": "949e2da3707530c7fd090abb9822163cd27a33eb905ec50e8a6be9362d024d5a",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "FOREST_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm01_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm02_01",
+      "modelSha256": "801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.5553673369541102,
+          -0.7385273974396682
+        ],
+        "max": [
+          192.35947898612696,
+          202.5467783434928
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.6898647575005021,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm02_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm03_01",
+      "modelSha256": "e001292cd9a7fea1db162a216fab19155ff949bb49bbcc13de7bfd554363d180",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35685500611822313,
+          -0.10606340184020163
+        ],
+        "max": [
+          288.3568419850132,
+          202.5531930563236
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.1291462905897878,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "FOREST_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm03_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm04_01",
+      "modelSha256": "8f40f2af52845e884d382af30231fbca8631557a01bc87fc7a113d8bd6691fe8",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.36207177443950755,
+          -0.09640815246452376
+        ],
+        "max": [
+          288.3620695429277,
+          114.54252864799392
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.1291054447769884,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "WATER_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm04_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm05_01",
+      "modelSha256": "48e4c202b5e46dcdf2a63b1c8942565477b44ce40ef83888ed005c91cd40bcdc",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35684421652500437,
+          -0.10242646580516412
+        ],
+        "max": [
+          240.36147289068825,
+          202.54750172977373
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3542799896478308,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "WATER_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm05_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm06_01",
+      "modelSha256": "295eb3671e20992849f4d6895ded481acadf5d5014deebd511e5bba5e5f7d39d",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35983293384660886,
+          -0.09792698063982484
+        ],
+        "max": [
+          336.36360488977726,
+          202.54645594496927
+        ]
+      },
+      "overviewFitScaleNativePixels": 0.9681535746577854,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "ICE_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm06_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm07_01",
+      "modelSha256": "de0117594f79f4573e1d2537c033bac5fa2752deb2f0aa7abba26d3c7f264260",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35882620907730184,
+          -0.16450497989259616
+        ],
+        "max": [
+          240.35883550159363,
+          202.57562624001207
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3542836769153799,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "CM07_MAGMA_SMOKE"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "cyan",
+          "alphaMode": "OPAQUE",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": false
+        },
+        {
+          "index": 1,
+          "name": "el-basalt",
+          "alphaMode": "OPAQUE",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": false
+        },
+        {
+          "index": 2,
+          "name": "el-basalt-light",
+          "alphaMode": "OPAQUE",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": false
+        },
+        {
+          "index": 3,
+          "name": "el-basalt-mid",
+          "alphaMode": "OPAQUE",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": false
+        },
+        {
+          "index": 4,
+          "name": "navy",
+          "alphaMode": "OPAQUE",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": false
+        },
+        {
+          "index": 5,
+          "name": "field_cm07_01-terrain-pbr",
+          "alphaMode": "OPAQUE",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        },
+        {
+          "index": 6,
+          "name": "porcelain",
+          "alphaMode": "OPAQUE",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": false
+        },
+        {
+          "index": 7,
+          "name": "blue",
+          "alphaMode": "OPAQUE",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": false
+        },
+        {
+          "index": 8,
+          "name": "el-smoke",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": false
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm08_01",
+      "modelSha256": "91b34ea242808f12d170bdf4f4f8a10c2897a6443311c9703bf44568470075d5",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.3558165077709147,
+          -0.09754073364733559
+        ],
+        "max": [
+          240.3492698607578,
+          202.5523768340372
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.354354429805781,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "FOREST_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm08_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "modelSha256": "b5033322edb9e7905ff6d604b44ecc239b8f6cd89f817d51058c1835cc6db0e4",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35685500611822313,
+          -0.09672663693979544
+        ],
+        "max": [
+          288.3568419850132,
+          202.5531930563236
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.1291462905897878,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "WATER_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm09_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm10_01",
+      "modelSha256": "408aab6e8236bcaf288534a538d7d49a411d7f904482ac96396fe707fad5043d",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35685500611822313,
+          -0.09672663693979544
+        ],
+        "max": [
+          288.3568419850132,
+          202.5531930563236
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.1291462905897878,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "WATER_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm10_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm11_01",
+      "modelSha256": "17a763c0f0bb35e793cdac149d5be30d522782e21a2ba89f03a2fa4c2e0bbcd7",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.34925913249219576,
+          -0.09753641190260115
+        ],
+        "max": [
+          240.35581914384161,
+          202.5523832813608
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3543544753374337,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "FOREST_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm11_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm12_01",
+      "modelSha256": "3df63e095c3dabf9e91f81aff8b4eea61c7993af1a32ef3c347d7c52bfe21f3b",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.3614675572192554,
+          -0.10242441081328596
+        ],
+        "max": [
+          240.35685494479063,
+          202.5474910312924
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3542799592967338,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "FOREST_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm12_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm13_01",
+      "modelSha256": "c8f4089cf704dd2b64a163a0aa4e21cfb56cdc58c653d7cd810599dc33451872",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35947417987208413,
+          -0.09781653319333213
+        ],
+        "max": [
+          192.35947898612696,
+          202.5467783434928
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.691582455406962,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm13_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm14_01",
+      "modelSha256": "155571c7490ed086992b0b7397edd810511a238c8a110f3b22a8ebcff9b4a54d",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.3614675572192554,
+          -0.10242441081328596
+        ],
+        "max": [
+          240.35685494479063,
+          202.5474910312924
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3542799592967338,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "FOREST_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm14_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm15_01",
+      "modelSha256": "3853287095590570da1ff2c54a3783a5ddcb823a13fb8b82a4e4eb0724dee194",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.3558165077709147,
+          -0.09754073364733559
+        ],
+        "max": [
+          240.3492698607578,
+          202.5523768340372
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.354354429805781,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "INDUSTRIAL_FIELDS"
+      ],
+      "sourceAnimationCount": 4,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm15_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm16_01",
+      "modelSha256": "d0ac9a4a30c32bdddf7c48b954a0f86f88e5d916e8c5d55dcfd9dca429244364",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "ICE_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm16_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm17_01",
+      "modelSha256": "05a340e967d07cc3d1c06dc3ae52d7436d8b79503f7c879337873d3fbb69b3a7",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35947687727038885,
+          -0.09491628520331268
+        ],
+        "max": [
+          192.35948977572016,
+          202.54327758567945
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.6915823370254732,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "INDUSTRIAL_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm17_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm18_01",
+      "modelSha256": "2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35947687727038885,
+          -0.09491613841817853
+        ],
+        "max": [
+          144.3653237210391,
+          202.5432605810485
+        ]
+      },
+      "overviewFitScaleNativePixels": 2.2525510392985675,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "FOREST_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm18_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm19_01",
+      "modelSha256": "7192630e17f179fbf729919aff920ed20d64bc172581afcdddbcf5ba89e30dac",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35901427346113324,
+          -0.09900472335834684
+        ],
+        "max": [
+          384.35904951125474,
+          114.55172786914557
+        ]
+      },
+      "overviewFitScaleNativePixels": 0.8473737801467678,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "WATER_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm19_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm20_01",
+      "modelSha256": "c89b2c3168e1df1fbaf2f3039bc119f56d99cd7cd74aec44b450904121f69560",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.3614675572192554,
+          -0.10242441081328596
+        ],
+        "max": [
+          240.35685494479063,
+          202.5474910312924
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3542799592967338,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "INDUSTRIAL_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm20_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm21_01",
+      "modelSha256": "4f4163c0c0a552b211df77bdeae30e96b708ca12431e50892ae2ae90608d891a",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35684421652500437,
+          -0.10242646580516412
+        ],
+        "max": [
+          240.36147289068825,
+          202.54750172977373
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3542799896478308,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "ICE_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm21_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm22_01",
+      "modelSha256": "bf236cf036592e9c8766452c8d1ab56c865b742fa247b280589dd4256b347027",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35947417987208413,
+          -0.09781653319333213
+        ],
+        "max": [
+          192.35947898612696,
+          202.5467783434928
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.691582455406962,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "INDUSTRIAL_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm22_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm23_01",
+      "modelSha256": "d141f2cc2408ce0e0c59f4e35c44763fc741d136809ec8eca9e19f316308225a",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.365319441998363,
+          -0.0949119578474295
+        ],
+        "max": [
+          144.35948924850604,
+          202.54327113835586
+        ]
+      },
+      "overviewFitScaleNativePixels": 2.25255091334862,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm23_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm24_01",
+      "modelSha256": "d4f53a54a278ee5a76688d5e046080dfe84b8451ef20de58a325ae54d2dd939b",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm24_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm25_01",
+      "modelSha256": "43066500b19c6ffbdd7a5cda4fb215a14fbc57e570ef304bfe04df4c95a7093c",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.36220529565559006,
+          -0.09636588681944873
+        ],
+        "max": [
+          192.3622087532113,
+          114.5442166418188
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.6915345240968793,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "INDUSTRIAL_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm25_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm26_01",
+      "modelSha256": "e1f11ca01ba49b8006846da33b5bd701b0b650f6af65b043f131d13de07872d3",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35684421652500437,
+          -0.10242646580516412
+        ],
+        "max": [
+          240.36147289068825,
+          202.54750172977373
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3542799896478308,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm26_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm27_01",
+      "modelSha256": "148da89a3a9106977b5dd055d6aaacfd453f0856fd5cf21ef57fe6799fa101ca",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35947687727038885,
+          -0.09491628520331268
+        ],
+        "max": [
+          192.35948977572016,
+          202.54327758567945
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.6915823370254732,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm27_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm28_01",
+      "modelSha256": "43099ad42413cba74f6d9c2e0323f2937832757eb2d39447ec5ee9e9c1100d21",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.3614675572192554,
+          -0.10242441081328596
+        ],
+        "max": [
+          240.35685494479063,
+          202.5474910312924
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.3542799592967338,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm28_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm29_01",
+      "modelSha256": "17b9194b35348bca3655014e1873e264bdbed4d5c8ea98cccbc252c281fbc8b6",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm29_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm30_01",
+      "modelSha256": "5a558a32dcfd84a0d5f893c9d5fd09f6083533f4cd0b9d14eccfbfd6d8927087",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.5640664464867587,
+          -0.21515778634017824
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.3635457668208555,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm30_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm31_01",
+      "modelSha256": "48f3763757aea98f6f7583b5c0c48c09195eb76d7ba23b19d8d388284ed6f1e6",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.36220529565559006,
+          -0.09636588681944873
+        ],
+        "max": [
+          192.3622087532113,
+          114.5442166418188
+        ]
+      },
+      "overviewFitScaleNativePixels": 1.6915345240968793,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm31_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm32_01",
+      "modelSha256": "bbaa00cacc91a615cc5c86cdc2ab3b19f21104596b96576347b4a2c3e20ab22f",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "FOREST_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm32_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm34_01",
+      "modelSha256": "01d1306d1d248a8b1f3aa52520fd5b90fed0bb51abddc38d5aec6c25c21c8bc6",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm34_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm35_01",
+      "modelSha256": "61ff3a730a23677b3da58c71734535ce3e9028dda4830cf7e5d997411e1b14a7",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm35_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm37_01",
+      "modelSha256": "4af25fc8e422a7320c47f2233255fabd3bf8d4fca19f2d8657bf134164b6f988",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm37_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    },
+    {
+      "fieldId": "field_cm39_01",
+      "modelSha256": "272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [
+        "WATER_FIELDS"
+      ],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": true,
+      "extraEffectScreenshot": true,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm39_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "4F_PLUS_IDENTICAL_REVIEWED_UV_REPAIR"
+    },
+    {
+      "fieldId": "field_cm40_01",
+      "modelSha256": "02b26418f5cc78244743042da9f9ff62696cc23a1743b784690f4401e7ebb665",
+      "projectedAuthoredNativeBoundsAt52Degrees": {
+        "min": [
+          -0.35745652594017063,
+          -0.09946916048864816
+        ],
+        "max": [
+          96.35746297516506,
+          114.54264339122338
+        ]
+      },
+      "overviewFitScaleNativePixels": 3.370731234453176,
+      "overviewScope": "FIXED52DEG_FIT_DIAGNOSTIC_NOT_PRODUCTION_CONTACT_ZOOM",
+      "sourceEffectGroups": [],
+      "sourceAnimationCount": 0,
+      "effectAdvanceMetadata": false,
+      "extraEffectScreenshot": false,
+      "sourceAlphaMaterials": [
+        {
+          "index": 0,
+          "name": "field_cm40_01-baked-colour",
+          "alphaMode": "BLEND",
+          "alphaCutoff": null,
+          "doubleSided": true,
+          "hasBaseColorTexture": true
+        }
+      ],
+      "opaqueOcclusionOracle": "NOT_APPLIED_TO_ASSET37_MIXED_MATERIAL_SCENES",
+      "referencePolicy": "RAW_4F_EXACT"
+    }
+  ],
+  "boundsScope": "AUTHORED_GEOMETRY_ONLY_RUNTIME_DEFORMATION_AND_PARTICLES_REPORTED_SEPARATELY_NOT_CLIPPED",
+  "captureBudget": {
+    "sceneEvaluationsBothEngines": 148,
+    "ordinaryOverviewContactScreenshots": 296,
+    "additionalEffectScreenshots": 40,
+    "maskArrays": 576
+  },
+  "runtimeAssumptions": [
+    "One browser context at a time per shard/engine, destroy scene+renderer on each asset/source boundary.",
+    "8 shards per engine, five assets maximum; publisher decides allowed parallelism.",
+    "Observed per-asset wallMs and actual GLB load/render timings recorded. No estimated timeout or completion guarantee from synthetic query.",
+    "Existing calibration receipt drives contact scale; overview fit is explicitly diagnostic."
+  ],
+  "effectPolicy": "Advance all source-tagged/animated assets at identical deterministic delta/seed; record metadata. Extra screenshots only fixed10 asset subset to retain40 budget. Metadata-only effects are not visual-motion passes."
+}

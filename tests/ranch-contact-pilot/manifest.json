@@ -1,0 +1,94 @@
+{
+  "schema": "BOUNDED_EIGHT_ROUTE_CONTACT_PILOT_V1",
+  "status": "LOCAL_PENDING_INDEPENDENT_REVIEW_NO_GPU_AUTHORIZATION",
+  "candidateSha256": "8a65acb62685e1c00dec88b3023301dcfba332c33b9378ebb6bb1366b9228284",
+  "expectedRoutes": 8,
+  "expectedRowsPerEngine": 32,
+  "seedRoles": 16,
+  "all226AdapterPreparedButNotLaunched": true,
+  "allBindingSweepAuthorized": false,
+  "files": [
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/runner.mjs",
+      "target": "tests/ranch-contact-pilot/runner.mjs",
+      "sha256": "81d7160bc07181f9fa8e6cc89e01af5674705ca41bcf60454098616b69e28c6c",
+      "bytes": 11060
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/fixture.html",
+      "target": "tests/fixtures/ranch-contact-pilot.html",
+      "sha256": "22ab32ad5bcee4ce7093250ab3f1d4e899f3979fcb96723ed43632dc2c355ce3",
+      "bytes": 42658
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/core.mjs",
+      "target": "tests/ranch-contact-pilot/core.mjs",
+      "sha256": "be8da2005cf405cdcd16883d7512b478f5772cba6ceab38efff44d21d038623f",
+      "bytes": 3020
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/normal-read.fragment.js",
+      "target": "tests/ranch-contact-pilot/normal-read.fragment.js",
+      "sha256": "96f63375db7bc5a5e6c16641393d477ef10866c269a0b67f6581615c88dcfa02",
+      "bytes": 3297
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/pilot.json",
+      "target": "tests/ranch-contact-pilot/pilot.json",
+      "sha256": "33cb691e503c1f22842a19e09bd43ddbefe8bad8f508a3ef6e910ac2c5ef1961",
+      "bytes": 28761
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/bounded226.json",
+      "target": "tests/ranch-contact-pilot/bounded226.json",
+      "sha256": "02ee7b8dc963cfc8c2453ed07e9e3a33abb07c36ad8259c61a493446d88a7f2d",
+      "bytes": 800271
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/compare.py",
+      "target": "tests/ranch-contact-pilot/compare.py",
+      "sha256": "a65cbcd3943953867a1c265c1e0ae274d51387a4bb147a40521df27e937c5641",
+      "bytes": 3917
+    },
+    {
+      "source": "shadow-map-audit/recovery-release-local/candidate/src/championship/presentation/ranchPhysicalSupport.js",
+      "target": "tests/ranch-contact-pilot/source/ranchPhysicalSupport.js",
+      "route": "src/championship/presentation/ranchPhysicalSupport.js",
+      "sha256": "fb42d410ba895a578507bf985a6f7dd471e274a5238d19b1ae070d536b2b4979",
+      "bytes": 4095
+    },
+    {
+      "source": "shadow-map-audit/recovery-release-local/candidate/src/championship/presentation/ranchSupportOwner.js",
+      "target": "tests/ranch-contact-pilot/source/ranchSupportOwner.js",
+      "route": "src/championship/presentation/ranchSupportOwner.js",
+      "sha256": "10ee4a275e2e696366630e5476ac94e78984d6d0080685b93246910bd859cd81",
+      "bytes": 2793
+    },
+    {
+      "source": "shadow-map-audit/recovery-release-local/candidate/src/championship/presentation/publicCharacterRoster.js",
+      "target": "tests/ranch-contact-pilot/source/publicCharacterRoster.js",
+      "route": "src/championship/presentation/publicCharacterRoster.js",
+      "sha256": "a195da3e2d2a4d1ddd26ca59405ace675d38028ac9d084bd3a90391f15c9d9ed",
+      "bytes": 4922
+    },
+    {
+      "source": "shadow-map-audit/recovery-release-local/candidate/src/championship/presentation/vs2/huntContactShadow.js",
+      "target": "tests/ranch-contact-pilot/source/vs2/huntContactShadow.js",
+      "route": "src/championship/presentation/vs2/huntContactShadow.js",
+      "sha256": "c284a006e2bec65205011553f2c62633edd514c5a3ec587d6a282caf1172cc41",
+      "bytes": 7787
+    },
+    {
+      "source": "shadow-map-audit/split-quad-mask-probe/inject-actor-mask.mjs",
+      "target": "tests/ranch-split/probe/inject-actor-mask.mjs",
+      "sha256": "70b5fdf502296308af5393c78bc5bfb7aae9de40931e126010b84503830a5bbe",
+      "bytes": 2119
+    },
+    {
+      "source": "shadow-map-audit/split-quad-mask-probe/actor-mask-probe.fragment.js",
+      "target": "tests/ranch-split/probe/actor-mask-probe.fragment.js",
+      "sha256": "d714504491ff157e41ebe58c19e3a35d460d680ddda5fcc1b62a4b7ce66efba0",
+      "bytes": 18797
+    }
+  ]
+}

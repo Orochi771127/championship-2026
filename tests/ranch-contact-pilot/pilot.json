@@ -1,0 +1,1083 @@
+{
+  "schema": "BOUNDED_CONTACT_SEEDS_V1",
+  "inventorySha256": "5fdbf59f5c4a1aa52b7438fd9cfe4308a192c90bef9e9b46f27281bb51535d8d",
+  "nativeZ": 0,
+  "nativeUnitPixels": 3,
+  "dedup": "NONE: retain both seed roles; no image-only alias merge",
+  "routes": [
+    {
+      "formIndex": 199,
+      "entityId": "m513_bantyoliomon",
+      "runtimeEntityId": "m513_bantyoliomon",
+      "form": "selected",
+      "runtimePath": "assets/production/characters/accepted-20261010/m513_bantyoliomon-ultimate-raw-r01/ranch-streaming-v1/90721e22023664fb/runtime.render.json",
+      "runtimeSha256": "14e7503952094992708ba6944e2fd4665f48e3c3912d7546d9bc260f36e4b154",
+      "idleSeed": {
+        "id": "b1-199-cell_000",
+        "texture": "m513_bantyoliomon/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "beb77d684b16e158fd5796351b8d1f1182913a5eae401ad07b20066dec5c4798",
+        "nativeBounds": [
+          -36.25,
+          -74.75,
+          41.75,
+          5.25
+        ],
+        "origin": [
+          316,
+          364
+        ],
+        "scale": 4
+      },
+      "sourceRiskSeed": {
+        "id": "b1-199-cell_025",
+        "texture": "m513_bantyoliomon/main/cell_025",
+        "sequenceId": 15,
+        "frameIndex": 0,
+        "cell": 25,
+        "allStaticRequestBindings": [
+          [
+            15,
+            0,
+            25
+          ]
+        ],
+        "geometrySha256": "65ff4cd4fc364355d93021bea0a95d171752967e6e3c23aba26fd4e7e4976f99",
+        "nativeBounds": [
+          -48.25,
+          -39.25,
+          32.5,
+          3
+        ],
+        "origin": [
+          316,
+          364
+        ],
+        "scale": 4
+      },
+      "sourceRiskRanking": [
+        1186,
+        0.305963421213251
+      ],
+      "sameSeed": false,
+      "actualWorstBaselineLoss": "UNMEASURED_REQUIRE_ROUTE_SWEEP",
+      "contactVerdict": "UNREVIEWED",
+      "viewportPolicy": "390x844 CSS at nativeUnit3 if actual full body+shadow fits; else768technicalviewport without sprite scaling; fail if stillnotfit",
+      "idleRequestedBinding": [
+        0,
+        0,
+        0
+      ],
+      "seedRoles": [
+        {
+          "role": "IDLE_REQUEST_SEED",
+          "frame": {
+            "id": "b1-199-cell_000",
+            "texture": "m513_bantyoliomon/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "beb77d684b16e158fd5796351b8d1f1182913a5eae401ad07b20066dec5c4798",
+            "nativeBounds": [
+              -36.25,
+              -74.75,
+              41.75,
+              5.25
+            ],
+            "origin": [
+              316,
+              364
+            ],
+            "scale": 4
+          }
+        },
+        {
+          "role": "SOURCE_PREDICTED_RISK_NOT_MEASURED_WORST",
+          "frame": {
+            "id": "b1-199-cell_025",
+            "texture": "m513_bantyoliomon/main/cell_025",
+            "sequenceId": 15,
+            "frameIndex": 0,
+            "cell": 25,
+            "allStaticRequestBindings": [
+              [
+                15,
+                0,
+                25
+              ]
+            ],
+            "geometrySha256": "65ff4cd4fc364355d93021bea0a95d171752967e6e3c23aba26fd4e7e4976f99",
+            "nativeBounds": [
+              -48.25,
+              -39.25,
+              32.5,
+              3
+            ],
+            "origin": [
+              316,
+              364
+            ],
+            "scale": 4
+          }
+        }
+      ],
+      "omittedStaticTextures": null
+    },
+    {
+      "formIndex": 197,
+      "entityId": "m511_saintgargomon",
+      "runtimeEntityId": "m511_saintgargomon",
+      "form": "selected",
+      "runtimePath": "assets/production/characters/accepted-20261010/m511_saintgargomon-ultimate-raw-r01/ranch-streaming-v1/921a3c67a28b2f3c/runtime.render.json",
+      "runtimeSha256": "f9942eccd9f4279a9196091d941cd8759d8e830cc17f7c132bbff39038197f4f",
+      "idleSeed": {
+        "id": "b1-197-cell_000",
+        "texture": "m511_saintgargomon/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "3cc24a25d58fffdfe6221970b64924908ace43ac87c138b3cd48818c2530c4e8",
+        "nativeBounds": [
+          -49.75,
+          -84.75,
+          44.75,
+          16.5
+        ],
+        "origin": [
+          328,
+          372
+        ],
+        "scale": 4
+      },
+      "sourceRiskSeed": {
+        "id": "b1-197-cell_020",
+        "texture": "m511_saintgargomon/main/cell_020",
+        "sequenceId": 13,
+        "frameIndex": 0,
+        "cell": 20,
+        "allStaticRequestBindings": [
+          [
+            13,
+            0,
+            20
+          ]
+        ],
+        "geometrySha256": "f62eedd36c6edd386dd506cffb2110d0601f32d28a059eed59907d2eb34dd3c9",
+        "nativeBounds": [
+          -81.5,
+          -54.75,
+          54,
+          14.75
+        ],
+        "origin": [
+          328,
+          372
+        ],
+        "scale": 4
+      },
+      "sourceRiskRanking": [
+        5195,
+        0.8856835877225686
+      ],
+      "sameSeed": false,
+      "actualWorstBaselineLoss": "UNMEASURED_REQUIRE_ROUTE_SWEEP",
+      "contactVerdict": "UNREVIEWED",
+      "viewportPolicy": "390x844 CSS at nativeUnit3 if actual full body+shadow fits; else768technicalviewport without sprite scaling; fail if stillnotfit",
+      "idleRequestedBinding": [
+        0,
+        0,
+        0
+      ],
+      "seedRoles": [
+        {
+          "role": "IDLE_REQUEST_SEED",
+          "frame": {
+            "id": "b1-197-cell_000",
+            "texture": "m511_saintgargomon/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "3cc24a25d58fffdfe6221970b64924908ace43ac87c138b3cd48818c2530c4e8",
+            "nativeBounds": [
+              -49.75,
+              -84.75,
+              44.75,
+              16.5
+            ],
+            "origin": [
+              328,
+              372
+            ],
+            "scale": 4
+          }
+        },
+        {
+          "role": "SOURCE_PREDICTED_RISK_NOT_MEASURED_WORST",
+          "frame": {
+            "id": "b1-197-cell_020",
+            "texture": "m511_saintgargomon/main/cell_020",
+            "sequenceId": 13,
+            "frameIndex": 0,
+            "cell": 20,
+            "allStaticRequestBindings": [
+              [
+                13,
+                0,
+                20
+              ]
+            ],
+            "geometrySha256": "f62eedd36c6edd386dd506cffb2110d0601f32d28a059eed59907d2eb34dd3c9",
+            "nativeBounds": [
+              -81.5,
+              -54.75,
+              54,
+              14.75
+            ],
+            "origin": [
+              328,
+              372
+            ],
+            "scale": 4
+          }
+        }
+      ],
+      "omittedStaticTextures": null
+    },
+    {
+      "formIndex": 71,
+      "entityId": "m379_growmon",
+      "runtimeEntityId": "m379_growmon",
+      "form": "selected",
+      "runtimePath": "assets/production/characters/accepted-20261010/m379_growmon-mature-raw-r02/ranch-streaming-v1/ed5dabba68ccdfcc/runtime.render.json",
+      "runtimeSha256": "830723f5053c49e2269ac0f328555366c591ee9e5b8727fa82290e8dd60ee4ad",
+      "idleSeed": {
+        "id": "b1-071-cell_000",
+        "texture": "m379_growmon/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "17550e7ad8b7d55ead8817f7cd83e8220a8846ad72a76dc66f2b1f951d196aaa",
+        "nativeBounds": [
+          -16.75,
+          -27.5,
+          29.5,
+          3.25
+        ],
+        "origin": [
+          128,
+          192
+        ],
+        "scale": 4
+      },
+      "sourceRiskSeed": {
+        "id": "b1-071-cell_020",
+        "texture": "m379_growmon/main/cell_020",
+        "sequenceId": 13,
+        "frameIndex": 0,
+        "cell": 20,
+        "allStaticRequestBindings": [
+          [
+            13,
+            0,
+            20
+          ]
+        ],
+        "geometrySha256": "4620a8a57b4f17aec128faf13c7c8f7551d6e0f4e22f715a9934c7023c729086",
+        "nativeBounds": [
+          -9.5,
+          -27.25,
+          39.75,
+          3.25
+        ],
+        "origin": [
+          97,
+          192
+        ],
+        "scale": 4
+      },
+      "sourceRiskRanking": [
+        1511,
+        0.37037677304761957
+      ],
+      "sameSeed": false,
+      "actualWorstBaselineLoss": "UNMEASURED_REQUIRE_ROUTE_SWEEP",
+      "contactVerdict": "UNREVIEWED",
+      "viewportPolicy": "390x844 CSS at nativeUnit3 if actual full body+shadow fits; else768technicalviewport without sprite scaling; fail if stillnotfit",
+      "idleRequestedBinding": [
+        0,
+        0,
+        0
+      ],
+      "seedRoles": [
+        {
+          "role": "IDLE_REQUEST_SEED",
+          "frame": {
+            "id": "b1-071-cell_000",
+            "texture": "m379_growmon/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "17550e7ad8b7d55ead8817f7cd83e8220a8846ad72a76dc66f2b1f951d196aaa",
+            "nativeBounds": [
+              -16.75,
+              -27.5,
+              29.5,
+              3.25
+            ],
+            "origin": [
+              128,
+              192
+            ],
+            "scale": 4
+          }
+        },
+        {
+          "role": "SOURCE_PREDICTED_RISK_NOT_MEASURED_WORST",
+          "frame": {
+            "id": "b1-071-cell_020",
+            "texture": "m379_growmon/main/cell_020",
+            "sequenceId": 13,
+            "frameIndex": 0,
+            "cell": 20,
+            "allStaticRequestBindings": [
+              [
+                13,
+                0,
+                20
+              ]
+            ],
+            "geometrySha256": "4620a8a57b4f17aec128faf13c7c8f7551d6e0f4e22f715a9934c7023c729086",
+            "nativeBounds": [
+              -9.5,
+              -27.25,
+              39.75,
+              3.25
+            ],
+            "origin": [
+              97,
+              192
+            ],
+            "scale": 4
+          }
+        }
+      ],
+      "omittedStaticTextures": null
+    },
+    {
+      "formIndex": 88,
+      "entityId": "m422_parrotmon",
+      "runtimeEntityId": "m422_parrotmon",
+      "form": "selected",
+      "runtimePath": "assets/production/characters/accepted-20261010/m422_parrotmon-perfect-raw-r01/ranch-streaming-v1/da460d1bd1d787b7/runtime.render.json",
+      "runtimeSha256": "d5574c032ecfe48b118d092274cc563fab07ac4eaf84338571399971c8314f76",
+      "idleSeed": {
+        "id": "b1-088-cell_000",
+        "texture": "m422_parrotmon/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "f43bd5d2316842d61cc36728c9d6a26bfaeb643c9c973f27708dea376e6775f4",
+        "nativeBounds": [
+          -25.75,
+          -37,
+          6.25,
+          -6
+        ],
+        "origin": [
+          124,
+          208
+        ],
+        "scale": 4
+      },
+      "sourceRiskSeed": {
+        "id": "b1-088-cell_000",
+        "texture": "m422_parrotmon/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "f43bd5d2316842d61cc36728c9d6a26bfaeb643c9c973f27708dea376e6775f4",
+        "nativeBounds": [
+          -25.75,
+          -37,
+          6.25,
+          -6
+        ],
+        "origin": [
+          124,
+          208
+        ],
+        "scale": 4
+      },
+      "sourceRiskRanking": [
+        0,
+        0.0
+      ],
+      "sameSeed": true,
+      "actualWorstBaselineLoss": "UNMEASURED_REQUIRE_ROUTE_SWEEP",
+      "contactVerdict": "UNREVIEWED",
+      "viewportPolicy": "390x844 CSS at nativeUnit3 if actual full body+shadow fits; else768technicalviewport without sprite scaling; fail if stillnotfit",
+      "idleRequestedBinding": [
+        0,
+        0,
+        0
+      ],
+      "seedRoles": [
+        {
+          "role": "IDLE_REQUEST_SEED",
+          "frame": {
+            "id": "b1-088-cell_000",
+            "texture": "m422_parrotmon/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "f43bd5d2316842d61cc36728c9d6a26bfaeb643c9c973f27708dea376e6775f4",
+            "nativeBounds": [
+              -25.75,
+              -37,
+              6.25,
+              -6
+            ],
+            "origin": [
+              124,
+              208
+            ],
+            "scale": 4
+          }
+        },
+        {
+          "role": "SOURCE_PREDICTED_RISK_NOT_MEASURED_WORST",
+          "frame": {
+            "id": "b1-088-cell_000",
+            "texture": "m422_parrotmon/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "f43bd5d2316842d61cc36728c9d6a26bfaeb643c9c973f27708dea376e6775f4",
+            "nativeBounds": [
+              -25.75,
+              -37,
+              6.25,
+              -6
+            ],
+            "origin": [
+              124,
+              208
+            ],
+            "scale": 4
+          }
+        }
+      ],
+      "omittedStaticTextures": null
+    },
+    {
+      "formIndex": 166,
+      "entityId": "m006_punimon",
+      "runtimeEntityId": "m006_punimon",
+      "form": "selected",
+      "runtimePath": "assets/production/characters/accepted-20261010/m006_punimon-early64-raw-v2-r01/ranch-streaming-v1/eb51d4af2d99d1e3/runtime.render.json",
+      "runtimeSha256": "3772166bb72f7340542a5cc08a74fbda6d6ce246c42c2f7d511c81c0c1fd37bb",
+      "idleSeed": {
+        "id": "b1-166-cell_000",
+        "texture": "m006_punimon/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "190e5a28b101b0518e34823295b378177f4a2db69c0db16d1bb0dcda6cf13eae",
+        "nativeBounds": [
+          -4,
+          -10,
+          4.25,
+          0
+        ],
+        "origin": [
+          96,
+          152
+        ],
+        "scale": 4
+      },
+      "sourceRiskSeed": {
+        "id": "b1-166-cell_023",
+        "texture": "m006_punimon/main/cell_023",
+        "sequenceId": 13,
+        "frameIndex": 0,
+        "cell": 23,
+        "allStaticRequestBindings": [
+          [
+            13,
+            0,
+            23
+          ]
+        ],
+        "geometrySha256": "c2457c6f4bc3a80f399a15d0bf383d10c203dabd92da208c8f89e7f3eca30e5d",
+        "nativeBounds": [
+          -5.5,
+          -4.5,
+          3.5,
+          0.25
+        ],
+        "origin": [
+          96,
+          152
+        ],
+        "scale": 4
+      },
+      "sourceRiskRanking": [
+        9,
+        0.016103337958592156
+      ],
+      "sameSeed": false,
+      "actualWorstBaselineLoss": "UNMEASURED_REQUIRE_ROUTE_SWEEP",
+      "contactVerdict": "UNREVIEWED",
+      "viewportPolicy": "390x844 CSS at nativeUnit3 if actual full body+shadow fits; else768technicalviewport without sprite scaling; fail if stillnotfit",
+      "idleRequestedBinding": [
+        0,
+        0,
+        0
+      ],
+      "seedRoles": [
+        {
+          "role": "IDLE_REQUEST_SEED",
+          "frame": {
+            "id": "b1-166-cell_000",
+            "texture": "m006_punimon/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "190e5a28b101b0518e34823295b378177f4a2db69c0db16d1bb0dcda6cf13eae",
+            "nativeBounds": [
+              -4,
+              -10,
+              4.25,
+              0
+            ],
+            "origin": [
+              96,
+              152
+            ],
+            "scale": 4
+          }
+        },
+        {
+          "role": "SOURCE_PREDICTED_RISK_NOT_MEASURED_WORST",
+          "frame": {
+            "id": "b1-166-cell_023",
+            "texture": "m006_punimon/main/cell_023",
+            "sequenceId": 13,
+            "frameIndex": 0,
+            "cell": 23,
+            "allStaticRequestBindings": [
+              [
+                13,
+                0,
+                23
+              ]
+            ],
+            "geometrySha256": "c2457c6f4bc3a80f399a15d0bf383d10c203dabd92da208c8f89e7f3eca30e5d",
+            "nativeBounds": [
+              -5.5,
+              -4.5,
+              3.5,
+              0.25
+            ],
+            "origin": [
+              96,
+              152
+            ],
+            "scale": 4
+          }
+        }
+      ],
+      "omittedStaticTextures": null
+    },
+    {
+      "formIndex": 0,
+      "entityId": "e005_digitama",
+      "runtimeEntityId": "e005_digitama",
+      "form": "selected",
+      "runtimePath": "assets/production/characters/accepted-20261010/e005_digitama-dot-intake-r01/ranch-streaming-v1/2deb24e3df56aa25/runtime.render.json",
+      "runtimeSha256": "59d75462764ff79217ab03cf9619b2815344b5644f2db045fde705936dc7dff3",
+      "idleSeed": {
+        "id": "b1-000-cell_000",
+        "texture": "e005_digitama/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "1a372cad5c226ed0118c47e7d9e7251f3867cfa735977f29a5248dc091ee7950",
+        "nativeBounds": [
+          -28.5,
+          -54,
+          33,
+          1
+        ],
+        "origin": [
+          192,
+          320
+        ],
+        "scale": 4
+      },
+      "sourceRiskSeed": {
+        "id": "b1-000-cell_002",
+        "texture": "e005_digitama/main/cell_002",
+        "sequenceId": 0,
+        "frameIndex": 2,
+        "cell": 2,
+        "allStaticRequestBindings": [
+          [
+            0,
+            2,
+            2
+          ]
+        ],
+        "geometrySha256": "80935153df2bc1b324f70f53b70c233e680b776e14504b1edf631c99e168ab30",
+        "nativeBounds": [
+          -32.25,
+          -40.75,
+          30.5,
+          1.5
+        ],
+        "origin": [
+          192,
+          320
+        ],
+        "scale": 4
+      },
+      "sourceRiskRanking": [
+        2261,
+        0.10316610009244405
+      ],
+      "sameSeed": false,
+      "actualWorstBaselineLoss": "UNMEASURED_REQUIRE_ROUTE_SWEEP",
+      "contactVerdict": "UNREVIEWED",
+      "viewportPolicy": "390x844 CSS at nativeUnit3 if actual full body+shadow fits; else768technicalviewport without sprite scaling; fail if stillnotfit",
+      "idleRequestedBinding": [
+        0,
+        0,
+        0
+      ],
+      "seedRoles": [
+        {
+          "role": "IDLE_REQUEST_SEED",
+          "frame": {
+            "id": "b1-000-cell_000",
+            "texture": "e005_digitama/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "1a372cad5c226ed0118c47e7d9e7251f3867cfa735977f29a5248dc091ee7950",
+            "nativeBounds": [
+              -28.5,
+              -54,
+              33,
+              1
+            ],
+            "origin": [
+              192,
+              320
+            ],
+            "scale": 4
+          }
+        },
+        {
+          "role": "SOURCE_PREDICTED_RISK_NOT_MEASURED_WORST",
+          "frame": {
+            "id": "b1-000-cell_002",
+            "texture": "e005_digitama/main/cell_002",
+            "sequenceId": 0,
+            "frameIndex": 2,
+            "cell": 2,
+            "allStaticRequestBindings": [
+              [
+                0,
+                2,
+                2
+              ]
+            ],
+            "geometrySha256": "80935153df2bc1b324f70f53b70c233e680b776e14504b1edf631c99e168ab30",
+            "nativeBounds": [
+              -32.25,
+              -40.75,
+              30.5,
+              1.5
+            ],
+            "origin": [
+              192,
+              320
+            ],
+            "scale": 4
+          }
+        }
+      ],
+      "omittedStaticTextures": null
+    },
+    {
+      "formIndex": 191,
+      "entityId": "m504_gigaseadramon",
+      "runtimeEntityId": "m504_gigaseadramon",
+      "form": "selected",
+      "runtimePath": "assets/production/characters/accepted-20261010/m504_gigaseadramon-ultimate-raw-r01/ranch-streaming-v1/4a985b86b4533924/runtime.render.json",
+      "runtimeSha256": "976cc41611e99cf52ac8c5a23dd0c3b95de3693ae7b954599866b568be739df9",
+      "idleSeed": {
+        "id": "b1-191-cell_000",
+        "texture": "m504_gigaseadramon/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "c7ccc8113076f2fedcca1247dbe4cab1e0091ad9c6f498d1c80a0917d9291f84",
+        "nativeBounds": [
+          -28.75,
+          -61,
+          36.25,
+          3.75
+        ],
+        "origin": [
+          320,
+          384
+        ],
+        "scale": 4
+      },
+      "sourceRiskSeed": {
+        "id": "b1-191-cell_008",
+        "texture": "m504_gigaseadramon/main/cell_008",
+        "sequenceId": 6,
+        "frameIndex": 0,
+        "cell": 8,
+        "allStaticRequestBindings": [
+          [
+            6,
+            0,
+            8
+          ]
+        ],
+        "geometrySha256": "12f42324da451783ae1974f8d8be4d3c64c5b8d96716ab9f327feab1dd602b13",
+        "nativeBounds": [
+          -43.75,
+          -56.75,
+          60.5,
+          22
+        ],
+        "origin": [
+          320,
+          384
+        ],
+        "scale": 4
+      },
+      "sourceRiskRanking": [
+        12911,
+        2.8180841427536274
+      ],
+      "sameSeed": false,
+      "actualWorstBaselineLoss": "UNMEASURED_REQUIRE_ROUTE_SWEEP",
+      "contactVerdict": "UNREVIEWED",
+      "viewportPolicy": "390x844 CSS at nativeUnit3 if actual full body+shadow fits; else768technicalviewport without sprite scaling; fail if stillnotfit",
+      "idleRequestedBinding": [
+        0,
+        0,
+        0
+      ],
+      "seedRoles": [
+        {
+          "role": "IDLE_REQUEST_SEED",
+          "frame": {
+            "id": "b1-191-cell_000",
+            "texture": "m504_gigaseadramon/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "c7ccc8113076f2fedcca1247dbe4cab1e0091ad9c6f498d1c80a0917d9291f84",
+            "nativeBounds": [
+              -28.75,
+              -61,
+              36.25,
+              3.75
+            ],
+            "origin": [
+              320,
+              384
+            ],
+            "scale": 4
+          }
+        },
+        {
+          "role": "SOURCE_PREDICTED_RISK_NOT_MEASURED_WORST",
+          "frame": {
+            "id": "b1-191-cell_008",
+            "texture": "m504_gigaseadramon/main/cell_008",
+            "sequenceId": 6,
+            "frameIndex": 0,
+            "cell": 8,
+            "allStaticRequestBindings": [
+              [
+                6,
+                0,
+                8
+              ]
+            ],
+            "geometrySha256": "12f42324da451783ae1974f8d8be4d3c64c5b8d96716ab9f327feab1dd602b13",
+            "nativeBounds": [
+              -43.75,
+              -56.75,
+              60.5,
+              22
+            ],
+            "origin": [
+              320,
+              384
+            ],
+            "scale": 4
+          }
+        }
+      ],
+      "omittedStaticTextures": null
+    },
+    {
+      "formIndex": 225,
+      "entityId": "oc_crownbrass_mandrill",
+      "runtimeEntityId": "oc_crownbrass_mandrill",
+      "form": "alternate",
+      "runtimePath": "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/runtime.render.json",
+      "runtimeSha256": "6fb593ab3a6b8f78946f80e4a032490b371b7e127c91ae828db0fa5d917a3dd3",
+      "idleSeed": {
+        "id": "b1-225-cell_000",
+        "texture": "oc_crownbrass_mandrill/main/cell_000",
+        "sequenceId": 0,
+        "frameIndex": 0,
+        "cell": 0,
+        "allStaticRequestBindings": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "geometrySha256": "2fd1f464bfb7d7eba93f00b6fce2ea673d44d397f2e8ef54e52a9a8a0f366fca",
+        "nativeBounds": [
+          -40.75,
+          -86,
+          42.75,
+          3.25
+        ],
+        "origin": [
+          320,
+          460
+        ],
+        "scale": 4
+      },
+      "sourceRiskSeed": {
+        "id": "b1-225-cell_050",
+        "texture": "oc_crownbrass_mandrill/main/cell_050",
+        "sequenceId": 35,
+        "frameIndex": 0,
+        "cell": 50,
+        "allStaticRequestBindings": [
+          [
+            35,
+            0,
+            50
+          ]
+        ],
+        "geometrySha256": "b8e3af629742e949675c33eafe8786bf919b54c1199d529d8828ddf412db5cee",
+        "nativeBounds": [
+          -52,
+          -90,
+          37.25,
+          18.75
+        ],
+        "origin": [
+          320,
+          460
+        ],
+        "scale": 4
+      },
+      "sourceRiskRanking": [
+        2532,
+        1.4976104301490705
+      ],
+      "sameSeed": false,
+      "actualWorstBaselineLoss": "UNMEASURED_REQUIRE_ROUTE_SWEEP",
+      "contactVerdict": "UNREVIEWED",
+      "viewportPolicy": "390x844 CSS at nativeUnit3 if actual full body+shadow fits; else768technicalviewport without sprite scaling; fail if stillnotfit",
+      "idleRequestedBinding": [
+        0,
+        0,
+        0
+      ],
+      "seedRoles": [
+        {
+          "role": "IDLE_REQUEST_SEED",
+          "frame": {
+            "id": "b1-225-cell_000",
+            "texture": "oc_crownbrass_mandrill/main/cell_000",
+            "sequenceId": 0,
+            "frameIndex": 0,
+            "cell": 0,
+            "allStaticRequestBindings": [
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "geometrySha256": "2fd1f464bfb7d7eba93f00b6fce2ea673d44d397f2e8ef54e52a9a8a0f366fca",
+            "nativeBounds": [
+              -40.75,
+              -86,
+              42.75,
+              3.25
+            ],
+            "origin": [
+              320,
+              460
+            ],
+            "scale": 4
+          }
+        },
+        {
+          "role": "SOURCE_PREDICTED_RISK_NOT_MEASURED_WORST",
+          "frame": {
+            "id": "b1-225-cell_050",
+            "texture": "oc_crownbrass_mandrill/main/cell_050",
+            "sequenceId": 35,
+            "frameIndex": 0,
+            "cell": 50,
+            "allStaticRequestBindings": [
+              [
+                35,
+                0,
+                50
+              ]
+            ],
+            "geometrySha256": "b8e3af629742e949675c33eafe8786bf919b54c1199d529d8828ddf412db5cee",
+            "nativeBounds": [
+              -52,
+              -90,
+              37.25,
+              18.75
+            ],
+            "origin": [
+              320,
+              460
+            ],
+            "scale": 4
+          }
+        }
+      ],
+      "omittedStaticTextures": null
+    }
+  ],
+  "authorizedScope": "ONLY_IDLE_AND_SOURCE_PREDICTED_RISK_NOT_ALL_FRAMES",
+  "anatomicalVerdict": "MANUAL_PENDING_NO_ALPHA_FEET_AUTOCORRECTION"
+}

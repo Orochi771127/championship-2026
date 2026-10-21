@@ -1,0 +1,1719 @@
+{
+  "schema": 1,
+  "status": "LOCAL_READONLY_PLANNING_NOT_GPU_ACCEPTANCE",
+  "count": 37,
+  "admittedCages": 36,
+  "structuralLids": 1,
+  "selection": "ACTUAL_PRODUCTION_PLANNER_AND_GROUND_API",
+  "sourceHashes": {
+    "../support-authority/nativeRaisingRanchRing.js": "f96ca07d299ca755e284f035e3eacc8679566fc5b25010219eb7aff16f0a29c8",
+    "../support-authority/ranch-three-ground.r1.json": "9ea4fffef3fec993bc3d228418c76b9dbd42a4cf284807030aa09c0ffbc4bd4e",
+    "../planner-preflight/src/championship/presentation/raisingRanchArtPlan.js": "4ff59cd0c13b195565ce7ba22f0722b0d8aa61cc2811593d201dbc93e53ba2d3",
+    "../production-support-wiring/candidate/src/championship/app/raisingGroundSupport.js": "ffd6a4e62213b1ee7b967fbf341d89f7a8f3e4c6da6a8ab76fd5bf73aff520c9",
+    "../edge-source/manifest.json": "c1d2a658a291a3ffa0b8d62bfcf3d26eb236a013bed45040f0a20560016f6fbf"
+  },
+  "rows": [
+    {
+      "id": "asset37-field_cm01_01",
+      "fieldId": "field_cm01_01",
+      "modelSha256": "949e2da3707530c7fd090abb9822163cd27a33eb905ec50e8a6be9362d024d5a",
+      "definitionIndex": 0,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:0",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:0",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 0
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        220,
+        12
+      ],
+      "pointLocalNative": [
+        28,
+        36
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 52,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm02_01",
+      "fieldId": "field_cm02_01",
+      "modelSha256": "801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e",
+      "definitionIndex": 1,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:1",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 1
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        284,
+        68
+      ],
+      "pointLocalNative": [
+        92,
+        92
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 211,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm03_01",
+      "fieldId": "field_cm03_01",
+      "modelSha256": "e001292cd9a7fea1db162a216fab19155ff949bb49bbcc13de7bfd554363d180",
+      "definitionIndex": 2,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:2",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:2",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 2
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        364,
+        68
+      ],
+      "pointLocalNative": [
+        172,
+        92
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 6,
+      "admittedCellCount": 382,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm04_01",
+      "fieldId": "field_cm04_01",
+      "modelSha256": "8f40f2af52845e884d382af30231fbca8631557a01bc87fc7a113d8bd6691fe8",
+      "definitionIndex": 3,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:3",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:3",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 3
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        332,
+        28
+      ],
+      "pointLocalNative": [
+        140,
+        52
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 237,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm05_01",
+      "fieldId": "field_cm05_01",
+      "modelSha256": "48e4c202b5e46dcdf2a63b1c8942565477b44ce40ef83888ed005c91cd40bcdc",
+      "definitionIndex": 4,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:4",
+          "slotIndex": 3,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:4",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 4
+      },
+      "rendererOwnerIndex": 9,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        332,
+        132
+      ],
+      "pointLocalNative": [
+        140,
+        68
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 245,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm06_01",
+      "fieldId": "field_cm06_01",
+      "modelSha256": "295eb3671e20992849f4d6895ded481acadf5d5014deebd511e5bba5e5f7d39d",
+      "definitionIndex": 5,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:5",
+          "slotIndex": 1,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:5",
+        "slotIndex": 1,
+        "instanceId": "audit:target",
+        "definitionIndex": 5
+      },
+      "rendererOwnerIndex": 9,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        96,
+        64
+      ],
+      "pointNative": [
+        340,
+        132
+      ],
+      "pointLocalNative": [
+        244,
+        68
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 169,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm07_01",
+      "fieldId": "field_cm07_01",
+      "modelSha256": "de0117594f79f4573e1d2537c033bac5fa2752deb2f0aa7abba26d3c7f264260",
+      "definitionIndex": 6,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:6",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:6",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 6
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        332,
+        52
+      ],
+      "pointLocalNative": [
+        140,
+        76
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 193,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm08_01",
+      "fieldId": "field_cm08_01",
+      "modelSha256": "91b34ea242808f12d170bdf4f4f8a10c2897a6443311c9703bf44568470075d5",
+      "definitionIndex": 7,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:7",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:7",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 7
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        228,
+        20
+      ],
+      "pointLocalNative": [
+        36,
+        44
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 229,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm09_01",
+      "fieldId": "field_cm09_01",
+      "modelSha256": "b5033322edb9e7905ff6d604b44ecc239b8f6cd89f817d51058c1835cc6db0e4",
+      "definitionIndex": 8,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:8",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 8
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        420,
+        28
+      ],
+      "pointLocalNative": [
+        228,
+        52
+      ],
+      "terrainType": 2,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 347,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm10_01",
+      "fieldId": "field_cm10_01",
+      "modelSha256": "408aab6e8236bcaf288534a538d7d49a411d7f904482ac96396fe707fad5043d",
+      "definitionIndex": 9,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:9",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:9",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 9
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        244,
+        52
+      ],
+      "pointLocalNative": [
+        52,
+        76
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 139,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm11_01",
+      "fieldId": "field_cm11_01",
+      "modelSha256": "17a763c0f0bb35e793cdac149d5be30d522782e21a2ba89f03a2fa4c2e0bbcd7",
+      "definitionIndex": 10,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:10",
+          "slotIndex": 1,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:10",
+        "slotIndex": 1,
+        "instanceId": "audit:target",
+        "definitionIndex": 10
+      },
+      "rendererOwnerIndex": 9,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        96,
+        64
+      ],
+      "pointNative": [
+        212,
+        204
+      ],
+      "pointLocalNative": [
+        116,
+        140
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 108,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm12_01",
+      "fieldId": "field_cm12_01",
+      "modelSha256": "3df63e095c3dabf9e91f81aff8b4eea61c7993af1a32ef3c347d7c52bfe21f3b",
+      "definitionIndex": 11,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:11",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:11",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 11
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        244,
+        20
+      ],
+      "pointLocalNative": [
+        52,
+        44
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 189,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm13_01",
+      "fieldId": "field_cm13_01",
+      "modelSha256": "c8f4089cf704dd2b64a163a0aa4e21cfb56cdc58c653d7cd810599dc33451872",
+      "definitionIndex": 12,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:12",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:12",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 12
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        228,
+        52
+      ],
+      "pointLocalNative": [
+        36,
+        76
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 124,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm14_01",
+      "fieldId": "field_cm14_01",
+      "modelSha256": "155571c7490ed086992b0b7397edd810511a238c8a110f3b22a8ebcff9b4a54d",
+      "definitionIndex": 13,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:13",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:13",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 13
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        284,
+        28
+      ],
+      "pointLocalNative": [
+        92,
+        52
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 212,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm15_01",
+      "fieldId": "field_cm15_01",
+      "modelSha256": "3853287095590570da1ff2c54a3783a5ddcb823a13fb8b82a4e4eb0724dee194",
+      "definitionIndex": 14,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:14",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:14",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 14
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        284,
+        100
+      ],
+      "pointLocalNative": [
+        92,
+        124
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 179,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm16_01",
+      "fieldId": "field_cm16_01",
+      "modelSha256": "d0ac9a4a30c32bdddf7c48b954a0f86f88e5d916e8c5d55dcfd9dca429244364",
+      "definitionIndex": 15,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:15",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:15",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 15
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        236,
+        28
+      ],
+      "pointLocalNative": [
+        44,
+        52
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 30,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm17_01",
+      "fieldId": "field_cm17_01",
+      "modelSha256": "05a340e967d07cc3d1c06dc3ae52d7436d8b79503f7c879337873d3fbb69b3a7",
+      "definitionIndex": 16,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:16",
+          "slotIndex": 3,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:16",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 16
+      },
+      "rendererOwnerIndex": 9,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        276,
+        196
+      ],
+      "pointLocalNative": [
+        84,
+        132
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 145,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm18_01",
+      "fieldId": "field_cm18_01",
+      "modelSha256": "2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7",
+      "definitionIndex": 17,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:17",
+          "slotIndex": 3,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:17",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 17
+      },
+      "rendererOwnerIndex": 9,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        268,
+        156
+      ],
+      "pointLocalNative": [
+        76,
+        92
+      ],
+      "terrainType": 0,
+      "navigationComponent": 3,
+      "clearance": 2,
+      "admittedCellCount": 63,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm19_01",
+      "fieldId": "field_cm19_01",
+      "modelSha256": "7192630e17f179fbf729919aff920ed20d64bc172581afcdddbcf5ba89e30dac",
+      "definitionIndex": 18,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:18",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 18
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        380,
+        12
+      ],
+      "pointLocalNative": [
+        188,
+        36
+      ],
+      "terrainType": 2,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 205,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm20_01",
+      "fieldId": "field_cm20_01",
+      "modelSha256": "c89b2c3168e1df1fbaf2f3039bc119f56d99cd7cd74aec44b450904121f69560",
+      "definitionIndex": 19,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:19",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:19",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 19
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        276,
+        12
+      ],
+      "pointLocalNative": [
+        84,
+        36
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 167,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm21_01",
+      "fieldId": "field_cm21_01",
+      "modelSha256": "4f4163c0c0a552b211df77bdeae30e96b708ca12431e50892ae2ae90608d891a",
+      "definitionIndex": 20,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:20",
+          "slotIndex": 3,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "rendererOwnerIndex": 9,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        324,
+        172
+      ],
+      "pointLocalNative": [
+        132,
+        108
+      ],
+      "terrainType": 0,
+      "navigationComponent": 2,
+      "clearance": 3,
+      "admittedCellCount": 264,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm22_01",
+      "fieldId": "field_cm22_01",
+      "modelSha256": "bf236cf036592e9c8766452c8d1ab56c865b742fa247b280589dd4256b347027",
+      "definitionIndex": 21,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:21",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:21",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 21
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        356,
+        36
+      ],
+      "pointLocalNative": [
+        164,
+        60
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 119,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm23_01",
+      "fieldId": "field_cm23_01",
+      "modelSha256": "d141f2cc2408ce0e0c59f4e35c44763fc741d136809ec8eca9e19f316308225a",
+      "definitionIndex": 22,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:22",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:22",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 22
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        220,
+        36
+      ],
+      "pointLocalNative": [
+        28,
+        60
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 80,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm24_01",
+      "fieldId": "field_cm24_01",
+      "modelSha256": "d4f53a54a278ee5a76688d5e046080dfe84b8451ef20de58a325ae54d2dd939b",
+      "definitionIndex": 23,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:23",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:23",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 23
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        228,
+        52
+      ],
+      "pointLocalNative": [
+        36,
+        76
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 37,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm25_01",
+      "fieldId": "field_cm25_01",
+      "modelSha256": "43066500b19c6ffbdd7a5cda4fb215a14fbc57e570ef304bfe04df4c95a7093c",
+      "definitionIndex": 24,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:24",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:24",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 24
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        300,
+        20
+      ],
+      "pointLocalNative": [
+        108,
+        44
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 66,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm26_01",
+      "fieldId": "field_cm26_01",
+      "modelSha256": "e1f11ca01ba49b8006846da33b5bd701b0b650f6af65b043f131d13de07872d3",
+      "definitionIndex": 25,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:25",
+          "slotIndex": 3,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:25",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 25
+      },
+      "rendererOwnerIndex": 9,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        292,
+        180
+      ],
+      "pointLocalNative": [
+        100,
+        116
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 230,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm27_01",
+      "fieldId": "field_cm27_01",
+      "modelSha256": "148da89a3a9106977b5dd055d6aaacfd453f0856fd5cf21ef57fe6799fa101ca",
+      "definitionIndex": 26,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:26",
+          "slotIndex": 3,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:26",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 26
+      },
+      "rendererOwnerIndex": 9,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        228,
+        212
+      ],
+      "pointLocalNative": [
+        36,
+        148
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 74,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm28_01",
+      "fieldId": "field_cm28_01",
+      "modelSha256": "43099ad42413cba74f6d9c2e0323f2937832757eb2d39447ec5ee9e9c1100d21",
+      "definitionIndex": 35,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:waiting-room",
+        "slotIndex": 0,
+        "instanceId": "audit:waiting",
+        "definitionIndex": 35
+      },
+      "rendererOwnerIndex": 0,
+      "nativeOwnerIndex": 0,
+      "originNative": [
+        0,
+        -24
+      ],
+      "pointNative": [
+        116,
+        60
+      ],
+      "pointLocalNative": [
+        116,
+        84
+      ],
+      "terrainType": 0,
+      "navigationComponent": 0,
+      "clearance": 7,
+      "admittedCellCount": 367,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm29_01",
+      "fieldId": "field_cm29_01",
+      "modelSha256": "17b9194b35348bca3655014e1873e264bdbed4d5c8ea98cccbc252c281fbc8b6",
+      "role": "STRUCTURAL_LID_NOT_PLACEABLE_CAGE",
+      "actorAdmission": "NOT_APPLICABLE_NO_CAGE_DEFINITION_OR_OWNER",
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        }
+      ],
+      "expected": "RENDER_ACTUAL_LID_FROM_PLAN_AND_VERIFY_NO_MANUAL_ACTOR_OWNER"
+    },
+    {
+      "id": "asset37-field_cm30_01",
+      "fieldId": "field_cm30_01",
+      "modelSha256": "5a558a32dcfd84a0d5f893c9d5fd09f6083533f4cd0b9d14eccfbfd6d8927087",
+      "definitionIndex": 27,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:27",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:27",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 27
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        228,
+        28
+      ],
+      "pointLocalNative": [
+        36,
+        52
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 57,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm31_01",
+      "fieldId": "field_cm31_01",
+      "modelSha256": "48f3763757aea98f6f7583b5c0c48c09195eb76d7ba23b19d8d388284ed6f1e6",
+      "definitionIndex": 28,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:28",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:28",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 28
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        236,
+        28
+      ],
+      "pointLocalNative": [
+        44,
+        52
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 80,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm32_01",
+      "fieldId": "field_cm32_01",
+      "modelSha256": "bbaa00cacc91a615cc5c86cdc2ab3b19f21104596b96576347b4a2c3e20ab22f",
+      "definitionIndex": 29,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:29",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:29",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 29
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        236,
+        60
+      ],
+      "pointLocalNative": [
+        44,
+        84
+      ],
+      "terrainType": 0,
+      "navigationComponent": 5,
+      "clearance": 2,
+      "admittedCellCount": 28,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm34_01",
+      "fieldId": "field_cm34_01",
+      "modelSha256": "01d1306d1d248a8b1f3aa52520fd5b90fed0bb51abddc38d5aec6c25c21c8bc6",
+      "definitionIndex": 30,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:30",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:30",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 30
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        228,
+        44
+      ],
+      "pointLocalNative": [
+        36,
+        68
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 60,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm35_01",
+      "fieldId": "field_cm35_01",
+      "modelSha256": "61ff3a730a23677b3da58c71734535ce3e9028dda4830cf7e5d997411e1b14a7",
+      "definitionIndex": 31,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:31",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 31
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        236,
+        20
+      ],
+      "pointLocalNative": [
+        44,
+        44
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 51,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm37_01",
+      "fieldId": "field_cm37_01",
+      "modelSha256": "4af25fc8e422a7320c47f2233255fabd3bf8d4fca19f2d8657bf134164b6f988",
+      "definitionIndex": 32,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:32",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:32",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 32
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        244,
+        28
+      ],
+      "pointLocalNative": [
+        52,
+        52
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 3,
+      "admittedCellCount": 59,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm39_01",
+      "fieldId": "field_cm39_01",
+      "modelSha256": "272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0",
+      "definitionIndex": 33,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:33",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 33
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        236,
+        28
+      ],
+      "pointLocalNative": [
+        44,
+        52
+      ],
+      "terrainType": 2,
+      "navigationComponent": 1,
+      "clearance": 4,
+      "admittedCellCount": 76,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    },
+    {
+      "id": "asset37-field_cm40_01",
+      "fieldId": "field_cm40_01",
+      "modelSha256": "02b26418f5cc78244743042da9f9ff62696cc23a1743b784690f4401e7ebb665",
+      "definitionIndex": 34,
+      "layout": [
+        {
+          "moduleId": "championship:2026:cage:waiting-room",
+          "slotIndex": 0,
+          "instanceId": "audit:waiting"
+        },
+        {
+          "moduleId": "championship:2026:cage:34",
+          "slotIndex": 4,
+          "instanceId": "audit:target"
+        }
+      ],
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:34",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 34
+      },
+      "rendererOwnerIndex": 1,
+      "nativeOwnerIndex": 1,
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        212,
+        20
+      ],
+      "pointLocalNative": [
+        20,
+        44
+      ],
+      "terrainType": 0,
+      "navigationComponent": 1,
+      "clearance": 2,
+      "admittedCellCount": 58,
+      "pointSelection": "MAX_ACTUAL_NATIVE_CLEARANCE_THEN_Y_X_TILE_CENTER",
+      "actorAdmission": "ACTUAL_READONLY_PRODUCTION_QUERY_PASS_NOT_APP_MOVE",
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "verticalAuthority": "EXISTING_RUNTIME_WALK_METADATA_ONLY_NO_MODEL_MAX_OVERRIDE"
+    }
+  ]
+}
