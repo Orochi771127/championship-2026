@@ -4,7 +4,7 @@ on:
     branches: ['fix/ranch-floor-contact-audit-20261021']
     paths:
       - '.github/workflows/ranch-normal-support-review.yml'
-      - 'tests/ranch-normal-support-v2.mjs'
+      - 'tests/ranch-normal-support-v3.mjs'
       - 'tests/fixtures/ranch-normal-support-v2.html'
       - 'tests/normal-support-candidate/**'
       - 'tests/ranch-support-probe/inject-support-diagnostics-v2.mjs'
@@ -50,7 +50,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-support-v2.html > /dev/null
-          node tests/ranch-normal-support-v2.mjs http://127.0.0.1:8765/ .tmp/normal-support/${{ matrix.engine }}/cases .tmp/normal-support-candidate .tmp/normal-support-probe-v2/createRaisingFieldPixiPresentation.js tests/ranch-floor-data/admitted-probes-v2.json
+          node tests/ranch-normal-support-v3.mjs http://127.0.0.1:8765/ .tmp/normal-support/${{ matrix.engine }}/cases .tmp/normal-support-candidate .tmp/normal-support-probe-v2/createRaisingFieldPixiPresentation.js tests/ranch-floor-data/admitted-probes-v2.json
       - name: Retain required captures and partial natural-waste attempts
         if: always()
         uses: actions/upload-artifact@v4
