@@ -5,6 +5,8 @@ on:
     paths:
       - '.github/workflows/friends-playtest-browser.yml'
       - 'tests/championship-friends-playtest-browser.cjs'
+      - 'tests/friends-installer-fixture-support.cjs'
+      - 'tests/friends-installer-fixture-cases.mjs'
       - 'tests/alternate-form-browser-support.cjs'
       - 'src/championship/app/**'
       - 'src/championship/cage/**'
@@ -40,7 +42,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Verify row confirmation and purchase invariants
-        run: node --test tests/championship-product-row-lock-ui-cases.mjs tests/championship-ranch-row-dialog-cases.mjs tests/championship-friends-playtest-cases.mjs tests/championship-product-ranch-grid-cases.mjs tests/championship-vs4-cage-edit-cases.mjs
+        run: node --test tests/friends-installer-fixture-cases.mjs tests/championship-product-row-lock-ui-cases.mjs tests/championship-ranch-row-dialog-cases.mjs tests/championship-friends-playtest-cases.mjs tests/championship-product-ranch-grid-cases.mjs tests/championship-vs4-cage-edit-cases.mjs
       - name: Build and validate the approved public artifact
         run: npm run build:playtest && npm run validate:playtest
       - name: Exercise fresh UI purchases, hunt fees, reload and isolated legacy save
@@ -66,3 +68,4 @@ jobs:
           path: .tmp/browser-qa/friends-playtest/*-trace.zip
           if-no-files-found: warn
           retention-days: 14
+

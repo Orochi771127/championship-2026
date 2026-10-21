@@ -1,8 +1,10 @@
-// Real public UI, fresh isolated profiles, exact built bytes. No app/state injection,
+// Real game UI, fresh isolated profiles, exact built game bytes. Private installer
+// fixtures are routed only inside this test. No app/state injection,
 // fake timers, private gameplay methods, fixture edits or custom browser/GPU flags.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
+const {createInstallerFixtures}=require('./friends-installer-fixture-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
 const output=require('./browser-qa-output.cjs')('friends-playtest');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/',saveKey='championshipModernSave:v1';
@@ -11,7 +13,10 @@ const digits=s=>Number(String(s).replace(/[^0-9]/g,''));
 const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(evidence,null,2)+'\n');
 (async()=>{
  const build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=build.buildId;assert.equal(build.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(build.publicPlaytest?.ownerApproved,true);
- assert.ok(resolveAsset(root,'/championship.html'));assert.ok(resolveAsset(root,'/full-qa-save.html'));
+ assert.ok(resolveAsset(root,'/championship.html'));
+ assert.equal(resolveAsset(root,'/full-qa-save.html'),null,'Private QA installer must stay outside the public build');
+ assert.equal(resolveAsset(root,'/qa/championship-full-qa-save.json'),null,'Private QA seed must stay outside the public build');
+ const fixtures=await createInstallerFixtures(path.resolve(__dirname,'..'));
  const server=await serveBuild(root);let browser,context,page;
  async function fresh(label){
   if(context){await context.tracing.stop({path:path.join(output,evidence.context+'-trace.zip')});await context.close();}
@@ -23,6 +28,8 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
    if(url.startsWith(server.origin+'/'))return route.continue();
    if(url.startsWith(publicBase)){
     const parsed=new URL(url),relative=parsed.pathname.slice(new URL(publicBase).pathname.length);
+    const fixture=fixtures.route('/'+relative);
+    if(fixture)return route.fulfill({status:200,...fixture,headers:{'Cache-Control':'no-store'}});
     if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:server.origin+'/'+relative+parsed.search,maxRedirects:0});return route.fulfill({response});}
    }
    evidence.networkErrors.push({context:label,url,error:'NON_BUILD_REQUEST_BLOCKED'});return route.abort();
@@ -323,7 +330,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
   // A separate empty browser profile uses the existing QA installer UI, not an edited save.
   await fresh('old-qa');await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);await page.locator('#install').click();await page.waitForURL(/championship\.html$/);
-  const old=await saved();const oldFixture=JSON.parse(fs.readFileSync(path.join(root,'qa/championship-full-qa-save.json')));assert.deepEqual(old.shop,oldFixture.shop,'Installer must preserve fixture economy/inventory');assert.deepEqual(old.cageEdit.placements,oldFixture.cageEdit.placements,'Installer must preserve fixture anchors');await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
+  const old=await saved();const oldFixture=fixtures.seed;assert.deepEqual(old.shop,oldFixture.shop,'Installer must preserve fixture economy/inventory');assert.deepEqual(old.cageEdit.placements,oldFixture.cageEdit.placements,'Installer must preserve fixture anchors');await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);assert.equal(await page.locator('[data-locked-test-row]').count(),1);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),1);await shot('07-legacy-one-row-lock');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
   const migrated=await saved();assert.deepEqual(migrated.shop,old.shop,'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,old.cageEdit.placements);assert.equal(migrated.flags.friendsPlaytest?.diamonds,10000);assert.equal(migrated.flags.friendsPlaytest.version,2);
@@ -344,3 +351,4 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  }catch(error){evidence.status='FAIL';evidence.failure=error.stack||String(error);await shot('failure').catch(()=>{});write();throw error;}
  finally{if(context){await context.tracing.stop({path:path.join(output,evidence.context+'-trace.zip')}).catch(()=>{});await context.close();}if(browser)await browser.close();await server.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
