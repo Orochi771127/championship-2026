@@ -31,14 +31,23 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
    const context=await browser.newContext({viewport:engine==='webkit'?{width:390,height:844}:{width:320,height:712},deviceScaleFactor:engine==='webkit'?3:1,isMobile:true,hasTouch:true,locale:'zh-TW'});
    const page=await context.newPage();page.setDefaultTimeout(120000);
    const evidence={mode,engine,target:35,targetEntity:config.entityId,targetPaths:[...targetPaths],errors:[],console:[],network:[],httpFailures:[],requestFailures:[],writes:[]};
-   let release,blocked=0,allow=false;const injectedRequests=new WeakSet();
+   let release,blocked=0,allow=false,baselinePresenterRequests=0;const injectedRequests=new WeakSet();
    const barrier=new Promise(r=>release=r);
    page.on('pageerror',e=>evidence.errors.push(e.message));
    page.on('console',m=>{if(['error','warning'].includes(m.type()))evidence.console.push({type:m.type(),text:m.text(),location:m.location()})});
    page.on('response',r=>{if(targetPaths.has(new URL(r.url()).pathname))evidence.network.push({url:r.url(),status:r.status()});if(r.status()>=400)evidence.httpFailures.push({url:r.url(),status:r.status(),method:r.request().method(),injected:injectedRequests.has(r.request())})});
    page.on('requestfailed',r=>evidence.requestFailures.push({url:r.url(),failure:r.failure()?.errorText,method:r.method(),injected:injectedRequests.has(r)}));
    await page.addInitScript(()=>{globalThis.__freezeWrites=[];const set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){globalThis.__freezeWrites.push(String(k));return set.call(this,k,v)};globalThis.__freezeRaf=0;function frame(){globalThis.__freezeRaf++;requestAnimationFrame(frame)}requestAnimationFrame(frame)});
-   await page.route('**/src/championship/app/championshipStandaloneApp.js',async route=>{
+   // Shared-streamed target control: both owned residents begin with seq0.
+   // A previously unseen species is eagerly loaded by production roster and
+   // cannot reproduce the cached-streaming missing39 incident.
+   await page.route(url=>url.origin===new URL(base).origin&&url.pathname==='/tests/fixtures/championship-owned-party.html',async route=>{
+    const response=await route.fetch();let text=await response.text();
+    text=exactReplace(text,"speciesId:'species-034',displayName:'乙隊驗收'","speciesId:'species-035',displayName:'乙隊驗收'");
+    text=exactReplace(text,'nativeHuntSpeciesByIndex(34),rng:{next:()=>11}','nativeHuntSpeciesByIndex(35),rng:{next:()=>11}');
+    await route.fulfill({response,body:text});
+   });
+   await page.route('**/src/championship/app/championshipStandaloneApp.js' ,async route=>{
     const response=await route.fetch();let text=await response.text();
     text="import {beginNativeRaisingEvolution as __testBeginEvolution} from '../raising/nativeRaisingActor.js';\n"+text;
     text=exactReplace(text,'    getRaisingState() {',`    __testBeginEvolution(target) {
@@ -58,7 +67,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     await route.fulfill({response,body:text});
    });
    if(baseline)await page.route('**/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js',async route=>{
-    await route.fulfill({status:200,contentType:'text/javascript',body:await fs.readFile('.tmp/evolution-baseline-presenter.js','utf8')});
+    baselinePresenterRequests++;await route.fulfill({status:200,contentType:'text/javascript',body:await fs.readFile('.tmp/evolution-baseline-presenter.js','utf8')});
    });
    await page.route('**/*',async route=>{
     if(!targetPaths.has(new URL(route.request().url()).pathname)||allow)return route.fallback();
@@ -72,7 +81,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     mark('prepare-valid-owned-fixture');
     // Existing fixture constructs a valid isolated local profile, not user data.
     await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);
-    await page.locator('#prepare').click();await page.locator('#status').filter({hasText:'受控存檔已準備'}).waitFor();
+    await page.locator('#prepare-practice').click();await page.locator('#status').filter({hasText:'受控存檔已準備'}).waitFor();
     await page.goto(new URL('championship.html?presentation=developer',base).href);
     await page.locator('#cm-login').waitFor();
     if(await page.locator('#cm-film-skip').isVisible()){await page.locator('#cm-film-skip').click();await page.locator('#cm-opening-film').waitFor({state:'hidden'});}
@@ -83,7 +92,16 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     mark('actual-home-ready');
     evidence.before=await snapshot();assert.equal(evidence.before.life.evolution,null);
     const storageBefore=await page.evaluate(()=>Object.keys(localStorage));
-    const ownedId=evidence.before.residents[0].id;assert.equal(evidence.before.residents.length,1);
+    const ownedId=evidence.before.residents[0].id;assert.equal(evidence.before.residents.length,2);
+    assert.ok(evidence.before.residents[0].speciesId.endsWith('species-034'));
+    assert.equal(new Set(evidence.before.residents.map(r=>r.id)).size,2,'Distinct owned residents');
+    assert.ok(evidence.before.residents.some(r=>r.speciesId.endsWith('species-035')),'Target is an already-streamed resident');
+    assert.equal(blocked,0,'Target39 page has not been requested before evolution');
+    assert.deepEqual(evidence.network,[],'No target39 response before evolution');
+    const loadedPages=evidence.before.scene.characterArt.textureMemory.atlasPages;
+    assert.ok(loadedPages.some(p=>p.entityId===config.entityId),'Target initial atlas is actually resident');
+    assert.ok(!loadedPages.some(p=>targetPaths.has(new URL(p.imageUrl).pathname)),'Target39 page absent from real loaded atlas diagnostics');
+    if(baseline)assert.ok(baselinePresenterRequests>0,'Baseline presenter response actually installed');
     assert.deepEqual(evidence.errors,[],'No startup page error');
     evidence.preparation={console:evidence.console,httpFailures:evidence.httpFailures,requestFailures:evidence.requestFailures};
     evidence.console=[];evidence.httpFailures=[];evidence.requestFailures=[];
@@ -93,6 +111,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     if(baseline){
      await page.waitForFunction(()=>globalThis.__freezeApp.getRaisingLifecycleFrame().evolution!==null);
      for(let i=0;i<150&&!evidence.errors.some(x=>x.includes(`NATIVE_CHARACTER_TEXTURE_MISSING:${config.entityId}:39:`));i++)await delay(100);
+     evidence.baselineState=await snapshot();evidence.baselinePresenterRequests=baselinePresenterRequests;evidence.interceptedRequests=blocked;
      assert.ok(evidence.errors.some(x=>x.includes(`NATIVE_CHARACTER_TEXTURE_MISSING:${config.entityId}:39:`)),'Baseline reproduces exact exception in actual browser');
      evidence.status='EXPECTED_BASELINE_REPRODUCED';await page.screenshot({path:`${out}/${engine}-baseline.png`,fullPage:true});
     }else{
@@ -101,6 +120,8 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
      assert.ok(blocked>0,'Actual sequence39 image intercepted');
      mark('target39-intercepted');
      evidence.pending=await snapshot();assert.equal(evidence.pending.playable,false);
+     const existingTarget=evidence.before.residents.find(r=>r.id!==ownedId);
+     assert.equal(evidence.pending.scene.residentAssets.find(r=>r.creatureId===existingTarget.id).state,'ready','Existing target resident stays independently ready');
      assert.equal(evidence.pending.life.evolution.phase,0);assert.equal(evidence.pending.life.evolution.reveal,false);
      await delay(700);evidence.stillPending=await snapshot();
      assert.equal(evidence.stillPending.life.evolution.totalFrames,evidence.pending.life.evolution.totalFrames,'Native evolution clock is paused');
@@ -122,7 +143,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
      }else{allow=true;release();}
      await page.waitForFunction(()=>!__freezeApp.getRaisingLifecycleFrame().evolution&&__freezeScene.isPlayable===true);
      mark('native-evolution-completed');
-     evidence.after=await snapshot();assert.deepEqual(evidence.after.residents,[{id:ownedId,speciesId:evidence.before.residents[0].speciesId.replace(/species-\d+$/, 'species-035')}],'Same owned resident, no duplication/reset');assert.equal(evidence.after.life.message?.target,35);assert.equal(evidence.after.life.message?.kind,'EVOLVED');
+     evidence.after=await snapshot();assert.deepEqual(evidence.after.residents,evidence.before.residents.map(r=>r.id===ownedId?{...r,speciesId:r.speciesId.replace(/species-\d+$/, 'species-035')}:r),'Same owned resident, no duplication/reset');assert.equal(evidence.after.life.message?.target,35);assert.equal(evidence.after.life.message?.kind,'EVOLVED');
      assert.equal(await page.locator('.int-rh2-field-host').evaluate(e=>e.inert),false);
      assert.equal(await page.locator('.int-rh2-resident-assets--recovery').isVisible(),false);
      // The production completion ceremony is a separate real UI owner.
@@ -167,7 +188,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
      evidence.status='PASS_ACTUAL_APP_NATIVE_EVOLUTION_AND_RETRY';
     }
     mark(evidence.status);await save();results.push({mode,status:evidence.status});
-   }catch(error){evidence.status='FAIL';evidence.failure=String(error);await page.screenshot({path:`${out}/${engine}-${mode}-failure.png`,fullPage:true}).catch(()=>{});await save();throw error;}
+   }catch(error){evidence.status='FAIL';evidence.failure=String(error);evidence.failureState=await snapshot().catch(()=>null);evidence.interceptedRequests=blocked;await page.screenshot({path:`${out}/${engine}-${mode}-failure.png`,fullPage:true}).catch(()=>{});await save();throw error;}
    finally{allow=true;release();await context.close();}
   }
   await fs.writeFile(`${out}/${engine}-summary.json`,JSON.stringify({status:'PASS',results},null,2));
