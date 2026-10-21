@@ -64,7 +64,7 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
  const game=await browser.newPage({viewport:{width:1280,height:900},locale:'zh-TW'});game.setDefaultTimeout(90000);
  const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',network:[],errors:[],pageErrors:[],consoleFailures:[],httpFailures:[],requestFailures:[],scenes:[],huntNormal034:'NOT_COVERED_NO_GUARANTEED_WILD_SPAWN_FIXTURE'};let scene='fixture';
  game.on('response',r=>{if(r.url().includes('/m201_agumon'))evidence.network.push({scene,url:r.url(),status:r.status()});if(r.status()>=400)evidence.httpFailures.push({scene,url:r.url(),status:r.status()})});
- game.on('requestfailed',r=>evidence.requestFailures.push({scene,url:r.url(),failure:r.failure()?.errorText}));
+ game.on('requestfailed',r=>evidence.requestFailures.push({scene,url:r.url(),failure:r.failure()?.errorText,method:r.method(),resourceType:r.resourceType()}));
  game.on('pageerror',e=>{evidence.pageErrors.push(e.message);evidence.errors.push(e.message)});game.on('console',m=>{if(/FALLBACK|CHARACTER_REVIEW_FAILED|CANDIDATE_.*DRIFT/.test(m.text())){evidence.consoleFailures.push({type:m.type(),message:m.text()});evidence.errors.push(m.text())}});
  const save=()=>fs.writeFile(out+'/normal-game-result.json',JSON.stringify(evidence,null,2));
  const screen=async name=>game.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();
@@ -104,7 +104,20 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
   assert.ok(Object.hasOwn(shadowRoots,battle.art.fieldId),'Approved arena field has independently frozen private shadow route');
   const expectedShadowUrl=new URL(shadowRoots[battle.art.fieldId]+'shadows.json',base).href;
   assert.deepEqual(evidence.httpFailures,[{scene:'battle',url:expectedShadowUrl,status:404}],'Only the exact baseline private shadow metadata 404 is expected');
-  assert.deepEqual(evidence.requestFailures,[],'No failed network requests');
+  // Actual run39558366558 observed only these streaming-media cancellations across scene changes.
+  // Unchanged musicPresentation.js release(): pause(), removeAttribute('src'), load().
+  const allowedMediaAborts=new Map([
+   [new URL('assets/production/original-music-r1/bgm_login_page.mp3',base).href,'raising'],
+   [new URL('assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3',base).href,'battle']
+  ]);
+  assert.ok(evidence.requestFailures.length<=2,'At most the two observed scene-transition media cancellations');
+  assert.equal(new Set(evidence.requestFailures.map(r=>r.url)).size,evidence.requestFailures.length,'No repeated media failure');
+  for(const r of evidence.requestFailures){
+   assert.ok(allowedMediaAborts.has(r.url),'No failed character image/JSON/module or unlisted audio request');
+   assert.equal(r.scene,allowedMediaAborts.get(r.url),'Only the corresponding controlled scene transition');
+   assert.equal(r.failure,'net::ERR_ABORTED');assert.equal(r.method,'GET');assert.equal(r.resourceType,'media');
+  }
+  evidence.mediaLifecycle={abortedRequests:evidence.requestFailures,completePlayback:'NOT_TESTED',sourceBlob:'da504c9c1f76235f4fb6314b0218bbda41107186'};
   assert.deepEqual(evidence.pageErrors,[],'No page errors, including errors resembling the known warning');
   assert.deepEqual(evidence.consoleFailures,[{type:'warning',message:'CHAMPIONSHIP_BM03_SHADOW_FALLBACK BM03_SHADOW_METADATA_UNAVAILABLE'}],'Exactly one warning-level baseline diagnostic');
   assert.deepEqual(evidence.errors,['CHAMPIONSHIP_BM03_SHADOW_FALLBACK BM03_SHADOW_METADATA_UNAVAILABLE'],'Exactly one known loopback-only baseline warning; all other errors/fallbacks fail');
@@ -145,4 +158,5 @@ async function isolatedHuntSceneSmoke(browser,base,prefix,out){
  await review.screenshot({path:out+'/isolated-hunt034-contact.png',fullPage:true});const disposal=await review.evaluate(()=>globalThis.__qa034Dispose());assert.equal(disposal.ticker,disposal.baselineTicker);assert.equal(disposal.rootDestroyed,true);assert.ok(network.some(n=>n.url===new URL(publicConfig.runtimePath,base).href&&n.status===200));assert.ok(network.some(n=>n.url.startsWith(new URL(prefix+'ranch-streaming-v1/',base).href)&&/main-[a-f0-9]{16}\.webp$/.test(n.url)&&n.status===200));assert.ok(!network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.(?:png|webp)$/.test(n.url)));await fs.writeFile(out+'/isolated-hunt034-result.json',JSON.stringify({status:'PASS_ISOLATED_HUNT_SCENE',...evidence,disposal,network},null,2));return evidence;
  }finally{await review.close();}
 }
+
 
