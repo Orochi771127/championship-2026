@@ -1,0 +1,25 @@
+  function residentFrameReady(entry,frame,{retry=false}={}){
+    const presenter=entry.nativeFramePresenter;
+    if(!presenter?.isFrameReady)return true;
+    if(presenter.isFrameReady(frame)){
+      if(entry.pendingAnimation!=null){entry.animationLoadToken=(entry.animationLoadToken??0)+1;
+        entry.pendingAnimation=null;entry.pendingAnimationFrame=null;entry.assetState='ready';entry.assetError=null;reportResidentAssets();}
+      return true;
+    }
+    const sequence=frame.sequenceId;
+    entry.pendingAnimationFrame=frame;
+    if(!retry&&entry.pendingAnimation===sequence)return false;
+    const token=(entry.animationLoadToken??0)+1;entry.animationLoadToken=token;
+    entry.pendingAnimation=sequence;entry.assetState='loading';entry.assetError=null;reportResidentAssets();
+    void presenter.ensureFrame(frame).then(()=>{
+      if(disposed||entry.root.destroyed||entry.animationLoadToken!==token)return;
+      entry.pendingAnimation=null;entry.pendingAnimationFrame=null;entry.assetState='ready';entry.assetError=null;
+      reportResidentAssets();sync(source.getFrame(),{force:true});
+    },error=>{
+      if(disposed||entry.root.destroyed||entry.animationLoadToken!==token)return;
+      entry.assetState='error';entry.assetError=error.message;reportResidentAssets();
+      onFallback(`CHAMPIONSHIP_RESIDENT_ANIMATION_FAILED ${entry.speciesId}: ${error.message}`);
+    });
+    return false;
+  }
+

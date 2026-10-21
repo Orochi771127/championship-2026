@@ -1048,3 +1048,7 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-status-b
 @media (max-width: 600px) {
   body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):has(.cm-status-bar__matches:not([hidden])) { --cm-match-notice-offset: 50px; }
 }
+
+
+/* Asset recovery remains operable while the world is inert for a lifecycle. */
+.int-rh2-root > .int-rh2-resident-assets--recovery { z-index:calc(var(--z-lifecycle) + 1); }

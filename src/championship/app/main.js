@@ -876,12 +876,13 @@ async function mountRaisingHome() {
     openRoster: () => runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }),
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
-    mountField({ host, source: fieldSource, onTrainingFrame }) {
+    mountField({ host, recoveryHost, source: fieldSource, onTrainingFrame }) {
       let closed = false, attempt = null, effects = null, scene = null, phase = 'loading';
       let residentStates = [], lastFrame = fieldSource.getFrame();
       const status = document.createElement('div'), message = document.createElement('p');
       const retry = document.createElement('button'), cancel = document.createElement('button'), leave = document.createElement('button'), reloadGame = document.createElement('button');
-      status.className = 'int-rh2-resident-assets'; status.dataset.loadOwner = 'raising';
+      status.className = 'int-rh2-resident-assets';
+      if(recoveryHost)status.classList.add('int-rh2-resident-assets--recovery'); status.dataset.loadOwner = 'raising';
       message.setAttribute('role', 'status'); message.setAttribute('aria-live', 'polite');
       for (const button of [retry, cancel, leave, reloadGame]) button.type = 'button';
       setText(retry, 'FIELD_LOAD_RETRY'); setText(cancel, 'FIELD_LOAD_CANCEL'); setText(leave, 'FIELD_LOAD_RETURN');
@@ -896,7 +897,7 @@ async function mountRaisingHome() {
         { id: 'partners', key: 'LOAD_STEP_PARTNERS' }, { id: 'scene', key: 'LOAD_STEP_SCENE' }] });
       let tracking = null;
       const stopTracking = () => { tracking?.stop(); tracking = null; };
-      status.append(message, progress.element, retry, cancel, leave, reloadGame); host.append(status);
+      status.append(message, progress.element, retry, cancel, leave, reloadGame); (recoveryHost??host).append(status);
       // The locked expansion rows' call to action: placed over the visible part
       // of the rows by the scene, hidden whenever they are off screen.
       const expansionCta = document.createElement('button');
