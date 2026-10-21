@@ -367,7 +367,8 @@
     "tests/product-form-public-content-cases.mjs",
     "tests/product-gameplay-compat-cases.mjs",
     "tests/product-promotion-disabled-fixture-cases.mjs",
-    "tests/product-species-extensions-cases.mjs"
+    "tests/product-species-extensions-cases.mjs",
+    "tests/test-ranch-coverage-intensity.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",
@@ -430,6 +431,8 @@
     "tests/ranch-normal-zoom-flight-v2.mjs": "Requires Playwright Chromium/WebKit and loopback HTTP; actual public carry/release/landing with measured canvas coordinates and lifecycle evidence. Bounded diagnostic, not full airborne coverage.",
     "tests/ranch-normal-scale-calibration-v3.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP; production UI zoom calibration with same-zoom/source-cell paired fallback assertions and strict lifecycle evidence.",
     "tests/ranch-normal-zoom-flight-v3.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP; bounded prearmed actual-pointerup/native-flight observer with strict readiness, landing and lifecycle evidence. Metadata does not approve panel-occluded visuals.",
-    "tests/ranch-depth-pipelines.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP; bounded default/offscreen framebuffer, compiled shader and thin-plane diagnostics using explicitly matched water/ice repair overlays. Not support authority or release acceptance."
+    "tests/ranch-depth-pipelines.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP; bounded default/offscreen framebuffer, compiled shader and thin-plane diagnostics using explicitly matched water/ice repair overlays. Not support authority or release acceptance.",
+    "tests/ranch-support-sheets.mjs": "Requires actual Playwright Chromium/WebKit and loopback HTTP; six-field owner-bound physical top diagnostic with same-target resolved-coverage controls and strict restoration. C0 only, not C1 or release acceptance.",
+    "tests/ranch-coverage-intensity.mjs": "Pure coverage measurement library exercised by portable test-ranch-coverage-intensity.mjs and dedicated GPU diagnostics; not a standalone test."
   }
 }

@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {measureResolvedCoverage as measure} from './ranch-coverage-intensity.mjs';
+const rgba=values=>new Uint8Array(values.flatMap(v=>[v,v,v,255]));
+assert.equal(measure(rgba([255,128,0]),rgba([255,128,0]),3,1).exactCoverageEqual,true);
+const half=measure(rgba([255,255]),rgba([255,128]),2,1);assert.equal(half.deficitPixels,1);assert.equal(half.lostIntensity,127);assert.deepEqual(half.transitions,{'255->128':1});assert.equal(half.exactCoverageEqual,false);
+const quarter=measure(rgba([255]),rgba([64]),1,1);assert.equal(quarter.lostIntensity,191);
+const excess=measure(rgba([255,0]),rgba([255,1]),2,1);assert.equal(excess.excessPixels,1);assert.equal(excess.exactCoverageEqual,false);
+assert.throws(()=>measure(rgba([0]),rgba([0]),1,1),/EMPTY/);
+assert.throws(()=>measure(rgba([255]),rgba([255]),2,1),/DIMENSION/);
+assert.throws(()=>measure(new Uint8Array([255,1,255,255]),rgba([255]),1,1),/GRAYSCALE/);
+console.log('PASS resolved coverage equality/half/quarter/excess/empty/dimensions/grayscale controls');
