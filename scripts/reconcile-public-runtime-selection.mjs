@@ -42,7 +42,8 @@ allCleanMedia.forEach(row=>buildOnly.add(row.sourcePath));
 for(const name of ['candidateCharacterArtReview.js','candidateCharacterHudReview.js','m001CharacterArtReview.js','m001CharacterHudReview.js'])buildOnly.add('src/championship/presentation/'+name);
 allow.files=allow.files.filter(row=>{
  const remove=buildOnly.has(row.path)||inactiveClean.has(row.path)||row.path.startsWith('assets/production/database-heroes-20261017/')&&!activeHeroes.has(row.path)
-  ||row.path==='assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4';
+  ||row.path==='assets/production/opening-film-ns33-r1/opening-720p-74e171ba.mp4'
+  ||row.path.startsWith('assets/production/temporary/int-rh2/creatures/');
  if(remove)excluded.push(row.path);return !remove;
 });
 allow.assets=allow.assets.filter(row=>!row.id.endsWith(':database-hero')&&!inactiveClean.has(row.src));
