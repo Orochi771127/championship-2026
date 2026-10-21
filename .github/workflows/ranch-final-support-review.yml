@@ -1,0 +1,74 @@
+name: Ranch final recovery six-field support diagnostic
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-final-support-review.yml'
+      - 'tests/ranch-final-support/**'
+      - 'tests/ranch-recovery/source/**'
+      - 'tests/ranch-depth-review/**'
+      - 'tests/six-field-support-proposal/**'
+      - 'tests/ranch-split/probe/**'
+      - 'tests/fixtures/ranch-final-support-audit.html'
+      - 'tests/ranch-a2-final/**'
+      - 'tests/ranch-grass-probe/**'
+      - 'tests/ranch-coverage-intensity.mjs'
+      - 'tests/ranch-floor-data/coverage-37fields-100slots.json'
+      - 'tests/ranch-b1-batch/calibration-*-39622727547.json'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy==2.2.6 Pillow==11.3.0 shapely==2.1.2
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify pure support and resolved-coverage controls
+        run: node tests/ranch-recovery/source/partition-cases.mjs && node tests/ranch-support-review/support-cases.mjs && node tests/test-ranch-coverage-intensity.mjs
+      - name: Preserve existing build validation
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Pin genuine prior calibration evidence
+        run: |
+          echo "c411e6caf9d2ad282a7466582fd1635f6f1c4b16d1f75b64fecd997d19d3dc81  tests/ranch-b1-batch/calibration-chromium-39622727547.json" | sha256sum -c -
+          echo "b4e280b065a0e4557c1990a60bb75cbf679381f3f8af9e2c0c1e7e8d119fcea7  tests/ranch-b1-batch/calibration-webkit-39622727547.json" | sha256sum -c -
+      - name: Compare matched effects reference and final recovery on 32 support cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/final-support/${{ matrix.engine }}
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/final-support/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-final-support-audit.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-final-support-audit.html > /dev/null
+          node tests/ranch-final-support/runner.mjs http://127.0.0.1:8765/ ${{ matrix.engine }} .tmp/final-support/${{ matrix.engine }}/cases tests/ranch-final-support/plan.json tests/ranch-floor-data/coverage-37fields-100slots.json tests/ranch-b1-batch/calibration-${{ matrix.engine }}-39622727547.json
+          python tests/ranch-final-support/compare.py .tmp/final-support/${{ matrix.engine }}/cases tests/ranch-final-support/plan.json
+      - name: Preserve causal masks, shaders, actual images and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-final-support-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/final-support/
+          if-no-files-found: error
+          retention-days: 14

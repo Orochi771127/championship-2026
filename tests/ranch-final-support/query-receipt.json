@@ -1,0 +1,1891 @@
+{
+  "status": "PASS_EXACT32_READONLY_PRODUCTION_QUERIES",
+  "planSha256": "5aa8660365715c8cbb1778a35dc434a57092d277dd3d739e15a9ea6213a72de3",
+  "sourceHashes": {
+    "../support-authority/nativeRaisingRanchRing.js": "f96ca07d299ca755e284f035e3eacc8679566fc5b25010219eb7aff16f0a29c8",
+    "../support-authority/ranch-three-ground.r1.json": "9ea4fffef3fec993bc3d228418c76b9dbd42a4cf284807030aa09c0ffbc4bd4e",
+    "../support-authority/ranch-sports-ground.r1.json": "708f2345f57690e70871814f11aedcd129559622b5071292cd111b3c0a038c1a",
+    "../support-authority/raising-ground.r1.json": "e1ac38dd768fa92e713fd652e7c1f21abc5fb0d7ccd89cdf4a23e2c4ae254c32",
+    "../planner-preflight/src/championship/cage/productRanchGrid.js": "cf18870b22021bcbe54d931b2e52d6619bfeff5db297a8bcdb51632ddcf2d5f7",
+    "../planner-preflight/src/championship/cage/cageCatalog.js": "4be6b19b3a7bc416b430938fecdf11634abd5b901eaba284b9f85f2ce8e9325e",
+    "../planner-preflight/src/championship/presentation/raisingRanchArtPlan.js": "4ff59cd0c13b195565ce7ba22f0722b0d8aa61cc2811593d201dbc93e53ba2d3",
+    "../production-support-wiring/candidate/src/championship/app/raisingGroundSupport.js": "ffd6a4e62213b1ee7b967fbf341d89f7a8f3e4c6da6a8ab76fd5bf73aff520c9",
+    "../production-support-wiring/candidate/src/championship/presentation/ranchSupportOwner.js": "10ee4a275e2e696366630e5476ac94e78984d6d0080685b93246910bd859cd81"
+  },
+  "counts": {
+    "admitted": 30,
+    "actualTerrain1Denied": 2,
+    "wrap": 4
+  },
+  "rows": [
+    {
+      "id": "final32-interior-field_cm02_01-actor",
+      "fieldId": "field_cm02_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 1
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "displayPointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "definitionIndex": 1,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          112.99239763989976,
+          49.65467032335772
+        ],
+        "positionNative": [
+          304.99239763989976,
+          25.65467032335772
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm02_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm02_01-food",
+      "fieldId": "field_cm02_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 1
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "displayPointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "definitionIndex": 1,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          112.99239763989976,
+          49.65467032335772
+        ],
+        "positionNative": [
+          304.99239763989976,
+          25.65467032335772
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm02_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm02_01-waste",
+      "fieldId": "field_cm02_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 1
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "displayPointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "definitionIndex": 1,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          112.99239763989976,
+          49.65467032335772
+        ],
+        "positionNative": [
+          304.99239763989976,
+          25.65467032335772
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm02_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-widebody-edge-field_cm02_01-actor",
+      "fieldId": "field_cm02_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 1
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        332,
+        20
+      ],
+      "displayPointNative": [
+        332,
+        20
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 2,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "definitionIndex": 1,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          140,
+          44
+        ],
+        "positionNative": [
+          332,
+          20
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm02_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-wrap-minus-field_cm02_01-actor",
+      "fieldId": "field_cm02_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 1
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "displayPointNative": [
+        -655.0076023601002,
+        25.65467032335772
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": -960,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "definitionIndex": 1,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          112.99239763989976,
+          49.65467032335772
+        ],
+        "positionNative": [
+          304.99239763989976,
+          25.65467032335772
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm02_01",
+        "shift": -960,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-wrap-plus-field_cm02_01-actor",
+      "fieldId": "field_cm02_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 1
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "displayPointNative": [
+        1264.9923976398998,
+        25.65467032335772
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 960,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "definitionIndex": 1,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          112.99239763989976,
+          49.65467032335772
+        ],
+        "positionNative": [
+          304.99239763989976,
+          25.65467032335772
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm02_01",
+        "shift": 960,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-synthetic-z8-field_cm02_01-actor",
+      "fieldId": "field_cm02_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 1
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "displayPointNative": [
+        304.9923976398997,
+        25.65467032335772
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:1",
+        "slotIndex": 4,
+        "definitionIndex": 1,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          112.99239763989976,
+          49.65467032335772
+        ],
+        "positionNative": [
+          304.99239763989976,
+          25.65467032335772
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm02_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm09_01-actor",
+      "fieldId": "field_cm09_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 8
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        384.16087701467495,
+        123.11232849860983
+      ],
+      "displayPointNative": [
+        384.16087701467495,
+        123.11232849860983
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 4,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "definitionIndex": 8,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          192.16087701467495,
+          147.11232849860983
+        ],
+        "positionNative": [
+          384.16087701467495,
+          123.11232849860983
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm09_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm09_01-food",
+      "fieldId": "field_cm09_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 8
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        384.16087701467495,
+        123.11232849860983
+      ],
+      "displayPointNative": [
+        384.16087701467495,
+        123.11232849860983
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 4,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "definitionIndex": 8,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          192.16087701467495,
+          147.11232849860983
+        ],
+        "positionNative": [
+          384.16087701467495,
+          123.11232849860983
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm09_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm09_01-waste",
+      "fieldId": "field_cm09_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 8
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        384.16087701467495,
+        123.11232849860983
+      ],
+      "displayPointNative": [
+        384.16087701467495,
+        123.11232849860983
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 4,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "definitionIndex": 8,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          192.16087701467495,
+          147.11232849860983
+        ],
+        "positionNative": [
+          384.16087701467495,
+          123.11232849860983
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm09_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-widebody-edge-field_cm09_01-actor",
+      "fieldId": "field_cm09_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 8
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        420,
+        84
+      ],
+      "displayPointNative": [
+        420,
+        84
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 1,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:8",
+        "slotIndex": 4,
+        "definitionIndex": 8,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          228,
+          108
+        ],
+        "positionNative": [
+          420,
+          84
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm09_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm19_01-actor",
+      "fieldId": "field_cm19_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 18
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        386,
+        20
+      ],
+      "displayPointNative": [
+        386,
+        20
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 2,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "definitionIndex": 18,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          194,
+          44
+        ],
+        "positionNative": [
+          386,
+          20
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm19_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm19_01-food",
+      "fieldId": "field_cm19_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 18
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        386,
+        20
+      ],
+      "displayPointNative": [
+        386,
+        20
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 2,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "definitionIndex": 18,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          194,
+          44
+        ],
+        "positionNative": [
+          386,
+          20
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm19_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm19_01-waste",
+      "fieldId": "field_cm19_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 18
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        386,
+        20
+      ],
+      "displayPointNative": [
+        386,
+        20
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 2,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "definitionIndex": 18,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          194,
+          44
+        ],
+        "positionNative": [
+          386,
+          20
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm19_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-widebody-edge-field_cm19_01-actor",
+      "fieldId": "field_cm19_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 18
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        380,
+        4
+      ],
+      "displayPointNative": [
+        380,
+        4
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 1,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "definitionIndex": 18,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          188,
+          28
+        ],
+        "positionNative": [
+          380,
+          4
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm19_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-blocked-denial-field_cm19_01-actor",
+      "fieldId": "field_cm19_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:18",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 18
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        434.88972761037587,
+        26.759323520723
+      ],
+      "displayPointNative": [
+        434.88972761037587,
+        26.759323520723
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 1,
+      "clearance": 0,
+      "navigationComponent": -1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": null,
+      "derivedSupportOwner": null,
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm21_01-actor",
+      "fieldId": "field_cm21_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        238,
+        222
+      ],
+      "displayPointNative": [
+        238,
+        222
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 2,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 9,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "definitionIndex": 20,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 2,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          64
+        ],
+        "localNative": [
+          46,
+          158
+        ],
+        "positionNative": [
+          238,
+          222
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 9,
+        "fieldId": "field_cm21_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm21_01-food",
+      "fieldId": "field_cm21_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        238,
+        222
+      ],
+      "displayPointNative": [
+        238,
+        222
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 2,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 9,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "definitionIndex": 20,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 2,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          64
+        ],
+        "localNative": [
+          46,
+          158
+        ],
+        "positionNative": [
+          238,
+          222
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 9,
+        "fieldId": "field_cm21_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm21_01-waste",
+      "fieldId": "field_cm21_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        238,
+        222
+      ],
+      "displayPointNative": [
+        238,
+        222
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 2,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 9,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "definitionIndex": 20,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 2,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          64
+        ],
+        "localNative": [
+          46,
+          158
+        ],
+        "positionNative": [
+          238,
+          222
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 9,
+        "fieldId": "field_cm21_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-widebody-edge-field_cm21_01-actor",
+      "fieldId": "field_cm21_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        372,
+        172
+      ],
+      "displayPointNative": [
+        372,
+        172
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 3,
+      "clearance": 1,
+      "navigationComponent": 2,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 9,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "definitionIndex": 20,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 2,
+        "terrain": 3,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          64
+        ],
+        "localNative": [
+          180,
+          108
+        ],
+        "positionNative": [
+          372,
+          172
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 9,
+        "fieldId": "field_cm21_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-wrap-minus-field_cm21_01-actor",
+      "fieldId": "field_cm21_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        238,
+        222
+      ],
+      "displayPointNative": [
+        -722,
+        222
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": -960,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 2,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 9,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "definitionIndex": 20,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 2,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          64
+        ],
+        "localNative": [
+          46,
+          158
+        ],
+        "positionNative": [
+          238,
+          222
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 9,
+        "fieldId": "field_cm21_01",
+        "shift": -960,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-wrap-plus-field_cm21_01-actor",
+      "fieldId": "field_cm21_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        238,
+        222
+      ],
+      "displayPointNative": [
+        1198,
+        222
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 960,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 2,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 9,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "definitionIndex": 20,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 2,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          64
+        ],
+        "localNative": [
+          46,
+          158
+        ],
+        "positionNative": [
+          238,
+          222
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 9,
+        "fieldId": "field_cm21_01",
+        "shift": 960,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-blocked-denial-field_cm21_01-actor",
+      "fieldId": "field_cm21_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        335.7365821513666,
+        211.04203342549067
+      ],
+      "displayPointNative": [
+        335.7365821513666,
+        211.04203342549067
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 1,
+      "clearance": 0,
+      "navigationComponent": -1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 9,
+      "admission": null,
+      "derivedSupportOwner": null,
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-synthetic-z8-field_cm21_01-actor",
+      "fieldId": "field_cm21_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "instanceId": "audit:target",
+        "definitionIndex": 20
+      },
+      "originNative": [
+        192,
+        64
+      ],
+      "pointNative": [
+        238,
+        222
+      ],
+      "displayPointNative": [
+        238,
+        222
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 3,
+      "navigationComponent": 2,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 9,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:20",
+        "slotIndex": 3,
+        "definitionIndex": 20,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 2,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          64
+        ],
+        "localNative": [
+          46,
+          158
+        ],
+        "positionNative": [
+          238,
+          222
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 9,
+        "fieldId": "field_cm21_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm35_01-actor",
+      "fieldId": "field_cm35_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 31
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "displayPointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 1,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "definitionIndex": 31,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          48.000001131258614,
+          59.475478258802376
+        ],
+        "positionNative": [
+          240.0000011312586,
+          35.475478258802376
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm35_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm35_01-food",
+      "fieldId": "field_cm35_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 31
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "displayPointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 1,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "definitionIndex": 31,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          48.000001131258614,
+          59.475478258802376
+        ],
+        "positionNative": [
+          240.0000011312586,
+          35.475478258802376
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm35_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm35_01-waste",
+      "fieldId": "field_cm35_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 31
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "displayPointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 1,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "definitionIndex": 31,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          48.000001131258614,
+          59.475478258802376
+        ],
+        "positionNative": [
+          240.0000011312586,
+          35.475478258802376
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm35_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-widebody-edge-field_cm35_01-actor",
+      "fieldId": "field_cm35_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 31
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        204,
+        20
+      ],
+      "displayPointNative": [
+        204,
+        20
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 0,
+      "clearance": 1,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:31",
+        "slotIndex": 4,
+        "definitionIndex": 31,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 0,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          12,
+          44
+        ],
+        "positionNative": [
+          204,
+          20
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm35_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm39_01-actor",
+      "fieldId": "field_cm39_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 33
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "displayPointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "definitionIndex": 33,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          48.000001131258614,
+          59.475478258802376
+        ],
+        "positionNative": [
+          240.0000011312586,
+          35.475478258802376
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm39_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm39_01-food",
+      "fieldId": "field_cm39_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 33
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "displayPointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "definitionIndex": 33,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          48.000001131258614,
+          59.475478258802376
+        ],
+        "positionNative": [
+          240.0000011312586,
+          35.475478258802376
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm39_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-interior-field_cm39_01-waste",
+      "fieldId": "field_cm39_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 33
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "displayPointNative": [
+        240.00000113125853,
+        35.475478258802376
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 3,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "definitionIndex": 33,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          48.000001131258614,
+          59.475478258802376
+        ],
+        "positionNative": [
+          240.0000011312586,
+          35.475478258802376
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm39_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    },
+    {
+      "id": "final32-widebody-edge-field_cm39_01-actor",
+      "fieldId": "field_cm39_01",
+      "stableSourcePlacement": {
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "instanceId": "audit:target",
+        "definitionIndex": 33
+      },
+      "originNative": [
+        192,
+        -24
+      ],
+      "pointNative": [
+        260,
+        68
+      ],
+      "displayPointNative": [
+        260,
+        68
+      ],
+      "wrapWidthNative": 960,
+      "wrapShiftNative": 0,
+      "terrainType": 2,
+      "clearance": 1,
+      "navigationComponent": 1,
+      "nativeOwnerIndex": 1,
+      "rendererOwnerIndex": 1,
+      "admission": {
+        "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+        "instanceId": "audit:target",
+        "moduleId": "championship:2026:cage:33",
+        "slotIndex": 4,
+        "definitionIndex": 33,
+        "nativeOwnerIndex": 1,
+        "navigationComponent": 1,
+        "terrain": 2,
+        "wrapWidthNative": 960,
+        "originNative": [
+          192,
+          -24
+        ],
+        "localNative": [
+          68,
+          92
+        ],
+        "positionNative": [
+          260,
+          68
+        ]
+      },
+      "derivedSupportOwner": {
+        "ownerIndex": 1,
+        "fieldId": "field_cm39_01",
+        "shift": 0,
+        "groundComponent": "NOMINAL_GROUND"
+      },
+      "actualActorMoveCalled": false,
+      "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+    }
+  ],
+  "gpuExecuted": false,
+  "actualActorMoveCalled": false,
+  "supportGeometryAuthority": "SEPARATE_REVIEWED_SIX_FIELD_PHYSICAL_TOP_METADATA_NOT_INFERRED_FROM_XY"
+}
