@@ -12,16 +12,16 @@ const baseline=await fs.readFile(baselineFile,'utf8'),candidate=await fs.readFil
 const phase=process.env.SUPPORT_PHASE??'interior';assert.ok(['interior','all'].includes(phase));const probes=plan.probes.filter(p=>phase==='all'||p.kind==='interior');assert.deepEqual([...new Set(probes.map(p=>p.fieldId))].sort(),required);
 const cases=probes.flatMap(probe=>['actor','food','waste'].flatMap(subjectKind=>[1,.7].map(zoom=>({id:`${probe.id}-${subjectKind}-z${zoom}`,fieldId:probe.fieldId,character,sequenceId,frameIndex,texture,nativeZ:0,zoom,viewport:{width:390,height:844},subjectKind,probe}))));
 await fs.mkdir(out,{recursive:true});const probesByMode={};for(const mode of ['baseline','floor-only']){const file=out+'/'+mode+'-mask-probe.js';execFileSync(process.execPath,['tests/ranch-mask-probe/inject-actor-mask.mjs','--input',mode==='baseline'?baselineFile:sourcePath,'--output',file,'--expected-sha',sha(mode==='baseline'?baseline:candidate)]);probesByMode[mode]=await fs.readFile(file,'utf8');}
-const browser=await ({chromium,webkit}[engine]).launch({headless:true}),results=[];let failure=null;
-const save=()=>fs.writeFile(out+'/support-results.json',JSON.stringify({baselineRevision,engine,phase,expectedCount:cases.length*2,plannedIds:cases.map(c=>c.id),results,failure,releaseApproved:false,status:failure?'FAIL':'DIAGNOSTIC_NOT_SUPPORT_APPROVAL',supportSemantics:plan.supportSemantics??'UNVERIFIED'},null,2));
-try{for(const mode of ['baseline','floor-only']){
+const browser=await ({chromium,webkit}[engine]).launch({headless:true}),results=[],fieldFailures=[];let failure=null;
+const save=()=>fs.writeFile(out+'/support-results.json',JSON.stringify({baselineRevision,engine,phase,expectedCount:cases.length*2,plannedIds:cases.map(c=>c.id),results,fieldFailures,coverage:cases.flatMap(c=>['baseline','floor-only'].map(mode=>({id:c.id,mode,fieldId:c.fieldId,status:results.some(r=>r.id===c.id&&r.mode===mode)?'CAPTURED':fieldFailures.some(f=>f.fieldId===c.fieldId&&f.mode===mode)?'BLOCKED_BY_RECORDED_FIELD_FAILURE':'NOT_YET_EXECUTED'}))),failure:failure??(fieldFailures.length?'ONE_OR_MORE_FIELDS_FAILED':null),releaseApproved:false,status:failure||fieldFailures.length?'FAIL':'DIAGNOSTIC_NOT_SUPPORT_APPROVAL',supportSemantics:plan.supportSemantics??'UNVERIFIED'},null,2));
+try{for(const fieldId of required)for(const mode of ['baseline','floor-only']){
  const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true}),page=await context.newPage(),errors=[];let routed=0;page.setDefaultTimeout(180000);
  await page.addInitScript(()=>{let s=0x137ab;Math.random=()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};});
  page.on('pageerror',e=>errors.push(String(e)));page.on('requestfailed',r=>errors.push(r.url()+':'+r.failure()?.errorText));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+':'+r.url())});page.on('console',m=>{if(m.type()==='error'||/Shader Error|VALIDATE_STATUS|GL_INVALID|WebGLProgram/.test(m.text()))errors.push(m.text())});await page.route('**/'+sourcePath,async route=>{routed++;await route.fulfill({status:200,contentType:'text/javascript',body:probesByMode[mode]})});
  try{
   await page.goto(new URL('tests/fixtures/ranch-support-audit.html',base).href);await page.waitForFunction(()=>!!globalThis.ranchAudit);assert.deepEqual(await page.evaluate(()=>[innerWidth,innerHeight,devicePixelRatio,visualViewport.scale]),[390,844,1,1]);
-  const bindings=await page.evaluate(({matrix,required})=>globalThis.ranchAudit.buildBindings(matrix,required),{matrix,required});
-  for(const input of cases){const fixture=bindings[input.fieldId];assert.ok(fixture);const test={...input,pointNative:input.probe.pointLocalNative.map((v,k)=>v+fixture.targetOriginNative[k])},prefix=mode+'-'+test.id;
+  const bindings=await page.evaluate(({matrix,fieldId})=>globalThis.ranchAudit.buildBindings(matrix,[fieldId]),{matrix,fieldId});
+  for(const input of cases.filter(c=>c.fieldId===fieldId)){const fixture=bindings[input.fieldId];assert.ok(fixture);const test={...input,pointNative:input.probe.pointLocalNative.map((v,k)=>v+fixture.targetOriginNative[k])},prefix=mode+'-'+test.id;
    const data=await page.evaluate(({test,fixture})=>globalThis.ranchAudit.render(test,fixture),{test,fixture});assert.ok(Number.isFinite(data.projectionError)&&data.projectionError<=.5);assert.ok(data.diagnostics.frames>0&&!data.diagnostics.lost);assert.deepEqual(errors,[]);
    const rect=await page.locator('.cm-ranch-three-canvas').evaluate(c=>[c.getBoundingClientRect().width,c.getBoundingClientRect().height]);assert.deepEqual(rect,[390,844]);
    let actual=await page.screenshot({path:out+'/'+prefix+'-actual.png'});assert.equal(actual.readUInt32BE(16),390);assert.equal(actual.readUInt32BE(20),844);
@@ -42,6 +42,9 @@ try{for(const mode of ['baseline','floor-only']){
    const stateHashes=Object.fromEntries(Object.entries({...controls.debugStates,...mask.debugStates}).map(([k,v])=>[k,sha(JSON.stringify(v))]));delete controls.debugStates;delete mask.debugStates;
    results.push({id:test.id,mode,settling,stateHashes,fieldId:test.fieldId,subjectKind:test.subjectKind,zoom:test.zoom,probe:test.probe,data,controls,mask,normalImageSha256:sha(actual),restoredImageSha256:sha(restored),images:{actual:prefix+'-actual.png',reference:prefix+'-reference-mask.png',visible:prefix+'-visible-mask.png'},sourceSha256:sha(mode==='baseline'?baseline:candidate)});await save();
   }assert.ok(routed>0);
+ }catch(error){
+  const fieldFailure={fieldId,mode,error:String(error),errors,sourceSha256:sha(mode==='baseline'?baseline:candidate),routed,completedIds:results.filter(r=>r.fieldId===fieldId&&r.mode===mode).map(r=>r.id),blockedIds:cases.filter(c=>c.fieldId===fieldId&&!results.some(r=>r.id===c.id&&r.mode===mode)).map(c=>c.id)};fieldFailures.push(fieldFailure);
+  await page.screenshot({path:out+'/'+mode+'-'+fieldId+'-field-failure.png'}).catch(()=>{});await fs.writeFile(out+'/'+mode+'-'+fieldId+'-field-failure.json',JSON.stringify(fieldFailure,null,2));await save();
  }finally{await context.close();}
 }}catch(error){failure=String(error);throw error;}finally{await browser.close();await save();}
-assert.equal(results.length,cases.length*2);
+assert.equal(fieldFailures.length,0,'Every field failure remains fatal after unaffected fields are recorded');assert.equal(results.length,cases.length*2);

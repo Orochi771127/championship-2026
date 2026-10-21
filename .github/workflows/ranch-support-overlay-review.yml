@@ -7,6 +7,10 @@ on:
       - 'tests/fixtures/ranch-support-audit.html'
       - 'tests/ranch-support-overlays.mjs'
       - 'tests/compare-support-overlays.py'
+      - 'tests/ranch-support-water-overlays.mjs'
+      - 'tests/fixtures/ranch-support-water-audit.html'
+      - 'tests/compare-support-water-overlays.py'
+      - 'tests/ranch-water-review/**'
       - 'tests/ranch-mask-probe/**'
       - 'tests/ranch-floor-data/**'
 permissions:
@@ -14,7 +18,7 @@ permissions:
 jobs:
   diagnostic:
     runs-on: ubuntu-22.04
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -35,6 +39,7 @@ jobs:
       - run: python -m pip install Pillow==11.3.0 numpy==2.2.6
       - run: npx playwright install --with-deps ${{ matrix.engine }}
       - name: Preserve existing build validation
+        id: build_validation
         run: npm run build:playtest && npm run validate:playtest
       - name: Measure six low-overlay interiors without support overrides
         shell: bash
@@ -53,6 +58,24 @@ jobs:
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-support-audit.html > /dev/null
           node tests/ranch-support-overlays.mjs http://127.0.0.1:8765/ ${{ matrix.engine }} .tmp/support-overlay/${{ matrix.engine }}/cases .tmp/baseline/ranchThreeScene.js tests/ranch-floor-data/support-overlay-plan.json tests/ranch-floor-data/coverage-37fields-100slots.json tests/ranch-floor-data/coverage-plan.json
           python tests/compare-support-overlays.py .tmp/support-overlay/${{ matrix.engine }}/cases
+      - name: Measure explicitly shared water repair despite raw field failures
+        if: ${{ !cancelled() && steps.build_validation.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/baseline .tmp/support-overlay/${{ matrix.engine }}
+          git show 4f64421314f0d0f5d0c04b916d30e821587c1a6a:src/championship/presentation/ranchThreeScene.js > .tmp/baseline/ranchThreeScene.js
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/support-overlay/${{ matrix.engine }}/water-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-support-water-audit.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-support-water-audit.html > /dev/null
+          node tests/ranch-support-water-overlays.mjs http://127.0.0.1:8765/ ${{ matrix.engine }} .tmp/support-overlay/${{ matrix.engine }}/water-cases .tmp/baseline/ranchThreeScene.js tests/ranch-floor-data/support-overlay-plan.json tests/ranch-floor-data/coverage-37fields-100slots.json tests/ranch-floor-data/coverage-plan.json tests/ranch-water-review/baseline4f-water-repair.js tests/ranch-water-review/floor1ae-water-repair.js
+          python tests/compare-support-water-overlays.py .tmp/support-overlay/${{ matrix.engine }}/water-cases
       - name: Preserve bounded measurements, not release acceptance
         if: always()
         uses: actions/upload-artifact@v4

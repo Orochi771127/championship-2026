@@ -7,10 +7,11 @@ on:
       - 'src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js'
       - 'tests/fixtures/ranch-normal-pairs.html'
       - 'tests/ranch-normal-pairs.mjs'
-      - 'tests/ranch-normal-contact-identity.mjs'
+      - 'tests/ranch-normal-contact-identity-v2.mjs'
       - 'src/championship/presentation/publicCharacterRoster.js'
       - 'src/championship/presentation/vs2/huntContactShadow.js'
       - 'tests/ranch-mask-probe/inject-contact-diagnostics.mjs'
+      - 'tests/normal-lifecycle/**'
 permissions:
   contents: read
 jobs:
@@ -31,6 +32,8 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Verify narrow request lifecycle observer
+        run: node tests/normal-lifecycle/request-audit.test.mjs && node tests/normal-lifecycle/request-audit-watcher.test.mjs
       - run: npx playwright install --with-deps ${{ matrix.engine }}
       - name: Preserve existing build validation
         id: build_validation
@@ -72,7 +75,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-pairs.html > /dev/null
-          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-contact-identity.mjs http://127.0.0.1:8765/ .tmp/normal-pairs/${{ matrix.engine }}/identity-cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
+          BROWSER_ENGINE=${{ matrix.engine }} node tests/ranch-normal-contact-identity-v2.mjs http://127.0.0.1:8765/ .tmp/normal-pairs/${{ matrix.engine }}/identity-cases .tmp/baseline/ranchThreeScene.js .tmp/contact-probe/createRaisingFieldPixiPresentation.js .tmp/baseline/contact
       - name: Preserve diagnostic captures, not release acceptance
         if: always()
         uses: actions/upload-artifact@v4
