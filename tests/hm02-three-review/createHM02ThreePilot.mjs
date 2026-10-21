@@ -132,7 +132,9 @@ export async function createHM02ThreePilot({THREE,GLTFLoader,stage,enabled=false
           const ellipses=node.threeContactEllipses;
           if(!Array.isArray(ellipses))throw new Error('HM02_EXISTING_SHADOW_BINDING_REQUIRED');
           let shadow=actor.userData.shadow;
-          if(!shadow){shadow=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:0x02070a,transparent:true,opacity:.48,depthTest:true,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}));actor.userData.shadow=shadow;scene.add(shadow);}
+          if(!shadow){shadow=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:0x02070a,transparent:true,opacity:.48,depthTest:true,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}));// Opaque terrain/props render first; ground shadows precede transparent
+            // actors, while retaining the opaque foreground depth test.
+            shadow.renderOrder=-1;actor.userData.shadow=shadow;scene.add(shadow);}
           const vertices=[];
           for(const e of ellipses)for(let i=0;i<20;i++){
             for(const [dx,dy]of [[0,0],[Math.cos(i*Math.PI/10)*e.radiusX,Math.sin(i*Math.PI/10)*e.radiusY],[Math.cos((i+1)*Math.PI/10)*e.radiusX,Math.sin((i+1)*Math.PI/10)*e.radiusY]]){
