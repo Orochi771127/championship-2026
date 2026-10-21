@@ -39,6 +39,10 @@ const selected=[
 const rows=new Map(allow.files.map(row=>[row.path,row]));
 for(const path of selected){
   if(!fs.statSync(path).isFile())throw Error('RANCH_3D_SELECTED_NON_FILE:'+path);
+  // Git enforces LF for these sources. Hashing a Windows CRLF working copy
+  // would approve bytes that the Linux Pages checkout can never contain.
+  if(path.startsWith('src/championship/')&&path.endsWith('.js')&&fs.readFileSync(path).includes('\r\n'))
+    throw Error('RANCH_3D_SOURCE_REQUIRES_LF:'+path);
   const row={...(rows.get(path)??{}),path,sha256:hash(path)};
   if(path.endsWith('.json')){
     const keys=new Set();

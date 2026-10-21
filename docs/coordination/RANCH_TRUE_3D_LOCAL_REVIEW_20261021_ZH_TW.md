@@ -83,12 +83,12 @@ Blender scripts 透過既有已安裝 Blender Lab MCP addon 的專用背景連�
 
 Owner 後續明確要求自我審查後 commit、push 與部署，因此上面「尚未更新公開 allowlist／不部署」是本機階段的歷史狀態。發佈候選保持同一套 37 個真正的 GLB 3D 模型，沒有烘成 2D 底圖。Blender 以 Draco 壓縮網格、WebP 壓縮材質貼圖；`three-masters/<field>/editable.blend`、`export.blend` 與未壓縮 GLB 均留在外部製作區，不覆寫原始 masters。公開 GLB 合計 8,453,760 bytes；較重要的工廠、籃球場、花壇使用 1024 貼圖，健身房、等候區、CM09／CM26／CM27 使用 512 貼圖，其餘使用 256 貼圖。WebGL 實際載入和渲染網格、材質、深度遮擋與 CM15 動畫。固定相機、2D 角色、隱形導航通路和工廠帶動位移不變。
 
-公開模組與 37 個 GLB 都由同一 Pages origin 提供；manifest 記錄每項 bytes／SHA-256，載入前逐項驗證。Draco 解碼器一起收進精確選取清單。公開打包結果為 8,188 個檔、999,687,119 bytes，低於本專案 1,000,000,000-byte 契約；build ID `45b385221c8fe38d1e7d22ef8c8086a14d11aa1030facfcfddce4b47796e40b9`。打包器原本的 `keepNames` 會把漏帶輔助函式的程式碼放進 Draco Worker，造成 `T is not defined`；已關閉這個打包選項，以瀏覽器直接載入打包成品驗證修正。
+公開模組與 37 個 GLB 都由同一 Pages origin 提供；manifest 記錄每項 bytes／SHA-256，載入前逐項驗證。Draco 解碼器一起收進精確選取清單。公開打包結果為 8,188 個檔、999,687,119 bytes，低於本專案 1,000,000,000-byte 契約；最後跨平台 LF 版的 build ID 為 `e3874d0dca913c68addf28492933ff440f7a5f8231149f7c48c48c993168ca0f`。打包器原本的 `keepNames` 會把漏帶輔助函式的程式碼放進 Draco Worker，造成 `T is not defined`；已關閉這個打包選項，以瀏覽器直接載入打包成品驗證修正。首次 GitHub 打包又指出三個 JS 來源的 Windows CRLF 工作區雜湊與 Linux LF 不同；已將來源工作區統一為 LF、重算公開選取雜湊，並在選取腳本加上防止重犯的檢查。
 
 - `audit/ci-after-draco-fix.txt`：最終 `npm run test:ci` 2,759/2,759 通過；舊測試已依新授權改檢查 Pixi 不自行建立第二套渲染器。
 - `audit/compressed-all35-final/`：壓縮候選的 35 種籠子逐張遊戲截圖與 report；每張有實際 3D 畫格，0 page errors／缺檔／警告；`contact-1.jpg`、`contact-2.jpg` 為逐張總覽。
 - `audit/compressed-final-qa/`、`audit/compressed-gym-512/`：代表場景、健身房對照。低解析度棋盤和工廠地面的可見模糊已以較高解析度候選修正。
-- `audit/build-draco-worker-fix.txt`、`audit/validate-draco-worker-fix.txt`：公開打包與選取驗證；`node scripts/assert-public-payload.mjs dist/github-playtest` 必須回報 `PUBLIC_PAYLOAD_VALIDATED`、8,188 個檔、同一 build ID，且未納入私有 authority index。
-- `audit/public-dist-qa-draco-fixed/`：以模擬 Pages 網址直接載入打包成品，草地／工廠均成功，0 錯誤、0 缺檔、0 外站模型請求；CM26／CM27／CM30／CM32 四籠另見 `audit/public-dist-key-four/`。
+- `audit/build-lf-portable.txt`、`audit/validate-lf-portable.txt`：跨平台 LF 修正後的公開打包與選取驗證；`node scripts/assert-public-payload.mjs dist/github-playtest` 必須回報 `PUBLIC_PAYLOAD_VALIDATED`、8,188 個檔、同一 build ID，且未納入私有 authority index。
+- `audit/public-dist-qa-draco-fixed/`：以模擬 Pages 網址直接載入打包成品，草地／工廠均成功，0 錯誤、0 缺檔、0 外站模型請求；CM26／CM27／CM30／CM32 四籠另見 `audit/public-dist-key-four/`。跨平台 LF 重算後的最終打包另以 `audit/public-dist-lf-portable/` 重驗草地場景正常載入。
 
 這是授權的公開試玩版本，**不代表**全部 35 種美術已達商業終稿、實體手機長時間效能已驗收，或已啟用任意旋轉／跳躍。特別是部分水岸與植栽細節仍列於 `per-model-review.csv` 待後續美術精修。
