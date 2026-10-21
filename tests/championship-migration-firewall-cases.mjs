@@ -205,7 +205,9 @@ test("all runtime asset declarations resolve below assets/production", () => {
     ...Object.values(contract.reaction.species).map((entry) => entry.sheet),
     ...Object.values(contract.portrait.species)
   ];
-  assert.equal(paths.length, 11);
+  // Decoupled 9 obsolete temporary int-rh2 creature assets (-9.16MB size cleanup);
+  // only the 2 habitat environment declarations (image and source) remain active.
+  assert.equal(paths.length, 2);
   for (const asset of paths) {
     assert.match(asset, /^assets\/production\//);
     assert.equal(fs.existsSync(path.join(root, asset)), true, asset);

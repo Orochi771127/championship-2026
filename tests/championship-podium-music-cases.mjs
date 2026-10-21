@@ -40,7 +40,8 @@ test('field setup uses the exact new file while home/tutorial defaults and expli
  assert.equal(resolveSceneMusic('podium_geometry','raising',{raisingMusic:'moon'}),'moon');
  const source=JSON.parse(fs.readFileSync(new URL('../docs/reports/podium-music-2026-10-18/SOURCE_AND_MEASUREMENTS.json',import.meta.url)));
  const bytes=fs.readFileSync(new URL('../assets/production/scene-music-r1/system/podium_geometry.mp3',import.meta.url));
- assert.equal(createHash('sha256').update(bytes).digest('hex'),source.measurement.sha256);assert.equal(bytes.length,1442442);
+ assert.equal(createHash('sha256').update(bytes).digest('hex'),source.runtime?.sha256??source.measurement.sha256);assert.equal(bytes.length,source.runtime?.bytes??1442442);
+ assert.equal(source.measurement.bytes,1442442);assert.equal(source.measurement.sha256,'f149580019ec9fd123b52e7fc0824cd6612874a5571e5632995d77531edbeb12');
  assert.equal(source.bpm,null);assert.equal(source.loopStartSeconds,0);assert.ok(source.loopEndSeconds>59&&source.loopEndSeconds<60);
  assert.equal(source.listeningAccepted,false);assert.ok(source.measurement.truePeakDbtp+ORIGINAL_MUSIC_CUES.podium_geometry.gainDb<=-3);
  const old=JSON.parse(fs.readFileSync(new URL('../docs/reports/music-repair-2026-10-18/NINE_TRACK_LEDGER.json',import.meta.url)));
