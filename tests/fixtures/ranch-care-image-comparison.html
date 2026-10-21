@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8"><title>Care image identity comparison</title><script type="module">
+import * as PIXI from '/node_modules/pixi.js/dist/pixi.mjs';
+import {createPixiAssetScope} from '/src/championship/presentation/pixiCharacterRuntimeBundle.js';
+import {createCareImageTextureScope} from '/src/championship/presentation/intRh2/careImageTextureScope.js';
+const hash=async b=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',b))].map(x=>x.toString(16).padStart(2,'0')).join('');
+const pixels=async image=>{const c=document.createElement('canvas');c.width=image.width||image.naturalWidth;c.height=image.height||image.naturalHeight;const x=c.getContext('2d');x.drawImage(image,0,0);const b=x.getImageData(0,0,c.width,c.height).data;return{width:c.width,height:c.height,rgbaSha256:await hash(b),png:c.toDataURL('image/png')};};
+globalThis.compareCareImages=async mode=>{
+ if(!['existing-worker','fresh-html'].includes(mode))throw Error('MODE');
+ const response=await fetch('/assets/production/public-runtime/raising-care.v1.json'),text=await response.text();if(await hash(new TextEncoder().encode(text))!=='aaf0c0d3b2a8cc9202ad807729601c3f2fd731055bf4f23a3a572175af9839f8')throw Error('MANIFEST_HASH');const cells=JSON.parse(text).cells;if(cells.length!==16)throw Error('EXACT16');
+ if(PIXI.VERSION!=='8.19.0')throw Error('EXACT_PIXI_VERSION');const scopeResponse=await fetch('/src/championship/presentation/pixiCharacterRuntimeBundle.js'),scopeBytes=await scopeResponse.arrayBuffer();if(!scopeResponse.ok||await hash(scopeBytes)!=='23e9510abdf698ed52805f72364aab18f38d839e6ed7e503c4915722b089ed3c')throw Error('EXACT_SCOPE_SOURCE');
+ const expected=[];for(const cell of cells){const r=await fetch('/'+cell.src);if(!r.ok)throw Error('SOURCE_HTTP');const bytes=await r.arrayBuffer();if(await hash(bytes)!==cell.sha256)throw Error('SOURCE_HASH');const bitmap=await createImageBitmap(new Blob([bytes],{type:'image/png'}));try{expected.push({...cell,...await pixels(bitmap)});}finally{bitmap.close();}}
+ const cycles=[];globalThis.__careImageComparisonPartial={mode,expected,cycles};
+ for(let cycle=0;cycle<2;cycle++){
+  const controller=new AbortController(),scoped=createPixiAssetScope(PIXI,location.href,{signal:controller.signal}),fresh=createCareImageTextureScope(PIXI,{signal:controller.signal}),textures=[];
+  try{const loaded=await Promise.all(cells.map(async cell=>{const url=new URL('/'+cell.src,location.href).href,texture=await(mode==='fresh-html'?fresh.load(url):scoped.Assets.load(url));textures.push(texture);return{cell,url,texture};}));
+   const rows=[];for(const {cell,url,texture}of loaded){const e=expected.find(x=>x.src===cell.src),actual=await pixels(texture.source.resource);rows.push({role:cell.role,pose:cell.pose,url,sourceSha256:cell.sha256,resourceType:texture.source.resource.constructor.name,textureUid:texture.uid,sourceUid:texture.source.uid,actual,expectedRgbaSha256:e.rgbaSha256,match:actual.width===e.width&&actual.height===e.height&&actual.rgbaSha256===e.rgbaSha256});}
+   cycles.push({cycle,rows});
+  }finally{if(mode==='existing-worker')await Promise.all(cells.map(c=>scoped.Assets.unload(new URL('/'+c.src,location.href).href)));controller.abort();fresh.dispose();if(cycles.at(-1)?.cycle===cycle)cycles.at(-1).disposed=textures.every(t=>t.destroyed);}
+ }
+ return{mode,pixiVersion:PIXI.VERSION,scopeSha256:await hash(scopeBytes),expected,cycles,scope:'ISOLATED_EXACT16_CARE_LOAD_IDENTITY_NOT_NORMAL_GAMEPLAY_OR_BODY_DEPTH'};
+};
+</script>
