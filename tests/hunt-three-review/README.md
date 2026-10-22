@@ -4,7 +4,7 @@
 
 This test packet stages the frozen `cf14c7ab2fa256ad5ce275347056af4c138321f71b0d7d554d7277db2de52409` candidate as **32 overlay files / 14,912,536 bytes**, not as a replacement repository. They are 20 source/catalog inputs and 12 HM01/HM08 map resources. No optional HM02 resource payload is selected. Shared HM02 compiler prerequisites remain unchanged.
 
-The ordinary approved core build runs first. All core/runtime/public inventory/input hashes and frozen ranch41 pins remain mandatory. The current default baseline additionally requires the 19 authenticated test/tool repairs from head `6c1482fad6ef43f4b392c0b4b14f7f6bedc08448`, tree `8a33bb071bb02bf4eb3e981538c727a4f9385fa7`. Its CI/merge status is not approval authority. No generic ignored-tests exception exists. A future changed base needs a new exact review; do not restore an older branch over repairs.
+The ordinary approved core build runs first. All core/runtime/public inventory/input hashes and frozen ranch41 pins remain mandatory. The current default baseline additionally requires the 19 authenticated test/tool repairs from head `76d687bd14149e5324ecf86b79bc21a5f022ce81`, tree `d4768b3acfaf71b1a8031aec177c793755e6ca19`. Its CI/merge status is not approval authority. No generic ignored-tests exception exists. A future changed base needs a new exact review; do not restore an older branch over repairs.
 
 Only the core receipt's existing 40-hex commit metadata is canonicalized to reproduce the approved core payload identity. Every other receipt byte/payload field and file is verified. The actual observed commit/hash is recorded. No baseline file is rewritten.
 

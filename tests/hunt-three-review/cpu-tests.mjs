@@ -1,8 +1,27 @@
 // No browser/network/socket. Tests observer authority/restoration and PNG math.
 import {createRequire} from 'node:module';
 import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {deflateSync} from 'node:zlib';
-import {installHuntActionsProbe} from './bridge.mjs';import {instrument} from './adapter.mjs';import {decodePNG,difference} from './pixels.mjs';import {run} from './browser.mjs';
+import {installHuntActionsProbe} from './bridge.mjs';import {instrument} from './adapter.mjs';import {decodePNG,difference} from './pixels.mjs';import {run,readHarnessBoundary,assertCaptureBoundary,pendingEntryAction,assertProjectionMetadata} from './browser.mjs';
 const here=path.dirname(fileURLToPath(import.meta.url));let checks=0;const check=(name,fn)=>{fn();checks++;};
+const liveBoundary={screen:'HUNT_FIELD',clockMinutes:500,remainingMinutes:460,fieldPresent:true,fieldBusy:'false',toolStatePresent:true,toolParseError:false,toolFrame:3,activeTool:'HAND',openDialogs:0,ceremonies:[]};
+check('capture normal native boundary',()=>assert.doesNotThrow(()=>assertCaptureBoundary(liveBoundary)));
+for(const delta of [{screen:'RAISING_HOME'},{screen:'HUNT_RESULT'},{fieldPresent:false},{fieldBusy:'true'},{remainingMinutes:0},{toolStatePresent:false},{toolParseError:true},{toolFrame:null}])check('capture rejects unavailable native boundary '+JSON.stringify(delta),()=>assert.throws(()=>assertCaptureBoundary({...liveBoundary,...delta}),/CAPTURE_/));
+const pendingBoundary={...liveBoundary,fieldBusy:'true'};
+check('no overlay needs no dismiss',()=>assert.equal(pendingEntryAction(pendingBoundary),'none'));
+for(const state of ['playing','settled','leaving'])check('existing native gate entry '+state,()=>assert.equal(pendingEntryAction({...pendingBoundary,ceremonies:[{kind:'gate-entry',tier:'moment',state}]}),state==='leaving'?'wait':'escape'));
+for(const delta of [{screen:'RAISING_HOME'},{fieldPresent:false},{fieldBusy:'false'},{openDialogs:1},{ceremonies:[{kind:'capture',tier:'toast',state:'playing'}]},{ceremonies:[{kind:'gate-entry',tier:'moment',state:'unknown'}]},{ceremonies:[{},{}]}])check('recovery never dismisses unrelated/ready UI '+JSON.stringify(delta),()=>assert.throws(()=>pendingEntryAction({...pendingBoundary,...delta}),/RECOVERY_/));
+const oldDocument=globalThis.document;try{
+ const field={getAttribute:()=> 'false'},toolHost={getAttribute:()=>JSON.stringify({frame:7,activeTool:'HAND',privateRawSave:'MUST_NOT_ESCAPE',actorNames:['PRIVATE']})};
+ globalThis.document={getElementById:()=>({dataset:{activeScreen:'HUNT_FIELD'}}),querySelector:s=>s==='.cm-vs2-field__canvas'?field:s==='[data-hunt-tool-state]'?toolHost:s==='.cm-status-bar__time'?{textContent:'08:20'}:s==='.cm-vs2-hud__companion'?{textContent:'剩餘 07:40'}:null,querySelectorAll:()=>[]};
+ check('read-only boundary selects clock and numeric tool fields only',()=>{const r=readHarnessBoundary();assert.equal(r.clockMinutes,500);assert.equal(r.remainingMinutes,460);assert.equal(r.toolFrame,7);assert(!JSON.stringify(r).includes('PRIVATE'));assert(!JSON.stringify(r).includes('RawSave'));});
+}finally{if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
+// Compare the authored camera diagnostic exactly to each pinned map descriptor.
+for(const map of ['hm01','hm08']){
+ const descriptor=JSON.parse(fs.readFileSync(path.join(here,`overlay/assets/production/hunt/${map}-three-r1-20261022/manifest.json`))),expected=descriptor.projection.elevationDegrees;
+ check(map+' exact pinned projection metadata',()=>assert.doesNotThrow(()=>assertProjectionMetadata({map,projectionElevationDegrees:expected})));
+ for(const value of [expected+.000001,52,55,NaN,Infinity,String(expected),null,undefined])check(map+' rejects altered projection metadata '+String(value),()=>assert.throws(()=>assertProjectionMetadata({map,projectionElevationDegrees:value}),/PINNED_PROJECTION_METADATA_MISMATCH/));
+}
+for(const map of ['hm02','../hm01','__proto__','constructor',undefined])check('unlisted projection map '+String(map),()=>assert.throws(()=>assertProjectionMetadata({map,projectionElevationDegrees:51.999991}),/PINNED_MAP_PROJECTION_REQUIRED/));
 const names=['src/championship/app/main.js','src/championship/presentation/vs2/createHuntFieldPixiPresentation.js','src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs'];
 for(const name of names){const source=fs.readFileSync(path.join(here,'overlay',name),'utf8');check('finite adapter anchors',()=>assert.notEqual(instrument(name,source),source));check('anchor drift fails',()=>assert.throws(()=>instrument(name,''),/ANCHOR_DRIFT/));}
 check('unlisted adapter identity',()=>assert.equal(instrument('src/other.js','same'),'same'));

@@ -1,15 +1,16 @@
 {
   "schema": "HUNT_ACTIONS_REPAIR_BASES.v1",
   "defaultVariant": "current-reviewed-test-repairs",
-  "currentHead": "6c1482fad6ef43f4b392c0b4b14f7f6bedc08448",
-  "currentTree": "8a33bb071bb02bf4eb3e981538c727a4f9385fa7",
+  "currentHead": "76d687bd14149e5324ecf86b79bc21a5f022ce81",
+  "currentTree": "d4768b3acfaf71b1a8031aec177c793755e6ca19",
   "currentCIStatus": "PENDING_NOT_MERGE_AUTHORITY",
-  "publisherReceiptSHA256": "8a1befaad1aa27b2af6d7de7e0b984735ee6f76e73e1fa116d9e0b3de0102566",
+  "publisherReceiptSHA256": "b2443d4411a3f00d2b946ef9a5e705f9e07cb6ff259c4edbd7759b05e5e935f8",
   "sourceMappingSHA256": [
     "59ccd9fc58c2e9e5d2d5a95bf6eb9d384840657f81d0d10692bfeed41ca94828",
     "0948fc903d5f8f9207b66d2ccb0c76b6e786c89432af30a3e56a66a99c079d26",
     "dd729b3038e2d478ea81cb50c014fb7202b6c645fd2c069694974a08b94992cf",
-    "8e0ddf5acfe613ded711c1041a9e4f008beb3f9330c89238e5bcdf6d07d13fed"
+    "8e0ddf5acfe613ded711c1041a9e4f008beb3f9330c89238e5bcdf6d07d13fed",
+    "9c5cf21d90b1db04d4da94307065cb4c33d190eb96ee000fec3863f8b1b40224"
   ],
   "finiteTestToolPathCount": 19,
   "productionPinExceptions": 0,
@@ -31,9 +32,9 @@
         },
         {
           "path": ".github/workflows/friends-playtest-browser.yml",
-          "bytes": 4193,
-          "sha256": "fba49159b2524039af3b1903acc7015ac0bda7293dda7a042b01b1b951148d64",
-          "gitBlob": "900a825ec3a184b19d64dd1013e8b532122b92dc"
+          "bytes": 4267,
+          "sha256": "cb72abce5b79b58eb654adf4a632dfd47bbca29e59a26ee75c801c1a05884323",
+          "gitBlob": "d0f82e352766e65824fe9dae19a3cbcf20324bba"
         },
         {
           "path": "scripts/alternate-form-qa-build.cjs",
@@ -85,9 +86,9 @@
         },
         {
           "path": "tests/championship-friends-playtest-browser.cjs",
-          "bytes": 52771,
-          "sha256": "30e5922a062209b03d556afca1a73b0679625aea1ad9054a645491da106d28af",
-          "gitBlob": "255713692d47d7a8c7dee9c61fe18aa65da55fd1"
+          "bytes": 54629,
+          "sha256": "4f9dc1f3d69821dcb6dc1fb5f2f2016f2b942cbc4b33dc7c8579b626d00992db",
+          "gitBlob": "485d56bbd1da09ce1820b746c396006b5f095ada"
         },
         {
           "path": "tests/championship-m201-density8-renderer-review.mjs",
@@ -115,21 +116,21 @@
         },
         {
           "path": "tests/friends-filmstrip-diagnostic.cjs",
-          "bytes": 12497,
-          "sha256": "4af5422dc0af2409d3a762cf31fb0a34795d0596e10060c31ea2aa653edb49ba",
-          "gitBlob": "0816ad9899c807b870161f9053e8766d2201ac18"
+          "bytes": 12675,
+          "sha256": "841a73d0bd8a803f864564590dc1517f6cf6c0c17904b98fe8919c7878cf210f",
+          "gitBlob": "1a7816cfd78f07a3e749b2c3208b6b4b3b7e70fc"
         },
         {
           "path": "tests/friends-playtest-groups-cases.cjs",
-          "bytes": 25748,
-          "sha256": "526e735f08d6b10be7e0f8985ed8c018f84a1b6f748150bca96cc62971a7ec6d",
-          "gitBlob": "1323253f90fceb651f90b508e9ca7812876daca5"
+          "bytes": 30537,
+          "sha256": "a61d13bf963db7c6e0f48ee3c0c2c5e01efd4fbc5ecd7a8010bdf0fd2921d0fc",
+          "gitBlob": "c0cf3136992ffd17db4436e091472c5cbcc3c33a"
         },
         {
           "path": "tests/friends-playtest-groups.cjs",
-          "bytes": 2518,
-          "sha256": "9bc82017964fb605f5df25771215a1916f20f184878317d6e4064a638e4af2e0",
-          "gitBlob": "e39822cdd3f4f0ba65f5a960dc6f6e7d7b79672b"
+          "bytes": 5019,
+          "sha256": "96c95dee4e396ee07ef6df951158e5509bb245546f9206283d947b4991345c2e",
+          "gitBlob": "0fadcdecb65a334b96dbc371eebeb9b1d8d045e3"
         }
       ]
     },
