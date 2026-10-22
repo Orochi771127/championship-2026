@@ -1,4 +1,5 @@
-// LOCAL MINIMAL FLOOR-ONLY EXPERIMENT: existing Pixi shadows/occluder passes unchanged.
+// Fixed-camera terrain, actors and contact shadows share one depth buffer.
+import {createRanchGroundShadows} from './ranchGroundShadows.js';
 import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
 import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
@@ -69,6 +70,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;
   scene.add(sun,sun.target);
   const models=new Map(), instances=[], textures=new Map(), sprites=new Map();
+  const groundShadows=createRanchGroundShadows(scene);
   const modelBitmaps=new Set();
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
@@ -653,7 +655,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   }
 
   function render({bounds,actors,food,waste,covered=false,deltaMS=0}) {
-    if(disposed||lost){for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
+    if(disposed||lost){groundShadows.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
     if(document.hidden)return true;
     canvas.style.visibility='';
     const start=performance.now(),screen=stage.app.screen;
@@ -691,11 +693,13 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         s.node.rotation.y=(sceneClock*0.35+s.offset)%(Math.PI*2);
       }
     }
+    groundShadows.reset();
     for(const item of sprites.values())item.seen=false;
     for(const [id,entry] of actors){
       // Evolution is a screen-space presentation owned by the existing scene.
       if(covered||entry.evolutionActive){if(entry.sprite)entry.sprite.renderable=true;continue;}
       syncSprite(id,entry.sprite,entry.root,bounds,pixelScale);
+      groundShadows.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true);
     }
     for(const [id,root] of food??[])syncSprite('food:'+id,root.children?.[1],root,bounds,pixelScale);
     for(const [id,sprite] of waste??[])syncSprite('waste:'+id,sprite,sprite,bounds,pixelScale);
@@ -704,6 +708,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     for(const [source,entry] of textures)if(!usedMaps.has(entry.texture)){
       entry.texture.dispose();entry.material.dispose();textures.delete(source);
     }
+    groundShadows.prune();
     renderer.render(scene,camera);frames++;lastRenderMs=performance.now()-start;
     canvas.dataset.frames=String(frames);canvas.dataset.drawCalls=String(renderer.info.render.calls);
     canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.actors=String([...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).length);
@@ -716,7 +721,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     return true;
   }
   function dispose(){
-    if(disposed)return;disposed=true;supportOwnerResolver?.dispose();supportOwnerResolver=null;
+    if(disposed)return;disposed=true;groundShadows.dispose();supportOwnerResolver?.dispose();supportOwnerResolver=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
     for(const ps of dynamicParticles)ps.dispose();dynamicParticles.length=0;
     for(const g of dynamicMachines){g.geometry.dispose();g.material.dispose();}dynamicMachines.length=0;

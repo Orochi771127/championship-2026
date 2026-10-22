@@ -220,6 +220,19 @@ export function raisingEdgeScroll(point,viewport,deltaMs){
   return strength*RAISING_CARRY_EDGE_SPEED*Math.min(50,Math.max(0,deltaMs))/1000;
 }
 
+/** Screen-space edge travel for a held resident. Positive Y reveals lower
+ * rows (the presenter subtracts it from the board's screen-space offset).
+ * Preserve the horizontal helper's speed/edge policy; cap corner speed too. */
+export function raisingCarryEdgeScroll(point, viewport, deltaMs) {
+  if (!point || ![point.x, point.y, viewport.width, viewport.height, deltaMs].every(Number.isFinite)
+    || viewport.width <= 0 || viewport.height <= 0) return {x:0,y:0};
+  const x=raisingEdgeScroll(point,viewport,deltaMs);
+  const y=raisingEdgeScroll({x:point.y,y:point.x},{width:viewport.height,height:viewport.width},deltaMs);
+  const limit=RAISING_CARRY_EDGE_SPEED*Math.min(50,Math.max(0,deltaMs))/1000;
+  const length=Math.hypot(x,y),factor=length>limit&&length>0?limit/length:1;
+  return {x:x*factor,y:y*factor};
+}
+
 export function raisingRegionBounds(region, viewport) {
   return { x: viewport.x + region.x * viewport.width, y: viewport.y + region.y * viewport.height,
     width: region.w * viewport.width, height: region.h * viewport.height };

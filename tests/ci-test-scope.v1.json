@@ -303,6 +303,7 @@
     "tests/championship-ranch-tile-composite-cases.mjs",
     "tests/championship-ranch-tile-composition-cases.mjs",
     "tests/championship-ranch-title-preload-cases.mjs",
+    "tests/championship-ranch-carry-edge-cases.mjs",
     "tests/championship-ranch-free-pan-cases.mjs",
     "tests/championship-ranch-zoom-cases.mjs",
     "tests/championship-reference-polish-cases.mjs",
@@ -381,7 +382,9 @@
     "tests/championship-ranch-v4-runtime-regression-cases.mjs",
     "tests/championship-ranch-v4-scalar-vertex-depth-cases.mjs",
     "tests/championship-raising-reviewed-contact-identity-cases.mjs",
-    "tests/championship-ranch-ground-support-owner-cases.mjs"
+    "tests/championship-ranch-ground-support-owner-cases.mjs",
+    "tests/championship-ranch-shadow-depth-cases.mjs",
+    "tests/championship-resident-notice-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",
