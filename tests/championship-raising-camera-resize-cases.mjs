@@ -32,7 +32,7 @@ function centre(field, view, camera) {
 function assertBounds(field, view, camera) {
   const fit = fitAt(field, view, camera);
   assert.ok(Number.isFinite(camera.cameraX) && Number.isFinite(camera.cameraY));
-  assert.ok(camera.cameraX >= 0 && camera.cameraY >= 0);
+  assert.ok(camera.cameraX >= 0 && camera.cameraY >= (fit.scrollMinY ?? 0));
   if (field.wrapWidthPx) assert.ok(camera.cameraX < field.wrapWidthPx);
   else assert.ok(camera.cameraX <= Math.max(0, field.worldWidthPx - (view.width - 24) / fit.scale));
   assert.ok(camera.cameraY <= fit.scrollMaxY);
@@ -100,7 +100,13 @@ test('vertical bounds still permit full tallest-body headroom and both folded ba
     const worldHeight = field.worldHeightPx + (field.fold?.bandOffsetPx ?? field.expansionPreview?.bandOffsetPx ?? 0);
     close(atBottom.y + worldHeight * atBottom.scale, short.height - 12);
     const toTall = resizeRaisingCamera(field, short, tall, toShort);
-    assert.equal(toTall.cameraY, 0, 'unneeded vertical scroll disappears in a tall frame');
+    // Free vertical pan preserves the old world focus where the new bounds
+    // permit it; a fitting frame no longer forces its offset back to zero.
+    const previous = fitAt(field, short, toShort);
+    const focalY = (Math.floor(short.height / 2) - previous.y) / previous.scale;
+    const origin = raisingFieldViewport(field, tall);
+    const requestedY = Math.floor(tall.height / 2) - focalY * origin.scale - origin.y;
+    close(toTall.cameraY, Math.max(origin.scrollMinY ?? 0, Math.min(origin.scrollMaxY, requestedY)));
     assertBounds(field, tall, toTall);
   }
 });
@@ -151,6 +157,7 @@ function sceneFunction(start, end) {
   assert.ok(from >= 0 && to > from, `${start} must remain inspectable`);
   return sceneSource.slice(from, to);
 }
+const scrollBoundsSource = sceneFunction('  const scrollMinY =', '\n  // World x');
 const resizeSource = sceneFunction('  function resize() {', '\n  // A requested pan');
 const cancelSource = sceneFunction('  function cancelInput(', '\n  const cancelHiddenInput');
 
@@ -171,12 +178,11 @@ function callbackHarness(extra = {}) {
     raisingFieldViewport, resizeRaisingCamera, wrapRaisingCamera,
     clamp: (value, min, max) => Math.max(min, Math.min(max, value)),
     syncCalls: [], sync(frame, options) { context.syncCalls.push({ frame, options }); },
-    scrollMaxY: () => raisingFieldViewport(fold, { ...context.view, scrollY: context.cameraY }).scrollMaxY,
     drag: null, cameraDrag: null, pointerPreview: null, cleanFeedback: null,
     backdrop: { cursor: 'grab' }, toolPreview: { visible: false }, ...extra
   };
   vm.createContext(context);
-  vm.runInContext(`${resizeSource}\n${cancelSource}`, context);
+  vm.runInContext(`${scrollBoundsSource}\n${resizeSource}\n${cancelSource}`, context);
   return context;
 }
 
@@ -334,7 +340,7 @@ test('small/short portrait reference keeps exact zoom across wide rotations for 
    const next={width:w,height:h,desktopRaising:w!==width,referenceViewport};
    assert.equal(raisingNativeScreenPixels(field,next),expected,`${nativeHeight}: ${width}x${height} -> ${w}x${h}`);
    const camera=resizeRaisingCamera(field,portrait,next,{cameraX:700,cameraY:73});
-   const fit=fitAt(field,next,camera);assert.ok(camera.cameraY>=0&&camera.cameraY<=(fit.scrollMaxY??0));assert.ok(camera.cameraX>=0);
+   const fit=fitAt(field,next,camera);assert.ok(camera.cameraY>=(fit.scrollMinY??0)&&camera.cameraY<=(fit.scrollMaxY??0));assert.ok(camera.cameraX>=0);
    const point={x:42,y:67};const p=raisingNativeToScreen([point.x*4096,point.y*4096],field,next,camera.cameraX);
    const back=raisingScreenToNative(p,field,next,camera.cameraX);close(back.x,point.x);close(back.y,point.y);
   }
@@ -401,4 +407,20 @@ test('visibility/blur cancellation invalidates a pending reference sample withou
  const reference=context.raisingReference.reference;context.cancelInput();
  assert.equal(context.raisingReference.pending,null);assert.equal(context.raisingReference.reference,reference);
  assert.match(sceneSource,/const cancelHiddenInput=\(\)=>\{if\(globalThis.document\?\.hidden\)\{zoomInput\?\.reset\(\);cancelInput\(\);\}\}/);
+});
+
+// Exercise the real signed-bound declarations, not a constant-zero stub.
+test('controlled resize retains negative fitting-board pan and clamps both out-of-range signs', () => {
+  const field={...base,worldHeightPx:384};
+  const view={width:390,height:675,desktopRaising:false};
+  const bounds=raisingFieldViewport(field,view);
+  assert.ok(bounds.scrollMinY<0&&bounds.scrollMaxY>0);
+  for(const cameraY of [-60,-1e6,1e6]) {
+    const context=callbackHarness({fieldArt:{field},view:{...view},
+      cameraViewport:{...view,referenceViewport:{width:390,height:675}},cameraY,
+      app:{screen:{width:390,height:675}}});
+    context.resize();
+    close(context.cameraY,Math.max(bounds.scrollMinY,Math.min(bounds.scrollMaxY,cameraY)));
+    assert.equal(context.syncCalls.length,1);
+  }
 });
