@@ -1,0 +1,59 @@
+name: Ranch real normal admitted point-height diagnostic
+on:
+  push:
+    branches: ['fix/ranch-floor-contact-audit-20261021']
+    paths:
+      - '.github/workflows/ranch-normal-point-height-review.yml'
+      - 'tests/ranch-normal-point-height.mjs'
+      - 'tests/fixtures/ranch-normal-point-height.html'
+      - 'tests/ranch-point-height/**'
+      - 'tests/ranch-point-height/points.json'
+      - 'tests/normal-lifecycle/**'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Preserve unchanged production build
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Observe actual contact heights and native locomotion without manual tokens
+        shell: bash
+        env:
+          BROWSER_ENGINE: ${{ matrix.engine }}
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/normal-point-height/${{ matrix.engine }}
+          node tests/ranch-point-height/inject-normal-point-height.mjs --input tests/ranch-point-height/candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/point-height-probe.mjs --expected-sha fa37b118ab195289b3ab02972ce9c45dabafd75572c96c198629d536739e4968
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/normal-point-height/${{ matrix.engine }}/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-point-height.html > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8765/tests/fixtures/ranch-normal-point-height.html > /dev/null
+          node tests/ranch-normal-point-height.mjs http://127.0.0.1:8765/ .tmp/normal-point-height/${{ matrix.engine }}/cases tests/ranch-point-height/candidate .tmp/point-height-probe.mjs tests/ranch-point-height/points.json
+      - name: Retain static captures, locomotion attempts and inverse-pick evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ranch-normal-point-height-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/normal-point-height/
+          if-no-files-found: error
+          retention-days: 14
