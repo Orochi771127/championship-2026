@@ -118,7 +118,7 @@ function shakeNoise(t, seed) {
   return Math.sin(t * 0.037 + seed) * 0.55 + Math.sin(t * 0.061 + seed * 2.3) * 0.3 + Math.sin(t * 0.113 + seed * 4.1) * 0.15;
 }
 
-export function createBattleFxCamera({reducedMotion = false, responsiveLayout = false, fullArena = false, boundedMap = false} = {}) {
+export function createBattleFxCamera({reducedMotion = false, responsiveLayout = false, fullArena = false, boundedMap = false, wideCover = false} = {}) {
   let zoom = null, cx = 0, cy = 0, over = {left: 0, right: 0, top: 0, bottom: 0};
   let punch = 0, trauma = 0, time = 0;
   let lastImpact = -Infinity, lastImpactStrength = 0;
@@ -208,7 +208,7 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
       const follow = stage && stage.boost >= 0.3 ? [] : points.map(p => ({left: p.x - 12, right: p.x + 12, top: p.y - 12, bottom: p.y + 12}));
       const shot = battleFxFrameShot({viewport, art, box: battleFxUnionBox([...framing, ...follow]),
         // An ordinary shot stays within 1.7x cover; a staged push-in may reach 2.3x.
-        boost: focused.length ? stage.boost : 0, responsiveLayout, boundedMap, maxZoomFactor: reducedMotion ? 1.3 : focused.length ? 2.3 : 1.7});
+        boost: focused.length ? stage.boost : 0, responsiveLayout, boundedMap, maxZoomFactor: wideCover ? 1.05 : reducedMotion ? 1.3 : focused.length ? 2.3 : 1.7});
       const resized = responsiveLayout && previousViewport !== null
         && (previousViewport.width !== viewport.width || previousViewport.height !== viewport.height);
       previousViewport = {width:viewport.width, height:viewport.height};
