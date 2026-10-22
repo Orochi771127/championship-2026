@@ -2,6 +2,8 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
+    "tests/championship-gr08-dex-centering-cases.mjs",
+    "tests/championship-gr26-recolor-cases.mjs",
     "tests/alternate-form-build-boundary-cases.mjs",
     "tests/alternate-form-portraits-cases.mjs",
     "tests/alternate-form-qa-bootstrap-cases.mjs",
@@ -42,6 +44,7 @@
     "tests/championship-battle-entry-handoff-cases.mjs",
     "tests/championship-battle-field-ambient-masked-cases.mjs",
     "tests/championship-battle-field-scene-cases.mjs",
+    "tests/championship-battle-floating-hud-cases.mjs",
     "tests/championship-battle-frame-loop-cases.mjs",
     "tests/championship-battle-full-arena-cases.mjs",
     "tests/championship-battle-hit-recovery-cpu-cases.mjs",
@@ -63,6 +66,7 @@
     "tests/championship-battle-normal-runtime-cases.mjs",
     "tests/championship-battle-null-target-launch-cases.mjs",
     "tests/championship-battle-opening-cases.mjs",
+    "tests/championship-battle-opening-skill-cases.mjs",
     "tests/championship-battle-optional-audio-cases.mjs",
     "tests/championship-battle-outcome-cases.mjs",
     "tests/championship-battle-owned-party-cases.mjs",
@@ -303,6 +307,8 @@
     "tests/championship-ranch-tile-composite-cases.mjs",
     "tests/championship-ranch-tile-composition-cases.mjs",
     "tests/championship-ranch-title-preload-cases.mjs",
+    "tests/championship-ranch-carry-edge-cases.mjs",
+    "tests/championship-ranch-free-pan-cases.mjs",
     "tests/championship-ranch-zoom-cases.mjs",
     "tests/championship-reference-polish-cases.mjs",
     "tests/championship-responsive-carry-cases.mjs",
@@ -380,7 +386,9 @@
     "tests/championship-ranch-v4-runtime-regression-cases.mjs",
     "tests/championship-ranch-v4-scalar-vertex-depth-cases.mjs",
     "tests/championship-raising-reviewed-contact-identity-cases.mjs",
-    "tests/championship-ranch-ground-support-owner-cases.mjs"
+    "tests/championship-ranch-ground-support-owner-cases.mjs",
+    "tests/championship-ranch-shadow-depth-cases.mjs",
+    "tests/championship-resident-notice-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",

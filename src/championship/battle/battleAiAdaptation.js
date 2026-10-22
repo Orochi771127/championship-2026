@@ -84,3 +84,26 @@ export function stepBattleAiApproach(c, h, memo) {
   memo.idleSince = null; memo.kicks += 1;
   return aim.mirrored ? 'WALK_MIRRORED' : 'WALK';
 }
+
+// OWNER_APPROVED_ADAPTATION 2026-10-22: menus' improved AI may use its first
+// skill after five ACTIVE combat seconds, rather than waiting for reserve
+// tiers (900 ticks each). The owning session clock excludes READY/FIGHT,
+// asset waits, hitstop and exclusive presentations. 300 ticks is the first
+// tick at/after five seconds at the established 33513982/560190 Hz cadence.
+export const BATTLE_AI_OPENING_SKILL_TICKS = Math.ceil(5 * 33513982 / 560190);
+
+/** Called only at the existing legal decision gate, never from a new timer. */
+export function chooseBattleAiOpeningSkill({policy, clock, launched, combatant, buckets, rng}) {
+  if (policy !== BATTLE_AI_ADAPTATION_V1 || launched || clock < BATTLE_AI_OPENING_SKILL_TICKS
+    || combatant.statusCode || combatant.pendingField24 > 0 || combatant.currentHp <= 0) return null;
+  // A willingness-to-spend adaptation, NOT extra energy. Native initialization
+  // still rechecks and charges the exact cost and owns target/range/locks/hits.
+  const choices = [5, 6].flatMap(state => (buckets[state] ?? [])
+    .filter(action => action.costField48 <= combatant.metricLimit)
+    .map(action => ({state, action})));
+  if (!choices.length) return null;
+  const roll = rng.next(216);
+  const {state, action} = choices[roll % choices.length];
+  return {decision:'ACTION', state, action, roll, reserve:combatant.metricLimit,
+    evidence:'OWNER_APPROVED_OPENING_SKILL_2026_10_22'};
+}

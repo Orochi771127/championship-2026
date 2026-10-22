@@ -735,7 +735,7 @@ body[data-desktop-raising] .int-rh2-companion__name { white-space: normal; overf
 .cm-ranch-zoom {
   position:absolute;right:12px;
   bottom:calc(var(--cm-toolbar-height, 74px) + var(--cm-raising-dock-gap, 12px) + 12px);z-index:4;
-  min-width:72px;min-height:44px;border:1px solid #8eb2bb;border-radius:14px;
+  min-width:44px;min-height:44px;border:1px solid #8eb2bb;border-radius:14px;
   background:rgba(244,252,255,.92);color:#244b57;font:600 14px system-ui;
   touch-action:manipulation;cursor:pointer;box-shadow:0 2px 8px #16344120;
 }

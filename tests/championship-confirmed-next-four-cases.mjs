@@ -1,3 +1,4 @@
+import {assertApproved20Registry} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -8,7 +9,8 @@ import {makeView}from'./helpers/dex-conditions-ui-fixture.mjs';
 import {setLocale}from'../src/championship/text/locale.js';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const manifest=read('docs/art/production/characters/confirmed-dex-next-four-20261019/manifest.json');
-const registry=read('src/data/championship/database-hero-portraits.public.v1.json');
+// Preserve historical subset counts/hashes after independently validating all214 records.
+const registry={entries:assertApproved20Registry(read('src/data/championship/database-hero-portraits.public.v1.json'))};
 const sha=b=>createHash('sha256').update(b).digest('hex');
 test('four confirmed revisions preserve the previous184 selected images',()=>{
  assert.deepEqual(manifest.entries.map(e=>e.speciesIndex),[126,169,170,173]);

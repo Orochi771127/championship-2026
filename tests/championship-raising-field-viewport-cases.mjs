@@ -83,7 +83,8 @@ test('the ranch takes the largest whole pixel scale that fits with its headroom,
     assert.equal(nativeScale,raisingNativeScreenPixels(field,screen));
     assert.ok(Number.isInteger(nativeScale)&&nativeScale>=RAISING_MIN_NATIVE_SCREEN_PIXELS&&nativeScale<=RAISING_MAX_NATIVE_SCREEN_PIXELS,
       'every native pixel is the same whole number of screen pixels');
-    assert.equal(fit.scrollMaxY,0,'these frames need no vertical scroll');
+    assert.equal(fit.scrollY,0,'fitting frames preserve their initial centering');
+    assert.ok(fit.scrollMinY<0&&fit.scrollMaxY>0,'fitting frames permit bounded free vertical pan');
     assert.ok(fit.y-headroom>=0&&fit.y+fit.height<=screen.height-12+1e-7,'the headroom and the whole board both fit the frame');
     assert.ok((nativeScale+1)*(boardNative+RAISING_TOP_HEADROOM_NATIVE)>screen.height-12,'one more whole step would not fit');
     assert.ok((screen.width-24)/nativeScale>=RAISING_MIN_VISIBLE_NATIVE_WIDTH,'at least 2⅓ board columns stay in view');

@@ -65,3 +65,30 @@ jobs:
           path: .tmp/browser-qa/alternate-forms/trace.zip
           if-no-files-found: warn
           retention-days: 14
+
+  # Source-instrumented geometry/timing evidence; not a compiled Pages acceptance claim.
+  battle-floating-hud-source:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Install Chrome channel required by existing full-map harness
+        run: npx playwright install --with-deps chrome
+      - name: Capture actual source Battle HUD geometry and observed kind-1 timing
+        env:
+          CHAMPIONSHIP_QA_ARTIFACT: ${{ github.workspace }}
+          CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
+        run: node tests/championship-battle-full-map-browser.cjs verified public-default
+      - name: Preserve Battle screenshots and geometry/timing diagnostics even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: battle-floating-hud-source-${{ github.run_id }}
+          path: .tmp/browser-qa/battle-full-map/public-default/
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,3 +1,5 @@
+import {APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
+import {assertApproved20Registry} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -9,7 +11,8 @@ import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
 import {setLocale} from '../src/championship/text/locale.js';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const manifest=read('docs/art/production/characters/approved-dex-repair-20261019/manifest.json');
-const registry=read('src/data/championship/database-hero-portraits.public.v1.json');
+// Preserve historical subset counts/hashes after independently validating all214 records.
+const registry={entries:assertApproved20Registry(read('src/data/championship/database-hero-portraits.public.v1.json'))};
 const ids=[103,105,119,120,124,136,138,139,141,146,168,178,182,185,190,191,192,193,194,195,196,197,198,199,203,204,205];
 const sha=b=>createHash('sha256').update(b).digest('hex');
 
@@ -36,7 +39,7 @@ test('approved repair selects exact species identities and retains all 155 previ
     }
   }
   assert.equal(manifest.entries.find(e=>e.speciesIndex===105).master.sha256,'90b4834b1048497840aaadf9142791e08158f0771c27e01a69e99ce362481804');
-  for(const id of [82,184,186,187,188,200])assert.equal(databaseHeroPortrait(id),null);
+  for(const id of [184,186,188])assert.deepEqual(databaseHeroPortrait(id),APPROVED10.find(e=>e.speciesIndex===id));for(const id of [187,200])assert.deepEqual(databaseHeroPortrait(id),APPROVED10.find(e=>e.speciesIndex===id));
 });
 
 test('new hero and thumbnail load in five locales while registration masking and player state remain unchanged',()=>{

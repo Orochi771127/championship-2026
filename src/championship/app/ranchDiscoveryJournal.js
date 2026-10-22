@@ -3,11 +3,11 @@ import {uiText} from '../text/uiText.js';
 const copy=()=>Object.fromEntries(["title", "about", "empty", "none", "full", "collect", "close", "food", "herb", "bits", "rare", "partner", "path", "blocked", "saved", "failed"].map(key=>[key,uiText(`RANCH_JOURNAL_${key.toUpperCase()}`)]));
 export function mountRanchDiscoveryJournal(root,source){
   const doc=root.ownerDocument,button=doc.createElement('button'),life=new AbortController();
-  button.className='int-rh2-discoveries';button.type='button';button.dataset.action='ranch-discoveries';
+  button.className='int-rh2-discoveries';button.type='button';button.hidden=true;button.dataset.action='ranch-discoveries';
   root.append(button);
   let last=null,busy=false;
   function update(frame){
-    last=frame?.exploration??null;button.hidden=!last||!!frame?.tutorial&&!frame.tutorial.finished;
+    last=frame?.exploration??null;button.hidden=!last?.pending?.length||!!frame?.tutorial&&!frame.tutorial.finished;
     const c=copy();button.textContent=`${c.title} · ${last?.pending.length??0}/12`;
     button.setAttribute('aria-label',button.textContent);
   }

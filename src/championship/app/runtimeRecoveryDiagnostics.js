@@ -6,7 +6,7 @@ const TYPES=new Set(['BOOT','PAGE_SHOW','PAGE_HIDE','VISIBILITY','SCREEN','LOAD'
 const SCREENS=new Set(['TITLE','RAISING_HOME','HUNT_FIELD','HUNT_RESULT','HUNT_LOADOUT','GATE_SELECT','BATTLE_SELECT',
   'BATTLE_FIELD','BATTLE_RESULT','CHAMPIONSHIP','SHOP','DATABASE','MEDALS','CAGE_EDIT','DIGIMON_LIST','SCHEDULE','HELP','TAMER_INFO']);
 const STAGES=new Set(['engine','facilities','partners','scene','arena','fighters','effects','overlay','loading','ready','error','cancelled',
-  'loading-card','first-render','audio']);
+  'loading-card','first-render','audio','gpu-warmup','first-vfx-render']);
 const CODES=['NATIVE_CHARACTER_TEXTURE_MISSING','UNVERIFIED_NATIVE_CHARACTER_FRAME','RESIDENT_ART_UNAVAILABLE',
   'RAISING_CORE_ART_UNAVAILABLE','BATTLE_CORE_ART_UNAVAILABLE','BATTLE_CORE_VFX_UNAVAILABLE','LOAD_TIMEOUT','LOAD_STALLED','SAVE_FAILED',
   'CHAMPIONSHIP_MODERN_SAVE_CONFLICT','CHARACTER_RUNTIME_BUNDLE_DISPOSED'];
@@ -27,6 +27,7 @@ function sanitize(row) {
   if(CODES.includes(row.code)||row.code==='OTHER')out.code=row.code;
   if(NAMES.has(row.errorName))out.errorName=row.errorName;
   if(SOURCES.has(row.source))out.source=row.source;
+  if(Number.isInteger(row.gpuWarmupGroups)&&row.gpuWarmupGroups>=0&&row.gpuWarmupGroups<=82)out.gpuWarmupGroups=row.gpuWarmupGroups;
   for(const key of ['persisted','wasDiscarded'])if(typeof row[key]==='boolean')out[key]=row[key];
   if(['navigate','reload','back_forward'].includes(row.navigation))out.navigation=row.navigation;
   if(['hidden','visible'].includes(row.visibility))out.visibility=row.visibility;
@@ -47,7 +48,7 @@ function read(text) {
 // evidence. Keep chronological order and the newest event within the same cap.
 function evict(events) {
   let index=events.findIndex((e,i)=>i<events.length-1&&e.type==='LOAD'
-    &&!(e.area==='battle'&&['overlay','scene','ready','loading-card','first-render','audio'].includes(e.stage)));
+    &&!(e.area==='battle'&&['overlay','scene','ready','loading-card','first-render','audio','gpu-warmup','first-vfx-render'].includes(e.stage)));
   if(index<0)index=events.findIndex((e,i)=>i<events.length-1&&e.type==='SCREEN');
   events.splice(index<0?0:index,1);
 }

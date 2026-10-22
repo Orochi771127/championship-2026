@@ -56,8 +56,9 @@ function friendsThreeIdentity(rows){
   return {...expected};
  });
 }
-function friendsThreeSnapshot(){const all=[...document.querySelectorAll('#cm-root[data-active-screen="RAISING_HOME"] .cm-ranch-three-canvas')],c=all[0],h=document.querySelector('.int-rh2-field-host'),r=c?.getBoundingClientRect();const state={canvasCount:all.length,frames:Number(c?.dataset.frames),width:c?.width??0,height:c?.height??0,visible:Boolean(r&&r.width>0&&r.height>0&&getComputedStyle(c).display!=='none'&&getComputedStyle(c).visibility!=='hidden'),loadState:h?.dataset.loadState,busy:h?.getAttribute('aria-busy'),fallbackCount:document.querySelectorAll('[data-field-fallback="true"]').length};
- return {...state,residents:JSON.parse(h?.dataset.residentAssets||'[]')};
+function friendsThreeSnapshot({includeRenderer=false}={}){const all=[...document.querySelectorAll('#cm-root[data-active-screen="RAISING_HOME"] .cm-ranch-three-canvas')],c=all[0],h=document.querySelector('.int-rh2-field-host'),r=c?.getBoundingClientRect();const state={canvasCount:all.length,frames:Number(c?.dataset.frames),width:c?.width??0,height:c?.height??0,visible:Boolean(r&&r.width>0&&r.height>0&&getComputedStyle(c).display!=='none'&&getComputedStyle(c).visibility!=='hidden'),loadState:h?.dataset.loadState,busy:h?.getAttribute('aria-busy'),fallbackCount:document.querySelectorAll('[data-field-fallback="true"]').length};
+ let renderer=null;if(includeRenderer&&c){const gl=c.getContext('webgl2');if(gl){const ext=gl.getExtension('WEBGL_debug_renderer_info');renderer={version:gl.getParameter(gl.VERSION),vendor:gl.getParameter(gl.VENDOR),renderer:gl.getParameter(gl.RENDERER),unmaskedRenderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):null,contextLost:gl.isContextLost(),hardwareConcurrencyHint:navigator.hardwareConcurrency};}}
+ return {...state,renderer,runtimeClockText:document.querySelector('.cm-status-bar')?.textContent??null,residents:JSON.parse(h?.dataset.residentAssets||'[]')};
 }
 function friendsThreeSnapshotReady(state){
  if(state.fallbackCount!==0)throw new Error('FRIENDS_THREE_FALLBACK_PRESENT');
@@ -66,6 +67,22 @@ function friendsThreeSnapshotReady(state){
  return state.canvasCount===1&&state.loadState==='ready'&&state.busy==='false'&&state.visible&&state.width>0&&state.height>0&&Number.isSafeInteger(state.frames)&&state.frames>0&&state.residents.length>0&&state.residents.every(row=>row.state==='ready');
 }
 function friendsMakeThreeReadiness(){return new Function(`const state=(${friendsThreeSnapshot.toString()})();return (${friendsThreeSnapshotReady.toString()})(state)?state:false;`);}
+// Pure test-only preparation: preserve raw observation; never act on a later unrelated visibility read.
+function friendsPreparationReady(s,fieldReady){
+ if(!s.overlay)return false;
+ if(s.overlay.kind==='canvas')return !fieldReady||friendsThreeSnapshotReady(s.three);
+ return friendsRecognizedOverlay(s.overlay);
+}
+function friendsMakePreparationObservation(fieldReady=false){return new Function('selector',`return {overlay:(${ordinaryRanchOverlayState.toString()})(selector),three:${fieldReady?'('+friendsThreeSnapshot.toString()+')()':'null'}};`);}
+function friendsMakePreparationPoll(fieldReady=false){return new Function('selector',`const s=(${friendsMakePreparationObservation(fieldReady).toString()})(selector);const friendsThreeSnapshotReady=(${friendsThreeSnapshotReady.toString()});const friendsRecognizedOverlay=(${friendsRecognizedOverlay.toString()});return (${friendsPreparationReady.toString()})(s,${fieldReady})?s:false;`);}
+async function friendsObservePreparation(api){
+ const row={fieldReady:api.fieldReady,startedAt:api.wall()};api.record(row);
+ try{row.initial=await api.observe();api.write();let left=api.deadline-api.now();assert.ok(left>0,'Original ordinary UI deadline exhausted');
+  if(friendsPreparationReady(row.initial,api.fieldReady)){row.final=row.initial;row.waited=false;}
+  else{row.waited=true;row.pollBudgetMs=left;api.write();row.final=await api.poll(left);}
+  assert.ok(api.now()<api.deadline,'Original ordinary UI deadline exhausted');assert.ok(friendsPreparationReady(row.final,api.fieldReady));api.write();return row.final.overlay;
+ }catch(error){row.error=String(error.stack||error);api.write();throw error;}
+}
 function friendsThreeProgress(before,after){
  for(const state of [before,after]){
   assert.equal(state.canvasCount,1,'Unique actual Three renderer required');
@@ -132,6 +149,41 @@ async function friendsGuardedRoute(operation,onFailure,abort){
   try{await abort();}catch(abortError){onFailure(error,abortError);}
  }
 }
+
+// Test-only wall-time boundary ledger; no browser RPC, simulation or clock mutation.
+async function friendsAwaitBoundary(api,label,action){
+ const parent=api.current?.()??null;const row={id:api.rows.length,parentId:parent?.id??null,label,startedAt:api.wall(),startedMs:api.now(),status:'RUNNING',cpuStart:api.cpu()};api.rows.push(row);api.active(row);api.write();
+ try{const value=await action();row.status='PASS';return value;}
+ catch(error){row.status='FAIL';row.error=String(error.stack||error);throw error;}
+ finally{row.endedAt=api.wall();row.elapsedMs=api.now()-row.startedMs;row.cpuEnd=api.cpu();api.active(parent);api.write();}
+}
+function friendsToolSnapshot({selector,tool}){
+ const visible=el=>Boolean(el&&!el.hidden&&el.getClientRects().length&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden');
+ const all=[...document.querySelectorAll(`button.cm-toolbar__cell[data-icon="${tool}"]`)];const button=all[0];
+ return {count:all.length,visible:visible(button),enabled:Boolean(button&&!button.disabled),pressed:button?.getAttribute('aria-pressed')==='true',bodyTool:document.body.dataset.tool??null};
+}
+function friendsMakeToolObservation(){return new Function('input',`return {overlay:(${ordinaryRanchOverlayState.toString()})(input.selector),state:(${friendsToolSnapshot.toString()})(input)};`);}
+async function friendsToolTransaction(api){
+ const deadline=api.now()+90000;const left=()=>{const n=deadline-api.now();assert.ok(n>0,'Original tool deadline exhausted');return n;};let attempted=false;
+ for(;;){
+  left();const observation=await api.observe();left();api.record({kind:'tool-observation',tool:api.tool,observation,attempted});
+  if(observation.overlay?.kind!=='canvas'){
+   assert.ok(friendsRecognizedOverlay(observation.overlay),'Unknown tool obstruction must fail');
+   const handled=await api.clear(deadline);left();assert.ok(handled.some(friendsRecognizedOverlay),'Observed native overlay must be normally acknowledged');api.record({kind:'tool-overlay-ack',tool:api.tool,handled});continue;
+  }
+  const state=observation.state;assert.equal(state.count,1);assert.ok(state.visible&&state.enabled,'Normal visible enabled tool required');
+  if(state.pressed){api.record({kind:'tool-already-selected',tool:api.tool,attempted});return;}
+  try{attempted=true;await api.click(Math.min(30000,left()));left();const after=await api.observe();left();api.record({kind:'tool-after-click',tool:api.tool,observation:after});
+   if(after.state.pressed){assert.ok(after.overlay?.kind==='canvas'||friendsRecognizedOverlay(after.overlay),'Unknown postclick obstruction');if(after.overlay?.kind==='canvas')return;}
+   assert.ok(friendsRecognizedOverlay(after.overlay),'Tool click did not select target and no recognized native overlay explains it');
+  }catch(error){if(error.name!=='TimeoutError')throw error;const after=await api.observe();left();api.record({kind:'tool-click-timeout',tool:api.tool,observation:after,error:String(error)});assert.ok(friendsRecognizedOverlay(after.overlay),'Unclassified tool timeout remains fatal');}
+ }
+}
+function friendsFieldCaptureReady(state){
+ assert.equal(state.overlay?.kind,'canvas','Raw phase capture is not unobstructed field evidence');assert.ok(state.three);assert.equal(friendsThreeSnapshotReady(state.three),true,'Raw phase capture field must be actually ready');return true;
+}
+function friendsMakeFieldObservation(){return new Function('selector',`return {overlay:(${ordinaryRanchOverlayState.toString()})(selector),three:(${friendsThreeSnapshot.toString()})()};`);}
+
 // END FRIENDS PUBLIC THREE / MENU / ROUTE CONTRACTS
 
 (async()=>{
@@ -173,6 +225,20 @@ async function friendsGuardedRoute(operation,onFailure,abort){
  }
  const shot=name=>page.screenshot({path:path.join(output,name+'.png'),fullPage:true});
  const saved=()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)),saveKey); // Read only.
+ const boundary=(label,action)=>{if(!evidence.sourceCoverage)return action();const rows=evidence.awaitBoundaries??=[];return friendsAwaitBoundary({rows,now:()=>performance.now(),wall:()=>new Date().toISOString(),cpu:()=>process.cpuUsage(),current:()=>evidence.activeAwait??null,active:row=>{evidence.activeAwait=row;},write},label,action);};
+ const sourceTool=async tool=>{
+  if(!evidence.sourceCoverage)return page.locator(`button.cm-toolbar__cell[data-icon="${tool}"]`).click();
+  return boundary('tool:'+tool,()=>friendsToolTransaction({tool,now:()=>Date.now(),observe:()=>page.evaluate(friendsMakeToolObservation(),{selector:ranchCanvasSelector,tool}),clear:deadline=>clearCalendar(deadline),click:timeout=>page.locator(`button.cm-toolbar__cell[data-icon="${tool}"]`).click({timeout}),record:row=>{(evidence.toolTransactions??=[]).push({...row,at:new Date().toISOString()});write();}}));
+ };
+ const sourceShot=async label=>{
+  const row={label,startedAt:new Date().toISOString()};(evidence.fieldCaptures??=[]).push(row);write();
+  row.before=await boundary('capture-observe-before:'+label,()=>page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector));write();
+  await boundary('screenshot:'+label,()=>shot(label));row.rawPngRetained=true;write();
+  row.after=await boundary('capture-observe-after:'+label,()=>page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector));write();
+  // Preserve raw screenshot before rejecting invalid/covered evidence. Never auto-recapture.
+  friendsFieldCaptureReady(row.before);friendsFieldCaptureReady(row.after);row.validFieldBoundary=true;write();
+ };
+
  async function login(){
   await page.locator('#cm-login').waitFor({state:'visible'});
   await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
@@ -234,12 +300,16 @@ async function friendsGuardedRoute(operation,onFailure,abort){
  // public camera gestures; inspect these screenshots alongside fresh-save
  // numeric cap/ground assertions rather than inventing legacy diagnostics.
   // Long visual sweeps can cross midnight. Only the calendar and exact system94 are acknowledged.
- async function clearCalendar(deadline=null){
+ async function clearCalendar(deadline=null,{fieldReady=false}={}){
+   deadline??=Date.now()+90000;
    const handled=[];
    const left=()=>{if(deadline===null)return 90000;const value=deadline-Date.now();assert.ok(value>0,'Menu deadline exhausted during ordinary overlay');return value;};
    for(;;){
-    const handle=await page.waitForFunction(ordinaryRanchOverlayState,ranchCanvasSelector,{timeout:left()});
-    const observed=await handle.jsonValue();await handle.dispose();
+    const observed=await friendsObservePreparation({fieldReady,deadline,now:()=>Date.now(),wall:()=>new Date().toISOString(),record:row=>{(evidence.ordinaryPreparation??=[]).push(row);write();},write,
+     observe:()=>page.evaluate(friendsMakePreparationObservation(fieldReady),ranchCanvasSelector),
+     poll:async timeout=>{const handle=await page.waitForFunction(friendsMakePreparationPoll(fieldReady),ranchCanvasSelector,{timeout});try{return await handle.jsonValue();}finally{await handle.dispose();}}
+    });
+    if(observed.kind==='canvas')return handled;
     if(observed.kind==='registration-notice-94'){
      const beforeSave=await saved(),before=registrationNoticeInvariant(beforeSave);
      const receipt={ordinarySystemRegistrationAcknowledged:false,normalUi:true,observed,before,
@@ -255,7 +325,7 @@ async function friendsGuardedRoute(operation,onFailure,abort){
      receipt.ordinarySystemRegistrationAcknowledged=true;handled.push(observed);write();continue;
     }
     const calendar=page.locator('.int-rh2-calendar');
-    if(!await calendar.isVisible())return handled;
+    assert.equal(observed.kind,'calendar','Only the actually observed enabled native calendar can be acknowledged');
     await calendar.click({timeout:left()});await page.waitForTimeout(250);handled.push({kind:'calendar',priorObserved:observed.kind});
     evidence.assertions.push({ordinaryCalendarAcknowledged:true,normalUi:true});write();
    }
@@ -289,24 +359,24 @@ async function friendsGuardedRoute(operation,onFailure,abort){
  }
 
  async function legacyTopContour(label,viewports=[{width:1280,height:800},{width:390,height:844}]){
-  const before=await saved();
+  const before=await boundary('saved:read-only',()=>saved());
   for(const viewport of viewports){
-   await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
+   await boundary('viewport:'+viewport.width,()=>page.setViewportSize(viewport));await boundary('home',()=>home());await boundary('wait:800',()=>page.waitForTimeout(800));
    // Clean-mode swipes pan even when begun on an actor; only a tap cleans.
    // Every gesture below exceeds the drag threshold and stays on the canvas.
-   await clearCalendar();
-   await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();
-   await page.waitForFunction(()=>document.body.dataset.tool==='clean');
-   const canvas=await ranchCanvas();
+   await boundary('clearCalendar',()=>clearCalendar());
+   await sourceTool('clean');
+   await boundary('wait:body-tool-clean',()=>page.waitForFunction(()=>document.body.dataset.tool==='clean'));
+   const canvas=await boundary('canvas:ready',()=>ranchCanvas());
    for(let gesture=0;gesture<4;gesture++){
-    const {box,start}=await beginCanvasDrag(canvas,box=>[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y}))),'Legacy camera swipe must start on unobstructed canvas',{width:0,height:500});
-    await page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20});await page.mouse.up();await page.waitForTimeout(250);
+    const {box,start}=await boundary('beginCanvasDrag',()=>beginCanvasDrag(canvas,box=>[180,270].flatMap(y=>[20,box.width/2,box.width-20].map(x=>({x,y}))),'Legacy camera swipe must start on unobstructed canvas',{width:0,height:500}));
+    await boundary('mouse.move',()=>page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20}));await boundary('mouse.up',()=>page.mouse.up());await boundary('wait:250',()=>page.waitForTimeout(250));
    }
-   await clearCalendar();
-   await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();await page.mouse.move(1,1);await page.waitForTimeout(300);
-   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await clearCalendar();await shot(label+'-top-contour-'+viewport.width);
+   await boundary('clearCalendar',()=>clearCalendar());
+   await sourceTool('hand');await boundary('mouse.move',()=>page.mouse.move(1,1));await boundary('wait:300',()=>page.waitForTimeout(300));
+   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await boundary('clearCalendar',()=>clearCalendar(null,{fieldReady:Boolean(evidence.sourceCoverage)}));await (evidence.sourceCoverage?sourceShot(label+'-top-contour-'+viewport.width):shot(label+'-top-contour-'+viewport.width));
   }
-  const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
+  const after=await boundary('saved:read-only',()=>saved());assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
  }
  // Separate installed QA profile: normal editor clicks only, never real player data.
  async function sourceCornerReview(caseId){
@@ -322,7 +392,7 @@ async function friendsGuardedRoute(operation,onFailure,abort){
   const readThree=async()=>{
    const started=Date.now(),row={stage:evidence.sourceCornerStage};(evidence.sourceThreeReadiness??=[]).push(row);
    try{
-    row.initial=await page.evaluate(friendsThreeSnapshot);write();
+    row.initial=await page.evaluate(friendsThreeSnapshot,{includeRenderer:true});write();
     const remaining=90000-(Date.now()-started);assert.ok(remaining>0,'Three readiness operation budget exhausted');
     if(friendsThreeSnapshotReady(row.initial)){row.final=row.initial;row.waited=false;row.elapsedMs=Date.now()-started;write();return row.final;}
     row.waited=true;row.pollBudgetMs=remaining;write();
@@ -331,65 +401,65 @@ async function friendsGuardedRoute(operation,onFailure,abort){
     assert.equal(friendsThreeSnapshotReady(row.final),true);row.elapsedMs=Date.now()-started;assert.ok(row.elapsedMs<90000,'Three readiness operation budget exhausted');write();return row.final;
    }catch(error){row.error=String(error.stack||error);write();throw error;}
   };
-  await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
-  await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
-  await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
-  const installed=await saved();coverage.baseline={fixtureSeedSha256:require('node:crypto').createHash('sha256').update(JSON.stringify(fixtures.seed)).digest('hex'),schemaVersion:installed.schemaVersion,layoutVersion:installed.cageEdit.layoutVersion,shop:installed.shop,placements:installed.cageEdit.placements.map(({moduleId,slotIndex})=>({moduleId,slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId))};write();
+  await boundary('installer-navigation',()=>page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'}));
+  await boundary('installer:button-visible',()=>page.locator('#install').waitFor());await boundary('installer:button-enabled',()=>page.waitForFunction(()=>!document.querySelector('#install').disabled));
+  await boundary('installer:click',()=>page.locator('#install').click());await boundary('installer:wait-url',()=>page.waitForURL(/championship\.html$/));await boundary('continueSaved',()=>continueSaved());
+  const installed=await boundary('saved:read-only',()=>saved());coverage.baseline={fixtureSeedSha256:require('node:crypto').createHash('sha256').update(JSON.stringify(fixtures.seed)).digest('hex'),schemaVersion:installed.schemaVersion,layoutVersion:installed.cageEdit.layoutVersion,shop:installed.shop,placements:installed.cageEdit.placements.map(({moduleId,slotIndex})=>({moduleId,slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId))};write();
   for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]}]){
    if(selected.scenario==='adjacent'&&scenario.name==='wrap')break;
    evidence.sourceCornerStage=scenario.name+':editor';write();
-   await page.setViewportSize({width:1280,height:800});await clearCalendar();await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
-   while(await page.locator('.cm-cage-facility:not([disabled])').count())await page.locator('.cm-cage-facility:not([disabled])').first().click();
+   await boundary('viewport:editor',()=>page.setViewportSize({width:1280,height:800}));await boundary('clearCalendar',()=>clearCalendar());await boundary('menu:cageEdit',()=>menu('MANAGEMENT','cageEdit'));await boundary('screen:CAGE_EDIT',()=>screen('CAGE_EDIT'));
+   while(await page.locator('.cm-cage-facility:not([disabled])').count())await boundary('editor:withdraw',()=>page.locator('.cm-cage-facility:not([disabled])').first().click());
    const specs=[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
    for(const [i,spec] of specs.entries()){
     const row=page.locator('.cm-vs2-cage-tray__item').filter({has:page.locator(`img[src*="field_cm${spec.id}_01"]`)});
-    assert.equal(await row.count(),1,'Exact field image identifies one owned facility');await row.click();
+    assert.equal(await row.count(),1,'Exact field image identifies one owned facility');await boundary('editor:tray:'+spec.id,()=>row.click());
     const slot=page.locator(`.cm-vs2-cage-slot[data-slot-index="${scenario.slots[i]}"]`);
-    assert.equal(await slot.getAttribute('data-unlocked'),'true');assert.equal(await slot.getAttribute('data-filled'),'false');await slot.click();
+    assert.equal(await slot.getAttribute('data-unlocked'),'true');assert.equal(await slot.getAttribute('data-filled'),'false');await boundary('editor:slot:'+scenario.slots[i],()=>slot.click());
    }
-   await page.locator('#cm-root[data-active-screen="CAGE_EDIT"] .cm-vs2-footer button.cm-vs2-action--primary').click();
-   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
-   const placed=await saved();
+   await boundary('editor:confirm',()=>page.locator('#cm-root[data-active-screen="CAGE_EDIT"] .cm-vs2-footer button.cm-vs2-action--primary').click());
+   await boundary('editor:return-home',()=>page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click());await boundary('home',()=>home());await boundary('saveQuit',()=>saveQuit());
+   const placed=await boundary('saved:read-only',()=>saved());
    assert.deepEqual(placed.cageEdit.placements.map(p=>({moduleId:p.moduleId,slotIndex:p.slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),[
     {moduleId:'championship:2026:cage:waiting-room',slotIndex:0},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
    ].sort((a,b)=>a.moduleId.localeCompare(b.moduleId)));
-   assert.deepEqual(placed.shop,expectedShop(installed.shop),'Editor-only inspection must preserve entire wallet and inventory');await continueSaved();
-   const reloadedPlacement=await saved();assert.deepEqual(reloadedPlacement.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(reloadedPlacement.shop,expectedShop(installed.shop));
+   assert.deepEqual(placed.shop,expectedShop(installed.shop),'Editor-only inspection must preserve entire wallet and inventory');await boundary('continueSaved',()=>continueSaved());
+   const reloadedPlacement=await boundary('saved:read-only',()=>saved());assert.deepEqual(reloadedPlacement.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(reloadedPlacement.shop,expectedShop(installed.shop));
    assert.equal(reloadedPlacement.schemaVersion,7);assert.equal(reloadedPlacement.cageEdit.layoutVersion,'PRODUCT_GRID100_INSTANCES_V1');
    coverage.setup.push({schemaVersion:reloadedPlacement.schemaVersion,layoutVersion:reloadedPlacement.cageEdit.layoutVersion,scenario:scenario.name,slots:scenario.slots,placements:placed.cageEdit.placements.map(({moduleId,slotIndex})=>({moduleId,slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),shop:placed.shop,reloaded:true});write();
    if(scenario.name!==selected.scenario)continue;
    evidence.sourceCornerStage=scenario.name+':visual';write();
    // These product-grid fields use verified Three GLBs, not unused 2D padded atlases.
-   await Promise.all(threeResponseReads);const resourceIdentity=friendsThreeIdentity(threeResponses),threeBefore=await readThree();
+   await boundary('Three:response-readbacks',()=>Promise.all(threeResponseReads));const resourceIdentity=friendsThreeIdentity(threeResponses),threeBefore=await boundary('readThree:before',()=>readThree());
    // The existing legacy helper reaches upper headroom through real tool swipes.
    await legacyTopContour('08-source-'+scenario.name,[selected.viewport]);coverage.topGestures=4;write();
    for(const viewport of [selected.viewport]){
-    await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);await clearCalendar();
-    await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();await page.waitForFunction(()=>document.body.dataset.tool==='clean');
-    const canvas=await ranchCanvas();
+    await boundary('viewport:'+viewport.width,()=>page.setViewportSize(viewport));await boundary('home',()=>home());await boundary('wait:500',()=>page.waitForTimeout(500));await boundary('clearCalendar',()=>clearCalendar());
+    await sourceTool('clean');await boundary('wait:body-tool-clean',()=>page.waitForFunction(()=>document.body.dataset.tool==='clean'));
+    const canvas=await boundary('canvas:ready',()=>ranchCanvas());
     // Top-headroom proof was captured above; lift the field 100px so lower tips clear the toolbar.
     if(viewport.width===1280){
-     const {box,start}=await beginCanvasDrag(canvas,box=>[260,320,380].map(y=>({x:box.width-35,y})),'Lower-tip framing must begin on unobstructed canvas');
-     await page.mouse.move(box.x+start.x,box.y+start.y-100,{steps:20});await page.mouse.up();await page.waitForTimeout(250);coverage.framingGestures++;write();
+     const {box,start}=await boundary('beginCanvasDrag',()=>beginCanvasDrag(canvas,box=>[260,320,380].map(y=>({x:box.width-35,y})),'Lower-tip framing must begin on unobstructed canvas'));
+     await boundary('mouse.move',()=>page.mouse.move(box.x+start.x,box.y+start.y-100,{steps:20}));await boundary('mouse.up',()=>page.mouse.up());await boundary('wait:250',()=>page.waitForTimeout(250));coverage.framingGestures++;write();
     }
     const count=viewport.width<500?9:6;
     for(let pan=0;pan<count;pan++){
      // Real elapsed time: two 170ms samples bracket the 334.302ms sea phases.
-     for(let frame=0;frame<3;frame++){await page.waitForTimeout(170);await clearCalendar();await shot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);coverage.phaseCaptures.push({pan,phase:frame});write();}
-     const {box,start}=await beginCanvasDrag(canvas,box=>[180,260,Math.min(360,box.height-150)].map(y=>({x:box.width-35,y})),'Pan origin must be ordinary unobstructed canvas',{width:250,height:200});
-     await page.mouse.move(box.x+Math.max(25,start.x-Math.min(420,box.width-70)),box.y+start.y,{steps:20});await page.mouse.up();await page.waitForTimeout(200);coverage.panGestures++;write();
+     for(let frame=0;frame<3;frame++){await boundary('wait:170',()=>page.waitForTimeout(170));await boundary('capture-ready',()=>clearCalendar(null,{fieldReady:true}));await sourceShot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);coverage.phaseCaptures.push({pan,phase:frame});write();}
+     const {box,start}=await boundary('beginCanvasDrag',()=>beginCanvasDrag(canvas,box=>[180,260,Math.min(360,box.height-150)].map(y=>({x:box.width-35,y})),'Pan origin must be ordinary unobstructed canvas',{width:250,height:200}));
+     await boundary('mouse.move',()=>page.mouse.move(box.x+Math.max(25,start.x-Math.min(420,box.width-70)),box.y+start.y,{steps:20}));await boundary('mouse.up',()=>page.mouse.up());await boundary('wait:200',()=>page.waitForTimeout(200));coverage.panGestures++;write();
     }
-    await clearCalendar();await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();
+    await boundary('clearCalendar',()=>clearCalendar());await sourceTool('hand');
    }
-   await Promise.all(threeResponseReads);friendsThreeIdentity(threeResponses);const threeAfter=await readThree();friendsThreeProgress(threeBefore,threeAfter);coverage.three=true;write();
+   await boundary('Three:response-readbacks',()=>Promise.all(threeResponseReads));friendsThreeIdentity(threeResponses);const threeAfter=await boundary('readThree:after',()=>readThree());friendsThreeProgress(threeBefore,threeAfter);coverage.three=true;write();
    evidence.assertions.push({sourceThreeAuthority:scenario.name,resourceIdentity,threeBefore,threeAfter,actualResponseBytesVerified:true});write();
    evidence.sourceCornerStage=scenario.name+':persistence';write();
-   await clearCalendar();await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,expectedShop(installed.shop));await continueSaved();
+   await boundary('clearCalendar',()=>clearCalendar());await boundary('saveQuit',()=>saveQuit());const after=await boundary('saved:read-only',()=>saved());assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,expectedShop(installed.shop));await boundary('continueSaved',()=>continueSaved());
    coverage.persistence=true;write();
    evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom','three unchanged source-art styles']});write();
   }
   // Final continueSaved also loads models: settle all owned readbacks before terminal guards/close.
-  await friendsDrainReadbacks(threeResponseReads);page.off('response',onThreeResponse);
+  await boundary('Three:drain-readbacks',()=>friendsDrainReadbacks(threeResponseReads));page.off('response',onThreeResponse);
   friendsThreeIdentity(threeResponses);evidence.sourceThreeReadbacksComplete={responses:threeResponses.length,reads:threeResponseReads.length};coverage.readbacks=true;write();
  }
 

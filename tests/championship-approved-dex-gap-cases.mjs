@@ -1,3 +1,5 @@
+import {APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
+import {assertApproved20Registry} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -6,7 +8,8 @@ import {databaseHeroPortrait} from '../src/championship/presentation/databaseHer
 const read=file=>JSON.parse(fs.readFileSync(new URL('../'+file,import.meta.url),'utf8'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const manifest=read('docs/art/production/characters/approved-dex-gap-20261018/manifest.json');
-const registry=read('src/data/championship/database-hero-portraits.public.v1.json');
+// Preserve historical subset counts/hashes after independently validating all214 records.
+const registry={entries:assertApproved20Registry(read('src/data/championship/database-hero-portraits.public.v1.json'))};
 const allowlist=read('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json');
 const inputs=read('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json');
 const ids=[122,123,127,128,129,130,131,132,133,134,135,137,144,150,152,153,154,157,161,163,164,165,166,167];
@@ -41,6 +44,6 @@ test('the 110 published selections and raw authoring registry remain intact',()=
   assert.equal(preserved.entries.length,110);
   assert.equal(sha(Buffer.from(JSON.stringify(preserved,null,2)+'\n')),'8686f2e91e776cd465ee427622b3bde0de08377024d144821e654da3ec93f1e1');
   assert.equal(read('src/data/championship/database-hero-portraits.r1.json').entries.length,96);
-  for(const id of [82,147,148])assert.equal(databaseHeroPortrait(id),null);
+  for(const id of [147,148])assert.deepEqual(databaseHeroPortrait(id),APPROVED10.find(e=>e.speciesIndex===id));
   assert.ok(!inputs.files.some(file=>file.includes('approved-dex-gap-20261018')||file.includes('source-masters')));
 });

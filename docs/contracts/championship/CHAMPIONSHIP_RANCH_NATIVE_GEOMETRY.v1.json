@@ -123,5 +123,24 @@
       "Carrying a resident across the fold adds the jump to the carry velocity; holding still before release settles it",
       "The camera does not scroll vertically by itself while a resident is carried"
     ]
+  },
+  "freePanOwnerAdaptation": {
+    "date": "2026-10-22",
+    "evidence": "OWNER_APPROVED_ADAPTATION",
+    "rule": "Continuous free XY dragging, including diagonals, with a fixed camera orientation. A fitting native board retains its initial centered framing and scale but permits signed vertical translation; bounds retain at least min(board height, 48 native pixels) of ground vertically in view. Non-fitting board vertical limits and horizontal behavior are unchanged. One axis reaching its boundary never locks the other. Art, actors, shadows and hit coordinates share the viewport transform.",
+    "scope": "Presentation only; no save, actor motion, rotation, gameplay or new gesture authority.",
+    "validation": "Pure viewport and extracted existing presenter moveDrag/finishDrag tests cover 100%/70%, fitting/non-fitting maps, eight directions, coordinate round trips, boundary independence and pointercancel. Existing large product-grid CPU input already supports eight directions; this change is not proof that the reported physical-phone behavior is resolved.",
+    "tests": "tests/championship-ranch-free-pan-cases.mjs",
+    "physicalDeviceQa": false
+  },
+  "carryEdgePanOwnerAdaptation": {
+    "date": "2026-10-22",
+    "evidence": "OWNER_APPROVED_ADAPTATION",
+    "request": "While carrying a resident toward lower cells, scroll the ranch automatically at all viewport edges and corners. This is not blank-ground map dragging.",
+    "rule": "Use the existing presentation ticker and carried input owner. Add bounded vertical edge movement to existing horizontal auto-scroll at 216 screen px/s, capped to 50ms per tick and 216px/s vector speed at corners. Positive bottom-edge travel subtracts from cameraY to reveal lower cells. Clamp vertical and nonwrapped horizontal axes independently; preserve horizontal wrapping. Reproject the held pointer through the updated shared world transform before updateHand/updateCarry.",
+    "inputBoundary": "Only an active carried resident and a pointer inside the field may scroll. DOM controls above the canvas block edge scrolling. Pointer leave clears the edge point; release, pointercancel, lostpointercapture, screen disposal, blur and context cancellation stop the existing owner. No second ticker or timer.",
+    "tests": "tests/championship-ranch-carry-edge-cases.mjs; existing viewport/resize/free-pan/zoom/native carry/hand/responsive carry suites",
+    "validation": "Controlled actual ticker and input-handler execution at 100% and 70%, all eight edge directions, stationary pointer, bounded corners and independent clamps, updated native ground tile at release, UI rejection and cancellation. Physical-phone gesture/drop acceptance remains pending.",
+    "doesNotChange": "Native actor carry/flight/terrain/save rules, manual free pan, camera orientation, map pixel scale, or floor/depth rendering."
   }
 }

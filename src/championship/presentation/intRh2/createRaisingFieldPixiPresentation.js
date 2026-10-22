@@ -22,7 +22,7 @@ import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
 import {bindRaisingZoomInput,RAISING_OVERVIEW_ZOOM} from './raisingZoomInput.js';
 import {zoomRaisingCamera} from './raisingFieldViewport.js';
-import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
+import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingCarryEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
 
 const DRAG_THRESHOLD_PX = 6;
 
@@ -220,8 +220,8 @@ export async function mountRaisingFieldPixiPresentation({
   let latestRevision = -1;
   let drag = null;
   let cameraX = 0;
-  // Screen pixels the board is lowered to show the headroom above it. Only a
-  // frame too short for the board and its headroom ever lets this leave 0; a
+  // Screen-pixel vertical translation. A fitting board has signed bounded
+  // travel; a
   // folded ring (expansion annex below the board) scrolls over both bands.
   let cameraY = 0;
   let zoom = 1;
@@ -240,6 +240,7 @@ export async function mountRaisingFieldPixiPresentation({
   // dimensions from the previous useful layout; retaining `view` itself would
   // retain its live getters and lose the pre-rotation world focal point.
   let cameraViewport = null;
+  const scrollMinY = () => (fieldArt?.field ? raisingFieldViewport(fieldArt.field, view).scrollMinY ?? 0 : 0);
   const scrollMaxY = () => (fieldArt?.field ? raisingFieldViewport(fieldArt.field, view).scrollMaxY ?? 0 : 0);
   // World x of a native x within its band: a folded ring (expansion prototype)
   // shows its annex as a second band, and the shared camera is band-local.
@@ -399,7 +400,9 @@ export async function mountRaisingFieldPixiPresentation({
     if(fieldArt.field.productGrid){
       const nativeY=frame.residents.map(resident=>source.getActorFrame?.(resident.creatureId)?.positionQ12)
         .find(position=>Number.isFinite(position?.[0]))?.[1];
-      if(Number.isFinite(nativeY))cameraY=centerRaisingNativeY(fieldArt.field,view,nativeY/4096,cameraX);
+      // Fitting boards previously had zero vertical travel at entry. Keep
+      // that framing; signed travel starts only with player interaction.
+      if(Number.isFinite(nativeY))cameraY=fit.scrollMinY<0?0:centerRaisingNativeY(fieldArt.field,view,nativeY/4096,cameraX);
     }
     const target = bandWorldX(fieldArt.field, nativeX / 4096) - (app.screen.width - 24) / fit.scale / 2;
     cameraX = fieldArt.field.wrapWidthPx
@@ -641,7 +644,7 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function reportResidentAssets(){
-    onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,error:e.evolutionAssetError??e.assetError??null})));
+    onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,hasVisibleSprite:Boolean(e.sprite),loadKind:['loading','error'].includes(e.evolutionAssetState)?'evolution':e.pendingAnimation!=null&&e.sprite?'animation':'appearance',error:e.evolutionAssetError??e.assetError??null})));
   }
 
   // Native animation tables and their frame clocks stay authoritative. A page
@@ -700,8 +703,9 @@ export async function mountRaisingFieldPixiPresentation({
   function decorateActor(entry,geometry){
     const {visible,hitArea}=geometry,center=visible.x+visible.width/2,bottom=visible.y+visible.height;
     const contact=geometry.contactShadow??{x:center,y:bottom+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
+    entry.groundShadowEllipses=geometry.reviewedContactShadow??[contact];
     entry.shadow.clear();
-    for(const ellipse of geometry.reviewedContactShadow??[contact]){
+    for(const ellipse of entry.groundShadowEllipses){
       entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
     }
     entry.shadow.fill({color:0x02070a,alpha:.26});
@@ -805,9 +809,9 @@ export async function mountRaisingFieldPixiPresentation({
       const maxX = Math.max(0, fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
       const next=cameraDrag.origin-(event.global.x-cameraDrag.startX)/fit.scale;
       cameraX = fieldArt.field.wrapWidthPx ? wrapRaisingCamera(next,fieldArt.field.wrapWidthPx) : clamp(next, 0, maxX);
-      // Dragging down lowers the board to show the headroom; only a frame
-      // short of room for both ever has any vertical travel.
-      cameraY = clamp((cameraDrag.originY ?? 0) + event.global.y - cameraDrag.startY, 0, fit.scrollMaxY ?? 0);
+      // Both axes share the viewport transform. Fitting boards also have
+      // bounded vertical travel without changing camera rotation or scale.
+      cameraY = clamp((cameraDrag.originY ?? 0) + event.global.y - cameraDrag.startY, fit.scrollMinY ?? 0, fit.scrollMaxY ?? 0);
       source.intents.panTutorial?.({x:cameraX/fieldArt.field.nativePixelWorldScale-tutorialCameraOffset,tool:cameraDrag.tool,checkpoint:cameraDrag.tutorialCheckpoint});
       sync(latestFrame, {force:true});
       return;
@@ -846,13 +850,13 @@ export async function mountRaisingFieldPixiPresentation({
     if (!responsiveLayout) {
     if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
     // A taller frame may need less scroll, or none.
-    cameraY = clamp(cameraY, 0, scrollMaxY());
+    cameraY = clamp(cameraY, scrollMinY(), scrollMaxY());
     // Desktop starts with the existing main cages in view. Locked lower rows
     // keep their place and their scroll range; a shorter height must not carry
     // the phone's numeric offset into a newly clipped main row.
     if(view.desktopRaising&&fieldArt?.field){
       const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
-      cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
+      cameraY=clamp(cameraY+Math.max(0,-fit.y),scrollMinY(),scrollMaxY());
     }
     sync(source.getFrame(), { force: true });
       return;
@@ -912,9 +916,9 @@ export async function mountRaisingFieldPixiPresentation({
     // retain the player's current world focus, including the lower annex.
     if (!cameraViewport && view.desktopRaising && fieldArt?.field) {
       const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
-      cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
+      cameraY=clamp(cameraY+Math.max(0,-fit.y),scrollMinY(),scrollMaxY());
     }
-    cameraY = clamp(cameraY, 0, scrollMaxY());
+    cameraY = clamp(cameraY, scrollMinY(), scrollMaxY());
     cameraViewport = nextViewport;
     const cap=desktopRaisingViewportWidth(fieldArt?.field,12,raisingReference.reference);
     if(cap!==null)app.canvas?.parentElement?.style?.setProperty('--cm-ranch-unique-width',`${cap}px`);
@@ -933,7 +937,7 @@ export async function mountRaisingFieldPixiPresentation({
     const eased = 1 - Math.pow(1 - t, 3);
     const next = cameraFocus.from + cameraFocus.distance * eased;
     cameraX = fieldArt.field.wrapWidthPx ? wrapRaisingCamera(next, fieldArt.field.wrapWidthPx) : Math.max(0, next);
-    cameraY = clamp((cameraFocus.fromY ?? cameraY) + (cameraFocus.distanceY ?? 0) * eased, 0, scrollMaxY());
+    cameraY = clamp((cameraFocus.fromY ?? cameraY) + (cameraFocus.distanceY ?? 0) * eased, scrollMinY(), scrollMaxY());
     layoutFieldArt();
     if (t >= 1) cameraFocus = null;
   }
@@ -955,7 +959,7 @@ export async function mountRaisingFieldPixiPresentation({
     if (!entry || entry.root.destroyed || !(max > 0)) return 0;
     const top = drawnBodyTop(entry), feet = entry.root.y, margin = 4;
     const delta = top < margin ? margin - top : feet > app.screen.height - 12 ? app.screen.height - 12 - feet : 0;
-    return clamp(cameraY + delta, 0, max) - cameraY;
+    return clamp(cameraY + delta, scrollMinY(), max) - cameraY;
   }
 
   // A tap on a resident brings the rest of it into view once the finger is up,
@@ -998,15 +1002,30 @@ export async function mountRaisingFieldPixiPresentation({
     if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
     if(drag?.carried&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'){
       const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
-      const delta=raisingEdgeScroll(drag.lastPoint,view,ticker.deltaMS)/fit.scale;
-      if(delta){
-        const next=cameraX+delta,maxX=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
-        cameraX=fieldArt.field.wrapWidthPx?wrapRaisingCamera(next,fieldArt.field.wrapWidthPx):clamp(next,0,maxX);
-        layoutFieldArt();
-        const point=screenToNativeGround(drag.lastPoint);
-        const pointer={...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,inside:true,checkpoint:drag.tutorialCheckpoint};
-        if(drag.nativeHand)source.intents.updateHand?.(drag.creatureId,pointer);
-        source.intents.updateCarry?.(drag.creatureId,pointer);
+      const delta=raisingCarryEdgeScroll(drag.lastPoint,view,ticker.deltaMS);
+      if(delta.x||delta.y){
+        // DOM controls own their hits even if a touch still has canvas capture.
+        const rect=app.canvas.getBoundingClientRect();
+        const hit=globalThis.document?.elementFromPoint?.(
+          rect.left+drag.lastPoint.x*rect.width/view.width,
+          rect.top+drag.lastPoint.y*rect.height/view.height);
+        if(!hit||hit===app.canvas){
+          const next=cameraX+delta.x/fit.scale,maxX=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
+          const nextX=fieldArt.field.wrapWidthPx?wrapRaisingCamera(next,fieldArt.field.wrapWidthPx):clamp(next,0,maxX);
+          const nextY=clamp(cameraY-delta.y,fit.scrollMinY??0,fit.scrollMaxY??0);
+          if(nextX!==cameraX||nextY!==cameraY){
+            cameraX=nextX;cameraY=nextY;
+            layoutFieldArt();
+            // Reproject the stationary pointer AFTER both camera axes move,
+            // so the carried actor and its eventual drop stay under the hand.
+            const point=screenToNativeGround(drag.lastPoint);
+            if(point){
+              const pointer={...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,inside:true,checkpoint:drag.tutorialCheckpoint};
+              if(drag.nativeHand)source.intents.updateHand?.(drag.creatureId,pointer);
+              source.intents.updateCarry?.(drag.creatureId,pointer);
+            }
+          }
+        }
       }
     }
     fieldArt?.update(ticker.deltaMS);
@@ -1099,7 +1118,7 @@ export async function mountRaisingFieldPixiPresentation({
         const bodyTop=drawnBodyTop(entry);
         return {creatureId,x:point.x,y:point.y,state:native?.state,speciesIndex:native?.speciesIndex,nativeFrame:native?.nativeFrame,sequenceId:native?.sequenceId,nativeScreenPixels,
           bodyTop,footY:entry.root.y,nativeY:native?.positionQ12?native.positionQ12[1]/4096:null,
-          boardTop:fit?.y??null,scrollY:fit?.scrollY??0,scrollMaxY:fit?.scrollMaxY??0,
+          boardTop:fit?.y??null,scrollY:fit?.scrollY??0,scrollMinY:fit?.scrollMinY??0,scrollMaxY:fit?.scrollMaxY??0,
           nativePositionQ12:native?.positionQ12,
           groundScreen:native?.positionQ12?raisingNativeToScreen([native.positionQ12[0],native.positionQ12[1],0],fieldArt?.field,view,cameraX):null};
       }));
@@ -1304,6 +1323,9 @@ export async function mountRaisingFieldPixiPresentation({
   // held gesture when the browser/OS cancels a touch, through the same owner.
   const cancelNativePointer=event=>finishDrag({type:'pointercancel',pointerId:event.pointerId});
   app.canvas.addEventListener('pointercancel',cancelNativePointer);
+  app.canvas.addEventListener('lostpointercapture',cancelNativePointer);
+  const leaveCarryPointer=event=>{if(drag?.pointerId===event.pointerId)drag.lastPoint=null;};
+  app.canvas.addEventListener('pointerleave',leaveCarryPointer);
   app.ticker.add(updateAnimations);
 
   const unsubscribe = source.subscribe(sync);
@@ -1313,7 +1335,7 @@ export async function mountRaisingFieldPixiPresentation({
   const zoomButton=globalThis.document?.createElement('button')??null;
   const describeZoom=()=>{
     if(!zoomButton)return;
-    zoomButton.textContent=zoom===1?'− 100%':'+ 70%';
+    zoomButton.textContent=zoom===1?'−':'+';
     zoomButton.setAttribute('aria-label',uiText(zoom===1?'Zoom out ranch (overview)':'Zoom in ranch (detail)'));
     zoomButton.title=uiText('Pinch or scroll over the ranch to zoom');
     zoomButton.disabled=!canZoom();
@@ -1465,7 +1487,7 @@ export async function mountRaisingFieldPixiPresentation({
         threeUsed: false,
         frameRevision: latestRevision,
         residentCount: actors.size,
-        residentAssets:[...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,error:e.evolutionAssetError??e.assetError??null,visible:e.visibleGeometry??null})),
+        residentAssets:[...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,hasVisibleSprite:Boolean(e.sprite),loadKind:['loading','error'].includes(e.evolutionAssetState)?'evolution':e.pendingAnimation!=null&&e.sprite?'animation':'appearance',error:e.evolutionAssetError??e.assetError??null,visible:e.visibleGeometry??null})),
         foodCount:foodGraphics.size,
         wasteCount:wasteGraphics.size,
         careArt:'LICENSED_PIXEL_FAITHFUL_WITH_AUTHORED_CELEBRATION',
@@ -1513,6 +1535,8 @@ export async function mountRaisingFieldPixiPresentation({
       app.stage.off("pointerupoutside", finishDrag);
       app.stage.off("pointercancel", finishDrag);
       app.canvas.removeEventListener('pointercancel',cancelNativePointer);
+      app.canvas.removeEventListener('lostpointercapture',cancelNativePointer);
+      app.canvas.removeEventListener('pointerleave',leaveCarryPointer);
       for (const entry of actors.values()) entry.loadToken += 1;
       if (scene.parent) scene.parent.removeChild(scene);
       scene.destroy({ children: true });

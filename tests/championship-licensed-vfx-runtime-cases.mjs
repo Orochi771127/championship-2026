@@ -158,3 +158,75 @@ test("battle VFX overlay uses the Pixi ticker, authored camera, and no pointer",
   assert.match(main, /vfxArt/);
   assert.doesNotMatch(main, /battleWeatherVfx|publishWeather/);
 });
+
+// CPU/fake renderer checks do not establish real WebGL/iOS crash acceptance.
+import {prepareBattleVfxGpu} from '../src/championship/presentation/vs5/prepareBattleVfxGpu.js';
+function warmupFixture(count=3){
+ const groups=Array.from({length:count},(_,i)=>({visible:i===0,frustumCulled:i%2===0,
+  traverse(fn){fn(this);}}));
+ const records=[],draws=[],scene={},camera={};let clears=0;
+ const renderer={domElement:{style:{visibility:'inherit'}},pixelRatio:1,context:{same:true,isContextLost:()=>false},getContext(){return this.context;},
+  render(s,c){assert.equal(s,scene);assert.equal(c,camera);assert.equal(this.domElement.style.visibility,'hidden');
+   assert.equal(groups.filter(g=>g.visible).length,1);assert.ok(groups.every(g=>g.frustumCulled===false));draws.push(groups.findIndex(g=>g.visible));},
+  clear(){clears++;}};
+ const original=groups.map(g=>({visible:g.visible,frustumCulled:g.frustumCulled}));
+ const options={renderer,groups,scene,camera,yieldTask:async()=>{},record:(t,r)=>records.push({type:t,...r})};
+ const restored=(expectedVisibility='inherit')=>{assert.deepEqual(groups.map(g=>({visible:g.visible,frustumCulled:g.frustumCulled})),original);
+  assert.equal(renderer.domElement.style.visibility,expectedVisibility);assert.equal(renderer.pixelRatio,1);assert.equal(renderer.context.same,true);};
+ return {options,groups,renderer,records,draws,restored,clears:()=>clears};
+}
+test('VFX first-use preparation submits one existing group at a time with no visible flash or context replacement',async()=>{
+ const h=warmupFixture(81);const result=await prepareBattleVfxGpu(h.options);
+ assert.equal(result.groups,81);assert.equal(result.submissionOnly,true);assert.deepEqual(h.draws,Array.from({length:81},(_,i)=>i));
+ assert.deepEqual(h.records.map(r=>[r.phase,r.gpuWarmupGroups]),[['start',0],['done',81]]);assert.equal(h.clears(),1);h.restored();
+});
+test('VFX preparation restores flags/canvas on render failure and never claims ready',async()=>{
+ const h=warmupFixture(),failure=Error('controlled render failure');h.renderer.render=()=>{throw failure;};
+ h.renderer.clear=()=>{throw Error('secondary clear failure');};
+ await assert.rejects(prepareBattleVfxGpu(h.options),e=>e===failure);h.restored('hidden');
+ assert.deepEqual(h.records.map(r=>r.phase),['start','error']);assert.equal(h.records.at(-1).gpuWarmupGroups,0);
+});
+test('VFX preparation cancellation during yielded work prevents the next submission and restores state',async()=>{
+ const h=warmupFixture();let active=true;
+ await assert.rejects(prepareBattleVfxGpu({...h.options,isActive:()=>active,yieldTask:async()=>{active=false;}}),/WARMUP_CANCELLED/);
+ assert.equal(h.draws.length,0);assert.equal(h.records.some(r=>r.phase==='done'),false);h.restored();
+});
+test('VFX preparation validates finite unique pool and diagnostic failures do not affect submission',async()=>{
+ for(const count of [0,83]){const h=warmupFixture(count);await assert.rejects(prepareBattleVfxGpu(h.options),/GROUP_BOUND/);assert.equal(h.draws.length,0);h.restored();}
+ const h=warmupFixture();await assert.rejects(prepareBattleVfxGpu({...h.options,groups:[h.groups[0],h.groups[0]]}),/GROUP_BOUND/);
+ await prepareBattleVfxGpu({...h.options,record(){throw Error('diagnostic unavailable');}});assert.equal(h.draws.length,3);h.restored();
+});
+test('VFX first-use preparation stays before overlay ticker registration and opening-ready gate',()=>{
+ const source=fs.readFileSync('src/championship/presentation/vs5/createBattleVfxThreeOverlay.js','utf8');
+ assert.ok(source.indexOf('await prepareBattleVfxGpu')<source.indexOf('stage.app.ticker.add(advance'));
+ assert.ok(source.includes("stage:'first-vfx-render'"));
+ const main=fs.readFileSync('src/championship/app/main.js','utf8');
+ assert.ok(main.indexOf('vfxOverlay = await loadOptionalBattleVfxOverlay')<main.indexOf('activeRuntime.markOpeningReady()'));
+ assert.ok(main.includes('() => !disposed'));
+});
+
+test('VFX context loss before or during render rejects instead of recording false completion',async()=>{
+ for(const during of [false,true]){
+  const h=warmupFixture();let lost=!during;h.renderer.context.isContextLost=()=>lost;
+  const render=h.renderer.render;h.renderer.render=function(...args){render.apply(this,args);lost=true;};
+  await assert.rejects(prepareBattleVfxGpu(h.options),/CONTEXT_LOST/);
+  assert.equal(h.records.some(r=>r.phase==='done'),false);assert.equal(h.records.at(-1).gpuWarmupGroups,0);h.restored('hidden');
+ }
+});
+test('VFX clear-only failure remains failure and never exposes a preparation frame',async()=>{
+ const h=warmupFixture(),failure=Error('clear failed');h.renderer.clear=()=>{throw failure;};
+ await assert.rejects(prepareBattleVfxGpu(h.options),e=>e===failure);
+ assert.equal(h.records.some(r=>r.phase==='done'),false);assert.equal(h.records.at(-1).gpuWarmupGroups,3);h.restored('hidden');
+});
+test('VFX nested sidecar visibility restores exactly and PWA430x932/DPR3 context is not resized by preparation',async()=>{
+ const h=warmupFixture(1),children=[{visible:false,frustumCulled:true},{visible:true,frustumCulled:false}];
+ h.groups[0].traverse=fn=>{fn(h.groups[0]);children.forEach(fn);};
+ const original=structuredClone(children),canvasSize={width:430,height:932},devicePixelRatio=3;
+ h.renderer.canvasSize=canvasSize;
+ const render=h.renderer.render;h.renderer.render=function(...args){assert.ok(children.every(c=>c.visible&&!c.frustumCulled));render.apply(this,args);};
+ await prepareBattleVfxGpu(h.options);assert.deepEqual(children,original);h.restored();
+ assert.deepEqual(h.renderer.canvasSize,{width:430,height:932});assert.equal(devicePixelRatio,3);assert.equal(h.renderer.pixelRatio,1);
+ const source=fs.readFileSync('src/championship/presentation/vs5/createBattleVfxThreeOverlay.js','utf8');
+ const prepared=source.indexOf('await prepareBattleVfxGpu');
+ assert.ok(source.indexOf('resize();',prepared)<source.indexOf('stage.onResize(resize)',prepared));
+});

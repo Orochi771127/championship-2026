@@ -1,0 +1,136 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createBattleFieldView} from '../src/championship/app/vs5Screens.js';
+import {setLocale} from '../src/championship/text/locale.js';
+import {createBattleFxCamera,clampBattleCameraToMap} from '../src/championship/presentation/battleFx/battleFxCamera.js';
+class Node {
+  constructor(tag){Object.assign(this,{tagName:tag,children:[],dataset:{},attributes:{},listeners:{},style:{},className:'',textContent:''});this.classList={add:n=>this.className+=' '+n,remove:()=>{}};}
+  get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
+  set textContent(value){this._text=String(value);this.children=[];}
+  append(...nodes){this.children.push(...nodes);}
+  prepend(...nodes){this.children.unshift(...nodes);}
+  replaceChildren(...nodes){this._text='';this.children=nodes;}
+  setAttribute(k,v){this.attributes[k]=v;}
+  getAttribute(k){return this.attributes[k]??null;}
+  addEventListener(k,v){this.listeners[k]=v;}
+}
+const all=n=>[n,...n.children.flatMap(all)];
+const by=(n,c)=>all(n).filter(x=>x.className.split(' ').includes(c));
+function frame(count=6){return {arena:{identifier:'BATTLE_VOLCANO'},clock:{ratio:.8,tier:1},combatants:Array.from({length:count},(_,slot)=>({slot,team:slot<3?0:1,present:true,displayName:'Long localized fighter name 日本語 ภาษาไทย Tiếng Việt',hp:{current:12345,maximum:65535,ratio:.188},resource:{current:650,maximum:999,ratio:.65},down:slot===4})),outcome:{ended:false}};}
+for(const locale of ['zh-Hant','en','ja','th','vi']) test(`${locale}: six actors retain numbers inside both bars, down state and exit`,()=>{
+  const before=globalThis.document;globalThis.document={createElement:t=>new Node(t)};setLocale(locale);
+  try {
+    const root=new Node('root'),f=frame();let exited=0;
+    const view=createBattleFieldView({root,frame:f,mountField:()=>({}),onExit:()=>exited++,dynamicFx:true,responsiveLayout:true});view.render(f);
+    assert.equal(root.children[0].dataset.hud,'floating');
+    assert.equal(by(root,'cm-vs5-fighter').length,6);
+    assert.equal(by(root,'cm-vs5-meter--resource').length,6);
+    for(const bar of by(root,'cm-vs5-meter--hp')) {assert.equal(bar.children[1].textContent,'HP 12345 / 65535');assert.deepEqual(bar.children[1].children.map(n=>n.textContent),['HP 12345',' / 65535']);assert.match(bar.attributes['aria-label'],/12345/);}
+    for(const bar of by(root,'cm-vs5-meter--resource')) {assert.equal(bar.children[1].textContent,'TP 650 / 999');assert.deepEqual(bar.children[1].children.map(n=>n.textContent),['TP 650',' / 999']);}
+    assert.equal(by(root,'cm-vs5-fighter').find(c=>c.dataset.slot==='4').dataset.down,'true');
+    assert.ok(by(root,'cm-vs5-exit')[0].textContent);by(root,'cm-vs5-exit')[0].listeners.click();assert.equal(exited,1);
+    assert.equal(by(root,'cm-vs5-clock').length,1);assert.equal(by(root,'cm-vs5-log').length,1);
+    view.dispose();
+  }finally{globalThis.document=before;setLocale('zh-Hant');}
+});
+test('classic retains separate HP text and player-only TP',()=>{
+ const before=globalThis.document;globalThis.document={createElement:t=>new Node(t)};
+ try {const root=new Node('root'),f=frame();const view=createBattleFieldView({root,frame:f,mountField:()=>({})});view.render(f);
+ assert.equal(root.children[0].dataset.hud,undefined);assert.equal(by(root,'cm-vs5-meter--resource').length,3);
+ assert.equal(by(root,'cm-vs5-meter--hp')[0].children.length,1);view.dispose();} finally {globalThis.document=before;}
+});
+test('cover has no uncovered edge on tall phones, landscape, desktop and resize; no stretch/rotation',()=>{
+ const art={x:0,y:0,width:416,height:272};
+ for(const [width,height] of [[320,568],[390,844],[430,932],[844,390],[1024,768],[1920,1080]]){
+ const camera=createBattleFxCamera({boundedMap:true,responsiveLayout:true,wideCover:true});
+ for(const x of [0,104,208,400])for(const y of [0,136,260]){
+ const box={left:x,top:y,right:x+16,bottom:y+12};
+ const shot=camera.update({viewport:{width,height},art,subjects:[{slot:0,team:0,...box}],dtMs:16});
+ const out=clampBattleCameraToMap({viewport:{width,height},art,transform:shot,box});
+ assert.ok(out.x<=1e-8&&out.y<=1e-8);assert.ok(out.x+416*out.zoom>=width-1e-8);assert.ok(out.y+272*out.zoom>=height-1e-8);
+ assert.ok(out.zoom<=Math.max(width/416,height/272)*1.05+1e-8);assert.equal(out.rotation,undefined);
+ }
+ }
+});
+test('floating CSS moves actual field behind HUD, keeps pointer input on field/exit and touch/safe-area rules',()=>{
+ const css=fs.readFileSync(new URL('../src/championship/app/vs5Styles.css',import.meta.url),'utf8').split('/* Owner 2026-10-23:')[1];
+ assert.match(css,/position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%/);
+ assert.match(css,/cm-vs5-fighter\[data-present="false"\] \{ display: none/);
+ assert.match(css,/pointer-events: none/);assert.match(css,/pointer-events: auto/);
+ assert.match(css,/grid-template-areas: none/);
+ assert.match(css,/min-height: 44px/);assert.match(css,/safe-area-inset-bottom/);
+ assert.match(css,/display: flex; flex-direction: row; flex-wrap: nowrap/);
+});
+test('failed-FX fallback contain-art coordinates still cover through unconditional final map clamp',()=>{
+ for(const [width,height] of [[320,568],[390,844],[844,390],[1920,1080]]){
+  const fit=Math.min(width/416,height/272);
+  const art={x:(width-416*fit)/2,y:(height-272*fit)/2,width:416*fit,height:272*fit};
+  const t=clampBattleCameraToMap({viewport:{width,height},art,transform:{zoom:1,x:0,y:0}});
+  assert.ok(art.x*t.zoom+t.x<=1e-8);assert.ok(art.y*t.zoom+t.y<=1e-8);
+  assert.ok((art.x+art.width)*t.zoom+t.x>=width-1e-8);assert.ok((art.y+art.height)*t.zoom+t.y>=height-1e-8);
+ }
+ const source=fs.readFileSync(new URL('../src/championship/presentation/vs5/createBattleFieldPixiPresentation.js',import.meta.url),'utf8');
+ assert.match(source,/const transform=fieldArt \? clampBattleCameraToMap/);
+});
+
+test('modern floating fighter chips remain compact with thinner TP and no old full-width tracks',()=>{
+ const css=fs.readFileSync(new URL('../src/championship/app/vs5Styles.css',import.meta.url),'utf8').split('/* Owner 2026-10-23:')[1];
+ assert.match(css,/flex: 0 1 calc\(140px \* var\(--text-scale, 1\)\); width: calc\(140px \* var\(--text-scale, 1\)\); max-width: 100%; min-width: 0/);
+ assert.match(css,/roster--opponent \{ justify-content: flex-end/);
+ assert.match(css,/height: calc\(16px \* var\(--text-scale, 1\)\)/);
+ assert.match(css,/meter--resource \{ min-height: calc\(13px \* var\(--text-scale, 1\)\)/);
+ assert.match(css,/width: min\(168px, 100%\)/);
+ assert.match(css,/white-space: normal; overflow-wrap: anywhere/);
+ assert.ok(css.indexOf('roster--opponent { justify-content: flex-end')>css.indexOf('flex-direction: row; flex-wrap: nowrap; justify-content: flex-start'),'team alignment wins generic equal-specificity cascade');
+ assert.doesNotMatch(css,/grid-template-columns: repeat|height: calc\(19px/);
+ for(const width of [320,360,390,844,1366]){const available=width-20,card=Math.min(140,(available-12)/3);assert.ok(3*card+12<=available);assert.ok(card>=96&&card<=140);}
+ assert.match(css,/flex-wrap: wrap; align-items: center; align-content: center/);
+ assert.match(css,/meter__number-part \{ flex: 0 0 auto; white-space: pre/);
+ assert.match(css,/position: absolute; inset: 0 auto 0 0; height: auto/);
+ assert.match(css,/font: 600 calc\(11px \* var\(--text-scale, 1\)\)/);
+});
+
+for(const count of [1,2,3])test(`${count} actors per team: reusable current/max fragments preserve zero and five digits`,()=>{
+ const before=globalThis.document;globalThis.document={createElement:t=>new Node(t)};
+ try{
+  const root=new Node('root'),f=frame(count*2);f.combatants.forEach((c,i)=>{c.team=Math.floor(i/count);});
+  const view=createBattleFieldView({root,frame:f,mountField:()=>({}),dynamicFx:true,responsiveLayout:true});view.render(f);
+  assert.equal(by(root,'cm-vs5-fighter').length,count*2);
+  for(const team of ['0','1'])assert.equal(by(root,'cm-vs5-fighter').filter(c=>c.dataset.team===team).length,count);
+  const hp=by(root,'cm-vs5-meter--hp')[0],tp=by(root,'cm-vs5-meter--resource')[0],parts=[...hp.children[1].children,...tp.children[1].children];
+  const next={...f,combatants:f.combatants.map(c=>({...c,hp:{current:0,maximum:65535,ratio:0},resource:{current:65535,maximum:65535,ratio:1}}))};view.render(next);
+  assert.deepEqual([...hp.children[1].children,...tp.children[1].children],parts,'updates reuse all four numeral spans');
+  assert.equal(hp.children[1].textContent,'HP 0 / 65535');assert.equal(tp.children[1].textContent,'TP 65535 / 65535');
+  assert.equal(hp.attributes['aria-valuenow'],'0');assert.equal(tp.attributes['aria-valuemax'],'65535');
+  assert.equal(hp.children[0].style.width,'0%');assert.equal(tp.children[0].style.width,'100%');view.dispose();
+ }finally{globalThis.document=before;}
+});
+test('adaptive width arithmetic retains one/two member compact alignment without reserving empty columns',()=>{
+ for(const viewport of [320,360,390,568,844,1366])for(const textScale of [1,1.25])for(const count of [1,2,3]){
+  const available=viewport-20,gaps=6*(count-1),basis=140*textScale,width=Math.min(basis,(available-gaps)/count);
+  assert.ok(count*width+gaps<=available+.001);assert.ok(width<=basis);assert.ok(width>=96);
+  if(count*basis+gaps<=available)assert.equal(width,basis);
+ }
+});
+
+// The more-specific TP rule occurs after the generic 11px shorthand. Check
+// that actual override, not just the existence of the earlier baseline.
+function resourceMeterFontPx(css,textScale) {
+ const selector='.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__value';
+ const clean=css.replace(/\/\*[\s\S]*?\*\//g,''),start=clean.indexOf(selector);
+ assert.ok(start>=0);assert.equal(clean.lastIndexOf(selector),start,'resource font override must be unambiguous');
+ const declaration=clean.slice(start+selector.length).match(/^\s*\{([^}]*)\}/)?.[1];
+ const size=declaration?.match(/font-size:\s*calc\((\d+(?:\.\d+)?)px \* var\(--text-scale, 1\)\);/);
+ assert.ok(size,'resource-specific font expression must remain explicitly bounded');
+ return Number(size[1])*textScale;
+}
+function assertResourceMeterFont(css) {
+ for(const scale of [1,1.25])assert.ok(resourceMeterFontPx(css,scale)>=11*scale,'resource-specific final font rule cannot lower the 11px baseline');
+}
+test('final TP-specific font override resolves to at least 11px at 100% and 125%',()=>{
+ const css=fs.readFileSync(new URL('../src/championship/app/vs5Styles.css',import.meta.url),'utf8');
+ assertResourceMeterFont(css);
+ const lower=css.replace(/(\.cm-vs5-meter--resource \.cm-vs5-meter__value \{ font-size: calc\()11px/,(_whole,prefix)=>prefix+'10px');
+ assert.notEqual(lower,css);assert.throws(()=>assertResourceMeterFont(lower),/cannot lower the 11px baseline/);
+});

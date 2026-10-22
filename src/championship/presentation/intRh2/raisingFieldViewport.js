@@ -85,7 +85,8 @@ export function raisingNativeScreenPixels(field, viewport, padding = 12) {
 /**
  * Where the native board's top edge sits, and how far the frame may scroll.
  *
- * When the headroom and the board fit, the pair is centred together. When
+ * When the headroom and the board fit, the pair starts centred together and
+ * may pan within bounded signed screen-pixel offsets. When
  * they do not, the whole board is shown resting on the bottom padding and
  * `viewport.scrollY` (screen pixels, clamped to `scrollMaxY`) lowers it to
  * reveal the headroom. Art, residents, shadows and input all read this one
@@ -101,7 +102,15 @@ function nativeBoardPlacement(field, viewport, padding, scale) {
   const headroom = RAISING_TOP_HEADROOM_NATIVE * field.nativePixelWorldScale * scale;
   const available = viewport.height - padding;
   if (headroom + height <= available) {
-    return { y: Math.round((available - headroom - height) / 2 + headroom), scrollMaxY: 0, scrollY: 0 };
+    // Owner adaptation: a fitting board still pans vertically. Keep its initial
+    // framing and scale; retain up to 48 native pixels of ground in view.
+    const originY = Math.round((available - headroom - height) / 2 + headroom);
+    const visible = Math.min(height, 48 * field.nativePixelWorldScale * scale);
+    const scrollMinY = Math.min(0, padding + visible - height - originY);
+    const scrollMaxY = Math.max(0, available - visible - originY);
+    const requested = Number(viewport.scrollY);
+    const scrollY = Math.min(scrollMaxY, Math.max(scrollMinY, Number.isFinite(requested) ? requested : 0));
+    return { y: Math.round(originY + scrollY), scrollMinY, scrollMaxY, scrollY };
   }
   const scrollMaxY = headroom + height - available;
   const requested = Number(viewport.scrollY);
@@ -133,8 +142,8 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   const x = nativeWindow ? padding - scroll*scale : (viewport.width-width)/2;
   if (!nativeWindow) return { x, y: (viewport.height - height) / 2, width, height, scale };
   // Whole screen pixels for the board's top edge, so rows do not shimmer.
-  const { y, scrollMaxY, scrollY } = nativeBoardPlacement(field, viewport, padding, scale);
-  return { x, y, width, height, scale, scrollY, scrollMaxY };
+  const { y, scrollMinY = 0, scrollMaxY, scrollY } = nativeBoardPlacement(field, viewport, padding, scale);
+  return { x, y, width, height, scale, scrollY, scrollMinY, scrollMaxY };
 }
 
 /**
@@ -176,7 +185,7 @@ export function resizeRaisingCamera(field, previousViewport, nextViewport,
   return {
     cameraX: field.wrapWidthPx > 0 ? wrapRaisingCamera(requestedX, field.wrapWidthPx)
       : Math.min(maxX, Math.max(0, requestedX)),
-    cameraY: Math.min(next.scrollMaxY ?? 0, Math.max(0, requestedY))
+    cameraY: Math.min(next.scrollMaxY ?? 0, Math.max(next.scrollMinY ?? 0, requestedY))
   };
 }
 
@@ -198,7 +207,7 @@ export function zoomRaisingCamera(field, viewport, nextZoom, point, {cameraX=0,c
   const maxX=Math.max(0,field.worldWidthPx-(viewport.width-24)/after.scale);
   return {
     cameraX:field.wrapWidthPx?wrapRaisingCamera(x,field.wrapWidthPx):Math.max(0,Math.min(maxX,x)),
-    cameraY:Math.max(0,Math.min(after.scrollMaxY??0,y))
+    cameraY:Math.max(after.scrollMinY??0,Math.min(after.scrollMaxY??0,y))
   };
 }
 
@@ -209,6 +218,19 @@ export function raisingEdgeScroll(point,viewport,deltaMs){
   const edge=Math.min(48,viewport.width/6);
   const strength=point.x<edge?-(edge-point.x)/edge:point.x>viewport.width-edge?(point.x-viewport.width+edge)/edge:0;
   return strength*RAISING_CARRY_EDGE_SPEED*Math.min(50,Math.max(0,deltaMs))/1000;
+}
+
+/** Screen-space edge travel for a held resident. Positive Y reveals lower
+ * rows (the presenter subtracts it from the board's screen-space offset).
+ * Preserve the horizontal helper's speed/edge policy; cap corner speed too. */
+export function raisingCarryEdgeScroll(point, viewport, deltaMs) {
+  if (!point || ![point.x, point.y, viewport.width, viewport.height, deltaMs].every(Number.isFinite)
+    || viewport.width <= 0 || viewport.height <= 0) return {x:0,y:0};
+  const x=raisingEdgeScroll(point,viewport,deltaMs);
+  const y=raisingEdgeScroll({x:point.y,y:point.x},{width:viewport.height,height:viewport.width},deltaMs);
+  const limit=RAISING_CARRY_EDGE_SPEED*Math.min(50,Math.max(0,deltaMs))/1000;
+  const length=Math.hypot(x,y),factor=length>limit&&length>0?limit/length:1;
+  return {x:x*factor,y:y*factor};
 }
 
 export function raisingRegionBounds(region, viewport) {
@@ -276,5 +298,5 @@ export function centerRaisingNativeY(field, viewport, nativeY, cameraX = 0) {
   const current = fit.scrollY ?? 0;
   if (!Number.isFinite(nativeY) || !(field?.nativePixelWorldScale > 0)) return current;
   const delta = Math.floor(viewport.height / 2) - fit.y - nativeY * field.nativePixelWorldScale * fit.scale;
-  return Math.min(fit.scrollMaxY ?? 0, Math.max(0, Math.round(current + delta)));
+  return Math.min(fit.scrollMaxY ?? 0, Math.max(fit.scrollMinY ?? 0, Math.round(current + delta)));
 }

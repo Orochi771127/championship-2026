@@ -1,3 +1,4 @@
+import {SUPERSEDED_GR_FIXES,SUPERSEDED8,APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -119,9 +120,9 @@ test('pinned gameplay data retains all values; derived vendor module has identic
 test('selected public hero mappings retain exact ID, image hash, dimensions and per-role resolution; authoring versions remain intact',()=>{
   const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));
   const authoring=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.r1.json'),'utf8'));
-  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,194);
+  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,230);
   for(const hero of heroes.entries)assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-hero`),{id:`${hero.speciesId}:database-hero`,src:hero.src,sha256:hero.sha256,width:hero.width,height:hero.height});
-  assert.equal(publicRuntimeAsset('species-188:database-hero'),null);
+  assert.equal(publicRuntimeAsset('species-188:database-hero').sha256,APPROVED10.find(e=>e.speciesIndex===188).sha256);
   assert.throws(()=>validatePublicRuntimeAssets({schemaVersion:1,assets:[{...publicRuntimeAsset('species-116:database-hero'),approvalMessage:'private'}]}),/PUBLIC_RUNTIME_ASSET_INVALID/);
 });
 
@@ -137,7 +138,7 @@ test('95 display renditions and thumbnails preserve exact approved source identi
  }throw Error('WEBP_DIMENSIONS_MISSING');};
  const replacement=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-215-20261018/manifest.json','utf8'));
  const replacementFlowers=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-054-059-20261018/manifest.json','utf8'));
- const superseded=[...replacement.supersededEntries,...replacementFlowers.supersededEntries];
+ const superseded=[...SUPERSEDED_GR_FIXES,...SUPERSEDED8,...replacement.supersededEntries,...replacementFlowers.supersededEntries];
  for(const row of recipe.rows){
   const master=masters.find(e=>e.speciesIndex===row.speciesIndex),liveHero=heroes.find(e=>e.speciesIndex===row.speciesIndex),hero=superseded.find(e=>e.speciesIndex===row.speciesIndex)??liveHero;
   for(const field of ['speciesId','displayCode'])assert.equal(hero[field],master[field]);
@@ -152,5 +153,6 @@ test('95 display renditions and thumbnails preserve exact approved source identi
    if(!superseded.some(e=>e.speciesIndex===row.speciesIndex))assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`),{id:`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`,src:media.src,sha256:media.sha256,width:media.width,height:media.height});
   }
  }
- for(const id of [82,184,186,187,188])assert.equal(heroes.some(row=>row.speciesIndex===id),false);
+ for(const id of [184,186,188])assert.deepEqual(heroes.find(row=>row.speciesIndex===id),APPROVED10.find(e=>e.speciesIndex===id));assert.deepEqual(heroes.find(row=>row.speciesIndex===187),APPROVED10.find(e=>e.speciesIndex===187));
+ assert.equal(masters.some(row=>row.speciesIndex===82),true);assert.notEqual(heroes.find(row=>row.speciesIndex===82)?.src,masters.find(row=>row.speciesIndex===82)?.src);assert.equal(heroes.find(row=>row.speciesIndex===82)?.displayCode,'MA15');
 });
