@@ -1,0 +1,72 @@
+[
+  {
+    "fixture": "wrap-plan.json",
+    "historicalSource": "stair-mat-audit/plan.json",
+    "sourceSha256": "1951249c58ee84b0448bafcb9307e70b264ed2e4cbacf98d52f5622b9a4fdcfa",
+    "fixtureSha256": "4c42027178cd396c1a5e29a26ed726f80c0230dcc433c9515c0be21506dce739",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "layouts.json",
+    "historicalSource": "all37-minimal-render-plan/asset-plan.json",
+    "sourceSha256": "75c73d1929cf5e33e080d7a63811fb86f7fafa55efe9a0556ec23c0158bddbfc",
+    "fixtureSha256": "09ad8c18e7cee3f2689f44501611c7cbff9187fa671611b7c6907419097ca80e",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "continuity.json",
+    "historicalSource": "stair-mat-support-proposal/logical-continuity-receipt.json",
+    "sourceSha256": "fd37a5a11eb97b4a17d414653a34f9cc5146bc012e6e53718e2c335ed48f093e",
+    "fixtureSha256": "40b2a05f025e83e48d71145338c766e43425fa7af6656759041a60777f417a9c",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "captured-inverse.json",
+    "historicalSource": "ci-evidence/39712605229/chromium/chromium/cases/normal-point-height-results.json",
+    "sourceSha256": "bda9f943bacd392d1ff935231ae774d93b1ceaadf43552b85cf3aeac9191edb4",
+    "fixtureSha256": "ec686ee95c4ce9de9f6d8ff70dcf7134791524cbe7a989942971ac6a7395a393",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "historical-v2-snippets.txt",
+    "historicalSource": "stair-mat-height-runtime-v2/ranchThreeScene.js",
+    "sourceSha256": "288783ac6a2a439eb7c341baf58763ac4549d086857ffc026853505dd7615f63",
+    "fixtureSha256": "03f61afde12592162fcce9535425f473206c82609814926008a31dcabbe9bd92",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "historical-v3-snippets.txt",
+    "historicalSource": "stair-mat-height-runtime-v3/ranchThreeScene.js",
+    "sourceSha256": "a2b55e308112ac1ce838913105e649142bad3883a2e4ed2f02a04a37b9ef77a6",
+    "fixtureSha256": "da3b71173d7b389a9ae38a28363b466b6c8749ef5f43b9063e3c3af5675e15e7",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "cm07-border-fixtures.json",
+    "historicalSource": "seam-candidate/cm07-fixtures.json",
+    "sourceSha256": "12e042db89d158e021753276200cbb079d85e1dd215741fb5a2c8249d711b260",
+    "fixtureSha256": "0f8677c6d1566f7b96c55f7e85a38d70570da3cb0de1783220785304f75710a8",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "cm07-metadata.json",
+    "historicalSource": "edge-source/all37-glb-metadata.json",
+    "sourceSha256": "5bd8b177bd36e536a78771bd7a8a31e8446fd37ebc4639658e1feba7e864ab06",
+    "fixtureSha256": "b7c798f55dcaf346432638c20a320e01fa6521b6a7df0aecc58f6fc295c391ec",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "point-cm18-tread4-waste.json",
+    "historicalSource": "ci-evidence/39709307899/webkit/webkit/cases/point/point-cm18-tread4-waste/evidence.json.gz",
+    "sourceSha256": "d039701eb9b48b1637b0adfc8656562cd0cc4c43b415d9af38b68e9568907307",
+    "fixtureSha256": "8e5f41561df73219124ec7a454d21212cf9c88733df9d9728a9b33ad7f64ffc0",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  },
+  {
+    "fixture": "point-cm34-mat-waste.json",
+    "historicalSource": "ci-evidence/39709307899/webkit/webkit/cases/point/point-cm34-mat-waste/evidence.json.gz",
+    "sourceSha256": "f42635991cb5b5eacd269e45a8b9c59440d0cec9ad49aa7a218b6503868e9fcd",
+    "fixtureSha256": "a136f1ef24cb12bef15cbcda05ebfb6804b2fc62b43e07e1da615b3c3c90d7e8",
+    "meaning": "Historical public-code or fresh isolated test evidence; not new GPU success"
+  }
+]

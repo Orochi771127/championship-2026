@@ -1,0 +1,242 @@
+{
+  "cases": [
+    {
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "point-wrap-field_cm18_01",
+      "fieldId": "field_cm18_01",
+      "pointNative": [
+        -692,
+        156
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "nativeZ": 0,
+      "wrapShiftNative": -960,
+      "expectedAdmitted": true,
+      "expectedHeightWorld": 0.09465029835700989,
+      "lane": "wrap",
+      "characterEntityId": "m106_nyaromon",
+      "maxSupportY": 0.1201668381690979,
+      "expectedQuery": {
+        "stableSourcePlacement": {
+          "moduleId": "championship:2026:cage:17",
+          "slotIndex": 3,
+          "instanceId": "audit:target",
+          "definitionIndex": 17
+        },
+        "originNative": [
+          192,
+          64
+        ],
+        "pointNative": [
+          268,
+          156
+        ],
+        "displayPointNative": [
+          -692,
+          156
+        ],
+        "wrapWidthNative": 960,
+        "wrapShiftNative": -960,
+        "terrainType": 0,
+        "clearance": 2,
+        "navigationComponent": 3,
+        "nativeOwnerIndex": 1,
+        "rendererOwnerIndex": 9,
+        "admission": {
+          "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+          "instanceId": "audit:target",
+          "moduleId": "championship:2026:cage:17",
+          "slotIndex": 3,
+          "definitionIndex": 17,
+          "nativeOwnerIndex": 1,
+          "navigationComponent": 3,
+          "terrain": 0,
+          "wrapWidthNative": 960,
+          "originNative": [
+            192,
+            64
+          ],
+          "localNative": [
+            76,
+            92
+          ],
+          "positionNative": [
+            268,
+            156
+          ]
+        },
+        "derivedSupportOwner": {
+          "ownerIndex": 9,
+          "fieldId": "field_cm18_01",
+          "shift": -960,
+          "groundComponent": "NOMINAL_GROUND"
+        },
+        "actualActorMoveCalled": false,
+        "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+      },
+      "expectedContact": {
+        "owner": {
+          "ownerIndex": 9,
+          "fieldId": "field_cm18_01",
+          "shift": -960,
+          "groundComponent": "NOMINAL_GROUND"
+        },
+        "acceptableGeometryHits": [
+          {
+            "authority": "EXACT_ADMITTED_AUTHORED_POINT",
+            "status": "VERIFIED_ADMITTED_AUTHORED_CONTACT",
+            "supportSheet": "stair-tread-3",
+            "sourceComponent": 456,
+            "sourceTriangleIndex": 40390,
+            "height": 0.09465029835700989
+          }
+        ],
+        "method": "INDEPENDENT_PYTHON_XZ_BARYCENTRIC_ON_PINNED_PHYSICAL_THEN_DERIVED_TRIANGLES"
+      }
+    },
+    {
+      "character": {
+        "id": "m106_nyaromon@5d8bc7fa",
+        "entityId": "m106_nyaromon",
+        "speciesId": "species-025",
+        "runtimePath": "assets/production/characters/accepted-20261010/m106_nyaromon-early64-raw-v2-r01/ranch-streaming-v1/468c5ced5e13e1f9/runtime.render.json",
+        "runtimeSha256": "e21e52dc2c663ba5e15357b49c04b9ca888bf1b70250a07a39948c98078ba08b",
+        "idle": [
+          0,
+          0,
+          "m106_nyaromon/main/cell_000"
+        ],
+        "supportExtreme": [
+          38,
+          0,
+          "m106_nyaromon/main/cell_063"
+        ],
+        "frameCount": 83
+      },
+      "sequenceId": 0,
+      "frameIndex": 0,
+      "texture": "m106_nyaromon/main/cell_000",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "point-wrap-field_cm34_01",
+      "fieldId": "field_cm34_01",
+      "pointNative": [
+        1188,
+        44
+      ],
+      "subjectKind": "actor",
+      "zoom": 1,
+      "nativeZ": 0,
+      "wrapShiftNative": 960,
+      "expectedAdmitted": true,
+      "expectedHeightWorld": 0.04995611310005188,
+      "lane": "wrap",
+      "characterEntityId": "m106_nyaromon",
+      "maxSupportY": 0.04995611310005188,
+      "expectedQuery": {
+        "stableSourcePlacement": {
+          "moduleId": "championship:2026:cage:30",
+          "slotIndex": 4,
+          "instanceId": "audit:target",
+          "definitionIndex": 30
+        },
+        "originNative": [
+          192,
+          -24
+        ],
+        "pointNative": [
+          228,
+          44
+        ],
+        "displayPointNative": [
+          1188,
+          44
+        ],
+        "wrapWidthNative": 960,
+        "wrapShiftNative": 960,
+        "terrainType": 0,
+        "clearance": 3,
+        "navigationComponent": 1,
+        "nativeOwnerIndex": 1,
+        "rendererOwnerIndex": 1,
+        "admission": {
+          "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+          "instanceId": "audit:target",
+          "moduleId": "championship:2026:cage:30",
+          "slotIndex": 4,
+          "definitionIndex": 30,
+          "nativeOwnerIndex": 1,
+          "navigationComponent": 1,
+          "terrain": 0,
+          "wrapWidthNative": 960,
+          "originNative": [
+            192,
+            -24
+          ],
+          "localNative": [
+            36,
+            68
+          ],
+          "positionNative": [
+            228,
+            44
+          ]
+        },
+        "derivedSupportOwner": {
+          "ownerIndex": 1,
+          "fieldId": "field_cm34_01",
+          "shift": 960,
+          "groundComponent": "NOMINAL_GROUND"
+        },
+        "actualActorMoveCalled": false,
+        "derivation": "ACTUAL_READONLY_PRODUCTION_GROUND_AND_RESOLVER_NOT_MANUAL_TOKEN"
+      },
+      "expectedContact": {
+        "owner": {
+          "ownerIndex": 1,
+          "fieldId": "field_cm34_01",
+          "shift": 960,
+          "groundComponent": "NOMINAL_GROUND"
+        },
+        "acceptableGeometryHits": [
+          {
+            "authority": "EXACT_ADMITTED_AUTHORED_POINT",
+            "status": "VERIFIED_ADMITTED_AUTHORED_CONTACT",
+            "supportSheet": "exercise-mat",
+            "sourceComponent": 13,
+            "sourceTriangleIndex": 644,
+            "height": 0.04995611310005188
+          }
+        ],
+        "method": "INDEPENDENT_PYTHON_XZ_BARYCENTRIC_ON_PINNED_PHYSICAL_THEN_DERIVED_TRIANGLES"
+      }
+    }
+  ]
+}

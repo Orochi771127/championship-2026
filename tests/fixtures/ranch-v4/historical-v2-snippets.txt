@@ -1,0 +1,47 @@
+  function updateContactTriangles(instance){
+    const mesh=instance.supportMesh;mesh.updateWorldMatrix(true,false);
+    const matrix=Array.from(mesh.matrixWorld.elements),key=matrix.join(',');
+    if(instance.contactMatrixKey!==key){instance.contactTriangles=transformContactTriangles(instance.supportTriangles,matrix);instance.logicalContactTriangles=instance.p.fieldId==='field_cm18_01'?transformContactTriangles(logicalBridges,matrix):[];instance.contactMatrixKey=key;}
+  }
+  function contactHeight(x,y,admission){
+    if(disposed)return {height:null,status:'DENIED_DISPOSED_CONTACT_SCENE',owner:null};
+    const owner=supportOwnerResolver?.resolve(admission,x)??null,eligible=eligibleSupportOwner(owner,instances,{requireRenderVisible:false});
+    if(!eligible.instance||!CONTACT_HEIGHT_FIELDS.has(eligible.instance.p.fieldId))return {height:null,status:eligible.status,owner};
+    const instance=eligible.instance;updateContactTriangles(instance);
+    const point=ranchNativeToWorld(x,y,0),hit=contactHeightAtPoint(instance.contactTriangles,point.x,point.z);
+    if(!hit){
+      const logical=logicalContactHeightAtPoint(instance.logicalContactTriangles,point.x,point.z);
+      if(logical)return {...logical,status:'VERIFIED_ADMITTED_DERIVED_LOGICAL_CONTACT',owner,supportSheet:logical.bridgeId,sourceComponent:null,queryNative:[x,y]};
+      return {height:null,status:'OUTSIDE_AUTHORED_AND_LOGICAL_CONTACT',owner};
+    }
+    const sheets=instance.contactSheets?.filter(sheet=>sheet.indices.includes(hit.sourceTriangleIndex))??[];
+    if(sheets.length!==1)throw Error('CONTACT_SHEET_NOT_UNIQUE');
+    return {...hit,status:'VERIFIED_ADMITTED_AUTHORED_CONTACT',owner,supportSheet:sheets[0].id,sourceComponent:sheets[0].component,queryNative:[x,y]};
+  }
+  function legacyGroundHeight(
+  function pickGroundNative(point,readAdmission=null){
+    let best={...point,height:0};const unit=field.nativePixelWorldScale;
+    for(const {p,shift} of instances){
+      const picked=ranchPickWalkSurface(point.x-p.x/unit-shift,point.y-p.y/unit,walkSurfaces[p.fieldId]);
+      if(picked.height>best.height)best={...point,y:picked.y+p.y/unit,height:picked.height};
+    }
+    // Test candidate ray intersections before querying ownership. Querying the
+    // base-height screen point first can select the adjacent native cell.
+    if(!disposed&&typeof readAdmission==='function'){
+      const candidates=[];
+      for(const instance of instances){
+        if(!CONTACT_HEIGHT_FIELDS.has(instance.p.fieldId)||!instance.supportMesh)continue;
+        updateContactTriangles(instance);
+        for(const hit of projectedContactIntersections([...instance.contactTriangles,...instance.logicalContactTriangles],point.x,point.y)){
+          const admitted=readAdmission(hit.x,hit.y),contact=contactHeight(hit.x,hit.y,admitted);
+          if(contact.height===null||contact.owner?.ownerIndex!==instance.p.ownerIndex||contact.owner?.fieldId!==instance.p.fieldId||contact.owner?.shift!==instance.shift||Math.abs(contact.height-hit.height)>1e-9)continue;
+          candidates.push({...hit,ownerIndex:instance.p.ownerIndex,shift:instance.shift});
+        }
+      }
+      candidates.sort((a,b)=>b.rayDepth-a.rayDepth||a.ownerIndex-b.ownerIndex||a.shift-b.shift||(a.sourceTriangleIndex??Infinity)-(b.sourceTriangleIndex??Infinity)||String(a.bridgeId).localeCompare(String(b.bridgeId))||(a.logicalTriangleIndex??0)-(b.logicalTriangleIndex??0));
+      const baselineWorld=ranchNativeToWorld(best.x,best.y,best.height),baselineRayDepth=baselineWorld.x*direction.x+baselineWorld.y*direction.y+baselineWorld.z*direction.z;
+      if(candidates[0]&&candidates[0].rayDepth>baselineRayDepth)best=candidates[0];
+    }
+    return {x:best.x,y:best.y};
+  }
+  return {render,dispose

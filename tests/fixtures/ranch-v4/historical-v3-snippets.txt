@@ -1,0 +1,103 @@
+  function depthEnvelopeMaterial(base) {
+    const material=base.clone();
+    const uniforms={
+      uRanchSupportTexture:{value:new THREE.DataTexture(new Float32Array(SUPPORT_MAX_TRIANGLES*16),4,SUPPORT_MAX_TRIANGLES,THREE.RGBAFormat,THREE.FloatType)},
+      uRanchSupportCount:{value:0},uRanchSupportMax:{value:0},uRanchBufferSize:{value:new THREE.Vector2(1,1)},
+      uRanchFloor:{value:0},
+      uRanchDirection:{value:direction},
+      uRanchViewProjection:{value:new THREE.Matrix4()}
+    };
+    const supportTexture=uniforms.uRanchSupportTexture.value;
+    supportTexture.minFilter=THREE.NearestFilter;supportTexture.magFilter=THREE.NearestFilter;supportTexture.generateMipmaps=false;supportTexture.needsUpdate=true;
+    material.userData.depthEnvelopeUniforms=uniforms;
+    material.addEventListener('dispose',()=>supportTexture.dispose());
+    material.onBeforeCompile=shader=>{
+      Object.assign(shader.uniforms,uniforms);
+      shader.vertexShader='varying vec3 vRanchWorldPosition;\n'+shader.vertexShader;
+      shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',
+        '#include <project_vertex>\nvRanchWorldPosition=(modelMatrix*vec4(transformed,1.0)).xyz;');
+      shader.fragmentShader='varying vec3 vRanchWorldPosition;\nuniform float uRanchFloor;\nuniform vec3 uRanchDirection;\nuniform mat4 uRanchViewProjection;\n'+shader.fragmentShader;
+      shader.fragmentShader=`uniform sampler2D uRanchSupportTexture;
+        uniform int uRanchSupportCount;uniform float uRanchSupportMax;uniform vec2 uRanchBufferSize;
+        float ranchSupportEdge(vec4 edge,vec2 p){return (edge.z-edge.x)*(p.y-edge.y)-(edge.w-edge.y)*(p.x-edge.x);}
+      `+shader.fragmentShader;
+      shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`#include <opaque_fragment>
+        // Preserve the rasterizer's exact original depth above the support.
+        gl_FragDepth=gl_FragCoord.z;
+        float fragmentFloor=uRanchFloor;
+        if(uRanchSupportCount>0 && vRanchWorldPosition.y<uRanchSupportMax+0.015){
+          vec2 supportPixel=gl_FragCoord.xy/uRanchBufferSize;
+          for(int i=0;i<72;i++){
+            if(i>=uRanchSupportCount)break;
+            vec4 info=texelFetch(uRanchSupportTexture,ivec2(3,i),0);
+            if(ranchSupportEdge(texelFetch(uRanchSupportTexture,ivec2(0,i),0),supportPixel)*info.y>=0.0 &&
+               ranchSupportEdge(texelFetch(uRanchSupportTexture,ivec2(1,i),0),supportPixel)*info.z>=0.0 &&
+               ranchSupportEdge(texelFetch(uRanchSupportTexture,ivec2(2,i),0),supportPixel)*info.w>=0.0){fragmentFloor=max(fragmentFloor,info.x+0.015);}
+          }
+        }
+        if(vRanchWorldPosition.y<fragmentFloor){
+          float clearance=(fragmentFloor-vRanchWorldPosition.y)/uRanchDirection.y;
+          vec3 proxy=vRanchWorldPosition+uRanchDirection*clearance;
+          vec4 clip=uRanchViewProjection*vec4(proxy,1.0);
+          gl_FragDepth=clamp(clip.z/clip.w*0.5+0.5,0.0,1.0);
+        }`);
+    };
+    material.customProgramCacheKey=()=> 'ranch-test-physical-support-v1';
+    return material;
+  }
+  function syncPhysicalSupport(item,root,box){
+    const started=performance.now(),uniforms=item.mesh.material.userData.depthEnvelopeUniforms;
+    uniforms.uRanchSupportCount.value=0;uniforms.uRanchSupportMax.value=0;
+    renderer.getDrawingBufferSize(uniforms.uRanchBufferSize.value);
+    const eligibility=eligibleSupportOwner(root.threeSupportOwner,instances);
+    item.physicalSupport={status:eligibility.status,candidateCount:0,rawCount:0,buildMs:0,owner:root.threeSupportOwner??null};
+    if(!eligibility.instance){item.physicalSupport.buildMs=performance.now()-started;return;}
+    const instance=eligibility.instance;
+    // Raised treads/mat use actual admitted point contact only. Never promote a
+    // neighboring higher tread into a generic projected-pixel support override.
+    if(CONTACT_HEIGHT_FIELDS.has(instance.p.fieldId)){item.physicalSupport={...item.physicalSupport,status:'ADMITTED_POINT_CONTACT_ONLY_NO_PROJECTED_TOP_OVERRIDE',buildMs:performance.now()-started};return;}
+    const {supportMesh,supportTriangles}=instance;
+    supportMesh.updateWorldMatrix(true,false);
+    // Fail closed for unknown tilt/scale: this pilot admits horizontal transforms only.
+    const m=supportMesh.matrixWorld.elements;
+    if(Math.abs(m[1])+Math.abs(m[9])>1e-12||m[5]<=0)throw Error('SUPPORT_INSTANCE_TILTED');
+    const buffer=uniforms.uRanchBufferSize.value,marginX=1/buffer.x,marginY=1/buffer.y;
+    const boxN={minX:box.x/width-marginX,maxX:(box.x+box.width)/width+marginX,minY:1-(box.y+box.height)/height-marginY,maxY:1-box.y/height+marginY};
+    const data=uniforms.uRanchSupportTexture.value.image.data;let count=0,maxHeight=-Infinity;
+    if(instance.supportProjectionFrame!==frames){
+      instance.supportProjection=supportTriangles.map(triangle=>{
+        const world=triangle.vertices.map(v=>new THREE.Vector3(...v).applyMatrix4(supportMesh.matrixWorld));
+        if(world.some(v=>Math.abs(v.y-world[0].y)>1e-10))throw Error('SUPPORT_WORLD_NON_HORIZONTAL');
+        const projected=world.map(v=>{const q=v.clone().project(camera);return [Math.fround((q.x+1)*.5),Math.fround((q.y+1)*.5)];});
+        return {projected,height:world[0].y,encoded:encodeProjectedTriangle(projected,world[0].y)};
+      });
+      instance.supportProjectionFrame=frames;
+    }
+    let changed=false;
+    for(const triangle of instance.supportProjection){
+      if(!projectedTriangleTouchesBox(triangle.projected,boxN))continue;
+      if(count>=SUPPORT_MAX_TRIANGLES)throw Error('SUPPORT_CANDIDATE_OVERFLOW');
+      for(let j=0;j<16;j++)if(data[count*16+j]!==triangle.encoded[j]){data[count*16+j]=triangle.encoded[j];changed=true;}
+      maxHeight=Math.max(maxHeight,triangle.height);count++;
+    }
+    if(changed)uniforms.uRanchSupportTexture.value.needsUpdate=true;
+    uniforms.uRanchSupportCount.value=count;uniforms.uRanchSupportMax.value=count?maxHeight:0;
+    item.physicalSupport={...item.physicalSupport,status:'VERIFIED_OWNER_PROJECTED_TOPS',candidateCount:count,rawCount:supportTriangles.length,textureUpload:changed,maxHeight:count?maxHeight:null,buildMs:performance.now()-started,bufferSize:buffer.toArray()};
+  }
+  function partitionMaterial(base,upper,threshold) {
+    // Baseline stock quad is never discarded: preserve every original covered sample.
+    if(upper)return base.clone();
+    const material=depthEnvelopeMaterial(base);
+    const previousHook=material.onBeforeCompile,previousKey=material.customProgramCacheKey.call(material);
+    material.onBeforeCompile=function(shader,webglRenderer){
+      previousHook.call(this,shader,webglRenderer);
+      shader.uniforms.uRanchPartitionY=threshold;
+      shader.fragmentShader='uniform float uRanchPartitionY;\n'+shader.fragmentShader;
+      shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',
+        'if(gl_FragCoord.y>=uRanchPartitionY)discard;\n#include <opaque_fragment>');
+    };
+    material.customProgramCacheKey=()=>previousKey+'|ranch-stock-plus-lower-recovery-v1';
+    return material;
+  }
+  function syncSpritePartition(
+uniforms.uRanchFloor.value=supportHeight+.015;

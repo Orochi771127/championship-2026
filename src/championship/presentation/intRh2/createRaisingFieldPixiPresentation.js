@@ -1121,12 +1121,15 @@ export async function mountRaisingFieldPixiPresentation({
 
   function screenToNativeGround(point){
     const native=raisingScreenToNative(point,fieldArt?.field,view,cameraX);
-    return native&&fieldArt?.threeScene?fieldArt.threeScene.pickGroundNative(native):native;
+    return native&&fieldArt?.threeScene?fieldArt.threeScene.pickGroundNative(native,(x,y)=>source.getGroundSupport?.(x,y)??null):native;
   }
 
   function alignThreeGround(root,point,positionQ12){
+    root.threeGroundAdmission=null;root.threeSupportOwner=null;root.threeGroundContact=null;
     if(!fieldArt?.threeScene||!point)return;
-    const height=fieldArt.threeScene.groundHeight(positionQ12[0]/4096,positionQ12[1]/4096);
+    root.threeGroundAdmission=source.getGroundSupport?.(positionQ12[0]/4096,positionQ12[1]/4096)??null;
+    root.threeGroundContact=fieldArt.threeScene.groundContact?.(positionQ12[0]/4096,positionQ12[1]/4096,root.threeGroundAdmission)??null;
+    const height=root.threeGroundContact?.height??fieldArt.threeScene.groundHeight(positionQ12[0]/4096,positionQ12[1]/4096,root.threeGroundAdmission);
     root.threeGroundScreen=point;root.threeGroundHeight=height;
     root.y=point.y-height*16*Math.cos(52*Math.PI/180)*getRaisingNativePixelScale(fieldArt.field,view);
   }
