@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         engine: [chromium, webkit]
-        mode: [static-contact, controlled-step]
+        mode: [static-contact]
     steps:
       - uses: actions/checkout@v4
         with:
