@@ -1,3 +1,4 @@
+import {APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
 import {assertApproved20Registry} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -38,7 +39,7 @@ test('approved repair selects exact species identities and retains all 155 previ
     }
   }
   assert.equal(manifest.entries.find(e=>e.speciesIndex===105).master.sha256,'90b4834b1048497840aaadf9142791e08158f0771c27e01a69e99ce362481804');
-  for(const id of [184,186,187,188,200])assert.equal(databaseHeroPortrait(id),null);
+  for(const id of [184,186,188])assert.deepEqual(databaseHeroPortrait(id),APPROVED10.find(e=>e.speciesIndex===id));for(const id of [187,200])assert.deepEqual(databaseHeroPortrait(id),APPROVED10.find(e=>e.speciesIndex===id));
 });
 
 test('new hero and thumbnail load in five locales while registration masking and player state remain unchanged',()=>{

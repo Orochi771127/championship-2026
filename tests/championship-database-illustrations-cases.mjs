@@ -1,3 +1,4 @@
+import {APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -45,7 +46,7 @@ test('every art-only detail shows its selected full illustration and authored st
 });
 
 test('all 134 prior published hero selections remain exact',()=>{
-  const registry=read('src/data/championship/database-hero-portraits.public.v1.json');
+  const registry={...read('src/data/championship/database-hero-portraits.public.v1.json'),entries:assert224(read('src/data/championship/database-hero-portraits.public.v1.json'))};
   const repairIds=new Set(read('docs/art/production/characters/approved-dex-repair-20261019/manifest.json').entries.map(e=>e.speciesIndex));
   const preserved={...registry,entries:registry.entries.filter(e=>e.speciesIndex<231&&![20,21,32,22,23,24,25,26,27,31,30,74,80,82,85,86,87,88,94,95].includes(e.speciesIndex)&&!repairIds.has(e.speciesIndex)&&![126,140,159,160,162,169,170,171,172,173,201,202].includes(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex))};
   assert.equal(preserved.entries.length,134);

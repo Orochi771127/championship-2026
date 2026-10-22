@@ -1,3 +1,4 @@
+import {APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -24,7 +25,7 @@ const savedOffsets=pathIds.flatMap(id=>(lifecycle.rules[id-8]??[]).map((_,i)=>(i
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 
 test('MA50 and MA62 resolve to the approved stable identities, with unique sorted codes in every filter and locale',()=>{
-  const expected=[[121,'species-121','MA50','聖焰獅皇'],[125,'species-125','MA62','日焰獅']];
+  const expected=[[121,'species-121','MA50','焰鋼獅'],[125,'species-125','MA62','日焰獅']];
   const book=projectDatabase({registeredSpecies:pathIds});
   assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,DATABASE_DISPLAY_CATALOG.entries.length);
   const native=JSON.parse(fs.readFileSync('src/data/championship/database-display.r1.json','utf8'));
@@ -75,7 +76,7 @@ test('both five-language profiles describe lions without invented swords, and so
 });
 
 test('normal Database component selects corrected codes, navigates both routes and leaves state untouched in five languages',()=>{
-  try {for(const locale of locales)for(const [source,target,code,name] of [[64,125,'MA62','日焰獅'],[62,121,'MA50','聖焰獅皇']]){
+  try {for(const locale of locales)for(const [source,target,code,name] of [[64,125,'MA62','日焰獅'],[62,121,'MA50','焰鋼獅']]){
     const f=makeView({locale,selectedSpeciesIndex:source,registeredSpecies:pathIds,evolutionBranches:savedOffsets,collection:[]});
     try {
       const buttons=f.root.querySelectorAll('.cm-dex-routes__target');
@@ -108,7 +109,7 @@ test('native data stays pinned, separately authorized savev7 is reviewed, the or
   const current=JSON.parse(fs.readFileSync('src/data/championship/database-hero-portraits.r1.json','utf8'));
   assert.equal(current.entries.length,before.entries.length+1);
   for(const entry of before.entries)assert.deepEqual(current.entries.find(e=>e.speciesIndex===entry.speciesIndex),entry);
-  assert.equal(databaseHeroPortrait(121),null);
+  assert.deepEqual(databaseHeroPortrait(121),APPROVED10.find(e=>e.speciesIndex===121));
   assert.equal(databaseHeroPortrait(125).displayCode,'MA62');
   assert.equal(current.entries.find(e=>e.speciesIndex===125).sha256,'2b59a46a702490d43d726166b0df35386dbd5016b8c4fa013ae7a0f4ad6454a6');
   const display=JSON.parse(fs.readFileSync('docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json','utf8')).rows.find(e=>e.speciesIndex===125);assert.equal(databaseHeroPortrait(125).sha256,display.display.sha256);assert.equal(display.source.sha256,current.entries.find(e=>e.speciesIndex===125).sha256);

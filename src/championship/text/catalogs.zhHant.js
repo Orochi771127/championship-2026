@@ -363,7 +363,7 @@ export const SPECIES_NAMES_ZH = Object.freeze(Object.fromEntries(`
 118|緋尾妖狐
 119|迅影猞王
 120|腐沼核獸
-121|聖焰獅皇
+121|焰鋼獅
 122|血棘花衛
 123|天鋒核龍
 124|深淵核龍
