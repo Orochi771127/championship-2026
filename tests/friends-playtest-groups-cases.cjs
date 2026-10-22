@@ -1,0 +1,11 @@
+const test=require('node:test'),assert=require('node:assert/strict');
+const {GROUPS,selectedGroups,verifyComplete}=require('./friends-playtest-groups.cjs');
+const expected={commit:'a'.repeat(40),runnerSha256:'b'.repeat(64)};
+const rows=()=>GROUPS.map(group=>({status:'PASS',commit:expected.commit,buildId:'same-built-bytes',partition:{schema:1,requested:group,expected:[group],completed:[group],runnerSha256:expected.runnerSha256},pageErrors:[],networkErrors:[],console:[]}));
+test('default all retains original scenario order',()=>assert.deepEqual(selectedGroups(),GROUPS));
+test('explicit all retains original order',()=>assert.deepEqual(selectedGroups('all'),GROUPS));
+for(const group of GROUPS)test('only exact group '+group,()=>assert.deepEqual(selectedGroups(group),[group]));
+for(const group of ['', 'legacy', 'fresh-economy,source-corners', 'ALL'])test('reject unknown '+JSON.stringify(group),()=>assert.throws(()=>selectedGroups(group)));
+test('complete three matching receipts pass',()=>assert.equal(verifyComplete(rows(),expected).status,'PASS'));
+const mutations={missing:r=>r.pop(),duplicate:r=>r[2]=structuredClone(r[1]),running:r=>r[0].status='RUNNING',failed:r=>r[0].status='FAIL',commit:r=>r[0].commit='c'.repeat(40),build:r=>r[0].buildId='different',runner:r=>r[0].partition.runnerSha256='d'.repeat(64),incomplete:r=>r[0].partition.completed=[],wrongExpected:r=>r[0].partition.expected=[...GROUPS],allReceipt:r=>r[0].partition.requested='all',unknown:r=>r[0].partition.requested='unknown',schema:r=>r[0].partition.schema=0,pageError:r=>r[0].pageErrors.push('error'),networkError:r=>r[0].networkErrors.push('error'),consoleError:r=>r[0].console.push({type:'error',text:'failure'}),fallback:r=>r[0].console.push({type:'warning',text:'CHAMPIONSHIP_PIXI_FALLBACK'})};
+for(const [name,mutate] of Object.entries(mutations))test('aggregate rejects '+name,()=>{const r=rows();mutate(r);assert.throws(()=>verifyComplete(r,expected));});

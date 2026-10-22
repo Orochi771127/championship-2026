@@ -10,6 +10,9 @@ const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playt
 const output=require('./browser-qa-output.cjs')('friends-playtest');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/',saveKey='championshipModernSave:v1';
 const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[]};
+const {selectedGroups}=require('./friends-playtest-groups.cjs');
+const groups=selectedGroups(process.env.CHAMPIONSHIP_FRIENDS_GROUP);
+evidence.partition={schema:1,requested:process.env.CHAMPIONSHIP_FRIENDS_GROUP||'all',expected:groups,completed:[],runnerSha256:require('node:crypto').createHash('sha256').update(fs.readFileSync(__filename)).digest('hex')};
 const digits=s=>Number(String(s).replace(/[^0-9]/g,''));
 const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(evidence,null,2)+'\n');
 // Test-only ordinary overlay classification. No app access, input, clock, or DOM mutation.
@@ -257,6 +260,7 @@ function registrationNoticeInvariant(save){
  try{
   browser=await chromium.launch({channel:'chromium',headless:true,chromiumSandbox:true});evidence.browserVersion=browser.version();
   evidence.launch={channel:'chromium',headless:true,chromiumSandbox:true,customArgs:[]};
+  if(groups.includes('fresh-economy')){
   await fresh('new-save');await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});await login();
   assert.equal(await page.locator('#cm-continue').isEnabled(),false,'Fresh profile must have no save');
   await page.locator('#cm-new-game').click();
@@ -379,6 +383,9 @@ function registrationNoticeInvariant(save){
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
   const afterHunt=await saved();assert.equal(afterHunt.shop.bits,afterShop.shop.bits-fee);assert.equal(afterHunt.flags.friendsPlaytest.diamonds,12000);
   evidence.assertions.push({freshUi:true,rowBalances:[20000,19000,18000,17000,16000,15000,14000,13000,12000],shopPrice:purchase.price,huntFee:fee,finalBits:afterHunt.shop.bits});write();
+  evidence.partition.completed.push('fresh-economy');write();
+  }
+  if(groups.includes('legacy-persistence')){
   // Unmodified old QA profile: no new-save grant, including after save/reload.
   await fresh('old-qa-no-topup');await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);await page.locator('#install').click();await page.waitForURL(/championship\.html$/);
@@ -405,7 +412,13 @@ function registrationNoticeInvariant(save){
   const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,expectedShop(old.shop));assert.deepEqual(legacyAfterPurchase.cageEdit.placements,expectedPlacements(old.cageEdit.placements));
   evidence.assertions.push({historicalWalletPreserved:10000,legacyGrant:0,afterPurchaseAndReload:9000});
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
+  evidence.partition.completed.push('legacy-persistence');write();
+  }
+  if(groups.includes('source-corners')){
   await sourceCornerReview();
+  evidence.partition.completed.push('source-corners');write();
+  }
+  assert.deepEqual(evidence.partition.completed,groups,'Every selected scenario must finish');
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
   evidence.status='PASS';write();console.log('CHAMPIONSHIP_FRIENDS_PLAYTEST_BROWSER_PASS');
