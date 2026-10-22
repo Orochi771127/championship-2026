@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "status": "OFFLINE_SOURCE_EXPORT_NOT_GPU_ACCEPTANCE",
+  "fields": [
+    {
+      "fieldId": "field_cm18_01",
+      "glbSha256": "2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7",
+      "nodeIndex": 0,
+      "meshIndex": 0,
+      "primitiveIndex": 0,
+      "sourceNodeName": "field_cm18_01-runtime-static",
+      "runtimeMeshName": "field_cm18_01-runtime-static",
+      "authoredNodeMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "positionCount": 106979,
+      "indexCount": 320016,
+      "triangleCount": 106672,
+      "positionSha256Float32LE": "29c4cfb7b84fb3923e8d00117b2584206f229f1cdba7148c4d631f361df8a2cb",
+      "indexSha256Uint32LE": "a759357968fa656394090d565c800169b3075af404f0d5c6bdc8fcfdfc8fba30",
+      "uvSha256Float32LE": "a91ee2c557bbb379911197eb74fe5b8afb08668e1c47fe3fe93dfc2267849ef5",
+      "npz": "field_cm18_01.npz",
+      "npzSha256": "812ec9593f3c8aafee4dad8572f9b7a016aabf3007777fef2584f4ad06146b38",
+      "texture": "field_cm18_01.basecolor.webp",
+      "textureSha256": "a317d740dea1f9ba18c551c76596e670fa195318570333d70f3c2235cb89a0bc",
+      "gltfMaterial": {
+        "alphaMode": "BLEND",
+        "doubleSided": true,
+        "name": "field_cm18_01-baked-colour",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicRoughnessTexture": {
+            "index": 1
+          }
+        }
+      },
+      "gltfSampler": {
+        "magFilter": 9729,
+        "minFilter": 9987
+      },
+      "semanticTagCounts": {
+        "0": 105596,
+        "2": 922,
+        "3": 18,
+        "4": 136
+      }
+    },
+    {
+      "fieldId": "field_cm34_01",
+      "glbSha256": "01d1306d1d248a8b1f3aa52520fd5b90fed0bb51abddc38d5aec6c25c21c8bc6",
+      "nodeIndex": 0,
+      "meshIndex": 0,
+      "primitiveIndex": 0,
+      "sourceNodeName": "field_cm34_01-runtime-static",
+      "runtimeMeshName": "field_cm34_01-runtime-static",
+      "authoredNodeMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "positionCount": 8010,
+      "indexCount": 13224,
+      "triangleCount": 4408,
+      "positionSha256Float32LE": "4e74850cffb0f963e32503fc120c3bea0cc7f11de6eb30d93b02437204e56b4c",
+      "indexSha256Uint32LE": "4f3b4215252aaf9eb4093e8694bd66c5f0f16587100b2e3132f20b330610c181",
+      "uvSha256Float32LE": "668ca2f8e3d56a590aecf7650c4c405f49f04d248a8b549918ba8453783a1ba7",
+      "npz": "field_cm34_01.npz",
+      "npzSha256": "dfa46285d4783142a67a25f3a74d06cee05281fc7b4684ddb5256f4743d0e679",
+      "texture": "field_cm34_01.basecolor.webp",
+      "textureSha256": "f16b88ae104aaf1b870f684ba0de9ba2617593406f2478010afe972eda750fb8",
+      "gltfMaterial": {
+        "alphaMode": "BLEND",
+        "doubleSided": true,
+        "name": "field_cm34_01-baked-colour",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicRoughnessTexture": {
+            "index": 1
+          }
+        }
+      },
+      "gltfSampler": {
+        "magFilter": 9729,
+        "minFilter": 9987
+      },
+      "semanticTagCounts": {
+        "0": 4220,
+        "8": 186,
+        "9": 2
+      }
+    }
+  ],
+  "semanticTags": {
+    "1": "authored physical horizontal support top; STILL retained depth geometry, including higher treads",
+    "2": "CM18 approved stair whole component, includes risers/bevels/underside",
+    "4": "CM18 side rock component442; retained opaque foreground; native-denied overlap proof separate",
+    "8": "CM34 exercise mat whole component"
+  },
+  "transformContract": "Apply captured mesh.matrixWorld ONCE to original local positions; authored node identity. Select actual visible instance/wrap from state; never planned origin substitute. Matrices are column-major Three arrays.",
+  "collisionPolicy": "No derived logical bridge vertices are in these assets. Collision-only geometry must NEVER enter foreground depth oracle.",
+  "retentionPolicy": "All source triangles remain depth candidates. Semantic tags label, do not exclude floor/tread/mat faces globally. Actual material state, side/culling, alphaTest and source texture must govern candidates."
+}
