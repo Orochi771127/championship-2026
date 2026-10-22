@@ -788,14 +788,15 @@ async function loadOptionalBattleFieldArt(stage, source) {
  * retains the explicit independent asset preview. Unknown hit/weather bindings
  * are not inferred from HP changes.
  */
-async function loadOptionalBattleVfxOverlay(host, stage, source, getFocusPlacement, getFieldPlacement) {
+async function loadOptionalBattleVfxOverlay(host, stage, source, getFocusPlacement, getFieldPlacement, isActive = () => true) {
   try {
     return await mountBattleVfxThreeOverlay({
       host,
       stage,
       systemId: VFX_ART_PREVIEW_SYSTEM,
       source: VFX_ART_PREVIEW_SYSTEM ? null : source,
-      getFocusPlacement,getFieldPlacement
+      getFocusPlacement,getFieldPlacement,
+      recordDiagnostic: recoveryDiagnostics.record,isActive
     });
   } catch (error) {
     console.warn(`CHAMPIONSHIP_VFX_ART_FALLBACK: ${error.message}`);
@@ -1499,7 +1500,7 @@ async function mountBattleField() {
           delete root.dataset.fieldFallback;
           // The existing overlay owns Hyper, five impact families and hit flash.
           // Keep its readiness gate: no safe replacement for these cues is proven.
-          vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement());
+          vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement(), () => !disposed);
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }

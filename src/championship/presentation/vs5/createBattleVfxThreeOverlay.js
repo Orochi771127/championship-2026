@@ -12,6 +12,7 @@ import {
 } from "../vfx/licensedVfxRuntimeBundle.js";
 import { BATTLE_IMPACT_FAMILIES } from '../../battle/battleImpactEffects.js';
 import { currentQuality, flashScale } from '../presentationPreferences.js';
+import { prepareBattleVfxGpu } from './prepareBattleVfxGpu.js';
 
 const CAMERA_POLICY = "PRODUCT_AUTHORED_PREVIEW_FRAMING";
 
@@ -38,7 +39,9 @@ export async function mountBattleVfxThreeOverlay({
   source = null,
   getFocusPlacement = () => null,
   getFieldPlacement = () => null,
-  fetchImpl = globalThis.fetch
+  fetchImpl = globalThis.fetch,
+  recordDiagnostic = () => {},
+  isActive = () => true
 }) {
   if (!host || typeof host.appendChild !== "function") fail("HOST_REQUIRED");
   if (!stage?.app?.ticker || typeof stage.onResize !== "function") fail("PIXI_STAGE_TICKER_REQUIRED");
@@ -116,6 +119,8 @@ export async function mountBattleVfxThreeOverlay({
   // Nothing visible and already cleared: skip the Three render (it would walk
   // every pooled impact group and clear the canvas again each frame).
   let cleared = false;
+  let firstVisibleRender=false;
+  const recordFirstRender=(phase,error)=>{try{recordDiagnostic('LOAD',{area:'battle',stage:'first-vfx-render',phase,...(error?{error}:{})});}catch{}};
   const lastData = { focus: null, impacts: null };
   const setData = (key, value) => { if (lastData[key] !== value) { lastData[key] = value; renderer.domElement.dataset[key] = value; } };
 
@@ -178,9 +183,22 @@ export async function mountBattleVfxThreeOverlay({
       renderer.setClearColor(0xffffff,flashScale());renderer.clear();cleared=false;
     }else if(live&&!model.visible&&visibleImpacts===0){
       if(!cleared){renderer.setClearColor(0x000000,0);renderer.clear();cleared=true;}
-    }else{renderer.setClearColor(0x000000,0);renderer.render(scene, camera);cleared=false;}
+    }else{
+      renderer.setClearColor(0x000000,0);
+      const observe=live&&!firstVisibleRender;
+      if(observe){firstVisibleRender=true;recordFirstRender('start');}
+      try{renderer.render(scene, camera);if(observe)recordFirstRender('done');}
+      catch(error){if(observe)recordFirstRender('error',error);throw error;}
+      cleared=false;
+    }
   }
 
+  resize();
+  if(live){
+    try{await prepareBattleVfxGpu({renderer,scene,camera,groups:[model,...impacts.map(item=>item.container)],record:recordDiagnostic,isActive});}
+    catch(error){await runtime.unloadAll();renderer.dispose();renderer.domElement.remove();throw error;}
+  }
+  // A phone can rotate during yielded preparation; refresh before exposure.
   resize();
   const unobserveResize = stage.onResize(resize);
   // Field simulation/layout (default 0) precedes this overlay on the SAME tick.

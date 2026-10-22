@@ -6,9 +6,11 @@ import {setLocale} from '../src/championship/text/locale.js';
 import {createBattleFxCamera,clampBattleCameraToMap} from '../src/championship/presentation/battleFx/battleFxCamera.js';
 class Node {
   constructor(tag){Object.assign(this,{tagName:tag,children:[],dataset:{},attributes:{},listeners:{},style:{},className:'',textContent:''});this.classList={add:n=>this.className+=' '+n,remove:()=>{}};}
+  get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
+  set textContent(value){this._text=String(value);this.children=[];}
   append(...nodes){this.children.push(...nodes);}
   prepend(...nodes){this.children.unshift(...nodes);}
-  replaceChildren(...nodes){this.children=nodes;}
+  replaceChildren(...nodes){this._text='';this.children=nodes;}
   setAttribute(k,v){this.attributes[k]=v;}
   getAttribute(k){return this.attributes[k]??null;}
   addEventListener(k,v){this.listeners[k]=v;}
@@ -24,8 +26,8 @@ for(const locale of ['zh-Hant','en','ja','th','vi']) test(`${locale}: six actors
     assert.equal(root.children[0].dataset.hud,'floating');
     assert.equal(by(root,'cm-vs5-fighter').length,6);
     assert.equal(by(root,'cm-vs5-meter--resource').length,6);
-    for(const bar of by(root,'cm-vs5-meter--hp')) {assert.equal(bar.children[1].textContent,'HP 12345 / 65535');assert.match(bar.attributes['aria-label'],/12345/);}
-    for(const bar of by(root,'cm-vs5-meter--resource')) assert.equal(bar.children[1].textContent,'TP 650 / 999');
+    for(const bar of by(root,'cm-vs5-meter--hp')) {assert.equal(bar.children[1].textContent,'HP 12345 / 65535');assert.deepEqual(bar.children[1].children.map(n=>n.textContent),['HP 12345',' / 65535']);assert.match(bar.attributes['aria-label'],/12345/);}
+    for(const bar of by(root,'cm-vs5-meter--resource')) {assert.equal(bar.children[1].textContent,'TP 650 / 999');assert.deepEqual(bar.children[1].children.map(n=>n.textContent),['TP 650',' / 999']);}
     assert.equal(by(root,'cm-vs5-fighter').find(c=>c.dataset.slot==='4').dataset.down,'true');
     assert.ok(by(root,'cm-vs5-exit')[0].textContent);by(root,'cm-vs5-exit')[0].listeners.click();assert.equal(exited,1);
     assert.equal(by(root,'cm-vs5-clock').length,1);assert.equal(by(root,'cm-vs5-log').length,1);
@@ -58,7 +60,7 @@ test('floating CSS moves actual field behind HUD, keeps pointer input on field/e
  assert.match(css,/pointer-events: none/);assert.match(css,/pointer-events: auto/);
  assert.match(css,/grid-template-areas: none/);
  assert.match(css,/min-height: 44px/);assert.match(css,/safe-area-inset-bottom/);
- assert.match(css,/display: flex; flex-direction: row; flex-wrap: wrap/);
+ assert.match(css,/display: flex; flex-direction: row; flex-wrap: nowrap/);
 });
 test('failed-FX fallback contain-art coordinates still cover through unconditional final map clamp',()=>{
  for(const [width,height] of [[320,568],[390,844],[844,390],[1920,1080]]){
@@ -74,14 +76,40 @@ test('failed-FX fallback contain-art coordinates still cover through uncondition
 
 test('modern floating fighter chips remain compact with thinner TP and no old full-width tracks',()=>{
  const css=fs.readFileSync(new URL('../src/championship/app/vs5Styles.css',import.meta.url),'utf8').split('/* Owner 2026-10-23:')[1];
- assert.match(css,/flex: 0 0 calc\(140px \* var\(--text-scale, 1\)\); width: calc\(140px \* var\(--text-scale, 1\)\); max-width: 100%; min-width: 0/);
+ assert.match(css,/flex: 0 1 calc\(140px \* var\(--text-scale, 1\)\); width: calc\(140px \* var\(--text-scale, 1\)\); max-width: 100%; min-width: 0/);
  assert.match(css,/roster--opponent \{ justify-content: flex-end/);
  assert.match(css,/height: calc\(16px \* var\(--text-scale, 1\)\)/);
- assert.match(css,/meter--resource \{ height: calc\(13px \* var\(--text-scale, 1\)\)/);
+ assert.match(css,/meter--resource \{ min-height: calc\(13px \* var\(--text-scale, 1\)\)/);
  assert.match(css,/width: min\(168px, 100%\)/);
  assert.match(css,/white-space: normal; overflow-wrap: anywhere/);
- assert.ok(css.indexOf('roster--opponent { justify-content: flex-end')>css.indexOf('flex-direction: row; flex-wrap: wrap; justify-content: flex-start'),'team alignment wins generic equal-specificity cascade');
+ assert.ok(css.indexOf('roster--opponent { justify-content: flex-end')>css.indexOf('flex-direction: row; flex-wrap: nowrap; justify-content: flex-start'),'team alignment wins generic equal-specificity cascade');
  assert.doesNotMatch(css,/grid-template-columns: repeat|height: calc\(19px/);
- assert.ok(2*140+6<=320-20);assert.ok(3*140+2*6>390-20);
- assert.ok(140-12>109.3125,'actual11px tabular65535/65535 measured109.3125px fits128px track');
+ for(const width of [320,360,390,844,1366]){const available=width-20,card=Math.min(140,(available-12)/3);assert.ok(3*card+12<=available);assert.ok(card>=96&&card<=140);}
+ assert.match(css,/flex-wrap: wrap; align-items: center; align-content: center/);
+ assert.match(css,/meter__number-part \{ flex: 0 0 auto; white-space: pre/);
+ assert.match(css,/position: absolute; inset: 0 auto 0 0; height: auto/);
+ assert.match(css,/font: 600 calc\(11px \* var\(--text-scale, 1\)\)/);
+});
+
+for(const count of [1,2,3])test(`${count} actors per team: reusable current/max fragments preserve zero and five digits`,()=>{
+ const before=globalThis.document;globalThis.document={createElement:t=>new Node(t)};
+ try{
+  const root=new Node('root'),f=frame(count*2);f.combatants.forEach((c,i)=>{c.team=Math.floor(i/count);});
+  const view=createBattleFieldView({root,frame:f,mountField:()=>({}),dynamicFx:true,responsiveLayout:true});view.render(f);
+  assert.equal(by(root,'cm-vs5-fighter').length,count*2);
+  for(const team of ['0','1'])assert.equal(by(root,'cm-vs5-fighter').filter(c=>c.dataset.team===team).length,count);
+  const hp=by(root,'cm-vs5-meter--hp')[0],tp=by(root,'cm-vs5-meter--resource')[0],parts=[...hp.children[1].children,...tp.children[1].children];
+  const next={...f,combatants:f.combatants.map(c=>({...c,hp:{current:0,maximum:65535,ratio:0},resource:{current:65535,maximum:65535,ratio:1}}))};view.render(next);
+  assert.deepEqual([...hp.children[1].children,...tp.children[1].children],parts,'updates reuse all four numeral spans');
+  assert.equal(hp.children[1].textContent,'HP 0 / 65535');assert.equal(tp.children[1].textContent,'TP 65535 / 65535');
+  assert.equal(hp.attributes['aria-valuenow'],'0');assert.equal(tp.attributes['aria-valuemax'],'65535');
+  assert.equal(hp.children[0].style.width,'0%');assert.equal(tp.children[0].style.width,'100%');view.dispose();
+ }finally{globalThis.document=before;}
+});
+test('adaptive width arithmetic retains one/two member compact alignment without reserving empty columns',()=>{
+ for(const viewport of [320,360,390,568,844,1366])for(const textScale of [1,1.25])for(const count of [1,2,3]){
+  const available=viewport-20,gaps=6*(count-1),basis=140*textScale,width=Math.min(basis,(available-gaps)/count);
+  assert.ok(count*width+gaps<=available+.001);assert.ok(width<=basis);assert.ok(width>=96);
+  if(count*basis+gaps<=available)assert.equal(width,basis);
+ }
 });
