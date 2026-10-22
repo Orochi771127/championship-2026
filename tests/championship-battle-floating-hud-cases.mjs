@@ -113,3 +113,24 @@ test('adaptive width arithmetic retains one/two member compact alignment without
   if(count*basis+gaps<=available)assert.equal(width,basis);
  }
 });
+
+// The more-specific TP rule occurs after the generic 11px shorthand. Check
+// that actual override, not just the existence of the earlier baseline.
+function resourceMeterFontPx(css,textScale) {
+ const selector='.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__value';
+ const clean=css.replace(/\/\*[\s\S]*?\*\//g,''),start=clean.indexOf(selector);
+ assert.ok(start>=0);assert.equal(clean.lastIndexOf(selector),start,'resource font override must be unambiguous');
+ const declaration=clean.slice(start+selector.length).match(/^\s*\{([^}]*)\}/)?.[1];
+ const size=declaration?.match(/font-size:\s*calc\((\d+(?:\.\d+)?)px \* var\(--text-scale, 1\)\);/);
+ assert.ok(size,'resource-specific font expression must remain explicitly bounded');
+ return Number(size[1])*textScale;
+}
+function assertResourceMeterFont(css) {
+ for(const scale of [1,1.25])assert.ok(resourceMeterFontPx(css,scale)>=11*scale,'resource-specific final font rule cannot lower the 11px baseline');
+}
+test('final TP-specific font override resolves to at least 11px at 100% and 125%',()=>{
+ const css=fs.readFileSync(new URL('../src/championship/app/vs5Styles.css',import.meta.url),'utf8');
+ assertResourceMeterFont(css);
+ const lower=css.replace(/(\.cm-vs5-meter--resource \.cm-vs5-meter__value \{ font-size: calc\()11px/,(_whole,prefix)=>prefix+'10px');
+ assert.notEqual(lower,css);assert.throws(()=>assertResourceMeterFont(lower),/cannot lower the 11px baseline/);
+});

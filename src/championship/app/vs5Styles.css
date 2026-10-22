@@ -838,4 +838,4 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 /* Empty roster slots must not become grid cells after the card override. */
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-present="false"] { display: none; }
 
-.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__value { font-size: calc(10px * var(--text-scale, 1)); }
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__value { font-size: calc(11px * var(--text-scale, 1)); }

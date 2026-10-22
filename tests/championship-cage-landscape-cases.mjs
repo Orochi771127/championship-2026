@@ -133,10 +133,22 @@ for(const choice of ['stay','discard','apply'])test(`dirty Cage ${choice} path i
  }
 });
 
+function cageLandscapeSection(css) {
+ const startMarker='/* Candidate Cage landscape:',endMarker='/* Desktop DOM menus:';
+ const start=css.indexOf(startMarker),end=css.indexOf(endMarker,start+startMarker.length);
+ assert.ok(start>=0&&end>start,'Cage section must have explicit ordered boundaries');
+ assert.equal(css.lastIndexOf(startMarker),start,'Cage start marker must be unique');
+ assert.equal(css.lastIndexOf(endMarker),end,'Cage end marker must be unique');
+ return css.slice(start,end);
+}
+function assertCageGeometryPreserved(candidate) {
+ assert.doesNotMatch(candidate.replace(/\/\*[\s\S]*?\*\//g,''),/transform:|zoom:|\.cm-vs2-cage-slot\s*\{|\.cm-cage-annex-board\s*\{|\.cm-vs2-cage-board\s*\{/,'no geometry override or scaling');
+}
+
 test('candidate reflow is in a loaded stylesheet, keeps board geometry and gives both panes bounded scrolling',()=>{
  const css=readFileSync('src/championship/app/vs2Styles.css','utf8');
  const html=readFileSync('championship.html','utf8');
- const candidate=css.slice(css.indexOf('/* Candidate Cage landscape:'),css.indexOf('/* Candidate desktop DOM menus:'));
+ const candidate=cageLandscapeSection(css);
  assert.match(html,/<link rel="stylesheet" href="\.\/src\/championship\/app\/vs2Styles\.css/);
  assert.match(css,/\.cm-vs2-cage-board \{[^}]*width: 508px; height: 102px;/);
  assert.match(css,/\.cm-cage-annex-board \{[^}]*width: 270px; height: 102px;[^}]*margin: -14px 0 0;/);
@@ -148,5 +160,26 @@ test('candidate reflow is in a loaded stylesheet, keeps board geometry and gives
  assert.match(candidate,/overflow: auto;[\s\S]*overscroll-behavior: contain/);
  assert.match(candidate,/\.cm-cage-board-scroll \{ margin-inline: 0; padding: var\(--sp-2\); touch-action: pan-x pan-y; \}/);
  assert.match(candidate,/\.cm-vs2-shop__status:empty \{ display: none; \}/);
- assert.doesNotMatch(candidate.replace(/\/\*[\s\S]*?\*\//g,''),/transform:|zoom:|\.cm-vs2-cage-slot\s*\{|\.cm-cage-annex-board\s*\{|\.cm-vs2-cage-board\s*\{/,'no geometry override or scaling');
+ assertCageGeometryPreserved(candidate);
+});
+
+test('Cage boundary fails closed and excludes unrelated Database centering only',()=>{
+ const css=readFileSync('src/championship/app/vs2Styles.css','utf8');
+ for(const marker of ['/* Candidate Cage landscape:','/* Desktop DOM menus:'])
+  assert.throws(()=>cageLandscapeSection(css.replace(marker,'/* renamed boundary:')),/explicit ordered boundaries/);
+ assert.throws(()=>cageLandscapeSection(css+'\n/* Desktop DOM menus: duplicate */'),/must be unique/);
+ const unrelated='\n.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero__image { transform: translateX(-14%); }';
+ assert.equal(cageLandscapeSection(css+unrelated),cageLandscapeSection(css));
+ assertCageGeometryPreserved(cageLandscapeSection(css+unrelated));
+});
+for(const bad of [
+ '.cm-cage-board-panel { transform: translateX(1px); }',
+ '.cm-cage-board-panel { zoom: .9; }',
+ '.cm-vs2-cage-slot { width: 47px; }',
+ '.cm-cage-annex-board { height: 101px; }',
+ '.cm-vs2-cage-board { width: 507px; }'
+])test(`Cage candidate still rejects actual geometry regression: ${bad}`,()=>{
+ const css=readFileSync('src/championship/app/vs2Styles.css','utf8');
+ const injected=css.replace('/* Desktop DOM menus:',bad+'\n/* Desktop DOM menus:');
+ assert.throws(()=>assertCageGeometryPreserved(cageLandscapeSection(injected)),/no geometry override or scaling/);
 });
