@@ -22,7 +22,7 @@ import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
 import {bindRaisingZoomInput,RAISING_OVERVIEW_ZOOM} from './raisingZoomInput.js';
 import {zoomRaisingCamera} from './raisingFieldViewport.js';
-import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
+import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingCarryEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
 
 const DRAG_THRESHOLD_PX = 6;
 
@@ -644,7 +644,7 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function reportResidentAssets(){
-    onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,error:e.evolutionAssetError??e.assetError??null})));
+    onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,hasVisibleSprite:Boolean(e.sprite),loadKind:['loading','error'].includes(e.evolutionAssetState)?'evolution':e.pendingAnimation!=null&&e.sprite?'animation':'appearance',error:e.evolutionAssetError??e.assetError??null})));
   }
 
   // Native animation tables and their frame clocks stay authoritative. A page
@@ -703,8 +703,9 @@ export async function mountRaisingFieldPixiPresentation({
   function decorateActor(entry,geometry){
     const {visible,hitArea}=geometry,center=visible.x+visible.width/2,bottom=visible.y+visible.height;
     const contact=geometry.contactShadow??{x:center,y:bottom+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
+    entry.groundShadowEllipses=geometry.reviewedContactShadow??[contact];
     entry.shadow.clear();
-    for(const ellipse of geometry.reviewedContactShadow??[contact]){
+    for(const ellipse of entry.groundShadowEllipses){
       entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
     }
     entry.shadow.fill({color:0x02070a,alpha:.26});
@@ -1001,15 +1002,30 @@ export async function mountRaisingFieldPixiPresentation({
     if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
     if(drag?.carried&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'){
       const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
-      const delta=raisingEdgeScroll(drag.lastPoint,view,ticker.deltaMS)/fit.scale;
-      if(delta){
-        const next=cameraX+delta,maxX=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
-        cameraX=fieldArt.field.wrapWidthPx?wrapRaisingCamera(next,fieldArt.field.wrapWidthPx):clamp(next,0,maxX);
-        layoutFieldArt();
-        const point=screenToNativeGround(drag.lastPoint);
-        const pointer={...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,inside:true,checkpoint:drag.tutorialCheckpoint};
-        if(drag.nativeHand)source.intents.updateHand?.(drag.creatureId,pointer);
-        source.intents.updateCarry?.(drag.creatureId,pointer);
+      const delta=raisingCarryEdgeScroll(drag.lastPoint,view,ticker.deltaMS);
+      if(delta.x||delta.y){
+        // DOM controls own their hits even if a touch still has canvas capture.
+        const rect=app.canvas.getBoundingClientRect();
+        const hit=globalThis.document?.elementFromPoint?.(
+          rect.left+drag.lastPoint.x*rect.width/view.width,
+          rect.top+drag.lastPoint.y*rect.height/view.height);
+        if(!hit||hit===app.canvas){
+          const next=cameraX+delta.x/fit.scale,maxX=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
+          const nextX=fieldArt.field.wrapWidthPx?wrapRaisingCamera(next,fieldArt.field.wrapWidthPx):clamp(next,0,maxX);
+          const nextY=clamp(cameraY-delta.y,fit.scrollMinY??0,fit.scrollMaxY??0);
+          if(nextX!==cameraX||nextY!==cameraY){
+            cameraX=nextX;cameraY=nextY;
+            layoutFieldArt();
+            // Reproject the stationary pointer AFTER both camera axes move,
+            // so the carried actor and its eventual drop stay under the hand.
+            const point=screenToNativeGround(drag.lastPoint);
+            if(point){
+              const pointer={...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,inside:true,checkpoint:drag.tutorialCheckpoint};
+              if(drag.nativeHand)source.intents.updateHand?.(drag.creatureId,pointer);
+              source.intents.updateCarry?.(drag.creatureId,pointer);
+            }
+          }
+        }
       }
     }
     fieldArt?.update(ticker.deltaMS);
@@ -1307,6 +1323,9 @@ export async function mountRaisingFieldPixiPresentation({
   // held gesture when the browser/OS cancels a touch, through the same owner.
   const cancelNativePointer=event=>finishDrag({type:'pointercancel',pointerId:event.pointerId});
   app.canvas.addEventListener('pointercancel',cancelNativePointer);
+  app.canvas.addEventListener('lostpointercapture',cancelNativePointer);
+  const leaveCarryPointer=event=>{if(drag?.pointerId===event.pointerId)drag.lastPoint=null;};
+  app.canvas.addEventListener('pointerleave',leaveCarryPointer);
   app.ticker.add(updateAnimations);
 
   const unsubscribe = source.subscribe(sync);
@@ -1316,7 +1335,7 @@ export async function mountRaisingFieldPixiPresentation({
   const zoomButton=globalThis.document?.createElement('button')??null;
   const describeZoom=()=>{
     if(!zoomButton)return;
-    zoomButton.textContent=zoom===1?'− 100%':'+ 70%';
+    zoomButton.textContent=zoom===1?'−':'+';
     zoomButton.setAttribute('aria-label',uiText(zoom===1?'Zoom out ranch (overview)':'Zoom in ranch (detail)'));
     zoomButton.title=uiText('Pinch or scroll over the ranch to zoom');
     zoomButton.disabled=!canZoom();
@@ -1468,7 +1487,7 @@ export async function mountRaisingFieldPixiPresentation({
         threeUsed: false,
         frameRevision: latestRevision,
         residentCount: actors.size,
-        residentAssets:[...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,error:e.evolutionAssetError??e.assetError??null,visible:e.visibleGeometry??null})),
+        residentAssets:[...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,hasVisibleSprite:Boolean(e.sprite),loadKind:['loading','error'].includes(e.evolutionAssetState)?'evolution':e.pendingAnimation!=null&&e.sprite?'animation':'appearance',error:e.evolutionAssetError??e.assetError??null,visible:e.visibleGeometry??null})),
         foodCount:foodGraphics.size,
         wasteCount:wasteGraphics.size,
         careArt:'LICENSED_PIXEL_FAITHFUL_WITH_AUTHORED_CELEBRATION',
@@ -1516,6 +1535,8 @@ export async function mountRaisingFieldPixiPresentation({
       app.stage.off("pointerupoutside", finishDrag);
       app.stage.off("pointercancel", finishDrag);
       app.canvas.removeEventListener('pointercancel',cancelNativePointer);
+      app.canvas.removeEventListener('lostpointercapture',cancelNativePointer);
+      app.canvas.removeEventListener('pointerleave',leaveCarryPointer);
       for (const entry of actors.values()) entry.loadToken += 1;
       if (scene.parent) scene.parent.removeChild(scene);
       scene.destroy({ children: true });
