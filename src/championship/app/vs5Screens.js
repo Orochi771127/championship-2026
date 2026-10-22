@@ -715,12 +715,14 @@ function eventLogBand(labels) {
 function meter(className, label) {
   const wrap = element("div", `cm-vs5-meter ${className}`);
   wrap.setAttribute("aria-label", uiText(label));
+  wrap.setAttribute("role", "meter");
+  wrap.setAttribute("aria-valuemin", "0");
   const fill = element("span", "cm-vs5-meter__fill");
   wrap.append(fill);
   return { wrap, fill };
 }
 
-function combatantCard(combatant, compact,hudArt=null) {
+function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
   const card = element("li", `cm-vs5-fighter${compact ? " cm-vs5-fighter--compact" : ""}`);
   card.dataset.slot = String(combatant.slot);
   card.dataset.team = String(combatant.team);
@@ -735,11 +737,16 @@ function combatantCard(combatant, compact,hudArt=null) {
   const hpValue = element('span', 'cm-vs5-fighter__hp');
   const portrait=element('img','cm-vs5-fighter__portrait');portrait.alt='';portrait.hidden=true;
   card.append(portrait);
-  card.append(name, hp.wrap, hpValue);
+  card.append(name, hp.wrap);
+  if (floatingHud) hp.wrap.append(hpValue); else card.append(hpValue);
   let resource = null;
   let sequenceId=0,sequenceStart=0;
-  if (!compact) {
+  if (!compact || floatingHud) {
     resource = meter("cm-vs5-meter--resource", "Action resource");
+    if (floatingHud) {
+      resource.value = element("span", "cm-vs5-meter__value");
+      resource.wrap.append(resource.value);
+    }
     card.append(resource.wrap);
   }
   return {
@@ -748,14 +755,23 @@ function combatantCard(combatant, compact,hudArt=null) {
       const requested=outcome?.ended&&outcome.winningTeam===next.team?9:next.down?5:0;
       if(requested!==sequenceId){sequenceId=requested;sequenceStart=frame;}
       const image=hudArt?.getBattleFrame(next.speciesId,sequenceId,Math.max(0,frame-sequenceStart));
-      portrait.hidden=!image;
+      portrait.hidden=floatingHud||!image;
       if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
-      hpValue.textContent = uiText("生命值 {hp} / {max}", { hp: next.hp.current, max: next.hp.maximum });
-      hp.wrap.setAttribute('aria-label', uiText(hpValue.textContent));
+      hpValue.textContent = floatingHud ? `HP ${next.hp.current} / ${next.hp.maximum}`
+        : uiText("生命值 {hp} / {max}", { hp: next.hp.current, max: next.hp.maximum });
+      hp.wrap.setAttribute('aria-label', floatingHud ? `${uiText('Health')} ${next.hp.current} / ${next.hp.maximum}` : uiText(hpValue.textContent));
+      hp.wrap.setAttribute("aria-valuenow", String(next.hp.current));
+      hp.wrap.setAttribute("aria-valuemax", String(next.hp.maximum));
       card.dataset.down = String(next.down);
       card.dataset.engaged = String(next.engaged);
-      if (resource) resource.fill.style.width = `${Math.round(next.resource.ratio * 100)}%`;
+      if (resource) {
+        resource.fill.style.width = `${Math.round(next.resource.ratio * 100)}%`;
+        resource.wrap.setAttribute("aria-valuenow", String(next.resource.current));
+        resource.wrap.setAttribute("aria-valuemax", String(next.resource.maximum));
+        if (resource.value) resource.value.textContent = `TP ${next.resource.current} / ${next.resource.maximum}`;
+        resource.wrap.setAttribute("aria-label", `${uiText("Action resource")} ${next.resource.current} / ${next.resource.maximum}`);
+      }
     }
   };
 }
@@ -773,7 +789,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   section.dataset.arena = frame.arena.identifier;
   // Owner 2026-10-12: the dynamic presentation gives the arena most of the
   // screen; the bands keep their order and content (styles in vs5Styles.css).
-  if (dynamicFx) section.dataset.fx = "dynamic";
+  if (dynamicFx) { section.dataset.fx = "dynamic"; section.dataset.hud = "floating"; }
   if (responsiveLayout && dynamicFx) section.dataset.responsiveBattle = "candidate";
   section.dataset.rosterEvidence = frame.rosterEvidence ?? "PRODUCT_AUTHORED";
 
@@ -782,7 +798,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const cards = new Map();
   for (const combatant of frame.combatants) {
     const compact = combatant.team !== localTeamIndex;
-    const built = combatantCard(combatant, compact,hudArt);
+    const built = combatantCard(combatant, compact,hudArt,dynamicFx);
     cards.set(combatant.slot, built);
     (compact ? opponents : players).append(built.card);
   }
