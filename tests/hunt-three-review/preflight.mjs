@@ -45,7 +45,7 @@ export function verifyPacketSeal({provisionalSeal=null}={}){
 export function readContracts(){
  const contracts={baseline:json(path.join(here,'contracts/baseline.json')),overlay:json(path.join(here,'contracts/overlay.json')),resources:json(path.join(here,'contracts/resources.json')),expected:json(path.join(here,'contracts/expected-exact.json')),repairs:json(path.join(here,'contracts/repair-bases.json')),testInputs:json(path.join(here,'contracts/test-inputs.json'))};
  assert.equal(contracts.repairs.schema,'HUNT_ACTIONS_REPAIR_BASES.v1');assert.equal(contracts.testInputs.schema,'HUNT_ACTIONS_TEST_INPUTS.v1');assert.equal(contracts.baseline.schema,'HUNT_ACTIONS_BASELINE.v1');assert.equal(contracts.overlay.schema,'HUNT_ACTIONS_OVERLAY.v1');assert.equal(contracts.resources.schema,'HUNT_ACTIONS_RESOURCES.v1');assert.equal(contracts.expected.schema,'HUNT_ACTIONS_EXPECTED_EXACT.v1');
- assert.equal(contracts.overlay.candidateSHA256,'cf14c7ab2fa256ad5ce275347056af4c138321f71b0d7d554d7277db2de52409');assert.equal(contracts.overlay.fileCount,32);assert.equal(contracts.overlay.bytes,14912536);assert.equal(contracts.resources.fileCount,15);assert.equal(contracts.resources.bytes,14739579);
+ assert.equal(contracts.overlay.candidateSHA256,'e3ba2cf8c023fad8c0147de4f3b41304581040d4d0ed178c6681a7625fdd64d9');assert.equal(contracts.overlay.fileCount,32);assert.equal(contracts.overlay.bytes,14912864);assert.equal(contracts.resources.fileCount,15);assert.equal(contracts.resources.bytes,14739579);
  return contracts;
 }
 export function canonicalCoreReceipt(bytes,baseline){
@@ -89,5 +89,5 @@ export async function preflight({root=process.cwd(),provisionalSeal=null,baselin
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const args=process.argv.slice(2),options={root:process.cwd()};for(let i=0;i<args.length;i+=2){assert(['--root','--baseline-variant'].includes(args[i])&&args[i+1],'USAGE: preflight.mjs [--root checkout] [--baseline-variant frozen-local-reference]');options[args[i]==='--root'?'root':'baselineVariant']=args[i+1];}
- const result=await preflight(options);console.log(JSON.stringify({status:'PASS_EXACT_PORTABLE_PREFLIGHT_NOT_PUBLIC_AUTHORITY',packet:result.packet,baseline:result.summary,overlayFiles:32,overlayBytes:14912536,browserGPU:false}));
+ const result=await preflight(options);console.log(JSON.stringify({status:'PASS_EXACT_PORTABLE_PREFLIGHT_NOT_PUBLIC_AUTHORITY',packet:result.packet,baseline:result.summary,overlayFiles:32,overlayBytes:14912864,browserGPU:false}));
 }

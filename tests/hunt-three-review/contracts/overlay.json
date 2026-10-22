@@ -1,8 +1,8 @@
 {
   "schema": "HUNT_ACTIONS_OVERLAY.v1",
-  "candidateSHA256": "cf14c7ab2fa256ad5ce275347056af4c138321f71b0d7d554d7277db2de52409",
+  "candidateSHA256": "e3ba2cf8c023fad8c0147de4f3b41304581040d4d0ed178c6681a7625fdd64d9",
   "fileCount": 32,
-  "bytes": 14912536,
+  "bytes": 14912864,
   "files": [
     {
       "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-7612568c0979.webp",
@@ -66,8 +66,8 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "5da8c9aaad9f06d5ee38ff9f5a4aa40565a683be3c9c192c92bab825264a2f53",
-      "bytes": 148256
+      "sha256": "da349ce13b89d22a4a1e633852fac8454e7f856dd8dd5c16da540a72ebbeeccc",
+      "bytes": 148584
     },
     {
       "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
@@ -164,5 +164,10 @@
       "sha256": "f27f9e43e2b8987e3204c9a0c8feba821e304451822580207ad903c4bf792e96",
       "bytes": 689977
     }
-  ]
+  ],
+  "sourceProvenance": {
+    "originalCandidateSHA256": "cf14c7ab2fa256ad5ce275347056af4c138321f71b0d7d554d7277db2de52409",
+    "baseCommit": "945a95a0470c8b430f28182e4305a17a68b4ae7e",
+    "mainCompositionManifestSHA256": "f25ce2f926209a351fbfe744e76a7c34769b9dd6334e0630ccdcd22a574996d2"
+  }
 }

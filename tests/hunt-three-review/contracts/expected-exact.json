@@ -1,20 +1,31 @@
 {
   "schema": "HUNT_ACTIONS_EXPECTED_EXACT.v1",
   "target": "LOCAL_HUNT_ADMISSION_BUILD",
-  "candidateSHA256": "cf14c7ab2fa256ad5ce275347056af4c138321f71b0d7d554d7277db2de52409",
-  "buildId": "647df6baa181ac95a436c03cbf3b22637db4c801a5b24490de04b845a5651b38",
-  "inputSHA256": "99007b3adc61235671b99ef6b069d46749ae0ae32934eaea873ff0b36260d24a",
-  "completeBytes": 988179891,
-  "fileCount": 8196,
+  "candidateSHA256": "e3ba2cf8c023fad8c0147de4f3b41304581040d4d0ed178c6681a7625fdd64d9",
+  "buildId": "5f5f86b0bb10d4d76743f046efd762a5e908a1eecbbc91a9df1f96e3c45df577",
+  "inputSHA256": "53a9aa5ad9d41b4c994898f5e89b1b8ed9de1020558d1d8f73dc947b3a0be564",
+  "completeBytes": 990192980,
+  "fileCount": 8268,
   "pagesReceipt": {
-    "sha256": "8a834d3275fc5e3a06dddd1b93381b335a0008c5e26091b3d55ccd8e6635a3b5",
-    "bytes": 517137
+    "sha256": "2a1acae7344a36fff635fe15293ec80de9e30a49b87d5cc788f3e604463d113d",
+    "bytes": 521813
   },
-  "completeCeilingBytes": 989094037,
+  "completeCeilingBytes": 990197076,
   "instrumentedAdditionalCompleteBytesCap": 131072,
   "bundleGrowthCapBytes": 1048576,
   "metadataGrowthCapBytes": 131072,
   "resourceIncrementBytes": 14739579,
   "instrumentedTarget": "LOCAL_HUNT_ACTIONS_INSTRUMENTED_BUILD",
-  "instrumentedClaim": "SEPARATE_REVIEW_BUILD_NOT_IDENTICAL_PACKAGED_CANDIDATE"
+  "instrumentedClaim": "SEPARATE_REVIEW_BUILD_NOT_IDENTICAL_PACKAGED_CANDIDATE",
+  "instrumentedCompleteCeilingBytes": 990208789,
+  "budgetDerivation": {
+    "baseCommit": "945a95a0470c8b430f28182e4305a17a68b4ae7e",
+    "baselineBuildId": "84dde92b854d94e4e2b79a3791310bbd4bc042ca5d016ba27638eebbb8c60161",
+    "oldCeilingBytes": 989094037,
+    "metadataAllowanceBytes": 4096,
+    "instrumentedMeasuredCompleteBytes": 990204693,
+    "publicHardLimitBytes": 1000000000,
+    "resourceIncrementUnchangedBytes": 14739579,
+    "reason": "Approved Ranch, Dex and Battle baseline changes only; exact mode measurements plus 4096 bytes of metadata allowance. Any source/resource/base growth requires remeasurement and review."
+  }
 }

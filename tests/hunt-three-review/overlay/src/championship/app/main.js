@@ -1,3 +1,4 @@
+import {createResidentAssetNotice,collectRaisingInitialSequences} from './residentAssetNotice.js';
 import {huntThreePublicFallbackRole} from '../presentation/vs2/huntThree/publicFallbackRole.mjs';
 import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
@@ -816,14 +817,15 @@ async function loadOptionalBattleFieldArt(stage, source) {
  * retains the explicit independent asset preview. Unknown hit/weather bindings
  * are not inferred from HP changes.
  */
-async function loadOptionalBattleVfxOverlay(host, stage, source, getFocusPlacement, getFieldPlacement) {
+async function loadOptionalBattleVfxOverlay(host, stage, source, getFocusPlacement, getFieldPlacement, isActive = () => true) {
   try {
     return await mountBattleVfxThreeOverlay({
       host,
       stage,
       systemId: VFX_ART_PREVIEW_SYSTEM,
       source: VFX_ART_PREVIEW_SYSTEM ? null : source,
-      getFocusPlacement,getFieldPlacement
+      getFocusPlacement,getFieldPlacement,
+      recordDiagnostic: recoveryDiagnostics.record,isActive
     });
   } catch (error) {
     console.warn(`CHAMPIONSHIP_VFX_ART_FALLBACK: ${error.message}`);
@@ -908,6 +910,7 @@ async function mountRaisingHome() {
     mountField({ host, recoveryHost, source: fieldSource, onTrainingFrame }) {
       let closed = false, attempt = null, effects = null, scene = null, phase = 'loading';
       let residentStates = [], lastFrame = fieldSource.getFrame();
+      const residentNotice = createResidentAssetNotice({onChange(){ if (!closed && phase === 'ready') show('ready'); }});
       const status = document.createElement('div'), message = document.createElement('p');
       const retry = document.createElement('button'), cancel = document.createElement('button'), leave = document.createElement('button'), reloadGame = document.createElement('button');
       status.className = 'int-rh2-resident-assets';
@@ -964,8 +967,8 @@ async function mountRaisingHome() {
         const failed = residentStates.some(s => s.state === 'error'), loading = residentStates.some(s => s.state === 'loading');
         host.setAttribute('aria-busy', String(next === 'loading' || loading));
         status.dataset.phase = next; progress.element.hidden = next === 'ready';
-        const residentPending = next === 'ready' && (failed || loading);
-        status.hidden = next === 'ready' && !failed && !loading;
+        const residentPending = next === 'ready' && residentNotice.visible;
+        status.hidden = next === 'ready' && !residentPending;
         retry.hidden = next === 'loading' || (next === 'ready' && !failed); retry.disabled = next === 'loading';
         cancel.hidden = next !== 'loading'; leave.hidden = next === 'ready' && !residentPending;
         reloadGame.hidden = retry.hidden && !residentPending;
@@ -974,7 +977,7 @@ async function mountRaisingHome() {
       const active = owner => !closed && attempt === owner && !owner.signal.aborted;
       function start() {
         if (closed) return;
-        attempt?.cancel(); effects?.cancel(); scene?.dispose(); scene = null; residentStates = [];
+        attempt?.cancel(); effects?.cancel(); scene?.dispose(); scene = null; residentStates = []; residentNotice.reset();
         delete status.dataset.moduleLoadFailed;
         status.append(retry, cancel, leave, reloadGame);
         expansionCta.hidden = true;
@@ -1003,8 +1006,7 @@ async function mountRaisingHome() {
             progress.start('facilities'); progress.start('partners');
             const [characterBundle, fieldArt] = await Promise.all([
               owner.own(loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map(r => r.speciesId), ['main'], {
-                signal: owner.signal,ranchStreaming:true,initialSequences:Object.fromEntries(fieldSource.getFrame().residents.map(r=>[
-                  r.speciesId,[0,fieldSource.getActorFrame?.(r.creatureId)?.sequenceId].filter(Number.isInteger)])) }))
+                signal: owner.signal,ranchStreaming:true,initialSequences:collectRaisingInitialSequences(fieldSource.getFrame().residents, id=>fieldSource.getActorFrame?.(id)) }))
                 .then(value => { if (value) {progress.done('partners');recoveryDiagnostics.record('LOAD',{area:'raising',stage:'partners',phase:'done'});} return value; }),
               owner.own(loadOptionalCageFieldArt(stage, { signal: owner.signal }))
                 .then(value => { if (value) {progress.done('facilities');recoveryDiagnostics.record('LOAD',{area:'raising',stage:'facilities',phase:'done'});} return value; })
@@ -1024,7 +1026,7 @@ async function mountRaisingHome() {
                 if (!active(owner)) return;
                 const failed=states.find(s=>s.state==='error');
                 if(failed)recoveryDiagnostics.record('LOAD_FAILED',{area:'raising',error:{name:'Error',message:failed.error}});
-                residentStates = states; host.dataset.residentAssets = JSON.stringify(states);
+                residentStates = states; residentNotice.update(states); host.dataset.residentAssets = JSON.stringify(states);
                 if (phase === 'ready') show('ready');
               },
               onActorFrame: new URLSearchParams(location.search).get('presentation') === 'developer' || app.getInteractiveTutorial()?.finished === false
@@ -1102,7 +1104,7 @@ async function mountRaisingHome() {
         focusResident(id, options) { return scene?.focusResident?.(id, options) ?? false; },
         getDiagnostics() { return scene?.getDiagnostics?.() ?? { renderer: 'LOADING', state: phase }; },
         dispose() {
-          if (closed) return; closed = true;
+          if (closed) return; closed = true; residentNotice.dispose();
           attempt?.cancel(); effects?.cancel(); stopTracking(); scene?.dispose(); scene = null; status.remove(); expansionCta.remove();
         }
       });
@@ -1548,7 +1550,7 @@ async function mountBattleField() {
           delete root.dataset.fieldFallback;
           // The existing overlay owns Hyper, five impact families and hit flash.
           // Keep its readiness gate: no safe replacement for these cues is proven.
-          vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement());
+          vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement(), () => !disposed);
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }

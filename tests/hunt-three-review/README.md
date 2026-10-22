@@ -1,50 +1,46 @@
-# HM01/HM08 finite Actions admission packet — not release
+# HM01 / HM08 finite packaged Actions admission — not release
 
-## Identity and scope
+This draft-PR test packet contains exactly 58 selected paths. The 32-path source/resource overlay is **14,912,864 bytes**. The 12 authored HM01/HM08 resources and three Draco decoder dependencies are unchanged: the complete added resource selection remains **14,739,579 bytes**. No Blender master, high-resolution design source, private audit or optional HM02 resource payload is selected.
 
-This test packet stages the frozen `cf14c7ab2fa256ad5ce275347056af4c138321f71b0d7d554d7277db2de52409` candidate as **32 overlay files / 14,912,536 bytes**, not as a replacement repository. They are 20 source/catalog inputs and 12 HM01/HM08 map resources. No optional HM02 resource payload is selected. Shared HM02 compiler prerequisites remain unchanged.
+## Current base and source composition
 
-The ordinary approved core build runs first. All core/runtime/public inventory/input hashes and frozen ranch41 pins remain mandatory. The current default baseline additionally requires the 19 authenticated test/tool repairs from head `76d687bd14149e5324ecf86b79bc21a5f022ce81`, tree `d4768b3acfaf71b1a8031aec177c793755e6ca19`. Its CI/merge status is not approval authority. No generic ignored-tests exception exists. A future changed base needs a new exact review; do not restore an older branch over repairs.
+- Approved main: `945a95a0470c8b430f28182e4305a17a68b4ae7e`, tree `2bc9ccea6f86469700e9046a08216660e4a5e5c7`.
+- Actual deployed core build: `84dde92b854d94e4e2b79a3791310bbd4bc042ca5d016ba27638eebbb8c60161`; 8,245 files, complete canonical selection **975,187,866 bytes**.
+- Composed candidate: `e3ba2cf8c023fad8c0147de4f3b41304581040d4d0ed178c6681a7625fdd64d9`. This is **not** the old cf14c7ab source identity. It preserves the original Hunt feature hunks and all current Ranch status/journal/viewport controls plus Battle warmup cancellation/diagnostics. Only the reviewed overlay main composition changes; no map redraw, actor authority change or second simulation/ticker/lease owner.
+- Baseline pins: 100 exact repository dependencies, historical Ranch 41-path set with current approved bytes, 19 finite repair/test dependencies, 270 canonical fixture-generator inputs, and one read-only browser helper. There are no generic ignored-test paths or production exceptions.
+- Core manifest bytes were canonically derived with the production compiler and joined to the actual deployed build ID; they were not downloaded from a Pages artifact. Hosted Actions must independently build and validate the full physical core and admission artifact. A local source/CPU result is never packaged or browser evidence.
 
-Only the core receipt's existing 40-hex commit metadata is canonicalized to reproduce the approved core payload identity. Every other receipt byte/payload field and file is verified. The actual observed commit/hash is recorded. No baseline file is rewritten.
+## Exact build versus instrumented build
 
-`PACKET.json` seals the proposed repository paths except itself. The separate local transfer selection binds PACKET too. Do not upload a parent audit folder, source/private manifests, Blender masters, QA high-resolution art, saves, or historical patches.
+Exact candidate build `5f5f86b0bb10d4d76743f046efd762a5e908a1eecbbc91a9df1f96e3c45df577` is **8,268 files / 990,192,980 bytes**, without an observation bridge. Its smoke uses ordinary UI and resource-hash evidence; unavailable Three diagnostics remain NOT_EXPOSED.
 
-## Two different build claims
+The separate instrumented review build is **8,269 files / 990,204,693 bytes**. Its three finite adapter substitutions and one bridge are explicitly recorded. No bridge enters the final game or claims to be identical production runtime. Native clock/controller/save rules are not mutated for capture or natural fade. Controlled opacity stress is separate from natural cave proof.
 
-* **Exact:** identical candidate build `647df6baa181ac95a436c03cbf3b22637db4c801a5b24490de04b845a5651b38`, input `99007b3adc61235671b99ef6b069d46749ae0ae32934eaea873ff0b36260d24a`, complete **8,196 files / 988,179,891 bytes**. Untouched runtime smoke has no observation bridge. Resource requests and ordinary UI screenshots are not falsely labelled `threeUsed` diagnostics.
-* **Instrumented:** separately compiled finite adapter changes to exactly main, the Hunt presenter, and the unified pilot, plus one test bridge. Adapter before/after hashes, input/build identity, and actual complete size are recorded. It is never claimed identical to the exact runtime and must never ship as the game.
+## Explicit finite resource budgets
 
-Both complete artifacts must fit **989,094,037 bytes**; instrumented growth has an additional **131,072-byte** cap. Compile-only success is not packaged evidence. New output directories are exclusive. Unchanged core files are read-only hardlinks; no cleanup, overwrite, chmod, or shared-input mutation is allowed. Browser execution consumes only the complete artifact directory, never the source checkout.
+The historical Hunt ceiling was **989,094,037 bytes**. Approved current Ranch/Dex/Battle changes require an explicit, measured revision, not a limit bypass:
 
-## Existing Actions only; explicit approval still required
+| Mode | Measured bytes | Metadata-only allowance | Enforced ceiling |
+|---|---:|---:|---:|
+| Exact | 990,192,980 | 4,096 | **990,197,076** |
+| Instrumented | 990,204,693 | 4,096 | **990,208,789** |
 
-The separate manual workflow is `hunt-hm01-hm08-admission.yml`, not PR66 or deployment. It uses existing checkout/setup-node/Playwright/build conventions, contents-read permissions, and no credentials persistence. Five jobs run with max parallelism 2 and 35-minute per-job ceiling. Phase limits remain strict; timeout or missing evidence is failure, not skipped acceptance. It does not trigger deployment or publish the complete game artifact.
+Both ceilings are independently enforced by builder, browser and evidence finalizer. The unchanged public **1,000,000,000-byte** hard limit remains an additional check. At ceilings, headroom is **9,802,924 / 9,791,211 bytes**. Instrumented-over-exact allowance remains separately limited to 131,072 bytes; bundle growth to 1,048,576 and metadata growth to 131,072 bytes. No allowance authorizes new images, source features or future baseline growth. Any changed base requires exact remeasurement and review.
 
-The browser runner refuses execution outside `CI=true` and `GITHUB_ACTIONS=true`. Local work is parse/CPU/build verification only; this guard is not authorization to bypass the local browser restriction. Future execution requires explicit approval of this exact packet and an independent final review.
+## Five bounded hosted phases
 
-## Real-state proof, not forced native state
+1. **Exact smoke:** normal HM01/HM08 day/night entry using the untouched packaged candidate; public request closure and no bridge.
+2. **Instrumented visual:** real day/night/phase and drag/scissor, same-frame 2D comparison, natural HM01 ENTER/HIDDEN/EXIT, overlapping near-transparent/zero actors and actor-versus-solid occlusion. Exact 0.05 stress is controlled, not passed off as natural output. HM08 Canyon has no cave groups.
+3. **Capture:** actual visible target and ordinary native tool gestures, capture/save/continue; record terminal screen, remaining native time and tool state. No direct capture invocation, virtual clock speedup or altered time limit.
+4. **Recovery:** manifest 404, corrupt GLB, held texture abort, exact HM08-owned Draco abort, context-loss recovery, and later successful entry. Decoder ownership matches exact compressed bytes and entry epoch; Ranch workers may legitimately persist. Cleanup evidence never substitutes for native disposal proof.
+5. **Reentries:** ten real same-app reentries, owned-resource release and memory plateau, public fallback. Unknown/mixed ownership or unexpected counters remain failures, not numerical waivers.
 
-Synthetic day/night fixtures are generated by the existing canonical Continue → advanceClock → save writers, then revalidated. Tests install them with the existing full-QA installer UI through exactly three contract-pinned in-memory test URLs: installer HTML, its self-contained bundled JavaScript, and the canonical day/night seed. These URLs must be absent from the game artifact; their GET-only routes exist only during installation and are removed before game testing. No source checkout is served. They do not patch saves, nested digests, rules, HP, RNG, actors, capture success or native clocks. They have rank9 and fee waiver; existing playtest unlock policy is retained. Entry is not independent native-rank enforcement proof and no450-Bits debit is claimed.
+Each phase is fail-closed with complete receipts. Draft PR opened/synchronize/reopened events target `main`; read-only permissions, no deploy/secrets, maximum two concurrent phases, existing time bounds and seven-day retention remain unchanged. Only validated small JSON/PNG evidence is retained: no raw saves, source audit, browser trace/HAR/video, masters or full game artifact.
 
-Expected phase sets derive from the pinned field descriptor: HM01{0,1}; HM08{0}, whose single frame has no animation duration. Phase equality remains mandatory; no nonexistent HM08 phase is invented.
+## Local CPU checks and hosted prerequisite
 
-The fixture times are08:00 (both day) and16:00 (both night). Normal tool input is real UI rope sampling/pull, Hand, card, result, Save&Quit and Continue. No virtual clock, second ticker, simulation or actor relocation is introduced. Same-frame comparisons synchronously render the displayed default framebuffer, suspend only the Three presentation, draw existing public2D fallback, and restore in finally. Native view/RNG/state/phase equality and UNPACK state are asserted. These extra diagnostic renders are excluded from performance claims.
+CPU checks exercise exact descriptor projection, source-alpha semantics, resource ownership, failure cleanup/settlement, finite cap edges, canonical fixtures and strict pin corruption negatives. No local browser or listener is authorized by this packet.
 
-HM01 cave proof requires actual observed ENTER → native capture-record wildHidden → EXIT. Hand capture hiding is not cave evidence. Native passage never emits exactly0.05: ENTER's minimum positive alpha is0.0625; EXIT's first positive alpha is0.044444…, with visible EXIT alpha0. Native near-zero/zero overlap cases are separate from labelled controlled render-only0.05/0 stress. HM08 is Canyon and has no caveGroups.
+Actions first runs these CPU checks and canonical fixture reproduction, then `build:playtest` and `validate:playtest`, exact packet/baseline preflight, complete admission build, real browser phase and fail-closed finalizer. The original R3 failures remain evidence; they do not become passes because source tests pass.
 
-Actual framebuffer omission and instrumented depth-reference images test invisible/near-transparent depth masking and native actor ordering. Reference-only material changes are always restored and are not a proposed runtime fix. Scissor traces bind the actual renderer draw to native visible-map bounds. Native transform/tint/opacity/contact-shadow metadata is checked separately from GPU pixels. Solid-occlusion controls require actual depth-covered pixels without another actor overlapping; human semantic/ordering review remains required.
-
-## Bounded evidence and stopping gates
-
-`test-matrix.json` is the authoritative required-case list. Exact smoke, phase/drag/natural fade/overlap, capture/save, abort/failure/context recovery, and ten real reentries have separate complete receipts. Unobserved natural cave/overlap evidence is **NOT PASS**. Source-only or fallback-only success cannot pass a Three-required case. Background lifecycle/fallback recovery and post-ten-entry fallback are required.
-
-Resource observer counts workers, decode tasks, blob URLs, ImageBitmaps, canvases and browser JS heap estimates. A stable app and Three renderer identity, bounded actor cache and GPU-count/heap plateaus are required. Explicit presenter-dispose Texture.destroy monitoring does not prove earlier failure-path or TextureSource ownership; prior CPU ownership tests and final reviewer inspection remain complementary gates.
-
-Only allowlisted PNG/JSON evidence is retained, **max128 files and64MiB per phase**, **7 days**. Finalization produces a privacy-minimal hash inventory; no server logs, video, tracing, HAR, raw saves, source audits or full game builds are uploaded. Early failure still creates a fail-closed receipt. Five phase artifacts have a combined maximum320MiB before compression.
-
-HM01 retained fallback dimensions estimate **95,314,176 bytes (~90.90MiB)** per active field, before3D textures, actors, CPU/driver costs. This is not measured GPU residency. No fallback-memory release is implemented. Desktop/portrait browser evidence is not physical-phone evidence. `qaApproved:false`, mobile performance, final human pixel review, and the fieldArt-owned release/reacquire design remain gates. A successful workflow alone is not public release approval.
-
-## R2 bounded review corrections
-
-The installer contract pins 65 existing inputs and exact in-memory HTML/JavaScript/seed outputs; installer transport identities are recorded separately from the untouched game artifact. CPU tests reject unknown, encoded, query-bearing, wrong-origin and non-GET installer requests. The observer uses Pixi current-chain `getGlobalTransform()` for trimmed visual bounds before rendering; an actual installed-Pixi regression covers two unrendered parent movements. Finalization requires an exact retained-evidence path/byte/hash inventory and at least one retained PNG for PASS. Missing, mutated, unlisted, duplicate, wrong-size and PNG-free evidence fail closed. None of these CPU checks constitutes actual browser/GPU evidence.
+**Still required:** actual normal gameplay evidence for all five phases, human transparent-depth/solid-order review, context/scissor/fallback recovery, and physical-phone performance. Retained HM01 fallback dimension estimate is 95,314,176 bytes before 3D/actors/driver overhead. Desktop portrait viewport is not physical-phone evidence. `qaApproved` remains false. This packet grants no merge, formal release or phone approval.

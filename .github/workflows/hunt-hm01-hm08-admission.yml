@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
-      - fix/ranch-core-rendering-v4-20261022
+      - main
     paths:
       - tests/hunt-three-review/**
       - .github/workflows/hunt-hm01-hm08-admission.yml

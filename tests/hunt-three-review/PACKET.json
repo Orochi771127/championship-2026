@@ -3,13 +3,13 @@
   "files": [
     {
       "path": ".github/workflows/hunt-hm01-hm08-admission.yml",
-      "bytes": 3607,
-      "sha256": "079e54df82011f5c4bc95fa7965ad41953cff135ec9e3316c0e3605eb9eb167a"
+      "bytes": 3575,
+      "sha256": "5d2faa9f5d1eb36a56e3d66caefea0badcf6d59065fbe8df2284f16894051bbf"
     },
     {
       "path": "tests/hunt-three-review/README.md",
-      "bytes": 8423,
-      "sha256": "86851631e138752a3292c90bb1a4214db9262edfd915690399c64fb13b86bd2c"
+      "bytes": 6030,
+      "sha256": "f7bc0dd6ce74f9983447a8772bdde6a1c1f8ae5f13c41d6a2ac18414627ee58c"
     },
     {
       "path": "tests/hunt-three-review/adapter.mjs",
@@ -23,23 +23,23 @@
     },
     {
       "path": "tests/hunt-three-review/browser.mjs",
-      "bytes": 59684,
-      "sha256": "3703ab0902583ba6f14daa46009fdfad38601378a2d44697e8ae74fa316cbf2b"
+      "bytes": 59788,
+      "sha256": "efc29b81b8f04373639f9fa6f61012f225e53b5c6e9c0b17016b01567e217bc3"
     },
     {
       "path": "tests/hunt-three-review/build.mjs",
-      "bytes": 18330,
-      "sha256": "f03d83f0a71af1178445cd915e006a2932da104c88d5c74cde4d0b56b6166c76"
+      "bytes": 18525,
+      "sha256": "ef533fb2c98f89d5b375c8b28278a45cfca49948b17e607d032794c004bc9a33"
     },
     {
       "path": "tests/hunt-three-review/contracts/baseline.json",
-      "bytes": 19103,
-      "sha256": "a333b10c4b0b3f7e8a953dee6640e4746072e12667338afd8808de552afa9f9b"
+      "bytes": 21883,
+      "sha256": "e7047cfef2e23b60f22f3dc392a6393b445322f24ad794209e62845d32915a32"
     },
     {
       "path": "tests/hunt-three-review/contracts/expected-exact.json",
-      "bytes": 868,
-      "sha256": "0533d5b6543daee9add00d716bcc0c2066e993150ecd95ecfc4197eddcb55d73"
+      "bytes": 1510,
+      "sha256": "d6318f5c86db06be2ddb99944be202d1b877cd2225c3426e74b7a47fb18237eb"
     },
     {
       "path": "tests/hunt-three-review/contracts/installer-transport.json",
@@ -48,13 +48,13 @@
     },
     {
       "path": "tests/hunt-three-review/contracts/overlay.json",
-      "bytes": 6683,
-      "sha256": "20b62212d83dee10ded23724ffa8c3452fce761342484e6cffad24be18ec6452"
+      "bytes": 6977,
+      "sha256": "3cb5a6f13fc7f0e15f89c73a2621cd1097a7b7d8fd0b11d0212996f768b4b397"
     },
     {
       "path": "tests/hunt-three-review/contracts/repair-bases.json",
-      "bytes": 9269,
-      "sha256": "c6e5f4be334421662fe53fdee17f7410de1128af0a980db5a026fc328e9c0b7c"
+      "bytes": 8988,
+      "sha256": "7dfc697e33d2c3d075bcff02b6a07764fd5a10fe9589d9e81b2abaedc79a45e4"
     },
     {
       "path": "tests/hunt-three-review/contracts/resources.json",
@@ -64,22 +64,27 @@
     {
       "path": "tests/hunt-three-review/contracts/test-inputs.json",
       "bytes": 52779,
-      "sha256": "8fffe2a3c7121499ea4f6cbca9bb96a02a4cdf045e9a2480adb4d2610f4a0996"
+      "sha256": "e723e5e1f2a2fe024b3359cf570c2ecfe4af451c9cea9e8dd7f4434ce043245b"
     },
     {
       "path": "tests/hunt-three-review/cpu-tests.mjs",
-      "bytes": 41713,
-      "sha256": "1fafec3dbbf783f2312a6b004a06803115d52030143ad7e05cf6fd3cdfbc9a7d"
+      "bytes": 44782,
+      "sha256": "41f7c8942dc73807244674f706d57f413f3ede0d1e05ce2637ca4d3647c7ff85"
     },
     {
       "path": "tests/hunt-three-review/finalize.mjs",
-      "bytes": 5202,
-      "sha256": "810eb4abfd35fc839b7a65efcc6d1d10610e933ad77509ade3448b4ac75de8b2"
+      "bytes": 5306,
+      "sha256": "0a98637abe838be9151be826ba4b3856379e58b89b0b0e6b797ee1bdde2b7135"
     },
     {
       "path": "tests/hunt-three-review/finalizer-tests.mjs",
       "bytes": 2573,
       "sha256": "6c710bd8f1e492fe94fa6c67eaef2c513341739723d69ff407dd1ac1b56a233d"
+    },
+    {
+      "path": "tests/hunt-three-review/fixtures.mjs",
+      "bytes": 2678,
+      "sha256": "8a25ac764fd26834e2e7a9ddba1d761f22c15f074658ce184f700053f6b7bc5b"
     },
     {
       "path": "tests/hunt-three-review/fixtures/full-qa-day.json",
@@ -90,11 +95,6 @@
       "path": "tests/hunt-three-review/fixtures/full-qa-night.json",
       "bytes": 15453,
       "sha256": "5f23dc8059e9e94e56e38c49f7b2aa428b6910e74e0a70cafed75a4c95a1df3f"
-    },
-    {
-      "path": "tests/hunt-three-review/fixtures.mjs",
-      "bytes": 2678,
-      "sha256": "8a25ac764fd26834e2e7a9ddba1d761f22c15f074658ce184f700053f6b7bc5b"
     },
     {
       "path": "tests/hunt-three-review/installer-transport-tests.mjs",
@@ -168,8 +168,8 @@
     },
     {
       "path": "tests/hunt-three-review/overlay/src/championship/app/main.js",
-      "bytes": 148256,
-      "sha256": "5da8c9aaad9f06d5ee38ff9f5a4aa40565a683be3c9c192c92bab825264a2f53"
+      "bytes": 148584,
+      "sha256": "da349ce13b89d22a4a1e633852fac8454e7f856dd8dd5c16da540a72ebbeeccc"
     },
     {
       "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
@@ -274,7 +274,7 @@
     {
       "path": "tests/hunt-three-review/preflight.mjs",
       "bytes": 11124,
-      "sha256": "b41cb21ea66ae9cd17f762d2ca44dfcb64f5fa9eff1de28775f566246bc56458"
+      "sha256": "db1bb0a0222c78dfc036558900396330b06174002b7fe9fff541682dbcdeafff"
     },
     {
       "path": "tests/hunt-three-review/resource-observer.mjs",
@@ -283,8 +283,8 @@
     },
     {
       "path": "tests/hunt-three-review/test-matrix.json",
-      "bytes": 2553,
-      "sha256": "5298c57f3e6b21b70285abec33858642a0533d36b8bfbeaa7611159a5ec9bc66"
+      "bytes": 3168,
+      "sha256": "c91bfcb787e4769f413a61590cb99250be410c68c36e4b5bce58547139f972e2"
     }
   ]
 }
