@@ -1,0 +1,122 @@
+{
+  "schema": "HUNT_THREE_MAP.v1",
+  "map": "hm01",
+  "qaApproved": false,
+  "glb": {
+    "file": "hm01-terrain-e90423e80e5e.glb",
+    "sha256": "e90423e80e5ec917854cc406b77e32815ae6912d5629126a2f92e209537da5ee",
+    "bytes": 1661384,
+    "materials": 0,
+    "textures": 0,
+    "compression": {
+      "extension": "KHR_draco_mesh_compression"
+    },
+    "meshes": [
+      {
+        "node": "hm01-foreground_structure",
+        "category": "foreground_structure",
+        "primitives": 1,
+        "triangles": 96193,
+        "vertices": 78600
+      },
+      {
+        "node": "hm01-foreground_vegetation",
+        "category": "foreground_vegetation",
+        "primitives": 1,
+        "triangles": 199263,
+        "vertices": 167035
+      },
+      {
+        "node": "hm01-standable_ground",
+        "category": "standable_ground",
+        "primitives": 1,
+        "triangles": 92463,
+        "vertices": 46770
+      },
+      {
+        "node": "hm01-water",
+        "category": "water",
+        "primitives": 1,
+        "triangles": 473,
+        "vertices": 477
+      }
+    ]
+  },
+  "fields": {
+    "field_hm01_01": {
+      "variant": "day",
+      "frames": [
+        {
+          "file": "field_hm01_01-frame-00-7612568c0979.webp",
+          "sha256": "7612568c0979787ca4b7e04cdced8aaa4396913427253fd3d61180b92385976d",
+          "bytes": 3169974,
+          "width": 2880,
+          "height": 2880
+        },
+        {
+          "file": "field_hm01_01-frame-01-eeb2ff08fdd4.webp",
+          "sha256": "eeb2ff08fdd4fa0ebd31d471dc35d3cf1a76153e05362a1f51ec57dd7208b902",
+          "bytes": 3169610,
+          "width": 2880,
+          "height": 2880
+        }
+      ]
+    },
+    "field_hm01_02": {
+      "variant": "night",
+      "frames": [
+        {
+          "file": "field_hm01_02-frame-00-2ddf2c03c3e1.webp",
+          "sha256": "2ddf2c03c3e169bab40caadecf6b5ec0011446972080b9c6b3869ce320fb3e8f",
+          "bytes": 2196984,
+          "width": 2880,
+          "height": 2880
+        },
+        {
+          "file": "field_hm01_02-frame-01-4fb08e2d1d80.webp",
+          "sha256": "4fb08e2d1d8006a59a7e4c2eaeec7501dda9652bc5a23727dd3ac41d68b4230a",
+          "bytes": 2196742,
+          "width": 2880,
+          "height": 2880
+        }
+      ]
+    }
+  },
+  "projection": {
+    "kind": "BLENDER_LOCKED_ORTHOGRAPHIC",
+    "elevationDegrees": 51.999991,
+    "azimuthDegrees": 45.0,
+    "nativePxPerUnit": 16,
+    "worldPxPerNativePx": 2,
+    "nativeSize": [
+      1440,
+      1440
+    ],
+    "worldSize": [
+      2880,
+      2880
+    ],
+    "orthoScaleUnits": 90.0,
+    "cameraForwardGltf": [
+      -0.4353385865688324,
+      -0.7880106568336487,
+      -0.4353383481502533
+    ],
+    "cameraUpGltf": [
+      -0.5572077631950378,
+      0.6156615614891052,
+      -0.5572076439857483
+    ]
+  },
+  "groundSupport": {
+    "walkableHeightUnits": 0.0,
+    "measured": {
+      "miss": 0
+    }
+  },
+  "groundHeights": {
+    "file": "hm01-ground-heights.json",
+    "sha256": "a46ee687ea5c3f1f7865dbddceca8ced3798772707f90d30c29728728d9935ba",
+    "bytes": 184689
+  }
+}

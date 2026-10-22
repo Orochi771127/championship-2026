@@ -1,0 +1,376 @@
+{
+  "schema": "HUNT_ACTIONS_INSTALLER_TRANSPORT.v1",
+  "scope": "EXACT_IN_MEMORY_TEST_ROUTES_ONLY_NOT_GAME_ARTIFACT",
+  "helper": {
+    "path": "tests/friends-installer-fixture-support.cjs",
+    "allowedExport": "createInstallerFixtures"
+  },
+  "compiler": {
+    "name": "esbuild",
+    "version": "0.28.2",
+    "externalImports": 0
+  },
+  "inputs": [
+    {
+      "path": "full-qa-save.html",
+      "bytes": 9233,
+      "sha256": "83c95226985e6740374aa0775fb7ac78c4e4000f81fb5a962dea4836aa9d3218"
+    },
+    {
+      "path": "qa/championship-full-qa-save.json",
+      "bytes": 15212,
+      "sha256": "6ad209dc3b5e4d03dcebc2b20157e84336884f825bf17117a3636be7adc35407"
+    },
+    {
+      "path": "src/championship/app/championshipStandaloneSave.js",
+      "bytes": 27042,
+      "sha256": "db8d3cebd6cf597699e4f0595d266b7f52d5371645dac094970ee93eb26e6d05"
+    },
+    {
+      "path": "src/championship/app/friendsPlaytestPolicy.js",
+      "bytes": 4134,
+      "sha256": "38d5ffa5c1c6fd187f110d8801d2df305461f17c4eebecb39c8072af86873ce9"
+    },
+    {
+      "path": "src/championship/app/interactiveTutorialBattleSteps.js",
+      "bytes": 2527,
+      "sha256": "68100c1cde8a1eea756b08be5da0c08895a160aa3646d4040eb6136cac04279b"
+    },
+    {
+      "path": "src/championship/app/interactiveTutorialCheckpoint.js",
+      "bytes": 1972,
+      "sha256": "2331d63e60771c9205c83fbe4c91aa6a0c7a3dc477dd626d9bc4cc45d028ee45"
+    },
+    {
+      "path": "src/championship/app/interactiveTutorialHuntSteps.js",
+      "bytes": 4175,
+      "sha256": "daa7559f7477a92e3079f2abd3e465e6da126326a4f44c1977a98dfb33aa1475"
+    },
+    {
+      "path": "src/championship/app/interactiveTutorialRaisingSteps.js",
+      "bytes": 3435,
+      "sha256": "b02d6a8d7f7f4ebdce51d658ef34e35cd8de7c001c6a3383476bbb220bfb8884"
+    },
+    {
+      "path": "src/championship/app/nativeOpeningState.js",
+      "bytes": 1383,
+      "sha256": "50bf700fd201d9e6ce14fb748c7ae26f70f4c9fb13b00cfc3e0b6c54893bbfa1"
+    },
+    {
+      "path": "src/championship/app/qaRanchExpansion.js",
+      "bytes": 1404,
+      "sha256": "1f19ca277a766ca952545bf9462a79f632e0a8a3b9e88e8fd3b7f6d4a56bcdac"
+    },
+    {
+      "path": "src/championship/battle/battleCreatureBuild.js",
+      "bytes": 13079,
+      "sha256": "1b01989c2eb55830318fd2a4dd53672398e1c5c9f852df8e7cbe66eb7a676445"
+    },
+    {
+      "path": "src/championship/battle/battleEconomyTransaction.js",
+      "bytes": 9842,
+      "sha256": "b7524b977ca055b370165be8b9590e3de4141b2c1b03225af124ecc1e8af80fb"
+    },
+    {
+      "path": "src/championship/battle/battleMatchSelection.js",
+      "bytes": 9220,
+      "sha256": "3081b678fb12c71cf75de9d9882eb270d1c3862c58ba44705f4415e739d7b9f3"
+    },
+    {
+      "path": "src/championship/battle/battleOutcome.js",
+      "bytes": 19445,
+      "sha256": "601e5083184451681380af0da49957b5907bbf2dd549ae31c1af0e0432627045"
+    },
+    {
+      "path": "src/championship/battle/battleRewardTransaction.js",
+      "bytes": 8168,
+      "sha256": "1909bf6a20aa3e165a0631dfbac45e2f521b5d93c57a51df4bede9d6a002cd8a"
+    },
+    {
+      "path": "src/championship/battle/battleRngChannel.js",
+      "bytes": 10063,
+      "sha256": "1cad51532eb44c22f117245e891c4a98443d58736e861f3d67af41c0038adfe7"
+    },
+    {
+      "path": "src/championship/battle/nativeChampionshipRounds.js",
+      "bytes": 7538,
+      "sha256": "e54b3468d40f3377f67d600a1f110cf63fc0881635811314c20deb8255f1ef18"
+    },
+    {
+      "path": "src/championship/battle/nativeFreeBattle.js",
+      "bytes": 3388,
+      "sha256": "0bbbfd3e569c41a615cbe300bae8f740b03236f18ef53e93a8b1615ec029c00b"
+    },
+    {
+      "path": "src/championship/battle/nativeTitleProgression.js",
+      "bytes": 5010,
+      "sha256": "e1cab34856560705fe2db6468531e9e5d6309a76225f3fbcd84de9ddee06caf4"
+    },
+    {
+      "path": "src/championship/battle/titleEventSchedule.js",
+      "bytes": 8171,
+      "sha256": "fb4a8adb7db80f0c0252b4c5470e5d5d5d2dddfb659508dac30fe24c420a984f"
+    },
+    {
+      "path": "src/championship/cage/cageCatalog.js",
+      "bytes": 5817,
+      "sha256": "bfd1cb54936989c71b05262fe345142bc095d8ac9213dad063f49b8bbf64a88a"
+    },
+    {
+      "path": "src/championship/cage/cageEffects.js",
+      "bytes": 9584,
+      "sha256": "986d468dda7d4b039586ecbe8d68991d1ed1f706e513e957cc0451a8305eff24"
+    },
+    {
+      "path": "src/championship/cage/nativeRanchLayout.js",
+      "bytes": 1877,
+      "sha256": "816f0a52801307872e76e228f5f0130c23ff6c7ad084a0e7f62b015a2f5e0454"
+    },
+    {
+      "path": "src/championship/cage/productRanchGrid.js",
+      "bytes": 12514,
+      "sha256": "3d8c546986919e916dc61c48b52525bf043da23f88ebde88fa60bcb9e86033c8"
+    },
+    {
+      "path": "src/championship/cage/ranchConnections.js",
+      "bytes": 7928,
+      "sha256": "36c486ede6616407ffed30ad824789fc2159f9f68972808b2032f021cbee6242"
+    },
+    {
+      "path": "src/championship/cage/ranchExpansion.js",
+      "bytes": 8800,
+      "sha256": "29432451610ba8c898039eec69fa8deda15560ca3729f428f395058f20d0fa2e"
+    },
+    {
+      "path": "src/championship/cage/ranchSlotGeometry.js",
+      "bytes": 6787,
+      "sha256": "5507c4a39b0711f9662a911f817919dfef4c15e89838f9f63dbd4bc31248a6dd"
+    },
+    {
+      "path": "src/championship/contracts/championshipContracts.js",
+      "bytes": 5943,
+      "sha256": "ebf6ba8b5e2ca69246af7e050c1ce218e8505ca76fa7155262f09c42680f68e4"
+    },
+    {
+      "path": "src/championship/contracts/productSpeciesData.js",
+      "bytes": 3394,
+      "sha256": "3b7a8140165b3f01a6083d7f3656934f38790431198f7806ba45745d6ebddfaa"
+    },
+    {
+      "path": "src/championship/contracts/productSpeciesExtensions.js",
+      "bytes": 3098,
+      "sha256": "5ab01be7f5da08854eaa2eea683700e02ce419f1f2b5340b06debc627b5e6be7"
+    },
+    {
+      "path": "src/championship/database/nativeBookRegistration.js",
+      "bytes": 1430,
+      "sha256": "a6254b48a6829b9e2ce84b16eece270787b966eb7052efa4ba2c120d9f8a7f6f"
+    },
+    {
+      "path": "src/championship/hunt/capture/nativeHuntActorInitialization.js",
+      "bytes": 2972,
+      "sha256": "8a95970c90bb36da1a02a82868b9b38d7850453201b14d87fe30b17a7f38d761"
+    },
+    {
+      "path": "src/championship/hunt/capture/nativeHuntHistory.js",
+      "bytes": 7100,
+      "sha256": "eb0e2fa2b66fbf6167c6d608ad82614a7a3f759ab6877b138d5aee4853f4bc0d"
+    },
+    {
+      "path": "src/championship/hunt/capture/nativeHuntIndividual.js",
+      "bytes": 7598,
+      "sha256": "881b0589b1b77a8dd9f3e14cd5d29b179cba66a5c38b4d918c5b0347ec8ca749"
+    },
+    {
+      "path": "src/championship/hunt/capture/nativeHuntPersistentState.js",
+      "bytes": 2037,
+      "sha256": "81ce5c6c645973cf3afc6b05f3131a9c3d7b619967ecf4c3851c7a9d2304b67c"
+    },
+    {
+      "path": "src/championship/hunt/capture/nativeHuntSources.js",
+      "bytes": 3408,
+      "sha256": "62d7316fb6e68d582d8ab19d5b6830a8c54c9c7846fcc5e17176c08d530da3b6"
+    },
+    {
+      "path": "src/championship/raising/nativeIndividualProfile.js",
+      "bytes": 4931,
+      "sha256": "1d425d94cae5c647a2dfef4ffdf03e5f67d1e88806bc6024e55357b11eb6128d"
+    },
+    {
+      "path": "src/championship/raising/nativeRaisingGround.js",
+      "bytes": 6265,
+      "sha256": "c0163aadbd8cdd90266b615366297ca9654f3b5c841e95bf4e8cf4c2d91ab538"
+    },
+    {
+      "path": "src/championship/raising/nativeRaisingHomeState.js",
+      "bytes": 5156,
+      "sha256": "ea3b0aae3b78b8cc082420976ef2a8e40ce1fd1cbf3c6be47557a47f0281640f"
+    },
+    {
+      "path": "src/championship/raising/nativeRaisingMessages.js",
+      "bytes": 4627,
+      "sha256": "8fd87351ae0f229ad164fbd059edbfb110280cca17df428d366f27b130130a16"
+    },
+    {
+      "path": "src/championship/raising/nativeRaisingRanchRing.js",
+      "bytes": 13567,
+      "sha256": "bf644add9ae14fb7a82f94530c2386459d121e66d69dfa7bf081cadab2a94f97"
+    },
+    {
+      "path": "src/championship/raising/raisingGroundReview.js",
+      "bytes": 1276,
+      "sha256": "b999f9ded4a032bd9de7ee086d3a67503a9893ac7ba0b81d707e3f045f10982d"
+    },
+    {
+      "path": "src/championship/raising/raisingInstanceIdentity.js",
+      "bytes": 9411,
+      "sha256": "9bcaf9873fc5431ad25df2ae395e042ad8c7a2d88b6d3b6e0764694f0600e3ad"
+    },
+    {
+      "path": "src/championship/raising/ranchDiscoveries.js",
+      "bytes": 3417,
+      "sha256": "429a0ee79e95e0ffc0679478c6c159e679a929fe24b8c027c0b1424587188a67"
+    },
+    {
+      "path": "src/championship/shop/shopCatalog.js",
+      "bytes": 1641,
+      "sha256": "b814998d3e5f2cfb5e44759a893ad2adaa0b80e48da8fa185606744f6476e2e6"
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-opponent-teams.r1.json",
+      "bytes": 24571,
+      "sha256": "b83f616271b40a7a3edc74ce01fec64258f17d88fc9c3e38b35325aacd925ac0"
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-presets.r1.json",
+      "bytes": 196644,
+      "sha256": "7ebedd982cf4fd66cdf60ddf4cbd4e02955b59356e1d53439cb085efea2542f5"
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-title-event-strings.r1.json",
+      "bytes": 36855,
+      "sha256": "ffc6b28b5350e1e5a5ace3bb3fe9c2f7d98672ca36dd2ec4eaf995063b2d5d86"
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-title-events.r1.json",
+      "bytes": 18764,
+      "sha256": "b6768835f3dd7bc73c333f88000661ef12dcf777133385aa42e9b532ea9f7003"
+    },
+    {
+      "path": "src/data/championship/catalogs/cage-definitions.r1.json",
+      "bytes": 18085,
+      "sha256": "872e82510bcda4e44de0c0096b7fbd15f7a61670931935ee32e27e50e4dc7153"
+    },
+    {
+      "path": "src/data/championship/catalogs/championship-pools.r1.json",
+      "bytes": 821,
+      "sha256": "6b8a0f7c212845f6f6692a7b2bfc61d6fd6c220384f96de5b71ccad99cff9ba3"
+    },
+    {
+      "path": "src/data/championship/catalogs/creature-species.r1.json",
+      "bytes": 63261,
+      "sha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba"
+    },
+    {
+      "path": "src/data/championship/catalogs/creature-stat-curve.r1.json",
+      "bytes": 3414,
+      "sha256": "d8896d4184054a9e332ce970f817059e6c3b75e45869d6618ad871856895e8cd"
+    },
+    {
+      "path": "src/data/championship/catalogs/free-battle.r1.json",
+      "bytes": 63132,
+      "sha256": "0bfc60591f1ae44e3d5358383ef7439e416c4ff3960a3a2ac5dfa4065419c308"
+    },
+    {
+      "path": "src/data/championship/catalogs/hunt-entry.r1.json",
+      "bytes": 293504,
+      "sha256": "9d76915304469991e62c5a7b70c2063b79a847f3841935a9008809c3e97778ce"
+    },
+    {
+      "path": "src/data/championship/catalogs/raising-ground.r1.json",
+      "bytes": 60226,
+      "sha256": "272caa8e575f9c107ab3058da351d45e75fe156b0b2fb6361aa74c3bc70d1242"
+    },
+    {
+      "path": "src/data/championship/catalogs/raising-lifecycle.r1.json",
+      "bytes": 67809,
+      "sha256": "290ddfbdde9be564be3b8e218ed742d06b116a9963d67c6258471b08b314718e"
+    },
+    {
+      "path": "src/data/championship/catalogs/raising-messages.r1.json",
+      "bytes": 23326,
+      "sha256": "e5d21144d9afd70bd09b76468d50e813c0c0f089ceff4fcee0f12e09a6b5c3f4"
+    },
+    {
+      "path": "src/data/championship/catalogs/ranch-sports-ground.r1.json",
+      "bytes": 3312,
+      "sha256": "e5584fe5c8b3382cfad97f793b1ed01d9039396dea67537e490dd130a22ead80"
+    },
+    {
+      "path": "src/data/championship/catalogs/ranch-three-ground.r1.json",
+      "bytes": 338822,
+      "sha256": "c062cea37b0609e81ae3a9122bf3dcdd4cefffe890ce24f3002f83b65db83167"
+    },
+    {
+      "path": "src/data/championship/catalogs/rng-channels.r1.json",
+      "bytes": 3851,
+      "sha256": "992cfa9ca0b67f8cd2f23d477856a5e2447f57f56fc8ea66e3c42a00d2369c22"
+    },
+    {
+      "path": "src/data/championship/catalogs/shop.r1.json",
+      "bytes": 51225,
+      "sha256": "3052c559481681302d0eec4b3f0ed181933b4c73d989c71f26cce2a5d4ea9c26"
+    },
+    {
+      "path": "src/data/championship/nativeBookSpecies.js",
+      "bytes": 910,
+      "sha256": "33d2a4fc464f275076152025d0aa310da93e0b17630327718b1f859bea3140bf"
+    },
+    {
+      "path": "src/data/championship/product-species-extensions.r1.json",
+      "bytes": 5325,
+      "sha256": "ea565e079fafaf72d86008d2df0fb94fe482a57922bb29e4a466b73201851a9e"
+    },
+    {
+      "path": "tests/friends-installer-fixture-support.cjs",
+      "bytes": 1703,
+      "sha256": "23329cff701a0986c4860966f9a73b00d19cc27f7dd18909176538c19480f332"
+    }
+  ],
+  "routes": [
+    {
+      "urlPath": "/full-qa-save.html",
+      "contentType": "text/html",
+      "bytes": 3062,
+      "sha256": "d2db7c75f84af802f1f9f715d230dd277d83dfeef262f13c05496a4057ad85a0"
+    },
+    {
+      "urlPath": "/__friends-fixtures/installer.js",
+      "contentType": "text/javascript",
+      "bytes": 1191041,
+      "sha256": "5b7759943fcdfc4eb9e0bcc7381b485af49190c1d1bfd72ee7c140f67ec3c214"
+    }
+  ],
+  "seed": {
+    "urlPath": "/qa/championship-full-qa-save.json",
+    "contentType": "application/json",
+    "variants": {
+      "day": {
+        "path": "fixtures/full-qa-day.json",
+        "bytes": 15453,
+        "sha256": "696f8c77475b2bd316e9aa4684a8042a7880113f65feb2e31de6053fbd6e0ebc"
+      },
+      "night": {
+        "path": "fixtures/full-qa-night.json",
+        "bytes": 15453,
+        "sha256": "5f23dc8059e9e94e56e38c49f7b2aa428b6910e74e0a70cafed75a4c95a1df3f"
+      }
+    }
+  },
+  "method": "GET",
+  "queriesPermitted": false,
+  "redirectsPermitted": false,
+  "availableOnlyDuringInstaller": true,
+  "artifactCopiesPermitted": false,
+  "rawSourceServingPermitted": false
+}

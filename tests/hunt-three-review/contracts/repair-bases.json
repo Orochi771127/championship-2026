@@ -1,0 +1,231 @@
+{
+  "schema": "HUNT_ACTIONS_REPAIR_BASES.v1",
+  "defaultVariant": "current-reviewed-test-repairs",
+  "currentHead": "6c1482fad6ef43f4b392c0b4b14f7f6bedc08448",
+  "currentTree": "8a33bb071bb02bf4eb3e981538c727a4f9385fa7",
+  "currentCIStatus": "PENDING_NOT_MERGE_AUTHORITY",
+  "publisherReceiptSHA256": "8a1befaad1aa27b2af6d7de7e0b984735ee6f76e73e1fa116d9e0b3de0102566",
+  "sourceMappingSHA256": [
+    "59ccd9fc58c2e9e5d2d5a95bf6eb9d384840657f81d0d10692bfeed41ca94828",
+    "0948fc903d5f8f9207b66d2ccb0c76b6e786c89432af30a3e56a66a99c079d26",
+    "dd729b3038e2d478ea81cb50c014fb7202b6c645fd2c069694974a08b94992cf",
+    "8e0ddf5acfe613ded711c1041a9e4f008beb3f9330c89238e5bcdf6d07d13fed"
+  ],
+  "finiteTestToolPathCount": 19,
+  "productionPinExceptions": 0,
+  "variants": {
+    "current-reviewed-test-repairs": {
+      "materializationPermitted": true,
+      "files": [
+        {
+          "path": ".github/workflows/alternate-form-browser.yml",
+          "bytes": 2922,
+          "sha256": "2c362b69c3a0c4488c19c562e6df449155e5f397eb72a11975d6395d9d12f200",
+          "gitBlob": "15c8d31904c50d595a79cebb318df41e7d1b76e9"
+        },
+        {
+          "path": ".github/workflows/friends-filmstrip-diagnostic.yml",
+          "bytes": 2904,
+          "sha256": "d8201fae3ab7bcdccd8dfde6218ed255fd23db9835fb6faa8722fe1a1e286748",
+          "gitBlob": "6f126ff7fa23bd91599f8a11a3893564b1d37603"
+        },
+        {
+          "path": ".github/workflows/friends-playtest-browser.yml",
+          "bytes": 4193,
+          "sha256": "fba49159b2524039af3b1903acc7015ac0bda7293dda7a042b01b1b951148d64",
+          "gitBlob": "900a825ec3a184b19d64dd1013e8b532122b92dc"
+        },
+        {
+          "path": "scripts/alternate-form-qa-build.cjs",
+          "bytes": 15422,
+          "sha256": "4770d709b9e09bfa736afc9d94f2ab4ee4f94de9a76ce941082844dcd0e2b497",
+          "gitBlob": "c6cb768bc592409784d553adca3f08dcd08fa040"
+        },
+        {
+          "path": "scripts/alternate-form-qa-recipe.json",
+          "bytes": 2958,
+          "sha256": "c9c100cf039d36bf27d67a363306c40b39b82df0ecf0b412d7595a925c5845ef",
+          "gitBlob": "1336a037a3f8b3660c240d2114b66dcabb2fb903"
+        },
+        {
+          "path": "tests/alternate-form-browser-support.cjs",
+          "bytes": 3931,
+          "sha256": "8bdff1d3d1501adb94b056cc6cb77fbf604681844207d71f6bf7bd975bb76b0a",
+          "gitBlob": "e93c3ca9d6833359ea7d4dde556d63f7bfb09183"
+        },
+        {
+          "path": "tests/alternate-form-compiled-cases.cjs",
+          "bytes": 12155,
+          "sha256": "a327f10f6299fccaa1fadf17f6ab1c1307455b08997c34cd76f851219485a2cb",
+          "gitBlob": "1a35fc6ef08eb73d6e06a9362d65eb617cc80354"
+        },
+        {
+          "path": "tests/alternate-form-compiled-support.cjs",
+          "bytes": 3761,
+          "sha256": "bf859da1faece0a48a8f42a41520c47e0d89b02eb929301938c5e6c13bbf77c9",
+          "gitBlob": "e055604427517b0dca81719f612a9400f0f355e5"
+        },
+        {
+          "path": "tests/championship-alternate-form-browser-contract-cases.mjs",
+          "bytes": 11124,
+          "sha256": "19bc3ac4e3b2e9e74576651f317f5e1b68070fa13f5edd171cce9dbf282f089a",
+          "gitBlob": "17be214012b700dcf49b269a314f4683a3db9060"
+        },
+        {
+          "path": "tests/championship-alternate-form-browser.cjs",
+          "bytes": 23353,
+          "sha256": "9100d2e451e57effcf9c454f7ad5c6628a512255846b629929ccb91369a65c01",
+          "gitBlob": "e16781580e732f3da6beed0fd43f2f85a4d71686"
+        },
+        {
+          "path": "tests/championship-evolution-streaming-browser.cjs",
+          "bytes": 21631,
+          "sha256": "014491bef672cbed9fef65c87e2100dc5ea035d54958b4f9b7b7b55bb96b43b5",
+          "gitBlob": "cac595ee5902573e4c2a3a0dd666db71ea8604a9"
+        },
+        {
+          "path": "tests/championship-friends-playtest-browser.cjs",
+          "bytes": 52771,
+          "sha256": "30e5922a062209b03d556afca1a73b0679625aea1ad9054a645491da106d28af",
+          "gitBlob": "255713692d47d7a8c7dee9c61fe18aa65da55fd1"
+        },
+        {
+          "path": "tests/championship-m201-density8-renderer-review.mjs",
+          "bytes": 40813,
+          "sha256": "b48c0177e9c7b2288f0e653cbee46519da83f7a59095344a7407548e0557b038",
+          "gitBlob": "8c9e01a0b3a1ee5e9fd0b60037cfea2c7471b575"
+        },
+        {
+          "path": "tests/championship-scene-music-browser.mjs",
+          "bytes": 63375,
+          "sha256": "a0bca9df6b2f517f94fe6f975019ba916b1d01c29dd86efb0885806bc9428d55",
+          "gitBlob": "ae96393deaccd10a33b1fdc06d58ef42a8cb88e2"
+        },
+        {
+          "path": "tests/fixtures/alternate-form-public-roster-observer.mjs",
+          "bytes": 764,
+          "sha256": "6018c29950b7cafeb7a6aed4195bc82af9705d257043ec4e02c446f80faef9a7",
+          "gitBlob": "c65d1366228f2fa49a4a4284bd5da321afcfa260"
+        },
+        {
+          "path": "tests/friends-filmstrip-diagnostic-cases.cjs",
+          "bytes": 7785,
+          "sha256": "84e5e821de669c48bfdbf74412e763489703911ebe2de2d2a4d0660f70e580d7",
+          "gitBlob": "bfbe87f0abd35ae2dbd07678aa5c1119deb02bd1"
+        },
+        {
+          "path": "tests/friends-filmstrip-diagnostic.cjs",
+          "bytes": 12497,
+          "sha256": "4af5422dc0af2409d3a762cf31fb0a34795d0596e10060c31ea2aa653edb49ba",
+          "gitBlob": "0816ad9899c807b870161f9053e8766d2201ac18"
+        },
+        {
+          "path": "tests/friends-playtest-groups-cases.cjs",
+          "bytes": 25748,
+          "sha256": "526e735f08d6b10be7e0f8985ed8c018f84a1b6f748150bca96cc62971a7ec6d",
+          "gitBlob": "1323253f90fceb651f90b508e9ca7812876daca5"
+        },
+        {
+          "path": "tests/friends-playtest-groups.cjs",
+          "bytes": 2518,
+          "sha256": "9bc82017964fb605f5df25771215a1916f20f184878317d6e4064a638e4af2e0",
+          "gitBlob": "e39822cdd3f4f0ba65f5a960dc6f6e7d7b79672b"
+        }
+      ]
+    },
+    "frozen-local-reference": {
+      "materializationPermitted": false,
+      "referenceCommit": "489a3d27af3cbded86aa3d413a5f47d32f9a41b2",
+      "files": [
+        {
+          "path": ".github/workflows/alternate-form-browser.yml",
+          "bytes": 2272,
+          "sha256": "b4d36dc6842293ceef181dd1a6544c5ca8c1d8d886509fbfaad1b201724986c2"
+        },
+        {
+          "path": ".github/workflows/friends-filmstrip-diagnostic.yml",
+          "absent": true
+        },
+        {
+          "path": ".github/workflows/friends-playtest-browser.yml",
+          "bytes": 2864,
+          "sha256": "535ff5807920b678cba8d065b316e93eaf2bf9bcac9b1bca667e1113c362a8b3"
+        },
+        {
+          "path": "scripts/alternate-form-qa-build.cjs",
+          "absent": true
+        },
+        {
+          "path": "scripts/alternate-form-qa-recipe.json",
+          "absent": true
+        },
+        {
+          "path": "tests/alternate-form-browser-support.cjs",
+          "bytes": 3715,
+          "sha256": "ba67f40782ed56c1bb0d38f458fa66af3ae4cef70ad1ce369601af4072b63e85",
+          "gitBlob": "38b185a0d35aa9cd4cc2a122126c82c0a3cf77a0"
+        },
+        {
+          "path": "tests/alternate-form-compiled-cases.cjs",
+          "absent": true
+        },
+        {
+          "path": "tests/alternate-form-compiled-support.cjs",
+          "absent": true
+        },
+        {
+          "path": "tests/championship-alternate-form-browser-contract-cases.mjs",
+          "bytes": 7967,
+          "sha256": "63b28945076ae9e1dadb0f839b9c9c531fbc1c42264994b2c0b17a1a310cd8aa",
+          "gitBlob": "9c55910cd47acb09b2a481866fe0874b8e068634"
+        },
+        {
+          "path": "tests/championship-alternate-form-browser.cjs",
+          "bytes": 22304,
+          "sha256": "cf276074266878ef417e3496dbdd42f2bde7b98130d79bc19b2df1fbf926bd96"
+        },
+        {
+          "path": "tests/championship-evolution-streaming-browser.cjs",
+          "bytes": 18573,
+          "sha256": "6d66530ea9fb80a4c12cd073569c34f976457b34e9fadcbaf2cc9ab94178cd74",
+          "gitBlob": "a998f4103b8c98df0e7f25e763cf7edf6bf7d478"
+        },
+        {
+          "path": "tests/championship-friends-playtest-browser.cjs",
+          "bytes": 37521,
+          "sha256": "576d67c5d17cb9255ecce14518694e49505f9207778f287cb805a48112208a16"
+        },
+        {
+          "path": "tests/championship-m201-density8-renderer-review.mjs",
+          "bytes": 24241,
+          "sha256": "720345a472ef7f1b8c54f322d212929c00acbd5c289d3f3f58bac146564bae83"
+        },
+        {
+          "path": "tests/championship-scene-music-browser.mjs",
+          "bytes": 47808,
+          "sha256": "505b1304f9148a8bd71a3e77fe29ac1b4d053fd9b80e658d8f1b23446f9c6ab8"
+        },
+        {
+          "path": "tests/fixtures/alternate-form-public-roster-observer.mjs",
+          "absent": true
+        },
+        {
+          "path": "tests/friends-filmstrip-diagnostic-cases.cjs",
+          "absent": true
+        },
+        {
+          "path": "tests/friends-filmstrip-diagnostic.cjs",
+          "absent": true
+        },
+        {
+          "path": "tests/friends-playtest-groups-cases.cjs",
+          "absent": true
+        },
+        {
+          "path": "tests/friends-playtest-groups.cjs",
+          "absent": true
+        }
+      ]
+    }
+  }
+}

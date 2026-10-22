@@ -1,0 +1,20 @@
+{
+  "schema": "HUNT_ACTIONS_EXPECTED_EXACT.v1",
+  "target": "LOCAL_HUNT_ADMISSION_BUILD",
+  "candidateSHA256": "cf14c7ab2fa256ad5ce275347056af4c138321f71b0d7d554d7277db2de52409",
+  "buildId": "647df6baa181ac95a436c03cbf3b22637db4c801a5b24490de04b845a5651b38",
+  "inputSHA256": "99007b3adc61235671b99ef6b069d46749ae0ae32934eaea873ff0b36260d24a",
+  "completeBytes": 988179891,
+  "fileCount": 8196,
+  "pagesReceipt": {
+    "sha256": "8a834d3275fc5e3a06dddd1b93381b335a0008c5e26091b3d55ccd8e6635a3b5",
+    "bytes": 517137
+  },
+  "completeCeilingBytes": 989094037,
+  "instrumentedAdditionalCompleteBytesCap": 131072,
+  "bundleGrowthCapBytes": 1048576,
+  "metadataGrowthCapBytes": 131072,
+  "resourceIncrementBytes": 14739579,
+  "instrumentedTarget": "LOCAL_HUNT_ACTIONS_INSTRUMENTED_BUILD",
+  "instrumentedClaim": "SEPARATE_REVIEW_BUILD_NOT_IDENTICAL_PACKAGED_CANDIDATE"
+}
