@@ -6,7 +6,26 @@ const here=path.dirname(fileURLToPath(import.meta.url));let checks=0;const check
 const names=['src/championship/app/main.js','src/championship/presentation/vs2/createHuntFieldPixiPresentation.js','src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs'];
 for(const name of names){const source=fs.readFileSync(path.join(here,'overlay',name),'utf8');check('finite adapter anchors',()=>assert.notEqual(instrument(name,source),source));check('anchor drift fails',()=>assert.throws(()=>instrument(name,''),/ANCHOR_DRIFT/));}
 check('unlisted adapter identity',()=>assert.equal(instrument('src/other.js','same'),'same'));
-await assert.rejects(run(),/ACTIONS_ONLY_NO_LOCAL_BROWSER_AUTHORITY/);checks++;
+// This negative CPU test must exercise the local-denial branch even on Actions.
+// Restore exact presence/value on resolve, rejection and synchronous throw.
+const authorityKeys=['GITHUB_ACTIONS','CI'];
+const captureAuthority=()=>authorityKeys.map(key=>({key,present:Object.hasOwn(process.env,key),value:process.env[key]}));
+const restoreAuthority=rows=>{for(const {key,present,value}of rows){if(present)process.env[key]=value;else delete process.env[key];}};
+async function withLocalAuthority(fn){const prior=captureAuthority();try{delete process.env.GITHUB_ACTIONS;delete process.env.CI;return await fn();}finally{restoreAuthority(prior);}}
+const inheritedAuthority=captureAuthority();
+try{
+ for(const env of [{},{GITHUB_ACTIONS:'true',CI:'true'},{GITHUB_ACTIONS:'false',CI:''}]){
+  for(const key of authorityKeys){if(Object.hasOwn(env,key))process.env[key]=env[key];else delete process.env[key];}
+  const prior=captureAuthority();
+  await withLocalAuthority(()=>assert.rejects(run(),/ACTIONS_ONLY_NO_LOCAL_BROWSER_AUTHORITY/));checks++;
+  assert.deepEqual(captureAuthority(),prior);checks++;
+  await assert.rejects(withLocalAuthority(()=>{throw new Error('CPU_ENV_SYNC_THROW');}),/CPU_ENV_SYNC_THROW/);checks++;
+  assert.deepEqual(captureAuthority(),prior);checks++;
+  await assert.rejects(withLocalAuthority(async()=>{throw new Error('CPU_ENV_ASYNC_REJECT');}),/CPU_ENV_ASYNC_REJECT/);checks++;
+  assert.deepEqual(captureAuthority(),prior);checks++;
+ }
+}finally{restoreAuthority(inheritedAuthority);}
+assert.deepEqual(captureAuthority(),inheritedAuthority);checks++;
 globalThis.location={hostname:'127.0.0.1',href:'http://127.0.0.1/championship.html?huntActionsReview=1'};
 class Texture{constructor(){this.frame={x:0,y:0,width:10,height:20};this.orig={width:12,height:24};this.trim={x:1,y:2,width:10,height:20};}destroy(){this.destroyed=true;}}
 let current=null;
