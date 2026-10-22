@@ -599,6 +599,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     if (hero) {
       const holder = element('div','cm-dex-hero');
       holder.dataset.art = 'loading';
+      holder.dataset.speciesId = hero.speciesId;
       const placeholder = element('span','cm-dex-hero__placeholder','DEX_IMAGE_MISSING');
       placeholder.hidden = true;
       const image = element('img','cm-dex-hero__image');

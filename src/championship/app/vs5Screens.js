@@ -722,6 +722,18 @@ function meter(className, label) {
   return { wrap, fill };
 }
 
+// Keep exact HP/TP current/max text, but allow only the slash/max fragment
+// to move to a second line when a narrow three-member card needs it.
+function floatingMeterNumerals(value, label) {
+  const current = element('span', 'cm-vs5-meter__number-part');
+  const maximum = element('span', 'cm-vs5-meter__number-part');
+  value.append(current, maximum);
+  return next => {
+    current.textContent = `${label} ${next.current}`;
+    maximum.textContent = ` / ${next.maximum}`;
+  };
+}
+
 function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
   const card = element("li", `cm-vs5-fighter${compact ? " cm-vs5-fighter--compact" : ""}`);
   card.dataset.slot = String(combatant.slot);
@@ -735,6 +747,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
   const name = element("span", "cm-vs5-fighter__name", combatant.displayName ?? uiText(`SLOT ${combatant.slot + 1}`), false);
   const hp = meter("cm-vs5-meter--hp", "Health");
   const hpValue = element('span', 'cm-vs5-fighter__hp');
+  const updateHpNumerals = floatingHud ? floatingMeterNumerals(hpValue, 'HP') : null;
   const portrait=element('img','cm-vs5-fighter__portrait');portrait.alt='';portrait.hidden=true;
   card.append(portrait);
   card.append(name, hp.wrap);
@@ -745,6 +758,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
     resource = meter("cm-vs5-meter--resource", "Action resource");
     if (floatingHud) {
       resource.value = element("span", "cm-vs5-meter__value");
+      resource.updateNumerals = floatingMeterNumerals(resource.value, 'TP');
       resource.wrap.append(resource.value);
     }
     card.append(resource.wrap);
@@ -758,8 +772,8 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
       portrait.hidden=floatingHud||!image;
       if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
-      hpValue.textContent = floatingHud ? `HP ${next.hp.current} / ${next.hp.maximum}`
-        : uiText("生命值 {hp} / {max}", { hp: next.hp.current, max: next.hp.maximum });
+      if (updateHpNumerals) updateHpNumerals(next.hp);
+      else hpValue.textContent = uiText("生命值 {hp} / {max}", { hp: next.hp.current, max: next.hp.maximum });
       hp.wrap.setAttribute('aria-label', floatingHud ? `${uiText('Health')} ${next.hp.current} / ${next.hp.maximum}` : uiText(hpValue.textContent));
       hp.wrap.setAttribute("aria-valuenow", String(next.hp.current));
       hp.wrap.setAttribute("aria-valuemax", String(next.hp.maximum));
@@ -769,7 +783,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
         resource.fill.style.width = `${Math.round(next.resource.ratio * 100)}%`;
         resource.wrap.setAttribute("aria-valuenow", String(next.resource.current));
         resource.wrap.setAttribute("aria-valuemax", String(next.resource.maximum));
-        if (resource.value) resource.value.textContent = `TP ${next.resource.current} / ${next.resource.maximum}`;
+        if (resource.updateNumerals) resource.updateNumerals(next.resource);
         resource.wrap.setAttribute("aria-label", `${uiText("Action resource")} ${next.resource.current} / ${next.resource.maximum}`);
       }
     }
