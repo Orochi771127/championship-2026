@@ -38,7 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .tmp/normal-point-height/${{ matrix.engine }}
-          node tests/ranch-point-height/inject-normal-point-height.mjs --input tests/ranch-point-height/candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/point-height-probe.mjs --expected-sha fa37b118ab195289b3ab02972ce9c45dabafd75572c96c198629d536739e4968
+          node tests/ranch-point-height/inject-normal-point-height.mjs --input tests/ranch-point-height/candidate/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js --output .tmp/point-height-probe.mjs --expected-sha 0cfd981a0cb76a47a587aa57d20eaa502507477792694938a6d4c369a617bdbf
           python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/normal-point-height/${{ matrix.engine }}/server.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT

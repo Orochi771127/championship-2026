@@ -45,3 +45,23 @@ export function logicalContactHeightAtPoint(triangles,x,z){
  hits.sort((a,b)=>b.height-a.height||a.bridgeId.localeCompare(b.bridgeId)||a.logicalTriangleIndex-b.logicalTriangleIndex);
  return hits[0]??null;
 }
+
+// Orthographic ray / verified surface intersection, expressed in projected
+// native coordinates. It does not choose ownership or bypass native admission.
+export function projectedContactIntersections(triangles,x,screenY){
+ if(!Number.isFinite(x)||!Number.isFinite(screenY))return [];
+ const lift=16*Math.cos(52*Math.PI/180),sin=Math.sin(52*Math.PI/180),hits=[];
+ for(const t of triangles){
+  const v=t.vertices.map(([wx,h,wz])=>[(wx-wz)*16/Math.SQRT2,(wx+wz)*sin*16/Math.SQRT2-h*lift,h]);
+  const [a,b,c]=v,d=(b[1]-c[1])*(a[0]-c[0])+(c[0]-b[0])*(a[1]-c[1]);
+  if(!Number.isFinite(d)||Math.abs(d)<1e-12)continue;
+  const u=((b[1]-c[1])*(x-c[0])+(c[0]-b[0])*(screenY-c[1]))/d;
+  const w=((c[1]-a[1])*(x-c[0])+(a[0]-c[0])*(screenY-c[1]))/d,q=1-u-w;
+  if(u< -1e-12||w< -1e-12||q< -1e-12)continue;
+  const height=u*a[2]+w*b[2]+q*c[2];
+  const world=[0,1,2].map(k=>u*t.vertices[0][k]+w*t.vertices[1][k]+q*t.vertices[2][k]),cos=Math.cos(52*Math.PI/180);
+  const rayDepth=(world[0]+world[2])*cos/Math.SQRT2+world[1]*sin;
+  hits.push({x,y:screenY+height*lift,height,rayDepth,sourceTriangleIndex:t.sourceTriangleIndex??null,bridgeId:t.bridgeId??null,logicalTriangleIndex:t.logicalTriangleIndex??null});
+ }
+ return hits;
+}

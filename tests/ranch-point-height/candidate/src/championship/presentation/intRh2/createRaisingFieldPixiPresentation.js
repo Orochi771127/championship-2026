@@ -1121,7 +1121,7 @@ export async function mountRaisingFieldPixiPresentation({
 
   function screenToNativeGround(point){
     const native=raisingScreenToNative(point,fieldArt?.field,view,cameraX);
-    return native&&fieldArt?.threeScene?fieldArt.threeScene.pickGroundNative(native):native;
+    return native&&fieldArt?.threeScene?fieldArt.threeScene.pickGroundNative(native,(x,y)=>source.getGroundSupport?.(x,y)??null):native;
   }
 
   function alignThreeGround(root,point,positionQ12){

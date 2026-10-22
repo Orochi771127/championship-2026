@@ -25,13 +25,13 @@ export async function validateSupportGeometry(spec,modelSha,meshes){
  }
  return p.triangles;
 }
-export function eligibleSupportOwner(owner,instances){
+export function eligibleSupportOwner(owner,instances,{requireRenderVisible=true}={}){
  if(!owner||owner.groundComponent!=='NOMINAL_GROUND'||!Number.isInteger(owner.ownerIndex)||!Number.isFinite(owner.shift)||typeof owner.fieldId!=='string')return {status:'DENIED_MISSING_OWNER',instance:null};
  const matched=instances.filter(i=>i.p.ownerIndex===owner.ownerIndex&&i.p.fieldId===owner.fieldId&&i.shift===owner.shift);
  if(matched.length!==1)return {status:'DENIED_OWNER_NOT_UNIQUE',instance:null};
  if(!matched[0].supportMesh)return {status:'DENIED_UNVERIFIED_GEOMETRY',instance:null};
- if(matched[0].object?.visible===false)return {status:'DENIED_INVISIBLE_SUPPORT',instance:null};
- for(let o=matched[0].supportMesh;o;o=o.parent)if(o.visible===false)return {status:'DENIED_INVISIBLE_SUPPORT',instance:null};
+ if(requireRenderVisible&&matched[0].object?.visible===false)return {status:'DENIED_INVISIBLE_SUPPORT',instance:null};
+ for(let o=matched[0].supportMesh;o;o=o.parent)if(o.visible===false&&(requireRenderVisible||o!==matched[0].object))return {status:'DENIED_INVISIBLE_SUPPORT',instance:null};
  return {status:'VERIFIED_OWNER',instance:matched[0]};
 }
 // Coordinates are normalized screen (bottom-left). Identical endpoints use

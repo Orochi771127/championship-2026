@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 spec=importlib.util.spec_from_file_location('heightproof',Path(__file__).with_name('height-translation-proof.py'));hp=importlib.util.module_from_spec(spec);spec.loader.exec_module(hp)
 root,pp=map(Path,sys.argv[1:3]);plan=json.loads(pp.read_text());doc=json.loads((root/'point-height-results.json').read_text());assert doc['planSha256']==hashlib.sha256(pp.read_bytes()).hexdigest();assert not doc['fieldFailures'];cases=plan['cases']+plan['trajectory'];assert len(cases)==49 and len(doc['results'])==98
-pins={'reference':'256919ce036206dae0f5d2564a5dd7c938d54e6d91b2437b0f0a04b4b2e6340b','point':'ea2f10eba39bccbe20f28b0c8bacde078de5de4d4e786cbb0f20f6e963626dca'};assert doc['sourcePins']==pins
+pins={'reference':'256919ce036206dae0f5d2564a5dd7c938d54e6d91b2437b0f0a04b4b2e6340b','point':'288783ac6a2a439eb7c341baf58763ac4549d086857ffc026853505dd7615f63'};assert doc['sourcePins']==pins
 records={}
 for row in doc['results']:
  k=row['mode'],row['id'];assert k not in records;r=json.loads(gzip.decompress((root/row['evidence']).read_bytes()));assert r['sourceSha256']==pins[k[0]];assert hashlib.sha256((root/row['normal']).read_bytes()).hexdigest()==r['normalSha256'];records[k]=r

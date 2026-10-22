@@ -1,6 +1,6 @@
 // LOCAL MINIMAL FLOOR-ONLY EXPERIMENT: existing Pixi shadows/occluder passes unchanged.
 import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
-import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint} from './ranchContactHeight.js';
+import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections} from './ranchContactHeight.js';
 import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { GLTFLoader } from '../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
@@ -704,12 +704,16 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     renderer.dispose();renderer.forceContextLoss();canvas.remove();Object.assign(pixi.style,previousStyle);
     canvas.removeEventListener('webglcontextlost',contextLost);canvas.removeEventListener('webglcontextrestored',contextRestored);
   }
-  function contactHeight(x,y,admission){
-    const owner=supportOwnerResolver?.resolve(admission,x)??null,eligible=eligibleSupportOwner(owner,instances);
-    if(!eligible.instance||!CONTACT_HEIGHT_FIELDS.has(eligible.instance.p.fieldId))return {height:null,status:eligible.status,owner};
-    const instance=eligible.instance,mesh=instance.supportMesh;mesh.updateWorldMatrix(true,false);
+  function updateContactTriangles(instance){
+    const mesh=instance.supportMesh;mesh.updateWorldMatrix(true,false);
     const matrix=Array.from(mesh.matrixWorld.elements),key=matrix.join(',');
     if(instance.contactMatrixKey!==key){instance.contactTriangles=transformContactTriangles(instance.supportTriangles,matrix);instance.logicalContactTriangles=instance.p.fieldId==='field_cm18_01'?transformContactTriangles(logicalBridges,matrix):[];instance.contactMatrixKey=key;}
+  }
+  function contactHeight(x,y,admission){
+    if(disposed)return {height:null,status:'DENIED_DISPOSED_CONTACT_SCENE',owner:null};
+    const owner=supportOwnerResolver?.resolve(admission,x)??null,eligible=eligibleSupportOwner(owner,instances,{requireRenderVisible:false});
+    if(!eligible.instance||!CONTACT_HEIGHT_FIELDS.has(eligible.instance.p.fieldId))return {height:null,status:eligible.status,owner};
+    const instance=eligible.instance;updateContactTriangles(instance);
     const point=ranchNativeToWorld(x,y,0),hit=contactHeightAtPoint(instance.contactTriangles,point.x,point.z);
     if(!hit){
       const logical=logicalContactHeightAtPoint(instance.logicalContactTriangles,point.x,point.z);
@@ -733,11 +737,28 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     return authored.height!==null?{...authored,authority:authored.kind==='DERIVED_LOGICAL_STAIR_CONTACT_HEIGHT'?'EXACT_ADMITTED_DERIVED_LOGICAL_POINT':'EXACT_ADMITTED_AUTHORED_POINT'}:{...authored,height:legacyGroundHeight(x,y),authority:'EXISTING_WALK_SURFACE_FALLBACK'};
   }
   function groundHeight(x,y,admission=null){return groundContact(x,y,admission).height;}
-  function pickGroundNative(point){
+  function pickGroundNative(point,readAdmission=null){
     let best={...point,height:0};const unit=field.nativePixelWorldScale;
     for(const {p,shift} of instances){
       const picked=ranchPickWalkSurface(point.x-p.x/unit-shift,point.y-p.y/unit,walkSurfaces[p.fieldId]);
       if(picked.height>best.height)best={...point,y:picked.y+p.y/unit,height:picked.height};
+    }
+    // Test candidate ray intersections before querying ownership. Querying the
+    // base-height screen point first can select the adjacent native cell.
+    if(!disposed&&typeof readAdmission==='function'){
+      const candidates=[];
+      for(const instance of instances){
+        if(!CONTACT_HEIGHT_FIELDS.has(instance.p.fieldId)||!instance.supportMesh)continue;
+        updateContactTriangles(instance);
+        for(const hit of projectedContactIntersections([...instance.contactTriangles,...instance.logicalContactTriangles],point.x,point.y)){
+          const admitted=readAdmission(hit.x,hit.y),contact=contactHeight(hit.x,hit.y,admitted);
+          if(contact.height===null||contact.owner?.ownerIndex!==instance.p.ownerIndex||contact.owner?.fieldId!==instance.p.fieldId||contact.owner?.shift!==instance.shift||Math.abs(contact.height-hit.height)>1e-9)continue;
+          candidates.push({...hit,ownerIndex:instance.p.ownerIndex,shift:instance.shift});
+        }
+      }
+      candidates.sort((a,b)=>b.rayDepth-a.rayDepth||a.ownerIndex-b.ownerIndex||a.shift-b.shift||(a.sourceTriangleIndex??Infinity)-(b.sourceTriangleIndex??Infinity)||String(a.bridgeId).localeCompare(String(b.bridgeId))||(a.logicalTriangleIndex??0)-(b.logicalTriangleIndex??0));
+      const baselineWorld=ranchNativeToWorld(best.x,best.y,best.height),baselineRayDepth=baselineWorld.x*direction.x+baselineWorld.y*direction.y+baselineWorld.z*direction.z;
+      if(candidates[0]&&candidates[0].rayDepth>baselineRayDepth)best=candidates[0];
     }
     return {x:best.x,y:best.y};
   }
