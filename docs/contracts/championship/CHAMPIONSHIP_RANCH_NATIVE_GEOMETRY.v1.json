@@ -123,5 +123,14 @@
       "Carrying a resident across the fold adds the jump to the carry velocity; holding still before release settles it",
       "The camera does not scroll vertically by itself while a resident is carried"
     ]
+  },
+  "freePanOwnerAdaptation": {
+    "date": "2026-10-22",
+    "evidence": "OWNER_APPROVED_ADAPTATION",
+    "rule": "Continuous free XY dragging, including diagonals, with a fixed camera orientation. A fitting native board retains its initial centered framing and scale but permits signed vertical translation; bounds retain at least min(board height, 48 native pixels) of ground vertically in view. Non-fitting board vertical limits and horizontal behavior are unchanged. One axis reaching its boundary never locks the other. Art, actors, shadows and hit coordinates share the viewport transform.",
+    "scope": "Presentation only; no save, actor motion, rotation, gameplay or new gesture authority.",
+    "validation": "Pure viewport and extracted existing presenter moveDrag/finishDrag tests cover 100%/70%, fitting/non-fitting maps, eight directions, coordinate round trips, boundary independence and pointercancel. Existing large product-grid CPU input already supports eight directions; this change is not proof that the reported physical-phone behavior is resolved.",
+    "tests": "tests/championship-ranch-free-pan-cases.mjs",
+    "physicalDeviceQa": false
   }
 }

@@ -220,8 +220,8 @@ export async function mountRaisingFieldPixiPresentation({
   let latestRevision = -1;
   let drag = null;
   let cameraX = 0;
-  // Screen pixels the board is lowered to show the headroom above it. Only a
-  // frame too short for the board and its headroom ever lets this leave 0; a
+  // Screen-pixel vertical translation. A fitting board has signed bounded
+  // travel; a
   // folded ring (expansion annex below the board) scrolls over both bands.
   let cameraY = 0;
   let zoom = 1;
@@ -240,6 +240,7 @@ export async function mountRaisingFieldPixiPresentation({
   // dimensions from the previous useful layout; retaining `view` itself would
   // retain its live getters and lose the pre-rotation world focal point.
   let cameraViewport = null;
+  const scrollMinY = () => (fieldArt?.field ? raisingFieldViewport(fieldArt.field, view).scrollMinY ?? 0 : 0);
   const scrollMaxY = () => (fieldArt?.field ? raisingFieldViewport(fieldArt.field, view).scrollMaxY ?? 0 : 0);
   // World x of a native x within its band: a folded ring (expansion prototype)
   // shows its annex as a second band, and the shared camera is band-local.
@@ -399,7 +400,9 @@ export async function mountRaisingFieldPixiPresentation({
     if(fieldArt.field.productGrid){
       const nativeY=frame.residents.map(resident=>source.getActorFrame?.(resident.creatureId)?.positionQ12)
         .find(position=>Number.isFinite(position?.[0]))?.[1];
-      if(Number.isFinite(nativeY))cameraY=centerRaisingNativeY(fieldArt.field,view,nativeY/4096,cameraX);
+      // Fitting boards previously had zero vertical travel at entry. Keep
+      // that framing; signed travel starts only with player interaction.
+      if(Number.isFinite(nativeY))cameraY=fit.scrollMinY<0?0:centerRaisingNativeY(fieldArt.field,view,nativeY/4096,cameraX);
     }
     const target = bandWorldX(fieldArt.field, nativeX / 4096) - (app.screen.width - 24) / fit.scale / 2;
     cameraX = fieldArt.field.wrapWidthPx
@@ -805,9 +808,9 @@ export async function mountRaisingFieldPixiPresentation({
       const maxX = Math.max(0, fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
       const next=cameraDrag.origin-(event.global.x-cameraDrag.startX)/fit.scale;
       cameraX = fieldArt.field.wrapWidthPx ? wrapRaisingCamera(next,fieldArt.field.wrapWidthPx) : clamp(next, 0, maxX);
-      // Dragging down lowers the board to show the headroom; only a frame
-      // short of room for both ever has any vertical travel.
-      cameraY = clamp((cameraDrag.originY ?? 0) + event.global.y - cameraDrag.startY, 0, fit.scrollMaxY ?? 0);
+      // Both axes share the viewport transform. Fitting boards also have
+      // bounded vertical travel without changing camera rotation or scale.
+      cameraY = clamp((cameraDrag.originY ?? 0) + event.global.y - cameraDrag.startY, fit.scrollMinY ?? 0, fit.scrollMaxY ?? 0);
       source.intents.panTutorial?.({x:cameraX/fieldArt.field.nativePixelWorldScale-tutorialCameraOffset,tool:cameraDrag.tool,checkpoint:cameraDrag.tutorialCheckpoint});
       sync(latestFrame, {force:true});
       return;
@@ -846,13 +849,13 @@ export async function mountRaisingFieldPixiPresentation({
     if (!responsiveLayout) {
     if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
     // A taller frame may need less scroll, or none.
-    cameraY = clamp(cameraY, 0, scrollMaxY());
+    cameraY = clamp(cameraY, scrollMinY(), scrollMaxY());
     // Desktop starts with the existing main cages in view. Locked lower rows
     // keep their place and their scroll range; a shorter height must not carry
     // the phone's numeric offset into a newly clipped main row.
     if(view.desktopRaising&&fieldArt?.field){
       const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
-      cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
+      cameraY=clamp(cameraY+Math.max(0,-fit.y),scrollMinY(),scrollMaxY());
     }
     sync(source.getFrame(), { force: true });
       return;
@@ -912,9 +915,9 @@ export async function mountRaisingFieldPixiPresentation({
     // retain the player's current world focus, including the lower annex.
     if (!cameraViewport && view.desktopRaising && fieldArt?.field) {
       const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
-      cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
+      cameraY=clamp(cameraY+Math.max(0,-fit.y),scrollMinY(),scrollMaxY());
     }
-    cameraY = clamp(cameraY, 0, scrollMaxY());
+    cameraY = clamp(cameraY, scrollMinY(), scrollMaxY());
     cameraViewport = nextViewport;
     const cap=desktopRaisingViewportWidth(fieldArt?.field,12,raisingReference.reference);
     if(cap!==null)app.canvas?.parentElement?.style?.setProperty('--cm-ranch-unique-width',`${cap}px`);
@@ -933,7 +936,7 @@ export async function mountRaisingFieldPixiPresentation({
     const eased = 1 - Math.pow(1 - t, 3);
     const next = cameraFocus.from + cameraFocus.distance * eased;
     cameraX = fieldArt.field.wrapWidthPx ? wrapRaisingCamera(next, fieldArt.field.wrapWidthPx) : Math.max(0, next);
-    cameraY = clamp((cameraFocus.fromY ?? cameraY) + (cameraFocus.distanceY ?? 0) * eased, 0, scrollMaxY());
+    cameraY = clamp((cameraFocus.fromY ?? cameraY) + (cameraFocus.distanceY ?? 0) * eased, scrollMinY(), scrollMaxY());
     layoutFieldArt();
     if (t >= 1) cameraFocus = null;
   }
@@ -955,7 +958,7 @@ export async function mountRaisingFieldPixiPresentation({
     if (!entry || entry.root.destroyed || !(max > 0)) return 0;
     const top = drawnBodyTop(entry), feet = entry.root.y, margin = 4;
     const delta = top < margin ? margin - top : feet > app.screen.height - 12 ? app.screen.height - 12 - feet : 0;
-    return clamp(cameraY + delta, 0, max) - cameraY;
+    return clamp(cameraY + delta, scrollMinY(), max) - cameraY;
   }
 
   // A tap on a resident brings the rest of it into view once the finger is up,
@@ -1099,7 +1102,7 @@ export async function mountRaisingFieldPixiPresentation({
         const bodyTop=drawnBodyTop(entry);
         return {creatureId,x:point.x,y:point.y,state:native?.state,speciesIndex:native?.speciesIndex,nativeFrame:native?.nativeFrame,sequenceId:native?.sequenceId,nativeScreenPixels,
           bodyTop,footY:entry.root.y,nativeY:native?.positionQ12?native.positionQ12[1]/4096:null,
-          boardTop:fit?.y??null,scrollY:fit?.scrollY??0,scrollMaxY:fit?.scrollMaxY??0,
+          boardTop:fit?.y??null,scrollY:fit?.scrollY??0,scrollMinY:fit?.scrollMinY??0,scrollMaxY:fit?.scrollMaxY??0,
           nativePositionQ12:native?.positionQ12,
           groundScreen:native?.positionQ12?raisingNativeToScreen([native.positionQ12[0],native.positionQ12[1],0],fieldArt?.field,view,cameraX):null};
       }));
