@@ -11,6 +11,31 @@ const output=require('./browser-qa-output.cjs')('alternate-forms');fs.mkdirSync(
 const publicBase='https://orochi771127.github.io/championship-2026/';
 const saveKey='championshipModernSave:v1',qaKey='championshipAlternateFormsQA:r1:'+saveKey;
 const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[],diagnostics:[],gpu:null};
+
+// BEGIN ALTERNATE ATOMIC READY (read-only test observation)
+function alternateReadySnapshot(){
+ const visible=n=>Boolean(n&&!n.hidden&&n.getClientRects().length&&getComputedStyle(n).display!=='none'&&getComputedStyle(n).visibility!=='hidden');
+ const roots=[...document.querySelectorAll('#cm-root[data-active-screen="RAISING_HOME"]')],root=roots[0],fields=[...(root?.querySelectorAll('.int-rh2-field-host')??[])],field=fields[0],canvases=[...(field?.querySelectorAll('canvas.cm-field-canvas')??[])],canvas=canvases[0];
+ return {rootCount:roots.length,fieldCount:fields.length,fieldVisible:visible(field),loadState:field?.dataset.loadState??null,busy:field?.getAttribute('aria-busy')??null,residents:JSON.parse(field?.dataset.residentAssets||'[]'),panelVisible:[...document.querySelectorAll('#cm-root .int-rh2-resident-assets[data-load-owner="raising"]')].some(visible),fallbackCount:document.querySelectorAll('#cm-root[data-field-fallback="true"]').length,canvas:{count:canvases.length,visible:visible(canvas),width:canvas?.width??0,height:canvas?.height??0}};
+}
+function alternateSnapshotReady(s){
+ if(s.fallbackCount!==0)throw Error('ALTERNATE_ACTUAL_FIELD_FALLBACK');
+ if(s.rootCount>1||s.fieldCount>1||s.canvas.count>1)throw Error('ALTERNATE_DUPLICATE_FIELD_OR_CANVAS');
+ if(s.loadState==='error'||s.residents.some(r=>r.state==='error'||r.error))throw Error('ALTERNATE_ACTUAL_ASSET_ERROR');
+ return s.rootCount===1&&s.fieldCount===1&&s.fieldVisible&&s.loadState==='ready'&&s.busy==='false'&&!s.panelVisible&&s.residents.length>0&&s.residents.every(r=>r.state==='ready')&&s.canvas.count===1&&s.canvas.visible&&s.canvas.width>0&&s.canvas.height>0;
+}
+function alternateMakeReady(){return new Function(`const s=(${alternateReadySnapshot.toString()})();return (${alternateSnapshotReady.toString()})(s)?s:false;`);}
+async function alternateAwaitReady(api){
+ const deadline=api.now()+180000;const row={label:api.label,startedAt:api.wall()};api.record(row);
+ try{row.initial=await api.snapshot();api.write();let left=deadline-api.now();if(left<=0)throw Error('Original Alternate readiness deadline exhausted');
+  if(alternateSnapshotReady(row.initial)){row.final=row.initial;row.waited=false;}
+  else{row.waited=true;row.pollBudgetMs=left;row.final=await api.poll(left);}
+  if(api.now()>=deadline)throw Error('Original Alternate readiness deadline exhausted');
+  if(!alternateSnapshotReady(row.final))throw Error('ALTERNATE_FINAL_SNAPSHOT_NOT_READY');row.finishedAt=api.wall();api.write();return row.final;
+ }catch(error){row.error=String(error.stack||error);api.write();throw error;}
+}
+// END ALTERNATE ATOMIC READY
+
 (async()=>{
  const manifest=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=manifest.buildId;assert.equal(manifest.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(manifest.publicPlaytest?.ownerApproved,true);
  assert.equal(resolveAsset(root,'/alternate-form-qa.html'),null,'Private QA entry must never enter the public artifact');
@@ -58,15 +83,10 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    evidence.diagnostics.push({label,report});await shot(label);await panel.locator('summary').click();await shot(label+'-scene');write();return report;
   }
   async function raisingReady(label){
-   const field=page.locator('#cm-root .int-rh2-field-host[data-load-state="ready"][aria-busy="false"]');
-   await field.waitFor({state:'visible',timeout:180000});
-   await page.locator('#cm-root .int-rh2-resident-assets[data-load-owner="raising"]:visible').waitFor({state:'hidden'});
-   assert.equal(await page.locator('#cm-root[data-field-fallback="true"]').count(),0);
-   const state=await field.evaluate(n=>({loadState:n.dataset.loadState,busy:n.getAttribute('aria-busy'),residents:JSON.parse(n.dataset.residentAssets||'[]')}));
-   assert.equal(state.loadState,'ready');assert.equal(state.busy,'false');assert.ok(state.residents.length>0);assert.ok(state.residents.every(r=>!['error','loading'].includes(r.state)));
-   const canvas=field.locator('canvas.cm-field-canvas');assert.equal(await canvas.count(),1);assert.equal(await canvas.isVisible(),true);
-   const size=await canvas.evaluate(n=>({width:n.width,height:n.height}));assert.ok(size.width>0&&size.height>0);
-   (evidence.raisingReady??=[]).push({label,...state,canvas:size});
+   const state=await alternateAwaitReady({label,now:()=>Date.now(),wall:()=>new Date().toISOString(),record:row=>{(evidence.raisingReadyObservations??=[]).push(row);write();},write,snapshot:()=>page.evaluate(alternateReadySnapshot),poll:async timeout=>{const handle=await page.waitForFunction(alternateMakeReady(),undefined,{timeout});try{return await handle.jsonValue();}finally{await handle.dispose();}}});
+   // The returned snapshot itself satisfied all original field/panel/canvas checks.
+   // No later locator re-read can substitute a newer busy state for this receipt.
+   (evidence.raisingReady??=[]).push({label,...state});write();
   }
   async function captureFourFormDatabase(){
    // Existing isolated QA session, normal menu/list navigation and DOM reads only.
