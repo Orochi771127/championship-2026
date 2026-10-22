@@ -1,0 +1,176 @@
+{
+  "schema": "EXACT_V4_SELECTED8_CONTACT_REGRESSION",
+  "status": "LOCAL_PACKET_PENDING_INDEPENDENT_REVIEW_AND_ROOT_LAUNCH",
+  "candidateSha256": "4eebd5f756597164a1be9223c30aba6c521f312844a2b36c00064d71cd7b0338",
+  "candidateSourceManifestSha256": "31f728bb9753abbb408edfb62d01f169369bdfb7dd6c8640e79bf0d3e52e939f",
+  "expectedRoutes": 8,
+  "expectedRowsPerEngine": 32,
+  "seedRoles": 16,
+  "all226Authorized": false,
+  "files": [
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/runner.mjs",
+      "target": "tests/ranch-contact-v4/runner.mjs",
+      "sha256": "52718c919fcdc0851296b91ff7b696a0bf372b3fd146cece3cb4b4a5f8e3261b",
+      "bytes": 11549
+    },
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/fixture.html",
+      "target": "tests/fixtures/ranch-contact-v4.html",
+      "sha256": "dc17d6e00a9e9c6f0f282cfe9e629c84a4c25ce5181bf531dfe5d8677e6275f3",
+      "bytes": 44283
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/core.mjs",
+      "target": "tests/ranch-contact-v4/core.mjs",
+      "sha256": "be8da2005cf405cdcd16883d7512b478f5772cba6ceab38efff44d21d038623f",
+      "bytes": 3020
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/normal-read.fragment.js",
+      "target": "tests/ranch-contact-v4/normal-read.fragment.js",
+      "sha256": "96f63375db7bc5a5e6c16641393d477ef10866c269a0b67f6581615c88dcfa02",
+      "bytes": 3297
+    },
+    {
+      "source": "shadow-map-audit/all226-contact-pilot/pilot.json",
+      "target": "tests/ranch-contact-v4/pilot.json",
+      "sha256": "33cb691e503c1f22842a19e09bd43ddbefe8bad8f508a3ef6e910ac2c5ef1961",
+      "bytes": 28761
+    },
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/compare.py",
+      "target": "tests/ranch-contact-v4/compare.py",
+      "sha256": "64a5b1c4c936a6b3514978e6a777e6f5dd497c8c90c47aaca57c5cebffc2cb03",
+      "bytes": 4805
+    },
+    {
+      "source": "shadow-map-audit/stair-mat-height-runtime-v4/ranchPhysicalSupport.js",
+      "target": "tests/ranch-contact-v4/source/ranchPhysicalSupport.js",
+      "route": "src/championship/presentation/ranchPhysicalSupport.js",
+      "sha256": "d8132f3048253069fcb74691f14b770860efe1bf2ff5195d3652b740c20b0408",
+      "bytes": 4208
+    },
+    {
+      "source": "shadow-map-audit/recovery-release-local/candidate/src/championship/presentation/ranchSupportOwner.js",
+      "target": "tests/ranch-contact-v4/source/ranchSupportOwner.js",
+      "route": "src/championship/presentation/ranchSupportOwner.js",
+      "sha256": "10ee4a275e2e696366630e5476ac94e78984d6d0080685b93246910bd859cd81",
+      "bytes": 2793
+    },
+    {
+      "source": "shadow-map-audit/recovery-release-local/candidate/src/championship/presentation/publicCharacterRoster.js",
+      "target": "tests/ranch-contact-v4/source/publicCharacterRoster.js",
+      "route": "src/championship/presentation/publicCharacterRoster.js",
+      "sha256": "a195da3e2d2a4d1ddd26ca59405ace675d38028ac9d084bd3a90391f15c9d9ed",
+      "bytes": 4922
+    },
+    {
+      "source": "shadow-map-audit/recovery-release-local/candidate/src/championship/presentation/vs2/huntContactShadow.js",
+      "target": "tests/ranch-contact-v4/source/vs2/huntContactShadow.js",
+      "route": "src/championship/presentation/vs2/huntContactShadow.js",
+      "sha256": "c284a006e2bec65205011553f2c62633edd514c5a3ec587d6a282caf1172cc41",
+      "bytes": 7787
+    },
+    {
+      "source": "shadow-map-audit/split-quad-mask-probe/inject-actor-mask.mjs",
+      "target": "tests/ranch-split/probe/inject-actor-mask.mjs",
+      "sha256": "70b5fdf502296308af5393c78bc5bfb7aae9de40931e126010b84503830a5bbe",
+      "bytes": 2119
+    },
+    {
+      "source": "shadow-map-audit/split-quad-mask-probe/actor-mask-probe.fragment.js",
+      "target": "tests/ranch-split/probe/actor-mask-probe.fragment.js",
+      "sha256": "d714504491ff157e41ebe58c19e3a35d460d680ddda5fcc1b62a4b7ce66efba0",
+      "bytes": 18797
+    },
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/restore-contract.mjs",
+      "target": "tests/ranch-contact-v4/restore-contract.mjs",
+      "sha256": "9b332940edc86dca9821beb0a3fdfad596f91934e4fa795192936e47f6d84fe4",
+      "bytes": 627
+    },
+    {
+      "source": "shadow-map-audit/stair-mat-height-runtime-v4/ranchThreeScene.js",
+      "target": "tests/ranch-contact-v4/source/ranchThreeScene.js",
+      "sha256": "4eebd5f756597164a1be9223c30aba6c521f312844a2b36c00064d71cd7b0338",
+      "bytes": 52280
+    },
+    {
+      "source": "shadow-map-audit/stair-mat-height-runtime-v4/ranchContactHeight.js",
+      "target": "tests/ranch-contact-v4/source/ranchContactHeight.js",
+      "route": "src/championship/presentation/ranchContactHeight.js",
+      "sha256": "61ce25cc7931ed4d7cc36e5a023ea9d376e32e77483cd6d20c10ef3ffdcc5c71",
+      "bytes": 5727
+    },
+    {
+      "source": "shadow-map-audit/seam8a65-composition/source/ranchBorderMembership.js",
+      "target": "tests/ranch-contact-v4/source/ranchBorderMembership.js",
+      "route": "src/championship/presentation/ranchBorderMembership.js",
+      "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb",
+      "bytes": 1335
+    },
+    {
+      "source": "shadow-map-audit/stair-mat-height-runtime-v4/physical-ground-tops.r2.json",
+      "target": "tests/ranch-contact-v4/data/physical-ground-tops.r2.json",
+      "route": "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
+      "sha256": "a8c073714c9457a880f6df0b5424fbed00d28ca64a2d10925b04a3068767f599",
+      "bytes": 151193
+    },
+    {
+      "source": "shadow-map-audit/stair-mat-height-runtime-v4/logical-stair-bridges.r1.json",
+      "target": "tests/ranch-contact-v4/data/logical-stair-bridges.r1.json",
+      "route": "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
+      "sha256": "8f6a8eec7fa71381de68f5dc0f7b30399bf89d62e91742281a60bb7e43293a50",
+      "bytes": 7929
+    },
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/prerequisite.mjs",
+      "target": "tests/ranch-contact-v4/prerequisite.mjs",
+      "sha256": "6125aaf2d0bbc6d33c4b792cf53aa76fc526ad718f0b36e192d0e8e87e7f7958",
+      "bytes": 2394
+    },
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/prerequisite.json",
+      "target": "tests/ranch-contact-v4/prerequisite.json",
+      "sha256": "73e6db8fb3ea57767af991a9ef89aefde5f7a51f523ca1bc46fcdc875c9b7ad3",
+      "bytes": 1976
+    },
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/test-prerequisite.mjs",
+      "target": "tests/ranch-contact-v4/test-prerequisite.mjs",
+      "sha256": "a8107ef50c7e24f5dff24531078b7c2c5670f09e96b553e64e56e4e36e97fbdf",
+      "bytes": 1116
+    },
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/test-restore.mjs",
+      "target": "tests/ranch-contact-v4/test-restore.mjs",
+      "sha256": "c60b3d15b467b32fc601825d2b8adc3db57fdd1c2026f61143f1a06c6d9b2f66",
+      "bytes": 559
+    },
+    {
+      "source": "shadow-map-audit/contact-v4-pilot/workflow.yml",
+      "target": ".github/workflows/ranch-contact-v4-review.yml",
+      "sha256": "b2850951ee8c89ee9f4be95c8fa0c0fca97d0db6f50fad581de577982d119dcb",
+      "bytes": 3610
+    },
+    {
+      "source": "shadow-map-audit/ci-evidence/39720832710/chromium/chromium/independent-review/point-height-comparison.json",
+      "target": "tests/ranch-contact-v4/prerequisites/chromium-scalar-comparison.json",
+      "sha256": "7c3b7a1fc4d8045b82165e2dd739b765d2c5016724588470d07efba223dc47ea",
+      "bytes": 19116
+    },
+    {
+      "source": "shadow-map-audit/ci-evidence/39720832710/webkit/webkit/independent-review/point-height-comparison.json",
+      "target": "tests/ranch-contact-v4/prerequisites/webkit-scalar-comparison.json",
+      "sha256": "74ae2162d5c70617d7af204011ba70f1fcd4c12412b5c766993beca6757b22ba",
+      "bytes": 19114
+    },
+    {
+      "source": "shadow-map-audit/ci-evidence/39720832710/artifact-receipts.json",
+      "target": "tests/ranch-contact-v4/prerequisites/artifact-receipts.json",
+      "sha256": "5d6a98d4d9ae89f46361b57c767814eb359b272b103c7fff3f785ef669c0285d",
+      "bytes": 687
+    }
+  ]
+}

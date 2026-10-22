@@ -1,0 +1,350 @@
+{
+  "status": "PROPOSED_REQUIRES_INDEPENDENT_SEMANTIC_REVIEW",
+  "fieldId": "field_cm18_01",
+  "glbSha256": "2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7",
+  "sourceMetadataSha256": "a8c073714c9457a880f6df0b5424fbed00d28ca64a2d10925b04a3068767f599",
+  "bridges": [
+    {
+      "id": "logical-stair-gap-1-2",
+      "kind": "DERIVED_LOGICAL_COLLISION_NOT_AUTHORED_RENDER_GEOMETRY",
+      "fromSheet": "stair-tread-1",
+      "toSheet": "stair-tread-2",
+      "facingEdgeNative": [
+        [
+          [
+            74.9258804321289,
+            100.9488296508789
+          ],
+          [
+            54.09920120239258,
+            90.53311157226562
+          ]
+        ],
+        [
+          [
+            55.07867431640625,
+            90.05376434326172
+          ],
+          [
+            75.8950424194336,
+            100.46135711669922
+          ]
+        ]
+      ],
+      "pointLocalNative": [
+        [
+          54.10958934404131,
+          90.5383068294442
+        ],
+        [
+          74.92298922178568,
+          100.94738371552317
+        ],
+        [
+          75.8950424194336,
+          100.46135711669922
+        ],
+        [
+          55.07867431640625,
+          90.05376434326172
+        ]
+      ],
+      "vertices": [
+        [
+          7.469007615301459,
+          0.045439839363098145,
+          2.6863504212525897
+        ],
+        [
+          8.972613088755304,
+          0.045439839363098145,
+          2.3502938705688967
+        ],
+        [
+          8.988314244161705,
+          0.07004508376121521,
+          2.2800768500089337
+        ],
+        [
+          7.4846608262470395,
+          0.07004508376121521,
+          2.616347812760016
+        ]
+      ],
+      "indices": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          2,
+          3
+        ]
+      ],
+      "areaNative2": 20.20314946669086,
+      "overlapPhysicalTopArea": 9.947598300641403e-14,
+      "heightRule": "LINEAR_BARYCENTRIC_BETWEEN_MEASURED_TOP_EDGE_HEIGHTS",
+      "scope": "ONLY_COMMON_WIDTH_OF_TWO_FACING_AUTHORED_EDGES; OUTSIDE_NO_OVERRIDE"
+    },
+    {
+      "id": "logical-stair-gap-2-3",
+      "kind": "DERIVED_LOGICAL_COLLISION_NOT_AUTHORED_RENDER_GEOMETRY",
+      "fromSheet": "stair-tread-2",
+      "toSheet": "stair-tread-3",
+      "facingEdgeNative": [
+        [
+          [
+            80.12224578857422,
+            98.34895324707031
+          ],
+          [
+            59.305870056152344,
+            87.94137573242188
+          ]
+        ],
+        [
+          [
+            60.23379135131836,
+            87.47014617919922
+          ],
+          [
+            81.06046295166016,
+            97.88585662841797
+          ]
+        ]
+      ],
+      "pointLocalNative": [
+        [
+          59.305870056152344,
+          87.94137573242188
+        ],
+        [
+          80.12224578857422,
+          98.34895324707031
+        ],
+        [
+          81.05445167417307,
+          97.88285030427089
+        ],
+        [
+          60.24105942825469,
+          87.4737810463707
+        ]
+      ],
+      "vertices": [
+        [
+          7.553008712150997,
+          0.07004508376121521,
+          2.3110608520418046
+        ],
+        [
+          9.056661611478555,
+          0.07004508376121521,
+          1.9747886963540386
+        ],
+        [
+          9.071719130466162,
+          0.09465029835700989,
+          1.9074500774455267
+        ],
+        [
+          7.5681144221073255,
+          0.09465029835700989,
+          2.24350671865974
+        ]
+      ],
+      "indices": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          2,
+          3
+        ]
+      ],
+      "areaNative2": 19.43563077881871,
+      "overlapPhysicalTopArea": 0.0,
+      "heightRule": "LINEAR_BARYCENTRIC_BETWEEN_MEASURED_TOP_EDGE_HEIGHTS",
+      "scope": "ONLY_COMMON_WIDTH_OF_TWO_FACING_AUTHORED_EDGES; OUTSIDE_NO_OVERRIDE"
+    },
+    {
+      "id": "logical-stair-gap-3-4",
+      "kind": "DERIVED_LOGICAL_COLLISION_NOT_AUTHORED_RENDER_GEOMETRY",
+      "fromSheet": "stair-tread-3",
+      "toSheet": "stair-tread-4",
+      "facingEdgeNative": [
+        [
+          [
+            85.37014770507812,
+            95.72472381591797
+          ],
+          [
+            64.53315734863281,
+            85.31713104248047
+          ]
+        ],
+        [
+          [
+            65.48170471191406,
+            84.8459243774414
+          ],
+          [
+            86.3083724975586,
+            95.26161193847656
+          ]
+        ]
+      ],
+      "pointLocalNative": [
+        [
+          64.53622597080988,
+          85.3186637479935
+        ],
+        [
+          85.37014770507812,
+          95.72472381591797
+        ],
+        [
+          86.30237265681515,
+          95.25861134004946
+        ],
+        [
+          65.48170471191406,
+          84.8459243774414
+        ]
+      ],
+      "vertices": [
+        [
+          7.637069859461777,
+          0.09465029835700989,
+          1.9328194824433962
+        ],
+        [
+          9.141413086559167,
+          0.09465029835700989,
+          1.595686792414427
+        ],
+        [
+          9.156470913513868,
+          0.1201668381690979,
+          1.5283467962485597
+        ],
+        [
+          7.652341769150923,
+          0.1201668381690979,
+          1.864522088469731
+        ]
+      ],
+      "indices": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          2,
+          3
+        ]
+      ],
+      "areaNative2": 19.549731652934668,
+      "overlapPhysicalTopArea": 0.0,
+      "heightRule": "LINEAR_BARYCENTRIC_BETWEEN_MEASURED_TOP_EDGE_HEIGHTS",
+      "scope": "ONLY_COMMON_WIDTH_OF_TWO_FACING_AUTHORED_EDGES; OUTSIDE_NO_OVERRIDE"
+    },
+    {
+      "id": "logical-internal-tread1-slit",
+      "kind": "DERIVED_LOGICAL_COLLISION_NOT_AUTHORED_RENDER_GEOMETRY",
+      "fromSheet": "stair-tread-1",
+      "toSheet": "stair-tread-1",
+      "facingEdgeNative": [
+        [
+          [
+            74.31757354736328,
+            101.24943542480469
+          ],
+          [
+            53.5012092590332,
+            90.84185791015625
+          ]
+        ],
+        [
+          [
+            53.67647933959961,
+            90.75247955322266
+          ],
+          [
+            74.49284362792969,
+            101.16006469726562
+          ]
+        ]
+      ],
+      "pointLocalNative": [
+        [
+          53.5012092590332,
+          90.84185791015625
+        ],
+        [
+          74.3158378096914,
+          101.24856760638477
+        ],
+        [
+          74.49284362792969,
+          101.16006469726562
+        ],
+        [
+          53.67822270624865,
+          90.75335118654853
+        ]
+      ],
+      "vertices": [
+        [
+          7.45914487955926,
+          0.045439839363098145,
+          2.7302613959663993
+        ],
+        [
+          8.96267189358819,
+          0.045439839363098145,
+          2.394017785489139
+        ],
+        [
+          8.965530992109466,
+          0.045439839363098145,
+          2.3812316322121942
+        ],
+        [
+          7.462004101308107,
+          0.045439839363098145,
+          2.717474691604341
+        ]
+      ],
+      "indices": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          2,
+          3
+        ]
+      ],
+      "areaNative2": 3.6842827387735633,
+      "overlapPhysicalTopArea": 0.0,
+      "heightRule": "LINEAR_BARYCENTRIC_BETWEEN_MEASURED_TOP_EDGE_HEIGHTS",
+      "scope": "ONLY_COMMON_WIDTH_OF_TWO_FACING_AUTHORED_EDGES; OUTSIDE_NO_OVERRIDE"
+    }
+  ],
+  "unresolved": [
+    "Fourth quad explicitly bridges only same-height internal slit of tread1; parent approved scoped collision continuity",
+    "No GLB modification; bridge must not masquerade as rendered occluder",
+    "Actual navigation admission and ascending/descending continuity tests required",
+    "Physical risers and higher treads remain renderer occluders"
+  ]
+}
