@@ -1,9 +1,14 @@
+// LOCAL MINIMAL FLOOR-ONLY EXPERIMENT: existing Pixi shadows/occluder passes unchanged.
+import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
+import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
+import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { GLTFLoader } from '../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from '../../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
 import { ranchNativeToWorld, ranchSurfaceHeight, ranchPickWalkSurface, ranchSpriteScreenQuad, ranchSpriteUvs, RANCH_ELEVATION } from './ranchThreeCoordinates.js';
 import { currentQualityTier, prefersReducedMotion } from './presentationPreferences.js';
 import { ranchSharedBoundaries } from '../cage/ranchConnections.js';
+import { ranchBorderWithinSharedSegments } from './ranchBorderMembership.js';
 
 const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
 const right = new THREE.Vector3(Math.SQRT1_2, 0, -Math.SQRT1_2);
@@ -20,7 +25,22 @@ const INDUSTRIAL_FIELDS = new Set(['field_cm17_01', 'field_cm20_01', 'field_cm25
  * The native simulation, pointer targets, camera pan/zoom and save stay owned
  * by the existing presenter. No requestAnimationFrame or new game authority.
  */
-export async function createRanchThreeScene({ stage, placements, field, signal,connections=[],cagePlacements=[] }) {
+export async function createRanchThreeScene({ stage, placements, field, signal,connections=[],cagePlacements=[],supportAudit=null }) {
+  const supportFieldIds=new Set(['field_cm02_01','field_cm09_01','field_cm19_01','field_cm21_01','field_cm35_01','field_cm39_01','field_cm18_01','field_cm34_01']);
+  if(!supportAudit&&placements.some(p=>supportFieldIds.has(p.fieldId))){
+    const supportResponse=await fetch('assets/production/cage/three-20261021/physical-ground-tops.r2.json',{signal});
+    if(!supportResponse.ok)throw Error('RANCH_SUPPORT_METADATA_HTTP');
+    supportAudit={metadataText:await supportResponse.text()};
+  }
+  const supportFields=supportAudit?await loadSupportMetadata(supportAudit.metadataText):new Map();
+  let logicalBridges=[];
+  if(placements.some(p=>p.fieldId==='field_cm18_01')){
+    let logicalText=supportAudit?.logicalBridgeText;
+    if(logicalText==null){const response=await fetch('assets/production/cage/three-20261021/logical-stair-bridges.r1.json',{signal});if(!response.ok)throw Error('RANCH_LOGICAL_BRIDGES_HTTP');logicalText=await response.text();}
+    logicalBridges=await loadLogicalBridges(logicalText,supportFields);
+  }
+  const verifiedSupport=new Map(),supportPlacements=[];
+  let supportOwnerResolver=null;
   const response = await fetch(MANIFEST, { signal });
   if (!response.ok) throw Error(`RANCH_3D_MANIFEST_HTTP_${response.status}`);
   const manifest = await response.json(), specs = new Map(manifest.fields.map(f => [f.fieldId, f]));
@@ -97,6 +117,10 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       const hash=[...new Uint8Array(digest)].map(value=>value.toString(16).padStart(2,'0')).join('');
       if(hash!==spec.sha256)throw Error(`RANCH_3D_MODEL_HASH_MISMATCH:${id}`);
       const gltf=await loader.parseAsync(bytes,new URL('.',new URL(url,location.href)).href);
+      if(supportFields.has(id)){
+        const meshes=[];gltf.scene.traverse(o=>{if(o.isMesh)meshes.push(o);});
+        verifiedSupport.set(id,await validateSupportGeometry(supportFields.get(id),hash,meshes));
+      }
       models.set(id,gltf);signal?.throwIfAborted();
       // Keep full-resolution authoring exports on disk. Bound resident GPU
       // texture memory for the selected device tier before first upload.
@@ -119,6 +143,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
     // Detect compatible boundaries between same-theme adjacent placements to dissolve borders
     const taggedPlacements=placements.map((p,idx)=>({...p,ownerIndex:p.ownerIndex??idx}));
+    supportPlacements.push(...taggedPlacements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap));
     let sharedEdges=[];
     try {
       const boundaries=ranchSharedBoundaries(taggedPlacements).filter(b=>b.compatible);
@@ -150,20 +175,29 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
           }
         }
 
-        // Dissolve outer rim joints, fascia and border lights between same-theme neighbors
+        // Remove only complete authored strips on compatible shared boundaries.
+        // Classify in unwrapped placement-local coordinates: all wrap copies agree.
         const myEdges=sharedEdges.filter(e=>e.left===p.ownerIndex||e.right===p.ownerIndex);
         if(myEdges.length>0){
+          const unwrapped=ranchNativeToWorld(p.x/unit,p.y/unit);
+          const localEdges=myEdges.map(e=>({
+            a:{x:e.a.x-unwrapped.x,z:e.a.z-unwrapped.z},
+            b:{x:e.b.x-unwrapped.x,z:e.b.z-unwrapped.z}
+          }));
+          object.updateMatrixWorld(true);
           object.traverse(o=>{
-            if(!o.name)return;
+            if(!o.isMesh||!o.geometry||!o.name)return;
             const isBorder=o.name.includes('joint')||o.name.includes('fascia')||o.name.includes('rim-light');
             if(!isBorder)return;
-            const wx=point.x+o.position.x, wz=point.z+o.position.z;
-            for(const e of myEdges){
-              const dx=e.b.x-e.a.x, dz=e.b.z-e.a.z, lenSq=dx*dx+dz*dz;
-              const t=lenSq>0?Math.max(0,Math.min(1,((wx-e.a.x)*dx+(wz-e.a.z)*dz)/lenSq)):0;
-              const dist=Math.hypot(wx-e.a.x-t*dx, wz-e.a.z-t*dz);
-              if(dist<2.2){o.visible=false;break;}
+            if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();
+            const box=o.geometry.boundingBox;if(!box||box.isEmpty())return;
+            const corners=[];
+            for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){
+              // Full child hierarchy transforms, not point + child.position.
+              const v=object.worldToLocal(o.localToWorld(new THREE.Vector3(x,y,z)));
+              corners.push({x:v.x,z:v.z});
             }
+            if(ranchBorderWithinSharedSegments(corners,localEdges))o.visible=false;
           });
         }
 
@@ -215,15 +249,18 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                   m.onBeforeCompile=(shader)=>{
                     shader.uniforms.uWaterTime={value:0};
                     m.userData.shader=shader;
-                    shader.fragmentShader='uniform float uWaterTime;\n'+shader.fragmentShader;
+                    shader.vertexShader='varying vec2 vRanchWaterUv;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace('#include <uv_vertex>',
+                      '#include <uv_vertex>\nvRanchWaterUv=uv;');
+                    shader.fragmentShader='uniform float uWaterTime;\nvarying vec2 vRanchWaterUv;\n'+shader.fragmentShader;
                     shader.fragmentShader=shader.fragmentShader.replace(
                       '#include <roughnessmap_fragment>',
                       `#include <roughnessmap_fragment>
-                      vec2 wUv1=vUv*26.0+vec2(uWaterTime*0.40,uWaterTime*0.20);
-                      vec2 wUv2=vUv*36.0-vec2(uWaterTime*0.25,uWaterTime*0.45);
+                      vec2 wUv1=vRanchWaterUv*26.0+vec2(uWaterTime*0.40,uWaterTime*0.20);
+                      vec2 wUv2=vRanchWaterUv*36.0-vec2(uWaterTime*0.25,uWaterTime*0.45);
                       float ripple=sin(wUv1.x+sin(wUv1.y))*cos(wUv2.y-cos(wUv2.x));
                       float glint=pow(max(0.0,0.5+0.5*ripple),6.0)*0.35;
-                      float flow=sin(vUv.y*45.0-uWaterTime*3.2)*0.08;
+                      float flow=sin(vRanchWaterUv.y*45.0-uWaterTime*3.2)*0.08;
                       diffuseColor.rgb+=vec3(0.05,0.12,0.18)*glint+vec3(0.04,0.08,0.12)*max(0.0,flow);`
                     );
                   };
@@ -266,12 +303,16 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                   m.onBeforeCompile=(shader)=>{
                     shader.uniforms.uIceTime={value:0};
                     m.userData.shader=shader;
-                    shader.fragmentShader='uniform float uIceTime;\n'+shader.fragmentShader;
+                    shader.vertexShader='varying vec2 vRanchIceUv;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace('#include <uv_vertex>',
+                      '#include <uv_vertex>\nvRanchIceUv=uv;');
+                    shader.fragmentShader='uniform float uIceTime;\nvarying vec2 vRanchIceUv;\n'+shader.fragmentShader;
                     shader.fragmentShader=shader.fragmentShader.replace(
-                      '#include <roughnessmap_fragment>',
-                      `#include <roughnessmap_fragment>
-                      float fresnel=pow(1.0-max(0.0,dot(geometryNormal,geometryViewDir)),2.8);
-                      float shimmer=sin(uIceTime*3.5+vUv.x*65.0)*cos(uIceTime*2.8+vUv.y*65.0);
+                      '#include <normal_fragment_maps>',
+                      `#include <normal_fragment_maps>
+                      vec3 ranchIceViewDir=isOrthographic?vec3(0.0,0.0,1.0):normalize(vViewPosition);
+                      float fresnel=pow(1.0-max(0.0,dot(normal,ranchIceViewDir)),2.8);
+                      float shimmer=sin(uIceTime*3.5+vRanchIceUv.x*65.0)*cos(uIceTime*2.8+vRanchIceUv.y*65.0);
                       float iceBreath=0.5+0.5*sin(uIceTime*1.8);
                       diffuseColor.rgb+=vec3(0.08,0.16,0.25)*fresnel*(0.7+0.3*iceBreath+0.25*max(0.0,shimmer));
                       roughnessFactor=clamp(roughnessFactor*(0.85+0.15*iceBreath),0.1,1.0);`
@@ -373,9 +414,12 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         const clips=models.get(p.fieldId).animations;
         const mixer=clips.length?new THREE.AnimationMixer(object):null;
         if(mixer)for(const clip of clips)mixer.clipAction(clip).play();
-        instances.push({object,p,shift,mixer});
+        let supportMesh=null;
+        if(verifiedSupport.has(p.fieldId)){const meshes=[];object.traverse(o=>{if(o.isMesh)meshes.push(o);});if(meshes.length!==1)throw Error('SUPPORT_INSTANCE_MESH_COUNT');supportMesh=meshes[0];}
+        instances.push({object,p,shift,mixer,supportMesh,supportTriangles:verifiedSupport.get(p.fieldId),contactSheets:supportFields.get(p.fieldId)?.supportSheets??null});
       }
     }
+    supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:field.wrapWidthPx/field.nativePixelWorldScale});
     // Owner direction: navigation connections are invisible; original bridges and floors remain model geometry.
     signal?.throwIfAborted();
     Object.assign(pixi.style,{position:'relative',zIndex:'1'});pixi.parentElement.insertBefore(canvas,pixi);
@@ -400,19 +444,180 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     return entry.material;
   }
+  // LOCAL EXPERIMENT ONLY. A 2.5D depth proxy, not anatomical foot inference.
+  // Upper fragments retain the RO vertical plane; submerged fragments use the
+  // same orthographic screen ray intersected with the verified support plane.
+  // Never changes native state, sprite screen coordinates, UVs or jump lift.
+  function depthEnvelopeMaterial(base) {
+    const material=base.clone();
+    const uniforms={
+      uRanchSupportTexture:{value:new THREE.DataTexture(new Float32Array(SUPPORT_MAX_TRIANGLES*16),4,SUPPORT_MAX_TRIANGLES,THREE.RGBAFormat,THREE.FloatType)},
+      uRanchSupportCount:{value:0},uRanchSupportMax:{value:0},uRanchBufferSize:{value:new THREE.Vector2(1,1)},
+      uRanchFloor:{value:0},
+      uRanchDirection:{value:direction},
+      uRanchViewProjection:{value:new THREE.Matrix4()}
+    };
+    const supportTexture=uniforms.uRanchSupportTexture.value;
+    supportTexture.minFilter=THREE.NearestFilter;supportTexture.magFilter=THREE.NearestFilter;supportTexture.generateMipmaps=false;supportTexture.needsUpdate=true;
+    material.userData.depthEnvelopeUniforms=uniforms;
+    material.addEventListener('dispose',()=>supportTexture.dispose());
+    material.onBeforeCompile=shader=>{
+      Object.assign(shader.uniforms,uniforms);
+      shader.vertexShader='varying vec3 vRanchWorldPosition;\n'+shader.vertexShader;
+      shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',
+        '#include <project_vertex>\nvRanchWorldPosition=(modelMatrix*vec4(transformed,1.0)).xyz;');
+      // Only verified point-contact treads/mat use fixed-function per-sample
+      // depth. Project the entire original quad to ONE contacted scalar plane;
+      // the existing lower-only screen discard restricts its accepted coverage.
+      // Never clamp individual vertices: that would fold the interpolation.
+      if(material.userData.scalarPointDepth){
+        shader.vertexShader='uniform float uRanchFloor;\nuniform vec3 uRanchDirection;\nuniform mat4 uRanchViewProjection;\n'+shader.vertexShader;
+        shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',`#include <project_vertex>
+          vec3 ranchPointWorld=(modelMatrix*vec4(transformed,1.0)).xyz;
+          vec3 ranchPointProxy=ranchPointWorld+uRanchDirection*((uRanchFloor-ranchPointWorld.y)/uRanchDirection.y);
+          vec4 ranchPointClip=uRanchViewProjection*vec4(ranchPointProxy,1.0);
+          // Preserve stock clip XY/W bit-for-bit; only hardware-interpolated Z changes.
+          gl_Position.z=(ranchPointClip.z/ranchPointClip.w)*gl_Position.w;`);
+        return;
+      }
+      shader.fragmentShader='varying vec3 vRanchWorldPosition;\nuniform float uRanchFloor;\nuniform vec3 uRanchDirection;\nuniform mat4 uRanchViewProjection;\n'+shader.fragmentShader;
+      shader.fragmentShader=`uniform sampler2D uRanchSupportTexture;
+        uniform int uRanchSupportCount;uniform float uRanchSupportMax;uniform vec2 uRanchBufferSize;
+        float ranchSupportEdge(vec4 edge,vec2 p){return (edge.z-edge.x)*(p.y-edge.y)-(edge.w-edge.y)*(p.x-edge.x);}
+      `+shader.fragmentShader;
+      shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`#include <opaque_fragment>
+        // Preserve the rasterizer's exact original depth above the support.
+        gl_FragDepth=gl_FragCoord.z;
+        float fragmentFloor=uRanchFloor;
+        if(uRanchSupportCount>0 && vRanchWorldPosition.y<uRanchSupportMax+0.015){
+          vec2 supportPixel=gl_FragCoord.xy/uRanchBufferSize;
+          for(int i=0;i<72;i++){
+            if(i>=uRanchSupportCount)break;
+            vec4 info=texelFetch(uRanchSupportTexture,ivec2(3,i),0);
+            if(ranchSupportEdge(texelFetch(uRanchSupportTexture,ivec2(0,i),0),supportPixel)*info.y>=0.0 &&
+               ranchSupportEdge(texelFetch(uRanchSupportTexture,ivec2(1,i),0),supportPixel)*info.z>=0.0 &&
+               ranchSupportEdge(texelFetch(uRanchSupportTexture,ivec2(2,i),0),supportPixel)*info.w>=0.0){fragmentFloor=max(fragmentFloor,info.x+0.015);}
+          }
+        }
+        if(vRanchWorldPosition.y<fragmentFloor){
+          float clearance=(fragmentFloor-vRanchWorldPosition.y)/uRanchDirection.y;
+          vec3 proxy=vRanchWorldPosition+uRanchDirection*clearance;
+          vec4 clip=uRanchViewProjection*vec4(proxy,1.0);
+          gl_FragDepth=clamp(clip.z/clip.w*0.5+0.5,0.0,1.0);
+        }`);
+    };
+    material.customProgramCacheKey=()=>material.userData.scalarPointDepth?'ranch-scalar-point-vertex-depth-v1':'ranch-test-physical-support-v1';
+    return material;
+  }
+  function syncPhysicalSupport(item,root,box){
+    const started=performance.now(),uniforms=item.mesh.material.userData.depthEnvelopeUniforms;
+    uniforms.uRanchSupportCount.value=0;uniforms.uRanchSupportMax.value=0;
+    renderer.getDrawingBufferSize(uniforms.uRanchBufferSize.value);
+    const eligibility=eligibleSupportOwner(root.threeSupportOwner,instances);
+    item.physicalSupport={status:eligibility.status,candidateCount:0,rawCount:0,buildMs:0,owner:root.threeSupportOwner??null};
+    if(!eligibility.instance){item.physicalSupport.buildMs=performance.now()-started;return;}
+    const instance=eligibility.instance;
+    // Raised treads/mat use actual admitted point contact only. Never promote a
+    // neighboring higher tread into a generic projected-pixel support override.
+    if(CONTACT_HEIGHT_FIELDS.has(instance.p.fieldId)){item.physicalSupport={...item.physicalSupport,status:'ADMITTED_POINT_CONTACT_ONLY_NO_PROJECTED_TOP_OVERRIDE',buildMs:performance.now()-started};return;}
+    const {supportMesh,supportTriangles}=instance;
+    supportMesh.updateWorldMatrix(true,false);
+    // Fail closed for unknown tilt/scale: this pilot admits horizontal transforms only.
+    const m=supportMesh.matrixWorld.elements;
+    if(Math.abs(m[1])+Math.abs(m[9])>1e-12||m[5]<=0)throw Error('SUPPORT_INSTANCE_TILTED');
+    const buffer=uniforms.uRanchBufferSize.value,marginX=1/buffer.x,marginY=1/buffer.y;
+    const boxN={minX:box.x/width-marginX,maxX:(box.x+box.width)/width+marginX,minY:1-(box.y+box.height)/height-marginY,maxY:1-box.y/height+marginY};
+    const data=uniforms.uRanchSupportTexture.value.image.data;let count=0,maxHeight=-Infinity;
+    if(instance.supportProjectionFrame!==frames){
+      instance.supportProjection=supportTriangles.map(triangle=>{
+        const world=triangle.vertices.map(v=>new THREE.Vector3(...v).applyMatrix4(supportMesh.matrixWorld));
+        if(world.some(v=>Math.abs(v.y-world[0].y)>1e-10))throw Error('SUPPORT_WORLD_NON_HORIZONTAL');
+        const projected=world.map(v=>{const q=v.clone().project(camera);return [Math.fround((q.x+1)*.5),Math.fround((q.y+1)*.5)];});
+        return {projected,height:world[0].y,encoded:encodeProjectedTriangle(projected,world[0].y)};
+      });
+      instance.supportProjectionFrame=frames;
+    }
+    let changed=false;
+    for(const triangle of instance.supportProjection){
+      if(!projectedTriangleTouchesBox(triangle.projected,boxN))continue;
+      if(count>=SUPPORT_MAX_TRIANGLES)throw Error('SUPPORT_CANDIDATE_OVERFLOW');
+      for(let j=0;j<16;j++)if(data[count*16+j]!==triangle.encoded[j]){data[count*16+j]=triangle.encoded[j];changed=true;}
+      maxHeight=Math.max(maxHeight,triangle.height);count++;
+    }
+    if(changed)uniforms.uRanchSupportTexture.value.needsUpdate=true;
+    uniforms.uRanchSupportCount.value=count;uniforms.uRanchSupportMax.value=count?maxHeight:0;
+    item.physicalSupport={...item.physicalSupport,status:'VERIFIED_OWNER_PROJECTED_TOPS',candidateCount:count,rawCount:supportTriangles.length,textureUpload:changed,maxHeight:count?maxHeight:null,buildMs:performance.now()-started,bufferSize:buffer.toArray()};
+  }
+  function syncScalarPointDepth(item,root,supportHeight) {
+    // This compile-time variant cannot leak into the six projected-support fields.
+    const contact=root.threeGroundContact,owner=root.threeSupportOwner;
+    const scalarPointDepth=Number.isFinite(supportHeight) && CONTACT_HEIGHT_FIELDS.has(owner?.fieldId) && item.physicalSupport.status==='ADMITTED_POINT_CONTACT_ONLY_NO_PROJECTED_TOP_OVERRIDE' &&
+      (contact?.authority==='EXACT_ADMITTED_AUTHORED_POINT'||contact?.authority==='EXACT_ADMITTED_DERIVED_LOGICAL_POINT') &&
+      contact.height===supportHeight && contact.owner?.fieldId===owner?.fieldId &&
+      contact.owner?.ownerIndex===owner?.ownerIndex && contact.owner?.shift===owner?.shift;
+    if(Boolean(item.mesh.material.userData.scalarPointDepth)!==scalarPointDepth){
+      item.mesh.material.userData.scalarPointDepth=scalarPointDepth;
+      item.mesh.material.needsUpdate=true;
+    }
+    item.recoveryDepthMode=scalarPointDepth?'SCALAR_POINT_VERTEX_DEPTH':'FRAGMENT_DEPTH_ENVELOPE';
+  }
+  function partitionMaterial(base,upper,threshold) {
+    // Baseline stock quad is never discarded: preserve every original covered sample.
+    if(upper)return base.clone();
+    const material=depthEnvelopeMaterial(base);
+    const previousHook=material.onBeforeCompile,previousKey=material.customProgramCacheKey;
+    material.onBeforeCompile=function(shader,webglRenderer){
+      previousHook.call(this,shader,webglRenderer);
+      shader.uniforms.uRanchPartitionY=threshold;
+      shader.fragmentShader='uniform float uRanchPartitionY;\n'+shader.fragmentShader;
+      shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',
+        'if(gl_FragCoord.y>=uRanchPartitionY)discard;\n#include <opaque_fragment>');
+    };
+    material.customProgramCacheKey=()=>previousKey.call(material)+'|ranch-stock-plus-lower-recovery-v1';
+    return material;
+  }
+  function syncSpritePartition(item,uvs) {
+    const mesh=item.mesh,upper=item.upperMesh,u=mesh.material.userData.depthEnvelopeUniforms;
+    const ceiling=Math.max(u.uRanchFloor.value,u.uRanchSupportCount.value>0?u.uRanchSupportMax.value+.015:-Infinity);
+    const cut=(ceiling-mesh.position.y)/mesh.scale.y;
+    const projected=new THREE.Vector3(mesh.position.x,ceiling,mesh.position.z).project(camera);
+    // gl_FragCoord uses physical drawing-buffer coordinates, lower-left origin.
+    // Only the recovery overlay uses this threshold; baseline stock coverage is untouched.
+    item.partitionThreshold.value=(projected.y+1)*.5*u.uRanchBufferSize.value.y;
+    upper.position.copy(mesh.position);upper.scale.copy(mesh.scale);upper.quaternion.copy(mesh.quaternion);
+    for(const part of [mesh,upper]){
+      part.geometry.attributes.uv.array.set(uvs);part.geometry.attributes.uv.needsUpdate=true;
+    }
+    // Keep baseline and recovery quads active. Opaque depth testing selects the
+    // nearest accepted sample; the recovery pass cannot erase baseline coverage.
+    upper.visible=true;mesh.visible=true;
+    item.partition={ceiling,cut,physicalScreenY:item.partitionThreshold.value,upperVertices:upper.geometry.attributes.position.count,lowerVertices:mesh.geometry.attributes.position.count,kind:'FULL_STOCK_BASELINE_PLUS_LOWER_RECOVERY',recoveryDepthMode:item.recoveryDepthMode};
+  }
+  function disposeSpriteItem(item){
+    for(const mesh of [item.mesh,item.upperMesh]){scene.remove(mesh);mesh.geometry.dispose();mesh.material.dispose();}
+  }
   function syncSprite(key, sprite, root, bounds, pixelScale) {
     if(!sprite || sprite.destroyed || !sprite.visible || !root.visible)return;
     const material=materialFor(sprite.texture);if(!material)return;
     let item=sprites.get(key);
     if(!item){
-      const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),material);
+      const partitionThreshold={value:0};
+      const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),partitionMaterial(material,false,partitionThreshold));
       mesh.quaternion.copy(rotY);
       scene.add(mesh);
-      item={mesh,sprite};
+      const upperMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),partitionMaterial(material,true,partitionThreshold));
+      scene.add(upperMesh);
+      // Test diagnostics must treat the pair as one logical sprite, never hide this companion.
+      mesh.userData.ranchSpriteCompanionId=upperMesh.id;upperMesh.userData.ranchSpritePrimaryId=mesh.id;
+      item={mesh,upperMesh,sprite,partitionThreshold};
       sprites.set(key,item);
     }
-    item.seen=true;item.mesh.visible=true;item.mesh.material=material;item.sprite=sprite;
-    const box=ranchSpriteScreenQuad(sprite);
+    item.seen=true;item.mesh.visible=true;item.sprite=sprite;
+    if(item.mesh.material.map!==material.map){
+      item.mesh.material.dispose();item.mesh.material=partitionMaterial(material,false,item.partitionThreshold);
+      item.upperMesh.material.dispose();item.upperMesh.material=partitionMaterial(material,true,item.partitionThreshold);
+    }
+    const box=ranchSpriteScreenQuad(sprite);item.screenQuad={...box};
     const foot=root.threeGroundScreen??root;
     const groundHeight=root.threeGroundHeight??0;
     const ground=ranchNativeToWorld((foot.x-bounds.x)/pixelScale,(foot.y-bounds.y)/pixelScale,groundHeight);
@@ -426,14 +631,27 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     item.mesh.scale.set(worldW,worldH,1);
     item.mesh.position.set(ground.x+right.x*dx, y_bottom+worldH/2, ground.z+right.z*dx);
     item.mesh.quaternion.copy(rotY);
+    const uniforms=item.mesh.material.userData.depthEnvelopeUniforms;
+    // Explicit override is a fixture/review hook, not a guessed model maxY.
+    const supportHeight=root.threeVerifiedSupportHeight??groundHeight;
+    uniforms.uRanchFloor.value=supportHeight+.015;
+    uniforms.uRanchViewProjection.value.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);
+    item.envelopeNativeExtent=Math.max(0,(supportHeight+.015-y_bottom)*16*Math.cos(RANCH_ELEVATION));
+    // Real-presenter path never accepts an externally supplied diagnostic token.
+    root.threeSupportOwner=supportOwnerResolver?.resolve(root.threeGroundAdmission,(foot.x-bounds.x)/pixelScale)??null;
+    syncPhysicalSupport(item,root,box);
+    syncScalarPointDepth(item,root,supportHeight);
+    item.supportStatus='UNCHANGED_NATIVE_ORIGIN';
+    item.surfaceStatus=root.threeVerifiedSupportHeight!==undefined?'EXPLICIT_VERIFIED_HEIGHT':'EXISTING_WALK_SURFACE_ONLY';
 
     const projected=item.mesh.position.clone().project(camera);
     item.projectionError=Math.hypot((projected.x+1)*width/2-box.x-box.width/2,(1-projected.y)*height/2-box.y-box.height/2);
     const u=sprite.texture.uvs,flip=sprite.scale.x*root.scale.x<0;
     const values=ranchSpriteUvs(u,flip);
-    item.mesh.geometry.attributes.uv.array.set(values);item.mesh.geometry.attributes.uv.needsUpdate=true;
+    syncSpritePartition(item,values);
     sprite.renderable=false;
   }
+
   function render({bounds,actors,food,waste,covered=false,deltaMS=0}) {
     if(disposed||lost){for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
     if(document.hidden)return true;
@@ -481,27 +699,29 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     for(const [id,root] of food??[])syncSprite('food:'+id,root.children?.[1],root,bounds,pixelScale);
     for(const [id,sprite] of waste??[])syncSprite('waste:'+id,sprite,sprite,bounds,pixelScale);
-    for(const [key,item] of sprites){if(!item.seen){item.mesh.visible=false;if(item.sprite.destroyed){scene.remove(item.mesh);item.mesh.geometry.dispose();sprites.delete(key);}else item.sprite.renderable=true;}}
-    const usedMaterials=new Set([...sprites.values()].map(item=>item.mesh.material));
-    for(const [source,entry] of textures)if(!usedMaterials.has(entry.material)){
+    for(const [key,item] of sprites){if(!item.seen){item.mesh.visible=false;item.upperMesh.visible=false;if(item.sprite.destroyed){disposeSpriteItem(item);sprites.delete(key);}else item.sprite.renderable=true;}}
+    const usedMaps=new Set([...sprites.values()].map(item=>item.mesh.material.map));
+    for(const [source,entry] of textures)if(!usedMaps.has(entry.texture)){
       entry.texture.dispose();entry.material.dispose();textures.delete(source);
     }
     renderer.render(scene,camera);frames++;lastRenderMs=performance.now()-start;
     canvas.dataset.frames=String(frames);canvas.dataset.drawCalls=String(renderer.info.render.calls);
-    canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.actors=String([...sprites.values()].filter(i=>i.mesh.visible).length);
-    canvas.dataset.actorProjectionError=String(Math.max(0,...[...sprites.values()].filter(i=>i.mesh.visible).map(i=>i.projectionError??0)));
+    canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.actors=String([...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).length);
+    canvas.dataset.depthEnvelopeMaxNative=String(Math.max(0,...[...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).map(i=>i.envelopeNativeExtent??0)));
+    canvas.dataset.depthEnvelopeUnverifiedSurfaces=String([...sprites.values()].filter(i=>(i.mesh.visible||i.upperMesh.visible)&&i.surfaceStatus!=='EXPLICIT_VERIFIED_HEIGHT').length);
+    canvas.dataset.actorProjectionError=String(Math.max(0,...[...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).map(i=>i.projectionError??0)));
     canvas.dataset.animatedInstances=String(instances.filter(i=>i.mixer&&i.object.visible).length);
     canvas.dataset.textureCount=String(renderer.info.memory.textures);
     canvas.dataset.passageAppearance='invisible';canvas.dataset.navigationConnections=String(connections.length);
     return true;
   }
   function dispose(){
-    if(disposed)return;disposed=true;
+    if(disposed)return;disposed=true;supportOwnerResolver?.dispose();supportOwnerResolver=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
     for(const ps of dynamicParticles)ps.dispose();dynamicParticles.length=0;
     for(const g of dynamicMachines){g.geometry.dispose();g.material.dispose();}dynamicMachines.length=0;
     for(const b of dynamicBeacons){b.geometry.dispose();b.material.dispose();}dynamicBeacons.length=0;
-    for(const {mesh,sprite} of sprites.values()){if(!sprite.destroyed)sprite.renderable=true;mesh.geometry.dispose();}
+    for(const item of sprites.values()){if(!item.sprite.destroyed)item.sprite.renderable=true;disposeSpriteItem(item);}
     for(const {texture,material} of textures.values()){texture.dispose();material.dispose();}
     for(const {object,mixer} of instances)if(mixer){mixer.stopAllAction();mixer.uncacheRoot(object);}
     const geometries=new Set(),materials=new Set(),maps=new Set();
@@ -512,7 +732,27 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     renderer.dispose();renderer.forceContextLoss();canvas.remove();Object.assign(pixi.style,previousStyle);
     canvas.removeEventListener('webglcontextlost',contextLost);canvas.removeEventListener('webglcontextrestored',contextRestored);
   }
-  function groundHeight(x,y){
+  function updateContactTriangles(instance){
+    const mesh=instance.supportMesh;mesh.updateWorldMatrix(true,false);
+    const matrix=Array.from(mesh.matrixWorld.elements),key=matrix.join(',');
+    if(instance.contactMatrixKey!==key){instance.contactTriangles=transformContactTriangles(instance.supportTriangles,matrix);instance.logicalContactTriangles=instance.p.fieldId==='field_cm18_01'?transformContactTriangles(logicalBridges,matrix):[];instance.contactMatrixKey=key;}
+  }
+  function contactHeight(x,y,admission){
+    if(disposed)return {height:null,status:'DENIED_DISPOSED_CONTACT_SCENE',owner:null};
+    const owner=supportOwnerResolver?.resolve(admission,x)??null,eligible=eligibleSupportOwner(owner,instances,{requireRenderVisible:false});
+    if(!eligible.instance||!CONTACT_HEIGHT_FIELDS.has(eligible.instance.p.fieldId))return {height:null,status:eligible.status,owner};
+    const instance=eligible.instance;updateContactTriangles(instance);
+    const point=ranchNativeToWorld(x,y,0),hit=contactHeightAtPoint(instance.contactTriangles,point.x,point.z);
+    if(!hit){
+      const logical=logicalContactHeightAtPoint(instance.logicalContactTriangles,point.x,point.z);
+      if(logical)return {...logical,status:'VERIFIED_ADMITTED_DERIVED_LOGICAL_CONTACT',owner,supportSheet:logical.bridgeId,sourceComponent:null,queryNative:[x,y]};
+      return {height:null,status:'OUTSIDE_AUTHORED_AND_LOGICAL_CONTACT',owner};
+    }
+    const sheets=instance.contactSheets?.filter(sheet=>sheet.indices.includes(hit.sourceTriangleIndex))??[];
+    if(sheets.length!==1)throw Error('CONTACT_SHEET_NOT_UNIQUE');
+    return {...hit,status:'VERIFIED_ADMITTED_AUTHORED_CONTACT',owner,supportSheet:sheets[0].id,sourceComponent:sheets[0].component,queryNative:[x,y]};
+  }
+  function legacyGroundHeight(x,y){
     let height=0;const unit=field.nativePixelWorldScale;
     for(const {p,shift} of instances){
       const triangles=walkSurfaces[p.fieldId];if(!triangles)continue;
@@ -520,13 +760,40 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     return height;
   }
-  function pickGroundNative(point){
+  function groundContact(x,y,admission=null){
+    const authored=contactHeight(x,y,admission);
+    return authored.height!==null?{...authored,authority:authored.kind==='DERIVED_LOGICAL_STAIR_CONTACT_HEIGHT'?'EXACT_ADMITTED_DERIVED_LOGICAL_POINT':'EXACT_ADMITTED_AUTHORED_POINT'}:{...authored,height:legacyGroundHeight(x,y),authority:'EXISTING_WALK_SURFACE_FALLBACK'};
+  }
+  function groundHeight(x,y,admission=null){return groundContact(x,y,admission).height;}
+  function pickGroundNative(point,readAdmission=null){
     let best={...point,height:0};const unit=field.nativePixelWorldScale;
     for(const {p,shift} of instances){
       const picked=ranchPickWalkSurface(point.x-p.x/unit-shift,point.y-p.y/unit,walkSurfaces[p.fieldId]);
       if(picked.height>best.height)best={...point,y:picked.y+p.y/unit,height:picked.height};
     }
+    // Test candidate ray intersections before querying ownership. Querying the
+    // base-height screen point first can select the adjacent native cell.
+    if(!disposed&&typeof readAdmission==='function'){
+      const candidates=[];
+      for(const instance of instances){
+        if(!CONTACT_HEIGHT_FIELDS.has(instance.p.fieldId)||!instance.supportMesh)continue;
+        updateContactTriangles(instance);
+        for(const hit of projectedContactIntersections([...instance.contactTriangles,...instance.logicalContactTriangles],point.x,point.y)){
+          // Native admission is discontinuous at exact 8px cell boundaries.
+          // Canonicalize roundoff near representable Q12 points BEFORE admission,
+          // never accept a denied cell by tolerance or change general pointer precision.
+          const recovered={...hit,x:canonicalContactNativeCoordinate(hit.x),y:canonicalContactNativeCoordinate(hit.y)};
+          const admitted=readAdmission(recovered.x,recovered.y),contact=contactHeight(recovered.x,recovered.y,admitted);
+          if(contact.height===null||contact.owner?.ownerIndex!==instance.p.ownerIndex||contact.owner?.fieldId!==instance.p.fieldId||contact.owner?.shift!==instance.shift||Math.abs(contact.height-hit.height)>1e-9)continue;
+          candidates.push({...recovered,ownerIndex:instance.p.ownerIndex,shift:instance.shift});
+        }
+      }
+      candidates.sort((a,b)=>b.rayDepth-a.rayDepth||a.ownerIndex-b.ownerIndex||a.shift-b.shift||(a.sourceTriangleIndex??Infinity)-(b.sourceTriangleIndex??Infinity)||String(a.bridgeId).localeCompare(String(b.bridgeId))||(a.logicalTriangleIndex??0)-(b.logicalTriangleIndex??0));
+      const baselineWorld=ranchNativeToWorld(best.x,best.y,best.height),baselineRayDepth=baselineWorld.x*direction.x+baselineWorld.y*direction.y+baselineWorld.z*direction.z;
+      if(candidates[0]&&candidates[0].rayDepth>baselineRayDepth)best=candidates[0];
+    }
     return {x:best.x,y:best.y};
   }
-  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections.length,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost})};
+  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections.length,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
 }
+

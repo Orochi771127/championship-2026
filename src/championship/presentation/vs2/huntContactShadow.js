@@ -122,3 +122,25 @@ export function huntContactShadow(speciesId, frame, worldZ = 0, art = null) {
     }))
   };
 }
+
+// Only the three already-reviewed Raising contacts. These public render hashes
+// identify their accepted deliveries; no private catalog is loaded at runtime.
+const publicReviewedContacts = Object.freeze({
+  'm104_tunomon': Object.freeze(['23e70fa59e076c77d0965ff92946bb1d94215ad0139f27399f0cdac818d1a19c','839c2d5ca2b879f0b9cf80f4056d786313bbb62d1c6888d3ca8f190c0e3f3fea']),
+  'm006_punimon': Object.freeze(['3772166bb72f7340542a5cc08a74fbda6d6ce246c42c2f7d511c81c0c1fd37bb','2474959abc3202a4ad6dec81570dcdcda1ec244fecc989a3c2d30e377941110c']),
+  'm203_elecmon': Object.freeze(['adf1335fbb55f749f60c5e97b3dae304da9c2290ed5b025f253c60b1253afaad','6c4e336d6c5ad3f0def4c281ef669ba150016f38b044dc793c8deeaad40e41bb'])
+});
+
+/** Call only after the public loader validates the actual runtime and geometry.
+ * Reuse existing reviewed identity, without exposing any new authoring fields.
+ * Unknown or changed deliveries retain their normal fallback shadow.
+ */
+export function getPublicReviewedRaisingContactArt(config, side = 'main') {
+  const expected = publicReviewedContacts[config?.entityId];
+  if (side !== 'main' || !expected || config.runtimeSha256 !== expected[0]
+    || config.geometrySha256 !== expected[1]) return null;
+  const profile = Object.values(profiles).find(value => value.entityId === config.entityId);
+  if (!profile?.sourceBankSha256 || !profile.folder) return null;
+  return Object.freeze({entityId:profile.entityId,folder:profile.folder,side,
+    sourceBankSha256:profile.sourceBankSha256});
+}

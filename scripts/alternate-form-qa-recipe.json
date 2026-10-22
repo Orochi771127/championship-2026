@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "target": "LOCAL_COMPILED_INSTRUMENTED_ALTERNATE_QA",
+  "toolVersion": "0.28.2",
+  "entry": "src/championship/app/main.js",
+  "outputDirectory": "src/championship/app/_alternate-qa",
+  "redirects": {
+    "src/data/championship/product-species-extensions.r1.json": "qa/alternate-form-product-catalog.json",
+    "src/data/championship/alternate-form-assets.r1.json": "qa/alternate-form-asset-catalog.json",
+    "src/championship/app/championshipStandaloneApp.js": "src/championship/app/alternateFormQaApp.js",
+    "src/championship/app/ChampionshipPersistentSavePort.js": "src/championship/app/alternateFormQaPorts.js",
+    "src/championship/presentation/completedOriginalCharacters.js": "src/championship/app/alternateFormQaCharacters.js",
+    "src/data/championship/database-hero-portraits.r1.json": "src/data/championship/qa-database-hero-portraits.r1.json"
+  },
+  "privateSources": {
+    "alternate-form-qa.html": "851323c35801341d6d96dea81f4c115464fb90268672cf7ec280b35dcdfc7ede",
+    "qa/alternate-form-asset-catalog.json": "e508d137b9e54f635555814ad0ae2b35291dacf04288cd76e67706162cd4603e",
+    "qa/alternate-form-product-catalog.json": "a927d95efd0438c693a960ac46264dbc1783b80e122fc801c3a336916cfca1a1",
+    "qa/alternate-form-save.json": "d1da76da93a177a27d35d89b245ef59140514a9cdb50b05260a371524bdeaff7",
+    "src/championship/app/alternateFormQaApp.js": "91d65f6cb42639f009e36967379aa6935ab75d4dc69a9c0efdda0ee1762b1af9",
+    "src/championship/app/alternateFormQaCharacters.js": "55d144635cc815272d0c914ce78d8f92517cb6626e2627e92132e491a9720e4e",
+    "src/championship/app/alternateFormQaDiagnostics.js": "3d635a6ed9f5053da9df23e370d1756fab870040e8d8fce07937d57f67b0cc6e",
+    "src/championship/app/alternateFormQaPorts.js": "0b07a5d690f185639c8b05a6fbda90a533eb456f9ee701f89c4d96babf6576d4",
+    "src/championship/app/alternateFormQaStorage.js": "08e30075457b5e07ba178bd5ea79ba6f3cc1e2d8afd75c1cc100833ea3dd7573",
+    "src/data/championship/qa-database-hero-portraits.r1.json": "7c288b208157b1bd0aaefd90174d5ac6e5756cdd4eddc34b407f1e51a527aa64",
+    "tests/fixtures/alternate-form-public-roster-observer.mjs": "6018c29950b7cafeb7a6aed4195bc82af9705d257043ec4e02c446f80faef9a7",
+    "src/data/championship/alternate-form-assets.r1.json": "a92f7099f8d447b083f512c06eef8f1fcccacd40212b3b47bc7c24b17d90709b"
+  },
+  "inspectionFiles": [
+    "qa/alternate-form-save.json",
+    "qa/alternate-form-product-catalog.json",
+    "qa/alternate-form-asset-catalog.json",
+    "src/data/championship/product-species-extensions.r1.json",
+    "src/data/championship/alternate-form-assets.r1.json",
+    "src/data/championship/database-hero-portraits.public.v1.json"
+  ],
+  "publicRosterObservation": {
+    "path": "src/championship/presentation/publicCharacterRoster.js",
+    "sha256": "a195da3e2d2a4d1ddd26ca59405ace675d38028ac9d084bd3a90391f15c9d9ed",
+    "scope": "PRIVATE_COMPILE_SUCCESSFUL_RETURN_OBSERVATION_NO_CALL_OR_PROMISE_WRAPPER"
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "intensity": {
+    "beforeState": {
+      "objects": [
+        {
+          "id": 75,
+          "name": "Scene",
+          "type": "Group",
+          "parent": 9,
+          "visible": false,
+          "matrixWorld": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            -30.351799955646,
+            0,
+            37.530451038262555,
+            1
+          ]
+        },
+        {
+          "id": 76,
+          "name": "field_cm18_01-runtime-static",
+          "type": "Mesh",
+          "parent": 75,
+          "visible": true,
+          "matrixWorld": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            -30.351799955646,
+            0,
+            37.530451038262555,
+            1
+          ]
+        },
+        {
+          "id": 77,
+          "name": "Scene",
+          "type": "Group",
+          "parent": 9,
+          "visible": true,
+          "matrixWorld": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            12.074606915546847,
+            0,
+            -4.8959558329302935,
+            1
+          ]
+        },
+        {
+          "id": 78,
+          "name": "field_cm18_01-runtime-static",
+          "type": "Mesh",
+          "parent": 77,
+          "visible": true,
+          "matrixWorld": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            12.074606915546847,
+            0,
+            -4.8959558329302935,
+            1
+          ]
+        },
+        {
+          "id": 79,
+          "name": "Scene",
+          "type": "Group",
+          "parent": 9,
+          "visible": false,
+          "matrixWorld": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            54.50101378673969,
+            0,
+            -47.322362704123144,
+            1
+          ]
+        },
+        {
+          "id": 80,
+          "name": "field_cm18_01-runtime-static",
+          "type": "Mesh",
+          "parent": 79,
+          "visible": true,
+          "matrixWorld": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            54.50101378673969,
+            0,
+            -47.322362704123144,
+            1
+          ]
+        }
+      ]
+    }
+  }
+}

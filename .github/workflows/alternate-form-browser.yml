@@ -3,6 +3,11 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - 'scripts/alternate-form-qa-build.cjs'
+      - 'scripts/alternate-form-qa-recipe.json'
+      - 'tests/alternate-form-compiled-support.cjs'
+      - 'tests/alternate-form-compiled-cases.cjs'
+      - 'tests/fixtures/alternate-form-public-roster-observer.mjs'
       - '.github/workflows/alternate-form-browser.yml'
       - 'tests/championship-alternate-form-browser.cjs'
       - 'tests/alternate-form-browser-support.cjs'
@@ -32,9 +37,14 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Build exact owner-approved public Pages artifact
         run: npm run build:playtest && npm run validate:playtest
+      - name: Verify private compiled QA boundary contracts
+        run: node --test tests/alternate-form-compiled-cases.cjs
+      - name: Build and validate isolated compiled instrumented QA sidecar
+        run: node scripts/alternate-form-qa-build.cjs && node scripts/alternate-form-qa-build.cjs --validate
       - name: Run real UI, isolated save, evolution and natural battle
         env:
           CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
+          CHAMPIONSHIP_ALTERNATE_QA_ARTIFACT: .tmp/alternate-form-compiled-qa
           CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
         run: node tests/championship-alternate-form-browser.cjs
       - name: Preserve diagnostics, screenshots and Playwright trace even on GPU failure

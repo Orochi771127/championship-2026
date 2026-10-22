@@ -5,6 +5,8 @@ on:
     paths:
       - '.github/workflows/friends-playtest-browser.yml'
       - 'tests/championship-friends-playtest-browser.cjs'
+      - 'tests/friends-playtest-groups.cjs'
+      - 'tests/friends-playtest-groups-cases.cjs'
       - 'tests/friends-installer-fixture-support.cjs'
       - 'tests/friends-installer-fixture-cases.mjs'
       - 'tests/alternate-form-browser-support.cjs'
@@ -30,7 +32,11 @@ on:
 permissions:
   contents: read
 jobs:
-  chromium:
+  groups:
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [fresh-economy, legacy-persistence, source-adjacent-desktop, source-adjacent-mobile, source-wrap-desktop, source-wrap-mobile]
     runs-on: ubuntu-22.04
     timeout-minutes: 25
     steps:
@@ -42,11 +48,12 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Verify row confirmation and purchase invariants
-        run: node --test tests/friends-installer-fixture-cases.mjs tests/championship-product-row-lock-ui-cases.mjs tests/championship-ranch-row-dialog-cases.mjs tests/championship-friends-playtest-cases.mjs tests/championship-product-ranch-grid-cases.mjs tests/championship-vs4-cage-edit-cases.mjs
+        run: node --test tests/friends-playtest-groups-cases.cjs tests/friends-installer-fixture-cases.mjs tests/championship-product-row-lock-ui-cases.mjs tests/championship-ranch-row-dialog-cases.mjs tests/championship-friends-playtest-cases.mjs tests/championship-product-ranch-grid-cases.mjs tests/championship-vs4-cage-edit-cases.mjs
       - name: Build and validate the approved public artifact
         run: npm run build:playtest && npm run validate:playtest
       - name: Exercise fresh UI purchases, hunt fees, reload and isolated legacy save
         env:
+          CHAMPIONSHIP_FRIENDS_GROUP: ${{ matrix.group }}
           CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
           CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/browser-qa
         run: node tests/championship-friends-playtest-browser.cjs
@@ -54,7 +61,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: friends-playtest-diagnostics-${{ github.run_id }}
+          name: friends-playtest-diagnostics-${{ github.run_id }}-${{ matrix.group }}
           path: |
             .tmp/browser-qa/friends-playtest/*.png
             .tmp/browser-qa/friends-playtest/*.json
@@ -64,8 +71,34 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: friends-playtest-traces-${{ github.run_id }}
+          name: friends-playtest-traces-${{ github.run_id }}-${{ matrix.group }}
           path: .tmp/browser-qa/friends-playtest/*-trace.zip
           if-no-files-found: warn
           retention-days: 14
 
+  # Preserve the original check identity (requiredness unknown); matrix rows alone cannot pass it.
+  chromium:
+    if: always()
+    needs: groups
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Require every scenario job to succeed
+        env:
+          GROUPS_RESULT: ${{ needs.groups.result }}
+        run: test "$GROUPS_RESULT" = success
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: friends-playtest-diagnostics-${{ github.run_id }}-*
+          path: .tmp/friends-groups
+      - name: Verify complete same-build scenario receipts
+        run: node tests/friends-playtest-groups.cjs .tmp/friends-groups
+      - uses: actions/upload-artifact@v4
+        with:
+          name: friends-playtest-completeness-${{ github.run_id }}
+          path: .tmp/friends-groups/completeness.json
+          retention-days: 14

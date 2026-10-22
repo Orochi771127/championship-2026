@@ -428,7 +428,12 @@
     "src/data/championship/battleNativeMathTables.js",
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/championship/presentation/intRh2/careImageTextureScope.js"
+    "src/championship/presentation/intRh2/careImageTextureScope.js",
+    "src/championship/app/raisingGroundSupport.js",
+    "src/championship/presentation/ranchBorderMembership.js",
+    "src/championship/presentation/ranchContactHeight.js",
+    "src/championship/presentation/ranchPhysicalSupport.js",
+    "src/championship/presentation/ranchSupportOwner.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js",
@@ -8957,7 +8962,14 @@
     "src/data/championship/public-playtest-runtime.v1.json",
     "src/data/championship/public-ui-selection.v1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/data/championship/ranch-render-selection.v1.json"
+    "src/data/championship/ranch-render-selection.v1.json",
+    "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
+    "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
+    "src/championship/app/raisingGroundSupport.js",
+    "src/championship/presentation/ranchBorderMembership.js",
+    "src/championship/presentation/ranchContactHeight.js",
+    "src/championship/presentation/ranchPhysicalSupport.js",
+    "src/championship/presentation/ranchSupportOwner.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -41073,7 +41085,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "3830a902ce5c19b28da71eee2bbfe162955d7e75f2390f8506545a766f69eab7"
+        "sha256": "bb06cb1911c1c9ee0a8465c79a1d620afb7e754ad7971440fee81a5161d8e29e"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
@@ -41177,7 +41189,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "4b3166e43507615e653077d18629aafe165bd23f0920caf72f9dcdf36b520068"
+        "sha256": "4dd6ca1d708c78e779c0cb7e4041c87a647550f4dc3373d7996e4e75cbd01713"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -41373,7 +41385,7 @@
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
-        "sha256": "b0fb113d2063d6b54000a284a2c91b658a7f95c1b99b0f802e180270af00a855"
+        "sha256": "9f5c0d23af6360e21682c0683c8424743907eb6fc384bdd0a7c8e56ad547d8a3"
       },
       {
         "path": "src/championship/app/ranchDiscoveryJournal.js",
@@ -42253,7 +42265,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "9abf5f818af06b163a86adda4811a2f200473e204ec2785a6bb7ada4a636210e"
+        "sha256": "d11771a26ff89116ebb013558d49a67dfd1b64d04454948195acb011cd8eb440"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -42261,7 +42273,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
-        "sha256": "33d50995715165ce96089747bd1288fd5b393470e382074287afbd247a32479d"
+        "sha256": "c7c1154b35739361b52fe948a379941b3969992ccb0f016c8b87e8ffe1ed3803"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingNativeSizing.js",
@@ -42369,7 +42381,7 @@
       },
       {
         "path": "src/championship/presentation/publicCharacterRoster.js",
-        "sha256": "5a810256912ba9faec9825480ccf789b78537848742e2163f4aa0bf695d6e4b5"
+        "sha256": "a195da3e2d2a4d1ddd26ca59405ace675d38028ac9d084bd3a90391f15c9d9ed"
       },
       {
         "path": "src/championship/presentation/publicHudManifestCache.js",
@@ -42421,7 +42433,7 @@
       },
       {
         "path": "src/championship/presentation/ranchThreeScene.js",
-        "sha256": "1d60444883f996bcf939a4989b84bd602efe03cbe7ec35db59ef84f3abb134a6"
+        "sha256": "4eebd5f756597164a1be9223c30aba6c521f312844a2b36c00064d71cd7b0338"
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
@@ -42477,7 +42489,7 @@
       },
       {
         "path": "src/championship/presentation/vs2/huntContactShadow.js",
-        "sha256": "5db6ea2ee5e4d06bc2b52a70fed79fa94cec55e6cb3e96caec114c152f4efe17"
+        "sha256": "c284a006e2bec65205011553f2c62633edd514c5a3ec587d6a282caf1172cc41"
       },
       {
         "path": "src/championship/presentation/vs2/huntDepthOccluders.js",
@@ -43054,6 +43066,34 @@
       {
         "path": "src/data/championship/ranch-render-selection.v1.json",
         "sha256": "ddd5d6a367c5f0b7e7d80203db5114924c93d6992691571d2fee55ea3eae7f41"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
+        "sha256": "8f6a8eec7fa71381de68f5dc0f7b30399bf89d62e91742281a60bb7e43293a50"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
+        "sha256": "a8c073714c9457a880f6df0b5424fbed00d28ca64a2d10925b04a3068767f599"
+      },
+      {
+        "path": "src/championship/app/raisingGroundSupport.js",
+        "sha256": "ffd6a4e62213b1ee7b967fbf341d89f7a8f3e4c6da6a8ab76fd5bf73aff520c9"
+      },
+      {
+        "path": "src/championship/presentation/ranchBorderMembership.js",
+        "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
+      },
+      {
+        "path": "src/championship/presentation/ranchContactHeight.js",
+        "sha256": "61ce25cc7931ed4d7cc36e5a023ea9d376e32e77483cd6d20c10ef3ffdcc5c71"
+      },
+      {
+        "path": "src/championship/presentation/ranchPhysicalSupport.js",
+        "sha256": "d8132f3048253069fcb74691f14b770860efe1bf2ff5195d3652b740c20b0408"
+      },
+      {
+        "path": "src/championship/presentation/ranchSupportOwner.js",
+        "sha256": "10ee4a275e2e696366630e5476ac94e78984d6d0080685b93246910bd859cd81"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",

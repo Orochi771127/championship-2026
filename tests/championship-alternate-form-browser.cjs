@@ -1,26 +1,57 @@
 // Real UI only. No fixture edits, clock manipulation, private app access, GPU flags,
-// runtime replacements or changes to production readiness. Requires built public QA.
+// changes to production readiness. Separate compiled instrumented QA; NOT byte-identical public runtime.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const {createHash}=require('node:crypto');
-const {resolveAsset,serveBuild,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
+const {resolveAsset,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
+const {validatedPair,assertCurrentPublicBattleLoaders}=require('./alternate-form-compiled-support.cjs');
+const qaRoot=path.resolve(process.env.CHAMPIONSHIP_ALTERNATE_QA_ARTIFACT||'.tmp/alternate-form-compiled-qa');
 const output=require('./browser-qa-output.cjs')('alternate-forms');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/';
 const saveKey='championshipModernSave:v1',qaKey='championshipAlternateFormsQA:r1:'+saveKey;
 const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[],diagnostics:[],gpu:null};
+
+// BEGIN ALTERNATE ATOMIC READY (read-only test observation)
+function alternateReadySnapshot(){
+ const visible=n=>Boolean(n&&!n.hidden&&n.getClientRects().length&&getComputedStyle(n).display!=='none'&&getComputedStyle(n).visibility!=='hidden');
+ const roots=[...document.querySelectorAll('#cm-root[data-active-screen="RAISING_HOME"]')],root=roots[0],fields=[...(root?.querySelectorAll('.int-rh2-field-host')??[])],field=fields[0],canvases=[...(field?.querySelectorAll('canvas.cm-field-canvas')??[])],canvas=canvases[0];
+ return {rootCount:roots.length,fieldCount:fields.length,fieldVisible:visible(field),loadState:field?.dataset.loadState??null,busy:field?.getAttribute('aria-busy')??null,residents:JSON.parse(field?.dataset.residentAssets||'[]'),panelVisible:[...document.querySelectorAll('#cm-root .int-rh2-resident-assets[data-load-owner="raising"]')].some(visible),fallbackCount:document.querySelectorAll('#cm-root[data-field-fallback="true"]').length,canvas:{count:canvases.length,visible:visible(canvas),width:canvas?.width??0,height:canvas?.height??0}};
+}
+function alternateSnapshotReady(s){
+ if(s.fallbackCount!==0)throw Error('ALTERNATE_ACTUAL_FIELD_FALLBACK');
+ if(s.rootCount>1||s.fieldCount>1||s.canvas.count>1)throw Error('ALTERNATE_DUPLICATE_FIELD_OR_CANVAS');
+ if(s.loadState==='error'||s.residents.some(r=>r.state==='error'||r.error))throw Error('ALTERNATE_ACTUAL_ASSET_ERROR');
+ return s.rootCount===1&&s.fieldCount===1&&s.fieldVisible&&s.loadState==='ready'&&s.busy==='false'&&!s.panelVisible&&s.residents.length>0&&s.residents.every(r=>r.state==='ready')&&s.canvas.count===1&&s.canvas.visible&&s.canvas.width>0&&s.canvas.height>0;
+}
+function alternateMakeReady(){return new Function(`const s=(${alternateReadySnapshot.toString()})();return (${alternateSnapshotReady.toString()})(s)?s:false;`);}
+async function alternateAwaitReady(api){
+ const deadline=api.now()+180000;const row={label:api.label,startedAt:api.wall()};api.record(row);
+ try{row.initial=await api.snapshot();api.write();let left=deadline-api.now();if(left<=0)throw Error('Original Alternate readiness deadline exhausted');
+  if(alternateSnapshotReady(row.initial)){row.final=row.initial;row.waited=false;}
+  else{row.waited=true;row.pollBudgetMs=left;row.final=await api.poll(left);}
+  if(api.now()>=deadline)throw Error('Original Alternate readiness deadline exhausted');
+  if(!alternateSnapshotReady(row.final))throw Error('ALTERNATE_FINAL_SNAPSHOT_NOT_READY');row.finishedAt=api.wall();api.write();return row.final;
+ }catch(error){row.error=String(error.stack||error);api.write();throw error;}
+}
+// END ALTERNATE ATOMIC READY
+
 (async()=>{
  const manifest=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=manifest.buildId;assert.equal(manifest.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(manifest.publicPlaytest?.ownerApproved,true);
- assert.ok(resolveAsset(root,'/alternate-form-qa.html'),'Approved public build must contain isolated QA entry');
- for(const entry of JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/product-species-extensions.r1.json'))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true,'Promotion requires production readiness, not a forced QA-only gate');
- const readCatalog=file=>JSON.parse(fs.readFileSync(path.join(root,file)));
+ assert.equal(resolveAsset(root,'/alternate-form-qa.html'),null,'Private QA entry must never enter the public artifact');
+ const pair=await validatedPair({publicRoot:root,qaRoot});
+ evidence.validationScope=pair.manifest.validationScope;evidence.privateBuildId=pair.manifest.buildId;evidence.privateParentPublicBuildId=pair.manifest.publicBuildId;
+ assert.equal(pair.manifest.publicBuildId,manifest.buildId);
+ assert.ok(pair.resolve('/alternate-form-qa.html'),'Validated private compiled QA entry required');
+ for(const entry of JSON.parse(fs.readFileSync(pair.resolve('/src/data/championship/product-species-extensions.r1.json'))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true,'Promotion requires production readiness, not a forced QA-only gate');
+ const readCatalog=file=>JSON.parse(fs.readFileSync(pair.resolve('/'+file)));
  assert.deepEqual(readCatalog('src/data/championship/product-species-extensions.r1.json').entries,readCatalog('qa/alternate-form-product-catalog.json').entries,'Observed QA gameplay must use the same product identities and readiness');
  const coreAsset=entry=>{const {blockers,...core}=entry;return core;};
  assert.deepEqual(readCatalog('src/data/championship/alternate-form-assets.r1.json').characters.map(coreAsset),readCatalog('qa/alternate-form-asset-catalog.json').characters.map(coreAsset),'QA and production must use the same four action/geometry/own-art configurations');
- const fixture=JSON.parse(fs.readFileSync(path.join(root,'qa/alternate-form-save.json')));
+ const fixture=JSON.parse(fs.readFileSync(pair.resolve('/qa/alternate-form-save.json')));
  assert.equal(fixture.raising.collection.find(i=>i.instanceId.endsWith(':0005')).speciesId,'species-139');
  assert.equal(fixture.raising.collection.find(i=>i.instanceId.endsWith(':0006')).speciesId,'species-144');
- const server=await serveBuild(root);let browser,context,page;
+ const server=await pair.serve();let browser,context,page;
  const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(evidence,null,2));
  try{
   // Official full Chromium new headless; sandbox retained. Unsupported runners fail.
@@ -33,7 +64,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    if(url.startsWith(server.origin+'/'))return route.continue();
    // Some published asset URLs are absolute: serve exact reviewed build bytes.
    if(url.startsWith(publicBase)){
-    const file=resolveAsset(root,'/'+new URL(url).pathname.slice(new URL(publicBase).pathname.length));
+    const file=pair.resolve('/'+new URL(url).pathname.slice(new URL(publicBase).pathname.length));
     if(file){const localUrl=server.origin+'/'+new URL(url).pathname.slice(new URL(publicBase).pathname.length)+new URL(url).search;const response=await route.fetch({url:localUrl,maxRedirects:0});return route.fulfill({response});}
    }
    evidence.networkErrors.push({url,error:'NON_BUILD_REQUEST_BLOCKED'});return route.abort();
@@ -52,24 +83,19 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    evidence.diagnostics.push({label,report});await shot(label);await panel.locator('summary').click();await shot(label+'-scene');write();return report;
   }
   async function raisingReady(label){
-   const field=page.locator('#cm-root .int-rh2-field-host[data-load-state="ready"][aria-busy="false"]');
-   await field.waitFor({state:'visible',timeout:180000});
-   await page.locator('#cm-root .int-rh2-resident-assets[data-load-owner="raising"]:visible').waitFor({state:'hidden'});
-   assert.equal(await page.locator('#cm-root[data-field-fallback="true"]').count(),0);
-   const state=await field.evaluate(n=>({loadState:n.dataset.loadState,busy:n.getAttribute('aria-busy'),residents:JSON.parse(n.dataset.residentAssets||'[]')}));
-   assert.equal(state.loadState,'ready');assert.equal(state.busy,'false');assert.ok(state.residents.length>0);assert.ok(state.residents.every(r=>!['error','loading'].includes(r.state)));
-   const canvas=field.locator('canvas.cm-field-canvas');assert.equal(await canvas.count(),1);assert.equal(await canvas.isVisible(),true);
-   const size=await canvas.evaluate(n=>({width:n.width,height:n.height}));assert.ok(size.width>0&&size.height>0);
-   (evidence.raisingReady??=[]).push({label,...state,canvas:size});
+   const state=await alternateAwaitReady({label,now:()=>Date.now(),wall:()=>new Date().toISOString(),record:row=>{(evidence.raisingReadyObservations??=[]).push(row);write();},write,snapshot:()=>page.evaluate(alternateReadySnapshot),poll:async timeout=>{const handle=await page.waitForFunction(alternateMakeReady(),undefined,{timeout});try{return await handle.jsonValue();}finally{await handle.dispose();}}});
+   // The returned snapshot itself satisfied all original field/panel/canvas checks.
+   // No later locator re-read can substitute a newer busy state for this receipt.
+   (evidence.raisingReady??=[]).push({label,...state});write();
   }
   async function captureFourFormDatabase(){
    // Existing isolated QA session, normal menu/list navigation and DOM reads only.
-   const registry=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json')));
+   const registry=JSON.parse(fs.readFileSync(pair.resolve('/src/data/championship/database-hero-portraits.public.v1.json')));
    const masters=JSON.parse(fs.readFileSync('src/data/championship/database-hero-portraits.r1.json'));
    const derivations=JSON.parse(fs.readFileSync('docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json'));
    const approvedHashes={222:'4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3',230:'09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39',211:'20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634',229:'f1e1a23e891b9345f4b759e910c5f67efd8a844a2de53e14183a1a2fe3310424'};
    const codes=new Map([[222,'UL02'],[230,'UL03'],[211,'UL33'],[229,'UL34']]);
-   const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root);
+   const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root,registry);
    const expected=new Map([...codes].map(([id,code])=>{
     const art=registry.entries.find(e=>e.speciesIndex===id);assert.ok(art);
     assert.equal(art.src,`assets/production/database-display-20261018/species-${id}.display.${art.sha256.slice(0,16)}.webp`);
@@ -78,7 +104,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
     assert.equal(master.sha256,approvedHashes[id]);assert.equal(createHash('sha256').update(fs.readFileSync(master.src)).digest('hex'),approvedHashes[id]);
     for(const key of ['src','sha256','width','height'])assert.equal(derived.source[key],master[key]);
     assert.equal(derived.display.sha256,art.sha256);assert.equal(derived.display.rgbaExactlyMatchesResizedSource,true);
-    const bytes=fs.readFileSync(path.join(root,art.src));assert.equal(createHash('sha256').update(bytes).digest('hex'),art.sha256);
+    const bytes=fs.readFileSync(pair.resolve('/'+art.src));assert.equal(createHash('sha256').update(bytes).digest('hex'),art.sha256);
     return [id,{...art,code,url:new URL(art.src,publicBase).href}];
    }));
    const imageJobs=[],received=new Map();
@@ -157,10 +183,14 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   await page.setViewportSize({width:844,height:390});
   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="saveQuit"]').click();await page.locator('#cm-login').waitFor({state:'visible'});
   const saved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
-  assert.equal(saved.schemaVersion,6);
+  assert.equal(saved.schemaVersion,7);
+  assert.equal(saved.cageEdit?.layoutVersion,'PRODUCT_GRID100_INSTANCES_V1');
+  assert.deepEqual(saved.shop?.cageQuantities,Object.fromEntries(fixture.shop.cageOwned.map(index=>[index,1])));
   for(const [suffix,species]of [['0005','species-229'],['0006','species-230']])assert.equal(saved.raising.collection.find(i=>i.instanceId.endsWith(':'+suffix)).speciesId,species);
   await page.reload({waitUntil:'domcontentloaded'});await boot();
-  const reloaded=await diagnostics('save-reload-evolved');assertEvolved(assert,reloaded);const beforeBattleReportCount=reloaded.actualLoaderReports.length;evidence.assertions.push('NORMAL_SAVE_EXIT_RELOAD_EVOLVED_0005_0006_PASS');
+  const reloaded=await diagnostics('save-reload-evolved');
+  const reloadedSaved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
+  assertEvolved(assert,reloaded,reloadedSaved);assert.deepEqual(reloadedSaved.shop?.cageQuantities,saved.shop.cageQuantities,'Reload must retain exact fixture-owned quantities');const beforeBattleReportCount=reloaded.actualLoaderReports.length;evidence.assertions.push('NORMAL_SAVE_EXIT_RELOAD_EVOLVED_0005_0006_PASS');
   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();
   await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();
   for(const [id,team]of [[211,'A'],[229,'A'],[222,'B'],[230,'B']]){
@@ -181,7 +211,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   const runtimeDiagnosticsKey='championshipAlternateFormsQA:r1:championshipModernSave:runtimeDiagnostics:v1';
   await page.waitForFunction(key=>JSON.parse(sessionStorage.getItem(key)||'null')?.events?.some(e=>e.area==='battle'&&e.stage==='first-render'&&e.phase==='done'),runtimeDiagnosticsKey);
   evidence.actualFirstRender=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),runtimeDiagnosticsKey);
-  const qaCatalog=JSON.parse(fs.readFileSync(path.join(root,'qa/alternate-form-product-catalog.json')));
+  const qaCatalog=JSON.parse(fs.readFileSync(pair.resolve('/qa/alternate-form-product-catalog.json')));
   const extensionName=id=>{const entry=qaCatalog.entries.find(e=>e.speciesIndex===id);return entry.displayNameByLocale?.['zh-Hant']??entry.displayNameZh;};
   evidence.hudTeams=await page.locator('.cm-vs5-fighter[data-present="true"]').evaluateAll(nodes=>nodes.map(n=>({team:Number(n.dataset.team),name:n.querySelector('.cm-vs5-fighter__name').textContent})));
   assert.deepEqual(evidence.hudTeams.filter(n=>n.team===0).map(n=>n.name).sort(),['黃銅王猿',extensionName(229)].sort());
@@ -194,7 +224,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   await page.locator('.cm-vs5-exit').click();await page.locator('#cm-root.int-rh2-root[data-active-screen="RAISING_HOME"]').waitFor({state:'visible'});assert.equal(await page.locator('#cm-root .cm-vs5-result__body').count(),0);
   await raisingReady('battle-return');const last=await diagnostics('battle-complete');
   assert.deepEqual(last.errors,[]);assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_VFX_ART_FALLBACK|BATTLE_CORE_VFX_UNAVAILABLE/.test(m.text)),[],'No product error or VFX fallback is accepted');
-  evidence.battleLoaderReport=assertBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount,{exactCount:true});
+  evidence.battleLoaderReport=assertCurrentPublicBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount);
   await captureFourFormDatabase();
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);

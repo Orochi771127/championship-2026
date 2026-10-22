@@ -12,8 +12,49 @@ const baseline=process.argv.includes('--baseline');
 assert.ok(['localhost','127.0.0.1','[::1]'].includes(new URL(base).hostname));
 const exactReplace=(s,a,b)=>{assert.equal(s.split(a).length,2,`Unique test seam: ${a}`);return s.replace(a,b);};
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
+// Test-only bounded writer history survives the preparation/window boundary.
+// No stored values are copied; preference change records contain only IDs and
+// the known boolean hint flag. Stack capture adds overhead, not a timing control.
+function observeEvolutionStorage(){
+ const diagnostic={events:[],dropped:0,observerErrors:0,truncated:0,phase:'preparation'};
+ let sequence=0;const set=Storage.prototype.setItem,get=Storage.prototype.getItem;
+ const record=(type,detail)=>{
+  try{
+   if(diagnostic.events.length>=256){diagnostic.dropped++;return null;}
+   const raw=new Error().stack||'';if(raw.length>4096)diagnostic.truncated++;
+   const entry={sequence:++sequence,type,timeMs:performance.now(),epochMs:performance.timeOrigin+performance.now(),phase:diagnostic.phase,stack:raw.slice(0,4096),...detail};
+   diagnostic.events.push(entry);return entry;
+  }catch{diagnostic.observerErrors++;return null;}
+ };
+ globalThis.__freezeWrites=[];
+ Storage.prototype.setItem=function(k,v){
+  const key=String(k);globalThis.__freezeWrites.push(key);
+  let entry=null;
+  try{if(key.length>256)diagnostic.truncated++;entry=record('setItem',{key:key.slice(0,256),local:this===globalThis.localStorage,existedBefore:get.call(this,key)!==null,valueLength:typeof v==='string'?v.length:null});}catch{diagnostic.observerErrors++;}
+  try{const result=set.call(this,k,v);if(entry)entry.succeeded=true;return result;}
+  catch(error){if(entry)entry.succeeded=false;throw error;}
+ };
+ globalThis.__freezeStorageQA={
+  begin(){
+   // Synchronous: no browser task can write between keys and counter reset.
+   const keys=Object.keys(localStorage),preparationWriteKeys=[...new Set(globalThis.__freezeWrites)];
+   globalThis.__freezeWrites=[];diagnostic.phase='evolution';
+   const marker=record('window-start',{});
+   return {keys,preparationWriteKeys,timeMs:marker?.timeMs??null,epochMs:marker?.epochMs??null};
+  },
+  preferenceChange(changed,raisingHintSeen){
+   try{if(changed.length>32)diagnostic.truncated++;record('preference-change',{changed:changed.slice(0,32),raisingHintSeen:raisingHintSeen===true});}catch{diagnostic.observerErrors++;}
+  },
+  snapshot(){return {...diagnostic,events:diagnostic.events.map(x=>({...x}))};}
+ };
+ globalThis.__freezeRaf=0;function frame(){globalThis.__freezeRaf++;requestAnimationFrame(frame)}requestAnimationFrame(frame);
+}
+const results=[];
+// Baseline evidence must never masquerade as a candidate summary.
+const summaryPath=`${out}/${engine}-${baseline?'baseline-':''}summary.json`;
+const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({status,runKind:baseline?'baseline':'candidate',results,...(failure?{failure}: {})},null,2));
 (async()=>{
- await fs.mkdir(out,{recursive:true});
+ await fs.mkdir(out,{recursive:true});await writeSummary('RUNNING');
  const catalog=JSON.parse(await fs.readFile('src/data/championship/public-character-catalog.v1.json','utf8'));
  const binding=catalog.speciesBindings.find(x=>x.speciesId==='species-035');
  const config=catalog.characters.find(x=>x.entityId===binding.entityId);
@@ -25,7 +66,6 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
  const delayed=pages.filter(p=>!initial.has(p));assert.ok(delayed.length,'Target39 must have noninitial pages');
  const targetPaths=new Set(delayed.map(p=>'/'+path.posix.join(path.posix.dirname(config.runtimePath),runtime.streaming.pages[p].image)));
  const browser=await ({chromium,webkit}[engine]).launch({headless:true});
- const results=[];
  try{
   for(const mode of baseline?['baseline']:['delay','reject']){
    const context=await browser.newContext({viewport:engine==='webkit'?{width:390,height:844}:{width:320,height:712},deviceScaleFactor:engine==='webkit'?3:1,isMobile:true,hasTouch:true,locale:'zh-TW'});
@@ -37,7 +77,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
    page.on('console',m=>{if(['error','warning'].includes(m.type()))evidence.console.push({type:m.type(),text:m.text(),location:m.location()})});
    page.on('response',r=>{if(targetPaths.has(new URL(r.url()).pathname))evidence.network.push({url:r.url(),status:r.status()});if(r.status()>=400)evidence.httpFailures.push({url:r.url(),status:r.status(),method:r.request().method(),injected:injectedRequests.has(r.request())})});
    page.on('requestfailed',r=>evidence.requestFailures.push({url:r.url(),failure:r.failure()?.errorText,method:r.method(),injected:injectedRequests.has(r)}));
-   await page.addInitScript(()=>{globalThis.__freezeWrites=[];const set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){globalThis.__freezeWrites.push(String(k));return set.call(this,k,v)};globalThis.__freezeRaf=0;function frame(){globalThis.__freezeRaf++;requestAnimationFrame(frame)}requestAnimationFrame(frame)});
+   await page.addInitScript(observeEvolutionStorage);
    // Shared-streamed target control: both owned residents begin with seq0.
    // A previously unseen species is eagerly loaded by production roster and
    // cannot reproduce the cached-streaming missing39 incident.
@@ -64,6 +104,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     const response=await route.fetch();let text=await response.text();
     text=exactReplace(text,'scene = next; owner.stopTimer();','scene = next; globalThis.__freezeScene = scene; owner.stopTimer();');
     text+='\nObject.defineProperty(globalThis,"__freezeApp",{get:()=>app});Object.defineProperty(globalThis,"__freezeSource",{get:()=>raisingSource});\n';
+    text+='\nsettings.store.subscribe((values,changed)=>globalThis.__freezeStorageQA?.preferenceChange(changed,values.raisingHintSeen));\n';
     await route.fulfill({response,body:text});
    });
    if(baseline)await page.route('**/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js',async route=>{
@@ -74,7 +115,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     blocked++;if(mode==='reject'){injectedRequests.add(route.request());return route.fulfill({status:503,body:'Controlled target sequence39 failure'});}
     await barrier;await route.continue();
    });
-   const save=async()=>{evidence.writes=await page.evaluate(()=>[...new Set(globalThis.__freezeWrites)]).catch(()=>[]);await fs.writeFile(`${out}/${engine}-${mode}.json`,JSON.stringify(evidence,null,2));};
+   const save=async()=>{const storage=await page.evaluate(()=>({diagnostic:globalThis.__freezeStorageQA?.snapshot()??{unavailable:true},boundary:globalThis.__freezeEvolutionBoundary??null})).catch(error=>({diagnostic:{unavailable:true,error:String(error)}}));evidence.storageDiagnostics=storage.diagnostic;evidence.storageBoundary??=storage.boundary;evidence.writes=await page.evaluate(()=>[...new Set(globalThis.__freezeWrites)]).catch(()=>[]);await fs.writeFile(`${out}/${engine}-${mode}.json`,JSON.stringify(evidence,null,2));};
    const snapshot=()=>page.evaluate(()=>({life:__freezeApp.getRaisingLifecycleFrame(),scene:__freezeScene.getDiagnostics(),playable:__freezeScene.isPlayable,raf:__freezeRaf,residents:__freezeSource.getFrame().residents.map(r=>({id:r.creatureId,speciesId:r.speciesId})),actor:__freezeApp.getRaisingActorFrame(__freezeApp.getRaisingLifecycleFrame().evolution?.instanceId)}));
    const mark=phase=>console.log(JSON.stringify({engine,mode,phase,time:new Date().toISOString()}));
    try{
@@ -91,7 +132,6 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     await page.waitForFunction(()=>globalThis.__freezeScene?.isPlayable===true&&document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready');
     mark('actual-home-ready');
     evidence.before=await snapshot();assert.equal(evidence.before.life.evolution,null);
-    const storageBefore=await page.evaluate(()=>Object.keys(localStorage));
     const ownedId=evidence.before.residents[0].id;assert.equal(evidence.before.residents.length,2);
     assert.ok(evidence.before.residents[0].speciesId.endsWith('species-034'));
     assert.equal(new Set(evidence.before.residents.map(r=>r.id)).size,2,'Distinct owned residents');
@@ -105,9 +145,9 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
     assert.deepEqual(evidence.errors,[],'No startup page error');
     evidence.preparation={console:evidence.console,httpFailures:evidence.httpFailures,requestFailures:evidence.requestFailures};
     evidence.console=[];evidence.httpFailures=[];evidence.requestFailures=[];
-    await page.evaluate(()=>{globalThis.__freezeWrites=[]});
     mark('begin-native-evolution-target35-sequence39');
-    await page.evaluate(()=>__freezeApp.__testBeginEvolution(35));
+    evidence.storageBoundary=await page.evaluate(()=>{globalThis.__freezeEvolutionBoundary=globalThis.__freezeStorageQA.begin();__freezeApp.__testBeginEvolution(35);return globalThis.__freezeEvolutionBoundary;});
+    const storageBefore=evidence.storageBoundary.keys;
     if(baseline){
      await page.waitForFunction(()=>globalThis.__freezeApp.getRaisingLifecycleFrame().evolution!==null);
      for(let i=0;i<150&&!evidence.errors.some(x=>x.includes(`NATIVE_CHARACTER_TEXTURE_MISSING:${config.entityId}:39:`));i++)await delay(100);
@@ -169,7 +209,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
      await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();
      assert.ok(await page.locator('.cm-toolbar__menu:not([hidden])').isVisible(),'HUD toolbar is interactive after resume');
      await page.screenshot({path:`${out}/${engine}-${mode}-resumed.png`,fullPage:true});
-     const storageAfter=await page.evaluate(()=>Object.keys(localStorage));
+     const storageAfter=await page.evaluate(()=>Object.keys(localStorage));evidence.storageAfter=storageAfter;
      evidence.writeKeys=await page.evaluate(()=>[...new Set(__freezeWrites)]);
      assert.deepEqual(storageAfter.filter(k=>!storageBefore.includes(k)),[],'No new save/migration key');
      assert.deepEqual(storageBefore.filter(k=>!storageAfter.includes(k)),[],'No deleted save/preference key');
@@ -191,9 +231,9 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
      evidence.status='PASS_ACTUAL_APP_NATIVE_EVOLUTION_AND_RETRY';
     }
     mark(evidence.status);await save();results.push({mode,status:evidence.status});
-   }catch(error){evidence.status='FAIL';evidence.failure=String(error);evidence.failureState=await snapshot().catch(()=>null);evidence.interceptedRequests=blocked;await page.screenshot({path:`${out}/${engine}-${mode}-failure.png`,fullPage:true}).catch(()=>{});await save();throw error;}
+   }catch(error){evidence.status='FAIL';evidence.failure=String(error);results.push({mode,status:'FAIL',failure:String(error)});evidence.failureState=await snapshot().catch(()=>null);evidence.interceptedRequests=blocked;await page.screenshot({path:`${out}/${engine}-${mode}-failure.png`,fullPage:true}).catch(()=>{});await save();throw error;}
    finally{allow=true;release();await context.close();}
   }
-  await fs.writeFile(`${out}/${engine}-summary.json`,JSON.stringify({status:'PASS',results},null,2));
+  await writeSummary('PASS');
  }finally{await browser.close();}
-})().catch(e=>{console.error(e);process.exitCode=1});
+})().catch(async e=>{console.error(e);process.exitCode=1;await writeSummary('FAIL',String(e)).catch(error=>console.error('SUMMARY_WRITE_FAILED',error));});
