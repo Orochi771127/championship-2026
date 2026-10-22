@@ -22,15 +22,15 @@ const APPROVED20 = Object.freeze([
     "speciesIndex": 21,
     "speciesId": "species-021",
     "displayCode": "B202",
-    "src": "assets/production/database-first10-20261022/species-021.display.37c79fa40b8c8426.webp",
+    "src": "assets/production/database-first10-20261022/species-021.display.caf4dbcb06e57df0.webp",
     "width": 864,
     "height": 691,
-    "sha256": "37c79fa40b8c8426430a226854124c1caa156de885744bbfbbed25296d7825e1",
+    "sha256": "caf4dbcb06e57df0574e344f0eb4e7e87305834ae2e9c6fbbe64639d2c334a91",
     "thumbnail": {
-      "src": "assets/production/database-first10-20261022/species-021.thumbnail.3f1fc7247b99da61.webp",
+      "src": "assets/production/database-first10-20261022/species-021.thumbnail.c58be9cc8cef3272.webp",
       "width": 96,
       "height": 77,
-      "sha256": "3f1fc7247b99da6101b8c983c6c44e3d463c20c681d546faa06c889a5486b229"
+      "sha256": "c58be9cc8cef32720546acd55ce6fbdc40d6344504610e647817924ac7a5e7e4"
     }
   },
   {
