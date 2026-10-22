@@ -72,19 +72,24 @@ try{
    const shell=document.querySelector('.cm-vs5-shell'),sr=shell.getBoundingClientRect(),field=document.querySelector('.cm-vs5-field').getBoundingClientRect();
    const rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height}};
    const cards=[...document.querySelectorAll('.cm-vs5-fighter[data-present="true"]')];
+   const numberProbe=(value,kind)=>{if(!value)return null;const probe=document.createElement('span'),style=getComputedStyle(value);probe.textContent=kind+' 65535 / 65535';Object.assign(probe.style,{position:'absolute',visibility:'hidden',whiteSpace:'pre',font:style.font,fontVariantNumeric:style.fontVariantNumeric});document.body.append(probe);const width=probe.getBoundingClientRect().width;probe.remove();return width;};
    return {mode:shell.dataset.hud,shell:rect(shell),field:{left:field.left,top:field.top,right:field.right,bottom:field.bottom},
-    namedAreas:getComputedStyle(shell).gridTemplateAreas,exit:rect(document.querySelector('.cm-vs5-exit')),
+    rosterStyles:[...shell.querySelectorAll('.cm-vs5-roster')].map(e=>({opponent:e.classList.contains('cm-vs5-roster--opponent'),direction:getComputedStyle(e).flexDirection,justify:getComputedStyle(e).justifyContent})),namedAreas:getComputedStyle(shell).gridTemplateAreas,exit:rect(document.querySelector('.cm-vs5-exit')),
     overlays:[...shell.querySelectorAll(':scope > .cm-vs5-clock,:scope > .cm-vs5-roster,:scope > .cm-vs5-log')].map(e=>({pointerEvents:getComputedStyle(e).pointerEvents,background:getComputedStyle(e).backgroundColor})),
-    cards:cards.map(c=>({slot:c.dataset.slot,bars:[...c.querySelectorAll('.cm-vs5-meter')].map(bar=>{const value=bar.querySelector('.cm-vs5-fighter__hp,.cm-vs5-meter__value');return {kind:bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP',bar:rect(bar),value:value?rect(value):null,text:value?.textContent,ariaLabel:bar.getAttribute('aria-label'),now:bar.getAttribute('aria-valuenow'),max:bar.getAttribute('aria-valuemax'),overflow:!!value&&value.scrollWidth>value.clientWidth+1}})}))};
+    cards:cards.map(c=>({slot:c.dataset.slot,rect:rect(c),bars:[...c.querySelectorAll('.cm-vs5-meter')].map(bar=>{const value=bar.querySelector('.cm-vs5-fighter__hp,.cm-vs5-meter__value');return {kind:bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP',bar:rect(bar),value:value?rect(value):null,text:value?.textContent,maxNumberWidth:numberProbe(value,bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP'),ariaLabel:bar.getAttribute('aria-label'),now:bar.getAttribute('aria-valuenow'),max:bar.getAttribute('aria-valuemax'),overflow:!!value&&value.scrollWidth>value.clientWidth+1}})}))};
   });
   if(phase!=='before'){const hud=s.floatingHud;assert.equal(hud.mode,'floating');assert.equal(hud.namedAreas,'none');
   for(const edge of ['left','top','right','bottom'])assert.ok(Math.abs(hud.shell[edge]-hud.field[edge])<=1,'field fills shell '+edge);
   assert.ok(hud.exit.width>=44&&hud.exit.height>=44);assert.ok(hud.exit.right<=width+1&&hud.exit.bottom<=height+1);
   assert.ok(hud.overlays.every(e=>e.pointerEvents==='none'&&e.background==='rgba(0, 0, 0, 0)'));
   assert.ok(hud.cards.length>=2);
+  for(const row of hud.rosterStyles){assert.equal(row.direction,'row');assert.equal(row.justify,row.opponent?'flex-end':'flex-start');}
+  for(const card of hud.cards){assert.ok(card.rect.width<=117,'compact actor chip width');assert.ok(card.rect.left>=hud.shell.left-1&&card.rect.right<=hud.shell.right+1);}
+  assert.ok(hud.cards.every(card=>card.bars.find(b=>b.kind==='TP').bar.height<card.bars.find(b=>b.kind==='HP').bar.height),'TP is thinner than HP');
   for(const card of hud.cards){assert.deepEqual(card.bars.map(b=>b.kind).sort(),['HP','TP']);for(const b of card.bars){
    assert.ok(b.value&&b.ariaLabel);assert.match(b.text,new RegExp('^'+b.kind+' \\d+ / \\d+$'));
    assert.ok(!b.overflow,'bar number overflow '+JSON.stringify(b));
+   assert.ok(b.maxNumberWidth<=b.value.width+1,'five-digit meter capacity '+JSON.stringify(b));
    assert.ok(b.value.left>=b.bar.left-1&&b.value.top>=b.bar.top-1&&b.value.right<=b.bar.right+1&&b.value.bottom<=b.bar.bottom+1);
   }}
   }

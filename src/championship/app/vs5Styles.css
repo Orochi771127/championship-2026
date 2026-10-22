@@ -756,7 +756,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   aspect-ratio: auto; margin: 0; overflow: hidden;
   display: grid; grid-template-areas: none; grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-  align-content: stretch; gap: 6px;
+  align-content: stretch; gap: 5px;
   padding: max(8px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px))
     max(8px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
   isolation: isolate; pointer-events: none;
@@ -774,7 +774,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   color: var(--battle-hud-ink); text-shadow: var(--battle-hud-shadow);
   pointer-events: none;
 }
-.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-clock { grid-row: 1; }
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-clock { grid-row: 1; width: min(168px, 100%); }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster--opponent { grid-row: 2; }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster--player { grid-row: 4; }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-log {
@@ -782,37 +782,42 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   grid-template-rows: auto auto; gap: 2px 10px; overflow: visible;
 }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start;
   gap: 6px; overflow: visible; align-content: start;
 }
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster--opponent { justify-content: flex-end; }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter {
   display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "name" "hpbar" "tp";
-  gap: 3px; padding: 2px 4px; border: 0; background: transparent;
-  border-radius: 0; box-shadow: none; overflow: visible;
+  flex: 0 0 calc(116px * var(--text-scale, 1)); width: calc(116px * var(--text-scale, 1)); max-width: 100%; min-width: 0;
+  gap: 3px; padding: 5px 6px; border: 0;
+  background: linear-gradient(135deg, rgb(255 255 255 / 18%), rgb(255 255 255 / 5%));
+  border-radius: 10px; box-shadow: 0 2px 8px rgb(12 42 48 / 12%); overflow: visible;
 }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter__portrait { display: none; }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter__name {
-  grid-area: name; display: block; font-size: calc(12px * var(--text-scale, 1)); line-height: 1.35;
+  grid-area: name; display: block; font-size: calc(11px * var(--text-scale, 1)); line-height: 1.25; font-weight: 600;
   white-space: normal; overflow-wrap: anywhere; overflow: visible;
 }
-.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter::before { inset-block: 2px; width: 2px; }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter::before { display: none; }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-down="true"] { opacity: 1; filter: none; }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-down="true"]::after {
   position: static; grid-column: 1; justify-self: start; background: transparent;
   color: var(--battle-hud-ink); padding: 0; line-height: 1.2;
 }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter {
-  position: relative; grid-column: 1; height: calc(19px * var(--text-scale, 1)); border-radius: 3px;
-  background: rgb(4 12 18 / 68%); box-shadow: 0 0 0 1px rgb(255 255 255 / 45%);
+  position: relative; grid-column: 1; height: calc(16px * var(--text-scale, 1)); border-radius: 5px;
+  background: rgb(12 42 48 / 34%); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 12%);
 }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--hp { grid-area: hpbar; }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource { grid-area: tp; }
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource { height: calc(13px * var(--text-scale, 1)); }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] :is(.cm-vs5-fighter__hp,.cm-vs5-meter__value) {
   display: flex; position: absolute; inset: 0; align-items: center; justify-content: center;
   color: var(--battle-hud-ink); font: 600 calc(11px * var(--text-scale, 1))/1 var(--font-ui);
   font-variant-numeric: tabular-nums; white-space: nowrap; text-shadow: var(--battle-hud-shadow);
 }
-.cm-vs5-shell[data-hud="floating"] .cm-vs5-meter__fill { opacity: .88; }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-meter__fill { opacity: .9; background: linear-gradient(90deg, #328978, #72cba4); }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__fill { background: linear-gradient(90deg, #426f96, #87c2d1); }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] :is(.cm-vs5-log__line,.cm-vs5-log__detail,.cm-vs5-kicker) {
   color: var(--battle-hud-ink); font-size: calc(12px * var(--text-scale, 1)); line-height: 1.4;
   letter-spacing: normal; overflow-wrap: anywhere;
@@ -825,10 +830,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   box-shadow: 0 1px 4px rgb(0 0 0 / 55%); pointer-events: auto;
 }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-exit:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-@media (orientation: landscape) {
-  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
-}
 /* Empty roster slots must not become grid cells after the card override. */
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-present="false"] { display: none; }
+
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__value { font-size: calc(10px * var(--text-scale, 1)); }

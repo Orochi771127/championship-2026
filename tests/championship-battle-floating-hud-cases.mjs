@@ -58,7 +58,7 @@ test('floating CSS moves actual field behind HUD, keeps pointer input on field/e
  assert.match(css,/pointer-events: none/);assert.match(css,/pointer-events: auto/);
  assert.match(css,/grid-template-areas: none/);
  assert.match(css,/min-height: 44px/);assert.match(css,/safe-area-inset-bottom/);
- assert.match(css,/repeat\(auto-fit, minmax\(min\(140px, 100%\), 1fr\)\)/);
+ assert.match(css,/display: flex; flex-direction: row; flex-wrap: wrap/);
 });
 test('failed-FX fallback contain-art coordinates still cover through unconditional final map clamp',()=>{
  for(const [width,height] of [[320,568],[390,844],[844,390],[1920,1080]]){
@@ -70,4 +70,17 @@ test('failed-FX fallback contain-art coordinates still cover through uncondition
  }
  const source=fs.readFileSync(new URL('../src/championship/presentation/vs5/createBattleFieldPixiPresentation.js',import.meta.url),'utf8');
  assert.match(source,/const transform=fieldArt \? clampBattleCameraToMap/);
+});
+
+test('modern floating fighter chips remain compact with thinner TP and no old full-width tracks',()=>{
+ const css=fs.readFileSync(new URL('../src/championship/app/vs5Styles.css',import.meta.url),'utf8').split('/* Owner 2026-10-23:')[1];
+ assert.match(css,/flex: 0 0 calc\(116px \* var\(--text-scale, 1\)\); width: calc\(116px \* var\(--text-scale, 1\)\); max-width: 100%; min-width: 0/);
+ assert.match(css,/roster--opponent \{ justify-content: flex-end/);
+ assert.match(css,/height: calc\(16px \* var\(--text-scale, 1\)\)/);
+ assert.match(css,/meter--resource \{ height: calc\(13px \* var\(--text-scale, 1\)\)/);
+ assert.match(css,/width: min\(168px, 100%\)/);
+ assert.match(css,/white-space: normal; overflow-wrap: anywhere/);
+ assert.ok(css.indexOf('roster--opponent { justify-content: flex-end')>css.indexOf('flex-direction: row; flex-wrap: wrap; justify-content: flex-start'),'team alignment wins generic equal-specificity cascade');
+ assert.doesNotMatch(css,/grid-template-columns: repeat|height: calc\(19px/);
+ assert.ok(3*116+2*6<=390-20);assert.ok(2*116+6<=320-20);
 });
