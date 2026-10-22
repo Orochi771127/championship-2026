@@ -1,0 +1,71 @@
+name: Friends bounded trace filmstrip diagnostic
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/friends-filmstrip-diagnostic.yml'
+      - 'tests/friends-filmstrip-diagnostic.cjs'
+      - 'tests/friends-filmstrip-diagnostic-cases.cjs'
+      - 'tests/championship-friends-playtest-browser.cjs'
+permissions:
+  contents: read
+jobs:
+  bounded-pair:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: node --test tests/friends-filmstrip-diagnostic-cases.cjs
+      - name: Build and validate exact public artifact
+        id: build
+        run: npm run build:playtest && npm run validate:playtest
+      - name: First independent context with automatic filmstrip ON
+        id: on
+        env:
+          CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
+          CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/filmstrip-on
+        run: node tests/friends-filmstrip-diagnostic.cjs on
+      - name: Second independent context with automatic filmstrip OFF
+        id: off
+        if: always() && steps.build.outcome == 'success'
+        env:
+          CHAMPIONSHIP_QA_ARTIFACT: dist/github-playtest
+          CHAMPIONSHIP_QA_OUTPUT_ROOT: .tmp/filmstrip-off
+        run: node tests/friends-filmstrip-diagnostic.cjs off
+      - name: Join exact bounded observations (not Friends acceptance)
+        if: always() && steps.build.outcome == 'success'
+        env:
+          ON_OUTCOME: ${{ steps.on.outcome }}
+          OFF_OUTCOME: ${{ steps.off.outcome }}
+        run: |
+          test "$ON_OUTCOME" = success && test "$OFF_OUTCOME" = success
+          node tests/friends-filmstrip-diagnostic.cjs join .tmp/filmstrip-on/friends-playtest/result.json .tmp/filmstrip-off/friends-playtest/result.json .tmp/filmstrip-comparison.json
+      - name: Retain explicit PNGs and complete failure receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: friends-filmstrip-diagnostic-${{ github.run_id }}
+          path: |
+            .tmp/filmstrip-on/friends-playtest/*.json
+            .tmp/filmstrip-on/friends-playtest/*.png
+            .tmp/filmstrip-off/friends-playtest/*.json
+            .tmp/filmstrip-off/friends-playtest/*.png
+            .tmp/filmstrip-comparison.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Retain action and DOM traces separately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: friends-filmstrip-traces-${{ github.run_id }}
+          path: |
+            .tmp/filmstrip-on/friends-playtest/*-trace.zip
+            .tmp/filmstrip-off/friends-playtest/*-trace.zip
+          if-no-files-found: warn
+          retention-days: 14

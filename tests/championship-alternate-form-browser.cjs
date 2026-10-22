@@ -1,26 +1,32 @@
 // Real UI only. No fixture edits, clock manipulation, private app access, GPU flags,
-// runtime replacements or changes to production readiness. Requires built public QA.
+// changes to production readiness. Separate compiled instrumented QA; NOT byte-identical public runtime.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const {createHash}=require('node:crypto');
-const {resolveAsset,serveBuild,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
+const {resolveAsset,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
+const {validatedPair,assertCurrentPublicBattleLoaders}=require('./alternate-form-compiled-support.cjs');
+const qaRoot=path.resolve(process.env.CHAMPIONSHIP_ALTERNATE_QA_ARTIFACT||'.tmp/alternate-form-compiled-qa');
 const output=require('./browser-qa-output.cjs')('alternate-forms');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/';
 const saveKey='championshipModernSave:v1',qaKey='championshipAlternateFormsQA:r1:'+saveKey;
 const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[],diagnostics:[],gpu:null};
 (async()=>{
  const manifest=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=manifest.buildId;assert.equal(manifest.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(manifest.publicPlaytest?.ownerApproved,true);
- assert.ok(resolveAsset(root,'/alternate-form-qa.html'),'Approved public build must contain isolated QA entry');
- for(const entry of JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/product-species-extensions.r1.json'))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true,'Promotion requires production readiness, not a forced QA-only gate');
- const readCatalog=file=>JSON.parse(fs.readFileSync(path.join(root,file)));
+ assert.equal(resolveAsset(root,'/alternate-form-qa.html'),null,'Private QA entry must never enter the public artifact');
+ const pair=await validatedPair({publicRoot:root,qaRoot});
+ evidence.validationScope=pair.manifest.validationScope;evidence.privateBuildId=pair.manifest.buildId;evidence.privateParentPublicBuildId=pair.manifest.publicBuildId;
+ assert.equal(pair.manifest.publicBuildId,manifest.buildId);
+ assert.ok(pair.resolve('/alternate-form-qa.html'),'Validated private compiled QA entry required');
+ for(const entry of JSON.parse(fs.readFileSync(pair.resolve('/src/data/championship/product-species-extensions.r1.json'))).entries)for(const gate of ['runtimeReady','evolutionReady','networkReady'])assert.equal(entry[gate],true,'Promotion requires production readiness, not a forced QA-only gate');
+ const readCatalog=file=>JSON.parse(fs.readFileSync(pair.resolve('/'+file)));
  assert.deepEqual(readCatalog('src/data/championship/product-species-extensions.r1.json').entries,readCatalog('qa/alternate-form-product-catalog.json').entries,'Observed QA gameplay must use the same product identities and readiness');
  const coreAsset=entry=>{const {blockers,...core}=entry;return core;};
  assert.deepEqual(readCatalog('src/data/championship/alternate-form-assets.r1.json').characters.map(coreAsset),readCatalog('qa/alternate-form-asset-catalog.json').characters.map(coreAsset),'QA and production must use the same four action/geometry/own-art configurations');
- const fixture=JSON.parse(fs.readFileSync(path.join(root,'qa/alternate-form-save.json')));
+ const fixture=JSON.parse(fs.readFileSync(pair.resolve('/qa/alternate-form-save.json')));
  assert.equal(fixture.raising.collection.find(i=>i.instanceId.endsWith(':0005')).speciesId,'species-139');
  assert.equal(fixture.raising.collection.find(i=>i.instanceId.endsWith(':0006')).speciesId,'species-144');
- const server=await serveBuild(root);let browser,context,page;
+ const server=await pair.serve();let browser,context,page;
  const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(evidence,null,2));
  try{
   // Official full Chromium new headless; sandbox retained. Unsupported runners fail.
@@ -33,7 +39,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
    if(url.startsWith(server.origin+'/'))return route.continue();
    // Some published asset URLs are absolute: serve exact reviewed build bytes.
    if(url.startsWith(publicBase)){
-    const file=resolveAsset(root,'/'+new URL(url).pathname.slice(new URL(publicBase).pathname.length));
+    const file=pair.resolve('/'+new URL(url).pathname.slice(new URL(publicBase).pathname.length));
     if(file){const localUrl=server.origin+'/'+new URL(url).pathname.slice(new URL(publicBase).pathname.length)+new URL(url).search;const response=await route.fetch({url:localUrl,maxRedirects:0});return route.fulfill({response});}
    }
    evidence.networkErrors.push({url,error:'NON_BUILD_REQUEST_BLOCKED'});return route.abort();
@@ -64,12 +70,12 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   }
   async function captureFourFormDatabase(){
    // Existing isolated QA session, normal menu/list navigation and DOM reads only.
-   const registry=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json')));
+   const registry=JSON.parse(fs.readFileSync(pair.resolve('/src/data/championship/database-hero-portraits.public.v1.json')));
    const masters=JSON.parse(fs.readFileSync('src/data/championship/database-hero-portraits.r1.json'));
    const derivations=JSON.parse(fs.readFileSync('docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json'));
    const approvedHashes={222:'4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3',230:'09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39',211:'20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634',229:'f1e1a23e891b9345f4b759e910c5f67efd8a844a2de53e14183a1a2fe3310424'};
    const codes=new Map([[222,'UL02'],[230,'UL03'],[211,'UL33'],[229,'UL34']]);
-   const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root);
+   const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root,registry);
    const expected=new Map([...codes].map(([id,code])=>{
     const art=registry.entries.find(e=>e.speciesIndex===id);assert.ok(art);
     assert.equal(art.src,`assets/production/database-display-20261018/species-${id}.display.${art.sha256.slice(0,16)}.webp`);
@@ -78,7 +84,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
     assert.equal(master.sha256,approvedHashes[id]);assert.equal(createHash('sha256').update(fs.readFileSync(master.src)).digest('hex'),approvedHashes[id]);
     for(const key of ['src','sha256','width','height'])assert.equal(derived.source[key],master[key]);
     assert.equal(derived.display.sha256,art.sha256);assert.equal(derived.display.rgbaExactlyMatchesResizedSource,true);
-    const bytes=fs.readFileSync(path.join(root,art.src));assert.equal(createHash('sha256').update(bytes).digest('hex'),art.sha256);
+    const bytes=fs.readFileSync(pair.resolve('/'+art.src));assert.equal(createHash('sha256').update(bytes).digest('hex'),art.sha256);
     return [id,{...art,code,url:new URL(art.src,publicBase).href}];
    }));
    const imageJobs=[],received=new Map();
@@ -181,7 +187,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   const runtimeDiagnosticsKey='championshipAlternateFormsQA:r1:championshipModernSave:runtimeDiagnostics:v1';
   await page.waitForFunction(key=>JSON.parse(sessionStorage.getItem(key)||'null')?.events?.some(e=>e.area==='battle'&&e.stage==='first-render'&&e.phase==='done'),runtimeDiagnosticsKey);
   evidence.actualFirstRender=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),runtimeDiagnosticsKey);
-  const qaCatalog=JSON.parse(fs.readFileSync(path.join(root,'qa/alternate-form-product-catalog.json')));
+  const qaCatalog=JSON.parse(fs.readFileSync(pair.resolve('/qa/alternate-form-product-catalog.json')));
   const extensionName=id=>{const entry=qaCatalog.entries.find(e=>e.speciesIndex===id);return entry.displayNameByLocale?.['zh-Hant']??entry.displayNameZh;};
   evidence.hudTeams=await page.locator('.cm-vs5-fighter[data-present="true"]').evaluateAll(nodes=>nodes.map(n=>({team:Number(n.dataset.team),name:n.querySelector('.cm-vs5-fighter__name').textContent})));
   assert.deepEqual(evidence.hudTeams.filter(n=>n.team===0).map(n=>n.name).sort(),['黃銅王猿',extensionName(229)].sort());
@@ -194,7 +200,7 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   await page.locator('.cm-vs5-exit').click();await page.locator('#cm-root.int-rh2-root[data-active-screen="RAISING_HOME"]').waitFor({state:'visible'});assert.equal(await page.locator('#cm-root .cm-vs5-result__body').count(),0);
   await raisingReady('battle-return');const last=await diagnostics('battle-complete');
   assert.deepEqual(last.errors,[]);assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_VFX_ART_FALLBACK|BATTLE_CORE_VFX_UNAVAILABLE/.test(m.text)),[],'No product error or VFX fallback is accepted');
-  evidence.battleLoaderReport=assertBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount,{exactCount:true});
+  evidence.battleLoaderReport=assertCurrentPublicBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount);
   await captureFourFormDatabase();
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);

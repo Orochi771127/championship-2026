@@ -313,9 +313,42 @@ async function enterGame(page) {
  await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});
  assert.ok(await page.locator('.int-rh2-field-host canvas').count()>0);assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);
 }
-async function menu(page,group,entry) {
- await page.locator(`.cm-toolbar button[data-menu-id="${group}"]:visible`).click();
- await page.locator(`.cm-toolbar__menu[data-menu-id="${group}"]:not([hidden]) button[data-entry-id="${entry}"]`).click();
+// Calendar-only normal-UI readiness. No text/locale guessing or other dialog acknowledgement.
+function ordinaryMusicMenuState(wait=true) {
+ const visible=el=>Boolean(el&&!el.hidden&&!el.closest('[hidden]')&&el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden'&&getComputedStyle(el).display!=='none');
+ const blocked=()=>wait?false:{kind:'blocked'};
+ if([...document.querySelectorAll('dialog[open],[role="dialog"],.cm-ceremony,.int-rh2-letter,.int-rh2-evolution-choice')].some(visible))return blocked();
+ const root=document.querySelector('#cm-root'),layer=root?.querySelector('.int-rh2-lifecycle'),calendar=root?.querySelector('button.int-rh2-calendar');
+ if(root?.dataset.activeScreen!=='RAISING_HOME'||!layer)return blocked();
+ if(visible(layer)&&layer.dataset.phase==='calendar'&&visible(calendar)&&!calendar.disabled)return {kind:'calendar',date:calendar.querySelector('.int-rh2-calendar__date')?.textContent?.slice(0,128)??''};
+ // Fade/save/calendar-in/out/evolution remain genuine blockers until native UI advances.
+ if(visible(layer)||visible(calendar))return blocked();
+ return {kind:'ready'};
+}
+async function menu(page,group,entry,evidence) {
+ const deadline=Date.now()+90000;let calendarAcknowledged=false;
+ const remaining=()=>{const ms=deadline-Date.now();if(ms<=0){const error=new Error('Music menu readiness exceeded original 90000ms deadline');error.name='TimeoutError';throw error;}return ms;};
+ const state=async wait=>{const handle=await page.waitForFunction(ordinaryMusicMenuState,wait,{timeout:remaining()});try{const observed=await handle.jsonValue();remaining();return observed;}finally{await handle.dispose();}};
+ async function ready(){
+  for(;;){
+   const observed=await state(true);if(observed.kind==='ready')return;
+   assert.equal(calendarAcknowledged,false,'Only one ordinary calendar acknowledgement per bounded menu action');
+   await page.locator('#cm-root[data-active-screen="RAISING_HOME"] .int-rh2-lifecycle[data-phase="calendar"] button.int-rh2-calendar:visible:not(:disabled)').click({timeout:remaining()});remaining();calendarAcknowledged=true;
+   evidence.calendarAcknowledgements.push({group,entry,date:observed.date,normalUi:true,hostEpochMs:Date.now()});
+   // Wait for the real calendar-out/fade-in transition; any newly appearing letter stays blocked.
+  }
+ }
+ for(const target of [page.locator(`.cm-toolbar button[data-menu-id="${group}"]:visible`),page.locator(`.cm-toolbar__menu[data-menu-id="${group}"]:not([hidden]) button[data-entry-id="${entry}"]`)]){
+  for(;;){
+   await ready();
+   try{await target.click({timeout:Math.min(30000,remaining())});remaining();break;}
+   catch(error){
+    // Only a newly observed ordinary calendar can justify retrying this exact target.
+    if(error.name!=='TimeoutError'||Date.now()>=deadline||calendarAcknowledged)throw error;
+    if((await state(false)).kind!=='calendar')throw error;
+   }
+  }
+ }
 }
 async function closeGameSettings(page) {
  await page.locator('dialog.cm-settings[open] .cm-settings__close').click();
@@ -332,25 +365,25 @@ async function readLocaleMusicState(page,label,evidence) {
 }
 async function normalGame(browser,base,output) {
  const context=await browser.newContext({viewport:{width:1366,height:768},hasTouch:true,locale:'zh-TW',serviceWorkers:'block'}),page=await context.newPage();page.setDefaultTimeout(90000);
- const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',errors:[],steps:[]};
+ const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',errors:[],steps:[],calendarAcknowledgements:[]};
  page.on('pageerror',e=>evidence.errors.push(String(e)));await page.addInitScript(observeNativeAudio,{localeDiagnostics:true});
  await context.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
  try{
   await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);await page.locator('#prepare-practice').click();await page.locator('#status').filter({hasText:'受控存檔已準備'}).waitFor();
   await page.goto(new URL('championship.html?presentation=developer',base).href);await enterGame(page);await waitCue(page,'a_quiet_evening_training');
-  await menu(page,'MANAGEMENT','cageEdit');await page.locator('#cm-root[data-active-screen="CAGE_EDIT"]').waitFor();checkNativeMedia(await nativeEvidence(page,'podium_geometry'),TRACKS.find(t=>t.id==='podium_geometry'));evidence.steps.push({case:'actual-cage-edit-podium-default',native:await assertBounded(page)});
+  await menu(page,'MANAGEMENT','cageEdit',evidence);await page.locator('#cm-root[data-active-screen="CAGE_EDIT"]').waitFor();checkNativeMedia(await nativeEvidence(page,'podium_geometry'),TRACKS.find(t=>t.id==='podium_geometry'));evidence.steps.push({case:'actual-cage-edit-podium-default',native:await assertBounded(page)});
   await page.locator('#cm-root .cm-vs2-cage-edit .cm-vs2-footer button').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await waitCue(page,'a_quiet_evening_training');evidence.steps.push({case:'actual-cage-edit-return-quiet-evening',native:await assertBounded(page)});
-  await menu(page,'SYSTEM','settings');await category(page,'sound');await select(page,'raisingMusic','a_quiet_evening_training');checkNativeMedia(await nativeEvidence(page,'a_quiet_evening_training'),TRACKS[0]);await select(page,'battleMusic','unison_under_fire');
+  await menu(page,'SYSTEM','settings',evidence);await category(page,'sound');await select(page,'raisingMusic','a_quiet_evening_training');checkNativeMedia(await nativeEvidence(page,'a_quiet_evening_training'),TRACKS[0]);await select(page,'battleMusic','unison_under_fire');
   const before=JSON.parse(await readLocaleMusicState(page,'before',evidence));await category(page,'language');await select(page,'locale','en');await category(page,'sound');checkLabels(await page.evaluate(labelsSnapshot),'en');assert.equal(JSON.parse(await readLocaleMusicState(page,'after',evidence)).starts,before.starts);await closeGameSettings(page);
   evidence.steps.push({case:'actual-raising-settings-immediate-change-locale',native:await assertBounded(page)});await page.screenshot({path:path.join(output,'normal-game-raising-selected.png')});
-  await menu(page,'MANAGEMENT','digimon');await page.locator('#cm-root[data-active-screen="DIGIMON_LIST"]').waitFor();await waitCue(page,'moon');await page.locator('#cm-root .cm-screen-back:visible').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});await waitCue(page,'a_quiet_evening_training');
-  await menu(page,'SYSTEM','battle');await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();const rows=page.locator('.cm-vs5-practice-member');await rows.nth(1).waitFor({state:'visible',timeout:30000});assert.ok(await rows.count()>=2,'Controlled fixture provides two owned eligible residents');await rows.nth(0).locator('button').nth(0).click();await rows.nth(1).locator('button').nth(1).click();await page.locator('.cm-vs5-footer .cm-vs5-action--primary').click();
+  await menu(page,'MANAGEMENT','digimon',evidence);await page.locator('#cm-root[data-active-screen="DIGIMON_LIST"]').waitFor();await waitCue(page,'moon');await page.locator('#cm-root .cm-screen-back:visible').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});await waitCue(page,'a_quiet_evening_training');
+  await menu(page,'SYSTEM','battle',evidence);await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();const rows=page.locator('.cm-vs5-practice-member');await rows.nth(1).waitFor({state:'visible',timeout:30000});assert.ok(await rows.count()>=2,'Controlled fixture provides two owned eligible residents');await rows.nth(0).locator('button').nth(0).click();await rows.nth(1).locator('button').nth(1).click();await page.locator('.cm-vs5-footer .cm-vs5-action--primary').click();
   await page.locator('#cm-root[data-active-screen="BATTLE_FIELD"]').waitFor();await page.locator('#cm-root .cm-vs5-field[aria-busy="false"]').waitFor({timeout:180000});assert.equal(await page.locator('#cm-root[data-field-fallback="true"]').count(),0);checkNativeMedia(await nativeEvidence(page,'unison_under_fire'),TRACKS[1]);evidence.steps.push({case:'actual-normal-practice-battle',native:await assertBounded(page)});await page.screenshot({path:path.join(output,'normal-game-battle-selected.png')});
   await page.locator('#cm-root .cm-vs5-exit:visible').click();await page.waitForFunction(()=>document.querySelector('#cm-root')?.dataset.activeScreen!=='BATTLE_FIELD'||document.querySelector('dialog[open] [data-action="leave"]'));const confirmation=page.locator('dialog[open] [data-action="leave"]');if(await confirmation.count())await confirmation.click();
   await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await waitCue(page,'a_quiet_evening_training');evidence.steps.push({case:'actual-practice-exit-raising-return',native:await assertBounded(page)});
-  await menu(page,'SYSTEM','settings');await category(page,'sound');await select(page,'battleMusic','federation_siege');await closeGameSettings(page);await menu(page,'SYSTEM','saveQuit');await titleReady(page);await waitCue(page,'login');await page.reload();await titleReady(page);
+  await menu(page,'SYSTEM','settings',evidence);await category(page,'sound');await select(page,'battleMusic','federation_siege');await closeGameSettings(page);await menu(page,'SYSTEM','saveQuit',evidence);await titleReady(page);await waitCue(page,'login');await page.reload();await titleReady(page);
   await page.locator('#cm-title-settings').click();await category(page,'sound');assert.equal(await page.locator(choice('raisingMusic','a_quiet_evening_training')).isChecked(),true);assert.equal(await page.locator(choice('battleMusic','federation_siege')).isChecked(),true);await closeGameSettings(page);evidence.steps.push({case:'actual-save-quit-reload-preferences',status:'PASS'});
-  await enterGame(page);await menu(page,'SYSTEM','battle');await page.locator('#cm-data-arena:visible').click();await page.locator('.da-root[data-state="SELECT"] .da-panel--select').waitFor();await page.locator('.da-root[data-state="SELECT"] .da-panel--select .da-btn--primary').click();await page.locator('.da-root[data-state="BRIEF"] .da-panel--brief').waitFor();await page.locator('.da-root[data-state="BRIEF"] .da-panel--brief .da-btn--primary').click();await page.locator('.da-root[data-state="PLAY"]').waitFor({timeout:180000});checkNativeMedia(await nativeEvidence(page,'federation_siege'),TRACKS[2]);
+  await enterGame(page);await menu(page,'SYSTEM','battle',evidence);await page.locator('#cm-data-arena:visible').click();await page.locator('.da-root[data-state="SELECT"] .da-panel--select').waitFor();await page.locator('.da-root[data-state="SELECT"] .da-panel--select .da-btn--primary').click();await page.locator('.da-root[data-state="BRIEF"] .da-panel--brief').waitFor();await page.locator('.da-root[data-state="BRIEF"] .da-panel--brief .da-btn--primary').click();await page.locator('.da-root[data-state="PLAY"]').waitFor({timeout:180000});checkNativeMedia(await nativeEvidence(page,'federation_siege'),TRACKS[2]);
   evidence.steps.push({case:'actual-data-arena-battle-selection',native:await assertBounded(page)});await page.screenshot({path:path.join(output,'normal-data-arena-selected.png')});await page.locator('.da-root[data-state="PLAY"] .da-hud__pause').click();await page.locator('.da-root[data-state="PAUSE"] .da-panel--pause .da-btn--quiet').click();await page.locator('.da-root').waitFor({state:'detached'});await waitCue(page,'core');evidence.steps.push({case:'actual-data-arena-exit-battle-return',native:await assertBounded(page)});
   assert.deepEqual(evidence.errors,[]);evidence.status='PASS_ACTUAL_RAISING_PRACTICE_BATTLE_DATA_ARENA_AND_RETURN';return evidence;
  }catch(e){evidence.status='FAIL';evidence.error=String(e.stack??e);evidence.live=await page.evaluate(()=>({screen:document.querySelector('#cm-root')?.dataset.activeScreen,arenaState:document.querySelector('.da-root')?.dataset.state,historyState:history.state,controls:[...document.querySelectorAll('.cm-toolbar [data-menu-id],dialog[open],#cm-login,#cm-continue,#cm-data-arena,#cm-title-settings,.da-root .da-btn--primary,.da-panel--pause .da-btn--quiet')].slice(0,30).map(e=>({tag:e.tagName,id:e.id,classes:e.className,menuId:e.dataset.menuId,hidden:!!e.closest('[hidden]'),visible:e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden',disabled:e.disabled??null})),musicState:document.documentElement.dataset.musicState,native:nativeAudioQA.snapshot(),events:nativeAudioQA.events.slice(-200),samples:nativeAudioQA.samples.slice(-100),localeMusic:nativeAudioQA.localeDiagnostics})).catch(error=>({diagnosticError:String(error)}));await fs.writeFile(path.join(output,'normal-game-result.json'),JSON.stringify(evidence,null,2)+'\n');await page.screenshot({path:path.join(output,'normal-game-failure.png')}).catch(()=>{});throw e;}
