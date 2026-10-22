@@ -10,7 +10,7 @@ const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playt
 const output=require('./browser-qa-output.cjs')('friends-playtest');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/',saveKey='championshipModernSave:v1';
 const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[],routeErrors:[]};
-const {selectedGroups}=require('./friends-playtest-groups.cjs');
+const {sourceCase,selectedGroups}=require('./friends-playtest-groups.cjs');
 const groups=selectedGroups(process.env.CHAMPIONSHIP_FRIENDS_GROUP);
 evidence.partition={schema:1,requested:process.env.CHAMPIONSHIP_FRIENDS_GROUP||'all',expected:groups,completed:[],runnerSha256:require('node:crypto').createHash('sha256').update(fs.readFileSync(__filename)).digest('hex')};
 const digits=s=>Number(String(s).replace(/[^0-9]/g,''));
@@ -288,9 +288,9 @@ async function friendsGuardedRoute(operation,onFailure,abort){
   assert.fail(message+' timed out waiting for ordinary date/lifecycle UI');
  }
 
- async function legacyTopContour(label){
+ async function legacyTopContour(label,viewports=[{width:1280,height:800},{width:390,height:844}]){
   const before=await saved();
-  for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
+  for(const viewport of viewports){
    await page.setViewportSize(viewport);await home();await page.waitForTimeout(800);
    // Clean-mode swipes pan even when begun on an actor; only a tap cleans.
    // Every gesture below exceeds the drag threshold and stays on the canvas.
@@ -309,8 +309,10 @@ async function friendsGuardedRoute(operation,onFailure,abort){
   const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
  }
  // Separate installed QA profile: normal editor clicks only, never real player data.
- async function sourceCornerReview(){
-  await fresh('source-corners');evidence.sourceCornerStage='install';write();
+ async function sourceCornerReview(caseId){
+  const selected=sourceCase(caseId);assert.ok(selected,'Exact source case required');
+  await fresh(caseId);evidence.sourceCornerStage='install';
+  const coverage={caseId,scenario:selected.scenario,viewport:selected.viewport,topGestures:0,framingGestures:0,panGestures:0,phaseCaptures:[],setup:[],persistence:false,three:false,readbacks:false,continuity:'INDEPENDENT_VIEWPORT_NOT_CROSS_VIEWPORT_CLOCK_OR_CAMERA'};evidence.sourceCoverage=coverage;write();
   const threeResponses=[],threeResponseReads=[];evidence.sourceThreeResponses=threeResponses;
   const onThreeResponse=response=>{
    const expected=FRIENDS_THREE_RESOURCES.find(row=>response.url()===publicBase+row.path);if(!expected)return;
@@ -332,8 +334,9 @@ async function friendsGuardedRoute(operation,onFailure,abort){
   await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
-  const installed=await saved();
+  const installed=await saved();coverage.baseline={fixtureSeedSha256:require('node:crypto').createHash('sha256').update(JSON.stringify(fixtures.seed)).digest('hex'),schemaVersion:installed.schemaVersion,layoutVersion:installed.cageEdit.layoutVersion,shop:installed.shop,placements:installed.cageEdit.placements.map(({moduleId,slotIndex})=>({moduleId,slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId))};write();
   for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]}]){
+   if(selected.scenario==='adjacent'&&scenario.name==='wrap')break;
    evidence.sourceCornerStage=scenario.name+':editor';write();
    await page.setViewportSize({width:1280,height:800});await clearCalendar();await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
    while(await page.locator('.cm-cage-facility:not([disabled])').count())await page.locator('.cm-cage-facility:not([disabled])').first().click();
@@ -351,38 +354,43 @@ async function friendsGuardedRoute(operation,onFailure,abort){
     {moduleId:'championship:2026:cage:waiting-room',slotIndex:0},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
    ].sort((a,b)=>a.moduleId.localeCompare(b.moduleId)));
    assert.deepEqual(placed.shop,expectedShop(installed.shop),'Editor-only inspection must preserve entire wallet and inventory');await continueSaved();
+   const reloadedPlacement=await saved();assert.deepEqual(reloadedPlacement.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(reloadedPlacement.shop,expectedShop(installed.shop));
+   assert.equal(reloadedPlacement.schemaVersion,7);assert.equal(reloadedPlacement.cageEdit.layoutVersion,'PRODUCT_GRID100_INSTANCES_V1');
+   coverage.setup.push({schemaVersion:reloadedPlacement.schemaVersion,layoutVersion:reloadedPlacement.cageEdit.layoutVersion,scenario:scenario.name,slots:scenario.slots,placements:placed.cageEdit.placements.map(({moduleId,slotIndex})=>({moduleId,slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),shop:placed.shop,reloaded:true});write();
+   if(scenario.name!==selected.scenario)continue;
    evidence.sourceCornerStage=scenario.name+':visual';write();
    // These product-grid fields use verified Three GLBs, not unused 2D padded atlases.
    await Promise.all(threeResponseReads);const resourceIdentity=friendsThreeIdentity(threeResponses),threeBefore=await readThree();
    // The existing legacy helper reaches upper headroom through real tool swipes.
-   await legacyTopContour('08-source-'+scenario.name);
-   for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
+   await legacyTopContour('08-source-'+scenario.name,[selected.viewport]);coverage.topGestures=4;write();
+   for(const viewport of [selected.viewport]){
     await page.setViewportSize(viewport);await home();await page.waitForTimeout(500);await clearCalendar();
     await page.locator('button.cm-toolbar__cell[data-icon="clean"]').click();await page.waitForFunction(()=>document.body.dataset.tool==='clean');
     const canvas=await ranchCanvas();
     // Top-headroom proof was captured above; lift the field 100px so lower tips clear the toolbar.
     if(viewport.width===1280){
      const {box,start}=await beginCanvasDrag(canvas,box=>[260,320,380].map(y=>({x:box.width-35,y})),'Lower-tip framing must begin on unobstructed canvas');
-     await page.mouse.move(box.x+start.x,box.y+start.y-100,{steps:20});await page.mouse.up();await page.waitForTimeout(250);
+     await page.mouse.move(box.x+start.x,box.y+start.y-100,{steps:20});await page.mouse.up();await page.waitForTimeout(250);coverage.framingGestures++;write();
     }
     const count=viewport.width<500?9:6;
     for(let pan=0;pan<count;pan++){
      // Real elapsed time: two 170ms samples bracket the 334.302ms sea phases.
-     for(let frame=0;frame<3;frame++){await page.waitForTimeout(170);await clearCalendar();await shot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);}
+     for(let frame=0;frame<3;frame++){await page.waitForTimeout(170);await clearCalendar();await shot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);coverage.phaseCaptures.push({pan,phase:frame});write();}
      const {box,start}=await beginCanvasDrag(canvas,box=>[180,260,Math.min(360,box.height-150)].map(y=>({x:box.width-35,y})),'Pan origin must be ordinary unobstructed canvas',{width:250,height:200});
-     await page.mouse.move(box.x+Math.max(25,start.x-Math.min(420,box.width-70)),box.y+start.y,{steps:20});await page.mouse.up();await page.waitForTimeout(200);
+     await page.mouse.move(box.x+Math.max(25,start.x-Math.min(420,box.width-70)),box.y+start.y,{steps:20});await page.mouse.up();await page.waitForTimeout(200);coverage.panGestures++;write();
     }
     await clearCalendar();await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();
    }
-   await Promise.all(threeResponseReads);friendsThreeIdentity(threeResponses);const threeAfter=await readThree();friendsThreeProgress(threeBefore,threeAfter);
+   await Promise.all(threeResponseReads);friendsThreeIdentity(threeResponses);const threeAfter=await readThree();friendsThreeProgress(threeBefore,threeAfter);coverage.three=true;write();
    evidence.assertions.push({sourceThreeAuthority:scenario.name,resourceIdentity,threeBefore,threeAfter,actualResponseBytesVerified:true});write();
    evidence.sourceCornerStage=scenario.name+':persistence';write();
    await clearCalendar();await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,expectedShop(installed.shop));await continueSaved();
+   coverage.persistence=true;write();
    evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom','three unchanged source-art styles']});write();
   }
   // Final continueSaved also loads models: settle all owned readbacks before terminal guards/close.
   await friendsDrainReadbacks(threeResponseReads);page.off('response',onThreeResponse);
-  friendsThreeIdentity(threeResponses);evidence.sourceThreeReadbacksComplete={responses:threeResponses.length,reads:threeResponseReads.length};write();
+  friendsThreeIdentity(threeResponses);evidence.sourceThreeReadbacksComplete={responses:threeResponses.length,reads:threeResponseReads.length};coverage.readbacks=true;write();
  }
 
  async function wallet(amount){const button=page.locator('.cm-status-bar__diamond');await button.waitFor({state:'visible'});assert.equal(digits(await button.innerText()),amount);assert.match(await button.getAttribute('aria-label'),/測試/);}
@@ -543,9 +551,9 @@ async function friendsGuardedRoute(operation,onFailure,abort){
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
   evidence.partition.completed.push('legacy-persistence');write();
   }
-  if(groups.includes('source-corners')){
-  await sourceCornerReview();
-  evidence.partition.completed.push('source-corners');write();
+  for(const caseId of groups.filter(group=>sourceCase(group))){
+  await sourceCornerReview(caseId);
+  evidence.partition.completed.push(caseId);write();
   }
   assert.deepEqual(evidence.partition.completed,groups,'Every selected scenario must finish');
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);

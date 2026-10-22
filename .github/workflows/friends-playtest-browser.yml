@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        group: [fresh-economy, legacy-persistence, source-corners]
+        group: [fresh-economy, legacy-persistence, source-adjacent-desktop, source-adjacent-mobile, source-wrap-desktop, source-wrap-mobile]
     runs-on: ubuntu-22.04
     timeout-minutes: 25
     steps:

@@ -1,6 +1,6 @@
 // TEST ONLY: exact reviewed Friends runner, bounded first adjacent desktop gesture.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
-const BASE='30e5922a062209b03d556afca1a73b0679625aea1ad9054a645491da106d28af';
+const BASE='4f9dc1f3d69821dcb6dc1fb5f2f2016f2b942cbc4b33dc7c8579b626d00992db';
 const BUILD='bab8a0633fbf9379065853985f3a26ea4131122317635569db268003f33b7a95';
 const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":8526,"sha256":"47153dea52ad24a31144e468927767bf97fa7f7d4302ea6ee6e24cf06462a63e"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":1220556,"sha256":"801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1164384,"sha256":"2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":182480,"sha256":"272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0"}]);
 function verifyThreeResponses(row){
@@ -16,13 +16,13 @@ function verifyThreeResponses(row){
 function transform(source,mode){
  assert.ok(['on','off'].includes(mode));assert.equal(crypto.createHash('sha256').update(source).digest('hex'),BASE,'Exact frozen normal runner required');
  const replace=(a,b)=>{assert.equal(source.split(a).length,2,'Unique diagnostic seam '+a.slice(0,60));source=source.replace(a,b);};
- replace("const groups=selectedGroups(process.env.CHAMPIONSHIP_FRIENDS_GROUP);","const groups=selectedGroups('source-corners');");
+ replace("const groups=selectedGroups(process.env.CHAMPIONSHIP_FRIENDS_GROUP);","const groups=selectedGroups('source-adjacent-desktop');");
  // Never emit a normal partition receipt or normal PASS for this truncated diagnostic.
  source=source.replaceAll('evidence.partition','evidence.diagnosticSelection');
  replace("const digits=s=>",`evidence.filmstrip={schema:1,mode:${JSON.stringify(mode)},order:${mode==='on'?1:2},scope:'FIRST_ADJACENT_DESKTOP_GESTURE_ONLY',baselineRunnerSha256:'${BASE}',diagnosticRunnerSha256:require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(__dirname,'friends-filmstrip-diagnostic.cjs'))).digest('hex'),warmup:'No explicit warmup loop; normal setup/readiness/existing800ms wait plus identical response hashing and PNG/GL observations add elapsed time; fresh contexts; fixed OFF second may benefit from OS cache',metrics:{},clock:'UNMODIFIED',gestureSteps:20};\nconst digits=s=>`);
  replace("assert.equal(build.target,'GITHUB_PAGES_OWNER_PLAYTEST');",`assert.equal(build.buildId,'${BUILD}','Same frozen compiled public build');assert.equal(build.target,'GITHUB_PAGES_OWNER_PLAYTEST');`);
  replace('await context.tracing.start({screenshots:true,snapshots:true,sources:true});',`await context.tracing.start({screenshots:${mode==='on'},snapshots:true,sources:true});`);
- replace("async function legacyTopContour(label){\n  const before=await saved();",`async function legacyTopContour(label){
+ replace("async function legacyTopContour(label,viewports=[{width:1280,height:800},{width:390,height:844}]){\n  const before=await saved();",`async function legacyTopContour(label,viewports=[{width:1280,height:800},{width:390,height:844}]){
   const before=await saved();
   const observe=()=>page.locator('.int-rh2-field-host').evaluate(h=>{const canvases=document.querySelectorAll('.cm-ranch-three-canvas');if(canvases.length!==1||!(Number(canvases[0].dataset.frames)>0))throw Error('One actually rendered Three canvas required');const c=canvases[0],gl=c.getContext('webgl2');if(!gl)throw Error('Actual Three WebGL2 context required');const ext=gl.getExtension('WEBGL_debug_renderer_info');const renderer={className:c.className,width:c.width,height:c.height,version:gl.getParameter(gl.VERSION),vendor:gl.getParameter(gl.VENDOR),renderer:gl.getParameter(gl.RENDERER),unmaskedVendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):null,unmaskedRenderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):null};return {renderer,threeFrames:Number(c.dataset.frames),viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},rect:{x:h.getBoundingClientRect().x,y:h.getBoundingClientRect().y,width:h.clientWidth,height:h.clientHeight},loadState:h.dataset.loadState,ariaBusy:h.getAttribute('aria-busy'),assets:JSON.parse(h.dataset.residentAssets||'[]'),positions:JSON.parse(h.dataset.residentScreenPositions||'[]')};});
   const measured=async(name,action)=>{const t=performance.now();try{return await action();}finally{evidence.filmstrip.metrics[name]=performance.now()-t;write();}};`);
@@ -39,7 +39,7 @@ function transform(source,mode){
    const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
    evidence.filmstrip.savedInvariant={before:{shop:before.shop,placements:before.cageEdit.placements},after:{shop:after.shop,placements:after.cageEdit.placements}};
    evidence.filmstrip.completedGestures=1;write();return;`);
- replace("await legacyTopContour('08-source-'+scenario.name);",`assert.equal(scenario.name,'adjacent');
+ replace("await legacyTopContour('08-source-'+scenario.name,[selected.viewport]);coverage.topGestures=4;write();",`assert.equal(scenario.name,'adjacent');
    evidence.filmstrip.resourceAuthority='THREE_PUBLIC_MANIFEST_GLB_RESPONSES_V1';
    evidence.filmstrip.resources=resourceIdentity;write();
    await legacyTopContour('08-source-'+scenario.name);
