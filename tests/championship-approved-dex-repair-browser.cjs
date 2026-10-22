@@ -1,3 +1,4 @@
+const {assertApproved20Registry}=require('./approved20-20261022-contract.cjs');
 // Disposable normal UI flow against exact locally built public bytes.
 // No save injection, registration changes or application/private API calls.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
@@ -25,7 +26,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
 async function main(){let browser,context,server,page;const jobs=[];
  try{
   const policy=await import('../src/championship/app/friendsPlaytestPolicy.js');assert.equal(policy.FRIENDS_PLAYTEST_POLICY.fullDexView,true);
-  assert.equal(registry.entries.length,Number(process.env.DEX_REPAIR_REGISTRY_COUNT||194));
+  assertApproved20Registry(registry);
   report.registrySha256=sha(registryBytes);
   report.build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8')).buildId;
   browser=await chromium.launch({executablePath:process.env.DEX_REPAIR_CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,chromiumSandbox:true});

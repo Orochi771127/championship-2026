@@ -119,7 +119,7 @@ test('pinned gameplay data retains all values; derived vendor module has identic
 test('selected public hero mappings retain exact ID, image hash, dimensions and per-role resolution; authoring versions remain intact',()=>{
   const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));
   const authoring=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.r1.json'),'utf8'));
-  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,194);
+  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,214);
   for(const hero of heroes.entries)assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-hero`),{id:`${hero.speciesId}:database-hero`,src:hero.src,sha256:hero.sha256,width:hero.width,height:hero.height});
   assert.equal(publicRuntimeAsset('species-188:database-hero'),null);
   assert.throws(()=>validatePublicRuntimeAssets({schemaVersion:1,assets:[{...publicRuntimeAsset('species-116:database-hero'),approvalMessage:'private'}]}),/PUBLIC_RUNTIME_ASSET_INVALID/);
@@ -152,5 +152,6 @@ test('95 display renditions and thumbnails preserve exact approved source identi
    if(!superseded.some(e=>e.speciesIndex===row.speciesIndex))assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`),{id:`${hero.speciesId}:database-${kind==='display'?'hero':'thumbnail'}`,src:media.src,sha256:media.sha256,width:media.width,height:media.height});
   }
  }
- for(const id of [82,184,186,187,188])assert.equal(heroes.some(row=>row.speciesIndex===id),false);
+ for(const id of [184,186,187,188])assert.equal(heroes.some(row=>row.speciesIndex===id),false);
+ assert.equal(masters.some(row=>row.speciesIndex===82),true);assert.notEqual(heroes.find(row=>row.speciesIndex===82)?.src,masters.find(row=>row.speciesIndex===82)?.src);assert.equal(heroes.find(row=>row.speciesIndex===82)?.displayCode,'MA15');
 });

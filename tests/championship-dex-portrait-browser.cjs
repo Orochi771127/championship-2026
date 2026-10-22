@@ -10,7 +10,8 @@ const { createHash } = require('node:crypto');
 const { pathToFileURL } = require('node:url');
 const PUBLIC_BASE = 'https://orochi771127.github.io/championship-2026/';
 const HERO = '.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero';
-const EXPECTED_REGISTRY_COUNT = 194;
+const {APPROVED20,APPROVED20_IDS,assertApproved20Registry} = require('./approved20-20261022-contract.cjs');
+const EXPECTED_REGISTRY_COUNT = 214;
 const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10,35,62,36]);
 const EXPECTED_MASTERS = Object.freeze({
   36: Object.freeze({"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "雷鬃獾"}),
@@ -40,7 +41,7 @@ const EXPECTED_MASTERS = Object.freeze({
 const publicHeroes = require('../src/data/championship/database-hero-portraits.public.v1.json');
 const displayRecipe = require('../docs/contracts/championship/DATABASE_HERO_DISPLAY_RENDITIONS.v1.json');
 const APPROVED_INTAKE = Object.freeze({"207": {"speciesIndex": 207, "speciesId": "species-207", "displayCode": "UL30", "src": "assets/production/database-display-20261018/species-207.display.c58a022ba5c009c0.webp", "width": 768, "height": 576, "sha256": "c58a022ba5c009c0b2d6fc389c9018b50c7e2206ea4c673a6e7720f133c78d91", "thumbnail": {"src": "assets/production/database-display-20261018/species-207.thumbnail.6c3aada38673cc74.webp", "width": 128, "height": 96, "sha256": "6c3aada38673cc74e8d107fc222e799f3e8481f6e6955f78c0d81b0d8172e51d"}, "ownerCompressed": true}, "208": {"speciesIndex": 208, "speciesId": "species-208", "displayCode": "UL31", "src": "assets/production/database-display-20261018/species-208.display.37a7c2836136cd96.webp", "width": 768, "height": 576, "sha256": "37a7c2836136cd96c9bb9e5f58d131263b18d1e7602a5d91fef7858076f53d9a", "thumbnail": {"src": "assets/production/database-display-20261018/species-208.thumbnail.c0ec507c5e72ea8d.webp", "width": 128, "height": 96, "sha256": "c0ec507c5e72ea8d682f3c4582b7cb606a2aee0bdbca12d25a99f3c04722b0dc"}, "ownerCompressed": true}, "209": {"speciesIndex": 209, "speciesId": "species-209", "displayCode": "UL32", "src": "assets/production/database-display-20261018/species-209.display.75f8e1f19f95d161.webp", "width": 637, "height": 768, "sha256": "75f8e1f19f95d1615b335be2be0feabcaa06216e35612f96e6d8043482055e67", "thumbnail": {"src": "assets/production/database-display-20261018/species-209.thumbnail.1a6ed4a9d8112f3a.webp", "width": 106, "height": 128, "sha256": "1a6ed4a9d8112f3ab82e1bf4928397d10a22d913b3cf8aabbc80941de47f4658"}, "ownerCompressed": true}, "210": {"speciesIndex": 210, "speciesId": "species-210", "displayCode": "UL35", "src": "assets/production/database-display-20261018/species-210.display.e3eb624541031d79.webp", "width": 768, "height": 576, "sha256": "e3eb624541031d799749b8a951cbf559fe570260115116025406335284d26dde", "thumbnail": {"src": "assets/production/database-display-20261018/species-210.thumbnail.5d38c2cecb0810a8.webp", "width": 128, "height": 96, "sha256": "5d38c2cecb0810a87613a407a7c974d9a1307ff058d58224211ddc6d8afb0e6b"}, "ownerCompressed": true}, "212": {"speciesIndex": 212, "speciesId": "species-212", "displayCode": "UL36", "src": "assets/production/database-display-20261018/species-212.display.3d8b44c8d1135b9f.webp", "width": 768, "height": 512, "sha256": "3d8b44c8d1135b9fae435c761ff0cb99edeabfc2e5b42e8b4b2b5b15bdaf241a", "thumbnail": {"src": "assets/production/database-display-20261018/species-212.thumbnail.5bcda0d097b4cc9d.webp", "width": 128, "height": 86, "sha256": "5bcda0d097b4cc9d69d10030d57f8d7e86e8b9139cd62c20929d3ab851c94436"}, "ownerCompressed": true}, "213": {"speciesIndex": 213, "speciesId": "species-213", "displayCode": "UL37", "src": "assets/production/database-display-20261018/species-213.display.50c57f149312986b.webp", "width": 768, "height": 512, "sha256": "50c57f149312986bbbdb6c2b821ac571bb933b668caa45248bb54df71b210a81", "thumbnail": {"src": "assets/production/database-display-20261018/species-213.thumbnail.91ae9e09433a0516.webp", "width": 128, "height": 86, "sha256": "91ae9e09433a05169f373178eb42bb391e8c8f3a5c9e7cc387b20c3662fb2ef0"}, "ownerCompressed": true}, "214": {"speciesIndex": 214, "speciesId": "species-214", "displayCode": "UL38", "src": "assets/production/database-display-20261018/species-214.display.9d0ad4251a75eca4.webp", "width": 768, "height": 576, "sha256": "9d0ad4251a75eca4467dda372dd5520438039d24143e0c1071592d72ae43ae6e", "thumbnail": {"src": "assets/production/database-display-20261018/species-214.thumbnail.a4dc0936be5dcc08.webp", "width": 128, "height": 96, "sha256": "a4dc0936be5dcc0809510421f26daa751e884140cebef90aa7c1a74cbeaa3a5e"}, "ownerCompressed": true}, "216": {"speciesIndex": 216, "speciesId": "species-216", "displayCode": "UL13", "src": "assets/production/database-display-20261018/species-216.display.25e50fe4d6f6367d.webp", "width": 768, "height": 576, "sha256": "25e50fe4d6f6367df0145323618747bc257196b16868380c9956b9366e4585ff", "thumbnail": {"src": "assets/production/database-display-20261018/species-216.thumbnail.859c850b972aa5d9.webp", "width": 128, "height": 96, "sha256": "859c850b972aa5d9ac1018ace90deec9bff578b2a939073ff636d1eb5fb958c6"}, "ownerCompressed": true}, "217": {"speciesIndex": 217, "speciesId": "species-217", "displayCode": "UL22", "src": "assets/production/database-display-20261018/species-217.display.b8013deb58b3b4b8.webp", "width": 702, "height": 768, "sha256": "b8013deb58b3b4b85b5a5b9123c79addedb581bc35d2ed1e74edbe70ec40cb2f", "thumbnail": {"src": "assets/production/database-display-20261018/species-217.thumbnail.56f6a1fa7761a2bc.webp", "width": 117, "height": 128, "sha256": "56f6a1fa7761a2bca81d86b0a612b590eb51cf608d0a591740940d36edf89f85"}, "ownerCompressed": true}, "218": {"speciesIndex": 218, "speciesId": "species-218", "displayCode": "UL15", "src": "assets/production/database-display-20261018/species-218.display.5227fdf8f59e640a.webp", "width": 768, "height": 512, "sha256": "5227fdf8f59e640ad65c27d4e316d45b600114186b62ecafda7e6416ac0c1dd4", "thumbnail": {"src": "assets/production/database-display-20261018/species-218.thumbnail.ab6bff208ddf50bc.webp", "width": 128, "height": 86, "sha256": "ab6bff208ddf50bcc19dd894a9c0374dc98f0986b9b9ebee45eb52bcde8aa667"}, "ownerCompressed": true}, "219": {"speciesIndex": 219, "speciesId": "species-219", "displayCode": "UL28", "src": "assets/production/database-display-20261018/species-219.display.3d4e6979ac206f44.webp", "width": 768, "height": 512, "sha256": "3d4e6979ac206f4423949d54eccc4b84f33db41a269884c5b8f339568fb20ee3", "thumbnail": {"src": "assets/production/database-display-20261018/species-219.thumbnail.7f52d70bdc06d402.webp", "width": 128, "height": 86, "sha256": "7f52d70bdc06d4022f88e2359e48e32b002e1df8ed646219a99d9418a39b4bb6"}, "ownerCompressed": true}, "220": {"speciesIndex": 220, "speciesId": "species-220", "displayCode": "UL01", "src": "assets/production/database-display-20261018/species-220.display.f9dd48c2215b2221.webp", "width": 637, "height": 768, "sha256": "f9dd48c2215b22211b1ad683fa043b3d8f7334737f5e6f7e72ead90ed2e75acc", "thumbnail": {"src": "assets/production/database-display-20261018/species-220.thumbnail.d63f9d761f3c81c2.webp", "width": 106, "height": 128, "sha256": "d63f9d761f3c81c25cd5bde1c423b445043337d940297b126cbd958874e19c75"}, "ownerCompressed": true}, "221": {"speciesIndex": 221, "speciesId": "species-221", "displayCode": "UL17", "src": "assets/production/database-display-20261018/species-221.display.067d872c8c8e4493.webp", "width": 637, "height": 768, "sha256": "067d872c8c8e4493cde782ecf6e9ad79ee97d313501919538840ba51ee8e125a", "thumbnail": {"src": "assets/production/database-display-20261018/species-221.thumbnail.34b96a365d1efa36.webp", "width": 106, "height": 128, "sha256": "34b96a365d1efa369e719cd48b8f665d1cc9192f5efbaac675a3373e9c85d635"}, "ownerCompressed": true}, "223": {"speciesIndex": 223, "speciesId": "species-223", "displayCode": "UL18", "src": "assets/production/database-display-20261018/species-223.display.cb48ee8d8d939913.webp", "width": 719, "height": 768, "sha256": "cb48ee8d8d939913cd789b8ae25cd830408d35df77149ccf1fb3be8305b22a55", "thumbnail": {"src": "assets/production/database-display-20261018/species-223.thumbnail.134e7d079ee91627.webp", "width": 120, "height": 128, "sha256": "134e7d079ee91627498a42319a178d4d6da7b8e7289fcc46027c56e394a244f0"}, "ownerCompressed": true}, "206": {"speciesIndex": 206, "speciesId": "species-206", "displayCode": "UL29", "src": "assets/production/database-display-20261018/species-206.display.08a4d0cfea842d7b.webp", "width": 1024, "height": 683, "sha256": "08a4d0cfea842d7bf91f3304f933d2bf7ff54f3ffe73f068ebb85e90008071c9", "thumbnail": {"src": "assets/production/database-display-20261018/species-206.thumbnail.2ee70cc859d4486a.webp", "width": 128, "height": 85, "sha256": "2ee70cc859d4486a762abe7f663d9513b1fd91383f9f93b08fdb7affc9a6b3a4"}, "ownerCompressed": true}, "215": {"speciesIndex": 215, "speciesId": "species-215", "displayCode": "UL39", "src": "assets/production/database-display-20261018/species-215.display.8cf984cef9c5a3f4.webp", "width": 768, "height": 768, "sha256": "8cf984cef9c5a3f402f022b8c2aa17751ca3e2613b1b5b4aa992c5c5a420ce4f", "thumbnail": {"src": "assets/production/database-display-20261018/species-215.thumbnail.69e09565bac6a967.webp", "width": 128, "height": 128, "sha256": "69e09565bac6a967a5c42c59f441ca38fda27a17a37cf68dd1756639ce02efd7"}, "ownerCompressed": true}, "54": {"speciesIndex": 54, "speciesId": "species-054", "displayCode": "GR28", "src": "assets/production/database-display-20261018/species-054.display.862dd05e6371806b.webp", "width": 1024, "height": 1024, "sha256": "862dd05e6371806b06f360e832d08a3b8e92ffa90e6ecdd9902806c7d22dcdcc", "thumbnail": {"src": "assets/production/database-display-20261018/species-054.thumbnail.4ad2692c6f79115c.webp", "width": 128, "height": 128, "sha256": "4ad2692c6f79115c5ffa66840b2ceceedffa78af40e9b3f5298477244f40f0f6"}, "ownerCompressed": true}, "59": {"speciesIndex": 59, "speciesId": "species-059", "displayCode": "GR34", "src": "assets/production/database-display-20261018/species-059.display.d65af3374e14305c.webp", "width": 1024, "height": 1024, "sha256": "d65af3374e14305c5fff2de0cb93aeb711d8d4c018454ce034d205582eded1bd", "thumbnail": {"src": "assets/production/database-display-20261018/species-059.thumbnail.133ac3f1f9d74ca7.webp", "width": 128, "height": 128, "sha256": "133ac3f1f9d74ca792af4230837e61e15ea1f559b4960f19d8866246f6345987"}, "ownerCompressed": true}});
-const EXPECTED = Object.freeze(Object.fromEntries(Object.entries({...EXPECTED_MASTERS,...APPROVED_INTAKE}).map(([id,master])=>{
+const EXPECTED = Object.freeze(Object.fromEntries(Object.entries({...EXPECTED_MASTERS,...APPROVED_INTAKE,...Object.fromEntries(APPROVED20.map(e=>[e.speciesIndex,{...e,ownerCompressed:true}]))}).map(([id,master])=>{
   const display=publicHeroes.entries.find(row=>row.speciesIndex===Number(id));
   assert.ok(display,`Missing public display rendition ${id}`);
   return [id,Object.freeze({...master,...display})];
@@ -73,6 +74,7 @@ function assertAsset(entry, bytes, expected) {
 function assertRegistry(sourceBytes, builtBytes) {
   assert.equal(sha256(builtBytes), sha256(sourceBytes), 'Built hero registry must equal this exact candidate source');
   const catalog = JSON.parse(builtBytes);
+  assertApproved20Registry(catalog);
   assert.ok(Array.isArray(catalog.entries));
   assert.equal(new Set(catalog.entries.map(entry => entry.speciesIndex)).size, catalog.entries.length, 'No duplicate hero identities');
   for (const id of Object.keys(EXPECTED).map(Number)) assert.ok(catalog.entries.some(entry => entry.speciesIndex === id), `Missing selected hero ${id}`);
@@ -103,6 +105,32 @@ function assertMeasured(snapshot, species, size = null) {
     }
   }
 }
+
+function assertThumbnailMeasured(actual,species){
+  const expected=APPROVED20.find(e=>e.speciesIndex===species);assert.ok(expected);
+  assert.equal(actual.speciesIndex,species);assert.equal(actual.displayCode,expected.displayCode);
+  assert.equal(actual.src,new URL(expected.thumbnail.src,PUBLIC_BASE).href);
+  assert.deepEqual(actual.natural,[expected.thumbnail.width,expected.thumbnail.height]);
+  assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.loading,'lazy');assert.equal(actual.objectFit,'contain');
+  const r=actual.imageRect,b=actual.rowRect,v=actual.viewport;
+  assert.ok(Math.abs(r.width-32)<=.75&&Math.abs(r.height-32)<=.75,'Normal thumbnail must remain32 CSS px');
+  assert.ok(r.x>=b.x-.75&&r.right<=b.right+.75&&r.y>=b.y-.75&&r.bottom<=b.bottom+.75,'Thumbnail contained in normal row');
+  assert.ok(r.x>=-1&&r.right<=v.width+1&&r.y>=-1&&r.bottom<=v.height+1,'Actual thumbnail must be visible after scrolling');
+}
+function assertApproved20Coverage(evidence){
+  for(const width of [1440,390,360]){
+    const rows=(evidence.approved20ThumbnailCaptures??[]).filter(e=>e.viewport.width===width);
+    assert.deepEqual(rows.map(e=>e.speciesIndex).sort((a,b)=>a-b),APPROVED20_IDS,'Exactly20 mounted thumbnails per viewport');
+    for(const row of rows){assertThumbnailMeasured(row,row.speciesIndex);if(width===360)assert.equal(row.screenshot,null);else assert.ok(row.screenshot);}
+  }
+  assert.equal(evidence.approved20ThumbnailCaptures.length,60);
+  for(const width of [1440,390]){
+    const rows=evidence.captures.filter(e=>APPROVED20_IDS.includes(e.speciesIndex)&&e.viewport.width===width&&e.sizeTarget==='NORMAL_UNMODIFIED');
+    assert.deepEqual(rows.map(e=>e.speciesIndex).sort((a,b)=>a-b),APPROVED20_IDS,'Exactly20 normal desktop/mobile heroes');
+    for(const row of rows){assertMeasured(row,row.speciesIndex);assert.ok(row.heroScreenshot);}
+  }
+}
+
 // DOM observation only. No application/session objects or private APIs are read.
 function mountedSnapshot() {
   const root = document.querySelector('.cm-vs2-root[data-screen="DATABASE"]');
@@ -163,14 +191,20 @@ async function main() {
   fs.mkdirSync(output, { recursive: true });
   const evidence = { status: 'RUNNING', visualReview: 'PENDING_ROOT_SCREENSHOT_REVIEW',
     commit: process.env.GITHUB_SHA || null, candidateHeadCommit: process.env.DEX_QA_HEAD_SHA || null, baseCommit: process.env.DEX_QA_BASE_SHA || null,
-    scope: 'Normal fresh public-playtest UI: approved Dex040/189 with preserved063/070 with unchanged117/055/071/072 comparisons at normal desktop/mobile and128/256 light/dark contain; four existing promoted forms retain normal hero/source/target preview coverage. Only mounted matrix-holder size/backdrop CSS is temporarily overridden.',
+    scope: 'Includes all approved20 list thumbnails plus unmodified desktop/mobile heroes; preserves original194 metadata. Normal fresh public-playtest UI: approved Dex040/189 with preserved063/070 with unchanged117/055/071/072 comparisons at normal desktop/mobile and128/256 light/dark contain; four existing promoted forms retain normal hero/source/target preview coverage. Only mounted matrix-holder size/backdrop CSS is temporarily overridden.',
     exclusions: ['No visual/anatomy/alpha PASS from automation', 'No runtime-action replacement', 'No physical-device acceptance', 'No public deployment claim'],
     captures: [], assetChecks: [], console: [], pageErrors: [], networkErrors: [], cleanupErrors: [] };
   const write = () => fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify(evidence, null, 2) + '\n');
   let server, browser, context, page;
   const imageResponses = new Map();
+  const thumbnailResponses = new Map();
   const imageJobs = [];
-  async function shot(name) { if (page) await page.screenshot({ path: path.join(output, name + '.png'), fullPage: true }); }
+  async function timedScreenshot(target,options){
+    const started=Date.now();let completed=false;
+    try{const result=await target.screenshot(options);completed=true;return result;}
+    finally{(evidence.screenshotTimings??=[]).push({file:path.basename(options.path),durationMs:Date.now()-started,completed});}
+  }
+  async function shot(name) { if (page) await timedScreenshot(page,{ path: path.join(output, name + '.png'), fullPage: true }); }
   try {
     evidence.policy = await checkPolicy(process.cwd());
     const buildBytes = fs.readFileSync(path.join(root, 'pages-build.json'));
@@ -184,7 +218,7 @@ async function main() {
     assertOriginalApprovalLineage();
     const registryPath = 'src/data/championship/database-hero-portraits.public.v1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), compiledCatalogs.read(registryPath));
-    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'110 preserved plus 24 explicitly approved full heroes; MA15 is held');
+    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'194 preserved heroes plus exact approved20');
     evidence.registry = { count: catalog.entries.length, sourceAndCompiledInputSha256: sha256(compiledCatalogs.read(registryPath)) };
     const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json',bindingPath='src/data/championship/public-alternate-form-bindings.v1.json';
     evidence.productionCatalogs=[];
@@ -208,6 +242,18 @@ async function main() {
       const asset = resolveAsset(root, '/' + expected.src); assert.ok(asset, 'Selected display image absent from approved build');
       const bytes = fs.readFileSync(asset); assertAsset(entry, bytes, expected);
       evidence.assetChecks.push({ speciesIndex: expected.speciesIndex, source: 'EXACT_BUILT_ARTIFACT', sha256: sha256(bytes), bytes: bytes.length });
+    }
+    evidence.all214ArtifactAssets=[];
+    for(const entry of catalog.entries)for(const [role,media]of [['hero',entry],['thumbnail',entry.thumbnail]]){
+      assert.ok(media);const file=resolveAsset(root,'/'+media.src);assert.ok(file);
+      const bytes=fs.readFileSync(file);assert.equal(sha256(bytes),media.sha256);
+      evidence.all214ArtifactAssets.push({speciesIndex:entry.speciesIndex,role,sha256:sha256(bytes),bytes:bytes.length});
+    }
+    assert.equal(evidence.all214ArtifactAssets.length,428);
+    for(const entry of APPROVED20){
+      const thumb=entry.thumbnail,asset=resolveAsset(root,'/'+thumb.src);assert.ok(asset,'Approved20 thumbnail missing from build');
+      const bytes=fs.readFileSync(asset);assert.equal(sha256(bytes),thumb.sha256);assert.ok(bytes.includes(Buffer.from('VP8L')));
+      evidence.assetChecks.push({speciesIndex:entry.speciesIndex,role:'thumbnail',source:'EXACT_BUILT_ARTIFACT',sha256:sha256(bytes),bytes:bytes.length});
     }
     server = await serveBuild(root);
     browser = await chromium.launch({ channel: 'chromium', headless: true, chromiumSandbox: true });
@@ -237,6 +283,11 @@ async function main() {
     page.on('requestfailed', request => { const error = request.failure()?.errorText; if (error !== 'net::ERR_ABORTED') evidence.networkErrors.push({ url: request.url(), error }); });
     page.on('response', response => {
       if (response.status() >= 400) evidence.networkErrors.push({ url: response.url(), status: response.status() });
+      const thumbnailEntry=APPROVED20.find(e=>response.url()===new URL(e.thumbnail.src,PUBLIC_BASE).href);
+      if(thumbnailEntry)imageJobs.push((async()=>{
+        const bytes=await response.body();assert.equal(response.status(),200);assert.equal(sha256(bytes),thumbnailEntry.thumbnail.sha256);
+        thumbnailResponses.set(thumbnailEntry.speciesIndex,{speciesIndex:thumbnailEntry.speciesIndex,role:'thumbnail',source:'BROWSER_IMAGE_RESPONSE',url:response.url(),status:response.status(),sha256:sha256(bytes),bytes:bytes.length});
+      })().catch(error=>evidence.networkErrors.push({url:response.url(),error:String(error)})));
       const expected = Object.values(EXPECTED).find(e => response.url() === new URL(e.src, PUBLIC_BASE).href);
       if (expected) imageJobs.push((async () => {
         const bytes = await response.body();
@@ -284,6 +335,7 @@ async function main() {
     await page.locator('.cm-vs2-database__stage').selectOption('');
     const listReturn = page.locator('.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-footer button');
     async function openSpecies(species) {
+      const started=Date.now();
       const detail = page.locator('.cm-vs2-database__detail');
       if (await detail.isVisible()) { await listReturn.click(); await detail.waitFor({ state: 'hidden' }); }
       const row = page.locator(`.cm-vs2-database__row[data-species-index="${species}"][data-display-code="${EXPECTED[species].displayCode}"]`);
@@ -291,16 +343,19 @@ async function main() {
       await page.locator(HERO + '[data-art="ready"] .cm-dex-hero__image').waitFor({ state: 'visible', timeout: 30000 });
       await page.waitForFunction(([width,height]) => { const image = document.querySelector('.cm-dex-hero__image'); return image?.complete && image.naturalWidth === width && image.naturalHeight === height; }, [EXPECTED[species].width ?? 1254, EXPECTED[species].height ?? 1254]);
       const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species);
+      (evidence.navigationTimings??=[]).push({speciesIndex:species,viewport:snapshot.viewport,durationMs:Date.now()-started});
       return snapshot;
     }
     async function capture(name, species, size = null, backdrop = 'native') {
+      const started=Date.now(),isApproved20=APPROVED20_IDS.includes(species);
       await page.locator(HERO).scrollIntoViewIfNeeded();
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species, size);
       assert.ok(snapshot.imageRect.x >= -1 && snapshot.imageRect.y >= -1 && snapshot.imageRect.right <= snapshot.viewport.width + 1 && snapshot.imageRect.bottom <= snapshot.viewport.height + 1, 'Whole image box must be visible after normal scrolling');
-      await shot(name); await page.locator(HERO).screenshot({ path: path.join(output, name + '-hero.png') });
+      if(!isApproved20)await shot(name);
+      await timedScreenshot(page.locator(HERO),{ path: path.join(output, name + '-hero.png') });
       evidence.captures.push({ name, sizeTarget: size === null ? 'NORMAL_UNMODIFIED' : 'IMAGE_CONTENT_BOX', requestedSize: size, backdrop, ...snapshot,
-        screenshot: name + '.png', heroScreenshot: name + '-hero.png' }); write();
+        screenshot: isApproved20?null:name + '.png', heroScreenshot: name + '-hero.png', durationMs:Date.now()-started }); write();
       return snapshot;
     }
     async function measureListCards(viewport) {
@@ -314,7 +369,21 @@ async function main() {
           lazy:row.querySelector('img').loading==='lazy'};
       }));
       assert.equal(measured.length,EXPECTED_REGISTRY_COUNT);assert.ok(measured.every(row=>row.visible&&row.inside&&row.lazy),'All list thumbnail/name/code bounds remain inside their cards');
-      assert.equal(await page.locator('[data-species-index="82"] .cm-dex-list-thumb').count(),0,'MA15 remains held');
+      for(const expected of APPROVED20){
+        const started=Date.now();
+        const row=page.locator(`.cm-vs2-database__row[data-species-index="${expected.speciesIndex}"][data-display-code="${expected.displayCode}"]`);
+        assert.equal(await row.count(),1);await row.scrollIntoViewIfNeeded();
+        const img=row.locator('.cm-dex-list-thumb');await img.waitFor({state:'visible'});await img.evaluate(image=>image.decode());
+        const actual=await row.evaluate(element=>{
+          const image=element.querySelector('img'),r=image.getBoundingClientRect(),b=element.getBoundingClientRect(),css=getComputedStyle(image);
+          return {speciesIndex:Number(element.dataset.speciesIndex),displayCode:element.dataset.displayCode,src:image.currentSrc||image.src,complete:image.complete,hidden:image.hidden,natural:[image.naturalWidth,image.naturalHeight],objectFit:css.objectFit,loading:image.loading,
+            imageRect:{x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height},rowRect:{x:b.x,y:b.y,right:b.right,bottom:b.bottom},viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio}};
+        });
+        assertThumbnailMeasured(actual,expected.speciesIndex);
+        const screenshot=viewport.width===360?null:`approved20-${expected.speciesIndex}-thumbnail-${viewport.width}.png`;
+        if(screenshot)await timedScreenshot(row,{path:path.join(output,screenshot)});
+        (evidence.approved20ThumbnailCaptures??=[]).push({...actual,screenshot,durationMs:Date.now()-started});write();
+      }
       (evidence.listCardChecks??=[]).push({viewport,checked:measured.length,status:'PASS'});
     }
     await measureListCards({width:1440,height:1000});
@@ -343,10 +412,10 @@ async function main() {
       assert.deepEqual(restored.cssHolderSize, normal.cssHolderSize);
     }
     // Normal re-entry and responsive rendering, still using the same session/UI.
-    for(const species of [...MATRIX_TARGETS,...Object.keys(APPROVED_INTAKE).map(Number)]){await openSpecies(species);await capture(`${species}-desktop-reentry`,species);}
+    for(const species of [...MATRIX_TARGETS,...Object.keys(APPROVED_INTAKE).map(Number),...APPROVED20_IDS]){await openSpecies(species);await capture(`${species}-desktop-reentry`,species);}
     await page.setViewportSize({ width: 390, height: 844 });
     await measureListCards({width:390,height:844});
-    for (const species of [...MATRIX_TARGETS,70,...Object.keys(APPROVED_INTAKE).map(Number)]) { await openSpecies(species); await capture(`${species}-mobile-normal-${evidence.captures.length}`, species); }
+    for (const species of [...MATRIX_TARGETS,70,...Object.keys(APPROVED_INTAKE).map(Number),...APPROVED20_IDS]) { await openSpecies(species); await capture(`${species}-mobile-normal-${evidence.captures.length}`, species); }
     await page.setViewportSize({width:360,height:800});await measureListCards({width:360,height:800});
     // Production entry only: ordinary rows and route nodes, no fixture/catalog swap.
     evidence.promotedCaptures=[];
@@ -357,7 +426,7 @@ async function main() {
       const expectedPreview=previewExpected.get(species);
       assert.equal(actual.art,'ready');assert.equal(actual.revealed,'true');assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.objectFit,'contain');assert.deepEqual(actual.natural,[expectedPreview.width,expectedPreview.height]);assert.equal(actual.src,expectedPreview.url);
       assert.ok(actual.imageRect.width>0&&actual.imageRect.height>0);assert.ok(actual.imageRect.x>=-1&&actual.imageRect.right<=viewport.width+1&&actual.imageRect.y>=-1&&actual.imageRect.bottom<=viewport.height+1);
-      const name=`production-${species}-${kind}-${viewport.width}`;await shot(name);await holder.screenshot({path:path.join(output,name+'-image.png')});evidence.promotedCaptures.push({speciesIndex:species,displayCode:EXPECTED[species].displayCode,kind,viewport,screenshot:name+'.png',imageScreenshot:name+'-image.png',...actual});write();
+      const name=`production-${species}-${kind}-${viewport.width}`;await shot(name);await timedScreenshot(holder,{path:path.join(output,name+'-image.png')});evidence.promotedCaptures.push({speciesIndex:species,displayCode:EXPECTED[species].displayCode,kind,viewport,screenshot:name+'.png',imageScreenshot:name+'-image.png',...actual});write();
     }
     for(const viewport of [{width:844,height:390},{width:390,height:844}]){
       await page.setViewportSize(viewport);
@@ -376,11 +445,17 @@ async function main() {
     assert.deepEqual(evidence.registrationAfter, evidence.registrationBefore, 'Read-only Dex browsing must not register or replace creatures');
     await Promise.all(imageJobs);
     for (const species of Object.keys(EXPECTED).map(Number)) { assert.ok(imageResponses.has(species), `No actual browser image response captured for ${species}`); evidence.assetChecks.push(imageResponses.get(species)); }
+    assert.deepEqual([...thumbnailResponses.keys()].sort((a,b)=>a-b),APPROVED20_IDS,'Every approved thumbnail must have a real browser response');
+    evidence.assetChecks.push(...thumbnailResponses.values());
+    assertApproved20Coverage(evidence);
     assert.deepEqual(evidence.pageErrors, []); assert.deepEqual(evidence.networkErrors, []);
     evidence.comparisonGroups=['desktop-normal','128-light','128-dark','256-light','256-dark','desktop-restored','desktop-reentry'].map(condition=>({condition,referenceSpecies:117,candidateSpecies:[40,189,63,70,71,72,9,10],visualAcceptance:'PENDING_ROOT_ACTUAL_IMAGE_REVIEW',captures:[40,189,63,70,71,72,9,10,117].map(species=>{const c=evidence.captures.find(x=>x.name===`${species}-${condition}`);assert.ok(c);return {speciesIndex:species,image:c.heroScreenshot,fullPresentation:c.screenshot};})}));
     evidence.visualChecklist=['Approved040/189 with preserved063/070, baby009/010 and071/072 against117 accepted style','Full appendages and normal mobile fit','Cyan edge fringe on light/dark','Exact CSS restoration','Promoted own hero, origin and revealed target identity'];
-    // Nine matrix heroes × eight conditions, one mobile re-entry, eight production hero captures.
-    assert.equal(evidence.captures.length,113+Object.keys(APPROVED_INTAKE).length*2);assert.equal(evidence.promotedCaptures.length,16);
+    // 13 matrix heroes ×8, one mobile re-entry,8 production,18 previous intake ×2,20 approved additions ×2.
+    assert.equal(evidence.captures.length,189);assert.equal(evidence.promotedCaptures.length,16);
+    assert.equal(evidence.screenshotTimings.length,410,'Original330 PNGs plus40 new hero crops and40 thumbnail rows');
+    assert.ok(evidence.screenshotTimings.every(row=>row.completed));
+    evidence.captureBudget={oldPngs:330,newHeroCropPngs:40,newThumbnailRowPngs:40,totalPngs:410,wholeJobTimeoutMinutes:25,fitWithinJob:'NOT_PROVEN_UNTIL_HOSTED_COMPLETION',new360ThumbnailMeasurements:20};
     evidence.status = 'CAPTURE_PASS_VISUAL_REVIEW_PENDING';
   } catch (error) {
     evidence.status = 'FAIL'; evidence.failure = error.stack || String(error);
@@ -475,16 +550,17 @@ async function selfTest() {
   }
   assert.equal(publicHeroes.entries.length,EXPECTED_REGISTRY_COUNT,'Public registry count must match browser preflight');
   assert.equal(MATRIX_TARGETS.length,13);assert.equal(MATRIX_TARGETS.length*8+1+8,113);
-  const sourceRegistry = Buffer.from(JSON.stringify({entries:Object.keys(EXPECTED).map(speciesIndex=>({speciesIndex:Number(speciesIndex)}))}));
-  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,35);
+  assert.equal(Object.keys(EXPECTED).length,55);
+  const sourceRegistry = Buffer.from(JSON.stringify(publicHeroes));
+  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,214);
   assert.throws(()=>assertRegistry(sourceRegistry,Buffer.from('{}')));
-  for(const species of [9,10]){const missingBaby=Buffer.from(JSON.stringify({entries:JSON.parse(sourceRegistry).entries.filter(e=>e.speciesIndex!==species)}));assert.throws(()=>assertRegistry(missingBaby,missingBaby));}
+  for(const species of [9,10,...APPROVED20_IDS]){const missingBaby=Buffer.from(JSON.stringify({entries:JSON.parse(sourceRegistry).entries.filter(e=>e.speciesIndex!==species)}));assert.throws(()=>assertRegistry(missingBaby,missingBaby));}
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));
   assert.throws(()=>assertRegistry(duplicated,duplicated));
   const missing=Buffer.from(JSON.stringify({entries:[{speciesIndex:55}]}));assert.throws(()=>assertRegistry(missing,missing));
   console.log('DEX_PORTRAIT_SELF_TEST_PASS: sizing, identity, registration, contain, measured geometry and bounded onboarding-race guards; no browser launched.');
 }
-module.exports = { EXPECTED, assertRegistry, sizePlan, assertAsset, assertMeasured, mountedSnapshot, checkPolicy, clickOptionalComicControl, selfTestOptionalComicClick };
+module.exports = { APPROVED20,APPROVED20_IDS,assertApproved20Coverage,assertThumbnailMeasured, EXPECTED, assertRegistry, sizePlan, assertAsset, assertMeasured, mountedSnapshot, checkPolicy, clickOptionalComicControl, selfTestOptionalComicClick };
 if (require.main === module) {
   if (process.argv.includes('--self-test')) selfTest().catch(error => { console.error(error); process.exitCode = 1; });
   else main().catch(error => { console.error(error); process.exitCode = 1; });
