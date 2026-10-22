@@ -72,11 +72,11 @@ try{
    const shell=document.querySelector('.cm-vs5-shell'),sr=shell.getBoundingClientRect(),field=document.querySelector('.cm-vs5-field').getBoundingClientRect();
    const rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height}};
    const cards=[...document.querySelectorAll('.cm-vs5-fighter[data-present="true"]')];
-   const numberProbe=(value,kind)=>{if(!value)return null;const probe=document.createElement('span'),style=getComputedStyle(value);probe.textContent=kind+' 65535 / 65535';Object.assign(probe.style,{position:'absolute',visibility:'hidden',whiteSpace:'pre',font:style.font,fontVariantNumeric:style.fontVariantNumeric});document.body.append(probe);const width=probe.getBoundingClientRect().width;probe.remove();return width;};
+   const numberProbe=(value,kind)=>{if(!value)return null;const probe=document.createElement('span'),style=getComputedStyle(value);probe.textContent=kind+' 65535 / 65535';Object.assign(probe.style,{position:'absolute',visibility:'hidden',whiteSpace:'pre',fontFamily:style.fontFamily,fontSize:style.fontSize,fontWeight:style.fontWeight,fontStyle:style.fontStyle,fontStretch:style.fontStretch,lineHeight:style.lineHeight,letterSpacing:style.letterSpacing,fontVariantNumeric:style.fontVariantNumeric});document.body.append(probe);const measured=getComputedStyle(probe),result={width:probe.getBoundingClientRect().width,valueFont:{family:style.fontFamily,size:style.fontSize,weight:style.fontWeight,numeric:style.fontVariantNumeric},probeFont:{family:measured.fontFamily,size:measured.fontSize,weight:measured.fontWeight,numeric:measured.fontVariantNumeric}};probe.remove();return result;};
    return {mode:shell.dataset.hud,shell:rect(shell),field:{left:field.left,top:field.top,right:field.right,bottom:field.bottom},
     rosterStyles:[...shell.querySelectorAll('.cm-vs5-roster')].map(e=>({opponent:e.classList.contains('cm-vs5-roster--opponent'),direction:getComputedStyle(e).flexDirection,justify:getComputedStyle(e).justifyContent})),namedAreas:getComputedStyle(shell).gridTemplateAreas,exit:rect(document.querySelector('.cm-vs5-exit')),
     overlays:[...shell.querySelectorAll(':scope > .cm-vs5-clock,:scope > .cm-vs5-roster,:scope > .cm-vs5-log')].map(e=>({pointerEvents:getComputedStyle(e).pointerEvents,background:getComputedStyle(e).backgroundColor})),
-    cards:cards.map(c=>({slot:c.dataset.slot,rect:rect(c),bars:[...c.querySelectorAll('.cm-vs5-meter')].map(bar=>{const value=bar.querySelector('.cm-vs5-fighter__hp,.cm-vs5-meter__value');return {kind:bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP',bar:rect(bar),value:value?rect(value):null,text:value?.textContent,maxNumberWidth:numberProbe(value,bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP'),ariaLabel:bar.getAttribute('aria-label'),now:bar.getAttribute('aria-valuenow'),max:bar.getAttribute('aria-valuemax'),overflow:!!value&&value.scrollWidth>value.clientWidth+1}})}))};
+    cards:cards.map(c=>({slot:c.dataset.slot,rect:rect(c),bars:[...c.querySelectorAll('.cm-vs5-meter')].map(bar=>{const value=bar.querySelector('.cm-vs5-fighter__hp,.cm-vs5-meter__value');return {kind:bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP',bar:rect(bar),value:value?rect(value):null,text:value?.textContent,maxNumberProbe:numberProbe(value,bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP'),ariaLabel:bar.getAttribute('aria-label'),now:bar.getAttribute('aria-valuenow'),max:bar.getAttribute('aria-valuemax'),overflow:!!value&&value.scrollWidth>value.clientWidth+1}})}))};
   });
   if(phase!=='before'){const hud=s.floatingHud;assert.equal(hud.mode,'floating');assert.equal(hud.namedAreas,'none');
   for(const edge of ['left','top','right','bottom'])assert.ok(Math.abs(hud.shell[edge]-hud.field[edge])<=1,'field fills shell '+edge);
@@ -89,7 +89,8 @@ try{
   for(const card of hud.cards){assert.deepEqual(card.bars.map(b=>b.kind).sort(),['HP','TP']);for(const b of card.bars){
    assert.ok(b.value&&b.ariaLabel);assert.match(b.text,new RegExp('^'+b.kind+' \\d+ / \\d+$'));
    assert.ok(!b.overflow,'bar number overflow '+JSON.stringify(b));
-   assert.ok(b.maxNumberWidth<=b.value.width+1,'five-digit meter capacity '+JSON.stringify(b));
+   assert.deepEqual(b.maxNumberProbe.probeFont,b.maxNumberProbe.valueFont,'probe inherits actual meter font');
+   assert.ok(b.maxNumberProbe.width<=b.value.width+1,'five-digit meter capacity '+JSON.stringify(b));
    assert.ok(b.value.left>=b.bar.left-1&&b.value.top>=b.bar.top-1&&b.value.right<=b.bar.right+1&&b.value.bottom<=b.bar.bottom+1);
   }}
   }
