@@ -22,10 +22,11 @@ test('public QA server serves exact bytes and rejects traversal and symlink esca
 });
 test('save acceptance checks evolved instances 0005 and 0006, not only seeded new forms',()=>{
  const identity={211:['m528_metaletemon','m528_metaletemon'],222:['m540_imperialdramon_fm','m506_griffomon'],229:['oc_crownbrass_mandrill','m528_metaletemon'],230:['oc_celestyrant_battle_r10','m540_imperialdramon_fm']};
- const report={qaOnly:true,namespace:'championshipAlternateFormsQA:r1:',saveSchema:6,storage:'sessionStorage only',errors:[],instances:[['0001',211],['0002',222],['0005',229],['0006',230]].map(([suffix,id])=>({instanceId:'championship:2026:instance:'+suffix,speciesIndex:id,actorSpeciesIndex:id,configuredEntity:identity[id][0],configuredMotionDonor:identity[id][1]}))};
- assert.doesNotThrow(()=>assertEvolved(assert,report));const bad=structuredClone(report);bad.instances[2].speciesIndex=139;assert.throws(()=>assertEvolved(assert,bad));
- const wrongDonor=structuredClone(report);wrongDonor.instances[1].configuredMotionDonor='m540_imperialdramon_fm';assert.throws(()=>assertEvolved(assert,wrongDonor));
- const substituted=structuredClone(report);substituted.instances[2].instanceId='championship:2026:instance:0003';assert.throws(()=>assertEvolved(assert,substituted));
+ const report={qaOnly:true,namespace:'championshipAlternateFormsQA:r1:',saveSchema:7,storage:'sessionStorage only',errors:[],instances:[['0001',211],['0002',222],['0005',229],['0006',230]].map(([suffix,id])=>({instanceId:'championship:2026:instance:'+suffix,speciesIndex:id,actorSpeciesIndex:id,configuredEntity:identity[id][0],configuredMotionDonor:identity[id][1]}))};
+ const saved={schemaVersion:7,cageEdit:{layoutVersion:'PRODUCT_GRID100_INSTANCES_V1'}};
+ assert.doesNotThrow(()=>assertEvolved(assert,report,saved));const bad=structuredClone(report);bad.instances[2].speciesIndex=139;assert.throws(()=>assertEvolved(assert,bad,saved));
+ const wrongDonor=structuredClone(report);wrongDonor.instances[1].configuredMotionDonor='m540_imperialdramon_fm';assert.throws(()=>assertEvolved(assert,wrongDonor,saved));
+ const substituted=structuredClone(report);substituted.instances[2].instanceId='championship:2026:instance:0003';assert.throws(()=>assertEvolved(assert,substituted,saved));
 });
 test('browser harness has no private setters, accelerated clock, synthetic battle result or security flags',()=>{
  const source=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
@@ -68,4 +69,29 @@ test('promotion browser evidence covers real production catalogs and an untouche
  assert.doesNotMatch(normal,/addInitScript|localStorage\.setItem|sessionStorage\.setItem|registerHooks|__alternateFormQaApp|page\.clock/);
  const production=fs.readFileSync(new URL('./product-form-production-source-cases.mjs',import.meta.url),'utf8');
  assert.doesNotMatch(production,/registerHooks|alternateFormQaApp/);assert.match(production,/createChampionshipStandaloneApp/);
+});
+
+
+test('canonical post-reload contract rejects stale/unknown schemas, mismatched report and missing/wrong grid',()=>{
+ const identity={211:['m528_metaletemon','m528_metaletemon'],222:['m540_imperialdramon_fm','m506_griffomon'],229:['oc_crownbrass_mandrill','m528_metaletemon'],230:['oc_celestyrant_battle_r10','m540_imperialdramon_fm']};
+ const report={qaOnly:true,namespace:'championshipAlternateFormsQA:r1:',saveSchema:7,storage:'sessionStorage only',errors:[],instances:[['0001',211],['0002',222],['0005',229],['0006',230]].map(([suffix,id])=>({instanceId:'championship:2026:instance:'+suffix,speciesIndex:id,actorSpeciesIndex:id,configuredEntity:identity[id][0],configuredMotionDonor:identity[id][1]}))};
+ const saved={schemaVersion:7,cageEdit:{layoutVersion:'PRODUCT_GRID100_INSTANCES_V1'}};
+ assert.doesNotThrow(()=>assertEvolved(assert,report,saved));
+ for(const version of [5,6,8,undefined]){assert.throws(()=>assertEvolved(assert,{...report,saveSchema:version},saved));assert.throws(()=>assertEvolved(assert,report,{...saved,schemaVersion:version}));}
+ for(const layout of [undefined,'NATIVE_DECKS_V1','PRODUCT_GRID50_V1'])assert.throws(()=>assertEvolved(assert,report,{...saved,cageEdit:{layoutVersion:layout}}));
+ assert.throws(()=>assertEvolved(assert,report));assert.throws(()=>assertEvolved(assert,report,{schemaVersion:7}));
+});
+
+test('whole reachable acceptance flow uses canonical saved and reloaded contracts before unchanged battle proof',()=>{
+ const source=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
+ const helper=fs.readFileSync(new URL('./alternate-form-browser-support.cjs',import.meta.url),'utf8');
+ const compiled=fs.readFileSync(new URL('./alternate-form-compiled-support.cjs',import.meta.url),'utf8');
+ assert.match(source,/assert\.equal\(saved\.schemaVersion,7\)/);assert.match(source,/assert\.equal\(saved\.cageEdit\?\.layoutVersion,'PRODUCT_GRID100_INSTANCES_V1'\)/);
+ const reload=source.indexOf("await page.reload({waitUntil:'domcontentloaded'});await boot();"),read=source.indexOf('const reloadedSaved=await page.evaluate',reload),check=source.indexOf('assertEvolved(assert,reloaded,reloadedSaved)',read),battle=source.indexOf("[data-entry-id=\"battle\"]",check);
+ assert.ok(reload>=0&&read>reload&&check>read&&battle>check);assert.equal(source.split('assertEvolved(assert,').length-1,1);
+ assert.match(source,/assert\.deepEqual\(reloadedSaved\.shop\?\.cageQuantities,saved\.shop\.cageQuantities/);
+ assert.match(source,/assertCurrentPublicBattleLoaders\(assert,last.actualLoaderReports,beforeBattleReportCount\)/);
+ for(const text of [source,helper,compiled])assert.doesNotMatch(text,/assert\.equal\([^;\n]*(?:saveSchema|schemaVersion)[^;\n]*,\s*6\s*\)/);
+ for(const text of ["JSON.stringify(r.loadedSides)==='[\"main\"]'",'beforeCount','replacementFailures','privateIndexRequested,false'])assert.ok(compiled.includes(text),text);
+ assert.match(source,/NATURAL_FOUR_ACTOR_BATTLE_RESULT_PASS/);assert.match(source,/await raisingReady\('battle-return'\)/);
 });

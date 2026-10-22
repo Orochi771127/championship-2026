@@ -56,6 +56,16 @@ function friendsThreeIdentity(rows){
   return {...expected};
  });
 }
+function friendsThreeSnapshot(){const all=[...document.querySelectorAll('#cm-root[data-active-screen="RAISING_HOME"] .cm-ranch-three-canvas')],c=all[0],h=document.querySelector('.int-rh2-field-host'),r=c?.getBoundingClientRect();const state={canvasCount:all.length,frames:Number(c?.dataset.frames),width:c?.width??0,height:c?.height??0,visible:Boolean(r&&r.width>0&&r.height>0&&getComputedStyle(c).display!=='none'&&getComputedStyle(c).visibility!=='hidden'),loadState:h?.dataset.loadState,busy:h?.getAttribute('aria-busy'),fallbackCount:document.querySelectorAll('[data-field-fallback="true"]').length};
+ return {...state,residents:JSON.parse(h?.dataset.residentAssets||'[]')};
+}
+function friendsThreeSnapshotReady(state){
+ if(state.fallbackCount!==0)throw new Error('FRIENDS_THREE_FALLBACK_PRESENT');
+ if(state.canvasCount>1)throw new Error('FRIENDS_THREE_DUPLICATE_CANVAS');
+ if(state.loadState==='error'||state.residents.some(row=>row.state==='error'))throw new Error('FRIENDS_THREE_RESIDENT_OR_FIELD_ERROR');
+ return state.canvasCount===1&&state.loadState==='ready'&&state.busy==='false'&&state.visible&&state.width>0&&state.height>0&&Number.isSafeInteger(state.frames)&&state.frames>0&&state.residents.length>0&&state.residents.every(row=>row.state==='ready');
+}
+function friendsMakeThreeReadiness(){return new Function(`const state=(${friendsThreeSnapshot.toString()})();return (${friendsThreeSnapshotReady.toString()})(state)?state:false;`);}
 function friendsThreeProgress(before,after){
  for(const state of [before,after]){
   assert.equal(state.canvasCount,1,'Unique actual Three renderer required');
@@ -65,6 +75,25 @@ function friendsThreeProgress(before,after){
   assert.ok(Number.isSafeInteger(state.frames)&&state.frames>0,'Actual Three frame counter required');
  }
  assert.ok(after.frames>before.frames,'Actual Three frames must advance across normal camera gestures');
+}
+// Same-state DOM observation only; serialized functions contain no app/state access.
+function friendsMenuDomState({group,entry}){
+    const controls=[...document.querySelectorAll(`button.cm-toolbar__cell[data-menu-id="${group}"]`)],control=controls[0];
+    const panels=[...document.querySelectorAll('.cm-toolbar__menu:not([hidden])')],panel=panels[0];
+    const visible=el=>Boolean(el&&!el.hidden&&el.getClientRects().length&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden');
+    return {buttonCount:controls.length,buttonVisible:visible(control),buttonEnabled:Boolean(control&&!control.disabled),expanded:control?.getAttribute('aria-expanded')==='true',openMenu:panels.length===0?null:panels.length===1?panel.dataset.menuId:'MULTIPLE_OPEN_MENUS',entryCount:panel?.dataset.menuId===group?panel.querySelectorAll(`button[data-entry-id="${entry}"]`).length:0};
+}
+function friendsMakeMenuObservation(overlayReader){
+ // Playwright serializes functions without Node closures. Embed only these exact
+ // local read-only helpers; no page globals or production functions are installed.
+ return new Function('input',`const readOverlay=(${overlayReader.toString()});const readState=(${friendsMenuDomState.toString()});const calendar=document.querySelector('.int-rh2-calendar');return {overlay:readOverlay(input.selector),calendarAbsentOrHidden:!calendar||calendar.hidden,state:readState(input)};`);
+}
+async function friendsInspectMenu(api,deadline){
+ const snapshot=await api.observe();
+ // Disabled/visible calendars, known dialogs, animations and unknown obstruction
+ // retain the full existing acknowledgment/wait path and a fresh state read.
+ if(snapshot.overlay?.kind==='canvas'&&snapshot.calendarAbsentOrHidden===true)return {handled:[],state:snapshot.state};
+ const handled=await api.clear(deadline);return {handled,state:await api.state()};
 }
 function friendsRecognizedOverlay(value){return value?.kind==='calendar'||value?.kind==='registration-notice-94';}
 async function friendsMenuTransaction(api){
@@ -162,13 +191,13 @@ async function friendsGuardedRoute(operation,onFailure,abort){
   evidence.activeMenu={group,entry};write();
   const groupControl=()=>page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`);
   const entryControl=()=>page.locator(`.cm-toolbar__menu:not([hidden])[data-menu-id="${group}"] button[data-entry-id="${entry}"]`);
-  await friendsMenuTransaction({group,entry,now:()=>Date.now(),clear:deadline=>clearCalendar(deadline),saved,
-   state:()=>page.evaluate(({group,entry})=>{
-    const controls=[...document.querySelectorAll(`button.cm-toolbar__cell[data-menu-id="${group}"]`)],control=controls[0];
-    const panels=[...document.querySelectorAll('.cm-toolbar__menu:not([hidden])')],panel=panels[0];
-    const visible=el=>Boolean(el&&!el.hidden&&el.getClientRects().length&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden');
-    return {buttonCount:controls.length,buttonVisible:visible(control),buttonEnabled:Boolean(control&&!control.disabled),expanded:control?.getAttribute('aria-expanded')==='true',openMenu:panels.length===0?null:panels.length===1?panel.dataset.menuId:'MULTIPLE_OPEN_MENUS',entryCount:panel?.dataset.menuId===group?panel.querySelectorAll(`button[data-entry-id="${entry}"]`).length:0};
-   },{group,entry}),
+  const observeMenu=friendsMakeMenuObservation(ordinaryRanchOverlayState);let inspectedState=null;
+  await friendsMenuTransaction({group,entry,now:()=>Date.now(),saved,
+   clear:async deadline=>{const result=await friendsInspectMenu({
+    observe:()=>page.evaluate(observeMenu,{group,entry,selector:ranchCanvasSelector}),
+    clear:value=>clearCalendar(value),state:()=>page.evaluate(friendsMenuDomState,{group,entry})
+   },deadline);inspectedState=result.state;return result.handled;},
+   state:async()=>{assert.ok(inspectedState,'Same-state menu observation required');return inspectedState;},
    clickGroup:timeout=>groupControl().click({timeout}),clickEntry:timeout=>entryControl().click({timeout}),
    observeOverlay:()=>page.evaluate(ordinaryRanchOverlayState,ranchCanvasSelector),
    record:row=>{evidence.assertions.push(row);write();}
@@ -288,7 +317,18 @@ async function friendsGuardedRoute(operation,onFailure,abort){
    const row={path:expected.path,url:response.url(),status:response.status()};threeResponses.push(row);
    threeResponseReads.push((async()=>{try{const bytes=await response.body();row.bytes=bytes.length;row.sha256=require('node:crypto').createHash('sha256').update(bytes).digest('hex');}catch(error){row.error=String(error.stack||error);evidence.networkErrors.push({context:'source-corners',url:response.url(),error:'THREE_RESPONSE_READ_FAILURE: '+error.message});}finally{write();}})());
   };page.on('response',onThreeResponse);
-  const readThree=()=>page.evaluate(()=>{const all=[...document.querySelectorAll('#cm-root[data-active-screen="RAISING_HOME"] .cm-ranch-three-canvas')],c=all[0],h=document.querySelector('.int-rh2-field-host'),r=c?.getBoundingClientRect();return {canvasCount:all.length,frames:Number(c?.dataset.frames),width:c?.width??0,height:c?.height??0,visible:Boolean(r&&r.width>0&&r.height>0&&getComputedStyle(c).display!=='none'&&getComputedStyle(c).visibility!=='hidden'),loadState:h?.dataset.loadState,busy:h?.getAttribute('aria-busy'),fallbackCount:document.querySelectorAll('[data-field-fallback="true"]').length};});
+  const readThree=async()=>{
+   const started=Date.now(),row={stage:evidence.sourceCornerStage};(evidence.sourceThreeReadiness??=[]).push(row);
+   try{
+    row.initial=await page.evaluate(friendsThreeSnapshot);write();
+    const remaining=90000-(Date.now()-started);assert.ok(remaining>0,'Three readiness operation budget exhausted');
+    if(friendsThreeSnapshotReady(row.initial)){row.final=row.initial;row.waited=false;row.elapsedMs=Date.now()-started;write();return row.final;}
+    row.waited=true;row.pollBudgetMs=remaining;write();
+    const handle=await page.waitForFunction(friendsMakeThreeReadiness(),undefined,{timeout:remaining});
+    try{row.final=await handle.jsonValue();}finally{await handle.dispose();}
+    assert.equal(friendsThreeSnapshotReady(row.final),true);row.elapsedMs=Date.now()-started;assert.ok(row.elapsedMs<90000,'Three readiness operation budget exhausted');write();return row.final;
+   }catch(error){row.error=String(error.stack||error);write();throw error;}
+  };
   await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();

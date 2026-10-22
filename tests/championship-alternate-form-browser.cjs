@@ -168,7 +168,9 @@ const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:
   assert.deepEqual(saved.shop?.cageQuantities,Object.fromEntries(fixture.shop.cageOwned.map(index=>[index,1])));
   for(const [suffix,species]of [['0005','species-229'],['0006','species-230']])assert.equal(saved.raising.collection.find(i=>i.instanceId.endsWith(':'+suffix)).speciesId,species);
   await page.reload({waitUntil:'domcontentloaded'});await boot();
-  const reloaded=await diagnostics('save-reload-evolved');assertEvolved(assert,reloaded);const beforeBattleReportCount=reloaded.actualLoaderReports.length;evidence.assertions.push('NORMAL_SAVE_EXIT_RELOAD_EVOLVED_0005_0006_PASS');
+  const reloaded=await diagnostics('save-reload-evolved');
+  const reloadedSaved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
+  assertEvolved(assert,reloaded,reloadedSaved);assert.deepEqual(reloadedSaved.shop?.cageQuantities,saved.shop.cageQuantities,'Reload must retain exact fixture-owned quantities');const beforeBattleReportCount=reloaded.actualLoaderReports.length;evidence.assertions.push('NORMAL_SAVE_EXIT_RELOAD_EVOLVED_0005_0006_PASS');
   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();
   await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();
   for(const [id,team]of [[211,'A'],[229,'A'],[222,'B'],[230,'B']]){

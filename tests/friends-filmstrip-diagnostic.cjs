@@ -1,6 +1,6 @@
 // TEST ONLY: exact reviewed Friends runner, bounded first adjacent desktop gesture.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
-const BASE='cb65985cef9a620452d35b17373188a045265c1d817c9e32948a358cb74b0950';
+const BASE='30e5922a062209b03d556afca1a73b0679625aea1ad9054a645491da106d28af';
 const BUILD='bab8a0633fbf9379065853985f3a26ea4131122317635569db268003f33b7a95';
 const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":8526,"sha256":"47153dea52ad24a31144e468927767bf97fa7f7d4302ea6ee6e24cf06462a63e"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":1220556,"sha256":"801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1164384,"sha256":"2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":182480,"sha256":"272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0"}]);
 function verifyThreeResponses(row){
