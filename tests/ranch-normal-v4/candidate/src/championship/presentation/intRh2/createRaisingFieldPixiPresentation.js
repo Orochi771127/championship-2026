@@ -1,0 +1,1539 @@
+import {createCareImageTextureScope} from './careImageTextureScope.js';
+import { getReviewedRaisingContactShadow } from './raisingContactShadow.js';
+import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
+import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
+import publicCare from '../../../../assets/production/public-runtime/raising-care.v1.json' with {type:'json'};
+// INT-RH2 Raising field -- a scene on the single Championship Pixi stage.
+//
+// VS1 created its own Application here. VS2 needs a second playable field, and
+// the product is allowed exactly one Pixi bootstrap, so the Application moved to
+// championshipPixiStage.js and this module became a scene on it. The rendered
+// result is unchanged; what changed is who owns the canvas.
+//
+// The scene may hold transient pointer and animation state, but never cage
+// assignment, save data, gameplay values, routing, or another runtime store.
+
+import { isNativeRanchLayout } from "../../cage/ranchExpansion.js";
+import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOriginalBodyScale, raisingOriginalBodyOffset, getRaisingEggContactShadow } from "./raisingNativeSizing.js";
+import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
+import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyphArt.js';
+import {EVOLUTION_TEXT_ROWS, EVOLUTION_WRITING_COLOR, evolutionWritingY} from '../../text/evolutionPresentationText.js';
+import { prefersReducedMotion } from '../presentationPreferences.js';
+import { uiText } from '../../text/uiText.js';
+import {bindRaisingZoomInput,RAISING_OVERVIEW_ZOOM} from './raisingZoomInput.js';
+import {zoomRaisingCamera} from './raisingFieldViewport.js';
+import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
+
+const DRAG_THRESHOLD_PX = 6;
+
+function assertDependencies(stage, source) {
+  if (!stage || !stage.PIXI || !stage.app || typeof stage.createSceneRoot !== "function"
+    || typeof stage.onResize !== "function" || typeof stage.attach !== "function") {
+    throw new TypeError("INT-RH2 requires the Championship Pixi stage");
+  }
+  if (!source || typeof source.getFrame !== "function" || typeof source.subscribe !== "function"
+    || typeof source.intents?.selectCreature !== "function"
+    || typeof source.intents?.relocateCreature !== "function") {
+    throw new TypeError("INT-RH2 requires the Raising presentation source");
+  }
+}
+
+function fallbackCreature(PIXI) {
+  const graphic = new PIXI.Graphics()
+    .ellipse(0, -10, 34, 26).fill(0x72809c).stroke({ color: 0x252d43, width: 3 })
+    .circle(22, -30, 17).fill(0x72809c).stroke({ color: 0x252d43, width: 3 })
+    .poly([11, -42, 18, -61, 28, -40]).fill(0xdce4ef).stroke({ color: 0x252d43, width: 2 })
+    .circle(27, -32, 3).fill(0x101727);
+  graphic.label = "original-created neutral resident fallback";
+  return graphic;
+}
+
+async function parseGridSheet(PIXI, spec, cachePrefix) {
+  const texture = await PIXI.Assets.load(spec.sheet);
+  const width = Number(texture.source?.width ?? texture.width);
+  const height = Number(texture.source?.height ?? texture.height);
+  const frameWidth = width / spec.columns;
+  const frameHeight = height / spec.rows;
+  if (!Number.isInteger(frameWidth) || !Number.isInteger(frameHeight)) {
+    throw new Error(`CHAMPIONSHIP_SPRITESHEET_GRID_INVALID: ${spec.sheet}`);
+  }
+  const frames = {};
+  const animation = [];
+  for (let index = 0; index < spec.frames; index += 1) {
+    const name = `frame-${String(index).padStart(2, "0")}`;
+    frames[name] = {
+      frame: {
+        x: (index % spec.columns) * frameWidth,
+        y: Math.floor(index / spec.columns) * frameHeight,
+        w: frameWidth,
+        h: frameHeight
+      },
+      sourceSize: { w: frameWidth, h: frameHeight },
+      spriteSourceSize: { x: 0, y: 0, w: frameWidth, h: frameHeight },
+      anchor: { x: 0.5, y: 1 }
+    };
+    animation.push(name);
+  }
+  const sheet = new PIXI.Spritesheet({
+    texture,
+    data: {
+      frames,
+      animations: { sequence: animation },
+      meta: { image: spec.sheet, size: { w: width, h: height }, scale: "1" }
+    },
+    cachePrefix
+  });
+  await sheet.parse();
+  return { sheet, textures: sheet.animations.sequence };
+}
+
+function clamp(value, minimum, maximum) {
+  return Math.max(minimum, Math.min(maximum, value));
+}
+
+/**
+ * Mount the Raising field scene onto the single Championship Pixi stage.
+ *
+ * The caller owns DOM screen UI and has already attached the stage to a field
+ * host inside it. This module owns only its own scene and returns a small
+ * presentation port.
+ */
+export async function mountRaisingFieldPixiPresentation({
+  stage,
+  source,
+  responsiveLayout = false,
+  getLayoutSample = () => null,
+  onFallback = () => {},
+  fieldArt = null,
+  characterBundle = null,
+  feedbackArt = null,
+  signal = null,
+  getSelectedTool = () => null,
+  onTrainingFrame = () => {},
+  onActorFrame = null,
+  onResidentAssetState = () => {},
+  // Locked expansion bays (2026-10-12): where they show on screen, and a tap
+  // on them. Both are presentation hooks; the caller owns the DOM and dialog.
+  onExpansionPreview = null,
+  onExpansionPreviewOpen = null,
+  reducedMotion = prefersReducedMotion()
+}) {
+  assertDependencies(stage, source);
+  const { app } = stage;
+  const lifetime = new AbortController();
+  const abort = () => lifetime.abort(signal?.reason);
+  signal?.addEventListener('abort', abort, { once: true });
+  if (signal?.aborted) abort();
+  const PIXI = createPixiAssetScope(stage.PIXI, globalThis.location?.href, { signal: lifetime.signal });
+  const careImageTextures=createCareImageTextureScope(stage.PIXI,{signal:lifetime.signal});
+  if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
+    || typeof fieldArt.dispose !== "function" || typeof fieldArt.getDiagnostics !== "function")) {
+    throw new TypeError("The Raising field art binding must be a loaded runtime map-art field");
+  }
+
+  // Care pixels communicate tool placement. Finish this required load before
+  // attaching a scene; cancellation can never leave a half-mounted scene root.
+  let careArt;
+  try {
+    careArt = fieldArt?.field?.presentationMode === 'NATIVE_RANCH' ? await loadCareArt() : new Map();
+    lifetime.signal.throwIfAborted();
+  } catch (error) {
+    lifetime.abort(error); signal?.removeEventListener('abort', abort); throw error;
+  }
+  let disposed = false;
+  const scene = stage.createSceneRoot("INT-RH2 Raising field");
+  const unmarkScene = stage.markScene("cm-raising-pixi-canvas");
+  const backgroundLayer = new PIXI.Container({ label: "background" });
+  const productionArtLayer = new PIXI.Container({ label: "bounded production cage art" });
+  const terrainLayer = new PIXI.Container({ label: "terrain" });
+  const propLayer = new PIXI.Container({ label: "props" });
+  const actorLayer = new PIXI.Container({ label: "actors" });
+  const foregroundLayer = new PIXI.Container({ label: "foreground occlusion" });
+  const fxLayer = new PIXI.Container({ label: "fx and lighting" });
+  actorLayer.sortableChildren = true;
+  scene.addChild(backgroundLayer, productionArtLayer, terrainLayer, propLayer, actorLayer, foregroundLayer, fxLayer);
+  if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
+  fieldArt?.foreground?.attach(actorLayer);
+
+  const backdrop = new PIXI.Graphics();
+  backgroundLayer.addChild(backdrop);
+  const cageGraphics = new Map();
+  const actors = new Map();
+  const foodGraphics = new Map();
+  const wasteGraphics = new Map();
+  const evolutionGlow=new PIXI.Graphics();evolutionGlow.eventMode='none';fxLayer.addChild(evolutionGlow);
+  const evolutionBackdrop=new PIXI.Graphics();evolutionBackdrop.eventMode='none';scene.addChildAt(evolutionBackdrop,4);
+  const evolutionWriting=new PIXI.Container();evolutionWriting.eventMode='none';scene.addChildAt(evolutionWriting,5);
+  const evolutionWords=EVOLUTION_TEXT_ROWS.map(({text,row})=>{
+    const word=new PIXI.Text({text,style:{
+      fontFamily:'Tahoma, "Noto Sans Thai", Thonburi, "Yu Gothic", "Hiragino Sans", "Noto Sans JP", sans-serif',
+      fontSize:16+(row%3)*4,fontWeight:'bold',fill:EVOLUTION_WRITING_COLOR
+    }});
+    word.eventMode='none';evolutionWriting.addChild(word);return word;
+  });
+  let evolutionGlyphArt = null, evolutionGlyphBand = null, evolutionGlyphLoad = null;
+  function ensureEvolutionGlyphs() {
+    if (evolutionGlyphLoad) return;
+    // First evolution only: no glyph pixels are fetched at boot or Home entry.
+    evolutionGlyphLoad = loadEvolutionGlyphArt(PIXI).then(art => {
+      if (disposed || lifetime.signal.aborted) { void art.dispose(); return; }
+      evolutionGlyphArt = art;
+      evolutionGlyphBand = createEvolutionGlyphBand(PIXI, art);
+      evolutionWriting.addChild(evolutionGlyphBand.container);
+    }).catch(error => { if (!disposed && !lifetime.signal.aborted) onFallback(error); });
+  }
+  // Reuse this presenter's existing authored vector ring/particles and the
+  // original glyph band. Private reference decorations are not a public input.
+  const silhouette=new PIXI.ColorMatrixFilter();silhouette.matrix=[0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0];
+  let evolutionCamera=null;
+  // Licensed original cells (common/i000_item) carry their own size and sprite
+  // origin, so each one is placed by its own geometry rather than a shared
+  // square. The celebration platter and cake have no original counterpart and
+  // stay authored vectors on the previous 32px square.
+  const FOOD_KINDS=['meat','protein','feast','cake'];
+  async function loadCareArt() {
+    const art=new Map();
+    const local=isOriginalRuntimeLocation();
+    if(!local)return art;
+    await Promise.all((local?publicCare.cells:[]).map(async cell=>art.set(`${cell.role}-${cell.pose}`,{
+      texture:await careImageTextures.load(new URL('../../../../'+cell.src,import.meta.url).href),
+      width:cell.nativeWidth,height:cell.nativeHeight,
+      anchorX:cell.nativeAnchorX/cell.nativeWidth,anchorY:cell.nativeAnchorY/cell.nativeHeight})));
+    const authored=new URL('../../../../assets/production/raising-care-r1/',import.meta.url);
+    await Promise.all(['feast','cake'].flatMap(kind=>[0,1,2,3].map(async quarter=>art.set(`${kind}-${quarter}`,{
+      texture:await PIXI.Assets.load(new URL(`${kind}-${quarter}.svg`,authored).href),
+      width:32,height:32,anchorX:0.5,anchorY:0.85}))));
+    return art;
+  }
+  const toolPreview = careArt.size?new PIXI.Sprite(careArt.get('broom-0').texture):null;
+  if(toolPreview){toolPreview.eventMode='none';toolPreview.visible=false;
+    toolPreview.label='Clean broom and dustpan';fxLayer.addChild(toolPreview);}
+  // i000_item plays spoiled food, waste and the sweep as two poses of 18
+  // native ticks each (sequences 4, 9, 10 and 11), and gives meat and the
+  // capsule one spoiled identity apiece rather than one per remaining amount.
+  const NATIVE_POSE_MS=18*560190/33513982*1000;
+  const placeCare=(sprite,art)=>{sprite.texture=art.texture;sprite.anchor.set(art.anchorX,art.anchorY);};
+  let pointerPreview=null,cleanFeedback=null,careElapsed=0;
+  const carePose=()=>reducedMotion?0:Math.floor(careElapsed/NATIVE_POSE_MS)%2;
+  const sheets = new Set();
+  let latestFrame = null;
+  let latestRevision = -1;
+  let drag = null;
+  let cameraX = 0;
+  // Screen pixels the board is lowered to show the headroom above it. Only a
+  // frame too short for the board and its headroom ever lets this leave 0; a
+  // folded ring (expansion annex below the board) scrolls over both bands.
+  let cameraY = 0;
+  let zoom = 1;
+  // Every placement on this scene reads the frame through this one view, so
+  // the vertical scroll moves art, residents, shadows and input together.
+  let raisingReference = null;
+  const view = Object.freeze({
+    get width() { return app.screen.width; },
+    get height() { return app.screen.height; },
+    get desktopRaising() { return globalThis.document?.body?.hasAttribute('data-desktop-raising')??false; },
+    get scrollY() { return cameraY; },
+    get zoom() { return zoom; },
+    get referenceViewport() { return raisingReference?.reference; }
+  });
+  // The shared stage updates app.screen BEFORE notifying scenes. Keep plain
+  // dimensions from the previous useful layout; retaining `view` itself would
+  // retain its live getters and lose the pre-rotation world focal point.
+  let cameraViewport = null;
+  const scrollMaxY = () => (fieldArt?.field ? raisingFieldViewport(fieldArt.field, view).scrollMaxY ?? 0 : 0);
+  // World x of a native x within its band: a folded ring (expansion prototype)
+  // shows its annex as a second band, and the shared camera is band-local.
+  const bandWorldX = (field, nativeX) => field?.fold ? raisingFoldBand(field, nativeX * field.nativePixelWorldScale).x
+    : nativeX * field.nativePixelWorldScale;
+  let cameraDrag = null;
+  let tutorialViewKey=null,tutorialCameraOffset=0;
+  const tutorialTargets=new PIXI.Graphics();tutorialTargets.eventMode="none";scene.addChild(tutorialTargets);
+  if (fieldArt?.field?.presentationMode === 'NATIVE_RANCH') {
+    // Ranch art is layered above the backdrop. Ground input belongs to the
+    // scene so a decorative tile cannot swallow a tap or a camera swipe.
+    scene.eventMode = 'static';
+    backdrop.cursor = 'grab';
+    scene.on('pointerdown', event => {
+      if(source.getLifecycleFrame?.()?.day||source.getLifecycleFrame?.()?.evolution)return;
+      if (drag || zoomInput?.isActive()) return;
+      event.stopPropagation();
+      cameraDrag = {pointerId:event.pointerId,startX:event.global.x,startY:event.global.y,origin:cameraX,originY:cameraY,tool:getSelectedTool(),moved:false,tutorialCheckpoint:source.getFrame().tutorial?.checkpoint??null};
+      pointerPreview={x:event.global.x,y:event.global.y,touch:event.pointerType==='touch',held:true};
+      backdrop.cursor = 'grabbing';
+    });
+  }
+  let assetFailures = 0;
+  if (characterBundle !== null && (typeof characterBundle.createActor !== "function"
+    || typeof characterBundle.dispose !== "function" || typeof characterBundle.getDiagnostics !== "function")) {
+    throw new TypeError("INT-RH2 character art must be an injected runtime bundle");
+  }
+
+  function cageBounds(cage) {
+    const fit = raisingFieldViewport(fieldArt?.field, view, 12, cameraX);
+    // Native ranch startup keeps the existing resident interaction lanes in
+    // Waiting Room. It does not infer training-module membership or collision.
+    const room = fieldArt?.field?.residentViewport;
+    const bounds = room ? {x:fit.x+room.x*fit.scale, y:fit.y+room.y*fit.scale,
+      width:room.width*fit.scale,height:room.height*fit.scale} : fit;
+    return raisingRegionBounds(cage.region, bounds);
+  }
+
+  // Fit one licensed field into the Pixi host. The two habitat regions stay
+  // product-authored drop targets on top; they are not original ranch slots.
+  function layoutFieldArt() {
+    if (!fieldArt) {
+      productionArtLayer.visible = false;
+      return;
+    }
+    const bounds = raisingFieldViewport(fieldArt.field, view, 12, cameraX);
+    productionArtLayer.visible = true;
+    productionArtLayer.scale.set(bounds.scale);
+    productionArtLayer.position.set(bounds.x, bounds.y);
+    fieldArt.foreground?.syncViewport(bounds);
+    syncExpansionPreview(bounds);
+  }
+
+  // The on-screen part of the locked expansion bays, for the caller's call to
+  // action. The band repeats with the ring, so the copy nearest the middle of
+  // the frame is the one reported. Reported only when it changes.
+  let expansionPreviewKey = null;
+  function expansionPreviewRect(bounds) {
+    const preview = fieldArt?.field?.expansionPreview;
+    if (!preview || !(bounds?.scale > 0)) return null;
+    const scale = bounds.scale, wrap = fieldArt.field.wrapWidthPx;
+    let left = bounds.x;
+    if (wrap > 0) left += Math.round((app.screen.width / 2 - (left + preview.widthPx * scale / 2)) / (wrap * scale)) * wrap * scale;
+    const rect = { left, right: left + preview.widthPx * scale,
+      top: bounds.y + (preview.bandOffsetPx - preview.capPx) * scale,
+      bottom: bounds.y + (preview.bandOffsetPx + preview.contentHeightPx) * scale };
+    const visible = { left: Math.max(0, rect.left), right: Math.min(app.screen.width, rect.right),
+      top: Math.max(0, rect.top), bottom: Math.min(app.screen.height, rect.bottom) };
+    // A band as long as the ring tiles seamlessly with its repeats: what shows
+    // is all of them together, not the one copy nearest the middle.
+    if (wrap > 0 && preview.widthPx >= wrap) for (const shift of [-wrap * scale, wrap * scale]) {
+      const from = Math.max(0, rect.left + shift), to = Math.min(app.screen.width, rect.right + shift);
+      if (to > from) { visible.left = Math.min(visible.left, from); visible.right = Math.max(visible.right, to); }
+    }
+    return visible.right - visible.left > 0 && visible.bottom - visible.top > 0 ? { band: rect, visible } : null;
+  }
+  function syncExpansionPreview(bounds) {
+    if (typeof onExpansionPreview !== 'function') return;
+    const rect = expansionPreviewRect(bounds);
+    const key = rect ? [rect.visible.left, rect.visible.top, rect.visible.right, rect.visible.bottom, rect.band.top].map(Math.round).join(',') : '';
+    if (key === expansionPreviewKey) return;
+    expansionPreviewKey = key;
+    onExpansionPreview(rect);
+  }
+
+  function drawField(frame) {
+    // Owner direction 2026-09-12 returns the interface to the original's
+    // language, and the space around the ranch belongs to that language rather
+    // than to a pale filler. The stage is transparent (backgroundAlpha 0), so
+    // painting nothing here lets the framed hex ground behind the canvas read
+    // through, and the ranch reads as a platform in the digital world -- which
+    // is what it is -- instead of a plate dropped on a blank sheet.
+    // This is presentation paint only; cage geometry and actor transforms stay
+    // separate.
+    backdrop.clear();
+    if (!fieldArt) {
+      // Art missing is the one case that still needs its own ground, and it
+      // takes the same deep blue rather than a light one.
+      backdrop
+        .rect(0, 0, app.screen.width, app.screen.height).fill(0x0b3bbe)
+        .circle(app.screen.width * 0.22, app.screen.height * 0.12, app.screen.width * 0.46)
+        .fill({ color: 0x18d5ff, alpha: 0.18 });
+    }
+    layoutFieldArt();
+
+    const liveCages = new Set(frame.cages.map((cage) => cage.cageId));
+    for (const [cageId, graphic] of cageGraphics) {
+      if (liveCages.has(cageId)) continue;
+      terrainLayer.removeChild(graphic);
+      graphic.destroy();
+      cageGraphics.delete(cageId);
+    }
+    frame.cages.forEach((cage, index) => {
+      let graphic = cageGraphics.get(cage.cageId);
+      if (!graphic) {
+        graphic = new PIXI.Graphics();
+        graphic.label = cage.name;
+        terrainLayer.addChild(graphic);
+        cageGraphics.set(cage.cageId, graphic);
+      }
+      // These regions belong to the legacy interaction prototype, not Cage
+      // artwork. Keep them out of the loaded ranch's visible presentation.
+      graphic.clear();
+      graphic.visible = !fieldArt;
+      if (fieldArt) return;
+      const bounds = cageBounds(cage);
+      const radius = Math.min(28, bounds.height * 0.16);
+      const color = index % 2 === 0 ? 0x2a7181 : 0x35694f;
+      graphic.roundRect(bounds.x, bounds.y, bounds.width, bounds.height, radius)
+        .fill({ color, alpha: 0.32 }).stroke({ color: 0x9ad9d2, width: 1.5, alpha: 0.34 });
+    });
+  }
+
+  // Owner 2026-09-16: the habitat fills the screen now, so fewer cages fit
+  // across it and the ranch's left edge is often bare ground. Open on a
+  // resident, once, so the player lands on somebody rather than on a fence.
+  let cameraStarted = false;
+  function startCameraOnResident(frame) {
+    if (cameraStarted || fieldArt?.field?.presentationMode !== 'NATIVE_RANCH') return;
+    if (responsiveLayout && (view.width <= 24 || view.height <= 24)) return;
+    const unit = fieldArt.field.nativePixelWorldScale;
+    const fit = raisingFieldViewport(fieldArt.field, view, 12, cameraX);
+    if (!(unit > 0) || !(fit.scale > 0)) return;
+    const nativeX = frame.residents
+      .map((resident) => source.getActorFrame?.(resident.creatureId)?.positionQ12?.[0])
+      .find((value) => Number.isFinite(value));
+    if (!Number.isFinite(nativeX)) return;
+    cameraStarted = true;
+    // Owner 2026-10-12: a ranch with rows below its board (the annex, or the
+    // expansion's locked rows) opens with the board right under the HUD, not
+    // below an empty band. The headroom is still there: a drag down shows it,
+    // and a tap on a resident brings its whole body into view.
+    if (fieldArt.field.fold || fieldArt.field.expansionPreview) {
+      cameraY = 0;
+      cameraY = clamp(-raisingFieldViewport(fieldArt.field, view, 12, cameraX).y, 0, scrollMaxY());
+    }
+    if(fieldArt.field.productGrid){
+      const nativeY=frame.residents.map(resident=>source.getActorFrame?.(resident.creatureId)?.positionQ12)
+        .find(position=>Number.isFinite(position?.[0]))?.[1];
+      if(Number.isFinite(nativeY))cameraY=centerRaisingNativeY(fieldArt.field,view,nativeY/4096,cameraX);
+    }
+    const target = bandWorldX(fieldArt.field, nativeX / 4096) - (app.screen.width - 24) / fit.scale / 2;
+    cameraX = fieldArt.field.wrapWidthPx
+      ? wrapRaisingCamera(target, fieldArt.field.wrapWidthPx)
+      : Math.max(0, target);
+  }
+
+  function actorPoint(resident) {
+    const native=source.getActorFrame?.(resident.creatureId);
+    if(native?.positionQ12&&isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)) {
+      const point=raisingNativeToScreen(native.positionQ12,fieldArt?.field,view,cameraX);if(point)return point;
+    }
+    const cage = latestFrame?.cages.find((entry) => entry.cageId === resident.cageId);
+    if (!cage) return { x: app.screen.width / 2, y: app.screen.height / 2 };
+    const bounds = cageBounds(cage);
+    return {
+      x: bounds.x + bounds.width * resident.lane.x,
+      y: bounds.y + bounds.height * resident.lane.y
+    };
+  }
+
+  function finishDrag(event) {
+    if (cameraDrag && (event.pointerId === undefined || cameraDrag.pointerId === event.pointerId)) {
+      const completed=cameraDrag;
+      cameraDrag = null;
+      backdrop.cursor = 'grab';
+      if(!completed.moved&&event.type!=="pointercancel"&&event.type!=="pointerupoutside"&&["feed","protein","clean"].includes(completed.tool)) {
+        const point=screenToNativeGround(event.global??{x:completed.startX,y:completed.startY});
+        if(point){if(completed.tool==='clean') {
+          source.intents.cleanFood?.({...point,checkpoint:completed.tutorialCheckpoint});
+          // Tool feedback is transient presentation; removal stays app-owned.
+          cleanFeedback={point,elapsed:0};
+        } else source.intents.placeFood?.({...point,protein:completed.tool==='protein',checkpoint:completed.tutorialCheckpoint});}
+      }
+      // Owner 2026-09-16: the readout now floats over the habitat, so tapping
+      // bare ground with a tool that places nothing puts it away again.
+      else if(!completed.moved&&event.type!=="pointercancel"&&event.type!=="pointerupoutside"
+        &&source.getFrame().selection?.creatureId!=null) source.intents.selectCreature(null);
+      // A plain tap on the locked expansion bays opens what they are for.
+      else if(!completed.moved&&event.type!=="pointercancel"&&event.type!=="pointerupoutside"&&!completed.tool
+        &&completed.tutorialCheckpoint===null&&typeof onExpansionPreviewOpen==='function') {
+        const rect=expansionPreviewRect(raisingFieldViewport(fieldArt?.field,view,12,cameraX)),at=event.global??{x:completed.startX,y:completed.startY};
+        if(rect&&at.x>=rect.visible.left&&at.x<=rect.visible.right&&at.y>=rect.visible.top&&at.y<=rect.visible.bottom)onExpansionPreviewOpen();
+      }
+      if(pointerPreview)pointerPreview.held=false;
+      if(event.type==='pointercancel'||event.type==='pointerupoutside'){pointerPreview=null;cleanFeedback=null;}
+    }
+    if (!drag || (event.pointerId !== undefined && event.pointerId !== drag.pointerId)) return;
+    const completed = drag;
+    drag = null;
+    completed.entry.root.cursor = "grab";
+    if(!completed.moved&&event.type!=='pointercancel'&&event.type!=='pointerupoutside')revealResident(completed.creatureId);
+    if(completed.nativeHand){source.intents.endHand?.(completed.creatureId,{cancelled:event.type==='pointercancel'||event.type==='pointerupoutside',checkpoint:completed.tutorialCheckpoint});
+      sync(source.getFrame(),{force:true});return;}
+    if(completed.carried){source.intents.releaseCarry?.(completed.creatureId);sync(source.getFrame(),{force:true});return;}
+    const point = event.global ?? completed.lastPoint;
+    const nativeFrame=source.getActorFrame?.(completed.creatureId)?.nativeFrame;
+    if(!completed.moved&&event.type!=='pointercancel'&&event.type!=='pointerupoutside'
+      &&['medicine','woundMedicine'].includes(completed.tool))source.intents.treatResident?.(completed.creatureId,completed.tool==='woundMedicine'?0:1,completed.tutorialCheckpoint);
+    // OVL18 0210C4FC: release before ten native frames selects request 7E.
+    // A cancelled pointer never becomes a tool action.
+    if (!completed.moved && event.type !== "pointercancel" && event.type !== "pointerupoutside" && completed.tool === "hand"
+        && Number.isInteger(nativeFrame) && nativeFrame-completed.nativeFrame < 10)
+      source.intents.touchEgg?.(completed.creatureId,completed.tutorialCheckpoint);
+    if (completed.moved && point && event.type!=="pointercancel" && event.type!=="pointerupoutside") {
+      if(isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)) {
+        const nativePoint=screenToNativeGround(point);
+        // Native short touches do not teleport a resident. Adult relocation
+        // completes through the held/flight owner after the ten-frame gate.
+        if(completed.tool==='hand'&&nativePoint&&source.getActorFrame?.(completed.creatureId)?.speciesIndex<8)
+          source.intents.relocateToGround?.(completed.creatureId,nativePoint);
+        sync(source.getFrame(),{force:true});return;
+      }
+      const target = latestFrame?.cages.find((cage) => {
+        const bounds = cageBounds(cage);
+        return point.x >= bounds.x && point.x <= bounds.x + bounds.width
+          && point.y >= bounds.y && point.y <= bounds.y + bounds.height;
+      });
+      if (target && target.cageId !== completed.originCageId) {
+        source.intents.relocateCreature(completed.creatureId, target.cageId);
+        return;
+      }
+    }
+    sync(source.getFrame(), { force: true });
+  }
+
+  function attachActorInput(entry, creatureId) {
+    entry.root.eventMode = "static";
+    entry.root.cursor = "grab";
+    entry.root.hitArea = new PIXI.Rectangle(-62, -124, 124, 132);
+    entry.root.on("pointerdown", (event) => {
+      if (disposed||drag||cameraDrag||zoomInput?.isActive()) return;
+      if(source.getLifecycleFrame?.()?.day||source.getLifecycleFrame?.()?.evolution)return;
+      event.stopPropagation();
+      // The camera lesson precedes carry: a swipe beginning on the resident
+      // must still reach the camera owner while native carry is gated off.
+      const cameraLesson=source.getFrame().tutorial?.action==='camera'&&getSelectedTool()==='hand';
+      if((cameraLesson||["feed","protein","clean"].includes(getSelectedTool()))&&fieldArt?.field?.presentationMode==='NATIVE_RANCH') {
+        cameraDrag={pointerId:event.pointerId,startX:event.global.x,startY:event.global.y,origin:cameraX,originY:cameraY,tool:getSelectedTool(),moved:false,tutorialCheckpoint:source.getFrame().tutorial?.checkpoint??null};
+        pointerPreview={x:event.global.x,y:event.global.y,touch:event.pointerType==='touch',held:true};
+        return;
+      }
+      source.intents.selectCreature(creatureId);
+      drag = {
+        creatureId,
+        entry,
+        tool: getSelectedTool(),
+        nativeFrame: source.getActorFrame?.(creatureId)?.nativeFrame,
+        tutorialCheckpoint: source.getFrame().tutorial?.checkpoint??null,
+        pointerId: event.pointerId,
+        originCageId: source.getFrame().residents.find((resident) => resident.creatureId === creatureId)?.cageId ?? null,
+        startPoint: { x: event.global.x, y: event.global.y },
+        lastPoint: { x: event.global.x, y: event.global.y },
+        moved: false
+      };
+      if(drag.tool==='hand'&&isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)){
+        const point=screenToNativeGround(event.global);
+        if(point)drag.nativeHand=source.intents.beginHand?.(creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,checkpoint:drag.tutorialCheckpoint})??false;
+      }
+      entry.root.cursor = "grabbing";
+    });
+  }
+
+  function createActor(resident) {
+    const root = new PIXI.Container({ label: resident.displayName });
+    const shadow = new PIXI.Graphics().ellipse(0, 3, 42, 12).fill({ color: 0x02070a, alpha: 0.38 });
+    // The pick is the interface's one living colour (mint, 2026-09-29), drawn as
+    // a lit spot on the floor rather than the old gold ring.
+    const selection = new PIXI.Graphics().ellipse(0, 0, 54, 17).fill({ color: 0x56e3c2, alpha: 0.12 }).stroke({ color: 0x56e3c2, width: 3, alpha: 0.9 });
+    // A canonical species must never appear to hatch into a fabricated animal
+    // while its atlas loads (or fails). DOM status owns loading/error feedback.
+    const canonicalSpecies=/^(championship:creature:)?species-\d{3}$/.test(resident.speciesId);
+    const fallback = canonicalSpecies ? new PIXI.Container({label:'resident art pending'}) : fallbackCreature(PIXI);
+    selection.visible = resident.selected;
+    root.addChild(shadow, selection, fallback);
+    actorLayer.addChild(root);
+    const entry = {
+      root,
+      speciesId: resident.speciesId,
+      entityId: null,
+      assetState: 'loading',
+      shadow,
+      selection,
+      fallback,
+      sprite: null,
+      characterController: null,
+      characterReactionActive: false,
+      idleTextures: null,
+      reactionTextures: null,
+      lastReactionRevision: -1,
+      loadToken: 0
+    };
+    if (characterBundle) {
+      const actor = characterBundle.createActor({
+        speciesId: resident.speciesId,
+        side: "main",
+        presentation: "raising",
+        reducedMotion: false // Native poses communicate eating, movement and injury.
+      });
+      if (actor) {
+        actor.sprite.scale.set(120 / 352);
+        root.removeChild(fallback);
+        fallback.destroy();
+        entry.fallback = null;
+        entry.sprite = actor.sprite;
+        entry.entityId = actor.entityId;
+        entry.assetState = 'ready';
+        entry.nativeSizing = actor.nativeSizing ?? null;
+        entry.characterController = actor.controller;
+        entry.nativeFramePresenter = actor.nativeFramePresenter;
+        entry.contactShadowArt = actor.contactShadowArt ?? null;
+        root.addChildAt(actor.sprite, 2);
+      }
+    }
+    actors.set(resident.creatureId, entry);
+    entry.shadow.visible=Boolean(entry.sprite)||!canonicalSpecies;
+    reportResidentAssets();
+    attachActorInput(entry, resident.creatureId);
+    if (!entry.sprite) void loadActorTextures(entry, resident);
+    return entry;
+  }
+
+  async function loadActorTextures(entry, resident) {
+    if (entry.sprite) return;
+    const token = ++entry.loadToken;
+    entry.assetState='loading';entry.assetError=null;reportResidentAssets();
+    try {
+      if (characterBundle?.ensureSpecies) {
+        const ready = await characterBundle.ensureSpecies(resident.speciesId);
+        if (disposed || token !== entry.loadToken) return;
+        const actor = ready && characterBundle.createActor({speciesId:resident.speciesId,side:"main",presentation:"raising",reducedMotion:false});
+        if (actor) {
+          entry.root.removeChild(entry.fallback);entry.fallback.destroy();entry.fallback=null;
+          entry.sprite=actor.sprite;entry.nativeSizing=actor.nativeSizing;
+          entry.entityId=actor.entityId;entry.assetState='ready';entry.shadow.visible=true;
+          entry.nativeFramePresenter=actor.nativeFramePresenter;entry.characterController=actor.controller;
+          entry.contactShadowArt=actor.contactShadowArt??null;
+          entry.root.addChildAt(actor.sprite,2);reportResidentAssets();sync(source.getFrame(),{force:true});return;
+        }
+      }
+      if (!resident.sprite?.idle?.sheet || !resident.sprite?.reaction?.sheet) throw new Error(`RESIDENT_ART_UNAVAILABLE:${resident.speciesId}`);
+      const key = resident.speciesId.replace(/^championship:creature:/, "");
+      const [idle, reaction] = await Promise.all([
+        parseGridSheet(PIXI, resident.sprite.idle, `int-rh2:${key}:idle:`),
+        parseGridSheet(PIXI, resident.sprite.reaction, `int-rh2:${key}:reaction:`)
+      ]);
+      if (disposed || token !== entry.loadToken) {
+        idle.sheet.destroy(false);
+        reaction.sheet.destroy(false);
+        return;
+      }
+      sheets.add(idle.sheet);
+      sheets.add(reaction.sheet);
+      entry.idleTextures = idle.textures;
+      entry.reactionTextures = reaction.textures;
+      const sprite = new PIXI.AnimatedSprite({
+        textures: idle.textures,
+        autoUpdate: false,
+        autoPlay: !reducedMotion,
+        loop: true,
+        anchor: { x: 0.5, y: 1 }
+      });
+      sprite.animationSpeed = resident.sprite.idle.fps / 60;
+      sprite.width = 120;
+      sprite.height = 120;
+      entry.root.removeChild(entry.fallback);
+      entry.fallback.destroy();
+      entry.fallback = null;
+      entry.root.addChildAt(sprite, 2);
+      entry.sprite = sprite;
+      entry.assetState='ready';entry.shadow.visible=true;reportResidentAssets();
+      if (resident.intent === "care-reaction") playReaction(entry, resident, latestRevision);
+    } catch (error) {
+      if(disposed||token!==entry.loadToken)return;
+      assetFailures += 1;
+      entry.assetState='error';entry.assetError=error.message;reportResidentAssets();
+      onFallback(`CHAMPIONSHIP_RESIDENT_ART_FAILED ${resident.speciesId}: ${error.message} ${JSON.stringify(characterBundle?.getDiagnostics?.().failures??[])}`);
+    }
+  }
+
+  function reportResidentAssets(){
+    onResidentAssetState([...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,error:e.evolutionAssetError??e.assetError??null})));
+  }
+
+  // Native animation tables and their frame clocks stay authoritative. A page
+  // that has not arrived pauses the existing scene-ready clock gate; the last
+  // verified frame remains visible until the exact requested sequence is ready.
+  function residentFrameReady(entry,frame,{retry=false}={}){
+    const presenter=entry.nativeFramePresenter;
+    if(!presenter?.isFrameReady)return true;
+    if(presenter.isFrameReady(frame)){
+      if(entry.pendingAnimation!=null){entry.animationLoadToken=(entry.animationLoadToken??0)+1;
+        entry.pendingAnimation=null;entry.pendingAnimationFrame=null;entry.assetState='ready';entry.assetError=null;reportResidentAssets();}
+      return true;
+    }
+    const sequence=frame.sequenceId;
+    entry.pendingAnimationFrame=frame;
+    if(!retry&&entry.pendingAnimation===sequence)return false;
+    const token=(entry.animationLoadToken??0)+1;entry.animationLoadToken=token;
+    entry.pendingAnimation=sequence;entry.assetState='loading';entry.assetError=null;reportResidentAssets();
+    void presenter.ensureFrame(frame).then(()=>{
+      if(disposed||entry.root.destroyed||entry.animationLoadToken!==token)return;
+      entry.pendingAnimation=null;entry.pendingAnimationFrame=null;entry.assetState='ready';entry.assetError=null;
+      reportResidentAssets();sync(source.getFrame(),{force:true});
+    },error=>{
+      if(disposed||entry.root.destroyed||entry.animationLoadToken!==token)return;
+      entry.assetState='error';entry.assetError=error.message;reportResidentAssets();
+      onFallback(`CHAMPIONSHIP_RESIDENT_ANIMATION_FAILED ${entry.speciesId}: ${error.message}`);
+    });
+    return false;
+  }
+
+  // The canvas CSS rect only changes with the viewport; reading it per actor
+  // per frame forced a full layout whenever the HUD had touched the DOM.
+  let canvasRect=null,canvasRectKey='';
+  function canvasCssRect(){
+    const key=`${app.screen.width}x${app.screen.height}:${globalThis.innerWidth}x${globalThis.innerHeight}`;
+    if(!canvasRect||key!==canvasRectKey){canvasRectKey=key;canvasRect=app.canvas.getBoundingClientRect?.()??null;}
+    return canvasRect;
+  }
+  function actorGeometry(entry,frameGeometry=entry.nativeFramePresenter?.getSnapshot()?.geometry,flipX=false){
+    const nativeScale=getRaisingNativePixelScale(fieldArt?.field,view);
+    const sizing=frameGeometry?.scale?{...entry.nativeSizing,packedPixelsPerNativePixel:frameGeometry.scale}:entry.nativeSizing;
+    const displayOffset=raisingOriginalBodyOffset(entry.entityId,entry.nativeSizing);
+    // A fixed offset identifies only the eight normalized original eggs.
+    // Read the rendered canvas rect so orientation-only CSS scaling is covered.
+    const rect=displayOffset?canvasCssRect():null;
+    const hitAreaCssScale=rect?{x:rect.width/app.screen.width,y:rect.height/app.screen.height}:null;
+    const geometry=getRaisingNativeActorGeometry(entry.sprite,sizing,nativeScale,{frameGeometry,flipX,displayScale:raisingOriginalBodyScale(entry.entityId,entry.nativeSizing),displayOffset,hitAreaCssScale});
+    if(geometry){
+      geometry.contactShadow=getRaisingEggContactShadow(entry.entityId,entry.nativeSizing,flipX);
+      geometry.reviewedContactShadow=getReviewedRaisingContactShadow(entry.speciesId,
+        entry.nativeFramePresenter?.getSnapshot(),entry.contactShadowArt,entry.visualLift??0,flipX);
+    }
+    return geometry;
+  }
+
+  function decorateActor(entry,geometry){
+    const {visible,hitArea}=geometry,center=visible.x+visible.width/2,bottom=visible.y+visible.height;
+    const contact=geometry.contactShadow??{x:center,y:bottom+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
+    entry.shadow.clear();
+    for(const ellipse of geometry.reviewedContactShadow??[contact]){
+      entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
+    }
+    entry.shadow.fill({color:0x02070a,alpha:.26});
+    entry.selection.clear().ellipse(center,bottom+1,visible.width/2+2,Math.max(2,visible.width*.16))
+      .fill({color:0x56e3c2,alpha:.12}).stroke({color:0x56e3c2,width:1,alpha:.95});
+    entry.root.hitArea=new PIXI.Rectangle(hitArea.x,hitArea.y,hitArea.width,hitArea.height);
+    entry.visibleGeometry=visible;
+  }
+
+  function playReaction(entry, resident, revision) {
+    if (entry.characterController) {
+      if (entry.lastReactionRevision === revision) return;
+      entry.lastReactionRevision = revision;
+      entry.characterReactionActive = true;
+      entry.characterController.setAnimation("happy");
+      return;
+    }
+    if (!entry.sprite || !entry.reactionTextures || entry.lastReactionRevision === revision) return;
+    entry.lastReactionRevision = revision;
+    entry.sprite.textures = entry.reactionTextures;
+    entry.sprite.loop = false;
+    entry.sprite.animationSpeed = resident.sprite.reaction.fps / 60;
+    entry.sprite.onComplete = () => {
+      if (disposed || !entry.sprite || !entry.idleTextures) return;
+      entry.sprite.onComplete = null;
+      entry.sprite.textures = entry.idleTextures;
+      entry.sprite.loop = true;
+      entry.sprite.animationSpeed = resident.sprite.idle.fps / 60;
+      if (reducedMotion) entry.sprite.gotoAndStop(0);
+      else entry.sprite.gotoAndPlay(0);
+    };
+    if (reducedMotion) entry.sprite.gotoAndStop(Math.min(1, entry.reactionTextures.length - 1));
+    else entry.sprite.gotoAndPlay(0);
+  }
+
+  function sync(frame, { force = false } = {}) {
+    if (disposed || !frame || (!force && frame.revision === latestRevision)) return;
+    // Completing the tutorial restores the owned resident on this same scene.
+    // Reuse the normal entry camera instead of leaving the egg off-screen at
+    // the demonstration's last training cage.
+    if (latestFrame?.tutorial && !latestFrame.tutorial.finished && frame.tutorial?.finished) {
+      cameraStarted = false; cameraFocus = null;
+    }
+    latestFrame = frame;
+    latestRevision = frame.revision;
+    startCameraOnResident(frame);
+    drawField(frame);
+    const live = new Set(frame.residents.map((resident) => resident.creatureId));
+    for (const [creatureId, entry] of actors) {
+      if (live.has(creatureId)) continue;
+      entry.loadToken += 1;
+      actorLayer.removeChild(entry.root);
+      entry.root.destroy({ children: true });
+      actors.delete(creatureId);
+      reportResidentAssets();
+    }
+    for (const resident of frame.residents) {
+      const previous = actors.get(resident.creatureId);
+      if (previous && previous.speciesId !== resident.speciesId) {
+        previous.loadToken++;
+        if (drag?.creatureId === resident.creatureId) drag=null;
+        actorLayer.removeChild(previous.root);previous.root.destroy({children:true});
+        actors.delete(resident.creatureId);
+      }
+      const entry = actors.get(resident.creatureId) ?? createActor(resident);
+      entry.selection.visible = resident.selected;
+      entry.root.zIndex = Math.round(resident.lane.y * 1000);
+      if (drag?.creatureId !== resident.creatureId||drag?.carried) {
+        const point = actorPoint(resident);
+        entry.root.position.set(point.x, point.y);
+      }
+      const nativeScale = getRaisingNativePixelScale(fieldArt?.field, view);
+      const actorFrame=source.getActorFrame?.(resident.creatureId);
+      if(entry.nativeFramePresenter&&actorFrame&&entry.speciesId===`championship:creature:species-${String(actorFrame.speciesIndex).padStart(3,'0')}`
+        &&residentFrameReady(entry,actorFrame)){
+        applyNativeCharacterCellGeometry(entry.sprite,entry.nativeFramePresenter.apply(actorFrame));
+      }
+      const flipX=Boolean(entry.nativeFramePresenter&&actorFrame?.flipBits&1);
+      const geometry = actorGeometry(entry,undefined,flipX);
+      const scale = geometry ? nativeScale : clamp(Math.min(app.screen.width / 390, app.screen.height / 620), 0.78, 1.18);
+      const facing = resident.facing === "left" ? -1 : 1;
+      if (geometry) {
+        entry.sprite.scale.set(geometry.spriteScale*(flipX?-1:1),geometry.spriteScale);
+        entry.visualLift=entry.nativeFramePresenter?(actorFrame?.positionQ12?.[2]??0)/4096:0;
+        entry.sprite.x=geometry.offset.x;entry.sprite.y=geometry.offset.y-entry.visualLift;
+        decorateActor(entry,geometry);
+      }
+      entry.nativeScale = geometry ? nativeScale : null;
+      entry.root.scale.set(scale * (entry.nativeFramePresenter?1:facing), scale);
+      entry.restScale=scale;
+      if (resident.intent === "care-reaction") playReaction(entry, resident, frame.revision);
+    }
+  }
+
+  function moveDrag(event) {
+    pointerPreview={x:event.global.x,y:event.global.y,touch:event.pointerType==='touch',held:Boolean(cameraDrag||drag)};
+    if (cameraDrag?.pointerId === event.pointerId) {
+      cameraDrag.moved ||= Math.hypot(event.global.x-cameraDrag.startX,event.global.y-cameraDrag.startY)>=DRAG_THRESHOLD_PX;
+      if(!cameraDrag.moved)return;
+      const fit = raisingFieldViewport(fieldArt.field, view);
+      const maxX = Math.max(0, fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
+      const next=cameraDrag.origin-(event.global.x-cameraDrag.startX)/fit.scale;
+      cameraX = fieldArt.field.wrapWidthPx ? wrapRaisingCamera(next,fieldArt.field.wrapWidthPx) : clamp(next, 0, maxX);
+      // Dragging down lowers the board to show the headroom; only a frame
+      // short of room for both ever has any vertical travel.
+      cameraY = clamp((cameraDrag.originY ?? 0) + event.global.y - cameraDrag.startY, 0, fit.scrollMaxY ?? 0);
+      source.intents.panTutorial?.({x:cameraX/fieldArt.field.nativePixelWorldScale-tutorialCameraOffset,tool:cameraDrag.tool,checkpoint:cameraDrag.tutorialCheckpoint});
+      sync(latestFrame, {force:true});
+      return;
+    }
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    drag.lastPoint = { x: event.global.x, y: event.global.y };
+    if(drag.nativeHand){const point=screenToNativeGround(event.global);
+      const local=drag.entry.root.toLocal(event.global);
+      if(point)source.intents.updateHand?.(drag.creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,
+        inside:drag.entry.root.hitArea?.contains(local.x,local.y)??true,checkpoint:drag.tutorialCheckpoint});}
+    if (!drag.moved) {
+      drag.moved = Math.hypot(event.global.x - drag.startPoint.x, event.global.y - drag.startPoint.y) >= DRAG_THRESHOLD_PX;
+    }
+    if(drag.carried){const point=screenToNativeGround(event.global);
+      if(point)source.intents.updateCarry?.(drag.creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale});}
+    else if(drag.moved&&!isNativeRanchLayout(latestFrame?.ranch?.layoutVersion))drag.entry.root.position.set(event.global.x,event.global.y);
+  }
+
+  function samplePortraitReference() {
+    if (!responsiveLayout || disposed || !raisingReference) return;
+    const layout=getLayoutSample();
+    const next=sampleRaisingReferenceViewport(raisingReference,view,{
+      portrait:layout?.portrait===true,ready:layout?.ready===true
+    });
+    if(next===raisingReference)return;
+    const changed=next.reference!==raisingReference.reference;
+    raisingReference=next;
+    if(changed){cancelInput('viewport-resize');resize();}
+  }
+
+  // Reframe the existing scene after the shared stage resized its renderer.
+  // No actor reload, selection intent, scene, application or clock is created.
+  function resize() {
+    canvasRect = null;
+    if (disposed) return;
+    if (!responsiveLayout) {
+    if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
+    // A taller frame may need less scroll, or none.
+    cameraY = clamp(cameraY, 0, scrollMaxY());
+    // Desktop starts with the existing main cages in view. Locked lower rows
+    // keep their place and their scroll range; a shorter height must not carry
+    // the phone's numeric offset into a newly clipped main row.
+    if(view.desktopRaising&&fieldArt?.field){
+      const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
+      cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
+    }
+    sync(source.getFrame(), { force: true });
+      return;
+    }
+    // A resize can happen while the ticker is suspended. Do not combine a
+    // pre-rotation portrait sample with the first post-rotation frame.
+    if(raisingReference?.pending)raisingReference={...raisingReference,pending:null};
+    if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
+    if(!raisingReference)raisingReference={reference:initialRaisingReferenceViewport({
+      width:globalThis.window?.innerWidth??view.width,height:globalThis.window?.innerHeight??view.height
+    }),measured:false,pending:null};
+    const nextViewport = { width: view.width, height: view.height, desktopRaising: view.desktopRaising,
+      referenceViewport:raisingReference.reference, zoom };
+    // An attaching/hidden host can briefly collapse to the renderer's 1px
+    // minimum. Do not turn that intermediate size into a camera movement.
+    if (nextViewport.width <= 24 || nextViewport.height <= 24) return;
+    const changed = cameraViewport && (cameraViewport.width !== nextViewport.width
+      || cameraViewport.height !== nextViewport.height || cameraViewport.desktopRaising !== nextViewport.desktopRaising
+      || cameraViewport.referenceViewport?.width !== nextViewport.referenceViewport.width
+      || cameraViewport.referenceViewport?.height !== nextViewport.referenceViewport.height);
+    if (changed && fieldArt?.field) {
+      const before = { cameraX, cameraY };
+      const next = resizeRaisingCamera(fieldArt.field, cameraViewport, nextViewport, before);
+      // A card-requested camera pan keeps its destination in the new frame.
+      // Restart only its remaining presentation easing, not a gameplay timer.
+      if (cameraFocus) {
+        const target = resizeRaisingCamera(fieldArt.field, cameraViewport, nextViewport, {
+          cameraX: cameraFocus.from + cameraFocus.distance,
+          cameraY: (cameraFocus.fromY ?? cameraY) + (cameraFocus.distanceY ?? 0)
+        });
+        let distance = target.cameraX - next.cameraX;
+        const wrap = fieldArt.field.wrapWidthPx;
+        if (wrap > 0) distance = wrapRaisingCamera(distance + wrap / 2, wrap) - wrap / 2;
+        cameraFocus = { from: next.cameraX, distance, fromY: next.cameraY,
+          distanceY: target.cameraY - next.cameraY, elapsed: 0,
+          duration: Math.max(1, cameraFocus.duration - cameraFocus.elapsed) };
+      }
+      // Evolution's native phase clock still owns its pan. Rebase its end
+      // point and recover a start that meets the already-rendered progress.
+      if (evolutionCamera) {
+        const target = resizeRaisingCamera(fieldArt.field, cameraViewport, nextViewport,
+          { cameraX: evolutionCamera.target, cameraY }).cameraX;
+        const travel = evolutionCamera.target - evolutionCamera.start;
+        const progress = travel ? clamp((cameraX - evolutionCamera.start) / travel, 0, 1) : 1;
+        evolutionCamera = { ...evolutionCamera, target,
+          start: progress < 1 ? (next.cameraX - target * progress) / (1 - progress) : next.cameraX };
+      }
+      cameraX = next.cameraX;
+      cameraY = next.cameraY;
+      // Camera teaching compares movement against this presentation offset.
+      // Reframing must not count the width change as a player camera gesture.
+      if (source.getFrame().tutorial && !source.getFrame().tutorial.finished && fieldArt.field.nativePixelWorldScale > 0) {
+        tutorialCameraOffset += (cameraX - before.cameraX) / fieldArt.field.nativePixelWorldScale;
+      }
+    }
+    // Only initial entry aligns the main cages under the HUD. Later rotations
+    // retain the player's current world focus, including the lower annex.
+    if (!cameraViewport && view.desktopRaising && fieldArt?.field) {
+      const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
+      cameraY=clamp(cameraY+Math.max(0,-fit.y),0,scrollMaxY());
+    }
+    cameraY = clamp(cameraY, 0, scrollMaxY());
+    cameraViewport = nextViewport;
+    const cap=desktopRaisingViewportWidth(fieldArt?.field,12,raisingReference.reference);
+    if(cap!==null)app.canvas?.parentElement?.style?.setProperty('--cm-ranch-unique-width',`${cap}px`);
+    sync(source.getFrame(), { force: true });
+  }
+
+  // A requested pan to a resident (from the resident card). It eases the camera
+  // and gives way at once to any drag, so input coordinates only ever move
+  // under the player's own finger.
+  let cameraFocus = null;
+  function stepCameraFocus(deltaMs) {
+    if (!cameraFocus || !fieldArt?.field) return;
+    if (drag || cameraDrag || zoomInput?.isActive()) { cameraFocus = null; return; }
+    cameraFocus.elapsed += Math.min(50, Math.max(0, deltaMs));
+    const t = Math.min(1, cameraFocus.elapsed / cameraFocus.duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const next = cameraFocus.from + cameraFocus.distance * eased;
+    cameraX = fieldArt.field.wrapWidthPx ? wrapRaisingCamera(next, fieldArt.field.wrapWidthPx) : Math.max(0, next);
+    cameraY = clamp((cameraFocus.fromY ?? cameraY) + (cameraFocus.distanceY ?? 0) * eased, 0, scrollMaxY());
+    layoutFieldArt();
+    if (t >= 1) cameraFocus = null;
+  }
+
+  // Screen y of a resident's drawn body top: the trimmed frame the shadow and
+  // hit area are built from, lifted by any hop -- not the padded texture box.
+  function drawnBodyTop(entry) {
+    if (!entry || entry.root.destroyed) return null;
+    const geometry = entry.sprite && !entry.sprite.destroyed && entry.nativeScale ? actorGeometry(entry) : null;
+    if (!geometry) return entry.root.getBounds().y;
+    return entry.root.toGlobal(new PIXI.Point(0, geometry.visible.y - (entry.visualLift ?? 0))).y;
+  }
+
+  // On a frame that scrolls vertically, how far to lower (or raise) the board
+  // so a resident's whole drawn body and its feet are in view. Zero elsewhere.
+  function verticalRevealDistance(creatureId) {
+    const entry = actors.get(creatureId);
+    const max = scrollMaxY();
+    if (!entry || entry.root.destroyed || !(max > 0)) return 0;
+    const top = drawnBodyTop(entry), feet = entry.root.y, margin = 4;
+    const delta = top < margin ? margin - top : feet > app.screen.height - 12 ? app.screen.height - 12 - feet : 0;
+    return clamp(cameraY + delta, 0, max) - cameraY;
+  }
+
+  // A tap on a resident brings the rest of it into view once the finger is up,
+  // so the board never moves under a drag.
+  function revealResident(creatureId) {
+    const distanceY = verticalRevealDistance(creatureId);
+    if (Math.abs(distanceY) < 0.5) return;
+    if (reducedMotion) { cameraY += distanceY; layoutFieldArt(); return; }
+    cameraFocus = { from: cameraX, distance: 0, fromY: cameraY, distanceY, elapsed: 0, duration: 260 };
+  }
+
+  function updateAnimations(ticker) {
+    samplePortraitReference();
+    if(zoomButton&&zoomButton.disabled===canZoom())describeZoom();
+    const tutorial=source.getFrame().tutorial;
+    const viewKey=tutorial&&!tutorial.finished?tutorial.checkpoint.stage+":"+tutorial.checkpoint.message+":"+tutorial.viewRevision:null;
+    if(viewKey!==tutorialViewKey){
+      tutorialViewKey=viewKey;
+      if(viewKey&&fieldArt?.field?.nativePixelWorldScale){
+        const resident=source.getFrame().residents[0],native=resident?source.getActorFrame?.(resident.creatureId):null;
+        const pixelScale=getRaisingNativePixelScale(fieldArt.field,view);
+        const xs=[native?.positionQ12?.[0]/4096,...(tutorial.targets??[]).map(p=>p[0])].filter(Number.isFinite);
+        // Preserve native predicates while framing their targets in the much
+        // narrower phone viewport. Carry keeps the resident visible; the
+        // existing edge-scroll gesture reaches destinations outside the view.
+        const center=tutorial.action==="carry"?(native?.positionQ12?.[0]/4096)+30:xs.length?(Math.min(...xs)+Math.max(...xs))/2:128;
+        const viewNative=Math.max(0,center-(app.screen.width-24)/pixelScale/2);
+        tutorialCameraOffset=viewNative-tutorial.cameraX;
+        cameraX=viewNative*fieldArt.field.nativePixelWorldScale;cameraFocus=null;layoutFieldArt();
+      }
+    }
+    tutorialTargets.clear();
+    if(tutorial&&!tutorial.finished&&!tutorial.dialogue&&!tutorial.pendingSave){
+      for(const target of tutorial.targets??[]){
+        const p=raisingNativeToScreen([target[0]*4096,target[1]*4096,0],fieldArt?.field,view,cameraX);
+        if(p)tutorialTargets.circle(p.x,p.y,14).stroke({color:0x65dbc4,width:3});
+      }
+    }
+    stepCameraFocus(ticker.deltaMS);
+    if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
+    if(drag?.carried&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'){
+      const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
+      const delta=raisingEdgeScroll(drag.lastPoint,view,ticker.deltaMS)/fit.scale;
+      if(delta){
+        const next=cameraX+delta,maxX=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
+        cameraX=fieldArt.field.wrapWidthPx?wrapRaisingCamera(next,fieldArt.field.wrapWidthPx):clamp(next,0,maxX);
+        layoutFieldArt();
+        const point=screenToNativeGround(drag.lastPoint);
+        const pointer={...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,inside:true,checkpoint:drag.tutorialCheckpoint};
+        if(drag.nativeHand)source.intents.updateHand?.(drag.creatureId,pointer);
+        source.intents.updateCarry?.(drag.creatureId,pointer);
+      }
+    }
+    fieldArt?.update(ticker.deltaMS);
+    careElapsed+=Math.min(100,Math.max(0,ticker.deltaMS));
+    drawFood();
+    drawWaste();
+    drawCareTool(ticker.deltaMS);
+    evolutionGlow.clear();
+    const lifecycle=source.getLifecycleFrame?.()?.evolution;
+    const activeFrame=lifecycle?source.getActorFrame?.(lifecycle.instanceId)?.evolution:null;
+    const covered=!!activeFrame&&activeFrame.phase>=1;
+    evolutionBackdrop.clear();evolutionWriting.visible=covered&&activeFrame.target>=0&&activeFrame.phase>=2;
+    if(covered){
+      evolutionBackdrop.rect(0,0,app.screen.width,app.screen.height).fill(evolutionWriting.visible?0x08163f:0x000000);
+      if(evolutionWriting.visible){
+        ensureEvolutionGlyphs();
+        evolutionGlyphBand?.update({width:app.screen.width,height:app.screen.height,
+          totalFrames:activeFrame.totalFrames,reducedMotion:reducedMotion||prefersReducedMotion()});
+        for(let i=0;i<5;i++)evolutionBackdrop.rect(0,i*app.screen.height/5,app.screen.width,app.screen.height/15).fill(i%2?0x0c205b:0x102b77);
+        evolutionWords.forEach((word,index)=>{const i=EVOLUTION_TEXT_ROWS[index].row;word.x=((i*113+activeFrame.totalFrames*(i%2?1:-1))%(app.screen.width+220)+app.screen.width+220)%(app.screen.width+220)-150;word.y=evolutionWritingY(i,app.screen.height);});
+      }
+    }
+    for(const g of foodGraphics.values())g.visible=!covered;for(const g of wasteGraphics.values())g.visible=!covered;
+    const trainingLabels=[];
+    for (const [creatureId, entry] of actors) {
+      entry.root.visible=!covered||creatureId===lifecycle?.instanceId;
+      const native=source.getActorFrame?.(creatureId);
+      drawNativeFeedback(entry,native,covered,'feedback');
+      drawNativeFeedback(entry,native,covered,'statusFeedback');
+      // OVL18 02110FB0: native stars in the recovery cages, same effect bank as the icons.
+      drawNativeFeedback(entry,native,covered,'recoveryStars');
+      drawTreatment(entry,native?.treatment,covered);
+      if(!covered&&native?.training?.phase===0&&native.positionQ12){
+        const point=raisingNativeToScreen(native.positionQ12,fieldArt?.field,view,cameraX),scale=getRaisingNativePixelScale(fieldArt?.field,view);
+        if(point)native.training.lanes.forEach((lane,index)=>{if(lane.stage>=2&&lane.command&&lane.command.outcome!=='BLOCKED')
+          trainingLabels.push({id:`${creatureId}:${index}`,command:lane.command,x:point.x,y:point.y-(22+lane.rise/4096)*scale,alpha:Math.max(0,lane.alpha/31),scale});});
+      }
+      if(native?.positionQ12&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'&&(drag?.creatureId!==creatureId||drag?.carried||drag?.nativeHand)) {
+        const point=raisingNativeToScreen(native.positionQ12,fieldArt.field,view,cameraX);
+        // A folded ring orders by screen row, so the second band draws in front.
+        entry.root.position.set(point.x,point.y);entry.root.zIndex=native.state===6?100000:fieldArt?.field?.fold?Math.round(point.y):Math.round(native.positionQ12[1]/4096);
+        alignThreeGround(entry.root,point,native.positionQ12);
+        entry.shadow?.scale.set(native.state===6?3277/4096:1);
+      }
+      if (entry.nativeFramePresenter) {
+        const frame=source.getActorFrame?.(creatureId);
+        // Profile changes may precede asynchronous texture loading. Never
+        // apply one species' frame index to another species' atlas.
+        if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId&&residentFrameReady(entry,frame))
+          {const visualFrame=entry.nativeFramePresenter.apply(frame);if(entry.sprite){
+            if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
+            entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
+            const geometry=entry.nativeScale!==null?actorGeometry(entry,visualFrame?.geometry,Boolean(frame.flipBits&1)):null;
+            if(geometry){entry.sprite.scale.set(geometry.spriteScale);entry.sprite.x=geometry.offset.x;decorateActor(entry,geometry);}
+            if(entry.nativeScale!==null)entry.root.scale.x=Math.abs(entry.root.scale.x);
+            entry.sprite.y=(geometry?.offset.y??0)-entry.visualLift;
+            // Main is authored facing left; the original body bit mirrors it.
+            entry.sprite.scale.x=Math.abs(entry.sprite.scale.x)*(frame.flipBits&1?-1:1);
+          }}
+      } else if (entry.characterController) {
+        const snapshot = entry.characterController.update(ticker);
+        if (entry.characterReactionActive && snapshot.cycle >= 1) {
+          entry.characterReactionActive = false;
+          entry.characterController.setAnimation("idle");
+        }
+      } else if (entry.sprite?.playing) {
+        entry.sprite.update(ticker);
+      }
+      drawEvolution(entry,native);
+    }
+    onTrainingFrame(trainingLabels);
+    if(fieldArt?.threeScene){
+      const rendered=fieldArt.threeScene.render({
+        bounds:raisingFieldViewport(fieldArt.field,view,12,cameraX),
+        actors,food:foodGraphics,waste:wasteGraphics,covered,deltaMS:ticker.deltaMS
+      });
+      productionArtLayer.visible=!rendered;
+      backgroundLayer.visible=!rendered;
+    }
+    if(onActorFrame){
+      // Developer-only readout. Screen pixels per native pixel, so a browser
+      // check can size a gesture in the original's native units at any zoom.
+      const fit=fieldArt?.field?raisingFieldViewport(fieldArt.field,view,12,cameraX):null;
+      const nativeScreenPixels=fit&&fieldArt.field.nativePixelWorldScale>0?fit.scale*fieldArt.field.nativePixelWorldScale:null;
+      onActorFrame([...actors].map(([creatureId,entry])=>{
+        const area=entry.root.hitArea,point=entry.root.toGlobal(new PIXI.Point(area.x+area.width/2,area.y+area.height/2));
+        const native=source.getActorFrame?.(creatureId);
+        // Where the drawn body starts and the feet stand, against the board's
+        // top edge and the vertical scroll, so a check can tell a clipped body.
+        const bodyTop=drawnBodyTop(entry);
+        return {creatureId,x:point.x,y:point.y,state:native?.state,speciesIndex:native?.speciesIndex,nativeFrame:native?.nativeFrame,sequenceId:native?.sequenceId,nativeScreenPixels,
+          bodyTop,footY:entry.root.y,nativeY:native?.positionQ12?native.positionQ12[1]/4096:null,
+          boardTop:fit?.y??null,scrollY:fit?.scrollY??0,scrollMaxY:fit?.scrollMaxY??0,
+          nativePositionQ12:native?.positionQ12,
+          groundScreen:native?.positionQ12?raisingNativeToScreen([native.positionQ12[0],native.positionQ12[1],0],fieldArt?.field,view,cameraX):null};
+      }));
+    }
+  }
+
+  function drawNativeFeedback(entry,native,covered,kind){
+    const feedback=native?.[kind],cell=feedbackArt?.getCell(feedback?.cell),key=kind+'Sprite';
+    if(!cell||covered||!native.positionQ12){if(entry[key])entry[key].visible=false;return;}
+    if(!entry[key]){entry[key]=new PIXI.Sprite();entry[key].eventMode='none';entry.root.addChild(entry[key]);}
+    const sprite=entry[key];
+    sprite.visible=true;sprite.texture=cell.texture;
+    sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);
+    const p=raisingNativeToScreen(feedback.positionQ12,fieldArt?.field,view,cameraX);
+    const body=raisingNativeToScreen(native.positionQ12,fieldArt?.field,view,cameraX);
+    const scale=entry.restScale??1;
+    sprite.position.set((p.x-body.x)/scale,(p.y-body.y)/scale-feedback.positionQ12[2]/4096);
+  }
+
+  function screenToNativeGround(point){
+    const native=raisingScreenToNative(point,fieldArt?.field,view,cameraX);
+    return native&&fieldArt?.threeScene?fieldArt.threeScene.pickGroundNative(native,(x,y)=>source.getGroundSupport?.(x,y)??null):native;
+  }
+
+  function alignThreeGround(root,point,positionQ12){
+    root.threeGroundAdmission=null;root.threeSupportOwner=null;root.threeGroundContact=null;
+    if(!fieldArt?.threeScene||!point)return;
+    root.threeGroundAdmission=source.getGroundSupport?.(positionQ12[0]/4096,positionQ12[1]/4096)??null;
+    root.threeGroundContact=fieldArt.threeScene.groundContact?.(positionQ12[0]/4096,positionQ12[1]/4096,root.threeGroundAdmission)??null;
+    const height=root.threeGroundContact?.height??fieldArt.threeScene.groundHeight(positionQ12[0]/4096,positionQ12[1]/4096,root.threeGroundAdmission);
+    root.threeGroundScreen=point;root.threeGroundHeight=height;
+    root.y=point.y-height*16*Math.cos(52*Math.PI/180)*getRaisingNativePixelScale(fieldArt.field,view);
+  }
+
+  function drawWaste(){
+    const waste=source.getWasteFrame?.()??[],live=new Set(waste.map(w=>w.slot));
+    for(const [slot,g] of wasteGraphics)if(!live.has(slot)){g.destroy();wasteGraphics.delete(slot);}
+    const scale=getRaisingNativePixelScale(fieldArt?.field,view);
+    if(!careArt.size||!(scale>0))return;
+    const art=careArt.get(`waste-${carePose()}`);
+    for(const item of waste){let g=wasteGraphics.get(item.slot);
+      if(!g){g=new PIXI.Sprite();g.eventMode='none';g.label='Waste';
+        actorLayer.addChild(g);wasteGraphics.set(item.slot,g);}
+      placeCare(g,art);// Owner 2026-10-10: 60% visual candidate; native cleanup hit area stays unchanged.
+      g.width=art.width*scale*0.6;g.height=art.height*scale*0.6;
+      const point=raisingNativeToScreen(item.positionQ12,fieldArt?.field,view,cameraX);
+      if(point){g.position.set(point.x,point.y);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(item.positionQ12[1]/4096);alignThreeGround(g,point,item.positionQ12);}}
+  }
+
+  // Evolution uses the same streamed atlas contract as residents. Readiness
+  // must precede apply(), including phase 0 when the target is still invisible.
+  function evolutionLoadFailed(entry,token,error){
+    if(disposed||entry.root.destroyed||entry.evolutionLoadToken!==token)return;
+    entry.evolutionAssetState='error';entry.evolutionAssetError=error.message;reportResidentAssets();
+    onFallback(`CHAMPIONSHIP_EVOLUTION_ART_FAILED ${entry.evolutionTarget}: ${error.message}`);
+  }
+  function loadEvolutionTarget(entry,e){
+    const token=(entry.evolutionLoadToken??0)+1;entry.evolutionLoadToken=token;
+    entry.evolutionSprite?.destroy();entry.evolutionSprite=null;entry.evolutionPresenter=null;
+    entry.evolutionTarget=e.target;entry.evolutionPendingFrame=e.targetFrame;
+    entry.evolutionAssetState='loading';entry.evolutionAssetError=null;reportResidentAssets();
+    const active=()=>!disposed&&!entry.root.destroyed&&entry.evolutionActive&&entry.evolutionLoadToken===token;
+    void (async()=>{
+      let visual=null,attached=false;
+      try{
+        const speciesId=`championship:creature:species-${String(e.target).padStart(3,'0')}`;
+        const ready=await characterBundle?.ensureSpecies?.(speciesId);
+        if(!active())return;
+        if(!ready)throw Error(`RESIDENT_ART_UNAVAILABLE:${speciesId}`);
+        visual=characterBundle.createActor({speciesId,side:'main',presentation:'raising',reducedMotion:false});
+        if(!visual)throw Error(`RESIDENT_ART_UNAVAILABLE:${speciesId}`);
+        if(e.targetFrame&&visual.nativeFramePresenter?.ensureFrame)await visual.nativeFramePresenter.ensureFrame(e.targetFrame);
+        if(!active())return;
+        entry.evolutionSprite?.destroy();
+        entry.evolutionSprite=visual.sprite;entry.evolutionPresenter=visual.nativeFramePresenter;
+        entry.evolutionSizing=visual.nativeSizing;entry.evolutionEntity=visual.entityId;
+        const geometry=getRaisingNativeActorGeometry(visual.sprite,visual.nativeSizing,getRaisingNativePixelScale(fieldArt?.field,view));
+        visual.sprite.scale.set(geometry?.spriteScale??120/352);entry.root.addChildAt(visual.sprite,2);attached=true;
+        entry.evolutionPendingFrame=null;entry.evolutionAssetState='ready';reportResidentAssets();
+      }catch(error){evolutionLoadFailed(entry,token,error);}
+      finally{if(visual&&!attached)visual.sprite.destroy();}
+    })();
+  }
+  function evolutionFrameReady(entry,frame,{retry=false}={}){
+    const presenter=entry.evolutionPresenter;
+    if(!presenter?.isFrameReady)return true;
+    if(presenter.isFrameReady(frame)){
+      if(entry.evolutionPendingFrame){entry.evolutionLoadToken=(entry.evolutionLoadToken??0)+1;
+        entry.evolutionPendingFrame=null;entry.evolutionAssetState='ready';entry.evolutionAssetError=null;reportResidentAssets();}
+      return true;
+    }
+    if(!retry&&entry.evolutionPendingFrame?.sequenceId===frame.sequenceId)return false;
+    const token=(entry.evolutionLoadToken??0)+1;entry.evolutionLoadToken=token;
+    entry.evolutionPendingFrame=frame;entry.evolutionAssetState='loading';entry.evolutionAssetError=null;reportResidentAssets();
+    void Promise.resolve().then(()=>presenter.ensureFrame(frame)).then(()=>{
+      if(disposed||entry.root.destroyed||entry.evolutionLoadToken!==token)return;
+      entry.evolutionPendingFrame=null;entry.evolutionAssetState='ready';reportResidentAssets();
+    },error=>evolutionLoadFailed(entry,token,error));
+    return false;
+  }
+
+  function drawEvolution(entry,native){
+    const e=native?.evolution;
+    if(!e){if(entry.evolutionActive){entry.evolutionLoadToken=(entry.evolutionLoadToken??0)+1;
+      entry.evolutionAssetState=null;entry.evolutionAssetError=null;entry.evolutionPendingFrame=null;reportResidentAssets();}
+      if(entry.evolutionSprite){entry.evolutionSprite.destroy();entry.evolutionSprite=null;entry.evolutionPresenter=null;}
+      if(entry.evolutionActive){if(entry.sprite){entry.sprite.visible=true;entry.sprite.filters=null;}entry.root.scale.set(entry.restScale??1);entry.evolutionActive=false;entry.evolutionTarget=null;}
+      if(!source.getLifecycleFrame?.()?.evolution)evolutionCamera=null;return;}
+    entry.evolutionActive=true;
+    if(!evolutionCamera||evolutionCamera.id!==source.getLifecycleFrame?.()?.evolution?.instanceId){
+      const fit=raisingFieldViewport(fieldArt.field,view);const max=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
+      evolutionCamera={id:source.getLifecycleFrame?.()?.evolution?.instanceId,start:cameraX,
+        target:clamp(bandWorldX(fieldArt.field,native.positionQ12[0]/4096)-(app.screen.width-24)/fit.scale/2,0,max)};}
+    if(e.phase===0){cameraX=evolutionCamera.start+(evolutionCamera.target-evolutionCamera.start)*e.elapsed/15;layoutFieldArt();}
+    if(e.target>=0&&entry.evolutionTarget!==e.target)loadEvolutionTarget(entry,e);
+    const enlarge=e.phase===0?0:e.phase===1?Math.min(19,e.elapsed)/19:e.phase===7?Math.max(0,1-e.elapsed/30):1;
+    const point=raisingNativeToScreen(native.positionQ12,fieldArt.field,view,cameraX);
+    entry.root.position.set(point.x,point.y+(app.screen.height/2-point.y)*enlarge);
+    entry.root.scale.set((entry.restScale??1)*(1+19*204/4096*enlarge));
+    if(entry.sprite){entry.sprite.visible=e.target<0?!e.reveal:!e.reveal||!entry.evolutionSprite;entry.sprite.filters=e.phase>=2&&e.phase<=4?[silhouette]:null;}
+    if(entry.evolutionSprite){entry.evolutionSprite.visible=e.reveal;
+      entry.evolutionSprite.filters=e.phase<=4?[silhouette]:null;
+      if(e.targetFrame&&evolutionFrameReady(entry,e.targetFrame)){const frame=entry.evolutionPresenter?.apply(e.targetFrame);
+        if(entry.nativeScale!==null&&e.reveal){
+          applyNativeCharacterCellGeometry(entry.evolutionSprite,frame);
+          const geometry=getRaisingNativeActorGeometry(entry.evolutionSprite,entry.evolutionSizing,entry.nativeScale,{frameGeometry:frame?.geometry,displayScale:raisingOriginalBodyScale(entry.evolutionEntity,entry.evolutionSizing),displayOffset:raisingOriginalBodyOffset(entry.evolutionEntity,entry.evolutionSizing)});
+          if(geometry){entry.evolutionSprite.scale.set(geometry.spriteScale);entry.evolutionSprite.position.set(geometry.offset.x,geometry.offset.y);}
+        }}}
+    const center={x:entry.root.x,y:entry.root.y-24*(entry.restScale??1)};
+    if(e.phase>0&&e.phase<7){
+      const radius=34*(entry.restScale??1);
+      if(e.phase>=2&&e.target>=0)evolutionGlow.ellipse(center.x,entry.root.y,radius*1.5,radius/3).stroke({color:0x005ace,width:4,alpha:0.8});
+      if(e.phase>=3)for(let i=0;i<28;i++){
+        const phase=(i*17+e.elapsed*4)%120,angle=i*2.3999;
+        const x=center.x+Math.cos(angle)*radius*(phase/120),y=entry.root.y-phase*(entry.restScale??1);
+        evolutionGlow.rect(x,y,2,4).fill({color:e.target<0?0xffffff:e.phase<=4?0x48fa6b:0x00baff,alpha:1-phase/130});
+      }
+      if(!reducedMotion&&(e.phase===4||e.phase===5))evolutionGlow.rect(0,0,app.screen.width,app.screen.height).fill({color:0xffffff,alpha:e.phase===4?Math.min(1,e.elapsed/4):Math.max(0,1-e.elapsed/8)});
+    }
+  }
+
+  function drawTreatment(entry,treatment,covered) {
+    if(!entry.treatmentGlyph){entry.treatmentGlyph=new PIXI.Graphics();entry.treatmentGlyph.eventMode='none';entry.root.addChild(entry.treatmentGlyph);}
+    const g=entry.treatmentGlyph;g.clear();g.visible=Boolean(treatment)&&!covered;
+    if(!g.visible)return;
+    // Independent vector treatment surface. The application supplies the
+    // original success/failure frame and lifetime; this draw consumes no RNG.
+    const y=-(entry.nativeSizing?.height??28)-8,phase=treatment.frame;
+    if(treatment.success){
+      const radius=7+(phase%4)*2;
+      g.circle(0,y,radius).stroke({color:0xcffff0,width:1.5,alpha:1-(phase%4)*0.15});
+      g.rect(-2,y-7,4,14).fill(0x50d6a5).rect(-7,y-2,14,4).fill(0x50d6a5);
+    } else {g.circle(-5+phase,y-2,5).fill({color:0xc4c9d0,alpha:0.8}).circle(3+phase,y+1,6).fill({color:0x7a8596,alpha:0.8});}
+  }
+
+  function drawFood() {
+    if(!careArt.size)return;
+    const foods=source.getFoodFrame?.()??[],live=new Set(foods.map(f=>f.slot));
+    for(const [slot,g] of foodGraphics)if(!live.has(slot)){g.destroy({children:true});foodGraphics.delete(slot);}
+    const fit=raisingFieldViewport(fieldArt?.field,view,12,cameraX);
+    const scale=(fieldArt?.field?.nativePixelWorldScale??1)*fit.scale;
+    for(const food of foods) {
+      let g=foodGraphics.get(food.slot);
+      if(!g){
+        g=new PIXI.Container();g.eventMode='none';g.label=['Bone-in meat','Protein capsule','Celebration platter','Birthday cake'][food.kind??(food.protein?1:0)];
+        g.addChild(new PIXI.Graphics().ellipse(0,2,10,3).fill({color:0x405039,alpha:0.22}));
+        const sprite=new PIXI.Sprite();sprite.anchor.set(0.5,0.85);g.addChild(sprite);
+        actorLayer.addChild(g);foodGraphics.set(food.slot,g);
+      }
+      const kind=food.kind??(food.protein?1:0),spoiled=food.freshness<=0,original=kind<2;
+      // Celebration platter and cake have no original spoiled identity, so they
+      // keep the existing desaturation rather than borrowing the food's.
+      const art=careArt.get(spoiled&&original?`${FOOD_KINDS[kind]}-rot-${carePose()}`:`${FOOD_KINDS[kind]}-${food.quarter}`);
+      const sprite=g.children[1];placeCare(sprite,art);
+      sprite.width=art.width;sprite.height=art.height;sprite.y=-food.heightQ12/4096;
+      sprite.tint=spoiled&&!original?0x8ca273:0xffffff;
+      const point=raisingNativeToScreen(food.positionQ12,fieldArt?.field,view,cameraX);
+      if(point){g.position.set(point.x,point.y);g.scale.set(scale);g.zIndex=fieldArt?.field?.fold?Math.round(point.y):Math.round(food.positionQ12[1]/4096);alignThreeGround(g,point,food.positionQ12);}
+    }
+  }
+
+  function drawCareTool(deltaMS) {
+    if(!toolPreview)return;
+    const tool=getSelectedTool();
+    if(tool!=='clean')cleanFeedback=null;
+    if(cleanFeedback){cleanFeedback.elapsed+=Math.min(100,Math.max(0,deltaMS));if(cleanFeedback.elapsed>=610)cleanFeedback=null;}
+    const point=cleanFeedback?raisingNativeToScreen([cleanFeedback.point.x*4096,cleanFeedback.point.y*4096,0],fieldArt?.field,view,cameraX):pointerPreview;
+    const inside=point&&point.x>=0&&point.y>=0&&point.x<=app.screen.width&&point.y<=app.screen.height;
+    toolPreview.visible=tool==='clean'&&Boolean(inside&&(cleanFeedback||!pointerPreview?.touch||pointerPreview?.held));
+    if(!toolPreview.visible)return;
+    const scale=getRaisingNativePixelScale(fieldArt?.field,view);
+    const art=careArt.get(`broom-${carePose()}`);placeCare(toolPreview,art);
+    toolPreview.width=art.width*scale;toolPreview.height=art.height*scale;
+    toolPreview.position.set(point.x,point.y);
+  }
+
+  app.stage.on("globalpointermove", moveDrag);
+  app.stage.on("pointerup", finishDrag);
+  app.stage.on("pointerupoutside", finishDrag);
+  app.stage.on("pointercancel", finishDrag);
+  // Pixi's boundary does not map native pointercancel. Release this scene's
+  // held gesture when the browser/OS cancels a touch, through the same owner.
+  const cancelNativePointer=event=>finishDrag({type:'pointercancel',pointerId:event.pointerId});
+  app.canvas.addEventListener('pointercancel',cancelNativePointer);
+  app.ticker.add(updateAnimations);
+
+  const unsubscribe = source.subscribe(sync);
+  const canZoom=()=>!disposed&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'
+    &&!source.getLifecycleFrame?.()?.day&&!source.getLifecycleFrame?.()?.evolution
+    &&!(source.getFrame().tutorial&&!source.getFrame().tutorial.finished);
+  const zoomButton=globalThis.document?.createElement('button')??null;
+  const describeZoom=()=>{
+    if(!zoomButton)return;
+    zoomButton.textContent=zoom===1?'− 100%':'+ 70%';
+    zoomButton.setAttribute('aria-label',uiText(zoom===1?'Zoom out ranch (overview)':'Zoom in ranch (detail)'));
+    zoomButton.title=uiText('Pinch or scroll over the ranch to zoom');
+    zoomButton.disabled=!canZoom();
+  };
+  const setZoom=(next,point)=>{
+    if(!canZoom()||zoom===next)return;
+    const camera=zoomRaisingCamera(fieldArt.field,view,next,point,{cameraX,cameraY});
+    const beforeX=cameraX;
+    zoom=next;cameraX=camera.cameraX;cameraY=camera.cameraY;cameraFocus=null;
+    tutorialCameraOffset+=(cameraX-beforeX)/fieldArt.field.nativePixelWorldScale;
+    if(cameraViewport)cameraViewport={...cameraViewport,zoom};
+    describeZoom();sync(source.getFrame(),{force:true});
+  };
+  const zoomInput=fieldArt?.field?.presentationMode==='NATIVE_RANCH'
+    ?bindRaisingZoomInput({canvas:app.canvas,getViewport:()=>app.screen,getLevel:()=>zoom,setLevel:setZoom,
+      cancelGesture:()=>cancelInput('viewport-resize'),enabled:canZoom}):null;
+  if(zoomButton&&zoomInput){
+    zoomButton.type='button';zoomButton.className='cm-ranch-zoom';
+    zoomButton.addEventListener('click',()=>{cancelInput('viewport-resize');setZoom(zoom===1?RAISING_OVERVIEW_ZOOM:1);});
+    app.canvas.parentElement?.append(zoomButton);describeZoom();
+  }
+  function cancelInput(reason = null){
+    if (!responsiveLayout) {
+    const options={cancelled:true,checkpoint:drag?.tutorialCheckpoint,
+      ...(reason==='viewport-resize'?{reason}:{})};
+    if(drag?.nativeHand)source.intents.endHand?.(drag.creatureId,options);
+    else if(drag?.carried)source.intents.releaseCarry?.(drag.creatureId,options);
+    if(drag)drag.entry.root.cursor='grab';
+    drag=null;cameraDrag=null;pointerPreview=null;cleanFeedback=null;backdrop.cursor='grab';
+      return;
+    }
+    // Blur/hidden/context loss may suspend the existing ticker between samples.
+    if(raisingReference?.pending)raisingReference={...raisingReference,pending:null};
+    const cancelled = drag;
+    drag=null;cameraDrag=null;
+    pointerPreview=null;cleanFeedback=null;
+    backdrop.cursor='grab';
+    if(toolPreview)toolPreview.visible=false;
+    if(cancelled&&!cancelled.entry.root.destroyed)cancelled.entry.root.cursor='grab';
+    // Clear transient owners before an intent publishes synchronously. This
+    // cannot interpret an old pointer-up as a drop/tool action in the newly
+    // laid-out field. Only stage resize requests the domain's origin rollback;
+    // blur, visibility, context loss and teardown retain their prior semantics.
+    const options = { cancelled:true, checkpoint:cancelled?.tutorialCheckpoint };
+    if(reason==='viewport-resize')options.reason=reason;
+    if(cancelled?.nativeHand)source.intents.endHand?.(cancelled.creatureId,options);
+    else if(cancelled?.carried)source.intents.releaseCarry?.(cancelled.creatureId,options);
+  }
+  const cancelHiddenInput=()=>{if(globalThis.document?.hidden){zoomInput?.reset();cancelInput();}};
+  globalThis.addEventListener?.('blur',cancelInput);
+  globalThis.document?.addEventListener('visibilitychange',cancelHiddenInput);
+  const unobserveResize = stage.onResize(()=>{zoomInput?.reset();cancelInput('viewport-resize');resize();});
+  const unobserveContextLost = stage.onContextLost(() => {
+    zoomInput?.reset();
+    cancelInput();
+    onFallback("The 2D field context was lost. DOM screen controls remain available; reload to restore the field.");
+  });
+  resize();
+
+  return Object.freeze({
+    // Core actors can change after mount (Continue, tutorial completion, hatch).
+    // Feed their readiness into the existing clock guard; that driver discards
+    // loading time and starts a fresh elapsed baseline when the pixels arrive.
+    get isPlayable() {
+      return !disposed && !lifetime.signal.aborted && source.getFrame().residents.every(resident => {
+        const entry = actors.get(resident.creatureId);
+        if (!(entry?.speciesId === resident.speciesId && entry.assetState === 'ready' && !['loading','error'].includes(entry.evolutionAssetState))) return false;
+        // The clock callback runs before the scene's draw callback. Inspect the
+        // current native frame, not only loading flags set by a previous draw.
+        // This getter stays read-only; the still-running scene ticker starts
+        // the existing async loads while the simulation gate discards elapsed.
+        const frame=source.getActorFrame?.(resident.creatureId),e=frame?.evolution;
+        if(frame&&entry.nativeFramePresenter?.isFrameReady&&!entry.nativeFramePresenter.isFrameReady(frame))return false;
+        if(!e||e.choicePending||e.target<0)return true;
+        if(entry.evolutionTarget!==e.target||!entry.evolutionSprite||!entry.evolutionPresenter||entry.evolutionAssetState!=='ready')return false;
+        return !e.targetFrame||!entry.evolutionPresenter.isFrameReady||entry.evolutionPresenter.isFrameReady(e.targetFrame);
+      });
+    },
+    // The P1R DOM shell calls render(frame) after its own DOM repaint. The
+    // source subscription remains authoritative; this method is an idempotent
+    // presentation sync only and skips an already-consumed revision.
+    render(frame) {
+      sync(frame);
+    },
+
+    setFeedbackArt(art) {
+      if (disposed) { void art?.dispose(); return; }
+      void feedbackArt?.dispose(); feedbackArt = art;
+    },
+
+    retryResidentAssets(){
+      if(disposed||!characterBundle?.ensureSpecies)return false;
+      for(const resident of source.getFrame().residents){
+        const entry=actors.get(resident.creatureId);
+        if(entry?.evolutionAssetState==='error'){
+          const evolution=source.getActorFrame?.(resident.creatureId)?.evolution;
+          if(evolution&&entry.evolutionPresenter&&entry.evolutionPendingFrame)evolutionFrameReady(entry,entry.evolutionPendingFrame,{retry:true});
+          else if(evolution)loadEvolutionTarget(entry,evolution);
+        }
+        if(entry?.assetState==='error'){
+          if(entry.pendingAnimationFrame)residentFrameReady(entry,entry.pendingAnimationFrame,{retry:true});
+          else void loadActorTextures(entry,resident);
+        }
+      }
+      return true;
+    },
+
+    /** A resident's on-screen box, relative to the field host, so interface
+     * cards can keep out of its way. Null while it is not drawn. */
+    actorScreenRect(creatureId) {
+      const entry = actors.get(creatureId);
+      const area = entry?.root?.hitArea;
+      if (!area || entry.root.destroyed || !entry.root.visible) return null;
+      const a = entry.root.toGlobal(new PIXI.Point(area.x, area.y));
+      const b = entry.root.toGlobal(new PIXI.Point(area.x + area.width, area.y + area.height));
+      return { x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), width: Math.abs(b.x - a.x), height: Math.abs(b.y - a.y) };
+    },
+
+    /** Ease the camera so a resident is in the middle of the view. Ignored
+     * while the player is dragging; the wrapped board takes the short way. */
+    focusResident(creatureId, { reducedMotion = false } = {}) {
+      const field = fieldArt?.field;
+      const native = source.getActorFrame?.(creatureId);
+      if (!field || field.presentationMode !== 'NATIVE_RANCH' || !native?.positionQ12 || drag || cameraDrag) return false;
+      const fit = raisingFieldViewport(field, view, 12, cameraX);
+      let target = bandWorldX(field, native.positionQ12[0] / 4096) - (app.screen.width - 24) / fit.scale / 2;
+      let distance;
+      if (field.wrapWidthPx) {
+        target = wrapRaisingCamera(target, field.wrapWidthPx);
+        distance = target - cameraX;
+        if (distance > field.wrapWidthPx / 2) distance -= field.wrapWidthPx;
+        if (distance < -field.wrapWidthPx / 2) distance += field.wrapWidthPx;
+      } else {
+        const maxX = Math.max(0, field.worldWidthPx - (app.screen.width - 24) / fit.scale);
+        distance = clamp(target, 0, maxX) - cameraX;
+      }
+      const distanceY = verticalRevealDistance(creatureId);
+      if (Math.abs(distance) < 0.5 && Math.abs(distanceY) < 0.5) return true;
+      if (reducedMotion) { cameraX = field.wrapWidthPx ? wrapRaisingCamera(cameraX + distance, field.wrapWidthPx) : cameraX + distance; cameraY += distanceY; layoutFieldArt(); return true; }
+      cameraFocus = { from: cameraX, distance, fromY: cameraY, distanceY, elapsed: 0, duration: 380 };
+      return true;
+    },
+
+    getDiagnostics() {
+      return Object.freeze({
+        renderer: "PIXI_SCENE_ON_SHARED_STAGE",
+        applicationCount: 1,
+        ticker: "APPLICATION_OWNED",
+        threeUsed: false,
+        frameRevision: latestRevision,
+        residentCount: actors.size,
+        residentAssets:[...actors].map(([creatureId,e])=>({creatureId,speciesId:e.speciesId,entityId:e.entityId,state:e.evolutionAssetState==='error'?'error':e.assetState==='error'?'error':e.evolutionAssetState==='loading'?'loading':e.assetState,error:e.evolutionAssetError??e.assetError??null,visible:e.visibleGeometry??null})),
+        foodCount:foodGraphics.size,
+        wasteCount:wasteGraphics.size,
+        careArt:'LICENSED_PIXEL_FAITHFUL_WITH_AUTHORED_CELEBRATION',
+        // Spoiled food, waste and the sweep share one clock so a QA run can
+        // read the pose instead of comparing pixels. 0 while reduced motion.
+        carePose:carePose(),
+        careTextureCount:careArt.size,
+        evolutionArt:'AUTHORED_VECTOR',
+        evolutionActors:[...actors].filter(([,e])=>e.evolutionActive).map(([id,e])=>({id,
+          target:e.evolutionTarget,visible:e.evolutionSprite?.visible??false,
+          position:[e.root.x,e.root.y],scale:[e.evolutionSprite?.scale.x??null,e.evolutionSprite?.scale.y??null],
+          targetFrame:e.evolutionPresenter?.getSnapshot()??null})),
+        cleanToolVisible:toolPreview?.visible??false,
+        nativeSizing: [...actors].map(([creatureId, entry]) => ({ creatureId,
+          status: entry.nativeScale === null ? "UNVERIFIED_LEGACY_FALLBACK" : "SHARED_NATIVE_PIXEL_SCALE",
+          screenPixelsPerNativePixel: entry.nativeScale,
+          packedPixelsPerNativePixel: entry.nativeSizing?.packedPixelsPerNativePixel ?? null })),
+        assetFailures,
+        cameraX,
+        cameraY,
+        zoom,
+        cameraViewport: cameraViewport ? Object.freeze({ ...cameraViewport }) : null,
+        characterArt: characterBundle?.getDiagnostics() ?? null,
+        art: fieldArt?.getDiagnostics() ?? null,
+        viewport: Object.freeze({ width: app.screen.width, height: app.screen.height })
+      });
+    },
+
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      lifetime.abort(); signal?.removeEventListener('abort', abort);
+      cancelInput();
+      zoomInput?.dispose();zoomButton?.remove();
+      globalThis.removeEventListener?.('blur',cancelInput);
+      globalThis.document?.removeEventListener('visibilitychange',cancelHiddenInput);
+      cameraDrag = null;
+      unsubscribe();
+      unmarkScene();
+      unobserveResize();
+      unobserveContextLost();
+      app.ticker.remove(updateAnimations);
+      app.stage.off("globalpointermove", moveDrag);
+      app.stage.off("pointerup", finishDrag);
+      app.stage.off("pointerupoutside", finishDrag);
+      app.stage.off("pointercancel", finishDrag);
+      app.canvas.removeEventListener('pointercancel',cancelNativePointer);
+      for (const entry of actors.values()) entry.loadToken += 1;
+      if (scene.parent) scene.parent.removeChild(scene);
+      scene.destroy({ children: true });
+      actors.clear();
+      foodGraphics.clear();
+      wasteGraphics.clear();
+      silhouette.destroy();
+      for (const sheet of sheets) sheet.destroy(false);
+      sheets.clear();
+      if (fieldArt?.displayObject.parent === productionArtLayer) {
+        productionArtLayer.removeChild(fieldArt.displayObject);
+      }
+      void fieldArt?.dispose();
+      fieldArt = null;
+      void characterBundle?.dispose();
+      void feedbackArt?.dispose();
+      void evolutionGlyphArt?.dispose();
+      characterBundle = null;
+      // The Application belongs to the stage and outlives this scene.
+      latestFrame = null;
+    }
+  });
+}
+
