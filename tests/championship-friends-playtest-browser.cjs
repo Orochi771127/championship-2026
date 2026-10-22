@@ -9,7 +9,7 @@ const {createInstallerFixtures}=require('./friends-installer-fixture-support.cjs
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
 const output=require('./browser-qa-output.cjs')('friends-playtest');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/',saveKey='championshipModernSave:v1';
-const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[]};
+const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[],routeErrors:[]};
 const {selectedGroups}=require('./friends-playtest-groups.cjs');
 const groups=selectedGroups(process.env.CHAMPIONSHIP_FRIENDS_GROUP);
 evidence.partition={schema:1,requested:process.env.CHAMPIONSHIP_FRIENDS_GROUP||'all',expected:groups,completed:[],runnerSha256:require('node:crypto').createHash('sha256').update(fs.readFileSync(__filename)).digest('hex')};
@@ -38,6 +38,73 @@ function registrationNoticeInvariant(save){
  return {shop:save.shop,battleEconomy:save.battleEconomy,friendsPlaytest:save.flags?.friendsPlaytest,registered:save.progression.nativeTitles.registered};
 }
 // End test-only ordinary overlay helpers.
+// BEGIN FRIENDS PUBLIC THREE / MENU / ROUTE CONTRACTS (test-only)
+const FRIENDS_THREE_RESOURCES=Object.freeze([
+ {path:'assets/production/cage/three-20261021/manifest.json',bytes:8526,sha256:'47153dea52ad24a31144e468927767bf97fa7f7d4302ea6ee6e24cf06462a63e'},
+ {fieldId:'field_cm02_01',path:'assets/production/cage/three-20261021/field_cm02_01.glb',bytes:1220556,sha256:'801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e'},
+ {fieldId:'field_cm18_01',path:'assets/production/cage/three-20261021/field_cm18_01.glb',bytes:1164384,sha256:'2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7'},
+ {fieldId:'field_cm39_01',path:'assets/production/cage/three-20261021/field_cm39_01.glb',bytes:182480,sha256:'272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0'}
+]);
+async function friendsDrainReadbacks(reads){
+ let count=-1;while(count!==reads.length){count=reads.length;await Promise.all(reads);}
+}
+function friendsThreeIdentity(rows){
+ return FRIENDS_THREE_RESOURCES.map(expected=>{
+  const found=rows.filter(row=>row.path===expected.path);
+  assert.ok(found.length,'Actual successful Three response required: '+expected.path);
+  for(const row of found){assert.equal(row.status,200);assert.equal(row.bytes,expected.bytes);assert.equal(row.sha256,expected.sha256);assert.equal(row.error,undefined);}
+  return {...expected};
+ });
+}
+function friendsThreeProgress(before,after){
+ for(const state of [before,after]){
+  assert.equal(state.canvasCount,1,'Unique actual Three renderer required');
+  assert.equal(state.fallbackCount,0,'No fallback renderer allowed');
+  assert.equal(state.loadState,'ready');assert.equal(state.busy,'false');
+  assert.ok(state.width>0&&state.height>0&&state.visible,'Actual Three canvas visible');
+  assert.ok(Number.isSafeInteger(state.frames)&&state.frames>0,'Actual Three frame counter required');
+ }
+ assert.ok(after.frames>before.frames,'Actual Three frames must advance across normal camera gestures');
+}
+function friendsRecognizedOverlay(value){return value?.kind==='calendar'||value?.kind==='registration-notice-94';}
+async function friendsMenuTransaction(api){
+ // One 90s wall-clock budget for the entire transaction; never extend it on re-open.
+ const deadline=api.now()+90000;let first=true;
+ const remaining=()=>{const left=deadline-api.now();assert.ok(left>0,'Original menu deadline exhausted');return Math.min(30000,left);};
+ for(;;){
+  remaining();const handled=await api.clear(deadline);remaining();
+  const state=await api.state();remaining();
+  assert.equal(state.buttonCount,1,'Exactly one live group control required');assert.ok(state.buttonVisible&&state.buttonEnabled,'Normal visible enabled group control required');
+  assert.ok(state.openMenu===null||state.openMenu===api.group,'Unexpected nonmatching open menu');
+  if(state.openMenu===api.group){assert.equal(state.expanded,true);assert.equal(state.entryCount,1,'Exact live entry required');}
+  else assert.equal(state.expanded,false,'Closed menu must have collapsed group control');
+  try{
+   if(state.openMenu===null){
+    const reopening=!first;
+    if(reopening){assert.equal(api.group,'SYSTEM','Only the observed SYSTEM interruption authorizes re-open');assert.ok(handled.length>0&&handled.every(friendsRecognizedOverlay),'Re-open requires an actually acknowledged known overlay');}
+    const before=reopening?registrationNoticeInvariant(await api.saved()):null;
+    // A timed-out click may already have dispatched. Never retry it as a new initial click.
+    first=false;await api.clickGroup(remaining());
+    if(reopening){const after=registrationNoticeInvariant(await api.saved());api.record({menuReopened:api.group,entry:api.entry,normalUi:true,handled,before,after});assert.deepEqual(after,before,'Menu re-open cannot change economy or registrations');}
+    continue;
+   }
+   first=false;await api.clickEntry(remaining());return;
+  }catch(error){
+   if(error.name!=='TimeoutError'||api.now()>=deadline||!friendsRecognizedOverlay(await api.observeOverlay()))throw error;
+   // Only the next loop's normal UI acknowledgment authorizes a re-open.
+  }
+ }
+}
+async function friendsGuardedRoute(operation,onFailure,abort){
+ try{return await operation();}
+ catch(error){
+  // Persist the real error before awaiting any cleanup. Never retry or whitelist it.
+  onFailure(error,null);
+  try{await abort();}catch(abortError){onFailure(error,abortError);}
+ }
+}
+// END FRIENDS PUBLIC THREE / MENU / ROUTE CONTRACTS
+
 (async()=>{
  const build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=build.buildId;assert.equal(build.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(build.publicPlaytest?.ownerApproved,true);
  assert.ok(resolveAsset(root,'/championship.html'));
@@ -54,7 +121,7 @@ function registrationNoticeInvariant(save){
   evidence.context=label;
   context=await browser.newContext({viewport:{width:390,height:844},locale:'zh-TW',acceptDownloads:true,serviceWorkers:'block'});
   await context.tracing.start({screenshots:true,snapshots:true,sources:true});
-  await context.route('**/*',async route=>{
+  await context.route('**/*',async route=>friendsGuardedRoute(async()=>{
    const url=route.request().url();
    if(url.startsWith(server.origin+'/'))return route.continue();
    if(url.startsWith(publicBase)){
@@ -65,7 +132,10 @@ function registrationNoticeInvariant(save){
     if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:server.origin+'/'+relative+parsed.search,maxRedirects:0});return route.fulfill({response});}
    }
    evidence.networkErrors.push({context:label,url,error:'NON_BUILD_REQUEST_BLOCKED'});return route.abort();
-  });
+  },(error,abortError)=>{
+   const row={context:label,url:route.request().url(),method:route.request().method(),resourceType:route.request().resourceType(),at:new Date().toISOString(),sourceCornerStage:evidence.sourceCornerStage??null,activeMenu:evidence.activeMenu??null,error:String(error.stack||error),abortError:abortError?String(abortError.stack||abortError):null};
+   evidence.routeErrors.push(row);evidence.networkErrors.push({...row,error:'BUILD_ROUTE_FAILURE: '+error.message});evidence.status='FAIL';process.exitCode=1;write();
+  },()=>route.abort('failed')));
   page=await context.newPage();page.setDefaultTimeout(90000);
   page.on('requestfailed',r=>{const error=r.failure()?.errorText;if(error!=='net::ERR_ABORTED')evidence.networkErrors.push({context:label,url:r.url(),error});});
   page.on('pageerror',e=>evidence.pageErrors.push({context:label,error:e.message}));
@@ -89,18 +159,21 @@ function registrationNoticeInvariant(save){
  async function ranchCanvas(){const canvas=page.locator(ranchCanvasSelector);await canvas.waitFor({state:'visible',timeout:180000});assert.equal(await canvas.count(),1,'Exactly one ranch input canvas');assert.notEqual(await canvas.evaluate(el=>getComputedStyle(el).pointerEvents),'none','Ranch canvas must receive ordinary input');return canvas;}
  async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await ranchCanvas();await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
  async function menu(group,entry){
-  // Long real-time visual sweeps can cross midnight before either menu click.
-  // Acknowledge only the ordinary calendar or exact system94; unknown obstructions still fail.
-  async function click(target){
-   const deadline=Date.now()+90000;
-   for(;;){
-    await clearCalendar();
-    try{await target.click({timeout:Math.min(30000,Math.max(1,deadline-Date.now()))});return;}
-    catch(error){if(error.name!=='TimeoutError'||Date.now()>=deadline||!await page.locator('.int-rh2-calendar').isVisible())throw error;}
-   }
-  }
-  await click(page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`));
-  await click(page.locator(`.cm-toolbar__menu:not([hidden]) button[data-entry-id="${entry}"]`));
+  evidence.activeMenu={group,entry};write();
+  const groupControl=()=>page.locator(`button.cm-toolbar__cell[data-menu-id="${group}"]`);
+  const entryControl=()=>page.locator(`.cm-toolbar__menu:not([hidden])[data-menu-id="${group}"] button[data-entry-id="${entry}"]`);
+  await friendsMenuTransaction({group,entry,now:()=>Date.now(),clear:deadline=>clearCalendar(deadline),saved,
+   state:()=>page.evaluate(({group,entry})=>{
+    const controls=[...document.querySelectorAll(`button.cm-toolbar__cell[data-menu-id="${group}"]`)],control=controls[0];
+    const panels=[...document.querySelectorAll('.cm-toolbar__menu:not([hidden])')],panel=panels[0];
+    const visible=el=>Boolean(el&&!el.hidden&&el.getClientRects().length&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden');
+    return {buttonCount:controls.length,buttonVisible:visible(control),buttonEnabled:Boolean(control&&!control.disabled),expanded:control?.getAttribute('aria-expanded')==='true',openMenu:panels.length===0?null:panels.length===1?panel.dataset.menuId:'MULTIPLE_OPEN_MENUS',entryCount:panel?.dataset.menuId===group?panel.querySelectorAll(`button[data-entry-id="${entry}"]`).length:0};
+   },{group,entry}),
+   clickGroup:timeout=>groupControl().click({timeout}),clickEntry:timeout=>entryControl().click({timeout}),
+   observeOverlay:()=>page.evaluate(ordinaryRanchOverlayState,ranchCanvasSelector),
+   record:row=>{evidence.assertions.push(row);write();}
+  });
+  evidence.activeMenu=null;write();
  }
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
@@ -132,9 +205,11 @@ function registrationNoticeInvariant(save){
  // public camera gestures; inspect these screenshots alongside fresh-save
  // numeric cap/ground assertions rather than inventing legacy diagnostics.
   // Long visual sweeps can cross midnight. Only the calendar and exact system94 are acknowledged.
- async function clearCalendar(){
+ async function clearCalendar(deadline=null){
+   const handled=[];
+   const left=()=>{if(deadline===null)return 90000;const value=deadline-Date.now();assert.ok(value>0,'Menu deadline exhausted during ordinary overlay');return value;};
    for(;;){
-    const handle=await page.waitForFunction(ordinaryRanchOverlayState,ranchCanvasSelector);
+    const handle=await page.waitForFunction(ordinaryRanchOverlayState,ranchCanvasSelector,{timeout:left()});
     const observed=await handle.jsonValue();await handle.dispose();
     if(observed.kind==='registration-notice-94'){
      const beforeSave=await saved(),before=registrationNoticeInvariant(beforeSave);
@@ -145,14 +220,14 @@ function registrationNoticeInvariant(save){
      assert.equal(await letter.count(),1,'Exactly one observed system94 dialog');
      const confirm=letter.getByRole('button',{name:'確認',exact:true});
      assert.equal(await confirm.count(),1);assert.equal(await confirm.isEnabled(),true,'Only enabled normal confirmation may be clicked');
-     await confirm.click();await letter.waitFor({state:'hidden'});
+     await confirm.click({timeout:left()});await letter.waitFor({state:'hidden',timeout:left()});
      receipt.after=registrationNoticeInvariant(await saved());write();
      assert.deepEqual(receipt.after,before,'System94 acknowledgement cannot alter persisted economy or registrations');
-     receipt.ordinarySystemRegistrationAcknowledged=true;write();continue;
+     receipt.ordinarySystemRegistrationAcknowledged=true;handled.push(observed);write();continue;
     }
     const calendar=page.locator('.int-rh2-calendar');
-    if(!await calendar.isVisible())return;
-    await calendar.click();await page.waitForTimeout(250);
+    if(!await calendar.isVisible())return handled;
+    await calendar.click({timeout:left()});await page.waitForTimeout(250);handled.push({kind:'calendar',priorObserved:observed.kind});
     evidence.assertions.push({ordinaryCalendarAcknowledged:true,normalUi:true});write();
    }
   }
@@ -206,11 +281,20 @@ function registrationNoticeInvariant(save){
  }
  // Separate installed QA profile: normal editor clicks only, never real player data.
  async function sourceCornerReview(){
-  await fresh('source-corners');const loadedPaddedUrls=new Set();page.on('response',r=>{if(r.ok()&&r.url().includes('source-bounds-r1-20261015/'))loadedPaddedUrls.add(r.url());});await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
+  await fresh('source-corners');evidence.sourceCornerStage='install';write();
+  const threeResponses=[],threeResponseReads=[];evidence.sourceThreeResponses=threeResponses;
+  const onThreeResponse=response=>{
+   const expected=FRIENDS_THREE_RESOURCES.find(row=>response.url()===publicBase+row.path);if(!expected)return;
+   const row={path:expected.path,url:response.url(),status:response.status()};threeResponses.push(row);
+   threeResponseReads.push((async()=>{try{const bytes=await response.body();row.bytes=bytes.length;row.sha256=require('node:crypto').createHash('sha256').update(bytes).digest('hex');}catch(error){row.error=String(error.stack||error);evidence.networkErrors.push({context:'source-corners',url:response.url(),error:'THREE_RESPONSE_READ_FAILURE: '+error.message});}finally{write();}})());
+  };page.on('response',onThreeResponse);
+  const readThree=()=>page.evaluate(()=>{const all=[...document.querySelectorAll('#cm-root[data-active-screen="RAISING_HOME"] .cm-ranch-three-canvas')],c=all[0],h=document.querySelector('.int-rh2-field-host'),r=c?.getBoundingClientRect();return {canvasCount:all.length,frames:Number(c?.dataset.frames),width:c?.width??0,height:c?.height??0,visible:Boolean(r&&r.width>0&&r.height>0&&getComputedStyle(c).display!=='none'&&getComputedStyle(c).visibility!=='hidden'),loadState:h?.dataset.loadState,busy:h?.getAttribute('aria-busy'),fallbackCount:document.querySelectorAll('[data-field-fallback="true"]').length};});
+  await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);
   await page.locator('#install').click();await page.waitForURL(/championship\.html$/);await continueSaved();
   const installed=await saved();
   for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]}]){
+   evidence.sourceCornerStage=scenario.name+':editor';write();
    await page.setViewportSize({width:1280,height:800});await clearCalendar();await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
    while(await page.locator('.cm-cage-facility:not([disabled])').count())await page.locator('.cm-cage-facility:not([disabled])').first().click();
    const specs=[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
@@ -227,6 +311,9 @@ function registrationNoticeInvariant(save){
     {moduleId:'championship:2026:cage:waiting-room',slotIndex:0},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
    ].sort((a,b)=>a.moduleId.localeCompare(b.moduleId)));
    assert.deepEqual(placed.shop,expectedShop(installed.shop),'Editor-only inspection must preserve entire wallet and inventory');await continueSaved();
+   evidence.sourceCornerStage=scenario.name+':visual';write();
+   // These product-grid fields use verified Three GLBs, not unused 2D padded atlases.
+   await Promise.all(threeResponseReads);const resourceIdentity=friendsThreeIdentity(threeResponses),threeBefore=await readThree();
    // The existing legacy helper reaches upper headroom through real tool swipes.
    await legacyTopContour('08-source-'+scenario.name);
    for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
@@ -247,13 +334,15 @@ function registrationNoticeInvariant(save){
     }
     await clearCalendar();await page.locator('button.cm-toolbar__cell[data-icon="hand"]').click();
    }
-   const resourceUrls=[...loadedPaddedUrls];
-   for(const asset of ['field_cm02_01/frame-00.webp','field_cm18_01/frame-00.webp','field_cm39_01/frame-00.webp','field_cm39_01/frame-01.webp']){
-    assert.ok(resourceUrls.some(url=>url.includes('source-bounds-r1-20261015/fields/'+asset)),'Exact padded phase must load: '+asset);
-   }
+   await Promise.all(threeResponseReads);friendsThreeIdentity(threeResponses);const threeAfter=await readThree();friendsThreeProgress(threeBefore,threeAfter);
+   evidence.assertions.push({sourceThreeAuthority:scenario.name,resourceIdentity,threeBefore,threeAfter,actualResponseBytesVerified:true});write();
+   evidence.sourceCornerStage=scenario.name+':persistence';write();
    await clearCalendar();await saveQuit();const after=await saved();assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,expectedShop(installed.shop));await continueSaved();
    evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom','three unchanged source-art styles']});write();
   }
+  // Final continueSaved also loads models: settle all owned readbacks before terminal guards/close.
+  await friendsDrainReadbacks(threeResponseReads);page.off('response',onThreeResponse);
+  friendsThreeIdentity(threeResponses);evidence.sourceThreeReadbacksComplete={responses:threeResponses.length,reads:threeResponseReads.length};write();
  }
 
  async function wallet(amount){const button=page.locator('.cm-status-bar__diamond');await button.waitFor({state:'visible'});assert.equal(digits(await button.innerText()),amount);assert.match(await button.getAttribute('aria-label'),/測試/);}
@@ -420,8 +509,13 @@ function registrationNoticeInvariant(save){
   }
   assert.deepEqual(evidence.partition.completed,groups,'Every selected scenario must finish');
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
-  assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
+  assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_RANCH_3D_FALLBACK|CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[],'No renderer, asset fallback or console error may masquerade as a playable field');
   evidence.status='PASS';write();console.log('CHAMPIONSHIP_FRIENDS_PLAYTEST_BROWSER_PASS');
  }catch(error){evidence.status='FAIL';evidence.failure=error.stack||String(error);await shot('failure').catch(()=>{});write();throw error;}
- finally{if(context){await context.tracing.stop({path:path.join(output,evidence.context+'-trace.zip')}).catch(()=>{});await context.close();}if(browser)await browser.close();await server.close();}
+ finally{if(context){
+  const tracePath=path.join(output,evidence.context+'-trace.zip');
+  try{await context.tracing.stop({path:tracePath});const bytes=fs.statSync(tracePath).size;assert.ok(bytes>0,'Trace must be retained');evidence.finalTrace={file:path.basename(tracePath),bytes};}
+  catch(error){evidence.status='FAIL';evidence.traceRetentionError=String(error.stack||error);process.exitCode=1;}
+  write();await context.close();
+ }if(browser)await browser.close();await server.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

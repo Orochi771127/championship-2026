@@ -105,22 +105,50 @@ function selfTest() {
  const box=(left,right)=>({left,right,top:0,bottom:44}),part=(left,right)=>({visible:true,bounds:box(left,right),textRects:[box(left+2,right-2)]});const header={bounds:box(0,320),back:part(0,90),title:part(100,260),close:part(276,320)};checkHeader(header);assert.throws(()=>checkHeader({...header,title:{...header.title,textRects:[box(80,240)]}}));
  console.log('PASS browser-runner assertion self-test only; no browser was launched');
 }
-// Read-only instrumentation wraps native constructors. Never substitutes media,
-// play(), decoder, AudioContext, clocks, gain values, or autoplay policy.
+// Native constructors remain real. Normal-game locale diagnostics additionally
+// forward play/currentTime calls without altering promises, values or policy.
 function observeNativeAudio({localeDiagnostics=false}={}) {
  const media=[],contexts=[],events=[],samples=[];let maxVoices=0;
  const isMusic=m=>/\/(original-music-r1|scene-music-r1)\//.test(m.currentSrc||m.src);
  const snapshot=()=>({mediaCreated:media.length,media:media.filter(isMusic).map((m,id)=>({id,src:m.src,currentSrc:m.currentSrc,paused:m.paused,ended:m.ended,seeking:m.seeking,seekable:Array.from({length:m.seekable.length},(_,i)=>[m.seekable.start(i),m.seekable.end(i)]),loop:m.loop,readyState:m.readyState,networkState:m.networkState,currentTime:m.currentTime,duration:Number.isFinite(m.duration)?m.duration:null,error:m.error?{code:m.error.code,message:m.error.message}:null,buffered:Array.from({length:m.buffered.length},(_,i)=>[m.buffered.start(i),m.buffered.end(i)])})),contexts:contexts.map(c=>({state:c.state,sampleRate:c.sampleRate,currentTime:c.currentTime})),maxVoices});
- // Normal-game diagnostics only. No transport methods, media clocks or timers are replaced.
- const locale=localeDiagnostics?{samples:[],events:[],states:[],actions:[],dropped:{samples:0,events:0,states:0,actions:0},observerErrors:0,truncatedStrings:0,windowClosed:false,startReason:{available:false,reason:'Production music state does not expose begin() caller/reason; native events alone cannot supply it.'}}:null;
+ // Normal-game diagnostics only. Forwarding observers add identity/stack/read overhead,
+ // not a timing control; they never initiate transport actions or mutate clocks.
+ const locale=localeDiagnostics?{samples:[],events:[],states:[],actions:[],origins:[],gestures:[],dropped:{samples:0,events:0,states:0,actions:0,origins:0,gestures:0},originObserver:{playInstalled:false,currentTimeInstalled:false,installErrors:[]},observerErrors:0,truncatedStrings:0,truncatedStacks:0,windowClosed:false,startReason:{available:false,reason:'Production begin() reason is not exposed; inspect bounded native caller stacks, not native events alone.'}}:null;
  let localeActive=false,localeSequence=0;
  const localeSafe=fn=>{if(locale)try{fn();}catch{locale.observerErrors++;}};
  const localeText=value=>{const text=String(value??'');if(text.length>1024)locale.truncatedStrings++;return text.slice(0,1024);};
  const localeState=raw=>{const s=JSON.parse(raw||'{}');return Object.fromEntries(['cue','key','playing','requestedCue','scene','pending','voices','starts','position','loopDeadline','error'].map(key=>[key,typeof s[key]==='string'?localeText(s[key]):typeof s[key]==='number'||typeof s[key]==='boolean'?s[key]:null]));};
  const localeMedia=()=>media.slice(0,8).map((m,mediaId)=>({mediaId,src:localeText(m.src),currentSrc:localeText(m.currentSrc),position:m.currentTime,duration:Number.isFinite(m.duration)?m.duration:null,paused:m.paused,ended:m.ended,seeking:m.seeking,readyState:m.readyState,error:m.error?.code??null}));
- const localeRecord=(kind,value)=>{const limit={samples:4,events:512,states:256,actions:32}[kind];if(locale[kind].length>=limit){locale.dropped[kind]++;return;}locale[kind].push({sequence:++localeSequence,time:performance.now(),epochMs:Date.now(),...value});};
+ const localeRecord=(kind,value)=>{const limit={samples:4,events:512,states:256,actions:32,origins:128,gestures:64}[kind];if(locale[kind].length>=limit){locale.dropped[kind]++;return;}locale[kind].push({sequence:++localeSequence,time:performance.now(),epochMs:Date.now(),...value});};
  const sampleLocale=(label,raw)=>localeSafe(()=>{if(label==='before')localeActive=true;localeRecord('samples',{label,state:localeState(raw),media:localeMedia(),mediaCreated:media.length,omittedMedia:Math.max(0,media.length-8)});if(label==='after'){localeActive=false;locale.windowClosed=true;}});
  const localeEvent=(m,type)=>{if(localeActive)localeSafe(()=>localeRecord('events',{type,mediaId:media.indexOf(m),src:localeText(m.currentSrc||m.src),position:m.currentTime,duration:Number.isFinite(m.duration)?m.duration:null,ended:m.ended,paused:m.paused,seeking:m.seeking,readyState:m.readyState,state:localeState(document.documentElement?.getAttribute('data-music-state'))}));};
+ const localeOrigin=(type,m,detail={})=>{if(localeActive)localeSafe(()=>{
+  const mediaId=media.indexOf(m);if(mediaId<0||!isMusic(m))return;
+  const stack=String(new Error().stack??'');if(stack.length>4096)locale.truncatedStacks++;
+  localeRecord('origins',{type,mediaId,stack:stack.slice(0,4096),state:localeState(document.documentElement?.getAttribute('data-music-state')),media:localeMedia(),...detail});
+ });};
+ if(locale){
+  // Explicit strictness survives classic-script injection without receiver coercion.
+  // Capture only the existing window. Wrappers forward the exact receiver,
+  // arguments, native result/promise and synchronous exceptions. No promise
+  // handlers, synthetic seeks, playback calls or extra timers are introduced.
+  const prototype=globalThis.HTMLMediaElement?.prototype;
+  try{
+   const play=Object.getOwnPropertyDescriptor(prototype,'play');
+   if(typeof play?.value!=='function')throw Error('NATIVE_PLAY_DESCRIPTOR_UNAVAILABLE');
+   Object.defineProperty(prototype,'play',{...play,value:function(){'use strict';localeOrigin('play-call',this);return Reflect.apply(play.value,this,arguments);}});
+   locale.originObserver.playInstalled=true;
+  }catch(error){locale.observerErrors++;locale.originObserver.installErrors.push(localeText(error?.message??error));}
+  try{
+   const time=Object.getOwnPropertyDescriptor(prototype,'currentTime');
+   if(typeof time?.get!=='function'||typeof time?.set!=='function')throw Error('NATIVE_TIME_DESCRIPTOR_UNAVAILABLE');
+   Object.defineProperty(prototype,'currentTime',{...time,set:function(value){'use strict';localeOrigin('currentTime-set',this,{requestedType:typeof value,requestedValue:typeof value==='number'&&Number.isFinite(value)?value:null});return Reflect.apply(time.set,this,arguments);}});
+   locale.originObserver.currentTimeInstalled=true;
+  }catch(error){locale.observerErrors++;locale.originObserver.installErrors.push(localeText(error?.message??error));}
+  for(const type of ['pointerdown','keydown'])document.addEventListener(type,event=>{if(localeActive)localeSafe(()=>{
+   const target=event.target;localeRecord('gestures',{type,trusted:event.isTrusted,target:{tag:localeText(target?.tagName),id:localeText(target?.id),setting:localeText(target?.closest?.('[data-setting]')?.getAttribute?.('data-setting'))},state:localeState(document.documentElement?.getAttribute('data-music-state')),media:localeMedia()});
+  });},true);
+ }
  if(locale){
   // Mutation records can be delivered in a batch: previousState is that record's
   // old value, observedState is the live value at callback time, not an invented cause.
