@@ -12,6 +12,29 @@ const publicBase='https://orochi771127.github.io/championship-2026/',saveKey='ch
 const evidence={status:'RUNNING',commit:process.env.GITHUB_SHA||null,assertions:[],console:[],pageErrors:[],networkErrors:[]};
 const digits=s=>Number(String(s).replace(/[^0-9]/g,''));
 const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(evidence,null,2)+'\n');
+// Test-only ordinary overlay classification. No app access, input, clock, or DOM mutation.
+function ordinaryRanchOverlayState(selector){
+ const visible=el=>Boolean(el&&!el.hidden&&el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden'&&getComputedStyle(el).display!=='none');
+ const dialogs=[...document.querySelectorAll('[role="dialog"]')].filter(visible);
+ if(dialogs.length){
+  if(dialogs.length!==1)return false;
+  const letter=dialogs[0],text=letter.querySelector('.int-rh2-letter__text');
+  const buttons=[...letter.querySelectorAll('button')].filter(visible);
+  if(!letter.matches('.int-rh2-letter[data-system="true"]')||text?.textContent?.trim()!=='已到戰鬥入場登錄時間。'
+    ||buttons.length!==1||!buttons[0].matches('.int-rh2-letter__ack')||buttons[0].textContent.trim()!=='確認'||buttons[0].disabled)return false;
+  return {kind:'registration-notice-94',text:text.textContent.trim(),system:true};
+ }
+ const layer=document.querySelector('.int-rh2-lifecycle'),calendar=document.querySelector('.int-rh2-calendar');
+ if(calendar&&!calendar.hidden&&!calendar.disabled)return {kind:'calendar'};
+ if(layer&&!layer.hidden||document.querySelector('.cm-ceremony'))return false;
+ const canvases=document.querySelectorAll(selector);if(canvases.length!==1)return false;const canvas=canvases[0];if(getComputedStyle(canvas).pointerEvents==='none')return false;
+ const box=canvas.getBoundingClientRect();return [180,260,Math.min(360,box.height-150)].some(y=>document.elementFromPoint(box.right-35,box.top+y)===canvas)?{kind:'canvas'}:false;
+}
+function registrationNoticeInvariant(save){
+ assert.ok(save?.shop&&save?.progression?.nativeTitles&&Array.isArray(save.progression.nativeTitles.registered),'Actual saved economy and registration required');
+ return {shop:save.shop,battleEconomy:save.battleEconomy,friendsPlaytest:save.flags?.friendsPlaytest,registered:save.progression.nativeTitles.registered};
+}
+// End test-only ordinary overlay helpers.
 (async()=>{
  const build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=build.buildId;assert.equal(build.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(build.publicPlaytest?.ownerApproved,true);
  assert.ok(resolveAsset(root,'/championship.html'));
@@ -64,7 +87,7 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  async function home(){await screen('RAISING_HOME');await page.locator('button.cm-toolbar__cell[data-menu-id="MANAGEMENT"]').waitFor();await ranchCanvas();await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');const a=JSON.parse(h?.dataset.residentAssets||'[]');return h?.dataset.loadState==='ready'&&a.length>0&&a.every(x=>x.state==='ready');},{},{timeout:180000});assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);}
  async function menu(group,entry){
   // Long real-time visual sweeps can cross midnight before either menu click.
-  // Acknowledge only the ordinary calendar; unknown obstructions still fail.
+  // Acknowledge only the ordinary calendar or exact system94; unknown obstructions still fail.
   async function click(target){
    const deadline=Date.now()+90000;
    for(;;){
@@ -105,18 +128,25 @@ const write=()=>fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(
  // Legacy saves do not enable developer actor telemetry. Capture them via
  // public camera gestures; inspect these screenshots alongside fresh-save
  // numeric cap/ground assertions rather than inventing legacy diagnostics.
-  // Long visual sweeps can cross midnight. Acknowledge only the ordinary new-date UI.
+  // Long visual sweeps can cross midnight. Only the calendar and exact system94 are acknowledged.
  async function clearCalendar(){
-   // Native lifecycle completion can launch a separate evolution ceremony.
-   // Wait for the real hit-test target, not just the native lifecycle flag.
    for(;;){
-    await page.waitForFunction(selector=>{
-     const layer=document.querySelector('.int-rh2-lifecycle'),calendar=document.querySelector('.int-rh2-calendar');
-     if(calendar&&!calendar.hidden&&!calendar.disabled)return true;
-     if(layer&&!layer.hidden||document.querySelector('.cm-ceremony'))return false;
-     const canvases=document.querySelectorAll(selector);if(canvases.length!==1)return false;const canvas=canvases[0];if(getComputedStyle(canvas).pointerEvents==='none')return false;
-     const box=canvas.getBoundingClientRect();return [180,260,Math.min(360,box.height-150)].some(y=>document.elementFromPoint(box.right-35,box.top+y)===canvas);
-    },ranchCanvasSelector);
+    const handle=await page.waitForFunction(ordinaryRanchOverlayState,ranchCanvasSelector);
+    const observed=await handle.jsonValue();await handle.dispose();
+    if(observed.kind==='registration-notice-94'){
+     const beforeSave=await saved(),before=registrationNoticeInvariant(beforeSave);
+     const receipt={ordinarySystemRegistrationAcknowledged:false,normalUi:true,observed,before,
+      scope:'Persisted economy/registration invariants only; native clock/profile/message state may advance normally'};
+     evidence.assertions.push(receipt);write();
+     const letter=page.locator('.int-rh2-letter[data-system="true"]:visible').filter({has:page.locator('.int-rh2-letter__text').filter({hasText:/^已到戰鬥入場登錄時間。$/})});
+     assert.equal(await letter.count(),1,'Exactly one observed system94 dialog');
+     const confirm=letter.getByRole('button',{name:'確認',exact:true});
+     assert.equal(await confirm.count(),1);assert.equal(await confirm.isEnabled(),true,'Only enabled normal confirmation may be clicked');
+     await confirm.click();await letter.waitFor({state:'hidden'});
+     receipt.after=registrationNoticeInvariant(await saved());write();
+     assert.deepEqual(receipt.after,before,'System94 acknowledgement cannot alter persisted economy or registrations');
+     receipt.ordinarySystemRegistrationAcknowledged=true;write();continue;
+    }
     const calendar=page.locator('.int-rh2-calendar');
     if(!await calendar.isVisible())return;
     await calendar.click();await page.waitForTimeout(250);

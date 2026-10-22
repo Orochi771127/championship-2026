@@ -149,7 +149,9 @@ async function category(page,id) {
  await page.locator(`.cm-settings__category[data-category="${id}"]`).click();
 }
 async function select(page,key,value,{touch=false}={}) {
- const input=page.locator(choice(key,value));await input.scrollIntoViewIfNeeded();
+ // Locator click/tap auto-scroll and re-resolve detached targets within the page timeout.
+ // A separate scroll holds one ElementHandle that can go stale during a rerender.
+ const input=page.locator(choice(key,value));
  if(touch)await input.locator('xpath=..').tap();else await input.locator('xpath=..').click();
  assert.equal(await page.locator(choice(key,value)).isChecked(),true);
 }
