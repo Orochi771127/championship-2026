@@ -788,7 +788,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster--opponent { justify-content: flex-end; }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter {
   display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "name" "hpbar" "tp";
-  flex: 0 0 calc(116px * var(--text-scale, 1)); width: calc(116px * var(--text-scale, 1)); max-width: 100%; min-width: 0;
+  flex: 0 0 calc(140px * var(--text-scale, 1)); width: calc(140px * var(--text-scale, 1)); max-width: 100%; min-width: 0;
   gap: 3px; padding: 5px 6px; border: 0;
   background: linear-gradient(135deg, rgb(255 255 255 / 18%), rgb(255 255 255 / 5%));
   border-radius: 10px; box-shadow: 0 2px 8px rgb(12 42 48 / 12%); overflow: visible;

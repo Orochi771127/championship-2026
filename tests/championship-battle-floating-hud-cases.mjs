@@ -74,7 +74,7 @@ test('failed-FX fallback contain-art coordinates still cover through uncondition
 
 test('modern floating fighter chips remain compact with thinner TP and no old full-width tracks',()=>{
  const css=fs.readFileSync(new URL('../src/championship/app/vs5Styles.css',import.meta.url),'utf8').split('/* Owner 2026-10-23:')[1];
- assert.match(css,/flex: 0 0 calc\(116px \* var\(--text-scale, 1\)\); width: calc\(116px \* var\(--text-scale, 1\)\); max-width: 100%; min-width: 0/);
+ assert.match(css,/flex: 0 0 calc\(140px \* var\(--text-scale, 1\)\); width: calc\(140px \* var\(--text-scale, 1\)\); max-width: 100%; min-width: 0/);
  assert.match(css,/roster--opponent \{ justify-content: flex-end/);
  assert.match(css,/height: calc\(16px \* var\(--text-scale, 1\)\)/);
  assert.match(css,/meter--resource \{ height: calc\(13px \* var\(--text-scale, 1\)\)/);
@@ -82,5 +82,6 @@ test('modern floating fighter chips remain compact with thinner TP and no old fu
  assert.match(css,/white-space: normal; overflow-wrap: anywhere/);
  assert.ok(css.indexOf('roster--opponent { justify-content: flex-end')>css.indexOf('flex-direction: row; flex-wrap: wrap; justify-content: flex-start'),'team alignment wins generic equal-specificity cascade');
  assert.doesNotMatch(css,/grid-template-columns: repeat|height: calc\(19px/);
- assert.ok(3*116+2*6<=390-20);assert.ok(2*116+6<=320-20);
+ assert.ok(2*140+6<=320-20);assert.ok(3*140+2*6>390-20);
+ assert.ok(140-12>109.3125,'actual11px tabular65535/65535 measured109.3125px fits128px track');
 });
