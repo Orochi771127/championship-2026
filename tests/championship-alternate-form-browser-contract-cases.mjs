@@ -22,15 +22,16 @@ test('public QA server serves exact bytes and rejects traversal and symlink esca
 });
 test('save acceptance checks evolved instances 0005 and 0006, not only seeded new forms',()=>{
  const identity={211:['m528_metaletemon','m528_metaletemon'],222:['m540_imperialdramon_fm','m506_griffomon'],229:['oc_crownbrass_mandrill','m528_metaletemon'],230:['oc_celestyrant_battle_r10','m540_imperialdramon_fm']};
- const report={qaOnly:true,namespace:'championshipAlternateFormsQA:r1:',saveSchema:6,storage:'sessionStorage only',errors:[],instances:[['0001',211],['0002',222],['0005',229],['0006',230]].map(([suffix,id])=>({instanceId:'championship:2026:instance:'+suffix,speciesIndex:id,actorSpeciesIndex:id,configuredEntity:identity[id][0],configuredMotionDonor:identity[id][1]}))};
- assert.doesNotThrow(()=>assertEvolved(assert,report));const bad=structuredClone(report);bad.instances[2].speciesIndex=139;assert.throws(()=>assertEvolved(assert,bad));
- const wrongDonor=structuredClone(report);wrongDonor.instances[1].configuredMotionDonor='m540_imperialdramon_fm';assert.throws(()=>assertEvolved(assert,wrongDonor));
- const substituted=structuredClone(report);substituted.instances[2].instanceId='championship:2026:instance:0003';assert.throws(()=>assertEvolved(assert,substituted));
+ const report={qaOnly:true,namespace:'championshipAlternateFormsQA:r1:',saveSchema:7,storage:'sessionStorage only',errors:[],instances:[['0001',211],['0002',222],['0005',229],['0006',230]].map(([suffix,id])=>({instanceId:'championship:2026:instance:'+suffix,speciesIndex:id,actorSpeciesIndex:id,configuredEntity:identity[id][0],configuredMotionDonor:identity[id][1]}))};
+ const saved={schemaVersion:7,cageEdit:{layoutVersion:'PRODUCT_GRID100_INSTANCES_V1'}};
+ assert.doesNotThrow(()=>assertEvolved(assert,report,saved));const bad=structuredClone(report);bad.instances[2].speciesIndex=139;assert.throws(()=>assertEvolved(assert,bad,saved));
+ const wrongDonor=structuredClone(report);wrongDonor.instances[1].configuredMotionDonor='m540_imperialdramon_fm';assert.throws(()=>assertEvolved(assert,wrongDonor,saved));
+ const substituted=structuredClone(report);substituted.instances[2].instanceId='championship:2026:instance:0003';assert.throws(()=>assertEvolved(assert,substituted,saved));
 });
 test('browser harness has no private setters, accelerated clock, synthetic battle result or security flags',()=>{
  const source=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
  assert.doesNotMatch(source,/addInitScript|storage\.setItem|localStorage\.setItem|sessionStorage\.setItem|__alternateFormQaApp|advanceFrames|page\.clock|--no-sandbox|--disable-web-security|--enable-unsafe|--use-gl|--use-angle/);
- assert.match(source,/chromiumSandbox:true/);assert.match(source,/timeout:600000/);assert.match(source,/BLOCKED_GPU/);assert.match(source,/#cm-root\[data-active-screen="BATTLE_RESULT"\]/);assert.doesNotMatch(source,/locator\('[^']*\[data-screen="BATTLE_RESULT"\]/);assert.match(source,/#cm-root\.int-rh2-root\[data-active-screen="RAISING_HOME"\]/);assert.match(source,/int-rh2-field-host\[data-load-state="ready"\]\[aria-busy="false"\]/);assert.match(source,/await raisingReady\('battle-return'\)/);
+ assert.match(source,/chromiumSandbox:true/);assert.match(source,/timeout:600000/);assert.match(source,/BLOCKED_GPU/);assert.match(source,/#cm-root\[data-active-screen="BATTLE_RESULT"\]/);assert.doesNotMatch(source,/locator\('[^']*\[data-screen="BATTLE_RESULT"\]/);assert.match(source,/#cm-root\.int-rh2-root\[data-active-screen="RAISING_HOME"\]/);assert.match(source,/alternateAwaitReady/);assert.match(source,/alternateMakeReady/);assert.match(source,/await raisingReady\('battle-return'\)/);
  assert.match(source,/captureFourFormDatabase/);assert.match(source,/FOUR_FORM_DEX_HERO_SOURCE_AND_CHOICE_PREVIEW_CAPTURE_PASS/);assert.match(source,/dexVisualReview='PENDING_ROOT_SCREENSHOT_REVIEW'/);assert.match(source,/data-entry-id="database"/);assert.match(source,/evolution-choice-preview/);assert.match(source,/dexIdentityAfter,evidence.dexIdentityBefore/);
  const workflow=fs.readFileSync(new URL('../.github/workflows/alternate-form-browser.yml',import.meta.url),'utf8');assert.match(workflow,/contents: read/);assert.match(workflow,/npm run build:playtest && npm run validate:playtest/);assert.doesNotMatch(workflow,/continue-on-error|secrets\.|pages: write|pull_request_target/);
 });
@@ -69,3 +70,39 @@ test('promotion browser evidence covers real production catalogs and an untouche
  const production=fs.readFileSync(new URL('./product-form-production-source-cases.mjs',import.meta.url),'utf8');
  assert.doesNotMatch(production,/registerHooks|alternateFormQaApp/);assert.match(production,/createChampionshipStandaloneApp/);
 });
+
+
+test('canonical post-reload contract rejects stale/unknown schemas, mismatched report and missing/wrong grid',()=>{
+ const identity={211:['m528_metaletemon','m528_metaletemon'],222:['m540_imperialdramon_fm','m506_griffomon'],229:['oc_crownbrass_mandrill','m528_metaletemon'],230:['oc_celestyrant_battle_r10','m540_imperialdramon_fm']};
+ const report={qaOnly:true,namespace:'championshipAlternateFormsQA:r1:',saveSchema:7,storage:'sessionStorage only',errors:[],instances:[['0001',211],['0002',222],['0005',229],['0006',230]].map(([suffix,id])=>({instanceId:'championship:2026:instance:'+suffix,speciesIndex:id,actorSpeciesIndex:id,configuredEntity:identity[id][0],configuredMotionDonor:identity[id][1]}))};
+ const saved={schemaVersion:7,cageEdit:{layoutVersion:'PRODUCT_GRID100_INSTANCES_V1'}};
+ assert.doesNotThrow(()=>assertEvolved(assert,report,saved));
+ for(const version of [5,6,8,undefined]){assert.throws(()=>assertEvolved(assert,{...report,saveSchema:version},saved));assert.throws(()=>assertEvolved(assert,report,{...saved,schemaVersion:version}));}
+ for(const layout of [undefined,'NATIVE_DECKS_V1','PRODUCT_GRID50_V1'])assert.throws(()=>assertEvolved(assert,report,{...saved,cageEdit:{layoutVersion:layout}}));
+ assert.throws(()=>assertEvolved(assert,report));assert.throws(()=>assertEvolved(assert,report,{schemaVersion:7}));
+});
+
+test('whole reachable acceptance flow uses canonical saved and reloaded contracts before unchanged battle proof',()=>{
+ const source=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
+ const helper=fs.readFileSync(new URL('./alternate-form-browser-support.cjs',import.meta.url),'utf8');
+ const compiled=fs.readFileSync(new URL('./alternate-form-compiled-support.cjs',import.meta.url),'utf8');
+ assert.match(source,/assert\.equal\(saved\.schemaVersion,7\)/);assert.match(source,/assert\.equal\(saved\.cageEdit\?\.layoutVersion,'PRODUCT_GRID100_INSTANCES_V1'\)/);
+ const reload=source.indexOf("await page.reload({waitUntil:'domcontentloaded'});await boot();"),read=source.indexOf('const reloadedSaved=await page.evaluate',reload),check=source.indexOf('assertEvolved(assert,reloaded,reloadedSaved)',read),battle=source.indexOf("[data-entry-id=\"battle\"]",check);
+ assert.ok(reload>=0&&read>reload&&check>read&&battle>check);assert.equal(source.split('assertEvolved(assert,').length-1,1);
+ assert.match(source,/assert\.deepEqual\(reloadedSaved\.shop\?\.cageQuantities,saved\.shop\.cageQuantities/);
+ assert.match(source,/assertCurrentPublicBattleLoaders\(assert,last.actualLoaderReports,beforeBattleReportCount\)/);
+ for(const text of [source,helper,compiled])assert.doesNotMatch(text,/assert\.equal\([^;\n]*(?:saveSchema|schemaVersion)[^;\n]*,\s*6\s*\)/);
+ for(const text of ["JSON.stringify(r.loadedSides)==='[\"main\"]'",'beforeCount','replacementFailures','privateIndexRequested,false'])assert.ok(compiled.includes(text),text);
+ assert.match(source,/NATURAL_FOUR_ACTOR_BATTLE_RESULT_PASS/);assert.match(source,/await raisingReady\('battle-return'\)/);
+});
+
+const readinessSource=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8').split('// BEGIN ALTERNATE ATOMIC READY (read-only test observation)')[1].split('// END ALTERNATE ATOMIC READY')[0];
+const readyFns=new Function(readinessSource+'return {alternateReadySnapshot,alternateSnapshotReady,alternateMakeReady,alternateAwaitReady};')();
+const atomicReady=()=>({rootCount:1,fieldCount:1,fieldVisible:true,loadState:'ready',busy:'false',residents:[{state:'ready',error:null}],panelVisible:false,fallbackCount:0,canvas:{count:1,visible:true,width:844,height:390}});
+for(const [name,change]of Object.entries({busy:s=>s.busy='true',loading:s=>s.residents[0].state='loading',empty:s=>s.residents=[],panel:s=>s.panelVisible=true,noCanvas:s=>s.canvas.count=0,hidden:s=>s.canvas.visible=false,zero:s=>s.canvas.width=0}))test('atomic Alternate waits for '+name,()=>{const s=atomicReady();change(s);assert.equal(readyFns.alternateSnapshotReady(s),false);});
+for(const [name,change]of Object.entries({fallback:s=>s.fallbackCount=1,duplicate:s=>s.canvas.count=2,error:s=>s.residents[0].error='decode',fieldError:s=>s.loadState='error'}))test('atomic Alternate rejects '+name,()=>{const s=atomicReady();change(s);assert.throws(()=>readyFns.alternateSnapshotReady(s));});
+function atomicFixture({initial=atomicReady(),final=atomicReady(),elapsed=0,pollError=null}={}){const rows=[],calls=[];let clock=0;return {rows,calls,api:{label:'reload',now:()=>clock,wall:()=>String(clock),record:r=>rows.push(r),write:()=>{},snapshot:async()=>{calls.push('snapshot');clock=elapsed;return initial;},poll:async budget=>{calls.push(['poll',budget]);if(pollError)throw pollError;return final;}}};}
+test('atomic Alternate returns exact initial ready snapshot without reread',async()=>{const f=atomicFixture(),s=await readyFns.alternateAwaitReady(f.api);assert.equal(s,f.rows[0].initial);assert.deepEqual(f.calls,['snapshot']);});
+test('atomic Alternate retains raw busy and returns exact polled ready snapshot',async()=>{const f=atomicFixture({initial:{...atomicReady(),busy:'true'},elapsed:2300}),s=await readyFns.alternateAwaitReady(f.api);assert.equal(f.rows[0].initial.busy,'true');assert.equal(s,f.rows[0].final);assert.deepEqual(f.calls,['snapshot',['poll',177700]]);});
+test('atomic Alternate deadline cannot reset',async()=>{const f=atomicFixture({elapsed:180001});await assert.rejects(readyFns.alternateAwaitReady(f.api),/deadline/);assert.equal(f.calls.length,1);});
+test('atomic Alternate timeout preserves raw evidence and exact exception',async()=>{const e=new Error('real timeout'),f=atomicFixture({initial:{...atomicReady(),busy:'true'},pollError:e});await assert.rejects(readyFns.alternateAwaitReady(f.api),x=>x===e);assert.match(f.rows[0].error,/real timeout/);});

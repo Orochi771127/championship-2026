@@ -1,3 +1,4 @@
+import {readRaisingGroundSupport} from './raisingGroundSupport.js';
 import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
@@ -1280,6 +1281,8 @@ export function createChampionshipStandaloneApp({
     getRaisingState() {
       return raising;
     },
+
+    getRaisingGroundSupport(x,y){return readRaisingGroundSupport(raisingGround,x,y);},
 
     getRaisingActorFrame(instanceId) {
       const actor=nativeRaisingActor(instanceId);

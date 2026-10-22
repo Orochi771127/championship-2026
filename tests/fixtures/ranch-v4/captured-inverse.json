@@ -1,0 +1,1494 @@
+{
+  "results": [
+    {
+      "fieldId": "field_cm18_01",
+      "preparation": {
+        "layout": [
+          {
+            "moduleId": "championship:2026:cage:waiting-room",
+            "slotIndex": 0,
+            "instanceId": "cage:legacy:35"
+          },
+          {
+            "moduleId": "championship:2026:cage:0",
+            "slotIndex": 8,
+            "instanceId": "cage:legacy:0"
+          },
+          {
+            "moduleId": "championship:2026:cage:15",
+            "slotIndex": 7,
+            "instanceId": "cage:legacy:15"
+          },
+          {
+            "moduleId": "championship:2026:cage:17",
+            "slotIndex": 3,
+            "instanceId": "cage:instance:1"
+          }
+        ],
+        "placement": {
+          "moduleId": "championship:2026:cage:17",
+          "slotIndex": 3,
+          "instanceId": "cage:instance:1"
+        },
+        "definitionIndex": 17,
+        "residentId": "resident:species-000"
+      },
+      "captures": [
+        {
+          "label": "tread-423",
+          "nativePoint": [
+            254,
+            160
+          ],
+          "pick": {
+            "input": {
+              "x": 153,
+              "y": 408.6571731900394
+            },
+            "native": {
+              "x": 254,
+              "y": 159.55239106334645
+            },
+            "admission": null,
+            "beforeSerial": 7,
+            "afterSerial": 7,
+            "scope": "ACTUAL_READONLY_POINTER_INVERSE_NOT_DRAG_DROP",
+            "deltaNative": [
+              0,
+              -0.44760893665355184
+            ],
+            "sameOwner": false,
+            "sameCell": false
+          },
+          "snap": {
+            "positions": [
+              {
+                "creatureId": "resident:species-000",
+                "groundScreen": {
+                  "x": 153,
+                  "y": 410
+                },
+                "nativeScreenPixels": 3,
+                "testOnlyContactDiagnostic": {
+                  "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+                  "entityId": "m106_nyaromon",
+                  "speciesId": "championship:creature:species-025",
+                  "mode": "fallback",
+                  "ellipses": [
+                    {
+                      "x": -0.375,
+                      "y": 2,
+                      "radiusX": 9.764999999999999,
+                      "radiusY": 3.0225
+                    }
+                  ],
+                  "visible": {
+                    "x": -12,
+                    "y": -10,
+                    "width": 23.25,
+                    "height": 11
+                  },
+                  "contactShadowArt": null,
+                  "frame": {
+                    "sequenceId": 0,
+                    "cell": 0,
+                    "flipX": true,
+                    "flipY": false,
+                    "geometry": {
+                      "blank": false,
+                      "scale": 4,
+                      "origin": [
+                        128,
+                        168
+                      ],
+                      "sourceSize": [
+                        256,
+                        256
+                      ],
+                      "nativeBounds": [
+                        -11.25,
+                        -10,
+                        12,
+                        1
+                      ]
+                    }
+                  },
+                  "nativeLift": 0,
+                  "groundAdmission": {
+                    "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+                    "instanceId": "cage:instance:1",
+                    "moduleId": "championship:2026:cage:17",
+                    "slotIndex": 3,
+                    "definitionIndex": 17,
+                    "nativeOwnerIndex": 3,
+                    "navigationComponent": 7,
+                    "terrain": 0,
+                    "wrapWidthNative": 960,
+                    "originNative": [
+                      192,
+                      64
+                    ],
+                    "localNative": [
+                      62,
+                      96
+                    ],
+                    "positionNative": [
+                      254,
+                      160
+                    ]
+                  },
+                  "supportOwner": {
+                    "ownerIndex": 9,
+                    "fieldId": "field_cm18_01",
+                    "shift": 0,
+                    "groundComponent": "NOMINAL_GROUND"
+                  },
+                  "root": {
+                    "x": 153,
+                    "y": 408.6571731900394,
+                    "scaleX": 3,
+                    "scaleY": 3
+                  },
+                  "shadowParentIsRoot": true,
+                  "shadowLocalMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "rootLocalMatrix": {
+                    "a": 3,
+                    "b": 0,
+                    "c": 0,
+                    "d": 3,
+                    "tx": 153,
+                    "ty": 408.6571731900394
+                  },
+                  "parentWorldMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "shadow": {
+                    "x": 0,
+                    "y": 0,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "visible": true
+                  },
+                  "ellipseScreen": [
+                    {
+                      "x": 151.875,
+                      "y": 414.6571731900394
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "label": "tread-435",
+          "nativePoint": [
+            259,
+            158
+          ],
+          "pick": {
+            "input": {
+              "x": 168,
+              "y": 401.9300451388285
+            },
+            "native": {
+              "x": 259,
+              "y": 158
+            },
+            "admission": {
+              "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+              "instanceId": "cage:instance:1",
+              "moduleId": "championship:2026:cage:17",
+              "slotIndex": 3,
+              "definitionIndex": 17,
+              "nativeOwnerIndex": 3,
+              "navigationComponent": 7,
+              "terrain": 0,
+              "wrapWidthNative": 960,
+              "originNative": [
+                192,
+                64
+              ],
+              "localNative": [
+                67,
+                94
+              ],
+              "positionNative": [
+                259,
+                158
+              ]
+            },
+            "beforeSerial": 8,
+            "afterSerial": 8,
+            "scope": "ACTUAL_READONLY_POINTER_INVERSE_NOT_DRAG_DROP",
+            "deltaNative": [
+              0,
+              0
+            ],
+            "sameOwner": true,
+            "sameCell": true
+          },
+          "snap": {
+            "positions": [
+              {
+                "creatureId": "resident:species-000",
+                "groundScreen": {
+                  "x": 168,
+                  "y": 404
+                },
+                "nativeScreenPixels": 3,
+                "testOnlyContactDiagnostic": {
+                  "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+                  "entityId": "m106_nyaromon",
+                  "speciesId": "championship:creature:species-025",
+                  "mode": "fallback",
+                  "ellipses": [
+                    {
+                      "x": -0.375,
+                      "y": 2,
+                      "radiusX": 9.764999999999999,
+                      "radiusY": 3.0225
+                    }
+                  ],
+                  "visible": {
+                    "x": -12,
+                    "y": -10,
+                    "width": 23.25,
+                    "height": 11
+                  },
+                  "contactShadowArt": null,
+                  "frame": {
+                    "sequenceId": 0,
+                    "cell": 0,
+                    "flipX": true,
+                    "flipY": false,
+                    "geometry": {
+                      "blank": false,
+                      "scale": 4,
+                      "origin": [
+                        128,
+                        168
+                      ],
+                      "sourceSize": [
+                        256,
+                        256
+                      ],
+                      "nativeBounds": [
+                        -11.25,
+                        -10,
+                        12,
+                        1
+                      ]
+                    }
+                  },
+                  "nativeLift": 0,
+                  "groundAdmission": {
+                    "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+                    "instanceId": "cage:instance:1",
+                    "moduleId": "championship:2026:cage:17",
+                    "slotIndex": 3,
+                    "definitionIndex": 17,
+                    "nativeOwnerIndex": 3,
+                    "navigationComponent": 7,
+                    "terrain": 0,
+                    "wrapWidthNative": 960,
+                    "originNative": [
+                      192,
+                      64
+                    ],
+                    "localNative": [
+                      67,
+                      94
+                    ],
+                    "positionNative": [
+                      259,
+                      158
+                    ]
+                  },
+                  "supportOwner": {
+                    "ownerIndex": 9,
+                    "fieldId": "field_cm18_01",
+                    "shift": 0,
+                    "groundComponent": "NOMINAL_GROUND"
+                  },
+                  "root": {
+                    "x": 168,
+                    "y": 401.9300451388285,
+                    "scaleX": 3,
+                    "scaleY": 3
+                  },
+                  "shadowParentIsRoot": true,
+                  "shadowLocalMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "rootLocalMatrix": {
+                    "a": 3,
+                    "b": 0,
+                    "c": 0,
+                    "d": 3,
+                    "tx": 168,
+                    "ty": 401.9300451388285
+                  },
+                  "parentWorldMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "shadow": {
+                    "x": 0,
+                    "y": 0,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "visible": true
+                  },
+                  "ellipseScreen": [
+                    {
+                      "x": 166.875,
+                      "y": 407.9300451388285
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "label": "tread-456",
+          "nativePoint": [
+            264,
+            155
+          ],
+          "pick": {
+            "input": {
+              "x": 183,
+              "y": 392.20291796832845
+            },
+            "native": {
+              "x": 264,
+              "y": 155
+            },
+            "admission": {
+              "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+              "instanceId": "cage:instance:1",
+              "moduleId": "championship:2026:cage:17",
+              "slotIndex": 3,
+              "definitionIndex": 17,
+              "nativeOwnerIndex": 3,
+              "navigationComponent": 7,
+              "terrain": 0,
+              "wrapWidthNative": 960,
+              "originNative": [
+                192,
+                64
+              ],
+              "localNative": [
+                72,
+                91
+              ],
+              "positionNative": [
+                264,
+                155
+              ]
+            },
+            "beforeSerial": 9,
+            "afterSerial": 9,
+            "scope": "ACTUAL_READONLY_POINTER_INVERSE_NOT_DRAG_DROP",
+            "deltaNative": [
+              0,
+              0
+            ],
+            "sameOwner": true,
+            "sameCell": true
+          },
+          "snap": {
+            "positions": [
+              {
+                "creatureId": "resident:species-000",
+                "groundScreen": {
+                  "x": 183,
+                  "y": 395
+                },
+                "nativeScreenPixels": 3,
+                "testOnlyContactDiagnostic": {
+                  "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+                  "entityId": "m106_nyaromon",
+                  "speciesId": "championship:creature:species-025",
+                  "mode": "fallback",
+                  "ellipses": [
+                    {
+                      "x": -0.375,
+                      "y": 2,
+                      "radiusX": 9.764999999999999,
+                      "radiusY": 3.0225
+                    }
+                  ],
+                  "visible": {
+                    "x": -12,
+                    "y": -10,
+                    "width": 23.25,
+                    "height": 11
+                  },
+                  "contactShadowArt": null,
+                  "frame": {
+                    "sequenceId": 0,
+                    "cell": 0,
+                    "flipX": true,
+                    "flipY": false,
+                    "geometry": {
+                      "blank": false,
+                      "scale": 4,
+                      "origin": [
+                        128,
+                        168
+                      ],
+                      "sourceSize": [
+                        256,
+                        256
+                      ],
+                      "nativeBounds": [
+                        -11.25,
+                        -10,
+                        12,
+                        1
+                      ]
+                    }
+                  },
+                  "nativeLift": 0,
+                  "groundAdmission": {
+                    "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+                    "instanceId": "cage:instance:1",
+                    "moduleId": "championship:2026:cage:17",
+                    "slotIndex": 3,
+                    "definitionIndex": 17,
+                    "nativeOwnerIndex": 3,
+                    "navigationComponent": 7,
+                    "terrain": 0,
+                    "wrapWidthNative": 960,
+                    "originNative": [
+                      192,
+                      64
+                    ],
+                    "localNative": [
+                      72,
+                      91
+                    ],
+                    "positionNative": [
+                      264,
+                      155
+                    ]
+                  },
+                  "supportOwner": {
+                    "ownerIndex": 9,
+                    "fieldId": "field_cm18_01",
+                    "shift": 0,
+                    "groundComponent": "NOMINAL_GROUND"
+                  },
+                  "root": {
+                    "x": 183,
+                    "y": 392.20291796832845,
+                    "scaleX": 3,
+                    "scaleY": 3
+                  },
+                  "shadowParentIsRoot": true,
+                  "shadowLocalMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "rootLocalMatrix": {
+                    "a": 3,
+                    "b": 0,
+                    "c": 0,
+                    "d": 3,
+                    "tx": 183,
+                    "ty": 392.20291796832845
+                  },
+                  "parentWorldMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "shadow": {
+                    "x": 0,
+                    "y": 0,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "visible": true
+                  },
+                  "ellipseScreen": [
+                    {
+                      "x": 181.875,
+                      "y": 398.20291796832845
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "label": "tread-487",
+          "nativePoint": [
+            269,
+            152
+          ],
+          "pick": {
+            "input": {
+              "x": 198,
+              "y": 382.44885954212447
+            },
+            "native": {
+              "x": 269,
+              "y": 151.99999999999997
+            },
+            "admission": {
+              "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+              "instanceId": "cage:instance:1",
+              "moduleId": "championship:2026:cage:17",
+              "slotIndex": 3,
+              "definitionIndex": 17,
+              "nativeOwnerIndex": 3,
+              "navigationComponent": 7,
+              "terrain": 0,
+              "wrapWidthNative": 960,
+              "originNative": [
+                192,
+                64
+              ],
+              "localNative": [
+                77,
+                87.99999999999997
+              ],
+              "positionNative": [
+                269,
+                151.99999999999997
+              ]
+            },
+            "beforeSerial": 10,
+            "afterSerial": 10,
+            "scope": "ACTUAL_READONLY_POINTER_INVERSE_NOT_DRAG_DROP",
+            "deltaNative": [
+              0,
+              -2.842170943040401e-14
+            ],
+            "sameOwner": true,
+            "sameCell": false
+          },
+          "snap": {
+            "positions": [
+              {
+                "creatureId": "resident:species-000",
+                "groundScreen": {
+                  "x": 198,
+                  "y": 386
+                },
+                "nativeScreenPixels": 3,
+                "testOnlyContactDiagnostic": {
+                  "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+                  "entityId": "m106_nyaromon",
+                  "speciesId": "championship:creature:species-025",
+                  "mode": "fallback",
+                  "ellipses": [
+                    {
+                      "x": -0.375,
+                      "y": 2,
+                      "radiusX": 9.764999999999999,
+                      "radiusY": 3.0225
+                    }
+                  ],
+                  "visible": {
+                    "x": -12,
+                    "y": -10,
+                    "width": 23.25,
+                    "height": 11
+                  },
+                  "contactShadowArt": null,
+                  "frame": {
+                    "sequenceId": 0,
+                    "cell": 0,
+                    "flipX": true,
+                    "flipY": false,
+                    "geometry": {
+                      "blank": false,
+                      "scale": 4,
+                      "origin": [
+                        128,
+                        168
+                      ],
+                      "sourceSize": [
+                        256,
+                        256
+                      ],
+                      "nativeBounds": [
+                        -11.25,
+                        -10,
+                        12,
+                        1
+                      ]
+                    }
+                  },
+                  "nativeLift": 0,
+                  "groundAdmission": {
+                    "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+                    "instanceId": "cage:instance:1",
+                    "moduleId": "championship:2026:cage:17",
+                    "slotIndex": 3,
+                    "definitionIndex": 17,
+                    "nativeOwnerIndex": 3,
+                    "navigationComponent": 7,
+                    "terrain": 0,
+                    "wrapWidthNative": 960,
+                    "originNative": [
+                      192,
+                      64
+                    ],
+                    "localNative": [
+                      77,
+                      88
+                    ],
+                    "positionNative": [
+                      269,
+                      152
+                    ]
+                  },
+                  "supportOwner": {
+                    "ownerIndex": 9,
+                    "fieldId": "field_cm18_01",
+                    "shift": 0,
+                    "groundComponent": "NOMINAL_GROUND"
+                  },
+                  "root": {
+                    "x": 198,
+                    "y": 382.44885954212447,
+                    "scaleX": 3,
+                    "scaleY": 3
+                  },
+                  "shadowParentIsRoot": true,
+                  "shadowLocalMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "rootLocalMatrix": {
+                    "a": 3,
+                    "b": 0,
+                    "c": 0,
+                    "d": 3,
+                    "tx": 198,
+                    "ty": 382.44885954212447
+                  },
+                  "parentWorldMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "shadow": {
+                    "x": 0,
+                    "y": 0,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "visible": true
+                  },
+                  "ellipseScreen": [
+                    {
+                      "x": 196.875,
+                      "y": 388.44885954212447
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "label": "walking-start",
+          "nativePoint": [
+            268,
+            156
+          ],
+          "pick": {
+            "input": {
+              "x": 195,
+              "y": 395.20291796832845
+            },
+            "native": {
+              "x": 268,
+              "y": 156
+            },
+            "admission": {
+              "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+              "instanceId": "cage:instance:1",
+              "moduleId": "championship:2026:cage:17",
+              "slotIndex": 3,
+              "definitionIndex": 17,
+              "nativeOwnerIndex": 3,
+              "navigationComponent": 7,
+              "terrain": 0,
+              "wrapWidthNative": 960,
+              "originNative": [
+                192,
+                64
+              ],
+              "localNative": [
+                76,
+                92
+              ],
+              "positionNative": [
+                268,
+                156
+              ]
+            },
+            "beforeSerial": 11,
+            "afterSerial": 11,
+            "scope": "ACTUAL_READONLY_POINTER_INVERSE_NOT_DRAG_DROP",
+            "deltaNative": [
+              0,
+              0
+            ],
+            "sameOwner": true,
+            "sameCell": true
+          },
+          "snap": {
+            "positions": [
+              {
+                "creatureId": "resident:species-000",
+                "groundScreen": {
+                  "x": 195,
+                  "y": 398
+                },
+                "nativeScreenPixels": 3,
+                "testOnlyContactDiagnostic": {
+                  "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+                  "entityId": "m106_nyaromon",
+                  "speciesId": "championship:creature:species-025",
+                  "mode": "fallback",
+                  "ellipses": [
+                    {
+                      "x": -0.375,
+                      "y": 2,
+                      "radiusX": 9.764999999999999,
+                      "radiusY": 3.0225
+                    }
+                  ],
+                  "visible": {
+                    "x": -12,
+                    "y": -10,
+                    "width": 23.25,
+                    "height": 11
+                  },
+                  "contactShadowArt": null,
+                  "frame": {
+                    "sequenceId": 0,
+                    "cell": 0,
+                    "flipX": true,
+                    "flipY": false,
+                    "geometry": {
+                      "blank": false,
+                      "scale": 4,
+                      "origin": [
+                        128,
+                        168
+                      ],
+                      "sourceSize": [
+                        256,
+                        256
+                      ],
+                      "nativeBounds": [
+                        -11.25,
+                        -10,
+                        12,
+                        1
+                      ]
+                    }
+                  },
+                  "nativeLift": 0,
+                  "groundAdmission": {
+                    "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+                    "instanceId": "cage:instance:1",
+                    "moduleId": "championship:2026:cage:17",
+                    "slotIndex": 3,
+                    "definitionIndex": 17,
+                    "nativeOwnerIndex": 3,
+                    "navigationComponent": 7,
+                    "terrain": 0,
+                    "wrapWidthNative": 960,
+                    "originNative": [
+                      192,
+                      64
+                    ],
+                    "localNative": [
+                      76,
+                      92
+                    ],
+                    "positionNative": [
+                      268,
+                      156
+                    ]
+                  },
+                  "supportOwner": {
+                    "ownerIndex": 9,
+                    "fieldId": "field_cm18_01",
+                    "shift": 0,
+                    "groundComponent": "NOMINAL_GROUND"
+                  },
+                  "root": {
+                    "x": 195,
+                    "y": 395.20291796832845,
+                    "scaleX": 3,
+                    "scaleY": 3
+                  },
+                  "shadowParentIsRoot": true,
+                  "shadowLocalMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "rootLocalMatrix": {
+                    "a": 3,
+                    "b": 0,
+                    "c": 0,
+                    "d": 3,
+                    "tx": 195,
+                    "ty": 395.20291796832845
+                  },
+                  "parentWorldMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "shadow": {
+                    "x": 0,
+                    "y": 0,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "visible": true
+                  },
+                  "ellipseScreen": [
+                    {
+                      "x": 193.875,
+                      "y": 401.20291796832845
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "label": "native-locomotion",
+          "nativePoint": [
+            261.045166015625,
+            162.4970703125
+          ],
+          "pick": {
+            "input": {
+              "x": 174.135498046875,
+              "y": 416.1483841275394
+            },
+            "native": {
+              "x": 261.045166015625,
+              "y": 162.49707031249997
+            },
+            "admission": {
+              "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+              "instanceId": "cage:instance:1",
+              "moduleId": "championship:2026:cage:17",
+              "slotIndex": 3,
+              "definitionIndex": 17,
+              "nativeOwnerIndex": 3,
+              "navigationComponent": 7,
+              "terrain": 0,
+              "wrapWidthNative": 960,
+              "originNative": [
+                192,
+                64
+              ],
+              "localNative": [
+                69.045166015625,
+                98.49707031249997
+              ],
+              "positionNative": [
+                261.045166015625,
+                162.49707031249997
+              ]
+            },
+            "beforeSerial": 18,
+            "afterSerial": 18,
+            "scope": "ACTUAL_READONLY_POINTER_INVERSE_NOT_DRAG_DROP",
+            "deltaNative": [
+              0,
+              -2.842170943040401e-14
+            ],
+            "sameOwner": true,
+            "sameCell": true
+          },
+          "snap": {
+            "positions": [
+              {
+                "creatureId": "resident:species-000",
+                "groundScreen": {
+                  "x": 174.135498046875,
+                  "y": 417.4912109375
+                },
+                "nativeScreenPixels": 3,
+                "testOnlyContactDiagnostic": {
+                  "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+                  "entityId": "m106_nyaromon",
+                  "speciesId": "championship:creature:species-025",
+                  "mode": "fallback",
+                  "ellipses": [
+                    {
+                      "x": -0.375,
+                      "y": 2,
+                      "radiusX": 9.764999999999999,
+                      "radiusY": 3.0225
+                    }
+                  ],
+                  "visible": {
+                    "x": -12,
+                    "y": -10,
+                    "width": 23.25,
+                    "height": 11
+                  },
+                  "contactShadowArt": null,
+                  "frame": {
+                    "sequenceId": 2,
+                    "cell": 4,
+                    "flipX": true,
+                    "flipY": false,
+                    "geometry": {
+                      "blank": false,
+                      "scale": 4,
+                      "origin": [
+                        128,
+                        168
+                      ],
+                      "sourceSize": [
+                        256,
+                        256
+                      ],
+                      "nativeBounds": [
+                        -11.25,
+                        -10,
+                        12,
+                        1
+                      ]
+                    }
+                  },
+                  "nativeLift": 0,
+                  "groundAdmission": {
+                    "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+                    "instanceId": "cage:instance:1",
+                    "moduleId": "championship:2026:cage:17",
+                    "slotIndex": 3,
+                    "definitionIndex": 17,
+                    "nativeOwnerIndex": 3,
+                    "navigationComponent": 7,
+                    "terrain": 0,
+                    "wrapWidthNative": 960,
+                    "originNative": [
+                      192,
+                      64
+                    ],
+                    "localNative": [
+                      69.045166015625,
+                      98.4970703125
+                    ],
+                    "positionNative": [
+                      261.045166015625,
+                      162.4970703125
+                    ]
+                  },
+                  "supportOwner": {
+                    "ownerIndex": 9,
+                    "fieldId": "field_cm18_01",
+                    "shift": 0,
+                    "groundComponent": "NOMINAL_GROUND"
+                  },
+                  "root": {
+                    "x": 174.135498046875,
+                    "y": 416.1483841275394,
+                    "scaleX": 3,
+                    "scaleY": 3
+                  },
+                  "shadowParentIsRoot": true,
+                  "shadowLocalMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "rootLocalMatrix": {
+                    "a": 3,
+                    "b": 0,
+                    "c": 0,
+                    "d": 3,
+                    "tx": 174.135498046875,
+                    "ty": 416.1483841275394
+                  },
+                  "parentWorldMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "shadow": {
+                    "x": 0,
+                    "y": 0,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "visible": true
+                  },
+                  "ellipseScreen": [
+                    {
+                      "x": 173.010498046875,
+                      "y": 422.1483841275394
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm34_01",
+      "preparation": {
+        "layout": [
+          {
+            "moduleId": "championship:2026:cage:waiting-room",
+            "slotIndex": 0,
+            "instanceId": "cage:legacy:35"
+          },
+          {
+            "moduleId": "championship:2026:cage:0",
+            "slotIndex": 8,
+            "instanceId": "cage:legacy:0"
+          },
+          {
+            "moduleId": "championship:2026:cage:15",
+            "slotIndex": 7,
+            "instanceId": "cage:legacy:15"
+          },
+          {
+            "moduleId": "championship:2026:cage:30",
+            "slotIndex": 4,
+            "instanceId": "cage:instance:1"
+          }
+        ],
+        "placement": {
+          "moduleId": "championship:2026:cage:30",
+          "slotIndex": 4,
+          "instanceId": "cage:instance:1"
+        },
+        "definitionIndex": 30,
+        "residentId": "resident:species-000"
+      },
+      "captures": [
+        {
+          "label": "mat",
+          "nativePoint": [
+            228,
+            44
+          ],
+          "pick": {
+            "input": {
+              "x": 219,
+              "y": 171.52370939394976
+            },
+            "native": {
+              "x": 228,
+              "y": 44
+            },
+            "admission": {
+              "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+              "instanceId": "cage:instance:1",
+              "moduleId": "championship:2026:cage:30",
+              "slotIndex": 4,
+              "definitionIndex": 30,
+              "nativeOwnerIndex": 3,
+              "navigationComponent": 1,
+              "terrain": 0,
+              "wrapWidthNative": 960,
+              "originNative": [
+                192,
+                -24
+              ],
+              "localNative": [
+                36,
+                68
+              ],
+              "positionNative": [
+                228,
+                44
+              ]
+            },
+            "beforeSerial": 7,
+            "afterSerial": 7,
+            "scope": "ACTUAL_READONLY_POINTER_INVERSE_NOT_DRAG_DROP",
+            "deltaNative": [
+              0,
+              0
+            ],
+            "sameOwner": true,
+            "sameCell": true
+          },
+          "snap": {
+            "positions": [
+              {
+                "creatureId": "resident:species-000",
+                "groundScreen": {
+                  "x": 219,
+                  "y": 173
+                },
+                "nativeScreenPixels": 3,
+                "testOnlyContactDiagnostic": {
+                  "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+                  "entityId": "m106_nyaromon",
+                  "speciesId": "championship:creature:species-025",
+                  "mode": "fallback",
+                  "ellipses": [
+                    {
+                      "x": -0.375,
+                      "y": 2,
+                      "radiusX": 9.764999999999999,
+                      "radiusY": 3.0225
+                    }
+                  ],
+                  "visible": {
+                    "x": -12,
+                    "y": -10,
+                    "width": 23.25,
+                    "height": 11
+                  },
+                  "contactShadowArt": null,
+                  "frame": {
+                    "sequenceId": 0,
+                    "cell": 0,
+                    "flipX": true,
+                    "flipY": false,
+                    "geometry": {
+                      "blank": false,
+                      "scale": 4,
+                      "origin": [
+                        128,
+                        168
+                      ],
+                      "sourceSize": [
+                        256,
+                        256
+                      ],
+                      "nativeBounds": [
+                        -11.25,
+                        -10,
+                        12,
+                        1
+                      ]
+                    }
+                  },
+                  "nativeLift": 0,
+                  "groundAdmission": {
+                    "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+                    "instanceId": "cage:instance:1",
+                    "moduleId": "championship:2026:cage:30",
+                    "slotIndex": 4,
+                    "definitionIndex": 30,
+                    "nativeOwnerIndex": 3,
+                    "navigationComponent": 1,
+                    "terrain": 0,
+                    "wrapWidthNative": 960,
+                    "originNative": [
+                      192,
+                      -24
+                    ],
+                    "localNative": [
+                      36,
+                      68
+                    ],
+                    "positionNative": [
+                      228,
+                      44
+                    ]
+                  },
+                  "supportOwner": {
+                    "ownerIndex": 1,
+                    "fieldId": "field_cm34_01",
+                    "shift": 0,
+                    "groundComponent": "NOMINAL_GROUND"
+                  },
+                  "root": {
+                    "x": 219,
+                    "y": 171.52370939394976,
+                    "scaleX": 3,
+                    "scaleY": 3
+                  },
+                  "shadowParentIsRoot": true,
+                  "shadowLocalMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "rootLocalMatrix": {
+                    "a": 3,
+                    "b": 0,
+                    "c": 0,
+                    "d": 3,
+                    "tx": 219,
+                    "ty": 171.52370939394976
+                  },
+                  "parentWorldMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "shadow": {
+                    "x": 0,
+                    "y": 0,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "visible": true
+                  },
+                  "ellipseScreen": [
+                    {
+                      "x": 217.875,
+                      "y": 177.52370939394976
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "label": "walking-start",
+          "nativePoint": [
+            228,
+            44
+          ],
+          "pick": {
+            "input": {
+              "x": 219,
+              "y": 171.52370939394976
+            },
+            "native": {
+              "x": 228,
+              "y": 44
+            },
+            "admission": {
+              "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+              "instanceId": "cage:instance:1",
+              "moduleId": "championship:2026:cage:30",
+              "slotIndex": 4,
+              "definitionIndex": 30,
+              "nativeOwnerIndex": 3,
+              "navigationComponent": 1,
+              "terrain": 0,
+              "wrapWidthNative": 960,
+              "originNative": [
+                192,
+                -24
+              ],
+              "localNative": [
+                36,
+                68
+              ],
+              "positionNative": [
+                228,
+                44
+              ]
+            },
+            "beforeSerial": 8,
+            "afterSerial": 8,
+            "scope": "ACTUAL_READONLY_POINTER_INVERSE_NOT_DRAG_DROP",
+            "deltaNative": [
+              0,
+              0
+            ],
+            "sameOwner": true,
+            "sameCell": true
+          },
+          "snap": {
+            "positions": [
+              {
+                "creatureId": "resident:species-000",
+                "groundScreen": {
+                  "x": 219,
+                  "y": 173
+                },
+                "nativeScreenPixels": 3,
+                "testOnlyContactDiagnostic": {
+                  "kind": "TEST_ONLY_CHOSEN_PRODUCTION_SHADOW",
+                  "entityId": "m106_nyaromon",
+                  "speciesId": "championship:creature:species-025",
+                  "mode": "fallback",
+                  "ellipses": [
+                    {
+                      "x": -0.375,
+                      "y": 2,
+                      "radiusX": 9.764999999999999,
+                      "radiusY": 3.0225
+                    }
+                  ],
+                  "visible": {
+                    "x": -12,
+                    "y": -10,
+                    "width": 23.25,
+                    "height": 11
+                  },
+                  "contactShadowArt": null,
+                  "frame": {
+                    "sequenceId": 0,
+                    "cell": 0,
+                    "flipX": true,
+                    "flipY": false,
+                    "geometry": {
+                      "blank": false,
+                      "scale": 4,
+                      "origin": [
+                        128,
+                        168
+                      ],
+                      "sourceSize": [
+                        256,
+                        256
+                      ],
+                      "nativeBounds": [
+                        -11.25,
+                        -10,
+                        12,
+                        1
+                      ]
+                    }
+                  },
+                  "nativeLift": 0,
+                  "groundAdmission": {
+                    "kind": "CURRENT_GROUND_XY_ADMISSION_V1",
+                    "instanceId": "cage:instance:1",
+                    "moduleId": "championship:2026:cage:30",
+                    "slotIndex": 4,
+                    "definitionIndex": 30,
+                    "nativeOwnerIndex": 3,
+                    "navigationComponent": 1,
+                    "terrain": 0,
+                    "wrapWidthNative": 960,
+                    "originNative": [
+                      192,
+                      -24
+                    ],
+                    "localNative": [
+                      36,
+                      68
+                    ],
+                    "positionNative": [
+                      228,
+                      44
+                    ]
+                  },
+                  "supportOwner": {
+                    "ownerIndex": 1,
+                    "fieldId": "field_cm34_01",
+                    "shift": 0,
+                    "groundComponent": "NOMINAL_GROUND"
+                  },
+                  "root": {
+                    "x": 219,
+                    "y": 171.52370939394976,
+                    "scaleX": 3,
+                    "scaleY": 3
+                  },
+                  "shadowParentIsRoot": true,
+                  "shadowLocalMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "rootLocalMatrix": {
+                    "a": 3,
+                    "b": 0,
+                    "c": 0,
+                    "d": 3,
+                    "tx": 219,
+                    "ty": 171.52370939394976
+                  },
+                  "parentWorldMatrix": {
+                    "a": 1,
+                    "b": 0,
+                    "c": 0,
+                    "d": 1,
+                    "tx": 0,
+                    "ty": 0
+                  },
+                  "shadow": {
+                    "x": 0,
+                    "y": 0,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "visible": true
+                  },
+                  "ellipseScreen": [
+                    {
+                      "x": 217.875,
+                      "y": 177.52370939394976
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

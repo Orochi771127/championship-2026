@@ -105,16 +105,65 @@ function selfTest() {
  const box=(left,right)=>({left,right,top:0,bottom:44}),part=(left,right)=>({visible:true,bounds:box(left,right),textRects:[box(left+2,right-2)]});const header={bounds:box(0,320),back:part(0,90),title:part(100,260),close:part(276,320)};checkHeader(header);assert.throws(()=>checkHeader({...header,title:{...header.title,textRects:[box(80,240)]}}));
  console.log('PASS browser-runner assertion self-test only; no browser was launched');
 }
-// Read-only instrumentation wraps native constructors. Never substitutes media,
-// play(), decoder, AudioContext, clocks, gain values, or autoplay policy.
-function observeNativeAudio() {
+// Native constructors remain real. Normal-game locale diagnostics additionally
+// forward play/currentTime calls without altering promises, values or policy.
+function observeNativeAudio({localeDiagnostics=false}={}) {
  const media=[],contexts=[],events=[],samples=[];let maxVoices=0;
  const isMusic=m=>/\/(original-music-r1|scene-music-r1)\//.test(m.currentSrc||m.src);
  const snapshot=()=>({mediaCreated:media.length,media:media.filter(isMusic).map((m,id)=>({id,src:m.src,currentSrc:m.currentSrc,paused:m.paused,ended:m.ended,seeking:m.seeking,seekable:Array.from({length:m.seekable.length},(_,i)=>[m.seekable.start(i),m.seekable.end(i)]),loop:m.loop,readyState:m.readyState,networkState:m.networkState,currentTime:m.currentTime,duration:Number.isFinite(m.duration)?m.duration:null,error:m.error?{code:m.error.code,message:m.error.message}:null,buffered:Array.from({length:m.buffered.length},(_,i)=>[m.buffered.start(i),m.buffered.end(i)])})),contexts:contexts.map(c=>({state:c.state,sampleRate:c.sampleRate,currentTime:c.currentTime})),maxVoices});
- globalThis.Audio=new Proxy(globalThis.Audio,{construct(Target,args){const m=Reflect.construct(Target,args);media.push(m);for(const type of ['loadedmetadata','loadeddata','canplay','playing','pause','seeking','seeked','timeupdate','waiting','stalled','ended','error','emptied'])m.addEventListener(type,()=>{events.push({type,time:performance.now(),src:m.currentSrc||m.src,position:m.currentTime,seeking:m.seeking,readyState:m.readyState,error:m.error?.code??null});if(events.length>1000)events.shift();});return m;}});
+ // Normal-game diagnostics only. Forwarding observers add identity/stack/read overhead,
+ // not a timing control; they never initiate transport actions or mutate clocks.
+ const locale=localeDiagnostics?{samples:[],events:[],states:[],actions:[],origins:[],gestures:[],dropped:{samples:0,events:0,states:0,actions:0,origins:0,gestures:0},originObserver:{playInstalled:false,currentTimeInstalled:false,installErrors:[]},observerErrors:0,truncatedStrings:0,truncatedStacks:0,windowClosed:false,interaction:null,startReason:{available:false,reason:'Production begin() reason is not exposed; inspect bounded native caller stacks, not native events alone.'}}:null;
+ let localeActive=false,localeSequence=0;
+ const localeSafe=fn=>{if(locale)try{fn();}catch{locale.observerErrors++;}};
+ const localeText=value=>{const text=String(value??'');if(text.length>1024)locale.truncatedStrings++;return text.slice(0,1024);};
+ const localeState=raw=>{const s=JSON.parse(raw||'{}');return Object.fromEntries(['cue','key','playing','requestedCue','scene','pending','voices','starts','position','loopDeadline','error'].map(key=>[key,typeof s[key]==='string'?localeText(s[key]):typeof s[key]==='number'||typeof s[key]==='boolean'?s[key]:null]));};
+ const localeMedia=()=>media.slice(0,8).map((m,mediaId)=>({mediaId,src:localeText(m.src),currentSrc:localeText(m.currentSrc),position:m.currentTime,duration:Number.isFinite(m.duration)?m.duration:null,paused:m.paused,ended:m.ended,seeking:m.seeking,readyState:m.readyState,error:m.error?.code??null}));
+ const localeRecord=(kind,value)=>{const limit={samples:4,events:512,states:256,actions:32,origins:128,gestures:64}[kind];if(locale[kind].length>=limit){locale.dropped[kind]++;return;}const row={sequence:++localeSequence,time:performance.now(),epochMs:Date.now(),...value};locale[kind].push(row);return row;};
+ const sampleLocale=(label,raw,expectedValue)=>localeSafe(()=>{if(label==='before'){localeActive=true;locale.interaction={expectedValue:localeText(expectedValue),before:null,change:null,after:null,pointerCount:0,changeCount:0};}const row=localeRecord('samples',{label,state:localeState(raw),media:localeMedia(),mediaCreated:media.length,omittedMedia:Math.max(0,media.length-8)});if(label==='after'){if(locale.interaction)locale.interaction.after=row;localeActive=false;locale.windowClosed=true;}});
+ const localeInput=target=>target?.closest?.('[data-setting="locale"]')?(target.closest('label')?.querySelector('input')??target.closest('input')):null;
+ const localeEvent=(m,type)=>{if(localeActive)localeSafe(()=>localeRecord('events',{type,mediaId:media.indexOf(m),src:localeText(m.currentSrc||m.src),position:m.currentTime,duration:Number.isFinite(m.duration)?m.duration:null,ended:m.ended,paused:m.paused,seeking:m.seeking,readyState:m.readyState,state:localeState(document.documentElement?.getAttribute('data-music-state'))}));};
+ const localeOrigin=(type,m,detail={})=>{if(localeActive)localeSafe(()=>{
+  const mediaId=media.indexOf(m);if(mediaId<0||!isMusic(m))return;
+  const stack=String(new Error().stack??'');if(stack.length>4096)locale.truncatedStacks++;
+  localeRecord('origins',{type,mediaId,stack:stack.slice(0,4096),state:localeState(document.documentElement?.getAttribute('data-music-state')),media:localeMedia(),...detail});
+ });};
+ if(locale){
+  // Explicit strictness survives classic-script injection without receiver coercion.
+  // Capture only the existing window. Wrappers forward the exact receiver,
+  // arguments, native result/promise and synchronous exceptions. No promise
+  // handlers, synthetic seeks, playback calls or extra timers are introduced.
+  const prototype=globalThis.HTMLMediaElement?.prototype;
+  try{
+   const play=Object.getOwnPropertyDescriptor(prototype,'play');
+   if(typeof play?.value!=='function')throw Error('NATIVE_PLAY_DESCRIPTOR_UNAVAILABLE');
+   Object.defineProperty(prototype,'play',{...play,value:function(){'use strict';localeOrigin('play-call',this);return Reflect.apply(play.value,this,arguments);}});
+   locale.originObserver.playInstalled=true;
+  }catch(error){locale.observerErrors++;locale.originObserver.installErrors.push(localeText(error?.message??error));}
+  try{
+   const time=Object.getOwnPropertyDescriptor(prototype,'currentTime');
+   if(typeof time?.get!=='function'||typeof time?.set!=='function')throw Error('NATIVE_TIME_DESCRIPTOR_UNAVAILABLE');
+   Object.defineProperty(prototype,'currentTime',{...time,set:function(value){'use strict';localeOrigin('currentTime-set',this,{requestedType:typeof value,requestedValue:typeof value==='number'&&Number.isFinite(value)?value:null});return Reflect.apply(time.set,this,arguments);}});
+   locale.originObserver.currentTimeInstalled=true;
+  }catch(error){locale.observerErrors++;locale.originObserver.installErrors.push(localeText(error?.message??error));}
+  for(const type of ['pointerdown','keydown'])document.addEventListener(type,event=>{if(localeActive)localeSafe(()=>{
+   const target=event.target;const row=localeRecord('gestures',{type,trusted:event.isTrusted,target:{tag:localeText(target?.tagName),id:localeText(target?.id),setting:localeText(target?.closest?.('[data-setting]')?.getAttribute?.('data-setting'))},state:localeState(document.documentElement?.getAttribute('data-music-state')),media:localeMedia()});
+   const input=localeInput(target),i=locale.interaction;if(type==='pointerdown'&&event.isTrusted&&input?.type==='radio'&&input.value===i?.expectedValue&&!input.checked){i.pointerCount++;if(i.pointerCount===1)i.before={...row,value:localeText(input.value),checked:input.checked};}
+  });},true);
+ }
+ if(locale){
+  // Mutation records can be delivered in a batch: previousState is that record's
+  // old value, observedState is the live value at callback time, not an invented cause.
+  new MutationObserver(records=>{if(localeActive)localeSafe(()=>{for(const r of records)if(r.target===document.documentElement)localeRecord('states',{previousState:localeState(r.oldValue),observedState:localeState(document.documentElement.getAttribute('data-music-state')),media:localeMedia()});});}).observe(document,{subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['data-music-state']});
+  for(const type of ['click','change'])document.addEventListener(type,event=>{if(localeActive)localeSafe(()=>{const target=event.target?.closest?.('[data-setting="locale"]');if(!target)return;const input=event.target.closest('label')?.querySelector('input')??event.target.closest('input');localeRecord('actions',{type,trusted:event.isTrusted,value:localeText(input?.value),checked:input?.checked??null,state:localeState(document.documentElement?.getAttribute('data-music-state')),media:localeMedia()});});},true);
+  // Settings radio change handler and store notification are synchronous. Bubble
+  // observes after that real target handler, even if its old subtree was detached.
+  document.addEventListener('change',event=>{if(localeActive)localeSafe(()=>{const input=localeInput(event.target),i=locale.interaction;if(!event.isTrusted||input?.type!=='radio'||input.value!==i?.expectedValue||!input.checked)return;const row=localeRecord('actions',{type:'change-bubble',trusted:true,value:localeText(input.value),checked:input.checked,state:localeState(document.documentElement?.getAttribute('data-music-state')),media:localeMedia()});i.changeCount++;if(i.changeCount===1)i.change=row;});},false);
+ }
+ globalThis.Audio=new Proxy(globalThis.Audio,{construct(Target,args){const m=Reflect.construct(Target,args);media.push(m);for(const type of ['loadedmetadata','loadeddata','canplay','playing','pause','seeking','seeked','timeupdate','waiting','stalled','ended','error','emptied'])m.addEventListener(type,()=>{events.push({type,time:performance.now(),src:m.currentSrc||m.src,position:m.currentTime,seeking:m.seeking,readyState:m.readyState,error:m.error?.code??null});if(events.length>1000)events.shift();localeEvent(m,type);});return m;}});
  for(const key of ['AudioContext','webkitAudioContext'])if(globalThis[key])globalThis[key]=new Proxy(globalThis[key],{construct(Target,args){const c=Reflect.construct(Target,args);contexts.push(c);return c;}});
  const timer=setInterval(()=>{const active=media.filter(m=>isMusic(m)&&!m.paused);maxVoices=Math.max(maxVoices,active.length);samples.push({time:performance.now(),voices:active.length,srcs:active.map(m=>m.currentSrc||m.src)});if(samples.length>2500)samples.shift();},10);
- globalThis.nativeAudioQA={snapshot,events,samples,clearSamples(){samples.length=0;},
+ globalThis.nativeAudioQA={snapshot,events,samples,localeDiagnostics:locale,sampleLocale,clearSamples(){samples.length=0;},
   // Controlled transport harness only: seek near a real decoded loop boundary.
   seekNearEnd(){const m=media.find(m=>isMusic(m)&&!m.paused);if(!m||!Number.isFinite(m.duration))throw Error('No decoded active media');const before={src:m.currentSrc,time:m.currentTime,duration:m.duration,seekable:Array.from({length:m.seekable.length},(_,i)=>[m.seekable.start(i),m.seekable.end(i)])},target=m.duration-0.65,at=performance.now();m.currentTime=target;return {before,target,immediateTime:m.currentTime,seeking:m.seeking,at};},
   stop(){clearInterval(timer);}};
@@ -149,7 +198,9 @@ async function category(page,id) {
  await page.locator(`.cm-settings__category[data-category="${id}"]`).click();
 }
 async function select(page,key,value,{touch=false}={}) {
- const input=page.locator(choice(key,value));await input.scrollIntoViewIfNeeded();
+ // Locator click/tap auto-scroll and re-resolve detached targets within the page timeout.
+ // A separate scroll holds one ElementHandle that can go stale during a rerender.
+ const input=page.locator(choice(key,value));
  if(touch)await input.locator('xpath=..').tap();else await input.locator('xpath=..').click();
  assert.equal(await page.locator(choice(key,value)).isChecked(),true);
 }
@@ -295,9 +346,42 @@ async function enterGame(page) {
  await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});
  assert.ok(await page.locator('.int-rh2-field-host canvas').count()>0);assert.equal(await page.locator('[data-field-fallback="true"]').count(),0);
 }
-async function menu(page,group,entry) {
- await page.locator(`.cm-toolbar button[data-menu-id="${group}"]:visible`).click();
- await page.locator(`.cm-toolbar__menu[data-menu-id="${group}"]:not([hidden]) button[data-entry-id="${entry}"]`).click();
+// Calendar-only normal-UI readiness. No text/locale guessing or other dialog acknowledgement.
+function ordinaryMusicMenuState(wait=true) {
+ const visible=el=>Boolean(el&&!el.hidden&&!el.closest('[hidden]')&&el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden'&&getComputedStyle(el).display!=='none');
+ const blocked=()=>wait?false:{kind:'blocked'};
+ if([...document.querySelectorAll('dialog[open],[role="dialog"],.cm-ceremony,.int-rh2-letter,.int-rh2-evolution-choice')].some(visible))return blocked();
+ const root=document.querySelector('#cm-root'),layer=root?.querySelector('.int-rh2-lifecycle'),calendar=root?.querySelector('button.int-rh2-calendar');
+ if(root?.dataset.activeScreen!=='RAISING_HOME'||!layer)return blocked();
+ if(visible(layer)&&layer.dataset.phase==='calendar'&&visible(calendar)&&!calendar.disabled)return {kind:'calendar',date:calendar.querySelector('.int-rh2-calendar__date')?.textContent?.slice(0,128)??''};
+ // Fade/save/calendar-in/out/evolution remain genuine blockers until native UI advances.
+ if(visible(layer)||visible(calendar))return blocked();
+ return {kind:'ready'};
+}
+async function menu(page,group,entry,evidence) {
+ const deadline=Date.now()+90000;let calendarAcknowledged=false;
+ const remaining=()=>{const ms=deadline-Date.now();if(ms<=0){const error=new Error('Music menu readiness exceeded original 90000ms deadline');error.name='TimeoutError';throw error;}return ms;};
+ const state=async wait=>{const handle=await page.waitForFunction(ordinaryMusicMenuState,wait,{timeout:remaining()});try{const observed=await handle.jsonValue();remaining();return observed;}finally{await handle.dispose();}};
+ async function ready(){
+  for(;;){
+   const observed=await state(true);if(observed.kind==='ready')return;
+   assert.equal(calendarAcknowledged,false,'Only one ordinary calendar acknowledgement per bounded menu action');
+   await page.locator('#cm-root[data-active-screen="RAISING_HOME"] .int-rh2-lifecycle[data-phase="calendar"] button.int-rh2-calendar:visible:not(:disabled)').click({timeout:remaining()});remaining();calendarAcknowledged=true;
+   evidence.calendarAcknowledgements.push({group,entry,date:observed.date,normalUi:true,hostEpochMs:Date.now()});
+   // Wait for the real calendar-out/fade-in transition; any newly appearing letter stays blocked.
+  }
+ }
+ for(const target of [page.locator(`.cm-toolbar button[data-menu-id="${group}"]:visible`),page.locator(`.cm-toolbar__menu[data-menu-id="${group}"]:not([hidden]) button[data-entry-id="${entry}"]`)]){
+  for(;;){
+   await ready();
+   try{await target.click({timeout:Math.min(30000,remaining())});remaining();break;}
+   catch(error){
+    // Only a newly observed ordinary calendar can justify retrying this exact target.
+    if(error.name!=='TimeoutError'||Date.now()>=deadline||calendarAcknowledged)throw error;
+    if((await state(false)).kind!=='calendar')throw error;
+   }
+  }
+ }
 }
 async function closeGameSettings(page) {
  await page.locator('dialog.cm-settings[open] .cm-settings__close').click();
@@ -306,30 +390,74 @@ async function closeGameSettings(page) {
  // before reopening it or reloading, rather than racing the next modal's entry.
  await page.waitForFunction(()=>!history.state?.cmSettings);
 }
+// Same attribute read as the assertion originally used, with a bounded diagnostic
+// snapshot in the same protocol round-trip. This does not wait for a music state.
+async function readLocaleMusicState(page,label,evidence) {
+ const result=await page.evaluate(label=>{const raw=document.documentElement.getAttribute('data-music-state');globalThis.nativeAudioQA?.sampleLocale?.(label,raw,'en');return {raw,diagnostics:globalThis.nativeAudioQA?.localeDiagnostics??null};},label);
+ evidence.localeMusic=result.diagnostics;return result.raw;
+}
+// One real locale action, no retry or start-count subtraction. Intersecting natural
+// turnover is inconclusive/nonzero, never a successful locale regression check.
+function assertLocaleMusicInteraction(d,receipt,expectedCue='a_quiet_evening_training') {
+ receipt.status='CHECKING';receipt.attempts=1;
+ try {
+  assert.ok(d&&d.windowClosed,'Complete closed locale diagnostics');
+  assert.equal(d.observerErrors,0);assert.equal(d.truncatedStrings,0);assert.equal(d.truncatedStacks,0);
+  assert.ok(Object.values(d.dropped).every(n=>n===0),'No dropped locale evidence');
+  assert.equal(d.originObserver.playInstalled,true);assert.equal(d.originObserver.currentTimeInstalled,true);assert.deepEqual(d.originObserver.installErrors,[]);
+  assert.ok(d.samples.length===2&&d.samples.every(s=>s.omittedMedia===0&&s.mediaCreated<=2),'Complete bounded native media snapshots');
+  const i=d.interaction;assert.ok(i&&i.before&&i.change&&i.after,'Trusted pointerdown, post-handler change and post-selection boundaries required');
+  assert.equal(i.expectedValue,'en');assert.equal(i.pointerCount,1);assert.equal(i.changeCount,1);
+  const before=i.before,change=i.change,after=i.after;
+  assert.ok(before.sequence<change.sequence&&change.sequence<after.sequence,'Atomic event boundary ordering');
+  assert.ok(before.time<=change.time&&change.time<=after.time);
+  assert.equal(before.trusted,true);assert.equal(before.value,'en');assert.equal(before.checked,false);
+  assert.equal(change.type,'change-bubble');assert.equal(change.trusted,true);assert.equal(change.value,'en');assert.equal(change.checked,true);
+  receipt.boundaries={before,change,after};receipt.starts={before:before.state.starts,change:change.state.starts,after:after.state.starts};
+  const inWindow=row=>row.sequence>=before.sequence&&row.sequence<=after.sequence;
+  assert.deepEqual(d.events.filter(row=>inWindow(row)&&(row.type==='error'||row.error!=null)),[],'No recorded native media error during locale interaction');
+  assert.deepEqual(['states','actions','gestures','origins'].flatMap(kind=>d[kind].filter(row=>inWindow(row)&&(row.observedState?.error!=null||row.state?.error!=null))),[],'No live observed music error during locale interaction');
+  const ends=d.events.filter(row=>inWindow(row)&&row.type==='ended');
+  const automaticLoops=d.origins.filter(row=>inWindow(row)&&row.type==='play-call'&&/at begin \(.*\/musicPresentation\.js:178:/.test(row.stack)&&/at (?:slot\.media\.onended|watchLoop|check) \(.*\/musicPresentation\.js:(?:161|80|91):/.test(row.stack));
+  const unstable=[before,change,after].some(row=>row.state.pending!==null||row.media.some(m=>m.src&&(!m.paused&&m.ended)));
+  if(ends.length||automaticLoops.length||unstable){receipt.status='INCONCLUSIVE';receipt.reason='Natural turnover or pending transport intersects locale observation';receipt.ends=ends;receipt.automaticLoops=automaticLoops;throw Error('LOCALE_MUSIC_INCONCLUSIVE_BOUNDARY');}
+  for(const row of [before,change,after]){
+   assert.ok(Number.isInteger(row.state.starts)&&row.state.starts>=0);assert.equal(row.state.cue,expectedCue);assert.equal(row.state.key,expectedCue);assert.equal(row.state.playing,expectedCue);assert.equal(row.state.error,null);assert.equal(row.state.voices,1);
+  }
+  // Keep exact equality; a start is never subtracted, rounded, or automatically allowed.
+  assert.equal(change.state.starts,before.state.starts,'Locale handler must not start music');
+  assert.equal(after.state.starts,before.state.starts,'Locale interaction must not start music');
+  assert.equal(after.state.requestedCue,before.state.requestedCue);assert.equal(after.state.scene,before.state.scene);
+  const active=row=>{assert.ok(row.media.every(m=>m.error===null));const list=row.media.filter(m=>m.src&&!m.paused);assert.equal(list.length,1,'One active native music element');const m=list[0];assert.equal(m.ended,false);assert.equal(m.seeking,false);assert.ok(m.readyState>=2&&Number.isFinite(m.duration)&&m.duration>0&&Number.isFinite(m.position)&&m.position>0&&m.position<m.duration,'Decoded advancing native position, not an end boundary');return m;};
+  const a=active(before),c=active(change),z=active(after);assert.equal(c.mediaId,a.mediaId);assert.equal(z.mediaId,a.mediaId);assert.equal(c.src,a.src);assert.equal(z.src,a.src);assert.ok(c.position>=a.position&&z.position>=c.position,'No locale position reset');
+  assert.deepEqual(d.origins.filter(inWindow),[],'No native play or JS seek during locale interaction');
+  receipt.status='PASS';return receipt;
+ }catch(error){if(receipt.status!=='INCONCLUSIVE')receipt.status='FAIL';receipt.error=String(error);throw error;}
+}
 async function normalGame(browser,base,output) {
  const context=await browser.newContext({viewport:{width:1366,height:768},hasTouch:true,locale:'zh-TW',serviceWorkers:'block'}),page=await context.newPage();page.setDefaultTimeout(90000);
- const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',errors:[],steps:[]};
- page.on('pageerror',e=>evidence.errors.push(String(e)));await page.addInitScript(observeNativeAudio);
+ const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare-practice',errors:[],steps:[],calendarAcknowledgements:[]};
+ page.on('pageerror',e=>evidence.errors.push(String(e)));await page.addInitScript(observeNativeAudio,{localeDiagnostics:true});
  await context.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
  try{
   await page.goto(new URL('tests/fixtures/championship-owned-party.html',base).href);await page.locator('#prepare-practice').click();await page.locator('#status').filter({hasText:'受控存檔已準備'}).waitFor();
   await page.goto(new URL('championship.html?presentation=developer',base).href);await enterGame(page);await waitCue(page,'a_quiet_evening_training');
-  await menu(page,'MANAGEMENT','cageEdit');await page.locator('#cm-root[data-active-screen="CAGE_EDIT"]').waitFor();checkNativeMedia(await nativeEvidence(page,'podium_geometry'),TRACKS.find(t=>t.id==='podium_geometry'));evidence.steps.push({case:'actual-cage-edit-podium-default',native:await assertBounded(page)});
+  await menu(page,'MANAGEMENT','cageEdit',evidence);await page.locator('#cm-root[data-active-screen="CAGE_EDIT"]').waitFor();checkNativeMedia(await nativeEvidence(page,'podium_geometry'),TRACKS.find(t=>t.id==='podium_geometry'));evidence.steps.push({case:'actual-cage-edit-podium-default',native:await assertBounded(page)});
   await page.locator('#cm-root .cm-vs2-cage-edit .cm-vs2-footer button').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await waitCue(page,'a_quiet_evening_training');evidence.steps.push({case:'actual-cage-edit-return-quiet-evening',native:await assertBounded(page)});
-  await menu(page,'SYSTEM','settings');await category(page,'sound');await select(page,'raisingMusic','a_quiet_evening_training');checkNativeMedia(await nativeEvidence(page,'a_quiet_evening_training'),TRACKS[0]);await select(page,'battleMusic','unison_under_fire');
-  const before=JSON.parse(await page.locator('html').getAttribute('data-music-state'));await category(page,'language');await select(page,'locale','en');await category(page,'sound');checkLabels(await page.evaluate(labelsSnapshot),'en');assert.equal(JSON.parse(await page.locator('html').getAttribute('data-music-state')).starts,before.starts);await closeGameSettings(page);
+  await menu(page,'SYSTEM','settings',evidence);await category(page,'sound');await select(page,'raisingMusic','a_quiet_evening_training');checkNativeMedia(await nativeEvidence(page,'a_quiet_evening_training'),TRACKS[0]);await select(page,'battleMusic','unison_under_fire');
+  await category(page,'language');await readLocaleMusicState(page,'before',evidence);await select(page,'locale','en');await readLocaleMusicState(page,'after',evidence);assertLocaleMusicInteraction(evidence.localeMusic,evidence.localeInteraction={});await category(page,'sound');checkLabels(await page.evaluate(labelsSnapshot),'en');await closeGameSettings(page);
   evidence.steps.push({case:'actual-raising-settings-immediate-change-locale',native:await assertBounded(page)});await page.screenshot({path:path.join(output,'normal-game-raising-selected.png')});
-  await menu(page,'MANAGEMENT','digimon');await page.locator('#cm-root[data-active-screen="DIGIMON_LIST"]').waitFor();await waitCue(page,'moon');await page.locator('#cm-root .cm-screen-back:visible').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});await waitCue(page,'a_quiet_evening_training');
-  await menu(page,'SYSTEM','battle');await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();const rows=page.locator('.cm-vs5-practice-member');await rows.nth(1).waitFor({state:'visible',timeout:30000});assert.ok(await rows.count()>=2,'Controlled fixture provides two owned eligible residents');await rows.nth(0).locator('button').nth(0).click();await rows.nth(1).locator('button').nth(1).click();await page.locator('.cm-vs5-footer .cm-vs5-action--primary').click();
+  await menu(page,'MANAGEMENT','digimon',evidence);await page.locator('#cm-root[data-active-screen="DIGIMON_LIST"]').waitFor();await waitCue(page,'moon');await page.locator('#cm-root .cm-screen-back:visible').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});await waitCue(page,'a_quiet_evening_training');
+  await menu(page,'SYSTEM','battle',evidence);await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();const rows=page.locator('.cm-vs5-practice-member');await rows.nth(1).waitFor({state:'visible',timeout:30000});assert.ok(await rows.count()>=2,'Controlled fixture provides two owned eligible residents');await rows.nth(0).locator('button').nth(0).click();await rows.nth(1).locator('button').nth(1).click();await page.locator('.cm-vs5-footer .cm-vs5-action--primary').click();
   await page.locator('#cm-root[data-active-screen="BATTLE_FIELD"]').waitFor();await page.locator('#cm-root .cm-vs5-field[aria-busy="false"]').waitFor({timeout:180000});assert.equal(await page.locator('#cm-root[data-field-fallback="true"]').count(),0);checkNativeMedia(await nativeEvidence(page,'unison_under_fire'),TRACKS[1]);evidence.steps.push({case:'actual-normal-practice-battle',native:await assertBounded(page)});await page.screenshot({path:path.join(output,'normal-game-battle-selected.png')});
   await page.locator('#cm-root .cm-vs5-exit:visible').click();await page.waitForFunction(()=>document.querySelector('#cm-root')?.dataset.activeScreen!=='BATTLE_FIELD'||document.querySelector('dialog[open] [data-action="leave"]'));const confirmation=page.locator('dialog[open] [data-action="leave"]');if(await confirmation.count())await confirmation.click();
   await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await waitCue(page,'a_quiet_evening_training');evidence.steps.push({case:'actual-practice-exit-raising-return',native:await assertBounded(page)});
-  await menu(page,'SYSTEM','settings');await category(page,'sound');await select(page,'battleMusic','federation_siege');await closeGameSettings(page);await menu(page,'SYSTEM','saveQuit');await titleReady(page);await waitCue(page,'login');await page.reload();await titleReady(page);
+  await menu(page,'SYSTEM','settings',evidence);await category(page,'sound');await select(page,'battleMusic','federation_siege');await closeGameSettings(page);await menu(page,'SYSTEM','saveQuit',evidence);await titleReady(page);await waitCue(page,'login');await page.reload();await titleReady(page);
   await page.locator('#cm-title-settings').click();await category(page,'sound');assert.equal(await page.locator(choice('raisingMusic','a_quiet_evening_training')).isChecked(),true);assert.equal(await page.locator(choice('battleMusic','federation_siege')).isChecked(),true);await closeGameSettings(page);evidence.steps.push({case:'actual-save-quit-reload-preferences',status:'PASS'});
-  await enterGame(page);await menu(page,'SYSTEM','battle');await page.locator('#cm-data-arena:visible').click();await page.locator('.da-root[data-state="SELECT"] .da-panel--select').waitFor();await page.locator('.da-root[data-state="SELECT"] .da-panel--select .da-btn--primary').click();await page.locator('.da-root[data-state="BRIEF"] .da-panel--brief').waitFor();await page.locator('.da-root[data-state="BRIEF"] .da-panel--brief .da-btn--primary').click();await page.locator('.da-root[data-state="PLAY"]').waitFor({timeout:180000});checkNativeMedia(await nativeEvidence(page,'federation_siege'),TRACKS[2]);
+  await enterGame(page);await menu(page,'SYSTEM','battle',evidence);await page.locator('#cm-data-arena:visible').click();await page.locator('.da-root[data-state="SELECT"] .da-panel--select').waitFor();await page.locator('.da-root[data-state="SELECT"] .da-panel--select .da-btn--primary').click();await page.locator('.da-root[data-state="BRIEF"] .da-panel--brief').waitFor();await page.locator('.da-root[data-state="BRIEF"] .da-panel--brief .da-btn--primary').click();await page.locator('.da-root[data-state="PLAY"]').waitFor({timeout:180000});checkNativeMedia(await nativeEvidence(page,'federation_siege'),TRACKS[2]);
   evidence.steps.push({case:'actual-data-arena-battle-selection',native:await assertBounded(page)});await page.screenshot({path:path.join(output,'normal-data-arena-selected.png')});await page.locator('.da-root[data-state="PLAY"] .da-hud__pause').click();await page.locator('.da-root[data-state="PAUSE"] .da-panel--pause .da-btn--quiet').click();await page.locator('.da-root').waitFor({state:'detached'});await waitCue(page,'core');evidence.steps.push({case:'actual-data-arena-exit-battle-return',native:await assertBounded(page)});
   assert.deepEqual(evidence.errors,[]);evidence.status='PASS_ACTUAL_RAISING_PRACTICE_BATTLE_DATA_ARENA_AND_RETURN';return evidence;
- }catch(e){evidence.status='FAIL';evidence.error=String(e.stack??e);evidence.live=await page.evaluate(()=>({screen:document.querySelector('#cm-root')?.dataset.activeScreen,arenaState:document.querySelector('.da-root')?.dataset.state,historyState:history.state,controls:[...document.querySelectorAll('.cm-toolbar [data-menu-id],dialog[open],#cm-login,#cm-continue,#cm-data-arena,#cm-title-settings,.da-root .da-btn--primary,.da-panel--pause .da-btn--quiet')].slice(0,30).map(e=>({tag:e.tagName,id:e.id,classes:e.className,menuId:e.dataset.menuId,hidden:!!e.closest('[hidden]'),visible:e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden',disabled:e.disabled??null})),musicState:document.documentElement.dataset.musicState,native:nativeAudioQA.snapshot(),events:nativeAudioQA.events.slice(-200),samples:nativeAudioQA.samples.slice(-100)})).catch(error=>({diagnosticError:String(error)}));await fs.writeFile(path.join(output,'normal-game-result.json'),JSON.stringify(evidence,null,2)+'\n');await page.screenshot({path:path.join(output,'normal-game-failure.png')}).catch(()=>{});throw e;}
+ }catch(e){evidence.status='FAIL';evidence.error=String(e.stack??e);evidence.live=await page.evaluate(()=>({screen:document.querySelector('#cm-root')?.dataset.activeScreen,arenaState:document.querySelector('.da-root')?.dataset.state,historyState:history.state,controls:[...document.querySelectorAll('.cm-toolbar [data-menu-id],dialog[open],#cm-login,#cm-continue,#cm-data-arena,#cm-title-settings,.da-root .da-btn--primary,.da-panel--pause .da-btn--quiet')].slice(0,30).map(e=>({tag:e.tagName,id:e.id,classes:e.className,menuId:e.dataset.menuId,hidden:!!e.closest('[hidden]'),visible:e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden',disabled:e.disabled??null})),musicState:document.documentElement.dataset.musicState,native:nativeAudioQA.snapshot(),events:nativeAudioQA.events.slice(-200),samples:nativeAudioQA.samples.slice(-100),localeMusic:nativeAudioQA.localeDiagnostics})).catch(error=>({diagnosticError:String(error)}));await fs.writeFile(path.join(output,'normal-game-result.json'),JSON.stringify(evidence,null,2)+'\n');await page.screenshot({path:path.join(output,'normal-game-failure.png')}).catch(()=>{});throw e;}
  finally{await context.close();}
 }
 if(process.argv.includes('--self-test'))selfTest();else if(process.argv[2]==='--serve')await serveRangeRoot(Number(process.argv[3]??8765),process.argv[4]??'.');else await main();

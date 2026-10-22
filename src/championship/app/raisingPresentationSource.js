@@ -374,6 +374,7 @@ export function createRaisingPresentationSource(app) {
   });
 
   return Object.freeze({
+    getGroundSupport(x,y){return app.getRaisingGroundSupport?.(x,y)??null;},
     getActorFrame(creatureId) { return app.getRaisingActorFrame?.(creatureId) ?? null; },
     getFoodFrame() { return app.getRaisingFoodFrame?.() ?? []; },
     getWasteFrame(){return app.getRaisingWasteFrame?.()??[];},
