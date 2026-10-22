@@ -1,6 +1,6 @@
 // TEST ONLY: exact reviewed Friends runner, bounded first adjacent desktop gesture.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
-const BASE='b92f666f86ae3fdf1f2f0aa9550c044a1f34bfc0a1ff5536a1bdfe50fd2e476f';
+const BASE='aa47b04211ed8b67523ac6429143281ec33a7e78fae0dc1cb33b2fb78b6c0751';
 const BUILD='bab8a0633fbf9379065853985f3a26ea4131122317635569db268003f33b7a95';
 const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":8526,"sha256":"47153dea52ad24a31144e468927767bf97fa7f7d4302ea6ee6e24cf06462a63e"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":1220556,"sha256":"801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1164384,"sha256":"2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":182480,"sha256":"272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0"}]);
 function verifyThreeResponses(row){
@@ -26,7 +26,7 @@ function transform(source,mode){
   const before=await boundary('saved:read-only',()=>saved());
   const observe=()=>page.locator('.int-rh2-field-host').evaluate(h=>{const canvases=document.querySelectorAll('.cm-ranch-three-canvas');if(canvases.length!==1||!(Number(canvases[0].dataset.frames)>0))throw Error('One actually rendered Three canvas required');const c=canvases[0],gl=c.getContext('webgl2');if(!gl)throw Error('Actual Three WebGL2 context required');const ext=gl.getExtension('WEBGL_debug_renderer_info');const renderer={className:c.className,width:c.width,height:c.height,version:gl.getParameter(gl.VERSION),vendor:gl.getParameter(gl.VENDOR),renderer:gl.getParameter(gl.RENDERER),unmaskedVendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):null,unmaskedRenderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):null};return {renderer,threeFrames:Number(c.dataset.frames),viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},rect:{x:h.getBoundingClientRect().x,y:h.getBoundingClientRect().y,width:h.clientWidth,height:h.clientHeight},loadState:h.dataset.loadState,ariaBusy:h.getAttribute('aria-busy'),assets:JSON.parse(h.dataset.residentAssets||'[]'),positions:JSON.parse(h.dataset.residentScreenPositions||'[]')};});
   const measured=async(name,action)=>{const t=performance.now();try{return await action();}finally{evidence.filmstrip.metrics[name]=performance.now()-t;write();}};`);
- replace('for(let gesture=0;gesture<4;gesture++){',`await clearCalendar();
+ replace('for(let gesture=0;gesture<4;gesture++){',`await clearCalendar(null,{fieldReady:true});
    evidence.filmstrip.before=await observe();write();
    (evidence.filmstrip.fieldCaptures??={}).before={before:await page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector)};write();
    await measured('beforePngMs',()=>shot('filmstrip-before'));
@@ -37,8 +37,8 @@ function transform(source,mode){
  replace("await boundary('mouse.move',()=>page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20}));await boundary('mouse.up',()=>page.mouse.up());await boundary('wait:250',()=>page.waitForTimeout(250));",`evidence.filmstrip.gesture={box,start,end:{x:box.x+start.x,y:box.y+Math.min(box.height-120,start.y+420)},steps:20};write();
     await measured('move20Ms',()=>page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20}));
     await measured('mouseUpMs',()=>page.mouse.up());await measured('existing250msWaitElapsed',()=>page.waitForTimeout(250));`);
- replace("evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await boundary('clearCalendar',()=>clearCalendar());await (evidence.sourceCoverage?sourceShot(label+'-top-contour-'+viewport.width):shot(label+'-top-contour-'+viewport.width));",`assert.deepEqual(viewport,{width:1280,height:800});
-   await clearCalendar();evidence.filmstrip.after=await observe();write();
+ replace("evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await boundary('clearCalendar',()=>clearCalendar(null,{fieldReady:Boolean(evidence.sourceCoverage)}));await (evidence.sourceCoverage?sourceShot(label+'-top-contour-'+viewport.width):shot(label+'-top-contour-'+viewport.width));",`assert.deepEqual(viewport,{width:1280,height:800});
+   await clearCalendar(null,{fieldReady:true});evidence.filmstrip.after=await observe();write();
    (evidence.filmstrip.fieldCaptures??={}).after={before:await page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector)};write();
    await measured('afterPngMs',()=>shot('filmstrip-after'));
    evidence.filmstrip.fieldCaptures.after.rawPngRetained=true;write();

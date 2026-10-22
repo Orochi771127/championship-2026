@@ -67,6 +67,22 @@ function friendsThreeSnapshotReady(state){
  return state.canvasCount===1&&state.loadState==='ready'&&state.busy==='false'&&state.visible&&state.width>0&&state.height>0&&Number.isSafeInteger(state.frames)&&state.frames>0&&state.residents.length>0&&state.residents.every(row=>row.state==='ready');
 }
 function friendsMakeThreeReadiness(){return new Function(`const state=(${friendsThreeSnapshot.toString()})();return (${friendsThreeSnapshotReady.toString()})(state)?state:false;`);}
+// Pure test-only preparation: preserve raw observation; never act on a later unrelated visibility read.
+function friendsPreparationReady(s,fieldReady){
+ if(!s.overlay)return false;
+ if(s.overlay.kind==='canvas')return !fieldReady||friendsThreeSnapshotReady(s.three);
+ return friendsRecognizedOverlay(s.overlay);
+}
+function friendsMakePreparationObservation(fieldReady=false){return new Function('selector',`return {overlay:(${ordinaryRanchOverlayState.toString()})(selector),three:${fieldReady?'('+friendsThreeSnapshot.toString()+')()':'null'}};`);}
+function friendsMakePreparationPoll(fieldReady=false){return new Function('selector',`const s=(${friendsMakePreparationObservation(fieldReady).toString()})(selector);const friendsThreeSnapshotReady=(${friendsThreeSnapshotReady.toString()});const friendsRecognizedOverlay=(${friendsRecognizedOverlay.toString()});return (${friendsPreparationReady.toString()})(s,${fieldReady})?s:false;`);}
+async function friendsObservePreparation(api){
+ const row={fieldReady:api.fieldReady,startedAt:api.wall()};api.record(row);
+ try{row.initial=await api.observe();api.write();let left=api.deadline-api.now();assert.ok(left>0,'Original ordinary UI deadline exhausted');
+  if(friendsPreparationReady(row.initial,api.fieldReady)){row.final=row.initial;row.waited=false;}
+  else{row.waited=true;row.pollBudgetMs=left;api.write();row.final=await api.poll(left);}
+  assert.ok(api.now()<api.deadline,'Original ordinary UI deadline exhausted');assert.ok(friendsPreparationReady(row.final,api.fieldReady));api.write();return row.final.overlay;
+ }catch(error){row.error=String(error.stack||error);api.write();throw error;}
+}
 function friendsThreeProgress(before,after){
  for(const state of [before,after]){
   assert.equal(state.canvasCount,1,'Unique actual Three renderer required');
@@ -284,12 +300,16 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
  // public camera gestures; inspect these screenshots alongside fresh-save
  // numeric cap/ground assertions rather than inventing legacy diagnostics.
   // Long visual sweeps can cross midnight. Only the calendar and exact system94 are acknowledged.
- async function clearCalendar(deadline=null){
+ async function clearCalendar(deadline=null,{fieldReady=false}={}){
+   deadline??=Date.now()+90000;
    const handled=[];
    const left=()=>{if(deadline===null)return 90000;const value=deadline-Date.now();assert.ok(value>0,'Menu deadline exhausted during ordinary overlay');return value;};
    for(;;){
-    const handle=await page.waitForFunction(ordinaryRanchOverlayState,ranchCanvasSelector,{timeout:left()});
-    const observed=await handle.jsonValue();await handle.dispose();
+    const observed=await friendsObservePreparation({fieldReady,deadline,now:()=>Date.now(),wall:()=>new Date().toISOString(),record:row=>{(evidence.ordinaryPreparation??=[]).push(row);write();},write,
+     observe:()=>page.evaluate(friendsMakePreparationObservation(fieldReady),ranchCanvasSelector),
+     poll:async timeout=>{const handle=await page.waitForFunction(friendsMakePreparationPoll(fieldReady),ranchCanvasSelector,{timeout});try{return await handle.jsonValue();}finally{await handle.dispose();}}
+    });
+    if(observed.kind==='canvas')return handled;
     if(observed.kind==='registration-notice-94'){
      const beforeSave=await saved(),before=registrationNoticeInvariant(beforeSave);
      const receipt={ordinarySystemRegistrationAcknowledged:false,normalUi:true,observed,before,
@@ -305,7 +325,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
      receipt.ordinarySystemRegistrationAcknowledged=true;handled.push(observed);write();continue;
     }
     const calendar=page.locator('.int-rh2-calendar');
-    if(!await calendar.isVisible())return handled;
+    assert.equal(observed.kind,'calendar','Only the actually observed enabled native calendar can be acknowledged');
     await calendar.click({timeout:left()});await page.waitForTimeout(250);handled.push({kind:'calendar',priorObserved:observed.kind});
     evidence.assertions.push({ordinaryCalendarAcknowledged:true,normalUi:true});write();
    }
@@ -354,7 +374,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    }
    await boundary('clearCalendar',()=>clearCalendar());
    await sourceTool('hand');await boundary('mouse.move',()=>page.mouse.move(1,1));await boundary('wait:300',()=>page.waitForTimeout(300));
-   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await boundary('clearCalendar',()=>clearCalendar());await (evidence.sourceCoverage?sourceShot(label+'-top-contour-'+viewport.width):shot(label+'-top-contour-'+viewport.width));
+   evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await boundary('clearCalendar',()=>clearCalendar(null,{fieldReady:Boolean(evidence.sourceCoverage)}));await (evidence.sourceCoverage?sourceShot(label+'-top-contour-'+viewport.width):shot(label+'-top-contour-'+viewport.width));
   }
   const after=await boundary('saved:read-only',()=>saved());assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
  }
@@ -425,7 +445,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
     const count=viewport.width<500?9:6;
     for(let pan=0;pan<count;pan++){
      // Real elapsed time: two 170ms samples bracket the 334.302ms sea phases.
-     for(let frame=0;frame<3;frame++){await boundary('wait:170',()=>page.waitForTimeout(170));await boundary('clearCalendar',()=>clearCalendar());await sourceShot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);coverage.phaseCaptures.push({pan,phase:frame});write();}
+     for(let frame=0;frame<3;frame++){await boundary('wait:170',()=>page.waitForTimeout(170));await boundary('capture-ready',()=>clearCalendar(null,{fieldReady:true}));await sourceShot(`08-source-${scenario.name}-${viewport.width}-pan${pan}-phase${frame}`);coverage.phaseCaptures.push({pan,phase:frame});write();}
      const {box,start}=await boundary('beginCanvasDrag',()=>beginCanvasDrag(canvas,box=>[180,260,Math.min(360,box.height-150)].map(y=>({x:box.width-35,y})),'Pan origin must be ordinary unobstructed canvas',{width:250,height:200}));
      await boundary('mouse.move',()=>page.mouse.move(box.x+Math.max(25,start.x-Math.min(420,box.width-70)),box.y+start.y,{steps:20}));await boundary('mouse.up',()=>page.mouse.up());await boundary('wait:200',()=>page.waitForTimeout(200));coverage.panGestures++;write();
     }
