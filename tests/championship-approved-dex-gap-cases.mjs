@@ -1,3 +1,4 @@
+import {APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
 import {assertApproved20Registry} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -43,6 +44,6 @@ test('the 110 published selections and raw authoring registry remain intact',()=
   assert.equal(preserved.entries.length,110);
   assert.equal(sha(Buffer.from(JSON.stringify(preserved,null,2)+'\n')),'8686f2e91e776cd465ee427622b3bde0de08377024d144821e654da3ec93f1e1');
   assert.equal(read('src/data/championship/database-hero-portraits.r1.json').entries.length,96);
-  for(const id of [147,148])assert.equal(databaseHeroPortrait(id),null);
+  for(const id of [147,148])assert.deepEqual(databaseHeroPortrait(id),APPROVED10.find(e=>e.speciesIndex===id));
   assert.ok(!inputs.files.some(file=>file.includes('approved-dex-gap-20261018')||file.includes('source-masters')));
 });

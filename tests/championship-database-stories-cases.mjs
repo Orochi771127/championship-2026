@@ -152,11 +152,11 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('214 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('230 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,214);
- for(const e of art.entries){const id=(e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|(?:closeout|repair)-20261019|first10-20261022|second10-20261022)\/species-\d{3}\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
- for(const id of [0,96,187,'8',NaN])assert.equal(get(id),null);
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,230);
+ for(const e of art.entries){const id=(e.src.includes('database-combined24-20261022')||e.src.includes('database-remaining16-20261022')||e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|(?:closeout|repair)-20261019|first10-20261022|second10-20261022|remaining16-20261022|combined24-20261022)\/(?:species-\d{3}|(?:ma|aw|ul)\d{2})\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ for(const id of [0,'8',NaN])assert.equal(get(id),null);for(const id of [96,187])assert.deepEqual(get(id),approved20Contract.APPROVED10.find(e=>e.speciesIndex===id));
 });
 
 test('registered list cards use only lazy small thumbnails, with display art selected on opening detail',()=>{
@@ -177,7 +177,7 @@ test('hero appears only after matching decoded dimensions and has cancellation-s
  image.naturalWidth=1;image.naturalHeight=1;image.onload();assert.ok(image.hidden);assert.equal(holder.dataset.art,'missing');
  image.naturalWidth=art.width;image.naturalHeight=art.height;image.onload();assert.equal(image.hidden,false);assert.equal(holder.dataset.art,'ready');
  image.onerror();assert.ok(image.hidden);assert.equal(holder.dataset.art,'missing');
- const late=image.onload;f.select(96);assert.equal(image.onload,null);assert.equal(image.onerror,null);late();assert.ok(image.hidden);assert.equal(f.root.querySelector('.cm-dex-hero'),null);f.assertUnchanged();f.dispose();
+ const late=image.onload;f.select(96);assert.equal(image.onload,null);assert.equal(image.onerror,null);late();assert.ok(image.hidden);assert.equal(f.root.querySelector('.cm-dex-hero__image').src,get(96).src);assert.equal(f.root.querySelector('.cm-dex-hero').dataset.art,'loading');f.assertUnchanged();f.dispose();
  const unknown=makeView({registeredSpecies:[],collection:[]});assert.equal(unknown.root.querySelector('.cm-dex-hero'),null);unknown.dispose();
 });
 
@@ -233,7 +233,7 @@ test('confirmed ultimate heroes are present with exact PNG bytes and selected so
  const {DATABASE_HERO_PORTRAITS:art}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- assert.equal(art.entries.length,214);assert.equal(manifest.count,44);
+ assert.equal(art.entries.length,230);assert.equal(manifest.count,44);
  for(const [sp,version,form] of [[211,'v1','OWNER_CONFIRMED_BRASS_CROWN_MANDRILL'],[222,'v2','R10_QUADRUPED_LEFT_PANEL']]){
   const entry=approvedHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(metadata.selectedSourceForm,form);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
@@ -630,7 +630,7 @@ test('approved207208209210212213214216217 bind exact owner hero bytes, preserve 
  const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-20261018/manifest.json','utf8'));
  const ids=[207,208,209,210,212,213,214,216,217],codes=['UL30','UL31','UL32','UL35','UL36','UL37','UL38','UL13','UL22'];
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
- const prior=publicHeroes.entries.filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&![206,218,219,220,221,223].includes(e.speciesIndex));assert.equal(prior.length,95);
+ const prior=approved20Contract.assertApproved20Registry(publicHeroes).filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&![206,218,219,220,221,223].includes(e.speciesIndex));assert.equal(prior.length,95);
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
@@ -653,7 +653,7 @@ test('approved218219220221 bind exact owner hero bytes, preserve previous104 and
  const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-218-221-20261018/manifest.json','utf8'));
  const ids=[218,219,220,221],codes=['UL15','UL28','UL01','UL17'];
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
- const prior=publicHeroes.entries.filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&![206,223].includes(e.speciesIndex));assert.equal(prior.length,104);
+ const prior=approved20Contract.assertApproved20Registry(publicHeroes).filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&![206,223].includes(e.speciesIndex));assert.equal(prior.length,104);
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
@@ -676,7 +676,7 @@ test('approved223DarkEyes bind exact owner hero bytes, preserve previous108 and 
  const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-223-20261018/manifest.json','utf8'));
  const ids=[223],codes=['UL18'];
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
- const prior=publicHeroes.entries.filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&e.speciesIndex!==206);assert.equal(prior.length,108);
+ const prior=approved20Contract.assertApproved20Registry(publicHeroes).filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex)&&!ids.includes(e.speciesIndex)&&e.speciesIndex!==206);assert.equal(prior.length,108);
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
@@ -699,7 +699,7 @@ test('approved206Simplified bind exact owner hero bytes, preserve previous109 an
  const ledger=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-206-20261018/manifest.json','utf8'));
  const ids=[206],codes=['UL29'];
  assert.deepEqual(ledger.entries.map(e=>e.speciesIndex),ids);
- const prior=publicHeroes.entries.filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex)&&!ids.includes(e.speciesIndex));assert.equal(prior.length,109);
+ const prior=approved20Contract.assertApproved20Registry(publicHeroes).filter(e=>e.speciesIndex<231&&!gapApprovedIds.has(e.speciesIndex)&&![142,143,145,149,151,155,156,158,183].includes(e.speciesIndex)&&!ids.includes(e.speciesIndex));assert.equal(prior.length,109);
  assert.equal(createHash('sha256').update(JSON.stringify(historicalPublicRows(prior))).digest('hex'),ledger.previousPublicHeroes.sha256);
  try{for(const [i,id] of ids.entries()){
   const art=databaseHeroPortrait(id),record=ledger.entries[i];assert.equal(art.displayCode,codes[i]);assert.equal(getDatabaseDisplayEntry(id).displayCode,codes[i]);
@@ -785,8 +785,8 @@ test('approved20 additions preserve exact prior194 and reject missing, extra, sw
 });
 
 test('approved20 exact small thumbnails are publicly selected and mounted without changing gameplay',async()=>{
- const {APPROVED20}=approved20Contract,{createHash}=await import('node:crypto'),fs=await import('node:fs');
- for(const e of APPROVED20){
+ const {APPROVED20:OLD20,APPROVED10}=approved20Contract,{createHash}=await import('node:crypto'),fs=await import('node:fs');
+ for(const e of [...OLD20,...APPROVED10]){
   const thumb=databaseHeroPortrait(e.speciesIndex).thumbnail;assert.deepEqual(thumb,e.thumbnail);
   const bytes=fs.readFileSync(thumb.src);assert.equal(createHash('sha256').update(bytes).digest('hex'),thumb.sha256);assert.ok(bytes.includes(Buffer.from('VP8L')));assert.equal(Math.max(thumb.width,thumb.height),96);
   const f=makeView({selectedSpeciesIndex:e.speciesIndex,registeredSpecies:[e.speciesIndex],collection:[]});
@@ -794,10 +794,12 @@ test('approved20 exact small thumbnails are publicly selected and mounted withou
  }
 });
 
-test('approved20 browser evidence aggregation fails closed on omitted thumbnail or normal hero coverage',()=>{
- const {APPROVED20,assertApproved20Coverage}=approved20Browser;
+test('approved44 browser evidence aggregation fails closed on omitted thumbnail or normal hero coverage',()=>{
+ const {APPROVED44,assertApproved44Coverage}=approved20Browser;
  const base='https://orochi771127.github.io/championship-2026/';
- const evidence={approved20ThumbnailCaptures:[1440,390,360].flatMap(width=>APPROVED20.map(e=>({speciesIndex:e.speciesIndex,displayCode:e.displayCode,src:new URL(e.thumbnail.src,base).href,complete:true,hidden:false,natural:[e.thumbnail.width,e.thumbnail.height],objectFit:'contain',loading:'lazy',imageRect:{x:10,y:10,right:42,bottom:42,width:32,height:32},rowRect:{x:0,y:0,right:100,bottom:100},viewport:{width,height:844,dpr:1},screenshot:width===360?null:'thumb.png'}))),captures:[1440,390].flatMap(width=>APPROVED20.map(e=>({speciesIndex:e.speciesIndex,displayCode:e.displayCode,rowState:'UNDISCOVERED',src:new URL(e.src,base).href,art:'ready',complete:true,hidden:false,natural:[e.width,e.height],objectFit:'contain',padding:[24,24,24,24],documentOverflow:false,imageRect:{width:272,height:272},viewport:{width,height:844},sizeTarget:'NORMAL_UNMODIFIED',heroScreenshot:'hero.png'})))};
- assertApproved20Coverage(evidence);
- for(const mutate of [x=>x.approved20ThumbnailCaptures.pop(),x=>x.captures.pop(),x=>x.approved20ThumbnailCaptures[0].src='wrong',x=>x.approved20ThumbnailCaptures[0].complete=false,x=>x.approved20ThumbnailCaptures[0].imageRect.width=0,x=>x.captures[0].natural=[1,1],x=>x.captures[0].sizeTarget='OVERRIDDEN']){const bad=structuredClone(evidence);mutate(bad);assert.throws(()=>assertApproved20Coverage(bad));}
+ const evidence={approved44ThumbnailCaptures:[1440,390,360].flatMap(width=>APPROVED44.map(e=>({speciesIndex:e.speciesIndex,displayCode:e.displayCode,src:new URL(e.thumbnail.src,base).href,complete:true,hidden:false,natural:[e.thumbnail.width,e.thumbnail.height],objectFit:'contain',loading:'lazy',imageRect:{x:10,y:10,right:42,bottom:42,width:32,height:32},rowRect:{x:0,y:0,right:100,bottom:100},viewport:{width,height:844,dpr:1},screenshot:width===360?null:'thumb.png'}))),captures:[1440,390].flatMap(width=>APPROVED44.map(e=>({speciesIndex:e.speciesIndex,displayCode:e.displayCode,rowState:'UNDISCOVERED',src:new URL(e.src,base).href,art:'ready',complete:true,hidden:false,natural:[e.width,e.height],objectFit:'contain',padding:[24,24,24,24],documentOverflow:false,imageRect:{width:272,height:272},viewport:{width,height:844},sizeTarget:'NORMAL_UNMODIFIED',heroScreenshot:'hero.png'})))};
+ assertApproved44Coverage(evidence);
+ for(const mutate of [x=>x.approved44ThumbnailCaptures.pop(),x=>x.captures.pop(),x=>x.approved44ThumbnailCaptures[0].src='wrong',x=>x.approved44ThumbnailCaptures[0].complete=false,x=>x.approved44ThumbnailCaptures[0].imageRect.width=0,x=>x.captures[0].natural=[1,1],x=>x.captures[0].sizeTarget='OVERRIDDEN']){const bad=structuredClone(evidence);mutate(bad);assert.throws(()=>assertApproved44Coverage(bad));}
 });
+
+test('approved10 fail closed, including stable121 lion and equipped187/200 rather than filename or historical code binding',()=>{const {APPROVED10,APPROVED10_IDS,assertApproved20Registry}=approved20Contract;assert.equal(APPROVED10.length,24);assert.equal(APPROVED10.find(e=>e.speciesIndex===121).displayCode,'MA50');assert.equal(APPROVED10.find(e=>e.speciesIndex===187).displayCode,'UL04');assert.equal(APPROVED10.find(e=>e.speciesIndex===200).displayCode,'UL21');for(const id of [180,184,186,188,179,177])assert.deepEqual(publicHeroes.entries.find(e=>e.speciesIndex===id),APPROVED10.find(e=>e.speciesIndex===id));for(const e of APPROVED10)for(const mutate of [x=>x.entries.find(y=>y.speciesIndex===e.speciesIndex).sha256='bad',x=>x.entries.find(y=>y.speciesIndex===e.speciesIndex).thumbnail.width++,x=>x.entries.find(y=>y.speciesIndex===e.speciesIndex).displayCode='WRONG']){const bad=structuredClone(publicHeroes);mutate(bad);assert.throws(()=>assertApproved20Registry(bad));}});

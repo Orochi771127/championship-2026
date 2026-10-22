@@ -306,14 +306,506 @@ const APPROVED20 = Object.freeze([
 ].map(Object.freeze));
 const APPROVED20_IDS = Object.freeze([20,21,22,23,24,25,26,27,30,31,32,74,80,82,85,86,87,88,94,95]);
 const PRIOR194_SHA256 = 'e6970c2ae7086bdf31cec85bbc68021ce04d2351020b92db355109efa5a2f8c4';
+const APPROVED10 = Object.freeze([
+  {
+    "speciesIndex": 11,
+    "speciesId": "species-011",
+    "displayCode": "B104",
+    "src": "assets/production/database-combined24-20261022/species-011.display.83dab3a7f5f48995.webp",
+    "width": 864,
+    "height": 691,
+    "sha256": "83dab3a7f5f48995dea41105f4358528c810d8ec8356d0b847c50eb369806dae",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-011.thumbnail.c319163974d19e66.webp",
+      "width": 96,
+      "height": 77,
+      "sha256": "c319163974d19e663bd569e3acb9bfbc1296bc3120202a32375cada3f877109b"
+    }
+  },
+  {
+    "speciesIndex": 12,
+    "speciesId": "species-012",
+    "displayCode": "B105",
+    "src": "assets/production/database-combined24-20261022/species-012.display.29c75647913a06bf.webp",
+    "width": 864,
+    "height": 790,
+    "sha256": "29c75647913a06bf92662a92e632e981437baea72609fce28242e3f22cce7105",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-012.thumbnail.3f1bcc04a9b3fcc6.webp",
+      "width": 96,
+      "height": 88,
+      "sha256": "3f1bcc04a9b3fcc6bb3d4317733211333f855875d0ac8cafcb094290c505e411"
+    }
+  },
+  {
+    "speciesIndex": 13,
+    "speciesId": "species-013",
+    "displayCode": "B107",
+    "src": "assets/production/database-combined24-20261022/species-013.display.a093f1036d4d52c9.webp",
+    "width": 790,
+    "height": 864,
+    "sha256": "a093f1036d4d52c9412e6fe7a2ba894e7c19893ec81ecbf74bce44adb1be3f0f",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-013.thumbnail.17e559e14eff0ba8.webp",
+      "width": 88,
+      "height": 96,
+      "sha256": "17e559e14eff0ba83368524b77ef2822256527ff4134059c3d60893e2147eaa3"
+    }
+  },
+  {
+    "speciesIndex": 14,
+    "speciesId": "species-014",
+    "displayCode": "B108",
+    "src": "assets/production/database-combined24-20261022/species-014.display.c4c1003969ac44f5.webp",
+    "width": 864,
+    "height": 691,
+    "sha256": "c4c1003969ac44f5f44aab2732790b0518552aa9ef6ae44bdfaaa8b6fdc19638",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-014.thumbnail.eabaf84afbde1e07.webp",
+      "width": 96,
+      "height": 77,
+      "sha256": "eabaf84afbde1e07730f2af1480310e82fe0453ba99ff8bbc444f113f2a3fa76"
+    }
+  },
+  {
+    "speciesIndex": 16,
+    "speciesId": "species-016",
+    "displayCode": "B110",
+    "src": "assets/production/database-combined24-20261022/species-016.display.7361ca26226112d6.webp",
+    "width": 691,
+    "height": 864,
+    "sha256": "7361ca26226112d6c4a58d1b85eb0f2a58a8a57d2abb703b5d96c83c702520ba",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-016.thumbnail.9b926cd4e524f1f0.webp",
+      "width": 77,
+      "height": 96,
+      "sha256": "9b926cd4e524f1f095915fcdc30c18651fd5216364e6609f2214dc991eb498e6"
+    }
+  },
+  {
+    "speciesIndex": 17,
+    "speciesId": "species-017",
+    "displayCode": "B111",
+    "src": "assets/production/database-combined24-20261022/species-017.display.ef03bc5de47ac2c1.webp",
+    "width": 864,
+    "height": 790,
+    "sha256": "ef03bc5de47ac2c1c4689c6ce5d94c7f7362647f701c873c489a990312a6be34",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-017.thumbnail.fe904b0f55ca6bb8.webp",
+      "width": 96,
+      "height": 88,
+      "sha256": "fe904b0f55ca6bb8369290b413d95d5c282320bed32774f1163446f2d668d2c0"
+    }
+  },
+  {
+    "speciesIndex": 18,
+    "speciesId": "species-018",
+    "displayCode": "B112",
+    "src": "assets/production/database-combined24-20261022/species-018.display.6fcc64ac3a67b8f3.webp",
+    "width": 864,
+    "height": 790,
+    "sha256": "6fcc64ac3a67b8f35a2e6676899507e6074bf48adc3bb3388d8c4ebaf0b0e589",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-018.thumbnail.fa3fd8de3e164aa2.webp",
+      "width": 96,
+      "height": 88,
+      "sha256": "fa3fd8de3e164aa2e4c2277c2da907a7fdc0c1712f7ff2dd1bf1fc05c3064a46"
+    }
+  },
+  {
+    "speciesIndex": 19,
+    "speciesId": "species-019",
+    "displayCode": "B106",
+    "src": "assets/production/database-combined24-20261022/species-019.display.db591d2cc7064e2f.webp",
+    "width": 790,
+    "height": 864,
+    "sha256": "db591d2cc7064e2f64fc776a80f82ea57511935e7778665c3f54189a62186bf0",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-019.thumbnail.de983e7fe28295b9.webp",
+      "width": 88,
+      "height": 96,
+      "sha256": "de983e7fe28295b97b24d3d49af719b4bf9e4c0f394142a2b768e93626023ea8"
+    }
+  },
+  {
+    "speciesIndex": 96,
+    "speciesId": "species-096",
+    "displayCode": "MA34",
+    "src": "assets/production/database-remaining16-20261022/ma34.display.1e82c850458bccdf.webp",
+    "sha256": "1e82c850458bccdffba8cb9817b82e1e9bb8c5b039e9460aa76d90adc4eb885e",
+    "width": 864,
+    "height": 648,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/ma34.thumbnail.211ec848ec7e36d6.webp",
+      "sha256": "211ec848ec7e36d6acd40207956f14aaa7408ed80f52d474105dfaa7bb7a654e",
+      "width": 96,
+      "height": 72
+    }
+  },
+  {
+    "speciesIndex": 121,
+    "speciesId": "species-121",
+    "displayCode": "MA50",
+    "src": "assets/production/database-remaining16-20261022/ma50.display.a67ced1b020daa39.webp",
+    "sha256": "a67ced1b020daa398db55afa1e64c7b1c64a6a16ea8325e4f122c1b1d7b8cde9",
+    "width": 864,
+    "height": 864,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/ma50.thumbnail.7d79e7aa795084c8.webp",
+      "sha256": "7d79e7aa795084c8a92471a8eff5bc485e5c1c2a9cefe83f7c174214dd942cc4",
+      "width": 96,
+      "height": 96
+    }
+  },
+  {
+    "speciesIndex": 147,
+    "speciesId": "species-147",
+    "displayCode": "AW15",
+    "src": "assets/production/database-remaining16-20261022/aw15.display.d67b4a3a84687536.webp",
+    "sha256": "d67b4a3a8468753649dec4664c8a1abede95a05e50a3d627b1aea05c77159f17",
+    "width": 776,
+    "height": 864,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/aw15.thumbnail.9a014a64fe580fad.webp",
+      "sha256": "9a014a64fe580fad00ac081c13a7fe9dd4e9f45145db1bcf1514fec314121799",
+      "width": 86,
+      "height": 96
+    }
+  },
+  {
+    "speciesIndex": 148,
+    "speciesId": "species-148",
+    "displayCode": "AW17",
+    "src": "assets/production/database-remaining16-20261022/aw17.display.dfbf7a7f75b095c7.webp",
+    "sha256": "dfbf7a7f75b095c703e49b7ac8247d30796d4ab3e2b26ed2e5b2a17bc6dd8744",
+    "width": 790,
+    "height": 864,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/aw17.thumbnail.7c337ba398eadfb2.webp",
+      "sha256": "7c337ba398eadfb23c40b92d1ecae8eb3cbe7723def4ce9953c2519564cde2b8",
+      "width": 88,
+      "height": 96
+    }
+  },
+  {
+    "speciesIndex": 174,
+    "speciesId": "species-174",
+    "displayCode": "AW46",
+    "src": "assets/production/database-remaining16-20261022/aw46.display.fcab2234524ce3af.webp",
+    "sha256": "fcab2234524ce3af19b85e2923264eafafeb33058b6af5430d7ad338e8a40452",
+    "width": 864,
+    "height": 790,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/aw46.thumbnail.22bd8020a0caabf0.webp",
+      "sha256": "22bd8020a0caabf0f3451896ec7e21e2cbd54bc8122ce4bd6406bccb36741427",
+      "width": 96,
+      "height": 88
+    }
+  },
+  {
+    "speciesIndex": 175,
+    "speciesId": "species-175",
+    "displayCode": "AW47",
+    "src": "assets/production/database-remaining16-20261022/aw47.display.3501b733d0765f3a.webp",
+    "sha256": "3501b733d0765f3ab548aab408b1faa1cc509343f8b51a3665e2eb34c29eb3c1",
+    "width": 576,
+    "height": 864,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/aw47.thumbnail.e1f91c1480d02ad9.webp",
+      "sha256": "e1f91c1480d02ad9b1da395fa4252794d4f1f4d32d14e3bd382df1bb25fe1de9",
+      "width": 64,
+      "height": 96
+    }
+  },
+  {
+    "speciesIndex": 176,
+    "speciesId": "species-176",
+    "displayCode": "AW48",
+    "src": "assets/production/database-remaining16-20261022/aw48.display.6f1a77cf4edc7636.webp",
+    "sha256": "6f1a77cf4edc7636ebdb351f95447eb2021efa2ab6541a26dcc2d4b9316cfa9c",
+    "width": 576,
+    "height": 864,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/aw48.thumbnail.41318322d254498e.webp",
+      "sha256": "41318322d254498ee8af9f3ca68a3f9fa461d09ee5dacb6eb1f445ec70d94549",
+      "width": 64,
+      "height": 96
+    }
+  },
+  {
+    "speciesIndex": 177,
+    "speciesId": "species-177",
+    "displayCode": "AW51",
+    "src": "assets/production/database-combined24-20261022/species-177.display.e62679f15b8e8517.webp",
+    "width": 728,
+    "height": 864,
+    "sha256": "e62679f15b8e8517a3f564dfceac04fa80bce40cabb396965d3bd19e8871c8f2",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-177.thumbnail.a2e72e931e839d01.webp",
+      "width": 81,
+      "height": 96,
+      "sha256": "a2e72e931e839d01a1518f191e5755ff8f0a7e41e3e0607b4a64e3a69d7ad492"
+    }
+  },
+  {
+    "speciesIndex": 179,
+    "speciesId": "species-179",
+    "displayCode": "AW50",
+    "src": "assets/production/database-combined24-20261022/species-179.display.5d7fcfac09c75627.webp",
+    "width": 864,
+    "height": 790,
+    "sha256": "5d7fcfac09c756279da7dd6cd0fbd8c6d465ce76f697966ebf4d8152e4896a20",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-179.thumbnail.61758eeb398e8e0b.webp",
+      "width": 96,
+      "height": 88,
+      "sha256": "61758eeb398e8e0be3f6c5dfbb5109ea33ed93ab2ed0498fab8dd65569b2ced3"
+    }
+  },
+  {
+    "speciesIndex": 180,
+    "speciesId": "species-180",
+    "displayCode": "AW04",
+    "src": "assets/production/database-combined24-20261022/species-180.display.64fe53de043b403c.webp",
+    "width": 790,
+    "height": 864,
+    "sha256": "64fe53de043b403ca03f5bbc46736dc12b6f40cabd87b5b0cf7cb1ef26986022",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-180.thumbnail.60c8414f0413b29f.webp",
+      "width": 88,
+      "height": 96,
+      "sha256": "60c8414f0413b29f7575ad53d2be1ff6e7a621f5c092db512e42594c7e5d70fc"
+    }
+  },
+  {
+    "speciesIndex": 181,
+    "speciesId": "species-181",
+    "displayCode": "AW10",
+    "src": "assets/production/database-remaining16-20261022/aw10.display.33e34ada6d1970c0.webp",
+    "sha256": "33e34ada6d1970c0138be65f213f8ffa190e848ff12604a4658049c3252ccf75",
+    "width": 864,
+    "height": 648,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/aw10.thumbnail.0336f4810a4ac770.webp",
+      "sha256": "0336f4810a4ac7701b5e8d5795520da63f6cf969afe2cc40f6a5a0e5b6be28eb",
+      "width": 96,
+      "height": 72
+    }
+  },
+  {
+    "speciesIndex": 184,
+    "speciesId": "species-184",
+    "displayCode": "AW16",
+    "src": "assets/production/database-combined24-20261022/species-184.display.59f8a3cd8c05a877.webp",
+    "width": 790,
+    "height": 864,
+    "sha256": "59f8a3cd8c05a877c5333899dc534650f3dcf437fdaade78e7e4e3d50c51cd66",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-184.thumbnail.59cd77bb56a70364.webp",
+      "width": 88,
+      "height": 96,
+      "sha256": "59cd77bb56a7036426561d40c4b55b796bf35581cbbf47f3daa1d768e9594c40"
+    }
+  },
+  {
+    "speciesIndex": 186,
+    "speciesId": "species-186",
+    "displayCode": "AW30",
+    "src": "assets/production/database-combined24-20261022/species-186.display.c2e60f26bd1c287d.webp",
+    "width": 734,
+    "height": 864,
+    "sha256": "c2e60f26bd1c287d1c5acd9781d5fa64a71b4ffc8fdf2b915a2c4fac76575407",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-186.thumbnail.100796155ef3a197.webp",
+      "width": 82,
+      "height": 96,
+      "sha256": "100796155ef3a197d45e3164a89dc443ac71a0aeac8323826798745ff6e9d538"
+    }
+  },
+  {
+    "speciesIndex": 187,
+    "speciesId": "species-187",
+    "displayCode": "UL04",
+    "src": "assets/production/database-remaining16-20261022/ul03.display.1b1438148ddb8b10.webp",
+    "sha256": "1b1438148ddb8b10701a55e78ced80a5b1ce0d97652bee5af78bd26fb205e4a6",
+    "width": 790,
+    "height": 864,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/ul03.thumbnail.b463d286c1647f32.webp",
+      "sha256": "b463d286c1647f3236bdd90e81fb1441f2f4109da18405777c6af00d414a1e97",
+      "width": 88,
+      "height": 96
+    }
+  },
+  {
+    "speciesIndex": 188,
+    "speciesId": "species-188",
+    "displayCode": "UL05",
+    "src": "assets/production/database-combined24-20261022/species-188.display.1b89c673740d94df.webp",
+    "width": 864,
+    "height": 790,
+    "sha256": "1b89c673740d94df666d788748e44d18a4a57190a1dadafdfb3cf0854518dfbe",
+    "thumbnail": {
+      "src": "assets/production/database-combined24-20261022/species-188.thumbnail.e175a5a43c0f8add.webp",
+      "width": 96,
+      "height": 88,
+      "sha256": "e175a5a43c0f8add67c840cd736379427949efc165ea6ea1ddd12320142ad7d2"
+    }
+  },
+  {
+    "speciesIndex": 200,
+    "speciesId": "species-200",
+    "displayCode": "UL21",
+    "src": "assets/production/database-remaining16-20261022/ul20.display.0ef05d8e8e38f552.webp",
+    "sha256": "0ef05d8e8e38f5523565197faa6dda9b69e14e6094a574548c0fdf96ee5f009c",
+    "width": 576,
+    "height": 864,
+    "thumbnail": {
+      "src": "assets/production/database-remaining16-20261022/ul20.thumbnail.1d631927c0002111.webp",
+      "sha256": "1d631927c0002111b8cfad34f7cde3afa885e940ff0345aa3aa53f0efab0283e",
+      "width": 64,
+      "height": 96
+    }
+  }
+].map(Object.freeze));
+const SUPERSEDED8 = [
+  {
+    "speciesIndex": 11,
+    "speciesId": "species-011",
+    "displayCode": "B104",
+    "src": "assets/production/database-display-20261018/species-011.display.2634278599e1b511.webp",
+    "width": 864,
+    "height": 691,
+    "sha256": "2634278599e1b5114b06a0a5b78d384dd203c7a1e471a2daf56c67af69abece5",
+    "thumbnail": {
+      "src": "assets/production/database-display-20261018/species-011.thumbnail.3e2ccb3f6215313b.webp",
+      "width": 128,
+      "height": 102,
+      "sha256": "3e2ccb3f6215313b42d2ad7badc03b88830bb038ab0570f31505ad16a4b219d7"
+    }
+  },
+  {
+    "speciesIndex": 12,
+    "speciesId": "species-012",
+    "displayCode": "B105",
+    "src": "assets/production/database-display-20261018/species-012.display.06d978acb5fe8d27.webp",
+    "width": 864,
+    "height": 790,
+    "sha256": "06d978acb5fe8d2740c82f77ee0647761b0da9edd085d6321cb898edbba5eff8",
+    "thumbnail": {
+      "src": "assets/production/database-display-20261018/species-012.thumbnail.0e67a71b1579af55.webp",
+      "width": 128,
+      "height": 117,
+      "sha256": "0e67a71b1579af5564a93846e0c29067c66834e2e3f03f00b07699e4fc1ee2ca"
+    }
+  },
+  {
+    "speciesIndex": 13,
+    "speciesId": "species-013",
+    "displayCode": "B107",
+    "src": "assets/production/database-display-20261018/species-013.display.0c9064cdff10af19.webp",
+    "width": 790,
+    "height": 864,
+    "sha256": "0c9064cdff10af19f5bea5f8b582aad53af3ec71af301bbf2330cc7848eea3ed",
+    "thumbnail": {
+      "src": "assets/production/database-display-20261018/species-013.thumbnail.0aca545a3c799875.webp",
+      "width": 117,
+      "height": 128,
+      "sha256": "0aca545a3c799875b87f306b73c3be9ef64e484ad971b2d4f3178f1d11f5cf61"
+    }
+  },
+  {
+    "speciesIndex": 14,
+    "speciesId": "species-014",
+    "displayCode": "B108",
+    "src": "assets/production/database-display-20261018/species-014.display.47541f8a80aff5b4.webp",
+    "width": 864,
+    "height": 691,
+    "sha256": "47541f8a80aff5b4bf229b19db896ea2340cdc980f622f9d07bb646b5cdb2a1f",
+    "thumbnail": {
+      "src": "assets/production/database-display-20261018/species-014.thumbnail.246d62f9df6029eb.webp",
+      "width": 128,
+      "height": 102,
+      "sha256": "246d62f9df6029eb88d614f1da441111f1876eea35c74b128c1dc1846f936f90"
+    }
+  },
+  {
+    "speciesIndex": 16,
+    "speciesId": "species-016",
+    "displayCode": "B110",
+    "src": "assets/production/database-display-20261018/species-016.display.fdbcb4f3f5f3527e.webp",
+    "width": 691,
+    "height": 864,
+    "sha256": "fdbcb4f3f5f3527e5f279781cf03559f024007b077a21eb9c8e413df9deb67f9",
+    "thumbnail": {
+      "src": "assets/production/database-display-20261018/species-016.thumbnail.66516e2aebf4db0a.webp",
+      "width": 102,
+      "height": 128,
+      "sha256": "66516e2aebf4db0acf2bedf2313f51bb664c2fd65434e9a77ed2c1ac023e673f"
+    }
+  },
+  {
+    "speciesIndex": 17,
+    "speciesId": "species-017",
+    "displayCode": "B111",
+    "src": "assets/production/database-display-20261018/species-017.display.53f540d37e916194.webp",
+    "width": 864,
+    "height": 790,
+    "sha256": "53f540d37e916194bd7dc812f4c321862199cb5df65d117dcddb663eab5eeaf8",
+    "thumbnail": {
+      "src": "assets/production/database-display-20261018/species-017.thumbnail.9da7c9de32935809.webp",
+      "width": 128,
+      "height": 117,
+      "sha256": "9da7c9de329358097dc3e8441f44232d4985ddb755b352962326ab7a456190ee"
+    }
+  },
+  {
+    "speciesIndex": 18,
+    "speciesId": "species-018",
+    "displayCode": "B112",
+    "src": "assets/production/database-display-20261018/species-018.display.d267e8e1968be7fe.webp",
+    "width": 864,
+    "height": 790,
+    "sha256": "d267e8e1968be7fe45cd208e69f1a5d6d481e7f0c62c88029af4f71d8c86fd71",
+    "thumbnail": {
+      "src": "assets/production/database-display-20261018/species-018.thumbnail.0d8ec5b4f1300e11.webp",
+      "width": 128,
+      "height": 117,
+      "sha256": "0d8ec5b4f1300e11279455e6ef2d6ba28e74e0124459d931458d4c5581224d97"
+    }
+  },
+  {
+    "speciesIndex": 19,
+    "speciesId": "species-019",
+    "displayCode": "B106",
+    "src": "assets/production/database-display-20261018/species-019.display.d1b6d28f8bb6daf0.webp",
+    "width": 790,
+    "height": 864,
+    "sha256": "d1b6d28f8bb6daf014b66366672c8259972aa03331dc5e87b506690221240dfd",
+    "thumbnail": {
+      "src": "assets/production/database-display-20261018/species-019.thumbnail.c6ea7a346d08d239.webp",
+      "width": 117,
+      "height": 128,
+      "sha256": "c6ea7a346d08d23971810691a1440087fe392c99b8a193d7c7583165aeb0fe6d"
+    }
+  }
+];
+const NEW16_IDS = APPROVED10.filter(e=>!SUPERSEDED8.some(s=>s.speciesIndex===e.speciesIndex)).map(e=>e.speciesIndex);
+const APPROVED10_IDS = Object.freeze(APPROVED10.map(e=>e.speciesIndex));
+const PRIOR214_SHA256 = '850ceead90b2986ce442ce45623c0a8ad0b8434dd68c4c8aba0039fa7a3c601c';
 function assertApproved20Registry(catalog) {
-  assert.equal(catalog.entries.length,214,'Exactly 194 prior heroes plus the approved20');
-  assert.equal(new Set(catalog.entries.map(e=>e.speciesIndex)).size,214,'No duplicate species');
+  assert.equal(catalog.entries.length,230,'Exactly214 minus8 superseded plus24 approved portraits');
+  for(const expected of APPROVED10) assert.deepEqual(catalog.entries.find(e=>e.speciesIndex===expected.speciesIndex),expected,'Approved10 identity or asset drift');
+  const actual206=catalog.entries.filter(e=>!APPROVED10_IDS.includes(e.speciesIndex));
+  assert.equal(actual206.length,206);
+  const prior214=[...actual206,...SUPERSEDED8].sort((a,b)=>a.speciesIndex-b.speciesIndex);
+  assert.equal(createHash('sha256').update(JSON.stringify(prior214)).digest('hex'),PRIOR214_SHA256,'All206 unaffected records and exact superseded8 baseline retain original214 hash');
+  assert.equal(new Set(catalog.entries.map(e=>e.speciesIndex)).size,230,'No duplicate species');
   assert.deepEqual(APPROVED20.map(e=>e.speciesIndex),APPROVED20_IDS);
   for(const expected of APPROVED20) assert.deepEqual(catalog.entries.find(e=>e.speciesIndex===expected.speciesIndex),expected,'Approved20 full identity/asset metadata drift');
-  const prior=catalog.entries.filter(e=>!APPROVED20_IDS.includes(e.speciesIndex));
+  const prior=prior214.filter(e=>!APPROVED20_IDS.includes(e.speciesIndex));
   assert.equal(prior.length,194);
   assert.equal(createHash('sha256').update(JSON.stringify(prior)).digest('hex'),PRIOR194_SHA256,'All original194 records/order remain byte-identical');
   return prior;
 }
-module.exports={APPROVED20,APPROVED20_IDS,PRIOR194_SHA256,assertApproved20Registry};
+module.exports={SUPERSEDED8,NEW16_IDS,APPROVED10,APPROVED10_IDS,PRIOR214_SHA256,APPROVED20,APPROVED20_IDS,PRIOR194_SHA256,assertApproved20Registry};
