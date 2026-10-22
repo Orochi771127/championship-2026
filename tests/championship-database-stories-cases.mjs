@@ -20,7 +20,7 @@ const critical=({styleBatch,...value})=>value;
 import publicHeroes from '../src/data/championship/database-hero-portraits.public.v1.json' with {type:'json'};
 import approvedGap from '../docs/art/production/characters/approved-dex-gap-20261018/manifest.json' with {type:'json'};
 import approvedRepair from '../docs/art/production/characters/approved-dex-repair-20261019/manifest.json' with {type:'json'};
-const gapApprovedIds=new Set([...approvedGap.entries,...approvedRepair.entries,...[126,140,159,160,162,169,170,171,172,173,201,202].map(speciesIndex=>({speciesIndex}))].map(row=>row.speciesIndex));
+const gapApprovedIds=new Set([...approvedGap.entries,...approvedRepair.entries,...[20,21,32,22,23,24,25,26,27,31,30,74,80,82,85,86,87,88,94,95,126,140,159,160,162,169,170,171,172,173,201,202].map(speciesIndex=>({speciesIndex}))].map(row=>row.speciesIndex));
 import replacement215 from '../docs/art/production/characters/approved-dex-215-20261018/manifest.json' with {type:'json'};
 import replacementFlowers from '../docs/art/production/characters/approved-dex-054-059-20261018/manifest.json' with {type:'json'};
 // Preserve historical approvals by comparing their superseded rows; latest bindings have independent tests.
@@ -150,11 +150,11 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('194 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('214 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,194);
- for(const e of art.entries){const id=(e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|(?:closeout|repair)-20261019)\/species-\d{3}\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
- for(const id of [0,20,187,'8',NaN])assert.equal(get(id),null);
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,214);
+ for(const e of art.entries){const id=(e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|(?:closeout|repair)-20261019|first10-20261022|second10-20261022)\/species-\d{3}\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ for(const id of [0,96,187,'8',NaN])assert.equal(get(id),null);
 });
 
 test('registered list cards use only lazy small thumbnails, with display art selected on opening detail',()=>{
@@ -170,12 +170,12 @@ test('registered list cards use only lazy small thumbnails, with display art sel
 
 test('hero appears only after matching decoded dimensions and has cancellation-safe handlers',async()=>{
  const {databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const f=makeView(),holder=f.root.querySelector('.cm-dex-hero'),image=holder.querySelector('img'),art=get(8);
+ const f=makeView({registeredSpecies:[8,96]}),holder=f.root.querySelector('.cm-dex-hero'),image=holder.querySelector('img'),art=get(8);
  assert.equal(holder.dataset.art,'loading');assert.ok(image.hidden);assert.notEqual(holder.hidden,true);assert.equal(image.src,art.src);
  image.naturalWidth=1;image.naturalHeight=1;image.onload();assert.ok(image.hidden);assert.equal(holder.dataset.art,'missing');
  image.naturalWidth=art.width;image.naturalHeight=art.height;image.onload();assert.equal(image.hidden,false);assert.equal(holder.dataset.art,'ready');
  image.onerror();assert.ok(image.hidden);assert.equal(holder.dataset.art,'missing');
- const late=image.onload;f.select(20);assert.equal(image.onload,null);assert.equal(image.onerror,null);late();assert.ok(image.hidden);assert.equal(f.root.querySelector('.cm-dex-hero'),null);f.assertUnchanged();f.dispose();
+ const late=image.onload;f.select(96);assert.equal(image.onload,null);assert.equal(image.onerror,null);late();assert.ok(image.hidden);assert.equal(f.root.querySelector('.cm-dex-hero'),null);f.assertUnchanged();f.dispose();
  const unknown=makeView({registeredSpecies:[],collection:[]});assert.equal(unknown.root.querySelector('.cm-dex-hero'),null);unknown.dispose();
 });
 
@@ -231,7 +231,7 @@ test('confirmed ultimate heroes are present with exact PNG bytes and selected so
  const {DATABASE_HERO_PORTRAITS:art}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- assert.equal(art.entries.length,194);assert.equal(manifest.count,44);
+ assert.equal(art.entries.length,214);assert.equal(manifest.count,44);
  for(const [sp,version,form] of [[211,'v1','OWNER_CONFIRMED_BRASS_CROWN_MANDRILL'],[222,'v2','R10_QUADRUPED_LEFT_PANEL']]){
   const entry=approvedHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(metadata.selectedSourceForm,form);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }
@@ -453,7 +453,7 @@ test('117 simplified pilot is exact source-guided PNG and preserves all existing
  assert.equal(manifest.count,44);assert.equal(manifest.entries.length,44);
  const e=approvedHeroPortrait(117);assert.deepEqual(critical(e),critical(expected));const b=fs.readFileSync(e.src);assert.equal(createHash('sha256').update(b).digest('hex'),e.sha256);assert.equal(b.readUInt32BE(16),1254);assert.equal(b.readUInt32BE(20),1254);assert.equal(b[25],6);
  const m=manifest.entries.find(x=>x.speciesIndex===117);assert.equal(m.sha256,e.sha256);assert.equal(m.sourceEntityId,'m357_unimon');assert.equal(m.sourceReferenceSha256,'8372366d49ae17a40a39326b0e84a1f3a474b5d67c9b639a799e0ebcaaf3ce50');assert.equal(m.selectedGenerationVersion,'simplified-v2');assert.equal(m.review.rootReview,'SCOPED_HOSTED_VISUAL_PASS');assert.equal(m.review.runtimeBrowser,'PASS_NORMAL_DEX_128_256_LIGHT_DARK_RESPONSIVE');assert.equal(m.review.hostedEvidence.candidateHead,'52978fc360df8abb22c0e29dbb7961b27e9cd8f6');assert.equal(m.review.hostedEvidence.artifactId,11983920742);assert.equal(m.review.hostedEvidence.testedImageSha256,e.sha256);assert.match(m.review.comparisonCaveat,/does not validate the whole roster/);assert.match(m.review.rootReviewScope,/not an all-roster, action-art or three-view acceptance/);
- for(const id of [229,230]){assert.equal(approvedHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}for(const sp of [74])assert.equal(databaseHeroPortrait(sp),null);for(const sp of [73,75,76,77,78])assert.equal(databaseHeroPortrait(sp).speciesIndex,sp);
+ for(const id of [229,230]){assert.equal(approvedHeroPortrait(id).speciesIndex,id);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getProductExtension(id).evolutionReady,true);assert.equal(getDatabaseDisplayEntry(id).speciesId,`species-${id}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}for(const sp of [74])assert.equal(approvedHeroPortrait(sp),null);for(const sp of [73,75,76,77,78])assert.equal(databaseHeroPortrait(sp).speciesIndex,sp);
  assert.equal(getDatabaseDisplayEntry(117).displayCode,'MA58');assert.equal(approvedHeroPortrait(55).speciesId,'species-055');
 });
 
@@ -507,7 +507,7 @@ test('070 redesign preserves unaffected baseline entries and071072 exact hosted 
   assert.equal(m.promptSha256,s.prompt);
   assert.equal(m.review.rootReview,'SCOPED_HOSTED_VISUAL_PASS');assert.equal(m.review.runtimeBrowser,'PASS_NORMAL_DEX_128_256_LIGHT_DARK_RESPONSIVE');assert.match(m.review.runtimeContainPadding,/24px/);assert.equal(m.review.hostedEvidence.candidateHead,'344010354799c2a6da0c794d7b74de768c6e7cc1');assert.equal(m.review.hostedEvidence.artifactId,11991000289);assert.equal(m.review.hostedEvidence.testedImageSha256,e.sha256);assert.equal(m.review.hostedEvidence.capturePairCount,33);assert.equal(m.review.hostedEvidence.friendsStatus,'PASS');assert.match(m.review.rootReviewScope,/Not an all-roster/);assert.match(m.review.nativeMarginCaveat,/margin/i);
  }
- for(const sp of [74])assert.equal(databaseHeroPortrait(sp),null);for(const sp of [73,75,76,77,78])assert.equal(databaseHeroPortrait(sp).speciesIndex,sp);
+ for(const sp of [74])assert.equal(approvedHeroPortrait(sp),null);for(const sp of [73,75,76,77,78])assert.equal(databaseHeroPortrait(sp).speciesIndex,sp);
  for(const id of [229,230]){assert.equal(approvedHeroPortrait(id).speciesId,`species-${id}`);assert.equal(getProductExtension(id).runtimeReady,true);assert.equal(getDatabaseDisplayEntry(id).displayCode,id===229?'UL34':'UL03');}
  assert.equal(approvedHeroPortrait(117).sha256,'8f7d027cdbf6d3e6d57dbe2f9cb091e42687c01170d1f3ef58ba0413e504a681');
 });
@@ -756,3 +756,13 @@ test('approvedBoldFlowers054059 bind exact owner hero bytes, retain superseded o
   }
  }}finally{setLocale('zh-Hant');}
 });
+
+
+test('owner-approved first ten single portraits use exact existing B2 identities without creating list thumbnails',()=>{
+ const expected={B201:20,B202:21,B203:32,B204:22,B205:23,B206:24,B207:25,B208:26,B209:27,B212:31};
+ for(const [code,id]of Object.entries(expected)){const hero=databaseHeroPortrait(id);assert.equal(hero.displayCode,code);assert.equal(hero.speciesId,`species-${String(id).padStart(3,'0')}`);assert.equal(getDatabaseDisplayEntry(id).displayCode,code);assert.match(hero.src,/^assets\/production\/database-first10-20261022\//);assert.equal(Math.max(hero.width,hero.height),864);assert.equal(hero.thumbnail,undefined);const f=makeView({selectedSpeciesIndex:id,registeredSpecies:[id],collection:[]});try{const image=f.root.querySelector('.cm-dex-hero__image');assert.ok(image);assert.equal(image.src,hero.src);assert.ok(image.hidden);image.naturalWidth=hero.width;image.naturalHeight=hero.height;image.onload();assert.equal(image.hidden,false);f.assertUnchanged();}finally{f.dispose();}}
+});
+
+test('approved second batch nine ready portraits preserve identity and controlled display without unrelated changes',()=>{const expected={"B214": 30, "MA06": 74, "MA12": 80, "MA15": 82, "MA17": 85, "MA18": 86, "MA21": 87, "MA22": 88, "MA31": 94};for(const[code,id]of Object.entries(expected)){const hero=databaseHeroPortrait(id);assert.equal(hero.displayCode,code);assert.equal(hero.speciesId,getDatabaseDisplayEntry(id).speciesId);assert.equal(Math.max(hero.width,hero.height),864);assert.equal(hero.thumbnail,undefined);const f=makeView({selectedSpeciesIndex:id,registeredSpecies:[id],collection:[]});try{const image=f.root.querySelector('.cm-dex-hero__image');assert.ok(image);assert.equal(image.src,hero.src);image.naturalWidth=hero.width;image.naturalHeight=hero.height;image.onload();assert.equal(image.hidden,false);f.assertUnchanged();}finally{f.dispose();}}});
+
+test('MA32 accepted transparent regeneration retains fullcanvas864x797 and does not mutate gameplay',()=>{const hero=databaseHeroPortrait(95);assert.equal(hero.displayCode,'MA32');assert.equal(hero.speciesId,getDatabaseDisplayEntry(95).speciesId);assert.equal(hero.width,864);assert.equal(hero.height,797);assert.equal(hero.thumbnail,undefined);const f=makeView({selectedSpeciesIndex:95,registeredSpecies:[95],collection:[]});try{const image=f.root.querySelector('.cm-dex-hero__image');assert.equal(image.src,hero.src);assert.ok(image.hidden);image.naturalWidth=864;image.naturalHeight=797;image.onload();assert.equal(image.hidden,false);f.assertUnchanged();}finally{f.dispose();}});
