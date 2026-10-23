@@ -15,9 +15,9 @@ window.cm07Review={
   const scale=Math.min(width/(adjacent?432:240),height/200)*.93;
   bounds={x:(width-(adjacent?432:240)*scale)/2,y:(height-200*scale)/2,scale};
   scene=await createRanchThreeScene({stage,placements,field:{productGrid:{},nativePixelWorldScale:1,wrapWidthPx:960}});
-  this.tick(1);return {boundaries:ranchSharedBoundaries(placements),diagnostics:scene.getDiagnostics()};
+  await this.tick(1);return {boundaries:ranchSharedBoundaries(placements),diagnostics:scene.getDiagnostics()};
  },
- tick(n=1,covered=false){for(let i=0;i<n;i++)scene.render({bounds,actors:new Map(),food:new Map(),waste:new Map(),deltaMS:1000/60,covered});return scene.getDiagnostics();},
+ async tick(n=1,covered=false){for(let i=0;i<n;i++){scene.render({bounds,actors:new Map(),food:new Map(),waste:new Map(),deltaMS:50,covered});await new Promise(requestAnimationFrame);}return scene.getDiagnostics();},
  pan(dx,dy){bounds.x+=dx;bounds.y+=dy;return this.tick(1);},
  motion(reduced){document.documentElement.dataset.motion=reduced?'reduced':'full';return this.tick(1);},
  height(x,y){return scene.groundHeight(x,y);},

@@ -20,14 +20,14 @@
 
 | 項目 | 現行 GLB | r2 review GLB |
 |---|---:|---:|
-| bytes | 337740 | 1423184 |
+| bytes | 337740 | 1423220 |
 | primitives | 32 | 32 |
 | triangles | 18036 | 20054 |
 | 貼圖 | 4×1024² | 相同四張、相同 bytes |
 | RGBA8 含完整 mip 估算 | 22369616 bytes | 22369616 bytes |
 | saver 512² 含 mip 估算 | 5592400 bytes | 5592400 bytes |
 
-r2 SHA-256：`136117fbebf682f3dc8775a1d86db8daeedd30944ed4fe5eebb277b78546bd30`。
+r2 SHA-256：`1e6d0fb8c706ea2bdf0998f6cc3c8c1d8bf7dea672e23701fde175e3baf6dc38`。
 
 既有 Draco 壓縮未改動節點維持原資料；五個改動節點以標準 glTF accessor 打包，未呼叫舊環境有 cache 寫入拒絕的 exporter。新網格未壓縮，因此 bytes 明顯增加；不能稱為效能改善或已完成手機最佳化。母檔高解析資料未進公開 payload。review GLB 和對應 walk-surfaces 僅存於 tests/fixtures/cm07-review；正式 manifest、公開 allowlist 選取仍為現行 GLB。
 
@@ -48,3 +48,5 @@ PR 初始 head `01594e290a71751acaa06ca30a2e5b4205652be5` 的 GitHub CI run `399
 本機 node_modules junction 建立曾存取被拒，沒有建立成功；不重試、不以其他 link 替代。依賴安裝與瀏覽器工作只在既有 CI runner 依鎖檔進行。舊 Chromium 問題未重試；未修改任何安全限制、網路或 credentials。
 
 私有交付：`R:/Projects/Championship2026/cm07-art-sample-20261023/geometry-r2/CM07_geometry_r2.blend`，同目錄含 before/after、GLB、geometry-receipt、walk surfaces；原母檔未覆寫。此 PR 與 feat/dex-detail-swipe 不共用修改檔案。
+
+靜態補驗：修正三個角點的零法線輸出後，GLB indices/normals、所有 node transforms/materials/images 不變性、原母檔雜湊、27 個未改節點均通過。2070 個地表三角形與 GLB 對應誤差最大 2.842170943040401e-14，外圈高度差 0；見 tests/fixtures/cm07-review/validation.json。

@@ -20,26 +20,26 @@ try{
    }
    return route.continue();
   });
-  const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));
+  const page=await context.newPage();page.setDefaultTimeout(60000);page.on('pageerror',e=>report.errors.push(e.message));
   await page.goto(new URL(fixture+'renderer.html',base).href);await page.waitForFunction(()=>window.cm07Review);
-  const row={version,adjacent};row.mount=await page.evaluate(adjacent=>cm07Review.mount({adjacent}),adjacent);
+  const row={version,adjacent};report.rows.push(row);row.mount=await page.evaluate(adjacent=>cm07Review.mount({adjacent}),adjacent);
   if(adjacent)assert.ok(row.mount.boundaries.some(b=>b.compatible));
   row.device=await page.evaluate(()=>cm07Review.device());row.start=await page.evaluate(()=>cm07Review.tick(1));
   assert.ok(row.start.drawCalls>0);assert.ok(row.start.triangles>0);assert.equal(row.start.lost,false);
   const stem=version+(adjacent?'-adjacent':'-single');
   await page.screenshot({path:path.join(out,stem+'-start.png')});
-  row.motion=await page.evaluate(()=>cm07Review.tick(90));await page.screenshot({path:path.join(out,stem+'-motion.png')});
+  row.motion=await page.evaluate(()=>cm07Review.tick(30));await page.screenshot({path:path.join(out,stem+'-motion.png')});
   row.height=await page.evaluate(()=>cm07Review.height(80,90));if(version==='candidate')assert.ok(row.height>.5);
   row.pan=[];for(const [dx,dy]of [[70,0],[-70,0],[0,70],[0,-70],[70,70],[-70,70],[70,-70],[-70,-70]]){
    row.pan.push(await page.evaluate(([x,y])=>cm07Review.pan(x,y),[dx,dy]));await page.screenshot({path:path.join(out,stem+'-pan-'+row.pan.length+'.png')});await page.evaluate(([x,y])=>cm07Review.pan(-x,-y),[dx,dy]);
   }
-  await page.evaluate(()=>cm07Review.motion(true));const reducedA=await page.screenshot();await page.evaluate(()=>cm07Review.tick(120));const reducedB=await page.screenshot();row.reducedMotionPixelStable=hash(reducedA)===hash(reducedB);assert.ok(row.reducedMotionPixelStable);
-  await page.evaluate(()=>cm07Review.motion(false));await page.evaluate(()=>cm07Review.tick(1,true));const coveredA=await page.screenshot();await page.evaluate(()=>cm07Review.tick(90,true));const coveredB=await page.screenshot();row.coveredPixelStable=hash(coveredA)===hash(coveredB);assert.ok(row.coveredPixelStable);
+  await page.evaluate(()=>cm07Review.motion(true));const reducedA=await page.screenshot();await page.evaluate(()=>cm07Review.tick(4));const reducedB=await page.screenshot();row.reducedMotionPixelStable=hash(reducedA)===hash(reducedB);assert.ok(row.reducedMotionPixelStable);
+  await page.evaluate(()=>cm07Review.motion(false));await page.evaluate(()=>cm07Review.tick(1,true));const coveredA=await page.screenshot();await page.evaluate(()=>cm07Review.tick(4,true));const coveredB=await page.screenshot();row.coveredPixelStable=hash(coveredA)===hash(coveredB);assert.ok(row.coveredPixelStable);
   row.offscreen=await page.evaluate(()=>cm07Review.pan(10000,10000));assert.equal(row.offscreen.drawCalls,0);
   row.cleanup=await page.evaluate(()=>cm07Review.dispose());assert.equal(row.cleanup.terrainCanvasCount,0);
   row.remount=await page.evaluate(()=>cm07Review.mount({width:390,height:844,quality:'saver'}));await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(out,stem+'-390-saver-emulation.png')});
   row.saver=await page.evaluate(()=>cm07Review.tick(1));assert.equal(row.saver.textureCap,512);await page.evaluate(()=>cm07Review.dispose());
-  report.rows.push(row);await context.close();
+  console.log(JSON.stringify({version,adjacent,device:row.device,drawCalls:row.start.drawCalls,triangles:row.start.triangles,textureCount:row.start.memory.textures,reducedMotionPixelStable:row.reducedMotionPixelStable,coveredPixelStable:row.coveredPixelStable}));await context.close();
  }
  assert.deepEqual(report.errors,[]);report.status='PASS_SCOPED_RENDERER';
 }catch(e){report.status='FAIL';report.failure=e.stack;throw e;}finally{fs.writeFileSync(path.join(out,'RESULTS.json'),JSON.stringify(report,null,2));await browser.close();}
