@@ -1,6 +1,6 @@
 import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {chromium} from 'playwright';
 const base=process.argv[2]||'http://127.0.0.1:8765/',out=process.argv[3]||'.tmp/browser-qa/cm07';fs.mkdirSync(out,{recursive:true});
-const fixture='tests/fixtures/cm07-review/',candidate=fs.readFileSync(fixture+'field_cm07_01.geometry-r2.glb');
+const fixture='tests/fixtures/cm07-review/',candidate=fs.readFileSync(fixture+'field_cm07_01.material-r3.glb');
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 const report={status:'RUNNING',kind:'ISOLATED_PRODUCTION_RANCH_RENDERER_NOT_NORMAL_GAME_OR_PHYSICAL_MOBILE',head:process.env.CM07_HEAD_SHA,errors:[],rows:[]};
 const browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
