@@ -18,10 +18,10 @@ const up = new THREE.Vector3(-Math.sin(RANCH_ELEVATION)*Math.SQRT1_2, Math.cos(R
 const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math.sin(RANCH_ELEVATION), Math.cos(RANCH_ELEVATION)*Math.SQRT1_2);
 const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
 
-const WATER_FIELDS = new Set(['field_cm19_01', 'field_cm39_01']);
+const WATER_FIELDS = new Set(['field_cm39_01']);
 const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
 const ICE_FIELDS = new Set(['field_cm21_01']);
-const INDUSTRIAL_FIELDS = new Set(['field_cm20_01', 'field_cm25_01', 'field_cm22_01']);
+const INDUSTRIAL_FIELDS = new Set(['field_cm25_01', 'field_cm22_01']);
 
 /** Bounded rendering adapter, driven only by the existing Pixi scene ticker.
  * The native simulation, pointer targets, camera pan/zoom and save stay owned
@@ -273,6 +273,30 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                 }
               }
 
+              // CM19: preserve the atlas and support surface; only authored water
+              // vertices receive ripples. Positive phase on Y travels downward.
+              if(p.fieldId==='field_cm19_01'&&o.geometry.getAttribute('_water_mask')){
+                dynamicShaders.add(m);
+                if(!m.userData.springWaterHooked){
+                  m.userData.springWaterHooked=true;
+                  m.onBeforeCompile=shader=>{
+                    shader.uniforms.uWaterTime={value:0};m.userData.shader=shader;
+                    shader.vertexShader='attribute float _water_mask;\nvarying float vSpringWater;\nvarying vec3 vSpringPosition;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvSpringWater=_water_mask;vSpringPosition=position;');
+                    shader.fragmentShader='uniform float uWaterTime;\nvarying float vSpringWater;\nvarying vec3 vSpringPosition;\n'+shader.fragmentShader;
+                    shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+                      if(vSpringWater>0.5){
+                        float ripple=sin(vSpringPosition.x*16.0+uWaterTime*0.7)*cos(vSpringPosition.z*13.0-uWaterTime*0.45);
+                        float glint=pow(max(0.0,ripple),8.0)*0.07;
+                        if(vSpringWater>1.5&&vSpringWater<2.5)glint=0.035+0.035*sin(vSpringPosition.y*20.0+uWaterTime*2.0);
+                        if(vSpringWater>2.5)glint=0.03+0.02*sin(uWaterTime*2.4+vSpringPosition.x*8.0);
+                        diffuseColor.rgb+=vec3(0.35,0.65,0.7)*glint;
+                      }`);
+                  };
+                  m.customProgramCacheKey=()=> 'cm19-authored-water-r1';m.needsUpdate=true;
+                }
+              }
+
               // Existing instrument displays / culture tanks only. A zero mask
               // keeps floors and rigid equipment completely outside this effect.
               if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
@@ -411,6 +435,19 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
         // Dynamic Suite: Particles and Machinery
         if(currentQualityTier()!=='saver'){
+          if(p.fieldId==='field_cm19_01'){
+            const vents=[[9.2,-2.47],[13.03,-4.96],[15.55,-8.38]];
+            const ps=createParticleSystem({count:6,color:0xcbd9d3,size:0.62,opacity:0.12,
+              initParticle:i=>({x:vents[i%3][0],y:0.12+(i%2)*0.28,z:vents[i%3][1]}),
+              updateParticle:(pt,dt,t,i)=>{const v=vents[i%3],phase=(t*0.16+i*0.37)%1;pt.x=v[0]+Math.sin(t*0.35+i)*0.12;pt.z=v[1]+Math.cos(t*0.3+i)*0.08;pt.y=0.10+phase*0.65;}
+            });
+            ps.mat.blending=THREE.NormalBlending;
+            ps.mat.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+              float radius=length(gl_PointCoord-vec2(0.5))*2.0;
+              diffuseColor.a*=1.0-smoothstep(0.15,1.0,radius);`);};
+            ps.mat.customProgramCacheKey=()=> 'cm19-soft-mist-r1';
+            object.add(ps.points);dynamicParticles.push(ps);
+          }
           if(WATER_FIELDS.has(p.fieldId)){
             const ps=createParticleSystem({
               count:24,color:0xc0e8ff,size:0.14,opacity:0.75,
