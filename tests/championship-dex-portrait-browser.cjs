@@ -390,6 +390,7 @@ async function main() {
     await page.locator('.cm-toolbar__menu:not([hidden]) button[data-entry-id="database"]').click();
     await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor();
     await page.locator('.cm-vs2-database__stage').selectOption('');
+    await require('./championship-database-swipe-browser.cjs')(page,{output,evidence});
     const listReturn = page.locator('.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-footer button');
     async function openSpecies(species, observeScoped=false) {
       const started=Date.now();
