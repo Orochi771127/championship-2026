@@ -1,6 +1,6 @@
 import {withSharedUnpackState} from './sharedGLState.mjs';
 // One existing canvas/context/ticker. Never creates a context, RAF, or app.
-// https://pixijs.com/8.x/guides/third-party/mixing-three-and-pixi
+// Shared-context integration follows the Pixi v8 mixing Three and Pixi guide.
 const owners=new WeakMap();
 export function installSharedPass({app,threeRenderer,draw,onFailure}) {
   const pixi=app.renderer;

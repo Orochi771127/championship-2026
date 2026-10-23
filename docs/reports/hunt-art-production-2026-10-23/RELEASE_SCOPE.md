@@ -20,4 +20,6 @@ The remaining maps are art work, not missing downloads or an added functional te
 
 ## Publication evidence
 
-Local normal build and validate:playtest passed. Build ID: 3ed356097734f6e1a5777d086febb52e428975a1b6fe72ec0e7854c8e2e9382f; 8266 public files. Exact owner-playtest approval audit: ok=true, issues=[]. Required remote CI and Pages evidence will be attached to the release PR. Base main: a104acba (CM07 PR74). Existing swipe, character and database changes preserved.
+Local normal build and validate:playtest passed. Build ID: e145de39ab2c1456ec3cb0497d72a98451c5c2efd7b7a2ec93de06088018ddce; 8266 public files. Exact owner-playtest approval audit: ok=true, issues=[]. Required remote CI and Pages evidence will be attached to the release PR. Base main: a104acba (CM07 PR74). Existing swipe, character and database changes preserved.
+
+The initial CI run identified stale Gate preview selection and art-contract inventory expectations. Gate previews now use the selected 3D fallback artwork, and the existing art checks cover the sixth map descriptor and its 19 fields. A reference URL in a runtime comment was removed to satisfy the existing source boundary. All five affected art/source checks passed after correction; no gameplay checks were run locally.

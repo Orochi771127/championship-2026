@@ -29,7 +29,7 @@ recipe.sources=recipe.sources.filter(row=>row.role!=='hunt-three-fallback');
 recipe.sources.push({role:'hunt-three-fallback',path:fallback,sha256:hash(fallback)});
 const selection=[
   'src/championship/app/main.js','src/championship/presentation/vs2/createHuntFieldPixiPresentation.js',
-  'src/championship/presentation/publicMapRequests.js','src/data/championship/catalogs/hunt-art-expansions-20261023.json',
+  'src/championship/presentation/publicMapRequests.js','src/championship/presentation/huntMobileReadouts.js','src/data/championship/catalogs/hunt-art-expansions-20261023.json',
   ...fs.readdirSync('src/championship/presentation/vs2/huntThree').filter(n=>n.endsWith('.mjs')).map(n=>'src/championship/presentation/vs2/huntThree/'+n),
   ...Object.values(MAPS).flatMap(m=>fs.readdirSync(m.directory).map(n=>m.directory+n)),
   ...fs.readdirSync(path.dirname(fallback)).filter(n=>n!==path.basename(fallback)).map(n=>path.dirname(fallback)+'/'+n),
