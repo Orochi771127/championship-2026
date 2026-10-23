@@ -1,5 +1,5 @@
 import {publicRuntimeAsset} from './publicRuntimeAssets.js';
-const roles=['cage-ui','cage-final','hunt-accepted','hunt-night','hunt-hm01x2'];
+const roles=['cage-ui','cage-final','hunt-accepted','hunt-night','hunt-hm01x2','hunt-three-fallback'];
 export function publicMapManifestPath(role){const row=publicRuntimeAsset(`art:public:map:${role}:v1`);if(!row)throw Error('PUBLIC_MAP_SELECTION_MISSING:'+role);return row.src;}
 export async function fetchRuntimeMapResponse(url,baseUrl,{signal,fetchImpl=globalThis.fetch}={}){
  const absolute=new URL(url,baseUrl);const selected=roles.map(role=>publicRuntimeAsset(`art:public:map:${role}:v1`)).find(row=>row&&new URL(row.src,baseUrl).href===absolute.href);

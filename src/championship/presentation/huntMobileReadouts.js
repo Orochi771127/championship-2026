@@ -1,12 +1,14 @@
 import {isOriginalRuntimeLocation} from './originalRuntimeLocation.js';
 import acceptedManifest from '../../../assets/production/public-runtime/hunt-accepted.map.v1.json' with {type:'json'};
 import rebuiltManifest from '../../../assets/production/public-runtime/hunt-hm01x2.map.v1.json' with {type:'json'};
+import threeFallbackManifest from '../../../assets/production/public-runtime/hunt-three-fallback.map.v1.json' with {type:'json'};
 // Read-only projections for the continuous mobile Hunt screen.
 // Daytime field thumbnails are previews, never the original field_image_icon.
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import {nativeHuntAnalyzedFields,nativeHuntRadarMask,nativeHuntRadarMatches} from '../hunt/loadout/nativeHuntPluginRules.js';
 import {SPECIES_NAMES_ZH} from '../text/catalogs.zhHant.js';
 
+const threeFallbackArt = validateRuntimeMapArtBundle(threeFallbackManifest);
 const acceptedArt = validateRuntimeMapArtBundle(acceptedManifest);
 // HM01 is the rebuilt whole-map hunt (2026-10-21); its Gate preview is a packaged 1440 px thumbnail.
 const rebuiltArt = validateRuntimeMapArtBundle(rebuiltManifest);
@@ -14,7 +16,7 @@ const rebuiltArt = validateRuntimeMapArtBundle(rebuiltManifest);
 export function huntGateThumbnail(gate,location=globalThis.location) {
   if(!isOriginalRuntimeLocation(location))return null;
   const dayFieldId = gate?.originalFields?.dayFieldId;
-  const field = [rebuiltArt, acceptedArt].map((art) => art.fields.find((entry) => entry.fieldId === dayFieldId)).find(Boolean);
+  const field = [rebuiltArt, threeFallbackArt, acceptedArt].map((art) => art.fields.find((entry) => entry.fieldId === dayFieldId)).find(Boolean);
   return field ? { src: (field.thumbnail ?? field.frames[0]).src, fieldId: field.fieldId,
     evidence: 'PRODUCTION_DAY_FIELD_PREVIEW' } : null;
 }
