@@ -5,6 +5,8 @@ on:
     paths:
       - '.github/workflows/dex-portrait-browser.yml'
       - 'tests/championship-dex-portrait-browser.cjs'
+      - 'tests/championship-database-swipe-browser.cjs'
+      - 'tests/championship-database-swipe-cases.mjs'
       - 'tests/alternate-form-browser-support.cjs'
       - 'tests/browser-qa-output.cjs'
       - 'src/championship/app/**'
@@ -42,7 +44,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Validate the test contract without launching a browser
-        run: node --check tests/championship-dex-portrait-browser.cjs && node tests/championship-dex-portrait-browser.cjs --self-test
+        run: node --check tests/championship-database-swipe-browser.cjs && node --check tests/championship-dex-portrait-browser.cjs && node tests/championship-dex-portrait-browser.cjs --self-test
       - run: npx playwright install --with-deps chromium
       - name: Build and validate the owner-approved playtest artifact
         run: npm run build:playtest && npm run validate:playtest
