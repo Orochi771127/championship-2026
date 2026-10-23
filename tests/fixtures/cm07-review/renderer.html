@@ -1,0 +1,27 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><base href="/">
+<style>html,body{margin:0;background:#28333b}#stage{position:relative;width:960px;height:800px}#pixi-placeholder{position:absolute;inset:0;pointer-events:none}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script>
+<div id="stage"><canvas id="pixi-placeholder"></canvas></div>
+<script type="module">
+import {createRanchThreeScene} from '/src/championship/presentation/ranchThreeScene.js';
+import {ranchSharedBoundaries} from '/src/championship/cage/ranchConnections.js';
+let scene,bounds,placements;const screen={width:960,height:800};
+const stage={app:{canvas:document.querySelector('#pixi-placeholder'),screen}};
+window.cm07Review={
+ async mount({adjacent=false,width=960,height=800,quality='balanced'}={}){
+  document.documentElement.dataset.quality=quality;screen.width=width;screen.height=height;
+  Object.assign(document.querySelector('#stage').style,{width:width+'px',height:height+'px'});
+  placements=(adjacent?[0,4]:[0]).map((slotIndex,i)=>({fieldId:'field_cm07_01',moduleId:'championship:2026:cage:6',cageDefinitionIndex:6,slotIndex,instanceId:'cm07-review:'+i,ownerIndex:i,x:i*192,y:0,worldWidthPx:240,worldHeightPx:200}));
+  const scale=Math.min(width/(adjacent?432:240),height/200)*.93;
+  bounds={x:(width-(adjacent?432:240)*scale)/2,y:(height-200*scale)/2,scale};
+  scene=await createRanchThreeScene({stage,placements,field:{productGrid:{},nativePixelWorldScale:1,wrapWidthPx:960}});
+  this.tick(1);return {boundaries:ranchSharedBoundaries(placements),diagnostics:scene.getDiagnostics()};
+ },
+ tick(n=1,covered=false){for(let i=0;i<n;i++)scene.render({bounds,actors:new Map(),food:new Map(),waste:new Map(),deltaMS:1000/60,covered});return scene.getDiagnostics();},
+ pan(dx,dy){bounds.x+=dx;bounds.y+=dy;return this.tick(1);},
+ motion(reduced){document.documentElement.dataset.motion=reduced?'reduced':'full';return this.tick(1);},
+ height(x,y){return scene.groundHeight(x,y);},
+ device(){const canvas=document.querySelector('.cm-ranch-three-canvas'),gl=canvas.getContext('webgl2'),ext=gl.getExtension('WEBGL_debug_renderer_info');return {ua:navigator.userAgent,renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),vendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),physicalMobile:false};},
+ dispose(){scene.dispose();scene.dispose();return {terrainCanvasCount:document.querySelectorAll('.cm-ranch-three-canvas').length};}
+};
+</script></html>

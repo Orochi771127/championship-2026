@@ -1,0 +1,48 @@
+name: CM07 candidate renderer review
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/cm07-renderer-review.yml'
+      - 'tests/championship-cm07-renderer-review.mjs'
+      - 'tests/fixtures/cm07-review/**'
+      - 'src/championship/presentation/cm07Ambient.js'
+      - 'src/championship/presentation/ranchThreeScene.js'
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Render exact baseline and private candidate through existing ranch adapter
+        env:
+          CM07_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/browser-qa/cm07
+          python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/browser-qa/cm07/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/tests/fixtures/cm07-review/renderer.html > /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/championship-cm07-renderer-review.mjs http://127.0.0.1:8765/ .tmp/browser-qa/cm07
+      - name: Preserve evidence including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm07-renderer-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/browser-qa/cm07/
+          retention-days: 14
