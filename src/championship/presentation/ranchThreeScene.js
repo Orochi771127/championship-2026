@@ -273,7 +273,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
 
               // Forest / Grassland Wind Sway (CM01, CM03, CM14)
-              if(FOREST_FIELDS.has(p.fieldId)){
+              if(FOREST_FIELDS.has(p.fieldId)&&(p.fieldId!=='field_cm01_01'
+                ||o.name==='field_cm01_01-canopy'||o.name==='field_cm01_01-grass')){
                 dynamicShaders.add(m);
                 if(!m.userData.windHooked){
                   m.userData.windHooked=true;
@@ -284,9 +285,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                     shader.vertexShader=shader.vertexShader.replace(
                       '#include <begin_vertex>',
                       `#include <begin_vertex>
-                      float windElev=max(0.0,position.y-0.35);
+                      float windElev=max(0.0,position.y-${p.fieldId==='field_cm01_01'?(o.name==='field_cm01_01-canopy'?'1.2':'0.0'):'0.35'});
                       if(windElev>0.0){
-                        float flex=windElev*windElev*0.022;
+                        float flex=${p.fieldId==='field_cm01_01'?'min(0.018,windElev*windElev*0.018)':'windElev*windElev*0.022'};
                         float sway=sin(uWindTime*2.2+position.x*0.7+position.z*0.7);
                         float cross=cos(uWindTime*1.6+position.z*0.9);
                         transformed.x+=(sway*0.6+cross*0.4)*flex;
