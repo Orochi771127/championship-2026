@@ -21,7 +21,7 @@ const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0),
 const WATER_FIELDS = new Set(['field_cm39_01']);
 const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
 const ICE_FIELDS = new Set(['field_cm21_01']);
-const INDUSTRIAL_FIELDS = new Set(['field_cm25_01', 'field_cm22_01']);
+const INDUSTRIAL_FIELDS = new Set(['field_cm25_01']);
 
 /** Bounded rendering adapter, driven only by the existing Pixi scene ticker.
  * The native simulation, pointer targets, camera pan/zoom and save stay owned
@@ -299,7 +299,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
               // Existing instrument displays / culture tanks only. A zero mask
               // keeps floors and rigid equipment completely outside this effect.
-              if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
+              if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01','field_cm22_01','field_cm23_01','field_cm24_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
                 dynamicShaders.add(m);
                 if(!m.userData.instrumentAmbientHooked){
                   m.userData.instrumentAmbientHooked=true;
@@ -316,12 +316,15 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                         totalEmissiveRadiance+=diffuseColor.rgb*idle;
                       }else if(vAmbientMask>1.5&&vAmbientMask<2.5){
                         totalEmissiveRadiance+=diffuseColor.rgb*(0.025+0.012*sin(uAmbientTime*0.6+vAmbientPosition.y*2.0));
+                      }else if(vAmbientMask>4.5){
+                        float arc=0.12+0.06*sin(uAmbientTime*4.0+vAmbientPosition.y*2.0);
+                        totalEmissiveRadiance+=diffuseColor.rgb*arc;
                       }else if(vAmbientMask>3.5){
                         float flame=0.65+0.08*sin(uAmbientTime*3.4+vAmbientPosition.x)+0.04*sin(uAmbientTime*6.1);
                         totalEmissiveRadiance+=diffuseColor.rgb*flame;
                       }`);
                   };
-                  m.customProgramCacheKey=()=> 'authored-instrument-ambient-r2';m.needsUpdate=true;
+                  m.customProgramCacheKey=()=> 'authored-instrument-ambient-r3';m.needsUpdate=true;
                 }
               }
 
@@ -435,6 +438,19 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
         // Dynamic Suite: Particles and Machinery
         if(currentQualityTier()!=='saver'){
+          if(p.fieldId==='field_cm23_01'){
+            const outlets=[[7.4784,2.484,-0.2998],[13.517,0.06,1.8498]];
+            const ps=createParticleSystem({count:4,color:0xc6ccc4,size:0.40,opacity:0.16,
+              initParticle:i=>({x:outlets[i%2][0],y:outlets[i%2][1],z:outlets[i%2][2]}),
+              updateParticle:(pt,dt,t,i)=>{const a=outlets[i%2],phase=(t*0.22+i*0.37)%1;pt.x=a[0]-phase*0.32;pt.z=a[2]+phase*0.32;pt.y=a[1]+phase*0.24;}
+            });
+            ps.mat.blending=THREE.NormalBlending;
+            ps.mat.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+              float radius=length(gl_PointCoord-vec2(0.5))*2.0;
+              diffuseColor.a*=1.0-smoothstep(0.1,1.0,radius);`);};
+            ps.mat.customProgramCacheKey=()=> 'cm23-soft-vent-r1';
+            object.add(ps.points);dynamicParticles.push(ps);
+          }
           if(p.fieldId==='field_cm19_01'){
             const vents=[[9.2,-2.47],[13.03,-4.96],[15.55,-8.38]];
             const ps=createParticleSystem({count:6,color:0xcbd9d3,size:0.62,opacity:0.12,
