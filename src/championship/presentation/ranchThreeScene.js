@@ -18,7 +18,7 @@ const up = new THREE.Vector3(-Math.sin(RANCH_ELEVATION)*Math.SQRT1_2, Math.cos(R
 const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math.sin(RANCH_ELEVATION), Math.cos(RANCH_ELEVATION)*Math.SQRT1_2);
 const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
 
-const WATER_FIELDS = new Set(['field_cm39_01']);
+const WATER_FIELDS = new Set();
 const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01']);
 const ICE_FIELDS = new Set(['field_cm21_01']);
 const INDUSTRIAL_FIELDS = new Set();
@@ -299,7 +299,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
               // Existing instrument displays / culture tanks only. A zero mask
               // keeps floors and rigid equipment completely outside this effect.
-              if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01','field_cm22_01','field_cm23_01','field_cm24_01','field_cm27_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
+              if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01','field_cm22_01','field_cm23_01','field_cm24_01','field_cm27_01','field_cm35_01','field_cm40_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
                 dynamicShaders.add(m);
                 if(!m.userData.instrumentAmbientHooked){
                   m.userData.instrumentAmbientHooked=true;
@@ -316,6 +316,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                         totalEmissiveRadiance+=diffuseColor.rgb*idle;
                       }else if(vAmbientMask>1.5&&vAmbientMask<2.5){
                         totalEmissiveRadiance+=diffuseColor.rgb*(0.025+0.012*sin(uAmbientTime*0.6+vAmbientPosition.y*2.0));
+                      }else if(vAmbientMask>5.5){
+                        float lavaFlow=0.5+0.5*sin(vAmbientPosition.x*4.0+vAmbientPosition.z*6.0-uAmbientTime*0.45);
+                        if(diffuseColor.r>diffuseColor.g*1.6&&diffuseColor.r>diffuseColor.b*3.0)totalEmissiveRadiance+=diffuseColor.rgb*(0.12+0.035*lavaFlow);
                       }else if(vAmbientMask>4.5){
                         float arc=0.12+0.06*sin(uAmbientTime*4.0+vAmbientPosition.y*2.0);
                         totalEmissiveRadiance+=diffuseColor.rgb*arc;
@@ -329,7 +332,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
 
               // Authored plant weights keep merged scenery rigid outside vegetation.
-              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm16_01','field_cm18_01','field_cm25_01','field_cm26_01','field_cm30_01','field_cm31_01','field_cm32_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
+              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm16_01','field_cm18_01','field_cm25_01','field_cm26_01','field_cm30_01','field_cm31_01','field_cm32_01','field_cm34_01','field_cm37_01','field_cm39_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
                 dynamicShaders.add(m);
                 if(!m.userData.rootedWindHooked){
                   m.userData.rootedWindHooked=true;
@@ -341,7 +344,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                       float flex=clamp(_wind_weight,0.0,1.0)*0.018;
                       transformed.x+=sin(uWindTime*1.5+position.x*0.8+position.z*0.4)*flex;
                       transformed.z+=cos(uWindTime*1.1+position.z*0.7)*flex*0.6;`);
-                    if(['field_cm09_01','field_cm25_01','field_cm26_01'].includes(p.fieldId)){
+                    if(['field_cm09_01','field_cm25_01','field_cm26_01','field_cm39_01'].includes(p.fieldId)){
                       shader.vertexShader='attribute float _coast_water;\nvarying float vCoastWater;\nvarying vec3 vCoastPosition;\n'+shader.vertexShader;
                       shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvCoastWater=_coast_water;vCoastPosition=position;');
                       shader.fragmentShader='uniform float uWindTime;\nvarying float vCoastWater;\nvarying vec3 vCoastPosition;\n'+shader.fragmentShader;
@@ -355,7 +358,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                         }`);
                     }
                   };
-                  m.customProgramCacheKey=()=>['field_cm09_01','field_cm25_01','field_cm26_01'].includes(p.fieldId)?'authored-rooted-water-r1':'cm02-rooted-canopy-r1';m.needsUpdate=true;
+                  m.customProgramCacheKey=()=>['field_cm09_01','field_cm25_01','field_cm26_01','field_cm39_01'].includes(p.fieldId)?'authored-rooted-water-r1':'cm02-rooted-canopy-r1';m.needsUpdate=true;
                 }
                 // Thin coplanar ground sheets receive prop shadows but do not
                 // cast shadows onto one another. Preserve the actual geometry.
