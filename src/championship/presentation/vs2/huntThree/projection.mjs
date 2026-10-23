@@ -33,5 +33,5 @@ export function createMapProjection(spec) {
   });
 }
 export function projectionForManifest(manifest){
-  return manifest.schema==='HM02_THREE_PILOT.v1'?hm02Projection(manifest.projection):createMapProjection(manifest.projection);
+  return manifest.schema==='HM02_THREE_PILOT.v1'||(manifest.schema==='HUNT_AUTHORED_MAP.v1'&&manifest.projection.elevationDegrees===55)?hm02Projection(manifest.projection):createMapProjection(manifest.projection);
 }

@@ -221,7 +221,7 @@ const HUNT_EXPANSION_REVIEW_MANIFEST_URL = !HUNT_EXPANSION_REVIEW ? null
 // Resolve from this source module so the existing loopback-only gate can load them.
 const importLocalReviewModule = (relative, options) => import(new URL(relative, import.meta.url).href, options);
 const loadHuntExpansionReview = HUNT_EXPANSION_REVIEW
-  ? async () => (await import("../../data/championship/catalogs/hunt-hm01x2.review-20261019.json", { with: { type: "json" } })).default
+  ? async () => (await import("../../data/championship/catalogs/hunt-art-expansions-20261023.json", { with: { type: "json" } })).default
   : null;
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
@@ -617,7 +617,9 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
   try {
     let manifest = null;
     let field = null;
-    for (const url of (["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_EXPANSION_REVIEW_MANIFEST_URL, HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[HUNT_EXPANSION_REVIEW_MANIFEST_URL,finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)].filter(Boolean):[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))) {
+    const authoredFallback = huntThreeProductionRequest(globalThis.location,wanted)?.key;
+    const authoredUrls = authoredFallback && !['hm01','hm08'].includes(authoredFallback) ? [publicMapManifestPath('hunt-three-fallback')] : [];
+    for (const url of [...authoredUrls, ...(["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_EXPANSION_REVIEW_MANIFEST_URL, HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[HUNT_EXPANSION_REVIEW_MANIFEST_URL,finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)].filter(Boolean):[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))]) {
       const response = await fetchRuntimeMapResponse(url, globalThis.location.href, { signal });
       if (!response.ok) {
         if (url !== LICENSED_HUNT_ART_MANIFEST_URL) continue;

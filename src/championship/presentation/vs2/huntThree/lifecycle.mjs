@@ -21,7 +21,7 @@ export function createResourceDisposer(){
   }
   function gltf(value){
     const textures=new Set();
-    value?.scene?.traverse(o=>{once(o.geometry);for(const m of [].concat(o.material??[])){for(const t of Object.values(m))if(t?.isTexture)textures.add(t);once(m);}});
+    value?.scene?.traverse(o=>{if(o.isInstancedMesh)once(o);once(o.geometry);for(const m of [].concat(o.material??[])){for(const t of Object.values(m))if(t?.isTexture)textures.add(t);once(m);}});
     for(const t of textures)texture(t);
   }
   return {once,gltf,texture,getErrors:()=>errors.slice()};

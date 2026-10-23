@@ -20,7 +20,7 @@ export async function loadHuntThreeMap({stage,fieldArt,fieldSource,signal,onFall
     ]);
     signal?.throwIfAborted();
     const map=await createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,
-      dracoDecoderPath:new URL('../../../../../node_modules/three/examples/jsm/libs/draco/gltf/',import.meta.url).href,
+      dracoDecoderPath:new URL('../../../../../node_modules/three/examples/jsm/libs/draco/',import.meta.url).href,
       stage,fieldArt,fieldId,manifest,baseUrl,enabled:true,
       appearanceApproved:request.appearanceApproved,signal,onFallback});
     if(signal?.aborted){map?.dispose();return null;}

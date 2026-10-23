@@ -7,6 +7,7 @@ import {loadExternalMapAssets,validateExternalManifest} from './externalMapAsset
 import {withSharedUnpackState} from './sharedGLState.mjs';
 import {installSharedPass} from './sharedPass.mjs';
 import {installFlatGroundDepthCandidate} from './supportDepth.mjs';
+import {loadAuthoredMapAssets,configureAuthoredLighting} from './authoredMapAssets.mjs';
 
 // Caller provides a hash-verified manifest and an explicit appearance approval,
 // authored actor support resolver and already-owned Pixi nodes. No gameplay API.
@@ -14,17 +15,21 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
   const {app}=stage;
   reviewHarness=reviewHarness===true && ['localhost','127.0.0.1','[::1]'].includes(globalThis.location?.hostname);
   const baked=manifest?.schema==='HUNT_THREE_MAP.v1';
+  const authored=manifest?.schema==='HUNT_AUTHORED_MAP.v1';
   if(baked){
     if(!enabled||!(manifest.qaApproved===true||reviewHarness||appearanceApproved===true)||app.renderer?.gl?.getContextAttributes?.().stencil!==true||typeof app.renderer.resetState!=='function')return null;
     try{validateExternalManifest(manifest,fieldId);}catch(error){onFallback(error);return null;}
+  }else if(authored){
+    if(!enabled||!appearanceApproved||!manifest.fields?.includes(fieldId)||app.renderer?.gl?.getContextAttributes?.().stencil!==true||typeof app.renderer.resetState!=='function')return null;
   }else if(!hm02PilotAllowed({enabled,fieldId,manifest,renderer:app.renderer,reviewHarness}))return null;
-  if (THREE.REVISION!=='185' || stage.PIXI.VERSION!=='8.19.0' || (!baked&&typeof resolveSupport!=='function')) return null;
+  if (THREE.REVISION!=='185' || stage.PIXI.VERSION!=='8.19.0' || (!baked&&!authored&&typeof resolveSupport!=='function')) return null;
   const map=projectionForManifest(manifest), scene=new THREE.Scene();
   let renderer=null, rendererLease=null, shaderGuard=null;
   const camera=new THREE.OrthographicCamera(-1,1,1,-1,0.01,1000);
   const ambient=new THREE.HemisphereLight(0xfff4dd,0x66543b,1.6);
   const sun=new THREE.DirectionalLight(0xffe3b0,2.2);sun.position.set(-30,65,40);
   scene.add(ambient,sun);
+  if(authored)configureAuthoredLighting({manifest,scene,ambient,sun,night:fieldId.endsWith('_02')});
   let active=true, view=null, pass=null, gltf=null, prototypeGltf=null, sizeKey='', restoreFallback=null, external=null, frameIndex=0, suspended=false;
   const controller=new AbortController(), resourceDisposer=createResourceDisposer(), batches=new Set(),cleanupErrors=[];
   const cleanup=(label,callback)=>{try{callback();}catch(error){cleanupErrors.push(`${label}: ${error?.message??error}`);}};
@@ -51,6 +56,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     actors.clear();cleanup('actor textures',()=>textures.dispose());
     for(const batch of batches)resourceDisposer.once(batch);batches.clear();
     cleanup('scene',()=>resourceDisposer.gltf(gltf));cleanup('prototypes',()=>resourceDisposer.gltf(prototypeGltf));cleanup('external assets',releaseExternal);
+    cleanup('authored shadow',()=>sun.shadow.dispose());
     cleanup('renderer lease',()=>rendererLease?.release());
     // Notifications run after mandatory ownership cleanup, and cannot strand it.
     cleanup('fallback restore',()=>restoreFallback?.());
@@ -78,8 +84,8 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       if(h!==asset.sha256)throw new Error('HM02_ASSET_HASH_MISMATCH');
       if(asset.bytes!==undefined&&b.byteLength!==asset.bytes)throw new Error('HM02_ASSET_BYTE_BUDGET_MISMATCH');return b;
     }
-    if(baked){
-      external=await loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoDecoderPath,manifest,fieldId,baseUrl,signal:controller.signal,disposer:resourceDisposer});
+    if(baked||authored){
+      external=await (authored?loadAuthoredMapAssets:loadExternalMapAssets)({THREE,GLTFLoader,DRACOLoader,dracoDecoderPath,manifest,fieldId,baseUrl,signal:controller.signal,disposer:resourceDisposer});
       if(!active||controller.signal.aborted){releaseExternal();controller.signal.throwIfAborted();throw new Error('HUNT_DISPOSED_DURING_ASSET_HANDOFF');}
       gltf=external.gltf;resolveSupport=external.resolveSupport;scene.add(gltf.scene);
     }else{
@@ -119,6 +125,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     controller.signal.throwIfAborted();
     try {
       rendererLease=leaseHM02Renderer({THREE,app,onInvalidate:fail});renderer=rendererLease.renderer;
+      renderer.shadowMap.enabled=authored;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
       renderer.autoClear=true;renderer.setClearColor(external?.field.clearColor??0x0a222a,1);renderer.outputColorSpace=THREE.SRGBColorSpace;
       shaderGuard=shaderFailureGuard(renderer);
       if(external)withSharedUnpackState(app.renderer.gl,()=>{for(const texture of external.textures)renderer.initTexture(texture);});
@@ -186,7 +193,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
         for(const [id,a]of actors)if(!live.has(id)){scene.remove(a);if(a.userData.shadow)scene.remove(a.userData.shadow);a.geometry.dispose();a.material.dispose();a.userData.shadow?.geometry.dispose();a.userData.shadow?.material.dispose();actors.delete(id);}
         for(const n of backgroundNodes)hide(n);
         // Keep native UI/rings/stamina/tools and pointer mapping on existing Pixi.
-        if(!baked){const night=fieldId==='field_hm02_02';ambient.intensity=night?.55:1.6;sun.intensity=night?.35:2.2;}
+        if(!baked&&!authored){const night=fieldId.endsWith('_02');ambient.intensity=night?.55:1.6;sun.intensity=night?.65:2.2;sun.color.set(night?0x9eb8ff:0xffe3b0);}
         return true;
       }catch(error){fail(error);return false;}
     },

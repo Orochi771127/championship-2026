@@ -20,7 +20,26 @@
       "sha256": "55014c5bb9a633b5ad6566cafb33b52526b1590afd2cf46abed97aa7a0b75b83",
       "excludeFields": [
         "field_hm01_01",
-        "field_hm01_02"
+        "field_hm01_02",
+        "field_hm02_01",
+        "field_hm02_02",
+        "field_hm03_01",
+        "field_hm03_02",
+        "field_hm04_01",
+        "field_hm04_02",
+        "field_hm05_01",
+        "field_hm05_02",
+        "field_hm06_01",
+        "field_hm06_02",
+        "field_hm09_01",
+        "field_hm15_01",
+        "field_hm15_02",
+        "field_hm16_01",
+        "field_hm16_02",
+        "field_hm17_01",
+        "field_hm17_02",
+        "field_hm18_01",
+        "field_hm18_02"
       ]
     },
     {
@@ -32,6 +51,11 @@
       "role": "hunt-night",
       "path": "assets/production/hunt/accepted-20261010/hm10-night.manifest.json",
       "sha256": "452b108fba5d77f1bb7da57863bb041382e029bbea358698b32d5c7ba1bfbf6e"
+    },
+    {
+      "role": "hunt-three-fallback",
+      "path": "assets/production/hunt/three-fallback-20261023/manifest.json",
+      "sha256": "6302ff80b8143cbaa35aaa7915cb0e9fe207ab9f940a7251ffeed22400e9acce"
     }
   ],
   "mediaPins": [
@@ -870,6 +894,90 @@
     {
       "path": "assets/production/hunt/hm01x2-public-20261021/images/fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80.webp",
       "sha256": "fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm02-day.webp",
+      "sha256": "2bbc94d9286efe4944750e12bd0bcb0e0873071bd154eb4c29820fe85f9b9efd"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm02-night.webp",
+      "sha256": "91243d78e38764aaef3ca65f4cdb2fa6500618d2bf8d2f3f597848751bacdfee"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm03-day.webp",
+      "sha256": "b501c765979c7677b8f11fef8a1773ae86529569ef9cb6bec810a102b99f639a"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm03-night.webp",
+      "sha256": "eb51e9a4e1af307836ab993b6c00bfe02b077cc0006188fdeff157008d3d069e"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm04-day.webp",
+      "sha256": "e906bf3ab728de0e4418fde50ddc3913bfeeb468ee796a80f60d9b47c5230568"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm04-night.webp",
+      "sha256": "96c94a00a794da6de7fb0b174a98f79e182fe3b79490eef0dd9e5990ca7ba84a"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm05-day.webp",
+      "sha256": "be46bdae2ab8d62aceb3dd66a45f52e3481bf4495c13ac4c9eb133a8003a2c88"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm05-night.webp",
+      "sha256": "0646e256c92e34da053b45c3071e9bf3facedd662c66389e1eb7410b644cc93e"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm06-day.webp",
+      "sha256": "dddb73b6fb35c160320f50cc02a0011c090f6ac20e6bc604fed1db6d700d6b75"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm06-night.webp",
+      "sha256": "4a689bd50bc03d9ede43fd573abbca4ca6aaea70620d11029f080b2c3088c074"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm09-day.webp",
+      "sha256": "269b5d4fc1206f799a8ff39f92f6d014b4abef559bf983c087308511c11de575"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm16-day.webp",
+      "sha256": "0be5da26c1b3763eb5c79718cb0fc4cd9a3cb1f330e08d019f23be9d76612d6c"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm16-night.webp",
+      "sha256": "e9e5ba1bd5dfa3643ca4836ac95e430961ae200c60b0081004336922b5c7d3d4"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm18-day.webp",
+      "sha256": "5cdb9e3a66498e7c95d084f58f65dc7c7ee2d690f1d0b00b7f063dc09a380c16"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm18-night.webp",
+      "sha256": "d42ef418be0167edeb54c78deb31c5290ef933e4016095ac48a0af1d2f028a80"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm15-day.webp",
+      "sha256": "a7f0985eed2141cc8d4b62d547649ffb3fa14fd11263ff27bcdce5978f52121e"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm15-day-phase1.webp",
+      "sha256": "91b1cf1ddf446b3576508f559d25feb6411c37120eee76b36e688beeebf042e6"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm15-night.webp",
+      "sha256": "8c28d3e1d1e8ac6270798d64cd622e8ed45e711b589decfdb13d9d64bdac4f37"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm15-night-phase1.webp",
+      "sha256": "4aed2458e633d712ee14ccbc54c0ef8f8a3bfd3defbed5005f2c066a92e0f677"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm17-day.webp",
+      "sha256": "1498853c7426f9ae346f8326a0cad6395700e93c184fc2120f5fbbd56ba1cf72"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm17-night.webp",
+      "sha256": "e762d25f48679b86185d01f00fc11dd4f4f04b5c17be7ca9be6191b7ed4e716c"
     }
   ]
 }
