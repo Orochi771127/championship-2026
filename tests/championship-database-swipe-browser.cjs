@@ -58,6 +58,27 @@ module.exports = async function verifyDetailSwipe(page, {output, evidence}) {
     const anchor=order.indexOf(40);assert.ok(anchor>0&&anchor<order.length-1);
     await open(40);const listScroll=await page.locator('.cm-vs2-shop__list').evaluate(e=>e.scrollTop);
     await shot('before-main-image');
+    // Delay the real next portrait response, then navigate back while it is loading.
+    // The existing build transport still supplies the unchanged image bytes.
+    const catalog=JSON.parse(fs.readFileSync(path.join(__dirname,'../src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));
+    const nextHero=catalog.entries.find(entry=>entry.speciesIndex===order[anchor+1]);
+    assert.ok(nextHero);
+    const delayedUrl=new URL(nextHero.src,page.url()).href;
+    let releaseImage,entered=false,finished;
+    const imageGate=new Promise(resolve=>{releaseImage=resolve;});
+    const imageFinished=new Promise(resolve=>{finished=resolve;});
+    const delayImage=async route=>{entered=true;try{await imageGate;await route.fallback();}finally{finished();}};
+    await page.route(delayedUrl,delayImage);
+    try {
+      await gesture(hero,-90);await expected(order[anchor+1]);
+      assert.ok(entered,'The next real portrait request was delayed');
+      assert.equal(await page.locator('.cm-dex-hero').getAttribute('data-art'),'loading');
+      await gesture('.cm-dex-hero',90);await expected(40);
+    } finally {releaseImage();if(entered)await imageFinished;await page.unroute(delayedUrl,delayImage);}
+    await page.locator(hero).waitFor({state:'visible'});
+    assert.equal(await page.locator('.cm-dex-hero').getAttribute('data-species-id'),'species-040');
+    assert.equal(await page.locator(hero).getAttribute('src'),catalog.entries.find(entry=>entry.speciesIndex===40).src);
+    report.operations.push({case:'async-portrait-return-keeps-current-identity',delayedSpecies:nextHero.speciesIndex,pass:true});
     await gesture(hero,-90);await expected(order[anchor+1]);await shot('after-next-main-image');
     await gesture(hero,90);await expected(40);
     report.operations.push({case:'main-image-next-previous',order:order.slice(anchor-1,anchor+2),pass:true});write();
