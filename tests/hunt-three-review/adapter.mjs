@@ -12,7 +12,10 @@ export function instrument(file,source){
   source="import {installHuntActionsProbe} from './huntThree/actionsReviewBridge.mjs';\n"+source;
   source=once(source,'  onActorFrame = null,','  onActorFrame = null,\n  reviewAuthority = null,');
   source=once(source,'  let threeActive = false;','  let threeActive = false;\n  let actionsProbe = null;');
-  source=once(source,'    for (const node of wildNodes.values()) node.characterController?.update(ticker);','    for (const node of wildNodes.values()) node.characterController?.update(ticker);\n    actionsProbe?.observe();');
+  source=once(source,'    source.field.tick(ticker.deltaMS);','    const actionsStart=performance.now();\n    source.field.tick(ticker.deltaMS);\n    const actionsSimulationEnd=performance.now();');
+  source=once(source,'    fieldArt?.update(ticker.deltaMS);','    const actionsSyncStart=performance.now();\n    fieldArt?.update(ticker.deltaMS);');
+  source=once(source,'    render(ticker.deltaMS);','    render(ticker.deltaMS);\n    const actionsSyncEnd=performance.now();');
+  source=once(source,'    for (const node of wildNodes.values()) node.characterController?.update(ticker);','    for (const node of wildNodes.values()) node.characterController?.update(ticker);\n    actionsProbe?.observe({wallMs:actionsStart,elapsedMS:ticker.elapsedMS,deltaMS:ticker.deltaMS,speed:ticker.speed,simulationMs:actionsSimulationEnd-actionsStart,presentationSyncMs:actionsSyncEnd-actionsSyncStart,charactersMs:performance.now()-actionsSyncEnd});');
   source=once(source,'  render();\n\n  return Object.freeze({',`  render();
   actionsProbe = installHuntActionsProbe({app,fieldArt,threePilot,
     getView:()=>source.field.getView({viewportWidth:app.screen.width,viewportHeight:app.screen.height}),

@@ -8,12 +8,26 @@ const finite=n=>Number.isFinite(n)?n:null;
 const registry={version:'HUNT_ACTIONS_OBSERVER.v1',instrumented:true,generation:0,current:null,disposed:[],errors:[]};
 const err=e=>String(e?.message??e).slice(0,300);
 const recordError=e=>{const message=err(e);if(!registry.errors.includes(message)&&registry.errors.length<8)registry.errors.push(message);};
+export function createPassiveTimingLedger(rendererIdentity){
+ const rows=[];let total=0,invalid=0;
+ return {record(input){total++;const keys=['wallMs','elapsedMS','deltaMS','speed','simulationMs','presentationSyncMs','charactersMs','observerMs','nativeFrame'];
+  if(!input||keys.some(k=>!Number.isFinite(input[k])||input[k]<0)){invalid++;return;}
+  rows.push(Object.fromEntries(keys.map(k=>[k,input[k]])));if(rows.length>64)rows.shift();
+ },snapshot(){return {schema:'HUNT_PASSIVE_TIMING.v1',scope:'EXISTING_TICKER_CPU_DURATIONS_NOT_GPU_COMPLETION',rendererIdentity:{...rendererIdentity},total,invalid,retained:rows.length,rows:rows.map(r=>({...r}))};}};
+}
+export function readReviewRendererIdentity(renderer){
+ const gl=renderer?.gl,out={context:'WEBGL',available:false};if(!gl)return {...out,context:'UNAVAILABLE'};
+ try{const clean=v=>typeof v==='string'?v.slice(0,160):null;out.vendor=clean(gl.getParameter(gl.VENDOR));out.renderer=clean(gl.getParameter(gl.RENDERER));out.version=clean(gl.getParameter(gl.VERSION));
+ const ext=gl.getExtension?.('WEBGL_debug_renderer_info');out.unmaskedVendor=ext?clean(gl.getParameter(ext.UNMASKED_VENDOR_WEBGL)):null;out.unmaskedRenderer=ext?clean(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)):null;out.available=Boolean(out.renderer);}
+ catch{out.error='RENDERER_IDENTITY_UNAVAILABLE';}return out;
+}
 function intersection(a,b){const x=Math.max(a.x,b.x),y=Math.max(a.y,b.y),right=Math.min(a.x+a.width,b.x+b.width),bottom=Math.min(a.y+a.height,b.y+b.height);return right>x&&bottom>y?{x,y,width:right-x,height:bottom-y}:null;}
 export function installHuntActionsProbe({app,fieldArt,threePilot,getView,getNodes,getDrawOrder,renderPresentation,readAuthority}){
  const location=globalThis.location;if(!HOSTS.includes(location?.hostname)||new URL(location.href).searchParams.get('huntActionsReview')!=='1')return null;
  if(typeof readAuthority!=='function')throw Error('HUNT_ACTIONS_AUTHORITY_REQUIRED');
  if(registry.current)throw Error('HUNT_ACTIONS_OVERLAPPING_FIELD_OWNER');
  const generation=++registry.generation;let disposed=false,capturing=false,armed=false,observerFailed=false,lostExtension=null,knownIds=new Set(),queue=[],frames=0,lastPhases=new Map(),transitions=[],captured=new Set(),borrowedDestroyCalls=0;
+ const timing=createPassiveTimingLedger(readReviewRendererIdentity(app.renderer));
  const authoritative=()=>JSON.stringify({authority:readAuthority([...knownIds]),view:getView(),phase:fieldArt?.getDiagnostics?.().frameIndex});
  function snapshot(){
   const view=getView(),nodes=getNodes(),actors=[];if(!view)return {generation,inactive:true,frames,errors:clone(registry.errors)};for(const wild of view.wildCreatures??[])knownIds.add(wild.wildId);
@@ -67,9 +81,9 @@ export function installHuntActionsProbe({app,fieldArt,threePilot,getView,getNode
    if(errors.length){errors.forEach(recordError);throw new AggregateError([...(failure?[failure]:[]),...errors],'HUNT_ACTIONS_CAPTURE_RESTORE_FAILED');}
   }
  }
- function observe(){
-  if(disposed||capturing||observerFailed)return;frames++;
-  try{const s=snapshot();if(s.inactive)return;const observed=[...s.actors,...(s.authority.records??[]).filter(r=>r?.nativePhase?.wildHidden&&['ENTER','HIDDEN'].includes(lastPhases.get(r.wildId))&&!['HAND_ANIMATION','ON_CARD','HOME_COMMITTED','RELEASED'].includes(r.state)&&!s.actors.some(a=>a.wildId===r.wildId)).map(r=>({wildId:r.wildId,passage:'HIDDEN',passageAlpha:0,currentHp:r.currentHp}))];for(const a of observed){const previous=lastPhases.get(a.wildId)??null;if(previous!==a.passage){if(transitions.length>=96)throw Error('HUNT_ACTIONS_TRANSITION_BUDGET');transitions.push({frame:frames,wildId:a.wildId,from:previous,to:a.passage,alpha:a.passageAlpha,hp:a.currentHp});lastPhases.set(a.wildId,a.passage);}}
+ function observe(input=null){
+  if(disposed||capturing||observerFailed)return;frames++;const observationStart=performance.now();let nativeFrame=null;
+  try{const s=snapshot();nativeFrame=s.authority?.tool?.frame??null;if(s.inactive)return;const observed=[...s.actors,...(s.authority.records??[]).filter(r=>r?.nativePhase?.wildHidden&&['ENTER','HIDDEN'].includes(lastPhases.get(r.wildId))&&!['HAND_ANIMATION','ON_CARD','HOME_COMMITTED','RELEASED'].includes(r.state)&&!s.actors.some(a=>a.wildId===r.wildId)).map(r=>({wildId:r.wildId,passage:'HIDDEN',passageAlpha:0,currentHp:r.currentHp}))];for(const a of observed){const previous=lastPhases.get(a.wildId)??null;if(previous!==a.passage){if(transitions.length>=96)throw Error('HUNT_ACTIONS_TRANSITION_BUDGET');transitions.push({frame:frames,wildId:a.wildId,from:previous,to:a.passage,alpha:a.passageAlpha,hp:a.currentHp});lastPhases.set(a.wildId,a.passage);}}
    if(!armed||queue.length>=2)return;
    for(const a of s.actors){
     if(!a.passage||!a.sprite?.bounds||a.passageAlpha>.07)continue;
@@ -79,10 +93,11 @@ export function installHuntActionsProbe({app,fieldArt,threePilot,getView,getNode
     captured.add(label);queue.push({label,natural:true,actualAlpha:a.passageAlpha,peers:peers.map(p=>p.wildId),capture:compare({targetId:a.wildId,omitIds:[a.wildId,...peers.map(p=>p.wildId)]})});break;
    }
   }catch(error){recordError(error);armed=false;observerFailed=true;}
+  finally{if(input)timing.record({...input,nativeFrame,observerMs:performance.now()-observationStart});}
  }
- const publicAPI=Object.freeze({snapshot,compare,arm(){armed=true;return {generation,armed};},take(){return queue.shift()??null;},loseContext(){const ext=app.renderer.gl.getExtension('WEBGL_lose_context');if(!ext)throw Error('CONTEXT_LOSS_EXTENSION_UNAVAILABLE');lostExtension=ext;ext.loseContext();return true;},restoreContext(){if(!lostExtension)throw Error('NO_TEST_CONTEXT_LOSS');lostExtension.restoreContext();return true;}});
+ const publicAPI=Object.freeze({snapshot,compare,timing:()=>timing.snapshot(),arm(){armed=true;return {generation,armed};},take(){return queue.shift()??null;},loseContext(){const ext=app.renderer.gl.getExtension('WEBGL_lose_context');if(!ext)throw Error('CONTEXT_LOSS_EXTENSION_UNAVAILABLE');lostExtension=ext;ext.loseContext();return true;},restoreContext(){if(!lostExtension)throw Error('NO_TEST_CONTEXT_LOSS');lostExtension.restoreContext();return true;}});
  registry.current={generation,api:publicAPI};
- if(!globalThis.__huntActions)Object.defineProperty(globalThis,'__huntActions',{configurable:false,writable:false,value:Object.freeze({version:registry.version,instrumented:true,snapshot:()=>registry.current?.api.snapshot()??{generation:null,disposed:clone(registry.disposed),errors:clone(registry.errors)},compare:o=>{if(!registry.current)throw Error('NO_ACTIVE_HUNT');return registry.current.api.compare(o);},arm:()=>registry.current?.api.arm(),take:()=>registry.current?.api.take()??null,loseContext:()=>registry.current?.api.loseContext(),restoreContext:()=>registry.current?.api.restoreContext()})});
+ if(!globalThis.__huntActions)Object.defineProperty(globalThis,'__huntActions',{configurable:false,writable:false,value:Object.freeze({version:registry.version,instrumented:true,timing:()=>registry.current?.api.timing()??{available:false},snapshot:()=>registry.current?.api.snapshot()??{generation:null,disposed:clone(registry.disposed),errors:clone(registry.errors)},compare:o=>{if(!registry.current)throw Error('NO_ACTIVE_HUNT');return registry.current.api.compare(o);},arm:()=>registry.current?.api.arm(),take:()=>registry.current?.api.take()??null,loseContext:()=>registry.current?.api.loseContext(),restoreContext:()=>registry.current?.api.restoreContext()})});
  return {observe,disposePilot(callback){
    const borrowed=new Set([...getNodes().values()].map(n=>n.characterSprite?.texture).filter(Boolean)),prototypes=new Map();
    for(const texture of borrowed){const p=Object.getPrototypeOf(texture);if(prototypes.has(p))continue;const original=p.destroy;prototypes.set(p,original);p.destroy=function(...args){if(borrowed.has(this))borrowedDestroyCalls++;return original.apply(this,args);};}

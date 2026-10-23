@@ -61,16 +61,16 @@ export function waitForNativeRopeTick(previous){
 export function installNativeRopeCollector(){
  const key='__huntActionsRopeCollector';if(globalThis[key])throw Error('ROPE_COLLECTOR_ALREADY_INSTALLED');
  const host=document.querySelector('.cm-vs2-field__canvas');if(!host)throw Error('ROPE_NATIVE_FIELD_UNAVAILABLE');
- const state={schema:'HUNT_NATIVE_ROPE_GESTURE.v1',startFrame:null,samples:[],events:[],pointerUpFrame:null,closure:null,error:null,terminal:false};
+ const state={timingClock:'BROWSER_PERFORMANCE_NOW_AND_DOM_EVENT_TIMESTAMP_MS',installedWallMs:performance.now(),schema:'HUNT_NATIVE_ROPE_GESTURE.v1',startFrame:null,samples:[],events:[],pointerUpFrame:null,closure:null,error:null,terminal:false};
  let observer,timer=null,waiter=null,disposed=false,pointerId=null;
  const read=()=>{const root=document.getElementById('cm-root');if(root?.dataset.activeScreen!=='HUNT_FIELD'||root?.dataset.screen!=='HUNT_FIELD'||host.getAttribute('aria-busy')!=='false')throw Error('ROPE_NATIVE_FIELD_UNAVAILABLE');
   let t;try{t=JSON.parse(host.getAttribute('data-hunt-tool-state'));}catch{throw Error('ROPE_NATIVE_TOOL_UNAVAILABLE');}
   if(!Number.isSafeInteger(t?.frame)||t.frame<0||t.activeTool!=='ROPE'||!Array.isArray(t.points))throw Error('ROPE_NATIVE_TOOL_UNAVAILABLE');
   const c=t.closure;if(c&&(![c.x,c.y,c.ticks].every(Number.isFinite)||!Number.isInteger(c.ticks)||c.ticks<0||c.ticks>18))throw Error('ROPE_NATIVE_CLOSURE_INVALID');
-  return {frame:t.frame,pointCount:t.points.length,closure:c?{x:c.x,y:c.y,ticks:c.ticks}:null};};
+  return {wallMs:performance.now(),frame:t.frame,pointCount:t.points.length,closure:c?{x:c.x,y:c.y,ticks:c.ticks}:null};};
  const initial=read();if(initial.closure||initial.pointCount!==0)throw Error('ROPE_NATIVE_PREVIOUS_GESTURE_UNSETTLED');
  const snapshot=()=>({...state,samples:state.samples.map(s=>({...s,closure:s.closure?{...s.closure}:null})),events:state.events.map(e=>({...e})),tickSpan:state.startFrame===null?null:(state.samples.at(-1)?.frame??state.startFrame)-state.startFrame,inputTickSpan:state.pointerUpFrame===null||state.startFrame===null?null:state.pointerUpFrame-state.startFrame,peakPointCount:Math.max(0,...state.samples.map(s=>s.pointCount)),distinctSampleFrames:state.samples.filter(s=>s.pointCount>0).length});
- const dispose=()=>{if(!disposed){disposed=true;observer?.disconnect();clearTimeout(timer);for(const name of ['pointerdown','pointermove','pointerup','pointercancel'])host.removeEventListener(name,onPointer,true);delete globalThis[key];}return snapshot();};
+ const dispose=()=>{if(!disposed){disposed=true;observer?.disconnect();clearTimeout(timer);for(const name of ['pointerdown','pointermove','pointerup','pointercancel'])host.removeEventListener(name,onPointer,true);delete globalThis[key];}const value=snapshot();try{value.presentationTiming=globalThis.__huntActions?.timing?.()??{available:false,reason:'NO_INSTRUMENTED_TIMING'};}catch{value.presentationTiming={available:false,reason:'TIMING_READ_FAILED'};}return value;};
  const settle=()=>{if(waiter&&state.terminal){const resolve=waiter;waiter=null;resolve(dispose());}};
  const fail=message=>{state.error??=message;state.terminal=true;settle();};
  const capture=()=>{if(state.startFrame===null||state.terminal)return;try{const value=read(),prior=state.samples.at(-1)?.frame??state.startFrame;
@@ -91,7 +91,7 @@ export function installNativeRopeCollector(){
    else if(event.pointerId!==pointerId)throw Error('ROPE_POINTER_ID_CHANGED');
    if(event.type==='pointermove'&&event.buttons!==1)throw Error('ROPE_PRESSED_MOVE_REQUIRED');
    if(event.type==='pointerup'){if(event.button!==0||event.buttons!==0)throw Error('ROPE_PRIMARY_UP_REQUIRED');state.pointerUpFrame=read().frame;}
-   if(state.events.length>=16)throw Error('ROPE_POINTER_EVENT_BOUND');state.events.push({type:event.type,x:event.clientX,y:event.clientY,trusted:true});capture();
+   if(state.events.length>=16)throw Error('ROPE_POINTER_EVENT_BOUND');state.events.push({type:event.type,x:event.clientX,y:event.clientY,trusted:true,wallMs:performance.now(),eventTimeStamp:Number.isFinite(event.timeStamp)?event.timeStamp:null,nativeFrame:read().frame});capture();
   }catch(error){fail(String(error.message));}
  }
  observer=new MutationObserver(capture);observer.observe(host,{attributes:true,attributeFilter:['data-hunt-tool-state']});
@@ -115,12 +115,13 @@ export function assertNativeRopeReceipt(receipt,points){
 }
 export async function performNativeRopeGesture(page,points,record){
  assert(Array.isArray(points)&&points.length===13&&points.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)),'ROPE_FINITE_13_POINT_GESTURE_REQUIRED');
- record.status='RUNNING';record.samples=[];let down=false,installed=false,primary=null;
+ record.status='RUNNING';record.samples=[];record.inputActions=[];record.inputActionClock='NODE_PERFORMANCE_NOW_MS_NOT_SYNCHRONIZED_TO_BROWSER';let down=false,installed=false,primary=null;
+ const action=async(kind,operation)=>{const row={kind,startMs:performance.now(),endMs:null,status:'RUNNING'};record.inputActions.push(row);try{const value=await operation();row.status='RESOLVED';return value;}catch(error){row.status='REJECTED';throw error;}finally{row.endMs=performance.now();}};
  try{
   installed=true;await page.evaluate(installNativeRopeCollector);
-  await page.mouse.move(points[0].x,points[0].y);await page.mouse.down();down=true;
-  for(const point of points.slice(1))await page.mouse.move(point.x,point.y);
-  await page.mouse.up();down=false;
+  await action('move',()=>page.mouse.move(points[0].x,points[0].y));await action('down',()=>page.mouse.down());down=true;
+  for(const point of points.slice(1))await action('move',()=>page.mouse.move(point.x,point.y));
+  await action('up',()=>page.mouse.up());down=false;
   const receipt=await page.evaluate(finishNativeRopeCollector);installed=false;Object.assign(record,receipt);assertNativeRopeReceipt(receipt,points);
   record.status='PASS_CADENCE_AND_NATIVE_CLOSURE_NOT_CAPTURE';return record;
  }catch(error){primary=error;record.status='FAIL_CLOSED';record.error=String(error.message).slice(0,160);throw error;}
@@ -213,7 +214,7 @@ export function assertReentryOwnerState(snapshot){
   if(w.terminatedAt)continue;
   assert(!u.revokedAt,'REENTRY_LIVE_WORKER_SOURCE_REVOKED');
   if(w.sourceClass==='PIXI_SHARED_IMAGE_BITMAP_POOL'){assert.equal(u.blobBytes,932);assert.equal(u.sourceSHA256,snapshot.sharedPool.source.sha256);assert.equal(w.bitmapPosts,w.bitmapReplies,'REENTRY_SHARED_POOL_STILL_BUSY');pool.push(w);}
-  else{assert.equal(w.sourceClass,'DRACO_PROTOCOL','REENTRY_UNKNOWN_WORKER_OWNER');assert.equal(w.createdContext,'RAISING_HOME','REENTRY_LIVE_MAP_DECODER');assert.equal(w.decodePosts,w.decodeReplies,'REENTRY_HOME_DECODE_STILL_BUSY');home.push(w);}
+  else{assert.equal(w.sourceClass,'DRACO_PROTOCOL','REENTRY_UNKNOWN_WORKER_OWNER');assert.equal(w.createdContext,'RAISING_HOME','REENTRY_LIVE_MAP_DECODER');assert(w.creationEvidence?.method==='EXACT_NATIVE_VIEW_SHELL_NOT_STALE_SCREEN_ATTRIBUTE'&&w.creationEvidence.homeShell===true&&w.creationEvidence.huntShell===false,'REENTRY_HOME_SHELL_ATTESTATION_REQUIRED');assert.equal(w.decodePosts,w.decodeReplies,'REENTRY_HOME_DECODE_STILL_BUSY');home.push(w);}
  }
  assert(pool.length>0&&pool.length<=cap,'REENTRY_SHARED_POOL_EXCEEDS_CONFIGURED_MAX');assert(home.length>0&&home.length<=4,'REENTRY_HOME_DRACO_EXCEEDS_SOURCE_LIMIT');
  assert.equal(new Set(pool.map(w=>w.urlId)).size,1,'REENTRY_SECOND_SHARED_POOL_URL');assert.equal(new Set(home.map(w=>w.urlId)).size,1,'REENTRY_SECOND_HOME_DECODER_POOL');assert.equal(live.length,pool.length+home.length);assert.equal(snapshot.liveWorkers,live.length);
@@ -223,11 +224,15 @@ export function assertReentryOwnedRelease(before,after,{oneDeclaredWarmup=false}
  const prior=assertReentryOwnerState(before),current=assertReentryOwnerState(after);assert.equal(current.configuredMax,prior.configuredMax,'REENTRY_CONFIGURED_POOL_LIMIT_CHANGED');assert.equal(current.poolURL,prior.poolURL,'REENTRY_SHARED_POOL_IDENTITY_CHANGED');assert.equal(current.homeSourceSHA256,prior.homeSourceSHA256,'REENTRY_HOME_DECODER_SOURCE_CHANGED');assert.equal(current.homeCount,prior.homeCount,'REENTRY_HOME_DECODER_COUNT_CHANGED');
  if(oneDeclaredWarmup)assert(prior.poolIds.every(id=>current.poolIds.includes(id)),'REENTRY_SHARED_POOL_REPLACED_DURING_WARMUP');else assert.deepEqual(current.poolIds,prior.poolIds,'REENTRY_SHARED_POOL_GREW_AFTER_WARMUP');
  const created=after.ownership.workers.filter(w=>w.createdAt>before.ownership.sequence),mapWorkers=created.filter(w=>w.createdContext==='HUNT_FIELD'&&w.sourceClass!=='PIXI_SHARED_IMAGE_BITMAP_POOL');
- assert.equal(mapWorkers.length,1,'REENTRY_EXACT_ONE_MAP_DECODER_REQUIRED');for(const w of mapWorkers){const u=after.ownership.objectURLs.find(u=>u.id===w.urlId);assert.equal(w.sourceClass,'DRACO_PROTOCOL');assert(w.terminatedAt>w.createdAt&&u?.revokedAt>u.createdAt,'REENTRY_MAP_DECODER_NOT_NATIVE_RELEASED');assert.equal(w.decodePosts,w.decodeReplies,'REENTRY_MAP_DECODE_UNSETTLED');}
+ assert.equal(mapWorkers.length,1,'REENTRY_EXACT_ONE_MAP_DECODER_REQUIRED');for(const w of mapWorkers){const u=after.ownership.objectURLs.find(u=>u.id===w.urlId);assert.equal(w.sourceClass,'DRACO_PROTOCOL');assert(w.creationEvidence?.method==='EXACT_NATIVE_VIEW_SHELL_NOT_STALE_SCREEN_ATTRIBUTE'&&w.creationEvidence.huntShell===true&&w.creationEvidence.homeShell===false,'REENTRY_MAP_SHELL_ATTESTATION_REQUIRED');assert(w.terminatedAt>w.createdAt&&u?.revokedAt>u.createdAt,'REENTRY_MAP_DECODER_NOT_NATIVE_RELEASED');assert.equal(w.decodePosts,w.decodeReplies,'REENTRY_MAP_DECODE_UNSETTLED');}
  assert.equal(after.liveObjectURLs,before.liveObjectURLs,'REENTRY_WHOLE_PAGE_OBJECT_URLS_BASELINE_MISMATCH');if(!oneDeclaredWarmup)assert.equal(after.liveWorkers,before.liveWorkers,'REENTRY_WHOLE_PAGE_LIVE_WORKERS_BASELINE_MISMATCH');
  return {scope:'EXACT_SOURCE_SHARED_POOL_AND_CONTEXT_OWNED_DECODER_RELEASE',oneDeclaredWarmup,prior,current,mapWorkerIds:mapWorkers.map(w=>w.id),nativeMapWorkersAlive:0};
 }
 function summarize(s){return {generation:s.generation,appIdentity:s.appIdentity,frames:s.frames,diagnostics:s.diagnostics,art:s.art,viewport:s.viewport,view:s.view,actors:s.actors?.map(({nativeFrame,...a})=>({...a,nativeFrame:{authority:nativeFrame?.authority,flipX:nativeFrame?.flipX,flipY:nativeFrame?.flipY,geometry:nativeFrame?.geometry}})),transitions:s.transitions,resources:s.resources,authority:s.authority?{screen:s.authority.screen,calendar:s.authority.calendar,collectionCount:s.authority.collection.length,cardCount:s.authority.cards.length,toolFrame:s.authority.tool?.frame}:null,errors:s.errors};}
+export function summarizeRecoveryGeometry(s){
+ const value=summarize(s),native=s.actors??[],three=s.renderActors?.actors??[];
+ value.actors=value.actors?.slice(0,64);value.geometryAvailability={nativeActorCount:native.length,nativeTruncated:native.length>64,rendererIdentity:s.renderActors?.rendererIdentity??null,threeActorCount:three.length,threeTruncated:three.length>64,threeVisibleCount:three.filter(a=>a.visible===true).length,threeActors:three.slice(0,64).map(a=>({id:a.id,visible:a.visible===true,opacity:Number.isFinite(a.opacity)?a.opacity:null,positionScalarCount:Array.isArray(a.positions)?a.positions.length:null,shadowVisible:a.shadow?.visible===true}))};return value;
+}
 export async function run(){
  assert.equal(process.env.GITHUB_ACTIONS,'true','ACTIONS_ONLY_NO_LOCAL_BROWSER_AUTHORITY');assert.equal(process.env.CI,'true');
  const args=process.argv.slice(2),phase=args[0],spec=matrix.phases[phase];assert(spec,'UNKNOWN_BOUNDED_PHASE');const root=process.cwd(),artifact=path.resolve(args[1]),receiptFile=path.resolve(args[2]),out=path.resolve(args[3]);assert(out.startsWith(path.join(root,'.tmp','hunt-three-evidence')+path.sep),'BOUNDED_OUTPUT_REQUIRED');assert(!fs.existsSync(out),'EXCLUSIVE_EVIDENCE_OUTPUT');fs.mkdirSync(out,{recursive:true});
@@ -302,7 +307,7 @@ export async function run(){
   await page.route(origin+ownerProof.urlPath,async route=>{ownerRequestCount++;try{assert.equal(ownerRequestCount,1,'HM08_SINGLE_TARGET_REQUEST_REQUIRED');const u=new URL(route.request().url());assert.equal(u.origin,origin);assert.equal(u.pathname,ownerProof.urlPath);assert.equal(u.search,'');assert.equal(route.request().method(),'GET');ownerArm=await page.evaluate(proof=>globalThis.__huntActionsResources.armHM08DecodeHold(proof),ownerProof);result.recoveryOwnerObservation.arm=ownerArm;await route.continue();}catch(error){ownerArmError=error;await route.abort();}});
   let nativeOwnerReleaseProved=false;await withTransportCleanup(async()=>{recoveryStage='hm08-worker-owned-entry';await enter('hm08',{wait:false});if(ownerArmError)throw ownerArmError;await page.waitForFunction(()=>{const s=globalThis.__huntActionsResources.snapshot();return s.heldDecodes===1||s.ownership.failures.length>0;},null,{timeout:90000});if(ownerArmError)throw ownerArmError;assert(ownerArm,'HM08_EXACT_REQUEST_ARM_NOT_OBSERVED');const ownerHeld=await page.evaluate(()=>globalThis.__huntActionsResources.snapshot());result.recoveryOwnerObservation.held=ownerHeld;assert.deepEqual(ownerHeld.ownership.failures,[],'HM08_OWNER_AMBIGUOUS');assert.equal(ownerHeld.heldDecodes,1);
   recoveryStage='hm08-worker-abort-overlay';await dismissPendingEntryForAbort(recoveryStage,{heldTransportObserved:true});recoveryStage='hm08-worker-abort-exit';await leave();const released=await page.evaluate(()=>globalThis.__huntActionsResources.releaseHeld());result.recoveryOwnerObservation.released=released;await page.waitForTimeout(600);const resources=await page.evaluate(()=>globalThis.__huntActionsResources.snapshot());result.recoveryOwnerObservation.after=resources;const ownerRelease=assertHM08OwnedRelease(ownerHeld,resources,released);result.recoveryOwnerObservation.closed=await page.evaluate(()=>globalThis.__huntActionsResources.closeHM08Owner());result.recoveryOwnerObservation.ownerRelease=ownerRelease;nativeOwnerReleaseProved=true;},async()=>result.ownedTransportCleanup=await cleanupOwnedTransport(page,()=>page.unroute(origin+ownerProof.urlPath),{nativeReleaseProved:nativeOwnerReleaseProved}),r=>{result.ownedTransportCleanup=r;});saveCase('hm08-worker-abort',{observedStage:'exact pinned HM08 compressed payload posted by post-arm worker/blob URL; native UI abort',...result.recoveryOwnerObservation,transportCleanup:result.ownedTransportCleanup,nativeUiExit:true});
-  await enter('hm01');await page.evaluate(()=>globalThis.__huntActions.loseContext());await page.waitForTimeout(1000);await screenshot('context-loss-ui');await page.evaluate(()=>globalThis.__huntActions.restoreContext());await page.waitForTimeout(1000);await leave();await enter('hm08');const recovered=await get();actorGeometryEvidence(recovered);saveCase('hm01-context-loss-recovery',{newContextRendererIdentity:recovered.renderActors.rendererIdentity,requiresContextGenerationReview:true});saveCase('hm08-success-after-failure',{threeUsed:recovered.diagnostics.threeUsed});await leave();}
+  recoveryStage='hm01-context-loss-entry';await enter('hm01');recoveryStage='hm01-context-loss';await page.evaluate(()=>globalThis.__huntActions.loseContext());await page.waitForTimeout(1000);await screenshot('context-loss-ui');await page.evaluate(()=>globalThis.__huntActions.restoreContext());await page.waitForTimeout(1000);recoveryStage='context-loss-leave';await leave();recoveryStage='hm08-post-context-reentry';await enter('hm08');const recovered=await get();result.recoveryFinalObservation=summarizeRecoveryGeometry(recovered);recoveryStage='hm08-post-context-reentry-geometry';actorGeometryEvidence(recovered);saveCase('hm01-context-loss-recovery',{newContextRendererIdentity:recovered.renderActors.rendererIdentity,requiresContextGenerationReview:true});saveCase('hm08-success-after-failure',{threeUsed:recovered.diagnostics.threeUsed});await leave();}
  async function reentries(){await boot('day');
   const settledResources=()=>page.evaluate(()=>globalThis.__huntActionsResources.settleSourceIdentities());
   const coldHome=await settledResources(),entries=[],disposals=[];
