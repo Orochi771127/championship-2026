@@ -55,14 +55,81 @@ export function waitForNativeRopeTick(previous){
   try{const host=document.querySelector('.cm-vs2-field__canvas');if(!host)throw Error('ROPE_NATIVE_FIELD_UNAVAILABLE');observer=new MutationObserver(check);observer.observe(host,{attributes:true,attributeFilter:['data-hunt-tool-state']});timer=setTimeout(()=>{try{read();finish(Error('ROPE_NATIVE_TICK_UNOBSERVED'));}catch(error){finish(error);}},3000);check();}catch(error){finish(error);}
  });
 }
+// One passive in-page collector avoids a protocol read roundtrip after each move.
+// It observes the real DOM/native writer and trusted mouse events only; it never
+// writes game state, dispatches events, advances frames, or creates a ticker.
+export function installNativeRopeCollector(){
+ const key='__huntActionsRopeCollector';if(globalThis[key])throw Error('ROPE_COLLECTOR_ALREADY_INSTALLED');
+ const host=document.querySelector('.cm-vs2-field__canvas');if(!host)throw Error('ROPE_NATIVE_FIELD_UNAVAILABLE');
+ const state={schema:'HUNT_NATIVE_ROPE_GESTURE.v1',startFrame:null,samples:[],events:[],pointerUpFrame:null,closure:null,error:null,terminal:false};
+ let observer,timer=null,waiter=null,disposed=false,pointerId=null;
+ const read=()=>{const root=document.getElementById('cm-root');if(root?.dataset.activeScreen!=='HUNT_FIELD'||root?.dataset.screen!=='HUNT_FIELD'||host.getAttribute('aria-busy')!=='false')throw Error('ROPE_NATIVE_FIELD_UNAVAILABLE');
+  let t;try{t=JSON.parse(host.getAttribute('data-hunt-tool-state'));}catch{throw Error('ROPE_NATIVE_TOOL_UNAVAILABLE');}
+  if(!Number.isSafeInteger(t?.frame)||t.frame<0||t.activeTool!=='ROPE'||!Array.isArray(t.points))throw Error('ROPE_NATIVE_TOOL_UNAVAILABLE');
+  const c=t.closure;if(c&&(![c.x,c.y,c.ticks].every(Number.isFinite)||!Number.isInteger(c.ticks)||c.ticks<0||c.ticks>18))throw Error('ROPE_NATIVE_CLOSURE_INVALID');
+  return {frame:t.frame,pointCount:t.points.length,closure:c?{x:c.x,y:c.y,ticks:c.ticks}:null};};
+ const initial=read();if(initial.closure||initial.pointCount!==0)throw Error('ROPE_NATIVE_PREVIOUS_GESTURE_UNSETTLED');
+ const snapshot=()=>({...state,samples:state.samples.map(s=>({...s,closure:s.closure?{...s.closure}:null})),events:state.events.map(e=>({...e})),tickSpan:state.startFrame===null?null:(state.samples.at(-1)?.frame??state.startFrame)-state.startFrame,inputTickSpan:state.pointerUpFrame===null||state.startFrame===null?null:state.pointerUpFrame-state.startFrame,peakPointCount:Math.max(0,...state.samples.map(s=>s.pointCount)),distinctSampleFrames:state.samples.filter(s=>s.pointCount>0).length});
+ const dispose=()=>{if(!disposed){disposed=true;observer?.disconnect();clearTimeout(timer);for(const name of ['pointerdown','pointermove','pointerup','pointercancel'])host.removeEventListener(name,onPointer,true);delete globalThis[key];}return snapshot();};
+ const settle=()=>{if(waiter&&state.terminal){const resolve=waiter;waiter=null;resolve(dispose());}};
+ const fail=message=>{state.error??=message;state.terminal=true;settle();};
+ const capture=()=>{if(state.startFrame===null||state.terminal)return;try{const value=read(),prior=state.samples.at(-1)?.frame??state.startFrame;
+  if(value.frame<prior)throw Error('ROPE_NATIVE_FRAME_REVERSED');if(value.frame===prior)return;
+  if(state.samples.length>=64)throw Error('ROPE_NATIVE_LEDGER_BOUND');state.samples.push(value);
+  if(value.frame-state.startFrame>=20)throw Error('ROPE_NATIVE_20_TICK_LIFETIME_EXCEEDED');
+  if(value.closure&&state.pointerUpFrame!==null&&value.frame>state.pointerUpFrame){state.closure=value.closure;state.terminal=true;settle();}
+ }catch(error){fail(String(error.message));}};
+ function onPointer(event){
+  if(disposed||!host.contains(event.target))return;
+  if(state.startFrame===null&&event.type!=='pointerdown')return;
+  if(state.pointerUpFrame!==null)return;
+  try{
+   if(event.isTrusted!==true||event.pointerType!=='mouse')throw Error('ROPE_TRUSTED_MOUSE_REQUIRED');
+   if(![event.clientX,event.clientY].every(Number.isFinite))throw Error('ROPE_POINTER_COORDINATES_REQUIRED');
+   if(event.type==='pointercancel')throw Error('ROPE_NATIVE_POINTER_CANCELLED');
+   if(event.type==='pointerdown'){if(state.startFrame!==null||event.button!==0||event.buttons!==1)throw Error('ROPE_SINGLE_PRIMARY_DOWN_REQUIRED');pointerId=event.pointerId;state.startFrame=read().frame;}
+   else if(event.pointerId!==pointerId)throw Error('ROPE_POINTER_ID_CHANGED');
+   if(event.type==='pointermove'&&event.buttons!==1)throw Error('ROPE_PRESSED_MOVE_REQUIRED');
+   if(event.type==='pointerup'){if(event.button!==0||event.buttons!==0)throw Error('ROPE_PRIMARY_UP_REQUIRED');state.pointerUpFrame=read().frame;}
+   if(state.events.length>=16)throw Error('ROPE_POINTER_EVENT_BOUND');state.events.push({type:event.type,x:event.clientX,y:event.clientY,trusted:true});capture();
+  }catch(error){fail(String(error.message));}
+ }
+ observer=new MutationObserver(capture);observer.observe(host,{attributes:true,attributeFilter:['data-hunt-tool-state']});
+ for(const name of ['pointerdown','pointermove','pointerup','pointercancel'])host.addEventListener(name,onPointer,true);
+ globalThis[key]={finish(){capture();if(state.terminal)return Promise.resolve(dispose());if(waiter)throw Error('ROPE_COLLECTOR_FINISH_DUPLICATE');return new Promise(resolve=>{waiter=resolve;timer=setTimeout(()=>fail('ROPE_NATIVE_CLOSURE_UNOBSERVED'),3000);});},dispose};
+ return {schema:state.schema,readOnly:true};
+}
+export function finishNativeRopeCollector(){const api=globalThis.__huntActionsRopeCollector;if(!api)throw Error('ROPE_COLLECTOR_RECEIPT_MISSING');return api.finish();}
+export function disposeNativeRopeCollector(){const api=globalThis.__huntActionsRopeCollector;if(!api)throw Error('ROPE_COLLECTOR_RECEIPT_MISSING');return api.dispose();}
+export function assertNativeRopeReceipt(receipt,points){
+ assert(receipt?.schema==='HUNT_NATIVE_ROPE_GESTURE.v1'&&Array.isArray(receipt.samples)&&Array.isArray(receipt.events),'ROPE_NATIVE_RECEIPT_REQUIRED');
+ if(receipt.error)throw Error(receipt.error);
+ assert.equal(receipt.terminal,true,'ROPE_NATIVE_RECEIPT_INCOMPLETE');assert.equal(receipt.events.length,14,'ROPE_TRUSTED_PATH_INCOMPLETE');
+ const expected=[{type:'pointerdown',...points[0]},...points.slice(1).map(p=>({type:'pointermove',...p})),{type:'pointerup',...points.at(-1)}];
+ receipt.events.forEach((e,i)=>{assert(e.trusted===true&&e.type===expected[i].type,'ROPE_TRUSTED_PATH_REQUIRED');assert(Math.abs(e.x-expected[i].x)<=1&&Math.abs(e.y-expected[i].y)<=1,'ROPE_TRUSTED_PATH_COORDINATES');}); // browser CSS-pixel input quantization only
+ assert.equal(receipt.tickSpan,assertRopeGestureCadence(receipt.startFrame,receipt.samples),'ROPE_NATIVE_SPAN_MISMATCH');assert(Number.isSafeInteger(receipt.inputTickSpan)&&receipt.inputTickSpan>=0&&receipt.inputTickSpan<20&&receipt.inputTickSpan===receipt.pointerUpFrame-receipt.startFrame,'ROPE_NATIVE_INPUT_SPAN_MISMATCH');
+ assert(receipt.samples.length>0&&receipt.peakPointCount>=6,'ROPE_NATIVE_SUFFICIENT_SAMPLES_UNOBSERVED');
+ const closure=receipt.samples.find(s=>s.frame>receipt.pointerUpFrame&&s.closure);
+ assert(closure&&receipt.closure&&closure.closure.ticks>=0&&closure.closure.ticks<=18,'ROPE_NATIVE_CLOSURE_UNOBSERVED');assert.deepEqual(receipt.closure,closure.closure);
+ return receipt.tickSpan;
+}
 export async function performNativeRopeGesture(page,points,record){
  assert(Array.isArray(points)&&points.length===13&&points.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)),'ROPE_FINITE_13_POINT_GESTURE_REQUIRED');
- record.status='RUNNING';record.samples=[];let down=false;
- try{const start=await page.evaluate(waitForNativeRopeTick,-1);record.startFrame=start.frame;await page.mouse.move(points[0].x,points[0].y);await page.mouse.down();down=true;
-  const observe=async()=>{const previous=record.samples.at(-1)?.frame??record.startFrame,observation=await page.evaluate(waitForNativeRopeTick,previous);record.samples.push(observation);record.tickSpan=assertRopeGestureCadence(record.startFrame,record.samples);return observation;};
-  await observe();for(const point of points.slice(1)){await page.mouse.move(point.x,point.y);await observe();}await page.mouse.up();down=false;const released=await observe();
-  assert(released.closure&&released.closure.ticks>=0&&released.closure.ticks<=18,'ROPE_NATIVE_CLOSURE_UNOBSERVED');record.closure=released.closure;record.status='PASS_CADENCE_AND_NATIVE_CLOSURE_NOT_CAPTURE';return record;
- }catch(error){record.status='FAIL_CLOSED';record.error=String(error.message).slice(0,160);throw error;}finally{if(down)await page.mouse.up();}
+ record.status='RUNNING';record.samples=[];let down=false,installed=false,primary=null;
+ try{
+  installed=true;await page.evaluate(installNativeRopeCollector);
+  await page.mouse.move(points[0].x,points[0].y);await page.mouse.down();down=true;
+  for(const point of points.slice(1))await page.mouse.move(point.x,point.y);
+  await page.mouse.up();down=false;
+  const receipt=await page.evaluate(finishNativeRopeCollector);installed=false;Object.assign(record,receipt);assertNativeRopeReceipt(receipt,points);
+  record.status='PASS_CADENCE_AND_NATIVE_CLOSURE_NOT_CAPTURE';return record;
+ }catch(error){primary=error;record.status='FAIL_CLOSED';record.error=String(error.message).slice(0,160);throw error;}
+ finally{
+  const cleanup=[];if(down)cleanup.push({operation:'pointer-up',...await cleanupStep(()=>page.mouse.up())});
+  if(installed)cleanup.push({operation:'collector-dispose',...await cleanupStep(async()=>{record.interruptedGesture=await page.evaluate(disposeNativeRopeCollector);})});
+  if(cleanup.length)record.gestureCleanup=cleanup;
+  if(!primary&&cleanup.some(r=>r.status!=='PASS'))throw Error('ROPE_GESTURE_CLEANUP_UNCONFIRMED');
+ }
 }
 // Cleanup evidence never converts a failed phase into native recovery success.
 export async function cleanupStep(operation,timeoutMs=5000){let timer;try{await Promise.race([Promise.resolve().then(operation),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('CLEANUP_STEP_TIMEOUT')),timeoutMs);})]);return {status:'PASS'};}catch(error){return {status:'ERROR',errorName:error.name,error:String(error.message).slice(0,160)};}finally{clearTimeout(timer);}}
@@ -134,6 +201,31 @@ export function visualEvidence(c){
   }
  }
  return out;
+}
+export function assertReentryOwnerState(snapshot){
+ const ledger=snapshot?.ownership;assert(ledger&&!ledger.overflow&&ledger.failures.length===0,'REENTRY_OWNER_LEDGER_REQUIRED');
+ assert.equal(snapshot.sharedPool?.source?.bytes,932);assert.equal(snapshot.sharedPool.source.sha256,'9d10b11cf15844e5bb768493df95ad58334901be58d1e5aa62b973a0889b90d7');
+ const cap=snapshot.sharedPool.configuredMax;assert(Number.isSafeInteger(cap)&&cap>=1&&cap<=256,'REENTRY_CONFIGURED_POOL_BOUND_REQUIRED');
+ const live=ledger.workers.filter(w=>!w.terminatedAt),pool=[],home=[];
+ for(const w of ledger.workers){assert.notEqual(w.sourceClass,'UNKNOWN','REENTRY_UNKNOWN_WORKER_OWNER');assert.equal(w.unknownProtocolPosts,0,'REENTRY_MIXED_WORKER_PROTOCOL');
+  const u=ledger.objectURLs.find(u=>u.id===w.urlId);assert(u?.sourceHashStatus==='VERIFIED'&&/^[a-f0-9]{64}$/.test(u.sourceSHA256),'REENTRY_WORKER_SOURCE_HASH_REQUIRED');
+  if(w.sourceClass==='PIXI_IMAGE_BITMAP_SUPPORT_CHECK'){assert(w.terminatedAt&&u.revokedAt,'REENTRY_SUPPORT_CHECK_NOT_RELEASED');continue;}
+  if(w.terminatedAt)continue;
+  assert(!u.revokedAt,'REENTRY_LIVE_WORKER_SOURCE_REVOKED');
+  if(w.sourceClass==='PIXI_SHARED_IMAGE_BITMAP_POOL'){assert.equal(u.blobBytes,932);assert.equal(u.sourceSHA256,snapshot.sharedPool.source.sha256);assert.equal(w.bitmapPosts,w.bitmapReplies,'REENTRY_SHARED_POOL_STILL_BUSY');pool.push(w);}
+  else{assert.equal(w.sourceClass,'DRACO_PROTOCOL','REENTRY_UNKNOWN_WORKER_OWNER');assert.equal(w.createdContext,'RAISING_HOME','REENTRY_LIVE_MAP_DECODER');assert.equal(w.decodePosts,w.decodeReplies,'REENTRY_HOME_DECODE_STILL_BUSY');home.push(w);}
+ }
+ assert(pool.length>0&&pool.length<=cap,'REENTRY_SHARED_POOL_EXCEEDS_CONFIGURED_MAX');assert(home.length>0&&home.length<=4,'REENTRY_HOME_DRACO_EXCEEDS_SOURCE_LIMIT');
+ assert.equal(new Set(pool.map(w=>w.urlId)).size,1,'REENTRY_SECOND_SHARED_POOL_URL');assert.equal(new Set(home.map(w=>w.urlId)).size,1,'REENTRY_SECOND_HOME_DECODER_POOL');assert.equal(live.length,pool.length+home.length);assert.equal(snapshot.liveWorkers,live.length);
+ return {poolIds:pool.map(w=>w.id).sort((a,b)=>a-b),poolURL:pool[0].urlId,poolCount:pool.length,configuredMax:cap,homeCount:home.length,homeSourceSHA256:ledger.objectURLs.find(u=>u.id===home[0].urlId).sourceSHA256};
+}
+export function assertReentryOwnedRelease(before,after,{oneDeclaredWarmup=false}={}){
+ const prior=assertReentryOwnerState(before),current=assertReentryOwnerState(after);assert.equal(current.configuredMax,prior.configuredMax,'REENTRY_CONFIGURED_POOL_LIMIT_CHANGED');assert.equal(current.poolURL,prior.poolURL,'REENTRY_SHARED_POOL_IDENTITY_CHANGED');assert.equal(current.homeSourceSHA256,prior.homeSourceSHA256,'REENTRY_HOME_DECODER_SOURCE_CHANGED');assert.equal(current.homeCount,prior.homeCount,'REENTRY_HOME_DECODER_COUNT_CHANGED');
+ if(oneDeclaredWarmup)assert(prior.poolIds.every(id=>current.poolIds.includes(id)),'REENTRY_SHARED_POOL_REPLACED_DURING_WARMUP');else assert.deepEqual(current.poolIds,prior.poolIds,'REENTRY_SHARED_POOL_GREW_AFTER_WARMUP');
+ const created=after.ownership.workers.filter(w=>w.createdAt>before.ownership.sequence),mapWorkers=created.filter(w=>w.createdContext==='HUNT_FIELD'&&w.sourceClass!=='PIXI_SHARED_IMAGE_BITMAP_POOL');
+ assert.equal(mapWorkers.length,1,'REENTRY_EXACT_ONE_MAP_DECODER_REQUIRED');for(const w of mapWorkers){const u=after.ownership.objectURLs.find(u=>u.id===w.urlId);assert.equal(w.sourceClass,'DRACO_PROTOCOL');assert(w.terminatedAt>w.createdAt&&u?.revokedAt>u.createdAt,'REENTRY_MAP_DECODER_NOT_NATIVE_RELEASED');assert.equal(w.decodePosts,w.decodeReplies,'REENTRY_MAP_DECODE_UNSETTLED');}
+ assert.equal(after.liveObjectURLs,before.liveObjectURLs,'REENTRY_WHOLE_PAGE_OBJECT_URLS_BASELINE_MISMATCH');if(!oneDeclaredWarmup)assert.equal(after.liveWorkers,before.liveWorkers,'REENTRY_WHOLE_PAGE_LIVE_WORKERS_BASELINE_MISMATCH');
+ return {scope:'EXACT_SOURCE_SHARED_POOL_AND_CONTEXT_OWNED_DECODER_RELEASE',oneDeclaredWarmup,prior,current,mapWorkerIds:mapWorkers.map(w=>w.id),nativeMapWorkersAlive:0};
 }
 function summarize(s){return {generation:s.generation,appIdentity:s.appIdentity,frames:s.frames,diagnostics:s.diagnostics,art:s.art,viewport:s.viewport,view:s.view,actors:s.actors?.map(({nativeFrame,...a})=>({...a,nativeFrame:{authority:nativeFrame?.authority,flipX:nativeFrame?.flipX,flipY:nativeFrame?.flipY,geometry:nativeFrame?.geometry}})),transitions:s.transitions,resources:s.resources,authority:s.authority?{screen:s.authority.screen,calendar:s.authority.calendar,collectionCount:s.authority.collection.length,cardCount:s.authority.cards.length,toolFrame:s.authority.tool?.frame}:null,errors:s.errors};}
 export async function run(){
@@ -211,7 +303,15 @@ export async function run(){
   let nativeOwnerReleaseProved=false;await withTransportCleanup(async()=>{recoveryStage='hm08-worker-owned-entry';await enter('hm08',{wait:false});if(ownerArmError)throw ownerArmError;await page.waitForFunction(()=>{const s=globalThis.__huntActionsResources.snapshot();return s.heldDecodes===1||s.ownership.failures.length>0;},null,{timeout:90000});if(ownerArmError)throw ownerArmError;assert(ownerArm,'HM08_EXACT_REQUEST_ARM_NOT_OBSERVED');const ownerHeld=await page.evaluate(()=>globalThis.__huntActionsResources.snapshot());result.recoveryOwnerObservation.held=ownerHeld;assert.deepEqual(ownerHeld.ownership.failures,[],'HM08_OWNER_AMBIGUOUS');assert.equal(ownerHeld.heldDecodes,1);
   recoveryStage='hm08-worker-abort-overlay';await dismissPendingEntryForAbort(recoveryStage,{heldTransportObserved:true});recoveryStage='hm08-worker-abort-exit';await leave();const released=await page.evaluate(()=>globalThis.__huntActionsResources.releaseHeld());result.recoveryOwnerObservation.released=released;await page.waitForTimeout(600);const resources=await page.evaluate(()=>globalThis.__huntActionsResources.snapshot());result.recoveryOwnerObservation.after=resources;const ownerRelease=assertHM08OwnedRelease(ownerHeld,resources,released);result.recoveryOwnerObservation.closed=await page.evaluate(()=>globalThis.__huntActionsResources.closeHM08Owner());result.recoveryOwnerObservation.ownerRelease=ownerRelease;nativeOwnerReleaseProved=true;},async()=>result.ownedTransportCleanup=await cleanupOwnedTransport(page,()=>page.unroute(origin+ownerProof.urlPath),{nativeReleaseProved:nativeOwnerReleaseProved}),r=>{result.ownedTransportCleanup=r;});saveCase('hm08-worker-abort',{observedStage:'exact pinned HM08 compressed payload posted by post-arm worker/blob URL; native UI abort',...result.recoveryOwnerObservation,transportCleanup:result.ownedTransportCleanup,nativeUiExit:true});
   await enter('hm01');await page.evaluate(()=>globalThis.__huntActions.loseContext());await page.waitForTimeout(1000);await screenshot('context-loss-ui');await page.evaluate(()=>globalThis.__huntActions.restoreContext());await page.waitForTimeout(1000);await leave();await enter('hm08');const recovered=await get();actorGeometryEvidence(recovered);saveCase('hm01-context-loss-recovery',{newContextRendererIdentity:recovered.renderActors.rendererIdentity,requiresContextGenerationReview:true});saveCase('hm08-success-after-failure',{threeUsed:recovered.diagnostics.threeUsed});await leave();}
- async function reentries(){await boot('day');const home=await page.evaluate(()=>globalThis.__huntActionsResources.snapshot()),entries=[],disposals=[];result.reentryObservation={home,entries,disposals,pending:null,counterScope:'WHOLE_PAGE_NOT_HUNT_OWNER_ATTRIBUTION'};for(let i=0;i<10;i++){const map=i%2?'hm08':'hm01';result.reentryObservation.pending={index:i,map,stage:'entry'};await enter(map);await page.waitForTimeout(1000);const s=await get();actorGeometryEvidence(s);entries.push({index:i,map,appIdentity:s.appIdentity,rendererIdentity:s.renderActors.rendererIdentity,cache:s.diagnostics.actorTextures,gpuMemory:s.diagnostics.three.memory,resources:s.resources});result.reentryObservation.pending.stage='exit';await leave();const done=await get(),last=done.disposed.at(-1);result.reentryObservation.pending={index:i,map,stage:'dispose-check',last:last?{generation:last.generation,active:last.diagnostics?.active,actorCount:last.diagnostics?.actorCount,actorTextureEntries:last.diagnostics?.actorTextures?.entries,residentFrameTextures:last.diagnostics?.residentFrameTextures,cleanupErrorCount:last.diagnostics?.cleanupErrors?.length,borrowedDestroyCalls:last.borrowedDestroyCalls}:null};assert.equal(last.diagnostics.active,false);assert.equal(last.diagnostics.actorCount,0);assert.equal(last.diagnostics.actorTextures.entries,0);assert.equal(last.diagnostics.residentFrameTextures,0);assert.equal(last.diagnostics.cleanupErrors.length,0);assert.equal(last.borrowedDestroyCalls,0);const resources=await page.evaluate(()=>globalThis.__huntActionsResources.snapshot());result.reentryObservation.pending={...result.reentryObservation.pending,stage:'whole-page-resource-check',resources};disposals.push({generation:last.generation,explicitDisposeBorrowedTextureDestroyCalls:last.borrowedDestroyCalls,resources});assert.equal(resources.liveWorkers,home.liveWorkers,'REENTRY_WHOLE_PAGE_LIVE_WORKERS_BASELINE_MISMATCH');assert.equal(resources.liveObjectURLs,home.liveObjectURLs,'REENTRY_WHOLE_PAGE_OBJECT_URLS_BASELINE_MISMATCH');result.reentryObservation.pending=null;}
+ async function reentries(){await boot('day');
+  const settledResources=()=>page.evaluate(()=>globalThis.__huntActionsResources.settleSourceIdentities());
+  const coldHome=await settledResources(),entries=[],disposals=[];
+  result.reentryObservation={coldHome,warmup:{map:'hm01',ordinaryEntryExit:true,status:'RUNNING_NOT_COUNTED_IN_TEN'},entries,disposals,pending:null,counterScope:'SOURCE_HASH_PROTOCOL_CONTEXT_PLUS_STRICT_POST_WARMUP_GLOBAL_PLATEAU'};
+  assertReentryOwnerState(coldHome);await enter('hm01');await leave();
+  const warmState=await get(),warmDisposed=warmState.disposed.at(-1);assert.equal(warmDisposed.diagnostics.active,false);assert.equal(warmDisposed.diagnostics.actorCount,0);assert.equal(warmDisposed.diagnostics.actorTextures.entries,0);assert.equal(warmDisposed.diagnostics.residentFrameTextures,0);assert.equal(warmDisposed.diagnostics.cleanupErrors.length,0);assert.equal(warmDisposed.borrowedDestroyCalls,0);
+  const home=await settledResources();result.reentryObservation.warmup.proof=assertReentryOwnedRelease(coldHome,home,{oneDeclaredWarmup:true});result.reentryObservation.warmup.status='PASS_DECLARED_SHARED_POOL_WARMUP_NOT_TEN_CYCLES';result.reentryObservation.home=home;
+  let priorHome=home;
+ for(let i=0;i<10;i++){const map=i%2?'hm08':'hm01';result.reentryObservation.pending={index:i,map,stage:'entry'};await enter(map);await page.waitForTimeout(1000);const s=await get();actorGeometryEvidence(s);entries.push({index:i,map,appIdentity:s.appIdentity,rendererIdentity:s.renderActors.rendererIdentity,cache:s.diagnostics.actorTextures,gpuMemory:s.diagnostics.three.memory,resources:s.resources});result.reentryObservation.pending.stage='exit';await leave();const done=await get(),last=done.disposed.at(-1);result.reentryObservation.pending={index:i,map,stage:'dispose-check',last:last?{generation:last.generation,active:last.diagnostics?.active,actorCount:last.diagnostics?.actorCount,actorTextureEntries:last.diagnostics?.actorTextures?.entries,residentFrameTextures:last.diagnostics?.residentFrameTextures,cleanupErrorCount:last.diagnostics?.cleanupErrors?.length,borrowedDestroyCalls:last.borrowedDestroyCalls}:null};assert.equal(last.diagnostics.active,false);assert.equal(last.diagnostics.actorCount,0);assert.equal(last.diagnostics.actorTextures.entries,0);assert.equal(last.diagnostics.residentFrameTextures,0);assert.equal(last.diagnostics.cleanupErrors.length,0);assert.equal(last.borrowedDestroyCalls,0);const resources=await settledResources();result.reentryObservation.pending={...result.reentryObservation.pending,stage:'whole-page-resource-check',resources};const ownerProof=assertReentryOwnedRelease(priorHome,resources);disposals.push({generation:last.generation,explicitDisposeBorrowedTextureDestroyCalls:last.borrowedDestroyCalls,resources,ownerProof});assert.equal(resources.liveWorkers,home.liveWorkers,'REENTRY_WHOLE_PAGE_LIVE_WORKERS_BASELINE_MISMATCH');assert.equal(resources.liveObjectURLs,home.liveObjectURLs,'REENTRY_WHOLE_PAGE_OBJECT_URLS_BASELINE_MISMATCH');priorHome=resources;result.reentryObservation.pending=null;}
   assert.equal(new Set(entries.map(e=>e.appIdentity)).size,1,'SECOND_PIXI_APP_OWNER');assert.equal(new Set(entries.map(e=>e.rendererIdentity)).size,1,'SECOND_THREE_RENDERER_OWNER');for(const map of ['hm01','hm08']){const e=entries.filter(r=>r.map===map),first=e[1],last=e.at(-1);assert(last.gpuMemory.textures-first.gpuMemory.textures<=matrix.hardGates.reentryGpuTextureCountGrowth);assert(last.gpuMemory.geometries-first.gpuMemory.geometries<=matrix.hardGates.reentryGpuGeometryCountGrowth);}const warm=disposals[3].resources.jsHeapBytes,last=disposals.at(-1).resources.jsHeapBytes;assert(Number.isFinite(warm)&&Number.isFinite(last),'JS_HEAP_ESTIMATE_UNAVAILABLE');assert(last-warm<=matrix.hardGates.reentryJsHeapGrowthBytes,'REENTRY_MEMORY_BUDGET');assert(disposals.at(-1).resources.liveImageBitmaps<=disposals[3].resources.liveImageBitmaps+2,'REENTRY_IMAGE_BITMAP_PLATEAU');assert(disposals.every(d=>d.resources.canvasElements<=home.canvasElements+1),'REENTRY_CANVAS_OWNER_GROWTH');write('reentry-memory.json',{entries,disposals,home,heapGrowth:last-warm,retainedHm01FallbackDimensionEstimate:95314176,gpuResidencyMeasured:false});saveCase('ten-real-reentries-same-app',{count:10});saveCase('memory-owner-plateau',{heapGrowth:last-warm,physicalPhone:false});await page.route('**/hm01-three-r1-20261022/manifest.json',r=>r.fulfill({status:404,body:''}));await enter('hm01');saveCase('public-fallback-after-reentries',await fallbackEvidence('hm01','after-ten-fallback'));await leave();}
  try{browser=await chromium.launch({headless:true});phaseWork=({'exact-smoke':exactSmoke,'instrumented-visual':visual,'instrumented-capture':captureSave,'instrumented-recovery':recovery,'instrumented-reentries':reentries})[phase]();phaseWork.then(()=>{phaseWorkSettled=true;},()=>{phaseWorkSettled=true;});await Promise.race([phaseWork,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('BOUNDED_PHASE_DEADLINE')),spec.timeoutSeconds*1000);})]);assert.equal(violation.length,0,'PUBLIC_ARTIFACT_REQUEST_CLOSURE');assert.equal(consoleErrors.length,0,'UNCAUGHT_PAGE_ERRORS');assert(spec.required.every(k=>result.cases[k].status==='PASS'),'INCOMPLETE_REQUIRED_PHASE');result.status='PASS_AUTOMATED_REVIEW_EVIDENCE_NOT_RELEASE_APPROVAL';}
  catch(error){failure=error;result.status='FAIL_CLOSED';if(page&&['instrumented-capture','instrumented-recovery'].includes(phase)){let observationTimer;try{const state=await Promise.race([page.evaluate(readHarnessBoundary),new Promise((_,reject)=>{observationTimer=setTimeout(()=>reject(Error('BOUNDARY_OBSERVATION_TIMEOUT')),3000);})]);result.failureBoundary={stage:phase==='instrumented-capture'?captureStage:recoveryStage,...state,readOnly:true};}catch(observationError){result.failureBoundary={stage:phase==='instrumented-capture'?captureStage:recoveryStage,available:false,errorName:observationError.name};}finally{clearTimeout(observationTimer);}}result.error={name:error.name,message:String(error.message).slice(0,500)};for(const c of Object.values(result.cases))if(c.status==='PENDING')c.status='NOT_OBSERVED_NOT_PASS';}
