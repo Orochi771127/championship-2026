@@ -18,9 +18,9 @@ const up = new THREE.Vector3(-Math.sin(RANCH_ELEVATION)*Math.SQRT1_2, Math.cos(R
 const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math.sin(RANCH_ELEVATION), Math.cos(RANCH_ELEVATION)*Math.SQRT1_2);
 const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
 
-const WATER_FIELDS = new Set(['field_cm05_01', 'field_cm10_01', 'field_cm09_01', 'field_cm19_01', 'field_cm39_01']);
+const WATER_FIELDS = new Set(['field_cm10_01', 'field_cm09_01', 'field_cm19_01', 'field_cm39_01']);
 const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
-const ICE_FIELDS = new Set(['field_cm06_01', 'field_cm16_01', 'field_cm21_01']);
+const ICE_FIELDS = new Set(['field_cm16_01', 'field_cm21_01']);
 const INDUSTRIAL_FIELDS = new Set(['field_cm17_01', 'field_cm20_01', 'field_cm25_01', 'field_cm15_01', 'field_cm22_01']);
 
 /** Bounded rendering adapter, driven only by the existing Pixi scene ticker.
@@ -270,6 +270,31 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                     );
                   };
                   m.needsUpdate=true;
+                }
+              }
+
+              // Existing instrument displays / culture tanks only. A zero mask
+              // keeps floors and rigid equipment completely outside this effect.
+              if((p.fieldId==='field_cm05_01'||p.fieldId==='field_cm06_01')&&o.geometry.getAttribute('_ambient_mask')){
+                dynamicShaders.add(m);
+                if(!m.userData.instrumentAmbientHooked){
+                  m.userData.instrumentAmbientHooked=true;
+                  m.onBeforeCompile=shader=>{
+                    shader.uniforms.uAmbientTime={value:0};m.userData.shader=shader;
+                    shader.vertexShader='uniform float uAmbientTime;\nattribute float _ambient_mask;\nvarying float vAmbientMask;\nvarying vec3 vAmbientPosition;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+                      vAmbientMask=_ambient_mask;vAmbientPosition=position;
+                      if(_ambient_mask>2.5)transformed.y+=sin(uAmbientTime*0.75+position.y*2.0)*0.055;`);
+                    shader.fragmentShader='uniform float uAmbientTime;\nvarying float vAmbientMask;\nvarying vec3 vAmbientPosition;\n'+shader.fragmentShader;
+                    shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
+                      if(vAmbientMask>0.5&&vAmbientMask<1.5){
+                        float idle=0.05+0.035*sin(uAmbientTime*0.9+vAmbientPosition.x*0.6);
+                        totalEmissiveRadiance+=diffuseColor.rgb*idle;
+                      }else if(vAmbientMask>1.5&&vAmbientMask<2.5){
+                        totalEmissiveRadiance+=diffuseColor.rgb*(0.025+0.012*sin(uAmbientTime*0.6+vAmbientPosition.y*2.0));
+                      }`);
+                  };
+                  m.customProgramCacheKey=()=> 'authored-instrument-ambient-r1';m.needsUpdate=true;
                 }
               }
 
@@ -724,6 +749,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
           if(m.userData.shader.uniforms.uWaterTime)m.userData.shader.uniforms.uWaterTime.value=sceneClock;
           if(m.userData.shader.uniforms.uWindTime)m.userData.shader.uniforms.uWindTime.value=sceneClock;
           if(m.userData.shader.uniforms.uIceTime)m.userData.shader.uniforms.uIceTime.value=sceneClock;
+          if(m.userData.shader.uniforms.uAmbientTime)m.userData.shader.uniforms.uAmbientTime.value=sceneClock;
         }
       }
       for(const ps of dynamicParticles)ps.update(deltaSec,sceneClock);
