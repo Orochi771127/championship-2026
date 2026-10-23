@@ -1,0 +1,78 @@
+{
+  "source": "R:\\Projects\\Championship2026\\cm07-art-sample-20261023\\geometry-r3\\field_cm07_01.r3-uncompressed.glb",
+  "destination": "R:\\Projects\\Championship2026\\cm07-art-sample-20261023\\geometry-r3\\field_cm07_01.r3-web.glb",
+  "sourceBytes": 2114956,
+  "bytes": 1100296,
+  "sha256": "98401d4551f63cdcb7180070e06ca54fd6999ee4b5c7307e0d9003eec1723da5",
+  "savedBytes": 1014660,
+  "quantizationBits": [
+    22,
+    18,
+    20,
+    0,
+    0
+  ],
+  "losslessCornerRoundtrip": false,
+  "compressedPrimitives": [
+    {
+      "mesh": "volcano-crag-000",
+      "encodedBytes": 98815,
+      "decodedCornerAttributesBitExact": false,
+      "maxAttributeError": {
+        "POSITION": 2.562999725341797e-06,
+        "NORMAL": 1.3053417205810547e-05
+      },
+      "indices": 15792,
+      "vertices": 10192
+    },
+    {
+      "mesh": "volcano-crag-002",
+      "encodedBytes": 97166,
+      "decodedCornerAttributesBitExact": false,
+      "maxAttributeError": {
+        "POSITION": 2.86102294921875e-06,
+        "NORMAL": 1.2516975402832031e-05
+      },
+      "indices": 15510,
+      "vertices": 10010
+    },
+    {
+      "mesh": "volcano-crag-001",
+      "encodedBytes": 97120,
+      "decodedCornerAttributesBitExact": false,
+      "maxAttributeError": {
+        "POSITION": 3.814697265625e-06,
+        "NORMAL": 1.290440559387207e-05
+      },
+      "indices": 15510,
+      "vertices": 10010
+    },
+    {
+      "mesh": "field_cm07_01-surface",
+      "encodedBytes": 27695,
+      "decodedCornerAttributesBitExact": false,
+      "maxAttributeError": {
+        "POSITION": 3.814697265625e-06,
+        "NORMAL": 1.2040138244628906e-05,
+        "TEXCOORD_0": 4.76837158203125e-07
+      },
+      "indices": 6210,
+      "vertices": 1112
+    },
+    {
+      "mesh": "volcano-rock-0",
+      "encodedBytes": 34353,
+      "decodedCornerAttributesBitExact": false,
+      "maxAttributeError": {
+        "POSITION": 2.86102294921875e-06,
+        "NORMAL": 1.2040138244628906e-05
+      },
+      "indices": 5640,
+      "vertices": 3640
+    }
+  ],
+  "removedAccessors": 15,
+  "bufferViewsBefore": 54,
+  "bufferViewsAfter": 36,
+  "imagesUntouched": true
+}
