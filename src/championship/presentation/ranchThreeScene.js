@@ -74,6 +74,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const groundShadows=createRanchGroundShadows(scene);
   const modelBitmaps=new Set();
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
+  const authoredDepthMaterials=new Set();
   let cm07Ambient=null;
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
   let sceneClock=0;
@@ -270,6 +271,41 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                   };
                   m.needsUpdate=true;
                 }
+              }
+
+              // CM02 keeps one merged primitive. Only authored canopy vertices flex;
+              // ground sheets, trunks, goals and the backstop have zero weight.
+              if(p.fieldId==='field_cm02_01'&&o.geometry.getAttribute('_wind_weight')){
+                dynamicShaders.add(m);
+                if(!m.userData.rootedWindHooked){
+                  m.userData.rootedWindHooked=true;
+                  m.userData.rootedWindTime={value:0};
+                  m.onBeforeCompile=shader=>{
+                    shader.uniforms.uWindTime=m.userData.rootedWindTime;m.userData.shader=shader;
+                    shader.vertexShader='uniform float uWindTime;\nattribute float _wind_weight;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+                      float flex=clamp(_wind_weight,0.0,1.0)*0.018;
+                      transformed.x+=sin(uWindTime*1.5+position.x*0.8+position.z*0.4)*flex;
+                      transformed.z+=cos(uWindTime*1.1+position.z*0.7)*flex*0.6;`);
+                  };
+                  m.customProgramCacheKey=()=> 'cm02-rooted-canopy-r1';m.needsUpdate=true;
+                }
+                // Thin coplanar ground sheets receive prop shadows but do not
+                // cast shadows onto one another. Preserve the actual geometry.
+                const depth=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking});
+                depth.onBeforeCompile=shader=>{
+                  shader.uniforms.uWindTime=m.userData.rootedWindTime;
+                  shader.vertexShader='uniform float uWindTime;\nattribute float _wind_weight;\nvarying float vAuthoredHeight;\n'+shader.vertexShader;
+                  shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+                    vAuthoredHeight=position.y;
+                    float flex=clamp(_wind_weight,0.0,1.0)*0.018;
+                    transformed.x+=sin(uWindTime*1.5+position.x*0.8+position.z*0.4)*flex;
+                    transformed.z+=cos(uWindTime*1.1+position.z*0.7)*flex*0.6;`);
+                  shader.fragmentShader='varying float vAuthoredHeight;\n'+shader.fragmentShader;
+                  shader.fragmentShader=shader.fragmentShader.replace('void main() {','void main() {\nif(vAuthoredHeight<0.05)discard;');
+                };
+                depth.customProgramCacheKey=()=> 'cm02-authored-prop-depth-r1';
+                o.customDepthMaterial=depth;authoredDepthMaterials.add(depth);
               }
 
               // Forest / Grassland Wind Sway (CM01, CM03, CM14)
@@ -729,6 +765,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     if(disposed)return;disposed=true;groundShadows.dispose();supportOwnerResolver?.dispose();supportOwnerResolver=null;
     cm07Ambient?.dispose();cm07Ambient=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
+    for(const material of authoredDepthMaterials)material.dispose();authoredDepthMaterials.clear();
     for(const ps of dynamicParticles)ps.dispose();dynamicParticles.length=0;
     for(const g of dynamicMachines){g.geometry.dispose();g.material.dispose();}dynamicMachines.length=0;
     for(const b of dynamicBeacons){b.geometry.dispose();b.material.dispose();}dynamicBeacons.length=0;
