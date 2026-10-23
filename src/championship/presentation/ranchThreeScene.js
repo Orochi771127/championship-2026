@@ -275,7 +275,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
               // Existing instrument displays / culture tanks only. A zero mask
               // keeps floors and rigid equipment completely outside this effect.
-              if((p.fieldId==='field_cm05_01'||p.fieldId==='field_cm06_01')&&o.geometry.getAttribute('_ambient_mask')){
+              if(['field_cm05_01','field_cm06_01','field_cm13_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
                 dynamicShaders.add(m);
                 if(!m.userData.instrumentAmbientHooked){
                   m.userData.instrumentAmbientHooked=true;
@@ -284,7 +284,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                     shader.vertexShader='uniform float uAmbientTime;\nattribute float _ambient_mask;\nvarying float vAmbientMask;\nvarying vec3 vAmbientPosition;\n'+shader.vertexShader;
                     shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
                       vAmbientMask=_ambient_mask;vAmbientPosition=position;
-                      if(_ambient_mask>2.5)transformed.y+=sin(uAmbientTime*0.75+position.y*2.0)*0.055;`);
+                      if(_ambient_mask>2.5&&_ambient_mask<3.5)transformed.y+=sin(uAmbientTime*0.75+position.y*2.0)*0.055;`);
                     shader.fragmentShader='uniform float uAmbientTime;\nvarying float vAmbientMask;\nvarying vec3 vAmbientPosition;\n'+shader.fragmentShader;
                     shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
                       if(vAmbientMask>0.5&&vAmbientMask<1.5){
@@ -292,14 +292,17 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                         totalEmissiveRadiance+=diffuseColor.rgb*idle;
                       }else if(vAmbientMask>1.5&&vAmbientMask<2.5){
                         totalEmissiveRadiance+=diffuseColor.rgb*(0.025+0.012*sin(uAmbientTime*0.6+vAmbientPosition.y*2.0));
+                      }else if(vAmbientMask>3.5){
+                        float flame=0.65+0.08*sin(uAmbientTime*3.4+vAmbientPosition.x)+0.04*sin(uAmbientTime*6.1);
+                        totalEmissiveRadiance+=diffuseColor.rgb*flame;
                       }`);
                   };
-                  m.customProgramCacheKey=()=> 'authored-instrument-ambient-r1';m.needsUpdate=true;
+                  m.customProgramCacheKey=()=> 'authored-instrument-ambient-r2';m.needsUpdate=true;
                 }
               }
 
               // Authored plant weights keep merged scenery rigid outside vegetation.
-              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
+              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
                 dynamicShaders.add(m);
                 if(!m.userData.rootedWindHooked){
                   m.userData.rootedWindHooked=true;
@@ -346,7 +349,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
 
               // Forest / Grassland Wind Sway (CM01, CM03, CM14)
-              if(FOREST_FIELDS.has(p.fieldId)&&p.fieldId!=='field_cm08_01'&&(p.fieldId!=='field_cm01_01'
+              if(FOREST_FIELDS.has(p.fieldId)&&!['field_cm08_01','field_cm11_01','field_cm12_01'].includes(p.fieldId)&&(p.fieldId!=='field_cm01_01'
                 ||o.name==='field_cm01_01-canopy'||o.name==='field_cm01_01-grass')){
                 dynamicShaders.add(m);
                 if(!m.userData.windHooked){
