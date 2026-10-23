@@ -1,0 +1,39 @@
+{
+  "packageBlob": "844eea13ce79871fb31b4199eee9bf78addd4ddc",
+  "lockBlob": "ccf6005e4a21413a1e022b163cee890561ab84d1",
+  "sourceChain": [
+    {
+      "key": "buildPages",
+      "sha": "beb8cdb8576791d84ef1c9672bb144a75683f1bf"
+    },
+    {
+      "key": "buildArtifact",
+      "sha": "f6b38af4b78f637064a619d4d8353747cc28c5f1"
+    },
+    {
+      "key": "browserBundle",
+      "sha": "05c99224377cb1377b1eb9fd7337d163ae4be822"
+    },
+    {
+      "key": "browserBundleWorker",
+      "sha": "35141ac90679261ba9db418a7659af4adec1c161"
+    },
+    {
+      "key": "champHtml",
+      "sha": "04ffbc68c46058f828ca8958e749210571593abc"
+    },
+    {
+      "key": "vendorPixi",
+      "sha": "80721f098ea46d2fb00708607a907398a6397597"
+    }
+  ],
+  "three": "0.185.1",
+  "pixi": "8.19.0",
+  "runtimePixiExactVersionGate": true,
+  "threeRevisionCannotDistinguishPatch": true,
+  "preflightScript": "dependency-preflight.mjs",
+  "actualStagedRepoPreflight": "PENDING_NO_STAGED_REPO_OR_PIXI_DEPENDENCY_IN_THIS_WORKSPACE",
+  "actualBrowserBuild": "PENDING_PARENT_APPROVED_CI",
+  "addonFix": "relative node_modules path; existing raw import map has exact three only, no addons prefix",
+  "CPUOnlyInstalledThree": "/tmp/ranch-three-math/node_modules/three/package.json = 0.185.1"
+}

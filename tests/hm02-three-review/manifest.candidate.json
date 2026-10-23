@@ -1,0 +1,89 @@
+{
+  "schema": "HM02_THREE_PILOT.v1",
+  "qaApproved": false,
+  "status": "LOCAL_REVIEW_NOT_SHIPPING",
+  "projection": {
+    "worldWidthPx": 2880,
+    "worldHeightPx": 2880,
+    "unitsPerWorldPixel": 0.022222222222222223,
+    "elevationDegrees": 55
+  },
+  "glb": {
+    "url": "./assets/hm02-three-v2/terrain-props.glb",
+    "sha256": "bc603d54fc0127a4d47a637aace2d9f6f85a57bf7ac4fa80073ef5f1fe63d4f4",
+    "bytes": 1827600
+  },
+  "treePrototypes": {
+    "url": "./assets/hm02-three-v2/tree-prototypes.glb",
+    "sha256": "ece6260af56cdb59beab6405429ecc132fc336d55dc5769f2d481d47fe99a6b2",
+    "bytes": 1291688
+  },
+  "treeInstances": {
+    "url": "./assets/hm02-three-v2/tree-instances.json",
+    "sha256": "91f19284e7f83610cfcc0ceb1a5edc35489e9b5958c10e2e2b30a7dba4909521",
+    "bytes": 26425
+  },
+  "flatSupport": {
+    "height": -0.005,
+    "verifiedSourceId": "terrain-props.glb SHA256 bc603d54fc0127a4d47a637aace2d9f6f85a57bf7ac4fa80073ef5f1fe63d4f4",
+    "exclusions": [
+      {
+        "id": "cave-NW",
+        "left": 430,
+        "top": 112,
+        "right": 723,
+        "bottom": 343,
+        "heightRange": [
+          -0.11378908157348633,
+          3.642880439758301
+        ],
+        "method": "exact v2 GLB cave mesh positions, fixed camera projection, plus4worldpx safety margin"
+      },
+      {
+        "id": "cave-E",
+        "left": 1518,
+        "top": 976,
+        "right": 1811,
+        "bottom": 1207,
+        "heightRange": [
+          -0.11378908157348633,
+          3.642880439758301
+        ],
+        "method": "exact v2 GLB cave mesh positions, fixed camera projection, plus4worldpx safety margin"
+      },
+      {
+        "id": "cave-SW",
+        "left": 110,
+        "top": 1504,
+        "right": 403,
+        "bottom": 1735,
+        "heightRange": [
+          -0.11378908157348633,
+          3.642880439758301
+        ],
+        "method": "exact v2 GLB cave mesh positions, fixed camera projection, plus4worldpx safety margin"
+      },
+      {
+        "id": "shelter",
+        "left": 138,
+        "top": 568,
+        "right": 243,
+        "bottom": 713,
+        "groundFootprint": {
+          "left": 142.0249843597412,
+          "top": 639.9728517050536,
+          "right": 238.775053024292,
+          "bottom": 708.8919419669379
+        },
+        "heightRange": [
+          0.0,
+          2.7134740352630615
+        ],
+        "method": "actual evaluated source geometry projected with fixed camera;4worldpx safety margin"
+      }
+    ],
+    "policy": "Any sprite bounds overlapping an exclusion is not certified flat; native terrain/collision still authoritative; no support on furniture/rocks inferred",
+    "caveFloorTopV2": 0.0245,
+    "source": "Exact v2 GLB caves; evaluated unchanged source shelter"
+  }
+}
