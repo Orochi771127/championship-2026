@@ -64,10 +64,21 @@ module.exports = async function verifyDetailSwipe(page, {output, evidence}) {
     const nextHero=catalog.entries.find(entry=>entry.speciesIndex===order[anchor+1]);
     assert.ok(nextHero);
     const delayedUrl=new URL(nextHero.src,page.url()).href;
-    let releaseImage,entered=false,finished;
+    const imageBytes=fs.readFileSync(path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest',nextHero.src));
+    assert.equal(require('node:crypto').createHash('sha256').update(imageBytes).digest('hex'),nextHero.sha256);
+    let releaseImage,entered=false,finished,delayError=null;
     const imageGate=new Promise(resolve=>{releaseImage=resolve;});
     const imageFinished=new Promise(resolve=>{finished=resolve;});
-    const delayImage=async route=>{entered=true;try{await imageGate;await route.fallback();}finally{finished();}};
+    // Own this single response directly: falling back after a cancelled request
+    // races the shared context route and can handle the same response twice.
+    const delayImage=async route=>{
+      entered=true;
+      try {await imageGate;await route.fulfill({status:200,contentType:nextHero.src.endsWith('.png')?'image/png':'image/webp',body:imageBytes});}
+      catch(error) {
+        if(route.request().failure()?.errorText==='net::ERR_ABORTED')report.delayedImageCancelled=true;
+        else delayError=error;
+      } finally {finished();}
+    };
     await page.route(delayedUrl,delayImage);
     try {
       await gesture(hero,-90);await expected(order[anchor+1]);
@@ -75,6 +86,7 @@ module.exports = async function verifyDetailSwipe(page, {output, evidence}) {
       assert.equal(await page.locator('.cm-dex-hero').getAttribute('data-art'),'loading');
       await gesture('.cm-dex-hero',90);await expected(40);
     } finally {releaseImage();if(entered)await imageFinished;await page.unroute(delayedUrl,delayImage);}
+    if(delayError)throw delayError;
     await page.locator(hero).waitFor({state:'visible'});
     assert.equal(await page.locator('.cm-dex-hero').getAttribute('data-species-id'),'species-040');
     assert.equal(await page.locator(hero).getAttribute('src'),catalog.entries.find(entry=>entry.speciesIndex===40).src);
