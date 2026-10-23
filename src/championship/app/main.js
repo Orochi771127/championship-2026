@@ -1,4 +1,5 @@
 import {createResidentAssetNotice,collectRaisingInitialSequences} from './residentAssetNotice.js';
+import {huntThreeProductionRequest} from '../presentation/vs2/huntThree/manifestBindings.mjs';
 import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation,isOriginalLoopbackLocation} from '../presentation/originalRuntimeLocation.js';
@@ -1203,7 +1204,20 @@ async function mountHuntField() {
           releaseArt();
           return { isPlayable: false, render() {}, dispose() {} };
         }
+        let threePilot = null;
+        if (huntThreeProductionRequest(location, fieldArt?.getDiagnostics?.().fieldId)) {
+          try {
+            const {loadHuntThreeMap} = await import('../presentation/vs2/huntThree/loadHuntThreeMap.mjs');
+            signal.throwIfAborted();
+            threePilot = await own(loadHuntThreeMap({stage,fieldArt,fieldSource,signal,
+              onFallback:error=>console.warn('HUNT_THREE_FALLBACK',error)}));
+          } catch(error) {
+            if (!signal.aborted) console.warn('HUNT_THREE_ENTRY_FALLBACK',error);
+          }
+        }
+        signal.throwIfAborted();
         const scene = await mountHuntFieldPixiPresentation({
+          threePilot,
           onActorFrame,
           stage,
           source: fieldSource,
