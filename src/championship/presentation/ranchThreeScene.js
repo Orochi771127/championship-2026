@@ -18,7 +18,7 @@ const up = new THREE.Vector3(-Math.sin(RANCH_ELEVATION)*Math.SQRT1_2, Math.cos(R
 const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math.sin(RANCH_ELEVATION), Math.cos(RANCH_ELEVATION)*Math.SQRT1_2);
 const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
 
-const WATER_FIELDS = new Set(['field_cm10_01', 'field_cm09_01', 'field_cm19_01', 'field_cm39_01']);
+const WATER_FIELDS = new Set(['field_cm19_01', 'field_cm39_01']);
 const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
 const ICE_FIELDS = new Set(['field_cm16_01', 'field_cm21_01']);
 const INDUSTRIAL_FIELDS = new Set(['field_cm17_01', 'field_cm20_01', 'field_cm25_01', 'field_cm15_01', 'field_cm22_01']);
@@ -298,9 +298,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                 }
               }
 
-              // CM02 keeps one merged primitive. Only authored canopy vertices flex;
-              // ground sheets, trunks, goals and the backstop have zero weight.
-              if(p.fieldId==='field_cm02_01'&&o.geometry.getAttribute('_wind_weight')){
+              // Authored plant weights keep merged scenery rigid outside vegetation.
+              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
                 dynamicShaders.add(m);
                 if(!m.userData.rootedWindHooked){
                   m.userData.rootedWindHooked=true;
@@ -312,8 +311,21 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                       float flex=clamp(_wind_weight,0.0,1.0)*0.018;
                       transformed.x+=sin(uWindTime*1.5+position.x*0.8+position.z*0.4)*flex;
                       transformed.z+=cos(uWindTime*1.1+position.z*0.7)*flex*0.6;`);
+                    if(p.fieldId==='field_cm09_01'){
+                      shader.vertexShader='attribute float _coast_water;\nvarying float vCoastWater;\nvarying vec3 vCoastPosition;\n'+shader.vertexShader;
+                      shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvCoastWater=_coast_water;vCoastPosition=position;');
+                      shader.fragmentShader='uniform float uWindTime;\nvarying float vCoastWater;\nvarying vec3 vCoastPosition;\n'+shader.fragmentShader;
+                      shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+                        if(vCoastWater>0.5&&diffuseColor.b>diffuseColor.r*1.2){
+                          float wave=sin(vCoastPosition.x*12.0+vCoastPosition.z*8.0+sin(vCoastPosition.z*3.0)-uWindTime*1.1);
+                          float crossWave=sin(vCoastPosition.x*4.0-vCoastPosition.z*6.0-uWindTime*0.7);
+                          float glint=pow(max(0.0,wave),9.0)*(0.5+0.5*crossWave);
+                          diffuseColor.rgb+=vec3(0.015,0.025,0.03)*glint;
+                          roughnessFactor=clamp(roughnessFactor+wave*0.025,0.25,1.0);
+                        }`);
+                    }
                   };
-                  m.customProgramCacheKey=()=> 'cm02-rooted-canopy-r1';m.needsUpdate=true;
+                  m.customProgramCacheKey=()=>p.fieldId==='field_cm09_01'?'cm09-rooted-coast-r1':'cm02-rooted-canopy-r1';m.needsUpdate=true;
                 }
                 // Thin coplanar ground sheets receive prop shadows but do not
                 // cast shadows onto one another. Preserve the actual geometry.
@@ -334,7 +346,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
 
               // Forest / Grassland Wind Sway (CM01, CM03, CM14)
-              if(FOREST_FIELDS.has(p.fieldId)&&(p.fieldId!=='field_cm01_01'
+              if(FOREST_FIELDS.has(p.fieldId)&&p.fieldId!=='field_cm08_01'&&(p.fieldId!=='field_cm01_01'
                 ||o.name==='field_cm01_01-canopy'||o.name==='field_cm01_01-grass')){
                 dynamicShaders.add(m);
                 if(!m.userData.windHooked){
