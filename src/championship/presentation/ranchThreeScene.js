@@ -1,5 +1,6 @@
 // Fixed-camera terrain, actors and contact shadows share one depth buffer.
 import {createRanchGroundShadows} from './ranchGroundShadows.js';
+import {createCm07Ambient} from './cm07Ambient.js';
 import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
 import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
@@ -73,6 +74,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const groundShadows=createRanchGroundShadows(scene);
   const modelBitmaps=new Set();
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
+  let cm07Ambient=null;
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
   let sceneClock=0;
   const textureCap=currentQualityTier()==='saver'?512:currentQualityTier()==='high'?2048:1024;
@@ -213,7 +215,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
           if(o.isMesh&&o.material){
             for(const m of [].concat(o.material)){
               // Volcano (field_cm07_01): Internal fluid lava churning & heat pulsing
-              if(p.fieldId==='field_cm07_01'||m.name?.includes('cm07')||m.name?.includes('terrain-pbr')){
+              if(p.fieldId!=='field_cm07_01'&&(m.name?.includes('cm07')||m.name?.includes('terrain-pbr'))){
                 lavaMaterials.add(m);
                 if(!m.userData.lavaHooked){
                   m.userData.lavaHooked=true;
@@ -325,7 +327,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
             }
           }
-          if(o.name&&o.name.startsWith('volcano-smoke')){
+          if(p.fieldId!=='field_cm07_01'&&o.name&&o.name.startsWith('volcano-smoke')){
             smokeNodes.push({node:o,baseY:o.position.y,offset:smokeNodes.length*1.8});
           }
         });
@@ -421,7 +423,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         instances.push({object,p,shift,mixer,supportMesh,supportTriangles:verifiedSupport.get(p.fieldId),contactSheets:supportFields.get(p.fieldId)?.supportSheets??null});
       }
     }
-    supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:field.wrapWidthPx/field.nativePixelWorldScale});
+      cm07Ambient=createCm07Ambient(instances.filter(i=>i.p.fieldId==='field_cm07_01').map(i=>i.object));
+      supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:field.wrapWidthPx/field.nativePixelWorldScale});
     // Owner direction: navigation connections are invisible; original bridges and floors remain model geometry.
     signal?.throwIfAborted();
     Object.assign(pixi.style,{position:'relative',zIndex:'1'});pixi.parentElement.insertBefore(canvas,pixi);
@@ -673,6 +676,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     const deltaSec=Math.min(50,Math.max(0,deltaMS))/1000;
     sceneClock+=deltaSec;
+    cm07Ambient?.update({elapsedSeconds:sceneClock,visible:!covered,reducedMotion:prefersReducedMotion()});
     if(!prefersReducedMotion()){
       for(const m of lavaMaterials){
         if(m.userData.shader)m.userData.shader.uniforms.uLavaTime.value=sceneClock;
@@ -722,6 +726,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   }
   function dispose(){
     if(disposed)return;disposed=true;groundShadows.dispose();supportOwnerResolver?.dispose();supportOwnerResolver=null;
+    cm07Ambient?.dispose();cm07Ambient=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
     for(const ps of dynamicParticles)ps.dispose();dynamicParticles.length=0;
     for(const g of dynamicMachines){g.geometry.dispose();g.material.dispose();}dynamicMachines.length=0;
