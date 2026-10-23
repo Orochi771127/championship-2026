@@ -20,8 +20,8 @@ const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0),
 
 const WATER_FIELDS = new Set(['field_cm19_01', 'field_cm39_01']);
 const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
-const ICE_FIELDS = new Set(['field_cm16_01', 'field_cm21_01']);
-const INDUSTRIAL_FIELDS = new Set(['field_cm17_01', 'field_cm20_01', 'field_cm25_01', 'field_cm22_01']);
+const ICE_FIELDS = new Set(['field_cm21_01']);
+const INDUSTRIAL_FIELDS = new Set(['field_cm20_01', 'field_cm25_01', 'field_cm22_01']);
 
 /** Bounded rendering adapter, driven only by the existing Pixi scene ticker.
  * The native simulation, pointer targets, camera pan/zoom and save stay owned
@@ -275,7 +275,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
               // Existing instrument displays / culture tanks only. A zero mask
               // keeps floors and rigid equipment completely outside this effect.
-              if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
+              if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
                 dynamicShaders.add(m);
                 if(!m.userData.instrumentAmbientHooked){
                   m.userData.instrumentAmbientHooked=true;
@@ -302,7 +302,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
 
               // Authored plant weights keep merged scenery rigid outside vegetation.
-              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
+              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm16_01','field_cm18_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
                 dynamicShaders.add(m);
                 if(!m.userData.rootedWindHooked){
                   m.userData.rootedWindHooked=true;
@@ -349,7 +349,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
 
               // Forest / Grassland Wind Sway (CM01, CM03, CM14)
-              if(FOREST_FIELDS.has(p.fieldId)&&!['field_cm08_01','field_cm11_01','field_cm12_01','field_cm14_01'].includes(p.fieldId)&&(p.fieldId!=='field_cm01_01'
+              if(FOREST_FIELDS.has(p.fieldId)&&!['field_cm08_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm18_01'].includes(p.fieldId)&&(p.fieldId!=='field_cm01_01'
                 ||o.name==='field_cm01_01-canopy'||o.name==='field_cm01_01-grass')){
                 dynamicShaders.add(m);
                 if(!m.userData.windHooked){
