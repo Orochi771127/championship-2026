@@ -19,7 +19,7 @@ const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math
 const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
 
 const WATER_FIELDS = new Set(['field_cm39_01']);
-const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
+const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01']);
 const ICE_FIELDS = new Set(['field_cm21_01']);
 const INDUSTRIAL_FIELDS = new Set();
 
@@ -329,7 +329,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
 
               // Authored plant weights keep merged scenery rigid outside vegetation.
-              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm16_01','field_cm18_01','field_cm25_01','field_cm26_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
+              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm16_01','field_cm18_01','field_cm25_01','field_cm26_01','field_cm30_01','field_cm31_01','field_cm32_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
                 dynamicShaders.add(m);
                 if(!m.userData.rootedWindHooked){
                   m.userData.rootedWindHooked=true;
