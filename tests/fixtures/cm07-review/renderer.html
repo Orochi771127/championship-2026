@@ -11,14 +11,15 @@ window.cm07Review={
  async mount({adjacent=false,width=960,height=800,quality='balanced'}={}){
   document.documentElement.dataset.quality=quality;screen.width=width;screen.height=height;
   Object.assign(document.querySelector('#stage').style,{width:width+'px',height:height+'px'});
-  placements=(adjacent?[0,4]:[0]).map((slotIndex,i)=>({fieldId:'field_cm07_01',moduleId:'championship:2026:cage:6',cageDefinitionIndex:6,slotIndex,instanceId:'cm07-review:'+i,ownerIndex:i,x:i*192,y:0,worldWidthPx:240,worldHeightPx:200}));
+  placements=(adjacent?[0,4]:[0]).map((slotIndex,i)=>({fieldId:'field_cm07_01',moduleId:'championship:2026:cage:6',cageDefinitionIndex:6,slotIndex,instanceId:'cm07-review:'+i,ownerIndex:i,x:i*192,y:-24,worldWidthPx:240,worldHeightPx:200}));
   const scale=Math.min(width/(adjacent?432:240),height/200)*.93;
-  bounds={x:(width-(adjacent?432:240)*scale)/2,y:(height-200*scale)/2,scale};
+  bounds={x:(width-(adjacent?432:240)*scale)/2,y:(height-200*scale)/2+24*scale,scale};
   scene=await createRanchThreeScene({stage,placements,field:{productGrid:{},nativePixelWorldScale:1,wrapWidthPx:960}});
   await this.tick(1);return {boundaries:ranchSharedBoundaries(placements),diagnostics:scene.getDiagnostics()};
  },
  async tick(n=1,covered=false){for(let i=0;i<n;i++){scene.render({bounds,actors:new Map(),food:new Map(),waste:new Map(),deltaMS:50,covered});await new Promise(requestAnimationFrame);}return scene.getDiagnostics();},
  pan(dx,dy){bounds.x+=dx;bounds.y+=dy;return this.tick(1);},
+ wrap(sign){bounds.x+=sign*960*bounds.scale;return this.tick(1);},
  motion(reduced){document.documentElement.dataset.motion=reduced?'reduced':'full';return this.tick(1);},
  height(x,y){return scene.groundHeight(x,y);},
  device(){const canvas=document.querySelector('.cm-ranch-three-canvas'),gl=canvas.getContext('webgl2'),ext=gl.getExtension('WEBGL_debug_renderer_info');return {ua:navigator.userAgent,renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),vendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),physicalMobile:false};},

@@ -26,6 +26,7 @@ try{
   if(adjacent)assert.ok(row.mount.boundaries.some(b=>b.compatible));
   row.device=await page.evaluate(()=>cm07Review.device());row.start=await page.evaluate(()=>cm07Review.tick(1));
   assert.ok(row.start.drawCalls>0);assert.ok(row.start.triangles>0);assert.equal(row.start.lost,false);
+  if(adjacent)assert.ok(row.start.drawCalls<2*report.rows.find(r=>r.version===version&&!r.adjacent).start.drawCalls,'Shared boundaries must actually remove border draws');
   const stem=version+(adjacent?'-adjacent':'-single');
   await page.screenshot({path:path.join(out,stem+'-start.png')});
   row.motion=await page.evaluate(()=>cm07Review.tick(30));await page.screenshot({path:path.join(out,stem+'-motion.png')});
@@ -34,6 +35,7 @@ try{
    row.pan.push(await page.evaluate(([x,y])=>cm07Review.pan(x,y),[dx,dy]));await page.screenshot({path:path.join(out,stem+'-pan-'+row.pan.length+'.png')});await page.evaluate(([x,y])=>cm07Review.pan(-x,-y),[dx,dy]);
   }
   await page.evaluate(()=>cm07Review.motion(true));const reducedA=await page.screenshot();await page.evaluate(()=>cm07Review.tick(4));const reducedB=await page.screenshot();row.reducedMotionPixelStable=hash(reducedA)===hash(reducedB);assert.ok(row.reducedMotionPixelStable);
+  row.wrap=[];for(const sign of [-1,1]){const result=await page.evaluate(sign=>cm07Review.wrap(sign),sign);assert.equal(result.drawCalls,row.start.drawCalls);assert.equal(result.triangles,row.start.triangles);row.wrap.push(result);await page.screenshot({path:path.join(out,stem+'-wrap-'+sign+'.png')});await page.evaluate(sign=>cm07Review.wrap(-sign),sign);}
   await page.evaluate(()=>cm07Review.motion(false));await page.evaluate(()=>cm07Review.tick(1,true));const coveredA=await page.screenshot();await page.evaluate(()=>cm07Review.tick(4,true));const coveredB=await page.screenshot();row.coveredPixelStable=hash(coveredA)===hash(coveredB);assert.ok(row.coveredPixelStable);
   row.offscreen=await page.evaluate(()=>cm07Review.pan(10000,10000));assert.equal(row.offscreen.drawCalls,0);
   row.cleanup=await page.evaluate(()=>cm07Review.dispose());assert.equal(row.cleanup.terrainCanvasCount,0);
