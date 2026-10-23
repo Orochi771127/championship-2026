@@ -18,8 +18,8 @@ const up = new THREE.Vector3(-Math.sin(RANCH_ELEVATION)*Math.SQRT1_2, Math.cos(R
 const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math.sin(RANCH_ELEVATION), Math.cos(RANCH_ELEVATION)*Math.SQRT1_2);
 const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
 
-const WATER_FIELDS = new Set(['field_cm04_01', 'field_cm05_01', 'field_cm10_01', 'field_cm09_01', 'field_cm19_01', 'field_cm39_01']);
-const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm03_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
+const WATER_FIELDS = new Set(['field_cm05_01', 'field_cm10_01', 'field_cm09_01', 'field_cm19_01', 'field_cm39_01']);
+const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
 const ICE_FIELDS = new Set(['field_cm06_01', 'field_cm16_01', 'field_cm21_01']);
 const INDUSTRIAL_FIELDS = new Set(['field_cm17_01', 'field_cm20_01', 'field_cm25_01', 'field_cm15_01', 'field_cm22_01']);
 
