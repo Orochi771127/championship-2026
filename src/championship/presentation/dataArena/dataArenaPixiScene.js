@@ -23,6 +23,7 @@ import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
+import { RELAY_ROSTER } from '../../modes/dataArena/dataArenaRelayRoster.js';
 
 const T = DATA_ARENA_TERRAIN;
 const TAU = Math.PI * 2;
@@ -307,7 +308,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       scale = ROLE_HEIGHT[role] / 96;
     }
     sprite.scale.set(scale);
-    const relayProfile = RELAY_ACTION_PROFILES[member?.partnerId];
+    const actorPartnerId = member?.partnerId ?? RELAY_ROSTER.find(p => p.speciesId === member?.speciesId)?.id;
+    const relayProfile = RELAY_ACTION_PROFILES[actorPartnerId];
     let attackAnimation = bundle?.runtime.sides.main.animations.find(a => a.id === DATA_ARENA_SEQUENCES.ATTACK);
     let currentPlacement = null;
     const action = createDataArenaCharacterAction({
@@ -334,7 +336,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         else if (event && (event.type === 'CAST_RELEASE' || body.cast?.actionId === event.actionId)) action.observe(event);
         else if (event) { action.clear(); actionEvents.delete(body.id); }
         else action.clear();
-        if(state.gameMode === 'RELAY')attackAnimation=bundle?.runtime.sides.main.animations.find(a=>a.id===relaySequence(member?.partnerId,body.action?.moveId));
+        if(state.gameMode === 'RELAY')attackAnimation=bundle?.runtime.sides.main.animations.find(a=>a.id===relaySequence(actorPartnerId,body.action?.moveId));
         motion = [DATA_ARENA_SEQUENCES.HIT, DATA_ARENA_SEQUENCES.DOWN, DATA_ARENA_SEQUENCES.WIN].includes(seq) ? null
           : state.gameMode === 'RELAY' ? sampleDataArenaRelayAction({ animation: attackAnimation, action: body.action, time: state.time,
               tickRateHz: bundle?.runtime.timing?.tickRateHz ?? 60, releaseSlot: relayProfile?.releaseSlot ?? 1, reducedMotion }) : action.sample(state.time);
@@ -1105,6 +1107,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         renderer: "CHAMPIONSHIP_SINGLE_PIXI_STAGE", scene: "DATA_ARENA", quality, reducedMotion, hasCreatureArt: playerView.hasArt,
         environment: environmentView?.diagnostics() ?? null,
         interactions:interactionView.diagnostics(),effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
+        rivalAnimations: [...rivalViews.values()].map(view => view.diagnostics()),
         particleAgeTotal:live.reduce((n,p)=>n+p.age,0),scorchSprites:[...decalSprites.values()].filter(d=>d.kind!=="wet").length,
         fireMotion:[...fireSprites].slice(0,8).map(([cell,s])=>({cell,x:s.scale.x,y:s.scale.y,frame:textures.flame.indexOf(s.texture)})),
         playerDrawIndex: objects.children.indexOf(playerView.container),

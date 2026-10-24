@@ -607,6 +607,11 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (!ultimate && !canCast(caster, moveId)) return false;
     if (ultimate && (caster.cast || caster.lunge || (relayMode && (caster.recovery > 0 || caster.energy < move.energy || (caster.cooldowns[moveId] ?? 0) > 0)))) return false;
     const angle = Math.atan2(aimY - caster.y, aimX - caster.x);
+    const range = move.range ?? move.distance ?? 0;
+    const reach = Math.min(range || Infinity, distance(aimX, aimY, caster.x, caster.y));
+    const targetX = move.type === "ZONE" ? caster.x + Math.cos(angle) * Math.min(reach, range) : aimX;
+    const targetY = move.type === "ZONE" ? caster.y + Math.sin(angle) * Math.min(reach, range) : aimY;
+    if (relayMode && move.type === 'ZONE' && !hasSight(caster.x, caster.y, targetX, targetY)) return false;
     if (ultimate && !relayMode) caster.ult = 0;
     else {
       caster.energy -= move.energy ?? 0;
@@ -614,10 +619,6 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       const scale = caster === player ? stat.cooldownScale : 1;
       caster.cooldowns[moveId] = (move.cooldown ?? 0) * scale;
     }
-    const range = move.range ?? move.distance ?? 0;
-    const reach = Math.min(range || Infinity, distance(aimX, aimY, caster.x, caster.y));
-    const targetX = move.type === "ZONE" ? caster.x + Math.cos(angle) * Math.min(reach, range) : aimX;
-    const targetY = move.type === "ZONE" ? caster.y + Math.sin(angle) * Math.min(reach, range) : aimY;
     caster.cast = { actionId: nextActionId++, moveId, move, t: 0, windup: move.windup ?? 0, angle, aimX: targetX, aimY: targetY, ultimate };
     caster.facing = Math.cos(angle) >= 0 ? 1 : -1;
     if (relayMode) {

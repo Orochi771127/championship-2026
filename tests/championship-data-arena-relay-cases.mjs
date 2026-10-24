@@ -141,3 +141,10 @@ test('free basic attacks allow TP recovery and overlapping fighters separate wit
   r.active=true;r.root=3;p.x=780;p.y=760;r.x=780;r.y=760;
   run(sim,.1);assert.ok(Math.hypot(r.x-p.x,r.y-p.y)>30);
 });
+
+test('zone targeting cannot place an attack beyond cover or spend TP on a blocked cast',()=>{
+  const sim=create(),p=sim.getState().player;
+  p.x=560;p.y=350;const before=p.energy;
+  assert.equal(sim.internals.beginCast(p,'iceCage',730,350),false);
+  assert.equal(p.energy,before);assert.equal(p.cast,null);
+});

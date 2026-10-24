@@ -38,10 +38,16 @@ const write = () => fs.writeFileSync(path.join(output,'validation.json'),JSON.st
     await page.click('.da-panel--select .da-btn--primary');await page.click('.da-panel--brief .da-btn--primary');
     await page.waitForFunction(()=>window.__dataArenaQA?.state()==='PLAY',null,{timeout:60000});
     await page.waitForFunction(()=>__dataArenaQA.snapshot().time>2.1);
+    const wantedQuality=process.env.RELAY_MAP_QUALITY||'low';
+    if(await page.evaluate(()=>__dataArenaQA.diagnostics().scene.quality)!==wantedQuality){
+      await page.locator('.da-hud__pause').tap();await page.locator('.da-panel--pause .da-toggle').nth(1).tap();
+      await page.waitForFunction(q=>__dataArenaQA.diagnostics().scene?.quality===q,wantedQuality);
+      await page.locator('.da-panel--pause .da-btn--primary').tap();
+    }
     const diag=await page.evaluate(()=>__dataArenaQA.diagnostics());report.maps.push({id,scene:diag.scene.environment,bundles:diag.bundles,quality:diag.scene.quality});
     check(`map ${id} mounted portrait`,diag.scene.environment?.id===id&&diag.scene.environment.portrait===true);
     check(`map ${id} loads only selected cast`,diag.bundles.length===4);
-    check(`map ${id} low tier`,diag.scene.quality==='low');check(`map ${id} no frame fault`,!diag.frameFault);
+    check(`map ${id} ${wantedQuality} tier`,diag.scene.quality===wantedQuality);check(`map ${id} no frame fault`,!diag.frameFault);
     await page.waitForFunction(()=>document.querySelector('.da-root').scrollWidth===innerWidth,null,{timeout:3000});
     if([1,5,11].includes(i)){
       const beforeMove=await page.evaluate(()=>__dataArenaQA.snapshot().player);

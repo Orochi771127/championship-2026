@@ -29,7 +29,7 @@ const write = () => fs.writeFileSync(path.join(output,'validation.json'),JSON.st
   await page.click('.da-mode[data-mode="RELAY"]');await page.locator('.da-partner').nth(1).click();
   await page.click('.da-panel--select .da-btn--primary');await page.click('.da-panel--brief .da-btn--primary');
   await page.waitForFunction(()=>window.__dataArenaQA?.state()==='PLAY',null,{timeout:60000});
-  let held=new Set(),mem={},switched=false,windup=false,recovery=false,hits=false,shot=false;
+  let held=new Set(),mem={},switched=false,windup=false,recovery=false,enemyCast=false,hits=false,shot=false;
   const start=Date.now();
   for(;;){
    assert.ok(Date.now()-start<230000,'bounded match timeout');
@@ -38,6 +38,7 @@ const write = () => fs.writeFileSync(path.join(output,'validation.json'),JSON.st
    assert.equal(o.diag.frameFault,null);
    if(o.diag.scene.playerAnimation.phase==='WINDUP')windup=true;
    if(o.diag.scene.playerAnimation.phase==='RECOVERY')recovery=true;
+   enemyCast ||= o.diag.scene.rivalAnimations.some(actor=>actor.phase==='WINDUP'||actor.phase==='RECOVERY');
    if(o.events.some(e=>e.type==='RIVAL_HIT'||e.type==='SKILL_HIT'))hits=true;
    for(const e of o.events)if(['CAST_RELEASE','RELAY_SWITCH','PLAYER_HIT','RIVAL_HIT','RESULT'].includes(e.type)&&!report.events.some(x=>JSON.stringify(x)===JSON.stringify(e)))report.events.push(e);
    const d=decide({...o,snap:{...o.snap,gameMode:'TOURNAMENT'}},mem),want=new Set(['j']);
@@ -55,6 +56,7 @@ const write = () => fs.writeFileSync(path.join(output,'validation.json'),JSON.st
   for(const k of held)await page.keyboard.up(k);
   await page.waitForSelector('.da-panel--result');await page.screenshot({path:path.join(output,'result.png')});
   check('windup drives body animation',windup);check('release drives recovery animation',recovery);
+  check('rival cast drives its body animation',enemyCast);
   check('actual rival hit',hits);check('switch changes active member',switched);
   check('complete result',!!report.result);
   const listeners=await page.evaluate(()=>__dataArenaQA.diagnostics().tickerListeners);
