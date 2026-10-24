@@ -294,7 +294,20 @@ async function menuCompletion(page,output){
   }
   throw Error('Normal lifecycle did not release toolbar after visible calendar acknowledgement');
  }
- async function oneCue(button,label){await settleCalendar();await pause();const before=await count();await button.click();await page.waitForTimeout(30);assert.equal(await count(),before+1,label);}
+ async function oneCue(button,label){
+  for(let attempt=0;attempt<2;attempt++){
+   await pause();await settleCalendar();const before=await count();
+   try{
+    await button.click({timeout:1500,noWaitAfter:true});
+    await page.waitForTimeout(30);assert.equal(await count(),before+1,label);return;
+   }catch(error){
+    // A new date card may arrive after readiness was observed. Retry once
+    // only when the click did not start any cue and that exact card is visible.
+    if(attempt||error.name!=='TimeoutError'||await count()!==before||!await page.locator('button.int-rh2-calendar:visible').isVisible())throw error;
+    await settleCalendar();result.calendarClickRetries=(result.calendarClickRetries??0)+1;
+   }
+  }
+ }
  for(const size of [{width:390,height:844},{width:1366,height:768}]){
   await page.setViewportSize(size);await page.waitForTimeout(400);
   const layout={...size,menus:[]};
