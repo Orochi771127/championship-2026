@@ -23,7 +23,7 @@ export function dataArenaBaseZoom(viewportWidth, viewportHeight) {
   return clamp(Math.min(area, viewportWidth / 560), 0.42, 1.6);
 }
 
-export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion = false, shake = true, artBounds = null } = {}) {
+export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion = false, shake = true, cover = false, artBounds = null } = {}) {
   let x = worldWidth / 2, y = worldHeight / 2, zoom = null, trauma = 0, time = 0;
   let shakeEnabled = Boolean(shake) && !reducedMotion;
   return Object.freeze({
@@ -45,8 +45,10 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
         const z = zoom ?? wanted;
         focusX = target.x + (opponent.x - target.x) * 0.42; focusY = target.y + (opponent.y - target.y) * 0.42 - 55 / z; // tall sprites (the champion) clear the rival bar
       }
+      if(cover)wanted=Math.max(wanted,viewport.width/worldWidth,viewport.height/worldHeight);
       if (zoom === null) zoom = wanted;
       else zoom += (wanted - zoom) * battleFxApproach(dtMs, reducedMotion ? 1400 : 650);
+      if(cover)zoom=Math.max(zoom,viewport.width/worldWidth,viewport.height/worldHeight);
       const look = (reducedMotion ? 0.18 : 0.32) * (opponent ? 0.4 : 1);
       let lx = clamp(velocity.x * look, -170, 170), ly = clamp(velocity.y * look, -130, 130);
       if (aim && !opponent) { lx += clamp((aim.x - target.x) * 0.16, -110, 110); ly += clamp((aim.y - target.y) * 0.16, -90, 90); }
@@ -60,7 +62,7 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       x = placed.x; y = placed.y;
       // In a duel the bottom kit bar must never cover the player at the arena's south
       // edge: past the floor clamp, nudge the view down just enough (at most the bar).
-      if (opponent) y = Math.min(placed.y + 110 / zoom, Math.max(y, target.y - (halfH - 110 / zoom)));
+      if (opponent && !cover) y = Math.min(placed.y + 110 / zoom, Math.max(y, target.y - (halfH - 110 / zoom)));
       trauma = Math.max(0, trauma - (dtMs / 1000) * 1.6);
       const amplitude = shakeEnabled ? Math.min(viewport.width, viewport.height) * 0.018 * trauma * trauma : 0;
       const sx = amplitude * Math.sin(time * 0.047 + 1.3), sy = amplitude * Math.sin(time * 0.071 + 4.1);

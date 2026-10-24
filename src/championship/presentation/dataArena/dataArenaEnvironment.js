@@ -4,6 +4,8 @@ import { createPixiAssetScope } from "../pixiCharacterRuntimeBundle.js";
 import {loadTournamentStoneArt,mountTournamentStoneArt}from './dataArenaTournamentArt.js';
 import {publicMetadataPath,loadPublicMetadata} from '../publicMetadata.js';
 
+import {loadRelayMapArt,mountRelayMapArt} from './dataArenaRelayMapArt.js';
+
 // Owner-authorized test release. Visual checkpoint, not final art acceptance.
 export const HARBOR_ART_URL = publicMetadataPath('arena-harbor');
 
@@ -21,7 +23,8 @@ export function dataArenaEnvironmentFloorOffset(grid, x, y, manifest) {
   return floor.ground;
 }
 
-export async function loadDataArenaEnvironment({ PIXI, map, quality = "high", href, signal, fetchImpl }) {
+export async function loadDataArenaEnvironment({ PIXI, map, quality = "high", href, signal, fetchImpl, renderer }) {
+  if(map.battleFieldId)return loadRelayMapArt({PIXI,map,quality,href,signal,fetchImpl,renderer});
   if(!map.stage&&map.cols===24&&map.rows===16)return loadTournamentStoneArt({PIXI,map,quality,href,signal,fetchImpl});
   if (!map.stage || map.cols !== 60 || map.rows !== 40 || map.cell !== 64) return null;
   const scope = createPixiAssetScope(PIXI, href, { signal });
@@ -70,6 +73,7 @@ export async function loadDataArenaEnvironment({ PIXI, map, quality = "high", hr
 
 /** Called by the product's one scene/ticker. Owns display objects only. */
 export function mountDataArenaEnvironment({ PIXI, environment, ground, objects, water, bridge, suppressedPropIds = new Set() }) {
+  if(environment.manifest.kind==='RELAY_BATTLE')return mountRelayMapArt({environment,ground,objects,water});
   if(environment.manifest.kind==='TOURNAMENT_STONE')return mountTournamentStoneArt({PIXI,environment,ground,objects,water,bridge});
   const { manifest, textures, tier } = environment;
   const version2 = manifest.schemaVersion === 2;

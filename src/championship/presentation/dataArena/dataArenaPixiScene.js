@@ -17,12 +17,17 @@ import { mixColor } from "../battleFx/battleFxLayer.js";
 import { createDataArenaCamera } from "./dataArenaCamera.js";
 import { createDataArenaTextures } from "./dataArenaTextures.js";
 import { DATA_ARENA_SEQUENCES } from "./dataArenaRoster.js";
-import { createDataArenaCharacterAction } from './dataArenaCharacterAction.js';
+import { createDataArenaCharacterAction, sampleDataArenaRelayAction, dataArenaRelaySlotPlacement } from './dataArenaCharacterAction.js';
 import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./dataArenaEnvironment.js";
 import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
+import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
+import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
+
 const T = DATA_ARENA_TERRAIN;
 const TAU = Math.PI * 2;
+
+
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 const PARTICLE_CAP = Object.freeze({ high: 380, low: 120 });
 const ROLE_HEIGHT = Object.freeze({ PLAYER: 78, MATE: 112, BOSS: 196, RIVAL: 96, CHAMPION: 132 });
@@ -40,7 +45,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const PIXI = stage.PIXI;
   const generatedTextures = createDataArenaTextures(PIXI);
   if (!generatedTextures) throw new Error("DATA_ARENA_CANVAS_UNAVAILABLE");
-  const textures = {...generatedTextures};
+  const relayTextures = sim.getState?.()?.gameMode === 'RELAY' ? createDataArenaRelayEffects(PIXI) : null;
+  if(relayTextures)rollback.push(()=>relayTextures.destroy());
+  const textures = {...generatedTextures, ...relayTextures, destroy:()=>{generatedTextures.destroy();relayTextures?.destroy();}};
   if(interactionArt)for(const[key,id]of[["ice","ICE"],["iceCracked","ICE_CRACKED"],["iceMelt","ICE_MELT"]])textures[key]=interactionArt.textures.get(interactionArt.manifest.ice[id][interactionArt.tier].src);
   rollback.push(() => textures.destroy());
   const grid = sim.grid;
@@ -82,7 +89,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const lights = new PIXI.Container({ label: "arena stand lights" });
   world.addChild(groundChunks, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights);
 
-  const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake, artBounds: environment?.manifest?.cameraArtBounds });
+  const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake, cover: Boolean(grid.map.battleFieldId), artBounds: environment?.manifest?.cameraArtBounds });
   let elapsed = 0;
   let ambientElapsed = 0;
   let view = null;
@@ -218,7 +225,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
   // ------------------------------------------------------------------ crowd
   const fans = [];
-  const hasModeledCrowd=environment?.manifest.kind==='TOURNAMENT_STONE'||Boolean(environment?.manifest.crowdFrames);
+  const hasModeledCrowd=environment?.manifest.kind==='RELAY_BATTLE'||environment?.manifest.kind==='TOURNAMENT_STONE'||Boolean(environment?.manifest.crowdFrames);
   const fanCount = Math.round((rich ? 260 : 120) * Math.min(1, worldWidth / 3840 + 0.25) * (standRows / 3));
   for (let i = 0; !hasModeledCrowd&&i < fanCount; i++) {
     const tier = i % Math.max(1, standRows), x = ((i * 7919) % 1000) / 1000 * (worldWidth - 40) + 20;
@@ -300,6 +307,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       scale = ROLE_HEIGHT[role] / 96;
     }
     sprite.scale.set(scale);
+    const relayProfile = RELAY_ACTION_PROFILES[member?.partnerId];
+    let attackAnimation = bundle?.runtime.sides.main.animations.find(a => a.id === DATA_ARENA_SEQUENCES.ATTACK);
+    let currentPlacement = null;
     const action = createDataArenaCharacterAction({
       animation: bundle?.runtime.sides.main.animations.find(a => a.id === DATA_ARENA_SEQUENCES.ATTACK),
       tickRateHz: bundle?.runtime.timing?.tickRateHz ?? 60, reducedMotion
@@ -324,7 +334,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         else if (event && (event.type === 'CAST_RELEASE' || body.cast?.actionId === event.actionId)) action.observe(event);
         else if (event) { action.clear(); actionEvents.delete(body.id); }
         else action.clear();
-        motion = [DATA_ARENA_SEQUENCES.HIT, DATA_ARENA_SEQUENCES.DOWN, DATA_ARENA_SEQUENCES.WIN].includes(seq) ? null : action.sample(state.time);
+        if(state.gameMode === 'RELAY')attackAnimation=bundle?.runtime.sides.main.animations.find(a=>a.id===relaySequence(member?.partnerId,body.action?.moveId));
+        motion = [DATA_ARENA_SEQUENCES.HIT, DATA_ARENA_SEQUENCES.DOWN, DATA_ARENA_SEQUENCES.WIN].includes(seq) ? null
+          : state.gameMode === 'RELAY' ? sampleDataArenaRelayAction({ animation: attackAnimation, action: body.action, time: state.time,
+              tickRateHz: bundle?.runtime.timing?.tickRateHz ?? 60, releaseSlot: relayProfile?.releaseSlot ?? 1, reducedMotion }) : action.sample(state.time);
         this.setSequence(motion?.sequenceId ?? seq, motion?.id ?? null);
         if (controller && motion) {
           const deltaMS = Math.max(0, motion.elapsedMs - actionElapsed);
@@ -332,18 +345,32 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           actionElapsed = motion.elapsedMs;
         } else if (controller && dtMs > 0) controller.update({ deltaMS: dtMs });
         // Art faces left; mirror for rightward facing.
-        sprite.scale.set(scale * (facing > 0 ? -1 : 1), scale * (1 - sink * 0.5));
+        const snapshot=controller?.getSnapshot();
+        const frame=bundle?.runtime.sides.main.animations.find(a=>a.id===sequence)?.frames[snapshot?.sourceFrameIndex ?? 0];
+        currentPlacement=state.gameMode==='RELAY'&&bundle ? dataArenaRelaySlotPlacement(frame,bundle.runtime.geometry,bundle.runtime.artProfile) : null;
+        if(currentPlacement)sprite.anchor.set(currentPlacement.anchor.x,currentPlacement.anchor.y);
+        const cellScale=currentPlacement ? scale*(bundle.runtime.artProfile?.scale??1)/currentPlacement.packingScale : scale;
+        sprite.scale.set(cellScale * (facing > 0 ? -1 : 1), cellScale * (1 - sink * 0.5));
         sprite.y = -lift + sink * 30;
+        sprite.x = 0;
+        if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
+        if (motion && relayProfile && !reducedMotion) {
+          const a = body.action;
+          const pulse = a?.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);
+          sprite.x += (facing > 0 ? 1 : -1) * relayProfile.thrust * pulse;
+          sprite.y -= relayProfile.lift * pulse;
+        }
         sprite.alpha = alpha;
         sprite.tint = flash > 0 ? 0xff7a7a : 0xffffff;
         shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.6 : 1);
       },
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
-        actionId: motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null })
+        speciesId: member?.speciesId, facing8: body.facing8 ?? null, slotPreserved: Boolean(currentPlacement), anchor: currentPlacement?.anchor ?? null, actionId: motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null })
     };
   }
   const playerMember = cast.partners.find((member) => member.partnerId === partnerId) ?? cast.partners[0];
-  const playerView = createActorView("PLAYER", playerMember, state.player);
+  let playerView = createActorView("PLAYER", playerMember, state.player);
+  const playerViews = new Map([[playerMember.partnerId, playerView]]);
   const mateView = createActorView("MATE", cast.mate, state.mate);
   let bossView = null;
   const rivalViews = new Map();
@@ -411,13 +438,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const shadow = new PIXI.Sprite(textures.shadow); shadow.anchor.set(0.5); shadow.scale.set(0.35, 0.3);
       entry = { sprite, glow, shadow };
     }
-    entry.sprite.texture = textures[SHOT_TEXTURE[projectile.kind] ?? "tide"];
+    const relayStyle = state.gameMode === 'RELAY' && projectile.moveId ? relayEffectStyle(projectile.moveId) : null;
+    entry.sprite.texture = textures[relayStyle?.texture ?? SHOT_TEXTURE[projectile.kind] ?? "tide"];
     // The texture's core is drawn at the collision radius (wave: its half height).
-    const coreRadius = projectile.kind === "SHARD" ? 13 : projectile.kind === "ORB" ? 10 : projectile.kind === "WAVE" ? 22 : 9;
+    const coreRadius = relayStyle ? 18 : projectile.kind === "SHARD" ? 13 : projectile.kind === "ORB" ? 10 : projectile.kind === "WAVE" ? 22 : 9;
     entry.sprite.scale.set(projectile.radius / coreRadius);
-    entry.sprite.anchor.set(projectile.kind === "PBOLT" ? 32 / 48 : 0.5, 0.5);
-    entry.sprite.tint = projectile.kind === "PBOLT" ? MOVE_TINT[projectile.moveId] ?? 0xffffff : 0xffffff;
-    entry.glow.tint = projectile.kind === "PBOLT" ? MOVE_TINT[projectile.moveId] ?? 0xffffff : SHOT_TINT[projectile.kind] ?? 0xffffff;
+    entry.sprite.anchor.set(!relayStyle && projectile.kind === "PBOLT" ? 32 / 48 : 0.5, 0.5);
+    entry.sprite.tint = relayStyle?.tint ?? (projectile.kind === "PBOLT" ? MOVE_TINT[projectile.moveId] ?? 0xffffff : 0xffffff);
+    entry.glow.tint = relayStyle?.tint ?? (projectile.kind === "PBOLT" ? MOVE_TINT[projectile.moveId] ?? 0xffffff : SHOT_TINT[projectile.kind] ?? 0xffffff);
     entry.glow.scale.set((projectile.radius * 4.2) / 64);
     entry.glow.visible = rich;
     entry.sprite.visible = entry.glow.visible = true;
@@ -625,18 +653,25 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "MOUNTED": ring(event.x, event.y, 70, 0x7fe9ff, 0.35); break;
         case "OVERHEAT": puff(state.player.x, state.player.y - 40, 0xdddddd, 6, 1.2); break;
         case "BRIDGE_LIFTED": bridgeLift = 0; camera.addTrauma(0.25); break;
-        case "CAST_RELEASE": if (event.team === "player") spawn({ x: event.x + Math.cos(event.angle) * 26, y: event.y - BEAM_ELEVATION + Math.sin(event.angle) * 26, texture: textures.glow, tint: 0x6ff7ff, scale: 0.45, scaleTo: 0.1, life: 0.14 }); break;
+        case "CAST": if(state.gameMode==='RELAY'){const fx=relayEffectStyle(event.moveId);spawn({x:event.x,y:event.y-BEAM_ELEVATION,texture:textures.ring,tint:fx.tint,scale:.7,scaleTo:.12,life:event.windup,alpha:.65});}break;
+        case "CAST_RELEASE": {
+          if(state.gameMode==='RELAY') {
+            const fx=relayEffectStyle(event.moveId),x=event.x+Math.cos(event.angle)*26,y=event.y-BEAM_ELEVATION+Math.sin(event.angle)*26;
+            spawn({x,y,texture:event.moveType==='LUNGE'?textures.relaySlash:textures.glow,tint:fx.tint,scale:event.moveType==='LUNGE'?.7:.6,scaleTo:.15,life:.19,rotation:event.angle});
+            burst(x,y,{count:5,speed:150,angle:event.angle,spread:1.2,tint:fx.tint,texture:fx.texture==='relayCrystal'?textures.shard:textures.spark,life:.22});
+          } else if(event.team==='player')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:0x6ff7ff,scale:.45,scaleTo:.1,life:.14});break;
+        }
         case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); crowdReact("CHEER", event.x, 1.2); break;
-        case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
-          burst(event.x, event.y - 20, { count: 24, speed: 380, tint: event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5); break;
+        case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
+          burst(event.x, event.y - 20, { count: 24, speed: 380, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5); break;
         case "ZONE_BURST": ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
-          burst(event.x, event.y, { count: 12, speed: 260, tint: event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18); break;
+          burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18); break;
         case "BARRIER_UP": ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
         case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
         case "RIVAL_HIT": if (event.cause !== "LASER") burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); break;
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
         case "RIVAL_SPLASH": ring(event.x, event.y, 50, 0x9fe8ff, 0.4); break;
-        case "SKILL_HIT": spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 }); break;
+        case "SKILL_HIT": spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 }); break;
         case "STATUS": burst(event.x, event.y - 30, { count: 4, speed: 120, tint: event.status === "ROOT" ? 0xd8f6ff : event.status === "SLOW" ? 0x7fc8ff : 0xff9a3c, life: 0.35 }); break;
         case "ROUND_WON": crowdReact("VICTORY", event.x ?? worldWidth / 2, 1.4); confetti(); camera.addTrauma(0.3); break;
         case "ROUND_LOST": crowdReact("DEFEAT", worldWidth / 2, 1); break;
@@ -729,11 +764,20 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }
     }
 
+    // Actors. Keep a view per selected team member; shared texture ownership stays
+    // with the bundle scope and all views are destroyed with this scene.
+    if (state.gameMode === 'RELAY' && state.player.partnerId !== partnerId) {
+      playerView.container.visible = false;
+      partnerId = state.player.partnerId;
+      if (!playerViews.has(partnerId)) playerViews.set(partnerId, createActorView('PLAYER', cast.partners.find(m => m.partnerId === partnerId), state.player));
+      playerView = playerViews.get(partnerId); playerView.container.visible = true;
+      actionEvents.delete(state.player.id);
+    }
     // Actors.
     const playerSeq = player.state === "DOWNED" || player.state === "DEFEATED" ? DATA_ARENA_SEQUENCES.DOWN
       : player.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
       : state.mode === "VICTORY_POSE" || state.result?.outcome === "VICTORY" ? DATA_ARENA_SEQUENCES.WIN
-      : state.laser.firing || player.cast || player.lunge ? DATA_ARENA_SEQUENCES.ATTACK
+      : state.laser.firing || player.cast || player.lunge || player.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK
       : Math.hypot(player.vx, player.vy) > 30 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
     const blink = !reducedMotion && player.invulnerable > 0 && player.state !== "DASH" && Math.floor(elapsed * 14) % 2 === 0;
     const sink = player.state === "FALLING" ? clamp(player.stateTime / 0.7, 0, 1) : 0;
@@ -743,6 +787,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (playerView.ringGfx) {
       const g = playerView.ringGfx;
       g.clear();
+      if (state.gameMode === 'RELAY') {
+        const angle = Math.PI / 2 - (player.facing8 ?? 2) * Math.PI / 4;
+        const ax = Math.cos(angle) * 42, ay = Math.sin(angle) * 23;
+        g.moveTo(ax, ay).lineTo(ax - Math.cos(angle - .6) * 12, ay - Math.sin(angle - .6) * 12)
+          .moveTo(ax, ay).lineTo(ax - Math.cos(angle + .6) * 12, ay - Math.sin(angle + .6) * 12).stroke({width: 3, color: 0xa5edff});
+      }
       g.ellipse(0, 0, 28, 12).stroke({ width: 2, color: PARTNER_BEAM[partnerId] ?? 0x6ff7ff, alpha: 0.75 });
       // Dash pips under the player.
       const max = sim.stats.dashCharges;
@@ -773,7 +823,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         rivalViews.set(rival.id, actorView);
       }
       const seq = rival.hp <= 0 ? DATA_ARENA_SEQUENCES.DOWN : rival.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
-        : rival.cast || rival.lunge ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
+        : rival.cast || rival.lunge || rival.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
       actorView.update(dtMs, { x: rival.x, y: rival.y, facing: rival.facing, flash: rival.hitFlash, alpha: rival.invulnerable > 0 ? 0.55 : 1, seq });
       actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
     }
@@ -1073,6 +1123,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       root.parent?.removeChild(root);
       // Character sprites come from their bundles; destroy display objects only,
       // the bundles' textures are released by their owner (the screen).
+      environment?.detach?.();
       root.destroy({ children: true, texture: false, textureSource: false });
       for (const sprite of [...pool, ...cellPool]) if (!sprite.destroyed) sprite.destroy();
       for (const entry of [...shotPool, ...enemyPool]) for (const part of Object.values(entry)) if (part?.destroy && !part.destroyed) part.destroy();
