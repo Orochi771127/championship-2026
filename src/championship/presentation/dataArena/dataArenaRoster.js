@@ -43,10 +43,12 @@ export async function loadDataArenaCharacter({art,PIXI,signal,fetchImpl=globalTh
  return loadPixiCharacterRuntimeBundle({PIXI,signal,fetchImpl,runtimeUrl:art.runtimeUrl,runtimeDocument:runtime,sides:['main'],cachePrefix:`data-arena:${art.entityId}:${hash}:`});
 }
 
-export function dataArenaCast(href = globalThis.location?.href) {
+import { RELAY_ROSTER } from '../../modes/dataArena/dataArenaRelayRoster.js';
+
+export function dataArenaCast(href = globalThis.location?.href, { includeRelay = false } = {}) {
   const member = (role, speciesId, extra = {}) => Object.freeze({ role, speciesId, name: speciesNameForId(speciesId), art: dataArenaArtRecord(speciesId, href), ...extra });
   return Object.freeze({
-    partners: Object.freeze(DATA_ARENA_PARTNERS.map((partner) => member("PLAYER", partner.speciesId, { partnerId: partner.id }))),
+    partners: Object.freeze((includeRelay?RELAY_ROSTER:DATA_ARENA_PARTNERS).map((partner) => member("PLAYER", partner.speciesId, { partnerId: partner.id }))),
     mate: member("MATE", DATA_ARENA_MATE.speciesId),
     rivals: Object.freeze(DATA_ARENA_RIVALS.map((rival) => member(rival.champion ? "CHAMPION" : "RIVAL", rival.speciesId, { rivalId: rival.id, kit: rival.kit }))),
     boss: member("BOSS", DATA_ARENA_BOSS.speciesId)

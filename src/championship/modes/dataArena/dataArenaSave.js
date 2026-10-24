@@ -9,16 +9,20 @@
 
 import { DATA_ARENA_PARTNERS, DATA_ARENA_VERSION } from "./dataArenaConfig.js";
 
+import { RELAY_ROSTER } from './dataArenaRelayRoster.js';
+import { RELAY_MAP_IDS } from './dataArenaRelayMaps.js';
+import { relayKit } from './dataArenaRelay.js';
+
 export const DATA_ARENA_RECORD_SCHEMA = DATA_ARENA_VERSION;
 const QUALITY = new Set(["auto", "high", "low"]);
-const MODES = ["TOURNAMENT", "HARBOR"];
-const PARTNER_IDS = new Set(DATA_ARENA_PARTNERS.map((partner) => partner.id));
+const MODES = ["TOURNAMENT", "HARBOR", "RELAY"];
+const PARTNER_IDS = new Set(RELAY_ROSTER.map((partner) => partner.id));
 const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(value, 1e9) : 0);
 
 export function defaultDataArenaRecords() {
   return {
     schemaVersion: 1, kind: "DATA_ARENA_RECORDS", runs: 0, wins: 0, bestScore: 0, bestVictorySeconds: null,
-    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "TOURNAMENT", partners: {}, modes: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
+    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "TOURNAMENT", relayLoadouts: {}, relayReserveId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
   };
 }
 
@@ -36,13 +40,15 @@ export function sanitizeDataArenaRecords(raw) {
     const entry = raw.modes?.[id];
     if (entry && typeof entry === "object") modes[id] = { runs: count(entry.runs), wins: Math.min(count(entry.wins), count(entry.runs)), bestScore: count(entry.bestScore), bestRound: Math.min(count(entry.bestRound), 9) };
   }
+  const relayLoadouts = {};
+  for(const id of PARTNER_IDS)if(Array.isArray(raw.relayLoadouts?.[id]))relayLoadouts[id]=relayKit(id,raw.relayLoadouts[id]).moves;
   const best = raw.bestVictorySeconds;
   return {
     ...base,
     runs: count(raw.runs), wins: Math.min(count(raw.wins), count(raw.runs)), bestScore: count(raw.bestScore),
     bestVictorySeconds: Number.isFinite(best) && best > 0 && best < 3600 ? best : null,
     lastPartnerId: PARTNER_IDS.has(raw.lastPartnerId) ? raw.lastPartnerId : base.lastPartnerId,
-    partners, modes, lastMode: MODES.includes(raw.lastMode) ? raw.lastMode : base.lastMode,
+    partners, modes, relayLoadouts, relayReserveId:PARTNER_IDS.has(raw.relayReserveId)?raw.relayReserveId:null, relayArenaId:RELAY_MAP_IDS.includes(raw.relayArenaId)?raw.relayArenaId:base.relayArenaId, lastMode: MODES.includes(raw.lastMode) ? raw.lastMode : base.lastMode,
     settings: { shake: raw.settings?.shake !== false, quality: QUALITY.has(raw.settings?.quality) ? raw.settings.quality : "auto" },
     briefingSeen: raw.briefingSeen === true
   };
@@ -78,6 +84,8 @@ export function createDataArenaRecordStore({ port = null } = {}) {
       records.settings = sanitizeDataArenaRecords({ ...records, settings: { ...records.settings, ...patch } }).settings;
       return write();
     },
+    setRelayTeam(reserveId,arenaId) { records.relayReserveId=PARTNER_IDS.has(reserveId)?reserveId:null;records.relayArenaId=RELAY_MAP_IDS.includes(arenaId)?arenaId:RELAY_MAP_IDS[0];return write(); },
+    setRelayLoadout(id, moves) { if (!PARTNER_IDS.has(id)) return false; records.relayLoadouts[id] = relayKit(id,moves).moves; return write(); },
     markBriefingSeen() { if (!records.briefingSeen) { records.briefingSeen = true; return write(); } return true; },
     setLastPartner(id) { if (PARTNER_IDS.has(id)) { records.lastPartnerId = id; return write(); } return false; },
     setLastMode(mode) { if (MODES.includes(mode)) { records.lastMode = mode; return write(); } return false; },

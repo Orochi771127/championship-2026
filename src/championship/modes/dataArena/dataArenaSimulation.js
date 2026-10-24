@@ -30,6 +30,10 @@ import { createDataArenaGrid } from "./dataArenaGrid.js";
 import { createFlowField } from "./dataArenaNav.js";
 import { createArenaRandom, dataArenaUpgrade, drawUpgradeOffer, upgradeValue } from "./dataArenaUpgrades.js";
 
+import { relayPartner } from './dataArenaRelayRoster.js';
+import { relayBattleMap } from './dataArenaRelayMaps.js';
+import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, relayMove, relayFacing8, relayKit } from './dataArenaRelay.js';
+
 const DT = DATA_ARENA_STEP_SECONDS;
 const TAU = Math.PI * 2;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -54,15 +58,17 @@ export function pointSegmentDistance(px, py, ax, ay, bx, by) {
 }
 
 const NEUTRAL_INPUT = Object.freeze({ moveX: 0, moveY: 0, aimX: null, aimY: null, fire: false, dash: false, surge: false, ride: false, cast: null, ult: false, autoAim: false });
-export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR"]);
+export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY"]);
 
-export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR" } = {}) {
+export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", relayLoadouts = {}, relayReserveId = null, relayArenaId = null, portrait = false } = {}) {
   if (!DATA_ARENA_MODES.includes(mode)) throw new RangeError(`DATA_ARENA_UNKNOWN_MODE:${mode}`);
-  const tournamentMode = mode === "TOURNAMENT";
+  const relayMode = mode === "RELAY";
+  const tournamentMode = mode === "TOURNAMENT" || relayMode;
+  const moveFor = (id, ultimate = false) => relayMode ? relayMove(id, ultimate) : DATA_ARENA_MOVES[id];
   const dashCooldown = tournamentMode ? DATA_ARENA_TOURNAMENT.dashCooldown : DATA_ARENA_PLAYER.dash.cooldown;
   const hasMate = !tournamentMode;
-  const map = tournamentMode ? DATA_ARENA_DUEL_MAP : DATA_ARENA_MAP;
-  const partner = DATA_ARENA_PARTNERS.find((entry) => entry.id === partnerId);
+  const map = relayMode ? relayBattleMap(relayArenaId,portrait) : tournamentMode ? DATA_ARENA_DUEL_MAP : DATA_ARENA_MAP;
+  let partner = relayMode ? relayPartner(partnerId) : DATA_ARENA_PARTNERS.find((entry) => entry.id === partnerId);
   if (!partner) throw new RangeError(`DATA_ARENA_UNKNOWN_PARTNER:${partnerId}`);
   const random = createArenaRandom(seed);
   const grid = createDataArenaGrid({ map });
@@ -81,6 +87,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   const playerSpawn = at(map.playerSpawn), mateSpawn = at(map.mateSpawn);
 
   const player = {
+    partnerId, speciesId: partner.speciesId, facing8: 2, recovery: 0, action: null,
     canSwim: partner.canSwim === true,
     id: nextId++, x: playerSpawn.x, y: playerSpawn.y, vx: 0, vy: 0, radius: DATA_ARENA_PLAYER.radius,
     hp: partner.hp, maxHp: partner.hp, state: "NORMAL", stateTime: 0, facing: 1,
@@ -88,7 +95,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     perfectThisDash: false, dashHits: new Set(), revives: tournamentMode ? 0 : DATA_ARENA_PLAYER.revives, hitFlash: 0,
     fallFromX: 0, fallFromY: 0,
     // Kit: slots 2-4 spend energy and have cooldowns; the ultimate charges.
-    team: "player", kit: DATA_ARENA_KITS[partnerId], energy: DATA_ARENA_ENERGY.max, energySpentAt: -Infinity,
+    team: "player", kit: relayMode ? relayKit(partnerId, relayLoadouts[partnerId]) : DATA_ARENA_KITS[partnerId], energy: DATA_ARENA_ENERGY.max, energySpentAt: -Infinity,
     cooldowns: Object.create(null), ult: 0, cast: null, lunge: null, barrier: 0, barrierAngle: 0,
     slow: 0, slowTimer: 0, root: 0, burn: 0, damageScale: 1
   };
@@ -106,7 +113,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
 
   const state = {
     seed, partnerId, quality, gameMode: mode, time: 0, mode: "PLAY", phaseIndex: 0, phaseId: tournamentMode ? "DUEL" : "WARMUP", warnedPhase: 0,
-    rivals: [], zones: [], tournament: null,
+    rivals: [], zones: [], tournament: null, relay: null,
     player, laser, mate, boss: null, enemies: [], projectiles: [], pickups: [], telegraphs: [], scans: [],
     pods: map.pods.map(([c, r]) => ({ id: nextId++, ...at([c, r]), hp: DATA_ARENA_GRID_RULES.podHp, respawn: 0, radius: 20 })),
     beacons: map.beacons.map(([c, r]) => ({ id: nextId++, ...at([c, r]), active: false, progress: 0, captured: false })),
@@ -553,14 +560,16 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   /** Apply damage from a kit attack to whatever body it struck. */
   function strike(target, amount, cause, onHit, x = target.x, y = target.y) {
     if (target === player) {
-      if (hurtPlayer(amount, cause, x, y) && onHit) applyStatus(player, onHit);
-      return;
+      const applied=hurtPlayer(amount, cause, x, y);
+      if (applied && onHit) applyStatus(player, onHit);
+      return applied;
     }
-    if (isRival(target)) damageRival(target, amount, cause);
+    if (isRival(target)) { const applied=damageRival(target, amount, cause); if(relayMode&&!applied)return false; }
     else if (target === state.boss) damageBoss(amount, cause);
     else damageEnemy(target, amount, cause, x, y);
     if (onHit && !target.dead) applyStatus(target, onHit);
     chargeUlt(amount * DATA_ARENA_ENERGY.ultPerDamageDealt);
+    return true;
   }
 
   function applyStatus(body, effect) {
@@ -586,31 +595,36 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   function kitMoveIds(caster) { return caster.kit.moves; }
 
   function canCast(caster, moveId) {
-    const move = DATA_ARENA_MOVES[moveId];
-    if (!move || caster.cast || caster.lunge) return false;
+    const move = moveFor(moveId);
+    if (!move || caster.cast || caster.lunge || (relayMode && caster.recovery > 0)) return false;
     if ((caster.cooldowns[moveId] ?? 0) > 0) return false;
     return caster.energy >= (move.energy ?? 0);
   }
 
   /** Begin a cast: spend energy, start the cooldown, show the windup telegraph. */
   function beginCast(caster, moveId, aimX, aimY, { ultimate = false } = {}) {
-    const move = DATA_ARENA_MOVES[moveId];
+    const move = moveFor(moveId, ultimate);
     if (!ultimate && !canCast(caster, moveId)) return false;
-    if (ultimate && (caster.cast || caster.lunge)) return false;
+    if (ultimate && (caster.cast || caster.lunge || (relayMode && (caster.recovery > 0 || caster.energy < move.energy || (caster.cooldowns[moveId] ?? 0) > 0)))) return false;
     const angle = Math.atan2(aimY - caster.y, aimX - caster.x);
-    if (ultimate) caster.ult = 0;
-    else {
-      caster.energy -= move.energy ?? 0;
-      caster.energySpentAt = state.time;
-      const scale = caster === player ? stat.cooldownScale : 1;
-      caster.cooldowns[moveId] = (move.cooldown ?? 0) * scale;
-    }
     const range = move.range ?? move.distance ?? 0;
     const reach = Math.min(range || Infinity, distance(aimX, aimY, caster.x, caster.y));
     const targetX = move.type === "ZONE" ? caster.x + Math.cos(angle) * Math.min(reach, range) : aimX;
     const targetY = move.type === "ZONE" ? caster.y + Math.sin(angle) * Math.min(reach, range) : aimY;
+    if (relayMode && move.type === 'ZONE' && !hasSight(caster.x, caster.y, targetX, targetY)) return false;
+    if (ultimate && !relayMode) caster.ult = 0;
+    else {
+      caster.energy -= move.energy ?? 0;
+      if(!relayMode||(move.energy??0)>0)caster.energySpentAt = state.time;
+      const scale = caster === player ? stat.cooldownScale : 1;
+      caster.cooldowns[moveId] = (move.cooldown ?? 0) * scale;
+    }
     caster.cast = { actionId: nextActionId++, moveId, move, t: 0, windup: move.windup ?? 0, angle, aimX: targetX, aimY: targetY, ultimate };
     caster.facing = Math.cos(angle) >= 0 ? 1 : -1;
+    if (relayMode) {
+      caster.facing8 = relayFacing8(angle);
+      caster.action = { id: caster.cast.actionId, moveId, startedAt: state.time, releasedAt: null, windup: move.windup, recovery: move.recovery, angle };
+    }
     if (caster === player) { state.stats.movesCast++; if (ultimate) state.stats.ultimates++; }
     const telegraph = { owner: `cast:${caster.id}`, team: caster.team, duration: Math.max(0.12, move.windup ?? 0), follow: null };
     if (move.type === "BOLT" || move.type === "WAVE") addTelegraph({ ...telegraph, kind: "LINE", x: caster.x, y: caster.y, angle, length: move.range, width: move.radius * 2 });
@@ -618,7 +632,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     else if (move.type === "LUNGE") addTelegraph({ ...telegraph, kind: "LINE", x: caster.x, y: caster.y, angle, length: move.distance, width: move.width });
     else if (move.type === "ZONE") addTelegraph({ ...telegraph, kind: "CIRCLE", x: targetX, y: targetY, radius: move.radius, danger: caster.team !== "player" });
     else if (move.type === "NOVA") addTelegraph({ ...telegraph, kind: "CIRCLE", x: caster.x, y: caster.y, radius: move.radius, danger: caster.team !== "player" });
-    emit({ type: ultimate ? "ULT_CAST" : "CAST", actionId: caster.cast.actionId, casterId: caster.id, team: caster.team, moveId, moveType: move.type, x: caster.x, y: caster.y, angle });
+    emit({ type: ultimate ? "ULT_CAST" : "CAST", actionId: caster.cast.actionId, casterId: caster.id, team: caster.team, moveId, moveType: move.type, windup: move.windup, recovery: move.recovery, x: caster.x, y: caster.y, angle });
     if (caster.cast.windup <= 0) finishCast(caster);
     return true;
   }
@@ -645,22 +659,23 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const owner = `cast:${caster.id}`;
     removeTelegraph(owner);
     caster.cast = null;
-    emit({ type: 'CAST_RELEASE', actionId, casterId: caster.id, team: caster.team, moveId, moveType: move.type,
-      x: caster.x, y: caster.y, angle, ultimate });
+    if (relayMode) { caster.recovery = move.recovery; if (caster.action) caster.action.releasedAt = state.time; }
+    emit({ type: 'CAST_RELEASE' , actionId, casterId: caster.id, team: caster.team, moveId, moveType: move.type,
+      x: caster.x, y: caster.y, angle, ultimate, windup: move.windup, recovery: move.recovery });
     const damageScale = caster === player ? stat.skillDamage : caster.damageScale ?? 1;
     switch (move.type) {
-      case "BOLT": case "WAVE": shootBolt(caster, move, angle, { actionId }); break;
+      case "BOLT": case "WAVE": shootBolt(caster, move, angle, { actionId, moveId }); break;
       case "SPREAD": case "LANCE":
-        for (let i = 0; i < move.count; i++) shootBolt(caster, move, angle - move.spread / 2 + (move.spread * i) / (move.count - 1), { actionId });
+        for (let i = 0; i < move.count; i++) shootBolt(caster, move, angle - move.spread / 2 + (move.spread * i) / (move.count - 1), { actionId, moveId });
         break;
       case "LUNGE":
-        caster.lunge = { dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
+        caster.lunge = { actionId, moveId, dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
           damage: move.damage * damageScale, hits: new Set() };
         if (caster === player && move.invulnerable) { player.invulnerable = Math.max(player.invulnerable, move.distance / move.speed + 0.08); player.dashGrace = player.invulnerable; player.perfectThisDash = false; }
         if (isRival(caster)) caster.invulnerable = Math.max(caster.invulnerable ?? 0, 0.1);
         break;
       case "ZONE":
-        state.zones.push({ id: nextId++, team: caster.team, x: aimX, y: aimY, radius: move.radius, delay: move.delay, t: 0, move, damage: move.damage * damageScale, caster: caster.id });
+        state.zones.push({ id: nextId++, moveId, team: caster.team, x: aimX, y: aimY, radius: move.radius, delay: move.delay, t: 0, move, damage: move.damage * damageScale, caster: caster.id });
         emit({ type: "ZONE_PLACED", team: caster.team, x: aimX, y: aimY, radius: move.radius, delay: move.delay });
         break;
       case "BARRIER":
@@ -668,7 +683,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         emit({ type: "BARRIER_UP", x: caster.x, y: caster.y, angle });
         break;
       case "BLINK": blink(caster, move, angle); break;
-      case "NOVA": nova(caster, move, damageScale); break;
+      case "NOVA": nova(caster, move, damageScale, moveId); break;
       default: break;
     }
   }
@@ -696,19 +711,21 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     emit({ type: "BLINK", fromX, fromY, x: caster.x, y: caster.y });
   }
 
-  function nova(caster, move, damageScale) {
+  function nova(caster, move, damageScale, moveId) {
     const team = caster.team;
     for (const target of targetsFor(team)) {
       if (distance(target.x, target.y, caster.x, caster.y) > move.radius + (target.radius ?? 20)) continue;
       if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
-      strike(target, move.damage * damageScale, move.type, zoneStatus(move));
+      if(relayMode&&!hasSight(caster.x,caster.y,target.x,target.y))continue;
+      const hit=strike(target, move.damage * damageScale, move.type, zoneStatus(move));
+      if(relayMode&&!hit)continue;
       if (move.effect !== "ROOT") {
         const d = distance(target.x, target.y, caster.x, caster.y) || 1;
         launch(target, (target.x - caster.x) / d, (target.y - caster.y) / d, DATA_ARENA_ENERGY.launch.NOVA);
       }
     }
     areaElement(caster.x, caster.y, move.radius, move,move.damage*damageScale);
-    emit({ type: "NOVA", team, x: caster.x, y: caster.y, radius: move.radius, effect: move.effect });
+    emit({ type: "NOVA", team, moveId, x: caster.x, y: caster.y, radius: move.radius, effect: move.effect });
   }
 
   function zoneStatus(move) {
@@ -730,14 +747,14 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if(grid.ice[i]>0)grid.meltAt((c+.5)*cell,(r+.5)*cell,DATA_ARENA_GRID_RULES.emberIceMelt,events);
         else grid.ignite(i, events, "SKILL");
       }
-      if (move.freezeWater || move.effect === "ROOT") grid.freezeCell(i, 7 * stat.iceScale, events, "SKILL");
+      if (move.freezeWater || (!relayMode && move.effect === "ROOT")) grid.freezeCell(i, 7 * stat.iceScale, events, "SKILL");
     }
     // Ice puts fire out: a freezing burst douses burning ground in its radius.
-    if (move.freezeWater || move.effect === "ROOT") grid.applyWater(x, y, span, events);
+    if (move.freezeWater || (!relayMode && move.effect === "ROOT")) grid.applyWater(x, y, span, events);
     for (let k = before; k < events.length; k++) events[k].t = state.time;
     if (move.effect === "IGNITE" && events.slice(before).some(e=>e.type==='FIRE_IGNITE'||e.type==='PROP_HIT'&&e.cause==='FIRE')) chain("BURN", x, y);
-    if ((move.freezeWater || move.effect === "ROOT") && events.slice(before).some((e) => e.type === "FIRE_OUT")) chain("STEAM", x, y);
-    if ((move.freezeWater || move.effect === "ROOT") && events.slice(before).some((e) => e.type === "ICE_FORM")) chain("FROST", x, y);
+    if ((move.freezeWater || (!relayMode && move.effect === "ROOT")) && events.slice(before).some((e) => e.type === "FIRE_OUT")) chain("STEAM", x, y);
+    if ((move.freezeWater || (!relayMode && move.effect === "ROOT")) && events.slice(before).some((e) => e.type === "ICE_FORM")) chain("FROST", x, y);
   }
 
   function updateLunge(caster) {
@@ -762,7 +779,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (distance(target.x, target.y, caster.x, caster.y) <= lunge.width / 2 + (target.radius ?? 20)) {
         lunge.hits.add(target.id);
         if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
-        strike(target, lunge.damage, "LUNGE", { slow: 0.3, slowSeconds: 0.6 });
+        if(relayMode&&!hasSight(caster.x,caster.y,target.x,target.y))continue;
+        const hit=strike(target, lunge.damage, "LUNGE", { slow: 0.3, slowSeconds: 0.6 });
+        if(relayMode&&!hit)continue;
         launch(target, lunge.dirX, lunge.dirY, DATA_ARENA_ENERGY.launch.LUNGE);
       }
     }
@@ -780,15 +799,21 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       for (const target of targetsFor(zone.team)) {
         if (distance(target.x, target.y, zone.x, zone.y) > zone.radius + (target.radius ?? 20) * 0.5) continue;
         if (target === player && player.dashGrace > 0) { perfectDodge(zone.x, zone.y); continue; }
+        if(relayMode&&!hasSight(zone.x,zone.y,target.x,target.y))continue;
         strike(target, zone.damage, "ZONE", zoneStatus(zone.move), zone.x, zone.y);
       }
       areaElement(zone.x, zone.y, zone.radius, zone.move,zone.damage);
-      emit({ type: "ZONE_BURST", team: zone.team, x: zone.x, y: zone.y, radius: zone.radius, effect: zone.move.effect });
+      emit({ type: "ZONE_BURST", moveId:zone.moveId, team: zone.team, x: zone.x, y: zone.y, radius: zone.radius, effect: zone.move.effect });
     }
     if (state.zones.some((zone) => zone.done)) state.zones = state.zones.filter((zone) => !zone.done);
   }
 
   function tickKit(caster, regenScale = 1) {
+    if (relayMode) {
+      caster.recovery = Math.max(0, (caster.recovery ?? 0) - DT);
+      if (!caster.cast && !caster.lunge && caster.recovery <= 0) caster.action = null;
+      if (caster.hp <= 0) { caster.cast = caster.lunge = caster.action = null; removeTelegraph(`cast:${caster.id}`); return; }
+    }
     for (const id in caster.cooldowns) if (caster.cooldowns[id] > 0) caster.cooldowns[id] = Math.max(0, caster.cooldowns[id] - DT);
     if (state.time - caster.energySpentAt >= DATA_ARENA_ENERGY.regenDelay) {
       const regen = caster === player ? stat.energyRegen : DATA_ARENA_ENERGY.regen * regenScale;
@@ -808,7 +833,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       kitBuffer = { ult: input.ult, cast: Number.isInteger(input.cast) ? input.cast : null, autoAim: input.autoAim, left: DATA_ARENA_ENERGY.inputBuffer };
     }
     if (!kitBuffer) return;
-    const usable = (player.state === "NORMAL" || player.state === "RIDING") && !player.cast && !player.lunge;
+    const usable = (player.state === "NORMAL" || player.state === "RIDING") && !player.cast && !player.lunge && (!relayMode || player.recovery <= 0);
     if (!usable) {
       kitBuffer.left -= DT;
       if (kitBuffer.left <= 0) kitBuffer = null;
@@ -819,8 +844,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const ids = kitMoveIds(player);
     const aimFor = (range) => (request.autoAim || input.autoAim || input.aimX === null ? autoAim(player, range) : { x: input.aimX, y: input.aimY });
     if (request.ult) {
-      if (player.ult >= DATA_ARENA_ENERGY.ultMax) {
-        const move = DATA_ARENA_MOVES[player.kit.ultimate];
+      if (relayMode ? canCast(player, player.kit.ultimate) && player.energy >= DATA_ARENA_RELAY.ultimateTp : player.ult >= DATA_ARENA_ENERGY.ultMax) {
+        const move = moveFor(player.kit.ultimate, true);
         const aim = aimFor(move.range ?? 600);
         beginCast(player, player.kit.ultimate, aim.x, aim.y, { ultimate: true });
         return;
@@ -828,7 +853,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       emit({ type: "CAST_REFUSED", reason: "ULT_NOT_READY" });
     }
     if (request.cast !== null && request.cast >= 0 && request.cast < ids.length) {
-      const id = ids[request.cast], move = DATA_ARENA_MOVES[id];
+      const id = ids[request.cast], move = moveFor(id);
       if (!canCast(player, id)) emit({ type: "CAST_REFUSED", reason: (player.cooldowns[id] ?? 0) > 0 ? "COOLDOWN" : "ENERGY", slot: request.cast });
       else { const aim = aimFor(move.range ?? move.distance ?? 400); beginCast(player, id, aim.x, aim.y); }
     }
@@ -836,8 +861,16 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
 
   // ------------------------------------------------------------------ laser
   function updateLaser(input) {
+    if (relayMode) {
+      laser.firing = false; laser.heat = 0;
+      if (input.fire && player.state === 'NORMAL' && canCast(player, RELAY_ACTION_PROFILES[partner.id].basic)) {
+        const aim = input.autoAim || input.aimX === null ? autoAim(player, 620) : { x: input.aimX, y: input.aimY };
+        beginCast(player, RELAY_ACTION_PROFILES[partner.id].basic, aim.x, aim.y);
+      }
+      return;
+    }
     laser.hitTimer = Math.max(0, laser.hitTimer - DT);
-    const canFire = (player.state === "NORMAL" || player.state === "RIDING") && !laser.overheated && !player.cast && !player.lunge;
+    const canFire = (player.state === "NORMAL" || player.state === "RIDING") && !laser.overheated && !player.cast && !player.lunge && (!relayMode || player.recovery <= 0);
     laser.firing = Boolean(input.fire && canFire);
     if (!laser.firing) {
       laser.heat = Math.max(0, laser.heat - stat.cooling * DT);
@@ -1190,7 +1223,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (projectile.hits.has(target.id)) continue;
       if (distance(target.x, target.y, projectile.x, projectile.y) > (target.radius ?? 20) + projectile.radius) continue;
       projectile.hits.add(target.id);
-      strike(target, projectile.damage, "SKILL", projectile.onHit, projectile.x, projectile.y);
+      const applied=strike(target, projectile.damage, "SKILL", projectile.onHit, projectile.x, projectile.y);
+      if(relayMode&&!applied)return;
       emit({ type: "SKILL_HIT", actionId: projectile.actionId, x: projectile.x, y: projectile.y, moveId: projectile.moveId });
       if (projectile.pierce <= 0) { projectile.dead = true; terrainEffect(projectile); return; }
       projectile.pierce--;
@@ -1737,11 +1771,12 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   }
 
   function damageRival(rival, amount, cause) {
-    if (rival.hp <= 0 || !rival.active) return;
-    if (rival.invulnerable > 0 && cause !== "BURN") return;
+    if (rival.hp <= 0 || !rival.active) return false;
+    if (rival.invulnerable > 0 && cause !== "BURN") return false;
     rival.hp = Math.max(0, rival.hp - amount);
     rival.hitFlash = 0.12;
     if (cause !== "BURN") emit({ type: "RIVAL_HIT", amount, cause, x: rival.x, y: rival.y });
+    return true;
   }
 
   /** Closest approach of a moving shot to a body within `horizon` seconds. */
@@ -1781,7 +1816,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
 
   function rivalPickMove(rival, d) {
     const options = [];
-    if (rival.ult >= DATA_ARENA_ENERGY.ultMax) {
+    if (relayMode ? rival.energy >= DATA_ARENA_RELAY.ultimateTp && !(rival.cooldowns[rival.kit.ultimate] > 0) : rival.ult >= DATA_ARENA_ENERGY.ultMax) {
       const ult = DATA_ARENA_MOVES[rival.kit.ultimate];
       if ((ult.type === "NOVA" && d < ult.radius * 0.85) || (ult.type === "LANCE" && d < ult.range * 0.8)) return { id: rival.kit.ultimate, ultimate: true };
     }
@@ -1937,6 +1972,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   }
 
   function updateTournament() {
+    if (relayMode) { updateRelay(); return; }
     const t = state.tournament;
     if (!t) return;
     const rival = state.rivals[0];
@@ -1964,6 +2000,76 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       state.pendingLevels = 1;
       openOffer();
     }
+  }
+
+  // Relay team orchestration. Benched members preserve HP, TP and cooldowns;
+  // no restoration on switching, and no progression writes.
+  const relayFields = ['hp', 'maxHp', 'energy', 'energySpentAt', 'cooldowns', 'ult', 'burn', 'slow', 'slowTimer', 'root', 'dashCharges', 'dashRecharge'];
+  function saveRelayPlayer() {
+    const entry = state.relay.team[state.relay.active];
+    for (const key of relayFields) entry[key] = player[key];
+  }
+  function switchRelayPlayer(forced = false) {
+    const relay = state.relay;
+    if (!relay || (!forced && (relay.switchCooldown > 0 || player.state !== 'NORMAL' || player.cast || player.lunge || player.recovery > 0))) return false;
+    const index = relay.team.findIndex((entry, i) => i !== relay.active && entry.hp > 0);
+    if (index < 0) return false;
+    saveRelayPlayer(); relay.active = index;
+    const entry = relay.team[index];
+    partner = relayPartner(entry.partnerId);
+    for(const key of Object.keys(upgrades))delete upgrades[key];Object.assign(upgrades,partner.startingUpgrades);
+    for (const key of relayFields) player[key] = entry[key];
+    Object.assign(player, { partnerId: partner.id, speciesId: partner.speciesId, canSwim: partner.canSwim === true, kit: relayKit(partner.id, relayLoadouts[partner.id]),
+      state: 'NORMAL', stateTime: 0, cast: null, lunge: null, action: null, recovery: 0, barrier: 0, hitFlash: 0,
+      vx: 0, vy: 0, kbx: 0, kby: 0, dashTimer: 0, dashGrace: 0, invulnerable: forced ? 0.8 : 0.25 });
+    // Switching never moves a land creature into an impassable cell.
+    if (blocked(player.x, player.y, player.radius, movementKind(player))) {
+      const bank = grid.nearestSafeCell(player.x, player.y); if (bank) { player.x = bank.x; player.y = bank.y; }
+    }
+    relay.switchCooldown = DATA_ARENA_RELAY.switchCooldown; relay.playerDownAt = null;
+    kitBuffer = null; removeTelegraph(`cast:${player.id}`); laser.firing = false;
+    emit({ type: 'RELAY_SWITCH', partnerId: partner.id, forced, x: player.x, y: player.y });
+    return true;
+  }
+  function relayRival(index) {
+    const definition = DATA_ARENA_RIVALS[index];
+    const rival = createRival({ ...definition, hp: Math.round(definition.hp * DATA_ARENA_RELAY.rivalHpScale) }, 0);
+    rival.active = true; return rival;
+  }
+  function updateRelay() {
+    const relay = state.relay, t = state.tournament;
+    if (t.status === 'INTRO') { t.timer -= DT; if (t.timer <= 0) { t.status = 'FIGHT'; state.rivals[0].active = true; emit({ type: 'ROUND_START', round: 0 }); } return; }
+    if (t.status === 'KO') { t.timer -= DT; if (t.timer <= 0) finish(t.winner === 'player' ? 'VICTORY' : t.winner === 'draw' ? 'DRAW' : 'DEFEAT'); return; }
+    t.roundTime += DT;
+    // Cooldowns tick on the bench; TP regenerates only for the active member.
+    relay.team.forEach((entry, i) => { if (i !== relay.active) for (const id in entry.cooldowns) entry.cooldowns[id] = Math.max(0, entry.cooldowns[id] - DT); });
+    const rival = state.rivals[0];
+    if (player.hp <= 0) {
+      relay.playerDownAt ??= state.time;
+      player.cast = player.lunge = player.action = null; removeTelegraph(`cast:${player.id}`);
+      if (state.time - relay.playerDownAt >= DATA_ARENA_RELAY.knockoutSeconds) switchRelayPlayer(true);
+    }
+    if (rival.hp <= 0) {
+      relay.enemyDownAt ??= state.time;
+      rival.cast = rival.lunge = rival.action = null; removeTelegraph(`cast:${rival.id}`);
+      if (relay.enemyIndex < 1 && state.time - relay.enemyDownAt >= DATA_ARENA_RELAY.knockoutSeconds) {
+        relay.enemyIndex++; relay.enemyDownAt = null; state.rivals = [relayRival(relay.enemyIndex)];
+        state.score += 1000; emit({ type: 'RELAY_RIVAL', x: state.rivals[0].x, y: state.rivals[0].y });
+      }
+    }
+    const mineDead = player.hp <= 0 && relay.team.every((entry, i) => i === relay.active || entry.hp <= 0);
+    const theirsDead = relay.enemyIndex === 1 && state.rivals[0].hp <= 0;
+    const timedOut = t.roundTime >= DATA_ARENA_RELAY.seconds;
+    if (!mineDead && !theirsDead && !timedOut) return;
+    saveRelayPlayer();
+    const mine = relay.team.reduce((sum, entry) => sum + Math.max(0, entry.hp) / entry.maxHp, 0) / 2;
+    const enemy = ((1 - relay.enemyIndex) + Math.max(0, state.rivals[0].hp) / state.rivals[0].maxHp) / 2;
+    t.winner = mineDead && theirsDead ? 'draw' : theirsDead ? 'player' : mineDead ? 'rival' : Math.abs(mine - enemy) < 1e-6 ? 'draw' : mine > enemy ? 'player' : 'rival';
+    t.status = 'KO'; t.timer = 1.3;
+    player.cast = player.lunge = player.action = null; state.rivals[0].active = false;
+    state.projectiles.length = state.zones.length = state.telegraphs.length = 0;
+    if (t.winner === 'player') state.score += 1500;
+    emit({ type: 'RELAY_END', winner: t.winner, reason: timedOut ? 'TIME' : 'KO' });
   }
 
   // ------------------------------------------------------------------ pickups / levels
@@ -2015,7 +2121,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     state.result = Object.freeze({ outcome, timeSeconds: Math.round(state.time * 100) / 100, score: total, breakdown: Object.freeze(breakdown),
       kills: state.kills, level: state.level, upgrades: Object.freeze({ ...upgrades }), cheers: state.cheers,
       stats: Object.freeze({ ...state.stats }), partnerId, seed, mode,
-      tournament: state.tournament ? Object.freeze({ roundsWon: state.stats.roundsWon, rounds: DATA_ARENA_TOURNAMENT.rounds,
+      tournament: state.tournament && !relayMode ? Object.freeze({ roundsWon: state.stats.roundsWon, rounds: DATA_ARENA_TOURNAMENT.rounds,
         reachedRound: state.tournament.round + 1, results: state.tournament.results.map((r) => ({ ...r })) }) : null });
     state.mode = "ENDED";
     laser.firing = false;
@@ -2026,8 +2132,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   function step(rawInput = NEUTRAL_INPUT) {
     if (state.mode === "ENDED" || state.mode === "LEVEL_UP") return false;
     let input = normalizeInput(rawInput);
+    if (relayMode && state.tournament.status === 'FIGHT' && input.switchPartner) switchRelayPlayer();
     if (tournamentMode && state.tournament?.status !== "FIGHT") input = { ...normalizeInput(NEUTRAL_INPUT), aimX: input.aimX, aimY: input.aimY };
     state.time += DT;
+    if (relayMode) {
+      state.relay.switchCooldown = Math.max(0, state.relay.switchCooldown - DT);
+      if (!player.cast && !player.lunge && player.recovery <= 0 && (input.moveX || input.moveY)) player.facing8 = relayFacing8(Math.atan2(input.moveY, input.moveX));
+    }
     if (state.mode === "VICTORY_POSE") {
       updateProjectiles();
       state.endTimer -= DT;
@@ -2049,6 +2160,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     updateSurges();
     updateEnemies();
     for (const rival of state.rivals) updateRival(rival);
+    if(relayMode)for(const rival of state.rivals)if(rival.active&&rival.hp>0&&player.hp>0){
+      const dx=rival.x-player.x,dy=rival.y-player.y,d=Math.hypot(dx,dy),overlap=(rival.radius+player.radius)*.8-d;
+      if(overlap>0){const nx=d>0?dx/d:1,ny=d>0?dy/d:0;moveBody(player,-nx*overlap*.5,-ny*overlap*.5,movementKind(player));moveBody(rival,nx*overlap*.5,ny*overlap*.5,movementKind(rival));}
+    }
     updateBoss();
     updateScans();
     updateRings();
@@ -2091,7 +2206,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const aim = Number.isFinite(input.aimX) && Number.isFinite(input.aimY);
     return { moveX, moveY, aimX: aim ? input.aimX : null, aimY: aim ? input.aimY : null,
       fire: Boolean(input.fire), dash: Boolean(input.dash), surge: Boolean(input.surge), ride: Boolean(input.ride),
-      cast: Number.isInteger(input.cast) ? input.cast : null, ult: Boolean(input.ult), autoAim: Boolean(input.autoAim) };
+      cast: Number.isInteger(input.cast) ? input.cast : null, ult: Boolean(input.ult), autoAim: Boolean(input.autoAim), switchPartner: Boolean(input.switchPartner) };
   }
 
   function choose(id) {
@@ -2114,6 +2229,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   }
 
   function objective() {
+    if (relayMode) return { id: 'RELAY', timeLeft: Math.max(0, DATA_ARENA_RELAY.seconds - state.tournament.roundTime),
+      status: state.tournament.status, progress: state.relay.enemyIndex, goal: 2, done: state.result?.outcome === 'VICTORY' };
     const id = state.phaseId;
     if (tournamentMode) {
       const t = state.tournament, rival = state.rivals[0];
@@ -2128,11 +2245,24 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       shielded: state.beacons.some((b) => !b.captured) };
   }
 
-  if (tournamentMode) {
+  if (tournamentMode && !relayMode) {
     const firstTwo = ["tide", "flame"];
     if (random() < 0.5) firstTwo.reverse();
     state.tournament = { round: 0, order: [...firstTwo, "storm"], status: "INTRO", timer: 0, roundTime: 0, winner: null, results: [] };
     startRound(0);
+  }
+
+  if (relayMode) {
+    state.relay = { active: 0, switchCooldown: 0, enemyIndex: 0, playerDownAt: null, enemyDownAt: null,
+      team: relayTeamIds(partnerId,relayReserveId).map(id => {
+        const p = relayPartner(id), hp = Math.round(p.hp * DATA_ARENA_RELAY.playerHpScale);
+        return { partnerId: id, speciesId: p.speciesId, hp, maxHp: hp, energy: DATA_ARENA_RELAY.tpMax, energySpentAt: -Infinity,
+          cooldowns: Object.create(null), ult: 0, burn: 0, slow: 0, slowTimer: 0, root: 0, dashCharges: 1, dashRecharge: 0 };
+      }) };
+    state.tournament = { round: 0, status: 'INTRO', timer: 2, roundTime: 0, results: [], order: ['tide', 'flame'] };
+    state.rivals = [relayRival(0)]; state.rivals[0].active = false;
+    state.phaseId = 'RELAY';
+    emit({ type: 'RELAY_INTRO' });
   }
 
   return Object.freeze({
@@ -2156,7 +2286,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       return {
         mode: state.mode, time: Math.round(state.time * 1000) / 1000, phase: state.phaseId, level: state.level, xp: state.xp,
         xpToNext: xpToNext(state.level), score: state.score, kills: state.kills, hype: Math.round(state.hype), cheer: state.cheerTimer > 0,
-        player: { x: Math.round(player.x), y: Math.round(player.y), hp: Math.round(player.hp), maxHp: player.maxHp, state: player.state,
+        player: { partnerId: player.partnerId, speciesId: player.speciesId, facing8: player.facing8, action: player.action ? { ...player.action } : null, x: Math.round(player.x), y: Math.round(player.y), hp: Math.round(player.hp), maxHp: player.maxHp, state: player.state,
           dashCharges: player.dashCharges, dashMax: stat.dashCharges, dashRecharge: player.dashRecharge, revives: player.revives,
            surface: grid.surfaceAt(player.x, player.y), canSwim:player.canSwim, invulnerable: player.invulnerable > 0 },
         laser: { firing: laser.firing, heat: laser.heat, heatCapacity: stat.heatCapacity, overheated: laser.overheated, endKind: laser.endKind,
@@ -2173,9 +2303,14 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         cores: state.cores.map((c) => ({ x: c.x, y: c.y, out: c.out })),
         pods: state.pods.map((p) => ({ x: p.x, y: p.y, ready: p.respawn <= 0 })),
         gameMode: mode,
-        kit: { moves: player.kit.moves.map((id) => ({ id, cooldown: player.cooldowns[id] ?? 0, cooldownMax: (DATA_ARENA_MOVES[id].cooldown ?? 0) * stat.cooldownScale,
-          energy: DATA_ARENA_MOVES[id].energy ?? 0, type: DATA_ARENA_MOVES[id].type, ready: canCast(player, id) })),
-          ultimate: player.kit.ultimate, ult: Math.round(player.ult), ultMax: DATA_ARENA_ENERGY.ultMax, energy: Math.round(player.energy), energyMax: DATA_ARENA_ENERGY.max,
+        relay: relayMode ? { active: state.relay.active, switchCooldown: state.relay.switchCooldown, enemyIndex: state.relay.enemyIndex,
+          team: state.relay.team.map((entry, index) => ({ partnerId: entry.partnerId, speciesId: entry.speciesId,
+            hp: Math.round(index === state.relay.active ? player.hp : entry.hp), maxHp: entry.maxHp,
+            tp: Math.round(index === state.relay.active ? player.energy : entry.energy) })) } : null,
+        kit: { moves: player.kit.moves.map((id) => ({ id, cooldown: player.cooldowns[id] ?? 0, cooldownMax: (moveFor(id).cooldown ?? 0) * stat.cooldownScale,
+          energy: moveFor(id).energy ?? 0, type: moveFor(id).type, ready: canCast(player, id) })),
+          ultimateCooldown: player.cooldowns[player.kit.ultimate] ?? 0, ultimate: player.kit.ultimate, ult: Math.round(player.ult), ultMax: DATA_ARENA_ENERGY.ultMax, energy: Math.round(player.energy), energyMax: DATA_ARENA_ENERGY.max,
+          currency: relayMode ? "TP" : "ENERGY", recovery: player.recovery ?? 0, basic: relayMode ? RELAY_ACTION_PROFILES[partner.id].basic : null,
           casting: player.cast ? player.cast.moveId : null, barrier: player.barrier > 0, slowed: player.slow > 0, rooted: player.root > 0 },
         rivals: state.rivals.map((r) => ({ id: r.definitionId, speciesId: r.speciesId, x: Math.round(r.x), y: Math.round(r.y), hp: Math.round(r.hp), maxHp: r.maxHp,
           energy: Math.round(r.energy), casting: r.cast ? r.cast.moveId : null, wantsCover: r.wantsCover, active: r.active, rooted: r.root > 0, slowed: r.slow > 0,

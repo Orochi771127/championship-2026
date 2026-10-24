@@ -8,6 +8,9 @@
 *.css text eol=lf
 *.html text eol=lf
 *.csv text eol=lf
+# Exact source comparisons must use the same LF bytes on Windows and Linux.
+tests/fixtures/evolution-texture-baseline-source-ready.txt text eol=lf
+tests/fixtures/ranch-v4/historical-v3-snippets.txt text eol=lf
 *.png binary
 *.webp binary
 *.bat text eol=crlf

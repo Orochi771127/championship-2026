@@ -18,7 +18,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   font-family: system-ui, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; overflow: hidden;
 }
-.da-field { position: absolute; inset: 0; outline: none; }
+.da-field { position: absolute; inset: 0; outline: none; overflow:hidden; }
 .da-field canvas { display: block; width: 100%; height: 100%; }
 .da-root[data-state="PLAY"] .da-field { cursor: crosshair; }
 
@@ -109,7 +109,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-root[data-mode="TOURNAMENT"] .da-boss__name { color: #ffd0a0; }
 
 /* ---- toasts ------------------------------------------------------------- */
-.da-toasts { position: absolute; inset: 0; pointer-events: none; }
+.da-toasts { position: absolute; inset: 0; pointer-events: none; overflow:hidden; }
 .da-toast {
   position: absolute; transform: translate(-50%, -50%); padding: 4px 12px; border-radius: 999px; font-weight: 900; font-size: 15px; white-space: nowrap;
   background: rgba(8, 20, 34, 0.85); border: 1px solid var(--da-edge); text-shadow: 0 1px 3px #000;
@@ -284,3 +284,78 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   .da-panel--level .da-card__effect, .da-panel--level .da-card__preview { font-size:12px; }
 }
 @media (prefers-reduced-motion: reduce) { .da-banner.is-showing { animation: none; } .da-bar__fill { transition: none; } }
+
+/* Relay extends the arena HUD only. Original temporary effects are identified
+   in the briefing, not mixed into combat controls. */
+.da-root:not([data-mode="RELAY"]) :is(.da-relay-switch,.da-relay-team,.da-tbtn--switch) { display:none; }
+.da-root[data-mode="RELAY"] :is(.da-bar--mate,.da-hud__revives,.da-hud__level,.da-bar--xp,.da-chip--harbor,.da-tbtn--surge,.da-tbtn--ride,.da-bar--heat) { display:none; }
+.da-root[data-mode="RELAY"] .da-hud__bottom { background:rgba(12,28,42,.4); border-color:rgba(170,230,255,.2); }
+.da-root[data-mode="RELAY"] .da-bar--energy { min-width:130px; height:22px; }
+.da-root[data-mode="RELAY"] .da-bar--hp { height:24px; }
+.da-relay-switch { pointer-events:auto; min-width:76px; min-height:44px; border:1px solid #91e3ff80; border-radius:12px; background:#122938a8; color:#effaff; cursor:pointer; }
+.da-slot { pointer-events:auto; font:inherit; color:inherit; cursor:pointer; }
+.da-relay-team { font-size:11px; max-width:250px; line-height:1.5; text-shadow:0 1px 4px #000; }
+.da-loadout { display:grid; gap:8px; border:1px solid #91e3ff50; border-radius:10px; padding:10px; min-width:0; }
+.da-loadout label { display:flex; align-items:center; gap:8px; }
+.da-loadout__select { flex:1; min-width:0; min-height:44px; border:1px solid #91e3ff80; border-radius:8px; background:#132b40; color:#effaff; padding:6px; font:inherit; }
+.da-tbtn--switch { border-color:#a3d9ff; grid-area:ride; }
+.da-root[data-mode="RELAY"] .da-slot__charge { color:#fff; font-size:10px; }
+.da-root[data-mode="RELAY"] .da-field { background:radial-gradient(ellipse at center,#63768a,#283c53); }
+@media (max-width:640px) {
+  .da-root[data-mode="RELAY"] .da-hud__bottom { box-sizing:border-box; max-width:calc(100vw - 20px); flex-wrap:wrap; }
+  .da-root[data-mode="RELAY"] .da-kit { flex-wrap:wrap; }
+  .da-root[data-mode="RELAY"] .da-hud__top { grid-template-columns:minmax(110px,1fr) auto 44px; }
+  .da-root[data-mode="RELAY"] .da-hud__right { display:none; }
+  .da-root[data-mode="RELAY"] .da-hud__objective { max-width:150px; }
+  .da-root[data-mode="RELAY"] .da-relay-team { font-size:10px; max-width:170px; }
+}
+
+/* Roster remains text-only until two selected members enter the field. */
+.da-relay-options{display:grid;gap:10px;margin-block:14px}.da-relay-options[hidden]{display:none}.da-roster-label{display:grid;gap:6px;min-width:0}.da-roster-label select{width:100%;max-width:100%;min-height:44px}.da-relay-options .da-note{margin:0}
+
+@media(pointer:coarse){.da-root[data-mode="RELAY"] .da-relay-switch{display:none}}
+
+/* Relay thumb layout. Individual targets receive input; the space between
+   them remains available to the floating movement / aim sticks. */
+.da-tbtn__label { position:relative; z-index:1; }
+.da-tbtn__meta, .da-move-hint, .da-tbtn--basic, .da-slot__meta { display:none; }
+.da-root[data-mode="RELAY"] { --da-control-right:max(16px,env(safe-area-inset-right)); --da-control-bottom:max(16px,env(safe-area-inset-bottom)); }
+.da-root[data-mode="RELAY"] .da-touch__buttons { inset:0; display:block; pointer-events:none; }
+.da-root[data-mode="RELAY"] .da-tbtn { position:absolute; box-sizing:border-box; pointer-events:auto; width:58px; height:58px; padding:5px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; text-shadow:0 1px 3px #06121e; background-color:rgba(8,24,40,.68); }
+.da-root[data-mode="RELAY"] .da-tbtn__label { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; line-height:1.2; }
+.da-root[data-mode="RELAY"] .da-tbtn__meta { display:block; position:relative; z-index:1; font-size:10px; line-height:1; font-variant-numeric:tabular-nums; color:#eaf6ff; }
+.da-root[data-mode="RELAY"] .da-tbtn--basic { right:var(--da-control-right); bottom:var(--da-control-bottom); width:76px; height:76px; border-color:#b5f7ff; background:radial-gradient(circle at 35% 25%,#38839ac9,#102e49c9); }
+.da-root[data-mode="RELAY"] .da-tbtn--basic .da-tbtn__label { font-size:17px; }
+.da-root[data-mode="RELAY"] .da-tbtn--s1 { right:calc(var(--da-control-right) + 92px); bottom:var(--da-control-bottom); }
+.da-root[data-mode="RELAY"] .da-tbtn--s2 { right:calc(var(--da-control-right) + 86px); bottom:calc(var(--da-control-bottom) + 76px); }
+.da-root[data-mode="RELAY"] .da-tbtn--s3 { right:var(--da-control-right); bottom:calc(var(--da-control-bottom) + 96px); }
+.da-root[data-mode="RELAY"] .da-tbtn--dash { right:calc(var(--da-control-right) + 90px); bottom:calc(var(--da-control-bottom) + 152px); width:54px; height:54px; }
+.da-root[data-mode="RELAY"] .da-tbtn--ult { right:var(--da-control-right); bottom:calc(var(--da-control-bottom) + 176px); width:60px; height:60px; }
+.da-root[data-mode="RELAY"] .da-tbtn--switch { left:max(16px,env(safe-area-inset-left)); bottom:calc(var(--da-control-bottom) + 148px); width:68px; height:48px; border-radius:16px; }
+.da-root[data-mode="RELAY"] :is(.da-tbtn--surge,.da-tbtn--ride) { display:none; }
+.da-root[data-mode="RELAY"] .da-move-hint { display:grid; place-items:center; position:absolute; left:max(20px,env(safe-area-inset-left)); bottom:calc(var(--da-control-bottom) + 12px); box-sizing:border-box; width:104px; height:104px; border:1px dashed #b5edff60; border-radius:50%; background:#122e451f; color:#e8f8ffc0; font-size:11px; text-shadow:0 1px 4px #000; }
+.da-root[data-mode="RELAY"] .da-bar--energy { min-width:0; width:100%; height:22px; }
+.da-root[data-mode="RELAY"] .da-hud__vitals { min-width:0; max-width:230px; }
+.da-root[data-mode="RELAY"] .da-relay-team { max-width:100%; line-height:1.4; }
+.da-root[data-mode="RELAY"] .da-relay-team > div { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.da-root[data-mode="RELAY"] .da-boss { top:calc(max(8px,env(safe-area-inset-top)) + 102px); }
+.da-root[data-mode="RELAY"] .da-bar--boss { max-width:none; }
+.da-root[data-mode="RELAY"] .da-slot--ult { height:54px; }
+.da-root[data-mode="RELAY"] .da-slot__meta { display:block; position:relative; z-index:1; font-size:10px; }
+.da-root[data-mode="RELAY"] :is(.da-slot__name,.da-slot__key) { z-index:1; }
+.da-root[data-mode="RELAY"][data-input="touch"] .da-hud__bottom { display:none; }
+.da-root[data-mode="RELAY"][data-input="touch"] .da-hud__right { display:none; }
+.da-root[data-mode="RELAY"][data-input="touch"] .da-hud__top { grid-template-columns:minmax(110px,1fr) auto 44px; }
+.da-root[data-mode="RELAY"][data-input="touch"] .da-hud__vitals .da-bar { max-width:none; }
+.da-root[data-mode="RELAY"] .da-tbtn:focus-visible { outline:3px solid var(--da-gold); outline-offset:3px; }
+@media (orientation:landscape) and (max-height:520px) {
+  .da-root[data-mode="RELAY"] .da-tbtn--s2 { bottom:calc(var(--da-control-bottom) + 70px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--s3 { bottom:calc(var(--da-control-bottom) + 88px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--dash { bottom:calc(var(--da-control-bottom) + 140px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--ult { bottom:calc(var(--da-control-bottom) + 158px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--switch { bottom:calc(var(--da-control-bottom) + 132px); }
+  .da-root[data-mode="RELAY"] .da-boss { top:max(8px,env(safe-area-inset-top)); left:50%; width:28vw; }
+  .da-root[data-mode="RELAY"] .da-hud__center { position:absolute; top:44px; left:50%; transform:translateX(-50%); }
+  .da-root[data-mode="RELAY"][data-input="touch"] .da-hud__top { grid-template-columns:1fr 44px; }
+  .da-root[data-mode="RELAY"][data-input="touch"] .da-hud__pause { grid-column:2; }
+}

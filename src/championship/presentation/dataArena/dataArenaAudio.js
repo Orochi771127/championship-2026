@@ -65,6 +65,10 @@ export function createDataArenaAudio({ bus }) {
   }
 
   const SOUNDS = {
+    claw: t=>Math.max(hiss(t,.002,.015,.09,.12,{from:2300,to:700}),tone('triangle',150,65,t,.002,.01,.08,.10)),
+    flame: t=>Math.max(hiss(t,.005,.07,.19,.13,{type:'lowpass',from:700,to:2600}),tone('sine',130,55,t,.005,.03,.15,.08)),
+    ray: t=>Math.max(tone('triangle',1550,620,t,.003,.025,.12,.07),tone('sine',2200,1000,t,.004,.02,.10,.04)),
+    frost: t=>Math.max(hiss(t,.008,.06,.2,.07,{type:'highpass',from:4500,to:1600}),tone('sine',1800,2500,t,.002,.01,.13,.045)),
     hit: (t) => tone("square", 900, 500, t, 0.002, 0.01, 0.05, 0.05),
     kill: (t) => Math.max(tone("square", 520, 120, t, 0.003, 0.02, 0.12, 0.08), hiss(t, 0.002, 0.02, 0.1, 0.12, { from: 2400, q: 0.8 })),
     hurt: (t) => Math.max(tone("sawtooth", 220, 90, t, 0.004, 0.04, 0.16, 0.14, { type: "lowpass", frequency: 1400 }), hiss(t, 0.002, 0.03, 0.1, 0.1, { from: 900 })),

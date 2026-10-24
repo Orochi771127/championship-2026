@@ -453,7 +453,12 @@
     "src/data/championship/battleCharacterProfiles.js",
     "src/data/championship/battleNativeMathTables.js",
     "src/data/championship/nativeBookSpecies.js",
-    "src/data/championship/r2/fields/fieldInventoryR2.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js",
+    "src/championship/modes/dataArena/dataArenaRelay.js",
+    "src/championship/modes/dataArena/dataArenaRelayMaps.js",
+    "src/championship/modes/dataArena/dataArenaRelayRoster.js",
+    "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
+    "src/championship/presentation/dataArena/dataArenaRelayMapArt.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js",
@@ -9094,7 +9099,14 @@
     "src/data/championship/public-playtest-runtime.v1.json",
     "src/data/championship/public-ui-selection.v1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/data/championship/ranch-render-selection.v1.json"
+    "src/data/championship/ranch-render-selection.v1.json",
+    "src/championship/modes/dataArena/dataArenaRelay.js",
+    "src/championship/modes/dataArena/dataArenaRelayMaps.js",
+    "src/championship/modes/dataArena/dataArenaRelayRoster.js",
+    "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
+    "src/championship/presentation/dataArena/dataArenaRelayMapArt.js",
+    "src/data/championship/data-arena-relay-maps.v1.json",
+    "src/data/championship/data-arena-relay-roster.v1.json"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -41690,11 +41702,11 @@
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "b191a615be4fc46e70f5ec6338b8cccd2d610f5990f6c9ef12061525ec5d4519"
+        "sha256": "1f9a6858bbfbec87fec1c3017d193a8f3852f181e12c6f94a4ae6d122251400b"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "cbb37b2f3cb4088264508808bca9147c758a896bb5d14903140dc423d057dfa9"
+        "sha256": "0ed1346998a40246d778c44a699f55e3769f4a98090eebfcd8059a651078a7f5"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -42550,11 +42562,11 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSave.js",
-        "sha256": "0df6f684959f8d4ff23651b16f9f05273abde33fafcd4760d9f170a06dcf73b9"
+        "sha256": "43b8008d2803dabe608425bf4ff91cd732307d5acb46b56d32eb864a4cd44dfc"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "49190aee814a75b670a57a3e707c90a3c3ad4374fd2a149c297a2c0fa2cbcd34"
+        "sha256": "eea5cc8d49b1731ec585ea0438143cc124dd55f3274686d5531aaf4769edbd2b"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -42670,19 +42682,19 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaAudio.js",
-        "sha256": "39c8e798490f9cb9cf197aafd4dc61e8139d9a0814acdce247f2cbba63913068"
+        "sha256": "6b94d508dd51a4aa2f69fdad2e287aa1040db70eac800a5129f1dae799111273"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaCamera.js",
-        "sha256": "a250b778bf1a7a6906f470c26edbe9f187ac680d90bcda64761e4f842d5ede8a"
+        "sha256": "262cd547b3bcc5b7fe635125de1c73cc0fde700d1c46c4c96528be6fc2b39f18"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaCharacterAction.js",
-        "sha256": "e34fc8b7ddbd0e0854a12007348ed45d960ea19b903065fc3781e512b9fb0e6f"
+        "sha256": "0571853089e343867f9e57168507e0b860367e9e4c2be8df3f252a306ee5dabf"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
-        "sha256": "5275b5b3ad0ce2d65fbc46665e32d117329d2320490d85373d9c8ceccdef3fae"
+        "sha256": "35f6d325a9113cd6530cc601a5675778a5ff2c47170f59c26cfc2a55586bb1cd"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaInteractionArt.js",
@@ -42694,11 +42706,11 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "51fc0f3d20765e239bb1fbf2155fa2dcc16664b4949f8c86711d267889235796"
+        "sha256": "6f15d2b7ba70c1e2eeffa1ce47556f5a893fad922eba85eb5b43e09310abdab7"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRoster.js",
-        "sha256": "d5fb9c1a863a437842b454ce18d61a1be2d16f1a38d217d86a5f89f0bedde493"
+        "sha256": "87a8516e08a51f7e282cbc5dffbeb3a8023e7f42a45893cac021328ad059e2a2"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaTextures.js",
@@ -43290,7 +43302,7 @@
       },
       {
         "path": "src/championship/text/dataArenaText.js",
-        "sha256": "d258f5ecb97be92ca29a408c3ada36efeda657adc3b71384c6edbd7ea552466d"
+        "sha256": "f684ea8d9ee88128ec3a6f74eacfb6b4df8f9cf6f6815d541bed16ffab7c3c16"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
@@ -43639,10 +43651,53 @@
       {
         "path": "src/data/championship/ranch-render-selection.v1.json",
         "sha256": "ddd5d6a367c5f0b7e7d80203db5114924c93d6992691571d2fee55ea3eae7f41"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelay.js",
+        "sha256": "64500614189bec79bbba2206a2128a3694a56365f21f5668b797ae7500cf5001"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayMaps.js",
+        "sha256": "84debc707bddeb30c176d9d3c3305ae46ae1e280eb67d8168d68cf9cf298e580"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayRoster.js",
+        "sha256": "c318a48426e1a3d2f1e50074effbc58399db083727602a7b0d29aafa053ea33e"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
+        "sha256": "59690e1073f30d557647b9ed8641bd356b91ac1c22e0663c95d3dfad3918a05c"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaRelayMapArt.js",
+        "sha256": "893bcb7ca2e23b30f686e6add4bf023a975dbfed68172341ae89e65ad06ce8b5"
+      },
+      {
+        "path": "src/data/championship/data-arena-relay-maps.v1.json",
+        "sha256": "cff0ae34e60cb9406bef8a15fbbf813a309d7071f04ee94c21f6870c9b1123a3",
+        "jsonFields": [
+          "fieldId",
+          "fields",
+          "grid",
+          "schemaVersion"
+        ]
+      },
+      {
+        "path": "src/data/championship/data-arena-relay-roster.v1.json",
+        "sha256": "f87451978b44498a13d03a0fae0828ac1a3ed3546f8148b4284a56764dafdb79",
+        "jsonFields": [
+          "body",
+          "element",
+          "entries",
+          "generationIndex",
+          "kind",
+          "schemaVersion",
+          "speciesIndex"
+        ]
       }
     ],
     "selectionId": "HUNT_EXISTING_3D_ART_20261023",
-    "ownerInstruction": "\u8acb\u81ea\u6211\u5be9\u67e5\u6c92\u554f\u984c\u5f8ccommit \u8ddfpush\uff1b\u9084\u6709\u90e8\u7f72"
+    "ownerInstruction": "請自我審查沒問題後commit 跟push；還有部署"
   },
   "browserBundle": {
     "version": 1,
