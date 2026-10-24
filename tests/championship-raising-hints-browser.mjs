@@ -229,6 +229,21 @@ async function enterControlledGame(page,evidence){
 }
 async function normalGame(browser,base,output,report){
  const context=await browser.newContext({viewport:{width:1366,height:768},locale:'zh-TW',serviceWorkers:'block'}),page=await context.newPage();page.setDefaultTimeout(90000);
+ // Observe native graph creation without replacing the context, nodes, clocks
+ // or game state. This records cue events only, not human listening acceptance.
+ await context.addInitScript(()=>{
+  const ids=new WeakMap();let nextId=0;
+  globalThis.menuCueEvidence=[];
+  const proto=(globalThis.AudioContext??globalThis.webkitAudioContext)?.prototype;
+  if(!proto)return;
+  const create=proto.createOscillator;
+  proto.createOscillator=function(...args){
+   if(!ids.has(this))ids.set(this,++nextId);
+   const contextId=ids.get(this),osc=create.apply(this,args),start=osc.start;
+   osc.start=function(...times){globalThis.menuCueEvidence.push({contextId,type:this.type,frequency:this.frequency.value,at:performance.now()});return start.apply(this,times);};
+   return osc;
+  };
+ });
  const evidence={status:'RUNNING',fixture:'tests/fixtures/championship-owned-party.html#prepare',errors:[],before:null,after:null};
  page.on('pageerror',e=>evidence.errors.push(String(e)));
  try{
@@ -251,7 +266,57 @@ async function normalGame(browser,base,output,report){
   await page.locator('[data-menu-id="MANAGEMENT"]').click();await page.locator('.cm-toolbar__menu:not([hidden]) [data-entry-id="digimon"]').click();await page.locator('#cm-root[data-active-screen="DIGIMON_LIST"]').waitFor();
   await page.locator('#cm-root .cm-screen-back:visible').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});
   assert.equal(await page.locator('.cm-toolbar').getAttribute('data-selected-tool'),'');
+  evidence.uiMenuCompletion=await menuCompletion(page,output);
   await page.screenshot({path:path.join(output,'normal-game-return-raising.png'),fullPage:false});assert.deepEqual(evidence.errors,[]);evidence.status='PASS_ACTUAL_RAISING_FEED_AND_RETURN';return evidence;
  }catch(error){evidence.status='FAIL';evidence.error=String(error);report.normalGame=evidence;await page.screenshot({path:path.join(output,'normal-game-failure.png'),fullPage:false}).catch(()=>{});throw error;}finally{await context.close();}
+}
+async function menuCompletion(page,output){
+ const result={status:'RUNNING',kind:'existing-PR-CI-native-Chromium-events',listeningAccepted:false,layouts:[]};
+ const count=()=>page.evaluate(()=>menuCueEvidence.length);
+ const pause=()=>page.waitForTimeout(120);
+ const system=page.locator('.cm-toolbar__cell[data-menu-id="SYSTEM"]');
+ async function oneCue(button,label){await pause();const before=await count();await button.click();await page.waitForTimeout(30);assert.equal(await count(),before+1,label);}
+ for(const size of [{width:390,height:844},{width:1366,height:768}]){
+  await page.setViewportSize(size);await page.waitForTimeout(400);
+  const layout={...size,menus:[]};
+  for(const id of ['MANAGEMENT','SYSTEM']){
+   const opener=page.locator(`.cm-toolbar__cell[data-menu-id="${id}"]`);
+   await oneCue(opener,`${size.width} ${id} open starts one cue`);
+   await page.waitForFunction(()=>[...document.querySelectorAll('.cm-toolbar__entry-icon')].every(n=>n.complete&&n.naturalWidth>0));
+   const rows=await page.locator('.cm-toolbar__entry').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.dataset.entryId,src:n.querySelector('img')?.getAttribute('src'),width:r.width,height:r.height,left:r.left,right:r.right};}));
+   assert.equal(rows.length,id==='MANAGEMENT'?5:8);
+   assert.ok(rows.every(r=>r.src&&r.width>=44&&r.height>=44&&r.left>=0&&r.right<=size.width+1));
+   for(const row of rows){if(!['database','medals'].includes(row.id))assert.ok(row.src.endsWith('/'+row.id+'.svg'),row.id+' uses its dedicated vector');}
+   layout.menus.push({id,rows});
+   await page.screenshot({path:path.join(output,`ui-menu-${size.width}-${id.toLowerCase()}.png`)});
+   await oneCue(opener,`${size.width} ${id} close starts one cue`);
+  }
+  result.layouts.push(layout);
+ }
+ // Repeat the real menu click and then use Escape: automatic close stays silent
+ // and the original keyboard focus target remains reachable.
+ await oneCue(system,'repeat open');await oneCue(system,'repeat close');await oneCue(system,'keyboard return open');
+ const beforeEscape=await count();await page.keyboard.press('Escape');assert.equal(await count(),beforeEscape);
+ assert.equal(await system.evaluate(n=>n===document.activeElement),true);
+ const feed=page.locator('.cm-toolbar__cell[data-tool-id="feed"]');
+ await oneCue(feed,'tool select');await oneCue(feed,'tool toggle back');
+ await oneCue(system,'settings menu open');
+ await oneCue(page.locator('.cm-toolbar__entry[data-entry-id="settings"]'),'settings entry selects once');
+ await page.locator('.cm-settings').waitFor();
+ await page.locator('.cm-settings__category[data-category="sound"]').click();
+ const muted=page.locator('[data-setting="muted"] input');
+ assert.equal(await muted.isChecked(),false);
+ await muted.check();await pause();const beforeMute=await count();
+ await page.locator('.cm-settings__close').click();
+ await system.click();await pause();await system.click();await pause();
+ assert.equal(await count(),beforeMute,'muted close/open/back create no oscillator');
+ await system.click();await page.locator('.cm-toolbar__entry[data-entry-id="settings"]').click();
+ await page.locator('.cm-settings__category[data-category="sound"]').click();await muted.uncheck();
+ await oneCue(page.locator('.cm-settings__close'),'unmuted back plays again');
+ assert.equal(await system.evaluate(n=>n===document.activeElement),true);
+ const events=await page.evaluate(()=>menuCueEvidence);
+ assert.equal(new Set(events.map(e=>e.contextId)).size,1,'all UI cues use the existing single native context');
+ result.nativeEvents=events;result.status='PASS_NATIVE_UI_EVENTS_MUTE_MENUS_AND_FOCUS';
+ return result;
 }
 if(process.argv.includes('--self-test'))selfTest();else await main();

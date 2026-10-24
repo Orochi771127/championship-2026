@@ -291,5 +291,20 @@
     "functionalAcceptance": "OWNER_TESTS",
     "physicalDeviceAccepted": false,
     "commercialReleaseAccepted": false
+  },
+  "uiMenuCompletion20261024": {
+    "authorizationRecordedOn": "2026-10-24",
+    "ownerInstructionId": "Sentinel_1c2f90da8e488191904551f4cbe2ce49",
+    "ownerInstruction": "做好以後就發佈吧",
+    "scope": "Eleven original menu entry icons plus explicit-click select/open/back cues on the existing sfx bus. Preserve existing audio. Reject remains outside the release.",
+    "excluded": [
+      "unbound reject cue",
+      "opening-light-motion candidate 07cad19b",
+      "adjacent cage placement repair",
+      "character animation changes"
+    ],
+    "rollbackReference": "105fafbd4d6a736476a414825e0dcfcf8ef8611c",
+    "normalBrowserAcceptance": "PENDING_PREVIOUS_LOOPBACK_ACCESS_DENIED",
+    "listeningAcceptance": "PENDING"
   }
 }
