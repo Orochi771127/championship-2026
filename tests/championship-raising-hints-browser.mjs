@@ -275,7 +275,26 @@ async function menuCompletion(page,output){
  const count=()=>page.evaluate(()=>menuCueEvidence.length);
  const pause=()=>page.waitForTimeout(120);
  const system=page.locator('.cm-toolbar__cell[data-menu-id="SYSTEM"]');
- async function oneCue(button,label){await pause();const before=await count();await button.click();await page.waitForTimeout(30);assert.equal(await count(),before+1,label);}
+ // The normal clock keeps running while menus are reviewed. A date card can
+ // legitimately cover the toolbar; acknowledge only its existing visible UI,
+ // as the Scene music runner does. Never force-click or edit the game clock.
+ async function settleCalendar(){
+  const deadline=Date.now()+20000;
+  while(Date.now()<deadline){
+   const state=await page.evaluate(()=>{
+    const visible=n=>Boolean(n&&!n.hidden&&!n.closest('[hidden]')&&n.getClientRects().length&&getComputedStyle(n).visibility!=='hidden');
+    if(document.querySelector('.cm-settings[open]'))return 'ready';
+    const layer=document.querySelector('#cm-root .int-rh2-lifecycle'),calendar=document.querySelector('button.int-rh2-calendar');
+    if(visible(calendar)&&!calendar.disabled&&layer?.dataset.phase==='calendar')return 'calendar';
+    return visible(layer)||visible(calendar)?'transition':'ready';
+   });
+   if(state==='ready')return;
+   if(state==='calendar'){await page.locator('button.int-rh2-calendar:visible').click();result.calendarAcknowledgements=(result.calendarAcknowledgements??0)+1;}
+   await page.waitForTimeout(200);
+  }
+  throw Error('Normal lifecycle did not release toolbar after visible calendar acknowledgement');
+ }
+ async function oneCue(button,label){await settleCalendar();await pause();const before=await count();await button.click();await page.waitForTimeout(30);assert.equal(await count(),before+1,label);}
  for(const size of [{width:390,height:844},{width:1366,height:768}]){
   await page.setViewportSize(size);await page.waitForTimeout(400);
   const layout={...size,menus:[]};
@@ -308,9 +327,10 @@ async function menuCompletion(page,output){
  assert.equal(await muted.isChecked(),false);
  await muted.check();await pause();const beforeMute=await count();
  await page.locator('.cm-settings__close').click();
+  await settleCalendar();
  await system.click();await pause();await system.click();await pause();
  assert.equal(await count(),beforeMute,'muted close/open/back create no oscillator');
- await system.click();await page.locator('.cm-toolbar__entry[data-entry-id="settings"]').click();
+ await settleCalendar();await system.click();await page.locator('.cm-toolbar__entry[data-entry-id="settings"]').click();
  await page.locator('.cm-settings__category[data-category="sound"]').click();await muted.uncheck();
  await oneCue(page.locator('.cm-settings__close'),'unmuted back plays again');
  assert.equal(await system.evaluate(n=>n===document.activeElement),true);
