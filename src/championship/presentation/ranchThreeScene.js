@@ -299,7 +299,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
               // Existing instrument displays / culture tanks only. A zero mask
               // keeps floors and rigid equipment completely outside this effect.
-              if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01','field_cm22_01','field_cm23_01','field_cm24_01','field_cm27_01','field_cm35_01','field_cm40_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
+              if(['field_cm03_01','field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01','field_cm20_01','field_cm22_01','field_cm23_01','field_cm24_01','field_cm27_01','field_cm28_01','field_cm29_01','field_cm40_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
                 dynamicShaders.add(m);
                 if(!m.userData.instrumentAmbientHooked){
                   m.userData.instrumentAmbientHooked=true;
@@ -309,6 +309,12 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                     shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
                       vAmbientMask=_ambient_mask;vAmbientPosition=position;
                       if(_ambient_mask>2.5&&_ambient_mask<3.5)transformed.y+=sin(uAmbientTime*0.75+position.y*2.0)*0.055;`);
+                    // Rounded desert rocks need a small receiver offset to avoid
+                    // self-shadow bands; the support plane and its shadows stay fixed.
+                    if(p.fieldId==='field_cm20_01')shader.vertexShader=shader.vertexShader.replace('#include <shadowmap_vertex>',`#include <shadowmap_vertex>
+                      #if NUM_DIR_LIGHT_SHADOWS > 0
+                        if(position.y>0.05)vDirectionalShadowCoord[0].z-=0.0009*vDirectionalShadowCoord[0].w;
+                      #endif`);
                     shader.fragmentShader='uniform float uAmbientTime;\nvarying float vAmbientMask;\nvarying vec3 vAmbientPosition;\n'+shader.fragmentShader;
                     shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
                       if(vAmbientMask>0.5&&vAmbientMask<1.5){
@@ -316,6 +322,20 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                         totalEmissiveRadiance+=diffuseColor.rgb*idle;
                       }else if(vAmbientMask>1.5&&vAmbientMask<2.5){
                         totalEmissiveRadiance+=diffuseColor.rgb*(0.025+0.012*sin(uAmbientTime*0.6+vAmbientPosition.y*2.0));
+                      }else if(vAmbientMask>8.5){
+                        float sheen=pow(max(0.0,sin(vAmbientPosition.x*0.7+vAmbientPosition.z*0.45-uAmbientTime*0.18)),24.0);
+                        float sheenPatch=pow(max(0.0,cos(vAmbientPosition.z*0.6-vAmbientPosition.x*0.2)),8.0);
+                        totalEmissiveRadiance+=diffuseColor.rgb*sheen*sheenPatch*0.035;
+                      }else if(vAmbientMask>7.5){
+                        vec2 sandUv=vec2(vAmbientPosition.x-uAmbientTime*0.065,vAmbientPosition.z)*vec2(22.0,95.0);
+                        vec2 sandCell=floor(sandUv);
+                        float seed=fract(sin(dot(sandCell,vec2(127.1,311.7)))*43758.5453);
+                        float grain=smoothstep(0.985,1.0,seed)*(1.0-smoothstep(0.1,0.45,abs(fract(sandUv.y)-0.5)));
+                        float gust=pow(max(0.0,sin(vAmbientPosition.x*0.7+vAmbientPosition.z*1.3-uAmbientTime*0.22)),6.0);
+                        totalEmissiveRadiance+=diffuseColor.rgb*grain*gust*0.08;
+                      }else if(vAmbientMask>6.5){
+                        float ripple=sin(vAmbientPosition.x*16.0+uAmbientTime*0.7)*cos(vAmbientPosition.z*13.0-uAmbientTime*0.45);
+                        totalEmissiveRadiance+=vec3(0.025,0.04,0.045)*pow(max(0.0,ripple),8.0);
                       }else if(vAmbientMask>5.5){
                         float lavaFlow=0.5+0.5*sin(vAmbientPosition.x*4.0+vAmbientPosition.z*6.0-uAmbientTime*0.45);
                         if(diffuseColor.r>diffuseColor.g*1.6&&diffuseColor.r>diffuseColor.b*3.0)totalEmissiveRadiance+=diffuseColor.rgb*(0.12+0.035*lavaFlow);
@@ -327,12 +347,12 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                         totalEmissiveRadiance+=diffuseColor.rgb*flame;
                       }`);
                   };
-                  m.customProgramCacheKey=()=> 'authored-instrument-ambient-r3';m.needsUpdate=true;
+                  m.customProgramCacheKey=()=>p.fieldId==='field_cm20_01'?'authored-instrument-ambient-r4-sand':'authored-instrument-ambient-r4';m.needsUpdate=true;
                 }
               }
 
               // Authored plant weights keep merged scenery rigid outside vegetation.
-              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm16_01','field_cm18_01','field_cm25_01','field_cm26_01','field_cm30_01','field_cm31_01','field_cm32_01','field_cm34_01','field_cm37_01','field_cm39_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
+              if(['field_cm02_01','field_cm04_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm16_01','field_cm18_01','field_cm25_01','field_cm26_01','field_cm30_01','field_cm31_01','field_cm32_01','field_cm34_01','field_cm39_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
                 dynamicShaders.add(m);
                 if(!m.userData.rootedWindHooked){
                   m.userData.rootedWindHooked=true;
