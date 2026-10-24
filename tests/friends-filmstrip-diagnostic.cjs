@@ -1,8 +1,8 @@
 // TEST ONLY: exact reviewed Friends runner, bounded first adjacent desktop gesture.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
-const BASE='aa47b04211ed8b67523ac6429143281ec33a7e78fae0dc1cb33b2fb78b6c0751';
-const BUILD='bab8a0633fbf9379065853985f3a26ea4131122317635569db268003f33b7a95';
-const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":8526,"sha256":"47153dea52ad24a31144e468927767bf97fa7f7d4302ea6ee6e24cf06462a63e"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":1220556,"sha256":"801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1164384,"sha256":"2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":182480,"sha256":"272dd947c4114739a6ac50e44657ce0e71de413ff509772e50ac574ad2112ea0"}]);
+const BASE='08af225dfd3225a0f1e62dc04448c0bec1d15e8be0eb06b341b24cedbae72b55';
+const BUILD='2b274502fe80a32ef6f9a23a6ab3cac8fc924eab8153bf1407300d196496d32f';
+const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":8532,"sha256":"e7dbfade6e74a7f5f8ceb27a000b01397792adfa9f074cb9987e4cde77915ce5"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":1282136,"sha256":"8b268f2740b440f592936881657d4d34cf5571e76fcecc7928bb2668246e950f"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1959304,"sha256":"56326469aa65e85bcccefc3959964b58986567b572fa8f71ebe1bbef63ac6260"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":493252,"sha256":"04728cd3b20fe397d645a3c365aaffc799a64692f0b70fe58b36939dff4dc9dd"}]);
 function verifyThreeResponses(row){
  assert.equal(row.sourceThreeReadbacksComplete?.responses,row.sourceThreeResponses?.length,'All owned response reads completed');
  assert.equal(row.sourceThreeReadbacksComplete?.reads,row.sourceThreeResponses?.length);

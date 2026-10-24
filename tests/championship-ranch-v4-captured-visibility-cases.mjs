@@ -6,13 +6,15 @@ const text=fs.readFileSync(R+'src/championship/presentation/ranchThreeScene.js',
 const body=text.slice(text.indexOf('  function updateContactTriangles('),text.indexOf('  function legacyGroundHeight('));const fields=await S.loadSupportMetadata(fs.readFileSync(R+'assets/production/cage/three-20261021/physical-ground-tops.r2.json','utf8'));const logicalBridges=await H.loadLogicalBridges(fs.readFileSync(R+'assets/production/cage/three-20261021/logical-stair-bridges.r1.json','utf8'),fields);
 // The captured fixture stays immutable. Re-exported triangle IDs are admitted
 // only through an exact three-vertex match against its historical support mesh.
-const remap=JSON.parse(fs.readFileSync(out+'cm18-r3-triangle-remap.json'));
-const cm18=fields.get(remap.fieldId);assert.equal(cm18.glbSha256,remap.currentGlbSha256);
-const triangleIds=new Map();
-for(const row of remap.triangles){
- const triangle=cm18.primitives[0].triangles.find(t=>t.sourceTriangleIndex===row.currentTriangleIndex);assert.ok(triangle);
- assert.deepEqual([...triangle.vertices].sort(),[...row.vertices].sort());
- triangleIds.set(row.historicalTriangleIndex,row.currentTriangleIndex);
+const remaps=['cm18-r3-triangle-remap.json','cm34-r3-triangle-remap.json'].map(file=>JSON.parse(fs.readFileSync(out+file)));
+const triangleIds=new Map(),remappedFields=new Set(remaps.map(remap=>remap.fieldId));
+for(const remap of remaps){
+ const field=fields.get(remap.fieldId);assert.equal(field.glbSha256,remap.currentGlbSha256);
+ for(const row of remap.triangles){
+  const triangle=field.primitives[0].triangles.find(t=>t.sourceTriangleIndex===row.currentTriangleIndex);assert.ok(triangle);
+  assert.deepEqual([...triangle.vertices].sort(),[...row.vertices].sort());
+  triangleIds.set(remap.fieldId+':'+row.historicalTriangleIndex,row.currentTriangleIndex);
+ }
 }
 const plan=JSON.parse(fs.readFileSync(out+'wrap-plan.json')),E=52*Math.PI/180,ranchNativeToWorld=(x,y,h=0)=>({x:(x+y/Math.sin(E))/(16*Math.SQRT2),y:h,z:(-x+y/Math.sin(E))/(16*Math.SQRT2)}),rows=[];
 for(const c of plan.cases.filter(c=>c.id.startsWith('point-wrap'))){
@@ -22,7 +24,7 @@ for(const c of plan.cases.filter(c=>c.id.startsWith('point-wrap'))){
  const object={visible:parent.visible},mesh={visible:captured.visible,parent:object,matrixWorld:{elements:captured.matrixWorld},updateWorldMatrix(){}};const instance={p:placement,shift:q.wrapShiftNative,object,supportMesh:mesh,supportTriangles:f.primitives[0].triangles,contactSheets:f.supportSheets},instances=[instance],resolver=O.createRanchSupportOwnerResolver({placements:[placement],instances,unit:1,wrapWidthNative:q.wrapWidthNative});
  const env={disposed:false,...H,eligibleSupportOwner:S.eligibleSupportOwner,instances,logicalBridges,supportOwnerResolver:resolver,ranchNativeToWorld};const query=new Function(...Object.keys(env),body+'return contactHeight;')(...Object.values(env));const [x,y]=q.displayPointNative;
  const before=query(x,y,q.admission);assert.equal(before.status,'VERIFIED_ADMITTED_AUTHORED_CONTACT');assert.ok(Math.abs(before.height-c.expectedHeightWorld)<1e-10);assert.deepEqual(before.owner,q.derivedSupportOwner);
- object.visible=true;const after=query(x,y,q.admission);assert.equal(after.status,'VERIFIED_ADMITTED_AUTHORED_CONTACT');assert.ok(Math.abs(after.height-c.expectedHeightWorld)<1e-10);assert.deepEqual(after,before);assert.ok(c.expectedContact.acceptableGeometryHits.some(h=>(c.fieldId===remap.fieldId?triangleIds.get(h.sourceTriangleIndex):h.sourceTriangleIndex)===after.sourceTriangleIndex));object.visible=false;assert.deepEqual(query(x,y,q.admission),before);
+ object.visible=true;const after=query(x,y,q.admission);assert.equal(after.status,'VERIFIED_ADMITTED_AUTHORED_CONTACT');assert.ok(Math.abs(after.height-c.expectedHeightWorld)<1e-10);assert.deepEqual(after,before);assert.ok(c.expectedContact.acceptableGeometryHits.some(h=>(remappedFields.has(c.fieldId)?triangleIds.get(c.fieldId+':'+h.sourceTriangleIndex):h.sourceTriangleIndex)===after.sourceTriangleIndex));object.visible=false;assert.deepEqual(query(x,y,q.admission),before);
  resolver.dispose();object.visible=true;assert.equal(query(x,y,q.admission).height,null);
  rows.push({id:c.id,priorEvidenceSha256:sha(fs.readFileSync(file)),capturedMeshId:captured.id,capturedParentId:parent.id,priorParentVisible:parent.visible,exactContactFunctionSha256:sha(body),sameGeometryMatrix:captured.matrixWorld,before,after,onlyMutation:'render-instance parent visibility false→true→false',disposalStillDenied:true});
 }
