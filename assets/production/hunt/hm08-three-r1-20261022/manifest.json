@@ -1,0 +1,103 @@
+{
+  "schema": "HUNT_THREE_MAP.v1",
+  "map": "hm08",
+  "qaApproved": false,
+  "glb": {
+    "file": "hm08-terrain-ee412126d0e2.glb",
+    "sha256": "ee412126d0e22f9986b9ac22e19b5bb8b203bc81a63862de9315dfa46440b328",
+    "bytes": 425920,
+    "materials": 0,
+    "textures": 0,
+    "compression": {
+      "extension": "KHR_draco_mesh_compression"
+    },
+    "meshes": [
+      {
+        "node": "hm08-foreground_structure",
+        "category": "foreground_structure",
+        "primitives": 1,
+        "triangles": 37099,
+        "vertices": 19516
+      },
+      {
+        "node": "hm08-foreground_vegetation",
+        "category": "foreground_vegetation",
+        "primitives": 1,
+        "triangles": 55248,
+        "vertices": 30732
+      },
+      {
+        "node": "hm08-standable_ground",
+        "category": "standable_ground",
+        "primitives": 1,
+        "triangles": 61177,
+        "vertices": 30973
+      }
+    ]
+  },
+  "fields": {
+    "field_hm08_01": {
+      "variant": "day",
+      "clearColor": "#b5855f",
+      "frames": [
+        {
+          "file": "field_hm08_01-frame-00-f785e7106327.webp",
+          "sha256": "f785e71063271186a2bcd28b48bb18fe54148912199a4a658e8e4ccaa22b8058",
+          "bytes": 516418,
+          "width": 2048,
+          "height": 2048
+        }
+      ]
+    },
+    "field_hm08_02": {
+      "variant": "night",
+      "clearColor": "#474651",
+      "frames": [
+        {
+          "file": "field_hm08_02-frame-00-c796caf80af0.webp",
+          "sha256": "c796caf80af0ca5820bf24038005f3794313347049503fe49286f5d9ba23780f",
+          "bytes": 356956,
+          "width": 2048,
+          "height": 2048
+        }
+      ]
+    }
+  },
+  "projection": {
+    "kind": "BLENDER_LOCKED_ORTHOGRAPHIC",
+    "elevationDegrees": 51.999991,
+    "azimuthDegrees": 45.0,
+    "nativePxPerUnit": 16,
+    "worldPxPerNativePx": 2,
+    "nativeSize": [
+      1024,
+      1024
+    ],
+    "worldSize": [
+      2048,
+      2048
+    ],
+    "orthoScaleUnits": 64.0,
+    "cameraForwardGltf": [
+      -0.43533849716186523,
+      -0.7880106568336487,
+      -0.43533843755722046
+    ],
+    "cameraUpGltf": [
+      -0.5572076439857483,
+      0.6156615614891052,
+      -0.5572077631950378
+    ]
+  },
+  "groundSupport": {
+    "walkableHeightUnits": 0.0,
+    "measured": {
+      "miss": 0
+    }
+  },
+  "groundHeights": {
+    "file": "hm08-ground-heights.json",
+    "sha256": "fb1b4e507cadb604ab7757233e3a568c02ffa2c8c1156c086271f8545e89c108",
+    "bytes": 92046
+  }
+}

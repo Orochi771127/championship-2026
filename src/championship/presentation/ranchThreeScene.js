@@ -1,5 +1,6 @@
 // Fixed-camera terrain, actors and contact shadows share one depth buffer.
 import {createRanchGroundShadows} from './ranchGroundShadows.js';
+import {createCm07Ambient} from './cm07Ambient.js';
 import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
 import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
@@ -17,10 +18,10 @@ const up = new THREE.Vector3(-Math.sin(RANCH_ELEVATION)*Math.SQRT1_2, Math.cos(R
 const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math.sin(RANCH_ELEVATION), Math.cos(RANCH_ELEVATION)*Math.SQRT1_2);
 const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
 
-const WATER_FIELDS = new Set(['field_cm04_01', 'field_cm05_01', 'field_cm10_01', 'field_cm09_01', 'field_cm19_01', 'field_cm39_01']);
-const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm03_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01', 'field_cm32_01']);
-const ICE_FIELDS = new Set(['field_cm06_01', 'field_cm16_01', 'field_cm21_01']);
-const INDUSTRIAL_FIELDS = new Set(['field_cm17_01', 'field_cm20_01', 'field_cm25_01', 'field_cm15_01', 'field_cm22_01']);
+const WATER_FIELDS = new Set(['field_cm39_01']);
+const FOREST_FIELDS = new Set(['field_cm01_01', 'field_cm14_01', 'field_cm08_01', 'field_cm11_01', 'field_cm12_01', 'field_cm18_01']);
+const ICE_FIELDS = new Set(['field_cm21_01']);
+const INDUSTRIAL_FIELDS = new Set();
 
 /** Bounded rendering adapter, driven only by the existing Pixi scene ticker.
  * The native simulation, pointer targets, camera pan/zoom and save stay owned
@@ -73,6 +74,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const groundShadows=createRanchGroundShadows(scene);
   const modelBitmaps=new Set();
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
+  const authoredDepthMaterials=new Set();
+  let cm07Ambient=null;
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
   let sceneClock=0;
   const textureCap=currentQualityTier()==='saver'?512:currentQualityTier()==='high'?2048:1024;
@@ -213,7 +216,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
           if(o.isMesh&&o.material){
             for(const m of [].concat(o.material)){
               // Volcano (field_cm07_01): Internal fluid lava churning & heat pulsing
-              if(p.fieldId==='field_cm07_01'||m.name?.includes('cm07')||m.name?.includes('terrain-pbr')){
+              if(p.fieldId!=='field_cm07_01'&&(m.name?.includes('cm07')||m.name?.includes('terrain-pbr'))){
                 lavaMaterials.add(m);
                 if(!m.userData.lavaHooked){
                   m.userData.lavaHooked=true;
@@ -270,8 +273,111 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                 }
               }
 
+              // CM19: preserve the atlas and support surface; only authored water
+              // vertices receive ripples. Positive phase on Y travels downward.
+              if(p.fieldId==='field_cm19_01'&&o.geometry.getAttribute('_water_mask')){
+                dynamicShaders.add(m);
+                if(!m.userData.springWaterHooked){
+                  m.userData.springWaterHooked=true;
+                  m.onBeforeCompile=shader=>{
+                    shader.uniforms.uWaterTime={value:0};m.userData.shader=shader;
+                    shader.vertexShader='attribute float _water_mask;\nvarying float vSpringWater;\nvarying vec3 vSpringPosition;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvSpringWater=_water_mask;vSpringPosition=position;');
+                    shader.fragmentShader='uniform float uWaterTime;\nvarying float vSpringWater;\nvarying vec3 vSpringPosition;\n'+shader.fragmentShader;
+                    shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+                      if(vSpringWater>0.5){
+                        float ripple=sin(vSpringPosition.x*16.0+uWaterTime*0.7)*cos(vSpringPosition.z*13.0-uWaterTime*0.45);
+                        float glint=pow(max(0.0,ripple),8.0)*0.07;
+                        if(vSpringWater>1.5&&vSpringWater<2.5)glint=0.035+0.035*sin(vSpringPosition.y*20.0+uWaterTime*2.0);
+                        if(vSpringWater>2.5)glint=0.03+0.02*sin(uWaterTime*2.4+vSpringPosition.x*8.0);
+                        diffuseColor.rgb+=vec3(0.35,0.65,0.7)*glint;
+                      }`);
+                  };
+                  m.customProgramCacheKey=()=> 'cm19-authored-water-r1';m.needsUpdate=true;
+                }
+              }
+
+              // Existing instrument displays / culture tanks only. A zero mask
+              // keeps floors and rigid equipment completely outside this effect.
+              if(['field_cm05_01','field_cm06_01','field_cm13_01','field_cm15_01','field_cm17_01','field_cm22_01','field_cm23_01','field_cm24_01','field_cm27_01'].includes(p.fieldId)&&o.geometry.getAttribute('_ambient_mask')){
+                dynamicShaders.add(m);
+                if(!m.userData.instrumentAmbientHooked){
+                  m.userData.instrumentAmbientHooked=true;
+                  m.onBeforeCompile=shader=>{
+                    shader.uniforms.uAmbientTime={value:0};m.userData.shader=shader;
+                    shader.vertexShader='uniform float uAmbientTime;\nattribute float _ambient_mask;\nvarying float vAmbientMask;\nvarying vec3 vAmbientPosition;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+                      vAmbientMask=_ambient_mask;vAmbientPosition=position;
+                      if(_ambient_mask>2.5&&_ambient_mask<3.5)transformed.y+=sin(uAmbientTime*0.75+position.y*2.0)*0.055;`);
+                    shader.fragmentShader='uniform float uAmbientTime;\nvarying float vAmbientMask;\nvarying vec3 vAmbientPosition;\n'+shader.fragmentShader;
+                    shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
+                      if(vAmbientMask>0.5&&vAmbientMask<1.5){
+                        float idle=0.05+0.035*sin(uAmbientTime*0.9+vAmbientPosition.x*0.6);
+                        totalEmissiveRadiance+=diffuseColor.rgb*idle;
+                      }else if(vAmbientMask>1.5&&vAmbientMask<2.5){
+                        totalEmissiveRadiance+=diffuseColor.rgb*(0.025+0.012*sin(uAmbientTime*0.6+vAmbientPosition.y*2.0));
+                      }else if(vAmbientMask>4.5){
+                        float arc=0.12+0.06*sin(uAmbientTime*4.0+vAmbientPosition.y*2.0);
+                        totalEmissiveRadiance+=diffuseColor.rgb*arc;
+                      }else if(vAmbientMask>3.5){
+                        float flame=0.65+0.08*sin(uAmbientTime*3.4+vAmbientPosition.x)+0.04*sin(uAmbientTime*6.1);
+                        totalEmissiveRadiance+=diffuseColor.rgb*flame;
+                      }`);
+                  };
+                  m.customProgramCacheKey=()=> 'authored-instrument-ambient-r3';m.needsUpdate=true;
+                }
+              }
+
+              // Authored plant weights keep merged scenery rigid outside vegetation.
+              if(['field_cm02_01','field_cm08_01','field_cm09_01','field_cm10_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm16_01','field_cm18_01','field_cm25_01','field_cm26_01','field_cm30_01','field_cm31_01','field_cm32_01'].includes(p.fieldId)&&o.geometry.getAttribute('_wind_weight')){
+                dynamicShaders.add(m);
+                if(!m.userData.rootedWindHooked){
+                  m.userData.rootedWindHooked=true;
+                  m.userData.rootedWindTime={value:0};
+                  m.onBeforeCompile=shader=>{
+                    shader.uniforms.uWindTime=m.userData.rootedWindTime;m.userData.shader=shader;
+                    shader.vertexShader='uniform float uWindTime;\nattribute float _wind_weight;\n'+shader.vertexShader;
+                    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+                      float flex=clamp(_wind_weight,0.0,1.0)*0.018;
+                      transformed.x+=sin(uWindTime*1.5+position.x*0.8+position.z*0.4)*flex;
+                      transformed.z+=cos(uWindTime*1.1+position.z*0.7)*flex*0.6;`);
+                    if(['field_cm09_01','field_cm25_01','field_cm26_01'].includes(p.fieldId)){
+                      shader.vertexShader='attribute float _coast_water;\nvarying float vCoastWater;\nvarying vec3 vCoastPosition;\n'+shader.vertexShader;
+                      shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvCoastWater=_coast_water;vCoastPosition=position;');
+                      shader.fragmentShader='uniform float uWindTime;\nvarying float vCoastWater;\nvarying vec3 vCoastPosition;\n'+shader.fragmentShader;
+                      shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+                        if(vCoastWater>0.5&&diffuseColor.b>diffuseColor.r*1.2){
+                          float wave=sin(vCoastPosition.x*12.0+vCoastPosition.z*8.0+sin(vCoastPosition.z*3.0)-uWindTime*1.1);
+                          float crossWave=sin(vCoastPosition.x*4.0-vCoastPosition.z*6.0-uWindTime*0.7);
+                          float glint=pow(max(0.0,wave),9.0)*(0.5+0.5*crossWave);
+                          diffuseColor.rgb+=vec3(0.015,0.025,0.03)*glint;
+                          roughnessFactor=clamp(roughnessFactor+wave*0.025,0.25,1.0);
+                        }`);
+                    }
+                  };
+                  m.customProgramCacheKey=()=>['field_cm09_01','field_cm25_01','field_cm26_01'].includes(p.fieldId)?'authored-rooted-water-r1':'cm02-rooted-canopy-r1';m.needsUpdate=true;
+                }
+                // Thin coplanar ground sheets receive prop shadows but do not
+                // cast shadows onto one another. Preserve the actual geometry.
+                const depth=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking});
+                depth.onBeforeCompile=shader=>{
+                  shader.uniforms.uWindTime=m.userData.rootedWindTime;
+                  shader.vertexShader='uniform float uWindTime;\nattribute float _wind_weight;\nvarying float vAuthoredHeight;\n'+shader.vertexShader;
+                  shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+                    vAuthoredHeight=position.y;
+                    float flex=clamp(_wind_weight,0.0,1.0)*0.018;
+                    transformed.x+=sin(uWindTime*1.5+position.x*0.8+position.z*0.4)*flex;
+                    transformed.z+=cos(uWindTime*1.1+position.z*0.7)*flex*0.6;`);
+                  shader.fragmentShader='varying float vAuthoredHeight;\n'+shader.fragmentShader;
+                  shader.fragmentShader=shader.fragmentShader.replace('void main() {','void main() {\nif(vAuthoredHeight<0.05)discard;');
+                };
+                depth.customProgramCacheKey=()=> 'cm02-authored-prop-depth-r1';
+                o.customDepthMaterial=depth;authoredDepthMaterials.add(depth);
+              }
+
               // Forest / Grassland Wind Sway (CM01, CM03, CM14)
-              if(FOREST_FIELDS.has(p.fieldId)){
+              if(FOREST_FIELDS.has(p.fieldId)&&!['field_cm08_01','field_cm11_01','field_cm12_01','field_cm14_01','field_cm18_01'].includes(p.fieldId)&&(p.fieldId!=='field_cm01_01'
+                ||o.name==='field_cm01_01-canopy'||o.name==='field_cm01_01-grass')){
                 dynamicShaders.add(m);
                 if(!m.userData.windHooked){
                   m.userData.windHooked=true;
@@ -282,9 +388,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
                     shader.vertexShader=shader.vertexShader.replace(
                       '#include <begin_vertex>',
                       `#include <begin_vertex>
-                      float windElev=max(0.0,position.y-0.35);
+                      float windElev=max(0.0,position.y-${p.fieldId==='field_cm01_01'?(o.name==='field_cm01_01-canopy'?'1.2':'0.0'):'0.35'});
                       if(windElev>0.0){
-                        float flex=windElev*windElev*0.022;
+                        float flex=${p.fieldId==='field_cm01_01'?'min(0.018,windElev*windElev*0.018)':'windElev*windElev*0.022'};
                         float sway=sin(uWindTime*2.2+position.x*0.7+position.z*0.7);
                         float cross=cos(uWindTime*1.6+position.z*0.9);
                         transformed.x+=(sway*0.6+cross*0.4)*flex;
@@ -325,13 +431,39 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
               }
             }
           }
-          if(o.name&&o.name.startsWith('volcano-smoke')){
+          if(p.fieldId!=='field_cm07_01'&&o.name&&o.name.startsWith('volcano-smoke')){
             smokeNodes.push({node:o,baseY:o.position.y,offset:smokeNodes.length*1.8});
           }
         });
 
         // Dynamic Suite: Particles and Machinery
         if(currentQualityTier()!=='saver'){
+          if(p.fieldId==='field_cm23_01'){
+            const outlets=[[7.4784,2.484,-0.2998],[13.517,0.06,1.8498]];
+            const ps=createParticleSystem({count:4,color:0xc6ccc4,size:0.40,opacity:0.16,
+              initParticle:i=>({x:outlets[i%2][0],y:outlets[i%2][1],z:outlets[i%2][2]}),
+              updateParticle:(pt,dt,t,i)=>{const a=outlets[i%2],phase=(t*0.22+i*0.37)%1;pt.x=a[0]-phase*0.32;pt.z=a[2]+phase*0.32;pt.y=a[1]+phase*0.24;}
+            });
+            ps.mat.blending=THREE.NormalBlending;
+            ps.mat.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+              float radius=length(gl_PointCoord-vec2(0.5))*2.0;
+              diffuseColor.a*=1.0-smoothstep(0.1,1.0,radius);`);};
+            ps.mat.customProgramCacheKey=()=> 'cm23-soft-vent-r1';
+            object.add(ps.points);dynamicParticles.push(ps);
+          }
+          if(p.fieldId==='field_cm19_01'){
+            const vents=[[9.2,-2.47],[13.03,-4.96],[15.55,-8.38]];
+            const ps=createParticleSystem({count:6,color:0xcbd9d3,size:0.62,opacity:0.12,
+              initParticle:i=>({x:vents[i%3][0],y:0.12+(i%2)*0.28,z:vents[i%3][1]}),
+              updateParticle:(pt,dt,t,i)=>{const v=vents[i%3],phase=(t*0.16+i*0.37)%1;pt.x=v[0]+Math.sin(t*0.35+i)*0.12;pt.z=v[1]+Math.cos(t*0.3+i)*0.08;pt.y=0.10+phase*0.65;}
+            });
+            ps.mat.blending=THREE.NormalBlending;
+            ps.mat.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+              float radius=length(gl_PointCoord-vec2(0.5))*2.0;
+              diffuseColor.a*=1.0-smoothstep(0.15,1.0,radius);`);};
+            ps.mat.customProgramCacheKey=()=> 'cm19-soft-mist-r1';
+            object.add(ps.points);dynamicParticles.push(ps);
+          }
           if(WATER_FIELDS.has(p.fieldId)){
             const ps=createParticleSystem({
               count:24,color:0xc0e8ff,size:0.14,opacity:0.75,
@@ -421,7 +553,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         instances.push({object,p,shift,mixer,supportMesh,supportTriangles:verifiedSupport.get(p.fieldId),contactSheets:supportFields.get(p.fieldId)?.supportSheets??null});
       }
     }
-    supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:field.wrapWidthPx/field.nativePixelWorldScale});
+      cm07Ambient=createCm07Ambient(instances.filter(i=>i.p.fieldId==='field_cm07_01').map(i=>i.object));
+      supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:field.wrapWidthPx/field.nativePixelWorldScale});
     // Owner direction: navigation connections are invisible; original bridges and floors remain model geometry.
     signal?.throwIfAborted();
     Object.assign(pixi.style,{position:'relative',zIndex:'1'});pixi.parentElement.insertBefore(canvas,pixi);
@@ -673,6 +806,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     const deltaSec=Math.min(50,Math.max(0,deltaMS))/1000;
     sceneClock+=deltaSec;
+    cm07Ambient?.update({elapsedSeconds:sceneClock,visible:!covered,reducedMotion:prefersReducedMotion()});
     if(!prefersReducedMotion()){
       for(const m of lavaMaterials){
         if(m.userData.shader)m.userData.shader.uniforms.uLavaTime.value=sceneClock;
@@ -683,6 +817,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
           if(m.userData.shader.uniforms.uWaterTime)m.userData.shader.uniforms.uWaterTime.value=sceneClock;
           if(m.userData.shader.uniforms.uWindTime)m.userData.shader.uniforms.uWindTime.value=sceneClock;
           if(m.userData.shader.uniforms.uIceTime)m.userData.shader.uniforms.uIceTime.value=sceneClock;
+          if(m.userData.shader.uniforms.uAmbientTime)m.userData.shader.uniforms.uAmbientTime.value=sceneClock;
         }
       }
       for(const ps of dynamicParticles)ps.update(deltaSec,sceneClock);
@@ -722,7 +857,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   }
   function dispose(){
     if(disposed)return;disposed=true;groundShadows.dispose();supportOwnerResolver?.dispose();supportOwnerResolver=null;
+    cm07Ambient?.dispose();cm07Ambient=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
+    for(const material of authoredDepthMaterials)material.dispose();authoredDepthMaterials.clear();
     for(const ps of dynamicParticles)ps.dispose();dynamicParticles.length=0;
     for(const g of dynamicMachines){g.geometry.dispose();g.material.dispose();}dynamicMachines.length=0;
     for(const b of dynamicBeacons){b.geometry.dispose();b.material.dispose();}dynamicBeacons.length=0;

@@ -227,9 +227,10 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen,
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
     describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text}) : null;
-  // A failed FX capability probe has no camera: retain contain-fit fallback.
+  // A failed FX probe starts from contain-fit art coordinates; the final
+  // unconditional map clamp below still cover-fits even without a director.
   responsiveLayout = responsiveLayout && Boolean(fxLayer);
-  const director = fxLayer ? createBattleFxCamera({reducedMotion, responsiveLayout, boundedMap:true}) : null;
+  const director = fxLayer ? createBattleFxCamera({reducedMotion, responsiveLayout, boundedMap:true, wideCover:true}) : null;
   const tracker = fxLayer ? createBattleFxEventTracker() : null;
   // One authored map only. The camera covers the viewport and stays within
   // the real arena throughout tracking, zoom and shake; no duplicated terrain.

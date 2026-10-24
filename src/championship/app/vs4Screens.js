@@ -370,6 +370,78 @@ export function createShopView({ root, source }) {
   });
 }
 
+// View-local touch recognition. Native scroll/selection owns ambiguous gestures.
+// Touch Events allow selective cancellation without disabling pan/pinch on the
+// whole pane. Mouse, pen and keyboard keep their existing behavior.
+function bindDatabaseDetailSwipe(detail, {isActive, onSwipe}) {
+  const doc = detail.ownerDocument;
+  const scope = doc.addEventListener ? doc : doc.documentElement;
+  let gesture = null;
+  const reset = () => { gesture = null; };
+  const selectedText = () => Boolean(doc.getSelection?.()?.toString());
+  const excluded = target => {
+    const node = target?.nodeType === 1 ? target : target?.parentElement;
+    // Ordinary portraits are swipe surfaces. Interactive ancestors and explicit
+    // drag targets keep priority; a native dragstart also cancels the gesture.
+    return !node || Boolean(node.closest('button, a, input, select, textarea, label, video, audio, summary, [contenteditable], [draggable="true"], [role="button"], [role="link"], [role="slider"], [data-no-dex-swipe]'));
+  };
+  const start = event => {
+    reset();
+    if (!isActive() || event.defaultPrevented || event.touches.length !== 1 || selectedText() || excluded(event.target)) return;
+    const touch = event.touches[0], width = globalThis.innerWidth;
+    // Leave both physical viewport edges to browser/OS navigation.
+    if (!Number.isFinite(width) || touch.clientX <= 24 || touch.clientX >= width - 24) return;
+    gesture = {id:touch.identifier, x:touch.clientX, y:touch.clientY, time:event.timeStamp, scroll:detail.scrollTop, direction:0};
+  };
+  const valid = event => gesture && isActive() && !event.defaultPrevented && !selectedText()
+    && detail.scrollTop === gesture.scroll && event.timeStamp - gesture.time <= 700;
+  const track = touch => {
+    if (touch.identifier !== gesture.id) { reset(); return null; }
+    const dx = touch.clientX - gesture.x, dy = touch.clientY - gesture.y;
+    if (!Number.isFinite(dx) || !Number.isFinite(dy)) { reset(); return null; }
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 12 && !gesture.direction) return null;
+    // Once vertical/diagonal intent wins, it cannot turn into a swipe later.
+    if (Math.abs(dx) < Math.abs(dy) * 2 || Math.abs(dy) > 24
+      || (gesture.direction && Math.sign(dx) !== gesture.direction)) { reset(); return null; }
+    gesture.direction = Math.sign(dx);
+    return dx;
+  };
+  const move = event => {
+    if (!valid(event) || event.touches.length !== 1) { reset(); return; }
+    const dx = track(event.touches[0]);
+    if (dx === null) return;
+    // A browser-owned (uncancelable) scroll must never become navigation.
+    if (!event.cancelable) { reset(); return; }
+    event.preventDefault();
+  };
+  const end = event => {
+    if (!valid(event) || event.touches.length !== 0 || event.changedTouches.length !== 1 || !gesture.direction) { reset(); return; }
+    const dx = track(event.changedTouches[0]);
+    reset(); // Clear before synchronous paint or another touch can run.
+    if (dx !== null && Math.abs(dx) >= 56) onSwipe(dx < 0 ? 1 : -1);
+  };
+  const additionalTouch = event => { if (event.touches.length !== 1) reset(); };
+  const selection = () => { if (selectedText()) reset(); };
+  const bindings = [
+    [detail, 'touchstart', start, {passive:true}],
+    [detail, 'touchmove', move, {passive:false}],
+    [detail, 'touchend', end, {passive:true}],
+    [detail, 'scroll', reset, {passive:true}],
+    [detail, 'dragstart', reset, true],
+    [detail, 'contextmenu', reset, true],
+    [scope, 'touchstart', additionalTouch, {passive:true, capture:true}],
+    [scope, 'touchcancel', reset, {passive:true, capture:true}],
+    [scope, 'pointercancel', reset, {passive:true, capture:true}],
+    [scope, 'selectionchange', selection, false]
+  ];
+  for (const [target, type, listener, options] of bindings) target.addEventListener(type, listener, options);
+  return {reset, dispose() {
+    reset();
+    for (const [target, type, listener, options] of bindings) target.removeEventListener(type, listener, options);
+  }};
+}
+
+
 export function createDatabaseView({ root, source, isWideLayout = () => isDesktopBrowseLayout({width:globalThis.innerWidth,height:globalThis.innerHeight,activeScreen:'DATABASE'}) }) {
   const frame = source.getFrame();
   const block = frame.database;
@@ -464,6 +536,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     else source.intents.leaveScreen();
   });
   stageFilter.addEventListener('change', () => {
+    detailSwipe.reset();
     activeStage = stageFilter.value === '' ? null : stageFilter.value === 'ART' ? 'ART' : Number(stageFilter.value);
     listScroll = null;
     lastOpened = null;
@@ -477,6 +550,31 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     paint(source.getFrame());
   });
   const stopBackKeys = bindBrowseBack(root, back);
+  function openRow(row, fromList = false) {
+    if (fromList) {
+      listScroll = list.scrollTop ?? 0;
+      lastOpened = row.speciesIndex;
+    }
+    selectedEgg = row.kind === 'EGG' ? row : null;
+    source.intents.selectDatabaseSpecies(row.kind === 'EGG' ? null : row.speciesIndex);
+    paint(source.getFrame());
+  }
+  const detailSwipe = bindDatabaseDetailSwipe(detail, {
+    isActive: () => alive && !detail.hidden && Boolean(selectedEgg ?? source.getFrame().database?.selected),
+    onSwipe(direction) {
+      const book = source.getFrame().database;
+      if (!book) return;
+      const selected = selectedEgg ?? book.selected;
+      const rows = databaseDisplayRows(book, activeStage);
+      const index = rows.findIndex(row => row.speciesIndex === selected?.speciesIndex);
+      const next = index < 0 ? null : rows[index + direction];
+      if (!next) return;
+      // Same rows and selection intent as clicks, including locked placeholders.
+      // Preserve the original list anchor while browsing successive details.
+      openRow(next);
+      detail.querySelector('h2')?.focus({preventScroll:true});
+    }
+  });
 
   function paint(nextFrame) {
     if (!alive) return;
@@ -495,12 +593,14 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       back.setAttribute("aria-label", uiText("Return to database list"));
       const detailKey = JSON.stringify([document.documentElement.lang, selected]);
       if (detailKey !== paintedDetail) {
+        detailSwipe.reset();
         paintDetail(selected, book);
         detail.scrollTop = 0;
         paintedDetail = detailKey;
       }
       if (list.hidden && focusWasInList) detail.querySelector('h2')?.focus({preventScroll:true});
     } else {
+      detailSwipe.reset();
       if (paintedDetail !== null) releasePortraits();
       clearConditionState();
       detail.replaceChildren();
@@ -533,12 +633,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
           image.src=thumbnail.src;item.classList.add('cm-vs2-database__row--thumb');item.append(image);
         }
         item.append(name);
-        item.addEventListener("click", () => {
-          listScroll = list.scrollTop ?? 0;
-          lastOpened = row.speciesIndex;
-          selectedEgg = row.kind === 'EGG' ? row : null;
-          source.intents.selectDatabaseSpecies(row.kind === 'EGG' ? null : row.speciesIndex);
-        });
+        item.addEventListener("click", () => openRow(row, true));
         list.append(item);
       }
     }
@@ -599,6 +694,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     if (hero) {
       const holder = element('div','cm-dex-hero');
       holder.dataset.art = 'loading';
+      holder.dataset.speciesId = hero.speciesId;
       const placeholder = element('span','cm-dex-hero__placeholder','DEX_IMAGE_MISSING');
       placeholder.hidden = true;
       const image = element('img','cm-dex-hero__image');
@@ -820,6 +916,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     relabel() { paint(source.getFrame()); },
     dispose() {
       alive = false;
+      detailSwipe.dispose();
       clearConditionState();
       releasePortraits();
       stopBackKeys();

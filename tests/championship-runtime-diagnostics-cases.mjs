@@ -124,3 +124,16 @@ test('download is an explicit JSON file with cleanup, and diagnostic UI keys wor
   try{for(const locale of ['zh-Hant','en','ja','th','vi']){setLocale(locale);for(const key of ['DIAGNOSTIC_DOWNLOAD','DIAGNOSTIC_HINT','DIAGNOSTIC_READY','DIAGNOSTIC_FAILED'])assert.notEqual(uiText(key),key);}}
   finally{setLocale('zh-Hant');h.journal.dispose();}
 });
+
+test('first-use GPU boundaries retain bounded counts without raw errors or a false GPU completion claim',()=>{
+ const h=fixture();
+ h.journal.record('LOAD',{area:'battle',stage:'gpu-warmup',phase:'start',gpuWarmupGroups:0});
+ h.journal.record('LOAD',{area:'battle',stage:'gpu-warmup',phase:'done',gpuWarmupGroups:81});
+ h.journal.record('LOAD',{area:'battle',stage:'first-vfx-render',phase:'start'});
+ h.journal.record('LOAD',{area:'battle',stage:'first-vfx-render',phase:'error',error:Error('PRIVATE_BROWSER_DETAIL')});
+ for(let i=0;i<50;i++)h.journal.record('LOAD',{area:'raising',stage:i%2?'engine':'partners'});
+ assert.ok(h.events().some(e=>e.stage==='gpu-warmup'&&e.phase==='done'&&e.gpuWarmupGroups===81));
+ assert.ok(h.events().some(e=>e.stage==='first-vfx-render'&&e.phase==='error'));
+ assert.doesNotMatch(h.journal.exportText(),/PRIVATE_BROWSER_DETAIL/);
+ h.journal.record('LOAD',{stage:'gpu-warmup',gpuWarmupGroups:83});assert.equal(h.events().at(-1).gpuWarmupGroups,undefined);h.journal.dispose();
+});

@@ -68,12 +68,14 @@
     "src/championship/app/phase1ProductCreatures.js",
     "src/championship/app/portraitFrame.js",
     "src/championship/app/qaUnlock.js",
+    "src/championship/app/raisingGroundSupport.js",
     "src/championship/app/raisingHomeP1RView.js",
     "src/championship/app/raisingPresentationSource.js",
     "src/championship/app/ranchDiscoveryJournal.js",
     "src/championship/app/ranchExpansionPreview.js",
     "src/championship/app/ranchRowPurchasePrompt.js",
     "src/championship/app/ranchTitlePreload.js",
+    "src/championship/app/residentAssetNotice.js",
     "src/championship/app/runtimeRecoveryDiagnostics.js",
     "src/championship/app/scheduleScreen.js",
     "src/championship/app/settings/preferenceEnvironment.js",
@@ -258,6 +260,7 @@
     "src/championship/presentation/characterAnimationTimeline.js",
     "src/championship/presentation/characterAtlasQueue.js",
     "src/championship/presentation/characterRosterCore.js",
+    "src/championship/presentation/cm07Ambient.js",
     "src/championship/presentation/completedOriginalUi20261007.js",
     "src/championship/presentation/dataArena/dataArenaAudio.js",
     "src/championship/presentation/dataArena/dataArenaCamera.js",
@@ -278,6 +281,7 @@
     "src/championship/presentation/highlight/highlightTimeline.js",
     "src/championship/presentation/huntFeedbackArt.js",
     "src/championship/presentation/huntMobileReadouts.js",
+    "src/championship/presentation/intRh2/careImageTextureScope.js",
     "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
     "src/championship/presentation/intRh2/raisingContactShadow.js",
     "src/championship/presentation/intRh2/raisingFieldViewport.js",
@@ -317,8 +321,13 @@
     "src/championship/presentation/raisingExpansionPreview.js",
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
+    "src/championship/presentation/ranchBorderMembership.js",
     "src/championship/presentation/ranchCageArtSelection.js",
+    "src/championship/presentation/ranchContactHeight.js",
+    "src/championship/presentation/ranchGroundShadows.js",
     "src/championship/presentation/ranchPassages.js",
+    "src/championship/presentation/ranchPhysicalSupport.js",
+    "src/championship/presentation/ranchSupportOwner.js",
     "src/championship/presentation/ranchThreeCoordinates.js",
     "src/championship/presentation/ranchThreeScene.js",
     "src/championship/presentation/runtimeMapArtBundle.js",
@@ -339,11 +348,28 @@
     "src/championship/presentation/vs2/huntFactoryShutters.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
     "src/championship/presentation/vs2/huntFoliageDither.js",
+    "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
+    "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
+    "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
+    "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
+    "src/championship/presentation/vs2/huntThree/dracoLifecycle.mjs",
+    "src/championship/presentation/vs2/huntThree/externalMapAssets.mjs",
+    "src/championship/presentation/vs2/huntThree/hm01SupportCorridors.mjs",
+    "src/championship/presentation/vs2/huntThree/hm02Projection.mjs",
+    "src/championship/presentation/vs2/huntThree/lifecycle.mjs",
+    "src/championship/presentation/vs2/huntThree/loadHuntThreeMap.mjs",
+    "src/championship/presentation/vs2/huntThree/manifestBindings.mjs",
+    "src/championship/presentation/vs2/huntThree/nativeActorAdapter.mjs",
+    "src/championship/presentation/vs2/huntThree/projection.mjs",
+    "src/championship/presentation/vs2/huntThree/sharedGLState.mjs",
+    "src/championship/presentation/vs2/huntThree/sharedPass.mjs",
+    "src/championship/presentation/vs2/huntThree/supportDepth.mjs",
     "src/championship/presentation/vs5/battleCubeArt.js",
     "src/championship/presentation/vs5/battleCubeTrackball.js",
     "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
     "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
     "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
+    "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
     "src/championship/r2/createChampionshipR2Session.js",
     "src/championship/raising/createRaisingHomeRuntime.js",
     "src/championship/raising/nativeGroundSpacing.js",
@@ -428,14 +454,6 @@
     "src/data/championship/battleNativeMathTables.js",
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/championship/presentation/intRh2/careImageTextureScope.js",
-    "src/championship/app/raisingGroundSupport.js",
-    "src/championship/presentation/ranchBorderMembership.js",
-    "src/championship/presentation/ranchContactHeight.js",
-    "src/championship/presentation/ranchPhysicalSupport.js",
-    "src/championship/presentation/ranchSupportOwner.js",
-    "src/championship/app/residentAssetNotice.js",
-    "src/championship/presentation/ranchGroundShadows.js",
     "src/championship/modes/dataArena/dataArenaRelay.js",
     "src/championship/modes/dataArena/dataArenaRelayMaps.js",
     "src/championship/modes/dataArena/dataArenaRelayRoster.js",
@@ -447,7 +465,6 @@
     "pixi.js": "./assets/production/public-runtime/vendor-pixi.mjs"
   },
   "files": [
-    "assets/production/PUBLIC_RUNTIME_INDEX.json",
     "assets/production/battle/bm01-polish-r2/base.webp",
     "assets/production/battle/bm01-polish-r2/boundary-glow.webp",
     "assets/production/battle/bm01-polish-r2/emissive.webp",
@@ -950,7 +967,9 @@
     "assets/production/cage/three-20261021/field_cm37_01.glb",
     "assets/production/cage/three-20261021/field_cm39_01.glb",
     "assets/production/cage/three-20261021/field_cm40_01.glb",
+    "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
     "assets/production/cage/three-20261021/manifest.json",
+    "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
     "assets/production/cage/three-20261021/walk-surfaces.json",
     "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/hud.render.json",
     "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/main-cell_000.webp",
@@ -7075,12 +7094,12 @@
     "assets/production/data-arena/interactions-v1/cargo-18-clean-ground-low.webp",
     "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-high.webp",
     "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-low.webp",
-    "assets/production/data-arena/interactions-v1/ice-high.webp",
-    "assets/production/data-arena/interactions-v1/ice-low.webp",
     "assets/production/data-arena/interactions-v1/ice_cracked-high.webp",
     "assets/production/data-arena/interactions-v1/ice_cracked-low.webp",
     "assets/production/data-arena/interactions-v1/ice_melt-high.webp",
     "assets/production/data-arena/interactions-v1/ice_melt-low.webp",
+    "assets/production/data-arena/interactions-v1/ice-high.webp",
+    "assets/production/data-arena/interactions-v1/ice-low.webp",
     "assets/production/data-arena/interactions-v1/timber-burnt-high.webp",
     "assets/production/data-arena/interactions-v1/timber-burnt-low.webp",
     "assets/production/data-arena/interactions-v1/timber-damaged-high.webp",
@@ -7205,6 +7224,34 @@
     "assets/production/database-closeout-20261019/species-241.thumbnail.8a6e03f01b3b489c.webp",
     "assets/production/database-closeout-20261019/species-242.display.41a4d9bd20c4f44d.webp",
     "assets/production/database-closeout-20261019/species-242.thumbnail.7000b1ea76955dbf.webp",
+    "assets/production/database-combined24-20261022/species-011.display.83dab3a7f5f48995.webp",
+    "assets/production/database-combined24-20261022/species-011.thumbnail.c319163974d19e66.webp",
+    "assets/production/database-combined24-20261022/species-012.display.29c75647913a06bf.webp",
+    "assets/production/database-combined24-20261022/species-012.thumbnail.3f1bcc04a9b3fcc6.webp",
+    "assets/production/database-combined24-20261022/species-013.display.a093f1036d4d52c9.webp",
+    "assets/production/database-combined24-20261022/species-013.thumbnail.17e559e14eff0ba8.webp",
+    "assets/production/database-combined24-20261022/species-014.display.c4c1003969ac44f5.webp",
+    "assets/production/database-combined24-20261022/species-014.thumbnail.eabaf84afbde1e07.webp",
+    "assets/production/database-combined24-20261022/species-016.display.7361ca26226112d6.webp",
+    "assets/production/database-combined24-20261022/species-016.thumbnail.9b926cd4e524f1f0.webp",
+    "assets/production/database-combined24-20261022/species-017.display.ef03bc5de47ac2c1.webp",
+    "assets/production/database-combined24-20261022/species-017.thumbnail.fe904b0f55ca6bb8.webp",
+    "assets/production/database-combined24-20261022/species-018.display.6fcc64ac3a67b8f3.webp",
+    "assets/production/database-combined24-20261022/species-018.thumbnail.fa3fd8de3e164aa2.webp",
+    "assets/production/database-combined24-20261022/species-019.display.db591d2cc7064e2f.webp",
+    "assets/production/database-combined24-20261022/species-019.thumbnail.de983e7fe28295b9.webp",
+    "assets/production/database-combined24-20261022/species-177.display.e62679f15b8e8517.webp",
+    "assets/production/database-combined24-20261022/species-177.thumbnail.a2e72e931e839d01.webp",
+    "assets/production/database-combined24-20261022/species-179.display.5d7fcfac09c75627.webp",
+    "assets/production/database-combined24-20261022/species-179.thumbnail.61758eeb398e8e0b.webp",
+    "assets/production/database-combined24-20261022/species-180.display.64fe53de043b403c.webp",
+    "assets/production/database-combined24-20261022/species-180.thumbnail.60c8414f0413b29f.webp",
+    "assets/production/database-combined24-20261022/species-184.display.59f8a3cd8c05a877.webp",
+    "assets/production/database-combined24-20261022/species-184.thumbnail.59cd77bb56a70364.webp",
+    "assets/production/database-combined24-20261022/species-186.display.c2e60f26bd1c287d.webp",
+    "assets/production/database-combined24-20261022/species-186.thumbnail.100796155ef3a197.webp",
+    "assets/production/database-combined24-20261022/species-188.display.1b89c673740d94df.webp",
+    "assets/production/database-combined24-20261022/species-188.thumbnail.e175a5a43c0f8add.webp",
     "assets/production/database-display-20261018/species-008.display.c7e821ac38dbdfe5.webp",
     "assets/production/database-display-20261018/species-008.thumbnail.3e10358f2b6a80dc.webp",
     "assets/production/database-display-20261018/species-009.display.c44505ca55df7bfc.webp",
@@ -7227,8 +7274,6 @@
     "assets/production/database-display-20261018/species-036.thumbnail.c5f924c4c49910bc.webp",
     "assets/production/database-display-20261018/species-037.display.02ea268543ebefda.webp",
     "assets/production/database-display-20261018/species-037.thumbnail.f90b8bc2d4e8039b.webp",
-    "assets/production/database-display-20261018/species-038.display.68b4a737285e00e4.webp",
-    "assets/production/database-display-20261018/species-038.thumbnail.b19de65a1a95f02a.webp",
     "assets/production/database-display-20261018/species-039.display.69bf45ae13181406.webp",
     "assets/production/database-display-20261018/species-039.thumbnail.9dcd90cbc3efbe49.webp",
     "assets/production/database-display-20261018/species-040.display.8e094df53a21ebf9.webp",
@@ -7247,16 +7292,10 @@
     "assets/production/database-display-20261018/species-046.thumbnail.c2c39ebf39b20d42.webp",
     "assets/production/database-display-20261018/species-047.display.f9de112bc8c27e1e.webp",
     "assets/production/database-display-20261018/species-047.thumbnail.158e189379f619dd.webp",
-    "assets/production/database-display-20261018/species-048.display.2f8f15b262d9478b.webp",
-    "assets/production/database-display-20261018/species-048.thumbnail.737d5f2b65a935dd.webp",
-    "assets/production/database-display-20261018/species-049.display.6b26a16d4d7d0bde.webp",
-    "assets/production/database-display-20261018/species-049.thumbnail.51cff0d18e19d8aa.webp",
     "assets/production/database-display-20261018/species-050.display.a561e591033f3e36.webp",
     "assets/production/database-display-20261018/species-050.thumbnail.9753b597b2432798.webp",
     "assets/production/database-display-20261018/species-051.display.82ea8172a32e6960.webp",
     "assets/production/database-display-20261018/species-051.thumbnail.0923b174a65557ec.webp",
-    "assets/production/database-display-20261018/species-052.display.372094cdfed88c25.webp",
-    "assets/production/database-display-20261018/species-052.thumbnail.b373582b37150ea3.webp",
     "assets/production/database-display-20261018/species-053.display.ca1665092133b656.webp",
     "assets/production/database-display-20261018/species-053.thumbnail.e7f7c0925584c94f.webp",
     "assets/production/database-display-20261018/species-054.display.4e351684b6f41e20.webp",
@@ -7463,6 +7502,26 @@
     "assets/production/database-display-gap-20261018/species-166.thumbnail.c39f5eeac737bb24.webp",
     "assets/production/database-display-gap-20261018/species-167.display.aeabfb279cc193d8.webp",
     "assets/production/database-display-gap-20261018/species-167.thumbnail.9eed3a826f844096.webp",
+    "assets/production/database-first10-20261022/species-020.display.5ef180e88ffc6323.webp",
+    "assets/production/database-first10-20261022/species-020.thumbnail.2a3d5e3fed18d7e6.webp",
+    "assets/production/database-first10-20261022/species-021.display.caf4dbcb06e57df0.webp",
+    "assets/production/database-first10-20261022/species-021.thumbnail.c58be9cc8cef3272.webp",
+    "assets/production/database-first10-20261022/species-022.display.067597b6716c69b1.webp",
+    "assets/production/database-first10-20261022/species-022.thumbnail.2f3e92fbd552fe35.webp",
+    "assets/production/database-first10-20261022/species-023.display.20caf7321c898096.webp",
+    "assets/production/database-first10-20261022/species-023.thumbnail.b69d170b3c5a2a21.webp",
+    "assets/production/database-first10-20261022/species-024.display.0e09b1e05edebddd.webp",
+    "assets/production/database-first10-20261022/species-024.thumbnail.8d77d87e06f21080.webp",
+    "assets/production/database-first10-20261022/species-025.display.3e8f466f9e4014d5.webp",
+    "assets/production/database-first10-20261022/species-025.thumbnail.7f3e024caa23e0a9.webp",
+    "assets/production/database-first10-20261022/species-026.display.ec2109a52294be0e.webp",
+    "assets/production/database-first10-20261022/species-026.thumbnail.6ddd286162a8cb38.webp",
+    "assets/production/database-first10-20261022/species-027.display.cc716b8480f2f0e9.webp",
+    "assets/production/database-first10-20261022/species-027.thumbnail.18165145e0e60ab4.webp",
+    "assets/production/database-first10-20261022/species-031.display.e9bfa934de54b2fa.webp",
+    "assets/production/database-first10-20261022/species-031.thumbnail.352c9a5ed964b78b.webp",
+    "assets/production/database-first10-20261022/species-032.display.625673a54275dc3f.webp",
+    "assets/production/database-first10-20261022/species-032.thumbnail.866d9788dad25bdd.webp",
     "assets/production/database-illustrations-20261018/species-231.display.af59af31bb743f84.webp",
     "assets/production/database-illustrations-20261018/species-231.thumbnail.7bf467318818f2c0.webp",
     "assets/production/database-illustrations-20261018/species-232.display.e21e59d73bb64d4a.webp",
@@ -7475,6 +7534,34 @@
     "assets/production/database-illustrations-20261018/species-235.thumbnail.ee40628ed6cb6bbc.webp",
     "assets/production/database-illustrations-20261018/species-236.display.c0ee654853c2d66e.webp",
     "assets/production/database-illustrations-20261018/species-236.thumbnail.bee4bdaf14a89612.webp",
+    "assets/production/database-next-portraits-20261022/species-038.display.ab63bfcc428a7a7d.webp",
+    "assets/production/database-next-portraits-20261022/species-038.thumbnail.d063ae58a38ff87b.webp",
+    "assets/production/database-next-portraits-20261022/species-048.display.ff326a954c212af1.webp",
+    "assets/production/database-next-portraits-20261022/species-048.thumbnail.8346e511c2ff9855.webp",
+    "assets/production/database-next-portraits-20261022/species-049.display.e38caed7b23c0f32.webp",
+    "assets/production/database-next-portraits-20261022/species-049.thumbnail.1af2fc20cb9301be.webp",
+    "assets/production/database-next-portraits-20261022/species-052.display.2a99c36fe93b41bb.webp",
+    "assets/production/database-next-portraits-20261022/species-052.thumbnail.7c3e4e6915e2d2bf.webp",
+    "assets/production/database-remaining16-20261022/aw10.display.33e34ada6d1970c0.webp",
+    "assets/production/database-remaining16-20261022/aw10.thumbnail.0336f4810a4ac770.webp",
+    "assets/production/database-remaining16-20261022/aw15.display.d67b4a3a84687536.webp",
+    "assets/production/database-remaining16-20261022/aw15.thumbnail.9a014a64fe580fad.webp",
+    "assets/production/database-remaining16-20261022/aw17.display.dfbf7a7f75b095c7.webp",
+    "assets/production/database-remaining16-20261022/aw17.thumbnail.7c337ba398eadfb2.webp",
+    "assets/production/database-remaining16-20261022/aw46.display.fcab2234524ce3af.webp",
+    "assets/production/database-remaining16-20261022/aw46.thumbnail.22bd8020a0caabf0.webp",
+    "assets/production/database-remaining16-20261022/aw47.display.3501b733d0765f3a.webp",
+    "assets/production/database-remaining16-20261022/aw47.thumbnail.e1f91c1480d02ad9.webp",
+    "assets/production/database-remaining16-20261022/aw48.display.6f1a77cf4edc7636.webp",
+    "assets/production/database-remaining16-20261022/aw48.thumbnail.41318322d254498e.webp",
+    "assets/production/database-remaining16-20261022/ma34.display.1e82c850458bccdf.webp",
+    "assets/production/database-remaining16-20261022/ma34.thumbnail.211ec848ec7e36d6.webp",
+    "assets/production/database-remaining16-20261022/ma50.display.a67ced1b020daa39.webp",
+    "assets/production/database-remaining16-20261022/ma50.thumbnail.7d79e7aa795084c8.webp",
+    "assets/production/database-remaining16-20261022/ul03.display.1b1438148ddb8b10.webp",
+    "assets/production/database-remaining16-20261022/ul03.thumbnail.b463d286c1647f32.webp",
+    "assets/production/database-remaining16-20261022/ul20.display.0ef05d8e8e38f552.webp",
+    "assets/production/database-remaining16-20261022/ul20.thumbnail.1d631927c0002111.webp",
     "assets/production/database-repair-20261019/species-103.display.848a425e3ea2786e.webp",
     "assets/production/database-repair-20261019/species-103.thumbnail.2de2570dac4d5bf8.webp",
     "assets/production/database-repair-20261019/species-105.display.8695b2423cd0f27f.webp",
@@ -7553,99 +7640,70 @@
     "assets/production/database-repair-20261019/species-204.thumbnail.44723dd46a07d6dd.webp",
     "assets/production/database-repair-20261019/species-205.display.f9fa859c8ae9adba.webp",
     "assets/production/database-repair-20261019/species-205.thumbnail.d68a259cf4bd453b.webp",
+    "assets/production/database-second10-20261022/species-030.display.52b9940dee31e64e.webp",
+    "assets/production/database-second10-20261022/species-030.thumbnail.3f91917406bc5bee.webp",
+    "assets/production/database-second10-20261022/species-074.display.0409f469846b3e78.webp",
+    "assets/production/database-second10-20261022/species-074.thumbnail.44762c6577c0939b.webp",
+    "assets/production/database-second10-20261022/species-080.display.ba3ebc3506ffabf1.webp",
+    "assets/production/database-second10-20261022/species-080.thumbnail.d1144d84a1273c16.webp",
+    "assets/production/database-second10-20261022/species-082.display.88e0cc7da3da641b.webp",
+    "assets/production/database-second10-20261022/species-082.thumbnail.b9620a9389f754e1.webp",
+    "assets/production/database-second10-20261022/species-085.display.9c38ad0a143b740a.webp",
+    "assets/production/database-second10-20261022/species-085.thumbnail.ade4e58a4eb1c6c8.webp",
+    "assets/production/database-second10-20261022/species-086.display.3ca46cc6ec68111d.webp",
+    "assets/production/database-second10-20261022/species-086.thumbnail.32b65b3a0faec069.webp",
+    "assets/production/database-second10-20261022/species-087.display.3f18f5b3830cf103.webp",
+    "assets/production/database-second10-20261022/species-087.thumbnail.fea962df6b8d108a.webp",
+    "assets/production/database-second10-20261022/species-088.display.4a4c51aadc0ebe47.webp",
+    "assets/production/database-second10-20261022/species-088.thumbnail.b3dfdf67878868c1.webp",
+    "assets/production/database-second10-20261022/species-094.display.03239efb7b3d25e3.webp",
+    "assets/production/database-second10-20261022/species-094.thumbnail.7c53e348532f9f28.webp",
+    "assets/production/database-second10-20261022/species-095.display.3639b5847d5ed1ce.webp",
+    "assets/production/database-second10-20261022/species-095.thumbnail.31dde55aba84d7ef.webp",
     "assets/production/evolution-glyphs-v1/CP-G01-link-128.png",
     "assets/production/evolution-glyphs-v1/CP-G02-memory-128.png",
     "assets/production/evolution-glyphs-v1/CP-G03-growth-128.png",
     "assets/production/evolution-glyphs-v1/CP-G04-evolution-128.png",
     "assets/production/hunt/accepted-20261010/images/000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c.webp",
-    "assets/production/hunt/accepted-20261010/images/05ec83343388ae48934531610be8109da609fdf237aa5f6820ac8582a33fc94f.webp",
-    "assets/production/hunt/accepted-20261010/images/0c11f1e05326d1e31d24f0dea684b892f174af539aba08858d092beabfa77a53.webp",
-    "assets/production/hunt/accepted-20261010/images/0fbd38dbf56d7a905d6afec9a3c50e2007e30b30cc627345007984c58770aa26.webp",
-    "assets/production/hunt/accepted-20261010/images/110e052c482b5488c332ab676f7fd2513b2f21452c2ecb87823dfc83b0f2d27c.webp",
     "assets/production/hunt/accepted-20261010/images/182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093.webp",
     "assets/production/hunt/accepted-20261010/images/1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263.webp",
-    "assets/production/hunt/accepted-20261010/images/18ed11e7cdf09ad15dd7e62206bb8eac42c875a5980410d28cacef3edeb6bd1a.webp",
-    "assets/production/hunt/accepted-20261010/images/19767cac7dd8f6d4e920315fcef47ea8144b69f8e5ee5f172f0996490bc35064.webp",
-    "assets/production/hunt/accepted-20261010/images/19e0b2eadfb60d606954834bec79df46893f32d1ef376aba96b1ac834f4b150a.webp",
     "assets/production/hunt/accepted-20261010/images/1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf.webp",
-    "assets/production/hunt/accepted-20261010/images/1f667c58cd859daa60400f6c54c84a20793ee8b56ba71bbf57b2633ff9f2165c.webp",
-    "assets/production/hunt/accepted-20261010/images/200cd88ffbd2f55630fe574c74f1e9bea216722fdb0b0bdef461ce78ba496fba.webp",
-    "assets/production/hunt/accepted-20261010/images/24efca4dfe32dee9f4dd08d5e8b8dbb8593eb7a56a8e49a01dcc22505a583ec5.webp",
     "assets/production/hunt/accepted-20261010/images/294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7.webp",
-    "assets/production/hunt/accepted-20261010/images/32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4.webp",
-    "assets/production/hunt/accepted-20261010/images/347d11467f2be954fe4b6949e28f69a43901b7230d11c2fc79d5f3bdc87100b3.webp",
-    "assets/production/hunt/accepted-20261010/images/3659e8f4961d9f7a14e398c2f5abdb7293bd52cd651810d88133c4f10b6969e6.webp",
-    "assets/production/hunt/accepted-20261010/images/36c910a8d17222d9df4f3faff9a2806fe4c97cf44ad9769075e7f777b4b38995.webp",
-    "assets/production/hunt/accepted-20261010/images/3aa60f86c9b04af7995eceabd310d6ecf722a8a531da5b13f24108d27b9ed56e.webp",
     "assets/production/hunt/accepted-20261010/images/3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef.webp",
-    "assets/production/hunt/accepted-20261010/images/49e5ce653a8695102af9cf3900496c26e65cf75e35da2842212f8630ad8446dc.webp",
-    "assets/production/hunt/accepted-20261010/images/4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69.webp",
     "assets/production/hunt/accepted-20261010/images/513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f.webp",
-    "assets/production/hunt/accepted-20261010/images/513f8f8a25b8cb0278483487d239f67336487e8a7eec7e9c432a06d5d00314a4.webp",
-    "assets/production/hunt/accepted-20261010/images/53c770a6c42bc9dab45c1225cb54d396b240a18272a7f63c36a6dc7b016896a6.webp",
-    "assets/production/hunt/accepted-20261010/images/543856b4323ffb7c802a17415a819e8fa9cf17b45c17d07d810c4520ea876db0.webp",
-    "assets/production/hunt/accepted-20261010/images/59ee4ed53d469ec138056dc38c17987a86e5dcff384efd90f083979efb87307f.webp",
-    "assets/production/hunt/accepted-20261010/images/5d2adf1d767d91ad608e1c01424a587ecfa0da9f05c8e7ea936a105c95d5d35b.webp",
-    "assets/production/hunt/accepted-20261010/images/617556ccf0bedf68e0a9bb2c4e3ac571f1404c82ea2c60f3fc84af08b2266df6.webp",
-    "assets/production/hunt/accepted-20261010/images/61ea69a1c5b1823dc54c21cc0e909a8e3f06154285cda185f9dad555977a6a75.webp",
     "assets/production/hunt/accepted-20261010/images/63212fbf55baeb3be4f94d103a20da279ca7b19eb8423e4a748609fdb3f726e3.webp",
     "assets/production/hunt/accepted-20261010/images/65826785834c9aedf81ff9bcf053e79e7c6ca4f495ad0ebb98e247b029e70827.webp",
-    "assets/production/hunt/accepted-20261010/images/6ae77617274797bcb7569bdf5b647dd167fdfc72e6f9e2563e295263061d3ee8.webp",
-    "assets/production/hunt/accepted-20261010/images/701bdced29a1c30bd41d1494a1e03c3929532f08f3028b731b033abc72f815ce.webp",
-    "assets/production/hunt/accepted-20261010/images/755ab37ebcd78c9d445522b882adddce7aeb82b5b29b6b4fd6f7506d20b491cf.webp",
     "assets/production/hunt/accepted-20261010/images/77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253.webp",
     "assets/production/hunt/accepted-20261010/images/79e65d73137fe9cf6a265b3203cfe4e708d9066618fc273b43f65a5616d02fcb.webp",
     "assets/production/hunt/accepted-20261010/images/818232e99c196b4626bb9b8e02c17201cc55f38c1c979cfad0c2788f900429d5.webp",
-    "assets/production/hunt/accepted-20261010/images/89a0d4f88d8386b638ac737c08500451167852c82cacb4bae6f76f99666ed66f.webp",
     "assets/production/hunt/accepted-20261010/images/8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d.webp",
-    "assets/production/hunt/accepted-20261010/images/8c8306f52bd570296e0ab8ef2bef9a2c503d321b39ecb973f60723383f78734c.webp",
-    "assets/production/hunt/accepted-20261010/images/94a65da0ae81a2f3fe58aeff4f5a0e452a4d7c43ac92749de870f1d20f5ea88d.webp",
     "assets/production/hunt/accepted-20261010/images/965154abada1869a418deef9830d32699dd4ff351bb3f012c5906b133cebcc8d.webp",
     "assets/production/hunt/accepted-20261010/images/9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654.webp",
-    "assets/production/hunt/accepted-20261010/images/9dc99fee686f1bbd72297cffa5d40e0199baed787ed85ea81789eaf155885103.webp",
     "assets/production/hunt/accepted-20261010/images/a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc.webp",
     "assets/production/hunt/accepted-20261010/images/a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031.webp",
     "assets/production/hunt/accepted-20261010/images/a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5.webp",
-    "assets/production/hunt/accepted-20261010/images/a4439317de55ac8b7794c77d3a4f13fb4b19659925e98d08db74966141312a17.webp",
     "assets/production/hunt/accepted-20261010/images/a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee.webp",
-    "assets/production/hunt/accepted-20261010/images/a92bd40a0e3e94ce9c20e958974e4a90983b6aabb8c17c159c256237e4b17230.webp",
-    "assets/production/hunt/accepted-20261010/images/a96efdd9953a00da9b7916061ce32355e9a839775d2f4f5a6dd3a0cfac9c7997.webp",
     "assets/production/hunt/accepted-20261010/images/aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818.webp",
     "assets/production/hunt/accepted-20261010/images/ad7422054c46843e2a43d048496c9253398bcf7c6dfd3e71b73ad2d03b4698d1.webp",
     "assets/production/hunt/accepted-20261010/images/b1753ee1db999c33e2482a9654770075baefbfc4383bfbbf359cfafcc2632399.webp",
-    "assets/production/hunt/accepted-20261010/images/b2b9af4cd075c43ae8aba1a2be9a8ce16723fdcd1231549c1a6d1488fc72b30a.webp",
-    "assets/production/hunt/accepted-20261010/images/b311ccbef3d249da78d6f615b132632448f2b91165fd880483462ad890b2720e.webp",
-    "assets/production/hunt/accepted-20261010/images/b32c70aac78eb73ea5699e5d2f8a71ec1c98bcc3cbb257512fc00fde3bc2ae99.webp",
     "assets/production/hunt/accepted-20261010/images/bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d.webp",
-    "assets/production/hunt/accepted-20261010/images/bbc442152e0ae052c3fad204d4042c950aec58c892ea4f1ac359359bc753392a.webp",
     "assets/production/hunt/accepted-20261010/images/bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9.webp",
-    "assets/production/hunt/accepted-20261010/images/c47ff11e6b06fa3798a96aeafaf207c3f753f2e19ac3295586df2993de277fc6.webp",
-    "assets/production/hunt/accepted-20261010/images/c7267ac7cb9142f03031bca0a387e41e975e73f97c2532518f907e9931be6ef0.webp",
-    "assets/production/hunt/accepted-20261010/images/caa02e908463fb40014c2e74811e6d656fbda2b9e37c27ccbe7e36c1dda602b6.webp",
-    "assets/production/hunt/accepted-20261010/images/cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2.webp",
-    "assets/production/hunt/accepted-20261010/images/cf907aa8434e3c59aa8b8fc98ee9a9bc34e446687345f93c1603e781dd6a966a.webp",
     "assets/production/hunt/accepted-20261010/images/d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6.webp",
     "assets/production/hunt/accepted-20261010/images/d266c7c42d56092d1515d37ef8d0ce532025b2193ece94398ecb4aeb6c88ed0c.webp",
-    "assets/production/hunt/accepted-20261010/images/d32a045c04fc05bc66abd6466b9d963b7998b72cf7d9a7cda9d2d634e3cc03a9.webp",
-    "assets/production/hunt/accepted-20261010/images/d3a73592a8db5a803fa67c28547b1b5be7126e33dcd4f584333a4da241cd95e9.webp",
-    "assets/production/hunt/accepted-20261010/images/d86443e0ab2b220b26a218b6e16a2c3da813fa42282e32c08f86bcdc626fcf46.webp",
-    "assets/production/hunt/accepted-20261010/images/d9899893de9b8c13ab26564137bc0a1c399981af73c07a697b7898e512c8276e.webp",
     "assets/production/hunt/accepted-20261010/images/dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd.webp",
-    "assets/production/hunt/accepted-20261010/images/e00c7dd73fbb2292c010101ae379b54ec54515c94257654c12b1bf618ce39fea.webp",
-    "assets/production/hunt/accepted-20261010/images/e3b4fc7faae9a83a72a668a0707490ceb8f0301ef5cc53c0878a9934ce1da8a9.webp",
     "assets/production/hunt/accepted-20261010/images/e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710.webp",
-    "assets/production/hunt/accepted-20261010/images/e846d6716917ef354ab91e48183a575d5339f6cdff9bd09f994fcecf72060c4a.webp",
     "assets/production/hunt/accepted-20261010/images/e8a5ec0f9dbab05c05513eb95dd37e24bd90dc796343943e41094cbb0f897bf9.webp",
     "assets/production/hunt/accepted-20261010/images/e9948bd0dab2b69d2a2f406bfc9248f5ac2b977e1611aa0219e2fba2168ddd39.webp",
-    "assets/production/hunt/accepted-20261010/images/ea329cc5877734e995d9dc7b0ce10b263aaea272d96a56b7f2ef7eb20612e59d.webp",
-    "assets/production/hunt/accepted-20261010/images/f208313ef68aacbbe7fb7884ee477f3bcae51d6e7ff4d6b23b065656f79c5925.webp",
-    "assets/production/hunt/accepted-20261010/images/f3261db3f829abb01cc848c03ecb038eee4977066768843acd7cbff2d143f7aa.webp",
     "assets/production/hunt/accepted-20261010/images/f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc.webp",
-    "assets/production/hunt/accepted-20261010/images/f5758d56212824f676b22e975d762fa59e550a7eee2f562987d771f35deb39d4.webp",
     "assets/production/hunt/accepted-20261010/images/f615a1d2f2ad3c098d5e2d1769db7e3ad44df3809e9e64b4486c28a646f6c5d1.webp",
     "assets/production/hunt/accepted-20261010/images/fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087.webp",
-    "assets/production/hunt/accepted-20261010/images/fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9.webp",
-    "assets/production/hunt/accepted-20261010/images/ff67f8822972b585f3bee77d56b31c1d188f97b6e23fb69c24653e4f64aa6c95.webp",
+    "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-7612568c0979.webp",
+    "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-01-eeb2ff08fdd4.webp",
+    "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-00-2ddf2c03c3e1.webp",
+    "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-01-4fb08e2d1d80.webp",
+    "assets/production/hunt/hm01-three-r1-20261022/hm01-ground-heights.json",
+    "assets/production/hunt/hm01-three-r1-20261022/hm01-terrain-e90423e80e5e.glb",
+    "assets/production/hunt/hm01-three-r1-20261022/manifest.json",
     "assets/production/hunt/hm01x2-public-20261021/images/090498c7fc9d16035628c45380caa9468719a1ee59c7bf21af4d57db0e4beeca.webp",
     "assets/production/hunt/hm01x2-public-20261021/images/394fad8b5764d045c432b81e5c1a369d79c65d8e8ad04b71bca3422aab7ee126.webp",
     "assets/production/hunt/hm01x2-public-20261021/images/4c19a4630915698c96ea53b85b811243f7b274b0b7ee99c3f8cfa53443ff7793.webp",
@@ -7660,6 +7718,67 @@
     "assets/production/hunt/hm01x2-public-20261021/images/d9ae2de83b3c7f2e4aebe9cfdd6a7caa4b2ea0bb85eef4baf1e7a61db1f960b1.webp",
     "assets/production/hunt/hm01x2-public-20261021/images/ed007c6350bfbc037a1e4df08ed4ea6329e5c58bb76f6ac00652ef84ba521dbe.webp",
     "assets/production/hunt/hm01x2-public-20261021/images/fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80.webp",
+    "assets/production/hunt/hm02-three-v5-20261023/manifest.json",
+    "assets/production/hunt/hm02-three-v5-20261023/terrain-props.glb",
+    "assets/production/hunt/hm02-three-v5-20261023/tree-instances.json",
+    "assets/production/hunt/hm02-three-v5-20261023/tree-prototypes.glb",
+    "assets/production/hunt/hm03-three-v6-review-20261023/manifest.json",
+    "assets/production/hunt/hm03-three-v6-review-20261023/terrain-props.glb",
+    "assets/production/hunt/hm03-three-v6-review-20261023/tree-instances.json",
+    "assets/production/hunt/hm03-three-v6-review-20261023/tree-prototypes.glb",
+    "assets/production/hunt/hm04-three-v5-review-20261023/manifest.json",
+    "assets/production/hunt/hm04-three-v5-review-20261023/terrain-props.glb",
+    "assets/production/hunt/hm04-three-v5-review-20261023/tree-instances.json",
+    "assets/production/hunt/hm04-three-v5-review-20261023/tree-prototypes.glb",
+    "assets/production/hunt/hm05-three-v7-20261023/manifest.json",
+    "assets/production/hunt/hm05-three-v7-20261023/terrain-props.glb",
+    "assets/production/hunt/hm05-three-v7-20261023/tree-instances.json",
+    "assets/production/hunt/hm05-three-v7-20261023/tree-prototypes.glb",
+    "assets/production/hunt/hm06-three-v4-20261023/manifest.json",
+    "assets/production/hunt/hm06-three-v4-20261023/terrain-props.glb",
+    "assets/production/hunt/hm06-three-v4-20261023/tree-instances.json",
+    "assets/production/hunt/hm06-three-v4-20261023/tree-prototypes.glb",
+    "assets/production/hunt/hm08-three-r1-20261022/field_hm08_01-frame-00-f785e7106327.webp",
+    "assets/production/hunt/hm08-three-r1-20261022/field_hm08_02-frame-00-c796caf80af0.webp",
+    "assets/production/hunt/hm08-three-r1-20261022/hm08-ground-heights.json",
+    "assets/production/hunt/hm08-three-r1-20261022/hm08-terrain-ee412126d0e2.glb",
+    "assets/production/hunt/hm08-three-r1-20261022/manifest.json",
+    "assets/production/hunt/hm09-three-v7-20261023/manifest.json",
+    "assets/production/hunt/hm09-three-v7-20261023/terrain-props.glb",
+    "assets/production/hunt/hm15-three-v6-20261023/ground-heights.json",
+    "assets/production/hunt/hm15-three-v6-20261023/lava-phase-1.webp",
+    "assets/production/hunt/hm15-three-v6-20261023/manifest.json",
+    "assets/production/hunt/hm15-three-v6-20261023/terrain-props.glb",
+    "assets/production/hunt/hm16-three-v6-20261023/ground-heights.json",
+    "assets/production/hunt/hm16-three-v6-20261023/hm16-terrain-props.glb",
+    "assets/production/hunt/hm16-three-v6-20261023/manifest.json",
+    "assets/production/hunt/hm17-three-v4-20261023/ground-heights.json",
+    "assets/production/hunt/hm17-three-v4-20261023/hm17-terrain-props.glb",
+    "assets/production/hunt/hm17-three-v4-20261023/manifest.json",
+    "assets/production/hunt/hm18-three-v3-20261023/ground-heights.json",
+    "assets/production/hunt/hm18-three-v3-20261023/manifest.json",
+    "assets/production/hunt/hm18-three-v3-20261023/terrain-props.glb",
+    "assets/production/hunt/three-fallback-20261023/hm02-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm02-night.webp",
+    "assets/production/hunt/three-fallback-20261023/hm03-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm03-night.webp",
+    "assets/production/hunt/three-fallback-20261023/hm04-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm04-night.webp",
+    "assets/production/hunt/three-fallback-20261023/hm05-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm05-night.webp",
+    "assets/production/hunt/three-fallback-20261023/hm06-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm06-night.webp",
+    "assets/production/hunt/three-fallback-20261023/hm09-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm15-day-phase1.webp",
+    "assets/production/hunt/three-fallback-20261023/hm15-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm15-night-phase1.webp",
+    "assets/production/hunt/three-fallback-20261023/hm15-night.webp",
+    "assets/production/hunt/three-fallback-20261023/hm16-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm16-night.webp",
+    "assets/production/hunt/three-fallback-20261023/hm17-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm17-night.webp",
+    "assets/production/hunt/three-fallback-20261023/hm18-day.webp",
+    "assets/production/hunt/three-fallback-20261023/hm18-night.webp",
     "assets/production/internal-faithful-baseline/battle-audio-v1/0200.wav",
     "assets/production/internal-faithful-baseline/battle-audio-v1/0201.wav",
     "assets/production/internal-faithful-baseline/battle-audio-v1/0202.wav",
@@ -8251,6 +8370,7 @@
     "assets/production/original-ui-intake-20261007/medals/title-58.png",
     "assets/production/original-ui-intake-20261007/medals/title-59.png",
     "assets/production/original-ui-intake-20261007/medals/title-60.png",
+    "assets/production/PUBLIC_RUNTIME_INDEX.json",
     "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
     "assets/production/public-media-clean-20261017/currency-hud-r1/bits-48.png",
     "assets/production/public-media-clean-20261017/currency-hud-r1/diamond-24.png",
@@ -8267,6 +8387,7 @@
     "assets/production/public-runtime/hunt-feedback.render.v1.json",
     "assets/production/public-runtime/hunt-hm01x2.map.v1.json",
     "assets/production/public-runtime/hunt-night.map.v1.json",
+    "assets/production/public-runtime/hunt-three-fallback.map.v1.json",
     "assets/production/public-runtime/metadata/arena-harbor.v1.json",
     "assets/production/public-runtime/metadata/arena-interactions.v1.json",
     "assets/production/public-runtime/metadata/arena-tournament.v1.json",
@@ -8397,10 +8518,10 @@
     "assets/production/ui/tooling-pilot-r1/tool-icons.webp",
     "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.png",
-    "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
-    "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
     "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.png",
+    "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
+    "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
     "assets/production/vfx/licensed-runtime-v1/battle/critup/critup.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/critup/critup.png",
     "assets/production/vfx/licensed-runtime-v1/battle/defup/defup.glb",
@@ -8415,11 +8536,11 @@
     "assets/production/vfx/licensed-runtime-v1/battle/hitspark_small/ip_circle.png",
     "assets/production/vfx/licensed-runtime-v1/battle/hitup/hitup.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/hitup/hitup.png",
+    "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
+    "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hitmark.png",
     "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hypereffect.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/new1.png",
-    "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
-    "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/s_impact_b/ip_circle.png",
     "assets/production/vfx/licensed-runtime-v1/battle/s_impact_b/s_impact_b.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/s_impact_s/ip_circle.png",
@@ -8434,22 +8555,22 @@
     "assets/production/vfx/licensed-runtime-v1/battle/toleup/toleup.png",
     "assets/production/vfx/licensed-runtime-v1/common/lightup/light_eff.png",
     "assets/production/vfx/licensed-runtime-v1/common/lightup/lightup.glb",
-    "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
     "assets/production/vfx/licensed-runtime-v1/common/mist/mist_eff.png",
-    "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
+    "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
     "assets/production/vfx/licensed-runtime-v1/common/rain/rain_eff.png",
+    "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
     "assets/production/vfx/licensed-runtime-v1/common/sandstome/sand_eff.png",
     "assets/production/vfx/licensed-runtime-v1/common/sandstome/sandstome.glb",
-    "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
     "assets/production/vfx/licensed-runtime-v1/common/snow/snow_eff.png",
-    "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
+    "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
     "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome_eff.png",
+    "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
     "assets/production/vfx/licensed-runtime-v1/common/spark/m_spark_eff.png",
     "assets/production/vfx/licensed-runtime-v1/common/spark/spark.glb",
     "assets/production/vfx/licensed-runtime-v1/common/time_pl/time_p.png",
     "assets/production/vfx/licensed-runtime-v1/common/time_pl/time_pl.glb",
-    "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
     "assets/production/vfx/licensed-runtime-v1/common/wind/wind_eff.png",
+    "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
     "assets/production/vfx/original-battle-2d-v1/effects.png",
     "assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png",
     "assets/production/vfx/original-shared-review-v1/text-en.png",
@@ -8459,9 +8580,9 @@
     "assets/production/web-app/icon-192.png",
     "assets/production/web-app/icon-512.png",
     "championship.html",
-    "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
     "docs/contracts/championship/battle-field-presentation.v1.json",
     "docs/contracts/championship/battle-player-roster.v1.json",
+    "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
     "docs/contracts/championship/raising-home-presentation.v1.json",
     "manifest.webmanifest",
     "node_modules/three/build/three.core.js",
@@ -8472,7 +8593,6 @@
     "node_modules/three/examples/jsm/loaders/GLTFLoader.js",
     "node_modules/three/examples/jsm/utils/BufferGeometryUtils.js",
     "node_modules/three/examples/jsm/utils/SkeletonUtils.js",
-    "src/championship/app/ChampionshipPersistentSavePort.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
     "src/championship/app/battleFxLookups.js",
@@ -8481,6 +8601,7 @@
     "src/championship/app/battleRuntime.js",
     "src/championship/app/cageRoster.js",
     "src/championship/app/championshipClockDriver.js",
+    "src/championship/app/ChampionshipPersistentSavePort.js",
     "src/championship/app/championshipRaisingProduction.js",
     "src/championship/app/championshipScreen.js",
     "src/championship/app/championshipScreenStack.js",
@@ -8502,13 +8623,13 @@
     "src/championship/app/helpScreen.js",
     "src/championship/app/huntLayoutResolver.js",
     "src/championship/app/huntMobile.css",
-    "src/championship/app/intRh2Styles.css",
     "src/championship/app/interactiveTutorial.css",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
     "src/championship/app/interactiveTutorialHuntSteps.js",
     "src/championship/app/interactiveTutorialPreview.js",
     "src/championship/app/interactiveTutorialRaisingSteps.js",
+    "src/championship/app/intRh2Styles.css",
     "src/championship/app/loadProgress.js",
     "src/championship/app/loadStylesheet.js",
     "src/championship/app/loadWatchdog.js",
@@ -8531,6 +8652,7 @@
     "src/championship/app/phase1ProductCreatures.js",
     "src/championship/app/portraitFrame.js",
     "src/championship/app/qaUnlock.js",
+    "src/championship/app/raisingGroundSupport.js",
     "src/championship/app/raisingHomeHud.css",
     "src/championship/app/raisingHomeP1RView.js",
     "src/championship/app/raisingPresentationSource.js",
@@ -8538,6 +8660,7 @@
     "src/championship/app/ranchExpansionPreview.js",
     "src/championship/app/ranchRowPurchasePrompt.js",
     "src/championship/app/ranchTitlePreload.js",
+    "src/championship/app/residentAssetNotice.js",
     "src/championship/app/runtimeRecoveryDiagnostics.js",
     "src/championship/app/scheduleScreen.js",
     "src/championship/app/settings/preferenceEnvironment.js",
@@ -8732,6 +8855,7 @@
     "src/championship/presentation/characterAnimationTimeline.js",
     "src/championship/presentation/characterAtlasQueue.js",
     "src/championship/presentation/characterRosterCore.js",
+    "src/championship/presentation/cm07Ambient.js",
     "src/championship/presentation/completedOriginalUi20261007.js",
     "src/championship/presentation/dataArena/dataArenaAudio.js",
     "src/championship/presentation/dataArena/dataArenaCamera.js",
@@ -8792,8 +8916,13 @@
     "src/championship/presentation/raisingExpansionPreview.js",
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
+    "src/championship/presentation/ranchBorderMembership.js",
     "src/championship/presentation/ranchCageArtSelection.js",
+    "src/championship/presentation/ranchContactHeight.js",
+    "src/championship/presentation/ranchGroundShadows.js",
     "src/championship/presentation/ranchPassages.js",
+    "src/championship/presentation/ranchPhysicalSupport.js",
+    "src/championship/presentation/ranchSupportOwner.js",
     "src/championship/presentation/ranchThreeCoordinates.js",
     "src/championship/presentation/ranchThreeScene.js",
     "src/championship/presentation/runtimeMapArtBundle.js",
@@ -8814,11 +8943,28 @@
     "src/championship/presentation/vs2/huntFactoryShutters.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
     "src/championship/presentation/vs2/huntFoliageDither.js",
+    "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
+    "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
+    "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
+    "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
+    "src/championship/presentation/vs2/huntThree/dracoLifecycle.mjs",
+    "src/championship/presentation/vs2/huntThree/externalMapAssets.mjs",
+    "src/championship/presentation/vs2/huntThree/hm01SupportCorridors.mjs",
+    "src/championship/presentation/vs2/huntThree/hm02Projection.mjs",
+    "src/championship/presentation/vs2/huntThree/lifecycle.mjs",
+    "src/championship/presentation/vs2/huntThree/loadHuntThreeMap.mjs",
+    "src/championship/presentation/vs2/huntThree/manifestBindings.mjs",
+    "src/championship/presentation/vs2/huntThree/nativeActorAdapter.mjs",
+    "src/championship/presentation/vs2/huntThree/projection.mjs",
+    "src/championship/presentation/vs2/huntThree/sharedGLState.mjs",
+    "src/championship/presentation/vs2/huntThree/sharedPass.mjs",
+    "src/championship/presentation/vs2/huntThree/supportDepth.mjs",
     "src/championship/presentation/vs5/battleCubeArt.js",
     "src/championship/presentation/vs5/battleCubeTrackball.js",
     "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
     "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
     "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
+    "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
     "src/championship/r2/createChampionshipR2Session.js",
     "src/championship/raising/createRaisingHomeRuntime.js",
     "src/championship/raising/nativeGroundSpacing.js",
@@ -8922,8 +9068,8 @@
     "src/data/championship/catalogs/free-battle.r1.json",
     "src/data/championship/catalogs/gate-table.r1.json",
     "src/data/championship/catalogs/help-text.r1.json",
+    "src/data/championship/catalogs/hunt-art-expansions-20261023.json",
     "src/data/championship/catalogs/hunt-entry.r1.json",
-    "src/data/championship/catalogs/hunt-hm01x2.review-20261019.json",
     "src/data/championship/catalogs/hunt-scene.r1.json",
     "src/data/championship/catalogs/hunt-tools.r1.json",
     "src/data/championship/catalogs/password-battle-species.r1.json",
@@ -8954,103 +9100,6 @@
     "src/data/championship/public-ui-selection.v1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
     "src/data/championship/ranch-render-selection.v1.json",
-    "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
-    "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
-    "src/championship/app/raisingGroundSupport.js",
-    "src/championship/presentation/ranchBorderMembership.js",
-    "src/championship/presentation/ranchContactHeight.js",
-    "src/championship/presentation/ranchPhysicalSupport.js",
-    "src/championship/presentation/ranchSupportOwner.js",
-    "assets/production/database-first10-20261022/species-020.display.5ef180e88ffc6323.webp",
-    "assets/production/database-first10-20261022/species-020.thumbnail.2a3d5e3fed18d7e6.webp",
-    "assets/production/database-first10-20261022/species-021.display.caf4dbcb06e57df0.webp",
-    "assets/production/database-first10-20261022/species-021.thumbnail.c58be9cc8cef3272.webp",
-    "assets/production/database-first10-20261022/species-022.display.067597b6716c69b1.webp",
-    "assets/production/database-first10-20261022/species-022.thumbnail.2f3e92fbd552fe35.webp",
-    "assets/production/database-first10-20261022/species-023.display.20caf7321c898096.webp",
-    "assets/production/database-first10-20261022/species-023.thumbnail.b69d170b3c5a2a21.webp",
-    "assets/production/database-first10-20261022/species-024.display.0e09b1e05edebddd.webp",
-    "assets/production/database-first10-20261022/species-024.thumbnail.8d77d87e06f21080.webp",
-    "assets/production/database-first10-20261022/species-025.display.3e8f466f9e4014d5.webp",
-    "assets/production/database-first10-20261022/species-025.thumbnail.7f3e024caa23e0a9.webp",
-    "assets/production/database-first10-20261022/species-026.display.ec2109a52294be0e.webp",
-    "assets/production/database-first10-20261022/species-026.thumbnail.6ddd286162a8cb38.webp",
-    "assets/production/database-first10-20261022/species-027.display.cc716b8480f2f0e9.webp",
-    "assets/production/database-first10-20261022/species-027.thumbnail.18165145e0e60ab4.webp",
-    "assets/production/database-second10-20261022/species-030.display.52b9940dee31e64e.webp",
-    "assets/production/database-second10-20261022/species-030.thumbnail.3f91917406bc5bee.webp",
-    "assets/production/database-first10-20261022/species-031.display.e9bfa934de54b2fa.webp",
-    "assets/production/database-first10-20261022/species-031.thumbnail.352c9a5ed964b78b.webp",
-    "assets/production/database-first10-20261022/species-032.display.625673a54275dc3f.webp",
-    "assets/production/database-first10-20261022/species-032.thumbnail.866d9788dad25bdd.webp",
-    "assets/production/database-second10-20261022/species-074.display.0409f469846b3e78.webp",
-    "assets/production/database-second10-20261022/species-074.thumbnail.44762c6577c0939b.webp",
-    "assets/production/database-second10-20261022/species-080.display.ba3ebc3506ffabf1.webp",
-    "assets/production/database-second10-20261022/species-080.thumbnail.d1144d84a1273c16.webp",
-    "assets/production/database-second10-20261022/species-082.display.88e0cc7da3da641b.webp",
-    "assets/production/database-second10-20261022/species-082.thumbnail.b9620a9389f754e1.webp",
-    "assets/production/database-second10-20261022/species-085.display.9c38ad0a143b740a.webp",
-    "assets/production/database-second10-20261022/species-085.thumbnail.ade4e58a4eb1c6c8.webp",
-    "assets/production/database-second10-20261022/species-086.display.3ca46cc6ec68111d.webp",
-    "assets/production/database-second10-20261022/species-086.thumbnail.32b65b3a0faec069.webp",
-    "assets/production/database-second10-20261022/species-087.display.3f18f5b3830cf103.webp",
-    "assets/production/database-second10-20261022/species-087.thumbnail.fea962df6b8d108a.webp",
-    "assets/production/database-second10-20261022/species-088.display.4a4c51aadc0ebe47.webp",
-    "assets/production/database-second10-20261022/species-088.thumbnail.b3dfdf67878868c1.webp",
-    "assets/production/database-second10-20261022/species-094.display.03239efb7b3d25e3.webp",
-    "assets/production/database-second10-20261022/species-094.thumbnail.7c53e348532f9f28.webp",
-    "assets/production/database-second10-20261022/species-095.display.3639b5847d5ed1ce.webp",
-    "assets/production/database-second10-20261022/species-095.thumbnail.31dde55aba84d7ef.webp",
-    "src/championship/app/residentAssetNotice.js",
-    "src/championship/presentation/ranchGroundShadows.js",
-    "assets/production/database-combined24-20261022/species-011.display.83dab3a7f5f48995.webp",
-    "assets/production/database-combined24-20261022/species-011.thumbnail.c319163974d19e66.webp",
-    "assets/production/database-combined24-20261022/species-012.display.29c75647913a06bf.webp",
-    "assets/production/database-combined24-20261022/species-012.thumbnail.3f1bcc04a9b3fcc6.webp",
-    "assets/production/database-combined24-20261022/species-013.display.a093f1036d4d52c9.webp",
-    "assets/production/database-combined24-20261022/species-013.thumbnail.17e559e14eff0ba8.webp",
-    "assets/production/database-combined24-20261022/species-014.display.c4c1003969ac44f5.webp",
-    "assets/production/database-combined24-20261022/species-014.thumbnail.eabaf84afbde1e07.webp",
-    "assets/production/database-combined24-20261022/species-016.display.7361ca26226112d6.webp",
-    "assets/production/database-combined24-20261022/species-016.thumbnail.9b926cd4e524f1f0.webp",
-    "assets/production/database-combined24-20261022/species-017.display.ef03bc5de47ac2c1.webp",
-    "assets/production/database-combined24-20261022/species-017.thumbnail.fe904b0f55ca6bb8.webp",
-    "assets/production/database-combined24-20261022/species-018.display.6fcc64ac3a67b8f3.webp",
-    "assets/production/database-combined24-20261022/species-018.thumbnail.fa3fd8de3e164aa2.webp",
-    "assets/production/database-combined24-20261022/species-019.display.db591d2cc7064e2f.webp",
-    "assets/production/database-combined24-20261022/species-019.thumbnail.de983e7fe28295b9.webp",
-    "assets/production/database-remaining16-20261022/ma34.display.1e82c850458bccdf.webp",
-    "assets/production/database-remaining16-20261022/ma34.thumbnail.211ec848ec7e36d6.webp",
-    "assets/production/database-remaining16-20261022/ma50.display.a67ced1b020daa39.webp",
-    "assets/production/database-remaining16-20261022/ma50.thumbnail.7d79e7aa795084c8.webp",
-    "assets/production/database-remaining16-20261022/aw15.display.d67b4a3a84687536.webp",
-    "assets/production/database-remaining16-20261022/aw15.thumbnail.9a014a64fe580fad.webp",
-    "assets/production/database-remaining16-20261022/aw17.display.dfbf7a7f75b095c7.webp",
-    "assets/production/database-remaining16-20261022/aw17.thumbnail.7c337ba398eadfb2.webp",
-    "assets/production/database-remaining16-20261022/aw46.display.fcab2234524ce3af.webp",
-    "assets/production/database-remaining16-20261022/aw46.thumbnail.22bd8020a0caabf0.webp",
-    "assets/production/database-remaining16-20261022/aw47.display.3501b733d0765f3a.webp",
-    "assets/production/database-remaining16-20261022/aw47.thumbnail.e1f91c1480d02ad9.webp",
-    "assets/production/database-remaining16-20261022/aw48.display.6f1a77cf4edc7636.webp",
-    "assets/production/database-remaining16-20261022/aw48.thumbnail.41318322d254498e.webp",
-    "assets/production/database-combined24-20261022/species-177.display.e62679f15b8e8517.webp",
-    "assets/production/database-combined24-20261022/species-177.thumbnail.a2e72e931e839d01.webp",
-    "assets/production/database-combined24-20261022/species-179.display.5d7fcfac09c75627.webp",
-    "assets/production/database-combined24-20261022/species-179.thumbnail.61758eeb398e8e0b.webp",
-    "assets/production/database-combined24-20261022/species-180.display.64fe53de043b403c.webp",
-    "assets/production/database-combined24-20261022/species-180.thumbnail.60c8414f0413b29f.webp",
-    "assets/production/database-remaining16-20261022/aw10.display.33e34ada6d1970c0.webp",
-    "assets/production/database-remaining16-20261022/aw10.thumbnail.0336f4810a4ac770.webp",
-    "assets/production/database-combined24-20261022/species-184.display.59f8a3cd8c05a877.webp",
-    "assets/production/database-combined24-20261022/species-184.thumbnail.59cd77bb56a70364.webp",
-    "assets/production/database-combined24-20261022/species-186.display.c2e60f26bd1c287d.webp",
-    "assets/production/database-combined24-20261022/species-186.thumbnail.100796155ef3a197.webp",
-    "assets/production/database-remaining16-20261022/ul03.display.1b1438148ddb8b10.webp",
-    "assets/production/database-remaining16-20261022/ul03.thumbnail.b463d286c1647f32.webp",
-    "assets/production/database-combined24-20261022/species-188.display.1b89c673740d94df.webp",
-    "assets/production/database-combined24-20261022/species-188.thumbnail.e175a5a43c0f8add.webp",
-    "assets/production/database-remaining16-20261022/ul20.display.0ef05d8e8e38f552.webp",
-    "assets/production/database-remaining16-20261022/ul20.thumbnail.1d631927c0002111.webp",
     "src/championship/modes/dataArena/dataArenaRelay.js",
     "src/championship/modes/dataArena/dataArenaRelayMaps.js",
     "src/championship/modes/dataArena/dataArenaRelayRoster.js",
@@ -9063,10 +9112,6 @@
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
     "authorizationRecordedOn": "2026-10-20",
     "files": [
-      {
-        "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-        "sha256": "8f9d2c64013e1ecf483e0f7f22702d98b7401dc4d0a702810b534398e24209dc"
-      },
       {
         "path": "assets/production/battle/bm01-polish-r2/base.webp",
         "sha256": "5e4a3b7b25c1fbb8f8d9d88d1bbd6cef9287583bdd3464790cc796a458785b9e"
@@ -10929,83 +10974,83 @@
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm01_01.glb",
-        "sha256": "949e2da3707530c7fd090abb9822163cd27a33eb905ec50e8a6be9362d024d5a"
+        "sha256": "75395681c56067c1525f8de93c809ca50bb746d464828eeb3017c81cb8692b67"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm02_01.glb",
-        "sha256": "801927f108317f8d575c2816dd96d4e64788bd707b752345f77ee48b16e8197e"
+        "sha256": "8b268f2740b440f592936881657d4d34cf5571e76fcecc7928bb2668246e950f"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm03_01.glb",
-        "sha256": "e001292cd9a7fea1db162a216fab19155ff949bb49bbcc13de7bfd554363d180"
+        "sha256": "623a926d742770c3a79286be980733092cb5caed6a9919b8b936435717785417"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm04_01.glb",
-        "sha256": "8f40f2af52845e884d382af30231fbca8631557a01bc87fc7a113d8bd6691fe8"
+        "sha256": "cdb2bccfcb62d48c4716a514ea752f23b0b71b0cb20878a2daad2d7c1917c720"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm05_01.glb",
-        "sha256": "48e4c202b5e46dcdf2a63b1c8942565477b44ce40ef83888ed005c91cd40bcdc"
+        "sha256": "89a990f295dd527d25fe90c3ef85b0ffbf5bb3b6ce7d04b92f851727afdee8c9"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm06_01.glb",
-        "sha256": "295eb3671e20992849f4d6895ded481acadf5d5014deebd511e5bba5e5f7d39d"
+        "sha256": "3ab5f9f3e21af9a3da4a5e67189d7b5cdd00c62623621012dcec0ca5ffafec99"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm07_01.glb",
-        "sha256": "de0117594f79f4573e1d2537c033bac5fa2752deb2f0aa7abba26d3c7f264260"
+        "sha256": "802491b907d9bbbeed8417071ccca5bc7863c10cf668f5465ebf1f5b91b0730c"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm08_01.glb",
-        "sha256": "91b34ea242808f12d170bdf4f4f8a10c2897a6443311c9703bf44568470075d5"
+        "sha256": "3a8ff74130acef054ac1a4bfccbf4410f12245e5c3a286fbdc3be2e199b03e0f"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm09_01.glb",
-        "sha256": "b5033322edb9e7905ff6d604b44ecc239b8f6cd89f817d51058c1835cc6db0e4"
+        "sha256": "c9ef62640ad122034564642a986a9b31227ef52d5230247560c0b1cad5ced642"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm10_01.glb",
-        "sha256": "408aab6e8236bcaf288534a538d7d49a411d7f904482ac96396fe707fad5043d"
+        "sha256": "a4a3ec07bb7cf562b751fdc0ac688fd32ee1cb502644449738d909336fd4247c"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm11_01.glb",
-        "sha256": "17a763c0f0bb35e793cdac149d5be30d522782e21a2ba89f03a2fa4c2e0bbcd7"
+        "sha256": "d31f851b1e639e695c67c40555ca79e6f4dbb31f18ba4e66b3adf5a788fac4b0"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm12_01.glb",
-        "sha256": "3df63e095c3dabf9e91f81aff8b4eea61c7993af1a32ef3c347d7c52bfe21f3b"
+        "sha256": "40116ed9b41eab63ad43682978f1a9c4e82e00738617342e96f1928a0943eec6"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm13_01.glb",
-        "sha256": "c8f4089cf704dd2b64a163a0aa4e21cfb56cdc58c653d7cd810599dc33451872"
+        "sha256": "1e6f4c225ec942587e5267c4e1fb7f98d66cdabb8d34f104a4cd1b806be95ece"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm14_01.glb",
-        "sha256": "155571c7490ed086992b0b7397edd810511a238c8a110f3b22a8ebcff9b4a54d"
+        "sha256": "cc13654db84be0bb2e041a0981e86cc1eadc44d33e42c4a000e4f3ec8e97942e"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm15_01.glb",
-        "sha256": "3853287095590570da1ff2c54a3783a5ddcb823a13fb8b82a4e4eb0724dee194"
+        "sha256": "74da1d02cb412c7c9430465297c5e5baa7496325a61e4ee2b87d2280dd942960"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm16_01.glb",
-        "sha256": "d0ac9a4a30c32bdddf7c48b954a0f86f88e5d916e8c5d55dcfd9dca429244364"
+        "sha256": "f5c3c3ce4d8f83941db2cf7fc81568c10a92868ae87353ef18310ba2f8d8588a"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm17_01.glb",
-        "sha256": "05a340e967d07cc3d1c06dc3ae52d7436d8b79503f7c879337873d3fbb69b3a7"
+        "sha256": "dd7c8ce6f287a10b935336616e3c1611758e01677573a474bfea854c0051ee1a"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm18_01.glb",
-        "sha256": "2b2d24f33f405cc6ac501c6667cdcf603fa9b02a84522afbc30d47678e59bae7"
+        "sha256": "56326469aa65e85bcccefc3959964b58986567b572fa8f71ebe1bbef63ac6260"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm19_01.glb",
-        "sha256": "7192630e17f179fbf729919aff920ed20d64bc172581afcdddbcf5ba89e30dac"
+        "sha256": "542629174aecf97a9c99de2b705292b4f5464188fbd6e604e4c3d43ff02be97b"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm20_01.glb",
-        "sha256": "c89b2c3168e1df1fbaf2f3039bc119f56d99cd7cd74aec44b450904121f69560"
+        "sha256": "74ca745a60a19f14877e690013bf8c548dda4a9209a1f72e181c7afe0459ef51"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm21_01.glb",
@@ -11013,47 +11058,47 @@
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm22_01.glb",
-        "sha256": "bf236cf036592e9c8766452c8d1ab56c865b742fa247b280589dd4256b347027"
+        "sha256": "a2620b09633a81661d813fecdfca2868fd1b626b6b017b79d482e8723ab1afc5"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm23_01.glb",
-        "sha256": "d141f2cc2408ce0e0c59f4e35c44763fc741d136809ec8eca9e19f316308225a"
+        "sha256": "c67a81c11732b5e918501302838231a97db6ec2a7dc4444b2e9a8607192d1534"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm24_01.glb",
-        "sha256": "d4f53a54a278ee5a76688d5e046080dfe84b8451ef20de58a325ae54d2dd939b"
+        "sha256": "e9e20e66e4c55aabcec439450a22472da77bb74c8c524aebbbe6019e1185d7d1"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm25_01.glb",
-        "sha256": "43066500b19c6ffbdd7a5cda4fb215a14fbc57e570ef304bfe04df4c95a7093c"
+        "sha256": "32127dbaa361abd8e3a3daa1a6618d52fee5ce8abfe5c6c0d30b00838446e3c2"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm26_01.glb",
-        "sha256": "e1f11ca01ba49b8006846da33b5bd701b0b650f6af65b043f131d13de07872d3"
+        "sha256": "0c0c538cbe42ab7e1c1792c7ff68be0f623b7783639b9fdc977ab8d3631d2eff"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm27_01.glb",
-        "sha256": "148da89a3a9106977b5dd055d6aaacfd453f0856fd5cf21ef57fe6799fa101ca"
+        "sha256": "d009f61089faad1a2ef76fee31afea8f51bbaad8b7f38f34232f412131d18d18"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm28_01.glb",
-        "sha256": "43099ad42413cba74f6d9c2e0323f2937832757eb2d39447ec5ee9e9c1100d21"
+        "sha256": "f1d0e6d168afac1e854f3149381e902fb0a69fb1862e6107b683175ee210e98e"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm29_01.glb",
-        "sha256": "17b9194b35348bca3655014e1873e264bdbed4d5c8ea98cccbc252c281fbc8b6"
+        "sha256": "a550f4754c7e89880a3b82279e8833a7a7f8620825e7153e86da480ea8e2738e"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm30_01.glb",
-        "sha256": "5a558a32dcfd84a0d5f893c9d5fd09f6083533f4cd0b9d14eccfbfd6d8927087"
+        "sha256": "732e92cc6156868967adfb594816b255842735b4f75b160eef7c3c5b074b9c25"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm31_01.glb",
-        "sha256": "48f3763757aea98f6f7583b5c0c48c09195eb76d7ba23b19d8d388284ed6f1e6"
+        "sha256": "309676ab1e58ef65afe5825be544deffaba18c4a8a765695e76f94559eda787b"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm32_01.glb",
-        "sha256": "bbaa00cacc91a615cc5c86cdc2ab3b19f21104596b96576347b4a2c3e20ab22f"
+        "sha256": "9753b9cd04a0c95cbc84eafb10eb4dbb9d5561243551dc3d138f208ca7022ba4"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm34_01.glb",
@@ -11076,12 +11121,20 @@
         "sha256": "02b26418f5cc78244743042da9f9ff62696cc23a1743b784690f4401e7ebb665"
       },
       {
+        "path": "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
+        "sha256": "e2b69c4d19f35f0edd6634da55d062710d81397a4f8e99f24ee9a4d2adda14b5"
+      },
+      {
         "path": "assets/production/cage/three-20261021/manifest.json",
-        "sha256": "47153dea52ad24a31144e468927767bf97fa7f7d4302ea6ee6e24cf06462a63e"
+        "sha256": "20e2243d6f0af2e5f44d920bb64c40b95d857bd396e4c056ee6beb3c47d995d5"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
+        "sha256": "35a989b6136211c652ed85a724f8b0b0ca0db242b82a870670caf83c3c9e6758"
       },
       {
         "path": "assets/production/cage/three-20261021/walk-surfaces.json",
-        "sha256": "8a7d5683320edc7b6f2604c2ea26332e44353dc29afa43522af1c2438b65c254"
+        "sha256": "d7c276bb615d720b8360272617f01402b418910157c3b3b36da3b04bff052976"
       },
       {
         "path": "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/hud.render.json",
@@ -35576,14 +35629,6 @@
         "sha256": "3353654b4de6ee19c61d652f4515bdc8a99e7887de613f6370a78b172872792a"
       },
       {
-        "path": "assets/production/data-arena/interactions-v1/ice-high.webp",
-        "sha256": "4cddea731f635bf221c7cdb3e207296ea1f2ccdb8a6e867d3c92847e9d45fe33"
-      },
-      {
-        "path": "assets/production/data-arena/interactions-v1/ice-low.webp",
-        "sha256": "48376d6634d26960c5a98156b3d7cfffb841414982c48ab184350f7b24f1e5c5"
-      },
-      {
         "path": "assets/production/data-arena/interactions-v1/ice_cracked-high.webp",
         "sha256": "2dc9c3b4ef6631246f25795354c6672ed85487b4f94083c6b283f3da158435b2"
       },
@@ -35598,6 +35643,14 @@
       {
         "path": "assets/production/data-arena/interactions-v1/ice_melt-low.webp",
         "sha256": "faadd3c51ea65df723e799fb60a3c9ee7d13c1e1fd28b7e8c22e96f8dadf8936"
+      },
+      {
+        "path": "assets/production/data-arena/interactions-v1/ice-high.webp",
+        "sha256": "4cddea731f635bf221c7cdb3e207296ea1f2ccdb8a6e867d3c92847e9d45fe33"
+      },
+      {
+        "path": "assets/production/data-arena/interactions-v1/ice-low.webp",
+        "sha256": "48376d6634d26960c5a98156b3d7cfffb841414982c48ab184350f7b24f1e5c5"
       },
       {
         "path": "assets/production/data-arena/interactions-v1/timber-burnt-high.webp",
@@ -36096,6 +36149,118 @@
         "sha256": "7000b1ea76955dbf3476c426d1ae7ab57a002264a8b8dec70e552eed9a329d6a"
       },
       {
+        "path": "assets/production/database-combined24-20261022/species-011.display.83dab3a7f5f48995.webp",
+        "sha256": "83dab3a7f5f48995dea41105f4358528c810d8ec8356d0b847c50eb369806dae"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-011.thumbnail.c319163974d19e66.webp",
+        "sha256": "c319163974d19e663bd569e3acb9bfbc1296bc3120202a32375cada3f877109b"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-012.display.29c75647913a06bf.webp",
+        "sha256": "29c75647913a06bf92662a92e632e981437baea72609fce28242e3f22cce7105"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-012.thumbnail.3f1bcc04a9b3fcc6.webp",
+        "sha256": "3f1bcc04a9b3fcc6bb3d4317733211333f855875d0ac8cafcb094290c505e411"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-013.display.a093f1036d4d52c9.webp",
+        "sha256": "a093f1036d4d52c9412e6fe7a2ba894e7c19893ec81ecbf74bce44adb1be3f0f"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-013.thumbnail.17e559e14eff0ba8.webp",
+        "sha256": "17e559e14eff0ba83368524b77ef2822256527ff4134059c3d60893e2147eaa3"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-014.display.c4c1003969ac44f5.webp",
+        "sha256": "c4c1003969ac44f5f44aab2732790b0518552aa9ef6ae44bdfaaa8b6fdc19638"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-014.thumbnail.eabaf84afbde1e07.webp",
+        "sha256": "eabaf84afbde1e07730f2af1480310e82fe0453ba99ff8bbc444f113f2a3fa76"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-016.display.7361ca26226112d6.webp",
+        "sha256": "7361ca26226112d6c4a58d1b85eb0f2a58a8a57d2abb703b5d96c83c702520ba"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-016.thumbnail.9b926cd4e524f1f0.webp",
+        "sha256": "9b926cd4e524f1f095915fcdc30c18651fd5216364e6609f2214dc991eb498e6"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-017.display.ef03bc5de47ac2c1.webp",
+        "sha256": "ef03bc5de47ac2c1c4689c6ce5d94c7f7362647f701c873c489a990312a6be34"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-017.thumbnail.fe904b0f55ca6bb8.webp",
+        "sha256": "fe904b0f55ca6bb8369290b413d95d5c282320bed32774f1163446f2d668d2c0"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-018.display.6fcc64ac3a67b8f3.webp",
+        "sha256": "6fcc64ac3a67b8f35a2e6676899507e6074bf48adc3bb3388d8c4ebaf0b0e589"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-018.thumbnail.fa3fd8de3e164aa2.webp",
+        "sha256": "fa3fd8de3e164aa2e4c2277c2da907a7fdc0c1712f7ff2dd1bf1fc05c3064a46"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-019.display.db591d2cc7064e2f.webp",
+        "sha256": "db591d2cc7064e2f64fc776a80f82ea57511935e7778665c3f54189a62186bf0"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-019.thumbnail.de983e7fe28295b9.webp",
+        "sha256": "de983e7fe28295b97b24d3d49af719b4bf9e4c0f394142a2b768e93626023ea8"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-177.display.e62679f15b8e8517.webp",
+        "sha256": "e62679f15b8e8517a3f564dfceac04fa80bce40cabb396965d3bd19e8871c8f2"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-177.thumbnail.a2e72e931e839d01.webp",
+        "sha256": "a2e72e931e839d01a1518f191e5755ff8f0a7e41e3e0607b4a64e3a69d7ad492"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-179.display.5d7fcfac09c75627.webp",
+        "sha256": "5d7fcfac09c756279da7dd6cd0fbd8c6d465ce76f697966ebf4d8152e4896a20"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-179.thumbnail.61758eeb398e8e0b.webp",
+        "sha256": "61758eeb398e8e0be3f6c5dfbb5109ea33ed93ab2ed0498fab8dd65569b2ced3"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-180.display.64fe53de043b403c.webp",
+        "sha256": "64fe53de043b403ca03f5bbc46736dc12b6f40cabd87b5b0cf7cb1ef26986022"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-180.thumbnail.60c8414f0413b29f.webp",
+        "sha256": "60c8414f0413b29f7575ad53d2be1ff6e7a621f5c092db512e42594c7e5d70fc"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-184.display.59f8a3cd8c05a877.webp",
+        "sha256": "59f8a3cd8c05a877c5333899dc534650f3dcf437fdaade78e7e4e3d50c51cd66"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-184.thumbnail.59cd77bb56a70364.webp",
+        "sha256": "59cd77bb56a7036426561d40c4b55b796bf35581cbbf47f3daa1d768e9594c40"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-186.display.c2e60f26bd1c287d.webp",
+        "sha256": "c2e60f26bd1c287d1c5acd9781d5fa64a71b4ffc8fdf2b915a2c4fac76575407"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-186.thumbnail.100796155ef3a197.webp",
+        "sha256": "100796155ef3a197d45e3164a89dc443ac71a0aeac8323826798745ff6e9d538"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-188.display.1b89c673740d94df.webp",
+        "sha256": "1b89c673740d94df666d788748e44d18a4a57190a1dadafdfb3cf0854518dfbe"
+      },
+      {
+        "path": "assets/production/database-combined24-20261022/species-188.thumbnail.e175a5a43c0f8add.webp",
+        "sha256": "e175a5a43c0f8add67c840cd736379427949efc165ea6ea1ddd12320142ad7d2"
+      },
+      {
         "path": "assets/production/database-display-20261018/species-008.display.c7e821ac38dbdfe5.webp",
         "sha256": "c7e821ac38dbdfe5cd61c53b0621a71298fa5bf83ff02a724bbbaa8a87a7e515"
       },
@@ -36184,14 +36349,6 @@
         "sha256": "f90b8bc2d4e8039b269a493b77b7cef05e39154f4eee0a3905cf92caf5ae8b84"
       },
       {
-        "path": "assets/production/database-display-20261018/species-038.display.68b4a737285e00e4.webp",
-        "sha256": "68b4a737285e00e41618aa7a6fae3c76ef2f33f87902ccb9383fd0320b0a9b86"
-      },
-      {
-        "path": "assets/production/database-display-20261018/species-038.thumbnail.b19de65a1a95f02a.webp",
-        "sha256": "b19de65a1a95f02a90bd7199b0e559a8982d8d088a9075a85fd02ca3b4bc3769"
-      },
-      {
         "path": "assets/production/database-display-20261018/species-039.display.69bf45ae13181406.webp",
         "sha256": "69bf45ae13181406a93ac7bbbccf13e1a952a782cc1f4f293a8b5d640dc81278"
       },
@@ -36264,22 +36421,6 @@
         "sha256": "158e189379f619dd7fb5a487efac4e61a1116c15b557f28bbdb55243152e0966"
       },
       {
-        "path": "assets/production/database-display-20261018/species-048.display.2f8f15b262d9478b.webp",
-        "sha256": "2f8f15b262d9478b798c68558414c59e33cce5818bd4e410d65f52a2ff55c127"
-      },
-      {
-        "path": "assets/production/database-display-20261018/species-048.thumbnail.737d5f2b65a935dd.webp",
-        "sha256": "737d5f2b65a935dde8d1db0448ad783da12850fee02491320b5bf4cca78f2a8c"
-      },
-      {
-        "path": "assets/production/database-display-20261018/species-049.display.6b26a16d4d7d0bde.webp",
-        "sha256": "6b26a16d4d7d0bdec0c46722a1ee3ef0d7347afbefe222c8ca35cd83809f30fe"
-      },
-      {
-        "path": "assets/production/database-display-20261018/species-049.thumbnail.51cff0d18e19d8aa.webp",
-        "sha256": "51cff0d18e19d8aa2929c3444c70ca69f4e91ed7b362b6a8647d6e8fcf7886ac"
-      },
-      {
         "path": "assets/production/database-display-20261018/species-050.display.a561e591033f3e36.webp",
         "sha256": "a561e591033f3e361061cf615f0b9d088444a4aa59a555d83b51b6a576b2cd73"
       },
@@ -36294,14 +36435,6 @@
       {
         "path": "assets/production/database-display-20261018/species-051.thumbnail.0923b174a65557ec.webp",
         "sha256": "0923b174a65557ecb7b1afd446d5af4a037c0a8da701642f9adcd838bbc0a8f7"
-      },
-      {
-        "path": "assets/production/database-display-20261018/species-052.display.372094cdfed88c25.webp",
-        "sha256": "372094cdfed88c2597cce6d4a61d3e9f5ab9d63d349babc148cd8f0571625305"
-      },
-      {
-        "path": "assets/production/database-display-20261018/species-052.thumbnail.b373582b37150ea3.webp",
-        "sha256": "b373582b37150ea3b7adc593802ac5d443dee5bdddef53e50477832c49adbcdb"
       },
       {
         "path": "assets/production/database-display-20261018/species-053.display.ca1665092133b656.webp",
@@ -37128,6 +37261,86 @@
         "sha256": "9eed3a826f844096cc32733441118c3ea25f1d280fe35184a262f1d660a3b812"
       },
       {
+        "path": "assets/production/database-first10-20261022/species-020.display.5ef180e88ffc6323.webp",
+        "sha256": "5ef180e88ffc632393d0c870e89221b96058f6aafa9def1dc4cbc3394c30586f"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-020.thumbnail.2a3d5e3fed18d7e6.webp",
+        "sha256": "2a3d5e3fed18d7e666d8166f24f4b19b60ccff9d17c017f2d629656fbd762cb9"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-021.display.caf4dbcb06e57df0.webp",
+        "sha256": "caf4dbcb06e57df0574e344f0eb4e7e87305834ae2e9c6fbbe64639d2c334a91"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-021.thumbnail.c58be9cc8cef3272.webp",
+        "sha256": "c58be9cc8cef32720546acd55ce6fbdc40d6344504610e647817924ac7a5e7e4"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-022.display.067597b6716c69b1.webp",
+        "sha256": "067597b6716c69b1ada9eef5640de343aa92446f6ca5cfa82a3dfde9b43c76b2"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-022.thumbnail.2f3e92fbd552fe35.webp",
+        "sha256": "2f3e92fbd552fe355af50a7d4806c1426339e4adc8649f0880b03c2513efde4b"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-023.display.20caf7321c898096.webp",
+        "sha256": "20caf7321c8980960e41e6cc919942c5a686f1bb51ac527cf7d83d9512c6d535"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-023.thumbnail.b69d170b3c5a2a21.webp",
+        "sha256": "b69d170b3c5a2a21941d012a199adb8b9a7c67d9044346b156404a6ef419316a"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-024.display.0e09b1e05edebddd.webp",
+        "sha256": "0e09b1e05edebdddcbda3d12c6122db82304fff3755bb78b7c274f5a04294bb0"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-024.thumbnail.8d77d87e06f21080.webp",
+        "sha256": "8d77d87e06f21080ce299886103478fb6899cff3024da2ba8656ae6423a7150f"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-025.display.3e8f466f9e4014d5.webp",
+        "sha256": "3e8f466f9e4014d50d35e7a48e0437778a2dcf6f74b560efdf815d8f7648712a"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-025.thumbnail.7f3e024caa23e0a9.webp",
+        "sha256": "7f3e024caa23e0a91ba11f7a353c373b1be382d9f2860dcc15d3ac7b64c0a2a5"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-026.display.ec2109a52294be0e.webp",
+        "sha256": "ec2109a52294be0e31df1c5cc6a73d96cbbf4fd1643314c3db73e8ed246a8527"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-026.thumbnail.6ddd286162a8cb38.webp",
+        "sha256": "6ddd286162a8cb38fc22b8bde885391499baf0e2c11ea46d88a2ab04c267c70d"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-027.display.cc716b8480f2f0e9.webp",
+        "sha256": "cc716b8480f2f0e9e9ff4d0a178b86d5de0a1eef0d48e4c4772b753275a5037b"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-027.thumbnail.18165145e0e60ab4.webp",
+        "sha256": "18165145e0e60ab428da8ef817efff8d67d31a106ef204b80e8cc9773512eaaf"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-031.display.e9bfa934de54b2fa.webp",
+        "sha256": "e9bfa934de54b2fa5a1808f5c0071fe5052a8fa664c3c8cb315e798a4d25e15a"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-031.thumbnail.352c9a5ed964b78b.webp",
+        "sha256": "352c9a5ed964b78b1dad7084b19c5d645f50ba40eac422ff80e3b0c894a615e2"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-032.display.625673a54275dc3f.webp",
+        "sha256": "625673a54275dc3fa69633200a06185a3a29caade5b8d358af5149386e160ea7"
+      },
+      {
+        "path": "assets/production/database-first10-20261022/species-032.thumbnail.866d9788dad25bdd.webp",
+        "sha256": "866d9788dad25bdddbc0d87ed52f8b141653ed962ff62e0d7ff461800e7f8ab8"
+      },
+      {
         "path": "assets/production/database-illustrations-20261018/species-231.display.af59af31bb743f84.webp",
         "sha256": "af59af31bb743f84daae65d129c3a5b65773cdce4815ead65cf4f654d492f2aa"
       },
@@ -37174,6 +37387,118 @@
       {
         "path": "assets/production/database-illustrations-20261018/species-236.thumbnail.bee4bdaf14a89612.webp",
         "sha256": "bee4bdaf14a896122f538cfd1cac4978f63993411afe5a93df55e65a694368e7"
+      },
+      {
+        "path": "assets/production/database-next-portraits-20261022/species-038.display.ab63bfcc428a7a7d.webp",
+        "sha256": "ab63bfcc428a7a7daa90bdd6198c8f83cfe9dd3837ec2d1e8cd031a606ca7932"
+      },
+      {
+        "path": "assets/production/database-next-portraits-20261022/species-038.thumbnail.d063ae58a38ff87b.webp",
+        "sha256": "d063ae58a38ff87ba532868815ed713ed5e6d9b8496dad3df60aecc4ddc93af4"
+      },
+      {
+        "path": "assets/production/database-next-portraits-20261022/species-048.display.ff326a954c212af1.webp",
+        "sha256": "ff326a954c212af1db657271bd325c7d7e0447dfe94e4f9b3fe624511fece1a6"
+      },
+      {
+        "path": "assets/production/database-next-portraits-20261022/species-048.thumbnail.8346e511c2ff9855.webp",
+        "sha256": "8346e511c2ff98558adc89410335cb84b337d9d9d13c723bc157e70664665b76"
+      },
+      {
+        "path": "assets/production/database-next-portraits-20261022/species-049.display.e38caed7b23c0f32.webp",
+        "sha256": "e38caed7b23c0f32c1cbba7a00819e623775b0d67b657d84a6ffe37a51eac49b"
+      },
+      {
+        "path": "assets/production/database-next-portraits-20261022/species-049.thumbnail.1af2fc20cb9301be.webp",
+        "sha256": "1af2fc20cb9301be17141b9a5244fad0c63314cdcb6ffda390195546698c6ee0"
+      },
+      {
+        "path": "assets/production/database-next-portraits-20261022/species-052.display.2a99c36fe93b41bb.webp",
+        "sha256": "2a99c36fe93b41bb58e36cfc2cf780e20b48ed41005e4e87d62939dc910dd5ce"
+      },
+      {
+        "path": "assets/production/database-next-portraits-20261022/species-052.thumbnail.7c3e4e6915e2d2bf.webp",
+        "sha256": "7c3e4e6915e2d2bf4261f26189bc565a17826f4eaced85f03d7595bb73ff7aaf"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw10.display.33e34ada6d1970c0.webp",
+        "sha256": "33e34ada6d1970c0138be65f213f8ffa190e848ff12604a4658049c3252ccf75"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw10.thumbnail.0336f4810a4ac770.webp",
+        "sha256": "0336f4810a4ac7701b5e8d5795520da63f6cf969afe2cc40f6a5a0e5b6be28eb"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw15.display.d67b4a3a84687536.webp",
+        "sha256": "d67b4a3a8468753649dec4664c8a1abede95a05e50a3d627b1aea05c77159f17"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw15.thumbnail.9a014a64fe580fad.webp",
+        "sha256": "9a014a64fe580fad00ac081c13a7fe9dd4e9f45145db1bcf1514fec314121799"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw17.display.dfbf7a7f75b095c7.webp",
+        "sha256": "dfbf7a7f75b095c703e49b7ac8247d30796d4ab3e2b26ed2e5b2a17bc6dd8744"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw17.thumbnail.7c337ba398eadfb2.webp",
+        "sha256": "7c337ba398eadfb23c40b92d1ecae8eb3cbe7723def4ce9953c2519564cde2b8"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw46.display.fcab2234524ce3af.webp",
+        "sha256": "fcab2234524ce3af19b85e2923264eafafeb33058b6af5430d7ad338e8a40452"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw46.thumbnail.22bd8020a0caabf0.webp",
+        "sha256": "22bd8020a0caabf0f3451896ec7e21e2cbd54bc8122ce4bd6406bccb36741427"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw47.display.3501b733d0765f3a.webp",
+        "sha256": "3501b733d0765f3ab548aab408b1faa1cc509343f8b51a3665e2eb34c29eb3c1"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw47.thumbnail.e1f91c1480d02ad9.webp",
+        "sha256": "e1f91c1480d02ad9b1da395fa4252794d4f1f4d32d14e3bd382df1bb25fe1de9"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw48.display.6f1a77cf4edc7636.webp",
+        "sha256": "6f1a77cf4edc7636ebdb351f95447eb2021efa2ab6541a26dcc2d4b9316cfa9c"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/aw48.thumbnail.41318322d254498e.webp",
+        "sha256": "41318322d254498ee8af9f3ca68a3f9fa461d09ee5dacb6eb1f445ec70d94549"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/ma34.display.1e82c850458bccdf.webp",
+        "sha256": "1e82c850458bccdffba8cb9817b82e1e9bb8c5b039e9460aa76d90adc4eb885e"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/ma34.thumbnail.211ec848ec7e36d6.webp",
+        "sha256": "211ec848ec7e36d6acd40207956f14aaa7408ed80f52d474105dfaa7bb7a654e"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/ma50.display.a67ced1b020daa39.webp",
+        "sha256": "a67ced1b020daa398db55afa1e64c7b1c64a6a16ea8325e4f122c1b1d7b8cde9"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/ma50.thumbnail.7d79e7aa795084c8.webp",
+        "sha256": "7d79e7aa795084c8a92471a8eff5bc485e5c1c2a9cefe83f7c174214dd942cc4"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/ul03.display.1b1438148ddb8b10.webp",
+        "sha256": "1b1438148ddb8b10701a55e78ced80a5b1ce0d97652bee5af78bd26fb205e4a6"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/ul03.thumbnail.b463d286c1647f32.webp",
+        "sha256": "b463d286c1647f3236bdd90e81fb1441f2f4109da18405777c6af00d414a1e97"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/ul20.display.0ef05d8e8e38f552.webp",
+        "sha256": "0ef05d8e8e38f5523565197faa6dda9b69e14e6094a574548c0fdf96ee5f009c"
+      },
+      {
+        "path": "assets/production/database-remaining16-20261022/ul20.thumbnail.1d631927c0002111.webp",
+        "sha256": "1d631927c0002111b8cfad34f7cde3afa885e940ff0345aa3aa53f0efab0283e"
       },
       {
         "path": "assets/production/database-repair-20261019/species-103.display.848a425e3ea2786e.webp",
@@ -37488,6 +37813,86 @@
         "sha256": "d68a259cf4bd453bc8a58784be217c75eeeedf79480a05c6714677c9be757414"
       },
       {
+        "path": "assets/production/database-second10-20261022/species-030.display.52b9940dee31e64e.webp",
+        "sha256": "52b9940dee31e64ea9e3fa7490bee9976f2999091fd7907157ba972f2ba5c166"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-030.thumbnail.3f91917406bc5bee.webp",
+        "sha256": "3f91917406bc5beeb554cac88a9b6f1f89c2955217a94a504ee90c87bea7be0e"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-074.display.0409f469846b3e78.webp",
+        "sha256": "0409f469846b3e78567405973eb9d5a001dad4d272ab31d3d63f96e0d5093f35"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-074.thumbnail.44762c6577c0939b.webp",
+        "sha256": "44762c6577c0939b29fae6c7d1cb173d6336590c2b1ee4ef4ecb419f4471a786"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-080.display.ba3ebc3506ffabf1.webp",
+        "sha256": "ba3ebc3506ffabf19281d2e7ae38063163e72fa79f5c9cd303777fc0f40fc5d4"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-080.thumbnail.d1144d84a1273c16.webp",
+        "sha256": "d1144d84a1273c161db2b42fb4ab8f970aa344590f9c3e0137aa949506688c94"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-082.display.88e0cc7da3da641b.webp",
+        "sha256": "88e0cc7da3da641ba480a841676e8197ca5058b1b98a8136e2b4699ffb2830b5"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-082.thumbnail.b9620a9389f754e1.webp",
+        "sha256": "b9620a9389f754e1859bc469b1d182cd8b2cb460885c5c9f90f88b6c9721e383"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-085.display.9c38ad0a143b740a.webp",
+        "sha256": "9c38ad0a143b740a6429b6815cba388b303b86cf0951de8a651a698ccfb644f1"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-085.thumbnail.ade4e58a4eb1c6c8.webp",
+        "sha256": "ade4e58a4eb1c6c8446e3701a5bdd3cb0ea7879c701b01e6278313ea04ed584a"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-086.display.3ca46cc6ec68111d.webp",
+        "sha256": "3ca46cc6ec68111d2fcef061dbd25f475d595a7c42f7033e98a045018f338239"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-086.thumbnail.32b65b3a0faec069.webp",
+        "sha256": "32b65b3a0faec069566795f87faa80ac6ddecadf346135c78efd6a80d2d0f2dc"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-087.display.3f18f5b3830cf103.webp",
+        "sha256": "3f18f5b3830cf103a97288e31c806a418200fbb117e0aaa3c9d829c345c647fa"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-087.thumbnail.fea962df6b8d108a.webp",
+        "sha256": "fea962df6b8d108a5b428e1a09baa1a7cab312212cb1df038380e4a3749a25c9"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-088.display.4a4c51aadc0ebe47.webp",
+        "sha256": "4a4c51aadc0ebe477185d4d7c2767e7bfed2f3fde84ca3dc56379d38db13bcdd"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-088.thumbnail.b3dfdf67878868c1.webp",
+        "sha256": "b3dfdf67878868c1ecfe3873fb313d1359075fd040e06664c180755db46caac3"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-094.display.03239efb7b3d25e3.webp",
+        "sha256": "03239efb7b3d25e3921cf7c4d7899706ff2f696f5fdcbe01a2397d3a6341f601"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-094.thumbnail.7c53e348532f9f28.webp",
+        "sha256": "7c53e348532f9f28ea458f978bbcff7211f534633e4d8eac745eb80c26682977"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-095.display.3639b5847d5ed1ce.webp",
+        "sha256": "3639b5847d5ed1ce6b285c193308d4387b7872f49dbbea1d29fa68ff95d0435c"
+      },
+      {
+        "path": "assets/production/database-second10-20261022/species-095.thumbnail.31dde55aba84d7ef.webp",
+        "sha256": "31dde55aba84d7ef830cdbf9e4c4d5713113ef1cf61dd8b6e6adfe7034aca38b"
+      },
+      {
         "path": "assets/production/evolution-glyphs-v1/CP-G01-link-128.png",
         "sha256": "7a7120ab07333958371352dc18c45d3949b75a082c39ab28cc88e5eb8a64b574"
       },
@@ -37508,22 +37913,6 @@
         "sha256": "000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/05ec83343388ae48934531610be8109da609fdf237aa5f6820ac8582a33fc94f.webp",
-        "sha256": "05ec83343388ae48934531610be8109da609fdf237aa5f6820ac8582a33fc94f"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/0c11f1e05326d1e31d24f0dea684b892f174af539aba08858d092beabfa77a53.webp",
-        "sha256": "0c11f1e05326d1e31d24f0dea684b892f174af539aba08858d092beabfa77a53"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/0fbd38dbf56d7a905d6afec9a3c50e2007e30b30cc627345007984c58770aa26.webp",
-        "sha256": "0fbd38dbf56d7a905d6afec9a3c50e2007e30b30cc627345007984c58770aa26"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/110e052c482b5488c332ab676f7fd2513b2f21452c2ecb87823dfc83b0f2d27c.webp",
-        "sha256": "110e052c482b5488c332ab676f7fd2513b2f21452c2ecb87823dfc83b0f2d27c"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093.webp",
         "sha256": "182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093"
       },
@@ -37532,100 +37921,20 @@
         "sha256": "1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/18ed11e7cdf09ad15dd7e62206bb8eac42c875a5980410d28cacef3edeb6bd1a.webp",
-        "sha256": "18ed11e7cdf09ad15dd7e62206bb8eac42c875a5980410d28cacef3edeb6bd1a"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/19767cac7dd8f6d4e920315fcef47ea8144b69f8e5ee5f172f0996490bc35064.webp",
-        "sha256": "19767cac7dd8f6d4e920315fcef47ea8144b69f8e5ee5f172f0996490bc35064"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/19e0b2eadfb60d606954834bec79df46893f32d1ef376aba96b1ac834f4b150a.webp",
-        "sha256": "19e0b2eadfb60d606954834bec79df46893f32d1ef376aba96b1ac834f4b150a"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf.webp",
         "sha256": "1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/1f667c58cd859daa60400f6c54c84a20793ee8b56ba71bbf57b2633ff9f2165c.webp",
-        "sha256": "1f667c58cd859daa60400f6c54c84a20793ee8b56ba71bbf57b2633ff9f2165c"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/200cd88ffbd2f55630fe574c74f1e9bea216722fdb0b0bdef461ce78ba496fba.webp",
-        "sha256": "200cd88ffbd2f55630fe574c74f1e9bea216722fdb0b0bdef461ce78ba496fba"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/24efca4dfe32dee9f4dd08d5e8b8dbb8593eb7a56a8e49a01dcc22505a583ec5.webp",
-        "sha256": "24efca4dfe32dee9f4dd08d5e8b8dbb8593eb7a56a8e49a01dcc22505a583ec5"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7.webp",
         "sha256": "294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4.webp",
-        "sha256": "32535b2f9ee784ff749cf7fc172928b1038697794d4c49f98e8827f60f2719a4"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/347d11467f2be954fe4b6949e28f69a43901b7230d11c2fc79d5f3bdc87100b3.webp",
-        "sha256": "347d11467f2be954fe4b6949e28f69a43901b7230d11c2fc79d5f3bdc87100b3"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/3659e8f4961d9f7a14e398c2f5abdb7293bd52cd651810d88133c4f10b6969e6.webp",
-        "sha256": "3659e8f4961d9f7a14e398c2f5abdb7293bd52cd651810d88133c4f10b6969e6"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/36c910a8d17222d9df4f3faff9a2806fe4c97cf44ad9769075e7f777b4b38995.webp",
-        "sha256": "36c910a8d17222d9df4f3faff9a2806fe4c97cf44ad9769075e7f777b4b38995"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/3aa60f86c9b04af7995eceabd310d6ecf722a8a531da5b13f24108d27b9ed56e.webp",
-        "sha256": "3aa60f86c9b04af7995eceabd310d6ecf722a8a531da5b13f24108d27b9ed56e"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef.webp",
         "sha256": "3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/49e5ce653a8695102af9cf3900496c26e65cf75e35da2842212f8630ad8446dc.webp",
-        "sha256": "49e5ce653a8695102af9cf3900496c26e65cf75e35da2842212f8630ad8446dc"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69.webp",
-        "sha256": "4ac709d5f4ce1145026ded02ffcf606b98243bb871889e4f0ac271c01c458b69"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f.webp",
         "sha256": "513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/513f8f8a25b8cb0278483487d239f67336487e8a7eec7e9c432a06d5d00314a4.webp",
-        "sha256": "513f8f8a25b8cb0278483487d239f67336487e8a7eec7e9c432a06d5d00314a4"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/53c770a6c42bc9dab45c1225cb54d396b240a18272a7f63c36a6dc7b016896a6.webp",
-        "sha256": "53c770a6c42bc9dab45c1225cb54d396b240a18272a7f63c36a6dc7b016896a6"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/543856b4323ffb7c802a17415a819e8fa9cf17b45c17d07d810c4520ea876db0.webp",
-        "sha256": "543856b4323ffb7c802a17415a819e8fa9cf17b45c17d07d810c4520ea876db0"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/59ee4ed53d469ec138056dc38c17987a86e5dcff384efd90f083979efb87307f.webp",
-        "sha256": "59ee4ed53d469ec138056dc38c17987a86e5dcff384efd90f083979efb87307f"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/5d2adf1d767d91ad608e1c01424a587ecfa0da9f05c8e7ea936a105c95d5d35b.webp",
-        "sha256": "5d2adf1d767d91ad608e1c01424a587ecfa0da9f05c8e7ea936a105c95d5d35b"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/617556ccf0bedf68e0a9bb2c4e3ac571f1404c82ea2c60f3fc84af08b2266df6.webp",
-        "sha256": "617556ccf0bedf68e0a9bb2c4e3ac571f1404c82ea2c60f3fc84af08b2266df6"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/61ea69a1c5b1823dc54c21cc0e909a8e3f06154285cda185f9dad555977a6a75.webp",
-        "sha256": "61ea69a1c5b1823dc54c21cc0e909a8e3f06154285cda185f9dad555977a6a75"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/63212fbf55baeb3be4f94d103a20da279ca7b19eb8423e4a748609fdb3f726e3.webp",
@@ -37634,18 +37943,6 @@
       {
         "path": "assets/production/hunt/accepted-20261010/images/65826785834c9aedf81ff9bcf053e79e7c6ca4f495ad0ebb98e247b029e70827.webp",
         "sha256": "65826785834c9aedf81ff9bcf053e79e7c6ca4f495ad0ebb98e247b029e70827"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/6ae77617274797bcb7569bdf5b647dd167fdfc72e6f9e2563e295263061d3ee8.webp",
-        "sha256": "6ae77617274797bcb7569bdf5b647dd167fdfc72e6f9e2563e295263061d3ee8"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/701bdced29a1c30bd41d1494a1e03c3929532f08f3028b731b033abc72f815ce.webp",
-        "sha256": "701bdced29a1c30bd41d1494a1e03c3929532f08f3028b731b033abc72f815ce"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/755ab37ebcd78c9d445522b882adddce7aeb82b5b29b6b4fd6f7506d20b491cf.webp",
-        "sha256": "755ab37ebcd78c9d445522b882adddce7aeb82b5b29b6b4fd6f7506d20b491cf"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253.webp",
@@ -37660,20 +37957,8 @@
         "sha256": "818232e99c196b4626bb9b8e02c17201cc55f38c1c979cfad0c2788f900429d5"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/89a0d4f88d8386b638ac737c08500451167852c82cacb4bae6f76f99666ed66f.webp",
-        "sha256": "89a0d4f88d8386b638ac737c08500451167852c82cacb4bae6f76f99666ed66f"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d.webp",
         "sha256": "8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/8c8306f52bd570296e0ab8ef2bef9a2c503d321b39ecb973f60723383f78734c.webp",
-        "sha256": "8c8306f52bd570296e0ab8ef2bef9a2c503d321b39ecb973f60723383f78734c"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/94a65da0ae81a2f3fe58aeff4f5a0e452a4d7c43ac92749de870f1d20f5ea88d.webp",
-        "sha256": "94a65da0ae81a2f3fe58aeff4f5a0e452a4d7c43ac92749de870f1d20f5ea88d"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/965154abada1869a418deef9830d32699dd4ff351bb3f012c5906b133cebcc8d.webp",
@@ -37682,10 +37967,6 @@
       {
         "path": "assets/production/hunt/accepted-20261010/images/9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654.webp",
         "sha256": "9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/9dc99fee686f1bbd72297cffa5d40e0199baed787ed85ea81789eaf155885103.webp",
-        "sha256": "9dc99fee686f1bbd72297cffa5d40e0199baed787ed85ea81789eaf155885103"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc.webp",
@@ -37700,20 +37981,8 @@
         "sha256": "a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/a4439317de55ac8b7794c77d3a4f13fb4b19659925e98d08db74966141312a17.webp",
-        "sha256": "a4439317de55ac8b7794c77d3a4f13fb4b19659925e98d08db74966141312a17"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee.webp",
         "sha256": "a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/a92bd40a0e3e94ce9c20e958974e4a90983b6aabb8c17c159c256237e4b17230.webp",
-        "sha256": "a92bd40a0e3e94ce9c20e958974e4a90983b6aabb8c17c159c256237e4b17230"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/a96efdd9953a00da9b7916061ce32355e9a839775d2f4f5a6dd3a0cfac9c7997.webp",
-        "sha256": "a96efdd9953a00da9b7916061ce32355e9a839775d2f4f5a6dd3a0cfac9c7997"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818.webp",
@@ -37728,48 +37997,12 @@
         "sha256": "b1753ee1db999c33e2482a9654770075baefbfc4383bfbbf359cfafcc2632399"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/b2b9af4cd075c43ae8aba1a2be9a8ce16723fdcd1231549c1a6d1488fc72b30a.webp",
-        "sha256": "b2b9af4cd075c43ae8aba1a2be9a8ce16723fdcd1231549c1a6d1488fc72b30a"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/b311ccbef3d249da78d6f615b132632448f2b91165fd880483462ad890b2720e.webp",
-        "sha256": "b311ccbef3d249da78d6f615b132632448f2b91165fd880483462ad890b2720e"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/b32c70aac78eb73ea5699e5d2f8a71ec1c98bcc3cbb257512fc00fde3bc2ae99.webp",
-        "sha256": "b32c70aac78eb73ea5699e5d2f8a71ec1c98bcc3cbb257512fc00fde3bc2ae99"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d.webp",
         "sha256": "bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/bbc442152e0ae052c3fad204d4042c950aec58c892ea4f1ac359359bc753392a.webp",
-        "sha256": "bbc442152e0ae052c3fad204d4042c950aec58c892ea4f1ac359359bc753392a"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9.webp",
         "sha256": "bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/c47ff11e6b06fa3798a96aeafaf207c3f753f2e19ac3295586df2993de277fc6.webp",
-        "sha256": "c47ff11e6b06fa3798a96aeafaf207c3f753f2e19ac3295586df2993de277fc6"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/c7267ac7cb9142f03031bca0a387e41e975e73f97c2532518f907e9931be6ef0.webp",
-        "sha256": "c7267ac7cb9142f03031bca0a387e41e975e73f97c2532518f907e9931be6ef0"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/caa02e908463fb40014c2e74811e6d656fbda2b9e37c27ccbe7e36c1dda602b6.webp",
-        "sha256": "caa02e908463fb40014c2e74811e6d656fbda2b9e37c27ccbe7e36c1dda602b6"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2.webp",
-        "sha256": "cb1cd68328341ffcd5ffd99c611a17ed331838c61c20d2f2ffd6811235633de2"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/cf907aa8434e3c59aa8b8fc98ee9a9bc34e446687345f93c1603e781dd6a966a.webp",
-        "sha256": "cf907aa8434e3c59aa8b8fc98ee9a9bc34e446687345f93c1603e781dd6a966a"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6.webp",
@@ -37780,40 +38013,12 @@
         "sha256": "d266c7c42d56092d1515d37ef8d0ce532025b2193ece94398ecb4aeb6c88ed0c"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/d32a045c04fc05bc66abd6466b9d963b7998b72cf7d9a7cda9d2d634e3cc03a9.webp",
-        "sha256": "d32a045c04fc05bc66abd6466b9d963b7998b72cf7d9a7cda9d2d634e3cc03a9"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/d3a73592a8db5a803fa67c28547b1b5be7126e33dcd4f584333a4da241cd95e9.webp",
-        "sha256": "d3a73592a8db5a803fa67c28547b1b5be7126e33dcd4f584333a4da241cd95e9"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/d86443e0ab2b220b26a218b6e16a2c3da813fa42282e32c08f86bcdc626fcf46.webp",
-        "sha256": "d86443e0ab2b220b26a218b6e16a2c3da813fa42282e32c08f86bcdc626fcf46"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/d9899893de9b8c13ab26564137bc0a1c399981af73c07a697b7898e512c8276e.webp",
-        "sha256": "d9899893de9b8c13ab26564137bc0a1c399981af73c07a697b7898e512c8276e"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd.webp",
         "sha256": "dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/e00c7dd73fbb2292c010101ae379b54ec54515c94257654c12b1bf618ce39fea.webp",
-        "sha256": "e00c7dd73fbb2292c010101ae379b54ec54515c94257654c12b1bf618ce39fea"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/e3b4fc7faae9a83a72a668a0707490ceb8f0301ef5cc53c0878a9934ce1da8a9.webp",
-        "sha256": "e3b4fc7faae9a83a72a668a0707490ceb8f0301ef5cc53c0878a9934ce1da8a9"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710.webp",
         "sha256": "e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/e846d6716917ef354ab91e48183a575d5339f6cdff9bd09f994fcecf72060c4a.webp",
-        "sha256": "e846d6716917ef354ab91e48183a575d5339f6cdff9bd09f994fcecf72060c4a"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/e8a5ec0f9dbab05c05513eb95dd37e24bd90dc796343943e41094cbb0f897bf9.webp",
@@ -37824,24 +38029,8 @@
         "sha256": "e9948bd0dab2b69d2a2f406bfc9248f5ac2b977e1611aa0219e2fba2168ddd39"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/ea329cc5877734e995d9dc7b0ce10b263aaea272d96a56b7f2ef7eb20612e59d.webp",
-        "sha256": "ea329cc5877734e995d9dc7b0ce10b263aaea272d96a56b7f2ef7eb20612e59d"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/f208313ef68aacbbe7fb7884ee477f3bcae51d6e7ff4d6b23b065656f79c5925.webp",
-        "sha256": "f208313ef68aacbbe7fb7884ee477f3bcae51d6e7ff4d6b23b065656f79c5925"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/f3261db3f829abb01cc848c03ecb038eee4977066768843acd7cbff2d143f7aa.webp",
-        "sha256": "f3261db3f829abb01cc848c03ecb038eee4977066768843acd7cbff2d143f7aa"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc.webp",
         "sha256": "f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/f5758d56212824f676b22e975d762fa59e550a7eee2f562987d771f35deb39d4.webp",
-        "sha256": "f5758d56212824f676b22e975d762fa59e550a7eee2f562987d771f35deb39d4"
       },
       {
         "path": "assets/production/hunt/accepted-20261010/images/f615a1d2f2ad3c098d5e2d1769db7e3ad44df3809e9e64b4486c28a646f6c5d1.webp",
@@ -37852,12 +38041,32 @@
         "sha256": "fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9.webp",
-        "sha256": "fe719c5f4c97f827f58e252806437abebabbaf76b32db0e9d72bc31162b44dd9"
+        "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-7612568c0979.webp",
+        "sha256": "7612568c0979787ca4b7e04cdced8aaa4396913427253fd3d61180b92385976d"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/ff67f8822972b585f3bee77d56b31c1d188f97b6e23fb69c24653e4f64aa6c95.webp",
-        "sha256": "ff67f8822972b585f3bee77d56b31c1d188f97b6e23fb69c24653e4f64aa6c95"
+        "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-01-eeb2ff08fdd4.webp",
+        "sha256": "eeb2ff08fdd4fa0ebd31d471dc35d3cf1a76153e05362a1f51ec57dd7208b902"
+      },
+      {
+        "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-00-2ddf2c03c3e1.webp",
+        "sha256": "2ddf2c03c3e169bab40caadecf6b5ec0011446972080b9c6b3869ce320fb3e8f"
+      },
+      {
+        "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-01-4fb08e2d1d80.webp",
+        "sha256": "4fb08e2d1d8006a59a7e4c2eaeec7501dda9652bc5a23727dd3ac41d68b4230a"
+      },
+      {
+        "path": "assets/production/hunt/hm01-three-r1-20261022/hm01-ground-heights.json",
+        "sha256": "a46ee687ea5c3f1f7865dbddceca8ced3798772707f90d30c29728728d9935ba"
+      },
+      {
+        "path": "assets/production/hunt/hm01-three-r1-20261022/hm01-terrain-e90423e80e5e.glb",
+        "sha256": "e90423e80e5ec917854cc406b77e32815ae6912d5629126a2f92e209537da5ee"
+      },
+      {
+        "path": "assets/production/hunt/hm01-three-r1-20261022/manifest.json",
+        "sha256": "4404b66afeaf5ceeb270bb02a4a50106f7fcab24066e671340e3e9f22ff516e4"
       },
       {
         "path": "assets/production/hunt/hm01x2-public-20261021/images/090498c7fc9d16035628c45380caa9468719a1ee59c7bf21af4d57db0e4beeca.webp",
@@ -37914,6 +38123,250 @@
       {
         "path": "assets/production/hunt/hm01x2-public-20261021/images/fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80.webp",
         "sha256": "fe3bbbbbb6c3c5ec998f8c7c92e4c85cb08bcac1a736a8d54b836bdfcd626b80"
+      },
+      {
+        "path": "assets/production/hunt/hm02-three-v5-20261023/manifest.json",
+        "sha256": "27f6a977918b557b5195d2b64089df2d8288e8ed09ddf88eb20d2605b36d9a37"
+      },
+      {
+        "path": "assets/production/hunt/hm02-three-v5-20261023/terrain-props.glb",
+        "sha256": "7c09ba73e8b5e651f40ba46fdd5856bc98387e8e3ee87eabe759a72c8beec2a0"
+      },
+      {
+        "path": "assets/production/hunt/hm02-three-v5-20261023/tree-instances.json",
+        "sha256": "598890a335f9af0062bf6fab2c2d79890de4aa0e33f14d38738d3047e76b541a"
+      },
+      {
+        "path": "assets/production/hunt/hm02-three-v5-20261023/tree-prototypes.glb",
+        "sha256": "ece6260af56cdb59beab6405429ecc132fc336d55dc5769f2d481d47fe99a6b2"
+      },
+      {
+        "path": "assets/production/hunt/hm03-three-v6-review-20261023/manifest.json",
+        "sha256": "6656e447c3162f1ad0cc64cee02bbfdf222e059c9b7e34cd91b2dad0e6f0eb39"
+      },
+      {
+        "path": "assets/production/hunt/hm03-three-v6-review-20261023/terrain-props.glb",
+        "sha256": "668aaa1fb428855dae91a1ff077ae484189c87192a83e05c400030e635594bd2"
+      },
+      {
+        "path": "assets/production/hunt/hm03-three-v6-review-20261023/tree-instances.json",
+        "sha256": "9deec1e3df90810d7a9938acf86ac3fa8ac000a6d1ce252c2a82cf618de4f368"
+      },
+      {
+        "path": "assets/production/hunt/hm03-three-v6-review-20261023/tree-prototypes.glb",
+        "sha256": "b21b01de84c97fc05009fd36ed3cadbb8f9fee9be429510b0fdff2e4729671cd"
+      },
+      {
+        "path": "assets/production/hunt/hm04-three-v5-review-20261023/manifest.json",
+        "sha256": "fec5aa4d6ac07ea016eebf371a61ebe59fba2c9f37c06ebc84729e2ef4e929a6"
+      },
+      {
+        "path": "assets/production/hunt/hm04-three-v5-review-20261023/terrain-props.glb",
+        "sha256": "b27ccb7d330146fe4cf1784885399026db6c89e126ca0b8a07b47b2de9610a3b"
+      },
+      {
+        "path": "assets/production/hunt/hm04-three-v5-review-20261023/tree-instances.json",
+        "sha256": "afc834135962dfea078e400f6ae8b30905dc2299ff5144df153eab0c76a023be"
+      },
+      {
+        "path": "assets/production/hunt/hm04-three-v5-review-20261023/tree-prototypes.glb",
+        "sha256": "efc4eb3d371293d3b77c8310c9845d690f5ed837ca5b610f2b62bec17667b44e"
+      },
+      {
+        "path": "assets/production/hunt/hm05-three-v7-20261023/manifest.json",
+        "sha256": "8ade45d33b64c3fff4205176e315d230c742a150ae92f14a15211a644f585ddb"
+      },
+      {
+        "path": "assets/production/hunt/hm05-three-v7-20261023/terrain-props.glb",
+        "sha256": "e88187bdd5555288b9ca308310edbc45aa8ea030c50888e5c06d88b612d1c287"
+      },
+      {
+        "path": "assets/production/hunt/hm05-three-v7-20261023/tree-instances.json",
+        "sha256": "6f0318a954ba69d144598917bf0f89fabc12d5b061a9cdd94549016fd0afc839"
+      },
+      {
+        "path": "assets/production/hunt/hm05-three-v7-20261023/tree-prototypes.glb",
+        "sha256": "3bb03e617815c09b873230fa709ecd90723ae44ce3817859a4ef3d92affff6fc"
+      },
+      {
+        "path": "assets/production/hunt/hm06-three-v4-20261023/manifest.json",
+        "sha256": "84d78879e2c3ac4f01d5fc6bdb7a2df54a5990f0afa0057c7230ac44ac24748b"
+      },
+      {
+        "path": "assets/production/hunt/hm06-three-v4-20261023/terrain-props.glb",
+        "sha256": "5024acbba3119daf77b771ad194998575744dad47e154f73b22bcb467c285f57"
+      },
+      {
+        "path": "assets/production/hunt/hm06-three-v4-20261023/tree-instances.json",
+        "sha256": "294cc645a562e55f1636a2ab732aced2813929e49d692ee165c9187d0bdb0471"
+      },
+      {
+        "path": "assets/production/hunt/hm06-three-v4-20261023/tree-prototypes.glb",
+        "sha256": "9215d4e1f2b743be51428d21c32a52b4951c2da71179e1dd4256cc63d362130a"
+      },
+      {
+        "path": "assets/production/hunt/hm08-three-r1-20261022/field_hm08_01-frame-00-f785e7106327.webp",
+        "sha256": "f785e71063271186a2bcd28b48bb18fe54148912199a4a658e8e4ccaa22b8058"
+      },
+      {
+        "path": "assets/production/hunt/hm08-three-r1-20261022/field_hm08_02-frame-00-c796caf80af0.webp",
+        "sha256": "c796caf80af0ca5820bf24038005f3794313347049503fe49286f5d9ba23780f"
+      },
+      {
+        "path": "assets/production/hunt/hm08-three-r1-20261022/hm08-ground-heights.json",
+        "sha256": "fb1b4e507cadb604ab7757233e3a568c02ffa2c8c1156c086271f8545e89c108"
+      },
+      {
+        "path": "assets/production/hunt/hm08-three-r1-20261022/hm08-terrain-ee412126d0e2.glb",
+        "sha256": "ee412126d0e22f9986b9ac22e19b5bb8b203bc81a63862de9315dfa46440b328"
+      },
+      {
+        "path": "assets/production/hunt/hm08-three-r1-20261022/manifest.json",
+        "sha256": "be78e84adcdd90fadefbaeb3c40f864d6d90b2e4f9ece2897ebb441b37a3d583"
+      },
+      {
+        "path": "assets/production/hunt/hm09-three-v7-20261023/manifest.json",
+        "sha256": "29a40a8d37bb81c6a2c9c1d68d7d7e15ae860cee15183fe8a91bb8a3ab483f96"
+      },
+      {
+        "path": "assets/production/hunt/hm09-three-v7-20261023/terrain-props.glb",
+        "sha256": "f331eb2debb91ec9f549c08f1981701918ca88c735a70482bcf60c5e33041578"
+      },
+      {
+        "path": "assets/production/hunt/hm15-three-v6-20261023/ground-heights.json",
+        "sha256": "8ff6bcca45dc5e13354885e1dc8cf925eefe2804bb02d6c39cbd1ed440b54881"
+      },
+      {
+        "path": "assets/production/hunt/hm15-three-v6-20261023/lava-phase-1.webp",
+        "sha256": "8cb3e5c66dd395cf5c9721a5912f8e4fad193a6c6acb9645594154fc83d61a6d"
+      },
+      {
+        "path": "assets/production/hunt/hm15-three-v6-20261023/manifest.json",
+        "sha256": "a5eb705de633d5bd713422b055e093565a97f1154d9174b37bdbd10413943ebf"
+      },
+      {
+        "path": "assets/production/hunt/hm15-three-v6-20261023/terrain-props.glb",
+        "sha256": "13f27e364d3e533347ff9b7ddf0154b6fad812f5954b9253d1b7b51a8939dcbd"
+      },
+      {
+        "path": "assets/production/hunt/hm16-three-v6-20261023/ground-heights.json",
+        "sha256": "e6bdecbb29e27cb18d4632c1e1ade7180efdb59a5f4b9e0df1db0a7f60b0cc81"
+      },
+      {
+        "path": "assets/production/hunt/hm16-three-v6-20261023/hm16-terrain-props.glb",
+        "sha256": "5214ff71cd39e14089d29b704eede46176cbec5e35f56ebc8f2d6e6aac720baf"
+      },
+      {
+        "path": "assets/production/hunt/hm16-three-v6-20261023/manifest.json",
+        "sha256": "81b05510c45a1259dd4c82296bebe7a259593b9292a8e8fd786341a86542bdac"
+      },
+      {
+        "path": "assets/production/hunt/hm17-three-v4-20261023/ground-heights.json",
+        "sha256": "7f4bb5681e5baa52d655c7062abbcdedac07ed6e7b8fca6992af3f514ca5ccb9"
+      },
+      {
+        "path": "assets/production/hunt/hm17-three-v4-20261023/hm17-terrain-props.glb",
+        "sha256": "65f19b7a27c4b575b315df36d72217e63aabbaa59aa09c584e36ad0dff513cbd"
+      },
+      {
+        "path": "assets/production/hunt/hm17-three-v4-20261023/manifest.json",
+        "sha256": "8b01e58d395cef1a7ad217eec7630b9f387a62d1d1560dd24c568fb00b062f43"
+      },
+      {
+        "path": "assets/production/hunt/hm18-three-v3-20261023/ground-heights.json",
+        "sha256": "0aa6216672814ce4ff1711cca850796f2f67826080a6eb6b70be07d1d5a1d291"
+      },
+      {
+        "path": "assets/production/hunt/hm18-three-v3-20261023/manifest.json",
+        "sha256": "ced49aec4f59220cb21eb199f512a0aa1d66cf6c49f1afddfa14d6a334b59a52"
+      },
+      {
+        "path": "assets/production/hunt/hm18-three-v3-20261023/terrain-props.glb",
+        "sha256": "2edd1ddc6bdaba000c1893d71d959ec89f5b7e59b15f271b36b58d0d35135cff"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm02-day.webp",
+        "sha256": "2bbc94d9286efe4944750e12bd0bcb0e0873071bd154eb4c29820fe85f9b9efd"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm02-night.webp",
+        "sha256": "91243d78e38764aaef3ca65f4cdb2fa6500618d2bf8d2f3f597848751bacdfee"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm03-day.webp",
+        "sha256": "b501c765979c7677b8f11fef8a1773ae86529569ef9cb6bec810a102b99f639a"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm03-night.webp",
+        "sha256": "eb51e9a4e1af307836ab993b6c00bfe02b077cc0006188fdeff157008d3d069e"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm04-day.webp",
+        "sha256": "e906bf3ab728de0e4418fde50ddc3913bfeeb468ee796a80f60d9b47c5230568"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm04-night.webp",
+        "sha256": "96c94a00a794da6de7fb0b174a98f79e182fe3b79490eef0dd9e5990ca7ba84a"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm05-day.webp",
+        "sha256": "be46bdae2ab8d62aceb3dd66a45f52e3481bf4495c13ac4c9eb133a8003a2c88"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm05-night.webp",
+        "sha256": "0646e256c92e34da053b45c3071e9bf3facedd662c66389e1eb7410b644cc93e"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm06-day.webp",
+        "sha256": "dddb73b6fb35c160320f50cc02a0011c090f6ac20e6bc604fed1db6d700d6b75"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm06-night.webp",
+        "sha256": "4a689bd50bc03d9ede43fd573abbca4ca6aaea70620d11029f080b2c3088c074"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm09-day.webp",
+        "sha256": "269b5d4fc1206f799a8ff39f92f6d014b4abef559bf983c087308511c11de575"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm15-day-phase1.webp",
+        "sha256": "91b1cf1ddf446b3576508f559d25feb6411c37120eee76b36e688beeebf042e6"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm15-day.webp",
+        "sha256": "a7f0985eed2141cc8d4b62d547649ffb3fa14fd11263ff27bcdce5978f52121e"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm15-night-phase1.webp",
+        "sha256": "4aed2458e633d712ee14ccbc54c0ef8f8a3bfd3defbed5005f2c066a92e0f677"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm15-night.webp",
+        "sha256": "8c28d3e1d1e8ac6270798d64cd622e8ed45e711b589decfdb13d9d64bdac4f37"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm16-day.webp",
+        "sha256": "0be5da26c1b3763eb5c79718cb0fc4cd9a3cb1f330e08d019f23be9d76612d6c"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm16-night.webp",
+        "sha256": "e9e5ba1bd5dfa3643ca4836ac95e430961ae200c60b0081004336922b5c7d3d4"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm17-day.webp",
+        "sha256": "1498853c7426f9ae346f8326a0cad6395700e93c184fc2120f5fbbd56ba1cf72"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm17-night.webp",
+        "sha256": "e762d25f48679b86185d01f00fc11dd4f4f04b5c17be7ca9be6191b7ed4e716c"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm18-day.webp",
+        "sha256": "5cdb9e3a66498e7c95d084f58f65dc7c7ee2d690f1d0b00b7f063dc09a380c16"
+      },
+      {
+        "path": "assets/production/hunt/three-fallback-20261023/hm18-night.webp",
+        "sha256": "d42ef418be0167edeb54c78deb31c5290ef933e4016095ac48a0af1d2f028a80"
       },
       {
         "path": "assets/production/internal-faithful-baseline/battle-audio-v1/0200.wav",
@@ -40280,6 +40733,10 @@
         "sha256": "091415f5ed036d5c3c4fa721ed276ae017b5093c2a01bf5bceb6e3adc9fda726"
       },
       {
+        "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
+        "sha256": "4d12a4423904f7c074c605a40259d81d43f0a050b982f01e0c6cd8e4f2666674"
+      },
+      {
         "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
         "sha256": "85ef74719519e2235ba6d74c7b613421a4772d5d560c55c458edb481c71720d1"
       },
@@ -40329,7 +40786,7 @@
       },
       {
         "path": "assets/production/public-runtime/hunt-accepted.map.v1.json",
-        "sha256": "21a89dc8f8175edf4cb17e047f12cc61560892d5d3098227e9f891c62f43597c"
+        "sha256": "ffd95469902f942e6edeee01aaf5472cea06cf816c5864665e68be79f86a3a63"
       },
       {
         "path": "assets/production/public-runtime/hunt-feedback.render.v1.json",
@@ -40342,6 +40799,10 @@
       {
         "path": "assets/production/public-runtime/hunt-night.map.v1.json",
         "sha256": "378866ffeee3c1686fadd47eaba57aaf4d296eb039d892fe3bb9f7f0f67ff454"
+      },
+      {
+        "path": "assets/production/public-runtime/hunt-three-fallback.map.v1.json",
+        "sha256": "6302ff80b8143cbaa35aaa7915cb0e9fe207ab9f940a7251ffeed22400e9acce"
       },
       {
         "path": "assets/production/public-runtime/metadata/arena-harbor.v1.json",
@@ -40864,20 +41325,20 @@
         "sha256": "8b28839ad0e910a78cbfbd457ae0f73ed0ec5439e530188a34ad39a7f81b8add"
       },
       {
-        "path": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
-        "sha256": "c9ecb319c8ff83f5e236d6e1495b26a071f89727441c5fdbd190ad5123bb0034"
-      },
-      {
-        "path": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
-        "sha256": "8144f3df78fc748ea492c61ab77e0bc1f6da8c12a82c46980cb05937387f7df4"
-      },
-      {
         "path": "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.glb",
         "sha256": "703ce76be930ab7bb0618c42aa6185b2ae344ea63099b9cc533130a00c403a7b"
       },
       {
         "path": "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.png",
         "sha256": "fdc12aacc071a2f1458877d361595d5700aba115b393d1127ecd3b136ea492bc"
+      },
+      {
+        "path": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
+        "sha256": "c9ecb319c8ff83f5e236d6e1495b26a071f89727441c5fdbd190ad5123bb0034"
+      },
+      {
+        "path": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
+        "sha256": "8144f3df78fc748ea492c61ab77e0bc1f6da8c12a82c46980cb05937387f7df4"
       },
       {
         "path": "assets/production/vfx/licensed-runtime-v1/battle/critup/critup.glb",
@@ -40936,6 +41397,14 @@
         "sha256": "3206af081f636bc8e3569f7a449e41c9032ff50562c4e433657e10f71abc6ff1"
       },
       {
+        "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
+        "sha256": "79e708a16bcbd3c5df0ca5a5cdc03a9a0a6024a487673f61c02a459b05f18d02"
+      },
+      {
+        "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
+        "sha256": "5e4641ef0731f62ec2d44a7076457e29bcb1d0d1ea8a2f7e86cd6a9f3f809621"
+      },
+      {
         "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hitmark.png",
         "sha256": "b65c00106eb65e79745538572cc1dd4a8338b633b0a7be9ab1a4afece02da763"
       },
@@ -40946,14 +41415,6 @@
       {
         "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/new1.png",
         "sha256": "4a491ed0096631c28affa4742b1a2a3791ceac597862dadbf830a4a8cde59f84"
-      },
-      {
-        "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
-        "sha256": "79e708a16bcbd3c5df0ca5a5cdc03a9a0a6024a487673f61c02a459b05f18d02"
-      },
-      {
-        "path": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
-        "sha256": "5e4641ef0731f62ec2d44a7076457e29bcb1d0d1ea8a2f7e86cd6a9f3f809621"
       },
       {
         "path": "assets/production/vfx/licensed-runtime-v1/battle/s_impact_b/ip_circle.png",
@@ -41012,20 +41473,20 @@
         "sha256": "cae56317ef555af59c105d905af887348c0b88bb0880bf7d966352f5bb4cf53d"
       },
       {
-        "path": "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
-        "sha256": "c607d1033cfddca39d4a03b5e51cf93cd79d30de1748824b4f49a4c38268ef13"
-      },
-      {
         "path": "assets/production/vfx/licensed-runtime-v1/common/mist/mist_eff.png",
         "sha256": "6bb310d51570d446082edc8acef8a94a693a9d4b7b6c28147320840e4b21f53d"
       },
       {
-        "path": "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
-        "sha256": "4ebc766b968c7b17dc097b1f7566212134346d768ed17dcd840e11f4fe4b6294"
+        "path": "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
+        "sha256": "c607d1033cfddca39d4a03b5e51cf93cd79d30de1748824b4f49a4c38268ef13"
       },
       {
         "path": "assets/production/vfx/licensed-runtime-v1/common/rain/rain_eff.png",
         "sha256": "5eb28a78831fee5e8f83a44ed35d93c245e04b38d8aa48cc5207b56dca6bdc8e"
+      },
+      {
+        "path": "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
+        "sha256": "4ebc766b968c7b17dc097b1f7566212134346d768ed17dcd840e11f4fe4b6294"
       },
       {
         "path": "assets/production/vfx/licensed-runtime-v1/common/sandstome/sand_eff.png",
@@ -41036,20 +41497,20 @@
         "sha256": "9ec983f0f7b8b3ac77f1734a5931ace55bbb8998b291e7d12a7f62225b30a38e"
       },
       {
-        "path": "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
-        "sha256": "2a4434d8f50dcf1c4bca9ad8e9cf1ec31380a5f23973fa83d6ae3a4c60882ea1"
-      },
-      {
         "path": "assets/production/vfx/licensed-runtime-v1/common/snow/snow_eff.png",
         "sha256": "bdf6ea83bd6110d82a1c1b18922efef62626a8d3515d187b27aa21d8423b019e"
       },
       {
-        "path": "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
-        "sha256": "9ec4556ebe1d91cf78eccdc8ec60629dbdbb3292f760fcd09dff24be233b96d3"
+        "path": "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
+        "sha256": "2a4434d8f50dcf1c4bca9ad8e9cf1ec31380a5f23973fa83d6ae3a4c60882ea1"
       },
       {
         "path": "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome_eff.png",
         "sha256": "6972369b5153792d62af2f475a5bc833146a31f2ea451baaf27dc4e48a6423bc"
+      },
+      {
+        "path": "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
+        "sha256": "9ec4556ebe1d91cf78eccdc8ec60629dbdbb3292f760fcd09dff24be233b96d3"
       },
       {
         "path": "assets/production/vfx/licensed-runtime-v1/common/spark/m_spark_eff.png",
@@ -41068,12 +41529,12 @@
         "sha256": "f80e1b07c7a9950f7d2ead83ab2fab176b777cc71f4ac37eeb99134564238129"
       },
       {
-        "path": "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
-        "sha256": "cb1d2d276e3d8f9a3bcce981f01a6c291c491e0eed67951ec3e4bac499a8f997"
-      },
-      {
         "path": "assets/production/vfx/licensed-runtime-v1/common/wind/wind_eff.png",
         "sha256": "4165afd3ac3e165958ae406d4dfca6b2aa49d665ae16ca633f9a683211108d8a"
+      },
+      {
+        "path": "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
+        "sha256": "cb1d2d276e3d8f9a3bcce981f01a6c291c491e0eed67951ec3e4bac499a8f997"
       },
       {
         "path": "assets/production/vfx/original-battle-2d-v1/effects.png",
@@ -41112,16 +41573,16 @@
         "sha256": "19ead2f3377cd11948262e8fb4814726d9dbc4b89534bbea2ec004f3dd045de3"
       },
       {
-        "path": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
-        "sha256": "ad5a9285baa66419efdc3df6ec3f2b1afae8c6611af12ded8d8b47e64a3aaa41"
-      },
-      {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
         "sha256": "d80ed00c964928da89345b949ed29602631b7d1ffaa3b5c25b016570b5a46251"
       },
       {
         "path": "docs/contracts/championship/battle-player-roster.v1.json",
         "sha256": "769e16c0b9710eb024f50e6596ef798869106b8d655d534a622a48c9723e3d20"
+      },
+      {
+        "path": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
+        "sha256": "ad5a9285baa66419efdc3df6ec3f2b1afae8c6611af12ded8d8b47e64a3aaa41"
       },
       {
         "path": "docs/contracts/championship/raising-home-presentation.v1.json",
@@ -41164,10 +41625,6 @@
         "sha256": "b1632a703206c3d830de9fcbe515696770d04b71a15ee6b50afa6d2c3298c86f"
       },
       {
-        "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "165912a541e507db570f7c630baefd4913fe20699eb150d9f5fe98ef7917b6e3"
-      },
-      {
         "path": "src/championship/app/assetPrefetch.js",
         "sha256": "e2290d2d3c73d276754b54028cc96eb148d3f086cd33f262f08803917ca413b1"
       },
@@ -41198,6 +41655,10 @@
       {
         "path": "src/championship/app/championshipClockDriver.js",
         "sha256": "bf06f2d0758338711b1fe1985ee70085781076073ebf3dc550735c4de8c46c80"
+      },
+      {
+        "path": "src/championship/app/ChampionshipPersistentSavePort.js",
+        "sha256": "165912a541e507db570f7c630baefd4913fe20699eb150d9f5fe98ef7917b6e3"
       },
       {
         "path": "src/championship/app/championshipRaisingProduction.js",
@@ -41284,10 +41745,6 @@
         "sha256": "5475fd905537cddb001fe2bfd91a20f36baa7a23d8def934c41af30858730413"
       },
       {
-        "path": "src/championship/app/intRh2Styles.css",
-        "sha256": "cb44f63723822c714f95d5068671b50ba7e1689f45cb0a2d55e9fa93726d1e54"
-      },
-      {
         "path": "src/championship/app/interactiveTutorial.css",
         "sha256": "213a6871cf9929d462a03706c50d101e9c21b5e59efcfca91d1cd9a8aeefe22f"
       },
@@ -41312,6 +41769,10 @@
         "sha256": "b02d6a8d7f7f4ebdce51d658ef34e35cd8de7c001c6a3383476bbb220bfb8884"
       },
       {
+        "path": "src/championship/app/intRh2Styles.css",
+        "sha256": "cb44f63723822c714f95d5068671b50ba7e1689f45cb0a2d55e9fa93726d1e54"
+      },
+      {
         "path": "src/championship/app/loadProgress.js",
         "sha256": "3aea9ead59360e4f8983c8a643136d143481ef0f77085ff72eb660dcd2b7b1f2"
       },
@@ -41325,7 +41786,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "8af99a90a315a5a6ea18a0317b8df57ebccccadef1dfb8c5d4e6fa1016e3f573"
+        "sha256": "14bd44d1f7a592c5878552d041db2ea1c135d7599be8d7879e354b2994bd782a"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -41400,6 +41861,10 @@
         "sha256": "6225c63794decfb6b740622b1892d1a6170f8f8e549f5d702d113f8bd62b37d6"
       },
       {
+        "path": "src/championship/app/raisingGroundSupport.js",
+        "sha256": "ffd6a4e62213b1ee7b967fbf341d89f7a8f3e4c6da6a8ab76fd5bf73aff520c9"
+      },
+      {
         "path": "src/championship/app/raisingHomeHud.css",
         "sha256": "cdb154f2216a74bcf06f870587e98df474fc6cb78acd3801a63b2e878d234ed3"
       },
@@ -41428,8 +41893,12 @@
         "sha256": "184fddbba7f3bf17d58f614dc737b514d2ff345ee03af987911257fb01ccc399"
       },
       {
+        "path": "src/championship/app/residentAssetNotice.js",
+        "sha256": "f94d3a65d586852f5065421e5643f67908e3e7e744244be4ecf29bd2a586d150"
+      },
+      {
         "path": "src/championship/app/runtimeRecoveryDiagnostics.js",
-        "sha256": "5b4a5ebd4f998f537f7e1cdfb6246ce78ed115d229500f67204c309816e9d9f9"
+        "sha256": "0df4d7a8152bf8c22d3129ccacf3db49d172b97f171c4a32e0462cf1fa91fb96"
       },
       {
         "path": "src/championship/app/scheduleScreen.js",
@@ -41509,7 +41978,7 @@
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "b2a76037404abd2d6c7941f67fa4fac16d5e441081964294d3a51e26b397cb67"
+        "sha256": "2e9faf60d5529d878fa81fc82b5908b9c85b6906e4a759e9cbc40a83537b441d"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
@@ -41517,15 +41986,15 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "2c093f17c1a6f751590103eec1bf8a2e3ef71ba58cb4f3565fba2abd53d8b7e1"
+        "sha256": "cbf29a17d50f908b96b9199742a8c1484f2a3febf5f005282b969dc9cba75f76"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "ba413d951013b008d18771adec38d87ad717c9f6f24d3dd76c54f726bf4462cf"
+        "sha256": "b3ac7d890833c2b6056db8acd8601945699d01d9e34dd61426e849896f837191"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
-        "sha256": "4a355e3dc9cbaedb990dad10714ee6109761f3e07ab87b9bfda1304d029851c8"
+        "sha256": "35429837529d3721666d60f71b27804d61da79e5645cb9ed1100f0ace9364d88"
       },
       {
         "path": "src/championship/app/webAppInstall.js",
@@ -41541,7 +42010,7 @@
       },
       {
         "path": "src/championship/battle/battleAiAdaptation.js",
-        "sha256": "e27816e23a6c7941de22480229c37790a98311bb98a0165c9a78330980a75749"
+        "sha256": "5855107601261055b98ef875bb2109e952ee6350e188f8f9aaeb6111b809b3f0"
       },
       {
         "path": "src/championship/battle/battleCandidateBuckets.js",
@@ -41641,7 +42110,7 @@
       },
       {
         "path": "src/championship/battle/battleNormalRuntime.js",
-        "sha256": "5063c68d41e420ae33a65bdee30f0196acc7e6573bd318fd41a75a131aa93499"
+        "sha256": "7654aac2d800a70e971567c4343ee3322f71be37b9dc09bd44274d1764b5e129"
       },
       {
         "path": "src/championship/battle/battleOpeningPhase.js",
@@ -41685,7 +42154,7 @@
       },
       {
         "path": "src/championship/battle/battleSession.js",
-        "sha256": "b028cbffe7158b74d8caaf46135e7670c684df133c5fb05c889c9194ae42b977"
+        "sha256": "6c6b11a9c411f0e2e39d356c46825627de893be7293670d791959531a48b0939"
       },
       {
         "path": "src/championship/battle/battleSoundEvents.js",
@@ -42137,7 +42606,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxCamera.js",
-        "sha256": "b8f6febc8e83a850c4227ff92436755d0e5454389ab1c44bf58b8393050a73e2"
+        "sha256": "487f37986c80b0f9cfbfc8ce41743308adba5191fa8e3615b10a92c6cb9581a1"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxEvents.js",
@@ -42202,6 +42671,10 @@
       {
         "path": "src/championship/presentation/characterRosterCore.js",
         "sha256": "5f1bb3e754489cdfad0330cf498ae9784374dff92bf91f6e05e8e2beb6020ea0"
+      },
+      {
+        "path": "src/championship/presentation/cm07Ambient.js",
+        "sha256": "094b079fd085801060e2de7ccbbe9a83d4e670176f0a68ae4f1f2255f87691f0"
       },
       {
         "path": "src/championship/presentation/completedOriginalUi20261007.js",
@@ -42281,7 +42754,7 @@
       },
       {
         "path": "src/championship/presentation/huntMobileReadouts.js",
-        "sha256": "3a5e1918b0da216c8184283d1e3c563b1edfbb97ebc274f9956946340ae02336"
+        "sha256": "d12ebadf155a650a10f6a5546358c0715db16516f97f73e48c29fd38a9dd33bd"
       },
       {
         "path": "src/championship/presentation/intRh2/careImageTextureScope.js",
@@ -42413,7 +42886,7 @@
       },
       {
         "path": "src/championship/presentation/publicMapRequests.js",
-        "sha256": "a0a0ac67782f85e0031c53eafdc7d8d8285c755e5bd3a884d87c76c88f05f38e"
+        "sha256": "ccad672a71cec5659a1ec098ad145c5c3f57a7474fd246cb861c7c134cb699fc"
       },
       {
         "path": "src/championship/presentation/publicMetadata.js",
@@ -42444,12 +42917,32 @@
         "sha256": "0914f2558b69cf6153c67005f64b624afa431bf4a2b9c00012424fc942bfb99a"
       },
       {
+        "path": "src/championship/presentation/ranchBorderMembership.js",
+        "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
+      },
+      {
         "path": "src/championship/presentation/ranchCageArtSelection.js",
         "sha256": "fd9a586661ae9d00539d45091cd6ee485a37507d11cd6e6d1d26bea79952cfae"
       },
       {
+        "path": "src/championship/presentation/ranchContactHeight.js",
+        "sha256": "9359ae3f207858b755bd2a832c3cdbd0360644ed4e4949d40c9d3c743a339547"
+      },
+      {
+        "path": "src/championship/presentation/ranchGroundShadows.js",
+        "sha256": "3cc1549d0aac4a2e417b1cbd332487652bf0b2be40f8a25e0f31c8e94c3e2375"
+      },
+      {
         "path": "src/championship/presentation/ranchPassages.js",
         "sha256": "750b9eb046e851973fce0d9bfbb8f5e1a90d57e681cc8585cafe93224bfd55d3"
+      },
+      {
+        "path": "src/championship/presentation/ranchPhysicalSupport.js",
+        "sha256": "7494276f42e792bc386f83d1bbd417cea1a33e13024a73955e2fcc776bf18e79"
+      },
+      {
+        "path": "src/championship/presentation/ranchSupportOwner.js",
+        "sha256": "10ee4a275e2e696366630e5476ac94e78984d6d0080685b93246910bd859cd81"
       },
       {
         "path": "src/championship/presentation/ranchThreeCoordinates.js",
@@ -42457,7 +42950,7 @@
       },
       {
         "path": "src/championship/presentation/ranchThreeScene.js",
-        "sha256": "3480fb6926c6f8321a4c04743605bb01782b870aa1aae9110b731615edb33ebf"
+        "sha256": "46f419b8d3b97d4862e5b0e707ae45772e9e1585eded827fecfe34f414fac392"
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
@@ -42505,7 +42998,7 @@
       },
       {
         "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
-        "sha256": "56d133781009f48227b1f3109b0229a9c87a1e78d7bc7b60fcefee6a17a4e815"
+        "sha256": "ceef05ae30f6b3b7c6181b8c71daa9a769b7c22fef13dc8a08202fc92ec568b1"
       },
       {
         "path": "src/championship/presentation/vs2/gateWorldLayout.js",
@@ -42532,6 +43025,70 @@
         "sha256": "cc059747c5a0c727d30bf23d20f2daa6e1f9f837378632cb03d5f55358a133b2"
       },
       {
+        "path": "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
+        "sha256": "20d94340eedb123a69ecc5348574f0d5be9b35d5d9acf7eaa80adb6bf5637dd6"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
+        "sha256": "17075171bb2a0f239d0a73cdb3a6ebc5b020737d2cf40796a9b2b89e9f6af7b5"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
+        "sha256": "ef1b32b00b99a8ae8e37c7af66294953b957677fae6129b75563485d71f62b5e"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
+        "sha256": "2078da272f86bd84cd8b6147d8d68a911fc36dd28b42d812beb8a3ff8eb96844"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/dracoLifecycle.mjs",
+        "sha256": "2efae34769d4e97579863de684a30af803357ce8bf569925975fd03035fe8612"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/externalMapAssets.mjs",
+        "sha256": "c001df3460efcaeeeb83c5ac0e5f460fcf8b5d92a249a2c569c5a119a6e40f91"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/hm01SupportCorridors.mjs",
+        "sha256": "d193ad31af7c129f60e697c2af575beeb6bd8c874c08c4e22ab20b42bd349cb4"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/hm02Projection.mjs",
+        "sha256": "0a1a35ae8a0bc12cf5f345b94343e870e3d4a15273fb024bf43ff2c0a256e1c1"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/lifecycle.mjs",
+        "sha256": "64a451af2b6003163d9d58fb28536dfcfef0a0b19c277b94ff47cd90f23f8546"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/loadHuntThreeMap.mjs",
+        "sha256": "5acdd41bd1f94d306c29eba30ce12d6481b6e13fdf37b2f0d60db4414fd35958"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/manifestBindings.mjs",
+        "sha256": "2caef6c3717a14b9add15000c4aae9df082d02928a6513cd6a0eb24b4a360bbe"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/nativeActorAdapter.mjs",
+        "sha256": "929435d6929478e82401fc3f3bf69b58ba0f6f53fdc26b3d71aca6814af47bd7"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/projection.mjs",
+        "sha256": "8431c29aef9f951e5a85afbd351794d3420a6217cd5d33965e7a29268b0f28be"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/sharedGLState.mjs",
+        "sha256": "acbea327ca2e54a4a28168106167fcfff76eedc289713d6c137bca647431718e"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/sharedPass.mjs",
+        "sha256": "d916a2db1774bfed6227ce38719cfe70a1a0c1120c4ae8c41aae96746a05a9c1"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/supportDepth.mjs",
+        "sha256": "08f0adc3d068790d15d5c8f44cb00e182c4afb20d39876082a8306a180694515"
+      },
+      {
         "path": "src/championship/presentation/vs5/battleCubeArt.js",
         "sha256": "16e3aaa7f1fc2137e0af0a160a53e7d42e52a9833fb147b5b72c69652e3646de"
       },
@@ -42541,7 +43098,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "c25a1c683b6f36f95790aaa9a781e9826e2a0313cc81c529f55140cbf148d2f5"
+        "sha256": "accf6c3ef012c5511c6cfdd052bbc2c3bc30db2195dbee2ea335c16f96570ea2"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -42549,7 +43106,11 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
-        "sha256": "9ba72976225035fc3979047392e7fd5a9f45774125109736090fc12790489a5f"
+        "sha256": "433478f1a7a087d1f5954b95550b0ec6476b4122971a11048763134157ce03db"
+      },
+      {
+        "path": "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
+        "sha256": "6b577562751fe0ae49182c1d5e8e8475f9da071ae2d15753f1a9ecacb3c92149"
       },
       {
         "path": "src/championship/r2/createChampionshipR2Session.js",
@@ -42964,12 +43525,12 @@
         "sha256": "55161edb67fb10a32f2d5983f9fc29af33fedd023f2d2d958533ae2015d514dd"
       },
       {
-        "path": "src/data/championship/catalogs/hunt-entry.r1.json",
-        "sha256": "9d76915304469991e62c5a7b70c2063b79a847f3841935a9008809c3e97778ce"
+        "path": "src/data/championship/catalogs/hunt-art-expansions-20261023.json",
+        "sha256": "89c0ad18ebc865695e5f30a35757feed672bb35c5cb7804108c27f38e0810dc8"
       },
       {
-        "path": "src/data/championship/catalogs/hunt-hm01x2.review-20261019.json",
-        "sha256": "96c08652454cf2474372da63a5e84a5c50c2e10a736256dc4b5bd269620d45be"
+        "path": "src/data/championship/catalogs/hunt-entry.r1.json",
+        "sha256": "9d76915304469991e62c5a7b70c2063b79a847f3841935a9008809c3e97778ce"
       },
       {
         "path": "src/data/championship/catalogs/hunt-scene.r1.json",
@@ -43049,7 +43610,7 @@
       },
       {
         "path": "src/data/championship/database-hero-portraits.public.v1.json",
-        "sha256": "6578dd64db646ce38526cd1325fafebe8ea9c9dd48ae03e5177c92f55f2e953f"
+        "sha256": "19b1e6f8aa51e705884b44989486e545939bac1895e713a8e51c05f54c520781"
       },
       {
         "path": "src/data/championship/database-illustrations.r1.json",
@@ -43090,394 +43651,6 @@
       {
         "path": "src/data/championship/ranch-render-selection.v1.json",
         "sha256": "ddd5d6a367c5f0b7e7d80203db5114924c93d6992691571d2fee55ea3eae7f41"
-      },
-      {
-        "path": "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
-        "sha256": "8f6a8eec7fa71381de68f5dc0f7b30399bf89d62e91742281a60bb7e43293a50"
-      },
-      {
-        "path": "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
-        "sha256": "a8c073714c9457a880f6df0b5424fbed00d28ca64a2d10925b04a3068767f599"
-      },
-      {
-        "path": "src/championship/app/raisingGroundSupport.js",
-        "sha256": "ffd6a4e62213b1ee7b967fbf341d89f7a8f3e4c6da6a8ab76fd5bf73aff520c9"
-      },
-      {
-        "path": "src/championship/presentation/ranchBorderMembership.js",
-        "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
-      },
-      {
-        "path": "src/championship/presentation/ranchContactHeight.js",
-        "sha256": "61ce25cc7931ed4d7cc36e5a023ea9d376e32e77483cd6d20c10ef3ffdcc5c71"
-      },
-      {
-        "path": "src/championship/presentation/ranchPhysicalSupport.js",
-        "sha256": "d8132f3048253069fcb74691f14b770860efe1bf2ff5195d3652b740c20b0408"
-      },
-      {
-        "path": "src/championship/presentation/ranchSupportOwner.js",
-        "sha256": "10ee4a275e2e696366630e5476ac94e78984d6d0080685b93246910bd859cd81"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-020.display.5ef180e88ffc6323.webp",
-        "sha256": "5ef180e88ffc632393d0c870e89221b96058f6aafa9def1dc4cbc3394c30586f"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-020.thumbnail.2a3d5e3fed18d7e6.webp",
-        "sha256": "2a3d5e3fed18d7e666d8166f24f4b19b60ccff9d17c017f2d629656fbd762cb9"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-021.display.caf4dbcb06e57df0.webp",
-        "sha256": "caf4dbcb06e57df0574e344f0eb4e7e87305834ae2e9c6fbbe64639d2c334a91"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-021.thumbnail.c58be9cc8cef3272.webp",
-        "sha256": "c58be9cc8cef32720546acd55ce6fbdc40d6344504610e647817924ac7a5e7e4"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-022.display.067597b6716c69b1.webp",
-        "sha256": "067597b6716c69b1ada9eef5640de343aa92446f6ca5cfa82a3dfde9b43c76b2"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-022.thumbnail.2f3e92fbd552fe35.webp",
-        "sha256": "2f3e92fbd552fe355af50a7d4806c1426339e4adc8649f0880b03c2513efde4b"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-023.display.20caf7321c898096.webp",
-        "sha256": "20caf7321c8980960e41e6cc919942c5a686f1bb51ac527cf7d83d9512c6d535"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-023.thumbnail.b69d170b3c5a2a21.webp",
-        "sha256": "b69d170b3c5a2a21941d012a199adb8b9a7c67d9044346b156404a6ef419316a"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-024.display.0e09b1e05edebddd.webp",
-        "sha256": "0e09b1e05edebdddcbda3d12c6122db82304fff3755bb78b7c274f5a04294bb0"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-024.thumbnail.8d77d87e06f21080.webp",
-        "sha256": "8d77d87e06f21080ce299886103478fb6899cff3024da2ba8656ae6423a7150f"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-025.display.3e8f466f9e4014d5.webp",
-        "sha256": "3e8f466f9e4014d50d35e7a48e0437778a2dcf6f74b560efdf815d8f7648712a"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-025.thumbnail.7f3e024caa23e0a9.webp",
-        "sha256": "7f3e024caa23e0a91ba11f7a353c373b1be382d9f2860dcc15d3ac7b64c0a2a5"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-026.display.ec2109a52294be0e.webp",
-        "sha256": "ec2109a52294be0e31df1c5cc6a73d96cbbf4fd1643314c3db73e8ed246a8527"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-026.thumbnail.6ddd286162a8cb38.webp",
-        "sha256": "6ddd286162a8cb38fc22b8bde885391499baf0e2c11ea46d88a2ab04c267c70d"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-027.display.cc716b8480f2f0e9.webp",
-        "sha256": "cc716b8480f2f0e9e9ff4d0a178b86d5de0a1eef0d48e4c4772b753275a5037b"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-027.thumbnail.18165145e0e60ab4.webp",
-        "sha256": "18165145e0e60ab428da8ef817efff8d67d31a106ef204b80e8cc9773512eaaf"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-030.display.52b9940dee31e64e.webp",
-        "sha256": "52b9940dee31e64ea9e3fa7490bee9976f2999091fd7907157ba972f2ba5c166"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-030.thumbnail.3f91917406bc5bee.webp",
-        "sha256": "3f91917406bc5beeb554cac88a9b6f1f89c2955217a94a504ee90c87bea7be0e"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-031.display.e9bfa934de54b2fa.webp",
-        "sha256": "e9bfa934de54b2fa5a1808f5c0071fe5052a8fa664c3c8cb315e798a4d25e15a"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-031.thumbnail.352c9a5ed964b78b.webp",
-        "sha256": "352c9a5ed964b78b1dad7084b19c5d645f50ba40eac422ff80e3b0c894a615e2"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-032.display.625673a54275dc3f.webp",
-        "sha256": "625673a54275dc3fa69633200a06185a3a29caade5b8d358af5149386e160ea7"
-      },
-      {
-        "path": "assets/production/database-first10-20261022/species-032.thumbnail.866d9788dad25bdd.webp",
-        "sha256": "866d9788dad25bdddbc0d87ed52f8b141653ed962ff62e0d7ff461800e7f8ab8"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-074.display.0409f469846b3e78.webp",
-        "sha256": "0409f469846b3e78567405973eb9d5a001dad4d272ab31d3d63f96e0d5093f35"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-074.thumbnail.44762c6577c0939b.webp",
-        "sha256": "44762c6577c0939b29fae6c7d1cb173d6336590c2b1ee4ef4ecb419f4471a786"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-080.display.ba3ebc3506ffabf1.webp",
-        "sha256": "ba3ebc3506ffabf19281d2e7ae38063163e72fa79f5c9cd303777fc0f40fc5d4"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-080.thumbnail.d1144d84a1273c16.webp",
-        "sha256": "d1144d84a1273c161db2b42fb4ab8f970aa344590f9c3e0137aa949506688c94"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-082.display.88e0cc7da3da641b.webp",
-        "sha256": "88e0cc7da3da641ba480a841676e8197ca5058b1b98a8136e2b4699ffb2830b5"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-082.thumbnail.b9620a9389f754e1.webp",
-        "sha256": "b9620a9389f754e1859bc469b1d182cd8b2cb460885c5c9f90f88b6c9721e383"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-085.display.9c38ad0a143b740a.webp",
-        "sha256": "9c38ad0a143b740a6429b6815cba388b303b86cf0951de8a651a698ccfb644f1"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-085.thumbnail.ade4e58a4eb1c6c8.webp",
-        "sha256": "ade4e58a4eb1c6c8446e3701a5bdd3cb0ea7879c701b01e6278313ea04ed584a"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-086.display.3ca46cc6ec68111d.webp",
-        "sha256": "3ca46cc6ec68111d2fcef061dbd25f475d595a7c42f7033e98a045018f338239"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-086.thumbnail.32b65b3a0faec069.webp",
-        "sha256": "32b65b3a0faec069566795f87faa80ac6ddecadf346135c78efd6a80d2d0f2dc"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-087.display.3f18f5b3830cf103.webp",
-        "sha256": "3f18f5b3830cf103a97288e31c806a418200fbb117e0aaa3c9d829c345c647fa"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-087.thumbnail.fea962df6b8d108a.webp",
-        "sha256": "fea962df6b8d108a5b428e1a09baa1a7cab312212cb1df038380e4a3749a25c9"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-088.display.4a4c51aadc0ebe47.webp",
-        "sha256": "4a4c51aadc0ebe477185d4d7c2767e7bfed2f3fde84ca3dc56379d38db13bcdd"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-088.thumbnail.b3dfdf67878868c1.webp",
-        "sha256": "b3dfdf67878868c1ecfe3873fb313d1359075fd040e06664c180755db46caac3"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-094.display.03239efb7b3d25e3.webp",
-        "sha256": "03239efb7b3d25e3921cf7c4d7899706ff2f696f5fdcbe01a2397d3a6341f601"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-094.thumbnail.7c53e348532f9f28.webp",
-        "sha256": "7c53e348532f9f28ea458f978bbcff7211f534633e4d8eac745eb80c26682977"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-095.display.3639b5847d5ed1ce.webp",
-        "sha256": "3639b5847d5ed1ce6b285c193308d4387b7872f49dbbea1d29fa68ff95d0435c"
-      },
-      {
-        "path": "assets/production/database-second10-20261022/species-095.thumbnail.31dde55aba84d7ef.webp",
-        "sha256": "31dde55aba84d7ef830cdbf9e4c4d5713113ef1cf61dd8b6e6adfe7034aca38b"
-      },
-      {
-        "path": "src/championship/app/residentAssetNotice.js",
-        "sha256": "f94d3a65d586852f5065421e5643f67908e3e7e744244be4ecf29bd2a586d150"
-      },
-      {
-        "path": "src/championship/presentation/ranchGroundShadows.js",
-        "sha256": "3cc1549d0aac4a2e417b1cbd332487652bf0b2be40f8a25e0f31c8e94c3e2375"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-011.display.83dab3a7f5f48995.webp",
-        "sha256": "83dab3a7f5f48995dea41105f4358528c810d8ec8356d0b847c50eb369806dae"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-011.thumbnail.c319163974d19e66.webp",
-        "sha256": "c319163974d19e663bd569e3acb9bfbc1296bc3120202a32375cada3f877109b"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-012.display.29c75647913a06bf.webp",
-        "sha256": "29c75647913a06bf92662a92e632e981437baea72609fce28242e3f22cce7105"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-012.thumbnail.3f1bcc04a9b3fcc6.webp",
-        "sha256": "3f1bcc04a9b3fcc6bb3d4317733211333f855875d0ac8cafcb094290c505e411"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-013.display.a093f1036d4d52c9.webp",
-        "sha256": "a093f1036d4d52c9412e6fe7a2ba894e7c19893ec81ecbf74bce44adb1be3f0f"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-013.thumbnail.17e559e14eff0ba8.webp",
-        "sha256": "17e559e14eff0ba83368524b77ef2822256527ff4134059c3d60893e2147eaa3"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-014.display.c4c1003969ac44f5.webp",
-        "sha256": "c4c1003969ac44f5f44aab2732790b0518552aa9ef6ae44bdfaaa8b6fdc19638"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-014.thumbnail.eabaf84afbde1e07.webp",
-        "sha256": "eabaf84afbde1e07730f2af1480310e82fe0453ba99ff8bbc444f113f2a3fa76"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-016.display.7361ca26226112d6.webp",
-        "sha256": "7361ca26226112d6c4a58d1b85eb0f2a58a8a57d2abb703b5d96c83c702520ba"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-016.thumbnail.9b926cd4e524f1f0.webp",
-        "sha256": "9b926cd4e524f1f095915fcdc30c18651fd5216364e6609f2214dc991eb498e6"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-017.display.ef03bc5de47ac2c1.webp",
-        "sha256": "ef03bc5de47ac2c1c4689c6ce5d94c7f7362647f701c873c489a990312a6be34"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-017.thumbnail.fe904b0f55ca6bb8.webp",
-        "sha256": "fe904b0f55ca6bb8369290b413d95d5c282320bed32774f1163446f2d668d2c0"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-018.display.6fcc64ac3a67b8f3.webp",
-        "sha256": "6fcc64ac3a67b8f35a2e6676899507e6074bf48adc3bb3388d8c4ebaf0b0e589"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-018.thumbnail.fa3fd8de3e164aa2.webp",
-        "sha256": "fa3fd8de3e164aa2e4c2277c2da907a7fdc0c1712f7ff2dd1bf1fc05c3064a46"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-019.display.db591d2cc7064e2f.webp",
-        "sha256": "db591d2cc7064e2f64fc776a80f82ea57511935e7778665c3f54189a62186bf0"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-019.thumbnail.de983e7fe28295b9.webp",
-        "sha256": "de983e7fe28295b97b24d3d49af719b4bf9e4c0f394142a2b768e93626023ea8"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/ma34.display.1e82c850458bccdf.webp",
-        "sha256": "1e82c850458bccdffba8cb9817b82e1e9bb8c5b039e9460aa76d90adc4eb885e"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/ma34.thumbnail.211ec848ec7e36d6.webp",
-        "sha256": "211ec848ec7e36d6acd40207956f14aaa7408ed80f52d474105dfaa7bb7a654e"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/ma50.display.a67ced1b020daa39.webp",
-        "sha256": "a67ced1b020daa398db55afa1e64c7b1c64a6a16ea8325e4f122c1b1d7b8cde9"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/ma50.thumbnail.7d79e7aa795084c8.webp",
-        "sha256": "7d79e7aa795084c8a92471a8eff5bc485e5c1c2a9cefe83f7c174214dd942cc4"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw15.display.d67b4a3a84687536.webp",
-        "sha256": "d67b4a3a8468753649dec4664c8a1abede95a05e50a3d627b1aea05c77159f17"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw15.thumbnail.9a014a64fe580fad.webp",
-        "sha256": "9a014a64fe580fad00ac081c13a7fe9dd4e9f45145db1bcf1514fec314121799"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw17.display.dfbf7a7f75b095c7.webp",
-        "sha256": "dfbf7a7f75b095c703e49b7ac8247d30796d4ab3e2b26ed2e5b2a17bc6dd8744"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw17.thumbnail.7c337ba398eadfb2.webp",
-        "sha256": "7c337ba398eadfb23c40b92d1ecae8eb3cbe7723def4ce9953c2519564cde2b8"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw46.display.fcab2234524ce3af.webp",
-        "sha256": "fcab2234524ce3af19b85e2923264eafafeb33058b6af5430d7ad338e8a40452"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw46.thumbnail.22bd8020a0caabf0.webp",
-        "sha256": "22bd8020a0caabf0f3451896ec7e21e2cbd54bc8122ce4bd6406bccb36741427"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw47.display.3501b733d0765f3a.webp",
-        "sha256": "3501b733d0765f3ab548aab408b1faa1cc509343f8b51a3665e2eb34c29eb3c1"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw47.thumbnail.e1f91c1480d02ad9.webp",
-        "sha256": "e1f91c1480d02ad9b1da395fa4252794d4f1f4d32d14e3bd382df1bb25fe1de9"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw48.display.6f1a77cf4edc7636.webp",
-        "sha256": "6f1a77cf4edc7636ebdb351f95447eb2021efa2ab6541a26dcc2d4b9316cfa9c"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw48.thumbnail.41318322d254498e.webp",
-        "sha256": "41318322d254498ee8af9f3ca68a3f9fa461d09ee5dacb6eb1f445ec70d94549"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-177.display.e62679f15b8e8517.webp",
-        "sha256": "e62679f15b8e8517a3f564dfceac04fa80bce40cabb396965d3bd19e8871c8f2"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-177.thumbnail.a2e72e931e839d01.webp",
-        "sha256": "a2e72e931e839d01a1518f191e5755ff8f0a7e41e3e0607b4a64e3a69d7ad492"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-179.display.5d7fcfac09c75627.webp",
-        "sha256": "5d7fcfac09c756279da7dd6cd0fbd8c6d465ce76f697966ebf4d8152e4896a20"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-179.thumbnail.61758eeb398e8e0b.webp",
-        "sha256": "61758eeb398e8e0be3f6c5dfbb5109ea33ed93ab2ed0498fab8dd65569b2ced3"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-180.display.64fe53de043b403c.webp",
-        "sha256": "64fe53de043b403ca03f5bbc46736dc12b6f40cabd87b5b0cf7cb1ef26986022"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-180.thumbnail.60c8414f0413b29f.webp",
-        "sha256": "60c8414f0413b29f7575ad53d2be1ff6e7a621f5c092db512e42594c7e5d70fc"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw10.display.33e34ada6d1970c0.webp",
-        "sha256": "33e34ada6d1970c0138be65f213f8ffa190e848ff12604a4658049c3252ccf75"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/aw10.thumbnail.0336f4810a4ac770.webp",
-        "sha256": "0336f4810a4ac7701b5e8d5795520da63f6cf969afe2cc40f6a5a0e5b6be28eb"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-184.display.59f8a3cd8c05a877.webp",
-        "sha256": "59f8a3cd8c05a877c5333899dc534650f3dcf437fdaade78e7e4e3d50c51cd66"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-184.thumbnail.59cd77bb56a70364.webp",
-        "sha256": "59cd77bb56a7036426561d40c4b55b796bf35581cbbf47f3daa1d768e9594c40"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-186.display.c2e60f26bd1c287d.webp",
-        "sha256": "c2e60f26bd1c287d1c5acd9781d5fa64a71b4ffc8fdf2b915a2c4fac76575407"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-186.thumbnail.100796155ef3a197.webp",
-        "sha256": "100796155ef3a197d45e3164a89dc443ac71a0aeac8323826798745ff6e9d538"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/ul03.display.1b1438148ddb8b10.webp",
-        "sha256": "1b1438148ddb8b10701a55e78ced80a5b1ce0d97652bee5af78bd26fb205e4a6"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/ul03.thumbnail.b463d286c1647f32.webp",
-        "sha256": "b463d286c1647f3236bdd90e81fb1441f2f4109da18405777c6af00d414a1e97"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-188.display.1b89c673740d94df.webp",
-        "sha256": "1b89c673740d94df666d788748e44d18a4a57190a1dadafdfb3cf0854518dfbe"
-      },
-      {
-        "path": "assets/production/database-combined24-20261022/species-188.thumbnail.e175a5a43c0f8add.webp",
-        "sha256": "e175a5a43c0f8add67c840cd736379427949efc165ea6ea1ddd12320142ad7d2"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/ul20.display.0ef05d8e8e38f552.webp",
-        "sha256": "0ef05d8e8e38f5523565197faa6dda9b69e14e6094a574548c0fdf96ee5f009c"
-      },
-      {
-        "path": "assets/production/database-remaining16-20261022/ul20.thumbnail.1d631927c0002111.webp",
-        "sha256": "1d631927c0002111b8cfad34f7cde3afa885e940ff0345aa3aa53f0efab0283e"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelay.js",
@@ -43523,7 +43696,7 @@
         ]
       }
     ],
-    "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
+    "selectionId": "HUNT_EXISTING_3D_ART_20261023",
     "ownerInstruction": "請自我審查沒問題後commit 跟push；還有部署"
   },
   "browserBundle": {

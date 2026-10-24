@@ -1,4 +1,4 @@
-import {SUPERSEDED8,APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
+import {SUPERSEDED_GR_FIXES,SUPERSEDED8,APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -138,7 +138,7 @@ test('95 display renditions and thumbnails preserve exact approved source identi
  }throw Error('WEBP_DIMENSIONS_MISSING');};
  const replacement=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-215-20261018/manifest.json','utf8'));
  const replacementFlowers=JSON.parse(fs.readFileSync('docs/art/production/characters/approved-dex-054-059-20261018/manifest.json','utf8'));
- const superseded=[...SUPERSEDED8,...replacement.supersededEntries,...replacementFlowers.supersededEntries];
+ const superseded=[...SUPERSEDED_GR_FIXES,...SUPERSEDED8,...replacement.supersededEntries,...replacementFlowers.supersededEntries];
  for(const row of recipe.rows){
   const master=masters.find(e=>e.speciesIndex===row.speciesIndex),liveHero=heroes.find(e=>e.speciesIndex===row.speciesIndex),hero=superseded.find(e=>e.speciesIndex===row.speciesIndex)??liveHero;
   for(const field of ['speciesId','displayCode'])assert.equal(hero[field],master[field]);

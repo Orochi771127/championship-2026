@@ -34,7 +34,7 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
     normalBattleSpeedScalar(session.rng);
     Object.assign(c,{field1C:1,field1E:0,field20:0,field3C:normalBattleSpeedScalar(session.rng),field184:50*4096,field188:30*4096,
       field44:i<3?0:32768,field17C:1,field180:-255,state:1,stateCounter:-255,statePeriod:1,launchSlots:[0,0,0],pendingDecision:null,
-      speedIndex:creatures[i]?.levels.field20??0});
+      openingSkillLaunched:false,speedIndex:creatures[i]?.levels.field20??0});
   });
   updateGeometry();
   function entries(indices){return indices.map(i=>({...session.slots[i],stat84:creatures[i]?.levels.field18??0,stat88:creatures[i]?.levels.field1C??0}));}
@@ -121,6 +121,7 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
           if(!(action.targetSlot>=0)){emit(slot,'LAUNCH_REFUSED',{moveId:moveId??null,targetSlot:null,state:c.state,actionIndex:action.index,
             reason:'NULL_TARGET_0211C0A0',resourceBefore:c.metricLimit,resourceAfter:c.metricLimit,decisionId:c.pendingDecisionId??null});return false;}
           const resourceBefore=c.metricLimit,ok=initialize(slot,action);
+          if(ok && move?.kind===1)c.openingSkillLaunched=true;
           emit(slot,ok?'LAUNCHED':'LAUNCH_REFUSED',{moveId:moveId??null,targetSlot:action.targetSlot,state:c.state,actionIndex:action.index,
             resourceBefore,resourceAfter:c.metricLimit,decisionId:c.pendingDecisionId??null});return ok;},
         release(launchIndex,action){action.release();releaseSlot(slot,launchIndex,action);},

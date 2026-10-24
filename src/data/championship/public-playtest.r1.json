@@ -221,5 +221,75 @@
     "physicalDeviceAccepted": false,
     "commercialArtAccepted": false,
     "commercialReleaseAccepted": false
+  },
+  "huntExisting3D20261023": {
+    "status": "OWNER_AUTHORIZED_PUBLIC_PLAYTEST",
+    "maps": [
+      "hm01",
+      "hm08",
+      "hm02",
+      "hm03",
+      "hm04",
+      "hm05",
+      "hm06",
+      "hm09",
+      "hm16",
+      "hm18",
+      "hm15",
+      "hm17"
+    ],
+    "worldDimensions": {
+      "hm01": [
+        2880,
+        2880
+      ],
+      "hm08": [
+        2048,
+        2048
+      ],
+      "hm02": [
+        2880,
+        2880
+      ],
+      "hm03": [
+        2880,
+        2880
+      ],
+      "hm04": [
+        2880,
+        2880
+      ],
+      "hm05": [
+        2880,
+        2880
+      ],
+      "hm06": [
+        2880,
+        2880
+      ],
+      "hm09": [
+        2880,
+        2880
+      ],
+      "hm16": [
+        2880,
+        2880
+      ],
+      "hm18": [
+        2880,
+        2880
+      ],
+      "hm15": [
+        2880,
+        2880
+      ],
+      "hm17": [
+        2880,
+        2880
+      ]
+    },
+    "functionalAcceptance": "OWNER_TESTS",
+    "physicalDeviceAccepted": false,
+    "commercialReleaseAccepted": false
   }
 }

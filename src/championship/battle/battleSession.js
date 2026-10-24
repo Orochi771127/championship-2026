@@ -34,6 +34,7 @@
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import { negativeStatusActionGate, BATTLE_STATUS_GATE_NORMAL } from "./battleStatus.js";
 import { selectBattleAiAction, BATTLE_AI_TABLES_BASELINE, BATTLE_AI_TABLES_ROM } from "./battleActionSelection.js";
+import { chooseBattleAiOpeningSkill } from "./battleAiAdaptation.js";
 import { buildCandidateBuckets } from "./battleCandidateBuckets.js";
 import { buildMoveBucketsForCombatant } from "./battleMoveBuckets.js";
 import { applyBattleHp, rebuildDecisionCooldown } from "./battleDamageResolver.js";
@@ -280,7 +281,10 @@ function runActionGate(combatant, slot, events, rng, allocateAction, session) {
   // candidate and every roll fell through to the move ladder.
   const built = buildCandidateBuckets([combatant.source12C, combatant.source130]);
   const ladder = buildMoveBucketsForCombatant(combatant);
-  const decision = selectBattleAiAction({
+  const decision = (session.normalFlow && chooseBattleAiOpeningSkill({
+    policy:session.aiPolicy, clock:session.clock, launched:combatant.openingSkillLaunched,
+    combatant, buckets:ladder.buckets, rng
+  })) || selectBattleAiAction({
     profileIndex: combatant.profileIndex,
     negativeStatusCode: combatant.statusCode,
     pendingField24: combatant.pendingField24,

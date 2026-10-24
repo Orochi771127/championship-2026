@@ -88,4 +88,15 @@ test('normal selection publishes target changes once through the existing source
   } finally { unsubscribe(); await app.dispose(); }
 });
 
-test("all sixteen public Gate previews use existing accepted original field pixels",()=>{for(const g of listChampionshipGates()){const t=huntGateThumbnail(g,"https://orochi771127.github.io/championship-2026/");assert.equal(t.fieldId,g.originalFields.dayFieldId);assert.ok(t.src.startsWith(g.originalFields.dayFieldId.startsWith("field_hm01_")?"assets/production/hunt/hm01x2-public-20261021/":"assets/production/hunt/accepted-20261010/"));assert.ok(fs.existsSync(t.src));assert.equal(huntGateThumbnail(g,"https://example.com/"),null);}});
+test('all sixteen public Gate previews use the selected field artwork',()=>{
+  const roles=['hunt-hm01x2','hunt-three-fallback','hunt-accepted'];
+  const fields=roles.flatMap(role=>JSON.parse(fs.readFileSync(`assets/production/public-runtime/${role}.map.v1.json`)).fields);
+  for(const gate of listChampionshipGates()){
+    const thumbnail=huntGateThumbnail(gate,'https://orochi771127.github.io/championship-2026/');
+    const field=fields.find(row=>row.fieldId===gate.originalFields.dayFieldId);
+    assert.equal(thumbnail.fieldId,field.fieldId);
+    assert.equal(thumbnail.src,(field.thumbnail??field.frames[0]).src);
+    assert.ok(fs.existsSync(thumbnail.src));
+    assert.equal(huntGateThumbnail(gate,'https://example.com/'),null);
+  }
+});

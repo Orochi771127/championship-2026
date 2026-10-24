@@ -47,9 +47,13 @@ class Element {
 
 function useDocument(t) {
   const old = globalThis.document;
-  globalThis.document = { createElement: tag => new Element(tag), activeElement: null, documentElement: {lang:'zh-Hant'} };
+  const document = { activeElement: null };
+  document.createElement = tag => Object.assign(new Element(tag), {ownerDocument: document});
+  document.documentElement = document.createElement('html');
+  document.documentElement.lang = 'zh-Hant';
+  globalThis.document = document;
   t.after(() => { if (old === undefined) delete globalThis.document; else globalThis.document = old; });
-  return new Element("main");
+  return document.createElement("main");
 }
 const allNodes = root => [root, ...root.querySelectorAll("*")];
 const visibleCopy = root => allNodes(root).flatMap(node => [node.textContent, node.attributes["aria-label"], node.title]).filter(Boolean).join("\n");

@@ -2,6 +2,10 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
+    "tests/championship-cm07-ambient-cases.mjs",
+    "tests/championship-database-swipe-cases.mjs",
+    "tests/championship-gr08-dex-centering-cases.mjs",
+    "tests/championship-gr26-recolor-cases.mjs",
     "tests/alternate-form-build-boundary-cases.mjs",
     "tests/alternate-form-portraits-cases.mjs",
     "tests/alternate-form-qa-bootstrap-cases.mjs",
@@ -42,6 +46,7 @@
     "tests/championship-battle-entry-handoff-cases.mjs",
     "tests/championship-battle-field-ambient-masked-cases.mjs",
     "tests/championship-battle-field-scene-cases.mjs",
+    "tests/championship-battle-floating-hud-cases.mjs",
     "tests/championship-battle-frame-loop-cases.mjs",
     "tests/championship-battle-full-arena-cases.mjs",
     "tests/championship-battle-hit-recovery-cpu-cases.mjs",
@@ -63,6 +68,7 @@
     "tests/championship-battle-normal-runtime-cases.mjs",
     "tests/championship-battle-null-target-launch-cases.mjs",
     "tests/championship-battle-opening-cases.mjs",
+    "tests/championship-battle-opening-skill-cases.mjs",
     "tests/championship-battle-optional-audio-cases.mjs",
     "tests/championship-battle-outcome-cases.mjs",
     "tests/championship-battle-owned-party-cases.mjs",
@@ -435,6 +441,7 @@
     "tests/create-character-save.mjs": "Local fixture-generation CLI, not a portable test; reads the private m301 review save template.",
     "tests/test-all-completed-original-characters.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
     "tests/test-completed-original-m301.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
-    "tests/championship-ma05-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the MA05 motion v7 actual renderer review workflow, covering all 77 cells and 53 sequences plus controlled normal Raising and Battle."
+    "tests/championship-ma05-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the MA05 motion v7 actual renderer review workflow, covering all 77 cells and 53 sequences plus controlled normal Raising and Battle.",
+    "tests/championship-cm07-renderer-review.mjs": "Requires Playwright Chromium and HTTP server; explicit CM07 candidate renderer workflow. Isolated terrain renderer, not normal game or physical mobile acceptance."
   }
 }
