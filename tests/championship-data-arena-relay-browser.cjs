@@ -10,7 +10,7 @@ const check = (name,value) => { report.checks.push({name,pass:!!value}); assert.
 const save = fs.readFileSync(path.join(__dirname,'../qa/championship-full-qa-save.json'),'utf8');
 const write = () => fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(report,null,2));
 (async()=>{
- const browser=await chromium.launch({headless:true,channel:'chrome',args:['--autoplay-policy=no-user-gesture-required']});
+ const browser=await chromium.launch({headless:true,channel:'chrome',args:['--autoplay-policy=no-user-gesture-required',...(process.env.CHAMPIONSHIP_QA_SOFTWARE_GL==='1'?['--use-angle=swiftshader','--enable-unsafe-swiftshader']:[])]});
  const context=await browser.newContext({viewport:{width:1280,height:720}}),page=await context.newPage();
  page.on('pageerror',e=>report.errors.push(e.message));
  page.on('console',m=>{if(m.type()==='error')report.errors.push(m.text());});
@@ -75,6 +75,6 @@ const write = () => fs.writeFileSync(path.join(output,'validation.json'),JSON.st
   check('raising save byte unchanged during arena',before===after);
   check('no runtime errors',report.errors.length===0);
   report.completed=true;
- } catch(error){report.failure=error.stack;await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});process.exitCode=1;}
+ } catch(error){report.failure=error.stack;report.layout=await page.evaluate(()=>({width:innerWidth,scroll:document.querySelector('.da-root')?.scrollWidth,overflow:[...document.querySelectorAll('.da-root *')].filter(n=>n.getBoundingClientRect().right>innerWidth+1).map(n=>({className:String(n.className),right:n.getBoundingClientRect().right,style:n.getAttribute('style')}))}));await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});process.exitCode=1;}
  finally {write();await browser.close();console.log(JSON.stringify({completed:report.completed,checks:report.checks,result:report.result,failure:report.failure,output}));}
 })();

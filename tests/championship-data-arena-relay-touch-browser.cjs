@@ -7,7 +7,7 @@ fs.mkdirSync(output,{recursive:true});
 const report={origin,checks:[],errors:[],layouts:[],physicalDeviceAccepted:false};
 const check=(name,value)=>{report.checks.push({name,pass:!!value});assert.ok(value,name);};
 (async()=>{
- const browser=await chromium.launch({headless:true,channel:'chrome'});
+ const browser=await chromium.launch({headless:true,channel:'chrome',args:process.env.CHAMPIONSHIP_QA_SOFTWARE_GL==='1'?['--use-angle=swiftshader','--enable-unsafe-swiftshader']:[]});
  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true}),page=await context.newPage();
  page.on('pageerror',e=>report.errors.push(e.stack));
  page.on('console',m=>{if(m.type()==='error')report.errors.push(m.text());});
