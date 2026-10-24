@@ -117993,7 +117993,7 @@
     },
     {
       "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-      "sha256": "4d12a4423904f7c074c605a40259d81d43f0a050b982f01e0c6cd8e4f2666674"
+      "sha256": "231e751ff3fd66e4e37ab5a28c5244fc4660ab8e28b50715e23fc3e5b51e9efe"
     },
     {
       "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -120024,7 +120024,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "19ead2f3377cd11948262e8fb4814726d9dbc4b89534bbea2ec004f3dd045de3"
+      "sha256": "c4a9a02aa3579cd1ccfa173adebcac085333c69eac6d74cc64b501b7410caef6"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -120440,7 +120440,7 @@
     },
     {
       "path": "src/championship/app/championshipToolbar.js",
-      "sha256": "cc7f2d88bf02af7cdc0367fdd23b3e55bc208fd9ecb7aa8b36c6220a74486157"
+      "sha256": "1f929a198f9f443a2b57bdc3b1378442554e3aebba217d3fda5c906f052bccc9"
     },
     {
       "path": "src/championship/app/codeClipboard.js",
@@ -120532,7 +120532,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "14bd44d1f7a592c5878552d041db2ea1c135d7599be8d7879e354b2994bd782a"
+      "sha256": "85a5ca4725d040ed1d331467e86907ddb67d2548737b6d799c9191a4c37a7d7e"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -120668,7 +120668,7 @@
     },
     {
       "path": "src/championship/app/settings/settingsPanel.js",
-      "sha256": "1707f39a38a2edc3e002aa824f8182d5a90825064489b67aca7efdeee7dadfe0"
+      "sha256": "153c9cbc64745ff53cdd6a084510ae945295cc8b3dd4681822394a88ed504515"
     },
     {
       "path": "src/championship/app/shopOriginalVideo.css",
@@ -123797,6 +123797,68 @@
         "schemaVersion",
         "speciesIndex"
       ]
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/tamer.svg",
+      "sha256": "cc1fcec2206734a2ec10e493958d8e61848b60416db92f9993da8f9f64bff7d2"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/schedule.svg",
+      "sha256": "eb25d3564dd5cf6e8365ec471299301aec105ca064afdab78d3af8941b12a18a"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/cageEdit.svg",
+      "sha256": "e36289fc7e6c8ab8d45443a79c1e43c617c55d2fd70ea6ec8f2a2c7915b5e9cf"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/digimon.svg",
+      "sha256": "54830aa8896bb5cc1ecc0cfc62e097c441cde892f7c88c113af1f4f4c7620c51"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/endDay.svg",
+      "sha256": "7d6bc78ae5f2851439ca3a120e4ff67f6cc56bfd212931466020390d4b0ebfcf"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/help.svg",
+      "sha256": "1cd7aad45c5e4b7b993cba5a1f929661396baf019c6809f35e8e065819002361"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/saveQuit.svg",
+      "sha256": "7119dab3e0b7bbd9ccb72e898b00f7e94865d3d7f78c3ee2ea97327d0d8baa4b"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/hunt.svg",
+      "sha256": "c5be8e5ea5ce23e686df30e9867bf78761cdd29dc8f6c912029457ca374b6c71"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/battle.svg",
+      "sha256": "1f568bdaa8071a794360a23761d259a3c27acdaddb11ec999b064aafc315064e"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/shop.svg",
+      "sha256": "a156704bf943b4bcfb725258068e71b9b42abb9a1ee8e409aae07433284eb1c4"
+    },
+    {
+      "path": "assets/production/ui/menu-entry-original-20261024/settings.svg",
+      "sha256": "02beec556f1c3389dfcbedd1b65c69b82e38a301c10bfa12f7dbb56dc3604f8a"
+    },
+    {
+      "path": "src/data/championship/toolbar-menu-icons.runtime.r1.json",
+      "sha256": "3980d9418c5a1ba53fcf7f3c463d245c3b17bfd7c09d81fbd2ce9629d2274cb7",
+      "jsonFields": [
+        "schemaVersion",
+        "entries",
+        "entryId",
+        "src"
+      ]
+    },
+    {
+      "path": "src/championship/presentation/toolbarMenuIcons.js",
+      "sha256": "85c48ae85684901309a0175611a060d36a7095c2fed3c16c59672c84cc74323b"
+    },
+    {
+      "path": "src/championship/presentation/uiCuePlayer.js",
+      "sha256": "65beeb080fbbd0c1fcca0cb046c895c876f7587c5cdfed99b4687154de0d65d7"
     }
   ],
   "assets": [
@@ -127553,6 +127615,83 @@
       "width": 80,
       "height": 96,
       "sha256": "7000b1ea76955dbf3476c426d1ae7ab57a002264a8b8dec70e552eed9a329d6a"
+    },
+    {
+      "id": "ui:toolbar-menu:tamer",
+      "src": "assets/production/ui/menu-entry-original-20261024/tamer.svg",
+      "sha256": "cc1fcec2206734a2ec10e493958d8e61848b60416db92f9993da8f9f64bff7d2",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:schedule",
+      "src": "assets/production/ui/menu-entry-original-20261024/schedule.svg",
+      "sha256": "eb25d3564dd5cf6e8365ec471299301aec105ca064afdab78d3af8941b12a18a",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:cageEdit",
+      "src": "assets/production/ui/menu-entry-original-20261024/cageEdit.svg",
+      "sha256": "e36289fc7e6c8ab8d45443a79c1e43c617c55d2fd70ea6ec8f2a2c7915b5e9cf",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:digimon",
+      "src": "assets/production/ui/menu-entry-original-20261024/digimon.svg",
+      "sha256": "54830aa8896bb5cc1ecc0cfc62e097c441cde892f7c88c113af1f4f4c7620c51",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:endDay",
+      "src": "assets/production/ui/menu-entry-original-20261024/endDay.svg",
+      "sha256": "7d6bc78ae5f2851439ca3a120e4ff67f6cc56bfd212931466020390d4b0ebfcf",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:help",
+      "src": "assets/production/ui/menu-entry-original-20261024/help.svg",
+      "sha256": "1cd7aad45c5e4b7b993cba5a1f929661396baf019c6809f35e8e065819002361",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:saveQuit",
+      "src": "assets/production/ui/menu-entry-original-20261024/saveQuit.svg",
+      "sha256": "7119dab3e0b7bbd9ccb72e898b00f7e94865d3d7f78c3ee2ea97327d0d8baa4b",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:hunt",
+      "src": "assets/production/ui/menu-entry-original-20261024/hunt.svg",
+      "sha256": "c5be8e5ea5ce23e686df30e9867bf78761cdd29dc8f6c912029457ca374b6c71",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:battle",
+      "src": "assets/production/ui/menu-entry-original-20261024/battle.svg",
+      "sha256": "1f568bdaa8071a794360a23761d259a3c27acdaddb11ec999b064aafc315064e",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:shop",
+      "src": "assets/production/ui/menu-entry-original-20261024/shop.svg",
+      "sha256": "a156704bf943b4bcfb725258068e71b9b42abb9a1ee8e409aae07433284eb1c4",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "ui:toolbar-menu:settings",
+      "src": "assets/production/ui/menu-entry-original-20261024/settings.svg",
+      "sha256": "02beec556f1c3389dfcbedd1b65c69b82e38a301c10bfa12f7dbb56dc3604f8a",
+      "width": 48,
+      "height": 48
     }
   ]
 }

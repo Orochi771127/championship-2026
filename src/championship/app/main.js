@@ -72,6 +72,7 @@ import { lookupSpeciesIdentity } from "./phase1ProductCreatures.js";
 // at species index + 33. See scripts/build-species-names.py.
 import speciesNames from "../../data/championship/catalogs/species-names.r1.json" with { type: "json" };
 import { TOOLBAR_MODES, createChampionshipToolbar } from "./championshipToolbar.js";
+import { createUiCuePlayer } from '../presentation/uiCuePlayer.js';
 import {
   createRuntimeMapArtFieldLoader,
   createRuntimeMapArtTileSetLoader,
@@ -428,6 +429,9 @@ function bootSettings() {
   return Object.freeze({ store, environment, quality, audio });
 }
 const settings = bootSettings();
+const uiCues = createUiCuePlayer({ audio: settings.audio });
+const onUiCue = (name, event) => uiCues.play(name, event);
+window.addEventListener('pagehide', event => { if (event.persisted) uiCues.stop(); else uiCues.dispose(); });
 // Ceremonies (2026-10-15) play their synthesized cues through the same sfx bus.
 configureCeremonyAudio(() => settings.audio.output('sfx'));
 // The Battle screens import display copy only; their two ceremonies are
@@ -490,6 +494,7 @@ function openSettings(from = null) {
     store: settings.store,
     environment: settings.environment,
     audio: settings.audio,
+    onUiCue,
     quality: settings.quality,
     getSaveStatus: saveStatusLine,
     exportBackup: () => downloadSaveBackup(() => app?.persistenceFacade().exportRecovery()),
@@ -1998,6 +2003,7 @@ async function openGameplay() {
       responsiveLayout: RESPONSIVE_LAYOUT_CANDIDATE,
       root: document.body,
       onMenuEntry: runToolbarMenuEntry,
+      onUiCue,
       getTutorialCheckpoint:()=>app.getInteractiveTutorial()?.checkpoint??null,
       onToolChange:(tool,context)=>{if(context?.userInitiated)app.selectInteractiveTutorialTool(tool,context.checkpoint);},
       getFoodStock:()=>{const rows=app.getShopFrame()?.listings??[];return {

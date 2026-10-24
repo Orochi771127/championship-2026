@@ -103,6 +103,7 @@ export function createSettingsPanel({
   store,
   environment,
   audio = null,
+  onUiCue = () => {},
   quality = null,
   getSaveStatus = () => null,
   exportBackup = null,
@@ -518,7 +519,11 @@ export function createSettingsPanel({
       if (id === category) button.setAttribute("aria-current", "true");
       button.append(node("span", "cm-settings__category-name", CATEGORY_TITLES[id]), node("span", "cm-settings__category-summary"));
       button.lastChild.textContent = summary(id);
-      button.addEventListener("click", () => showCategory(id, { focus: true }));
+      button.addEventListener("click", (event) => {
+        const changed = category !== id || view !== 'detail';
+        showCategory(id, { focus: true });
+        if (changed) onUiCue('select', event);
+      });
       nav.append(button);
     }
   }
@@ -603,13 +608,17 @@ export function createSettingsPanel({
     backButton = node("button", "cm-settings__back", "設定");
     backButton.type = "button";
     setLabel(backButton, "aria-label", "返回設定分類");
-    backButton.addEventListener("click", showList);
+    backButton.addEventListener("click", (event) => {
+      const changed = view !== 'list';
+      showList();
+      if (changed) onUiCue('back', event);
+    });
     titleNode = node("h2", "cm-settings__title", "設定");
     titleNode.id = "cm-settings-title";
     const closeButton = node("button", "cm-settings__close");
     closeButton.type = "button";
     setLabel(closeButton, "aria-label", "關閉設定");
-    closeButton.addEventListener("click", () => close());
+    closeButton.addEventListener("click", (event) => { onUiCue('back', event); close(); });
     header.append(backButton, titleNode, closeButton);
     const body = node("div", "cm-settings__body");
     nav = node("nav", "cm-settings__nav");
@@ -636,7 +645,7 @@ export function createSettingsPanel({
     // cancel): tidy up exactly as if the panel had closed itself.
     dialog.addEventListener("close", () => { if (dialog && !closing) close({ native: true }); });
     // A press on the backdrop (outside the panel) closes, like the dialogs.
-    dialog.addEventListener("click", (event) => { if (event.target === dialog) close(); });
+    dialog.addEventListener("click", (event) => { if (event.target === dialog) { onUiCue('back', event); close(); } });
     // Arrow keys move between categories in the list.
     nav.addEventListener("keydown", (event) => {
       if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;

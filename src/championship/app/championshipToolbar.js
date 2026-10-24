@@ -1,5 +1,6 @@
 import { createTransientHint, TOOL_HINT_MS } from './transientHint.js';
-import {isOriginalUiIntakeLocal,originalToolbarArt,originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
+import {isOriginalUiIntakeLocal,originalToolbarArt} from "../presentation/completedOriginalUi20261007.js";
+import { toolbarMenuEntryIcon } from '../presentation/toolbarMenuIcons.js';
 import {isOriginalRuntimeLocation} from "../presentation/originalRuntimeLocation.js";
 import { uiText } from "../text/uiText.js";
 // The contextual toolbar -- the original's ui/toolbar.nxr.
@@ -138,8 +139,9 @@ function element(tag, className, text) {
  * @param {HTMLElement} options.root
  * @param {(entry: object) => void} options.onMenuEntry
  * @param {(toolId: string|null) => void} [options.onToolChange]
+ * @param {(cue: string, event: MouseEvent) => void} [options.onUiCue] Explicit click feedback only.
  */
-export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null } = {}) {
+export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, onUiCue = () => {}, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null } = {}) {
   if (!root) throw new TypeError("The toolbar requires a root element");
   if (typeof onMenuEntry !== "function") throw new TypeError("The toolbar requires an onMenuEntry handler");
 
@@ -189,7 +191,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     // Two lines: the original entry name, then what it is for, so Hunt,
     // Battle and Shop can be found without knowing the menus by heart.
     const button = element("button", "cm-toolbar__entry");
-    const art=originalDatabaseIcon(entry.screen);
+    const art=toolbarMenuEntryIcon(entry);
     if(art){const icon=element("img","cm-toolbar__entry-icon");icon.src=art.src;icon.alt="";button.append(icon);}
     button.append(element("span", "cm-toolbar__entry-label", entry.label));
     if (entry.hint) button.append(element("span", "cm-toolbar__entry-hint", entry.hint));
@@ -205,9 +207,10 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       button.dataset.state = "NOT_IMPLEMENTED";
       button.title = uiText("In the original, not yet in this build");
     }
-    button.addEventListener("click", () => {
-      closeMenu();
+    button.addEventListener("click", (event) => {
       if(button.disabled)return;
+      closeMenu();
+      onUiCue('select', event);
       onMenuEntry(entry,{checkpoint:tutorialCheckpoint});
     });
     return button;
@@ -284,16 +287,25 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       button.append(element("span", "cm-toolbar__cell-label", cell.tool.label));
       let gestureCheckpoint=null;
       button.addEventListener("pointerdown",()=>{gestureCheckpoint=getTutorialCheckpoint();});
-      button.addEventListener("click", () => {
+      button.addEventListener("click", (event) => {
         const checkpoint=gestureCheckpoint??getTutorialCheckpoint();gestureCheckpoint=null;
-        if(button.disabled)return;closeMenu();selectTool(cell.tool.id,{userInitiated:true,checkpoint});
+        if(button.disabled)return;
+        closeMenu();
+        const previous = selectedTool;
+        selectTool(cell.tool.id,{userInitiated:true,checkpoint});
+        if (previous !== selectedTool) onUiCue(selectedTool === null ? 'back' : 'select', event);
       });
     } else {
       button.dataset.menuId = cell.menu.id;
       button.setAttribute("aria-haspopup", "true");
       button.setAttribute("aria-expanded", "false");
       button.append(element("span", "cm-toolbar__cell-label", cell.menu.label));
-      button.addEventListener("click", () => openMenu(cell.menu));
+      button.addEventListener("click", (event) => {
+        if (button.disabled) return;
+        const previous = openMenuId;
+        openMenu(cell.menu);
+        if (previous !== openMenuId) onUiCue(openMenuId === null ? 'back' : 'open', event);
+      });
     }
     rail.append(button);
   });
@@ -330,7 +342,12 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       if (tool) body.dataset.tool = tool.id; else delete body.dataset.tool;
     }
   }
-  toolDone.addEventListener("click", () => { if (selectedTool) selectTool(selectedTool); });
+  toolDone.addEventListener("click", (event) => {
+    if (!selectedTool || toolDone.hidden) return;
+    const previous = selectedTool;
+    selectTool(selectedTool);
+    if (previous !== selectedTool) onUiCue('back', event);
+  });
   // An open menu closes on Escape (focus returns to its button) or on a press
   // anywhere outside the toolbar; the press itself still reaches its target.
   const ownerDocument = root.ownerDocument ?? globalThis.document;
