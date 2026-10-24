@@ -266,12 +266,29 @@ async function normalGame(browser,base,output,report){
   await page.locator('[data-menu-id="MANAGEMENT"]').click();await page.locator('.cm-toolbar__menu:not([hidden]) [data-entry-id="digimon"]').click();await page.locator('#cm-root[data-active-screen="DIGIMON_LIST"]').waitFor();
   await page.locator('#cm-root .cm-screen-back:visible').first().click();await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:180000});
   assert.equal(await page.locator('.cm-toolbar').getAttribute('data-selected-tool'),'');
-  evidence.uiMenuCompletion=await menuCompletion(page,output);
+  evidence.uiMenuCompletion=await menuCompletion(page,output,evidence);
   await page.screenshot({path:path.join(output,'normal-game-return-raising.png'),fullPage:false});assert.deepEqual(evidence.errors,[]);evidence.status='PASS_ACTUAL_RAISING_FEED_AND_RETURN';return evidence;
  }catch(error){evidence.status='FAIL';evidence.error=String(error);report.normalGame=evidence;await page.screenshot({path:path.join(output,'normal-game-failure.png'),fullPage:false}).catch(()=>{});throw error;}finally{await context.close();}
 }
-async function menuCompletion(page,output){
+async function menuCompletion(page,output,evidence){
  const result={status:'RUNNING',kind:'existing-PR-CI-native-Chromium-events',listeningAccepted:false,layouts:[]};
+ // Keep partial observations even when an action fails. These are read-only
+ // diagnostics on the fixture-owned origin, not replacement clicks or clocks.
+ evidence.uiMenuCompletion=result;
+ result.attempts=[];
+ async function actionState(button,label,phase){
+  const targets=await button.evaluateAll(buttons=>buttons.map(n=>{
+   const r=n.getBoundingClientRect(),c=getComputedStyle(n);
+   return {tag:n.tagName,id:n.id,class:n.className,hidden:n.hidden,disabled:n.disabled,rect:{x:r.x,y:r.y,width:r.width,height:r.height},display:c.display,visibility:c.visibility,pointerEvents:c.pointerEvents,expanded:n.getAttribute('aria-expanded'),hitStack:document.elementsFromPoint(r.x+r.width/2,r.y+r.height/2).slice(0,5).map(e=>({tag:e.tagName,id:e.id,class:e.className}))};
+  }));
+  const state=await page.evaluate(({targets,label,phase})=>{
+   const rect=n=>{const r=n?.getBoundingClientRect();return r?{x:r.x,y:r.y,width:r.width,height:r.height}:null;};
+   const describe=n=>n?{tag:n.tagName,id:n.id,class:n.className,hidden:n.hidden,disabled:n.disabled,rect:rect(n),display:getComputedStyle(n).display,visibility:getComputedStyle(n).visibility,pointerEvents:getComputedStyle(n).pointerEvents}:null;
+   const root=document.querySelector('#cm-root'),bar=document.querySelector('.cm-toolbar');
+   return {label,phase,time:performance.now(),url:location.href,viewport:[innerWidth,innerHeight],bodyData:{...document.body.dataset},screen:root?.dataset.activeScreen,root:describe(root),bar:describe(bar),count:targets.length,buttons:targets,lifecycle:describe(document.querySelector('.int-rh2-lifecycle')),calendar:describe(document.querySelector('button.int-rh2-calendar')),cueCount:globalThis.menuCueEvidence.length};
+  },{targets,label,phase});
+  result.attempts.push(state);console.log('UI_MENU_ACTION_STATE '+JSON.stringify(state));
+ }
  const count=()=>page.evaluate(()=>menuCueEvidence.length);
  const pause=()=>page.waitForTimeout(120);
  const system=page.locator('.cm-toolbar__cell[data-menu-id="SYSTEM"]');
@@ -297,10 +314,15 @@ async function menuCompletion(page,output){
  async function oneCue(button,label){
   for(let attempt=0;attempt<2;attempt++){
    await pause();await settleCalendar();const before=await count();
+   await actionState(button,label,'before');
    try{
     await button.click({timeout:1500,noWaitAfter:true});
     await page.waitForTimeout(30);assert.equal(await count(),before+1,label);return;
    }catch(error){
+    await actionState(button,label,'failed');
+    console.log('UI_MENU_PARTIAL_RESULT '+JSON.stringify(result));
+    const shot=await page.screenshot({path:path.join(output,'ui-menu-action-failure.jpg'),type:'jpeg',quality:35}).catch(()=>null);
+    if(shot)console.log('UI_MENU_FAILURE_JPEG_BASE64 '+shot.toString('base64'));
     // A new date card may arrive after readiness was observed. Retry once
     // only when the click did not start any cue and that exact card is visible.
     if(attempt||error.name!=='TimeoutError'||await count()!==before||!await page.locator('button.int-rh2-calendar:visible').isVisible())throw error;
