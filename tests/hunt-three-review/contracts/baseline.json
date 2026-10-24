@@ -1,0 +1,568 @@
+{
+  "schema": "HUNT_ACTIONS_BASELINE.v1",
+  "status": "CURRENT_MAIN_EXACT_BASELINE_NOT_HUNT_ADMISSION",
+  "coreDirectory": "dist/github-playtest",
+  "coreBuildId": "84dde92b854d94e4e2b79a3791310bbd4bc042ca5d016ba27638eebbb8c60161",
+  "coreInputSHA256": "d13b2ac91baa519f20fd4d4b390156454bcb108caf0a5646a8b488f0eb0748e0",
+  "coreCommit": "945a95a0470c8b430f28182e4305a17a68b4ae7e",
+  "coreFileCount": 8245,
+  "coreCompleteBytes": 975187866,
+  "coreManifest": {
+    "path": "pages-build.json",
+    "bytes": 519606,
+    "sha256": "06fdbf463a0223d4bfe427f811ab26be7fcac57c37dafbffc4201ed4e9d9e450"
+  },
+  "repositoryFiles": [
+    {
+      "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
+      "sha256": "3e21e8048f2bc13687cc36e3608dff56a682dd594b58dba50d4d3e8a78f0fd25",
+      "bytes": 153363
+    },
+    {
+      "path": "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
+      "sha256": "8f6a8eec7fa71381de68f5dc0f7b30399bf89d62e91742281a60bb7e43293a50",
+      "bytes": 7929
+    },
+    {
+      "path": "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
+      "sha256": "a8c073714c9457a880f6df0b5424fbed00d28ca64a2d10925b04a3068767f599",
+      "bytes": 151193
+    },
+    {
+      "path": "championship.html",
+      "sha256": "19ead2f3377cd11948262e8fb4814726d9dbc4b89534bbea2ec004f3dd045de3",
+      "bytes": 40912
+    },
+    {
+      "path": "docs/contracts/championship/CHAMPIONSHIP_RANCH_NATIVE_GEOMETRY.v1.json",
+      "sha256": "e97bd1ef32d678bf77856fc58f20b739a1cc3d3f9bae78a5e0670c69b39d988f",
+      "bytes": 14189
+    },
+    {
+      "path": "docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json",
+      "sha256": "5503047cb5d5ceca13897650e405d01aa8abd1475c2dccd115ca38e09c42b088",
+      "bytes": 4390852
+    },
+    {
+      "path": "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json",
+      "sha256": "d13b2ac91baa519f20fd4d4b390156454bcb108caf0a5646a8b488f0eb0748e0",
+      "bytes": 3106813
+    },
+    {
+      "path": "node_modules/esbuild/package.json",
+      "sha256": "9d0bc453f4e791553c4cc2298ba023b409241fd9801e494741666eb0f6051490",
+      "bytes": 3980
+    },
+    {
+      "path": "node_modules/three/package.json",
+      "sha256": "1d5c438acdc1fe5a52fb8ede2e417afd91fec91d22275c40f7b739591b24e4df",
+      "bytes": 3826
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "01728785da165668841fbe7bcc183d3a3f35217549f3219be635af43f404f625",
+      "bytes": 20674
+    },
+    {
+      "path": "package.json",
+      "sha256": "0af1682eb8d3bcd6017dc53b7f3c7828bea7820234a36de8c02e3f565d377452",
+      "bytes": 8125
+    },
+    {
+      "path": "scripts/lib/browser-bundle.mjs",
+      "sha256": "37ef9f1d19e559dc29b543e84129976a3c5ca2dc5e1ab8de551c15c4ad134b69",
+      "bytes": 3584
+    },
+    {
+      "path": "scripts/lib/build-manifest-codec.mjs",
+      "sha256": "a9083a820600e52a77e424a3700f093ee100745e40d0294ddd9c8795039af04a",
+      "bytes": 2616
+    },
+    {
+      "path": "scripts/lib/opening-film-publication.mjs",
+      "sha256": "5bbd6f35472d2b22cf5cd8f1b35c574b8e30f5048dc568b82a051e50d9b2ce6c",
+      "bytes": 804
+    },
+    {
+      "path": "scripts/lib/pages-module-closure.mjs",
+      "sha256": "4e8a7b8c44b92b8f9581c10b197d17e24c660f54877d35deca5813aa8e4c02e5",
+      "bytes": 3004
+    },
+    {
+      "path": "scripts/lib/pages-payload-size.mjs",
+      "sha256": "a8d1c3e007c2578b93435da004dbe2614a450b39f74dcfa11b848f5d2720f714",
+      "bytes": 595
+    },
+    {
+      "path": "scripts/lib/public-battle-page-policy.mjs",
+      "sha256": "d00741fc8615a785ff291d3c659e86bf936ed8a873bc37e0bc9c8ad22bb3fe14",
+      "bytes": 2956
+    },
+    {
+      "path": "scripts/lib/public-character-boundary.mjs",
+      "sha256": "5975a41a61f962d7e1a0e23135461103467acf28f02396e5d17baf97b5b60339",
+      "bytes": 4438
+    },
+    {
+      "path": "scripts/lib/public-clean-media.mjs",
+      "sha256": "df36c4ed52e8dedff102d6770a1daee900ecc08432fda3d8e90e658c9ed99652",
+      "bytes": 2012
+    },
+    {
+      "path": "scripts/lib/public-map-projection.mjs",
+      "sha256": "53fd8ef7840887331b93f87875ac51aa12f8674bde67ee14a06b9fb06be0d49c",
+      "bytes": 4758
+    },
+    {
+      "path": "scripts/lib/public-metadata-projection.mjs",
+      "sha256": "66a8224522d03476dbf1a25fef199da90b703502138f828dc2f4bbe91a66aef2",
+      "bytes": 6027
+    },
+    {
+      "path": "scripts/lib/public-program-data.mjs",
+      "sha256": "c4f19a4c5cd265f1824c8df094e56de85bcec4674632d47c9038a04eb684eb50",
+      "bytes": 2761
+    },
+    {
+      "path": "scripts/lib/public-ranch-streaming-boundary.mjs",
+      "sha256": "e4d6f2de493e0b5ad131f8d8554b9e2d8c81b67cdbbcde7560de7b34bf47e276",
+      "bytes": 2813
+    },
+    {
+      "path": "scripts/lib/public-render-projection.mjs",
+      "sha256": "7421b5292cccf4d39690d56bc784fe6643f9deebbfe5d39b43b1458121d46b20",
+      "bytes": 6129
+    },
+    {
+      "path": "scripts/lib/public-runtime-boundary.mjs",
+      "sha256": "30f3b4bc066f3a9c0bb338dbd9f104c412b140f633ffc7ac39714b4dc5f82b21",
+      "bytes": 15526
+    },
+    {
+      "path": "scripts/lib/public-shop-cage-projection.mjs",
+      "sha256": "0382a8ea82b1c91f5187a8de9635b005caad189f2b68b32aa0f9afbe533a3a51",
+      "bytes": 2995
+    },
+    {
+      "path": "src/championship/app/championshipStandaloneApp.js",
+      "sha256": "4dd6ca1d708c78e779c0cb7e4041c87a647550f4dc3373d7996e4e75cbd01713",
+      "bytes": 199168
+    },
+    {
+      "path": "src/championship/app/intRh2Styles.css",
+      "sha256": "cb44f63723822c714f95d5068671b50ba7e1689f45cb0a2d55e9fa93726d1e54",
+      "bytes": 46058
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "sha256": "bedefc874caf7b30e76c9a159efea6fc8c7101730be9f5d635f9607c0fcf0bd4",
+      "bytes": 145283
+    },
+    {
+      "path": "src/championship/app/openingFilm.js",
+      "sha256": "02c353916646da9efcf2b6ced16911b39ca3d1dfe2e2c4a73df76cca772149e6",
+      "bytes": 10987
+    },
+    {
+      "path": "src/championship/app/raisingGroundSupport.js",
+      "sha256": "ffd6a4e62213b1ee7b967fbf341d89f7a8f3e4c6da6a8ab76fd5bf73aff520c9",
+      "bytes": 1566
+    },
+    {
+      "path": "src/championship/app/raisingPresentationSource.js",
+      "sha256": "9f5c0d23af6360e21682c0683c8424743907eb6fc384bdd0a7c8e56ad547d8a3",
+      "bytes": 16992
+    },
+    {
+      "path": "src/championship/app/ranchDiscoveryJournal.js",
+      "sha256": "6e168e426b5595a9e5620026843413ed2788ee2c10962ee1d1d9b1eaaccfa853",
+      "bytes": 2690
+    },
+    {
+      "path": "src/championship/app/residentAssetNotice.js",
+      "sha256": "f94d3a65d586852f5065421e5643f67908e3e7e744244be4ecf29bd2a586d150",
+      "bytes": 1821
+    },
+    {
+      "path": "src/championship/app/runtimeRecoveryDiagnostics.js",
+      "sha256": "0df4d7a8152bf8c22d3129ccacf3db49d172b97f171c4a32e0462cf1fa91fb96",
+      "bytes": 8268
+    },
+    {
+      "path": "src/championship/contracts/championshipContracts.js",
+      "sha256": "ebf6ba8b5e2ca69246af7e050c1ce218e8505ca76fa7155262f09c42680f68e4",
+      "bytes": 5943
+    },
+    {
+      "path": "src/championship/presentation/alternateFormAssetContracts.js",
+      "sha256": "c8562441124bd43e752af8c1e3cb65ebb9dc2001e1e47485248a3383b4af946b",
+      "bytes": 3632
+    },
+    {
+      "path": "src/championship/presentation/battleEffectArt.js",
+      "sha256": "31142c5661759f4674391449eeeb5bdc8703087343466a6762b4239ef80bd6fa",
+      "bytes": 3235
+    },
+    {
+      "path": "src/championship/presentation/characterAnimationTimeline.js",
+      "sha256": "a6c03f5c2964e6f054014f0aeffa512270d78ff45cc12c607625fc2822a75a01",
+      "bytes": 7249
+    },
+    {
+      "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "sha256": "f4fc3d8aea3c55e0c0aa962b1c9886d6e2fef2004f35fd40630aad6d90766482",
+      "bytes": 91108
+    },
+    {
+      "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
+      "sha256": "bea02ad6d7eb9245d23d5d7c7c6702c712ff039c67b056d47a311ab0e6bdfd7a",
+      "bytes": 18247
+    },
+    {
+      "path": "src/championship/presentation/originalCageVisualBindings.js",
+      "sha256": "ddee410ab9dd5bd64a8d5d2764c0f51a01a7456624fa015e03db68eb7a7cd3cd",
+      "bytes": 2248
+    },
+    {
+      "path": "src/championship/presentation/originalRuntimeLocation.js",
+      "sha256": "e86f708ac73809d715732c7ff176db940ee3187fbfe5975f1bb622926816deb3",
+      "bytes": 1614
+    },
+    {
+      "path": "src/championship/presentation/publicCharacterRenderContract.js",
+      "sha256": "09f5ccc8bbb8248a8fc9ad6bdd9cd24aa3f63e60cdd0686bb13db5d83047fcb5",
+      "bytes": 904
+    },
+    {
+      "path": "src/championship/presentation/publicCharacterRoster.js",
+      "sha256": "a195da3e2d2a4d1ddd26ca59405ace675d38028ac9d084bd3a90391f15c9d9ed",
+      "bytes": 4922
+    },
+    {
+      "path": "src/championship/presentation/publicRenderDescriptors.js",
+      "sha256": "54a948e7fc27785fdee34c37ad81ac40dbd71167eca05877d26d313db7fd4300",
+      "bytes": 6002
+    },
+    {
+      "path": "src/championship/presentation/publicRuntimeAssets.js",
+      "sha256": "23698f96bd1ee0e23181edba2df2fc22b5fc705977ffcfaa4920c91ed0099342",
+      "bytes": 1441
+    },
+    {
+      "path": "src/championship/presentation/ranchBorderMembership.js",
+      "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb",
+      "bytes": 1335
+    },
+    {
+      "path": "src/championship/presentation/ranchContactHeight.js",
+      "sha256": "61ce25cc7931ed4d7cc36e5a023ea9d376e32e77483cd6d20c10ef3ffdcc5c71",
+      "bytes": 5727
+    },
+    {
+      "path": "src/championship/presentation/ranchGroundShadows.js",
+      "sha256": "3cc1549d0aac4a2e417b1cbd332487652bf0b2be40f8a25e0f31c8e94c3e2375",
+      "bytes": 4137
+    },
+    {
+      "path": "src/championship/presentation/ranchPhysicalSupport.js",
+      "sha256": "d8132f3048253069fcb74691f14b770860efe1bf2ff5195d3652b740c20b0408",
+      "bytes": 4208
+    },
+    {
+      "path": "src/championship/presentation/ranchSupportOwner.js",
+      "sha256": "10ee4a275e2e696366630e5476ac94e78984d6d0080685b93246910bd859cd81",
+      "bytes": 2793
+    },
+    {
+      "path": "src/championship/presentation/ranchThreeScene.js",
+      "sha256": "3480fb6926c6f8321a4c04743605bb01782b870aa1aae9110b731615edb33ebf",
+      "bytes": 52571
+    },
+    {
+      "path": "src/championship/presentation/runtimeMapArtBundle.js",
+      "sha256": "82247e471c995a5bb3d90fcc267e758d58aaa2404123771ef95640f5c83306a4",
+      "bytes": 28477
+    },
+    {
+      "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+      "sha256": "56d133781009f48227b1f3109b0229a9c87a1e78d7bc7b60fcefee6a17a4e815",
+      "bytes": 38929
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntContactShadow.js",
+      "sha256": "c284a006e2bec65205011553f2c62633edd514c5a3ec587d6a282caf1172cc41",
+      "bytes": 7787
+    },
+    {
+      "path": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
+      "sha256": "433478f1a7a087d1f5954b95550b0ec6476b4122971a11048763134157ce03db",
+      "bytes": 10767
+    },
+    {
+      "path": "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
+      "sha256": "6b577562751fe0ae49182c1d5e8e8475f9da071ae2d15753f1a9ecacb3c92149",
+      "bytes": 2454
+    },
+    {
+      "path": "src/championship/text/brandTerms.js",
+      "sha256": "730cefa17cf162f22254175feefe2f030e21de784984a863a13266ca67b77518",
+      "bytes": 3413
+    },
+    {
+      "path": "src/championship/text/locale.js",
+      "sha256": "0d7da8205ad3342f755a9b5fd4dec34a01113e2a5bb246d0567c3f0e3dcc5bd7",
+      "bytes": 3764
+    },
+    {
+      "path": "src/championship/text/openingFilmText.js",
+      "sha256": "dcc22f9a5862d5887fed966eb7313b16cb613af559f79bdbc1df44affaba40fa",
+      "bytes": 949
+    },
+    {
+      "path": "src/data/championship/alternate-form-assets.r1.json",
+      "sha256": "a92f7099f8d447b083f512c06eef8f1fcccacd40212b3b47bc7c24b17d90709b",
+      "bytes": 45179
+    },
+    {
+      "path": "src/data/championship/battleEffectProfiles.json",
+      "sha256": "10f48b6981a89d675a5c92c2f605f9c958c432e1ca3a7155127fc37f32488ba7",
+      "bytes": 105381
+    },
+    {
+      "path": "src/data/championship/public-playtest-runtime.v1.json",
+      "sha256": "0de272b6cec1862c5c10e3deca84773b7f5d3b88c66f43f3def7c97b78c8aefe",
+      "bytes": 315
+    },
+    {
+      "path": "src/data/championship/public-playtest.r1.json",
+      "sha256": "30c9693561cc722f384a6aaea7138fb5ab6f91d3a6bb9defeee58e3d5f0ba06d",
+      "bytes": 12887
+    },
+    {
+      "path": "tests/championship-raising-field-viewport-cases.mjs",
+      "sha256": "630252d900f20e12cfd2baaefcc7c3dfd6dc4a2adc218cf659f4bca5016619b4",
+      "bytes": 11265
+    },
+    {
+      "path": "tests/championship-raising-reviewed-contact-identity-cases.mjs",
+      "sha256": "8554d660361a0de7715a60ed197c5cd5659344a399dab6b2a14d2fbe8215b663",
+      "bytes": 6886
+    },
+    {
+      "path": "tests/championship-ranch-carry-edge-cases.mjs",
+      "sha256": "e65a7dfd9a139db9a1c099582deb25c9dc5fb7d9a41b60b6f903ad1246a40b21",
+      "bytes": 7727
+    },
+    {
+      "path": "tests/championship-ranch-free-pan-cases.mjs",
+      "sha256": "fafcb0ba1c11603df04e1a7febc5f23c74014d325ab668600892ecb2e7f8e70e",
+      "bytes": 5152
+    },
+    {
+      "path": "tests/championship-ranch-ground-support-owner-cases.mjs",
+      "sha256": "94611aeee68bdd86bec407ce6ac3c73e63d8b232593a9019eaa650da7fe2ae08",
+      "bytes": 5054
+    },
+    {
+      "path": "tests/championship-ranch-shadow-depth-cases.mjs",
+      "sha256": "bb1098bfe7129e87ef1ab6d33602fb5fea553cb70794e9fb3f6a1db90a77a406",
+      "bytes": 4456
+    },
+    {
+      "path": "tests/championship-ranch-v4-border-membership-cases.mjs",
+      "sha256": "d3131aa8a69cd8b1ba97cb0a2c721bd50b3be5f1bb546b405987b346d45d41dc",
+      "bytes": 1765
+    },
+    {
+      "path": "tests/championship-ranch-v4-border-three-hierarchy-wrap-cases.mjs",
+      "sha256": "dea5fa1cff7f33748414751dd11450beca7fbd4e24eb63d878c6d0d3bc136b4b",
+      "bytes": 2485
+    },
+    {
+      "path": "tests/championship-ranch-v4-captured-roundtrip-cases.mjs",
+      "sha256": "ef0592f67aba4f2403b5d7ced6e8542ef2e3c9834996c5238f4751a00d93bf8c",
+      "bytes": 7553
+    },
+    {
+      "path": "tests/championship-ranch-v4-captured-visibility-cases.mjs",
+      "sha256": "d34326a2e39c455aeff0867b5ecbe09f7b91ef08acf07505e21a2c850d56534a",
+      "bytes": 4284
+    },
+    {
+      "path": "tests/championship-ranch-v4-logical-height-cases.mjs",
+      "sha256": "7a1bbc6f75545bd76297ef1ed7ee250d6d432c0c448a9e49019a6f2c94f7c83e",
+      "bytes": 2726
+    },
+    {
+      "path": "tests/championship-ranch-v4-material-lifecycle-cases.mjs",
+      "sha256": "49035163c439290602576b72d8f99f01c57173fb7e24a7a7eec3e834c1b7a0bb",
+      "bytes": 3580
+    },
+    {
+      "path": "tests/championship-ranch-v4-partition-cases.mjs",
+      "sha256": "6e6d9914e5ffb86161932c8392b383338d487e41ec2059b88c25d4ca5f64f32d",
+      "bytes": 4249
+    },
+    {
+      "path": "tests/championship-ranch-v4-physical-support-cases.mjs",
+      "sha256": "6a154d308a5731895516b08f30daa661128887c43885c4428f1d2fad16fde714",
+      "bytes": 3393
+    },
+    {
+      "path": "tests/championship-ranch-v4-point-height-cases.mjs",
+      "sha256": "eaa7b61397066af7a691cbf3b573dedb335a53149bbcc095aa00d2b808f67612",
+      "bytes": 3759
+    },
+    {
+      "path": "tests/championship-ranch-v4-runtime-regression-cases.mjs",
+      "sha256": "f11091b6dbc2541bd619eb7d3a6ba5f3916b61611ac4b9d16bb44f62ec00e6f4",
+      "bytes": 6990
+    },
+    {
+      "path": "tests/championship-ranch-v4-scalar-vertex-depth-cases.mjs",
+      "sha256": "d493ce61e5898d536371c8eb7ca4fbd6bd20c762563e03f9f6eb25ce912dc77c",
+      "bytes": 7630
+    },
+    {
+      "path": "tests/championship-resident-notice-cases.mjs",
+      "sha256": "375520b329874d4cd43c5db6baa0514a0ed4313593b2f155f9a91cc332a7834d",
+      "bytes": 5929
+    },
+    {
+      "path": "tests/ci-test-scope.v1.json",
+      "sha256": "8ec1cdb646562abc9f3a31052fca5f5ea00f5707a71372931ca5d754c0ab9353",
+      "bytes": 30673
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/captured-inverse.json",
+      "sha256": "ec686ee95c4ce9de9f6d8ff70dcf7134791524cbe7a989942971ac6a7395a393",
+      "bytes": 45780
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/cm07-border-fixtures.json",
+      "sha256": "0f8677c6d1566f7b96c55f7e85a38d70570da3cb0de1783220785304f75710a8",
+      "bytes": 492710
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/cm07-metadata.json",
+      "sha256": "b7c798f55dcaf346432638c20a320e01fa6521b6a7df0aecc58f6fc295c391ec",
+      "bytes": 59796
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/continuity.json",
+      "sha256": "40b2a05f025e83e48d71145338c766e43425fa7af6656759041a60777f417a9c",
+      "bytes": 5643
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/historical-v2-snippets.txt",
+      "sha256": "03f61afde12592162fcce9535425f473206c82609814926008a31dcabbe9bd92",
+      "bytes": 3741
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/historical-v3-snippets.txt",
+      "sha256": "da3b71173d7b389a9ae38a28363b466b6c8749ef5f43b9063e3c3af5675e15e7",
+      "bytes": 7165
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/layouts.json",
+      "sha256": "09ad8c18e7cee3f2689f44501611c7cbff9187fa671611b7c6907419097ca80e",
+      "bytes": 733
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/point-cm18-tread4-waste.json",
+      "sha256": "8e5f41561df73219124ec7a454d21212cf9c88733df9d9728a9b33ad7f64ffc0",
+      "bytes": 2889
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/point-cm34-mat-waste.json",
+      "sha256": "a136f1ef24cb12bef15cbcda05ebfb6804b2fc62b43e07e1da615b3c3c90d7e8",
+      "bytes": 2889
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/provenance.json",
+      "sha256": "6686b9badbf8db76bf2a17565ef57f7c6c44b400ce02df907008108685c897bb",
+      "bytes": 4014
+    },
+    {
+      "path": "tests/fixtures/ranch-v4/wrap-plan.json",
+      "sha256": "4c42027178cd396c1a5e29a26ed726f80c0230dcc433c9515c0be21506dce739",
+      "bytes": 6829
+    },
+    {
+      "path": "tools/authoring/legacy-render/battleAudioPresentation.mjs",
+      "sha256": "452adf892de7cc477b6c499421cb27eec4fa36b2e4a845703442eeefb02dde70",
+      "bytes": 7911
+    },
+    {
+      "path": "tools/authoring/legacy-render/battleEffectArt.mjs",
+      "sha256": "4cfcf98801b14f21abc097dd613a09f0c0157ec1bac43ad693144901b2b1b800",
+      "bytes": 5707
+    },
+    {
+      "path": "tools/authoring/legacy-render/huntFeedbackArt.mjs",
+      "sha256": "3001bd9bf8c60b90204c1d90f55ee6a970b96af85544783efb6edb3f95b5a183",
+      "bytes": 9463
+    },
+    {
+      "path": "tools/authoring/legacy-render/originalSharedVfxReview.mjs",
+      "sha256": "0f515e99b6373da24b03f1969d8417fd5cc3aa505f08ac8041b5ce7485f71720",
+      "bytes": 17553
+    },
+    {
+      "path": "tools/authoring/legacy-render/raisingFeedbackArt.mjs",
+      "sha256": "4bc36c4ac27dc2556ea7dfa12d5f8ff5a1e696718ebf85984d2203cf6fe7638b",
+      "bytes": 3717
+    }
+  ],
+  "frozenRanchFileCount": 41,
+  "frozenRanchPaths": [
+    "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
+    "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
+    "championship.html",
+    "docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json",
+    "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json",
+    "src/championship/app/championshipStandaloneApp.js",
+    "src/championship/app/raisingGroundSupport.js",
+    "src/championship/app/raisingPresentationSource.js",
+    "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+    "src/championship/presentation/publicCharacterRoster.js",
+    "src/championship/presentation/ranchBorderMembership.js",
+    "src/championship/presentation/ranchContactHeight.js",
+    "src/championship/presentation/ranchPhysicalSupport.js",
+    "src/championship/presentation/ranchSupportOwner.js",
+    "src/championship/presentation/ranchThreeScene.js",
+    "src/championship/presentation/vs2/huntContactShadow.js",
+    "tests/championship-raising-reviewed-contact-identity-cases.mjs",
+    "tests/championship-ranch-ground-support-owner-cases.mjs",
+    "tests/championship-ranch-v4-border-membership-cases.mjs",
+    "tests/championship-ranch-v4-border-three-hierarchy-wrap-cases.mjs",
+    "tests/championship-ranch-v4-captured-roundtrip-cases.mjs",
+    "tests/championship-ranch-v4-captured-visibility-cases.mjs",
+    "tests/championship-ranch-v4-logical-height-cases.mjs",
+    "tests/championship-ranch-v4-material-lifecycle-cases.mjs",
+    "tests/championship-ranch-v4-partition-cases.mjs",
+    "tests/championship-ranch-v4-physical-support-cases.mjs",
+    "tests/championship-ranch-v4-point-height-cases.mjs",
+    "tests/championship-ranch-v4-runtime-regression-cases.mjs",
+    "tests/championship-ranch-v4-scalar-vertex-depth-cases.mjs",
+    "tests/ci-test-scope.v1.json",
+    "tests/fixtures/ranch-v4/captured-inverse.json",
+    "tests/fixtures/ranch-v4/cm07-border-fixtures.json",
+    "tests/fixtures/ranch-v4/cm07-metadata.json",
+    "tests/fixtures/ranch-v4/continuity.json",
+    "tests/fixtures/ranch-v4/historical-v2-snippets.txt",
+    "tests/fixtures/ranch-v4/historical-v3-snippets.txt",
+    "tests/fixtures/ranch-v4/layouts.json",
+    "tests/fixtures/ranch-v4/point-cm18-tread4-waste.json",
+    "tests/fixtures/ranch-v4/point-cm34-mat-waste.json",
+    "tests/fixtures/ranch-v4/provenance.json",
+    "tests/fixtures/ranch-v4/wrap-plan.json"
+  ],
+  "coreReceiptCommitRule": {
+    "mode": "CANONICALIZE_EXISTING_40_HEX_COMMIT_ONLY",
+    "canonicalCommit": "945a95a0470c8b430f28182e4305a17a68b4ae7e",
+    "reason": "The approved current core embeds checkout git HEAD. Canonicalize only this 40-hex commit field; every payload row and all other manifest bytes remain exact. Local receipt is canonical CPU-derived and joins the actual deployed core build ID."
+  },
+  "currentMainTree": "2bc9ccea6f86469700e9046a08216660e4a5e5c7",
+  "repositoryFileCount": 100
+}

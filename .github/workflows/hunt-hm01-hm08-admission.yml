@@ -1,0 +1,89 @@
+name: HM01 HM08 finite packaged admission review (not release)
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+    paths:
+      - tests/hunt-three-review/**
+      - .github/workflows/hunt-hm01-hm08-admission.yml
+permissions:
+  contents: read
+concurrency:
+  group: hunt-admission-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  packaged-review:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - phase: exact-smoke
+            mode: exact
+          - phase: instrumented-visual
+            mode: instrumented
+          - phase: instrumented-capture
+            mode: instrumented
+          - phase: instrumented-recovery
+            mode: instrumented
+          - phase: instrumented-reentries
+            mode: instrumented
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: CPU observer and canonical fixture checks
+        run: |
+          node tests/hunt-three-review/cpu-tests.mjs .
+          node tests/hunt-three-review/installer-transport-tests.mjs .
+          node tests/hunt-three-review/finalizer-tests.mjs
+          node tests/hunt-three-review/fixtures.mjs . --check
+      - name: Build unchanged approved core first
+        run: npm run build:playtest && npm run validate:playtest
+      - name: Verify finite current-repair baseline and exact packet seal
+        run: node tests/hunt-three-review/preflight.mjs
+      - name: Build complete separately identified admission artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/hunt-three-receipts
+          node tests/hunt-three-review/build.mjs --mode '${{ matrix.mode }}' > '.tmp/hunt-three-receipts/${{ matrix.phase }}.json'
+      - run: npx playwright install --with-deps chromium
+      - name: Serve only the complete packaged artifact and execute bounded real UI phase
+        shell: bash
+        env:
+          HUNT_ACTIONS_ORIGIN: http://127.0.0.1:8765
+        run: |
+          set -euo pipefail
+          artifact='.tmp/hunt-three-admission/${{ matrix.mode }}'
+          python3 -u -m http.server 8765 --bind 127.0.0.1 --directory "$artifact" > /dev/null 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent "$HUNT_ACTIONS_ORIGIN/pages-build.json" > /dev/null; then break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          curl --fail --silent "$HUNT_ACTIONS_ORIGIN/pages-build.json" > /dev/null
+          node tests/hunt-three-review/browser.mjs '${{ matrix.phase }}' "$artifact" '.tmp/hunt-three-receipts/${{ matrix.phase }}.json' '.tmp/hunt-three-evidence/${{ matrix.phase }}'
+      - name: Fail-closed bounded privacy-minimal evidence selection
+        if: always()
+        run: node tests/hunt-three-review/finalize.mjs '${{ matrix.phase }}'
+      - name: Preserve only validated evidence (never game artifact or source audit)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hunt-admission-${{ matrix.phase }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/hunt-three-evidence-upload/${{ matrix.phase }}/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6

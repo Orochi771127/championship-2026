@@ -1,0 +1,91 @@
+{
+  "schema": "HUNT_ACTIONS_TEST_MATRIX.v1",
+  "candidate": "e3ba2cf8c023fad8c0147de4f3b41304581040d4d0ed178c6681a7625fdd64d9",
+  "phases": {
+    "exact-smoke": {
+      "mode": "exact",
+      "timeoutSeconds": 600,
+      "required": [
+        "hm01-day-entry",
+        "hm01-night-entry",
+        "hm08-day-entry",
+        "hm08-night-entry",
+        "exact-no-bridge",
+        "exact-public-request-closure"
+      ]
+    },
+    "instrumented-visual": {
+      "mode": "instrumented",
+      "timeoutSeconds": 1100,
+      "required": [
+        "hm01-day-phase-native",
+        "hm01-night-phase-native",
+        "hm08-day-phase-native",
+        "hm08-night-phase-native",
+        "drag-scissor",
+        "hm01-natural-enter-hidden-exit",
+        "hm01-natural-near-overlap",
+        "hm01-natural-zero-overlap",
+        "controlled-0.05-overlap",
+        "controlled-zero-overlap",
+        "actor-solid-occlusion"
+      ]
+    },
+    "instrumented-capture": {
+      "mode": "instrumented",
+      "timeoutSeconds": 1100,
+      "required": [
+        "hm01-native-capture-save-continue",
+        "hm08-native-capture-save-continue"
+      ]
+    },
+    "instrumented-recovery": {
+      "mode": "instrumented",
+      "timeoutSeconds": 900,
+      "required": [
+        "hm01-manifest-404-fallback",
+        "hm08-glb-corrupt-fallback",
+        "hm01-texture-abort",
+        "hm08-worker-abort",
+        "hm01-context-loss-recovery",
+        "hm08-success-after-failure"
+      ]
+    },
+    "instrumented-reentries": {
+      "mode": "instrumented",
+      "timeoutSeconds": 900,
+      "required": [
+        "ten-real-reentries-same-app",
+        "memory-owner-plateau",
+        "public-fallback-after-reentries"
+      ]
+    }
+  },
+  "evidenceBudget": {
+    "maxFiles": 128,
+    "maxBytes": 67108864,
+    "retentionDays": 7,
+    "rawSaveVideoTraceHarForbidden": true
+  },
+  "hardGates": {
+    "completeArtifactBytes": 990197076,
+    "instrumentedAdditionalBytes": 131072,
+    "reentryJsHeapGrowthBytes": 33554432,
+    "reentryGpuTextureCountGrowth": 2,
+    "reentryGpuGeometryCountGrowth": 2,
+    "actorCacheEntries": 64,
+    "actorCacheBytes": 16777216,
+    "instrumentedCompleteArtifactBytes": 990208789
+  },
+  "limitations": [
+    "Desktop browser including portrait viewport is not physical-phone evidence.",
+    "Exact 0.05 is not a natural passage output; it is controlled presentation-only stress.",
+    "Natural near-zero outputs include ENTER 0.0625 and EXIT 0.044444444444444446; EXIT zero must be observed, not forced.",
+    "HM08 Canyon has no caveGroups; no HM08 cave proof is requested.",
+    "Existing public playtest unlock policy is retained, so UI admission alone is not rank-lock enforcement proof.",
+    "Full-QA fixture has fee waiver; no 450-Bits debit claim.",
+    "Retained HM01 fallback dimension estimate is 95314176 bytes before 3D/actor/driver overhead; physical-phone approval remains blocked.",
+    "Explicit presenter-dispose Texture.destroy observer does not measure all earlier failure paths or TextureSource destruction.",
+    "Pixel omission/depth-reference comparisons are diagnostic evidence; human solid/ordering review remains required."
+  ]
+}

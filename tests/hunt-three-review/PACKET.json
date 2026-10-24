@@ -1,0 +1,290 @@
+{
+  "schema": "HUNT_ACTIONS_PACKET.v1",
+  "files": [
+    {
+      "path": ".github/workflows/hunt-hm01-hm08-admission.yml",
+      "bytes": 3575,
+      "sha256": "5d2faa9f5d1eb36a56e3d66caefea0badcf6d59065fbe8df2284f16894051bbf"
+    },
+    {
+      "path": "tests/hunt-three-review/README.md",
+      "bytes": 6030,
+      "sha256": "f7bc0dd6ce74f9983447a8772bdde6a1c1f8ae5f13c41d6a2ac18414627ee58c"
+    },
+    {
+      "path": "tests/hunt-three-review/adapter.mjs",
+      "bytes": 5966,
+      "sha256": "6c380e39c376b5eef879bff5da4a89a31efd09734a397a2025557bca0f7488d6"
+    },
+    {
+      "path": "tests/hunt-three-review/bridge.mjs",
+      "bytes": 13920,
+      "sha256": "e315e7e9b0fa2179b50a6eb8a0049d85a6e02d40cbadc72506c5ac383132e0cc"
+    },
+    {
+      "path": "tests/hunt-three-review/browser.mjs",
+      "bytes": 74023,
+      "sha256": "928c1547225507bbd8d5b46cdfa2e3784a6089cee01f040244712ad6e9cfc90f"
+    },
+    {
+      "path": "tests/hunt-three-review/build.mjs",
+      "bytes": 18525,
+      "sha256": "ef533fb2c98f89d5b375c8b28278a45cfca49948b17e607d032794c004bc9a33"
+    },
+    {
+      "path": "tests/hunt-three-review/contracts/baseline.json",
+      "bytes": 21883,
+      "sha256": "e7047cfef2e23b60f22f3dc392a6393b445322f24ad794209e62845d32915a32"
+    },
+    {
+      "path": "tests/hunt-three-review/contracts/expected-exact.json",
+      "bytes": 1510,
+      "sha256": "d6318f5c86db06be2ddb99944be202d1b877cd2225c3426e74b7a47fb18237eb"
+    },
+    {
+      "path": "tests/hunt-three-review/contracts/installer-transport.json",
+      "bytes": 13417,
+      "sha256": "9c294a1198c50dcd76f75fba0c6e535f30b17b822ebf4ddb7d24b00c4bbd7db3"
+    },
+    {
+      "path": "tests/hunt-three-review/contracts/overlay.json",
+      "bytes": 6977,
+      "sha256": "3cb5a6f13fc7f0e15f89c73a2621cd1097a7b7d8fd0b11d0212996f768b4b397"
+    },
+    {
+      "path": "tests/hunt-three-review/contracts/repair-bases.json",
+      "bytes": 8988,
+      "sha256": "7dfc697e33d2c3d075bcff02b6a07764fd5a10fe9589d9e81b2abaedc79a45e4"
+    },
+    {
+      "path": "tests/hunt-three-review/contracts/resources.json",
+      "bytes": 3656,
+      "sha256": "8adecd562e129e7721e0244be7b503ebc4e4879da84f3a01aad43c1dde78cc13"
+    },
+    {
+      "path": "tests/hunt-three-review/contracts/test-inputs.json",
+      "bytes": 52779,
+      "sha256": "e723e5e1f2a2fe024b3359cf570c2ecfe4af451c9cea9e8dd7f4434ce043245b"
+    },
+    {
+      "path": "tests/hunt-three-review/cpu-tests.mjs",
+      "bytes": 69559,
+      "sha256": "6953ee2a61e58502e57654650b2b92302b26f32f55fe1f69e0cb0eb523499fa7"
+    },
+    {
+      "path": "tests/hunt-three-review/finalize.mjs",
+      "bytes": 5306,
+      "sha256": "0a98637abe838be9151be826ba4b3856379e58b89b0b0e6b797ee1bdde2b7135"
+    },
+    {
+      "path": "tests/hunt-three-review/finalizer-tests.mjs",
+      "bytes": 2573,
+      "sha256": "6c710bd8f1e492fe94fa6c67eaef2c513341739723d69ff407dd1ac1b56a233d"
+    },
+    {
+      "path": "tests/hunt-three-review/fixtures.mjs",
+      "bytes": 2678,
+      "sha256": "8a25ac764fd26834e2e7a9ddba1d761f22c15f074658ce184f700053f6b7bc5b"
+    },
+    {
+      "path": "tests/hunt-three-review/fixtures/full-qa-day.json",
+      "bytes": 15453,
+      "sha256": "696f8c77475b2bd316e9aa4684a8042a7880113f65feb2e31de6053fbd6e0ebc"
+    },
+    {
+      "path": "tests/hunt-three-review/fixtures/full-qa-night.json",
+      "bytes": 15453,
+      "sha256": "5f23dc8059e9e94e56e38c49f7b2aa428b6910e74e0a70cafed75a4c95a1df3f"
+    },
+    {
+      "path": "tests/hunt-three-review/installer-transport-tests.mjs",
+      "bytes": 3260,
+      "sha256": "898b48e8fb0f99fc5867734bb593b3b4d6c9ba5699fff900e27d3c2e1ca7fb43"
+    },
+    {
+      "path": "tests/hunt-three-review/installer-transport.mjs",
+      "bytes": 2702,
+      "sha256": "6654ac3857c6ccf4097e22970bc329da7f32ea1bb8f838378c3009b784f57d0b"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-7612568c0979.webp",
+      "bytes": 3169974,
+      "sha256": "7612568c0979787ca4b7e04cdced8aaa4396913427253fd3d61180b92385976d"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-01-eeb2ff08fdd4.webp",
+      "bytes": 3169610,
+      "sha256": "eeb2ff08fdd4fa0ebd31d471dc35d3cf1a76153e05362a1f51ec57dd7208b902"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-00-2ddf2c03c3e1.webp",
+      "bytes": 2196984,
+      "sha256": "2ddf2c03c3e169bab40caadecf6b5ec0011446972080b9c6b3869ce320fb3e8f"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-01-4fb08e2d1d80.webp",
+      "bytes": 2196742,
+      "sha256": "4fb08e2d1d8006a59a7e4c2eaeec7501dda9652bc5a23727dd3ac41d68b4230a"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm01-three-r1-20261022/hm01-ground-heights.json",
+      "bytes": 184689,
+      "sha256": "a46ee687ea5c3f1f7865dbddceca8ced3798772707f90d30c29728728d9935ba"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm01-three-r1-20261022/hm01-terrain-e90423e80e5e.glb",
+      "bytes": 1661384,
+      "sha256": "e90423e80e5ec917854cc406b77e32815ae6912d5629126a2f92e209537da5ee"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm01-three-r1-20261022/manifest.json",
+      "bytes": 3053,
+      "sha256": "4404b66afeaf5ceeb270bb02a4a50106f7fcab24066e671340e3e9f22ff516e4"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm08-three-r1-20261022/field_hm08_01-frame-00-f785e7106327.webp",
+      "bytes": 516418,
+      "sha256": "f785e71063271186a2bcd28b48bb18fe54148912199a4a658e8e4ccaa22b8058"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm08-three-r1-20261022/field_hm08_02-frame-00-c796caf80af0.webp",
+      "bytes": 356956,
+      "sha256": "c796caf80af0ca5820bf24038005f3794313347049503fe49286f5d9ba23780f"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm08-three-r1-20261022/hm08-ground-heights.json",
+      "bytes": 92046,
+      "sha256": "fb1b4e507cadb604ab7757233e3a568c02ffa2c8c1156c086271f8545e89c108"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm08-three-r1-20261022/hm08-terrain-ee412126d0e2.glb",
+      "bytes": 425920,
+      "sha256": "ee412126d0e22f9986b9ac22e19b5bb8b203bc81a63862de9315dfa46440b328"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/assets/production/hunt/hm08-three-r1-20261022/manifest.json",
+      "bytes": 2462,
+      "sha256": "be78e84adcdd90fadefbaeb3c40f864d6d90b2e4f9ece2897ebb441b37a3d583"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/app/main.js",
+      "bytes": 148584,
+      "sha256": "da349ce13b89d22a4a1e633852fac8454e7f856dd8dd5c16da540a72ebbeeccc"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+      "bytes": 39696,
+      "sha256": "8d13a06c87d7f18514f74b9aceeffcd31fa6d9ce5194ba6d8ae60d27a9a88e1f"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/actorBounds.mjs",
+      "bytes": 692,
+      "sha256": "20d94340eedb123a69ecc5348574f0d5be9b35d5d9acf7eaa80adb6bf5637dd6"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
+      "bytes": 2174,
+      "sha256": "17075171bb2a0f239d0a73cdb3a6ebc5b020737d2cf40796a9b2b89e9f6af7b5"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
+      "bytes": 16878,
+      "sha256": "684897728f2839d3f817fb6a22e7dd55ba21b2c6eb19535051698bfa11aff92a"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/dracoLifecycle.mjs",
+      "bytes": 3289,
+      "sha256": "2efae34769d4e97579863de684a30af803357ce8bf569925975fd03035fe8612"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/externalMapAssets.mjs",
+      "bytes": 9982,
+      "sha256": "c001df3460efcaeeeb83c5ac0e5f460fcf8b5d92a249a2c569c5a119a6e40f91"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/hm01SupportCorridors.mjs",
+      "bytes": 2419,
+      "sha256": "d193ad31af7c129f60e697c2af575beeb6bd8c874c08c4e22ab20b42bd349cb4"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/hm02FlatSupport.mjs",
+      "bytes": 1339,
+      "sha256": "88450f1933022508027492f5a87271ab6045f1c0d110b2b5ab82c967a6a64425"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/hm02Projection.mjs",
+      "bytes": 2509,
+      "sha256": "0a1a35ae8a0bc12cf5f345b94343e870e3d4a15273fb024bf43ff2c0a256e1c1"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/lifecycle.mjs",
+      "bytes": 4132,
+      "sha256": "495c8027631a4285753e4bf812cdde0043f081c4288adedefb07cefce8492e25"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/loadHuntThreeMap.mjs",
+      "bytes": 2598,
+      "sha256": "11a1b6f90d737dec86fa90266f4767d14033821115b6b5b0eb45218bfc2207fb"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/manifestBindings.mjs",
+      "bytes": 1283,
+      "sha256": "248461c82e168faf71ec57f4fc74ac546e70675a9fd597ed0f99364c45583202"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/nativeActorAdapter.mjs",
+      "bytes": 1892,
+      "sha256": "929435d6929478e82401fc3f3bf69b58ba0f6f53fdc26b3d71aca6814af47bd7"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/projection.mjs",
+      "bytes": 2408,
+      "sha256": "56fc3ffa738e1128735ddc4f9b1797880b823435396b8a91269cd71fabd99d8e"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/publicFallbackRole.mjs",
+      "bytes": 710,
+      "sha256": "55204bc3307cad4abc40a4d4e22cfd242f0a11c5a94f9c1ec7f37416ae9ffbee"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/sharedGLState.mjs",
+      "bytes": 1125,
+      "sha256": "acbea327ca2e54a4a28168106167fcfff76eedc289713d6c137bca647431718e"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/sharedPass.mjs",
+      "bytes": 1838,
+      "sha256": "3cad80707011629638d5c3a1400f1bb74dcd97b8f98cfaa84b44c250108d2560"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/championship/presentation/vs2/huntThree/supportDepth.mjs",
+      "bytes": 3101,
+      "sha256": "08f0adc3d068790d15d5c8f44cb00e182c4afb20d39876082a8306a180694515"
+    },
+    {
+      "path": "tests/hunt-three-review/overlay/src/data/championship/catalogs/hunt-hm02v5.review-20261022.json",
+      "bytes": 689977,
+      "sha256": "f27f9e43e2b8987e3204c9a0c8feba821e304451822580207ad903c4bf792e96"
+    },
+    {
+      "path": "tests/hunt-three-review/pixels.mjs",
+      "bytes": 2636,
+      "sha256": "c4f3c0371fd37b95dad4d66f53868eaa58b15b3881027f331e45df7678f47831"
+    },
+    {
+      "path": "tests/hunt-three-review/preflight.mjs",
+      "bytes": 11124,
+      "sha256": "db1bb0a0222c78dfc036558900396330b06174002b7fe9fff541682dbcdeafff"
+    },
+    {
+      "path": "tests/hunt-three-review/resource-observer.mjs",
+      "bytes": 10220,
+      "sha256": "9f71c5c1b2cf274189617450e402caba8cdd891b89d11291c9cc5d783a783ef7"
+    },
+    {
+      "path": "tests/hunt-three-review/test-matrix.json",
+      "bytes": 3168,
+      "sha256": "c91bfcb787e4769f413a61590cb99250be410c68c36e4b5bce58547139f972e2"
+    }
+  ]
+}

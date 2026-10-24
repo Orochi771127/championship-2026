@@ -1,0 +1,173 @@
+{
+  "schema": "HUNT_ACTIONS_OVERLAY.v1",
+  "candidateSHA256": "e3ba2cf8c023fad8c0147de4f3b41304581040d4d0ed178c6681a7625fdd64d9",
+  "fileCount": 32,
+  "bytes": 14912864,
+  "files": [
+    {
+      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-7612568c0979.webp",
+      "sha256": "7612568c0979787ca4b7e04cdced8aaa4396913427253fd3d61180b92385976d",
+      "bytes": 3169974
+    },
+    {
+      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-01-eeb2ff08fdd4.webp",
+      "sha256": "eeb2ff08fdd4fa0ebd31d471dc35d3cf1a76153e05362a1f51ec57dd7208b902",
+      "bytes": 3169610
+    },
+    {
+      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-00-2ddf2c03c3e1.webp",
+      "sha256": "2ddf2c03c3e169bab40caadecf6b5ec0011446972080b9c6b3869ce320fb3e8f",
+      "bytes": 2196984
+    },
+    {
+      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-01-4fb08e2d1d80.webp",
+      "sha256": "4fb08e2d1d8006a59a7e4c2eaeec7501dda9652bc5a23727dd3ac41d68b4230a",
+      "bytes": 2196742
+    },
+    {
+      "path": "assets/production/hunt/hm01-three-r1-20261022/hm01-ground-heights.json",
+      "sha256": "a46ee687ea5c3f1f7865dbddceca8ced3798772707f90d30c29728728d9935ba",
+      "bytes": 184689
+    },
+    {
+      "path": "assets/production/hunt/hm01-three-r1-20261022/hm01-terrain-e90423e80e5e.glb",
+      "sha256": "e90423e80e5ec917854cc406b77e32815ae6912d5629126a2f92e209537da5ee",
+      "bytes": 1661384
+    },
+    {
+      "path": "assets/production/hunt/hm01-three-r1-20261022/manifest.json",
+      "sha256": "4404b66afeaf5ceeb270bb02a4a50106f7fcab24066e671340e3e9f22ff516e4",
+      "bytes": 3053
+    },
+    {
+      "path": "assets/production/hunt/hm08-three-r1-20261022/field_hm08_01-frame-00-f785e7106327.webp",
+      "sha256": "f785e71063271186a2bcd28b48bb18fe54148912199a4a658e8e4ccaa22b8058",
+      "bytes": 516418
+    },
+    {
+      "path": "assets/production/hunt/hm08-three-r1-20261022/field_hm08_02-frame-00-c796caf80af0.webp",
+      "sha256": "c796caf80af0ca5820bf24038005f3794313347049503fe49286f5d9ba23780f",
+      "bytes": 356956
+    },
+    {
+      "path": "assets/production/hunt/hm08-three-r1-20261022/hm08-ground-heights.json",
+      "sha256": "fb1b4e507cadb604ab7757233e3a568c02ffa2c8c1156c086271f8545e89c108",
+      "bytes": 92046
+    },
+    {
+      "path": "assets/production/hunt/hm08-three-r1-20261022/hm08-terrain-ee412126d0e2.glb",
+      "sha256": "ee412126d0e22f9986b9ac22e19b5bb8b203bc81a63862de9315dfa46440b328",
+      "bytes": 425920
+    },
+    {
+      "path": "assets/production/hunt/hm08-three-r1-20261022/manifest.json",
+      "sha256": "be78e84adcdd90fadefbaeb3c40f864d6d90b2e4f9ece2897ebb441b37a3d583",
+      "bytes": 2462
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "sha256": "da349ce13b89d22a4a1e633852fac8454e7f856dd8dd5c16da540a72ebbeeccc",
+      "bytes": 148584
+    },
+    {
+      "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+      "sha256": "8d13a06c87d7f18514f74b9aceeffcd31fa6d9ce5194ba6d8ae60d27a9a88e1f",
+      "bytes": 39696
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
+      "sha256": "20d94340eedb123a69ecc5348574f0d5be9b35d5d9acf7eaa80adb6bf5637dd6",
+      "bytes": 692
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
+      "sha256": "17075171bb2a0f239d0a73cdb3a6ebc5b020737d2cf40796a9b2b89e9f6af7b5",
+      "bytes": 2174
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
+      "sha256": "684897728f2839d3f817fb6a22e7dd55ba21b2c6eb19535051698bfa11aff92a",
+      "bytes": 16878
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/dracoLifecycle.mjs",
+      "sha256": "2efae34769d4e97579863de684a30af803357ce8bf569925975fd03035fe8612",
+      "bytes": 3289
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/externalMapAssets.mjs",
+      "sha256": "c001df3460efcaeeeb83c5ac0e5f460fcf8b5d92a249a2c569c5a119a6e40f91",
+      "bytes": 9982
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/hm01SupportCorridors.mjs",
+      "sha256": "d193ad31af7c129f60e697c2af575beeb6bd8c874c08c4e22ab20b42bd349cb4",
+      "bytes": 2419
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/hm02FlatSupport.mjs",
+      "sha256": "88450f1933022508027492f5a87271ab6045f1c0d110b2b5ab82c967a6a64425",
+      "bytes": 1339
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/hm02Projection.mjs",
+      "sha256": "0a1a35ae8a0bc12cf5f345b94343e870e3d4a15273fb024bf43ff2c0a256e1c1",
+      "bytes": 2509
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/lifecycle.mjs",
+      "sha256": "495c8027631a4285753e4bf812cdde0043f081c4288adedefb07cefce8492e25",
+      "bytes": 4132
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/loadHuntThreeMap.mjs",
+      "sha256": "11a1b6f90d737dec86fa90266f4767d14033821115b6b5b0eb45218bfc2207fb",
+      "bytes": 2598
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/manifestBindings.mjs",
+      "sha256": "248461c82e168faf71ec57f4fc74ac546e70675a9fd597ed0f99364c45583202",
+      "bytes": 1283
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/nativeActorAdapter.mjs",
+      "sha256": "929435d6929478e82401fc3f3bf69b58ba0f6f53fdc26b3d71aca6814af47bd7",
+      "bytes": 1892
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/projection.mjs",
+      "sha256": "56fc3ffa738e1128735ddc4f9b1797880b823435396b8a91269cd71fabd99d8e",
+      "bytes": 2408
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/publicFallbackRole.mjs",
+      "sha256": "55204bc3307cad4abc40a4d4e22cfd242f0a11c5a94f9c1ec7f37416ae9ffbee",
+      "bytes": 710
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/sharedGLState.mjs",
+      "sha256": "acbea327ca2e54a4a28168106167fcfff76eedc289713d6c137bca647431718e",
+      "bytes": 1125
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/sharedPass.mjs",
+      "sha256": "3cad80707011629638d5c3a1400f1bb74dcd97b8f98cfaa84b44c250108d2560",
+      "bytes": 1838
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/supportDepth.mjs",
+      "sha256": "08f0adc3d068790d15d5c8f44cb00e182c4afb20d39876082a8306a180694515",
+      "bytes": 3101
+    },
+    {
+      "path": "src/data/championship/catalogs/hunt-hm02v5.review-20261022.json",
+      "sha256": "f27f9e43e2b8987e3204c9a0c8feba821e304451822580207ad903c4bf792e96",
+      "bytes": 689977
+    }
+  ],
+  "sourceProvenance": {
+    "originalCandidateSHA256": "cf14c7ab2fa256ad5ce275347056af4c138321f71b0d7d554d7277db2de52409",
+    "baseCommit": "945a95a0470c8b430f28182e4305a17a68b4ae7e",
+    "mainCompositionManifestSHA256": "f25ce2f926209a351fbfe744e76a7c34769b9dd6334e0630ccdcd22a574996d2"
+  }
+}
