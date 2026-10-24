@@ -48,3 +48,5 @@ CM20 僅對離地岩石調整陰影接收取樣，修正圓角岩石的自陰影
 ## 本批提交前驗證
 
 實際選定 12 張資產載入與 shader PASS（錯誤 0）；物理支撐契約 PASS（26 checks、8 fields、156 tops）；ranchThreeScene.js 語法與 git diff --check 通過；build／validate 為 8,266 檔，build ID `2b274502fe80a32ef6f9a23a6ab3cac8fc924eab8153bf1407300d196496d32f`；assert-public-payload 通過。既有 CI／Pages 於 PR／main 自動執行，公開部署仍須事後核對，這些本機結果不等於已上線。
+
+CI 首次檢查發現歷史接地證據索引與瀏覽器固定資產指紋仍指向舊版。CM34 的兩個原支撐三角形已以完全相同的 float32 頂點建立 644／645 → 3894／3895 對應，保留既有 captured fixtures、接地高度、可見性與精度檢查。Friends normal runner 僅更新四筆資產身份，test-only filmstrip 固定校準同步至同一個已驗證 build，動作邏輯與計時不變，不宣稱新增成對動畫驗收。這些必要對應修正的 186 項 focused checks 全數通過。
