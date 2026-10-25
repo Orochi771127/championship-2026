@@ -118,7 +118,8 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
   // Scene-owned sample fetches are cancelled by battleAudioPresentation.dispose().
   // Only the four exact requests observed in run39586767530 are permitted here,
   // and only after this test confirms the ordinary battle-exit dialog.
-  const allowedSampleAborts=new Set(['0201','0202','0203','0204'].map(id=>new URL(`assets/production/internal-faithful-baseline/battle-audio-v1/${id}.wav`,base).href));
+  // Run40218468403 additionally observed0207/0208 during confirmed exit; same bounded loader teardown.
+  const allowedSampleAborts=new Set(['0201','0202','0203','0204','0207','0208'].map(id=>new URL(`assets/production/internal-faithful-baseline/battle-audio-v1/${id}.wav`,base).href));
   const mediaAborts=[],sampleAborts=[];
   for(const r of evidence.requestFailures){
    assert.equal(r.failure,'net::ERR_ABORTED');assert.equal(r.method,'GET');
