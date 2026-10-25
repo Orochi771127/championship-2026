@@ -113,7 +113,7 @@ export function createSettingsPanel({
 } = {}) {
   if (!store) throw new TypeError("The settings panel needs a preference store");
   let dialog = null;
-  let saveStatusNode = null, lastSavedNode = null;
+  let saveStatusNode = null, lastSavedNode = null, saveNotesNode = null;
   let category = "appearance";
   let view = "list";
   let opener = null;
@@ -409,7 +409,8 @@ export function createSettingsPanel({
       saveBlock.append(node("p", "cm-settings__text", "存檔保存在這台裝置的這個瀏覽器（本機）。重要操作後會自動保存；清除網站資料後無法取回。"));
       saveStatusNode = node('p', 'cm-settings__text');
       lastSavedNode = node('p', 'cm-settings__text');
-      saveBlock.append(saveStatusNode, lastSavedNode);
+      saveNotesNode = node('div', 'cm-settings__save-notes');
+      saveBlock.append(saveStatusNode, lastSavedNode, saveNotesNode);
       refreshSaveStatus();
       if (typeof exportBackup === 'function') {
         const backup = node('button', 'cm-settings__action', 'BACKUP_DOWNLOAD');
@@ -482,6 +483,10 @@ export function createSettingsPanel({
     if (save) setText(saveStatusNode, save.key, save.params);
     lastSavedNode.hidden = !save?.lastSaved;
     if (save?.lastSaved) setText(lastSavedNode, save.lastSaved.key, save.lastSaved.params);
+    // Size and browser-retention facts; each note is its own translatable line.
+    const notes = Array.isArray(save?.notes) ? save.notes : [];
+    saveNotesNode.hidden = notes.length === 0;
+    saveNotesNode.replaceChildren(...notes.map(({ key, params }) => node('p', 'cm-settings__text', key, params)));
   }
 
   function preferenceStatusKey(status) {
@@ -528,7 +533,7 @@ export function createSettingsPanel({
     const focusedValue = doc.activeElement?.value ?? null;
     const scroll = content.scrollTop;
     content.replaceChildren();
-    saveStatusNode = lastSavedNode = null;
+    saveStatusNode = lastSavedNode = saveNotesNode = null;
     sliderPainters.clear();
     volumeNote = null;
     const heading = node("h3", "cm-settings__section-title", CATEGORY_TITLES[category]);
@@ -714,7 +719,7 @@ export function createSettingsPanel({
     try { if (dialog.open) dialog.close(); } catch { /* already closed */ }
     dialog.remove();
     dialog = null;
-    saveStatusNode = lastSavedNode = null;
+    saveStatusNode = lastSavedNode = saveNotesNode = null;
     closing = false;
     if (historyEntry && !fromHistory) {
       historyEntry = false;

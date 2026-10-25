@@ -186,6 +186,10 @@ export const UI_COPY_JA = Object.freeze({
   "SAVE_LAST_SUCCESS": "最後の保存成功：{time}。",
   "SAVE_NO_SUCCESS": "保存に成功した時刻はまだありません。",
   "SAVE_PENDING": "端末への保存待ち…",
+  "SAVE_SIZE_USAGE": "セーブデータの大きさ：{used} KB／上限 {budget} KB。",
+  "SAVE_SIZE_HIGH": "セーブデータが容量の上限に近づいています。バックアップをダウンロードし、開発者に報告してください。",
+  "STORAGE_PERSISTED": "ブラウザはこのサイトのデータを長期保存することを許可しています。",
+  "STORAGE_NOT_PERSISTED": "空き容量が少ないときや長期間使わないときに、ブラウザがサイトのデータを消去することがあります。定期的にバックアップをダウンロードしてください。ホーム画面に追加すると消去されにくくなります。",
 
   "MUSIC_RAISING_PICK": "育成の BGM",
   "MUSIC_RAISING_PICK_HINT": "育成ホームとケージ編集に適用され、チュートリアルでも使用します。",
