@@ -31,7 +31,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Build and validate the existing playtest artifact
         run: npm run build:playtest && npm run validate:playtest
-      - name: Review all 83 cells and 53 sequences using actual PIXI and native presenters
+      - name: Review the active M201 selection with its matching renderer contract
         shell: bash
         run: |
           set -euo pipefail
@@ -45,10 +45,18 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:8765/tests/fixtures/championship-owned-party.html > /dev/null
-          node tests/championship-m201-density8-renderer-review.mjs \
-            http://127.0.0.1:8765/ \
-            assets/production/characters/accepted-20261010/m201_agumon-clarity-trial-20261021-r01/ \
-            .tmp/browser-qa/m201-density8
+          if node --input-type=module -e "import fs from 'node:fs'; const c=JSON.parse(fs.readFileSync('src/data/championship/public-character-catalog.v1.json')); process.exit(c.characters.find(x=>x.entityId==='m201_agumon').runtimePath.startsWith('assets/production/characters/growth-authored-20261025/')?0:1);"; then
+            # The October 25 replacement has a different reviewed image contract.
+            # Keep the frozen 83-cell trial test intact for that trial's own selection.
+            GROWTH_RENDER_BASE=http://127.0.0.1:8765/ \
+            GROWTH_RENDER_OUTPUT=.tmp/browser-qa/m201-density8 \
+              node tests/growth38-render-smoke.cjs
+          else
+            node tests/championship-m201-density8-renderer-review.mjs \
+              http://127.0.0.1:8765/ \
+              assets/production/characters/accepted-20261010/m201_agumon-clarity-trial-20261021-r01/ \
+              .tmp/browser-qa/m201-density8
+          fi
       - name: Preserve real renderer screenshots and exact result
         if: always()
         uses: actions/upload-artifact@v4

@@ -331,6 +331,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         try { controller.setAnimation(id); sequence = id; actionRequest = request; actionElapsed = 0; } catch { /* a missing raw sequence keeps the current pose */ }
       },
       update(dtMs, { x, y, facing, flash = 0, alpha = 1, lift = 0, seq = DATA_ARENA_SEQUENCES.STAND, sink = 0 }) {
+        if(role === "PLAYER") body = state.player; // Switching back reuses the view, not an obsolete actor object.
         container.position.set(x, y - floorOffset(x,y));
         container.zIndex = y;
         const event = actionEvents.get(body.id);
@@ -384,7 +385,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           sprite.x=0;
           sprite.y=-lift+sink*30;
         }
-        if (motion && relayProfile && !reducedMotion) {
+        if (motion && relayProfile && body.action && !reducedMotion) {
           const a = body.action;
           const pulse = a?.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);
           sprite.x += (facing > 0 ? 1 : -1) * relayProfile.thrust * pulse;
