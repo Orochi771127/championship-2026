@@ -189,7 +189,7 @@ export const UI_COPY = Object.freeze({
   "SAVE_PENDING": "正在等待保存到本機…",
   "SAVE_SIZE_USAGE": "存檔大小：{used} KB／上限 {budget} KB。",
   "SAVE_SIZE_HIGH": "存檔已接近容量上限，請先下載備份並回報開發者。",
-  "STORAGE_PERSISTED": "瀏覽器已同意長期保存這個網站的資料。",
+  "STORAGE_PERSISTED": "瀏覽器已同意長期保存這個網站的資料；這不保證永不遺失，仍建議定期下載存檔備份。",
   "STORAGE_NOT_PERSISTED": "瀏覽器可能在空間不足或長期未使用時清除網站資料，建議定期下載存檔備份；加入主畫面後通常較不易被清除。",
 
   "MUSIC_RAISING_PICK": "育成場景 BGM",

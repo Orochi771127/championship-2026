@@ -200,7 +200,7 @@ export const UI_COPY_EN = Object.freeze({
   "SAVE_PENDING": "Waiting to save locally…",
   "SAVE_SIZE_USAGE": "Save size: {used} KB of {budget} KB.",
   "SAVE_SIZE_HIGH": "The save is close to its size limit. Download a backup and report it to the developers.",
-  "STORAGE_PERSISTED": "The browser has agreed to keep this site's data.",
+  "STORAGE_PERSISTED": "The browser has agreed to keep this site's data. That is not a guarantee against loss, so keep downloading save backups.",
   "STORAGE_NOT_PERSISTED": "The browser may clear site data when space runs low or after long disuse. Download a save backup regularly; adding the game to the Home Screen usually makes clearing less likely.",
 
   "MUSIC_RAISING_PICK": "Raising BGM",

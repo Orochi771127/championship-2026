@@ -188,7 +188,7 @@ export const UI_COPY_VI = Object.freeze({
   "SAVE_PENDING": "Đang chờ lưu trên thiết bị…",
   "SAVE_SIZE_USAGE": "Dung lượng bản lưu: {used} KB / tối đa {budget} KB.",
   "SAVE_SIZE_HIGH": "Bản lưu sắp đạt giới hạn dung lượng. Hãy tải bản sao lưu và báo cho nhà phát triển.",
-  "STORAGE_PERSISTED": "Trình duyệt đã đồng ý lưu lâu dài dữ liệu của trang này.",
+  "STORAGE_PERSISTED": "Trình duyệt đã đồng ý lưu lâu dài dữ liệu của trang này. Điều này không bảo đảm dữ liệu không bao giờ mất, hãy tiếp tục tải bản sao lưu định kỳ.",
   "STORAGE_NOT_PERSISTED": "Trình duyệt có thể xóa dữ liệu trang khi thiếu dung lượng hoặc lâu không dùng. Hãy tải bản sao lưu định kỳ; thêm trò chơi vào màn hình chính thường giúp ít bị xóa hơn.",
 
   "MUSIC_RAISING_PICK": "BGM nuôi dưỡng",
