@@ -5,12 +5,15 @@ import {actorWorldBounds} from './actorBounds.mjs';
 import {projectionForManifest} from './projection.mjs';
 
 export function configureAuthoredLighting({manifest,scene,ambient,sun,night=false}){
-  ambient.color.set(0xdce9ff);ambient.groundColor.set(0x574f3e);ambient.intensity=night?.45:.8;
-  sun.color.set(night?0x9eb8ff:0xfff1db);sun.intensity=night?.65:1.7;
+  // Diorama light shared with the ranch (2026-10-26): warm key, cool sky fill,
+  // green ground bounce, soft cool shadows. Intensities keep the hunt balance.
+  ambient.color.set(night?0xb8c8e6:0xc9ddf2);ambient.groundColor.set(0x5d6b45);ambient.intensity=night?.45:.8;
+  sun.color.set(night?0x9eb8ff:0xfff1d6);sun.intensity=night?.65:1.7;
   const center=projectionForManifest(manifest).ground(1440,1440);
   sun.position.set(center[0]-30,65,center[2]+40);sun.target.position.set(...center);scene.add(sun.target);
   sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-80;sun.shadow.camera.right=80;sun.shadow.camera.top=80;sun.shadow.camera.bottom=-80;
   sun.shadow.camera.near=.1;sun.shadow.camera.far=250;sun.shadow.bias=-.001;sun.shadow.normalBias=.05;
+  sun.shadow.radius=3;sun.shadow.intensity=.82;
 }
 
 // Adapter for the self-contained material GLBs in the reviewed authoring batch.
