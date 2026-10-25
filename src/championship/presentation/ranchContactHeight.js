@@ -21,7 +21,7 @@ export function contactHeightAtPoint(triangles,x,z){
 }
 
 // Separate, explicitly derived collision surfaces. Never physical render/support triangles.
-export const LOGICAL_BRIDGES_SHA='e2b69c4d19f35f0edd6634da55d062710d81397a4f8e99f24ee9a4d2adda14b5';
+export const LOGICAL_BRIDGES_SHA='eabcd713743d269e326ec7c5ff69461fe6018c11574ce599b2f259694ec3a0ec';
 export async function loadLogicalBridges(text,physicalFields){
  const digest=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(x=>x.toString(16).padStart(2,'0')).join('');
  if(digest!==LOGICAL_BRIDGES_SHA)throw Error('LOGICAL_BRIDGES_HASH_MISMATCH');

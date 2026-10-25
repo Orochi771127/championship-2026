@@ -64,11 +64,14 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const pixi=stage.app.canvas, previousStyle={position:pixi.style.position,zIndex:pixi.style.zIndex};
   const scene=new THREE.Scene(), camera=new THREE.OrthographicCamera(-1,1,1,-1,.1,600);
   camera.up.copy(up);
-  scene.add(new THREE.HemisphereLight(0xdbeeff,0x6b7650,2));
-  const sun=new THREE.DirectionalLight(0xffeed5,2.6);sun.castShadow=renderer.shadowMap.enabled;
+  // Diorama light (2026-10-25): cool sky fill with a green ground bounce, warm key,
+  // soft shadow edges and lifted shadow floor so shade reads cool rather than black.
+  // Contact occlusion is authored into the GLB atlases, not added here.
+  scene.add(new THREE.HemisphereLight(0xc9ddf2,0x5d6b45,2));
+  const sun=new THREE.DirectionalLight(0xfff1d6,2.7);sun.castShadow=renderer.shadowMap.enabled;
   sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;
   sun.shadow.camera.top=35;sun.shadow.camera.bottom=-35;sun.shadow.camera.far=150;
-  sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;
+  sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;sun.shadow.radius=3;sun.shadow.intensity=.82;
   scene.add(sun,sun.target);
   const models=new Map(), instances=[], textures=new Map(), sprites=new Map();
   const groundShadows=createRanchGroundShadows(scene);

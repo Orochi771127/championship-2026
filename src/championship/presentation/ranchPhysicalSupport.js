@@ -1,5 +1,5 @@
 // Exact six low ground fields plus admitted CM18 treads / CM34 mat. Not navigation authority.
-export const SUPPORT_METADATA_SHA='1cd74d55b57f36db88d1b32414e74db9c0040a6357afafcec4d1bf220ac33ad4';
+export const SUPPORT_METADATA_SHA='a92e0a1931d30b972f18b6f0a69b21c59e8349013fe2dff7d9ce74de4c4ec516';
 export const SUPPORT_MAX_TRIANGLES=72;
 export async function sha256(bytes){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');}
 export async function loadSupportMetadata(text){
