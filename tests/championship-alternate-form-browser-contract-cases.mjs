@@ -56,7 +56,7 @@ test('system-menu navigation targets buttons, never the retained hidden menu con
  assert.equal(source.includes("locator('[data-menu-id=\"SYSTEM\"]')"),false);
 });
 
-test('promotion browser evidence covers real production catalogs and an untouched normal-entry save',()=>{
+test('promotion browser evidence covers real production catalogs and read-only normal-entry registration',()=>{
  const qa=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
  assert.match(qa,/assert\.equal\(entry\[gate\],true/);
  assert.match(qa,/Observed QA gameplay must use the same product identities and readiness/);
@@ -64,13 +64,35 @@ test('promotion browser evidence covers real production catalogs and an untouche
  const normal=fs.readFileSync(new URL('./championship-dex-portrait-browser.cjs',import.meta.url),'utf8');
  assert.match(normal,/NORMAL_ENTRY_MUST_NOT_LOAD_ALTERNATE_QA/);
  assert.match(normal,/HERO_SOURCE_TARGET_4_FORMS_2_VIEWPORTS/);
- assert.match(normal,/productionCatalogs/);assert.match(normal,/Normal new game must not manufacture any registration/);
- assert.match(normal,/registrationAfter, evidence\.registrationBefore/);
+ assert.match(normal,/productionCatalogs/);
+ assert.ok(normal.includes("assertSavedStarterRegistration({registeredSpecies:[],starter:'species-000'},evidence.registrationBefore,initialHomeStarter)"));
+ assert.ok(normal.includes('assertSavedStarterRegistration(evidence.registrationBefore,evidence.registrationAfter,evidence.dexStarter)'));
+ assert.ok(normal.includes('assertStarterRegistration(rows,observed.starter)'));
+ assert.match(normal,/Read-only Dex browsing must not change registration/);
+ assert.match(normal,/Only the independently observed starter may be registered/);
+ assert.match(normal,/data-resident-assets/);assert.match(normal,/residents\[0\]\.creatureId!=='resident:species-000'/);
+ const swipe=fs.readFileSync(new URL('./championship-database-swipe-browser.cjs',import.meta.url),'utf8');
+ const registrationCheck=swipe.indexOf('await checkDexRegistration?.()'),homeExit=swipe.indexOf("await returnToList();await back.click();");
+ assert.ok(registrationCheck>=0&&homeExit>registrationCheck,'Check unchanged registration before returning to live Home');
  assert.doesNotMatch(normal,/addInitScript|localStorage\.setItem|sessionStorage\.setItem|registerHooks|__alternateFormQaApp|page\.clock/);
  const production=fs.readFileSync(new URL('./product-form-production-source-cases.mjs',import.meta.url),'utf8');
  assert.doesNotMatch(production,/registerHooks|alternateFormQaApp/);assert.match(production,/createChampionshipStandaloneApp/);
 });
 
+
+test('normal Dex registration accepts only independently observed default-egg hatching',()=>{
+ const normal=fs.readFileSync(new URL('./championship-dex-portrait-browser.cjs',import.meta.url),'utf8');
+ const helpers=['assertStarterRegistration','assertSavedStarterRegistration'].map(name=>{
+  const source=normal.match(new RegExp(`^function ${name}\\([^]*?^}`, 'm'));assert.ok(source,`Missing ${name}`);return source[0];
+ }).join('\n');
+ const {assertStarterRegistration:rows,assertSavedStarterRegistration:saved}=new Function('assert',helpers+';return {assertStarterRegistration,assertSavedStarterRegistration};')(assert);
+ const egg={registeredSpecies:[],starter:'species-000'},hatch={registeredSpecies:[14],starter:'species-014'};
+ assert.equal(rows([],0),0);assert.equal(rows([14],14),14);
+ for(const [registered,starter]of [[[14],0],[[14,117],14],[[117],117],[[],14]])assert.throws(()=>rows(registered,starter));
+ saved(egg,egg,0);saved(egg,egg,14);saved(egg,hatch,14);
+ assert.throws(()=>saved(egg,hatch,0));
+ for(const after of [{registeredSpecies:[14,117],starter:'species-014'},{registeredSpecies:[117],starter:'species-117'},{registeredSpecies:[14],starter:'species-000'}])assert.throws(()=>saved(egg,after,14));
+});
 
 test('canonical post-reload contract rejects stale/unknown schemas, mismatched report and missing/wrong grid',()=>{
  const identity={211:['m528_metaletemon','m528_metaletemon'],222:['m540_imperialdramon_fm','m506_griffomon'],229:['oc_crownbrass_mandrill','m528_metaletemon'],230:['oc_celestyrant_battle_r10','m540_imperialdramon_fm']};
