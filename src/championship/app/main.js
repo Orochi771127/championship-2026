@@ -96,6 +96,7 @@ import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/c
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
 import { downloadSaveBackup, downloadRuntimeDiagnostics } from './downloadSaveBackup.js';
+import { createStorageDurability, saveSizeLevel } from './storageDurability.js';
 import { createRuntimeRecoveryDiagnostics, observeBattleFirstRender } from './runtimeRecoveryDiagnostics.js';
 import { createAutosaveScheduler } from './autosaveScheduler.js';
 // Settings round (2026-09-29): player preferences, applied to the page, the
@@ -485,6 +486,8 @@ function sceneIsSettled() {
 }
 
 let settingsPanel = null;
+// Asked once, after a save has succeeded, so a first visit never prompts.
+const storageDurability = createStorageDurability({ onChange: () => settingsPanel?.refreshSaveStatus?.() });
 function openSettings(from = null) {
   settingsPanel ??= createSettingsPanel({
     store: settings.store,
@@ -505,12 +508,27 @@ function saveStatusLine() {
   if (!status || !app?.getSession?.()) return { key: "目前沒有進行中的遊戲。" };
   const when = status.savedAt ? formatDateTime(status.savedAt) : null;
   const lastSaved = when ? { key: 'SAVE_LAST_SUCCESS', params: { time: when } } : { key: 'SAVE_NO_SUCCESS' };
+  const notes = saveDurabilityNotes(status);
   if (status.phase === "SAVE_FAILED") return { key: status.lastCode === 'CHAMPIONSHIP_MODERN_SAVE_CONFLICT'
     ? "另一個分頁已寫入較新的存檔，這個分頁不會覆蓋它。請關閉其他分頁後重新開啟遊戲。"
-    : "上次保存失敗；可在畫面上方的保存狀態重試。", lastSaved };
-  if ((autosave?.inspect().pending.length ?? 0) > 0) return { key: 'SAVE_PENDING', lastSaved };
-  if (status.phase === "SAVED" || status.phase === "RESTORED") return when ? { key: "已存到本機（{time}）。", params: { time: when } } : { key: "已存到本機。" };
-  return { key: "上次寫入後遊戲又有進展，重要操作或離開頁面時會保存。", lastSaved };
+    : "上次保存失敗；可在畫面上方的保存狀態重試。", lastSaved, notes };
+  if ((autosave?.inspect().pending.length ?? 0) > 0) return { key: 'SAVE_PENDING', lastSaved, notes };
+  if (status.phase === "SAVED" || status.phase === "RESTORED") return when ? { key: "已存到本機（{time}）。", params: { time: when }, notes } : { key: "已存到本機。", notes };
+  return { key: "上次寫入後遊戲又有進展，重要操作或離開頁面時會保存。", lastSaved, notes };
+}
+
+/** Size against the save budget and whether the browser keeps this site's data. */
+function saveDurabilityNotes(status) {
+  const notes = [];
+  const kb = (bytes) => String(Math.max(1, Math.ceil(bytes / 1024)));
+  if (Number.isSafeInteger(status.bytes)) {
+    notes.push({ key: 'SAVE_SIZE_USAGE', params: { used: kb(status.bytes), budget: kb(status.byteBudget) } });
+    if (saveSizeLevel(status.bytes, status.byteBudget) === 'HIGH') notes.push({ key: 'SAVE_SIZE_HIGH' });
+  }
+  const storage = storageDurability.getState();
+  if (storage === 'PERSISTED') notes.push({ key: 'STORAGE_PERSISTED' });
+  else if (storage === 'NOT_PERSISTED') notes.push({ key: 'STORAGE_NOT_PERSISTED' });
+  return notes;
 }
 
 function note(message) {
@@ -2254,6 +2272,7 @@ function refreshStatusBar() {
     reading.todayMatches = Math.min(app.getAvailableBattleRecordIndices().length, BATTLE_MATCH_LIST_CAP);
     const status = app.savePort?.getStatus?.() ?? null;
     reading.save = status ? { ...status, autosavePending: (autosave?.inspect().pending.length ?? 0) > 0 } : null;
+    if (status?.phase === 'SAVED') storageDurability.requestOnce();
   }
   statusBar.render(reading);
   // A day may only be closed from the Training side, matching where the

@@ -20,6 +20,7 @@
 import { serializeRaisingHomeSaveR2 } from "../raising/raisingHomePersistenceR2.js";
 import {
   CHAMPIONSHIP_MODERN_SAVE_KEY,
+  CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES,
   createChampionshipModernSave,
   deserializeChampionshipModernSave,
   serializeChampionshipModernSave
@@ -148,8 +149,12 @@ export function createChampionshipPersistentSavePort({
     revision: 0,
     savedAt: null,
     error: null,
-    committedWrites: 0
+    committedWrites: 0,
+    // Size of the stored text against the envelope budget, for an early warning.
+    bytes: null,
+    byteBudget: CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES
   });
+  const byteLength = (text) => new TextEncoder().encode(text).byteLength;
   let lastRequest = null;
   let baseline;
   let pendingText=null;
@@ -276,7 +281,7 @@ export function createChampionshipPersistentSavePort({
       lastRequest = request;
       pendingText=null;
       try {
-        const { save: written } = commit(request);
+        const { save: written, text } = commit(request);
         return publish({
           phase: "SAVED",
           lastCode: "CHAMPIONSHIP_MODERN_SAVE_OK",
@@ -284,7 +289,8 @@ export function createChampionshipPersistentSavePort({
           revision: written.progression.revision,
           savedAt: written.updatedAt,
           error: null,
-          committedWrites: status.committedWrites + 1
+          committedWrites: status.committedWrites + 1,
+          bytes: byteLength(text)
         });
       } catch (error) {
         return publish({
@@ -334,7 +340,8 @@ export function createChampionshipPersistentSavePort({
           canRetry: false,
           revision: save.progression.revision,
           savedAt: save.updatedAt,
-          error: null
+          error: null,
+          bytes: byteLength(text)
         });
         return Object.freeze({ present: true, save, error: null });
       } catch (error) {
@@ -347,7 +354,7 @@ export function createChampionshipPersistentSavePort({
       guarded.removeItem(key);
       baseline=null;pendingText=null;
       lastRequest = null;
-      return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED", canRetry: false, revision: 0, savedAt: null, error: null });
+      return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED", canRetry: false, revision: 0, savedAt: null, error: null, bytes: null });
     }
   });
 }
