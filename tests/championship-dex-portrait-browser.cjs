@@ -84,15 +84,28 @@ function assertRegistry(sourceBytes, builtBytes) {
   for (const id of Object.keys(EXPECTED).map(Number)) assert.ok(catalog.entries.some(entry => entry.speciesIndex === id), `Missing selected hero ${id}`);
   return catalog;
 }
+// The default egg's native ancestry forces hatch target 14. Home continues
+// ticking while slow browser clicks/loaders settle; Database itself does not.
+function assertStarterRegistration(rows, observedStarter) {
+  assert.ok([0,14].includes(observedStarter), 'Only the normal default egg or its native hatch is expected');
+  assert.deepEqual(rows, observedStarter===0?[]:[14], 'Dex must register only the independently observed hatched Home starter; eggs are not tracked');
+  return observedStarter;
+}
+function assertSavedStarterRegistration(before, after, observedStarter) {
+  // A read-only save observation can lag the live Home actor until autosave.
+  if (JSON.stringify(before) === JSON.stringify(after)) return;
+  assert.equal(observedStarter,14,'A save change requires an observed natural Home hatch');
+  assert.deepEqual(after,{registeredSpecies:[14],starter:'species-014'},'No unrelated registrations or replacement creatures');
+}
 function sizePlan(size, padding) {
   assert.ok([128, 256].includes(size));
   assert.deepEqual(padding, [24, 24, 24, 24], 'Existing normal 24px stage padding changed');
   return { size, width: size + padding[1] + padding[3], height: size + padding[0] + padding[2] };
 }
-function assertMeasured(snapshot, species, size = null) {
+function assertMeasured(snapshot, species, size = null, starter = null) {
   const expected = EXPECTED[species];
   assert.equal(snapshot.speciesIndex, species); assert.equal(snapshot.displayCode, expected.displayCode);
-  assert.equal(snapshot.rowState, 'UNDISCOVERED', 'Fresh review must not manufacture registration');
+  assert.equal(snapshot.rowState, species === starter ? 'REGISTERED' : 'UNDISCOVERED', 'Only the independently observed starter may be registered');
   assert.equal(snapshot.src, new URL(expected.src, PUBLIC_BASE).href);
   assert.equal(snapshot.art, 'ready'); assert.equal(snapshot.complete, true); assert.equal(snapshot.hidden, false);
   assert.deepEqual(snapshot.natural, [expected.width ?? 1254, expected.height ?? 1254]); assert.equal(snapshot.objectFit, 'contain');
@@ -180,7 +193,7 @@ function assertApproved44Coverage(evidence){
   for(const width of [1440,390]){
     const rows=evidence.captures.filter(e=>APPROVED44_IDS.includes(e.speciesIndex)&&e.viewport.width===width&&e.sizeTarget==='NORMAL_UNMODIFIED');
     assert.deepEqual(rows.map(e=>e.speciesIndex).sort((a,b)=>a-b),APPROVED44_IDS,'Exactly44 normal desktop/mobile heroes');
-    for(const row of rows){assertMeasured(row,row.speciesIndex);assert.ok(row.heroScreenshot);}
+    for(const row of rows){assertMeasured(row,row.speciesIndex,null,evidence.dexStarter);assert.ok(row.heroScreenshot);}
   }
 }
 
@@ -384,13 +397,43 @@ async function main() {
       const saved = JSON.parse(localStorage.getItem('championshipModernSave:v1'));
       return { registeredSpecies: saved?.progression?.registeredSpecies ?? [], starter: saved?.creature?.speciesId ?? null };
     }); // Read-only observation of this disposable profile, never an imported save.
+    // Observe public mounted Home metadata, not application objects or intents.
+    await page.evaluate(() => {
+      const state={starter:null,history:[],error:null};
+      const observe=()=>{
+        const host=document.querySelector('#cm-root[data-active-screen="RAISING_HOME"] [data-resident-assets]');
+        if(!host)return;
+        let residents;
+        try {residents=JSON.parse(host.dataset.residentAssets);} catch {state.error='Invalid Home resident metadata';return;}
+        if(Array.isArray(residents)&&residents.length===0)return; // Temporary loading metadata is not a roster change.
+        if(!Array.isArray(residents)||residents.length!==1||residents[0].creatureId!=='resident:species-000'){state.error='Unexpected normal starter roster';return;}
+        const id=Number(residents[0].speciesId.match(/species-(\d+)$/)?.[1]);
+        if(state.starter!==id){state.starter=id;state.history.push(id);}
+      };
+      state.observer=new MutationObserver(observe);
+      state.observer.observe(document.documentElement,{subtree:true,attributes:true,attributeFilter:['data-resident-assets']});
+      observe();window.__dexStarterObservation=state;
+    });
+    await page.waitForFunction(()=>window.__dexStarterObservation.starter!==null||window.__dexStarterObservation.error!==null);
     evidence.registrationBefore = await registration();
-    assert.deepEqual(evidence.registrationBefore.registeredSpecies,[],'Normal new game must not manufacture any registration');
+    const initialHomeStarter=await page.evaluate(()=>window.__dexStarterObservation.starter);
+    assertSavedStarterRegistration({registeredSpecies:[],starter:'species-000'},evidence.registrationBefore,initialHomeStarter);
     await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();
     await page.locator('.cm-toolbar__menu:not([hidden]) button[data-entry-id="database"]').click();
     await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor();
     await page.locator('.cm-vs2-database__stage').selectOption('');
-    await require('./championship-database-swipe-browser.cjs')(page,{output,evidence});
+    async function checkDexRegistration({homeBoundary=false}={}) {
+      const observed=await page.evaluate(()=>({starter:window.__dexStarterObservation.starter,history:window.__dexStarterObservation.history,error:window.__dexStarterObservation.error}));
+      assert.equal(observed.error,null);
+      const rows=await page.locator('.cm-vs2-database__row[data-state="REGISTERED"]').evaluateAll(rows=>rows.map(row=>Number(row.dataset.speciesIndex)));
+      if(homeBoundary)evidence.dexStarter=assertStarterRegistration(rows,observed.starter);
+      else assert.deepEqual(rows,evidence.dexStarter===0?[]:[14],'Read-only Dex browsing must not change registration');
+      assert.ok(['[0]','[0,14]','[14]'].includes(JSON.stringify(observed.history)),'Only one natural default-egg hatch is allowed');
+      evidence.starterHistory=[...observed.history];
+    }
+    await checkDexRegistration({homeBoundary:true});
+    await require('./championship-database-swipe-browser.cjs')(page,{output,evidence,checkDexRegistration});
+    await checkDexRegistration({homeBoundary:true});
     const listReturn = page.locator('.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-footer button');
     async function openSpecies(species, observeScoped=false) {
       const started=Date.now();
@@ -406,7 +449,8 @@ async function main() {
       }
       await page.locator(HERO + '[data-art="ready"] .cm-dex-hero__image').waitFor({ state: 'visible', timeout: 30000 });
       await page.waitForFunction(([width,height]) => { const image = document.querySelector('.cm-dex-hero__image'); return image?.complete && image.naturalWidth === width && image.naturalHeight === height; }, [EXPECTED[species].width ?? 1254, EXPECTED[species].height ?? 1254]);
-      const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species);
+      const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species, null, evidence.dexStarter);
+      await checkDexRegistration();
       (evidence.navigationTimings??=[]).push({speciesIndex:species,viewport:snapshot.viewport,durationMs:Date.now()-started});
       return snapshot;
     }
@@ -414,7 +458,7 @@ async function main() {
       const started=Date.now(),isApproved44=APPROVED44_IDS.includes(species);
       await page.locator(HERO).scrollIntoViewIfNeeded();
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species, size);
+      const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species, size, evidence.dexStarter);
       const visible=visibleHeroRect(snapshot,species);
       assert.ok(visible.x >= -1 && visible.y >= -1 && visible.right <= snapshot.viewport.width + 1 && visible.bottom <= snapshot.viewport.height + 1, 'Whole visible hero must be visible after normal scrolling');
       if(!isApproved44)await shot(name);
@@ -536,7 +580,9 @@ async function main() {
     }
     evidence.normalProductionFormCoverage='HERO_SOURCE_TARGET_4_FORMS_2_VIEWPORTS';
     evidence.registrationAfter = await registration();
-    assert.deepEqual(evidence.registrationAfter, evidence.registrationBefore, 'Read-only Dex browsing must not register or replace creatures');
+    await checkDexRegistration();
+    assertSavedStarterRegistration(evidence.registrationBefore,evidence.registrationAfter,evidence.dexStarter);
+    await page.evaluate(()=>{window.__dexStarterObservation.observer.disconnect();delete window.__dexStarterObservation;});
     await Promise.all(imageJobs);
     for (const species of Object.keys(EXPECTED).map(Number)) { assert.ok(imageResponses.has(species), `No actual browser image response captured for ${species}`); evidence.assetChecks.push(imageResponses.get(species)); }
     assert.deepEqual([...thumbnailResponses.keys()].sort((a,b)=>a-b),APPROVED44_IDS,'Every approved thumbnail must have a real browser response');
@@ -612,6 +658,18 @@ async function selfTest() {
     art: 'ready', complete: true, hidden: false, natural: [EXPECTED[117].width, EXPECTED[117].height], objectFit: 'contain', padding: [24, 24, 24, 24], documentOverflow: false,
     imageRect: { width: 128, height: 128 }, holderRect: { width: 176, height: 176 } };
   assertMeasured(valid, 117, 128);
+  assert.equal(assertStarterRegistration([],0),0);
+  assert.equal(assertStarterRegistration([14],14),14);
+  for(const [rows,starter] of [[[14],0],[[14,117],14],[[117],117],[[],14]])assert.throws(()=>assertStarterRegistration(rows,starter));
+  const eggSave={registeredSpecies:[],starter:'species-000'},hatchSave={registeredSpecies:[14],starter:'species-014'};
+  assertSavedStarterRegistration(eggSave,eggSave,14);
+  assertSavedStarterRegistration(eggSave,hatchSave,14);
+  assert.throws(()=>assertSavedStarterRegistration(eggSave,hatchSave,0));
+  assert.throws(()=>assertSavedStarterRegistration(eggSave,{registeredSpecies:[14,117],starter:'species-014'},14));
+  assert.throws(()=>assertMeasured({...valid,rowState:'REGISTERED'},117,128,14));
+  const baby=EXPECTED[14],hatched={...valid,speciesIndex:14,displayCode:baby.displayCode,title:baby.name,natural:[baby.width,baby.height],src:new URL(baby.src,PUBLIC_BASE).href,rowState:'REGISTERED'};
+  assertMeasured(hatched,14,128,14);
+  assert.throws(()=>assertMeasured(hatched,14,128,0));
   for (const changed of [{ rowState: 'REGISTERED' }, { src: 'wrong.png' }, { objectFit: 'cover' }, { imageRect: { width: 80, height: 80 } }]) assert.throws(() => assertMeasured({ ...valid, ...changed }, 117, 128));
   for (const species of [9,10,40,189,63,70,35,62,36]) {
     const expected=EXPECTED[species];

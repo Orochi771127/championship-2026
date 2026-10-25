@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-module.exports = async function verifyDetailSwipe(page, {output, evidence}) {
+module.exports = async function verifyDetailSwipe(page, {output, evidence, checkDexRegistration}) {
   const originalViewport = page.viewportSize();
   const report = evidence.detailSwipe = {status:'RUNNING', input:'Chromium CDP Input.dispatchTouchEvent',
     viewport:{width:390,height:844}, physicalDevice:false, operations:[], screenshots:[], events:[]};
@@ -124,6 +124,7 @@ module.exports = async function verifyDetailSwipe(page, {output, evidence}) {
     const stageCounts={};for(const value of ['0','1','2','3','4','5','6','ART'])stageCounts[value]=(await stage(value)).length;
     report.singleRow={stageCounts,status:Object.values(stageCounts).includes(1)?'AVAILABLE':'NOT_REACHABLE_WITH_CURRENT_STAGE_FILTER',
       coverage:'Single-row behavior is separately tested in the controlled-DOM suite; catalog is not altered for browser QA.'};
+    await stage('');await checkDexRegistration?.();
     await stage('3');await open(40);await returnToList();await back.click();
     await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();
     await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();

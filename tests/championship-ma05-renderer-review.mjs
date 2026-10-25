@@ -116,10 +116,12 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
    [new URL('assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3',base).href,'battle']
   ]);
   // Scene-owned sample fetches are cancelled by battleAudioPresentation.dispose().
-  // Only the four exact requests observed in run39586767530 are permitted here,
+  // Only exact requests observed in the recorded review runs are permitted here,
   // and only after this test confirms the ordinary battle-exit dialog.
-  // Run40218468403 additionally observed0207/0208 during confirmed exit; same bounded loader teardown.
-  const allowedSampleAborts=new Set(['0201','0202','0203','0204','0207','0208'].map(id=>new URL(`assets/production/internal-faithful-baseline/battle-audio-v1/${id}.wav`,base).href));
+  // Run40218468403 observed0207/0208; run40219428175 observed0205/0206.
+  // Decode timing changes which of the four loader slots are pending at exit.
+  // Both runs had no page errors and only the baseline shadow metadata 404.
+  const allowedSampleAborts=new Set(['0201','0202','0203','0204','0205','0206','0207','0208'].map(id=>new URL(`assets/production/internal-faithful-baseline/battle-audio-v1/${id}.wav`,base).href));
   const mediaAborts=[],sampleAborts=[];
   for(const r of evidence.requestFailures){
    assert.equal(r.failure,'net::ERR_ABORTED');assert.equal(r.method,'GET');
