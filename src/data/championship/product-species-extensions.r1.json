@@ -1,5 +1,5 @@
 {
-  "revision": 1,
+  "revision": 2,
   "authority": "PRODUCT_EXTENSION_CANDIDATE_NOT_ROM",
   "baseCommit": "7e5bf02b2b6ed9a26c05b4cac24d3b29e38f817c",
   "absentSpeciesIndex": 228,
@@ -61,6 +61,162 @@
         "th": "ร่างต่อสู้ของจักรพรรดิมังกรแห่งฟากฟ้ายืนด้วยสองขา แขนทั้งสองและปีกมังกรที่กางออกสร้างโครงร่างคล้ายมนุษย์ เกราะสีดำปกคลุมร่างสีน้ำเงิน และหางยาวยังคงลักษณะของมังกรไว้ แม้ท่าทางจะแตกต่างจากร่างสี่ขาอย่างชัดเจน",
         "vi": "Dạng chiến đấu của Thiên Khung Đế Long đứng bằng hai chân, đôi tay và cánh rồng dang rộng tạo nên hình dáng gần với con người. Giáp đen phủ thân xanh lam, còn chiếc đuôi dài giữ nét rồng của dạng bốn chân trong một tư thế chiến đấu khác biệt."
       }
+    },
+    {
+      "speciesIndex": 231,
+      "speciesId": "species-231",
+      "entityId": "oc_galactic_boar",
+      "displayNameZh": "星河山豬",
+      "displaySerial": 39,
+      "baseSpeciesIndex": 35,
+      "generationIndex": 3,
+      "sourceIdentity": "GR39",
+      "motionDonor": "m201_agumon",
+      "runtimeReady": true,
+      "evolutionReady": true,
+      "networkReady": true,
+      "displayNameByLocale": {
+        "zh-Hant": "星河山豬",
+        "en": "Galactic Boar",
+        "ja": "ギャラクシーボア",
+        "th": "Galactic Boar",
+        "vi": "Galactic Boar"
+      },
+      "profileByLocale": {
+        "zh-Hant": "棲息於星海航路上的小型獸型網路拍檔。背部鬃毛閃爍著初生星塵的光芒，性格活潑好動且充滿好奇心。牠們常在星河網絡中成群結隊地穿梭，尋找高密度的宇宙數據殘片作為食糧，遇到危險時會以帶有微弱星芒的雙角向前奮力突進。",
+        "en": "A small beast-type Cyber Partner that dwells along galactic pathways. The bristles along its back sparkle with the brilliance of newborn stardust. Energetic and endlessly curious, it roams star networks in small groups searching for dense cosmic data fragments, defending itself with determined headbutts from star-glimmering tusks.",
+        "ja": "銀河の航路を駆け抜ける小型獣型電脳パートナー。背の毛並みは生まれたての星屑のようにきらめき、好奇心旺盛で活発な性格を持つ。星間ネットワークの群れで高密度な宇宙データ片を探し求め、危機に瀕すると淡い星光を宿した二本の牙で果敢に突進する。",
+        "th": "คู่หูไซเบอร์ประเภทสัตว์ป่าขนาดเล็กที่อาศัยอยู่ตามเส้นทางดาราจักร แผงขนบนหลังเปล่งประกายระยิบระยับดั่งละอองดาวเกิดใหม่ มีนิสัยร่าเริงและเปี่ยมด้วยความอยากรู้อยากเห็น มักออกตระเวนหาเศษข้อมูลคอสมิกความหนาแน่นสูงเป็นฝูง และใช้เขี้ยวเปล่งประกายแสงดาวพุ่งชนอย่างกล้าหาญเมื่อเผชิญภัย",
+        "vi": "Một cộng sự không gian mạng dạng thú nhỏ sinh sống dọc theo những hải trình ngân hà. Bờm trên lưng nó lấp lánh như bụi sao sơ sinh, mang tính cách hoạt bát và tò mò. Chúng thường bầy đàn băng qua mạng lưới liên sao để tìm kiếm các mảnh dữ liệu vũ trụ đậm đặc, và dũng cảm húc về phía trước bằng cặp nanh ánh sao khi gặp nguy hiểm."
+      },
+      "speciesOverrides": {
+        "statCurveIndex": 6
+      },
+      "huntOverrides": {
+        "rungs": [
+          6,
+          4,
+          6,
+          6,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "movementBase": 0.8,
+        "baseName": "ギャラクシーボア"
+      },
+      "balanceAuthority": "OWNER_AUTHORIZED_ORIGINAL_DESIGN_2026_10_25",
+      "balanceBudget": 55,
+      "evolutionPolicy": "Existing base entry requirements and outgoing branches; distinct persistent species identity and independently allocated stat rungs.",
+      "battleMoveSourceSpeciesIndex": 35
+    },
+    {
+      "speciesIndex": 237,
+      "speciesId": "species-237",
+      "entityId": "oc_starseed_bean",
+      "displayNameZh": "星核豆獸",
+      "displaySerial": 40,
+      "baseSpeciesIndex": 68,
+      "generationIndex": 3,
+      "sourceIdentity": "GR40",
+      "motionDonor": "m201_agumon",
+      "runtimeReady": true,
+      "evolutionReady": true,
+      "networkReady": true,
+      "displayNameByLocale": {
+        "zh-Hant": "星核豆獸",
+        "en": "Starseed Bean",
+        "ja": "スターシードビーン",
+        "th": "Starseed Bean",
+        "vi": "Starseed Bean"
+      },
+      "profileByLocale": {
+        "zh-Hant": "體型圓滾滾且極富彈性的小型網路拍檔，核心蘊含著如同微型恆星般的溫暖星能。個性開朗黏人，非常喜歡與馴獸師互動，心情愉悅時會散發出柔和的星光微粒。雖然個頭嬌小，但遇到危險時能將體內星能壓縮並彈跳釋放，撞退體型數倍於己的對手。",
+        "en": "A small, round, and remarkably springy Cyber Partner whose core radiates the gentle warmth of a miniature star. Cheerful and deeply affectionate, it loves interacting with Tamers and emits shimmering starlight particles when joyful. Despite its tiny stature, it can compress its internal star energy to deliver surprising bouncy impacts that send much larger foes reeling.",
+        "ja": "球状で弾力性に富む愛らしい小型電脳パートナー。その体内には微小恒星に匹敵するあたたかな星のエネルギーが脈動している。人懐っこく明るい性格で、嬉しくなると柔らかな星光の粒子を放つ。小柄ながらも星エネルギーを一気に凝縮して跳ね回り、大型の相手を弾き飛ばす意外な底力を持つ。",
+        "th": "คู่หูไซเบอร์ขนาดเล็กตัวกลมดิกและเปี่ยมด้วยความยืดหยุ่น แกนกลางอัดแน่นด้วยพลังงานดาวฤกษ์อันอบอุ่น นิสัยร่าเริงและชอบคลอเคลียผู้เพาะเลี้ยง เมื่อมีความสุขจะเปล่งละอองแสงดาวนุ่มนวล แม้จะตัวเล็กแต่สามารถบีบอัดพลังดวงดาวแล้วกระโดดพุ่งชนเพื่อผลักศัตรูที่ตัวใหญ่กว่าหลายเท่าให้กระเด็นได้",
+        "vi": "Một cộng sự không gian mạng nhỏ nhắn, tròn xoe và vô cùng đàn hồi, mang trong lõi nguồn năng lượng ấm áp của một ngôi sao tí hon. Tính tình hoạt bát và quấn quýt người nuôi, nó tỏa ra những hạt ánh sao dịu nhẹ khi vui vẻ. Dù vóc dáng nhỏ bé, nó có thể nén năng lượng sao trong người để nảy mạnh, húc văng những đối thủ lớn hơn mình gấp bội."
+      },
+      "speciesOverrides": {
+        "statCurveIndex": 5
+      },
+      "huntOverrides": {
+        "rungs": [
+          5,
+          6,
+          4,
+          5,
+          6,
+          5,
+          5,
+          5,
+          5,
+          5,
+          4
+        ],
+        "movementBase": 0.9,
+        "baseName": "スターシードビーン"
+      },
+      "balanceAuthority": "OWNER_AUTHORIZED_ORIGINAL_DESIGN_2026_10_25",
+      "balanceBudget": 55,
+      "evolutionPolicy": "Existing base entry requirements and outgoing branches; distinct persistent species identity and independently allocated stat rungs.",
+      "battleMoveSourceSpeciesIndex": 68
+    },
+    {
+      "speciesIndex": 239,
+      "speciesId": "species-239",
+      "entityId": "oc_thunder_catwolf",
+      "displayNameZh": "雷霆貓狼",
+      "displaySerial": 41,
+      "baseSpeciesIndex": 36,
+      "generationIndex": 3,
+      "sourceIdentity": "GR41",
+      "motionDonor": "m201_agumon",
+      "runtimeReady": true,
+      "evolutionReady": true,
+      "networkReady": true,
+      "displayNameByLocale": {
+        "zh-Hant": "雷霆貓狼",
+        "en": "Thunder Catwolf",
+        "ja": "サンダーキャットウルフ",
+        "th": "Thunder Catwolf",
+        "vi": "Thunder Catwolf"
+      },
+      "profileByLocale": {
+        "zh-Hant": "兼具獵貓的靈巧與野狼的忠誠的成長期網路拍檔。體型修長敏捷，四肢肉墊中藏有高壓蓄電胞，奔跑時會藉由摩擦地面產生金色電光。個性機靈警覺，對認可的夥伴展現出極高的依賴與守護心。",
+        "en": "A Rookie-stage Cyber Partner possessing both the feline agility of a wildcat and the fierce loyalty of a wolf. Slender and exceptionally quick on its feet, high-voltage capacitor cells within its paw pads generate golden sparks of lightning as it sprints. Inquisitive and sharp-witted, it forms unbreakable bonds of devotion with its chosen partner.",
+        "ja": "猫のしなやかな俊敏さと狼の誇り高き忠誠心を併せ持った成長期の電脳パートナー。しなやかな肢体の肉球には高圧の蓄電細胞が備わり、大地を疾走する摩擦で金色の電撃を発生させる。警戒心が強く機敏だが、心を許したパートナーには深い愛情と忠誠を捧げる。",
+        "th": "คู่หูไซเบอร์ขั้นเติบโตที่ผสมผสานความคล่องแคล่วของแมวป่าและความจงรักภักดีของหมาป่า ร่างกายเพรียวบางว่องไว ใต้อุ้งเท้ามีเซลล์กักเก็บประจุไฟฟ้าแรงสูงที่สร้างประกายสายฟ้าสีทองยามวิ่งบนพื้น มีไหวพริบยอดเยี่ยมและคอยปกป้องคู่หูที่ตนไว้วางใจอย่างสุดหัวใจ",
+        "vi": "Một cộng sự không gian mạng thời kỳ trưởng thành sở hữu cả sự nhanh nhẹn của loài miêu lẫn lòng trung thành của loài sói. Thân hình thon gọn và lanh lợi, đệm bàn chân chứa các tế bào tích điện cao áp ma sát tạo ra tia chớp vàng khi phóng nhanh. Nhanh trí và nhạy bén, nó luôn bảo vệ người bạn đồng hành với sự tận tụy bền chặt."
+      },
+      "speciesOverrides": {
+        "statCurveIndex": 4
+      },
+      "huntOverrides": {
+        "rungs": [
+          4,
+          5,
+          6,
+          4,
+          4,
+          7,
+          5,
+          5,
+          5,
+          4,
+          6
+        ],
+        "movementBase": 1.0,
+        "baseName": "サンダーキャットウルフ"
+      },
+      "balanceAuthority": "OWNER_AUTHORIZED_ORIGINAL_DESIGN_2026_10_25",
+      "balanceBudget": 55,
+      "evolutionPolicy": "Existing base entry requirements and outgoing branches; distinct persistent species identity and independently allocated stat rungs.",
+      "battleMoveSourceSpeciesIndex": 36
     }
   ]
 }

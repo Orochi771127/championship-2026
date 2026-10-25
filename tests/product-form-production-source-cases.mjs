@@ -66,7 +66,7 @@ test('production readiness and observed QA gameplay use equivalent core configur
  const {ACTIVE_ALTERNATE_FORM_ASSETS}=await import('../src/championship/presentation/alternateFormAssetContracts.js');
  assert.equal(ACTIVE_ALTERNATE_FORM_ASSETS.length,4);
  for(const e of listProductExtensions())for(const k of ['runtimeReady','evolutionReady','networkReady'])assert.equal(e[k],true);
- assert.deepEqual(read('src/data/championship/product-species-extensions.r1.json').entries,read('qa/alternate-form-product-catalog.json').entries);
+ assert.deepEqual(read('src/data/championship/product-species-extensions.r1.json').entries.filter(e=>e.generationIndex===6),read('qa/alternate-form-product-catalog.json').entries);
  const core=e=>{const {blockers,...rest}=e;return rest;};
  assert.deepEqual(read('src/data/championship/alternate-form-assets.r1.json').characters.map(core),read('qa/alternate-form-asset-catalog.json').characters.map(core));
 });

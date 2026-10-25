@@ -1,7 +1,7 @@
 // QA-ONLY activation fixture; not release evidence for graphics or assets.
 import test from 'node:test';import assert from 'node:assert/strict';import {registerHooks} from 'node:module';
 registerHooks({load(url,context,next){const result=next(url,context);
- if(url.endsWith('/product-species-extensions.r1.json')){const d=JSON.parse(result.source.toString());d.entries.forEach(e=>{e.runtimeReady=e.evolutionReady=e.networkReady=true;});return {...result,source:JSON.stringify(d)};}
+ if(url.endsWith('/product-species-extensions.r1.json')){const d=JSON.parse(result.source.toString());d.entries=d.entries.filter(e=>e.generationIndex===6);d.entries.forEach(e=>{e.runtimeReady=e.evolutionReady=e.networkReady=true;});return {...result,source:JSON.stringify(d)};}
  if(url.endsWith('/alternate-form-assets.r1.json')){const d=JSON.parse(result.source.toString());d.characters.forEach(e=>{e.runtimeReady=true;e.qa.normalPath='PASS';});return {...result,source:JSON.stringify(d)};}
  return result;}});
 const {productHuntSpecies}=await import('../src/championship/contracts/productSpeciesData.js');

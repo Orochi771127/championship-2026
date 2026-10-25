@@ -7,7 +7,7 @@ const source = readFileSync(new URL('tests/fixtures/evolution-texture-baseline-d
 const drawSource = source;
 assert.ok(drawSource.includes('entry.evolutionPresenter?.apply(e.targetFrame)'));
 const presenterCode=readFileSync(new URL('src/championship/presentation/nativeHuntCharacterAction.js',base),'utf8');
-const {createNativeHuntCharacterFramePresenter}=await import('data:text/javascript;base64,'+Buffer.from(presenterCode).toString('base64'));
+const {createNativeHuntCharacterFramePresenter}=await import(new URL('src/championship/presentation/nativeHuntCharacterAction.js',base));
 function setup({target=8,sequence=39,loaded39=false}={}) {
   const idle={key:'idle'},evolving={key:'evolving'}, textures=new Map([['fixture/main/idle',idle]]);
   if(loaded39)textures.set('fixture/main/evolving',evolving);

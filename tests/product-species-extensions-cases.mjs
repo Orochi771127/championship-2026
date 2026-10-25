@@ -16,7 +16,7 @@ for(const id of [229,230]){
  assert.equal(candidate.recordIndex,id);assert.equal(candidate.lookupKey,getProductExtension(id).entityId);
  assert.notEqual(candidate.lookupKey,records[getProductExtension(id).baseSpeciesIndex].lookupKey);
 }
-for(const id of [-1,231,2.5,NaN,'229'])assert.equal(isKnownProductSpecies(id,records),false);
+for(const id of [-1,232,2.5,NaN,'229'])assert.equal(isKnownProductSpecies(id,records),false);
 const planned=planUltimateDisplayOrder(display),byCode=new Map(planned.map(x=>[x.displayCode,x.speciesIndex]));
 assert.equal(planned.length,39);assert.equal(new Set(planned.map(x=>x.speciesIndex)).size,39);
 assert.deepEqual(['UL02','UL03','UL33','UL34'].map(x=>byCode.get(x)),[222,230,211,229]);

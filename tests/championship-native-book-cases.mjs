@@ -10,12 +10,13 @@ test("all 228 original CPU registration calls select the correct original book o
   const oracle=JSON.parse(fs.readFileSync("docs/research/RAISING_BOOK_CPU_CHECK_2026-09-08.json","utf8"));
   const slots=listDatabaseSlots();
   assert.equal(oracle.cases.length,228);assert.equal(oracle.regularSpeciesOrder.length,216);
-  assert.equal(slots.length,218);
+  assert.equal(slots.length,221);
   assert.deepEqual(slots.slice(0,216).map(row=>row.speciesIndex),oracle.regularSpeciesOrder);
   assert.ok(slots.slice(0,216).every(row=>row.identityEvidence==='VERIFIED_BINARY'));
   assert.deepEqual(slots.slice(216).map(({speciesIndex,bookOrdinal,identityEvidence})=>({speciesIndex,bookOrdinal,identityEvidence})),[
     {speciesIndex:229,bookOrdinal:216,identityEvidence:'PRODUCT_EXTENSION_EXPLICIT'},
-    {speciesIndex:230,bookOrdinal:217,identityEvidence:'PRODUCT_EXTENSION_EXPLICIT'}
+    {speciesIndex:230,bookOrdinal:217,identityEvidence:'PRODUCT_EXTENSION_EXPLICIT'},
+    ...[231,237,239].map((speciesIndex,i)=>({speciesIndex,bookOrdinal:218+i,identityEvidence:'PRODUCT_EXTENSION_EXPLICIT'}))
   ]);
   for(const row of oracle.cases){
     const registered=registerNativeBookSpecies([],row.species);
@@ -35,7 +36,7 @@ test("a registered species stays registered with no held instance, without creat
 });
 
 test("the save validator rejects egg, duplicate, sparse and malformed book flags", () => {
-  for(const bad of [[0],[224],[228],[231],[14,14],[NaN],["14"],null,{},new Array(2)]) {
+  for(const bad of [[0],[224],[228],[232],[14,14],[NaN],["14"],null,{},new Array(2)]) {
     assert.throws(()=>normalizeRegisteredSpecies(bad),/INVALID_REGISTERED_SPECIES/);
   }
   const create=progression=>createChampionshipModernSave({sessionId:"book-test",
@@ -52,7 +53,7 @@ test('production product registrations append without aliasing native IDs or inv
     const registered=registerNativeBookSpecies([],id);
     assert.deepEqual(registered,[id]);assert.equal(registerNativeBookSpecies(registered,id),registered);
     const frame=projectDatabase({registeredSpecies:registered,selectedSpeciesIndex:id});
-    assert.equal(frame.slotCount,218);assert.equal(frame.registeredCount,1);
+    assert.equal(frame.slotCount,221);assert.equal(frame.registeredCount,1);
     assert.equal(frame.selected.speciesId,`species-${id}`);assert.equal(frame.selected.bookOrdinal,id-13);
     assert.equal(frame.selected.identityEvidence,'PRODUCT_EXTENSION_EXPLICIT');
     assert.equal(frame.selected.state,'REGISTERED');assert.equal(frame.selected.source,'HISTORY');

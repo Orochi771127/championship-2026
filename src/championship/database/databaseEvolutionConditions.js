@@ -1,7 +1,7 @@
 // Display-only descriptions of an already-revealed, exact evolution branch.
 // This is not an eligibility checker. No individual, actor, resolver, RNG or
 // save authority is accepted. Unknown branches return no condition payload.
-import lifecycle from '../../data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+import {PRODUCT_RAISING_LIFECYCLE_RULES as lifecycle} from '../contracts/productSpeciesData.js';
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {nativeEvolutionRequirements} from '../raising/nativeRaisingLifecycle.js';
 import {projectDatabaseEvolutionRoutes} from './databaseEvolutionRoutes.js';

@@ -1,3 +1,4 @@
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 // Battle catalogs — the six original ARM9 tables the battle modules had no data for.
 //
 // Independently dumped from YDIJ ROM SHA-256 8ad375ba…c5d1 by
@@ -147,6 +148,7 @@ export function readBattleCatalogField(name, recordIndex, fieldName) {
  * combatant state, not from the species, so they are not this function's to add.
  */
 export function listMoveRecordsForSpecies(speciesId) {
+  speciesId=getProductExtension(speciesId)?.battleMoveSourceSpeciesIndex??speciesId;
   if (!Number.isInteger(speciesId) || speciesId < 0) {
     throw catalogError("INVALID_SPECIES_ID");
   }

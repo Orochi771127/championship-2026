@@ -1,3 +1,4 @@
+import {growthAuthoredSelection} from './lib/growth-authored-selection.mjs';
 import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {mergeAlternateFormConfigs,bindAlternateFormManifest} from '../src/championship/presentation/alternateFormAssetContracts.js';
@@ -69,7 +70,12 @@ for(const config of configs){
  }
  characters.push(row);
 }
+const authored=growthAuthoredSelection(root);
+for(const row of authored){const i=characters.findIndex(c=>c.speciesId===row.speciesId);if(i>=0)characters[i]=row;else characters.push(row);}
 const known=new Set(characters.map(c=>c.entityId));
+const bindings=manifest.speciesBindings.filter(b=>known.has(b.entityId)).map(b=>({speciesId:b.speciesId,entityId:b.entityId}));
+for(const row of authored){const i=bindings.findIndex(b=>b.speciesId===row.speciesId);const binding={speciesId:row.speciesId,entityId:row.entityId};if(i>=0)bindings[i]=binding;else bindings.push(binding);}
+
 write('src/data/championship/public-character-catalog.v1.json',{schemaVersion:1,assetId:'art:public:characters:v1',characters,
- speciesBindings:manifest.speciesBindings.filter(b=>known.has(b.entityId)).map(b=>({speciesId:b.speciesId,entityId:b.entityId}))});
+ speciesBindings:bindings});
 console.log(JSON.stringify({characters:characters.length,streamed:characters.filter(c=>c.runtimePath.includes('/ranch-streaming-v1/')).length,compactBattle:characters.filter(c=>c.battleRuntimePath).length,privateRegistrationFlagsCopied:false}));

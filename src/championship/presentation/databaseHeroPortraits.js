@@ -1,3 +1,4 @@
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 import manifest from '../../data/championship/database-hero-portraits.public.v1.json' with {type:'json'};
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {publicRuntimeAsset} from './publicRuntimeAssets.js';
@@ -6,7 +7,8 @@ import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
 // Dedicated encyclopedia illustrations, never animation/HUD replacements.
 const mappedEntries = manifest.entries.map(entry => {
   const illustration = getDatabaseIllustration(entry.speciesIndex);
-  return illustration ? {...entry, displayCode: illustration.displayCode} : entry;
+  const extension=getProductExtension(entry.speciesIndex);
+  return illustration ? {...entry, displayCode: illustration.displayCode} : extension?.generationIndex===3?{...entry,displayCode:`GR${extension.displaySerial}`}:entry;
 });
 export const DATABASE_HERO_PORTRAITS = deepFreeze({...manifest, entries: mappedEntries});
 const entries = new Map(mappedEntries.map(entry=>{

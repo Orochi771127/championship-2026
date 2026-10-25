@@ -473,7 +473,7 @@ test("arena records use their own key through the one writer and never touch the
 test("the cast reuses shipped creatures only where the selection is approved", () => {
   const local = dataArenaCast("http://127.0.0.1:8732/championship.html");
   assert.equal(local.partners.length, 3);
-  assert.ok(local.partners.every((p) => p.art?.runtimeUrl.includes("/assets/production/characters/accepted-20261010/")));
+  assert.ok(local.partners.every((p) => p.art?.runtimeUrl.includes("/assets/production/characters/growth-authored-20261025/")));
   assert.ok(local.mate.art && local.boss.art);
   const pages = dataArenaCast("https://orochi771127.github.io/championship-2026/championship.html");
   assert.ok(pages.boss.art.runtimeUrl.startsWith("https://orochi771127.github.io/championship-2026/assets/production/"));

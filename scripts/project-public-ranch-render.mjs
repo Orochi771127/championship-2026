@@ -1,3 +1,4 @@
+import {growthAuthoredSelection} from './lib/growth-authored-selection.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -25,5 +26,6 @@ for(const row of sourceSelection.characters){
   characters.push({entityId:row.entityId,speciesId:row.speciesId,runtimePath,runtimeSha256,
     sourceRuntimeSha256:row.sourceRuntimeSha256,sourceImageSha256:row.sourceImageSha256});
 }
+for(const row of growthAuthoredSelection(root)){const c=characters.find(c=>c.entityId===row.entityId);if(c){c.runtimePath=row.runtimePath;c.runtimeSha256=row.runtimeSha256;}}
 write(publicSelectionPath,{schemaVersion:1,characters});
 console.log(JSON.stringify({projected:characters.length,privateSourceFilesChanged:0,selector:publicSelectionPath}));

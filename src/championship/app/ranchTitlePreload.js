@@ -40,7 +40,7 @@ export function createRanchTitlePreloader({baseUrl,characters=selection.characte
         // Every current resident gets its idle before any speculative next page.
         let planned=0;const urls=[];
         for(const phase of ['first','next'])for(const g of groups)for(const i of phase==='first'?g.first:(g.next<0?[]:[g.next])){
-          const page=g.pages[i];if(!page||!/^main-[a-f0-9]{16}\.webp$/.test(page.image)||!Number.isSafeInteger(page.bytes)||page.bytes<0)continue;
+          const page=g.pages[i];if(!page||!page.image.endsWith('.webp')||page.image.includes('://')||page.image.startsWith('/')||!Number.isSafeInteger(page.bytes)||page.bytes<0)continue;
           const url=new URL(page.image,g.url).href;if(urls.includes(url)||planned+page.bytes>maxImageBytes)continue;
           planned+=page.bytes;urls.push(url);
         }

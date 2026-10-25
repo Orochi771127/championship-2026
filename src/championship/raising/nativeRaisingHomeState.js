@@ -1,3 +1,5 @@
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {productEvolutionOptions,PRODUCT_RAISING_LIFECYCLE_RULES} from '../contracts/productSpeciesData.js';
 import {isKnownSpeciesIndex} from '../contracts/productSpeciesData.js';
 import {normalizeRanchDiscoveries} from './ranchDiscoveries.js';
 // Optional child of the existing v5 Raising save. Physical pool slots remain
@@ -45,7 +47,7 @@ export function normalizeNativeRaisingHome(input) {
     wasteSlots.add(w.slot);return Object.freeze({slot:w.slot,speciesIndex:w.speciesIndex,cageDefinitionIndex:w.cageDefinitionIndex,...cageOwner(w),localPositionQ12:Object.freeze([...w.localPositionQ12])});
   });
   const productBranches=input.productEvolutionBranches??[];
-  if(!Array.isArray(productBranches)||productBranches.length>3||new Set(productBranches).size!==productBranches.length||productBranches.some(x=>!['139:211:229','143:211:229','144:222:230'].includes(x)))fail();
+  if(!Array.isArray(productBranches)||productBranches.length>1024||new Set(productBranches).size!==productBranches.length||productBranches.some(x=>{if(typeof x!=='string'||!/^\d+:\d+:\d+$/.test(x))return true;const [from,base,to]=x.split(':').map(Number);return !PRODUCT_RAISING_LIFECYCLE_RULES.rules[from-8]?.some(r=>r.target===base)||!(productEvolutionOptions(base).slice(1).includes(to)||(getProductExtension(from)&&base===to));}))fail();
   const branches=input.evolutionBranches??[];
   // ARM9 root+BC keeps unprocessed daylight minutes across the day-end save.
   // Consume this child field only when Home is reconstructed after the calendar

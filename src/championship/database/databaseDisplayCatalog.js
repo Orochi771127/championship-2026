@@ -12,7 +12,7 @@ const correctedNative={...nativeCatalog,entries:nativeCatalog.entries.map(e=>({.
 const enabled=listProductExtensions().every(e=>e.runtimeReady&&e.evolutionReady);
 const planned=enabled?planUltimateDisplayOrder(correctedNative.entries):[];
 const ultimate=new Map(planned.map(e=>[e.speciesIndex,e]));
-const catalog=enabled?{...correctedNative,entries:[...correctedNative.entries.map(e=>ultimate.get(e.speciesIndex)??e),...listProductExtensions().map(e=>({...ultimate.get(e.speciesIndex),entryKey:`dex-species-${e.speciesIndex}`,contentStatus:'PUBLISHED',legacyBookOrdinal:null,firstPublishedRevision:2}))].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)}:{...correctedNative,entries:[...correctedNative.entries].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)};
+const catalog=enabled?{...correctedNative,entries:[...correctedNative.entries.map(e=>ultimate.get(e.speciesIndex)??e),...listProductExtensions().map(e=>({...(ultimate.get(e.speciesIndex)??{speciesIndex:e.speciesIndex,speciesId:e.speciesId,numberingStageIndex:e.generationIndex,serial:e.displaySerial,displayCode:`GR${e.displaySerial}`}),entryKey:`dex-species-${e.speciesIndex}`,contentStatus:'PUBLISHED',legacyBookOrdinal:null,firstPublishedRevision:2}))].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)}:{...correctedNative,entries:[...correctedNative.entries].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)};
 // Illustration entries have their assigned evolution stage and serial.
 const displayCatalog={...catalog,entries:[...catalog.entries,...listDatabaseIllustrations().map(entry=>({
   ...databaseIllustrationRow(entry.speciesIndex),entryKey:`dex-illustration-${entry.speciesIndex}`,

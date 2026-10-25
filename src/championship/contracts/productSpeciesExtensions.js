@@ -1,11 +1,11 @@
-// Isolated, disabled product extension contract. Not imported by production.
+// Explicit product extensions. Native records remain immutable.
 // Display serials never serve as persistent species identity.
 import catalog from '../../data/championship/product-species-extensions.r1.json' with {type:'json'};
 const clone=value=>structuredClone(value);
 const byIndex=new Map(catalog.entries.map(entry=>[entry.speciesIndex,Object.freeze({...entry})]));
 if(byIndex.size!==catalog.entries.length || catalog.entries.some(entry=>
   !Number.isInteger(entry.speciesIndex)||entry.speciesIndex<=228||
-  entry.speciesId!==`species-${entry.speciesIndex}`||![211,222].includes(entry.baseSpeciesIndex))) {
+  entry.speciesId!==`species-${entry.speciesIndex}`||!Number.isInteger(entry.baseSpeciesIndex)||entry.baseSpeciesIndex<8||entry.baseSpeciesIndex>=228)) {
   throw new Error('PRODUCT_EXTENSION_CATALOG_INVALID');
 }
 export const PRODUCT_ABSENT_SPECIES_INDEX=228;
@@ -31,7 +31,7 @@ export function resolveProductSpeciesDefinition(index,nativeRecords,{allowUnread
   if(!base)throw new Error('PRODUCT_SPECIES_BASE_MISSING');
   // Explicit inherited numeric schema, with a distinct identity, never a
   // silent downgrade of the stored species ID to the donor/base ID.
-  return {...clone(base),recordIndex:index,lookupKey:entry.entityId,
+  return {...clone(base),...clone(entry.speciesOverrides??{}),recordIndex:index,lookupKey:entry.entityId,
     identifier:entry.entityId.toUpperCase(),sourceEvidence:'PRODUCT_INHERITED_BASE_CANDIDATE',
     productBaseSpeciesIndex:entry.baseSpeciesIndex};
 }
@@ -40,11 +40,11 @@ export function planUltimateDisplayOrder(existingEntries){
   const bySpecies=new Map(old.map(x=>[x.speciesIndex,x]));
   if(!bySpecies.has(211)||!bySpecies.has(222))throw new Error('PRODUCT_DISPLAY_BASE_MISSING');
   const fixed=new Map([[2,clone(bySpecies.get(222))],[33,clone(bySpecies.get(211))],
-    ...catalog.entries.map(e=>[e.displaySerial,{speciesIndex:e.speciesIndex,speciesId:e.speciesId,
+    ...catalog.entries.filter(e=>e.generationIndex===6).map(e=>[e.displaySerial,{speciesIndex:e.speciesIndex,speciesId:e.speciesId,
       numberingStageIndex:6,contentStatus:'PLANNED_DISABLED'}])]);
   const rest=old.filter(x=>![211,222].includes(x.speciesIndex));
   let cursor=0;
-  return Array.from({length:old.length+catalog.entries.length},(_,i)=>{
+  return Array.from({length:old.length+catalog.entries.filter(e=>e.generationIndex===6).length},(_,i)=>{
     const serial=i+1,entry=fixed.get(serial)??clone(rest[cursor++]);
     return {...entry,serial,displayCode:`UL${String(serial).padStart(2,'0')}`};
   });

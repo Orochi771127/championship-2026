@@ -17,7 +17,8 @@ import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
 import {setLocale} from '../src/championship/text/locale.js';
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 const sha=b=>createHash('sha256').update(b).digest('hex');
-const ids=[231,232,233,234,235,236,237,238,239,240,241,242];
+const allArtIds=[231,232,233,234,235,236,237,238,239,240,241,242];
+const ids=allArtIds.filter(id=>![231,237,239].includes(id));
 const manifest=read('docs/art/production/characters/approved-six-illustrations-20261018/manifest.json');
 
 test('gallery locale coverage recognizes only the exact complete five-language dictionary',()=>{
@@ -56,13 +57,13 @@ test('all 134 prior published hero selections remain exact',()=>{
 test('twelve encyclopedia identities are classified into confirmed stages with sequential display codes and stories',()=>{
   assert.deepEqual(listDatabaseIllustrations().map(e=>e.speciesIndex),ids);
   const codes=ids.map(id=>getDatabaseIllustration(id).displayCode);
-  const expectedCodes=['GR39','MA65','AW52','MA66','MA67','MA68','GR40','B215','GR41','MA69','AW53','UL40'];
+  const expectedCodes=['MA65','AW52','MA66','MA67','MA68','B215','MA69','AW53','UL40'];
   assert.deepEqual(codes,expectedCodes);
   assert.equal(DATABASE_DISPLAY_CATALOG.entries.length,238);
   assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.speciesIndex)).size,238);
   assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,238);
   const book=projectDatabase(),rows=databaseDisplayRows(book,'ART');
-  assert.deepEqual(rows.map(e=>e.speciesIndex),[238, 231, 237, 239, 232, 234, 235, 236, 240, 233, 241, 242]);
+  assert.deepEqual(rows.map(e=>e.speciesIndex),[238, 232, 234, 235, 236, 240, 233, 241, 242]);
   for(const row of rows){
     assert.equal(row.kind,'ILLUSTRATION');assert.equal(row.state,'NOT_TRACKED');assert.equal(row.viewable,true);
     assert.equal(typeof row.numberingStageIndex,'number');assert.equal(row.legacyBookOrdinal,null);assert.equal(row.instanceCount,0);
@@ -89,29 +90,29 @@ test('twelve encyclopedia identities are classified into confirmed stages with s
 });
 
 test('art-only browsing cannot register, instantiate or invent gameplay/evolution data',()=>{
-  assert.equal(listDatabaseSlots().length,218);
+  assert.equal(listDatabaseSlots().length,221);
   for(const id of ids){
     assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);
     assert.throws(()=>normalizeRegisteredSpecies([id]));
     assert.equal(getProductExtension(id),null);assert.throws(()=>requirePlayableProductExtension(id));
     assert.ok(databaseStory(id));assert.equal(databaseVerifiedData(id),null);
     const book=projectDatabase({selectedSpeciesIndex:id,registeredSpecies:[id],starterSpeciesId:`species-${id}`,collection:[{speciesId:`species-${id}`,instanceId:'invalid-art-instance'}]});
-    assert.equal(book.slotCount,218);assert.equal(book.regularCount,218);assert.equal(book.registeredCount,0);
-    assert.equal(book.entries.length,218);assert.equal(book.selected.state,'NOT_TRACKED');assert.equal(book.selected.source,null);
+    assert.equal(book.slotCount,221);assert.equal(book.regularCount,221);assert.equal(book.registeredCount,0);
+    assert.equal(book.entries.length,221);assert.equal(book.selected.state,'NOT_TRACKED');assert.equal(book.selected.source,null);
     assert.deepEqual(book.selected.instances,[]);assert.deepEqual(book.selected.evolutionRoutes,[]);
   }
   assert.throws(()=>projectDatabase({selectedSpeciesIndex:243}),/UNKNOWN_DATABASE_SLOT/);
 });
 
 test('approved new boar revisions and all six hero/thumbnail pairs match public selected bytes',()=>{
-  assert.deepEqual(manifest.entries.map(e=>e.speciesIndex),ids.slice(0,6));
+  assert.deepEqual(manifest.entries.map(e=>e.speciesIndex),allArtIds.slice(0,6));
   assert.equal(manifest.entries[1].master.sha256,'79541efce40c55a366c21116509d4dd4a8356d9a62713980170fb0b8bb55e004');
   assert.equal(manifest.entries[2].master.sha256,'8b91df854871ed98da64c0b776246209efcdadedf08da6d25c7be27a092abf59');
   const allow=read('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json');
   const input=read('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json');
   for(const entry of manifest.entries){
     assert.equal(entry.approval.status,'owner_approved');assert.equal(entry.evolutionStageAssigned,false);
-    const hero=databaseHeroPortrait(entry.speciesIndex);assert.equal(hero.displayCode,getDatabaseIllustration(entry.speciesIndex).displayCode);
+    const hero=databaseHeroPortrait(entry.speciesIndex);assert.equal(hero.displayCode,getDatabaseIllustration(entry.speciesIndex)?.displayCode??`GR${getProductExtension(entry.speciesIndex).displaySerial}`);
     for(const [role,asset] of [['display',hero],['thumbnail',hero.thumbnail]]){
       const bytes=fs.readFileSync(asset.src);assert.equal(sha(bytes),asset.sha256);assert.equal(bytes.length,entry[role].bytes);
       for(const key of ['src','sha256','width','height'])assert.equal(asset[key],entry[role][key]);

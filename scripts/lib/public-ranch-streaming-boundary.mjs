@@ -28,9 +28,9 @@ export function assertPublicRanchStreaming({root,files,allowlist,assertBytes}){
     ||meta.pages.length!==runtime.sides.main.atlases.length||runtime.sides?.sub?.atlases?.length!==0)
     throw Error('PUBLIC_RANCH_RENDER_SCHEMA: '+character.entityId);
   for(const [i,page]of meta.pages.entries())for(const [field,hashField,extension]of [['data','dataSha256','json'],['image','imageSha256','webp']]){
-    if(!new RegExp('^main-[a-f0-9]{16}\\.'+extension+'$').test(page[field])||runtime.sides.main.atlases[i][field]!==page[field])
+    if(!page[field].endsWith('.'+extension)||page[field].includes('://')||page[field].startsWith('/')||runtime.sides.main.atlases[i][field]!==page[field])
       throw Error('PUBLIC_RANCH_PAGE_PATH: '+character.entityId);
-    const target=path.posix.join(path.posix.dirname(file),page[field]);
+    const target=path.posix.normalize(path.posix.join(path.posix.dirname(file),page[field]));
     if(!available.has(target)||rows.get(target)?.sha256!==page[hashField])throw Error('PUBLIC_RANCH_PAGE_NOT_SELECTED: '+target);
   }
  }

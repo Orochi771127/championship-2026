@@ -91,11 +91,11 @@ test('texture reuse preserves slot-local anchors and displacement', () => {
 });
 
 test('all 196 eligible identities keep stable species IDs, kits and independently selectable reserve',()=>{
-  assert.equal(RELAY_ROSTER.length,196);assert.equal(new Set(RELAY_ROSTER.map(p=>p.speciesId)).size,196);
+  assert.equal(RELAY_ROSTER.length,199);assert.equal(new Set(RELAY_ROSTER.map(p=>p.speciesId)).size,199);
   for(const p of RELAY_ROSTER){assert.ok(p.generationIndex>=3&&p.generationIndex<=6);assert.equal(Number(p.speciesId.slice(-3)),p.speciesIndex);assert.equal(relayKit(p.id).moves.length,3);assert.ok(relayMove(relayKit(p.id).ultimate,true));}
   assert.ok(RELAY_ROSTER.some(p=>p.speciesIndex===230));assert.ok(!RELAY_ROSTER.some(p=>p.speciesIndex===228));
   const reserve=RELAY_ROSTER.at(-1).id,sim=createDataArenaSimulation({mode:'RELAY',partnerId:'ember-lizard',relayReserveId:reserve});run(sim,2.1);sim.step({switchPartner:true});
-  assert.equal(sim.getState().player.speciesId,'species-230');
+  assert.equal(sim.getState().player.speciesId,RELAY_ROSTER.at(-1).speciesId);
   const saved=sanitizeDataArenaRecords({...defaultDataArenaRecords(),lastPartnerId:reserve,relayReserveId:'ember-lizard',relayArenaId:RELAY_MAP_IDS[10],relayLoadouts:{[reserve]:relayKit(reserve).moves}});
   assert.equal(saved.lastPartnerId,reserve);assert.equal(saved.relayArenaId,RELAY_MAP_IDS[10]);
 });

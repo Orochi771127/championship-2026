@@ -1,4 +1,5 @@
 import {createNativeCharacterAnimationTimeline} from './characterAnimationTimeline.js';
+import {sampleAuthoredCharacterFrame} from './authoredCharacterFrame.js';
 
 // OVL19 notification entry handlers -> 02114310 -> ARM9 02047984.
 // These are raw sequence requests, never archive semantic aliases.
@@ -45,7 +46,7 @@ export function projectBattleCharacterRequest(combatant) {
 /** Uses battle frame numbers, never GPU elapsed time or its own ticker.
  * Equal requests do not restart (ARM9 02047984); raw mode 1 stops, mode 2 loops.
  */
-export function createBattleCharacterAnimator({sprite,animations,textureResolver,geometry,reducedMotion=false}) {
+export function createBattleCharacterAnimator({sprite,animations,textureResolver,geometry,reducedMotion=false,authoredPresentation=null}) {
   const sequences = new Map(animations.map(a=>[a.id,a]));
   const initialTexture=sprite.texture;
   const initialAnchor=sprite.anchor ? {x:sprite.anchor.x,y:sprite.anchor.y} : null;
@@ -82,11 +83,13 @@ export function createBattleCharacterAnimator({sprite,animations,textureResolver
       if(native.sequenceId!==sequenceId||!Number.isInteger(native.frameIndex)||!sequence.frames[native.frameIndex]
         ||native.cell!==sequence.frames[native.frameIndex].cell)throw Error('BATTLE_NATIVE_ANIMATION_SAMPLE_MISMATCH');
       const frame=reducedMotion ? sequence.frames[sequence.loopStartFrame??0] : sequence.frames[native.frameIndex];
-      const placement=geometry.frames[frame.texture];
-      const texture=textureResolver(frame.texture);
+      const authoredFrame=sampleAuthoredCharacterFrame(sequence,native,authoredPresentation,reducedMotion);
+      const textureKey=authoredFrame?.texture??frame.texture;
+      const placement=geometry.frames[textureKey];
+      const texture=textureResolver(textureKey);
       if (!texture || !placement) throw new Error('BATTLE_ANIMATION_FRAME_BINDING_MISSING');
       sprite.texture=texture;
-      current=Object.freeze({...native,texture:frame.texture,cell:frame.cell,
+      current=Object.freeze({...native,texture:textureKey,cell:frame.cell,
         frameIndex:reducedMotion ? sequence.loopStartFrame??0 : native.frameIndex,
         geometry:placement,baseBounds:geometry.frames[sequences.get(0).frames[0].texture].nativeBounds,
         reducedMotion,originalTimingParity:false});

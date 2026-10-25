@@ -53,7 +53,7 @@ test('all original decoder goldens keep radix228, 22-character alphabet and unch
 });
 test('v2 password structural roundtrip retains both new identities, holes, extras and compact numbers',()=>{
   const before=JSON.stringify(team),code=encodeProductPasswordData(team),decoded=decodeProductPasswordData(code);
-  assert.ok(code.startsWith(PRODUCT_PASSWORD_PREFIX));assert.equal(decoded.version,2);assert.equal(decoded.catalogRevision,1);
+  assert.ok(code.startsWith(PRODUCT_PASSWORD_PREFIX));assert.equal(decoded.version,2);assert.equal(decoded.catalogRevision,2);
   assert.deepEqual(decoded.members,team.members);assert.equal(decoded.teamField,1);assert.equal(JSON.stringify(team),before);
   assert.equal(encodeProductPasswordData({teamField:decoded.teamField,members:decoded.members}),code);
   assert.throws(()=>password.decodeNativePasswordTeam(code),/PASSWORD_BATTLE_LENGTH/);
@@ -83,7 +83,7 @@ test('production entry points preserve accepted new forms without casting to211/
   assert.deepEqual(password.decodeChampionshipPasswordTeam(password.encodeChampionshipPasswordTeam(team)).members.map(x=>x?.nativeProfile.fields['000']??null),[229,null,230]);
 });
 test('v2 password rejects sentinel, unknown identities, extra fields, nonintegers, overflow and empties',()=>{
-  for(const id of [228,231,-1,'229',229.5,NaN]){
+  for(const id of [228,232,-1,'229',229.5,NaN]){
     const t=structuredClone(team);t.members[0].compact.speciesIndex=id;
     assert.throws(()=>encodeProductPasswordData(t),/UNKNOWN_SPECIES/);
   }
@@ -103,7 +103,7 @@ test('v2 bounds input and rejects checksum, future versions, catalog revision an
   assert.throws(()=>decodeProductPasswordData(`${code.slice(0,-2)}AA`),/CODE_CHECKSUM|CODE_NONCANONICAL/);
   assert.throws(()=>decodeProductPasswordData(code.replace('PASSWORD-2','PASSWORD-3')),/UNSUPPORTED_VERSION/);
   assert.throws(()=>decodeProductPasswordData(mutateCode(code,p=>p.version=3)),/UNSUPPORTED_VERSION/);
-  for(const mutate of [p=>p.catalogRevision=2,p=>p.catalog.revision=2,p=>p.catalog.extensions[0].baseSpeciesIndex=222,
+  for(const mutate of [p=>p.catalogRevision=999,p=>p.catalog.revision=999,p=>p.catalog.extensions[0].baseSpeciesIndex=222,
     p=>p.catalog.extensions[0].entityId='wrong',p=>p.catalog.extensions.reverse()]){
     assert.throws(()=>decodeProductPasswordData(mutateCode(code,mutate)),/CATALOG_MISMATCH/);
   }
@@ -124,7 +124,7 @@ test('v2 host and guest agree on version, identity manifest, arena and exact ful
   const invite=link.createChampionshipLinkInvite({individuals:host,arenaIndex:7,transportVersion:2});
   const reply=link.createChampionshipLinkReply({inviteCode:invite.code,individuals:guest});
   const session=link.readChampionshipLinkReply(invite.code,reply.code);
-  assert.equal(invite.version,2);assert.equal(reply.version,2);assert.equal(session.catalogRevision,1);
+  assert.equal(invite.version,2);assert.equal(reply.version,2);assert.equal(session.catalogRevision,2);
   assert.deepEqual(session.catalog,PRODUCT_BATTLE_CATALOG);assert.equal(session.arenaIndex,7);
   assert.deepEqual(session.hostIndividuals.map(e=>e.nativeProfile),host.map(e=>e.nativeProfile));
   assert.deepEqual(session.guestIndividuals.map(e=>e.nativeProfile),guest.map(e=>e.nativeProfile));
@@ -151,7 +151,7 @@ test('v1/v2 mix, wrong invite, catalog mismatch and malformed link profiles fail
   assert.throws(()=>link.readChampionshipLinkReply(invite.code,oldReply.code),/VERSION_MISMATCH/);
   assert.throws(()=>link.readChampionshipLinkReply(other.code,reply.code),/REPLY_FOR_DIFFERENT_INVITE/);
   assert.throws(()=>link.createChampionshipLinkReply({inviteCode:old.code,individuals:[individual(230)]}),/V2_INVITE_REQUIRED/);
-  assert.throws(()=>link.readChampionshipLinkReply(invite.code,mutateCode(reply.code,p=>p.catalogRevision=2)),/CATALOG_MISMATCH/);
+  assert.throws(()=>link.readChampionshipLinkReply(invite.code,mutateCode(reply.code,p=>p.catalogRevision=999)),/CATALOG_MISMATCH/);
   assert.throws(()=>link.readChampionshipLinkInvite(mutateCode(invite.code,p=>p.host[0][0][0]=228)),/UNKNOWN_SPECIES/);
   assert.throws(()=>link.readChampionshipLinkInvite(mutateCode(invite.code,p=>p.host[0][0].pop())),/PROFILE_SHAPE/);
   assert.throws(()=>link.readChampionshipLinkInvite(mutateCode(invite.code,p=>p.host[0][0][1]=-1)),/INVALID_NATIVE_INDIVIDUAL_WORD/);

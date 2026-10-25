@@ -50,8 +50,8 @@ test("the 216 native names remain a separate witness from the 218-row product bo
   const slots=listDatabaseSlots(),nativeSlots=slots.filter(s=>s.identityEvidence==='VERIFIED_BINARY');
   assert.equal(names.recordCount,216);assert.equal(nativeSlots.length,216);
   assert.deepEqual(nativeSlots.map(s=>s.speciesIndex).sort((a,b)=>a-b),names.records.map(r=>r.recordIndex));
-  assert.deepEqual(slots.filter(s=>s.identityEvidence==='PRODUCT_EXTENSION_EXPLICIT').map(s=>s.speciesIndex),[229,230]);
+  assert.deepEqual(slots.filter(s=>s.identityEvidence==='PRODUCT_EXTENSION_EXPLICIT').map(s=>s.speciesIndex),[229,230,231,237,239]);
   assert.equal(species.records.length,228);assert.equal(species.records[228],undefined);
-  assert.equal(DATABASE_EGG_COUNT,0);assert.equal(DATABASE_REGULAR_COUNT,218);assert.equal(DATABASE_SLOT_COUNT,218);
-  assert.equal(DATABASE_SLOT_COUNT,names.recordCount+2);
+  assert.equal(DATABASE_EGG_COUNT,0);assert.equal(DATABASE_REGULAR_COUNT,221);assert.equal(DATABASE_SLOT_COUNT,221);
+  assert.equal(DATABASE_SLOT_COUNT,names.recordCount+5);
 });

@@ -22,7 +22,7 @@ import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./da
 import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
-import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
+import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle, relayMove } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER } from '../../modes/dataArena/dataArenaRelayRoster.js';
 
 const T = DATA_ARENA_TERRAIN;
@@ -295,12 +295,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const shadow = new PIXI.Sprite(textures.shadow);
     shadow.anchor.set(0.5); shadow.alpha = 0.8;
     const bundle = member?.art ? bundles.get(member.speciesId) : null;
-    let sprite, controller = null, scale = 1, sequence = null;
+    let sprite, controller = null, scale = 1, sequence = null, authoredActor = null;
     if (bundle) {
       const actor = bundle.createActor({ side: "main", animation: DATA_ARENA_SEQUENCES.STAND, reducedMotion: false });
-      sprite = actor.sprite; controller = actor.controller;
+      sprite = actor.sprite; controller = actor.controller; authoredActor = actor;
       const height = sprite.texture.frame?.height || sprite.texture.height || 64;
-      scale = ROLE_HEIGHT[role] / height;
+      const idleKey=bundle.runtime.sides.main.animations.find(a=>a.id===DATA_ARENA_SEQUENCES.STAND).frames[0].texture;
+      const packing=bundle.runtime.geometry?.frames?.[idleKey]?.scale??bundle.runtime.artProfile?.scale??1;
+      scale = ROLE_HEIGHT[role] / height * packing/(bundle.runtime.artProfile?.scale??1);
       sequence = DATA_ARENA_SEQUENCES.STAND;
     } else {
       sprite = new PIXI.Sprite(textures.fallback[role]);
@@ -316,7 +318,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       animation: bundle?.runtime.sides.main.animations.find(a => a.id === DATA_ARENA_SEQUENCES.ATTACK),
       tickRateHz: bundle?.runtime.timing?.tickRateHz ?? 60, reducedMotion
     });
-    let actionRequest = null, actionElapsed = 0, motion = null;
+    let actionRequest = null, actionElapsed = 0, motion = null, lastDirection = 2;
     shadow.scale.set((ROLE_HEIGHT[role] / 64) * 0.9, (ROLE_HEIGHT[role] / 64) * 0.75);
     container.addChild(shadow, sprite);
     objects.addChild(container);
@@ -349,13 +351,39 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         // Art faces left; mirror for rightward facing.
         const snapshot=controller?.getSnapshot();
         const frame=bundle?.runtime.sides.main.animations.find(a=>a.id===sequence)?.frames[snapshot?.sourceFrameIndex ?? 0];
-        currentPlacement=state.gameMode==='RELAY'&&bundle ? dataArenaRelaySlotPlacement(frame,bundle.runtime.geometry,bundle.runtime.artProfile) : null;
+        currentPlacement=bundle ? dataArenaRelaySlotPlacement(frame,bundle.runtime.geometry,bundle.runtime.artProfile) : null;
         if(currentPlacement)sprite.anchor.set(currentPlacement.anchor.x,currentPlacement.anchor.y);
         const cellScale=currentPlacement ? scale*(bundle.runtime.artProfile?.scale??1)/currentPlacement.packingScale : scale;
         sprite.scale.set(cellScale * (facing > 0 ? -1 : 1), cellScale * (1 - sink * 0.5));
         sprite.y = -lift + sink * 30;
         sprite.x = 0;
         if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
+        let authoredFrame = null;
+        if (authoredActor && ![DATA_ARENA_SEQUENCES.DOWN, DATA_ARENA_SEQUENCES.WIN].includes(seq)) {
+          const angle = body.cast?.angle ?? (role==='PLAYER'&&state.laser.firing?state.laser.angle:null)
+            ?? (Math.hypot(body.vx??0,body.vy??0)>1?Math.atan2(body.vy,body.vx):null);
+          if(state.gameMode==='RELAY'&&Number.isInteger(body.facing8))lastDirection=body.facing8;
+          else if(angle!==null)lastDirection=((Math.round((Math.PI/2-angle)/(Math.PI/4))%8)+8)%8;
+          const direction=lastDirection;
+          const attacking = Boolean(motion) || seq === DATA_ARENA_SEQUENCES.ATTACK;
+          const move = motion?.moveId ? relayMove(motion.moveId) : null;
+          const actionName = seq === DATA_ARENA_SEQUENCES.HIT ? 'hurt' : attacking
+            ? (move?.type === 'LUNGE' || body.lunge ? 'melee' : 'ranged') : 'walk';
+          const sourceAnimation = bundle.runtime.sides.main.animations.find(a => a.id === sequence);
+          const totalMs = sourceAnimation.frames.reduce((n,f)=>n+f.ticks,0)*1000/60;
+          const beforeMs = sourceAnimation.frames[0].ticks*1000/60;
+          authoredFrame = authoredActor.applyAuthoredArena({direction, action:actionName, sequenceId:sequence,
+            sample:{frameIndex:snapshot.sourceFrameIndex,elapsedQ12:snapshot.elapsedTicks*4096,active:1},
+            hold:seq===DATA_ARENA_SEQUENCES.STAND || motion?.phase==='WINDUP',
+            releaseProgress:motion && motion.phase!=='WINDUP' ? Math.max(0,(motion.elapsedMs-beforeMs)/Math.max(1,totalMs-beforeMs)) : null});
+        }
+        if(authoredFrame){
+          const p=authoredFrame.placement;
+          const authoredScale=scale*(bundle.runtime.artProfile?.scale??1)/p.scale;
+          sprite.scale.set(authoredScale*(p.mirrorX?-1:1),authoredScale*(1-sink*.5));
+          sprite.x=0;
+          sprite.y=-lift+sink*30;
+        }
         if (motion && relayProfile && !reducedMotion) {
           const a = body.action;
           const pulse = a?.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);

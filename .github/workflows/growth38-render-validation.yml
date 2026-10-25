@@ -1,0 +1,30 @@
+name: Validate growth character renderer
+on:
+  push:
+    branches: ['art/growth38-*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  renderer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Start isolated test server
+        run: node scripts/serve.mjs > /tmp/growth38-server.log 2>&1 &
+      - name: Test real Pixi streaming and directional sprite placement
+        run: node tests/growth38-render-smoke.cjs
+      - name: Save renderer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: growth38-render-evidence
+          path: integration-notes/
+          retention-days: 7

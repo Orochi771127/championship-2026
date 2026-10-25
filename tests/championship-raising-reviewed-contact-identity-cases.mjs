@@ -31,7 +31,7 @@ for(const eid of ['m104_tunomon','m006_punimon','m203_elecmon']){
   assert.deepEqual(contact.huntContactShadow(config.speciesId,pose,8,art).ellipses,contact.huntContactShadow(config.speciesId,frame,0,art).ellipses);assertions++;
  }
 }
-const approved=catalog.characters.filter(c=>contact.getPublicReviewedRaisingContactArt(c));assert.equal(approved.length,3);assert.equal(catalog.characters.length,226);assertions+=2;
+const approved=catalog.characters.filter(c=>contact.getPublicReviewedRaisingContactArt(c));assert.equal(approved.length,3);assert.equal(catalog.characters.length,229);assertions+=2;
 // Exercise actual public loader validation and actual new wrapper, mocking only
 // GPU bundle/core dependencies. No hash validation or helper is replaced.
 let source=read('src/championship/presentation/publicCharacterRoster.js').replace(/^import .*;\n/gm,'').replace(/^export \{.*;\n/gm,'');

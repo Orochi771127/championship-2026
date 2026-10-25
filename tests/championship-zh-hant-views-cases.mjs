@@ -148,7 +148,7 @@ test("Database translates every registered species without revealing unregistere
   const allRows=root.querySelectorAll(".cm-vs2-database__row");
   assert.equal(allRows.length,238);
   const rows=allRows.filter(row=>Number(row.dataset.speciesIndex)<231);
-  const playableDisplay=DATABASE_DISPLAY_CATALOG.entries.filter(row=>row.kind!=='ILLUSTRATION');
+  const playableDisplay=DATABASE_DISPLAY_CATALOG.entries.filter(row=>row.kind!=='ILLUSTRATION'&&row.speciesIndex<231);
   assert.equal(rows.length,226);assert.equal(playableDisplay.length,226);
   assert.deepEqual(rows.map(row=>[Number(row.dataset.speciesIndex),row.dataset.displayCode]),
     playableDisplay.map(row=>[row.speciesIndex,row.displayCode]));

@@ -26,7 +26,7 @@ test('public character loading renders native frames with no private index, sour
  assert.deepEqual(roster.getDiagnostics().failures,[]);
  for(const c of configs){const actor=roster.createActor({speciesId:c.speciesId,presentation:'raising'}),runtime=read(c.runtimePath),seq=runtime.sides.main.animations[0];assert.ok(actor?.nativeFramePresenter);
   const applied=actor.nativeFramePresenter.apply({contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:seq.id,frameIndex:0,flipBits:0});assert.equal(applied.cell,seq.frames[0].cell);assert.deepEqual(applied.geometry,runtime.geometry.frames[seq.frames[0].texture]);
-  if(c.nativeSizing)assert.equal(actor.nativeSizing.packedPixelsPerNativePixel,c.density);actor.sprite.destroy();}
+  if(c.nativeSizing)assert.equal(actor.nativeSizing.packedPixelsPerNativePixel,c.nativeSizing.packedPixelsPerNativePixel);actor.sprite.destroy();}
  assert.ok(!f.calls.some(forbidden));await roster.dispose();assert.equal(f.cache.size,0);assert.ok(f.sources.every(source=>source.destroyed));
 });
 test('public render hash/motion/geometry failures cannot load pixels or fall back to private source atlases',async()=>{

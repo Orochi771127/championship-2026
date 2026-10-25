@@ -1,4 +1,4 @@
-import {listProductExtensions} from '../contracts/productSpeciesExtensions.js';
+import {listProductExtensions,getProductExtension} from '../contracts/productSpeciesExtensions.js';
 import {productSpeciesRecord} from '../contracts/productSpeciesData.js';
 // Base stats for a species, through the already-traced path.
 //
@@ -90,8 +90,8 @@ export function speciesBaseStats(speciesId) {
     speciesId,
     statCurveIndex: record.statCurveIndex,
     maxHp: row[STAT_CURVE_HP_COLUMN],
-    maxTp: row[STAT_CURVE_TP_COLUMN],
-    evidence: SPECIES_BASE_STAT_EVIDENCE,
+    maxTp: CURVE_ROWS[getProductExtension(record.recordIndex)?.huntOverrides?.rungs?.[1]??record.statCurveIndex][STAT_CURVE_TP_COLUMN],
+    evidence: getProductExtension(record.recordIndex)?.huntOverrides?'OWNER_AUTHORIZED_ORIGINAL_DESIGN':SPECIES_BASE_STAT_EVIDENCE,
     // Named so a consumer can see what is missing instead of guessing why the
     // panel has two numbers where the original shows six.
     undifferentiated: SPECIES_UNDIFFERENTIATED_STATS,

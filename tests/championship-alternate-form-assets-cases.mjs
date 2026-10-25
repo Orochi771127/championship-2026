@@ -56,7 +56,7 @@ console.log('PASS: real completed-original loader adapter with fetch/decode doub
 for(const [filename,symbol] of [['battleCharacterProfiles.js','BATTLE_CHARACTER_PROFILES'],['battleCharacterGeometry.js','BATTLE_CHARACTER_GEOMETRY'],['characterNativeSizing.js','CHARACTER_NATIVE_SIZING']]){
  const file=fs.readFileSync(path.join(root,'src/data/championship',filename),'utf8').replace(/^import .*;\n/gm,'').replace(/^export /gm,'');
  const names=filename==='battleCharacterProfiles.js'?[symbol,'BATTLE_SPECIES_ENTITIES','BATTLE_SPECIES_MOVEMENT']:[symbol];
- const result=new Function('ACTIVE_ALTERNATE_FORM_ASSETS',file+';return {'+names.join(',')+'};')(configs);
+ const result=new Function('ACTIVE_ALTERNATE_FORM_ASSETS','listProductExtensions',file+';return {'+names.join(',')+'};')(configs,()=>[]);
  assert(result[symbol].oc_crownbrass_mandrill);assert(result[symbol].oc_celestyrant_battle_r10);
  if(filename==='battleCharacterProfiles.js'){
   assert.equal(result.BATTLE_SPECIES_ENTITIES[228],null);assert.equal(result.BATTLE_SPECIES_ENTITIES[229],'oc_crownbrass_mandrill');assert.equal(result.BATTLE_SPECIES_ENTITIES[230],'oc_celestyrant_battle_r10');

@@ -38,7 +38,7 @@ test('real projectDatabase joins all 477 exact branches; original route and book
     const source=i+8;const options=deepFreeze({registeredSpecies:[...allRegistered],evolutionBranches:[...allOffsets],selectedSpeciesIndex:source});
     const result=projectDatabase(options),originalRoutes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies:allRegistered,evolutionBranches:allOffsets});frozen(result);
     assert.deepEqual(Object.keys(result).sort(),['slotCount','eggCount','regularCount','registeredCount','unlockEvidence','entries','selected'].sort());
-    assert.equal(result.slotCount,218);assert.equal(result.eggCount,0);assert.equal(result.regularCount,218);assert.equal(result.registeredCount,216);assert.equal(result.entries.length,218);
+    assert.equal(result.slotCount,221);assert.equal(result.eggCount,0);assert.equal(result.regularCount,221);assert.equal(result.registeredCount,216);assert.equal(result.entries.length,221);
     assert.ok(result.entries.filter(e=>[229,230].includes(e.speciesIndex)).every(e=>e.state==='UNDISCOVERED'));
     assert.equal(result.selected.speciesIndex,source);assert.equal(result.selected.state,'REGISTERED');assert.deepEqual(plain(result.selected.instances),[]);
     assert.deepEqual(Object.keys(result.selected).sort(),['bookOrdinal','speciesIndex','speciesId','displayName','kind','state','source','instanceCount','identityEvidence','instances','evolutionRoutes'].sort());

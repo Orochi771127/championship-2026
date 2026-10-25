@@ -1,7 +1,8 @@
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 import {productEvolutionOptions} from '../contracts/productSpeciesData.js';
 // Read-only join of ordered candidates and the existing five-slot history.
 // No resolver, eligibility, RNG, writer or save normalization runs here.
-import lifecycle from '../../data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+import {PRODUCT_RAISING_LIFECYCLE_RULES as lifecycle} from '../contracts/productSpeciesData.js';
 import {deepFreeze} from '../contracts/championshipContracts.js';
 
 function validOffset(value) {
@@ -16,13 +17,14 @@ export function projectDatabaseEvolutionRoutes(sourceSpeciesIndex, {
   const valid = Array.isArray(evolutionBranches) ? evolutionBranches.filter(validOffset) : [];
   const uncertain = !Array.isArray(evolutionBranches) || valid.length !== evolutionBranches.length;
   const nativeRoutes=candidates.map((rule, branchIndex) => {
-    const legacyBranchOffset = (sourceSpeciesIndex - 8) * 5 + branchIndex;
-    const historyState = valid.includes(legacyBranchOffset) ? 'RECORDED' : uncertain ? 'UNKNOWN' : 'NOT_RECORDED';
+    const productRouteId=getProductExtension(sourceSpeciesIndex)?`${sourceSpeciesIndex}:${rule.target}:${rule.target}`:null;
+    const legacyBranchOffset = productRouteId?null:(sourceSpeciesIndex - 8) * 5 + branchIndex;
+    const historyState = (productRouteId?productEvolutionBranches.includes(productRouteId):valid.includes(legacyBranchOffset)) ? 'RECORDED' : uncertain ? 'UNKNOWN' : 'NOT_RECORDED';
     const targetRegistered = registeredSpecies.includes(rule.target);
     return {
       sourceSpeciesIndex, branchIndex, targetSpeciesIndex:rule.target,
       targetSpeciesId:`species-${String(rule.target).padStart(3,'0')}`,
-      legacyBranchOffset, historyState, targetRegistered,
+      legacyBranchOffset, productRouteId, historyState, targetRegistered,
       // A contradictory old/invalid registration snapshot stays masked. The
       // completion flag remains its own fact and never registers the target.
       displayPreview:fullView, revealed:fullView || (historyState === 'RECORDED' && targetRegistered)

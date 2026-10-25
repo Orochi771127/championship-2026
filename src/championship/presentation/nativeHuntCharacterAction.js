@@ -1,3 +1,4 @@
+import {sampleAuthoredCharacterFrame} from './authoredCharacterFrame.js';
 /** OVL0 0210C048 -> ARM9 02047984. These numbers are requests, not names.
  * This selector consumes existing state. It never chooses an AI state.
  */
@@ -23,7 +24,7 @@ export const NATIVE_HUNT_CHARACTER_FRAME_CONTRACT = "HUNT_CHARACTER_PRESENTATION
  * Each actor supplies its own compiled native sequences and cells. Live capture
  * replay is verified separately from the 224-character frame correspondence.
  */
-export function createNativeHuntCharacterFramePresenter({ sprite, animations, textureResolver, entityId, reducedMotion = false, geometry = null }) {
+export function createNativeHuntCharacterFramePresenter({ sprite, animations, textureResolver, entityId, reducedMotion = false, geometry = null, authoredPresentation = null }) {
   if (!sprite || typeof textureResolver !== "function" || !Array.isArray(animations)) {
     throw new TypeError("NATIVE_CHARACTER_PRESENTATION_DEPENDENCIES_REQUIRED");
   }
@@ -44,9 +45,11 @@ export function createNativeHuntCharacterFramePresenter({ sprite, animations, te
         throw new TypeError("UNVERIFIED_NATIVE_CHARACTER_FRAME");
       }
       const sourceFrame = sequence.frames[reducedMotion ? 0 : frame.frameIndex];
-      const texture = textureResolver(sourceFrame.texture);
+      const authoredFrame=sampleAuthoredCharacterFrame(sequence,frame,authoredPresentation,reducedMotion);
+      const textureKey=authoredFrame?.texture??sourceFrame.texture;
+      const texture = textureResolver(textureKey);
       if (!texture) throw new RangeError(`NATIVE_CHARACTER_TEXTURE_MISSING:${entityId}:${frame.sequenceId}:${frame.frameIndex}:${sourceFrame.texture}`);
-      const placement = geometry?.frames[sourceFrame.texture];
+      const placement = geometry?.frames[textureKey];
       if (geometry && !placement) throw new RangeError('NATIVE_CHARACTER_GEOMETRY_MISSING');
       sprite.texture = texture;
       current = Object.freeze({ sequenceId: frame.sequenceId, frameIndex: reducedMotion ? 0 : frame.frameIndex,

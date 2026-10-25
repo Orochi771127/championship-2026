@@ -5,9 +5,9 @@ import {getProductExtension,listProductExtensions,resolveProductSpeciesDefinitio
 export function isKnownSpeciesIndex(index){return Number.isInteger(index)&&index>=0&&index!==228&&(index<228||getProductExtension(index)!==null);}
 export function productBaseSpeciesIndex(index){if(!isKnownSpeciesIndex(index))throw new TypeError('PRODUCT_SPECIES_UNKNOWN');return getProductExtension(index)?.baseSpeciesIndex??index;}
 export function productSpeciesRecord(index){return resolveProductSpeciesDefinition(index,nativeSpecies.records,{allowUnready:true});}
-export function productHuntSpecies(index){const base=nativeHunt.species[productBaseSpeciesIndex(index)];return getProductExtension(index)?Object.freeze({...base,speciesIndex:index}):base;}
+export function productHuntSpecies(index){const base=nativeHunt.species[productBaseSpeciesIndex(index)];return getProductExtension(index)?Object.freeze({...base,...structuredClone(getProductExtension(index).huntOverrides??{}),speciesIndex:index}):base;}
 export function productLifecycleSpecies(index){return nativeLifecycle.species[productBaseSpeciesIndex(index)];}
-export const PRODUCT_RAISING_LIFECYCLE_RULES=Object.freeze({...nativeLifecycle,species:Object.freeze(Object.assign({},nativeLifecycle.species,Object.fromEntries(listProductExtensions().map(e=>[e.speciesIndex,nativeLifecycle.species[e.baseSpeciesIndex]]))))});
+export const PRODUCT_RAISING_LIFECYCLE_RULES=Object.freeze({...nativeLifecycle,rules:Object.freeze(Object.assign({},nativeLifecycle.rules,Object.fromEntries(listProductExtensions().filter(e=>e.generationIndex<6).map(e=>[e.speciesIndex-8,nativeLifecycle.rules[e.baseSpeciesIndex-8]])))),species:Object.freeze(Object.assign({},nativeLifecycle.species,Object.fromEntries(listProductExtensions().map(e=>[e.speciesIndex,nativeLifecycle.species[e.baseSpeciesIndex]]))))});
 export function productEvolutionOptions(target){const extra=listProductExtensions().filter(e=>e.baseSpeciesIndex===target&&e.runtimeReady&&e.evolutionReady);return Object.freeze([target,...extra.map(e=>e.speciesIndex)]);}
 export function requiresProductSaveVersion(value){
  if(!value||typeof value!=='object')return false;

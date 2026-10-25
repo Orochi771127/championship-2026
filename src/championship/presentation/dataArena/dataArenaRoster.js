@@ -40,7 +40,7 @@ export async function loadDataArenaCharacter({art,PIXI,signal,fetchImpl=globalTh
  const text=await response.text(),hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
  if(hash!==selected.runtimeSha256)throw Error('DATA_ARENA_ART_HASH');
  const runtime=JSON.parse(text);await validatePublicCharacterRender(runtime,selected);
- return loadPixiCharacterRuntimeBundle({PIXI,signal,fetchImpl,runtimeUrl:art.runtimeUrl,runtimeDocument:runtime,sides:['main'],cachePrefix:`data-arena:${art.entityId}:${hash}:`});
+ return loadPixiCharacterRuntimeBundle({PIXI,signal,fetchImpl,runtimeUrl:art.runtimeUrl,runtimeDocument:runtime,sides:['main'],authoredArena:true,cachePrefix:`data-arena:${art.entityId}:${hash}:`});
 }
 
 import { RELAY_ROSTER } from '../../modes/dataArena/dataArenaRelayRoster.js';

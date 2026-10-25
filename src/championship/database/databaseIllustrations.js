@@ -1,3 +1,4 @@
+import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 // Read-only encyclopedia art. These identities never enter playable species,
 // registration, stats, moves, saves or evolution catalogs.
 import catalog from '../../data/championship/database-illustrations.r1.json' with {type:'json'};
@@ -15,9 +16,9 @@ for(const entry of catalog.entries){
   ids.add(entry.speciesIndex);codes.add(entry.displayCode);
 }
 export const DATABASE_ILLUSTRATIONS=deepFreeze(catalog);
-const bySpecies=new Map(catalog.entries.map(entry=>[entry.speciesIndex,entry]));
+const bySpecies=new Map(catalog.entries.filter(e=>!getProductExtension(e.speciesIndex)?.runtimeReady).map(entry=>[entry.speciesIndex,entry]));
 export function getDatabaseIllustration(speciesIndex){return bySpecies.get(speciesIndex)??null;}
-export function listDatabaseIllustrations(){return catalog.entries;}
+export function listDatabaseIllustrations(){return catalog.entries.filter(e=>!getProductExtension(e.speciesIndex)?.runtimeReady);}
 export function getDatabaseIllustrationStory(speciesIndex, locale = getLocale()) {
   const entry = getDatabaseIllustration(speciesIndex);
   return entry?.profileByLocale?.[locale] ?? null;

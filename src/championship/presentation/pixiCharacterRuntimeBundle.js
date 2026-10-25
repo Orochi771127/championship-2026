@@ -3,6 +3,7 @@ import { createNativeHuntCharacterFramePresenter } from "./nativeHuntCharacterAc
 import { createBattleCharacterAnimator } from "./battleCharacterAction.js";
 import {createNativeCharacterAnimationTimeline} from './characterAnimationTimeline.js';
 import {prepareCharacterAtlasPage} from './characterAtlasQueue.js';
+import {sampleAuthoredArenaFrame} from './authoredCharacterFrame.js';
 const closedBitmaps=new WeakSet();
 function closeDestroyedBitmap(bitmap,source){
   if(source?.destroyed&&typeof bitmap?.close==='function'&&!closedBitmaps.has(bitmap)){
@@ -40,6 +41,7 @@ export async function loadPixiCharacterRuntimeBundle({
   replacementGuard = null,
   runtimeDocument = null,
   initialSequenceIds = null,
+  authoredArena = false,
   signal = null,
   fetchImpl = (...args) => globalThis.fetch(...args)
 }) {
@@ -69,7 +71,7 @@ export async function loadPixiCharacterRuntimeBundle({
   function sequenceTextures(id){
     const sequence=runtime.sides.main.animations.find(a=>a.id===id);
     if(!sequence)throw new RangeError(`Unknown character animation: ${id}`);
-    return sequence.frames.map(f=>f.texture);
+    return [...sequence.frames.map(f=>f.texture),...(runtime.authoredPresentation?.[id]?.frames??[]).map(f=>f.texture)];
   }
   function validateStreaming(){
     const meta=runtime.streaming,atlases=runtime.sides.main.atlases;
@@ -80,7 +82,7 @@ export async function loadPixiCharacterRuntimeBundle({
       if(!Number.isInteger(page)||page<0||page>=atlases.length)throw Error('CHARACTER_STREAMING_FRAME_PAGE');
     }
     for(const [i,atlas] of atlases.entries()){
-      if(!/^main-[a-f0-9]{16}\.json$/.test(atlas.data)||!/^main-[a-f0-9]{16}\.webp$/.test(atlas.image)
+      if(!/\.json$/.test(atlas.data)||!/\.webp$/.test(atlas.image)||[atlas.data,atlas.image].some(p=>p.includes('://')||p.startsWith('/'))
         ||meta.pages[i].data!==atlas.data||meta.pages[i].image!==atlas.image)
         throw Error('CHARACTER_STREAMING_PAGE_PATH');
     }
@@ -103,7 +105,7 @@ export async function loadPixiCharacterRuntimeBundle({
       if(hash!==runtime.streaming.pages[page].dataSha256)throw Error('CHARACTER_STREAMING_METADATA_HASH');
       const data=JSON.parse(text);
       if(disposed)throw Error('CHARACTER_RUNTIME_BUNDLE_DISPOSED');
-      if(data.meta?.image!==atlas.image)throw Error('CHARACTER_STREAMING_IMAGE_PATH');
+      if(!data.meta?.image||assetUrl(data.meta.image,dataUrl)!==imageUrl)throw Error('CHARACTER_STREAMING_IMAGE_PATH');
       const expected=Object.keys(runtime.streaming.texturePages).filter(k=>runtime.streaming.texturePages[k]===page);
       if(expected.length!==Object.keys(data.frames??{}).length||expected.some(k=>!data.frames[k]))
         throw Error('CHARACTER_STREAMING_FRAME_SET');
@@ -174,8 +176,9 @@ export async function loadPixiCharacterRuntimeBundle({
       if (!Array.isArray(side.atlases) || !Array.isArray(side.animations)) {
         throw new TypeError(`Character side ${sideName} requires atlases and animations`);
       }
-      for (let page = 0; page < side.atlases.length; page += 1) {
-        const atlas = requireRecord(side.atlases[page], `${sideName}.atlases[${page}]`);
+      const selectedAtlases=[...side.atlases,...(authoredArena&&sideName==='main'?runtime.authoredArena?.atlases??[]:[])];
+      for (let page = 0; page < selectedAtlases.length; page += 1) {
+        const atlas = requireRecord(selectedAtlases[page], `${sideName}.atlases[${page}]`);
         const dataUrl = assetUrl(atlas.data, runtimeUrl);
         const imageUrl = assetUrl(atlas.image, runtimeUrl);
         const atlasAsset = replacementGuard ? guardedAtlases.get(dataUrl) : await PIXI.Assets.load(dataUrl);
@@ -259,19 +262,31 @@ export async function loadPixiCharacterRuntimeBundle({
       });
       const presenter = nativeFramePresentation ? createNativeHuntCharacterFramePresenter({
         sprite, animations: sideRuntime.animations, textureResolver: (key) => textures.get(key),
-        entityId: runtime.entityId, reducedMotion, geometry: nativeGeometry
+        entityId: runtime.entityId, reducedMotion, geometry: nativeGeometry, authoredPresentation:runtime.authoredPresentation
       }) : null;
       const nativeFramePresenter = presenter && streamed ? Object.freeze({...presenter,
         isFrameReady(frame){return sequenceTextures(frame.sequenceId).every(k=>textures.has(k));},
         ensureFrame(frame){return ensureSequence(frame.sequenceId);}
       }) : presenter;
       const battleAnimator = battleGeometry ? createBattleCharacterAnimator({sprite,
-        animations:sideRuntime.animations,textureResolver:key=>textures.get(key),geometry:battleGeometry,reducedMotion}) : null;
+        animations:sideRuntime.animations,textureResolver:key=>textures.get(key),geometry:battleGeometry,reducedMotion,authoredPresentation:runtime.authoredPresentation}) : null;
       const timeline=nativeSequence?createNativeCharacterAnimationTimeline(firstAnimation):null;
       const sequencePlayer=timeline?{getSnapshot:()=>timeline.getSnapshot(),advanceNative(delta){
         const frame=timeline.advanceNative(delta);sprite.texture=textures.get(frame.texture);return frame;
       }}:null;
-      return Object.freeze({ sprite, controller, side, nativeFramePresenter, battleAnimator,sequencePlayer });
+      function applyAuthoredArena(options){
+        if(!authoredArena||!runtime.authoredArena)return null;
+        const sequence=sideRuntime.animations.find(a=>a.id===options.sequenceId);
+        if(!sequence)return null;
+        const frame=sampleAuthoredArenaFrame(runtime.authoredArena,{...options,sequence,reducedMotion});
+        if(!frame)return null;
+        const texture=textures.get(frame.texture),placement=runtime.authoredArena.geometry[frame.texture];
+        if(!texture||!placement)throw Error('AUTHORED_ARENA_FRAME_BINDING');
+        sprite.texture=texture;
+        sprite.anchor.set(placement.origin[0]/placement.sourceSize[0],placement.origin[1]/placement.sourceSize[1]);
+        return {texture:frame.texture,placement};
+      }
+      return Object.freeze({ sprite, controller, side, nativeFramePresenter, battleAnimator,sequencePlayer,applyAuthoredArena });
     },
 
     getDiagnostics() {

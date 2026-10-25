@@ -423,7 +423,7 @@ export function beginNativeRaisingEvolution(actor,selection,rng,foods=[]) {
   if(choices.length>1){actor.state=12;actor.evolution={oldSpecies:actor.speciesIndex,target:selection.target,
     choices:[...choices],choicePending:true,pendingSelection:structuredClone(selection),targetActor:null,phase:'choice',elapsed:0,reveal:false};return;}
   actor.state=selection.target<0?21:12;actor.evolution={oldSpecies:actor.speciesIndex,target:selection.target,index:selection.actor?.['1f4']??0,
-    productRouteId:selection.productRouteId??null,last:selection.actor?.['1f0']??1,inherited:selection.actor?.['464']??0,phase:0,elapsed:0,period:20,reveal:false,totalFrames:0,targetActor:null};
+    productRouteId:selection.productRouteId??(getProductExtension(actor.speciesIndex)&&selection.target>=8?`${actor.speciesIndex}:${selection.target}:${selection.target}`:null),last:selection.actor?.['1f0']??1,inherited:selection.actor?.['464']??0,phase:0,elapsed:0,period:20,reveal:false,totalFrames:0,targetActor:null};
   if(selection.target>=0){const targetActor={speciesIndex:selection.target,sequenceId:null,animator:null,nativeFrame:0};
     request(targetActor,selection.target<8?0:39,true);actor.evolution.targetActor=targetActor;}
   request(actor,39,true);

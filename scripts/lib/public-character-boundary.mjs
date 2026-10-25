@@ -8,7 +8,7 @@ export function publicCharacterRequiredFiles(root){
  for(const character of catalog.characters){
   for(const file of [character.runtimePath,...(character.battleRuntimePath?[character.battleRuntimePath]:[])]){
    add(file);const runtime=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
-   for(const atlas of runtime.sides.main.atlases)for(const key of ['data','image'])add(path.posix.normalize(path.posix.join(path.posix.dirname(file),atlas[key])));
+   for(const atlas of [...runtime.sides.main.atlases,...(runtime.authoredArena?.atlases??[])])for(const key of ['data','image'])add(path.posix.normalize(path.posix.join(path.posix.dirname(file),atlas[key])));
   }
   add(character.hudPath);const hud=JSON.parse(fs.readFileSync(path.join(root,character.hudPath),'utf8'));
   for(const cell of [hud.portrait,...hud.battle.cells])add(cell.src);
@@ -30,7 +30,7 @@ export function assertPublicCharacterSelection({root,files,allowlist,assertBytes
   for(const [file,hash]of [[character.runtimePath,character.runtimeSha256],...(character.battleRuntimePath?[[character.battleRuntimePath,character.battleRuntimeSha256]]:[])]){
    const runtime=descriptor(file,hash);
    if(runtime.kind!=='CHARACTER_RENDER_V1'||runtime.entityId!==character.entityId||runtime.sides?.sub?.atlases?.length!==0)throw Error('PUBLIC_CHARACTER_RENDER_IDENTITY');
-   for(const atlas of runtime.sides.main.atlases)for(const field of ['data','image']){
+   for(const atlas of [...runtime.sides.main.atlases,...(runtime.authoredArena?.atlases??[])])for(const field of ['data','image']){
     if(typeof atlas[field]!=='string'||atlas[field].startsWith('/')||atlas[field].includes('\\')||atlas[field].includes('://'))throw Error('PUBLIC_CHARACTER_ATLAS_PATH');
     const target=path.posix.normalize(path.posix.join(path.posix.dirname(file),atlas[field]));
     if(!available.has(target)||!selected.has(target)||!target.startsWith('assets/production/characters/'))throw Error('PUBLIC_CHARACTER_ATLAS_NOT_SELECTED: '+target);

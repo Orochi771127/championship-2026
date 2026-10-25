@@ -52,7 +52,7 @@ test('unknown source, eggs, empty group and final stages expose no invented bran
   for(const index of [0,7,160,187,211,222,228,229,230])assert.deepEqual(projectDatabaseEvolutionRoutes(index,{sourceRegistered:true,registeredSpecies,evolutionBranches:[0]}),[]);
   const book=projectDatabase({registeredSpecies:[8,20],selectedSpeciesIndex:8});
   assert.equal(book.selected.instanceCount,0);assert.equal(book.selected.state,'REGISTERED');assert.equal(book.selected.evolutionRoutes[0].historyState,'NOT_RECORDED');
-  assert.equal(book.slotCount,218);
+  assert.equal(book.slotCount,221);
 });
 
 test('all 216 ordinary public portraits preserve exact selected HUD hashes and aliases96/97',()=>{
@@ -86,7 +86,7 @@ test('private provenance, foreign paths and changed identities cannot pass the h
 });
 
 test('production appends exactly three product routes without borrowing the 477 native history offsets',()=>{
-  const registered=[...registeredSpecies,229,230],snapshot=JSON.stringify(lifecycle),extras=[];let nativeCount=0;
+  const registered=[...registeredSpecies,229,230,231,237,239],snapshot=JSON.stringify(lifecycle),extras=[];let nativeCount=0;
   for(let source=8;source<=186;source++){
     const flags=(lifecycle.rules[source-8]??[]).map((_,i)=>(source-8)*5+i);
     const routes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies:registered,evolutionBranches:flags});
@@ -98,7 +98,7 @@ test('production appends exactly three product routes without borrowing the 477 
       assert.equal(routes.find(r=>!r.productRouteId&&r.branchIndex===route.branchIndex).historyState,'RECORDED');
     }
   }
-  assert.equal(nativeCount,477);assert.deepEqual(extras,[[139,229,'139:211:229'],[143,229,'143:211:229'],[144,230,'144:222:230']]);
+  assert.equal(nativeCount,477);assert.deepEqual(extras.filter(x=>[229,230].includes(x[1])),[[139,229,'139:211:229'],[143,229,'143:211:229'],[144,230,'144:222:230']]);assert.ok([231,237,239].every(id=>extras.some(x=>x[1]===id)));
   for(const [source,target,productRouteId] of extras){
     const options={sourceRegistered:true,registeredSpecies:registered,evolutionBranches:[],productEvolutionBranches:[productRouteId]},before=JSON.stringify(options);
     const routes=projectDatabaseEvolutionRoutes(source,options),route=routes.find(r=>r.productRouteId===productRouteId);
