@@ -127,7 +127,7 @@ module.exports = async function verifyDetailSwipe(page, {output, evidence}) {
     await stage('3');await open(40);await returnToList();await back.click();
     await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();
     await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();
-    await page.locator('.cm-toolbar__menu:not([hidden]) button[data-entry-id="database"]').click();
+    await page.locator('.cm-toolbar :is(.cm-toolbar__menu:not([hidden]), .cm-toolbar__quick:not([hidden])) button[data-entry-id="database"]').click();
     await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor();
     await stage('3');await open(40);await gesture(hero,-90);await expected(order[anchor+1]);
     report.operations.push({case:'leave-and-reenter-no-duplicate-listener',pass:true});await shot('reentry-next');

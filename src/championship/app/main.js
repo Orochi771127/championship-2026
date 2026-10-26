@@ -87,6 +87,8 @@ import { createLoadProgressView, observeLoadActivity } from './loadProgress.js';
 import { mountPortraitFrame } from './portraitFrame.js';
 import { createHuntLayoutResolver } from './huntLayoutResolver.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
+import { openRanchBackpack } from './ranchBackpack.js';
+import { RANCH_JOURNAL_OPEN_EVENT } from './ranchDiscoveryJournal.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
@@ -228,6 +230,8 @@ const loadHuntExpansionReview = HUNT_EXPANSION_REVIEW
   : null;
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
+// Owner 2026-10-27 diorama review: ?ranchPitch=35|40|45 compares camera pitches.
+const RANCH_VIEW_PITCH = Number(new URLSearchParams(globalThis.location?.search ?? "").get("ranchPitch")) || undefined;
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
 const VFX_ART_PREVIEW_SYSTEM = new URLSearchParams(globalThis.location?.search ?? "").get("vfxArt");
 // Owner 2026-10-18: arena hazards (BM04 lagoon, BM05 ice, BM03 lava) are a local
@@ -717,9 +721,9 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       try {
         const [{createRanchThreeScene},{ranchThreeField}]=await Promise.all([
           import('../presentation/ranchThreeScene.js'),import('../presentation/ranchThreeCoordinates.js')]);
-        const field=ranchThreeField(manifest,plan);
+        const field=ranchThreeField(manifest,plan,{pitch:RANCH_VIEW_PITCH});
         const threeScene=await createRanchThreeScene({stage,placements:plan.placements,field,signal,
-          connections:app.getRanchExplorationFrame()?.connections??[],cagePlacements:cageFrame?.placements??[]});
+          connections:app.getRanchExplorationFrame()?.connections??null,cagePlacements:cageFrame?.placements??[]});
         const displayObject=new PIXI.Container({label:'3D ranch metadata bridge'});
         return {assetId:'art:cage:three-20261021',field,displayObject,threeScene,update(){},
           getDiagnostics:()=>({assetId:'art:cage:three-20261021',three:threeScene.getDiagnostics()}),
@@ -2073,6 +2077,9 @@ function runToolbarMenuEntry(entry,context={}) {
   // over the current screen and changes nothing in the session.
   // Focus returns to the Menu button: the menu item itself is gone by then.
   if (entry.action === "OPEN_SETTINGS") { openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]')); return; }
+  // Owner 2026-10-27: the bag and the discovery journal, from the System menu.
+  if (entry.action === "OPEN_BACKPACK") { void openRanchBackpack({ getShopFrame: () => app.getShopFrame() }); return; }
+  if (entry.action === "OPEN_RANCH_JOURNAL") { document.dispatchEvent(new CustomEvent(RANCH_JOURNAL_OPEN_EVENT)); return; }
   if (entry.action === "END_DAY") {
     app.requestRaisingDayEnd();
     clockDriver?.reset();

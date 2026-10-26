@@ -96,18 +96,22 @@ export function ranchRegions(placements,connections) {
   for(const p of placements){const r=find(p.ownerIndex);groups.set(r,[...(groups.get(r)??[]),p.ownerIndex]);}
   return [...groups.values()].map(owners=>owners.sort((a,b)=>a-b)).sort((a,b)=>a[0]-b[0]);
 }
-export function connectRanchGround(ground) {
-  const {width,height,owners,terrain,clearance}=ground;
-  const boundaries=ranchSharedBoundaries(ground.placements),connections=[],corridorOwner=new Int16Array(terrain.length).fill(-1);
-  // Real model obstacles can leave a walkable border pocket with no access
-  // to the cage interior. A seam opens only between standing cells that reach
-  // each cage's interior.
+// Real model obstacles can leave a walkable border pocket with no access to
+// the cage interior. Only standing cells that reach their cage's interior count.
+function interiorReach({width,height,owners,terrain,clearance}) {
   const reachesInterior=new Uint8Array(terrain.length),interiorQueue=[];
   for(let i=0;i<terrain.length;i++)if(owners[i]>=0&&terrain[i]!==1&&clearance[i]>1){reachesInterior[i]=1;interiorQueue.push(i);}
   for(let n=0;n<interiorQueue.length;n++){
     const i=interiorQueue[n];
     for(const j of neighbors(i,width,height))if(!reachesInterior[j]&&owners[j]===owners[i]&&terrain[j]!==1){reachesInterior[j]=1;interiorQueue.push(j);}
   }
+  return reachesInterior;
+}
+export function connectRanchGround(ground) {
+  const {width,height,owners,terrain,clearance}=ground;
+  const boundaries=ranchSharedBoundaries(ground.placements),connections=[],corridorOwner=new Int16Array(terrain.length).fill(-1);
+  // A seam opens only between standing cells that reach each cage's interior.
+  const reachesInterior=interiorReach(ground);
   for(const edge of boundaries){
     if(!edge.compatible)continue;
     const mid=[(edge.a[0]+edge.b[0])/2,(edge.a[1]+edge.b[1])/2];
@@ -170,4 +174,43 @@ export function connectRanchGround(ground) {
     ownerAt:p=>{const i=cellAt(p);return i<0?null:byOwner.get(owners[i]>=0?owners[i]:corridorOwner[i])??null;}
   });
   return {...ground,navigation};
+}
+
+/**
+ * Safe exits (Owner 2026-10-27, for the editor's marks): every outer hex edge
+ * of every placement whose own floor reaches it, by the seam rule above (the
+ * band along the edge minus its corner tips, interior-reaching standing cells
+ * only). A passage opens exactly where two compatible cages both have one.
+ * Returns edge id (as ranchSharedBoundaries) -> owners whose floor reaches it.
+ */
+export function ranchSafeExits(ground) {
+  const {width,owners,terrain}=ground,reachesInterior=interiorReach(ground);
+  const edgesByOwner=new Map();
+  for(const p of ground.placements){
+    const cells=productPlacementCells(p)??[];
+    const list=[];
+    for(const slot of cells){
+      const polygon=ranchSlotPolygon(slot);
+      for(let i=0;i<6;i++){
+        const a=polygon[i],b=polygon[(i+1)%6],id=edgeKey(a,b);
+        list.push({id,a,b,polygon});
+      }
+    }
+    // An edge two of the placement's own cells share is inside it, not an exit.
+    const count=new Map();for(const e of list)count.set(e.id,(count.get(e.id)??0)+1);
+    edgesByOwner.set(p.ownerIndex,list.filter(e=>count.get(e.id)===1));
+  }
+  const exits=new Map();
+  for(let i=0;i<owners.length;i++){
+    const owner=owners[i];
+    if(owner<0||terrain[i]===1||!reachesInterior[i])continue;
+    const p=point(i,width);
+    for(const e of edgesByOwner.get(owner)??[]){
+      if(exits.get(e.id)?.has(owner))continue;
+      const f=edgeFrame(p,e.a,e.b);
+      if(f.distance<=RANCH_SEAM_REACH&&f.along>=RANCH_SEAM_CORNER_GUARD&&f.along<=f.length-RANCH_SEAM_CORNER_GUARD&&inside(p,e.polygon))
+        exits.set(e.id,new Set([...(exits.get(e.id)??[]),owner]));
+    }
+  }
+  return {exits,edgesByOwner};
 }

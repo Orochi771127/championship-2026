@@ -164,9 +164,9 @@ export const SHOP_DESCRIPTIONS_EN = Object.freeze([
   "A hospital that researches vaccines. Raises the Vaccine attribute. Suggested for 6 companions.",
   "A gas room full of germs. Raises the Virus attribute. Suggested for 4 companions.",
   "A mini version of the Infirmary. Recovers HP and stress. Suggested for 2 companions.",
-  "An infirmary that heals companions. Recovers HP and stress. Suggested for 6 companions.",
+  "An infirmary that heals companions. Recovers HP and stress. Suggested for 4 companions.",
   "A hot spring that heals companions. Recovers HP and stress. Suggested for 8 companions.",
-  "Takes care of feeding and droppings automatically, though it's a little cramped. Suggested for 2 companions.",
+  "Takes care of feeding and droppings automatically, though it's a little cramped. Suggested for 4 companions.",
   "Takes care of feeding and droppings automatically, with plenty of comfortable room. Suggested for 8 companions.",
   "Sparring again and again in a practice ring. Raises battle count. Suggested for 6 companions."
 ]);

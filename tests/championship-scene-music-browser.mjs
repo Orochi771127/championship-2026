@@ -371,7 +371,7 @@ async function menu(page,group,entry,evidence) {
    // Wait for the real calendar-out/fade-in transition; any newly appearing letter stays blocked.
   }
  }
- for(const target of [page.locator(`.cm-toolbar button[data-menu-id="${group}"]:visible`),page.locator(`.cm-toolbar__menu[data-menu-id="${group}"]:not([hidden]) button[data-entry-id="${entry}"]`)]){
+ for(const target of [page.locator(`.cm-toolbar button[data-menu-id="${group}"]:visible`),page.locator(`.cm-toolbar :is(.cm-toolbar__menu[data-menu-id="${group}"]:not([hidden]), .cm-toolbar__quick:not([hidden])) button[data-entry-id="${entry}"]`)]){
   for(;;){
    await ready();
    try{await target.click({timeout:Math.min(30000,remaining())});remaining();break;}

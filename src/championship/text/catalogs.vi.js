@@ -239,9 +239,9 @@ export const SHOP_DESCRIPTIONS_VI = Object.freeze([
   "Bệnh viện. Giúp tăng phòng thủ. Khuyến nghị 6 cá thể.",
   "Phòng khí độc. Giúp tăng phòng thủ. Khuyến nghị 4 cá thể.",
   "Trạm xá nhỏ. Giúp tăng phòng thủ. Khuyến nghị 2 cá thể.",
-  "Trạm xá. Giúp tăng phòng thủ. Khuyến nghị 6 cá thể.",
+  "Trạm xá. Giúp tăng phòng thủ. Khuyến nghị 4 cá thể.",
   "Suối nước nóng. Giúp tăng phòng thủ. Khuyến nghị 8 cá thể.",
-  "Vườn thú. Giúp tăng phòng thủ. Khuyến nghị 2 cá thể.",
+  "Vườn thú. Giúp tăng phòng thủ. Khuyến nghị 4 cá thể.",
   "Trang trại. Giúp tăng phòng thủ. Khuyến nghị 8 cá thể.",
   "Võ đài. Giúp tăng phòng thủ. Khuyến nghị 6 cá thể."
 ]);

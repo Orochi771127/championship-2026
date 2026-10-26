@@ -92,6 +92,9 @@ export const TOOLBAR_MENUS = Object.freeze([
  */
 export const TOOLBAR_PRODUCT_ENTRIES = Object.freeze({
   SYSTEM: Object.freeze([
+    // Owner 2026-10-27: the bag shows what the shop and the partners' walks put in it.
+    Object.freeze({ id: "backpack", label: "背包", action: "OPEN_BACKPACK", hint: "道具、用品與探索發現", evidence: "OWNER_APPROVED_ADAPTATION_20261027" }),
+    Object.freeze({ id: "journal", label: "探索手帳", action: "OPEN_RANCH_JOURNAL", hint: "夥伴散步找到的東西", evidence: "OWNER_APPROVED_ADAPTATION_20261027" }),
     Object.freeze({ id:"medals", label:"徽章收藏", screen:"MEDALS", hint:"61 場頭銜賽的勝利紀錄", originalRuntimeOnly:true, evidence:"OWNER_APPROVED_ADAPTATION_20261007" }),
     Object.freeze({ id: "settings", label: "Settings", action: "OPEN_SETTINGS", hint: "主題、畫質、聲音與語言", evidence: "PRODUCT_AUTHORED" })
   ])
@@ -117,10 +120,13 @@ export const TOOLBAR_MENU_GROUPS = Object.freeze({
     Object.freeze({ id: "records", title: "紀錄", entries: Object.freeze(["tamer", "schedule"]) }),
     Object.freeze({ id: "day", title: null, entries: Object.freeze(["endDay"]), separate: true })
   ]),
+  // Owner 2026-10-27: while the dock shows Hunt, Battle, Shop and Database the
+  // menu does not repeat them (see TOOLBAR_QUICK_ENTRIES); a tutorial, which
+  // hides the dock, still finds them here.
   SYSTEM: Object.freeze([
     Object.freeze({ id: "go", title: "出發", entries: Object.freeze(["hunt", "battle", "shop"]), prominent: true }),
-    Object.freeze({ id: "reference", title: "資料", entries: Object.freeze(["database", "medals", "help"]) }),
-    Object.freeze({ id: "session", title: null, entries: Object.freeze(["settings", "saveQuit"]), separate: true })
+    Object.freeze({ id: "items", title: "背包與收藏", entries: Object.freeze(["backpack", "journal", "medals", "database"]) }),
+    Object.freeze({ id: "session", title: "系統", entries: Object.freeze(["help", "settings", "saveQuit"]), separate: true })
   ])
 });
 
@@ -229,7 +235,13 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     openMenuId = menu.id;
     menuPanel.replaceChildren();
     menuPanel.dataset.menuId = menu.id;
-    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? []).filter(entry=>toolbarProductEntryAvailable(entry))].map((entry) => [entry.id, entry]));
+    // One button per destination: what the shown dock offers is not repeated.
+    const docked = new Set(syncDock() ? TOOLBAR_QUICK_ENTRIES : []);
+    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? []).filter(entry=>toolbarProductEntryAvailable(entry))]
+      .filter((entry) => !docked.has(entry.id)).map((entry) => [entry.id, entry]));
+    const head = element("div", "cm-toolbar__menu-head");
+    head.append(element("p", "cm-toolbar__menu-title", menu.label));
+    menuPanel.append(head);
     const placed = new Set();
     for (const group of TOOLBAR_MENU_GROUPS[menu.id] ?? []) {
       const entries = group.entries.map((id) => byId.get(id)).filter(Boolean);
@@ -322,6 +334,19 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       .filter(Boolean)
       .map((entry) => entryButton(entry, "cm-toolbar__quick-entry")));
     quick.hidden = currentMode !== TOOLBAR_MODES.TRAINING || tutorialTool !== null;
+    syncDock();
+  }
+  // A shown dock key is that entry's only button (the menu omits it), so it
+  // carries the entry id the menu's button would; a dock that is hidden, or
+  // not drawn by the theme (only the arcade sheet shows it), gives it back.
+  function syncDock() {
+    const rects = typeof quick.getClientRects === "function" ? quick.getClientRects() : null;
+    const shown = !quick.hidden && (rects === null || rects.length > 0);
+    for (const button of quick.children) {
+      if (shown) button.dataset.entryId = button.dataset.quickId;
+      else delete button.dataset.entryId;
+    }
+    return shown;
   }
 
   // Appended last: the menu, rail and hint keep their order; the arcade sheet draws the dock above the rail.
