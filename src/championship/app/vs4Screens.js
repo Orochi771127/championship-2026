@@ -1,5 +1,8 @@
 import { createRanchRowPurchasePrompt } from './ranchRowPurchasePrompt.js';
-import { createHexWorldBoard } from './hexWorldEditor.js';
+import { createHexWorldBoard, hexFootprintIcon } from './hexWorldEditor.js';
+import { ranchSynergyPartners } from './hexWorldPassages.js';
+import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
+import { productPlacementCells, productGridSlot } from '../cage/productRanchGrid.js';
 import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
 import {databaseHeroPortrait} from '../presentation/databaseHeroPortraits.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
@@ -142,7 +145,10 @@ export function createShopView({ root, source }) {
   // button (2026-09-28 QA: 0 Bits greyed Buy with no reason).
   const detailState = element("p", "cm-vs2-shop__detail-state");
   detailState.hidden = true;
-  detailCopy.append(detailName, detailDescription, detailMeta, detailState);
+  // Owner 2026-10-27: a cage's detail names the cages it joins into one area.
+  const detailSynergy = element("p", "cm-vs2-shop__detail-synergy cm-cage-cart__synergy");
+  detailSynergy.hidden = true;
+  detailCopy.append(detailName, detailDescription, detailSynergy, detailMeta, detailState);
   detail.setAttribute("role", "dialog");
   detail.setAttribute("aria-modal", "true");
   const detailActions = element("div", "cm-vs2-shop__detail-actions");
@@ -353,6 +359,9 @@ export function createShopView({ root, source }) {
     appendProductArt(detailArt, selectedRow, { detailView: true });
     detailName.textContent = uiText(selectedName);
     detailDescription.textContent = shopItemDescription(selectedRow);
+    const cageDefinition = selectedRow.category === "CAGES" ? listCageDefinitions().find((entry) => entry.shopRecordIndex === selectedRow.shopRecordIndex) : null;
+    detailSynergy.textContent = cageDefinition ? cageSynergyLabel(cageDefinition.moduleId) : "";
+    detailSynergy.hidden = !cageDefinition;
     detailMeta.textContent = uiText("{bits} 位元幣 · 持有 {owned}/{max}", { bits: selectedRow.unitPriceBits, owned: selectedRow.owned, max: selectedRow.maxOwned });
     const full = selectedRow.owned >= selectedRow.maxOwned;
     const shortBits = full ? 0 : Math.max(0, selectedRow.unitPriceBits - shop.bits);
@@ -1094,6 +1103,16 @@ function expansionPreviewBays(doc = globalThis.document) {
   });
 }
 
+/** 「🔗 可連通：…」 from the ranch's own ecology pairs (Owner 2026-10-27). */
+export function cageSynergyLabel(moduleId) {
+  const definition = getCageDefinitionByModuleId(moduleId);
+  if (!definition) return '';
+  const partners = ranchSynergyPartners(moduleId);
+  if (partners.type === null) return uiText('固定設施，不與其他設施連通');
+  if (partners.sameTypeOnly) return uiText('🔗 同類連通（對齊安全出口）');
+  return uiText('🔗 可連通：{names}', { names: partners.names.map((name) => uiText(name)).join('、') });
+}
+
 export function createCageEditView({ root, source, askToLeave = showChoiceDialog, askToBuy = showChoiceDialog, openExpansionPreview = openRanchExpansionPreview }) {
   const frame = source.getFrame();
   const block = frame.cageEdit;
@@ -1119,7 +1138,17 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   );
   const census = element("div", "cm-vs2-cage-rank");
   census.setAttribute("aria-live", "polite");
-  header.append(copy, census);
+  // Owner 2026-10-27: the how-to lines fold into a "?" key on the hex world.
+  const help = element("button", "cm-cage-help", "?");
+  help.type = "button";
+  help.setAttribute("aria-label", uiText("操作說明"));
+  help.setAttribute("aria-expanded", "false");
+  help.addEventListener("click", () => {
+    const open = shell.dataset.helpOpen !== "true";
+    shell.dataset.helpOpen = open ? "true" : "false";
+    help.setAttribute("aria-expanded", String(open));
+  });
+  header.append(copy, census, help);
 
   const body = element("div", "cm-vs2-body cm-vs2-cage-edit__body");
   const board = element("div", "cm-vs2-cage-board");
@@ -1153,7 +1182,23 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   const inventoryPanel = element('div', 'cm-cage-inventory-panel');
   boardPanel.append(boardHint, boardScroll, expansionControls);
   inventoryPanel.append(facilities, tray);
-  body.append(boardPanel, inventoryPanel, status);
+  // Size filters for the cartridge dock (hex world only). 全部 shows both the
+  // cages still in hand and the ones already on the board.
+  const filters = element('div', 'cm-cage-filters');
+  filters.setAttribute('role', 'tablist');
+  filters.setAttribute('aria-label', uiText('依格數篩選設施'));
+  let filter = 'all';
+  const FILTERS = [['all', '全部'], ['1', '1格'], ['2-3', '2~3格'], ['4-5', '4~5格'], ['placed', '場上已放置']];
+  for (const [id, label] of FILTERS) {
+    const tab = element('button', 'cm-cage-filter', label);
+    tab.type = 'button';
+    tab.dataset.filter = id;
+    tab.setAttribute('role', 'tab');
+    tab.addEventListener('click', () => { filter = id; applyFilter(); });
+    filters.append(tab);
+  }
+  filters.hidden = true;
+  body.append(boardPanel, filters, inventoryPanel, status);
 
   // Footer rule shared by every screen: leave on the left, the one primary
   // action on the right.
@@ -1237,6 +1282,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     }
     paintedVerdict = cage.lastVerdict ?? null;
     confirm.disabled = !cage.dirty;
+    confirm.dataset.dirty = cage.dirty ? "true" : "false";
 
     if (cage.layoutVersion === PRODUCT_RANCH_GRID && !hexBoard) {
       hexBoard = createHexWorldBoard({ source, openLandPurchase: row => { void rowPurchase.open(row); } });
@@ -1248,6 +1294,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     if (typeof hexBoard !== 'undefined' && hexBoard !== null) {
       hexBoard.element.hidden = !hexWorld; boardScroll.hidden = hexWorld; expansionControls.hidden = hexWorld;
       root.dataset.hexWorld = hexWorld ? 'true' : 'false';
+      filters.hidden = !hexWorld;
       if (hexWorld) {
         boardHint.textContent = uiText('拖曳空白處移動視角 · 點設施可移動或收回 · 先選設施再點空格放置');
         hexBoard.paint(cage);
@@ -1383,6 +1430,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       const src = cageUiImage(placement.moduleId);
       if (src) { const image = element('img', 'cm-facility-thumb'); image.src = src; image.alt = ''; tile.append(image); }
       tile.append(element('strong', '', displayName), element('span', '', cageUiSummary(placement.moduleId, placement.trainingSummary)));
+      decorateCartridge(tile, placement.moduleId, { placed: true });
       tile.addEventListener('click', () => source.intents.removeCagePlacement(placement.instanceId??placement.moduleId));
       facilities.append(tile);
     }
@@ -1390,6 +1438,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     tray.replaceChildren();
     if (cage.tray.length === 0) {
       tray.append(element("p", "cm-vs2-shop__empty", "已持有的設施皆已放置。"));
+      applyFilter();
       return;
     }
     for (const item of cage.tray) {
@@ -1405,11 +1454,37 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         element("span", "cm-vs2-cage-tray__name", `${cageUiName(item.moduleId, item.displayName)} ×${item.availableCount??1}`),
         element("span", "cm-vs2-cage-tray__effect", cageUiSummary(item.moduleId, item.trainingSummary))
       );
+      decorateCartridge(row, item.moduleId, { count: item.availableCount ?? 1 });
       row.addEventListener("click", () => {
         source.intents.selectCageModule(item.selected ? null : item.moduleId);
       });
       tray.append(row);
     }
+    applyFilter();
+  }
+
+  // Cartridge face (Owner 2026-10-27): footprint shape, count, and which cages it joins.
+  function decorateCartridge(node, moduleId, { placed = false, count = null } = {}) {
+    const cells = productPlacementCells({ moduleId, slotIndex: productGridSlot(10, 10) })?.length ?? 0;
+    node.dataset.cells = String(cells);
+    node.dataset.placed = placed ? 'true' : 'false';
+    node.prepend(hexFootprintIcon(node.ownerDocument, moduleId, 28));
+    if (count !== null) node.append(element('span', 'cm-cage-cart__count', `×${count}`));
+    if (placed) node.append(element('span', 'cm-cage-cart__count cm-cage-cart__count--placed', '已放置'));
+    const label = cageSynergyLabel(moduleId);
+    if (label) node.append(element('span', 'cm-cage-cart__synergy', label));
+  }
+  function applyFilter() {
+    for (const tab of filters.children) tab.setAttribute('aria-selected', String(tab.dataset.filter === filter));
+    const fits = (node) => {
+      const cells = Number(node.dataset.cells);
+      if (filter === 'placed') return node.dataset.placed === 'true';
+      if (filter === '1') return cells === 1;
+      if (filter === '2-3') return cells >= 2 && cells <= 3;
+      if (filter === '4-5') return cells >= 4;
+      return true;
+    };
+    for (const node of [...tray.children, ...facilities.children]) if (node.dataset?.cells !== undefined) node.hidden = !fits(node);
   }
 
   paint(frame);

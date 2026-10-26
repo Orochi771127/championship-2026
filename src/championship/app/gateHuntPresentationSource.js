@@ -406,6 +406,11 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       committed("cage-layout");
       return commit();
     },
+    // Owner 2026-10-27: the editor's 還原 key drops the unconfirmed draft (optional on the application).
+    revertCageEdit() {
+      app.revertCageEdit?.();
+      return commit();
+    },
     // Ranch expansion prototype (non-paid): optional on the application.
     grantRanchExpansion() {
       app.grantRanchExpansionPrototype?.();

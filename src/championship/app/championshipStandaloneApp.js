@@ -1296,6 +1296,8 @@ export function createChampionshipStandaloneApp({
       const profile=raisingNativeProfile(instanceId);
       return actor&&profile ? Object.freeze({
         ...projectNativeRaisingActor(actor),
+        // Presentation only: on its way to look at a newly opened passage.
+        visitingPassage:Boolean(actor.explorationVisit&&actor.explorationRoute?.length),
         // Current and maximum HP for frame readers. These reads do not create
         // a second HP owner; the recovery-cage stars do not read them.
         currentHp:profile.fields["050"],
@@ -2490,6 +2492,14 @@ export function createChampionshipStandaloneApp({
       return changeRanchExpansion((editor) => editor.revokeExpansion(...cageEditArgs()));
     },
 
+    /** Drop the unconfirmed draft; the committed layout and save are untouched. */
+    revertCageEdit() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      requireCageEdit().revert(...cageEditArgs());
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
     confirmCageEdit() {
       if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
         throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
@@ -2500,12 +2510,21 @@ export function createChampionshipStandaloneApp({
       editor.confirm(...cageEditArgs());
       if (JSON.stringify(editor.toSave()) !== before) {
         const nextGround=createNativeRaisingGround({...editor.toSave(),unlockedCount:slotCountForTamerRank(tamerRankValue)});
+        // Owner 2026-10-27: partners beside a newly opened passage go and look.
+        const opened=raisingGround?.navigation&&nextGround?.navigation
+          ?nextGround.navigation.connections.filter(c=>!raisingGround.navigation.connections.some(o=>o.id===c.id)):[];
+        const visits=new Map();
+        for(const c of opened){
+          const left=nextGround.placements[c.left]?.instanceId,right=nextGround.placements[c.right]?.instanceId;
+          if(left&&right){visits.set(left,right);visits.set(right,left);}
+        }
         if(raisingGround?.navigation&&nextGround?.navigation){
           for(const actor of raisingActors.values())actor.positionQ12=ranchPositionAfterLayout(raisingGround,nextGround,actor.positionQ12,actor.cageInstanceId??actor.cageDefinitionIndex);
           for(const item of [...raisingFoods,...raisingWaste])item.positionQ12=ranchPositionAfterLayout(raisingGround,nextGround,item.positionQ12,item.cageInstanceId??item.cageDefinitionIndex);
           raisingGround=nextGround;storeNativeRaisingPositions();storeNativeRaisingHome();
         }
         raisingActors.clear();initializeNativeRaisingHome({restoreLayoutPositions:true});savePort.markDirty();
+        for(const actor of raisingActors.values()){const across=visits.get(actor.cageInstanceId);if(across)actor.passageVisit=across;}
       }
       publishScreens();
       return this.getCageEditFrame();

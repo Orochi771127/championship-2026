@@ -57,7 +57,9 @@ assets/production/vfx/original-rom-conversion-v1/
 _tmp_*
 
 # Local editor/preview configuration. Dev-tool settings, not product source.
-.claude/
+.claude/*
+# Owner 2026-10-27: project skills are shared; local settings stay ignored.
+!.claude/skills/
 
 # Local review descriptors contain intake metadata. Public render projections
 # must pass the closed artifact boundary before they can replace these inputs.

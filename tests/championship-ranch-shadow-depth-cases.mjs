@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as THREE from '../node_modules/three/build/three.module.js';
-import {createRanchGroundShadows,ranchShadowWorldPoint,ranchShadowScreenEllipses} from '../src/championship/presentation/ranchGroundShadows.js';
+import {createRanchGroundShadows,ranchShadowWorldPoint,ranchShadowScreenEllipses,RANCH_CONTACT_SHADOW_OPACITY} from '../src/championship/presentation/ranchGroundShadows.js';
 import {ranchWorldToNative,RANCH_ELEVATION} from '../src/championship/presentation/ranchThreeCoordinates.js';
 let checks=0;const check=(name,fn)=>{fn();checks++;console.log('PASS',name);};
 const bounds={x:20,y:-130},scale=2;
@@ -19,7 +19,7 @@ manager.reset();manager.sync('actor',entry,bounds,scale,true);manager.prune();
 check('shadow shares scene with depth testing, never depth writes or actor override',()=>{
  assert.equal(scene.children.length,1);const m=scene.children[0].material;
  assert.equal(m.depthTest,true);assert.equal(m.depthWrite,false);assert.equal(m.transparent,true);assert.equal(m.opacity,1);
- assert.equal(m.uniforms.opacity.value,.26*.8);assert.equal(shadow.renderable,false);
+ assert.equal(m.uniforms.opacity.value,RANCH_CONTACT_SHADOW_OPACITY*.8);assert.equal(shadow.renderable,false);
  assert.match(m.fragmentShader,/coverage=max/);assert.match(m.fragmentShader,/discard/);
  assert.equal(scene.children[0].renderOrder,0);
 });
@@ -46,7 +46,7 @@ check('context-loss reset and dispose restore fallback, repeated lifetimes relea
 });
 check('integration keeps original actor support shader and alpha cutout unchanged',()=>{
  const text=fs.readFileSync(new URL('../src/championship/presentation/ranchThreeScene.js',import.meta.url),'utf8');
- assert.match(text,/alphaTest:\.15/);assert.match(text,/groundShadows.sync\(id,entry,bounds,pixelScale,sprites.get\(id\)\?\.seen===true\)/);
+ assert.match(text,/alphaTest:\.15/);assert.match(text,/groundShadows.sync\(id,entry,bounds,pixelScale,sprites.get\(id\)\?\.seen===true,view\)/);
  assert.match(text,/groundShadows.prune\(\);\s*renderer.render/);assert.match(text,/if\(disposed\|\|lost\)\{groundShadows.reset/);
  assert.doesNotMatch(text,/depthTest\s*:\s*false/);
 });
