@@ -740,4 +740,10 @@
 /* Numbers ride above both bars. */
 .cm-vs5-meter :is(.cm-vs5-meter__value, .cm-vs5-meter__number-part) { position: relative; z-index: 2; }
 :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-fighter__name { color: #fff; text-shadow: 0 2px 0 var(--ax-ink); }
+/* Sheets open over the cards only (inside the body), never over the footer's way back. */
+:root body .cm-vs2-root[data-screen]:is([data-shop-layout="ARCADE_GRID_R1"], [data-database-layout="ARCADE_GRID_R1"]) .cm-vs2-shop__body { position: relative; }
+:root body .cm-vs2-root[data-screen] :is(.cm-vs2-shop__sheet, .cm-vs2-database__sheet) { position: absolute; inset: 0; z-index: 5; padding: 8px; }
+@media (max-width: 600px) {
+  :root body .cm-vs2-root[data-screen] :is(.cm-vs2-shop__sheet, .cm-vs2-database__sheet) { padding: 0; }
+}
 

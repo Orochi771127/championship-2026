@@ -157,7 +157,9 @@ function assertCohortThumbnailMeasured(actual,species,cohort){
   assert.deepEqual(actual.natural,[expected.thumbnail.width,expected.thumbnail.height]);
   assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.loading,'lazy');assert.equal(actual.objectFit,'contain');
   const r=actual.imageRect,b=actual.rowRect,v=actual.viewport;
-  assert.ok(Math.abs(r.width-32)<=.75&&Math.abs(r.height-32)<=.75,'Normal thumbnail must remain32 CSS px');
+  // Owner 2026-10-26: the arcade rebuild's dex cards show the portrait in a large well
+  // (112 / 88 / 72 px by layout), replacing the earlier 32 px list thumbnail.
+  assert.ok(r.width>=64&&r.height>=64,'Dex card portrait must fill its card well');
   assert.ok(r.x>=b.x-.75&&r.right<=b.right+.75&&r.y>=b.y-.75&&r.bottom<=b.bottom+.75,'Thumbnail contained in normal row');
   assert.ok(r.x>=-1&&r.right<=v.width+1&&r.y>=-1&&r.bottom<=v.height+1,'Actual thumbnail must be visible after scrolling');
 }

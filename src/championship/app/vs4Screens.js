@@ -171,7 +171,8 @@ export function createShopView({ root, source }) {
   shelf.append(previous, list, next);
   const status = element("p", "cm-vs2-shop__status");
   status.setAttribute("aria-live", "polite");
-  body.append(tabs, shelf, status);
+  // The sheet opens over the cards only; the header and the footer's way back stay usable.
+  body.append(tabs, shelf, status, sheet);
 
   // Footer rule: leave on the left, the one primary action -- Buy -- on the
   // right. Leaving used to wear the gold while Buy looked secondary.
@@ -183,7 +184,7 @@ export function createShopView({ root, source }) {
   footer.append(back);
   detailActions.append(buy);
   shell.append(header, body, footer);
-  root.append(shell, sheet);
+  root.append(shell);
 
   const categories = Object.keys(CATEGORY_LABELS);
   let activeCategory = categories[0];
@@ -560,7 +561,6 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
   const detail = element("div", "cm-vs2-database__detail");
   detail.hidden = true;
   catalogPane.append(filterLabel, stageChips, list);
-  body.append(catalogPane);
   const sheet = element("div", "cm-vs2-database__sheet");
   sheet.hidden = true;
   const sheetScrim = element("div", "cm-vs2-database__sheet-scrim");
@@ -570,6 +570,8 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
   closeSheet.type = "button";
   sheetPanel.append(closeSheet, detail);
   sheet.append(sheetScrim, sheetPanel);
+  // Over the grid only: the header and the footer's way back stay usable.
+  body.append(catalogPane, sheet);
 
   // Leaving is not this screen's primary action, so it does not wear gold.
   const footer = element("footer", "cm-vs2-footer");
@@ -578,7 +580,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
   back.setAttribute("aria-label", uiText("Return to Raising Home"));
   footer.append(back);
   shell.append(header, body, footer);
-  root.append(shell, sheet);
+  root.append(shell);
 
   let listScroll = null;
   let lastOpened = null;
