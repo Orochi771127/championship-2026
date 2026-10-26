@@ -60,7 +60,7 @@ test("the quick dock is the observed System entries themselves, appended after t
   assert.equal(quick.hidden, true, "hidden until a mode is set");
   toolbar.setMode(TOOLBAR_MODES.TRAINING);
   assert.equal(quick.hidden, false);
-  assert.deepEqual(quick.children.map((button) => button.dataset.entryId), ["hunt", "battle", "shop", "database"]);
+  assert.deepEqual(quick.children.map((button) => button.dataset.quickId), ["hunt", "battle", "shop", "database"]);
   for (const button of quick.children) {
     assert.equal(button.className, "cm-toolbar__quick-entry");
     assert.equal(button.attributes.role, undefined, "a dock key is a plain button, not a menu item");

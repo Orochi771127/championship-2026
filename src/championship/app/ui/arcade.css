@@ -322,10 +322,10 @@
 :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-icon { display: none; }
 :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-body); font-weight: var(--fw-heavy); line-height: 1.1; }
 :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-hint { display: none; }
-:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-entry-id="hunt"]     { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
-:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-entry-id="battle"]   { --key-face: var(--ax-red);    --key-shade: var(--ax-red-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
-:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-entry-id="shop"]     { --key-face: var(--ax-yellow); --key-shade: var(--ax-yellow-sh); }
-:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-entry-id="database"] { --key-face: var(--ax-purple); --key-shade: var(--ax-purple-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-quick-id="hunt"]     { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-quick-id="battle"]   { --key-face: var(--ax-red);    --key-shade: var(--ax-red-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-quick-id="shop"]     { --key-face: var(--ax-yellow); --key-shade: var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-quick-id="database"] { --key-face: var(--ax-purple); --key-shade: var(--ax-purple-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
 
 /* ---- Screens: titles on the stage, paper cards below ------------------------------ */
 :root[data-theme="arcade"] :is(.cm-vs2-title, .cm-vs5-title) {

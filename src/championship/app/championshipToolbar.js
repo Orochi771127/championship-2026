@@ -204,7 +204,9 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     button.setAttribute("aria-label", uiText(entry.label));
     button.type = "button";
     if (className === "cm-toolbar__entry") button.setAttribute("role", "menuitem");
-    button.dataset.entryId = entry.id;
+    // Dock keys carry their own id, so a query for a menu entry finds only the menu's.
+    if (className === "cm-toolbar__entry") button.dataset.entryId = entry.id;
+    else button.dataset.quickId = entry.id;
     const reachable = Boolean(entry.screen || entry.action);
     button.disabled = !reachable || (tutorialTool!==null&&!(tutorialTool==="SYSTEM"&&entry.id===tutorialMenuEntry));
     const tutorialCheckpoint=getTutorialCheckpoint();
