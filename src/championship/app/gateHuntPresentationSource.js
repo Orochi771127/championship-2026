@@ -238,6 +238,8 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         plugins:huntPluginReadout(runtime,app.getHuntLoadout()?.getHudCapabilities()),
         time:app.getHuntTimeState?.() ?? null,
         gateName: gate?.tutorial ? "教學關卡" : gate?.displayName ?? null,
+        // Presentation mood only (ambience colour, particles); never a rule.
+        biomeId: gate?.tutorial ? null : gate?.biomeId ?? null,
         actorName: runtime.getPlayer().displayName,
         // What the HUD may display is decided at loadout by the fitted plugins.
         // A readout with no plugin behind it stays dark - the recovered rule.

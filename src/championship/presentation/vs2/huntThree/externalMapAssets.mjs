@@ -85,7 +85,9 @@ export function createVerifiedGridSupport(manifest,heights){
 }
 export function configureDraco({THREE,GLTFLoader,DRACOLoader,decoderPath,baseUrl}){
   const path=new URL(decoderPath),base=new URL(baseUrl);
-  if(path.origin!==base.origin||path.search||path.hash||!path.pathname.endsWith('/node_modules/three/examples/jsm/libs/draco/gltf/'))
+  // The loader hands every map the published decoder (libs/draco/); libs/draco/gltf/
+  // is not published, so requiring it alone sent hm01/hm08 to 2D on every load.
+  if(path.origin!==base.origin||path.search||path.hash||!/\/node_modules\/three\/examples\/jsm\/libs\/draco\/(gltf\/)?$/.test(path.pathname))
     throw new Error('HUNT_THREE_UNTRUSTED_DECODER_PATH');
   const allowed=new Set(['draco_wasm_wrapper.js','draco_decoder.wasm','draco_decoder.js'].map(name=>new URL(name,path).href));
   const manager=new THREE.LoadingManager();manager.setURLModifier(url=>{

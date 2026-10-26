@@ -17,7 +17,7 @@ export function configureAuthoredLighting({manifest,scene,ambient,sun,night=fals
 // Rendering and actor ownership remain in the existing shared Three/Pixi pass.
 export async function loadAuthoredMapAssets({THREE,GLTFLoader,DRACOLoader,dracoDecoderPath,manifest,fieldId,baseUrl,signal,disposer}){
   if(manifest.schema!=='HUNT_AUTHORED_MAP.v1'||!manifest.fields.includes(fieldId)
-    ||!['hm02','hm03','hm04','hm05','hm06','hm09','hm10','hm11','hm13','hm15','hm16','hm17','hm18'].includes(manifest.map))throw Error('HUNT_AUTHORED_FIELD_MISMATCH');
+    ||!['hm02','hm03','hm04','hm05','hm06','hm09','hm10','hm11','hm13','hm14','hm15','hm16','hm17','hm18'].includes(manifest.map))throw Error('HUNT_AUTHORED_FIELD_MISMATCH');
   validateIdentity(manifest.glb);
   const manager=new THREE.LoadingManager();
   manager.setURLModifier(url=>{if(url.startsWith('blob:')||url.startsWith('data:'))return url;throw Error('HUNT_AUTHORED_EXTERNAL_RESOURCE');});

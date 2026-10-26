@@ -10,7 +10,7 @@ const manifest = JSON.parse(fs.readFileSync("assets/production/temporary/vs2-hun
 
 test("VS2-P screens consume only the injected presentation source", () => {
   const imports = [...screens.matchAll(/^import .* from ['"]([^'"]+)['"];\r?$/gm)].map(match => match[1]);
-  assert.deepEqual(imports,["../text/uiText.js","../presentation/shopGoodsUiArt.js","../hunt/loadout/huntEquipmentCatalog.js","../presentation/ceremony/ceremonyRunner.js","../presentation/ceremony/ceremonyScenes.js","./vs2PresentationAuthority.js"],"only existing display adapters and read-only labels are imported");
+  assert.deepEqual(imports,["../text/uiText.js","../presentation/shopGoodsUiArt.js","../hunt/loadout/huntEquipmentCatalog.js","../presentation/ceremony/ceremonyRunner.js","./ui/loadingWalker.js","./ui/ambienceLayer.js","../presentation/ceremony/ceremonyScenes.js","./vs2PresentationAuthority.js"],"only existing display adapters and read-only labels are imported");
   assert.doesNotMatch(screens, /import\s*\(/);
   assert.equal(VS2_UI_AUTHORITY,"CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R");
   assert.equal(VS2_PRESENTATION_MODES.PLAYER,"PLAYER_MODE");

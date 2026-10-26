@@ -66,8 +66,10 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const up=new THREE.Vector3(...view.up),direction=new THREE.Vector3(...view.direction);
   const scene=new THREE.Scene(), camera=new THREE.OrthographicCamera(-1,1,1,-1,.1,600);
   camera.up.copy(up);
-  scene.add(new THREE.HemisphereLight(0xdbeeff,0x6b7650,2));
-  const sun=new THREE.DirectionalLight(0xffeed5,2.6);sun.castShadow=renderer.shadowMap.enabled;
+  // Owner 2026-10-27 HD-2D: a warm key light and a cool blue-violet fill under
+  // it, so lit faces and shaded sides of rock, trees and buildings separate.
+  scene.add(new THREE.HemisphereLight(0xd8e8ff,0x3e4270,1.8));
+  const sun=new THREE.DirectionalLight(0xffe2b4,2.95);sun.castShadow=renderer.shadowMap.enabled;
   sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;
   sun.shadow.camera.top=35;sun.shadow.camera.bottom=-35;sun.shadow.camera.far=150;
   sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;

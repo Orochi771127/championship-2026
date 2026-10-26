@@ -89,6 +89,7 @@ import { createHuntLayoutResolver } from './huntLayoutResolver.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import { openRanchBackpack } from './ranchBackpack.js';
 import { RANCH_JOURNAL_OPEN_EVENT } from './ranchDiscoveryJournal.js';
+import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
@@ -929,7 +930,7 @@ async function mountRaisingHome() {
       // on instead of one that is merely slow.
       const progress = createLoadProgressView({ steps: [
         { id: 'engine', key: 'LOAD_STEP_ENGINE' }, { id: 'facilities', key: 'LOAD_STEP_FACILITIES' },
-        { id: 'partners', key: 'LOAD_STEP_PARTNERS' }, { id: 'scene', key: 'LOAD_STEP_SCENE' }] });
+        { id: 'partners', key: 'LOAD_STEP_PARTNERS' }, { id: 'scene', key: 'LOAD_STEP_SCENE' }], walker: true });
       let tracking = null;
       const stopTracking = () => { tracking?.stop(); tracking = null; };
       status.append(message, progress.element, retry, cancel, leave, reloadGame); (recoveryHost??host).append(status);
@@ -950,6 +951,8 @@ async function mountRaisingHome() {
       };
       expansionCta.addEventListener('click', openExpansionSheet);
       host.append(expansionCta);
+      // HD-2D ambience over the ranch (Owner 2026-10-27): vignette and warm motes.
+      const ambience = mountAmbience(host, { theme: 'sun' });
       function placeExpansionCta(rect) {
         const frame = rect?.visible;
         // Too little of the rows on screen to point at: hide rather than float.
@@ -1108,7 +1111,7 @@ async function mountRaisingHome() {
         getDiagnostics() { return scene?.getDiagnostics?.() ?? { renderer: 'LOADING', state: phase }; },
         dispose() {
           if (closed) return; closed = true; residentNotice.dispose();
-          attempt?.cancel(); effects?.cancel(); stopTracking(); scene?.dispose(); scene = null; status.remove(); expansionCta.remove();
+          attempt?.cancel(); effects?.cancel(); stopTracking(); progress.dispose(); ambience.dispose(); scene?.dispose(); scene = null; status.remove(); expansionCta.remove();
         }
       });
     }
