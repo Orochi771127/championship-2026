@@ -651,9 +651,9 @@ async function selfTest() {
   assert.equal(MATRIX_TARGETS.length,13);assert.equal(MATRIX_TARGETS.length*8+1+8,113);
   const scopedThumbFixtures=[];
   for(const width of [1440,390,360])for(const e of APPROVED_GR_FIXES){
-    const actual={speciesIndex:e.speciesIndex,displayCode:e.displayCode,src:new URL(e.thumbnail.src,PUBLIC_BASE).href,natural:[e.thumbnail.width,e.thumbnail.height],complete:true,hidden:false,loading:'lazy',objectFit:'contain',imageRect:{x:20,y:20,width:32,height:32,right:52,bottom:52},rowRect:{x:10,y:10,right:100,bottom:100},viewport:{width,height:844},screenshot:width===360?null:`thumb-${e.speciesIndex}-${width}.png`};
+    const actual={speciesIndex:e.speciesIndex,displayCode:e.displayCode,src:new URL(e.thumbnail.src,PUBLIC_BASE).href,natural:[e.thumbnail.width,e.thumbnail.height],complete:true,hidden:false,loading:'lazy',objectFit:'contain',imageRect:{x:16,y:16,width:112,height:112,right:128,bottom:128},rowRect:{x:10,y:10,right:140,bottom:200},viewport:{width,height:844},screenshot:width===360?null:`thumb-${e.speciesIndex}-${width}.png`};
     assertScopedGRThumbnailMeasured(actual,e.speciesIndex);assert.throws(()=>assertThumbnailMeasured(actual,e.speciesIndex),'Old44 cohort remains separate');scopedThumbFixtures.push(actual);
-    for(const changed of [{src:'wrong.webp'},{natural:[128,128]},{hidden:true},{complete:false},{loading:'eager'},{objectFit:'cover'},{imageRect:{...actual.imageRect,width:64}},{rowRect:{x:30,y:30,right:40,bottom:40}}])assert.throws(()=>assertScopedGRThumbnailMeasured({...actual,...changed},e.speciesIndex));
+    for(const changed of [{src:'wrong.webp'},{natural:[128,128]},{hidden:true},{complete:false},{loading:'eager'},{objectFit:'cover'},{imageRect:{...actual.imageRect,width:40}},{rowRect:{x:30,y:30,right:40,bottom:40}}])assert.throws(()=>assertScopedGRThumbnailMeasured({...actual,...changed},e.speciesIndex));
   }
   assertScopedGRThumbnailCoverage(scopedThumbFixtures);
   assert.throws(()=>assertScopedGRThumbnailCoverage(scopedThumbFixtures.slice(1)));
