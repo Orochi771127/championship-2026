@@ -389,7 +389,7 @@ async function main() {
     evidence.registrationBefore = await registration();
     assert.deepEqual(evidence.registrationBefore.registeredSpecies,[],'Normal new game must not manufacture any registration');
     await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();
-    await page.locator('.cm-toolbar__menu:not([hidden]) button[data-entry-id="database"]').click();
+    await page.locator('.cm-toolbar :is(.cm-toolbar__menu:not([hidden]), .cm-toolbar__quick:not([hidden])) button[data-entry-id="database"]').click();
     await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor();
     await page.locator('.cm-vs2-database__stage').selectOption('');
     await require('./championship-database-swipe-browser.cjs')(page,{output,evidence});

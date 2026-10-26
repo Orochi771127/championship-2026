@@ -236,7 +236,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     menuPanel.replaceChildren();
     menuPanel.dataset.menuId = menu.id;
     // One button per destination: what the shown dock offers is not repeated.
-    const docked = new Set(quick.hidden ? [] : TOOLBAR_QUICK_ENTRIES);
+    const docked = new Set(syncDock() ? TOOLBAR_QUICK_ENTRIES : []);
     const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? []).filter(entry=>toolbarProductEntryAvailable(entry))]
       .filter((entry) => !docked.has(entry.id)).map((entry) => [entry.id, entry]));
     const head = element("div", "cm-toolbar__menu-head");
@@ -334,12 +334,19 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       .filter(Boolean)
       .map((entry) => entryButton(entry, "cm-toolbar__quick-entry")));
     quick.hidden = currentMode !== TOOLBAR_MODES.TRAINING || tutorialTool !== null;
-    // A shown dock key is that entry's only button (the menu omits it), so it
-    // carries the entry id the menu's button would; a hidden dock gives it back.
+    syncDock();
+  }
+  // A shown dock key is that entry's only button (the menu omits it), so it
+  // carries the entry id the menu's button would; a dock that is hidden, or
+  // not drawn by the theme (only the arcade sheet shows it), gives it back.
+  function syncDock() {
+    const rects = typeof quick.getClientRects === "function" ? quick.getClientRects() : null;
+    const shown = !quick.hidden && (rects === null || rects.length > 0);
     for (const button of quick.children) {
-      if (quick.hidden) delete button.dataset.entryId;
-      else button.dataset.entryId = button.dataset.quickId;
+      if (shown) button.dataset.entryId = button.dataset.quickId;
+      else delete button.dataset.entryId;
     }
+    return shown;
   }
 
   // Appended last: the menu, rail and hint keep their order; the arcade sheet draws the dock above the rail.

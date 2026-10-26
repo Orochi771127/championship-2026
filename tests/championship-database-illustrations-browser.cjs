@@ -49,7 +49,7 @@ async function main(){let browser,context,server,page;const jobs=[];
   await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();const decline=page.locator('dialog[open] [data-action="decline"]');await decline.waitFor({state:'visible',timeout:15000});await decline.click();await decline.waitFor({state:'hidden'});
   const registration=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('championshipModernSave:v1'))?.progression?.registeredSpecies??[]);
   report.registrationBefore=await registration();assert.deepEqual(report.registrationBefore,[]);
-  await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();await page.locator('.cm-toolbar__menu:not([hidden]) button[data-entry-id="database"]').click();await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor();await page.locator('.cm-vs2-database__stage').selectOption('ART');
+  await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();await page.locator('.cm-toolbar :is(.cm-toolbar__menu:not([hidden]), .cm-toolbar__quick:not([hidden])) button[data-entry-id="database"]').click();await page.locator('#cm-root[data-active-screen="DATABASE"]').waitFor();await page.locator('.cm-vs2-database__stage').selectOption('ART');
   assert.equal(await page.locator('.cm-vs2-database__row').count(),12);
   for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
    await page.setViewportSize(viewport);

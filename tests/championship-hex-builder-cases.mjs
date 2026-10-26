@@ -99,8 +99,9 @@ test('the System menu keeps every destination once and adds the bag and the jour
   for (const id of ['backpack', 'journal']) assert.ok(TOOLBAR_PRODUCT_ENTRIES.SYSTEM.some((entry) => entry.id === id && entry.action));
   assert.deepEqual([...TOOLBAR_QUICK_ENTRIES], ['hunt', 'battle', 'shop', 'database']);
   const source = fs.readFileSync('src/championship/app/championshipToolbar.js', 'utf8');
-  assert.match(source, /docked = new Set\(quick\.hidden \? \[\] : TOOLBAR_QUICK_ENTRIES\)/, 'a shown dock is not repeated in the menu');
-  assert.match(source, /button\.dataset\.entryId = button\.dataset\.quickId/, 'the shown dock key carries the entry id instead');
+  assert.match(source, /docked = new Set\(syncDock\(\) \? TOOLBAR_QUICK_ENTRIES : \[\]\)/, 'a shown dock is not repeated in the menu');
+  assert.match(source, /if \(shown\) button\.dataset\.entryId = button\.dataset\.quickId;/, 'the shown dock key carries the entry id instead');
+  assert.match(source, /quick\.getClientRects\(\)/, 'a dock the theme does not draw counts as hidden');
 });
 
 test('the bag lists owned supplies; journal finds name the records they credit', () => {
