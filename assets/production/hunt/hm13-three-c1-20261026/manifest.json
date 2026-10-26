@@ -1,0 +1,25 @@
+{
+  "schema": "HUNT_AUTHORED_MAP.v1",
+  "map": "hm13",
+  "assetVersion": "c1-20261026",
+  "projection": {
+    "worldWidthPx": 2880,
+    "worldHeightPx": 2880,
+    "unitsPerWorldPixel": 0.022222222222222223,
+    "elevationDegrees": 55
+  },
+  "fields": [
+    "field_hm13_01",
+    "field_hm13_02"
+  ],
+  "glb": {
+    "file": "terrain-props.glb",
+    "sha256": "afc5ab5226649e9cc6d6b2a99890ee7bc40de4f76ed333ec9a596bf44252b941",
+    "bytes": 1857332
+  },
+  "clearColor": 2437418,
+  "flatSupport": {
+    "height": 0,
+    "exclusions": []
+  }
+}

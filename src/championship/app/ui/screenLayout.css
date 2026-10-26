@@ -1107,3 +1107,556 @@
 @media (hover: hover) and (pointer: fine) {
   :root[data-theme="arcade"] body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility):hover:not(:disabled) { transform: translateY(-2px) rotate(-1deg); }
 }
+
+/* ======================================================================== *
+ * Hunt destination 2026-10-27 (Owner): holo planet navigator on one screen.
+ * The globe fills the upper area with the chosen destination's visor on its
+ * lower edge; a sideways cartridge carousel sits below; the footer keys stay.
+ * Globe and carousel follow each other (vs2Screens.js). The toggle shows every
+ * card at once as a compact grid.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header { padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: 6px; align-items: center; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-kicker,
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-subtitle { display: none; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-title { margin: 0; font-size: 22px; line-height: 1.15; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas: "world" "carousel";
+  align-content: stretch;
+  gap: 10px;
+  padding-bottom: 4px;
+  overflow: hidden;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > * { flex-shrink: 1; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-gate3d {
+  grid-area: world;
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+  align-self: stretch;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__bar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 5;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  pointer-events: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__bar > * { pointer-events: auto; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__bar-copy { padding: 4px 10px; border-radius: 999px; background: rgba(20, 20, 31, 0.7); font-size: 12px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__toggle { min-width: 0; min-height: 40px; padding: 0 12px; font-size: 13px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host { min-height: 0; height: auto; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__hint { left: 50%; bottom: auto; top: 54px; max-width: none; transform: translateX(-50%); white-space: nowrap; font-size: 11px; opacity: 0.8; }
+
+/* The holo stage: atmosphere glow behind the canvas, a crosshair and two
+   graticule rings in front (pointer-events none). */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host {
+  background:
+    radial-gradient(closest-side, rgba(82, 227, 255, 0.18), rgba(82, 227, 255, 0.05) 62%, transparent 76%),
+    radial-gradient(120% 90% at 50% 120%, rgba(255, 196, 90, 0.12), transparent 60%);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::before,
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::before {
+  background:
+    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(127, 249, 224, 0.22) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(0deg, transparent calc(50% - 0.5px), rgba(127, 249, 224, 0.22) 50%, transparent calc(50% + 0.5px));
+  mask-image: radial-gradient(closest-side, transparent 36%, #000 40%, #000 62%, transparent 70%);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::after {
+  margin: auto;
+  width: auto;
+  height: 90%;
+  max-width: 90%;
+  aspect-ratio: 1;
+  border: 1px dashed rgba(127, 249, 224, 0.28);
+  border-radius: 50%;
+  box-shadow: 0 0 0 14px transparent, 0 0 0 15px rgba(255, 196, 90, 0.16);
+  animation: cm-holo-spin 60s linear infinite;
+}
+@keyframes cm-holo-spin { to { rotate: 360deg; } }
+
+/* Tactical beacon pins: a breathing ring; the chosen one a locked reticle with ripples. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-index {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #14141f;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #bff7ff 45%, #4ec9dc);
+  color: #14141f;
+  box-shadow: 0 3px 0 #14141f, 0 0 0 3px rgba(82, 227, 255, 0.25);
+  animation: cm-pin-breathe 2.4s ease-in-out infinite;
+}
+@keyframes cm-pin-breathe { 50% { box-shadow: 0 3px 0 #14141f, 0 0 0 6px rgba(82, 227, 255, 0.12); } }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit[data-selected="true"] .cm-vs2-gate3d__node-index {
+  background: radial-gradient(circle at 35% 30%, #fffbe6, #ffd23f 55%, #ff9f1c);
+  transform: scale(1.18);
+  animation: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit[data-selected="true"]::before,
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit[data-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 2px solid #ffd23f;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: cm-pin-ripple 1.6s ease-out infinite;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit[data-selected="true"]::after { animation-delay: 0.8s; }
+@keyframes cm-pin-ripple { from { opacity: 0.9; transform: scale(0.8); } to { opacity: 0; transform: scale(2.1); } }
+
+/* The visor on the globe's lower edge. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-preview {
+  grid-area: world;
+  align-self: end;
+  position: relative;
+  z-index: 6;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0 10px 10px;
+  padding: 8px 12px 8px 16px;
+  overflow: hidden;
+  border: 3px solid #14141f;
+  border-radius: 16px;
+  background: rgba(20, 20, 31, 0.86) radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  color: #fff;
+  box-shadow: 0 5px 0 #14141f, inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: hsl(calc(var(--gate-phase, 0) * 45 + 20) 90% 60%);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview[data-ordinal]::after {
+  content: attr(data-ordinal);
+  position: absolute;
+  top: 6px;
+  left: 16px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: #14141f;
+  color: #ffd23f;
+  font-size: 10px;
+  font-weight: 900;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview[data-pop="true"] { animation: cm-visor-in 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-visor-in { from { opacity: 0.4; transform: translateY(14px) scale(0.94); } }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__image { grid-column: 1; grid-row: 1; width: 64px; height: 44px; object-fit: cover; border: 2px solid #14141f; border-radius: 8px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__copy { grid-column: 2; grid-row: 1; min-width: 0; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs { grid-column: 3; grid-row: 1; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview[data-selected="false"] .cm-vs2-preview__copy { grid-column: 1 / 3; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__name { color: #fff; font-size: 16px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__id { color: rgba(255, 255, 255, 0.6); font-size: 11px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 8px;
+  align-items: center;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  text-align: right;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd { margin: 0; color: #fff; font-weight: 900; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd:first-of-type { padding: 1px 8px; border-radius: 999px; background: #ffd23f; color: #14141f; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd[data-free="true"] { background: #3ddc84; }
+
+/* The cartridge carousel. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-gate-fallback { grid-area: carousel; min-height: 0; overflow: visible; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate-fallback__heading { display: none; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gates {
+  display: flex;
+  grid-template-columns: none;
+  gap: 12px;
+  padding: 8px 6px 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gates[data-dragging="true"] { scroll-snap-type: none; cursor: grabbing; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate {
+  position: relative;
+  flex: 0 0 128px;
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  justify-items: stretch;
+  align-content: start;
+  gap: 2px;
+  min-height: 0;
+  padding: 7px 7px 9px;
+  overflow: hidden;
+  text-align: left;
+  scroll-snap-align: center;
+  transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__aperture { position: relative; display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 8px; transform: none; animation: none; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__aperture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(20, 20, 31, 0.14) 0 1px, transparent 1px 3px);
+  box-shadow: inset 0 3px 6px rgba(20, 20, 31, 0.45);
+  pointer-events: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__art { width: 100%; height: 100%; object-fit: cover; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__ordinal { justify-self: start; font-size: 11px; font-weight: 900; letter-spacing: 0.08em; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__name { font-size: 14px; font-weight: 900; line-height: 1.2; text-align: left; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__fee { color: var(--c-gold-strong); font-size: 11px; font-weight: 800; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate[data-availability="LOCKED"] { filter: grayscale(0.7); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate[data-selected="true"] { transform: translateY(-4px) scale(1.03); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate[data-selected="true"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: cm-cart-shine 900ms ease-out 1 both;
+  pointer-events: none;
+}
+@keyframes cm-cart-shine { to { transform: translateX(120%); } }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate[data-pop="true"] { animation: cm-cart-jelly 480ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-cart-jelly { 0% { transform: translateY(-4px) scale(1.12, 0.9); } 55% { transform: translateY(-4px) scale(0.98, 1.06); } 100% { transform: translateY(-4px) scale(1.03); } }
+
+/* The grid toggle: every card at once, the globe put away. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-body--gate {
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas: "world" "visor" "carousel";
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-gate3d__bar { position: static; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-body--gate > .cm-vs2-preview { grid-area: visor; margin: 0; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-body--gate > .cm-vs2-gate-fallback { overflow-y: auto; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-gates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  overflow: visible;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"][data-gate-presentation$="FALLBACK"] .cm-vs2-gate3d[hidden] + .cm-vs2-gate-fallback { grid-row: 1 / -1; }
+
+/* Short landscape phones: globe left with its visor, cartridges on the right. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: "world carousel";
+  }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-gate-fallback { overflow-y: auto; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gates { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); overflow: visible; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-preview { grid-template-columns: 48px minmax(0, 1fr) auto; padding: 6px 10px 6px 14px; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__image { width: 48px; height: 34px; }
+}
+:root[data-motion="reduced"] body .cm-vs2-root[data-gate-layout="HOLO_NAV_R1"] :is(.cm-vs2-gate3d__node-index, .cm-vs2-gate, .cm-vs2-preview) { animation: none !important; }
+:root[data-motion="reduced"] body .cm-vs2-root[data-gate-layout="HOLO_NAV_R1"] :is(.cm-vs2-gate, .cm-vs2-gate3d__node-hit)::before,
+:root[data-motion="reduced"] body .cm-vs2-root[data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit::after { animation: none !important; }
+:root[data-motion="reduced"] body .cm-vs2-root[data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::after { animation: none; }
+
+/* ======================================================================== *
+ * Gate entry 2026-10-27 (Owner): the loading screen is a compact dashboard
+ * (destination, time limit, a partner walking the bar); the orb is the portal
+ * core charged by the download (--portal-progress, 0..1, set by vs2Screens),
+ * and when the field is ready it splits open onto the live field
+ * ([data-breach]). Selectors outrank the ceremony's settle rule (0,3,0) so the
+ * charge keeps moving after the ceremony settles.
+ * ======================================================================== */
+@property --cm-iris { syntax: "<length>"; inherits: false; initial-value: 0px; }
+
+/* The dashboard. */
+:root body .cm-vs2-field__viewport .cm-vs2-field__loading {
+  z-index: calc(var(--z-lifecycle) + 1);
+  width: min(340px, calc(100% - 32px));
+  gap: 6px;
+  padding: 10px 14px 12px;
+  border: 3px solid #14141f;
+  border-radius: 16px;
+  background: rgba(20, 20, 31, 0.88) radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  color: #fff;
+  box-shadow: 0 5px 0 #14141f, inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.cm-vs2-field__loading-title { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0; }
+.cm-vs2-field__loading-gate { font-size: 16px; font-weight: 900; }
+.cm-vs2-field__loading-limit { padding: 1px 8px; border-radius: 999px; background: #ffd23f; color: #14141f; font-size: 11px; font-weight: 900; }
+.cm-vs2-field__loading-limit:empty { display: none; }
+.cm-vs2-field__walk-lane { position: relative; display: block; height: 46px; margin: -2px 0 -4px; }
+.cm-load-walker { position: absolute; bottom: 0; left: 3%; display: block; height: 44px; transform: translateX(-50%); pointer-events: none; }
+.cm-load-walker canvas { display: block; height: 44px; width: auto; filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.35)); }
+:root body .cm-vs2-field__viewport .cm-vs2-field__loading-text { color: rgba(255, 255, 255, 0.85); font-size: 12px; }
+:root body .cm-vs2-field__viewport .cm-vs2-field__loading :is(.cm-vs2-field__loading-bytes, .cm-vs2-field__loading-note) { color: rgba(255, 255, 255, 0.65); font-size: 11px; }
+:root body .cm-vs2-field__viewport .cm-vs2-field__progress { height: 10px; border: 2px solid #14141f; border-radius: 999px; background: rgba(255, 255, 255, 0.12); }
+:root body .cm-vs2-field__viewport .cm-vs2-field__progress-fill { background: linear-gradient(90deg, #8a5cff, #4deed6 55%, #ffd23f); }
+/* The plate's words live in the dashboard now; the orb stands alone. */
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-cer-gate .cm-cer-plate { display: none; }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-cer-gate { margin-top: -18%; }
+/* While it loads, the way back stays in reach above the portal. */
+.cm-vs2-field:has(.cm-vs2-field__loading) .cm-vs2-hud { z-index: calc(var(--z-lifecycle) + 2); }
+
+/* The charge: two orbits that speed up and draw in, a core that brightens. */
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__orbit {
+  scale: calc(1.22 - 0.24 * var(--portal-progress, 0));
+  animation: cm-portal-orbit calc(3.2s - 2.6s * var(--portal-progress, 0)) linear infinite;
+}
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__orbit::after {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border: 2px dashed rgba(255, 210, 63, 0.55);
+  border-radius: 50%;
+  scale: calc(1.12 - 0.14 * var(--portal-progress, 0));
+  animation: cm-portal-orbit calc(4.2s - 3.2s * var(--portal-progress, 0)) linear infinite reverse;
+}
+@keyframes cm-portal-orbit { to { rotate: 360deg; } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__core {
+  filter: brightness(calc(0.92 + 0.55 * var(--portal-progress, 0)));
+  animation: cm-portal-pulse calc(1.6s - 1.1s * var(--portal-progress, 0)) ease-in-out infinite;
+}
+@keyframes cm-portal-pulse { 50% { scale: 1.05; } }
+
+/* The breach (600 ms): draw in and crack (0-140), split and open the iris onto
+   the field (140-480), the field settles and the HUD lands (480-600). */
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] {
+  pointer-events: none;
+  -webkit-mask: radial-gradient(circle at 50% 41%, transparent var(--cm-iris), #000 calc(var(--cm-iris) + 2px));
+  mask: radial-gradient(circle at 50% 41%, transparent var(--cm-iris), #000 calc(var(--cm-iris) + 2px));
+  animation: cm-iris-open 600ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+@keyframes cm-iris-open { 0%, 23% { --cm-iris: 0px; opacity: 1; } 80% { --cm-iris: 110vmax; opacity: 1; } 100% { --cm-iris: 150vmax; opacity: 0; } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__portal { animation: cm-orb-breach 600ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+@keyframes cm-orb-breach { 0% { transform: scale(1); } 23% { transform: scale(0.84); } 80% { transform: scale(6); opacity: 0.9; } 100% { transform: scale(7); opacity: 0; } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core { background: transparent; box-shadow: none; animation: none; }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__core::before,
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__core::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #ffffff 0%, #fff3bf 38%, #b98cff 100%);
+  opacity: 0;
+}
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core::before { clip-path: inset(0 0 52% 0); animation: cm-orb-half-up 600ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core::after { clip-path: inset(52% 0 0 0); animation: cm-orb-half-down 600ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+@keyframes cm-orb-half-up { 0%, 23% { opacity: 1; transform: none; } 80% { opacity: 0.6; transform: translateY(-46%); } 100% { opacity: 0; transform: translateY(-60%); } }
+@keyframes cm-orb-half-down { 0%, 23% { opacity: 1; transform: none; } 80% { opacity: 0.6; transform: translateY(46%); } 100% { opacity: 0; transform: translateY(60%); } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__portal::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: calc(50% - 1.5px);
+  height: 3px;
+  border-radius: 2px;
+  background: #fffbe6;
+  box-shadow: 0 0 12px #fff3bf, 0 0 24px #ffd23f;
+  animation: cm-orb-crack 600ms ease-out forwards;
+}
+@keyframes cm-orb-crack { 0% { opacity: 0; transform: scaleX(0.2); } 20% { opacity: 1; transform: scaleX(1); } 60% { opacity: 0.8; } 100% { opacity: 0; } }
+.cm-vs2-field__viewport[data-entering="true"] .cm-vs2-field__canvas { animation: cm-field-land 600ms cubic-bezier(0.34, 1.3, 0.64, 1) both; }
+@keyframes cm-field-land { 0%, 80% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"]) .cm-vs2-hud { animation: cm-hud-drop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"]) .cm-hunt-controls-panel { animation: cm-hud-rise 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-hud-drop { 0%, 80% { opacity: 0; transform: translateY(-24px); } 100% { opacity: 1; transform: none; } }
+@keyframes cm-hud-rise { 0%, 80% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: none; } }
+:root[data-motion="reduced"] .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage :is(.cm-cer-gate__orbit, .cm-cer-gate__core) { animation: none; }
+:root[data-motion="reduced"] .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__orbit::after { animation: none; }
+
+/* ======================================================================== *
+ * Hunt visor 2026-10-27 (Owner): 85% of the field stays clear. An armoured
+ * gate-and-clock tag top left, the way back top right, a target capsule that
+ * opens into a card when something is picked, a caption-weight hint, and the
+ * hand / rope trigger dock. Rope primed frames the field like a scope; a
+ * collectable target makes the hand key pulse. Theme colour from the biome.
+ * ======================================================================== */
+.cm-vs2-field { --biome: #4deed6; }
+.cm-vs2-field:has(.cm-vs2-field__viewport:is([data-biome="Volcano"], [data-biome="Desert"], [data-biome="Canyon"])) { --biome: #ff6a2b; }
+.cm-vs2-field:has(.cm-vs2-field__viewport:is([data-biome="Forest"], [data-biome="Grass"], [data-biome="Jungle"], [data-biome="Savanna"], [data-biome="Damp"])) { --biome: #6ee36a; }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-biome="Ice"]) { --biome: #8fd0ff; }
+.cm-vs2-field:has(.cm-vs2-field__viewport:is([data-biome="Factory"], [data-biome="Sewer"], [data-biome="Mine"], [data-biome="Ruins"])) { --biome: #4deed6; }
+.cm-vs2-field:has(.cm-vs2-field__viewport:is([data-biome="Oasis"], [data-biome="Seaside"], [data-biome="Crag"])) { --biome: #ffd23f; }
+
+/* Armoured gate + clock tag. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__copy {
+  gap: 0;
+  padding: 6px 16px 7px 14px;
+  border: 0;
+  border-left: 5px solid var(--biome);
+  border-radius: 0;
+  background: rgba(20, 20, 31, 0.86);
+  color: #fff;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  filter: drop-shadow(0 4px 0 rgba(20, 20, 31, 0.6));
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__gate { color: #fff; font-size: 15px; font-weight: 900; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__companion { color: #ffd23f; font-size: 13px; font-weight: 900; letter-spacing: 0.04em; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud[data-urgent="warning"] .cm-vs2-hud__copy { border-left-color: #ffb020; animation: cm-clock-beat 1.2s ease-in-out infinite; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud[data-urgent="critical"] .cm-vs2-hud__copy { border-left-color: #ff4d5e; animation: cm-clock-beat 0.6s ease-in-out infinite; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud[data-urgent="critical"] .cm-vs2-hud__companion { color: #ff8a95; }
+@keyframes cm-clock-beat { 50% { filter: drop-shadow(0 4px 0 rgba(20, 20, 31, 0.6)) drop-shadow(0 0 8px rgba(255, 77, 94, 0.75)); } }
+
+/* The target: a quiet capsule until something is picked. */
+:root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-info {
+  top: 70px;
+  justify-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) {
+  width: auto;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(20, 20, 31, 0.6);
+  box-shadow: none;
+  opacity: 0.85;
+  pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) .cm-vs2-target__name { color: #fff; font-size: 12px; font-weight: 800; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) .cm-vs2-target__name::before { content: "\25CE  "; color: var(--biome); }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] {
+  width: min(300px, 100%);
+  padding: 10px 14px;
+  border: 3px solid #14141f;
+  border-top: 5px solid var(--biome);
+  border-radius: 16px;
+  background: #fff8e6;
+  color: #14141f;
+  box-shadow: 0 5px 0 #14141f;
+  transform-origin: 50% 0;
+  animation: cm-target-open 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cm-target-open { from { opacity: 0.4; transform: scale(0.6, 0.4); } }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__name { color: #14141f; font-size: 16px; font-weight: 900; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__stats { color: #5a5a6e; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__stats dd { color: #14141f; }
+
+/* Caption-weight hint: no white pill, hard shadowed words. */
+:root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint {
+  bottom: calc(118px + max(0px, env(safe-area-inset-bottom)));
+  padding: 3px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(20, 20, 31, 0.42);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-shadow: 0 2px 0 #14141f, 0 0 6px rgba(0, 0, 0, 0.6);
+  box-shadow: none;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint[data-kind="notice"] { background: rgba(255, 77, 94, 0.85); text-shadow: 0 2px 0 #14141f; }
+
+/* Trigger dock: big keys, 6 px slab, 45 ms press. */
+:root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools { gap: 14px; bottom: max(14px, env(safe-area-inset-bottom)); }
+:root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action { flex: 0 0 84px; min-height: 84px; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action {
+  border: 3px solid #14141f;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.7), 0 6px 0 var(--key-shade);
+  transition: transform 160ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 160ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action:active:not(:disabled) { transform: translateY(5px); box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.7), 0 1px 0 var(--key-shade); transition-duration: 45ms; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-pop="true"] { animation: cm-trigger-jelly 380ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes cm-trigger-jelly { 0% { scale: 1.12 0.88; } 55% { scale: 0.96 1.05; } 100% { scale: 1 1; } }
+/* Rope primed: locked down, a neon outline and a lit indicator. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ROPE"][aria-pressed="true"] {
+  transform: translateY(3px);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.7), 0 3px 0 var(--key-shade), 0 0 0 4px #ff9f1c, 0 0 18px rgba(255, 159, 28, 0.85);
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ROPE"][aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border: 2px solid #14141f;
+  border-radius: 50%;
+  background: #ffd23f;
+  box-shadow: 0 0 8px #ffd23f;
+}
+/* A target can be collected: the hand key calls for it. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="HAND"][data-ready="true"]::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 3px solid #3ddc84;
+  border-radius: 18px;
+  pointer-events: none;
+  animation: cm-tool-pulse 800ms cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+/* Rope scope: four corner brackets over the field, never in the way. */
+.cm-vs2-field__viewport[data-tool="ROPE"]::after {
+  content: "";
+  position: absolute;
+  inset: 84px 14px 128px;
+  z-index: 3;
+  pointer-events: none;
+  --c: rgba(255, 210, 63, 0.9);
+  background:
+    linear-gradient(var(--c), var(--c)) top left / 34px 3px, linear-gradient(var(--c), var(--c)) top left / 3px 34px,
+    linear-gradient(var(--c), var(--c)) top right / 34px 3px, linear-gradient(var(--c), var(--c)) top right / 3px 34px,
+    linear-gradient(var(--c), var(--c)) bottom left / 34px 3px, linear-gradient(var(--c), var(--c)) bottom left / 3px 34px,
+    linear-gradient(var(--c), var(--c)) bottom right / 34px 3px, linear-gradient(var(--c), var(--c)) bottom right / 3px 34px;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 4px rgba(255, 159, 28, 0.8));
+  animation: cm-scope-in 260ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cm-scope-in { from { opacity: 0; transform: scale(1.06); } }
+body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 84px 14px 18px; }
+/* A catch lands: the field jolts once. */
+.cm-vs2-field__viewport[data-shake="true"] .cm-vs2-field__canvas { animation: cm-field-shake 320ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+@keyframes cm-field-shake { 20% { translate: -4px 2px; } 40% { translate: 4px -2px; } 60% { translate: -3px 1px; } 80% { translate: 2px 0; } }
+:root[data-motion="reduced"] .cm-vs2-root[data-screen="HUNT_FIELD"] :is(.cm-vs2-hud__copy, .cm-vs2-target, .cm-hunt-tools .cm-vs2-action, .cm-vs2-field__canvas) { animation: none !important; }
+:root[data-motion="reduced"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action::before,
+:root[data-motion="reduced"] .cm-vs2-field__viewport::after { animation: none !important; }
+
+/* ======================================================================== *
+ * HD-2D ambience (ambienceLayer.js): diorama vignette, a light edge tinted by
+ * the biome, top and bottom miniature falloff, and the particle canvas.
+ * Gradients only (no blur), pointer-events none, under the HUD.
+ * ======================================================================== */
+.cm-ambience { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.cm-ambience::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(14, 12, 28, 0.32), transparent 8%, transparent 92%, rgba(14, 12, 28, 0.36)),
+    radial-gradient(120% 95% at 50% 46%, transparent 58%, rgba(14, 12, 28, 0.42) 100%);
+}
+.cm-ambience::after { content: ""; position: absolute; inset: 0; mix-blend-mode: soft-light; }
+.cm-ambience[data-theme="ember"]::after { background: radial-gradient(90% 60% at 50% 110%, rgba(255, 96, 32, 0.55), transparent 70%), radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(255, 80, 30, 0.3)); }
+.cm-ambience[data-theme="motes"]::after { background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(80, 220, 110, 0.32)); }
+.cm-ambience[data-theme="snow"]::after { background: radial-gradient(120% 90% at 50% 50%, transparent 50%, rgba(120, 180, 255, 0.42)), linear-gradient(180deg, rgba(200, 230, 255, 0.25), transparent 30%); }
+.cm-ambience[data-theme="data"]::after { background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(60, 220, 255, 0.34)); }
+.cm-ambience[data-theme="sun"]::after { background: radial-gradient(80% 60% at 30% -10%, rgba(255, 220, 140, 0.45), transparent 70%), radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(255, 200, 120, 0.22)); }
+.cm-ambience__particles { position: absolute; inset: 0; width: 100%; height: 100%; }
+:root[data-quality="saver"] .cm-ambience__particles { display: none; }
+
+/* Ranch loading 2026-10-27 (Owner): a bar with a partner walking it, one line
+   of small words; the step list stays for assistive technology only. */
+.cm-load-progress__walk-lane { position: relative; display: block; order: -1; height: 46px; margin-bottom: -6px; }
+:root body .cm-load-progress__steps { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+:root[data-theme="arcade"] .cm-load-progress__bar { height: 10px; border: 2px solid #14141f; background: rgba(255, 255, 255, 0.5); }
+:root[data-theme="arcade"] .cm-load-progress__fill { background: linear-gradient(90deg, #8a5cff, #4deed6 55%, #ffd23f); }
+:root body .cm-load-progress__meta { margin: 0; font-size: 11px; }

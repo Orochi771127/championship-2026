@@ -17,6 +17,7 @@
 // It reuses the screen's own loads; it starts and owns no loading itself.
 
 import { setLabel, setText } from '../text/uiText.js';
+import { mountLoadingWalker } from './ui/loadingWalker.js';
 
 /**
  * Files that finish loading while this runs: the page's own requests and,
@@ -48,7 +49,7 @@ export function observeLoadActivity(onChange, { PerformanceObserverImpl = global
  * @param {Array<{id: string, key: string}>} options.steps in display order
  * @param {Document} [options.doc]
  */
-export function createLoadProgressView({ steps, doc = globalThis.document }) {
+export function createLoadProgressView({ steps, doc = globalThis.document, walker: withWalker = false }) {
   if (!Array.isArray(steps) || steps.length === 0) throw new TypeError('createLoadProgressView needs steps');
   const root = doc.createElement('div');
   root.className = 'cm-load-progress';
@@ -85,6 +86,15 @@ export function createLoadProgressView({ steps, doc = globalThis.document }) {
   slow.hidden = true;
   setText(slow, 'LOAD_SLOW');
   root.append(bar, list, meta, slow);
+  // Owner 2026-10-27: a partner walks the bar (shown above it by CSS order).
+  let walker = null;
+  if (withWalker) {
+    const lane = doc.createElement('span');
+    lane.className = 'cm-load-progress__walk-lane';
+    lane.setAttribute('aria-hidden', 'true');
+    root.append(lane);
+    walker = mountLoadingWalker(lane, { doc });
+  }
 
   let fileCount = 0;
   function paint() {
@@ -97,6 +107,9 @@ export function createLoadProgressView({ steps, doc = globalThis.document }) {
     bar.dataset.failed = String(states.includes('error'));
     root.dataset.state = states.includes('error') ? 'error' : done === items.size ? 'done' : 'loading';
     setText(count, 'LOAD_PROGRESS_STEPS', { done, total: items.size });
+    walker?.setProgress(done === 0 && states.includes('active') ? null : done / items.size);
+    // The walk ends with the load: no frames run behind a finished screen.
+    if (done === items.size) { walker?.dispose(); walker = null; }
     files.hidden = !(fileCount > 0);
     if (fileCount > 0) setText(files, 'LOAD_FILES', { count: fileCount });
   }
@@ -117,6 +130,7 @@ export function createLoadProgressView({ steps, doc = globalThis.document }) {
     reset() { fileCount = 0; slow.hidden = true; for (const item of items.values()) { item.dataset.state = 'pending'; item.removeAttribute('aria-current'); } paint(); },
     setFiles(total) { const next = Math.max(0, Math.floor(Number(total) || 0)); if (next !== fileCount) { fileCount = next; paint(); } },
     showSlow(show = true) { slow.hidden = !show; },
+    dispose() { walker?.dispose(); walker = null; },
     state() { return root.dataset.state; }
   });
 }

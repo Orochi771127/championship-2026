@@ -682,6 +682,8 @@ export async function mountHuntFieldPixiPresentation({
       if (active && !threeActive) fieldArt?.occluders?.detach();
       if (!active && threeActive) fieldArt?.occluders?.attach(actorLayer);
       threeActive = active;
+      // Observable renderer state for normal-flow gates: 3D must not fall back silently.
+      if (app.canvas?.dataset && app.canvas.dataset.huntThree !== (active ? "active" : "fallback")) app.canvas.dataset.huntThree = active ? "active" : "fallback";
     }
     if(onActorFrame)onActorFrame(view.wildCreatures.map(wild=>({wildId:wild.wildId,speciesId:wild.speciesId,
       x:(view.viewportOffset?.x ?? 0)+(wild.worldX-(view.viewRect ?? view.camera).left)*view.transform.scale,y:(view.viewportOffset?.y ?? 0)+(wild.worldY-(view.viewRect ?? view.camera).top)*view.transform.scale,
