@@ -157,7 +157,9 @@ function assertCohortThumbnailMeasured(actual,species,cohort){
   assert.deepEqual(actual.natural,[expected.thumbnail.width,expected.thumbnail.height]);
   assert.equal(actual.complete,true);assert.equal(actual.hidden,false);assert.equal(actual.loading,'lazy');assert.equal(actual.objectFit,'contain');
   const r=actual.imageRect,b=actual.rowRect,v=actual.viewport;
-  assert.ok(Math.abs(r.width-32)<=.75&&Math.abs(r.height-32)<=.75,'Normal thumbnail must remain32 CSS px');
+  // Owner 2026-10-26: the arcade rebuild's dex cards show the portrait in a large well
+  // (112 / 88 / 72 px by layout), replacing the earlier 32 px list thumbnail.
+  assert.ok(r.width>=64&&r.height>=64,'Dex card portrait must fill its card well');
   assert.ok(r.x>=b.x-.75&&r.right<=b.right+.75&&r.y>=b.y-.75&&r.bottom<=b.bottom+.75,'Thumbnail contained in normal row');
   assert.ok(r.x>=-1&&r.right<=v.width+1&&r.y>=-1&&r.bottom<=v.height+1,'Actual thumbnail must be visible after scrolling');
 }
@@ -649,9 +651,9 @@ async function selfTest() {
   assert.equal(MATRIX_TARGETS.length,13);assert.equal(MATRIX_TARGETS.length*8+1+8,113);
   const scopedThumbFixtures=[];
   for(const width of [1440,390,360])for(const e of APPROVED_GR_FIXES){
-    const actual={speciesIndex:e.speciesIndex,displayCode:e.displayCode,src:new URL(e.thumbnail.src,PUBLIC_BASE).href,natural:[e.thumbnail.width,e.thumbnail.height],complete:true,hidden:false,loading:'lazy',objectFit:'contain',imageRect:{x:20,y:20,width:32,height:32,right:52,bottom:52},rowRect:{x:10,y:10,right:100,bottom:100},viewport:{width,height:844},screenshot:width===360?null:`thumb-${e.speciesIndex}-${width}.png`};
+    const actual={speciesIndex:e.speciesIndex,displayCode:e.displayCode,src:new URL(e.thumbnail.src,PUBLIC_BASE).href,natural:[e.thumbnail.width,e.thumbnail.height],complete:true,hidden:false,loading:'lazy',objectFit:'contain',imageRect:{x:16,y:16,width:112,height:112,right:128,bottom:128},rowRect:{x:10,y:10,right:140,bottom:200},viewport:{width,height:844},screenshot:width===360?null:`thumb-${e.speciesIndex}-${width}.png`};
     assertScopedGRThumbnailMeasured(actual,e.speciesIndex);assert.throws(()=>assertThumbnailMeasured(actual,e.speciesIndex),'Old44 cohort remains separate');scopedThumbFixtures.push(actual);
-    for(const changed of [{src:'wrong.webp'},{natural:[128,128]},{hidden:true},{complete:false},{loading:'eager'},{objectFit:'cover'},{imageRect:{...actual.imageRect,width:64}},{rowRect:{x:30,y:30,right:40,bottom:40}}])assert.throws(()=>assertScopedGRThumbnailMeasured({...actual,...changed},e.speciesIndex));
+    for(const changed of [{src:'wrong.webp'},{natural:[128,128]},{hidden:true},{complete:false},{loading:'eager'},{objectFit:'cover'},{imageRect:{...actual.imageRect,width:40}},{rowRect:{x:30,y:30,right:40,bottom:40}}])assert.throws(()=>assertScopedGRThumbnailMeasured({...actual,...changed},e.speciesIndex));
   }
   assertScopedGRThumbnailCoverage(scopedThumbFixtures);
   assert.throws(()=>assertScopedGRThumbnailCoverage(scopedThumbFixtures.slice(1)));

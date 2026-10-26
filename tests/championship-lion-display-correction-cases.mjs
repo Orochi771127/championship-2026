@@ -90,8 +90,9 @@ test('normal Database component selects corrected codes, navigates both routes a
 });
 
 test('native data stays pinned, separately authorized savev7 is reviewed, the original95 heroes stay intact and only the approved MA62 hero is added',()=>{
-  // The later Owner-authorized100-cell save extension supersedes this one source pin only.
-  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/CAGE100_PLAYTEST_20261019.json","utf8"));
+  // The later Owner-authorized100-cell save extension, then the hex cage world
+  // (2026-10-26), supersede this one source pin only.
+  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/HEX_CAGE_WORLD_20261026.json","utf8"));
   assert.deepEqual(Object.keys(followup.sourceLocks),["src/championship/app/championshipStandaloneSave.js"]);
   // Owner-authorized MA05 replacement preserves the deployed AW40/GR01 trial and all other221 selections;
   // all unrelated native/gameplay pins remain exact. This pins the entire reviewed new file.

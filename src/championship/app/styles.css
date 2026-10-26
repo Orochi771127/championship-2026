@@ -73,6 +73,8 @@ img { max-width: 100%; }
 .cm-status-bar [hidden],
 .cm-toolbar[hidden],
 .cm-toolbar [hidden] { display: none; }
+/* The arcade theme's quick dock (ui/arcade.css); other themes keep the eight-slot rail only. */
+.cm-toolbar__quick { display: none; }
 
 .cm-visually-hidden {
   position: absolute;

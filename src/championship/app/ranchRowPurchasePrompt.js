@@ -6,7 +6,10 @@ export function createRanchRowPurchasePrompt({ source, ask = showChoiceDialog, r
   const controller = new AbortController();
   let pending = false;
   const current = () => source.getFrame();
-  const lockedCount = (cage, row) => cage?.slots?.filter(slot => slot.row === row && !slot.unlocked).length ?? 0;
+  // Hex cage world: land rows are a capacity list; older frames counted locked board cells.
+  const lockedCount = (cage, row) => cage?.productGrid?.landRows
+    ? cage.productGrid.landRows.find(entry => entry.row === row)?.cells ?? 0
+    : cage?.slots?.filter(slot => slot.row === row && !slot.unlocked).length ?? 0;
   return {
     async open(row) {
       const frame = current(), cage = frame?.cageEdit;

@@ -124,6 +124,14 @@ export const TOOLBAR_MENU_GROUPS = Object.freeze({
   ])
 });
 
+/**
+ * The arcade dock's one-tap destinations (OWNER_APPROVED_ADAPTATION of presentation,
+ * 2026-10-26: the arcade rebuild's layout on this game). They are the observed System
+ * entries themselves, built by the same entry button, so reachability, tutorial
+ * gating and dispatch are the menu's own. The eight-slot rail is unchanged.
+ */
+export const TOOLBAR_QUICK_ENTRIES = Object.freeze(["hunt", "battle", "shop", "database"]);
+
 function element(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -185,18 +193,20 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     for (const cell of rail.querySelectorAll("[data-menu-id]")) cell.setAttribute("aria-expanded", "false");
   }
 
-  function entryButton(entry) {
+  function entryButton(entry, className = "cm-toolbar__entry") {
     // Two lines: the original entry name, then what it is for, so Hunt,
     // Battle and Shop can be found without knowing the menus by heart.
-    const button = element("button", "cm-toolbar__entry");
+    const button = element("button", className);
     const art=originalDatabaseIcon(entry.screen);
     if(art){const icon=element("img","cm-toolbar__entry-icon");icon.src=art.src;icon.alt="";button.append(icon);}
     button.append(element("span", "cm-toolbar__entry-label", entry.label));
     if (entry.hint) button.append(element("span", "cm-toolbar__entry-hint", entry.hint));
     button.setAttribute("aria-label", uiText(entry.label));
     button.type = "button";
-    button.setAttribute("role", "menuitem");
-    button.dataset.entryId = entry.id;
+    if (className === "cm-toolbar__entry") button.setAttribute("role", "menuitem");
+    // Dock keys carry their own id, so a query for a menu entry finds only the menu's.
+    if (className === "cm-toolbar__entry") button.dataset.entryId = entry.id;
+    else button.dataset.quickId = entry.id;
     const reachable = Boolean(entry.screen || entry.action);
     button.disabled = !reachable || (tutorialTool!==null&&!(tutorialTool==="SYSTEM"&&entry.id===tutorialMenuEntry));
     const tutorialCheckpoint=getTutorialCheckpoint();
@@ -298,7 +308,24 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     rail.append(button);
   });
 
-  bar.append(menuPanel, rail, toolHint);
+  // Quick dock: shown with the Training rail only, and never during a tutorial
+  // step, which keeps guiding the player through the System menu itself.
+  const quick = element("div", "cm-toolbar__quick");
+  quick.setAttribute("role", "group");
+  quick.hidden = true;
+  function paintQuick() {
+    if (disposed) return;
+    const system = TOOLBAR_MENUS.find((menu) => menu.id === "SYSTEM");
+    quick.setAttribute("aria-label", uiText("出發"));
+    quick.replaceChildren(...TOOLBAR_QUICK_ENTRIES
+      .map((id) => system.entries.find((entry) => entry.id === id))
+      .filter(Boolean)
+      .map((entry) => entryButton(entry, "cm-toolbar__quick-entry")));
+    quick.hidden = currentMode !== TOOLBAR_MODES.TRAINING || tutorialTool !== null;
+  }
+
+  // Appended last: the menu, rail and hint keep their order; the arcade sheet draws the dock above the rail.
+  bar.append(menuPanel, rail, toolHint, quick);
   root.append(bar);
   let hintedTool = null;
   function syncToolHintClearance() {
@@ -413,6 +440,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       bar.dataset.mode = visible ? String(mode) : "";
       host.dataset.toolbar = visible ? "on" : "";
       refreshFoodStock();
+      paintQuick();
       syncHeight();
     },
 
@@ -439,6 +467,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
         button.disabled=currentMode===TOOLBAR_MODES.HUNT || (tutorialTool!==null&&(tutorialTool==="SYSTEM"?button.dataset.menuId!=="SYSTEM":button.dataset.toolId!==tutorialTool));
         if(button.dataset.toolId)button.setAttribute("aria-pressed",String(button.dataset.toolId===selectedTool));
       }
+      paintQuick();
       syncHeight();
     },
 
@@ -456,6 +485,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       paintToolHint();
       const open = TOOLBAR_MENUS.find((menu) => menu.id === openMenuId);
       if (open) { openMenuId = null; openMenu(open); }
+      paintQuick();
       syncHeight();
     },
 

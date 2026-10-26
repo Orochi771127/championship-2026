@@ -1485,3 +1485,38 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-cage-expansion[data-product-grid="true"] { display: none; }
 .cm-dialog[data-variant="ranch-row-purchase"] .cm-dialog__message { white-space: pre-line; }
 .cm-dialog[data-variant="ranch-row-purchase"] .cm-dialog__action { min-height: 44px; }
+
+/* ---- Hex cage world editor (2026-10-26) ----------------------------------
+ * Edit mode only. A faint honeycomb of every world position inside a pan/zoom
+ * viewport; placed cages show their art across their footprint. Preview tints
+ * say whether a placement or move fits before anything changes. */
+.cm-hexworld { display: grid; gap: var(--sp-2); min-width: 0; }
+.cm-hexworld[hidden] { display: none; }
+.cm-hexworld__toolbar { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.cm-hexworld__counter { margin: 0 auto 0 0; display: flex; align-items: baseline; gap: var(--sp-2); color: var(--c-text-2); font-size: var(--fs-label); }
+.cm-hexworld__count { font-size: var(--fs-title-2); color: var(--c-text-1); font-variant-numeric: tabular-nums; }
+.cm-hexworld__counter[data-full="true"] .cm-hexworld__count { color: var(--c-warning); }
+.cm-hexworld__zoom { min-width: var(--target); }
+.cm-hexworld__viewport {
+  position: relative; overflow: hidden; height: min(56vh, 540px); min-height: 280px;
+  border: 1px solid var(--c-line-2); border-radius: var(--r-card);
+  background: var(--c-ground-raised) var(--bg-pattern);
+  touch-action: none; cursor: grab; user-select: none;
+}
+.cm-hexworld__viewport[data-panning="true"] { cursor: grabbing; }
+.cm-vs2-cage-board.cm-hexworld__board { position: absolute; left: 0; top: 0; width: 1232px; height: 1080px; transform-origin: 0 0; will-change: transform; }
+.cm-hexworld__cell.cm-vs2-cage-slot { background-color: color-mix(in srgb, var(--c-accent) 7%, transparent); color: transparent; }
+.cm-hexworld__cell.cm-vs2-cage-slot[data-filled="false"]:hover { background-color: color-mix(in srgb, var(--c-accent) 22%, transparent); }
+.cm-hexworld__cell[data-filled="true"] { background-color: var(--c-surface-2); }
+.cm-hexworld__cell[data-selected="true"] { filter: brightness(1.18) saturate(1.1); box-shadow: inset 0 0 0 4px var(--c-accent); }
+.cm-hexworld__cell[data-selected="moving"] { opacity: .45; }
+.cm-hexworld__cell[data-preview="ok"] { background-color: color-mix(in srgb, var(--c-success) 55%, transparent); }
+.cm-hexworld__cell[data-preview="blocked"] { background-color: color-mix(in srgb, var(--c-danger) 60%, transparent); }
+.cm-hexworld__cell[data-preview="full"] { background-color: color-mix(in srgb, var(--c-warning) 60%, transparent); }
+.cm-hexworld__selection { display: grid; gap: var(--sp-1); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-accent-line); border-radius: var(--r-control); background: var(--c-accent-soft); }
+.cm-hexworld__selection[hidden] { display: none; }
+.cm-hexworld__selected, .cm-hexworld__note { margin: 0; font-size: var(--fs-body-sm); color: var(--c-text-1); }
+.cm-hexworld__actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.cm-hexworld__land { display: flex; gap: var(--sp-2); }
+.cm-hexworld__land .cm-hexworld__buy-land { position: static; width: auto; height: auto; min-width: 44px; min-height: 44px; padding: 0 var(--sp-3); }
+.cm-vs2-root[data-hex-world="true"] .cm-cage-board-scroll { display: none; }

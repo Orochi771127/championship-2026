@@ -1,7 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {PRODUCT_RANCH_GRID,productPlacementCells,validateProductRanch,restoreFixedRanchPlacements} from '../src/championship/cage/productRanchGrid.js';
+import {PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID100,productPlacementCells,validateProductRanch,restoreFixedRanchPlacements,
+  legacyGrid100PlacementCells,validateLegacyGrid100,legacyGrid100SlotToWorld as W} from '../src/championship/cage/productRanchGrid.js';
+// Rotated copies only ever existed in 10×10 GRID100 saves; since the hex cage world
+// (2026-10-26) they are fixed on the old board, then laid into the world.
+const inWorld=p=>({...p,slotIndex:W(p.slotIndex)});
 import {composeProductRanchGround} from '../src/championship/raising/nativeRaisingRanchRing.js';
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 import {createCageEditRuntime} from '../src/championship/cage/cageEditRuntime.js';
@@ -15,12 +19,13 @@ const all=Array.from({length:100},(_,i)=>i);
 const access={version:1,legacyUnlockedSlots:all.slice(0,40),purchasedRows:[],testUnlockedRows:[4,5,6,7,8,9],legacyGrants:[]};
 const seed=()=>{
  const save=JSON.parse(fs.readFileSync(new URL('../qa/championship-full-qa-save.json',import.meta.url),'utf8'));
- save.schemaVersion=7;save.cageEdit={layoutVersion:PRODUCT_RANCH_GRID,gridAccess:structuredClone(access),placements:[{...waiting},{...facility}],nextInstanceSequence:2};
+ save.schemaVersion=7;save.cageEdit={layoutVersion:LEGACY_PRODUCT_RANCH_GRID100,gridAccess:structuredClone(access),placements:[{...waiting},{...facility}],nextInstanceSequence:2};
  return save;
 };
 test('legacy rotation becomes fixed in place, with stock, identity and ordinary saves preserved',()=>{
  const input=seed(),output=deserializeChampionshipModernSave(JSON.stringify(input));
- assert.deepEqual(output.cageEdit.placements,[waiting,{moduleId:moduleOf(1),slotIndex:54,instanceId:'cage:test'}]);
+ assert.deepEqual(output.cageEdit.placements,[inWorld(waiting),inWorld({moduleId:moduleOf(1),slotIndex:54,instanceId:'cage:test'})]);
+ assert.equal(output.cageEdit.layoutVersion,PRODUCT_RANCH_GRID);
  assert.deepEqual(output.shop,input.shop);assert.deepEqual(input.cageEdit.placements[1],facility);
  const reload=deserializeChampionshipModernSave(serializeChampionshipModernSave(output));
  assert.deepEqual(reload.cageEdit,output.cageEdit);
@@ -32,13 +37,13 @@ test('conflict moves only the formerly rotated facility to unlocked vacant land'
  const output=restoreFixedRanchPlacements([waiting,facility,obstacle],all);
  assert.deepEqual(output[0],waiting);assert.deepEqual(output[2],obstacle);
  assert.notEqual(output[1].slotIndex,54);assert.equal(output[1].instanceId,facility.instanceId);
- assert.ok(validateProductRanch(output,all));assert.equal(output[1].rotation,undefined);
+ assert.ok(validateLegacyGrid100(output,all));assert.equal(output[1].rotation,undefined);
  assert.deepEqual(restoreFixedRanchPlacements([waiting,facility,obstacle],all),output);
 });
 test('no free fixed footprint returns the copy to the tray without granting stock or land',()=>{
- const available=[...productPlacementCells(waiting),54,64,65];
+ const available=[...legacyGrid100PlacementCells(waiting),54,64,65];
  assert.deepEqual(restoreFixedRanchPlacements([waiting,facility],available),[waiting]);
- const input=seed(),used=new Set([...productPlacementCells(waiting),54,64,65]);
+ const input=seed(),used=new Set([...legacyGrid100PlacementCells(waiting),54,64,65]);
  input.cageEdit.placements.push(...all.filter(i=>!used.has(i)).map(slotIndex=>({moduleId:moduleOf(0),slotIndex,instanceId:`cage:fill:${slotIndex}`})));
  input.shop.cageQuantities=Object.fromEntries(input.shop.cageOwned.map(i=>[i,i===defs[0].shopRecordIndex?93:1]));
  input.raising.nativeHome.foods=[{slot:0,cageDefinitionIndex:1,cageInstanceId:'cage:test',localPositionQ12:[0,0,0],protein:false,remaining:4,freshness:100}];
@@ -57,7 +62,7 @@ test('malformed, overlapping, locked-land and waiting-room rotations remain reje
  for(const rotation of [-1,6,1.2,'1']){const s=seed();s.cageEdit.placements[1].rotation=rotation;assert.throws(()=>deserializeChampionshipModernSave(JSON.stringify(s)),/INVALID_CAGE_ROTATION/);}
  assert.throws(()=>restoreFixedRanchPlacements([{...waiting,rotation:1}],all));
  assert.throws(()=>restoreFixedRanchPlacements([waiting,facility,{...facility,instanceId:'cage:duplicate'}],all));
- assert.throws(()=>restoreFixedRanchPlacements([waiting,facility],productPlacementCells(waiting)));
+ assert.throws(()=>restoreFixedRanchPlacements([waiting,facility],legacyGrid100PlacementCells(waiting)));
  assert.equal(productPlacementCells(facility),null,'runtime rejects a nonzero direction');
 });
 test('editor offers fixed placement, withdrawal, relocation and confirmation without a rotation API',()=>{

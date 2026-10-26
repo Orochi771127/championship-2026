@@ -4,7 +4,10 @@ import fs from 'node:fs';
 import {settleRanchDiscoveries,normalizeRanchDiscoveries,removeCollectedDiscoveries,RANCH_DISCOVERY_INTERVAL_MS as INTERVAL} from '../src/championship/raising/ranchDiscoveries.js';
 import {ranchSharedBoundaries,connectRanchGround} from '../src/championship/cage/ranchConnections.js';
 import {composeProductRanchGround} from '../src/championship/raising/nativeRaisingRanchRing.js';
-import {PRODUCT_RANCH_GRID,productGridSlot,productPlacementCells} from '../src/championship/cage/productRanchGrid.js';
+import {PRODUCT_RANCH_GRID,productGridSlot,productPlacementCells,legacyGrid100SlotToWorld as W} from '../src/championship/cage/productRanchGrid.js';
+// Hex cage world (2026-10-26): these layouts were authored on the 10×10 board; they land
+// 8 rows / 7 columns into the world, so native px shift by (672, 704) and tiles by (84, 88).
+const DX=672,DY=704,at=([x,y])=>[x+DX,y+DY];
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 import {beginRanchExplorationWalk,advanceRanchExplorationWalk} from '../src/championship/raising/ranchExplorationWalk.js';
 import {stepNativeRaisingMovement,nativeRaisingMovementArrived} from '../src/championship/raising/nativeRaisingMovement.js';
@@ -16,7 +19,7 @@ const read=f=>JSON.parse(fs.readFileSync(new URL('../'+f,import.meta.url),'utf8'
 const participant=[{id:'partner:one',cageId:'cage:one'}],epoch=Date.parse('2026-10-21T00:00:00Z');
 function ground(entries=[[0,10],[0,12],[0,11]]){
   return composeProductRanchGround({layoutVersion:PRODUCT_RANCH_GRID,unlockedSlots:Array.from({length:100},(_,i)=>i),
-    placements:[[35,0],...entries].map(([definition,slotIndex],i)=>({moduleId:moduleOf(definition),slotIndex,instanceId:`cage:test:${i}`}))});
+    placements:[[35,0],...entries].map(([definition,slotIndex],i)=>({moduleId:moduleOf(definition),slotIndex:W(slotIndex),instanceId:`cage:test:${i}`}))});
 }
 test('six actual hex sides, same type/height, and no opposite-board edge connection',()=>{
   const center={moduleId:moduleOf(0),slotIndex:productGridSlot(4,4),ownerIndex:0};
@@ -31,15 +34,15 @@ test('six actual hex sides, same type/height, and no opposite-board edge connect
 test('real meadow copies gain safe horizontal/diagonal passages and reachable paths',()=>{
   const g=ground();assert.equal(g.navigation.connections.length,2);
   assert.equal(g.navigation.boundaries.filter(e=>e.reason==='NO_SAFE_EXIT').length,1);
-  const route=g.navigation.plan([540,20],2,3);assert.ok(route?.length);
+  const route=g.navigation.plan(at([540,20]),2,3);assert.ok(route?.length);
   for(const [x,y] of route)assert.notEqual(g.readTerrain(Math.floor(x/8),Math.floor(y/8)),1);
-  assert.equal(g.navigation.plan([540,20],0),null,'waiting room is not a same-type neighbour');
+  assert.equal(g.navigation.plan(at([540,20]),0),null,'waiting room is not a same-type neighbour');
   assert.equal(ground([[0,10],[0,16]]).navigation.connections.length,0,'separated copies never connect');
 });
 test('connection construction never erases an owned wall or crosses an unrelated owner',()=>{
   const original=ground(),terrain=new Uint8Array(original.terrain),clearance=new Uint8Array(original.clearance),owners=new Int16Array(original.owners);
   // Seal both endpoint rows with owned obstacles.
-  for(let y=0;y<9;y++)for(let x=68;x<=73;x++){const i=y*original.width+x;owners[i]=1;terrain[i]=1;}
+  for(let y=88;y<97;y++)for(let x=152;x<=157;x++){const i=y*original.width+x;owners[i]=1;terrain[i]=1;}
   const before=new Uint8Array(terrain),g=connectRanchGround({...original,terrain,clearance,owners});
   for(let i=0;i<before.length;i++)if(owners[i]>=0)assert.equal(g.terrain[i],before[i],`owned cell ${i}`);
   assert.ok(g.navigation.boundaries.some(b=>b.reason==='NO_SAFE_EXIT'));
@@ -48,7 +51,7 @@ test('a resident walks a real crossing through the original movement step and re
   const g=ground([[0,10],[0,12]]);
   const actor={speciesIndex:34,cageDefinitionIndex:0,cageInstanceId:'cage:test:1',poolSlot:0,
     state:2,mode:0,ticks:0,threshold:0,angleQ12:0,desiredAngleQ12:0,slow:0,
-    foodSlot:null,positionQ12:[540*4096,20*4096,0],destinationQ12:[540*4096,20*4096,0]};
+    foodSlot:null,positionQ12:[(540+DX)*4096,(20+DY)*4096,0],destinationQ12:[(540+DX)*4096,(20+DY)*4096,0]};
   assert.equal(beginRanchExplorationWalk(actor,g),true);
   const positions=[];let done=false;
   for(let i=0;i<1800;i++){
@@ -57,7 +60,7 @@ test('a resident walks a real crossing through the original movement step and re
     assert.notEqual(g.readTerrain(Math.floor(actor.positionQ12[0]/32768),Math.floor(actor.positionQ12[1]/32768)),1);
     if(!advanceRanchExplorationWalk(actor,g)&&nativeRaisingMovementArrived(actor)){done=true;break;}
   }
-  assert.equal(done,true);assert.ok(positions.some(p=>p[0]>584));
+  assert.equal(done,true);assert.ok(positions.some(p=>p[0]>584+DX));
   assert.equal(g.navigation.ownerAt(positions.at(-1)).ownerIndex,2);
   assert.equal(actor.cageInstanceId,'cage:test:1');
   assert.equal(beginRanchExplorationWalk(actor,g),true);actor.foodSlot=1;

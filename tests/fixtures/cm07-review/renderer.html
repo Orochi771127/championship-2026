@@ -5,15 +5,19 @@
 <script type="module">
 import {createRanchThreeScene} from '/src/championship/presentation/ranchThreeScene.js';
 import {ranchSharedBoundaries} from '/src/championship/cage/ranchConnections.js';
-let scene,bounds,placements;const screen={width:960,height:800};
+import {productGridCell} from '/src/championship/cage/productRanchGrid.js';
+let scene,bounds,placements,origin={x:0,y:0};const screen={width:960,height:800};
 const stage={app:{canvas:document.querySelector('#pixi-placeholder'),screen}};
 window.cm07Review={
  async mount({adjacent=false,width=960,height=800,quality='balanced'}={}){
   document.documentElement.dataset.quality=quality;screen.width=width;screen.height=height;
   Object.assign(document.querySelector('#stage').style,{width:width+'px',height:height+'px'});
-  placements=(adjacent?[0,4]:[0]).map((slotIndex,i)=>({fieldId:'field_cm07_01',moduleId:'championship:2026:cage:6',cageDefinitionIndex:6,slotIndex,instanceId:'cm07-review:'+i,ownerIndex:i,x:i*192,y:-24,worldWidthPx:240,worldHeightPx:200}));
+  // Hex cage world (2026-10-26): the former 10x10 slots 0 / 4 are world slots 199 / 201,
+  // placed at their world positions; the camera and height probe follow the same origin.
+  origin=productGridCell(199);
+  placements=(adjacent?[199,201]:[199]).map((slotIndex,i)=>{const c=productGridCell(slotIndex);return {fieldId:'field_cm07_01',moduleId:'championship:2026:cage:6',cageDefinitionIndex:6,slotIndex,instanceId:'cm07-review:'+i,ownerIndex:i,x:c.x,y:c.y-24,worldWidthPx:240,worldHeightPx:200};});
   const scale=Math.min(width/(adjacent?432:240),height/200)*.93;
-  bounds={x:(width-(adjacent?432:240)*scale)/2,y:(height-200*scale)/2+24*scale,scale};
+  bounds={x:(width-(adjacent?432:240)*scale)/2-origin.x*scale,y:(height-200*scale)/2+24*scale-origin.y*scale,scale};
   scene=await createRanchThreeScene({stage,placements,field:{productGrid:{},nativePixelWorldScale:1,wrapWidthPx:960}});
   await this.tick(1);return {boundaries:ranchSharedBoundaries(placements),diagnostics:scene.getDiagnostics()};
  },
@@ -21,7 +25,7 @@ window.cm07Review={
  pan(dx,dy){bounds.x+=dx;bounds.y+=dy;return this.tick(1);},
  wrap(sign){bounds.x+=sign*960*bounds.scale;return this.tick(1);},
  motion(reduced){document.documentElement.dataset.motion=reduced?'reduced':'full';return this.tick(1);},
- height(x,y){return scene.groundHeight(x,y);},
+ height(x,y){return scene.groundHeight(x+origin.x,y+origin.y);},
  device(){const canvas=document.querySelector('.cm-ranch-three-canvas'),gl=canvas.getContext('webgl2'),ext=gl.getExtension('WEBGL_debug_renderer_info');return {ua:navigator.userAgent,renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),vendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),physicalMobile:false};},
  dispose(){scene.dispose();scene.dispose();return {terrainCanvasCount:document.querySelectorAll('.cm-ranch-three-canvas').length};}
 };

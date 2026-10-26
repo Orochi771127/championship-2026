@@ -111,7 +111,7 @@ test("Shop uses the existing equipment identities for all 118 rows, including lo
   assert.match(shopItemDescription(fullAnalyzer), /世代、種族、屬性、生命值、性格、所需容量/);
   const bought = [];
   const view = createShopView({ root, source: { getFrame: () => frame, intents: { buyShopItem: (...args) => bought.push(args) } } });
-  assert.deepEqual(view.inspect(), { layout: "ORIGINAL_VIDEO_R1", activeCategory: "TRAINING_GOODS", selectedShopRecordIndex: 0, listingCount: 118 });
+  assert.deepEqual(view.inspect(), { layout: "ARCADE_GRID_R1", sheetOpen: false, activeCategory: "TRAINING_GOODS", selectedShopRecordIndex: 0, listingCount: 118 });
   assert.ok(root.querySelector(".cm-vs2-shop__detail"));
   assert.ok(root.querySelector(".cm-vs2-shop__shelf"));
   assert.equal(root.querySelectorAll(".cm-vs2-shop__buy").length, 1, "the original flow has one Buy action for the selected item");

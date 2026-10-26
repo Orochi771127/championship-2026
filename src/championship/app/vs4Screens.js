@@ -1,4 +1,5 @@
 import { createRanchRowPurchasePrompt } from './ranchRowPurchasePrompt.js';
+import { createHexWorldBoard } from './hexWorldEditor.js';
 import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
 import {databaseHeroPortrait} from '../presentation/databaseHeroPortraits.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
@@ -82,6 +83,14 @@ function pulse(node) {
   { duration: 320, easing: "ease-out" });
 }
 
+// Result juice (ui/arcadeFx.js listens): one DOM event, so screens import no effects code.
+function arcadeFx(target, kind, text) {
+  const Event = target?.ownerDocument?.defaultView?.CustomEvent ?? globalThis.CustomEvent;
+  if (!target?.dispatchEvent || typeof Event !== "function") return;
+  // Effects are optional: a host that cannot carry the event never fails the screen.
+  try { target.dispatchEvent(new Event("cm-fx", { bubbles: true, detail: { kind, text } })); } catch { /* no effects */ }
+}
+
 function bindBrowseBack(root, back) {
   const onKey = event => {
     if (event.key !== 'Escape') return;
@@ -104,7 +113,9 @@ export function createShopView({ root, source }) {
   root.dataset.uiAuthority = VS2_UI_AUTHORITY;
   root.dataset.presentationMode = mode;
   root.dataset.screen = frame.screen;
-  root.dataset.shopLayout = "ORIGINAL_VIDEO_R1";
+  // Owner 2026-10-26: the arcade rebuild's arrangement -- category tabs over a card
+  // grid; a card opens its detail sheet, which holds Buy. Leaving stays in the footer.
+  root.dataset.shopLayout = "ARCADE_GRID_R1";
 
   const shell = element("section", "cm-vs2-shell cm-vs2-shop");
   shell.setAttribute("aria-label", uiText("Shop"));
@@ -132,7 +143,18 @@ export function createShopView({ root, source }) {
   const detailState = element("p", "cm-vs2-shop__detail-state");
   detailState.hidden = true;
   detailCopy.append(detailName, detailDescription, detailMeta, detailState);
-  detail.append(detailArt, detailCopy);
+  detail.setAttribute("role", "dialog");
+  detail.setAttribute("aria-modal", "true");
+  const detailActions = element("div", "cm-vs2-shop__detail-actions");
+  const closeSheet = element("button", "cm-vs2-action cm-vs2-shop__close", "關閉");
+  closeSheet.type = "button";
+  detailActions.append(closeSheet);
+  detail.append(detailArt, detailCopy, detailActions);
+  const sheet = element("div", "cm-vs2-shop__sheet");
+  sheet.hidden = true;
+  const sheetScrim = element("div", "cm-vs2-shop__sheet-scrim");
+  sheetScrim.setAttribute("aria-hidden", "true");
+  sheet.append(sheetScrim, detail);
   const tabs = element("div", "cm-vs2-shop__tabs");
   tabs.setAttribute("role", "tablist");
   setLabel(tabs, "aria-label", "商品分類");
@@ -149,7 +171,8 @@ export function createShopView({ root, source }) {
   shelf.append(previous, list, next);
   const status = element("p", "cm-vs2-shop__status");
   status.setAttribute("aria-live", "polite");
-  body.append(detail, tabs, shelf, status);
+  // The sheet opens over the cards only; the header and the footer's way back stay usable.
+  body.append(tabs, shelf, status, sheet);
 
   // Footer rule: leave on the left, the one primary action -- Buy -- on the
   // right. Leaving used to wear the gold while Buy looked secondary.
@@ -158,7 +181,8 @@ export function createShopView({ root, source }) {
   back.type = "button";
   const buy = element("button", "cm-vs2-action cm-vs2-action--primary cm-vs2-shop__buy", "購買");
   buy.type = "button";
-  footer.append(back, buy);
+  footer.append(back);
+  detailActions.append(buy);
   shell.append(header, body, footer);
   root.append(shell);
 
@@ -185,6 +209,32 @@ export function createShopView({ root, source }) {
 
   back.addEventListener("click", () => source.intents.leaveScreen());
   const stopBackKeys = bindBrowseBack(root, back);
+  let sheetReturn = null;
+  function openDetail(card) {
+    sheetReturn = card ?? null;
+    sheet.hidden = false;
+    root.dataset.sheet = "open";
+    arcadeFx(detail, "open");
+    (buy.disabled ? closeSheet : buy).focus?.({ preventScroll: true });
+  }
+  function closeDetail() {
+    if (sheet.hidden) return;
+    sheet.hidden = true;
+    delete root.dataset.sheet;
+    arcadeFx(root, "close");
+    const card = list.querySelector?.('[data-selected="true"]') ?? sheetReturn;
+    card?.focus?.({ preventScroll: true });
+  }
+  closeSheet.addEventListener("click", closeDetail);
+  sheetScrim.addEventListener("click", closeDetail);
+  // An open sheet takes Escape first; the screen's own back runs only when it is closed.
+  const onSheetKey = (event) => {
+    if (event.key !== "Escape" || sheet.hidden) return;
+    event.preventDefault();
+    event.stopPropagation();
+    closeDetail();
+  };
+  root.addEventListener("keydown", onSheetKey, true);
   // One tap buys one. Two taps landing within a double-tap window are one
   // intent, so the second is dropped instead of charging twice.
   let lastBuy = { at: -Infinity, record: null };
@@ -268,7 +318,11 @@ export function createShopView({ root, source }) {
         : uiText(RECEIPT_COPY[receipt.reason] ?? ""))
       : "";
     status.dataset.tone = receipt ? (receipt.ok ? "ok" : "refused") : "";
-    if (receipt && receipt !== paintedReceipt) pulse(status);
+    if (receipt && receipt !== paintedReceipt) {
+      pulse(status);
+      if (boughtRow) arcadeFx(buy, "purchase", `-${boughtRow.unitPriceBits}`);
+      else arcadeFx(buy, "denied");
+    }
     paintedReceipt = receipt ?? null;
 
     for (const [category, tab] of tabButtons) {
@@ -335,12 +389,14 @@ export function createShopView({ root, source }) {
       item.addEventListener("click", () => {
         selectedByCategory.set(activeCategory, row.shopRecordIndex);
         paint(source.getFrame());
+        openDetail(list.querySelector?.('[data-selected="true"]'));
       });
       item.append(art, name);
       list.append(item);
     }
     if (revealSelectedCard) {
-      selectedCard?.scrollIntoView({ block: "nearest", inline: "center" });
+      // The grid scrolls vertically only; centring inline would scroll the whole screen sideways.
+      selectedCard?.scrollIntoView({ block: "nearest", inline: "nearest" });
       revealSelectedCard = false;
     }
     if (restoreCardFocus) selectedCard?.focus({ preventScroll: true });
@@ -352,6 +408,8 @@ export function createShopView({ root, source }) {
     render: paint,
     dispose() {
       stopBackKeys();
+      root.removeEventListener("keydown", onSheetKey, true);
+      delete root.dataset.sheet;
       root.replaceChildren();
       root.className = "";
       delete root.dataset.uiAuthority;
@@ -362,6 +420,7 @@ export function createShopView({ root, source }) {
     inspect() {
       return Object.freeze({
         layout: root.dataset.shopLayout,
+        sheetOpen: !sheet.hidden,
         activeCategory,
         selectedShopRecordIndex: selectedRow?.shopRecordIndex ?? null,
         listingCount: source.getFrame()?.shop?.listings.length ?? 0
@@ -481,12 +540,38 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     stageFilter.append(option);
   }
   filterLabel.append(stageFilter);
+  // Owner 2026-10-26: the arcade rebuild's arrangement -- stage chips over a portrait
+  // grid; an entry opens its detail as a sheet over the grid. The select stays the
+  // filter's single source (the chips set it), so keyboard and assistive use are unchanged.
+  root.dataset.databaseLayout = "ARCADE_GRID_R1";
+  const stageChips = element("div", "cm-vs2-database__chips");
+  stageChips.setAttribute("role", "group");
+  stageChips.setAttribute("aria-label", uiText('DEX_STAGE'));
+  for (const option of stageFilter.options ?? stageFilter.children ?? []) {
+    const chip = element("button", "cm-vs2-database__chip");
+    chip.type = "button";
+    chip.dataset.stage = option.value;
+    chip.textContent = option.textContent;
+    chip.setAttribute("aria-pressed", String(option.value === ""));
+    chip.addEventListener("click", () => { stageFilter.value = option.value; applyStage(); });
+    stageChips.append(chip);
+  }
   const list = element("div", "cm-vs2-shop__list");
   list.setAttribute("role", "list");
   const detail = element("div", "cm-vs2-database__detail");
   detail.hidden = true;
-  catalogPane.append(filterLabel, list);
-  body.append(catalogPane, detail);
+  catalogPane.append(filterLabel, stageChips, list);
+  const sheet = element("div", "cm-vs2-database__sheet");
+  sheet.hidden = true;
+  const sheetScrim = element("div", "cm-vs2-database__sheet-scrim");
+  sheetScrim.setAttribute("aria-hidden", "true");
+  const sheetPanel = element("div", "cm-vs2-database__sheet-panel");
+  const closeSheet = element("button", "cm-vs2-action cm-vs2-database__close", "關閉");
+  closeSheet.type = "button";
+  sheetPanel.append(closeSheet, detail);
+  sheet.append(sheetScrim, sheetPanel);
+  // Over the grid only: the header and the footer's way back stay usable.
+  body.append(catalogPane, sheet);
 
   // Leaving is not this screen's primary action, so it does not wear gold.
   const footer = element("footer", "cm-vs2-footer");
@@ -535,7 +620,12 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     else if (current?.selected) source.intents.selectDatabaseSpecies(null);
     else source.intents.leaveScreen();
   });
-  stageFilter.addEventListener('change', () => {
+  // Closing the sheet is the screen's own way back to the list.
+  closeSheet.addEventListener("click", () => back.click());
+  sheetScrim.addEventListener("click", () => back.click());
+  stageFilter.addEventListener('change', () => applyStage());
+  function applyStage() {
+    for (const chip of stageChips.children) chip.setAttribute("aria-pressed", String(chip.dataset.stage === stageFilter.value));
     detailSwipe.reset();
     activeStage = stageFilter.value === '' ? null : stageFilter.value === 'ART' ? 'ART' : Number(stageFilter.value);
     listScroll = null;
@@ -548,7 +638,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       source.intents.selectDatabaseSpecies(null);
     }
     paint(source.getFrame());
-  });
+  }
   const stopBackKeys = bindBrowseBack(root, back);
   function openRow(row, fromList = false) {
     if (fromList) {
@@ -583,11 +673,15 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     const selected = selectedEgg ?? (book.selected ? {...book.selected, ...getDatabaseDisplayEntry(book.selected.speciesIndex)} : null);
     census.textContent = uiText("已登錄 {count} / {total}", { count: book.registeredCount, total: book.slotCount });
     body.dataset.mode = selected ? "detail" : "list";
-    const wide = isWideLayout();
+    // The grid stays behind the detail sheet at every width.
+    const wide = root.dataset.databaseLayout === "ARCADE_GRID_R1" || isWideLayout();
     const focusWasInList = list.contains(document.activeElement);
     list.hidden = Boolean(selected) && !wide;
     catalogPane.hidden = list.hidden;
     detail.hidden = !selected;
+    if (sheet.hidden && selected) arcadeFx(sheetPanel, "open");
+    else if (!sheet.hidden && !selected) arcadeFx(root, "close");
+    sheet.hidden = detail.hidden;
     if (selected) {
       back.textContent = uiText("Return to database list");
       back.setAttribute("aria-label", uiText("Return to database list"));
@@ -925,6 +1019,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       root.className = "";
       delete root.dataset.uiAuthority;
       delete root.dataset.presentationMode;
+      delete root.dataset.databaseLayout;
       delete root.dataset.screen;
     }
   });
@@ -952,6 +1047,12 @@ const CAGE_VERDICT_COPY = Object.freeze({
   UNOWNED: "You do not own that cage.",
   NOTHING_SELECTED: "Select a cage first.",
   OUT_OF_BOUNDS: "That hex is outside the ranch.",
+  // Hex cage world (2026-10-26).
+  MOVED: "已移動設施。",
+  CELL_CAP: "牧場世界最多 100 格，已經放滿了。原本的配置保持不變。",
+  LAND_CAPACITY: "可用土地不足，請先開放更多土地。原本的配置保持不變。",
+  RESIDENTS_PRESENT: "這裡是夥伴的家。請先把夥伴移到其他設施，再收回這個設施。",
+  NOT_PLACED: "這個設施不在牧場上。",
   // Ranch expansion prototype (2026-10-05): no price, no purchase.
   EXPANSION_GRANTED: "已加入擴充區（原型，不收費）。",
   EXPANSION_ALREADY_GRANTED: "擴充區已經開放。",
@@ -1092,12 +1193,15 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   });
   confirm.addEventListener("click", () => source.intents.confirmCageEdit());
 
+  // Hex cage world board (2026-10-26), created the first time a product world is shown.
+  let hexBoard = null;
+  let paintedVerdict = null;
   const rowPurchase = createRanchRowPurchasePrompt({ source, ask: askToBuy, restoreFocus(row) {
     // A purchase or a frame update can replace the opener while the modal is
     // active. Restore a live target without stealing focus from another control.
     const doc = root.ownerDocument;
     if (!root.isConnected || !doc || (doc.activeElement && doc.activeElement !== doc.body && doc.activeElement.isConnected)) return;
-    const target = board.querySelector(`[data-locked-test-row="${row}"]`)
+    const target = root.querySelector(`[data-locked-test-row="${row}"]`)
       ?? board.querySelector('button[data-locked-test-row]') ?? back;
     target.focus({ preventScroll: true });
   } });
@@ -1126,9 +1230,31 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     else census.append(rankLabel);
     const reason = cage.lastVerdict?.reason;
     status.textContent = uiText(reason ? CAGE_VERDICT_COPY[reason] ?? "" : "");
+    if (cage.lastVerdict && cage.lastVerdict !== paintedVerdict) {
+      const kind = !cage.lastVerdict.ok ? "denied" : /REMOVED|CLEARED|RETURNED/.test(reason) ? "unsnap" : /PLACED|MOVED/.test(reason) ? "snap" : "sparkle";
+      const cell = Number.isInteger(cage.lastVerdict.slotIndex) ? root.querySelector?.(`.cm-hexworld__cell[data-slot-index="${cage.lastVerdict.slotIndex}"]`) : null;
+      arcadeFx(cell ?? status, kind);
+    }
+    paintedVerdict = cage.lastVerdict ?? null;
     confirm.disabled = !cage.dirty;
 
+    if (cage.layoutVersion === PRODUCT_RANCH_GRID && !hexBoard) {
+      hexBoard = createHexWorldBoard({ source, openLandPurchase: row => { void rowPurchase.open(row); } });
+      boardPanel.append(hexBoard.element);
+    }
     board.replaceChildren();
+    // Hex cage world: its own pan/zoom board; the fixed board below stays for native layouts.
+    const hexWorld = typeof hexBoard !== 'undefined' && hexBoard !== null && cage.layoutVersion === PRODUCT_RANCH_GRID;
+    if (typeof hexBoard !== 'undefined' && hexBoard !== null) {
+      hexBoard.element.hidden = !hexWorld; boardScroll.hidden = hexWorld; expansionControls.hidden = hexWorld;
+      root.dataset.hexWorld = hexWorld ? 'true' : 'false';
+      if (hexWorld) {
+        boardHint.textContent = uiText('拖曳空白處移動視角 · 點設施可移動或收回 · 先選設施再點空格放置');
+        hexBoard.paint(cage);
+      }
+    }
+    let cellArt = null;
+    if (!hexWorld) {
     annexBoard.replaceChildren();
     const productGrid = cage.layoutVersion === PRODUCT_RANCH_GRID;
     board.dataset.productGrid = productGrid ? 'true' : 'false';
@@ -1152,7 +1278,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     }
     boardScroll.dataset.annex = annex || preview ? 'true' : 'false';
     boardHint.textContent = uiText(productGrid ? 'CAGE_PUBLIC_TEST_GRID_HINT' : annex ? '牧場平面配置 · 左右滑動查看格位，往下是擴充區' : '牧場平面配置 · 左右滑動查看所有格位');
-    const cellArt = new Map(cageEditorArtCells(cage.slots, undefined, { productGrid }).map((cell) => [cell.slotIndex, cell]));
+    cellArt = new Map(cageEditorArtCells(cage.slots, undefined, { productGrid }).map((cell) => [cell.slotIndex, cell]));
     expansionControls.dataset.productGrid = productGrid ? 'true' : 'false';
     expansionControls.replaceChildren();
     if (productGrid) {
@@ -1199,7 +1325,9 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       });
       expansionControls.append(toggle);
     }
+    }
     for (const slot of cage.slots) {
+      if (typeof hexWorld !== 'undefined' && hexWorld) break;
       const productGrid = cage.layoutVersion === PRODUCT_RANCH_GRID;
       const cell = element("button", "cm-vs2-cage-slot");
       cell.type = "button";
@@ -1290,6 +1418,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     render: paint,
     dispose() {
       rowPurchase.dispose();
+      hexBoard?.dispose();
       root.replaceChildren();
       root.className = "";
       delete root.dataset.uiAuthority;

@@ -29,8 +29,14 @@ import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, originalStartingRanch, native
 import { RANCH_DECKS_LAYOUT, RANCH_EXPANSION_DECK_SLOTS, RANCH_EXPANSION_EVIDENCE, RANCH_EXPANSION_FIRST_SLOT, annexPlacementCells,
   annexSlotCount, isAnnexSlot, normalizeRanchExpansion, prototypeRanchExpansion, validateRanchLayout } from './ranchExpansion.js';
 
-import { PRODUCT_RANCH_GRID, LEGACY_PRODUCT_RANCH_GRID, PRODUCT_RANCH_SLOT_COUNT, PUBLIC_TEST_RANCH_ACCESS, productGridCell, productPlacementCells,
-  productUnlockedSlots, normalizeProductRanchAccess, migrateProductRanch, validateProductRanch } from './productRanchGrid.js';
+import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_LAYOUTS, PRODUCT_RANCH_SLOT_COUNT, PRODUCT_RANCH_COLUMNS, PRODUCT_RANCH_ROWS, PRODUCT_RANCH_CELL_CAP,
+  PUBLIC_TEST_RANCH_ACCESS, productGridCell, productPlacementCells, productLandCapacity, productLockedLandRows, productRanchProblem,
+  productOccupiedCellCount, normalizeProductRanchAccess, migrateProductRanch, validateProductRanch } from './productRanchGrid.js';
+
+// Hex cage world verdicts the free lattice can produce (2026-10-26).
+const HEX_WORLD_REASONS = Object.freeze({ OCCUPIED:'OCCUPIED', OUT_OF_BOUNDS:'OUT_OF_BOUNDS', CELL_CAP:'CELL_CAP',
+  LAND_CAPACITY:'LAND_CAPACITY', DUPLICATE_INSTANCE:'FOOTPRINT_BLOCKED', DUPLICATE_WAITING_ROOM:'FOOTPRINT_BLOCKED',
+  WAITING_ROOM_REQUIRED:'FIXED_WAITING_ROOM', INVALID:'FOOTPRINT_BLOCKED' });
 
 export const CAGE_EDIT_AUTHORITY = "CHAMPIONSHIP_2026_PRODUCT";
 
@@ -83,12 +89,12 @@ function normalizePlacements(raw, slotLimit = MAX_SLOT_COUNT, instances=false) {
 
 export function createCageEditRuntime({ snapshot = null, initializeOriginal = false, publicTestGrid = false, initialTamerRank = 0 } = {}) {
   if (initializeOriginal) snapshot = originalStartingRanch();
-  if (publicTestGrid && snapshot?.layoutVersion && snapshot.layoutVersion !== PRODUCT_RANCH_GRID) {
+  if (publicTestGrid && snapshot?.layoutVersion && !PRODUCT_RANCH_LAYOUTS.includes(snapshot.layoutVersion)) {
     if (!validateRanchLayout(snapshot.placements, { layoutVersion: snapshot.layoutVersion,
       mainUnlocked: slotCountForTamerRank(initialTamerRank), expansion: snapshot.expansion ?? null })) throw cageError('INVALID_NATIVE_RANCH_MIGRATION');
     snapshot = migrateProductRanch(snapshot, MAX_SLOT_COUNT);
   }
-  if([PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID].includes(snapshot?.layoutVersion))snapshot=migrateProductRanch(snapshot,MAX_SLOT_COUNT);
+  if(PRODUCT_RANCH_LAYOUTS.includes(snapshot?.layoutVersion))snapshot=migrateProductRanch(snapshot,MAX_SLOT_COUNT);
   // NATIVE_DECKS_V1 is the original layout plus the expansion prototype's
   // annex (ranchExpansion.js). Only the prototype grant writes it.
   let layoutVersion = snapshot?.layoutVersion ?? null;
@@ -99,7 +105,9 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
   const grid = layoutVersion === PRODUCT_RANCH_GRID;
   if (grid && !validateProductRanch(snapshot?.placements)) throw cageError('INVALID_PRODUCT_RANCH');
   let gridAccess = grid ? normalizeProductRanchAccess(snapshot.gridAccess) : null;
-  if (grid && !validateProductRanch(snapshot.placements, productUnlockedSlots(gridAccess,20))) throw cageError('PRODUCT_RANCH_PLACEMENT_NOT_UNLOCKED');
+  // Land is a capacity in the hex world. An existing layout is never refused
+  // for exceeding it (old saves only ever used opened land); new cells are.
+  const landCapacity = (unlockedCount) => productLandCapacity(gridAccess, unlockedCount, publicTestGrid ? PUBLIC_TEST_RANCH_ACCESS : null);
   const testAccessOverride = publicTestGrid ? PUBLIC_TEST_RANCH_ACCESS : null;
   let committed = normalizePlacements(snapshot?.placements, grid ? PRODUCT_RANCH_SLOT_COUNT : MAX_SLOT_COUNT + annexSlotCount(expansion),grid);
   let nextInstanceSequence=snapshot?.nextInstanceSequence??1;
@@ -177,13 +185,13 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       gridAccess = normalizeProductRanchAccess({ ...gridAccess, legacyUnlockedSlots:[...new Set([
         ...gridAccess.legacyUnlockedSlots, ...Array.from({length:publicTestGrid ? MAX_SLOT_COUNT : unlockedCount},(_,slot)=>slot)
       ])] });
-      const unlockedSlots = new Set(productUnlockedSlots(gridAccess, unlockedCount, testAccessOverride));
       slots.length = 0;
+      // Every lattice position is open; land limits how many cells are used.
       for (let slotIndex = 0; slotIndex < PRODUCT_RANCH_SLOT_COUNT; slotIndex++) {
         const moduleId = occupied.get(slotIndex) ?? null;
         const definition = moduleId ? getCageDefinitionByModuleId(moduleId) : null;
         const training = trainingViewFromDefinition(definition);
-        slots.push({ ...productGridCell(slotIndex), instanceId:instanceAt.get(slotIndex)??null, unlocked: unlockedSlots.has(slotIndex),
+        slots.push({ ...productGridCell(slotIndex), instanceId:instanceAt.get(slotIndex)??null, unlocked: true,
           fixed: moduleId === WAITING_ROOM_MODULE, moduleId, displayName: definition?.displayName ?? null,
           trainingSummary: moduleId ? training.summary : null });
       }
@@ -215,10 +223,12 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       tamerRank,
       tamerRankTableLastIndex: TAMER_RANK_TABLE_LAST_INDEX,
       maxSlotCount: grid ? PRODUCT_RANCH_SLOT_COUNT : MAX_SLOT_COUNT,
-      unlockedCount: grid ? slots.filter(slot=>slot.unlocked).length : unlockedCount,
+      unlockedCount: grid ? landCapacity(unlockedCount) : unlockedCount,
       ...(grid ? { gridAccess: normalizeProductRanchAccess(gridAccess), testAccessOverride,
-        mainUnlockedCount: unlockedCount, unlockedSlots:slots.filter(slot=>slot.unlocked).map(slot=>slot.slotIndex),
-        productGrid: { columns:10, rows:10, lockedSlots:slots.filter(slot=>!slot.unlocked).map(slot=>slot.slotIndex) } } : {}),
+        mainUnlockedCount: unlockedCount, unlockedSlots:null, landCapacity: landCapacity(unlockedCount),
+        productGrid: { columns:PRODUCT_RANCH_COLUMNS, rows:PRODUCT_RANCH_ROWS, cellCap:PRODUCT_RANCH_CELL_CAP,
+          usedCells:productOccupiedCellCount(draft), landCapacity:landCapacity(unlockedCount), lockedSlots:[],
+          landRows:productLockedLandRows(gridAccess, unlockedCount) } } : {}),
       slotCountEvidence: SLOT_COUNT_EVIDENCE,
       placementModel: layoutVersion ? 'ORIGINAL_MULTI_CELL_FOOTPRINT' : PLACEMENT_MODEL,
       placementEvidence: grid ? 'OWNER_APPROVED_ADAPTATION' : layoutVersion ? 'VERIFIED_BINARY_NATIVE_REPLAY' : PLACEMENT_EVIDENCE,
@@ -247,7 +257,7 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       if (!grid || testAccessOverride !== PUBLIC_TEST_RANCH_ACCESS || !Number.isInteger(row) || row < 2 || row >= 10) {
         return { ok:false, reason:'TEST_ROW_PURCHASE_UNAVAILABLE' };
       }
-      if (frame.slots.filter(slot=>slot.row===row).every(slot=>slot.unlocked)) return { ok:false, reason:'TEST_ROW_ALREADY_OPEN' };
+      if (!frame.productGrid.landRows.some(entry=>entry.row===row)) return { ok:false, reason:'TEST_ROW_ALREADY_OPEN' };
       return { ok:true, reason:'TEST_ROW_QUOTED', row, price:1000, currency:'TEST_DIAMONDS' };
     },
 
@@ -307,14 +317,12 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
         if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= PRODUCT_RANCH_SLOT_COUNT) {
           lastVerdict = { ok:false, reason:'OUT_OF_BOUNDS' }; return getFrame(shopCageOwned, tamerRank);
         }
-        const available = productUnlockedSlots(gridAccess, unlockedCount, testAccessOverride);
-        if (!available.includes(slotIndex)) {
-          lastVerdict = { ok:false, reason:'SLOT_LOCKED' }; return getFrame(shopCageOwned, tamerRank);
-        }
         const withdrawn=withdrawnCopies.get(selectedModuleId),reusedId=withdrawn?.at(-1);
         const candidate = { moduleId:selectedModuleId, slotIndex, instanceId:reusedId??allocateInstance() };
-        if (!validateProductRanch([...draft,candidate], available)) {
-          lastVerdict = { ok:false, reason:'FOOTPRINT_BLOCKED' }; return getFrame(shopCageOwned, tamerRank);
+        const problem = productRanchProblem([...draft,candidate], landCapacity(unlockedCount));
+        if (problem) {
+          if(!reusedId)nextInstanceSequence--;
+          lastVerdict = { ok:false, reason:HEX_WORLD_REASONS[problem] ?? 'FOOTPRINT_BLOCKED' }; return getFrame(shopCageOwned, tamerRank);
         }
         if(reusedId)withdrawn.pop();
         draft = [...draft,candidate]; selectedModuleId = null;
@@ -346,11 +354,38 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
       return getFrame(shopCageOwned, tamerRank);
     },
 
-    removePlacement(reference, shopCageOwned = [], tamerRank = 0) {
+    /**
+     * Move one placed cage to another anchor. Its instance (and so its
+     * residents, whose positions are cage-local) moves with it. A refused move
+     * keeps the layout exactly as it was and reports why.
+     */
+    movePlacement(reference, slotIndex, shopCageOwned = [], tamerRank = 0) {
+      if (!grid) { lastVerdict = { ok:false, reason:'PRODUCT_RANCH_REQUIRED' }; return getFrame(shopCageOwned, tamerRank); }
+      const target=draft.find(p=>p.instanceId===reference);
+      if (!target) { lastVerdict = { ok:false, reason:'NOT_PLACED' }; return getFrame(shopCageOwned, tamerRank); }
+      if (target.moduleId === WAITING_ROOM_MODULE) { lastVerdict = { ok:false, reason:'FIXED_WAITING_ROOM' }; return getFrame(shopCageOwned, tamerRank); }
+      if (target.slotIndex === slotIndex) { lastVerdict = { ok:true, reason:'MOVED' }; return getFrame(shopCageOwned, tamerRank); }
+      if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= PRODUCT_RANCH_SLOT_COUNT) {
+        lastVerdict = { ok:false, reason:'OUT_OF_BOUNDS' }; return getFrame(shopCageOwned, tamerRank);
+      }
+      const moved = draft.map(p => p === target ? { ...p, slotIndex } : p);
+      const problem = productRanchProblem(moved, Math.max(landCapacity(slotCountForTamerRank(tamerRank)), productOccupiedCellCount(draft)));
+      if (problem) { lastVerdict = { ok:false, reason:HEX_WORLD_REASONS[problem] ?? 'FOOTPRINT_BLOCKED' }; return getFrame(shopCageOwned, tamerRank); }
+      draft = moved;
+      lastVerdict = { ok:true, reason:'MOVED' };
+      return getFrame(shopCageOwned, tamerRank);
+    },
+
+    removePlacement(reference, shopCageOwned = [], tamerRank = 0, { residentInstances = null } = {}) {
       const target=draft.find(p=>(p.instanceId??p.moduleId)===reference)??draft.find(p=>p.moduleId===reference);
       const moduleId=target?.moduleId??reference;
       if (layoutVersion && moduleId === WAITING_ROOM_MODULE) {
         lastVerdict = { ok: false, reason: 'FIXED_WAITING_ROOM' };
+        return getFrame(shopCageOwned, tamerRank);
+      }
+      // v1: never take land out from under a partner; the player moves it first.
+      if (grid && target?.instanceId && residentInstances?.has?.(target.instanceId)) {
+        lastVerdict = { ok:false, reason:'RESIDENTS_PRESENT', instanceId:target.instanceId };
         return getFrame(shopCageOwned, tamerRank);
       }
       if (!draft.some((entry) => entry.moduleId === moduleId)) {

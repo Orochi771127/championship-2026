@@ -195,7 +195,10 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
  // Explicit historical wallet, not a grant from the game or a change to the QA seed.
  const historicalWalletSeed={...fixtures.seed,flags:{...fixtures.seed.flags,friendsPlaytest:{version:1,grants:[],diamonds:10000,purchases:[]}}};
  const expectedShop=shop=>({...shop,cageQuantities:shop.cageQuantities??Object.fromEntries(shop.cageOwned.map(id=>[id,1]))});
- const expectedPlacements=placements=>placements.map(p=>({...p,instanceId:p.instanceId??`cage:legacy:${p.moduleId.endsWith(':waiting-room')?35:p.moduleId.split(':').at(-1)}`}));
+ // Hex cage world (Owner 2026-10-26): loading a 10x10 save moves it 8 rows / 7 columns into the
+ // 24-wide world (productRanchGrid.legacyGrid100SlotToWorld), so a legacy anchor keeps its layout.
+ const legacyToWorld=s=>{const row=s<40?Math.floor(s/20)*2+s%2:4+Math.floor((s-40)/10),column=s<40?Math.floor((s%20)/2):(s-40)%10;return (row+8)*24+column+7;};
+ const expectedPlacements=placements=>placements.map(p=>({...p,slotIndex:legacyToWorld(p.slotIndex),instanceId:p.instanceId??`cage:legacy:${p.moduleId.endsWith(':waiting-room')?35:p.moduleId.split(':').at(-1)}`}));
  const server=await serveBuild(root);let browser,context,page;
  async function fresh(label){
   if(context){await context.tracing.stop({path:path.join(output,evidence.context+'-trace.zip')});await context.close();}
@@ -405,7 +408,10 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   await boundary('installer:button-visible',()=>page.locator('#install').waitFor());await boundary('installer:button-enabled',()=>page.waitForFunction(()=>!document.querySelector('#install').disabled));
   await boundary('installer:click',()=>page.locator('#install').click());await boundary('installer:wait-url',()=>page.waitForURL(/championship\.html$/));await boundary('continueSaved',()=>continueSaved());
   const installed=await boundary('saved:read-only',()=>saved());coverage.baseline={fixtureSeedSha256:require('node:crypto').createHash('sha256').update(JSON.stringify(fixtures.seed)).digest('hex'),schemaVersion:installed.schemaVersion,layoutVersion:installed.cageEdit.layoutVersion,shop:installed.shop,placements:installed.cageEdit.placements.map(({moduleId,slotIndex})=>({moduleId,slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId))};write();
-  for(const scenario of [{name:'adjacent',slots:[4,8,7]},{name:'wrap',slots:[4,8,19]}]){
+  // Hex cage world (Owner 2026-10-26): the former 10x10 slots 4 / 8 / 7 / 19 sit at world
+  // slots 201 / 203 / 226 / 232 (same relative layout); the world no longer wraps, so the
+  // 'wrap' case is now a set of apart cages, still rendered and persisted the same way.
+  for(const scenario of [{name:'adjacent',slots:[201,203,226]},{name:'wrap',slots:[201,203,232]}]){
    if(selected.scenario==='adjacent'&&scenario.name==='wrap')break;
    evidence.sourceCornerStage=scenario.name+':editor';write();
    await boundary('viewport:editor',()=>page.setViewportSize({width:1280,height:800}));await boundary('clearCalendar',()=>clearCalendar());await boundary('menu:cageEdit',()=>menu('MANAGEMENT','cageEdit'));await boundary('screen:CAGE_EDIT',()=>screen('CAGE_EDIT'));
@@ -421,11 +427,11 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    await boundary('editor:return-home',()=>page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click());await boundary('home',()=>home());await boundary('saveQuit',()=>saveQuit());
    const placed=await boundary('saved:read-only',()=>saved());
    assert.deepEqual(placed.cageEdit.placements.map(p=>({moduleId:p.moduleId,slotIndex:p.slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),[
-    {moduleId:'championship:2026:cage:waiting-room',slotIndex:0},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
+    {moduleId:'championship:2026:cage:waiting-room',slotIndex:199},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
    ].sort((a,b)=>a.moduleId.localeCompare(b.moduleId)));
    assert.deepEqual(placed.shop,expectedShop(installed.shop),'Editor-only inspection must preserve entire wallet and inventory');await boundary('continueSaved',()=>continueSaved());
    const reloadedPlacement=await boundary('saved:read-only',()=>saved());assert.deepEqual(reloadedPlacement.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(reloadedPlacement.shop,expectedShop(installed.shop));
-   assert.equal(reloadedPlacement.schemaVersion,7);assert.equal(reloadedPlacement.cageEdit.layoutVersion,'PRODUCT_GRID100_INSTANCES_V1');
+   assert.equal(reloadedPlacement.schemaVersion,7);assert.equal(reloadedPlacement.cageEdit.layoutVersion,'PRODUCT_HEX_WORLD_V1');
    coverage.setup.push({schemaVersion:reloadedPlacement.schemaVersion,layoutVersion:reloadedPlacement.cageEdit.layoutVersion,scenario:scenario.name,slots:scenario.slots,placements:placed.cageEdit.placements.map(({moduleId,slotIndex})=>({moduleId,slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),shop:placed.shop,reloaded:true});write();
    if(scenario.name!==selected.scenario)continue;
    evidence.sourceCornerStage=scenario.name+':visual';write();
@@ -515,7 +521,9 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   const initial=await saved();assert.equal(initial.shop.bits,8000000);assert.equal(initial.flags.friendsPlaytest.diamonds,20000);
   assert.equal(digits(await page.locator('.cm-status-bar__bits-value').innerText()),8000000);await wallet(20000);await noOverflow();await shot('01-new-wallet');await topContour('01-new-save');
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
-  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),20);assert.equal(await page.locator('[data-locked-test-row]').count(),8);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),8);assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="false"]').allTextContents().then(xs=>xs.join('')), '');await shot('02-eight-row-locks');
+  // Hex cage world (Owner 2026-10-26): land is a capacity with one control for the next row.
+  const landNote=()=>page.locator('.cm-hexworld__land-note').innerText();
+  assert.equal(digits(await landNote()),20);assert.equal(await page.locator('[data-locked-test-row]').count(),1);assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="false"]').count(),0);await shot('02-land-control');
   assert.equal(await page.locator('[data-buy-test-row],.cm-cage-row-purchase').count(),0,'Lower purchase controls removed');
   for(const lock of await page.locator('button[data-locked-test-row]').all()){
    assert.equal(await lock.getAttribute('aria-haspopup'),'dialog');
@@ -545,13 +553,13 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    await dialog.locator('[data-action="buy"]').evaluate(el=>{el.click();el.click();});
    await page.waitForFunction(({key,balance})=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===balance,{key:saveKey,balance});
    assert.equal(await page.locator('dialog[open]').count(),0);
-   assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),total);assert.equal(await page.locator('[data-locked-test-row]').count(),9-row);await shot('row-'+row);
+   if(total<100)assert.equal(digits(await landNote()),total);else assert.match(await landNote(),/全部土地已開放/);assert.equal(await page.locator('[data-locked-test-row]').count(),row<9?1:0);await shot('row-'+row);
   }
   assert.equal(await page.locator('button[data-locked-test-row],[data-buy-test-row],.cm-cage-row-purchase').count(),0);
   evidence.assertions.push({rowUnlockConfirmation:{cancelAndEscapeNoDebit:true,details:true,repeatedOpenAndBuySafe:true,noRowLinesOrLowerControls:true,slots:100,diamonds:12000}});
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await wallet(12000);await saveQuit();
   await page.reload({waitUntil:'domcontentloaded'});await continueSaved();await wallet(12000);
-  await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),100,'Reload must restore all purchased grid rows');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
+  await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.match(await page.locator('.cm-hexworld__land-note').innerText(),/全部土地已開放/,'Reload must restore all purchased land');assert.equal(await page.locator('[data-locked-test-row]').count(),0);await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
   const afterRows=await saved();assert.equal(afterRows.shop.bits,8000000);assert.deepEqual(afterRows.flags.friendsPlaytest.purchases,[2,3,4,5,6,7,8,9]);assert.equal(afterRows.flags.friendsPlaytest.diamonds,12000);
   await menu('SYSTEM','shop');await screen('SHOP');
   let purchase;
@@ -606,15 +614,17 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   await fresh('historical-wallet');await page.goto(publicBase+'full-qa-save.html',{waitUntil:'domcontentloaded'});
   await page.locator('#install').waitFor();await page.waitForFunction(()=>!document.querySelector('#install').disabled);await page.locator('#install').click();await page.waitForURL(/championship\.html$/);
   const old=await saved();const oldFixture=historicalWalletSeed;assert.deepEqual(old.shop,oldFixture.shop,'Installer must preserve fixture economy/inventory');assert.deepEqual(old.cageEdit.placements,oldFixture.cageEdit.placements,'Installer must preserve fixture anchors');await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
-  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);assert.equal(await page.locator('[data-locked-test-row]').count(),6);assert.equal(await page.locator('.cm-cage-row-lock__icon').count(),6);await shot('07-legacy-six-row-locks');
+  // Hex cage world: the old save's four open rows read as 40 cells of land and one land control.
+  const legacyLand=async()=>digits(await page.locator('.cm-hexworld__land-note').innerText());
+  assert.equal(await legacyLand(),40);assert.equal(await page.locator('[data-locked-test-row]').count(),1);await shot('07-legacy-land-control');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
   const migrated=await saved();assert.deepEqual(migrated.shop,expectedShop(old.shop),'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,expectedPlacements(old.cageEdit.placements));assert.equal(migrated.flags.friendsPlaytest?.diamonds,10000);assert.equal(migrated.flags.friendsPlaytest.version,2);
   await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
-  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),40);
+  assert.equal(await legacyLand(),40);
   await page.locator('button[data-locked-test-row="4"]').click();
   await page.locator('dialog[data-variant="ranch-row-purchase"] [data-action="buy"]').click();
   await page.waitForFunction(key=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===9000,saveKey);
-  assert.equal(await page.locator('.cm-vs2-cage-slot[data-unlocked="true"]').count(),50);
+  assert.equal(await legacyLand(),50);
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9000);
   const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,expectedShop(old.shop));assert.deepEqual(legacyAfterPurchase.cageEdit.placements,expectedPlacements(old.cageEdit.placements));
   evidence.assertions.push({historicalWalletPreserved:10000,legacyGrant:0,afterPurchaseAndReload:9000});
